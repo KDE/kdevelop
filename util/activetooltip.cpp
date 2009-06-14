@@ -135,10 +135,25 @@ void ActiveToolTip::showEvent(QShowEvent*)
     adjustRect();
 }
 
+void ActiveToolTip::updateMouseDistance()
+{
+    d->previousDistance_ = (d->rect_.center() - QCursor::pos()).manhattanLength();
+}
+
+void ActiveToolTip::moveEvent(QMoveEvent* ev)
+{
+    QWidget::moveEvent(ev);
+    
+    updateMouseDistance();
+}
+
 void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
+    
     emit resized();
+
+    updateMouseDistance();
 }
 
 void ActiveToolTip::addExtendRect(QRect rect)
@@ -152,6 +167,7 @@ void ActiveToolTip::adjustRect()
     QRect r = geometry();
     r.adjust(-10, -10, 10, 10);
     d->rect_ = r;
+    updateMouseDistance();
 }
 
 void ActiveToolTip::setBoundingGeometry(QRect r) {

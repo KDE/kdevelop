@@ -67,6 +67,8 @@ public:
     void showEvent(QShowEvent*);
 
     void resizeEvent(QResizeEvent*);
+    
+    void moveEvent(QMoveEvent*);
 
     void adjustRect();
     
@@ -79,6 +81,8 @@ Q_SIGNALS:
     void resized();    
 private:
     virtual void closeEvent(QCloseEvent* );
+    void updateMouseDistance();
+    
     class ActiveToolTipPrivate* const d;
 };
 
