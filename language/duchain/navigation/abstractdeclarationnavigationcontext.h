@@ -43,10 +43,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
   protected:
     DeclarationPointer m_declaration;
 
+    ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
+    virtual QualifiedIdentifier prettyQualifiedIdentifier(DeclarationPointer decl) const;
+    ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
+    Identifier prettyIdentifier(DeclarationPointer decl) const;
     
     static QString stringFromAccess(Declaration::AccessPolicy access);
     static QString stringFromAccess(DeclarationPointer decl);
-    static QString declarationName( DeclarationPointer decl );
+    QString declarationName( DeclarationPointer decl ) const;
     static QStringList declarationDetails(DeclarationPointer decl);
 
     ///This can be used for example to resolve typedefs within the type.
