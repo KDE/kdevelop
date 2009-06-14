@@ -65,8 +65,6 @@ void CMakeConditionTest::testGoodParse()
 
 void CMakeConditionTest::testGoodParse_data()
 {
-    QStringList condition;
-    
     QTest::addColumn<QStringList>( "expression" );
     QTest::addColumn<bool>( "result" );
     
@@ -108,6 +106,24 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "parenthese3" ) << QString("( ZERO AND ZERO ) OR ONE").split(" ") << true;
     QTest::newRow( "parenthese4" ) << QString("( ZERO AND ZERO ) OR ZERO").split(" ") << false;
     QTest::newRow( "parenthese5" ) << QString("( ONE AND ZERO ) OR ( ZERO OR ONE )").split(" ") << true;
+}
+
+void CMakeConditionTest::testBadParse()
+{
+    QFETCH( QStringList, expression );
+    
+    CMakeProjectVisitor v(QString(), 0);
+    v.setVariableMap( m_vars );
+    v.setMacroMap( m_macros );
+    
+    CMakeCondition cond(&v);
+    QCOMPARE( cond.condition(expression), false );
+}
+
+void CMakeConditionTest::testBadParse_data()
+{
+    QTest::addColumn<QStringList>( "expression" );
+    QTest::newRow( "missing operator" ) << QString("MATCHES STUFF").split(" ");
 }
 
 #include "cmake_cmakecondition_test.moc"

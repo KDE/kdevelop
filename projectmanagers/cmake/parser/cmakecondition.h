@@ -46,6 +46,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         QList<QStringList::const_iterator> m_varUses;
         QList<int> m_argUses;
 //         int m_parameters[Last];
+
+        QStringList::const_iterator conditionBegin;
 };
 
 #endif

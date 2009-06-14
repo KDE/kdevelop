@@ -119,6 +119,9 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
     return it;
 }
 
+#define CHECK_PREV(it) if(it==this->conditionBegin) return false
+#define CHECK_NEXT(it) if(it+1!=itEnd) return false
+
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd)
 {
 //     qDebug() << "xxxx" << *itBegin << *itEnd;
@@ -158,20 +161,19 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
                     dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
                     QFileInfo f(dir, v);
-                    if(f.exists())
-                    {
-                        last=true;
-                    }
+                    last=f.exists();
 //                     kDebug(9042) << "EXISTS" << f.filePath() << dir << last;
                 }
                 itEnd=it2;
             }   break;
             case IS_DIRECTORY: {
+                CHECK_NEXT(it2);
                 QFileInfo f(*(it2+1));
                 last = f.isDir();
                 itEnd=it2;
             }   break;
             case DEFINED:
+                CHECK_NEXT(it2);
                 last=m_vars->contains(*(it2+1));
                 itEnd=it2;
                 break;
@@ -182,6 +184,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
 //                 qDebug() << "OR" << last;
                 return evaluateCondition(itBegin, it2) || last;
             case MATCHES: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QRegExp rx(*(it2+1));
                 if(m_vars->contains(*(it2-1)))
                     rx.indexIn(m_vars->value(*(it2-1)).join(QString()));
@@ -192,6 +196,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case LESS: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 if(m_vars->contains(strA))
@@ -201,6 +207,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case GREATER: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 if(m_vars->contains(strA))
@@ -210,6 +218,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case EQUAL: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 if(m_vars->contains(strA))
@@ -219,6 +229,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case STRLESS: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 if(m_vars->contains(strA))
@@ -227,6 +239,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case STRGREATER: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 if(m_vars->contains(strA))
@@ -235,6 +249,8 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case STREQUAL: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QString strA=*(it2-1);
                 QString strB=*(it2+1);
                 
@@ -245,12 +261,14 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2-1;
             }   break;
             case IS_NEWER_THAN: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
                 QFileInfo pathA(*(it2-1));
                 QFileInfo pathB(*(it2+1));
 //                 kDebug(9042) << "newer" << strA << strB;
                 last= (pathA.lastModified()>pathB.lastModified());
                 itEnd=it2-1;
-            }
+            }   break;
             case LPR: {
                 itEnd=it2;
             } break;
@@ -287,6 +305,8 @@ bool CMakeCondition::condition(const QStringList &expression)
         return false;
     }
     QStringList::const_iterator it = expression.constBegin(), itEnd=expression.constEnd();
+    conditionBegin=it;
+    
     bool ret = evaluateCondition(it, itEnd-1);
     uint i=0;
     m_argUses.clear();
