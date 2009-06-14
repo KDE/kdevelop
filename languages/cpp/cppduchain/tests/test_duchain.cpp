@@ -345,12 +345,24 @@ void TestDUChain::testDeclareInt()
 }
 
 void TestDUChain::testContextSearch() {
-  QByteArray method("typedef union { char __size[2]; long int __align; } pthread_attr_t; struct Stru {};");
-  
-  TopDUContext* top = parse(method, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->findContexts(DUContext::Class, QualifiedIdentifier("Stru") ).count(), 1);
-  QCOMPARE(top->findContexts(DUContext::Namespace, QualifiedIdentifier("Stru") ).count(), 0);
+  {
+    QByteArray method("int t; struct C { }; void test() { C c; c.t = 3;}");
+    
+    TopDUContext* top = parse(method, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QVERIFY(top->localDeclarations()[0]->uses().isEmpty());
+    release(top);
+  }
+  {
+    QByteArray method("typedef union { char __size[2]; long int __align; } pthread_attr_t; struct Stru {};");
+    
+    TopDUContext* top = parse(method, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->findContexts(DUContext::Class, QualifiedIdentifier("Stru") ).count(), 1);
+    QCOMPARE(top->findContexts(DUContext::Namespace, QualifiedIdentifier("Stru") ).count(), 0);
+    release(top);
+  }
 }
 
 void TestDUChain::testSeparateVariableDefinition() {

@@ -239,7 +239,9 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
       
       DUContext::DeclarationList decls;
       ///@todo do correct tracing for correct visibility
-      m_source->findDeclarationsInternal( allIdentifiers, m_source->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup) );
+
+      if(!basicFlags & DUContext::DontSearchInParent)
+        m_source->findDeclarationsInternal( allIdentifiers, m_source->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup | basicFlags) );
       if( !decls.isEmpty() )
         tempDecls = decls;
     }
