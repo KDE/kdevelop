@@ -111,4 +111,3 @@ void ProblemHighlighter::rangeContentsChanged(KTextEditor::SmartRange* range)
     range->setAttribute(KTextEditor::Attribute::Ptr());
 }
 
-#include "problemhighlighter.moc"

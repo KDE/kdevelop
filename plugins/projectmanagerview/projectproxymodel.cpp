@@ -79,4 +79,3 @@ KDevelop::ProjectBaseItem* ProjectProxyModel::itemFromProxyIndex( const QModelIn
     return static_cast<KDevelop::ProjectBaseItem*>( projectModel()->itemFromIndex( mapToSource( idx ) ) );
 }
 
-#include "projectproxymodel.moc"
