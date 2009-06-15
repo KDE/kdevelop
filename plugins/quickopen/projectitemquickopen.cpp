@@ -42,8 +42,8 @@ SubstringCache(QString string = QString()) : substring(string) {
 
 inline bool containedIn(Identifier id) {
     int index = id.index();
-    QHash<int, bool>::const_iterator it = cache.find(index);
-    if(it != cache.end())
+    QHash<int, bool>::const_iterator it = cache.constFind(index);
+    if(it != cache.constEnd())
     return *it;
     bool result = id.identifier().str().contains( substring, Qt::CaseInsensitive );
     cache[index] = result;
@@ -145,7 +145,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const {
 
   //Check whether this position falls into an appended item-list, else apply the offset
    uint filteredItemOffset = 0;
-   for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it) {
+   for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.constBegin(); it != m_addedItems.constEnd(); ++it) {
      int offsetInAppended = pos - (it.key()+1);
      if(offsetInAppended >= 0 && offsetInAppended < it.value().count()) {
        return it.value()[offsetInAppended];
@@ -206,7 +206,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data( uint pos ) const {
    
         m_addedItems.insert(pos, append);
 
-        for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = addMap.begin(); it != addMap.end(); ++it)
+        for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = addMap.constBegin(); it != addMap.constEnd(); ++it)
             m_addedItems.insert(it.key(), it.value());
     }
     return ret.first();
@@ -241,7 +241,7 @@ void ProjectItemDataProvider::reset() {
 
 uint ProjectItemDataProvider::itemCount() const {
   uint add = 0;
-  for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it)
+  for(QMap<uint, QList<KDevelop::QuickOpenDataPointer> >::const_iterator it = m_addedItems.constBegin(); it != m_addedItems.constEnd(); ++it)
     add += it.value().count();
   return m_filteredItems.count() + add;
 }

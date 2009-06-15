@@ -345,8 +345,8 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFil
   
   CachedIndexedRecursiveImports cachedImports;
   
-  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.find(visibility);
-  if(it != d->m_importsCache.end()) {
+  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.constFind(visibility);
+  if(it != d->m_importsCache.constEnd()) {
     cachedImports = *it;
   }else{
     cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
@@ -357,8 +357,8 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFil
   {
     //Do visibility caching
     CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
-    CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.find(visibility);
-    if(cacheIt != cached.m_hash.end())
+    CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.constFind(visibility);
+    if(cacheIt != cached.m_hash.constEnd())
       return FilteredDeclarationIterator(Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
 
     CacheEntry<IndexedDeclaration>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDeclaration>());
@@ -399,8 +399,8 @@ PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilte
   
   CachedIndexedRecursiveImports cachedImports;
   
-  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.find(visibility);
-  if(it != d->m_importsCache.end()) {
+  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.constFind(visibility);
+  if(it != d->m_importsCache.constEnd()) {
     cachedImports = *it;
   }else{
     cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
@@ -411,8 +411,8 @@ PersistentSymbolTable::FilteredDUContextIterator PersistentSymbolTable::getFilte
   {
     //Do visibility caching
     CacheEntry<IndexedDUContext>& cached(d->m_contextsCache[id]);
-    CacheEntry<IndexedDUContext>::DataHash::const_iterator cacheIt = cached.m_hash.find(visibility);
-    if(cacheIt != cached.m_hash.end())
+    CacheEntry<IndexedDUContext>::DataHash::const_iterator cacheIt = cached.m_hash.constFind(visibility);
+    if(cacheIt != cached.m_hash.constEnd())
       return FilteredDUContextIterator(Contexts::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
 
     CacheEntry<IndexedDUContext>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDUContext>());

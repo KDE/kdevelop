@@ -366,8 +366,8 @@ void UiController::addNewToolView(MainWindow *mw)
     QListWidget *list = new QListWidget(dia);
 
     list->setSortingEnabled(true);
-    for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.begin();
-        it != d->factoryDocuments.end(); ++it)
+    for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
+        it != d->factoryDocuments.constEnd(); ++it)
     {
         ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
         item->factory = it.key();
@@ -473,8 +473,8 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     foreach (Sublime::Area *area, defaultAreas())
     {
         QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
-        for (i = d->factoryDocuments.begin(),
-                 e = d->factoryDocuments.end(); i != e; ++i)
+        for (i = d->factoryDocuments.constBegin(),
+                 e = d->factoryDocuments.constEnd(); i != e; ++i)
         {
             addToolViewIfWanted(i.key(), i.value(), area);
         }
@@ -515,8 +515,8 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
             // At this point we know which toolviews the area wants.
             // Tender all tool views we have.
             QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
-            for (i = d->factoryDocuments.begin(),
-                     e = d->factoryDocuments.end(); i != e; ++i)
+            for (i = d->factoryDocuments.constBegin(),
+                     e = d->factoryDocuments.constEnd(); i != e; ++i)
             {
                 addToolViewIfWanted(i.key(), i.value(), area);
             }

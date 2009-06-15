@@ -58,7 +58,7 @@ struct CodeCompletionItemGrouper {
       (*it).append(item);
     }
 
-    for( typename GroupMap::const_iterator it = groups.begin(); it != groups.end(); ++it ) {
+    for( typename GroupMap::const_iterator it = groups.constBegin(); it != groups.constEnd(); ++it ) {
       KSharedPtr<CompletionTreeNode> node(new CompletionTreeNode());
       node->setParent(parent);
       node->role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)KeyExtractor::Role;

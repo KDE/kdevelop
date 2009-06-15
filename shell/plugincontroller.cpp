@@ -167,8 +167,8 @@ PluginController::~PluginController()
 
 KPluginInfo PluginController::pluginInfo( const IPlugin* plugin ) const
 {
-    for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.begin();
-          it != d->loadedPlugins.end(); ++it )
+    for ( PluginControllerPrivate::InfoToPluginMap::ConstIterator it = d->loadedPlugins.constBegin();
+          it != d->loadedPlugins.constEnd(); ++it )
     {
         if ( it.value() == plugin )
             return it.key();
@@ -316,7 +316,7 @@ void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 KPluginInfo PluginController::infoForPluginId( const QString &pluginId ) const
 {
     QList<KPluginInfo>::ConstIterator it;
-    for ( it = d->plugins.begin(); it != d->plugins.end(); ++it )
+    for ( it = d->plugins.constBegin(); it != d->plugins.constEnd(); ++it )
     {
         if ( it->pluginName() == pluginId )
             return *it;

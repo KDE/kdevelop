@@ -186,7 +186,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 
         ///non-crashy part: Use the mime-types of known languages
         ///Very inefficient right now
-        for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.begin(); it != d->mimeTypeCache.end(); ++it) {
+        for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin(); it != d->mimeTypeCache.constEnd(); ++it) {
             foreach(QString pattern, it.key()->patterns()) {
                 if(pattern.startsWith('*'))
                 pattern = pattern.mid(1);
@@ -208,7 +208,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         ///Crashy and unsafe part: Load missing language-supports
         KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
 
-        LanguageCache::iterator it = d->languageCache.find(mimeType->name());
+        LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
         if (it != d->languageCache.constEnd()) {
             languages = it.value();
         } else {

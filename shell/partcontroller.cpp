@@ -77,7 +77,7 @@ public:
             if ( !preferredName.isEmpty() )
             {
                 KService::List::ConstIterator it;
-                for ( it = offers.begin(); it != offers.end(); ++it )
+                for ( it = offers.constBegin(); it != offers.constEnd(); ++it )
                 {
                     if ( ( *it ) ->desktopEntryName() == preferredName )
                     {

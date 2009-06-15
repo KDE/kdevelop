@@ -482,7 +482,7 @@ void VcsBlackBoxTest::testAddRevert(Repo & r)
 
     // Adding sequentially
 
-    for (Repo::StateMap::const_iterator i = r.state.begin(); i != r.state.end(); ++i) {
+    for (Repo::StateMap::const_iterator i = r.state.constBegin(); i != r.state.constEnd(); ++i) {
         r.add(__LINE__, KUrl::List(i->url()), IBasicVersionControl::NonRecursive);
     }
 

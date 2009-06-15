@@ -87,7 +87,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
       if (FunctionDefinition::definition(dec))
         kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().textRange();
       QMap<IndexedString, QList<SimpleRange> > uses = dec->uses();
-      for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.begin(); it != uses.end(); ++it) {
+      for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
         kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
         foreach (const SimpleRange& range, *it)
           kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();

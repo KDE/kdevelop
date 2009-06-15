@@ -252,7 +252,7 @@ class KrossWrapper : public DUChainReader
                 it--;
                 createHandler(*it);
             }
-            while(it!=definedClasses.begin());
+            while(it!=definedClasses.constBegin());
             
             output += "}\n";
             handlersHeader += "}\n\n";

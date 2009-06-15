@@ -303,7 +303,7 @@ void ItemRepositoryRegistry::store() {
   if(f.open(QIODevice::WriteOnly)) {
     f.resize(0);
     QDataStream stream(&f);
-    for(QMap<QString, QAtomicInt*>::const_iterator it = m_customCounters.begin(); it != m_customCounters.end(); ++it) {
+    for(QMap<QString, QAtomicInt*>::const_iterator it = m_customCounters.constBegin(); it != m_customCounters.constEnd(); ++it) {
       stream << it.key();
       stream << it.value()->fetchAndAddRelaxed(0);
     }

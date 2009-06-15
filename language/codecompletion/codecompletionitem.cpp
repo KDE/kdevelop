@@ -66,7 +66,7 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
 }
 
 void CompletionTreeNode::appendChildren(QList< KSharedPtr< KDevelop::CompletionTreeElement > > children) {
-  for(QList< KSharedPtr< KDevelop::CompletionTreeElement > >::const_iterator it = children.begin(); it != children.end(); ++it)
+  for(QList< KSharedPtr< KDevelop::CompletionTreeElement > >::const_iterator it = children.constBegin(); it != children.constEnd(); ++it)
     appendChild(*it);
 }
 
