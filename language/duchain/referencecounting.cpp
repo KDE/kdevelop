@@ -58,7 +58,7 @@ bool KDevelop::shouldDoDUChainReferenceCountingInternal(void* item)
   refcounting()->mutex.lock();
   bool ret = false;
   
-  QMap< void*, QPair<uint, uint> >::const_iterator it = refcounting()->ranges.upperBound(item);
+  QMap< void*, QPair<uint, uint> >::iterator it = refcounting()->ranges.upperBound(item);
   if(it != refcounting()->ranges.begin()) {
     --it;
     ret = ((char*)it.key()) <= (char*)item && (char*)item < ((char*)it.key()) + it.value().first;

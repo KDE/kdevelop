@@ -758,10 +758,10 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
 
   QMap<IndexedString, QList<SimpleRange> > ret;
 
-  for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.begin(); it != tempUses.end(); ++it) {
+  for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
       QList<SimpleRange>& list(ret[it.key()]);
-      for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2)
+      for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }
   }

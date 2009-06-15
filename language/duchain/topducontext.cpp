@@ -758,8 +758,8 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
       if(top == imported) {
         addImportedContextRecursion(top, imported, 1);
       }else{
-        RecursiveImports::const_iterator it2 = top->m_local->m_recursiveImports.find(imported);
-        if(it2 != top->m_local->m_recursiveImports.end()) {
+        RecursiveImports::const_iterator it2 = top->m_local->m_recursiveImports.constFind(imported);
+        if(it2 != top->m_local->m_recursiveImports.constEnd()) {
 
           addImportedContextRecursion(top, imported, (*it2).first + 1);
         }
@@ -774,8 +774,8 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported) {
       if(top == imported) {
         addImportedContextRecursion(top, imported, 1);
       }else{
-        RecursiveImports::const_iterator it2 = top->m_local->m_recursiveImports.find(imported);
-        if(it2 != top->m_local->m_recursiveImports.end()) {
+        RecursiveImports::const_iterator it2 = top->m_local->m_recursiveImports.constFind(imported);
+        if(it2 != top->m_local->m_recursiveImports.constEnd()) {
 
           addImportedContextRecursion(top, imported, (*it2).first + 1);
         }

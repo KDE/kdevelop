@@ -763,8 +763,8 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
 
      if(m_dynamicData->m_hasLocalDeclarationsHash) {
        //Use a special hash that contains all declarations visible in this context
-      QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
-      QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
+      QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.constFind(identifier);
+      QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.constEnd();
 
       for( ; it != end && it.key() == identifier; ++it ) {
         Declaration* declaration = (*it).data();
@@ -1037,8 +1037,8 @@ QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier
   QList<Declaration*> ret;
 
   if(m_dynamicData->m_hasLocalDeclarationsHash) {
-    QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.find(identifier);
-    QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.end();
+    QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.constFind(identifier);
+    QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.constEnd();
 
     for( ; it != end && it.key() == identifier; ++it )
       ret << (*it).data();

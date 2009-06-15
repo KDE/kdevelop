@@ -332,17 +332,17 @@ void DUChainUtils::collectItems( DUContext* context, DUChainItemFilter& filter )
   QVector<DUContext*> children = context->childContexts();
   QVector<Declaration*> localDeclarations = context->localDeclarations();
 
-  QVector<DUContext*>::const_iterator childIt = children.begin();
-  QVector<Declaration*>::const_iterator declIt = localDeclarations.begin();
+  QVector<DUContext*>::const_iterator childIt = children.constBegin();
+  QVector<Declaration*>::const_iterator declIt = localDeclarations.constBegin();
 
-  while(childIt != children.end() || declIt != localDeclarations.end()) {
+  while(childIt != children.constEnd() || declIt != localDeclarations.constEnd()) {
 
     DUContext* child = 0;
-    if(childIt != children.end())
+    if(childIt != children.constEnd())
       child = *childIt;
 
     Declaration* decl = 0;
-    if(declIt != localDeclarations.end())
+    if(declIt != localDeclarations.constEnd())
       decl = *declIt;
 
     if(decl) {
