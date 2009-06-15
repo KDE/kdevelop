@@ -39,18 +39,21 @@
 #include <time.h>
 #include "cpptypes.h"
 #include "templateparameterdeclaration.h"
-#include <language/editor/documentrange.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
 #include <language/util/setrepository.h>
+
 #include <language/editor/hashedstring.h>
+#include <language/editor/documentrange.h>
+
 #include "typeutils.h"
 #include "templatedeclaration.h"
-#include <language/duchain/indexedstring.h>
 #include "rpp/chartools.h"
 #include "rpp/pp-engine.h"
 #include "rpp/preprocessor.h"
+
+#include <language/duchain/indexedstring.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -59,6 +62,7 @@
 
 #include "tokens.h"
 #include "parsesession.h"
+#include "astutilities.h"
 
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
@@ -1106,17 +1110,20 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(dynamic_cast<ParseSession *>(top->ast().data()));
     ParseSession::Ptr session = ParseSession::Ptr( dynamic_cast<ParseSession *>(top->ast().data()) );
     QVERIFY(session);
-    QVERIFY(session->topAstNode());
-    QCOMPARE(session->topAstNode()->declarations->count(), 3);
-    //! @todo Convenience functions to access nodes from AST root
-    const ListNode<DeclarationAST *> * declarations = session->topAstNode()->declarations->toFront();
-    kDebug() << "node in tree: " << reinterpret_cast<SimpleDeclarationAST *>(declarations->element)->type_specifier->kind;
-    kDebug() << "node in map: " << session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[1]))->kind;
-    QCOMPARE(reinterpret_cast<SimpleDeclarationAST *>(declarations->element)->type_specifier,
+    TranslationUnitAST * ast = session->topAstNode();
+    QVERIFY(ast);
+    QCOMPARE(ast->declarations->count(), 3);
+    
+    //First verify that the node indices correspond to the expected type,
+    //then test that they correspond to their DUChain mappings
+    QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 0));
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier,
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[0])));
-    QCOMPARE(reinterpret_cast<SimpleDeclarationAST *>(declarations->at(1)->element)->init_declarators->toFront()->element->declarator,
+    QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 1));
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 1)->init_declarators->toFront()->element->declarator,
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[1])));
-    QCOMPARE(reinterpret_cast<FunctionDefinitionAST *>(declarations->at(2)->element)->init_declarator->declarator,
+    QVERIFY(AstUtils::childNode<FunctionDefinitionAST>(ast, 2));
+    QCOMPARE(AstUtils::childNode<FunctionDefinitionAST>(ast, 2)->init_declarator->declarator,
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[2])) );
   }
 
