@@ -81,6 +81,10 @@ int test_main(int ac, char* av[])
     v.push_back(10);
     v.push_back(11);
     
+    std::vector<std::string> v2;
+    v2.push_back("hi");
+    v2.push_back("there");
+    
     Test* test = new Test;
     Test& test2 = *test;
     test->n = "foo";

@@ -108,7 +108,8 @@ Variable::~Variable()
         if (topLevel_
             && !controller_->stateIsOn(s_dbgNotStarted))
         {
-            controller_->addCommand(new GDBCommand(GDBMI::VarDelete, varobj_));
+            controller_->addCommand(
+                new GDBCommand(GDBMI::VarDelete, QString("\"%1\"").arg(varobj_)));
         }
         
         allVariables_.remove(varobj_);
@@ -168,7 +169,7 @@ void Variable::fetchMoreChildren()
         activeCommands_ = 1;
         controller_->addCommand(
             new GDBCommand(GDBMI::VarListChildren,
-                           QString("--all-values %1").arg(varobj_),
+                           QString("--all-values \"%1\"").arg(varobj_),
                            this,
                            // FIXME: handle error?
                            &Variable::handleChildren, this));
@@ -214,7 +215,7 @@ void Variable::handleChildren(const GDBMI::ResultRecord &r)
             ++activeCommands_;
             controller_->addCommand(
                 new GDBCommand(GDBMI::VarListChildren,
-                               QString("--all-values %1")
+                               QString("--all-values \"%1\"")
                                .arg(child["name"].literal()),
                                this,
                                // FIXME: handle error?
