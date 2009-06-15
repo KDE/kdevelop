@@ -620,7 +620,7 @@ void MercurialPlugin::parseLogOutputBasicVersionControl(DVcsJob* job) const
     }
 
     typedef std::reverse_iterator<QList<QByteArray>::const_iterator> QStringListReverseIterator;
-    QStringListReverseIterator rbegin(items.end() - 1), rend(items.begin());  // Skip the final 0
+    QStringListReverseIterator rbegin(items.constEnd() - 1), rend(items.constBegin());  // Skip the final 0
     qlonglong lastId;
 
     while (rbegin != rend) {
@@ -716,7 +716,7 @@ void MercurialPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& comm
     QVector<QString> fullIds(id + 1);
 
     typedef std::reverse_iterator<QList<QByteArray>::const_iterator> QStringListReverseIterator;
-    QStringListReverseIterator rbegin(items.end() - 1), rend(items.begin());  // Skip the final 0
+    QStringListReverseIterator rbegin(items.constEnd() - 1), rend(items.constBegin());  // Skip the final 0
     unsigned int lastId;
 
     while (rbegin != rend) {

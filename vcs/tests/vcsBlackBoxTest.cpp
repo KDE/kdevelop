@@ -496,7 +496,7 @@ void VcsBlackBoxTest::testAddRevert(Repo & r)
     typedef std::reverse_iterator<Repo::StateMap::const_iterator> StateMapReverseIterator;
 
     // Adding sequentially; this time in reverse order
-    StateMapReverseIterator rbegin(r.state.end()), rend(r.state.begin());
+    StateMapReverseIterator rbegin(r.state.constEnd()), rend(r.state.constBegin());
 
     for (StateMapReverseIterator i = rbegin; i != rend; ++i) {
         r.add(__LINE__, KUrl::List(i->url()), IBasicVersionControl::NonRecursive);
