@@ -1483,7 +1483,7 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
 if(!declaration)
   return std::numeric_limits<int>::max();
 
-  if(declaration->topContext() == this && !declaration->inSymbolTable()) {
+  if(declaration->topContext() == this && !declaration->inSymbolTable() && !m_dynamicData->isTemporaryDeclarationIndex(declaration->ownIndex())) {
     uint index = declaration->ownIndex();
     Q_ASSERT(!(index & (1<<31)));
     return (int)(index | (1<<31)); //We don't put context-local declarations into the list, that's a waste. We just use the mark them with the highest bit.
@@ -1496,6 +1496,7 @@ if(!declaration)
   uint size = d_func()->m_usedDeclarationIdsSize();
   const DeclarationId* ids = d_func()->m_usedDeclarationIds();
 
+  ///@todo Make m_usedDeclarationIds sorted, and find the decl. using binary search
   for(unsigned int a = 0; a < size; ++a)
     if(ids[a] == id) {
       index = a;
