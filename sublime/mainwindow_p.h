@@ -134,6 +134,7 @@ class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:
     MainWindowPrivate(MainWindow *w, Controller* controller);
+    ~MainWindowPrivate();
 
     /**Use this to create tool views for an area.*/
     class IdealToolViewCreator {
@@ -187,6 +188,8 @@ public slots:
     void toolViewMoved(Sublime::View *toolView, Sublime::Position position);
     void toggleArea(int index);
 
+    void setTabBarLeftCornerWidget(QWidget* widget);
+
 private slots:
     void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
@@ -219,6 +222,7 @@ private:
 
     QMap<Area*, QAction*> m_areaActions;
     QMap<QAction*, Area*> m_actionAreas;
+    QPointer<QWidget> m_leftTabbarCornerWidget;
 };
 
 }

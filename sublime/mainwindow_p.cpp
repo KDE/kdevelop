@@ -121,6 +121,12 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     recreateCentralWidget();
 }
 
+
+MainWindowPrivate::~MainWindowPrivate()
+{
+    delete m_leftTabbarCornerWidget;
+}
+
 void MainWindowPrivate::showLeftDock(bool b)
 {
     idealMainWidget->showLeftDock(b);
@@ -249,6 +255,9 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 
 void MainWindowPrivate::reconstruct()
 {
+    if(m_leftTabbarCornerWidget)
+        m_leftTabbarCornerWidget->setParent(0);
+    
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
 
@@ -274,10 +283,15 @@ void MainWindowPrivate::reconstruct()
         }
     }
     idealMainWidget->blockSignals(false);
+    
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
 }
 
 void MainWindowPrivate::clearArea()
 {
+    if(m_leftTabbarCornerWidget)
+        m_leftTabbarCornerWidget->setParent(0);
+    
     //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
     {
@@ -302,6 +316,9 @@ void MainWindowPrivate::clearArea()
     m_mainWindow->setActiveView(0);
     m_indexSplitters.clear();
     area = 0;
+    viewContainers.clear();
+    
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
 }
 
 void MainWindowPrivate::recreateCentralWidget()
@@ -325,7 +342,6 @@ void MainWindowPrivate::recreateCentralWidget()
             SIGNAL(widgetResized(IdealMainLayout::Role, int)),
             this,
             SLOT(widgetResized(IdealMainLayout::Role, int)));
-
 }
 
 void MainWindowPrivate::
@@ -343,6 +359,9 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
+    if(m_leftTabbarCornerWidget)
+        m_leftTabbarCornerWidget->setParent(0);
+    
     ViewCreator viewCreator(this);
     QSplitter *splitter = m_indexSplitters[index];
     if (index->isSplitted() && (splitter->count() == 1) &&
@@ -360,6 +379,8 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     }
     area->walkViews(viewCreator, index);
     emit m_mainWindow->viewAdded( view );
+    
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
 }
 
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
@@ -403,6 +424,9 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     }
     else
     {
+        if(m_leftTabbarCornerWidget)
+            m_leftTabbarCornerWidget->setParent(0);
+        
         // We've about to remove the last view of this container.  It will
         // be empty, so have to delete it, as well.
 
@@ -467,14 +491,19 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             kDebug() << "after deleation " << parent << " has "
                          << parentSplitter->count() << " elements";
 
+            
             //find the container somewhere to activate
             Container *containerToActivate = parentSplitter->findChild<Sublime::Container*>();
             //activate the current view there
-            if (containerToActivate)
-                return m_mainWindow->setActiveView(containerToActivate->viewForWidget(containerToActivate->currentWidget()));
+            if (containerToActivate) {
+                m_mainWindow->setActiveView(containerToActivate->viewForWidget(containerToActivate->currentWidget()));
+                setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+                return;
+            }
         }
     }
 
+    setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
     m_mainWindow->setActiveView(0L);
 }
 
@@ -719,6 +748,36 @@ AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget*
     layout->setMargin ( 0 );
 }
 #endif
+
+void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
+{
+    if(widget != m_leftTabbarCornerWidget)
+        delete m_leftTabbarCornerWidget;
+    m_leftTabbarCornerWidget = widget;
+    
+    if(!widget || !area || viewContainers.isEmpty())
+        return;
+    
+    AreaIndex* putToIndex = area->rootIndex();
+    QSplitter* splitter = m_indexSplitters[putToIndex];
+    while(putToIndex->isSplitted()) {
+        putToIndex = putToIndex->first();
+        splitter = m_indexSplitters[putToIndex];
+    }
+    
+//     Q_ASSERT(splitter || putToIndex == area->rootIndex());
+    
+    Container* c = 0;
+    if(splitter) {
+        c = qobject_cast<Container*>(splitter->widget(0));
+    }else{
+        c = viewContainers.values()[0];
+    }
+    Q_ASSERT(c);
+    
+    c->setLeftCornerWidget(widget);
+}
+
 }
 
 #include "mainwindow_p.moc"

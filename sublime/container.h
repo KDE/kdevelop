@@ -23,6 +23,8 @@
 
 #include "sublimeexport.h"
 
+class QBoxLayout;
+
 class QPaintEvent;
 
 namespace Sublime {
@@ -60,6 +62,10 @@ public:
     void setTabBarHidden(bool hide);
     void setOpenAfterCurrent(bool after);
 
+    /** Adds a corner widget to the left of this containers tab-bar. To remove it again, just delete it.
+      * The ownership otherwise goes to the container. */
+    void setLeftCornerWidget(QWidget* widget);
+
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void closeRequest(QWidget *w);
@@ -75,6 +81,8 @@ private Q_SLOTS:
 private:
 
     struct ContainerPrivate * const d;
+
+    QBoxLayout* m_tabBarLayout;
 };
 
 }

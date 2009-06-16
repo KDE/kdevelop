@@ -38,6 +38,7 @@
 
 #include "view.h"
 #include "document.h"
+#include <qpointer.h>
 
 namespace Sublime {
 
@@ -50,6 +51,7 @@ struct ContainerPrivate {
     QStackedWidget *stack;
     QLabel *fileNameCorner;
     QLabel *statusCorner;
+    QPointer<QWidget> leftCornerWidget;
 
     bool openAfterCurrent;
 };
@@ -127,17 +129,17 @@ Container::Container(QWidget *parent)
     l->setMargin(0);
     l->setSpacing(0);
 
-    QBoxLayout *h = new QBoxLayout(QBoxLayout::LeftToRight);
-    h->setMargin(0);
-    h->setSpacing(0);
+    m_tabBarLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    m_tabBarLayout->setMargin(0);
+    m_tabBarLayout->setSpacing(0);
 
     d->tabBar = new KTabBar(this);
-    h->addWidget(d->tabBar);
+    m_tabBarLayout->addWidget(d->tabBar);
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
-    h->addWidget(d->fileNameCorner);
+    m_tabBarLayout->addWidget(d->fileNameCorner);
     d->statusCorner = new StatusLabel(d->tabBar, this);
-    h->addWidget(d->statusCorner);
-    l->addLayout(h);
+    m_tabBarLayout->addWidget(d->statusCorner);
+    l->addLayout(m_tabBarLayout);
 
     d->stack = new QStackedWidget(this);
     l->addWidget(d->stack);
@@ -160,6 +162,21 @@ Container::Container(QWidget *parent)
 #endif
 
     setOpenAfterCurrent(group.readEntry("TabBarOpenAfterCurrent", 1) == 1);
+}
+
+void Container::setLeftCornerWidget(QWidget* widget)
+{
+    if(d->leftCornerWidget == widget) {
+        if(d->leftCornerWidget)
+            d->leftCornerWidget->setParent(0);
+    }else{
+        delete d->leftCornerWidget;
+    }
+    d->leftCornerWidget = widget;
+    if(!widget)
+        return;
+    widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    m_tabBarLayout->insertWidget(0, widget);
 }
 
 Container::~Container()

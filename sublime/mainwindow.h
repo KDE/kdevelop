@@ -72,6 +72,10 @@ public:
     /** Allows setting an additional widget that will be inserted next to the area-switcher tabs */
     void setAreaSwitcherCornerWidget(QWidget* widget);
     
+    /** Allows setting an additional widget that will be inserted left to the document tab-bar.
+      *  The ownership goes to the target.  */
+    void setTabBarLeftCornerWidget(QWidget* widget);
+    
 public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);
@@ -98,7 +102,7 @@ protected:
     QWidget *statusBarLocation();
     virtual void initializeStatusBar();
 protected Q_SLOTS:
-    void setupAreaSelector();
+    virtual void setupAreaSelector();
 
 public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.

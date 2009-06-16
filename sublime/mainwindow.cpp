@@ -345,6 +345,11 @@ void MainWindow::setAreaSwitcherCornerWidget(QWidget* widget)
 #endif
 }
 
+void MainWindow::setTabBarLeftCornerWidget(QWidget* widget)
+{
+    d->setTabBarLeftCornerWidget(widget);
+}
+
 }
 
 #include "mainwindow.moc"
