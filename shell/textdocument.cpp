@@ -470,7 +470,7 @@ bool TextDocument::close(DocumentSaveMode mode)
         return false;
 
     KDevelop::EditorIntegrator::removeDocument(d->document);
-    d->document->deleteLater();
+    delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
 
     return true;
 }
@@ -492,6 +492,8 @@ KDevelop::TextView::TextView(TextDocument * doc)
 
 KDevelop::TextView::~TextView()
 {
+    delete d->editor; //We have to delete the view right now, to prevent random crashes in the event handler
+    d->editor = 0;
     delete d;
 }
 
