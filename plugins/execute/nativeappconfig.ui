@@ -212,7 +212,7 @@
          <string>Removes the selected dependencies from the list.</string>
         </property>
         <property name="text">
-         <string>-</string>
+         <string></string>
         </property>
        </widget>
       </item>
@@ -225,7 +225,7 @@
          <string>Move a dependency up in the list.</string>
         </property>
         <property name="text">
-         <string>Up</string>
+         <string></string>
         </property>
        </widget>
       </item>
@@ -238,7 +238,7 @@
          <string>Moves the selected dependency down in the list.</string>
         </property>
         <property name="text">
-         <string>Down</string>
+         <string></string>
         </property>
        </widget>
       </item>
@@ -264,7 +264,7 @@
          <string>Adds the listed target to the dependency list.</string>
         </property>
         <property name="text">
-         <string>+</string>
+         <string></string>
         </property>
        </widget>
       </item>

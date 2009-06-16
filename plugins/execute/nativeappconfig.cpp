@@ -80,6 +80,11 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(1, "Build" );
     dependencyAction->setItemData(2, "Install" );
     dependencyAction->setItemData(3, "SudoInstall" );
+
+    addDependency->setIcon( KIcon("list-add") );
+    removeDependency->setIcon( KIcon("list-remove") );
+    moveDepUp->setIcon( KIcon("go-up") );
+    moveDepDown->setIcon( KIcon("go-down") );
     
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
