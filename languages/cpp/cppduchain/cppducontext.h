@@ -197,15 +197,57 @@ class CppDUContext : public BaseContext {
     CppDUContext( const Param1& p1, const Param2& p2) : BaseContext(p1, p2), m_instantiatedFrom(0) {
       static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
+    
+    ///Matches the qualified identifier represented by the search item to the tail of the contexts scope identfier
+    ///Also matches searches without template-parameters to fully instantiated contexts
+    ///Returns true if they match
+    inline bool matchSearchItem(DUContext::SearchItem::Ptr item, const DUContext* ctx) const {
+        DUContext::SearchItem::PtrList items;
+        while(1) {
+          items << item;
+          if(!item->next.isEmpty())
+            item = item->next[0];
+          else
+            break;
+        }
+        
+        while(ctx && !items.isEmpty()) {
+          QualifiedIdentifier localId = ctx->localScopeIdentifier();
+          
+          if(localId.isEmpty())
+            return false;
+        
+          int matchPos = localId.count()-1;
+          while(!items.isEmpty() && matchPos >= 0) {
+            
+            if(items.back()->identifier.templateIdentifiersCount())
+              return false; //Don't match when there is template parameters, as that needs other mechanisms
+            
+            if((!items.back()->identifier.templateIdentifiersCount() && items.back()->identifier.identifier() == localId.at(matchPos).identifier()) ||
+                items.back()->identifier == localId.at(matchPos)) {
+              --matchPos;
+              items.resize(items.size()-1);
+            }else{
+              return false;
+            }
+          }
+          
+          if(items.isEmpty())
+            return true;
+          
+          ctx = ctx->parentContext();
+        }
+        
+        return false;
+    }
 
     ///Overridden to take care of templates and other c++ specific things
     virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags ) const
     {
-      if(this->type() == DUContext::Class && identifiers.count() == 1 && !identifiers[0]->hasNext() && !(basicFlags & DUContext::OnlyFunctions) && this->localScopeIdentifier().count()) {
+      if(this->type() == DUContext::Class && identifiers.count() == 1 && /*!identifiers[0]->hasNext() &&*/!(basicFlags & DUContext::OnlyFunctions) && this->localScopeIdentifier().count()) {
         
         //Check whether we're searching for just the name of this context's class. If yes, return this context's owner.
-        Identifier searchId = identifiers[0]->identifier;
-        if(searchId.identifier() == this->localScopeIdentifier().last().identifier() && !searchId.templateIdentifiersCount()) {
+        if(matchSearchItem(identifiers[0], this)) {
           
           Declaration* owner = this->owner();
           if(owner) {

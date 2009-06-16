@@ -540,29 +540,52 @@ void TestDUChain::testBaseUses()
 {
   TEST_FILE_PARSE_ONLY
 
-  //                 0         1         2         3         4         5
-  //                 012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("class A{ class B {}; }; class C : public A::B { C() : A::B() {} };");
+{
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("namespace N { struct A { A(int); int m; }; }; struct B : public N::A { B() : N::A(5) { this->N::A::m = 5; } };");
 
-  TopDUContext* top = parse(method, DumpNone);
+    TopDUContext* top = parse(method, DumpAll);
 
-  DUChainWriteLocker lock(DUChain::lock());
+    DUChainWriteLocker lock(DUChain::lock());
 
-  QCOMPARE(top->localDeclarations().count(), 2);
-  QCOMPARE(top->childContexts().count(), 2);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
-  QCOMPARE(top->childContexts()[1]->usesCount(), 2);
+    QVERIFY(top->problems().isEmpty()); //N::A must be found in the constructor
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 2);
+    QVERIFY(!top->childContexts()[0]->childContexts()[0]->localDeclarations()[1]->uses().isEmpty());
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
 
-  QCOMPARE(top->childContexts()[1]->uses()[0].m_range, SimpleRange(0, 41, 0, 42));
-  QCOMPARE(top->childContexts()[1]->uses()[1].m_range, SimpleRange(0, 44, 0, 45));
+    release(top);
+  }
 
-  QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+  {
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("class A{ class B {}; }; class C : public A::B { C() : A::B() {} };");
 
-  QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
-  QCOMPARE(top->childContexts()[1]->childContexts()[1]->usesCount(), 2);
+    TopDUContext* top = parse(method, DumpNone);
 
-  release(top);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[1]->usesCount(), 2);
+
+    QCOMPARE(top->childContexts()[1]->uses()[0].m_range, SimpleRange(0, 41, 0, 42));
+    QCOMPARE(top->childContexts()[1]->uses()[1].m_range, SimpleRange(0, 44, 0, 45));
+
+    QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+
+    QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->childContexts()[1]->usesCount(), 2);
+
+    release(top);
+  }
 }
 
 
