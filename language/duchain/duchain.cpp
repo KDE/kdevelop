@@ -1366,7 +1366,7 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
     return;
   //Check whether the document has an attached environment-manager, and whether that one thinks the document needs to be updated.
   //If yes, update it.
-  DUChainWriteLocker lock( DUChain::lock() );
+  DUChainReadLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
   TopDUContext* ctx = DUChainUtils::standardContextForUrl(doc->url());
   if(ctx && ctx->parsingEnvironmentFile())
@@ -1455,19 +1455,36 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
     bool needsUpdate = standardContext->parsingEnvironmentFile() && standardContext->parsingEnvironmentFile()->needsUpdate();
     if(!needsUpdate) {
+
         //Only apply the highlighting if we don't need to update, else we might highlight total crap
-        foreach( KDevelop::ILanguage* language, languages)
-          if(language->languageSupport() && language->languageSupport()->codeHighlighting())
-            language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
+        //Do instant highlighting only if all imports are loaded, to make sure that we don't block the user-interface too long
+        //Else the highlighting will be done in the background-thread
+        //This is not exactly right, as the direct imports don't necessarily equal the real imports used by uses
+        //but it approximates the correct behavior.
+        bool allImportsLoaded = true;
+        foreach(DUContext::Import import, standardContext->importedParentContexts())
+          if(!import.indexedContext().indexedTopContext().isLoaded())
+            allImportsLoaded = false;
+
+        if(allImportsLoaded) {
+          foreach( KDevelop::ILanguage* language, languages)
+            if(language->languageSupport() && language->languageSupport()->codeHighlighting())
+              language->languageSupport()->codeHighlighting()->highlightDUChain(standardContext);
+          kDebug() << "highlighted" << doc->url() << "in foreground";
+          return;
+        }
     }else{
       kDebug() << "not highlighting the duchain because the documents needs an update";
     }
     
-    if(needsUpdate || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses))
+    if(needsUpdate || !(standardContext->features() & TopDUContext::AllDeclarationsContextsAndUses)) {
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
-  }else{
-    ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
+      return;
+    }
   }
+    
+  //Add for highlighting etc.
+  ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), TopDUContext::AllDeclarationsContextsAndUses);
 }
 
 void DUChain::documentRenamed(KDevelop::IDocument* doc)
