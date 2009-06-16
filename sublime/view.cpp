@@ -62,8 +62,11 @@ View::View(Document *doc, WidgetOwnership ws )
 
 View::~View()
 {
-    if (d->widget && d->ws == View::TakeOwnership )
-        delete d->widget;
+    if (d->widget && d->ws == View::TakeOwnership ) {
+        d->widget->hide();
+        d->widget->setParent(0);
+        d->widget->deleteLater();
+    }
     delete d;
 }
 
