@@ -631,6 +631,7 @@ void LaunchConfigTypePage::changeLauncher( int idx )
         ui->tab->removePage( p );
         delete p;
     }
+    launcherPages.clear();
     ILauncher* l = config->type()->launcherForId( ui->launcher->itemData( idx ).toString() );
     if( l )
     {
