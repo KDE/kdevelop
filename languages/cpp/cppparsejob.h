@@ -239,6 +239,9 @@ public:
     ReferencedTopDUContext proxyContext;
     ReferencedTopDUContext contentContext;
 private:
+    //Duchain must not be locked
+    void highlightIfNeeded();
+
     ReferencedTopDUContext updatingProxyContext;
     ReferencedTopDUContext updatingContentContext;
 

@@ -394,6 +394,20 @@ void CPPInternalParseJob::initialize() {
       proxyContext = ContextBuilder::createEmptyTopContext(parentJob()->document());*/
 }
 
+void CPPInternalParseJob::highlightIfNeeded()
+{
+    DUChainReadLocker l(DUChain::lock());
+    ReferencedTopDUContext standardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
+
+    if(standardContext && standardContext->smartRange()) {
+      kDebug( 9007 ) << "Highlighting" << parentJob()->document().str();
+      //If the document has a smart-range, at least re-do the highlighting
+      l.unlock();
+      if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
+        parentJob()->cpp()->codeHighlighting()->highlightDUChain( standardContext.data() );
+    }
+}
+
 void CPPInternalParseJob::run()
 {
     if(!CppLanguageSupport::self())
@@ -408,6 +422,7 @@ void CPPInternalParseJob::run()
     if(!parentJob()->needsUpdate()) {
       parentJob()->processDelayedImports();
       kDebug( 9007 ) << "===-- ALREADY UP TO DATE --===> " << parentJob()->document().str();
+      highlightIfNeeded();
       return;
     }
     if(!parentJob()->contentEnvironmentFile()) {
@@ -690,7 +705,6 @@ void CPPInternalParseJob::run()
               foreach(KDevelop::ProblemPointer problem, useBuilder.problems())
                 contentContext->addProblem(problem);
           }
-          
           if (!parentJob()->abortRequested() && editor.smart()) {
 
             if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
@@ -724,6 +738,9 @@ void CPPInternalParseJob::run()
       if (parentJob()->abortRequested())
         return /*parentJob()->abortJob()*/;
 
+    }else{
+      kDebug() << "keeping duchain";
+      highlightIfNeeded();
     }
     
     //Even if doNotChangeDUChain is enabled, add new imported contexts.
