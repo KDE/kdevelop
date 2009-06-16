@@ -21,6 +21,7 @@
 #include "cmakeutils.h"
 
 #include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -31,6 +32,7 @@
 #include <kdebug.h>
 #include <kprocess.h>
 #include <kstandarddirs.h>
+#include <KMessageBox>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
@@ -66,6 +68,20 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
         if( !choosedlg.exec() )
         {
             return false;
+        }
+
+        {   // if the buildfolder does not exist, create it
+            // TODO: the whole configuration stuff has to be changed since it expects a configured cmake project
+            //       creating the buildfolder alone is not enough.
+            QDir buildFolder( bd.buildFolder().toLocalFile() );
+            if ( !buildFolder.exists() ) {
+                if ( !buildFolder.mkpath( buildFolder.absolutePath() ) ) {
+                    KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                                        i18n( "The build directory did not exist and could not be created." ),
+                                        i18n("Error creating build directory") );
+                    return false;
+                }
+            }
         }
 
         cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
