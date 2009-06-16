@@ -957,6 +957,24 @@ void CppLanguageSupport::newClassWizard()
   SimpleRefactoring::self().createNewClass(0);
 }
 
+void CppLanguageSupport::replaceCurrentAccess(KUrl url, QString old, QString _new)
+{
+  IDocument* document = ICore::self()->documentController()->documentForUrl(url);
+  if(document) {
+    KTextEditor::Document* textDocument = document->textDocument();
+    if(textDocument) {
+      KTextEditor::View* activeView = textDocument->activeView();
+      if(activeView) {
+        KTextEditor::Cursor cursor = activeView->cursorPosition();
+        KTextEditor::Range oldRange = KTextEditor::Range(cursor-KTextEditor::Cursor(0,old.length()), cursor);
+        if(oldRange.start().column() >= 0 && textDocument->text(oldRange) == old) {
+          textDocument->replaceText(oldRange, _new);
+        }
+      }
+    }
+  }
+}
+
 UIBlockTester::UIBlockTesterThread::UIBlockTesterThread( UIBlockTester& parent ) : QThread(), m_parent( parent ), m_stop(false) {
 }
 

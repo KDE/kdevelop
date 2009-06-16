@@ -1673,20 +1673,8 @@ bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUC
 
 void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
 {
-  IDocument* document = ICore::self()->documentController()->documentForUrl(m_duContext->url().toUrl());
-  if(document) {
-    KTextEditor::Document* textDocument = document->textDocument();
-    if(textDocument) {
-      KTextEditor::View* activeView = textDocument->activeView();
-      if(activeView) {
-        KTextEditor::Cursor cursor = activeView->cursorPosition();
-        KTextEditor::Range oldRange = KTextEditor::Range(cursor-KTextEditor::Cursor(0,old.length()), cursor);
-        if(oldRange.start().column() >= 0 && textDocument->text(oldRange) == old) {
-          textDocument->replaceText(oldRange, _new);
-        }
-      }
-    }
-  }
+  //We must not change the document from within the background, so we use a queued connection
+  QMetaObject::invokeMethod(CppLanguageSupport::self(), "replaceCurrentAccess", Qt::QueuedConnection, Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
 }
 
 int CodeCompletionContext::matchPosition() const {

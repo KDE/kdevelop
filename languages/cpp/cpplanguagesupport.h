@@ -147,6 +147,8 @@ public:
   
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
+    //Invoked directly from within the code-completion context
+    void replaceCurrentAccess(KUrl document, QString oldAccess, QString newAccess);
   
 private slots:
     void projectOpened(KDevelop::IProject *project);

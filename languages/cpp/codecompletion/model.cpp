@@ -99,6 +99,10 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
   if(insertedTrimmed.endsWith( '(' ) || insertedTrimmed.endsWith(',') || insertedTrimmed.endsWith('<') || insertedTrimmed.endsWith(":") )
     return true;*/
   
+  //Start automatic completion behind '::'
+  if(insertedTrimmed.endsWith(":") && position.column() > 1 && view->document()->text(KTextEditor::Range(position.line(), position.column()-2, position.line(), position.column())) == "::")
+    return true;
+  
   return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
