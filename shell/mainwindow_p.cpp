@@ -57,6 +57,7 @@ Boston, MA 02110-1301, USA.
 #include "statusbar.h"
 
 #include "mainwindow.h"
+#include "workingsetcontroller.h"
 
 namespace KDevelop {
 
@@ -308,6 +309,15 @@ void MainWindowPrivate::setupAreaSelectorActions()
         group->addAction(t);
     }
     m_mainWindow->plugActionList("area_selector", areaActions);
+}
+
+void MainWindowPrivate::setupAreaSelector()
+{
+    if(!m_workingSetCornerWidget) {
+        m_workingSetCornerWidget = new QWidget(m_mainWindow);
+        QWidget* w = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, true);
+        m_mainWindow->setTabBarLeftCornerWidget(w);
+    }
 }
 
 void MainWindowPrivate::toggleArea(bool b)

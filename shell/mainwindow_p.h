@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QObject>
 #include <QPointer>
+#include <qwidget.h>
 
 class KActionCollection;
 
@@ -58,6 +59,7 @@ public:
     void registerStatus(QObject*);
 
     void setupAreaSelectorActions();
+    void setupAreaSelector();
 
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );
@@ -104,12 +106,14 @@ public Q_SLOTS:
 
     void toggleArea(bool b);
 
+    
 private:
     KActionCollection *actionCollection();
 
     MainWindow *m_mainWindow;
     StatusBar* m_statusBar;
     QWidget* lastXMLGUIClientView;
+    QPointer<QWidget> m_workingSetCornerWidget;
     static bool s_quitRequested;
 };
 

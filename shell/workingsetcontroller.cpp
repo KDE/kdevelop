@@ -42,7 +42,7 @@ using namespace KDevelop;
 bool WorkingSet::m_loading = false;
 
 //Random set of icons that are well distinguishable from each other. If the user doesn't have them, they won't be used.
-QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "accessories-calculator" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
+QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
 
 WorkingSetController::WorkingSetController(Core* core) : m_core(core)
 {
@@ -497,11 +497,10 @@ void WorkingSetWidget::buttonTriggered()
     
     if(m_mainWindow->area()->workingSet() == m_buttons[button]->id()) {
         //Create a new working-set
-        if(!m_mini) {
+//         if(!m_mini) {
                 m_mainWindow->area()->setWorkingSet(QString());
-        }else{
-            ///@todo Show some useful menu here
-        }
+//         }else{
+//         }
     }else{
         m_mainWindow->area()->setWorkingSet(m_buttons[button]->id());
     }

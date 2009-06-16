@@ -64,7 +64,8 @@ Q_SIGNALS:
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
-
+    virtual void setupAreaSelector();
+    
 public Q_SLOTS:
     virtual void loadSettings();
     virtual void saveSettings();

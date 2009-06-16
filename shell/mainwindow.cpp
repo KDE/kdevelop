@@ -202,6 +202,13 @@ void MainWindow::initializeStatusBar()
     d->setupStatusBar();
 }
 
+
+void MainWindow::setupAreaSelector()
+{
+    Sublime::MainWindow::setupAreaSelector();
+    d->setupAreaSelector();
+}
+
 }
 
 #include "mainwindow.moc"
