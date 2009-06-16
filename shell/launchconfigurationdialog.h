@@ -29,6 +29,8 @@
 #include <kcombobox.h>
 #include <qitemeditorfactory.h>
 
+#include "ui_launchconfigurationdialog.h"
+
 class QTreeView;
 class QStackedWidget;
 class QToolButton;
@@ -123,7 +125,7 @@ private:
     QList<LaunchConfigurationPage*> launcherPages;
 };
 
-class LaunchConfigurationDialog : public KDialog
+class LaunchConfigurationDialog : public KDialog, public Ui::LaunchConfigurationDialog
 {
 Q_OBJECT
 public:
@@ -135,13 +137,10 @@ private slots:
     void selectedConfig(QItemSelection,QItemSelection);
     void pageChanged();
     void saveConfig();
+    void updateNameLabel( const QString& );
 private:
     void saveConfig( const QModelIndex& );
-    QTreeView* tree;
     LaunchConfigurationsModel* model;
-    QStackedWidget* stack;
-    QToolButton* addConfig;
-    QToolButton* deleteConfig;
     QMap<LaunchConfigurationType*, LaunchConfigTypePage*> typeWidgets;
     bool currentPageChanged;
 };

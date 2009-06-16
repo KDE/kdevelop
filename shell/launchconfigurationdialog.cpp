@@ -55,27 +55,13 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     setButtonFocus( KDialog::Ok );
     button( KDialog::Apply )->setEnabled( false );
     
-    QSplitter* split = new QSplitter();
+    setupUi( mainWidget() );
     
-    QWidget* leftWidget = new QWidget( split );
-    QGridLayout* lay = new QGridLayout( leftWidget );
-    leftWidget->setLayout( lay );
-    
-    addConfig = new QToolButton( leftWidget );
     addConfig->setIcon( KIcon("list-add") );
-    addConfig->setText( i18n( "Add" ) );
     addConfig->setEnabled( false );
-    deleteConfig = new QToolButton( leftWidget );
     deleteConfig->setIcon( KIcon("list-remove") );
-    deleteConfig->setText( i18n( "Delete" ) );
     deleteConfig->setEnabled( false );
     
-    lay->addWidget( addConfig , 0, 0);
-    lay->addWidget( deleteConfig, 0, 1 );
-    lay->setColumnStretch( 2, 1 );
-    
-    tree = new QTreeView( leftWidget );
-    lay->addWidget( tree, 2, 0, 1, 3  );
     model = new LaunchConfigurationsModel( tree );
     tree->setModel( model );
     tree->setIndentation( 5 );
@@ -88,20 +74,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     dlg->setItemEditorFactory( new QItemEditorFactory() );
     dlg->itemEditorFactory()->registerEditor( QVariant::String, new LaunchConfigurationTypeEditorCreator() );
     tree->setItemDelegateForColumn( 1, dlg );
-    
-    split->addWidget( leftWidget );
-    
-    stack = new QStackedWidget( split );
-    
-    // setup a default widget to make sure the treeview is sized properly on start
-    QWidget* topWidget = new QWidget( stack );
-    topWidget->setMinimumWidth( 120 );
-    stack->addWidget(topWidget);
-    stack->setCurrentIndex( 0 );
-    split->addWidget( stack );
-    split->setSizes( QList<int>() << 2 << 5 );
-    
-    setMainWidget( split );
     
     connect( addConfig, SIGNAL(clicked()), this, SLOT(createConfiguration()));
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
@@ -127,7 +99,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     tree->selectionModel()->select( QItemSelection( idx, idx ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     tree->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     tree->resizeColumnToContents( 0 );
-    setInitialSize( QSize( 750, 550 ) );
+    setInitialSize( QSize( 700, 500 ) );
     
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
@@ -140,6 +112,7 @@ void LaunchConfigurationDialog::selectedConfig(QItemSelection selected, QItemSel
         LaunchConfiguration* l = model->configForIndex( deselected.indexes().first() );
         if( l )
         {
+            disconnect(l, SIGNAL(nameChanged(QString)), this,  SLOT(updateNameLabel(QString)));
             if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18n("Unsaved Changes") ) == KMessageBox::Yes )
             {
                 saveConfig( deselected.indexes().first() );
@@ -150,6 +123,7 @@ void LaunchConfigurationDialog::selectedConfig(QItemSelection selected, QItemSel
             }
         }
     }
+    updateNameLabel("");
     if( !selected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
@@ -168,6 +142,8 @@ void LaunchConfigurationDialog::selectedConfig(QItemSelection selected, QItemSel
                 stack->addWidget( tab );
             }
             tab->setLaunchConfiguration( l );
+            updateNameLabel( l->name() );
+            connect( l, SIGNAL(nameChanged(QString)), SLOT(updateNameLabel(QString)) );
             stack->setCurrentWidget( tab );
             
             addConfig->setEnabled( true );
@@ -221,6 +197,13 @@ void LaunchConfigurationDialog::deleteConfiguration()
         tree->resizeColumnToContents( 0 );
     }
 }
+
+
+void LaunchConfigurationDialog::updateNameLabel( const QString& name )
+{
+    configName->setText( i18n("<b>%1</b>", name ) );
+}
+
 
 void LaunchConfigurationDialog::createConfiguration()
 {
