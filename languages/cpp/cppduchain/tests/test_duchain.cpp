@@ -1125,6 +1125,8 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(AstUtils::childNode<FunctionDefinitionAST>(ast, 2));
     QCOMPARE(AstUtils::childNode<FunctionDefinitionAST>(ast, 2)->init_declarator->declarator,
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[2])) );
+             
+    release(top);
   }
 
   {
@@ -1495,7 +1497,28 @@ void TestDUChain::testDeclareClass()
   Declaration* defRec = classA->localDeclarations()[1];
   QVERIFY(defRec->abstractType());
   QCOMPARE(defRec->abstractType()->indexed(), defClassA->abstractType()->indexed());
-
+  
+  //Test Ast-DuChain mappings
+  parse(method, DumpAST, top, true);
+  
+  ParseSession::Ptr session = ParseSession::Ptr(dynamic_cast<ParseSession *>(top->ast().data()));
+  TranslationUnitAST * ast = session->topAstNode();
+  QVERIFY(ast);
+  ClassSpecifierAST * classAst = AstUtils::node_cast<ClassSpecifierAST>
+                               (AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier);
+  QVERIFY(classAst);
+  kDebug() << "count:" << classAst->member_specs->count();
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier ),
+           KDevelop::DeclarationPointer(top->localDeclarations()[0]));
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<FunctionDefinitionAST>(classAst, 0)->init_declarator->declarator ),
+           KDevelop::DeclarationPointer(top->childContexts()[0]->localDeclarations()[0]));
+           
+  //I haven't figured out why the AST inserts a NULL node after A's constructor
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(classAst, 2)->init_declarators->toFront()->element->declarator ),
+           KDevelop::DeclarationPointer(top->childContexts()[0]->localDeclarations()[1]));
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(classAst, 3)->init_declarators->toFront()->element->declarator ),
+           KDevelop::DeclarationPointer(top->childContexts()[0]->localDeclarations()[2]));
+           
   release(top);
 }
 

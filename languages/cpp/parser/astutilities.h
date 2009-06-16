@@ -34,13 +34,17 @@ namespace AstUtils
 template<typename Target, typename Source>
 Target * node_cast(Source * node)
 {
+  if(!node)
+    return 0;
+  
   return Target::__node_kind == node->kind ? reinterpret_cast<Target *>(node) : 0;
 }
 
 /**
  *Access a declaration node from a translation unit of a known type.
  * @tparam NodeType The known type of the node to be expecting
- * 
+ * @param tree the top level node of the tree
+ * @param index index of the declaration to access, is checked for validity
  */
 template<typename NodeType>
 NodeType * childNode(TranslationUnitAST * tree, int index)
@@ -49,6 +53,12 @@ NodeType * childNode(TranslationUnitAST * tree, int index)
   return node_cast<NodeType>(tree->declarations->at(index)->element);
 }
 
+template<typename NodeType>
+NodeType * childNode(ClassSpecifierAST * tree, int index)
+{
+  Q_ASSERT(index < tree->member_specs->count());
+  return node_cast<NodeType>(tree->member_specs->at(index)->element);
+}
 
 }
 
