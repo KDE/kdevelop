@@ -263,6 +263,8 @@ public:
    * This is only created if you request the AST feature for parsing.
    * It may be discarded at any time. Every update without the AST feature will discard it.
    * The actual contents is language-specific.
+   *
+   * @todo Figure out logic to get rid of AST when it is not needed/useful
    */
   KSharedPtr<IAstContainer> ast() const;
   
