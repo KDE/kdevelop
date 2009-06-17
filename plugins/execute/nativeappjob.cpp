@@ -37,8 +37,10 @@
 #include <kshell.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
+
+#include "iexecuteplugin.h"
 
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg) 
     : KDevelop::OutputJob( parent ), proc(0)
@@ -46,37 +48,20 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     kDebug() << "creating native app job";
     setCapabilities(Killable);
     
-    KConfigGroup grp = cfg->config();
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
+        
     KDevelop::EnvironmentGroupList l(KGlobal::config());
-
-    QString executable = ExecutePlugin::executableFromConfig( grp );
-    QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
+    QString envgrp = iface->environmentGroup(cfg);
     
-    if( executable.isEmpty() )
+    QString err;
+    KUrl executable = iface->executable( cfg, err );
+    
+    if( !err.isEmpty() ) 
     {
-        setError(-1);
-        setErrorText( i18n("No executable specified") );
-        kWarning() << "Launch Configuration:" << cfg->name() << "no executable set";
-    } else
-    {
-        KShell::Errors err;
-        if( KShell::splitArgs( executable, KShell::TildeExpand | KShell::AbortOnMeta, &err ).isEmpty() || err != KShell::NoError )
-        {
-            
-            setError( -1 );
-            if( err == KShell::BadQuoting ) 
-            {
-                setErrorText( i18n("There is a quoting error in the executable "
-                                   "for the launch configuration '%1'. "
-                                   "Aborting start.", cfg->name() ) );
-            } else 
-            {   
-                setErrorText( i18n("A shell meta character was included in the "
-                                   "executable for the launch configuration '%1', "
-                                   "this is not supported currently. Aborting start.", cfg->name() ) );
-            }
-            kWarning() << "Launch Configuration:" << cfg->name() << "executable has meta characters";
-        }
+        setError( -1 );
+        setErrorText( err );
+        return;
     }
     
     if( envgrp.isEmpty() )
@@ -87,23 +72,11 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         envgrp = l.defaultGroup();
     }
     
-    KShell::Errors err;
-    QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
-    if( err != KShell::NoError )
+    QStringList arguments = iface->arguments( cfg, err );
+    if( !err.isEmpty() ) 
     {
-        
-        setError( -1 );
-        if( err == KShell::BadQuoting ) 
-        {
-            setErrorText( i18n("There is a quoting error in the arguments for "
-                               "the launch configuration '%1'. Aborting start.", cfg->name() ) );
-        } else 
-        {   
-            setErrorText( i18n("A shell meta character was included in the "
-                               "arguments for the launch configuration '%1', "
-                               "this is not supported currently. Aborting start.", cfg->name() ) );
-        }
-        kWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
+        setError( -2 );
+        setErrorText( err );
     }
     
     if( error() != 0 )
@@ -127,14 +100,19 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     // Now setup the process parameters
     
     proc->setEnvironment( l.createEnvironment( envgrp, proc->systemEnvironment()) );
-    proc->setWorkingDirectory( grp.readEntry(ExecutePlugin::workingDirEntry, KUrl( QFileInfo( executable ).absolutePath() ) ).toLocalFile() );
+    KUrl wc = iface->workingDirectory( cfg );
+    if( !wc.isValid() || wc.isEmpty() )
+    {
+        wc = KUrl( QFileInfo( executable.toLocalFile() ).absolutePath() );
+    }
+    proc->setWorkingDirectory( wc.toLocalFile() );
     proc->setProperty( "executable", executable );
     
     kDebug() << "setting app:" << executable << arguments;
     
     proc->setOutputChannelMode(KProcess::MergedChannels);
     
-    proc->setProgram( executable, arguments );
+    proc->setProgram( executable.toLocalFile(), arguments );
     
     setTitle(cfg->name());
 }

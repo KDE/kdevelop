@@ -25,23 +25,42 @@
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 #include <QtCore/QProcess>
+#include "iexecuteplugin.h"
 
-namespace KDevelop
-{
+class KUrl;
+class KJob;
 
-class ExecutePlugin : public KDevelop::IPlugin
+class ExecutePlugin : public KDevelop::IPlugin, public IExecutePlugin
 {
     Q_OBJECT
+    Q_INTERFACES( IExecutePlugin )
 
   public:
     ExecutePlugin(QObject *parent, const QVariantList & = QVariantList() );
     virtual ~ExecutePlugin();
 
+    static QString _nativeAppConfigTypeId;
+    static QString workingDirEntry;
+    static QString executableEntry;
+    static QString argumentsEntry;
+    static QString isExecutableEntry;
+    static QString dependencyEntry;
+    static QString environmentGroupEntry;
+    static QString useTerminalEntry;
+    static QString userIdToRunEntry;
+    static QString dependencyActionEntry;
+    static QString projectTargetEntry;
+    
     virtual void unload();
-
+    
+    KUrl executable( KDevelop::ILaunchConfiguration*, QString& err ) const;
+    QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
+    KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
+    KJob* dependecyJob( KDevelop::ILaunchConfiguration* ) const;
+    QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
+    bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
+    QString nativeAppConfigTypeId() const;
 };
-
-}
 
 #endif // EXECUTEPLUGIN_H
 

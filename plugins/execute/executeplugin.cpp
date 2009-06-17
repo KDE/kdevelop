@@ -28,14 +28,33 @@
 #include <kpluginloader.h>
 #include <kdebug.h>
 #include <kjob.h>
+#include <kparts/mainwindow.h>
 #include <kmessagebox.h>
 #include <kaboutdata.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <util/environmentgrouplist.h>
 
 #include "nativeappconfig.h"
+#include <project/projectmodel.h>
+#include <project/builderjob.h>
+#include <kshell.h>
+
+QString ExecutePlugin::_nativeAppConfigTypeId = "Native Application";
+QString ExecutePlugin::workingDirEntry = "Working Directory";
+QString ExecutePlugin::executableEntry = "Executable";
+QString ExecutePlugin::argumentsEntry = "Arguments";
+QString ExecutePlugin::isExecutableEntry = "isExecutable";
+QString ExecutePlugin::dependencyEntry = "Dependencies";
+QString ExecutePlugin::environmentGroupEntry = "EnvironmentGroup";
+QString ExecutePlugin::useTerminalEntry = "Use External Terminal";
+QString ExecutePlugin::userIdToRunEntry = "User Id to Run";
+QString ExecutePlugin::dependencyActionEntry = "Dependency Action";
+QString ExecutePlugin::projectTargetEntry = "Project Target";
 
 using namespace KDevelop;
 
@@ -45,6 +64,7 @@ K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecute", "kdevexecute", ki18
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
 {
+    KDEV_USE_EXTENSION_INTERFACE( IExecutePlugin )
     NativeAppConfigType* t = new NativeAppConfigType();
     t->addLauncher( new NativeAppLauncher() );
     kDebug() << "adding native app launch config";
@@ -60,152 +80,164 @@ void ExecutePlugin::unload()
 {
 }
 
-//TODO: Port to launch framework
-// QStringList ExecutePlugin::instrumentorsProvided() const
-// {
-//     return QStringList() << "default" << "konsole";
-// }
-// 
-// QString ExecutePlugin::translatedInstrumentor(const QString& instrumentor) const
-// {
-//     if (instrumentor == "default")
-//         return i18n("Run");
-// 
-//     if (instrumentor == "konsole")
-//         return i18n("Run in external konsole");
-// 
-//     return i18n("Unsupported instrumentor");
-// }
-// 
-// bool ExecutePlugin::execute(const IRun & run, KJob* job)
-// {
-//     Q_ASSERT(instrumentorsProvided().contains(run.instrumentor()));
-// 
-//     QProcess* process = new QProcess(this);
-//     connect(process, SIGNAL(readyReadStandardOutput()), SLOT(readyReadStandardOutput()));
-//     connect(process, SIGNAL(readyReadStandardError()), SLOT(readyReadStandardError()));
-//     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(processFinished(int, QProcess::ExitStatus)));
-//     connect(process, SIGNAL(error(QProcess::ProcessError)), SLOT(error(QProcess::ProcessError)));
-// 
-//     m_runners.insert(job, process);
-// 
-//     KDevelop::EnvironmentGroupList l(KGlobal::config());
-//     process->setProperty("job", QVariant::fromValue(static_cast<void*>(job)));
-//     process->setEnvironment(l.createEnvironment(run.environmentKey(), process->systemEnvironment()));
-//     process->setWorkingDirectory(run.workingDirectory().toLocalFile());
-// 
-//     process->setProperty("executable", run.executable().toLocalFile());
-// 
-//     QString executable = run.executable().toLocalFile();
-//     QStringList args;
-// 
-//     if (!run.runAsUser().isEmpty()) {
-//         args << "-u" << run.runAsUser();
-//         args << "-c" << executable;
-//         executable = "kdesudo";
-//     }
-// 
-//     if (run.instrumentor() == "konsole") {
-//         // Don't fork, so we can still kill it via our job system
-//         //args << "--nofork";
-//         // Provide the executable to run
-//         args << "-e" << executable;
-// 
-//         executable = "konsole";
-//     }
-// 
-//     args << run.arguments();
-// 
-//     process->start(executable, args);
-// 
-//     kDebug() << "Started process" << executable << "with arguments" << args;
-// 
-//     return true;
-// }
-// 
-// void ExecutePlugin::abort(KJob* job)
-// {
-//     if (m_runners.contains(job)) {
-//         QProcess* process = m_runners.take(job);
-//         process->close();
-//         delete process;
-//     }
-// }
-// 
-// void ExecutePlugin::readyReadStandardError()
-// {
-//     QProcess* process = qobject_cast<QProcess*>(sender());
-//     if (!process)
-//         return;
-// 
-//     readFrom(process, QProcess::StandardError);
-// }
-// 
-// void ExecutePlugin::readyReadStandardOutput()
-// {
-//     QProcess* process = qobject_cast<QProcess*>(sender());
-//     if (!process)
-//         return;
-// 
-//     readFrom(process, QProcess::StandardOutput);
-// }
-// 
-// void ExecutePlugin::readFrom(QProcess * process, QProcess::ProcessChannel channel)
-// {
-//     process->setReadChannel(channel);
-//     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
-// 
-//     while (process->canReadLine()) {
-//         QByteArray line = process->readLine() + '\n';
-//         QString string = QString::fromLocal8Bit(line, line.length() - 2);
-//         emit output(job, string, channel == QProcess::StandardOutput ? IRunProvider::StandardOutput : IRunProvider::StandardError);
-//     }
-// }
-// 
-// void ExecutePlugin::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
-// {
-//     QProcess* process = qobject_cast<QProcess*>(sender());
-//     if (!process)
-//         return;
-// 
-//     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
-// 
-//     if (exitCode == 0 && exitStatus == QProcess::NormalExit)
-//         emit output(job, i18n("*** Exited normally ***"), IRunProvider::RunProvider);
-//     else
-//         if (exitStatus == QProcess::NormalExit)
-//             emit output(job, i18n("*** Exited with return code: %1 ***", QString::number(exitCode)), IRunProvider::RunProvider);
-//         else
-//             if (job->error() == KJob::KilledJobError)
-//                 emit output(job, i18n("*** Process aborted ***"), IRunProvider::RunProvider);
-//             else
-//                 emit output(job, i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)), IRunProvider::RunProvider);
-// 
-//     emit finished(job);
-// }
-// 
-// void ExecutePlugin::error(QProcess::ProcessError error)
-// {
-//     const QProcess* process = qobject_cast<const QProcess*>(sender());
-//     Q_ASSERT(process);
-// 
-//     if( error == QProcess::FailedToStart )
-//     {
-//         KMessageBox::information(
-//             qApp->activeWindow(),
-//             i18n("<b>Could not start program.</b>"
-//                  "<p>Could not run '%1'. "
-//                  "Make sure that the path name is specified correctly.",
-//                  process->property("executable").toString()),
-//             i18n("Could not start program"));
-//     }
-// 
-//     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(process->property("job")));
-//     Q_ASSERT(job);
-// 
-//     emit finished(job);
-// }
+
+QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const
+{
+
+    if( !cfg )
+    {
+        return QStringList();
+    }
+    
+    KShell::Errors err;
+    QStringList args = KShell::splitArgs( cfg->config().readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
+    if( err != KShell::NoError )
+    {
+        
+        if( err == KShell::BadQuoting ) 
+        {
+            err_ = i18n("There is a quoting error in the arguments for "
+            "the launch configuration '%1'. Aborting start.", cfg->name() );
+        } else 
+        {   
+            err_ = i18n("A shell meta character was included in the "
+            "arguments for the launch configuration '%1', "
+            "this is not supported currently. Aborting start.", cfg->name() );
+        }
+        args = QStringList();
+        kWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
+    }
+    return args;
+}
+
+
+KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    QStringList deps = cfg->config().readEntry( dependencyEntry, QStringList() );
+    QString depAction = cfg->config().readEntry( dependencyActionEntry, "Nothing" );
+    if( depAction != "Nothing" && !deps.isEmpty() ) 
+    {
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        QList<KDevelop::ProjectBaseItem*> items;
+        foreach( const QString& dep, deps )
+        {
+            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.split('/') ) );
+            if( item )
+            {
+                items << item;
+            }
+        }
+        if( depAction == "SudoInstall" )
+        {
+            KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
+                                    i18n("Installing via sudo is not yet implemented"), 
+                                        i18n("Not implemented") );
+        } else 
+        {
+            KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
+            if( depAction == "Build" )
+            {
+                job->addItems( KDevelop::BuilderJob::Build, items );
+            } else if( depAction == "Install" )
+            {
+                job->addItems( KDevelop::BuilderJob::Install, items );
+            }
+            return job;
+        }
+    }
+    return 0;
+}
+
+
+QString ExecutePlugin::environmentGroup( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    if( !cfg )
+    {
+        return "";
+    }
+    
+    return cfg->config().readEntry( ExecutePlugin::environmentGroupEntry, "" );
+}
+
+
+KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& err ) const
+{
+    KUrl executable;
+    if( !cfg ) 
+    {
+        return executable;
+    }
+    KConfigGroup grp = cfg->config();
+    if( grp.readEntry(ExecutePlugin::isExecutableEntry, false ) )
+    {
+        executable = grp.readEntry( ExecutePlugin::executableEntry, KUrl("") );
+    } else 
+    {
+        QString prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, "" );
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        //TODO: Need to think about escaping here and in projectitem!
+        KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>( model->itemFromIndex( 
+        model->pathToIndex(prjitem.split( '/' )  ) ) );
+        if( item && item->executable() )
+        {
+            // TODO: Need an option in the gui to choose between installed and builddir url here, currently cmake only supports builddir url
+            executable = item->executable()->builtUrl();
+        }
+    }
+    if( !executable.isLocalFile() || executable.isEmpty() )
+    {
+        err = i18n("No valid executable specified");
+        kWarning() << "Launch Configuration:" << cfg->name() << "no valid executable set";
+    } else
+    {
+        KShell::Errors err_;
+        if( KShell::splitArgs( executable.toLocalFile(), KShell::TildeExpand | KShell::AbortOnMeta, &err_ ).isEmpty() || err_ != KShell::NoError )
+        {
+            executable = KUrl();
+            if( err_ == KShell::BadQuoting ) 
+            {
+                err = i18n("There is a quoting error in the executable "
+                "for the launch configuration '%1'. "
+                "Aborting start.", cfg->name() );
+            } else 
+            {   
+                err = i18n("A shell meta character was included in the "
+                "executable for the launch configuration '%1', "
+                "this is not supported currently. Aborting start.", cfg->name() );
+            }
+            kWarning() << "Launch Configuration:" << cfg->name() << "executable has meta characters";
+        }
+    }
+    return executable;
+}
+
+
+bool ExecutePlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    if( !cfg )
+    {
+        return false;
+    }
+    
+    return cfg->config().readEntry( ExecutePlugin::useTerminalEntry, false );
+}
+
+
+KUrl ExecutePlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    if( !cfg )
+    {
+        return KUrl();
+    }
+    
+    return cfg->config().readEntry( ExecutePlugin::workingDirEntry, KUrl() );
+}
+
+
+QString ExecutePlugin::nativeAppConfigTypeId() const
+{
+    return _nativeAppConfigTypeId;
+}
+
 
 #include "executeplugin.moc"
-
-// kate: space-indent on; indent-width 4; tab-width 4; replace-tabs on; auto-insert-doxygen on

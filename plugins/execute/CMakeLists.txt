@@ -27,5 +27,5 @@ install(TARGETS kdevexecute DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
-install(FILES executepluginconstants.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/execute COMPONENT Devel)
+install(FILES iexecuteplugin.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/execute COMPONENT Devel)
 install(FILES kdevexecute.desktop DESTINATION ${SERVICES_INSTALL_DIR})
