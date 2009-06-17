@@ -51,36 +51,42 @@ public:
 void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseItem* item )
 {
     Q_ASSERT(item);
+    kDebug() << "adding build job for item:" << item->text();
     Q_ASSERT(item->project());
-    if( item && item->project() && item->project()->projectItem() && item->project()->buildSystemManager() && item->project()->buildSystemManager()->builder( item->project()->projectItem() ) )
+    kDebug() << "project for item:" << item->project()->name();
+    Q_ASSERT(item->project->projectItem());
+    kDebug() << "project item for the project:" << item->project->projectItem()->text();
+    if( !item->project()->buildSystemManager() )
     {
-        KJob* j = 0;
-        switch( t )
-        {
-            case BuilderJob::Build:
-                j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->build( item );
-                break;
-            case BuilderJob::Clean:
-                j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->clean( item );
-                break;
-            case BuilderJob::Install:
-                j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->install( item );
-                break;
-            case BuilderJob::Prune:
-                j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->prune( item->project() );
-                break;
-            case BuilderJob::Configure:
-                j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->configure( item->project() );
-                break;
-            default:
-                break;
-        }
-        if( j )
-        {
-            q->addSubjob( j );
-        }
-    } else {
-        kWarning() << "Ooops, got a problem with the project item, buildsystem manager or builder. Couldn't add item to build" << item->text();
+        kWarning() << "no buildsystem manager for:" << item->text() << item->project()->name();
+        return;
+    }
+    kDebug() << "got build system manager";
+    Q_ASSERT(item->project()->buildSystemManager()->builder( item->project()->projectItem() ));
+    KJob* j = 0;
+    switch( t )
+    {
+        case BuilderJob::Build:
+            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->build( item );
+            break;
+        case BuilderJob::Clean:
+            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->clean( item );
+            break;
+        case BuilderJob::Install:
+            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->install( item );
+            break;
+        case BuilderJob::Prune:
+            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->prune( item->project() );
+            break;
+        case BuilderJob::Configure:
+            j = item->project()->buildSystemManager()->builder( item->project()->projectItem() )->configure( item->project() );
+            break;
+        default:
+            break;
+    }
+    if( j )
+    {
+        q->addSubjob( j );
     }
 }
 BuilderJob::BuilderJob() 
