@@ -349,6 +349,13 @@ void RunController::setupActions()
     action->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
     ac->addAction("run_debug", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
+    
+    action = new KAction( KIcon(""), i18n("Profile Launch"), this);
+    action->setToolTip(i18n("Profile current Launch"));
+    action->setStatusTip(i18n("Profile current Launch"));
+    action->setWhatsThis(i18n("<b>Profile Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Profiler.</p>"));
+    ac->addAction("run_profile", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
     action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
     action->setShortcut(Qt::Key_Escape);
@@ -401,6 +408,11 @@ void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
 void RunController::slotDebug()
 {
     executeDefaultLaunch( "debug" );
+}
+
+void RunController::slotProfile()
+{
+    executeDefaultLaunch( "profile" );
 }
 
 void RunController::slotExecute()
