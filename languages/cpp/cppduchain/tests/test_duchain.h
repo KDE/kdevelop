@@ -35,7 +35,6 @@
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/editor/simplecursor.h>
-#include <language/duchain/topducontext.h>
 
 namespace KDevelop
 {

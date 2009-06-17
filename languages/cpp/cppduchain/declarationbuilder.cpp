@@ -200,6 +200,9 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseComments(node->comments);
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
+  
+  //Used to map to the top level function node once the Declaration is built
+  m_declarationNode = node;
 
   m_functionDefinedStack.push(node->start_token);
 
@@ -252,6 +255,8 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
+  m_declarationNode = node;
+  
   m_functionDefinedStack.push(0);
 
   DeclarationBuilderBase::visitSimpleDeclaration(node);
@@ -279,6 +284,13 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
       checkParameterDeclarationClause(node->parameter_declaration_clause);
     
     Declaration* decl = openFunctionDeclaration(node->id, node);
+    
+    ///Create mappings iff the AST feature is specified
+    if(m_mapAstDuChain && m_declarationNode)
+    {
+      editor()->parseSession()->mapAstDuChain(m_declarationNode, KDevelop::DeclarationPointer(decl));
+      m_declarationNode = 0;
+    }
 
     if( !m_functionDefinedStack.isEmpty() ) {
         DUChainWriteLocker lock(DUChain::lock());
@@ -599,10 +611,6 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   clearComment();
 
   setEncountered(declaration);
-  
-  ///Create mappings iff the AST feature is specified
-  if(m_mapAstDuChain)
-    editor()->parseSession()->mapAstDuChain(rangeNode, KDevelop::DeclarationPointer(declaration));
 
   openDeclarationInternal(declaration);
 
@@ -635,6 +643,13 @@ ClassDeclaration* DeclarationBuilder::openClassDefinition(NameAST* name, AST* ra
 Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, bool collapseRange)
 {
   Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
+  
+  ///Create mappings iff the AST feature is specified
+  if(m_mapAstDuChain && m_declarationNode)
+  {
+    editor()->parseSession()->mapAstDuChain(m_declarationNode, KDevelop::DeclarationPointer(ret));
+    m_declarationNode = 0;
+  }
 
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
@@ -786,7 +801,11 @@ void DeclarationBuilder::visitTypedef(TypedefAST *def)
 
 void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
-  openDefinition(node->name, node, node->name == 0);
+  Declaration * declaration = openDefinition(node->name, node, node->name == 0);
+  
+  ///Create mappings iff the AST feature is specified
+  if(m_mapAstDuChain)
+    editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));
 
   DeclarationBuilderBase::visitEnumSpecifier(node);
 
@@ -912,13 +931,17 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST */*node*/, DUConte
   currentDeclaration()->setInternalContext(context);
 }
 
-  void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
+void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
   if (ast->namespace_name) {
     DUChainWriteLocker lock(DUChain::lock());
     SimpleRange range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
     Identifier id(editor()->tokenToString(ast->namespace_name));
-    openDeclarationReal<Declaration>(0, 0, id, false, false, &range);
+    Declaration * declaration = openDeclarationReal<Declaration>(0, 0, id, false, false, &range);
+    
+    ///Create mappings iff the AST feature is specified
+    if(m_mapAstDuChain)
+      editor()->parseSession()->mapAstDuChain(ast, KDevelop::DeclarationPointer(declaration));
   }
   
   DeclarationBuilderBase::visitNamespace(ast);
@@ -954,7 +977,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   int kind = editor()->parseSession()->token_stream->kind(node->class_key);
   
-  openClassDefinition(node->name, node, node->name == 0, classTypeFromTokenKind(kind));
+  ClassDeclaration * declaration = openClassDefinition(node->name, node, node->name == 0, classTypeFromTokenKind(kind));
 
   if (kind == Token_struct || kind == Token_union)
     m_accessPolicyStack.push(Declaration::Public);
@@ -1043,6 +1066,10 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
     tempDecl->setSpecializedWith(specializedWith);
   }
   closeDeclaration();
+  
+  ///Create mappings iff the AST feature is specified
+  if(m_mapAstDuChain)
+    editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));
   
   if(node->name)
     closePrefixContext(id);

@@ -157,7 +157,9 @@ private:
 
   bool m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
   
+  //Ast Mapping members
   bool m_mapAstDuChain;
+  AST * m_declarationNode;
 
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;

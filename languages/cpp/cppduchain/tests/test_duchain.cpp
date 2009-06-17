@@ -1143,10 +1143,10 @@ void TestDUChain::testDeclareStruct()
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier,
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[0])));
     QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 1));
-    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 1)->init_declarators->toFront()->element->declarator,
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 1),
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[1])));
     QVERIFY(AstUtils::childNode<FunctionDefinitionAST>(ast, 2));
-    QCOMPARE(AstUtils::childNode<FunctionDefinitionAST>(ast, 2)->init_declarator->declarator,
+    QCOMPARE(AstUtils::childNode<FunctionDefinitionAST>(ast, 2),
              session->astNodeFromDeclaration(KDevelop::DeclarationPointer(top->localDeclarations()[2])) );
              
     release(top);
@@ -1344,7 +1344,7 @@ void TestDUChain::testDeclareStructInNamespace()
   {
     QByteArray method("namespace B {class C {struct A;void test();};};using namespace B;struct C::A {};");
 
-    TopDUContext* top = parse(method, DumpNone);
+    TopDUContext* top = parse(method, DumpAll);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -1533,13 +1533,13 @@ void TestDUChain::testDeclareClass()
   kDebug() << "count:" << classAst->member_specs->count();
   QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier ),
            KDevelop::DeclarationPointer(top->localDeclarations()[0]));
-  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<FunctionDefinitionAST>(classAst, 0)->init_declarator->declarator ),
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<FunctionDefinitionAST>(classAst, 0) ),
            KDevelop::DeclarationPointer(top->childContexts()[0]->localDeclarations()[0]));
            
   //I haven't figured out why the AST inserts a NULL node after A's constructor
-  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(classAst, 2)->init_declarators->toFront()->element->declarator ),
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(classAst, 2) ),
            KDevelop::DeclarationPointer(top->childContexts()[0]->localDeclarations()[1]));
-  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(classAst, 3)->init_declarators->toFront()->element->declarator ),
+  QCOMPARE(session->declarationFromAstNode( AstUtils::childNode<SimpleDeclarationAST>(classAst, 3) ),
            KDevelop::DeclarationPointer(top->childContexts()[0]->localDeclarations()[2]));
            
   release(top);
