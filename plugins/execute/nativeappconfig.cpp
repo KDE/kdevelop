@@ -29,7 +29,6 @@
 #include <project/projectmodel.h>
 
 #include "nativeappjob.h"
-#include "executepluginconstants.h"
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>

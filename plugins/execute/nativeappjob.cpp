@@ -33,7 +33,6 @@
 #include <util/processlinemaker.h>
 #include <util/environmentgrouplist.h>
 
-#include "executepluginconstants.h"
 #include <kshell.h>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
