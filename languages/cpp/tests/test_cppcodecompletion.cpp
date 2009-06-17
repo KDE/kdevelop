@@ -108,6 +108,20 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
 
 void TestCppCodeCompletion::testArgumentMatching() {
   {
+    QByteArray test = "struct A{ int m;}; void test(int q) { A a;  }";
+
+    TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(context->childContexts().count(), 3);
+    CompletionItemTester tester(context->childContexts()[2], "test(a.");
+    QVERIFY(tester.completionContext->parentContext());
+    QCOMPARE(tester.completionContext->parentContext()->knownArgumentTypes().count(), 0);
+    QCOMPARE(tester.completionContext->parentContext()->functionName(), QString("test"));
+    bool abort = false;
+    QCOMPARE(tester.completionContext->parentContext()->completionItems(abort).size(), 1);
+    release(context);
+  }
+  {
     QByteArray test = "#define A(x) #x\n void test(char* a, char* b, int c) { } ";
 
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
