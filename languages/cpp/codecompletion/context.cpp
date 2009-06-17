@@ -373,7 +373,8 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   }
   
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
-  if( expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') || expressionPrefix.endsWith(':') ) {
+  if( (expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') || expressionPrefix.endsWith(':')) 
+      && getEndOperator(expressionPrefix).length() < 2 ) { //Do not try a function-call for example with "<<", as that may lead to a quadratic expansion together with the operator expansion
     log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
 
