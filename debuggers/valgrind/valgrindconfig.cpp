@@ -37,9 +37,10 @@
 #include <project/builderjob.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <interfaces/iplugincontroller.h>
 #include <util/executecompositejob.h>
 
-#include <execute/executepluginconstants.h>
+#include <execute/iexecuteplugin.h>
 
 #include "valgrindjob.h"
 #include "ui_valgrindconfig.h"
@@ -53,44 +54,17 @@ KJob* ValgrindLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
         return 0;
     if( launchMode == "profile" )
     {
-        QStringList deps = cfg->config().readEntry( ExecutePlugin::dependencyEntry, QStringList() );
-        QString depAction = cfg->config().readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" );
-        if( depAction != "Nothing" && !deps.isEmpty() ) 
+        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+        Q_ASSERT(iface);
+        
+        QList<KJob*> l;
+        KJob* depjob = iface->dependecyJob( cfg );
+        if( depjob )
         {
-            QList<KJob*> l;
-            KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-            QList<KDevelop::ProjectBaseItem*> items;
-            foreach( const QString& dep, deps )
-            {
-                KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.split('/') ) );
-                if( item )
-                {
-                    items << item;
-                }
-            }
-             if( depAction == "SudoInstall" )
-            {
-                KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
-                                        i18n("Installing via sudo is not yet implemented"), 
-                                        i18n("Not implemented") );
-            } else 
-            {
-                KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
-                if( depAction == "Build" )
-                {
-                    job->addItems( KDevelop::BuilderJob::Build, items );
-                } else if( depAction == "Install" )
-                {
-                    job->addItems( KDevelop::BuilderJob::Install, items );
-                }
-                l << job;
-            }
-            l << new ValgrindJob( m_tool, cfg, KDevelop::ICore::self()->runController() );
-            return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
-        }else
-        {
-            return new ValgrindJob( m_tool, cfg, KDevelop::ICore::self()->runController() );
+            l << depjob;
         }
+        l << new ValgrindJob( m_tool, cfg, KDevelop::ICore::self()->runController() );
+        return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;

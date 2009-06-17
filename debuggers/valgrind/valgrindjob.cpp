@@ -38,8 +38,10 @@
 #include <outputview/outputmodel.h>
 #include <util/environmentgrouplist.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 
-#include <execute/executepluginconstants.h>
+#include <execute/iexecuteplugin.h>
 
 #include "valgrindmodel.h"
 #include "valgrindplugin.h"
@@ -68,38 +70,23 @@ ValgrindJob::ValgrindJob( const QString& tool, KDevelop::ILaunchConfiguration* c
 void ValgrindJob::start()
 {
     KConfigGroup grp = m_launchcfg->config();
+    
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
+    
     KDevelop::EnvironmentGroupList l(KGlobal::config());
+    QString envgrp = iface->environmentGroup( m_launchcfg );
     
-    QString executable = ExecutePlugin::executableFromConfig( grp );
-    QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
+    QString err;
+    QString executable = iface->executable( m_launchcfg, err ).toLocalFile();
     
-    if( executable.isEmpty() )
+    if( !err.isEmpty() ) 
     {
-        setError(-1);
-        setErrorText( i18n("No executable specified") );
-        kWarning() << "no executable set";
-    } else
-    {
-        KShell::Errors err;
-        if( KShell::splitArgs( executable, KShell::TildeExpand | KShell::AbortOnMeta, &err ).isEmpty() || err != KShell::NoError )
-        {
-            
-            setError( -1 );
-            if( err == KShell::BadQuoting ) 
-            {
-                setErrorText( i18n("There is a quoting error in the executable "
-                "for the launch configuration '%1'. "
-                "Aborting start.", m_launchcfg->name() ) );
-            } else 
-            {   
-                setErrorText( i18n("A shell meta character was included in the "
-                "executable for the launch configuration '%1', "
-                "this is not supported currently. Aborting start.", m_launchcfg->name() ) );
-            }
-            kWarning() << "executable has meta characters";
-        }
+        setError( -1 );
+        setErrorText( err );
+        return;
     }
-    
+
     if( envgrp.isEmpty() )
     {
         kWarning() << i18n("No environment group specified, looks like a broken "
@@ -108,23 +95,11 @@ void ValgrindJob::start()
         envgrp = l.defaultGroup();
     }
     
-    KShell::Errors err;
-    QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
-    if( err != KShell::NoError )
+    QStringList arguments = iface->arguments( m_launchcfg, err );
+    if( !err.isEmpty() )
     {
-        
         setError( -1 );
-        if( err == KShell::BadQuoting ) 
-        {
-            setErrorText( i18n("There is a quoting error in the arguments for "
-            "the launch configuration '%1'. Aborting start.", m_launchcfg->name() ) );
-        } else 
-        {   
-            setErrorText( i18n("A shell meta character was included in the "
-            "arguments for the launch configuration '%1', "
-            "this is not supported currently. Aborting start.", m_launchcfg->name() ) );
-        }
-        kDebug() << "arguments have meta characters";
+        setErrorText( err );
     }
     if( error() != 0 )
     {
@@ -156,7 +131,12 @@ void ValgrindJob::start()
     }
 
     m_process->setEnvironment( l.createEnvironment( envgrp, m_process->systemEnvironment()) );
-    m_process->setWorkingDirectory( grp.readEntry(ExecutePlugin::workingDirEntry, KUrl( QFileInfo( executable ).absolutePath() ) ).toLocalFile() );
+    KUrl wc = iface->workingDirectory( m_launchcfg );
+    if( wc.isEmpty() || ! wc.isValid() )
+    {
+        wc = KUrl( QFileInfo( executable ).absolutePath() );
+    }
+    m_process->setWorkingDirectory( wc.toLocalFile() );
     m_process->setProperty( "executable", executable );
 
     QStringList valgrindArgs;

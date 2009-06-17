@@ -51,12 +51,13 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/launchconfigurationtype.h>
-#include <execute/executepluginconstants.h>
 
 #include "valgrindmodel.h"
 #include "valgrindjob.h"
 #include "valgrindconfig.h"
 #include "valgrindwidget.h"
+#include <execute/iexecuteplugin.h>
+#include <interfaces/iplugincontroller.h>
 
 using namespace KDevelop;
 
@@ -97,7 +98,10 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
 
     core()->uiController()->addToolView(i18n("Valgrind"), new ValgrindWidgetFactory(this));
     
-    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( ExecutePlugin::nativeAppConfigTypeId );
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
+    
+    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
     Q_ASSERT(type);
     type->addLauncher( new ValgrindLauncher("memcheck") );
     type->addLauncher( new ValgrindLauncher("hellgrind") );
