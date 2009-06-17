@@ -108,13 +108,6 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     type->addLauncher( new ValgrindLauncher("callgrind") );
     type->addLauncher( new ValgrindLauncher("cachegrind") );
 
-    KAction* action = new KAction( i18n("&Valgrind Memory Leak Check"), this);
-    actionCollection()->addAction("tools_valgrind", action);
-    action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_V);
-    action->setToolTip(i18n("Valgrind memory leak check and other tools"));
-    action->setWhatsThis(i18n("<b>Valgrind memory leak check</b><p>Runs Valgrind &mdash; a tool to help you find memory-management problems in your programs, and which provides other tools.</p>"));
-    action->setIcon(KIcon("fork"));
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotExecValgrind()));
 }
 
 ValgrindPlugin::~ValgrindPlugin()
@@ -143,14 +136,6 @@ void ValgrindPlugin::loadOutput()
     }*/
     f.close();
 #endif
-}
-
-void ValgrindPlugin::slotExecValgrind()
-{
-    //TODO: Port to launch framework
-    //KDevelop::IRun run = KDevelop::ICore::self()->runController()->defaultRun();
-    //run.setInstrumentor("memcheck");
-    //KDevelop::ICore::self()->runController()->execute(run);
 }
 
 void ValgrindPlugin::slotExecCalltree()

@@ -57,7 +57,6 @@ signals:
 //   void restorePartialProjectSession( const QDomElement* el );
 
 private slots:
-    void slotExecValgrind();
     void slotExecCalltree();
     void loadOutput();
 
