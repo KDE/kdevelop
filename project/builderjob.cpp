@@ -54,8 +54,8 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, KDevelop::ProjectBaseIt
     kDebug() << "adding build job for item:" << item->text();
     Q_ASSERT(item->project());
     kDebug() << "project for item:" << item->project()->name();
-    Q_ASSERT(item->project->projectItem());
-    kDebug() << "project item for the project:" << item->project->projectItem()->text();
+    Q_ASSERT(item->project()->projectItem());
+    kDebug() << "project item for the project:" << item->project()->projectItem()->text();
     if( !item->project()->buildSystemManager() )
     {
         kWarning() << "no buildsystem manager for:" << item->text() << item->project()->name();
