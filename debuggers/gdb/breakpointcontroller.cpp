@@ -238,26 +238,29 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             }
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
-        Q_ASSERT(m_ids.contains(breakpoint));
-        controller()->addCommandToFront(
-            new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
-                           QString::number(m_ids[breakpoint]),
-                           new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn)));
-        addedCommand = true;
+        if (m_ids.contains(breakpoint)) {
+            controller()->addCommandToFront(
+                new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
+                            QString::number(m_ids[breakpoint]),
+                            new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn)));
+            addedCommand = true;
+        }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
-        Q_ASSERT(m_ids.contains(breakpoint));
-        controller()->addCommandToFront(
-            new GDBCommand(BreakAfter,
-                           QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
-                           new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn)));
-        addedCommand = true;
+        if (m_ids.contains(breakpoint)) {
+            controller()->addCommandToFront(
+                new GDBCommand(BreakAfter,
+                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
+                            new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn)));
+            addedCommand = true;
+        }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
-        Q_ASSERT(m_ids.contains(breakpoint));
-        controller()->addCommandToFront(
-            new GDBCommand(BreakCondition,
-                           QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
-                           new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn)));
-        addedCommand = true;
+        if (m_ids.contains(breakpoint)) {
+            controller()->addCommandToFront(
+                new GDBCommand(BreakCondition,
+                            QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
+                            new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn)));
+            addedCommand = true;
+        }
     }
     if (addedCommand && debugSession()->state() == KDevelop::IDebugSession::ActiveState) {
         if (m_interrupted) {
