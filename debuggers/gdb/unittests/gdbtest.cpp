@@ -42,7 +42,6 @@
 #include <debugger/interfaces/ibreakpointcontroller.h>
 #include <gdbcommand.h>
 #include <interfaces/ilaunchconfiguration.h>
-#include <execute/executepluginconstants.h>
 
 using namespace GDBDebugger;
 
@@ -88,8 +87,8 @@ public:
     TestLaunchConfiguration(KUrl executable = KUrl(QDir::currentPath()+"/unittests/debugee") ) {
         c = new KConfig();
         cfg = c->group("launch");
-        cfg.writeEntry(ExecutePlugin::isExecutableEntry, true);
-        cfg.writeEntry(ExecutePlugin::executableEntry, executable);
+        cfg.writeEntry("isExecutable", true);
+        cfg.writeEntry("Executable", executable);
     }
     ~TestLaunchConfiguration() {
         delete c;

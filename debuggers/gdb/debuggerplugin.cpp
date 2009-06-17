@@ -66,7 +66,7 @@
 #include <language/interfaces/editorcontext.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/iplugincontroller.h>
-#include <execute/executepluginconstants.h>
+#include <execute/iexecuteplugin.h>
 #include <interfaces/launchconfigurationtype.h>
 
 #include "variablewidget.h"
@@ -175,7 +175,9 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setupDBus();
 
-    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( ExecutePlugin::nativeAppConfigTypeId );
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
+    KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
     Q_ASSERT(type);
     type->addLauncher( new GdbLauncher( this ) );
     

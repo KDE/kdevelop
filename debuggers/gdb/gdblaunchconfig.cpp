@@ -34,7 +34,7 @@
 #include <outputview/outputmodel.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentgrouplist.h>
-#include <execute/executepluginconstants.h>
+#include <execute/iexecuteplugin.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>
@@ -46,6 +46,8 @@
 #include "debuggerplugin.h"
 
 #include "ui_debuggerconfigwidget.h"
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/icore.h>
 
 GdbConfigPage::GdbConfigPage( QWidget* parent )
     : LaunchConfigurationPage(parent), ui( new Ui::DebuggerConfigWidget )
@@ -124,44 +126,16 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
     }
     if( launchMode == "debug" )
     {
-        QStringList deps = cfg->config().readEntry( ExecutePlugin::dependencyEntry, QStringList() );
-        QString depAction = cfg->config().readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" );
-        if( depAction != "Nothing" && !deps.isEmpty() )
+        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+        Q_ASSERT(iface);
+        QList<KJob*> l;
+        KJob* depjob = iface->dependecyJob(cfg);
+        if( depjob ) 
         {
-            QList<KJob*> l;
-            KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-            QList<KDevelop::ProjectBaseItem*> items;
-            foreach( const QString& dep, deps )
-            {
-                KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.split('/') ) );
-                if( item )
-                {
-                    items << item;
-                }
-            }
-             if( depAction == "SudoInstall" )
-            {
-                KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
-                                        i18n("Installing via sudo is not yet implemented"), 
-                                        i18n("Not implemented") );
-            } else 
-            {
-                KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
-                if( depAction == "Build" )
-                {
-                    job->addItems( KDevelop::BuilderJob::Build, items );
-                } else if( depAction == "Install" )
-                {
-                    job->addItems( KDevelop::BuilderJob::Install, items );
-                }
-                l << job;
-            }
-            l << new GdbJob( m_plugin, cfg );
-            return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
-        }else
-        {
-            return new GdbJob( m_plugin, cfg );
+            l << depjob;
         }
+        l << new GdbJob( m_plugin, cfg );
+        return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     kWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
     return 0;
@@ -197,36 +171,17 @@ void GdbJob::start()
 {
     KConfigGroup grp = m_launchcfg->config();
     KDevelop::EnvironmentGroupList l(KGlobal::config());
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
+    QString err;
+    QString executable = iface->executable( m_launchcfg, err ).toLocalFile();
+    QString envgrp = iface->environmentGroup( m_launchcfg );
     
-    QString executable = ExecutePlugin::executableFromConfig( grp );
-    
-    QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
-    
-    if( executable.isEmpty() )
+    if( !err.isEmpty() )
     {
-        setError(-1);
-        setErrorText( i18n("No executable specified") );
-        kWarning() << "no executable set";
-    } else
-    {
-        KShell::Errors err;
-        if( KShell::splitArgs( executable, KShell::TildeExpand | KShell::AbortOnMeta, &err ).isEmpty() || err != KShell::NoError )
-        {
-            
-            setError( -1 );
-            if( err == KShell::BadQuoting ) 
-            {
-                setErrorText( i18n("There is a quoting error in the executable "
-                "for the launch configuration '%1'. "
-                "Aborting start.", m_launchcfg->name() ) );
-            } else 
-            {   
-                setErrorText( i18n("A shell meta character was included in the "
-                "executable for the launch configuration '%1', "
-                "this is not supported currently. Aborting start.", m_launchcfg->name() ) );
-            }
-            kWarning() << "executable has meta characters";
-        }
+        setError( -1 );
+        setErrorText( err );
+        return;
     }
     
     if( envgrp.isEmpty() )
@@ -237,23 +192,11 @@ void GdbJob::start()
         envgrp = l.defaultGroup();
     }
     
-    KShell::Errors err;
-    QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::TildeExpand | KShell::AbortOnMeta, &err );
-    if( err != KShell::NoError )
+    QStringList arguments = iface->arguments( m_launchcfg, err );
+    if( !err.isEmpty() )
     {
-        
         setError( -1 );
-        if( err == KShell::BadQuoting ) 
-        {
-            setErrorText( i18n("There is a quoting error in the arguments for "
-            "the launch configuration '%1'. Aborting start.", m_launchcfg->name() ) );
-        } else 
-        {   
-            setErrorText( i18n("A shell meta character was included in the "
-            "arguments for the launch configuration '%1', "
-            "this is not supported currently. Aborting start.", m_launchcfg->name() ) );
-        }
-        kDebug() << "arguments have meta characters";
+        setErrorText( err );
     }
     if( error() != 0 )
     {

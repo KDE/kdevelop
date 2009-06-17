@@ -54,9 +54,11 @@
 #include "stackmanager.h"
 #include "breakpointcontroller.h"
 #include "gdb.h"
-#include <execute/executepluginconstants.h>
+#include <execute/iexecuteplugin.h>
 #include "gdblaunchconfig.h"
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 
 using namespace std;
 using namespace GDBMI;
@@ -698,12 +700,18 @@ QPointer<GDB> GDBController::startProgram(KDevelop::ILaunchConfiguration* cfg)
 
     queueCmd(new GDBCommand(InferiorTtySet, tty));
     
-    QString executable = ExecutePlugin::executableFromConfig( grp );
-    QString envgrp = grp.readEntry( ExecutePlugin::environmentGroupEntry, "" );
     
-    QStringList arguments = KShell::splitArgs( grp.readEntry( ExecutePlugin::argumentsEntry, "" ), KShell::Options( KShell::TildeExpand | KShell::AbortOnMeta ) );
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
+    
+    // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
+    QString err;
+    QString executable = iface->executable(cfg, err).toLocalFile();
+    QString envgrp = iface->environmentGroup(cfg);
+    
+    QStringList arguments = iface->arguments(cfg, err);
     // Change the "Working directory" to the correct one
-    QString dir = grp.readEntry( ExecutePlugin::workingDirEntry, KUrl() ).toLocalFile();
+    QString dir = iface->workingDirectory(cfg).toLocalFile();
     if (!dir.isEmpty())
         queueCmd(new GDBCommand(EnvironmentCd, dir));
 
