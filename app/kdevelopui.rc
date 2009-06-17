@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="91" name="kdevelop" >
+<kpartgui version="92" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -81,6 +81,7 @@
     <Action name="configure_launches" />
     <Action name="run_execute" /> <!-- ### remove me -->
     <Action name="run_debug" /> <!-- ### remove me -->
+    <Action name="run_profile" /> <!-- ### remove me -->
 
     <Separator />
 
