@@ -122,6 +122,10 @@ void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUCon
 
 void ProblemWidget::forceFullUpdate() {
     kDebug() << "forcing full update";
+    if(!m_activeUrl.isValid()) {
+        kWarning() << "no active url";
+        return;
+    }
     DUChainReadLocker lock(DUChain::lock());
     DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), KDevelop::TopDUContext::ForceUpdateRecursive);
 }
