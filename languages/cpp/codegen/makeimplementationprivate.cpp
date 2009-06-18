@@ -31,6 +31,24 @@ namespace KDevelop
 
 bool MakeImplementationPrivate::process()
 {
+    //Add private implementation struct forward declaration before the class
+    
+    //Create private implementation pointer member in the class
+    
+    //Initialize private implementation pointer in constructor
+    
+    //Destroy private implementation pointer in destructor
+    
+    //Create container for private implementation
+    
+    //Gather private member declarations 
+    //Move member declarations to private implementation
+    
+    //Gather all Uses of this class' members
+    
+    //For all uses gathered change to access through pointer
+    
+    //Verify that implementation is private
     return true;
 }
 
@@ -49,8 +67,15 @@ bool MakeImplementationPrivate::gatherInformation()
 
 bool MakeImplementationPrivate::checkPreconditions(KDevelop::DUContext * context, const KDevelop::DocumentRange &)
 {
+    m_classContext = context;
     //TODO check that it doesn't already have a private implementation
-    return context->type() == DUContext::Class;
+    if(m_classContext->type() != DUContext::Class)
+    {
+        setErrorText("Selected Context does not belong to a Class");
+        return false;
+    }
+    else
+        return true;
 }
 
 }

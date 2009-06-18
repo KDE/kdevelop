@@ -20,6 +20,9 @@
 #define MAKEIMPLEMENTATIONPRIVATE_H
 
 #include <language/codegen/codegenerator.h>
+#include <parsesession.h>
+
+#include <bitset>
 
 namespace KDevelop
 {
@@ -27,8 +30,16 @@ namespace KDevelop
 /*!
  * @brief   Applies the PIMPL pattern to a class, hiding all it's private members in a private class
  */
-class MakeImplementationPrivate : public CodeGenerator
+class MakeImplementationPrivate : public CodeGenerator<ParseSession>
 {
+    enum Policies
+    {
+        ContainerIsClass,             //Indicates the container type will be class, otherwise struct will be used
+        MoveInitializationToPrivate,  //Moves the initialization of variables to the initialization list of private implementation
+        MoveMethodsToPrivate,         //Moves the private methods into the private implementation
+        PolicyNum
+    };
+    
   public:
     
     // Implementations from CodeGenerator
@@ -39,6 +50,10 @@ class MakeImplementationPrivate : public CodeGenerator
   private:
     DUContext * m_classContext;
     QString m_privatePointerName;
+    
+    std::bitset<PolicyNum> Policies;
+    
+    bool classHasPrivateImplementation();
 };
 
 }
