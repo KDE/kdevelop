@@ -50,8 +50,9 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
   private:
     DUContext * m_classContext;
     QString m_privatePointerName;
+    QString m_structureName;
     
-    std::bitset<PolicyNum> Policies;
+    std::bitset<PolicyNum> m_policies;
     
     bool classHasPrivateImplementation();
 };

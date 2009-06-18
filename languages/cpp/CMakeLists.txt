@@ -42,7 +42,12 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/makeimplementationprivate.cpp
 )
 
-kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS codegen/ui/custom_include_paths.ui)
+set(kdevcpplanguagesupport_LIB_UI
+    codegen/ui/custom_include_paths.ui
+    codegen/ui/privateimplementation.ui
+)
+
+kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_LIB_UI})
 
 option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
 if(BUILD_kdev_includepathresolver)
