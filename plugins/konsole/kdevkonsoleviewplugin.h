@@ -24,6 +24,7 @@ class KDevKonsoleViewPlugin : public KDevelop::IPlugin
 public:
     KDevKonsoleViewPlugin( KPluginFactory*, QObject *parent, const QVariantList & = QVariantList() );
     virtual ~KDevKonsoleViewPlugin();
+    virtual void unload();
     KPluginFactory* konsoleFactory() const;
 private:
     class KDevKonsoleViewFactory *m_factory;

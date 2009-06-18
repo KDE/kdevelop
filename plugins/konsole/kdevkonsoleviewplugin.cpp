@@ -61,6 +61,11 @@ KDevKonsoleViewPlugin::KDevKonsoleViewPlugin( KPluginFactory* konsolefactory, QO
     core()->uiController()->addToolView("Konsole", m_factory);
 }
 
+void KDevKonsoleViewPlugin::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
+}
+
 KPluginFactory* KDevKonsoleViewPlugin::konsoleFactory() const
 {
     return m_konsoleFactory;
