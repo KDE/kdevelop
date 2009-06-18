@@ -234,10 +234,7 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
 
         connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
 
-        ///TODO: check if this works for remote files when something gets changed through another KDE app
-        if ( project->folder().isLocalFile() ) {
-            m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs );
-        }
+        m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs );
     }
 
     return projectRoot;
