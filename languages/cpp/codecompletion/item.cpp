@@ -421,8 +421,11 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           if(m_isTemplateCompletion || declarationNeedsTemplateParameters(dec))
             createTemplateArgumentList(*this, ret, 0);
           
-          if (dec->type<FunctionType>())
-            createArgumentList(*this, ret, 0);
+          if (dec->type<FunctionType>()) {
+            needCachedArgumentList();
+            
+            return m_cachedArgumentList->text;
+          }
           
           return ret;
         }
@@ -445,14 +448,9 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
 
     case CodeCompletionModel::CustomHighlight:
     if( index.column() == CodeCompletionModel::Arguments /*&& completionContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess*/ ) {
-      QString ret;
-      QList<QVariant> highlight;
-      if(m_isTemplateCompletion || declarationNeedsTemplateParameters(dec))
-        createTemplateArgumentList(*this, ret, &highlight);
+      needCachedArgumentList();
       
-      if (dec->type<FunctionType>())
-        createArgumentList(*this, ret, &highlight);
-      return QVariant(highlight);
+      return QVariant(m_cachedArgumentList->highlighting);
     }
 //     if( index.column() == CodeCompletionModel::Name ) {
 //       //Bold
@@ -491,6 +489,23 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
   return KDevelop::NormalDeclarationCompletionItem::data(index, role, model);
 }
 
+void NormalDeclarationCompletionItem::needCachedArgumentList() const
+{
+  if(!m_cachedArgumentList)
+  {
+    m_cachedArgumentList = KSharedPtr<CachedArgumentList>(new CachedArgumentList);
+    
+    if(!m_declaration)
+      return;
+    
+    if(m_isTemplateCompletion || declarationNeedsTemplateParameters(m_declaration.data()))
+      createTemplateArgumentList(*this, m_cachedArgumentList->text, &m_cachedArgumentList->highlighting);
+
+
+    if (m_declaration->type<FunctionType>())
+      createArgumentList(*this, m_cachedArgumentList->text, &m_cachedArgumentList->highlighting);
+  }
+}
 
 QWidget* NormalDeclarationCompletionItem::createExpandingWidget(const KDevelop::CodeCompletionModel* model) const
 {

@@ -40,6 +40,10 @@ namespace KTextEditor {
 
 class QModelIndex;
 
+struct CachedArgumentList : public QSharedData {
+  QString text;
+  QList<QVariant> highlighting;
+};
 
 namespace Cpp {
   class CodeCompletionContext;
@@ -86,9 +90,14 @@ protected:
   virtual bool createsExpandingWidget() const;
   virtual QString shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const;
 private:
+  
+  void needCachedArgumentList() const;
+  
   mutable DeclarationPointer m_cachedTypeStringDecl;
   mutable QString m_cachedTypeString;
   mutable uint m_cachedTypeStringLength;
+  
+  mutable KSharedPtr<CachedArgumentList> m_cachedArgumentList;
 };
 
 //A completion item used for completing include-files
