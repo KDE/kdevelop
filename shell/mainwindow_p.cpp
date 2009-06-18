@@ -314,9 +314,8 @@ void MainWindowPrivate::setupAreaSelectorActions()
 void MainWindowPrivate::setupAreaSelector()
 {
     if(!m_workingSetCornerWidget) {
-        m_workingSetCornerWidget = new QWidget(m_mainWindow);
-        QWidget* w = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, true);
-        m_mainWindow->setTabBarLeftCornerWidget(w);
+        m_workingSetCornerWidget = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, true);
+        m_mainWindow->setTabBarLeftCornerWidget(m_workingSetCornerWidget);
     }
 }
 
