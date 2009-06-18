@@ -70,6 +70,7 @@ public:
         desired["org.kdevelop.OutputView"] = Sublime::Bottom;
         desired["org.kdevelop.ContextBrowser"] = Sublime::Bottom;
         desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
+        desired["org.kdevelop.KonsoleView"] = Sublime::Bottom;
         Sublime::Area* a =
             new Sublime::Area(m_controller, "code", i18n("Code"));
         a->setDesiredToolViews(desired);
@@ -81,6 +82,7 @@ public:
         desired["org.kdevelop.debugger.BreakpointsView"] = Sublime::Bottom;
         desired["org.kdevelop.debugger.StackView"] = Sublime::Bottom;
         desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
+        desired["org.kdevelop.KonsoleView"] = Sublime::Bottom;
         a = new Sublime::Area(m_controller, "debug", i18n("Debug"));
         a->setDesiredToolViews(desired);
         a->setIconName("tools-report-bug");
