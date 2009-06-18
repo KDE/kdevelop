@@ -78,7 +78,7 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDeve
 
     bool ok = isFolder;
 
-    for ( QStringList::ConstIterator it = includes.begin(); !ok && it != includes.end(); ++it ) {
+    for ( QStringList::ConstIterator it = includes.constBegin(); !ok && it != includes.constEnd(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
         if ( rx.exactMatch( url.fileName() ) ) {
             ok = true;
@@ -90,7 +90,7 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDeve
         return false;
     }
 
-    for ( QStringList::ConstIterator it = excludes.begin(); it != excludes.end(); ++it ) {
+    for ( QStringList::ConstIterator it = excludes.constBegin(); it != excludes.constEnd(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
         if ( rx.exactMatch( url.fileName() ) ) {
             return false;
