@@ -78,9 +78,16 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDeve
 
     bool ok = isFolder;
 
+    // we operate on the path of this url relative to the project base
+    // by prepending a slash we can filter hidden files with the pattern "*/.*"
+    // by appending a slash to folders we can filter them with "*/"
+    const QString relativePath = "/" + project->relativeUrl( url ).path(
+        isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
+    );
+
     for ( QStringList::ConstIterator it = includes.constBegin(); !ok && it != includes.constEnd(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( url.fileName() ) ) {
+        if ( rx.exactMatch( relativePath ) ) {
             ok = true;
             break;
         }
@@ -92,7 +99,7 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDeve
 
     for ( QStringList::ConstIterator it = excludes.constBegin(); it != excludes.constEnd(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
-        if ( rx.exactMatch( url.fileName() ) ) {
+        if ( rx.exactMatch( relativePath ) ) {
             return false;
         }
     }
@@ -158,7 +165,7 @@ void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
     KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
     QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
     ///TODO: filter hidden files by default
-    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList());
+    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList("*/.*"));
 
     // build lists of valid files and folders with relative urls to the project folder
     KUrl::List files;
