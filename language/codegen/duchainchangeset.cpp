@@ -21,6 +21,11 @@
 namespace KDevelop
 {
 
+//DUChainRef::DUChainRef(DUChainChangeSet* set, DUChainBase* object, bool newObject) :
+//    m_changeSet(set), m_object(object), m_objectRef(0), m_newObject(newObject)
+//{
+//}
+
 DUChainChangeSet::DUChainChangeSet(ReferencedTopDUContext topContext) :
     m_topContext(topContext)
 {

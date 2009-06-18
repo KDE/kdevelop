@@ -60,15 +60,15 @@ void CodeGeneratorBase::start()
 
 void CodeGeneratorBase::addChangeSet(DUChainChangeSet * duchainChange)
 {
-    IndexedString file = duchainChange->topDuContext().data()->url() ;
+    IndexedString file; //TODO= duchainChange->topDuContext().data()->url() ;
     
     QMap<IndexedString, DUChainChangeSet *>::iterator it = d->duchainChanges.find(file);
     
     //if we already have an entry for this file, merge it
     if(it !=d->duchainChanges.end())
     {
-        **it << *duchainChange;
-        delete duchainChange;
+        //TODO **it << *duchainChange;
+        //TODO delete duchainChange;
     }
     else
         d->duchainChanges.insert(file, duchainChange);
