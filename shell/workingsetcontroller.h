@@ -84,6 +84,10 @@ public:
     ///@param clear If this is true, the area will be cleared before
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear = true);
 
+    bool hasConnectedAreas() const {
+        return !m_areas.isEmpty();
+    }
+    
     void connectArea(Sublime::Area* area) {
         if(m_areas.contains(area)) {
             kDebug() << "tried to double-connect area";
@@ -121,6 +125,7 @@ private slots:
     void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) ;
     void changingWorkingSet(Sublime::Area* area, QString from, QString to);
     void changedWorkingSet(Sublime::Area*, QString, QString);
+    void deleteSet();
     Q_SIGNALS:
     void setChangedSignificantly();
 private:
@@ -159,6 +164,29 @@ private:
 
 class WorkingSetController;
 
+class WorkingSetToolButton : public QToolButton {
+    Q_OBJECT
+    public:
+    WorkingSetToolButton(QWidget* parent, WorkingSet* set) : QToolButton(parent), m_set(set) {
+        setFocusPolicy(Qt::NoFocus);
+    }
+    private slots:
+    void closeSet();
+    void loadSet();
+    void duplicateSet();
+    void mergeSet();
+    void subtractSet();
+    void intersectSet();
+    private:
+    void filterViews(QSet<QString> documents);
+    MainWindow* mainWindow() const;
+
+    
+    virtual void contextMenuEvent(QContextMenuEvent* ev);
+    virtual bool event(QEvent* e);
+    WorkingSet* m_set;
+};
+
 class WorkingSetWidget : public QWidget {
 Q_OBJECT
 public:
@@ -186,7 +214,9 @@ public:
     WorkingSetController(KDevelop::Core* core) ;
     ///Returns a working-set management widget
 //     QWidget* createManagerWidget(QObject* parent);
-    
+
+    WorkingSet* newWorkingSet(QString prefix);
+
     WorkingSet* getWorkingSet(QString id);
     void initialize() {}
     void cleanup();

@@ -147,6 +147,7 @@ public:
     ///within Area.
     ///The actual view management has to be implemented in the entity that knows more
     ///about possible views, documents, etc. (kdevplatform/shell)
+    ///@warning (KDevelop): Before calling this, make sure that all views are saved!
     void setWorkingSet(QString name);
     
     /**Walker mode to determine the behavior of area walkers.*/

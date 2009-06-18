@@ -36,6 +36,9 @@
 #include <kiconeffect.h>
 #include <qapplication.h>
 #include <util/activetooltip.h>
+#include <qevent.h>
+#include <qmenu.h>
+#include <sublime/urldocument.h>
 
 using namespace KDevelop;
 
@@ -71,6 +74,13 @@ bool WorkingSetController::usingIcon(QString icon)
 bool WorkingSetController::iconValid(QString icon)
 {
     return !KIconLoader::global()->iconPath(icon, KIconLoader::Small, true).isNull();
+}
+
+
+WorkingSet* WorkingSetController::newWorkingSet(QString prefix)
+{
+    QString newId = QString("%1_%2").arg(prefix).arg(qrand() % 10000000);
+    return getWorkingSet(newId);
 }
 
 WorkingSet* WorkingSetController::getWorkingSet(QString id)
@@ -243,6 +253,9 @@ void loadFileList(QStringList& ret, KConfigGroup group)
 }
 QStringList WorkingSet::fileList() const
 {
+    if(m_id.isEmpty())
+        return QStringList();
+    
     QStringList ret;
     KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
@@ -332,6 +345,16 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     }
 }
 
+void WorkingSet::deleteSet()
+{
+    if(m_areas.isEmpty() && !m_id.isEmpty()) {
+        KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+        KConfigGroup group = setConfig.group(m_id);
+        deleteGroupRecursive(group);
+        emit setChangedSignificantly();
+    }
+}
+
 QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local, Sublime::Area* fixedArea) {
 #if QT_VERSION >= 0x040500
     return new WorkingSetWidget(parent, this, local, fixedArea);
@@ -406,15 +429,88 @@ class WorkingSetToolTipWidget : public QWidget {
         WorkingSet* m_set;
 };
 
-class WorkingSetToolButton : public QToolButton {
-    public:
-    WorkingSetToolButton(QWidget* parent, WorkingSet* set) : QToolButton(parent), m_set(set) {
+
+void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
+{
+    QToolButton::contextMenuEvent(ev);
+
+    QMenu menu;
+    Sublime::MainWindow* mainWindow = dynamic_cast<Sublime::MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    Q_ASSERT(mainWindow);
+    if(m_set->id() == mainWindow->area()->workingSet()) {
+        menu.addAction(i18n("Close Working Set (Left Click)"), this, SLOT(closeSet()));
+        menu.addAction(i18n("Duplicate Working Set"), this, SLOT(duplicateSet()));
+    }else{
+        menu.addAction(i18n("Load Working Set (Left Click)"), this, SLOT(loadSet()));
+        menu.addAction(i18n("Merge Working Set"), this, SLOT(mergeSet()));
+        menu.addSeparator();
+        menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
+        menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
     }
-    private:
+    menu.actions()[0]->setIcon(KIcon(m_set->iconName()));
+    
+    if(!m_set->hasConnectedAreas()) {
+        menu.addSeparator();
+        menu.addAction(i18n("Delete Working Set"), m_set, SLOT(deleteSet()));
+    }
+    menu.exec(ev->globalPos());
+    
+    ev->accept();
+}
+
+
+void WorkingSetToolButton::filterViews(QSet< QString > keepFiles)
+{
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+        return;
+    
+    foreach(Sublime::View* view, mainWindow()->area()->views()) {
         
-    virtual bool event(QEvent* e);
-    WorkingSet* m_set;
-};
+        Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
+        if(urlDoc && !keepFiles.contains(urlDoc->documentSpecifier()))
+            mainWindow()->area()->closeView(view);
+    }
+}
+
+void WorkingSetToolButton::intersectSet()
+{
+    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
+}
+
+void WorkingSetToolButton::subtractSet()
+{
+    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
+}
+
+void WorkingSetToolButton::mergeSet()
+{
+    QSet< QString > loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
+    foreach(QString file, loadFiles)
+        Core::self()->documentController()->openDocument(KUrl(file));
+}
+
+void WorkingSetToolButton::duplicateSet()
+{
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+        return;
+    WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
+    set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
+    mainWindow()->area()->setWorkingSet(set->id());
+}
+
+void WorkingSetToolButton::loadSet()
+{
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+        return;
+    mainWindow()->area()->setWorkingSet(QString(m_set->id()));
+}
+
+void WorkingSetToolButton::closeSet()
+{
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+        return;
+    mainWindow()->area()->setWorkingSet(QString());
+}
 
 bool WorkingSetToolButton::event(QEvent* e)
 {
@@ -537,10 +633,10 @@ void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
     }
     if (m_id.isEmpty()) {
         //Spawn a new working-set
-        QString newId = QString("%1_%2").arg(area->objectName()).arg(qrand() % 10000000);
-        kDebug() << "spawning new working-set for area" << area->objectName() << ":" << newId;
-        Core::self()->workingSetControllerInternal()->getWorkingSet(newId)->saveFromArea(area, area->rootIndex());
-        area->setWorkingSet(newId);
+ 
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
+        set->saveFromArea(area, area->rootIndex());
+        area->setWorkingSet(set->id());
         return;
     }
     changed(area);
@@ -578,6 +674,12 @@ WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
     m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
     m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
     //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
+}
+
+MainWindow* WorkingSetToolButton::mainWindow() const {
+    MainWindow* ret = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    Q_ASSERT(ret);
+    return ret;
 }
 
 #include "workingsetcontroller.moc"
