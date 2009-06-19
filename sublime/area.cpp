@@ -399,16 +399,25 @@ void Area::setWorkingSet(QString name)
     }
 }
 
-void Area::closeView(View* view)
+bool Area::closeView(View* view)
 {
     QPointer<Document> doc = view->document();
 
+    if(doc && doc->views().count() == 1) {
+        if(!doc->closeDocument())
+            return false;
+        else
+            return true;
+    }
+    
     //close only one active view
     removeView(view);
     delete view;
 
     if(doc && doc->views().count() == 0)
         doc->closeDocument(); //close the document instead
+
+    return true;
 }
 
 void Area::clearViews()

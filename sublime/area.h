@@ -90,13 +90,17 @@ public:
     This method is added only for convenience.*/
     QList<View*> views();
 
-    /** Removes all views from this area and deletes them */
+    /** Removes all views from this area and deletes them.
+      * If an open document has changes, and it is the last view of that document,
+      * the user may push 'Cancel', and the view will stay active. */
     void clearViews();
     
     /** Closes and deletes the view, asking the user for feedback if needed.
       * Closes the document if it is the last view.
-      * Does not allow breaking the closing process. */
-    void closeView(View* view);
+      * Does allow breaking the closing process.
+      * If it is the last view of the document that has changes, and the user pushed 'Cancel',
+      * false will be returned, and the view will not be closed. */
+    bool closeView(View* view);
     
     /**@return the index of view or 0 if it can not be found.*/
     AreaIndex *indexOf(View *view);

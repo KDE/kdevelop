@@ -67,7 +67,7 @@ public:
     virtual void setTextSelection(const KTextEditor::Range &range);
 
     //Overridden from Sublime::Document
-    virtual void closeDocument();
+    virtual bool closeDocument();
     
 private:
     class PartDocumentPrivate * const d;

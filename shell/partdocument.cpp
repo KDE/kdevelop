@@ -145,8 +145,8 @@ bool PartDocument::close(DocumentSaveMode mode)
     return true;
 }
 
-void PartDocument::closeDocument() {
-    close();
+bool PartDocument::closeDocument() {
+    return close();
 }
 
 void PartDocument::reload()

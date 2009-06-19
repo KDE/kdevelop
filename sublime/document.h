@@ -67,8 +67,15 @@ public:
     /**@return the specifics of this document which can be written to config.*/
     virtual QString documentSpecifier() const = 0;
 
-    /**Should try closing the document, eventually asking the user for feedback.*/
-    virtual void closeDocument() {
+    /**Should try closing the document, eventually asking the user for feedback.
+      *
+      *If closing is successful, all views should be deleted, and the document itself
+      *be scheduled for deletion using deleteLater().
+      *
+      * Returns whether closing was successful (The user did not push 'Cancel') */
+    virtual bool closeDocument() {
+        Q_ASSERT(0); //Every document should override this
+        return false;
     }
 
     void setStatusIcon(QIcon icon);
