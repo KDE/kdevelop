@@ -100,7 +100,8 @@ public:
         connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewAdded(Sublime::AreaIndex*,Sublime::View*)));
         connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), this, SLOT(areaViewRemoved(Sublime::AreaIndex*,Sublime::View*)));
         connect(area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)), this, SLOT(changingWorkingSet(Sublime::Area*,QString,QString)));
-        connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)));
+        //The connection is queued, because the signal may be triggered from within an object that may be deleted during the performed actions
+        connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)), Qt::QueuedConnection);
     }
     
     void disconnectArea(Sublime::Area* area) {
