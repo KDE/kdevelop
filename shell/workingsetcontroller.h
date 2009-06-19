@@ -211,21 +211,25 @@ public slots:
 
 class WorkingSetToolTipWidget : public QWidget {
     Q_OBJECT
-    public:
+public:
     WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow);
     
+Q_SIGNALS:
+    void shouldClose();
 public slots:
     void buttonClicked(bool);
     void updateFileButtons();
     
-    private:
-        QMap<QString, QToolButton*> m_fileButtons;
-        WorkingSet* m_set;
+private:
+    QMap<QString, QToolButton*> m_fileButtons;
+    WorkingSet* m_set;
 
     QPushButton* m_mergeButton;
     QPushButton* m_subtractButton;
     QPushButton* m_openButton;
     WorkingSetToolButton* m_setButton;
+
+    QPushButton* m_deleteButton;
 };
 
 class WorkingSetController : public QObject

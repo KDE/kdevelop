@@ -446,10 +446,10 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
         menu.addAction(i18n("Duplicate Working Set"), this, SLOT(duplicateSet()));
     }else{
         menu.addAction(i18n("Load Working Set (Left Click)"), this, SLOT(loadSet()));
-        menu.addAction(i18n("Merge Working Set"), this, SLOT(mergeSet()));
-        menu.addSeparator();
-        menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
-        menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
+//         menu.addAction(i18n("Merge Working Set"), this, SLOT(mergeSet()));
+//         menu.addSeparator();
+//         menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
+//         menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
     }
     menu.actions()[0]->setIcon(KIcon(m_set->iconName()));
     
@@ -518,8 +518,10 @@ bool WorkingSetToolButton::event(QEvent* e)
         tooltip->addExtendRect(QRect(parentWidget()->mapToGlobal(geometry().topLeft()), parentWidget()->mapToGlobal(geometry().bottomRight())));
         QVBoxLayout* layout = new QVBoxLayout(tooltip);
         layout->setMargin(0);
-        layout->addWidget(new WorkingSetToolTipWidget(tooltip, m_set, mainWindow()));
+        WorkingSetToolTipWidget* widget = new WorkingSetToolTipWidget(tooltip, m_set, mainWindow());
+        layout->addWidget(widget);
         tooltip->resize( tooltip->sizeHint() );
+        connect(widget, SIGNAL(shouldClose()), tooltip, SLOT(close()));
         ActiveToolTip::showToolTip(tooltip);
         return true;
     }
@@ -668,18 +670,28 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     
     m_mergeButton = new QPushButton;
     m_mergeButton->setIcon(KIcon("list-add"));
-    m_mergeButton->setText(i18n("Add All Documents"));
+    m_mergeButton->setText(i18n("Add All"));
     m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
     connect(m_mergeButton, SIGNAL(clicked(bool)), m_setButton, SLOT(mergeSet()));
     topLayout->addWidget(m_mergeButton);
 
     m_subtractButton = new QPushButton;
-    m_subtractButton->setIcon(KIcon("edit-delete"));
-    m_subtractButton->setText(i18n("Subtract All Documents"));
+    m_subtractButton->setIcon(KIcon("list-remove"));
+    m_subtractButton->setText(i18n("Subtract All"));
     m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
     connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
     topLayout->addWidget(m_subtractButton);
     
+    topLayout->addSpacing(30);
+    
+    m_deleteButton = new QPushButton;
+    m_deleteButton->setIcon(KIcon("edit-delete"));
+    m_deleteButton->setText(i18n("Delete"));
+    m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
+    connect(m_deleteButton, SIGNAL(clicked(bool)), m_set, SLOT(deleteSet()));
+    connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
+    topLayout->addWidget(m_deleteButton);
+
     
     layout2->addLayout(topLayout);
     QStringList files = m_set->fileList();
@@ -737,6 +749,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
     
     m_mergeButton->setEnabled(!allOpen && mainWindow->area()->workingSet() != m_set->id());
     m_subtractButton->setEnabled(!noneOpen && mainWindow->area()->workingSet() != m_set->id());
+    m_deleteButton->setEnabled(mainWindow->area()->workingSet() != m_set->id());
     
     if(m_set->id() == mainWindow->area()->workingSet()) {
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
