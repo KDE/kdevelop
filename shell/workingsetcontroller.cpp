@@ -705,7 +705,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         fileLayout->addWidget(plusButton);
 
-        QLabel* fileLabel = new QLabel(KUrl(file).prettyUrl());
+        QLabel* fileLabel = new QLabel(KUrl(file).pathOrUrl());
         fileLayout->addWidget(fileLabel);
         fileLayout->setMargin(0);
         layout2->addLayout(fileLayout);
