@@ -193,7 +193,7 @@ const IndexedString* ClassFunctionDeclaration::defaultParameters() const
   return d_func()->m_defaultParameters();
 }
 
-int ClassFunctionDeclaration::defaultParametersSize() const
+unsigned int ClassFunctionDeclaration::defaultParametersSize() const
 {
   return d_func()->m_defaultParametersSize();
 }

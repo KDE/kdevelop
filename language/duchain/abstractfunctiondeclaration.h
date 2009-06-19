@@ -80,7 +80,7 @@ public:
    * So the vector may be empty or smaller than the count of function-arguments.
    * */
   virtual const IndexedString* defaultParameters() const = 0;
-  virtual int defaultParametersSize() const = 0;
+  virtual unsigned int defaultParametersSize() const = 0;
   virtual void addDefaultParameter(const IndexedString& str) = 0;
   virtual void clearDefaultParameters()  = 0;
   ///Returns the default parameter assigned to the given argument number.

@@ -91,7 +91,7 @@ const IndexedString* FunctionDeclaration::defaultParameters() const
   return d_func()->m_defaultParameters();
 }
 
-int FunctionDeclaration::defaultParametersSize() const
+unsigned int FunctionDeclaration::defaultParametersSize() const
 {
   return d_func()->m_defaultParametersSize();
 }

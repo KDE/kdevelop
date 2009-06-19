@@ -108,7 +108,7 @@ public:
   virtual uint additionalIdentity() const;
   
   virtual const IndexedString* defaultParameters() const;
-  virtual int defaultParametersSize() const;
+  virtual unsigned int defaultParametersSize() const;
   virtual void addDefaultParameter(const IndexedString& str);
   virtual void clearDefaultParameters();
   
