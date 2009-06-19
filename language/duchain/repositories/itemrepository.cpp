@@ -114,9 +114,11 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
 ///The global item-repository registry that is used by default
 ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
   QPair<QString, KLockFile::Ptr> repo = allocateRepository();
-    
-  static ItemRepositoryRegistry global(repo.first, repo.second);
-  return global;
+  
+  ///We intentionally leak the registry, to prevent problems in the destruction order, where
+  ///the actual repositories might get deleted later than the repository registry.
+  static ItemRepositoryRegistry* global = new ItemRepositoryRegistry(repo.first, repo.second);
+  return *global;
 }
 
 ///The global item-repository registry that is used by default
