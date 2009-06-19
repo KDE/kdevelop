@@ -39,10 +39,35 @@
 #include <qevent.h>
 #include <qmenu.h>
 #include <sublime/urldocument.h>
+#include "partdocument.h"
+#include <qpushbutton.h>
 
 using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
+
+static MainWindow* mainWindow() {
+    MainWindow* ret = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    Q_ASSERT(ret);
+    return ret;
+}
+
+//Filters the views in the main-window so they only contain the given files to keep
+void filterViews(QSet< QString > keepFiles)
+{
+    foreach(Sublime::View* view, mainWindow()->area()->views()) {
+        
+        PartDocument* partDoc = dynamic_cast<PartDocument*>(view->document());
+        if(partDoc && !keepFiles.contains(partDoc->documentSpecifier())) {
+            if(view->document()->views().count() == 1) {
+                partDoc->close();
+                continue;
+            }
+            
+            mainWindow()->area()->closeView(view);
+        }
+    }
+}
 
 //Random set of icons that are well distinguishable from each other. If the user doesn't have them, they won't be used.
 QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
@@ -409,27 +434,6 @@ QString htmlColor(QColor color) {
     return "#" + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
 }
 
-class WorkingSetToolTipWidget : public QWidget {
-    public:
-    WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set) : QWidget(parent), m_set(set) {
-        QFrame* frame = new QFrame(this);
-        frame->setFrameStyle(QFrame::Panel | QFrame::Plain);
-        frame->setLineWidth(1);
-        QVBoxLayout* layout = new QVBoxLayout(this);
-        layout->setMargin(0);
-        layout->addWidget(frame);
-        QVBoxLayout* layout2 = new QVBoxLayout(frame);
-        layout2->setMargin(0);
-        QStringList files = m_set->fileList();
-        QLabel* label = new QLabel(i18n("Working Set:\n%1", files.join("\n")));
-        layout2->addWidget(label);
-    }
-    
-    private:
-        WorkingSet* m_set;
-};
-
-
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 {
     QToolButton::contextMenuEvent(ev);
@@ -458,20 +462,6 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
     ev->accept();
 }
 
-
-void WorkingSetToolButton::filterViews(QSet< QString > keepFiles)
-{
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
-        return;
-    
-    foreach(Sublime::View* view, mainWindow()->area()->views()) {
-        
-        Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
-        if(urlDoc && !keepFiles.contains(urlDoc->documentSpecifier()))
-            mainWindow()->area()->closeView(view);
-    }
-}
-
 void WorkingSetToolButton::intersectSet()
 {
     filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
@@ -486,7 +476,7 @@ void WorkingSetToolButton::mergeSet()
 {
     QSet< QString > loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
     foreach(QString file, loadFiles)
-        Core::self()->documentController()->openDocument(KUrl(file));
+        Core::self()->documentController()->openDocument(file);
 }
 
 void WorkingSetToolButton::duplicateSet()
@@ -514,7 +504,7 @@ void WorkingSetToolButton::closeSet()
 
 bool WorkingSetToolButton::event(QEvent* e)
 {
-    if(e->type() == QEvent::ToolTip) {
+    if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
         e->accept();
         static QPointer<KDevelop::ActiveToolTip> tooltip;
         static WorkingSetToolButton* oldTooltipButton;
@@ -528,7 +518,7 @@ bool WorkingSetToolButton::event(QEvent* e)
         tooltip->addExtendRect(QRect(parentWidget()->mapToGlobal(geometry().topLeft()), parentWidget()->mapToGlobal(geometry().bottomRight())));
         QVBoxLayout* layout = new QVBoxLayout(tooltip);
         layout->setMargin(0);
-        layout->addWidget(new WorkingSetToolTipWidget(tooltip, m_set));
+        layout->addWidget(new WorkingSetToolTipWidget(tooltip, m_set, mainWindow()));
         tooltip->resize( tooltip->sizeHint() );
         ActiveToolTip::showToolTip(tooltip);
         return true;
@@ -557,48 +547,29 @@ void WorkingSetWidget::workingSetsChanged()
             continue;
         }
 //         kDebug() << "adding button for" << set->id();
-        QToolButton* butt = new WorkingSetToolButton(this, set);
+        QToolButton* butt = new WorkingSetToolButton(this, set, m_mainWindow);
         butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
-        
-        QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
-        QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
-        QColor useColor;
-        if(m_mainWindow && m_mainWindow->area() && m_mainWindow->area()->workingSet() == set->id()) {
-            useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
-            butt->setIcon(set->activeIcon());
-        }else{
-            useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.2);
-            butt->setIcon(set->inactiveIcon());
-        }
-        
-        QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
-        butt->setStyleSheet(sheet);
 
         m_layout->addWidget(butt);
-        connect(butt, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
         m_buttons[butt] = set;
     }
     update();
 }
 
-void WorkingSetWidget::buttonTriggered()
+void WorkingSetToolButton::buttonTriggered()
 {
-    QToolButton* button = qobject_cast<QToolButton*>(sender());
-    Q_ASSERT(button);
-    Q_ASSERT(m_buttons.contains(button));
-    
     //Only close the working-set if the file was saved before
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(m_mainWindow, KDevelop::IDocument::Default))
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
     
-    if(m_mainWindow->area()->workingSet() == m_buttons[button]->id()) {
+    if(mainWindow()->area()->workingSet() == m_set->id()) {
         //Create a new working-set
 //         if(!m_mini) {
-                m_mainWindow->area()->setWorkingSet(QString());
+                mainWindow()->area()->setWorkingSet(QString());
 //         }else{
 //         }
     }else{
-        m_mainWindow->area()->setWorkingSet(m_buttons[button]->id());
+        mainWindow()->area()->setWorkingSet(m_set->id());
     }
 }
 
@@ -676,10 +647,147 @@ WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
     //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
 }
 
-MainWindow* WorkingSetToolButton::mainWindow() const {
-    MainWindow* ret = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(ret);
-    return ret;
+WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow) : QWidget(parent), m_set(set) {
+    QFrame* frame = new QFrame(this);
+    frame->setFrameStyle(QFrame::Panel | QFrame::Plain);
+    frame->setLineWidth(1);
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->addWidget(frame);
+    QVBoxLayout* layout2 = new QVBoxLayout(frame);
+
+    QHBoxLayout* topLayout = new QHBoxLayout;
+    m_setButton = new WorkingSetToolButton(this, set, mainwindow);
+    m_setButton->disableTooltip();
+//     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+    topLayout->addWidget(m_setButton);
+
+    m_openButton = new QPushButton;
+    m_openButton->setIcon(KIcon(m_set->iconName()));
+    topLayout->addWidget(m_openButton);
+    
+    m_mergeButton = new QPushButton;
+    m_mergeButton->setIcon(KIcon("list-add"));
+    m_mergeButton->setText(i18n("Add All Documents"));
+    m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
+    connect(m_mergeButton, SIGNAL(clicked(bool)), m_setButton, SLOT(mergeSet()));
+    topLayout->addWidget(m_mergeButton);
+
+    m_subtractButton = new QPushButton;
+    m_subtractButton->setIcon(KIcon("edit-delete"));
+    m_subtractButton->setText(i18n("Subtract All Documents"));
+    m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
+    connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
+    topLayout->addWidget(m_subtractButton);
+    
+    
+    layout2->addLayout(topLayout);
+    QStringList files = m_set->fileList();
+    QLabel* label = new QLabel(i18n("Documents:"));
+    layout2->addWidget(label);
+    layout2->setSpacing(0);
+    foreach(QString file, files) {
+        QHBoxLayout* fileLayout = new QHBoxLayout;
+
+        QToolButton* plusButton = new QToolButton;
+        plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        fileLayout->addWidget(plusButton);
+
+        QLabel* fileLabel = new QLabel(KUrl(file).prettyUrl());
+        fileLayout->addWidget(fileLabel);
+        fileLayout->setMargin(0);
+        layout2->addLayout(fileLayout);
+
+        plusButton->setObjectName(file);
+        fileLabel->setObjectName(file);
+        
+        m_fileButtons.insert(file, plusButton);
+        
+        connect(plusButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
+    }
+    
+    updateFileButtons();
+    connect(set, SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
+    connect(Core::self()->workingSetControllerInternal()->getWorkingSet(mainwindow->area()->workingSet()), SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
+    connect(mainwindow->area(), SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), SLOT(updateFileButtons()), Qt::QueuedConnection);
+}
+
+
+void WorkingSetToolTipWidget::updateFileButtons()
+{
+    MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    Q_ASSERT(mainWindow);
+    
+    QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow->area()->workingSet())->fileList().toSet();
+    
+    bool allOpen = true;
+    bool noneOpen = true;
+    
+    for(QMap< QString, QToolButton* >::iterator it = m_fileButtons.begin(); it != m_fileButtons.end(); ++it) {
+        if(openFiles.contains(it.key())) {
+            noneOpen = false;
+            (*it)->setToolTip(i18n("Remove this file from the current working set"));
+            (*it)->setIcon(KIcon("list-remove"));
+        }else{
+            allOpen = false;
+            (*it)->setToolTip(i18n("Add this file to the current working set"));
+            (*it)->setIcon(KIcon("list-add"));
+        }
+    }
+    
+    m_mergeButton->setEnabled(!allOpen && mainWindow->area()->workingSet() != m_set->id());
+    m_subtractButton->setEnabled(!noneOpen && mainWindow->area()->workingSet() != m_set->id());
+    
+    if(m_set->id() == mainWindow->area()->workingSet()) {
+        disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
+        connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
+        m_openButton->setText(i18n("Close Working Set"));        
+    }else{
+        disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
+        connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
+        m_openButton->setText(i18n("Load Working Set"));        
+    }
+}
+
+void WorkingSetToolTipWidget::buttonClicked(bool)
+{
+    QPointer<WorkingSetToolTipWidget> stillExists(this);
+    
+    QToolButton* s = qobject_cast<QToolButton*>(sender());
+    Q_ASSERT(s);
+
+    MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    Q_ASSERT(mainWindow);
+    QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow->area()->workingSet())->fileList().toSet();
+    
+    if(!openFiles.contains(s->objectName())) {
+        Core::self()->documentControllerInternal()->openDocument(s->objectName());
+    }else{
+        openFiles.remove(s->objectName());
+        filterViews(openFiles);
+    }
+    
+    if(stillExists)
+        updateFileButtons();
+}
+
+WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow) : QToolButton(parent), m_set(set), m_toolTipEnabled(true) {
+    setFocusPolicy(Qt::NoFocus);
+    QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
+    QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
+    QColor useColor;
+    if(mainWindow && mainWindow->area() && mainWindow->area()->workingSet() == set->id()) {
+        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
+        setIcon(set->activeIcon());
+    }else{
+        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.2);
+        setIcon(set->inactiveIcon());
+    }
+    
+    QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
+    setStyleSheet(sheet);
+    
+    connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
 }
 
 #include "workingsetcontroller.moc"

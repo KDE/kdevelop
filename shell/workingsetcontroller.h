@@ -30,8 +30,8 @@
 #include "core.h"
 #include <util/pushvalue.h>
 
+class QPushButton;
 class QHBoxLayout;
-
 class KConfigGroup;
 
 namespace Sublime {
@@ -166,25 +166,28 @@ class WorkingSetController;
 
 class WorkingSetToolButton : public QToolButton {
     Q_OBJECT
+
     public:
-    WorkingSetToolButton(QWidget* parent, WorkingSet* set) : QToolButton(parent), m_set(set) {
-        setFocusPolicy(Qt::NoFocus);
+    WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow) ;
+    
+    void disableTooltip() {
+        m_toolTipEnabled = false;
     }
-    private slots:
+    
+    public slots:
     void closeSet();
     void loadSet();
     void duplicateSet();
     void mergeSet();
     void subtractSet();
     void intersectSet();
+    void buttonTriggered();
     private:
-    void filterViews(QSet<QString> documents);
-    MainWindow* mainWindow() const;
-
     
     virtual void contextMenuEvent(QContextMenuEvent* ev);
     virtual bool event(QEvent* e);
     WorkingSet* m_set;
+    bool m_toolTipEnabled;
 };
 
 class WorkingSetWidget : public QWidget {
@@ -204,7 +207,25 @@ public slots:
     void areaChanged(Sublime::Area*);
     void changingWorkingSet(Sublime::Area*,QString,QString);
     void workingSetsChanged();
-    void buttonTriggered();
+};
+
+class WorkingSetToolTipWidget : public QWidget {
+    Q_OBJECT
+    public:
+    WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow);
+    
+public slots:
+    void buttonClicked(bool);
+    void updateFileButtons();
+    
+    private:
+        QMap<QString, QToolButton*> m_fileButtons;
+        WorkingSet* m_set;
+
+    QPushButton* m_mergeButton;
+    QPushButton* m_subtractButton;
+    QPushButton* m_openButton;
+    WorkingSetToolButton* m_setButton;
 };
 
 class WorkingSetController : public QObject
