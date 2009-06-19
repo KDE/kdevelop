@@ -759,17 +759,19 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
   QString word(found.first.first);
   SimpleRange wordRange(found.first.second);
 
-  for(int pos = wordRange.end.column-wordRange.start.column-1; pos >= 0; --pos) {
-    if(word[pos] == '"' || word[pos].isSpace() || word[pos] == '>')
-      --wordRange.end.column;
-    else
+  int pos = 0;
+  for(; pos < word.size(); ++pos) {
+    if(word[pos] == '"' || word[pos] == '<') {
+      wordRange.start.column = ++pos;
       break;
+    }
   }
 
-  for(int pos = 0; pos < word.size(); ++pos) {
-    ++wordRange.start.column;
-    if(word[pos] == '"' || word[pos] == '<')
+  for(; pos < word.size(); ++pos) {
+    if(word[pos] == '"' || word[pos] == '>') {
+      wordRange.end.column = pos;
       break;
+    }
   }
 
   if(wordRange.start > wordRange.end)
