@@ -60,7 +60,7 @@ enum SearchPriority
     CustomConstructor,
     Destructor,
     ClassNameExtension,
-    DeclarationOnly,
+    DeclarationOnly
 };
 
 /**
