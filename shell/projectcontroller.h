@@ -76,6 +76,7 @@ public:
     void setDialogProvider(IProjectDialogProvider*);
 
     KUrl projectsBaseDirectory() const;
+    QString prettyFileName(KUrl url) const;
 
 public Q_SLOTS:
     virtual void openProjectForUrl( const KUrl &sourceUrl );

@@ -803,6 +803,16 @@ KUrl ProjectController::projectsBaseDirectory() const
                                      KUrl( QDir::homePath()+"/projects" ) );
 }
 
+QString ProjectController::prettyFileName(KUrl url) const
+{
+    IProject* project = Core::self()->projectController()->findProjectForUrl(url);
+    QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
+    if(project)
+        prefixText = "<i>" +  project->name() + "/</i>" + project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);
+
+    return prefixText + "<b>" + url.fileName() + "</b>";
+    
+}
 
 }
 

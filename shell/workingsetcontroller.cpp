@@ -41,6 +41,8 @@
 #include <sublime/urldocument.h>
 #include "partdocument.h"
 #include <qpushbutton.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 using namespace KDevelop;
 
@@ -705,7 +707,10 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         fileLayout->addWidget(plusButton);
 
-        QLabel* fileLabel = new QLabel(KUrl(file).pathOrUrl());
+        QLabel* fileLabel = new QLabel;
+        fileLabel->setTextFormat(Qt::RichText);
+        fileLabel->setText(Core::self()->projectController()->prettyFileName(KUrl(file)));
+//         fileLabel->setToolTip(KUrl(file).pathOrUrl());
         fileLayout->addWidget(fileLabel);
         fileLayout->setMargin(0);
         layout2->addLayout(fileLayout);

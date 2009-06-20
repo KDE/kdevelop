@@ -88,6 +88,14 @@ public:
 
     virtual KUrl projectsBaseDirectory() const = 0;
 
+    /**
+     * Returns a pretty short representation of the given url, considering the currently loaded projects,
+     * and with some added html highlighting:
+     * When the file is part of a currently loaded project, that projects name is shown as prefix instead of the
+     * the full file path.
+     */
+    Q_SCRIPTABLE virtual QString prettyFileName(KUrl url) const = 0;
+    
 public Q_SLOTS:
     /**
      * Tries finding a project-file for the given source-url and opens it.
