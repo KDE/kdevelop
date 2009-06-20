@@ -283,7 +283,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
 void GitPlugin::parseGitBlameOutput(DVcsJob *job) {
     QList<QVariant> results;
     int lineNumber = 0;
-    QRegExp regex("(\\w{8}) \\((.*) (\\d+) [-+]\\d+\\s+\\d+\\)");
+    QRegExp regex("(\\w{8}) .* ?\\((.*) (\\d+) [-+]\\d+\\s+\\d+\\)");
     foreach(QString line, job->output().split('\n')) {
         if (regex.indexIn(line) == 0) {
             VcsAnnotationLine annotation;
