@@ -595,7 +595,7 @@ void TestDUChain::testTypedefUses()
 
     //                 0         1         2         3         4         5
     //                 012345678901234567890123456789012345678901234567890123456789
-    QByteArray method("namespace Search { typedef int StateHypothesisIndex; StateHypothesisIndex i; }");
+    QByteArray method("namespace Search { typedef int StateHypothesisIndexwqeqrqwe; StateHypothesisIndexwqeqrqwe i; }");
 
     TopDUContext* top = parse(method, DumpAll);
 
