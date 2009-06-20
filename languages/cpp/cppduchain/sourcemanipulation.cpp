@@ -240,6 +240,14 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature,
   return ret;
 }
 
+SimpleRange SourceCodeInsertion::insertionRange(int line)
+{
+  if(line == 0 || !m_codeRepresentation)
+    return SimpleRange(line, 0, line, 0);
+  else
+    return SimpleRange(line-1, m_codeRepresentation->line(line-1).size(), line-1, m_codeRepresentation->line(line-1).size());
+}
+
 bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, bool isConstant, QString body) {
   if(!m_context)
     return false;
@@ -256,13 +264,11 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   else
     decl += " " + zeroIndentation(body, 1);
   
-  decl += "\n";
-  
   InsertionPoint insertion = findInsertionPoint(m_access, Function);
   
   decl = "\n" + applyIndentation(applySubScope(insertion.prefix +decl));
   
-  return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(insertion.line, 0, insertion.line, 0), QString(), decl));
+  return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(insertion.line), QString(), decl));
 }
 
 bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifier name, KDevelop::AbstractType::Ptr type) {
@@ -272,18 +278,31 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
   
   type = TypeUtils::removeConstants(type);
   
-  QString decl = Cpp::simplifiedTypeString(type, m_context) + " " + name.toString() + ";\n";
+  QString decl = Cpp::simplifiedTypeString(type, m_context) + " " + name.toString() + ";";
   
   InsertionPoint insertion = findInsertionPoint(m_access, Variable);
   
   decl = "\n" + applyIndentation(applySubScope(insertion.prefix + decl));
   
-  return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(insertion.line, 0, insertion.line, 0), QString(), decl));
+  return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(insertion.line), QString(), decl));
+}
+
+
+
+SimpleCursor SourceCodeInsertion::end() const
+{
+  SimpleCursor ret = m_context->range().end;
+  if(m_codeRepresentation && m_codeRepresentation->lines() && dynamic_cast<TopDUContext*>(m_context)) {
+    ret.line = m_codeRepresentation->lines()-1;
+    ret.column = m_codeRepresentation->line(ret.line).size();
+  }
+  return ret;
+  
 }
 
 SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const {
   InsertionPoint ret;
-  ret.line = m_context->range().end.line;
+  ret.line = end().line;
   
     bool behindExistingItem = false;
     
@@ -336,14 +355,14 @@ bool Cpp::SourceCodeInsertion::insertSlot(QString name, QString normalizedSignat
     QString add = insertion.prefix;
     
     QString sig;
-    add += "void " + name + "(" + normalizedSignature + ");\n";
+    add += "void " + name + "(" + normalizedSignature + ");";
     
     if(insertion.line > m_codeRepresentation->lines())
       return false;
 
-    add = applyIndentation(add);
+    add = "\n" + applyIndentation(add);
     
-    return m_changeSet.addChange(DocumentChange(m_context->url(), SimpleRange(insertion.line, 0, insertion.line, 0), QString(), add));
+    return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(insertion.line), QString(), add));
 }
 
 bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* decl) {
@@ -355,15 +374,18 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
   }
   
     QString forwardDeclaration;
-    if(decl->type<KDevelop::EnumerationType>()) {
-      forwardDeclaration = "enum " + decl->identifier().toString() + ";\n";
+    if(decl->kind() == Declaration::Instance) {
+      //A simple variable declaration
+      forwardDeclaration = "extern " + Cpp::simplifiedTypeString(decl->abstractType(), m_context) + " " + decl->identifier().toString() + ";";
+    }else if(decl->type<KDevelop::EnumerationType>()) {
+      forwardDeclaration = "enum " + decl->identifier().toString() + ";";
     }else if(decl->isTypeAlias()) {
       if(!decl->abstractType()) {
         kDebug() << "no type";
         return false;
       }
       
-      forwardDeclaration = "typedef " + Cpp::simplifiedTypeString(decl->abstractType(), m_context) + " " + decl->identifier().toString() + ";\n";
+      forwardDeclaration = "typedef " + Cpp::simplifiedTypeString(decl->abstractType(), m_context) + " " + decl->identifier().toString() + ";";
     }else{
       DUContext* templateContext = getTemplateContext(decl);
       if(templateContext) {
@@ -395,11 +417,13 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
         
         forwardDeclaration += " >\n";
       }
-      forwardDeclaration += "class " + decl->identifier().toString() + ";\n";
+      forwardDeclaration += "class " + decl->identifier().toString() + ";";
     }
     
     //Put declarations to the end, and namespaces to the begin
     KTextEditor::Cursor position;
+    
+    bool needNewLine = true;
     
     if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->range().end > m_insertBefore)) {
       //To the begin
@@ -415,7 +439,13 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       }
     } else{
       //To the end
-      position = m_context->range().end.textCursor() - KTextEditor::Cursor(0, 1);
+      
+      position = end().textCursor();
+      if(position.column() != 0 && m_context->type() == DUContext::Namespace) {
+        position -= KTextEditor::Cursor(0, 1);
+        forwardDeclaration += "\n";
+        needNewLine = false;
+      }
     }
     int firstValidLine = firstValidCodeLineBefore(m_insertBefore.line);
     if(firstValidLine > position.line() && m_context == m_topContext && (!m_insertBefore.isValid() || firstValidLine < m_insertBefore.line)) {
@@ -423,7 +453,9 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       position.setColumn(0);
     }
     
-    forwardDeclaration = "\n" + applySubScope(forwardDeclaration);
+    forwardDeclaration = applySubScope(forwardDeclaration);
+    if(needNewLine)
+      forwardDeclaration = "\n" + forwardDeclaration;
     
     kDebug() << "inserting at" << position << forwardDeclaration;
     

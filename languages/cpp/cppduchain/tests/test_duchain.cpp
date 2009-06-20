@@ -3013,6 +3013,104 @@ void TestDUChain::testTemplateInternalSearch() {
 
 void TestDUChain::testSourceCodeInsertion()
 {
+  {
+    QByteArray method("namespace A {\nclass B {};\n}\n");
+    
+    TopDUContext* top = parse(method, DumpNone);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    InsertArtificialCodeRepresentation repr(top->url(), QString::fromUtf8(method));
+    
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+
+    QCOMPARE(repr.text().trimmed().split('\n').count(), 3);
+    {
+      Cpp::SourceCodeInsertion ins(top);
+      ins.insertForwardDeclaration(top->childContexts()[0]->localDeclarations()[0]);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      QVERIFY(result);
+      kDebug() << repr.text();
+//       QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("int testVar;").remove(' ')));
+      
+      //Only one newline should be added
+      QCOMPARE(repr.text().trimmed().split('\n').count(), 4);
+    }
+    
+    top = parse(repr.text().toUtf8(), DumpNone, top);
+    
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+    
+    release(top);
+  }
+  
+  {
+    QByteArray method("");
+    
+    TopDUContext* top = parse(method, DumpNone);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    InsertArtificialCodeRepresentation repr(top->url(), QString::fromUtf8(method));
+    
+    {
+      Cpp::SourceCodeInsertion ins(top);
+      ins.insertFunctionDeclaration(Identifier("test"), AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)), QList<Cpp::SourceCodeInsertion::SignatureItem>(), false, "{ this is the body; }");
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      kDebug() << result.m_failureReason;
+      QVERIFY(result);
+      kDebug() << repr.text();
+      QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("void test() { this is the body; }").remove(' ')));
+      
+      //Only one newline should be added
+      QCOMPARE(repr.text().split('\n').count(), 2);
+    }
+    
+    top = parse(repr.text().toUtf8(), DumpNone, top);
+    
+    QCOMPARE(top->localDeclarations().count(), 1);
+
+    {
+      Cpp::SourceCodeInsertion ins(top);
+      ins.insertVariableDeclaration(Identifier("testVar"), AbstractType::Ptr(new IntegralType(IntegralType::TypeInt)));
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      QVERIFY(result);
+      kDebug() << repr.text();
+      QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("int testVar;").remove(' ')));
+      
+      //Only one newline should be added
+      QCOMPARE(repr.text().split('\n').count(), 3);
+    }
+    
+    top = parse(repr.text().toUtf8(), DumpNone, top);
+    
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("test"));
+    QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("testVar"));
+
+    {
+      Cpp::SourceCodeInsertion ins(top);
+      ins.setInsertBefore(top->localDeclarations()[1]->range().start);
+      ins.insertForwardDeclaration(top->localDeclarations()[1]);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      QVERIFY(result);
+      kDebug() << repr.text();
+//       QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("int testVar;").remove(' ')));
+      
+      //Only one newline should be added
+      QCOMPARE(repr.text().trimmed().split('\n').count(), 3);
+    }
+    
+    top = parse(repr.text().toUtf8(), DumpNone, top);
+    
+    QCOMPARE(top->localDeclarations().count(), 3);
+    ///@todo Wrong order (Minor issue when updating without smart-ranges)
+    QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("test"));
+    QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("testVar"));
+    QCOMPARE(top->localDeclarations()[2]->identifier(), Identifier("testVar"));
+    
+    release(top);
+  }
 }
 
 void TestDUChain::testSimplifiedTypeString()

@@ -70,6 +70,10 @@ public:
       QString prefix;
     };
     
+    ///Returns the exact position where the item should be inserted so it is in the given line.
+    ///The inserted item has to start with a newline, and does not need to end with a newline.
+    SimpleRange insertionRange(int line);
+    
     ///Returns a pair: (line, prefix) for inserting the given kind of declaration with the given access policy
     InsertionPoint findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const;
     //Should apply m_scope to the given declaration string
@@ -77,6 +81,10 @@ public:
     virtual QString accessString() const;
     virtual QString indentation() const;
     virtual QString applyIndentation(QString decl) const;
+
+    ///Returns an end-cursor that is guaranteed to fit into the current document. The top-context may have an invalid end-cursor if
+    ///the document is not open.
+    SimpleCursor end() const;
     
     KDevelop::DocumentChangeSet m_changeSet;
     KDevelop::SimpleCursor m_insertBefore;
