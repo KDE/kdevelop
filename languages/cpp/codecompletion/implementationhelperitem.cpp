@@ -317,7 +317,11 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     Cpp::SourceCodeInsertion insertion(updated.data());
     insertion.setContext(classContext);
     
-    insertion.insertSlot(completionContext()->followingText(), QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature));
+    QString slotName = completionContext()->followingText();
+    if(slotName.isEmpty())
+      slotName = completionContext()->m_connectedSignalIdentifier.toString();
+    
+    insertion.insertSlot(slotName, QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature));
 
     QString name = completionContext()->followingText();
     if(name.isEmpty() && m_declaration)
