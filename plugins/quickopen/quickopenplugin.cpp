@@ -188,6 +188,7 @@ class QuickOpenLineEdit : public QLineEdit {
       setMinimumWidth(200);
       setMaximumWidth(400);
       deactivate();
+      setObjectName("Quickopen");
     }
     ~QuickOpenLineEdit() {
       delete m_widget;
@@ -621,7 +622,15 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 
 void QuickOpenPlugin::quickOpenLine(bool)
 {
-
+  QList< QWidget* > lines = ICore::self()->uiController()->activeMainWindow()->findChildren<QWidget*>("Quickopen");
+  foreach(QWidget* line, lines) {
+    if(line->isVisible()) {
+      line->setFocus();
+      return;
+    }
+  }
+  
+  quickOpen();
 }
 
 static QuickOpenPlugin* staticQuickOpenPlugin = 0;
@@ -673,8 +682,8 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
 
     KAction* quickOpenLine = actions->addAction("quick_open_line");
-    quickOpenLine->setText( i18n("Quick Open") );
-    quickOpenLine->setShortcut( Qt::CTRL | Qt::Key_Comma );
+    quickOpenLine->setText( i18n("Embedded Quick Open") );
+    quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
 //     KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
