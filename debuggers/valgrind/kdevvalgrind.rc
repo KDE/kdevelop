@@ -1,10 +1,10 @@
 <!DOCTYPE kpartgui>
-<gui name="valgrind" library="libvalgrindplugin" version="6">
+<gui name="valgrind" library="libvalgrindplugin" version="7">
 <MenuBar>
  <Menu name="run">
    <text context="@title:menu">Run</text>
    <Menu name="valgrind_profile" group="run_operations">
-     <text context="@title:menu">Profile (Valgrind)</text>
+     <text context="@title:menu">Profile Launch (Valgrind)</text>
      <Action name="valgrind_memcheck"/>
      <Action name="valgrind_callgrind"/>
      <Action name="valgrind_helgrind"/>
