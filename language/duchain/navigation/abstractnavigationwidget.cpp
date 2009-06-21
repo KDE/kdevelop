@@ -52,6 +52,7 @@ AbstractNavigationWidget::AbstractNavigationWidget()
   : m_browser(0), m_currentWidget(0)
 {
   setPalette( QApplication::palette() );
+  setFocusPolicy(Qt::NoFocus);
   resize(100, 100);
 }
 
