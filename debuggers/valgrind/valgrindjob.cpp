@@ -157,14 +157,15 @@ ui->simulateHWPref->setChecked( cfg.readEntry( "Simulate Hardware Prefetcher", f
 ui->happensBefore->setCurrentIndex( cfg.readEntry("Extra Synchronization Events", 0 ) );
 */
 
-    valgrindArgs << QString( "--tool=%1" ).arg( grp.readEntry( m_tool ) );
+    valgrindArgs << QString( "--tool=%1" ).arg( m_tool );
     valgrindArgs << "--xml=yes";
     if( m_server ) {
         valgrindArgs << QString( "--log-socket=127.0.0.1:%1").arg( m_server->serverPort() );
     }
     valgrindArgs << executable;
     valgrindArgs += arguments;
-    m_process->setProgram( grp.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ).toLocalFile() );
+    kDebug() << "executing:" << grp.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ).toLocalFile() << valgrindArgs;
+    m_process->setProgram( grp.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ).toLocalFile(), valgrindArgs );
     m_process->start();
 }
 
