@@ -64,12 +64,12 @@ public:
     KDevelop::VcsJob* commit(const QString& message,
                              const KUrl::List& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
+
+    using KDevelop::DistributedVersionControlPlugin::log;
+
     KDevelop::VcsJob* log(const KUrl& localLocation,
                           const KDevelop::VcsRevision& rev,
                           unsigned long limit);
-    KDevelop::VcsJob* log(const KUrl& localLocation,
-                          const KDevelop::VcsRevision& rev,
-                          const KDevelop::VcsRevision& limit);
     KDevelop::VcsJob* annotate(const KUrl &localLocation, const KDevelop::VcsRevision &rev);
 
     // Begin:  KDevelop::IDistributedVersionControl
@@ -117,6 +117,8 @@ protected:
 
 protected slots:
     void parseGitBlameOutput(DVcsJob *job);
+    void parseGitLogOutput(DVcsJob *job);
+
 private:
     //commit dialog "main" helper
     QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList());
