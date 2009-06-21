@@ -72,6 +72,9 @@ public:
 
     void adjustRect();
     
+    ///Clicks within the friend widget are allowed
+    void addFriendWidget(QWidget* widget);
+    
     ///Add a rectangle to the area in which the mouse can be moved freely without hiding the tooltip
     void addExtendRect(QRect rect);
     

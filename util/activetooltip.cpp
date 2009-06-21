@@ -38,6 +38,7 @@ public:
     uint previousDistance_;
     QRect rect_;
     QRegion rectExtensions_;
+    QList<QPointer<QObject> > friendWidgets_;
     int mouseOut_;
 };
 
@@ -70,15 +71,20 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
 
     case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
+    {
+        kDebug() << "closing because of window activation";
         close();
+    }
     case QEvent::MouseButtonPress:
     case QEvent::MouseButtonRelease:
     case QEvent::MouseButtonDblClick:
     case QEvent::Wheel:
         /* If the click is within tooltip, it's fine.
            Clicks outside close it.  */
-        if (!insideThis(object))
+        if (!insideThis(object)) {
+            kDebug() << "closing because of click";
             close();
+        }
 
     // FIXME: revisit this code later.
 #if 0
@@ -117,11 +123,16 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
     return false;
 }
 
+void ActiveToolTip::addFriendWidget(QWidget* widget)
+{
+    d->friendWidgets_.append((QObject*)widget);
+}
+
 bool ActiveToolTip::insideThis(QObject* object)
 {
     while (object)
     {
-        if (object == this)
+        if (object == this || d->friendWidgets_.contains(object))
         {
             return true;
         }
