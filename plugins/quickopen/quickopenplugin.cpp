@@ -193,6 +193,18 @@ class QuickOpenLineEdit : public QLineEdit {
       delete m_widget;
     }
     
+    
+    virtual void keyPressEvent(QKeyEvent* ev) {
+      QLineEdit::keyPressEvent(ev);
+      if(ev->key() == Qt::Key_Escape) {
+        if(m_widget)
+          delete m_widget;
+        ev->accept();
+        if(ICore::self()->documentController()->activeDocument())
+          ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());
+      }
+    }
+    
     virtual void focusInEvent(QFocusEvent* ev) {
       activate();
       QLineEdit::focusInEvent(ev);
@@ -339,7 +351,7 @@ void QuickOpenWidget::prepareShow()
 }
 
 void QuickOpenWidgetDialog::run() {
-m_widget->prepareShow();
+  m_widget->prepareShow();
   m_dialog->show();
 }
 
