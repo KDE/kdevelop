@@ -160,7 +160,7 @@ class QuickOpenWidgetDialog : public QObject {
       return m_widget;
     }
   private:
-  KDialog* m_dialog; //Warning: m_dialog is also the parent
+  QDialog* m_dialog; //Warning: m_dialog is also the parent
   QuickOpenWidget* m_widget;
 };
 

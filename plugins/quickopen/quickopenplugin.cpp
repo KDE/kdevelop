@@ -364,11 +364,13 @@ QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* mode
 {
   m_widget = new QuickOpenWidget(title, model, initialItems, initialScopes, listOnly, noSearchField);
   
-  m_dialog = new KDialog( ICore::self()->uiController()->activeMainWindow() );
-  m_dialog->setInitialSize(QSize(800, 400));
-  m_dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+  //KDialog always sets the focus on the "OK" button, so we use QDialog
+  m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
+  m_dialog->resize(QSize(800, 400));
+
   m_dialog->setWindowTitle(title);
-  m_dialog->setMainWidget(m_widget);
+  QVBoxLayout* layout = new QVBoxLayout(m_dialog);
+  layout->addWidget(m_widget);
   
   connect(m_widget, SIGNAL(ready()), m_dialog, SLOT(close()));
   connect( m_dialog, SIGNAL(accepted()), m_widget, SLOT(accept()) );
