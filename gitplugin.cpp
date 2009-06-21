@@ -35,6 +35,7 @@
 
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
+#include <vcs/vcsevent.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <shell/core.h>
 #include <vcs/vcsannotation.h>
@@ -248,20 +249,14 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     if (prepareJob(job, localLocation.toLocalFile()) ) {
         *job << "git";
         *job << "log";
+        *job << "--date=raw";
         *job << "--";
         addFileList(job, localLocation);
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
         return job;
     }
     if (job) delete job;
     return NULL;
-}
-
-VcsJob* GitPlugin::log(const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev,
-                const KDevelop::VcsRevision& limit)
-{
-    Q_UNUSED(limit)
-    return log(localLocation, rev, 0);
 }
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&) {
@@ -271,6 +266,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
         *job << "blame";
         *job << "--root";
         *job << "-t";
+        *job << "--";
         addFileList(job, localLocation);
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
     } else {
@@ -791,6 +787,48 @@ void GitPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& commits) c
             commitLog += s +'\n';
         }
     }
+}
+
+void GitPlugin::parseGitLogOutput(DVcsJob * job)
+{
+    QList<QVariant> commits;
+    static QRegExp commitRegex( "^commit (\\w{8})\\w{32}" );
+    static QRegExp infoRegex( "^(\\w+):(.*)" );
+
+    QString contents = job->output();
+    QTextStream s(&contents);
+
+    VcsEvent item;
+    QString message;
+    bool pushCommit = false;
+    while (!s.atEnd()) {
+        QString line = s.readLine();
+        if (commitRegex.exactMatch(line)) {
+            if (pushCommit) {
+                item.setMessage(message.trimmed());
+                commits.append(QVariant::fromValue(item));
+            } else {
+                pushCommit = true;
+            }
+            VcsRevision rev;
+            rev.setRevisionValue(commitRegex.cap(1), KDevelop::VcsRevision::GlobalNumber);
+            item.setRevision(rev);
+            message.clear();
+        } else if (infoRegex.exactMatch(line)) {
+            QString cap1 = infoRegex.cap(1);
+            if (cap1 == "Author") {
+                item.setAuthor(infoRegex.cap(2).trimmed());
+            } else if (cap1 == "Date") {
+                item.setDate(QDateTime::fromTime_t(infoRegex.cap(2).trimmed().split(' ')[0].toUInt()));
+            }
+        } else if (line.startsWith("    ")) {
+            message += line.remove(0, 4);
+            message += '\n';
+        }
+    }
+    item.setMessage(message.trimmed());
+    commits.append(QVariant::fromValue(item));
+    job->setResults(commits);
 }
 
 QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args)
