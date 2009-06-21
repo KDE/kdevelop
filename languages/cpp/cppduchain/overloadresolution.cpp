@@ -32,7 +32,7 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext  ) : m_context(context), m_topContext(topContext), m_worstConversionRank(NoMatch) {
+OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance  ) : m_context(context), m_topContext(topContext), m_worstConversionRank(NoMatch), m_forceIsInstance(forceIsInstance) {
 
 }
 
@@ -87,7 +87,7 @@ void OverloadResolver::expandDeclarations( const QList<Declaration*>& declaratio
 
     if( CppClassType::Ptr klass = TypeUtils::realType(decl->abstractType(), m_topContext.data(), &isConstant).cast<CppClassType>() )
     {
-      if( decl->kind() == Declaration::Instance ) {
+      if( decl->kind() == Declaration::Instance || m_forceIsInstance ) {
         //Instances of classes should be substituted with their operator() members
         QList<Declaration*> decls;
         TypeUtils::getMemberFunctions( klass, m_topContext.data(), decls, "operator()", isConstant );
@@ -115,7 +115,7 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
 
     if( CppClassType::Ptr klass = TypeUtils::realType(decl.second->abstractType(), m_topContext.data(), &isConstant).cast<CppClassType>() )
     {
-      if( decl.second->kind() == Declaration::Instance ) {
+      if( decl.second->kind() == Declaration::Instance || m_forceIsInstance ) {
         //Instances of classes should be substituted with their operator() members
         QList<Declaration*> functions;
         TypeUtils::getMemberFunctions( klass, m_topContext.data(), functions, "operator()", isConstant );

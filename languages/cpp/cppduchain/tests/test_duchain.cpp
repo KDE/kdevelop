@@ -3721,6 +3721,48 @@ void TestDUChain::testDefinitionUse()
   release(top);
 }
 
+
+void TestDUChain::testOperatorUses()
+{
+  {
+    QByteArray method("struct S { bool operator() () const {}  };void test() { S s; s(); S()(); } ");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 2);
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 2);
+
+    release(top);
+  }
+  {
+    QByteArray method("struct S { S operator() () const {}; S(int) {};  };void test() { S s(1); s(); S(1)()(); } ");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 3);
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    ///@todo Also build constructor-uses for initializers
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+//     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).textRange(), KTextEditor::Range(0, 68, 0, 69));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).textRange(), KTextEditor::Range(0, 79, 0, 80));
+
+    release(top);
+  }
+}
+
 struct TestContext {
   TestContext() {
     static int number = 0;

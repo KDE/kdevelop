@@ -130,6 +130,7 @@ private slots:
   void testConstructorOperatorUses();
   void testSizeofUse();
   void testDefinitionUse();
+  void testOperatorUses();
   void testImportStructure();
   void testImportCache();
   void testDeclareSubClass();

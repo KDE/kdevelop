@@ -39,6 +39,7 @@ using namespace KDevelop;
 /**
  * Models overloaded function resolution
  * The du-chain must be locked for the whole lifetime of this object.
+ * @todo Give the 'instance' info with each declaration
  * */
 class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
   public:
@@ -85,8 +86,10 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     /**
      * @param container The container in which to search for the functions. If it is a class, base-classes will be respected too.
      * @param topContext The top-context of the file where where code-completion/parsing is started from. Needed to resolve forward-declarations.
+     * @param forceIsInstance If this is true, every class given to this overload-resolver as an object the function-call is applied on is considered
+     *                                        an instance of that object, rather then the type itself. This means that "operator()" will be used instead of a constructor.
      * */
-    OverloadResolver( DUContextPointer context, TopDUContextPointer topContext );
+    OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance = false );
 
     /**
      * Resolve one function with the given name that matches the given parameters.
@@ -165,6 +168,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
     DUContextPointer m_context;
     TopDUContextPointer m_topContext;
     uint m_worstConversionRank;
+    bool m_forceIsInstance;
 };
 
 }

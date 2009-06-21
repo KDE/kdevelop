@@ -1590,23 +1590,43 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     /**
      * If a class name was found, get its constructors.
-     *
-     * @todo Think uses should be built for typedef class constructors.
-     *       Normally, it should be a use of the typedef class, so refactoring can work
-     *       correctly. However we also want to know which constructor was called in other places.
      * */
     CppClassType::Ptr constructedType;
 
     AbstractType::Ptr oldLastType = m_lastType;
     
-    {
+    if(!m_lastInstance) {
       LOCKDUCHAIN;
+      if(m_lastDeclarations.isEmpty() && m_lastType && !m_lastInstance) {
+        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(m_lastType.unsafeData());
+        if(idType) {
+          Declaration* decl = idType->declaration(m_source);
+          if(decl)
+            m_lastDeclarations << DeclarationPointer(decl);
+        }
+      }
+      
       if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first().data() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = unAliasedType(m_lastDeclarations.first()->logicalDeclaration(topContext())->abstractType()).cast<CppClassType>()) ) {
 
         if( constructedType && constructedType->declaration(topContext()) && constructedType->declaration(topContext())->internalContext() )
         {
           Declaration* constructedDecl = constructedType->declaration(topContext());
+          
+          //Replace a type with its constructros if there is constructors available, so overload-resolution can happen
           m_lastDeclarations = convert(constructedDecl->internalContext()->findLocalDeclarations( constructedDecl->identifier(), constructedDecl->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
+        }
+      }
+    }else{
+      if(m_lastDeclarations.isEmpty() && m_lastType) {
+        LOCKDUCHAIN;
+        //The function-call operator may also be applied on instances that don't have an explicit declaration, like return-values
+        AbstractType::Ptr type = realType(m_lastType);
+        IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
+        if(identified) {
+          DeclarationPointer decl(identified->declaration(m_source));
+          if(decl) {
+            m_lastDeclarations << decl;
+          }
         }
       }
     }
@@ -1616,12 +1636,12 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
      * node->arguments contains them, using recursive binary expressions
      * */
     QList<DeclarationPointer> declarations = m_lastDeclarations;
+    Instance oldInstance = m_lastInstance;
 
     QList<OverloadResolver::Parameter> oldParams = m_parameters;
     KDevVarLengthArray<AST*> oldParameterNodes = m_parameterNodes;
     m_parameters.clear();
     m_parameterNodes.clear();
-    //kDebug(9007) << "clearing parameters";
 
     //Backup the current use and invalidate it, we will update and create it after overload-resolution
     CurrentUse oldCurrentUse = m_currentUse;
@@ -1634,12 +1654,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( m_lastType ) {
       m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) );
       m_parameterNodes.append(node->arguments);
-      //LOCKDUCHAIN;
-      //kDebug(9007) << "adding last parameter: " << (m_lastType.data() ? m_lastType->toString() : QString("<notype>"));
     }
 
     if( declarations.isEmpty() && !constructedType ) {
-      
+
       if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
         missing->arguments = m_parameters;
         missing->isFunction = true;
@@ -1666,20 +1684,23 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = AbstractType::Ptr(constructedType.unsafeData());
       DeclarationPointer decl(constructedType->declaration(topContext()));
       m_lastInstance = Instance(decl.data());
+      m_lastDeclarations.clear();
+//       m_lastDeclarations << decl;
       lock.unlock();
-      if(oldCurrentUse.isValid)
+      if(oldCurrentUse.isValid) {
         newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
+      }
+      flushUse();
       return;
     }
 
     //Resolve functions
     DeclarationPointer chosenFunction;
     KDevelop::DUContextPointer ptr(m_currentContext);
-    OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()) );
+    OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
-    if( !fail ) {
+    if( !fail )
       chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
-    }
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
@@ -1709,8 +1730,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       chosenFunction = declarations.front();
     }
 
-    //kDebug(9007) << "Resetting old parameters of size " << oldParams.size();
-
     clearLast();
 
     if( constructedType ) {
@@ -1730,7 +1749,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     static IndexedString functionCallOperatorIdentifier("operator()");
     
     bool createUseOnParen = (bool)chosenFunction && (constructedType || chosenFunction->identifier().identifier() == functionCallOperatorIdentifier);
-
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
     lock.unlock();
     
@@ -1745,6 +1763,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     m_parameterNodes = oldParameterNodes;
     m_parameters = oldParams;
+    
+    flushUse();
     
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
