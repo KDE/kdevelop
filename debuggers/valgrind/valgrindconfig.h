@@ -21,8 +21,11 @@
 #ifndef VALGRINDCONFIG_H
 #define VALGRINDCONFIG_H
 
+#include <QtCore/QMap>
+
 #include <interfaces/launchconfigurationpage.h>
 #include <interfaces/ilauncher.h>
+#include <interfaces/ilaunchmode.h>
 
 class KJob;
 class KIcon;
@@ -37,11 +40,65 @@ namespace Ui
 class ValgrindConfig;
 }
 
+class ValgrindLaunchMode : public KDevelop::ILaunchMode
+{
+public:
+    virtual QString tool() const = 0;
+};
+
+class MemCheckLaunchMode : public ValgrindLaunchMode
+{
+public:
+    MemCheckLaunchMode();
+    
+    virtual KIcon icon() const;
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString tool() const;
+};
+
+
+class CacheGrindLaunchMode : public ValgrindLaunchMode
+{
+public:
+    CacheGrindLaunchMode();
+    
+    virtual KIcon icon() const;
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString tool() const;
+};
+
+
+class CallGrindLaunchMode : public ValgrindLaunchMode
+{
+public:
+    CallGrindLaunchMode();
+    
+    virtual KIcon icon() const;
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString tool() const;
+};
+
+
+class HelGrindLaunchMode : public ValgrindLaunchMode
+{
+public:
+    HelGrindLaunchMode();
+    
+    virtual KIcon icon() const;
+    virtual QString id() const;
+    virtual QString name() const;
+    virtual QString tool() const;
+};
+
 class ValgrindLauncher : public KDevelop::ILauncher
 {
 public:
-    ValgrindLauncher( const QString& tool );
+    ValgrindLauncher();
     virtual QList< KDevelop::LaunchConfigurationPageFactory* > configPages() const;
+    void addMode( ValgrindLaunchMode* mode );
     virtual QString description() const;
     virtual QString id();
     virtual QString name() const;
@@ -49,7 +106,7 @@ public:
     virtual QStringList supportedModes() const;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factories;
-    QString m_tool;
+    QMap<QString, ValgrindLaunchMode*> modes;
 };
 
 class ValgrindConfigPage : public KDevelop::LaunchConfigurationPage

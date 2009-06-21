@@ -53,11 +53,11 @@ signals:
 
     void newModel(ValgrindModel* model);
 
-//   void savePartialProjectSession( QDomElement* el );
-//   void restorePartialProjectSession( const QDomElement* el );
-
 private slots:
-    void slotExecCalltree();
+    void runMemCheck();
+    void runCallGrind();
+    void runHelGrind();    
+    void runCacheGrind();
     void loadOutput();
 
 private:

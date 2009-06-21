@@ -52,7 +52,8 @@ KJob* ValgrindLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
     Q_ASSERT(cfg);
     if( !cfg )
         return 0;
-    if( launchMode == "profile" )
+    
+    if( modes.contains( launchMode ) )
     {
         IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
         Q_ASSERT(iface);
@@ -63,23 +64,30 @@ KJob* ValgrindLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
         {
             l << depjob;
         }
-        l << new ValgrindJob( m_tool, cfg, KDevelop::ICore::self()->runController() );
+        l << new ValgrindJob( modes.value(launchMode)->tool(), cfg, KDevelop::ICore::self()->runController() );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     kWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return 0;
 }
 
-ValgrindLauncher::ValgrindLauncher( const QString& tool )
-    : m_tool( tool )
+
+ValgrindLauncher::ValgrindLauncher()
 {
     factories << new ValgrindConfigPageFactory();
 }
 
+void ValgrindLauncher::addMode(ValgrindLaunchMode* mode)
+{
+    if( !modes.contains( mode->id() ) )
+    {
+        modes.insert( mode->id(), mode );
+    }
+}
 
 QStringList ValgrindLauncher::supportedModes() const
 {
-    return QStringList() << "profile";
+    return modes.keys();
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > ValgrindLauncher::configPages() const
@@ -177,8 +185,118 @@ KDevelop::LaunchConfigurationPage* ValgrindConfigPageFactory::createWidget(QWidg
 
 ValgrindConfigPageFactory::ValgrindConfigPageFactory()
 {
-
 }
+
+
+CacheGrindLaunchMode::CacheGrindLaunchMode()
+{
+}
+
+KIcon CacheGrindLaunchMode::icon() const
+{
+    return KIcon();
+}
+
+
+QString CacheGrindLaunchMode::id() const
+{
+    return "valgrind_cachegrind";
+}
+
+
+QString CacheGrindLaunchMode::name() const
+{
+    return i18n("Cache Simulator");
+}
+
+
+QString CacheGrindLaunchMode::tool() const
+{
+    return "cachegrind";
+}
+
+CallGrindLaunchMode::CallGrindLaunchMode()
+{
+}
+
+
+KIcon CallGrindLaunchMode::icon() const
+{
+    return KIcon();
+}
+
+
+QString CallGrindLaunchMode::id() const
+{   
+    return "valgrind_callgrind";
+}
+
+
+QString CallGrindLaunchMode::name() const
+{
+    return i18n("Call Tracing");
+}
+
+QString CallGrindLaunchMode::tool() const
+{
+    return "callgrind";
+}
+
+HelGrindLaunchMode::HelGrindLaunchMode()
+{
+}
+
+
+KIcon HelGrindLaunchMode::icon() const
+{
+    return KIcon();
+}
+
+
+QString HelGrindLaunchMode::id() const
+{
+    return "valgrind_helgrind";
+}
+
+
+QString HelGrindLaunchMode::name() const
+{
+    return i18n("Race Conditions");
+}
+
+
+QString HelGrindLaunchMode::tool() const
+{
+    return "helgrind";
+}
+
+MemCheckLaunchMode::MemCheckLaunchMode()
+{
+}
+
+
+KIcon MemCheckLaunchMode::icon() const
+{
+    return KIcon();
+}
+
+QString MemCheckLaunchMode::id() const
+{
+    return "valgrind_memcheck";
+}
+
+
+QString MemCheckLaunchMode::name() const
+{
+    return i18n("Memory Check");
+}
+
+
+QString MemCheckLaunchMode::tool() const
+{
+    return "memcheck";
+}
+
 
 
 #include "valgrindconfig.moc"

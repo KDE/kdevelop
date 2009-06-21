@@ -94,25 +94,76 @@ private:
 ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     : IPlugin( ValgrindFactory::componentData(), parent)
 {
+    kDebug() << "setting valgrind rc file";
     setXMLFile( "kdevvalgrind.rc" );
 
     core()->uiController()->addToolView(i18n("Valgrind"), new ValgrindWidgetFactory(this));
     
+    // Initialize actions for the laucnh modes
+    KAction* act = actionCollection()->addAction("valgrind_memcheck", this, SLOT(runMemCheck()) );
+    act->setText( i18n("Memory Check" ) );
+    act->setStatusTip( i18n("Launches the currently selected launch configuration with the Valgrind Memory Checker (memcheck).") );
+    act = actionCollection()->addAction("valgrind_callgrind", this, SLOT(runCallGrind()) );
+    act->setText( i18n("Call Tracing" ) );
+    act->setStatusTip( i18n("Launches the currently selected launch configuration with the Valgrind Call Tracing (callgrind).") );
+    act = actionCollection()->addAction("valgrind_helgrind", this, SLOT(runHelGrind()) );
+    act->setText( i18n("Race Conditions" ) );
+    act->setStatusTip( i18n("Launches the currently selected launch configuration with the Valgrind Race Conditions Checker (helgrind).") );
+    act = actionCollection()->addAction("valgrind_cachegrind", this, SLOT(runCacheGrind()) );
+    act->setText( i18n("Cache Simulator" ) );
+    act->setStatusTip( i18n("Launches the currently selected launch configuration with the Valgrind Cache Simulator (cachegrind).") );
+    
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
     Q_ASSERT(iface);
     
+    // Initialize launch modes and register them with platform, also put them into our launcher
+    ValgrindLauncher* launcher = new ValgrindLauncher();
+    ValgrindLaunchMode* mode = new MemCheckLaunchMode();
+    KDevelop::ICore::self()->runController()->addLaunchMode( mode );
+    launcher->addMode( mode );
+    mode = new HelGrindLaunchMode();
+    KDevelop::ICore::self()->runController()->addLaunchMode( mode );
+    launcher->addMode( mode );
+    mode = new CallGrindLaunchMode();
+    KDevelop::ICore::self()->runController()->addLaunchMode( mode );
+    launcher->addMode( mode );
+    mode = new CacheGrindLaunchMode();
+    KDevelop::ICore::self()->runController()->addLaunchMode( mode );
+    launcher->addMode( mode );
+    
+    // Add launcher for native apps
     KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
     Q_ASSERT(type);
-    type->addLauncher( new ValgrindLauncher("memcheck") );
-    type->addLauncher( new ValgrindLauncher("hellgrind") );
-    type->addLauncher( new ValgrindLauncher("callgrind") );
-    type->addLauncher( new ValgrindLauncher("cachegrind") );
-
+    type->addLauncher( launcher );
 }
 
 ValgrindPlugin::~ValgrindPlugin()
 {
 }
+
+void ValgrindPlugin::runCacheGrind()
+{
+    core()->runController()->executeDefaultLaunch( "valgrind_cachegrind" );
+}
+
+
+void ValgrindPlugin::runCallGrind()
+{
+    core()->runController()->executeDefaultLaunch( "valgrind_callgrind" );
+}
+
+
+void ValgrindPlugin::runHelGrind()
+{
+    core()->runController()->executeDefaultLaunch( "valgrind_helgrind" );
+}
+
+
+void ValgrindPlugin::runMemCheck()
+{
+    core()->runController()->executeDefaultLaunch( "valgrind_memcheck" );
+}
+
 
 void ValgrindPlugin::loadOutput()
 {
@@ -138,6 +189,7 @@ void ValgrindPlugin::loadOutput()
 #endif
 }
 
+#if 0
 void ValgrindPlugin::slotExecCalltree()
 {
     /* FIXME add a mainProgram function or equivalent so this can be ported
@@ -162,6 +214,7 @@ void ValgrindPlugin::slotExecCalltree()
     m_lastCtParams = dlg->ctParams();
     */
 }
+#endif
 
 #if 0
 void ValgrindPlugin::restorePartialProjectSession( const QDomElement* el )
