@@ -120,7 +120,7 @@ There have been attempts to provide similar mechanisms which will work on a high
   <secondary>CORBA</secondary></indexterm>
 
 <para>
-<ulink url="http://www.omg.org/gettingstarted/corbafaq.htm">CORBA</ulink> (<emphasis>Common Object Request Broker Architecture</emphasis>) is an attempt to let computer applications work together over networks. It was devised by the private, vendor independent <ulink url="http://www.omg.org">OMG</ulink> (Object Management Group) standards comittee.
+<ulink url="http://www.omg.org/gettingstarted/corbafaq.htm">CORBA</ulink> (<emphasis>Common Object Request Broker Architecture</emphasis>) is an attempt to let computer applications work together over networks. It was devised by the private, vendor independent <ulink url="http://www.omg.org">OMG</ulink> (Object Management Group) standards committee.
 </para>
 <para>
 CORBA-based programs use the IIOP standard protocol to communicate. Implementations based on IIOP are available on a wide variety of operating systems, programming languages, and networks and are thus highly portable.
@@ -197,7 +197,7 @@ To accomplish this, the basic tools needed are
 When you have a large project consisting of possibly hundreds of source code files, the process of compiling may become quite laborsome. You do not want to recompile all files each time you have changed only some of them. Instead, you only want to compile those files which are affected by the changes. In general, it is not always easily obvious which of the files have to be recompiled.
 </para>
 <para>
-When you &eg; change a function prototype in a header file, you need to compile every file which includes this header file. If your project contains many such files you may easily miss one or two of them if you have to do the job manually. Thus some means of automization is necessary.
+When you &eg; change a function prototype in a header file, you need to compile every file which includes this header file. If your project contains many such files you may easily miss one or two of them if you have to do the job manually. Thus some means of automatization is necessary.
 </para>
 
 <sect2 id="unixdev-buildsystems-make">
@@ -231,7 +231,7 @@ Each rule consists of several building blocks, namely
   a set of <emphasis>dependencies</emphasis>, basically the names of those files the target depends on (&eg; the name of a source file, where then the target will be the name of the object file to be built) and
   </para></listitem>
   <listitem><para>
-  the <emphasis>commands</emphasis> which are to be executed to <quote>make</quote> the target (&ie; to compile it or to link other object files together to build an executable progam file).
+  the <emphasis>commands</emphasis> which are to be executed to <quote>make</quote> the target (&ie; to compile it or to link other object files together to build an executable program file).
   </para></listitem>
 </itemizedlist>
 </para>

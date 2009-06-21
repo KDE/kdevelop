@@ -576,7 +576,7 @@ Settings - Configure KDevelop - Abbreviations.
 </menuchoice></term>
 <listitem><para>
 Completes current expression using memory class store
-for the current project and persistant class stores for
+for the current project and persistent class stores for
 external libraries. TODO
 </para></listitem>
 </varlistentry>
@@ -1002,7 +1002,7 @@ Opens a Kdevelop2 or KDevelop3 project.
 </menuchoice></term>
 <listitem><para>
 Opens recently edited project. 
-A submenu of recently edited projectj is displayed to choose from.
+A submenu of recently edited projects is displayed to choose from.
 </para></listitem>
 </varlistentry>
 

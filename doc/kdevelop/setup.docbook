@@ -189,7 +189,7 @@ You may of course change the directory path of a new project at the time you set
 To select a font suitable for the <guilabel>Messages Output View</guilabel> window click the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
 </para>
 <note><para>
-On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Messages Output View</guilabel> window font.
+On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitly reselect the <guilabel>Messages Output View</guilabel> window font.
 </para></note>
 </listitem>
 </varlistentry>
@@ -264,7 +264,7 @@ The <guilabel>Application Output View</guilabel> window is used to display error
 To select a font suitable for the <guilabel>Application Output View</guilabel> window click the <guilabel>Window Font</guilabel> button showing the currently selected font (it says <quote>Luxi Sans</quote> in the above illustration). The &kde; standard <guilabel>Select Font</guilabel> dialog will pop up from which you may select the font to be used.
 </para>
 <note><para>
-On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitely reselect the <guilabel>Application Output View</guilabel> window font.
+On first start-up, &kdevelop; initializes this font setting to the standard font for which your &kde; user has been configured. <emphasis>This setting is fixed</emphasis>, so if you alter <menuchoice><guimenuitem>Preferences</guimenuitem><guimenuitem>Appearances &amp; Themes</guimenuitem><guimenuitem>Fonts</guimenuitem></menuchoice> in the <guilabel>Control Center</guilabel>, this will not effect this &kdevelop; font selection. You will have to explicitly reselect the <guilabel>Application Output View</guilabel> window font.
 </para></note>
 </listitem>
 </varlistentry>
@@ -366,7 +366,7 @@ In the IDEAl and tabbed pages modes there will be named tabs on top of the docum
 Tab</term>
 <listitem>
 <para>
-When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> coniguration section for this.
+When you configured &kdevelop; to display the documents tab bar, either always or when more than one document is displayed in the main work area, you may add more functionality to the tabs beyond their document selection capability. Use the <guilabel>Use Close On Hover</guilabel> configuration section for this.
 </para>
 
 <variablelist>
@@ -537,7 +537,7 @@ To set up a specific format style, select <menuchoice> <guimenu>Settings</guimen
 </para>
 
 <tip><para>
-Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitely use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
+Any style changes apply to newly entered text only. If you want to change the formatting style of an already existing source text you will have to explicitly use the <menuchoice><guimenu>Edit</guimenu><guimenuitem>Reformat Source</guimenuitem></menuchoice> command.
 </para></tip>
 
 <note><para>
@@ -815,7 +815,7 @@ insert extra spaces in special positions.</para>
   <varlistentry>
     <term><guilabel>Add spaces around parentheses</guilabel></term>
     <listitem>
-    <para>In fact what is meant is to add spaces around the text put in parentheses. This enhances the readabilitiy of function arguments and conditionals.</para>
+    <para>In fact what is meant is to add spaces around the text put in parentheses. This enhances the readability of function arguments and conditionals.</para>
 <screen>
 if ( isBar( fooArg )==barValue )
 </screen>
@@ -1035,7 +1035,7 @@ group.</para>
 Change</term>
 <listitem>
 <para>
-Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitely want to refresh its contents.
+Updating the contents in the <guilabel>File Selector</guilabel> window takes time and resources, esp. when changing to another directory. Therefore  <guilabel>File Selector</guilabel> is set up by default in such a way that its contents change only on demand, &ie; when you select another directory or when you explicitly want to refresh its contents.
 </para>
 
 <note><para>
@@ -1251,7 +1251,7 @@ There are three buttons available to maintain the contents of the documentation 
     <listitem>
       <para>Removes the selected documentation entry from the list.</para>
       <note><para>
-      The entry will be removed from the list only. Actual documentation sources remain untouched. You will have to remove them explicitely by other means.
+      The entry will be removed from the list only. Actual documentation sources remain untouched. You will have to remove them explicitly by other means.
       </para></note>
     </listitem>
   </varlistentry>
@@ -1306,7 +1306,7 @@ Every documentation setup page shows the listed documentation items in a table w
         The internal index will be built the first time the user selects the <guilabel>Index</guilabel> page. This will delay the first access noticeably, because the index will be read from disk and then cached.
         </para>
         <para>
-        All subsequent indexed searches will however use this chache and thus work significally faster.
+        All subsequent indexed searches will however use this chache and thus work significantly faster.
         </para>
       </note>
     </listitem>
@@ -1437,7 +1437,7 @@ On this configuration page all &API; documentation generated by &doxygen; is set
 In short, such an &API; documents the interface to certain library functions. The &API; documentation on this page should be produced by the externally provided <ulink url="http://www.stack.nl/~dimitri/doxygen/">&doxygen;</ulink> tool.
 </para>
 <para>
-&doxygen; generated &API; documentationconsists of a series of <filename>html</filename> files, starting with <filename>index.html</filename>. Additionally there may exist <filename>tag</filename> files which contain information to link to already existing &API; documentations. Thus &kdevelop; will look for <filename>index.html</filename> and <filename>*.tag</filename> files when seaching for &doxygen; generated &API; documentation.
+&doxygen; generated &API; documentationconsists of a series of <filename>html</filename> files, starting with <filename>index.html</filename>. Additionally there may exist <filename>tag</filename> files which contain information to link to already existing &API; documentations. Thus &kdevelop; will look for <filename>index.html</filename> and <filename>*.tag</filename> files when searching for &doxygen; generated &API; documentation.
 </para>
 <para>
 There are some structural constraints assumed when searching for &doxygen; generated &API; documentation. The directory in which the <filename>index.html</filename> file resides should contain subdirectories with separate documentation collections. Each of these subdirectories is assumed to contain a <filename>.tag</filename> file and a <filename class="directory">html/</filename> subdirectory.
@@ -1530,7 +1530,7 @@ The main bulk of the &kdevelop; documentation facility provides immediate access
 KDevelopTOC files cannot be indexed to perform a full text search because they usually point to a remote location. On the other hand, such a <filename>.toc</filename> file can have an index manually defined, using the <computeroutput>&lt;index&gt;</computeroutput> tag. Thus the <guilabel>Index</guilabel> check box will be enabled ony when &kdevelop; finds an <computeroutput>&lt;index&gt;</computeroutput> tag in the <filename>.toc</filename> file. (For more detail see the description below in the <link linkend="setup-docu-general-toc-files">&kdevelop; TOC Files</link> section.)
 </para>
 <para>
-The <guilabel>Search</guilabel> check box in the <link linkend="setup-docu-columns">setup table</link> will alway be disabled.
+The <guilabel>Search</guilabel> check box in the <link linkend="setup-docu-columns">setup table</link> will always be disabled.
 </para>
 
 <para>
@@ -1551,7 +1551,7 @@ There is a special feature associated with this. To illustrate, follow these ste
 </para>
 
 <para>
-The rationale behind this is not only to locally navigate remote documentation without wasting net access ressources, but to provide the developer with easy, structured access to the documentation he/she needs. Using these tools one can access almost any local or remote documentation in a structured fashion even if the original is laid out flat or structured in another way. All that is needed is access to files and/or parts of files which are displayable by the Konqueror.
+The rationale behind this is not only to locally navigate remote documentation without wasting net access resources, but to provide the developer with easy, structured access to the documentation he/she needs. Using these tools one can access almost any local or remote documentation in a structured fashion even if the original is laid out flat or structured in another way. All that is needed is access to files and/or parts of files which are displayable by the Konqueror.
 </para>
 
 <para>
@@ -1769,11 +1769,11 @@ Handling is straightforward here. Use the <link linkend="setup-docu-buttons">but
 </para>
 
 <para>
-You will have to explicitely select the items for display in the &kdevelop; documentation facility. Mark the <guilabel>TOC</guilabel> check box of the entry in the <link linkend="setup-docu-columns">setup table</link>.
+You will have to explicitly select the items for display in the &kdevelop; documentation facility. Mark the <guilabel>TOC</guilabel> check box of the entry in the <link linkend="setup-docu-columns">setup table</link>.
 </para>
 
 <note><para>
-Custom documention cannot be indexed or searched. Thus the <guilabel>Index</guilabel> and <guilabel>Search</guilabel> check boxes have no effect here as shown above.
+Custom documentation cannot be indexed or searched. Thus the <guilabel>Index</guilabel> and <guilabel>Search</guilabel> check boxes have no effect here as shown above.
 </para></note>
 
 </sect3> <!--- setup-docu-general-custom -->

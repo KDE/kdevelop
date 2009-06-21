@@ -78,7 +78,7 @@ When you start &kdevelop; for the first time you will get a display similar to t
 <formalpara>
 <title>Workspace Area and Tool View Tabs</title>
 <para>
-In this intitial case &kdevelop; uses the so-called <link linkend="uimodes-survey">IDEAl user interface mode</link>. A workspace area of maximum possible size is surrounded left, bottom, and right by a series of buttons which act similar to tabs on a tabbed display. If you click on one of those tabs, a so-called <emphasis>tool view window</emphasis> will open which allows you to work on a specific task.
+In this initial case &kdevelop; uses the so-called <link linkend="uimodes-survey">IDEAl user interface mode</link>. A workspace area of maximum possible size is surrounded left, bottom, and right by a series of buttons which act similar to tabs on a tabbed display. If you click on one of those tabs, a so-called <emphasis>tool view window</emphasis> will open which allows you to work on a specific task.
 </para>
 </formalpara>
 
@@ -149,7 +149,7 @@ see the <link linkend="commands">Command Reference</link>.</para>
     <formalpara><title>Usual Actions</title>
     <para>It provides the usual undo/redo and cut/copy/paste actions. Furthermore it allows to select text blocks in various ways.</para></formalpara>
     <formalpara><title>Search and Replace</title>
-    <para>There is a very powerful search facilitiy available on the <guimenu>Edit</guimenu> menu. In addition to the usual search and replace actions limited to the current document you may as well conduct global search and replace actions. This allows to work on all files of the project in a single turn.</para></formalpara>
+    <para>There is a very powerful search facility available on the <guimenu>Edit</guimenu> menu. In addition to the usual search and replace actions limited to the current document you may as well conduct global search and replace actions. This allows to work on all files of the project in a single turn.</para></formalpara>
     <formalpara><title>Advanced Text Edit</title>
     <para>There are provisions to reformat the current document and to automatically complete partially typed texts in various ways.</para></formalpara>
   </listitem>

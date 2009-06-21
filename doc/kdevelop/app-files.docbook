@@ -138,16 +138,16 @@ There are quite a lot of default configuration subdirectories in <filename class
     </para></listitem>
     <listitem><para><filename class="directory">kdevfilter/</filename> &mdash; provides the <guimenuitem>Execute Command...</guimenuitem> and <guimenuitem>Filter Selection Through Command...</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Shell Filtering and Insertion</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevfullscreen/</filename> &mdash; provides the <guimenuitem>Full Screen Mode</guimenuitem> entry in the <guimenu>View</guimenu> menu and the according tool bar icon.</para></listitem>
-    <listitem><para><filename class="directory">kdevgrepview/</filename> &mdash; provides the <guimenuitem>Find in Files...</guimenuitem>entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Grep Frontend</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevgrepview/</filename> &mdash; provides the <guimenuitem>Find in Files...</guimenuitem> entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Grep Frontend</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevhistory/</filename> &mdash; provides the <guimenuitem>Back</guimenuitem> and <guimenuitem>Forward</guimenuitem> entries in the <guimenu>View</guimenu> menu.</para></listitem>
     <listitem><para><filename class="directory">kdevjavadebugger/</filename> &mdash; provides a <guimenu>Java Debug</guimenu> menu in order to debug a &Java; application.</para></listitem>
     <listitem><para><filename class="directory">kdevoutputviews/</filename> &mdash; provides the <guimenuitem>Next Error</guimenuitem> and <guimenuitem>Previous Error</guimenuitem> entries in the <guimenu>View</guimenu> menu.</para></listitem>
     <listitem><para><filename class="directory">kdevpartexplorer/</filename> &mdash; provides the <guimenuitem>Part Explorer</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Part Explorer Tool</guilabel> plugin.</para></listitem>
-    <listitem><para><filename class="directory">kdevquickopen/</filename> &mdash; provides the <guimenuitem>Quick Open File..</guimenuitem> entry in the <guimenu>File</guimenu> menu and the <guimenuitem>Quick Open Class...</guimenuitem> and <guimenuitem>Quick Open Method</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Quick Open</guilabel> project plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevquickopen/</filename> &mdash; provides the <guimenuitem>Quick Open File...</guimenuitem> entry in the <guimenu>File</guimenu> menu and the <guimenuitem>Quick Open Class...</guimenuitem> and <guimenuitem>Quick Open Method</guimenuitem> entries in the <guimenu>Tools</guimenu> menu used by the <guilabel>Quick Open</guilabel> project plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevregexptest/</filename> &mdash; provides the <guimenuitem>Debug Regular Expression...</guimenuitem> entry in the <guimenu>Tools</guimenu> menu used by the <guilabel>Regular Expression Tester</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevreplace/</filename> &mdash; provides the <guimenuitem>Find-Select-Replace...</guimenuitem> entry in the <guimenu>Edit</guimenu> menu used by the <guilabel>Replace Part</guilabel> plugin.</para></listitem>
     <listitem id="app-files-default-tips"><para><filename class="directory">kdevtipofday/</filename> &mdash; provides the <guimenuitem>Tip of the Day</guimenuitem> entry in the <guimenu>Help</guimenu> menu as well as a HTML-File containing the available tips.</para></listitem>
-    <listitem><para><filename class="directory">kdevtools/</filename> &mdash; controls various menu entries ceated by <guimenu>Tools Menu</guimenu> and <guilabel>External Tools Menu</guilabel> settings provided by the <guilabel>Tools Menu Addition</guilabel> plugin.</para></listitem>
+    <listitem><para><filename class="directory">kdevtools/</filename> &mdash; controls various menu entries created by <guimenu>Tools Menu</guimenu> and <guilabel>External Tools Menu</guilabel> settings provided by the <guilabel>Tools Menu Addition</guilabel> plugin.</para></listitem>
     <listitem><para><filename class="directory">kdevvalgrind/</filename> &mdash; provides the <guimenuitem>Valgrind Memory Leak Check</guimenuitem> and <guimenuitem>Profile with KCachegrind</guimenuitem> entries in the <guimenu>Debug</guimenu> menu used by the <guilabel>Valgrind Frontend</guilabel> plugin.</para></listitem>
   </itemizedlist></listitem>
 
@@ -185,8 +185,8 @@ There are quite a lot of default configuration subdirectories in <filename class
     <listitem><para><filename class="directory">kdevphpsupport/</filename> &mdash; contains UI and PHP function definition files needed to develop PHP scripts.</para></listitem>
     <listitem><para><filename class="directory">kdevpythonsupport/</filename> &mdash; provides <guimenu>Build</guimenu> and <guimenu>Help</guimenu> menu entries and according tool bar icons needed to develop Python scripts.</para></listitem>
     <listitem><para><filename class="directory">kdevrubysupport/</filename> &mdash; provides <guimenu>Build</guimenu> menu entries and according tool bar icons needed to develop Ruby scripts.</para></listitem>
-    <listitem><para><filename class="directory">kdevscriptproject/</filename> &mdash; provides th UI definitions needed to develop custom projects. Currently (version 3.1.0) unused.</para></listitem>
-    <listitem><para><filename class="directory">kdevsqlsupport/</filename> &mdash; provides th UI definitions needed to develop SQL projects. Currently (version 3.1.0) unused.</para></listitem>
+    <listitem><para><filename class="directory">kdevscriptproject/</filename> &mdash; provides the UI definitions needed to develop custom projects. Currently (version 3.1.0) unused.</para></listitem>
+    <listitem><para><filename class="directory">kdevsqlsupport/</filename> &mdash; provides the UI definitions needed to develop SQL projects. Currently (version 3.1.0) unused.</para></listitem>
   </itemizedlist></listitem>
 
 </itemizedlist>
@@ -246,7 +246,7 @@ In case the contents of these directories mirror those of the Default Configurat
     <para><filename class="directory">kdevcloser/</filename> &mdash; provides the <guimenuitem>Close Selected Windows...</guimenuitem> entry in the <guimenu>Windows</guimenu> menu.</para>
   </listitem>
   <listitem>
-    <para><filename class="directory">kdevcppsupport/</filename> &mdash; holds the acual configuration used by the &appwizard; to build C++ applications. The &appwizard; however uses its main bulk of configuration information directly from the <link linkend="app-files-default-apps-lang-cpp">default configuration directory</link>. See there for more detail.</para>
+    <para><filename class="directory">kdevcppsupport/</filename> &mdash; holds the actual configuration used by the &appwizard; to build C++ applications. The &appwizard; however uses its main bulk of configuration information directly from the <link linkend="app-files-default-apps-lang-cpp">default configuration directory</link>. See there for more detail.</para>
     <itemizedlist>
       <listitem>
         <para><filename class="directory">newclass/</filename> &mdash; contains the actual header and source templates from which the &appwizard; builds the according source files.</para>
@@ -386,7 +386,7 @@ There are two groups of &kdevelop; configuration files in the <filename class="d
   <listitem><para><filename>docdevhelppluginrc</filename> &mdash; holds information about the actual GNOME 2 DevHelp documentation files as defined on the <guilabel>Devhelp Documentation Collection</guilabel> configuration page.</para></listitem>
   <listitem><para><filename>docdoxygenpluginrc</filename> &mdash; holds information about the actual Doxygen generated API documentations as defined on the <guilabel>Doxygen Documentation Collection</guilabel> configuration page.</para></listitem>
   <listitem><para><filename>dockdevtocpluginrc</filename> &mdash; holds information about the actual KDevelopTOC structured documentation files as defined on the <guilabel>KDevelopTOC Documentation Collection</guilabel> configuration page.</para></listitem>
-  <listitem><para><filename>docqtpluginrc</filename> &mdash; holds information about the QT documentation files actually included on the <guilabel> Documentation Collection</guilabel>Qt configuration page.</para></listitem>
+  <listitem><para><filename>docqtpluginrc</filename> &mdash; holds information about the QT documentation files actually included on the <guilabel>Qt Documentation Collection</guilabel> configuration page.</para></listitem>
 </itemizedlist>
 
 </sect2> <!-- app-files-user-config -->
@@ -399,7 +399,7 @@ There are two groups of &kdevelop; configuration files in the <filename class="d
 <title>Project Dependent Configuration</title>
 
 <para>
-Most project dependend configuration is kept in the <filename>&lt;project-name&gt;.kdevelop</filename> and <filename>&lt;project-name&gt;.kdevses</filename> &kdevelop; project configuration files rather than in separate files as the other, more global, configuration settings. In short, those files are meant for:
+Most project-dependent configuration is kept in the <filename>&lt;project-name&gt;.kdevelop</filename> and <filename>&lt;project-name&gt;.kdevses</filename> &kdevelop; project configuration files rather than in separate files as the other, more global, configuration settings. In short, those files are meant for:
 </para>
 <simplelist>
   <member><filename>&lt;project-name&gt;.kdevelop</filename> &mdash; global project configuration information.</member>
@@ -412,11 +412,11 @@ Both are &XML; coded files. They can be viewed and (cautiously) altered using an
 <sect2>
 <title>Persistent Code Store Files</title>
 
-<para>There is a third project dependend configuration file, the <filename>&lt;project-name&gt;.kdevelop.pcs</filename> Persistant Code Store. This is a binary coded file holding an internal parser cache for the most part in order to speed up the loading sequence of the project. Additionally, this Persistant Code Store keeps information use by the <guilabel>Code Completion</guilabel> facility of &kdevelop;.
+<para>There is a third project-dependent configuration file, the <filename>&lt;project-name&gt;.kdevelop.pcs</filename> Persistent Code Store. This is a binary coded file holding an internal parser cache for the most part in order to speed up the loading sequence of the project. Additionally, this Persistent Code Store keeps information use by the <guilabel>Code Completion</guilabel> facility of &kdevelop;.
 </para>
 
 <note><para>
-There can be additional Persistant Code Store files be set up on the <guilabel>Code Completion</guilabel> tab of the <guilabel>C++ Specific</guilabel> project configuration page. Information about these additional <filename>.pcs</filename> is kept globally in the <filename class="directory">$<envar>KDEHOME</envar>/share/apps/kdevcppsupport/pcs/</filename> directory.
+There can be additional Persistent Code Store files be set up on the <guilabel>Code Completion</guilabel> tab of the <guilabel>C++ Specific</guilabel> project configuration page. Information about these additional <filename>.pcs</filename> is kept globally in the <filename class="directory">$<envar>KDEHOME</envar>/share/apps/kdevcppsupport/pcs/</filename> directory.
 </para></note>
 </sect2>
 

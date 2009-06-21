@@ -12,7 +12,7 @@
 <sect1 id="running-scripts">
 <title>Running Scripts</title>
 <para>
-  To access a script that is available to &kdevelop; use the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Scripts</guimenuitem></menuchoice> menu.  If there there is no such menu item then there are no installed scripts available to KDevelop.
+  To access a script that is available to &kdevelop; use the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Scripts</guimenuitem></menuchoice> menu.  If there is no such menu item then there are no installed scripts available to KDevelop.
 </para>
 </sect1>
 

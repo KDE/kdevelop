@@ -694,7 +694,7 @@ The <command>kbuildsycoca</command> command does not run from within the root. Y
   <secondary>&kdevelop; API</secondary></indexterm>
 
 <para>
-API is the short form of <quote>Application Program Interface</quote>. Actually such an API cotains a series of descriptions (&ie; calling conventions) by which an application program can access the operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
+API is the short form of <quote>Application Program Interface</quote>. Actually such an API contains a series of descriptions (&ie; calling conventions) by which an application program can access the operating system and other services. In our context, however, a broader definition was adopted. The API of a &kde; or &Qt; application is an abstract of the classes and methods interfaces, a synopsis to be used like a dictionary to navigate the sources.
 </para>
 <para>
 There is a version of the most current API available at the <ulink url="http://www.kdevelop.org/HEAD/doc/api/html/index.html">KDevelop-Home website</ulink>. It will be automatically updated every 24 hours so you can keep up.

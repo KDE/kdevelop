@@ -674,7 +674,7 @@ If, for example, you want the &doxygen;-built &API; documentation to display som
 <screen><computeroutput>
 /**
  * \file $MODULE$.cpp
- * \brief (put some short descripion here).
+ * \brief (put some short description here).
  **/
 </computeroutput></screen>
 <para>
@@ -683,7 +683,7 @@ Whenever you create a new source file, &kdevelop; will replace the <varname>$MOD
 <screen><computeroutput>
 /**
  * \file asimpletest.cpp
- * \brief (put some short descripion here).
+ * \brief (put some short description here).
  **/
 </computeroutput></screen>
 <para>
