@@ -310,10 +310,12 @@ void QuickOpenModel::resetTimer() {
             ++it;
     }
     
-    QModelIndex currentIndex(treeView()->currentIndex());  
-    QAbstractItemModel::reset(); //New items have been inserted
-    if (currentIndex.isValid()) {
-        treeView()->setCurrentIndex(index(currentIndex.row(), 0, QModelIndex())); //Preserve the current index
+    if(treeView()) {
+        QModelIndex currentIndex(treeView()->currentIndex());  
+        QAbstractItemModel::reset(); //New items have been inserted
+        if (currentIndex.isValid()) {
+            treeView()->setCurrentIndex(index(currentIndex.row(), 0, QModelIndex())); //Preserve the current index
+        }
     }
     m_resetBehindRow = 0;
 }

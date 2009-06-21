@@ -33,7 +33,7 @@ namespace KDevelop {
 }
 
 class QuickOpenModel;
-class QuickOpenWidgetHandler;
+class QuickOpenWidget;
 
 class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
 {
@@ -44,6 +44,8 @@ public:
     QuickOpenPlugin( QObject *parent, const QVariantList & = QVariantList() );
     virtual ~QuickOpenPlugin();
 
+    static QuickOpenPlugin* self();
+    
     // KDevelop::Plugin methods
     virtual void unload();
     
@@ -67,6 +69,9 @@ public:
 
     virtual QSet<KDevelop::IndexedString> fileSet() const;
 
+    //Frees the model by closing active quickopen dialoags, and retuns whether successful.
+    bool freeModel();
+    
 public slots:
     void quickOpen();
     void quickOpenFile();
@@ -76,13 +81,15 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
+    void quickOpenLine(bool);
 
 private slots:
     void storeScopes( const QStringList& );
+    void storeItems( const QStringList& );
 
 private:
-    //Frees the model by closing active quickopen dialoags, and retuns whether successful.
-    bool freeModel();
+    friend class QuickOpenLineEdit;
+    QWidget* createQuickOpenLineWidget();
 
     QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
@@ -93,14 +100,14 @@ private:
     class ProjectItemDataProvider* m_projectItemData;
     class OpenFilesDataProvider* m_openFilesData;
     QStringList lastUsedScopes;
-    
-    //Contains a pointer to the current QuickOpenWidgetHandler, if a completion is active.
+    QStringList lastUsedItems;
+  
     //We can only have one widget at a time, because we manipulate the model.
-    QPointer<QuickOpenWidgetHandler> m_currentWidgetHandler;
+    QPointer<QObject> m_currentWidgetHandler;
 };
 
 ///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently
-class QuickOpenWidgetHandler : public QObject {
+class QuickOpenWidget : public QWidget {
   Q_OBJECT
   public:
   /**
@@ -109,14 +116,15 @@ class QuickOpenWidgetHandler : public QObject {
    * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
    * @param noSearchFied when this is true, no search-line is shown.
    * */
-  QuickOpenWidgetHandler( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
-  ~QuickOpenWidgetHandler();
-
-  ///Shows the dialog
-  void run();
+  QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false, QLineEdit* alterantiveSearchField = 0 );
+  ~QuickOpenWidget();
+  void setPreselectedText(const QString &text);
+    void prepareShow();
 
   signals:
   void scopesChanged( const QStringList& scopes );
+  void itemsChanged( const QStringList& scopes );
+  void ready();
 
   private slots:
   void currentChanged( const QModelIndex& current, const QModelIndex& previous );
@@ -131,14 +139,29 @@ class QuickOpenWidgetHandler : public QObject {
   void callRowSelected();
   
   virtual bool eventFilter ( QObject * watched, QEvent * event );
-  KDialog* m_dialog; //Warning: m_dialog is also the parent
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
   QString m_preselectedText;
-  public:
   Ui::QuickOpen o;
-  void setPreselectedText(const QString &text);
+  
+  friend class QuickOpenWidgetDialog;
+  friend class QuickOpenPlugin;
+};
+
+class QuickOpenWidgetDialog : public QObject {
+  Q_OBJECT
+  public:
+    QuickOpenWidgetDialog( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
+    ~QuickOpenWidgetDialog();
+    ///Shows the dialog
+    void run();
+    QuickOpenWidget* widget() const {
+      return m_widget;
+    }
+  private:
+  KDialog* m_dialog; //Warning: m_dialog is also the parent
+  QuickOpenWidget* m_widget;
 };
 
 #endif // QUICKOPENPLUGIN_H

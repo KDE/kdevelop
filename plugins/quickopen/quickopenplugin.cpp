@@ -69,6 +69,10 @@
 #include "customlistquickopen.h"
 #include <language/duchain/functiondefinition.h>
 #include <qmenu.h>
+#include <qdesktopwidget.h>
+#include <util/activetooltip.h>
+#include <qboxlayout.h>
+#include <language/util/navigationtooltip.h>
 
 using namespace KDevelop;
 
@@ -178,18 +182,78 @@ QString cursorItemText() {
   return QString();
 }
 
-QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
-  m_dialog = new KDialog( ICore::self()->uiController()->activeMainWindow() );
-  m_dialog->setInitialSize(QSize(800, 400));
-  m_dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+class QuickOpenLineEdit : public QLineEdit {
+  public:
+    QuickOpenLineEdit() : m_widget(0) {
+      setMinimumWidth(200);
+      setMaximumWidth(400);
+      deactivate();
+    }
+    ~QuickOpenLineEdit() {
+      delete m_widget;
+    }
+    
+    virtual void focusInEvent(QFocusEvent* ev) {
+      activate();
+      QLineEdit::focusInEvent(ev);
+      delete m_widget;
+      if(m_widget)
+        return;
+      
+      if(!QuickOpenPlugin::self()->freeModel())
+        return;
+      
+      m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true, this );
+      m_widget->setParent(0, Qt::ToolTip);
+      m_widget->setFocusPolicy(Qt::NoFocus);
+      
+      QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
+      
+      connect( m_widget, SIGNAL( scopesChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeScopes( const QStringList& ) ) );
+      m_widget->prepareShow();
+    QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
+    widgetGeometry.setWidth(700); ///@todo Waste less space
+    QRect screenGeom = QApplication::desktop()->screenGeometry(this);
+    if(widgetGeometry.right() > screenGeom.right())
+      widgetGeometry.moveRight(screenGeom.right());
+    m_widget->setGeometry(widgetGeometry);
+    m_widget->show();
+    }
+    
+    virtual void focusOutEvent(QFocusEvent* ev) {
+      QLineEdit::focusOutEvent(ev);
+      m_widget->deleteLater();
+      m_widget  = 0;
+      deactivate();
+    }
+    
+    void activate() {
+      setText("");
+      setStyleSheet("");
+    }
+    
+    void deactivate() {
+      setText(i18n("Quick Open"));
+      setStyleSheet("color: grey"); ///@todo Better color picking
+    }
+  private:
+    QPointer<QuickOpenWidget> m_widget;
+};
 
-  o.setupUi( m_dialog->mainWidget() );
+QWidget* QuickOpenPlugin::createQuickOpenLineWidget()
+{
+  return new QuickOpenLineEdit;
+}
+
+QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField, QLineEdit* alterantiveSearchField ) : m_model(model), m_expandedTemporary(false) {
+
+  o.setupUi( this );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );
   o.list->setVerticalScrollMode( QAbstractItemView::ScrollPerItem );
+  
   connect(o.list->verticalScrollBar(), SIGNAL(valueChanged(int)), m_model, SLOT(placeExpandingWidgets()));
 
-  m_dialog->setWindowTitle(title);
   o.searchLine->setFocus();
 
   o.list->setItemDelegate( new QuickOpenDelegate( m_model, o.list ) );
@@ -237,6 +301,10 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* m
     o.searchLine->hide();
     o.searchLabel->hide();
   }
+  
+  if(alterantiveSearchField)
+    o.searchLine = alterantiveSearchField;
+  
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
   o.list->setFocusPolicy(Qt::NoFocus);
@@ -244,7 +312,6 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* m
   o.itemsButton->setFocusPolicy(Qt::NoFocus);
 
   connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
-  connect( m_dialog, SIGNAL(accepted()), this, SLOT(accept()) );
 
   connect( o.list, SIGNAL(doubleClicked( const QModelIndex& )), this, SLOT(doubleClicked( const QModelIndex& )) );
 
@@ -255,11 +322,10 @@ QuickOpenWidgetHandler::QuickOpenWidgetHandler( QString title, QuickOpenModel* m
   o.list->setColumnWidth( 0, 20 );
 }
 
-void QuickOpenWidgetHandler::run() {
+
+void QuickOpenWidget::prepareShow()
+{
   o.list->setModel( 0 );
-  m_dialog->show();
-  //This is a workaround for a problem in KStyle where the scroll-mode is overwritten with ScrollPerPixel during show()
-  //Usually all this stuff should be done BEFORE show() is called
   o.list->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
   m_model->setTreeView( o.list );
   o.list->setModel( m_model );
@@ -272,18 +338,42 @@ void QuickOpenWidgetHandler::run() {
   connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& )), this, SLOT(currentChanged( const QItemSelection&, const QItemSelection& )) );
 }
 
-QuickOpenWidgetHandler::~QuickOpenWidgetHandler() {
-  //if( m_model->treeView() == o.list )
+void QuickOpenWidgetDialog::run() {
+m_widget->prepareShow();
+  m_dialog->show();
+}
+
+QuickOpenWidget::~QuickOpenWidget() {
   m_model->setTreeView( 0 );
+}
+
+
+QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
+{
+  m_widget = new QuickOpenWidget(title, model, initialItems, initialScopes, listOnly, noSearchField);
+  
+  m_dialog = new KDialog( ICore::self()->uiController()->activeMainWindow() );
+  m_dialog->setInitialSize(QSize(800, 400));
+  m_dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+  m_dialog->setWindowTitle(title);
+  m_dialog->setMainWidget(m_widget);
+  
+  connect(m_widget, SIGNAL(ready()), m_dialog, SLOT(close()));
+  connect( m_dialog, SIGNAL(accepted()), m_widget, SLOT(accept()) );
+}
+
+
+QuickOpenWidgetDialog::~QuickOpenWidgetDialog()
+{
   delete m_dialog;
 }
 
-void QuickOpenWidgetHandler::setPreselectedText(const QString& text)
+void QuickOpenWidget::setPreselectedText(const QString& text)
 {
   m_preselectedText = text;
 }
 
-void QuickOpenWidgetHandler::updateProviders() {
+void QuickOpenWidget::updateProviders() {
   if(QAction* action = qobject_cast<QAction*>(sender())) {
     QMenu* menu = qobject_cast<QMenu*>(action->parentWidget());
     if(menu) {
@@ -321,12 +411,13 @@ void QuickOpenWidgetHandler::updateProviders() {
     o.scopesButton->setText(checkedScopes.join(", "));
   }
 
+  emit itemsChanged( checkedItems );
   emit scopesChanged( checkedScopes );
   m_model->enableProviders( checkedItems, checkedScopes );
 }
 
 
-void QuickOpenWidgetHandler::textChanged( const QString& str ) {
+void QuickOpenWidget::textChanged( const QString& str ) {
   m_model->textChanged( str );
 
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
@@ -335,7 +426,7 @@ void QuickOpenWidgetHandler::textChanged( const QString& str ) {
   callRowSelected();
 }
 
-void QuickOpenWidgetHandler::callRowSelected() {
+void QuickOpenWidget::callRowSelected() {
   QModelIndex currentIndex = o.list->selectionModel()->currentIndex();
   if( currentIndex.isValid() )
     m_model->rowSelected( currentIndex );
@@ -343,29 +434,29 @@ void QuickOpenWidgetHandler::callRowSelected() {
     kDebug() << "current index is not valid";
 }
 
-void QuickOpenWidgetHandler::currentChanged( const QModelIndex& /*current*/, const QModelIndex& /*previous */) {
+void QuickOpenWidget::currentChanged( const QModelIndex& /*current*/, const QModelIndex& /*previous */) {
   callRowSelected();
 }
 
-void QuickOpenWidgetHandler::currentChanged( const QItemSelection& /*current*/, const QItemSelection& /*previous */) {
+void QuickOpenWidget::currentChanged( const QItemSelection& /*current*/, const QItemSelection& /*previous */) {
   callRowSelected();
 }
 
-void QuickOpenWidgetHandler::accept() {
+void QuickOpenWidget::accept() {
   QString filterText = o.searchLine->text();
   m_model->execute( o.list->currentIndex(), filterText );
 }
 
-void QuickOpenWidgetHandler::doubleClicked ( const QModelIndex & index ) {
+void QuickOpenWidget::doubleClicked ( const QModelIndex & index ) {
   QString filterText = o.searchLine->text();
   if(  m_model->execute( index, filterText ) )
-    m_dialog->close();
+    emit ready();
   else if( filterText != o.searchLine->text() )
     o.searchLine->setText( filterText );
 }
 
 
-bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
+bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 {
   QKeyEvent *keyEvent = dynamic_cast<QKeyEvent*>(event);
   
@@ -484,7 +575,7 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
         } else {
           QString filterText = o.searchLine->text();
           if( m_model->execute( o.list->currentIndex(), filterText ) ) {
-            m_dialog->close();
+            emit ready();
           } else {
             //Maybe the filter-text was changed:
             if( filterText != o.searchLine->text() ) {
@@ -500,10 +591,24 @@ bool QuickOpenWidgetHandler::eventFilter ( QObject * watched, QEvent * event )
   return false;
 }
 
+
+void QuickOpenPlugin::quickOpenLine(bool)
+{
+
+}
+
+static QuickOpenPlugin* staticQuickOpenPlugin = 0;
+
+QuickOpenPlugin* QuickOpenPlugin::self()
+{
+  return staticQuickOpenPlugin;
+}
+
 QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
                                  const QVariantList&)
     : KDevelop::IPlugin(KDevQuickOpenFactory::componentData(), parent)
 {
+    staticQuickOpenPlugin = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
     setXMLFile( "kdevquickopen.rc" );
     m_model = new QuickOpenModel( 0 );
@@ -540,6 +645,11 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
 
+    KAction* quickOpenLine = actions->addAction("quick_open_line");
+    quickOpenLine->setText( i18n("Quick Open") );
+    quickOpenLine->setShortcut( Qt::CTRL | Qt::Key_Comma );
+    connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
+    quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
 //     KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
 //     quickOpenNavigate->setText( i18n("Navigate Declaration") );
 //     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
@@ -551,6 +661,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
     connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open") );
+    lastUsedItems = quickopengrp.readEntry("SelectedItems", QStringList() );
 
     {
       m_openFilesData = new OpenFilesDataProvider();
@@ -610,19 +721,21 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open")))
     useScopes << i18n("Currently Open");
 
-  m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Quick Open"), m_model, initialItems, useScopes );
+  QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Quick Open"), m_model, initialItems, useScopes );
+  m_currentWidgetHandler = dialog;
   if (!(modes & Files) || modes == QuickOpenPlugin::All)
   {
     KDevelop::IDocument *currentDoc = core()->documentController()->activeDocument();
     if (currentDoc && currentDoc->isTextDocument())
     {
       QString preselected = currentDoc->textSelection().isEmpty() ? currentDoc->textWord() : currentDoc->textDocument()->text(currentDoc->textSelection());
-      m_currentWidgetHandler->setPreselectedText(preselected);
+      dialog->widget()->setPreselectedText(preselected);
     }
   }
   
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
-  m_currentWidgetHandler->run();
+  connect( m_currentWidgetHandler, SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
+  dialog->run();
 }
 
 
@@ -631,6 +744,13 @@ void QuickOpenPlugin::storeScopes( const QStringList& scopes )
   lastUsedScopes = scopes;
   KConfigGroup grp = KGlobal::config()->group("QuickOpen");
   grp.writeEntry( "SelectedScopes", scopes );
+}
+
+void QuickOpenPlugin::storeItems( const QStringList& items )
+{
+  lastUsedItems = items;
+  KConfigGroup grp = KGlobal::config()->group("QuickOpen");
+  grp.writeEntry( "SelectedItems", items );
 }
 
 void QuickOpenPlugin::quickOpen()
@@ -828,11 +948,12 @@ void QuickOpenPlugin::quickOpenNavigate()
     }
 
     //Change the parent so there are no conflicts in destruction order
-    m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Navigate"), model, QStringList(), QStringList(), true, true );
+    QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Navigate"), model, QStringList(), QStringList(), true, true );
+    m_currentWidgetHandler = dialog;
     model->setParent(m_currentWidgetHandler);
     model->setExpanded(model->index(0,0, QModelIndex()), true);
 
-    m_currentWidgetHandler->run();
+    dialog->run();
   }
 
   if(!decl) {
@@ -912,18 +1033,19 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 
   model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
 
-  m_currentWidgetHandler = new QuickOpenWidgetHandler( i18n("Outline"), model, QStringList(), QStringList(), true );
+  QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Outline"), model, QStringList(), QStringList(), true );
+  m_currentWidgetHandler = dialog;
   
   model->setParent(m_currentWidgetHandler);
-  m_currentWidgetHandler->run();
+  dialog->run();
 
   //Select the declaration that contains the cursor
   if(cursorDecl) {
     int num = 0;
     foreach(const DUChainItem& item, items) {
       if(item.m_item.data() == cursorDecl) {
-        m_currentWidgetHandler->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
-        m_currentWidgetHandler->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
+        dialog->widget()->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
+        dialog->widget()->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
       }
       ++num;
     }

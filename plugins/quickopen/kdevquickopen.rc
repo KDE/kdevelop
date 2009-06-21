@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevQuickopen" version="6">
+<kpartgui name="KDevQuickopen" version="7">
 <MenuBar>
   <Menu name="navigation">
     <Action name="quick_open"
@@ -28,5 +28,13 @@
 
   </Menu>
 </MenuBar>
+
+<ToolBar name="quickOpenToolBar">
+  <text>Quick Open Toolbar</text>
+  <Separator/>
+  <Action name="quick_open_line"/>
+  <Separator/>
+  <WeakSeparator/>
+</ToolBar>
 
 </kpartgui>
