@@ -119,7 +119,7 @@ ValgrindConfigPage::ValgrindConfigPage(QWidget* parent)
     
     connect( ui->valgrindExecutable, SIGNAL(textChanged(QString)), SIGNAL(changed()) );
     connect( ui->valgrindExecutable, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
-    connect( ui->valgrindParameters, SIGNAL(textEdited(KUrl)), SIGNAL(changed()) );
+    connect( ui->valgrindParameters, SIGNAL(textEdited(QString)), SIGNAL(changed()) );
     connect( ui->freeBlockList, SIGNAL(valueChanged(int)), SIGNAL(changed()) );
     connect( ui->happensBefore, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
     connect( ui->leakResolution, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
