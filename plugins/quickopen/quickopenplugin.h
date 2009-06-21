@@ -121,6 +121,9 @@ class QuickOpenWidget : public QWidget {
   void setPreselectedText(const QString &text);
     void prepareShow();
 
+  //Shows OK + Cancel. By default they are hidden  
+  void showStandardButtons();
+    
   signals:
   void scopesChanged( const QStringList& scopes );
   void itemsChanged( const QStringList& scopes );

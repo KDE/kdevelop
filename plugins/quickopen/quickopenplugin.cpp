@@ -257,6 +257,12 @@ QWidget* QuickOpenPlugin::createQuickOpenLineWidget()
   return new QuickOpenLineEdit;
 }
 
+void QuickOpenWidget::showStandardButtons()
+{
+  o.okButton->show();
+  o.cancelButton->show();
+}
+
 QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField, QLineEdit* alterantiveSearchField ) : m_model(model), m_expandedTemporary(false) {
 
   o.setupUi( this );
@@ -313,6 +319,8 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
     o.searchLine->hide();
     o.searchLabel->hide();
   }
+  o.okButton->hide();
+  o.cancelButton->hide();
   
   if(alterantiveSearchField)
     o.searchLine = alterantiveSearchField;
@@ -327,6 +335,10 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
 
   connect( o.list, SIGNAL(doubleClicked( const QModelIndex& )), this, SLOT(doubleClicked( const QModelIndex& )) );
 
+  connect(o.okButton, SIGNAL(clicked(bool)), this, SLOT(accept()));
+  connect(o.okButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
+  connect(o.cancelButton, SIGNAL(clicked(bool)), SIGNAL(ready()));
+  
   updateProviders();
 
   m_model->restart();
@@ -371,7 +383,7 @@ QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* mode
   m_dialog->setWindowTitle(title);
   QVBoxLayout* layout = new QVBoxLayout(m_dialog);
   layout->addWidget(m_widget);
-  
+  m_widget->showStandardButtons();
   connect(m_widget, SIGNAL(ready()), m_dialog, SLOT(close()));
   connect( m_dialog, SIGNAL(accepted()), m_widget, SLOT(accept()) );
 }
