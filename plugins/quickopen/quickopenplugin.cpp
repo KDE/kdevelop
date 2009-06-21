@@ -601,7 +601,8 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
         } else {
           QString filterText = o.searchLine->text();
           if( m_model->execute( o.list->currentIndex(), filterText ) ) {
-            emit ready();
+            if(!(keyEvent->modifiers() & Qt::ShiftModifier))
+              emit ready();
           } else {
             //Maybe the filter-text was changed:
             if( filterText != o.searchLine->text() ) {
