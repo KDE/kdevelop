@@ -119,50 +119,31 @@ void MakeOutputModel::activate( const QModelIndex& index )
 
 QModelIndex MakeOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
-    int startrow = 0;
-    if( isValidIndex(currentIdx) )
+    int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
+    
+    for( int row = 0; row < rowCount(); ++row ) 
     {
-        startrow = currentIdx.row();
-    }
-    int currow = startrow + 1;
-    int rows = rowCount();
-    while( currow != startrow )
-    {
-        if( currow == rows )
-        {
-            currow = 0;
-        }
+        int currow = (startrow + row) % rowCount();
         if( items.at( currow ).isActivatable )
         {
             return index( currow, 0, QModelIndex() );
         }
-        currow++;
     }
     return QModelIndex();
 }
 
 QModelIndex MakeOutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 {
-
-    int startrow = 0;
-    if( !isValidIndex(currentIdx) )
+    //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
+    int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
+    
+    for ( int row = 0; row < rowCount(); ++row )
     {
-        startrow = rowCount() - 1;
-    }else{
-        startrow = currentIdx.row();
-    }
-    int currow = startrow - 1;
-    while( currow != startrow )
-    {
-        if( currow < 0 )
-        {
-            currow = rowCount() - 1;
-        }
+        int currow = (startrow - row) % rowCount();
         if( items.at( currow ).isActivatable )
         {
             return index( currow, 0, QModelIndex() );
         }
-        currow--;
     }
     return QModelIndex();
 }
