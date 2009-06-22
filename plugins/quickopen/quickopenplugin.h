@@ -107,7 +107,7 @@ private:
 };
 
 ///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently
-class QuickOpenWidget : public QWidget {
+class QuickOpenWidget : public QFrame {
   Q_OBJECT
   public:
   /**
