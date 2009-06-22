@@ -168,9 +168,7 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
     {
         emit activateUrl( item->file()->url() );
     }else if( model()->rowCount(index) != 0) {
-        if(isExpanded(index))
-            collapse(index);
-        else
+        if(!isExpanded(index))
             expand(index);
     }
 }
