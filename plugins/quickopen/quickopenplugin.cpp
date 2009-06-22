@@ -182,124 +182,6 @@ QString cursorItemText() {
   return QString();
 }
 
-class QuickOpenLineEdit : public QLineEdit {
-  public:
-    QuickOpenLineEdit() : m_widget(0) {
-      setMinimumWidth(200);
-      setMaximumWidth(400);
-      deactivate();
-      setObjectName("Quickopen");
-    }
-    ~QuickOpenLineEdit() {
-      delete m_widget;
-    }
-    
-    
-    virtual void keyPressEvent(QKeyEvent* ev) {
-      QLineEdit::keyPressEvent(ev);
-      if(ev->key() == Qt::Key_Escape) {
-        if(m_widget)
-          delete m_widget;
-        ev->accept();
-        if(ICore::self()->documentController()->activeDocument())
-          ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());
-      }
-    }
-    
-    bool insideThis(QObject* object)
-    {
-        while (object)
-        {
-          kDebug() << object;
-            if (object == this || object == m_widget)
-            {
-                return true;
-            }
-            object = object->parent();
-        }
-        return false;
-    }
-    
-    
-    virtual void focusInEvent(QFocusEvent* ev) {
-      QLineEdit::focusInEvent(ev);
-//       delete m_widget;
-      
-      if(m_widget)
-        return;
-      
-      if(!QuickOpenPlugin::self()->freeModel())
-        return;
-      
-      m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true, this );
-      m_widget->setParent(0, Qt::ToolTip);
-      m_widget->setFocusPolicy(Qt::NoFocus);
-      m_widget->setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
-      m_widget->setLineWidth(5);
-      QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
-      
-      connect( m_widget, SIGNAL( scopesChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeScopes( const QStringList& ) ) );
-      m_widget->prepareShow();
-      QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
-      widgetGeometry.setWidth(700); ///@todo Waste less space
-      QRect screenGeom = QApplication::desktop()->screenGeometry(this);
-      if(widgetGeometry.right() > screenGeom.right())
-        widgetGeometry.moveRight(screenGeom.right());
-      m_widget->setGeometry(widgetGeometry);
-      
-      //Hack so we don't have a frame it top, where the widget docks to the line
-      QRect frameRect = m_widget->frameRect();
-      frameRect.setTop(frameRect.top()-10);
-      m_widget->setFrameRect(frameRect);
-      
-      m_widget->show();
-
-      activate();
-    }
-    
-//     virtual void focusOutEvent(QFocusEvent* ev) {
-//       QLineEdit::focusOutEvent(ev);
-//       deactivate();
-//     }
-    
-    
-    virtual bool eventFilter(QObject* obj, QEvent* e) {
-      switch (e->type()) {
-        case QEvent::WindowActivate:
-        case QEvent::WindowDeactivate:
-          kDebug() << "closing because of window activation";
-          deactivate();
-          break;
-        case QEvent::FocusIn:
-          if(dynamic_cast<QWidget*>(obj)) {
-            kDebug() << "closign because of other focus" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;
-            if(!insideThis(obj))
-              deactivate();
-          }
-          break;
-        default:
-          break;
-      }
-      return false;
-    }
-    
-    void activate() {
-      setText("");
-      setStyleSheet("");
-      qApp->installEventFilter(this);
-    }
-    
-    void deactivate() {
-      setText(i18n("Quick Open"));
-      setStyleSheet("color: grey"); ///@todo Better color picking
-      if(m_widget)
-        m_widget->deleteLater();
-      qApp->removeEventFilter(this);
-    }
-  private:
-    QPointer<QuickOpenWidget> m_widget;
-};
-
 QWidget* QuickOpenPlugin::createQuickOpenLineWidget()
 {
   return new QuickOpenLineEdit;
@@ -1134,6 +1016,130 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
     }
   }
 }
+QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0) {
+    setMinimumWidth(200);
+    setMaximumWidth(400);
+    deactivate();
+    setObjectName("Quickopen");
+}
+QuickOpenLineEdit::~QuickOpenLineEdit() {
+    delete m_widget;
+}
+void QuickOpenLineEdit::keyPressEvent(QKeyEvent* ev) {
+    if (ev->key() == Qt::Key_Escape) {
+      kDebug() << "escape";
+        deactivate();
+        ev->accept();
+    }
+    QLineEdit::keyPressEvent(ev);
+}
+bool QuickOpenLineEdit::insideThis(QObject* object) {
+    while (object)
+    {
+        kDebug() << object;
+        if (object == this || object == m_widget)
+        {
+            return true;
+        }
+        object = object->parent();
+    }
+    return false;
+}
+void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
+    QLineEdit::focusInEvent(ev);
+//       delete m_widget;
+    kDebug() << "got focus";
+    if (m_widget)
+        return;
+
+    if (!QuickOpenPlugin::self()->freeModel())
+        return;
+
+    m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true, this );
+    m_widget->setParent(0, Qt::ToolTip);
+    m_widget->setFocusPolicy(Qt::NoFocus);
+    m_widget->setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
+    m_widget->setLineWidth(5);
+    QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
+    connect(m_widget, SIGNAL(ready()), SLOT(deactivate()));
+
+    connect( m_widget, SIGNAL( scopesChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeScopes( const QStringList& ) ) );
+    m_widget->prepareShow();
+    QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
+    widgetGeometry.setWidth(700); ///@todo Waste less space
+    QRect screenGeom = QApplication::desktop()->screenGeometry(this);
+    if (widgetGeometry.right() > screenGeom.right())
+        widgetGeometry.moveRight(screenGeom.right());
+    m_widget->setGeometry(widgetGeometry);
+
+    //Hack so we don't have a frame it top, where the widget docks to the line
+    QRect frameRect = m_widget->frameRect();
+    frameRect.setTop(frameRect.top()-10);
+    m_widget->setFrameRect(frameRect);
+
+    m_widget->show();
+
+    activate();
+}
+bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
+    if (!m_widget)
+        return false;
+    switch (e->type()) {
+    case QEvent::WindowActivate:
+    case QEvent::WindowDeactivate:
+        kDebug() << "closing because of window activation";
+        deactivate();
+        break;
+    case QEvent::FocusIn:
+        if (dynamic_cast<QWidget*>(obj)) {
+            QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(e);
+            Q_ASSERT(focusEvent);
+            //Eat the focus event, keep the focus
+            kDebug() << "focus change" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;
+            if (focusEvent->reason() == Qt::OtherFocusReason) {
+                kWarning() << "queuing stuff";
+                QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
+                return false;
+            }
+            if (!insideThis(obj))
+                deactivate();
+        }
+        break;
+    default:
+        break;
+    }
+    return false;
+}
+void QuickOpenLineEdit::activate() {
+    kDebug() << "activating";
+    setText("");
+    setStyleSheet("");
+    qApp->installEventFilter(this);
+}
+void QuickOpenLineEdit::deactivate() {
+    kDebug() << "deactivating";
+    
+    setText(i18n("Quick Open"));
+    setStyleSheet("color: grey"); ///@todo Better color picking
+    if (m_widget)
+        m_widget->deleteLater();
+    m_widget = 0;
+    qApp->removeEventFilter(this);
+    
+    QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
+}
+
+void QuickOpenLineEdit::checkFocus()
+{
+    kDebug() << "checking focus" << m_widget;
+    if(m_widget) {
+      setFocus();
+    }else{
+       if (ICore::self()->documentController()->activeDocument())
+           ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());
+    }
+}
+
 
 #include "quickopenplugin.moc"
 

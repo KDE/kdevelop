@@ -167,6 +167,24 @@ class QuickOpenWidgetDialog : public QObject {
   QuickOpenWidget* m_widget;
 };
 
+class QuickOpenLineEdit : public QLineEdit {
+  Q_OBJECT
+  public:
+    QuickOpenLineEdit() ;
+    ~QuickOpenLineEdit() ;
+    
+    bool insideThis(QObject* object);
+  private slots:
+    void activate() ;
+    void deactivate() ;
+    void checkFocus();
+  private:
+    virtual void keyPressEvent(QKeyEvent* ev) ;
+    virtual void focusInEvent(QFocusEvent* ev) ;
+    virtual bool eventFilter(QObject* obj, QEvent* e) ;
+    QPointer<QuickOpenWidget> m_widget;
+};
+
 #endif // QUICKOPENPLUGIN_H
 
 // kate: space-indent on; indent-width 2; tab-width 4; replace-tabs on; auto-insert-doxygen on
