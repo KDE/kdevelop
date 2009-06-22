@@ -34,6 +34,7 @@ namespace KDevelop {
 
 class QuickOpenModel;
 class QuickOpenWidget;
+class QuickOpenLineEdit;
 
 class QuickOpenPlugin : public KDevelop::IPlugin, public KDevelop::IQuickOpen
 {
@@ -81,7 +82,6 @@ public slots:
     void quickOpenDefinition();
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
-    void quickOpenLine(bool);
 
 private slots:
     void storeScopes( const QStringList& );
@@ -89,6 +89,7 @@ private slots:
 
 private:
     friend class QuickOpenLineEdit;
+    QuickOpenLineEdit* quickOpenLine();
     QWidget* createQuickOpenLineWidget();
 
     QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
@@ -116,13 +117,16 @@ class QuickOpenWidget : public QFrame {
    * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
    * @param noSearchFied when this is true, no search-line is shown.
    * */
-  QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false, QLineEdit* alterantiveSearchField = 0 );
+  QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false );
   ~QuickOpenWidget();
   void setPreselectedText(const QString &text);
     void prepareShow();
 
+  void setAlternativeSearchField(QLineEdit* alterantiveSearchField);
+    
   //Shows OK + Cancel. By default they are hidden  
-  void showStandardButtons();
+  void showStandardButtons(bool show);
+    void showSearchField(bool show);
     
   signals:
   void scopesChanged( const QStringList& scopes );
@@ -142,6 +146,7 @@ class QuickOpenWidget : public QFrame {
   void callRowSelected();
   
   virtual bool eventFilter ( QObject * watched, QEvent * event );
+
   QuickOpenModel* m_model;
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
@@ -150,6 +155,7 @@ class QuickOpenWidget : public QFrame {
   
   friend class QuickOpenWidgetDialog;
   friend class QuickOpenPlugin;
+  friend class QuickOpenLineEdit;
 };
 
 class QuickOpenWidgetDialog : public QObject {
@@ -174,6 +180,7 @@ class QuickOpenLineEdit : public QLineEdit {
     ~QuickOpenLineEdit() ;
     
     bool insideThis(QObject* object);
+    void showWithWidget(QuickOpenWidget* widget);
   private slots:
     void activate() ;
     void deactivate() ;
@@ -185,6 +192,7 @@ class QuickOpenLineEdit : public QLineEdit {
     virtual void hideEvent(QHideEvent* );
     
     QPointer<QuickOpenWidget> m_widget;
+    bool m_forceUpdate;
 };
 
 #endif // QUICKOPENPLUGIN_H

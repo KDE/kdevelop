@@ -187,13 +187,18 @@ QWidget* QuickOpenPlugin::createQuickOpenLineWidget()
   return new QuickOpenLineEdit;
 }
 
-void QuickOpenWidget::showStandardButtons()
+void QuickOpenWidget::showStandardButtons(bool show)
 {
-  o.okButton->show();
-  o.cancelButton->show();
+  if(show) {
+    o.okButton->show();
+    o.cancelButton->show();
+  }else{
+    o.okButton->hide();
+    o.cancelButton->hide();
+  }
 }
 
-QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField, QLineEdit* alterantiveSearchField ) : m_model(model), m_expandedTemporary(false) {
+QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
 
   o.setupUi( this );
   o.list->header()->hide();
@@ -245,15 +250,10 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
     o.label_2->hide();
   }
 
-  if( noSearchField ) {
-    o.searchLine->hide();
-    o.searchLabel->hide();
-  }
+  showSearchField(!noSearchField);
+  
   o.okButton->hide();
   o.cancelButton->hide();
-  
-  if(alterantiveSearchField)
-    o.searchLine = alterantiveSearchField;
   
   o.searchLine->installEventFilter( this );
   o.list->installEventFilter( this );
@@ -276,6 +276,25 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
   o.list->setColumnWidth( 0, 20 );
 }
 
+
+void QuickOpenWidget::setAlternativeSearchField(QLineEdit* alterantiveSearchField)
+{
+    o.searchLine = alterantiveSearchField;
+    o.searchLine->installEventFilter( this );
+    connect( o.searchLine, SIGNAL(textChanged( const QString& )), this, SLOT(textChanged( const QString& )) );
+}
+
+
+void QuickOpenWidget::showSearchField(bool b)
+{
+    if(b){
+      o.searchLine->show();
+      o.searchLabel->show();
+    }else{
+      o.searchLine->hide();
+      o.searchLabel->hide();
+    }
+}
 
 void QuickOpenWidget::prepareShow()
 {
@@ -313,7 +332,7 @@ QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* mode
   m_dialog->setWindowTitle(title);
   QVBoxLayout* layout = new QVBoxLayout(m_dialog);
   layout->addWidget(m_widget);
-  m_widget->showStandardButtons();
+  m_widget->showStandardButtons(true);
   connect(m_widget, SIGNAL(ready()), m_dialog, SLOT(close()));
   connect( m_dialog, SIGNAL(accepted()), m_widget, SLOT(accept()) );
 }
@@ -549,17 +568,16 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 }
 
 
-void QuickOpenPlugin::quickOpenLine(bool)
+QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine()
 {
-  QList< QWidget* > lines = ICore::self()->uiController()->activeMainWindow()->findChildren<QWidget*>("Quickopen");
-  foreach(QWidget* line, lines) {
+  QList< QuickOpenLineEdit* > lines = ICore::self()->uiController()->activeMainWindow()->findChildren<QuickOpenLineEdit*>("Quickopen");
+  foreach(QuickOpenLineEdit* line, lines) {
     if(line->isVisible()) {
-      line->setFocus();
-      return;
+      return line;
     }
   }
   
-  quickOpen();
+  return 0;
 }
 
 static QuickOpenPlugin* staticQuickOpenPlugin = 0;
@@ -612,8 +630,8 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 
     KAction* quickOpenLine = actions->addAction("quick_open_line");
     quickOpenLine->setText( i18n("Embedded Quick Open") );
-    quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
-    connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
+//     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
+//     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
     quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
 //     KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
 //     quickOpenNavigate->setText( i18n("Navigate Declaration") );
@@ -700,7 +718,12 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   
   connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   connect( m_currentWidgetHandler, SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
-  dialog->run();
+  
+  if(quickOpenLine()) {
+    quickOpenLine()->showWithWidget(dialog->widget());
+  }else{
+    dialog->run();
+  }
 }
 
 
@@ -1016,7 +1039,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
     }
   }
 }
-QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0) {
+QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0), m_forceUpdate(false) {
     setMinimumWidth(200);
     setMaximumWidth(400);
     deactivate();
@@ -1045,21 +1068,49 @@ bool QuickOpenLineEdit::insideThis(QObject* object) {
     }
     return false;
 }
+
+void QuickOpenLineEdit::showWithWidget(QuickOpenWidget* widget)
+{
+  kDebug() << "storing widget" << widget;
+  deactivate();
+  if(m_widget) {
+    kDebug() << "deleting" << m_widget;
+    delete m_widget;
+  }
+  m_widget = widget;
+  m_forceUpdate = true;
+  setFocus();
+}
+
 void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     QLineEdit::focusInEvent(ev);
 //       delete m_widget;
     kDebug() << "got focus";
-    if (m_widget)
+    kDebug() << "old widget" << m_widget << "force update:" << m_forceUpdate;
+    if (m_widget && !m_forceUpdate)
         return;
 
-    if (!QuickOpenPlugin::self()->freeModel())
+    if (!m_forceUpdate && !QuickOpenPlugin::self()->freeModel())
         return;
 
-    m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true, this );
+    m_forceUpdate = false;
+    
+    if(!m_widget) {
+      kWarning() << "new widget";
+      m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true );
+    }else{
+      kWarning() << "re-using widget";
+      m_widget->showStandardButtons(false);
+      m_widget->showSearchField(false);
+    }
+    
     m_widget->setParent(0, Qt::ToolTip);
     m_widget->setFocusPolicy(Qt::NoFocus);
     m_widget->setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
     m_widget->setLineWidth(5);
+    setText(m_widget->o.searchLine->text());
+    m_widget->setAlternativeSearchField(this);
+    
     QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
     connect(m_widget, SIGNAL(ready()), SLOT(deactivate()));
 
@@ -1094,11 +1145,11 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
     if (!m_widget)
         return false;
     switch (e->type()) {
-    case QEvent::WindowActivate:
+     case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
         kDebug() << "closing because of window activation";
         deactivate();
-        break;
+    break;
     case QEvent::FocusIn:
         if (dynamic_cast<QWidget*>(obj)) {
             QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(e);
