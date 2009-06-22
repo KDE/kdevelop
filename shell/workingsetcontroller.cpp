@@ -754,7 +754,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
     
     m_mergeButton->setEnabled(!allOpen && mainWindow->area()->workingSet() != m_set->id());
     m_subtractButton->setEnabled(!noneOpen && mainWindow->area()->workingSet() != m_set->id());
-    m_deleteButton->setEnabled(mainWindow->area()->workingSet() != m_set->id());
+    m_deleteButton->setEnabled(!m_set->hasConnectedAreas());
     
     if(m_set->id() == mainWindow->area()->workingSet()) {
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
