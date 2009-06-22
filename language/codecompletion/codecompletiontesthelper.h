@@ -110,6 +110,12 @@ struct CodeCompletionItemTester {
     
   CodeCompletionItemTester(DUContext* context, QString text = "; ") {
     completionContext = new  T(DUContextPointer(context), text, QString(), context->range().end);
+
+    if ( !completionContext->isValid() ) {
+      kDebug() << "invalid completion context";
+      return;
+    }
+
     bool abort = false;
     items = completionContext->completionItems(abort);
     
