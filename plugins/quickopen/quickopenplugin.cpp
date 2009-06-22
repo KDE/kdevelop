@@ -721,6 +721,7 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   
   if(quickOpenLine()) {
     quickOpenLine()->showWithWidget(dialog->widget());
+    dialog->deleteLater();
   }else{
     dialog->run();
   }
@@ -1024,8 +1025,13 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
   QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Outline"), model, QStringList(), QStringList(), true );
   m_currentWidgetHandler = dialog;
   
-  model->setParent(m_currentWidgetHandler);
-  dialog->run();
+  model->setParent(dialog->widget());
+  
+  if(quickOpenLine()) {
+    quickOpenLine()->showWithWidget(dialog->widget());
+    dialog->deleteLater();
+  }else
+    dialog->run();
 
   //Select the declaration that contains the cursor
   if(cursorDecl) {
@@ -1092,14 +1098,13 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
 
     if (!m_forceUpdate && !QuickOpenPlugin::self()->freeModel())
         return;
-
+    
+    activate();
     m_forceUpdate = false;
     
     if(!m_widget) {
-      kWarning() << "new widget";
       m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true );
     }else{
-      kWarning() << "re-using widget";
       m_widget->showStandardButtons(false);
       m_widget->showSearchField(false);
     }
@@ -1108,13 +1113,13 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     m_widget->setFocusPolicy(Qt::NoFocus);
     m_widget->setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
     m_widget->setLineWidth(5);
-    setText(m_widget->o.searchLine->text());
     m_widget->setAlternativeSearchField(this);
     
     QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
     connect(m_widget, SIGNAL(ready()), SLOT(deactivate()));
 
     connect( m_widget, SIGNAL( scopesChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeScopes( const QStringList& ) ) );
+    Q_ASSERT(m_widget->o.searchLine == this);
     m_widget->prepareShow();
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
     widgetGeometry.setWidth(700); ///@todo Waste less space
@@ -1129,8 +1134,6 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     m_widget->setFrameRect(frameRect);
 
     m_widget->show();
-
-    activate();
 }
 
 void QuickOpenLineEdit::hideEvent(QHideEvent* ev)
@@ -1161,7 +1164,6 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
             
             kDebug() << "reason" << focusEvent->reason();
             if (focusEvent->reason() != Qt::MouseFocusReason && focusEvent->reason() != Qt::ActiveWindowFocusReason) {
-                kWarning() << "queuing stuff";
                 QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
                 return false;
             }
