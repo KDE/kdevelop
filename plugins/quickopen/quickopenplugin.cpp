@@ -1081,6 +1081,15 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
 
     activate();
 }
+
+void QuickOpenLineEdit::hideEvent(QHideEvent* ev)
+{
+    QWidget::hideEvent(ev);
+    if(m_widget)
+      QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
+//       deactivate();
+}
+
 bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
     if (!m_widget)
         return false;
@@ -1096,7 +1105,11 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
             Q_ASSERT(focusEvent);
             //Eat the focus event, keep the focus
             kDebug() << "focus change" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;
-            if (focusEvent->reason() == Qt::OtherFocusReason) {
+            if(obj == this)
+              return false;
+            
+            kDebug() << "reason" << focusEvent->reason();
+            if (focusEvent->reason() != Qt::MouseFocusReason && focusEvent->reason() != Qt::ActiveWindowFocusReason) {
                 kWarning() << "queuing stuff";
                 QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
                 return false;
@@ -1121,19 +1134,23 @@ void QuickOpenLineEdit::deactivate() {
     
     setText(i18n("Quick Open"));
     setStyleSheet("color: grey"); ///@todo Better color picking
-    if (m_widget)
+    if (m_widget) {
         m_widget->deleteLater();
+        QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
+    }
     m_widget = 0;
     qApp->removeEventFilter(this);
     
-    QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
 }
 
 void QuickOpenLineEdit::checkFocus()
 {
     kDebug() << "checking focus" << m_widget;
     if(m_widget) {
-      setFocus();
+      if(isVisible() && !isHidden())
+        setFocus();
+      else
+        deactivate();
     }else{
        if (ICore::self()->documentController()->activeDocument())
            ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());

@@ -182,6 +182,8 @@ class QuickOpenLineEdit : public QLineEdit {
     virtual void keyPressEvent(QKeyEvent* ev) ;
     virtual void focusInEvent(QFocusEvent* ev) ;
     virtual bool eventFilter(QObject* obj, QEvent* e) ;
+    virtual void hideEvent(QHideEvent* );
+    
     QPointer<QuickOpenWidget> m_widget;
 };
 
