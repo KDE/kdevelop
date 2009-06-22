@@ -1587,7 +1587,7 @@ void CodeCompletionContext::standardAccessCompletionItems(QList<CompletionTreeIt
   ///Eventually add a "this" item
   DUContext* functionContext = m_duContext.data();
   if(!m_onlyShowSignals && !m_onlyShowSlots && !m_onlyShowTypes) {
-    while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext()->type() == DUContext::Other)
+    while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext() && functionContext->parentContext()->type() == DUContext::Other)
       functionContext = functionContext->parentContext();
   }
 
