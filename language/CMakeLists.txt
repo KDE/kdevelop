@@ -321,14 +321,13 @@ install(FILES
 )
 
 install(FILES
-    codegen/licenses/GPL\ v1
     codegen/licenses/GPL\ v2
     codegen/licenses/GPL\ v3
     codegen/licenses/LGPL\ v2
-    codegen/licenses/Apache\ v1
+    codegen/licenses/Apache\ v2
     codegen/licenses/BSD
     codegen/licenses/Boost
-    codegen/licenses/MIT
+    codegen/licenses/MIT\ X11
     codegen/licenses/Mozilla\ v1.1
     DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/licenses
 )
