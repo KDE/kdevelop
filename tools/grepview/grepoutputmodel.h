@@ -60,6 +60,10 @@ public Q_SLOTS:
     void slotFailed();
 
 private:
+    
+    /** Check whether idx points to a row in the current model. */
+    bool isValidIndex( const QModelIndex& idx ) const;
+    
 //     int m_matchCount;
     QString _lastfilename;
     QRegExp m_regExp;

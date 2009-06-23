@@ -94,51 +94,36 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     }
 }
 
-QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex& currentIndex )
+bool GrepOutputModel::isValidIndex( const QModelIndex& idx ) const
 {
-    int nextRow = currentIndex.row() + 1;
-    int rows = rowCount(currentIndex.parent());
+    return ( idx.isValid() && idx.row() >= 0 && idx.row() < rowCount() && idx.column() == 0 );
+}
 
-    while (nextRow != currentIndex.row()) {
-        QModelIndex idx = index(nextRow, currentIndex.column(), currentIndex.parent());
-        if (GrepOutputItem* item = dynamic_cast<GrepOutputItem*>(itemFromIndex(idx)))
-            if (item->data() == Text)
-                return idx;
-
-        ++nextRow;
-
-        if (nextRow >= rows)
-        {
-            if (currentIndex.row() == -1)
-            {
-                break;
-            } else {
-                nextRow = 0;
-            }
-        }
+QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
+{
+    int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
+    
+    for (int row = 0; row < rowCount(); ++row) {
+        int currow = (startrow + row) % rowCount();
+        if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
+            if (grep_item->data() == Text)
+                return index(currow, 0);
     }
-
     return QModelIndex();
 }
 
-QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex& currentIndex )
+QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 {
-    int prevRow = currentIndex.row() - 1;
-    int rows = rowCount(currentIndex.parent());
-
-    do {
-        if (prevRow < 0)
-            prevRow = rows - 1;
-
-        QModelIndex idx = index(prevRow, currentIndex.column(), currentIndex.parent());
-        if (GrepOutputItem* item = dynamic_cast<GrepOutputItem*>(itemFromIndex(idx)))
-            if (item->data() == Text)
-                return idx;
-
-        --prevRow;
-
-    } while (prevRow != currentIndex.row());
-
+    //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
+    int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
+    
+    for (int row = 0; row < rowCount(); ++row)
+    {
+        int currow = (startrow - row) % rowCount();
+        if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
+            if (grep_item->data() == Text)
+                return index(currow, 0);
+    }
     return QModelIndex();
 }
 
