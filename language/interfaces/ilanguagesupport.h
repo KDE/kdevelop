@@ -20,12 +20,10 @@
 #define ILANGUAGESUPPORT_H
 
 #include <kurl.h>
-#include <ksharedptr.h>
 
 #include <interfaces/iextension.h>
 #include "../editor/simplerange.h"
 #include "../languageexport.h"
-#include "iastcontainer.h"
 
 namespace KDevelop {
 
@@ -45,12 +43,6 @@ public:
     virtual QString name() const = 0;
     /** @return the parse job that is used by background parser to parse given @p url.*/
     virtual ParseJob *createParseJob(const KUrl &url) = 0;
-    
-    /**
-     * Called when the Ast needs to be regenerated explicitly, mainly for refactoring purpouses
-     */
-    //virtual IAstContainer::Ptr generateAst(const TopDUContext & topContext) = 0;
-    
     /** @return the language for this support.*/
     virtual ILanguage *language();
     /**
