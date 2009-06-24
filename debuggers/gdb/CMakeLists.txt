@@ -3,6 +3,7 @@ project(gdb)
 find_package(KDE4Workspace 4.2.0 REQUIRED)
 
 add_subdirectory(unittests)
+add_subdirectory(printers)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9012 )
 

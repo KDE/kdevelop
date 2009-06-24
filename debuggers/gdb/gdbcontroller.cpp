@@ -43,6 +43,7 @@
 #include <kmessagebox.h>
 #include <kshell.h>
 #include <KConfigGroup>
+#include <KStandardDirs>
 
 #include <util/environmentgrouplist.h>
 
@@ -622,6 +623,11 @@ bool GDBController::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     queueCmd(new GDBCommand(SignalHandle, "SIG41 pass nostop noprint"));
     queueCmd(new GDBCommand(SignalHandle, "SIG42 pass nostop noprint"));
     queueCmd(new GDBCommand(SignalHandle, "SIG43 pass nostop noprint"));
+
+    QString fileName = KStandardDirs::locate("data", "kdevgdb/printers/gdbinit");
+    if (!fileName.isEmpty()) {
+        queueCmd(new GDBCommand(GDBMI::NonMI, "source " + fileName));
+    }
 
     return true;
 }
