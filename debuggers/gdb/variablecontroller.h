@@ -64,7 +64,6 @@ private:
     void updateLocals();
 
     void handleVarUpdate(const GDBMI::ResultRecord& r);
-    void handleListLocalVars(const GDBMI::ResultRecord& r);
     void addWatch(const GDBMI::ResultRecord& r);
     void addWatchpoint(const GDBMI::ResultRecord& r);
 

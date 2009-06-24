@@ -140,26 +140,63 @@ void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)
         }
     }
 }
+class StackListArgumentsHandler : public GDBCommandHandler
+{
+public:
+    StackListArgumentsHandler(QStringList localsName)
+        : m_localsName(localsName)
+    {}
+
+    virtual void handle(const GDBMI::ResultRecord &r)
+    {
+        // FIXME: handle error.
+
+        const GDBMI::Value& locals = r["stack-args"][0]["args"];
+
+        for (int i = 0; i < locals.size(); i++) {
+            m_localsName << locals[i].literal();
+        }
+        KDevelop::ICore::self()->debugController()->variableCollection()
+                ->locals()->updateLocals(m_localsName);
+    }
+
+private:
+    QStringList m_localsName;
+};
+
+class StackListLocalsHandler : public GDBCommandHandler
+{
+public:
+    StackListLocalsHandler(GDBController *controller)
+        : m_controller(controller)
+    {}
+
+    virtual void handle(const GDBMI::ResultRecord &r)
+    {
+        // FIXME: handle error.
+
+        const GDBMI::Value& locals = r["locals"];
+
+        QStringList localsName;
+        for (int i = 0; i < locals.size(); i++) {
+            const GDBMI::Value& var = locals[i];
+            localsName << var["name"].literal();
+        }
+        m_controller->addCommand(                    //dont'show value, low-frame, high-frame
+            new GDBCommand(GDBMI::StackListArguments, "0 0 0",
+                        new StackListArgumentsHandler(localsName)));
+        KDevelop::ICore::self()->debugController()->variableCollection()->locals()->updateLocals(localsName);
+    }
+
+private:
+    GDBController *m_controller;
+};
 
 void VariableController::updateLocals()
 {
-    // FIXME: also get arguments.
     controller()->addCommand(
-        new GDBCommand(GDBMI::StackListLocals, "1",
-                       this, &VariableController::handleListLocalVars));
-
-}
-
-void VariableController::handleListLocalVars(const GDBMI::ResultRecord& r)
-{
-    const GDBMI::Value& locals = r["locals"];
-
-    QStringList localsName;
-    for (int i = 0; i < locals.size(); i++) {
-        const GDBMI::Value& var = locals[i];
-        localsName << var["name"].literal();
-    }
-    variableCollection()->locals()->updateLocals(localsName);
+        new GDBCommand(GDBMI::StackListLocals, "--all-values",
+                        new StackListLocalsHandler(controller())));
 }
 
 class CreateVarobjHandler : public GDBCommandHandler
@@ -322,7 +359,6 @@ void VariableController::addWatch(const GDBMI::ResultRecord& r)
 
 void VariableController::addWatchpoint(const GDBMI::ResultRecord& r)
 {
-    // FIXME: handle error.
     if (r.reason == "done" && !r["path_expr"].literal().isEmpty()) {
         KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r["path_expr"].literal());
     }
