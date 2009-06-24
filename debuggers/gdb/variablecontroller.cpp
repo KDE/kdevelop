@@ -208,6 +208,7 @@ public:
 
     virtual void handle(const GDBMI::ResultRecord &r)
     {
+        if (!m_variable) return;
         bool hasValue = false;
         if (r.reason == "error") {
             /* Probably should mark this disabled, or something.  */
@@ -226,7 +227,7 @@ public:
     virtual bool handlesError() { return true; }
 
 private:
-    KDevelop::Variable *m_variable;
+    QPointer<KDevelop::Variable> m_variable;
     QObject *m_callback;
     const char *m_callbackMethod;
 };
@@ -249,6 +250,7 @@ public:
 
     virtual void handle(const GDBMI::ResultRecord &r)
     {
+        if (!m_variable) return;
         --m_activeCommands;
         const GDBMI::Value& children = r["children"];
         for (int i = 0; i < children.size(); ++i) {
@@ -285,7 +287,7 @@ public:
     }
 
 private:
-    KDevelop::Variable *m_variable;
+    QPointer<KDevelop::Variable> m_variable;
     GDBController *m_controller;
     int m_activeCommands;
 };
