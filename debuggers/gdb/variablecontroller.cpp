@@ -63,20 +63,10 @@ void VariableController::slotEvent(event_t e)
         case debugger_exited:
         {
             KDevelop::Variable::markAllDead();
-#if 0
+
             // Remove all locals.
-            foreach (AbstractVariableItem* item, m_items) {
-                // only remove frame items
-                if (qobject_cast<FrameItem*>(item))
-                {
-                    deleteItem(item);
-                }
-                else
-                {
-                    item->deregisterWithGdb();
-                }
-            }
-#endif
+            variableCollection()->locals()->clear();
+
             break;
         }
 
