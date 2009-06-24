@@ -37,6 +37,11 @@ public:
     virtual ~GDBCommandHandler() {}
     virtual void handle(const GDBMI::ResultRecord&) = 0;
     virtual bool handlesError() { return false; }
+
+    /**
+     * If the handler object should be deleted after the handle() call.
+     */
+    virtual bool autoDelete() { return true; }
 };
 
 /**

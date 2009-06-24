@@ -69,7 +69,6 @@
 #include <execute/iexecuteplugin.h>
 #include <interfaces/launchconfigurationtype.h>
 
-#include "variablewidget.h"
 #include "disassemblewidget.h"
 #include "gdbcontroller.h"
 #include "processselection.h"
@@ -77,7 +76,6 @@
 #include "gdbparser.h"
 #include "gdboutputwidget.h"
 #include "gdbglobal.h"
-#include "variablecollection.h"
 #include "debugsession.h"
 #include "selectcoredialog.h"
 
@@ -164,12 +162,6 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
         new DebuggerToolFactory<ViewerWidget>(
             this, m_controller, "org.kdevelop.debugger.VariousViews",
             Qt::BottomDockWidgetArea));
-
-    core()->uiController()->addToolView(
-        i18n("Variables"),
-        new DebuggerToolFactory<VariableWidget>(
-            this, m_controller, "org.kdevelop.debugger.VariablesView",
-            Qt::LeftDockWidgetArea));
 
     setupActions();
 

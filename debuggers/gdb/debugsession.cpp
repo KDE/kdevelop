@@ -42,6 +42,7 @@
 #include "gdbcontroller.h"
 #include "stackmanager.h"
 #include "breakpointcontroller.h"
+#include "variablecontroller.h"
 #include "gdb.h"
 
 namespace GDBDebugger {
@@ -54,6 +55,7 @@ DebugSession::DebugSession(GDBController* controller)
     , m_config(KGlobal::config(), "GDB Debugger")
 {
     m_breakpointController = new BreakpointController(this);
+    m_variableController = new  VariableController(this);
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 

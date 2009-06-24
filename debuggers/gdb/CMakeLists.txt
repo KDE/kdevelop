@@ -24,8 +24,6 @@ set(kdevgdb_PART_SRCS
     gdbcommand.cpp
     gdbparser.cpp
     stty.cpp
-    variablewidget.cpp
-    variablecollection.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
     processselection.cpp
@@ -36,11 +34,11 @@ set(kdevgdb_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
-    tooltipwidget.cpp
     stringhelpers.cpp
     debugsession.cpp
     gdblaunchconfig.cpp
     selectcoredialog.cpp
+    variablecontroller.cpp
 )
 
 set(kdevgdb_PART_UI
@@ -76,8 +74,6 @@ set(gdbtest_PART_SRCS
     gdbcommand.cpp
     gdbparser.cpp
     stty.cpp
-    variablewidget.cpp
-    variablecollection.cpp
     disassemblewidget.cpp
     memviewdlg.cpp
     processselection.cpp
@@ -88,9 +84,9 @@ set(gdbtest_PART_SRCS
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
-    tooltipwidget.cpp
     stringhelpers.cpp
     debugsession.cpp
+    variablecontroller.cpp
 )
 
 kde4_add_ui_files(gdbtest_PART_SRCS

@@ -59,7 +59,6 @@ class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
 class GDBController;
-class VariableWidget;
 class GDBOutputWidget;
 class ViewerWidget;
 class DebugSession;

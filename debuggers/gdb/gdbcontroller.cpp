@@ -50,7 +50,6 @@
 #include "stty.h"
 #include "mi/miparser.h"
 #include "gdbcommandqueue.h"
-#include "variablecollection.h"
 #include "stackmanager.h"
 #include "breakpointcontroller.h"
 #include "gdb.h"
@@ -80,16 +79,12 @@ GDBController::GDBController(QObject* parent)
         state_reload_needed(false),
         stateReloadInProgress_(false),
         gdb_(0),
-        m_variableCollection(new VariableCollection(this)),
         m_stackManager(new StackManager(this))
 {
     configure();
 
     Q_ASSERT(! debug_controllerExists);
     debug_controllerExists = true;
-
-    connect(this, SIGNAL(event(event_t)),
-            m_variableCollection, SLOT(slotEvent(event_t)));
 }
 
 // **************************************************************************
@@ -357,15 +352,6 @@ void GDBController::programStopped(const GDBMI::ResultRecord& r)
 
     QString reason;
     if (r.hasField("reason")) reason = r["reason"].literal();
-
-    if (reason == "function-finished" && r.hasField("gdb-result-var"))
-    {
-        variables()->watches()->addFinishResult(r["gdb-result-var"].literal());
-    }
-    else
-    {
-        variables()->watches()->removeFinishResult();
-    }
 
     if (reason == "exited-normally" || reason == "exited")
     {
@@ -1290,11 +1276,6 @@ void GDBController::slotRestart()
     // would not work.
     slotKill();
     slotRun();
-}
-
-VariableCollection * GDBController::variables() const
-{
-    return m_variableCollection;
 }
 
 StackManager * GDBController::stackManager() const

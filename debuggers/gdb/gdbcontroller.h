@@ -50,7 +50,6 @@ class GDBCommand;
 class VarItem;
 class STTY;
 class CommandQueue;
-class VariableCollection;
 class StackManager;
 class GDB;
 
@@ -167,11 +166,6 @@ public:
     int currentFrame() const;
 
     bool stateIsOn(DBGStateFlags state);
-
-    /**
-     * Return the shared variable collection cache
-     */
-    VariableCollection* variables() const;
 
     /**
      * Return the shared frame stack model
@@ -337,7 +331,6 @@ private:
 
     QPointer<GDB> gdb_;
 
-    VariableCollection* m_variableCollection;
     StackManager* m_stackManager;
 };
 

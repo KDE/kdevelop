@@ -14,7 +14,6 @@
  ***************************************************************************/
 
 #include "gdbcommand.h"
-#include "variablewidget.h"
 
 using namespace GDBMI;
 
@@ -62,8 +61,11 @@ GDBCommand::invokeHandler(const GDBMI::ResultRecord& r)
         (handler_this->*handler_method)(r);
         return true;
     } else if (commandHandler_) {
+        bool autoDelete = commandHandler_->autoDelete(); //ask before calling handler as it might deleted itself in handler
         commandHandler_->handle(r);
-        delete commandHandler_;
+        if (autoDelete) {
+            delete commandHandler_;
+        }
         commandHandler_ = 0;
         return true;
     } else {
