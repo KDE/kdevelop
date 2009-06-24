@@ -229,7 +229,9 @@ PersistentSymbolTable::PersistentSymbolTable() : d(new PersistentSymbolTablePriv
 
 PersistentSymbolTable::~PersistentSymbolTable()
 {
-  delete d;
+  //Workaround for a strange destruction-order related crash duing shutdown
+  //We just let the data leak. This doesn't hurt, as there is no meaningful destructors.
+//   delete d;
 }
 
 void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
