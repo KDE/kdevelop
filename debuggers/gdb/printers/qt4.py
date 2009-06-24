@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 # Pretty-printers for Qt4.
 
 # Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
@@ -26,6 +27,37 @@ class QStringPrinter:
 
     def to_string(self):
         return self.val['d']['data'].string('UTF-16')
+
+    def display_hint (self):
+        return 'string'
+
+class QByteArrayPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    class _iterator:
+        def __init__(self, data, size):
+            self.data = data
+            self.size = size
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.count >= self.size:
+                raise StopIteration
+            count = self.count
+            self.count = self.count + 1
+            return ('[%d]' % count, self.data[count])
+
+    def children(self):
+        return self._iterator(self.val['d']['data'], self.val['d']['size'])
+
+    def to_string(self):
+        #todo: handle charset correctly
+        return self.val['d']['data'].string()
 
     def display_hint (self):
         return 'string'
@@ -190,6 +222,23 @@ class QTimePrinter:
         msec = ds % 1000
         return "%02d:%02d:%02d.%03d" % (hour, minute, second, msec)
 
+class QDateTimePrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        #val['d'] is a QDateTimePrivate, but for some reason casting to that doesn't work
+        #so work around by manually adjusting the pointer
+        date = self.val['d'].cast(gdb.lookup_type('char').pointer());
+        date += gdb.lookup_type('int').sizeof #increment for QAtomicInt ref;
+        date = date.cast(gdb.lookup_type('QDate').pointer()).dereference();
+
+        time = self.val['d'].cast(gdb.lookup_type('char').pointer());
+        time += gdb.lookup_type('int').sizeof + gdb.lookup_type('QDate').sizeof #increment for QAtomicInt ref; and QDate date;
+        time = time.cast(gdb.lookup_type('QTime').pointer()).dereference();
+        return "%s %s" % (date, time)
+
 def register_qt4_printers (obj):
     if obj == None:
         obj = gdb
@@ -226,11 +275,13 @@ def lookup_function (val):
 
 def build_dictionary ():
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
+    pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QString')
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)
     pretty_printers_dict[re.compile('^QTime$')] = lambda val: QTimePrinter(val)
+    pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
 
 
 pretty_printers_dict = {}
