@@ -61,14 +61,7 @@ void VariableController::slotEvent(event_t e)
     {
         case program_exited:
         case debugger_exited:
-        {
-            KDevelop::Variable::markAllDead();
-
-            // Remove all locals.
-            variableCollection()->locals()->clear();
-
             break;
-        }
 
         case connected_to_program:
             variableCollection()->watches()->reinstall();
