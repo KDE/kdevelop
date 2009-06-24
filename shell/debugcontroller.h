@@ -51,6 +51,7 @@ public:
     virtual ContextMenuExtension contextMenuExtension( Context* context );
 
     virtual BreakpointModel* breakpointModel();
+    virtual VariableCollection* variableCollection();
 
 private Q_SLOTS:
     void restartDebugger();
@@ -96,6 +97,7 @@ private:
 
     QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
+    VariableCollection *m_variableCollection;
 };
 
 }

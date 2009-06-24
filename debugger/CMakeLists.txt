@@ -8,6 +8,7 @@ set( kdevplatformdebugger_LIB_SRCS
     interfaces/stackmodel.cpp
     interfaces/stackitem.cpp
     interfaces/ibreakpointcontroller.cpp
+    interfaces/ivariablecontroller.cpp
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
@@ -15,10 +16,14 @@ set( kdevplatformdebugger_LIB_SRCS
     breakpoint/breakpointmodel.cpp
     breakpoint/breakpointwidget.cpp
     breakpoint/breakpointdetails.cpp
+    variable/variablewidget.cpp
+    variable/variablecollection.cpp
+    variable/variabletooltip.cpp
 )
 kde4_add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
 target_link_libraries(kdevplatformdebugger
         kdevplatforminterfaces
+        kdevplatformutil
         ${QT_QTCORE_LIBRARY} 
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
@@ -37,6 +42,7 @@ install(FILES
     interfaces/stackmodel.h
     interfaces/stackitem.h
     interfaces/ibreakpointcontroller.h
+    interfaces/ivariablecontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
 )
 install(FILES
@@ -51,4 +57,8 @@ install(FILES
     breakpoint/breakpoint.h
     breakpoint/breakpointmodel.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/breakpoint COMPONENT Devel
+)
+install(FILES
+    variable/variablecollection.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/variable COMPONENT Devel
 )

@@ -18,37 +18,44 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-
-#ifndef IDEBUGCONTROLLER_H
-#define IDEBUGCONTROLLER_H
+#ifndef KDEVELOP_IVARIABLECONTROLLER_H
+#define KDEVELOP_IVARIABLECONTROLLER_H
 
 #include <QtCore/QObject>
-#include "interfacesexport.h"
+
+#include "../debuggerexport.h"
+
+namespace KTextEditor {
+class Document;
+class Cursor;
+}
 
 namespace KDevelop {
 
-class VariableCollection;
-class BreakpointModel;
-class ContextMenuExtension;
-class Context;
 class IDebugSession;
+class VariableCollection;
+class Variable;
 
-class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
+class KDEVPLATFORMDEBUGGER_EXPORT IVariableController : public QObject
 {
     Q_OBJECT
 public:
-    IDebugController(QObject *parent = 0);
-    virtual ~IDebugController();
+    IVariableController(IDebugSession* parent);
 
-    virtual void addSession(IDebugSession* session) = 0;
-    virtual IDebugSession *currentSession() = 0;
-    virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
+    virtual void createVarobj(Variable *variable, QObject *callback = 0, const char *callbackMethod = 0) = 0;
+    virtual void fetchMoreChildren(Variable* variable) = 0;
+    virtual void deleteVar(Variable* variable) = 0;
 
-    virtual BreakpointModel *breakpointModel() = 0;
-    virtual VariableCollection *variableCollection() = 0;
+    virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) = 0;
 
-Q_SIGNALS:
-    void sessionAdded(IDebugSession* session);
+    virtual void addWatch(Variable* variable) = 0;
+    virtual void addWatchpoint(Variable* variable) = 0;
+
+protected:
+    /**
+     * Convenience function that returns the VariableCollection
+     **/
+    VariableCollection *variableCollection();
 };
 
 }

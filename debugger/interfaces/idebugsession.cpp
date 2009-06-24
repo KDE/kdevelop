@@ -29,7 +29,7 @@ namespace KDevelop {
 
 
 IDebugSession::IDebugSession()
-    : m_breakpointController(0)
+    : m_breakpointController(0), m_variableController(0)
 {
 }
 
@@ -43,10 +43,17 @@ bool IDebugSession::isRunning() const
     return (s == ActiveState || s == PausedState);
 }
 
-KDevelop::IBreakpointController* IDebugSession::breakpointController()
+IBreakpointController *IDebugSession::breakpointController()
 {
     return m_breakpointController;
 }
+
+
+IVariableController *IDebugSession::variableController()
+{
+    return m_variableController;
+}
+
 
 }
 

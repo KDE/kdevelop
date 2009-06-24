@@ -18,39 +18,23 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#include "ivariablecontroller.h"
 
-#ifndef IDEBUGCONTROLLER_H
-#define IDEBUGCONTROLLER_H
-
-#include <QtCore/QObject>
-#include "interfacesexport.h"
+#include "idebugsession.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/idebugcontroller.h"
 
 namespace KDevelop {
 
-class VariableCollection;
-class BreakpointModel;
-class ContextMenuExtension;
-class Context;
-class IDebugSession;
-
-class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
+    
+IVariableController::IVariableController(IDebugSession* parent)
+    : QObject(parent)
 {
-    Q_OBJECT
-public:
-    IDebugController(QObject *parent = 0);
-    virtual ~IDebugController();
-
-    virtual void addSession(IDebugSession* session) = 0;
-    virtual IDebugSession *currentSession() = 0;
-    virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
-
-    virtual BreakpointModel *breakpointModel() = 0;
-    virtual VariableCollection *variableCollection() = 0;
-
-Q_SIGNALS:
-    void sessionAdded(IDebugSession* session);
-};
-
 }
 
-#endif
+VariableCollection* IVariableController::variableCollection()
+{
+    return ICore::self()->debugController()->variableCollection();
+}
+
+}

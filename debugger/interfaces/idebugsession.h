@@ -27,6 +27,8 @@
 class KUrl;
 
 namespace KDevelop {
+
+class IVariableController;
 class IBreakpointController;
 class Breakpoint;
 class StackModel;
@@ -68,6 +70,7 @@ public:
     bool isRunning() const;
     
     IBreakpointController *breakpointController();
+    IVariableController *variableController();
 
 public Q_SLOTS:
     virtual void restartDebugger() = 0;
@@ -93,6 +96,7 @@ Q_SIGNALS:
 protected:
 
     IBreakpointController *m_breakpointController;
+    IVariableController *m_variableController;
 };
 
 }

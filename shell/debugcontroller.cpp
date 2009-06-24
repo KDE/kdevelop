@@ -47,6 +47,7 @@
 #include "core.h"
 #include "../debugger/breakpoint/breakpointmodel.h"
 #include "../debugger/breakpoint/breakpointwidget.h"
+#include "../debugger/variable/variablewidget.h"
 
 
 namespace KDevelop {
@@ -94,7 +95,9 @@ private:
 };
 
 DebugController::DebugController(QObject *parent)
-    : IDebugController(parent), KXMLGUIClient(), m_breakpointModel(new BreakpointModel(this))
+    : IDebugController(parent), KXMLGUIClient(),
+      m_breakpointModel(new BreakpointModel(this)),
+      m_variableCollection(new VariableCollection(this))
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
@@ -114,6 +117,12 @@ DebugController::DebugController(QObject *parent)
             this, "org.kdevelop.debugger.BreakpointsView",
             Qt::BottomDockWidgetArea));
 
+    ICore::self()->uiController()->addToolView(
+        i18n("Variables"),
+        new DebuggerToolFactory<VariableWidget>(
+            this, "org.kdevelop.debugger.VariablesView",
+            Qt::LeftDockWidgetArea));
+
     foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
         partAdded(p);
     connect(KDevelop::ICore::self()->partController(),
@@ -132,6 +141,12 @@ BreakpointModel* DebugController::breakpointModel()
 {
     return m_breakpointModel;
 }
+
+VariableCollection* DebugController::variableCollection()
+{
+    return m_variableCollection;
+}
+
 
 void DebugController::partAdded(KParts::Part* part)
 {
