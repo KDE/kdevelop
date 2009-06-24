@@ -214,6 +214,7 @@ void TreeItem::setHasMore(bool more)
     {
         model_->beginRemoveRows(index, childItems.size(), childItems.size());
         delete ellipsis_;
+        ellipsis_ = 0;
         more_ = more;
         model_->endRemoveRows();
     }
