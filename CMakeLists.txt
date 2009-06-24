@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDEVELOP_VERSION_MAJOR 3 )
 set( KDEVELOP_VERSION_MINOR 9 )
-set( KDEVELOP_VERSION_PATCH 93 )
+set( KDEVELOP_VERSION_PATCH 94 )
 
 set(KDE_MIN_VERSION "4.2.0")
 find_package(KDE4 4.2.0 REQUIRED)
@@ -16,7 +16,7 @@ include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
 
-find_package(KDevPlatform 0.9.93 REQUIRED)
+find_package(KDevPlatform 0.9.94 REQUIRED)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
