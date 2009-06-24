@@ -250,18 +250,19 @@ void Controller::addDocument(Document *document)
 void Controller::areaReleased()
 {
     MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
-    kDebug() << "marking areas as mainwindow-free";
+    kDebug() << "marking areas as mainwindow-free" << w << d->controlledWindows.contains(w) << d->shownAreas.keys(w);
     foreach (Area *area, d->shownAreas.keys(w))
     {
         kDebug() << "" << area->objectName();
         areaReleased(area);
         disconnect(area, 0, w, 0);
     }
+
+    d->controlledWindows.removeAll(w);
 }
 
 void Controller::areaReleased(Sublime::Area *area)
 {
-    d->controlledWindows.removeAll(d->shownAreas[area]);
     d->shownAreas.remove(area);
     d->namedAreas.remove(area->objectName());
 }
