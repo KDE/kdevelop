@@ -24,6 +24,7 @@
 #include <QtCore/QObject>
 
 #include "../debuggerexport.h"
+#include "idebugsession.h"
 
 namespace KTextEditor {
 class Document;
@@ -56,6 +57,9 @@ protected:
      * Convenience function that returns the VariableCollection
      **/
     VariableCollection *variableCollection();
+
+private slots:
+    void stateChanged(KDevelop::IDebugSession::DebuggerState state);
 };
 
 }

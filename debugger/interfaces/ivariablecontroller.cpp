@@ -23,6 +23,7 @@
 #include "idebugsession.h"
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
+#include "../variable/variablecollection.h"
 
 namespace KDevelop {
 
@@ -30,11 +31,24 @@ namespace KDevelop {
 IVariableController::IVariableController(IDebugSession* parent)
     : QObject(parent)
 {
+    connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+             SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 VariableCollection* IVariableController::variableCollection()
 {
     return ICore::self()->debugController()->variableCollection();
+}
+
+
+void IVariableController::stateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::EndedState) {
+        // Remove all locals.
+        variableCollection()->locals()->clear();
+
+        KDevelop::Variable::markAllDead();
+    }
 }
 
 }
