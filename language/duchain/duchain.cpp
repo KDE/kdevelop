@@ -473,9 +473,20 @@ kDebug() << index << removed << removed2;
     uint listIndex = m_environmentListInfo.findIndex(url);
 
     if(listIndex) {
-      QMutexLocker lock(m_environmentListInfo.mutex()); //Lock the mutex to make sure the item isn't changed while it's being iterated
-      const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(listIndex);
-      FOREACH_FUNCTION(uint topContextIndex, item->items) {
+      KDevVarLengthArray<uint> topContextIndices;
+      
+      {
+        //First store all the possible intices into the KDevVarLengthArray, so we can unlock the mutex before processing them.
+        
+        QMutexLocker lock(m_environmentListInfo.mutex()); //Lock the mutex to make sure the item isn't changed while it's being iterated
+        const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(listIndex);
+        FOREACH_FUNCTION(uint topContextIndex, item->items)
+          topContextIndices << topContextIndex;
+      }
+      
+      //Process the indices in a separate step after copying them from the array, so we don't need m_environmentListInfo.mutex locked,
+      //and can call loadInformation(..) safely, which else might lead to a deadlock.
+      FOREACH_ARRAY(uint topContextIndex, topContextIndices) {
         KSharedPtr< ParsingEnvironmentFile > p = ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
         if(p) {
          ret << p;
@@ -824,6 +835,7 @@ kDebug() << index << removed << removed2;
 
   ///Loads/gets the environment-information for the given top-context index, or returns zero if none exists
   ///@warning m_chainsMutex should NOT be locked when this is called, because it triggers I/O
+  ///@warning no other mutexes should be locked, as that may lead to a dedalock
   ParsingEnvironmentFile* loadInformation(uint topContextIndex) {
 
     ParsingEnvironmentFile* alreadyLoaded = findInformation(topContextIndex);
@@ -839,14 +851,13 @@ kDebug() << index << removed << removed2;
 
     const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(dataIndex));
 
-    QMutexLocker lock(&m_chainsMutex);
-    
     alreadyLoaded = findInformation(topContextIndex);
     if(alreadyLoaded)
       return alreadyLoaded;
     
     ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create( (DUChainBaseData*)(((char*)&item) + sizeof(EnvironmentInformationItem)) ));
     if(ret) {
+      QMutexLocker lock(&m_chainsMutex);
       Q_ASSERT(ret->d_func()->classId);
       Q_ASSERT(ret->indexedTopContext().index() == topContextIndex);
       ParsingEnvironmentFilePointer retPtr(ret);
