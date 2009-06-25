@@ -1188,6 +1188,7 @@ void QuickOpenLineEdit::activate() {
 void QuickOpenLineEdit::deactivate() {
     kDebug() << "deactivating";
     
+    clear();
    if (m_widget) {
         m_widget->deleteLater();
         QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
