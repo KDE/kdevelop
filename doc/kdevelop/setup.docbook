@@ -414,7 +414,7 @@ The <guilabel>Toolview Tab Layout</guilabel> configuration section will be avail
 <varlistentry>
   <term><guilabel>Text</guilabel></term>
   <listitem><para>
-  This is the default toolview tab display mode. Each tab displays the name of its associated toolwiew.
+  This is the default toolview tab display mode. Each tab displays the name of its associated toolview.
   </para></listitem>
 </varlistentry>
 <varlistentry>

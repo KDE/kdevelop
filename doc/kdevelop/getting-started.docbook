@@ -158,7 +158,7 @@ see the <link linkend="commands">Command Reference</link>.</para>
   <varlistentry>
   <term><guimenu>View</guimenu></term>
   <listitem>
-    <para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there is a project currently open. I this case there will be the following actions available (amongst others):</para>
+    <para>Like the <guimenu>Edit</guimenu> menu, this menu is useful only if there is a project currently open. In this case there will be the following actions available (amongst others):</para>
     <formalpara><title>Navigation History</title>
     <para>Switch back and forth through the documents &etc; you visited.</para>
     </formalpara>

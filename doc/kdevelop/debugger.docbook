@@ -57,7 +57,7 @@ The debugger frontend offers several views <quote>into</quote> the process:
 
 <para>If you try to debug a project without debugging information, you get
 the message <computeroutput>No source...</computeroutput> in the status
-bar.If you try to set a breakpoint, it is shown as <computeroutput>Pending
+bar. If you try to set a breakpoint, it is shown as <computeroutput>Pending
 (add)</computeroutput> in the breakpoint window (see below).
 </para>
 
