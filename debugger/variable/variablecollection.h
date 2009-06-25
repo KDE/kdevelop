@@ -131,7 +131,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
 public:
     Locals(TreeModel* model, TreeItem* parent);
     void updateLocals(QStringList locals);
-    using TreeItem::clear;
+    void deleteLocals();
 
 private:
     void fetchMoreChildren() {}

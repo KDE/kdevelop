@@ -279,6 +279,16 @@ void Locals::updateLocals(QStringList locals)
 }
 
 
+void Locals::deleteLocals()
+{
+    for (int i = 0; i < childItems.size(); ++i) {
+        TreeItem* v = child(i);
+        delete v;
+    }
+    clear();
+}
+
+
 VariablesRoot::VariablesRoot(TreeModel* model)
 : TreeItem(model)
 {

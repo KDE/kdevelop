@@ -45,7 +45,8 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::EndedState) {
         // Remove all locals.
-        variableCollection()->locals()->clear();
+        variableCollection()->locals()->deleteLocals();
+ 
 
         KDevelop::Variable::markAllDead();
     }
