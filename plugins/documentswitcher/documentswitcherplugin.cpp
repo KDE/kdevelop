@@ -238,8 +238,13 @@ void DocumentSwitcherPlugin::removeMainWindow( QObject* obj )
 
 void DocumentSwitcherPlugin::changeArea( Sublime::Area* area ) 
 {
+
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
+    
+    //Since the main-window only emits aboutToRemoveView for views within the current area, we must forget all areas except the active one 
+    documentLists.remove(mainwindow);
+    
     if( !documentLists[mainwindow].contains( area ) )
     {
         storeAreaViewList( mainwindow, area );
