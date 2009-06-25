@@ -186,7 +186,6 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
       Q_ASSERT(folder->folder());
     } else if(!folder) {
       QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
-      kDebug() << ">>>>>>>>>>>>> " << newClassWizard.implementationUrl().upUrl() << folderList;
       if(folderList.isEmpty())
         return;
       folder = folderList.first();
