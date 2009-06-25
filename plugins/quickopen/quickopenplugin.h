@@ -122,7 +122,7 @@ class QuickOpenWidget : public QFrame {
   void setPreselectedText(const QString &text);
     void prepareShow();
 
-  void setAlternativeSearchField(QLineEdit* alterantiveSearchField);
+  void setAlternativeSearchField(KLineEdit* alterantiveSearchField);
     
   //Shows OK + Cancel. By default they are hidden  
   void showStandardButtons(bool show);
@@ -173,7 +173,7 @@ class QuickOpenWidgetDialog : public QObject {
   QuickOpenWidget* m_widget;
 };
 
-class QuickOpenLineEdit : public QLineEdit {
+class QuickOpenLineEdit : public KLineEdit {
   Q_OBJECT
   public:
     QuickOpenLineEdit() ;
