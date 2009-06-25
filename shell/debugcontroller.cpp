@@ -286,6 +286,8 @@ void DebugController::addSession(IDebugSession* session)
     updateDebuggerState(session->state(), session);
     
     emit sessionAdded(session);
+
+    ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
 }
 
 void DebugController::clearExecutionPoint()
