@@ -176,25 +176,23 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
   
   CppNewClass newClassWizard(qApp->activeWindow(), u);
   int result=newClassWizard.exec();
-  if(result==QDialog::Accepted) {
-    if(!item)
-      return;
+  if(result==QDialog::Accepted && item) {
     IProject* p=item->project();
-    QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
-    if(folderList.isEmpty())
-      return;
-    ProjectFolderItem* folder = folderList.first();
+    ProjectFolderItem* folder=item->folder();
+    ProjectTargetItem* target=item->target();
     
-    if(!item)
-      item=folder;
-    ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.implementationUrl(), folder);
-    ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.headerUrl(), folder);
+    if(target) {
+      folder=static_cast<ProjectFolderItem*>(item->target()->parent());
+      Q_ASSERT(folder->folder());
+    } else if(!folder) {
+      QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
+      kDebug() << ">>>>>>>>>>>>> " << newClassWizard.implementationUrl().upUrl() << folderList;
+      if(folderList.isEmpty())
+        return;
+      folder = folderList.first();
+    }
     
-    if(item->target()) {
-      p->buildSystemManager()->addFileToTarget(file, item->target());
-      p->buildSystemManager()->addFileToTarget(header, item->target());
-    } else if(item->project()->buildSystemManager() &&
-              item->project()->buildSystemManager()->features() & IBuildSystemManager::Targets) {
+    if(!target && item->project()->buildSystemManager()->features() & IBuildSystemManager::Targets && folder) {
       QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
       for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
         KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
@@ -204,7 +202,7 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
       if(t.isEmpty()) //Do not do anything
       {}
       if(t.count()==1) //Just choose this one
-        p->buildSystemManager()->addFileToTarget(file, t.first());
+        target=t.first();
       else {
         KDialog d;
         QWidget *w=new QWidget(&d);
@@ -226,8 +224,17 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
           if(targetsWidget->selectedItems().isEmpty())
             QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
           else
-            p->buildSystemManager()->addFileToTarget(file, t[targetsWidget->currentRow()]);
+            target= t[targetsWidget->currentRow()];
         }
+      }
+    }
+    
+    if(folder) {
+      ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.implementationUrl(), folder);
+      ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.headerUrl(), folder);
+      if(target) {
+        p->buildSystemManager()->addFileToTarget(file, target);
+        p->buildSystemManager()->addFileToTarget(header, target);
       }
     }
   }
