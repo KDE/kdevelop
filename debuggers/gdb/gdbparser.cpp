@@ -14,7 +14,6 @@
 // **************************************************************************
 
 #include "gdbparser.h"
-#include "variablewidget.h"
 #include <kdebug.h>
 
 #include <QRegExp>
