@@ -227,7 +227,10 @@ void UiController::mainWindowDeleted(MainWindow* mw)
 // should just rename it.
 void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 {
-    Q_UNUSED( switchMode );
+    if (switchMode == ThisWindow) {
+        showArea(areaName, activeSublimeWindow());
+        return;
+    }
 
     MainWindow *main = new MainWindow(this);
     // FIXME: what this is supposed to do?
