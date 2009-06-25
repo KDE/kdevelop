@@ -37,6 +37,7 @@
 #include <KTextEditor/SmartCursorNotifier>
 #include <KConfigGroup>
 
+#define IF_DEBUG(x)
 
 using namespace KDevelop;
 using namespace KTextEditor;
@@ -166,7 +167,7 @@ bool KDevelop::BreakpointModel::removeRows(int row, int count, const QModelIndex
     for (int i=0; i < count; ++i) {
         Breakpoint *b = m_breakpoints.at(row);
         m_breakpoints.removeAt(row);
-        kDebug() << m_breakpoints;
+        IF_DEBUG ( kDebug() << m_breakpoints; )
         if (!b->deleted()) b->setDeleted();
         emit breakpointDeleted(b);
     }
@@ -344,7 +345,7 @@ void KDevelop::BreakpointModel::updateMarks()
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
         uint type = breakpointType(breakpoint);
-        kDebug() << type << breakpoint->url() << mark->mark(breakpoint->line());
+        IF_DEBUG( kDebug() << type << breakpoint->url() << mark->mark(breakpoint->line()); )
 
         doc->textDocument()->blockSignals(true);
         if (mark->mark(breakpoint->line()) & AllBreakpointMarks) {
@@ -366,7 +367,7 @@ void KDevelop::BreakpointModel::updateMarks()
         doc->textDocument()->blockSignals(true);
         foreach (KTextEditor::Mark *m, mark->marks()) {
             if (!(m->type & AllBreakpointMarks)) continue;
-            kDebug() << m->line << m->type;
+            IF_DEBUG( kDebug() << m->line << m->type; )
             foreach (Breakpoint *breakpoint, m_breakpoints) {
                 if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
                 if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
@@ -382,7 +383,7 @@ void KDevelop::BreakpointModel::updateMarks()
 
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
-    kDebug();
+    IF_DEBUG( kDebug(); )
     foreach (Breakpoint *breakpoint, m_breakpoints) {
             if (breakpoint->smartCursor()) {
             if (breakpoint->smartCursor()->document() != doc->textDocument()) continue;

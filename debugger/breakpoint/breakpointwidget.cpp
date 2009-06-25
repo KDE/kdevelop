@@ -38,6 +38,8 @@
 #include "../breakpoint/breakpointmodel.h"
 #include "../../shell/debugcontroller.h"
 
+#define IF_DEBUG(x)
+
 using namespace KDevelop;
 
 BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
@@ -278,7 +280,7 @@ void BreakpointWidget::slotRemoveBreakpoint()
 {
     QItemSelectionModel* sel = table_->selectionModel();
     QModelIndexList selected = sel->selectedIndexes();
-    kDebug() << selected;
+    IF_DEBUG( kDebug() << selected; )
     if (!selected.isEmpty()) {
         m_debugController->breakpointModel()->removeRow(selected.first().row());
     }
@@ -287,7 +289,7 @@ void BreakpointWidget::slotRemoveBreakpoint()
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
     QModelIndexList selected = table_->selectionModel()->selectedIndexes();
-    kDebug() << selected;
+    IF_DEBUG( kDebug() << selected; )
     if (selected.isEmpty()) {
         details_->setItem(0);
     } else {
@@ -297,7 +299,7 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
 
 void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 {
-    kDebug() << b;
+    IF_DEBUG( kDebug() << b; )
     QModelIndex index = m_debugController->breakpointModel()->breakpointIndex(b, 0);
     table_->selectionModel()->select(
         index,
@@ -307,7 +309,7 @@ void BreakpointWidget::breakpointHit(KDevelop::Breakpoint* b)
 
 void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& msg, int column)
 {
-    kDebug() << b << msg << column;
+    IF_DEBUG( kDebug() << b << msg << column; )
 
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.
