@@ -168,6 +168,10 @@ void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 
 void DocumentSwitcherPlugin::unload()
 {
+    foreach( Sublime::MainWindow* mw, documentLists.keys() )
+    {
+        removeMainWindow( mw );
+    }
     delete forwardAction;
     delete backwardAction;
     view->deleteLater();
