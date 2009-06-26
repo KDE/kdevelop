@@ -52,6 +52,10 @@ public:
     virtual void addWatch(Variable* variable) = 0;
     virtual void addWatchpoint(Variable* variable) = 0;
 
+    virtual void update() = 0;
+
+    void setAutoUpdate(bool autoUpdate);
+
 protected:
     /**
      * Convenience function that returns the VariableCollection
@@ -60,6 +64,9 @@ protected:
 
 private slots:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
+
+private:
+    bool m_autoUpdate;
 };
 
 }

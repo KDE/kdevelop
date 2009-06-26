@@ -40,6 +40,7 @@
 
 #include "../../interfaces/icore.h"
 #include "../../shell/debugcontroller.h"
+#include "../interfaces/ivariablecontroller.h"
 #include "variablecollection.h"
 
 /** The variables widget is passive, and is invoked by the rest of the
@@ -98,6 +99,8 @@ VariableWidget::VariableWidget(DebugController* controller, QWidget *parent)
     connect(watchVarEditor_, SIGNAL(returnPressed(const QString &)),
             this, SLOT(slotAddWatch(const QString&)));
 
+    connect(controller, SIGNAL(sessionAdded(IDebugSession*)), SLOT(sessionAdded(IDebugSession*)));
+
     //TODO
     //connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
 
@@ -123,6 +126,11 @@ VariableWidget::VariableWidget(DebugController* controller, QWidget *parent)
 
 }
 
+void VariableWidget::sessionAdded(IDebugSession *session)
+{
+    session->variableController()->setAutoUpdate(isVisible());
+}
+
 void VariableWidget::slotAddWatch(const QString &expression)
 {
     if (!expression.isEmpty())
@@ -138,6 +146,24 @@ void VariableWidget::slotAddWatch(const QString &expression)
         */
         //varTree_->setExpanded(index, true);
         watchVarEditor_->clearEditText();
+    }
+}
+
+void VariableWidget::hideEvent(QHideEvent* e)
+{
+    QWidget::hideEvent(e);
+    IDebugSession *session = ICore::self()->debugController()->currentSession();
+    if (session) {
+        session->variableController()->setAutoUpdate(false);
+    }
+}
+
+void VariableWidget::showEvent(QShowEvent* e)
+{
+    QWidget::showEvent(e);
+    IDebugSession *session = ICore::self()->debugController()->currentSession();
+    if (session) {
+        session->variableController()->setAutoUpdate(true);
     }
 }
 

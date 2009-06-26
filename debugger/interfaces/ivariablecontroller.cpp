@@ -29,7 +29,7 @@ namespace KDevelop {
 
     
 IVariableController::IVariableController(IDebugSession* parent)
-    : QObject(parent)
+    : QObject(parent), m_autoUpdate(false)
 {
     connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
              SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
@@ -46,9 +46,19 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
     if (state == IDebugSession::EndedState) {
         // Remove all locals.
         variableCollection()->locals()->deleteLocals();
- 
-
         KDevelop::Variable::markAllDead();
+    } else if (state == IDebugSession::PausedState) {
+        if (m_autoUpdate) update();
+    }
+}
+
+
+void IVariableController::setAutoUpdate(bool autoUpdate)
+{
+    IDebugSession::DebuggerState state = static_cast<IDebugSession*>(parent())->state();
+    m_autoUpdate = autoUpdate;
+    if (autoUpdate && state == IDebugSession::PausedState) {
+        update();
     }
 }
 

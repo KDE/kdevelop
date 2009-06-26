@@ -51,6 +51,13 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotAddWatch(const QString &ident);
 
+private Q_SLOTS:
+    void sessionAdded(IDebugSession*);
+
+protected:
+    virtual void showEvent(QShowEvent* e);
+    virtual void hideEvent(QHideEvent* e);
+
 private:
     VariableTree *varTree_;
     KLineEdit *watchVarEntry_;
