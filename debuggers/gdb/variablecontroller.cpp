@@ -41,7 +41,6 @@ VariableController::VariableController(DebugSession* parent)
     : KDevelop::IVariableController(parent)
 {
     Q_ASSERT(parent);
-    connect(controller(), SIGNAL(event(event_t)), SLOT(slotEvent(event_t)));
     connect(parent, SIGNAL(programStopped(GDBMI::ResultRecord)), SLOT(programStopped(GDBMI::ResultRecord)));
 }
 
@@ -53,44 +52,6 @@ DebugSession *VariableController::debugSession() const
 GDBController *VariableController::controller() const
 {
     return debugSession()->controller();
-}
-
-void VariableController::slotEvent(event_t e)
-{
-    switch(e)
-    {
-        case program_exited:
-        case debugger_exited:
-            break;
-
-        case connected_to_program:
-            variableCollection()->watches()->reinstall();
-            break;
-
-        case program_state_changed:
-
-            // Fall-through intended.
-
-        case thread_or_frame_changed:
-
-            // FIXME: probably should do this only on the
-            // first stop.
-            variableCollection()->watches()->reinstall();
-            updateLocals();
-            update();
-
-            #if 0
-            {
-                FrameItem *frame = currentFrame();
-
-                frame->setDirty();
-            }
-            #endif
-            break;
-
-        default:
-            break;
-    }
 }
 
 void VariableController::programStopped(const GDBMI::ResultRecord& r)
@@ -106,9 +67,14 @@ void VariableController::programStopped(const GDBMI::ResultRecord& r)
 
 void VariableController::update()
 {
+    variableCollection()->watches()->reinstall();
+
+    updateLocals();
+
     controller()->addCommand(
         new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
                        &VariableController::handleVarUpdate));
+
 }
 
 void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)

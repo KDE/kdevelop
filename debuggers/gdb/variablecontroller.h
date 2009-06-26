@@ -51,16 +51,15 @@ public:
     virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor);
     virtual void addWatch(KDevelop::Variable* variable);
     virtual void addWatchpoint(KDevelop::Variable* variable);
+    virtual void update();
 
 private slots:
-    void slotEvent(event_t);
     void programStopped(const GDBMI::ResultRecord &r);
 
 private:
     GDBController* controller() const;
     DebugSession* debugSession() const;
 
-    void update();
     void updateLocals();
 
     void handleVarUpdate(const GDBMI::ResultRecord& r);

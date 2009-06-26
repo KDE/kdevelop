@@ -55,7 +55,7 @@ DebugSession::DebugSession(GDBController* controller)
     , m_config(KGlobal::config(), "GDB Debugger")
 {
     m_breakpointController = new BreakpointController(this);
-    m_variableController = new  VariableController(this);
+    m_variableController = new VariableController(this);
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
