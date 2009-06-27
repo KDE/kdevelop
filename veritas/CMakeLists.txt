@@ -29,8 +29,8 @@ set(veritas_SRCS
     internal/resultswidget.cpp
     internal/itestframework_p.cpp
     internal/test_p.cpp
-    tests/runnertesthelper.cpp # Actual tests of concrete frameworks use these.
-    tests/testutils.cpp)       # eg QTestRunnerTest, CppUnitRunnerTest
+    tests/runnertesthelper.cpp )# Actual tests of concrete frameworks use these.
+                               # eg QTestRunnerTest, CppUnitRunnerTest
                                # Before ui_* and other internals were installed
                                # to make this possible, which is bad.
     #${CMAKE_SOURCE_DIR}/tests/modeltest.cpp)
@@ -45,6 +45,7 @@ kde4_add_library(kdevplatformveritas SHARED ${veritas_SRCS})
 set_target_properties(kdevplatformveritas PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 target_link_libraries(kdevplatformveritas
     kdevplatforminterfaces
+    kdevplatformtests
     sublime
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}

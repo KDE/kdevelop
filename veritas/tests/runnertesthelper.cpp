@@ -29,9 +29,11 @@
 #include "../internal/runnermodel.h"
 #include "../internal/runnerwindow.h"
 #include "../test.h"
+#include <tests/kdevsignalspy.h>
 
 using Veritas::RunnerTestHelper;
 using Veritas::Test;
+using KDevelop::KDevSignalSpy;
 
 RunnerTestHelper::RunnerTestHelper()
     : m_window(0), m_show(false), m_timeout(2000)
