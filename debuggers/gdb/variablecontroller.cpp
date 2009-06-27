@@ -151,7 +151,6 @@ public:
         m_controller->addCommand(                    //dont'show value, low-frame, high-frame
             new GDBCommand(GDBMI::StackListArguments, "0 0 0",
                         new StackListArgumentsHandler(localsName)));
-        KDevelop::ICore::self()->debugController()->variableCollection()->locals()->updateLocals(localsName);
     }
 
 private:
