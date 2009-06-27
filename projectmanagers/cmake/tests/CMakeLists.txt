@@ -1,6 +1,7 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/projectmanagers/cmake
     ${CMAKE_SOURCE_DIR}/projectmanagers/cmake/parser
+    ${KDEVPLATFORM_INCLUDE_DIR}
 )
 
 set(CMAKE_TEST_LIBRARIES 
@@ -35,4 +36,7 @@ target_link_libraries( cmakeprojectvisitortest ${CMAKE_TEST_LIBRARIES}
 
 kde4_add_unit_test( cmakeparserutilstest cmakeparserutilstest.cpp)
 target_link_libraries( cmakeparserutilstest ${CMAKE_TEST_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
+
+kde4_add_unit_test( cmakeloadprojecttest cmakeloadprojecttest.cpp )
+target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} kdevplatformtests kdevplatformtestshell)
 
