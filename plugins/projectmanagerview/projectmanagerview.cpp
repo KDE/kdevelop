@@ -52,7 +52,7 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 
-#include "tests/common/modeltest.h"
+#include "tests/modeltest.h"
 #include "projectproxymodel.h"
 #include "projectmanagerviewplugin.h"
 #include "proxyselectionmodel.h"

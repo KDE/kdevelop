@@ -25,7 +25,7 @@
 #include "../testresult.h"
 #include "test_p.h"
 #include "utils.h"
-#include "tests/common/modeltest.h"
+#include "tests/modeltest.h"
 
 #include <KDebug>
 

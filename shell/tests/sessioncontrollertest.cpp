@@ -20,7 +20,7 @@
 #include "sessioncontrollertest.h"
 
 #include <qtest_kde.h>
-#include <tests/common/autotestshell.h>
+#include <tests/autotestshell.h>
 
 #include <kglobal.h>
 #include <kdebug.h>

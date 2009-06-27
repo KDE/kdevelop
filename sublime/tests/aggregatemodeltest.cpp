@@ -23,7 +23,7 @@
 #include <QStandardItemModel>
 
 #include <sublime/aggregatemodel.h>
-#include <tests/common/modeltest.h>
+#include <tests/modeltest.h>
 
 #include <qtest_kde.h>
 
@@ -36,7 +36,7 @@ void AggregateModelTest::modelAggregationInASingleView()
     model->addModel("Second Model", newModel());
 
     //this will assert in case of model problems and the test will fail
-    //for detailed explanation why the test failed refer to test/common/modeltest.cpp
+    //for detailed explanation why the test failed refer to test/modeltest.cpp
     new ModelTest(model, this);
 }
 

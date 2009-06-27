@@ -25,7 +25,7 @@
 #include "test_p.h"
 #include "testexecutor.h"
 #include "utils.h"
-#include "tests/common/modeltest.h"
+#include "tests/modeltest.h"
 
 #include <QColor>
 

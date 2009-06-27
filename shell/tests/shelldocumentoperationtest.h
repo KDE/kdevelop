@@ -20,7 +20,7 @@
 #define SHELLDOCUMENTOPERATIONTEST_H
 
 #include <QObject>
-#include <tests/common/autotestshell.h>
+#include <tests/autotestshell.h>
 
 using namespace KDevelop;
 

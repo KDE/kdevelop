@@ -31,7 +31,7 @@
 #include <kparts/part.h>
 #include <kio/netaccess.h>
 #include <interfaces/iplugincontroller.h>
-#include <tests/common/autotestshell.h>
+#include <tests/autotestshell.h>
 #include <shell/testcore.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>

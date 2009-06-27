@@ -38,6 +38,7 @@ add_subdirectory(veritas)
 add_subdirectory(pics)
 macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
+add_subdirectory(tests)
 
 macro_write_basic_cmake_version_file( KDevPlatformConfigVersion.cmake ${KDEVPLATFORM_VERSION_MAJOR} ${KDEVPLATFORM_VERSION_MINOR} ${KDEVPLATFORM_VERSION_PATCH} )
 configure_file( "${KDevPlatform_SOURCE_DIR}/KDevPlatformConfig.cmake.in" "${KDevPlatform_BINARY_DIR}/KDevPlatformConfig.cmake" @ONLY )

@@ -33,7 +33,7 @@ set(veritas_SRCS
     tests/testutils.cpp)       # eg QTestRunnerTest, CppUnitRunnerTest
                                # Before ui_* and other internals were installed
                                # to make this possible, which is bad.
-    #${CMAKE_SOURCE_DIR}/tests/common/modeltest.cpp)
+    #${CMAKE_SOURCE_DIR}/tests/modeltest.cpp)
 
 kde4_add_ui_files(veritas_SRCS
     internal/runnerwindow.ui)

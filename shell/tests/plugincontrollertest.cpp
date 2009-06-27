@@ -30,7 +30,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <tests/common/autotestshell.h>
+#include <tests/autotestshell.h>
 
 #include "../core.h"
 #include "../plugincontroller.h"

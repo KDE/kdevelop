@@ -26,7 +26,7 @@
 #include <kdebug.h>
 
 #include <qtest_kde.h>
-#include <tests/common/autotestshell.h>
+#include <tests/autotestshell.h>
 
 #include "../core.h"
 #include "../projectcontroller.h"
