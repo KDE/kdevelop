@@ -286,6 +286,8 @@ void DebugController::addSession(IDebugSession* session)
     updateDebuggerState(session->state(), session);
     
     emit sessionAdded(session);
+    
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
 }
@@ -310,6 +312,8 @@ void DebugController::clearExecutionPoint()
 
 void DebugController::showStepInSource(const KUrl &url, int lineNum)
 {
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
+
     clearExecutionPoint();
     kDebug() << url << lineNum;
     KDevelop::IDocument* document = KDevelop::ICore::self()
@@ -348,6 +352,8 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 
 void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, IDebugSession *session)
 {
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
+
     kDebug() << state;
     switch (state) {
         case IDebugSession::StoppedState:
