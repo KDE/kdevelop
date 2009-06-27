@@ -56,6 +56,7 @@ _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
 _kdevplatform_set_lib_vars( TESTSHELL kdevplatformtestshell )
 _kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
 _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
+_kdevplatform_set_lib_vars( TESTS kdevplatformtests )
 
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 
@@ -71,4 +72,5 @@ mark_as_advanced(
     KDEVPLATFORM_VERITAS_LIBRARY
     KDEVPLATFORM_SOURCEFORMATTER_LIBRARY
     KDEVPLATFORM_DEBUGGER_LIBRARY
+    KDEVPLATFORM_TESTS_LIBRARY
 )
