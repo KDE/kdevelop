@@ -15,8 +15,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-
 #include <iostream>
+struct testStruct { int a; int b; int c; };
 void noop() {}
 void foo() {
     static int i=0;
@@ -31,5 +31,11 @@ int main(int argc, char **argv) {
 
     char *x = "Hello";
     std::cout << x << std::endl;
+    
+    testStruct ts;
+    ts.a = 0;
+    ts.b = 1;
+    ts.c = 2;
+    ts.a++;
     return 0;
 }

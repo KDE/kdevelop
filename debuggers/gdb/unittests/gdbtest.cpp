@@ -342,7 +342,7 @@ void GdbTest::testConditionBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 33);
+    KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(debugeeFileName, 39);
     b->setCondition("x[0] == 'H'");
 
     b = breakpoints()->addCodeBreakpoint(debugeeFileName, 23);
@@ -361,7 +361,7 @@ void GdbTest::testConditionBreakpoint()
     QCOMPARE(session->line(), 23);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 33);
+    QCOMPARE(session->line(), 39);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -705,6 +705,43 @@ void GdbTest::testVariablesLocals()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testVariablesLocalsStruct()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(300);
+
+    QModelIndex i = variableCollection()->index(1, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 4);
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(1, 1, i), "{...}");
+    QModelIndex ts = variableCollection()->index(1, 0, i);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
+    variableCollection()->expanded(ts);
+    QTest::qWait(100);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
+    COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
+    COMPARE_DATA(variableCollection()->index(1, 1, ts), "1");
+    COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
+    COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
+
+    session->stepInto();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(1, 1, i), "{...}");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
+
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
