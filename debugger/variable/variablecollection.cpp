@@ -99,6 +99,11 @@ void Variable::setTopLevel(bool v)
 void Variable::setInScope(bool v)
 {
     inScope_ = v;
+    for (int i=0; i < childCount(); ++i) {
+        if (Variable *var = dynamic_cast<Variable*>(child(i))) {
+            var->setInScope(v);
+        }
+    }
 }
 
 void Variable::setVarobj(const QString& v)
