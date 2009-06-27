@@ -50,6 +50,7 @@ class GetCMakePropertyAst;
 class GetFilenameComponentAst;
 class GetPropertyAst;
 class GetSourceFilePropAst;
+class GetTargetPropAst;
 class IfAst;
 class IncludeAst;
 class IncludeDirectoriesAst;
@@ -96,6 +97,7 @@ class CMakeAstVisitor {
         virtual int visit( const GetCMakePropertyAst * ) = 0;
         virtual int visit( const GetFilenameComponentAst * ) = 0;
         virtual int visit( const GetPropertyAst * ) = 0;
+        virtual int visit( const GetTargetPropAst * ) = 0;
         virtual int visit( const GetSourceFilePropAst * )=0;
         virtual int visit( const IfAst * ) = 0;
         virtual int visit( const IncludeAst * ) = 0;

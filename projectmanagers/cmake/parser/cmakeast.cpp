@@ -3915,13 +3915,12 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.name.toLower()!="set_property" || func.arguments.count() < 4)
         return false;
     
-    PropertyType t;
     QString propName=func.arguments.first().value;
-    if(propName=="GLOBAL") t=GLOBAL;
-    else if(propName=="DIRECTORY") t=DIRECTORY;
-    else if(propName=="TARGET") t=TARGET;
-    else if(propName=="SOURCE") t=SOURCE;
-    else if(propName=="TEST") t=TEST;
+    if(propName=="GLOBAL") m_type=GLOBAL;
+    else if(propName=="DIRECTORY") m_type=DIRECTORY;
+    else if(propName=="TARGET") m_type=TARGET;
+    else if(propName=="SOURCE") m_type=SOURCE;
+    else if(propName=="TEST") m_type=TEST;
     else
         return false;
     
@@ -3930,8 +3929,7 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         m_args.append(it->value);
     }
-    if(it!=itEnd)
-        m_append=it->value=="APPEND";
+    m_append=it!=itEnd && it->value=="APPEND";
     
     if(m_append)
         ++it;
@@ -3941,6 +3939,7 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     m_name=it->value;
+    ++it;
     for(; it!=itEnd && it->value!="PROPERTY" && it->value!="APPEND"; ++it)
     {
         m_values.append(it->value);

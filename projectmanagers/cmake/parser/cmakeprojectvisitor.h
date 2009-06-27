@@ -71,6 +71,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const MacroAst * );
         virtual int visit( const ListAst * );
         virtual int visit( const GetFilenameComponentAst * );
+        virtual int visit( const GetSourceFilePropAst * );
+        virtual int visit( const GetTargetPropAst * );
         virtual int visit( const OptionAst * );
         virtual int visit( const SetAst * );
         virtual int visit( const ForeachAst * );
@@ -86,8 +88,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const RemoveDefinitionsAst * );
         virtual int visit( const SeparateArgumentsAst * );
         virtual int visit( const WhileAst * );
-        virtual int visit( const GetSourceFilePropAst * );
         virtual int visit( const CMakeAst * );
+        
         
         void setCacheValues( CacheValues* cache);
         void setVariableMap( VariableMap* vars );

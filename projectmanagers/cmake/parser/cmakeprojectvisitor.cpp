@@ -268,6 +268,7 @@ int CMakeProjectVisitor::visit(const ProjectAst *project)
 
 int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 {
+    kDebug(9042) << "setting target props for " << targetProps->targets() << targetProps->properties();
     foreach(const QString& tname, targetProps->targets())
     {
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
@@ -275,6 +276,22 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
             m_props[TARGET][tname][t.first] += t.second;
         }
     }
+    return 1;
+}
+
+int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
+{
+    kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
+    if(m_props[TARGET].contains(prop->target()) && !m_props[TARGET][prop->target()].contains(prop->property())) {
+        if(prop->property().startsWith("LOCATION_") && m_props[TARGET][prop->target()].contains("IMPORTED_"+prop->property()))
+            m_props[TARGET][prop->target()][prop->property()]=m_props[TARGET][prop->target()]["IMPORTED_"+prop->property()];
+            
+//         kDebug(9032) << "unexistent property" << prop->property() << "on" << prop->target();
+    }
+    kDebug(9042) << "current properties" << m_props[TARGET][prop->target()].keys();
+    kDebug(9042) << "goooooot" << m_props[TARGET][prop->target()][prop->property()];
+    
+    m_vars->insert(prop->variableName(), m_props[TARGET][prop->target()][prop->property()]);
     return 1;
 }
 
@@ -291,7 +308,7 @@ int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
 
 int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
 {
-    kDebug(9042) << "adding subdirectory" << sdirs->directories() << sdirs->exluceFromAll();
+    kDebug(9042) << "adding subdirectories" << sdirs->directories() << sdirs->exluceFromAll();
     m_subdirectories += sdirs->directories() << sdirs->exluceFromAll();
     return 1;
 }
@@ -1288,13 +1305,28 @@ int CMakeProjectVisitor::visit(const FileAst *file)
         }
             break;
         case FileAst::GLOB: {
-            QString current;
-            if(file->path().isEmpty())
-                current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
-            else
-                current=file->path();
-            QDir d(current);
-            QStringList matches=d.entryList(file->globbingExpressions());
+            QStringList matches;
+            QString relative=file->path();
+            foreach(const QString& glob, file->globbingExpressions())
+            {
+                QStringList globs;
+                QString current;
+                if(KUrl::isRelativeUrl(glob)) {
+                    KUrl urlGlob(glob);
+                    current=urlGlob.upUrl().path();
+                    
+                    globs.append(urlGlob.fileName());
+                } else if(!relative.isEmpty()) {
+                    current=relative;
+                    globs.append(glob);
+                } else {
+                    current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+                    globs.append(glob);
+                }
+                
+                QDir d(current);
+                matches+=d.entryList(globs);
+            }
             m_vars->insert(file->variable(), matches);
             kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
         } break;
@@ -1815,7 +1847,7 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
-    kDebug() << "setprops";
+    kDebug() << "setprops" << setp->type() << setp->name() << setp->values();
     if(setp->type()==GLOBAL)
         m_props[GLOBAL][QString()][setp->name()]=setp->values();
     else
