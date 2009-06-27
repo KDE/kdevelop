@@ -668,6 +668,47 @@ void GdbTest::testCoreFile()
     QTest::qWait(100);
 }
 
+
+KDevelop::VariableCollection *variableCollection()
+{
+    return KDevelop::ICore::self()->debugController()->variableCollection();
+}
+
+#define COMPARE_DATA(index, expected) \
+    compareData((index), (expected), __FILE__, __LINE__)
+void compareData(QModelIndex index, QString expected, const char *file, int line)
+{
+    QString s = index.model()->data(index, Qt::DisplayRole).toString();
+    if (s != expected) {
+        kFatal() << QString("'%0' didn't match expected '%1' in %2:%3").arg(s).arg(expected).arg(file).arg(line);
+    }
+}
+
+void GdbTest::testVariablesLocals()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(variableCollection()->rowCount(), 2);
+    QModelIndex i = variableCollection()->index(1, 0);
+    COMPARE_DATA(i, "Locals");
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "0");
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {

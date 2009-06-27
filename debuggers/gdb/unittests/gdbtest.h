@@ -54,6 +54,7 @@ private Q_SLOTS:
     void testStack();
     void testAttach();
     void testCoreFile();
+    void testVariablesLocals();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
