@@ -746,6 +746,45 @@ void GdbTest::testVariablesLocalsStruct()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testVariablesWatches()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    
+    KDevelop::Variable *var = variableCollection()->watches()->add("ts");
+    QTest::qWait(300);
+
+    QModelIndex i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
+    QModelIndex ts = variableCollection()->index(0, 0, i);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
+    variableCollection()->expanded(ts);
+    QTest::qWait(100);
+    COMPARE_DATA(variableCollection()->index(0, 0, ts), "a");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "0");
+    COMPARE_DATA(variableCollection()->index(1, 0, ts), "b");
+    COMPARE_DATA(variableCollection()->index(1, 1, ts), "1");
+    COMPARE_DATA(variableCollection()->index(2, 0, ts), "c");
+    COMPARE_DATA(variableCollection()->index(2, 1, ts), "2");
+
+    session->stepInto();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
+    COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {
