@@ -85,6 +85,11 @@ QString Variable::expression() const
     return expression_;
 }
 
+bool Variable::inScope() const
+{
+    return inScope_;
+}
+
 void Variable::setValue(const QString& v)
 {
     itemData[1] = v;
@@ -216,8 +221,6 @@ void Watches::removeFinishResult()
         finishResult_ = 0;
     }
 }
-
-
 
 QVariant Watches::data(int column, int role) const
 {

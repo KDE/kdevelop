@@ -37,12 +37,17 @@
 #include "../debuggerexport.h"
 #include "../interfaces/idebugsession.h"
 
+namespace GDBDebugger {
+    class GdbTest;
+}
+
 namespace KDevelop
 {
 class VariableToolTip;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {
+    friend class GDBDebugger::GdbTest;
 public:
     Variable(TreeModel* model, TreeItem* parent,
              const QString& expression,
@@ -50,6 +55,7 @@ public:
 
     QString varobj() const;
     QString expression() const;
+    bool inScope() const;
     void setInScope(bool v);
     void setVarobj(const QString& v);
     void setValue(const QString &v);
@@ -109,6 +115,7 @@ public:
 
 class KDEVPLATFORMDEBUGGER_EXPORT Watches : public TreeItem
 {
+    friend class GDBDebugger::GdbTest;
 public:
     Watches(TreeModel* model, TreeItem* parent);
     Variable* add(const QString& expression);
@@ -117,8 +124,9 @@ public:
 
     Variable *addFinishResult(const QString& convenienceVarible);
     void removeFinishResult();
-
+    
 private:
+
     QVariant data(int column, int role) const;
 
     void fetchMoreChildren() {}
