@@ -168,7 +168,7 @@ void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 
 void DocumentSwitcherPlugin::unload()
 {
-    foreach( Sublime::MainWindow* mw, documentLists.keys() )
+    foreach( QObject* mw, documentLists.keys() )
     {
         removeMainWindow( mw );
     }
@@ -231,12 +231,12 @@ void DocumentSwitcherPlugin::enableActions( Sublime::MainWindow* mw )
 
 void DocumentSwitcherPlugin::removeMainWindow( QObject* obj ) 
 {
-    Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( obj );
-    if( !mainwindow )
+    if( !obj || !documentLists.contains(obj) ) {
         return;
-    mainwindow->removeEventFilter( this );
-    disconnect( mainwindow, 0, this, 0 );
-    documentLists.remove( mainwindow );
+    }
+    obj->removeEventFilter( this );
+    disconnect( obj, 0, this, 0 );
+    documentLists.remove( obj );
 }
 
 
