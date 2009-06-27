@@ -45,7 +45,7 @@
 #include "gdbcontroller.h"
 #include "debugsession.h"
 
-using namespace GDBDebugger;
+namespace GDBDebugger {
 
 class AutoTestShell : public KDevelop::ShellExtension
 {
@@ -78,6 +78,12 @@ void GdbTest::init()
     
     KDevelop::BreakpointModel* m = KDevelop::ICore::self()->debugController()->breakpointModel();
     m->removeRows(0, m->rowCount());
+
+    KDevelop::VariableCollection *vc = KDevelop::ICore::self()->debugController()->variableCollection();
+    for (int i=0; i < vc->watches()->childCount(); ++i) {
+        delete vc->watches()->child(i);
+    }
+    vc->watches()->clear();
 }
 
 void GdbTest::cleanup()
@@ -757,7 +763,7 @@ void GdbTest::testVariablesWatches()
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     
-    KDevelop::Variable *var = variableCollection()->watches()->add("ts");
+    variableCollection()->watches()->add("ts");
     QTest::qWait(300);
 
     QModelIndex i = variableCollection()->index(0, 0);
@@ -785,6 +791,60 @@ void GdbTest::testVariablesWatches()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+
+void GdbTest::testVariablesWatchesTwoSessions()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    
+    variableCollection()->watches()->add("ts");
+    QTest::qWait(300);
+
+    QModelIndex i = variableCollection()->index(0, 0);
+    QModelIndex ts = variableCollection()->index(0, 0, i);
+    variableCollection()->expanded(ts);
+    QTest::qWait(100);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    
+    //check if variable is marked as out-of-scope
+    QCOMPARE(variableCollection()->watches()->childCount(), 1);
+    KDevelop::Variable* v = dynamic_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
+    QVERIFY(v);
+    QVERIFY(!v->inScope());
+    QCOMPARE(v->childCount(), 3);
+    v = dynamic_cast<KDevelop::Variable*>(v->child(0));
+    QVERIFY(!v->inScope());
+
+    //start a second debug session
+    session = new TestDebugSession;
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    //check if variable is now marked as in-scope
+    QCOMPARE(variableCollection()->watches()->childCount(), 1);
+    v = dynamic_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
+    QVERIFY(v);
+    QVERIFY(v->inScope());
+    QCOMPARE(v->childCount(), 3);
+    v = dynamic_cast<KDevelop::Variable*>(v->child(0));
+    QVERIFY(v->inScope());
+    
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+    
+    //check if variable is marked as out-of-scope
+    v = dynamic_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
+    QVERIFY(!v->inScope());
+    QVERIFY(!dynamic_cast<KDevelop::Variable*>(v->child(0))->inScope());
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {
@@ -805,7 +865,9 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     QTest::qWait(100);
 }
 
-QTEST_KDEMAIN(GdbTest, GUI)
+}
+
+QTEST_KDEMAIN(GDBDebugger::GdbTest, GUI)
 
 
 #include "gdbtest.moc"

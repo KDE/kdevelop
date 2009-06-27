@@ -25,6 +25,8 @@
 namespace KDevelop {
 class TestCore;
 }
+namespace GDBDebugger {
+
 class GdbTest : public QObject
 {
     Q_OBJECT
@@ -57,9 +59,12 @@ private Q_SLOTS:
     void testVariablesLocals();
     void testVariablesLocalsStruct();
     void testVariablesWatches();
+    void testVariablesWatchesTwoSessions();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
 };
+
+}
 
 #endif // GDBTEST_H
