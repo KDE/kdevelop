@@ -790,8 +790,7 @@ void GdbTest::testVariablesWatchesTwoSessions()
     variableCollection()->watches()->add("ts");
     QTest::qWait(300);
 
-    QModelIndex i = variableCollection()->index(0, 0);
-    QModelIndex ts = variableCollection()->index(0, 0, i);
+    QModelIndex ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
     variableCollection()->expanded(ts);
     QTest::qWait(100);
     session->run();
@@ -808,17 +807,21 @@ void GdbTest::testVariablesWatchesTwoSessions()
 
     //start a second debug session
     session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(300);
 
-    //check if variable is now marked as in-scope
     QCOMPARE(variableCollection()->watches()->childCount(), 1);
+    ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
     v = dynamic_cast<KDevelop::Variable*>(variableCollection()->watches()->child(0));
     QVERIFY(v);
     QVERIFY(v->inScope());
     QCOMPARE(v->childCount(), 3);
+
     v = dynamic_cast<KDevelop::Variable*>(v->child(0));
     QVERIFY(v->inScope());
+    QCOMPARE(v->data(1, Qt::DisplayRole).toString(), QString::number(0));
     
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
