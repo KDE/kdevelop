@@ -20,19 +20,18 @@
 #define CMAKELOADPROJECTTEST_H
 
 #include <QObject>
-#include <tests/autotestshell.h>
-#include <shell/testcore.h>
+#include <shell/shellextension.h>
 
 using namespace KDevelop;
 
-class CMakeLoadProjectTest : public QObject {
-    Q_OBJECT
-private slots:
-    void initTestCase();
-    void cleanupTestCase();
-    void testOpenProject();
-private:
-    KDevelop::TestCore* m_testcore;
+class CMakeLoadProjectTest : public KDevelop::ShellExtension {
+public:
+    CMakeLoadProjectTest();
+    virtual QString xmlFile();
+    virtual KDevelop::AreaParams defaultArea();
+    virtual QString projectFileExtension();
+    virtual QString projectFileDescription();
+    virtual QStringList defaultPlugins();
 };
 
 #endif

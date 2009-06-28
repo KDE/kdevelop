@@ -4,6 +4,8 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
 )
 
+add_definitions( -DCMAKE_TESTS_PROJECTS_DIR=\"${CMAKE_CURRENT_SOURCE_DIR}/manual\" )
+
 set(CMAKE_TEST_LIBRARIES 
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
@@ -38,6 +40,6 @@ target_link_libraries( cmakeprojectvisitortest ${CMAKE_TEST_LIBRARIES}
 kde4_add_unit_test( cmakeparserutilstest cmakeparserutilstest.cpp)
 target_link_libraries( cmakeparserutilstest ${CMAKE_TEST_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
 
-kde4_add_unit_test( cmakeloadprojecttest cmakeloadprojecttest.cpp )
-target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} kdevplatformtests kdevplatformtestshell)
+kde4_add_executable( cmakeloadprojecttest cmakeloadprojecttest.cpp )
+target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} kdevplatformtests kdevplatformshell)
 

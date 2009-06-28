@@ -25,34 +25,60 @@
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
 #include <kdebug.h>
+#include <kapplication.h>
 
+#include <shell/core.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include <tests/autotestshell.h>
-#include <tests/kdevsignalspy.h>
-
-QTEST_KDEMAIN(CMakeLoadProjectTest, NoGUI)
-
-void CMakeLoadProjectTest::initTestCase() 
+CMakeLoadProjectTest::CMakeLoadProjectTest()
 {
-    AutoTestShell::init();
-    m_testcore = new KDevelop::TestCore();
-    m_testcore->initialize( KDevelop::Core::NoUi );
+    s_instance = this;
 }
 
-void CMakeLoadProjectTest::cleanupTestCase()
+QString CMakeLoadProjectTest::xmlFile()
 {
-    m_testcore->cleanup();
-    delete m_testcore;
+    return "kdevelopui.rc";
+}
+KDevelop::AreaParams CMakeLoadProjectTest::defaultArea()
+{
+    KDevelop::AreaParams p = { "code", i18n("Code" ) };
+    return p;
+}
+QString CMakeLoadProjectTest::projectFileExtension()
+{
+    return "kdev4";
+}
+QString CMakeLoadProjectTest::projectFileDescription()
+{
+    return i18n("KDevelop4 Project files");
+}
+QStringList CMakeLoadProjectTest::defaultPlugins()
+{
+    return QStringList() << "KDevCMakeManager" << "KDevProjectManagerView";
 }
 
-void CMakeLoadProjectTest::testOpenProject()
+int main(int argc, char** argv)
 {
-    KDevSignalSpy* spy = new KDevSignalSpy( m_testcore->projectController(), SIGNAL(projectOpened( KDevelop::IProject* ) ) );
-    m_testcore->projectController()->openProject( KUrl( "/home/andreas/temp/testcmakekde4/testcmakekde4.kdev4" ) );
-    bool gotSignal = spy->wait(60000);
-    QVERIFY2(gotSignal, "Timeout while waiting for project opening");
+    KAboutData aboutdata( "cmakeloadprojecttest", 0, ki18n("cmakeloadprojecttest"), "0.0.0", ki18n("small utility to do manual performance checks of cmake project load times"), KAboutData::License_GPL);
+    KCmdLineArgs::init( argc, argv, &aboutdata );
+    KCmdLineOptions options;
+    options.add( "project <project>", ki18n("url to project") );
+    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    KApplication app;
+    CMakeLoadProjectTest shell;
+    Core::initialize();
+    Core* core = Core::self();
+    QString project = args->getOption( "project" );
+    if( project.isEmpty() ) 
+    {
+        qWarning() << "Need a project to load";
+        exit(1);
+    }
+    core->projectController()->openProject( KUrl( project ) );
+    args->clear();
+    return app.exec();
+
 }
 
-#include "cmakeloadprojecttest.moc"
 
