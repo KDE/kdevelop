@@ -100,6 +100,35 @@ private:
     friend class Document;
 };
 
+/**
+ * Special type of view for the toolviews
+ */
+class SUBLIME_EXPORT ToolView: public View {
+    Q_OBJECT
+signals:
+    /**
+     * Forwarding signal, emitted when the view's widget
+     * wants to have a progress indicator shown.
+     */
+    void showProgressIndicator();
+    
+    /**
+    * Forwarding signal, emitted when the view's widget
+    * wants to hide the progress indicator again.
+    */
+    void hideProgressIndicator();
+protected:
+    ToolView(Document *doc, View::WidgetOwnership ws = View::DoNotTakeOwnerShip );
+    /**
+    * override this function to create a custom widget in your View subclass
+    * @param parent the parent widget
+    * @returns a new widget which is used for this view
+    */
+    virtual QWidget *createWidget(QWidget *parent);
+private:
+    ToolView( const ToolView& );
+    friend class ToolDocument;
+};
 }
 
 #endif

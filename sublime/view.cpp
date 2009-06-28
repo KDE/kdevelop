@@ -130,6 +130,26 @@ void View::notifyPositionChanged(int newPositionInArea)
     emit positionChanged(this, newPositionInArea);
 }
 
+
+ToolView::ToolView(Document* doc, View::WidgetOwnership ws)
+    : View( doc, ws )
+{
+}
+
+
+QWidget* ToolView::createWidget(QWidget* parent)
+{
+    QWidget* w = Sublime::View::createWidget(parent);
+    ToolDocument* tooldoc = dynamic_cast<ToolDocument*>( document() );
+    if( tooldoc->factory()->viewsWantProgressIndicator() ) 
+    {
+        connect( w, SIGNAL( showProgressIndicator() ), SIGNAL( showProgressIndicator() ) );
+        connect( w, SIGNAL( hideProgressIndicator() ), SIGNAL( hideProgressIndicator() ) );
+    }
+    return w;
+}
+
+
 }
 
 #include "view.moc"

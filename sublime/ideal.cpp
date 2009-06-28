@@ -42,7 +42,7 @@
 using namespace Sublime;
 
 IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
-    : QToolButton(parent), _area(area)
+    : KAnimatedButton(parent), _area(area)
 {
     setFocusPolicy(Qt::NoFocus);
     KAcceleratorManager::setNoAccel(this);
@@ -58,6 +58,19 @@ Qt::Orientation IdealToolButton::orientation() const
 
     return Qt::Horizontal;
 }
+
+void IdealToolButton::hideProgressIndicator()
+{
+    setIcon( normalIcon );
+}
+
+void IdealToolButton::showProgressIndicator()
+{
+    normalIcon = icon();
+    setIcons( "process-working-kde" );
+}
+
+
 
 QSize IdealToolButton::sizeHint() const
 {
@@ -177,6 +190,8 @@ QWidget* IdealButtonBarWidget::corner()
 
 void IdealButtonBarWidget::removeAction(QAction * action)
 {
+    disconnect(_widgets[action]->view(), SIGNAL(showProgressIndicator()), _buttons[action], 0);
+    disconnect(_widgets[action]->view(), SIGNAL(hideProgressIndicator()), _buttons[action], 0);
     _widgets.remove(action);
     delete _buttons.take(action);
     delete action;
@@ -232,14 +247,18 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
+            connect(_widgets[action]->view(), SIGNAL(showProgressIndicator()), button, SLOT(showProgressIndicator()));
+            connect(_widgets[action]->view(), SIGNAL(hideProgressIndicator()), button, SLOT(hideProgressIndicator()));
         }
     } break;
 
     case QEvent::ActionRemoved: {
+        kDebug() << "action got removed";
         if (IdealToolButton *button = _buttons.value(action)) {
             for (int index = 0; index < layout()->count(); ++index) {
                 if (QLayoutItem *item = layout()->itemAt(index)) {
                     if (item->widget() == button) {
+                        kDebug() << "yeap, I know about this action";
                         action->disconnect(this);
                         delete layout()->takeAt(index);
                         layout()->invalidate();

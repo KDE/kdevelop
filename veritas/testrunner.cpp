@@ -265,6 +265,7 @@ public:
         return QList<QAction*>();
     }
     QString id() const { return m_factory->id(); }
+    virtual bool viewsWantProgressIndicator() const { return false; }
 
 private:
     IToolViewFactory *m_factory;

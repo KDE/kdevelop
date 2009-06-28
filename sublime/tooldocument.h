@@ -78,11 +78,16 @@ public:
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
     ToolFactory *factory() const;
+    
+    /**Creates and returns the new view. Reimplement in subclasses to instantiate
+    views of derived from Sublime::View classes.*/
+    virtual View *newView(Document *doc);
 
 private:
     struct ToolDocumentPrivate * const d;
     
     friend class View;
+    friend class ToolView;
 };
 
 }

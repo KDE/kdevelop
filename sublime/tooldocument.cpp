@@ -22,6 +22,8 @@
 
 #include <kdebug.h>
 
+#include <view.h>
+
 namespace Sublime {
 
 // struct ToolDocumentPrivate
@@ -69,6 +71,14 @@ QString ToolDocument::documentSpecifier() const
 {
     return factory()->id();
 }
+
+
+View* ToolDocument::newView(Document* doc)
+{
+    emit viewNumberChanged(this);
+    return new ToolView(doc);
+}
+
 
 }
 
