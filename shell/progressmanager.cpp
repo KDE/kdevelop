@@ -37,7 +37,7 @@ ProgressItem::ProgressItem( ProgressItem *parent, const QString &id,
                             bool canBeCanceled)
   :mId( id ), mLabel( label ), mStatus( status ), mParent( parent ),
    mCanBeCanceled( canBeCanceled ), mProgress( 0 ), mTotal( 0 ),
-   mCompleted( 0 ), mWaitingForKids( false ), mCanceled( false )
+   mCompleted( 0 ), mWaitingForKids( false ), mCanceled( false ), mBusy( false )
 {
 }
 

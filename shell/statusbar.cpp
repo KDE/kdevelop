@@ -230,6 +230,7 @@ void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int val
         if( minimum == 0 && maximum == 0 ) {
             i->setBusy();
         } else {
+            i->setBusy( false );
             i->setProgress( 100*value/maximum );
         }
         m_progressWidget->raise();

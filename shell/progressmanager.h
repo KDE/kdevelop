@@ -125,6 +125,7 @@ public:
       setProgress( 0 );
       setStatus( QString() );
       mCompleted = 0;
+      mBusy = false;
     }
 
     // Often needed values for calculating progress.
