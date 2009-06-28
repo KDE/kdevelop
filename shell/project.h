@@ -168,6 +168,35 @@ private:
 
     class ProjectPrivate* const d;
 };
-    
+
+class ProjectProgress : public QObject, public IStatus
+{
+Q_OBJECT
+Q_INTERFACES(KDevelop::IStatus)
+
+public:
+    ProjectProgress();
+    virtual ~ProjectProgress();
+    virtual QString statusName() const;
+
+    /*! Show indeterminate mode progress bar */
+    void setBuzzy();
+
+    /*! Hide progress bar */
+    void setDone();
+
+    QString projectName;
+
+private Q_SLOTS:
+    void slotClean();
+
+Q_SIGNALS:
+    void clearMessage(KDevelop::IStatus*);
+    void showMessage(KDevelop::IStatus*,const QString & message, int timeout = 0);
+    void showErrorMessage(const QString & message, int timeout = 0);
+    void hideProgress(KDevelop::IStatus*);
+    void showProgress(KDevelop::IStatus*,int minimum, int maximum, int value);
+};
+
 } // namespace KDevelop
 #endif

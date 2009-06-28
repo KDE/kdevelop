@@ -18,6 +18,9 @@
 */
 
 #include "statusbar.h"
+#include "progresswidget.h"
+#include "progressmanager.h"
+#include "progressdialog.h"
 
 #include <QtCore/QTimer>
 #include <QtGui/QProgressBar>
@@ -55,6 +58,13 @@ StatusBar::StatusBar(QWidget* parent)
     registerStatus(Core::self()->languageController()->backgroundParser());
 
     connect(m_errorRemovalMapper, SIGNAL(mapped(QWidget*)), SLOT(removeError(QWidget*)));
+
+    m_progressController = Core::self()->progressController();
+    m_progressDialog = new ProgressDialog(m_progressController, this, parent); // construct this first, then progressWidget
+    m_progressDialog->setVisible(false);
+    m_progressWidget = new StatusbarProgressWidget(m_progressController, m_progressDialog, this);
+
+    addPermanentWidget(m_progressWidget, 0);
 }
 
 void StatusBar::removeError(QWidget* w)
@@ -191,45 +201,41 @@ void StatusBar::clearMessage( IStatus* status )
 
 void StatusBar::showMessage( IStatus* status, const QString & message, int timeout)
 {
-    Message m;
-    m.text = message;
-    m.timeout = timeout;
-
-    m_messages.insert(status, m);
-
-    updateMessage();
+    if ( m_progressItems.contains(status) ) {
+        ProgressItem* i = m_progressItems[status];
+        i->setStatus(message);
+    } else {
+        Message m;
+        m.text = message;
+        m.timeout = timeout;
+        m_messages.insert(status, m);
+        updateMessage();
+    }
 }
 
 void StatusBar::hideProgress( IStatus* status )
 {
-    if (m_progressBars.contains(status)) {
-        delete m_progressBars[status];
-        m_progressBars.remove(status);
-    }
+   if (m_progressItems.contains(status)) {
+        m_progressItems[status]->setComplete();
+        m_progressItems.remove(status);
+   }
+
 }
 
 void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int value)
 {
-    QProgressBar* bar;
-
-    if (m_progressBars.contains(status)) {
-        bar = m_progressBars[status];
-        if (bar->minimum() != minimum)
-            bar->setMinimum(minimum);
-        if (bar->maximum() != maximum)
-            bar->setMaximum(maximum);
-        if (bar->value() != value)
-            bar->setValue(value);
-
+    if (m_progressItems.contains(status)) {
+        ProgressItem* i = m_progressItems[status];
+        i->setProgress( 100*value/maximum );
+        m_progressWidget->raise();
+        m_progressDialog->raise();
     } else {
-        bar = new QProgressBar(this);
-        bar->setRange(minimum, maximum);
-        bar->setValue(value);
-        bar->setMaximumWidth(300);
-        bar->setMaximumHeight((height()*2)/3);
-        m_progressBars.insert(status, bar);
-
-        addPermanentWidget(bar);
+        bool canBeCanceled = false;
+        ProgressItem* i = m_progressController->createProgressItem(
+            ProgressManager::getUniqueID(), status->statusName(), QString(), canBeCanceled);
+        m_progressItems[status] = i;
+        m_progressWidget->raise();
+        m_progressDialog->raise();
     }
 }
 

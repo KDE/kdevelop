@@ -39,6 +39,10 @@ namespace KDevelop
 
 class IStatus;
 class IPlugin;
+class ProgressItem;
+class ProgressDialog;
+class StatusbarProgressWidget;
+class ProgressManager;
 
 /**
  * Status bar
@@ -81,11 +85,14 @@ private:
     };
 
     QMap<IStatus*, Message> m_messages;
-    QMap<IStatus*, QProgressBar*> m_progressBars;
     QTimer* m_timer;
     QTime m_time;
     Sublime::View* m_currentView;
     QSignalMapper* m_errorRemovalMapper;
+    QMap<IStatus*,ProgressItem*> m_progressItems;
+    StatusbarProgressWidget* m_progressWidget; // embedded in the statusbar, shows a single progressbar & button to expand the overlay widget
+    ProgressDialog* m_progressDialog; // the actual overlay widget that contains multiple progressbars and status messages
+    ProgressManager* m_progressController; // progress item model
 };
 
 }

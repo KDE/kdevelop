@@ -47,6 +47,8 @@
 #include "runcontroller.h"
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
+#include "progressmanager.h"
+#include "core_p.h"
 #include "selectioncontroller.h"
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
@@ -133,6 +135,11 @@ void CorePrivate::initialize(Core::Setup mode)
     if( !sourceFormatterController )
     {
         sourceFormatterController = new SourceFormatterController(m_core);
+    }
+
+    if ( !progressController) 
+    {
+        progressController = new ProgressManager();
     }
 
     if( !selectionController )
@@ -349,6 +356,11 @@ RunController *Core::runControllerInternal()
 ISourceFormatterController* Core::sourceFormatterController()
 {
     return d->sourceFormatterController;
+}
+
+ProgressManager *Core::progressController()
+{
+    return d->progressController;
 }
 
 ISelectionController* Core::selectionController()

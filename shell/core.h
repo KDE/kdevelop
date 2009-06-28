@@ -36,6 +36,7 @@ class RunController;
 class SessionController;
 class CorePrivate;
 class SourceFormatterController;
+class ProgressManager;
 class SelectionController;
 class DocumentationController;
 class DebugController;
@@ -128,6 +129,11 @@ public:
      * @internal
      */
     SessionController *sessionController();
+
+    /**
+     * @internal
+     */
+    ProgressManager *progressController();
 
     void cleanup();
 

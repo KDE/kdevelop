@@ -37,6 +37,7 @@ class PluginController;
 class UiController;
 class SessionController;
 class SourceFormatterController;
+class ProgressManager;
 class SelectionController;
 class DocumentationController;
 class DebugController;
@@ -56,6 +57,7 @@ public:
     QPointer<RunController> runController;
     QPointer<SessionController> sessionController;
     QPointer<SourceFormatterController> sourceFormatterController;
+    QPointer<ProgressManager> progressController;
     QPointer<SelectionController> selectionController;
     QPointer<DocumentationController> documentationController;
     QPointer<DebugController> debugController;
