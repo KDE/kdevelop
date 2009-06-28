@@ -574,7 +574,6 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
 {
     if (stateIsOn(s_dbgNotStarted))
     {
-        Q_ASSERT(0); //TODO NIKO: remove assert
         KMessageBox::information(
             qApp->activeWindow(),
             i18n("<b>Gdb command sent when debugger is not running</b><br>"

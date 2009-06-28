@@ -39,7 +39,7 @@
 #include <sys/types.h>
 #include <signal.h>
 
-#define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
+// #define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
 
 using namespace GDBDebugger;
 
