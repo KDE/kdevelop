@@ -851,13 +851,15 @@ kDebug() << index << removed << removed2;
 
     const EnvironmentInformationItem& item(*m_environmentInfo.itemFromIndex(dataIndex));
 
+    QMutexLocker lock(&m_chainsMutex);
+
+    //Due to multi-threading, we must do this check after locking the mutex, so we can be sure we don't create the same item twice at the same time
     alreadyLoaded = findInformation(topContextIndex);
     if(alreadyLoaded)
       return alreadyLoaded;
     
     ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create( (DUChainBaseData*)(((char*)&item) + sizeof(EnvironmentInformationItem)) ));
     if(ret) {
-      QMutexLocker lock(&m_chainsMutex);
       Q_ASSERT(ret->d_func()->classId);
       Q_ASSERT(ret->indexedTopContext().index() == topContextIndex);
       ParsingEnvironmentFilePointer retPtr(ret);
