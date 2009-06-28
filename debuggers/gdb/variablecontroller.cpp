@@ -184,7 +184,7 @@ public:
             m_variable->setHasMore(r["numchild"].toInt());
             m_variable->setValue(r["value"].literal());
             hasValue = !r["value"].literal().isEmpty();
-            if (m_variable->isExpanded()) {
+            if (m_variable->isExpanded() && r["numchild"].toInt()) {
                 m_variable->fetchMoreChildren();
             }
         }
