@@ -74,6 +74,8 @@ protected: // Interface for derived classes
 
     void removeSelf();
 
+    void deleteChildren();
+
     /** Report change in data of this item.  */
     void reportChange();
     void reportChange(int column);

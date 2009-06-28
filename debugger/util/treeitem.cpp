@@ -116,6 +116,15 @@ void TreeItem::removeSelf()
     parentItem->removeChild(modelIndex.row());
 }
 
+void TreeItem::deleteChildren()
+{
+    for (int i = 0; i < childItems.size(); ++i) {
+        TreeItem* v = child(i);
+        delete v;
+    }
+    clear();
+}
+
 void TreeItem::clear()
 {
     if (childItems.size() || more_)

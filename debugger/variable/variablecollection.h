@@ -62,8 +62,9 @@ public:
     void setTopLevel(bool v);
     using TreeItem::setHasMore;
     using TreeItem::setHasMoreInitial;
-    using TreeItem::clear;
     using TreeItem::appendChild;
+    using TreeItem::deleteChildren;
+    using TreeItem::isExpanded;
 
     using TreeItem::model;
 
@@ -139,7 +140,8 @@ class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
 public:
     Locals(TreeModel* model, TreeItem* parent);
     void updateLocals(QStringList locals);
-    void deleteLocals();
+
+    using TreeItem::deleteChildren;
 
 private:
     void fetchMoreChildren() {}

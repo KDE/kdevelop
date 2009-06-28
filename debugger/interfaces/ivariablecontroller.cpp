@@ -45,7 +45,7 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::EndedState) {
         // Remove all locals.
-        variableCollection()->locals()->deleteLocals();
+        variableCollection()->locals()->deleteChildren();
         KDevelop::Variable::markAllDead();
     } else if (state == IDebugSession::PausedState) {
         if (m_autoUpdate) update();
