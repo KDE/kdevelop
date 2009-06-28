@@ -52,7 +52,7 @@ public Q_SLOTS:
     void slotAddWatch(const QString &ident);
 
 private Q_SLOTS:
-    void sessionAdded(IDebugSession*);
+    void sessionAdded(KDevelop::IDebugSession*);
 
 protected:
     virtual void showEvent(QShowEvent* e);

@@ -44,7 +44,7 @@ using namespace KDevelop;
 FramestackWidget::FramestackWidget(DebugController* controller, QWidget* parent)
     : QSplitter(Qt::Horizontal, parent), m_controller(controller)
 {
-    connect(controller, SIGNAL(sessionAdded(IDebugSession*)), SLOT(sessionAdded(IDebugSession*)));
+    connect(controller, SIGNAL(sessionAdded(KDevelop::IDebugSession*)), SLOT(sessionAdded(KDevelop::IDebugSession*)));
     connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
     
 

@@ -47,7 +47,7 @@ class FramestackWidget : public QSplitter
         virtual void showEvent(QShowEvent* );
         virtual void hideEvent(QHideEvent* );
     private Q_SLOTS:
-        void sessionAdded(IDebugSession* session);
+        void sessionAdded(KDevelop::IDebugSession* session);
         void setThreadShown(const QModelIndex& idx);
         void checkFetchMoreFrames();
         void assignSomeThread();

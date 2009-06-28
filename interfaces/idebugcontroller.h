@@ -48,7 +48,7 @@ public:
     virtual VariableCollection *variableCollection() = 0;
 
 Q_SIGNALS:
-    void sessionAdded(IDebugSession* session);
+    void sessionAdded(KDevelop::IDebugSession* session);
 };
 
 }
