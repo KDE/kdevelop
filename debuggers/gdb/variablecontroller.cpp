@@ -90,7 +90,7 @@ void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)
             if (var.hasField("type_changed")
                 && var["type_changed"].literal() == "true")
             {
-                v->clear(); //TODO: delete children
+                v->deleteChildren();
                 v->setHasMore(var["new_num_children"].toInt() != 0);
             }
 
@@ -178,7 +178,7 @@ public:
         if (r.reason == "error") {
             /* Probably should mark this disabled, or something.  */
         } else {
-            m_variable->clear(); //TODO: delete children
+            m_variable->deleteChildren();
             m_variable->setInScope(true);
             m_variable->setVarobj(r["name"].literal());
             m_variable->setHasMore(r["numchild"].toInt());
