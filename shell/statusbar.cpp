@@ -224,25 +224,20 @@ void StatusBar::hideProgress( IStatus* status )
 
 void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int value)
 {
-    if (m_progressItems.contains(status)) {
-        kDebug() << "using existing item for" << status->statusName();
-        ProgressItem* i = m_progressItems[status];
-        if( minimum == 0 && maximum == 0 ) {
-            i->setBusy();
-        } else {
-            i->setBusy( false );
-            i->setProgress( 100*value/maximum );
-        }
-        m_progressWidget->raise();
-        m_progressDialog->raise();
-    } else {
+    if (!m_progressItems.contains(status)) {
         bool canBeCanceled = false;
-        kDebug() << "creating new item for" << status->statusName();
-        ProgressItem* i = m_progressController->createProgressItem(
-            ProgressManager::getUniqueID(), status->statusName(), QString(), canBeCanceled);
-        m_progressItems[status] = i;
-        m_progressWidget->raise();
-        m_progressDialog->raise();
+        m_progressItems[status] = m_progressController->createProgressItem(
+            ProgressManager::getUniqueID(), status->statusName(), QString(), canBeCanceled);;
+    }
+    
+    ProgressItem* i = m_progressItems[status];
+    m_progressWidget->raise();
+    m_progressDialog->raise();
+    if( minimum == 0 && maximum == 0 ) {
+        i->setBusy();
+    } else {
+        i->setBusy( false );
+        i->setProgress( 100*value/maximum );
     }
 }
 
