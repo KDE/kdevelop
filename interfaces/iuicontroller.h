@@ -46,19 +46,33 @@ class IAssistant;
 class KDEVPLATFORMINTERFACES_EXPORT IToolViewFactory {
 public:
     virtual ~IToolViewFactory() {}
+    /**
+     * called to create a new widget for this toolview
+     * @param parent the parent to use as parent for the widget
+     * @returns the new widget for the toolview
+     */
     virtual QWidget* create(QWidget *parent = 0) = 0;
-    /* Return the identifier of this toolview.  The identifier
-       is used to remember which areas the tool view should appear
-       in, and must never change. */
+    /** 
+     * @returns the identifier of this toolview.  The identifier
+     * is used to remember which areas the tool view should appear
+     * in, and must never change.
+     */
     virtual QString id() const = 0;
+    /**
+     * @returns the default position where this toolview should appear
+     */
     virtual Qt::DockWidgetArea defaultPosition() = 0;
     /**
-      * Fetch a list of actions to add to the toolbar of the toolview @p view
-      * @param view the view to which the actions should be added
-      * @returns a list of actions to be added to the toolbar
-      */
-    
+     * Fetch a list of actions to add to the toolbar of the toolview @p view
+     * @param view the view to which the actions should be added
+     * @returns a list of actions to be added to the toolbar
+     */
     virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const { return viewWidget->actions(); }
+    
+    /**
+     * called when a new view is created from this template
+     * @param view the new sublime view that is being shown
+     */
     virtual void viewCreated(Sublime::View* view);
 };
 
