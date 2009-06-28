@@ -104,7 +104,6 @@ void KDevelop::BreakpointDetails::textEdited(const QString& text)
 
 void BreakpointDetails::setItem(Breakpoint *b)
 {
-    kDebug() << b;
     m_currentBreakpoint = b;
 
     if (!b) {
