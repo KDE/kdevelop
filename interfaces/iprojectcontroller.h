@@ -123,6 +123,15 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
+     * emitted right before a project is started to be loaded.
+     * At this point all sanity checks have been done, so the project
+     * is really going to be loaded.
+     * @note the given project won't be very useful as it doesn't have all things
+     * setup properly
+     * @param url the url of the project that is about to be opened.
+     */
+    void projectAboutToBeOpened( KDevelop::IProject* project );
+    /**
      * emitted after a project is completely opened and the project model
      * has been populated.
      * @param project the project that has been opened.

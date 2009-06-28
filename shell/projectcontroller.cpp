@@ -577,6 +577,7 @@ void ProjectController::openProject( const KUrl &projectFile )
     }
 
     Project* project = new Project();
+    emit projectAboutToBeOpened( project );
     if ( !project->open( url ) )
     {
         KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),

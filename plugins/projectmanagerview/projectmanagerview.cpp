@@ -22,6 +22,7 @@
 #include "projectmanagerview.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QTimer>
 #include <QtGui/QHeaderView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>
@@ -112,7 +113,32 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
              SLOT(updateSyncAction()));
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
+             
+    connect( KDevelop::ICore::self()->projectController(), SIGNAL(projectAboutToBeOpened(KDevelop::IProject*)),
+             SLOT(projectToBeOpened()) );
+    connect( KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+             SLOT(projectOpened()) );
     selectionChanged();
+    // Update the progress-state, but do so in a second so we
+    // can be sure the button has been created
+    QTimer::singleShot( 1000, this, SLOT(projectToBeOpened()) );
+}
+
+void ProjectManagerView::projectOpened()
+{
+    if( m_plugin->numProjectsBeingOpened() == 0 )
+    {
+        emit hideProgressIndicator();
+    }
+}
+
+void ProjectManagerView::projectToBeOpened()
+{
+    kDebug() << "project to be opened" << m_plugin->numProjectsBeingOpened();
+    if( m_plugin->numProjectsBeingOpened() == 0 )
+    {
+        emit showProgressIndicator();
+    }
 }
 
 void ProjectManagerView::selectionChanged()
