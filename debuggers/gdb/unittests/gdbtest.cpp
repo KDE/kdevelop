@@ -40,6 +40,7 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <debugger/variable/variablecollection.h>
 #include <debugger/interfaces/ivariablecontroller.h>
+#include <tests/autotestshell.h>
 
 #include "gdbcommand.h"
 #include "gdbcontroller.h"
@@ -47,23 +48,6 @@
 
 namespace GDBDebugger {
 
-class AutoTestShell : public KDevelop::ShellExtension
-{
-public:
-    QString xmlFile() { return QString(); }
-    QString defaultProfile() { return "kdevtest"; }
-    KDevelop::AreaParams defaultArea() {
-        KDevelop::AreaParams params;
-        params.name = "test";
-        params.title = "Test";
-        return params;
-    }
-    QString projectFileExtension() { return QString(); }
-    QString projectFileDescription() { return QString(); }
-    QStringList defaultPlugins() { return QStringList(); }
-
-    static void init() { s_instance = new AutoTestShell; }
-};
 
 void GdbTest::init()
 {
