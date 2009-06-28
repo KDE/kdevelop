@@ -60,6 +60,8 @@ private Q_SLOTS:
     void testVariablesLocalsStruct();
     void testVariablesWatches();
     void testVariablesWatchesTwoSessions();
+    void testVariablesStopDebugger();
+    void testVariablesStartSecondSession();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);

@@ -70,7 +70,6 @@
 #include <interfaces/launchconfigurationtype.h>
 
 #include "disassemblewidget.h"
-#include "gdbcontroller.h"
 #include "processselection.h"
 #include "memviewdlg.h"
 #include "gdbparser.h"
@@ -93,14 +92,13 @@ template<class T>
 class DebuggerToolFactory : public KDevelop::IToolViewFactory
 {
 public:
-  DebuggerToolFactory(CppDebuggerPlugin* plugin, GDBController* controller,
-                      const QString &id, Qt::DockWidgetArea defaultArea)
-  : m_plugin(plugin), m_controller(controller),
-    m_id(id), m_defaultArea(defaultArea) {}
+  DebuggerToolFactory(CppDebuggerPlugin* plugin, const QString &id, Qt::DockWidgetArea defaultArea)
+  : m_plugin(plugin), m_id(id), m_defaultArea(defaultArea)
+  {}
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new T(m_plugin, m_controller, parent);
+    return new T(m_plugin, parent);
   }
 
   virtual QString id() const
@@ -129,7 +127,6 @@ public:
 
 private:
   CppDebuggerPlugin* m_plugin;
-  GDBController* m_controller;
   QString m_id;
   Qt::DockWidgetArea m_defaultArea;
 };
@@ -142,25 +139,22 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setXMLFile("kdevgdbui.rc");
 
-    // Setup widgets and dbgcontroller
-    m_controller = new GDBController(this);
-
     core()->uiController()->addToolView(
         i18n("Disassemble"),
         new DebuggerToolFactory<DisassembleWidget>(
-            this, m_controller, "org.kdevelop.debugger.DisassemblerView",
+            this, "org.kdevelop.debugger.DisassemblerView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
         i18n("GDB"),
         new DebuggerToolFactory<GDBOutputWidget>(
-            this, m_controller, "org.kdevelop.debugger.ConsoleView",
+            this, "org.kdevelop.debugger.ConsoleView",
             Qt::BottomDockWidgetArea));
 
     core()->uiController()->addToolView(
         i18n("Debug views"),
         new DebuggerToolFactory<ViewerWidget>(
-            this, m_controller, "org.kdevelop.debugger.VariousViews",
+            this, "org.kdevelop.debugger.VariousViews",
             Qt::BottomDockWidgetArea));
 
     setupActions();
@@ -339,7 +333,7 @@ void CppDebuggerPlugin::contextEvaluate()
 
 DebugSession* CppDebuggerPlugin::createSession()
 {
-    DebugSession *session = new DebugSession(m_controller);
+    DebugSession *session = new DebugSession();
     KDevelop::ICore::self()->debugController()->addSession(session);
     connect(session, SIGNAL(showMessage(QString,int)), SLOT(controllerMessage(QString,int)));
     connect(session, SIGNAL(reset()), SIGNAL(reset()));

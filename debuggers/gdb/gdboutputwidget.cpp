@@ -41,17 +41,20 @@
 #include <KIcon>
 #include <QScrollBar>
 
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
+#include "debugsession.h"
 
 namespace GDBDebugger
 {
 
 /***************************************************************************/
 
-GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent) :
+GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     QWidget(parent),
-    m_controller(controller),
     m_userGDBCmdEditor(0),
     m_Interrupt(0),
     m_gdbView(0),
@@ -100,21 +103,31 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* contr
     connect( &updateTimer_, SIGNAL(timeout()),
              this,  SLOT(flushPending()));
 
-    connect( this,       SIGNAL(userGDBCmd(const QString &)),
-             controller, SLOT(slotUserGDBCmd(const QString&)));
-    connect( this,       SIGNAL(breakInto()),
-             controller, SLOT(slotPauseApp()));
-
-    connect( controller, SIGNAL(gdbInternalCommandStdout(const QString&)),
-             this,       SLOT(slotInternalCommandStdout(const QString&)) );
-    connect( controller, SIGNAL(gdbUserCommandStdout(const QString&)),
-             this,       SLOT(slotUserCommandStdout(const QString&)) );
-
-    connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
-             this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+    connect(KDevelop::ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
+            SLOT(sessionAdded(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
 }
+
+
+void GDBOutputWidget::sessionAdded(KDevelop::IDebugSession* s)
+{
+    DebugSession *session = qobject_cast<DebugSession*>(s);
+    if (!session) return;
+     connect( this,       SIGNAL(userGDBCmd(const QString &)),
+             session, SLOT(slotUserGDBCmd(const QString&)));
+     connect( this,       SIGNAL(breakInto()),
+             session, SLOT(interruptDebugger()));
+
+     connect( session, SIGNAL(gdbInternalCommandStdout(const QString&)),
+             this,       SLOT(slotInternalCommandStdout(const QString&)) );
+     connect( session, SIGNAL(gdbUserCommandStdout(const QString&)),
+             this,       SLOT(slotUserCommandStdout(const QString&)) );
+
+     connect( session, SIGNAL(gdbStateChanged(DBGStateFlags, DBGStateFlags)),
+             this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+}
+
 
 /***************************************************************************/
 

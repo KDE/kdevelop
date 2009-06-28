@@ -31,11 +31,15 @@
 /***************************************************************************/
 /***************************************************************************/
 
+namespace KDevelop {
+    class IDebugSession;
+}
+
 namespace GDBDebugger
 {
 
 class Breakpoint;
-class GDBController;
+class DebugSession;
 class CppDebuggerPlugin;
 
 class DisassembleWidget : public QTreeWidget
@@ -51,7 +55,7 @@ public:
         ColumnCount
     };
 
-    DisassembleWidget( CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent=0 );
+    DisassembleWidget( CppDebuggerPlugin* plugin, QWidget *parent=0 );
     virtual ~DisassembleWidget();
 
 Q_SIGNALS:
@@ -61,6 +65,9 @@ public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
+
+private Q_SLOTS:
+    void sessionAdded(KDevelop::IDebugSession* session);
 
 protected:
     virtual void showEvent(QShowEvent*);
@@ -73,7 +80,6 @@ private:
     /// callback for GDBCommand
     void memoryRead(const GDBMI::ResultRecord& r);
 
-    GDBController* controller_;
     bool    active_;
     unsigned long    lower_;
     unsigned long    upper_;

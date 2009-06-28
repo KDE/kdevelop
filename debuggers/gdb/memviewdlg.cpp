@@ -14,7 +14,6 @@
  ***************************************************************************/
 
 #include "memviewdlg.h"
-#include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "gdbglobal.h"
 #include "debuggerplugin.h"
@@ -45,6 +44,11 @@
 #include <khexedit/byteseditinterface.h>
 
 #include <ctype.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+
+#include "debugsession.h"
 
 // **************************************************************************
 //
@@ -147,10 +151,17 @@ namespace GDBDebugger
         if (isOk())
             slotEnableOrDisable();
 
-        connect( controller, SIGNAL(stateChanged(DBGStateFlags, DBGStateFlags)),
-                 this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+        connect(KDevelop::ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
+                SLOT(sessionAdded(KDevelop::IDebugSession*)));
         connect(this,        SIGNAL(setViewShown(bool)),
                 plugin,      SLOT(slotShowView(bool)));
+    }
+
+    void MemoryView::sessionAdded(KDevelop::IDebugSession* s)
+    {
+        DebugSession *session = qobject_cast<DebugSession*>(s);
+        if (!session) return;
+        connect( session, SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)), SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
     }
 
     void MemoryView::initWidget()
@@ -258,7 +269,9 @@ namespace GDBDebugger
 
     void MemoryView::slotChangeMemoryRange()
     {
-        controller_->addCommand(
+        DebugSession *session = qobject_cast<DebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+        if (!session) return;
+        session->addCommand(
             new ExpressionValueCommand(
                 rangeSelector_->amountLineEdit->text(),
                 this, &MemoryView::sizeComputed));
@@ -266,7 +279,9 @@ namespace GDBDebugger
 
     void MemoryView::sizeComputed(const QString& size)
     {
-        controller_->addCommand(
+        DebugSession *session = qobject_cast<DebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+        if (!session) return;
+        session->addCommand(
             new
             GDBCommand(
                 GDBMI::DataReadMemory,
@@ -330,9 +345,11 @@ namespace GDBDebugger
 
     void MemoryView::memoryEdited(int start, int end)
     {
+        DebugSession *session = qobject_cast<DebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+        if (!session) return;
         for(int i = start; i <= end; ++i)
         {
-            controller_->addCommand(
+            session->addCommand(
                 new GDBCommand(GDBMI::GdbSet,
                     QString("*(char*)(%1 + %2) = %3")
                         .arg(start_)
@@ -378,14 +395,17 @@ namespace GDBDebugger
             // not textual startAsString_ and amountAsString_,
             // because program position might have changes and expressions
             // are no longer valid.
-            controller_->addCommand(
-                new
-                GDBCommand(
-                    GDBMI::DataReadMemory,
-                    QString("%1 x 1 1 %2")
-                    .arg(start_).arg(amount_),
-                    this,
-                    &MemoryView::memoryRead));
+            DebugSession *session = qobject_cast<DebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+            if (session) {
+                session->addCommand(
+                    new
+                    GDBCommand(
+                        GDBMI::DataReadMemory,
+                        QString("%1 x 1 1 %2")
+                        .arg(start_).arg(amount_),
+                        this,
+                        &MemoryView::memoryRead));
+            }
         }
 
         if (result == close)
@@ -411,11 +431,9 @@ namespace GDBDebugger
     }
 
 
-    ViewerWidget::ViewerWidget(CppDebuggerPlugin* plugin, GDBController* controller,
-                               QWidget* parent)
+    ViewerWidget::ViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent)
     : QWidget(parent),
-      m_plugin(plugin),
-      controller_(controller)
+      m_plugin(plugin)
     {
 //         setWindowIcon(KIcon("math_brace"));
         setWindowIcon(KIcon("debugger"));

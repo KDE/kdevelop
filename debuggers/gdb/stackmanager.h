@@ -36,13 +36,13 @@ class TreeModel;
 
 namespace GDBDebugger
 {
-class GDBController;
+class DebugSession;
 
 class Thread : public KDevelop::ThreadItem
 {
     Q_OBJECT
 public:
-    Thread(KDevelop::StackModel* model, GDBController *controller,
+    Thread(KDevelop::StackModel* model, DebugSession *session,
            const GDBMI::Value& thread);
 
     int id() const { return id_; }
@@ -54,7 +54,7 @@ public:
     void fetchMoreChildren_1(bool clear);
     void handleFrameList(const GDBMI::ResultRecord& r);
 
-    GDBController* controller_;
+    DebugSession* session_;
     int id_;
 
     static const int step = 20;
@@ -81,7 +81,7 @@ class StackManager : public KDevelop::StackModel
 
 public:
 
-    StackManager(GDBController* controller);
+    StackManager(DebugSession* session);
     virtual ~StackManager();
 
     virtual void update();
@@ -99,7 +99,7 @@ public Q_SLOTS:
     void slotEvent(event_t e);
 
 private:
-    GDBController* controller_;
+    DebugSession* session_;
     class DebugUniverse *universe_;
 };
 

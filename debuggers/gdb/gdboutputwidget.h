@@ -31,8 +31,11 @@
 
 #include "gdbglobal.h"
 
-class KHistoryComboBox;
+namespace KDevelop {
+class IDebugSession;
+}
 
+class KHistoryComboBox;
 class QTextEdit;
 class QToolButton;
 
@@ -47,7 +50,7 @@ class GDBOutputWidget : public QWidget
     Q_OBJECT
 
 public:
-    GDBOutputWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent=0 );
+    GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent=0 );
     ~GDBOutputWidget();
 
     void savePartialProjectSession();
@@ -69,6 +72,9 @@ public Q_SLOTS:
 
     void copyAll();
     void toggleShowInternalCommands();
+
+private Q_SLOTS:
+    void sessionAdded(KDevelop::IDebugSession *session);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

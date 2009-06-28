@@ -35,8 +35,6 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
 
-#include "gdbcontroller.h"
-
 class QLabel;
 class QMenu;
 class QDBusInterface;
@@ -58,7 +56,6 @@ class GDBBreakpointWidget;
 class FramestackWidget;
 class DisassembleWidget;
 class Breakpoint;
-class GDBController;
 class GDBOutputWidget;
 class ViewerWidget;
 class DebugSession;
@@ -150,8 +147,6 @@ private:
     KConfigGroup m_config;
 
     DebugSession* m_session;
-
-    GDBController* m_controller;
 };
 
 }

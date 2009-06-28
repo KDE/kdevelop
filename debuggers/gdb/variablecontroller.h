@@ -57,7 +57,6 @@ private slots:
     void programStopped(const GDBMI::ResultRecord &r);
 
 private:
-    GDBController* controller() const;
     DebugSession* debugSession() const;
 
     void updateLocals();

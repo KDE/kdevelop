@@ -28,6 +28,7 @@
 #include <KGlobal>
 #include <KSharedConfig>
 #include <KDebug>
+#include <KProcess>
 #include <qtest_kde.h>
 
 #include <shell/testcore.h>
@@ -43,7 +44,6 @@
 #include <tests/autotestshell.h>
 
 #include "gdbcommand.h"
-#include "gdbcontroller.h"
 #include "debugsession.h"
 
 namespace GDBDebugger {
@@ -101,17 +101,14 @@ class TestDebugSession : public DebugSession
 {
     Q_OBJECT
 public:
-    TestDebugSession() : DebugSession(new GDBController), m_line(0)
+    TestDebugSession() : DebugSession(), m_line(0)
     {
         qRegisterMetaType<KUrl>("KUrl");
         connect(this, SIGNAL(showStepInSource(KUrl, int)), SLOT(slotShowStepInSource(KUrl, int)));
         
         KDevelop::ICore::self()->debugController()->addSession(this);
     }
-    ~TestDebugSession()
-    {
-        delete controller();
-    }
+
     KUrl url() { return m_url; }
     int line() { return m_line; }
 
@@ -292,7 +289,7 @@ void GdbTest::testUpdateBreakpoint()
     session->startProgram(&cfg);
 
     //insert custom command as user might do it using GDB console
-    session->controller()->addCommand(new UserCommand(GDBMI::NonMI, "break "+debugeeFileName+":28"));
+    session->addCommand(new UserCommand(GDBMI::NonMI, "break "+debugeeFileName+":28"));
 
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(100);
@@ -831,6 +828,45 @@ void GdbTest::testVariablesWatchesTwoSessions()
     QVERIFY(!v->inScope());
     QVERIFY(!dynamic_cast<KDevelop::Variable*>(v->child(0))->inScope());
 }
+
+void GdbTest::testVariablesStopDebugger()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    session->stopDebugger();
+    QTest::qWait(300);
+}
+
+
+void GdbTest::testVariablesStartSecondSession()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(true);
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)

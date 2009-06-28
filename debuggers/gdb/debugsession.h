@@ -33,6 +33,7 @@
 #include <debugger/interfaces/idebugsession.h>
 
 #include "gdbglobal.h"
+#include "mi/gdbmi.h"
 
 class KToolBar;
 
@@ -43,20 +44,34 @@ namespace KDevelop {
 class ProcessLineMaker;
 class ILaunchConfiguration;
 }
-namespace GDBMI {
-class ResultRecord;
-}
+
 namespace GDBDebugger {
+
+class StackManager;
+class STTY;
+class CommandQueue;
+class GDBCommand;
 class GDB;
 class BreakpointController;
-class GDBController;
 
+
+static QString gdbPathEntry = "GDB Path";
+static QString debuggerShellEntry = "Debugger Shell";
+static QString remoteGdbConfigEntry = "Remote GDB Config Script";
+static QString remoteGdbShellEntry = "Remote GDB Shell Script";
+static QString remoteGdbRunEntry = "Remote GDB Run Script";
+static QString staticMembersEntry = "Display Static Members";
+static QString demangleNamesEntry = "Display Demangle Names";
+static QString breakOnLibLoadEntry = "Try Setting Breakpoints On Loading Libraries";
+static QString separateTerminalEntry = "Separate Terminal For Application IO";
+static QString floatingToolbarEntry = "Floating Toolbar";
+static QString allowForcedBPEntry = "Allow Forced Breakpoint Set";
 
 class DebugSession : public KDevelop::IDebugSession
 {
     Q_OBJECT
 public:
-    DebugSession(GDBController* controller);
+    DebugSession();
     ~DebugSession();
 
     virtual DebuggerState state() const;
@@ -64,18 +79,19 @@ public:
 
     virtual bool restartAvaliable() const;
 
-    GDBController* controller() { return m_controller; }
-
 Q_SIGNALS:
     void applicationStandardOutputLines(const QStringList& lines);
     void applicationStandardErrorLines(const QStringList& lines);
-    void showMessage(const QString&, int);
+    void showMessage(const QString& message, int timeout);
     void reset();
     void raiseOutputViews();
     void raiseVariableViews();
     void programStopped(const GDBMI::ResultRecord& mi_record);
 
 public Q_SLOTS:
+    /**
+     * Start the debugger, and execute the program specified by \a run.
+     */
     bool startProgram(KDevelop::ILaunchConfiguration* run);
     virtual void restartDebugger();
     virtual void stopDebugger();
@@ -89,19 +105,26 @@ public Q_SLOTS:
     virtual void stepOverInstruction();
     virtual void stepOut();
 
+    /**
+     * Start the debugger and examine the core file given by \a coreFile.
+     */
     void examineCoreFile(const KUrl& debugee, const KUrl& coreFile);
+
+    /**
+     * Attach to currently running process with the given \a pid.
+     */
     void attachToProcess(int pid);
 
 private Q_SLOTS:
     void slotDebuggerAbnormalExit();
-    void gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
-    void slotShowStepInSource(const QString& file, int line, const QString& address);
+    void emitShowStepInSource(const QString& file, int line, const QString& address);
 
 private:
+    void _gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
+
     void setupController();
     void setSessionState(KDevelop::IDebugSession::DebuggerState state);
 
-    GDBController *m_controller;
     KDevelop::ProcessLineMaker *m_procLineMaker;
     KDevelop::ProcessLineMaker *m_gdbLineMaker;
     DebuggerState m_sessionState;
@@ -109,6 +132,227 @@ private:
     QPointer<KToolBar> floatingToolBar;
     KConfigGroup m_config;
     QPointer<GDB> m_gdb;
+
+
+
+
+public:
+    /**
+     * Run currently executing program to the given \a url and \a line.
+     */
+    void runUntil(const KUrl& url, int line);
+
+    /**
+     * Move the execution point of the currently executing program to the given \a url and \a line.
+     */
+    void jumpTo(const KUrl& url, int line);
+
+
+    /** Adds a command to the end of queue of commands to be executed
+        by gdb. The command will be actually sent to gdb only when
+        replies from all previous commands are received and full processed.
+
+        The literal command sent to gdb is obtained by calling
+        cmd->cmdToSend. The call is made immediately before sending the
+        command, so it's possible to use results of prior commands when
+        computing the exact command to send.
+    */
+    void addCommand(GDBCommand* cmd);
+
+    /** Same as above, but internally constructs new GDBCommand
+       instance from the string. */
+    void addCommand(GDBMI::CommandType type, const QString& cmd = QString());
+
+    /** Adds command to the front of the commands queue. It will be executed
+        next.
+
+        This is useful to implement 'atomic' command sequences. For example,
+        if one wants to switch to each thread in turn, asking gdb where that
+        thread stand, this should never be interrupted by other command, since
+        other commands might not expect that thread magically changes.
+
+        In this specific case, first -thread-list-ids commands is issued. The
+        handler for reply will add a number of command to front, and it will
+        guarantee that no other command will get in between.
+
+        Note that if you call:
+
+            addCommandToFront(cmd1);
+            addCommandToFront(cmd2);
+
+        The execution order will be 'cmd2', then 'cmd1'.
+
+        FIXME: is not used for now, maybe remove.
+    */
+    void addCommandToFront(GDBCommand* cmd);
+
+    /* If current command queue has any command
+       for which isRun is true, inserts 'cmd'
+       before the first such command. Otherwise,
+       works the same as addCommand. */
+    void addCommandBeforeRun(GDBCommand* cmd);
+
+    /** Selects the specified thread/frame. Immediately emits
+        thread_or_frame_changed event.
+    */
+    void selectFrame(int frameNo, int threadNo);
+
+    /** Returns the numerical identfier of the current thread,
+        or -1 if the program is not threaded (i.e. there's just
+        one thread.
+    */
+    int currentThread() const;
+
+    int currentFrame() const;
+
+    bool stateIsOn(DBGStateFlags state) const;
+
+    using QObject::event;
+
+private:
+    void parseLocals          (char type, char *buf);
+
+    /** Handles a result response from a MI command -- that is
+        all MI responses except for Stream and Prompt responses.
+        Uses currentCmd to decide what to do with response and
+        calls appropriate method.
+    */
+    void processMICommandResponse(const GDBMI::ResultRecord& r);
+
+    /** Handles reply from -stack-info-frame command issues
+        after switching the stack frame.
+    */
+    void handleMiFrameSwitch(const GDBMI::ResultRecord& r);
+
+    /** Try to execute next command in the queue.  If GDB is not
+        busy with previous command, and there's a command in the
+        queue, sends it and returns true.
+        Otherwise, returns false.  */
+    bool executeCmd ();
+    void destroyCmds();
+    void removeInfoRequests();
+    /** Called when there are no pending commands and 'state_reload_needed'
+        is true.
+        Issues commands to completely reload all program state shown
+        to the user.
+    */
+    void reloadProgramState();
+
+    void programNoApp(const QString &msg, bool msgBox);
+
+    void setStateOn(DBGStateFlags stateOn);
+    void setStateOff(DBGStateFlags stateOff);
+    void setState(DBGStateFlags newState);
+
+    void debugStateChange(DBGStateFlags oldState, DBGStateFlags newState);
+    void commandDone();
+
+    /** Raises the specified event. Should be used instead of
+        emitting 'event' directly, since this method can perform
+        additional book-keeping for events.
+    */
+    void raiseEvent(event_t e);
+
+    void maybeAnnounceWatchpointHit();
+
+    bool startDebugger(KDevelop::ILaunchConfiguration* cfg);
+
+private Q_SLOTS:
+
+    void gdbReady();
+
+    void gdbExited();
+
+    void slotProgramStopped(const GDBMI::ResultRecord& mi_record);
+
+    /** Parses the CLI output line, and catches interesting messages
+        like "Program exited". This is intended to allow using console
+        commands in the gdb window despite the fact that GDB does not
+        produce right MI notification for CLI commands. I.e. if you
+        run "continue" there will be no MI message if the application has
+        exited.
+    */
+    void parseStreamRecord(const GDBMI::StreamRecord& s);
+
+    /** Default handler for errors.
+        Tries to guess is the error message is telling that target is
+        gone, if so, informs the user.
+        Otherwise, shows a dialog box and reloads view state.  */
+    void defaultErrorHandler(const GDBMI::ResultRecord& result);
+
+    void resultRecord(const GDBMI::ResultRecord& result);
+
+    void programRunning();
+
+    // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
+    void queueCmd(GDBCommand *cmd, QueuePosition queue_where = QueueAtEnd);
+
+    void configure();
+
+    void slotUserGDBCmd(const QString&);
+
+    // Pops up a dialog box with some hopefully
+    // detailed information about which state debugger
+    // is in, which commands were sent and so on.
+    void explainDebuggerStatus();
+
+    void slotKillGdb();
+
+    void handleVersion(const QStringList& s);
+
+public Q_SLOTS:
+    void slotKill();
+
+Q_SIGNALS:
+    void rawGDBMemoryDump     (char *buf);
+    void rawGDBRegisters      (char *buf);
+    void rawGDBLibraries      (char *buf);
+    void ttyStdout            (const QByteArray& output);
+    void ttyStderr            (const QByteArray& output);
+    void gdbInternalCommandStdout (const QString& output);
+    void gdbUserCommandStdout (const QString& output);
+    void gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
+    void gdbShowStepInSource(const QString &fileName, int line, const QString &address);
+
+    /** This signal is emitted whenever the given event in a program
+        happens. See DESIGN.txt for expected handled of each event.
+
+        NOTE: this signal should never be emitted directly. Instead,
+        use raiseEvent.
+    */
+    void event(event_t e);
+
+    void debuggerAbnormalExit();
+
+
+    /** Emitted immediately after breakpoint is hit, before any commands
+        are sent and before current line indicator is shown. */
+    void breakpointHit(int id);
+    /** Emitted for watchpoint hit, after line indicator is shown. */
+    void watchpointHit(int id,
+                       const QString& oldValue, const QString& newValue);
+
+private:
+    int               currentFrame_;
+    int               currentThread_;
+
+    CommandQueue*   commandQueue_;
+
+    STTY*             tty_;
+    QString           badCore_;
+
+    // Some state variables
+    DBGStateFlags     state_;
+    bool              programHasExited_;
+
+
+    bool state_reload_needed;
+
+    QTime commandExecutionTime;
+
+    bool stateReloadInProgress_;
+
+    StackManager* m_stackManager;
 };
 
 }

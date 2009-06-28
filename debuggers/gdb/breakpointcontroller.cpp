@@ -30,7 +30,6 @@
 #include <debugger/breakpoint/breakpointmodel.h>
 #include <debugger/breakpoint/breakpoint.h>
 
-#include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "debugsession.h"
 #include <KLocalizedString>
@@ -128,7 +127,7 @@ BreakpointController::BreakpointController(DebugSession* parent)
     Q_ASSERT(parent);
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
-    connect(controller(),     SIGNAL(event(event_t)),
+    connect(debugSession(),     SIGNAL(event(event_t)),
             this,       SLOT(slotEvent(event_t)));
     connect(parent, SIGNAL(programStopped(GDBMI::ResultRecord)), SLOT(programStopped(GDBMI::ResultRecord)));
 }
@@ -139,11 +138,6 @@ DebugSession *BreakpointController::debugSession() const
     return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
 }
 
-GDBController * BreakpointController::controller() const
-{
-    Q_ASSERT(debugSession());
-    return debugSession()->controller();
-}
 
 void BreakpointController::slotEvent(event_t e)
 {
@@ -151,9 +145,9 @@ void BreakpointController::slotEvent(event_t e)
         case program_state_changed:
             if (m_interrupted) {
                 m_interrupted = false;
-                controller()->addCommand(ExecContinue);
+                debugSession()->addCommand(ExecContinue);
             } else {
-                controller()->addCommand(
+                debugSession()->addCommand(
                     new GDBCommand(GDBMI::BreakList,
                                 "",
                                 this,
@@ -178,7 +172,7 @@ void BreakpointController::slotEvent(event_t e)
 
 void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
 {
-    if (controller()->stateIsOn(s_dbgNotStarted)) {
+    if (debugSession()->stateIsOn(s_dbgNotStarted)) {
         return;
     }
 
@@ -194,7 +188,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         m_dirty.remove(breakpoint);
         m_errors.remove(breakpoint);
         if (m_ids.contains(breakpoint)) {
-            controller()->addCommand(
+            debugSession()->addCommand(
                 new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                new DeletedHandler(this, breakpoint)));
             addedCommand = true;
@@ -210,13 +204,13 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             if (m_ids.contains(breakpoint)) {
                 /* We already have GDB breakpoint for this, so we need to remove
                 this one.  */
-                controller()->addCommand(
+                debugSession()->addCommand(
                     new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
                                 new DeletedHandler(this, breakpoint)));
                 addedCommand = true;
             } else {
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
-                    controller()->addCommand(
+                    debugSession()->addCommand(
                         new GDBCommand(BreakInsert,
                                     breakpoint->location(),
                                     new InsertedHandler(this, breakpoint)));
@@ -228,7 +222,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                     else if (breakpoint->kind() == KDevelop::Breakpoint::AccessBreakpoint)
                         opt = "-a ";
 
-                    controller()->addCommand(
+                    debugSession()->addCommand(
                         new GDBCommand(
                             BreakWatch,
                             opt + breakpoint->location(),
@@ -239,7 +233,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
         if (m_ids.contains(breakpoint)) {
-            controller()->addCommandToFront(
+            debugSession()->addCommandToFront(
                 new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
                             QString::number(m_ids[breakpoint]),
                             new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::EnableColumn)));
@@ -247,7 +241,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
         if (m_ids.contains(breakpoint)) {
-            controller()->addCommandToFront(
+            debugSession()->addCommandToFront(
                 new GDBCommand(BreakAfter,
                             QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
                             new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::IgnoreHitsColumn)));
@@ -255,7 +249,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
         if (m_ids.contains(breakpoint)) {
-            controller()->addCommandToFront(
+            debugSession()->addCommandToFront(
                 new GDBCommand(BreakCondition,
                             QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
                             new UpdateHandler(this, breakpoint, KDevelop::Breakpoint::ConditionColumn)));
@@ -268,7 +262,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
         } else {
             kDebug() << "dbg is busy, interrupting";
             m_interrupted = true;
-            controller()->slotPauseApp();
+            debugSession()->interruptDebugger();
         }
     }
 }
@@ -371,7 +365,10 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 
 void BreakpointController::programStopped(const GDBMI::ResultRecord& r)
 {
-    QString reason = r["reason"].literal();
+    QString reason;
+    if (r.hasField("reason")) {
+        reason = r["reason"].literal();
+    }
     kDebug() << reason;
 
     /* This method will not do the right thing if we hit a breakpoint

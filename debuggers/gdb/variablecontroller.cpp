@@ -29,7 +29,6 @@
 
 #include "gdbcommand.h"
 #include "debugsession.h"
-#include "gdbcontroller.h"
 #include "stringhelpers.h"
 #include <debugger/breakpoint/breakpointmodel.h>
 
@@ -49,11 +48,6 @@ DebugSession *VariableController::debugSession() const
     return static_cast<DebugSession*>(const_cast<QObject*>(QObject::parent()));
 }
 
-GDBController *VariableController::controller() const
-{
-    return debugSession()->controller();
-}
-
 void VariableController::programStopped(const GDBMI::ResultRecord& r)
 {
     if (r.hasField("reason") && r["reason"].literal() == "function-finished"
@@ -71,7 +65,7 @@ void VariableController::update()
 
     updateLocals();
 
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
                        &VariableController::handleVarUpdate));
 
@@ -133,8 +127,8 @@ private:
 class StackListLocalsHandler : public GDBCommandHandler
 {
 public:
-    StackListLocalsHandler(GDBController *controller)
-        : m_controller(controller)
+    StackListLocalsHandler(DebugSession *session)
+        : m_session(session)
     {}
 
     virtual void handle(const GDBMI::ResultRecord &r)
@@ -148,20 +142,20 @@ public:
             const GDBMI::Value& var = locals[i];
             localsName << var["name"].literal();
         }
-        m_controller->addCommand(                    //dont'show value, low-frame, high-frame
+        m_session->addCommand(                    //dont'show value, low-frame, high-frame
             new GDBCommand(GDBMI::StackListArguments, "0 0 0",
                         new StackListArgumentsHandler(localsName)));
     }
 
 private:
-    GDBController *m_controller;
+    DebugSession *m_session;
 };
 
 void VariableController::updateLocals()
 {
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(GDBMI::StackListLocals, "--all-values",
-                        new StackListLocalsHandler(controller())));
+                        new StackListLocalsHandler(debugSession())));
 }
 
 class CreateVarobjHandler : public GDBCommandHandler
@@ -203,7 +197,7 @@ private:
 
 void VariableController::createVarobj(KDevelop::Variable *variable, QObject *callback, const char *callbackMethod)
 {
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(
             GDBMI::VarCreate,
             QString("var%1 @ %2").arg(nextId_++).arg(variable->expression()),
@@ -213,8 +207,8 @@ void VariableController::createVarobj(KDevelop::Variable *variable, QObject *cal
 class FetchMoreChildrenHandler : public GDBCommandHandler
 {
 public:
-    FetchMoreChildrenHandler(KDevelop::Variable *variable, GDBController *controller)
-        : m_variable(variable), m_controller(controller), m_activeCommands(1)
+    FetchMoreChildrenHandler(KDevelop::Variable *variable, DebugSession *session)
+        : m_variable(variable), m_session(session), m_activeCommands(1)
     {}
 
     virtual void handle(const GDBMI::ResultRecord &r)
@@ -227,7 +221,7 @@ public:
             const QString& exp = child["exp"].literal();
             if (exp == "public" || exp == "protected" || exp == "private") {
                 ++m_activeCommands;
-                m_controller->addCommand(
+                m_session->addCommand(
                     new GDBCommand(GDBMI::VarListChildren,
                                 QString("--all-values \"%1\"").arg(child["name"].literal()),
                                 this/*use again as handler*/));
@@ -257,23 +251,23 @@ public:
 
 private:
     QPointer<KDevelop::Variable> m_variable;
-    GDBController *m_controller;
+    DebugSession *m_session;
     int m_activeCommands;
 };
 
 
 void VariableController::fetchMoreChildren(KDevelop::Variable* variable)
 {
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(GDBMI::VarListChildren,
                     QString("--all-values \"%1\"").arg(variable->varobj()),
-                    new FetchMoreChildrenHandler(variable, controller())));
+                    new FetchMoreChildrenHandler(variable, debugSession())));
 }
 
 
 void VariableController::deleteVar(KDevelop::Variable* variable)
 {
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(GDBMI::VarDelete, QString("\"%1\"").arg(variable->varobj())));
 }
 
@@ -304,7 +298,7 @@ QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, co
 
 void VariableController::addWatch(KDevelop::Variable* variable)
 {
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(GDBMI::VarInfoPathExpression,
                         variable->varobj(),
                         this,
@@ -313,7 +307,7 @@ void VariableController::addWatch(KDevelop::Variable* variable)
 
 void VariableController::addWatchpoint(KDevelop::Variable* variable)
 {
-    controller()->addCommand(
+    debugSession()->addCommand(
         new GDBCommand(GDBMI::VarInfoPathExpression,
                         variable->varobj(),
                         this,

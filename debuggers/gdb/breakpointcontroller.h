@@ -38,7 +38,6 @@ class Value;
 namespace GDBDebugger
 {
 class DebugSession;
-class GDBController;
 struct InsertedHandler;
 struct UpdateHandler;
 struct DeletedHandler;
@@ -59,7 +58,6 @@ private slots:
     void programStopped(const GDBMI::ResultRecord &r);
 
 private:
-    GDBController* controller() const;
     DebugSession* debugSession() const;
 
     virtual void sendMaybe(KDevelop::Breakpoint *breakpoint);

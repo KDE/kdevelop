@@ -24,6 +24,10 @@
 
 #include "gdbglobal.h"
 
+namespace KDevelop {
+class IDebugSession;
+}
+
 class KLineEdit;
 class QToolBox;
 
@@ -37,8 +41,7 @@ namespace GDBDebugger
     {
         Q_OBJECT
     public:
-        ViewerWidget(CppDebuggerPlugin* plugin, GDBController* controller,
-                     QWidget* parent);
+        ViewerWidget(CppDebuggerPlugin* plugin, QWidget* parent);
 
     public Q_SLOTS:
         /** Adds a new memory view to *this, initially showing
@@ -116,6 +119,8 @@ namespace GDBDebugger
         char* data_;
 
         int debuggerState_;
+    private slots:
+        void sessionAdded(KDevelop::IDebugSession* session);
     };
 }
 

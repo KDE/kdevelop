@@ -22,7 +22,6 @@
  */
 
 #include "disassemblewidget.h"
-#include "gdbcontroller.h"
 #include "gdbcommand.h"
 #include "debuggerplugin.h"
 
@@ -37,6 +36,10 @@
 #include <stdlib.h>
 #include <klocale.h>
 #include <KIcon>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <debugger/interfaces/idebugsession.h>
+#include "debugsession.h"
 
 using namespace GDBMI;
 
@@ -47,8 +50,8 @@ namespace GDBDebugger
 /***************************************************************************/
 /***************************************************************************/
 
-DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* controller, QWidget *parent)
-        : QTreeWidget(parent), controller_(controller),
+DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
+        : QTreeWidget(parent),
         active_(false),
         lower_(0),
         upper_(0),
@@ -69,12 +72,22 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, GDBController* c
 
     setHeaderLabels(QStringList() << i18n("Address") << i18n("Function") << i18n("Offset") << i18n("Instruction"));
 
-    connect( controller,  SIGNAL(showStepInSource(const QString&, int, const QString&)),
-             this,        SLOT(slotShowStepInSource(const QString&, int, const QString&)));
+    connect(KDevelop::ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
+            SLOT(sessionAdded(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
     connect(plugin, SIGNAL(reset()), this, SLOT(slotDeactivate()));
 }
+
+
+void DisassembleWidget::sessionAdded(KDevelop::IDebugSession* s)
+{
+    DebugSession *session = qobject_cast<DebugSession*>(s);
+    if (!session) return;
+    connect(session, SIGNAL(gdbShowStepInSource(QString,int,QString)),
+                SLOT(slotShowStepInSource(QString,int,QString)));
+}
+
 
 /***************************************************************************/
 
@@ -126,7 +139,7 @@ void DisassembleWidget::slotActivate(bool activate)
 void DisassembleWidget::slotShowStepInSource(   const QString &, int,
                                                 const QString &currentAddress)
 {
-    kDebug(9012) << "DisasssembleWidget::slotShowStepInSource()";
+    kDebug();
 
     currentAddress_ = currentAddress;
     address_ = strtoul(currentAddress.toLatin1(), 0, 0);
@@ -141,15 +154,18 @@ void DisassembleWidget::slotShowStepInSource(   const QString &, int,
 
 void DisassembleWidget::getNextDisplay()
 {
-    kDebug(9012) << "DisasssembleWidget::getNextDisplay()";
+    kDebug();
 
     if (address_)
     {
         Q_ASSERT(!currentAddress_.isNull());
 
         QString cmd = QString("-s $pc -e \"$pc + 128\" -- 0");
-        controller_->addCommandToFront( 
+        DebugSession *s = qobject_cast<DebugSession*>(KDevelop::ICore::self()->debugController()->currentSession());
+        if (s) {
+            s->addCommandToFront(
                         new GDBCommand(DataDisassemble, cmd, this, &DisassembleWidget::memoryRead ) );
+        }
     }
 }
 

@@ -30,7 +30,7 @@
 
 #include "gdbparser.h"
 #include "gdbcommand.h"
-#include "gdbcontroller.h"
+#include "debugsession.h"
 
 #include <debugger/util/treeitem.h>
 #include <debugger/util/treemodel.h>
@@ -74,8 +74,8 @@ void Frame::updateSelf(const GDBMI::Value& frame)
     setInformation(frame["level"].toInt(), get_function_or_address(frame), loc.first, loc.second);
 }
 
-Thread::Thread(KDevelop::StackModel* model, GDBDebugger::GDBController* controller, const GDBMI::Value& thread)
-    : ThreadItem(model), controller_(controller)
+Thread::Thread(KDevelop::StackModel* model, GDBDebugger::DebugSession* session, const GDBMI::Value& thread)
+    : ThreadItem(model), session_(session)
 {
     id_ = thread["id"].toInt();
 
@@ -124,7 +124,7 @@ void Thread::fetchMoreChildren_1(bool clear)
                                    this,
                                    &Thread::handleFrameList);
     c->setThread(id_);
-    controller_->addCommand(c);
+    session_->addCommand(c);
 }
 
 void Thread::handleFrameList(const GDBMI::ResultRecord& r)
@@ -174,15 +174,15 @@ class DebugUniverse : public TreeItem
 {
     Q_OBJECT
 public:
-    DebugUniverse(StackModel* model, GDBController *controller,
+    DebugUniverse(StackModel* model, DebugSession *session,
                   StackManager *stackManager)
-    : TreeItem(model), controller_(controller), stackManager_(stackManager), mModel(model)
+    : TreeItem(model), session_(session), stackManager_(stackManager), mModel(model)
     {}
 
     void update()
     {
-        if (!controller_->stateIsOn(s_dbgNotStarted)) {
-            controller_->addCommand(
+        if (!session_->stateIsOn(s_dbgNotStarted)) {
+            session_->addCommand(
                 new GDBCommand(ThreadInfo, "",
                             this,
                             &DebugUniverse::handleThreadInfo));
@@ -241,7 +241,7 @@ private:
         }
 
         for (; gidx >= 0; --gidx)
-            appendChild(new Thread(mModel, controller_, threads[gidx]));
+            appendChild(new Thread(mModel, session_, threads[gidx]));
 
         for (int i = 0; i < childItems.size(); ++i)
         {
@@ -255,7 +255,7 @@ private:
 
     }
 
-    GDBController* controller_;
+    DebugSession* session_;
     StackManager* stackManager_;
     StackModel* mModel;
 };
@@ -266,18 +266,18 @@ void GDBDebugger::Thread::clicked()
     KDevelop::ThreadItem::clicked();
 }
 
-StackManager::StackManager(GDBController* controller)
+StackManager::StackManager(DebugSession* session)
   : KDevelop::StackModel(),
-    controller_(controller)
+    session_(session)
 {
-    universe_ = new DebugUniverse(this, controller, this);
+    universe_ = new DebugUniverse(this, session, this);
     setRootItem(universe_);
 
     // new ModelTest(model_, this);
 
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
-    connect(controller, SIGNAL(event(event_t)),
+    connect(session, SIGNAL(event(event_t)),
             this,       SLOT(slotEvent(event_t)));
 }
 

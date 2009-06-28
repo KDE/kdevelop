@@ -20,7 +20,6 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  ${KDE4_ENABLE_EXCEPTIONS}")
 set(kdevgdb_PART_SRCS
     gdb.cpp
     debuggerplugin.cpp
-    gdbcontroller.cpp
     gdbcommandqueue.cpp
     gdbcommand.cpp
     gdbparser.cpp
@@ -70,7 +69,6 @@ install(TARGETS kdevgdb DESTINATION ${PLUGIN_INSTALL_DIR})
 set(gdbtest_PART_SRCS
     unittests/gdbtest.cpp
     gdb.cpp
-    gdbcontroller.cpp
     gdbcommandqueue.cpp
     gdbcommand.cpp
     gdbparser.cpp
