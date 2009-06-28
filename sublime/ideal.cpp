@@ -42,13 +42,15 @@
 using namespace Sublime;
 
 IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
-    : KAnimatedButton(parent), _area(area)
+    : KAnimatedButton(parent), _area(area), showingIndicator( false )
 {
     setFocusPolicy(Qt::NoFocus);
     KAcceleratorManager::setNoAccel(this);
     setCheckable(true);
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    kDebug() << "created toolbutton";
+    setIcons( "process-working-kde" );
 }
 
 Qt::Orientation IdealToolButton::orientation() const
@@ -61,16 +63,28 @@ Qt::Orientation IdealToolButton::orientation() const
 
 void IdealToolButton::hideProgressIndicator()
 {
+    stop();
     setIcon( normalIcon );
+    showingIndicator = false;
 }
 
 void IdealToolButton::showProgressIndicator()
 {
-    normalIcon = icon();
+    kDebug() << "got show indicator";
     setIcons( "process-working-kde" );
+    showingIndicator = true;
+    start();
 }
 
-
+void IdealToolButton::updateNormalIcon( const QIcon& icon )
+{
+    normalIcon = icon;
+    if( !showingIndicator )
+    {
+        kDebug() << "updating normal icon";
+        setIcon( icon );
+    }
+}
 
 QSize IdealToolButton::sizeHint() const
 {
@@ -237,11 +251,12 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     switch (event->type()) {
     case QEvent::ActionAdded: {
         if (! _buttons.contains(action)) {
+            kDebug() << "action was added" << action->text();
             IdealToolButton *button = new IdealToolButton(_area);
             _buttons.insert(action, button);
 
             button->setText(action->text());
-            button->setIcon(action->icon());
+            button->updateNormalIcon(action->icon());
             button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
             layout()->addWidget(button);
@@ -272,7 +287,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     case QEvent::ActionChanged: {
 	if (IdealToolButton *button = _buttons.value(action)) {
 	    button->setText(action->text());
-	    button->setIcon(action->icon());
+	    button->updateNormalIcon(action->icon());
 	    button->setShortcut(QKeySequence());
 	    Q_ASSERT(_widgets.contains(action));
 	    _widgets[action]->setWindowTitle(action->text());

@@ -53,6 +53,7 @@ public:
     Qt::Orientation orientation() const;
 
     virtual QSize sizeHint() const;
+    void updateNormalIcon( const QIcon& );
 
 protected:
     virtual void paintEvent(QPaintEvent *event);
@@ -63,6 +64,7 @@ private slots:
 private:
     Qt::DockWidgetArea _area;
     QIcon normalIcon;
+    bool showingIndicator;
 };
 
 class IdealDockWidgetButton: public QToolButton
