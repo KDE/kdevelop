@@ -61,6 +61,37 @@
 namespace KDevelop
 {
 
+class ProjectProgress : public QObject, public IStatus
+{
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::IStatus)
+    
+    public:
+        ProjectProgress();
+        virtual ~ProjectProgress();
+        virtual QString statusName() const;
+        
+        /*! Show indeterminate mode progress bar */
+        void setBuzzy();
+        
+        /*! Hide progress bar */
+        void setDone();
+        
+        QString projectName;
+        
+    private Q_SLOTS:
+        void slotClean();
+        
+    Q_SIGNALS:
+        void clearMessage(KDevelop::IStatus*);
+        void showMessage(KDevelop::IStatus*,const QString & message, int timeout = 0);
+        void showErrorMessage(const QString & message, int timeout = 0);
+        void hideProgress(KDevelop::IStatus*);
+        void showProgress(KDevelop::IStatus*,int minimum, int maximum, int value);
+};
+    
+    
+    
 ProjectProgress::ProjectProgress()
 {
 }
@@ -76,6 +107,7 @@ QString ProjectProgress::statusName() const
 
 void ProjectProgress::setBuzzy()
 {
+    kDebug() << "showing busy prorgess" << statusName();
     // show an indeterminate progressbar
     emit showProgress(this, 0,0,0);
     emit showMessage(this, i18n("Loading") + " " + projectName);
@@ -84,6 +116,7 @@ void ProjectProgress::setBuzzy()
 
 void ProjectProgress::setDone()
 {
+    kDebug() << "showing done progress" << statusName();
     // first show 100% bar for a second, then hide.
     emit showProgress(this, 0,1,1);
     QTimer* t = new QTimer;
@@ -642,4 +675,4 @@ QSet<IndexedString> Project::fileSet() const
 } // namespace KDevelop
 
 #include "project.moc"
-
+#include "moc_project.cpp"

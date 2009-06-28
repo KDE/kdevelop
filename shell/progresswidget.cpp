@@ -158,8 +158,14 @@ void StatusbarProgressWidget::connectSingleItem()
 void StatusbarProgressWidget::activateSingleItemMode()
 {
   m_pProgressBar->show();
-  m_pProgressBar->setMaximum( 100 );
-  m_pProgressBar->setValue( mCurrentItem->progress() );
+  if( mCurrentItem->busy() ) 
+  {
+      m_pProgressBar->setMaximum( 0 );
+  } else 
+  {
+    m_pProgressBar->setMaximum( 100 );
+    m_pProgressBar->setValue( mCurrentItem->progress() );
+  }
   m_pProgressBar->setTextVisible( true );
 }
 
@@ -190,9 +196,14 @@ void StatusbarProgressWidget::slotBusyIndicator()
 
 void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsigned int value )
 {
-  Q_ASSERT( item == mCurrentItem); // the only one we should be connected to
+  Q_ASSERT( item == mCurrentItem ); // the only one we should be connected to
   show();
-  m_pProgressBar->setValue( value );
+  if( item->busy() ) {
+    m_pProgressBar->setMaximum( 0 );
+  } else {
+    m_pProgressBar->setMaximum( 100 );
+    m_pProgressBar->setValue( value );
+  }
 }
 
 void StatusbarProgressWidget::setMode() {

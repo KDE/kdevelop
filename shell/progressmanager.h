@@ -86,6 +86,17 @@ class ProgressItem : public QObject
      */
     unsigned int progress() const { return mProgress; }
 
+    /**
+     * Adjust wether this item has progress information or not.
+     * @param busy indicates wether this item can show progress information or not
+     */
+    void setBusy( bool busy = true );
+
+    /**
+     * @returns true if this item has no progress information
+     * and hence a busy indicator show be used
+     */
+    bool busy() { return mBusy; }
 public Q_SLOTS:
     /**
      * Set the progress (percentage of completion) value of this item.
@@ -204,6 +215,7 @@ public:
     unsigned int mCompleted;
     bool mWaitingForKids;
     bool mCanceled;
+    bool mBusy;
 };
 
 /**

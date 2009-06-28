@@ -115,6 +115,16 @@ void ProgressItem::setStatus( const QString &v )
   emit progressItemStatus( this, mStatus );
 }
 
+
+void ProgressItem::setBusy(bool busy)
+{
+    mBusy = busy;
+    if( mBusy ) {
+        setProgress( 0 );
+    }
+    emit progressItemProgress( this, progress() );
+}
+
 // ======================================
 
 ProgressManager::ProgressManager()

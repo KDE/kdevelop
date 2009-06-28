@@ -56,6 +56,8 @@
 #include <QToolButton>
 
 using KDevelop::ProgressDialog;
+using KDevelop::ProgressItem;
+using KDevelop::ProgressManager;
 using KDevelop::TransactionItemView;
 using KDevelop::TransactionItem;
 
@@ -171,8 +173,12 @@ TransactionItem::TransactionItem( QWidget* parent,
   h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 
   mProgress = new QProgressBar( h );
-  mProgress->setMaximum(100);
-  mProgress->setValue( item->progress() );
+  if( item->busy() ) {
+    mProgress->setMaximum( 0 );
+  } else {
+      mProgress->setMaximum(100);
+      mProgress->setValue( item->progress() );
+  }
   h->layout()->addWidget( mProgress );
 
   if ( item->canBeCanceled() ) {
@@ -203,7 +209,13 @@ void TransactionItem::hideHLine()
 
 void TransactionItem::setProgress( int progress )
 {
-  mProgress->setValue( progress );
+  if( this->mItem->busy() )
+  {
+    mProgress->setMaximum( 0 );
+  } else {
+    mProgress->setMaximum( 100 );
+    mProgress->setValue( progress );
+  }
 }
 
 void TransactionItem::setLabel( const QString& label )
