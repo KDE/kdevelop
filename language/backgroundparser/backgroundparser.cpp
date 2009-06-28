@@ -112,7 +112,6 @@ public:
         // Create delayed jobs, that is, jobs for documents which have been changed
         // by the user.
         QList<ParseJob*> jobs;
-
         for(QHash<KUrl, DocumentChangeTracker*>::iterator it = m_delayedParseJobs.begin(); it != m_delayedParseJobs.end(); ) {
             KUrl url(it.key());
 
@@ -120,6 +119,7 @@ public:
                 kDebug() << "already parsing" << url << ", delaying the parse-job";
                 ++it; //Add the delayed job later
             }else{
+                kDebug() << "creating job from delayed job";
                 ParseJob* job = createParseJob(url,
                                             TopDUContext::AllDeclarationsContextsAndUses,
                                             QList<QPointer<QObject> >());
@@ -181,6 +181,9 @@ public:
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
         if(m_doneParseJobs == m_maxParseJobs)
             emit m_parser->hideProgress(m_parser);
+        
+        if(!m_delayedParseJobs.isEmpty())
+            startTimerThreadSafe();
     }
 
     ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QPointer<QObject> > notifyWhenReady)
@@ -521,7 +524,6 @@ void BackgroundParser::parseComplete(ThreadWeaver::Job* job)
             //has a virtual destructor that may lock the duchain, leading to deadlocks
             delete parseJob;
         }
-
         //Continue creating more parse-jobs
         QMetaObject::invokeMethod(this, "parseDocuments", Qt::QueuedConnection);
     }
