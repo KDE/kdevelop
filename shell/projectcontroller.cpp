@@ -47,7 +47,6 @@ Boston, MA 02110-1301, USA.
 #include <ksettings/dialog.h>
 #include <kio/netaccess.h>
 #include <kstandarddirs.h>
-#include <knotification.h>
 
 #include <ksettings/dispatcher.h>
 
@@ -564,11 +563,6 @@ void ProjectController::openProject( const KUrl &projectFile )
         }
     }
 
-    KNotification* ev=new KNotification("LoadingProject", Core::self()->uiControllerInternal()->activeMainWindow());
-    ev->setText(i18n( "Loading Project: %1", url.prettyUrl() ));
-    ev->setComponentData(KGlobal::mainComponent());
-    ev->sendEvent();
-
     //FIXME Create the hidden directory if it doesn't exist
     if ( loadProjectPart() )
     {
@@ -645,10 +639,6 @@ void ProjectController::projectImportingFinished( IProject* project )
         }
         Core::self()->languageController()->backgroundParser()->addDocumentList( parseList, KDevelop::TopDUContext::AllDeclarationsContextsAndUses, 10 );
     }
-    KNotification* ev=new KNotification("ProjectLoadedSuccessfully", Core::self()->uiControllerInternal()->activeMainWindow());
-    ev->setText(i18n( "Project loaded: %1", project->name() ));
-    ev->setComponentData(KGlobal::mainComponent());
-    ev->sendEvent();
 }
 
 // helper method for closeProject()
