@@ -32,7 +32,7 @@
 #include <kio/netaccess.h>
 #include <interfaces/iplugincontroller.h>
 #include <tests/autotestshell.h>
-#include <shell/testcore.h>
+#include <tests/testcore.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/vcsjob.h>

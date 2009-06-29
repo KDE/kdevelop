@@ -26,7 +26,7 @@
 
 #include <qtest_kde.h>
 #include <QtTest/QtTest>
-#include <shell/testcore.h>
+#include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
 #include <KUrl>

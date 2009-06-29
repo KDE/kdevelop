@@ -6,10 +6,8 @@ target_link_libraries(vcsBlackBoxTest
                       ${QT_QTTEST_LIBRARY}
                       ${QT_QTGUI_LIBRARY}
                       ${KDE4_KDECORE_LIBS}
-                      kdevplatformtestshell
                       kdevplatformutil
                       kdevplatformvcs
-					  kdevplatformshell
-					  kdevplatforminterfaces
-                      )
+                      kdevplatformtests
+                     )
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )

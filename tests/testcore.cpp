@@ -18,15 +18,15 @@
  ***************************************************************************/
 #include "testcore.h"
 
-#include "uicontroller.h"
-#include "sessioncontroller.h"
-#include "languagecontroller.h"
-#include "runcontroller.h"
-#include "documentcontroller.h"
-#include "plugincontroller.h"
-#include "partcontroller.h"
-#include "projectcontroller.h"
-#include "core_p.h"
+#include <shell/uicontroller.h>
+#include <shell/sessioncontroller.h>
+#include <shell/languagecontroller.h>
+#include <shell/runcontroller.h>
+#include <shell/documentcontroller.h>
+#include <shell/plugincontroller.h>
+#include <shell/partcontroller.h>
+#include <shell/projectcontroller.h>
+#include "../shell/core_p.h"
 
 namespace KDevelop
 {

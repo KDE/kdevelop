@@ -24,7 +24,7 @@ if (MERCURIAL)
 		${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
-        kdevplatformtestshell
+        kdevplatformtests
 	)
 endif (MERCURIAL)
 

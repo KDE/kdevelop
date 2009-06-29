@@ -25,7 +25,7 @@ if (GIT)
         ${KDE4_KDECORE_LIBS}
         kdevplatformutil
         kdevplatformvcs
-        kdevplatformtestshell
+        kdevplatformtests
     )
 endif (GIT)
 

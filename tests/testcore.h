@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORMTESTCORE_H
 #define KDEVPLATFORMTESTCORE_H
 
-#include "testshellexport.h"
-#include "core.h"
+#include "kdevplatformtestsexport.h"
+#include <shell/core.h>
 
 namespace KDevelop
 {
@@ -55,7 +55,7 @@ class UiController;
  * @note It is important to call initialize and cleanup, else the controllers
  * won't work properly.
  */
-class KDEVPLATFORMTESTSHELL_EXPORT TestCore : public Core
+class KDEVPLATFORMTESTS_EXPORT TestCore : public Core
 {
     Q_OBJECT
 public:
