@@ -15,11 +15,15 @@
 */
 
 #include "stackitem.h"
-#include "stackmodel.h"
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
+
 #include <KIcon>
 #include <KLocalizedString>
+
+#include "stackmodel.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/idocumentcontroller.h"
+#include "../../interfaces/iprojectcontroller.h"
+#include "../../interfaces/iproject.h"
 
 KDevelop::FrameItem::FrameItem(KDevelop::FramesModel* model)
     : TreeItem(model, model->root()), mModel(model)
@@ -34,9 +38,16 @@ void KDevelop::FrameItem::setInformation(int id, const QString& name, const QStr
 {
     mId=id;
     mLocation=qMakePair(location, line);
+
+    KUrl url(location);
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
+    if(project)
+        prefixText = project->name() + "/" + project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);
+    QString l = prefixText + url.fileName();
     setData(QVector<QVariant>() << QString::number(id)
                                 << name
-                                << QString(location+':'+QString::number(line)));
+                                << QString(l+':'+QString::number(line)));
 }
 
 KDevelop::FramesModel* KDevelop::FrameItem::framesModel()
