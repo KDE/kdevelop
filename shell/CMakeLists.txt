@@ -105,7 +105,7 @@ target_link_libraries(kdevplatformshell
 target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES 
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KDECORE_LIBS}
-		kdevplatforminterfaces)
+	kdevplatforminterfaces)
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 set(kdevplatformtestshell_LIB_SRCS

@@ -22,8 +22,6 @@ if (MERCURIAL)
 	target_link_libraries(kdevmercurial-test
 		${QT_QTTEST_LIBRARY}
 		${KDE4_KDECORE_LIBS}
-        kdevplatformshell
-        kdevplatforminterfaces
         kdevplatformutil
         kdevplatformvcs
         kdevplatformtestshell
