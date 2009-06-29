@@ -31,7 +31,7 @@
 #include <KProcess>
 #include <qtest_kde.h>
 
-#include <shell/testcore.h>
+#include <tests/testcore.h>
 #include <shell/shellextension.h>
 #include <debugger/interfaces/stackmodel.h>
 #include <debugger/breakpoint/breakpointmodel.h>
