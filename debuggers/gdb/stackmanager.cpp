@@ -54,7 +54,9 @@ QString get_function_or_address(const GDBMI::Value &frame)
 QPair<QString, int> get_source(const GDBMI::Value &frame)
 {
     QPair<QString, int> ret(QString(), 0);
-    if (frame.hasField("file"))
+    if (frame.hasField("fullname"))
+        ret=qMakePair(frame["fullname"].literal(), frame["line"].toInt());
+    else if (frame.hasField("file"))
         ret=qMakePair(frame["file"].literal(), frame["line"].toInt());
     else if (frame.hasField("from"))
         ret.first=frame["from"].literal();
