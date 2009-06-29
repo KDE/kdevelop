@@ -38,13 +38,7 @@ void KDevelop::FrameItem::setInformation(int id, const QString& name, const QStr
 {
     mId=id;
     mLocation=qMakePair(location, line);
-
-    KUrl url(location);
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
-    QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
-    if(project)
-        prefixText = project->name() + "/" + project->relativeUrl(url.upUrl()).path(KUrl::AddTrailingSlash);
-    QString l = prefixText + url.fileName();
+    QString l = ICore::self()->projectController()->prettyFileName(KUrl(location), IProjectController::FormatPlain);
     setData(QVector<QVariant>() << QString::number(id)
                                 << name
                                 << QString(l+':'+QString::number(line)));

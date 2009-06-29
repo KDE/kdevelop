@@ -88,13 +88,17 @@ public:
 
     virtual KUrl projectsBaseDirectory() const = 0;
 
+    enum FormattingOptions {
+        FormatHtml,
+        FormatPlain
+    };
     /**
-     * Returns a pretty short representation of the given url, considering the currently loaded projects,
-     * and with some added html highlighting:
+     * Returns a pretty short representation of the given url, considering the currently loaded projects:
      * When the file is part of a currently loaded project, that projects name is shown as prefix instead of the
      * the full file path.
+     * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFileName(KUrl url) const = 0;
+    Q_SCRIPTABLE virtual QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const = 0;
     
 public Q_SLOTS:
     /**
