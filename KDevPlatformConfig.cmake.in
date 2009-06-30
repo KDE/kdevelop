@@ -11,7 +11,7 @@
 # KDEVPLATFORM_PROJECT_LIBRARY         - the project library
 # KDEVPLATFORM_SUBLIME_LIBRARY         - the sublime library
 # KDEVPLATFORM_SHELL_LIBRARY           - the shell library
-# KDEVPLATFORM_TESTSHELL_LIBRARY       - the testshell library
+# KDEVPLATFORM_TESTS_LIBRARY           - the tests library
 # KDEVPLATFORM_UTIL_LIBRARY            - the util library
 # KDEVPLATFORM_VCS_LIBRARY             - the vcs library
 # KDEVPLATFORM_VERITAS                 - the veritas library
@@ -53,7 +53,6 @@ _kdevplatform_set_lib_vars( SUBLIME sublime )
 _kdevplatform_set_lib_vars( VERITAS kdevplatformveritas )
 _kdevplatform_set_lib_vars( VCS kdevplatformvcs )
 _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
-_kdevplatform_set_lib_vars( TESTSHELL kdevplatformtestshell )
 _kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
 _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
 _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
