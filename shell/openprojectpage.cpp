@@ -69,10 +69,17 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
     fileWidget->setFilter( filters.join("\n") );
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
+
+    // TODO for 4.4: (don't dare to introduce new API for 4.3 after the rc1)
+    // Provide a setDefaultView function on KDirOperator so we don't have to
+    // put it into the config and hence allow the user to store his favourite
+    // setting.
+    KConfigGroup projectdialogsettings = KGlobal::config()->group( "Open Project Dialog Settings" );
+    projectdialogsettings.writeEntry( "View Style", "Simple" );
 #if KDE_IS_VERSION(4,2,62)
     // Enforce "short view" for now as KFileWidget has no API to read its config from a different
     // but the global-default for KFileDialog. 
-    fileWidget->dirOperator()->setView(KFile::Simple);
+    fileWidget->dirOperator()->setViewConfig( projectdialogsettings );
 #endif
 
     layout->addWidget( fileWidget );
