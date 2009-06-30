@@ -1,8 +1,15 @@
 [Desktop Entry]
 Name=kde4app
+Name[sv]=kde4pgm
+Name[x-test]=xxkde4appxx
 Exec=kde4app %i -caption "%c"
 Icon=kde4app
 Type=Application
 X-DocPath=kde4app/index.html
 GenericName=A KDE4 Application
+GenericName[es]=Una aplicación para KDE4
+GenericName[sv]=Ett KDE4-program
+GenericName[tr]=Bir KDE4 Uygulaması
+GenericName[uk]=Програма для KDE4
+GenericName[x-test]=xxA KDE4 Applicationxx
 Terminal=false
