@@ -23,8 +23,8 @@ set( cmakecommon_SRCS
   parser/cmakedebugvisitor.cpp
   parser/cmakecachereader.cpp
   parser/cmakeparserutils.cpp
-  cmakebuilddirchooser.cpp
   cmakeutils.cpp
+  cmakebuilddirchooser.cpp
  )
 
 set( cmakecommon_UI
@@ -39,7 +39,6 @@ set( cmakemanager_SRCS
   cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
   applychangeswidget.cpp
-  settings/cmakebuilddircreator.cpp
 )
 
 set( cmakemanager_UI
@@ -50,7 +49,6 @@ set( cmakesettings_SRCS
   settings/cmakepreferences.cpp
   settings/cmakecachemodel.cpp
   settings/cmakecachedelegate.cpp
-  settings/cmakebuilddircreator.cpp
 )
 
 set( cmakesettings_UI
