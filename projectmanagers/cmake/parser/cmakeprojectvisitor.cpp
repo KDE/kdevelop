@@ -288,8 +288,8 @@ int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
             
 //         kDebug(9032) << "unexistent property" << prop->property() << "on" << prop->target();
     }
-    kDebug(9042) << "current properties" << m_props[TARGET][prop->target()].keys();
-    kDebug(9042) << "goooooot" << m_props[TARGET][prop->target()][prop->property()];
+//     kDebug(9042) << "current properties" << m_props[TARGET][prop->target()].keys();
+//     kDebug(9042) << "goooooot" << m_props[TARGET][prop->target()][prop->property()];
     
     m_vars->insert(prop->variableName(), m_props[TARGET][prop->target()][prop->property()]);
     return 1;
