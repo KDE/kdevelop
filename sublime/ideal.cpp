@@ -49,7 +49,6 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     setCheckable(true);
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    kDebug() << "created toolbutton";
     setIcons( "process-working-kde" );
 }
 
@@ -70,7 +69,6 @@ void IdealToolButton::hideProgressIndicator()
 
 void IdealToolButton::showProgressIndicator()
 {
-    kDebug() << "got show indicator";
     setIcons( "process-working-kde" );
     showingIndicator = true;
     start();
@@ -81,7 +79,6 @@ void IdealToolButton::updateNormalIcon( const QIcon& icon )
     normalIcon = icon;
     if( !showingIndicator )
     {
-        kDebug() << "updating normal icon";
         setIcon( icon );
     }
 }
@@ -172,7 +169,6 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
 KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *dock,
                                          Area *area, View *view)
 {
-    kDebug() << "adding widget";
     KAction *action = new KAction(this);
     action->setCheckable(true);
     action->setText(title);
@@ -251,7 +247,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     switch (event->type()) {
     case QEvent::ActionAdded: {
         if (! _buttons.contains(action)) {
-            kDebug() << "action was added" << action->text();
             IdealToolButton *button = new IdealToolButton(_area);
             _buttons.insert(action, button);
 
@@ -268,12 +263,10 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     } break;
 
     case QEvent::ActionRemoved: {
-        kDebug() << "action got removed";
         if (IdealToolButton *button = _buttons.value(action)) {
             for (int index = 0; index < layout()->count(); ++index) {
                 if (QLayoutItem *item = layout()->itemAt(index)) {
                     if (item->widget() == button) {
-                        kDebug() << "yeap, I know about this action";
                         action->disconnect(this);
                         delete layout()->takeAt(index);
                         layout()->invalidate();
@@ -617,7 +610,6 @@ bool IdealMainWidget::someDockMaximized()
 // helper for toggleDocksShown
 void IdealMainWidget::restorePreviouslyShownDocks()
 {
-    kDebug() << "";
     foreach(View* v, m_previouslyShownDocks) {
         if (v && m_view_to_action.contains(v)) {
             m_view_to_action[v]->setChecked(true);
@@ -628,7 +620,6 @@ void IdealMainWidget::restorePreviouslyShownDocks()
 // helper for toggleDocksShown
 void IdealMainWidget::hideAllShownDocks()
 {
-    kDebug() << "";
     m_previouslyShownDocks.clear();
     QMapIterator<View*, QAction*> it(m_view_to_action);
     while(it.hasNext()) {
@@ -643,7 +634,6 @@ void IdealMainWidget::hideAllShownDocks()
 
 void IdealMainWidget::toggleDocksShown()
 {
-    kDebug() << "";
     if (m_switchingDocksShown || someDockMaximized()) {
         return;
     }
