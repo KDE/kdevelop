@@ -131,8 +131,11 @@ void CMakeBuildDirChooser::updated()
         return;
     }
 
-    if( alreadyCreated ) st |= BuildDirCreated;
-    if( correctProject ) st |= CorrectProject;
+    if( alreadyCreated )
+        st |= BuildDirCreated;
+    
+    if( correctProject && !m_alreadyUsed.contains(m_chooserUi->buildFolder->url().path()))
+        st |= CorrectProject;
 
     if(alreadyCreated && correctProject)
     {
