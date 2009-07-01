@@ -134,8 +134,7 @@ void ProjectManagerView::projectOpened()
 
 void ProjectManagerView::projectToBeOpened()
 {
-    kDebug() << "project to be opened" << m_plugin->numProjectsBeingOpened();
-    if( m_plugin->numProjectsBeingOpened() == 0 )
+    if( m_plugin->numProjectsBeingOpened() != 0 )
     {
         emit showProgressIndicator();
     }
