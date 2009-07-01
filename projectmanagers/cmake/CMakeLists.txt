@@ -44,7 +44,6 @@ set( cmakemanager_SRCS
 
 set( cmakemanager_UI
   cmakepossibleroots.ui
-  settings/cmakebuilddircreator.ui
 )
 
 set( cmakesettings_SRCS
@@ -56,7 +55,6 @@ set( cmakesettings_SRCS
 
 set( cmakesettings_UI
   settings/cmakebuildsettings.ui
-  settings/cmakebuilddircreator.ui
 )
 
 remove_definitions( -DQT_NO_STL )

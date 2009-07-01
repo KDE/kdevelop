@@ -27,12 +27,14 @@
 #include "ui_cmakebuilddirchooser.h"
 
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
-    : QWidget(parent)
+    : KDialog(parent)
 {
+//     QWidget* w= new QWidget(this);
     m_chooserUi = new Ui::CMakeBuildDirChooser;
-    m_chooserUi->setupUi( this );
+    m_chooserUi->setupUi(mainWidget());
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
+//     setMainWidget(w);
 
     QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
@@ -93,8 +95,8 @@ void CMakeBuildDirChooser::updated()
 //  m_chooserUi->generator->setEnabled(haveCMake);
     if(!haveCMake)
     {
-        emit status(i18n("You need to select a cmake binary"));
-        emit updated( st, "" );
+        m_chooserUi->status->setText(i18n("You need to select a cmake binary"));
+        button(Ok)->setEnabled(false);
         return;
     }
 
@@ -124,8 +126,8 @@ void CMakeBuildDirChooser::updated()
         }
     }else
     {
-        emit status(i18n("You need to specify a build directory"));
-        emit updated( st, "" );
+        m_chooserUi->status->setText(i18n("You need to specify a build directory"));
+        button(Ok)->setEnabled(false);
         return;
     }
 
@@ -136,7 +138,7 @@ void CMakeBuildDirChooser::updated()
     {
         m_chooserUi->installPrefix->setEnabled(false);
         m_chooserUi->buildType->setEnabled(false);
-        emit status(i18n("Using an already created build directory"));
+        m_chooserUi->status->setText(i18n("Using an already created build directory"));
     }
     else
     {
@@ -144,22 +146,22 @@ void CMakeBuildDirChooser::updated()
         if(correct)
         {
             st |= CorrectBuildDir;
-            emit status(QString());
+            m_chooserUi->status->setText(QString());
         }
         else
         {
-            //Useful to prevent disasters
-            if(alreadyCreated)
-                emit status(i18n("The selected build directory is not empty"));
-            else if ( alreadyCreated && !correctProject )
-                emit status(i18n("This build directory is for %1, "
+            //Useful to explain what's going wrong
+            if (alreadyCreated && !correctProject)
+                m_chooserUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
+            else if(alreadyCreated)
+                m_chooserUi->status->setText(i18n("The selected build directory is not empty"));
         }
 
         m_chooserUi->installPrefix->setEnabled(correct);
         m_chooserUi->buildType->setEnabled(correct);
     }
-    emit updated( st, srcDir );
+    button(Ok)->setEnabled(st & CorrectBuildDir);
 }
 
 void CMakeBuildDirChooser::setCMakeBinary(const KUrl& url) 

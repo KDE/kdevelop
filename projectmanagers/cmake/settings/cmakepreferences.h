@@ -54,6 +54,8 @@ class CMakePreferences : public ProjectKCModule<CMakeSettings>
         void removeBuildDir();
         void showAdvanced(bool v);
     private:
+        void configure();
+        
         KUrl m_srcFolder;
         KUrl m_subprojFolder;
         void updateCache( const KUrl & );

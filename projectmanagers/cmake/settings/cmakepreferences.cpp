@@ -21,6 +21,8 @@
 
 #include "cmakepreferences.h"
 
+#include <interfaces/icore.h>
+
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KUrl>
@@ -35,6 +37,12 @@
 #include "cmakecachedelegate.h"
 #include "cmakebuilddircreator.h"
 #include "cmakeconfig.h"
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
+#include <interfaces/iruncontroller.h>
+#include <KStandardDirs>
 
 K_PLUGIN_FACTORY(CMakePreferencesFactory, registerPlugin<CMakePreferences>(); )
 K_EXPORT_PLUGIN(CMakePreferencesFactory("kcm_kdevcmake_settings"))
@@ -135,12 +143,7 @@ void CMakePreferences::save()
     CMakeSettings::self()->writeConfig();
     
     //We run cmake on the builddir to generate it 
-    KProcess cmakeproc;
-    cmakeproc << m_currentModel->value("CMAKE_COMMAND") << m_prefsUi->buildDirs->currentText();
-    cmakeproc.start();
-    cmakeproc.waitForFinished();
-    if(cmakeproc.exitCode())
-        kDebug(9032) << "error. didn't generate a correct cache file";
+    configure();
 }
 
 void CMakePreferences::defaults()
@@ -174,12 +177,6 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
     else
     {
-        if(!newBuildDir.isEmpty())
-        {
-            KMessageBox::error(this, i18n("The %1 build directory is not valid. It will be removed from the list", newBuildDir.toLocalFile()));
-            removeBuildDir();
-        }
-        
         if(m_currentModel)
             m_currentModel->clear();
         m_prefsUi->cacheList->setEnabled(false);
@@ -220,7 +217,7 @@ void CMakePreferences::buildDirChanged(const QString &str)
 
 void CMakePreferences::createBuildDir()
 {
-    CMakeBuildDirCreator bdCreator(m_srcFolder, this);
+    CMakeBuildDirChooser bdCreator;
     
     QStringList used;
     for(int i=0; i<m_prefsUi->buildDirs->count(); i++)
@@ -229,7 +226,8 @@ void CMakePreferences::createBuildDir()
     }
     
     bdCreator.setAlreadyUsed(used);
-    //TODO: if there is information, use it to initialize the dialog
+    bdCreator.setCMakeBinary(KStandardDirs::findExe("cmake"));
+    
     if(bdCreator.exec())
     {
         m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile(KUrl::AddTrailingSlash));
@@ -263,6 +261,16 @@ void CMakePreferences::removeBuildDir()
     emit changed(true);
 }
 
+void CMakePreferences::configure()
+{
+    KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(m_srcFolder);
+    KDevelop::ProjectFolderItem* it=p->projectItem();
+    KDevelop::IProjectBuilder *b=p->buildSystemManager()->builder(it);
+    KJob* job=b->configure(p);
+    
+    KDevelop::ICore::self()->runController()->registerJob(job);
+}
+
 void CMakePreferences::showAdvanced(bool v)
 {
     kDebug(9042) << "toggle pressed: " << v;
@@ -271,5 +279,3 @@ void CMakePreferences::showAdvanced(bool v)
 
 
 #include "cmakepreferences.moc"
-
-

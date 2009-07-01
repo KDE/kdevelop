@@ -57,14 +57,7 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
 
     if( !builddir.isValid() || builddir.isEmpty() )
     {
-        KDialog choosedlg(KDevelop::ICore::self()->uiController()->activeMainWindow());
-        choosedlg.setButtons( KDialog::Ok | KDialog::Cancel );
-        choosedlg.setWindowTitle( i18n( "Choose CMake Build Directory" ) );
-        choosedlg.resize( 600, 250 );
-        CMakeBuildDirChooser bd( &choosedlg );
-        bd.setSourceFolder( item->project()->folder() );
-        choosedlg.setButtons( KDialog::Ok | KDialog::Cancel );
-        choosedlg.setMainWidget( &bd );
+        CMakeBuildDirChooser choosedlg;
         if( !choosedlg.exec() )
         {
             return false;
@@ -73,7 +66,7 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
         {   // if the buildfolder does not exist, create it
             // TODO: the whole configuration stuff has to be changed since it expects a configured cmake project
             //       creating the buildfolder alone is not enough.
-            QDir buildFolder( bd.buildFolder().toLocalFile() );
+            QDir buildFolder( choosedlg.buildFolder().toLocalFile() );
             if ( !buildFolder.exists() ) {
                 if ( !buildFolder.mkpath( buildFolder.absolutePath() ) ) {
                     KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(),
@@ -84,13 +77,13 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
             }
         }
 
-        cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
-        cmakeGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary() );
-        cmakeGrp.writeEntry( currentInstallDirKey, bd.installPrefix() );
-        cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
+        cmakeGrp.writeEntry( currentBuildDirKey, choosedlg.buildFolder() );
+        cmakeGrp.writeEntry( currentCMakeBinaryKey, choosedlg.cmakeBinary() );
+        cmakeGrp.writeEntry( currentInstallDirKey, choosedlg.installPrefix() );
+        cmakeGrp.writeEntry( currentBuildTypeKey, choosedlg.buildType() );
 
-        if(!builddirs.contains(bd.buildFolder().toLocalFile())) {
-            builddirs.append(bd.buildFolder().toLocalFile());
+        if(!builddirs.contains(choosedlg.buildFolder().toLocalFile())) {
+            builddirs.append(choosedlg.buildFolder().toLocalFile());
             cmakeGrp.writeEntry( "BuildDirs", builddirs);
         }
         cmakeGrp.sync();

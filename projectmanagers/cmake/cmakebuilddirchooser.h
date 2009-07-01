@@ -21,7 +21,7 @@
 #ifndef CMAKEBUILDDIRCHOOSER_H
 #define CMAKEBUILDDIRCHOOSER_H
 
-#include <QWidget>
+#include <KDialog>
 #include <QFlags>
 #include <kurl.h>
 
@@ -31,7 +31,7 @@ namespace Ui {
     class CMakeBuildDirChooser;
 }
 
-class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QWidget
+class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
 {
     Q_OBJECT
     public:
@@ -58,13 +58,12 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QWidget
         void setBuildFolder(const KUrl&);
         void setBuildType(const QString&);
         void setSourceFolder( const KUrl& srcFolder );
-    signals:
-        void status(const QString&);
-        void updated( CMakeBuildDirChooser::StatusTypes, const QString& srcDirFromCache );
+        void setAlreadyUsed(const QStringList& used) { m_alreadyUsed=used; }
 
     private slots:
         void updated();
     private:
+        QStringList m_alreadyUsed;
         static QString buildDirProject(const KUrl& buildDir);
 
         Ui::CMakeBuildDirChooser* m_chooserUi;

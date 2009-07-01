@@ -1,160 +1,145 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>CMakeBuildDirChooser</class>
- <widget class="QWidget" name="CMakeBuildDirChooser" >
-  <property name="geometry" >
+ <widget class="QWidget" name="CMakeBuildDirChooser">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>604</width>
-    <height>202</height>
+    <height>230</height>
    </rect>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>600</width>
     <height>200</height>
    </size>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="1" >
-    <widget class="KUrlRequester" name="cmakeBin" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+  <layout class="QFormLayout" name="formLayout">
+   <property name="fieldGrowthPolicy">
+    <enum>QFormLayout::ExpandingFieldsGrow</enum>
+   </property>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>CMake &amp;Binary:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>cmakeBin</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KUrlRequester" name="cmakeBin">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_3" >
-     <property name="text" >
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
       <string>&amp;Build Directory:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>buildFolder</cstring>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="KUrlRequester" name="buildFolder" />
+   <item row="1" column="1">
+    <widget class="KUrlRequester" name="buildFolder"/>
    </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>&amp;Installation Prefix:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>installPrefix</cstring>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="KUrlRequester" name="installPrefix" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+   <item row="2" column="1">
+    <widget class="KUrlRequester" name="installPrefix">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Build &amp;type:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
-     <property name="buddy" >
+     <property name="buddy">
       <cstring>buildType</cstring>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="QComboBox" name="buildType" >
-     <property name="editable" >
+   <item row="3" column="1">
+    <widget class="QComboBox" name="buildType">
+     <property name="editable">
       <bool>true</bool>
      </property>
-     <property name="currentIndex" >
+     <property name="currentIndex">
       <number>-1</number>
      </property>
      <item>
-      <property name="text" >
+      <property name="text">
        <string>debug</string>
       </property>
      </item>
      <item>
-      <property name="text" >
+      <property name="text">
        <string>release</string>
       </property>
      </item>
      <item>
-      <property name="text" >
+      <property name="text">
        <string>RelWithDebInfo</string>
       </property>
      </item>
      <item>
-      <property name="text" >
+      <property name="text">
        <string>MinSizeRel</string>
       </property>
      </item>
     </widget>
    </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="label_4" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-     <property name="text" >
-      <string>Generator:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy" >
-      <cstring>generator</cstring>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Status:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <widget class="QComboBox" name="generator" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label_5" >
-     <property name="text" >
-      <string>CMake &amp;Binary:</string>
-     </property>
-     <property name="alignment" >
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy" >
-      <cstring>cmakeBin</cstring>
+   <item row="4" column="1">
+    <widget class="QLabel" name="status">
+     <property name="text">
+      <string>TextLabel</string>
      </property>
     </widget>
    </item>
   </layout>
-  <zorder>cmakeBin</zorder>
-  <zorder>label_3</zorder>
-  <zorder>buildFolder</zorder>
-  <zorder>label</zorder>
-  <zorder>installPrefix</zorder>
-  <zorder>label_2</zorder>
-  <zorder>buildType</zorder>
-  <zorder>label_4</zorder>
-  <zorder>generator</zorder>
-  <zorder>label_5</zorder>
  </widget>
  <customwidgets>
   <customwidget>
