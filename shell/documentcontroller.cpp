@@ -298,7 +298,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
-        KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*.*|Text File\n" ),
+        KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*|Text File\n" ),
                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
                                        i18n( "Open File" ) );
         if( !res.URLs.isEmpty() )
