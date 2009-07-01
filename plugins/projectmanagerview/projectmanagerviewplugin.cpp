@@ -158,13 +158,11 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
 
 void ProjectManagerViewPlugin::projectToBeOpened()
 {
-    kDebug() << "project is being opened";
     projectsBeingOpened++;
 }
 
 void ProjectManagerViewPlugin::projectOpened()
 {
-    kDebug() << "project is opened";
     projectsBeingOpened--;
 }
 
