@@ -35,7 +35,7 @@
 
 #include "ui_cmakebuildsettings.h"
 #include "cmakecachedelegate.h"
-#include "cmakebuilddircreator.h"
+#include "cmakebuilddirchooser.h"
 #include "cmakeconfig.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
