@@ -109,7 +109,7 @@ QByteArray Token::symbolByteArray() const {
 }
 
 QString Token::symbolString() const {
-  return stringFromContents(session->contentsVector(), position, size);
+  return QString::fromUtf8(stringFromContents(session->contentsVector(), position, size));
 }
 
 uint Token::symbolLength() const {
