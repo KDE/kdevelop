@@ -410,6 +410,7 @@ QString formatComment( const QString& comment ) {
       if( it != lines.end() ) {
 
           for( ; it != eit; ++it ) {
+              strip( "///", *it );
               strip( "//", *it );
               strip( "**", *it );
               rStrip( "/**", *it );
