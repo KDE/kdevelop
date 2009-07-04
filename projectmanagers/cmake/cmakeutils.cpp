@@ -58,6 +58,7 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
     if( !builddir.isValid() || builddir.isEmpty() )
     {
         CMakeBuildDirChooser choosedlg;
+        choosedlg.setSourceFolder( item->project()->folder() );
         if( !choosedlg.exec() )
         {
             return false;

@@ -218,6 +218,7 @@ void CMakePreferences::buildDirChanged(const QString &str)
 void CMakePreferences::createBuildDir()
 {
     CMakeBuildDirChooser bdCreator;
+    bdCreator.setSourceFolder( m_srcFolder );
     
     QStringList used;
     for(int i=0; i<m_prefsUi->buildDirs->count(); i++)
