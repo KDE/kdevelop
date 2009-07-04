@@ -8,6 +8,7 @@ find_package(KDevelop REQUIRED)
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INCLUDE_DIR} )
 
 add_subdirectory(qmakebuilder)
+add_subdirectory(app_templates)
 
 find_package(KDevelop-PG-Qt QUIET)
 include_directories(
