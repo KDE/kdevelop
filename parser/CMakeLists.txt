@@ -9,7 +9,7 @@ set(parser_STAT_SRCS
     qmakeastdefaultvisitor.cpp
     )
 
-include_directories( ${QMakeManager_SOURCE_DIR}/parser )
+include_directories( ${QMakeManager_SOURCE_DIR}/parser ${QMakeManager_BINARY_DIR}/parser )
 
 if(KDEVPGQT_FOUND)
     kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
