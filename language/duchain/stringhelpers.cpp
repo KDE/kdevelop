@@ -394,37 +394,32 @@ void strip( const QString& str, QString& from ) {
 
 QString formatComment( const QString& comment ) {
   QString ret;
-  int i = 0;
 
-  if( i > 1 ) {
-      ret = comment.mid( i );
-  } else {
-      ///remove the star in each line
-      QStringList lines = comment.split( '\n', QString::KeepEmptyParts );
+  ///remove the star in each line
+  QStringList lines = comment.split( '\n', QString::KeepEmptyParts );
 
-      if( lines.isEmpty() ) return ret;
+  if( lines.isEmpty() ) return ret;
 
-      QStringList::iterator it = lines.begin();
-      QStringList::iterator eit = lines.end();
+  QStringList::iterator it = lines.begin();
+  QStringList::iterator eit = lines.end();
 
-      if( it != lines.end() ) {
+  if( it != lines.end() ) {
 
-          for( ; it != eit; ++it ) {
-              strip( "///", *it );
-              strip( "//", *it );
-              strip( "**", *it );
-              rStrip( "/**", *it );
-          }
-
-          if( lines.front().trimmed().isEmpty() )
-              lines.pop_front();
-
-          if( !lines.isEmpty() && lines.back().trimmed().isEmpty() )
-              lines.pop_back();
+      for( ; it != eit; ++it ) {
+          strip( "///", *it );
+          strip( "//", *it );
+          strip( "**", *it );
+          rStrip( "/**", *it );
       }
 
-      ret = lines.join( "\n" );
+      if( lines.front().trimmed().isEmpty() )
+          lines.pop_front();
+
+      if( !lines.isEmpty() && lines.back().trimmed().isEmpty() )
+          lines.pop_back();
   }
+
+  ret = lines.join( "\n" );
 
   return ret;
 }
