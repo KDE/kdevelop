@@ -225,7 +225,6 @@ void CMakePreferences::createBuildDir()
     {
         used += m_prefsUi->buildDirs->itemText(i);
     }
-    
     bdCreator.setAlreadyUsed(used);
     bdCreator.setCMakeBinary(KStandardDirs::findExe("cmake"));
     

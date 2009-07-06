@@ -61,7 +61,7 @@ QString CMakeBuildDirChooser::buildDirProject(const KUrl& buildDir)
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         kWarning(9032) << "Something really strange happened reading CMakeCache.txt";
-        return "";
+        return QString();
     }
 
     QString ret;
@@ -70,16 +70,13 @@ QString CMakeBuildDirChooser::buildDirProject(const KUrl& buildDir)
     while (!correct && !file.atEnd())
     {
         QString line = file.readLine().trimmed();
-        if(line.startsWith('#') || line.isEmpty())
-            continue;
-
         if(line.startsWith(pLine))
         {
             correct=true;
             ret=line.mid(pLine.count());
         }
     }
-    kDebug(9042) << "The source directory for " << buildDir << "is" << ret;
+    kDebug(9042) << "The source directory for " << file.fileName() << "is" << ret;
     return ret;
 }
 
@@ -103,7 +100,7 @@ void CMakeBuildDirChooser::updated()
     bool emptyUrl=m_chooserUi->buildFolder->url().isEmpty();
     if( emptyUrl ) st |= BuildFolderEmpty;
 
-    bool alreadyCreated=false, correctProject=false, dirEmpty = false, dirExists=false;
+    bool dirEmpty = false, dirExists=false;
     QString srcDir;
     if(!emptyUrl)
     {
@@ -112,35 +109,36 @@ void CMakeBuildDirChooser::updated()
         dirEmpty=dirExists && d.count()<=2;
         if(!dirEmpty && dirExists)
         {
-            alreadyCreated=QFile::exists(m_chooserUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
-            if(alreadyCreated)
+            bool hasCache=QFile::exists(m_chooserUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
+            if(hasCache)
             {
                 QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
 
                 srcDir=buildDirProject(m_chooserUi->buildFolder->url());
-                if(!srcDir.isEmpty())
-                    correctProject= (QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath());
-                else
-                    kWarning(9042) << "maybe you are trying a damaged CMakeCache.txt file";
+                if(!srcDir.isEmpty()) {
+                    if(QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath())
+                    {
+                        if(m_alreadyUsed.contains(buildFolder().path(KUrl::AddTrailingSlash)))
+                            m_chooserUi->status->setText(i18n("Build directory already configured."));
+                        else
+                            st |= CorrectBuildDir | BuildDirCreated;
+                    }
+                } else {
+                    kWarning(9042) << "maybe you are trying a damaged CMakeCache.txt file. Proper: ";
+                }
             }
         }
-    }else
+    }
+    else
     {
         m_chooserUi->status->setText(i18n("You need to specify a build directory"));
         button(Ok)->setEnabled(false);
         return;
     }
-
-    if( alreadyCreated )
-        st |= BuildDirCreated;
     
-    if( correctProject && !m_alreadyUsed.contains(m_chooserUi->buildFolder->url().path()))
-        st |= CorrectProject;
-
-    if(alreadyCreated && correctProject)
+    
+    if(st & (BuildDirCreated | CorrectBuildDir))
     {
-        m_chooserUi->installPrefix->setEnabled(false);
-        m_chooserUi->buildType->setEnabled(false);
         m_chooserUi->status->setText(i18n("Using an already created build directory"));
     }
     else
@@ -154,10 +152,10 @@ void CMakeBuildDirChooser::updated()
         else
         {
             //Useful to explain what's going wrong
-            if (alreadyCreated && !correctProject)
+            if ((st & BuildDirCreated) && !(st & CorrectBuildDir))
                 m_chooserUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
-            else if(alreadyCreated)
+            else if(st & BuildDirCreated)
                 m_chooserUi->status->setText(i18n("The selected build directory is not empty"));
         }
 
