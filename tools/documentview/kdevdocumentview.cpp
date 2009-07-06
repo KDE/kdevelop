@@ -39,6 +39,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/context.h>
+#include <interfaces/idocument.h>
 
 KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *parent )
     : QTreeView( parent ),
@@ -235,5 +236,10 @@ void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
     doItemsLayout();
 }
 
-#include "kdevdocumentview.moc"
+void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
+{
+    KDevDocumentItem * documentItem = m_doc2index[ document ];
+    documentItem->setText(document->url().fileName());
+}
 
+#include "kdevdocumentview.moc"

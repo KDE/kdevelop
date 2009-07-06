@@ -65,6 +65,9 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
             QObject::connect( docController,
                     SIGNAL( documentStateChanged( KDevelop::IDocument* ) ),
                     view, SLOT( stateChanged( KDevelop::IDocument* ) ) );
+            QObject::connect( docController,
+                    SIGNAL( documentUrlChanged( KDevelop::IDocument* ) ),
+                    view, SLOT( documentUrlChanged( KDevelop::IDocument* ) ) );
             return view;
         }
         virtual Qt::DockWidgetArea defaultPosition()

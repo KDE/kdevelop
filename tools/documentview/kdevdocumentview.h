@@ -59,6 +59,7 @@ private slots:
     void closed( KDevelop::IDocument* document );
     void contentChanged( KDevelop::IDocument* document );
     void stateChanged( KDevelop::IDocument* document );
+    void documentUrlChanged( KDevelop::IDocument* document );
 
     void saveSelected();
     void closeSelected();
