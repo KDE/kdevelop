@@ -17,9 +17,6 @@
    </size>
   </property>
   <layout class="QFormLayout" name="formLayout">
-   <property name="fieldGrowthPolicy">
-    <enum>QFormLayout::ExpandingFieldsGrow</enum>
-   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
@@ -133,9 +130,9 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QLabel" name="status">
-     <property name="text">
-      <string>TextLabel</string>
+    <widget class="QTextBrowser" name="status">
+     <property name="enabled">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
