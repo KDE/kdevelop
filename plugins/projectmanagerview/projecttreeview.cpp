@@ -52,7 +52,7 @@
 using namespace KDevelop;
 
 ProjectTreeView::ProjectTreeView( QWidget *parent )
-        : QTreeView( parent ), m_ctxProject( 0 ), mouseClickChangesSelection( false )
+        : QTreeView( parent ), m_ctxProject( 0 )
 {
     header()->setResizeMode( QHeaderView::ResizeToContents );
     header()->hide();
@@ -65,19 +65,7 @@ ProjectTreeView::ProjectTreeView( QWidget *parent )
     setIndentation(10);
 
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( popupContextMenu( QPoint ) ) );
-    if( style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, this) == KGlobalSettings::singleClick() )
-    {
-        connect( this, SIGNAL( activated( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
-    } else
-    {
-        if( KGlobalSettings::singleClick() )
-        {
-            connect( this, SIGNAL( clicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
-        } else
-        {
-            connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
-        }
-    }
+    connect( this, SIGNAL( doubleClicked( QModelIndex ) ), this, SLOT( slotActivated( QModelIndex ) ) );
 }
 
 ProjectTreeView::~ProjectTreeView()
@@ -101,13 +89,6 @@ ProjectFolderItem *ProjectTreeView::currentFolderItem() const
     }
 
     return 0;
-}
-
-void ProjectTreeView::mouseReleaseEvent( QMouseEvent* event )
-{
-    mouseClickChangesSelection = ( event->modifiers() & Qt::ControlModifier ) | ( event->modifiers() & Qt::ShiftModifier );
-    rightButtonClicked = ( event->button() == Qt::RightButton );
-    QTreeView::mouseReleaseEvent( event );
 }
 
 ProjectFileItem *ProjectTreeView::currentFileItem() const
@@ -160,16 +141,11 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
 
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
-    if( mouseClickChangesSelection || rightButtonClicked )
-        return;
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
     KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) );
     if ( item && item->file() )
     {
         emit activateUrl( item->file()->url() );
-    }else if( model()->rowCount(index) != 0) {
-        if(!isExpanded(index))
-            expand(index);
     }
 }
 

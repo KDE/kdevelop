@@ -67,14 +67,9 @@ class ProjectTreeView: public QTreeView
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
 
-    protected:
-        virtual void mouseReleaseEvent( QMouseEvent* );
-
     private:
         KDevelop::IProject* m_ctxProject;
         QPointer<KDevelop::NavigationToolTip> m_tooltip;
-        bool mouseClickChangesSelection;
-        bool rightButtonClicked;
         void appendActions(QMenu& menu, const QList<QAction*>& actions);
         QPersistentModelIndex m_idx;
 };
