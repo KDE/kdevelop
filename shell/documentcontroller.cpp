@@ -316,23 +316,31 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     //get a part document
     if (!d->documents.contains(url))
     {
-        //make sure the URL exists
-        if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
+        KMimeType::Ptr mimeType;
+        if (url.url() == EMPTY_DOCUMENT_URL)
         {
-            kDebug() << "cannot find URL:" << url.url();
-            return 0;
+            mimeType = KMimeType::mimeType("text/plain");
         }
-
-        // clean it and resolve possible symlink
-        url.cleanPath( KUrl::SimplifyDirSeparators );
-        if ( url.isLocalFile() )
+        else
         {
-            QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
-            if ( !path.isEmpty() )
-                url.setPath( path );
-        }
+            //make sure the URL exists
+            if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
+            {
+                kDebug() << "cannot find URL:" << url.url();
+                return 0;
+            }
 
-        KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
+            // clean it and resolve possible symlink
+            url.cleanPath( KUrl::SimplifyDirSeparators );
+            if ( url.isLocalFile() )
+            {
+                QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
+                if ( !path.isEmpty() )
+                    url.setPath( path );
+            }
+
+            mimeType = KMimeType::findByUrl( url );
+        }
 
         // is the URL pointing to a directory?
         if ( mimeType->is( "inode/directory" ) )

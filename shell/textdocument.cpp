@@ -198,8 +198,6 @@ public:
 TextDocument::TextDocument(const KUrl &url, ICore* core, const QString& encoding)
     :PartDocument(url, core), d(new TextDocumentPrivate(this))
 {
-    if (url.url().endsWith("kdevtmp"))
-        setTitle(i18n("Untitled"));
     d->encoding = encoding;
 }
 
@@ -237,7 +235,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         if (!d->encoding.isEmpty())
             d->document->setEncoding(d->encoding);
 
-        if (!url().isEmpty())
+        if (!url().isEmpty() && url() != EMPTY_DOCUMENT_URL)
             d->document->openUrl( url() );
 
         /* It appears, that by default a part will be deleted the the
@@ -363,8 +361,11 @@ bool TextDocument::save(DocumentSaveMode mode)
             break;
     }
 
+    KUrl urlBeforeSave = d->document->url();
     if (d->document->save())
     {
+        if (d->document->url() != urlBeforeSave)
+            notifyUrlChanged();
         return true;
     }
     return false;

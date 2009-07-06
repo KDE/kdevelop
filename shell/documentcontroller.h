@@ -39,6 +39,8 @@ namespace Sublime {
     class AreaIndex;
 }
 
+#define EMPTY_DOCUMENT_URL i18n("Untitled")
+
 namespace KDevelop {
 
 class MainWindow;
