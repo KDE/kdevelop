@@ -118,7 +118,7 @@ void CMakeBuildDirChooser::updated()
                 if(!srcDir.isEmpty()) {
                     if(QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath())
                     {
-                        if(m_alreadyUsed.contains(buildFolder().path(KUrl::AddTrailingSlash)))
+                        if(m_alreadyUsed.contains(buildFolder().path(KUrl::RemoveTrailingSlash)))
                             m_chooserUi->status->setText(i18n("Build directory already configured."));
                         else
                             st |= CorrectBuildDir | BuildDirCreated;
@@ -152,10 +152,10 @@ void CMakeBuildDirChooser::updated()
         else
         {
             //Useful to explain what's going wrong
-            if ((st & BuildDirCreated) && !(st & CorrectBuildDir))
+            if (!(st & CorrectBuildDir))
                 m_chooserUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
-            else if(st & BuildDirCreated)
+            else
                 m_chooserUi->status->setText(i18n("The selected build directory is not empty"));
         }
 
