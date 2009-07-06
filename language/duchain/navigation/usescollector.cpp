@@ -226,8 +226,12 @@ void UsesCollector::startCollecting() {
             }
           }
         }
-        if(checker(decl->topContext()->parsingEnvironmentFile().data()))
-          collected.insert(decl->topContext()->parsingEnvironmentFile().data());
+        KDevelop::ParsingEnvironmentFile* file=decl->topContext()->parsingEnvironmentFile().data();
+        if(!file)
+          return;
+        
+        if(checker(file))
+          collected.insert(file);
 
         ///We have all importers now. However since we can tell parse-jobs to also update all their importers, we only need to
         ///update the "root" top-contexts that open the whole set with their imports.
