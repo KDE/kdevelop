@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2003-2007 Alexander Dymo  <adymo@kdevelop.org>              *
+ *   Copyright 2003-2009 Alexander Dymo <adymo@kdevelop.org>               *
  *   Copyright 2007 Ralf Habacker  <Ralf.Habacker@freenet.de>              *
  *   Copyright 2006-2007 Matt Rogers  <mattr@kde.org>                      *
  *   Copyright 2006-2007 Hamish Rodda <rodda@kde.org>                      *
@@ -121,6 +121,15 @@ int main( int argc, char *argv[] )
     options.add("+files", ki18n( "Files to load" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+
+#ifdef Q_WS_X11
+#if QT_VERSION >= 0x040500
+    //Text rendering on X11 is exceptionally slow, so force Qt
+    //raster graphics system (mostly) to make kate editor feel faster
+    QApplication::setGraphicsSystem("raster");
+#endif
+#endif
+
     KApplication app;
     KDevIDEExtension::init();
     
