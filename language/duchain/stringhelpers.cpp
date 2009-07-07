@@ -395,33 +395,25 @@ void strip( const QString& str, QString& from ) {
 QString formatComment( const QString& comment ) {
   QString ret;
 
-  ///remove the star in each line
   QStringList lines = comment.split( '\n', QString::KeepEmptyParts );
 
-  if( lines.isEmpty() ) return ret;
+  if ( !lines.isEmpty() ) {
 
-  QStringList::iterator it = lines.begin();
-  QStringList::iterator eit = lines.end();
+    QStringList::iterator it = lines.begin();
+    QStringList::iterator eit = lines.end();
 
-  if( it != lines.end() ) {
+    // remove common leading chars from the beginning of lines
+    for( ; it != eit; ++it ) {
+        strip( "///", *it );
+        strip( "//", *it );
+        strip( "**", *it );
+        rStrip( "/**", *it );
+    }
 
-      for( ; it != eit; ++it ) {
-          strip( "///", *it );
-          strip( "//", *it );
-          strip( "**", *it );
-          rStrip( "/**", *it );
-      }
-
-      if( lines.front().trimmed().isEmpty() )
-          lines.pop_front();
-
-      if( !lines.isEmpty() && lines.back().trimmed().isEmpty() )
-          lines.pop_back();
+    ret = lines.join( "\n" );
   }
 
-  ret = lines.join( "\n" );
-
-  return ret;
+  return ret.trimmed();
 }
 
 ParamIterator::~ParamIterator()
