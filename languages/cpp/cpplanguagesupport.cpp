@@ -186,13 +186,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     
     m_standardEnvironment = PreprocessJob::createStandardEnvironment();
 
-    connect( core()->projectController(),
-             SIGNAL( projectOpened( KDevelop::IProject* ) ),
-             this, SLOT( projectOpened( KDevelop::IProject* ) ) );
-    connect( core()->projectController(),
-             SIGNAL( projectClosing( KDevelop::IProject* ) ),
-             this, SLOT( projectClosing( KDevelop::IProject* ) ) );
-
     m_quickOpenDataProvider = new IncludeFileDataProvider();
 
     IQuickOpen* quickOpen = core()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
@@ -499,44 +492,6 @@ KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
 const KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
-}
-
-void CppLanguageSupport::projectOpened(KDevelop::IProject *project)
-{
-    Q_UNUSED(project)
-    // FIXME Add signals slots from the filemanager for:
-    //       1. filesAddedToProject
-    //       2. filesRemovedFromProject
-    //       3. filesChangedInProject
-
-    ///@todo Be more clever about getting include-paths for header-files: They are not directly part of the project, but usually they have an assigned source-file, so use the include-path from that file. Then we won't need to do the ordering.
-
-    //Since there may be additional information like include-paths available now, reparse all open documents
-    QList<IDocument*> headers;
-    foreach(IDocument* doc, core()->documentController()->openDocuments()) {
-        if(project->inProject(doc->url())) {
-          bool isSource = false;
-          QString path = doc->url().toLocalFile();
-
-          foreach(const QString& str, sourceExtensions)
-            if(path.endsWith(str))
-              isSource = true;
-
-          if(isSource) //Add source-files first, because their include-paths may be important for headers
-            core()->languageController()->backgroundParser()->addDocument(doc->url());
-          else
-            headers << doc;
-        }
-    }
-
-    foreach(IDocument* doc, headers)
-      core()->languageController()->backgroundParser()->addDocument(doc->url());
-}
-
-void CppLanguageSupport::projectClosing(KDevelop::IProject *project)
-{
-    Q_UNUSED(project)
-    //TODO: Anything to do here?!?!
 }
 
 void CppLanguageSupport::findIncludePathsForJob(CPPParseJob* job)
