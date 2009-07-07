@@ -49,6 +49,10 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
     return m_document->setText(text);
   }
   
+  bool fileExists(){
+    return QFile(m_document->url().path()).exists();
+  }
+  
   void startEdit() {
       m_document->startEditing();
   }
@@ -84,6 +88,7 @@ class FileCodeRepresentation : public CodeRepresentation {
           data = file.readAll();
           lineData = data.split('\n');
         }
+        m_exists = file.exists();
     }
     
     QString line(int line) const {
@@ -114,9 +119,14 @@ class FileCodeRepresentation : public CodeRepresentation {
       return false;
     }
     
+    bool fileExists(){
+      return m_exists;
+    }
+    
   private:
     //We use QByteArray, because the column-numbers are measured in utf-8
     IndexedString m_document;
+    bool m_exists;
     QList<QByteArray> lineData;
     QByteArray data;
 };
@@ -164,6 +174,10 @@ class StringCodeRepresentation : public CodeRepresentation {
     bool setText(QString text) {
         data->setData(text);
         return true;
+    }
+    
+    bool fileExists(){
+        return false;
     }
     
   private:

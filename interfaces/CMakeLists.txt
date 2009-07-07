@@ -42,7 +42,8 @@ target_link_libraries(kdevplatforminterfaces
         ${KDE4_KTEXTEDITOR_LIBS} 
         ${KDE4_THREADWEAVER_LIBRARIES} 
         ${QT_QTDESIGNER_LIBRARY} 
-        ${KDE4_KROSSCORE_LIBS})
+        ${KDE4_KROSSCORE_LIBS}
+        )#kdevplatformproject)
 target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES 
         ${KDE4_KPARTS_LIBS} 
         ${KDE4_KTEXTEDITOR_LIBS} 

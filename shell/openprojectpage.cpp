@@ -69,17 +69,10 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
     fileWidget->setFilter( filters.join("\n") );
 
     fileWidget->setMode( KFile::Modes( KFile::File | KFile::Directory | KFile::ExistingOnly ) );
-
-    KConfigGroup projectdialogsettings = KGlobal::config()->group( "Open Project Dialog Settings" );
-#if KDE_IS_VERSION(4,2,62) && !KDE_IS_VERSION(4,3,60)
-    projectdialogsettings.writeEntry( "View Style", "Simple" );
+#if KDE_IS_VERSION(4,2,62)
     // Enforce "short view" for now as KFileWidget has no API to read its config from a different
-    // but the global-default for KFileDialog.
-    // TODO for 4.4: Add the needed API to KFileWidget
-    fileWidget->dirOperator()->readConfig( projectdialogsettings );
-    fileWidget->dirOperator()->setViewConfig( projectdialogsettings );
-#elif KDE_IS_VERSION(4,3,60)
-    fileWidget->readConfig( projectdialogsettings );
+    // but the global-default for KFileDialog. 
+    fileWidget->dirOperator()->setView(KFile::Simple);
 #endif
 
     layout->addWidget( fileWidget );

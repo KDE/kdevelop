@@ -43,6 +43,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation {
     ///Overwrites the text in the file with the new given one
     ///@return true on success
     virtual bool setText(QString) = 0;
+    ///@return true if this representation represents an actual file on disk
+    virtual bool fileExists() = 0;
     
     ///Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
     ///You should enable this within tests, unless you really want to work on the disk.

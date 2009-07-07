@@ -30,6 +30,7 @@
 #include <language/duchain/parsingenvironment.h>
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
+#include <interfaces/iproject.h>
 
 namespace KDevelop {
 
@@ -44,6 +45,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
     
     m_changes[change->m_document].append(change);
     return ChangeResult(true);
+}
+
+DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
+{
+    for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.m_changes.begin();
+        it != rhs.m_changes.end(); ++it)
+        m_changes[it.key()].append(*it);
+    rhs.clear();
+    
+    return *this;
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::DocumentChangeSet::ReplacementPolicy policy, KDevelop::DocumentChangeSet::FormatPolicy format, KDevelop::DocumentChangeSet::DUChainUpdateHandling scheduleUpdate) {
@@ -263,6 +274,64 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
     }
 
     return DocumentChangeSet::ChangeResult(true);
+}
+
+void DocumentChangeSet::addFileToProject(IndexedString file)
+{
+    #if 0
+   //Pick the folder Item that should contain the new class
+  IProject * p;
+  QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
+  if(folderList.isEmpty())
+    return;
+  ProjectFolderItem* folder = folderList.first();
+    
+  //Add new files into the project
+  if(!item)
+    item=folder;
+  ProjectFileItem* projectFile=p->buildSystemManager()->addFile(newClassWizard.implementationUrl(), folder);
+  
+  //Add them as targets
+  if(item->target()) {
+    p->buildSystemManager()->addFileToTarget(file, item->target());
+    p->buildSystemManager()->addFileToTarget(header, item->target());
+  } else if(item->project()->buildSystemManager() &&
+            item->project()->buildSystemManager()->features() & IBuildSystemManager::Targets) {
+    QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
+  
+  for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
+    KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
+    t=bit->targetList();
+  }
+      
+  if(t.count()==1) //Just choose this one
+    p->buildSystemManager()->addFileToTarget(file, t.first());
+  else {
+    KDialog d;
+    QWidget *w=new QWidget(&d);
+    w->setLayout(new QVBoxLayout);
+    w->layout()->addWidget(new QLabel("Choose one target to add the file or cancel if you do not want to do so."));
+    QListWidget* targetsWidget=new QListWidget(w);
+    targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+    foreach(ProjectTargetItem* it, t) {
+      targetsWidget->addItem(it->text());
+    }
+    w->layout()->addWidget(targetsWidget);
+        
+    targetsWidget->setCurrentRow(0);
+    d.setButtons( KDialog::Ok | KDialog::Cancel);
+    d.enableButtonOk(true);
+    d.setMainWidget(w);
+      
+    if(d.exec()==QDialog::Accepted) {
+      if(targetsWidget->selectedItems().isEmpty())
+        QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
+      else 
+        p->buildSystemManager()->addFileToTarget(file, t[targetsWidget->currentRow()]);
+    }
+  }
+}
+#endif
 }
 
 

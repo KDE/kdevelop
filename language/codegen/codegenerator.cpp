@@ -20,10 +20,12 @@
 #include "codegenerator.h"
 
 #include "documentchangeset.h"
-#include "../duchain/topducontext.h"
+#include "duchainchangeset.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+
+#include <language/duchain/duchainlock.h>
 
 #include <qtimer.h>
 #include "duchainchangeset.h"
@@ -44,6 +46,7 @@ CodeGeneratorBase::CodeGeneratorBase()
 
 CodeGeneratorBase::~CodeGeneratorBase()
 {
+    clearChangeSets();
     delete d;
 }
 
@@ -56,80 +59,101 @@ void CodeGeneratorBase::start()
 {
     kDebug() << "Starting Code Generation Job";
     QTimer::singleShot(0, this, SLOT(executeGenerator()));
+    //executeGenerator();
 }
 
 void CodeGeneratorBase::addChangeSet(DUChainChangeSet * duchainChange)
 {
-    IndexedString file; //TODO= duchainChange->topDuContext().data()->url() ;
+    IndexedString file = duchainChange->topDuContext().data()->url() ;
     
     QMap<IndexedString, DUChainChangeSet *>::iterator it = d->duchainChanges.find(file);
     
     //if we already have an entry for this file, merge it
     if(it !=d->duchainChanges.end())
     {
-        //TODO **it << *duchainChange;
-        //TODO delete duchainChange;
+        **it << *duchainChange;
+        delete duchainChange;
     }
     else
         d->duchainChanges.insert(file, duchainChange);
 }
+
+void CodeGeneratorBase::addChangeSet(DocumentChangeSet & docChangeSet)
+{
+    d->documentChanges << docChangeSet;
+}
+
+DocumentChangeSet & CodeGeneratorBase::documentChangeSet()
+{
+    return d->documentChanges;
+}
+
 
 void CodeGeneratorBase::setErrorText(const QString & errorText)
 {
     KJob::setErrorText(errorText);
 }
 
+void CodeGeneratorBase::clearChangeSets(void)
+{
+    kDebug() << "Cleaning up all the changesets registered by the generator";
+    foreach(DUChainChangeSet * changeSet, d->duchainChanges)
+        delete changeSet;
+    d->duchainChanges.clear();
+    
+    d->documentChanges.clear();
+}
+
 void CodeGeneratorBase::executeGenerator()
 {
+    DUChainReadLocker lock(DUChain::self()->lock());
     kDebug() << "Checking Preconditions for the codegenerator";
     
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
-    DocumentRange range( ICore::self()->documentController()->activeDocument()->url().url(),
-                         ICore::self()->documentController()->activeDocument()->textSelection());
-    if(!checkPreconditions(0,range))
+    KUrl document = ICore::self()->documentController()->activeDocument()->url();
+    DocumentRange range( document.url(), ICore::self()->documentController()->activeDocument()->textSelection());
+    
+    DUContext * selectionContext = DUChain::self()->chainForDocument(document)->findContextIncluding(range);
+    
+    if(!selectionContext)
+    {
+        setErrorText("Error finding context for selection range");
+        emitResult();
+        return;
+    }
+    
+    if(!checkPreconditions(selectionContext,range))
     {
         setErrorText("Error checking conditions to generate code: " + errorText());
         emitResult();
+        return;
     }
     kDebug() << "Gathering user information for the codegenerator";
     if(!gatherInformation())
     {
-        setErrorText("Error Ggathering user information: " + errorText());
+        setErrorText("Error Gathering user information: " + errorText());
         emitResult();
+        return;
     }
-    
-    // Fetch the AST either from your cache, or recreate it
-    // To recreate:
-    //         Fetch text from the editor, with the same revision number as the duchain was 
-    // created off (we have to save the revision number with the duchain, and not 
-    // release it until the duchain is reparsed - I can help with this)
-    //         Run through the preprocessor and parser
-    //         Save the ast in the cache
     
     kDebug() << "Generating code";
     if(!process())
     {
         setErrorText("Error generating code: " + errorText());
         emitResult();
+        return;
     }
     kDebug() << "Submitting to the user for review";
     
     if(!displayChanges())
+    {
         emitResult();
+        return;
+    }
     
-    //Apply Changes
+    if(DocumentChangeSet::ChangeResult result = d->documentChanges.applyAllChanges())
+        setErrorText(result.m_failureReason);
     
-    // Merge DUChainChangeSets
-    // Apply DUChainChangeSets (to make the language independent modifications to the 
-    // AST)
-    // Present AST to language-specific refactoring code, if applicable
-    //         Apply AstChangeSets
-    // Create a DocumentChangeSet
-    // Merge changes into document
-    // If no errors were found, save
-    // Reparse DUChain
-    
-    d->documentChanges.applyAllChanges();
     emitResult();
 }
 
@@ -140,3 +164,5 @@ bool CodeGeneratorBase::displayChanges()
 }
 
 }
+
+#include "codegenerator.moc"

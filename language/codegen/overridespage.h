@@ -31,7 +31,6 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWizardPage
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList overrides READ selectedOverrides())
 
 public:
     OverridesPage(QWizard* parent);
@@ -39,20 +38,13 @@ public:
 
     QTreeWidget* overrideTree() const;
 
-    QVariantList selectedOverrides() const;
-
     QWidget* extraFunctionsContainer() const;
 
     virtual void initializePage();
     virtual void cleanupPage();
     virtual bool validatePage();
-    virtual void fetchInheritance(const QString& inheritedObject);
-    virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
-    virtual void fetchInheritanceFromClass(KDevelop::Declaration* decl);
-    virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration);
-
-    /// Returns a list of all base-classes that were picked by the user
-    QList<IndexedDeclaration> baseClasses() const;
+    virtual void populateOverrideTree(const QList<DeclarationPointer> & baseList);
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration);
     
 public Q_SLOTS:
     virtual void selectAll();

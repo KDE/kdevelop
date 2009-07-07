@@ -19,10 +19,14 @@
 #ifndef KDEV_CREATECLASS_H
 #define KDEV_CREATECLASS_H
 
+#include "language/duchain/identifier.h"
+#include "language/duchain/duchainpointer.h"
+
 #include <QtGui/QWizard>
 #include <KDE/KUrl>
 
 #include "../languageexport.h"
+#include <language/duchain/types/structuretype.h>
 
 class KLineEdit;
 class KUrl;
@@ -31,6 +35,9 @@ namespace KDevelop {
 
 class OverridesPage;
 class IndexedDeclaration;
+class Context;
+class Declaration;
+class DocumentChangeSet;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ClassIdentifierPage : public QWizardPage
 {
@@ -49,6 +56,8 @@ public:
 
     /// Returns a list of inheritances for the new class
     QStringList inheritanceList() const;
+    
+    virtual bool validatePage(void);
 
 Q_SIGNALS:
     void inheritanceChanged();
@@ -79,6 +88,12 @@ public Q_SLOTS:
      * To override in subclasses, don't call this implementation.
      */
     virtual void moveDownInheritance();
+    
+    /**
+     * Parses a parent class into a QualifiedIdentifier, the defaul implementation
+     * Just returns the string converted to a QualifiedIdentifier
+     */
+    virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 
 private:
     void checkMoveButtonState();
@@ -111,44 +126,144 @@ private:
 };
 
 /**
- * Provides a wizard and logic for a new class wizard.
- *
- * \todo add licensing option for generated code
+ * A Class generator defines the logic to create a language-specific class
+ * and optionally declare some members
  */
-class KDEVPLATFORMLANGUAGE_EXPORT CreateClass : public QWizard
+class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
 {
-    Q_OBJECT
-
-public:
-    CreateClass(QWidget* parent, KUrl baseUrl = KUrl());
-    virtual ~CreateClass();
+  public:
+    
+    ClassGenerator(void);
+    virtual ~ClassGenerator(void);
+      
     /**
-     * Creates the generic parts of the new class wizard.
+     * Generate the actual DocumentChangeSet
+     * \todo Convert this to return actual KDevelop::DocumentChangeSet
      */
-    virtual void setup();
+    virtual DocumentChangeSet generate(KUrl url) = 0;
+    
+    /**
+     * Remove all previous base classes
+     */
+    void clearInheritance(void);
+    
+    /**
+     * Clear all in class declarations
+     */
+    void clearDeclarations(void);
+    
+    /**
+     * Add another base class, must be the pure identifier
+     * 
+     * \return the current list of base classes
+     */
+    virtual const QList<DeclarationPointer> & addBaseClass(const QString &);
+    
+    /**
+     * Add a declaration to insert to the new Class
+     */
+    void addDeclaration(DeclarationPointer newDeclaration);
+    
+    /**
+     * @return All the current declarations for this class
+     */
+    const QList<DeclarationPointer> declarations() const;
+    
+    /// \return The list of all of the inherited classes
+    const QList<DeclarationPointer> & inheritanceList(void) const;
 
     /**
      *Should return the suggested url of the header file for the given class-name
      */
-    virtual KUrl headerUrlFromBase(QString className, KUrl baseUrl);
+    virtual KUrl headerUrlFromBase(KUrl baseUrl);
 
     /**
      *Should return the suggested url of the implementation file for the given class-name,
      *if header and implementation are separate for this language.
      */
-    virtual KUrl implementationUrlFromBase(QString className, KUrl baseUrl);
+    virtual KUrl implementationUrlFromBase(KUrl baseUrl);
+    
+    /**
+     * Set the position where the header is to be inserted
+     */
+    void setHeaderPosition(SimpleCursor position);
+    
+    /**
+     * Set the position where the implementation stubbs are to be inserted
+     */
+    void setImplementationPosition(SimpleCursor position);
+    
+    /**
+     * \return The name of the class to generate (excluding namespaces)
+     */
+    const QString & name(void) const;
+    
+    /**
+     * @param identifier The Qualified identifier that the class will have
+     */
+    virtual void identifier(const QString & identifier);
+    
+    /**
+     * \return The class to be generated as a Type
+     */
+    virtual StructureType::Ptr objectType() const = 0;
+    
+    /**
+     * \return The Identifier of the class to generate (including all used namespaces)
+     */
+    virtual QString identifier(void) const;
+    
+    const QString & license(void) const;
+    void license(const QString & license);
+    
+  protected:
+    
+    /**
+     * Set the name (without namespace) for this class
+     */
+    void name(const QString &);
+    
+    SimpleCursor headerPosition();
+    SimpleCursor implementationPosition();
+    
+    /**
+     * Look recursively for parent classes, and add them to the Inheritance list
+     */
+    void fetchParentClasses(const Context * baseClass);
+    
+    QList<DeclarationPointer> m_baseClasses;  //!< These are the base classes, that are directly inherited from
+    QList<DeclarationPointer> m_declarations; //!< Declarations 
+    
+  private:
+    struct ClassGeneratorPrivate * const d;
+    
+    void fetchSuperClasses(DeclarationPointer derivedClass);
+};
+
+/**
+ * Provides a wizard for creating a new class using a ClassGenerator.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT CreateClassWizard : public QWizard
+{
+    Q_OBJECT
+
+public:
+    CreateClassWizard(QWidget* parent, ClassGenerator * generator, KUrl baseUrl = KUrl());
+    virtual ~CreateClassWizard();
+    /**
+     * Creates the generic parts of the new class wizard.
+     */
+    
+    virtual void setup();
     /**
      * Called when the wizard completes.
      */
     virtual void accept();
-
-    /// \copydoc
-    virtual void done ( int r );
-
+    
     /**
-     * Generate the code.
+     * \return The generator that this wizard will use
      */
-    virtual void generate() = 0;
+    virtual ClassGenerator * generator();
 
     virtual ClassIdentifierPage* newIdentifierPage();
 
@@ -156,7 +271,7 @@ public:
 
 private:
     friend class OutputPage;
-    class CreateClassPrivate* const d;
+    class CreateClassWizardPrivate* const d;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
@@ -164,7 +279,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
     Q_OBJECT
 
 public:
-    OutputPage(CreateClass* parent);
+    OutputPage(CreateClassWizard* parent);
     virtual ~OutputPage();
 
 private:

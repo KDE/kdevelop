@@ -17,6 +17,7 @@
 */
 
 #include "overridespage.h"
+#include "createclass.h"
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -44,16 +45,10 @@ public:
     }
 
     Ui::OverridesDialog* overrides;
-    QList<KDevelop::Declaration*> overrideSuperclasses;
-    QMultiHash<Identifier, KDevelop::Declaration*> overriddenFunctions;
-    QList<KDevelop::Declaration*> chosenOverrides;
-    QList<KDevelop::IndexedDeclaration> baseClasses;
-    QVariantList selectedOverrides;
+    QMultiHash<Identifier, DeclarationPointer> overriddenFunctions;
+    QMap<QTreeWidgetItem *, DeclarationPointer> declarationMap;
+    QList<DeclarationPointer> chosenOverrides;
 };
-
-QList< KDevelop::IndexedDeclaration > KDevelop::OverridesPage::baseClasses() const {
-    return d->baseClasses;
-}
 
 OverridesPage::OverridesPage(QWizard* parent)
     : QWizardPage(parent)
@@ -67,8 +62,6 @@ OverridesPage::OverridesPage(QWizard* parent)
 
     connect(d->overrides->selectAllPushButton, SIGNAL(pressed()), this, SLOT(selectAll()));
     connect(d->overrides->deselectAllPushButton, SIGNAL(pressed()), this, SLOT(deselectAll()));
-
-    registerField("overrides", this, "overrides");
 }
 
 OverridesPage::~OverridesPage()
@@ -76,30 +69,26 @@ OverridesPage::~OverridesPage()
     delete d;
 }
 
-QList< QVariant > OverridesPage::selectedOverrides() const
-{
-    return d->selectedOverrides;
-}
 
 void OverridesPage::initializePage()
 {
     QWizardPage::initializePage();
 
-    d->overrideSuperclasses.clear();
     d->overriddenFunctions.clear();
     overrideTree()->clear();
-
     d->chosenOverrides.clear();
-    kDebug() << selectedOverrides().count();
-    foreach (const QVariant& override, selectedOverrides()) {
-        IndexedDeclaration id = qvariant_cast<IndexedDeclaration>(override);
-        if (Declaration* decl = id.declaration()) {
-            d->chosenOverrides.append(decl);
-        }
+    d->declarationMap.clear();
+    
+    ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
+    generator->clearDeclarations();
+
+    
+    foreach (const DeclarationPointer override, generator->declarations()) {
+        d->chosenOverrides.append(override);
     }
 
-    foreach (const QString& inherited, field("classInheritance").toStringList())
-        fetchInheritance(inherited);
+    //Add All the virtual overridable classes to the treewidget
+    populateOverrideTree(dynamic_cast<CreateClassWizard *>(wizard())->generator()->inheritanceList());
 
     overrideTree()->expandAll();
     overrideTree()->header()->resizeSections(QHeaderView::ResizeToContents);
@@ -107,14 +96,15 @@ void OverridesPage::initializePage()
 
 bool OverridesPage::validatePage()
 {
-    d->selectedOverrides.clear();
+    ClassGenerator * gen = dynamic_cast<CreateClassWizard *>(wizard())->generator();
+    gen->clearDeclarations();
 
     for (int i = 0; i < d->overrides->overridesTree->topLevelItemCount(); ++i) {
         QTreeWidgetItem* item = d->overrides->overridesTree->topLevelItem(i);
         for (int j = 0; j < item->childCount(); ++j) {
             QTreeWidgetItem* child = item->child(j);
             if (child->checkState(0) == Qt::Checked)
-                d->selectedOverrides.append(child->data(0, Qt::UserRole));
+                gen->addDeclaration(d->declarationMap[child]);//TODO add overrides to the generator
         }
     }
 
@@ -128,75 +118,36 @@ void OverridesPage::cleanupPage()
     validatePage();
 }
 
-void OverridesPage::fetchInheritance(const QString& inheritedObject)
+void OverridesPage::populateOverrideTree(const QList<DeclarationPointer> & baseList)
 {
-    KDevelop::DUChainReadLocker lock( DUChain::lock(), 100 );
-    if(!lock.locked()) {
-      kDebug() << "Failed to lock du-chain in time";
-      return;
-    }
+    KDevelop::DUChainReadLocker lock(DUChain::lock());
+    
+    foreach(const DeclarationPointer baseClass, baseList)
+    {
+        DUContext* context = baseClass->internalContext();
 
-    PersistentSymbolTable::Declarations declarations = PersistentSymbolTable::self().getDeclarations( IndexedQualifiedIdentifier(parseParentClassId(inheritedObject)) );
+        QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
+        classItem->setIcon(0, DUChainUtils::iconForDeclaration(baseClass.data()));
 
-    for (PersistentSymbolTable::Declarations::Iterator it = declarations.iterator(); it; ++it) {
-        Declaration* decl = it->declaration();
-        if (decl->isForwardDeclaration())
-            continue;
-
-        // Check if it's a class/struct/etc
-        if (decl->type<StructureType>()) {
-            fetchInheritanceFromClass(decl);
-            d->baseClasses << IndexedDeclaration(decl);
-            break;
-        }
-    }
-}
-
-KDevelop::QualifiedIdentifier KDevelop::OverridesPage::parseParentClassId(const QString& inheritedObject)
-{
-    // TODO: properly strip qualifiers
-    QString identifier = inheritedObject;
-    identifier = identifier.remove("public ", Qt::CaseInsensitive).remove("protected ", Qt::CaseInsensitive).remove("private ", Qt::CaseInsensitive).simplified();
-
-    return QualifiedIdentifier(identifier);
-}
-
-
-void OverridesPage::fetchInheritanceFromClass(KDevelop::Declaration* decl)
-{
-    // Prevent recursion / duplication
-    if (d->overrideSuperclasses.contains(decl))
-        return;
-
-    d->overrideSuperclasses.append(decl);
-
-    DUContext* context = decl->internalContext();
-    QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << decl->qualifiedIdentifier().toString());
-    classItem->setIcon(0, DUChainUtils::iconForDeclaration(decl));
-
-    foreach (Declaration* childDeclaration, context->localDeclarations()) {
-        if (childDeclaration->type<FunctionType>()) {
-            // We have a child function
-            if (AbstractFunctionDeclaration* func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration)) {
-                if (func->isVirtual()) {
-                    // It's virtual, add it to the list
-                    addPotentialOverride(classItem, childDeclaration);
-                }
+        //For this internal context get all the function declarations inside the class
+        foreach (Declaration * childDeclaration, context->localDeclarations())
+        {
+            AbstractFunctionDeclaration * func;
+            if (childDeclaration->type<FunctionType>() &&
+                (func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration)) &&
+                func->isVirtual())
+            {
+                // Its a virtual function, add it to the list
+                addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
             }
         }
     }
-
-
-    foreach (const DUContext::Import& import, context->importedParentContexts())
-        if (DUContext* parentContext = import.context(context->topContext()))
-            if (parentContext->type() == DUContext::Class)
-                fetchInheritanceFromClass( parentContext->owner() );
 }
 
-void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration)
+void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration)
 {
     if (d->overriddenFunctions.contains(childDeclaration->identifier())) {
-        foreach (Declaration* decl, d->overriddenFunctions.values(childDeclaration->identifier()))
+        foreach (DeclarationPointer decl, d->overriddenFunctions.values(childDeclaration->identifier()))
             if (decl->indexedType() == childDeclaration->indexedType())
                 // This signature is already shown somewhere else
                 return;
@@ -205,8 +156,9 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
     d->overriddenFunctions.insert(childDeclaration->identifier(), childDeclaration);
 
     QString accessModifier;
-    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(childDeclaration)) {
+    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(childDeclaration.data())) {
         switch (member->accessPolicy()) {
+            case Declaration::DefaultAccess:
             case Declaration::Public:
                 accessModifier = i18n("Public");
                 break;
@@ -224,16 +176,16 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
     QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
     overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
     overrideItem->setCheckState( 0, d->chosenOverrides.contains(childDeclaration) ? Qt::Checked : Qt::Unchecked );
-    overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration));
-    overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration)));
+    overrideItem->setIcon(0, DUChainUtils::iconForDeclaration(childDeclaration.data()));
+    overrideItem->setData(0, Qt::UserRole, QVariant::fromValue(IndexedDeclaration(childDeclaration.data())));
     overrideItem->setText(1, accessModifier);
 
-    if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration)) {
+    if (ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data())) {
         overrideItem->setCheckState( 2, function->isSignal() ? Qt::Checked : Qt::Unchecked );
         overrideItem->setCheckState( 3, function->isSlot() ? Qt::Checked : Qt::Unchecked );
     }
     
-    ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
+    ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
     if(classFunction && classFunction->isAbstract()) {
         overrideItem->setIcon(0, KIcon("flag-red"));
         overrideItem->setCheckState(0, Qt::Checked);
@@ -241,6 +193,8 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::D
         classItem->removeChild(overrideItem);
         classItem->insertChild(0, overrideItem);
     }
+    
+    d->declarationMap[overrideItem] = DeclarationPointer(childDeclaration);
 }
 
 QTreeWidget* OverridesPage::overrideTree() const

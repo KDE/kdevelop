@@ -30,37 +30,46 @@
 #include "ui_licensechooser.h"
 #include "ui_outputlocation.h"
 
+#include "duchain/persistentsymboltable.h"
+#include "duchain/duchainlock.h"
+#include "duchain/duchain.h"
+#include "duchain/types/structuretype.h"
+
+#include "codegen/documentchangeset.h"
+
 #include "overridespage.h"
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 #include <kconfig.h>
 
-using namespace KDevelop;
-
 namespace KDevelop {
 
-struct CreateClassPrivate {
+struct CreateClassWizardPrivate {
     KUrl baseUrl;
     OutputPage* output;
+    ClassGenerator * generator;
 };
-}
 
-CreateClass::CreateClass(QWidget* parent, KUrl baseUrl)
+
+CreateClassWizard::CreateClassWizard(QWidget* parent, ClassGenerator * generator, KUrl baseUrl)
     : QWizard(parent)
-    , d(new CreateClassPrivate)
+    , d(new CreateClassWizardPrivate)
 {
     d->baseUrl = baseUrl;
+    Q_ASSERT(generator);
+    d->generator = generator;
+    
     setDefaultProperty("KUrlRequester", "url", SIGNAL(textChanged(QString)));
     setDefaultProperty("KTextEdit", "plainText", SIGNAL(textChanged()));
 }
 
-CreateClass::~CreateClass()
+CreateClassWizard::~CreateClassWizard()
 {
     delete d;
 }
 
-void CreateClass::setup()
+void CreateClassWizard::setup()
 {
     setWindowTitle(i18n("Create New Class"));
 
@@ -74,47 +83,186 @@ void CreateClass::setup()
     addPage(d->output = new OutputPage(this));
 }
 
-KUrl CreateClass::headerUrlFromBase(QString className, KUrl baseUrl)
-{
-    Q_UNUSED(baseUrl);
-    KUrl url;
-    url.addPath(className);
-    return url;
-}
-
-KUrl CreateClass::implementationUrlFromBase(QString className, KUrl baseUrl)
-{
-    Q_UNUSED(baseUrl);
-    Q_UNUSED(className);
-    return KUrl();
-}
-
-
-void CreateClass::accept()
+void CreateClassWizard::accept()
 {
     QWizard::accept();
+    
+    //Transmit all the final information to the generator
+    d->generator->license(field("license").toString());
 
-    generate();
+    d->generator->generate(d->baseUrl);
 }
 
-void CreateClass::done ( int r )
+ClassGenerator * CreateClassWizard::generator(void)
 {
-    QWizard::done(r);
-
-    //generate();
+    return d->generator;
 }
 
-ClassIdentifierPage* CreateClass::newIdentifierPage()
+ClassIdentifierPage* CreateClassWizard::newIdentifierPage()
 {
     return new ClassIdentifierPage(this);
 }
 
-OverridesPage* CreateClass::newOverridesPage()
+OverridesPage* CreateClassWizard::newOverridesPage()
 {
     return new OverridesPage(this);
 }
 
-class KDevelop::ClassIdentifierPagePrivate
+struct ClassGeneratorPrivate
+{
+    QString name; ///< The name for the class to be generated (does not include namespace if relevant)
+    QString license;
+    QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
+    SimpleCursor headerPosition;
+    SimpleCursor implementationPosition;
+};
+
+ClassGenerator::ClassGenerator(void) :
+                             d(new ClassGeneratorPrivate)
+{
+}
+
+ClassGenerator::~ClassGenerator(void)
+{
+    delete d;
+}
+
+const QString & ClassGenerator::name(void) const
+{
+    return d->name;
+}
+
+void ClassGenerator::identifier(const QString & identifier)
+{
+    name(identifier);
+}
+
+QString ClassGenerator::identifier(void) const
+{
+    return name();
+}
+
+void ClassGenerator::name(const QString & newName)
+{
+    d->name = newName;
+}
+
+void ClassGenerator::addDeclaration(DeclarationPointer newDeclaration)
+{
+    m_declarations << newDeclaration;
+}
+
+const QList<DeclarationPointer> ClassGenerator::declarations() const
+{
+    return m_declarations;
+}
+
+const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  newBaseClass)
+{
+    DUChainReadLocker lock(DUChain::lock());
+    
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(newBaseClass)));
+    
+    //Search for all super classes
+    for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
+    {
+        DeclarationPointer declaration = DeclarationPointer(it->declaration());
+        if(declaration->isForwardDeclaration())
+            continue;
+
+        // Check if it's a class/struct/etc
+        if(declaration->type<StructureType>())
+        {
+            fetchSuperClasses(declaration);
+            m_baseClasses << declaration;
+            break;
+        }
+    }
+    
+    return m_baseClasses;
+}
+
+const QList<DeclarationPointer> & ClassGenerator::inheritanceList(void) const
+{
+    return d->inheritedClasses;
+}
+
+void ClassGenerator::clearInheritance(void)
+{
+    m_baseClasses.clear();
+    d->inheritedClasses.clear();
+}
+
+void ClassGenerator::clearDeclarations(void)
+{
+    m_declarations.clear();
+}
+
+KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl)
+{
+    Q_UNUSED(baseUrl);
+    KUrl url;
+    url.addPath(d->name);
+    return url;
+}
+
+KUrl ClassGenerator::implementationUrlFromBase(KUrl baseUrl)
+{
+    Q_UNUSED(baseUrl);
+    return KUrl();
+}
+
+void ClassGenerator::setHeaderPosition ( SimpleCursor position )
+{
+    d->headerPosition = position;
+}
+
+void ClassGenerator::setImplementationPosition ( SimpleCursor position )
+{
+    d->implementationPosition = position;
+}
+
+SimpleCursor ClassGenerator::headerPosition()
+{
+    return d->headerPosition;
+}
+
+SimpleCursor ClassGenerator::implementationPosition()
+{
+    return d->implementationPosition;
+}
+
+/// Specify license for this class
+void ClassGenerator::license(const QString & license)
+{
+    kDebug() << "New Class: " << d->name << "Set license: " << d->license;
+    d->license = license;
+}
+
+/// Get the license specified for this classes
+const QString & ClassGenerator::license(void) const
+{
+    return d->license;
+}
+
+void ClassGenerator::fetchSuperClasses(DeclarationPointer derivedClass)
+{
+    DUChainReadLocker lock(DUChain::lock());
+    
+    //Prevent duplicity
+    if(d->inheritedClasses.contains(derivedClass))
+        return;
+    
+    d->inheritedClasses.append(derivedClass);
+
+    DUContext* context = derivedClass->internalContext();
+    foreach (const DUContext::Import& import, context->importedParentContexts())
+        if (DUContext * parentContext = import.context(context->topContext()))
+            if (parentContext->type() == DUContext::Class)
+                fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
+}
+
+class ClassIdentifierPagePrivate
 {
 public:
     ClassIdentifierPagePrivate()
@@ -211,6 +359,11 @@ void ClassIdentifierPage::moveDownInheritance()
     emit inheritanceChanged();
 }
 
+QualifiedIdentifier ClassIdentifierPage::parseParentClassId(const QString& inheritedObject)
+{
+    return QualifiedIdentifier(inheritedObject);
+}
+
 void ClassIdentifierPage::checkMoveButtonState()
 {
     int currentRow = d->classid->inheritanceList->currentRow();
@@ -227,7 +380,21 @@ QStringList ClassIdentifierPage::inheritanceList() const
     return ret;
 }
 
-struct KDevelop::LicensePagePrivate
+bool ClassIdentifierPage::validatePage ( void )
+{
+    //save the information in the generator
+    ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
+    generator->identifier(field("classIdentifier").toString());
+    
+    //Add base classes
+    foreach (const QString & inherited, field("classInheritance").toStringList())
+        generator->addBaseClass(inherited);
+    
+    return true;
+}
+
+
+struct LicensePagePrivate
 {
     struct LicenseInfo
     {
@@ -395,7 +562,7 @@ bool LicensePage::saveLicense(void)
     return true;
 }
 
-class KDevelop::OutputPagePrivate
+class OutputPagePrivate
 {
 public:
     OutputPagePrivate()
@@ -404,10 +571,10 @@ public:
     }
 
     Ui::OutputLocationDialog* output;
-    CreateClass* parent;
+    CreateClassWizard* parent;
 };
 
-OutputPage::OutputPage(CreateClass* parent)
+OutputPage::OutputPage(CreateClassWizard* parent)
     : QWizardPage(parent)
     , d(new OutputPagePrivate)
 {
@@ -427,13 +594,15 @@ OutputPage::OutputPage(CreateClass* parent)
 }
 
 void OutputPage::showEvent(QShowEvent*) {
-    d->output->headerUrl->setUrl(d->parent->headerUrlFromBase(d->parent->field("classIdentifier").toString(), d->parent->d->baseUrl));
-    d->output->implementationUrl->setUrl(d->parent->implementationUrlFromBase(d->parent->field("classIdentifier").toString(), d->parent->d->baseUrl));
+    d->output->headerUrl->setUrl(d->parent->generator()->headerUrlFromBase(d->parent->d->baseUrl));
+    d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl));
 }
 
 OutputPage::~OutputPage()
 {
     delete d;
+}
+
 }
 
 #include "createclass.moc"

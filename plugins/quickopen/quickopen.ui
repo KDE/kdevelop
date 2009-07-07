@@ -24,17 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KLineEdit" name="searchLine">
-       <property name="urlDropsEnabled">
-        <bool>false</bool>
-       </property>
-       <property name="clickMessage">
-        <string>Quick Open...</string>
-       </property>
-       <property name="showClearButton" stdset="0">
-        <bool>true</bool>
-       </property>
-      </widget>
+      <widget class="QLineEdit" name="searchLine"/>
      </item>
      <item>
       <widget class="QPushButton" name="okButton">
@@ -122,11 +112,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
-  </customwidget>
   <customwidget>
    <class>ExpandingTree</class>
    <extends>QTreeView</extends>

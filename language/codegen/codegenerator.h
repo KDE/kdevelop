@@ -24,6 +24,8 @@
 #include "../duchain/topducontext.h"
 #include "../duchain/duchain.h"
 
+#include "language/interfaces/iastcontainer.h"
+
 namespace KDevelop
 {
 template<class AstNode >
@@ -51,7 +53,6 @@ class DocumentChangeSet;
 class KDEVPLATFORMLANGUAGE_EXPORT CodeGeneratorBase : public KJob
 {
     Q_OBJECT
-
 public:
     CodeGeneratorBase();
     virtual ~CodeGeneratorBase();
@@ -107,16 +108,30 @@ protected:
      */
     void addChangeSet(DUChainChangeSet* duChainChange);
     
+    void addChangeSet(DocumentChangeSet & docChangeSet);
+    
+    /**
+     * \return The Document Change set to add a single Change, it is more addicient than creating a local DocumentChangeSet and merging it
+     */
+    DocumentChangeSet & documentChangeSet();
+    
     /**
      * Accessor for KJob's KJob::setErrorText.
      */
     void setErrorText(const QString & error);
+    
+    /**
+     * Clean up all the change sets that this generator is in charge of
+     */
+    void clearChangeSets(void);
 
 private:
     class CodeGeneratorPrivate * const d;
     
-    void executeGenerator(void);
     bool displayChanges(void);
+
+private slots:
+    void executeGenerator();
 };
 
 /**
@@ -133,7 +148,10 @@ template <typename AstContainer>
 class CodeGenerator : public CodeGeneratorBase
 {
 public:
-    CodeGenerator() {}
+    ~CodeGenerator()
+    {
+        clearChangeSets();
+    }
     
 protected:
     
@@ -146,17 +164,32 @@ protected:
      */
     TopAstNode * ast(const IndexedString & file)
     {
-        typename AstContainer::Ptr & container = m_AstContainers[file];
-        if(container.isNull)
+        return astContainer(file)->topAstNode();
+    }
+    
+    TopAstNode * ast(const TopDUContext & context)
+    {
+        return astContainer(context)->topAstNode();
+    }
+    
+    typename AstContainer::Ptr astContainer(const IndexedString & file)
+    {
+        if(!m_AstContainers.contains(file))
         {
             kDebug() << "Ast requested for: " << file.str();
-            TopDUContext * context = DUChain::self()->chainForDocument(file);
+            
+            TopDUContext * context = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AST).data();
             
             Q_ASSERT(context);
-            m_AstContainers[file] = AstContainer::Ptr( context->ast().data() );
+            m_AstContainers[file] = AstContainer::Ptr::template staticCast<IAstContainer>( context->ast() );
         }
         
-        return container->topAstNode();
+        return m_AstContainers[file];
+    }
+    
+    typename AstContainer::Ptr astContainer(const TopDUContext & context)
+    {
+        return astContainer(context.url());
     }
     
     /**
@@ -169,12 +202,22 @@ protected:
         CodeGeneratorBase::addChangeSet(duChainChange);
     }
     
+    void addChangeSet(DocumentChangeSet & doc)
+    {
+        CodeGeneratorBase::addChangeSet(doc);
+    }
+    
     /**
      * Generate text edits from duchain / ast change set.
      *
      * You may call this method multiple times to edit different files.
      */
     void addChangeSet(LanguageChangeSet * astChange);
+    
+    void clearChangeSets(void)
+    {
+        CodeGeneratorBase::clearChangeSets();
+    }
     
     /**
      * Accessor for KJob's KJob::setErrorText.

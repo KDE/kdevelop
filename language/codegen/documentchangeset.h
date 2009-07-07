@@ -60,6 +60,12 @@ namespace KDevelop {
         ChangeResult addChange(const DocumentChangePointer& change);
         ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
         ChangeResult addChange(const DocumentChange& change);
+        ///Get rid of all the current changes
+        void clear(void)
+        { m_changes.clear(); }
+        
+        ///Merge two document change sets
+        DocumentChangeSet & operator<<(DocumentChangeSet &);
         
         enum ReplacementPolicy {
             IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
@@ -83,8 +89,11 @@ namespace KDevelop {
         ///@param format How the changed text should be formatted
         ///@param scheduleUpdate Whether a duchain update should be triggered for all affected documents
         ChangeResult applyAllChanges(ReplacementPolicy policy = StopOnFailedChange, FormatPolicy format = AutoFormatChanges, DUChainUpdateHandling scheduleUpdate = SimpleUpdate);        
-        private:
-            QMap< IndexedString, QList<DocumentChangePointer> > m_changes;
+        
+       private:
+        
+         QMap< IndexedString, QList<DocumentChangePointer> > m_changes;
+         void addFileToProject(IndexedString file);
     };
 }
 
