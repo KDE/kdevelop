@@ -27,11 +27,15 @@
 namespace KDevelop
 {
 
+class ClassMemberDeclaration;
 /*!
  * @brief   Applies the PIMPL pattern to a class, hiding all it's private members in a private class
+ * @todo    Add support for non-default constructors
  */
 class MakeImplementationPrivate : public CodeGenerator<ParseSession>
 {
+    typedef QList<QMap<IndexedString, QList<SimpleRange> > > UseList;
+    
     enum Policies
     {
         ContainerIsClass,             //Indicates the container type will be class, otherwise struct will be used
@@ -41,7 +45,8 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     };
     
   public:
-    
+    MakeImplementationPrivate() : m_classContext(0) {}
+    ~MakeImplementationPrivate() {}
     // Implementations from CodeGenerator
     virtual bool process(void);
     virtual bool gatherInformation(void);
@@ -49,12 +54,17 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
   
   private:
     DUContext * m_classContext;
+    DeclarationPointer m_classDeclaration;
     QString m_privatePointerName;
     QString m_structureName;
     
     std::bitset<PolicyNum> m_policies;
     
     bool classHasPrivateImplementation();
+    void gatherPrivateMembers(QList<ClassMemberDeclaration *> & memberDeclarations);
+    void updateConstructors(const KDevelop::Declaration &);
+    void updateDestructor(void);
+    void updateAllUses(UseList & alluses);
 };
 
 }

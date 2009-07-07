@@ -73,6 +73,8 @@ public:
    */
   AST * astNodeFromDeclaration(KDevelop::DeclarationPointer declaration);
   
+  AST * astNodeFromDeclaration(KDevelop::Declaration * declaration);
+  
   /**
    * \brief Request a Declaration from an AST node
    * \return The Associated Declaration if available, empty DeclarationPointer otherwise

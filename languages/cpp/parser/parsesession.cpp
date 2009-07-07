@@ -81,6 +81,11 @@ AST * ParseSession::astNodeFromDeclaration(KDevelop::DeclarationPointer declarat
     return m_DuchainToAst[declaration];
 }
 
+AST * ParseSession::astNodeFromDeclaration(KDevelop::Declaration * declaration)
+{
+  return astNodeFromDeclaration(KDevelop::DeclarationPointer(declaration));
+}
+
 KDevelop::DeclarationPointer ParseSession::declarationFromAstNode(AST * node)
 {
   //declaration was not mapped

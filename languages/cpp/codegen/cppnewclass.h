@@ -24,6 +24,7 @@
 
 #include <language/codegen/createclass.h>
 #include <language/codegen/overridespage.h>
+#include "cppduchain/cpptypes.h"
 
 class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
 {
@@ -31,6 +32,8 @@ class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
 
 public:
   CppClassIdentifierPage(QWizard* parent);
+  
+  virtual KDevelop::QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 };
 
 class CppOverridesPage : public KDevelop::OverridesPage
@@ -40,24 +43,55 @@ class CppOverridesPage : public KDevelop::OverridesPage
 public:
     CppOverridesPage(QWizard* parent);
 
-    virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration);
+    virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::DeclarationPointer childDeclaration);
 };
 
-//!@todo  Add an option to enclose in namespace
+class CppNewClass : public KDevelop::ClassGenerator
+{
+  public:
+    ///Specify the type of object that will be created
+    enum Type
+    {
+      DefaultType,  //!<@todo Have the user configure the default type of container
+      Class,
+      Struct
+    };
+    
+    CppNewClass() : m_type(DefaultType), m_objectType(new CppClassType) {};
+    virtual ~CppNewClass(void) {};
+    
+    virtual KDevelop::DocumentChangeSet generate(KUrl url);
+    
+    virtual const QList<KDevelop::DeclarationPointer> & addBaseClass(const QString &);
+
+    virtual KUrl headerUrlFromBase(KUrl baseUrl);
+    virtual KUrl implementationUrlFromBase(KUrl baseUrl);
+    
+    virtual void identifier(const QString & identifier);
+    virtual QString identifier(void) const;
+    
+    virtual KDevelop::StructureType::Ptr objectType() const;
+    
+    void setType(Type);
+
+    KDevelop::DocumentChangeSet generateHeader(KUrl url);
+    KDevelop::DocumentChangeSet generateImplementation(KUrl headerUrl, KUrl url);
+  
+  private:
+    QStringList m_namespaces;
+    QStringList m_baseAccessSpecifiers;
+    Type m_type;
+    
+    mutable CppClassType::Ptr m_objectType;
+};
+
 //!@todo  Tag the overrided methods with the name of the parent class
-class CppNewClass : public KDevelop::CreateClass
+class CppNewClassWizard : public KDevelop::CreateClassWizard
 {
   Q_OBJECT
 
 public:
-  CppNewClass(QWidget* parent, KUrl baseUrl = KUrl());
-
-  virtual void generate();
-  void generateHeader();
-  void generateImplementation();
-
-  virtual KUrl headerUrlFromBase(QString className, KUrl baseUrl);
-  virtual KUrl implementationUrlFromBase(QString className, KUrl baseUrl);
+  CppNewClassWizard(QWidget* parent, CppNewClass * generator, KUrl baseUrl = KUrl());
 
   virtual CppClassIdentifierPage* newIdentifierPage();
   virtual CppOverridesPage* newOverridesPage();

@@ -86,6 +86,7 @@
 #include "veritas/stubcontextaction.h"
 #include "veritas/uutcontextaction.h"
 #include "codegen/cppnewclass.h"
+#include "codegen/makeimplementationprivate.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
@@ -205,6 +206,11 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     KAction* newClassAction = actions->addAction("code_new_class");
     newClassAction->setText( i18n("Create &New Class") );
     connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
+    
+    KAction* pimplAction = actions->addAction("code_private_implementation");
+    pimplAction->setText( i18n("Make Class Implementation Private") );
+    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
+    connect(pimplAction, SIGNAL(triggered(bool)), this, SLOT(pImplementation()));
 
     KAction* renameDeclarationAction = actions->addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
@@ -229,6 +235,15 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif
+}
+
+void CppLanguageSupport::pImplementation()
+{
+  ///@todo move this into the refactoring plugin manager
+  int * P = 0;
+  *P;
+   MakeImplementationPrivate p;
+   p.start();
 }
 
 bool CppLanguageSupport::isHeader(const KUrl &url) const {

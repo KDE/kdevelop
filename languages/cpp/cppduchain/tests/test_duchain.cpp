@@ -1128,10 +1128,9 @@ void TestDUChain::testDeclareStruct()
     
     //Now test Ast mappings
     parse(method, DumpNone, top, true);
-    //!@todo conversions through KSharedPtr
     QVERIFY(top->ast().data());
     QVERIFY(dynamic_cast<ParseSession *>(top->ast().data()));
-    ParseSession::Ptr session = ParseSession::Ptr( dynamic_cast<ParseSession *>(top->ast().data()) );
+    ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>( top->ast() );
     QVERIFY(session);
     TranslationUnitAST * ast = session->topAstNode();
     QVERIFY(ast);
@@ -1524,7 +1523,7 @@ void TestDUChain::testDeclareClass()
   //Test Ast-DuChain mappings
   parse(method, DumpAST, top, true);
   
-  ParseSession::Ptr session = ParseSession::Ptr(dynamic_cast<ParseSession *>(top->ast().data()));
+  ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>(top->ast());
   TranslationUnitAST * ast = session->topAstNode();
   QVERIFY(ast);
   ClassSpecifierAST * classAst = AstUtils::node_cast<ClassSpecifierAST>
@@ -3424,8 +3423,31 @@ void TestDUChain::testTemplates3() {
     QVERIFY(alias->type());
     QCOMPARE(Cpp::shortenTypeForViewing(cvrDecl->abstractType())->toString(), QString("quakka* const&"));
     QVERIFY(TypeUtils::unAliasedType(cvrDecl->abstractType())->modifiers() & AbstractType::ConstModifier);
+  
+    release(top);
   }
-  release(top);
+  {
+    QByteArray method("template<class T> struct Cnt { typedef T Val; }; struct Item; template<class Value> struct Freqto { struct Item { typedef Value Value2; }; struct Pattern : public Cnt<Item> { }; };");
+
+    TopDUContext* top = parse(method, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[3]->childContexts().count(), 2);
+    
+    //The import should have been delayed, since it needs 'Item'
+    QVERIFY(top->childContexts()[3]->childContexts()[1]->owner());
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(top->childContexts()[3]->childContexts()[1]->owner());
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->baseClassesSize(), 1u);
+    QVERIFY(top->childContexts()[3]->childContexts()[1]->importedParentContexts().isEmpty());
+    QVERIFY(classDecl->baseClasses()[0].baseClass.type<DelayedType>());
+    kDebug() << classDecl->baseClasses()[0].baseClass.abstractType()->toString();
+    Declaration* val2Decl = findDeclaration(top, QualifiedIdentifier("Freqto<int>::Pattern::Val::Value2"));
+    QVERIFY(val2Decl);
+    QCOMPARE(unAliasedType(val2Decl->abstractType())->toString(), QString("int"));
+
+    release(top);
+  }
 }
 
 void TestDUChain::testTemplates4()

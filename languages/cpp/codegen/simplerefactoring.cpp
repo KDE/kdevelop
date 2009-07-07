@@ -38,7 +38,6 @@
 #include <qdatetime.h>
 #include "progressdialogs.h"
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <limits>
 #include <language/duchain/use.h>
 #include <language/duchain/classmemberdeclaration.h>
@@ -151,6 +150,8 @@ void SimpleRefactoring::executeNewClassAction() {
 void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
 {
   KUrl u;
+  
+  //Pick a folder to guess Possible URL for new class
   if(item) {
     ProjectFolderItem* ff = item->folder();
     if(!ff && item->target())
@@ -158,25 +159,16 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
     
     if(ff)
       u=ff->url();
-  }else{
-    ///@todo Put this folder-picking logic into some shared place
-    KDevelop::Context* sel = ICore::self()->selectionController()->currentSelection();
-    KDevelop::FileContext* fc = dynamic_cast<FileContext*>(sel);
-    KDevelop::ProjectItemContext* pc = dynamic_cast<ProjectItemContext*>(sel);
-    if(fc && !fc->urls().isEmpty())
-      u = fc->urls()[0].upUrl();
-    else if(pc && !pc->items().isEmpty() && pc->items()[0]->folder())
-      u = pc->items()[0]->folder()->url();
-    else if(ICore::self()->documentController()->activeDocument())
-      u = ICore::self()->documentController()->activeDocument()->url().upUrl();
-    else if(!ICore::self()->projectController()->projects().isEmpty())
-      u = ICore::self()->projectController()->projects()[0]->folder();
-      
   }
+  else
+    u = ICore::self()->selectionController()->folderFromSelection();
   
-  CppNewClass newClassWizard(qApp->activeWindow(), u);
+  //Run wizard
+  CppNewClass newClassGenerator;
+  CppNewClassWizard newClassWizard(qApp->activeWindow(), &newClassGenerator, u);
   int result=newClassWizard.exec();
   if(result==QDialog::Accepted && item) {
+    //Pick the folder Item that should contain the new class
     IProject* p=item->project();
     ProjectFolderItem* folder=item->folder();
     ProjectTargetItem* target=item->target();
@@ -190,6 +182,7 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
         return;
       folder = folderList.first();
     }
+
     
     if(!target && item->project()->buildSystemManager()->features() & IBuildSystemManager::Targets && folder) {
       QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
@@ -198,8 +191,6 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
         t=bit->targetList();
       }
       
-      if(t.isEmpty()) //Do not do anything
-      {}
       if(t.count()==1) //Just choose this one
         target=t.first();
       else {

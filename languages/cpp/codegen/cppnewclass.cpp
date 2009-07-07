@@ -37,8 +37,9 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
-
 #include <language/duchain/classdeclaration.h>
+#include <language/codegen/documentchangeset.h>
+
 #include "../codecompletion/implementationhelperitem.h"
 #include "../codecompletion/missingincludeitem.h"
 
@@ -51,12 +52,21 @@ CppClassIdentifierPage::CppClassIdentifierPage(QWizard* parent)
     inheritanceLineEdit()->setText("public ");
 }
 
+QualifiedIdentifier CppClassIdentifierPage::parseParentClassId(const QString & inheritedObject)
+{
+  // TODO: properly strip qualifiers
+  QString identifier = inheritedObject;
+  identifier = identifier.remove("public ", Qt::CaseInsensitive).remove("protected ", Qt::CaseInsensitive).remove("private ", Qt::CaseInsensitive).simplified();
+
+  return QualifiedIdentifier(identifier);
+}
+
 CppOverridesPage::CppOverridesPage(QWizard* parent)
   : KDevelop::OverridesPage(parent)
 {
 }
 
-void CppOverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::Declaration* childDeclaration)
+void CppOverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::DeclarationPointer childDeclaration)
 {
   // HACK: filter out Qt's moc calls
   QString id = childDeclaration->identifier().toString();
@@ -66,69 +76,101 @@ void CppOverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop
   OverridesPage::addPotentialOverride(classItem, childDeclaration);
 }
 
-CppNewClass::CppNewClass(QWidget* parent, KUrl baseUrl)
-  : KDevelop::CreateClass(parent, baseUrl)
+CppNewClassWizard::CppNewClassWizard(QWidget* parent, CppNewClass* generator, KUrl baseUrl)
+  : CreateClassWizard(parent, generator, baseUrl)
 {
   setup();
 }
 
-CppClassIdentifierPage* CppNewClass::newIdentifierPage()
+CppClassIdentifierPage* CppNewClassWizard::newIdentifierPage()
 {
   return new CppClassIdentifierPage(this);
 }
 
-CppOverridesPage* CppNewClass::newOverridesPage()
+CppOverridesPage* CppNewClassWizard::newOverridesPage()
 {
   return new CppOverridesPage(this);
 }
 
-void CppNewClass::generate()
+KDevelop::DocumentChangeSet CppNewClass::generate(KUrl url)
 {
-  generateHeader();
-  generateImplementation();
+  
+  KDevelop::DocumentChangeSet changeSet0 = generateHeader(headerUrlFromBase(url));
+  KDevelop::DocumentChangeSet changeSet1 = generateImplementation(headerUrlFromBase(url), implementationUrlFromBase(url));
+  
+  return changeSet0 << changeSet1;
 }
 
-KUrl CppNewClass::headerUrlFromBase(QString className, KUrl baseUrl) {
+const QList<KDevelop::DeclarationPointer> & CppNewClass::addBaseClass(const QString & base)
+{
+  if(base.isEmpty())
+    return m_baseClasses;
+  //strip access specifier
+  QStringList splitBase = base.split(' ', QString::SkipEmptyParts);
+  
+  //if no access specifier is found use public by default
+  if(splitBase.size() == 1)
+    m_baseAccessSpecifiers << "public";
+  else
+    m_baseAccessSpecifiers << splitBase[0];
+  
+  //Call base function with stripped access specifier
+  return ClassGenerator::addBaseClass(splitBase.last());
+}
+
+void CppNewClass::identifier(const QString & identifier)
+{
+  QStringList list = identifier.split("::");
+  name(list.last());
+  m_objectType->setDeclarationId(DeclarationId(QualifiedIdentifier(name())));
+  list.pop_back();
+  m_namespaces = list;
+}
+
+StructureType::Ptr CppNewClass::objectType() const
+{
+  return StructureType::Ptr::staticCast<CppClassType>(m_objectType);
+}
+
+void CppNewClass::setType(Type type)
+{
+  m_type = type;
+}
+
+
+QString CppNewClass::identifier(void) const
+{
+  QString identifier = m_namespaces.join("::");
+  
+  identifier.append(m_namespaces.empty() ? name() : "::" + name());
+  return identifier;
+}
+
+KUrl CppNewClass::headerUrlFromBase(KUrl baseUrl) {
   KUrl url(baseUrl); ///@todo Add some settings somewhere to set up how this is computed
-  className = className.split("::").last(); //Use last element of the scope, so namespaces are not part of the filename
-  url.addPath(className.toLower() + ".h");
+  url.addPath(name().toLower() + ".h");
   return url;
 }
 
-KUrl CppNewClass::implementationUrlFromBase(QString className, KUrl baseUrl) {
+KUrl CppNewClass::implementationUrlFromBase(KUrl baseUrl) {
   KUrl url(baseUrl);
-  className = className.split("::").last(); //Use last element of the scope, so namespaces are not part of the filename
-  url.addPath(className.toLower() + ".cpp");
+  url.addPath(name().toLower() + ".cpp");
   return url;
 }
 
-void CppNewClass::generateHeader()
+KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
 {
-  KUrl url = field("headerUrl").value<KUrl>();
+  QString header;
 
-  QFile file;
-  file.setFileName(url.toLocalFile());
-  if (!file.open(QIODevice::WriteOnly)) {
-    KMessageBox::error(this, i18n("Unable to open '%1' to write the new class header.", url.prettyUrl()), i18n("Header generation error"));
-    return;
-  }
-
-  QTextStream output(&file);
-
-  QList<IndexedDeclaration> baseClasses;
+  QTextStream output(&header, QIODevice::WriteOnly);
   
-  for(int a = 0; a < currentId(); ++a) {
-    OverridesPage* overridesPage = dynamic_cast<OverridesPage*>(page(a));
-    if(overridesPage)
-      baseClasses = overridesPage->baseClasses();
-  }
+  kDebug() << "base-classes:" << m_baseClasses.size();
   
-  kDebug() << "base-classes:" << baseClasses.size();
-  
-  output << "/*\n" << field("license").toString() << "*/\n\n";
+  if(!license().isEmpty())
+    output << "/*\n" << license() << "\n*/\n\n";
 
   // Namespace
-  QualifiedIdentifier id(field("classIdentifier").toString());
+  QualifiedIdentifier id(identifier());
   Identifier classId = id.last();
 
   bool ns = false;
@@ -150,9 +192,9 @@ void CppNewClass::generateHeader()
   
   bool addedIncludes = false;
   
-  foreach(IndexedDeclaration base, baseClasses) {
+  foreach(DeclarationPointer base, m_baseClasses) {
     DUChainReadLocker lock(DUChain::lock());
-    KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(url, base);
+    KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(url, IndexedDeclaration(base.data()));
     if(item) {
       output << item->lineToInsert() << "\n";
       addedIncludes = true;
@@ -166,20 +208,15 @@ void CppNewClass::generateHeader()
   if (ns)
     output << "namespace " << id.toString() << " {\n\n";
 
-  output << "class ";
+  output << (m_type == Class || m_type == DefaultType ? "class " : "struct ");
 
   //if (useExportMacro) output << macroExportString;
 
   output << classId.toString();
 
-  bool first = true;
-  foreach (const QString& inherits, field("classInheritance").toStringList())
-    if (first) {
-      first = false;
-      output << " : " << inherits;
-    } else {
-      output << ", " << inherits;
-    }
+  Q_ASSERT(m_baseClasses.size() == m_baseAccessSpecifiers.size());
+  for(unsigned int i = 0; i < m_baseClasses.size(); ++i)
+      output << (i == 0 ? " : " : ", ") << m_baseAccessSpecifiers[i] << ' ' << m_baseClasses[i]->identifier().toString() ;
 
   output << "\n{\n";
 
@@ -194,31 +231,28 @@ void CppNewClass::generateHeader()
   {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
-    IndexedDeclaration id = qvariant_cast<IndexedDeclaration>(override);
-    if (Declaration* d = id.declaration()) {
-      if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(d)) {
-        if (ap != member->accessPolicy()) {
-          switch (member->accessPolicy()) {
-            case Declaration::Public:
-              output << "\npublic:\n";
-              break;
+  foreach (DeclarationPointer override, m_declarations) {
+    if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(override.data())) {
+      if (ap != member->accessPolicy()) {
+        switch (member->accessPolicy()) {
+          case Declaration::Public:
+            output << "\npublic:\n";
+            break;
 
-            case Declaration::Protected:
-              output << "\nprotected:\n";
-              break;
+          case Declaration::Protected:
+            output << "\nprotected:\n";
+            break;
 
-            case Declaration::Private:
-              output << "\nprivate:\n";
-              break;
-          }
-          ap = member->accessPolicy();
+          case Declaration::Private:
+            output << "\nprivate:\n";
+            break;
         }
+        ap = member->accessPolicy();
       }
-      
-      Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, DeclarationPointer(d));
-      output << item.insertionText() << "\n";
     }
+    
+    Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, override);
+    output << item.insertionText() << "\n";
   }
   }
 
@@ -229,8 +263,12 @@ void CppNewClass::generateHeader()
   }
 
   output << "#endif // " << headerGuard << '\n';
-
-  file.close();
+  
+  DocumentChangeSet changes;
+  changes.addChange(DocumentChange(IndexedString(url.path()),
+                    SimpleRange(headerPosition(), 0), QString(), header));
+  
+  return changes;
 
 #if 0
   {
@@ -287,21 +325,14 @@ void CppNewClass::generateHeader()
   ICore::self()->documentController()->openDocument(url);
 }
 
-void CppNewClass::generateImplementation()
+KDevelop::DocumentChangeSet CppNewClass::generateImplementation(KUrl headerUrl, KUrl url)
 {
-  KUrl headerUrl = this->headerUrl();
-  KUrl url = implementationUrl();
+  QString implementation;
 
-  QFile file;
-  file.setFileName(url.toLocalFile());
-  if (!file.open(QIODevice::WriteOnly)) {
-    KMessageBox::error(this, i18n("Unable to open '%1' to write the new class implementation.", url.prettyUrl()), i18n("Implementation generation error"));
-    return;
-  }
+  QTextStream output(&implementation, QIODevice::WriteOnly);
 
-  QTextStream output(&file);
-
-  output << "/*\n" << field("license").toString() << "*/\n\n";
+  if(!license().isEmpty())
+    output << "/*\n" << license() << "\n*/\n\n";
 
   // #include our header
   QString path = KUrl::relativePath(url.directory(), headerUrl.toLocalFile());
@@ -310,7 +341,7 @@ void CppNewClass::generateImplementation()
   output << "#include \"" << path << "\"\n\n";
 
   // Namespace
-  QualifiedIdentifier id(field("classIdentifier").toString());
+  QualifiedIdentifier id(identifier());
   
   Identifier classId = id.last();
 
@@ -323,26 +354,28 @@ void CppNewClass::generateImplementation()
 
   if (ns)
     // Add using statement
-    // TODO make configurable
+    ///@todo make configurable
     output << "using namespace " << id.toString() << ";\n\n";
 
   // Overrides
   {
   KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
-  foreach (const QVariant& override, qvariant_cast<QVariantList>(field("overrides"))) {
-    IndexedDeclaration indexedDecl = qvariant_cast<IndexedDeclaration>(override);
-    if (Declaration* d = indexedDecl.declaration()) {
-      Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::CreateDefinition, DeclarationPointer(d));
+  foreach (DeclarationPointer override, m_declarations) {
+    Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::CreateDefinition, override);
 
-      output << item.insertionText(KUrl(), KDevelop::SimpleCursor(), QualifiedIdentifier(classId)) << "\n";
-    }
+    output << item.insertionText(KUrl(), KDevelop::SimpleCursor(), QualifiedIdentifier(classId)) << "\n";
   }
   }
-
-  file.close();
 
   ICore::self()->documentController()->openDocument(url);
+  
+  DocumentChangeSet changes;
+  
+  changes.addChange(DocumentChange(IndexedString(url.path()), SimpleRange(implementationPosition(), 0),
+                                   QString(), implementation));
+  
+  return changes;
 }
 
 #include "cppnewclass.moc"

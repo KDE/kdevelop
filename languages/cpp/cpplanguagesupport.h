@@ -91,6 +91,7 @@ public:
     KDevelop::ILanguage *language();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KUrl &url );
+    //KDevelop::AstRepresentationPtr  generateAst(const KDevelop::TopDUContext & topContext);
 
     /// Get the full path for a file based on a search through the project's
     /// include directories
@@ -154,6 +155,8 @@ public slots:
     void switchDefinitionDeclaration();
 
     void newClassWizard();
+    
+    void pImplementation();
 
 private:
 
