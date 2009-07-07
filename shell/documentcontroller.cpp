@@ -317,7 +317,8 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
     if (!d->documents.contains(url))
     {
         KMimeType::Ptr mimeType;
-        if (url.url() == EMPTY_DOCUMENT_URL)
+
+        if (DocumentController::isEmptyDocumentUrl(url))
         {
             mimeType = KMimeType::mimeType("text/plain");
         }
@@ -693,6 +694,29 @@ void DocumentController::registerDocumentForMimetype( const QString& mimetype,
 QStringList DocumentController::documentTypes() const
 {
     return QStringList() << "Text";
+}
+
+bool DocumentController::isEmptyDocumentUrl(const KUrl &url)
+{
+    QRegExp r(QString("^%1(\\s\\(\\d+\\))?$").arg(EMPTY_DOCUMENT_URL));
+    return r.indexIn(url.prettyUrl()) != -1;
+}
+
+int DocumentController::nextEmptyDocumentNumber()
+{
+    int nextEmptyDocNumber = 0;
+    foreach (IDocument *doc, Core::self()->documentControllerInternal()->openDocuments())
+    {
+        if (DocumentController::isEmptyDocumentUrl(doc->url()))
+        {
+            QRegExp r(QString("^%1\\s\\((\\d+)\\)$").arg(EMPTY_DOCUMENT_URL));
+            if (r.indexIn(doc->url().prettyUrl()) != -1)
+                nextEmptyDocNumber = qMax(nextEmptyDocNumber, r.cap(1).toInt()+1);
+            else
+                nextEmptyDocNumber = qMax(nextEmptyDocNumber, 1);
+        }
+    }
+    return nextEmptyDocNumber;
 }
 
 }

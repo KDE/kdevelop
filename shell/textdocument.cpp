@@ -235,7 +235,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         if (!d->encoding.isEmpty())
             d->document->setEncoding(d->encoding);
 
-        if (!url().isEmpty() && url() != EMPTY_DOCUMENT_URL)
+        if (!url().isEmpty() && !DocumentController::isEmptyDocumentUrl(url()))
             d->document->openUrl( url() );
 
         /* It appears, that by default a part will be deleted the the

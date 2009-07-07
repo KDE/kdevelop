@@ -103,6 +103,10 @@ public:
 
     using IDocumentController::openDocument;
 
+    /**checks that url is an url of empty document*/
+    static bool isEmptyDocumentUrl(const KUrl &url);
+    static int nextEmptyDocumentNumber();
+
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.
