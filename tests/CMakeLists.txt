@@ -23,9 +23,11 @@ if (GIT)
     target_link_libraries(kdevgit-test
         ${QT_QTTEST_LIBRARY}
         ${KDE4_KDECORE_LIBS}
+        kdevplatformshell
+        kdevplatforminterfaces
         kdevplatformutil
         kdevplatformvcs
-        kdevplatformtests
+        kdevplatformtestshell
     )
 endif (GIT)
 
