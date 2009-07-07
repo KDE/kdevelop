@@ -238,8 +238,8 @@ void KDevDocumentView::stateChanged( KDevelop::IDocument* document )
 
 void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
 {
-    KDevDocumentItem * documentItem = m_doc2index[ document ];
-    documentItem->setText(document->url().fileName());
+    closed(document);
+    opened(document);
 }
 
 #include "kdevdocumentview.moc"
