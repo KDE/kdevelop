@@ -103,11 +103,8 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
 
     a = KTextEditor::Attribute::Ptr(new KTextEditor::Attribute(*ColorCache::self()->defaultColors()->getAttribute(type)));
 
-    switch (context) {
-      case DefinitionContext:
-      case DeclarationContext:
-        a->setFontBold();
-        break;
+    if ( context == DefinitionContext || context == DeclarationContext ) {
+      a->setFontBold();
     }
 
     if( color.isValid() ) {
