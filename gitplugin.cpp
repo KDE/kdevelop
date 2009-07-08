@@ -97,7 +97,7 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
     }
 
     // We might have found a valid repository, call git to verify it
-    KDevelop::VcsJob* job = gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
+    KDevelop::VcsJob* job = gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")), KDevelop::OutputJob::Silent);
 
     if (!job) {
         kDebug() << "Failed creating job";
@@ -129,7 +129,7 @@ bool GitPlugin::isVersionControlled(const KUrl &path)
 
     QStringList listfiles("--");
     listfiles.append(filename);
-    QStringList otherFiles = getLsFiles(workDir, listfiles);
+    QStringList otherFiles = getLsFiles(workDir, listfiles, KDevelop::OutputJob::Silent);
     return !otherFiles.empty();
 }
 
@@ -364,9 +364,10 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
     return NULL;
 }
 
-DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args)
+DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
+    KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(this);
+    DVcsJob* job = new DVcsJob(this, verbosity);
     if (prepareJob(job, repository) ) {
         *job << "git";
         *job << "ls-files";
@@ -831,9 +832,10 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     job->setResults(commits);
 }
 
-QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args)
+QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args,
+    KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = lsFiles(directory, args);
+    DVcsJob* job = lsFiles(directory, args, verbosity);
     if (job)
     {
         job->exec();
@@ -845,10 +847,11 @@ QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &a
     return QStringList();
 }
 
-DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &args)
+DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &args,
+    KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
     //Use prepareJob() here only if you like "dead" recursion and KDevelop crashes
-    DVcsJob* job = new DVcsJob(this);
+    DVcsJob* job = new DVcsJob(this, verbosity);
     if (job)
     {
         QString workDir = repository;
