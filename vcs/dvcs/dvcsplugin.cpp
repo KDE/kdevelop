@@ -400,7 +400,7 @@ QString DistributedVersionControlPlugin::stripPathToDir(const QString &path)
 {
     QFileInfo repoInfo = QFileInfo(path);
     if (repoInfo.isFile())
-        return repoInfo.path();
+        return repoInfo.path() + QDir::separator();
     else if (path.endsWith(QDir::separator()))
         return path;
     else
