@@ -12,6 +12,7 @@ add_definitions(-DTEST_COMPLETION)
 
 set(cppcodecompletiontest_SRCS
   test_cppcodecompletion.cpp
+  
   ../codecompletion/context.cpp
   ../stringhelpers.cpp
   ../codecompletion/item.cpp
@@ -37,6 +38,10 @@ set(cppcodecompletiontest_SRCS
   ../codecompletion/missingincludeitem.cpp
 )
 
+set(cppcodegentest_SRCS
+  test_cppcodegen.cpp
+)
+
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
 target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
@@ -51,5 +56,11 @@ target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
+)
+
+kde4_add_unit_test(cppcodegentest ${cppcodegentest_SRCS})
+target_link_libraries(cppcodegentest
+    ${QT_QTTEST_LIBRARY}
+    kdevcpplanguagesupport
 )
 
