@@ -37,18 +37,15 @@ class BuildItem
 {
 public:
     BuildItem();
-    BuildItem( const QString& itemName, const QString& projectName, const QString& itemPath );
+    explicit BuildItem( const QString& itemPath );
     BuildItem( const BuildItem& rhs );
-    BuildItem( KDevelop::ProjectBaseItem* );
+    explicit BuildItem( KDevelop::ProjectBaseItem* );
     void initializeFromItem( KDevelop::ProjectBaseItem* item );
     KDevelop::ProjectBaseItem* findItem() const;
     BuildItem& operator=( const BuildItem& );
-    QString itemName() const { return m_itemName; }
-    QString projectName() const { return m_projectName; }
+    QString itemName() const;
     QString itemPath() const { return m_itemPath; }
 private:
-    QString m_itemName;
-    QString m_projectName;
     QString m_itemPath;
 };
 

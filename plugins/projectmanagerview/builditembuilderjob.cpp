@@ -29,7 +29,9 @@ BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, con
 {
     foreach( const BuildItem &item, items )
     {
-        addItem( t, item.findItem() );
+        KDevelop::ProjectBaseItem *it=item.findItem();
+        if(it)
+            addItem( t, it );
     }
 
 }

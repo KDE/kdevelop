@@ -1,6 +1,7 @@
 /***************************************************************************
  *   This file is part of KDevelop                                         *
- *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                        *
+ *   Copyright 2007 Andreas Pakulat <apaku@gmx.de>                         *
+ *   Copyright 2009 Aleix Pol <aleixpol@kde.org>                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -33,69 +34,12 @@
 
 #include <project/projectmodel.h>
 
-QString getRelativeFolder( KDevelop::ProjectBaseItem* item )
-{
-    if( !item )
-        return "";
-
-    if( item->type() == KDevelop::ProjectBaseItem::Folder
-          || item->type() == KDevelop::ProjectBaseItem::BuildFolder )
-    {
-
-        return item->project()->relativeUrl( item->folder()->url() ).toLocalFile();
-    }else
-    {
-        return getRelativeFolder( dynamic_cast<KDevelop::ProjectBaseItem*>( item->parent() ) );
-    }
-}
-
-KDevelop::ProjectBaseItem* findItem( const QString& item, const QString& path, KDevelop::ProjectBaseItem* top )
-{
-    if( top && top->text() == item && getRelativeFolder( top ) == path )
-    {
-        return top;
-    }else if( top->hasChildren() )
-    {
-        for( int i = 0; i < top->rowCount(); i++ )
-        {
-            QStandardItem* sitem = top->child( i );
-            KDevelop::ProjectBaseItem* prjitem = dynamic_cast<KDevelop::ProjectBaseItem*>(sitem);
-            if( prjitem )
-            {
-                if( prjitem->file()
-                    && prjitem->text() == item
-                    && path == getRelativeFolder( prjitem->file() ) )
-                {
-                    return prjitem;
-                }else if( prjitem->folder()
-                          && prjitem->text() == item
-                          && path == getRelativeFolder( prjitem->folder() ) )
-                {
-                    return prjitem;
-                }else if( prjitem->target()
-                          && prjitem->text() == item
-                          && path == getRelativeFolder( prjitem->target() ) )
-                {
-                    return prjitem;
-                }else
-                {
-                    KDevelop::ProjectBaseItem* tmp = findItem( item, path, prjitem );
-                    if( tmp )
-                        return tmp;
-                }
-            }
-        }
-    }
-    return 0;
-}
-
-
 BuildItem::BuildItem()
 {
 }
 
-BuildItem::BuildItem( const QString& itemName, const QString& projectName, const QString& itemPath )
-        : m_itemName( itemName ), m_projectName( projectName ), m_itemPath( itemPath )
+BuildItem::BuildItem( const QString & itemPath )
+        : m_itemPath( itemPath )
 {
 }
 
@@ -106,43 +50,41 @@ BuildItem::BuildItem( KDevelop::ProjectBaseItem* item )
 
 BuildItem::BuildItem( const BuildItem& rhs )
 {
-    m_itemName = rhs.itemName();
-    m_projectName = rhs.projectName();
     m_itemPath = rhs.itemPath();
 }
 
 void BuildItem::initializeFromItem( KDevelop::ProjectBaseItem* item )
 {
-    if( item )
-    {
-        m_itemName = item->text();
-        m_itemPath = getRelativeFolder( item );
-        m_projectName = item->project()->name();
-    }
+    Q_ASSERT(item);
+    KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
+        
+    m_itemPath = model->pathFromIndex(item->index()).join("/");
+}
+
+QString BuildItem::itemName() const
+{
+    int idx=m_itemPath.lastIndexOf('/');
+    return m_itemPath.mid(idx, m_itemPath.size()-idx);
 }
 
 KDevelop::ProjectBaseItem* BuildItem::findItem() const
 {
-    KDevelop::ProjectBaseItem* top = 0;
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectByName( projectName() );
-    if( project )
-    {
-        top = ::findItem( itemName(), itemPath(), project->projectItem() );
-    }
-    return top;
+    KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
+    QModelIndex idx = model->pathToIndex(itemPath().split('/'));
+    KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>(model->itemFromIndex(idx));
+    Q_ASSERT(item);
+    return item;
 }
 
 bool operator==( const BuildItem& rhs, const BuildItem& lhs  )
 {
-    return( rhs.itemName() == lhs.itemName() && rhs.projectName() == lhs.projectName() && rhs.itemPath() == lhs.itemPath() );
+    return( rhs.itemPath() == lhs.itemPath() );
 }
 
 BuildItem& BuildItem::operator=( const BuildItem& rhs )
 {
     if( this == &rhs )
         return *this;
-    m_itemName = rhs.itemName();
-    m_projectName = rhs.projectName();
     m_itemPath = rhs.itemPath();
     return *this;
 }
@@ -155,22 +97,23 @@ ProjectBuildSetModel::ProjectBuildSetModel( QObject* parent )
 QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
 {
     if( !idx.isValid() || idx.row() < 0 || idx.column() < 0
-         || idx.row() >= rowCount() || idx.column() >= columnCount()
-         || role != Qt::DisplayRole )
+         || idx.row() >= rowCount() || idx.column() >= columnCount())
     {
         return QVariant();
     }
-    switch( idx.column() )
-    {
-        case 0:
-            return m_items.at( idx.row() ).itemName();
-            break;
-        case 1:
-            return m_items.at( idx.row() ).projectName();
-            break;
-        case 2:
-            return m_items.at( idx.row() ).itemPath();
-            break;
+    
+    if(role == Qt::DisplayRole) {
+        switch( idx.column() )
+        {
+            case 0:
+                return m_items.at( idx.row() ).itemName();
+                break;
+            case 1:
+                return m_items.at( idx.row() ).itemPath();
+                break;
+        }
+    } else if(role == Qt::DecorationRole && idx.column()==0) {
+        return m_items.at( idx.row() ).findItem()->icon();
     }
     return QVariant();
 }
@@ -187,10 +130,7 @@ QVariant ProjectBuildSetModel::headerData( int section, Qt::Orientation orientat
             return i18n("Name");
             break;
         case 1:
-            return i18n("Project");
-            break;
-        case 2:
-            return i18n("Folder");
+            return i18n("Path");
             break;
     }
     return QVariant();
@@ -207,12 +147,12 @@ int ProjectBuildSetModel::columnCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() )
         return 0;
-    return 3;
+    return 2;
 }
 
 void ProjectBuildSetModel::addProjectItem( KDevelop::ProjectBaseItem* item )
 {
-    if( m_items.contains( item ) )
+    if( m_items.contains( BuildItem(item) ) )
         return;
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
     m_items.append(BuildItem(item));
@@ -250,7 +190,7 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 {
     for( int i = m_items.count() - 1; i >= 0; i-- )
     {
-        if( m_items.at(i).projectName() == project->name() )
+        if( m_items.at(i).itemPath().startsWith(project->name()+"/") )
         {
             beginRemoveRows( QModelIndex(), i, i );
             m_items.removeAt(i);
@@ -261,35 +201,25 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
-    KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    int count = 0;
+    QStringList paths;
     foreach( const BuildItem &item, m_items)
     {
-        if( item.projectName() == project->name() )
-        {
-            KConfigGroup grp = base.group(QString("Builditem%1").arg(count));
-            grp.writeEntry("Projectname", item.projectName());
-            grp.writeEntry("Itemname", item.itemName());
-            grp.writeEntry("Itempath", item.itemPath());
-            count++;
-        }
+        paths.append(item.itemPath());
     }
-    base.writeEntry("Number of Builditems", count);
+    KConfigGroup base = project->projectConfiguration()->group("Buildset");
+    base.writeEntry("Builditems", paths);
     base.sync();
 }
 
 void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    int count = base.readEntry("Number of Builditems", 0);
-    for( int i = 0; i < count; i++ )
+    QStringList items = base.readEntry("Builditems", QStringList());
+    
+    foreach(const QString& path, items)
     {
-        KConfigGroup grp = base.group(QString("Builditem%1").arg(i));
-        QString name = grp.readEntry("Projectname");
-        QString item = grp.readEntry("Itemname");
-        QString path = grp.readEntry("Itempath");
         beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-        m_items.append( BuildItem( item, name, path ) );
+        m_items.append( BuildItem( path ) );
         endInsertRows();
     }
 }
@@ -338,4 +268,3 @@ void ProjectBuildSetModel::moveRowsToTop(int row, int count)
     }
     endInsertRows();
 }
-

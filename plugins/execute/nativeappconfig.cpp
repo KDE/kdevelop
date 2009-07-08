@@ -31,6 +31,7 @@
 #include "nativeappjob.h"
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/projectmodel.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>
 #include <kmessagebox.h>

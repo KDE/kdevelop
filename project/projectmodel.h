@@ -278,6 +278,7 @@ public:
     virtual bool canFetchMore( const QModelIndex & parent ) const;
     
     QModelIndex pathToIndex(const QStringList& tofetch) const;
+    QStringList pathFromIndex(const QModelIndex& index) const;
 private:
     class ProjectModelPrivate* const d;
 };
