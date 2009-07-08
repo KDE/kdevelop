@@ -140,7 +140,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
      * Generate the actual DocumentChangeSet
      * \todo Convert this to return actual KDevelop::DocumentChangeSet
      */
-    virtual DocumentChangeSet generate(KUrl url) = 0;
+    virtual DocumentChangeSet generate() = 0;
     
     /**
      * Remove all previous base classes
@@ -184,6 +184,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     virtual KUrl implementationUrlFromBase(KUrl baseUrl);
     
     /**
+     * Set the URL where the header will be implemented
+     */
+    void setHeaderUrl(KUrl header);
+    
+    /**
+     * Set the URL where the implementation will be implemented
+     */
+    void setImplementationUrl(KUrl implementation);
+    
+    /**
      * Set the position where the header is to be inserted
      */
     void setHeaderPosition(SimpleCursor position);
@@ -225,6 +235,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     
     SimpleCursor headerPosition();
     SimpleCursor implementationPosition();
+    
+    KUrl & headerUrl();
+    KUrl & implementationUrl();
     
     /**
      * Look recursively for parent classes, and add them to the Inheritance list
@@ -281,6 +294,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
 public:
     OutputPage(CreateClassWizard* parent);
     virtual ~OutputPage();
+    
+    virtual bool validatePage();
 
 private:
     virtual void showEvent(QShowEvent*);

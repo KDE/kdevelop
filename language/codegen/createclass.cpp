@@ -89,8 +89,14 @@ void CreateClassWizard::accept()
     
     //Transmit all the final information to the generator
     d->generator->license(field("license").toString());
-
-    d->generator->generate(d->baseUrl);
+    kDebug() << "Header Url: " << field("headerUrl").toString();
+    /*
+    d->generator->setHeaderUrl(field("headerUrl").toString());
+    d->generator->setImplementationUrl(field("implementationUrl").toString());
+    d->generator->setHeaderPosition(SimpleCursor(field("headerLine").toInt(), field("headerColumn").toInt()));
+    d->generator->setHeaderPosition(SimpleCursor(field("implementationLine").toInt(), field("implementationColumn").toInt()));
+    */
+    d->generator->generate().applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
 }
 
 ClassGenerator * CreateClassWizard::generator(void)
@@ -115,6 +121,9 @@ struct ClassGeneratorPrivate
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
     SimpleCursor headerPosition;
     SimpleCursor implementationPosition;
+    
+    KUrl headerUrl;
+    KUrl implementationUrl;
 };
 
 ClassGenerator::ClassGenerator(void) :
@@ -222,6 +231,18 @@ void ClassGenerator::setImplementationPosition ( SimpleCursor position )
     d->implementationPosition = position;
 }
 
+void ClassGenerator::setHeaderUrl ( KUrl header )
+{
+    d->headerUrl = header;
+    kDebug() << "Header for the generated class: " << header;
+}
+
+void ClassGenerator::setImplementationUrl ( KUrl implementation )
+{
+    d->implementationUrl = implementation;
+    kDebug() << "Implementation for the generated class: " << implementation;
+}
+
 SimpleCursor ClassGenerator::headerPosition()
 {
     return d->headerPosition;
@@ -230,6 +251,16 @@ SimpleCursor ClassGenerator::headerPosition()
 SimpleCursor ClassGenerator::implementationPosition()
 {
     return d->implementationPosition;
+}
+
+KUrl & ClassGenerator::headerUrl()
+{
+    return d->headerUrl;
+}
+
+KUrl & ClassGenerator::implementationUrl()
+{
+    return d->implementationUrl;
 }
 
 /// Specify license for this class
@@ -591,11 +622,25 @@ OutputPage::OutputPage(CreateClassWizard* parent)
 
     registerField("headerUrl*", d->output->headerUrl);
     registerField("implementationUrl*", d->output->implementationUrl);
+    registerField("headerLine", d->output->headerLineNumber);
+    registerField("headerColumn", d->output->headerColumnNumber);
+    registerField("implementationLine", d->output->implementationLineNumber);
+    registerField("implementationColumn", d->output->implementationColumnNumber);
 }
 
 void OutputPage::showEvent(QShowEvent*) {
     d->output->headerUrl->setUrl(d->parent->generator()->headerUrlFromBase(d->parent->d->baseUrl));
     d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl));
+}
+
+bool OutputPage::validatePage()
+{
+    
+    d->parent->generator()->setHeaderUrl(d->output->headerUrl->text());
+    d->parent->generator()->setImplementationUrl(d->output->implementationUrl->text());
+    d->parent->generator()->setHeaderPosition(SimpleCursor(field("headerLine").toInt(), field("headerColumn").toInt()));
+    d->parent->generator()->setHeaderPosition(SimpleCursor(field("implementationLine").toInt(), field("implementationColumn").toInt()));
+    return true;
 }
 
 OutputPage::~OutputPage()
