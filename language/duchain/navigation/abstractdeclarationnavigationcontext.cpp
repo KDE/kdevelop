@@ -181,7 +181,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   }
   
   if( shorten && !m_declaration->comment().isEmpty() ) {
-    QString comment = m_declaration->comment();
+    QString comment = QString::fromUtf8(m_declaration->comment());
     if( comment.length() > 60 ) {
       comment.truncate(60);
       comment += "...";
