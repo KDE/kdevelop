@@ -24,7 +24,7 @@
 
 class TestCppCodegen : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
     TestCppCodegen();
