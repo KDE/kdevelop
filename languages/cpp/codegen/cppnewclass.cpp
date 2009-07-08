@@ -92,11 +92,11 @@ CppOverridesPage* CppNewClassWizard::newOverridesPage()
   return new CppOverridesPage(this);
 }
 
-KDevelop::DocumentChangeSet CppNewClass::generate(KUrl url)
+KDevelop::DocumentChangeSet CppNewClass::generate()
 {
   
-  KDevelop::DocumentChangeSet changeSet0 = generateHeader(headerUrlFromBase(url));
-  KDevelop::DocumentChangeSet changeSet1 = generateImplementation(headerUrlFromBase(url), implementationUrlFromBase(url));
+  KDevelop::DocumentChangeSet changeSet0 = generateHeader();
+  KDevelop::DocumentChangeSet changeSet1 = generateImplementation();
   
   return changeSet0 << changeSet1;
 }
@@ -158,7 +158,7 @@ KUrl CppNewClass::implementationUrlFromBase(KUrl baseUrl) {
   return url;
 }
 
-KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
+KDevelop::DocumentChangeSet CppNewClass::generateHeader()
 {
   QString header;
 
@@ -181,7 +181,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
   }
 
   // Header protector
-  QString headerGuard = url.fileName().toUpper().replace('.', '_');
+  QString headerGuard = headerUrl().fileName().toUpper().replace('.', '_');
   if (ns)
     headerGuard.prepend(id.toString().toUpper().replace("::", "_") + '_');
 
@@ -194,7 +194,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
   
   foreach(DeclarationPointer base, m_baseClasses) {
     DUChainReadLocker lock(DUChain::lock());
-    KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(url, IndexedDeclaration(base.data()));
+    KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(headerUrl(), IndexedDeclaration(base.data()));
     if(item) {
       output << item->lineToInsert() << "\n";
       addedIncludes = true;
@@ -235,6 +235,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(override.data())) {
       if (ap != member->accessPolicy()) {
         switch (member->accessPolicy()) {
+          case Declaration::DefaultAccess:
           case Declaration::Public:
             output << "\npublic:\n";
             break;
@@ -265,7 +266,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
   output << "#endif // " << headerGuard << '\n';
   
   DocumentChangeSet changes;
-  changes.addChange(DocumentChange(IndexedString(url.path()),
+  changes.addChange(DocumentChange(IndexedString(headerUrl().path()),
                     SimpleRange(headerPosition(), 0), QString(), header));
   
   return changes;
@@ -322,10 +323,10 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader(KUrl url)
   }
 #endif
 
-  ICore::self()->documentController()->openDocument(url);
+  ICore::self()->documentController()->openDocument(headerUrl());
 }
 
-KDevelop::DocumentChangeSet CppNewClass::generateImplementation(KUrl headerUrl, KUrl url)
+KDevelop::DocumentChangeSet CppNewClass::generateImplementation()
 {
   QString implementation;
 
@@ -335,7 +336,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateImplementation(KUrl headerUrl, 
     output << "/*\n" << license() << "\n*/\n\n";
 
   // #include our header
-  QString path = KUrl::relativePath(url.directory(), headerUrl.toLocalFile());
+  QString path = KUrl::relativePath(implementationUrl().directory(), headerUrl().toLocalFile());
   if(path.startsWith("./"))
     path = path.mid(2);
   output << "#include \"" << path << "\"\n\n";
@@ -367,12 +368,10 @@ KDevelop::DocumentChangeSet CppNewClass::generateImplementation(KUrl headerUrl, 
     output << item.insertionText(KUrl(), KDevelop::SimpleCursor(), QualifiedIdentifier(classId)) << "\n";
   }
   }
-
-  ICore::self()->documentController()->openDocument(url);
   
   DocumentChangeSet changes;
   
-  changes.addChange(DocumentChange(IndexedString(url.path()), SimpleRange(implementationPosition(), 0),
+  changes.addChange(DocumentChange(IndexedString(implementationUrl().path()), SimpleRange(implementationPosition(), 0),
                                    QString(), implementation));
   
   return changes;

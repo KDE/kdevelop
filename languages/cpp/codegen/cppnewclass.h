@@ -60,7 +60,7 @@ class CppNewClass : public KDevelop::ClassGenerator
     CppNewClass() : m_type(DefaultType), m_objectType(new CppClassType) {};
     virtual ~CppNewClass(void) {};
     
-    virtual KDevelop::DocumentChangeSet generate(KUrl url);
+    virtual KDevelop::DocumentChangeSet generate();
     
     virtual const QList<KDevelop::DeclarationPointer> & addBaseClass(const QString &);
 
@@ -74,8 +74,8 @@ class CppNewClass : public KDevelop::ClassGenerator
     
     void setType(Type);
 
-    KDevelop::DocumentChangeSet generateHeader(KUrl url);
-    KDevelop::DocumentChangeSet generateImplementation(KUrl headerUrl, KUrl url);
+    KDevelop::DocumentChangeSet generateHeader();
+    KDevelop::DocumentChangeSet generateImplementation();
   
   private:
     QStringList m_namespaces;
