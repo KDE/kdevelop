@@ -26,6 +26,7 @@
 #include <vcs/dvcs/dvcsplugin.h>
 #include <QObject>
 #include <vcs/vcsstatusinfo.h>
+#include <outputview/outputjob.h>
 
 
 namespace KDevelop
@@ -109,11 +110,13 @@ protected:
     bool isValidDirectory(const KUrl &dirPath);
 
     DVcsJob* lsFiles(const QString &repository,
-                     const QStringList &args);
+                     const QStringList &args,
+                     KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     DVcsJob* gitRevList(const QString &repository,
                         const QStringList &args);
     DVcsJob* gitRevParse(const QString &repository,
-                         const QStringList &args);
+                         const QStringList &args,
+                         KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
 protected slots:
     void parseGitBlameOutput(DVcsJob *job);
@@ -121,7 +124,8 @@ protected slots:
 
 private:
     //commit dialog "main" helper
-    QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList());
+    QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList(),
+        KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     void initBranchHash(const QString &repo);
 
