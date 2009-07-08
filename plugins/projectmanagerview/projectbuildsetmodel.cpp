@@ -72,7 +72,7 @@ KDevelop::ProjectBaseItem* BuildItem::findItem() const
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
     QModelIndex idx = model->pathToIndex(itemPath().split('/'));
     KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>(model->itemFromIndex(idx));
-    Q_ASSERT(item);
+    
     return item;
 }
 
