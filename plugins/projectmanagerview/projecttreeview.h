@@ -67,6 +67,9 @@ class ProjectTreeView: public QTreeView
         void popupContextMenu( const QPoint &pos );
         void openProjectConfig();
 
+    protected:
+        virtual void keyPressEvent(QKeyEvent *event);
+
     private:
         KDevelop::IProject* m_ctxProject;
         QPointer<KDevelop::NavigationToolTip> m_tooltip;

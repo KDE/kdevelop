@@ -265,5 +265,18 @@ bool ProjectTreeView::event(QEvent* event)
     return QAbstractItemView::event(event);
 }
 
+
+void ProjectTreeView::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Return && currentIndex().isValid())
+    {
+        event->accept();
+        slotActivated(currentIndex());
+    }
+    else
+        QTreeView::keyPressEvent(event);
+}
+
+
 #include "projecttreeview.moc"
 
