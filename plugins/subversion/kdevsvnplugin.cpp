@@ -99,7 +99,7 @@ KDevSvnPlugin::~KDevSvnPlugin()
 
 bool KDevSvnPlugin::isVersionControlled(const KUrl& localLocation)
 {
-    SvnInfoJob* job = new SvnInfoJob(this);
+    SvnInfoJob* job = new SvnInfoJob(this, KDevelop::OutputJob::Silent);
 
     job->setLocation(localLocation);
 
