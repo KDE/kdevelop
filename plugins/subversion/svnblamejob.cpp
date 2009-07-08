@@ -98,8 +98,8 @@ void SvnInternalBlameJob::setEndRevision( const KDevelop::VcsRevision& rev )
     m_endRevision = rev;
 }
 
-SvnBlameJob::SvnBlameJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent )
+SvnBlameJob::SvnBlameJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : SvnJobBase( parent, verbosity )
 {
     setType( KDevelop::VcsJob::Annotate );
     m_job = new SvnInternalBlameJob( this );

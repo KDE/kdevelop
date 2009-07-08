@@ -38,11 +38,13 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputJob : public KJob
     Q_OBJECT
 
 public:
-    OutputJob(QObject* parent = 0);
+    enum OutputJobVerbosity { Silent, Verbose };
+
+    OutputJob(QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
 
     void startOutput();
 
-    void setRaiseOnCreation(bool raise);
+    OutputJobVerbosity verbosity() const;
 
 protected:
     void setStandardToolView(IOutputView::StandardToolView standard);
@@ -70,7 +72,7 @@ private:
     IOutputView::ViewType m_type;
     IOutputView::Behaviours m_behaviours;
     bool m_killJobOnOutputClose;
-    bool m_raiseOnCreation;
+    OutputJobVerbosity m_verbosity;
     int m_outputId;
     QAbstractItemModel* m_outputModel;
     IOutputView::Ownership m_modelOwnership;

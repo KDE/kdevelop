@@ -43,7 +43,7 @@ class SvnDiffJob : public SvnJobBase
 {
     Q_OBJECT
 public:
-    SvnDiffJob( KDevSvnPlugin* parent );
+    SvnDiffJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     QVariant fetchResults();
     void start();
     SvnInternalJobBase* internalJob() const;

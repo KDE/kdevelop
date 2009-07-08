@@ -35,7 +35,7 @@ class SvnJobBase : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    SvnJobBase( KDevSvnPlugin* );
+    SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     virtual ~SvnJobBase();
     virtual SvnInternalJobBase* internalJob() const = 0;
     KDevelop::VcsJob::JobStatus status() const;

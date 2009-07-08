@@ -29,8 +29,8 @@ namespace KDevelop
             VcsJob::JobType m_type;
     };
 
-    VcsJob::VcsJob( QObject* parent )
-        : OutputJob(parent), d(new VcsJobPrivate)
+    VcsJob::VcsJob( QObject* parent, OutputJobVerbosity verbosity )
+        : OutputJob(parent, verbosity), d(new VcsJobPrivate)
     {
         setStandardToolView(IOutputView::VcsView);
         startOutput();

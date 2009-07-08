@@ -28,13 +28,13 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
-OutputJob::OutputJob(QObject* parent)
+OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
     : KJob(parent)
     , m_standardToolView(-1)
     , m_type(IOutputView::OneView)
     , m_behaviours(IOutputView::AllowUserClose)
     , m_killJobOnOutputClose(true)
-    , m_raiseOnCreation(true)
+    , m_verbosity(verbosity)
     , m_outputId(-1)
     , m_outputModel(0)
     , m_modelOwnership(IOutputView::KeepOwnership)
@@ -81,7 +81,7 @@ void OutputJob::startOutput()
             if (m_killJobOnOutputClose)
                 connect(i, SIGNAL(outputRemoved(int, int)), this, SLOT(outputViewRemoved(int, int)));
 
-            if (m_raiseOnCreation)
+            if (m_verbosity == OutputJob::Verbose)
                 view->raiseOutput(m_outputId);
         }
     }
@@ -135,11 +135,6 @@ void KDevelop::OutputJob::setStandardToolView(IOutputView::StandardToolView stan
     m_standardToolView = standard;
 }
 
-void KDevelop::OutputJob::setRaiseOnCreation(bool raise)
-{
-    m_raiseOnCreation = raise;
-}
-
 void OutputJob::setToolTitle(const QString& title)
 {
     m_toolTitle = title;
@@ -154,5 +149,11 @@ int OutputJob::outputId() const
 {
     return m_outputId;
 }
+
+OutputJob::OutputJobVerbosity OutputJob::verbosity() const
+{
+    return m_verbosity;
+}
+
 
 #include "outputjob.moc"

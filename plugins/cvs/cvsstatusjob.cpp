@@ -18,8 +18,8 @@
 #include <vcs/vcsstatusinfo.h>
 
 
-CvsStatusJob::CvsStatusJob(KDevelop::IPlugin* parent)
-    : CvsJob(parent)
+CvsStatusJob::CvsStatusJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+    : CvsJob(parent, verbosity)
 {
 }
 

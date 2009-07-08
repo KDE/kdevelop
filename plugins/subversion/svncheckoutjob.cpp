@@ -83,8 +83,8 @@ KDevelop::VcsLocation SvnInternalCheckoutJob::source() const
 }
 
 
-SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent )
+SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : SvnJobBase( parent, verbosity )
 {
     setType( KDevelop::VcsJob::Import );
     m_job = new SvnInternalCheckoutJob( this );

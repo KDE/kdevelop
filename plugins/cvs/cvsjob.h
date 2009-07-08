@@ -30,7 +30,7 @@ class CvsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    CvsJob(KDevelop::IPlugin* parent);
+    CvsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~CvsJob();
 
     void clear();

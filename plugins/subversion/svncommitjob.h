@@ -34,7 +34,7 @@ class SvnCommitJob : public SvnJobBase
 {
     Q_OBJECT
 public:
-    explicit SvnCommitJob( KDevSvnPlugin* parent );
+    explicit SvnCommitJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     QVariant fetchResults();
     void start();
     void setCommitMessage( const QString& msg );

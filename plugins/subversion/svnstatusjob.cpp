@@ -127,8 +127,8 @@ void SvnInternalStatusJob::run()
     }
 }
 
-SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent )
+SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : SvnJobBase( parent, verbosity )
 {
     setType( KDevelop::VcsJob::Status );
     m_job = new SvnInternalStatusJob( this );

@@ -27,8 +27,8 @@
 #include "svnssldialog.h"
 #include "kdevsvnplugin.h"
 
-SvnJobBase::SvnJobBase( KDevSvnPlugin* parent )
-    : VcsJob( parent ), m_part( parent ),
+SvnJobBase::SvnJobBase( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : VcsJob( parent, verbosity ), m_part( parent ),
       m_status( KDevelop::VcsJob::JobNotStarted )
 {
     setCapabilities( KJob::Killable );
@@ -173,6 +173,8 @@ KDevelop::IPlugin* SvnJobBase::vcsPlugin() const
 void SvnJobBase::outputMessage(const QString& message)
 {
     if (!model()) return;
+    if (verbosity() == KDevelop::OutputJob::Silent) return;
+
     QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
     QStandardItem *previous = m->item(m->rowCount()-1);
     if (message == "." && previous && previous->text().contains(QRegExp("\\.+")))

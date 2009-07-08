@@ -51,8 +51,8 @@ struct CvsJob::Private
 };
 
 
-CvsJob::CvsJob(KDevelop::IPlugin* parent)
-    : VcsJob(parent), d(new Private)
+CvsJob::CvsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+    : VcsJob(parent, verbosity), d(new Private)
 {
     d->vcsplugin = parent;
 }

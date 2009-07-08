@@ -91,7 +91,7 @@ class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    DVcsJob(KDevelop::IPlugin* parent);
+    DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~DVcsJob();
 
     /**

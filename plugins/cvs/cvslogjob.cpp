@@ -17,8 +17,8 @@
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
 
-CvsLogJob::CvsLogJob(KDevelop::IPlugin* parent)
-    : CvsJob(parent)
+CvsLogJob::CvsLogJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+    : CvsJob(parent, verbosity)
 {
 }
 

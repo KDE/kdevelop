@@ -35,7 +35,7 @@ class SvnCheckoutJob : public SvnJobBase
 {
     Q_OBJECT
 public:
-    SvnCheckoutJob( KDevSvnPlugin* parent );
+    SvnCheckoutJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     QVariant fetchResults();
     void start();
     SvnInternalJobBase* internalJob() const;

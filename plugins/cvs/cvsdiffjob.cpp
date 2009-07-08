@@ -13,8 +13,8 @@
 #include <KDebug>
 #include <QRegExp>
 
-CvsDiffJob::CvsDiffJob(KDevelop::IPlugin* parent)
-    : CvsJob(parent)
+CvsDiffJob::CvsDiffJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+    : CvsJob(parent, verbosity)
 {
 }
 

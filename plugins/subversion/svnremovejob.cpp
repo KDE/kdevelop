@@ -87,8 +87,8 @@ bool SvnInternalRemoveJob::force() const
     return m_force;
 }
 
-SvnRemoveJob::SvnRemoveJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent )
+SvnRemoveJob::SvnRemoveJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : SvnJobBase( parent, verbosity )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalRemoveJob( this );

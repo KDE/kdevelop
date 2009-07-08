@@ -111,8 +111,8 @@ KDevelop::VcsRevision SvnInternalCatJob::pegRevision() const
     return m_pegRevision;
 }
 
-SvnCatJob::SvnCatJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent )
+SvnCatJob::SvnCatJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : SvnJobBase( parent, verbosity )
 {
     setType( KDevelop::VcsJob::Cat );
     m_job = new SvnInternalCatJob( this );

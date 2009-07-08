@@ -18,8 +18,8 @@
 
 #include <vcs/vcsrevision.h>
 
-CvsAnnotateJob::CvsAnnotateJob(KDevelop::IPlugin* parent)
-    : CvsJob(parent)
+CvsAnnotateJob::CvsAnnotateJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+    : CvsJob(parent, verbosity)
 {
 }
 

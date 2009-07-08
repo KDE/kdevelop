@@ -119,8 +119,8 @@ void SvnInternalCommitJob::run()
     }
 }
 
-SvnCommitJob::SvnCommitJob( KDevSvnPlugin* parent )
-    : SvnJobBase( parent ), m_commitdlg( 0 )
+SvnCommitJob::SvnCommitJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
+    : SvnJobBase( parent, verbosity ), m_commitdlg( 0 )
 {
     setType( KDevelop::VcsJob::Commit );
     m_job = new SvnInternalCommitJob( this );
