@@ -169,21 +169,12 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   if(!license().isEmpty())
     output << "/*\n" << license() << "\n*/\n\n";
 
-  // Namespace
-  QualifiedIdentifier id(identifier());
-  Identifier classId = id.last();
-
-  bool ns = false;
-
-  if (id.count() > 1) {
-    ns = true;
-    id.pop();
-  }
+  Identifier classId = Identifier(name());
 
   // Header protector
   QString headerGuard = headerUrl().fileName().toUpper().replace('.', '_');
-  if (ns)
-    headerGuard.prepend(id.toString().toUpper().replace("::", "_") + '_');
+  if (m_namespaces.size())
+    headerGuard.prepend(m_namespaces.join("_").toUpper() + '_');
 
   output << "#ifndef " << headerGuard << '\n';
   output << "#define " << headerGuard << "\n\n";
@@ -204,9 +195,9 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   if(addedIncludes)
     output << "\n\n";
   
-  
-  if (ns)
-    output << "namespace " << id.toString() << " {\n\n";
+  //Support for nested namespaces
+  foreach(QString ns, m_namespaces)
+    output << "namespace " << ns << " {\n\n";
 
   output << (m_type == Class || m_type == DefaultType ? "class " : "struct ");
 
@@ -215,7 +206,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   output << classId.toString();
 
   Q_ASSERT(m_baseClasses.size() == m_baseAccessSpecifiers.size());
-  for(unsigned int i = 0; i < m_baseClasses.size(); ++i)
+  for(int i = 0; i < m_baseClasses.size(); ++i)
       output << (i == 0 ? " : " : ", ") << m_baseAccessSpecifiers[i] << ' ' << m_baseClasses[i]->identifier().toString() ;
 
   output << "\n{\n";
@@ -259,17 +250,14 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
 
   output << "};\n\n";
 
-  if (ns) {
+  for(int i = 0; i < m_namespaces.size(); ++i)
     output << "}\n\n";
-  }
 
   output << "#endif // " << headerGuard << '\n';
   
   DocumentChangeSet changes;
   changes.addChange(DocumentChange(IndexedString(headerUrl().path()),
                     SimpleRange(headerPosition(), 0), QString(), header));
-  
-  return changes;
 
 #if 0
   {
@@ -322,8 +310,10 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
     }
   }
 #endif
-
+  //TODO DocumentChangeSet should take care of opening new documents in the editor
   ICore::self()->documentController()->openDocument(headerUrl());
+  
+  return changes;
 }
 
 KDevelop::DocumentChangeSet CppNewClass::generateImplementation()
