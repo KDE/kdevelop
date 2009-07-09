@@ -29,6 +29,8 @@
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : KDialog(parent)
 {
+    setCaption(i18n("Configure a build directory"));
+    
 //     QWidget* w= new QWidget(this);
     m_chooserUi = new Ui::CMakeBuildDirChooser;
     m_chooserUi->setupUi(mainWidget());
@@ -54,9 +56,9 @@ void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
     update();
 }
 
-QString CMakeBuildDirChooser::buildDirProject(const KUrl& buildDir)
+QString CMakeBuildDirChooser::buildDirProject(const KUrl& srcDir)
 {
-    QFile file(buildDir.toLocalFile()+"/CMakeCache.txt");
+    QFile file(srcDir.toLocalFile()+"/CMakeCache.txt");
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -112,21 +114,25 @@ void CMakeBuildDirChooser::updated()
             bool hasCache=QFile::exists(m_chooserUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
             if(hasCache)
             {
-                QString srcfold=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
+                QString proposed=m_srcFolder.toLocalFile(KUrl::RemoveTrailingSlash);
 
                 srcDir=buildDirProject(m_chooserUi->buildFolder->url());
-                if(!srcDir.isEmpty()) {
-                    if(QDir(srcDir).canonicalPath()==QDir(srcfold).canonicalPath())
+                if(!srcDir.isEmpty())
+                {
+                    if(QDir(srcDir).canonicalPath()==QDir(proposed).canonicalPath())
                     {
-                        if(m_alreadyUsed.contains(buildFolder().path(KUrl::RemoveTrailingSlash)))
-                            m_chooserUi->status->setText(i18n("Build directory already configured."));
-                        else
                             st |= CorrectBuildDir | BuildDirCreated;
                     }
-                } else {
+                }
+                else
+                {
                     kWarning(9042) << "maybe you are trying a damaged CMakeCache.txt file. Proper: ";
                 }
             }
+        }
+        
+        if(m_alreadyUsed.contains(buildFolder().toLocalFile(KUrl::RemoveTrailingSlash))) {
+            st=DirAlreadyCreated;
         }
     }
     else
@@ -140,10 +146,13 @@ void CMakeBuildDirChooser::updated()
     if(st & (BuildDirCreated | CorrectBuildDir))
     {
         m_chooserUi->status->setText(i18n("Using an already created build directory"));
+        m_chooserUi->installPrefix->setEnabled(false);
+        m_chooserUi->buildType->setEnabled(false);
     }
     else
     {
-        bool correct=dirEmpty || !dirExists;
+        bool correct = (dirEmpty || !dirExists) && !(st & DirAlreadyCreated);
+        
         if(correct)
         {
             st |= CorrectBuildDir;
@@ -152,10 +161,12 @@ void CMakeBuildDirChooser::updated()
         else
         {
             //Useful to explain what's going wrong
-            if (!(st & CorrectBuildDir))
+            if(st & DirAlreadyCreated)
+                m_chooserUi->status->setText(i18n("Build directory already configured."));
+            else if (!srcDir.isEmpty())
                 m_chooserUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
-            else
+            else if(!dirEmpty)
                 m_chooserUi->status->setText(i18n("The selected build directory is not empty"));
         }
 
@@ -168,25 +179,31 @@ void CMakeBuildDirChooser::updated()
 void CMakeBuildDirChooser::setCMakeBinary(const KUrl& url) 
 { 
     m_chooserUi->cmakeBin->setUrl(url); 
-    update();
+    updated();
 }
 
 void CMakeBuildDirChooser::setInstallPrefix(const KUrl& url) 
 { 
     m_chooserUi->installPrefix->setUrl(url); 
-    update();
+    updated();
 }
 
 void CMakeBuildDirChooser::setBuildFolder(const KUrl& url) 
 { 
     m_chooserUi->buildFolder->setUrl(url); 
-    update();
+    updated();
 }
 
 void CMakeBuildDirChooser::setBuildType(const QString& s) 
 { 
     m_chooserUi->buildType->addItem(s); 
-    update();
+    updated();
+}
+
+void CMakeBuildDirChooser::setAlreadyUsed (const QStringList & used)
+{
+    m_alreadyUsed = used;
+    updated();
 }
 
 KUrl CMakeBuildDirChooser::cmakeBinary() const { return m_chooserUi->cmakeBin->url(); }

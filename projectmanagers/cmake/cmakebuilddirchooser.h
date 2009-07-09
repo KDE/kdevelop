@@ -41,7 +41,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
             CorrectProject = 2, 
             BuildFolderEmpty = 4, 
             HaveCMake = 8,
-            CorrectBuildDir = 16
+            CorrectBuildDir = 16,
+            DirAlreadyCreated = 32 //Error message in case it's already configured
         };
         Q_DECLARE_FLAGS( StatusTypes, StatusType )
 
@@ -58,7 +59,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         void setBuildFolder(const KUrl&);
         void setBuildType(const QString&);
         void setSourceFolder( const KUrl& srcFolder );
-        void setAlreadyUsed(const QStringList& used) { m_alreadyUsed=used; }
+        void setAlreadyUsed(const QStringList& used);
 
     private slots:
         void updated();

@@ -117,7 +117,6 @@ void CMakePreferences::load()
 void CMakePreferences::save()
 {
     kDebug(9042) << "*******saving";
-    Q_ASSERT(m_currentModel);
     QStringList bDirs;
     int count=m_prefsUi->buildDirs->model()->rowCount();
     for(int i=0; i<count; i++)
@@ -131,19 +130,29 @@ void CMakePreferences::save()
     item = CMakeSettings::self()->findItem("currentBuildDir");
     item->setProperty( qVariantFromValue<KUrl>( KUrl( m_prefsUi->buildDirs->currentText() ) ) );
     
+    KUrl cmakeCmd;
+    KUrl installPrefix;
+    
+    if(m_currentModel)
+    {
+        cmakeCmd=m_currentModel->value("CMAKE_COMMAND");
+        installPrefix=m_currentModel->value("CMAKE_INSTALL_PREFIX");
+        m_currentModel->writeDown();
+    }
+    
     item = CMakeSettings::self()->findItem("cmakeBin");
-    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_currentModel->value("CMAKE_COMMAND") ) ) );
+    item->setProperty(qVariantFromValue<KUrl>(cmakeCmd));
     
     item = CMakeSettings::self()->findItem("currentInstallDir");
-    item->setProperty( qVariantFromValue<KUrl>( KUrl( m_currentModel->value("CMAKE_INSTALL_PREFIX") ) ) );
-    m_currentModel->writeDown();
+    item->setProperty( qVariantFromValue<KUrl>(installPrefix));
     
     kDebug(9042) << "doing real save from ProjectKCModule";
     ProjectKCModule<CMakeSettings>::save();
     CMakeSettings::self()->writeConfig();
     
     //We run cmake on the builddir to generate it 
-    configure();
+    if(!cmakeCmd.isEmpty())
+        configure();
 }
 
 void CMakePreferences::defaults()
@@ -224,13 +233,17 @@ void CMakePreferences::createBuildDir()
     for(int i=0; i<m_prefsUi->buildDirs->count(); i++)
     {
         used += m_prefsUi->buildDirs->itemText(i);
+        
+        //Comparisons are with TrailingSlash-less paths, remove it just in case
+        if(used.last().endsWith('/'))
+            used.last().chop(1);
     }
     bdCreator.setAlreadyUsed(used);
     bdCreator.setCMakeBinary(KStandardDirs::findExe("cmake"));
     
     if(bdCreator.exec())
     {
-        m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile(KUrl::AddTrailingSlash));
+        m_prefsUi->buildDirs->addItem(bdCreator.buildFolder().toLocalFile(KUrl::RemoveTrailingSlash));
         m_prefsUi->removeBuildDir->setEnabled(true);
         kDebug(9042) << "Emitting changed signal for cmake kcm";
         emit changed(true);
