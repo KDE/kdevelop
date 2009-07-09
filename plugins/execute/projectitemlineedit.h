@@ -24,20 +24,18 @@
 #include <QStringList>
 #include <KLineEdit>
 
-namespace KDevelop { class ProjectModel; }
-
 class ProjectItemCompleter : public QCompleter
 {
     Q_OBJECT
     public:
-        ProjectItemCompleter(KDevelop::ProjectModel* model, QObject* parent=0);
+        ProjectItemCompleter(QAbstractItemModel* model, QObject* parent=0);
         
+        QString pathFromIndex(const QModelIndex& index) const;
         QString separator() const { return sep; }
         QStringList splitPath(const QString &path) const { return path.split(sep); }
-        QString pathFromIndex(const QModelIndex& index) const;
         
     private:
-        KDevelop::ProjectModel* mModel;
+        QAbstractItemModel *mModel;
         QString sep;
 };
 

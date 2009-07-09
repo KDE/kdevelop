@@ -53,13 +53,25 @@ void ProjectItemLineEdit::correctnessChange(bool correct)
     setPalette(p);
 }
 
-ProjectItemCompleter::ProjectItemCompleter(KDevelop::ProjectModel* model, QObject* parent)
+ProjectItemCompleter::ProjectItemCompleter(QAbstractItemModel* model, QObject* parent)
     : QCompleter(model, parent), mModel(model), sep("/")
 {}
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
 {
-    return mModel->pathFromIndex(index).join(sep);
+    if (!index.isValid())
+        return QString();
+
+    QModelIndex idx = index;
+    QStringList list;
+    do {
+        QString t = mModel->data(idx, Qt::EditRole).toString();
+        list.prepend(t);
+        QModelIndex parent = idx.parent();
+        idx = parent.sibling(parent.row(), index.column());
+    } while (idx.isValid());
+
+    return list.join(sep);
 }
 
 #include "projectitemlineedit.moc"

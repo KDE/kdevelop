@@ -471,22 +471,6 @@ QModelIndex ProjectModel::pathToIndex(const QStringList& tofetch_) const
     return ret;
 }
 
-QStringList ProjectModel::pathFromIndex(const QModelIndex& index) const
-{
-    if (!index.isValid())
-        return QStringList();
-
-    QModelIndex idx = index;
-    QStringList list;
-    do {
-        QString t = data(idx, Qt::EditRole).toString();
-        list.prepend(t);
-        QModelIndex parent = idx.parent();
-        idx = parent.sibling(parent.row(), index.column());
-    } while (idx.isValid());
-
-    return list;
-}
 
 }
 #include "projectmodel.moc"
