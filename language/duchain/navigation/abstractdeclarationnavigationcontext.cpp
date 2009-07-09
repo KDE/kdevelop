@@ -256,7 +256,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   
   if( !shorten && (!m_declaration->comment().isEmpty() || doc) ) {
     modifyHtml() += "<br />";
-    QString comment = m_declaration->comment();
+    QString comment = QString::fromUtf8(m_declaration->comment());
     if(comment.isEmpty() && doc) {
       comment = doc->description();
       if(!comment.isEmpty()) {
