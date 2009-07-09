@@ -389,7 +389,7 @@ void ProjectController::setupActions()
     
     KAction* openProjectForFileAction = new KAction( this );
     ac->addAction("project_open_for_file", openProjectForFileAction);
-    openProjectForFileAction->setText("Open Project for Current File");
+    openProjectForFileAction->setText(i18n("Open Project for Current File"));
     connect( openProjectForFileAction, SIGNAL(triggered(bool)), SLOT(openProjectForUrlSlot(bool)));
 }
 
