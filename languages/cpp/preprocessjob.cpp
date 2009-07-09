@@ -638,8 +638,6 @@ bool PreprocessJob::checkAbort()
 
 bool PreprocessJob::readContents()
 {
-    CodeRepresentation * repr = createCodeRepresentation(parentJob()->document());
-    
     bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
     parentJob()->setReadFromDisk(readFromDisk);
     
@@ -652,6 +650,15 @@ bool PreprocessJob::readContents()
         QFile file( localFile );
         if ( !file.open( QIODevice::ReadOnly ) )
         {
+            //Try using a code-representation, as artificial code may have been inserted
+            CodeRepresentation * repr = createCodeRepresentation(parentJob()->document());
+            if(repr) {
+              m_contents = repr->text().toUtf8();
+              delete repr;
+              kDebug() << "took contents for " << parentJob()->document().toUrl() << " from code-representation";
+              return true;
+            }
+          
             KDevelop::ProblemPointer p(new Problem());
             p->setSource(KDevelop::ProblemData::Disk);
             p->setDescription(i18n( "Could not open file '%1'", localFile ));
@@ -675,6 +682,7 @@ bool PreprocessJob::readContents()
             kWarning( 9007 ) << "Could not open file" << parentJob()->document().str() << "(path" << localFile << ")" ;
             return false;
         }
+        m_contents = file.readAll(); ///@todo respect local encoding settings. Currently, the file is expected to be utf-8
         file.close();
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
     }
@@ -688,9 +696,6 @@ bool PreprocessJob::readContents()
     foreach (KTextEditor::SmartRange* range, parentJob()->changedRanges())
         kDebug() << *range << range->text().join("\n").left(20) << "...";
 #endif
-    
-    ///@todo Respect local encoding settings. Currently, the file is expected to be utf-8
-    m_contents = repr->text().toUtf8();
     
     ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().str()
