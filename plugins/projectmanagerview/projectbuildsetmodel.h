@@ -23,6 +23,7 @@
 
 #include <QAbstractTableModel>
 #include <QSet>
+#include <QStringList>
 
 namespace KDevelop
 {
@@ -37,19 +38,17 @@ class BuildItem
 {
 public:
     BuildItem();
-    BuildItem( const QString& itemName, const QString& projectName, const QString& itemPath );
+    explicit BuildItem( const QStringList& itemPath );
     BuildItem( const BuildItem& rhs );
-    BuildItem( KDevelop::ProjectBaseItem* );
+    explicit BuildItem( KDevelop::ProjectBaseItem* );
     void initializeFromItem( KDevelop::ProjectBaseItem* item );
     KDevelop::ProjectBaseItem* findItem() const;
     BuildItem& operator=( const BuildItem& );
-    QString itemName() const { return m_itemName; }
-    QString projectName() const { return m_projectName; }
-    QString itemPath() const { return m_itemPath; }
+    QString itemName() const;
+    QStringList itemPath() const { return m_itemPath; }
+    QString itemProject() const;
 private:
-    QString m_itemName;
-    QString m_projectName;
-    QString m_itemPath;
+    QStringList m_itemPath;
 };
 
 bool operator==( const BuildItem& rhs, const BuildItem& lhs );

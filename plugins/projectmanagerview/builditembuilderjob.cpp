@@ -29,7 +29,11 @@ BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, con
 {
     foreach( const BuildItem &item, items )
     {
-        addItem( t, item.findItem() );
+        KDevelop::ProjectBaseItem *it=item.findItem();
+        //FIXME: should have disabled the building before
+        //convert to assert or remove "if(it)" when it's done
+        if(it)
+            addItem( t, it );
     }
 
 }
