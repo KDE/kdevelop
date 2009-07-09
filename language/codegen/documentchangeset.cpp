@@ -51,7 +51,7 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 {
     for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.m_changes.begin();
         it != rhs.m_changes.end(); ++it)
-        m_changes[it.key()].append(*it);
+        m_changes[it.key()] += *it;
     rhs.clear();
     
     return *this;
