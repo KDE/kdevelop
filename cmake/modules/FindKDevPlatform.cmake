@@ -20,7 +20,9 @@
 # KDEVPLATFORM_PROJECT_LIBRARY         - project module library
 # KDEVPLATFORM_SUBLIME_LIBRARY         - sublime module library
 # KDEVPLATFORM_SHELL_LIBRARY           - shell module library
-# KDEVPLATFORM_TESTSHELL_LIBRARY       - module library to write tests that need to replace parts of shell
+# KDEVPLATFORM_TESTS_LIBRARY           - library to write tests for plugins,
+#                                        contains some useful tools and a way to replace parts of Core 
+#                                        classes with custom implementations
 # KDEVPLATFORM_UTIL_LIBRARY            - util module library
 # KDEVPLATFORM_VCS_LIBRARY             - vcs module library
 # KDEVPLATFORM_VERITAS_LIBRARY         - test module library
