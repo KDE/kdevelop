@@ -87,6 +87,7 @@ public:
 private:
     void headerSectionEndedInternal(rpp::Stream* stream);
     bool checkAbort();
+    bool readContents();
 
     CppPreprocessEnvironment* m_currentEnvironment;
     KSharedPtr<Cpp::EnvironmentFile> m_firstEnvironmentFile; //First environment-file. If simplified matching is used, this is the proxy.
@@ -97,6 +98,7 @@ private:
     bool m_success;
     bool m_headerSectionEnded;
     rpp::pp* m_pp;
+    QByteArray m_contents;
 };
 
 KDevelop::ParsingEnvironment* createStandardEnvironment();

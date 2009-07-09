@@ -35,6 +35,7 @@
 #include <klocale.h>
 
 #include <language/backgroundparser/backgroundparser.h>
+#include <language/codegen/coderepresentation.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
@@ -98,6 +99,8 @@ CPPParseJob * PreprocessJob::parentJob() const
 
 void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedString guardName)
 {
+  Q_UNUSED(stream);
+  
   KDevelop::DUChainWriteLocker lock(KDevelop::DUChain::lock());
   
   m_currentEnvironment->environmentFile()->setHeaderGuard(guardName);
@@ -114,9 +117,6 @@ void PreprocessJob::run()
   
     //If we have a parent, that parent already has locked the parse-lock
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
-  
-    if(!CppLanguageSupport::self())
-      return;
     
     //It seems like we cannot influence the actual thread priority in thread-weaver, so for now set it here.
     //It must be low so the GUI stays fluid.
@@ -206,73 +206,8 @@ void PreprocessJob::run()
     if(m_secondEnvironmentFile)
       m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
     
-    bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
-    parentJob()->setReadFromDisk(readFromDisk);
-
-    QByteArray contents;
-
-    
-    QString localFile(parentJob()->document().toUrl().toLocalFile());
-  
-    QFileInfo fileInfo( localFile );
-    
-    if ( readFromDisk )
-    {
-        QFile file( localFile );
-        if ( !file.open( QIODevice::ReadOnly ) )
-        {
-            KDevelop::ProblemPointer p(new Problem());
-            p->setSource(KDevelop::ProblemData::Disk);
-            p->setDescription(i18n( "Could not open file '%1'", localFile ));
-            switch (file.error()) {
-              case QFile::ReadError:
-                  p->setExplanation(i18n("File could not be read from."));
-                  break;
-              case QFile::OpenError:
-                  p->setExplanation(i18n("File could not be opened."));
-                  break;
-              case QFile::PermissionsError:
-                  p->setExplanation(i18n("File permissions prevent opening for read."));
-                  break;
-              default:
-                  break;
-            }
-            p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor::invalid(), KTextEditor::Cursor::invalid()));
-            p->setLocationStack(parentJob()->includeStack());
-            parentJob()->addPreprocessorProblem(p);
-
-            kWarning( 9007 ) << "Could not open file" << parentJob()->document().str() << "(path" << localFile << ")" ;
-            return ;
-        }
-
-        contents = file.readAll(); ///@todo respect local encoding settings. Currently, the file is expected to be utf-8
-        
-    //        Q_ASSERT( !contents.isEmpty() );
-        file.close();
-        m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
-    }
-    else
-    {
-        KTextEditor::Range range = KTextEditor::Range::invalid();
-
-        //===--- Incremental Parsing!!! yay :) ---===//
-        kDebug() << "We could have just parsed the changed ranges:";
-        foreach (KTextEditor::SmartRange* range, parentJob()->changedRanges())
-            kDebug() << *range << range->text().join("\n").left(20) << "...";
-
-        contents = parentJob()->contentsFromEditor().toUtf8();
-        m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
-    }
-    
-    ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
-    << parentJob()->document().str()
-    << "<== readFromDisk:" << readFromDisk
-    << "size:" << contents.length()
-    << endl; )
-
-    if (checkAbort())
+    if (checkAbort() || !readContents())
         return;
-    
 
     {
         ///Find a context that can be updated
@@ -299,13 +234,13 @@ void PreprocessJob::run()
     
     preprocessor.setEnvironment( m_currentEnvironment );
 
-    PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), contents);
+    PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), m_contents);
 
     if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
       if(macroNamesAtBeginning.contains(m_firstEnvironmentFile->headerGuard())) {
         //Remove the header-guard, and re-preprocess, since we don't do real environment-management(We don't allow empty versions)
         m_currentEnvironment->removeMacro(m_firstEnvironmentFile->headerGuard());
-        result = preprocessor.processFile(parentJob()->document().str(), contents);
+        result = preprocessor.processFile(parentJob()->document().str(), m_contents);
       }
     }
     
@@ -699,6 +634,71 @@ bool PreprocessJob::checkAbort()
     }
 
     return false;
+}
+
+bool PreprocessJob::readContents()
+{
+    CodeRepresentation * repr = createCodeRepresentation(parentJob()->document());
+    
+    bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
+    parentJob()->setReadFromDisk(readFromDisk);
+    
+    QString localFile(parentJob()->document().toUrl().toLocalFile());
+  
+    QFileInfo fileInfo( localFile );
+    
+    if ( readFromDisk )
+    {
+        QFile file( localFile );
+        if ( !file.open( QIODevice::ReadOnly ) )
+        {
+            KDevelop::ProblemPointer p(new Problem());
+            p->setSource(KDevelop::ProblemData::Disk);
+            p->setDescription(i18n( "Could not open file '%1'", localFile ));
+            switch (file.error()) {
+              case QFile::ReadError:
+                  p->setExplanation(i18n("File could not be read from."));
+                  break;
+              case QFile::OpenError:
+                  p->setExplanation(i18n("File could not be opened."));
+                  break;
+              case QFile::PermissionsError:
+                  p->setExplanation(i18n("File permissions prevent opening for read."));
+                  break;
+              default:
+                  break;
+            }
+            p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor::invalid(), KTextEditor::Cursor::invalid()));
+            p->setLocationStack(parentJob()->includeStack());
+            parentJob()->addPreprocessorProblem(p);
+
+            kWarning( 9007 ) << "Could not open file" << parentJob()->document().str() << "(path" << localFile << ")" ;
+            return false;
+        }
+        file.close();
+        m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
+    }
+    else
+        m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
+    
+    ///@todo Modify parsing foronly changed ranges on editor files
+#if 0
+    //===--- Incremental Parsing!!! yay :) ---===//
+    kDebug() << "We could have just parsed the changed ranges:";
+    foreach (KTextEditor::SmartRange* range, parentJob()->changedRanges())
+        kDebug() << *range << range->text().join("\n").left(20) << "...";
+#endif
+    
+    ///@todo Respect local encoding settings. Currently, the file is expected to be utf-8
+    m_contents = repr->text().toUtf8();
+    
+    ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
+    << parentJob()->document().str()
+    << "<== readFromDisk:" << readFromDisk
+    << "size:" << contents.length()
+    << endl; )
+    
+    return true;
 }
 
 bool PreprocessJob::success() const
