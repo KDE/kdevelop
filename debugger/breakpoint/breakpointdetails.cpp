@@ -136,7 +136,7 @@ void BreakpointDetails::setItem(Breakpoint *b)
                 status_->setText(i18n("Breakpoint is <a href=\"dirty\">dirty</a>"));
                 break;
             case Breakpoint::CleanState:
-                status_->setText("Breakpoint is active");
+                status_->setText(i18n("Breakpoint is active"));
                 break;
         }
 
