@@ -62,6 +62,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
 };
 
 ///Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
+///The caller will own the code representation, and has to care about deleting it.
 KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation* createCodeRepresentation(IndexedString url);
 
 ///An artificial source-code representation that can be used for testing.

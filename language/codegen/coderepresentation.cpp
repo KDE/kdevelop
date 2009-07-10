@@ -203,6 +203,7 @@ void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
 }
 
 InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(IndexedString file, QString text) : m_file(file) {
+    Q_ASSERT(!artificialStrings.contains(m_file));
     artificialStrings.insert(file, KSharedPtr<ArtificialStringData>(new ArtificialStringData(text)));
 }
 
