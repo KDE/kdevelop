@@ -194,12 +194,7 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 {
     for( int i = m_items.count() - 1; i >= 0; i-- )
     {
-#if QT_VERSION >= 0x040500
-        if( m_items.at(i).itemPath().startsWith(project->name()+"/") )
-#else
-        if( !m_items.at(i).itemPath().isEmpty() && 
-             m_items.at(i).itemPath().first() == QString(project->name()+"/") )
-#endif
+        if( m_items.at(i).itemProject() == project->name())
         {
             beginRemoveRows( QModelIndex(), i, i );
             m_items.removeAt(i);
