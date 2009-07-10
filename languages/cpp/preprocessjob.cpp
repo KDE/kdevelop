@@ -205,7 +205,7 @@ void PreprocessJob::run()
     
     if(m_secondEnvironmentFile)
       m_secondEnvironmentFile->setIncludePaths(m_firstEnvironmentFile->includePaths());
-    
+
     if (checkAbort() || !readContents())
         return;
 
@@ -686,8 +686,11 @@ bool PreprocessJob::readContents()
         file.close();
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
     }
-    else
+    else{
+        ///This has to be done, before parentJob()->revisionToken() is read, as it sets the token.
+        m_contents = parentJob()->contentsFromEditor().toUtf8();
         m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
+    }
     
     ///@todo Modify parsing foronly changed ranges on editor files
 #if 0
