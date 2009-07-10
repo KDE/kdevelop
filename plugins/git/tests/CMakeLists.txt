@@ -27,7 +27,7 @@ if (GIT)
         kdevplatforminterfaces
         kdevplatformutil
         kdevplatformvcs
-        kdevplatformtestshell
+        kdevplatformtests
     )
 endif (GIT)
 
