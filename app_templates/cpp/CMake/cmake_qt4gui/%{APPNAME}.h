@@ -1,5 +1,5 @@
-#ifndef %{PROJECTDIRNAME}_%{APPNAME}_H
-#define %{PROJECTDIRNAME}_%{APPNAME}_H
+#ifndef %{APPNAME}_H
+#define %{APPNAME}_H
 
 #include <QtGui/QMainWindow>
 
@@ -11,4 +11,4 @@ public:
     virtual ~%{APPNAME}();
 };
 
-#endif // %{PROJECTDIRNAME}_%{APPNAME}_H
+#endif // %{APPNAME}_H

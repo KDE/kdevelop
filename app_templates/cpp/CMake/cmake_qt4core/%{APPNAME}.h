@@ -1,5 +1,5 @@
-#ifndef %{PROJECTDIRNAME}_%{APPNAME}_H
-#define %{PROJECTDIRNAME}_%{APPNAME}_H
+#ifndef %{APPNAME}_H
+#define %{APPNAME}_H
 
 #include <QtCore/QObject>
 
@@ -13,4 +13,4 @@ private slots:
     void output();
 };
 
-#endif // %{PROJECTDIRNAME}_%{APPNAME}_H
+#endif // %{APPNAME}_H

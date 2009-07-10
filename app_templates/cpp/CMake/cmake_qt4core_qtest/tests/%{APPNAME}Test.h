@@ -1,5 +1,5 @@
-#ifndef %{PROJECTDIRNAME}_%{APPNAME}TEST_H
-#define %{PROJECTDIRNAME}_%{APPNAME}TEST_H
+#ifndef %{APPNAME}TEST_H
+#define %{APPNAME}TEST_H
 
 #include <QtCore/QObject>
 
@@ -15,4 +15,4 @@ private slots:
     void someTest();
 };
 
-#endif // %{PROJECTDIRNAME}_%{APPNAME}TEST_H
+#endif // %{APPNAME}TEST_H
