@@ -177,14 +177,6 @@ bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& pa
     return true;
 }
 
-KDevelop::ProjectBaseItem* ProjectBuildSetModel::itemForIndex( const QModelIndex& idx )
-{
-    if( !idx.isValid() || idx.row() < 0 || idx.column() < 0
-         || idx.column() >= columnCount() || idx.row() >= rowCount() )
-        return 0;
-    return m_items.at( idx.row() ).findItem();
-}
-
 QList<BuildItem> ProjectBuildSetModel::items()
 {
     return m_items ;

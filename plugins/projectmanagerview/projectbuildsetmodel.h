@@ -69,7 +69,6 @@ public:
     void moveRowsDown( int row, int count );
     void moveRowsToTop( int row, int count );
     void moveRowsToBottom( int row, int count );
-    KDevelop::ProjectBaseItem* itemForIndex( const QModelIndex& );
     QList<BuildItem> items();
 public slots:
     void saveToProject( KDevelop::IProject* ) const;
