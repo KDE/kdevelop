@@ -41,6 +41,7 @@
 #include <interfaces/iplugincontroller.h>
 
 #include "executeplugin.h"
+#include <util/kdevstringhandler.h>
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -59,13 +60,18 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
     } else 
     {
         projectTargetRadio->setChecked( true );
-        projectTarget->setText( cfg.readEntry( ExecutePlugin::projectTargetEntry, "" ) );
+        projectTarget->setText( KDevStringHandler::joinWithEscaping( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ), '/', '\\' ) );
     }
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
-    dependencies->addItems( cfg.readEntry( ExecutePlugin::dependencyEntry, QStringList() ) );
+    QVariantList deps = cfg.readEntry( ExecutePlugin::dependencyEntry, QVariantList() );
+    QStringList strDeps;
+    foreach( QVariant dep, deps ) {
+        QListWidgetItem* item = new QListWidgetItem( KDevStringHandler::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
+        item->setData( Qt::UserRole, dep );
+    }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
     blockSignals( b );
 }
@@ -213,7 +219,7 @@ void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
         cfg.deleteEntry( ExecutePlugin::projectTargetEntry );
     } else
     {
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->text() );
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, KDevStringHandler::splitWithEscaping(projectTarget->text(), '/', '\\' ) );
         cfg.deleteEntry( ExecutePlugin::executableEntry );
     }
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
@@ -221,10 +227,10 @@ void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
     cfg.writeEntry( ExecutePlugin::environmentGroupEntry, environment->currentProfile() );
     cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
     cfg.writeEntry( ExecutePlugin::dependencyActionEntry, dependencyAction->itemData( dependencyAction->currentIndex() ).toString() );
-    QStringList deps;
+    QVariantList deps;
     for( int i = 0; i < dependencies->count(); i++ )
     {
-        deps << dependencies->item( i )->text();
+        deps << dependencies->item( i )->data( Qt::UserRole );
     }
     cfg.writeEntry( ExecutePlugin::dependencyEntry, deps );
 }

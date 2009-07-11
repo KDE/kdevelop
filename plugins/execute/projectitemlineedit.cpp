@@ -24,6 +24,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
+#include <util/kdevstringhandler.h>
+
 //TODO: use a proper QValidator for the validation instead of doing it manually.
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : KLineEdit(parent)
@@ -54,12 +56,18 @@ void ProjectItemLineEdit::correctnessChange(bool correct)
 }
 
 ProjectItemCompleter::ProjectItemCompleter(KDevelop::ProjectModel* model, QObject* parent)
-    : QCompleter(model, parent), mModel(model), sep("/")
+    : QCompleter(model, parent), mModel(model), sep('/')
 {}
+
+
+QStringList ProjectItemCompleter::splitPath(const QString& path) const
+{
+    return KDevStringHandler::splitWithEscaping( path, sep, '\\' ); 
+}
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
 {
-    return mModel->pathFromIndex(index).join(sep);
+    return KDevStringHandler::joinWithEscaping(mModel->pathFromIndex(index), sep, '\\');
 }
 
 #include "projectitemlineedit.moc"

@@ -113,15 +113,15 @@ QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QStri
 
 KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
 {
-    QStringList deps = cfg->config().readEntry( dependencyEntry, QStringList() );
+    QVariantList deps = cfg->config().readEntry( dependencyEntry, QVariantList() );
     QString depAction = cfg->config().readEntry( dependencyActionEntry, "Nothing" );
     if( depAction != "Nothing" && !deps.isEmpty() ) 
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QList<KDevelop::ProjectBaseItem*> items;
-        foreach( const QString& dep, deps )
+        foreach( const QVariant& dep, deps )
         {
-            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.split('/') ) );
+            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.toStringList() ) );
             if( item )
             {
                 items << item;
@@ -173,11 +173,10 @@ KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
         executable = grp.readEntry( ExecutePlugin::executableEntry, KUrl("") );
     } else 
     {
-        QString prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, "" );
+        QStringList prjitem = grp.readEntry( ExecutePlugin::projectTargetEntry, QStringList() );
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        //TODO: Need to think about escaping here and in projectitem!
         KDevelop::ProjectBaseItem* item = dynamic_cast<KDevelop::ProjectBaseItem*>( model->itemFromIndex( 
-        model->pathToIndex(prjitem.split( '/' )  ) ) );
+        model->pathToIndex(prjitem) ) );
         if( item && item->executable() )
         {
             // TODO: Need an option in the gui to choose between installed and builddir url here, currently cmake only supports builddir url
