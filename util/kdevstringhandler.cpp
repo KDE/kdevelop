@@ -25,7 +25,13 @@
 
 namespace KDevStringHandler
 {
-    QStringList splitWithEscaping( const QString& input, const QChar& split, const QChar& escapechar )
+    QString joinWithEscaping( const QStringList& input, const QChar& joinchar, const QChar& escapechar )
+    {
+        QStringList tmp = input;
+        return tmp.replaceInStrings( joinchar, QString( joinchar ) + QString( escapechar ) ).join( joinchar );
+    }
+    
+    QStringList splitWithEscaping( const QString& input, const QChar& splitchar, const QChar& escapechar )
     {
         enum State { Normal, SeenEscape } state;
 
@@ -38,7 +44,7 @@ namespace KDevStringHandler
                 case Normal:
                     if( input[i] == escapechar ) {
                         state = SeenEscape;
-                    } else if( input[i] == split ) {
+                    } else if( input[i] == splitchar ) {
                         result << currentstring;
                         currentstring = "";
                     } else {

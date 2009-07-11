@@ -28,7 +28,8 @@ class QStringList;
 
 namespace KDevStringHandler
 {
-    KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping( const QString& input, const QChar& escapeChar );
+    KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping( const QString& input, const QChar& splitChar, const QChar& escapeChar );
+    KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping( const QStringList& input, const QChar& joinChar, const QChar& escapeChar );
 }
 
 #endif // KDEVSTRINGHANDLER_H
