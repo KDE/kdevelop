@@ -117,7 +117,10 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
                 break;
         }
     } else if(role == Qt::DecorationRole && idx.column()==0) {
-        return m_items.at( idx.row() ).findItem()->icon();
+        KDevelop::ProjectBaseItem* item = m_items.at( idx.row() ).findItem();
+        if( item ) {
+            return item->icon();
+        }
     }
     return QVariant();
 }
@@ -204,14 +207,14 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
             paths.append(item.itemPath());
     }
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    base.writeEntry("Builditems", paths);
+    base.writeEntry("BuildItems", paths);
     base.sync();
 }
 
 void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    QVariantList items = base.readEntry("Builditems", QVariantList());
+    QVariantList items = base.readEntry("BuildItems", QVariantList());
     
     foreach(const QVariant& path, items)
     {
