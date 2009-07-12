@@ -7,9 +7,9 @@ include_directories(
 
 # workaround a boost bug in 1.37 and 1.38 that causes link failure when exceptions are disabled
 # see https://svn.boost.org/trac/boost/ticket/2947 for details
-if( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_EQUAL 1.37.0 OR ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_EQUAL 1.38.0 )
+if( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_GREATER 1.36.1 )
     add_definitions( ${KDE4_ENABLE_EXCEPTIONS} )
-endif( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_EQUAL 1.37.0 OR ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_EQUAL 1.38.0 )
+endif( ${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_PATCH_VERSION} VERSION_GREATER 1.36.1 )
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9512 )
 
