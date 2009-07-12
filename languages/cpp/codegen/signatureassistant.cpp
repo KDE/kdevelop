@@ -218,7 +218,8 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
       DocumentChangePointer change(new DocumentChange(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data())));
       change->m_ignoreOldText = true;
       changes.addChange( change );
-      DocumentChangeSet::ChangeResult result = changes.applyAllChanges(DocumentChangeSet::WarnOnFailedChange);
+      changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
+      DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
       if(!result) {
         KMessageBox::error(0, i18n("Failed to apply changes: %1", result.m_failureReason));
       }

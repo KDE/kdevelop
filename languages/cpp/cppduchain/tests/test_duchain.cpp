@@ -3027,7 +3027,9 @@ void TestDUChain::testSourceCodeInsertion()
     {
       Cpp::SourceCodeInsertion ins(top);
       ins.insertForwardDeclaration(top->childContexts()[0]->localDeclarations()[0]);
-      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      
+      ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges();
       QVERIFY(result);
       kDebug() << repr.text();
 //       QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("int testVar;").remove(' ')));
@@ -3055,7 +3057,8 @@ void TestDUChain::testSourceCodeInsertion()
     {
       Cpp::SourceCodeInsertion ins(top);
       ins.insertFunctionDeclaration(Identifier("test"), AbstractType::Ptr(new IntegralType(IntegralType::TypeVoid)), QList<Cpp::SourceCodeInsertion::SignatureItem>(), false, "{ this is the body; }");
-      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges();
       kDebug() << result.m_failureReason;
       QVERIFY(result);
       kDebug() << repr.text();
@@ -3072,7 +3075,8 @@ void TestDUChain::testSourceCodeInsertion()
     {
       Cpp::SourceCodeInsertion ins(top);
       ins.insertVariableDeclaration(Identifier("testVar"), AbstractType::Ptr(new IntegralType(IntegralType::TypeInt)));
-      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges();
       QVERIFY(result);
       kDebug() << repr.text();
       QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("int testVar;").remove(' ')));
@@ -3091,7 +3095,8 @@ void TestDUChain::testSourceCodeInsertion()
       Cpp::SourceCodeInsertion ins(top);
       ins.setInsertBefore(top->localDeclarations()[1]->range().start);
       ins.insertForwardDeclaration(top->localDeclarations()[1]);
-      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges();
       QVERIFY(result);
       kDebug() << repr.text();
 //       QVERIFY(repr.text().trimmed().remove(' ').remove('\n').contains(QString("int testVar;").remove(' ')));
@@ -3152,7 +3157,8 @@ void TestDUChain::testSimplifiedTypeString()
       repr.setText(QString::fromUtf8(method));
       Cpp::SourceCodeInsertion ins(top);
       ins.insertFunctionDeclaration(Identifier("test"), funType->returnType(), QList<Cpp::SourceCodeInsertion::SignatureItem>(), false, "{ this is the body; }");
-      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::StopOnFailedChange);
+      DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges();
       kDebug() << result.m_failureReason;
       QVERIFY(result);
       kDebug() << repr.text();

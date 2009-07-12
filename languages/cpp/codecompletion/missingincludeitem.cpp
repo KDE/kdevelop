@@ -464,7 +464,9 @@ void ForwardDeclarationItem::execute(KTextEditor::Document* document, const KTex
     
     lock.unlock();
     
-    if(!insertion.changes().applyAllChanges(DocumentChangeSet::WarnOnFailedChange))
+    insertion.changes().setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
+    
+    if(!insertion.changes().applyAllChanges())
       return;
   }
 }

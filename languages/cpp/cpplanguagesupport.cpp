@@ -85,6 +85,7 @@
 #include "veritas/testswitch.h"
 #include "veritas/stubcontextaction.h"
 #include "veritas/uutcontextaction.h"
+#include "codegen/codeassistant.h"
 #include "codegen/cppnewclass.h"
 #include "codegen/makeimplementationprivate.h"
 
@@ -235,13 +236,14 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif
+
+    //TODO when CodeAssistant is implemented
+    //Cpp::StaticCodeAssistant::init();
 }
 
 void CppLanguageSupport::pImplementation()
 {
   ///@todo move this into the refactoring plugin manager
-  int * P = 0;
-  *P;
    MakeImplementationPrivate p;
    p.start();
 }

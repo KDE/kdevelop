@@ -45,7 +45,9 @@ class CreateLocalDeclarationAction : public IAssistantAction {
             KDevelop::DocumentChangeSet changes;
             changes.addChange(KDevelop::DocumentChange(problem->url(), SimpleRange(problem->range().start, problem->range().start), QString(),  typeString() + " "));
             lock.unlock();
-            changes.applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
+            
+            changes.setReplacementPolicy(KDevelop::DocumentChangeSet::WarnOnFailedChange);
+            changes.applyAllChanges();
           }
         }
         virtual QString description() const {
@@ -102,7 +104,9 @@ class CreateMemberDeclarationAction : public IAssistantAction {
               ins.insertVariableDeclaration(problem->type->identifier().identifier().identifier().last(), returnType());
             }
             lock.unlock();
-            ins.changes().applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
+            
+            ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::WarnOnFailedChange);
+            ins.changes().applyAllChanges();
             if(changeUrl != localUrl) {
               ICore::self()->languageController()->backgroundParser()->addDocument(changeUrl);
               ICore::self()->languageController()->backgroundParser()->addDocument(localUrl);

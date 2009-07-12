@@ -44,6 +44,9 @@ class StaticCodeAssistant : public QObject {
   Q_OBJECT
   public:
     StaticCodeAssistant();
+    
+    //Initialize connections in case no core is running
+    static void init();
   private slots:
     void assistantHide();
     void documentLoaded(KDevelop::IDocument*);

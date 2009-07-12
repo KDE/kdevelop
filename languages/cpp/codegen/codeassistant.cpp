@@ -44,12 +44,16 @@ StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true),
   m_timer->setInterval(400);
-  connect(m_timer, SIGNAL(timeout()), SLOT(timeout()));
-  connect(KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), SLOT(documentLoaded(KDevelop::IDocument*)));
-  connect(KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
+}
+
+void StaticCodeAssistant::init()
+{
+  connect(staticCodeAssistant.m_timer, SIGNAL(timeout()), &staticCodeAssistant, SLOT(timeout()));
+  connect(KDevelop::ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), &staticCodeAssistant, SLOT(documentLoaded(KDevelop::IDocument*)));
+  connect(KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), &staticCodeAssistant, SLOT(documentActivated(KDevelop::IDocument*)));
   foreach(KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments())
-    documentLoaded(document);
-  connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
+    staticCodeAssistant.documentLoaded(document);
+  connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), &staticCodeAssistant, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
 void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
