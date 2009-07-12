@@ -96,7 +96,10 @@ void CreateClassWizard::accept()
     d->generator->setHeaderPosition(SimpleCursor(field("headerLine").toInt(), field("headerColumn").toInt()));
     d->generator->setHeaderPosition(SimpleCursor(field("implementationLine").toInt(), field("implementationColumn").toInt()));
     */
-    d->generator->generate().applyAllChanges(KDevelop::DocumentChangeSet::WarnOnFailedChange);
+    DocumentChangeSet changes = d->generator->generate();
+    
+    changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
+    changes.applyAllChanges();
 }
 
 ClassGenerator * CreateClassWizard::generator(void)

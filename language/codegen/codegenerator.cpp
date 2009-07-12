@@ -35,8 +35,14 @@ namespace KDevelop
 
 struct CodeGeneratorPrivate
 {
+    CodeGeneratorPrivate() : autoGen(false), context(0) {}
+    
     QMap<IndexedString, DUChainChangeSet *> duchainChanges;
     DocumentChangeSet documentChanges;
+    
+    bool autoGen;
+    DUContext * context;
+    DocumentRange range;
 };
 
 CodeGeneratorBase::CodeGeneratorBase()
@@ -59,8 +65,15 @@ void CodeGeneratorBase::start()
 {
     kDebug() << "Starting Code Generation Job";
     QTimer::singleShot(0, this, SLOT(executeGenerator()));
-    //executeGenerator();
 }
+
+void CodeGeneratorBase::autoGenerate ( DUContext* context, const KDevelop::DocumentRange* range )
+{
+    d->autoGen = true;
+    d->context = context;
+    d->range = *range;
+}
+
 
 void CodeGeneratorBase::addChangeSet(DUChainChangeSet * duchainChange)
 {
@@ -110,30 +123,38 @@ void CodeGeneratorBase::executeGenerator()
     kDebug() << "Checking Preconditions for the codegenerator";
     
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
+    
     KUrl document = ICore::self()->documentController()->activeDocument()->url();
-    DocumentRange range( document.url(), ICore::self()->documentController()->activeDocument()->textSelection());
     
-    DUContext * selectionContext = DUChain::self()->chainForDocument(document)->findContextIncluding(range);
+    if(d->range.isEmpty())
+        d->range = DocumentRange(document.url(), ICore::self()->documentController()->activeDocument()->textSelection());
     
-    if(!selectionContext)
+    if(!d->context)
+        d->context = DUChain::self()->chainForDocument(document)->findContextIncluding(d->range);
+    
+    if(!d->context)
     {
         setErrorText("Error finding context for selection range");
         emitResult();
         return;
     }
     
-    if(!checkPreconditions(selectionContext,range))
+    if(!checkPreconditions(d->context,d->range))
     {
         setErrorText("Error checking conditions to generate code: " + errorText());
         emitResult();
         return;
     }
-    kDebug() << "Gathering user information for the codegenerator";
-    if(!gatherInformation())
+    
+    if(!d->autoGen)
     {
-        setErrorText("Error Gathering user information: " + errorText());
-        emitResult();
-        return;
+        kDebug() << "Gathering user information for the codegenerator";
+        if(!gatherInformation())
+        {
+            setErrorText("Error Gathering user information: " + errorText());
+            emitResult();
+            return;
+        }
     }
     
     kDebug() << "Generating code";
@@ -159,8 +180,11 @@ void CodeGeneratorBase::executeGenerator()
 
 bool CodeGeneratorBase::displayChanges()
 {
+    //There is no user review needed
+    if(d->autoGen)
+        return true;
+    
     //Create a window that shows changes to be made
-    return true;
 }
 
 }

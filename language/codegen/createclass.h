@@ -138,7 +138,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
       
     /**
      * Generate the actual DocumentChangeSet
-     * \todo Convert this to return actual KDevelop::DocumentChangeSet
      */
     virtual DocumentChangeSet generate() = 0;
     

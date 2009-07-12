@@ -34,6 +34,32 @@
 
 namespace KDevelop {
 
+struct DocumentChangeSetPrivate
+{
+    DocumentChangeSet::ReplacementPolicy replacePolicy;
+    DocumentChangeSet::FormatPolicy formatPolicy;
+    DocumentChangeSet::DUChainUpdateHandling updatePolicy;
+    
+    QMap< IndexedString, QList<DocumentChangePointer> > changes;
+    QMap< IndexedString, IndexedString > tempFiles;
+    
+    void formatChanges();
+    void updateFiles();
+    void addFileToProject(IndexedString file);
+};
+
+
+DocumentChangeSet::DocumentChangeSet() : d(new DocumentChangeSetPrivate)
+{
+    d->replacePolicy = StopOnFailedChange;
+    d->formatPolicy = AutoFormatChanges;
+    d->updatePolicy = SimpleUpdate;
+}
+
+DocumentChangeSet::~DocumentChangeSet()
+{
+    delete d;
+}
 
 KDevelop::DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const KDevelop::DocumentChange& change) {
     return addChange(DocumentChangePointer(new DocumentChange(change)));
@@ -43,26 +69,56 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
     if(change->m_range.start.line != change->m_range.end.line)
         return ChangeResult("Multi-line ranges are not supported");
     
-    m_changes[change->m_document].append(change);
+    d->changes[change->m_document].append(change);
     return ChangeResult(true);
 }
 
 DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 {
-    for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.m_changes.begin();
-        it != rhs.m_changes.end(); ++it)
-        m_changes[it.key()] += *it;
+    for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.d->changes.begin();
+        it != rhs.d->changes.end(); ++it)
+        d->changes[it.key()] += *it;
     rhs.clear();
     
     return *this;
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::DocumentChangeSet::ReplacementPolicy policy, KDevelop::DocumentChangeSet::FormatPolicy format, KDevelop::DocumentChangeSet::DUChainUpdateHandling scheduleUpdate) {
+void DocumentChangeSet::clear ( void )
+{
+    d->changes.clear();
+}
+
+void DocumentChangeSet::setReplacementPolicy ( DocumentChangeSet::ReplacementPolicy policy )
+{
+    d->replacePolicy = policy;
+}
+
+void DocumentChangeSet::setFormatPolicy ( DocumentChangeSet::FormatPolicy policy )
+{
+    d->formatPolicy = policy;
+}
+
+void DocumentChangeSet::setUpdateHandling ( DocumentChangeSet::DUChainUpdateHandling policy )
+{
+    d->updatePolicy = policy;
+}
+
+
+IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file )
+{
+    if(d->tempFiles.contains(file))
+        file = d->tempFiles[file];
+    
+    return file;
+}
+
+
+DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     QMap<IndexedString, CodeRepresentation*> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
 
-    foreach(const IndexedString &file, m_changes.keys())
+    foreach(const IndexedString &file, d->changes.keys())
     {
         CodeRepresentation* repr = createCodeRepresentation(file);
         if(!repr)
@@ -80,7 +136,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
         
         QMultiMap<SimpleCursor, DocumentChangePointer> sortedChanges;
         
-        foreach(const DocumentChangePointer &change, m_changes[file])
+        foreach(const DocumentChangePointer &change, d->changes[file])
             sortedChanges.insert(change->m_range.end, change);
         
         //Remove duplicates
@@ -126,7 +182,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
 
                 QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
 
-                if(formatter && format == AutoFormatChanges) {
+                if(formatter && d->formatPolicy == AutoFormatChanges) {
                     kDebug() << "formatting" << change.m_newText;
                     change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
                     kDebug() << "result" << change.m_newText;
@@ -136,9 +192,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
             }else{
                 QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = \"%6\"(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText);
                 
-                if(policy == IgnoreFailedChange) {
+                if(d->replacePolicy == IgnoreFailedChange) {
                     //Just don't do the replacement
-                }else if(policy == WarnOnFailedChange) {
+                }else if(d->replacePolicy == WarnOnFailedChange) {
                     kWarning() << warningString;
                 }else{
                     qDeleteAll(codeRepresentations);
@@ -153,9 +209,81 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
     
     QMap<IndexedString, QString> oldTexts;
     
+    //d->autoformatChanges()
+    
+    foreach(const IndexedString &file, d->changes.keys())
+    {
+        oldTexts[file] = codeRepresentations[file]->text();
+        bool fail = false;
+        
+        DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(codeRepresentations[file]);
+        if(dynamic) {
+            dynamic->startEdit();
+            //Replay the changes one by one
+            QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
+            
+            for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
+                DocumentChange& change(*sortedChangesList[pos]);
+                if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
+                    QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
+                    
+                    if(d->replacePolicy == IgnoreFailedChange) {
+                        //Just don't do the replacement
+                    }else if(d->replacePolicy == WarnOnFailedChange) {
+                        kWarning() << warningString;
+                    }else{
+                        dynamic->endEdit();
+                        qDeleteAll(codeRepresentations);
+                        return DocumentChangeSet::ChangeResult(warningString);
+                    }
+                }
+            }
+            
+            dynamic->endEdit();
+        }else{
+            fail = !codeRepresentations[file]->setText(newTexts[file]);
+        }
+        
+        if(fail) {
+            //Fail
+            foreach(const IndexedString &revertFile, oldTexts.keys())
+                codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
+            
+            qDeleteAll(codeRepresentations);
+            return DocumentChangeSet::ChangeResult(QString("Failed to set text on %1").arg(file.str()));
+        }
+    }
+    
+    qDeleteAll(codeRepresentations);
+    ModificationRevisionSet::clearCache();
+
+    d->updateFiles();
+    
+    return DocumentChangeSet::ChangeResult(true);
+}
+
+void DocumentChangeSetPrivate::updateFiles()
+{
+    if(updatePolicy != DocumentChangeSet::NoUpdate && ICore::self())
+        foreach(const IndexedString &file, changes.keys())
+        {
+                ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
+                foreach(KUrl doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+                    DUChainReadLocker lock(DUChain::lock());
+                    TopDUContext* top = DUChainUtils::standardContextForUrl(doc);
+                    if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
+                        lock.unlock();
+                        ICore::self()->languageController()->backgroundParser()->addDocument(doc);
+                    }
+                }
+        }
+}
+
+void DocumentChangeSetPrivate::formatChanges()
+{
 #if 0
-    if(format == AutoFormatChanges) {
-        foreach(const IndexedString &file, m_changes.keys())
+    if(formatChanges() == DocumentChangeSet::AutoFormatChanges) {
+        foreach(const IndexedString &file, d->changes.keys())
         {
             ISourceFormatter* formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
             if(!formatter)
@@ -211,72 +339,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges(KDevelop::Doc
         }
     }
 #endif
-    
-    foreach(const IndexedString &file, m_changes.keys())
-    {
-        oldTexts[file] = codeRepresentations[file]->text();
-        bool fail = false;
-        
-        DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(codeRepresentations[file]);
-        if(dynamic) {
-            dynamic->startEdit();
-            //Replay the changes one by one
-            QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
-            
-            for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
-                DocumentChange& change(*sortedChangesList[pos]);
-                if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
-                    QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
-                    
-                    if(policy == IgnoreFailedChange) {
-                        //Just don't do the replacement
-                    }else if(policy == WarnOnFailedChange) {
-                        kWarning() << warningString;
-                    }else{
-                        dynamic->endEdit();
-                        qDeleteAll(codeRepresentations);
-                        return DocumentChangeSet::ChangeResult(warningString);
-                    }
-                }
-            }
-            
-            dynamic->endEdit();
-        }else{
-            fail = !codeRepresentations[file]->setText(newTexts[file]);
-        }
-        
-        if(fail) {
-            //Fail
-            foreach(const IndexedString &revertFile, oldTexts.keys())
-                codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
-            
-            qDeleteAll(codeRepresentations);
-            return DocumentChangeSet::ChangeResult(QString("Failed to set text on %1").arg(file.str()));
-        }
-    }
-    
-    qDeleteAll(codeRepresentations);
-    ModificationRevisionSet::clearCache();
-    
-    foreach(const IndexedString &file, m_changes.keys())
-    {
-        if(scheduleUpdate != NoUpdate && ICore::self()) {
-            ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
-            foreach(KUrl doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
-                DUChainReadLocker lock(DUChain::lock());
-                TopDUContext* top = DUChainUtils::standardContextForUrl(doc);
-                if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
-                    lock.unlock();
-                    ICore::self()->languageController()->backgroundParser()->addDocument(doc);
-                }
-            }
-        }
-    }
-
-    return DocumentChangeSet::ChangeResult(true);
 }
 
-void DocumentChangeSet::addFileToProject(IndexedString file)
+void DocumentChangeSetPrivate::addFileToProject(IndexedString file)
 {
     #if 0
    //Pick the folder Item that should contain the new class

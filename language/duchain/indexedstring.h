@@ -49,6 +49,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   explicit IndexedString( const char* str, unsigned short length, unsigned int hash = 0 );
 
   ///Needs a zero terminated string. When the information is already available, try using the other constructor.
+  //WARNING There is a UTF8-related issue when attempting to retrieve the string using str from an IndexedString built from this constructor
   explicit IndexedString( const char* str );
 
   explicit IndexedString( char c );
