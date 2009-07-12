@@ -1407,7 +1407,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
       }
 
       if(!parentContext() && (m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
-        if(!m_onlyShowVariables && !m_isConstructorCompletion) {
+        if(!m_onlyShowVariables && !m_isConstructorCompletion && m_memberAccessOperation == NoMemberAccess) {
           QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
           if(!helpers.isEmpty()) {
             eventuallyAddGroup(i18n("Implement Function"), 0, helpers);
