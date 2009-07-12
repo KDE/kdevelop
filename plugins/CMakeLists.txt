@@ -14,6 +14,7 @@ add_subdirectory(execute)
 add_subdirectory(sourceformatter)
 add_subdirectory(documentswitcher)
 
+set(Boost_ADDITIONAL_VERSION 1.39.0 1.39)
 macro_optional_find_package( Boost 1.35.0 )
 macro_log_feature( Boost_FOUND "Boost" "Boost libraries for enabling the classbrowser" "http://www.boost.org" FALSE "1.35.0" "The boost libraries are needed to build the Class Browser" )
 if(Boost_FOUND)
