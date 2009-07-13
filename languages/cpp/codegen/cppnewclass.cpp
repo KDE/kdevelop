@@ -146,15 +146,21 @@ QString CppNewClass::identifier(void) const
   return identifier;
 }
 
-KUrl CppNewClass::headerUrlFromBase(KUrl baseUrl) {
+KUrl CppNewClass::headerUrlFromBase(KUrl baseUrl, bool toLower) {
   KUrl url(baseUrl); ///@todo Add some settings somewhere to set up how this is computed
-  url.addPath(name().toLower() + ".h");
+  if( toLower )
+    url.addPath(name().toLower() + ".h");
+  else
+    url.addPath(name() + ".h");
   return url;
 }
 
-KUrl CppNewClass::implementationUrlFromBase(KUrl baseUrl) {
+KUrl CppNewClass::implementationUrlFromBase(KUrl baseUrl, bool toLower) {
   KUrl url(baseUrl);
-  url.addPath(name().toLower() + ".cpp");
+  if( toLower )
+    url.addPath(name().toLower() + ".cpp");
+  else
+    url.addPath(name() + ".cpp");
   return url;
 }
 
