@@ -1050,6 +1050,7 @@ QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0), m_forceUpdate(false) {
     setMaximumWidth(400);
     deactivate();
     setObjectName("Quickopen");
+    setFocusPolicy(Qt::ClickFocus);
 }
 QuickOpenLineEdit::~QuickOpenLineEdit() {
     delete m_widget;
