@@ -137,13 +137,13 @@ void CMakeCacheDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 
 QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const
 {
-    kDebug(9042) << "calculant" << index << bool(option.state & QStyle::State_Editing);
+//     kDebug(9042) << "calculant" << index << bool(option.state & QStyle::State_Editing);
     QSize ret=QItemDelegate::sizeHint(option, index);
     if(index.column()==2 && option.state & QStyle::State_Editing)
     {
         QModelIndex typeIdx=index.sibling(index.row(), 1);
         QString type=index.model()->data(typeIdx, Qt::DisplayRole).toString();
-        if(type=="PATH" || type=="PATH")
+        if(type=="PATH")
         {
             ret.setHeight(m_sample->sizeHint().height());
         }

@@ -132,11 +132,13 @@ void CMakePreferences::save()
     
     KUrl cmakeCmd;
     KUrl installPrefix;
+    QString buildType;
     
     if(m_currentModel)
     {
         cmakeCmd=m_currentModel->value("CMAKE_COMMAND");
         installPrefix=m_currentModel->value("CMAKE_INSTALL_PREFIX");
+        buildType=m_currentModel->value("CMAKE_BUILD_TYPE");
         m_currentModel->writeDown();
     }
     
@@ -146,13 +148,15 @@ void CMakePreferences::save()
     item = CMakeSettings::self()->findItem("currentInstallDir");
     item->setProperty( qVariantFromValue<KUrl>(installPrefix));
     
+    item = CMakeSettings::self()->findItem("currentBuildType");
+    item->setProperty( qVariantFromValue<QString>(buildType));
+    
     kDebug(9042) << "doing real save from ProjectKCModule";
     ProjectKCModule<CMakeSettings>::save();
     CMakeSettings::self()->writeConfig();
     
     //We run cmake on the builddir to generate it 
-    if(!cmakeCmd.isEmpty())
-        configure();
+    configure();
 }
 
 void CMakePreferences::defaults()
@@ -186,8 +190,8 @@ void CMakePreferences::updateCache(const KUrl& newBuildDir)
     }
     else
     {
-        if(m_currentModel)
-            m_currentModel->clear();
+        delete m_currentModel;
+        m_currentModel=0;
         m_prefsUi->cacheList->setEnabled(false);
         emit changed(true);
     }
@@ -262,14 +266,17 @@ void CMakePreferences::removeBuildDir()
     if(m_prefsUi->buildDirs->count()==0)
         m_prefsUi->removeBuildDir->setEnabled(false);
     
-    int ret=KMessageBox::warningYesNo(this,
-            i18n("The %1 directory is about to be removed in KDevelop's list.\n"
-                 "Do you want KDevelop to remove it in the file system as well?", removed));
-    if(ret==KMessageBox::Yes)
+    if(QDir(removed).exists())
     {
-        bool correct=KIO::NetAccess::del(KUrl(removed), this);
-        if(!correct)
-            KMessageBox::error(this, i18n("Could not remove: %1.\n", removed));
+        int ret=KMessageBox::warningYesNo(this,
+                i18n("The %1 directory is about to be removed in KDevelop's list.\n"
+                    "Do you want KDevelop to remove it in the file system as well?", removed));
+        if(ret==KMessageBox::Yes)
+        {
+            bool correct=KIO::NetAccess::del(KUrl(removed), this);
+            if(!correct)
+                KMessageBox::error(this, i18n("Could not remove: %1.\n", removed));
+        }
     }
     emit changed(true);
 }
