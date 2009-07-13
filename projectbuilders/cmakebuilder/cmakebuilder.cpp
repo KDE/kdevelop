@@ -62,7 +62,8 @@
 #include "cmakeutils.h"
 
 K_PLUGIN_FACTORY(CMakeBuilderFactory, registerPlugin<CMakeBuilder>(); )
-K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuilder", ki18n("CMake Builder"), "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(CMakeBuilderFactory(KAboutData("kdevcmakebuilder","kdevcmakebuilder", ki18n("CMake Builder"),
+                                               "0.1", ki18n("Support for building CMake projects"), KAboutData::License_GPL)))
 
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(CMakeBuilderFactory::componentData(), parent),
@@ -124,7 +125,8 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             configure = this->configure(builditem->project());
         } else if( CMake::currentBuildDir( builditem->project() ).isEmpty() ) 
         {
-            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                               i18n("No Build Directory configured, cannot build"), i18n("Aborting build") );
             return 0;
         }
         
@@ -137,7 +139,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         }
         return build;
     }
-    return false;
+    return 0;
 }
 
 KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
@@ -154,7 +156,8 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
             configure = this->configure(item->project());
         } else if( CMake::currentBuildDir( item->project() ).isEmpty() ) 
         {
-            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clean"), i18n("Aborting clean") );
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                               i18n("No Build Directory configured, cannot clean"), i18n("Aborting clean") );
             return 0;
         }
         
@@ -183,7 +186,8 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom)
             configure = this->configure(item->project());
         } else if( CMake::currentBuildDir( item->project() ).isEmpty() ) 
         {
-            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot install"), i18n("Aborting install") );
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                               i18n("No Build Directory configured, cannot install"), i18n("Aborting install") );
             return 0;
         }
         
@@ -202,7 +206,8 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 {
     if( CMake::currentBuildDir( project ).isEmpty() )
     {
-        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot configure"), i18n("Aborting configure") );
+        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                           i18n("No Build Directory configured, cannot configure"), i18n("Aborting configure") );
         return 0;
     }
     CMakeJob* job = new CMakeJob(this);
@@ -215,7 +220,8 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
     KUrl builddir = CMake::currentBuildDir( project );
     if( builddir.isEmpty() )
     {
-        KMessageBox::information(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("No Build Directory configured, cannot clear builddir"), i18n("No clearing of builddir possible") );
+        KMessageBox::information(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                                 i18n("No Build Directory configured, cannot clear builddir"), i18n("No clearing of builddir possible") );
         return 0;
     }
     QDir d( builddir.toLocalFile() );
