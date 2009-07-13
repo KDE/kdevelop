@@ -56,6 +56,10 @@ DocumentChangeSet::DocumentChangeSet() : d(new DocumentChangeSetPrivate)
     d->updatePolicy = SimpleUpdate;
 }
 
+DocumentChangeSet::DocumentChangeSet(const DocumentChangeSet & rhs) : d(new DocumentChangeSetPrivate(*rhs.d))
+{
+}
+
 DocumentChangeSet::~DocumentChangeSet()
 {
     delete d;

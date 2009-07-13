@@ -44,6 +44,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
   public:
     
       DocumentChangeSet();
+      DocumentChangeSet(const DocumentChangeSet & rhs);
       ~DocumentChangeSet();
     
     //Returns true on success

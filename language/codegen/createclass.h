@@ -174,13 +174,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /**
      *Should return the suggested url of the header file for the given class-name
      */
-    virtual KUrl headerUrlFromBase(KUrl baseUrl);
+    virtual KUrl headerUrlFromBase(KUrl baseUrl, bool toLower=true);
 
     /**
      *Should return the suggested url of the implementation file for the given class-name,
      *if header and implementation are separate for this language.
      */
-    virtual KUrl implementationUrlFromBase(KUrl baseUrl);
+    virtual KUrl implementationUrlFromBase(KUrl baseUrl, bool toLower=true);
     
     /**
      * Set the URL where the header will be implemented
@@ -299,6 +299,9 @@ public:
 private:
     virtual void showEvent(QShowEvent*);
     class OutputPagePrivate* const d;
+    
+private slots:
+    virtual void updateFileNames();
 };
 }
 

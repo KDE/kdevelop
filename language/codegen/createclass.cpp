@@ -210,7 +210,7 @@ void ClassGenerator::clearDeclarations(void)
     m_declarations.clear();
 }
 
-KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl)
+KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
     KUrl url;
@@ -218,7 +218,7 @@ KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl)
     return url;
 }
 
-KUrl ClassGenerator::implementationUrlFromBase(KUrl baseUrl)
+KUrl ClassGenerator::implementationUrlFromBase(KUrl baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
     return KUrl();
@@ -629,11 +629,17 @@ OutputPage::OutputPage(CreateClassWizard* parent)
     registerField("headerColumn", d->output->headerColumnNumber);
     registerField("implementationLine", d->output->implementationLineNumber);
     registerField("implementationColumn", d->output->implementationColumnNumber);
+    
+    connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
 }
 
 void OutputPage::showEvent(QShowEvent*) {
-    d->output->headerUrl->setUrl(d->parent->generator()->headerUrlFromBase(d->parent->d->baseUrl));
-    d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl));
+    updateFileNames();
+}
+
+void OutputPage::updateFileNames() {
+    d->output->headerUrl->setUrl(d->parent->generator()->headerUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
+    d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
 }
 
 bool OutputPage::validatePage()
