@@ -116,6 +116,7 @@ Range* DocumentRange::parentRange() const
 
 DocumentRange& DocumentRange::operator=(const DocumentRange& rhs)
 {
+    Range::operator=(rhs);
     *d = *rhs.d;
     return *this;
 }
