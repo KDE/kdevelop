@@ -1208,6 +1208,10 @@ void QuickOpenLineEdit::checkFocus()
     }else{
        if (ICore::self()->documentController()->activeDocument())
            ICore::self()->documentController()->activateDocument(ICore::self()->documentController()->activeDocument());
+       
+       //Make sure the focus is somewehre else, even if there is no active document
+       setEnabled(false);
+       setEnabled(true);
     }
 }
 
