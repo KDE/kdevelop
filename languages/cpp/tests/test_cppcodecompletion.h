@@ -96,6 +96,7 @@ private slots:
   void testNamespaceCompletion();
   void testTemplateMemberAccess();
   void testTemplateArguments();
+  void testTemplateFunction();
   void testImportTypedef();
   void testConstructorCompletion();
   void testAssistant();

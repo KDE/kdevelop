@@ -2771,14 +2771,23 @@ void TestDUChain::testIntegralTemplates()
 void TestDUChain::testFunctionTemplates() {
   QByteArray method("template<class T> T test(const T& t) {};");
 
-  TopDUContext* top = parse(method, DumpNone);
+  TopDUContext* top = parse(method, DumpAll);
 
   DUChainWriteLocker lock(DUChain::lock());
 
+  QCOMPARE(top->childContexts().size(), 3);
   Declaration* defTest = top->localDeclarations()[0];
+  QVERIFY(top->childContexts()[0]->type() == DUContext::Template);
+  QCOMPARE(top->childContexts()[0]->importers().size(), 1);
+  kDebug() << top->childContexts()[0]->importers()[0] << top->childContexts()[1] << top->childContexts()[2];
+  QCOMPARE(top->childContexts()[0]->importers()[0], top->childContexts()[1]);
   QCOMPARE(defTest->identifier(), Identifier("test"));
   QVERIFY(defTest->type<FunctionType>());
   QVERIFY( isTemplateDeclaration(defTest) );
+  QVERIFY(defTest->internalContext());
+  QCOMPARE(defTest->internalContext()->importedParentContexts().size(), 1);
+  KDevelop::DUContext* tempCtx = getTemplateContext(defTest);
+  QVERIFY(tempCtx);
 
   QCOMPARE( defTest->type<FunctionType>()->arguments().count(), 1 );
   QVERIFY( realType(defTest->type<FunctionType>()->arguments()[0], 0).cast<DelayedType>() );

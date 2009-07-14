@@ -67,6 +67,8 @@ public:
   //Prefix that will be stripped from all identifiers(For example the namespace)
   QualifiedIdentifier stripPrefix() const;
   
+  bool completingTemplateParameters() const;
+  
   QString alternativeText; //Text shown when declaration is zero
   
   //If this is true, alternativeText will be shown in the list, and will be inserted on execution.

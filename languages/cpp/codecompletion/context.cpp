@@ -245,7 +245,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   if( m_text.endsWith('(') || m_text.endsWith( '<' ) ) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
-      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), m_position, +1 );
+      m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), m_position, 1 );
       m_text.clear();
     }else{
       ExpressionParser expressionParser;
@@ -273,9 +273,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
       for( QStringList::const_iterator it = m_knownArgumentExpressions.constBegin(); it != m_knownArgumentExpressions.constEnd(); ++it )
         m_knownArgumentTypes << expressionParser.evaluateExpression( (*it).toUtf8(), m_duContext );
     }
-  }
-
-  if( endsWithOperator( m_text ) && (m_memberAccessOperation != StaticMemberChoose || !m_text.trimmed().endsWith(">"))) {
+  }else if( endsWithOperator( m_text ) && (m_memberAccessOperation != StaticMemberChoose || !m_text.trimmed().endsWith(">"))) {
     if( depth == 0 ) {
       //The first context should never be a function-call context, so make this a NoMemberAccess context and the parent a function-call context.
       m_parentContext = new CodeCompletionContext( m_duContext, m_text, QString(), m_position, depth+1 );
@@ -734,7 +732,9 @@ bool CodeCompletionContext::doConstructorCompletion() {
   
   //Pre-compute the items
   foreach(Declaration* decl, container->localDeclarations(m_duContext->topContext())) {
-    if(decl->kind() == Declaration::Instance && !decl->isFunctionDeclaration()) {
+    ClassMemberDeclaration* classMem = dynamic_cast<ClassMemberDeclaration*>(decl);
+    
+    if(decl->kind() == Declaration::Instance && !decl->isFunctionDeclaration() && classMem && !classMem->isStatic()) {
       if(!hadItemsSet.contains(decl->identifier().toString())) {
         items << CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(decl), KDevelop::CodeCompletionContext::Ptr(this), pos ));
         ++pos;

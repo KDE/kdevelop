@@ -200,8 +200,8 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   return p;
 }
 
-bool declarationNeedsTemplateParameters(Declaration* decl) {
-  Cpp::TemplateDeclaration* asTemplate = dynamic_cast<Cpp::TemplateDeclaration*>(decl);
+bool declarationNeedsTemplateParameters(const Declaration* decl) {
+  const Cpp::TemplateDeclaration* asTemplate = dynamic_cast<const Cpp::TemplateDeclaration*>(decl);
   if(asTemplate) {
     DUContext* templateContext = asTemplate->templateContext(decl->topContext());
     if(templateContext) {
@@ -212,6 +212,12 @@ bool declarationNeedsTemplateParameters(Declaration* decl) {
     }
   }
   return false;
+}
+
+
+bool NormalDeclarationCompletionItem::completingTemplateParameters() const
+{
+  return m_isTemplateCompletion || declarationNeedsTemplateParameters(m_declaration.data());
 }
 
 QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const
@@ -418,7 +424,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         {
           QString ret;
           
-          if(m_isTemplateCompletion || declarationNeedsTemplateParameters(dec))
+          if(completingTemplateParameters())
             createTemplateArgumentList(*this, ret, 0);
           
           if (dec->type<FunctionType>()) {

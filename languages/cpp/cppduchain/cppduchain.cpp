@@ -745,5 +745,34 @@ bool isFriend(KDevelop::Declaration* _class, KDevelop::Declaration* _friend) {
   return false;
 }
 
+DUContext* getTemplateContext(DUContext* internal, const TopDUContext* source) {
+  if(internal->type() == DUContext::Template)
+    return internal;
+  
+  if(!source)
+    source = internal->topContext();
+  
+  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
+    DUContext* c = ctx.context(source);
+    if( c ) {
+      if( c->type() == DUContext::Template )
+        return c;
+      c = getTemplateContext(c, source);
+      if(c)
+        return c;
+    }
+  }
+  return 0;
+}
+
+///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
+DUContext* getTemplateContext(Declaration* decl, const TopDUContext* source) {
+  DUContext* internal = decl->internalContext();
+  if( !internal )
+    return 0;
+  
+  return getTemplateContext(internal, source);
+}
+
 }
 

@@ -148,6 +148,12 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr shortenTypeForViewing(KDevelop
 ///and all scope prefixes removed that are redundant within the given context
 ///The returned type should not actively be used in the  type-system, but rather only for displaying.
 KDevelop::AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* ctx);
+
+///Returns the template context attached to this declaration, if any
+KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* getTemplateContext(KDevelop::Declaration* decl, const KDevelop::TopDUContext* source = 0);
+///Returns the template context import by this context, if any
+KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* getTemplateContext(KDevelop::DUContext* ctx, const KDevelop::TopDUContext* source = 0);
+
 }
 
 #endif

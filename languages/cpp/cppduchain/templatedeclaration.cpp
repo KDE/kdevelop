@@ -88,23 +88,6 @@ struct AtomicIncrementer {
   Int* c;
 };
 
-
-///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
-DUContext* getTemplateContext(Declaration* decl, const TopDUContext* top)
-{
-  DUContext* internal = decl->internalContext();
-  if( !internal )
-    return 0;
-  if(internal->type() == DUContext::Template)
-    return internal;
-  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
-    if( ctx.context(top) )
-      if( ctx.context(top)->type() == DUContext::Template )
-        return ctx.context(top);
-  }
-  return 0;
-}
-
 AbstractType::Ptr applyPointerReference( AbstractType::Ptr ptr, const KDevelop::IndexedTypeIdentifier& id ) {
   AbstractType::Ptr ret = ptr;
 

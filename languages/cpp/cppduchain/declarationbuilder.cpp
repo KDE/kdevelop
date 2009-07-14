@@ -82,21 +82,6 @@ ClassDeclarationData::ClassType classTypeFromTokenKind(int kind)
   }
 }
 
-///Returns the context assigned to the given declaration that contains the template-parameters, if available. Else zero.
-DUContext* getTemplateContext(Declaration* decl) {
-  DUContext* internal = decl->internalContext();
-  if( !internal )
-    return 0;
-  if(internal->type() == DUContext::Template)
-    return internal;
-  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
-    if( ctx.context(decl->topContext()) )
-      if( ctx.context(decl->topContext())->type() == DUContext::Template )
-        return ctx.context(decl->topContext());
-  }
-  return 0;
-}
-
 bool DeclarationBuilder::changeWasSignificant() const
 {
   ///@todo Also set m_changeWasSignificant if publically visible declarations were removed(needs interaction with abstractcontextbuilder)

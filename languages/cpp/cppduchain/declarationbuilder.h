@@ -167,7 +167,5 @@ private:
 
 KDEVCPPDUCHAIN_EXPORT const Identifier& castIdentifier();
 
-KDEVCPPDUCHAIN_EXPORT DUContext* getTemplateContext(Declaration* decl);
-
 #endif // DECLARATIONBUILDER_H
 

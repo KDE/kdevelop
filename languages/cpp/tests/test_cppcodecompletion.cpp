@@ -175,7 +175,7 @@ void TestCppCodeCompletion::testSubClassVisibility() {
 
 void TestCppCodeCompletion::testConstructorCompletion() {
   {
-    QByteArray test = "class A {}; class Class : public A { Class(); int m_1; float m_2; char m_3; }; ";
+    QByteArray test = "class A {}; class Class : public A { Class(); int m_1; float m_2; char m_3; static int m_4; }; ";
 
     //74
     TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
@@ -516,6 +516,40 @@ void TestCppCodeCompletion::testLocalUsingNamespace() {
   
   QVERIFY(CompletionItemTester(top->childContexts()[2]).names.contains("test"));
   release(top);
+}
+
+void TestCppCodeCompletion::testTemplateFunction() {
+    QByteArray method("template<class A> void test(A i); void t() { }");
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->childContexts().count(), 4);
+    
+    bool abort = false;
+    {
+      CompletionItemTester tester1(top->childContexts()[3], "test<");
+      QVERIFY(tester1.completionContext->parentContext());
+      CompletionItemTester tester2 = tester1.parent();
+      QCOMPARE(tester2.items.size(), 1);
+      Cpp::NormalDeclarationCompletionItem* item = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(tester2.items[0].data());
+      QVERIFY(item);
+      QVERIFY(item->completingTemplateParameters());
+    }
+    {
+      kDebug() << "second test";
+      CompletionItemTester tester1(top->childContexts()[3], "test<int>(");
+      QVERIFY(tester1.completionContext->parentContext());
+      CompletionItemTester tester2 = tester1.parent();
+      QCOMPARE(tester2.items.size(), 1);
+      Cpp::NormalDeclarationCompletionItem* item = dynamic_cast<Cpp::NormalDeclarationCompletionItem*>(tester2.items[0].data());
+      QVERIFY(item);
+      QVERIFY(!item->completingTemplateParameters());
+      QVERIFY(item->typeForArgumentMatching().size() == 1);
+      QVERIFY(item->typeForArgumentMatching()[0].type<IntegralType>());
+    }
+    
+    release(top);
 }
 
 void TestCppCodeCompletion::testTemplateArguments() {
