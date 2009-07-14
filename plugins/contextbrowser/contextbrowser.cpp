@@ -566,8 +566,24 @@ DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
 
 void ContextBrowserPlugin::unHighlightAll()
 {
-    foreach(KTextEditor::View* view, m_highlightedDeclarations.keys())
+    foreach(KTextEditor::View* view, m_highlightedDeclarations.keys()) {
+      KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(view->document());
+    
+      QMutexLocker lock(smart->smartMutex());
+      
+      QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > > b = m_backups;
+      
+      for(QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > >::iterator it = b.begin(); it != b.end(); ++it) {
+        if(it.key()->document() == view->document()) {
+          if(it.key()->attribute() == it->first)
+            it.key()->setAttribute(it->second); //Set the backed up attriute, if it wasn't changed yet
+          ignoreRange(it.key());
+          m_backups.remove(it.key());
+        }
+      }
+      
       changeHighlight( view, m_highlightedDeclarations[view].data(), false, false );
+    }
 
     m_highlightedDeclarations.clear();
 }
