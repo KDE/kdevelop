@@ -311,9 +311,13 @@ Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& curso
   if(!ctx)
     return 0;
   
-  foreach(Declaration* decl, ctx->localDeclarations())
+  foreach(Declaration* decl, ctx->localDeclarations()) {
     if(decl->range().start.line == cursor.line)
       return decl;
+    DUContext* funCtx = getFunctionContext(decl);
+    if(funCtx && funCtx->contains(cursor))
+      return decl;
+  }
 
   foreach(DUContext* child, ctx->childContexts()){
     Declaration* decl = declarationInLine(cursor, child);
