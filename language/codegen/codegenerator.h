@@ -17,8 +17,6 @@
 #ifndef KDEVELOP_CODEGENERATOR_H
 #define KDEVELOP_CODEGENERATOR_H
 
-#include <kjob.h>
-
 #include "language/editor/documentrange.h"
 #include "../duchain/indexedstring.h"
 #include "../duchain/topducontext.h"
@@ -50,9 +48,8 @@ class DocumentChangeSet;
  * \see CodeGenerator
  * \author Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeGeneratorBase : public KJob
+class KDEVPLATFORMLANGUAGE_EXPORT CodeGeneratorBase
 {
-    Q_OBJECT
 public:
     CodeGeneratorBase();
     virtual ~CodeGeneratorBase();
@@ -89,13 +86,10 @@ public:
      */
     virtual bool process() = 0;
     
-    /**
-     * Retrieve the text edits to be performed as a result of this code generation.
-     */
-    DocumentChangeSet* textEdits() const;
+    const QString & errorText() const;
     
     // Implementation from kJob
-    virtual void start(void);
+    bool execute(void);
 
     /**
      * @brief Indicates that this generation should not expect interaction with the user/
@@ -139,9 +133,6 @@ private:
     class CodeGeneratorPrivate * const d;
     
     bool displayChanges(void);
-
-private slots:
-    void executeGenerator();
 };
 
 /**

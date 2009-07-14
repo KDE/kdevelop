@@ -43,6 +43,7 @@ struct CodeGeneratorPrivate
     bool autoGen;
     DUContext * context;
     DocumentRange range;
+    QString error;
 };
 
 CodeGeneratorBase::CodeGeneratorBase()
@@ -54,17 +55,6 @@ CodeGeneratorBase::~CodeGeneratorBase()
 {
     clearChangeSets();
     delete d;
-}
-
-DocumentChangeSet* CodeGeneratorBase::textEdits() const
-{
-    return &d->documentChanges;
-}
-
-void CodeGeneratorBase::start()
-{
-    kDebug() << "Starting Code Generation Job";
-    QTimer::singleShot(0, this, SLOT(executeGenerator()));
 }
 
 void CodeGeneratorBase::autoGenerate ( DUContext* context, const KDevelop::DocumentRange* range )
@@ -101,10 +91,14 @@ DocumentChangeSet & CodeGeneratorBase::documentChangeSet()
     return d->documentChanges;
 }
 
+const QString & CodeGeneratorBase::errorText() const
+{
+    return d->error;
+}
 
 void CodeGeneratorBase::setErrorText(const QString & errorText)
 {
-    KJob::setErrorText(errorText);
+    d->error = errorText;
 }
 
 void CodeGeneratorBase::clearChangeSets(void)
@@ -117,7 +111,7 @@ void CodeGeneratorBase::clearChangeSets(void)
     d->documentChanges.clear();
 }
 
-void CodeGeneratorBase::executeGenerator()
+bool CodeGeneratorBase::execute()
 {
     DUChainReadLocker lock(DUChain::self()->lock());
     kDebug() << "Checking Preconditions for the codegenerator";
@@ -135,15 +129,13 @@ void CodeGeneratorBase::executeGenerator()
     if(!d->context)
     {
         setErrorText("Error finding context for selection range");
-        emitResult();
-        return;
+        return false;
     }
     
     if(!checkPreconditions(d->context,d->range))
     {
         setErrorText("Error checking conditions to generate code: " + errorText());
-        emitResult();
-        return;
+        return false;
     }
     
     if(!d->autoGen)
@@ -152,8 +144,7 @@ void CodeGeneratorBase::executeGenerator()
         if(!gatherInformation())
         {
             setErrorText("Error Gathering user information: " + errorText());
-            emitResult();
-            return;
+            return false;
         }
     }
     
@@ -161,21 +152,20 @@ void CodeGeneratorBase::executeGenerator()
     if(!process())
     {
         setErrorText("Error generating code: " + errorText());
-        emitResult();
-        return;
+        return false;
     }
     kDebug() << "Submitting to the user for review";
     
     if(!displayChanges())
-    {
-        emitResult();
-        return;
-    }
+        return false;
     
     if(DocumentChangeSet::ChangeResult result = d->documentChanges.applyAllChanges())
+    {
         setErrorText(result.m_failureReason);
+        return false;
+    }
     
-    emitResult();
+    return true;
 }
 
 bool CodeGeneratorBase::displayChanges()
@@ -188,5 +178,3 @@ bool CodeGeneratorBase::displayChanges()
 }
 
 }
-
-#include "codegenerator.moc"
