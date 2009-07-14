@@ -174,7 +174,8 @@ bool CodeGeneratorBase::displayChanges()
     if(d->autoGen)
         return true;
     
-    //Create a window that shows changes to be made
+    ///TODO: Create a window that shows changes to be made
+    return false;
 }
 
 }
