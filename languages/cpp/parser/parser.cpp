@@ -310,9 +310,6 @@ void Parser::syntaxError()
     err += '\'';
     err += token_name(kind);
     err += '\'';
-    
-    if(kind == '}' || kind == '{')
-      _M_hadMismatchingCompoundTokens = true;
   }
 
   reportError(err);
