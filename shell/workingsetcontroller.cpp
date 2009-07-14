@@ -727,6 +727,8 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     connect(set, SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
     connect(Core::self()->workingSetControllerInternal()->getWorkingSet(mainwindow->area()->workingSet()), SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
     connect(mainwindow->area(), SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), SLOT(updateFileButtons()), Qt::QueuedConnection);
+    
+    QMetaObject::invokeMethod(this, "updateFileButtons");
 }
 
 
@@ -752,7 +754,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
         }
     }
     
-    m_mergeButton->setEnabled(!allOpen && mainWindow->area()->workingSet() != m_set->id());
+    m_mergeButton->setEnabled(!allOpen);
     m_subtractButton->setEnabled(!noneOpen && mainWindow->area()->workingSet() != m_set->id());
     m_deleteButton->setEnabled(!m_set->hasConnectedAreas());
     
