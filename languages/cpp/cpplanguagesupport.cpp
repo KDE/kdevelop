@@ -245,7 +245,8 @@ void CppLanguageSupport::pImplementation()
 {
   ///@todo move this into the refactoring plugin manager
    MakeImplementationPrivate p;
-   p.start();
+   if(!p.execute())
+     kDebug() << p.errorText();
 }
 
 bool CppLanguageSupport::isHeader(const KUrl &url) const {

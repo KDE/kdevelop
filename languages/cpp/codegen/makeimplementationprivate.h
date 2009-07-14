@@ -57,11 +57,12 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     DeclarationPointer m_classDeclaration;
     QString m_privatePointerName;
     QString m_structureName;
+    QList<ClassMemberDeclaration *> m_members;
     
     std::bitset<PolicyNum> m_policies;
     
     bool classHasPrivateImplementation();
-    void gatherPrivateMembers(QList<ClassMemberDeclaration *> & memberDeclarations);
+    void gatherPrivateMembers();
     void updateConstructors(const KDevelop::Declaration &);
     void updateDestructor(void);
     void updateAllUses(UseList & alluses);

@@ -51,14 +51,12 @@ namespace KDevelop
 
 bool MakeImplementationPrivate::process()
 {
-    QList<ClassMemberDeclaration *> memberDeclarations;
-    gatherPrivateMembers(memberDeclarations);
     updateDestructor();
     
     //Create container for private implementation
     CppNewClass classGenerator;
     classGenerator.setType(m_policies[ContainerIsClass] ? CppNewClass::Class : CppNewClass::Struct);
-    foreach(Declaration * decl, memberDeclarations)
+    foreach(Declaration * decl, m_members)
     {
         classGenerator.addDeclaration(DeclarationPointer(decl));
         DocumentChange removeDeclarations(decl->url(), decl->range(), decl->toString(), QString());
@@ -93,7 +91,7 @@ bool MakeImplementationPrivate::process()
     
     //Gather all Uses of this class' members
     UseList allUses;
-    foreach(ClassMemberDeclaration * declaration, memberDeclarations)
+    foreach(ClassMemberDeclaration * declaration, m_members)
     {
         if(!declaration->type<FunctionType>())
             allUses << declaration->uses();
@@ -106,6 +104,8 @@ bool MakeImplementationPrivate::process()
 
 bool MakeImplementationPrivate::gatherInformation()
 {
+    gatherPrivateMembers();
+    
     Ui::PrivateImplementationDialog privateDialog;
     KDialog dialog(KDevelop::ICore::self()->uiController()->activeMainWindow());
     
@@ -117,7 +117,21 @@ bool MakeImplementationPrivate::gatherInformation()
     privateDialog.structureName->setValidator(&globalValidator);
     privateDialog.pointerName->setValidator(&localValidator);
     
-    privateDialog.structureName->setText(m_classContext->scopeIdentifier().toString() + "Private");
+    privateDialog.structureName->setText(m_classContext->scopeIdentifier(true).last().toString() + "Private");
+    
+    //If any of the members is either a reference or has non-default constructor then initialization
+    //must bemoved to the private implementation constructor
+//     foreach(ClassMemberDeclaration * declaration, m_members)
+//     {
+//         AbstractType::Ptr type = declaration->abstractType();
+//         if(AbstractType::Ptr::dynamicCast<ReferenceType>(type) ||
+//            (type->whichType() == AbstractType::TypeStructure ))//TODO && !Hav4e default constructor TODO where is the best place to put returning of all constructors ) )
+//         {
+//             privateDialog.variableOption->setChecked();
+//             privateDialog.variableOption->setDisabled();
+//             break;
+//         }
+//     }
     
     int ret = dialog.exec();
     
@@ -146,20 +160,23 @@ bool MakeImplementationPrivate::checkPreconditions(KDevelop::DUContext * context
         setErrorText("Could not get the context for text selection");
         return false;
     }
-    //TODO find Class declaration from any context related to the class
     m_classContext = context;
     //TODO check that it doesn't already have a private implementation
-    if(m_classContext->type() != DUContext::Class)
+    
+    while(m_classContext && m_classContext->type() != DUContext::Class)
+        m_classContext = m_classContext->parentContext();
+    
+    if(!m_classContext)
     {
         setErrorText("Selected Context does not belong to a Class");
         return false;
     }
-    m_classDeclaration = context->owner();
+    m_classDeclaration = m_classContext->owner();
     
     return true;
 }
 
-void MakeImplementationPrivate::gatherPrivateMembers(QList<ClassMemberDeclaration *> & memberDeclarations)
+void MakeImplementationPrivate::gatherPrivateMembers()
 {
     foreach(Declaration * declaration, m_classContext->localDeclarations())
     {
@@ -169,7 +186,7 @@ void MakeImplementationPrivate::gatherPrivateMembers(QList<ClassMemberDeclaratio
         {
             if(decl->type<FunctionType>() && !m_policies[MoveMethodsToPrivate] )
                 continue;
-            memberDeclarations << decl;
+            m_members << decl;
         }
     }
 }
@@ -178,12 +195,22 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
 {
     //Gather constructors
     QList<ClassFunctionDeclaration *> constructors;
+    ClassFunctionDeclaration * assignmentOp = 0;
     
     foreach(Declaration * declaration, m_classContext->localDeclarations())
     {
         ClassFunctionDeclaration * fun = dynamic_cast<ClassFunctionDeclaration *>(declaration);
-        if(fun && fun->isConstructor())
-            constructors << fun;
+        if(fun)
+        {
+            if(fun->isConstructor())
+                constructors << fun;
+            else if(!assignmentOp)
+            {
+                QString signature = fun->toString();
+                if(signature.contains("operator=") && fun->type<FunctionType>()->arguments().contains(m_classDeclaration->abstractType()))
+                    assignmentOp = fun;
+            }
+        }
     }
     
     kDebug() << "Found the following constructors: " << constructors;
@@ -218,6 +245,8 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
         DocumentChange constructorChange(constructor->url(), SimpleRange(insertionPoint, 0), QString(), m_privatePointerName + "(" + CppUtils::insertMemoryAllocation(privateStruct) + ") ");
         documentChangeSet().addChange(constructorChange);
     }
+    
+    //TODO Handle assignment operator here as well, and check selection logic
 }
 
 void MakeImplementationPrivate::updateDestructor(void)
@@ -233,11 +262,7 @@ void MakeImplementationPrivate::updateDestructor(void)
             break;
         }
     }
-    
-    /*DUChainChangeSet changeSet(m_classContext->topContext());
-    DUChainRef * destructor;
-    DUChainRef classReference(&changeset, &m_classDeclaration);*/
-    
+   
     if(!destructor)
     {
         //Create a Destructor
@@ -251,7 +276,7 @@ void MakeImplementationPrivate::updateDestructor(void)
 
 void MakeImplementationPrivate::updateAllUses(UseList & allUses)
 {
-    //For all uses gathered change to access through pointer
+    //For all uses gathered from all members change to access through pointer
     for(UseList::iterator it = allUses.begin();
         it != allUses.end(); ++it)
     {
