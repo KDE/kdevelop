@@ -579,6 +579,15 @@ void UiController::registerStatus(QObject* status)
     mw->registerStatus(status);
 }
 
+void UiController::showErrorMessage(const QString& message, int timeout)
+{
+    Sublime::MainWindow* w = activeSublimeWindow();
+    if (!w) return;
+    MainWindow* mw = qobject_cast<KDevelop::MainWindow*>(w);
+    if (!mw) return;
+    mw->showErrorMessage(message, timeout);
+}
+
 void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
 {
     if(d->currentShownAssistant && d->currentShownAssistant->assistant() == assistant) {

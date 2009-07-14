@@ -105,6 +105,7 @@ public Q_SLOTS:
     void showAboutPlatform();
 
     void toggleArea(bool b);
+    void showErrorMessage(QString message, int timeout);
 
     
 private:

@@ -97,6 +97,7 @@ private:
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
+    virtual void showErrorMessage(const QString& message, int timeout);
 private Q_SLOTS:
     void assistantAction1();
     void assistantAction2(bool);

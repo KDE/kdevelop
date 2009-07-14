@@ -51,6 +51,11 @@ public:
 
     /*! @p status must implement KDevelop::IStatus */
     void registerStatus(QObject* status);
+    
+    /*! Shows an error message in the status bar.
+        @p message The message
+        @p timeout The timeout in milliseconds how long to show the message */
+    void showErrorMessage(const QString& message, int timeout);
 
     virtual QWidget* customButtonForAreaSwitcher( Sublime::Area* area );
     

@@ -362,6 +362,12 @@ void MainWindowPrivate::registerStatus(QObject* status)
     m_statusBar->registerStatus(status);
 }
 
+
+void MainWindowPrivate::showErrorMessage(QString message, int timeout)
+{
+    m_statusBar->showErrorMessage(message, timeout);
+}
+
 }
 
 #include "mainwindow_actions.cpp"

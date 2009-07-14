@@ -63,6 +63,9 @@ public:
 
     void viewChanged(Sublime::View* view);
 
+public Q_SLOTS:
+    void showErrorMessage(const QString& message, int timeout);
+    
 private Q_SLOTS:
     void clearMessage( KDevelop::IStatus* );
     void showMessage( KDevelop::IStatus*, const QString & message, int timeout);
@@ -70,7 +73,6 @@ private Q_SLOTS:
     void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
     void slotTimeout();
     void viewStatusChanged(Sublime::View* view);
-    void showErrorMessage(const QString& message, int timeout);
 
     void pluginLoaded(KDevelop::IPlugin*);
     void removeError(QWidget*);
