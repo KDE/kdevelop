@@ -153,7 +153,10 @@ void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
     kDebug() << "reading contents of " << curUrl << "total entries:" << entries.count();
 
     KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( job->url() );
-    Q_ASSERT(project);
+    if ( !project ) {
+        kDebug() << "no project found for" << job->url();
+        return;
+    }
 
     QList<KDevelop::ProjectFolderItem*> fitems = project->foldersForUrl( curUrl );
     if ( fitems.isEmpty() ) {
