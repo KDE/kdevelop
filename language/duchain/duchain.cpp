@@ -462,7 +462,6 @@ public:
       m_environmentInfo.deleteItem(index);
     }
 
-kDebug() << index << removed << removed2;
     Q_ASSERT(index || (removed && removed2));
     Q_ASSERT(!findInformation(info->indexedTopContext().index()));
   }
