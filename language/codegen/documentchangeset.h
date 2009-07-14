@@ -46,6 +46,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
       DocumentChangeSet();
       DocumentChangeSet(const DocumentChangeSet & rhs);
       ~DocumentChangeSet();
+      DocumentChangeSet& operator=(const DocumentChangeSet& rhs);
     
     //Returns true on success
     struct ChangeResult {

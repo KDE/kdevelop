@@ -60,6 +60,13 @@ DocumentChangeSet::DocumentChangeSet(const DocumentChangeSet & rhs) : d(new Docu
 {
 }
 
+
+DocumentChangeSet& DocumentChangeSet::operator=(const KDevelop::DocumentChangeSet& rhs)
+{
+    *d = *rhs.d;
+    return *this;
+}
+
 DocumentChangeSet::~DocumentChangeSet()
 {
     delete d;
