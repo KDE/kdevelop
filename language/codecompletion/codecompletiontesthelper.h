@@ -107,25 +107,28 @@ template <class T>
 struct CodeCompletionItemTester {
    
   typedef KSharedPtr< KDevelop::CompletionTreeElement > Element;
-    
+  
+  //Creates a CodeCompletionItemTester for the parent context
+  CodeCompletionItemTester parent() {
+    KSharedPtr<T> parent = KSharedPtr<T>(dynamic_cast<T*>(completionContext->parentContext()));
+    Q_ASSERT(parent);
+    return CodeCompletionItemTester(parent);
+  }
+
+  //Standard constructor
   CodeCompletionItemTester(DUContext* context, QString text = "; ") {
     completionContext = new  T(DUContextPointer(context), text, QString(), context->range().end);
 
-    if ( !completionContext->isValid() ) {
-      kDebug() << "invalid completion context";
-      return;
-    }
-
-    bool abort = false;
-    items = completionContext->completionItems(abort);
-    
-    
-    addElements(completionContext->ungroupedElements());
-    
-    foreach(Item i, items)
-      names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+    init();
   }
-  
+
+  //Can be used if you already have the completion context
+  CodeCompletionItemTester(KSharedPtr<T> context) {
+    completionContext = context;
+    
+    init();
+  }
+
   void addElements(QList<Element> elements) {
     foreach(Element element, elements) {
       Item item(dynamic_cast<CompletionTreeItem*>(element.data()));
@@ -154,6 +157,22 @@ struct CodeCompletionItemTester {
     
     return items[itemNumber]->data(fakeModel().index(0, column), role, 0);
   }
+  private:
+    void init() {
+      if ( !completionContext->isValid() ) {
+        kDebug() << "invalid completion context";
+        return;
+      }
+
+      bool abort = false;
+      items = completionContext->completionItems(abort);
+      
+      
+      addElements(completionContext->ungroupedElements());
+      
+      foreach(Item i, items)
+        names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+    }
 };
 
 #endif // CODECOMPLETIONTESTHELPER_H
