@@ -201,10 +201,11 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
         return;
       }
 
+      ///@todo Exactly watch what components are changed and how
       ///@todo Handle return-type
       ///@todo Keep default-parameters
       ///@todo Do matching of the arguments
-      ///@todo Eventually do real renaming
+      ///@todo Eventually do real refactoring-like renaming
       if(!functionContext || functionContext->type() != DUContext::Function) {
         kDebug() << "no correct function context";
         return;

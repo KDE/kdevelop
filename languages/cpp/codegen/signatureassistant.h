@@ -45,7 +45,7 @@ class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
     
     KDevelop::DeclarationId m_definitionId;
     KDevelop::ReferencedTopDUContext m_definitionContext;
-    QList<SignatureItem> m_oldSignature;
+    QList<SignatureItem> m_oldSignature; //Sold signature of the _other_ side
     KDevelop::IndexedType m_oldReturnType;
     KDevelop::IndexedString m_document;
     KDevelop::SimpleRange m_invocationRange;
