@@ -62,6 +62,7 @@
 #include <qwaitcondition.h>
 #include <language/duchain/duchainutils.h>
 #include "includepathcomputer.h"
+#include <interfaces/iuicontroller.h>
 
 //#define DUMP_SMART_RANGES
 //#define DUMP_AST
@@ -534,6 +535,7 @@ void CPPInternalParseJob::run()
             updatingContentContext->smartRange() &&
             updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
           kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
+          QMetaObject::invokeMethod(dynamic_cast<QObject*>(ICore::self()->uiController()), "showErrorMessage", Q_ARG(QString, i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName())), Q_ARG(int, 1));
           l.unlock();
           doNotChangeDUChain = true;
           ProblemPointer problem(new Problem);
