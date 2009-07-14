@@ -141,6 +141,7 @@ public:
     virtual void registerStatus(QObject*) {}
     virtual void popUpAssistant(const KSharedPtr<KDevelop::IAssistant>& ) {}
     virtual void hideAssistant(const KSharedPtr<KDevelop::IAssistant>& ) {}
+    virtual void showErrorMessage(const QString &message, int timeout) {}
 
     KParts::MainWindow* m_activeMainWindow;
     Sublime::Controller* m_controller;
