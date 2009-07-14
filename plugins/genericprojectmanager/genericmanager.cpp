@@ -126,7 +126,7 @@ void GenericProjectManager::waitForProjectOpen(KDevelop::IProject* project)
 void GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item )
 {
     ///TODO: listRecursive does not follow directory links!
-    KIO::ListJob* job = KIO::listRecursive( item->url() );
+    KIO::ListJob* job = KIO::listRecursive( item->url(), KIO::HideProgressInfo );
     kDebug() << "adding job" << job << job->url() << "for project" << item->project();
 
     KDevelop::ICore::self()->runController()->registerJob( job );
