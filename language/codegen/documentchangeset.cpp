@@ -43,6 +43,7 @@ struct DocumentChangeSetPrivate
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
     QMap< IndexedString, IndexedString > tempFiles;
     
+    DocumentChangeSet::ChangeResult replaceOldText(CodeRepresentation * repr, const QString & newText, const QList<DocumentChangePointer> & sortedChangesList);
     DocumentChangeSet::ChangeResult generateNewText(const KDevelop::IndexedString & file, QList< KDevelop::DocumentChangePointer > & sortedChanges, const KDevelop::CodeRepresentation* repr, QString& output);
     DocumentChangeSet::ChangeResult removeDuplicates(const IndexedString & file, QList<DocumentChangePointer> & filteredChanges);
     void formatChanges();
@@ -118,6 +119,7 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 void DocumentChangeSet::clear ( void )
 {
     d->changes.clear();
+    d->tempFiles.clear();
 }
 
 void DocumentChangeSet::setReplacementPolicy ( DocumentChangeSet::ReplacementPolicy policy )
@@ -188,46 +190,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     foreach(const IndexedString &file, d->changes.keys())
     {
         oldTexts[file] = codeRepresentations[file]->text();
-        bool fail = false;
         
-        DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(codeRepresentations[file]);
-        if(dynamic) {
-            dynamic->startEdit();
-            //Replay the changes one by one
-            QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
-            
-            for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
-                DocumentChange& change(*sortedChangesList[pos]);
-                if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
-                    QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
-                                                    .arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column)
-                                                    .arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText)
-                                                    .arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
-                    
-                    if(d->replacePolicy == IgnoreFailedChange) {
-                        //Just don't do the replacement
-                    }else if(d->replacePolicy == WarnOnFailedChange) {
-                        kWarning() << warningString;
-                    }else{
-                        dynamic->endEdit();
-                        qDeleteAll(codeRepresentations);
-                        return DocumentChangeSet::ChangeResult(warningString);
-                    }
-                }
-            }
-            
-            dynamic->endEdit();
-        }else{
-            fail = !codeRepresentations[file]->setText(newTexts[file]);
-        }
-        
-        if(fail) {
-            //Fail
+        DocumentChangeSet::ChangeResult result = d->replaceOldText(codeRepresentations[file], newTexts[file], filteredSortedChanges[file]);
+        if(!result && d->replacePolicy == StopOnFailedChange)
+        {
+            //Revert all files 
             foreach(const IndexedString &revertFile, oldTexts.keys())
                 codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
             
             qDeleteAll(codeRepresentations);
-            return DocumentChangeSet::ChangeResult(QString("Failed to set text on %1").arg(file.str()));
+            return result;
         }
     }
     
@@ -237,6 +209,55 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     d->updateFiles();
     
     return DocumentChangeSet::ChangeResult(true);
+}
+
+DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRepresentation * repr,
+                                                                         const QString & newText,
+                                                                         const QList<DocumentChangePointer> & sortedChangesList)
+{
+    DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(repr);
+    if(dynamic) {
+        dynamic->startEdit();
+        //Replay the changes one by one
+        
+        for(int pos = sortedChangesList.size()-1; pos >= 0; --pos)
+        {
+            const DocumentChange& change(*sortedChangesList[pos]);
+            if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText))
+            {
+                QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
+                                                .arg(change.m_document.str()).arg(change.m_range.start.line).arg(change.m_range.start.column)
+                                                .arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText)
+                                                .arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
+
+                if(replacePolicy == DocumentChangeSet::WarnOnFailedChange)
+                {
+                    kWarning() << warningString;
+                }
+                else if(replacePolicy == DocumentChangeSet::StopOnFailedChange)
+                {
+                    dynamic->endEdit();
+                    return DocumentChangeSet::ChangeResult(warningString);
+                }
+                //If set to ignore failed changes just continue with the others
+            }
+        }
+        
+        dynamic->endEdit();
+        return true;
+    }
+    
+    //For files on disk
+    if (!repr->setText(newText))
+    {
+        QString warningString = QString("Could not replace text for file in disk: %1").arg(sortedChangesList.begin()->data()->m_document.str());
+        if(replacePolicy == DocumentChangeSet::WarnOnFailedChange)
+            kWarning() << warningString;
+        
+        return DocumentChangeSet::ChangeResult(warningString);
+    }
+    
+    return true;
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const IndexedString & file,
