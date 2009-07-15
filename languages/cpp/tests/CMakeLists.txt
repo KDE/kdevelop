@@ -40,6 +40,30 @@ set(cppcodecompletiontest_SRCS
 
 set(cppcodegentest_SRCS
   test_cppcodegen.cpp
+  
+  ../cpphighlighting.cpp
+  ../cpplanguagesupport.cpp
+  ../cppparsejob.cpp
+  ../includepathcomputer.cpp
+  ../includepathresolver.cpp
+  ../preprocessjob.cpp
+  ../setuphelpers.cpp
+  ../stringhelpers.cpp
+  ../quickopen.cpp
+  ../codecompletion/context.cpp
+  ../codecompletion/helpers.cpp
+  ../codecompletion/implementationhelperitem.cpp
+  ../codecompletion/item.cpp
+  ../codecompletion/missingincludeitem.cpp
+  ../codecompletion/missingincludemodel.cpp
+  ../codecompletion/model.cpp
+  ../codecompletion/worker.cpp
+  ../codegen/cppnewclass.cpp
+  ../codegen/cpputils.cpp
+  ../codegen/makeimplementationprivate.cpp
+  ../codegen/progressdialogs.cpp
+  ../codegen/simplerefactoring.cpp
+  ../codegen/unresolvedincludeassistant.cpp
 )
 
 
@@ -60,7 +84,12 @@ target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
 
 kde4_add_unit_test(cppcodegentest ${cppcodegentest_SRCS})
 target_link_libraries(cppcodegentest
+    kdev4cppduchain
+    kdev4cppparser
+    veritascpp
     ${QT_QTTEST_LIBRARY}
-    kdevcpplanguagesupport
+    ${QT_QTCORE_LIBRARY}
+    ${KDEVPLAFORM_SHELL_LIBRARY}
+    ${KDEVPLATFORM_TESTS_LIBRARY}
 )
 

@@ -20,22 +20,41 @@
 #ifndef TEST_CPPCODEGEN_H
 #define TEST_CPPCODEGEN_H
 
+#include <language/duchain/indexedstring.h>
+
 #include <QtCore/QObject>
+#include <QMap>
+#include <language/duchain/topducontext.h>
+
 
 class TestCppCodegen : public QObject
 {
     Q_OBJECT
-
-  public:
-    TestCppCodegen();
+    
+    typedef QMap<KDevelop::IndexedString, KDevelop::ReferencedTopDUContext> ContextContainer;
     
   private slots:
     // Tests
-    void testAstDuChainMapping();
+    void init();
+    void initTestCase();
+    void cleanupTestCase();
     
+    
+    void testAstDuChainMapping();
+    void testClassGeneration();
+    void testPrivateImplementation();
     
   private:
+    void parseArtificialCode();
+    void resetArtificialCode();
     
+    
+    void addArtificialCode(KDevelop::IndexedString fileName, const QString & code);
+    
+    QList<KDevelop::IndexedString> m_artificialCodeNames;
+    ContextContainer m_contexts;
+    
+    static const QString m_testUrl;
 };
 
 #endif // TEST_CPPCODEGEN_H

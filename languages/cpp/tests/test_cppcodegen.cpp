@@ -19,28 +19,129 @@
 
 #include "test_cppcodegen.h"
 
+#include "parsesession.h"
+#include "ast.h"
+#include "astutilities.h"
+#include "codegen/cppnewclass.h"
+
+#include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/coderepresentation.h>
+#include <language/duchain/duchain.h>
+
+#include <interfaces/ilanguagecontroller.h>
 
 #include <QtTest/QTest>
+#include <shell/shellextension.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+#include <qtest_kde.h>
 
-QTEST_MAIN(TestCppCodegen)
+///gets the top context of artificial test code by just specifying the file name, more efficient and safe than calling contextForUrl
+//Needs to be a macro because QVERIFY2 only works directly on the test function
+#define GET_CONTEXT(file, top)  IndexedString str_(m_testUrl + file);\
+                                QVERIFY2(m_contexts[str_], "Requested artificial file not found");\
+                                top = m_contexts[str_].data()
+
+QTEST_KDEMAIN(TestCppCodegen, GUI )
 
 using namespace KDevelop;
 
-TestCppCodegen::TestCppCodegen()
+const QString TestCppCodegen::m_testUrl("test:///");
+
+void TestCppCodegen::initTestCase()
 {
+  //TODO Have some problem with getting the KGlobal::mainComponent
+  //Initialize KDevelop components
+  AutoTestShell::init();
+  Core::initialize(KDevelop::Core::NoUi);
+  
   //Insert all the test data as a string representation
-  InsertArtificialCodeRepresentation(IndexedString("ClassA.h"), "class ClassA { public: ClassA(); private: int i;  float f, j;\
-                                                                  struct ContainedStruct { int i; ClassA * p;  } structVar; };");
-  InsertArtificialCodeRepresentation(IndexedString("ClassA.cpp"), "ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; }");
+  //NOTE: When adding new test artificial code, remember to update cppcodegen_snippets.cpp, and if possible update related tests
+  addArtificialCode(IndexedString(m_testUrl + "ClassA.h"), "class ClassA { public: ClassA(); private: int i;  float f, j;\
+                                                       struct ContainedStruct { int i; ClassA * p;  } structVar; };");
+  addArtificialCode(IndexedString(m_testUrl + "ClassA.cpp"), "ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; }");
+  
+  parseArtificialCode();
+}
+
+
+void TestCppCodegen::cleanupTestCase()
+{
+  Core::self()->cleanup();
+}
+
+void TestCppCodegen::init()
+{
+  resetArtificialCode();
+  parseArtificialCode();
+}
+
+void TestCppCodegen::testAstDuChainMapping()
+{
+  
+  ContextContainer::Iterator it = m_contexts.begin();
+  
+  //----ClassA.h----
+  ParseSession::Ptr session = ParseSession::Ptr::dynamicCast<IAstContainer>(it->data()->ast());
+  QVERIFY(session);
+  TranslationUnitAST * ast = session->topAstNode();
+  QVERIFY(ast);
+  QVERIFY(ast->declarations->count() == 1);
+  
+  
+  QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 0));
+  QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier,
+            session->astNodeFromDeclaration(KDevelop::DeclarationPointer(it->data()->localDeclarations()[0])));
+  ++it;
+ 
+  
+  //----ClassA.cpp----
+  QVERIFY(session = ParseSession::Ptr::dynamicCast<IAstContainer>(it->data()->ast()));
+  QVERIFY(ast = session->topAstNode());
+  QVERIFY(ast->declarations->count() == 1);
+}
+
+#include <codegen/simplerefactoring.h>
+void TestCppCodegen::testClassGeneration()
+{
+  TopDUContext * top = 0;
+  GET_CONTEXT("AbstractClass.h", top);
+  
+  //DUChain::self()->
+  
+  CppNewClass newClass;
+  newClass.addBaseClass("AbstractClass");
+  //newClass.
   
 }
 
-
-void TestCppCodegen::testAstDuChainMapping ()
+void TestCppCodegen::testPrivateImplementation()
 {
-
 }
 
+void TestCppCodegen::parseArtificialCode()
+{
+  //Update the context for all the representations, and save their contexts in the contexts map
+  foreach(IndexedString file, m_artificialCodeNames)
+  {
+    CodeRepresentation * code = createCodeRepresentation(file);
+    
+    Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), KDevelop::TopDUContext::AllDeclarationsAndContexts);
+    ///TODO maybe only needs to be done once
+    Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AllDeclarationsAndContexts));
+    
+    delete code;
+  }
+}
+
+void TestCppCodegen::addArtificialCode ( IndexedString fileName, const QString & code )
+{
+  InsertArtificialCodeRepresentation(fileName, code);
+  m_artificialCodeNames << fileName;
+}
+
+void TestCppCodegen::resetArtificialCode(void)
+{
+}
 
 #include "test_cppcodegen.moc"
