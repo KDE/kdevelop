@@ -43,11 +43,28 @@ struct DocumentChangeSetPrivate
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
     QMap< IndexedString, IndexedString > tempFiles;
     
+    DocumentChangeSet::ChangeResult generateNewText(const KDevelop::IndexedString & file, QList< KDevelop::DocumentChangePointer > & sortedChanges, const KDevelop::CodeRepresentation* repr, QString& output);
+    DocumentChangeSet::ChangeResult removeDuplicates(const IndexedString & file, QList<DocumentChangePointer> & filteredChanges);
     void formatChanges();
     void updateFiles();
     void addFileToProject(IndexedString file);
 };
 
+//Simple helper to clear up code clutter
+namespace
+{
+inline bool changeIsValid(const DocumentChange & change, const QStringList & textLines)
+{
+    return change.m_range.start <= change.m_range.end &&
+           change.m_range.end.line < textLines.size() &&
+           change.m_range.start.line >= 0 &&
+           change.m_range.start.column >= 0 &&
+           change.m_range.start.column <= textLines[change.m_range.start.line].length() &&
+           change.m_range.end.column >= 0 && 
+           change.m_range.end.column <= textLines[change.m_range.end.line].length() && 
+           change.m_range.start.line == change.m_range.end.line;
+}
+}
 
 DocumentChangeSet::DocumentChangeSet() : d(new DocumentChangeSetPrivate)
 {
@@ -79,6 +96,10 @@ KDevelop::DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const KDe
 DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChangePointer& change) {
     if(change->m_range.start.line != change->m_range.end.line)
         return ChangeResult("Multi-line ranges are not supported");
+    
+    if(d->tempFiles.contains(change->m_document))
+        //Because the change is semantically constant, but not bitwise, correct the old file name for the temp one
+        const_cast<DocumentChangePointer &>(change)->m_document = d->tempFiles[change->m_document];
     
     d->changes[change->m_document].append(change);
     return ChangeResult(true);
@@ -135,93 +156,35 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
         if(!repr)
             return ChangeResult(QString("Could not code for %1").arg(file.str()));
         
-        ISourceFormatter* formatter = 0;
-        if(ICore::self())
-            formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
-        
         codeRepresentations[file] = repr;
         
-        QString text = repr->text();
         
-        QStringList textLines = text.split('\n');
-        
-        QMultiMap<SimpleCursor, DocumentChangePointer> sortedChanges;
-        
-        foreach(const DocumentChangePointer &change, d->changes[file])
-            sortedChanges.insert(change->m_range.end, change);
-        
-        //Remove duplicates
-        DocumentChangePointer previous = DocumentChangePointer();
-        for(QMultiMap<SimpleCursor, DocumentChangePointer>::iterator it =sortedChanges.begin(); it != sortedChanges.end(); ) {
-            if(previous){
-                if(previous->m_range.end > (*it)->m_range.start) {
-                    //intersection
-                    if(previous->m_range == (*it)->m_range && previous->m_oldText == (*it)->m_oldText && previous->m_newText == (*it)->m_newText &&
-                       !previous->m_ignoreOldText && !(*it)->m_ignoreOldText) {
-                        //duplicate, remove one
-                        it = sortedChanges.erase(it);
-                        continue;
-                    }else{
-                        qDeleteAll(codeRepresentations);
-                        return ChangeResult(QString("Inconsistent change-request at %1").arg(file.str()));
-                    }
-                }
-            }
-            previous = *it;
-            ++it;
-        }
-
         QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
-        sortedChangesList = sortedChanges.values();
-
-        for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
-            DocumentChange& change(*sortedChangesList[pos]);
-            QString encountered;
-            if(change.m_range.start <= change.m_range.end &&
-                change.m_range.end.line < textLines.size() &&
-                change.m_range.start.line >= 0 &&
-                change.m_range.start.column >= 0 &&
-                change.m_range.start.column <= textLines[change.m_range.start.line].length() &&
-                change.m_range.end.column >= 0 && 
-                change.m_range.end.column <= textLines[change.m_range.end.line].length() && 
-                change.m_range.start.line == change.m_range.end.line  && //We demand this, although it shoult be fixed
-                ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
+        {
+            ChangeResult result(d->removeDuplicates(file, sortedChangesList));
+            if(!result)
             {
-                ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
-                QString leftContext = QStringList(textLines.mid(0, change.m_range.start.line+1)).join("\n");
-                leftContext.chop(textLines[change.m_range.start.line].length() - change.m_range.start.column);
-
-                QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
-
-                if(formatter && d->formatPolicy == AutoFormatChanges) {
-                    kDebug() << "formatting" << change.m_newText;
-                    change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
-                    kDebug() << "result" << change.m_newText;
-                }
-                
-                textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
-            }else{
-                QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = \"%6\"(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(encountered).arg(change.m_newText);
-                
-                if(d->replacePolicy == IgnoreFailedChange) {
-                    //Just don't do the replacement
-                }else if(d->replacePolicy == WarnOnFailedChange) {
-                    kWarning() << warningString;
-                }else{
-                    qDeleteAll(codeRepresentations);
-                    
-                    return DocumentChangeSet::ChangeResult(warningString, sortedChangesList[pos]);
-                }
+                qDeleteAll(codeRepresentations);
+                return result;
             }
         }
-        
-        newTexts[file] = textLines.join("\n");
+
+        {
+            ChangeResult result(d->generateNewText(file, sortedChangesList, repr, newTexts[file]));
+            if(!result)
+            {
+                qDeleteAll(codeRepresentations);
+                return result;
+            }
+        }
     }
     
     QMap<IndexedString, QString> oldTexts;
     
+    //! @todo apply correct formatting, and call it
     //d->autoformatChanges()
     
+    //Apply the changes to the files
     foreach(const IndexedString &file, d->changes.keys())
     {
         oldTexts[file] = codeRepresentations[file]->text();
@@ -236,7 +199,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
             for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
                 DocumentChange& change(*sortedChangesList[pos]);
                 if(!dynamic->replace(change.m_range.textRange(), change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
-                    QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"").arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column).arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText).arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
+                    QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = %6(encountered \"%7\") -> \"%8\"")
+                                                    .arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column)
+                                                    .arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText)
+                                                    .arg(dynamic->rangeText(change.m_range.textRange())).arg(change.m_newText);
                     
                     if(d->replacePolicy == IgnoreFailedChange) {
                         //Just don't do the replacement
@@ -271,6 +237,90 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     d->updateFiles();
     
     return DocumentChangeSet::ChangeResult(true);
+}
+
+DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const IndexedString & file,
+                                                                          QList<DocumentChangePointer> & sortedChanges,
+                                                                          const CodeRepresentation * repr,
+                                                                          QString & output)
+{
+
+    ISourceFormatter* formatter = 0;
+    if(ICore::self())
+        formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
+
+    //Create the actual new modified file
+    QStringList textLines = repr->text().split('\n');
+
+    for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {
+        DocumentChange& change(*sortedChanges[pos]);
+        QString encountered;
+        if(changeIsValid(change, textLines)  && //We demand this, although it shoult be fixed
+            ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
+        {
+            ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
+            QString leftContext = QStringList(textLines.mid(0, change.m_range.start.line+1)).join("\n");
+            leftContext.chop(textLines[change.m_range.start.line].length() - change.m_range.start.column);
+
+            QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
+
+            if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges) {
+                kDebug() << "formatting" << change.m_newText;
+                change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
+                kDebug() << "result" << change.m_newText;
+            }
+            
+            textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
+        }else{
+            QString warningString = QString("Inconsistent change in %1 at %2:%3 -> %4:%5 = \"%6\"(encountered \"%7\") -> \"%8\"")
+                                            .arg(file.str()).arg(change.m_range.start.line).arg(change.m_range.start.column)
+                                            .arg(change.m_range.end.line).arg(change.m_range.end.column).arg(change.m_oldText)
+                                            .arg(encountered).arg(change.m_newText);
+            
+            if(replacePolicy == DocumentChangeSet::IgnoreFailedChange) {
+                //Just don't do the replacement
+            }else if(replacePolicy == DocumentChangeSet::WarnOnFailedChange)
+                kWarning() << warningString;
+            else
+                return DocumentChangeSet::ChangeResult(warningString, sortedChanges[pos]);
+                
+        }
+    }
+
+    output = textLines.join("\n");
+    return true;
+}
+
+//Removes all duplicate changes for a single file, and then returns (via filteredChanges) the filtered duplicates
+DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const IndexedString & file,
+                                                                           QList<DocumentChangePointer> & filteredChanges)
+{
+    QMultiMap<SimpleCursor, DocumentChangePointer> sortedChanges;
+    
+    foreach(const DocumentChangePointer &change, changes[file])
+        sortedChanges.insert(change->m_range.end, change);
+    
+    //Remove duplicates
+    DocumentChangePointer previous = DocumentChangePointer();
+    for(QMultiMap<SimpleCursor, DocumentChangePointer>::iterator it =sortedChanges.begin(); it != sortedChanges.end(); ) {
+        if(previous && previous->m_range.end > (*it)->m_range.start) {
+            //intersection
+            if(previous->m_range == (*it)->m_range && previous->m_oldText == (*it)->m_oldText && previous->m_newText == (*it)->m_newText &&
+                !previous->m_ignoreOldText && !(*it)->m_ignoreOldText) {
+                //duplicate, remove one
+                it = sortedChanges.erase(it);
+                continue;
+            }
+            else
+                return DocumentChangeSet::ChangeResult(QString("Inconsistent change-request at %1").arg(file.str()));
+            
+        }
+        previous = *it;
+        ++it;
+    }
+    
+    filteredChanges = sortedChanges.values();
+    return true;
 }
 
 void DocumentChangeSetPrivate::updateFiles()
