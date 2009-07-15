@@ -79,10 +79,6 @@ set(kdevsubversion_PART_UI
 kde4_add_ui_files(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
 kde4_add_plugin(kdevsubversion ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set_target_properties(kdevsubversion PROPERTIES COMPILE_FLAGS "-Wno-ignored-qualifiers")
-endif(CMAKE_COMPILER_IS_GNUCXX)
-
 target_link_libraries(kdevsubversion
                     ${SUBVERSION_LIBRARIES}
                     ${QT_QTDESIGNER_LIBRARY}
