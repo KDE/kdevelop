@@ -236,7 +236,6 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
             Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
             m_waitForIncludePathsMutex.lock();
             qRegisterMetaType<CPPParseJob*>("CPPParseJob*");
-            ///@todo Make sure this doesn't create problems in corner cases
             QMetaObject::invokeMethod(cpp(), "findIncludePathsForJob", Qt::QueuedConnection, Q_ARG(CPPParseJob*, const_cast<CPPParseJob*>(this)));
             //Will be woken once the include-paths are computed
             m_waitForIncludePaths.wait(&m_waitForIncludePathsMutex);
@@ -535,7 +534,7 @@ void CPPInternalParseJob::run()
             updatingContentContext->smartRange() &&
             updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
           kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
-          QMetaObject::invokeMethod(dynamic_cast<QObject*>(ICore::self()->uiController()), "showErrorMessage", Q_ARG(QString, i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName())), Q_ARG(int, 1));
+          ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
           l.unlock();
           doNotChangeDUChain = true;
           ProblemPointer problem(new Problem);
