@@ -142,10 +142,11 @@ public:
      * Sublime::Document.
      */
     virtual Sublime::Controller* controller() = 0;
-public Q_SLOTS:
+
     /** Shows an error message in the status bar.
       *
-      * Convenience function. use registerStatus(..) and IStatus for more complex needs.
+      * Unlike all other functions in this class, this function is thread-safe.
+      * You can call it from the background.
       *
       * @p message The message
       * @p timeout The timeout in seconds how long to show the message */

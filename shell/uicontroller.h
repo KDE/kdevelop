@@ -86,6 +86,8 @@ public:
     virtual void popUpAssistant(const KDevelop::IAssistant::Ptr& assistant);
 
     virtual void hideAssistant(const KDevelop::IAssistant::Ptr& assistant);
+
+    virtual void showErrorMessage(const QString& message, int timeout);
     
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
@@ -97,7 +99,6 @@ private:
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
-    virtual void showErrorMessage(const QString& message, int timeout);
 private Q_SLOTS:
     void assistantAction1();
     void assistantAction2(bool);

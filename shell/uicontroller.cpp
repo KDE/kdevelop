@@ -585,7 +585,7 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     if (!w) return;
     MainWindow* mw = qobject_cast<KDevelop::MainWindow*>(w);
     if (!mw) return;
-    mw->showErrorMessage(message, timeout);
+    QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
 }
 
 void UiController::hideAssistant(const KDevelop::IAssistant::Ptr& assistant)
