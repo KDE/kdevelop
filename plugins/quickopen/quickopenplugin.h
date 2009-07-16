@@ -83,6 +83,9 @@ public slots:
     void quickOpenNavigate();
     void quickOpenNavigateFunctions();
 
+    void previousFunction();
+    void nextFunction();
+
 private slots:
     void storeScopes( const QStringList& );
     void storeItems( const QStringList& );
@@ -91,6 +94,9 @@ private:
     friend class QuickOpenLineEdit;
     QuickOpenLineEdit* quickOpenLine();
     QWidget* createQuickOpenLineWidget();
+
+    enum FunctionJumpDirection { NextFunction, PreviousFunction };
+    void jumpToNearestFunction(FunctionJumpDirection direction);
 
     QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;

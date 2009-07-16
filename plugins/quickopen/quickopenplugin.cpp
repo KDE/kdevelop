@@ -91,6 +91,35 @@ public:
 
 };
 
+class OutlineFilter : public DUChainUtils::DUChainItemFilter {
+public:
+  enum OutlineMode { Functions, FunctionsAndClasses };
+  OutlineFilter(QList<DUChainItem>& _items, OutlineMode _mode = FunctionsAndClasses) : items(_items), mode(_mode) {
+  }
+  virtual bool accept(Declaration* decl) {
+    if(decl->range().isEmpty())
+      return false;
+    bool collectable = mode == Functions ? decl->isFunctionDeclaration() : (decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class));
+    if (collectable) {
+      DUChainItem item;
+      item.m_item = IndexedDeclaration(decl);
+      item.m_text = decl->toString();
+      items << item;
+
+      return true;
+    } else
+      return false;
+  }
+  virtual bool accept(DUContext* ctx) {
+    if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other || ctx->type() == DUContext::Helper )
+      return true;
+    else
+      return false;
+  }
+  QList<DUChainItem>& items;
+  OutlineMode mode;
+};
+
 K_PLUGIN_FACTORY(KDevQuickOpenFactory, registerPlugin<QuickOpenPlugin>(); )
 K_EXPORT_PLUGIN(KDevQuickOpenFactory(KAboutData("kdevquickopen","kdevquickopen", ki18n("Quick Open"), "0.1", ki18n("Quickly open resources such as files, classes and methods."), KAboutData::License_GPL)))
 
@@ -638,6 +667,16 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 //     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
 //     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
 
+    KAction* quickOpenNextFunction = actions->addAction("quick_open_next_function");
+    quickOpenNextFunction->setText( i18n("Next Function") );
+    quickOpenNextFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageDown );
+    connect(quickOpenNextFunction, SIGNAL(triggered(bool)), this, SLOT(nextFunction()));
+
+    KAction* quickOpenPrevFunction = actions->addAction("quick_open_prev_function");
+    quickOpenPrevFunction->setText( i18n("Previous Function") );
+    quickOpenPrevFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageUp );
+    connect(quickOpenPrevFunction, SIGNAL(triggered(bool)), this, SLOT(previousFunction()));
+
     KAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
     quickOpenNavigateFunctions->setText( i18n("Outline") );
     quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
@@ -960,6 +999,72 @@ bool QuickOpenPlugin::freeModel()
   return true;
 }
 
+void QuickOpenPlugin::nextFunction()
+{
+  jumpToNearestFunction(NextFunction);
+}
+
+void QuickOpenPlugin::previousFunction()
+{
+  jumpToNearestFunction(PreviousFunction);
+}
+
+void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirection direction)
+{
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
+  if(!doc) {
+    kDebug() << "No active document";
+    return;
+  }
+
+  KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+  TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
+
+  if( !context ) {
+    kDebug() << "Got no standard context";
+    return;
+  }
+
+  QList<DUChainItem> items;
+  OutlineFilter filter(items, OutlineFilter::Functions);
+  DUChainUtils::collectItems( context, filter );
+
+  SimpleCursor cursor = SimpleCursor(doc->cursorPosition());
+  if (!cursor.isValid())
+    return;
+
+  Declaration *nearestDeclBefore = 0;
+  int distanceBefore = INT_MIN;
+  Declaration *nearestDeclAfter = 0;
+  int distanceAfter = INT_MAX;
+
+  for (int i = 0; i < items.length(); ++i) {
+    Declaration *decl = items[i].m_item.data();
+
+    int distance = decl->range().start.line - cursor.line;
+    if (distance < 0 && distance >= distanceBefore) {
+      distanceBefore = distance;
+      nearestDeclBefore = decl;
+    } else if (distance > 0 && distance <= distanceAfter) {
+      distanceAfter = distance;
+      nearestDeclAfter = decl;
+    }
+  }
+
+  SimpleCursor c = SimpleCursor::invalid();
+  if (direction == QuickOpenPlugin::NextFunction && nearestDeclAfter)
+    c = nearestDeclAfter->range().start;
+  else if (direction == QuickOpenPlugin::PreviousFunction && nearestDeclBefore)
+    c = nearestDeclBefore->range().start;
+
+  lock.unlock();
+  if (c.isValid())
+    core()->documentController()->openDocument(doc->url(), c.textCursor());
+  else
+    kDebug() << "No declaration to jump to";
+}
+
 void QuickOpenPlugin::quickOpenNavigateFunctions()
 {
   if(!freeModel())
@@ -984,32 +1089,7 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 
   QList<DUChainItem> items;
 
-  class OutlineFilter : public DUChainUtils::DUChainItemFilter {
-  public:
-    OutlineFilter(QList<DUChainItem>& _items) : items(_items) {
-    }
-    virtual bool accept(Declaration* decl) {
-      if(decl->range().isEmpty())
-        return false;
-      if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class)) {
-
-        DUChainItem item;
-        item.m_item = IndexedDeclaration(decl);
-        item.m_text = decl->toString();
-        items << item;
-
-        return true;
-      } else
-        return false;
-    }
-    virtual bool accept(DUContext* ctx) {
-      if(ctx->type() == DUContext::Class || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Global || ctx->type() == DUContext::Other || ctx->type() == DUContext::Helper )
-        return true;
-      else
-        return false;
-    }
-    QList<DUChainItem>& items;
-  } filter(items);
+  OutlineFilter filter(items);
 
   DUChainUtils::collectItems( context, filter );
 
