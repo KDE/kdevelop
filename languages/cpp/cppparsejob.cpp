@@ -396,6 +396,9 @@ void CPPInternalParseJob::initialize() {
 
 void CPPInternalParseJob::highlightIfNeeded()
 {
+    if(!KDevelop::EditorIntegrator::documentForUrl(parentJob()->document()))
+      return;
+    
     DUChainReadLocker l(DUChain::lock());
     ReferencedTopDUContext standardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
