@@ -222,7 +222,7 @@ bool NormalDeclarationCompletionItem::completingTemplateParameters() const
 
 QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const
 {
-  if(m_cachedTypeStringDecl == decl && m_cachedTypeStringLength == desiredTypeLength)
+  if(m_cachedTypeStringDecl == decl && m_cachedTypeStringLength == static_cast<uint>(desiredTypeLength))
     return m_cachedTypeString;
   
   QString ret;

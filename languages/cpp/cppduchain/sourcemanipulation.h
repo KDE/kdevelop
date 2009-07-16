@@ -97,7 +97,7 @@ public:
     //Represents the whole code of the manipulated top-context for reading.
     //Changes should be done as transactions to m_changeSet.
     ///@warning This must be checked for zero before using. It is zero if the file could not be read.
-    const KDevelop::CodeRepresentation* m_codeRepresentation;
+    const KDevelop::CodeRepresentation::Ptr m_codeRepresentation;
 };
 }
 

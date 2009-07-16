@@ -162,16 +162,15 @@ void KDevelop::SourceCodeInsertion::setAccess(KDevelop::Declaration::AccessPolic
   m_access = access;
 }
 
-KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topContext) : m_context(topContext), m_access(Declaration::Public), m_topContext(topContext) {
+KDevelop::SourceCodeInsertion::SourceCodeInsertion(KDevelop::TopDUContext* topContext) : m_context(topContext), m_access(Declaration::Public), m_topContext(topContext),
+                                                   m_codeRepresentation(KDevelop::createCodeRepresentation(m_topContext->url())){
   if(m_topContext->parsingEnvironmentFile() && m_topContext->parsingEnvironmentFile()->isProxyContext()) {
     kWarning() << "source-code manipulation on proxy-context is wrong!!!" << m_topContext->url().toUrl();
   }
-  m_codeRepresentation = KDevelop::createCodeRepresentation(m_topContext->url());
   m_insertBefore = SimpleCursor::invalid();
 }
 
 KDevelop::SourceCodeInsertion::~SourceCodeInsertion() {
-  delete m_codeRepresentation;
 }
 
 QString KDevelop::SourceCodeInsertion::accessString() const {

@@ -36,6 +36,7 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
 {
     typedef QList<QMap<IndexedString, QList<SimpleRange> > > UseList;
     
+    ///Add policy for declaring in unnamed namespace
     enum Policies
     {
         ContainerIsClass,             //Indicates the container type will be class, otherwise struct will be used
