@@ -110,7 +110,9 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
     //Used in several headers like sys/time.h
     insertMacro( macros, rpp::pp_macro("__restrict") );
     insertMacro( macros, rpp::pp_macro("__extension__") );
-    
+    //Add macros that allow special treatment when within kdevelop
+    insertMacro( macros, rpp::pp_macro("IN_KDEVELOP_PARSER") );
+    insertMacro( macros, rpp::pp_macro("IN_IDE_PARSER") );
     {
       //Used in several headers like sys/time.h
       rpp::pp_macro m("__const");
