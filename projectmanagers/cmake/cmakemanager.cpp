@@ -720,34 +720,27 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
 
 QString CMakeManager::guessCMakeShare(const QString& cmakeBin)
 {
-    KUrl bin(cmakeBin);
-    bin=bin.upUrl();
-    bin=bin.upUrl();
-    return bin.toLocalFile(KUrl::RemoveTrailingSlash);
+    QFileInfo bin(cmakeBin+"/../..");
+    return bin.absoluteFilePath();
 }
 
 QString CMakeManager::guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
-{
-    QString ret;
-    KUrl bin(guessCMakeShare(cmakeBin));
+{;
+    QString bin(guessCMakeShare(cmakeBin));
 
     QString versionNumber = version[0]+'.'+version[1];
 
-    bin.cd(QString("share/cmake-%1").arg(versionNumber));
+    bin += QString("/share/cmake-%1").arg(versionNumber));
 
-    ret=bin.toLocalFile(KUrl::RemoveTrailingSlash);
-    QDir d(ret);
+    QDir d(bin);
     if(!d.exists(ret))
     {
-        KUrl std(bin);
-        std = std.upUrl();
-        std.cd("cmake/");
-        ret=std.toLocalFile(KUrl::RemoveTrailingSlash);
-        bin = std;
+        bin += "/../cmake/");
     }
 
-    kDebug(9042) << "guessing: " << bin.toLocalFile(KUrl::RemoveTrailingSlash);
-    return ret;
+    QFileInfo fi(bin);
+    kDebug(9042) << "guessing: " << bin << fi.absoluteFilePath();
+    return fi.absoluteFilePath();
 }
 
 QStringList CMakeManager::guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
