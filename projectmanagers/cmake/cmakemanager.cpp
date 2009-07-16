@@ -193,22 +193,18 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
 {
     QString cmakeCmd=KStandardDirs::findExe("cmake");
     
-    QString versionOutput=CMake::executeProcess(cmakeCmd, QStringList("--version"));
-    QRegExp rx("([0-9]+).([0-9]+)-patch ([0-9]+)");
-    rx.indexIn(versionOutput);
-    QStringList version=rx.capturedTexts();
-    version.takeFirst();
+    QString systeminfo=CMake::executeProcess(cmakeCmd, QStringList("--system-information"));
     
     VariableMap m_varsDef;
-    QStringList modulePathDef=CMakeParserUtils::guessCMakeModulesDirectories(cmakeCmd, version);
+    QStringList modulePathDef=QStringList(CMakeParserUtils::valueFromSystemInfo( "CMAKE_ROOT", systeminfo ) + "/Modules");
     m_modulePathPerProject[project]=modulePathDef;
     kDebug(9042) << "found module path is" << modulePathDef;
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
     m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
     m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
-    m_varsDef.insert("CMAKE_MAJOR_VERSION", QStringList(version[0]));
-    m_varsDef.insert("CMAKE_MINOR_VERSION", QStringList(version[1]));
-    m_varsDef.insert("CMAKE_PATCH_VERSION", QStringList(version[2]));
+    m_varsDef.insert("CMAKE_MAJOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MAJOR_VERSION", systeminfo)));
+    m_varsDef.insert("CMAKE_MINOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MINOR_VERSION", systeminfo))); 
+    m_varsDef.insert("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
     
     QStringList cmakeInitScripts;
 #ifdef Q_OS_WIN
@@ -225,7 +221,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
 
     m_varsDef.insert("CMAKE_MODULE_PATH", modulePathDef);
-    m_varsDef.insert("CMAKE_ROOT", QStringList(CMakeParserUtils::guessCMakeRoot(cmakeCmd, version)));
+    m_varsDef.insert("CMAKE_ROOT", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_ROOT", systeminfo)));
 
     //Defines the behaviour that can't be identified on initialization scripts
 #ifdef Q_OS_WIN32

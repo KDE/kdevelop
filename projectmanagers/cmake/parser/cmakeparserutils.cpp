@@ -48,37 +48,21 @@ namespace CMakeParserUtils
         }
         return versionNumList;
     }
-    
-    QString guessCMakeShare(const QString& cmakeBin)
+
+    QString valueFromSystemInfo(const QString& variable, const QString& systeminfo)
     {
-        QFileInfo bin(cmakeBin+"/../..");
-        return bin.absoluteFilePath();
-    }
-    
-    QString guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
-    {
-        QString bin(guessCMakeShare(cmakeBin));
-        
-        QString versionNumber = version[0]+'.'+version[1];
-        
-        bin += QString("/share/cmake-%1").arg(versionNumber);
-        
-        QDir d(bin);
-        if(!d.exists())
-        {
-            bin += "/../cmake/";
+        int idx = systeminfo.indexOf( variable );
+        if( idx != -1 ) {
+            // 2 == ' "'
+            idx += variable.count() + 2;
+            int end = systeminfo.indexOf( "\"", idx );
+            if( end != -1 ) {
+                return systeminfo.mid( idx, end-idx );
+            }
         }
-        
-        QFileInfo fi(bin);
-        kDebug(9042) << "guessing: " << bin << fi.absoluteFilePath();
-        return fi.absoluteFilePath();
+        return QString();
     }
-    
-    QStringList guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
-    {
-        return QStringList(guessCMakeRoot(cmakeBin, version)+"/Modules");
-    }
-    
+
     
 }
     
