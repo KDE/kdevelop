@@ -186,15 +186,15 @@ class StringCodeRepresentation : public CodeRepresentation {
 
 static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
 
-CodeRepresentation* createCodeRepresentation(IndexedString url) {
+CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
     if(artificialStrings.contains(url))
-        return new StringCodeRepresentation(artificialStrings[url]);
+        return CodeRepresentation::Ptr(new StringCodeRepresentation(artificialStrings[url]));
     
   IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
   if(document && document->textDocument())
-    return new EditorCodeRepresentation(document->textDocument());
+    return CodeRepresentation::Ptr(new EditorCodeRepresentation(document->textDocument()));
   else
-    return new FileCodeRepresentation(url);
+    return CodeRepresentation::Ptr(new FileCodeRepresentation(url));
 }
 
 void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)

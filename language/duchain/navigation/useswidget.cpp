@@ -462,7 +462,7 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
 
     if(topContext && m_declaration.data()) {
 
-      CodeRepresentation* code = createCodeRepresentation(topContext->url());
+      CodeRepresentation::Ptr code = createCodeRepresentation(topContext->url());
       setUpdatesEnabled(false);
 
       IndexedTopDUContext localTopContext(topContext);
@@ -479,8 +479,6 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
         connect(usesWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)));
       }
       setUpdatesEnabled(true);
-
-      delete code;
     }
   }
 }

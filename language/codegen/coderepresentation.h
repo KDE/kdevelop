@@ -22,6 +22,8 @@
 #include "../languageexport.h"
 #include <language/duchain/indexedstring.h>
 
+#include <ksharedptr.h>
+
 class QString;
 
 namespace KTextEditor {
@@ -33,7 +35,7 @@ namespace KDevelop {
     class IndexedString;
     
 ///Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
-class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation {
+class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData{
   public:
     virtual ~CodeRepresentation() {
     }
@@ -49,6 +51,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation {
     ///Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
     ///You should enable this within tests, unless you really want to work on the disk.
     static void setDiskChangesForbidden(bool changesForbidden);
+    
+    typedef KSharedPtr<CodeRepresentation> Ptr;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
@@ -59,11 +63,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
       virtual QString rangeText(KTextEditor::Range range) const = 0;
       ///Must be called exactly once per startEdit()
       virtual void endEdit() = 0;
+    
+      typedef KSharedPtr<DynamicCodeRepresentation> Ptr;
 };
 
 ///Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
 ///The caller will own the code representation, and has to care about deleting it.
-KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation* createCodeRepresentation(IndexedString url);
+KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation::Ptr createCodeRepresentation(IndexedString url);
 
 ///An artificial source-code representation that can be used for testing.
 ///It inserts itself automatically into the code-representation framework,

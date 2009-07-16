@@ -148,13 +148,13 @@ IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file )
 
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
-    QMap<IndexedString, CodeRepresentation*> codeRepresentations;
+    QMap<IndexedString, CodeRepresentation::Ptr> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
 
     foreach(const IndexedString &file, d->changes.keys())
     {
-        CodeRepresentation* repr = createCodeRepresentation(file);
+        CodeRepresentation::Ptr repr = createCodeRepresentation(file);
         if(!repr)
             return ChangeResult(QString("Could not code for %1").arg(file.str()));
         
@@ -165,19 +165,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
         {
             ChangeResult result(d->removeDuplicates(file, sortedChangesList));
             if(!result)
-            {
-                qDeleteAll(codeRepresentations);
                 return result;
-            }
         }
 
         {
-            ChangeResult result(d->generateNewText(file, sortedChangesList, repr, newTexts[file]));
+            ChangeResult result(d->generateNewText(file, sortedChangesList, repr.data(), newTexts[file]));
             if(!result)
-            {
-                qDeleteAll(codeRepresentations);
                 return result;
-            }
         }
     }
     
@@ -191,19 +185,17 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     {
         oldTexts[file] = codeRepresentations[file]->text();
         
-        DocumentChangeSet::ChangeResult result = d->replaceOldText(codeRepresentations[file], newTexts[file], filteredSortedChanges[file]);
+        DocumentChangeSet::ChangeResult result = d->replaceOldText(codeRepresentations[file].data(), newTexts[file], filteredSortedChanges[file]);
         if(!result && d->replacePolicy == StopOnFailedChange)
         {
             //Revert all files 
             foreach(const IndexedString &revertFile, oldTexts.keys())
                 codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
             
-            qDeleteAll(codeRepresentations);
             return result;
         }
     }
     
-    qDeleteAll(codeRepresentations);
     ModificationRevisionSet::clearCache();
 
     d->updateFiles();
