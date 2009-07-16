@@ -22,6 +22,8 @@
 
 #include <QStringList>
 #include <qfileinfo.h>
+#include <qdir.h>
+#include <kdebug.h>
 
 namespace CMakeParserUtils
 {

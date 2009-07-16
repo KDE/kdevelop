@@ -71,6 +71,7 @@
 #include "icmakebuilder.h"
 #include "cmakeutils.h"
 #include "cmaketypes.h"
+#include "parser/cmakeparserutils.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -199,7 +200,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     version.takeFirst();
     
     VariableMap m_varsDef;
-    QStringList modulePathDef=guessCMakeModulesDirectories(cmakeCmd, version);
+    QStringList modulePathDef=CMakeParserUtils::guessCMakeModulesDirectories(cmakeCmd, version);
     m_modulePathPerProject[project]=modulePathDef;
     kDebug(9042) << "found module path is" << modulePathDef;
     m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
@@ -224,7 +225,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
 
     m_varsDef.insert("CMAKE_MODULE_PATH", modulePathDef);
-    m_varsDef.insert("CMAKE_ROOT", QStringList(guessCMakeRoot(cmakeCmd, version)));
+    m_varsDef.insert("CMAKE_ROOT", QStringList(CMakeParserUtils::guessCMakeRoot(cmakeCmd, version)));
 
     //Defines the behaviour that can't be identified on initialization scripts
 #ifdef Q_OS_WIN32
@@ -716,36 +717,6 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
 {
     Q_ASSERT(m_builder);
     return m_builder;
-}
-
-QString CMakeManager::guessCMakeShare(const QString& cmakeBin)
-{
-    QFileInfo bin(cmakeBin+"/../..");
-    return bin.absoluteFilePath();
-}
-
-QString CMakeManager::guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
-{;
-    QString bin(guessCMakeShare(cmakeBin));
-
-    QString versionNumber = version[0]+'.'+version[1];
-
-    bin += QString("/share/cmake-%1").arg(versionNumber);
-
-    QDir d(bin);
-    if(!d.exists())
-    {
-        bin += "/../cmake/";
-    }
-
-    QFileInfo fi(bin);
-    kDebug(9042) << "guessing: " << bin << fi.absoluteFilePath();
-    return fi.absoluteFilePath();
-}
-
-QStringList CMakeManager::guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
-{
-    return QStringList(guessCMakeRoot(cmakeBin, version)+"/Modules");
 }
 
 /*void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url)
