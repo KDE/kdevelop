@@ -24,7 +24,7 @@
 #include <interfaces/icore.h>
 
 namespace KDevelop {
-
+    
 static bool onDiskChangesForbidden = false;
 
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
@@ -186,8 +186,16 @@ class StringCodeRepresentation : public CodeRepresentation {
 
 static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
 
-CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
+bool artificialCodeRepresentationExists(IndexedString url)
+{
     if(artificialStrings.contains(url))
+        return true;
+    else
+        return artificialStrings.contains(IndexedString(CodeRepresentation::artificialUrl(url.str())));
+}
+
+CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
+    if(artificialCodeRepresentationExists(url))
         return CodeRepresentation::Ptr(new StringCodeRepresentation(artificialStrings[url]));
     
   IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
@@ -200,6 +208,13 @@ CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
 void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
 {
     onDiskChangesForbidden = changesForbidden;
+}
+
+KUrl CodeRepresentation::artificialUrl(const QString & name)
+{
+    KUrl url("artificial:///");
+    url.addPath(name);
+    return url;
 }
 
 InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(IndexedString file, QString text) : m_file(file) {

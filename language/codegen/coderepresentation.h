@@ -51,7 +51,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData{
     ///Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
     ///You should enable this within tests, unless you really want to work on the disk.
     static void setDiskChangesForbidden(bool changesForbidden);
-    
+   
+    ///Returns the specified name as a url for aritificial source code
+    ///suitable for code being inserted into the parser
+    static KUrl artificialUrl(const QString & name);
+ 
     typedef KSharedPtr<CodeRepresentation> Ptr;
 };
 
@@ -69,6 +73,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeReprese
 
 ///Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
 KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation::Ptr createCodeRepresentation(IndexedString url);
+
+///@return true if an artificial code representation already exists for the specified URL
+KDEVPLATFORMLANGUAGE_EXPORT bool artificialCodeRepresentationExists(IndexedString url);
 
 ///An artificial source-code representation that can be used for testing.
 ///It inserts itself automatically into the code-representation framework,
