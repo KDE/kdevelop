@@ -121,7 +121,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
         break;
     }
 
-    if( dec->kind() == Declaration::Instance )
+    if( dec->kind() == Declaration::Instance && !dec->isFunctionDeclaration() )
       p |= CodeCompletionModel::Variable;
   }
 
