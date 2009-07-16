@@ -57,8 +57,8 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/codecompletion/codecompletion.h>
+#include <language/codegen/applychangeswidget.h>
 
-#include "applychangeswidget.h"
 #include "cmakedocumentation.h"
 #include "cmakemodelitems.h"
 #include "cmakenavigationwidget.h"

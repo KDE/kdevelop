@@ -31,14 +31,13 @@ set( cmakecommon_UI
   cmakebuilddirchooser.ui
 )
 
-set( cmakemanager_SRCS 
+set( cmakemanager_SRCS
   cmakenavigationwidget.cpp
   cmakedocumentation.cpp
   cmakemodelitems.cpp
   cmakemanager.cpp
   cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
-  applychangeswidget.cpp
 )
 
 set( cmakemanager_UI
