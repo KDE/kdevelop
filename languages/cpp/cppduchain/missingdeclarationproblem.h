@@ -33,8 +33,7 @@ public:
   MissingDeclarationProblem(MissingDeclarationType::Ptr type);
 
   virtual KSharedPtr< KDevelop::IAssistant > solutionAssistant() const;
-  virtual KDevelop::Problem::Severity severity() const;
-  
+
   MissingDeclarationType::Ptr type;
 };
 

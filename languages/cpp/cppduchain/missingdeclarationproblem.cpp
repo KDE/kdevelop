@@ -25,10 +25,7 @@ namespace Cpp {
 
 MissingDeclarationProblem::MissingDeclarationProblem(Cpp::MissingDeclarationType::Ptr _type) : type(_type) {
   setDescription(i18n("Declaration not found: %1", type->identifier().toString()));
-}
-
-KDevelop::Problem::Severity Cpp::MissingDeclarationProblem::severity() const {
-  return Hint;
+  setSeverity(ProblemData::Hint);
 }
 
 KSharedPtr< KDevelop::IAssistant > Cpp::MissingDeclarationProblem::solutionAssistant() const {
