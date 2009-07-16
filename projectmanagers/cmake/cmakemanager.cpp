@@ -326,33 +326,8 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file,
                                                         KDevelop::IProject * project, ReferencedTopDUContext parent)
 {
-    kDebug(9042) << "Running cmake script: " << file;
-    CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-    if(f.isEmpty())
-    {
-        kDebug() << "There is no such file: " << file;
-        return 0;
-    }
-
-    VariableMap *vm=&m_varsPerProject[project];
-    MacroMap *mm=&m_macrosPerProject[project];
-    vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]));
-    vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
-    vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(project->folder().toLocalFile(KUrl::RemoveTrailingSlash)));
-
-    CMakeProjectVisitor v(file, parent);
-    v.setCacheValues( &m_projectCache[project] );
-    v.setVariableMap(vm);
-    v.setMacroMap(mm);
-    v.setModulePath(m_modulePathPerProject[project]);
-    v.walk(f, 0, true);
-
-    vm->remove("CMAKE_CURRENT_LIST_FILE");
-    vm->remove("CMAKE_CURRENT_SOURCE_DIR");
-    vm->remove("CMAKE_CURRENT_BINARY_DIR");
-
     m_watchers[project]->addFile(file);
-    return v.context();
+    return CMakeParserUtils::includeScript( file, parent, &m_varsPerProject[project], &m_macrosPerProject[project], project->folder().toLocalFile(KUrl::RemoveTrailingSlash), &m_projectCache[project], m_modulePathPerProject[project]);
 }
 
 QSet<QString> removeMatches(const QString& exp, const QStringList& orig)

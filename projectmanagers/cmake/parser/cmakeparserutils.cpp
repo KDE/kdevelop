@@ -27,6 +27,7 @@
 #include "variablemap.h"
 #include <kprocess.h>
 #include <kstandarddirs.h>
+#include "cmakeprojectvisitor.h"
 
 namespace CMakeParserUtils
 {
@@ -135,6 +136,35 @@ namespace CMakeParserUtils
         kDebug(9042) << "executed" << execName << "<" << t;
         
         return t;
+    }
+
+    
+    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent, VariableMap* variables, MacroMap* macros, const QString& sourcedir, CacheValues* cache, const QStringList& modulesDir )
+    {
+        kDebug(9042) << "Running cmake script: " << file;
+        CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
+        if(f.isEmpty())
+        {
+            kDebug() << "There is no such file: " << file;
+            return 0;
+        }
+        
+        variables->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(variables->value("CMAKE_BINARY_DIR")[0]));
+        variables->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
+        variables->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
+        
+        CMakeProjectVisitor v(file, parent);
+        v.setCacheValues( cache );
+        v.setVariableMap(variables);
+        v.setMacroMap(macros);
+        v.setModulePath(modulesDir);
+        v.walk(f, 0, true);
+        
+        variables->remove("CMAKE_CURRENT_LIST_FILE");
+        variables->remove("CMAKE_CURRENT_SOURCE_DIR");
+        variables->remove("CMAKE_CURRENT_BINARY_DIR");
+        
+        return v.context();
     }
 
     

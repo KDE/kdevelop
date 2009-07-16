@@ -26,6 +26,8 @@
 #include <QString>
 #include <QStringList>
 #include <QPair>
+#include "cmaketypes.h"
+#include <language/duchain/topducontext.h>
 
 class VariableMap;
 
@@ -50,6 +52,8 @@ namespace CMakeParserUtils
 
     /** Runs the process specified by @p execName with @p args */
     KDEVCMAKECOMMON_EXPORT QString executeProcess(const QString& execName, const QStringList& args=QStringList());
+    
+    KDEVCMAKECOMMON_EXPORT KDevelop::ReferencedTopDUContext includeScript( const QString& file, KDevelop::ReferencedTopDUContext parent, VariableMap* variables, MacroMap* macros, const QString& sourcedir, CacheValues* cache, const QStringList& modulesDir );
 }
 
 #endif
