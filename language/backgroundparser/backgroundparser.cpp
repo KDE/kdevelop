@@ -668,8 +668,7 @@ void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTex
 }
 
 void BackgroundParser::startTimer() {
-    if (!d->m_timer.isActive())
-        d->m_timer.start(d->m_delay);
+    d->m_timer.start(d->m_delay);
 }
 
 
