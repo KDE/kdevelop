@@ -29,6 +29,7 @@
 #include "cmakelistsparser.h"
 #include "cmakeprojectvisitor.h"
 #include "cmakeast.h"
+#include <cmakeparserutils.h>
 
 QTEST_MAIN( CMakeLoadProjectTest )
 
@@ -44,27 +45,35 @@ CMakeLoadProjectTest::~CMakeLoadProjectTest()
 
 void CMakeLoadProjectTest::testTinyCMakeProject()
 {
-    KDevelop::ReferencedTopDUContext m_fakeContext;
-    {
-        DUChainWriteLocker lock(DUChain::lock());
-        m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
-        DUChain::self()->addDocumentChain(m_fakeContext);
-    }
-
-    QString projectfile = CMAKE_TESTS_PROJECTS_DIR"/tiny_project/CMakeLists.txt";
+    QString sourcedir = QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project";
+    QString projectfile = sourcedir+"/CMakeLists.txt";
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
     QVERIFY(code.count() != 0);
 
+    QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
     MacroMap mm;
-    VariableMap vm;
+    VariableMap vm = initials.first;
     CacheValues cv;
-    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("."));
+    vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
+    
+    KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
+    DUChain::self()->addDocumentChain(buildstrapContext);
+    ReferencedTopDUContext ref=buildstrapContext;
+    QStringList modulesPath = vm["CMAKE_MODULE_PATH"];
+    foreach(const QString& script, initials.second)
+    {
+        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &vm, &mm, sourcedir, &cv, modulesPath );
+    }
+    
+    vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));
+    vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(projectfile));
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
 
-    CMakeProjectVisitor v(projectfile, m_fakeContext);
+    CMakeProjectVisitor v(projectfile, ref);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
     v.setCacheValues(&cv);
-//     v.setModulePath();
+    v.setModulePath(modulesPath);
     v.walk(code, 0);
 
     ReferencedTopDUContext ctx=v.context();
