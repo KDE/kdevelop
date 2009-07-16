@@ -53,8 +53,6 @@ class TestCppCodegen : public QObject
     
     QList<KDevelop::IndexedString> m_artificialCodeNames;
     ContextContainer m_contexts;
-    
-    static const QString m_testUrl;
 };
 
 #endif // TEST_CPPCODEGEN_H

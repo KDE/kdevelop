@@ -68,6 +68,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/smartconverter.h>
 #include <language/duchain/functiondefinition.h>
+#include <language/codegen/coderepresentation.h>
 #include <interfaces/contextmenuextension.h>
 
 #include "preprocessjob.h"
@@ -638,10 +639,16 @@ restart:
         goto restart;
     }
 
-    if( ret.first.isEmpty() && !quiet ) {
-        kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
-        foreach( const KUrl& path, includePaths )
-            kDebug(9007) << path;
+    if( ret.first.isEmpty())
+    {
+        //Check if there is an available artificial representation
+        if(!includeName.isNull() && includeName[0] == '/' && artificialCodeRepresentationExists(IndexedString(includeName)))
+            ret.first = CodeRepresentation::artificialUrl(includeName);
+        else if(!quiet ) {
+            kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
+            foreach( const KUrl& path, includePaths )
+                kDebug(9007) << path;
+        }
     }
     
     return ret;

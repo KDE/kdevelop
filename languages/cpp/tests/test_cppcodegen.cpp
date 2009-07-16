@@ -38,7 +38,7 @@
 
 ///gets the top context of artificial test code by just specifying the file name, more efficient and safe than calling contextForUrl
 //Needs to be a macro because QVERIFY2 only works directly on the test function
-#define GET_CONTEXT(file, top)  IndexedString str_(m_testUrl + file);\
+#define GET_CONTEXT(file, top)  IndexedString str_(CodeRepresentation::artificialUrl(file));\
                                 QVERIFY2(m_contexts[str_], "Requested artificial file not found");\
                                 top = m_contexts[str_].data()
 
@@ -46,20 +46,19 @@ QTEST_KDEMAIN(TestCppCodegen, GUI )
 
 using namespace KDevelop;
 
-const QString TestCppCodegen::m_testUrl("test:///");
-
 void TestCppCodegen::initTestCase()
 {
-  //TODO Have some problem with getting the KGlobal::mainComponent
+  //TODO Have some problem with CppLanguageSuppor having an invalid component return from its factory
   //Initialize KDevelop components
   AutoTestShell::init();
   Core::initialize(KDevelop::Core::NoUi);
   
   //Insert all the test data as a string representation
   //NOTE: When adding new test artificial code, remember to update cppcodegen_snippets.cpp, and if possible update related tests
-  addArtificialCode(IndexedString(m_testUrl + "ClassA.h"), "class ClassA { public: ClassA(); private: int i;  float f, j;\
+  //NOTE: To #include another artificial Code Representation, it must be as an absolute path
+  addArtificialCode(IndexedString(CodeRepresentation::artificialUrl("ClassA.h")), "class ClassA { public: ClassA(); private: int i;  float f, j;\
                                                        struct ContainedStruct { int i; ClassA * p;  } structVar; };");
-  addArtificialCode(IndexedString(m_testUrl + "ClassA.cpp"), "ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; }");
+  addArtificialCode(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")), "#include</ClassA.h> \n ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; }");
   
   parseArtificialCode();
 }
