@@ -52,6 +52,23 @@ int ProblemModel::rowCount(const QModelIndex & parent) const
     return 0;
 }
 
+QString getDisplayUrl(const QString &url, const KUrl &base) {
+    KUrl location(url);
+    QString displayedUrl;
+    if ( location.protocol() == base.protocol() &&
+            location.user() == base.user() &&
+            location.host() == base.host() ) {
+        bool isParent;
+        displayedUrl = KUrl::relativePath(base.path(), location.path(), &isParent );
+        if ( !isParent ) {
+            displayedUrl = location.pathOrUrl();
+        }
+    } else {
+        displayedUrl = location.pathOrUrl();
+    }
+    return displayedUrl;
+}
+
 QVariant ProblemModel::data(const QModelIndex & index, int role) const
 {
     if (!index.isValid())
@@ -89,11 +106,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return p->description();
                     case File: {
-                        QString relative = KUrl::relativePath(m_base.toLocalFile(), p->finalLocation().document().str());
-                        if(relative.startsWith(".."))
-                            return p->finalLocation().document().str();
-                        else
-                            return relative;
+                        return getDisplayUrl(p->finalLocation().document().str(), m_base);
                     }
                     case Line:
                         if (p->finalLocation().isValid())
@@ -120,7 +133,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return i18n("In file included from:");
                     case File: {
-                        return KUrl::relativePath(m_base.toLocalFile(), p->locationStack().at(index.row()).document().str());
+                        return getDisplayUrl(p->locationStack().at(index.row()).document().str(), m_base);
                     } case Line:
                         if (p->finalLocation().isValid())
                             return QString::number(p->finalLocation().start().line() + 1);

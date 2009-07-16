@@ -163,7 +163,7 @@ void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
 
 void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
 {
-  KUrl url(job->document().str());
+  KUrl url = job->document().toUrl();
   IDocument* active = ICore::self()->documentController()->activeDocument();
 
   if(active) {
