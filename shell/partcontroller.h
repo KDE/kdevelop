@@ -59,6 +59,8 @@ public:
 
     KTextEditor::Document* createTextPart( const QString &encoding );
 
+    bool canCreatePart( const KUrl &url );
+
     KParts::Part* createPart( const KUrl &url );
     KParts::Part* createPart( const QString &mimeType,
                               const QString &partType,

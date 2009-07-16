@@ -207,6 +207,28 @@ KParts::Part* PartController::createPart( const QString & mimeType,
     return 0;
 }
 
+bool PartController::canCreatePart(const KUrl& url)
+{
+    if (!url.isValid()) return false;
+
+    KMimeType::Ptr mimeType;
+    if ( url.isEmpty() )
+        mimeType = KMimeType::mimeType("text/plain");
+    else
+        mimeType = KMimeType::findByUrl( url );
+
+    KService::List offers = KMimeTypeTrader::self()->query(
+                                mimeType->name(),
+                                "KParts/ReadOnlyPart",
+                                QString( "'%1' in ServiceTypes" ).arg( "KParts/ReadOnlyPart" ) );
+    offers += KMimeTypeTrader::self()->query(
+                                mimeType->name(),
+                                "KParts/ReadOnlyPart",
+                                QString( "'%1' in ServiceTypes" ).arg( "KParts/ReadWritePart" ) );
+
+    return offers.count() > 0;
+}
+
 KParts::Part* PartController::createPart( const KUrl & url )
 {
     KMimeType::Ptr mimeType;

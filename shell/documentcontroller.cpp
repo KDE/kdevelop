@@ -51,6 +51,7 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "partcontroller.h"
 #include "savedialog.h"
+#include <kmessagebox.h>
 
 
 namespace KDevelop
@@ -370,8 +371,16 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         }
         if ( !d->documents.contains(url) && Core::self()->partControllerInternal()->isTextType(mimeType))
             d->documents[url] = new TextDocument(url, Core::self(), encoding);
-        else if( !d->documents.contains(url) )
+        else if( !d->documents.contains(url) && Core::self()->partControllerInternal()->canCreatePart(url) )
             d->documents[url] = new PartDocument(url, Core::self());
+        else
+        {
+            int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?").arg(url.fileName()), i18n("Could Not Find Editor"));
+            if (openAsText == KMessageBox::Yes)
+                d->documents[url] = new TextDocument(url, Core::self(), encoding);
+            else
+                return 0;
+        }
         emitOpened = d->documents.contains(url);
     }
     IDocument *doc = d->documents[url];
