@@ -48,6 +48,12 @@ public:
         SemanticAnalysis /**< problem during semantic analysis */
     };
 
+    enum Severity {
+        Error,
+        Warning,
+        Hint        //For implementation-helpers and such stuff
+    };
+
     ProblemData()
         : source(Unknown)
     {
@@ -58,6 +64,7 @@ public:
 //     QStack<DocumentCursor> locationStack;
     IndexedString description;
     IndexedString explanation;
+    Severity severity;
 };
 
 /**
@@ -106,19 +113,20 @@ public:
      */
     QString explanation() const;
     void setExplanation(const QString& explanation);
-
-    enum Severity {
-        Error,
-        Warning,
-        Hint        //For implementation-helpers and such stuff
-    };
     
     /**
-     * Should return the severity of this problem. The default-implementation returns Error.
+     * Get the severity of this problem.
      * This is used for example to decide for a highlighting color.
+     * 
+     * @see setSeverity()
      */
-    virtual Severity severity() const;
-
+    ProblemData::Severity severity() const;
+    
+    /**
+     * Set the severity of this problem.
+     */
+    void setSeverity(ProblemData::Severity severity);
+    
      /**
      * If this problem can be solved, this may return an assistant for the solution.
      */

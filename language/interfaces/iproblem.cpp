@@ -114,8 +114,12 @@ void KDevelop::Problem::setSolutionAssistant(KSharedPtr< KDevelop::IAssistant > 
     m_solution = assistant;
 }
 
-KDevelop::Problem::Severity KDevelop::Problem::severity() const {
-    return Error;
+KDevelop::ProblemData::Severity KDevelop::Problem::severity() const {
+    return d_func()->severity;
+}
+
+void KDevelop::Problem::setSeverity(ProblemData::Severity severity) {
+    d_func_dynamic()->severity = severity;
 }
 
 /*
