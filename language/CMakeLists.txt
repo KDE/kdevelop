@@ -103,6 +103,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codecompletion/codecompletionhelper.cpp
     codecompletion/normaldeclarationcompletionitem.cpp
 
+    codegen/applychangeswidget.cpp
     codegen/createclass.cpp
     codegen/codegenerator.cpp
     codegen/documentchangeset.cpp
@@ -293,6 +294,7 @@ install(FILES
 )
 
 install(FILES
+    codegen/applychangeswidget.h
     codegen/createclass.h
     codegen/overridespage.h
     codegen/astchangeset.h
