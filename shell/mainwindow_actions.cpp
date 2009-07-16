@@ -144,13 +144,7 @@ void MainWindowPrivate::toggleFullScreen(bool fullScreen)
 
 void MainWindowPrivate::fileNew()
 {
-    int nextEmptyDocNumber = DocumentController::nextEmptyDocumentNumber();
-    KUrl url;
-    if (nextEmptyDocNumber > 0)
-        url = KUrl(QString("%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
-    else
-        url = KUrl(EMPTY_DOCUMENT_URL);
-    Core::self()->documentControllerInternal()->openDocument(url);
+    Core::self()->documentControllerInternal()->openDocument(DocumentController::nextEmptyDocumentUrl());
 }
 
 void MainWindowPrivate::viewAddNewToolView()

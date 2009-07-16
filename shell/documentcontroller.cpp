@@ -263,13 +263,9 @@ void DocumentController::slotOpenDocument(const KUrl &url)
 
 IDocument* DocumentController::openDocumentFromText( const QString& data )
 {
-    KTemporaryFile *temp = new KTemporaryFile();
-    temp->setSuffix("kdevtmp");
-    temp->open();
-    temp->write(data.toUtf8());
-    temp->flush();
-    d->tempFiles << temp;
-    return openDocument(temp->fileName());
+    IDocument* d = openDocument(nextEmptyDocumentUrl());
+    d->textDocument()->setText( data );
+    return d;
 }
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
@@ -711,7 +707,7 @@ bool DocumentController::isEmptyDocumentUrl(const KUrl &url)
     return r.indexIn(url.prettyUrl()) != -1;
 }
 
-int DocumentController::nextEmptyDocumentNumber()
+KUrl DocumentController::nextEmptyDocumentUrl()
 {
     int nextEmptyDocNumber = 0;
     foreach (IDocument *doc, Core::self()->documentControllerInternal()->openDocuments())
@@ -725,7 +721,13 @@ int DocumentController::nextEmptyDocumentNumber()
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, 1);
         }
     }
-    return nextEmptyDocNumber;
+    
+    KUrl url;
+    if (nextEmptyDocNumber > 0)
+        url = KUrl(QString("%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
+    else
+        url = KUrl(EMPTY_DOCUMENT_URL);
+    return url;
 }
 
 }

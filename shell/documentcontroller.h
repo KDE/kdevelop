@@ -105,7 +105,7 @@ public:
 
     /**checks that url is an url of empty document*/
     static bool isEmptyDocumentUrl(const KUrl &url);
-    static int nextEmptyDocumentNumber();
+    static KUrl nextEmptyDocumentUrl();
 
 public Q_SLOTS:
     /**Opens a new or existing document.
