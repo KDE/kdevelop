@@ -145,6 +145,14 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
 QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p)
 {
 
+  if( (p & CodeCompletionModel::Variable) )
+    if( (p & CodeCompletionModel::Protected) )
+      RETURN_CACHED_ICON("CVprotected_var")
+    else if( p & CodeCompletionModel::Private )
+      RETURN_CACHED_ICON("CVprivate_var")
+    else
+      RETURN_CACHED_ICON("CVpublic_var")
+  else
   if( (p & CodeCompletionModel::Union) && (p & CodeCompletionModel::Protected) )
     RETURN_CACHED_ICON("protected_union")
 
@@ -203,16 +211,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
       RETURN_CACHED_ICON("private_function")
     else
       RETURN_CACHED_ICON("function")
-
-  else if( (p & CodeCompletionModel::Variable) )
-    if( (p & CodeCompletionModel::Protected) )
-      RETURN_CACHED_ICON("CVprotected_var")
-    else if( p & CodeCompletionModel::Private )
-      RETURN_CACHED_ICON("CVprivate_var")
-    else
-      RETURN_CACHED_ICON("CVpublic_var")
-
-  else if( p & CodeCompletionModel::Protected )
+  if( p & CodeCompletionModel::Protected )
     RETURN_CACHED_ICON("protected_field")
   else if( p & CodeCompletionModel::Private )
     RETURN_CACHED_ICON("private_field")
