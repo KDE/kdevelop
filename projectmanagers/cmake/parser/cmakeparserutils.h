@@ -24,6 +24,10 @@
 
 #include <QList>
 #include <QString>
+#include <QStringList>
+#include <QPair>
+
+class VariableMap;
 
 namespace CMakeParserUtils
 {
@@ -32,8 +36,20 @@ namespace CMakeParserUtils
      * be a version number.
      */
     KDEVCMAKECOMMON_EXPORT QList<int> parseVersion(const QString &version, bool *ok);
+    /**
+     * extracts the value of a variable from the --system-information output from CMake
+     */
     KDEVCMAKECOMMON_EXPORT QString valueFromSystemInfo( const QString& variable, const QString& systeminfo );
     
+    /**
+     * produces a map of initially set variables and scripts to include. 
+     * This is based on the CMake output from --system-information
+     * and on reading the CMake sources.
+     */
+    KDEVCMAKECOMMON_EXPORT QPair<VariableMap,QStringList> initialVariables( );
+
+    /** Runs the process specified by @p execName with @p args */
+    KDEVCMAKECOMMON_EXPORT QString executeProcess(const QString& execName, const QStringList& args=QStringList());
 }
 
 #endif

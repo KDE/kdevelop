@@ -24,6 +24,9 @@
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <kdebug.h>
+#include "variablemap.h"
+#include <kprocess.h>
+#include <kstandarddirs.h>
 
 namespace CMakeParserUtils
 {
@@ -61,6 +64,77 @@ namespace CMakeParserUtils
             }
         }
         return QString();
+    }
+
+
+    QPair<VariableMap,QStringList> initialVariables()
+    {
+        QString cmakeCmd=KStandardDirs::findExe("cmake");
+        
+        QString systeminfo=executeProcess(cmakeCmd, QStringList("--system-information"));
+        
+        VariableMap m_varsDef;
+        QStringList modulePathDef=QStringList(CMakeParserUtils::valueFromSystemInfo( "CMAKE_ROOT", systeminfo ) + "/Modules");
+        kDebug(9042) << "found module path is" << modulePathDef;
+        m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
+        m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
+        m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
+        m_varsDef.insert("CMAKE_MAJOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MAJOR_VERSION", systeminfo)));
+        m_varsDef.insert("CMAKE_MINOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MINOR_VERSION", systeminfo))); 
+        m_varsDef.insert("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
+        
+        QStringList cmakeInitScripts;
+        #ifdef Q_OS_WIN
+            cmakeInitScripts << "CMakeMinGWFindMake.cmake";
+            cmakeInitScripts << "CMakeMSYSFindMake.cmake";
+            cmakeInitScripts << "CMakeNMakeFindMake.cmake";
+            cmakeInitScripts << "CMakeVS8FindMake.cmake";
+        #else
+            cmakeInitScripts << "CMakeUnixFindMake.cmake";
+        #endif
+        cmakeInitScripts << "CMakeDetermineSystem.cmake";
+        cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
+        cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
+        cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
+        
+        m_varsDef.insert("CMAKE_MODULE_PATH", modulePathDef);
+        m_varsDef.insert("CMAKE_ROOT", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_ROOT", systeminfo)));
+        
+        //Defines the behaviour that can't be identified on initialization scripts
+        #ifdef Q_OS_WIN32
+            m_varsDef.insert("WIN32", QStringList("1"));
+            m_varsDef.insert("CMAKE_HOST_WIN32", QStringList("1"));
+        #else
+            m_varsDef.insert("UNIX", QStringList("1"));
+            m_varsDef.insert("CMAKE_HOST_UNIX", QStringList("1"));
+        #endif
+        #ifdef Q_OS_MAC
+            m_varsDef.insert("APPLE", QStringList("1"));
+            m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
+        #endif
+        return QPair<VariableMap,QStringList>( m_varsDef, cmakeInitScripts );
+    }
+
+    QString executeProcess(const QString& execName, const QStringList& args)
+    {
+        kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+        
+        KProcess p;
+        p.setOutputChannelMode(KProcess::MergedChannels);
+        p.setProgram(execName, args);
+        p.start();
+        
+        if(!p.waitForFinished())
+        {
+            kDebug() << "failed to execute:" << execName;
+        }
+        
+        QByteArray b = p.readAllStandardOutput();
+        QString t;
+        t.prepend(b.trimmed());
+        kDebug(9042) << "executed" << execName << "<" << t;
+        
+        return t;
     }
 
     

@@ -191,53 +191,10 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 
 KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project, const KUrl& baseUrl)
 {
-    QString cmakeCmd=KStandardDirs::findExe("cmake");
-    
-    QString systeminfo=CMake::executeProcess(cmakeCmd, QStringList("--system-information"));
-    
-    VariableMap m_varsDef;
-    QStringList modulePathDef=QStringList(CMakeParserUtils::valueFromSystemInfo( "CMAKE_ROOT", systeminfo ) + "/Modules");
-    m_modulePathPerProject[project]=modulePathDef;
-    kDebug(9042) << "found module path is" << modulePathDef;
-    m_varsDef.insert("CMAKE_BINARY_DIR", QStringList("#[bin_dir]"));
-    m_varsDef.insert("CMAKE_INSTALL_PREFIX", QStringList("#[install_dir]"));
-    m_varsDef.insert("CMAKE_COMMAND", QStringList(cmakeCmd));
-    m_varsDef.insert("CMAKE_MAJOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MAJOR_VERSION", systeminfo)));
-    m_varsDef.insert("CMAKE_MINOR_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_MINOR_VERSION", systeminfo))); 
-    m_varsDef.insert("CMAKE_PATCH_VERSION", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_PATCH_VERSION", systeminfo)));
-    
-    QStringList cmakeInitScripts;
-#ifdef Q_OS_WIN
-    cmakeInitScripts << "CMakeMinGWFindMake.cmake";
-    cmakeInitScripts << "CMakeMSYSFindMake.cmake";
-    cmakeInitScripts << "CMakeNMakeFindMake.cmake";
-    cmakeInitScripts << "CMakeVS8FindMake.cmake";
-#else
-    cmakeInitScripts << "CMakeUnixFindMake.cmake";
-#endif
-    cmakeInitScripts << "CMakeDetermineSystem.cmake";
-    cmakeInitScripts << "CMakeSystemSpecificInformation.cmake";
-    cmakeInitScripts << "CMakeDetermineCCompiler.cmake";
-    cmakeInitScripts << "CMakeDetermineCXXCompiler.cmake";
-
-    m_varsDef.insert("CMAKE_MODULE_PATH", modulePathDef);
-    m_varsDef.insert("CMAKE_ROOT", QStringList(CMakeParserUtils::valueFromSystemInfo("CMAKE_ROOT", systeminfo)));
-
-    //Defines the behaviour that can't be identified on initialization scripts
-#ifdef Q_OS_WIN32
-    m_varsDef.insert("WIN32", QStringList("1"));
-    m_varsDef.insert("CMAKE_HOST_WIN32", QStringList("1"));
-#else
-    m_varsDef.insert("UNIX", QStringList("1"));
-    m_varsDef.insert("CMAKE_HOST_UNIX", QStringList("1"));
-#endif
-#ifdef Q_OS_MAC
-    m_varsDef.insert("APPLE", QStringList("1"));
-    m_varsDef.insert("CMAKE_HOST_APPLE", QStringList("1"));
-#endif
-
+    QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
+    m_modulePathPerProject[project]=initials.first["CMAKE_MODULE_PATH"];
     m_macrosPerProject[project].clear();
-    m_varsPerProject[project]=m_varsDef;
+    m_varsPerProject[project]=initials.first;
     m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
 
     KSharedConfig::Ptr cfg = project->projectConfiguration();
@@ -256,10 +213,10 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
         if( !l.isEmpty() )
             group.writeEntry("CMakeDir", l);
         else
-            group.writeEntry("CMakeDir", modulePathDef);
+            group.writeEntry("CMakeDir", m_modulePathPerProject[project]);
     }
     else
-        group.writeEntry("CMakeDir", modulePathDef);
+        group.writeEntry("CMakeDir", m_modulePathPerProject[project]);
 
     
     KDevelop::ReferencedTopDUContext buildstrapContext;
@@ -282,7 +239,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
         Q_ASSERT(buildstrapContext);
     }
     ReferencedTopDUContext ref=buildstrapContext;
-    foreach(const QString& script, cmakeInitScripts)
+    foreach(const QString& script, initials.second)
     {
         ref = includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project], QStringList()),
                               project, ref);
