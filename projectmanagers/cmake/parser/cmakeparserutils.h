@@ -32,7 +32,11 @@ namespace CMakeParserUtils
      * be a version number.
      */
     KDEVCMAKECOMMON_EXPORT QList<int> parseVersion(const QString &version, bool *ok);
-
+    KDEVCMAKECOMMON_EXPORT QString guessCMakeShare(const QString& cmakeBin);
+    KDEVCMAKECOMMON_EXPORT QString guessCMakeRoot(const QString& cmakeBin, const QStringList& version);
+    KDEVCMAKECOMMON_EXPORT QStringList guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version);
+    
+    
 }
 
 #endif

@@ -103,8 +103,6 @@ public:
     
     virtual bool reload(KDevelop::ProjectBaseItem*);
 
-    static QStringList guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version);
-
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
     
     QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const;
@@ -124,8 +122,6 @@ public slots:
     void jumpToDeclaration();
 
 private:
-    static QString guessCMakeShare(const QString& cmakeBin);
-    static QString guessCMakeRoot(const QString& cmakeBin, const QStringList& version);
     void parseOnly(KDevelop::IProject* project, const KUrl &url);
     void reimport(CMakeFolderItem*);
     CacheValues readCache(const KUrl &path) const;

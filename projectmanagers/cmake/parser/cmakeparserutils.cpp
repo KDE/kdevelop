@@ -21,6 +21,7 @@
 #include "cmakeparserutils.h"
 
 #include <QStringList>
+#include <qfileinfo.h>
 
 namespace CMakeParserUtils
 {
@@ -45,6 +46,37 @@ namespace CMakeParserUtils
         }
         return versionNumList;
     }
+    
+    QString guessCMakeShare(const QString& cmakeBin)
+    {
+        QFileInfo bin(cmakeBin+"/../..");
+        return bin.absoluteFilePath();
+    }
+    
+    QString guessCMakeRoot(const QString & cmakeBin, const QStringList& version)
+    {
+        QString bin(guessCMakeShare(cmakeBin));
+        
+        QString versionNumber = version[0]+'.'+version[1];
+        
+        bin += QString("/share/cmake-%1").arg(versionNumber);
+        
+        QDir d(bin);
+        if(!d.exists())
+        {
+            bin += "/../cmake/";
+        }
+        
+        QFileInfo fi(bin);
+        kDebug(9042) << "guessing: " << bin << fi.absoluteFilePath();
+        return fi.absoluteFilePath();
+    }
+    
+    QStringList guessCMakeModulesDirectories(const QString& cmakeBin, const QStringList& version)
+    {
+        return QStringList(guessCMakeRoot(cmakeBin, version)+"/Modules");
+    }
+    
     
 }
     
