@@ -124,13 +124,11 @@ void TestCppCodegen::parseArtificialCode()
   //Update the context for all the representations, and save their contexts in the contexts map
   foreach(IndexedString file, m_artificialCodeNames)
   {
-    CodeRepresentation * code = createCodeRepresentation(file);
+    CodeRepresentation::Ptr code = createCodeRepresentation(file);
     
     Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), KDevelop::TopDUContext::AllDeclarationsAndContexts);
     ///TODO maybe only needs to be done once
     Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AllDeclarationsAndContexts));
-    
-    delete code;
   }
 }
 
