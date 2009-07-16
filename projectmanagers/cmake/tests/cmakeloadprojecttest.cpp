@@ -78,7 +78,9 @@ void CMakeLoadProjectTest::testTinyCMakeProject()
 
     ReferencedTopDUContext ctx=v.context();
     QVERIFY(ctx);
-
+    QCOMPARE(v.targets().count(), 1);
+    QCOMPARE(v.targets().at( 0 ).name, QString("foo") );
+    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "foo.cpp" );
 }
 
 #include "cmakeloadprojecttest.moc"
