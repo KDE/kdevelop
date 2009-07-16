@@ -730,12 +730,12 @@ QString CMakeManager::guessCMakeRoot(const QString & cmakeBin, const QStringList
 
     QString versionNumber = version[0]+'.'+version[1];
 
-    bin += QString("/share/cmake-%1").arg(versionNumber));
+    bin += QString("/share/cmake-%1").arg(versionNumber);
 
     QDir d(bin);
-    if(!d.exists(ret))
+    if(!d.exists())
     {
-        bin += "/../cmake/");
+        bin += "/../cmake/";
     }
 
     QFileInfo fi(bin);
