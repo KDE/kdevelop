@@ -29,6 +29,7 @@
 #include <interfaces/icore.h>
 #include <kmimetype.h>
 #include "cmakemanager.h"
+#include <cmakeparserutils.h>
 
 CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m)
     : mCMakeCmd(cmakeCmd), m_manager(m)
@@ -45,7 +46,7 @@ void CMakeDocumentation::delayedInitialization()
 
 void CMakeDocumentation::collectIds(const QString& param, Type type)
 {
-    QStringList ids=CMake::executeProcess(mCMakeCmd, QStringList(param)).split('\n');
+    QStringList ids=CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(param)).split('\n');
     ids.takeFirst();
     foreach(const QString& name, ids)
     {
@@ -95,7 +96,7 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     
     QString desc;
     if(!arg.isEmpty())
-        desc="<pre>"+CMake::executeProcess(mCMakeCmd, QStringList(arg) << identifier)+"</pre>";
+        desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(arg) << identifier)+"</pre>";
     
     {
         KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
