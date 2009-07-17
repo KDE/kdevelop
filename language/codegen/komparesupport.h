@@ -55,8 +55,11 @@ class KompareSupport<false>
     }
 };
 
-
-typedef KompareSupport<KOMPARE_ENABLED> KompareWidgets;
+#ifdef KOMPARE_ENABLED
+typedef KompareSupport<true> KompareWidgets;
+#else
+typedef KompareSupport<false> KompareWidgets;
+#endif //KOMPARE_ENABLED
 }
 
 #undef KOMPARE_ENABLED
