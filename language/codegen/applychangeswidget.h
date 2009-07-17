@@ -22,15 +22,13 @@
 #include <KDialog>
 #include "../languageexport.h"
 
-namespace KParts { class ReadWritePart; }
 namespace KTextEditor { class Document; class Range;}
 class KUrl;
-class QStandardItem;
-class QStandardItemModel;
 class QModelIndex;
 
 namespace KDevelop
 {
+class IndexedString;
 class ApplyChangesWidgetPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
@@ -41,6 +39,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         ~ApplyChangesWidget();
         
         KTextEditor::Document* document() const;
+        
+        void AddDocuments(const IndexedString & original, const IndexedString & modified);
     
     private Q_SLOTS:
         void change (KTextEditor::Document *document, const KTextEditor::Range &oldRange,
@@ -48,6 +48,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         void insertion (KTextEditor::Document *document, const KTextEditor::Range &range);
         void removal (KTextEditor::Document *document, const KTextEditor::Range &range);
         void jump( const QModelIndex &);
+        void switchEditView() {};
+        
+        void indexChanged(int);
         
     private:
         ApplyChangesWidgetPrivate * d;
