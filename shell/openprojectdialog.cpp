@@ -57,8 +57,16 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     QString extension;
     if( url.isLocalFile() )
     {
-        isDir = QFileInfo( url.toLocalFile() ).isDir();
-        extension = QFileInfo( url.toLocalFile() ).suffix();
+        QFileInfo info( url.toLocalFile() );
+        if ( !info.exists() ) {
+            setAppropriate( projectInfoPage, false );
+            setAppropriate( openPage, true );
+            setValid( openPage, false );
+            return;
+        } else {
+            isDir = QFileInfo( url.toLocalFile() ).isDir();
+            extension = QFileInfo( url.toLocalFile() ).suffix();
+        }
     } else 
     {
         KIO::UDSEntry entry;
