@@ -23,7 +23,7 @@
 #include <ktexteditor/view.h>
 
 #include <kparts/part.h>
-#include <kompare/kompareinterface.h>
+//#include <kompare/kompareinterface.h>
 #include <KTabWidget>
 #include <KMimeType>
 #include <KMimeTypeTrader>
