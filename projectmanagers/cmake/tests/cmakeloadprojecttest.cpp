@@ -45,7 +45,22 @@ CMakeLoadProjectTest::~CMakeLoadProjectTest()
 
 void CMakeLoadProjectTest::testTinyCMakeProject()
 {
-    QString sourcedir = QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project";
+    parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project" );
+}
+
+void CMakeLoadProjectTest::testSmallQ4Project()
+{
+    parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/qt4app");
+}
+
+
+void CMakeLoadProjectTest::testSmallKDE4Project()
+{
+    parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/kde4app");
+}
+
+void CMakeLoadProjectTest::parseProject( const QString& sourcedir )
+{
     QString projectfile = sourcedir+"/CMakeLists.txt";
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
     QVERIFY(code.count() != 0);

@@ -38,11 +38,13 @@ public:
     ~CMakeLoadProjectTest();
 
 private slots:
+    //Note: These could be done as data-driven tests, but they are separate so that one can
+    // more easily profile a plain-cmake vs. qt4-only vs. kde4 project
     void testTinyCMakeProject();
-    //void testSmallQ4Project();
-    //void testSmallKDE4Project();
+    void testSmallQ4Project();
+    void testSmallKDE4Project();
 private:
-
+    void parseProject( const QString& sourcedir );
 };
 
 #endif
