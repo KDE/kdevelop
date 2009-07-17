@@ -85,11 +85,14 @@ target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
 kde4_add_unit_test(cppcodegentest ${cppcodegentest_SRCS})
 target_link_libraries(cppcodegentest
     kdev4cppduchain
+    kdev4cpprpp
     kdev4cppparser
     veritascpp
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
-    ${KDEVPLAFORM_SHELL_LIBRARY}
+    ${KDEVPLATFORM_SHELL_LIBRARY}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+    ${KDEVPLATFORM_PROJECT_LIBRARY}
     ${KDEVPLATFORM_TESTS_LIBRARY}
 )
 
