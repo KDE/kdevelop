@@ -40,7 +40,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         
         KTextEditor::Document* document() const;
         
-        void AddDocuments(const IndexedString & original, const IndexedString & modified);
+        void addDocuments(const IndexedString & original, const IndexedString & modified);
     
     private Q_SLOTS:
         void change (KTextEditor::Document *document, const KTextEditor::Range &oldRange,

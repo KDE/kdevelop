@@ -17,23 +17,26 @@
  */
 
 #include "applychangeswidget.h"
+#include "komparesupport.h"
 #include <ktexteditor/document.h>
 // #include <ktexteditor/editor.h>
 // #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/view.h>
 
+#include <shell/partcontroller.h>
+
 #include <kparts/part.h>
-//#include <kompare/kompareinterface.h>
+
 #include <KTabWidget>
 #include <KMimeType>
 #include <KMimeTypeTrader>
 #include <QLayout>
-#include <QPushButton>
 #include <QSplitter>
 #include <QLabel>
 #include <QStandardItemModel>
 #include <QTreeView>
 #include <QDebug>
+#include <KPushButton>
 
 namespace KDevelop
 {
@@ -51,9 +54,10 @@ struct ApplyChangesWidgetPrivate
     ApplyChangesWidget * const parent;
     unsigned int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
+    QList<QStandardItemModel*> m_changes;
     KTabWidget * m_documentTabs;
     
-    QList<QStandardItemModel*> m_changes;
+    KompareWidgets m_kompare;
 };
 
 ApplyChangesWidget::ApplyChangesWidget(const QString& info, const KUrl& url, QWidget* parent)
@@ -67,9 +71,9 @@ ApplyChangesWidget::ApplyChangesWidget(const QString& info, const KUrl& url, QWi
     d->m_documentTabs->addTab(w, url.fileName());
    
     
-    QPushButton * switchButton = new QPushButton("Edit Document", this);
-    switchButton->setEnabled(false);
-    switchButton->hide();
+    KDialog::setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
+    KPushButton * switchButton(KDialog::button(KDialog::User1));
+    switchButton->setText("Edit Document");
     
     d->createEditPart(url, info);
     
@@ -89,6 +93,11 @@ ApplyChangesWidget::~ApplyChangesWidget()
 KTextEditor::Document* ApplyChangesWidget::document() const
 {
     return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
+}
+
+void ApplyChangesWidget::addDocuments(const IndexedString & original, const IndexedString & modified)
+{
+    QWidget * w = d->m_documentTabs->currentWidget();
 }
 
 }

@@ -120,6 +120,22 @@ set(kdevplatformlanguage_LIB_SRCS
     highlighting/codehighlighting.cpp
 )
 
+#Search for kompare to enable kompare support
+option(WITH_KOMPARE_PART "Search for the Kompare interface to enable KomparePart support" ON)
+if(WITH_KOMPARE_PART)
+    find_path(KOMPARE_INCLUDES kompareinterface.h HINTS ${KDE4_INCLUDE_DIR}/kompare)
+endif(WITH_KOMPARE_PART)
+
+macro_log_feature(KOMPARE_INCLUDES "Kompare Part" "Enhance code generation user feedback" "" FALSE)
+if(KOMPARE_INCLUDES)
+    message(STATUS "Kompare interfaces FOUND. Enabling Kompare Support")
+    add_definitions(-DKOMPARE_ENABLED=1)
+else(KOMPARE_INCLUDES)
+    message(STATUS "Kompare interfaces NOT FOUND. Kompare Support cannot be enabled")
+    add_definitions(-DKOMPARE_ENABLED=0)
+endif(KOMPARE_INCLUDES)
+
+
 set( kdevplatformlanguage_LIB_UI
     codegen/ui/newclass.ui
     codegen/ui/overridevirtuals.ui
