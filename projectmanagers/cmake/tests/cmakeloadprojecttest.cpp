@@ -45,25 +45,39 @@ CMakeLoadProjectTest::~CMakeLoadProjectTest()
 
 void CMakeLoadProjectTest::testTinyCMakeProject()
 {
-    parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project" );
+    CMakeProjectVisitor v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/tiny_project" );
+    QCOMPARE(v.targets().count(), 1);
+    QCOMPARE(v.targets().at( 0 ).name, QString("foo") );
+    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "foo.cpp" );
 }
 
-void CMakeLoadProjectTest::testSmallQ4Project()
+void CMakeLoadProjectTest::testSmallQt4Project()
 {
-    parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/qt4app");
+    CMakeProjectVisitor v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/qt4app");
+    QCOMPARE(v.targets().count(), 1);
+    QCOMPARE(v.projectName(), QString("qt4app"));
+    QCOMPARE(v.targets().at( 0 ).name, QString("qt4app") );
+    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "qt4app.cpp" << "main.cpp" );
 }
 
 
 void CMakeLoadProjectTest::testSmallKDE4Project()
 {
-    parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/kde4app");
+    CMakeProjectVisitor v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/kde4app");
+    QCOMPARE(v.targets().count(), 2);
+    QCOMPARE(v.projectName(), QString("kde4app"));
+    QCOMPARE(v.targets().at( 0 ).name, QString("kde4app") );
+    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
+                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/ui_kde4appview_base.h" 
+                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/ui_prefs_base.h" 
+                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/settings.cpp" 
+                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/settings.h" );
 }
 
-void CMakeLoadProjectTest::parseProject( const QString& sourcedir )
+CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir )
 {
     QString projectfile = sourcedir+"/CMakeLists.txt";
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
-    QVERIFY(code.count() != 0);
 
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
     MacroMap mm;
@@ -92,10 +106,7 @@ void CMakeLoadProjectTest::parseProject( const QString& sourcedir )
     v.walk(code, 0);
 
     ReferencedTopDUContext ctx=v.context();
-    QVERIFY(ctx);
-    QCOMPARE(v.targets().count(), 1);
-    QCOMPARE(v.targets().at( 0 ).name, QString("foo") );
-    QCOMPARE(v.targets().at( 0 ).files, QStringList() << "foo.cpp" );
+    return v;
 }
 
 #include "cmakeloadprojecttest.moc"
