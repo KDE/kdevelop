@@ -629,31 +629,37 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
 
     KAction* quickOpen = actions->addAction("quick_open");
     quickOpen->setText( i18n("&Quick Open") );
+    quickOpen->setIcon( KIcon("quickopen") );
     quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
     connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
 
     KAction* quickOpenFile = actions->addAction("quick_open_file");
     quickOpenFile->setText( i18n("Quick Open &File") );
+    quickOpenFile->setIcon( KIcon("quickopen-file") );
     quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
     connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
 
     KAction* quickOpenClass = actions->addAction("quick_open_class");
     quickOpenClass->setText( i18n("Quick Open &Class") );
+    quickOpenClass->setIcon( KIcon("quickopen-class") );
     quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
     connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
 
     KAction* quickOpenFunction = actions->addAction("quick_open_function");
     quickOpenFunction->setText( i18n("Quick Open &Function") );
+    quickOpenFunction->setIcon( KIcon("quickopen-function") );
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
     KAction* quickOpenDeclaration = actions->addAction("quick_open_jump_declaration");
     quickOpenDeclaration->setText( i18n("Jump to Declaration") );
+    quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
     quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
     connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
 
     KAction* quickOpenDefinition = actions->addAction("quick_open_jump_definition");
     quickOpenDefinition->setText( i18n("Jump to Definition") );
+    quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
     quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
     connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
 

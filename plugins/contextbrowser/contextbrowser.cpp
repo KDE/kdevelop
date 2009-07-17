@@ -128,11 +128,13 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 
   KAction* previousContext = actions->addAction("previous_context");
   previousContext->setText( i18n("&Previous Visited Context") );
+  previousContext->setIcon( KIcon("go-previous-context" ) );
   previousContext->setShortcut( Qt::META | Qt::Key_Left );
   connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
 
   KAction* nextContext = actions->addAction("next_context");
   nextContext->setText( i18n("&Next Visited Context") );
+  nextContext->setIcon( KIcon("go-next-context" ) );
   nextContext->setShortcut( Qt::META | Qt::Key_Right );
   connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
 

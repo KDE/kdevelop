@@ -78,7 +78,7 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     setXMLFile("kdevappwizard.rc");
 
     QAction *action = actionCollection()->addAction("project_new");
-    action->setIcon(KIcon("window-new"));
+    action->setIcon(KIcon("project-development-new-template"));
     action->setText(i18n("New From Template..."));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
     action->setToolTip( i18n("Generate a new project from a template") );
