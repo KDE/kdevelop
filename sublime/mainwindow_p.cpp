@@ -728,6 +728,7 @@ AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex 
     setExpanding ( false );
     setLayoutDirection ( Qt::RightToLeft );
     setDrawBase ( false );
+    setFocusPolicy( Qt::NoFocus );
     QPalette pal = palette();
 }
 
