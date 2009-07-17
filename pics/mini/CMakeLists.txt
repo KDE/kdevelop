@@ -5,7 +5,7 @@ kde4_install_icons(${ICON_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES class.png enum.png field.png function.png namespace.png
+install(FILES code-class.png enum.png field.png code-function.png namespace.png
     private_class.png private_enum.png private_field.png private_function.png private_struct.png private_union.png
     protected_class.png protected_enum.png protected_field.png protected_function.png protected_struct.png protected_union.png
     signal.png slot.png struct.png typedef.png union.png CTchildren.png CTclients.png CTparents.png CTdisconnected_parents.png CTsuppliers.png CTvirtuals.png CVclass.png CVglobal_meth.png
