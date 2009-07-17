@@ -21,6 +21,7 @@
 
 #include <QDir>
 #include <QLayout>
+#include <QAbstractItemView>
 
 #include <kurl.h>
 #include <kurlnavigator.h>
@@ -55,6 +56,10 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     dirop = new KDirOperator(QDir::homePath(), this);
     dirop->setView( KFile::Tree );
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
+    //KDirOperator emits fileSelected() twice because both activated() and doubleClicked() emit fileClicked().
+    //activated() should be enough, so disconnect doubleClicked()
+    disconnect(dirop->view(), SIGNAL(doubleClicked(const QModelIndex&)),
+            dirop, SLOT(_k_slotDoubleClicked(const QModelIndex&)));
     l->addWidget(dirop);
 
     connect( dirop, SIGNAL(fileSelected(const KFileItem&)), this, SLOT(openFile(const KFileItem&)) );
