@@ -472,7 +472,7 @@ bool ContextBrowserPlugin::findSpecialObject(View* view, const SimpleCursor& pos
       KUrl viewUrl = view->document()->url();
       QList<ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
 
-      SimpleRange r;
+      SimpleRange r = SimpleRange::invalid();
       foreach( ILanguage* language, languages) {
         r = language->languageSupport()->specialLanguageObjectRange(viewUrl, position);
         if(r.isValid()) {
