@@ -190,7 +190,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
     else if( (p & CodeCompletionModel::Class) && (p & CodeCompletionModel::Private) )
       RETURN_CACHED_ICON("private_class")
     else
-      RETURN_CACHED_ICON("class")
+      RETURN_CACHED_ICON("code-class")
 
   else if( p & CodeCompletionModel::Union )
     if( p & CodeCompletionModel::Private )
@@ -210,7 +210,7 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
     else if( p & CodeCompletionModel::Private )
       RETURN_CACHED_ICON("private_function")
     else
-      RETURN_CACHED_ICON("function")
+      RETURN_CACHED_ICON("code-function")
   if( p & CodeCompletionModel::Protected )
     RETURN_CACHED_ICON("protected_field")
   else if( p & CodeCompletionModel::Private )

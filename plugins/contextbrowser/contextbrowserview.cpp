@@ -554,7 +554,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     connect(m_lockButton, SIGNAL(toggled(bool)), SLOT(updateLockIcon(bool)));
 
     m_declarationMenuButton = new QToolButton();
-    m_declarationMenuButton->setIcon(KIcon("class"));
+    m_declarationMenuButton->setIcon(KIcon("code-class"));
     m_declarationMenuButton->setToolTip(i18n("Declaration menu"));
     connect(m_declarationMenuButton, SIGNAL(clicked(bool)), SLOT(declarationMenu()));
     
