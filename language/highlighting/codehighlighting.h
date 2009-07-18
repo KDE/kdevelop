@@ -139,6 +139,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
   private:
+    //Returns whether the given attribute was set by the code highlighting, and not by something else
+    //Always returns true when the attribute is zero
+    bool isCodeHighlight(KTextEditor::Attribute::Ptr attr) const;
     //Can be overridden to create an own instance type
     virtual CodeHighlightingInstance* createInstance() const;
     friend class CodeHighlightingInstance;

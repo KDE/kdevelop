@@ -94,6 +94,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void hideTooTip();
     void findUses();
     
+    void textInserted(KTextEditor::Document*, KTextEditor::Range);
+    
   private:
     void switchUse(bool forward);
     void clearMouseHover();
@@ -148,6 +150,10 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     QPointer<QWidget> m_currentToolTip;
     IndexedDeclaration m_currentToolTipDeclaration;
     QAction* m_findUses;
+    
+    //This is just a marker, only used for comparison. Never expect it to be valid!
+    KTextEditor::Document* m_lastInsertionDocument;
+    KTextEditor::Cursor m_lastInsertionPos;
 };
 
 DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);

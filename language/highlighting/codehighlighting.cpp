@@ -128,6 +128,15 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
   return a;
 }
 
+
+bool CodeHighlighting::isCodeHighlight(Attribute::Ptr attr) const
+{
+  ///@todo Do this properly, by statically building a set of attributes, and testing whether the given attribute is in that set
+  if(!attr)
+    return true;
+  return !attr->background().color().isValid();
+}
+
 void CodeHighlightingInstance::outputRange( KTextEditor::SmartRange * range ) const
 {
   kDebug() << range << QString(range->depth(), ' ') << *range << "attr" << range->attribute();
@@ -173,11 +182,11 @@ void CodeHighlighting::deleteHighlighting(KDevelop::DUContext* context) const {
     LOCK_SMART(context->smartRange());
 
     foreach (Declaration* dec, context->localDeclarations())
-      if(dec->smartRange())
+      if(dec->smartRange() && isCodeHighlight(dec->smartRange()->attribute()))
         dec->smartRange()->setAttribute(KTextEditor::Attribute::Ptr());
 
     for(int a = 0; a < context->usesCount(); ++a)
-      if(context->useSmartRange(a))
+      if(context->useSmartRange(a) && isCodeHighlight(context->useSmartRange(a)->attribute()))
         context->useSmartRange(a)->setAttribute(KTextEditor::Attribute::Ptr());
   }
 
@@ -429,6 +438,10 @@ void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, c
 {
   if (SmartRange* range = declaration->smartRange()) {
     LOCK_SMART(range);
+
+    if(!m_highlighting->isCodeHighlight(range->attribute()))
+      return;
+
     range->setAttribute(m_highlighting->attributeForType(typeForDeclaration(declaration, 0), DeclarationContext, color));
   }
 }
@@ -436,12 +449,17 @@ void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, c
 void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const QColor &color) const
 {
   if (SmartRange* range = context->useSmartRange(index)) {
+
     Types type = ErrorVariableType;
     Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[index].m_declarationIndex);
 
     type = typeForDeclaration(decl, context);
 
     LOCK_SMART(range);
+
+    if(!m_highlighting->isCodeHighlight(range->attribute())) {
+      return;
+    }
 
     if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
       range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, color));
@@ -460,6 +478,10 @@ void CodeHighlightingInstance::highlightUses(DUContext* context) const
         type = typeForDeclaration(decl, context);
 
     LOCK_SMART(range);
+
+    if(!m_highlighting->isCodeHighlight(range->attribute()))
+      continue;
+
     if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
         range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, QColor(QColor::Invalid)));
     else

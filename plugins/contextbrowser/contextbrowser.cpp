@@ -736,11 +736,24 @@ void ContextBrowserPlugin::viewDestroyed( QObject* obj )
   m_updateViews.remove(static_cast<View*>(obj));
 }
 
-void ContextBrowserPlugin::cursorPositionChanged( View* view, const KTextEditor::Cursor& /*newPosition*/ )
+void ContextBrowserPlugin::cursorPositionChanged( View* view, const KTextEditor::Cursor& newPosition )
 {
+  if(view->document() == m_lastInsertionDocument && newPosition == m_lastInsertionPos)
+  {
+    //Do not update the highlighting while typing
+    m_lastInsertionDocument = 0;
+    m_lastInsertionPos = KTextEditor::Cursor();
+    return;
+  }
   clearMouseHover();
   m_updateViews.insert(view);
   m_updateTimer->start(highlightingTimeout/2); // triggers updateViews()
+}
+
+void ContextBrowserPlugin::textInserted(KTextEditor::Document* doc, KTextEditor::Range range)
+{
+  m_lastInsertionDocument = doc;
+  m_lastInsertionPos = range.end();
 }
 
 void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
@@ -748,6 +761,8 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
   disconnect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) ); ///Just to make sure that multiple connections don't happen
   connect( v, SIGNAL( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ), this, SLOT( cursorPositionChanged( KTextEditor::View*, const KTextEditor::Cursor& ) ) );
   connect( v, SIGNAL(destroyed( QObject* )), this, SLOT( viewDestroyed( QObject* ) ) );
+  disconnect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+  connect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
 
   KTextEditor::TextHintInterface *iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
   if( !iface )
