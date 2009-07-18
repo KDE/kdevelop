@@ -1045,7 +1045,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   Declaration *nearestDeclAfter = 0;
   int distanceAfter = INT_MAX;
 
-  for (int i = 0; i < items.length(); ++i) {
+  for (int i = 0; i < items.count(); ++i) {
     Declaration *decl = items[i].m_item.data();
 
     int distance = decl->range().start.line - cursor.line;
