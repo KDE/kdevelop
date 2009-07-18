@@ -132,7 +132,8 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
 bool CodeHighlighting::isCodeHighlight(Attribute::Ptr attr) const
 {
   ///@todo Do this properly, by statically building a set of attributes, and testing whether the given attribute is in that set
-  if(!attr)
+  ///Right now we just try to keep the highlighting of the context-browser alive to prevent flashing
+  if(!attr || attr->underlineStyle() != KTextEditor::Attribute::NoUnderline)
     return true;
   return !attr->background().color().isValid();
 }
