@@ -60,8 +60,8 @@ namespace KDevelop {
 
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
-        : m_textDocument(textDocument)
-        , m_loaded(false), encoding("")
+        : encoding(""), m_textDocument(textDocument)
+        , m_loaded(false)
     {
         document = 0;
         state = IDocument::Clean;
