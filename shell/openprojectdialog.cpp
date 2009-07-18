@@ -18,6 +18,7 @@
 #include <kpagewidgetmodel.h>
 #include <kmessagebox.h>
 #include <klocale.h>
+#include <KColorScheme>
 
 #include <kio/netaccess.h>
 #include <kio/udsentry.h>
@@ -55,34 +56,65 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
 {
     bool isDir = false;
     QString extension;
+    bool isValid = false;
+
     if( url.isLocalFile() )
     {
         QFileInfo info( url.toLocalFile() );
-        if ( !info.exists() ) {
-            setAppropriate( projectInfoPage, false );
-            setAppropriate( openPage, true );
-            setValid( openPage, false );
-            return;
-        } else {
+        isValid = info.exists();
+        if ( isValid ) {
             isDir = QFileInfo( url.toLocalFile() ).isDir();
             extension = QFileInfo( url.toLocalFile() ).suffix();
         }
     } else 
     {
         KIO::UDSEntry entry;
-        if( KIO::NetAccess::stat( url, entry, Core::self()->uiControllerInternal()->defaultMainWindow() ) ) {
+        isValid = KIO::NetAccess::stat( url, entry, Core::self()->uiControllerInternal()->defaultMainWindow() );
+        if ( isValid ) {
             isDir = entry.isDir();
             extension = QFileInfo( entry.stringValue( KIO::UDSEntry::UDS_NAME ) ).suffix();
-        } else {
-            KMessageBox::error(Core::self()->uiControllerInternal()->defaultMainWindow(), 
-                               i18n("Could not fetch information for remote url: %1", url.prettyUrl()), 
-                               i18n("Error fetching remote url") );
-            setAppropriate( projectInfoPage, false );
-            setAppropriate( openPage, true );
-            setValid( openPage, false );
-            return;
         }
     }
+
+    if ( isValid ) {
+        // reset header
+        openPage->setHeader(QString());
+    } else {
+        // report error
+        KColorScheme scheme(palette().currentColorGroup());
+        const QString errorMsg = i18n("Selected url is invalid.");
+        QString msgTemplate;
+        if ( layoutDirection() == Qt::LeftToRight ) {
+            msgTemplate = QString(
+                "<table width='100%' cellpadding='0' cellspacing='0'>"
+                    "<tr>"
+                        "<td align='left'>%1</td>"
+                        "<td align='right'><font color='%3'>%2</font></td>"
+                    "</tr>"
+                "</table>"
+            );
+        } else {
+            msgTemplate = QString(
+                "<table width='100%' cellpadding='0' cellspacing='0'>"
+                    "<tr>"
+                        "<td align='left'><font color='%3'>%2</font></td>"
+                        "<td align='right'>%1</td>"
+                    "</tr>"
+                "</table>"
+            );
+        }
+        openPage->setHeader(
+            msgTemplate
+                .arg(openPage->name())
+                .arg(errorMsg)
+                .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
+        );
+        setAppropriate( projectInfoPage, false );
+        setAppropriate( openPage, true );
+        setValid( openPage, false );
+        return;
+    }
+
     if( isDir || extension != ShellExtension::getInstance()->projectFileExtension() ) 
     {
         setAppropriate( projectInfoPage, true );
