@@ -107,7 +107,7 @@ K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevconte
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(ContextBrowserFactory::componentData(), parent)
-    , m_viewFactory(new ContextBrowserViewFactory(this))
+    , m_viewFactory(new ContextBrowserViewFactory(this)), m_backupsMutex(QMutex::Recursive)
 {
   setXMLFile( "kdevcontextbrowser.rc" );
 
@@ -186,6 +186,7 @@ void ContextBrowserPlugin::unload()
 }
 
 void ContextBrowserPlugin::rangeDeleted( KTextEditor::SmartRange *range ) {
+  QMutexLocker lock(&m_backupsMutex);
   m_backups.remove( range );
   m_watchedRanges.remove(range);
 
@@ -405,6 +406,8 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
   if( !range )
     return;
 
+  QMutexLocker lock(&m_backupsMutex);
+  
   if( highlight ) {
 /*    if( declaration )
       attrib = highlightedDeclarationAttribute();
@@ -571,14 +574,13 @@ void ContextBrowserPlugin::unHighlightAll()
     foreach(KTextEditor::View* view, m_highlightedDeclarations.keys()) {
       KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(view->document());
     
-      QMutexLocker lock(smart->smartMutex());
+      QMutexLocker smartLock(smart->smartMutex());
+      QMutexLocker lock(&m_backupsMutex);
       
-      QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > > b = m_backups;
-      
-      for(QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > >::iterator it = b.begin(); it != b.end(); ++it) {
+      for(QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > >::iterator it = m_backups.begin(); it != m_backups.end(); ++it) {
         if(it.key()->document() == view->document()) {
           if(it.key()->attribute() == it->first)
-            it.key()->setAttribute(it->second); //Set the backed up attriute, if it wasn't changed yet
+            it.key()->setAttribute(it->second); //Set the backed up attribute, if it wasn't changed yet
           ignoreRange(it.key());
           m_backups.remove(it.key());
         }

@@ -125,6 +125,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void unHighlightAll();
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
+    //Must be locked before doing anything with m_backups, and _after_ the relevant smart-mutex has been locked
+    QMutex m_backupsMutex;
     //Contains the range, the old attribute, and the attribute it was replaced with
     QMap<KTextEditor::SmartRange*, QPair<KTextEditor::Attribute::Ptr,KTextEditor::Attribute::Ptr> > m_backups;
     QSet<KTextEditor::View*> m_updateViews;
