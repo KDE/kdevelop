@@ -124,7 +124,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
 
   private:
     //Unhighlights all currently highlighted declarations
-    void unHighlightAll();
+    void unHighlightAll(KTextEditor::View* selectView = 0);
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
     //Must be locked before doing anything with m_backups, and _after_ the relevant smart-mutex has been locked
@@ -154,6 +154,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     //This is just a marker, only used for comparison. Never expect it to be valid!
     KTextEditor::Document* m_lastInsertionDocument;
     KTextEditor::Cursor m_lastInsertionPos;
+    QSet<KTextEditor::View*> m_keepHighlightedDeclaration;
 };
 
 DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);
