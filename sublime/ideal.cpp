@@ -94,12 +94,27 @@ QSize IdealToolButton::sizeHint() const
 
     const int charWidth = fm.width(QLatin1Char('x'));
 
-    QSize textSize = fm.size(Qt::TextShowMnemonic, opt.text);
-    textSize.rwidth() += 2 * charWidth;
+    QSize textSize;
+    // No text size if we're having icon-only button
+    if (toolButtonStyle() != Qt::ToolButtonIconOnly) {
+        textSize = fm.size(Qt::TextShowMnemonic, opt.text);
+        textSize.rwidth() += 2 * charWidth;
+    }
 
     const int spacing = 2; // ### FIXME
-    int width = 4 + textSize.width() + opt.iconSize.width() + spacing;
-    int height = 4 + qMax(textSize.height(), opt.iconSize.height());
+    int iconwidth = 0, iconheight = 0;
+    // No icon size if we're drawing text only
+    if (toolButtonStyle() != Qt::ToolButtonTextOnly) {
+        if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
+            iconwidth = opt.iconSize.width();
+            iconheight = opt.iconSize.height();
+        } else {
+            iconwidth = opt.iconSize.height();
+            iconheight = opt.iconSize.width();
+        }
+    }
+    int width = 4 + textSize.width() + iconwidth + spacing;
+    int height = 4 + qMax(textSize.height(), iconheight) + spacing;
 
     if (orientation() == Qt::Vertical)
         return QSize(height, width);
@@ -114,7 +129,16 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
     } else {
         QStyleOptionToolButton opt;
         initStyleOption(&opt);
-	opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
+        // If we're drawing icons only it looks better if they're not rotated
+        QPixmap ic = icon().pixmap(QSize(16,16), QIcon::Normal, QIcon::On);
+        QTransform tf;
+        if(_area == Qt::LeftDockWidgetArea) {
+            tf = tf.rotate(90);
+        } else {
+            tf = tf.rotate(-90);
+        }
+        opt.icon = ic.transformed( tf, Qt::FastTransformation );
+        opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
 
         QPixmap pix(opt.rect.width(), opt.rect.height());
 	QStylePainter painter(&pix, this);
