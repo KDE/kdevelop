@@ -40,9 +40,10 @@ class KompareSupport
     {
         return true;
     }
-    
+#ifdef KOMPARE_ENABLED
   private:
     QList<KompareInterface *> m_interfaces;
+#endif //KOMPARE_ENABLED
 };
 
 template <>
