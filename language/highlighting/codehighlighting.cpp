@@ -135,7 +135,7 @@ bool CodeHighlighting::isCodeHighlight(Attribute::Ptr attr) const
   ///Right now we just try to keep the highlighting of the context-browser alive to prevent flashing
   if(!attr || attr->underlineStyle() != KTextEditor::Attribute::NoUnderline)
     return true;
-  return !attr->background().color().isValid();
+  return !attr->hasProperty(QTextFormat::BackgroundBrush);
 }
 
 void CodeHighlightingInstance::outputRange( KTextEditor::SmartRange * range ) const
@@ -487,6 +487,9 @@ void CodeHighlightingInstance::highlightUses(DUContext* context) const
         range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, QColor(QColor::Invalid)));
     else
         range->setAttribute(KTextEditor::Attribute::Ptr());
+
+//     kDebug() << range->attribute()->underlineStyle() << range->attribute()->background().iscolor().isValid();
+    Q_ASSERT(m_highlighting->isCodeHighlight(range->attribute()));
     }
   }
 }
