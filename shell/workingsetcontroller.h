@@ -152,7 +152,8 @@ private:
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex * areaIndex, KConfigGroup & group);
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group);
     
-    WorkingSet(const WorkingSet& rhs) {
+    WorkingSet(const WorkingSet& rhs)
+    	: QObject() {
         m_id =  rhs.m_id + "_copy_";
     }
 
