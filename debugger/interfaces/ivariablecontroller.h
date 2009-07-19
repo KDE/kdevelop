@@ -62,7 +62,7 @@ protected:
      **/
     VariableCollection *variableCollection();
 
-private slots:
+private Q_SLOTS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
 
 private:

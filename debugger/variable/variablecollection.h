@@ -24,12 +24,12 @@
 #ifndef KDEV_VARIABLECOLLECTION_H
 #define KDEV_VARIABLECOLLECTION_H
 
-#include <QAbstractItemModel>
-#include <QMap>
-#include <QPointer>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QMap>
+#include <QtCore/QPointer>
 
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
+#include <KDE/KTextEditor/Document>
+#include <KDE/KTextEditor/View>
 
 #include "../util/treemodel.h"
 #include "../util/treeitem.h"
@@ -262,7 +262,7 @@ private:
 #endif
 
 
-private slots:
+private Q_SLOTS:
     void textDocumentCreated( KDevelop::IDocument*);
     void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void textHintRequested(const KTextEditor::Cursor&, QString&);
