@@ -105,7 +105,7 @@ private:
  */
 class SUBLIME_EXPORT ToolView: public View {
     Q_OBJECT
-signals:
+Q_SIGNALS:
     /**
      * Forwarding signal, emitted when the view's widget
      * wants to have a progress indicator shown.
