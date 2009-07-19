@@ -208,14 +208,14 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
             paths.append(item.itemPath());
     }
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    base.writeEntry("BuildItems", KDevStringHandler::qvariantToString( QVariant( paths ) ));
+    base.writeEntry("BuildItems", KDevelop::qvariantToString( QVariant( paths ) ));
     base.sync();
 }
 
 void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    QVariantList items = KDevStringHandler::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
+    QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
     
     foreach(const QVariant& path, items)
     {

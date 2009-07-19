@@ -70,7 +70,7 @@
 #include <QDataStream>
 #include <QVariant>
 
-namespace KDevStringHandler
+namespace KDevelop
 {
     QString joinWithEscaping( const QStringList& input, const QChar& joinchar, const QChar& escapechar )
     {

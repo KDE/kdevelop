@@ -62,7 +62,7 @@ ProjectItemCompleter::ProjectItemCompleter(KDevelop::ProjectModel* model, QObjec
 
 QStringList ProjectItemCompleter::splitPath(const QString& path) const
 {
-    return KDevStringHandler::splitWithEscaping( path, sep, '\\' ); 
+    return KDevelop::splitWithEscaping( path, sep, '\\' ); 
 }
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
@@ -71,7 +71,7 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
     if(mModel->item(index)->folder())
         postfix=sep;
     
-    return KDevStringHandler::joinWithEscaping(mModel->pathFromIndex(index), sep, '\\')+postfix;
+    return KDevelop::joinWithEscaping(mModel->pathFromIndex(index), sep, '\\')+postfix;
 }
 
 #include "projectitemlineedit.moc"

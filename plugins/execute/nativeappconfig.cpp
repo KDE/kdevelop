@@ -60,16 +60,16 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
     } else 
     {
         projectTargetRadio->setChecked( true );
-        projectTarget->setText( KDevStringHandler::joinWithEscaping( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ), '/', '\\' ) );
+        projectTarget->setText( KDevelop::joinWithEscaping( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ), '/', '\\' ) );
     }
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
-    QVariantList deps = KDevStringHandler::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
+    QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
     foreach( QVariant dep, deps ) {
-        QListWidgetItem* item = new QListWidgetItem( KDevStringHandler::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
+        QListWidgetItem* item = new QListWidgetItem( KDevelop::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
     }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
@@ -219,7 +219,7 @@ void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
         cfg.deleteEntry( ExecutePlugin::projectTargetEntry );
     } else
     {
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, KDevStringHandler::splitWithEscaping(projectTarget->text(), '/', '\\' ) );
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, KDevelop::splitWithEscaping(projectTarget->text(), '/', '\\' ) );
         cfg.deleteEntry( ExecutePlugin::executableEntry );
     }
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
@@ -232,7 +232,7 @@ void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
     {
         deps << dependencies->item( i )->data( Qt::UserRole );
     }
-    cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevStringHandler::qvariantToString( QVariant( deps ) ) );
+    cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariant( deps ) ) );
 }
 
 QString NativeAppConfigPage::title() const 

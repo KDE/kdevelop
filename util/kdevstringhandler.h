@@ -27,7 +27,7 @@ class QChar;
 class QStringList;
 class QVariant;
 
-namespace KDevStringHandler
+namespace KDevelop
 {
     KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping( const QString& input, const QChar& splitChar, const QChar& escapeChar );
     KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping( const QStringList& input, const QChar& joinChar, const QChar& escapeChar );
