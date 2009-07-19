@@ -31,11 +31,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <project/projectmodel.h>
-#include <util/kdevstringhandler.h>
 
-static QChar pathSeparator='/';
-static QChar pathEscape='\\';
+#include <project/projectmodel.h>
 
 BuildItem::BuildItem()
 {
@@ -73,12 +70,6 @@ QString BuildItem::itemProject() const
 {
     return m_itemPath.first();
 }
-
-QStringList BuildItem::itemPath() const
-{
-    return m_itemPath;
-}
-
 
 KDevelop::ProjectBaseItem* BuildItem::findItem() const
 {
@@ -122,7 +113,7 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
                 return m_items.at( idx.row() ).itemName();
                 break;
             case 1:
-                return m_items.at( idx.row() ).itemPath().join("/");
+                return m_items.at( idx.row() ).itemPath();
                 break;
         }
     } else if(role == Qt::DecorationRole && idx.column()==0) {
@@ -189,7 +180,7 @@ bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& pa
     return true;
 }
 
-QList<BuildItem> ProjectBuildSetModel::items() const
+QList<BuildItem> ProjectBuildSetModel::items()
 {
     return m_items ;
 }
@@ -209,13 +200,12 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
-    QStringList paths;
+    QVariantList paths;
     foreach( const BuildItem &item, m_items)
     {
         if( item.itemProject() == project->name() )
-            paths.append(KDevStringHandler::joinWithEscaping(item.itemPath(), pathSeparator, pathEscape));
+            paths.append(item.itemPath());
     }
-    
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
     base.writeEntry("BuildItems", paths);
     base.sync();
@@ -224,12 +214,12 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    QStringList items = base.readEntry("BuildItems", QStringList());
+    QVariantList items = base.readEntry("BuildItems", QVariantList());
     
-    foreach(const QString& path, items)
+    foreach(const QVariant& path, items)
     {
         beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-        m_items.append( BuildItem( KDevStringHandler::splitWithEscaping(path, pathSeparator, pathEscape) ) );
+        m_items.append( BuildItem( path.toStringList() ) );
         endInsertRows();
     }
 }

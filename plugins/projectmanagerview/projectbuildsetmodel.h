@@ -45,7 +45,7 @@ public:
     KDevelop::ProjectBaseItem* findItem() const;
     BuildItem& operator=( const BuildItem& );
     QString itemName() const;
-    QStringList itemPath() const;
+    QStringList itemPath() const { return m_itemPath; }
     QString itemProject() const;
 private:
     QStringList m_itemPath;
@@ -69,7 +69,7 @@ public:
     void moveRowsDown( int row, int count );
     void moveRowsToTop( int row, int count );
     void moveRowsToBottom( int row, int count );
-    QList<BuildItem> items() const;
+    QList<BuildItem> items();
 public slots:
     void saveToProject( KDevelop::IProject* ) const;
     void loadFromProject( KDevelop::IProject* );
