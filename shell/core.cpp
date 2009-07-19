@@ -48,7 +48,6 @@
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
 #include "progressmanager.h"
-#include "core_p.h"
 #include "selectioncontroller.h"
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
