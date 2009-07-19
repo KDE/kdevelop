@@ -573,12 +573,15 @@ void ContextBrowserPlugin::unHighlightAll(KTextEditor::View* selectView)
       QMutexLocker smartLock(smart->smartMutex());
       QMutexLocker lock(&m_backupsMutex);
       
-      for(QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > >::iterator it = m_backups.begin(); it != m_backups.end(); ++it) {
+      QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > >::iterator it = m_backups.begin();
+      while(it != m_backups.end()) {
         if(it.key()->document() == view->document()) {
           if(it.key()->attribute() == it->first)
             it.key()->setAttribute(it->second); //Set the backed up attribute, if it wasn't changed yet
           ignoreRange(it.key());
-          m_backups.remove(it.key());
+          it = m_backups.erase(it);
+        } else {
+          ++it;
         }
       }
       
