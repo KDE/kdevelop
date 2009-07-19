@@ -38,7 +38,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <util/environmentgrouplist.h>
-#include <util/kdevstringhandler.h>
 
 #include "nativeappconfig.h"
 #include <project/projectmodel.h>
@@ -122,8 +121,7 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
         QList<KDevelop::ProjectBaseItem*> items;
         foreach( const QVariant& dep, deps )
         {
-            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex(
-                                KDevStringHandler::splitWithEscaping(dep.toString(), '/', '\\') ));
+            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.toStringList() ) );
             if( item )
             {
                 items << item;

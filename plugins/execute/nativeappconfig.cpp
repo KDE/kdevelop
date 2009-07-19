@@ -67,8 +67,10 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     QVariantList deps = cfg.readEntry( ExecutePlugin::dependencyEntry, QVariantList() );
-    foreach(const QVariant& dep, deps ) {
-        QListWidgetItem* item = new QListWidgetItem(dep.toString(), dependencies );
+    QStringList strDeps;
+    foreach( QVariant dep, deps ) {
+        QListWidgetItem* item = new QListWidgetItem( KDevStringHandler::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
+        item->setData( Qt::UserRole, dep );
     }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
     blockSignals( b );
@@ -190,7 +192,7 @@ void NativeAppConfigPage::moveDependencyUp()
 void NativeAppConfigPage::addDep()
 {
     dependencies->addItem( targetDependency->text() );
-    targetDependency->clear();
+    targetDependency->setText("");
     addDependency->setEnabled( false );
     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
 }
@@ -228,7 +230,7 @@ void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
     QVariantList deps;
     for( int i = 0; i < dependencies->count(); i++ )
     {
-        deps << dependencies->item( i )->data( Qt::DisplayRole );
+        deps << dependencies->item( i )->data( Qt::UserRole );
     }
     cfg.writeEntry( ExecutePlugin::dependencyEntry, deps );
 }
