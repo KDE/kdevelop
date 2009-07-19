@@ -21,7 +21,7 @@
 #ifndef KDEVSIGNALSPY_H
 #define KDEVSIGNALSPY_H
 
-#include <QObject>
+#include <QtCore/QObject>
 #include "kdevplatformtestsexport.h"
 
 class QEventLoop;
