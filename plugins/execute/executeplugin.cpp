@@ -43,6 +43,7 @@
 #include <project/projectmodel.h>
 #include <project/builderjob.h>
 #include <kshell.h>
+#include <util/kdevstringhandler.h>
 
 QString ExecutePlugin::_nativeAppConfigTypeId = "Native Application";
 QString ExecutePlugin::workingDirEntry = "Working Directory";
@@ -113,7 +114,7 @@ QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QStri
 
 KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
 {
-    QVariantList deps = cfg->config().readEntry( dependencyEntry, QVariantList() );
+    QVariantList deps = KDevStringHandler::stringToQVariant( cfg->config().readEntry( dependencyEntry, QString() ) ).toList();
     QString depAction = cfg->config().readEntry( dependencyActionEntry, "Nothing" );
     if( depAction != "Nothing" && !deps.isEmpty() ) 
     {

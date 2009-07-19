@@ -66,7 +66,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
     runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
-    QVariantList deps = cfg.readEntry( ExecutePlugin::dependencyEntry, QVariantList() );
+    QVariantList deps = KDevStringHandler::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
     foreach( QVariant dep, deps ) {
         QListWidgetItem* item = new QListWidgetItem( KDevStringHandler::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
@@ -232,7 +232,7 @@ void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
     {
         deps << dependencies->item( i )->data( Qt::UserRole );
     }
-    cfg.writeEntry( ExecutePlugin::dependencyEntry, deps );
+    cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevStringHandler::qvariantToString( QVariant( deps ) ) );
 }
 
 QString NativeAppConfigPage::title() const 

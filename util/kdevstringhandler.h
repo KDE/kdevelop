@@ -25,11 +25,28 @@
 class QString;
 class QChar;
 class QStringList;
+class QVariant;
 
 namespace KDevStringHandler
 {
     KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping( const QString& input, const QChar& splitChar, const QChar& escapeChar );
     KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping( const QStringList& input, const QChar& joinChar, const QChar& escapeChar );
+    
+    /**
+    * convert the @p variant into a string which can then be stored
+    * easily in a KConfig entry. This supports any QVariant type (including custom types)
+    * for which there is a QDataStream operator defined
+    * @returns a QString containing the data from the QVariant.
+    */
+    KDEVPLATFORMUTIL_EXPORT QString qvariantToString( const QVariant& variant );
+    
+    /**
+    * convert the @p s into a QVariant, usually the string is read from KConfig.
+    * This supports any QVariant type (including custom types)
+    * for which there is a QDataStream operator defined
+    * @returns a QVariant created from the bytearray
+    */
+    KDEVPLATFORMUTIL_EXPORT QVariant stringToQVariant( const QString& s );
 }
 
 #endif // KDEVSTRINGHANDLER_H
