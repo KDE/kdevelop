@@ -732,7 +732,9 @@ AreaTabBar::AreaTabBar ( QWidget* parent ) : QTabBar ( parent ), m_currentIndex 
     QPalette pal = palette();
 }
 
-AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget ) : QWidget ( parent ), m_isCurrent ( isCurrent ), customButtonWidget(_customButtonWidget) {
+AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget )
+	: QWidget ( parent ), customButtonWidget(_customButtonWidget), m_isCurrent ( isCurrent )
+{
     QHBoxLayout* layout = new QHBoxLayout ( this );
     iconLabel = new QLabel ( this );
     iconLabel->setPixmap ( icon.pixmap ( QSize ( iconSize, iconSize ) ) );
