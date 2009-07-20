@@ -41,10 +41,12 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <debugger/variable/variablecollection.h>
 #include <debugger/interfaces/ivariablecontroller.h>
+#include <debugger/framestack/framestackmodel.h>
 #include <tests/autotestshell.h>
 
 #include "gdbcommand.h"
 #include "debugsession.h"
+#include "stackcontroller.h"
 
 namespace GDBDebugger {
 
@@ -97,6 +99,22 @@ private:
     KConfig *c;
 };
 
+class TestStackController : public StackController
+{
+public:
+    
+    TestStackController(DebugSession* session)
+        : StackController(session), fetchFramesCalled(0)
+    { }
+
+    int fetchFramesCalled;
+    virtual void fetchFrames(int threadNumber, int from, int to)
+    {
+        fetchFramesCalled++;
+        StackController::fetchFrames(threadNumber, from, to);
+    }
+};
+
 class TestDebugSession : public DebugSession
 {
     Q_OBJECT
@@ -107,10 +125,13 @@ public:
         connect(this, SIGNAL(showStepInSource(KUrl, int)), SLOT(slotShowStepInSource(KUrl, int)));
         
         KDevelop::ICore::self()->debugController()->addSession(this);
+        delete m_stackController;
+        m_stackController = new TestStackController(this);
     }
 
     KUrl url() { return m_url; }
     int line() { return m_line; }
+    TestStackController *stackController() const { return static_cast<TestStackController*>(m_stackController); }
 
 private slots:
     void slotShowStepInSource(const KUrl &url, int line)
@@ -127,6 +148,16 @@ private:
 
 #define WAIT_FOR_STATE(session, state) \
     waitForState((session), (state), __FILE__, __LINE__)
+
+#define COMPARE_DATA(index, expected) \
+    compareData((index), (expected), __FILE__, __LINE__)
+void compareData(QModelIndex index, QString expected, const char *file, int line)
+{
+    QString s = index.model()->data(index, Qt::DisplayRole).toString();
+    if (s != expected) {
+        kFatal() << QString("'%0' didn't match expected '%1' in %2:%3").arg(s).arg(expected).arg(file).arg(line);
+    }
+}
 
 static const QString debugeeFileName = QFileInfo(__FILE__).dir().path()+"/debugee.cpp";
 
@@ -560,36 +591,42 @@ void GdbTest::testShowStepInSource()
     }
 }
 
+KDevelop::FrameStackModel* stackModel()
+{
+    return KDevelop::ICore::self()->debugController()->frameStackModel();
+}
 void GdbTest::testStack()
 {
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
+    stackModel()->setAutoUpdate(true);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
-    KDevelop::StackModel *model = session->stackModel();
-    model->setAutoUpdate(true);
-    QTest::qWait(200);
+    QModelIndex tIdx = stackModel()->index(0,0);
+    QCOMPARE(stackModel()->rowCount(QModelIndex()), 1);
+    QCOMPARE(stackModel()->columnCount(QModelIndex()), 1);
+    COMPARE_DATA(tIdx, "#1 at foo");
 
-    QCOMPARE(model->rowCount(QModelIndex()), 1);
-    QCOMPARE(model->columnCount(QModelIndex()), 1);
+    QCOMPARE(stackModel()->rowCount(tIdx), 2);
+    QCOMPARE(stackModel()->columnCount(tIdx), 3);
+    COMPARE_DATA(tIdx.child(0, 0), "0");
+    COMPARE_DATA(tIdx.child(0, 1), "foo");
+    COMPARE_DATA(tIdx.child(0, 2), debugeeFileName+":23");
+    COMPARE_DATA(tIdx.child(1, 0), "1");
+    COMPARE_DATA(tIdx.child(1, 1), "main");
+    COMPARE_DATA(tIdx.child(1, 2), debugeeFileName+":29");
 
-    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("#1 at foo"));
 
-    QTest::qWait(200);
-    KDevelop::FramesModel* fmodel=model->modelForThread(0);
-    QCOMPARE(fmodel->rowCount(), 2);
-    QCOMPARE(fmodel->columnCount(), 3);
-    QCOMPARE(fmodel->framesCount(), 2);
-    QCOMPARE(fmodel->data(fmodel->index(0,0), Qt::DisplayRole).toString(), QString("0"));
-    QCOMPARE(fmodel->data(fmodel->index(0,1), Qt::DisplayRole).toString(), QString("foo"));
-    QCOMPARE(fmodel->data(fmodel->index(0,2), Qt::DisplayRole).toString(), debugeeFileName+QString(":23"));
-    QCOMPARE(fmodel->data(fmodel->index(1,0), Qt::DisplayRole).toString(), QString("1"));
-    QCOMPARE(fmodel->data(fmodel->index(1,1), Qt::DisplayRole).toString(), QString("main"));
-    QCOMPARE(fmodel->data(fmodel->index(1,2), Qt::DisplayRole).toString(), debugeeFileName+QString(":29"));
-
+    session->stepOut();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    COMPARE_DATA(tIdx, "#1 at main");
+    QCOMPARE(stackModel()->rowCount(tIdx), 1);
+    COMPARE_DATA(tIdx.child(0, 0), "0");
+    COMPARE_DATA(tIdx.child(0, 1), "main");
+    COMPARE_DATA(tIdx.child(0, 2), debugeeFileName+":30");
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -597,6 +634,137 @@ void GdbTest::testStack()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testStackFetchMore()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeerecursion"));
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeerecursion.cpp";
+
+    breakpoints()->addCodeBreakpoint(fileName, 25);
+    stackModel()->setAutoUpdate(true);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->stackController()->fetchFramesCalled, 1);
+
+    QModelIndex tIdx = stackModel()->index(0,0);
+    QCOMPARE(stackModel()->rowCount(QModelIndex()), 1);
+    QCOMPARE(stackModel()->columnCount(QModelIndex()), 1);
+    COMPARE_DATA(tIdx, "#1 at foo");
+
+    QCOMPARE(stackModel()->rowCount(tIdx), 21);
+    COMPARE_DATA(tIdx.child(0, 0), "0");
+    COMPARE_DATA(tIdx.child(0, 1), "foo");
+    COMPARE_DATA(tIdx.child(0, 2), fileName+":26");
+    COMPARE_DATA(tIdx.child(1, 0), "1");
+    COMPARE_DATA(tIdx.child(1, 1), "foo");
+    COMPARE_DATA(tIdx.child(1, 2), fileName+":24");
+    COMPARE_DATA(tIdx.child(2, 0), "2");
+    COMPARE_DATA(tIdx.child(2, 1), "foo");
+    COMPARE_DATA(tIdx.child(2, 2), fileName+":24");
+    COMPARE_DATA(tIdx.child(19, 0), "19");
+    COMPARE_DATA(tIdx.child(20, 0), "20");
+
+    stackModel()->fetchMoreFrames();
+    QTest::qWait(200);
+    QCOMPARE(session->stackController()->fetchFramesCalled, 2);
+    QCOMPARE(stackModel()->rowCount(tIdx), 41);
+    COMPARE_DATA(tIdx.child(20, 0), "20");
+    COMPARE_DATA(tIdx.child(21, 0), "21");
+    COMPARE_DATA(tIdx.child(22, 0), "22");
+    COMPARE_DATA(tIdx.child(39, 0), "39");
+    COMPARE_DATA(tIdx.child(40, 0), "40");
+
+    stackModel()->fetchMoreFrames();
+    QTest::qWait(200);
+    QCOMPARE(session->stackController()->fetchFramesCalled, 3);
+    QCOMPARE(stackModel()->rowCount(tIdx), 61);
+    COMPARE_DATA(tIdx.child(40, 0), "40");
+    COMPARE_DATA(tIdx.child(41, 0), "41");
+    COMPARE_DATA(tIdx.child(42, 0), "42");
+    COMPARE_DATA(tIdx.child(60, 0), "60");
+
+    stackModel()->fetchMoreFrames();
+    QTest::qWait(200);
+    QCOMPARE(session->stackController()->fetchFramesCalled, 4);
+    QCOMPARE(stackModel()->rowCount(tIdx), 81);
+
+    stackModel()->fetchMoreFrames();
+    QTest::qWait(200);
+    QCOMPARE(session->stackController()->fetchFramesCalled, 5);
+    QCOMPARE(stackModel()->rowCount(tIdx), 101);
+    COMPARE_DATA(tIdx.child(100, 0), "100");
+    COMPARE_DATA(tIdx.child(100, 1), "main");
+    COMPARE_DATA(tIdx.child(100, 2), fileName+":30");
+
+    stackModel()->fetchMoreFrames(); //nothing to fetch, we are at the end
+    QTest::qWait(200);
+    QCOMPARE(session->stackController()->fetchFramesCalled, 5);
+    QCOMPARE(stackModel()->rowCount(tIdx), 101);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testStackDeactivateAndActive()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg;
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
+    stackModel()->setAutoUpdate(true);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QModelIndex tIdx = stackModel()->index(0,0);
+
+    stackModel()->setAutoUpdate(false);
+    session->stepOut();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    stackModel()->setAutoUpdate(true);
+    QTest::qWait(200);
+    COMPARE_DATA(tIdx, "#1 at main");
+    QCOMPARE(stackModel()->rowCount(tIdx), 1);
+    COMPARE_DATA(tIdx.child(0, 0), "0");
+    COMPARE_DATA(tIdx.child(0, 1), "main");
+    COMPARE_DATA(tIdx.child(0, 2), debugeeFileName+":30");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+void GdbTest::testStackSwitchThread()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeethreads"));
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeethreads.cpp";
+
+    breakpoints()->addCodeBreakpoint(fileName, 38);
+    stackModel()->setAutoUpdate(true);
+    QVERIFY(session->startProgram(&cfg));
+    QTest::qWait(500);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    QCOMPARE(stackModel()->rowCount(), 4);
+
+    QModelIndex tIdx = stackModel()->index(0,0);
+    COMPARE_DATA(tIdx, "#1 at main");
+    QCOMPARE(stackModel()->rowCount(tIdx), 1);
+    COMPARE_DATA(tIdx.child(0, 0), "0");
+    COMPARE_DATA(tIdx.child(0, 1), "main");
+    COMPARE_DATA(tIdx.child(0, 2), fileName+":39");
+
+    tIdx = stackModel()->index(1,0);
+    QVERIFY(stackModel()->data(tIdx).toString().startsWith("#2 at pthread_cond_timedwait"));
+    stackModel()->setActiveThread(2);
+    QTest::qWait(200);
+    int rows = stackModel()->rowCount(tIdx);
+    QVERIFY(rows > 3);
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
 
 void GdbTest::testAttach()
 {
@@ -641,34 +809,22 @@ void GdbTest::testCoreFile()
 
     TestDebugSession *session = new TestDebugSession;
     session->examineCoreFile(KUrl(QDir::currentPath()+"/unittests/debugeecrash"), KUrl(QDir::currentPath()+"/core"));
+    stackModel()->setAutoUpdate(true);
+    WAIT_FOR_STATE(session, DebugSession::StoppedState);
 
-    KDevelop::StackModel *model = session->stackModel();
-    model->setAutoUpdate(true);
-    QTest::qWait(500);
-
-    QCOMPARE(model->rowCount(QModelIndex()), 1);
-    QCOMPARE(model->columnCount(QModelIndex()), 1);
-
-    QCOMPARE(model->data(model->index(0,0), Qt::DisplayRole).toString(), QString("#1 at foo"));
+    QModelIndex tIdx = stackModel()->index(0,0);
+    QCOMPARE(stackModel()->rowCount(QModelIndex()), 1);
+    QCOMPARE(stackModel()->columnCount(QModelIndex()), 1);
+    COMPARE_DATA(tIdx, "#1 at foo");
 
     session->stopDebugger();
-    QTest::qWait(100);
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
 
 KDevelop::VariableCollection *variableCollection()
 {
     return KDevelop::ICore::self()->debugController()->variableCollection();
-}
-
-#define COMPARE_DATA(index, expected) \
-    compareData((index), (expected), __FILE__, __LINE__)
-void compareData(QModelIndex index, QString expected, const char *file, int line)
-{
-    QString s = index.model()->data(index, Qt::DisplayRole).toString();
-    if (s != expected) {
-        kFatal() << QString("'%0' didn't match expected '%1' in %2:%3").arg(s).arg(expected).arg(file).arg(line);
-    }
 }
 
 void GdbTest::testVariablesLocals()
@@ -877,6 +1033,7 @@ void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::Deb
     stopWatch.start();
     while (s->state() != state) {
         if (stopWatch.elapsed() > 5000) {
+            kWarning() << "current state" << s->state() << "waiting for" << state;
             kFatal() << QString("Didn't reach state in %0:%1").arg(file).arg(line);
         }
         QTest::qWait(20);

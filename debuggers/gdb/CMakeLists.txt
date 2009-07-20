@@ -30,7 +30,6 @@ set(kdevgdb_PART_SRCS
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
-    stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
@@ -39,6 +38,7 @@ set(kdevgdb_PART_SRCS
     gdblaunchconfig.cpp
     selectcoredialog.cpp
     variablecontroller.cpp
+    stackcontroller.cpp
 )
 
 set(kdevgdb_PART_UI
@@ -79,13 +79,13 @@ set(gdbtest_PART_SRCS
     gdboutputwidget.cpp
 #    debuggertracingdialog.cpp
     breakpointcontroller.cpp
-    stackmanager.cpp
     mi/gdbmi.cpp
     mi/milexer.cpp
     mi/miparser.cpp
     stringhelpers.cpp
     debugsession.cpp
     variablecontroller.cpp
+    stackcontroller.cpp
 )
 
 kde4_add_ui_files(gdbtest_PART_SRCS

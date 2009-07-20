@@ -75,7 +75,6 @@ public:
     ~DebugSession();
 
     virtual DebuggerState state() const;
-    virtual KDevelop::StackModel* stackModel() const;
 
     virtual bool restartAvaliable() const;
 

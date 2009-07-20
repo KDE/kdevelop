@@ -48,12 +48,12 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iplugincontroller.h>
 
-#include "stackmanager.h"
 #include "breakpointcontroller.h"
 #include "variablecontroller.h"
 #include "gdb.h"
 #include "gdbcommandqueue.h"
 #include "stty.h"
+#include "stackcontroller.h"
 
 namespace GDBDebugger {
 
@@ -69,13 +69,13 @@ DebugSession::DebugSession()
       state_(s_dbgNotStarted|s_appNotStarted),
       programHasExited_(false),
       state_reload_needed(false),
-      stateReloadInProgress_(false),
-      m_stackManager(new StackManager(this))
+      stateReloadInProgress_(false)
 {
     configure();
 
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
+    m_stackController = new StackController(this);
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
@@ -114,11 +114,6 @@ void DebugSession::emitShowStepInSource(const QString& file, int line, const QSt
     } else {
         emit clearExecutionPoint();
     }
-}
-
-KDevelop::StackModel* DebugSession::stackModel() const
-{
-    return m_stackManager;
 }
 
 KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
