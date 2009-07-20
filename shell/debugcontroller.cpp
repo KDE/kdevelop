@@ -43,11 +43,12 @@
 #include "../interfaces/context.h"
 #include "../language/interfaces/editorcontext.h"
 #include "../sublime/view.h"
-#include "debugger/framestackwidget.h"
 #include "core.h"
 #include "../debugger/breakpoint/breakpointmodel.h"
 #include "../debugger/breakpoint/breakpointwidget.h"
 #include "../debugger/variable/variablewidget.h"
+#include "../debugger/framestack/framestackmodel.h"
+#include "../debugger/framestack/framestackwidget.h"
 
 
 namespace KDevelop {
@@ -97,7 +98,8 @@ private:
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient(),
       m_breakpointModel(new BreakpointModel(this)),
-      m_variableCollection(new VariableCollection(this))
+      m_variableCollection(new VariableCollection(this)),
+      m_frameStackModel(new FrameStackModel(this))
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
@@ -146,6 +148,12 @@ VariableCollection* DebugController::variableCollection()
 {
     return m_variableCollection;
 }
+
+FrameStackModel* DebugController::frameStackModel()
+{
+    return m_frameStackModel;
+}
+
 
 
 void DebugController::partAdded(KParts::Part* part)

@@ -18,41 +18,28 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#include "istackcontroller.h"
 
-#ifndef IDEBUGCONTROLLER_H
-#define IDEBUGCONTROLLER_H
-
-#include <QtCore/QObject>
-#include "interfacesexport.h"
+#include "idebugsession.h"
+#include "../../interfaces/icore.h"
+#include "../../interfaces/idebugcontroller.h"
+#include "framestack/framestackmodel.h"
 
 namespace KDevelop {
 
-class VariableCollection;
-class BreakpointModel;
-class FrameStackModel;
-class ContextMenuExtension;
-class Context;
-class IDebugSession;
-
-class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
+IStackController::IStackController(IDebugSession* session)
+    : QObject(session)
 {
-    Q_OBJECT
-public:
-    IDebugController(QObject *parent = 0);
-    virtual ~IDebugController();
+    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+            SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
+}
 
-    virtual void addSession(IDebugSession* session) = 0;
-    virtual IDebugSession *currentSession() = 0;
-    virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
+FrameStackModel* IStackController::frameStackModel()
+{
+    return ICore::self()->debugController()->frameStackModel();
+}
 
-    virtual BreakpointModel *breakpointModel() = 0;
-    virtual VariableCollection *variableCollection() = 0;
-    virtual FrameStackModel *frameStackModel() = 0;
-
-Q_SIGNALS:
-    void sessionAdded(KDevelop::IDebugSession* session);
-};
 
 }
 
-#endif
+#include "istackcontroller.moc"

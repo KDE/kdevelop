@@ -18,39 +18,30 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#ifndef KDEV_ISTACKCONTROLLER_H
+#define KDEV_ISTACKCONTROLLER_H
 
-#ifndef IDEBUGCONTROLLER_H
-#define IDEBUGCONTROLLER_H
+#include <QObject>
 
-#include <QtCore/QObject>
-#include "interfacesexport.h"
+#include "../debuggerexport.h"
+#include "idebugsession.h"
 
 namespace KDevelop {
 
-class VariableCollection;
-class BreakpointModel;
 class FrameStackModel;
-class ContextMenuExtension;
-class Context;
 class IDebugSession;
 
-class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
+class KDEVPLATFORMDEBUGGER_EXPORT IStackController : public QObject
 {
     Q_OBJECT
 public:
-    IDebugController(QObject *parent = 0);
-    virtual ~IDebugController();
+    IStackController(IDebugSession *session);
 
-    virtual void addSession(IDebugSession* session) = 0;
-    virtual IDebugSession *currentSession() = 0;
-    virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
+    virtual void fetchThreads() = 0;
+    virtual void fetchFrames(int threadNumber, int from, int to) = 0;
 
-    virtual BreakpointModel *breakpointModel() = 0;
-    virtual VariableCollection *variableCollection() = 0;
-    virtual FrameStackModel *frameStackModel() = 0;
-
-Q_SIGNALS:
-    void sessionAdded(KDevelop::IDebugSession* session);
+protected:
+    FrameStackModel *frameStackModel();
 };
 
 }

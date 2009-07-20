@@ -3,7 +3,7 @@
  *
  * Copyright 1999 John Birch <jbb@kdevelop.org>
  * Copyright 2007 Hamish Rodda <rodda@kde.org>
- * Copyright 2009 Niko Sams <niko.sams@gmail.com> 
+ * Copyright 2009 Niko Sams <niko.sams@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -25,21 +25,22 @@
 #define KDEVELOP_FRAMESTACKWIDGET_H
 
 #include <QSplitter>
-#include "../../debugger/interfaces/idebugsession.h"
 
+#include "../debuggerexport.h"
+
+class QTreeView;
 class QModelIndex;
 class QListView;
 
 namespace KDevelop {
 class IDebugSession;
-class DebugController;
-class AsyncTreeView;
+class IDebugController;
 
-class FramestackWidget : public QSplitter
+class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
 {
     Q_OBJECT
     public:
-        FramestackWidget( DebugController* controller, QWidget *parent=0 );
+        FramestackWidget( IDebugController* controller, QWidget *parent=0 );
         virtual ~FramestackWidget();
     Q_SIGNALS:
         void requestRaise();
@@ -48,15 +49,17 @@ class FramestackWidget : public QSplitter
         virtual void hideEvent(QHideEvent* );
     private Q_SLOTS:
         void sessionAdded(KDevelop::IDebugSession* session);
+
         void setThreadShown(const QModelIndex& idx);
         void checkFetchMoreFrames();
         void assignSomeThread();
-        void stateChanged(KDevelop::IDebugSession::DebuggerState state);
+        void openFile(const QModelIndex& idx);
+
     private:
-        DebugController *m_controller;
-        AsyncTreeView *mFrames;
-        QListView *mThreads;
-        QWidget* mThreadsWidget;
+        IDebugController *m_controller;
+        QListView *m_threads;
+        QWidget *m_threadsWidget;
+        QTreeView *m_frames;
 };
 
 }

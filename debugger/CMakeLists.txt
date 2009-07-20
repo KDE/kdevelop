@@ -5,10 +5,9 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9531 )
 
 set( kdevplatformdebugger_LIB_SRCS
     interfaces/idebugsession.cpp
-    interfaces/stackmodel.cpp
-    interfaces/stackitem.cpp
     interfaces/ibreakpointcontroller.cpp
     interfaces/ivariablecontroller.cpp
+    interfaces/istackcontroller.cpp
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
@@ -19,6 +18,8 @@ set( kdevplatformdebugger_LIB_SRCS
     variable/variablewidget.cpp
     variable/variablecollection.cpp
     variable/variabletooltip.cpp
+    framestack/framestackmodel.cpp
+    framestack/framestackwidget.cpp
 )
 kde4_add_library(kdevplatformdebugger SHARED ${kdevplatformdebugger_LIB_SRCS})
 target_link_libraries(kdevplatformdebugger
@@ -39,10 +40,9 @@ install(FILES
 )
 install(FILES
     interfaces/idebugsession.h
-    interfaces/stackmodel.h
-    interfaces/stackitem.h
     interfaces/ibreakpointcontroller.h
     interfaces/ivariablecontroller.h
+    interfaces/istackcontroller.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/interfaces COMPONENT Devel
 )
 install(FILES
@@ -61,4 +61,8 @@ install(FILES
 install(FILES
     variable/variablecollection.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/variable COMPONENT Devel
+)
+install(FILES
+    framestack/framestackmodel.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/framestack COMPONENT Devel
 )

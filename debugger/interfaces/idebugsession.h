@@ -30,6 +30,7 @@ namespace KDevelop {
 
 class IVariableController;
 class IBreakpointController;
+class IStackController;
 class Breakpoint;
 class StackModel;
 
@@ -57,8 +58,6 @@ public:
      */
     virtual DebuggerState state() const = 0;
 
-    virtual StackModel* stackModel() const = 0;
-
     /**
      * Should return if restart is currently available
      */
@@ -69,8 +68,9 @@ public:
      */
     bool isRunning() const;
     
-    IBreakpointController *breakpointController();
-    IVariableController *variableController();
+    IBreakpointController *breakpointController() const;
+    IVariableController *variableController() const;
+    IStackController *stackController() const;
 
 public Q_SLOTS:
     virtual void restartDebugger() = 0;
@@ -97,6 +97,7 @@ protected:
 
     IBreakpointController *m_breakpointController;
     IVariableController *m_variableController;
+    IStackController *m_stackController;
 };
 
 }

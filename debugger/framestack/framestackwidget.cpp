@@ -24,29 +24,31 @@
 
 #include "framestackwidget.h"
 
-#include <KDebug>
-#include <KLocalizedString>
-#include <KIcon>
-
-#include "../debugcontroller.h"
-#include <debugger/util/treeview.h>
-#include <debugger/interfaces/stackmodel.h>
-#include <debugger/interfaces/stackitem.h>
 #include <QHeaderView>
 #include <QScrollBar>
 #include <QListView>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QTreeView>
 
+#include <KDebug>
+#include <KLocalizedString>
+#include <KIcon>
+#include <KTextEditor/Cursor>
 
-using namespace KDevelop;
+#include "../../interfaces/icore.h"
+#include "../../interfaces/idebugcontroller.h"
+#include "../../interfaces/idocumentcontroller.h"
+#include "../interfaces/istackcontroller.h"
+#include "framestackmodel.h"
 
-FramestackWidget::FramestackWidget(DebugController* controller, QWidget* parent)
+namespace KDevelop {
+
+FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent)
     : QSplitter(Qt::Horizontal, parent), m_controller(controller)
 {
     connect(controller, SIGNAL(sessionAdded(KDevelop::IDebugSession*)), SLOT(sessionAdded(KDevelop::IDebugSession*)));
     connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
-    
 
     setWhatsThis(i18n("<b>Frame stack</b><p>"
                     "Often referred to as the \"call stack\", "
@@ -57,21 +59,24 @@ FramestackWidget::FramestackWidget(DebugController* controller, QWidget* parent)
                     "can see the values in any of the "
                     "previous calling functions.</p>"));
     setWindowIcon(KIcon("view-list-text"));
-    mThreadsWidget=new QWidget(this);
-    mThreads=new QListView(mThreadsWidget);
-    mFrames=new AsyncTreeView(0, this);
-    
-    mThreadsWidget->setLayout(new QVBoxLayout());
-    mThreadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
-    mThreadsWidget->layout()->addWidget(mThreads);
-    mThreadsWidget->hide();
-    addWidget(mThreadsWidget);
-    addWidget(mFrames);
-    
+    m_threadsWidget = new QWidget(this);
+    m_threads = new QListView(m_threadsWidget);
+    m_threads->setModel(controller->frameStackModel());
+    m_frames = new QTreeView(this);
+    m_frames->setRootIsDecorated(false);
+    m_frames->setModel(controller->frameStackModel());
+
+    m_threadsWidget->setLayout(new QVBoxLayout());
+    m_threadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
+    m_threadsWidget->layout()->addWidget(m_threads);
+    m_threadsWidget->hide();
+    addWidget(m_threadsWidget);
+    addWidget(m_frames);
+
     setStretchFactor(1, 3);
-    connect(mFrames->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(checkFetchMoreFrames()));
-    mFrames->setRootIsDecorated(false);
-    connect(mThreads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
+    connect(m_frames->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(checkFetchMoreFrames()));
+    connect(m_threads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
+    connect(m_frames, SIGNAL(clicked(QModelIndex)), SLOT(openFile(QModelIndex)));
 }
 
 FramestackWidget::~FramestackWidget() {}
@@ -81,7 +86,6 @@ void FramestackWidget::sessionAdded(KDevelop::IDebugSession* session)
     Q_UNUSED(session);
     kDebug() << "Adding session:" << isVisible();
     if (isVisible()) {
-        KDevelop::IDebugSession* session = m_controller->currentSession();
         showEvent(0);
     }
 }
@@ -89,71 +93,62 @@ void FramestackWidget::sessionAdded(KDevelop::IDebugSession* session)
 void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
-    kDebug();
-    if (m_controller->currentSession()) {
-        m_controller->currentSession()->stackModel()->setAutoUpdate(false);
-    }
+    m_controller->frameStackModel()->setAutoUpdate(false);
 }
 
 void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
-    if (m_controller->currentSession()
-        && m_controller->currentSession()->state() != KDevelop::IDebugSession::EndedState)
-    {
-        kDebug();
-        StackModel* model = m_controller->currentSession()->stackModel();
-        model->setAutoUpdate(true);
-        mThreads->setModel(model);
-        
-        connect(model, SIGNAL(rowsInserted(QModelIndex, int, int)), this, SLOT(assignSomeThread()));
+
+    m_controller->frameStackModel()->setAutoUpdate(true);
+
+    IDebugSession *session = m_controller->currentSession();
+    if (session && session->state() != KDevelop::IDebugSession::EndedState) {
+        connect(m_controller->frameStackModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+                SLOT(assignSomeThread()));
         assignSomeThread();
-        
-        connect(m_controller->currentSession(), SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-                    SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
     }
 }
 
 void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& idx)
 {
-    StackModel* model = m_controller->currentSession()->stackModel();
-    FramesModel *f= model->modelForThread(idx.row());
-    mFrames->setModel(f);
+    m_frames->setRootIndex(idx);
+    m_controller->frameStackModel()->setActiveThread(idx);
 }
 
 void KDevelop::FramestackWidget::checkFetchMoreFrames()
 {
-    int val=mFrames->verticalScrollBar()->value();
-    int max=mFrames->verticalScrollBar()->maximum();
-    const int offset=20;
-    
-    if(val+offset>max)
-        static_cast<FramesModel *>(mFrames->model())->moreItems();
+    int val = m_frames->verticalScrollBar()->value();
+    int max = m_frames->verticalScrollBar()->maximum();
+    const int offset = 20;
+
+    kDebug() << val << max << m_frames->verticalScrollBar()->minimum();
+    if (val + offset > max) {
+        m_controller->frameStackModel()->fetchMoreFrames();
+    }
 }
 
 void KDevelop::FramestackWidget::assignSomeThread()
 {
-    StackModel* model=m_controller->currentSession()->stackModel();
-    kDebug() << mFrames->model() << model->hasThreads();
-    if(!mFrames->model() && model->hasThreads()) {
-        QModelIndex idx=mThreads->model()->index(0,0);
+    FrameStackModel* model = m_controller->frameStackModel();
+    if (model->activeThread() && m_threads->selectionModel()->selectedRows().isEmpty()) {
+        QModelIndex idx = model->activeThreadIndex();
+        m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         setThreadShown(idx);
     }
     if (model->rowCount() <= 1) {
-        mThreadsWidget->hide();
+        m_threadsWidget->hide();
     } else {
-        mThreadsWidget->show();
+        m_threadsWidget->show();
     }
 }
 
-void FramestackWidget::stateChanged(KDevelop::IDebugSession::DebuggerState state)
+void FramestackWidget::openFile(const QModelIndex& idx)
 {
-    if (state == KDevelop::IDebugSession::EndedState) {
-        mThreads->setModel(0);
-        mFrames->setModel(0);
-    }
+    FrameStackModel::FrameItem f = m_controller->frameStackModel()->frame(idx);
+    ICore::self()->documentController()->openDocument(f.file, KTextEditor::Cursor(f.line, 0));
 }
 
-
+}
 
 #include "framestackwidget.moc"

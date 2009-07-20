@@ -69,8 +69,6 @@ set(kdevplatformshell_LIB_SRCS
     kross/wrappers/krossiprojectbuilder.cpp
     kross/wrappers/krosseditorcontext.cpp
     kross/wrappers/krossqtoolbar.cpp
-
-    debugger/framestackwidget.cpp
 )
 
 set(kdevplatformshell_UI
