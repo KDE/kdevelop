@@ -63,3 +63,5 @@ void IVariableController::setAutoUpdate(bool autoUpdate)
 }
 
 }
+
+#include "ivariablecontroller.moc"
