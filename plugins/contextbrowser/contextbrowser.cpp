@@ -107,7 +107,7 @@ K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevconte
 
 ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(ContextBrowserFactory::componentData(), parent)
-    , m_viewFactory(new ContextBrowserViewFactory(this)), m_backupsMutex(QMutex::Recursive)
+    , m_backupsMutex(QMutex::Recursive), m_viewFactory(new ContextBrowserViewFactory(this))
 {
   setXMLFile( "kdevcontextbrowser.rc" );
 
