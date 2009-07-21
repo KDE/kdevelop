@@ -41,9 +41,9 @@ QStringList removeBasePath( const QStringList& fullpath, KDevelop::ProjectBaseIt
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QStringList basePath = model->pathFromIndex( model->indexFromItem( item ) );
-        if( basePath.count() > fullpath.count() )
+        if( basePath.count() >= fullpath.count() )
         {
-            return basePath;
+            return QStringList();
         }
         for( int i = 0; i < basePath.count(); i++ )
         {
@@ -99,13 +99,12 @@ ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
 {
     setModel(mModel);
     setCaseSensitivity( Qt::CaseInsensitive );
-//     setModelSorting( QCompleter::CaseInsensitivelySortedModel );
 }
 
 
 QStringList ProjectItemCompleter::splitPath(const QString& path) const
 {
-    return KDevelop::splitWithEscaping( path, sep, escape ); 
+    return joinBasePath( KDevelop::splitWithEscaping( path, sep, escape ), mBase ); 
 }
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
@@ -113,7 +112,7 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
     QString postfix;
     if(mModel->item(index)->folder())
         postfix=sep;
-    
+    qDebug() << "path from index:" << index << removeBasePath( mModel->pathFromIndex(index), mBase );
     return KDevelop::joinWithEscaping(removeBasePath( mModel->pathFromIndex(index), mBase ), sep, escape)+postfix;
 }
 
