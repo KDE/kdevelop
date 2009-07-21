@@ -78,11 +78,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
 NativeAppConfigPage::NativeAppConfigPage( QWidget* parent ) 
     : LaunchConfigurationPage( parent )
 {
-    setupUi(this);
-    //Setup completions for the target lineedits
-    projectTarget->setCompleter( new ProjectItemCompleter( KDevelop::ICore::self()->projectController()->projectModel(), this ) );
-    targetDependency->setCompleter( new ProjectItemCompleter( KDevelop::ICore::self()->projectController()->projectModel(), this ) );
-    
+    setupUi(this);    
     //Setup data info for combobox
     dependencyAction->setItemData(0, "Nothing" );
     dependencyAction->setItemData(1, "Build" );

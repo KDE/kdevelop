@@ -20,39 +20,22 @@
 #ifndef PROJECTITEMLINEEDIT_H
 #define PROJECTITEMLINEEDIT_H
 
-#include <QCompleter>
-#include <QStringList>
 #include <KLineEdit>
 
 namespace KDevelop { class ProjectModel; }
 
-class ProjectItemCompleter : public QCompleter
-{
-    Q_OBJECT
-    public:
-        ProjectItemCompleter(KDevelop::ProjectModel* model, QObject* parent=0);
-        
-        QString separator() const { return sep; }
-        QStringList splitPath(const QString &path) const;
-        QString pathFromIndex(const QModelIndex& index) const;
-        
-    private:
-        KDevelop::ProjectModel* mModel;
-        QChar sep;
-};
-
 class ProjectItemLineEdit : public KLineEdit
 {
     Q_OBJECT
-    public:
-        ProjectItemLineEdit(QWidget* parent=0);
-        
-    public Q_SLOTS:
-        void updated(const QString& newText);
-        void correctnessChange(bool correct);
-        
-    Q_SIGNALS:
-        void correctnessChanged(bool isCorrect);
+public:
+    ProjectItemLineEdit(QWidget* parent=0);
+    
+public slots:
+    void updated(const QString& newText);
+    void correctnessChange(bool correct);
+    
+signals:
+    void correctnessChanged(bool isCorrect);
 };
 
 #endif
