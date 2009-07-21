@@ -41,6 +41,10 @@ QStringList removeBasePath( const QStringList& fullpath, KDevelop::ProjectBaseIt
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QStringList basePath = model->pathFromIndex( model->indexFromItem( item ) );
+        if( basePath.count() > fullpath.count() )
+        {
+            return basePath;
+        }
         for( int i = 0; i < basePath.count(); i++ )
         {
             result.takeFirst();
@@ -95,7 +99,7 @@ ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
 {
     setModel(mModel);
     setCaseSensitivity( Qt::CaseInsensitive );
-    setModelSorting( QCompleter::CaseInsensitivelySortedModel );
+//     setModelSorting( QCompleter::CaseInsensitivelySortedModel );
 }
 
 
