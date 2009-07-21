@@ -49,7 +49,7 @@ KIcon NativeAppConfigPage::icon() const
 
 //TODO: Make sure to auto-add the executable target to the dependencies when its used.
 
-void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg) 
+void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project ) 
 {
     bool b = blockSignals( true );
     if( cfg.readEntry( ExecutePlugin::isExecutableEntry, false ) ) 
@@ -205,7 +205,7 @@ void NativeAppConfigPage::removeDep()
     }
 }
 
-void NativeAppConfigPage::saveToConfiguration(KConfigGroup cfg) const
+void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
 {
     cfg.writeEntry( ExecutePlugin::isExecutableEntry, executableRadio->isChecked() );
     if( executableRadio-> isChecked() )

@@ -624,7 +624,7 @@ void LaunchConfigTypePage::changeLauncher( int idx )
             LaunchConfigurationPage* page = fac->createWidget( ui->tab );
             connect( page, SIGNAL(changed()), SIGNAL(changed()) );
             ui->tab->addTab( page, page->icon(), page->title() );
-            page->loadFromConfiguration( config->config() );
+            page->loadFromConfiguration( config->config(), config->project() );
             launcherPages << page;
         }
     }
@@ -666,7 +666,7 @@ void LaunchConfigTypePage::setLaunchConfiguration( KDevelop::LaunchConfiguration
     changeLauncher( ui->launcher->findData( config->launcherForMode( "execute" ) ) );
     foreach( LaunchConfigurationPage* p, ui->tab->findChildren<LaunchConfigurationPage*>() )
     {
-        p->loadFromConfiguration( config->config() );
+        p->loadFromConfiguration( config->config(), config->project() );
     }
 }
 

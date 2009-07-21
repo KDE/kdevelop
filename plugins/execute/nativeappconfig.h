@@ -34,8 +34,8 @@ class NativeAppConfigPage : public KDevelop::LaunchConfigurationPage, Ui::Native
 Q_OBJECT
 public:
     NativeAppConfigPage( QWidget* parent );
-    void loadFromConfiguration( const KConfigGroup& cfg );
-    void saveToConfiguration( KConfigGroup cfg ) const;
+    void loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject* project = 0 );
+    void saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project = 0 ) const;
     QString title() const;
     KIcon icon() const;
 private slots:
