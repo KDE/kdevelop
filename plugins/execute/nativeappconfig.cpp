@@ -58,8 +58,12 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
     } else 
     {
+        if( project )
+        {
+            projectTarget->setBaseItem( project->projectItem() );
+        }
         projectTargetRadio->setChecked( true );
-        projectTarget->setText( KDevelop::joinWithEscaping( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ), '/', '\\' ) );
+        projectTarget->setItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
     }
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
@@ -214,7 +218,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
         cfg.deleteEntry( ExecutePlugin::projectTargetEntry );
     } else
     {
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, KDevelop::splitWithEscaping(projectTarget->text(), '/', '\\' ) );
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->itemPath() );
         cfg.deleteEntry( ExecutePlugin::executableEntry );
     }
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
