@@ -29,13 +29,6 @@ class ProjectItemLineEdit : public KLineEdit
     Q_OBJECT
 public:
     ProjectItemLineEdit(QWidget* parent=0);
-    
-public slots:
-    void updated(const QString& newText);
-    void correctnessChange(bool correct);
-    
-signals:
-    void correctnessChanged(bool isCorrect);
 };
 
 #endif

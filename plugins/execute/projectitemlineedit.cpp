@@ -26,24 +26,35 @@
 #include <project/projectmodel.h>
 #include <util/kdevstringhandler.h>
 #include <kcolorscheme.h>
+#include <QValidator>
+
+static const QChar sep = '/';
+static const QChar escape = '\\';
 
 class ProjectItemCompleter : public QCompleter
 {
     Q_OBJECT
-    public:
-        ProjectItemCompleter(QObject* parent=0);
-        
-        QString separator() const { return sep; }
-        QStringList splitPath(const QString &path) const;
-        QString pathFromIndex(const QModelIndex& index) const;
-        
-    private:
-        KDevelop::ProjectModel* mModel;
-        QChar sep;
+public:
+    ProjectItemCompleter(QObject* parent=0);
+    
+    QString separator() const { return sep; }
+    QStringList splitPath(const QString &path) const;
+    QString pathFromIndex(const QModelIndex& index) const;
+    
+private:
+    KDevelop::ProjectModel* mModel;
+};
+
+class ProjectItemValidator : public QValidator
+{
+    Q_OBJECT
+public:
+    ProjectItemValidator(QObject* parent = 0 );
+    QValidator::State validate( QString& input, int& pos ) const;
 };
 
 ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
-: QCompleter(parent), mModel(KDevelop::ICore::self()->projectController()->projectModel()), sep('/')
+: QCompleter(parent), mModel(KDevelop::ICore::self()->projectController()->projectModel())
 {
     setModel(mModel);
 }
@@ -51,7 +62,7 @@ ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
 
 QStringList ProjectItemCompleter::splitPath(const QString& path) const
 {
-    return KDevelop::splitWithEscaping( path, sep, '\\' ); 
+    return KDevelop::splitWithEscaping( path, sep, escape ); 
 }
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
@@ -60,38 +71,39 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
     if(mModel->item(index)->folder())
         postfix=sep;
     
-    return KDevelop::joinWithEscaping(mModel->pathFromIndex(index), sep, '\\')+postfix;
+    return KDevelop::joinWithEscaping(mModel->pathFromIndex(index), sep, escape)+postfix;
+}
+
+
+ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent)
+{
+}
+
+
+QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
+{
+    QStringList path = KDevelop::splitWithEscaping( input, sep, escape );
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    QModelIndex idx = model->pathToIndex( path );
+    QValidator::State state = QValidator::Invalid;
+    if( idx.isValid() ) {
+        state = QValidator::Acceptable;
+    } else {
+        path.takeLast();
+        idx = model->pathToIndex( path );
+        if( idx.isValid() ) {
+            state = QValidator::Intermediate;
+        }
+    }
+    return state;
 }
 
 //TODO: use a proper QValidator for the validation instead of doing it manually.
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : KLineEdit(parent)
 {
-    connect(this, SIGNAL(textChanged(QString)), this, SLOT(updated(QString)));
-    connect(this, SIGNAL(correctnessChanged(bool)), this, SLOT(correctnessChange(bool)));
     setCompleter( new ProjectItemCompleter( this ) );
-}
-
-void ProjectItemLineEdit::updated(const QString& newText)
-{
-    QStringList tofetch=completer()->splitPath(newText);
-    const KDevelop::ProjectModel* model=static_cast<const KDevelop::ProjectModel* >(completer()->model());
-    QModelIndex idx=model->pathToIndex(tofetch);
-    emit correctnessChanged(idx.isValid());
-}
-
-void ProjectItemLineEdit::correctnessChange(bool correct)
-{
-    KStatefulBrush brush;
-    if(correct) {
-        brush=KStatefulBrush( KColorScheme::View, KColorScheme::PositiveText );
-    } else {
-        brush=KStatefulBrush( KColorScheme::View, KColorScheme::NegativeText );
-    }
-    
-    QPalette pal = palette();
-    pal.setBrush( QPalette::Text, brush.brush( this ) );
-    setPalette( pal );
+    setValidator( new ProjectItemValidator( this ) );
 }
 
 #include "projectitemlineedit.moc"
