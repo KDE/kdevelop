@@ -57,6 +57,8 @@ ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
 : QCompleter(parent), mModel(KDevelop::ICore::self()->projectController()->projectModel())
 {
     setModel(mModel);
+    setCaseSensitivity( Qt::CaseInsensitive );
+    setModelSorting( QCompleter::CaseInsensitivelySortedModel );
 }
 
 
