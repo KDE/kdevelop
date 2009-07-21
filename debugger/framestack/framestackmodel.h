@@ -22,6 +22,9 @@
 #define KDEV_FRAMESTACKMODEL_H
 
 #include <QtCore/QModelIndex>
+#if QT_VERSION < 0x040500
+#include <QtCore/QHash>
+#endif
 
 #include <KUrl>
 

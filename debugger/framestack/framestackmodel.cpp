@@ -110,7 +110,11 @@ void FrameStackModel::insertFrames(int threadNumber, const QList<FrameItem> &fra
 
     beginInsertRows(threadIndex, m_frames[threadNumber].count()-1,
                     m_frames[threadNumber].count()+frames.count()-2);
+#if QT_VERSION >= 0x040500
     m_frames[threadNumber].append(frames);
+#else
+    m_frames[threadNumber] << frames;
+#endif
     endInsertRows();
 }
 
