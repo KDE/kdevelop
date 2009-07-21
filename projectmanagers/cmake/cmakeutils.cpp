@@ -45,6 +45,7 @@ static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
 static QString currentBuildTypeKey = "CurrentBuildType";
 static QString currentInstallDirKey = "CurrentInstallDir";
+static QString projectRootRelativeKey = "ProjectRootRelative";
 
 namespace CMake
 {
@@ -58,7 +59,12 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
     if( !builddir.isValid() || builddir.isEmpty() )
     {
         CMakeBuildDirChooser bd;
-        bd.setSourceFolder( item->project()->folder() );
+        
+        KUrl folderUrl=item->project()->folder();
+        QString relative=CMake::projectRootRelative(item->project());
+        folderUrl.cd(relative);
+        
+        bd.setSourceFolder( folderUrl );
         if( !bd.exec() )
         {
             return false;
@@ -122,6 +128,12 @@ KUrl currentInstallDir( KDevelop::IProject* project )
     return cmakeGrp.readEntry( currentInstallDirKey, KUrl("/usr/local") );
 }
 
+QString projectRootRelative( KDevelop::IProject* project )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry( projectRootRelativeKey, QString());
+}
+
 void setCurrentInstallDir( KDevelop::IProject* project, const KUrl& url )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
@@ -150,6 +162,12 @@ void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url )
     cmakeGrp.sync();
 }
 
+void setProjectRootRelative( KDevelop::IProject* project, const QString& relative)
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( projectRootRelativeKey, relative );
+    cmakeGrp.sync();
+}
 
 }
 

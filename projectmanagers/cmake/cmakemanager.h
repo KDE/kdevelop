@@ -138,7 +138,6 @@ private:
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KDevelop::IProject*, KUrl> m_realRoot;
-    QMap<KDevelop::IProject*, KUrl> m_subprojectRoot;
     
     CMakeDocumentation* m_doc;
     ICMakeBuilder* m_builder;

@@ -232,7 +232,9 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
             buildstrapContext->clearImportedParentContexts();
             buildstrapContext->deleteChildContextsRecursively();
         }else{
-            buildstrapContext=new TopDUContext(IndexedString(buildStrapUrl), SimpleRange(0,0, 0,0));
+            IndexedString idxpath(buildStrapUrl);
+            buildstrapContext=new TopDUContext(idxpath, SimpleRange(0,0, 0,0),
+                                               new ParsingEnvironmentFile(idxpath));
             DUChain::self()->addDocumentChain(buildstrapContext);
         }
         
@@ -266,11 +268,10 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
     {
         KSharedConfig::Ptr cfg = project->projectConfiguration();
         KConfigGroup group(cfg.data(), "CMake");
-        m_subprojectRoot[project] = folderUrl;
 
         if(group.hasKey("ProjectRootRelative"))
         {
-            QString relative=group.readEntry("ProjectRootRelative");
+            QString relative=CMake::projectRootRelative(project);
             folderUrl.cd(relative);
         }
         else
@@ -293,13 +294,12 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
                     return 0;
                 }
                 KUrl choice=KUrl(ui.candidates->currentItem()->text());
-                QString relative=KUrl::relativeUrl(folderUrl, choice);
-                group.writeEntry("ProjectRootRelative", relative);
+                CMake::setProjectRootRelative(project, KUrl::relativeUrl(folderUrl, choice));
                 folderUrl=choice;
             }
             else
             {
-                group.writeEntry("ProjectRootRelative", "./");
+                CMake::setProjectRootRelative(project, "./");
             }
         }
 
@@ -441,7 +441,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 folder->setText(data.projectName);
             }
 
-            KUrl subroot=m_subprojectRoot[item->project()];
+            KUrl subroot=item->project()->folder();
 
             foreach (const QString& subf, data.subdirectories)
             {

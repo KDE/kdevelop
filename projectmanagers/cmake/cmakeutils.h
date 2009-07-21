@@ -64,6 +64,11 @@ namespace CMake
      * @returns the current install dir for the given project or "/usr/local" as default value.
      */
     KDEVCMAKECOMMON_EXPORT KUrl currentInstallDir( KDevelop::IProject* project );
+    
+    /**
+     * Sets the current build dir for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT QString projectRootRelative( KDevelop::IProject* project );
 
     /**
      * Sets the current install dir for the given project.
@@ -84,6 +89,11 @@ namespace CMake
      * Sets the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setCurrentBuildDir( KDevelop::IProject* project, const KUrl& url );
+    
+    /**
+     * Sets the current build dir for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setProjectRootRelative( KDevelop::IProject* project, const QString& path);
 }
 
 #endif

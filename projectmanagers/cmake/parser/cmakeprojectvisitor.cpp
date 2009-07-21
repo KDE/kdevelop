@@ -621,7 +621,9 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     }
     else
     {
-        topctx=new TopDUContext(IndexedString(path), SimpleRange(0,0, endl, endc));
+        IndexedString idxpath(path);
+        topctx=new TopDUContext(idxpath, SimpleRange(0,0, endl, endc),
+                                new ParsingEnvironmentFile(idxpath));
         DUChain::self()->addDocumentChain(topctx);
 
         Q_ASSERT(DUChain::self()->chainForDocument(path));
