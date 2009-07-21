@@ -27,9 +27,38 @@
 #include <util/kdevstringhandler.h>
 #include <kcolorscheme.h>
 #include <QValidator>
+#include <interfaces/iproject.h>
+#include <klocale.h>
+#include <kaction.h>
 
 static const QChar sep = '/';
 static const QChar escape = '\\';
+
+QStringList removeBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item )
+{
+    QStringList result = fullpath;
+    if( item )
+    {
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        QStringList basePath = model->pathFromIndex( model->indexFromItem( item ) );
+        for( int i = 0; i < basePath.count(); i++ )
+        {
+            result.takeFirst();
+        }
+    }
+    return result;
+}
+
+QStringList joinBasePath( const QStringList& partialpath, KDevelop::ProjectBaseItem* item )
+{
+    QStringList basePath;
+    if( item )
+    {
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        basePath = model->pathFromIndex( model->indexFromItem( item ) );
+    }
+    return basePath + partialpath;
+}
 
 class ProjectItemCompleter : public QCompleter
 {
@@ -41,8 +70,11 @@ public:
     QStringList splitPath(const QString &path) const;
     QString pathFromIndex(const QModelIndex& index) const;
     
+    void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }
+    
 private:
     KDevelop::ProjectModel* mModel;
+    KDevelop::ProjectBaseItem* mBase;
 };
 
 class ProjectItemValidator : public QValidator
@@ -51,10 +83,15 @@ class ProjectItemValidator : public QValidator
 public:
     ProjectItemValidator(QObject* parent = 0 );
     QValidator::State validate( QString& input, int& pos ) const;
+    
+    void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }
+    
+private:
+    KDevelop::ProjectBaseItem* mBase;
 };
 
 ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
-: QCompleter(parent), mModel(KDevelop::ICore::self()->projectController()->projectModel())
+: QCompleter(parent), mModel(KDevelop::ICore::self()->projectController()->projectModel()), mBase( 0 )
 {
     setModel(mModel);
     setCaseSensitivity( Qt::CaseInsensitive );
@@ -73,39 +110,90 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
     if(mModel->item(index)->folder())
         postfix=sep;
     
-    return KDevelop::joinWithEscaping(mModel->pathFromIndex(index), sep, escape)+postfix;
+    return KDevelop::joinWithEscaping(removeBasePath( mModel->pathFromIndex(index), mBase ), sep, escape)+postfix;
 }
 
 
-ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent)
+ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent), mBase(0)
 {
 }
 
 
 QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
 {
-    QStringList path = KDevelop::splitWithEscaping( input, sep, escape );
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    QStringList path = joinBasePath( KDevelop::splitWithEscaping( input, sep, escape ), mBase );
     QModelIndex idx = model->pathToIndex( path );
-    QValidator::State state = QValidator::Invalid;
-    if( idx.isValid() ) {
+    QValidator::State state = input.isEmpty() ? QValidator::Intermediate : QValidator::Invalid;
+    if( idx.isValid() )
+    {
         state = QValidator::Acceptable;
-    } else {
-        path.takeLast();
+    } else if( path.count() > 1 )
+    {
+        // Check beginning of path and if that is ok, then try to find a child
+        QString end = path.takeLast();
         idx = model->pathToIndex( path );
-        if( idx.isValid() ) {
-            state = QValidator::Intermediate;
+        if( idx.isValid() )
+        {
+            for( int i = 0; i < model->rowCount( idx ); i++ )
+            {
+                if( model->data( model->index( i, 0, idx ) ).toString().startsWith( end, Qt::CaseInsensitive ) )
+                {
+                    state = QValidator::Intermediate;
+                    break;
+                }
+            }
+        }
+    } else if( path.count() == 1 )
+    {
+        // Check for a project whose name beings with the input
+        QString first = path.first();
+        foreach( KDevelop::IProject* project, KDevelop::ICore::self()->projectController()->projects() )
+        {
+            if( project->name().startsWith( first, Qt::CaseInsensitive ) )
+            {
+                state = QValidator::Intermediate;
+                break;
+            }
         }
     }
     return state;
 }
 
-//TODO: use a proper QValidator for the validation instead of doing it manually.
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
-    : KLineEdit(parent)
+    : KLineEdit(parent), 
+      m_base(0), 
+      m_completer( new ProjectItemCompleter( this ) ), 
+      m_validator( new ProjectItemValidator( this ) )
 {
-    setCompleter( new ProjectItemCompleter( this ) );
-    setValidator( new ProjectItemValidator( this ) );
+    setCompleter( m_completer );
+    setValidator( m_validator );
+    setClearButtonShown( true );
+    setClickMessage( i18n("Enter the path to an item from the projects tree" ) );
+}
+
+
+void ProjectItemLineEdit::setItemPath(const QStringList& list)
+{
+    setText( KDevelop::joinWithEscaping( removeBasePath( list, m_base ), sep, escape ) ); 
+}
+
+QStringList ProjectItemLineEdit::itemPath() const
+{
+    return joinBasePath( KDevelop::splitWithEscaping( text(), sep, escape ), m_base );
+}
+
+void ProjectItemLineEdit::setBaseItem(KDevelop::ProjectBaseItem* item)
+{
+    m_base = item;
+    m_validator->setBaseItem( m_base );
+    m_completer->setBaseItem( m_base );
+}
+
+KDevelop::ProjectBaseItem* ProjectItemLineEdit::baseItem() const
+{
+    return m_base;
+    
 }
 
 #include "projectitemlineedit.moc"

@@ -22,13 +22,47 @@
 
 #include <KLineEdit>
 
-namespace KDevelop { class ProjectModel; }
+namespace KDevelop { 
+class ProjectModel; 
+class ProjectBaseItem;
+}
+
+class ProjectItemValidator;
+class ProjectItemCompleter;
 
 class ProjectItemLineEdit : public KLineEdit
 {
     Q_OBJECT
 public:
     ProjectItemLineEdit(QWidget* parent=0);
+    
+    /**
+     * Sets this lineedit to show the given @p path, eventually removing
+     * parts from the beginning if a base item is set
+     * @note This should be preferred over using setText()
+     */
+    void setItemPath( const QStringList& path );
+    /**
+     * Generates a path from the content of the lineedit, including
+     * the base item if present
+     * @returns a path identifying the item selected in this lineedit
+     */
+    QStringList itemPath() const;
+    
+    /**
+     * Sets @p item as the base item for this lineedit, the user
+     * then doesn't need to specify the path leading to this item
+     * and can just start typing the name of one of the subitems
+     */
+    void setBaseItem( KDevelop::ProjectBaseItem* item );
+    /**
+     * @returns the currently used base item
+     */
+    KDevelop::ProjectBaseItem* baseItem() const;
+private:
+    KDevelop::ProjectBaseItem* m_base;
+    ProjectItemCompleter* m_completer;
+    ProjectItemValidator* m_validator;
 };
 
 #endif
