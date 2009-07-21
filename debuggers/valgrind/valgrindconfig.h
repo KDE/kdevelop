@@ -33,6 +33,7 @@ class KIcon;
 namespace KDevelop
 {
 class ILaunchConfiguration;
+class IProject;
 }
 
 namespace Ui
@@ -114,9 +115,9 @@ class ValgrindConfigPage : public KDevelop::LaunchConfigurationPage
 Q_OBJECT
 public:
     ValgrindConfigPage( QWidget* parent = 0 );
-    virtual void loadFromConfiguration(const KConfigGroup& cfg);
+    virtual void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0);
     virtual KIcon icon() const;
-    virtual void saveToConfiguration(KConfigGroup ) const;
+    virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const;
     virtual QString title() const;
 private:
     Ui::ValgrindConfig *ui;

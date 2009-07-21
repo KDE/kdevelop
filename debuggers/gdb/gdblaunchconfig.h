@@ -35,6 +35,7 @@ namespace KDevelop
 {
 class OutputModel;
 class ILaunchConfiguration;
+class IProject;
 }
 
 namespace GDBDebugger
@@ -73,8 +74,8 @@ Q_OBJECT
 public:
     GdbConfigPage( QWidget* parent = 0 );
     virtual KIcon icon() const;
-    virtual void loadFromConfiguration(const KConfigGroup& cfg);
-    virtual void saveToConfiguration(KConfigGroup ) const;
+    virtual void loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* = 0);
+    virtual void saveToConfiguration(KConfigGroup, KDevelop::IProject* = 0 ) const;
     virtual QString title() const;
 private:
     Ui::DebuggerConfigWidget* ui;

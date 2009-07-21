@@ -136,7 +136,7 @@ KIcon ValgrindConfigPage::icon() const
     return KIcon("fork");
 }
 
-void ValgrindConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
+void ValgrindConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* )
 {
     ui->valgrindExecutable->setUrl( cfg.readEntry( "Valgrind Executable", KUrl( "/usr/bin/valgrind" ) ) );
     ui->valgrindParameters->setText( cfg.readEntry( "Valgrind Arguments", "" ) );
@@ -153,7 +153,7 @@ void ValgrindConfigPage::loadFromConfiguration(const KConfigGroup& cfg)
     ui->happensBefore->setCurrentIndex( cfg.readEntry("Extra Synchronization Events", 0 ) );
 }
 
-void ValgrindConfigPage::saveToConfiguration( KConfigGroup cfg ) const
+void ValgrindConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* ) const
 {
     
     cfg.writeEntry( "Valgrind Executable", ui->valgrindExecutable->url() );

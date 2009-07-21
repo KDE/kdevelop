@@ -61,7 +61,7 @@ KIcon GdbConfigPage::icon() const
     return KIcon();
 }
 
-void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg )
+void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject*  )
 {
     ui->kcfg_gdbPath->setUrl( cfg.readEntry( GDBDebugger::gdbPathEntry, KUrl() ) );
     ui->kcfg_debuggingShell->setUrl( cfg.readEntry( GDBDebugger::debuggerShellEntry, KUrl() ) );
@@ -77,7 +77,7 @@ void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg )
     ui->kcfg_enableFloatingToolBar->setChecked( cfg.readEntry(GDBDebugger::floatingToolbarEntry, false) );
 }
 
-void GdbConfigPage::saveToConfiguration( KConfigGroup cfg ) const
+void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* ) const
 {
     cfg.writeEntry(GDBDebugger::gdbPathEntry, ui->kcfg_gdbPath->url() );
     cfg.writeEntry(GDBDebugger::debuggerShellEntry, ui->kcfg_debuggingShell->url() );
