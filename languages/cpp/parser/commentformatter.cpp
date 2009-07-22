@@ -29,7 +29,7 @@ QString CommentFormatter::formatComment( size_t token, const ParseSession* sessi
   if( !token )
     return QString();
   const Token& commentToken( (*session->token_stream)[token] );
-  return KDevelop::formatComment( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) );
+  return KDevelop::formatComment( QString::fromUtf8( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) ) );
 }
 
 QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {
