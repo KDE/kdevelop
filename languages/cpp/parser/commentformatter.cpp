@@ -25,25 +25,25 @@
 #include <language/duchain/stringhelpers.h>
 
 
-QString CommentFormatter::formatComment( size_t token, const ParseSession* session ) {
+QByteArray CommentFormatter::formatComment( size_t token, const ParseSession* session ) {
   if( !token )
-    return QString();
+    return QByteArray();
   const Token& commentToken( (*session->token_stream)[token] );
-  return KDevelop::formatComment( QString::fromUtf8( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) ) );
+  return KDevelop::formatComment( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) );
 }
 
-QString CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {
-  QString ret;
+QByteArray CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {
+  QByteArray ret;
   if( comments )
   {
     const ListNode<size_t> *it = comments->toFront(), *end = it;
     do {
-      QString c = CommentFormatter::formatComment(it->element, session);
+      QByteArray c = CommentFormatter::formatComment(it->element, session);
 
       if( ret.isEmpty() )
         ret = c;
       else
-        ret += QString("\n(%1)").arg(c);
+        ret += "\n(" + c + ")";
 
       it = it->next;
     }while( it != end );

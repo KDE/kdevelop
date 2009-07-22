@@ -241,21 +241,21 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
 
-    QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QString("TranslationUnitComment")); //The comments were merged
+    QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QByteArray("TranslationUnitComment")); //The comments were merged
 
     const ListNode<DeclarationAST*>* it = ast->declarations;
     QVERIFY(it);
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello\n(behind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("Hello\n(behind)"));
 
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("between\nHello2\n(behind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("between\nHello2\n(behind)"));
 
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QString("Hello3\nbeforeTest\n(testBehind)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("Hello3\nbeforeTest\n(testBehind)"));
   }
 
   void testComments2()
@@ -279,12 +279,12 @@ private slots:
     enumerator = enumerator->next;
     QVERIFY(enumerator);
 
-    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QString("enumerator1Comment\n(enumerator1BehindComment)"));
+    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator1Comment\n(enumerator1BehindComment)"));
 
     enumerator = enumerator->next;
     QVERIFY(enumerator);
 
-    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QString("enumerator2Comment\n(enumerator2BehindComment)"));
+    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator2Comment\n(enumerator2BehindComment)"));
   }
 
   void testComments3()
@@ -308,7 +308,7 @@ private slots:
     members = members->next;
     QVERIFY(members);
 
-    QCOMPARE(CommentFormatter::formatComment(members->element->comments, lastSession), QString("Comment"));
+    QCOMPARE(CommentFormatter::formatComment(members->element->comments, lastSession), QByteArray("Comment"));
   }
 
   void testComments4()
