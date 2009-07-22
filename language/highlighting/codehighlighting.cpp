@@ -131,6 +131,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Cont
 
 bool CodeHighlighting::isCodeHighlight(Attribute::Ptr attr) const
 {
+  ///@todo Just create separate smart-ranges in the context-browser, that will solve this mess
   ///@todo Do this properly, by statically building a set of attributes, and testing whether the given attribute is in that set
   ///Right now we just try to keep the highlighting of the context-browser alive to prevent flashing
   if(!attr || attr->underlineStyle() != KTextEditor::Attribute::NoUnderline)
