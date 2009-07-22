@@ -37,6 +37,7 @@
 #include <QTreeView>
 #include <QDebug>
 #include <KPushButton>
+#include "coderepresentation.h"
 
 namespace KDevelop
 {
@@ -48,34 +49,31 @@ struct ApplyChangesWidgetPrivate
     
     void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type);
     void jump( const QModelIndex & idx);
-    void createEditPart(const KUrl & url, const QString & info);
+    void createEditPart(const KDevelop::IndexedString& url, const QString& info);
 
     
     ApplyChangesWidget * const parent;
     unsigned int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
     QList<QStandardItemModel*> m_changes;
+    QList<QPair<IndexedString, IndexedString> > m_files;
     KTabWidget * m_documentTabs;
     
     KompareWidgets m_kompare;
 };
 
-ApplyChangesWidget::ApplyChangesWidget(const QString& info, const KUrl& url, QWidget* parent)
+ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     : KDialog(parent), d(new ApplyChangesWidgetPrivate(this))
 {
     setSizeGripEnabled(true);
     setInitialSize(QSize(800, 400));
     
     d->m_documentTabs = new KTabWidget(this);
-    QWidget * w = new QWidget;
-    d->m_documentTabs->addTab(w, url.fileName());
-   
     
     KDialog::setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
     KPushButton * switchButton(KDialog::button(KDialog::User1));
     switchButton->setText("Edit Document");
-    
-    d->createEditPart(url, info);
+    switchButton->setEnabled(d->m_kompare.enabled);
     
     connect(switchButton, SIGNAL(released()),
             this, SLOT(switchEditView()));
@@ -95,9 +93,34 @@ KTextEditor::Document* ApplyChangesWidget::document() const
     return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
 }
 
-void ApplyChangesWidget::addDocuments(const IndexedString & original, const IndexedString & modified)
+void ApplyChangesWidget::addDocuments(const IndexedString & original, const IndexedString & modified, const QString & info)
 {
-    QWidget * w = d->m_documentTabs->currentWidget();
+    
+    QWidget * w = new QWidget;
+    d->m_documentTabs->addTab(w, original.index() ? original.str() : modified.str());
+    
+    if(d->m_kompare.createWidget(original, modified, w) == -1)
+        d->createEditPart(modified, info);
+    
+#ifndef NDEBUG
+    //Duplicated originals should not exist
+    typedef QPair<IndexedString, IndexedString> StringPair;
+    foreach( StringPair files, d->m_files)
+        Q_ASSERT(files.first != original);
+#endif
+    d->m_files.insert(d->m_index, qMakePair(original, modified));
+}
+
+bool ApplyChangesWidget::applyAllChanges()
+{
+    /// @todo implement safeguard in case a file saving fails
+    
+    bool ret = true;
+    for(unsigned int i = 0; i < static_cast<unsigned int>(d->m_files.size()); ++i )
+        if(!d->m_editParts[i]->saveAs(d->m_files[i].first.toUrl()))
+            ret = false;
+        
+    return ret;
 }
 
 }
@@ -140,7 +163,7 @@ void ApplyChangesWidgetPrivate::jump( const QModelIndex & idx)
     view->setCursorPosition(r.start());
 }
 
-void ApplyChangesWidgetPrivate::createEditPart(const KUrl & url, const QString & info)
+void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const QString & info)
 {
     QWidget * widget = m_documentTabs->currentWidget();
     Q_ASSERT(widget);
@@ -148,9 +171,19 @@ void ApplyChangesWidgetPrivate::createEditPart(const KUrl & url, const QString &
     QVBoxLayout *m=new QVBoxLayout(widget);
     QSplitter *v=new QSplitter(widget);
     
+    KUrl url = file.toUrl();
+    
     KMimeType::Ptr mimetype = KMimeType::findByUrl( url, 0, true );
     
     m_editParts.insert(m_index, KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype->name(), widget, widget));
+    
+    //Open the best code representation, even if it is artificial
+    CodeRepresentation::Ptr repr = createCodeRepresentation(file);
+    
+    //KateDocument does not accept streaming of data for some reason
+    //Q_ASSERT(m_editParts[m_index]->openStream(mimetype->name(), url));
+    //Q_ASSERT(m_editParts[m_index]->writeStream(repr->text().toLocal8Bit()));
+    //Q_ASSERT(m_editParts[m_index]->closeStream());
     m_editParts[m_index]->openUrl(url);
     
     m_changes.insert(m_index, new QStandardItemModel(widget));

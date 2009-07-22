@@ -36,10 +36,17 @@ template<bool Enable>
 class KompareSupport
 {
   public:
-    bool CreateWidget(const IndexedString & original, const IndexedString & modified, QWidget * widget)
+    static const bool enabled = Enable;
+    
+    /**
+     * Create a widget at index @p index. if @p index == -1 then widget will be appended
+     * @return the index number of the retrieved/created widget, 
+     */
+    int createWidget(const IndexedString & original, const IndexedString & modified, QWidget * widget, int index = -1)
     {
-        return true;
+        return -1;
     }
+
 #ifdef KOMPARE_ENABLED
   private:
     QList<KompareInterface *> m_interfaces;
@@ -50,9 +57,11 @@ template <>
 class KompareSupport<false>
 {
   public:
-    bool CreateWidget(const IndexedString & original, const IndexedString & modified, QWidget * widget)
+    static const bool enabled = false;
+    
+    int createWidget(const IndexedString & original, const IndexedString & modified, QWidget * widget, int index = -1)
     {
-        return false;
+        return -1;
     }
 };
 

@@ -35,12 +35,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
 {
     Q_OBJECT
     public:
-        ApplyChangesWidget(const QString& info, const KUrl& url, QWidget* parent=0);
+        ApplyChangesWidget(QWidget* parent=0);
         ~ApplyChangesWidget();
         
         KTextEditor::Document* document() const;
         
-        void addDocuments(const IndexedString & original, const IndexedString & modified);
+        void addDocuments(const IndexedString & original, const IndexedString & modified, const QString & info);
+        
+        ///This will save all the modified files into their originals
+        bool applyAllChanges();
     
     private Q_SLOTS:
         void change (KTextEditor::Document *document, const KTextEditor::Range &oldRange,

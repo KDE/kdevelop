@@ -108,6 +108,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
 
 DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 {
+    /// @todo Possibly check for duplicates, since it could create a lot of bloat when big changes are merged
     for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.d->changes.begin();
         it != rhs.d->changes.end(); ++it)
         d->changes[it.key()] += *it;
