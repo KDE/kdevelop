@@ -346,7 +346,7 @@ private slots:
   {
     rpp::Preprocessor preprocessor;
     QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
-    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )").simplified(), QString("\nHelloYou YouHello"));
+    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )").simplified(), QString("\nHelloYou YouHello").simplified());
   }
 
   void testCondition()
