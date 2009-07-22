@@ -100,6 +100,12 @@ CvsPlugin::~CvsPlugin()
 }
 
 
+void CvsPlugin::unload()
+{
+    core()->uiController()->removeToolView( d->m_factory );
+}
+
+
 CvsProxy* CvsPlugin::proxy()
 {
     return d->m_proxy;

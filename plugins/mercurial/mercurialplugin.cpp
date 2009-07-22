@@ -68,6 +68,13 @@ MercurialPlugin::~MercurialPlugin()
 {
 }
 
+
+void MercurialPlugin::unload()
+{
+    core()->uiController()->removeToolView( dvcsViewFactory() );
+}
+
+
 QString MercurialPlugin::name() const
 {
     return QLatin1String("Mercurial");

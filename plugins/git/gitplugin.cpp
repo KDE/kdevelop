@@ -65,6 +65,12 @@ GitPlugin::~GitPlugin()
 }
 
 
+void GitPlugin::unload()
+{
+    core()->uiController()->removeToolView( dvcsViewFactory() );
+}
+
+
 QString GitPlugin::name() const
 {
     return QLatin1String("Git");

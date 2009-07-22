@@ -57,6 +57,8 @@ public:
     explicit MercurialPlugin(QObject *parent, const QVariantList & args = QVariantList());
     ~MercurialPlugin();
 
+    virtual void unload();
+    
     bool isValidDirectory(const KUrl &dirPath);
     bool isVersionControlled(const KUrl &path);
     QString name() const;

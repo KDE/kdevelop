@@ -43,6 +43,8 @@ class CvsPlugin : public KDevelop::IPlugin, public KDevelop::ICentralizedVersion
 public:
     explicit CvsPlugin(QObject *parent, const QVariantList & args = QVariantList());
     virtual ~CvsPlugin();
+    
+    virtual void unload();
 
     virtual QString name() const;
     virtual KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);
