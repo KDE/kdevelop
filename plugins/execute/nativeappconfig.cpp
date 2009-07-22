@@ -190,7 +190,8 @@ void NativeAppConfigPage::moveDependencyUp()
 
 void NativeAppConfigPage::addDep()
 {
-    dependencies->addItem( targetDependency->text() );
+    QListWidgetItem* item = new QListWidgetItem( targetDependency->text(), dependencies );
+    item->setData( Qt::UserRole, targetDependency->itemPath() );
     targetDependency->setText("");
     addDependency->setEnabled( false );
     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
