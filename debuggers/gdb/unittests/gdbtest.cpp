@@ -33,7 +33,6 @@
 
 #include <tests/testcore.h>
 #include <shell/shellextension.h>
-#include <debugger/interfaces/stackmodel.h>
 #include <debugger/breakpoint/breakpointmodel.h>
 #include <interfaces/idebugcontroller.h>
 #include <debugger/breakpoint/breakpoint.h>
