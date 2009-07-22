@@ -59,6 +59,7 @@ class Breakpoint;
 class GDBOutputWidget;
 class ViewerWidget;
 class DebugSession;
+template<typename T> class DebuggerToolFactory;
 
 class CppDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IStatus
 {
@@ -71,6 +72,8 @@ public:
     CppDebuggerPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~CppDebuggerPlugin();
 
+    virtual void unload();
+    
     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
     
     DebugSession *createSession();
@@ -147,6 +150,10 @@ private:
     KConfigGroup m_config;
 
     DebugSession* m_session;
+    DebuggerToolFactory< DisassembleWidget >* disassemblefactory;
+    DebuggerToolFactory< GDBOutputWidget >* gdbfactory;
+    DebuggerToolFactory< ViewerWidget >* viewerfactory;
+    
 };
 
 }

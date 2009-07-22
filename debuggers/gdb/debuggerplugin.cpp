@@ -139,23 +139,25 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     setXMLFile("kdevgdbui.rc");
 
+    disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
+    this, "org.kdevelop.debugger.DisassemblerView", Qt::BottomDockWidgetArea);
+
+    gdbfactory = new DebuggerToolFactory<GDBOutputWidget>(
+    this, "org.kdevelop.debugger.ConsoleView",Qt::BottomDockWidgetArea);
+    viewerfactory = new DebuggerToolFactory<ViewerWidget>(
+    this, "org.kdevelop.debugger.VariousViews", Qt::BottomDockWidgetArea);
+    
     core()->uiController()->addToolView(
         i18n("Disassemble"),
-        new DebuggerToolFactory<DisassembleWidget>(
-            this, "org.kdevelop.debugger.DisassemblerView",
-            Qt::BottomDockWidgetArea));
+        disassemblefactory);
 
     core()->uiController()->addToolView(
         i18n("GDB"),
-        new DebuggerToolFactory<GDBOutputWidget>(
-            this, "org.kdevelop.debugger.ConsoleView",
-            Qt::BottomDockWidgetArea));
+        gdbfactory);
 
     core()->uiController()->addToolView(
         i18n("Debug views"),
-        new DebuggerToolFactory<ViewerWidget>(
-            this, "org.kdevelop.debugger.VariousViews",
-            Qt::BottomDockWidgetArea));
+        viewerfactory);
 
     setupActions();
 
@@ -174,6 +176,13 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 // PORTING TODO broken - need intermediate signal?
 //     connect( gdbBreakpointWidget,   SIGNAL(tracingOutput(const QByteArray&)),
 //              procLineMaker,         SLOT(slotReceivedStdout(const QByteArray&)));
+}
+
+void CppDebuggerPlugin::unload()
+{
+    core()->uiController()->removeToolView(disassemblefactory);
+    core()->uiController()->removeToolView(gdbfactory);
+    core()->uiController()->removeToolView(viewerfactory);
 }
 
 void CppDebuggerPlugin::setupActions()

@@ -92,12 +92,12 @@ private:
 };
 
 ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
-    : IPlugin( ValgrindFactory::componentData(), parent)
+    : IPlugin( ValgrindFactory::componentData(), parent), m_factory( new ValgrindWidgetFactory(this) )
 {
     kDebug() << "setting valgrind rc file";
     setXMLFile( "kdevvalgrind.rc" );
-
-    core()->uiController()->addToolView(i18n("Valgrind"), new ValgrindWidgetFactory(this));
+    
+    core()->uiController()->addToolView(i18n("Valgrind"), m_factory);
     
     // Initialize actions for the laucnh modes
     KAction* act = actionCollection()->addAction("valgrind_memcheck", this, SLOT(runMemCheck()) );
@@ -135,6 +135,11 @@ ValgrindPlugin::ValgrindPlugin( QObject *parent, const QVariantList& )
     KDevelop::LaunchConfigurationType* type = core()->runController()->launchConfigurationTypeForId( iface->nativeAppConfigTypeId() );
     Q_ASSERT(type);
     type->addLauncher( launcher );
+}
+
+void ValgrindPlugin::unload()
+{
+    core()->uiController()->removeToolView( m_factory );
 }
 
 ValgrindPlugin::~ValgrindPlugin()

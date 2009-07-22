@@ -49,6 +49,8 @@ public:
     ValgrindPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~ValgrindPlugin();
 
+    virtual void unload();
+    
 signals:
 
     void newModel(ValgrindModel* model);
@@ -63,6 +65,7 @@ private slots:
 private:
     QString m_lastExec, m_lastParams, m_lastValExec, m_lastValParams,
         m_lastCtExec, m_lastCtParams, m_lastKcExec;
+    class ValgrindWidgetFactory* m_factory;
 };
 
 #endif // VALGRINDPLUGIN_H
