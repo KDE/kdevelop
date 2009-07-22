@@ -47,9 +47,9 @@ protected:
   inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
 
   /// Access the current comment. \returns the current comment, or an empty string if none exists.
-  inline const QString& comment() const { return m_lastComment; }
+  inline const QByteArray& comment() const { return m_lastComment; }
   /// Set the current \a comment. \param comment the new comment.
-  inline void setComment(const QString& comment) { m_lastComment = comment; }
+  inline void setComment(const QByteArray& comment) { m_lastComment = comment; }
   /// Clears the current comment.
   inline void clearComment() { m_lastComment.clear(); }
 
@@ -221,7 +221,7 @@ protected:
 
 private:
   QStack<Declaration*> m_declarationStack;
-  QString m_lastComment;
+  QByteArray m_lastComment;
 };
 
 }
