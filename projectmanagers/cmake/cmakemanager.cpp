@@ -870,7 +870,8 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
     Q_ASSERT(!relative.contains("/"));
 //     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
 
-    ApplyChangesWidget e(i18n("Create a folder called '%1'.", relative), lists);
+    ApplyChangesWidget e;
+    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Create a folder called '%1'.", relative));
 
     e.document()->insertLine(e.document()->lines(), QString("add_subdirectory(%1)").arg(relative));
 
@@ -889,7 +890,7 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
         QTextStream out(&f);
         out << "\n";
 
-        bool saved=e.document()->documentSave();
+        bool saved=e.applyAllChanges();
         if(!saved)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                   i18n("Could not save the change."));
@@ -907,7 +908,9 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
         return true;
     }
 
-    ApplyChangesWidget e(i18n("Remove a folder called '%1'.", it->text()), lists);
+    ApplyChangesWidget e;
+    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Remove a folder called '%1'.", it->text()));
+    
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
     KTextEditor::Range r=cmit->descriptor().range().textRange();
     kDebug(9042) << "For " << lists << " remove " << r;
@@ -915,7 +918,7 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
 
     if(e.exec())
     {
-        bool saved=e.document()->documentSave();
+        bool saved=e.applyAllChanges();
         if(!saved)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                   i18n("Could not save the change."));
@@ -1012,14 +1015,15 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     KUrl lists=folder->url();
     lists.addPath("CMakeLists.txt");
 
-    ApplyChangesWidget e(i18n("Remove a file called '%1'.", it->text()), lists);
+    ApplyChangesWidget e;
+    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Remove a file called '%1'.", it->text()));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false);
     if(ret)
     {
         if(e.exec())
         {
-            bool saved=e.document()->documentSave();
+            bool saved=e.applyAllChanges();
             if(!saved)
                 KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                     i18n("Cannot save the change."));
@@ -1066,12 +1070,13 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     KUrl lists=folder->url();
     lists.addPath("CMakeLists.txt");
 
-    ApplyChangesWidget e(i18n("Add a file called '%1' to target '%2'.", it->text(), target->text()), lists);
+    ApplyChangesWidget e;
+    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Add a file called '%1' to target '%2'.", it->text(), target->text()));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, true);
 
     if(ret && e.exec())
-        ret=e.document()->documentSave();
+        ret=e.applyAllChanges();
     if(!ret)
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                   i18n("Cannot save the change."));
