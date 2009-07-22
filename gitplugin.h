@@ -49,6 +49,8 @@ class GitPlugin: public KDevelop::DistributedVersionControlPlugin
 public:
     GitPlugin(QObject *parent, const QVariantList & args = QVariantList() );
     ~GitPlugin();
+   
+    virtual void unload();
 
     QString name() const;
 
