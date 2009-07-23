@@ -22,6 +22,7 @@
 #include "types/typeutils.h"
 #include <typeinfo>
 #include "types/typealiastype.h"
+#include "repositories/typerepository.h"
 
 
 namespace KDevelop {
@@ -112,10 +113,9 @@ uint InstantiationInformation::hash() const {
   return (ret + previousInstantiationInformation.index()) * 31;
 }
 
-KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > instantiationInformationRepository("Instantiation Information Repository");
+KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > > instantiationInformationRepository("Instantiation Information Repository", 1, typeRepositoryManager());
 
-
-const uint standardInstantiationInformationIndex = instantiationInformationRepository.index( InstantiationInformation() );
+const uint standardInstantiationInformationIndex = instantiationInformationRepository->index( InstantiationInformation() );
 
 IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(0) {
 }
@@ -126,16 +126,16 @@ IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m
   
   if(m_index && shouldDoDUChainReferenceCounting(this))
   {
-    QMutexLocker lock(instantiationInformationRepository.mutex());
-    increase(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    QMutexLocker lock(instantiationInformationRepository->mutex());
+    increase(instantiationInformationRepository->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
   }
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs) : m_index(rhs.m_index) {
   if(m_index && shouldDoDUChainReferenceCounting(this))
   {
-    QMutexLocker lock(instantiationInformationRepository.mutex());
-    increase(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    QMutexLocker lock(instantiationInformationRepository->mutex());
+    increase(instantiationInformationRepository->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
   }
 }
 
@@ -143,16 +143,16 @@ IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(cons
 
   if(m_index && shouldDoDUChainReferenceCounting(this))
   {
-    QMutexLocker lock(instantiationInformationRepository.mutex());
-    decrease(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    QMutexLocker lock(instantiationInformationRepository->mutex());
+    decrease(instantiationInformationRepository->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
   }
   
   m_index = rhs.m_index;
   
   if(m_index && shouldDoDUChainReferenceCounting(this))
   {
-    QMutexLocker lock(instantiationInformationRepository.mutex());
-    increase(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    QMutexLocker lock(instantiationInformationRepository->mutex());
+    increase(instantiationInformationRepository->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
   }
   return *this;
 }
@@ -160,8 +160,8 @@ IndexedInstantiationInformation& IndexedInstantiationInformation::operator=(cons
 IndexedInstantiationInformation::~IndexedInstantiationInformation() {
   if(m_index && shouldDoDUChainReferenceCounting(this))
   {
-    QMutexLocker lock(instantiationInformationRepository.mutex());
-    decrease(instantiationInformationRepository.dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
+    QMutexLocker lock(instantiationInformationRepository->mutex());
+    decrease(instantiationInformationRepository->dynamicItemFromIndexSimple(m_index)->m_refCount, m_index);
   }
 }
 
@@ -170,10 +170,10 @@ bool IndexedInstantiationInformation::isValid() const {
 }
 
 const InstantiationInformation& IndexedInstantiationInformation::information() const {
-  return *instantiationInformationRepository.itemFromIndex(m_index ? m_index : standardInstantiationInformationIndex);
+  return *instantiationInformationRepository->itemFromIndex(m_index ? m_index : standardInstantiationInformationIndex);
 }
 
 IndexedInstantiationInformation InstantiationInformation::indexed() const {
-  return IndexedInstantiationInformation(instantiationInformationRepository.index(*this));
+  return IndexedInstantiationInformation(instantiationInformationRepository->index(*this));
 }
 }

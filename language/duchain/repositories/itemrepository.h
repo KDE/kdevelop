@@ -122,6 +122,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractRepositoryManager {
 
       repositoryDeleted();
     }
+    
+    virtual QMutex* repositoryMutex() const = 0;
 
     virtual void repositoryDeleted() {
     }
@@ -193,7 +195,8 @@ KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry
 template<class ItemRepositoryType, bool unloadingEnabled = true, bool lazy = true>
 struct RepositoryManager : public AbstractRepositoryManager{
   public:
-    RepositoryManager(QString name, int version = 1, ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) : m_name(name), m_version(version), m_registry(registry) {
+    ///@param shareMutex Option repository from where this repository should take the thread-safety mutex
+    RepositoryManager(QString name, int version = 1, AbstractRepositoryManager* shareMutex = 0, ItemRepositoryRegistry& registry = globalItemRepositoryRegistry()) : m_name(name), m_version(version), m_registry(registry), m_shareMutex(shareMutex) {
       if(!lazy)
         createRepository();
     }
@@ -209,6 +212,10 @@ struct RepositoryManager : public AbstractRepositoryManager{
 
       return static_cast<ItemRepositoryType*>(m_repository);
     }
+    
+    QMutex* repositoryMutex() const {
+      return (*this)->mutex();
+    }
 
   private:
 
@@ -217,6 +224,10 @@ struct RepositoryManager : public AbstractRepositoryManager{
         QMutexLocker lock(&m_registry.mutex());
         if(!m_repository) {
           m_repository = new ItemRepositoryType(m_name, &m_registry, m_version, const_cast<RepositoryManager*>(this));
+          
+          if(m_shareMutex)
+            (*this)->setMutex(m_shareMutex->repositoryMutex());
+          
           (*this)->setUnloadingEnabled(unloadingEnabled);
         }
       }
@@ -225,6 +236,7 @@ struct RepositoryManager : public AbstractRepositoryManager{
     QString m_name;
     int m_version;
     mutable ItemRepositoryRegistry& m_registry;
+    AbstractRepositoryManager* m_shareMutex;
 };
 
   ///This is the actual data that is stored in the repository. All the data that is not directly in the class-body,

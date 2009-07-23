@@ -84,6 +84,10 @@ class AbstractTypeDataRequest {
 
 RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> typeRepository("Type Repository");
 
+AbstractRepositoryManager* typeRepositoryManager() {
+  return &typeRepository;
+}
+
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
     return 0;

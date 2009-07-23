@@ -268,7 +268,7 @@ struct QualifiedIdentifierItemRequest {
   const DynamicQualifiedIdentifierPrivate& m_identifier;
 };
 
-RepositoryManager< ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest>, false> qualifiedidentifierRepository("Qualified Identifier Repository");
+RepositoryManager< ItemRepository<ConstantQualifiedIdentifierPrivate, QualifiedIdentifierItemRequest>, false> qualifiedidentifierRepository("Qualified Identifier Repository", 1, &identifierRepository);
 
 uint emptyConstantQualifiedIdentifierPrivateIndex() {
    static uint index = qualifiedidentifierRepository->index(DynamicQualifiedIdentifierPrivate());

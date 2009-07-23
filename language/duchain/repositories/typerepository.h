@@ -21,6 +21,7 @@
 
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/referencecounting.h>
+#include "itemrepository.h"
 
 namespace KDevelop {
   class TypeRepository {
@@ -32,6 +33,8 @@ namespace KDevelop {
       static void increaseReferenceCount(uint index, ReferenceCountManager* manager);
       static void decreaseReferenceCount(uint index, ReferenceCountManager* manager);
   };
+  
+  AbstractRepositoryManager* typeRepositoryManager();
 }
 
 #endif
