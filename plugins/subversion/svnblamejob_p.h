@@ -27,6 +27,11 @@
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
 
+namespace KDevelop {
+    class VcsAnnotationLine;
+}
+
+class KUrl;
 class SvnInternalBlameJob : public SvnInternalJobBase
 {
     Q_OBJECT
