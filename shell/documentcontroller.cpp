@@ -510,8 +510,11 @@ void DocumentController::notifyDocumentClosed(IDocument* doc)
     emit documentClosed(doc);
 }
 
-IDocument * DocumentController::documentForUrl( const KUrl & url ) const
+IDocument * DocumentController::documentForUrl( const KUrl & dirtyUrl ) const
 {
+    //Fix urls that might not be absolute
+    KUrl url(dirtyUrl);
+    url.cleanPath();
     if ( d->documents.contains( url ) )
         return d->documents.value( url );
 
