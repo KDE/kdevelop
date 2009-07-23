@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=kde4app
+Name[nds]=kde4prog
 Name[sv]=kde4pgm
 Name[x-test]=xxkde4appxx
 Name[zh_TW]=KDE4 應用程式
@@ -10,6 +11,7 @@ X-DocPath=kde4app/index.html
 GenericName=A KDE4 Application
 GenericName[es]=Una aplicación para KDE4
 GenericName[fr]=Une application pour KDE4
+GenericName[nds]=En KDE-4-Programm
 GenericName[pt]=Uma Aplicação do KDE4
 GenericName[pt_BR]=Uma Aplicação do KDE4
 GenericName[sv]=Ett KDE4-program
