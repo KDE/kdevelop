@@ -299,7 +299,7 @@ QString clearComments( QString str, QChar replacement ) {
     if( !s ) return str;
     int i = withoutStrings.indexOf( '\n', pos );
     if( i != -1 && i <= len - 1 ) {
-      fillString( str, pos, i+1, replacement );
+      fillString( str, pos, i, replacement );
       lastPos = i+1;
     } else {
       fillString( str, pos, len, replacement );
