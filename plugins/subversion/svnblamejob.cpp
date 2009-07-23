@@ -29,6 +29,7 @@
 #include <ThreadWeaver.h>
 
 #include "svnclient.h"
+#include <QDateTime>
 
 SvnInternalBlameJob::SvnInternalBlameJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -43,15 +44,15 @@ void SvnInternalBlameJob::run()
 {
     initBeforeRun();
 
-    SvnClient cli(m_ctxt);
-    connect( &cli, SIGNAL( lineReceived( const KDevelop::VcsAnnotationLine& ) ),
-             this, SIGNAL( blameLine( const KDevelop::VcsAnnotationLine& ) ) );
+    QByteArray ba = location().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
+    
+    svn::Client cli(m_ctxt);
+    svn::AnnotatedFile* file;
     try
     {
-        QByteArray ba = location().toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
-        cli.blame( ba.data(),
-                 createSvnCppRevisionFromVcsRevision( startRevision() ),
-                 createSvnCppRevisionFromVcsRevision( endRevision() ) );
+        file = cli.annotate( ba.data(),
+                             createSvnCppRevisionFromVcsRevision( startRevision() ),
+                             createSvnCppRevisionFromVcsRevision( endRevision() ) );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while blaming file: "
@@ -59,6 +60,48 @@ void SvnInternalBlameJob::run()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
+        return;
+    }
+    svn_revnum_t minrev = -1, maxrev = -1;
+    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); it++ )
+    {
+        if( (*it).revision() < minrev || minrev == -1 )
+        {
+            minrev = (*it).revision();
+        }
+        if( (*it).revision() > maxrev || maxrev == -1 )
+        {
+            maxrev = (*it).revision();
+        }
+    }
+    QHash<svn_revnum_t,QString> commitMessages;
+    try
+    {
+        const svn::LogEntries* entries = cli.log( ba.data(), svn::Revision(minrev), svn::Revision(maxrev), false, false );
+        for( svn::LogEntries::const_iterator it = entries->begin(); it != entries->end(); it++ )
+        {
+            commitMessages[(*it).revision] = QString::fromUtf8( (*it).message.c_str() );
+        }
+    }catch( svn::ClientException ce )
+    {
+        kDebug(9510) << "Exception while fetching log messages for blame: "
+                     << location()
+                     << QString::fromUtf8( ce.message() );
+        setErrorMessage( QString::fromUtf8( ce.message() ) );
+        m_success = false;
+    }
+    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); it++ )
+    {
+        KDevelop::VcsAnnotationLine line;
+        line.setAuthor( QString::fromUtf8( it->author().c_str() ) );
+        line.setDate( QDateTime::fromString( QString::fromUtf8( it->date().c_str() ), Qt::ISODate ) );
+        line.setText( QString::fromUtf8( it->line().c_str() ) );
+        KDevelop::VcsRevision rev;
+        rev.setRevisionValue( QVariant( qlonglong( it->revision() ) ), KDevelop::VcsRevision::GlobalNumber );
+        line.setRevision( rev );
+        line.setLineNumber( it->lineNumber() );
+        line.setCommitMessage( commitMessages[it->revision()] );
+        emit blameLine( line );
     }
 }
 
