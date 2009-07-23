@@ -71,7 +71,7 @@ public:
     virtual ILanguageController *languageController();
 
     /** @copydoc ICore::partController() */
-    virtual IPartController *partController();
+    virtual KParts::PartManager *partController();
 
     /** @copydoc ICore::documentController() */
     virtual IDocumentController *documentController();

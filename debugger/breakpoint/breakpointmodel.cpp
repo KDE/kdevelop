@@ -33,7 +33,6 @@
 #include "../interfaces/icore.h"
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/idocument.h"
-#include "../interfaces/ipartcontroller.h"
 #include "breakpoint.h"
 #include <KTextEditor/SmartCursorNotifier>
 #include <KConfigGroup>

@@ -31,7 +31,6 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/ipartcontroller.h>
 #include <interfaces/context.h>
 
 #include <interfaces/contextmenuextension.h>

@@ -312,7 +312,7 @@ ProjectController *Core::projectControllerInternal()
     return d->projectController;
 }
 
-IPartController *Core::partController()
+KParts::PartManager *Core::partController()
 {
     return d->partController;
 }

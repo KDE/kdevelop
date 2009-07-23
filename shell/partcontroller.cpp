@@ -60,10 +60,49 @@ public:
 
     KTextEditor::Editor *m_textEditor;
 
+    KParts::Factory *findPartFactory( const QString &mimeType,
+                                      const QString &partType,
+                                      const QString &preferredName = QString() )
+
+    {
+        KService::List offers = KMimeTypeTrader::self() ->query(
+                                    mimeType,
+                                    "KParts/ReadOnlyPart",
+                                    QString( "'%1' in ServiceTypes" ).arg( partType ) );
+
+        if ( offers.count() > 0 )
+        {
+            KService::Ptr ptr;
+            // if there is a preferred plugin we'll take it
+            if ( !preferredName.isEmpty() )
+            {
+                KService::List::ConstIterator it;
+                for ( it = offers.constBegin(); it != offers.constEnd(); ++it )
+                {
+                    if ( ( *it ) ->desktopEntryName() == preferredName )
+                    {
+                        ptr = ( *it );
+                    }
+                }
+            }
+            // else we just take the first in the list
+            if ( !ptr )
+            {
+                ptr = offers.first();
+            }
+            KParts::Factory *factory = static_cast<KParts::Factory*>(
+                                           KLibLoader::self() ->factory(
+                                               QFile::encodeName( ptr->library() ) ) );
+            return factory;
+        }
+
+        return 0;
+    }
+
 };
 
 PartController::PartController(Core *core, QWidget *toplevel)
-        : IPartController( toplevel ), d(new PartControllerPrivate)
+        : KParts::PartManager( toplevel, 0 ), d(new PartControllerPrivate)
 
 {
     setObjectName("PartController");
@@ -108,7 +147,7 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
 {
     if (!d->m_textEditor)
     {
-        KTextEditor::Factory * editorFactory = qobject_cast<KTextEditor::Factory*>(findPartFactory(
+        KTextEditor::Factory * editorFactory = qobject_cast<KTextEditor::Factory*>(d->findPartFactory(
             "text/plain",
             "KTextEditor/Document",
             "KTextEditor::Editor" ));
@@ -152,7 +191,7 @@ KParts::Part* PartController::createPart( const QString & mimeType,
         const QString & className,
         const QString & preferredName )
 {
-    KParts::Factory * editorFactory = findPartFactory(
+    KParts::Factory * editorFactory = d->findPartFactory(
                                           mimeType,
                                           partType,
                                           preferredName );
@@ -214,7 +253,7 @@ KParts::Part* PartController::createPart( const KUrl & url )
     KParts::Factory *editorFactory = 0;
     for ( uint i = 0; i < 2; ++i )
     {
-        editorFactory = findPartFactory( mimeType->name(), services[ i ] );
+        editorFactory = d->findPartFactory( mimeType->name(), services[ i ] );
         if ( editorFactory )
         {
             className = classNames[ i ];

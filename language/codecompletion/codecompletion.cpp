@@ -21,13 +21,13 @@
 
 #include "codecompletion.h"
 
+#include <kparts/partmanager.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktexteditor/codecompletioninterface.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/ipartcontroller.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 

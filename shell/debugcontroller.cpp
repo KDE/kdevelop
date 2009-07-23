@@ -38,7 +38,6 @@
 #include "../interfaces/idocument.h"
 #include "../interfaces/icore.h"
 #include "../interfaces/idocumentcontroller.h"
-#include "../interfaces/ipartcontroller.h"
 #include "../interfaces/iuicontroller.h"
 #include "../interfaces/contextmenuextension.h"
 #include "../interfaces/context.h"
