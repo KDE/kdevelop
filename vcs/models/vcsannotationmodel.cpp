@@ -102,7 +102,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
         return QVariant( aline.revision().revisionValue() );
     } else if( role == Qt::ToolTipRole )
     {
-        return QVariant( i18n("Author:%1\nDate:%2", aline.author(), aline.date().toString() ) );
+        return QVariant( i18n("Author:%1\nDate:%2\nCommit Message:%3", aline.author(), aline.date().toString(), aline.commitMessage() ) );
     }
     return QVariant();
 }

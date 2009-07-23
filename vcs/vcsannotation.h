@@ -63,6 +63,10 @@ public:
      */
     QDateTime date() const;
     /**
+     * @return the commit message of the revision in this line
+     */
+    QString commitMessage() const;
+    /**
      * set the line number of this annotation line
      * @param lineno the line number
      */
@@ -87,6 +91,13 @@ public:
      * @param date the date of the last change
      */
     void setDate( const QDateTime& );
+    /**
+     * set the commit message of the revision in this
+     * line
+     * @param msg the message of the commit
+     */
+    void setCommitMessage( const QString& msg );
+    
     VcsAnnotationLine& operator=( const VcsAnnotationLine& rhs);
 private:
     class VcsAnnotationLinePrivate* d;

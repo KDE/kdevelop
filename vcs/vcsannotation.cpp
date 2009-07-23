@@ -44,6 +44,7 @@ public:
     QString text;
     QString line;
     VcsRevision revision;
+    QString message;
     int lineno;
 };
 
@@ -62,6 +63,7 @@ VcsAnnotationLine::VcsAnnotationLine( const VcsAnnotationLine& rhs )
     d->lineno = rhs.d->lineno;
     d->date = rhs.d->date;
     d->text = rhs.d->text;
+    d->message = rhs.d->message;
 }
 
 VcsAnnotationLine::~VcsAnnotationLine()
@@ -129,7 +131,19 @@ VcsAnnotationLine& VcsAnnotationLine::operator=( const VcsAnnotationLine& rhs)
     d->lineno = rhs.d->lineno;
     d->date = rhs.d->date;
     d->text = rhs.d->text;
+    d->message = rhs.d->message;
     return *this;
+}
+
+QString VcsAnnotationLine::commitMessage() const
+{
+    return d->message;
+}
+
+
+void VcsAnnotationLine::setCommitMessage ( const QString& msg )
+{
+    d->message = msg;
 }
 
 VcsAnnotation::VcsAnnotation()
