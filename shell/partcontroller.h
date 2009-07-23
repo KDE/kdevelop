@@ -20,7 +20,7 @@
 #ifndef __KDEVPARTCONTROLLER_H__
 #define __KDEVPARTCONTROLLER_H__
 
-#include <kparts/partmanager.h>
+#include <interfaces/ipartcontroller.h>
 
 #include <QtCore/QMap>
 #include <QtCore/QHash>
@@ -49,7 +49,7 @@ class Editor;
 namespace KDevelop
 {
 
-class KDEVPLATFORMSHELL_EXPORT PartController : public KParts::PartManager
+class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
 {
     friend class CorePrivate;
     Q_OBJECT
