@@ -71,10 +71,6 @@ void AssistantPopup::updateActions() {
 AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant) : QFrame(parent), m_assistant(assistant) {
     Q_ASSERT(assistant);
     m_normalPalette = palette();
-    QPalette p;
-    p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
-    p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
-    setPalette(p);
     
     setAutoFillBackground(true);
 
