@@ -105,6 +105,9 @@ public:
 
     QHash<KJob*, KAction*> jobs;
     KActionMenu* stopAction;
+    KAction* profileAction;
+    KAction* runAction;
+    KAction* dbgAction;
     KSelectAction* currentTargetAction;
     QMap<QString,LaunchConfigurationType*> launchConfigurationTypes;
     QList<LaunchConfiguration*> launchConfigurations;
@@ -126,6 +129,12 @@ public:
             grp.writeEntry( CurrentLaunchConfigNameEntry, l->configGroupName() );
             grp.sync();
         }
+    }
+    void enableLaunchActions()
+    {
+        runAction->setEnabled( !launchConfigurations.isEmpty() );
+        profileAction->setEnabled( !launchConfigurations.isEmpty() );
+        dbgAction->setEnabled( !launchConfigurations.isEmpty() );
     }
     void configureLaunches()
     {
@@ -281,6 +290,7 @@ void RunController::initialize()
              this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 
     d->updateCurrentLaunchAction();
+    d->enableLaunchActions();
 }
 
 KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
@@ -334,28 +344,28 @@ void RunController::setupActions()
     action->setWhatsThis(i18n("<p>Opens a dialog to setup new launch configurations, or to change the existing ones.</p>"));
     connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
-    action = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
-    action->setShortcut(Qt::SHIFT + Qt::Key_F9);
-    action->setToolTip(i18n("Execute current Launch"));
-    action->setStatusTip(i18n("Execute current Launch"));
-    action->setWhatsThis(i18n("<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
-    ac->addAction("run_execute", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
+    d->runAction = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
+    d->runAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
+    d->runAction->setToolTip(i18n("Execute current Launch"));
+    d->runAction->setStatusTip(i18n("Execute current Launch"));
+    d->runAction->setWhatsThis(i18n("<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
+    ac->addAction("run_execute", d->runAction);
+    connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
     
-    action = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
-    action->setShortcut(Qt::Key_F9);
-    action->setToolTip(i18n("Debug current Launch"));
-    action->setStatusTip(i18n("Debug current Launch"));
-    action->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
-    ac->addAction("run_debug", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
+    d->dbgAction = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
+    d->dbgAction->setShortcut(Qt::Key_F9);
+    d->dbgAction->setToolTip(i18n("Debug current Launch"));
+    d->dbgAction->setStatusTip(i18n("Debug current Launch"));
+    d->dbgAction->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
+    ac->addAction("run_debug", d->dbgAction);
+    connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
     
-    action = new KAction( KIcon(""), i18n("Profile Launch"), this);
-    action->setToolTip(i18n("Profile current Launch"));
-    action->setStatusTip(i18n("Profile current Launch"));
-    action->setWhatsThis(i18n("<b>Profile Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Profiler.</p>"));
-    ac->addAction("run_profile", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
+    d->profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
+    d->profileAction->setToolTip(i18n("Profile current Launch"));
+    d->profileAction->setStatusTip(i18n("Profile current Launch"));
+    d->profileAction->setWhatsThis(i18n("<b>Profile Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Profiler.</p>"));
+    ac->addAction("run_profile", d->profileAction);
+    connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
     action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
     action->setShortcut(Qt::Key_Escape);
@@ -605,6 +615,7 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
     {
         d->addLaunchAction( l );
         d->launchConfigurations << l;
+        d->enableLaunchActions();
         if( !d->currentTargetAction->currentAction() )
         {
             if( !d->currentTargetAction->actions().isEmpty() )
@@ -646,6 +657,8 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
     }
 
     d->launchConfigurations.removeAll( l );
+    
+    d->enableLaunchActions();
     
     delete l;
 }
