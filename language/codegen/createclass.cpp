@@ -476,8 +476,15 @@ LicensePage::LicensePage(QWizard* parent)
 LicensePage::~LicensePage(void)
 {
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
-    config.writeEntry("LastSelectedLicense", d->license->licenseComboBox->currentIndex());
-    config.config()->sync();
+    //Do not save invalid license numbers'
+    int index = d->license->licenseComboBox->currentIndex();
+    if( index >= 0 || index < d->availableLicenses.size() )
+    {
+        config.writeEntry("LastSelectedLicense", index);
+        config.config()->sync();
+    }
+    else
+        kWarning() << "Attempted to save an invalid license number: " << index << ". Number of licenses:" << d->availableLicenses.size();
     
     delete d;
 }
@@ -567,7 +574,10 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->licenseTextEdit->setReadOnly(true);
     }
     
-    d->license->licenseTextEdit->setText(readLicense(selectedLicense));
+    if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
+        d->license->licenseTextEdit->setText("Could not load previous license");
+    else
+        d->license->licenseTextEdit->setText(readLicense(selectedLicense));
 }
 
 bool LicensePage::saveLicense(void)
