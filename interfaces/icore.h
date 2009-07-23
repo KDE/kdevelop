@@ -50,6 +50,7 @@ class ISession;
 class ISelectionController;
 class IDocumentationController;
 class IDebugController;
+class IPartController;
 
 /**
  * ICore is the container class for all the various objects in use by
@@ -91,7 +92,7 @@ public:
     Q_SCRIPTABLE virtual KDevelop::ILanguageController *languageController() = 0;
 
     /** @return part manager */
-    Q_SCRIPTABLE virtual KParts::PartManager *partController() = 0;
+    Q_SCRIPTABLE virtual KDevelop::IPartController *partController() = 0;
 
     /** @return document controller */
     Q_SCRIPTABLE virtual KDevelop::IDocumentController *documentController() = 0;
