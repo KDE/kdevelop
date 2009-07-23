@@ -38,6 +38,8 @@
 #include <QDebug>
 #include <KPushButton>
 #include "coderepresentation.h"
+#include <KTemporaryFile>
+#include <qsharedpointer.h>
 
 namespace KDevelop
 {
@@ -56,6 +58,7 @@ struct ApplyChangesWidgetPrivate
     unsigned int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
     QList<QStandardItemModel*> m_changes;
+    QList<QSharedPointer<KTemporaryFile> > m_temps;
     QList<QPair<IndexedString, IndexedString> > m_files;
     KTabWidget * m_documentTabs;
     
@@ -184,6 +187,18 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const
     //Q_ASSERT(m_editParts[m_index]->openStream(mimetype->name(), url));
     //Q_ASSERT(m_editParts[m_index]->writeStream(repr->text().toLocal8Bit()));
     //Q_ASSERT(m_editParts[m_index]->closeStream());
+    if(!repr->fileExists())
+    {
+        QSharedPointer<KTemporaryFile> temp(new KTemporaryFile);
+        temp->setSuffix(url.fileName().split(".").last());
+        temp->open();
+        temp->write(repr->text().toUtf8());
+        temp->close();
+        
+        url = temp->fileName();
+        
+        m_temps << temp;
+    }
     m_editParts[m_index]->openUrl(url);
     
     m_changes.insert(m_index, new QStandardItemModel(widget));
