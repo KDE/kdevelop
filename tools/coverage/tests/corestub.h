@@ -33,7 +33,11 @@ class IProjectController;
 class IRunController;
 class IUiController;
 class ISessionController;
-class IPartController;
+}
+
+namespace KParts
+{
+class KPartManager;
 }
 
 namespace TestStubs
@@ -78,7 +82,7 @@ public:
     virtual KDevelop::IUiController *uiController() {
         return m_uiController;
     }
-    virtual KDevelop::IPartController *partController() {
+    virtual KParts::PartManager *partController() {
         return m_partController;
     }
     virtual KDevelop::IDocumentationController* documentationController() {
@@ -106,7 +110,7 @@ public:
     KDevelop::IRunController* m_runController;
     KDevelop::ISelectionController* m_selectionController;
     KDevelop::ISession* m_session;
-    KDevelop::IPartController* m_partController;
+    KParts::PartManager* m_partController;
     KDevelop::IDocumentationController* m_documentationController;
     KDevelop::IDebugController* m_debugController;
 };
