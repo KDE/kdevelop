@@ -304,7 +304,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         return QString();
     }
     
-    QString projectFileName = QDir::cleanPath( dest.toLocalFile() + '/' + info.name.toLower() + ".kdev4" );
+    QString projectFileName = QDir::cleanPath( dest.toLocalFile() + '/' + info.name + ".kdev4" );
 
     kDebug() << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
     
