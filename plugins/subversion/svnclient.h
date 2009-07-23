@@ -59,13 +59,10 @@ public:
               bool strictNodeHistory = true )
             throw (svn::ClientException);
 
-    void blame( const svn::Path&, const svn::Revision&, const svn::Revision& );
     void emitLogEventReceived( const KDevelop::VcsEvent& );
-    void emitLineReceived( const KDevelop::VcsAnnotationLine& );
 
 signals:
     void logEventReceived( const KDevelop::VcsEvent& );
-    void lineReceived( const KDevelop::VcsAnnotationLine& );
 private:
     svn::Context* m_ctxt;
 };

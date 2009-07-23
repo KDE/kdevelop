@@ -331,55 +331,6 @@ void SvnClient::log( const char* path,
     }
 }
 
-static svn_error_t *
-kdev_annotateReceiver ( void *baton,
-                    apr_int64_t line_no,
-                    svn_revnum_t revision,
-                    const char *author,
-                    const char *date,
-                    const char *line,
-                    apr_pool_t *pool )
-{
-    Q_UNUSED(pool);
-    SvnClient* client = reinterpret_cast<SvnClient*>(baton);
-
-    KDevelop::VcsAnnotationLine vcsline;
-    vcsline.setAuthor( QString::fromUtf8( author ) );
-    vcsline.setDate( QDateTime::fromString( QString::fromUtf8( date ), Qt::ISODate ) );
-    vcsline.setText( QString::fromUtf8( line ) );
-    KDevelop::VcsRevision rev;
-    rev.setRevisionValue( QVariant( qlonglong( revision ) ), KDevelop::VcsRevision::GlobalNumber );
-    vcsline.setRevision( rev );
-    vcsline.setLineNumber( line_no );
-    client->emitLineReceived( vcsline );
-    return NULL;
-}
-
-void SvnClient::blame( const svn::Path& path, const svn::Revision& start, const svn::Revision& end )
-{
-    svn::Pool pool;
-    svn_error_t *error;
-    error = svn_client_blame (
-        path.c_str (),
-        start.revision (),
-        end.revision (),
-        kdev_annotateReceiver,
-        this,
-        m_ctxt->ctx(), // client ctx
-        pool);
-
-    if (error != NULL)
-    {
-      throw svn::ClientException (error);
-    }
-
-}
-
-void SvnClient::emitLineReceived( const KDevelop::VcsAnnotationLine& line )
-{
-    emit lineReceived( line );
-}
-
 void SvnClient::emitLogEventReceived( const KDevelop::VcsEvent& ev )
 {
     emit logEventReceived( ev );
