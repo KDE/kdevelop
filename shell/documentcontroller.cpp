@@ -555,7 +555,7 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
     if (mode & IDocument::Silent) {
         foreach (IDocument* doc, modifiedDocuments(list)) {
             bool ret = doc->save(mode);
-            Q_ASSERT(ret);
+            qWarning() << "!! Could not save document:" << doc->url();
             // TODO if (!ret) showErrorDialog() ?
         }
 
