@@ -100,13 +100,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     void setUpdateHandling(DUChainUpdateHandling policy);
     
     ///Apply all the registered changes for @p file, and keep them as temporary in memory
+    ///@note For multiple passes if the original file is given, then the previous temporary will be merged
     ChangeResult applyToTemp(IndexedString file);
     
     ///Apply all changes for all files, and keep them as temporary in memory
     ChangeResult applyAllToTemp();
     
     /// @return The name for the latest temporary version of @p file if it exists, returns @p file otherwise
-    IndexedString tempNameForFile(IndexedString file);
+    IndexedString tempNameForFile(IndexedString file) const;
+    
+    /// @return The mapping between all original file names and their temporaries
+    /// @note If a file has not been applied to temp, it won't appear in the mapping
+    QList<QPair<IndexedString, IndexedString> > tempNamesForAll() const;
     
     /// Apply all the changes registered in this changeset
     ChangeResult applyAllChanges();

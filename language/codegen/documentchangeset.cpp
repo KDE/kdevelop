@@ -31,6 +31,8 @@
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
 #include <interfaces/iproject.h>
+#include <KLocalizedString>
+#include <QSharedPointer>
 
 namespace KDevelop {
 
@@ -41,7 +43,8 @@ struct DocumentChangeSetPrivate
     DocumentChangeSet::DUChainUpdateHandling updatePolicy;
     
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
-    QMap< IndexedString, IndexedString > tempFiles;
+    QMap< IndexedString, QPair<IndexedString, QSharedPointer<InsertArtificialCodeRepresentation> > > tempFiles;
+    QMap< IndexedString, IndexedString > tempToOriginal;
     
     DocumentChangeSet::ChangeResult replaceOldText(CodeRepresentation * repr, const QString & newText, const QList<DocumentChangePointer> & sortedChangesList);
     DocumentChangeSet::ChangeResult generateNewText(const KDevelop::IndexedString & file, QList< KDevelop::DocumentChangePointer > & sortedChanges, const KDevelop::CodeRepresentation* repr, QString& output);
@@ -49,6 +52,7 @@ struct DocumentChangeSetPrivate
     void formatChanges();
     void updateFiles();
     void addFileToProject(IndexedString file);
+    void addTempFile(IndexedString originalName, const QString & text);
 };
 
 //Simple helper to clear up code clutter
@@ -100,7 +104,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
     
     if(d->tempFiles.contains(change->m_document))
         //Because the change is semantically constant, but not bitwise, correct the old file name for the temp one
-        const_cast<DocumentChangePointer &>(change)->m_document = d->tempFiles[change->m_document];
+        const_cast<DocumentChangePointer &>(change)->m_document = d->tempFiles[change->m_document].first;
     
     d->changes[change->m_document].append(change);
     return ChangeResult(true);
@@ -108,6 +112,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
 
 DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 {
+    /// @todo Fix for a possibility of two different temporaries created for the same fileName
+    d->tempFiles.unite(rhs.d->tempFiles);
+    Q_ASSERT(d->tempFiles.uniqueKeys().size() == d->tempFiles.size());
+    d->tempToOriginal.unite(rhs.d->tempToOriginal);
+    
     /// @todo Possibly check for duplicates, since it could create a lot of bloat when big changes are merged
     for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.d->changes.begin();
         it != rhs.d->changes.end(); ++it)
@@ -121,6 +130,7 @@ void DocumentChangeSet::clear ( void )
 {
     d->changes.clear();
     d->tempFiles.clear();
+    d->tempToOriginal.clear();
 }
 
 void DocumentChangeSet::setReplacementPolicy ( DocumentChangeSet::ReplacementPolicy policy )
@@ -139,14 +149,117 @@ void DocumentChangeSet::setUpdateHandling ( DocumentChangeSet::DUChainUpdateHand
 }
 
 
-IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file )
+IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file ) const
 {
     if(d->tempFiles.contains(file))
-        file = d->tempFiles[file];
+        file = d->tempFiles[file].first;
     
     return file;
 }
 
+QList<QPair<IndexedString, IndexedString> > DocumentChangeSet::tempNamesForAll() const
+{
+    QList<QPair<IndexedString, IndexedString> > names;
+    for(QMap< IndexedString, QPair<IndexedString, QSharedPointer<InsertArtificialCodeRepresentation> > >::Iterator it = d->tempFiles.begin();
+        it != d->tempFiles.end(); ++it)
+        names << qMakePair(it.key(), it.value().first);
+    
+    return names;
+}
+
+DocumentChangeSet::ChangeResult DocumentChangeSet::applyToTemp(IndexedString fileName)
+{
+    //If there is a temporary version already, then use that one
+    IndexedString tempFile = tempNameForFile(fileName);
+    
+    if(!d->changes.contains(tempFile))
+        return ChangeResult(i18n("Trying to apply changes to a temporary that is not in this change set: %1", fileName.str()));
+    
+    CodeRepresentation::Ptr repr = createCodeRepresentation(tempFile);
+    
+    QList<DocumentChangePointer> sortedChanges;
+    QString newText;
+    {
+        ChangeResult result(d->removeDuplicates(fileName, sortedChanges));
+        if(!result)
+            return result;
+        
+        result = d->generateNewText(fileName, sortedChanges, repr.data(), newText);
+        if(!result)
+            return result;
+    }
+    
+    //If a previous temp did not exist, create one
+    if(!d->tempFiles.contains(tempFile))
+    {
+        d->addTempFile(fileName, newText);
+        return true;
+    }
+    else
+        return d->replaceOldText(repr.data(), newText, sortedChanges);
+}
+
+
+DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllToTemp()
+{
+    QMap<IndexedString, CodeRepresentation::Ptr> codeRepresentations;
+    QMap<IndexedString, QString> newTexts;
+    QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
+
+    foreach(const IndexedString &file, d->changes.keys())
+    {
+        CodeRepresentation::Ptr repr = createCodeRepresentation(file);
+        if(!repr)
+            return ChangeResult(QString("Could not create a Representation for %1").arg(file.str()));
+        
+        codeRepresentations[file] = repr;
+        
+        QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
+        {
+            ChangeResult result(d->removeDuplicates(file, sortedChangesList));
+            if(!result)
+                return result;
+        }
+
+        {
+            ChangeResult result(d->generateNewText(file, sortedChangesList, repr.data(), newTexts[file]));
+            if(!result)
+                return result;
+        }
+    }
+    
+    QMap<IndexedString, QString> oldTexts;
+    
+    //! @todo apply correct formatting, and call it
+    //d->autoformatChanges()
+    
+    //Apply the changes to the files
+    foreach(const IndexedString &file, d->changes.keys())
+    {
+        if(!d->tempToOriginal.contains(file))
+            d->addTempFile(file, newTexts[file]);
+        else
+        {
+            oldTexts[file] = codeRepresentations[file]->text();
+            
+            DocumentChangeSet::ChangeResult result = d->replaceOldText(codeRepresentations[file].data(), newTexts[file], filteredSortedChanges[file]);
+            if(!result && d->replacePolicy == StopOnFailedChange)
+            {
+                //Revert all files 
+                foreach(const IndexedString &revertFile, oldTexts.keys())
+                    codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
+                
+                return result;
+            }
+        }
+    }
+    
+    ModificationRevisionSet::clearCache();
+
+    d->updateFiles();
+    
+    return DocumentChangeSet::ChangeResult(true);
+}
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     QMap<IndexedString, CodeRepresentation::Ptr> codeRepresentations;
@@ -157,7 +270,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     {
         CodeRepresentation::Ptr repr = createCodeRepresentation(file);
         if(!repr)
-            return ChangeResult(QString("Could not code for %1").arg(file.str()));
+            return ChangeResult(QString("Could not create a Representation for %1").arg(file.str()));
         
         codeRepresentations[file] = repr;
         
@@ -243,7 +356,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
     //For files on disk
     if (!repr->setText(newText))
     {
-        QString warningString = QString("Could not replace text for file in disk: %1").arg(sortedChangesList.begin()->data()->m_document.str());
+        QString warningString = QString("Could not replace text for file in disk, or artificial code: %1").arg(sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange)
             kWarning() << warningString;
         
@@ -269,7 +382,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {
         DocumentChange& change(*sortedChanges[pos]);
         QString encountered;
-        if(changeIsValid(change, textLines)  && //We demand this, although it shoult be fixed
+        if(changeIsValid(change, textLines)  && //We demand this, although it should be fixed
             ((encountered = textLines[change.m_range.start.line].mid(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column)) == change.m_oldText || change.m_ignoreOldText))
         {
             ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
@@ -472,6 +585,16 @@ void DocumentChangeSetPrivate::addFileToProject(IndexedString file)
   }
 }
 #endif
+}
+
+void DocumentChangeSetPrivate::addTempFile(IndexedString originalName, const QString & text)
+{
+    ///@todo An actual algorithm to find an appropriate name to avoid potential name collision
+    IndexedString tempFile(CodeRepresentation::artificialUrl(originalName.str()));
+    
+    tempFiles[originalName] = qMakePair(tempFile, QSharedPointer<InsertArtificialCodeRepresentation>(new InsertArtificialCodeRepresentation(tempFile, text)));
+    tempToOriginal[tempFile] = originalName;
+    changes.erase(changes.find(tempFile));
 }
 
 
