@@ -67,7 +67,6 @@ void SvnJobBase::askForLogin( const QString& realm )
 
 void SvnJobBase::showNotification( const QString& path, const QString& msg )
 {
-    kDebug( 9510 ) << "notification" << path << msg;
     outputMessage(msg);
 }
 
@@ -129,7 +128,6 @@ void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
 {
     if( internalJob() == job )
     {
-        kDebug(9510) << "Job is done";
         outputMessage(i18n("Completed"));
         if( m_status != VcsJob::JobCanceled )
         {

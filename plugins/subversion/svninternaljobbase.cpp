@@ -95,7 +95,6 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
         // various update notifications
         case svn_wc_notify_update_delete:
             notifyString = i18nc( "A file was deleted during an svn update operation", "Deleted %1", QString::fromUtf8( path ) );
-            kDebug(9500) << notifyString;
             break;
         case svn_wc_notify_update_add:
             notifyString = i18nc( "A file was added during an svn update operation", "Added %1", QString::fromUtf8( path ) );
@@ -104,7 +103,6 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
          /* If this is an inoperative dir change, do no notification.
             An inoperative dir change is when a directory gets closed
             without any props having been changed. */
-            kDebug(9500) << QString::fromUtf8( path ) << "wc_notify_state:" << contentState;
             if (! ((kind == svn_node_dir)
                     && ((propState == svn_wc_notify_state_inapplicable)
                     || (propState == svn_wc_notify_state_unknown)
@@ -188,7 +186,6 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
         default:
             break;
     }
-    kDebug(9510) << "showing notification:" << path << notifyString ;
     emit showNotification( QString::fromUtf8( path ), notifyString );
 }
 
