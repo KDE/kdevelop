@@ -240,38 +240,11 @@ KParts::Part* PartController::createPart( const KUrl & url )
     else
         mimeType = KMimeType::findByUrl( url );
 
-    QString className;
-    QString services[] =
-        {
-            "KParts/ReadWritePart", "KParts/ReadOnlyPart"
-        };
-
-    QString classNames[] =
-        {
-            "KParts::ReadWritePart", "KParts::ReadOnlyPart"
-        };
-    KParts::Factory *editorFactory = 0;
-    for ( uint i = 0; i < 2; ++i )
+    KParts::Part* part = createPart( mimeType->name() );
+    if( part )
     {
-        editorFactory = d->findPartFactory( mimeType->name(), services[ i ] );
-        if ( editorFactory )
-        {
-            className = classNames[ i ];
-            break;
-        }
-    }
-
-    if ( !className.isEmpty() && editorFactory )
-    {
-        KParts::Part * part = editorFactory->createPart(
-                                  0,
-                                  this,
-                                  className.toLatin1() );
-        if( part )
-        {
-            readOnly( part ) ->openUrl( url );
-            return part;
-        }
+        readOnly( part ) ->openUrl( url );
+        return part;
     }
 
     return 0;
