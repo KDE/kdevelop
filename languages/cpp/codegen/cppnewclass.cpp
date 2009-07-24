@@ -118,6 +118,12 @@ const QList<KDevelop::DeclarationPointer> & CppNewClass::addBaseClass(const QStr
   return ClassGenerator::addBaseClass(splitBase.last());
 }
 
+void CppNewClass::clearInheritance()
+{
+    ClassGenerator::clearInheritance();
+    m_baseAccessSpecifiers.clear();
+}
+
 void CppNewClass::identifier(const QString & identifier)
 {
   QStringList list = identifier.split("::");
@@ -188,9 +194,10 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   //Add #includes
   
   bool addedIncludes = false;
-  
+ 
+  DUChainReadLocker lock(DUChain::lock());
+ 
   foreach(DeclarationPointer base, m_baseClasses) {
-    DUChainReadLocker lock(DUChain::lock());
     KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(headerUrl(), IndexedDeclaration(base.data()));
     if(item) {
       output << item->lineToInsert() << "\n";
@@ -213,7 +220,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
 
   Q_ASSERT(m_baseClasses.size() == m_baseAccessSpecifiers.size());
   for(int i = 0; i < m_baseClasses.size(); ++i)
-      output << (i == 0 ? " : " : ", ") << m_baseAccessSpecifiers[i] << ' ' << m_baseClasses[i]->identifier().toString() ;
+      output << (i == 0 ? " : " : ", ") << m_baseAccessSpecifiers[i] << ' ' << m_baseClasses[i]->qualifiedIdentifier().toString() ;
 
   output << "\n{\n";
 
@@ -225,8 +232,6 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   // Constructor(s)
 
   // Overrides
-  {
-  KDevelop::DUChainReadLocker lock( DUChain::lock() );
 
   foreach (DeclarationPointer override, m_declarations) {
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(override.data())) {
@@ -251,7 +256,6 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
     
     Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, override);
     output << item.insertionText() << "\n";
-  }
   }
 
   output << "};\n\n";
