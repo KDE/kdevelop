@@ -536,6 +536,33 @@ void TestDUChain::testArrayType()
   release(top);
 }
 
+void TestDUChain::testProblematicUses()
+{
+  TEST_FILE_PARSE_ONLY
+
+{
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("enum { b = 5 }; template<bool b> struct A { enum { Mem }; }; void test(int a) { if(a < 0 && a > -1) { } if(a < 0 && a < -1) { } if(A<(b < 10 && b < 0)>::Mem) { } if(A<(b < 10 && b > 0)>::Mem) { } }");
+
+///@todo This works in g++, but not in kdevelops parser. Although it's butt ugly.
+//     if(A<b < 10 && b < 0>::Mem) {}
+    
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 5);
+    QCOMPARE(top->childContexts()[3]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[3]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[3]->localDeclarations()[0]->uses().begin()->size(), 4); //a uses
+    
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 4); //b uses
+
+    release(top);
+  }
+}
+
 void TestDUChain::testBaseUses()
 {
   TEST_FILE_PARSE_ONLY

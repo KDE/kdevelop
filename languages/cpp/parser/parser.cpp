@@ -81,7 +81,7 @@ void Parser::moveComments( CommentAST* ast ) {
 }
 
 Parser::Parser(Control *c)
-  : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0), _M_hadMismatchingCompoundTokens(false)
+  : control(c), lexer(control), session(0), _M_last_valid_token(0), _M_last_parsed_comment(0), _M_hadMismatchingCompoundTokens(false), m_primaryExpressionWithTemplateParamsNeedsFunctionCall(true)
 {
   _M_max_problem_count = 5;
   _M_hold_errors = false;
@@ -225,6 +225,7 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   if (!forceExpression)
     parseTypeId(ast);
   if(!ast) {
+    m_primaryExpressionWithTemplateParamsNeedsFunctionCall = false;
     ExpressionAST* ast = 0;
     parseExpression(ast);
     return ast;
@@ -547,8 +548,9 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
   while (true)
     {
       UnqualifiedNameAST *n = 0;
-      if (!parseUnqualifiedName(n))
+      if (!parseUnqualifiedName(n)) {
         return false;
+      }
 
       if (session->token_stream->lookAhead() == Token_scope)
         {
@@ -2925,11 +2927,12 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
 
           UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
-
           return true;
         }
     }
-
+    
+  ast->type_specifier = 0;
+  
   rewind(start);
 
   if (!parseCommaExpression(ast->expression))
@@ -3694,8 +3697,17 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       break;
 
     default:
-      if (!parseName(ast->name, true))
+      if (!parseName(ast->name, true)) {
         return false;
+      }
+      //Only accept template parameters as primary expression if the expression is followed by a function call
+      if(ast->name->unqualified_name && ast->name->unqualified_name->template_arguments)
+        if(session->token_stream->lookAhead() != '(' && m_primaryExpressionWithTemplateParamsNeedsFunctionCall) {
+          rewind(start);
+          ast->name = 0;
+          if(!parseName(ast->name, false))
+            return false;
+        }
 
       break;
     }

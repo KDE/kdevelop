@@ -73,6 +73,8 @@ public:
    * if that fails, as an expression. This is perfect for parsing template-arguements.
    * The input can be as simple as "A" or "A::a+2"
    * @param forceExpression If this is true, the text will not be considered to be a type-id, only an expression.
+   *                                         With this parameter, unlike during normal parsing, primary expressions may
+   *                                         have template parameters even without a function-call behind. That allows evaluating only partial expressions.
    * */
   AST *parseTypeOrExpression(ParseSession* session, bool forceExpression = false);
   /**@return the problem count.*/
@@ -254,6 +256,7 @@ private:
   size_t _M_last_parsed_comment;
   
   bool _M_hadMismatchingCompoundTokens;
+  bool m_primaryExpressionWithTemplateParamsNeedsFunctionCall;
 
   // keeps track of tokens where a syntax error has been found
   // so that the same error is not reported twice for a token

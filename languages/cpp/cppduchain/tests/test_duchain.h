@@ -146,6 +146,7 @@ private slots:
   void testSeparateVariableDefinition();
   
   void testBaseUses();
+  void testProblematicUses();
 
   void testCStruct();
   void testCStruct2();
