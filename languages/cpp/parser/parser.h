@@ -152,7 +152,14 @@ public:
   bool parseMemInitializerList(const ListNode<MemInitializerAST*> *&node);
   bool parseMemberSpecification(DeclarationAST *&node);
   bool parseMultiplicativeExpression(ExpressionAST *&node);
-  bool parseName(NameAST *&node, bool acceptTemplateId = false);
+  
+  enum ParseNameAcceptTemplate {
+    DontAcceptTemplate = 0,
+    AcceptTemplate = 1,
+    //If this is given, template-parameters are only accepted if the name is followed by a function call
+    EventuallyAcceptTemplate = 2
+  };
+  bool parseName(NameAST *&node, ParseNameAcceptTemplate acceptTemplateId = DontAcceptTemplate);
   bool parseNamespace(DeclarationAST *&node);
   bool parseNamespaceAliasDefinition(DeclarationAST *&node);
   bool parseNewDeclarator(NewDeclaratorAST *&node);

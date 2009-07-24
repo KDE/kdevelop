@@ -528,7 +528,7 @@ bool Parser::skip(int l, int r)
   return false;
 }
 
-bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
+bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
 {
   std::size_t start = session->token_stream->cursor();
 
@@ -568,7 +568,10 @@ bool Parser::parseName(NameAST *&node, bool acceptTemplateId)
       else
         {
           Q_ASSERT(n != 0);
-          if (!acceptTemplateId)
+      
+          if (acceptTemplateId == DontAcceptTemplate ||
+            //Eventually only accept template parameters as primary expression if the expression is followed by a function call
+            (acceptTemplateId == EventuallyAcceptTemplate && n->template_arguments && session->token_stream->lookAhead() != '(' && m_primaryExpressionWithTemplateParamsNeedsFunctionCall))
             {
               rewind(n->start_token);
               parseUnqualifiedName(n, false);
@@ -1256,7 +1259,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
     }
   else
     {
-      if (!parseName(ast->name, true))
+      if (!parseName(ast->name, AcceptTemplate))
         {
           ast->name = 0;
           rewind(start);
@@ -1395,7 +1398,7 @@ bool Parser::parseDeclarator(DeclaratorAST *&node)
         {
           // unnamed bitfield
         }
-      else if (parseName(declId, true))
+      else if (parseName(declId, AcceptTemplate))
         {
           ast->id = declId;
         }
@@ -1733,7 +1736,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
         advance(); // skip class
 
         // parse optional name
-        if(parseName(ast->name, true))
+        if(parseName(ast->name, AcceptTemplate))
           {
             if (session->token_stream->lookAhead() == '=')
               {
@@ -1771,7 +1774,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
           advance();
 
         // parse optional name
-        if (parseName(ast->name, true))
+        if (parseName(ast->name, AcceptTemplate))
           {
             if (session->token_stream->lookAhead() == '=')
               {
@@ -1789,7 +1792,7 @@ bool Parser::parseTypeParameter(TypeParameterAST *&node)
           {
             advance();
 
-            parseName(ast->template_name, true);
+            parseName(ast->template_name, AcceptTemplate);
           }
       }
       break;
@@ -2029,7 +2032,7 @@ bool Parser::parseClassSpecifier(TypeSpecifierAST *&node)
     }
 
   NameAST *name = 0;
-  parseName(name, true);
+  parseName(name, AcceptTemplate);
 
   BaseClauseAST *bases = 0;
   if (session->token_stream->lookAhead() == ':')
@@ -2249,7 +2252,7 @@ bool Parser::parseElaboratedTypeSpecifier(TypeSpecifierAST *&node)
       advance();
 
       NameAST *name = 0;
-      if (parseName(name, true))
+      if (parseName(name, AcceptTemplate))
         {
           ElaboratedTypeSpecifierAST *ast
             = CreateNode<ElaboratedTypeSpecifierAST>(session->mempool);
@@ -2449,7 +2452,7 @@ bool Parser::parseMemInitializer(MemInitializerAST *&node)
   std::size_t start = session->token_stream->cursor();
 
   NameAST *initId = 0;
-  if (!parseName(initId, true))
+  if (!parseName(initId, AcceptTemplate))
     {
       reportError(("Identifier expected"));
       return false;
@@ -2531,7 +2534,7 @@ bool Parser::parseBaseSpecifier(BaseSpecifierAST *&node)
         }
     }
 
-  if (!parseName(ast->name, true))
+  if (!parseName(ast->name, AcceptTemplate))
     reportError(("Class name expected"));
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -2897,11 +2900,13 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
 {
   std::size_t start = session->token_stream->cursor();
 
+  kDebug() << "condition at" << start;
   ConditionAST *ast = CreateNode<ConditionAST>(session->mempool);
   TypeSpecifierAST *spec = 0;
 
   if (parseTypeSpecifier(spec))
     {
+      kDebug() << "no type specifier";
       ast->type_specifier = spec;
 
       std::size_t declarator_start = session->token_stream->cursor();
@@ -2927,6 +2932,7 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
 
           UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
+          kDebug() << "Success A";
           return true;
         }
     }
@@ -2935,11 +2941,15 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
   
   rewind(start);
 
-  if (!parseCommaExpression(ast->expression))
+  if (!parseCommaExpression(ast->expression)) {
+    kDebug() << "no comma expression";
     return false;
+  }
+  Q_ASSERT(ast->expression);
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
+          kDebug() << "Success B";
 
   return true;
 }
@@ -3104,7 +3114,7 @@ bool Parser::parseIfStatement(StatementAST *&node)
   ADVANCE(Token_if, "if");
 
   ADVANCE('(' , "(");
-
+kDebug() <<"if-statement";
   IfStatementAST *ast = CreateNode<IfStatementAST>(session->mempool);
 
   ConditionAST *cond = 0;
@@ -3113,6 +3123,9 @@ bool Parser::parseIfStatement(StatementAST *&node)
       reportError(("Condition expected"));
       return false;
     }
+    
+  kDebug() <<"condition ends at" << cond->end_token;
+    
   ADVANCE(')', ")");
 
   StatementAST *stmt = 0;
@@ -3375,7 +3388,7 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
 
   int index = session->token_stream->cursor();
   NameAST *name = 0;
-  if (parseName(name, true) && session->token_stream->lookAhead() == '(')
+  if (parseName(name, AcceptTemplate) && session->token_stream->lookAhead() == '(')
     {
       // no type specifier, maybe a constructor or a cast operator??
 
@@ -3697,17 +3710,8 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
       break;
 
     default:
-      if (!parseName(ast->name, true)) {
+      if (!parseName(ast->name, EventuallyAcceptTemplate))
         return false;
-      }
-      //Only accept template parameters as primary expression if the expression is followed by a function call
-      if(ast->name->unqualified_name && ast->name->unqualified_name->template_arguments)
-        if(session->token_stream->lookAhead() != '(' && m_primaryExpressionWithTemplateParamsNeedsFunctionCall) {
-          rewind(start);
-          ast->name = 0;
-          if(!parseName(ast->name, false))
-            return false;
-        }
 
       break;
     }
@@ -3780,7 +3784,7 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
 //           }
 
         NameAST *name = 0;
-        if (!parseName(name, true)) ///@todo this used to be "templ" as the second parameter. Can this cause problems with expressions?
+        if (!parseName(name, EventuallyAcceptTemplate))
           return false;
 
         ClassMemberAccessAST *ast = CreateNode<ClassMemberAccessAST>(session->mempool);
@@ -3862,7 +3866,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
         advance();
 
         NameAST* name = 0;
-        if (!parseName(name, true))
+        if (!parseName(name, AcceptTemplate))
           return false;
 
         CHECK('(');
@@ -3906,7 +3910,7 @@ bool Parser::parsePostfixExpression(ExpressionAST *&node)
 
   // let's try to parse a type
   NameAST *name = 0;
-  if (parseName(name, true))
+  if (parseName(name, AcceptTemplate))
     {
       Q_ASSERT(name->unqualified_name != 0);
 

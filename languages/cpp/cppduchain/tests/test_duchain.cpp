@@ -539,6 +539,25 @@ void TestDUChain::testArrayType()
 void TestDUChain::testProblematicUses()
 {
   TEST_FILE_PARSE_ONLY
+  
+  {
+    QByteArray method("struct S { int a; }; int c; int q; int a; S* s; void test() { if(s->a < q && a > c) { } if(s->a < q && a > c) { } }");
+
+    TopDUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->localDeclarations().count(), 6);
+    QCOMPARE(top->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[1]->uses().begin()->size(), 2); //c uses
+    QCOMPARE(top->localDeclarations()[2]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[2]->uses().begin()->size(), 2); //q uses
+    QCOMPARE(top->localDeclarations()[3]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[3]->uses().begin()->size(), 2); //a uses
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 2); //a uses
+
+    release(top);
+  }
 
 {
     //                 0         1         2         3         4         5
