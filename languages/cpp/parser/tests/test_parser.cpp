@@ -111,6 +111,26 @@ private slots:
     QVERIFY(ast->declarations != 0);
   }
   
+  void testManyComparisons()
+  {
+    //Should not crash
+    {
+      QByteArray clazz("void test() { if(val < f && val < val1 && val < val2 && val < val3 ){ } }");
+      pool mem_pool;
+      TranslationUnitAST* ast = parse(clazz, &mem_pool);
+      QVERIFY(ast != 0);
+      QVERIFY(ast->declarations != 0);
+      dumper.dump(ast, lastSession->token_stream);
+    }
+    {
+      QByteArray clazz("void test() { if(val < f && val < val1 && val < val2 && val < val3 && val < val4 && val < val5 && val < val6 && val < val7 && val < val8 && val < val9 && val < val10 && val < val11 && val < val12 && val < val13 && val < val14 && val < val15 && val < val16 && val < val17 && val < val18 && val < val19 && val < val20 && val < val21 && val < val22 && val < val23 && val < val24 && val < val25 && val < val26){ } }");
+      pool mem_pool;
+      TranslationUnitAST* ast = parse(clazz, &mem_pool);
+      QVERIFY(ast != 0);
+      QVERIFY(ast->declarations != 0);
+    }
+  }
+  
   void testParserFail()
   {
     QByteArray stuff("foo bar !!! nothing that really looks like valid c++ code");

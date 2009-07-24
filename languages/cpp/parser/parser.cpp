@@ -180,7 +180,7 @@ void Parser::clearComment( ) {
 
 TranslationUnitAST *Parser::parse(ParseSession* _session)
 {
-  _M_hold_errors = false;
+  clear();
   session = _session;
 
   if (!session->token_stream)
@@ -196,7 +196,7 @@ TranslationUnitAST *Parser::parse(ParseSession* _session)
 
 StatementAST *Parser::parseStatement(ParseSession* _session)
 {
-  _M_hold_errors = false;
+  clear();
   session = _session;
 
   if (!session->token_stream)
@@ -212,7 +212,7 @@ StatementAST *Parser::parseStatement(ParseSession* _session)
 
 AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
 {
-  _M_hold_errors = false;
+  clear();
   session = _session;
 
   if (!session->token_stream)
@@ -231,6 +231,32 @@ AST *Parser::parseTypeOrExpression(ParseSession* _session, bool forceExpression)
   }
 
   return ast;
+}
+
+
+void Parser::clear()
+{
+  _M_hold_errors = false;
+  m_tokenMarkers.clear();
+}
+
+
+void Parser::addTokenMarkers(size_t tokenNumber, Parser::TokenMarkers markers)
+{
+  __gnu_cxx::hash_map<size_t, TokenMarkers>::iterator it = m_tokenMarkers.find(tokenNumber);
+  if(it != m_tokenMarkers.end())
+    (*it).second = (TokenMarkers)((*it).second | markers);
+  else
+    m_tokenMarkers.insert(std::make_pair(tokenNumber, markers));
+}
+
+Parser::TokenMarkers Parser::tokenMarkers(size_t tokenNumber) const
+{
+  __gnu_cxx::hash_map<size_t, TokenMarkers>::const_iterator it = m_tokenMarkers.find(tokenNumber);
+  if(it != m_tokenMarkers.end())
+    return (*it).second;
+  else
+    return None;
 }
 
 KDevelop::IndexedString declSpecString("__declspec");
@@ -2651,7 +2677,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
     {
       std::size_t index = session->token_stream->cursor();
 
-      if (session->token_stream->lookAhead() == '<')
+      if (session->token_stream->lookAhead() == '<' && !(tokenMarkers(index) & IsNoTemplateArgumentList))
         {
           advance();
 
@@ -2664,6 +2690,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
             }
           else
             {
+              addTokenMarkers(index, IsNoTemplateArgumentList);
               ast->template_arguments = 0;
               rewind(index);
             }

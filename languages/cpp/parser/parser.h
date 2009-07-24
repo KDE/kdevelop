@@ -28,6 +28,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include <cppparserexport.h>
+#include <ext/hash_map>
 
 class TokenStream;
 class Control;
@@ -217,9 +218,20 @@ public:
   Control *control;
   Lexer lexer;
 private:
+  
+  enum TokenMarkers {
+    None = 0,
+    IsNoTemplateArgumentList = 1
+  };
+  
+  TokenMarkers tokenMarkers(size_t tokenNumber) const;
+  void addTokenMarkers(size_t tokenNumber, TokenMarkers markers);
+
 
   int lineFromTokenNumber( size_t tokenNumber ) const;
 
+  void clear();
+  
   ///parses all comments until the end of the line
   Comment comment();
   ///Preparses comments in the same line as given token-number
@@ -232,7 +244,8 @@ private:
 
   Comment m_currentComment;
   CommentStore m_commentStore;
-
+ 
+  __gnu_cxx::hash_map<size_t, TokenMarkers> m_tokenMarkers;
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;
