@@ -48,6 +48,10 @@ struct ApplyChangesWidgetPrivate
 {
     ApplyChangesWidgetPrivate(ApplyChangesWidget * p)
         : parent(p), m_index(0) {}
+    ~ApplyChangesWidgetPrivate()
+    {
+        qDeleteAll(m_temps);
+    }
     
     void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type);
     void jump( const QModelIndex & idx);
@@ -58,7 +62,7 @@ struct ApplyChangesWidgetPrivate
     unsigned int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
     QList<QStandardItemModel*> m_changes;
-    QList<QSharedPointer<KTemporaryFile> > m_temps;
+    QList<KTemporaryFile * > m_temps;
     QList<QPair<IndexedString, IndexedString> > m_files;
     KTabWidget * m_documentTabs;
     
@@ -101,6 +105,7 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original, const Inde
     
     QWidget * w = new QWidget;
     d->m_documentTabs->addTab(w, original.index() ? original.str() : modified.str());
+    d->m_documentTabs->setCurrentWidget(w);
     
     if(d->m_kompare.createWidget(original, modified, w) == -1)
         d->createEditPart(modified, info);
@@ -189,7 +194,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const
     //Q_ASSERT(m_editParts[m_index]->closeStream());
     if(!repr->fileExists())
     {
-        QSharedPointer<KTemporaryFile> temp(new KTemporaryFile);
+        KTemporaryFile * temp(new KTemporaryFile);
         temp->setSuffix(url.fileName().split(".").last());
         temp->open();
         temp->write(repr->text().toUtf8());
