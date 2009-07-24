@@ -144,7 +144,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /**
      * Remove all previous base classes
      */
-    void clearInheritance(void);
+    virtual void clearInheritance(void);
     
     /**
      * Clear all in class declarations

@@ -420,7 +420,8 @@ bool ClassIdentifierPage::validatePage ( void )
     ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
     generator->identifier(field("classIdentifier").toString());
     
-    //Add base classes
+    //Remove old base classes, and add the new ones
+    generator->clearInheritance();
     foreach (const QString & inherited, field("classInheritance").toStringList())
         generator->addBaseClass(inherited);
     
