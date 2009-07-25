@@ -207,6 +207,7 @@ void GdbJob::start()
     setStandardToolView(KDevelop::IOutputView::DebugView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
     setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
+    setTitle(m_launchcfg->name());
     
     startOutput();
     
