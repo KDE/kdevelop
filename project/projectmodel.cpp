@@ -462,13 +462,20 @@ QModelIndex ProjectModel::pathToIndex(const QStringList& tofetch_) const
     {
         const QString& currentName = tofetch[a];
         
+        bool matched = false;
         QModelIndexList l = match(current, Qt::EditRole, currentName, -1, Qt::MatchExactly);
         foreach(QModelIndex idx, l) {
             //If this is not the last item, only match folders, as there may be targets and folders with the same name
             if(a == tofetch.size()-1 || item(idx)->folder()) {
                 ret = idx;
                 current = index(0,0, ret);
+                matched = true;
+                break;
             }
+        }
+        if(!matched) {
+            ret = QModelIndex();
+            break;
         }
     }
     Q_ASSERT(!ret.isValid() || data(ret).toString()==tofetch.last());
