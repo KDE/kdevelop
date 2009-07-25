@@ -407,6 +407,7 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
                 d->currentTargetAction->actions().first()->setChecked(true);
         }
     }
+    d->enableLaunchActions();
 }
 
 void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
