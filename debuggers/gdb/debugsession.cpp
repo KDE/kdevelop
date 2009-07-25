@@ -1041,14 +1041,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         queueCmd(
             new GDBCommand(GDBMI::ExecArguments, KShell::joinArgs( arguments )));
 
-    // Get the run environment variables pairs into the environstr string
-    // in the form of: "ENV_VARIABLE=ENV_VALUE" and send to gdb using the
-    // GDBMI::GdbSet, "environment" command
-    // Note that we quote the variable value due to the possibility of
-    // embedded spaces
-    QString environstr;
-    typedef QPair<QString, QString> QStringPair;
-
     foreach (const QString& envvar, l.createEnvironment(envgrp, QStringList()))
         queueCmd(new GDBCommand(GDBMI::GdbSet, "environment " + envvar));
 
