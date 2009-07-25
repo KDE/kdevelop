@@ -42,6 +42,19 @@ class ProjectTargetItem;
 class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
 
+class KDEVPLATFORMPROJECT_EXPORT ProjectVisitor
+{
+public:
+    ProjectVisitor();
+    virtual ~ProjectVisitor();
+    virtual void visit( IProject* );
+    virtual void visit( ProjectBuildFolderItem* );
+    virtual void visit( ProjectExecutableTargetItem* );
+    virtual void visit( ProjectFolderItem* );
+    virtual void visit( ProjectFileItem* );
+    virtual void visit( ProjectLibraryTargetItem* );
+};
+
 /**
  * Interface that allows a developer to implement the three basic types of
  * items you would see in a multi-project

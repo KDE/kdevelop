@@ -499,5 +499,101 @@ QStringList ProjectModel::pathFromIndex(const QModelIndex& index) const
     return list;
 }
 
+
+ProjectVisitor::ProjectVisitor() 
+{
+}
+
+
+void ProjectVisitor::visit ( IProject* prj )
+{
+    visit( prj->projectItem() );
+}
+
+
+void ProjectVisitor::visit ( ProjectBuildFolderItem* folder )
+{
+    foreach( ProjectFileItem* item, folder->fileList() )
+    {
+        visit( item );
+    }
+    foreach( ProjectTargetItem* item, folder->targetList() )
+    {
+        if( item->type() == ProjectBaseItem::LibraryTarget )
+        {
+            visit( dynamic_cast<ProjectLibraryTargetItem*>( item ) );
+        } else if( item->type() == ProjectBaseItem::ExecutableTarget )
+        {
+            visit( dynamic_cast<ProjectExecutableTargetItem*>( item ) );
+        }
+    }
+    foreach( ProjectFolderItem* item, folder->folderList() )
+    {
+        if( item->type() == ProjectBaseItem::BuildFolder )
+        {
+            visit( dynamic_cast<ProjectBuildFolderItem*>( item ) );
+        } else if( item->type() == ProjectBaseItem::Folder )
+        {
+            visit( dynamic_cast<ProjectFolderItem*>( item ) );
+        }
+    }
+}
+
+
+void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
+{
+    foreach( ProjectFileItem* item, exec->fileList() )
+    {
+        visit( item );
+    }
+}
+
+
+void ProjectVisitor::visit ( ProjectFolderItem* folder )
+{
+    foreach( ProjectFileItem* item, folder->fileList() )
+    {
+        visit( item );
+    }
+    foreach( ProjectTargetItem* item, folder->targetList() )
+    {
+        if( item->type() == ProjectBaseItem::LibraryTarget )
+        {
+            visit( dynamic_cast<ProjectLibraryTargetItem*>( item ) );
+        } else if( item->type() == ProjectBaseItem::ExecutableTarget )
+        {
+            visit( dynamic_cast<ProjectExecutableTargetItem*>( item ) );
+        }
+    }
+    foreach( ProjectFolderItem* item, folder->folderList() )
+    {
+        if( item->type() == ProjectBaseItem::BuildFolder )
+        {
+            visit( dynamic_cast<ProjectBuildFolderItem*>( item ) );
+        } else if( item->type() == ProjectBaseItem::Folder )
+        {
+            visit( dynamic_cast<ProjectFolderItem*>( item ) );
+        }
+    }
+}
+
+
+void ProjectVisitor::visit ( ProjectFileItem* )
+{
+}
+
+void ProjectVisitor::visit ( ProjectLibraryTargetItem* lib )
+{
+    foreach( ProjectFileItem* item, lib->fileList() )
+    {
+        visit( item );
+    }
+}
+
+ProjectVisitor::~ProjectVisitor()
+{
+}
+
+
 }
 #include "projectmodel.moc"
