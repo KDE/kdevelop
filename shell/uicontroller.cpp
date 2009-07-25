@@ -608,6 +608,11 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         return;
     
     Sublime::View* view = d->activeSublimeWindow->activeView();
+    if( !view )
+    {
+        kDebug() << "no active view in mainwindow";
+        return;
+    }
     TextEditorWidget* textWidget = dynamic_cast<TextEditorWidget*>(view->widget());
     if(textWidget && textWidget->editorView()) {
 
