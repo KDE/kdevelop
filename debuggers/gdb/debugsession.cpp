@@ -1356,8 +1356,8 @@ void DebugSession::slotUserGDBCmd(const QString& cmd)
     // We can do it right now, and don't wait for user command to finish
     // since commands used to reload all view will be executed after
     // user command anyway.
-    //if (!stateIsOn(s_appNotStarted) && !stateIsOn(s_programExited))
-    //    raiseEvent(program_state_changed);
+    if (!stateIsOn(s_appNotStarted) && !stateIsOn(s_programExited))
+        raiseEvent(program_state_changed);
 }
 
 void DebugSession::explainDebuggerStatus()
