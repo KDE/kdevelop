@@ -143,10 +143,12 @@ void SvnRecursiveAdd::test()
     validatingExecJob(job);
     qDebug() << "filling wc";
     fillWorkingDirectory(checkoutDir.name());
-    kDebug() << "Recursively adding files at " << checkoutLoc;
-    validatingExecJob(vcs->add(KUrl(checkoutLoc), IBasicVersionControl::Recursive));
-    kDebug() << "Recursively reverting changes at " << checkoutLoc;
-    validatingExecJob(vcs->revert(KUrl(checkoutLoc), IBasicVersionControl::Recursive));
+    KUrl addUrl = checkoutLoc;
+    addUrl.addPath( vcsTestDir0 );
+    kDebug() << "Recursively adding files at " << addUrl;
+    validatingExecJob(vcs->add(KUrl(addUrl), IBasicVersionControl::Recursive));
+    kDebug() << "Recursively reverting changes at " << addUrl;
+    validatingExecJob(vcs->revert(KUrl(addUrl), IBasicVersionControl::Recursive));
 }
 
 QTEST_KDEMAIN(SvnRecursiveAdd, GUI)
