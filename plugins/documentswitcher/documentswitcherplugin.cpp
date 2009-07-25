@@ -117,11 +117,9 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
     model->clear();
     QList<QStandardItem*> views;
     foreach( Sublime::View* v, documentLists[window][window->area()] )
-    {
-        views << new QStandardItem( v->document()->statusIcon(), v->document()->title() );
+    {   
+        model->appendRow( new QStandardItem( v->document()->statusIcon(), v->document()->title() ) );
     }
-    
-    model->appendRow( views );
     
 }
 
