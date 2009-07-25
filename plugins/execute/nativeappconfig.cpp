@@ -78,6 +78,13 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         item->setData( Qt::UserRole, dep );
     }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
+    if( project )
+    {
+        targetDependency->setBaseItem( project->projectItem() );
+    } else {
+        targetDependency->setBaseItem( 0 );
+    }
+
     blockSignals( b );
 }
 
