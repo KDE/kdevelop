@@ -37,6 +37,7 @@
 #include <sublime/document.h>
 
 #include "documentswitchertreeview.h"
+#include <QStandardItemModel>
 
 K_PLUGIN_FACTORY(DocumentSwitcherFactory, registerPlugin<DocumentSwitcherPlugin>(); )
 K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
@@ -74,7 +75,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     connect( view, SIGNAL(clicked(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
     connect( view, SIGNAL(activated(const QModelIndex&)), SLOT(switchToView(const QModelIndex&)) );
     
-    model = new QStringListModel( view );
+    model = new QStandardItemModel( view );
     view->setModel( model );    
 }
 
@@ -89,15 +90,13 @@ void DocumentSwitcherPlugin::walkForward()
     QModelIndex idx;
     if( !view->isVisible() )
     {
-        QStringList views;
-        foreach( Sublime::View* v, documentLists[window][window->area()] )
-        {
-            views << v->document()->title();
-        }
-    
-        model->setStringList( views );
+        fillModel( window );
         view->move( QCursor::pos() );
         idx = model->index( 1, 0 );
+        if( !idx.isValid() )
+        {
+            idx = model->index( 0, 0 );
+        }
         view->show();
     } else 
     {
@@ -108,8 +107,22 @@ void DocumentSwitcherPlugin::walkForward()
         }
         idx = model->index( newrow, 0 );
     }
-    view->selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect );
-    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent );
+    view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
+}
+
+
+void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
+{
+    model->clear();
+    QList<QStandardItem*> views;
+    foreach( Sublime::View* v, documentLists[window][window->area()] )
+    {
+        views << new QStandardItem( v->document()->statusIcon(), v->document()->title() );
+    }
+    
+    model->appendRow( views );
+    
 }
 
 void DocumentSwitcherPlugin::walkBackward()
@@ -123,13 +136,7 @@ void DocumentSwitcherPlugin::walkBackward()
     QModelIndex idx;
     if( !view->isVisible() )
     {
-        QStringList views;
-        foreach( Sublime::View* v, documentLists[window][window->area()] )
-        {
-            views << v->document()->title();
-        }
-    
-        model->setStringList( views );
+        fillModel( window );
         view->move( QCursor::pos() );
         idx = model->index( model->rowCount()-1, 0 );
         view->show();
@@ -142,8 +149,8 @@ void DocumentSwitcherPlugin::walkBackward()
         }
         idx = model->index( newrow, 0 );
     }
-    view->selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect );
-    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent );
+    view->selectionModel()->select( idx, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
+    view->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows );
 }
 
 DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
@@ -152,8 +159,12 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
-    int row = view->selectionModel()->selectedRows().first().row();
     view->hide();
+    if( view->selectionModel()->selectedRows().isEmpty() )
+    {
+        return;
+    }
+    int row = view->selectionModel()->selectedRows().first().row();
     
     Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )
