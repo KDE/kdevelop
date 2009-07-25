@@ -184,7 +184,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   Identifier classId = Identifier(name());
 
   // Header protector
-  QString headerGuard = headerUrl().fileName().toUpper().replace('.', '_');
+  QString headerGuard = headerUrl().fileName().toUpper().replace('.', '_').replace('-','_');
   if (m_namespaces.size())
     headerGuard.prepend(m_namespaces.join("_").toUpper() + '_');
 
