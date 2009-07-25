@@ -58,9 +58,9 @@ public:
         case KDevelop::IDocument::Modified:
             return KIcon( "document-save" );
         case KDevelop::IDocument::Dirty:
-            return KIcon( "file-revert" );
+            return KIcon( "document-revert" );
         case KDevelop::IDocument::DirtyAndModified:
-            return KIcon( "process-stop" );
+            return KIcon( "edit-delete" );
         default:
             return QIcon();
         }
