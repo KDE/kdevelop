@@ -50,6 +50,7 @@ struct ContainerPrivate {
     KTabBar *tabBar;
     QStackedWidget *stack;
     QLabel *fileNameCorner;
+    QLabel *fileStatus;
     QLabel *statusCorner;
     QPointer<QWidget> leftCornerWidget;
 
@@ -135,6 +136,9 @@ Container::Container(QWidget *parent)
 
     d->tabBar = new KTabBar(this);
     m_tabBarLayout->addWidget(d->tabBar);
+    d->fileStatus = new QLabel( this );
+    d->fileStatus->setFixedSize( QSize( 16, 16 ) );
+    m_tabBarLayout->addWidget(d->fileStatus);
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
     m_tabBarLayout->addWidget(d->fileNameCorner);
     d->statusCorner = new StatusLabel(d->tabBar, this);
@@ -254,6 +258,7 @@ void Container::statusIconChanged(Document* doc)
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
+            d->fileStatus->setPixmap( doc->statusIcon().pixmap( QSize( 16,16 ) ) );
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
                 d->tabBar->setTabIcon(tabIndex, doc->statusIcon());
@@ -341,10 +346,12 @@ void Container::setTabBarHidden(bool hide)
     {
         d->tabBar->hide();
         d->fileNameCorner->show();
+        d->fileStatus->show();
     }
     else
     {
         d->fileNameCorner->hide();
+        d->fileStatus->hide();
         d->tabBar->show();
     }
 }
