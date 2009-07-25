@@ -281,6 +281,9 @@ public:
 
     virtual OverridesPage* newOverridesPage();
 
+    
+    virtual int nextId() const;
+    
 private:
     friend class OutputPage;
     class CreateClassWizardPrivate* const d;
