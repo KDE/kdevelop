@@ -34,6 +34,8 @@ public:
 
     bool isValid() const;
     KDevelop::VcsLocation source() const;
+    KUrl destination() const;
+    KDevelop::IBasicVersionControl::RecursionMode recursion() const;
 protected:
     void run();
 private:

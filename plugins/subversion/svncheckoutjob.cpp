@@ -50,17 +50,15 @@ void SvnInternalCheckoutJob::run()
     svn::Client cli(m_ctxt);
     try
     {
-        QMutexLocker l( m_mutex );
-        bool recurse = ( m_recursion == KDevelop::IBasicVersionControl::Recursive );
-        QByteArray srcba = m_sourceRepository.repositoryServer().toUtf8();
-        QByteArray destba = m_destinationDirectory.toLocalFile().toUtf8();
+        bool recurse = ( recursion() == KDevelop::IBasicVersionControl::Recursive );
+        QByteArray srcba = source().repositoryServer().toUtf8();
+        QByteArray destba = destination().toLocalFile().toUtf8();
         kDebug(9510) << srcba << destba;
-        cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision(svn::Revision::HEAD), recurse );
+        svn_revnum_t rev = cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision(svn_opt_revision_number), recurse );
     }catch( svn::ClientException ce )
     {
-        QMutexLocker l( m_mutex );
         kDebug(9510) << "Exception while checking out: "
-                << m_sourceRepository.repositoryServer()
+                << source().repositoryServer()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
@@ -82,6 +80,17 @@ KDevelop::VcsLocation SvnInternalCheckoutJob::source() const
     return m_sourceRepository;
 }
 
+KDevelop::IBasicVersionControl::RecursionMode SvnInternalCheckoutJob::recursion() const
+{
+    QMutexLocker l( m_mutex );
+    return m_recursion;
+}
+
+KUrl SvnInternalCheckoutJob::destination() const
+{
+    QMutexLocker l( m_mutex );
+    return m_destinationDirectory;
+}
 
 SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
     : SvnJobBase( parent, verbosity )
