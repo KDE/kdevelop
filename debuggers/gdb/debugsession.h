@@ -237,7 +237,8 @@ private:
     */
     void reloadProgramState();
 
-    void programNoApp(const QString &msg, bool msgBox);
+    void programNoApp(const QString &msg);
+    void programFinished(const QString &msg);
 
     void setStateOn(DBGStateFlags stateOn);
     void setStateOff(DBGStateFlags stateOff);

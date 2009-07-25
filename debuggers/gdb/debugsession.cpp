@@ -682,7 +682,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 
     if (reason == "exited-normally" || reason == "exited")
     {
-        programNoApp("Exited normally", false);
+        programNoApp(i18n("Exited normally"));
         programHasExited_ = true;
         state_reload_needed = false;
         return;
@@ -690,8 +690,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 
     if (reason == "exited-signalled")
     {
-        programNoApp(i18n("Exited on signal %1",
-                     r["signal-name"].literal()), false);
+        programNoApp(i18n("Exited on signal %1", r["signal-name"].literal()));
         // FIXME: figure out why this variable is needed.
         programHasExited_ = true;
         state_reload_needed = false;
@@ -746,9 +745,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             // program has a signal that's caused the prog to stop.
             // Continuing from SIG FPE/SEGV will cause a "Cannot ..." and
             // that'll end the program.
-            KMessageBox::information(qApp->activeWindow(),
-                                     i18n("Program received signal %1 (%2)", name, user_name),
-                                     i18n("Received signal"));
+            programFinished(i18n("Program received signal %1 (%2)", name, user_name));
         }
     }
 
@@ -788,7 +785,7 @@ void DebugSession::reloadProgramState()
 // an invalid program specified or ...
 // gdb is still running though, but only the run command (may) make sense
 // all other commands are disabled.
-void DebugSession::programNoApp(const QString &msg, bool msgBox)
+void DebugSession::programNoApp(const QString& msg)
 {
     kDebug() << msg;
 
@@ -829,14 +826,22 @@ void DebugSession::programNoApp(const QString &msg, bool msgBox)
 
     raiseEvent(debugger_exited);
 
-    if (msgBox)
-        KMessageBox::information(qApp->activeWindow(), i18n("gdb message:\n%1", msg), i18n("Warning"));
-
     emit showMessage(msg, 0);
+
+    programFinished(msg);
+}
+
+
+void DebugSession::programFinished(const QString& msg)
+{
+    QString m = QString("*** %0 ***").arg(msg);
+    emit applicationStandardErrorLines(QStringList(m));
+
     /* Also show message in gdb window, so that users who
        prefer to look at gdb window know what's up.  */
-    emit gdbUserCommandStdout(msg);
+    emit gdbUserCommandStdout(m);
 }
+
 
 void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
 {
@@ -850,7 +855,7 @@ void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
         } else if (line.startsWith("The program no longer exists")
             || line.startsWith("Program exited"))
         {
-            programNoApp(line, false);
+            programNoApp(line);
         }
     }
 }
