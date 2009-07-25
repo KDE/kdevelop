@@ -1049,8 +1049,7 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     QString environstr;
     typedef QPair<QString, QString> QStringPair;
 
-    foreach (const QString& envvar, l.createEnvironment(envgrp,
-                                                        QProcess::systemEnvironment()))
+    foreach (const QString& envvar, l.createEnvironment(envgrp, QStringList()))
         queueCmd(new GDBCommand(GDBMI::GdbSet, "environment " + envvar));
 
     // Needed so that breakpoint widget has a chance to insert breakpoints.
