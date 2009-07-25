@@ -2900,13 +2900,11 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
 {
   std::size_t start = session->token_stream->cursor();
 
-  kDebug() << "condition at" << start;
   ConditionAST *ast = CreateNode<ConditionAST>(session->mempool);
   TypeSpecifierAST *spec = 0;
 
   if (parseTypeSpecifier(spec))
     {
-      kDebug() << "no type specifier";
       ast->type_specifier = spec;
 
       std::size_t declarator_start = session->token_stream->cursor();
@@ -2932,7 +2930,6 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
 
           UPDATE_POS(ast, start, _M_last_valid_token+1);
           node = ast;
-          kDebug() << "Success A";
           return true;
         }
     }
@@ -2942,14 +2939,12 @@ bool Parser::parseCondition(ConditionAST *&node, bool initRequired)
   rewind(start);
 
   if (!parseCommaExpression(ast->expression)) {
-    kDebug() << "no comma expression";
     return false;
   }
   Q_ASSERT(ast->expression);
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
-          kDebug() << "Success B";
 
   return true;
 }
@@ -3114,7 +3109,6 @@ bool Parser::parseIfStatement(StatementAST *&node)
   ADVANCE(Token_if, "if");
 
   ADVANCE('(' , "(");
-kDebug() <<"if-statement";
   IfStatementAST *ast = CreateNode<IfStatementAST>(session->mempool);
 
   ConditionAST *cond = 0;
@@ -3123,8 +3117,6 @@ kDebug() <<"if-statement";
       reportError(("Condition expected"));
       return false;
     }
-    
-  kDebug() <<"condition ends at" << cond->end_token;
     
   ADVANCE(')', ")");
 
