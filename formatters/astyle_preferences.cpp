@@ -232,7 +232,7 @@ void AStylePreferences::indentChanged()
 {
     if(!m_enableWidgetSignals)
         return;
-
+    m_formatter->setTabSpaceConversionMode( chkConvertTabs->isEnabled() );
     switch(cbIndentType->currentIndex()) {
         case INDENT_TABS:
             m_formatter->setTabIndentation(inpNuberSpaces->value(), false);
