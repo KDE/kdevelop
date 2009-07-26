@@ -273,6 +273,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
+            d->fileNameCorner->setText( doc->title() );
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
