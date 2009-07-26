@@ -23,6 +23,8 @@
 #include <KDE/KUrl>
 #include <interfaces/iextension.h>
 #include "../languageexport.h"
+#include <language/duchain/indexeditems.h>
+#include <KLineEdit>
 
 class QStringList;
 
@@ -31,6 +33,18 @@ namespace KDevelop
 
 class QuickOpenDataProviderBase;
 class IndexedString;
+
+class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine : public KLineEdit {
+Q_OBJECT
+public:
+        ///Returns a non-zero declaration if it has been explicitly selected and executed through the quickopen line
+//         IndexedDeclaration selectedDeclaration() = 0;
+        ///Returns a non-empty string if the file has been explicitly selected and executed through the quickopen line
+//         IndexedString selectedFile() = 0;
+    virtual void setDefaultText(QString text) = 0;
+    Q_SIGNALS:
+        void itemSelected();
+};
 
 /**
  * Interface to quickopen
@@ -62,6 +76,8 @@ public:
      * This should not be queried by data-providers that implement QuickOpenFileSetInterface during their initialization(set() and enableData())
     * */
     virtual QSet<KDevelop::IndexedString> fileSet() const = 0;
+    
+    virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type) = 0;
 };
 
 }
