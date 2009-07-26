@@ -144,11 +144,17 @@ KUrl CMakeJob::buildDir( KDevelop::IProject* project )
 QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
 {
     QStringList args;
-    KSharedConfig::Ptr cfg = project->projectConfiguration();
-    KConfigGroup group(cfg.data(), "CMake");
-    args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
-    args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
-    args << project->folder().toLocalFile();
+    KUrl cmakecache = buildDir( project );
+    cmakecache.addPath("CMakeCache.txt");
+    if( !QFileInfo( cmakecache.toLocalFile() ).exists() )
+    {
+        KSharedConfig::Ptr cfg = project->projectConfiguration();
+        
+        KConfigGroup group(cfg.data(), "CMake");
+        args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
+        args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
+        args << project->folder().toLocalFile();
+    }
     return args;
 }
 
