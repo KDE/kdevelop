@@ -24,8 +24,6 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 
-class KUrl;
-
 namespace KDevelop
 {
 
@@ -59,11 +57,6 @@ public:
      * Provides the current selection, note that this might be 0
      */
     virtual Context* currentSelection() = 0;
-    
-    /**
-     * @return the folder that most closely matches the current selection
-     */
-    KUrl folderFromSelection();
 
 public Q_SLOTS:
     /**

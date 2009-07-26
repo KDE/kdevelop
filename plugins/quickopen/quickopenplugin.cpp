@@ -306,7 +306,7 @@ QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QS
 }
 
 
-void QuickOpenWidget::setAlternativeSearchField(QLineEdit* alterantiveSearchField)
+void QuickOpenWidget::setAlternativeSearchField(KLineEdit* alterantiveSearchField)
 {
     o.searchLine = alterantiveSearchField;
     o.searchLine->installEventFilter( this );
@@ -1134,6 +1134,9 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0), m_forceUpdate(false) {
     setMinimumWidth(200);
     setMaximumWidth(400);
+    
+    setClickMessage(i18n("Quick Open..."));
+    
     deactivate();
     setObjectName("Quickopen");
     setFocusPolicy(Qt::ClickFocus);
@@ -1272,9 +1275,8 @@ void QuickOpenLineEdit::activate() {
 void QuickOpenLineEdit::deactivate() {
     kDebug() << "deactivating";
     
-    setText(i18n("Quick Open"));
-    setStyleSheet("color: grey"); ///@todo Better color picking
-    if (m_widget) {
+    clear();
+   if (m_widget) {
         m_widget->deleteLater();
         QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
     }
