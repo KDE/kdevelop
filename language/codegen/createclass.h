@@ -296,11 +296,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT OutputPage : public QWizardPage
 public:
     OutputPage(CreateClassWizard* parent);
     virtual ~OutputPage();
+
+    virtual void initializePage();
     
     virtual bool validatePage();
 
+    virtual bool isComplete() const;
 private:
-    virtual void showEvent(QShowEvent*);
     class OutputPagePrivate* const d;
     
 private slots:

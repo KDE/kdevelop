@@ -659,11 +659,14 @@ OutputPage::OutputPage(CreateClassWizard* parent)
     registerField("implementationLine", d->output->implementationLineNumber);
     registerField("implementationColumn", d->output->implementationColumnNumber);
     
+    
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
 }
 
-void OutputPage::showEvent(QShowEvent*) {
+void OutputPage::initializePage()
+{
     updateFileNames();
+    QWizardPage::initializePage();
 }
 
 void OutputPage::updateFileNames() {
@@ -671,9 +674,13 @@ void OutputPage::updateFileNames() {
     d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
 }
 
+bool OutputPage::isComplete() const
+{
+    return !d->output->headerUrl->url().url().isEmpty() && !d->output->implementationUrl->url().url().isEmpty();
+}
+
 bool OutputPage::validatePage()
 {
-    
     d->parent->generator()->setHeaderUrl(d->output->headerUrl->text());
     d->parent->generator()->setImplementationUrl(d->output->implementationUrl->text());
     d->parent->generator()->setHeaderPosition(SimpleCursor(field("headerLine").toInt(), field("headerColumn").toInt()));
