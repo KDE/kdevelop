@@ -84,7 +84,7 @@ bool doRefactoringWarning() {
 #endif
 }
 
-KUrl ISelectionController::folderFromSelection()
+KUrl folderFromSelection()
 {
     KUrl u;
 
@@ -181,7 +181,7 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
       u=ff->url();
   }
   else
-    u = ICore::self()->selectionController()->folderFromSelection();
+    u = folderFromSelection();
   
   //Run wizard
   CppNewClass newClassGenerator;
