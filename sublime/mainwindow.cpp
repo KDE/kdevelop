@@ -69,8 +69,15 @@ void MainWindow::setupAreaSelector() {
     if(areas.isEmpty())
         areas = controller()->defaultAreas();
     
+    QSet<QString> hadAreaName;
+    
     for(int a = 0; a < areas.size(); ++a) {
         Area* theArea = areas[a];
+        
+        if(hadAreaName.contains(theArea->objectName()))
+            continue;
+        
+        hadAreaName.insert(theArea->objectName());
         
         if(theArea->objectName() == area()->objectName()) {
             currentIndex = a;
