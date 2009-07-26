@@ -39,8 +39,8 @@ class IncludeFileDataProvider;
 extern QStringList headerExtensions;
 extern QStringList sourceExtensions;
 
-namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer; }
-namespace Cpp { class MacroSet; class EnvironmentManager; class StaticCodeAssistant; }
+namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer;}
+namespace Cpp { class MacroSet; class EnvironmentManager; }
 namespace CppTools { class IncludePathResolver; }
 namespace Veritas { class StubContextAction; class UUTContextAction; }
 
@@ -188,8 +188,6 @@ private:
 
     Veritas::StubContextAction* m_stubAction;
     Veritas::UUTContextAction* m_uutAction;
-    
-    Cpp::StaticCodeAssistant * m_assistant;
 };
 
 #endif

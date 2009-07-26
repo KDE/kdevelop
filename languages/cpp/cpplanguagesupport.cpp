@@ -174,7 +174,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new Cpp::MissingIncludeCompletionModel(0), name() );
     m_standardMacros = new Cpp::ReferenceCountedMacroSet;
     m_standardIncludePaths = new QStringList;
-    m_assistant = new Cpp::StaticCodeAssistant();
     
     Cpp::EnvironmentManager::setSimplifiedMatching(true);
     
@@ -487,7 +486,6 @@ CppLanguageSupport::~CppLanguageSupport()
     delete m_standardMacros;
     delete m_standardIncludePaths;
     delete m_includeResolver;
-    delete m_assistant;
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
 #endif

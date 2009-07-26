@@ -44,8 +44,6 @@ class StaticCodeAssistant : public QObject {
   Q_OBJECT
   public:
     StaticCodeAssistant();
-    
-    static StaticCodeAssistant * self();
   private slots:
     void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
@@ -67,9 +65,6 @@ class StaticCodeAssistant : public QObject {
     KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
     bool m_activeProblemAssistant;
     QTimer* m_timer;
-    
-    //Singleton pointer
-    static StaticCodeAssistant * instance;
 };
 
 }
