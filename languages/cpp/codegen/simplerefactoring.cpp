@@ -84,6 +84,26 @@ bool doRefactoringWarning() {
 #endif
 }
 
+KUrl ISelectionController::folderFromSelection()
+{
+    KUrl u;
+
+    KDevelop::Context * sel = ICore::self()->selectionController()->currentSelection();
+    KDevelop::FileContext * fc = dynamic_cast<FileContext*>(sel);
+    KDevelop::ProjectItemContext * pc = dynamic_cast<ProjectItemContext*>(sel);
+    if(fc && !fc->urls().isEmpty())
+      u = fc->urls()[0].upUrl();
+    else if(pc && !pc->items().isEmpty() && pc->items()[0]->folder())
+      ;//TODO check how to solve cyclic dependancy
+      //u = pc->items()[0]->folder()->url();
+    else if(ICore::self()->documentController()->activeDocument())
+      u = ICore::self()->documentController()->activeDocument()->url().upUrl();
+    else if(!ICore::self()->projectController()->projects().isEmpty())
+      u = ICore::self()->projectController()->projects()[0]->folder();
+
+    return u;
+}
+
 SimpleRefactoring& SimpleRefactoring::self() {
   static SimpleRefactoring ret;
   return ret;
