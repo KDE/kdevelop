@@ -548,7 +548,7 @@ void LicensePage::initializeLicenses(void)
 QString & LicensePage::readLicense(int licenseIndex)
 {
     //If the license is not loaded into memory, read it in
-    if(d->availableLicenses[licenseIndex].contents.isNull())
+    if(d->availableLicenses[licenseIndex].contents.isEmpty())
     {
         QString licenseText("");
         //If we are dealing with the last option "other" just return a new empty string
