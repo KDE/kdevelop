@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include <QPointer>
 #include <qwidget.h>
+#include <kxmlguiclient.h>
 
 class KActionCollection;
 
@@ -50,6 +51,7 @@ class MainWindowPrivate: public QObject {
     Q_OBJECT
 public:
     MainWindowPrivate(MainWindow *mainWindow);
+    ~MainWindowPrivate();
 
     QPointer<QWidget> centralPlugin;
 
@@ -106,6 +108,7 @@ public Q_SLOTS:
 
     void toggleArea(bool b);
     void showErrorMessage(QString message, int timeout);
+    void pluginDestroyed(QObject*);
 
     
 private:
@@ -115,6 +118,9 @@ private:
     StatusBar* m_statusBar;
     QWidget* lastXMLGUIClientView;
     QPointer<QWidget> m_workingSetCornerWidget;
+    
+    QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
+    
     static bool s_quitRequested;
 };
 

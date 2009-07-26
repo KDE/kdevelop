@@ -222,6 +222,29 @@ KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
 void KDevelop::IPlugin::initializeGuiState()
 { }
 
+class CustomXmlGUIClient : public KXMLGUIClient {
+    public:
+        CustomXmlGUIClient(const KComponentData& data) {
+            setComponentData(data);
+        }
+        void setXmlFile(QString file) {
+            KXMLGUIClient::setXMLFile(file);
+        }
+};
+
+KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
+{
+    CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentData());
+    QString file;
+    createActionsForMainWindow(window, file, *ret->actionCollection());
+    ret->setXmlFile(file);
+    return ret;
+}
+
+void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*window*/, QString& /*xmlFile*/, KActionCollection& /*actions*/ )
+{
+}
+
 #include "iplugin.moc"
 
 

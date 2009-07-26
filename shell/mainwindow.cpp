@@ -142,6 +142,7 @@ void MainWindow::initialize()
     setupGUI( KXmlGuiWindow::Keys | KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
     Core::self()->partController()->addManagedTopLevelWidget(this);
     kDebug() << "Adding plugin-added connection";
+    
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
              d, SLOT(addPlugin(KDevelop::IPlugin*)));
     connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
@@ -151,6 +152,10 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
     connect(Core::self()->documentController(), SIGNAL(documentStateChanged(KDevelop::IDocument*)), SLOT(documentStateChanged(KDevelop::IDocument*)));
     connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
+    
+    foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
+        d->addPlugin(plugin);
+    
     guiFactory()->addClient(Core::self()->debugControllerInternal());
     d->setupGui();
 }
