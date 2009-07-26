@@ -207,6 +207,10 @@ Variable* Watches::add(const QString& expression)
 
 Variable *Watches::addFinishResult(const QString& convenienceVarible)
 {
+    if( finishResult_ )
+    {
+        removeFinishResult();
+    }
     finishResult_ = new Variable(model(), this, convenienceVarible, "$ret");
     appendChild(finishResult_);
     finishResult_->createVarobjMaybe();
