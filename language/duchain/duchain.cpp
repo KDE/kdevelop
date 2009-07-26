@@ -1503,8 +1503,13 @@ void DUChain::documentRenamed(KDevelop::IDocument* doc)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
-
-  ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
+  
+  if(!doc->url().isValid()) {
+    ///Maybe this happens when a file was deleted?
+    kWarning() << "Strange, url of renamed document is invalid!";
+  }else{
+    ICore::self()->languageController()->backgroundParser()->addDocument(doc->url(), (TopDUContext::Features)(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::ForceUpdate));
+  }
 }
 
 Uses* DUChain::uses()
