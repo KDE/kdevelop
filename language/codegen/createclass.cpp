@@ -86,17 +86,13 @@ void CreateClassWizard::setup()
 
 int CreateClassWizard::nextId() const
 {
-    qDebug() << "fetching next id" << dynamic_cast<ClassIdentifierPage*>( currentPage() );
     if( ClassIdentifierPage* idpage = dynamic_cast<ClassIdentifierPage*>( currentPage() ) )
     {
-        qDebug() << "inheritance list:" << idpage->inheritanceList();
         if( idpage->inheritanceList().isEmpty() )
         {
-            qDebug() << "returning nextid of next id" << idpage->nextId() << page( idpage->nextId() ) << page( idpage->nextId() )->nextId();
             return page( idpage->nextId() )->nextId();
         }
     }
-    qDebug() << "doing default";
     return QWizard::nextId();
 }
 
