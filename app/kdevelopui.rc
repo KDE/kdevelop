@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="94" name="kdevelop" >
+<kpartgui version="95" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -162,7 +162,12 @@
   <Separator/>
   <Action name="run_stop" />
   <Separator/>
+  <DefineGroup append="build_operations" name="build_operations"/>
+  <Separator/>
+  <DefineGroup append="run_operations" name="run_operations"/>
+  <Separator/>
   <DefineGroup append="file_operations" name="file_operations"/>
+  <Separator/>
   <DefineGroup append="edit_operations" name="edit_operations"/>
 </ToolBar>
 
