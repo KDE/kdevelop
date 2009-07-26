@@ -569,11 +569,7 @@ void WorkingSetToolButton::buttonTriggered()
         return;
     
     if(mainWindow()->area()->workingSet() == m_set->id()) {
-        //Create a new working-set
-//         if(!m_mini) {
-                mainWindow()->area()->setWorkingSet(QString());
-//         }else{
-//         }
+        closeSet();
     }else{
         mainWindow()->area()->setWorkingSet(m_set->id());
     }

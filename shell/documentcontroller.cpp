@@ -310,6 +310,15 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 
     bool emitOpened = false;
 
+    // clean it and resolve possible symlink
+    url.cleanPath( KUrl::SimplifyDirSeparators );
+    if ( url.isLocalFile() )
+    {
+        QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
+        if ( !path.isEmpty() )
+            url.setPath( path );
+    }
+    
     //get a part document
     if (!d->documents.contains(url))
     {
@@ -326,15 +335,6 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
             {
                 kDebug() << "cannot find URL:" << url.url();
                 return 0;
-            }
-
-            // clean it and resolve possible symlink
-            url.cleanPath( KUrl::SimplifyDirSeparators );
-            if ( url.isLocalFile() )
-            {
-                QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
-                if ( !path.isEmpty() )
-                    url.setPath( path );
             }
 
             mimeType = KMimeType::findByUrl( url );
@@ -365,17 +365,20 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
                 }
             }
         }
-        if ( !d->documents.contains(url) && Core::self()->partControllerInternal()->isTextType(mimeType))
-            d->documents[url] = new TextDocument(url, Core::self(), encoding);
-        else if( !d->documents.contains(url) && Core::self()->partControllerInternal()->canCreatePart(url) )
-            d->documents[url] = new PartDocument(url, Core::self());
-        else
-        {
-            int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
-            if (openAsText == KMessageBox::Yes)
+        
+        if(!d->documents.contains(url)) {
+            if ( Core::self()->partControllerInternal()->isTextType(mimeType))
                 d->documents[url] = new TextDocument(url, Core::self(), encoding);
+            else if( Core::self()->partControllerInternal()->canCreatePart(url) )
+                d->documents[url] = new PartDocument(url, Core::self());
             else
-                return 0;
+            {
+                int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
+                if (openAsText == KMessageBox::Yes)
+                    d->documents[url] = new TextDocument(url, Core::self(), encoding);
+                else
+                    return 0;
+            }
         }
         emitOpened = d->documents.contains(url);
     }
