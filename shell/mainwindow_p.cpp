@@ -86,14 +86,46 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
     kDebug() << "add plugin" << plugin << plugin->componentData().componentName();
     Q_ASSERT( plugin );
 
-    m_mainWindow->guiFactory()->addClient( plugin );
+    //The direct plugin client can only be added to the first mainwindow
+    if(m_mainWindow == Core::self()->uiControllerInternal()->mainWindows()[0])
+        m_mainWindow->guiFactory()->addClient( plugin );
+    
+    Q_ASSERT(!m_pluginCustomClients.contains(plugin));
+    
+    KXMLGUIClient* ownClient = plugin->createGUIForMainWindow(m_mainWindow);
+    if(ownClient) {
+        m_pluginCustomClients[plugin] = ownClient;
+        connect(plugin, SIGNAL(destroyed(QObject*)), SLOT(pluginDestroyed(QObject*)));
+        m_mainWindow->guiFactory()->addClient(ownClient);
+    }
+    
     setupAreaSelectorActions();
+}
+
+void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
+{
+    IPlugin* plugin = static_cast<IPlugin*>(pluginObj);
+    Q_ASSERT(m_pluginCustomClients.contains(plugin));
+    delete m_pluginCustomClients[plugin];
+    m_pluginCustomClients.remove(plugin);
+}
+
+MainWindowPrivate::~MainWindowPrivate()
+{
+    foreach(KXMLGUIClient* client, m_pluginCustomClients.values())
+        delete client;
 }
 
 void MainWindowPrivate::removePlugin( IPlugin *plugin )
 {
     Q_ASSERT( plugin );
 
+    if(m_pluginCustomClients.contains(plugin)) {
+        delete m_pluginCustomClients[plugin];
+        m_pluginCustomClients.remove(plugin);
+        disconnect(plugin, SIGNAL(destroyed(QObject*)), this, SLOT(pluginDestroyed(QObject*)));
+    }
+    
     m_mainWindow->guiFactory()->removeClient( plugin );
     setupAreaSelectorActions();
 }
