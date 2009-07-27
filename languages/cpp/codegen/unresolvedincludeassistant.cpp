@@ -47,6 +47,9 @@ void Cpp::AddCustomIncludePathAction::execute() {
   o.storageDirectory->setUrl(current);
 //   o.sourceDirectory->setUrl(current);
 //   o.buildDirectory->setUrl(current);
+  o.storageDirectory->setMode(KFile::Directory);
+  o.sourceDirectory->setMode(KFile::Directory);
+  o.buildDirectory->setMode(KFile::Directory);
 
   //Find old settings
   CppTools::CustomIncludePathsSettings oldSettings = CppTools::CustomIncludePathsSettings::findAndRead(current.toLocalFile());
