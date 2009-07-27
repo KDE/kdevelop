@@ -73,6 +73,8 @@ DebugSession::DebugSession()
 {
     configure();
 
+    // FIXME: this poking at parent's member variable is bad.
+    // Introduce functions to set them?
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
     m_stackController = new StackController(this);
@@ -968,6 +970,8 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 
 bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
 {
+    kDebug();
+    
     if (stateIsOn( s_appNotStarted ) )
     {
         emit showMessage(i18n("Running program"), 1000);

@@ -47,7 +47,6 @@ class ILaunchConfiguration;
 
 namespace GDBDebugger {
 
-class StackManager;
 class STTY;
 class CommandQueue;
 class GDBCommand;
@@ -351,8 +350,6 @@ private:
     QTime commandExecutionTime;
 
     bool stateReloadInProgress_;
-
-    StackManager* m_stackManager;
 };
 
 }
