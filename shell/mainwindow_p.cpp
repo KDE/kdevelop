@@ -87,8 +87,13 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
     Q_ASSERT( plugin );
 
     //The direct plugin client can only be added to the first mainwindow
-    if(m_mainWindow == Core::self()->uiControllerInternal()->mainWindows()[0])
+    if(m_mainWindow == Core::self()->uiControllerInternal()->mainWindows()[0]) 
+    {
+        // For now all plugins are still xmlgui clients and hence for the first
+        // mainwindow we don't want the code below
         m_mainWindow->guiFactory()->addClient( plugin );
+        return;
+    }
     
     Q_ASSERT(!m_pluginCustomClients.contains(plugin));
     
