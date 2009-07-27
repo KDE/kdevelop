@@ -970,8 +970,6 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 
 bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
 {
-    kDebug();
-    
     if (stateIsOn( s_appNotStarted ) )
     {
         emit showMessage(i18n("Running program"), 1000);
