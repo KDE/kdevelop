@@ -237,7 +237,14 @@ KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* wi
     CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentData());
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());
-    ret->setXmlFile(file);
+    // xmlgui doesn't like to be passed empty strings as xml file, IIRC I
+    // discussed this a while back on kde-core-devel or in a bugreport and the
+    // result was that thats how its supposed to be. i.e. an empty file argument
+    // is considered an invalid XML file.
+    if( !file.isEmpty() )
+    {
+        ret->setXmlFile(file);
+    }
     return ret;
 }
 
