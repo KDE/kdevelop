@@ -73,12 +73,6 @@ public:
     //Frees the model by closing active quickopen dialoags, and retuns whether successful.
     bool freeModel();
     
-    virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions );
-
-    QuickOpenLineEdit* createQuickOpenLineWidget();
-    
-    virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type);
-    
 public slots:
     void quickOpen();
     void quickOpenFile();
@@ -99,6 +93,7 @@ private slots:
 private:
     friend class QuickOpenLineEdit;
     QuickOpenLineEdit* quickOpenLine();
+    QWidget* createQuickOpenLineWidget();
 
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);
@@ -184,7 +179,7 @@ class QuickOpenWidgetDialog : public QObject {
   QuickOpenWidget* m_widget;
 };
 
-class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
+class QuickOpenLineEdit : public KLineEdit {
   Q_OBJECT
   public:
     QuickOpenLineEdit() ;
@@ -192,13 +187,6 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
-    
-    void setItems(const QStringList& scopes, const QStringList& items);
-    
-    virtual void setDefaultText(QString text) {
-      m_defaultText = text;
-      setClickMessage(m_defaultText);
-    }
   private slots:
     void activate() ;
     void deactivate() ;
@@ -211,9 +199,6 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     
     QPointer<QuickOpenWidget> m_widget;
     bool m_forceUpdate;
-    QStringList m_scopes;
-    QStringList m_items;
-    QString m_defaultText;
 };
 
 #endif // QUICKOPENPLUGIN_H

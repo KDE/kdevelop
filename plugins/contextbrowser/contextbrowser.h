@@ -71,7 +71,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void previousContextShortcut();
     void nextContextShortcut();
 
-  public slots:
+  private slots:
     void startDelayedBrowsing(KTextEditor::View* view);
     void stopDelayedBrowsing();
     
@@ -97,8 +97,6 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
     
   private:
-    
-    virtual void createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions);
     void switchUse(bool forward);
     void clearMouseHover();
     virtual void rangeDeleted (KTextEditor::SmartRange *range);

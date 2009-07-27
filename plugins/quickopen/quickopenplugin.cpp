@@ -211,7 +211,7 @@ QString cursorItemText() {
   return QString();
 }
 
-QuickOpenLineEdit* QuickOpenPlugin::createQuickOpenLineWidget()
+QWidget* QuickOpenPlugin::createQuickOpenLineWidget()
 {
   return new QuickOpenLineEdit;
 }
@@ -616,80 +616,77 @@ QuickOpenPlugin* QuickOpenPlugin::self()
   return staticQuickOpenPlugin;
 }
 
-void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions)
-{
-    xmlFile ="kdevquickopen.rc";
-
-    KAction* quickOpen = actions.addAction("quick_open");
-    quickOpen->setText( i18n("&Quick Open") );
-    quickOpen->setIcon( KIcon("quickopen") );
-    quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
-    connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
-
-    KAction* quickOpenFile = actions.addAction("quick_open_file");
-    quickOpenFile->setText( i18n("Quick Open &File") );
-    quickOpenFile->setIcon( KIcon("quickopen-file") );
-    quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
-    connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
-
-    KAction* quickOpenClass = actions.addAction("quick_open_class");
-    quickOpenClass->setText( i18n("Quick Open &Class") );
-    quickOpenClass->setIcon( KIcon("quickopen-class") );
-    quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
-    connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
-
-    KAction* quickOpenFunction = actions.addAction("quick_open_function");
-    quickOpenFunction->setText( i18n("Quick Open &Function") );
-    quickOpenFunction->setIcon( KIcon("quickopen-function") );
-    quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
-    connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
-
-    KAction* quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
-    quickOpenDeclaration->setText( i18n("Jump to Declaration") );
-    quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
-    quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
-    connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
-
-    KAction* quickOpenDefinition = actions.addAction("quick_open_jump_definition");
-    quickOpenDefinition->setText( i18n("Jump to Definition") );
-    quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
-    quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
-    connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
-
-    KAction* quickOpenLine = actions.addAction("quick_open_line");
-    quickOpenLine->setText( i18n("Embedded Quick Open") );
-//     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
-//     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
-    quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
-//     KAction* quickOpenNavigate = actions.addAction("quick_open_navigate");
-//     quickOpenNavigate->setText( i18n("Navigate Declaration") );
-//     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
-//     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
-
-    KAction* quickOpenNextFunction = actions.addAction("quick_open_next_function");
-    quickOpenNextFunction->setText( i18n("Next Function") );
-    quickOpenNextFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageDown );
-    connect(quickOpenNextFunction, SIGNAL(triggered(bool)), this, SLOT(nextFunction()));
-
-    KAction* quickOpenPrevFunction = actions.addAction("quick_open_prev_function");
-    quickOpenPrevFunction->setText( i18n("Previous Function") );
-    quickOpenPrevFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageUp );
-    connect(quickOpenPrevFunction, SIGNAL(triggered(bool)), this, SLOT(previousFunction()));
-
-    KAction* quickOpenNavigateFunctions = actions.addAction("quick_open_outline");
-    quickOpenNavigateFunctions->setText( i18n("Outline") );
-    quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
-    connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));   
-}
-
 QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
                                  const QVariantList&)
     : KDevelop::IPlugin(KDevQuickOpenFactory::componentData(), parent)
 {
     staticQuickOpenPlugin = this;
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IQuickOpen )
+    setXMLFile( "kdevquickopen.rc" );
     m_model = new QuickOpenModel( 0 );
 
+    KActionCollection* actions = actionCollection();
+
+    KAction* quickOpen = actions->addAction("quick_open");
+    quickOpen->setText( i18n("&Quick Open") );
+    quickOpen->setIcon( KIcon("quickopen") );
+    quickOpen->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_Q );
+    connect(quickOpen, SIGNAL(triggered(bool)), this, SLOT(quickOpen()));
+
+    KAction* quickOpenFile = actions->addAction("quick_open_file");
+    quickOpenFile->setText( i18n("Quick Open &File") );
+    quickOpenFile->setIcon( KIcon("quickopen-file") );
+    quickOpenFile->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_O );
+    connect(quickOpenFile, SIGNAL(triggered(bool)), this, SLOT(quickOpenFile()));
+
+    KAction* quickOpenClass = actions->addAction("quick_open_class");
+    quickOpenClass->setText( i18n("Quick Open &Class") );
+    quickOpenClass->setIcon( KIcon("quickopen-class") );
+    quickOpenClass->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_C );
+    connect(quickOpenClass, SIGNAL(triggered(bool)), this, SLOT(quickOpenClass()));
+
+    KAction* quickOpenFunction = actions->addAction("quick_open_function");
+    quickOpenFunction->setText( i18n("Quick Open &Function") );
+    quickOpenFunction->setIcon( KIcon("quickopen-function") );
+    quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
+    connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
+
+    KAction* quickOpenDeclaration = actions->addAction("quick_open_jump_declaration");
+    quickOpenDeclaration->setText( i18n("Jump to Declaration") );
+    quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
+    quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
+    connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
+
+    KAction* quickOpenDefinition = actions->addAction("quick_open_jump_definition");
+    quickOpenDefinition->setText( i18n("Jump to Definition") );
+    quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
+    quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
+    connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
+
+    KAction* quickOpenLine = actions->addAction("quick_open_line");
+    quickOpenLine->setText( i18n("Embedded Quick Open") );
+//     quickOpenLine->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_E );
+//     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
+    quickOpenLine->setDefaultWidget(createQuickOpenLineWidget());
+//     KAction* quickOpenNavigate = actions->addAction("quick_open_navigate");
+//     quickOpenNavigate->setText( i18n("Navigate Declaration") );
+//     quickOpenNavigate->setShortcut( Qt::ALT | Qt::Key_Space );
+//     connect(quickOpenNavigate, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigate()));
+
+    KAction* quickOpenNextFunction = actions->addAction("quick_open_next_function");
+    quickOpenNextFunction->setText( i18n("Next Function") );
+    quickOpenNextFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageDown );
+    connect(quickOpenNextFunction, SIGNAL(triggered(bool)), this, SLOT(nextFunction()));
+
+    KAction* quickOpenPrevFunction = actions->addAction("quick_open_prev_function");
+    quickOpenPrevFunction->setText( i18n("Previous Function") );
+    quickOpenPrevFunction->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_PageUp );
+    connect(quickOpenPrevFunction, SIGNAL(triggered(bool)), this, SLOT(previousFunction()));
+
+    KAction* quickOpenNavigateFunctions = actions->addAction("quick_open_outline");
+    quickOpenNavigateFunctions->setText( i18n("Outline") );
+    quickOpenNavigateFunctions->setShortcut( Qt::CTRL| Qt::ALT | Qt::Key_N );
+    connect(quickOpenNavigateFunctions, SIGNAL(triggered(bool)), this, SLOT(quickOpenNavigateFunctions()));
     KConfigGroup quickopengrp = KGlobal::config()->group("QuickOpen");
     lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open") );
     lastUsedItems = quickopengrp.readEntry("SelectedItems", QStringList() );
@@ -715,6 +712,7 @@ QuickOpenPlugin::QuickOpenPlugin(QObject *parent,
       items << ProjectItemDataProvider::supportedItemTypes();
       m_model->registerProvider( scopes, items, m_projectItemData );
     }
+
 }
 
 QuickOpenPlugin::~QuickOpenPlugin()
@@ -1136,9 +1134,10 @@ void QuickOpenPlugin::quickOpenNavigateFunctions()
 QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0), m_forceUpdate(false) {
     setMinimumWidth(200);
     setMaximumWidth(400);
-
+    
+    setClickMessage(i18n("Quick Open..."));
+    
     deactivate();
-    setDefaultText("Quick Open...");
     setObjectName("Quickopen");
     setFocusPolicy(Qt::ClickFocus);
 }
@@ -1193,17 +1192,8 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     activate();
     m_forceUpdate = false;
     
-    if(!m_widget)
-    {
-      QStringList useItems = m_items;
-      if(useItems.isEmpty())
-        useItems = QuickOpenPlugin::self()->lastUsedItems;
-      
-      QStringList useScopes = m_scopes;
-      if(useScopes.isEmpty())
-        useScopes = QuickOpenPlugin::self()->lastUsedScopes;
-      
-      m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, useScopes, false, true );
+    if(!m_widget) {
+      m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, QuickOpenPlugin::self()->lastUsedScopes, false, true );
     }else{
       m_widget->showStandardButtons(false);
       m_widget->showSearchField(false);
@@ -1311,17 +1301,6 @@ void QuickOpenLineEdit::checkFocus()
        setEnabled(false);
        setEnabled(true);
     }
-}
-
-IQuickOpenLine* QuickOpenPlugin::createQuickOpenLine(const QStringList& scopes, const QStringList& type)
-{
-  return createQuickOpenLineWidget();
-}
-
-void QuickOpenLineEdit::setItems(const QStringList& scopes, const QStringList& items)
-{
-  m_scopes = scopes;
-  m_items = items;
 }
 
 

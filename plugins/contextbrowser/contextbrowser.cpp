@@ -59,8 +59,6 @@
 #include <language/duchain/specializationstore.h>
 #include <language/util/navigationtooltip.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <language/interfaces/iquickopen.h>
-#include <interfaces/iplugincontroller.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -104,45 +102,6 @@ private:
     ContextBrowserPlugin *m_plugin;
 };
 
-void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions) {
-    xmlFile = "kdevcontextbrowser.rc" ;
-
-    KAction* previousContext = actions.addAction("previous_context");
-    previousContext->setText( i18n("&Previous Visited Context") );
-    previousContext->setIcon( KIcon("go-previous-context" ) );
-    previousContext->setShortcut( Qt::META | Qt::Key_Left );
-    QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
-
-    KAction* nextContext = actions.addAction("next_context");
-    nextContext->setText( i18n("&Next Visited Context") );
-    nextContext->setIcon( KIcon("go-next-context" ) );
-    nextContext->setShortcut( Qt::META | Qt::Key_Right );
-    QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
-
-    KAction* previousUse = actions.addAction("previous_use");
-    previousUse->setText( i18n("&Previous Use") );
-    previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
-    QObject::connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
-
-    KAction* nextUse = actions.addAction("next_use");
-    nextUse->setText( i18n("&Next Use") );
-    nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
-    QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
-
-    IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
-    
-      Q_ASSERT(quickOpen);
-      
-    if(quickOpen) {
-#if 0
-      KAction* outline = actions->addAction("context_outline");
-      IQuickOpenLine* line = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Functions"));
-      line->setDefaultText(i18n("Outline..."));
-      outline->setDefaultWidget(line);
-#endif
-    }
-}
-
 K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
 K_EXPORT_PLUGIN(ContextBrowserFactory(KAboutData("kdevcontextbrowser","kdevcontextbrowser",ki18n("Context Browser"), "0.1", ki18n("Shows information for the current context"), KAboutData::License_GPL)))
 
@@ -150,6 +109,10 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(ContextBrowserFactory::componentData(), parent)
     , m_backupsMutex(QMutex::Recursive), m_viewFactory(new ContextBrowserViewFactory(this))
 {
+  setXMLFile( "kdevcontextbrowser.rc" );
+
+  KActionCollection* actions = actionCollection();
+
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
   connect( core()->documentController(), SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), this, SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
@@ -162,8 +125,29 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   m_updateTimer = new QTimer(this);
   m_updateTimer->setSingleShot(true);
   connect( m_updateTimer, SIGNAL( timeout() ), this, SLOT( updateViews() ) );
+
+  KAction* previousContext = actions->addAction("previous_context");
+  previousContext->setText( i18n("&Previous Visited Context") );
+  previousContext->setIcon( KIcon("go-previous-context" ) );
+  previousContext->setShortcut( Qt::META | Qt::Key_Left );
+  connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
+
+  KAction* nextContext = actions->addAction("next_context");
+  nextContext->setText( i18n("&Next Visited Context") );
+  nextContext->setIcon( KIcon("go-next-context" ) );
+  nextContext->setShortcut( Qt::META | Qt::Key_Right );
+  connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
+
+  KAction* previousUse = actions->addAction("previous_use");
+  previousUse->setText( i18n("&Previous Use") );
+  previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
+  connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
+
+  KAction* nextUse = actions->addAction("next_use");
+  nextUse->setText( i18n("&Next Use") );
+  nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
+  connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
   
-  //Needed global action for the context-menu extensions
   m_findUses = new QAction(i18n("Find Uses"), this);
   connect(m_findUses, SIGNAL(triggered(bool)), this, SLOT(findUses()));
 }
@@ -379,7 +363,6 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardBoldAttribute ) {
       standardBoldAttribute= Attribute::Ptr( new Attribute() );
       standardBoldAttribute->setBackgroundFillWhitespace(true);
-      ///@todo Use a weaker color, for example 50% yellow, 50% editor background color
       standardBoldAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
       standardBoldAttribute->setForeground(Qt::black); 
       standardBoldAttribute->setFontBold(true);
@@ -589,7 +572,7 @@ void ContextBrowserPlugin::unHighlightAll(KTextEditor::View* selectView)
     
       QMutexLocker smartLock(smart->smartMutex());
       QMutexLocker lock(&m_backupsMutex);
-
+      
       QMap< KTextEditor::SmartRange*, QPair< Attribute::Ptr, Attribute::Ptr > >::iterator it = m_backups.begin();
       while(it != m_backups.end()) {
         if(it.key()->document() == view->document()) {

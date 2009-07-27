@@ -222,36 +222,6 @@ KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
 void KDevelop::IPlugin::initializeGuiState()
 { }
 
-class CustomXmlGUIClient : public KXMLGUIClient {
-    public:
-        CustomXmlGUIClient(const KComponentData& data) {
-            setComponentData(data);
-        }
-        void setXmlFile(QString file) {
-            KXMLGUIClient::setXMLFile(file);
-        }
-};
-
-KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* window)
-{
-    CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentData());
-    QString file;
-    createActionsForMainWindow(window, file, *ret->actionCollection());
-    // xmlgui doesn't like to be passed empty strings as xml file, IIRC I
-    // discussed this a while back on kde-core-devel or in a bugreport and the
-    // result was that thats how its supposed to be. i.e. an empty file argument
-    // is considered an invalid XML file.
-    if( !file.isEmpty() )
-    {
-        ret->setXmlFile(file);
-    }
-    return ret;
-}
-
-void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*window*/, QString& /*xmlFile*/, KActionCollection& /*actions*/ )
-{
-}
-
 #include "iplugin.moc"
 
 

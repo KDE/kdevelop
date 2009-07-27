@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KDevContextBrowser" version="6">
+<kpartgui name="KDevContextBrowser" version="3">
 <MenuBar>
   <Menu name="navigation">
     <text context="@title:menu">Navigation</text>
@@ -15,9 +15,6 @@
 
     <Action name="next_use"
             group="navigation_code"/>
-
-    <Action name="context_outline"
-            group="navigation_code"/>
   </Menu>
 </MenuBar>
 
@@ -31,12 +28,5 @@
     <Action name="quick_open_jump_definition" />
   </enable>
 </State>
-
-<ToolBar name="codebrowserToolBar">
-  <text>Code Browser Toolbar</text>
-  <Action name="context_outline"/>
-  <WeakSeparator/>
-</ToolBar>
-
 
 </kpartgui>

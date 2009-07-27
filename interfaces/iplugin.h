@@ -34,10 +34,6 @@
 class KIconLoader;
 class QAction;
 
-namespace Sublime {
-    class MainWindow;
-}
-
 /**
  * Current KDevelop plugin interface version. Interfaces declare plugin version
  * to make sure old source (or binary) incompatible plugins are not loaded.
@@ -182,30 +178,6 @@ public:
      */
     virtual ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
-    /**
-     * Can create a new KXMLGUIClient, and set it up correctly with all the plugins per-window GUI actions.
-     *
-     * The caller owns the created object, including all contained actions. The object is destroyed as soon as
-     * the mainwindow is closed.
-     *
-     * The default implementation calls the convenience function @ref createActionsForMainWindow and uses it to fill a custom KXMLGUIClient.
-     *
-     * Only override this version if you need more specific features of KXMLGUIClient, or other special per-window handling.
-     *
-     * @param window The main window the actions are created for
-     */
-    virtual KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window );
-
-    /**
-     * This function allows allows setting up plugin actions conveniently. Unless createGUIForMainWindow was overridden,
-     * this is called for each new mainwindow, and the plugin should add its actions to @p actions, and write its KXMLGui xml file
-     * into @p xmlFile.
-     *
-     * @param window The main window the actions are created for
-     * @param xmlFile Change this to the xml file that needed for merging the actions into the GUI
-     * @param actions Add your actions here. A new set of actions has to be created for each mainwindow.
-     */
-    virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions );
 public Q_SLOTS:
     /**
      * Re-initialize the global icon loader
