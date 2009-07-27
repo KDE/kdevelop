@@ -181,6 +181,7 @@ void GdbJob::start()
     {
         setError( -1 );
         setErrorText( err );
+        emitResult();
         return;
     }
     
