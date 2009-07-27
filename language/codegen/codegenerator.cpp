@@ -28,7 +28,6 @@
 #include <language/duchain/duchainlock.h>
 
 #include <qtimer.h>
-#include "duchainchangeset.h"
 #include "applychangeswidget.h"
 
 namespace KDevelop
