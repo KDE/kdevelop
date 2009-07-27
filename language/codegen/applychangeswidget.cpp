@@ -39,7 +39,6 @@
 #include <KPushButton>
 #include "coderepresentation.h"
 #include <KTemporaryFile>
-#include <qsharedpointer.h>
 
 namespace KDevelop
 {
