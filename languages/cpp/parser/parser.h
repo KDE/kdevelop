@@ -28,7 +28,13 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include <cppparserexport.h>
+#ifdef Q_OS_WIN
+#include <hash_map>
+using namespace stdext;
+#else
 #include <ext/hash_map>
+using namespace __gnu_cxx;
+#endif
 
 class TokenStream;
 class Control;
@@ -53,8 +59,8 @@ public:
 
   @sa pool for more information about the memory pool used.*/
   TranslationUnitAST *parse(ParseSession* session);
-
   /**
+
    * Same as parse, except that it parses the content as a compound statement.
    * This is useful for parsing independent expression-strings that appear for
    * example within a function.
@@ -254,7 +260,7 @@ private:
   Comment m_currentComment;
   CommentStore m_commentStore;
  
-  __gnu_cxx::hash_map<size_t, TokenMarkers> m_tokenMarkers;
+  hash_map<size_t, TokenMarkers> m_tokenMarkers;
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;

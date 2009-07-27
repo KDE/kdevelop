@@ -244,7 +244,7 @@ void Parser::clear()
 
 void Parser::addTokenMarkers(size_t tokenNumber, Parser::TokenMarkers markers)
 {
-  __gnu_cxx::hash_map<size_t, TokenMarkers>::iterator it = m_tokenMarkers.find(tokenNumber);
+  hash_map<size_t, TokenMarkers>::iterator it = m_tokenMarkers.find(tokenNumber);
   if(it != m_tokenMarkers.end())
     (*it).second = (TokenMarkers)((*it).second | markers);
   else
@@ -253,7 +253,7 @@ void Parser::addTokenMarkers(size_t tokenNumber, Parser::TokenMarkers markers)
 
 Parser::TokenMarkers Parser::tokenMarkers(size_t tokenNumber) const
 {
-  __gnu_cxx::hash_map<size_t, TokenMarkers>::const_iterator it = m_tokenMarkers.find(tokenNumber);
+  hash_map<size_t, TokenMarkers>::const_iterator it = m_tokenMarkers.find(tokenNumber);
   if(it != m_tokenMarkers.end())
     return (*it).second;
   else
