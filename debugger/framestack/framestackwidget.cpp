@@ -146,7 +146,9 @@ void KDevelop::FramestackWidget::assignSomeThread()
 void FramestackWidget::openFile(const QModelIndex& idx)
 {
     FrameStackModel::FrameItem f = m_controller->frameStackModel()->frame(idx);
-    ICore::self()->documentController()->openDocument(f.file, KTextEditor::Cursor(f.line, 0));
+    /* If line is -1, then it's not a source file at all.  */
+    if (f.line != -1)
+        ICore::self()->documentController()->openDocument(f.file, KTextEditor::Cursor(f.line, 0));
 }
 
 }

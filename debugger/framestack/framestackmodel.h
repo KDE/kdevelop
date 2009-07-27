@@ -40,10 +40,13 @@ public:
     FrameStackModel(DebugController* parent);
     virtual ~FrameStackModel();
 
+    /** Stack frame */
     struct FrameItem {
         int nr;
         QString name;
         KUrl file;
+        /* If -1, it means that file is not necessary a source file,
+           but possibly a solib name.  */
         int line;
     };
     struct ThreadItem {
