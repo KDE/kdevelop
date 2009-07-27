@@ -86,6 +86,7 @@ void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)
             {
                 v->deleteChildren();
                 v->setHasMore(var["new_num_children"].toInt() != 0);
+                v->fetchMoreChildren();
             }
 
             if (var.hasField("in_scope") && var["in_scope"].literal() == "false")
