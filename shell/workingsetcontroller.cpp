@@ -218,6 +218,7 @@ struct DisconnectMainWindowsFromArea
             foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
                 if(window->area() == area) {
                     mainWindows << window;
+                    oldActiveView = window->activeView();
                     bool hadTempArea = false;
                     foreach(Sublime::Area* tempArea, Core::self()->uiControllerInternal()->areas(window)) {
                         if(tempArea != area) {
@@ -240,6 +241,8 @@ struct DisconnectMainWindowsFromArea
             foreach(Sublime::MainWindow* window, mainWindows) {
                 kDebug() << "changing back";
                 Core::self()->uiControllerInternal()->showArea(m_area, window);
+                if(oldActiveView)
+                    window->activateView(oldActiveView);
                 window->setUpdatesEnabled(true);
             }
         }
@@ -247,6 +250,7 @@ struct DisconnectMainWindowsFromArea
 
     Sublime::Area* m_area;
     QList<Sublime::MainWindow*> mainWindows;
+    QPointer<Sublime::View> oldActiveView;
 };
 
 void loadFileList(QStringList& ret, KConfigGroup group)
@@ -300,7 +304,12 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     
     if(clear) {
         kDebug() << "clearing area with working-set" << area->workingSet();
-        area->clearViews();
+        QSet< QString > files = fileList().toSet();
+        foreach(Sublime::View* view, area->views()) {
+            Sublime::UrlDocument* doc = dynamic_cast<Sublime::UrlDocument*>(view->document());
+            if(!doc || !files.contains(doc->documentSpecifier()))
+                area->closeView(view);
+        }
     }
     
     if(m_id.isEmpty())
