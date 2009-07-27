@@ -51,7 +51,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainRef
     friend class DUChainChangeSet;
 
 public:
-    virtual ~DUChainRef();
+    /*virtual ~DUChainRef();
 
     virtual const DUChainBase* object() const;
     virtual const DUContext* context() const;
@@ -79,7 +79,7 @@ public:
 
     AbstractType::Ptr currentType() const;
     void changeType(AbstractType::Ptr newType);
-
+*/
     /**
      * Rewrite the AST which created this duchain object. Eg:
      * - for declarations, the entire declaration.
@@ -90,7 +90,7 @@ public:
      *          exists (after any existing duchain changes are applied).  Changes
      *          made to the AST will be applied along with the duchain change set.
      */
-    template <typename AstNode>
+/*    template <typename AstNode>
     AstNodeRef<AstNode> * rewriteAst();
 
     /// Removes a change from this object reference, and deletes it.
@@ -111,7 +111,7 @@ private:
     DUChainRef* m_objectRef;
     bool m_newObject;
 
-    QList<DUChainChange*> m_changes;
+    QList<DUChainChange*> m_changes;*/
 };
 
 typedef QList<DUChainRef*> DUChainBaseList;
