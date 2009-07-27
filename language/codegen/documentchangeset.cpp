@@ -32,7 +32,6 @@
 #include <interfaces/isourceformatter.h>
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
-#include <QSharedPointer>
 
 namespace KDevelop {
 
@@ -43,7 +42,7 @@ struct DocumentChangeSetPrivate
     DocumentChangeSet::DUChainUpdateHandling updatePolicy;
     
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
-    QMap< IndexedString, QPair<IndexedString, QSharedPointer<InsertArtificialCodeRepresentation> > > tempFiles;
+    QMap< IndexedString, QPair<IndexedString, InsertArtificialCodeRepresentation* > > tempFiles;
     QMap< IndexedString, IndexedString > tempToOriginal;
     
     DocumentChangeSet::ChangeResult replaceOldText(CodeRepresentation * repr, const QString & newText, const QList<DocumentChangePointer> & sortedChangesList);
@@ -160,7 +159,7 @@ IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file ) const
 QList<QPair<IndexedString, IndexedString> > DocumentChangeSet::tempNamesForAll() const
 {
     QList<QPair<IndexedString, IndexedString> > names;
-    for(QMap< IndexedString, QPair<IndexedString, QSharedPointer<InsertArtificialCodeRepresentation> > >::Iterator it = d->tempFiles.begin();
+    for(QMap< IndexedString, QPair<IndexedString, InsertArtificialCodeRepresentation* > >::Iterator it = d->tempFiles.begin();
         it != d->tempFiles.end(); ++it)
         names << qMakePair(it.key(), it.value().first);
     
@@ -592,7 +591,7 @@ void DocumentChangeSetPrivate::addTempFile(IndexedString originalName, const QSt
     ///@todo An actual algorithm to find an appropriate name to avoid potential name collision
     IndexedString tempFile(CodeRepresentation::artificialUrl(originalName.str()));
     
-    tempFiles[originalName] = qMakePair(tempFile, QSharedPointer<InsertArtificialCodeRepresentation>(new InsertArtificialCodeRepresentation(tempFile, text)));
+    tempFiles[originalName] = qMakePair(tempFile, new InsertArtificialCodeRepresentation(tempFile, text));
     tempToOriginal[tempFile] = originalName;
     changes.erase(changes.find(tempFile));
 }
