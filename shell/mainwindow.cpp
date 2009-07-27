@@ -137,9 +137,39 @@ void MainWindow::saveSettings()
     Sublime::MainWindow::saveSettings();
 }
 
+
+void MainWindow::configureShortcuts()
+{
+    ///Workaround for a problem with the actions: Always start the shortcut-configuration in the first mainwindow, then propagate the updated
+    ///settings into the other windows
+    Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->configureShortcuts();
+
+    QMap<QString, QKeySequence> shortcuts;
+    foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients()) {
+        foreach(QAction* action, client->actionCollection()->actions()) {
+            if(!action->objectName().isEmpty()) {
+                shortcuts[action->objectName()] = action->shortcut();
+            }
+        }
+    }
+    
+    for(uint a = 1; a < Core::self()->uiControllerInternal()->mainWindows().size(); ++a) {
+        foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[a]->guiFactory()->clients()) {
+            foreach(QAction* action, client->actionCollection()->actions()) {
+                kDebug() << "transferring setting shortcut for" << action->objectName();
+                if(shortcuts.contains(action->objectName())) {
+                    action->setShortcut(shortcuts[action->objectName()]);
+                }
+            }
+        }
+    }
+}
+
 void MainWindow::initialize()
 {
-    setupGUI( KXmlGuiWindow::Keys | KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
+    KStandardAction::keyBindings(this, SLOT(configureShortcuts()), actionCollection());
+    setupGUI( KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
+    
     Core::self()->partController()->addManagedTopLevelWidget(this);
     kDebug() << "Adding plugin-added connection";
     

@@ -63,6 +63,7 @@ public Q_SLOTS:
     
 public Q_SLOTS:
     virtual void setVisible( bool visible );
+    void configureShortcuts();
 
 Q_SIGNALS:
     void finishedLoading();
