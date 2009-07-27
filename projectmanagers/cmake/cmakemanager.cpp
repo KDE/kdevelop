@@ -180,7 +180,9 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
         return path;
     }
 
-    KUrl projectPath = m_realRoot[item->project()];
+    //Can't get it from item->project()->projectItem()->url() because
+    //it might not be created yet.
+    KUrl projectPath = CMake::projectRoot(item->project());
     QString relative=KUrl::relativeUrl( projectPath, fi->url() );
     path.addPath(relative);
     path.cleanPath();
@@ -303,7 +305,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             }
         }
 
-        m_realRoot[project] = folderUrl;
         m_watchers[project] = new KDirWatch(project);
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
         m_rootItem->setProjectRoot(true);
@@ -368,14 +369,14 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             KDevelop::ReferencedTopDUContext curr;
             if(item->parent()==0)
-                curr=initializeProject(item->project(), m_realRoot[item->project()]);
+                curr=initializeProject(item->project(), item->project()->projectItem()->url());
             else
                 curr=dynamic_cast<CMakeFolderItem*>(folder->parent())->topDUContext();
             
             kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
             m_watchers[item->project()]->addFile(cmakeListsPath.toLocalFile());
-            QString binDir=KUrl::relativePath(m_realRoot[folder->project()].toLocalFile(), folder->url().toLocalFile());
+            QString binDir=KUrl::relativePath(folder->project()->projectItem()->url().toLocalFile(), folder->url().toLocalFile());
             if(binDir.startsWith("./"))
                 binDir=binDir.remove(0, 2);
             
@@ -600,7 +601,7 @@ bool CMakeManager::reload(KDevelop::ProjectBaseItem* item)
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 {
     QList<KDevelop::ProjectTargetItem*> ret;
-    foreach(IProject* p, m_realRoot.keys())
+    foreach(IProject* p, m_watchers.keys())
     {
         ret+=p->projectItem()->targetList();
     }
@@ -664,7 +665,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
         return;
     }
 
-    QString currentBinDir=KUrl::relativeUrl(m_realRoot[project], url);
+    QString currentBinDir=KUrl::relativeUrl(project->projectItem()->url(), url);
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
     vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
@@ -722,7 +723,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
 
         KDevelop::IProject* proj=it->project();
-        KUrl projectBaseUrl=m_realRoot[proj];
+        KUrl projectBaseUrl=proj->projectItem()->url();
         projectBaseUrl.adjustPath(KUrl::AddTrailingSlash);
 
         kDebug(9032) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);

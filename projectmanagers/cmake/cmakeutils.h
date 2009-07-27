@@ -69,6 +69,11 @@ namespace CMake
      * Sets the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT QString projectRootRelative( KDevelop::IProject* project );
+    
+    /**
+     * Convenience function to get the project root.
+     */
+    KDEVCMAKECOMMON_EXPORT KUrl projectRoot( KDevelop::IProject* project );
 
     /**
      * Sets the current install dir for the given project.

@@ -104,6 +104,14 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
     return false;
 }
 
+KUrl projectRoot(KDevelop::IProject* project)
+{
+    KUrl projectPath = project->folder();
+    bool correct=projectPath.cd(CMake::projectRootRelative(project));
+    Q_ASSERT(correct);
+    return projectPath;
+}
+
 KUrl currentBuildDir( KDevelop::IProject* project )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
