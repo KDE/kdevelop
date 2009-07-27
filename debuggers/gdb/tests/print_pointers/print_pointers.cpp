@@ -34,6 +34,20 @@ class Test
      int b;
 };
 
+struct S1 { int a; int b; };
+struct S2 { int a; int b; int c; };
+
+void test_type_changes()
+{
+    S1 s = {1, 2};
+    s.a++;
+    {
+        S2 s = {1, 2, 3};
+        s.c++;
+        s.a++;
+    }
+}
+
 int test_main(int ac, char* av[])
 {
     printf("Hello world\n");
@@ -101,5 +115,6 @@ int test_main(int ac, char* av[])
 
 int main(int ac, char* av[])
 {
+    test_type_changes();
     return test_main(ac, av);
 }
