@@ -116,7 +116,12 @@ void MainWindow::setArea(Area *area)
 
     d->area = area;
     d->reconstruct();
-    d->activateFirstVisibleView();
+    
+    if(d->area->activeView())
+        activateView(d->area->activeView());
+    else
+        d->activateFirstVisibleView();
+    
     initializeStatusBar();
     emit areaChanged(area);
     d->ignoreDockShown = false;
@@ -188,6 +193,7 @@ void MainWindow::activateView(View *view)
     d->viewContainers[view]->setCurrentWidget(view->widget());
 
     setActiveView(view);
+    d->area->setActiveView(view);
 }
 
 void MainWindow::setActiveView(View *view)

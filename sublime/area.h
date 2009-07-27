@@ -94,6 +94,17 @@ public:
       * If an open document has changes, and it is the last view of that document,
       * the user may push 'Cancel', and the view will stay active. */
     void clearViews();
+
+    /**
+     * Returns the view that was last stored through setActiveView(view), or zero
+     * if the view was deleted or it was never set.
+     */
+    View* activeView();
+    
+    /**
+     * Allows marking a view as active that can later be retrieved through activeView()
+     */
+    void setActiveView(View* view);
     
     /** Closes and deletes the view, asking the user for feedback if needed.
       * Closes the document if it is the last view.

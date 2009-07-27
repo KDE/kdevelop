@@ -94,6 +94,7 @@ struct AreaPrivate {
     QMap<Sublime::Position, int> thickness;
     QString iconName;
     QString workingSet;
+    QPointer<View> activeView;
 };
 
 
@@ -148,6 +149,16 @@ void Area::initialize()
 Area::~Area()
 {
     delete d;
+}
+
+View* Area::activeView()
+{
+    return d->activeView;
+}
+
+void Area::setActiveView(View* view)
+{
+    d->activeView = view;
 }
 
 void Sublime::Area::addView(View *view, AreaIndex *index)
