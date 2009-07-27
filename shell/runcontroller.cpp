@@ -289,8 +289,12 @@ void RunController::initialize()
     connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
              this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 
-    d->updateCurrentLaunchAction();
-    d->enableLaunchActions();
+    if( (Core::self()->setupFlags() & Core::NoUi) == 0 )
+    {
+        // Only do this in GUI mode
+        d->updateCurrentLaunchAction();
+        d->enableLaunchActions();
+    }
 }
 
 KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
