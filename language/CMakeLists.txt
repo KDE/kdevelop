@@ -154,7 +154,7 @@ target_link_libraries(kdevplatformlanguage
         kdevplatformutil)
 # Need to add kdevplatforminterfaces and kdevplatformutil when those are exported targets
 target_link_libraries(kdevplatformlanguage LINK_INTERFACE_LIBRARIES
-        ${KDE4_KTEXTEDITOR+LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
         ${KDE4_THREADWEAVER_LIBRARIES})
 set_target_properties(kdevplatformlanguage PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformlanguage EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
