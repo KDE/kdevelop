@@ -83,7 +83,6 @@ target_link_libraries(cppcodegentest
     kdev4cpprpp
     kdev4cppparser
     veritascpp
-    cpplanguagecommon
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
