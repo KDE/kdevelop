@@ -60,6 +60,7 @@
 #include "codegen/unresolvedincludeassistant.h"
 
 // #define ifDebug(x) x
+#include "cpputils.h"
 
 const uint maxIncludeDepth = 50;
 
@@ -87,7 +88,7 @@ PreprocessJob::~PreprocessJob() {
 
 KDevelop::ParsingEnvironment* PreprocessJob::createStandardEnvironment() {
     CppPreprocessEnvironment* ret = new CppPreprocessEnvironment(0, Cpp::EnvironmentFilePointer());
-    ret->merge( CppLanguageSupport::self()->standardMacros() );
+    ret->merge( CppUtils::standardMacros() );
     
     return ret;
 }
@@ -112,7 +113,7 @@ void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedStrin
 
 void PreprocessJob::run()
 {
-    if(!CppLanguageSupport::self())
+    if(!ICore::self()->languageController()->language("C++")->languageSupport())
       return;
   
     //If we have a parent, that parent already has locked the parse-lock
@@ -189,7 +190,7 @@ void PreprocessJob::run()
                 KUrl::List includePaths = parentJob()->includePathUrls();
                 readLock.lock();
                 
-                needsUpdate = CppLanguageSupport::self()->needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, includePaths);
+                needsUpdate = CppUtils::needsUpdate(Cpp::EnvironmentFilePointer(cppEnv), localPath, includePaths);
               }
             
             if(!needsUpdate) {
@@ -368,7 +369,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
             
-            if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppLanguageSupport::self()->needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures())) ) {
+            if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures())) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
                 m_updatingEnvironmentFile = m_secondEnvironmentFile;
@@ -443,7 +444,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     if (skipCurrentPath)
       from = parentJob()->includedFromPath();
 
-    QPair<KUrl, KUrl> included = parentJob()->cpp()->findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
+    QPair<KUrl, KUrl> included = CppUtils::findInclude( parentJob()->includePathUrls(), localPath, fileName, type, from );
     KUrl includedFile = included.first;
     if (includedFile.isValid()) {
       
@@ -508,7 +509,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             if(includedContext) {
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment ) {
-                updateNeeded = CppLanguageSupport::self()->needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                updateNeeded = CppUtils::needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
                 updateNeeded |= !includedEnvironment->featuresSatisfied((TopDUContext::Features)(slaveMinimumFeatures & (~TopDUContext::ForceUpdateRecursive)));
                 //Do not update again if ForceUpdate is given and the context was already updated during this run
                 updateNeeded |= (slaveMinimumFeatures & TopDUContext::ForceUpdate) && !parentJob()->masterJob()->wasUpdated(includedContext.data());
@@ -613,7 +614,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
 bool PreprocessJob::checkAbort()
 {
-  if(!CppLanguageSupport::self()) {
+  if(!ICore::self()->languageController()->language("C++")->languageSupport()) {
     kDebug(9007) << "Environment-manager disappeared" ;
     return true;
   }
@@ -711,6 +712,16 @@ bool PreprocessJob::readContents()
 bool PreprocessJob::success() const
 {
     return m_success;
+}
+
+KDevelop::ParsingEnvironment * PreprocessJob::m_standardEnvironment = 0;
+
+const KDevelop::ParsingEnvironment * PreprocessJob::standardEnvironment()
+{
+  if(m_standardEnvironment)
+    createStandardEnvironment();
+
+  return m_standardEnvironment;
 }
 
 #include "preprocessjob.moc"

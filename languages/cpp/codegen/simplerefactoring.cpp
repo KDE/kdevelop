@@ -49,7 +49,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include "cppnewclass.h"
 #include <templatedeclaration.h>
-#include <cpplanguagesupport.h>
+#include "../cpputils.h"
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
@@ -267,7 +267,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
     KDevelop::IndexedString url = decl->url();
     KUrl targetUrl = decl->url().toUrl();
     if(headerExtensions.contains(QFileInfo(targetUrl.toLocalFile()).suffix())) {
-      targetUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate(targetUrl);
+      targetUrl = CppUtils::sourceOrHeaderCandidate(targetUrl);
     }
     if(!targetUrl.isValid()) {
       ///@todo Create source file if it doesn't exist yet

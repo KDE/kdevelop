@@ -20,8 +20,13 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 #include <klocalizedstring.h>
+
+#include <interfaces/idocumentcontroller.h>
+
+#include <language/interfaces/ilanguagesupport.h>
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchain.h>
+#include <language/duchain/duchainutils.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/functiondefinition.h>
@@ -30,6 +35,7 @@
 #include <language/duchain/safetycounter.h>
 #include <language/interfaces/iproblem.h>
 #include <util/pushvalue.h>
+
 #include "../cppduchain/cppduchain.h"
 #include "../cppduchain/typeutils.h"
 #include "../cppduchain/overloadresolution.h"
@@ -39,20 +45,22 @@
 #include "../stringhelpers.h"
 #include "../cppduchain/templatedeclaration.h"
 #include "../cpplanguagesupport.h"
+#include "../cpputils.h"
 #include "../cppduchain/environmentmanager.h"
 #include "../cppduchain/cppduchain.h"
+
 #include "cppdebughelper.h"
 #include "missingincludeitem.h"
-#include <interfaces/idocumentcontroller.h>
 #include "implementationhelperitem.h"
 #include <qtfunctiondeclaration.h>
-#include <language/duchain/duchainutils.h>
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 
 // #define ifDebug(x) x
 
 #define LOCKDUCHAIN     DUChainReadLocker lock(DUChain::lock())
+#include <cpputils.h>
+#include <interfaces/ilanguage.h>
 
 QString lastLines(QString str, int count = 40) {
   QStringList lines = str.split("\n");
@@ -868,7 +876,7 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   if(!m_duContext)
     return;
 #ifndef TEST_COMPLETION
-  m_includeItems = CppLanguageSupport::self()->allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
+  m_includeItems = CppUtils::allFilesInIncludePath(KUrl(m_duContext->url().str()), local, prefixPath);
 #endif
   m_valid = true;
   m_memberAccessOperation = IncludeListAccess;
@@ -1427,9 +1435,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::getImplementationHelpers
   if(searchInContext)
     ret += getImplementationHelpersInternal(m_duContext->scopeIdentifier(true), searchInContext);
   
-  if(!CppLanguageSupport::self()->isHeader( searchInContext->url().toUrl() )) {
-    KUrl headerUrl = CppLanguageSupport::self()->sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
-    searchInContext = CppLanguageSupport::self()->standardContext(headerUrl);
+  if(!CppUtils::isHeader( searchInContext->url().toUrl() )) {
+    KUrl headerUrl = CppUtils::sourceOrHeaderCandidate( searchInContext->url().toUrl(), true );
+    searchInContext = ICore::self()->languageController()->language("C++")->languageSupport()->standardContext(headerUrl);
   }
 
   if(searchInContext)
@@ -1675,7 +1683,7 @@ bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUC
 void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
 {
   //We must not change the document from within the background, so we use a queued connection
-  QMetaObject::invokeMethod(CppLanguageSupport::self(), "replaceCurrentAccess", Qt::QueuedConnection, Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
+  QMetaObject::invokeMethod(new CppUtils::ReplaceCurrentAccess, "exec", Qt::QueuedConnection, Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
 }
 
 int CodeCompletionContext::matchPosition() const {

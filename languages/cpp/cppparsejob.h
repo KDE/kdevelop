@@ -51,7 +51,7 @@ namespace KDevelop {
 
 class IncludePathComputer;
 
-class CPPParseJob : public KDevelop::ParseJob
+class CPPParseJob: public KDevelop::ParseJob
 {
     Q_OBJECT
 public:

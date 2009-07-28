@@ -20,7 +20,7 @@
 #ifndef INCLUDEPATHCOMPUTER_H
 #define INCLUDEPATHCOMPUTER_H
 
-class IncludePathComputer {
+class IncludePathComputer  {
   public:
     IncludePathComputer(const KUrl& file, QList<KDevelop::ProblemPointer>* problems);
     ///Must be called in the foreground thread, before calling computeBackground().

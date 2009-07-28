@@ -18,20 +18,17 @@ set(cppcodecompletiontest_SRCS
   ../codecompletion/item.cpp
   ../codecompletion/helpers.cpp
   ../codecompletion/implementationhelperitem.cpp
-  ../cpplanguagesupport.cpp
   ../cpphighlighting.cpp
   ../codecompletion/model.cpp
-  ../preprocessjob.cpp
   ../quickopen.cpp
   ../codegen/simplerefactoring.cpp
-  ../cppparsejob.cpp
   ../includepathresolver.cpp
   ../setuphelpers.cpp
   ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
   ../codegen/makeimplementationprivate.cpp
-  ../codegen/cpputils.cpp
+  ../cpputils.cpp
   ../codecompletion/worker.cpp
   ../includepathcomputer.cpp
   ../codecompletion/missingincludemodel.cpp
@@ -41,31 +38,29 @@ set(cppcodecompletiontest_SRCS
 set(cppcodegentest_SRCS
   test_cppcodegen.cpp
   
-  ../cpphighlighting.cpp
-  ../cpplanguagesupport.cpp
-  ../cppparsejob.cpp
-  ../includepathcomputer.cpp
-  ../includepathresolver.cpp
-  ../preprocessjob.cpp
-  ../setuphelpers.cpp
-  ../stringhelpers.cpp
-  ../quickopen.cpp
   ../codecompletion/context.cpp
+  ../stringhelpers.cpp
+  ../codecompletion/item.cpp
   ../codecompletion/helpers.cpp
   ../codecompletion/implementationhelperitem.cpp
-  ../codecompletion/item.cpp
-  ../codecompletion/missingincludeitem.cpp
-  ../codecompletion/missingincludemodel.cpp
+  ../cpphighlighting.cpp
   ../codecompletion/model.cpp
-  ../codecompletion/worker.cpp
-  ../codegen/cppnewclass.cpp
-  ../codegen/cpputils.cpp
-  ../codegen/makeimplementationprivate.cpp
-  ../codegen/progressdialogs.cpp
+  ../quickopen.cpp
   ../codegen/simplerefactoring.cpp
+  ../includepathresolver.cpp
+  ../setuphelpers.cpp
+  ../codegen/cppnewclass.cpp
+  ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
+  ../codegen/makeimplementationprivate.cpp
+  ../cpputils.cpp
+  ../codecompletion/worker.cpp
+  ../includepathcomputer.cpp
+  ../codecompletion/missingincludemodel.cpp
+  ../codecompletion/missingincludeitem.cpp
 )
 
+add_definitions(-DBUILD_TESTS)
 
 kde4_add_unit_test(cppcodecompletiontest ${cppcodecompletiontest_SRCS})
 target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
@@ -88,6 +83,7 @@ target_link_libraries(cppcodegentest
     kdev4cpprpp
     kdev4cppparser
     veritascpp
+    cpplanguagecommon
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}

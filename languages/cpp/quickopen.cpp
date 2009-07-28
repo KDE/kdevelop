@@ -37,17 +37,21 @@
 #include "cppduchain/navigation/navigationwidget.h"
 #include "codecompletion/model.h"
 #include "cpplanguagesupport.h"
+#include <interfaces/icore.h>
 #include <language/duchain/arrayhelpers.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/ilanguage.h>
+#include "cpputils.h"
 
 using namespace KDevelop;
 using namespace Cpp;
 
 TopDUContextPointer getCurrentTopDUContext() {
-  IDocument* doc = CppLanguageSupport::self()->core()->documentController()->activeDocument();
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
 
   if( doc )
   {
-    return TopDUContextPointer( CppLanguageSupport::self()->standardContext( doc->url() ) );
+    return TopDUContextPointer( ICore::self()->languageController()->language("C++")->languageSupport()->standardContext( doc->url() ) );
   }
   return TopDUContextPointer();
 }
@@ -90,7 +94,7 @@ bool IncludeFileData::execute( QString& filterText ) {
   } else {
     KUrl u = m_item.url();
     
-    CppLanguageSupport::self()->core()->documentController()->openDocument( u );
+    ICore::self()->documentController()->openDocument( u );
 
     return true;
   }
@@ -338,7 +342,7 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       kDebug(9007) << "extracted prefix " << prefixPath;
 
       if( m_allowPossibleImports || explicitPath )
-        allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, prefixPath, addIncludePaths, explicitPath, true, true );
+        allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl, true, prefixPath, addIncludePaths, explicitPath, true, true );
 
       if( m_allowImports )
         allIncludeItems += getAllIncludedItems( m_duContext, prefixPath );
@@ -365,7 +369,7 @@ void IncludeFileDataProvider::reset()
   m_baseUrl = KUrl();
   m_importers.clear();
   
-  IDocument* doc = CppLanguageSupport::self()->core()->documentController()->activeDocument();
+  IDocument* doc = ICore::self()->documentController()->activeDocument();
 
   if( doc )
   {
@@ -373,7 +377,7 @@ void IncludeFileDataProvider::reset()
 
     {
       DUChainReadLocker lock( DUChain::lock() );
-      m_duContext = TopDUContextPointer( CppLanguageSupport::self()->standardContext( doc->url() )  );
+      m_duContext = TopDUContextPointer( ICore::self()->languageController()->language("C++")->languageSupport()->standardContext( doc->url() )  );
 
       if( m_allowImporters && m_duContext ) {
         QSet<IndexedString> importers;
@@ -388,7 +392,7 @@ void IncludeFileDataProvider::reset()
   QList<IncludeItem> allIncludeItems;
 
   if( m_allowPossibleImports )
-    allIncludeItems += CppLanguageSupport::self()->allFilesInIncludePath( m_baseUrl, true, QString(), KUrl::List(), false, true, true );
+    allIncludeItems += CppUtils::allFilesInIncludePath( m_baseUrl, true, QString(), KUrl::List(), false, true, true );
 
   if( m_allowImports )
     allIncludeItems += getAllIncludedItems( m_duContext );

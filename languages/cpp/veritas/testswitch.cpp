@@ -45,6 +45,7 @@
 #include <language/duchain/persistentsymboltable.h>
 
 // kdevelop includes
+#include "../cpputils.h"
 #include "../cppduchain/cppduchain.h"
 #include "../cppduchain/environmentmanager.h"
 #include "../cppduchain/cpppreprocessenvironment.h"

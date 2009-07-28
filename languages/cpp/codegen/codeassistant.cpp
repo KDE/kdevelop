@@ -38,8 +38,6 @@ Q_DECLARE_METATYPE(KTextEditor::Range)
 
 namespace Cpp {
 
-StaticCodeAssistant staticCodeAssistant;
-
 StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true),

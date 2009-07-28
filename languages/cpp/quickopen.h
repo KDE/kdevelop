@@ -60,7 +60,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
  * also searches sub-directories if the typed text wants it.
  * */
 
-class IncludeFileDataProvider : public KDevelop::QuickOpenDataProviderBase, public KDevelop::FilterWithSeparator<Cpp::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
+class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, public KDevelop::FilterWithSeparator<Cpp::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
   public:
     IncludeFileDataProvider();
     virtual void setFilterText( const QString& text );

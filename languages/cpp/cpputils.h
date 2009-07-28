@@ -1,0 +1,106 @@
+/*
+   Copyright 2009 Ramón Zarazúa <killerfox512+kde@gmail.com>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef CPPUTILS_H
+#define CPPUTILS_H
+
+#include <QStringList>
+#include "environmentmanager.h"
+
+class QString;
+
+extern QStringList headerExtensions;
+extern QStringList sourceExtensions;
+
+namespace Cpp
+{
+class IncludeItem;
+}
+
+namespace KDevelop
+{
+class Declaration;
+class ParsingEnvironment;
+}
+
+class KUrl;
+
+namespace CppUtils
+{
+  
+/**
+ * @param objectToAllocate The declaration of the object to allocate memory for
+ * @return the stringirized form of the user's preferred method of mamory allocation
+ *
+ * @todo Make this configurable by the user to use eg: new, malloc, or a custom memory allocation
+ */
+QString insertMemoryAllocation(const KDevelop::Declaration & objectToAllocate);
+
+
+QString insertMemoryDeallocation(const KDevelop::Declaration & objectToDeallocate);
+
+
+///If @param fast is true, no exhaustive search is done as fallback.
+KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false );
+
+///Returns true if the given url is a header, looking at he known file extensions
+bool isHeader(const KUrl &url);
+  
+QStringList standardIncludePaths();
+
+const Cpp::ReferenceCountedMacroSet& standardMacros();
+
+/// Get the full path for a file based on a search through the project's
+/// include directories
+/// @param localPath the path from which this findInclude is issued
+/// @param skipPath this path will be skipped while searching, as needed for gcc extension #include_next
+/// @return first: The found file(not a canonical path, starts with the directory it was found in)
+///         second: The include-path the file was found in(can be used to skip that path on #include_next)
+QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localPath, const QString& includeName, int includeType, const KUrl& skipPath, bool quiet=false);
+    
+///Thread-safe
+bool needsUpdate(const Cpp::EnvironmentFilePointer& file, const KUrl& localPath, const KUrl::List& includePaths );
+
+const KDevelop::ParsingEnvironment * standardEnvironment();
+
+///Returns the include-path. Each dir has a trailing slash. Search should be iterated forward through the list
+///@param problems If this is nonzero, eventual problems will be added to the list
+KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>* problems);
+
+/**
+  * Returns a list of all files within the include-path of the given file
+  * @param addPath This path is added behind each include-path, and the content of the resulting directory used.
+  * @param addIncludePaths A list of include-paths that should be used for listing, additionally to the known ones
+  * @param onlyAddedIncludePaths If this is true, only the include-paths given in @p addIncludePaths will be used
+  * @param prependAddedPathToName If this is true, @p addPath is prepended to each of the returned items paths
+  * */
+QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false, bool prependAddedPathToName = false, bool allowSourceFiles = false );
+
+struct ReplaceCurrentAccess : public QObject
+{
+  Q_OBJECT
+  
+  public slots:
+    //Invoked directly from within the code-completion context
+    void exec(KUrl url, QString old, QString _new);
+};
+  
+}
+
+
+#endif	//CPPUTILS_H

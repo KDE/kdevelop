@@ -33,7 +33,7 @@
 #include "../cppduchain/cppduchain.h"
 #include <templatedeclaration.h>
 #include <templateparameterdeclaration.h>
-#include "../cpplanguagesupport.h"
+#include "../cpputils.h"
 #include "context.h"
 
 const int desiredArgumentTypeLength = 20;

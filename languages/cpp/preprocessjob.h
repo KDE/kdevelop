@@ -84,6 +84,8 @@ public:
      * It can be used for matching, but it cannot be used for parsing.
      * */
     static KDevelop::ParsingEnvironment* createStandardEnvironment();
+
+    static const KDevelop::ParsingEnvironment* standardEnvironment();
 private:
     void headerSectionEndedInternal(rpp::Stream* stream);
     bool checkAbort();
@@ -99,9 +101,11 @@ private:
     bool m_headerSectionEnded;
     rpp::pp* m_pp;
     QByteArray m_contents;
+
+    static KDevelop::ParsingEnvironment* m_standardEnvironment;
 };
 
-KDevelop::ParsingEnvironment* createStandardEnvironment();
+KDevelop::ParsingEnvironment* CreateStandardEnvironment();
 
 #endif
 

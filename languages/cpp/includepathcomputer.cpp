@@ -16,6 +16,7 @@
 
 #include "includepathcomputer.h"
 #include "cpplanguagesupport.h"
+#include "cpputils.h"
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -45,13 +46,13 @@ void IncludePathComputer::computeForeground() {
 
   if(headerExtensions.contains(QFileInfo(m_source.toLocalFile()).suffix())) {
     //This file is a header. Since a header doesn't represent a target, we just try to get the include-paths for the corresponding source-file, if there is one.
-    KUrl newSource = CppLanguageSupport::self()->sourceOrHeaderCandidate(m_source, true);
+    KUrl newSource = CppUtils::sourceOrHeaderCandidate(m_source, true);
     if(newSource.isValid())
       m_source = newSource;
   }
 
   if( m_source.isEmpty() ) {
-    foreach( const QString& path, CppLanguageSupport::self()->standardIncludePaths()) {
+    foreach( const QString& path, CppUtils::standardIncludePaths()) {
         KUrl u(path);
         if(!m_hasPath.contains(u)) {
           m_ret << KUrl(path);
@@ -114,7 +115,7 @@ void IncludePathComputer::computeBackground() {
     if(!m_effectiveBuildDirectory.isEmpty())
         m_includeResolver.setOutOfSourceBuildSystem(m_projectDirectory.toLocalFile(), m_effectiveBuildDirectory.toLocalFile());
     
-    QList<QString> standardPaths = CppLanguageSupport::self()->standardIncludePaths();
+    QList<QString> standardPaths = CppUtils::standardIncludePaths();
     
     m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
     kDebug() << "current include path dependency state:" << m_includePathDependency.toString();

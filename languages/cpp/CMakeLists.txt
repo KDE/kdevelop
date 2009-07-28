@@ -20,13 +20,15 @@ set(kdevcpplanguagesupport_PART_SRCS
     cppparsejob.cpp
     preprocessjob.cpp
     cpphighlighting.cpp
-    codecompletion/model.cpp
-    codecompletion/worker.cpp
-    codecompletion/context.cpp
+    cpputils.cpp
     stringhelpers.cpp
     includepathresolver.cpp
     setuphelpers.cpp
     quickopen.cpp
+    
+    codecompletion/model.cpp
+    codecompletion/worker.cpp
+    codecompletion/context.cpp
     codecompletion/item.cpp
     codecompletion/helpers.cpp
     codecompletion/missingincludeitem.cpp
@@ -34,7 +36,6 @@ set(kdevcpplanguagesupport_PART_SRCS
     codecompletion/missingincludemodel.cpp
 
     codegen/cppnewclass.cpp
-    codegen/cpputils.cpp
     codegen/simplerefactoring.cpp
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
@@ -60,11 +61,10 @@ if(BUILD_kdev_includepathresolver)
   install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(BUILD_kdev_includepathresolver)
 
-
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport
-    kdev4cppduchain
     kdev4cpprpp
+    kdev4cppduchain
     kdev4cppparser
     veritascpp
     ${QT_QTDESIGNER_LIBRARY}

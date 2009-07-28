@@ -108,8 +108,8 @@ void TestCppCodegen::testClassGeneration()
   
   //DUChain::self()->
   
-  CppNewClass newClass;
-  newClass.addBaseClass("AbstractClass");
+  //CppNewClass newClass;
+  //newClass.addBaseClass("AbstractClass");
   //newClass.
   
 }
