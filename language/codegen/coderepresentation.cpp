@@ -154,6 +154,7 @@ class ArtificialStringData : public QSharedData {
 class StringCodeRepresentation : public CodeRepresentation {
   public:
     StringCodeRepresentation(KSharedPtr<ArtificialStringData> _data) : data(_data) {
+      Q_ASSERT(data);
     }
     
     QString line(int line) const {
@@ -188,10 +189,12 @@ static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings
 
 bool artificialCodeRepresentationExists(IndexedString url)
 {
-    if(artificialStrings.contains(url))
+    if(artificialStrings.contains(url) && artificialStrings[url])
         return true;
-    else
-        return artificialStrings.contains(IndexedString(CodeRepresentation::artificialUrl(url.str())));
+    ///@todo Check for also names inserted with artificial URL, and handle it in representation creation
+    //else
+    //    return artificialStrings.contains(IndexedString(CodeRepresentation::artificialUrl(url.str())));
+    return false;
 }
 
 CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {

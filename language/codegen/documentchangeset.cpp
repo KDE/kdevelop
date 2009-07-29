@@ -41,8 +41,9 @@ struct DocumentChangeSetPrivate
     DocumentChangeSet::FormatPolicy formatPolicy;
     DocumentChangeSet::DUChainUpdateHandling updatePolicy;
     
+    typedef QPair<IndexedString, InsertArtificialCodeRepresentation*> tempPair;
+    QMap< IndexedString, tempPair > tempFiles;
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
-    QMap< IndexedString, QPair<IndexedString, InsertArtificialCodeRepresentation* > > tempFiles;
     QMap< IndexedString, IndexedString > tempToOriginal;
     
     DocumentChangeSet::ChangeResult replaceOldText(CodeRepresentation * repr, const QString & newText, const QList<DocumentChangePointer> & sortedChangesList);
@@ -90,6 +91,8 @@ DocumentChangeSet& DocumentChangeSet::operator=(const KDevelop::DocumentChangeSe
 
 DocumentChangeSet::~DocumentChangeSet()
 {
+    foreach( DocumentChangeSetPrivate::tempPair pair, d->tempFiles)
+        delete pair.second;
     delete d;
 }
 
@@ -114,6 +117,7 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
     /// @todo Fix for a possibility of two different temporaries created for the same fileName
     d->tempFiles.unite(rhs.d->tempFiles);
     Q_ASSERT(d->tempFiles.uniqueKeys().size() == d->tempFiles.size());
+    rhs.d->tempFiles.clear();
     d->tempToOriginal.unite(rhs.d->tempToOriginal);
     
     /// @todo Possibly check for duplicates, since it could create a lot of bloat when big changes are merged
@@ -127,8 +131,10 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 
 void DocumentChangeSet::clear ( void )
 {
-    d->changes.clear();
+    foreach( DocumentChangeSetPrivate::tempPair pair, d->tempFiles)
+        delete pair.second;
     d->tempFiles.clear();
+    d->changes.clear();
     d->tempToOriginal.clear();
 }
 
