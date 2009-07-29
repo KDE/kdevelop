@@ -52,6 +52,7 @@ class TestCppCodegen : public QObject
   private:
     void parseArtificialCode();
     void resetArtificialCode();
+    void parseFile(KDevelop::IndexedString file);
     
     
     void addArtificialCode(KDevelop::IndexedString fileName, const QString & code);
