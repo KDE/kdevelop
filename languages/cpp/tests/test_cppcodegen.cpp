@@ -26,7 +26,8 @@
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/coderepresentation.h>
-#include <language/duchain/duchain.h>
+#include <language/duchain/duchain.h>  
+#include <language/duchain/duchainlock.h>
 
 #include <interfaces/ilanguagecontroller.h>
 
@@ -67,6 +68,7 @@ void TestCppCodegen::initTestCase()
 void TestCppCodegen::cleanupTestCase()
 {
   Core::self()->cleanup();
+  qDeleteAll(m_artificialCode);
 }
 
 void TestCppCodegen::init()
@@ -78,6 +80,8 @@ void TestCppCodegen::init()
 void TestCppCodegen::testAstDuChainMapping()
 {
   
+  DUChainReadLocker lock(DUChain::lock());
+  
   ContextContainer::Iterator it = m_contexts.begin();
   
   //----ClassA.h----
@@ -85,6 +89,7 @@ void TestCppCodegen::testAstDuChainMapping()
   QVERIFY(session);
   TranslationUnitAST * ast = session->topAstNode();
   QVERIFY(ast);
+  QVERIFY(ast->declarations);
   QVERIFY(ast->declarations->count() == 1);
   
   
@@ -97,6 +102,7 @@ void TestCppCodegen::testAstDuChainMapping()
   //----ClassA.cpp----
   QVERIFY(session = ParseSession::Ptr::dynamicCast<IAstContainer>(it->data()->ast()));
   QVERIFY(ast = session->topAstNode());
+  QVERIFY(ast->declarations);
   QVERIFY(ast->declarations->count() == 1);
 }
 
@@ -125,15 +131,15 @@ void TestCppCodegen::parseArtificialCode()
   {
     CodeRepresentation::Ptr code = createCodeRepresentation(file);
     
-    Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), KDevelop::TopDUContext::AllDeclarationsAndContexts);
+    Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), static_cast<TopDUContext::Features>(TopDUContext::AllDeclarationsAndContexts | TopDUContext::AST));
     ///TODO maybe only needs to be done once
-    Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AllDeclarationsAndContexts));
+    Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, static_cast<TopDUContext::Features>(TopDUContext::AllDeclarationsAndContexts | TopDUContext::AST)));
   }
 }
 
 void TestCppCodegen::addArtificialCode ( IndexedString fileName, const QString & code )
 {
-  InsertArtificialCodeRepresentation(fileName, code);
+  m_artificialCode << new InsertArtificialCodeRepresentation(fileName, code);
   m_artificialCodeNames << fileName;
 }
 

@@ -26,6 +26,11 @@
 #include <QMap>
 #include <language/duchain/topducontext.h>
 
+namespace KDevelop
+{
+class InsertArtificialCodeRepresentation;
+}
+
 
 class TestCppCodegen : public QObject
 {
@@ -52,6 +57,7 @@ class TestCppCodegen : public QObject
     void addArtificialCode(KDevelop::IndexedString fileName, const QString & code);
     
     QList<KDevelop::IndexedString> m_artificialCodeNames;
+    QList<KDevelop::InsertArtificialCodeRepresentation *> m_artificialCode;
     ContextContainer m_contexts;
 };
 
