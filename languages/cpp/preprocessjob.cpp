@@ -652,10 +652,10 @@ bool PreprocessJob::readContents()
         if ( !file.open( QIODevice::ReadOnly ) )
         {
             //Try using a code-representation, as artificial code may have been inserted
-            CodeRepresentation::Ptr repr = createCodeRepresentation(parentJob()->document());
-            if(repr) {
+            if(artificialCodeRepresentationExists(parentJob()->document())) {
+              CodeRepresentation::Ptr repr = createCodeRepresentation(parentJob()->document());
               m_contents = repr->text().toUtf8();
-              kDebug() << "took contents for " << parentJob()->document().toUrl() << " from code-representation";
+              kDebug() << "took contents for " << parentJob()->document().toUrl() << " from code-representation:\n" << m_contents;
               return true;
             }
           
