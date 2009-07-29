@@ -225,8 +225,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif
 
-    //TODO when CodeAssistant is implemented
-    //Cpp::StaticCodeAssistant::init();
+    m_assistant = new Cpp::StaticCodeAssistant;
 }
 
 void CppLanguageSupport::pImplementation()
@@ -368,6 +367,7 @@ CppLanguageSupport::~CppLanguageSupport()
 #ifdef DEBUG_UI_LOCKUP
     delete m_blockTester;
 #endif
+    delete m_assistant;
 }
 
 CppLanguageSupport* CppLanguageSupport::self() {

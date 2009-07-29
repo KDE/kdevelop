@@ -45,7 +45,6 @@ class StaticCodeAssistant : public QObject {
   public:
     StaticCodeAssistant();
     
-    static StaticCodeAssistant * self();
   private slots:
     void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
