@@ -101,7 +101,14 @@ uint buildIdentifierForType(AbstractType::Ptr type, IndexedTypeIdentifier& id, u
       id.setIdentifier(idType->qualifiedIdentifier());
   }else{
     //Just create it as an expression
-    id.setIdentifier(QualifiedIdentifier(type->toString(), true));
+    AbstractType::Ptr useTypeText = type;
+    if(type->modifiers() & AbstractType::ConstModifier)
+    {
+      //Remove the 'const' modifier, as it will be added to the type-identifier below
+      useTypeText = type->indexed().abstractType();
+      useTypeText->setModifiers(useTypeText->modifiers() & (~AbstractType::ConstModifier));
+    }
+    id.setIdentifier(QualifiedIdentifier(useTypeText->toString(), true));
   }
   if(type->modifiers() & AbstractType::ConstModifier)
     id.setIsConstant(true);
@@ -706,6 +713,7 @@ IndexedTypeIdentifier shortenedTypeIdentifier(AbstractType::Ptr type, DUContext*
   if(type.cast<DelayedType>())
     identifier = type.cast<DelayedType>()->identifier();
   identifier = stripPrefixIdentifiers(identifier, stripPrefix);
+
   if(isReference) {
     identifier.setIsReference(true);
     if(isConstReference)

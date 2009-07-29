@@ -3175,6 +3175,18 @@ void TestDUChain::testSourceCodeInsertion()
 void TestDUChain::testSimplifiedTypeString()
 {
   {
+    QByteArray method("const int i;\n");
+    
+    TopDUContext* top = parse(method, DumpNone);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[0]->abstractType(), top).remove(' '), QString("const int").remove(' '));
+    release(top);
+  }
+  
+  {
     QByteArray method("template<class T> class Template { class Member; Member mem; }; Template< Template< int >* >::Member q;\n");
     
     TopDUContext* top = parse(method, DumpNone);
