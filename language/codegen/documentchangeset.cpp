@@ -41,8 +41,8 @@ struct DocumentChangeSetPrivate
     DocumentChangeSet::FormatPolicy formatPolicy;
     DocumentChangeSet::DUChainUpdateHandling updatePolicy;
     
-    typedef QPair<IndexedString, InsertArtificialCodeRepresentation*> tempPair;
-    QMap< IndexedString, tempPair > tempFiles;
+    typedef QPair<IndexedString, InsertArtificialCodeRepresentationPointer> TempPair;
+    QMap< IndexedString, TempPair > tempFiles;
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
     QMap< IndexedString, IndexedString > tempToOriginal;
     
@@ -91,8 +91,6 @@ DocumentChangeSet& DocumentChangeSet::operator=(const KDevelop::DocumentChangeSe
 
 DocumentChangeSet::~DocumentChangeSet()
 {
-    foreach( DocumentChangeSetPrivate::tempPair pair, d->tempFiles)
-        delete pair.second;
     delete d;
 }
 
@@ -104,9 +102,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
     if(change->m_range.start.line != change->m_range.end.line)
         return ChangeResult("Multi-line ranges are not supported");
     
-    if(d->tempFiles.contains(change->m_document))
+    if(d->tempFiles.contains(change->m_document)) {
         //Because the change is semantically constant, but not bitwise, correct the old file name for the temp one
         const_cast<DocumentChangePointer &>(change)->m_document = d->tempFiles[change->m_document].first;
+    }
     
     d->changes[change->m_document].append(change);
     return ChangeResult(true);
@@ -129,10 +128,8 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
     return *this;
 }
 
-void DocumentChangeSet::clear ( void )
+void DocumentChangeSet::clear ()
 {
-    foreach( DocumentChangeSetPrivate::tempPair pair, d->tempFiles)
-        delete pair.second;
     d->tempFiles.clear();
     d->changes.clear();
     d->tempToOriginal.clear();
@@ -165,7 +162,7 @@ IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file ) const
 QList<QPair<IndexedString, IndexedString> > DocumentChangeSet::tempNamesForAll() const
 {
     QList<QPair<IndexedString, IndexedString> > names;
-    for(QMap< IndexedString, QPair<IndexedString, InsertArtificialCodeRepresentation* > >::Iterator it = d->tempFiles.begin();
+    for(QMap< IndexedString, QPair<IndexedString, KSharedPtr<InsertArtificialCodeRepresentation> > >::Iterator it = d->tempFiles.begin();
         it != d->tempFiles.end(); ++it)
         names << qMakePair(it.key(), it.value().first);
     
@@ -597,7 +594,7 @@ void DocumentChangeSetPrivate::addTempFile(IndexedString originalName, const QSt
     ///@todo An actual algorithm to find an appropriate name to avoid potential name collision
     IndexedString tempFile(CodeRepresentation::artificialUrl(originalName.str()));
     
-    tempFiles[originalName] = qMakePair(tempFile, new InsertArtificialCodeRepresentation(tempFile, text));
+    tempFiles[originalName] = qMakePair(tempFile, InsertArtificialCodeRepresentationPointer(new InsertArtificialCodeRepresentation(tempFile, text)));
     tempToOriginal[tempFile] = originalName;
     changes.erase(changes.find(tempFile));
 }

@@ -35,7 +35,7 @@ namespace KDevelop {
     class IndexedString;
     
 ///Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
-class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData{
+class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
   public:
     virtual ~CodeRepresentation() {
     }
@@ -81,7 +81,9 @@ KDEVPLATFORMLANGUAGE_EXPORT bool artificialCodeRepresentationExists(IndexedStrin
 ///It inserts itself automatically into the code-representation framework,
 ///logically representing the contents of a file. Thus, it can be used for testing
 ///refactoring.
-class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation {
+///
+///@warning This object is not copyable
+class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation : public QSharedData {
     public:
         InsertArtificialCodeRepresentation(IndexedString file, QString text);
         ~InsertArtificialCodeRepresentation();
@@ -90,6 +92,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation {
     private:
         IndexedString m_file;
 };
+
+typedef KSharedPtr<InsertArtificialCodeRepresentation> InsertArtificialCodeRepresentationPointer;
 
 }
 

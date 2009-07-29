@@ -189,7 +189,7 @@ static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings
 
 bool artificialCodeRepresentationExists(IndexedString url)
 {
-    if(artificialStrings.contains(url) && artificialStrings[url])
+    if(artificialStrings.contains(url))
         return true;
     ///@todo Check for also names inserted with artificial URL, and handle it in representation creation
     //else

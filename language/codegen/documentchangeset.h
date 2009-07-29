@@ -70,7 +70,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
     ChangeResult addChange(const DocumentChange& change);
     ///Get rid of all the current changes
-    void clear(void);
+    void clear();
     
     ///Merge two document change sets
     DocumentChangeSet & operator<<(DocumentChangeSet &);
