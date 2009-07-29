@@ -718,8 +718,8 @@ KDevelop::ParsingEnvironment * PreprocessJob::m_standardEnvironment = 0;
 
 const KDevelop::ParsingEnvironment * PreprocessJob::standardEnvironment()
 {
-  if(m_standardEnvironment)
-    createStandardEnvironment();
+  if(!m_standardEnvironment)
+    m_standardEnvironment = createStandardEnvironment();
 
   return m_standardEnvironment;
 }
