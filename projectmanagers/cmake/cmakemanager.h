@@ -139,7 +139,6 @@ private:
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     
     CMakeDocumentation* m_doc;
-    ICMakeBuilder* m_builder;
     CMakeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;

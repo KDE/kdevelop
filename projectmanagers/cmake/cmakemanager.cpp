@@ -140,15 +140,11 @@ KUrl::List resolveSystemDirs(KDevelop::IProject* project, const QStringList& dir
 }
 
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
-    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent ), m_builder(0)
+    : KDevelop::IPlugin( CMakeSupportFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
-    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.ICMakeBuilder" );
-    Q_ASSERT(i);
-    m_builder = i->extension<ICMakeBuilder>();
-    Q_ASSERT(m_builder);
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(), name());
 
@@ -644,8 +640,11 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
 
 KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *) const
 {
-    Q_ASSERT(m_builder);
-    return m_builder;
+    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.ICMakeBuilder" );
+    Q_ASSERT(i);
+    ICMakeBuilder* _builder = i->extension<ICMakeBuilder>();
+    Q_ASSERT(_builder );
+    return _builder ;
 }
 
 /*void CMakeProjectManager::parseOnly(KDevelop::IProject* project, const KUrl &url)
