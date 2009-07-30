@@ -124,7 +124,15 @@ bool CodeGeneratorBase::execute()
         d->range = DocumentRange(document.url(), ICore::self()->documentController()->activeDocument()->textSelection());
     
     if(!d->context)
-        d->context = DUChain::self()->chainForDocument(document)->findContextIncluding(d->range);
+    {
+        TopDUContext * documentChain = DUChain::self()->chainForDocument(document);
+        if(!documentChain)
+        {
+            setErrorText(QString("Could not find chain for selected document: %1").arg(document.url()));
+            return false;
+        }
+        d->context = documentChain->findContextIncluding(d->range);
+    }
     
     if(!d->context)
     {
