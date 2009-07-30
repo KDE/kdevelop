@@ -102,6 +102,39 @@ bool MakeImplementationPrivate::process()
     return true;
 }
 
+namespace
+{
+//TODO Find best place for this convenience function
+bool hasDefaultConstructor(const Declaration * decl)
+{
+    DUContext * context = decl->internalContext();
+    
+    //take into account compiler generated default constructors
+    bool constructorFound = false;
+    
+    foreach(Declaration * member, context->localDeclarations())
+    {
+        if(ClassFunctionDeclaration * classFun = dynamic_cast<ClassFunctionDeclaration *>(member))
+        {
+            TypePtr<FunctionType> funType = classFun->type<FunctionType>();
+            
+            //Check also for all default parameters, counts as default constructor
+            if(classFun->isConstructor())
+            {
+                if(!constructorFound)
+                    constructorFound = true;
+                if(funType && classFun->defaultParametersSize() == funType->indexedArgumentsSize() &&
+                   classFun->internalFunctionContext())
+                    return true;
+            }
+        }
+    }
+  
+    return !constructorFound;
+}
+
+}
+
 bool MakeImplementationPrivate::gatherInformation()
 {
     gatherPrivateMembers();
@@ -121,17 +154,18 @@ bool MakeImplementationPrivate::gatherInformation()
     
     //If any of the members is either a reference or has non-default constructor then initialization
     //must bemoved to the private implementation constructor
-//     foreach(ClassMemberDeclaration * declaration, m_members)
-//     {
-//         AbstractType::Ptr type = declaration->abstractType();
-//         if(AbstractType::Ptr::dynamicCast<ReferenceType>(type) ||
-//            (type->whichType() == AbstractType::TypeStructure ))//TODO && !Hav4e default constructor TODO where is the best place to put returning of all constructors ) )
-//         {
-//             privateDialog.variableOption->setChecked();
-//             privateDialog.variableOption->setDisabled();
-//             break;
-//         }
-//     }
+    foreach(ClassMemberDeclaration * declaration, m_members)
+    {
+        AbstractType::Ptr type = declaration->abstractType();
+        if(type->whichType() == AbstractType::TypeReference ||
+           (type->whichType() == AbstractType::TypeStructure && !hasDefaultConstructor(StructureType::Ptr::dynamicCast<AbstractType>(type)->declaration(m_classContext->topContext())) ))
+        {
+            kDebug() << "Forcing private implementation member initialization, because of member: " << declaration->identifier();
+            privateDialog.variableOption->setChecked(true);
+            privateDialog.variableOption->setDisabled(true);
+            break;
+        }
+    }
     
     int ret = dialog.exec();
     
