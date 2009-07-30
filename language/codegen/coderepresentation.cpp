@@ -27,6 +27,23 @@ namespace KDevelop {
     
 static bool onDiskChangesForbidden = false;
 
+QString CodeRepresentation::rangeText(KTextEditor::Range range) const
+{
+    Q_ASSERT(range.end().line() < lines());
+    
+    //Easier for single line ranges which should happen most of the time
+    if(range.onSingleLine())
+        return QString( line( range.start().line() ).mid( range.start().column(), range.columnWidth() ) );
+    
+    //Add up al the requested lines
+    QString rangedText = line(range.start().line()).mid(range.start().column());
+    
+    for(int i = range.start().line() + 1; i <= range.end().line(); ++i)
+        rangedText += '\n' + ((i == range.end().line()) ? line(i).left(range.end().column()) : line(i));
+    
+    return rangedText;
+}
+
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
   EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
@@ -215,8 +232,8 @@ void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
 
 KUrl CodeRepresentation::artificialUrl(const QString & name)
 {
-    KUrl url("artificial:///");
-    url.addPath(name);
+    KUrl url(name[0] == '/' ? name : '/' + name);
+    url.setScheme("artificial");
     return url;
 }
 
