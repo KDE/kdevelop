@@ -320,6 +320,8 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
     }
   }
 #endif
+
+  lock.unlock(); //Never call openDocument while the duchain is locked
   //TODO DocumentChangeSet should take care of opening new documents in the editor
   ICore::self()->documentController()->openDocument(headerUrl());
   
