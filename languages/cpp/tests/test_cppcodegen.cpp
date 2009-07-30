@@ -143,7 +143,24 @@ void TestCppCodegen::testAstDuChainMapping()
   QVERIFY(it->data()->localDeclarations()[0]->context()->importedParentContexts()[0].context(it->data()) != it->data());
 }
 
-#include <codegen/simplerefactoring.h>
+void TestCppCodegen::testCodeRepresentations()
+{
+  //text from range
+  CodeRepresentation::Ptr code = createCodeRepresentation(IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
+  QVERIFY(code);
+  
+  
+  QCOMPARE(code->rangeText(KTextEditor::Range(0, 0, 0, 12)), QString("class ClassA"));
+  QCOMPARE(code->rangeText(KTextEditor::Range(0, 0, 0, code->line(0).size())), code->line(0));
+  
+  code = createCodeRepresentation(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
+  QVERIFY(code);
+  
+  QCOMPARE(code->rangeText(KTextEditor::Range(0, 0, 1, 0)), QString("#include</ClassA.h> \n"));
+  QCOMPARE(code->rangeText(KTextEditor::Range(0, 0, code->lines() - 1, code->line(code->lines() - 1).size())),
+           code->text());
+}
+
 void TestCppCodegen::testClassGeneration()
 {
   TopDUContext * top = 0;
@@ -160,8 +177,8 @@ void TestCppCodegen::testClassGeneration()
   DocumentChangeSet changes = newClass.generate();
   changes.applyAllToTemp();
   QCOMPARE(changes.tempNamesForAll().size(), 2);
-/*  parseFile(changes.tempNamesForAll()[0].second);
-  parseFile(changes.tempNamesForAll()[1].second);*/
+  parseFile(changes.tempNamesForAll()[0].second);
+  parseFile(changes.tempNamesForAll()[1].second);
 }
 
 void TestCppCodegen::testPrivateImplementation()

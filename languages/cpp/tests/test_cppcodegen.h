@@ -46,6 +46,7 @@ class TestCppCodegen : public QObject
     
     
     void testAstDuChainMapping();
+    void testCodeRepresentations();
     void testClassGeneration();
     void testPrivateImplementation();
     
