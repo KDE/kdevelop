@@ -286,7 +286,7 @@ void MakeImplementationPrivate::updateAllUses(UseList & allUses)
             foreach(SimpleRange range, *mapIt)
             {
                 CodeRepresentation::Ptr rangeRepresentation = createCodeRepresentation(mapIt.key());
-                QString use = DynamicCodeRepresentation::Ptr::dynamicCast<CodeRepresentation>(rangeRepresentation)->rangeText(range.textRange());
+                QString use = rangeRepresentation->rangeText(range.textRange());
                 //! @todo check properly if the pointer is being hidden, and add this-> only if necessary
                 DocumentChange useChange(mapIt.key(), range, use, "this->" + m_privatePointerName + "->" + use);
                 
