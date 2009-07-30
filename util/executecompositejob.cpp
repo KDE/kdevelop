@@ -67,11 +67,14 @@ void ExecuteCompositeJob::slotResult(KJob* job)
 bool ExecuteCompositeJob::doKill()
 {
     d->m_killing = true;
-    if(hasSubjobs()) {
+    while(hasSubjobs()) {
         KJob* j = subjobs().first();
+        if( !j ) {
+            removeSubjob(j);
+            continue;
+        }
         if (j->kill()) {
             removeSubjob(j);
-            return true;
         } else {
             return false;
         }
