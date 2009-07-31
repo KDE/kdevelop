@@ -1,4 +1,5 @@
 /* Copyright 2008 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2009 Ramón Zarazúa <killerfox512+kde@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,16 +45,23 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         
         ///This will save all the modified files into their originals
         bool applyAllChanges();
+        
+        ///Update the comparison view fo @p index, in case changes have been done directly to the opened document.
+        ///@param index the index to update, -1 for current index
+        void updateDiffView(int index = -1);
     
+    public Q_SLOTS:
+        ///Called when a change between comparison and edition is requested
+        void switchEditView();
+        ///Called to signal a change to the currently viewed index
+        void indexChanged(int);
+        
     private Q_SLOTS:
         void change (KTextEditor::Document *document, const KTextEditor::Range &oldRange,
                 const KTextEditor::Range &newRange);
         void insertion (KTextEditor::Document *document, const KTextEditor::Range &range);
         void removal (KTextEditor::Document *document, const KTextEditor::Range &range);
         void jump( const QModelIndex &);
-        void switchEditView() {};
-        
-        void indexChanged(int);
         
     private:
         ApplyChangesWidgetPrivate * d;

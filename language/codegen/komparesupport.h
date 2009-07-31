@@ -20,57 +20,38 @@
 #ifndef KOMPARESUPPORT_H
 #define KOMPARESUPPORT_H
 
-#ifdef KOMPARE_ENABLED
-#include <kompare/kompareinterface.h>
-
-#include <QList>
-#endif //KOMPARE_ENABLED
-
-#include <language/duchain/indexedstring.h>
-#include <QWidget>
+class QWidget;
+class QString;
 
 namespace KDevelop
 {
+struct KompareWidgetsPrivate;
+class IndexedString;
 
-template<bool Enable>
-class KompareSupport
+class KompareWidgets
 {
   public:
-    static const bool enabled = Enable;
+    static const bool enabled = KOMPARE_ENABLED;
+    
+    KompareWidgets();
+    ~KompareWidgets();
     
     /**
      * Create a widget at index @p index. if @p index == -1 then widget will be appended
      * @return the index number of the retrieved/created widget, 
      */
-    int createWidget(const IndexedString & original, const IndexedString & modified, QWidget * widget, int index = -1)
-    {
-        return -1;
-    }
-
-#ifdef KOMPARE_ENABLED
-  private:
-    QList<KompareInterface *> m_interfaces;
-#endif //KOMPARE_ENABLED
-};
-
-template <>
-class KompareSupport<false>
-{
-  public:
-    static const bool enabled = false;
+    bool compare(const IndexedString & original, const QString & modified, QWidget * widget, int index = -1);
     
-    int createWidget(const IndexedString & original, const IndexedString & modified, QWidget * widget, int index = -1)
-    {
-        return -1;
-    }
+    ///@return true if the widget is being displayed
+    bool widgetActive(int index);
+    
+    ///Set the widget to unused, and removes the current widget its attached to
+    void hideWidget(int index);
+
+  private:
+    KompareWidgetsPrivate * const d;
 };
 
-#ifdef KOMPARE_ENABLED
-typedef KompareSupport<true> KompareWidgets;
-#else
-typedef KompareSupport<false> KompareWidgets;
-#endif //KOMPARE_ENABLED
 }
 
-#undef KOMPARE_ENABLED
 #endif //KOMPARESUPPORT_H

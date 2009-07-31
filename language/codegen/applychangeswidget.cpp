@@ -1,4 +1,5 @@
 /* Copyright 2008 Aleix Pol <aleixpol@gmail.com>
+ * Copyright 2009 Ramón Zarazúa <killerfox512+kde@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +56,7 @@ struct ApplyChangesWidgetPrivate
     void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type);
     void jump( const QModelIndex & idx);
     void createEditPart(const KDevelop::IndexedString& url, const QString& info);
+    void updateButtonLabel();
 
     
     ApplyChangesWidget * const parent;
@@ -106,9 +108,6 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original, const Inde
     d->m_documentTabs->addTab(w, original.index() ? original.str() : modified.str());
     d->m_documentTabs->setCurrentWidget(w);
     
-    if(d->m_kompare.createWidget(original, modified, w) == -1)
-        d->createEditPart(modified, info);
-    
 #ifndef NDEBUG
     //Duplicated originals should not exist
     typedef QPair<IndexedString, IndexedString> StringPair;
@@ -116,6 +115,9 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original, const Inde
         Q_ASSERT(files.first != original);
 #endif
     d->m_files.insert(d->m_index, qMakePair(original, modified));
+    
+    d->createEditPart(modified, info);
+    switchEditView();
 }
 
 bool ApplyChangesWidget::applyAllChanges()
@@ -170,6 +172,16 @@ void ApplyChangesWidgetPrivate::jump( const QModelIndex & idx)
     view->setCursorPosition(r.start());
 }
 
+void ApplyChangesWidgetPrivate::updateButtonLabel()
+{
+    KPushButton * switchButton(parent->button(KDialog::User1));
+    
+    if(m_kompare.widgetActive(m_index))
+        switchButton->setText("Edit Document");
+    else
+        switchButton->setText("View Differences");
+}
+
 void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const QString & info)
 {
     QWidget * widget = m_documentTabs->currentWidget();
@@ -186,11 +198,6 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const
     
     //Open the best code representation, even if it is artificial
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
-    
-    //KateDocument does not accept streaming of data for some reason
-    //Q_ASSERT(m_editParts[m_index]->openStream(mimetype->name(), url));
-    //Q_ASSERT(m_editParts[m_index]->writeStream(repr->text().toLocal8Bit()));
-    //Q_ASSERT(m_editParts[m_index]->closeStream());
     if(!repr->fileExists())
     {
         KTemporaryFile * temp(new KTemporaryFile);
@@ -246,10 +253,42 @@ void ApplyChangesWidget::removal(KTextEditor::Document *document, const KTextEdi
     d->addItem(d->m_changes[d->m_index], document, range, i18n("Remove"));
 }
 
+void ApplyChangesWidget::switchEditView()
+{
+    if(d->m_kompare.widgetActive(d->m_index))
+    {
+        //Chage into editPart
+        d->m_editParts[d->m_index]->widget()->parentWidget()->setVisible(true);
+        d->m_kompare.hideWidget(d->m_index);
+    }
+    else
+    {
+        d->m_editParts[d->m_index]->widget()->parentWidget()->setVisible(false);
+        //Change into KomparePart
+        d->m_kompare.compare(d->m_files[d->m_index].first, document()->text(),
+                             d->m_documentTabs->widget(d->m_index), d->m_index);
+    }
+    
+    d->updateButtonLabel();
+}
+
 void ApplyChangesWidget::indexChanged(int newIndex)
 {
     Q_ASSERT(newIndex != -1);
     d->m_index = newIndex;
+    d->updateButtonLabel();
+}
+
+void ApplyChangesWidget::updateDiffView(int index)
+{
+    int prevIndex = d->m_index;
+    d->m_index = index == -1 ? d->m_index : index;
+    
+    switchEditView();
+    switchEditView();
+    
+    d->m_index = prevIndex;
+    
 }
 
 }

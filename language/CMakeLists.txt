@@ -106,9 +106,10 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/applychangeswidget.cpp
     codegen/createclass.cpp
     codegen/codegenerator.cpp
+    codegen/coderepresentation.cpp
     codegen/documentchangeset.cpp
     codegen/duchainchangeset.cpp
-    codegen/coderepresentation.cpp
+    codegen/komparesupport.cpp
     codegen/overridespage.cpp
     codegen/utilities.cpp
 
@@ -124,15 +125,17 @@ set(kdevplatformlanguage_LIB_SRCS
 option(WITH_KOMPARE_PART "Search for the Kompare interface to enable KomparePart support" ON)
 if(WITH_KOMPARE_PART)
     find_path(KOMPARE_INCLUDES kompareinterface.h HINTS ${KDE4_INCLUDE_DIR}/kompare)
+    set(ENABLE_KOMPARE FALSE KOMPARE_INCLUDES AND ${KDE_VERSION} VERSION_GREATER 4.3.0)
 endif(WITH_KOMPARE_PART)
 
 macro_log_feature(KOMPARE_INCLUDES "Kompare Part" "Enhance code generation user feedback" "" FALSE)
-if(KOMPARE_INCLUDES)
-    message(STATUS "Kompare interfaces FOUND. Enabling Kompare Support")
-    add_definitions(-DKOMPARE_ENABLED)
-else(KOMPARE_INCLUDES)
+if(ENABLE_KOMPARE)
+    message(STATUS "Kompare interfaces FOUND. Enabling Kompare Support ")
+    add_definitions(-DKOMPARE_ENABLED=true)
+else(ENABLE_KOMPARE)
     message(STATUS "Kompare interfaces NOT FOUND. Kompare Support cannot be enabled")
-endif(KOMPARE_INCLUDES)
+    add_definitions(-DKOMPARE_ENABLED=false)
+endif(ENABLE_KOMPARE)
 
 
 set( kdevplatformlanguage_LIB_UI
