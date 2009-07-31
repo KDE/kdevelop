@@ -631,7 +631,16 @@ public:
 
     Ui::OutputLocationDialog* output;
     CreateClassWizard* parent;
+    
+    void updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable);
 };
+
+void OutputPagePrivate::updateRanges(KIntNumInput * line, KIntNumInput * column, bool enable)
+{
+    kDebug() << "Updating Ranges, file exists: " << enable;
+    line->setEnabled(enable);
+    column->setEnabled(enable);
+}
 
 OutputPage::OutputPage(CreateClassWizard* parent)
     : QWizardPage(parent)
@@ -647,16 +656,11 @@ OutputPage::OutputPage(CreateClassWizard* parent)
     d->output->headerUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
     d->output->implementationUrl->setMode( KFile::File | KFile::LocalOnly );
     d->output->implementationUrl->fileDialog()->setOperationMode( KFileDialog::Saving );
-
-    registerField("headerUrl*", d->output->headerUrl);
-    registerField("implementationUrl*", d->output->implementationUrl);
-    registerField("headerLine", d->output->headerLineNumber);
-    registerField("headerColumn", d->output->headerColumnNumber);
-    registerField("implementationLine", d->output->implementationLineNumber);
-    registerField("implementationColumn", d->output->implementationColumnNumber);
     
     
     connect(d->output->lowerFilenameCheckBox, SIGNAL(stateChanged(int)), this, SLOT(updateFileNames()));
+    connect(d->output->headerUrl, SIGNAL(textChanged(const QString &)), this, SLOT(updateHeaderRanges(const QString &)));
+    connect(d->output->implementationUrl, SIGNAL(textChanged(const QString &)), this, SLOT(updateImplementationRanges(const QString &)));
 }
 
 void OutputPage::initializePage()
@@ -670,6 +674,18 @@ void OutputPage::updateFileNames() {
     d->output->implementationUrl->setUrl(d->parent->generator()->implementationUrlFromBase(d->parent->d->baseUrl, d->output->lowerFilenameCheckBox->isChecked()));
 }
 
+void OutputPage::updateHeaderRanges(const QString & url)
+{
+    QFileInfo info(url);
+    d->updateRanges(d->output->headerLineNumber, d->output->headerColumnNumber, info.exists() && !info.isDir());
+}
+
+void OutputPage::updateImplementationRanges(const QString & url)
+{
+    QFileInfo info(url);
+    d->updateRanges(d->output->implementationLineNumber, d->output->implementationColumnNumber, info.exists() && !info.isDir());
+}
+
 bool OutputPage::isComplete() const
 {
     return !d->output->headerUrl->url().url().isEmpty() && !d->output->implementationUrl->url().url().isEmpty();
@@ -679,8 +695,8 @@ bool OutputPage::validatePage()
 {
     d->parent->generator()->setHeaderUrl(d->output->headerUrl->text());
     d->parent->generator()->setImplementationUrl(d->output->implementationUrl->text());
-    d->parent->generator()->setHeaderPosition(SimpleCursor(field("headerLine").toInt(), field("headerColumn").toInt()));
-    d->parent->generator()->setHeaderPosition(SimpleCursor(field("implementationLine").toInt(), field("implementationColumn").toInt()));
+    d->parent->generator()->setHeaderPosition(SimpleCursor(d->output->headerLineNumber->value(), d->output->headerColumnNumber->value()));
+    d->parent->generator()->setImplementationPosition(SimpleCursor(d->output->implementationLineNumber->value(), d->output->implementationColumnNumber->value()));
     return true;
 }
 
