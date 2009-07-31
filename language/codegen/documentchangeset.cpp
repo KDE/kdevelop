@@ -162,7 +162,7 @@ IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file ) const
 QList<QPair<IndexedString, IndexedString> > DocumentChangeSet::tempNamesForAll() const
 {
     QList<QPair<IndexedString, IndexedString> > names;
-    for(QMap< IndexedString, QPair<IndexedString, KSharedPtr<InsertArtificialCodeRepresentation> > >::Iterator it = d->tempFiles.begin();
+    for(QMap< IndexedString, DocumentChangeSetPrivate::TempPair >::Iterator it = d->tempFiles.begin();
         it != d->tempFiles.end(); ++it)
         names << qMakePair(it.key(), it.value().first);
     
@@ -591,8 +591,19 @@ void DocumentChangeSetPrivate::addFileToProject(IndexedString file)
 
 void DocumentChangeSetPrivate::addTempFile(IndexedString originalName, const QString & text)
 {
-    ///@todo An actual algorithm to find an appropriate name to avoid potential name collision
-    IndexedString tempFile(CodeRepresentation::artificialUrl(originalName.str()));
+    QString name = originalName.str();
+    KUrl url = CodeRepresentation::artificialUrl(name);
+    
+    unsigned int counter = 0;
+    //Search for a unique new url for this file
+    while(artificialCodeRepresentationExists(IndexedString(url)))
+    {
+        //Increment a number reference before the period
+        name.insert(name.lastIndexOf("."), QString::number(counter++));
+        url = CodeRepresentation::artificialUrl(name);
+    }
+    
+    IndexedString tempFile(url);
     
     tempFiles[originalName] = qMakePair(tempFile, InsertArtificialCodeRepresentationPointer(new InsertArtificialCodeRepresentation(tempFile, text)));
     tempToOriginal[tempFile] = originalName;
