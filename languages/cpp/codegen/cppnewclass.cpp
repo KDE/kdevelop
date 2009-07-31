@@ -184,12 +184,29 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   Identifier classId = Identifier(name());
 
   // Header protector
-  QString headerGuard = headerUrl().fileName().toUpper().replace('.', '_').replace('-','_');
-  if (m_namespaces.size())
-    headerGuard.prepend(m_namespaces.join("_").toUpper() + '_');
+  //If this is a new file add the header guard
+  QString headerGuard;
+  bool headerExists;
+  {
+    QFileInfo info(headerUrl().toLocalFile());
+    headerExists = info.exists();
+  }
+  if(!headerExists) 
+  {
+    if(headerPosition() != SimpleCursor())
+    {
+      kWarning() << "A header position was specified for a new file, ignoring.";
+      setHeaderPosition(SimpleCursor());
+    }
+    
+    headerGuard = headerUrl().fileName().toUpper().replace('.', '_').replace('-','_');
+    if (m_namespaces.size())
+      headerGuard.prepend(m_namespaces.join("_").toUpper() + '_');
 
-  output << "#ifndef " << headerGuard << '\n';
-  output << "#define " << headerGuard << "\n\n";
+    
+    output << "#ifndef " << headerGuard << '\n';
+    output << "#define " << headerGuard << "\n\n";
+  }
 
   //Add #includes
   
@@ -263,7 +280,8 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   for(int i = 0; i < m_namespaces.size(); ++i)
     output << "}\n\n";
 
-  output << "#endif // " << headerGuard << '\n';
+  if(!headerExists)
+    output << "#endif // " << headerGuard << '\n';
   
   DocumentChangeSet changes;
   changes.addChange(DocumentChange(IndexedString(headerUrl().path()),
