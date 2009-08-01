@@ -349,6 +349,8 @@ namespace GDBMI
     struct ResultRecord : public Record, public TupleValue
     {
         ResultRecord() { Record::kind = Result; }
+        
+        enum { CommandResult, ExecNotification, StatusNotification, GeneralNotification } subkind;
 
         QString reason;
     };

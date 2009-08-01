@@ -96,6 +96,9 @@ Q_SIGNALS:
     /** FIXME: temporary, to be eliminated.  */
     void resultRecord(const GDBMI::ResultRecord& s);
     
+    /** Reports a general MI notification.  */
+    void notification(const GDBMI::ResultRecord& n);
+    
     /** Emitted for error that is not handled by the
         command being executed. */
     void error(const GDBMI::ResultRecord& s);

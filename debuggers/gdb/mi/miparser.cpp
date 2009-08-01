@@ -75,6 +75,9 @@ Record *MIParser::parse(FileSymbol *file)
             // marker.
             parseResultRecord(record);
             break;
+        case '=':
+            parseResultRecord(record);
+            break;
         default:
             break;
     }
@@ -120,7 +123,8 @@ bool MIParser::parseStreamRecord(Record *&record)
 
 bool MIParser::parseResultRecord(Record *&record)
 {
-    if (lex->lookAhead() != '^' && lex->lookAhead() != '*')
+    char c = lex->lookAhead();
+    if (c != '^' && c != '*' && c != '=' && c != '+')
         return false;
     lex->nextToken();
 
@@ -130,7 +134,17 @@ bool MIParser::parseResultRecord(Record *&record)
 
     std::auto_ptr<ResultRecord> res(new ResultRecord);
     res->reason = reason;
-
+    if (c == '^')
+        res->subkind = ResultRecord::CommandResult;
+    else if (c == '*')
+        res->subkind = ResultRecord::ExecNotification;
+    else if (c == '+')
+        res->subkind == ResultRecord::StatusNotification;
+    else {
+        Q_ASSERT(c == '=');
+        res->subkind = ResultRecord::GeneralNotification;        
+    }
+                
     if (lex->lookAhead() != ',') {
         record = res.release();
         return true;

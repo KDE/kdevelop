@@ -241,7 +241,17 @@ void GDB::processLine(const QByteArray& line)
                    emit userCommandOutput(QString::fromLocal8Bit(line));
                else
                    emit internalCommandOutput(QString::fromLocal8Bit(line) + '\n');
-
+               
+               // FIXME: the code below should be reviewed to consider result record
+               // subtype when doing all decisions.
+               
+               if (result.subkind == GDBMI::ResultRecord::GeneralNotification)
+               {
+                   kDebug() << "General notification";
+                   emit notification(result);
+                   return;
+               }
+               
                if (result.reason == "stopped")
                {
                    emit programStopped(result);
