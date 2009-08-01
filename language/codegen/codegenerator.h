@@ -102,9 +102,9 @@ public:
     void autoGenerate(DUContext * context, const DocumentRange * range);
     
     /**
-     * @return the changes generated with autoGeneration
+     * \return The Document Change set to add a single Change, it is more addicient than creating a local DocumentChangeSet and merging it
      */
-    DocumentChangeSet documentChanges();
+    DocumentChangeSet & documentChangeSet();
     
 
 protected:
@@ -118,11 +118,6 @@ protected:
     void addChangeSet(DUChainChangeSet* duChainChange);
     
     void addChangeSet(DocumentChangeSet & docChangeSet);
-    
-    /**
-     * \return The Document Change set to add a single Change, it is more addicient than creating a local DocumentChangeSet and merging it
-     */
-    DocumentChangeSet & documentChangeSet();
     
     /**
      * Accessor for KJob's KJob::setErrorText.
