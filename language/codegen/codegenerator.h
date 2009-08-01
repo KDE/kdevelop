@@ -101,6 +101,11 @@ public:
      */
     void autoGenerate(DUContext * context, const DocumentRange * range);
     
+    /**
+     * @return the changes generated with autoGeneration
+     */
+    DocumentChangeSet documentChanges();
+    
 
 protected:
 
