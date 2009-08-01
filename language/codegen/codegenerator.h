@@ -89,7 +89,7 @@ public:
     const QString & errorText() const;
     
     // Implementation from kJob
-    bool execute(void);
+    bool execute();
 
     /**
      * @brief Indicates that this generation should not expect interaction with the user/
@@ -127,12 +127,12 @@ protected:
     /**
      * Clean up all the change sets that this generator is in charge of
      */
-    void clearChangeSets(void);
+    void clearChangeSets();
 
 private:
     class CodeGeneratorPrivate * const d;
     
-    bool displayChanges(void);
+    bool displayChanges();
 };
 
 /**
@@ -215,7 +215,7 @@ protected:
      */
     void addChangeSet(LanguageChangeSet * astChange);
     
-    void clearChangeSets(void)
+    void clearChangeSets()
     {
         CodeGeneratorBase::clearChangeSets();
     }
