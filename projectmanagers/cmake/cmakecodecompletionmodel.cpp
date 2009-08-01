@@ -137,8 +137,12 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             {
                 DUChainReadLocker lock(DUChain::lock());
                 int pos=index.row()-m_commands.count();
-                AbstractType::Ptr type; Q_ASSERT(type = m_declarations[pos].data()->abstractType());
-                FunctionType::Ptr func; Q_ASSERT(func = type.cast<FunctionType>());
+                AbstractType::Ptr type; 
+                type = m_declarations[pos].data()->abstractType();
+                Q_ASSERT(type);
+                FunctionType::Ptr func;
+                func = type.cast<FunctionType>();
+                Q_ASSERT(func);
                 
                 QStringList args;
                 foreach(const AbstractType::Ptr& t, func->arguments())
