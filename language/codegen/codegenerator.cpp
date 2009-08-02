@@ -22,6 +22,8 @@
 #include "documentchangeset.h"
 #include "duchainchangeset.h"
 
+#include <klocale.h>
+
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
@@ -121,6 +123,12 @@ bool CodeGeneratorBase::execute()
     KUrl document;
     if(!d->autoGen)
     {
+        if( !ICore::self()->documentController()->activeDocument() )
+        {
+            setErrorText( i18n("Could not find an open document" ) );
+            return false;
+        }
+
         document = ICore::self()->documentController()->activeDocument()->url();
         
         if(d->range.isEmpty())
