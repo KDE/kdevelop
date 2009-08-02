@@ -100,7 +100,7 @@ void BrowseManager::eventuallyStartDelayedBrowsing() {
         emit startDelayedBrowsing(m_browingStartedInView);
 }
 
-BrowseManager::BrowseManager(ContextController* controller) : QObject(controller), m_controller(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
+BrowseManager::BrowseManager(ContextBrowserView* controller) : QObject(controller), m_view(controller), m_browsing(false), m_browsingByKey(0), m_watcher(this) {
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
     
@@ -158,7 +158,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         }
         
         if(!m_browsing)
-            m_controller->browseButton()->setChecked(true);
+            m_view->setAllowBrowsing(true); 
         
     }
     
@@ -168,7 +168,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease) || 
        (focusEvent && focusEvent->lostFocus())) {
         if(!m_browsing)
-            m_controller->browseButton()->setChecked(false);
+            m_view->setAllowBrowsing(false);
         m_browsingByKey = 0;
         emit stopDelayedBrowsing();
     }
@@ -306,12 +306,12 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
 
-    connect(view, SIGNAL(navigateLeft()), m_controller->view(), SLOT(navigateLeft()));
-    connect(view, SIGNAL(navigateRight()), m_controller->view(), SLOT(navigateRight()));
-    connect(view, SIGNAL(navigateUp()), m_controller->view(), SLOT(navigateUp()));
-    connect(view, SIGNAL(navigateDown()), m_controller->view(), SLOT(navigateDown()));
-    connect(view, SIGNAL(navigateAccept()), m_controller->view(), SLOT(navigateAccept()));
-    connect(view, SIGNAL(navigateBack()), m_controller->view(), SLOT(navigateBack()));
+    connect(view, SIGNAL(navigateLeft()), m_view, SLOT(navigateLeft()));
+    connect(view, SIGNAL(navigateRight()), m_view, SLOT(navigateRight()));
+    connect(view, SIGNAL(navigateUp()), m_view, SLOT(navigateUp()));
+    connect(view, SIGNAL(navigateDown()), m_view, SLOT(navigateDown()));
+    connect(view, SIGNAL(navigateAccept()), m_view, SLOT(navigateAccept()));
+    connect(view, SIGNAL(navigateBack()), m_view, SLOT(navigateBack()));
 }
 
 void BrowseManager::Watcher::viewAdded(KTextEditor::View* view) {
@@ -334,7 +334,7 @@ void BrowseManager::setBrowsing(bool enabled) {
     }
 }
 
-BrowseManager::Watcher::Watcher(BrowseManager* manager) : EditorViewWatcher(masterWidget(manager->m_controller->view())), m_manager(manager) {
+BrowseManager::Watcher::Watcher(BrowseManager* manager) : EditorViewWatcher(masterWidget(manager->m_view)), m_manager(manager) {
     foreach(KTextEditor::View* view, allViews())
         m_manager->applyEventFilter(view, true);
 }

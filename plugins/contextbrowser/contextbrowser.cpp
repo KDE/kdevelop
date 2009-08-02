@@ -135,8 +135,9 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* /*win
       
     if(quickOpen) {
 #if 0
-      KAction* outline = actions->addAction("context_outline");
-      IQuickOpenLine* line = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Functions"));
+      KAction* outline = actions.addAction("outline_line");
+      outline->setText(i18n("Outline"));
+      IQuickOpenLine* line = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
       line->setDefaultText(i18n("Outline..."));
       outline->setDefaultWidget(line);
 #endif

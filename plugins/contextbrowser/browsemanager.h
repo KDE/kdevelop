@@ -61,12 +61,16 @@ class EditorViewWatcher : QObject {
     QWidget* m_childrenOf;
 };
 
-class ContextController;
+class ContextBrowserView;
+
+/**
+ * Integrates the context-browser with the editor views, by listening for navigation events, and implementing html-like source browsing
+ */
 
 class BrowseManager : public QObject {
     Q_OBJECT
     public:
-        BrowseManager(ContextController* controller);
+        BrowseManager(ContextBrowserView* controller);
     Q_SIGNALS:
         //Emitted whenever the shift-key has been pressed + released without any other key in between
         void shiftKeyTriggered();
@@ -94,7 +98,7 @@ class BrowseManager : public QObject {
         //Installs/uninstalls the event-filter
         void applyEventFilter(QWidget* object, bool install);
         virtual bool eventFilter(QObject * watched, QEvent * event) ;
-        ContextController* m_controller;
+        ContextBrowserView* m_view;
         bool m_browsing;
         int m_browsingByKey; //Whether the browsing was started because of a key
         Watcher m_watcher;

@@ -39,9 +39,6 @@ class QMenu;
 class KComboBox;
 class BrowseManager;
 
-class ContextController;     // declared below
-class DeclarationController; // declared below
-
 namespace KDevelop {
 class IDocument;
 }
@@ -56,7 +53,6 @@ class ContextBrowserView : public QWidget {
         void setContext(KDevelop::DUContext* context);
         void setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force = false);
         void setSpecialNavigationWidget(QWidget*);
-        void updateHistory(KDevelop::DUContext*, const KDevelop::SimpleCursor&);
         void updateMainWidget(QWidget*);
 
         /** Allows a single update of the view even if in locked state.
@@ -72,67 +68,16 @@ class ContextBrowserView : public QWidget {
             return m_navigationWidget;
         }
         
-    Q_SIGNALS:
-        void startDelayedBrowsing(KTextEditor::View*);
-        void stopDelayedBrowsing();
-        
-    public Q_SLOTS:
-        void navigateLeft();
-        void navigateRight();
-        void navigateUp();
-        void navigateDown();
-        void navigateAccept();
-        void navigateBack();
-        
-    private Q_SLOTS:
-        void updateLockIcon(bool); 
-        void declarationMenu();
-
-    private:
-        virtual void showEvent(QShowEvent* event);
-        virtual bool event(QEvent* event);
-        virtual bool eventFilter(QObject* object, QEvent* event);
-        
-        
-        virtual void focusInEvent(QFocusEvent* event);
-        virtual void focusOutEvent(QFocusEvent* event);
-        bool isLocked() const;
-        void resetWidget();
-
-    private:
-        ContextBrowserPlugin* m_plugin;
-        ContextController* m_contextCtrl;
-        DeclarationController* m_declarationCtrl;
-        QVBoxLayout* m_layout;
-        QToolButton* m_lockButton;
-        QToolButton* m_declarationMenuButton;
-        
-        QHBoxLayout* m_buttons;
-        QPointer<QWidget> m_navigationWidget;
-        KDevelop::DeclarationId m_navigationWidgetDeclaration;
-        bool m_allowLockedUpdate;
-        KDevelop::IndexedTopDUContext m_lastUsedTopContext;
-};
-
-// handles Context related operations for ContextBrowserView
-class ContextController : public QObject {
-    Q_OBJECT
-    public:
-        ContextController(ContextBrowserView*);
-        virtual ~ContextController();
-
         ///duchain must be locked
         ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
         void updateHistory(KDevelop::DUContext* context, const
         KDevelop::SimpleCursor& cursorPosition, bool force = false);
         QWidget* createWidget(KDevelop::DUContext* context);
+        
+        //duchain must be locked
+        QWidget* createWidget(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext);
 
-        QToolButton* previousButton() const;
-        QToolButton* nextButton() const;
-        QToolButton* browseButton() const;
-        KComboBox* currentContextBox() const;
-
-        ContextBrowserView* view() const;
+        KDevelop::IndexedDeclaration declaration() const;
         
         struct HistoryEntry {
             //Duchain must be locked
@@ -152,21 +97,44 @@ class ContextController : public QObject {
 
         void updateDeclarationListBox(KDevelop::DUContext* context);
         
-        QWidget* focusBackWidget();
+        void setAllowBrowsing(bool allow) ;
         
-        BrowseManager* browseManager() const;
+    Q_SIGNALS:
+        void startDelayedBrowsing(KTextEditor::View*);
+        void stopDelayedBrowsing();
         
     public Q_SLOTS:
+        void navigateLeft();
+        void navigateRight();
+        void navigateUp();
+        void navigateDown();
+        void navigateAccept();
+        void navigateBack();
+
         void historyNext();
         void historyPrevious();
         void nextMenuAboutToShow();
         void previousMenuAboutToShow();
         void actionTriggered();
         void switchFocusToContextBrowser();
+        
     private Q_SLOTS:
+        void updateLockIcon(bool); 
+        void declarationMenu();
         void comboItemActivated(int index);
         void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
+        
+
     private:
+        virtual void showEvent(QShowEvent* event);
+        virtual bool event(QEvent* event);
+        virtual bool eventFilter(QObject* object, QEvent* event);
+        
+        virtual void focusInEvent(QFocusEvent* event);
+        virtual void focusOutEvent(QFocusEvent* event);
+        bool isLocked() const;
+        void resetWidget();
+        
         bool isPreviousEntry(KDevelop::DUContext*, const KDevelop::SimpleCursor& cursor);
         QString actionTextFor(int historyIndex);
         void updateButtonState();
@@ -174,6 +142,20 @@ class ContextController : public QObject {
         void fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices);
 
     private:
+        
+        KDevelop::IndexedDeclaration m_declaration;
+        
+        ContextBrowserPlugin* m_plugin;
+        QVBoxLayout* m_layout;
+        QToolButton* m_lockButton;
+        QToolButton* m_declarationMenuButton;
+        
+        QHBoxLayout* m_buttons;
+        QPointer<QWidget> m_navigationWidget;
+        KDevelop::DeclarationId m_navigationWidgetDeclaration;
+        bool m_allowLockedUpdate;
+        KDevelop::IndexedTopDUContext m_lastUsedTopContext;
+
         KDevelop::IndexedDUContext m_context;
         int m_nextHistoryIndex;
         
@@ -181,7 +163,6 @@ class ContextController : public QObject {
         QToolButton *m_previousButton;
         QToolButton *m_nextButton;
         QMenu* m_previousMenu, *m_nextMenu;
-        ContextBrowserView* m_view;
         QToolButton *m_browseButton;
         KComboBox* m_currentContextBox;
         QList<KDevelop::IndexedDeclaration> m_listDeclarations;
@@ -189,20 +170,6 @@ class ContextController : public QObject {
         BrowseManager* m_browseManager;
         //Used to not record jumps triggered by the context-browser as history entries
         QPointer<QWidget> m_focusBackWidget;
-};
-
-// Handles Declaration related operations for ContextBrowserView
-class DeclarationController : public QWidget {
-    Q_OBJECT
-    public:
-        DeclarationController();
-        //duchain must be locked
-        QWidget* createWidget(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext);
-
-        KDevelop::IndexedDeclaration declaration();
-        
-    private:
-        KDevelop::IndexedDeclaration m_declaration;
 };
 
 #endif
