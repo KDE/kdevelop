@@ -129,19 +129,20 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* /*win
     nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 
+#if 0
+    If this gets re-enabled, this plugin needs to declare a dependency on the quickopen interface in its .desktop file
     IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
     
       Q_ASSERT(quickOpen);
       
     if(quickOpen) {
-#if 0
       KAction* outline = actions.addAction("outline_line");
       outline->setText(i18n("Outline"));
       IQuickOpenLine* line = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
       line->setDefaultText(i18n("Outline..."));
       outline->setDefaultWidget(line);
-#endif
     }
+#endif
 }
 
 K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
