@@ -33,10 +33,12 @@ template<> inline char* toString(const QFileInfo& fi)
 {
     return qstrdup(fi.filePath().toLatin1().constData());
 }
+#if QT_VERSION < QT_VERSION_CHECK(4,6,0)
 template<> inline char* toString(const QVariant& va)
 {
     return qstrdup(va.toString().toLatin1().constData());
 }
+#endif
 template<> inline char* toString(const KUrl& url)
 {
     return qstrdup(url.toLocalFile().toLatin1().constData());
