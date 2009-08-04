@@ -476,9 +476,9 @@ bool ContextBrowserPlugin::findSpecialObject(View* view, const SimpleCursor& pos
         QMutexLocker lock(iface->smartMutex());
         //Q_ASSERT(m_highlightedRange[view]->document() == view->document());
         if (m_highlightedRange[view]->document() == view->document()) {
-	  delete m_highlightedRange[view];
+          delete m_highlightedRange[view];
           m_highlightedRange.remove(view);
-      	} else {
+      } else {
           kDebug() << "m_highlightedRange[view]->document() != view->document()";	
         }
       }
@@ -638,7 +638,7 @@ void ContextBrowserPlugin::updateBrowserWidgetFor(View* view)
     Declaration* foundDeclaration = 0;
     
     //Only update the history if this context is around the text cursor
-    if(position == SimpleCursor(view->cursorPosition()))
+    if(core()->documentController()->activeDocument() && position == SimpleCursor(view->cursorPosition()) && view->document() == core()->documentController()->activeDocument()->textDocument())
     {
       foreach(ContextBrowserView* contextView, m_views)
         if(masterWidget(contextView) == masterWidget(view))
