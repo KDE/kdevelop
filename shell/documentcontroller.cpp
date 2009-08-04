@@ -464,7 +464,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         if(doc->textDocument() && doc->textDocument()->activeView())
             activePosition = doc->textDocument()->activeView()->cursorPosition();
         
-        emit documentJumpPerformed(doc, range.start(), previousActiveDocument, previousActivePosition);
+        emit documentJumpPerformed(doc, range.isValid() ? range.start() : activePosition, previousActiveDocument, previousActivePosition);
     }
     
     return doc;
