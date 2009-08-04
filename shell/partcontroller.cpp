@@ -201,7 +201,7 @@ KParts::Part* PartController::createPart( const KUrl & url )
     else
         mimeType = KMimeType::findByUrl( url );
 
-    KParts::Part* part = IPartController::createPart( mimeType->name() );
+    KParts::Part* part = createPart( mimeType->name() );
     if( part )
     {
         readOnly( part ) ->openUrl( url );

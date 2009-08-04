@@ -61,6 +61,8 @@ public:
 
     bool canCreatePart( const KUrl &url );
 
+    using IPartController::createPart;
+
     KParts::Part* createPart( const KUrl &url );
     KParts::Part* createPart( const QString &mimeType,
                               const QString &partType,
