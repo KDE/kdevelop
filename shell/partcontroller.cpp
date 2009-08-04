@@ -180,12 +180,7 @@ bool PartController::canCreatePart(const KUrl& url)
 
     KService::List offers = KMimeTypeTrader::self()->query(
                                 mimeType->name(),
-                                "KParts/ReadOnlyPart",
-                                QString( "'%1' in ServiceTypes" ).arg( "KParts/ReadOnlyPart" ) );
-    offers += KMimeTypeTrader::self()->query(
-                                mimeType->name(),
-                                "KParts/ReadOnlyPart",
-                                QString( "'%1' in ServiceTypes" ).arg( "KParts/ReadWritePart" ) );
+                                "KParts/ReadOnlyPart" );
 
     return offers.count() > 0;
 }
