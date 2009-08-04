@@ -97,6 +97,7 @@ private:
     {
     public:
         TreeItem() : parent(0) {}
+        virtual ~TreeItem() {}
         TreeItem* parent;
         int row;
         QList<TreeItem*> children;
@@ -121,7 +122,7 @@ private:
     public:
         QString text;
     };
-    TreeItem* findItemForProject( IProject* );
+    ProjectItem* findItemForProject( IProject* );
     QList<TreeItem*> topItems;
 };
 

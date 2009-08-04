@@ -256,10 +256,10 @@ LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForPr
 {
     foreach( TreeItem* t, topItems )
     {
-        ProjectItem pi = dynamic_cast<ProjectItem*>( t );
+        ProjectItem* pi = dynamic_cast<ProjectItem*>( t );
         if( pi && pi->project == p ) 
         {
-            return t;
+            return pi;
         }
     }
     Q_ASSERT(false);
