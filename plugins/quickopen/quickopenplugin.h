@@ -77,7 +77,7 @@ public:
 
     QuickOpenLineEdit* createQuickOpenLineWidget();
     
-    virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type);
+    virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind);
     
 public slots:
     void quickOpen();
@@ -98,7 +98,8 @@ private slots:
 
 private:
     friend class QuickOpenLineEdit;
-    QuickOpenLineEdit* quickOpenLine();
+    friend class StandardQuickOpenWidgetCreator;
+    QuickOpenLineEdit* quickOpenLine(QString name = "Quickopen");
 
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);
@@ -162,6 +163,7 @@ class QuickOpenWidget : public QFrame {
   bool m_expandedTemporary, m_hadNoCommandSinceAlt;
   QTime m_altDownTime;
   QString m_preselectedText;
+  public:
   Ui::QuickOpen o;
   
   friend class QuickOpenWidgetDialog;
@@ -184,16 +186,16 @@ class QuickOpenWidgetDialog : public QObject {
   QuickOpenWidget* m_widget;
 };
 
+class QuickOpenWidgetCreator;
+
 class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
   Q_OBJECT
   public:
-    QuickOpenLineEdit() ;
+    QuickOpenLineEdit(QuickOpenWidgetCreator* creator) ;
     ~QuickOpenLineEdit() ;
     
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
-    
-    void setItems(const QStringList& scopes, const QStringList& items);
     
     virtual void setDefaultText(QString text) {
       m_defaultText = text;
@@ -211,9 +213,8 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     
     QPointer<QuickOpenWidget> m_widget;
     bool m_forceUpdate;
-    QStringList m_scopes;
-    QStringList m_items;
     QString m_defaultText;
+    QuickOpenWidgetCreator* m_widgetCreator;
 };
 
 #endif // QUICKOPENPLUGIN_H

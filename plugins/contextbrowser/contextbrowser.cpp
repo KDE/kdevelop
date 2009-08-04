@@ -61,6 +61,7 @@
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
+#include <sublime/mainwindow.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -82,9 +83,9 @@ class ContextBrowserViewFactory: public KDevelop::IToolViewFactory
 public:
     ContextBrowserViewFactory(ContextBrowserPlugin *plugin): m_plugin(plugin) {}
 
-    virtual QWidget* create(QWidget */*parent*/ = 0)
+    virtual QWidget* create(QWidget *parent = 0)
     {
-        ContextBrowserView* ret = new ContextBrowserView(m_plugin);
+        ContextBrowserView* ret = new ContextBrowserView(m_plugin, parent);
         QObject::connect(ret, SIGNAL(startDelayedBrowsing(KTextEditor::View*)), m_plugin, SLOT(startDelayedBrowsing(KTextEditor::View*)));
         QObject::connect(ret, SIGNAL(stopDelayedBrowsing()), m_plugin, SLOT(stopDelayedBrowsing()));
         return ret;
@@ -104,7 +105,7 @@ private:
     ContextBrowserPlugin *m_plugin;
 };
 
-void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions) {
+void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) {
     xmlFile = "kdevcontextbrowser.rc" ;
 
     KAction* previousContext = actions.addAction("previous_context");
@@ -129,20 +130,11 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* /*win
     nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 
-#if 0
-    If this gets re-enabled, this plugin needs to declare a dependency on the quickopen interface in its .desktop file
-    IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
-    
-      Q_ASSERT(quickOpen);
-      
-    if(quickOpen) {
-      KAction* outline = actions.addAction("outline_line");
-      outline->setText(i18n("Outline"));
-      IQuickOpenLine* line = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
-      line->setDefaultText(i18n("Outline..."));
-      outline->setDefaultWidget(line);
-    }
-#endif
+    KAction* outline = actions.addAction("outline_line");
+    outline->setText(i18n("Context Browser"));
+    QWidget* w = toolbarWidgetForMainWindow(window);
+    w->setHidden(false);
+    outline->setDefaultWidget(w);
 }
 
 K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
@@ -533,7 +525,6 @@ bool ContextBrowserPlugin::showDeclarationView(View* view, const SimpleCursor& p
         bool success = false;
         foreach(ContextBrowserView* contextView, m_views) {
           if(masterWidget(contextView) == masterWidget(view)) {
-              contextView->updateHistory(ctx, position);
               contextView->setDeclaration(foundDeclaration, ctx->topContext());
               success = true;
           }
@@ -553,7 +544,6 @@ bool ContextBrowserPlugin::showSpecialObjectView(View* view, const SimpleCursor&
           if(masterWidget(contextView) == masterWidget(view)) {
               ILanguageSupport* ls = pickedLanguage->languageSupport();
               QWidget* w = ls->specialLanguageObjectNavigationWidget(view->document()->url(), position);
-              contextView->updateHistory(ctx, position);
               contextView->setSpecialNavigationWidget(w);
               success = true;
             }
@@ -566,7 +556,6 @@ void ContextBrowserPlugin::showContextView(View* view, const SimpleCursor& posit
     Q_ASSERT(ctx);
     foreach(ContextBrowserView* contextView, m_views) {
       if(masterWidget(contextView) == masterWidget(view)) {
-        contextView->updateHistory(ctx, position);
         contextView->setContext(SpecializationStore::self().applySpecialization(ctx, ctx->topContext()));
       }
     }
@@ -647,6 +636,14 @@ void ContextBrowserPlugin::updateBrowserWidgetFor(View* view)
     DUContext* ctx = contextAt(position, topContext);
     if (!ctx) return;
     Declaration* foundDeclaration = 0;
+    
+    //Only update the history if this context is around the text cursor
+    if(position == SimpleCursor(view->cursorPosition()))
+    {
+      foreach(ContextBrowserView* contextView, m_views)
+        if(masterWidget(contextView) == masterWidget(view))
+          contextView->updateHistory(ctx, position);
+    }
     
     if(keptHighlightedDeclaration) {
       foundDeclaration = m_highlightedDeclarations[view].data();
@@ -1028,6 +1025,19 @@ void ContextBrowserPlugin::unRegisterToolView(ContextBrowserView* view)
   m_views.removeAll(view);
 }
 
+QWidget* ContextBrowserPlugin::toolbarWidgetForMainWindow(QWidget* widgetInWindow)
+{
+  QWidget* master = masterWidget(widgetInWindow);
+  
+  for(QList< QPointer< QWidget > >::iterator it = m_toolbarWidgets.begin(); it != m_toolbarWidgets.end(); ++it) {
+    if((*it) && masterWidget(*it) == master) {
+      return *it;
+    }
+  }
+  m_toolbarWidgets.append(new QWidget(master));
+  m_toolbarWidgets.back()->setHidden(true);
+  return m_toolbarWidgets.back();
+}
 
 #include "contextbrowser.moc"
 

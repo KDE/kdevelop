@@ -67,6 +67,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*);
 
+    QWidget* toolbarWidgetForMainWindow(QWidget* widgetInWindow);
+    
   Q_SIGNALS:
     void previousContextShortcut();
     void nextContextShortcut();
@@ -157,6 +159,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     KTextEditor::Document* m_lastInsertionDocument;
     KTextEditor::Cursor m_lastInsertionPos;
     QSet<KTextEditor::View*> m_keepHighlightedDeclaration;
+    QList<QPointer<QWidget> > m_toolbarWidgets;
 };
 
 DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);

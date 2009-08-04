@@ -57,6 +57,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iplugincontroller.h>
 #include <ktexteditor/codecompletioninterface.h>
+#include <language/interfaces/iquickopen.h>
 
 const int maxHistoryLength = 30;
 
@@ -132,11 +133,10 @@ void ContextBrowserView::navigateUp() {
 
 void ContextBrowserView::documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor) {
         
-    kDebug() << "jump from" << (previousDocument ? previousDocument->url().prettyUrl() : QString()) << "to" << (newDocument ? newDocument->url().prettyUrl() : QString());
-    
     DUChainReadLocker lock(DUChain::lock());
     
     if(previousDocument && previousCursor.isValid()) {
+        kDebug() << "updating jump source";
         DUContext* context = getContextAt(previousDocument->url(), previousCursor);
         if(context) {
             updateHistory(context, SimpleCursor(previousCursor), true);
@@ -147,7 +147,9 @@ void ContextBrowserView::documentJumpPerformed( KDevelop::IDocument* newDocument
             ++m_nextHistoryIndex;
         }
     }
+    kDebug() << "new doc: " << newDocument << " new cursor: " << newCursor;
     if(newDocument && newCursor.isValid()) {
+        kDebug() << "updating jump target";
         DUContext* context = getContextAt(newDocument->url(), newCursor);
         if(context) {
             updateHistory(context, SimpleCursor(newCursor), true);
@@ -156,6 +158,7 @@ void ContextBrowserView::documentJumpPerformed( KDevelop::IDocument* newDocument
             m_history.resize(m_nextHistoryIndex); // discard forward history
             m_history.append(HistoryEntry(DocumentCursor(newDocument->url().prettyUrl(), newCursor)));
             ++m_nextHistoryIndex;
+            m_outlineLine->clear();
         }
     }
 }
@@ -164,29 +167,6 @@ void ContextBrowserView::updateButtonState()
 {
     m_nextButton->setEnabled( m_nextHistoryIndex < m_history.size() );
     m_previousButton->setEnabled( m_nextHistoryIndex >= 2 );
-}
-
-void ContextBrowserView::comboItemActivated(int index)
-{
-    if(index >= 0 && index < m_listDeclarations.size()) {
-        IndexedString u;
-        SimpleCursor c;
-        {
-            KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
-            Declaration* activated = m_listDeclarations[index].data();
-            if(activated) {
-                u = activated->url();
-                c = activated->range().start;
-                if(activated->internalContext() && activated->internalContext()->url() == u) {
-                    c = activated->internalContext()->range().start;
-                    if(c.line+1 <= activated->internalContext()->range().end.line)
-                        c = SimpleCursor(c.line+1, 0); //Move more into the body
-                }
-            }
-        }
-        if(c.isValid())
-            ICore::self()->documentController()->openDocument(KUrl(u.str()), c.textCursor());
-    }
 }
 
 void ContextBrowserView::historyNext() {
@@ -342,61 +322,41 @@ bool ContextBrowserView::isPreviousEntry(KDevelop::DUContext* context, const KDe
 }
 
 void ContextBrowserView::updateDeclarationListBox(DUContext* context) {
-    if(!context) {
+    if(!context || !context->owner()) {
+        kDebug() << "not updating box";
         m_listUrl = IndexedString(); ///@todo Compute the context in the document here
-        m_currentContextBox->clear();
+        m_outlineLine->clear();
         return;
     }
+    
+    Declaration* decl = context->owner();
+    
     m_listUrl = context->url();
 
-    class FunctionListFilter : public DUChainUtils::DUChainItemFilter {
-        public:
-        FunctionListFilter(KComboBox* box, QList<IndexedDeclaration>& _declarations) : m_box(box), declarations(_declarations) {
-            box->clear();
-            declarations.clear();
-        }
-        
-        virtual bool accept(Declaration* decl) {
-            if(decl->range().isEmpty())
-                return false;
-                
-            if(decl->isFunctionDeclaration() || (decl->internalContext() && decl->internalContext()->type() == DUContext::Class)) {
-                Declaration* specialDecl = SpecializationStore::self().applySpecialization(decl, decl->topContext());
+    Declaration* specialDecl = SpecializationStore::self().applySpecialization(decl, decl->topContext());
 
-                FunctionType::Ptr function = specialDecl->type<FunctionType>();
-                QString text = specialDecl->qualifiedIdentifier().toString();
-                if(function)
-                    text += function->partToString(KDevelop::FunctionType::SignatureArguments);
-
-                m_box->addItem(text);
-                declarations.append(decl);
-            }
-
-            return true;
-        }
-        virtual bool accept(DUContext* ctx) {
-        return ctx->type() == DUContext::Global || ctx->type() == DUContext::Namespace || ctx->type() == DUContext::Class;
-        }
-        KComboBox* m_box;
-        QList<IndexedDeclaration>& declarations;
-    };
-
-    m_currentContextBox->clear();
-    FunctionListFilter f(m_currentContextBox, m_listDeclarations);
-    DUChainUtils::collectItems(context->topContext(), f);
-    m_currentContextBox->setCurrentIndex(m_listDeclarations.indexOf(context->owner()));
+    FunctionType::Ptr function = specialDecl->type<FunctionType>();
+    QString text = specialDecl->qualifiedIdentifier().toString();
+    if(function)
+        text += function->partToString(KDevelop::FunctionType::SignatureArguments);
+    
+    m_outlineLine->setText(text);
+    m_outlineLine->setCursorPosition(0);
+    
+    kDebug() << "updated" << text;
 }
 
 void ContextBrowserView::updateHistory(KDevelop::DUContext* context, const KDevelop::SimpleCursor& position, bool force)
 {
-    if (context == 0 || isLocked()) return;
-    if(!context->owner() && !force)
+    kDebug() << "updating history";
+    
+    if(m_outlineLine->isVisible())
+        updateDeclarationListBox(context);
+    
+    if(!context && !context->owner() && !force) {
         return; //Only add history-entries for contexts that have owners, which in practice should be functions and classes
                 //This keeps the history cleaner
-
-    if (!isPreviousEntry(context, position) || context->url() != m_listUrl)
-        if(m_currentContextBox->isVisible())
-            updateDeclarationListBox(context);
+    }
 
     if (isPreviousEntry(context, position)) {
         if(m_nextHistoryIndex) {
@@ -465,7 +425,7 @@ void ContextBrowserView::updateLockIcon(bool checked) {
     m_lockButton->setIcon(KIcon(checked ? "document-encrypt" : "document-decrypt"));
 }
 
-ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugin(plugin), m_navigationWidget(new KTextBrowser()), m_nextHistoryIndex(0) {
+ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new KTextBrowser()), m_nextHistoryIndex(0), m_outlineLine(0) {
     setWindowIcon( KIcon("applications-development-web") );
 
     m_browseManager = new BrowseManager(this);
@@ -478,6 +438,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_previousButton->setIcon(KIcon("go-previous"));
     m_previousButton->setEnabled(false);
+    m_previousButton->setFocusPolicy(Qt::NoFocus);
     m_previousMenu = new QMenu();
     m_previousButton->setMenu(m_previousMenu);
     connect(m_previousButton, SIGNAL(clicked(bool)), this, SLOT(historyPrevious()));
@@ -487,6 +448,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_nextButton->setIcon(KIcon("go-next"));
     m_nextButton->setEnabled(false);
+    m_nextButton->setFocusPolicy(Qt::NoFocus);
     m_nextMenu = new QMenu();
     m_nextButton->setMenu(m_nextMenu);
     connect(m_nextButton, SIGNAL(clicked(bool)), this, SLOT(historyNext()));
@@ -497,11 +459,16 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     m_browseButton->setToolTip(i18n("Enable/disable source browse mode"));
     m_browseButton->setWhatsThis(i18n("When this is enabled, you can browse the source-code by clicking in the editor."));
     m_browseButton->setCheckable(true);
+    m_browseButton->setFocusPolicy(Qt::NoFocus);
+    
     connect(m_browseButton, SIGNAL(clicked(bool)), m_browseManager, SLOT(setBrowsing(bool)));
 
-    m_currentContextBox = new KComboBox();
-    m_currentContextBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-    connect(m_currentContextBox, SIGNAL(activated(int)), this, SLOT(comboItemActivated(int)));
+    IQuickOpen* quickOpen = KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>("org.kdevelop.IQuickOpen");
+    
+    if(quickOpen) {
+      m_outlineLine = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
+      m_outlineLine->setDefaultText(i18n("Outline..."));
+    }
     
     connect(m_browseManager, SIGNAL(startDelayedBrowsing(KTextEditor::View*)), this, SIGNAL(startDelayedBrowsing(KTextEditor::View*)));
     connect(m_browseManager, SIGNAL(stopDelayedBrowsing()), this, SIGNAL(stopDelayedBrowsing()));
@@ -521,10 +488,21 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     m_declarationMenuButton->setToolTip(i18n("Declaration menu"));
     connect(m_declarationMenuButton, SIGNAL(clicked(bool)), SLOT(declarationMenu()));
     
-    m_buttons->addWidget(m_previousButton);
-    m_buttons->addWidget(m_currentContextBox);
-    m_buttons->addWidget(m_nextButton);
-    m_buttons->addWidget(m_browseButton);
+    m_toolbarWidget = plugin->toolbarWidgetForMainWindow(this);
+    m_toolbarWidgetLayout = new QHBoxLayout;
+    m_toolbarWidgetLayout->setSizeConstraint(QLayout::SetMaximumSize);
+    m_previousButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_nextButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_browseButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    
+    m_toolbarWidgetLayout->addWidget(m_previousButton);
+    m_toolbarWidgetLayout->addWidget(m_outlineLine);
+    m_toolbarWidgetLayout->addWidget(m_nextButton);
+    m_toolbarWidgetLayout->addWidget(m_browseButton);
+    
+    if(m_toolbarWidget->children().isEmpty())
+        m_toolbarWidget->setLayout(m_toolbarWidgetLayout);
+    
     m_buttons->addStretch();
     m_buttons->addWidget(m_declarationMenuButton);
     m_buttons->addWidget(m_lockButton);
@@ -536,14 +514,25 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin ) : m_plugi
     setLayout(m_layout);
 
     m_plugin->registerToolView(this);
+    
     connect(plugin, SIGNAL(previousContextShortcut()), this, SLOT(historyPrevious()));
     connect(plugin, SIGNAL(nextContextShortcut()), this, SLOT(historyNext()));
+    
+    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
 }
 
 ContextBrowserView::~ContextBrowserView() {
     m_plugin->unRegisterToolView(this);
     delete m_nextMenu;
     delete m_previousMenu;
+    delete m_toolbarWidgetLayout;
+    
+    delete m_previousButton;
+    delete m_outlineLine;
+    delete m_nextButton;
+    delete m_browseButton;
+    
 }
 
 void ContextBrowserView::focusInEvent(QFocusEvent* event) {
@@ -586,28 +575,10 @@ bool ContextBrowserView::event(QEvent* event) {
             
             if(key == Qt::Key_L)
                 m_lockButton->toggle();
-            if(key == Qt::Key_F) {
-                m_currentContextBox->setFocus();
-                m_currentContextBox->removeEventFilter(this); //Just to prevent double insertion
-                m_currentContextBox->installEventFilter(this);
-            }
         }
     }
     return QWidget::event(event);
 }
-
-bool ContextBrowserView::eventFilter(QObject* object, QEvent* event) {
-    if(object == m_currentContextBox && m_currentContextBox->hasFocus()) {
-        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
-        if(keyEvent && keyEvent->type() == QEvent::KeyPress && keyEvent->key() == Qt::Key_F) {
-            m_currentContextBox->removeEventFilter(this);
-            setFocus();
-        }
-    }
-    return QWidget::eventFilter(object, event);
-}
-
-
 
 void ContextBrowserView::showEvent(QShowEvent* event) {
     DUChainReadLocker lock(DUChain::lock());

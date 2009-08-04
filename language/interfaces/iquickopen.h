@@ -77,7 +77,12 @@ public:
     * */
     virtual QSet<KDevelop::IndexedString> fileSet() const = 0;
     
-    virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type) = 0;
+    enum QuickOpenType {
+        Standard,
+        Outline
+    };
+    
+    virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& types, QuickOpenType type = Standard) = 0;
 };
 
 }

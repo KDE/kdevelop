@@ -29,6 +29,7 @@
 #include <language/editor/documentcursor.h>
 #include "browsemanager.h"
 #include <language/duchain/indexedstring.h>
+#include <language/interfaces/iquickopen.h>
 
 class ContextBrowserPlugin;
 class QVBoxLayout;
@@ -46,7 +47,7 @@ class IDocument;
 class ContextBrowserView : public QWidget {
     Q_OBJECT
     public:
-        ContextBrowserView( ContextBrowserPlugin* );
+        ContextBrowserView( ContextBrowserPlugin*, QWidget* parent );
         ~ContextBrowserView();
 
         //duchain must be locked
@@ -66,6 +67,10 @@ class ContextBrowserView : public QWidget {
         
         QWidget* navigationWidget() {
             return m_navigationWidget;
+        }
+        
+        QWidget* toolbarWidget() {
+            return m_toolbarWidget;
         }
         
         ///duchain must be locked
@@ -121,14 +126,12 @@ class ContextBrowserView : public QWidget {
     private Q_SLOTS:
         void updateLockIcon(bool); 
         void declarationMenu();
-        void comboItemActivated(int index);
         void documentJumpPerformed( KDevelop::IDocument* newDocument, KTextEditor::Cursor newCursor, KDevelop::IDocument* previousDocument, KTextEditor::Cursor previousCursor);
         
 
     private:
         virtual void showEvent(QShowEvent* event);
         virtual bool event(QEvent* event);
-        virtual bool eventFilter(QObject* object, QEvent* event);
         
         virtual void focusInEvent(QFocusEvent* event);
         virtual void focusOutEvent(QFocusEvent* event);
@@ -160,16 +163,19 @@ class ContextBrowserView : public QWidget {
         int m_nextHistoryIndex;
         
         QVector<HistoryEntry> m_history;
-        QToolButton *m_previousButton;
-        QToolButton *m_nextButton;
-        QMenu* m_previousMenu, *m_nextMenu;
-        QToolButton *m_browseButton;
-        KComboBox* m_currentContextBox;
+        QPointer<QToolButton> m_previousButton;
+        QPointer<QToolButton> m_nextButton;
+        QPointer<QMenu> m_previousMenu, m_nextMenu;
+        QPointer<QToolButton> m_browseButton;
         QList<KDevelop::IndexedDeclaration> m_listDeclarations;
         KDevelop::IndexedString m_listUrl;
         BrowseManager* m_browseManager;
         //Used to not record jumps triggered by the context-browser as history entries
         QPointer<QWidget> m_focusBackWidget;
+        QPointer<KDevelop::IQuickOpenLine> m_outlineLine;
+        
+        QPointer<QHBoxLayout> m_toolbarWidgetLayout;
+        QPointer<QWidget> m_toolbarWidget;
 };
 
 #endif

@@ -78,6 +78,47 @@ using namespace KDevelop;
 
 const bool noHtmlDestriptionInOutline = true;
 
+class QuickOpenWidgetCreator {
+  public:
+    virtual ~QuickOpenWidgetCreator() {
+    }
+    virtual QuickOpenWidget* createWidget() = 0;
+    virtual QString objectNameForLine() = 0;
+    virtual void widgetShown() {
+    }
+};
+
+class StandardQuickOpenWidgetCreator : public QuickOpenWidgetCreator {
+  public:
+    StandardQuickOpenWidgetCreator(QStringList items, QStringList scopes) : m_items(items), m_scopes(scopes) {
+    }
+
+    virtual QString objectNameForLine() {
+      return "Quickopen";
+    }
+
+    void setItems(const QStringList& scopes, const QStringList& items)
+    {
+      m_scopes = scopes;
+      m_items = items;
+    }
+
+    virtual QuickOpenWidget* createWidget() {
+      QStringList useItems = m_items;
+      if(useItems.isEmpty())
+        useItems = QuickOpenPlugin::self()->lastUsedItems;
+      
+      QStringList useScopes = m_scopes;
+      if(useScopes.isEmpty())
+        useScopes = QuickOpenPlugin::self()->lastUsedScopes;
+      
+      return new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, useScopes, false, true );
+    }
+    
+    QStringList m_items;
+    QStringList m_scopes;
+};
+
 class QuickOpenDelegate : public ExpandingDelegate {
 public:
   QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = 0L) : ExpandingDelegate(model, parent) {
@@ -213,7 +254,7 @@ QString cursorItemText() {
 
 QuickOpenLineEdit* QuickOpenPlugin::createQuickOpenLineWidget()
 {
-  return new QuickOpenLineEdit;
+  return new QuickOpenLineEdit(new StandardQuickOpenWidgetCreator(QStringList(), QStringList()));
 }
 
 void QuickOpenWidget::showStandardButtons(bool show)
@@ -597,9 +638,9 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
 }
 
 
-QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine()
+QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine(QString name)
 {
-  QList< QuickOpenLineEdit* > lines = ICore::self()->uiController()->activeMainWindow()->findChildren<QuickOpenLineEdit*>("Quickopen");
+  QList< QuickOpenLineEdit* > lines = ICore::self()->uiController()->activeMainWindow()->findChildren<QuickOpenLineEdit*>(name);
   foreach(QuickOpenLineEdit* line, lines) {
     if(line->isVisible()) {
       return line;
@@ -1073,78 +1114,142 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     kDebug() << "No declaration to jump to";
 }
 
-void QuickOpenPlugin::quickOpenNavigateFunctions()
-{
-  if(!freeModel())
-    return;
 
-  IDocument* doc = ICore::self()->documentController()->activeDocument();
-  if(!doc) {
-    kDebug() << "No active document";
-    return;
+struct CreateOutlineDialog {
+  CreateOutlineDialog() : dialog(0), cursorDecl(0), model(0) {
   }
-
-  KDevelop::DUChainReadLocker lock( DUChain::lock() );
-
-  TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
-
-  if( !context ) {
-    kDebug() << "Got no standard context";
-    return;
-  }
-
-  QuickOpenModel* model = new QuickOpenModel(0);
-
-  QList<DUChainItem> items;
-
-  OutlineFilter filter(items);
-
-  DUChainUtils::collectItems( context, filter );
-
-  if(noHtmlDestriptionInOutline) {
-    for(int a = 0; a < items.size(); ++a)
-      items[a].m_noHtmlDestription = true;
-  }
-
-  Declaration* cursorDecl = cursorContextDeclaration();
-
-  model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(this, items, true) );
-
-  QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Outline"), model, QStringList(), QStringList(), true );
-  m_currentWidgetHandler = dialog;
   
-  model->setParent(dialog->widget());
-  
-  if(quickOpenLine()) {
-    quickOpenLine()->showWithWidget(dialog->widget());
-    dialog->deleteLater();
-  }else
-    dialog->run();
+  void start() {
+    if(!QuickOpenPlugin::self()->freeModel())
+        return;
 
-  //Select the declaration that contains the cursor
-  if(cursorDecl) {
-    int num = 0;
-    foreach(const DUChainItem& item, items) {
-      if(item.m_item.data() == cursorDecl) {
-        dialog->widget()->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
-        dialog->widget()->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
+      IDocument* doc = ICore::self()->documentController()->activeDocument();
+      if(!doc) {
+        kDebug() << "No active document";
+        return;
       }
-      ++num;
+
+      KDevelop::DUChainReadLocker lock( DUChain::lock() );
+
+      TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
+
+      if( !context ) {
+        kDebug() << "Got no standard context";
+        return;
+      }
+
+      model = new QuickOpenModel(0);
+
+      OutlineFilter filter(items);
+
+      DUChainUtils::collectItems( context, filter );
+
+      if(noHtmlDestriptionInOutline) {
+        for(int a = 0; a < items.size(); ++a)
+          items[a].m_noHtmlDestription = true;
+      }
+
+      cursorDecl = cursorContextDeclaration();
+
+      model->registerProvider( QStringList(), QStringList(), new DeclarationListDataProvider(QuickOpenPlugin::self(), items, true) );
+
+      dialog = new QuickOpenWidgetDialog( i18n("Outline"), model, QStringList(), QStringList(), true );
+      
+      model->setParent(dialog->widget());    
+  }
+  void finish() {
+    //Select the declaration that contains the cursor
+    if(cursorDecl && dialog) {
+      int num = 0;
+      foreach(const DUChainItem& item, items) {
+        if(item.m_item.data() == cursorDecl) {
+          dialog->widget()->o.list->setCurrentIndex( model->index(num,0,QModelIndex()) );
+          dialog->widget()->o.list->scrollTo( model->index(num,0,QModelIndex()), QAbstractItemView::PositionAtCenter );
+        }
+        ++num;
+      }
     }
   }
+    QPointer<QuickOpenWidgetDialog> dialog;
+    Declaration* cursorDecl;
+    QList<DUChainItem> items;
+    QuickOpenModel* model;
+};
+
+class OutlineQuickopenWidgetCreator : public QuickOpenWidgetCreator {
+  public:
+    OutlineQuickopenWidgetCreator(QStringList /*scopes*/, QStringList /*items*/) : m_creator(0) {
+    }
+    
+    ~OutlineQuickopenWidgetCreator() {
+      delete m_creator;
+    }
+    
+    virtual QuickOpenWidget* createWidget() {
+      delete m_creator;
+      m_creator = new CreateOutlineDialog;
+      m_creator->start();
+      
+      if(!m_creator->dialog)
+        return 0;
+      
+      m_creator->dialog->deleteLater();
+      return m_creator->dialog->widget();
+    }
+    
+    virtual void widgetShown() {
+      if(m_creator) {
+        m_creator->finish();
+        delete m_creator;
+        m_creator = 0;
+      }
+    }
+    
+    virtual QString objectNameForLine() {
+      return "Outline";
+    }
+    
+    CreateOutlineDialog* m_creator;
+};
+
+void QuickOpenPlugin::quickOpenNavigateFunctions()
+{
+  CreateOutlineDialog create;
+  create.start();
+  
+  if(!create.dialog)
+    return;
+  
+  m_currentWidgetHandler = create.dialog;
+  
+  QuickOpenLineEdit* line = quickOpenLine("Outline");
+  if(!line)
+    line  = quickOpenLine();
+  
+  if(line) {
+    line->showWithWidget(create.dialog->widget());
+    create.dialog->deleteLater();
+  }else
+    create.dialog->run();
+  
+  create.finish();
 }
-QuickOpenLineEdit::QuickOpenLineEdit() : m_widget(0), m_forceUpdate(false) {
+
+QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget(0), m_forceUpdate(false), m_widgetCreator(creator) {
     setMinimumWidth(200);
     setMaximumWidth(400);
 
     deactivate();
     setDefaultText("Quick Open...");
-    setObjectName("Quickopen");
+    setObjectName(m_widgetCreator->objectNameForLine());
     setFocusPolicy(Qt::ClickFocus);
 }
+
 QuickOpenLineEdit::~QuickOpenLineEdit() {
     delete m_widget;
+    delete m_widgetCreator;
 }
+
 void QuickOpenLineEdit::keyPressEvent(QKeyEvent* ev) {
     if (ev->key() == Qt::Key_Escape) {
       kDebug() << "escape";
@@ -1153,6 +1258,7 @@ void QuickOpenLineEdit::keyPressEvent(QKeyEvent* ev) {
     }
     QLineEdit::keyPressEvent(ev);
 }
+
 bool QuickOpenLineEdit::insideThis(QObject* object) {
     while (object)
     {
@@ -1195,19 +1301,13 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     
     if(!m_widget)
     {
-      QStringList useItems = m_items;
-      if(useItems.isEmpty())
-        useItems = QuickOpenPlugin::self()->lastUsedItems;
-      
-      QStringList useScopes = m_scopes;
-      if(useScopes.isEmpty())
-        useScopes = QuickOpenPlugin::self()->lastUsedScopes;
-      
-      m_widget = new QuickOpenWidget( i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, useScopes, false, true );
-    }else{
-      m_widget->showStandardButtons(false);
-      m_widget->showSearchField(false);
+      m_widget = m_widgetCreator->createWidget();
+      if(!m_widget)
+        return;
     }
+    
+    m_widget->showStandardButtons(false);
+    m_widget->showSearchField(false);
     
     m_widget->setParent(0, Qt::ToolTip);
     m_widget->setFocusPolicy(Qt::NoFocus);
@@ -1234,6 +1334,8 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     m_widget->setFrameRect(frameRect);
 
     m_widget->show();
+    
+    m_widgetCreator->widgetShown();
 }
 
 void QuickOpenLineEdit::hideEvent(QHideEvent* ev)
@@ -1313,17 +1415,13 @@ void QuickOpenLineEdit::checkFocus()
     }
 }
 
-IQuickOpenLine* QuickOpenPlugin::createQuickOpenLine(const QStringList& scopes, const QStringList& type)
+IQuickOpenLine* QuickOpenPlugin::createQuickOpenLine(const QStringList& scopes, const QStringList& type, IQuickOpen::QuickOpenType kind)
 {
-  return createQuickOpenLineWidget();
+  if(kind == Outline)
+    return new QuickOpenLineEdit(new OutlineQuickopenWidgetCreator(scopes, type));
+  else
+    return new QuickOpenLineEdit(new StandardQuickOpenWidgetCreator(scopes, type));
 }
-
-void QuickOpenLineEdit::setItems(const QStringList& scopes, const QStringList& items)
-{
-  m_scopes = scopes;
-  m_items = items;
-}
-
 
 #include "quickopenplugin.moc"
 
