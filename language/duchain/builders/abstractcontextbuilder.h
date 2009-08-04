@@ -697,7 +697,9 @@ protected:
     Q_ASSERT( m_compilingContexts );
     DUContext* ret = 0L;
     if(range.start > range.end)
+    {
       kDebug() << "Bad context-range" << range.textRange();
+    }
 
     {
       if ( recompiling() )
