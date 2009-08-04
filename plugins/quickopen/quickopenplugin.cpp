@@ -1293,19 +1293,24 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     if (m_widget && !m_forceUpdate)
         return;
 
-    if (!m_forceUpdate && !QuickOpenPlugin::self()->freeModel())
+    if (!m_forceUpdate && !QuickOpenPlugin::self()->freeModel()) {
+        deactivate();
         return;
+    }
     
-    activate();
     m_forceUpdate = false;
     
     if(!m_widget)
     {
       m_widget = m_widgetCreator->createWidget();
-      if(!m_widget)
+      if(!m_widget) {
+        deactivate();
         return;
+      }
     }
-    
+
+    activate();
+
     m_widget->showStandardButtons(false);
     m_widget->showSearchField(false);
     
@@ -1388,10 +1393,13 @@ void QuickOpenLineEdit::deactivate() {
     kDebug() << "deactivating";
     
     clear();
-   if (m_widget) {
+
+    if(m_widget || hasFocus())
+      QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
+    
+   if (m_widget)
         m_widget->deleteLater();
-        QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
-    }
+    
     m_widget = 0;
     qApp->removeEventFilter(this);
     
