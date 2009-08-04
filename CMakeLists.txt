@@ -14,21 +14,13 @@ set(KDE_MIN_VERSION "4.2.0")
 find_package(KDE4 4.2.0 REQUIRED)
 find_package(ZLIB REQUIRED)
 
-macro_optional_find_package(Kompare)
-macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
-macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
-                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
-                        "Required for difference checking. From KDE SDK package.")
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
-                ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
-
 include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
 include (MacroLibrary)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES}  ${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} )
 
 set(KDEVPLATFORM_LIB_VERSION 1.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 1)
