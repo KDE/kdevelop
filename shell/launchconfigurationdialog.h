@@ -44,6 +44,7 @@ class LaunchConfigTypePage;
 
 namespace KDevelop
 {
+class ILaunchMode;
 
 class LaunchConfigurationType;
 class LaunchConfiguration;
@@ -95,12 +96,30 @@ private:
     class TreeItem
     {
     public:
-        TreeItem() : project(0), launch(0), parent(0) {}
-        IProject* project;
-        LaunchConfiguration* launch;
+        TreeItem() : parent(0) {}
         TreeItem* parent;
         int row;
         QList<TreeItem*> children;
+    };
+    class ProjectItem : public TreeItem
+    {
+    public:
+        IProject* project;
+    };
+    class LaunchItem : public TreeItem
+    {
+    public:
+        LaunchConfiguration* launch;
+    };
+    class LaunchModeItem : public TreeItem
+    {
+    public:
+        ILaunchMode* mode;
+    };
+    class GenericPageItem : public TreeItem
+    {
+    public:
+        QString text;
     };
     TreeItem* findItemForProject( IProject* );
     QList<TreeItem*> topItems;

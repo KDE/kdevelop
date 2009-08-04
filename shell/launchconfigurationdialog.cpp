@@ -225,19 +225,20 @@ void LaunchConfigurationDialog::createConfiguration()
 
 LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstractItemModel(parent)
 {
-    TreeItem* global = new TreeItem;
+    GenericPageItem* global = new GenericPageItem;
+    global->text = i18n("Global");
     global->row = 0;
     topItems << global;
     foreach( IProject* p, Core::self()->projectController()->projects() )
     {
-        TreeItem* t = new TreeItem;
+        ProjectItem* t = new ProjectItem;
         t->project = p;
         t->row = topItems.count();
         topItems << t;
     }
     foreach( LaunchConfiguration* l, Core::self()->runControllerInternal()->launchConfigurations() )
     {
-        TreeItem* t = new TreeItem;
+        LaunchItem* t = new LaunchItem;
         t->launch = l;
         TreeItem* parent;
         if( l->project() ) {
@@ -251,11 +252,12 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
     }    
 }
 
-LaunchConfigurationsModel::TreeItem* LaunchConfigurationsModel::findItemForProject( IProject* p )
+LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForProject( IProject* p )
 {
     foreach( TreeItem* t, topItems )
     {
-        if( t->project == p ) 
+        ProjectItem pi = dynamic_cast<ProjectItem*>( t );
+        if( pi && pi->project == p ) 
         {
             return t;
         }
@@ -277,49 +279,56 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
         switch( role ) 
         {
             case Qt::DisplayRole:
-                if( index.column() == 0 )
+            {
+                LaunchItem* li = dynamic_cast<LaunchItem*>( t );
+                if( li ) 
                 {
-                    if( t->launch ) 
+                    if( index.column() == 0 )
                     {
-                        return t->launch->name();
-                    } else if( t->project )
+                        return li->launch->name();   
+                    } else if( index.column() == 1 )
                     {
-                        return t->project->name();
-                    } else
-                    {
-                        return i18n("Global");
-                    }
-                } else if( index.column() == 1 )
-                {
-                    if( t->launch )
-                    {
-                        return t->launch->type()->name();
-                    } else
-                    {
-                        return "";
+                        return li->launch->type()->name();
                     }
                 }
-                break;
-            case Qt::DecorationRole:
-                if( index.column() == 0 && t->launch )
+                ProjectItem* pi = dynamic_cast<ProjectItem*>( t );
+                if( pi && index.column() == 0 ) 
                 {
-                    return t->launch->type()->icon();
+                    return pi->project->name();
+                }
+                GenericPageItem* gpi = dynamic_cast<GenericPageItem*>( t );
+                if( gpi && index.column() == 0 )
+                {
+                    return gpi->text;
+                }
+                break;
+            }
+            case Qt::DecorationRole:
+            {
+                LaunchItem* li = dynamic_cast<LaunchItem*>( t );
+                if( index.column() == 0 && li )
+                {
+                    return li->launch->type()->icon();
                 } else if( index.column() == 1 )
                 {
                     return KIcon();
                 }
+            }
             case Qt::EditRole:
-                if( index.parent().isValid() )
+            {
+                LaunchItem* li = dynamic_cast<LaunchItem*>( t );
+                if( li )
                 {
                     if( index.column() == 0 )
                     {
-                        return t->launch->name();
+                        return li->launch->name();
                     } else if ( index.column() == 1 )
                     {
-                        return t->launch->type()->id();
+                        return li->launch->type()->id();
                     }
                 }
                 break;
+            }
             default:
                 break;
         }
@@ -397,7 +406,7 @@ Qt::ItemFlags LaunchConfigurationsModel::flags(const QModelIndex& index) const
         && index.column() < columnCount( QModelIndex() ) ) 
     {
         TreeItem* t = static_cast<TreeItem*>( index.internalPointer() );
-        if( t && t->launch )
+        if( t && dynamic_cast<LaunchItem*>( t ) )
         {
             return Qt::ItemFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
         } else if( t )
@@ -414,7 +423,7 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
     {
         if( index.row() >= 0 && index.row() < rowCount( index.parent() ) ) 
         {
-            TreeItem* t = static_cast<TreeItem*>( index.internalPointer() );
+            LaunchItem* t = dynamic_cast<LaunchItem*>( static_cast<TreeItem*>( index.internalPointer() ) );
             if( t )
             {
                 if( index.column() == 0 )
@@ -434,8 +443,11 @@ LaunchConfiguration* LaunchConfigurationsModel::configForIndex(const QModelIndex
 {
     if( idx.isValid() )
     {
-        TreeItem* item = static_cast<TreeItem*>( idx.internalPointer() );
-        return item->launch;
+        LaunchItem* item = dynamic_cast<LaunchItem*>( static_cast<TreeItem*>( idx.internalPointer() ) );
+        if( item )
+        {
+            return item->launch;
+        }
     }
     return 0;
 }
@@ -449,7 +461,8 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l )
         {
             foreach( TreeItem* t, topItems )
             {
-                if( t->project && t->project == l->project() )
+                ProjectItem* pi = dynamic_cast<ProjectItem*>( t );
+                if( pi && pi->project == l->project() )
                 {
                     tparent = t;
                     break;
@@ -461,7 +474,8 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l )
         {
             foreach( TreeItem* c, tparent->children )
             {
-                if( c->launch && c->launch == l )
+                LaunchItem* li = dynamic_cast<LaunchItem*>( c );
+                if( li->launch && li->launch == l )
                 {
                     return index( c->row, 0, index( tparent->row, 0, QModelIndex() ) );
                 }
@@ -474,7 +488,9 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l )
 
 void LaunchConfigurationsModel::deleteConfiguration( const QModelIndex& index )
 {
-    TreeItem* t = static_cast<TreeItem*>( index.internalPointer() );
+    LaunchItem* t = dynamic_cast<LaunchItem*>( static_cast<TreeItem*>( index.internalPointer() ) );
+    if( !t )
+        return;
     beginRemoveRows( parent( index ), index.row(), index.row() );
     t->parent->children.removeAll( t );
     Core::self()->runControllerInternal()->removeLaunchConfiguration( t->launch );
@@ -484,17 +500,22 @@ void LaunchConfigurationsModel::deleteConfiguration( const QModelIndex& index )
 void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
 {
     TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
+    ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
     if( parent.isValid() && t && !Core::self()->runController()->launchConfigurationTypes().isEmpty() )
     {
         KConfigGroup launchGroup;
-        if( t->project )
+        if( ti )
         {
-            launchGroup = t->project->projectConfiguration()->group( RunController::LaunchConfigurationsGroup );
+            launchGroup = ti->project->projectConfiguration()->group( RunController::LaunchConfigurationsGroup );
             
-        } else 
+        } else if( !t->parent )
         {
             launchGroup = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
             
+        } else 
+        {
+            kWarning() << "Expected project or global item, but didn't find either";
+            return;
         }
         beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
         QStringList configs = launchGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
@@ -513,10 +534,10 @@ void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
         configs << groupName;
         launchGroup.writeEntry( RunController::LaunchConfigurationsListEntry, configs );
         launchGroup.sync();
-        LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, t->project ? t->project : 0 );
+        LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, ( ti ? ti->project : 0 ) );
         l->setLauncherForMode( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
         Core::self()->runControllerInternal()->addLaunchConfiguration( l );
-        TreeItem* item = new TreeItem;
+        LaunchItem* item = new LaunchItem;
         item->launch = l;
         item->parent = t;
         item->row = t->children.count();
