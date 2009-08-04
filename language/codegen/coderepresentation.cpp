@@ -204,19 +204,29 @@ class StringCodeRepresentation : public CodeRepresentation {
 
 static QHash<IndexedString, KSharedPtr<ArtificialStringData> > artificialStrings;
 
-bool artificialCodeRepresentationExists(IndexedString url)
+//Return the representation for the given URL if it exists, or an empty pointer otherwise
+KSharedPtr<ArtificialStringData> representationForUrl(IndexedString url)
 {
     if(artificialStrings.contains(url))
-        return true;
-    ///@todo Check for also names inserted with artificial URL, and handle it in representation creation
-    //else
-    //    return artificialStrings.contains(IndexedString(CodeRepresentation::artificialUrl(url.str())));
-    return false;
+        return artificialStrings[url];
+    else
+    {
+        IndexedString constructedUrl(CodeRepresentation::artificialUrl(url.str()));
+        if(artificialStrings.contains(constructedUrl))
+            return artificialStrings[constructedUrl];
+        else
+            return KSharedPtr<ArtificialStringData>();
+    }
+}
+
+bool artificialCodeRepresentationExists(IndexedString url)
+{
+    return !representationForUrl(url).isNull();
 }
 
 CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
     if(artificialCodeRepresentationExists(url))
-        return CodeRepresentation::Ptr(new StringCodeRepresentation(artificialStrings[url]));
+        return CodeRepresentation::Ptr(new StringCodeRepresentation(representationForUrl(url)));
     
   IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
   if(document && document->textDocument())
@@ -232,8 +242,10 @@ void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
 
 KUrl CodeRepresentation::artificialUrl(const QString & name)
 {
-    KUrl url(name[0] == '/' ? name : '/' + name);
+    KUrl url(name);
     url.setScheme("artificial");
+    url.cleanPath();
+    
     return url;
 }
 
