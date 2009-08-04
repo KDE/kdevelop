@@ -253,8 +253,11 @@ restart:
     if( ret.first.isEmpty())
     {
         //Check if there is an available artificial representation
-        if(!includeName.isNull() && includeName[0] == '/' && artificialCodeRepresentationExists(IndexedString(includeName)))
+        if(!includeName.isNull() && artificialCodeRepresentationExists(IndexedString(includeName)))
+        {
             ret.first = CodeRepresentation::artificialUrl(includeName);
+            kDebug() << "Utilizing Artificial code for include: " << includeName;
+        }
         else if(!quiet ) {
             kDebug(9007) << "FAILED to find include-file" << includeName << "in paths:";
             foreach( const KUrl& path, includePaths )
