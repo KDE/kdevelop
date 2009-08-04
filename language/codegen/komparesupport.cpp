@@ -18,8 +18,9 @@
  */
 
 #include "komparesupport.h"
+#include <config-kdevplatform.h>
 
-#if KOMPARE_ENABLED == true
+#if HAVE_KOMPARE
 
 #include <stddef.h>
 #include <cstddef>

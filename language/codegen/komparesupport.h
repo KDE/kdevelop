@@ -20,6 +20,8 @@
 #ifndef KOMPARESUPPORT_H
 #define KOMPARESUPPORT_H
 
+#include <config-kdevplatform.h>
+
 class QWidget;
 class QString;
 
@@ -31,8 +33,8 @@ class IndexedString;
 class KompareWidgets
 {
   public:
-    static const bool enabled = KOMPARE_ENABLED;
-    
+    static const bool enabled = HAVE_KOMPARE;
+
     KompareWidgets();
     ~KompareWidgets();
     
