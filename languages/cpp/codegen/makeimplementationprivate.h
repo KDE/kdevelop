@@ -20,12 +20,14 @@
 #define MAKEIMPLEMENTATIONPRIVATE_H
 
 #include <language/codegen/codegenerator.h>
+#include <language/codegen/coderepresentation.h>
 #include <parsesession.h>
 
 #include <bitset>
 
 namespace KDevelop
 {
+class DocumentChange;
 
 class ClassMemberDeclaration;
 /*!
@@ -36,38 +38,53 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
 {
     typedef QList<QMap<IndexedString, QList<SimpleRange> > > UseList;
     
-    ///Add policy for declaring in unnamed namespace
-    enum Policies
-    {
-        ContainerIsClass,             //Indicates the container type will be class, otherwise struct will be used
-        MoveInitializationToPrivate,  //Moves the initialization of variables to the initialization list of private implementation
-        MoveMethodsToPrivate,         //Moves the private methods into the private implementation
-        PolicyNum
-    };
-    
   public:
+    
+    ///Add policy for declaring in unnamed namespace
+    enum Policy
+    {
+        EmptyPolicy = 0x0,
+        ContainerIsClass = 0x1,             //Indicates the container type will be class, otherwise struct will be used
+        MoveInitializationToPrivate = 0x2,  //Moves the initialization of variables to the initialization list of private implementation
+        MoveMethodsToPrivate = 0x4,         //Moves the private methods into the private implementation
+    };
+    Q_DECLARE_FLAGS(Policies, Policy);
+    
     MakeImplementationPrivate() : m_classContext(0) {}
     ~MakeImplementationPrivate() {}
     // Implementations from CodeGenerator
     virtual bool process(void);
     virtual bool gatherInformation(void);
     virtual bool checkPreconditions(DUContext* context, const DocumentRange& position);
+    
+    //Options for auto generation
+    void setStructureName(const QString & name) { m_structureName = name; };
+    void setPointerName(const QString & name)   { m_privatePointerName = name; };
+    void setPolicies(Policies newPolicy)        { m_policies = newPolicy; };
+    
   
   private:
     DUContext * m_classContext;
     DeclarationPointer m_classDeclaration;
+    
     QString m_privatePointerName;
     QString m_structureName;
-    QList<ClassMemberDeclaration *> m_members;
     
-    std::bitset<PolicyNum> m_policies;
+    QList<ClassMemberDeclaration *> m_members;
+    QHash<IndexedString, CodeRepresentation::Ptr> m_representations;
+    
+    Policies m_policies;
     
     bool classHasPrivateImplementation();
     void gatherPrivateMembers();
     void updateConstructors(const KDevelop::Declaration &);
     void updateDestructor(void);
     void updateAllUses(UseList & alluses);
+    CodeRepresentation::Ptr representationFor(IndexedString url);
+    //DocumentChange insertConstructorInitializations(ClassFunctionDeclaration * constructor, const QList<ClassMemberDeclaration *>)
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(MakeImplementationPrivate::Policies);
 
 }
 

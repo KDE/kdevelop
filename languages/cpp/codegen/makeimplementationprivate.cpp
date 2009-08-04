@@ -55,7 +55,7 @@ bool MakeImplementationPrivate::process()
     
     //Create container for private implementation
     CppNewClass classGenerator;
-    classGenerator.setType(m_policies[ContainerIsClass] ? CppNewClass::Class : CppNewClass::Struct);
+    classGenerator.setType(m_policies.testFlag(ContainerIsClass) ? CppNewClass::Class : CppNewClass::Struct);
     foreach(Declaration * decl, m_members)
     {
         classGenerator.addDeclaration(DeclarationPointer(decl));
@@ -69,7 +69,10 @@ bool MakeImplementationPrivate::process()
     SourceCodeInsertion pointerInsertion(m_classContext->topContext());
     pointerInsertion.setContext(m_classContext);
     pointerInsertion.setAccess(KDevelop::Declaration::Private);
-    pointerInsertion.insertVariableDeclaration(Identifier(m_privatePointerName), AbstractType::Ptr::staticCast<StructureType>(classGenerator.objectType()));
+    PointerType::Ptr pointer(new PointerType);
+    pointer->setBaseType(AbstractType::Ptr::staticCast<StructureType>(classGenerator.objectType()));
+    pointer->setModifiers(PointerType::ConstModifier);
+    pointerInsertion.insertVariableDeclaration(Identifier(m_privatePointerName), AbstractType::Ptr::dynamicCast<PointerType>(pointer));
     addChangeSet(pointerInsertion.changes());
     
     //Add private implementation struct forward declaration before the class
@@ -172,12 +175,12 @@ bool MakeImplementationPrivate::gatherInformation()
     if(ret == QDialog::Accepted)
     { 
         //Save the names, and options set
-        m_privatePointerName = privateDialog.pointerName->text();
-        m_structureName = privateDialog.structureName->text();
+        setPointerName(privateDialog.pointerName->text());
+        setStructureName(privateDialog.structureName->text());
         
-        m_policies[ContainerIsClass] = privateDialog.classOption->isChecked();
-        m_policies[MoveInitializationToPrivate] = privateDialog.variableOption->isChecked();
-        m_policies[MoveMethodsToPrivate] = privateDialog.methodOption->isChecked();
+        m_policies |= (privateDialog.classOption->isChecked() ? ContainerIsClass : EmptyPolicy);
+        m_policies |= (privateDialog.variableOption->isChecked() ? MoveInitializationToPrivate : EmptyPolicy);
+        m_policies |= (privateDialog.methodOption->isChecked() ? MoveMethodsToPrivate : EmptyPolicy);
         return true;
     }
     else
@@ -218,7 +221,7 @@ void MakeImplementationPrivate::gatherPrivateMembers()
         Q_ASSERT(decl);
         if(decl->accessPolicy() == ClassMemberDeclaration::Private)
         {
-            if(decl->type<FunctionType>() && !m_policies[MoveMethodsToPrivate] )
+            if(decl->type<FunctionType>() && m_policies.testFlag(MoveMethodsToPrivate) )
                 continue;
             m_members << decl;
         }
@@ -249,14 +252,26 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
     
     kDebug() << "Found the following constructors: " << constructors;
     
-    if(m_policies[MoveInitializationToPrivate])
+    if(m_policies.testFlag(MoveInitializationToPrivate))
     {
         if(constructors.size() > 1)
             KMessageBox::warningContinueCancel(0, "Warning. It is not recommended to move initialization lists to private constructor when multiple constructors are defined.",
                                                "PIMPL Generation", KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "PIMPL multiple constructor warning");
-        //foreach(ClassFunctionDecla)
-        //{
-        //}//TODO
+        foreach(ClassFunctionDeclaration * constructor, constructors)
+        {
+            CodeRepresentation::Ptr rangeRepresentation = representationFor(constructor->url());
+            
+            //Replace the previous constructor 
+            QString privateVersion(constructor->toString());
+            privateVersion.replace(m_classDeclaration->identifier().toString(), m_structureName);
+            
+            documentChangeSet().addChange(DocumentChange(constructor->url(), constructor->range(), constructor->toString(), privateVersion));
+            
+            // Create a "new" version of the previous constructor so that the private one can be called
+            ParseSession::Ptr astPtr = astContainer(constructor->internalFunctionContext()->url());
+            documentChangeSet().addChange(DocumentChange(constructor->internalFunctionContext()->url(), SimpleRange(constructor->internalFunctionContext()->range().start, 0),
+                                                         QString(), constructor->toString() + "\n{\n}\n\n"));
+        }
     }
     
     if(constructors.empty())
@@ -273,6 +288,8 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
         
         //Check for constructors without initializer list
         
+        //If moved initialization
+            //Send the parameters this constructor takes into the new one
         CppEditorIntegrator integrator(astPtr.data());
         SimpleCursor insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
         
@@ -301,11 +318,13 @@ void MakeImplementationPrivate::updateDestructor(void)
     {
         //Create a Destructor
     } 
+    else
+    {
+      DocumentChange destructorChange(destructor->url(), SimpleRange(destructor->logicalInternalContext(destructor->topContext())->range().start, -1),
+                                      QString(), /*CppUtils::insertMemoryDeallocation()*/ "delete this->" + m_privatePointerName + ";\n");
     
-    DocumentChange destructorChange(destructor->url(), SimpleRange(destructor->logicalInternalContext(destructor->topContext())->range().start, -1),
-                                    QString(), /*CppUtils::insertMemoryDeallocation()*/ "delete this->" + m_privatePointerName + ";\n");
-    
-    documentChangeSet().addChange(destructorChange);
+      documentChangeSet().addChange(destructorChange);
+    }
 }
 
 void MakeImplementationPrivate::updateAllUses(UseList & allUses)
@@ -319,7 +338,7 @@ void MakeImplementationPrivate::updateAllUses(UseList & allUses)
         {
             foreach(SimpleRange range, *mapIt)
             {
-                CodeRepresentation::Ptr rangeRepresentation = createCodeRepresentation(mapIt.key());
+                CodeRepresentation::Ptr rangeRepresentation = representationFor(mapIt.key());
                 QString use = rangeRepresentation->rangeText(range.textRange());
                 //! @todo check properly if the pointer is being hidden, and add this-> only if necessary
                 DocumentChange useChange(mapIt.key(), range, use, "this->" + m_privatePointerName + "->" + use);
@@ -330,5 +349,12 @@ void MakeImplementationPrivate::updateAllUses(UseList & allUses)
     }
 }
 
+CodeRepresentation::Ptr MakeImplementationPrivate::representationFor(IndexedString url)
+{
+    if(!m_representations.contains(url))
+        m_representations[url] = createCodeRepresentation(url);
+    
+    return m_representations[url];
+}
 
 }
