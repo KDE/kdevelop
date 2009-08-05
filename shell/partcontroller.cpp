@@ -172,14 +172,14 @@ bool PartController::canCreatePart(const KUrl& url)
 {
     if (!url.isValid()) return false;
 
-    KMimeType::Ptr mimeType;
+    QString mimeType;
     if ( url.isEmpty() )
-        mimeType = KMimeType::mimeType("text/plain");
+        mimeType = "text/plain";
     else
-        mimeType = KMimeType::findByUrl( url );
+        mimeType = KMimeType::findByUrl( url )->name();
 
     KService::List offers = KMimeTypeTrader::self()->query(
-                                mimeType->name(),
+                                mimeType,
                                 "KParts/ReadOnlyPart" );
 
     return offers.count() > 0;
@@ -187,16 +187,16 @@ bool PartController::canCreatePart(const KUrl& url)
 
 KParts::Part* PartController::createPart( const KUrl & url )
 {
-    KMimeType::Ptr mimeType;
+    QString mimeType;
     if ( url.isEmpty() )
         //create a part for empty text file
-        mimeType = KMimeType::mimeType("text/plain");
+        mimeType = "text/plain";
     else if ( !url.isValid() )
         return 0;
     else
-        mimeType = KMimeType::findByUrl( url );
+        mimeType = KMimeType::findByUrl( url )->name();
 
-    KParts::Part* part = createPart( mimeType->name() );
+    KParts::Part* part = createPart( mimeType );
     if( part )
     {
         readOnly( part ) ->openUrl( url );
