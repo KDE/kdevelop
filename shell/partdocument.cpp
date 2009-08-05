@@ -33,7 +33,7 @@
 namespace KDevelop {
 
 struct PartDocumentPrivate {
-    QMap<QWidget*, KParts::Part*> partForView;
+    QHash<QWidget*, KParts::Part*> partForView;
 };
 
 PartDocument::PartDocument(const KUrl &url, ICore* core)
