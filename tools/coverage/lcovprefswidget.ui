@@ -20,7 +20,7 @@
       <item>
        <widget class="QLabel" name="geninfoPathLabel">
         <property name="text">
-         <string>geninfo Executable:</string>
+         <string comment="@label:textbox">geninfo Executable:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_geninfoPath</cstring>
@@ -30,7 +30,7 @@
       <item>
        <widget class="KUrlRequester" name="kcfg_geninfoPath">
         <property name="toolTip">
-         <string>Select the geninfo executable to use for extracting visualization from coverage data</string>
+         <string comment="@info:tooltip">Select the geninfo executable to use for extracting visualization from coverage data</string>
         </property>
        </widget>
       </item>

@@ -228,10 +228,10 @@ ReportModel::ReportModel(QObject* parent)
     : QStandardItemModel(parent)
 {
     QStringList headers;
-    headers << i18n("source") 
-            << i18n("coverage")
-            << i18n("visited")
-            << i18n("SLOC");
+    headers << i18nc("@title:column Coverage report column", "source") 
+            << i18nc("@title:column Coverage report column", "coverage")
+            << i18nc("@title:column Coverage report column", "visited")
+            << i18nc("@title:column Coverage report column", "SLOC");
     setHorizontalHeaderLabels(headers);
 
     KConfigGroup group = KGlobal::config()->group("Code Coverage");
