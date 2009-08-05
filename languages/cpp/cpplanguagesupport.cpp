@@ -232,8 +232,10 @@ void CppLanguageSupport::pImplementation()
 {
   ///@todo move this into the refactoring plugin manager
    MakeImplementationPrivate p;
-   if(!p.execute())
+   if(!p.execute()) 
+   {
      kDebug() << p.errorText();
+   }
 }
 
 ///@todo Make this work again with non-class declarations/definitions
@@ -426,7 +428,9 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
       top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().context(0));
 
       if(!top)
+      {
         kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
+      }
 
     } else {
       kDebug(9007) << "ERROR: Proxy-context has no content-context";
