@@ -263,8 +263,6 @@ void MakeJob::procError( QProcess::ProcessError err )
         setErrorText(i18n("Job failed"));
         model()->addLine( i18n("*** Failed ***") );
 
-    } else {
-        model()->addLine( i18n("*** Aborted ***") );
     }
     emitResult();
 }
@@ -285,6 +283,7 @@ void MakeJob::procFinished( int code, QProcess::ExitStatus status )
 
 bool MakeJob::doKill()
 {
+    model()->addLine( i18n("*** Aborted ***") );
     m_killed = true;
     m_process->kill();
     return true;
