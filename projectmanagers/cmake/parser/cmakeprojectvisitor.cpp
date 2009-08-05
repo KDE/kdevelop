@@ -345,14 +345,17 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
 
 void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, Target::Type t)
 {
-    if (!m_targetForId.contains(id))
+    if (m_targetForId.contains(id))
         kDebug(9032) << "warning! there already was a target called" << id;
 
     VisitorState p=stackTop();
 
-    DUChainWriteLocker lock(DUChain::lock());
-    Declaration *d = new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
-    d->setIdentifier( Identifier(id) );
+    Declaration *d=0;
+    if(!p.code->at(p.line).arguments.isEmpty()) {
+        DUChainWriteLocker lock(DUChain::lock());
+        d= new Declaration(p.code->at(p.line).arguments.first().range(), p.context);
+        d->setIdentifier( Identifier(id) );
+    }
     
     Target target;
     target.name=id;
