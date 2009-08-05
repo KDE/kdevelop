@@ -83,27 +83,19 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
         "KParts::ReadWritePart", "KParts::ReadOnlyPart"
     };
 
-    KParts::Factory* editorFactory;
-    const char* className;
+    KParts::Part* part = 0;
     for ( uint i = 0; i < 2; ++i )
     {
-        editorFactory = findPartFactory( mimetype, QString::fromLatin1(services[ i ]), prefName );
+        KParts::Factory* editorFactory = findPartFactory( mimetype, QString::fromLatin1(services[ i ]), prefName );
         if ( editorFactory )
         {
-            className = classNames[ i ];
+            part = editorFactory->createPart( 0, this, classNames[ i ] );
+
             break;
         }
     }
 
-    if ( editorFactory )
-    {
-        KParts::Part * part = editorFactory->createPart(
-        0, this, className );
-
-        return part;
-    }
-
-    return 0;
+    return part;
 }
 
 
