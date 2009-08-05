@@ -46,9 +46,9 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
         EmptyPolicy = 0x0,
         ContainerIsClass = 0x1,             //Indicates the container type will be class, otherwise struct will be used
         MoveInitializationToPrivate = 0x2,  //Moves the initialization of variables to the initialization list of private implementation
-        MoveMethodsToPrivate = 0x4,         //Moves the private methods into the private implementation
+        MoveMethodsToPrivate = 0x4         //Moves the private methods into the private implementation
     };
-    Q_DECLARE_FLAGS(Policies, Policy);
+    Q_DECLARE_FLAGS(Policies, Policy)
     
     MakeImplementationPrivate() : m_classContext(0) {}
     ~MakeImplementationPrivate() {}
@@ -84,7 +84,7 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     //DocumentChange insertConstructorInitializations(ClassFunctionDeclaration * constructor, const QList<ClassMemberDeclaration *>)
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(MakeImplementationPrivate::Policies);
+Q_DECLARE_OPERATORS_FOR_FLAGS(MakeImplementationPrivate::Policies)
 
 }
 
