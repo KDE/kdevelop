@@ -14,6 +14,10 @@ set(KDE_MIN_VERSION "4.2.0")
 find_package(KDE4 4.2.0 REQUIRED)
 find_package(ZLIB REQUIRED)
 
+include (KDE4Defaults)
+include (MacroWriteBasicCMakeVersionFile)
+include (MacroLibrary)
+
 macro_optional_find_package(Kompare)
 macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
 macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
@@ -22,9 +26,6 @@ macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
-include (KDE4Defaults)
-include (MacroWriteBasicCMakeVersionFile)
-include (MacroLibrary)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
