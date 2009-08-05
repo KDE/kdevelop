@@ -52,6 +52,7 @@ KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, con
                 if ( ( *it ) ->desktopEntryName() == preferredName )
                 {
                     ptr = ( *it );
+                    break;
                 }
             }
         }
