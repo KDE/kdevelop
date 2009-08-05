@@ -33,14 +33,11 @@ IPartController::IPartController( QWidget* toplevel )
 }
 
 
-KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, const QString& parttype, const QString& preferredName ) {
-    
-    KService::List offers = KMimeTypeTrader::self() ->query(
-                                        mimetype,
-                                        "KParts/ReadOnlyPart",
-                                        QString( "'%1' in ServiceTypes" ).arg( parttype ) );
-                            
-    if ( offers.count() > 0 )
+KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, const QString& parttype, const QString& preferredName )
+{
+    const KService::List offers = KMimeTypeTrader::self()->query( mimetype, parttype );
+
+    if ( ! offers.isEmpty() )
     {
         KService::Ptr ptr;
         // if there is a preferred plugin we'll take it
