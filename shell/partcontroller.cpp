@@ -120,7 +120,7 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
     if ( !encoding.isNull() )
     {
         KParts::OpenUrlArguments args = doc->arguments();
-        args.setMimeType( QString( "text/plain;" ) + encoding );
+        args.setMimeType( QString::fromLatin1( "text/plain;" ) + encoding );
         doc->setArguments( args );
     }
 
@@ -174,7 +174,7 @@ bool PartController::canCreatePart(const KUrl& url)
 
     QString mimeType;
     if ( url.isEmpty() )
-        mimeType = "text/plain";
+        mimeType = QString::fromLatin1("text/plain");
     else
         mimeType = KMimeType::findByUrl( url )->name();
 
@@ -190,7 +190,7 @@ KParts::Part* PartController::createPart( const KUrl & url )
     QString mimeType;
     if ( url.isEmpty() )
         //create a part for empty text file
-        mimeType = "text/plain";
+        mimeType = QString::fromLatin1("text/plain");
     else if ( !url.isValid() )
         return 0;
     else
