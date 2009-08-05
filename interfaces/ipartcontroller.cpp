@@ -35,8 +35,10 @@ IPartController::IPartController( QWidget* toplevel )
 
 KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, const QString& parttype, const QString& preferredName )
 {
-    const KService::List offers = KMimeTypeTrader::self()->query( mimetype, parttype );
-
+    // parttype may be a interface type not derived from KParts/ReadOnlyPart
+    const KService::List offers = KMimeTypeTrader::self()->query( mimetype,
+                                        QString::fromLatin1( "KParts/ReadOnlyPart" ),
+                                        QString::fromLatin1( "'%1' in ServiceTypes" ).arg( parttype ) );
     if ( ! offers.isEmpty() )
     {
         KService::Ptr ptr;
