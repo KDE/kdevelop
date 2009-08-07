@@ -137,6 +137,7 @@ private:
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
+    QMap<KUrl, KDevelop::ProjectFolderItem*> m_pending;
     
     CMakeDocumentation* m_doc;
     CMakeHighlighting *m_highlight;

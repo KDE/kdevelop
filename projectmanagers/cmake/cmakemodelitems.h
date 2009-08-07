@@ -65,7 +65,7 @@ class DUChainAttatched
 class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public DescriptorAttatched
 {
     public:
-        CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item = 0 );
+        CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeFolderItem* parent);
         virtual ~CMakeFolderItem() {}
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
         QStringList includeDirectories() const;
@@ -75,10 +75,16 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         void setTopDUContext(KDevelop::ReferencedTopDUContext ctx) { m_topcontext=ctx; }
         KDevelop::ReferencedTopDUContext topDUContext() const { return m_topcontext;}
         
+        /** The upper level parent is not the real parent anymore (in some 
+        corner cases) we have the former parent here that has the information*/
+        CMakeFolderItem* formerParent() const { return m_formerParent; }
+        
+        void setFormerParent(CMakeFolderItem* parent) { m_formerParent=parent; }
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;
         CMakeDefinitions m_defines;
+        CMakeFolderItem* m_formerParent;
 };
 
 class CMakeExecutableTargetItem 

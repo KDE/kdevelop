@@ -27,19 +27,19 @@
 #include <language/duchain/parsingenvironment.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, QStandardItem* item )
-    : KDevelop::ProjectBuildFolderItem( project, name, item )
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeFolderItem* item )
+    : KDevelop::ProjectBuildFolderItem( project, name, item ), m_formerParent(item)
 {}
 
 QStringList CMakeFolderItem::includeDirectories() const
 {
     QStringList urls(m_includeList);
 
-    CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(parent());
+    CMakeFolderItem *folder = formerParent();
     while(folder)
     {
         urls += folder->includeDirectories();
-        folder = dynamic_cast<CMakeFolderItem*>(folder->parent());
+        folder = formerParent();
     }
     return urls;
 }

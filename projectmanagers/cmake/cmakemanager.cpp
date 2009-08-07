@@ -367,7 +367,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             if(item->parent()==0)
                 curr=initializeProject(item->project(), item->project()->projectItem()->url());
             else
-                curr=dynamic_cast<CMakeFolderItem*>(folder->parent())->topDUContext();
+                curr=folder->formerParent()->topDUContext();
             
             kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
@@ -458,12 +458,20 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(subroot.isParentOf(path) || path.isParentOf(subroot))
                 {
                     entries.remove(subf);
+                    CMakeFolderItem* parent=folder;
+                    if(path.upUrl()!=folder->url())
+                        parent=0;
 
-                    CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf, folder );
+                    CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf, parent );
                     kDebug() << "folder: " << a << a->index();
                     a->setUrl(path);
                     a->setDefinitions(data.definitions);
                     folderList.append( a );
+                    
+                    if(!parent) {
+                        m_pending[path]=a;
+                        a->setFormerParent(folder);
+                    }
 
                     DescriptorAttatched* datt=static_cast<DescriptorAttatched*>(a);
                     datt->setDescriptor(data.folderDeclarations[subf]);
@@ -567,7 +575,12 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         {
             fileurl.adjustPath(KUrl::AddTrailingSlash);
             if(!QFile::exists(cache.toLocalFile()))
-                folderList.append(new KDevelop::ProjectFolderItem( item->project(), fileurl, item ));
+            {
+                if(m_pending.contains(fileurl))
+                    item->appendRow(m_pending.take(fileurl));
+                else
+                    folderList.append(new KDevelop::ProjectFolderItem( item->project(), fileurl, item ));
+            }
         }
         else
         {
@@ -578,18 +591,29 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     return folderList;
 }
 
-bool CMakeManager::reload(KDevelop::ProjectBaseItem* item)
+bool CMakeManager::reload(KDevelop::ProjectBaseItem* it)
 {
-    CMakeFolderItem* folderItem = dynamic_cast<CMakeFolderItem*>(item);
-    if (folderItem) {
-        if (item == item->project()->projectItem()) {
-            item->project()->reloadModel();
-        } else {
-            QStandardItem *parent = folderItem->parent();
-            CMakeFolderItem* fi = new CMakeFolderItem( folderItem->project(), folderItem->url().toLocalFile(), parent);
-            parent->removeRow(folderItem->row());
-            reimport(fi);
+    if (it == it->project()->projectItem()) {
+        it->project()->reloadModel();
+    } else {
+        //We have to reload folders
+        CMakeFolderItem* item=0;
+        while(!item && it->parent()) {
+            item=dynamic_cast<CMakeFolderItem*>(it->folder());
         }
+        Q_ASSERT(item);
+        
+        CMakeFolderItem* former=item->formerParent();
+        QStandardItem* parent=item->parent();
+        KUrl url=item->url();
+        IProject* project=item->project();
+        
+        item->parent()->removeRow(item->row());
+        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), 0);
+                                                    
+        fi->setFormerParent(former);
+        parent->appendRow(fi);
+        reimport(fi);
     }
     return true;
 }
@@ -739,10 +763,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
                 parseOnly(proj, current);
             }
 #endif
-            QStandardItem *parent=it->parent();
-            parent->removeRow(it->row());
-            CMakeFolderItem* fi=new CMakeFolderItem( proj, dir.toLocalFile(), parent);
-            reload(fi);
+            reload(it);
         }
         else
         {
