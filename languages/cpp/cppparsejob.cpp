@@ -767,7 +767,9 @@ void CPPInternalParseJob::run()
         if(!context.context)
           continue;
         Q_ASSERT(context.context);
-        Q_ASSERT(contentContext->imports(context.context.data(), SimpleCursor::invalid()));
+        if(!contentContext->imports(context.context.data(), SimpleCursor::invalid())) {
+          kWarning() << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
+        }
       }
     }
 
