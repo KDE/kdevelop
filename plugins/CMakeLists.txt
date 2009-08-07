@@ -13,6 +13,7 @@ add_subdirectory(problemreporter)
 add_subdirectory(execute)
 add_subdirectory(sourceformatter)
 add_subdirectory(documentswitcher)
+add_subdirectory(patchreview)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 macro_optional_find_package( Boost 1.35.0 )
@@ -32,4 +33,3 @@ macro_optional_add_subdirectory(git)
 macro_optional_add_subdirectory(mercurial)
 
 macro_display_feature_log()
-
