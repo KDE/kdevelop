@@ -597,7 +597,7 @@ bool CMakeManager::reload(KDevelop::ProjectBaseItem* it)
         it->project()->reloadModel();
     } else {
         //We have to reload folders
-        CMakeFolderItem* item=0;
+        CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(it->folder());
         while(!item && it->parent()) {
             item=dynamic_cast<CMakeFolderItem*>(it->folder());
         }
