@@ -113,7 +113,11 @@ uint InstantiationInformation::hash() const {
   return (ret + previousInstantiationInformation.index()) * 31;
 }
 
-KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > > instantiationInformationRepository("Instantiation Information Repository", 1, typeRepositoryManager());
+AbstractRepositoryManager* returnTypeRepository() {
+  return typeRepositoryManager();
+}
+
+KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > > instantiationInformationRepository("Instantiation Information Repository", 1, &returnTypeRepository);
 
 const uint standardInstantiationInformationIndex = instantiationInformationRepository->index( InstantiationInformation() );
 
