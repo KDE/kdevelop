@@ -65,7 +65,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     
     model = new LaunchConfigurationsModel( tree );
     tree->setModel( model );
-    //tree->setIndentation( 5 );
     tree->setExpandsOnDoubleClick( true );
     tree->setSelectionBehavior( QAbstractItemView::SelectRows );
     tree->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -95,9 +94,32 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     }
     tree->selectionModel()->select( QItemSelection( idx, idx ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     tree->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
-    tree->resizeColumnToContents( 0 );
     setInitialSize( QSize( 700, 500 ) );
     
+    // Unfortunately tree->resizeColumnToContents() only looks at the top-level 
+    // items, instead of all open ones. Hence we're calculating it ourselves like
+    // this:
+    // Take the selected index, check if it has childs, if so take the first child
+    // Then count the level by going up, then let the tree calculate the width
+    // for the selected or its first child index and add indentation*level
+    //
+    // If Qt Software ever fixes resizeColumnToContents, the following line
+    // can be enabled and the rest be removed
+    // tree->resizeColumnToContents( 0 );
+    int level = 0;
+    QModelIndex widthidx = idx;
+    if( model->rowCount( idx ) > 0 )
+    {
+        widthidx = idx.child( 0, 0 );
+    }
+    QModelIndex parentidx = widthidx.parent();
+    while( parentidx.isValid() )
+    {
+        level++;
+        parentidx = parentidx.parent();
+    }
+    int width = qMax( tree->columnWidth( 0 ), level*tree->indentation() + tree->indentation() + tree->sizeHintForIndex( widthidx ).width() );
+    tree->setColumnWidth( 0, width );
     
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
