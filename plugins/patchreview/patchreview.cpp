@@ -55,6 +55,9 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
 //krazy:excludeall=doublequote_chars
+#include <language/editor/editorintegrator.h>
+#include <krun.h>
+#include <kparts/mainwindow.h>
 
 QStringList splitArgs( const QString& str ) {
     QStringList ret;
@@ -107,20 +110,7 @@ void PatchReviewToolView::updatePatchFromEdit() {
     ps->baseDir = m_editPatch.baseDir->url();
     ps->depth = m_editPatch.depth->value();
 
-    ps->state = editState();
-
     m_plugin->notifyPatchChanged();
-}
-
-LocalPatchSource::State PatchReviewToolView::editState() {
-    switch ( m_editPatch.state->currentIndex() ) {
-    case 0:
-        return LocalPatchSource::Unknown;
-    case 1:
-        return LocalPatchSource::Applied;
-    default:
-        return LocalPatchSource::NotApplied;
-    }
 }
 
 void PatchReviewToolView::fillEditFromPatch() {
@@ -133,45 +123,12 @@ void PatchReviewToolView::fillEditFromPatch() {
     m_editPatch.baseDir->setUrl( patch->baseDir );
     m_editPatch.depth->setValue( patch->depth );
 
-    int stateIndex = 0;
-
-    switch ( patch->state ) {
-    case LocalPatchSource::Applied:
-        stateIndex = 1;
-        break;
-    case LocalPatchSource::NotApplied:
-        stateIndex = 2;
-        break;
-    default:
-        stateIndex = 0;
-    }
-
-    m_editPatch.state->setCurrentIndex( stateIndex );
 //   slotStateChanged();
 
-    if ( !patch->filename.isEmpty() )
+//     if ( patch->command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
-    else
-        m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
-}
-
-void PatchReviewToolView::slotStateChanged() {
-//   updatePatchFromEdit();
-
-    switch ( editState() ) {
-    case LocalPatchSource::Unknown:
-        m_editPatch.applyButton->setEnabled( true );
-        m_editPatch.unApplyButton->setEnabled( true );
-        break;
-    case LocalPatchSource::Applied:
-        m_editPatch.applyButton->setEnabled( false );
-        m_editPatch.unApplyButton->setEnabled( true );
-        break;
-    case LocalPatchSource::NotApplied:
-        m_editPatch.applyButton->setEnabled( true );
-        m_editPatch.unApplyButton->setEnabled( false );
-        break;
-    }
+//     else
+//         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
 }
 
 void PatchReviewToolView::slotEditCommandChanged() {
@@ -206,7 +163,6 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.baseDir->setMode(KFile::Directory);
 
     connect( m_editPatch.command, SIGNAL( textChanged( const QString& ) ), this, SLOT(slotEditCommandChanged()) );
-    connect( m_editPatch.state, SIGNAL( currentIndexChanged( int ) ), this, SLOT( slotStateChanged() ) );
 //   connect( m_editPatch.determineState, SIGNAL( clicked( bool ) ), this, SLOT( slotDetermineState() ) );
 //   connect( m_editPatch.commandToFile, SIGNAL( clicked( bool ) ), this, SLOT( slotToFile() ) );
 
@@ -217,13 +173,11 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.command, SIGNAL( returnPressed() ), this, SLOT(slotEditCommandChanged()) );
     connect( m_editPatch.command, SIGNAL( () ), this, SLOT(slotEditCommandChanged()) );
 
-    connect( m_editPatch.highlightFiles, SIGNAL(clicked(bool)), m_plugin, SLOT(highlightPatch()) );
+    connect( m_editPatch.updateButton, SIGNAL(clicked(bool)), m_plugin, SLOT(updateKompareModel()) );
 
+    connect( m_editPatch.showButton, SIGNAL(clicked(bool)), m_plugin, SLOT(showPatch()) );
+    
     bool blocked = blockSignals( true );
-
-    m_editPatch.state->insertItem( 0, "Unknown" );
-    m_editPatch.state->insertItem( 1, "Applied" );
-    m_editPatch.state->insertItem( 2, "Not Applied" );
 
     blockSignals( blocked );
 }
@@ -238,7 +192,12 @@ void PatchReviewToolView::prevHunk() {
     m_plugin->seekHunk( false );
 }
 
-void PatchReviewPlugin::seekHunk( bool forwards, const QString& fileName ) {
+KUrl PatchReviewPlugin::diffFile()
+{
+    return m_patch->filename;
+}
+
+void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
     try {
         if ( !m_modelList.get() )
             throw "no model";
@@ -257,12 +216,12 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QString& fileName ) {
                 file.addPath( model->destinationPath() );
                 file.addPath( model->destinationFile() );
             }
-            if ( !fileName.isEmpty() && fileName != file.toLocalFile() )
+            if ( !fileName.isEmpty() && fileName != file )
                 continue;
 
             IDocument* doc = ICore::self()->documentController()->documentForUrl( file );
 
-            if ( doc ) {
+            if ( doc && doc == ICore::self()->documentController()->activeDocument() ) {
                 ICore::self()->documentController()->activateDocument( doc );
                 if ( doc->textDocument() ) {
                     KTextEditor::View * v = doc->textDocument() ->activeView();
@@ -304,8 +263,10 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QString& fileName ) {
     kDebug() << "no matching hunk found";
 }
 
-void PatchReviewPlugin::highlightPatch() {
-//   updateKompareModel();
+
+
+void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* document)
+{
     try {
         if ( !modelList() )
             throw "no model";
@@ -324,21 +285,52 @@ void PatchReviewPlugin::highlightPatch() {
                 file.addPath( model->destinationFile() );
             }
 
-            kDebug() << "highlighting" << file.toLocalFile();
+            if (file != highlightFile)
+                continue;
 
-            IDocument* doc = ICore::self()->documentController()->documentForUrl( file );
+            kDebug() << "highlighting" << file.prettyUrl();
 
-            if ( !doc ) {
-                doc = ICore::self()->documentController()->openDocument( file, KTextEditor::Cursor() );
-                if (!doc) {
-                    kWarning() << "failed to open" << file;
-                    return;
-                }
-                seekHunk( true, file.toLocalFile() );
+            IDocument* doc = document;
+            if(!doc)
+              doc = ICore::self()->documentController()->documentForUrl( file );
+
+            kDebug() << "highlighting file" << file << "with doc" << doc;
+            
+            if ( !doc )
+                continue;
+
+            removeHighlighting( file );
+
+            m_highlighters[ file ] = new PatchHighlighter( model, doc, isSource() );
+        }
+
+    } catch ( const QString & str ) {
+        kDebug() << "highlightFile():" << str;
+    } catch ( const char * str ) {
+        kDebug() << "highlightFile():" << str;
+    }
+}
+
+void PatchReviewPlugin::highlightPatch() {
+    try {
+        if ( !modelList() )
+            throw "no model";
+
+        for (uint a = 0; a < modelList()->modelCount(); ++a) {
+            const Diff2::DiffModel* model = modelList()->modelAt(a);
+            if ( !model )
+                continue;
+
+            KUrl file = m_patch->baseDir;
+            if ( isSource() ) {
+                file.addPath( model->sourcePath() );
+                file.addPath( model->sourceFile() );
+            } else {
+                file.addPath( model->destinationPath() );
+                file.addPath( model->destinationFile() );
             }
-            removeHighlighting( file.toLocalFile() );
 
-            m_highlighters[ file.toLocalFile() ] = new DocumentHighlighter( model, doc, isSource() );
+            addHighlighting(file);
         }
 
     } catch ( const QString & str ) {
@@ -372,7 +364,7 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
 
         ICore::self()->documentController()->openDocument( file, KTextEditor::Cursor() );
 
-        m_plugin->seekHunk( true, file.toLocalFile() );
+        m_plugin->seekHunk( true, file );
     } catch ( const QString & str ) {
         kDebug() << "fileDoubleClicked():" << str;
     } catch ( const char * str ) {
@@ -425,7 +417,6 @@ void PatchReviewToolView::fileSelectionChanged() {
     QModelIndexList i = m_editPatch.filesList->selectionModel() ->selectedIndexes();
     m_editPatch.nextHunk->setEnabled( false );
     m_editPatch.previousHunk->setEnabled( false );
-    m_editPatch.highlightFiles->setEnabled( false );
     if ( !m_plugin->modelList() )
         return ;
     for ( QModelIndexList::iterator it = i.begin(); it != i.end(); ++it ) {
@@ -436,14 +427,19 @@ void PatchReviewToolView::fileSelectionChanged() {
                 if ( model->differenceCount() != 0 ) {
                     m_editPatch.nextHunk->setEnabled( true );
                     m_editPatch.previousHunk->setEnabled( true );
-                    m_editPatch.highlightFiles->setEnabled( true );
                 }
             }
         }
     }
 }
 
-DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, bool isSource ) throw( QString ) : m_doc( kdoc ) {
+
+void PatchHighlighter::rangeDeleted(KTextEditor::SmartRange* range)
+{
+    m_ranges.remove(range);
+}
+
+PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, bool isSource ) throw( QString ) : m_doc( kdoc ) {
 //  connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( model, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
@@ -451,7 +447,6 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
     KTextEditor::Document* doc = kdoc->textDocument();
     if ( doc->lines() == 0 )
         return ;
-    if ( doc->activeView() == 0 ) return;
 
     if ( !model->differences() )
         return ;
@@ -477,7 +472,7 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
             line -= 1;
 
         KTextEditor::Cursor c( line, 0 );
-        KTextEditor::Cursor endC( line + lineCount, 0 );
+        KTextEditor::Cursor endC( line + lineCount - 1, 0 );
         if ( doc->lines() <= c.line() )
             c.setLine( doc->lines() - 1 );
         if ( doc->lines() <= endC.line() )
@@ -489,7 +484,7 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
             r->setParentRange(topRange);
             KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
-            t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 200, 200, 255 ) ) );
+            t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
             r->setAttribute( t );
         }
     }
@@ -499,28 +494,32 @@ DocumentHighlighter::DocumentHighlighter( const Diff2::DiffModel* model, IDocume
     smart->addHighlightToDocument(topRange);
 }
 
-DocumentHighlighter::~DocumentHighlighter() {
-    for ( QList<KTextEditor::SmartRange*>::iterator it = m_ranges.begin(); it != m_ranges.end(); ++it ) {
-        delete *it; ///@todo smart-lock
-    }
+PatchHighlighter::~PatchHighlighter()
+{
+    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( m_doc->textDocument() );
+    if ( !smart )
+        return;
+
+    QMutexLocker lock(smart->smartMutex());
+
+    for ( QSet<KTextEditor::SmartRange*>::iterator it = m_ranges.begin(); it != m_ranges.end(); ++it )
+        delete *it;
 
     m_ranges.clear();
 }
 
-IDocument* DocumentHighlighter::doc() {
+IDocument* PatchHighlighter::doc() {
     return m_doc;
 }
 
-void DocumentHighlighter::documentDestroyed() {
+void PatchHighlighter::documentDestroyed() {
     m_ranges.clear();
 }
 
-void PatchReviewPlugin::removeHighlighting( const QString& file ) {
+void PatchReviewPlugin::removeHighlighting( const KUrl& file ) {
     if ( file.isEmpty() ) {
         ///Remove all highlighting
-        for ( HighlightMap::iterator it = m_highlighters.begin(); it != m_highlighters.end(); ++it ) {
-            delete *it;
-        }
+        qDeleteAll(m_highlighters);
         m_highlighters.clear();
     } else {
         HighlightMap::iterator it = m_highlighters.find( file );
@@ -535,6 +534,12 @@ void PatchReviewPlugin::notifyPatchChanged()
 {
     kDebug() << "notifying patch change: " << m_patch->filename;
     m_updateKompareTimer->start(500);
+}
+
+void PatchReviewPlugin::showPatch()
+{
+//     KRun::displayOpenWithDialog(KUrl::List() << diffFile(), core()->uiController()->activeMainWindow());
+      KRun::runCommand("kompare " + diffFile().pathOrUrl(), core()->uiController()->activeMainWindow());
 }
 
 void PatchReviewPlugin::updateKompareModel() {
@@ -573,6 +578,9 @@ void PatchReviewPlugin::updateKompareModel() {
         }
 
         emit patchChanged();
+
+        highlightPatch();
+
         return;
     } catch ( const QString & str ) {
         kWarning() << "updateKompareModel:" << str;
@@ -622,10 +630,23 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KD
     core()->uiController()->addToolView(i18n("Patch Review"), m_factory);
     setXMLFile("kdevpatchreview.rc");
 
+    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
+
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
+}
 
+
+void PatchReviewPlugin::documentClosed(IDocument* doc)
+{
+    removeHighlighting(doc->url());
+}
+
+void PatchReviewPlugin::textDocumentCreated(IDocument* doc)
+{
+    addHighlighting( doc->url(), doc );
 }
 
 void PatchReviewPlugin::unload()

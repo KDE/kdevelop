@@ -19,8 +19,11 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <memory>
 #include <qstandarditemmodel.h>
 #include <interfaces/iplugin.h>
+#include <ktexteditor/smartrange.h>
 #include "localpatchsource.h"
 #include "ui_patchreview.h"
+#include <language/duchain/indexedstring.h>
+#include <ktexteditor/rangefeedback.h>
 
 class PatchReviewToolViewFactory;
 
@@ -45,16 +48,18 @@ class IDocument;
 }
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
-class DocumentHighlighter : public QObject {
+class PatchHighlighter : public QObject, public KTextEditor::SmartRangeWatcher {
     Q_OBJECT
 public:
-    DocumentHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, bool isSource ) throw( QString );
-    ~DocumentHighlighter();
+    PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, bool isSource ) throw( QString );
+    ~PatchHighlighter();
     KDevelop::IDocument* doc();
 private slots:
     void documentDestroyed();
 private:
-    QList<KTextEditor::SmartRange*> m_ranges;
+
+    virtual void rangeDeleted(KTextEditor::SmartRange* range);
+    QSet<KTextEditor::SmartRange*> m_ranges;
     KDevelop::IDocument* m_doc;
 };
 
@@ -71,7 +76,6 @@ signals:
     void dialogClosed( PatchReviewToolView* );
     void  stateChanged( PatchReviewToolView* );
 private slots:
-    void slotStateChanged();
 
     void fileDoubleClicked( const QModelIndex& i );
     void fileSelectionChanged();
@@ -92,8 +96,6 @@ private:
 
     void showEditDialog();
     void editPatchReadOnly();
-    ///Returns the edit-state visible in the UI
-    LocalPatchSource::State editState();
     ///Fills the editor views from m_editingPatch
     void fillEditFromPatch();
 
@@ -135,20 +137,25 @@ public:
 
     void notifyPatchChanged();
 
-    void seekHunk( bool forwards, const QString& file = QString() );
+    void seekHunk( bool forwards, const KUrl& file = KUrl() );
 
+    KUrl diffFile();
+    
 Q_SIGNALS:
     void patchChanged();
 
 public Q_SLOTS:
     void  highlightPatch();
+    void updateKompareModel();
+    void showPatch();
 
 private Q_SLOTS:
-    void updateKompareModel();
-
+    void documentClosed(KDevelop::IDocument*);
+    void textDocumentCreated(KDevelop::IDocument*);
 private:
 
-    void removeHighlighting( const QString& file = QString() );
+    void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
+    void removeHighlighting( const KUrl& file = KUrl() );
 
     LocalPatchSourcePointer m_patch;
     bool m_isSource;
@@ -163,7 +170,7 @@ private:
     std::auto_ptr<Kompare::Info> m_kompareInfo;
     std::auto_ptr<Diff2::KompareModelList> m_modelList;
     KUrl m_lastModelFile;
-    typedef QMap<QString, QPointer<DocumentHighlighter> > HighlightMap;
+    typedef QMap<KUrl, QPointer<PatchHighlighter> > HighlightMap;
     HighlightMap m_highlighters;
 };
 
