@@ -44,6 +44,7 @@
 #include "ui_launchconfigtypepage.h"
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
+#include <QLayout>
 
 namespace KDevelop
 {
@@ -64,21 +65,17 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     
     model = new LaunchConfigurationsModel( tree );
     tree->setModel( model );
-    tree->setIndentation( 5 );
+    //tree->setIndentation( 5 );
     tree->setExpandsOnDoubleClick( true );
     tree->setSelectionBehavior( QAbstractItemView::SelectRows );
     tree->setSelectionMode( QAbstractItemView::SingleSelection );
     tree->setUniformRowHeights( true );
-    tree->setItemDelegateForColumn(0, new QItemDelegate( tree ) );
-    QItemDelegate* dlg = new QItemDelegate( tree );
-    dlg->setItemEditorFactory( new QItemEditorFactory() );
-    dlg->itemEditorFactory()->registerEditor( QVariant::String, new LaunchConfigurationTypeEditorCreator() );
-    tree->setItemDelegateForColumn( 1, dlg );
+    tree->setItemDelegate( new LaunchConfigurationModelDelegate() );
     
     connect( addConfig, SIGNAL(clicked()), this, SLOT(createConfiguration()));
     connect( deleteConfig, SIGNAL(clicked()), this, SLOT(deleteConfiguration()));
     
-    connect( tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectedConfig(QItemSelection,QItemSelection)));
+    connect( tree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged(QItemSelection,QItemSelection)));
     QModelIndex idx = model->indexForConfig( Core::self()->runControllerInternal()->defaultLaunch() );
     kDebug() << "selecting index:" << idx;
     if( !idx.isValid() )
@@ -101,25 +98,29 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     tree->resizeColumnToContents( 0 );
     setInitialSize( QSize( 700, 500 ) );
     
+    
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
 }
 
-void LaunchConfigurationDialog::selectedConfig(QItemSelection selected, QItemSelection deselected )
+void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
 {
-    if( !deselected.indexes().isEmpty() && currentPageChanged )
+    if( !deselected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( deselected.indexes().first() );
         if( l )
         {
             disconnect(l, SIGNAL(nameChanged(QString)), this,  SLOT(updateNameLabel(QString)));
-            if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18n("Unsaved Changes") ) == KMessageBox::Yes )
+            if( currentPageChanged )
             {
-                saveConfig( deselected.indexes().first() );
-            } else {
-                LaunchConfigTypePage* tab = qobject_cast<LaunchConfigTypePage*>( stack->currentWidget() );
-                tab->setLaunchConfiguration( l );
-                currentPageChanged = false;
+                if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18n("Unsaved Changes") ) == KMessageBox::Yes )
+                {
+                    saveConfig( deselected.indexes().first() );
+                } else {
+                    LaunchConfigPagesContainer* tab = qobject_cast<LaunchConfigPagesContainer*>( stack->currentWidget() );
+                    tab->setLaunchConfiguration( l );
+                    currentPageChanged = false;
+                }
             }
         }
     }
@@ -127,27 +128,59 @@ void LaunchConfigurationDialog::selectedConfig(QItemSelection selected, QItemSel
     if( !selected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
+        ILaunchMode* lm = model->modeForIndex( selected.indexes().first() );
         if( l )
         {
-            //TODO: enable removal button
-            LaunchConfigurationType* type = l->type();
-            LaunchConfigTypePage* tab;
-            if( typeWidgets.contains( type ) )
-            {
-                tab = typeWidgets.value( type );
-            } else
-            {
-                tab = new LaunchConfigTypePage( type, stack );
-                connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
-                stack->addWidget( tab );
-            }
-            tab->setLaunchConfiguration( l );
             updateNameLabel( l->name() );
+            tree->expand( model->indexForConfig( l ) );
             connect( l, SIGNAL(nameChanged(QString)), SLOT(updateNameLabel(QString)) );
-            stack->setCurrentWidget( tab );
-            
-            addConfig->setEnabled( true );
-            deleteConfig->setEnabled( true );
+            if( lm )
+            {
+                ILauncher* launcher = l->type()->launcherForId( l->launcherForMode( lm->id() ) );
+                if( launcher )
+                {
+                    LaunchConfigPagesContainer* tab;
+                    if( launcherWidgets.contains( launcher ) )
+                    {
+                        tab = launcherWidgets.value( launcher );
+                    } else
+                    {
+                        tab = new LaunchConfigPagesContainer( launcher->configPages(), stack );
+                        connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
+                        stack->addWidget( tab );
+                    }
+                    tab->setLaunchConfiguration( l );
+                    stack->setCurrentWidget( tab );
+                    updateNameLabel( l->name() );
+                    addConfig->setEnabled( false );
+                    deleteConfig->setEnabled( false );
+                } else
+                {
+                    addConfig->setEnabled( false );
+                    deleteConfig->setEnabled( false );
+                    stack->setCurrentIndex( 0 );
+                }
+            } else 
+            {
+                //TODO: enable removal button
+                LaunchConfigurationType* type = l->type();
+                LaunchConfigPagesContainer* tab;
+                if( typeWidgets.contains( type ) )
+                {
+                    tab = typeWidgets.value( type );
+                } else
+                {
+                    tab = new LaunchConfigPagesContainer( type->configPages(), stack );
+                    connect( tab, SIGNAL(changed()), SLOT(pageChanged()) );
+                    stack->addWidget( tab );
+                }
+                kDebug() << "created pages, setting config up";
+                tab->setLaunchConfiguration( l );
+                stack->setCurrentWidget( tab );
+                
+                addConfig->setEnabled( true );
+                deleteConfig->setEnabled( true );
+            }
         } else 
         {
             addConfig->setEnabled( true );
@@ -164,7 +197,7 @@ void LaunchConfigurationDialog::selectedConfig(QItemSelection selected, QItemSel
 
 void LaunchConfigurationDialog::saveConfig( const QModelIndex& idx )
 {
-    LaunchConfigTypePage* tab = qobject_cast<LaunchConfigTypePage*>( stack->currentWidget() );
+    LaunchConfigPagesContainer* tab = qobject_cast<LaunchConfigPagesContainer*>( stack->currentWidget() );
     if( tab )
     {
         tab->save();
@@ -238,18 +271,39 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
     }
     foreach( LaunchConfiguration* l, Core::self()->runControllerInternal()->launchConfigurations() )
     {
-        LaunchItem* t = new LaunchItem;
-        t->launch = l;
-        TreeItem* parent;
-        if( l->project() ) {
-            parent = findItemForProject( l->project() );
-        } else {
-            parent = topItems.at(0);
-        }
-        t->parent = parent;
-        t->row = parent->children.count();
-        parent->children.append( t );
+        addItemForLaunchConfig( l );
     }    
+}
+
+void LaunchConfigurationsModel::addItemForLaunchConfig( LaunchConfiguration* l )
+{
+    LaunchItem* t = new LaunchItem;
+    t->launch = l;
+    TreeItem* parent;
+    if( l->project() ) {
+        parent = findItemForProject( l->project() );
+    } else {
+        parent = topItems.at(0);
+    }
+    t->parent = parent;
+    t->row = parent->children.count();
+    parent->children.append( t );
+    QSet<QString> modes;
+    foreach( ILauncher* launcher, l->type()->launchers() )
+    {
+        foreach( const QString& mode, launcher->supportedModes() )
+        {
+            if( !modes.contains( mode ) && launcher->configPages().count() > 0 )
+            {
+                modes.insert( mode );
+                LaunchModeItem* lmi = new LaunchModeItem;
+                lmi->mode = Core::self()->runController()->launchModeForId( mode );
+                lmi->parent = t;
+                lmi->row = t->children.count();
+                t->children.append( lmi );
+            }
+        }
+    }
 }
 
 LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForProject( IProject* p )
@@ -301,6 +355,18 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                 {
                     return gpi->text;
                 }
+                LaunchModeItem* lmi = dynamic_cast<LaunchModeItem*>( t );
+                if( lmi )
+                {
+                    if( index.column() == 0 )
+                    {
+                        return lmi->mode->name();
+                    } else if( index.column() == 1 )
+                    {
+                        LaunchConfiguration* l = configForIndex( index );
+                        return l->type()->launcherForId( l->launcherForMode( lmi->mode->id() ) )->name();
+                    }
+                }
                 break;
             }
             case Qt::DecorationRole:
@@ -309,9 +375,11 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                 if( index.column() == 0 && li )
                 {
                     return li->launch->type()->icon();
-                } else if( index.column() == 1 )
+                }
+                LaunchModeItem* lmi = dynamic_cast<LaunchModeItem*>( t );
+                if( lmi && index.column() == 0 )
                 {
-                    return KIcon();
+                    return lmi->mode->icon();
                 }
             }
             case Qt::EditRole:
@@ -326,6 +394,11 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                     {
                         return li->launch->type()->id();
                     }
+                }
+                LaunchModeItem* lmi = dynamic_cast<LaunchModeItem*>( t );
+                if( lmi && index.column() == 1  )
+                {
+                    return configForIndex( index )->launcherForMode( lmi->mode->id() );
                 }
                 break;
             }
@@ -406,7 +479,7 @@ Qt::ItemFlags LaunchConfigurationsModel::flags(const QModelIndex& index) const
         && index.column() < columnCount( QModelIndex() ) ) 
     {
         TreeItem* t = static_cast<TreeItem*>( index.internalPointer() );
-        if( t && dynamic_cast<LaunchItem*>( t ) )
+        if( t && ( dynamic_cast<LaunchItem*>( t ) || ( dynamic_cast<LaunchModeItem*>( t ) && index.column() == 1 ) ) )
         {
             return Qt::ItemFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
         } else if( t )
@@ -429,9 +502,21 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
                 if( index.column() == 0 )
                 {
                     t->launch->setName( value.toString() );
+                    return true;
                 } else if( index.column() == 1 )
                 {
                     t->launch->setType( value.toString() );
+                    return true;
+                }
+            }
+            LaunchModeItem* lmi = dynamic_cast<LaunchModeItem*>( static_cast<TreeItem*>( index.internalPointer() ) );
+            if( lmi )
+            {
+                if( index.column() == 1 )
+                {
+                    LaunchConfiguration* l = configForIndex( index );
+                    l->setLauncherForMode( lmi->mode->id(), value.toString() );
+                    return true;
                 }
             }
         }
@@ -439,7 +524,20 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
     return false;
 }
 
-LaunchConfiguration* LaunchConfigurationsModel::configForIndex(const QModelIndex& idx )
+ILaunchMode* LaunchConfigurationsModel::modeForIndex( const QModelIndex& idx ) const
+{
+    if( idx.isValid() )
+    {
+        LaunchModeItem* item = dynamic_cast<LaunchModeItem*>( static_cast<TreeItem*>( idx.internalPointer() ) );
+        if( item )
+        {
+            return item->mode;
+        }
+    }
+    return 0;
+}
+
+LaunchConfiguration* LaunchConfigurationsModel::configForIndex(const QModelIndex& idx ) const
 {
     if( idx.isValid() )
     {
@@ -447,12 +545,17 @@ LaunchConfiguration* LaunchConfigurationsModel::configForIndex(const QModelIndex
         if( item )
         {
             return item->launch;
+        } 
+        LaunchModeItem* lmitem = dynamic_cast<LaunchModeItem*>( static_cast<TreeItem*>( idx.internalPointer() ) );
+        if( lmitem ) 
+        {
+            return dynamic_cast<LaunchItem*>( lmitem->parent )->launch;
         }
     }
     return 0;
 }
 
-QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l )
+QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l ) const
 {
     if( l )
     {
@@ -537,168 +640,112 @@ void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
         LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, ( ti ? ti->project : 0 ) );
         l->setLauncherForMode( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
         Core::self()->runControllerInternal()->addLaunchConfiguration( l );
-        LaunchItem* item = new LaunchItem;
-        item->launch = l;
-        item->parent = t;
-        item->row = t->children.count();
-        t->children.append( item );
+        addItemForLaunchConfig( l );
         endInsertRows();
     }
 }
 
-LaunchConfigurationTypeComboBox::LaunchConfigurationTypeComboBox( QWidget* parent )
-    : KComboBox( parent )
+LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*>& factories, QWidget* parent ) 
+    : QWidget(parent)
 {
-    foreach( LaunchConfigurationType* t, Core::self()->runControllerInternal()->launchConfigurationTypes() )
+    setLayout( new QVBoxLayout( this ) );
+    QWidget* parentwidget = this;
+    KTabWidget* tab = 0;
+    if( factories.count() > 1 )
     {
-        addItem( t->name(), t->id() );
+        tab = new KTabWidget( this );
+        parentwidget = tab;
+        layout()->addWidget( tab );
     }
-}
-
-QVariant LaunchConfigurationTypeComboBox::currentData() const
-{
-    return itemData( currentIndex() );
-}
-
-void LaunchConfigurationTypeComboBox::changeCurrentIndex( int idx )
-{
-    emit currentDataChanged( itemData( idx ) );
-}
-
-void LaunchConfigurationTypeComboBox::setCurrentData( const QVariant& data )
-{
-    setCurrentIndex( findData( data ) );
-}
-
-LaunchConfigurationTypeEditorCreator::LaunchConfigurationTypeEditorCreator()
-{
-}
-
-QWidget* LaunchConfigurationTypeEditorCreator::createWidget(QWidget* parent) const
-{
-    LaunchConfigurationTypeComboBox* cb = new LaunchConfigurationTypeComboBox( parent );
-    cb->setFrame( false );
-    return cb;
-}
-
-QByteArray LaunchConfigurationTypeEditorCreator::valuePropertyName() const
-{
-    return "currentData";
-}
-
-LaunchConfigTypePage::LaunchConfigTypePage( LaunchConfigurationType* type, QWidget* parent ) 
-    : QWidget(parent), ui( new Ui::LaunchConfigTypePage )
-{
-    ui->setupUi( this );
-    ui->launcher->setEnabled( false );
-    foreach( ILauncher* l, type->launchers() )
+    foreach( LaunchConfigurationPageFactory* fac, factories )
     {
-        foreach( const QString& s, l->supportedModes() )
-        {
-            ILaunchMode* m = Core::self()->runControllerInternal()->launchModeForId( s );
-            if( m )
-            {
-                int idx = ui->mode->findData( m->id() );
-                if( idx == -1 )
-                {
-                    ui->mode->addItem( m->icon(), m->name(), m->id() );
-                    launchersForModes.insert( m->id(), QStringList() << l->id() );
-                } else
-                {
-                    launchersForModes[ m->id() ] << l->id();
-                }
-            } else
-            {
-                kWarning() << "Ooops, config type" << type->id() << "provides a launcher with an unknown launch mode:" << s;
-                return;
-            }
-        }
-    }
-    
-    foreach( LaunchConfigurationPageFactory* fac, type->configPages() )
-    {
-        LaunchConfigurationPage* page = fac->createWidget( ui->tab );
+        LaunchConfigurationPage* page = fac->createWidget( parentwidget );
+        pages.append( page );
         connect( page, SIGNAL(changed()), SIGNAL(changed()) );
-        ui->tab->addTab( page, page->icon(), page->title() );
-    }
-    
-    connect( ui->mode, SIGNAL(currentIndexChanged(int)), SLOT(changeMode(int)) );
-    connect( ui->launcher, SIGNAL(currentIndexChanged(int)), SLOT(changeLauncher(int)) );
-    connect( ui->launcher, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    
-}
-
-void LaunchConfigTypePage::changeLauncher( int idx )
-{
-    foreach( LaunchConfigurationPage* p, launcherPages )
-    {
-        ui->tab->removePage( p );
-        delete p;
-    }
-    launcherPages.clear();
-    ILauncher* l = config->type()->launcherForId( ui->launcher->itemData( idx ).toString() );
-    if( l )
-    {
-        config->setLauncherForMode( ui->mode->itemData( ui->mode->currentIndex() ).toString(), ui->launcher->itemData( idx ).toString() );
-        foreach( LaunchConfigurationPageFactory* fac, l->configPages() )
+        if( tab ) {
+            tab->addTab( page, page->icon(), page->title() );
+        } else 
         {
-            LaunchConfigurationPage* page = fac->createWidget( ui->tab );
-            connect( page, SIGNAL(changed()), SIGNAL(changed()) );
-            ui->tab->addTab( page, page->icon(), page->title() );
-            page->loadFromConfiguration( config->config(), config->project() );
-            launcherPages << page;
+            layout()->addWidget( page );
         }
     }
-    
 }
 
-void LaunchConfigTypePage::changeMode( int idx )
-{
-    QString id = ui->mode->itemData( idx ).toString();
-    QStringList launchers = launchersForModes[id];
-    
-    if( launchers.count() > 1 )
-    {
-        ui->launcher->setEnabled( true );
-    } else
-    {
-        ui->launcher->setEnabled( false );
-    }
-    bool b = ui->launcher->blockSignals( true );
-    ui->launcher->clear();
-    foreach( const QString& lid, launchers )
-    {
-        ui->launcher->addItem( config->type()->launcherForId( lid )->name(), lid );
-    }
-    int lidx = 0;
-    if( launchers.contains( config->launcherForMode( id ) ) )
-    {
-        lidx = ui->launcher->findData( config->launcherForMode( id ) );
-    } 
-    ui->launcher->setCurrentIndex( lidx );
-    changeLauncher( lidx );
-    ui->launcher->blockSignals( b );
-}
-
-void LaunchConfigTypePage::setLaunchConfiguration( KDevelop::LaunchConfiguration* l )
+void LaunchConfigPagesContainer::setLaunchConfiguration( KDevelop::LaunchConfiguration* l )
 {
     config = l;
-    changeMode( ui->mode->findData( "execute" ) );
-    changeLauncher( ui->launcher->findData( config->launcherForMode( "execute" ) ) );
-    foreach( LaunchConfigurationPage* p, ui->tab->findChildren<LaunchConfigurationPage*>() )
+    foreach( LaunchConfigurationPage* p, pages )
     {
         p->loadFromConfiguration( config->config(), config->project() );
     }
 }
 
-void LaunchConfigTypePage::save()
+void LaunchConfigPagesContainer::save()
 {
-    QList<LaunchConfigurationPage*> pages = ui->tab->findChildren<LaunchConfigurationPage*>();
     foreach( LaunchConfigurationPage* p, pages )
     {
         p->saveToConfiguration( config->config() );
     }
     config->config().sync();
+}
+
+
+QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    const LaunchConfigurationsModel* model = dynamic_cast<const LaunchConfigurationsModel*>( index.model() );
+    ILaunchMode* mode = model->modeForIndex( index );
+    LaunchConfiguration* config = model->configForIndex( index );
+    if( index.column() == 1 && mode && config ) 
+    {
+        KComboBox* box = new KComboBox( parent );
+        QList<ILauncher*> launchers = config->type()->launchers();
+        for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); it++ )
+        {
+            if( ((*it)->supportedModes().contains( mode->id() ) ) )
+            {
+                box->addItem( (*it)->name(), (*it)->id() );
+            }
+        }
+        return box;
+    } else if( !mode && config && index.column() == 1 )
+    {
+        KComboBox* box = new KComboBox( parent );
+        QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
+        for( QList<LaunchConfigurationType*>::const_iterator it = types.begin(); it != types.end(); it++ )
+        {
+            box->addItem( (*it)->name(), (*it)->id() );
+        }
+        return box;
+    }
+    return QItemDelegate::createEditor ( parent, option, index );
+}
+
+LaunchConfigurationModelDelegate::LaunchConfigurationModelDelegate()
+{
+}
+
+void LaunchConfigurationModelDelegate::setEditorData ( QWidget* editor, const QModelIndex& index ) const
+{
+    const LaunchConfigurationsModel* model = dynamic_cast<const LaunchConfigurationsModel*>( index.model() );
+    LaunchConfiguration* config = model->configForIndex( index );
+    if( index.column() == 1 && config ) 
+    {
+        KComboBox* box = qobject_cast<KComboBox*>( editor );
+        box->setCurrentIndex( box->findData( index.data( Qt::EditRole ) ) );
+    }
+    QItemDelegate::setEditorData ( editor, index );
+}
+
+void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const
+{
+    LaunchConfigurationsModel* lmodel = dynamic_cast<LaunchConfigurationsModel*>( model );
+    LaunchConfiguration* config = lmodel->configForIndex( index );
+    if( index.column() == 1 && config ) 
+    {
+        KComboBox* box = qobject_cast<KComboBox*>( editor );
+        lmodel->setData( index, box->itemData( box->currentIndex() ) );
+    }
+    QItemDelegate::setModelData ( editor, model, index );
 }
 
 

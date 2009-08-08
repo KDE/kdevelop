@@ -30,6 +30,7 @@
 #include <qitemeditorfactory.h>
 
 #include "ui_launchconfigurationdialog.h"
+#include <QItemDelegate>
 
 class QTreeView;
 class QStackedWidget;
@@ -44,6 +45,8 @@ class LaunchConfigTypePage;
 
 namespace KDevelop
 {
+class ILauncher;
+class LaunchConfigurationPageFactory;
 class ILaunchMode;
 
 class LaunchConfigurationType;
@@ -52,26 +55,13 @@ class LaunchConfigurationPage;
 class ILaunchConfiguration;
 class IProject;
 
-class LaunchConfigurationTypeComboBox : public KComboBox
-{
-Q_OBJECT
-    Q_PROPERTY( QVariant currentData READ currentData WRITE setCurrentData NOTIFY currentDataChanged )
-public:
-    LaunchConfigurationTypeComboBox( QWidget* parent );
-    QVariant currentData() const;
-    void setCurrentData( const QVariant& );
-signals:
-    void currentDataChanged( const QVariant& );
-private slots:
-    void changeCurrentIndex(int);
-};
-
-class LaunchConfigurationTypeEditorCreator : public QItemEditorCreatorBase
+class LaunchConfigurationModelDelegate : public QItemDelegate
 {
 public:
-    LaunchConfigurationTypeEditorCreator();
-    virtual QWidget* createWidget(QWidget* parent) const;
-    virtual QByteArray valuePropertyName() const;
+    LaunchConfigurationModelDelegate();
+    virtual QWidget* createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    virtual void setEditorData ( QWidget* editor, const QModelIndex& index ) const;
+    virtual void setModelData ( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const;
 };
 
 
@@ -90,8 +80,9 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     void createConfiguration( const QModelIndex& );
     void deleteConfiguration( const QModelIndex& index );
-    LaunchConfiguration* configForIndex( const QModelIndex& );
-    QModelIndex indexForConfig( LaunchConfiguration* );
+    LaunchConfiguration* configForIndex( const QModelIndex& ) const;
+    ILaunchMode* modeForIndex( const QModelIndex& idx ) const;
+    QModelIndex indexForConfig( LaunchConfiguration* ) const;
 private:
     class TreeItem
     {
@@ -123,26 +114,22 @@ private:
         QString text;
     };
     ProjectItem* findItemForProject( IProject* );
+    void addItemForLaunchConfig( LaunchConfiguration* l );
     QList<TreeItem*> topItems;
 };
 
-class LaunchConfigTypePage : public QWidget
+class LaunchConfigPagesContainer : public QWidget
 {
 Q_OBJECT
 public:
-    LaunchConfigTypePage( LaunchConfigurationType*, QWidget* parent = 0 );
+    LaunchConfigPagesContainer( const QList<LaunchConfigurationPageFactory*> &, QWidget* parent = 0 );
     void setLaunchConfiguration( LaunchConfiguration* );
     void save();
 signals:
     void changed();
-private slots:
-    void changeMode(int);
-    void changeLauncher(int);
 private:
-    Ui::LaunchConfigTypePage* ui;
-    QMap<QString,QStringList> launchersForModes;
     LaunchConfiguration* config;
-    QList<LaunchConfigurationPage*> launcherPages;
+    QList<LaunchConfigurationPage*> pages;
 };
 
 class LaunchConfigurationDialog : public KDialog, public Ui::LaunchConfigurationDialog
@@ -154,14 +141,15 @@ public:
 private slots:
     void deleteConfiguration();
     void createConfiguration();
-    void selectedConfig(QItemSelection,QItemSelection);
+    void selectionChanged(QItemSelection,QItemSelection);
     void pageChanged();
     void saveConfig();
     void updateNameLabel( const QString& );
 private:
     void saveConfig( const QModelIndex& );
     LaunchConfigurationsModel* model;
-    QMap<LaunchConfigurationType*, LaunchConfigTypePage*> typeWidgets;
+    QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;
+    QMap<ILauncher*, LaunchConfigPagesContainer*> launcherWidgets;
     bool currentPageChanged;
 };
 

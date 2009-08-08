@@ -74,7 +74,6 @@ set(kdevplatformshell_LIB_SRCS
 set(kdevplatformshell_UI
     sessiondialog.ui
     projectinfopage.ui
-    launchconfigtypepage.ui
     launchconfigurationdialog.ui
 )
 
