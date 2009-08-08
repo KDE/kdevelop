@@ -88,6 +88,7 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     showEditDialog();
     connect( plugin, SIGNAL(patchChanged()), SLOT(patchChanged()) );
     patchChanged();
+    connect( ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
 void PatchReviewToolView::patchChanged()
@@ -148,10 +149,12 @@ void PatchReviewToolView::showEditDialog() {
     m_filesModel = new QStandardItemModel( m_editPatch.filesList );
     m_editPatch.filesList->setModel( m_filesModel );
 
+    m_editPatch.previousHunk->setIcon(KIcon("arrow-up"));
+    m_editPatch.nextHunk->setIcon(KIcon("arrow-down"));
+    
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
     connect( m_editPatch.filesList, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( fileDoubleClicked( const QModelIndex& ) ) );
-    connect( m_editPatch.filesList->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), this, SLOT( fileSelectionChanged() ) );
     //connect( m_editPatch.cancelButton, SIGNAL( pressed() ), this, SLOT( slotEditCancel() ) );
 
     connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
@@ -372,6 +375,19 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
     }
 }
 
+KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
+{
+  KUrl file = m_plugin->patch()->baseDir;
+  if ( m_plugin->isSource() ) {
+      file.addPath( model->sourcePath() );
+      file.addPath( model->sourceFile() );
+  } else {
+      file.addPath( model->destinationPath() );
+      file.addPath( model->destinationFile() );
+  }
+  return file;
+}
+
 void PatchReviewToolView::kompareModelChanged()
 {
     m_filesModel->clear();
@@ -390,14 +406,7 @@ void PatchReviewToolView::kompareModelChanged()
         if ( diffs )
             cnt = diffs->count();
 
-        KUrl file = m_plugin->patch()->baseDir;
-        if ( m_plugin->isSource() ) {
-            file.addPath( ( *it ) ->sourcePath() );
-            file.addPath( ( *it ) ->sourceFile() );
-        } else {
-            file.addPath( ( *it ) ->destinationPath() );
-            file.addPath( ( *it ) ->destinationFile() );
-        }
+        KUrl file = urlForFileModel(*it);
 
         m_filesModel->insertRow( 0 );
         QModelIndex i = m_filesModel->index( 0, 0 );
@@ -410,27 +419,39 @@ void PatchReviewToolView::kompareModelChanged()
         }
         ++it;
     }
-    fileSelectionChanged();
 }
 
-void PatchReviewToolView::fileSelectionChanged() {
+
+void PatchReviewToolView::documentActivated(IDocument* doc)
+{
     QModelIndexList i = m_editPatch.filesList->selectionModel() ->selectedIndexes();
-    m_editPatch.nextHunk->setEnabled( false );
-    m_editPatch.previousHunk->setEnabled( false );
     if ( !m_plugin->modelList() )
         return ;
-    for ( QModelIndexList::iterator it = i.begin(); it != i.end(); ++it ) {
-        QVariant v = m_filesModel->data( *it, Qt::UserRole );
+    for(uint a = 0; a < m_filesModel->rowCount(); ++a) {
+      
+        QModelIndex index = m_filesModel->index(a, 0);
+      
+        QVariant v = m_filesModel->data( index, Qt::UserRole );
         if ( v.canConvert<const Diff2::DiffModel*>() ) {
             const Diff2::DiffModel * model = v.value<const Diff2::DiffModel*>();
-            if ( model ) {
-                if ( model->differenceCount() != 0 ) {
-                    m_editPatch.nextHunk->setEnabled( true );
-                    m_editPatch.previousHunk->setEnabled( true );
-                }
+            
+            KUrl file = urlForFileModel(model);
+            
+            if(file == doc->url()) {
+              m_editPatch.filesList->setCurrentIndex(index);
+              return;
+            
+              /*
+              if ( model ) {
+                  if ( model->differenceCount() != 0 ) {
+                      m_editPatch.nextHunk->setEnabled( true );
+                      m_editPatch.previousHunk->setEnabled( true );
+                  }
+              }*/
             }
         }
     }
+    m_editPatch.filesList->setCurrentIndex(QModelIndex());
 }
 
 

@@ -36,6 +36,7 @@ class QDialog;
 namespace Diff2 {
 class KompareModelList;
 class DiffModel;
+class DiffModel;
 }
 namespace KTextEditor {
 class SmartRange;
@@ -78,7 +79,6 @@ signals:
 private slots:
 
     void fileDoubleClicked( const QModelIndex& i );
-    void fileSelectionChanged();
 
     void nextHunk();
     void prevHunk();
@@ -111,7 +111,11 @@ private:
     bool m_reversed;
     QStandardItemModel* m_filesModel;
 
+    KUrl urlForFileModel(const Diff2::DiffModel* model);
+    
     PatchReviewPlugin* m_plugin;
+public slots:
+    void documentActivated(KDevelop::IDocument*);
 };
 
 class PatchReviewPlugin : public KDevelop::IPlugin {
