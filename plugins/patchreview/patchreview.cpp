@@ -587,7 +587,7 @@ void PatchReviewPlugin::updateKompareModel() {
         m_modelList.reset( new Diff2::KompareModelList( m_diffSettings, *m_kompareInfo, ( QObject* ) this ) );
         KUrl diffFile = l->filename;
         if ( diffFile.isEmpty() )
-            return ;
+            throw "no diff file"; ;
         try {
             ///@todo does not work with remote URLs
             if ( !m_modelList->openDirAndDiff( l->baseDir.toLocalFile(), diffFile.toLocalFile() ) )
@@ -611,6 +611,8 @@ void PatchReviewPlugin::updateKompareModel() {
     m_modelList.reset( 0 );
     delete m_diffSettings;
     m_kompareInfo.reset( 0 );
+    
+    emit patchChanged();
 }
 
 K_PLUGIN_FACTORY(KDevProblemReporterFactory, registerPlugin<PatchReviewPlugin>(); )
