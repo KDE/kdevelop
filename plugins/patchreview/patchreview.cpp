@@ -475,6 +475,17 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     if ( !smart )
         throw QString( "no smart-interface" );
 
+    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
+    if( !markIface )
+      throw QString( "no mark-interface" );
+    
+    markIface->setMarkDescription(KTextEditor::MarkInterface::markType25, i18n("Insertion"));
+    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType25, KIcon("insert-text").pixmap(16, 16));
+    markIface->setMarkDescription(KTextEditor::MarkInterface::markType26, i18n("Removal"));
+    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType26, KIcon("edit-delete").pixmap(16, 16));
+    markIface->setMarkDescription(KTextEditor::MarkInterface::markType27, i18n("Change"));
+    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, KIcon("text-field").pixmap(16, 16));
+    
     QMutexLocker lock(smart->smartMutex());
 
     KTextEditor::SmartRange* topRange = smart->newSmartRange(doc->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
@@ -491,6 +502,14 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
         }
         if ( line > 0 )
             line -= 1;
+        
+        KTextEditor::MarkInterface::MarkTypes mark = KTextEditor::MarkInterface::markType27;
+        
+        if(diff->destinationLineCount() == 0)
+          mark = KTextEditor::MarkInterface::markType26;
+
+        if(diff->sourceLineCount() == 0)
+          mark = KTextEditor::MarkInterface::markType25;
 
         KTextEditor::Cursor c( line, 0 );
         KTextEditor::Cursor endC( line + lineCount - 1, 0 );
@@ -501,6 +520,8 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
         endC.setColumn( doc->lineLength( endC.line() ) ) ;
 
         if ( endC.isValid() && c.isValid() ) {
+            markIface->addMark(c.line(), mark);
+
             KTextEditor::SmartRange * r = smart->newSmartRange( c, endC );
             r->setParentRange(topRange);
             KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
@@ -521,6 +542,17 @@ PatchHighlighter::~PatchHighlighter()
     if ( !smart )
         return;
 
+    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( m_doc->textDocument() );
+    if( !markIface )
+      return;
+
+    uint lines = m_doc->textDocument()->lines();
+    for(uint a = 0; a < lines; ++a) {
+      markIface->removeMark(a, KTextEditor::MarkInterface::markType27);
+      markIface->removeMark(a, KTextEditor::MarkInterface::markType26);
+      markIface->removeMark(a, KTextEditor::MarkInterface::markType25);
+    }
+    
     QMutexLocker lock(smart->smartMutex());
 
     for ( QSet<KTextEditor::SmartRange*>::iterator it = m_ranges.begin(); it != m_ranges.end(); ++it )
@@ -660,7 +692,6 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KD
     m_updateKompareTimer->setSingleShot( true );
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
 }
-
 
 void PatchReviewPlugin::documentClosed(IDocument* doc)
 {
