@@ -373,9 +373,8 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardBoldAttribute ) {
       standardBoldAttribute= Attribute::Ptr( new Attribute() );
       standardBoldAttribute->setBackgroundFillWhitespace(true);
-      ///@todo Use a weaker color, for example 50% yellow, 50% editor background color
-      standardBoldAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
-      standardBoldAttribute->setForeground(Qt::black); 
+      
+      standardBoldAttribute->setBackground(QColor(255, 255, 0, 150));//QApplication::palette().toolTipBase());
       standardBoldAttribute->setFontBold(true);
     }
     return standardBoldAttribute;
@@ -384,8 +383,7 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardAttribute ) {
       standardAttribute = Attribute::Ptr( new Attribute() );
       standardAttribute->setBackgroundFillWhitespace(true);
-      standardAttribute->setBackground(Qt::yellow);//QApplication::palette().toolTipBase());
-      standardAttribute->setForeground(Qt::black); 
+      standardAttribute->setBackground(QColor(255, 255, 0, 150));//QApplication::palette().toolTipBase());
     }
     return standardAttribute;
   }
@@ -406,9 +404,7 @@ Attribute::Ptr highlightedSpecialObjectAttribute() {
   if( !standardAttribute ) {
     standardAttribute = Attribute::Ptr( new Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
-    QColor color(Qt::yellow);
-    color.setRed(90);
-    standardAttribute->setBackground(color);
+    standardAttribute->setBackground(QColor(90, 255, 0, 150));//QApplication::palette().toolTipBase());
   }
   return standardAttribute;
 }
