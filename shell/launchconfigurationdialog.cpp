@@ -54,6 +54,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
 {
     setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
     setButtonFocus( KDialog::Ok );
+    setWindowTitle( i18n( "Launch Configurations" ) );
     button( KDialog::Apply )->setEnabled( false );
     
     setupUi( mainWidget() );
