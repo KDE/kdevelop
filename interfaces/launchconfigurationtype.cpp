@@ -35,6 +35,12 @@ LaunchConfigurationType::LaunchConfigurationType()
 {
 }
 
+LaunchConfigurationType::~LaunchConfigurationType()
+{
+    delete d;
+}
+
+
 void LaunchConfigurationType::addLauncher( ILauncher* starter )
 {
     if( !d->starters.contains( starter ) )

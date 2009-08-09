@@ -34,7 +34,7 @@ class LaunchConfigurationPageFactory;
 
 /**
  * Launch configuration types are used to be able to create
- * new launch configurations. Each launch configuration has a 
+ * new launch configurations. Each launch configuration has a
  * specific type, which specifies which launchers can be used
  * for the configuration as well as which config pages are needed
  * to setup the launch configuration
@@ -43,7 +43,7 @@ class KDEVPLATFORMINTERFACES_EXPORT LaunchConfigurationType
 {
 public:
     LaunchConfigurationType();
-    virtual ~LaunchConfigurationType() {}
+    virtual ~LaunchConfigurationType();
 
     /**
      * Provide a unique identifier for the type
@@ -58,38 +58,38 @@ public:
      * @returns a translatable string for the type
      */
     virtual QString name() const = 0;
-    
+
     /**
      * Add @p starter to this configuration type
      * @param starter the launcher that can start configurations of this type
      */
     void addLauncher( ILauncher* starter );
-    
+
     /**
      * remove @p starter from this configuration type
      * @param starter the launcher that should not start configurations of this type
      */
     void removeLauncher( ILauncher* starter );
-    
+
     /**
      * Access all launchers that are usable with this type
      * @returns a list of launchers that can be used with configurations of this type
      */
     QList<ILauncher*> launchers() const;
-    
+
     /**
      * Convenience method to access a launcher given its @p id
      * @param id the id of the launcher to be found
      * @returns the launcher with the given id or 0 if there's no such launcher in this configuration type
      */
     ILauncher* launcherForId( const QString& id );
-    
+
     /**
      * Provide a list of widgets to configure a launch configuration for this type
      * @returns a list of factories to create config pages from.
      */
     virtual QList<LaunchConfigurationPageFactory*> configPages() const = 0;
-    
+
     /**
      * Provide an icon for this launch configuration type
      * @returns an icon to be used for representing launch configurations of this type

@@ -28,19 +28,24 @@ class ExecuteCompositeJobPrivate
 public:
     bool m_killing;
 };
-    
+
 ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
 : KCompositeJob(parent), d(new ExecuteCompositeJobPrivate)
 {
     d->m_killing = false;
     setCapabilities(Killable);
-    
+
     qDebug() << "execute composite" << jobs;
     foreach(KJob* job, jobs) {
         addSubjob(job);
     }
 }
-        
+
+ExecuteCompositeJob::~ExecuteCompositeJob()
+{
+    delete d;
+}
+
 void ExecuteCompositeJob::start()
 {
     if(hasSubjobs())
@@ -48,12 +53,12 @@ void ExecuteCompositeJob::start()
     else
         emitResult();
 }
-        
+
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
     kDebug() << "finished: "<< job << job->error() << error();
     KCompositeJob::slotResult(job);
-    
+
     if(hasSubjobs() && !error() && !d->m_killing)
     {
         kDebug() << "remaining: " << subjobs().count() << subjobs();
@@ -63,7 +68,7 @@ void ExecuteCompositeJob::slotResult(KJob* job)
         emitResult();
     }
 }
-        
+
 bool ExecuteCompositeJob::doKill()
 {
     d->m_killing = true;
