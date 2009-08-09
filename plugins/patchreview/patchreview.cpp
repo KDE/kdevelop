@@ -32,6 +32,8 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <kparts/part.h>
 #include <kparts/factory.h>
 #include <kdialog.h>
+#include <ktemporaryfile.h>
+
 
 #include "libdiff2/komparemodellist.h"
 #include "libdiff2/kompare.h"
@@ -45,7 +47,7 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <ktexteditor/markinterface.h>
 #include <ktexteditor/smartinterface.h>
 #include <interfaces/idocumentcontroller.h>
-#include <k3process.h>
+#include <kprocess.h>
 #include <interfaces/iuicontroller.h>
 #include <kaboutdata.h>
 
@@ -84,7 +86,7 @@ using namespace KDevelop;
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
-PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin ) : QWidget( parent ), m_actionState( LocalPatchSource::Unknown ), m_plugin( plugin ), m_reversed( false ) {
+PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin ) : QWidget( parent ), m_plugin( plugin ), m_reversed( false ) {
     showEditDialog();
     connect( plugin, SIGNAL(patchChanged()), SLOT(patchChanged()) );
     patchChanged();
@@ -107,6 +109,7 @@ void PatchReviewToolView::updatePatchFromEdit() {
     if ( !ps )
         return;
 
+    ps->command = m_editPatch.command->text();
     ps->filename = m_editPatch.filename->url();
     ps->baseDir = m_editPatch.baseDir->url();
     ps->depth = m_editPatch.depth->value();
@@ -120,16 +123,17 @@ void PatchReviewToolView::fillEditFromPatch() {
     if ( !patch )
         return ;
 
+    m_editPatch.command->setText( patch->command );
     m_editPatch.filename->setUrl( patch->filename );
     m_editPatch.baseDir->setUrl( patch->baseDir );
     m_editPatch.depth->setValue( patch->depth );
 
 //   slotStateChanged();
 
-//     if ( patch->command.isEmpty() )
+    if ( patch->command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
-//     else
-//         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
+    else
+        m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
 }
 
 void PatchReviewToolView::slotEditCommandChanged() {
@@ -166,17 +170,16 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.baseDir->setMode(KFile::Directory);
 
     connect( m_editPatch.command, SIGNAL( textChanged( const QString& ) ), this, SLOT(slotEditCommandChanged()) );
-//   connect( m_editPatch.determineState, SIGNAL( clicked( bool ) ), this, SLOT( slotDetermineState() ) );
 //   connect( m_editPatch.commandToFile, SIGNAL( clicked( bool ) ), this, SLOT( slotToFile() ) );
 
     connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.filename, SIGNAL( urlSelected( const QString& ) ), this, SLOT(slotEditFileNameChanged()) );
-    connect( m_editPatch.command, SIGNAL( editingFinished() ), this, SLOT(slotEditCommandChanged()) );
-    connect( m_editPatch.command, SIGNAL( returnPressed() ), this, SLOT(slotEditCommandChanged()) );
-    connect( m_editPatch.command, SIGNAL( () ), this, SLOT(slotEditCommandChanged()) );
+    connect( m_editPatch.command, SIGNAL(textChanged(QString)), this, SLOT(slotEditCommandChanged()) );
+    connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
-    connect( m_editPatch.updateButton, SIGNAL(clicked(bool)), m_plugin, SLOT(updateKompareModel()) );
+    
+    connect( m_editPatch.updateButton, SIGNAL(clicked(bool)), m_plugin, SLOT(forceUpdate()) );
 
     connect( m_editPatch.showButton, SIGNAL(clicked(bool)), m_plugin, SLOT(showPatch()) );
     
@@ -197,7 +200,10 @@ void PatchReviewToolView::prevHunk() {
 
 KUrl PatchReviewPlugin::diffFile()
 {
-    return m_patch->filename;
+    if(!m_patch->filename.isEmpty())
+      return m_patch->filename;
+    else
+      return m_diffFile;
 }
 
 void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
@@ -546,11 +552,11 @@ PatchHighlighter::~PatchHighlighter()
     if( !markIface )
       return;
 
-    uint lines = m_doc->textDocument()->lines();
-    for(uint a = 0; a < lines; ++a) {
-      markIface->removeMark(a, KTextEditor::MarkInterface::markType27);
-      markIface->removeMark(a, KTextEditor::MarkInterface::markType26);
-      markIface->removeMark(a, KTextEditor::MarkInterface::markType25);
+    QHash< int, KTextEditor::Mark* > marks = markIface->marks();
+    foreach(int line, marks.keys()) {
+      markIface->removeMark(line, KTextEditor::MarkInterface::markType27);
+      markIface->removeMark(line, KTextEditor::MarkInterface::markType26);
+      markIface->removeMark(line, KTextEditor::MarkInterface::markType25);
     }
     
     QMutexLocker lock(smart->smartMutex());
@@ -587,6 +593,7 @@ void PatchReviewPlugin::notifyPatchChanged()
 {
     kDebug() << "notifying patch change: " << m_patch->filename;
     m_updateKompareTimer->start(500);
+    m_diffFile = KUrl();
 }
 
 void PatchReviewPlugin::showPatch()
@@ -595,20 +602,46 @@ void PatchReviewPlugin::showPatch()
       KRun::runCommand("kompare " + diffFile().pathOrUrl(), core()->uiController()->activeMainWindow());
 }
 
+void PatchReviewPlugin::forceUpdate()
+{
+  notifyPatchChanged();
+
+  if(!m_patch->command.isEmpty()) {
+    KTemporaryFile temp;
+    temp.setSuffix(".diff");
+    temp.setAutoRemove(false);
+    if(temp.open()) {
+      temp.setAutoRemove(false);
+      QString filename = temp.fileName();
+      kDebug() << "temp file: " << filename;
+      temp.close();
+      KProcess proc;
+      proc.setWorkingDirectory(m_patch->baseDir.toLocalFile());
+      proc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+      proc.setStandardOutputFile(filename);
+      ///Try to apply, if it works, the patch is not applied
+      proc << splitArgs( m_patch->command );
+
+      kDebug() << "calling " << m_patch->command;
+
+      if ( proc.execute() ) {
+          kWarning() << "returned with bad exit code";
+          return;
+      }
+      
+      m_diffFile = KUrl(filename);
+      kDebug() << "success, diff: " << m_diffFile;
+      
+    }else{
+      kWarning() << "PROBLEM";
+    }
+  }
+}
+
 void PatchReviewPlugin::updateKompareModel() {
+  
     kDebug() << "updating model";
     try {
-        LocalPatchSourcePointer l = m_patch;
-        if ( l ) {
-//       if ( l->state != LocalPatchSource::Applied )
-//         return;
-            /*
-            if ( l->filename == m_lastModelFile && m_modelList.get() )
-              return ; ///We already have the correct model
-              */
-            m_lastModelFile = l->filename;
-        }
-
         m_modelList.reset( 0 );
         qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
         if ( m_diffSettings )
@@ -617,12 +650,12 @@ void PatchReviewPlugin::updateKompareModel() {
         m_kompareInfo.reset( new Kompare::Info() );
         removeHighlighting();
         m_modelList.reset( new Diff2::KompareModelList( m_diffSettings, *m_kompareInfo, ( QObject* ) this ) );
-        KUrl diffFile = l->filename;
+        KUrl diffFile = this->diffFile();
         if ( diffFile.isEmpty() )
             throw "no diff file"; ;
         try {
             ///@todo does not work with remote URLs
-            if ( !m_modelList->openDirAndDiff( l->baseDir.toLocalFile(), diffFile.toLocalFile() ) )
+            if ( !m_modelList->openDirAndDiff( m_patch->baseDir.toLocalFile(), diffFile.toLocalFile() ) )
                 throw "could not open diff " + diffFile.toLocalFile();
         } catch ( const QString & str ) {
             throw;
@@ -679,6 +712,14 @@ PatchReviewPlugin::~PatchReviewPlugin()
     removeHighlighting();
 }
 
+void PatchReviewPlugin::commandToFile()
+{
+    if(!diffFile().isEmpty()) {
+      m_patch->filename = diffFile();
+      notifyPatchChanged();
+    }
+}
+
 PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent), m_factory(new PatchReviewToolViewFactory(this)), m_isSource(false) {
 
     m_patch = LocalPatchSourcePointer(new LocalPatchSource);
@@ -715,6 +756,7 @@ QWidget* PatchReviewPlugin::createToolView(QWidget* parent)
     return new PatchReviewToolView(parent, this);
 }
 
+#if 0
 void PatchReviewPlugin::determineState() {
     LocalPatchSourcePointer lpatch = m_patch;
     if ( !lpatch ) {
@@ -727,23 +769,23 @@ void PatchReviewPlugin::determineState() {
         KUrl fileUrl = lpatch->filename;
 
         {
-            K3Process proc;
-            ///Try to apply, if it works, the patch is not applied
-            QString cmd =  "patch --dry-run -s -f -i " + fileUrl.toLocalFile();
-            proc << splitArgs( cmd );
-
-            kDebug() << "calling " << cmd;
-
-            if ( !proc.start( K3Process::Block ) )
-                throw "could not start process";
-
-            if ( !proc.normalExit() )
-                throw "process did not exit normally";
-
-            kDebug() << "exit-status:" << proc.exitStatus();
+            K3Process proc;                                                                                                        
+            ///Try to apply, if it works, the patch is not applied                                                                 
+            QString cmd =  "patch --dry-run -s -f -i " + fileUrl.toLocalFile();                                                    
+            proc << splitArgs( cmd );                                                                                              
+                                                                                                                                   
+            kDebug() << "calling " << cmd;                                                                                         
+                                                                                                                                   
+            if ( !proc.start( K3Process::Block ) )                                                                                 
+                throw "could not start process";                                                                                   
+                                                                                                                                   
+            if ( !proc.normalExit() )                                                                                              
+                throw "process did not exit normally";                                                                             
+                                                                                                                                   
+            kDebug() << "exit-status:" << proc.exitStatus();                                                                       
 
             if ( proc.exitStatus() == 0 ) {
-                lpatch->state = LocalPatchSource::NotApplied;
+//                 lpatch->state = LocalPatchSource::NotApplied;
                 return;
             }
         }
@@ -765,7 +807,7 @@ void PatchReviewPlugin::determineState() {
             kDebug() << "exit-status:" << proc.exitStatus();
 
             if ( proc.exitStatus() == 0 ) {
-                lpatch->state = LocalPatchSource::Applied;
+//                 lpatch->state = LocalPatchSource::Applied;
                 return;
             }
         }
@@ -775,8 +817,9 @@ void PatchReviewPlugin::determineState() {
         kWarning() << "Error:" << str;
     }
 
-    lpatch->state = LocalPatchSource::Unknown;
+//     lpatch->state = LocalPatchSource::Unknown;
 }
+#endif
 #include "patchreview.moc"
 
 // kate: space-indent on; indent-width 2; tab-width 2; replace-tabs on

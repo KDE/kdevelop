@@ -13,14 +13,3 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
 #include "localpatchsource.h"
 
-string LocalPatchSource::stateAsString() {
-    switch ( state ) {
-    case Applied:
-        return "Applied";
-    case  NotApplied:
-        return "NotApplied";
-    default:
-        return "Unknown";
-    };
-}
-

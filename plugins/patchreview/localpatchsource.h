@@ -18,27 +18,17 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QString>
 #include <KUrl>
 
-typedef QString string;
-
 class LocalPatchSource : public KShared {
 
     ///This class should be used for identification instead of just the name, because the type of comparison might change in future
 public:
 
-    enum State {
-        Applied,
-        NotApplied,
-        Unknown
-    };
-
-    string stateAsString();
-
     KUrl filename;
     KUrl baseDir;
-    State state;
     uint depth;
+    QString command;
 
-    LocalPatchSource()  : state( Unknown ), depth(0) {
+    LocalPatchSource()  : depth(0) {
     }
 };
 

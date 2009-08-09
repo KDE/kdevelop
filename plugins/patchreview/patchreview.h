@@ -99,8 +99,6 @@ private:
     ///Fills the editor views from m_editingPatch
     void fillEditFromPatch();
 
-    LocalPatchSource::State m_actionState;
-
     Ui_EditPatch m_editPatch;
 
     QTime m_lastDataTime;
@@ -152,6 +150,8 @@ public Q_SLOTS:
     void  highlightPatch();
     void updateKompareModel();
     void showPatch();
+    void commandToFile();
+    void forceUpdate();
 
 private Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);
@@ -168,12 +168,14 @@ private:
 
     PatchReviewToolViewFactory* m_factory;
 
+    #if 0
     void determineState();
+    #endif
 
+    KUrl m_diffFile;
     QPointer<DiffSettings> m_diffSettings;
     std::auto_ptr<Kompare::Info> m_kompareInfo;
     std::auto_ptr<Diff2::KompareModelList> m_modelList;
-    KUrl m_lastModelFile;
     typedef QMap<KUrl, QPointer<PatchHighlighter> > HighlightMap;
     HighlightMap m_highlighters;
 };
