@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Comment=This plugin allows to open with files with associated external applications.
+Comment[x-test]=xxThis plugin allows to open with files with associated external applications.xx
+Name=Open With
+Name[x-test]=xxOpen Withxx
+GenericName=Open With
+GenericName[x-test]=xxOpen Withxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevopenwith
+X-KDevelop-Version=7
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=kdevopenwith
+X-KDE-PluginInfo-Author=Andreas Pakulat
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Mode=GUI
