@@ -41,7 +41,6 @@
 #include "runcontroller.h"
 #include "launchconfiguration.h"
 
-#include "ui_launchconfigtypepage.h"
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
 #include <QLayout>
