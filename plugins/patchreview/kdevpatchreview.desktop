@@ -2,8 +2,14 @@
 Type=Service
 Exec=blubb
 Comment=This plugin allows reviewing patches directly in the editor.
+Comment[sv]=Insticksprogrammet gör det möjligt att direkt granska programfixar i editorn.
+Comment[uk]=За допомогою цього додатка ви зможете рецензувати латки безпосередньо у редакторі.
 Name=Patch Review
+Name[sv]=Granska programfixar
+Name[uk]=Рецензування латки
 GenericName=Patch Review
+GenericName[sv]=Granska programfixar
+GenericName[uk]=Рецензування латки
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevpatchreview
 X-KDevelop-Version=7
