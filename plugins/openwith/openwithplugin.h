@@ -24,6 +24,7 @@
 #include <interfaces/iplugin.h>
 #include <QVariantList>
 #include <kservice.h>
+#include <kurl.h>
 
 class QSignalMapper;
 namespace KDevelop
@@ -42,8 +43,9 @@ public:
 private slots:
     void open( const QString& );
 private:
-    QList<QAction*> actionsForServices( const KService::List& list, KService::Ptr pref, const QString& prefix );
+    QList<QAction*> actionsForServices( const KService::List& list, KService::Ptr pref );
     QSignalMapper* actionMap;
+    KUrl url;
 };
 
 #endif // OPENWITHPLUGIN_H

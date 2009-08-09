@@ -35,6 +35,12 @@
 #include <kmimetypetrader.h>
 #include <QSignalMapper>
 #include <kmenu.h>
+#include <krun.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <interfaces/idocumentcontroller.h>
+#include <kparts/mainwindow.h>
 
 using namespace KDevelop;
 
@@ -59,7 +65,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
     {
         delete actionMap;
     }
-    KUrl url;
+    url = KUrl();
     FileContext* filectx = dynamic_cast<FileContext*>( context );
     ProjectItemContext* projctx = dynamic_cast<ProjectItemContext*>( context );
     if( filectx && filectx->urls().count() == 1 )
@@ -88,8 +94,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
         // Now setup a menu with actions for each part and app
         KMenu* menu = new KMenu( i18n("Open With" ) );
         
-        menu->addActions( actionsForServices( parts, preferredpart, "|__PART__" ) );
-        menu->addActions( actionsForServices( apps, preferredapp, "|__APP__" ) );
+        menu->addActions( actionsForServices( parts, preferredpart ) );
+        menu->addActions( actionsForServices( apps, preferredapp ) );
         
         KDevelop::ContextMenuExtension ext;
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
@@ -99,7 +105,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
 }
 
 
-QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& list, KService::Ptr pref, const QString& prefix )
+QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& list, KService::Ptr pref )
 {
     QList<QAction*> openactions;
     foreach( KService::Ptr svc, list )
@@ -107,7 +113,7 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
         KAction* act = new KAction( svc->name(), this );
         act->setIcon( KIcon( svc->icon() ) );
         connect(act, SIGNAL(triggered()), actionMap, SLOT(map()));
-        actionMap->setMapping( act, svc->storageId()+prefix );
+        actionMap->setMapping( act, svc->storageId() );
         if( svc->storageId() == pref->storageId() )
         {
             openactions.prepend( act );
@@ -122,4 +128,12 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
 void OpenWithPlugin::open ( const QString& storageid )
 {
     kDebug() << "opening:" << storageid;
+    KService::Ptr svc = KService::serviceByStorageId( storageid );
+    if( svc->isApplication() )
+    {
+        KRun::run( *svc, QList<KUrl>() << url, ICore::self()->uiController()->activeMainWindow() );
+    } else 
+    {
+        ICore::self()->documentController()->openDocument( url );
+    }
 }
