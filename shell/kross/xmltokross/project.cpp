@@ -142,7 +142,9 @@ DumbProject::DumbProject( QObject *parent )
 }
 
 DumbProject::~DumbProject()
-{}
+{
+    delete d;
+}
 
 QString DumbProject::name() const
 {
