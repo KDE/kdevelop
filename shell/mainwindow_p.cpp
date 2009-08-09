@@ -312,6 +312,7 @@ void MainWindowPrivate::setupActions()
     action->setIcon(KIcon("document-new"));
     action->setShortcut( Qt::CTRL + Qt::Key_N );
     action->setText( i18n( "&New File" ) );
+    action->setIconText( i18n("New") );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
     action->setToolTip( i18n( "New File" ) );
     action->setWhatsThis( i18n( "<b>New File</b><p>Creates an empty file.</p>" ) );
