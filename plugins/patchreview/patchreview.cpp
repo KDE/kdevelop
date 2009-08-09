@@ -137,7 +137,7 @@ void PatchReviewToolView::fillEditFromPatch() {
 }
 
 void PatchReviewToolView::slotEditCommandChanged() {
-    m_editPatch.filename->setText( "" );
+    m_editPatch.filename->lineEdit()->setText( "" );
     updatePatchFromEdit();
 }
 
