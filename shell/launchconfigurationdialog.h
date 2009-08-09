@@ -144,8 +144,9 @@ private slots:
     void selectionChanged(QItemSelection,QItemSelection);
     void pageChanged();
     void saveConfig();
-    void updateNameLabel( const QString& );
+    void updateNameLabel( LaunchConfiguration* l );
 private:
+    void updateNameLabel( const QString&, const QString& );
     void saveConfig( const QModelIndex& );
     LaunchConfigurationsModel* model;
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;

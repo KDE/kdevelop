@@ -86,7 +86,7 @@ public:
     KConfigGroup config();
     
 signals:
-    void nameChanged( const QString& );
+    void nameChanged( LaunchConfiguration* );
     void typeChanged( LaunchConfigurationType* );
 private:
     KConfigGroup baseGroup;

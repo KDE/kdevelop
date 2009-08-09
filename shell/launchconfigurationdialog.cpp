@@ -132,7 +132,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
         LaunchConfiguration* l = model->configForIndex( deselected.indexes().first() );
         if( l )
         {
-            disconnect(l, SIGNAL(nameChanged(QString)), this,  SLOT(updateNameLabel(QString)));
+            disconnect(l, SIGNAL(nameChanged(LaunchConfiguration*)), this,  SLOT(updateNameLabel(LaunchConfiguration*)));
             if( currentPageChanged )
             {
                 if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18n("Unsaved Changes") ) == KMessageBox::Yes )
@@ -146,16 +146,16 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
             }
         }
     }
-    updateNameLabel("");
+    updateNameLabel("", "");
     if( !selected.indexes().isEmpty() )
     {
         LaunchConfiguration* l = model->configForIndex( selected.indexes().first() );
         ILaunchMode* lm = model->modeForIndex( selected.indexes().first() );
         if( l )
         {
-            updateNameLabel( l->name() );
+            updateNameLabel( l );
             tree->expand( model->indexForConfig( l ) );
-            connect( l, SIGNAL(nameChanged(QString)), SLOT(updateNameLabel(QString)) );
+            connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(updateNameLabel(LaunchConfiguration*)) );
             if( lm )
             {
                 ILauncher* launcher = l->type()->launcherForId( l->launcherForMode( lm->id() ) );
@@ -173,7 +173,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                     }
                     tab->setLaunchConfiguration( l );
                     stack->setCurrentWidget( tab );
-                    updateNameLabel( l->name() );
+                    updateNameLabel( l );
                     addConfig->setEnabled( false );
                     deleteConfig->setEnabled( false );
                 } else
@@ -253,10 +253,26 @@ void LaunchConfigurationDialog::deleteConfiguration()
     }
 }
 
-
-void LaunchConfigurationDialog::updateNameLabel( const QString& name )
+void LaunchConfigurationDialog::updateNameLabel( LaunchConfiguration* l )
 {
-    configName->setText( i18n("<b>%1</b>", name ) );
+    if( l )
+    {
+        updateNameLabel( l->name(), l->project() ? l->project()->name() : "" );
+    } else
+    {
+        updateNameLabel( "", "" );
+    }
+}
+
+void LaunchConfigurationDialog::updateNameLabel( const QString& name, const QString& project )
+{
+    if( project.isEmpty() )
+    {
+        configName->setText( i18n("<b>%1</b>", name ) );
+    } else
+    {
+        configName->setText( i18n("<b>%1</b> (%2)", name, project ) );
+    }
 }
 
 

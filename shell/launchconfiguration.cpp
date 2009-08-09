@@ -72,7 +72,7 @@ void LaunchConfiguration::setName(const QString& name)
 {
     baseGroup.writeEntry( LaunchConfigurationNameEntry, name );
     baseGroup.sync();
-    emit nameChanged( name );
+    emit nameChanged( this );
 }
 
 void LaunchConfiguration::setType(const QString& typeId)
