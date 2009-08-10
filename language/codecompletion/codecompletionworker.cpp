@@ -93,8 +93,10 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   {
     {
       QMutexLocker lock(m_mutex);
-      if(context)
+      if(context) {
+        kDebug() << context->localScopeIdentifier().toString();
         range = KTextEditor::Range(context->range().start.textCursor(), position);
+      }
       else
         range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
     }

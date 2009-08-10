@@ -83,6 +83,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/navigation/abstractnavigationcontext.cpp
     duchain/navigation/usesnavigationcontext.cpp
     duchain/navigation/abstractdeclarationnavigationcontext.cpp
+    duchain/navigation/abstractincludenavigationcontext.cpp
     duchain/navigation/useswidget.cpp
     duchain/navigation/usescollector.cpp
 
@@ -191,6 +192,7 @@ install(FILES
     util/navigationtooltip.h
     util/setrepository.h
     util/basicsetrepository.h
+    util/includeitem.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util COMPONENT Devel
 )
 
@@ -290,6 +292,7 @@ install(FILES
     codecompletion/codecompletionitemgrouper.h
     codecompletion/codecompletionhelper.h
     codecompletion/normaldeclarationcompletionitem.h
+    codecompletion/abstractincludefilecompletionitem.h
     codecompletion/codecompletiontesthelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/codecompletion COMPONENT Devel
 )
@@ -311,6 +314,7 @@ install(FILES
     duchain/navigation/usesnavigationcontext.h
     duchain/navigation/abstractnavigationcontext.h
     duchain/navigation/abstractdeclarationnavigationcontext.h
+    duchain/navigation/abstractincludenavigationcontext.h
     duchain/navigation/abstractnavigationwidget.h
     duchain/navigation/navigationaction.h
     duchain/navigation/useswidget.h
