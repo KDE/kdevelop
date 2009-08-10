@@ -2403,6 +2403,12 @@ class ItemRepository : public AbstractItemRepository {
 
     delete[] m_firstBucketForHash;
 
+    ///We intentionally don't delete the buckets here, as their contained memory may be referenced
+    ///still from different places.
+//     for(int i = 0; i < m_buckets.size(); ++i) {
+//       delete m_buckets[i];
+//     }
+
     m_buckets.clear();
     m_firstBucketForHash = 0;
   }
