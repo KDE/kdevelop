@@ -349,7 +349,7 @@ void RunController::setupActions()
     connect(action, SIGNAL(triggered(bool)), SLOT(configureLaunches()));
 
     d->runAction = new KAction( KIcon("system-run"), i18n("Execute Launch"), this);
-    d->runAction->setIconText( i18n("Execute") );
+    d->runAction->setIconText( i18nc("Short text for 'Execute Launch' used in the toolbar", "Execute") );
     d->runAction->setShortcut(Qt::SHIFT + Qt::Key_F9);
     d->runAction->setToolTip(i18n("Execute current Launch"));
     d->runAction->setStatusTip(i18n("Execute current Launch"));
@@ -359,7 +359,7 @@ void RunController::setupActions()
     
     d->dbgAction = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
-    d->dbgAction->setIconText( i18n("Debug") );
+    d->dbgAction->setIconText( i18nc("Short text for 'Debug Launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18n("Debug current Launch"));
     d->dbgAction->setStatusTip(i18n("Debug current Launch"));
     d->dbgAction->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
@@ -374,7 +374,7 @@ void RunController::setupActions()
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
     action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
-    action->setIconText(i18n("Stop"));
+    action->setIconText(i18nc("Short text for 'Stop Jobs' used in the toolbar", "Stop"));
     action->setShortcut(Qt::Key_Escape);
     action->setToolTip(i18n("Stop all currently running jobs"));
     action->setWhatsThis(i18n("<b>Stop Jobs</b><p>Requests that all running jobs are stopped.</p>"));
