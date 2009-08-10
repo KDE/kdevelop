@@ -32,7 +32,6 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
-#include "../cppduchain/navigation/navigationwidget.h"
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/classdeclaration.h>
 #include "../cppduchain/qtfunctiondeclaration.h"
@@ -527,59 +526,6 @@ KSharedPtr<CodeCompletionContext> NormalDeclarationCompletionItem::completionCon
   return KSharedPtr<CodeCompletionContext>::staticCast(m_completionContext);
 }
 
-
-int IncludeFileCompletionItem::inheritanceDepth() const
-{
-  return includeItem.pathNumber;
-}
-
-int IncludeFileCompletionItem::argumentHintDepth() const
-{
-  return 0;
-}
-
-QVariant IncludeFileCompletionItem::data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const
-{
-  DUChainReadLocker lock(DUChain::lock(), 500);
-  if(!lock.locked()) {
-    kDebug(9007) << "Failed to lock the du-chain in time";
-    return QVariant();
-  }
-
-  const Cpp::IncludeItem& item( includeItem );
-
-  switch (role) {
-    case CodeCompletionModel::IsExpandable:
-      return QVariant(true);
-    case CodeCompletionModel::ExpandingWidget: {
-      Cpp::NavigationWidget* nav = new Cpp::NavigationWidget(item, model->currentTopContext());
-      model->addNavigationWidget(this, nav);
-
-       QVariant v;
-       v.setValue<QWidget*>((QWidget*)nav);
-       return v;
-    }
-    case Qt::DisplayRole:
-      switch (index.column()) {
-        case CodeCompletionModel::Prefix:
-          if(item.isDirectory)
-            return QVariant("directory");
-          else
-            return QVariant("file");
-        case CodeCompletionModel::Name: {
-          return item.isDirectory ? item.name + '/' : item.name;
-        }
-      }
-      break;
-    case CodeCompletionModel::ItemSelected:
-    {
-      return QVariant( Cpp::NavigationWidget::shortDescription(item) );
-    }
-  }
-
-  return QVariant();
-}
-
 void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
 
   KTextEditor::Range word(_word);
@@ -594,7 +540,7 @@ void IncludeFileCompletionItem::execute(KTextEditor::Document* document, const K
       if(lineText.startsWith('"'))
         newText += '\"';
       else if(lineText.startsWith('<'))
-        newText += '>';
+       newText += '>';
     }
 
     word.end().setColumn( document->lineLength(word.end().line()) );

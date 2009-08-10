@@ -419,7 +419,7 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
 {
   QList<QuickOpenDataPointer> ret;
 
-  const QList<Cpp::IncludeItem>& items( filteredItems() );
+  const QList<KDevelop::IncludeItem>& items( filteredItems() );
   
   if( end > (uint)items.count() )
     end = items.count();
@@ -454,14 +454,14 @@ QList<QuickOpenDataPointer> IncludeFileDataProvider::data( uint start, uint end 
   return ret;
 }
 
-QString IncludeFileDataProvider::itemText( const Cpp::IncludeItem& data ) const
+QString IncludeFileDataProvider::itemText( const KDevelop::IncludeItem& data ) const
 {
   return data.name;
 }
 
 QSet<IndexedString> IncludeFileDataProvider::files() const {
   QSet<IndexedString> set;
-  foreach(const Cpp::IncludeItem& item, items()) {
+  foreach(const KDevelop::IncludeItem& item, items()) {
     if( !item.basePath.isEmpty() ) {
       KUrl path = item.basePath;
       path.addPath( item.name );

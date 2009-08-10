@@ -19,21 +19,16 @@
 #ifndef INCLUDENAVIGATIONCONTEXT_H
 #define INCLUDENAVIGATIONCONTEXT_H
 
-#include <language/duchain/navigation/abstractnavigationcontext.h>
-#include "../../includeitem.h"
+#include <language/duchain/navigation/abstractincludenavigationcontext.h>
 
 namespace Cpp {
-  
-class IncludeNavigationContext : public KDevelop::AbstractNavigationContext {
-public:
-  IncludeNavigationContext(const IncludeItem& item, KDevelop::TopDUContextPointer topContext);
-  virtual QString html(bool shorten);
-  virtual QString name() const;
 
-private:
-  ///@param first must initially be true
-  void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first, QString indent = "");
-  IncludeItem m_item;
+class IncludeNavigationContext : public KDevelop::AbstractIncludeNavigationContext {
+public:
+  IncludeNavigationContext(const KDevelop::IncludeItem& item, KDevelop::TopDUContextPointer topContext);
+
+protected:
+    virtual void getFileInfo(KDevelop::TopDUContext* duchain);
 };
 
 }

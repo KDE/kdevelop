@@ -27,7 +27,7 @@
 #include <kurl.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/duchain/indexedstring.h>
-#include "includeitem.h"
+#include <language/util/includeitem.h>
 
 class IncludeFileData : public KDevelop::QuickOpenDataBase {
   public:
@@ -35,7 +35,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
      * includedFrom is zero if the file is not included into the current document
      * In case of importers(marked by item.pathNumber == -1), includedFrom should be the context of the current open document.
      * */
-  IncludeFileData( const Cpp::IncludeItem& item, const KDevelop::TopDUContextPointer& includedFrom );
+  IncludeFileData( const KDevelop::IncludeItem& item, const KDevelop::TopDUContextPointer& includedFrom );
     
     virtual QString text() const;
     virtual QString htmlDescription() const;
@@ -49,7 +49,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
     
     virtual QIcon icon() const;
   private:
-    Cpp::IncludeItem m_item;
+    KDevelop::IncludeItem m_item;
     bool m_isDirectory;
     KDevelop::TopDUContextPointer m_includedFrom;
 };
@@ -60,7 +60,7 @@ class IncludeFileData : public KDevelop::QuickOpenDataBase {
  * also searches sub-directories if the typed text wants it.
  * */
 
-class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, public KDevelop::FilterWithSeparator<Cpp::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
+class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, public KDevelop::FilterWithSeparator<KDevelop::IncludeItem>, public KDevelop::QuickOpenFileSetInterface {
   public:
     IncludeFileDataProvider();
     virtual void setFilterText( const QString& text );
@@ -78,12 +78,12 @@ class IncludeFileDataProvider: public KDevelop::QuickOpenDataProviderBase, publi
   private:
   
     //Reimplemented from Filter<..>
-    virtual QString itemText( const Cpp::IncludeItem& data ) const;
+    virtual QString itemText( const KDevelop::IncludeItem& data ) const;
 
     KUrl m_baseUrl;
     QString m_lastSearchedPrefix;
 
-    QList<Cpp::IncludeItem> m_baseItems;
+    QList<KDevelop::IncludeItem> m_baseItems;
     
     bool m_allowImports, m_allowPossibleImports, m_allowImporters;
 

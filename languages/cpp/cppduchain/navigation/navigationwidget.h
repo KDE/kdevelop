@@ -20,7 +20,7 @@
 #define CPP_NAVIGATIONWIDGET_H
 
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include "../../includeitem.h"
+#include <language/util/includeitem.h>
 #include "../../parser/rpp/pp-macro.h"
 #include "../cppduchainexport.h"
 
@@ -44,7 +44,7 @@ public:
       * normal text in the navigation-widget.
       * The texts may contain links to files, see above.
       * */
-    NavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
+    NavigationWidget(const KDevelop::IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext, const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString());
 
     /**
       * @param htmlPrefix and @param htmlSuffix can be used to add own text before/behind the
@@ -57,7 +57,7 @@ public:
     * Creates a compact html description-text
     **/
     static QString shortDescription(KDevelop::Declaration* declaration);
-    static QString shortDescription(const IncludeItem& includeItem);
+    static QString shortDescription(const KDevelop::IncludeItem& includeItem);
 
 protected:
     KDevelop::DeclarationPointer m_declaration;

@@ -28,8 +28,9 @@
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletionitem.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
+#include <language/codecompletion/abstractincludefilecompletionitem.h>
+#include "../cppduchain/navigation/navigationwidget.h"
 #include "context.h"
-#include "../includeitem.h"
 
 namespace KTextEditor {
   class CodeCompletionModel;
@@ -102,20 +103,14 @@ private:
   mutable KSharedPtr<CachedArgumentList> m_cachedArgumentList;
 };
 
-//A completion item used for completing include-files
-class IncludeFileCompletionItem : public KDevelop::CompletionTreeItem {
+typedef KDevelop::AbstractIncludeFileCompletionItem<Cpp::NavigationWidget> BaseIncludeFileCompletionItem;
+
+class IncludeFileCompletionItem : public BaseIncludeFileCompletionItem {
 public:
-  IncludeFileCompletionItem(const Cpp::IncludeItem& include) : includeItem(include) {
-  }
+    IncludeFileCompletionItem(const KDevelop::IncludeItem& include)
+      : BaseIncludeFileCompletionItem(include) {}
 
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const;
-
-  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
-
-  virtual int inheritanceDepth() const;
-  virtual int argumentHintDepth() const;
-
-  Cpp::IncludeItem includeItem;
+    virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 };
 
 class TypeConversionCompletionItem : public KDevelop::CompletionTreeItem {

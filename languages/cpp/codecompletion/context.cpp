@@ -1288,8 +1288,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
           {
             //Include-file completion
             int cnt = 0;
-            QList<Cpp::IncludeItem> allIncludeItems = includeItems();
-            foreach(const Cpp::IncludeItem& includeItem, allIncludeItems) {
+            QList<KDevelop::IncludeItem> allIncludeItems = includeItems();
+            foreach(const KDevelop::IncludeItem& includeItem, allIncludeItems) {
               if (shouldAbort)
                 return items;
 

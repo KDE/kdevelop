@@ -27,7 +27,7 @@
 #include "../cppduchain/viablefunctions.h"
 #include "../cppduchain/overloadresolutionhelper.h"
 #include "../cppduchain/expressionevaluationresult.h"
-#include "../includeitem.h"
+#include <language/util/includeitem.h>
 #include "item.h"
 #include <language/codecompletion/codecompletioncontext.h>
 
@@ -155,7 +155,7 @@ namespace Cpp {
       /**
        * When memberAccessOperation is IncludeListAccess, then this contains all the files to be listed.
       * */
-      QList<Cpp::IncludeItem> includeItems() const;
+      QList<KDevelop::IncludeItem> includeItems() const;
       /**
        *
        * Returns additional potential match-types based on builtin operators(like the = operator)
@@ -235,7 +235,7 @@ namespace Cpp {
       QString m_operator; //If this completion-context ends with a binary operator, this is the operator
       ExpressionEvaluationResult m_expressionResult;
 
-      QList<Cpp::IncludeItem> m_includeItems;
+      QList<KDevelop::IncludeItem> m_includeItems;
 
       QString m_functionName;
 

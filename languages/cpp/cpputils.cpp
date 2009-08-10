@@ -22,7 +22,6 @@
 #include "parser/rpp/preprocessor.h"
 #include "preprocessjob.h"
 #include "includepathcomputer.h"
-#include "includeitem.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -33,6 +32,7 @@
 #include <language/codegen/coderepresentation.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchain.h>
+#include <language/util/includeitem.h>
 
 #include <project/projectmodel.h>
 
@@ -292,10 +292,10 @@ KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>*
   return comp.result();
 }
 
-QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prependAddedPathToName, bool allowSourceFiles) {
+QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths, bool onlyAddedIncludePaths, bool prependAddedPathToName, bool allowSourceFiles) {
 
     QMap<KUrl, bool> hadPaths; //Only process each path once
-    QList<Cpp::IncludeItem> ret;
+    QList<KDevelop::IncludeItem> ret;
 
     KUrl::List paths = addIncludePaths;
     if(!onlyAddedIncludePaths) {
@@ -330,7 +330,7 @@ QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, co
 
         while(dirContent.hasNext()) {
              dirContent.next();
-            Cpp::IncludeItem item;
+            KDevelop::IncludeItem item;
             item.name = dirContent.fileName();
 
             if(item.name.startsWith('.') || item.name.endsWith("~")) //This filters out ".", "..", and hidden files, and backups

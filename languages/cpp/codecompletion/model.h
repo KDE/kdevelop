@@ -30,7 +30,6 @@
 #include <ksharedptr.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/codecompletion/codecompletioncontext.h>
-#include "../includeitem.h"
 #include "item.h"
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include <kdeversion.h>

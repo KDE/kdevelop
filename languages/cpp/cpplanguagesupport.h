@@ -25,7 +25,6 @@
 
 #include <interfaces/iplugin.h>
 #include <language/interfaces/ilanguagesupport.h>
-#include "includeitem.h"
 #include "environmentmanager.h"
 #include <QThread>
 

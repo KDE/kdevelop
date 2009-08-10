@@ -27,13 +27,9 @@ class QString;
 extern QStringList headerExtensions;
 extern QStringList sourceExtensions;
 
-namespace Cpp
-{
-class IncludeItem;
-}
-
 namespace KDevelop
 {
+class IncludeItem;
 class Declaration;
 class ParsingEnvironment;
 }
@@ -89,7 +85,7 @@ KUrl::List findIncludePaths(const KUrl& source, QList<KDevelop::ProblemPointer>*
   * @param onlyAddedIncludePaths If this is true, only the include-paths given in @p addIncludePaths will be used
   * @param prependAddedPathToName If this is true, @p addPath is prepended to each of the returned items paths
   * */
-QList<Cpp::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false, bool prependAddedPathToName = false, bool allowSourceFiles = false );
+QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool local, const QString& addPath, KUrl::List addIncludePaths = KUrl::List(), bool onlyAddedIncludePaths = false, bool prependAddedPathToName = false, bool allowSourceFiles = false );
 
 struct ReplaceCurrentAccess : public QObject
 {
