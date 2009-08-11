@@ -125,6 +125,11 @@ protected:
     void setErrorText(const QString & error);
     
     /**
+     * Inform the derived class if this generation is being performed without user interaction
+     */
+    bool autoGeneration() const;
+    
+    /**
      * Clean up all the change sets that this generator is in charge of
      */
     void clearChangeSets();
@@ -218,6 +223,14 @@ protected:
     void clearChangeSets()
     {
         CodeGeneratorBase::clearChangeSets();
+    }
+    
+    /**
+     * Inform the derived class if this generation is being performed without user interaction
+     */
+    bool autoGeneration() const
+    {
+        return CodeGeneratorBase::autoGeneration();
     }
     
     /**

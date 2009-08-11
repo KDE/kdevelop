@@ -98,6 +98,11 @@ const QString & CodeGeneratorBase::errorText() const
     return d->error;
 }
 
+bool CodeGeneratorBase::autoGeneration() const
+{
+    return d->autoGen;
+}
+
 void CodeGeneratorBase::setErrorText(const QString & errorText)
 {
     d->error = errorText;
@@ -115,7 +120,6 @@ void CodeGeneratorBase::clearChangeSets(void)
 
 bool CodeGeneratorBase::execute()
 {
-    DUChainReadLocker lock(DUChain::self()->lock());
     kDebug() << "Checking Preconditions for the codegenerator";
     
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
@@ -132,11 +136,15 @@ bool CodeGeneratorBase::execute()
         document = ICore::self()->documentController()->activeDocument()->url();
         
         if(d->range.isEmpty())
+        {
+            DUChainReadLocker lock(DUChain::lock());
             d->range = DocumentRange(document.url(), ICore::self()->documentController()->activeDocument()->textSelection());
+        }
     }
     
     if(!d->context)
     {
+        DUChainReadLocker lock(DUChain::lock());
         TopDUContext * documentChain = DUChain::self()->chainForDocument(document);
         if(!documentChain)
         {
