@@ -17,7 +17,7 @@ kde4_add_ui_files(patchreview_PART_SRCS ${patchreview_UI} )
 
 
 kde4_add_plugin(kdevpatchreview ${patchreview_PART_SRCS})
-target_link_libraries(kdevpatchreview ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevteamwork_diff2 kdevplatforminterfaces ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kdevpatchreview ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevpatchreview_diff2 kdevplatforminterfaces ${KDE4_KDE3SUPPORT_LIBS})
 
 install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -20,8 +20,8 @@ set(diff2_PART_SRCS
 
 
 # This library only exists as a convenience library for the teamwork plugin, thus it is not SOVERSION'ed
-kde4_add_library(kdevteamwork_diff2 SHARED ${diff2_PART_SRCS})
+kde4_add_library(kdevpatchreview_diff2 SHARED ${diff2_PART_SRCS})
 
-target_link_libraries(kdevteamwork_diff2  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
+target_link_libraries(kdevpatchreview_diff2  ${KDE4_KDEUI_LIBS} ${KDE4_KDE3SUPPORT_LIBS} )
 
-install(TARGETS kdevteamwork_diff2 ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdevpatchreview_diff2 ${INSTALL_TARGETS_DEFAULT_ARGS})
