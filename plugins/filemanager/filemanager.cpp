@@ -56,6 +56,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     l->addWidget(urlnav);
     dirop = new KDirOperator(QDir::homePath(), this);
     dirop->setView( KFile::Tree );
+    dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
     //KDirOperator emits fileSelected() twice because both activated() and doubleClicked() emit fileClicked().
     //activated() should be enough, so disconnect doubleClicked()
