@@ -63,7 +63,7 @@ public:
 
     using IPartController::createPart;
 
-    KParts::Part* createPart( const KUrl &url );
+    KParts::Part* createPart( const KUrl &url, const QString& prefName = QString() );
     KParts::Part* createPart( const QString &mimeType,
                               const QString &partType,
                               const QString &className,

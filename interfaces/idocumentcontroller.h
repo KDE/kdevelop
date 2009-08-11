@@ -104,6 +104,12 @@ public Q_SLOTS:
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0 ) = 0;
+            
+            
+    /**Opens a new or existing document.
+    @param url The full Url of the document to open.
+    @param prefName The name of the preferred KPart to open that document,*/
+    virtual KDevelop::IDocument* openDocument( const KUrl &url, const QString& prefname ) = 0;
 
     virtual void closeAllDocuments() = 0;
 

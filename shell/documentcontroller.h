@@ -117,6 +117,8 @@ public Q_SLOTS:
             DocumentActivationParams activationParams = 0);
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );
+    
+    virtual KDevelop::IDocument* openDocument( const KUrl &url, const QString& prefname );
 
     virtual void closeDocument( const KUrl &url );
     void fileClose();
@@ -140,6 +142,7 @@ private:
     Q_PRIVATE_SLOT(d, void chooseDocument())
     Q_PRIVATE_SLOT(d, void changeDocumentUrl(KDevelop::IDocument*))
 
+    friend struct DocumentControllerPrivate;
     struct DocumentControllerPrivate *d;
 };
 

@@ -185,8 +185,9 @@ bool PartController::canCreatePart(const KUrl& url)
     return offers.count() > 0;
 }
 
-KParts::Part* PartController::createPart( const KUrl & url )
+KParts::Part* PartController::createPart( const KUrl & url, const QString& preferredPart )
 {
+    kDebug() << "creating part with url" << url << "and pref part:" << preferredPart;
     QString mimeType;
     if ( url.isEmpty() )
         //create a part for empty text file
@@ -196,7 +197,7 @@ KParts::Part* PartController::createPart( const KUrl & url )
     else
         mimeType = KMimeType::findByUrl( url )->name();
 
-    KParts::Part* part = createPart( mimeType );
+    KParts::Part* part = createPart( mimeType, preferredPart );
     if( part )
     {
         readOnly( part ) ->openUrl( url );

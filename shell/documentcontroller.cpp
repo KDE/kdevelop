@@ -130,6 +130,215 @@ struct DocumentControllerPrivate {
         }
     }
 
+    IDocument* openDocumentInternal( const KUrl & inputUrl, const QString& prefName = QString(),
+        const KTextEditor::Range& range = KTextEditor::Range::invalid(),
+        DocumentController::DocumentActivationParams activationParams = 0 )
+    {
+        IDocument* previousActiveDocument = controller->activeDocument();
+        KTextEditor::Cursor previousActivePosition;
+        if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
+            previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+        
+
+        UiController *uiController = Core::self()->uiControllerInternal();
+        Sublime::Area *area = uiController->activeArea();
+
+        KUrl url = inputUrl;
+        QString encoding = "";
+
+        if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
+        {
+            KUrl dir;
+            if( controller->activeDocument() )
+            {
+                dir = KUrl( controller->activeDocument()->url().directory() );
+            }else
+            {
+                dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
+            }
+
+            KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*|Text File\n" ),
+                                        Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                        i18n( "Open File" ) );
+            if( !res.URLs.isEmpty() )
+                url = res.URLs.first();
+            encoding = res.encoding;
+        }
+        if ( url.isEmpty() )
+            //still no url
+            return 0;
+
+        KGlobal::config()->group("Open File").writeEntry( "Last Open File Directory", url.upUrl() );
+
+        bool emitOpened = false;
+
+        // clean it and resolve possible symlink
+        url.cleanPath( KUrl::SimplifyDirSeparators );
+        if ( url.isLocalFile() )
+        {
+            QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
+            if ( !path.isEmpty() )
+                url.setPath( path );
+        }
+        
+        //get a part document
+        if (!documents.contains(url))
+        {
+            KMimeType::Ptr mimeType;
+
+            if (DocumentController::isEmptyDocumentUrl(url))
+            {
+                mimeType = KMimeType::mimeType("text/plain");
+            }
+            else
+            {
+                //make sure the URL exists
+                if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
+                {
+                    kDebug() << "cannot find URL:" << url.url();
+                    return 0;
+                }
+
+                mimeType = KMimeType::findByUrl( url );
+            }
+
+            // is the URL pointing to a directory?
+            if ( mimeType->is( "inode/directory" ) )
+            {
+                kDebug() << "cannot open directory:" << url.url();
+                return 0;
+            }
+
+            if( prefName.isEmpty() )
+            {
+                // Try to find a plugin that handles this mimetype
+                QString constraint = QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
+                KPluginInfo::List plugins = IPluginController::queryPlugins( constraint );
+
+                if( !plugins.isEmpty() )
+                {
+                    KPluginInfo info = plugins.first();
+                    Core::self()->pluginController()->loadPlugin( info.pluginName() );
+                    if( factories.contains( mimeType->name() ) )
+                    {
+                        IDocument* idoc = factories[mimeType->name()]->create(url, Core::self());
+                        if( idoc )
+                        {
+                            documents[url] = idoc;
+                        }
+                    }
+                }
+            }
+            
+            if(!documents.contains(url)) {
+                if( !prefName.isEmpty() ) 
+                {
+                    documents[url] = new PartDocument(url, Core::self(), prefName);
+                } else  if ( Core::self()->partControllerInternal()->isTextType(mimeType)) 
+                {
+                    documents[url] = new TextDocument(url, Core::self(), encoding);
+                } else if( Core::self()->partControllerInternal()->canCreatePart(url) ) 
+                {
+                    documents[url] = new PartDocument(url, Core::self());
+                } else
+                {
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
+                    if (openAsText == KMessageBox::Yes)
+                        documents[url] = new TextDocument(url, Core::self(), encoding);
+                    else
+                        return 0;
+                }
+            }
+            emitOpened = documents.contains(url);
+        }
+        IDocument *doc = documents[url];
+
+        Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
+        if( !sdoc )
+        {
+            documents.remove(url);
+            delete doc;
+            return 0;
+        }
+        //react on document deletion - we need to cleanup controller structures
+        QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(removeDocument(Sublime::Document*)));
+
+        if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
+        {
+            //find a view if there's one already opened in this area
+            Sublime::View *partView = 0;
+            foreach (Sublime::View *view, sdoc->views())
+            {
+                if (area->views().contains(view) && (activationParams.testFlag(DocumentController::DoNotForceCurrentView) || area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView())))
+                {
+                    partView = view;
+                    break;
+                }
+            }
+            bool addView = false, applyRange = true;
+            if (!partView)
+            {
+                //no view currently shown for this url
+                partView = sdoc->createView();
+                addView = true;
+            }
+            
+            KDevelop::TextView* textView = dynamic_cast<KDevelop::TextView*>(partView);
+            if(textView && textView->textView()) {
+                applyRange = false;
+                if (range.isEmpty())
+                    doc->setCursorPosition( range.start() );
+                else
+                    doc->setTextSelection( range );
+            }else if(textView) {
+                textView->setInitialRange(range);
+            }
+            
+            if(addView) {
+                //add view to the area
+                area->addView(partView, uiController->activeSublimeWindow()->activeView());
+            }
+            
+            if (!activationParams.testFlag(IDocumentController::DoNotActivate))
+            {
+                uiController->activeSublimeWindow()->activateView(partView);
+            }
+            fileOpenRecent->addUrl( url );
+
+            if( applyRange && range.isValid() )
+            {
+                if (range.isEmpty())
+                    doc->setCursorPosition( range.start() );
+                else
+                    doc->setTextSelection( range );
+            }
+        }
+
+        // Deferred signals, wait until it's all ready first
+        if( emitOpened ) {
+            emit controller->documentOpened( documents[url] );
+        }
+
+        if (!activationParams.testFlag(IDocumentController::DoNotActivate) && doc != controller->activeDocument())
+            emit controller->documentActivated( doc );
+
+        saveAll->setEnabled(true);
+        revertAll->setEnabled(true);
+        close->setEnabled(true);
+        closeAll->setEnabled(true);
+        closeAllOthers->setEnabled(true);
+
+        if(doc) {
+            KTextEditor::Cursor activePosition;
+            if(doc->textDocument() && doc->textDocument()->activeView())
+                activePosition = doc->textDocument()->activeView()->cursorPosition();
+            
+            emit controller->documentJumpPerformed(doc, range.isValid() ? range.start() : activePosition, previousActiveDocument, previousActivePosition);
+        }
+        
+        return doc;
+    }
+
     DocumentController* controller;
 
     QList<HistoryEntry> backHistory;
@@ -268,206 +477,16 @@ IDocument* DocumentController::openDocumentFromText( const QString& data )
     return d;
 }
 
+IDocument* DocumentController::openDocument( const KUrl& inputUrl, const QString& prefName )
+{
+    return d->openDocumentInternal( inputUrl, prefName );
+}
+
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Range& range,
         DocumentActivationParams activationParams)
 {
-    IDocument* previousActiveDocument = activeDocument();
-    KTextEditor::Cursor previousActivePosition;
-    if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
-        previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
-    
-
-    UiController *uiController = Core::self()->uiControllerInternal();
-    Sublime::Area *area = uiController->activeArea();
-
-    KUrl url = inputUrl;
-    QString encoding = "";
-
-    if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
-    {
-        KUrl dir;
-        if( activeDocument() )
-        {
-            dir = KUrl( activeDocument()->url().directory() );
-        }else
-        {
-            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
-        }
-
-        KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlAndEncoding( "", dir.url(), i18n( "*|Text File\n" ),
-                                       Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                       i18n( "Open File" ) );
-        if( !res.URLs.isEmpty() )
-            url = res.URLs.first();
-        encoding = res.encoding;
-    }
-    if ( url.isEmpty() )
-        //still no url
-        return 0;
-
-    KGlobal::config()->group("Open File").writeEntry( "Last Open File Directory", url.upUrl() );
-
-    bool emitOpened = false;
-
-    // clean it and resolve possible symlink
-    url.cleanPath( KUrl::SimplifyDirSeparators );
-    if ( url.isLocalFile() )
-    {
-        QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
-        if ( !path.isEmpty() )
-            url.setPath( path );
-    }
-    
-    //get a part document
-    if (!d->documents.contains(url))
-    {
-        KMimeType::Ptr mimeType;
-
-        if (DocumentController::isEmptyDocumentUrl(url))
-        {
-            mimeType = KMimeType::mimeType("text/plain");
-        }
-        else
-        {
-            //make sure the URL exists
-            if ( !url.isValid() || !KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
-            {
-                kDebug() << "cannot find URL:" << url.url();
-                return 0;
-            }
-
-            mimeType = KMimeType::findByUrl( url );
-        }
-
-        // is the URL pointing to a directory?
-        if ( mimeType->is( "inode/directory" ) )
-        {
-            kDebug() << "cannot open directory:" << url.url();
-            return 0;
-        }
-
-        // Try to find a plugin that handles this mimetype
-        QString constraint = QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
-        KPluginInfo::List plugins = IPluginController::queryPlugins( constraint );
-
-        if( !plugins.isEmpty() )
-        {
-            KPluginInfo info = plugins.first();
-            kDebug() << "loading" << info.pluginName();
-            Core::self()->pluginController()->loadPlugin( info.pluginName() );
-            if( d->factories.contains( mimeType->name() ) )
-            {
-                IDocument* idoc = d->factories[mimeType->name()]->create(url, Core::self());
-                if( idoc )
-                {
-                     d->documents[url] = idoc;
-                }
-            }
-        }
-        
-        if(!d->documents.contains(url)) {
-            if ( Core::self()->partControllerInternal()->isTextType(mimeType))
-                d->documents[url] = new TextDocument(url, Core::self(), encoding);
-            else if( Core::self()->partControllerInternal()->canCreatePart(url) )
-                d->documents[url] = new PartDocument(url, Core::self());
-            else
-            {
-                int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
-                if (openAsText == KMessageBox::Yes)
-                    d->documents[url] = new TextDocument(url, Core::self(), encoding);
-                else
-                    return 0;
-            }
-        }
-        emitOpened = d->documents.contains(url);
-    }
-    IDocument *doc = d->documents[url];
-
-    Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
-    if( !sdoc )
-    {
-        d->documents.remove(url);
-        delete doc;
-        return 0;
-    }
-    //react on document deletion - we need to cleanup controller structures
-    connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), this, SLOT(removeDocument(Sublime::Document*)));
-
-    if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
-    {
-        //find a view if there's one already opened in this area
-        Sublime::View *partView = 0;
-        foreach (Sublime::View *view, sdoc->views())
-        {
-            if (area->views().contains(view) && (activationParams.testFlag(DoNotForceCurrentView) || area->indexOf(view) == area->indexOf(uiController->activeSublimeWindow()->activeView())))
-            {
-                partView = view;
-                break;
-            }
-        }
-        bool addView = false, applyRange = true;
-        if (!partView)
-        {
-            //no view currently shown for this url
-            partView = sdoc->createView();
-            addView = true;
-        }
-        
-        KDevelop::TextView* textView = dynamic_cast<KDevelop::TextView*>(partView);
-        if(textView && textView->textView()) {
-            applyRange = false;
-            if (range.isEmpty())
-                doc->setCursorPosition( range.start() );
-            else
-                doc->setTextSelection( range );
-        }else if(textView) {
-            textView->setInitialRange(range);
-        }
-        
-        if(addView) {
-            //add view to the area
-            area->addView(partView, uiController->activeSublimeWindow()->activeView());
-        }
-        
-        if (!activationParams.testFlag(IDocumentController::DoNotActivate))
-        {
-            uiController->activeSublimeWindow()->activateView(partView);
-        }
-        d->fileOpenRecent->addUrl( url );
-
-        if( applyRange && range.isValid() )
-        {
-            if (range.isEmpty())
-                doc->setCursorPosition( range.start() );
-            else
-                doc->setTextSelection( range );
-        }
-    }
-
-    // Deferred signals, wait until it's all ready first
-    if( emitOpened ) {
-        emit documentOpened( d->documents[url] );
-    }
-
-    if (!activationParams.testFlag(IDocumentController::DoNotActivate) && doc != activeDocument())
-        emit documentActivated( doc );
-
-    d->saveAll->setEnabled(true);
-    d->revertAll->setEnabled(true);
-    d->close->setEnabled(true);
-    d->closeAll->setEnabled(true);
-    d->closeAllOthers->setEnabled(true);
-
-    if(doc) {
-        KTextEditor::Cursor activePosition;
-        if(doc->textDocument() && doc->textDocument()->activeView())
-            activePosition = doc->textDocument()->activeView()->cursorPosition();
-        
-        emit documentJumpPerformed(doc, range.isValid() ? range.start() : activePosition, previousActiveDocument, previousActivePosition);
-    }
-    
-    return doc;
+    return d->openDocumentInternal( inputUrl, "", range, activationParams );
 }
 
 void DocumentController::fileClose()

@@ -24,6 +24,7 @@
 #include <kparts/factory.h>
 #include <kmimetype.h>
 #include <kparts/part.h>
+#include <kdebug.h>
 
 namespace KDevelop {
     
@@ -74,12 +75,13 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
 {
     static const char* const services[] =
     {
-        "KParts/ReadWritePart", "KParts/ReadOnlyPart"
+        // Disable read/write parts until we can support them
+        /*"KParts/ReadWritePart",*/ "KParts/ReadOnlyPart"
     };
 
     static const char* const classNames[] =
     {
-        "KParts::ReadWritePart", "KParts::ReadOnlyPart"
+        /*"KParts::ReadWritePart",*/ "KParts::ReadOnlyPart"
     };
 
     KParts::Part* part = 0;
@@ -89,7 +91,6 @@ KParts::Part* IPartController::createPart ( const QString& mimetype, const QStri
         if ( editorFactory )
         {
             part = editorFactory->createPart( 0, this, classNames[ i ] );
-
             break;
         }
     }

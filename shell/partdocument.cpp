@@ -34,11 +34,13 @@ namespace KDevelop {
 
 struct PartDocumentPrivate {
     QMap<QWidget*, KParts::Part*> partForView;
+    QString preferredPart;
 };
 
-PartDocument::PartDocument(const KUrl &url, ICore* core)
+PartDocument::PartDocument(const KUrl& url, KDevelop::ICore* core, const QString& preferredPart)
     : Sublime::UrlDocument(core->uiController()->controller(), url), KDevelop::IDocument(core), d(new PartDocumentPrivate)
 {
+    d->preferredPart = preferredPart;
 }
 
 PartDocument::~PartDocument()
@@ -48,7 +50,7 @@ PartDocument::~PartDocument()
 
 QWidget *PartDocument::createViewWidget(QWidget */*parent*/)
 {
-    KParts::Part *part = Core::self()->partControllerInternal()->createPart(url());
+    KParts::Part *part = Core::self()->partControllerInternal()->createPart(url(), d->preferredPart);
     if( part )
     {
         Core::self()->partController()->addPart(part);
