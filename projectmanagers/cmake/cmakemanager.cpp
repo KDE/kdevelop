@@ -593,16 +593,15 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
 bool CMakeManager::reload(KDevelop::ProjectBaseItem* it)
 {
-    if (it == it->project()->projectItem()) {
+    CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(it->folder());
+    while(!item && it->parent()) {
+        item=dynamic_cast<CMakeFolderItem*>(it->folder());
+        it=dynamic_cast<ProjectBaseItem*>(it->parent());
+    }
+    
+    if (!item || it == it->project()->projectItem()) {
         it->project()->reloadModel();
     } else {
-        //We have to reload folders
-        CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(it->folder());
-        while(!item && it->parent()) {
-            item=dynamic_cast<CMakeFolderItem*>(it->folder());
-        }
-        Q_ASSERT(item);
-        
         CMakeFolderItem* former=item->formerParent();
         QStandardItem* parent=item->parent();
         KUrl url=item->url();
