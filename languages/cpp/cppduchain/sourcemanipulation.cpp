@@ -416,7 +416,9 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
         
         forwardDeclaration += " >\n";
       }
-      forwardDeclaration += "class " + decl->identifier().toString() + ";";
+      
+      ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration *>(decl);
+      forwardDeclaration += classDecl->toString() + ";";
     }
     
     //Put declarations to the end, and namespaces to the begin
