@@ -86,20 +86,20 @@ void FileManager::updateNav( const KUrl& url )
 
 void FileManager::setupActions()
 {
-    tbActions << (dirop->actionCollection()->action("back"));
-    tbActions << (dirop->actionCollection()->action("up"));
-    tbActions << (dirop->actionCollection()->action("home"));
-    tbActions << (dirop->actionCollection()->action("forward"));
-    tbActions << (dirop->actionCollection()->action("reload"));
-    tbActions << (dirop->actionCollection()->action("sorting menu"));
-    tbActions << (dirop->actionCollection()->action("show hidden"));
-
     KAction* action = new KAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
     action->setIcon(KIcon("dirsync"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(syncCurrentDocumentDirectory()));
+    tbActions << (dirop->actionCollection()->action("back"));
+    tbActions << (dirop->actionCollection()->action("up"));
+    tbActions << (dirop->actionCollection()->action("home"));
+    tbActions << (dirop->actionCollection()->action("forward"));
+    tbActions << (dirop->actionCollection()->action("reload"));
     tbActions << action;
+    tbActions << (dirop->actionCollection()->action("sorting menu"));
+    tbActions << (dirop->actionCollection()->action("show hidden"));
+
 }
 
 void FileManager::syncCurrentDocumentDirectory()
