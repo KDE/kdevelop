@@ -39,6 +39,7 @@
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/classdeclaration.h>
 #include <language/codegen/documentchangeset.h>
+#include <language/codegen/coderepresentation.h>
 
 #include "../codecompletion/implementationhelperitem.h"
 #include "../codecompletion/missingincludeitem.h"
@@ -189,7 +190,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   bool headerExists;
   {
     QFileInfo info(headerUrl().toLocalFile());
-    headerExists = info.exists();
+    headerExists = info.exists() || artificialCodeRepresentationExists(IndexedString(headerUrl()));
   }
   if(!headerExists) 
   {
@@ -243,8 +244,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
 
   // if (baseClassIsQObjectDerivative) output << "\tQ_OBJECT\n\n";
 
-  output << "public:\n";
-  Declaration::AccessPolicy ap = Declaration::Public;
+  Declaration::AccessPolicy ap = m_type == Class ? Declaration::Private : Declaration::Public;
 
   // Constructor(s)
 
@@ -271,8 +271,13 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
       }
     }
     
-    Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, override);
-    output << item.insertionText() << "\n";
+    if(override->type<FunctionType>())
+    {
+      Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, override);
+      output << item.insertionText() << "\n";
+    }
+    else
+      output << override->toString() << ";\n";
   }
 
   output << "};\n\n";
@@ -284,7 +289,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
     output << "#endif // " << headerGuard << '\n';
   
   DocumentChangeSet changes;
-  changes.addChange(DocumentChange(IndexedString(headerUrl().path()),
+  changes.addChange(DocumentChange(IndexedString(headerUrl()),
                     SimpleRange(headerPosition(), 0), QString(), header));
 
 #if 0
@@ -391,7 +396,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateImplementation()
   
   DocumentChangeSet changes;
   
-  changes.addChange(DocumentChange(IndexedString(implementationUrl().path()), SimpleRange(implementationPosition(), 0),
+  changes.addChange(DocumentChange(IndexedString(implementationUrl()), SimpleRange(implementationPosition(), 0),
                                    QString(), implementation));
   
   return changes;
