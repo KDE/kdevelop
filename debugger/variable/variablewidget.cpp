@@ -99,8 +99,6 @@ VariableWidget::VariableWidget(DebugController* controller, QWidget *parent)
     connect(watchVarEditor_, SIGNAL(returnPressed(const QString &)),
             this, SLOT(slotAddWatch(const QString&)));
 
-    connect(controller, SIGNAL(sessionAdded(KDevelop::IDebugSession*)), SLOT(sessionAdded(KDevelop::IDebugSession*)));
-
     //TODO
     //connect(plugin, SIGNAL(raiseVariableViews()), this, SIGNAL(requestRaise()));
 
@@ -126,11 +124,6 @@ VariableWidget::VariableWidget(DebugController* controller, QWidget *parent)
 
 }
 
-void VariableWidget::sessionAdded(KDevelop::IDebugSession *session)
-{
-    session->variableController()->setAutoUpdate(isVisible());
-}
-
 void VariableWidget::slotAddWatch(const QString &expression)
 {
     if (!expression.isEmpty())
@@ -152,19 +145,13 @@ void VariableWidget::slotAddWatch(const QString &expression)
 void VariableWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
-    IDebugSession *session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        session->variableController()->setAutoUpdate(false);
-    }
+    variableCollection()->variableWidgetHidden();
 }
 
 void VariableWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
-    IDebugSession *session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        session->variableController()->setAutoUpdate(true);
-    }
+    variableCollection()->variableWidgetShown();
 }
 
 // **************************************************************************

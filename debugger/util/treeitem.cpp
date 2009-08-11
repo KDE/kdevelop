@@ -241,5 +241,13 @@ void TreeItem::setHasMoreInitial(bool more)
 
 QVariant KDevelop::TreeItem::icon(int column) const { return QVariant(); }
 
+void KDevelop::TreeItem::setExpanded(bool b)
+{
+    if (expanded_ != b) {
+        expanded_ = b;
+        if (expanded_) emit expanded();
+        else emit collapsed();
+    }
+}
 
 #include "treeitem.moc"

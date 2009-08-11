@@ -51,9 +51,6 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotAddWatch(const QString &ident);
 
-private Q_SLOTS:
-    void sessionAdded(KDevelop::IDebugSession*);
-
 protected:
     virtual void showEvent(QShowEvent* e);
     virtual void hideEvent(QHideEvent* e);

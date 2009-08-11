@@ -255,12 +255,14 @@ Locals::Locals(TreeModel* model, TreeItem* parent)
     setData(QVector<QVariant>() << "Locals" << QString());
 }
 
-
 void Locals::updateLocals(QStringList locals)
 {
+    setHasMore(false);
+
     QSet<QString> existing, current;
-    for (int i = 0; i < childCount(); i++)
+    for (int i = 0; i < childItems.size(); i++)
     {
+        Q_ASSERT(dynamic_cast<KDevelop::Variable*>(child(i)));
         existing << static_cast<KDevelop::Variable*>(child(i))->expression();
     }
 
@@ -300,7 +302,7 @@ VariablesRoot::VariablesRoot(TreeModel* model)
 }
 
 VariableCollection::VariableCollection(QObject* parent)
-: TreeModel(QVector<QString>() << "Name" << "Value", parent)
+: TreeModel(QVector<QString>() << "Name" << "Value", parent), m_widgetVisible(false)
 {
     universe_ = new VariablesRoot(this);
     setRootItem(universe_);
@@ -311,6 +313,42 @@ VariableCollection::VariableCollection(QObject* parent)
          SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ),
          this,
          SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
+
+    connect(ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
+             SLOT(updateAutoUpdate(KDevelop::IDebugSession*)));
+
+    connect(locals(), SIGNAL(expanded()), SLOT(updateAutoUpdate()));
+    connect(locals(), SIGNAL(collapsed()), SLOT(updateAutoUpdate()));
+    connect(watches(), SIGNAL(expanded()), SLOT(updateAutoUpdate()));
+    connect(watches(), SIGNAL(collapsed()), SLOT(updateAutoUpdate()));
+}
+
+void VariableCollection::variableWidgetHidden()
+{
+    m_widgetVisible = false;
+    updateAutoUpdate();
+}
+
+void VariableCollection::variableWidgetShown()
+{
+    m_widgetVisible = true;
+    updateAutoUpdate();
+}
+
+void VariableCollection::updateAutoUpdate(IDebugSession* session)
+{
+    if (!session) {
+        session = ICore::self()->debugController()->currentSession();
+        if (!session) return;
+    }
+    if (!m_widgetVisible) {
+        session->variableController()->setAutoUpdate(IVariableController::UpdateNone);
+    } else {
+        QFlags<IVariableController::UpdateType> t = IVariableController::UpdateNone;
+        if (locals()->isExpanded()) t |= IVariableController::UpdateLocals;
+        if (watches()->isExpanded()) t |= IVariableController::UpdateWatches;
+        session->variableController()->setAutoUpdate(t);
+    }
 }
 
 VariableCollection::~ VariableCollection()

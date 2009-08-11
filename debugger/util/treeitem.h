@@ -93,6 +93,10 @@ protected: // Interface for derived classes
 
     bool isExpanded() const { return expanded_; }
 
+Q_SIGNALS:
+    void expanded();
+    void collapsed();
+
 protected: // Backend implementation of Model/View
     friend class TreeModel;
 
@@ -103,7 +107,7 @@ protected: // Backend implementation of Model/View
     int row() const;
     TreeItem *parent();
     bool hasMore() const { return more_; }
-    void setExpanded(bool b) { expanded_ = b; }
+    void setExpanded(bool b);
 
     virtual void clicked() {}
     virtual QVariant icon(int column) const;

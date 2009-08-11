@@ -54,7 +54,14 @@ public:
 
     virtual void update() = 0;
 
-    void setAutoUpdate(bool autoUpdate);
+    enum UpdateType {
+        UpdateNone    = 0x0,
+        UpdateLocals  = 0x1,
+        UpdateWatches = 0x2
+    };
+    Q_DECLARE_FLAGS(UpdateTypes, UpdateType)
+    void setAutoUpdate(QFlags<UpdateType> autoUpdate);
+    QFlags<UpdateType> autoUpdate();
 
 protected:
     /**
@@ -66,9 +73,11 @@ private Q_SLOTS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
 
 private:
-    bool m_autoUpdate;
+    QFlags<UpdateType> m_autoUpdate;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(IVariableController::UpdateTypes)
+ 
 }
 
 #endif

@@ -125,7 +125,9 @@ public:
 
     Variable *addFinishResult(const QString& convenienceVarible);
     void removeFinishResult();
-    
+
+    using TreeItem::childCount;
+    friend class VariableCollection;
 private:
 
     QVariant data(int column, int role) const;
@@ -142,6 +144,9 @@ public:
     void updateLocals(QStringList locals);
 
     using TreeItem::deleteChildren;
+    using TreeItem::setHasMore;
+
+    friend class VariableCollection;
 
 private:
     void fetchMoreChildren() {}
@@ -178,6 +183,14 @@ public:
     Watches* watches() const { return universe_->watches(); }
     Locals* locals() const { return universe_->locals(); }
 
+public Q_SLOTS:
+    void variableWidgetShown();
+    void variableWidgetHidden();
+
+private Q_SLOTS:
+    void updateAutoUpdate(KDevelop::IDebugSession* session = 0);
+
+    
 #if 0
     void addItem(AbstractVariableItem* item);
     void deleteItem(AbstractVariableItem* item);
@@ -270,6 +283,7 @@ private Q_SLOTS:
 private:
     VariablesRoot* universe_;
     QPointer<VariableToolTip> activeTooltip_;
+    bool m_widgetVisible;
 
 #if 0
     QMap<QString, AbstractVariableItem*> m_variableObjectMap;
