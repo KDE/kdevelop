@@ -93,11 +93,17 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
         
         // Now setup a menu with actions for each part and app
         KMenu* menu = new KMenu( i18n("Open With" ) );
+        menu->setIcon( SmallIcon( "document-open" ) );
         
         menu->addActions( actionsForServices( parts, preferredpart ) );
         menu->addActions( actionsForServices( apps, preferredapp ) );
         
+        KAction* openAction = new KAction( i18n( "Open" ), this );
+        openAction->setIcon( SmallIcon( "document-open" ) );
+        connect( openAction, SIGNAL( triggered() ), SLOT( openDefault() ) );
+
         KDevelop::ContextMenuExtension ext;
+        ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, menu->menuAction() );
         return ext;
     }
@@ -111,7 +117,7 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
     foreach( KService::Ptr svc, list )
     {
         KAction* act = new KAction( svc->name(), this );
-        act->setIcon( KIcon( svc->icon() ) );
+        act->setIcon( SmallIcon( svc->icon() ) );
         connect(act, SIGNAL(triggered()), actionMap, SLOT(map()));
         actionMap->setMapping( act, svc->storageId() );
         if( svc->storageId() == pref->storageId() )
@@ -123,6 +129,11 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
         }
     }
     return openactions;
+}
+
+void OpenWithPlugin::openDefault()
+{
+    ICore::self()->documentController()->openDocument( url );
 }
 
 void OpenWithPlugin::open ( const QString& storageid )

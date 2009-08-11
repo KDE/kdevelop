@@ -42,6 +42,7 @@ public:
     virtual KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context );
 private slots:
     void open( const QString& );
+    void openDefault();
 private:
     QList<QAction*> actionsForServices( const KService::List& list, KService::Ptr pref );
     QSignalMapper* actionMap;
