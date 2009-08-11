@@ -219,6 +219,7 @@ public:
     ///on a top-context, its flag will be AllDeclarationsContextsAndUses.
     AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses,
     AST = 16,  //Use this flag if you want to signalize that the IAstContainer needs to be there
+    AllDeclarationsContextsUsesAndAST = AllDeclarationsContextsAndUses | AST,
     ForceUpdate = 32, //This flag can not be set on a context, but is only used during updating
     ForceUpdateRecursive = ForceUpdate | 64 //This flag can not be set on a context, but is only used during updating
   };
