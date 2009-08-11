@@ -127,13 +127,20 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
 
 void OpenWithPlugin::open ( const QString& storageid )
 {
-    kDebug() << "opening:" << storageid;
     KService::Ptr svc = KService::serviceByStorageId( storageid );
     if( svc->isApplication() )
     {
         KRun::run( *svc, QList<KUrl>() << url, ICore::self()->uiController()->activeMainWindow() );
     } else 
     {
-        ICore::self()->documentController()->openDocument( url );
+        QString prefName = svc->desktopEntryName();
+        if( svc->serviceTypes().contains( "KTextEditor/Document" ) )
+        {
+            // If the user chose a KTE part, lets make sure we're creating a TextDocument instead of 
+            // a PartDocument by passing no preferredpart to the documentcontroller
+            // TODO: Solve this rather inside DocumentController
+            prefName = "";
+        }
+        ICore::self()->documentController()->openDocument( url, prefName );
     }
 }
