@@ -1,4 +1,4 @@
-add_subdirectory(libdiff2)
+#add_subdirectory(libdiff2)
 
 ########### next target ###############
 
@@ -8,6 +8,21 @@ set(patchreview_PART_SRCS
     patchreview.cpp
     documenthighlighter.cpp
     localpatchsource.cpp
+
+    libdiff2/kompareprocess.cpp
+    libdiff2/komparemodellist.cpp
+    libdiff2/diffmodellist.cpp
+    libdiff2/diffmodel.cpp
+    libdiff2/difference.cpp
+    libdiff2/diffhunk.cpp
+    libdiff2/levenshteintable.cpp
+    libdiff2/parser.cpp
+    libdiff2/parserbase.cpp
+    libdiff2/cvsdiffparser.cpp
+    libdiff2/diffparser.cpp
+    libdiff2/perforceparser.cpp
+    libdiff2/diffsettings.cpp
+    libdiff2/settingsbase.cpp 
 )
 
 set (patchreview_UI
@@ -17,7 +32,7 @@ kde4_add_ui_files(patchreview_PART_SRCS ${patchreview_UI} )
 
 
 kde4_add_plugin(kdevpatchreview ${patchreview_PART_SRCS})
-target_link_libraries(kdevpatchreview ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevpatchreview_diff2 kdevplatforminterfaces ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kdevpatchreview ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevplatforminterfaces ${KDE4_KDE3SUPPORT_LIBS})
 
 install(TARGETS kdevpatchreview DESTINATION ${PLUGIN_INSTALL_DIR})
 
