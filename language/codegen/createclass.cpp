@@ -590,7 +590,7 @@ void LicensePage::licenseComboChanged(int selectedLicense)
     }
     
     if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
-        d->license->licenseTextEdit->setText("Could not load previous license");
+        d->license->licenseTextEdit->setText(i18n("Could not load previous license"));
     else
         d->license->licenseTextEdit->setText(readLicense(selectedLicense));
 }

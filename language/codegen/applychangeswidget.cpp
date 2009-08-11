@@ -80,7 +80,7 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     
     KDialog::setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
     KPushButton * switchButton(KDialog::button(KDialog::User1));
-    switchButton->setText("Edit Document");
+    switchButton->setText(i18n("Edit Document"));
     switchButton->setEnabled(d->m_kompare.enabled);
     
     connect(switchButton, SIGNAL(released()),
@@ -177,9 +177,9 @@ void ApplyChangesWidgetPrivate::updateButtonLabel()
     KPushButton * switchButton(parent->button(KDialog::User1));
     
     if(m_kompare.widgetActive(m_index))
-        switchButton->setText("Edit Document");
+        switchButton->setText(i18n("Edit Document"));
     else
-        switchButton->setText("View Differences");
+        switchButton->setText(i18n("View Differences"));
 }
 
 void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const QString & info)
