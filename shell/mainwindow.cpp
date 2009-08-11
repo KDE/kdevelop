@@ -153,8 +153,8 @@ void MainWindow::configureShortcuts()
         }
     }
     
-    foreach(Sublime::MainWindow* w, Core::self()->uiControllerInternal()->mainWindows()) {
-        foreach(KXMLGUIClient* client, w->guiFactory()->clients()) {
+    for(int a = 1; a < Core::self()->uiControllerInternal()->mainWindows().size(); ++a) {
+        foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[a]->guiFactory()->clients()) {
             foreach(QAction* action, client->actionCollection()->actions()) {
                 kDebug() << "transferring setting shortcut for" << action->objectName();
                 if(shortcuts.contains(action->objectName())) {
