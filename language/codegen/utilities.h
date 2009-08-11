@@ -51,41 +51,19 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
 };
 
 /**
- * Priority for searching a class implementation file, each of these concepts will be searched for in order,
- * the first found will be returned.
- */
-enum SearchPriority
-{
-    DefaultConstructor,
-    CustomConstructor,
-    Destructor,
-    ClassNameExtension,
-    DeclarationOnly
-};
-
-/**
  * @brief Search for the file that contains the implementation of a specified type
  *
  * Search for the file that contains the implementation of @p targetClass. For languages that
- * allow implementation of a type through multiple files, use @p priority to specify which file that contains
- * the specified definition should be used. If not found it will search for the next definition as declared
- * in SearchPriority. For ClassNameExtension, specify an @p extension, then the file that matches the
- * target class' name with @p extension will be used if found.
+ * allow implementation of a type through multiple files, the file with the most implementations of
+ * class methods will be chosen, if a tie is found, then the file with the most uses will be chosen.
+ * Else the file that contains the declaration is chosen.
  *
  * @note If called with a Forward declaration, the real declaration will be searched for.
  *
- * @return The file that matched the top Priority first, or an empty indexed string if none was found
+ * @return The file that matched best
  */
 KDEVPLATFORMLANGUAGE_EXPORT IndexedString
-fetchImplementationFileForClass(const Declaration & targetClass, SearchPriority priority = DeclarationOnly, const QString & extension = "");
-    
-//TODO Generalized Renaming
-
-//TODO Interface to verify DuContext Encapsulation
-
-//TODO Expression Morphing
-
-//TODO Detect Conflicts
+fetchImplementationFileForClass(const Declaration & targetClass);
 
 }
 
