@@ -61,14 +61,21 @@ void VariableController::programStopped(const GDBMI::ResultRecord& r)
 
 void VariableController::update()
 {
-    variableCollection()->watches()->reinstall();
+    if (autoUpdate() & UpdateWatches) {
+        variableCollection()->watches()->reinstall();
+    }
 
-    updateLocals();
+    if (autoUpdate() & UpdateLocals) {
+        updateLocals();
+    }
 
-    debugSession()->addCommand(
-        new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
+    if ((autoUpdate() & UpdateLocals) ||
+        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
+    {
+        debugSession()->addCommand(
+            new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
                        &VariableController::handleVarUpdate));
-
+    }
 }
 
 void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)

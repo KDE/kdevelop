@@ -829,7 +829,7 @@ KDevelop::VariableCollection *variableCollection()
 void GdbTest::testVariablesLocals()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     TestLaunchConfiguration cfg;
 
@@ -854,7 +854,7 @@ void GdbTest::testVariablesLocals()
 void GdbTest::testVariablesLocalsStruct()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     TestLaunchConfiguration cfg;
 
@@ -891,7 +891,7 @@ void GdbTest::testVariablesLocalsStruct()
 void GdbTest::testVariablesWatches()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
 
     TestLaunchConfiguration cfg;
 
@@ -931,7 +931,7 @@ void GdbTest::testVariablesWatches()
 void GdbTest::testVariablesWatchesTwoSessions()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     TestLaunchConfiguration cfg;
 
@@ -959,7 +959,7 @@ void GdbTest::testVariablesWatchesTwoSessions()
 
     //start a second debug session
     session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(300);
@@ -987,7 +987,7 @@ void GdbTest::testVariablesWatchesTwoSessions()
 void GdbTest::testVariablesStopDebugger()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     TestLaunchConfiguration cfg;
 
@@ -1003,7 +1003,7 @@ void GdbTest::testVariablesStopDebugger()
 void GdbTest::testVariablesStartSecondSession()
 {
     TestDebugSession *session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     TestLaunchConfiguration cfg;
 
@@ -1012,7 +1012,7 @@ void GdbTest::testVariablesStartSecondSession()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     session = new TestDebugSession;
-    session->variableController()->setAutoUpdate(true);
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
     QVERIFY(session->startProgram(&cfg));
