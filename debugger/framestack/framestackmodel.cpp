@@ -171,6 +171,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
 
 int FrameStackModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED(parent);
     return 3;
 }
 

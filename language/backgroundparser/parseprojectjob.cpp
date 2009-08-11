@@ -59,6 +59,8 @@ void ParseProjectJob::updateProgress() {
 }
 
 void ParseProjectJob::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+    Q_UNUSED(url);
+    Q_UNUSED(topContext);
     ++m_updated;
     if(m_updated % ((m_totalFiles / 100)+1) == 0)
         updateProgress();

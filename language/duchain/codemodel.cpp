@@ -139,6 +139,7 @@ class CodeModelRequestItem {
   }
   
   static bool persistent(const CodeModelRepositoryItem* item) {
+    Q_UNUSED(item);
     return true;
   }
   

@@ -236,8 +236,9 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   
   Q_UNUSED(invocationType)
 
-  if (!worker())
+  if (!worker()) {
     kWarning() << "Completion invoked on a completion model which has no code completion worker assigned!";
+  }
 
   m_navigationWidgets.clear();
   m_completionItems.clear();
@@ -265,8 +266,9 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
   m_completionItems = items;
   
   
-  if(m_completionContext)
+  if(m_completionContext) {
     kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
+  }
 
   reset();
 
@@ -285,8 +287,9 @@ void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext>
   QMutexLocker lock(m_mutex);
   m_completionContext = completionContext;
 
-  if(m_completionContext)
+  if(m_completionContext) {
     kDebug() << "got completion-context with " << m_completionContext->ungroupedElements().size() << "ungrouped elements";
+  }
 }
 
 KSharedPtr<CodeCompletionContext> CodeCompletionModel::completionContext() const

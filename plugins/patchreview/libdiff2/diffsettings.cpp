@@ -44,7 +44,9 @@ DiffSettings::~DiffSettings()
 }
 
 void DiffSettings::loadSettings( KConfig* config )
-{/*
+{
+    Q_UNUSED( config );
+    /*
 	KConfigGroup group( config, "Diff Options" );
 	m_diffProgram                    = group.readEntry    ( "DiffProgram", "" );
 	m_linesOfContext                 = group.readEntry( "LinesOfContext", QVariant(3) ).asInt();
@@ -74,7 +76,9 @@ void DiffSettings::loadSettings( KConfig* config )
 }
 
 void DiffSettings::saveSettings( KConfig* config )
-{/*
+{
+    Q_UNUSED( config );
+    /*
 	KConfigGroup group( config, "Diff Options" );
 	group.writeEntry( "DiffProgram",                    m_diffProgram );
 	group.writeEntry( "LinesOfContext",                 m_linesOfContext );

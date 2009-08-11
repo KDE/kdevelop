@@ -315,6 +315,7 @@ struct UintSetVisitor {
 
 struct NothingDoVisitor {
     inline bool operator() (const TestItem& item) {
+        Q_UNUSED(item);
         return true;
     }
 };
@@ -327,8 +328,9 @@ class TestEmbeddedFreeTree : public QObject {
         TestSet set;
         srand(time(NULL));
         for(int a = 0; a < cycles; ++a) {
-            if(a % (cycles / 10) == 0)
+            if(a % (cycles / 10) == 0) {
                 kDebug() << "cycle" << a;
+            }
             
             bool remove = (rand() % 100) < removeProbability;
             if(remove && set.size()) {
@@ -435,8 +437,9 @@ class TestEmbeddedFreeTree : public QObject {
             std::set<uint> testSet2;
             RepositorySet repSet2;
             
-            if(a % (cycles / 10) == 0)
+            if(a % (cycles / 10) == 0) {
                 kDebug() << "cycle" << a;
+            }
             
             //Build the sets
             extractor_div_with = (rand() % 10) + 1;

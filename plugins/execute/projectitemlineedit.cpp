@@ -124,6 +124,7 @@ ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent),
 
 QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
 {
+    Q_UNUSED( pos );
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     QStringList path = joinBasePath( KDevelop::splitWithEscaping( input, sep, escape ), mBase );
     QModelIndex idx = model->pathToIndex( path );

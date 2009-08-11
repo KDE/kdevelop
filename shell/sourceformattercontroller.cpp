@@ -201,8 +201,9 @@ void SourceFormatterController::setActiveLanguage(const QString &lang, QString p
 		m_currentPlugins[lang] = formatterByName(lang, plugin);
 	kDebug() << "Activating language " << lang << " with plugin " << plugin << " == " << m_currentPlugins[lang] << endl;
 
-	if (plugin.isEmpty())
+	if (plugin.isEmpty()) {
 		kDebug() << "Cannot find a suitable plugin for language " << lang << endl;
+	}
 
 	// update the plugin entry in config
 // 	m_rootConfigGroup.group(lang).writeEntry("Plugin", plugin);

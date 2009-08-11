@@ -96,7 +96,11 @@ class KrossImpl : public DUChainReader
         }
                     
         void writeVariable(const QString& name, const QString& _type, bool isConst)
-        {}
+        {
+            Q_UNUSED(name);
+            Q_UNUSED(_type);
+            Q_UNUSED(isConst);
+        }
         
         void writeNamespace(const QString& name)
         {
@@ -106,19 +110,26 @@ class KrossImpl : public DUChainReader
         void writeEndEnum(const QStringList& ) { Q_ASSERT(false); }
         
         void writeEnum(const QStringList &fl)
-        {}
+        {
+            Q_UNUSED(fl);
+        }
         
         void writeQ_Enum(const QStringList& fl)
-        {}
+        {
+            Q_UNUSED(fl);
+        }
         
         void createHandler(const QString& _classname)
-        {}
+        {
+            Q_UNUSED(_classname);
+        }
         
         void writeEndDocument()
         {}
         
         QString valueToVariant(const QString& type, const QString& varname)
         {
+            Q_UNUSED(varname);
             QString ret;
             if(type=="const QModelIndex&")
                 ret="QVariant()";

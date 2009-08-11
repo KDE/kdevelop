@@ -259,6 +259,7 @@ void SourceFormatterSettings::currentStyleChanged(QListWidgetItem *current, QLis
 
 void SourceFormatterSettings::styleRenamed(QListWidgetItem *item)
 {
+	Q_UNUSED(item);
 	changed();
 }
 

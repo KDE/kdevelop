@@ -50,6 +50,7 @@ TreeModel::~TreeModel()
 
 int TreeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return headers_.size();
 }
 

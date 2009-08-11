@@ -37,8 +37,9 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaratio
 }
 
 void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
-  if(!( !type || dynamic_cast<FunctionType*>(type.unsafeData()) ))
+  if(!( !type || dynamic_cast<FunctionType*>(type.unsafeData()) )) {
     kWarning(9505) << "WARNING: Non-function type assigned to function declaration";
+  }
   ClassMemberDeclaration::setAbstractType(type);
 }
 

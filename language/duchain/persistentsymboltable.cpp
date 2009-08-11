@@ -610,8 +610,9 @@ void PersistentSymbolTable::contexts(const IndexedQualifiedIdentifier& id, uint&
 struct Visitor {
   bool operator() (const PersistentSymbolTableItem* item) {
     QualifiedIdentifier id(item->id.identifier());
-    if(identifiers.contains(id))
+    if(identifiers.contains(id)) {
       kDebug() << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+    }
     
     ++identifiers[id];
     
@@ -624,8 +625,9 @@ struct Visitor {
           declarations.insert(decl, id);
         }
       }
-      if(decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier())
+      if(decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier()) {
         kDebug() << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() << "is registered as" << item->id.identifier();
+      }
       
       if(!decl.data() && !decl.isDummy()) {
         kDebug() << "Item in symbol-table is invalid:" << id.toString() << item->declarations()[a].localIndex() << IndexedTopDUContext(item->declarations()[a].topContextIndex()).url().str();
@@ -640,8 +642,9 @@ struct Visitor {
 struct ContextVisitor {
   bool operator() (const PersistentContextTableItem* item) {
     QualifiedIdentifier id(item->id.identifier());
-    if(identifiers.contains(id))
+    if(identifiers.contains(id)) {
       kDebug() << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+    }
     
     ++identifiers[id];
     

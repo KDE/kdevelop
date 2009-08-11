@@ -125,11 +125,16 @@ void KDevelop::CodeCompletionWorker::doSpecialProcessing(uint) {
 }
 
 CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText, const KDevelop::SimpleCursor& position) const {
+  Q_UNUSED(context);
+  Q_UNUSED(contextText);
+  Q_UNUSED(followingText);
+  Q_UNUSED(position);
   return 0;
 }
 
 void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText)
 {
+  Q_UNUSED(contextRange);
   KTextEditor::Cursor cursorPosition = view->cursorPosition();
   QString followingText; //followingText may contain additional text that stands for the current item. For example in the case "QString|", QString is in addedText.
   if(position < cursorPosition)
@@ -174,6 +179,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
 QList<KSharedPtr<CompletionTreeElement> > CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext)
 {
+  Q_UNUSED(completionContext);
   QList<KSharedPtr<CompletionTreeElement> > tree;
   /**
    * 1. Group by argument-hint depth

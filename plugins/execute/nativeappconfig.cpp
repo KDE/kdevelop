@@ -143,6 +143,7 @@ void NativeAppConfigPage::activateDeps( int idx )
 
 void NativeAppConfigPage::checkActions( const QItemSelection& selected, const QItemSelection& unselected )
 {
+    Q_UNUSED( unselected );
     kDebug() << "checkActions";
     if( !selected.indexes().isEmpty() )
     {
@@ -214,6 +215,7 @@ void NativeAppConfigPage::removeDep()
 
 void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
 {
+    Q_UNUSED( project );
     cfg.writeEntry( ExecutePlugin::isExecutableEntry, executableRadio->isChecked() );
     if( executableRadio-> isChecked() )
     {

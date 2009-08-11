@@ -274,6 +274,7 @@ void QuickOpenWidget::showStandardButtons(bool show)
 
 QuickOpenWidget::QuickOpenWidget( QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField ) : m_model(model), m_expandedTemporary(false) {
 
+  Q_UNUSED( title );
   o.setupUi( this );
   o.list->header()->hide();
   o.list->setRootIsDecorated( false );

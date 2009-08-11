@@ -32,7 +32,7 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
     public:
         explicit DummyBSM(QObject *parent=0, const QVariantList& args=QVariantList(), const KUrl::List& cf=KUrl::List());
         
-        QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom ) { return QList<KDevelop::ProjectFolderItem*>(); }
+        QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom ) { Q_UNUSED( dom ); return QList<KDevelop::ProjectFolderItem*>(); }
         KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
 
         KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const { return 0; }

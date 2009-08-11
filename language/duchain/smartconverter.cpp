@@ -102,8 +102,9 @@ void SmartConverter::convertDUChain(DUContext* context) const
   Q_ASSERT(iface);
   if (iface && !context->smartRange()) {
     context->setSmartRange(d->m_editor->topRange(iface, KDevelop::EditorIntegrator::DefinitionUseChain)->toSmartRange());
-    if (context->range().textRange() != iface.currentDocument()->documentRange())
+    if (context->range().textRange() != iface.currentDocument()->documentRange()) {
       kWarning() << "Context range to be converted" << context->range().textRange() << "does not match the document range" << iface.currentDocument()->documentRange();
+    }
     //Q_ASSERT(context->range().textRange() == iface.currentDocument()->documentRange());
     Q_ASSERT(context->smartRange() && !context->smartRange()->parentRange() && context->smartRange()->childRanges().isEmpty());
 

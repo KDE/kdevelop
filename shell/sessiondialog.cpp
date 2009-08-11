@@ -199,6 +199,7 @@ void SessionDialog::enableButtons()
 
 void SessionDialog::enableButtons( const QModelIndex& current, const QModelIndex& previous )
 {
+    Q_UNUSED( previous );
     if( m_model->data( current ).toString() == Core::self()->activeSession()->name() )
     {
         m_ui->activateButton->setEnabled( false );

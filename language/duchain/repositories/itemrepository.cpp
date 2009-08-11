@@ -96,8 +96,9 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
        }
        if(useDir) {
           repoPath = specificDir;
-          if(result == KLockFile::LockStale)
+          if(result == KLockFile::LockStale) {
             kWarning() << "stale lock detected:" << specificDir + "/lock";
+          }
           break;
        }
     }

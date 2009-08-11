@@ -56,6 +56,7 @@ class DocumentationViewFactory: public KDevelop::IToolViewFactory
 DocumentationController::DocumentationController(Core* core)
     : m_factory(new DocumentationViewFactory)
 {
+    Q_UNUSED( core );
     m_showDocumentation = new QAction(i18n("Show Documentation"), this);
     connect(m_showDocumentation, SIGNAL(triggered(bool)), SLOT(doShowDocumentation()));
 }

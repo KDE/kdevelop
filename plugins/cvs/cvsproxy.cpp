@@ -303,6 +303,7 @@ CvsJob* CvsProxy::commit(const QString& repo, const KUrl::List& files, const QSt
 CvsJob* CvsProxy::add(const QString & repo, const KUrl::List & files, 
                       bool recursiv, bool binary)
 {
+    Q_UNUSED(recursiv);
     // FIXME recursiv is not implemented yet
     CvsJob* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {

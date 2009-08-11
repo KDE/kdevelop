@@ -27,6 +27,7 @@ K_PLUGIN_FACTORY(DummyBSMFactory, registerPlugin<DummyBSM>(); )
 DummyBSM::DummyBSM(QObject *parent, const QVariantList& args, const KUrl::List& cf)
     : KDevelop::IPlugin( DummyBSMFactory::componentData(), parent ), m_controlledFiles(cf)
 {
+    Q_UNUSED( args );
 }
 
 KDevelop::ProjectFolderItem* DummyBSM::import(KDevelop::IProject *project )

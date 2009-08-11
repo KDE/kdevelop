@@ -349,8 +349,9 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 
     core()->projectController()->closeProject(curProject); //let's ask to save all files!
 
-    if (!checkoutJob->exec())
+    if (!checkoutJob->exec()) {
         kDebug() << "CHECKOUT PROBLEM!";
+    }
 
     kDebug() << "projectFile is " << projectFile << " JobDir is " << workingDir;
     kDebug() << "Project was closed, now it will be opened";

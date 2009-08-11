@@ -84,6 +84,7 @@ KDevelop::ContextMenuExtension KrossPlugin::contextMenuExtension(KDevelop::Conte
 
 void KrossPlugin::createToolViewFactory(const QString& method, const QString& id, Qt::DockWidgetArea pos)
 {
+    Q_UNUSED(pos);
     kDebug() << "creating kross tool view" << method << id;
     //KrossToolViewFactory* toolFactory=new KrossToolViewFactory(this, action, method, id, pos);
     KrossToolViewFactory* toolFactory=new KrossToolViewFactory(this, action, method, id, Qt::BottomDockWidgetArea);

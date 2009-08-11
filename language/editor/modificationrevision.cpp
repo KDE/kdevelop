@@ -27,6 +27,7 @@
 #if defined(Q_CC_MSVC)
 #include <hash_map>
 #else
+// DEPRECATED (should use unordered_map), but needed to support gcc 3.4 and early 4.x
 #include <ext/hash_map>
 #endif
 

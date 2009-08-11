@@ -568,8 +568,9 @@ void BackgroundParser::resume()
 void BackgroundParser::updateProgressBar()
 {
     if (d->m_doneParseJobs >= d->m_maxParseJobs) {
-        if(d->m_doneParseJobs > d->m_maxParseJobs)
+        if(d->m_doneParseJobs > d->m_maxParseJobs) {
             kWarning() << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
+        }
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
     } else {

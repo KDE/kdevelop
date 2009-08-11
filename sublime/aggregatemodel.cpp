@@ -86,6 +86,9 @@ Qt::ItemFlags AggregateModel::flags(const QModelIndex &index) const
 
 QVariant AggregateModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
     //there's nothing to return here because aggregated models will have different headers
     //so we just use empty headers for aggregate model.
     return "";
@@ -93,6 +96,7 @@ QVariant AggregateModel::headerData(int section, Qt::Orientation orientation, in
 
 int AggregateModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     //only 1 column is supported atm
     return 1;
 }

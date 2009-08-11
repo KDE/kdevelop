@@ -179,6 +179,7 @@ void CvsJob::cancel()
 
 void CvsJob::slotProcessError( QProcess::ProcessError err)
 {
+    Q_UNUSED( err );
     // disconnect all connections to childproc's signals; they are no longer needed
     d->childproc->disconnect();
 

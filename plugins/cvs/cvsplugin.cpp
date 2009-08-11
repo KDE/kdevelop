@@ -435,6 +435,8 @@ KDevelop::VcsJob * CvsPlugin::annotate(const KUrl & localLocation, const KDevelo
 
 KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(localLocations);
+    Q_UNUSED(recursion);
     return NULL;
 }
 
@@ -463,6 +465,7 @@ KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& s
 
 KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
+    Q_UNUSED(recursion);
     if (!destinationDirectory.isLocalFile()
             || !sourceRepository.isValid()
             || sourceRepository.type() != KDevelop::VcsLocation::RepositoryLocation) {

@@ -63,6 +63,7 @@ QStack< DocumentCursor > Problem::locationStack() const
 
 void Problem::addLocation(const DocumentCursor & cursor)
 {
+    Q_UNUSED(cursor);
 //     d_func()->locationStack.push(DocumentCursor(cursor));
 }
 
@@ -73,6 +74,7 @@ void Problem::clearLocationStack()
 
 void Problem::setLocationStack(const QStack< DocumentCursor > & locationStack)
 {
+    Q_UNUSED(locationStack);
 //     d_func()->locationStack = locationStack;
 }
 

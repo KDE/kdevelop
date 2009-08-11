@@ -157,6 +157,7 @@ DocumentSwitcherPlugin::~DocumentSwitcherPlugin()
 
 void DocumentSwitcherPlugin::switchToView( const QModelIndex& idx )
 {
+    Q_UNUSED( idx );
     view->hide();
     if( view->selectionModel()->selectedRows().isEmpty() )
     {

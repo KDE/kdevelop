@@ -412,6 +412,7 @@ void OutputWidget::enableActions()
 }
 
 void OutputWidget::rowsInserted(const QModelIndex& parent, int from, int to) {
+    Q_UNUSED(parent);
     for( QMap< int, QTreeView* >::const_iterator it = views.constBegin(); it != views.constEnd(); ++it) {
         if((*it)->model() == sender()) {
             QModelIndex pre = (*it)->model()->index(from-1, 0);

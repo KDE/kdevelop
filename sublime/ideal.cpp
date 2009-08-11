@@ -495,6 +495,7 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     : QWidget(parent)
     , m_centralWidgetFocusing(false), m_switchingDocksShown(false)
 {
+    Q_UNUSED(ac);
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this);
     leftBarWidget->hide();
 

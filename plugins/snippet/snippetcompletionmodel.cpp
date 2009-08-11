@@ -52,6 +52,9 @@ void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, 
 
 void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType)
 {
+    Q_UNUSED( view );
+    Q_UNUSED( range );
+    Q_UNUSED( invocationType );
     initData();
 }
 

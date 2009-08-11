@@ -57,6 +57,7 @@ KompareModelList::KompareModelList( DiffSettings* diffSettings, struct Kompare::
 	m_info( info ),
 	m_textCodec( 0 )
 {
+    Q_UNUSED( name );
 	m_applyDifference = m_unApplyDifference = m_applyAll = m_unapplyAll = m_previousFile = m_nextFile = m_previousDifference = m_nextDifference = m_save = 0;
 /*	m_applyDifference    = new KAction( i18n("&Apply Difference"), "1rightarrow", Qt::Key_Space,
 	                                 this, SLOT(slotActionApplyDifference()),

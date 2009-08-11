@@ -41,6 +41,7 @@
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     :QWidget(parent)
 {
+    Q_UNUSED( plugin );
     setObjectName("FileManager");
     setWindowIcon(SmallIcon("system-file-manager"));
     setWindowTitle(i18n("Filesystem"));

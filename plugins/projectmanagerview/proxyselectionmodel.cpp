@@ -104,6 +104,7 @@ QItemSelectionModel::SelectionFlags ProxySelectionModel::selectionFlags() const
 
 void ProxySelectionModel::forwardChangeCurrent( const QModelIndex& current, const QModelIndex& previous )
 {
+    Q_UNUSED( previous );
     if( doingUpdate )
         return;
     doingUpdate = true;
@@ -113,6 +114,7 @@ void ProxySelectionModel::forwardChangeCurrent( const QModelIndex& current, cons
 
 void ProxySelectionModel::forwardChangeCurrentColumn( const QModelIndex& current, const QModelIndex& previous )
 {
+    Q_UNUSED( previous );
     if( doingUpdate )
         return;
     doingUpdate = true;
@@ -122,6 +124,7 @@ void ProxySelectionModel::forwardChangeCurrentColumn( const QModelIndex& current
 
 void ProxySelectionModel::forwardChangeCurrentRow( const QModelIndex& current, const QModelIndex& previous )
 {
+    Q_UNUSED( previous );
     if( doingUpdate )
         return;
     doingUpdate = true;

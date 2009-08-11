@@ -176,6 +176,7 @@ void DumbProject::reloadModel()
 
 bool DumbProject::open( const KUrl& projectFileUrl_ )
 {
+    Q_UNUSED( projectFileUrl_ );
     return true;
 }
 

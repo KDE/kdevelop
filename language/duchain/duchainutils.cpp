@@ -204,13 +204,15 @@ QIcon DUChainUtils::iconForProperties(KTextEditor::CodeCompletionModel::Completi
     else
       RETURN_CACHED_ICON("typedef")
 
-  else if( p & CodeCompletionModel::Function )
+  else if( p & CodeCompletionModel::Function ) {
     if( p & CodeCompletionModel::Protected )
       RETURN_CACHED_ICON("protected_function")
     else if( p & CodeCompletionModel::Private )
       RETURN_CACHED_ICON("private_function")
     else
       RETURN_CACHED_ICON("code-function")
+  }
+
   if( p & CodeCompletionModel::Protected )
     RETURN_CACHED_ICON("protected_field")
   else if( p & CodeCompletionModel::Private )

@@ -366,9 +366,10 @@ void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::Reference
         processUses(topContext);
         lock.lock();
       }
-    }else{
-      if(!m_declaration.data())
+    } else {
+      if(!m_declaration.data()) {
         kDebug() << "declaration has become invalid";
+      }
     }
 
     QList<KDevelop::ReferencedTopDUContext> imports;

@@ -157,9 +157,10 @@ PluginController::PluginController(Core *core)
 
 PluginController::~PluginController()
 {
-    if ( d->cleanupMode != PluginControllerPrivate::CleanupDone )
+    if ( d->cleanupMode != PluginControllerPrivate::CleanupDone ) {
         kWarning(9501) << "Destructing plugin controller without going through the shutdown process! Backtrace is: "
                        << endl << kBacktrace() << endl;
+    }
 
     delete d->m_manager;
     delete d;

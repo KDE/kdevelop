@@ -219,6 +219,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
 
 void LaunchConfigurationDialog::saveConfig( const QModelIndex& idx )
 {
+    Q_UNUSED( idx );
     LaunchConfigPagesContainer* tab = qobject_cast<LaunchConfigPagesContainer*>( stack->currentWidget() );
     if( tab )
     {
@@ -360,6 +361,7 @@ LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForPr
 
 int LaunchConfigurationsModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED( parent );
     return 2;
 }
 

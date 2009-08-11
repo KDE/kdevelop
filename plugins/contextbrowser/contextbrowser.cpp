@@ -505,6 +505,7 @@ bool ContextBrowserPlugin::findSpecialObject(View* view, const SimpleCursor& pos
 
 Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCursor& position, bool mouseHighlight)
 {
+      Q_UNUSED(mouseHighlight);
       Declaration* foundDeclaration = 0;
       if(m_useDeclaration.data()) {
         foundDeclaration = m_useDeclaration.data();
@@ -517,6 +518,7 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCurso
 
 bool ContextBrowserPlugin::showDeclarationView(View* view, const SimpleCursor& position, Declaration* foundDeclaration, DUContext* ctx)
 {
+        Q_UNUSED(position);
         Q_ASSERT(foundDeclaration);
         bool success = false;
         foreach(ContextBrowserView* contextView, m_views) {
@@ -549,6 +551,7 @@ bool ContextBrowserPlugin::showSpecialObjectView(View* view, const SimpleCursor&
 
 void ContextBrowserPlugin::showContextView(View* view, const SimpleCursor& position, DUContext* ctx)
 {
+    Q_UNUSED(position);
     Q_ASSERT(ctx);
     foreach(ContextBrowserView* contextView, m_views) {
       if(masterWidget(contextView) == masterWidget(view)) {

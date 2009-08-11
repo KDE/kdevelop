@@ -239,7 +239,11 @@ void TreeItem::setHasMoreInitial(bool more)
     }
 }
 
-QVariant KDevelop::TreeItem::icon(int column) const { return QVariant(); }
+QVariant KDevelop::TreeItem::icon(int column) const
+{
+    Q_UNUSED(column);
+    return QVariant();
+}
 
 void KDevelop::TreeItem::setExpanded(bool b)
 {

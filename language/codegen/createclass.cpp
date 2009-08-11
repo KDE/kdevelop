@@ -227,6 +227,7 @@ void ClassGenerator::clearDeclarations(void)
 KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
+    Q_UNUSED(toLower);
     KUrl url;
     url.addPath(d->name);
     return url;
@@ -235,6 +236,7 @@ KUrl ClassGenerator::headerUrlFromBase(KUrl baseUrl, bool toLower)
 KUrl ClassGenerator::implementationUrlFromBase(KUrl baseUrl, bool toLower)
 {
     Q_UNUSED(baseUrl);
+    Q_UNUSED(toLower);
     return KUrl();
 }
 

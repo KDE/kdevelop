@@ -113,12 +113,12 @@ void CommitViewDelegate::paintGraph(QPainter* p, const QStyleOptionViewItem& opt
 
     QBrush back = opt.palette.base();
 //     const QVector<int>& lanes(r->lanes);
-    uint laneNum = model->rowCount();
+//     uint laneNum = model->rowCount();
     uint branchNum = (dynamic_cast<CommitLogModel*>(model))->branchCount(index.row());
 
     int x1 = 0; int x2 = 0;
-    int curBr;
-    int maxWidth = opt.rect.right();
+
+//     int maxWidth = opt.rect.right();
     int lw = 12;  //TODO: count it with laneWidth(), it depends on font
         for(uint curBr = 0; curBr < branchNum; curBr++)
         {
@@ -134,6 +134,7 @@ void CommitViewDelegate::paintGraph(QPainter* p, const QStyleOptionViewItem& opt
 void CommitViewDelegate::paintGraphLane(QPainter* p, int type, int x1, int x2, const int height,
                                         const QColor& col, const QBrush& back) const 
 {
+    Q_UNUSED(back);
 
     int h = height / 2; //TODO: laneHeight!
     int m = (x1 + x2) / 2;

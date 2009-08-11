@@ -360,7 +360,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
     {
         QString warningString = QString("Could not replace text for file in disk, or artificial code: %1").arg(sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange)
+        {
             kWarning() << warningString;
+        }
         
         return DocumentChangeSet::ChangeResult(warningString);
     }
@@ -533,6 +535,7 @@ void DocumentChangeSetPrivate::formatChanges()
 
 void DocumentChangeSetPrivate::addFileToProject(IndexedString file)
 {
+    Q_UNUSED(file);
     #if 0
    //Pick the folder Item that should contain the new class
   IProject * p;

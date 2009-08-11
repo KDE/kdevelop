@@ -84,8 +84,9 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
       kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "smart range:" << dec->smartRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
-      if (FunctionDefinition::definition(dec))
+      if (FunctionDefinition::definition(dec)) {
         kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().textRange();
+      }
       QMap<IndexedString, QList<SimpleRange> > uses = dec->uses();
       for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
         kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
@@ -93,7 +94,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
           kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();
       }
     }
-  }else{
+  } else {
     kDebug() << QString((indent+1) * 2, ' ') << context->localDeclarations(top).count() << "Declarations, " << context->childContexts().size() << "child-contexts";
   }
 

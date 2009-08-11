@@ -173,6 +173,8 @@ QList<KDevelop::ProjectTargetItem*> KrossBuildSystemManager::targets(KDevelop::P
 
 KDevelop::ProjectFolderItem* KrossBuildSystemManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
+    Q_UNUSED( folder );
+    Q_UNUSED( parent );
     return 0;
 }
 

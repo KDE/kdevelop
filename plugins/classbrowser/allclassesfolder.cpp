@@ -102,6 +102,7 @@ void DocumentClassesFolder::branchModified(KDevelop::DUContextPointer context)
 
 void DocumentClassesFolder::branchRemoved(KDevelop::DUContextPointer context)
 {
+  Q_UNUSED(context);
   //Getting a read-lock may lead to UI lockups when the background-parser is writing the duchain
 /*  DUChainReadLocker readLock(DUChain::lock());
 

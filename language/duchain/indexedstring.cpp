@@ -77,6 +77,7 @@ struct IndexedStringRepositoryItemRequest {
   }
   
   static void destroy(IndexedStringData* item, KDevelop::AbstractItemRepository&) {
+    Q_UNUSED(item);
     //Nothing to do here (The object is not intelligent)
   }
 

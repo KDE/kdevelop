@@ -63,8 +63,9 @@ bool FunctionDeclaration::isFunctionDeclaration() const
 }
 
 void FunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
-  if( type && !type.cast<FunctionType>() )
+  if( type && !type.cast<FunctionType>() ) {
     kDebug() << "wrong type attached to function declaration:" << type->toString();
+  }
   Declaration::setAbstractType(type);
 }
 

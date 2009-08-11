@@ -216,7 +216,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     ContextMenuExtension menuExt;
     bool closeProjectsAdded = false;
     bool buildItemsAdded = false;
-    bool hasTargets = false;
+    //bool hasTargets = false;
     bool folderItemsAdded = false;
     bool fileItemsAdded = false;
     bool folderWithParentAdded = false;

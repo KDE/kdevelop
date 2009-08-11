@@ -562,10 +562,11 @@ void TopDUContextDynamicData::store() {
 
       m_onDisk = true;
 
-      if (file.size() == 0)
+      if (file.size() == 0) {
         kWarning() << "Saving zero size top ducontext data";
+      }
 
-    }else{
+    } else {
       kWarning() << "Cannot open top-context for writing";
     }
 //   kDebug() << "stored" << m_topContext->url().str() << m_topContext->ownIndex() << "import-count:" << m_topContext->importedParentContexts().size();
