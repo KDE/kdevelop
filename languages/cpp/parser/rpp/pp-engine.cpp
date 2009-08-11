@@ -1130,13 +1130,19 @@ int pp::next_token (Stream& input)
         }
 
         QString number(QString::fromUtf8(stringFromContents(byteNumber)));
+        int base = 10;
+        if (number.startsWith("0x")) {
+          base = 16;
+        } else if (number.startsWith('0')) {
+          base = 8;
+        }
 
         if (number.endsWith('u', Qt::CaseInsensitive)) {
-          token_uvalue = number.toULong();
+          token_uvalue = number.toULong(0, base);
           nextToken = TOKEN_UNUMBER;
 
         } else {
-          token_value = number.toLong();
+          token_value = number.toLong(0, base);
           nextToken = TOKEN_NUMBER;
         }
       }
