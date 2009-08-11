@@ -18,6 +18,7 @@ class KrossKDevelopIToolViewFactory : public QObject, public Kross::WrapperInter
 		Q_SCRIPTABLE Qt::DockWidgetArea defaultPosition() { return wrapped->defaultPosition(); }
 		Q_SCRIPTABLE QList< QAction* > toolBarActions(QWidget* x0) const { return wrapped->toolBarActions(x0); }
 		Q_SCRIPTABLE void viewCreated(Sublime::View* x0) { wrapped->viewCreated(x0); }
+		Q_SCRIPTABLE bool viewsWantProgressIndicator() const { return wrapped->viewsWantProgressIndicator(); }
 	private:
 		KDevelop::IToolViewFactory* wrapped;
 };
@@ -28,19 +29,25 @@ class KrossKDevelopIUiController : public QObject, public Kross::WrapperInterfac
 	Q_ENUMS(SwitchMode)
 	Q_FLAGS(SwitchMode ThisWindow NewWindow)
 
+	Q_ENUMS(FindFlags)
+	Q_FLAGS(FindFlags None Create Raise CreateAndRaise)
+
 	public:
 		enum KrossSwitchMode { ThisWindow=KDevelop::IUiController::ThisWindow, NewWindow=KDevelop::IUiController::NewWindow };
+		enum KrossFindFlags { None=KDevelop::IUiController::None, Create=KDevelop::IUiController::Create, Raise=KDevelop::IUiController::Raise, CreateAndRaise=KDevelop::IUiController::CreateAndRaise };
 		KrossKDevelopIUiController(KDevelop::IUiController* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::IUiController"); }
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE void switchToArea(const QString& x0, KDevelop::IUiController::SwitchMode x1) { wrapped->switchToArea(x0, x1); }
 		Q_SCRIPTABLE void addToolView(const QString& x0, KDevelop::IToolViewFactory* x1) { wrapped->addToolView(x0, x1); }
 		Q_SCRIPTABLE void removeToolView(KDevelop::IToolViewFactory* x0) { wrapped->removeToolView(x0); }
+		Q_SCRIPTABLE QWidget* findToolView(const QString& x0, KDevelop::IToolViewFactory* x1, KDevelop::IUiController::FindFlags x2=KDevelop::IUiController::CreateAndRaise) { return wrapped->findToolView(x0, x1, x2); }
 		Q_SCRIPTABLE KParts::MainWindow* activeMainWindow() { return wrapped->activeMainWindow(); }
 		Q_SCRIPTABLE void registerStatus(QObject* x0) { wrapped->registerStatus(x0); }
 		Q_SCRIPTABLE void popUpAssistant(const KSharedPtr< KDevelop::IAssistant >& x0) { wrapped->popUpAssistant(x0); }
 		Q_SCRIPTABLE void hideAssistant(const KSharedPtr< KDevelop::IAssistant >& x0) { wrapped->hideAssistant(x0); }
 		Q_SCRIPTABLE Sublime::Controller* controller() { return wrapped->controller(); }
+		Q_SCRIPTABLE void showErrorMessage(const QString& x0, int x1=1) { wrapped->showErrorMessage(x0, x1); }
 	private:
 		KDevelop::IUiController* wrapped;
 };

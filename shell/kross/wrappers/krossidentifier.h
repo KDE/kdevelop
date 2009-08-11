@@ -7,15 +7,14 @@
 
 namespace KDevelop { class IndexedIdentifier; }
 namespace KDevelop { class IndexedQualifiedIdentifier; }
-namespace KDevelop { class IndexedTypeIdentifier; }
 namespace KDevelop { class Identifier; }
 namespace KDevelop { class QualifiedIdentifier; }
-namespace KDevelop { class TypeIdentifier; }
+namespace KDevelop { class IndexedTypeIdentifier; }
 namespace Handlers
 {
-	QVariant _kDevelopTypeIdentifierHandler(void* type);
-	QVariant kDevelopTypeIdentifierHandler(KDevelop::TypeIdentifier* type);
-	QVariant kDevelopTypeIdentifierHandler(const KDevelop::TypeIdentifier* type);
+	QVariant _kDevelopIndexedTypeIdentifierHandler(void* type);
+	QVariant kDevelopIndexedTypeIdentifierHandler(KDevelop::IndexedTypeIdentifier* type);
+	QVariant kDevelopIndexedTypeIdentifierHandler(const KDevelop::IndexedTypeIdentifier* type);
 
 	QVariant _kDevelopQualifiedIdentifierHandler(void* type);
 	QVariant kDevelopQualifiedIdentifierHandler(KDevelop::QualifiedIdentifier* type);
@@ -24,10 +23,6 @@ namespace Handlers
 	QVariant _kDevelopIdentifierHandler(void* type);
 	QVariant kDevelopIdentifierHandler(KDevelop::Identifier* type);
 	QVariant kDevelopIdentifierHandler(const KDevelop::Identifier* type);
-
-	QVariant _kDevelopIndexedTypeIdentifierHandler(void* type);
-	QVariant kDevelopIndexedTypeIdentifierHandler(KDevelop::IndexedTypeIdentifier* type);
-	QVariant kDevelopIndexedTypeIdentifierHandler(const KDevelop::IndexedTypeIdentifier* type);
 
 	QVariant _kDevelopIndexedQualifiedIdentifierHandler(void* type);
 	QVariant kDevelopIndexedQualifiedIdentifierHandler(KDevelop::IndexedQualifiedIdentifier* type);

@@ -13,8 +13,12 @@ class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 	Q_ENUMS(Source)
 	Q_FLAGS(Source Unknown Disk Preprocessor Lexer Parser DUChainBuilder SemanticAnalysis)
 
+	Q_ENUMS(Severity)
+	Q_FLAGS(Severity Error Warning Hint)
+
 	public:
 		enum KrossSource { Unknown=KDevelop::ProblemData::Unknown, Disk=KDevelop::ProblemData::Disk, Preprocessor=KDevelop::ProblemData::Preprocessor, Lexer=KDevelop::ProblemData::Lexer, Parser=KDevelop::ProblemData::Parser, DUChainBuilder=KDevelop::ProblemData::DUChainBuilder, SemanticAnalysis=KDevelop::ProblemData::SemanticAnalysis };
+		enum KrossSeverity { Error=KDevelop::ProblemData::Error, Warning=KDevelop::ProblemData::Warning, Hint=KDevelop::ProblemData::Hint };
 		KrossKDevelopProblemData(KDevelop::ProblemData* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProblemData"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -32,6 +36,10 @@ class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 		Q_PROPERTY(KDevelopIndexedString  explanation READ getexplanation WRITE setexplanation SCRIPTABLE true)
 		Q_SCRIPTABLE void setexplanation(const KDevelopIndexedString  val) { wrapped->explanation=val; }
 		Q_SCRIPTABLE KDevelopIndexedString  getexplanation() const { return wrapped->explanation; }
+		typedef KDevelop::ProblemData::Severity KDevelopProblemDataSeverity;
+		Q_PROPERTY(KDevelopProblemDataSeverity  severity READ getseverity WRITE setseverity SCRIPTABLE true)
+		Q_SCRIPTABLE void setseverity(const KDevelopProblemDataSeverity  val) { wrapped->severity=val; }
+		Q_SCRIPTABLE KDevelopProblemDataSeverity  getseverity() const { return wrapped->severity; }
 	private:
 		KDevelop::ProblemData* wrapped;
 };
@@ -39,11 +47,7 @@ class KrossKDevelopProblemData : public QObject, public Kross::WrapperInterface
 class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
-	Q_ENUMS(Severity)
-	Q_FLAGS(Severity Error Warning Hint)
-
 	public:
-		enum KrossSeverity { Error=KDevelop::Problem::Error, Warning=KDevelop::Problem::Warning, Hint=KDevelop::Problem::Hint };
 		KrossKDevelopProblem(KDevelop::Problem* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Problem"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -60,7 +64,8 @@ class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setDescription(const QString& x0) { wrapped->setDescription(x0); }
 		Q_SCRIPTABLE QString explanation() const { return wrapped->explanation(); }
 		Q_SCRIPTABLE void setExplanation(const QString& x0) { wrapped->setExplanation(x0); }
-		Q_SCRIPTABLE KDevelop::Problem::Severity severity() const { return wrapped->severity(); }
+		Q_SCRIPTABLE KDevelop::ProblemData::Severity severity() const { return wrapped->severity(); }
+		Q_SCRIPTABLE void setSeverity(KDevelop::ProblemData::Severity x0) { wrapped->setSeverity(x0); }
 		Q_SCRIPTABLE KSharedPtr< KDevelop::IAssistant > solutionAssistant() const { return wrapped->solutionAssistant(); }
 		Q_SCRIPTABLE void setSolutionAssistant(KSharedPtr< KDevelop::IAssistant > x0) { wrapped->setSolutionAssistant(x0); }
 	private:

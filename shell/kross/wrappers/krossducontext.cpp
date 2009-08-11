@@ -120,10 +120,11 @@ class KrossKDevelopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setPropagateDeclarations(bool x0) { wrapped->setPropagateDeclarations(x0); }
 		Q_SCRIPTABLE bool isPropagateDeclarations() const { return wrapped->isPropagateDeclarations(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > importers() const { return wrapped->importers(); }
+		Q_SCRIPTABLE KDevVarLengthArray< KDevelop::IndexedDUContext, 256 > indexedImporters() const { return wrapped->indexedImporters(); }
 		Q_SCRIPTABLE QVector< KDevelop::DUContext* > childContexts() const { return wrapped->childContexts(); }
 		Q_SCRIPTABLE void deleteChildContextsRecursively() { wrapped->deleteChildContextsRecursively(); }
 		Q_SCRIPTABLE bool inDUChain() const { return wrapped->inDUChain(); }
-		Q_SCRIPTABLE KDevelop::DUContext* specialize(uint x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
+		Q_SCRIPTABLE KDevelop::DUContext* specialize(KDevelop::IndexedInstantiationInformation x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
 		Q_SCRIPTABLE QList< KDevelop::Declaration* > findDeclarations(const KDevelop::QualifiedIdentifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::AbstractType::Ptr& x2=KDevelop::AbstractType::Ptr(), const KDevelop::TopDUContext* x3=0, KDevelop::DUContext::SearchFlags x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findDeclarations(x0, x1, x2, x3, x4); }
 		Q_SCRIPTABLE QList< KDevelop::Declaration* > findDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, KDevelop::DUContext::SearchFlags x3=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findDeclarations(x0, x1, x2, x3); }
 		Q_SCRIPTABLE QList< KDevelop::Declaration* > findLocalDeclarations(const KDevelop::Identifier& x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor::invalid(), const KDevelop::TopDUContext* x2=0, const KDevelop::AbstractType::Ptr& x3=KDevelop::AbstractType::Ptr(), KDevelop::DUContext::SearchFlags x4=KDevelop::DUContext::NoSearchFlags) const { return wrapped->findLocalDeclarations(x0, x1, x2, x3, x4); }
@@ -167,7 +168,8 @@ class KrossKDevelopDUContextImport : public QObject, public Kross::WrapperInterf
 		Q_SCRIPTABLE KDevelop::DUContext* context(const KDevelop::TopDUContext* x0) const { return wrapped->context(x0); }
 		Q_SCRIPTABLE uint topContextIndex() const { return wrapped->topContextIndex(); }
 		Q_SCRIPTABLE KDevelop::IndexedDUContext indexedContext() const { return wrapped->indexedContext(); }
-		Q_SCRIPTABLE bool isBackwardMapped() const { return wrapped->isBackwardMapped(); }
+		Q_SCRIPTABLE bool isDirect() const { return wrapped->isDirect(); }
+		Q_SCRIPTABLE KDevelop::DeclarationId indirectDeclarationId() const { return wrapped->indirectDeclarationId(); }
 		typedef KDevelop::SimpleCursor KDevelopSimpleCursor;
 		Q_PROPERTY(KDevelopSimpleCursor  position READ getposition WRITE setposition SCRIPTABLE true)
 		Q_SCRIPTABLE void setposition(const KDevelopSimpleCursor  val) { wrapped->position=val; }

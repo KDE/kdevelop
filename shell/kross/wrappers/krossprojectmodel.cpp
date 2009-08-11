@@ -6,6 +6,23 @@
 #include <kross/core/wrapperinterface.h>
 #include <project/projectmodel.h>
 
+class KrossKDevelopProjectVisitor : public QObject, public Kross::WrapperInterface
+{
+	Q_OBJECT
+	public:
+		KrossKDevelopProjectVisitor(KDevelop::ProjectVisitor* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::ProjectVisitor"); }
+		void* wrappedObject() const { return wrapped; }
+
+		Q_SCRIPTABLE void visit(KDevelop::IProject* x0) { wrapped->visit(x0); }
+		Q_SCRIPTABLE void visit(KDevelop::ProjectBuildFolderItem* x0) { wrapped->visit(x0); }
+		Q_SCRIPTABLE void visit(KDevelop::ProjectExecutableTargetItem* x0) { wrapped->visit(x0); }
+		Q_SCRIPTABLE void visit(KDevelop::ProjectFolderItem* x0) { wrapped->visit(x0); }
+		Q_SCRIPTABLE void visit(KDevelop::ProjectFileItem* x0) { wrapped->visit(x0); }
+		Q_SCRIPTABLE void visit(KDevelop::ProjectLibraryTargetItem* x0) { wrapped->visit(x0); }
+	private:
+		KDevelop::ProjectVisitor* wrapped;
+};
+
 class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterface
 {
 	Q_OBJECT
@@ -143,6 +160,7 @@ class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void fetchMore(const QModelIndex& x0) { wrapped->fetchMore(x0); }
 		Q_SCRIPTABLE bool canFetchMore(const QModelIndex& x0) const { return wrapped->canFetchMore(x0); }
 		Q_SCRIPTABLE QModelIndex pathToIndex(const QStringList& x0) const { return wrapped->pathToIndex(x0); }
+		Q_SCRIPTABLE QStringList pathFromIndex(const QModelIndex& x0) const { return wrapped->pathFromIndex(x0); }
 	private:
 		KDevelop::ProjectModel* wrapped;
 };
@@ -253,6 +271,18 @@ bool b_KDevelopProjectBaseItem1=krossprojectmodel_registerHandler("ProjectBaseIt
 bool b_KDevelopProjectBaseItem=krossprojectmodel_registerHandler("KDevelop::ProjectBaseItem*", _kDevelopProjectBaseItemHandler);
 QVariant kDevelopProjectBaseItemHandler(KDevelop::ProjectBaseItem* type){ return _kDevelopProjectBaseItemHandler(type); }
 QVariant kDevelopProjectBaseItemHandler(const KDevelop::ProjectBaseItem* type) { return _kDevelopProjectBaseItemHandler((void*) type); }
+
+QVariant _kDevelopProjectVisitorHandler(void* type)
+{
+	if(!type) return QVariant();
+	KDevelop::ProjectVisitor* t=static_cast<KDevelop::ProjectVisitor*>(type);
+	Q_ASSERT(dynamic_cast<KDevelop::ProjectVisitor*>(t));
+	return qVariantFromValue((QObject*) new KrossKDevelopProjectVisitor(t, 0));
+}
+bool b_KDevelopProjectVisitor1=krossprojectmodel_registerHandler("ProjectVisitor*", _kDevelopProjectVisitorHandler);
+bool b_KDevelopProjectVisitor=krossprojectmodel_registerHandler("KDevelop::ProjectVisitor*", _kDevelopProjectVisitorHandler);
+QVariant kDevelopProjectVisitorHandler(KDevelop::ProjectVisitor* type){ return _kDevelopProjectVisitorHandler(type); }
+QVariant kDevelopProjectVisitorHandler(const KDevelop::ProjectVisitor* type) { return _kDevelopProjectVisitorHandler((void*) type); }
 
 }
 #include "krossprojectmodel.moc"

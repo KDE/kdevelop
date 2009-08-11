@@ -36,7 +36,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE void setIsTypeAlias(bool x0) { wrapped->setIsTypeAlias(x0); }
 		Q_SCRIPTABLE bool isFinal() const { return wrapped->isFinal(); }
 		Q_SCRIPTABLE void setFinal(bool x0) { wrapped->setFinal(x0); }
-		Q_SCRIPTABLE KDevelop::Declaration* specialize(uint x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
+		Q_SCRIPTABLE KDevelop::Declaration* specialize(KDevelop::IndexedInstantiationInformation x0, const KDevelop::TopDUContext* x1, int x2=0) { return wrapped->specialize(x0, x1, x2); }
 		Q_SCRIPTABLE KDevelop::DUContext* internalContext() const { return wrapped->internalContext(); }
 		Q_SCRIPTABLE void setInternalContext(KDevelop::DUContext* x0) { wrapped->setInternalContext(x0); }
 		Q_SCRIPTABLE KDevelop::DUContext* logicalInternalContext(const KDevelop::TopDUContext* x0) const { return wrapped->logicalInternalContext(x0); }
@@ -64,7 +64,7 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE QMap< KDevelop::IndexedString, QList< KDevelop::SimpleRange > > uses() const { return wrapped->uses(); }
 		Q_SCRIPTABLE QList< KTextEditor::SmartRange* > smartUses() const { return wrapped->smartUses(); }
 		Q_SCRIPTABLE uint additionalIdentity() const { return wrapped->additionalIdentity(); }
-		Q_SCRIPTABLE uint specialization() const { return wrapped->specialization(); }
+		Q_SCRIPTABLE KDevelop::IndexedInstantiationInformation specialization() const { return wrapped->specialization(); }
 		Q_SCRIPTABLE KDevelop::DeclarationId id(bool x0=false) const { return wrapped->id(x0); }
 		Q_SCRIPTABLE uint ownIndex() const { return wrapped->ownIndex(); }
 		Q_SCRIPTABLE bool isAnonymous() const { return wrapped->isAnonymous(); }

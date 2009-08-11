@@ -45,11 +45,11 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 	Q_FLAGS(Flags NoFlags UpdatingContext LastFlag)
 
 	Q_ENUMS(Features)
-	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses AllDeclarationsContextsAndUsesForRecursive ForceUpdate ForceUpdateRecursive)
+	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses AllDeclarationsContextsAndUsesForRecursive AST ForceUpdate ForceUpdateRecursive)
 
 	public:
 		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
-		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses, AllDeclarationsContextsAndUsesForRecursive=KDevelop::TopDUContext::AllDeclarationsContextsAndUsesForRecursive, ForceUpdate=KDevelop::TopDUContext::ForceUpdate, ForceUpdateRecursive=KDevelop::TopDUContext::ForceUpdateRecursive };
+		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses, AllDeclarationsContextsAndUsesForRecursive=KDevelop::TopDUContext::AllDeclarationsContextsAndUsesForRecursive, AST=KDevelop::TopDUContext::AST, ForceUpdate=KDevelop::TopDUContext::ForceUpdate, ForceUpdateRecursive=KDevelop::TopDUContext::ForceUpdateRecursive };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -73,10 +73,11 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE int indexForUsedDeclaration(KDevelop::Declaration* x0, bool x1=true) { return wrapped->indexForUsedDeclaration(x0, x1); }
 		Q_SCRIPTABLE KDevelop::Declaration* usedDeclarationForIndex(unsigned int x0) const { return wrapped->usedDeclarationForIndex(x0); }
 		Q_SCRIPTABLE void clearUsedDeclarationIndices() { wrapped->clearUsedDeclarationIndices(); }
-		Q_SCRIPTABLE KDevelop::IndexedString language() const { return wrapped->language(); }
-		Q_SCRIPTABLE void setLanguage(KDevelop::IndexedString x0) { wrapped->setLanguage(x0); }
 		Q_SCRIPTABLE KDevelop::TopDUContext::Flags flags() const { return wrapped->flags(); }
 		Q_SCRIPTABLE void setFlags(KDevelop::TopDUContext::Flags x0) { wrapped->setFlags(x0); }
+		Q_SCRIPTABLE KSharedPtr< KDevelop::IAstContainer > ast() const { return wrapped->ast(); }
+		Q_SCRIPTABLE void setAst(KSharedPtr< KDevelop::IAstContainer > x0) { wrapped->setAst(x0); }
+		Q_SCRIPTABLE void clearAst() { wrapped->clearAst(); }
 		Q_SCRIPTABLE void addImportedParentContext(KDevelop::DUContext* x0, const KDevelop::SimpleCursor& x1=KDevelop::SimpleCursor(), bool x2=false, bool x3=false) { wrapped->addImportedParentContext(x0, x1, x2, x3); }
 		Q_SCRIPTABLE void addImportedParentContexts(const QList< QPair< KDevelop::TopDUContext*, KDevelop::SimpleCursor > >& x0, bool x1=false) { wrapped->addImportedParentContexts(x0, x1); }
 		Q_SCRIPTABLE void removeImportedParentContext(KDevelop::DUContext* x0) { wrapped->removeImportedParentContext(x0); }
