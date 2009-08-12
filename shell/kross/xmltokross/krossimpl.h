@@ -129,13 +129,10 @@ class KrossImpl : public DUChainReader
         
         QString valueToVariant(const QString& type, const QString& varname)
         {
-            Q_UNUSED(varname);
-            QString ret;
             if(type=="const QModelIndex&")
-                ret="QVariant()";
+                 return "QVariant()";
             else
-                ret=type;
-            return ret;
+                 return varname;
         }
         
         void writeEndFunction(const method& m)
