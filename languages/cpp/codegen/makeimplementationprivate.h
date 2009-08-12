@@ -78,7 +78,7 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     bool classHasPrivateImplementation();
     void gatherPrivateMembers();
     void updateConstructors(const KDevelop::Declaration &);
-    void updateDestructor(void);
+    void updateDestructor();
     void updateAllUses(UseList & alluses);
     CodeRepresentation::Ptr representationFor(IndexedString url);
     //DocumentChange insertConstructorInitializations(ClassFunctionDeclaration * constructor, const QList<ClassMemberDeclaration *>)

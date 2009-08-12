@@ -51,7 +51,9 @@ namespace KDevelop
 
 bool MakeImplementationPrivate::process()
 {
-    updateDestructor();
+    //If invoked through auto generation, then gatherPrivateMembers wan't called
+    if(autoGeneration())
+        gatherPrivateMembers();
     
     //Create container for private implementation
     CppNewClass classGenerator;
@@ -63,9 +65,21 @@ bool MakeImplementationPrivate::process()
         documentChangeSet().addChange(removeDeclarations);
     }
     classGenerator.identifier(m_structureName);
-    //classGenerator.generateHeader();
+    
+    IndexedString implementationFile = CodeGenUtils::fetchImplementationFileForClass(*m_classDeclaration);
+    classGenerator.setHeaderUrl(CodeRepresentation::artificialUrl(implementationFile.str()));
+    //Set the best matching position before the first use
+    //classGenerator.setHeaderPosition()
+    DocumentChangeSet classChange = classGenerator.generateHeader();
+    classChange.setReplacementPolicy(DocumentChangeSet::StopOnFailedChange);
+    
+    //Temporarily apply the new class into a separate temp file so we can get a chin for it, then merge it
+    classChange.applyToTemp(implementationFile);
+    KDevelop::ReferencedTopDUContext generatedClass = DUChain::self()->waitForUpdate(classChange.tempNameForFile(implementationFile), TopDUContext::AllDeclarationsContextsUsesAndAST);
+    documentChangeSet() << classChange;
     
     //Create private implementation pointer member in the class
+    DUChainReadLocker lock(DUChain::lock());
     SourceCodeInsertion pointerInsertion(m_classContext->topContext());
     pointerInsertion.setContext(m_classContext);
     pointerInsertion.setAccess(KDevelop::Declaration::Private);
@@ -73,26 +87,32 @@ bool MakeImplementationPrivate::process()
     pointer->setBaseType(AbstractType::Ptr::staticCast<StructureType>(classGenerator.objectType()));
     pointer->setModifiers(PointerType::ConstModifier);
     pointerInsertion.insertVariableDeclaration(Identifier(m_privatePointerName), AbstractType::Ptr::dynamicCast<PointerType>(pointer));
+    
+    //Temporarily apply the pointer insertion so that more changes can be made
+    pointerInsertion.changes().applyAllToTemp();
     addChangeSet(pointerInsertion.changes());
     
     //Add private implementation struct forward declaration before the class
     Cpp::SourceCodeInsertion forwardDeclare(m_classContext->topContext());
     forwardDeclare.setInsertBefore(m_classDeclaration->range().start);
-    /*{
-        DUChainReadLocker lock(DUChain::self()->lock());
-        DeclarationData decl;
-        decl.m_identifier = IndexedIdentifier(Identifier(classGenerator.identifier()));
-        decl.m_kind = Declaration::Type;
-        decl.m_type = classGenerator.objectType()->indexed();
-        decl.m_isTypeAlias = false;
-        Declaration d (decl);
-        //TODO declaration needs context forwardDeclare.insertForwardDeclaration(&d);
-         
-        updateConstructors(decl);
+    kDebug() << "Looking for declaration of private class";
+    QList<Declaration *> decls = generatedClass->findDeclarations(Identifier(classGenerator.identifier()));
+    kDebug() << "Found: ";
+    foreach(Declaration * decl, decls)
+        kDebug() << decl->toString();
+    
+    if(!decls.empty())
+    {
+        forwardDeclare.insertForwardDeclaration(decls[0]);
+        
+        lock.unlock();
+        updateConstructors(*decls[0]);
+        updateDestructor();
     }
-    addChangeSet(forwardDeclare.changes());*/
+    addChangeSet(forwardDeclare.changes());
     
     //Gather all Uses of this class' members
+    lock.lock();
     UseList allUses;
     foreach(ClassMemberDeclaration * declaration, m_members)
     {
@@ -152,6 +172,8 @@ bool MakeImplementationPrivate::gatherInformation()
     
     privateDialog.structureName->setValidator(&globalValidator);
     privateDialog.pointerName->setValidator(&localValidator);
+
+    DUChainReadLocker lock(DUChain::lock());
     
     privateDialog.structureName->setText(m_classContext->scopeIdentifier(true).last().toString() + "Private");
     
@@ -208,6 +230,8 @@ bool MakeImplementationPrivate::checkPreconditions(KDevelop::DUContext * context
         setErrorText("Selected Context does not belong to a Class");
         return false;
     }
+    
+    DUChainReadLocker lock(DUChain::lock());
     m_classDeclaration = m_classContext->owner();
     
     return true;
@@ -215,6 +239,7 @@ bool MakeImplementationPrivate::checkPreconditions(KDevelop::DUContext * context
 
 void MakeImplementationPrivate::gatherPrivateMembers()
 {
+    DUChainReadLocker lock(DUChain::lock());
     foreach(Declaration * declaration, m_classContext->localDeclarations())
     {
         ClassMemberDeclaration * decl = dynamic_cast<ClassMemberDeclaration *>(declaration);
@@ -226,11 +251,18 @@ void MakeImplementationPrivate::gatherPrivateMembers()
             m_members << decl;
         }
     }
+    
+    kDebug() << "Gathered Privates:";
+#ifndef NDEBUG
+    foreach(ClassMemberDeclaration * decl, m_members)
+      kDebug() << decl->toString();
+#endif
 }
 
 void MakeImplementationPrivate::updateConstructors(const Declaration & privateStruct)
 {
     //Gather constructors
+    DUChainReadLocker lock(DUChain::lock());
     QList<ClassFunctionDeclaration *> constructors;
     ClassFunctionDeclaration * assignmentOp = 0;
     
@@ -279,31 +311,47 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
         //TODO Create a default constructor
     }
     
+    lock.unlock();
+    
     foreach(ClassFunctionDeclaration * constructor, constructors)
     {
         ParseSession::Ptr astPtr = astContainer(constructor->internalFunctionContext()->url());
         
         FunctionDefinitionAST * construct = AstUtils::node_cast<FunctionDefinitionAST>(astPtr->astNodeFromDeclaration(constructor));
-        Q_ASSERT(construct);
-        
-        //Check for constructors without initializer list
-        
-        //If moved initialization
-            //Send the parameters this constructor takes into the new one
-        CppEditorIntegrator integrator(astPtr.data());
-        SimpleCursor insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
-        
-        DocumentChange constructorChange(constructor->url(), SimpleRange(insertionPoint, 0), QString(), m_privatePointerName + "(" + CppUtils::insertMemoryAllocation(privateStruct) + ") ");
-        documentChangeSet().addChange(constructorChange);
+        if(construct)
+        {
+            
+            QString insertedText;
+            
+            //If moved initialization
+                //Send the parameters this constructor takes into the new one
+            CppEditorIntegrator integrator(astPtr.data());
+            SimpleCursor insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
+            
+            //Check for constructors without initializer list
+            if(!insertionPoint.isValid())
+            {
+                insertedText += ": ";
+                insertionPoint = integrator.findPosition(construct->function_specifiers->toBack()->element);
+            }
+            insertedText += m_privatePointerName + "(" + CppUtils::insertMemoryAllocation(privateStruct) + ") ";
+            
+            DocumentChange constructorChange(constructor->url(), SimpleRange(insertionPoint, 0), QString(), insertedText);
+            documentChangeSet().addChange(constructorChange);
+        }
+        else
+            kWarning() << "A correct AST node for constructor: " << constructor->toString() << " was not found.";
     }
     
     //TODO Handle assignment operator here as well, and check selection logic
 }
 
-void MakeImplementationPrivate::updateDestructor(void)
+void MakeImplementationPrivate::updateDestructor()
 {
     //Find destructor if available
     ClassFunctionDeclaration * destructor = 0;
+    DUChainReadLocker lock(DUChain::lock());
+    
     foreach(Declaration * declaration, m_classContext->localDeclarations())
     {
         ClassFunctionDeclaration * fun = dynamic_cast<ClassFunctionDeclaration *>(declaration);
@@ -316,7 +364,21 @@ void MakeImplementationPrivate::updateDestructor(void)
    
     if(!destructor)
     {
-        //Create a Destructor
+        SourceCodeInsertion insertion(m_classContext->topContext());
+        insertion.setAccess(KDevelop::Declaration::Public);
+        insertion.setContext(m_classContext);
+        insertion.setInsertBefore(m_classContext->range().end);
+        QString signature("~");
+        signature.append(m_classDeclaration->identifier().toString());
+        
+        ///@todo Allow creation of Destructor body in implementation file
+        ///@todo allow for custom memory deallocation set up by the user
+        QString body = "{\ndelete " + m_privatePointerName + ";\n};";
+        
+        bool result = insertion.insertFunctionDeclaration(Identifier(signature), AbstractType::Ptr(),
+                                                          QList<SourceCodeInsertion::SignatureItem>(), false, body);
+        Q_ASSERT(result);
+        documentChangeSet() << insertion.changes();
     } 
     else
     {
@@ -340,6 +402,7 @@ void MakeImplementationPrivate::updateAllUses(UseList & allUses)
             {
                 CodeRepresentation::Ptr rangeRepresentation = representationFor(mapIt.key());
                 QString use = rangeRepresentation->rangeText(range.textRange());
+                kDebug() << "Found use: " << use << "at: " << range.textRange();
                 //! @todo check properly if the pointer is being hidden, and add this-> only if necessary
                 DocumentChange useChange(mapIt.key(), range, use, "this->" + m_privatePointerName + "->" + use);
                 
