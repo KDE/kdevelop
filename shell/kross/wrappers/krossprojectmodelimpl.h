@@ -7,6 +7,68 @@
 #include <kross/core/wrapperinterface.h>
 #include <project/projectmodel.h>
 
+class KrossImplKDevelopProjectVisitor : public KDevelop::ProjectVisitor
+{
+	public:
+		KrossImplKDevelopProjectVisitor(Kross::Object::Ptr _obj) : KDevelop::ProjectVisitor(), obj(_obj) {}
+		void visit(KDevelop::IProject* x0)
+		{
+			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << KDevelop::IProject*);
+		}
+
+		void visit(KDevelop::ProjectBuildFolderItem* x0)
+		{
+			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << KDevelop::ProjectBuildFolderItem*);
+		}
+
+		void visit(KDevelop::ProjectExecutableTargetItem* x0)
+		{
+			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << KDevelop::ProjectExecutableTargetItem*);
+		}
+
+		void visit(KDevelop::ProjectFolderItem* x0)
+		{
+			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << KDevelop::ProjectFolderItem*);
+		}
+
+		void visit(KDevelop::ProjectFileItem* x0)
+		{
+			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << KDevelop::ProjectFileItem*);
+		}
+
+		void visit(KDevelop::ProjectLibraryTargetItem* x0)
+		{
+			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << KDevelop::ProjectLibraryTargetItem*);
+		}
+
+	private:
+		Kross::Object::Ptr obj;
+};
+
 class KrossImplKDevelopProjectBaseItem : public KDevelop::ProjectBaseItem
 {
 	public:
