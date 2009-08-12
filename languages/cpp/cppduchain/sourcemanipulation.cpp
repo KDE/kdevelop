@@ -418,7 +418,11 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
       }
       
       ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration *>(decl);
-      forwardDeclaration += classDecl->toString() + ";";
+      if(classDecl) {
+        forwardDeclaration += classDecl->toString() + ";";
+      }else{
+        forwardDeclaration += "class " + decl->identifier().toString() + ";";
+      }
     }
     
     //Put declarations to the end, and namespaces to the begin
