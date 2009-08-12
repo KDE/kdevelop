@@ -178,6 +178,8 @@ public:
     virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) { return 0; }
     virtual void notifyDocumentClosed(KDevelop::IDocument* doc) {}
 
+    virtual KDevelop::IDocument* openDocument( const KUrl&, const QString& ) { return 0; }
+
     // actually these are virtual slots, but so long as Qt does not cry we'r good.
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
