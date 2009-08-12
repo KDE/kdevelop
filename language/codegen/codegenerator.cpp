@@ -152,6 +152,18 @@ bool CodeGeneratorBase::execute()
             return false;
         }
         d->context = documentChain->findContextIncluding(d->range);
+        
+        if(!d->context)
+        {
+            //Attempt to get the context again
+            QList<TopDUContext *> contexts = DUChain::self()->chainsForDocument(document);
+            foreach(TopDUContext * top, contexts)
+            {
+                kDebug() << "Checking top context with range: " << top->range().textRange() << " for a context";
+                if((d->context = top->findContextIncluding(d->range)))
+                    break;
+            }
+        }
     }
     
     if(!d->context)
