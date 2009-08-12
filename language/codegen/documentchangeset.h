@@ -52,7 +52,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     struct ChangeResult {
         ChangeResult(bool success) : m_success(success) {
         }
-        ChangeResult(QString failureReason, DocumentChangePointer reasonChange = DocumentChangePointer()) : m_failureReason(failureReason), m_reasonChange(reasonChange) {
+        ChangeResult(QString failureReason, DocumentChangePointer reasonChange = DocumentChangePointer()) : m_failureReason(failureReason), m_reasonChange(reasonChange), m_success(false) {
         }
         
         operator bool() const {
