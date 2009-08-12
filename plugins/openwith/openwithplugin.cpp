@@ -64,6 +64,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
     if( actionMap )
     {
         delete actionMap;
+        actionMap = 0;
     }
     url = KUrl();
     FileContext* filectx = dynamic_cast<FileContext*>( context );
