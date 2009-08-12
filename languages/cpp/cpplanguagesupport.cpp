@@ -199,7 +199,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     KAction* pimplAction = actions->addAction("code_private_implementation");
     pimplAction->setText( i18n("Make Class Implementation Private") );
     pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
-    connect(pimplAction, SIGNAL(triggered(bool)), this, SLOT(pImplementation()));
+    connect(pimplAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executePrivateImplementationAction()));
 
     KAction* renameDeclarationAction = actions->addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
@@ -226,16 +226,6 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 #endif
 
     m_assistant = new Cpp::StaticCodeAssistant;
-}
-
-void CppLanguageSupport::pImplementation()
-{
-  ///@todo move this into the refactoring plugin manager
-   MakeImplementationPrivate p;
-   if(!p.execute()) 
-   {
-     kDebug() << p.errorText();
-   }
 }
 
 ///@todo Make this work again with non-class declarations/definitions

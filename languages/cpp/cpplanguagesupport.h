@@ -113,8 +113,6 @@ public slots:
     void switchDefinitionDeclaration();
 
     void newClassWizard();
-    
-    void pImplementation();
 
 private:
 

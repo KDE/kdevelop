@@ -48,6 +48,7 @@
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include "cppnewclass.h"
+#include "makeimplementationprivate.h"
 #include <templatedeclaration.h>
 #include "../cpputils.h"
 #include <interfaces/iuicontroller.h>
@@ -553,6 +554,15 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
       KMessageBox::error(0, i18n("Applying changes failed: %1", result.m_failureReason));
       return;
   }
+}
+
+void SimpleRefactoring::executePrivateImplementationAction()
+{
+   MakeImplementationPrivate p;
+   if(!p.execute()) 
+   {
+     KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), p.errorText(), "Error Generating code");
+   }
 }
 
 KDevelop::IndexedDeclaration SimpleRefactoring::declarationUnderCursor(bool allowUse) {
