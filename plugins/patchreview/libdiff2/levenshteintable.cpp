@@ -136,15 +136,15 @@ unsigned int LevenshteinTable::createTable( DifferenceString* source, Difference
 
 	int cost = 0, north = 0, west = 0, northwest = 0;
 
-	ushort si, dj;
+	QChar si, dj;
 	// Optimization, calculate row wise instead of column wise, wont trash the cache so much with large strings
 	for ( j = 1; j < n; ++j )
 	{
-		dj = QString(dq[ j ]).toInt();
+		dj = dq[ j ];
 
 		for ( i = 1; i < m; ++i )
 		{
-			si = QString(sq[ i ]).toInt();
+			si = sq[ i ];
 			if ( si == dj )
 				cost = 0;
 			else
@@ -295,37 +295,5 @@ void LevenshteinTable::createListsOfMarkers()
 			break;
 		}
 	}
-
-//	kDebug(8101) << "Source string:" << m_source->string();
-//	c = m_source->markerList()->first();
-//	QStringList list;
-//	unsigned int prevValue = 0;
-//	for ( ; c; c = m_source->markerList()->next() )
-//	{
-//		kDebug(8101) << "Source Marker Entry : Type:" << c->type() << ", Offset:" << c->offset();
-//		list.append( m_source->string().mid( prevValue, c->offset() - prevValue ) );
-//		prevValue = c->offset();
-//	}
-//	if ( prevValue < m_source->string().length() - 1 )
-//	{
-//		list.append( m_source->string().mid( prevValue, m_source->string().length() - prevValue ) );
-//	}
-//	kDebug(8101) << "Source Resulting stringlist :" << list.join("\n");
-
-//	list.clear();
-//	prevValue = 0;
-
-//	kDebug(8101) << "Destination string:" << m_destination->string();
-//	for ( ; c; c = m_destination->markerList()->next() )
-//	{
-//		kDebug(8101) << "Destination Marker Entry : Type:" << c->type() << ", Offset:" << c->offset();
-//		list.append( m_destination->string().mid( prevValue, c->offset() - prevValue ) );
-//		prevValue = c->offset();
-//	}
-//	if ( prevValue < m_destination->string().length() - 1 )
-//	{
-//		list.append( m_destination->string().mid( prevValue, m_destination->string().length() - prevValue ) );
-//	}
-//	kDebug(8101) << "Destination Resulting string :" << list.join("\n");
 }
 

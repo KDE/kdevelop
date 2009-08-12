@@ -197,6 +197,15 @@ public:
 	void determineInlineDifferences();
 
 	QString recreateDifference() const;
+    
+    void reverse() {
+        int l = m_sourceLineNo;
+        m_sourceLineNo = m_destinationLineNo;
+        m_destinationLineNo = l;
+        DifferenceStringList t = m_destinationLines;
+        m_destinationLines = m_sourceLines;
+        m_sourceLines = t;
+    }
 
 private:
 	int                   m_type;

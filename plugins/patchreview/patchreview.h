@@ -24,8 +24,10 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
 #include "ui_patchreview.h"
 #include <language/duchain/indexedstring.h>
 #include <ktexteditor/rangefeedback.h>
+#include "libdiff2/diffmodel.h"
 
 class PatchReviewToolViewFactory;
+class PatchReviewPlugin;
 
 namespace KParts {
 class Part;
@@ -40,6 +42,7 @@ class DiffModel;
 }
 namespace KTextEditor {
 class SmartRange;
+class Mark;
 }
 namespace Kompare {
 class Info;
@@ -52,7 +55,7 @@ class IDocument;
 class PatchHighlighter : public QObject, public KTextEditor::SmartRangeWatcher {
     Q_OBJECT
 public:
-    PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, bool isSource ) throw( QString );
+    PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
     ~PatchHighlighter();
     KDevelop::IDocument* doc();
 private slots:
@@ -61,7 +64,15 @@ private:
 
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
     QSet<KTextEditor::SmartRange*> m_ranges;
+    QMap<KTextEditor::SmartRange*, Diff2::Difference*> m_differencesForRanges;
     KDevelop::IDocument* m_doc;
+    bool m_isSource;
+    PatchReviewPlugin* m_plugin;
+public slots:
+    void markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&);
+    void showToolTipForMark(QPoint arg1, KTextEditor::SmartRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
+    bool isRemoval(Diff2::Difference*);
+    bool isInsertion(Diff2::Difference*);
 };
 
 class DiffSettings;
@@ -118,6 +129,7 @@ public slots:
 
 class PatchReviewPlugin : public KDevelop::IPlugin {
     Q_OBJECT
+    bool m_isSource;
 public:
     PatchReviewPlugin(QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
@@ -143,6 +155,10 @@ public:
 
     KUrl diffFile();
     
+    ///Returns whether the change is reversed:
+    ///The source source is the current version of the document, and the destination is the version of the document before the patch was applied.
+    bool isReverseChange() const ;
+    
 Q_SIGNALS:
     void patchChanged();
 
@@ -162,7 +178,6 @@ private:
     void removeHighlighting( const KUrl& file = KUrl() );
 
     LocalPatchSourcePointer m_patch;
-    bool m_isSource;
 
     QTimer* m_updateKompareTimer;
 

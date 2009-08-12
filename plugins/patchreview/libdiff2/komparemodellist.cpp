@@ -254,7 +254,7 @@ bool KompareModelList::openFileAndDiff( const QString& file, const QString& diff
 	return true;
 }
 
-bool KompareModelList::openDirAndDiff( const QString& dir, const QString& diff )
+bool KompareModelList::openDirAndDiff( const QString& dir, const QString& diff, bool reverse )
 {
 	clear();
 
@@ -263,6 +263,18 @@ bool KompareModelList::openDirAndDiff( const QString& dir, const QString& diff )
 		emit error( i18n( "<qt>No models or no differences, this file: <b>%1</b>, is not a valid diff file.</qt>", diff ) );
 		return false;
 	}
+
+    //Inverse the hunks
+    if(reverse) {
+        int mCount = modelCount();
+        for(uint a = 0; a < mCount; ++a) {
+            const Diff2::DiffModel* model = modelAt(a);
+            int hunkCount = modelAt(a)->hunkCount();
+            for(int h = 0; h < hunkCount; ++h) {
+                (*(*const_cast<DiffHunkList*>(model->hunks())).at(h))->reverse();
+            }
+        }
+    }
 
 	// Do our thing :)
 	if ( !blendOriginalIntoModelList( dir ) )

@@ -52,6 +52,14 @@ public:
 
 	QString recreateHunk() const;
 
+    void reverse() {
+        int t = m_destinationLine;
+        m_destinationLine = m_sourceLine;
+        m_sourceLine = t;
+        for(int a = 0; a < m_differences.size(); ++a)
+            m_differences[a]->reverse();
+    }
+    
 private:
 	int            m_sourceLine;
 	int            m_destinationLine;

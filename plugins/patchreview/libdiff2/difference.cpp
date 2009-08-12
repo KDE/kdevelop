@@ -71,7 +71,7 @@ void Difference::determineInlineDifferences()
 		return;
 
 	int slc = sourceLineCount();
-
+kDebug() << "determining differences";
 	for ( int i = 0; i < slc; ++i )
 	{
 		DifferenceString* sl = sourceLineAt( i );

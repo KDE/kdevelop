@@ -60,6 +60,9 @@ std::string*/
 #include <language/editor/editorintegrator.h>
 #include <krun.h>
 #include <kparts/mainwindow.h>
+#include <qtextdocument.h>
+#include <util/activetooltip.h>
+#include <ktextbrowser.h>
 
 QStringList splitArgs( const QString& str ) {
     QStringList ret;
@@ -310,7 +313,7 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
 
             removeHighlighting( file );
 
-            m_highlighters[ file ] = new PatchHighlighter( model, doc, isSource() );
+            m_highlighters[ file ] = new PatchHighlighter( model, doc, this );
         }
 
     } catch ( const QString & str ) {
@@ -464,9 +467,145 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
 void PatchHighlighter::rangeDeleted(KTextEditor::SmartRange* range)
 {
     m_ranges.remove(range);
+    m_differencesForRanges.remove(range);
 }
 
-PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, bool isSource ) throw( QString ) : m_doc( kdoc ) {
+QSize sizeHintForHtml(QString html, QSize maxSize) {
+  QTextDocument doc;
+  doc.setHtml(html);
+
+  QSize ret;
+  if(doc.idealWidth() > maxSize.width()) {
+    doc.setPageSize( QSize(maxSize.width(), 30) );
+    ret.setWidth(maxSize.width());
+  }else{
+    ret.setWidth(doc.idealWidth());    
+  }
+  ret.setHeight(doc.size().height());
+  if(ret.height() > maxSize.height())
+    ret.setHeight(maxSize.height());
+  return ret;
+}
+
+void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* markRange, QPair< int, int > highlightMark)
+{
+  static QPointer<QWidget> currentTooltip;
+  static KTextEditor::SmartRange* currentTooltipMark;
+  if(currentTooltipMark == markRange && currentTooltip)
+    return;
+  delete currentTooltip;
+  
+  //Got the difference
+  Diff2::Difference* diff = m_differencesForRanges[markRange];
+  
+  QString html;
+#if 0
+  if(diff->hasConflict())
+    html += i18n("<b><span style=\"color:red\">Conflict</span></b><br/>");
+#endif
+  
+  Diff2::DifferenceStringList lines;
+  
+  if(isInsertion(diff)) {
+    html += i18n("<b>Insertion</b><br/>");
+  }else{
+    html += i18n("<b>Alternative:</b><br/>");
+    
+    if(m_plugin->isSource())
+    {
+      lines = diff->destinationLines();
+    }else{
+      lines = diff->sourceLines();
+    }
+    
+    for(int a = 0; a < lines.size(); ++a) {
+      Diff2::DifferenceString* line = lines[a];
+      uint currentPos = 0;
+      QString string = line->string();
+      
+      Diff2::MarkerList markers = line->markerList();
+
+      for(uint b = 0; b < markers.size(); ++b) {
+        kDebug() << "marker at " << markers[b]->offset() << ": " << markers[b]->type();
+        QString spanText = Qt::escape(string.mid(currentPos, markers[b]->offset() - currentPos));
+        if(markers[b]->type() == Diff2::Marker::End) {
+          if(a == highlightMark.first && b == highlightMark.second)
+            html += "<b><span style=\"background:#FF5555\">" + spanText + "</span></b>";
+          else
+            html += "<b><span style=\"background:#FFBBBB\">" + spanText + "</span></b>";
+        }else{
+          html += spanText;
+        }
+        currentPos = markers[b]->offset();
+      }
+
+      html += Qt::escape(string.mid(currentPos, string.length()-currentPos));
+      html += "<br/>";
+    }
+  }
+
+  KTextBrowser* browser = new KTextBrowser;
+  browser->setPalette( QApplication::palette() );
+  browser->setHtml(html);
+  
+  int maxHeight = 500;
+  
+  browser->setMinimumSize(sizeHintForHtml(html, QSize((ICore::self()->uiController()->activeMainWindow()->width()*2)/3, maxHeight)));
+  browser->setMaximumSize(browser->minimumSize() + QSize(10, 10));
+  if(browser->minimumHeight() != maxHeight)
+    browser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  
+  QVBoxLayout* layout = new QVBoxLayout;
+  layout->setMargin(0);
+  layout->addWidget(browser);
+
+  KDevelop::ActiveToolTip* tooltip = new KDevelop::ActiveToolTip(ICore::self()->uiController()->activeMainWindow(), pos + QPoint(5, -browser->sizeHint().height() - 30));
+  tooltip->setLayout(layout);
+  tooltip->resize( tooltip->sizeHint() + QSize(10, 10) );
+  tooltip->move(pos - QPoint(0, 20 + tooltip->height()));
+  tooltip->addExtendRect(QRect(pos - QPoint(15, 15), pos + QPoint(15, 15)));
+  
+  currentTooltip = tooltip;
+  currentTooltipMark = markRange;
+  
+  ActiveToolTip::showToolTip(tooltip);
+}
+
+void PatchHighlighter::markToolTipRequested(KTextEditor::Document* , KTextEditor::Mark mark, QPoint pos, bool& handled)
+{
+  int myMarksPattern = KTextEditor::MarkInterface::markType25 | KTextEditor::MarkInterface::markType26 | KTextEditor::MarkInterface::markType27;
+  if(mark.type & myMarksPattern) {
+    //There is a mark in this line. Show the old text.
+    for(QMap< KTextEditor::SmartRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.begin(); it != m_differencesForRanges.end(); ++it) {
+      if(it.key()->start().line() == mark.line || it.key()->start().line() == mark.line-1)
+      {
+        showToolTipForMark(pos, it.key());
+        break;
+      }
+    }
+  }
+}
+
+
+bool PatchHighlighter::isInsertion(Diff2::Difference* diff)
+{
+  if(!m_plugin->isReverseChange())
+    return diff->sourceLineCount() == 0;
+  else
+    return diff->destinationLineCount() == 0;
+}
+
+
+bool PatchHighlighter::isRemoval(Diff2::Difference* diff)
+{
+  if(m_plugin->isReverseChange())
+    return diff->sourceLineCount() == 0;
+  else
+    return diff->destinationLineCount() == 0;
+}
+
+
+PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString ) : m_doc( kdoc ), m_plugin(plugin) {
 //  connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( model, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
@@ -485,6 +624,9 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     if( !markIface )
       throw QString( "no mark-interface" );
     
+    ///This requires the KDE 4.4 development branch from 12.8.2009
+    connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)), this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
+    
     markIface->setMarkDescription(KTextEditor::MarkInterface::markType25, i18n("Insertion"));
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType25, KIcon("insert-text").pixmap(16, 16));
     markIface->setMarkDescription(KTextEditor::MarkInterface::markType26, i18n("Removal"));
@@ -499,23 +641,25 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     for ( Diff2::DifferenceList::const_iterator it = model->differences() ->begin(); it != model->differences() ->end(); ++it ) {
         Diff2::Difference* diff = *it;
         int line, lineCount;
-        if ( isSource ) {
+        Diff2::DifferenceStringList lines ;
+        if ( m_plugin->isSource() ) {
             line = diff->sourceLineNumber();
             lineCount = diff->sourceLineCount();
+            lines = diff->sourceLines();
         } else {
             line = diff->destinationLineNumber();
             lineCount = diff->destinationLineCount();
+            lines = diff->destinationLines();
         }
         if ( line > 0 )
             line -= 1;
         
         KTextEditor::MarkInterface::MarkTypes mark = KTextEditor::MarkInterface::markType27;
         
-        if(diff->destinationLineCount() == 0)
-          mark = KTextEditor::MarkInterface::markType26;
-
-        if(diff->sourceLineCount() == 0)
+        if(isInsertion(diff))
           mark = KTextEditor::MarkInterface::markType25;
+        if(isRemoval(diff))
+          mark = KTextEditor::MarkInterface::markType26;
 
         KTextEditor::Cursor c( line, 0 );
         KTextEditor::Cursor endC( line + lineCount - 1, 0 );
@@ -534,6 +678,29 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
 
             t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
             r->setAttribute( t );
+            m_differencesForRanges[r] = *it;
+            
+            for(uint a = 0; a < lines.size(); ++a) {
+              Diff2::DifferenceString* line = lines[a];
+              uint currentPos = 0;
+              QString string = line->string();
+              
+              Diff2::MarkerList markers = line->markerList();
+
+              for(uint b = 0; b < markers.size(); ++b) { 
+//                 kDebug() << "marker at " << markers[b]->offset() << ": " << markers[b]->type();
+                if(markers[b]->type() == Diff2::Marker::End)
+                {
+                  KTextEditor::SmartRange * r2 = smart->newSmartRange( KTextEditor::Cursor(a + c.line(), currentPos), KTextEditor::Cursor(a + c.line(), markers[b]->offset()), r );
+                  
+                  KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
+
+                  t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 0, 70 ) ) );
+                  r2->setAttribute( t );
+                }
+                currentPos = markers[b]->offset();
+              }
+            }
         }
     }
 
@@ -648,6 +815,9 @@ void PatchReviewPlugin::updateKompareModel() {
             delete m_diffSettings;
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
+        
+        m_isSource = true;
+        
         removeHighlighting();
         m_modelList.reset( new Diff2::KompareModelList( m_diffSettings, *m_kompareInfo, ( QObject* ) this ) );
         KUrl diffFile = this->diffFile();
@@ -655,9 +825,10 @@ void PatchReviewPlugin::updateKompareModel() {
             throw "no diff file"; ;
         try {
             ///@todo does not work with remote URLs
-            if ( !m_modelList->openDirAndDiff( m_patch->baseDir.toLocalFile(), diffFile.toLocalFile() ) )
+            ///@todo Only reverse if the patch is currently applied
+            if ( !m_modelList->openDirAndDiff( m_patch->baseDir.toLocalFile(), diffFile.toLocalFile(), true ) )
                 throw "could not open diff " + diffFile.toLocalFile();
-        } catch ( const QString & str ) {
+         } catch ( const QString & str ) {
             throw;
         } catch ( ... ) {
             throw QString( "lib/libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );
@@ -716,6 +887,7 @@ void PatchReviewPlugin::commandToFile()
 {
     if(!diffFile().isEmpty()) {
       m_patch->filename = diffFile();
+      m_patch->command.clear();
       notifyPatchChanged();
     }
 }
@@ -755,6 +927,12 @@ QWidget* PatchReviewPlugin::createToolView(QWidget* parent)
 {
     return new PatchReviewToolView(parent, this);
 }
+
+bool PatchReviewPlugin::isReverseChange() const
+{
+    return true;
+}
+
 
 #if 0
 void PatchReviewPlugin::determineState() {

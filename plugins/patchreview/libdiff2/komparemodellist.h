@@ -58,7 +58,7 @@ public:
 	bool openDiff( const QString& diff );
 
 	bool openFileAndDiff( const QString& file, const QString& diff );
-	bool openDirAndDiff( const QString& dir, const QString& diff );
+	bool openDirAndDiff( const QString& dir, const QString& diff, bool reverse = false );
 
 	bool saveDiff( const QString& url, const QString& directory, DiffSettings* diffSettings );
 	bool saveAll();
