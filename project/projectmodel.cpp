@@ -355,8 +355,7 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandar
 {
     Q_D(ProjectFileItem);
     d->project = project;
-    d->m_url = file;
-    setText( file.fileName() );
+    setUrl( file );
     setParent( parent );
     setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
@@ -378,6 +377,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
     Q_D(ProjectFileItem);
     d->m_url = url;
     d->m_fileName = d->m_url.fileName();
+    setText( d->m_fileName );
 }
 
 int ProjectFileItem::type() const
