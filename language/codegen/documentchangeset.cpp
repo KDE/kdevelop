@@ -53,6 +53,7 @@ struct DocumentChangeSetPrivate
     void updateFiles();
     void addFileToProject(IndexedString file);
     void addTempFile(IndexedString originalName, const QString & text);
+    void adjustChangeToTemp(DocumentChangePointer newChange);
 };
 
 //Simple helper to clear up code clutter
@@ -107,14 +108,12 @@ KDevelop::DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const KDe
     return addChange(DocumentChangePointer(new DocumentChange(change)));
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChangePointer& change) {
+DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(DocumentChangePointer change) {
     if(change->m_range.start.line != change->m_range.end.line)
         return ChangeResult("Multi-line ranges are not supported");
     
-    if(d->tempFiles.contains(change->m_document)) {
-        //Because the change is semantically constant, but not bitwise, correct the old file name for the temp one
-        const_cast<DocumentChangePointer &>(change)->m_document = d->tempFiles[change->m_document].first;
-    }
+    if(d->tempFiles.contains(change->m_document))
+        d->adjustChangeToTemp(change);
     
     d->changes[change->m_document].append(change);
     return ChangeResult(true);
@@ -656,5 +655,43 @@ void DocumentChangeSetPrivate::addTempFile(IndexedString originalName, const QSt
     changes.erase(changes.find(tempFile));
 }
 
+void DocumentChangeSetPrivate::adjustChangeToTemp(DocumentChangePointer newChange)
+{
+    
+    kDebug() << "Adjusting change to temp for change: " << newChange->m_newText << "With range: " << newChange->m_range.textRange();
+    //Adjust the range of the new change according to temporaries already applied
+    
+    //Sort the changes to the original file
+    QList<DocumentChangePointer> sortedChanges;
+    removeDuplicates(newChange->m_document, sortedChanges );
+    
+    //foreach changed
+    foreach(DocumentChangePointer originalChange, sortedChanges)
+    {
+        if(originalChange->m_range.textRange() < newChange->m_range.textRange() )
+        {
+            if(originalChange->m_range.end.line == newChange->m_range.start.line)
+            {
+                //Apply column offset
+                int offset;
+                if(originalChange->m_newText.count('\n'))
+                    offset = originalChange->m_range.start.column - (originalChange->m_newText.lastIndexOf('\n') - originalChange->m_newText.size() + 1);
+                else
+                    offset = originalChange->m_newText.size() - (originalChange->m_range.end.column - originalChange->m_range.start.column);
+                newChange->m_range.start.column += offset;
+                newChange->m_range.end.column += offset;
+            }
+             
+            //Get the line difference that the change poduced, and apply it to the new one
+            int lineDifference = originalChange->m_newText.count('\n') - originalChange->m_range.textRange().numberOfLines();
+            if(lineDifference)
+            {
+                newChange->m_range.start.line += lineDifference;
+                newChange->m_range.end.line += lineDifference;
+            }
+        }
+    }
+    newChange->m_document = tempFiles[newChange->m_document].first;
+}
 
 }
