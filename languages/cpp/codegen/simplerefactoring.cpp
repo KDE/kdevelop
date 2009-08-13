@@ -561,7 +561,7 @@ void SimpleRefactoring::executePrivateImplementationAction()
    MakeImplementationPrivate p;
    if(!p.execute()) 
    {
-     KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), p.errorText(), "Error Generating code");
+     KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), p.errorText(), i18n("Error Generating code"));
    }
 }
 
