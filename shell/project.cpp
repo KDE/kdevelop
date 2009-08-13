@@ -596,7 +596,7 @@ QList<ProjectFolderItem*> Project::foldersForUrl(const KUrl& url) const
     QList<ProjectFolderItem*> items;
     foreach(ProjectBaseItem* item,  d->itemsForUrl( url ) )
     {
-        if( item->type() == ProjectBaseItem::Folder )
+        if( item->type() == ProjectBaseItem::Folder || item->type() == ProjectBaseItem::BuildFolder )
             items << dynamic_cast<ProjectFolderItem*>( item );
     }
     return items;
