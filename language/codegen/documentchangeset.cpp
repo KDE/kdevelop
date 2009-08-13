@@ -69,6 +69,15 @@ inline bool changeIsValid(const DocumentChange & change, const QStringList & tex
            change.m_range.end.column <= textLines[change.m_range.end.line].length() && 
            change.m_range.start.line == change.m_range.end.line;
 }
+
+inline bool duplicateChanges(DocumentChangePointer previous, DocumentChangePointer current)
+{
+    //Given the option of considering a duplicate two changes in the same range but with different old texts to be ignored
+    return previous->m_range == current->m_range &&
+           previous->m_newText == current->m_newText &&
+           (previous->m_oldText == current->m_oldText ||
+           (previous->m_ignoreOldText && current->m_ignoreOldText));
+}
 }
 
 DocumentChangeSet::DocumentChangeSet() : d(new DocumentChangeSetPrivate)
@@ -113,6 +122,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChang
 
 DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 {
+    kDebug() << "Merging DocumentChangeSets, tempFiles.\nTemp Files in lhs:";
+    for(QMap <KDevelop::IndexedString, KDevelop::DocumentChangeSetPrivate::TempPair >::iterator it = d->tempFiles.begin();
+        it != d->tempFiles.end(); ++it)
+        kDebug() << it.key().str() << " " << it->first.str();
+    kDebug() << "Temp Files in rhs: ";
+    for(QMap <KDevelop::IndexedString, KDevelop::DocumentChangeSetPrivate::TempPair >::iterator it = rhs.d->tempFiles.begin();
+        it != rhs.d->tempFiles.end(); ++it)
+        kDebug() << it.key().str() << " " << it->first.str();
     /// @todo Fix for a possibility of two different temporaries created for the same fileName
     d->tempFiles.unite(rhs.d->tempFiles);
     Q_ASSERT(d->tempFiles.uniqueKeys().size() == d->tempFiles.size());
@@ -124,6 +141,16 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
         it != rhs.d->changes.end(); ++it)
         d->changes[it.key()] += *it;
     rhs.clear();
+    
+    kDebug() << "Merged Changes: ";
+    for(QMap <KDevelop::IndexedString, QList <KDevelop::DocumentChangePointer > >::iterator it = d->changes.begin();
+        it != d->changes.end(); ++it)
+    {
+        kDebug() << it.key().str();
+        foreach(DocumentChangePointer p, *it)
+            kDebug() << p->m_newText;
+    }
+        
     
     return *this;
 }
@@ -207,9 +234,19 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllToTemp()
     QMap<IndexedString, CodeRepresentation::Ptr> codeRepresentations;
     QMap<IndexedString, QString> newTexts;
     QMap<IndexedString, QList<DocumentChangePointer> > filteredSortedChanges;
-
+    
+    kDebug() << "Changes to be applied:";
+    for(QMap <KDevelop::IndexedString, QList <KDevelop::DocumentChangePointer > >::iterator it = d->changes.begin();
+        it != d->changes.end(); ++it)
+    {
+        kDebug() << it.key().str();
+        foreach(DocumentChangePointer p, *it)
+            kDebug() << p->m_newText;
+    }
+    
     foreach(const IndexedString &file, d->changes.keys())
     {
+        kDebug() << "Processing change for file: " << file.str();
         CodeRepresentation::Ptr repr = createCodeRepresentation(file);
         if(!repr)
             return ChangeResult(QString("Could not create a Representation for %1").arg(file.str()));
@@ -239,10 +276,14 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllToTemp()
     foreach(const IndexedString &file, d->changes.keys())
     {
         if(!d->tempToOriginal.contains(file))
+        {
+            kDebug() << "Adding a new Temp file from original with text: " << newTexts[file];
             d->addTempFile(file, newTexts[file]);
+        }
         else
         {
             oldTexts[file] = codeRepresentations[file]->text();
+            kDebug() << "Applying to already created temp: " << file.str() << ". Old text: " << oldTexts[file];
             
             DocumentChangeSet::ChangeResult result = d->replaceOldText(codeRepresentations[file].data(), newTexts[file], filteredSortedChanges[file]);
             if(!result && d->replacePolicy == StopOnFailedChange)
@@ -253,6 +294,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllToTemp()
                 
                 return result;
             }
+            kDebug() << "Applied new text: " << newTexts[file];
         }
     }
     
@@ -396,9 +438,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
 
             if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges) {
-                kDebug() << "formatting" << change.m_newText;
                 change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
-                kDebug() << "result" << change.m_newText;
             }
             
             textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
@@ -436,14 +476,17 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
     for(QMultiMap<SimpleCursor, DocumentChangePointer>::iterator it =sortedChanges.begin(); it != sortedChanges.end(); ) {
         if(previous && previous->m_range.end > (*it)->m_range.start) {
             //intersection
-            if(previous->m_range == (*it)->m_range && previous->m_oldText == (*it)->m_oldText && previous->m_newText == (*it)->m_newText &&
-                !previous->m_ignoreOldText && !(*it)->m_ignoreOldText) {
+            if(duplicateChanges(previous, *it)) {
                 //duplicate, remove one
                 it = sortedChanges.erase(it);
                 continue;
             }
             else
-                return DocumentChangeSet::ChangeResult(QString("Inconsistent change-request at %1").arg(file.str()));
+                return DocumentChangeSet::ChangeResult(
+                       QString("Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"\"%9\"@%10:%11->%12:%13 ")
+                       .arg(file.str(), previous->m_oldText, previous->m_newText).arg(previous->m_range.start.line).arg(previous->m_range.start.column)
+                       .arg(previous->m_range.end.line).arg(previous->m_range.end.column).arg((*it)->m_oldText, (*it)->m_newText).arg((*it)->m_range.start.line)
+                       .arg((*it)->m_range.start.column).arg((*it)->m_range.end.line).arg((*it)->m_range.end.column));
             
         }
         previous = *it;
