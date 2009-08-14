@@ -244,7 +244,17 @@ SimpleRange SourceCodeInsertion::insertionRange(int line)
   if(line == 0 || !m_codeRepresentation)
     return SimpleRange(line, 0, line, 0);
   else
-    return SimpleRange(line-1, m_codeRepresentation->line(line-1).size(), line-1, m_codeRepresentation->line(line-1).size());
+  {
+    SimpleRange range(line-1, m_codeRepresentation->line(line-1).size(), line-1, m_codeRepresentation->line(line-1).size());
+    //If the context finishes on that line, then this will need adjusting
+    if(!m_context->range().textRange().contains(range.textRange()))
+    {
+      range.start = m_context->range().end;
+      range.start.column -= 1;
+      range.end = range.start;
+    }
+    return range;
+  }
 }
 
 bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifier name, AbstractType::Ptr returnType, QList<SignatureItem> signature, bool isConstant, QString body) {
