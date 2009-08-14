@@ -250,7 +250,8 @@ SimpleRange SourceCodeInsertion::insertionRange(int line)
     if(!m_context->range().textRange().contains(range.textRange()))
     {
       range.start = m_context->range().end;
-      range.start.column -= 1;
+      if(range.start.column > 0)
+        range.start.column -= 1;
       range.end = range.start;
     }
     return range;
