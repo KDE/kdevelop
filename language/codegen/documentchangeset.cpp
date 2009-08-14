@@ -447,9 +447,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
             QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
 
-            if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges) {
+            if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges)
                 change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
-            }
             
             textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
         }else{
@@ -482,24 +481,41 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
         sortedChanges.insert(change->m_range.end, change);
     
     //Remove duplicates
-    DocumentChangePointer previous = DocumentChangePointer();
-    for(QMultiMap<SimpleCursor, DocumentChangePointer>::iterator it =sortedChanges.begin(); it != sortedChanges.end(); ) {
-        if(previous && previous->m_range.end > (*it)->m_range.start) {
+    QMultiMap<SimpleCursor, DocumentChangePointer>::iterator previous = sortedChanges.begin();
+    for(QMultiMap<SimpleCursor, DocumentChangePointer>::iterator it = ++sortedChanges.begin(); it != sortedChanges.end(); ) {
+        if(( *previous ) && ( *previous )->m_range.end > (*it)->m_range.start) {
             //intersection
-            if(duplicateChanges(previous, *it)) {
+            if(duplicateChanges(( *previous ), *it)) {
                 //duplicate, remove one
+                it = sortedChanges.erase(it);
+                continue;
+            }
+            
+            //When two changes contain each other, and the container change is set to ignore old text, then it should be safe to
+            //just ignore the contained change, and apply the bigger change
+            else if((*it)->m_range.contains(( *previous )->m_range) && (*it)->m_ignoreOldText  )
+            {
+                kDebug() << "Removing change: " << ( *previous )->m_oldText << "->" << ( *previous )->m_newText
+                         << ", because it is contained by change: " << (*it)->m_oldText << "->" << (*it)->m_newText;
+                sortedChanges.erase(previous);
+            }
+            //This case is for when both have the same end, either of them could be the containing range
+            else if((*previous)->m_range.contains((*it)->m_range) && (*previous)->m_ignoreOldText  )
+            {
+                kDebug() << "Removing change: " << (*it)->m_oldText << "->" << (*it)->m_newText
+                         << ", because it is contained by change: " << ( *previous )->m_oldText << "->" << ( *previous )->m_newText;
                 it = sortedChanges.erase(it);
                 continue;
             }
             else
                 return DocumentChangeSet::ChangeResult(
                        QString("Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"\"%9\"@%10:%11->%12:%13 ")
-                       .arg(file.str(), previous->m_oldText, previous->m_newText).arg(previous->m_range.start.line).arg(previous->m_range.start.column)
-                       .arg(previous->m_range.end.line).arg(previous->m_range.end.column).arg((*it)->m_oldText, (*it)->m_newText).arg((*it)->m_range.start.line)
+                       .arg(file.str(), ( *previous )->m_oldText, ( *previous )->m_newText).arg(( *previous )->m_range.start.line).arg(( *previous )->m_range.start.column)
+                       .arg(( *previous )->m_range.end.line).arg(( *previous )->m_range.end.column).arg((*it)->m_oldText, (*it)->m_newText).arg((*it)->m_range.start.line)
                        .arg((*it)->m_range.start.column).arg((*it)->m_range.end.line).arg((*it)->m_range.end.column));
             
         }
-        previous = *it;
+        previous = it;
         ++it;
     }
     
