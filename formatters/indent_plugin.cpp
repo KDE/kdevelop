@@ -104,9 +104,12 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, c
 		kDebug() << "Process doesn't finish" << endl;
 		return text;
 	}
+	///@todo Be able to detect errors in formatting, since indent returns the error as the output
 
 	QStringList output = ios.readAll().split("\n");
 	
+	///@todo Correctly remove the contexts, if the context originally had a different ammount of lines
+	///as it does after formatting, this will chop off the incorrect text portion
 	//Remove right context
 	if(rightContext.startsWith("\n"))
 		output = output.mid(0, (leftContext + text).split("\n").count());
