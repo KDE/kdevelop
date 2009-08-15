@@ -41,9 +41,9 @@
 
 ///gets the top context of artificial test code by just specifying the file name, more efficient and safe than calling contextForUrl
 //Needs to be a macro because QVERIFY2 only works directly on the test function
-#define GET_CONTEXT(file, top)  IndexedString str_(CodeRepresentation::artificialUrl(file));\
+#define GET_CONTEXT(file, top)  { IndexedString str_(CodeRepresentation::artificialUrl(file));\
                                 QVERIFY2(m_contexts[str_], QString("Requested artificial file not found: %1").arg(str_.str()).toUtf8());\
-                                top = m_contexts[str_].data()
+                                top = m_contexts[str_].data(); }
 
 QTEST_KDEMAIN(TestCppCodegen, GUI )
 
@@ -199,11 +199,41 @@ void TestCppCodegen::testPrivateImplementation()
   generator.setPointerName("d");
   
   QVERIFY2(generator.execute(), generator.errorText().toAscii());
+  generator.documentChangeSet().setReplacementPolicy(DocumentChangeSet::StopOnFailedChange);
+  
+  //Formatting plugin does not like source code in a single line
+  generator.documentChangeSet().setFormatPolicy(DocumentChangeSet::NoAutoFormat);
   DocumentChangeSet::ChangeResult result = generator.documentChangeSet().applyAllToTemp();
   QVERIFY2(result, result.m_failureReason.toAscii());
   kDebug() << "tempName: " << generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))).str();
   kDebug() << "Generated Text:" << createCodeRepresentation(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))))->text();
   kDebug() << "GeneratedText:" << createCodeRepresentation(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp"))))->text();
+  
+  QVERIFY(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h"))) != IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
+  QVERIFY(generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp"))) != IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
+  
+  IndexedString tempName1 = generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.h")));
+  IndexedString tempName2 = generator.documentChangeSet().tempNameForFile(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")));
+  parseFile(tempName1);
+  parseFile(tempName2);
+  
+  TopDUContext * newHeader = m_contexts[tempName1].data();
+  TopDUContext * newImplementation = m_contexts[tempName2].data();
+  
+  QVERIFY(newHeader);
+  QVERIFY(newImplementation);
+  
+  DUChainReadLocker lock(DUChain::lock());
+  kDebug() << "HeaderProblems: ";
+  foreach(ProblemPointer p, newHeader->problems())
+    kDebug() << p->description();
+  kDebug() << "Implementation Problems: ";
+  foreach(ProblemPointer p, newImplementation->problems())
+    kDebug() << p->description();
+  
+  //There is a problem from include path resolver, we care about semantic problems
+  QCOMPARE(newHeader->problems().size(), 1);
+  QCOMPARE(newImplementation->problems().size(), 1);
 }
 
 void TestCppCodegen::parseArtificialCode()
@@ -229,9 +259,9 @@ void TestCppCodegen::resetArtificialCode(void)
 
 void TestCppCodegen::parseFile(IndexedString file)
 {
-    Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), static_cast<TopDUContext::Features>(TopDUContext::AllDeclarationsAndContexts | TopDUContext::AST));
+    Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), TopDUContext::AllDeclarationsContextsUsesAndAST);
     ///TODO maybe only needs to be done once
-    Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, static_cast<TopDUContext::Features>(TopDUContext::AllDeclarationsAndContexts | TopDUContext::AST)));
+    Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, TopDUContext::AllDeclarationsContextsUsesAndAST));
 }
 
 #include "test_cppcodegen.moc"

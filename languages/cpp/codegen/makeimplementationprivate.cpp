@@ -58,12 +58,7 @@ bool MakeImplementationPrivate::process()
     //Create container for private implementation
     CppNewClass classGenerator;
     classGenerator.setType(m_policies.testFlag(ContainerIsClass) ? CppNewClass::Class : CppNewClass::Struct);
-    foreach(Declaration * decl, m_members)
-    {
-        classGenerator.addDeclaration(DeclarationPointer(decl));
-        DocumentChange removeDeclarations(decl->url(), decl->range(), decl->toString(), QString());
-        documentChangeSet().addChange(removeDeclarations);
-    }
+    addDeclarationsToPrivate(classGenerator);
     classGenerator.identifier(m_structureName);
     
     IndexedString implementationFile = CodeGenUtils::fetchImplementationFileForClass(*m_classDeclaration);
@@ -89,7 +84,6 @@ bool MakeImplementationPrivate::process()
     pointerInsertion.insertVariableDeclaration(Identifier(m_privatePointerName), AbstractType::Ptr::dynamicCast<PointerType>(pointer));
     
     //Temporarily apply the pointer insertion so that more changes can be made
-    pointerInsertion.changes().applyAllToTemp();
     addChangeSet(pointerInsertion.changes());
     
     //Add private implementation struct forward declaration before the class
@@ -418,6 +412,31 @@ CodeRepresentation::Ptr MakeImplementationPrivate::representationFor(IndexedStri
         m_representations[url] = createCodeRepresentation(url);
     
     return m_representations[url];
+}
+
+void MakeImplementationPrivate::addDeclarationsToPrivate(CppNewClass & classGenerator)
+{
+    ParseSession::Ptr ast = astContainer(m_classContext->url());
+    CppEditorIntegrator integrator(ast.data());
+    
+    foreach(Declaration * decl, m_members)
+    {
+        classGenerator.addDeclaration(DeclarationPointer(decl));
+        //Get the context that properly encapsulates the declaration through the AST
+        AST * node = ast->astNodeFromDeclaration(decl);
+        if(node)
+        {
+            SimpleRange declarationRange = integrator.findRange(node);
+            kDebug() << "Found AST node for declaration: " << decl->toString() << ". With range: " << declarationRange.textRange();
+            
+            DocumentChange removeDeclarations(decl->url(), declarationRange, decl->toString(), QString());
+            //Verifying the old text might cause conflicts with variables defined after structure declarations
+            removeDeclarations.m_ignoreOldText = true;
+            documentChangeSet().addChange(removeDeclarations);
+        }
+        else
+            kWarning() << "Did not find an AST node mapped for declarationn: " << decl->toString();
+    }
 }
 
 }

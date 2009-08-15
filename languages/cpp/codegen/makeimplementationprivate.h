@@ -25,6 +25,7 @@
 
 #include <bitset>
 
+class CppNewClass;
 namespace KDevelop
 {
 class DocumentChange;
@@ -81,6 +82,7 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     void updateDestructor();
     void updateAllUses(UseList & alluses);
     CodeRepresentation::Ptr representationFor(IndexedString url);
+    void addDeclarationsToPrivate(CppNewClass &);
     //DocumentChange insertConstructorInitializations(ClassFunctionDeclaration * constructor, const QList<ClassMemberDeclaration *>)
 };
 
