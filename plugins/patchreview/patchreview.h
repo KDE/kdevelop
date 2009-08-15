@@ -62,17 +62,22 @@ private slots:
     void documentDestroyed();
 private:
 
+    void addLineMarker(KTextEditor::SmartRange* arg1, Diff2::Difference* arg2);
+    void removeLineMarker(KTextEditor::SmartRange* arg1, Diff2::Difference* arg2);
+  
+    KTextEditor::SmartRange* rangeForMark(KTextEditor::Mark mark);
+
     virtual void rangeDeleted(KTextEditor::SmartRange* range);
     QSet<KTextEditor::SmartRange*> m_ranges;
     QMap<KTextEditor::SmartRange*, Diff2::Difference*> m_differencesForRanges;
     KDevelop::IDocument* m_doc;
-    bool m_isSource;
     PatchReviewPlugin* m_plugin;
 public slots:
     void markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&);
     void showToolTipForMark(QPoint arg1, KTextEditor::SmartRange* arg2, QPair< int, int > highlightMark = qMakePair(-1, -1));
     bool isRemoval(Diff2::Difference*);
     bool isInsertion(Diff2::Difference*);
+    void markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&);
 };
 
 class DiffSettings;
@@ -129,7 +134,6 @@ public slots:
 
 class PatchReviewPlugin : public KDevelop::IPlugin {
     Q_OBJECT
-    bool m_isSource;
 public:
     PatchReviewPlugin(QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
@@ -139,10 +143,6 @@ public:
 
     LocalPatchSourcePointer patch() const {
         return m_patch;
-    }
-
-    bool isSource() const {
-        return m_isSource;
     }
 
     Diff2::KompareModelList* modelList() const {
