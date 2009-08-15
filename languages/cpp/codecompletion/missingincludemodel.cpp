@@ -53,7 +53,6 @@ void MissingIncludeCompletionModel::parseJobFinished(KDevelop::ParseJob* job) {
         ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
         QMetaObject::invokeMethod(doc->textDocument()->activeView(), "userInvokedCompletion");
       }
-      job->document().toUrl();
     }
   }
 }
