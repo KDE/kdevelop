@@ -242,9 +242,8 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStan
 {
     Q_D(ProjectFolderItem);
     d->project = project;
-    d->m_url = dir;
+    setUrl(dir);
     setParent(parent);
-    setText( dir.fileName() );
 }
 
 ProjectFolderItem::ProjectFolderItem( ProjectFolderItemPrivate& dd)
