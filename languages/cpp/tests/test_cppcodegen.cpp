@@ -114,20 +114,24 @@ void TestCppCodegen::testAstDuChainMapping()
     QCOMPARE(classAst->member_specs->count(), 6);
     QCOMPARE(cont->localDeclarations().size(), 6);
     
-    kDebug() << "Declaration mapped: " << session->declarationFromAstNode(AstUtils::childNode<SimpleDeclarationAST>(classAst, 3))->identifier();
-    //kDebug() << "Actual Declaration: " << cont->localDeclarations()[6]->identifier();
+    //ClassA()
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 1),
              session->astNodeFromDeclaration(cont->localDeclarations()[0]));
-             
-/*    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 3)->type_specifier,
-             session->astNodeFromDeclaration(cont->localDeclarations()[2]));*/
-             
-//    QCOMPARE(AstUtils::childNode<FunctionDefinitionAST>(classAst, 4),
-//             session->astNodeFromDeclaration(cont->localDeclarations()[2]));
-
-    
+    //int i         
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 3),
+             session->astNodeFromDeclaration(cont->localDeclarations()[1]));
+    //float f         
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 4),
+             session->astNodeFromDeclaration(cont->localDeclarations()[2]));
+    //float j, part of the same declaration as above        
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 4),
+             session->astNodeFromDeclaration(cont->localDeclarations()[3]));
+    //struct ContainedStruct
     QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 5)->type_specifier,
              session->astNodeFromDeclaration(cont->localDeclarations()[4]));
+    //ContainedStruct structVar, part of the same declaration as above         
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 5),
+             session->astNodeFromDeclaration(cont->localDeclarations()[5]));
   }
   ++it;
  
@@ -143,6 +147,60 @@ void TestCppCodegen::testAstDuChainMapping()
             session->astNodeFromDeclaration(KDevelop::DeclarationPointer(it->data()->localDeclarations()[0])));
   QCOMPARE(it->data()->localDeclarations()[0]->context()->importedParentContexts().size(), 1);
   QVERIFY(it->data()->localDeclarations()[0]->context()->importedParentContexts()[0].context(it->data()) != it->data());
+  ++it;
+  
+  //----AbstractClass.h----
+  QVERIFY(session = ParseSession::Ptr::dynamicCast<IAstContainer>(it->data()->ast()));
+  QVERIFY(ast = session->topAstNode());
+  QVERIFY(ast->declarations);
+  QCOMPARE(ast->declarations->count(), 1);
+  
+  QVERIFY(AstUtils::childNode<SimpleDeclarationAST>(ast, 0));
+  QCOMPARE(session->astNodeFromDeclaration(it->data()->localDeclarations()[0]),
+           AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier);
+  //AbstractClass
+  {
+    ClassSpecifierAST * classAst = AstUtils::node_cast<ClassSpecifierAST>
+                                  (AstUtils::childNode<SimpleDeclarationAST>(ast, 0)->type_specifier);
+    QVERIFY(classAst);
+    
+    DUContext * cont = it->data()->localDeclarations()[0]->internalContext();
+    QVERIFY(cont);
+    
+    //~AbstractClass()
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 1),
+             session->astNodeFromDeclaration(cont->localDeclarations()[0]));
+    
+    //pureVirtual()
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 2),
+             session->astNodeFromDeclaration(cont->localDeclarations()[1]));
+    
+    //constPure()
+    SimpleDeclarationAST * func = AstUtils::childNode<SimpleDeclarationAST>(classAst, 3);
+    QCOMPARE(func,
+             session->astNodeFromDeclaration(cont->localDeclarations()[2]));
+    QVERIFY(AstUtils::childInitDeclarator(func, 0));
+    QVERIFY(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0));
+    QVERIFY(cont->localDeclarations()[2]->internalContext()->localDeclarations()[0]);
+    QVERIFY(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0));
+    QCOMPARE(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0),
+             session->astNodeFromDeclaration(cont->localDeclarations()[2]->internalContext()->localDeclarations()[0]));
+    
+    //regularVirtual()
+    QCOMPARE(AstUtils::childNode<SimpleDeclarationAST>(classAst, 4),
+             session->astNodeFromDeclaration(cont->localDeclarations()[3]));
+    
+    //constPure()
+    func = AstUtils::childNode<SimpleDeclarationAST>(classAst, 5);
+    QCOMPARE(func,
+             session->astNodeFromDeclaration(cont->localDeclarations()[4]));
+    QVERIFY(AstUtils::childInitDeclarator(func, 0));
+    QVERIFY(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0));
+    QVERIFY(cont->localDeclarations()[4]->internalContext()->localDeclarations()[0]);
+    QVERIFY(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0));
+    QCOMPARE(AstUtils::parameterAtIndex(AstUtils::childInitDeclarator(func, 0)->declarator, 0),
+             session->astNodeFromDeclaration(cont->localDeclarations()[4]->internalContext()->localDeclarations()[0]));
+  }
 }
 
 void TestCppCodegen::testCodeRepresentations()

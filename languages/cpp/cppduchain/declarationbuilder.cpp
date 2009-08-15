@@ -187,13 +187,13 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseFunctionSpecifiers(node->function_specifiers);
   
   //Used to map to the top level function node once the Declaration is built
-  m_declarationNode = node;
-
+  m_mappedNodes.push(node);
   m_functionDefinedStack.push(node->start_token);
 
   DeclarationBuilderBase::visitFunctionDeclaration(node);
 
   m_functionDefinedStack.pop();
+  m_mappedNodes.pop();
 
   popSpecifiers();
 }
@@ -240,13 +240,13 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  m_declarationNode = node;
-  
+  m_mappedNodes.push(node);
   m_functionDefinedStack.push(0);
 
   DeclarationBuilderBase::visitSimpleDeclaration(node);
 
   m_functionDefinedStack.pop();
+  m_mappedNodes.pop();
 
   popSpecifiers();
 }
@@ -271,11 +271,8 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     Declaration* decl = openFunctionDeclaration(node->id, node);
     
     ///Create mappings iff the AST feature is specified
-    if(m_mapAstDuChain && m_declarationNode)
-    {
-      editor()->parseSession()->mapAstDuChain(m_declarationNode, KDevelop::DeclarationPointer(decl));
-      m_declarationNode = 0;
-    }
+    if(m_mapAstDuChain && !m_mappedNodes.empty())
+      editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(decl));
 
     if( !m_functionDefinedStack.isEmpty() ) {
         DUChainWriteLocker lock(DUChain::lock());
@@ -630,11 +627,8 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
   Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
   
   ///Create mappings iff the AST feature is specified
-  if(m_mapAstDuChain && m_declarationNode)
-  {
-    editor()->parseSession()->mapAstDuChain(m_declarationNode, KDevelop::DeclarationPointer(ret));
-    m_declarationNode = 0;
-  }
+  if(m_mapAstDuChain && !m_mappedNodes.empty())
+    editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(ret));
 
   DUChainWriteLocker lock(DUChain::lock());
   ret->setDeclarationIsDefinition(true);
@@ -1426,6 +1420,8 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
 }
 
 void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node) {
+  m_mappedNodes.push(node);
+  
   DeclarationBuilderBase::visitParameterDeclaration(node);
   
   AbstractFunctionDeclaration* function = currentDeclaration<AbstractFunctionDeclaration>();
@@ -1445,6 +1441,8 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
       closeDeclaration();
     }
   }
+  
+  m_mappedNodes.pop();
 }
 
 

@@ -63,7 +63,8 @@ void ParseSession::topAstNode(TranslationUnitAST * node)
 void ParseSession::mapAstDuChain ( AST * node , KDevelop::DeclarationPointer declaration)
 {
   //Duplicates shouldn't exist
-  Q_ASSERT(m_AstToDuchain.find(node) == m_AstToDuchain.end());
+  Q_ASSERT(m_AstToDuchain.find(node) == m_AstToDuchain.end() ||
+           m_AstToDuchain[node] != declaration);
   
   kDebug() << "Mapping AST node: " << names[node->kind] <<
               "With Declaration: " << declaration->toString();

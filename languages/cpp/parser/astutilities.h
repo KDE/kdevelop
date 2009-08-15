@@ -45,19 +45,33 @@ Target * node_cast(Source * node)
  * @tparam NodeType The known type of the node to be expecting
  * @param tree the top level node of the tree
  * @param index index of the declaration to access, is checked for validity
+ * @return the child requested casted to the type, or NULL if invalid
  */
 template<typename NodeType>
-NodeType * childNode(TranslationUnitAST * tree, int index)
+inline NodeType * childNode(TranslationUnitAST * tree, int index)
 {
-  Q_ASSERT(index < tree->declarations->count());
-  return node_cast<NodeType>(tree->declarations->at(index)->element);
+  return index < tree->declarations->count() ? node_cast<NodeType>(tree->declarations->at(index)->element) : 0;
 }
 
 template<typename NodeType>
-NodeType * childNode(ClassSpecifierAST * tree, int index)
+inline NodeType * childNode(ClassSpecifierAST * tree, int index)
 {
-  Q_ASSERT(index < tree->member_specs->count());
-  return node_cast<NodeType>(tree->member_specs->at(index)->element);
+  return index < tree->member_specs->count() ? node_cast<NodeType>(tree->member_specs->at(index)->element) : 0;
+}
+
+inline InitDeclaratorAST * childInitDeclarator(SimpleDeclarationAST * decl, int index)
+{
+  return index < decl->init_declarators->count() ? decl->init_declarators->at(index)->element : 0;
+}
+
+inline ParameterDeclarationAST * parameterAtIndex(ParameterDeclarationClauseAST * params, int index)
+{
+  return index < params->parameter_declarations->count() ? params->parameter_declarations->at(index)->element : 0;
+}
+
+inline ParameterDeclarationAST * parameterAtIndex(DeclaratorAST * decl, int index)
+{
+  return decl->parameter_declaration_clause ? parameterAtIndex(decl->parameter_declaration_clause, index) : 0;
 }
 
 }

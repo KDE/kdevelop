@@ -159,7 +159,7 @@ private:
   
   //Ast Mapping members
   bool m_mapAstDuChain;
-  AST * m_declarationNode;
+  QStack<AST *> m_mappedNodes;
 
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;
