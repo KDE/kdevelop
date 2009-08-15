@@ -38,6 +38,8 @@
 
 #include "documentswitchertreeview.h"
 #include <QStandardItemModel>
+#include <QApplication>
+#include <QDesktopWidget>
 
 K_PLUGIN_FACTORY(DocumentSwitcherFactory, registerPlugin<DocumentSwitcherPlugin>(); )
 K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevdocumentswitcher",ki18n("Document Switcher"), "0.1", ki18n("Switch between open documents using most-recently-used list"), KAboutData::License_GPL)))
@@ -91,7 +93,11 @@ void DocumentSwitcherPlugin::walkForward()
     if( !view->isVisible() )
     {
         fillModel( window );
-        view->move( QCursor::pos() );
+        // center on screen
+        {
+            const QRect bounds = QApplication::desktop()->screenGeometry();
+            view->move( (bounds.width() - view->width()) / 2, (bounds.height() - view->height()) / 2 );
+        }
         idx = model->index( 1, 0 );
         if( !idx.isValid() )
         {
@@ -135,7 +141,11 @@ void DocumentSwitcherPlugin::walkBackward()
     if( !view->isVisible() )
     {
         fillModel( window );
-        view->move( QCursor::pos() );
+        // center on screen
+        {
+            const QRect bounds = QApplication::desktop()->screenGeometry();
+            view->move( (bounds.width() - view->width()) / 2, (bounds.height() - view->height()) / 2 );
+        }
         idx = model->index( model->rowCount()-1, 0 );
         view->show();
     } else 
