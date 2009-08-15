@@ -90,6 +90,11 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
   QString insertedTrimmed = inserted.trimmed();
   
   TypeConversion::startCache();
+
+  QString lineText = view->document()->text(KTextEditor::Range(position.line(), 0, position.line(), position.column()));
+  
+  if(lineText.startsWith("#") && lineText.contains("include") && inserted == "/")
+    return true; //Directory-content completion
   
   if(insertedTrimmed.endsWith('\"'))
     return false; //Never start completion behind a string literal
@@ -100,7 +105,7 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
     return true;*/
   
   //Start automatic completion behind '::'
-  if(insertedTrimmed.endsWith(":") && position.column() > 1 && view->document()->text(KTextEditor::Range(position.line(), position.column()-2, position.line(), position.column())) == "::")
+  if(insertedTrimmed.endsWith(":") && position.column() > 1 && lineText.right(2) == "::")
     return true;
   
   return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);

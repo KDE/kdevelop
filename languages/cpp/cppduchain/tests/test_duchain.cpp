@@ -3132,6 +3132,48 @@ void TestDUChain::testSourceCodeInsertion()
 void TestDUChain::testSimplifiedTypeString()
 {
   {
+    QByteArray method("typedef int *honk, **honk2; honk k;");
+    TopDUContext* top = parse(method, DumpAll);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 3);
+    
+    QVERIFY(top->localDeclarations()[0]->abstractType().cast<TypeAliasType>());
+    QVERIFY(top->localDeclarations()[1]->abstractType().cast<TypeAliasType>());
+    QVERIFY(top->localDeclarations()[2]->abstractType().cast<TypeAliasType>());
+    
+    QCOMPARE(top->localDeclarations()[0]->abstractType().cast<TypeAliasType>()->qualifiedIdentifier(), QualifiedIdentifier("honk"));
+    QCOMPARE(top->localDeclarations()[0]->abstractType().cast<TypeAliasType>()->type()->toString(), QString("int*"));
+    
+    QCOMPARE(top->localDeclarations()[1]->abstractType().cast<TypeAliasType>()->qualifiedIdentifier(), QualifiedIdentifier("honk2"));
+    ///@todo Make this work as well, the init-declarators need to have separate types
+//     QCOMPARE(top->localDeclarations()[1]->abstractType().cast<TypeAliasType>()->type()->toString(), QString("int**"));
+    
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[2]->abstractType(), top).remove(' '), QString("honk").remove(' '));
+    release(top);
+  }
+  {
+    QByteArray method("typedef int const * const honkolo; honkolo k;");
+    TopDUContext* top = parse(method, DumpNone);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    
+    QVERIFY(top->localDeclarations()[0]->abstractType().cast<TypeAliasType>());
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[0]->abstractType().cast<TypeAliasType>()->type(), top).remove(' '), QString("const int *const").remove(' '));
+    release(top);
+  }
+  {
+    QByteArray method("class C; typedef C* honk; honk k;");
+    TopDUContext* top = parse(method, DumpNone);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 3);
+    
+    QCOMPARE(Cpp::simplifiedTypeString(top->localDeclarations()[2]->abstractType(), top).remove(' '), QString("honk").remove(' '));
+    release(top);
+  }
+  {
     QByteArray method("const int i;\n");
     
     TopDUContext* top = parse(method, DumpNone);

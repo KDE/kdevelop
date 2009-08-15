@@ -49,6 +49,8 @@ protected:
   // Created visitors
   virtual void visitArrayExpression(ExpressionAST*);
 
+  AbstractType::Ptr typeForCurrentDeclaration();
+  
   // Regular visitors
   virtual void visitClassSpecifier(ClassSpecifierAST*);
   virtual void visitBaseSpecifier(BaseSpecifierAST*);
@@ -81,7 +83,6 @@ protected:
   bool m_inTypedef;
   
   private:
-  void eventuallyCreateAliasType();
   void openDelayedType(const KDevelop::IndexedTypeIdentifier& identifier, AST* node, DelayedType::Kind kind);
 
 

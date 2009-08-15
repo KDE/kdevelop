@@ -183,17 +183,6 @@ bool TypeBuilder::lastTypeWasInstance() const
   return m_lastTypeWasInstance;
 }
 
-void TypeBuilder::eventuallyCreateAliasType() {
-  if(m_inTypedef) {
-    KDevelop::TypeAliasType::Ptr alias(new KDevelop::TypeAliasType());
-    openType(alias);
-    
-    alias->setType(lastType());
-      
-    closeType();
-  }
-}
-
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
   m_lastTypeWasInstance = false;
@@ -209,8 +198,6 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
     if(openedType)
       closeType();
-    
-    eventuallyCreateAliasType();
     
     return;
   }
@@ -330,8 +317,6 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 
   if (openedType)
     closeType();
-
-  eventuallyCreateAliasType();
 }
 
 void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
@@ -482,6 +467,18 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
   TypeBuilderBase::visitTypedef(node);
 
 //   closeType();
+}
+
+AbstractType::Ptr TypeBuilder::typeForCurrentDeclaration()
+{
+  if(m_inTypedef) {
+    kDebug() << "returning type alias type for declaration";
+    KDevelop::TypeAliasType::Ptr alias(new KDevelop::TypeAliasType());
+    alias->setType(lastType());
+    return alias.cast<AbstractType>();
+  }else{
+    return lastType();
+  }
 }
 
 void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)

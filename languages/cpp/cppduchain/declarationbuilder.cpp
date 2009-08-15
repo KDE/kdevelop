@@ -729,7 +729,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       
     if (lastType()) {
 
-      AbstractType::Ptr type = lastType();
+      AbstractType::Ptr type = typeForCurrentDeclaration();
       IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.unsafeData());
       DelayedType::Ptr delayed = type.cast<DelayedType>();
 
@@ -748,7 +748,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
           currentDeclaration()->setKind(Declaration::Type);
       }
 
-      currentDeclaration()->setType(lastType());
+      currentDeclaration()->setType(type);
     }else{
       currentDeclaration()->setAbstractType(AbstractType::Ptr());
     }
