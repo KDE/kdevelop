@@ -187,13 +187,17 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseFunctionSpecifiers(node->function_specifiers);
   
   //Used to map to the top level function node once the Declaration is built
-  m_mappedNodes.push(node);
+  if(m_mapAstDuChain)
+    m_mappedNodes.push(node);
+  
   m_functionDefinedStack.push(node->start_token);
 
   DeclarationBuilderBase::visitFunctionDeclaration(node);
 
   m_functionDefinedStack.pop();
-  m_mappedNodes.pop();
+  
+  if(m_mapAstDuChain)
+    m_mappedNodes.pop();
 
   popSpecifiers();
 }
@@ -240,13 +244,17 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  m_mappedNodes.push(node);
+  if(m_mapAstDuChain)
+    m_mappedNodes.push(node);
+  
   m_functionDefinedStack.push(0);
 
   DeclarationBuilderBase::visitSimpleDeclaration(node);
 
   m_functionDefinedStack.pop();
-  m_mappedNodes.pop();
+  
+  if(m_mapAstDuChain)
+    m_mappedNodes.pop();
 
   popSpecifiers();
 }
@@ -1419,8 +1427,10 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
   m_functionSpecifiers.push(specs);
 }
 
-void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node) {
-  m_mappedNodes.push(node);
+void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
+{
+  if(m_mapAstDuChain)
+    m_mappedNodes.push(node);
   
   DeclarationBuilderBase::visitParameterDeclaration(node);
   
@@ -1442,7 +1452,8 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
     }
   }
   
-  m_mappedNodes.pop();
+  if(m_mapAstDuChain)
+    m_mappedNodes.pop();
 }
 
 
