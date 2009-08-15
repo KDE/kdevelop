@@ -29,6 +29,9 @@ class KUrl;
 class KDirWatch;
 template <typename T> class QList;
 
+///FIXME: remove once the hack is gone
+class KJob;
+
 namespace KIO
 {
 class Job;
@@ -91,6 +94,9 @@ private Q_SLOTS:
     ///NOTE: make sure the project for the job's URL is already registered at the controller
     void addJobItems(KIO::Job* j, KIO::UDSEntryList entries);
     void waitForProjectOpen( KDevelop::IProject* project );
+
+    ///FIXME: remove this hack once async managers are better supported
+    void startProjectParseJob(KJob* j);
 
 private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,

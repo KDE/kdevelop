@@ -44,6 +44,11 @@
 #include <KIO/Job>
 #include <KIO/NetAccess>
 
+///FIXME: remove the hack and these includes
+#include <interfaces/isession.h>
+#include <language/backgroundparser/parseprojectjob.h>
+///END
+
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
 K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericprojectmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
 
@@ -133,6 +138,32 @@ void GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* i
 
     connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
                 this, SLOT(addJobItems(KIO::Job*, KIO::UDSEntryList)) );
+
+    /// FIXME: once async project managers are supported, we won't have to do this hack
+    /// since parse() cannot return anything the parseprojectjob gets a list of empty files
+    /// => hence this hack at least starts the parsepojrectjob if required
+    if ( item->isProjectRoot() &&
+         KDevelop::ICore::self()->activeSession()->config()->group( "Project Manager" ).readEntry( "Parse All Project Sources", true ) )
+    {
+        connect( job, SIGNAL(result(KJob*)),
+                this, SLOT(startProjectParseJob(KJob*)) );
+    }
+}
+
+void GenericProjectManager::startProjectParseJob( KJob* j )
+{
+    if ( j->error() ) {
+        return;
+    }
+    KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(j));
+    Q_ASSERT(job);
+
+    KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl(job->url());
+    if ( !project ) {
+        return;
+    }
+    KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
+    KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
 }
 
 void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
