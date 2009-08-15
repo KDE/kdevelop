@@ -29,7 +29,7 @@ class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
     CompletionSettings()
         : m_level(MinimalWhenAutomatic), m_automatic(true),
-          m_highlightSemanticProblems(true), m_showMultiLineInformation(true),
+          m_highlightSemanticProblems(true), m_showMultiLineInformation(false),
           m_localColorizationLevel(170), m_globalColorizationLevel(255)
     {
     }

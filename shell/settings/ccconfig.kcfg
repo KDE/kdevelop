@@ -19,7 +19,7 @@
     <default>false</default>
     </entry>
     <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
-    <default>true</default>
+    <default>false</default>
     </entry>
     <entry name="localColorization" key="localColorization" type="Int">
     <default>120</default>
