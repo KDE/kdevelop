@@ -39,7 +39,7 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
 
 ProblemHighlighter::~ProblemHighlighter()
 {
-    if(m_topHLRanges.isEmpty())
+    if(m_topHLRanges.isEmpty() || !m_document)
         return;
 
     KDevelop::EditorIntegrator editor;

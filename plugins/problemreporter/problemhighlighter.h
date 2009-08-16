@@ -25,6 +25,7 @@
 #include <KTextEditor/SmartRangeWatcher>
 
 #include <language/interfaces/iproblem.h>
+#include <qpointer.h>
 
 class ProblemHighlighter : public KTextEditor::SmartRangeWatcher
 {
@@ -42,7 +43,7 @@ private:
 
     void clearHighlights();
 
-    KTextEditor::Document* m_document;
+    QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::SmartRange*> m_topHLRanges;
 };
 
