@@ -106,7 +106,13 @@ public:
     /**checks that url is an url of empty document*/
     static bool isEmptyDocumentUrl(const KUrl &url);
     static KUrl nextEmptyDocumentUrl();
+    
+    virtual IDocumentFactory* factory(const QString& mime) const;
 
+    
+    virtual bool openDocument(IDocument* doc,
+                              const KTextEditor::Range& range = KTextEditor::Range::invalid(),
+                              DocumentActivationParams activationParams = 0);
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open. If it is empty, a dialog to choose the document will be opened.

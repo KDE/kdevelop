@@ -197,6 +197,16 @@ void PartDocument::setUrl(const KUrl& newUrl)
     notifyUrlChanged();
 }
 
+QMap<QWidget*, KParts::Part*> PartDocument::partForView() const
+{
+    return d->partForView;
+}
+
+void PartDocument::addPartForView(QWidget* w, KParts::Part* p)
+{
+    d->partForView[w]=p;
+}
+
 }
 
 #include "partdocument.moc"

@@ -1,3 +1,4 @@
+
 /***************************************************************************
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *                                                                         *
@@ -56,6 +57,12 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/interfaces/editorcontext.h>
+
+#include <config-kdevplatform.h>
+#if HAVE_KOMPARE
+#include <KTemporaryFile>
+#include <interfaces/ipatchdocument.h>
+#endif
 
 namespace KDevelop
 {
@@ -223,6 +230,46 @@ void VcsPluginHelper::diffToHead()
     d->plugin->core()->runController()->registerJob(job);
 }
 
+#if HAVE_KOMPARE
+void showDiff(const KDevelop::VcsDiff& d)
+{
+    ICore::self()->uiController()->switchToArea("test", KDevelop::IUiController::ThisWindow);
+    foreach(const VcsLocation& l, d.leftTexts().keys())
+    {
+        KUrl to;
+        if(d.rightTexts().contains(l))
+        {
+            KTemporaryFile temp2;
+            temp2.setSuffix("2.patch");
+            temp2.setAutoRemove(false);
+            temp2.open();
+            QTextStream t2(&temp2);
+            t2 << d.rightTexts()[l];
+            temp2.close();
+            to=temp2.fileName();
+        }
+        else
+            to=l.localUrl();
+        
+        KUrl fakeUrl(to);
+        fakeUrl.setScheme("kdevpatch");
+        
+        IDocumentFactory* docf=ICore::self()->documentController()->factory("text/x-patch");
+        IDocument* doc=docf->create(fakeUrl, ICore::self());
+        IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
+        
+        Q_ASSERT(pdoc);
+        ICore::self()->documentController()->openDocument(doc);
+        pdoc->setDiff(d.leftTexts()[l], to);
+    }
+}
+#else
+void showDiff(const KDevelop::VcsDiff& d)
+{
+    ICore::self()->documentController()->openDocumentFromText(d.diff());
+}
+#endif
+
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
     KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
@@ -231,8 +278,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            QString diff = d.diff();
-            ICore::self()->documentController()->openDocumentFromText(diff);
+            showDiff(d);
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }

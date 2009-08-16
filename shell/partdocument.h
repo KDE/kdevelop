@@ -68,6 +68,12 @@ public:
 
     //Overridden from Sublime::Document
     virtual bool closeDocument();
+protected:
+    /** Gives us access to the KParts */
+    QMap<QWidget*, KParts::Part*> partForView() const;
+    
+    /** Lets us override the createViewWidget method safely */
+    void addPartForView(QWidget* widget, KParts::Part* part);
     
 private:
     class PartDocumentPrivate * const d;

@@ -53,6 +53,10 @@ Boston, MA 02110-1301, USA.
 #include "savedialog.h"
 #include <kmessagebox.h>
 
+#include <config-kdevplatform.h>
+#if HAVE_KOMPARE
+    #include "patchdocument.h"
+#endif
 
 namespace KDevelop
 {
@@ -182,7 +186,10 @@ struct DocumentControllerPrivate {
         }
         
         //get a part document
-        if (!documents.contains(url))
+        IDocument* doc=0;
+        if (documents.contains(url))
+            doc=documents.value(url);
+        else
         {
             KMimeType::Ptr mimeType;
 
@@ -219,50 +226,74 @@ struct DocumentControllerPrivate {
                 {
                     KPluginInfo info = plugins.first();
                     Core::self()->pluginController()->loadPlugin( info.pluginName() );
-                    if( factories.contains( mimeType->name() ) )
-                    {
-                        IDocument* idoc = factories[mimeType->name()]->create(url, Core::self());
-                        if( idoc )
-                        {
-                            documents[url] = idoc;
-                        }
-                    }
                 }
             }
             
-            if(!documents.contains(url)) {
+            if( factories.contains( mimeType->name() ) )
+            {
+                doc = factories[mimeType->name()]->create(url, Core::self());
+            }
+            
+            if(!doc) {
                 if( !prefName.isEmpty() ) 
                 {
-                    documents[url] = new PartDocument(url, Core::self(), prefName);
+                    doc = new PartDocument(url, Core::self(), prefName);
                 } else  if ( Core::self()->partControllerInternal()->isTextType(mimeType)) 
                 {
-                    documents[url] = new TextDocument(url, Core::self(), encoding);
+                    doc = new TextDocument(url, Core::self(), encoding);
                 } else if( Core::self()->partControllerInternal()->canCreatePart(url) ) 
                 {
-                    documents[url] = new PartDocument(url, Core::self());
+                    doc = new PartDocument(url, Core::self());
                 } else
                 {
                     int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
                     if (openAsText == KMessageBox::Yes)
-                        documents[url] = new TextDocument(url, Core::self(), encoding);
+                        doc = new TextDocument(url, Core::self(), encoding);
                     else
                         return 0;
                 }
             }
-            emitOpened = documents.contains(url);
         }
-        IDocument *doc = documents[url];
+        
+        if(doc && openDocumentInternal(doc, range, activationParams))
+            return doc;
+        else
+            return 0;
+        
+    }
+    
+    bool openDocumentInternal(IDocument* doc,
+                                const KTextEditor::Range& range,
+                                DocumentController::DocumentActivationParams activationParams)
+    {
+        IDocument* previousActiveDocument = controller->activeDocument();
+        KTextEditor::Cursor previousActivePosition;
+        if(previousActiveDocument && previousActiveDocument->textDocument() && previousActiveDocument->textDocument()->activeView())
+            previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
+        
+        KUrl url=doc->url();
+        UiController *uiController = Core::self()->uiControllerInternal();
+        Sublime::Area *area = uiController->activeArea();
+        
+        //We can't have the same url in many documents
+        //so we check it's already the same if it exists
+        //contains=>it's the same
+        Q_ASSERT(!documents.contains(url) || documents[url]==doc);
 
         Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
         if( !sdoc )
         {
             documents.remove(url);
             delete doc;
-            return 0;
+            return false;
         }
         //react on document deletion - we need to cleanup controller structures
         QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(removeDocument(Sublime::Document*)));
-
+        //We check if it was already opened before
+        bool emitOpened = documents.contains(url);
+        if(!emitOpened)
+            documents[url]=doc;
+        
         if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
         {
             //find a view if there's one already opened in this area
@@ -316,7 +347,7 @@ struct DocumentControllerPrivate {
 
         // Deferred signals, wait until it's all ready first
         if( emitOpened ) {
-            emit controller->documentOpened( documents[url] );
+            emit controller->documentOpened( doc );
         }
 
         if (!activationParams.testFlag(IDocumentController::DoNotActivate) && doc != controller->activeDocument())
@@ -336,7 +367,7 @@ struct DocumentControllerPrivate {
             emit controller->documentJumpPerformed(doc, range.isValid() ? range.start() : activePosition, previousActiveDocument, previousActivePosition);
         }
         
-        return doc;
+        return true;
     }
 
     DocumentController* controller;
@@ -369,6 +400,10 @@ DocumentController::DocumentController( QObject *parent )
     connect(this, SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(changeDocumentUrl(KDevelop::IDocument*)));
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+
+#if HAVE_KOMPARE    
+    registerDocumentForMimetype("text/x-patch", new PatchDocumentFactory);
+#endif
 }
 
 void KDevelop::DocumentController::initialize()
@@ -488,6 +523,15 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
 {
     return d->openDocumentInternal( inputUrl, "", range, activationParams );
 }
+
+
+bool DocumentController::openDocument(IDocument* doc,
+                                      const KTextEditor::Range& range,
+                                      DocumentActivationParams activationParams)
+{
+    return d->openDocumentInternal( doc, range, activationParams );
+}
+
 
 void DocumentController::fileClose()
 {
@@ -758,6 +802,11 @@ KUrl DocumentController::nextEmptyDocumentUrl()
     else
         url = KUrl(EMPTY_DOCUMENT_URL);
     return url;
+}
+
+IDocumentFactory* DocumentController::factory(const QString& mime) const
+{
+    return d->factories.value(mime);
 }
 
 }

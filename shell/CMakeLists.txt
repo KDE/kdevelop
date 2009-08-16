@@ -71,6 +71,10 @@ set(kdevplatformshell_LIB_SRCS
     kross/wrappers/krossqtoolbar.cpp
 )
 
+if(HAVE_KOMPARE)
+	set(kdevplatformshell_LIB_SRCS ${kdevplatformshell_LIB_SRCS} patchdocument.cpp)
+endif(HAVE_KOMPARE)
+
 set(kdevplatformshell_UI
     sessiondialog.ui
     projectinfopage.ui

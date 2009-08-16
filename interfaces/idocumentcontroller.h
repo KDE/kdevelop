@@ -88,6 +88,7 @@ public:
 
     virtual void notifyDocumentClosed(IDocument* doc) = 0;
 
+    virtual IDocumentFactory* factory(const QString& mime) const = 0;
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
@@ -104,7 +105,14 @@ public Q_SLOTS:
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0 ) = 0;
-            
+    
+    /** Opens a document from the IDocument instance.
+    @param doc The IDocument to add
+    @param range The location information, if applicable.
+    @param activationParams Indicates whether to fully activate the document.*/
+    virtual Q_SCRIPTABLE bool openDocument(IDocument* doc,
+            const KTextEditor::Range& range = KTextEditor::Range::invalid(),
+            DocumentActivationParams activationParams = 0) = 0;
             
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
