@@ -1,6 +1,6 @@
 project(kdevelop)
 
-set(KDE4_BUILD_TESTS "ON")
+set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Build KDE4 tests" FORCE )
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
