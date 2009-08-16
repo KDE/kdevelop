@@ -11,6 +11,7 @@ X-KDE-ParentComponents=KDevGenericManager
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Project Settings
+Name[bg]=Настройки на проекта
 Name[ca]=Arranjaments del projecte
 Name[de]=Projekteinstellungen
 Name[el]=Ρυθμίσεις έργου
@@ -32,6 +33,7 @@ Name[x-test]=xxProject Settingsxx
 Name[zh_CN]=工程设置
 Name[zh_TW]=專案設定
 Comment=Configure Project
+Comment[bg]=Конфигуриране на проект
 Comment[ca]=Configura el projecte
 Comment[de]=Projekt einrichten
 Comment[el]=Ρύθμιση έργου
