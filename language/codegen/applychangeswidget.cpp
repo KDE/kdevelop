@@ -55,7 +55,7 @@ struct ApplyChangesWidgetPrivate
     
     void addItem(QStandardItemModel* mit, KTextEditor::Document *document, const KTextEditor::Range &range, const QString& type);
     void jump( const QModelIndex & idx);
-    void createEditPart(const KDevelop::IndexedString& url, const QString& info);
+    void createEditPart(const KDevelop::IndexedString& url);
     void updateButtonLabel();
 
     
@@ -66,6 +66,7 @@ struct ApplyChangesWidgetPrivate
     QList<KTemporaryFile * > m_temps;
     QList<QPair<IndexedString, IndexedString> > m_files;
     KTabWidget * m_documentTabs;
+    QLabel* m_info;
     
     KompareWidgets m_kompare;
 };
@@ -76,8 +77,6 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     setSizeGripEnabled(true);
     setInitialSize(QSize(800, 400));
     
-    d->m_documentTabs = new KTabWidget(this);
-    
     KDialog::setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1);
     KPushButton * switchButton(KDialog::button(KDialog::User1));
     switchButton->setText(i18n("Edit Document"));
@@ -85,10 +84,18 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     
     connect(switchButton, SIGNAL(released()),
             this, SLOT(switchEditView()));
+    
+    QWidget* w=new QWidget(this);
+    d->m_info=new QLabel(w);
+    d->m_documentTabs = new KTabWidget(w);
     connect(d->m_documentTabs, SIGNAL(currentChanged(int)),
             this, SLOT(indexChanged(int)));
+            
+    QVBoxLayout* l = new QVBoxLayout(w);
+    l->addWidget(d->m_info);
+    l->addWidget(d->m_documentTabs);
     
-    setMainWidget(d->m_documentTabs);
+    setMainWidget(w);
 }
 
 ApplyChangesWidget::~ApplyChangesWidget()
@@ -101,7 +108,12 @@ KTextEditor::Document* ApplyChangesWidget::document() const
     return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
 }
 
-void ApplyChangesWidget::addDocuments(const IndexedString & original, const IndexedString & modified, const QString & info)
+void ApplyChangesWidget::setInformation(const QString & info)
+{
+    d->m_info->setText(info);
+}
+
+void ApplyChangesWidget::addDocuments(const IndexedString & original, const IndexedString & modified)
 {
     
     QWidget * w = new QWidget;
@@ -116,7 +128,7 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original, const Inde
 #endif
     d->m_files.insert(d->m_index, qMakePair(original, modified));
     
-    d->createEditPart(modified, info);
+    d->createEditPart(modified);
     switchEditView();
 }
 
@@ -182,13 +194,14 @@ void ApplyChangesWidgetPrivate::updateButtonLabel()
         switchButton->setText(i18n("View Differences"));
 }
 
-void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const QString & info)
+void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
 {
     QWidget * widget = m_documentTabs->currentWidget();
     Q_ASSERT(widget);
     
     QVBoxLayout *m=new QVBoxLayout(widget);
     QSplitter *v=new QSplitter(widget);
+    m->addWidget(v);
     
     KUrl url = file.toUrl();
     
@@ -221,11 +234,6 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file, const
     v->addWidget(m_editParts[m_index]->widget());
     v->addWidget(changesView);
     v->setSizes(QList<int>() << 400 << 100);
-    
-    QLabel* l=new QLabel(info, widget);
-    l->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    m->addWidget(l);
-    m->addWidget(v);
     
     QObject::connect(m_editParts[m_index], SIGNAL(textChanged(KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range)),
             parent, SLOT(change (KTextEditor::Document*, KTextEditor::Range, KTextEditor::Range)));

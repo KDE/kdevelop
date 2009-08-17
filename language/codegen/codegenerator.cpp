@@ -222,10 +222,12 @@ bool CodeGeneratorBase::displayChanges()
     }
     
     ApplyChangesWidget widget;
+    //TODO: Find some good information to put
+    widget.setInformation("Info?");
     
     typedef QPair<IndexedString, IndexedString> NameList;
     foreach(const NameList & namePair, d->documentChanges.tempNamesForAll())
-        widget.addDocuments(namePair.first , namePair.second, "Info?");
+        widget.addDocuments(namePair.first , namePair.second);
     
     if(widget.exec())
         return widget.applyAllChanges();
