@@ -928,25 +928,8 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     m.name = macro->macroName();
     m.knownArgs=macro->knownArgs();
     m.isFunction=false;
-    CMakeFileContent::const_iterator it=macro->content().constBegin()+macro->line();
-    CMakeFileContent::const_iterator itEnd=macro->content().constEnd();
-    int lines=0;
-    for(; it!=itEnd; ++it, ++lines)
-    {
-        if(it->name.toLower()=="endmacro")
-            break;
-        m.code += *it;
-    }
-    ++lines; //We do not want to return to endmacro
-
-    if(it!=itEnd)
-    {
-        m_macros->insert(macro->macroName(), m);
-        macroDeclaration(macro->content()[macro->line()],
-                     macro->content()[macro->line()+lines-1],
-                     m.knownArgs);
-    }
-    return lines;
+    
+    return declareFunction(m, macro->content(), macro->line());
 }
 
 int CMakeProjectVisitor::visit(const FunctionAst *func)
@@ -956,8 +939,14 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
     m.name = func->name();
     m.knownArgs=func->knownArgs();
     m.isFunction=true;
-    CMakeFileContent::const_iterator it=func->content().constBegin()+func->line();
-    CMakeFileContent::const_iterator itEnd=func->content().constEnd();
+    
+    return declareFunction(m, func->content(), func->line());
+}
+
+int CMakeProjectVisitor::declareFunction(Macro m, const CMakeFileContent& content, int initial)
+{
+    CMakeFileContent::const_iterator it=content.constBegin()+initial;
+    CMakeFileContent::const_iterator itEnd=content.constEnd();
 
     int lines=0;
     for(; it!=itEnd; ++it)
@@ -971,11 +960,9 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
 
     if(it!=itEnd)
     {
-        m_macros->insert(func->name(), m);
+        m_macros->insert(m.name, m);
 
-        macroDeclaration(func->content()[func->line()],
-                        func->content()[func->line()+lines-1],
-                        m.knownArgs);
+        macroDeclaration(content[initial], content[initial+lines-1], m.knownArgs);
     }
     return lines;
 }
@@ -2008,10 +1995,21 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
         m_vars->insert("CMAKE_CURRENT_LIST_LINE", QStringList(QString::number(it->line)));
         int lines=element->accept(this);
         line+=lines;
-        it+=lines;
         m_backtrace.top().line = line;
         m_backtrace.top().context = m_topctx;
         delete element;
+        
+        if(line>fc.count()) {
+            DUChainWriteLocker lock(DUChain::lock());
+            KSharedPtr<Problem> p(new Problem);
+            p->setDescription(i18n("Unfinished function. "));
+            p->setRange(it->nameRange());
+            m_topctx->addProblem(p);
+            
+            break;
+        }
+        
+        it+=lines;
     }
     m_backtrace.pop();
     m_topctx=aux;

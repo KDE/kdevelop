@@ -166,6 +166,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void printBacktrace(const QStack<VisitorState> &backtrace);
         VisitorState stackTop() const;
         QStringList dependees(const QString& s) const;
+        int declareFunction(Macro m, const CMakeFileContent& content, int initial);
 
         CMakeProperties m_props;
         QStringList m_modulePath;
