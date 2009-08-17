@@ -184,6 +184,12 @@ public:
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = 0 ) { return 0; }
+            
+    virtual bool openDocument(KDevelop::IDocument* doc,
+                              const KTextEditor::Range& range = KTextEditor::Range::invalid(),
+                              DocumentActivationParams activationParams = 0) { return true; }
+
+    virtual KDevelop::IDocumentFactory* factory(const QString& mime) const { return 0; }
     virtual void closeAllDocuments() {}
 
     void emitDocumentActivated(KDevelop::IDocument* doc) {
