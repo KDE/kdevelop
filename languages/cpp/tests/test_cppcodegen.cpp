@@ -62,7 +62,7 @@ void TestCppCodegen::initTestCase()
   //NOTE: To #include another artificial Code Representation, it must be as an absolute path
   addArtificialCode(IndexedString(CodeRepresentation::artificialUrl("ClassA.h")), "class ClassA { public: ClassA(); private: int i;  float f, j;\
                                                        struct ContainedStruct { int i; ClassA * p;  } structVar; };");
-  addArtificialCode(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")), "#include<ClassA.h> \n ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; }");
+  addArtificialCode(IndexedString(CodeRepresentation::artificialUrl("ClassA.cpp")), "#include<ClassA.h> \n ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; ContainedStruct testStruct; }");
   
   addArtificialCode(IndexedString(CodeRepresentation::artificialUrl("AbstractClass.h")), "class AbstractClass { public: virtual ~AbstractClass();\
                                                        virtual void pureVirtual() = 0; virtual const int constPure(const int &) const = 0; \

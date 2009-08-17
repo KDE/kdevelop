@@ -20,7 +20,8 @@ class ClassA
 #include </ClassA.h>
 ClassA::ClassA() : i(0), j(0.0)
 {
-    structVar.i = 0; 
+    structVar.i = 0;
+    ContainedStruct testStruct;
 }
 
 // ==ClassDerived.h==
