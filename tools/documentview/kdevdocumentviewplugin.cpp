@@ -88,6 +88,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
 KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantList& args )
         : KDevelop::IPlugin( KDevDocumentViewFactory::componentData(), parent )
 {
+    Q_UNUSED( args );
 
     factory = new KDevDocumentViewPluginFactory( this );
 
