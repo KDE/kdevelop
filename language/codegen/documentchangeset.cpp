@@ -47,6 +47,7 @@ struct DocumentChangeSetPrivate
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
     QMap< IndexedString, IndexedString > tempToOriginal;
     
+    DocumentChangeSet::ChangeResult addChange(DocumentChangePointer change);
     DocumentChangeSet::ChangeResult replaceOldText(CodeRepresentation * repr, const QString & newText, const QList<DocumentChangePointer> & sortedChangesList);
     DocumentChangeSet::ChangeResult generateNewText(const KDevelop::IndexedString & file, QList< KDevelop::DocumentChangePointer > & sortedChanges, const KDevelop::CodeRepresentation* repr, QString& output);
     DocumentChangeSet::ChangeResult removeDuplicates(const IndexedString & file, QList<DocumentChangePointer> & filteredChanges);
@@ -108,18 +109,18 @@ DocumentChangeSet::~DocumentChangeSet()
 }
 
 KDevelop::DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const KDevelop::DocumentChange& change) {
-    return addChange(DocumentChangePointer(new DocumentChange(change)));
+    return d->addChange(DocumentChangePointer(new DocumentChange(change)));
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(DocumentChangePointer change) {
+DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(DocumentChangePointer change) {
     if(change->m_range.start.line != change->m_range.end.line)
-        return ChangeResult("Multi-line ranges are not supported");
+        return DocumentChangeSet::ChangeResult("Multi-line ranges are not supported");
     
-    if(d->tempFiles.contains(change->m_document))
-        d->adjustChangeToTemp(change);
+    if(tempFiles.contains(change->m_document))
+        adjustChangeToTemp(change);
     
-    d->changes[change->m_document].append(change);
-    return ChangeResult(true);
+    changes[change->m_document].append(change);
+    return true;
 }
 
 /*
@@ -147,14 +148,14 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
         if(d->changes.contains(file))
         {
             foreach(const DocumentChangePointer & change, d->changes[file])
-                rhs.addChange(change);
+                rhs.d->addChange(change);
             d->changes.remove(file);
         }
     
     /// @todo Possibly check for duplicates, since it could create a lot of bloat when big changes are merged
     foreach(const QList<DocumentChangePointer> & changeList, rhs.d->changes.values())
         foreach(const DocumentChangePointer & change, changeList)
-            addChange(change);
+            d->addChange(change);
 
     /// @todo Fix for a possibility of two different temporaries created for the same fileName
     d->tempFiles.unite(rhs.d->tempFiles);
