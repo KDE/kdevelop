@@ -929,7 +929,7 @@ int CMakeProjectVisitor::visit(const MacroAst *macro)
     m.knownArgs=macro->knownArgs();
     m.isFunction=false;
     
-    return declareFunction(m, macro->content(), macro->line());
+    return declareFunction(m, macro->content(), macro->line(), "endmacro");
 }
 
 int CMakeProjectVisitor::visit(const FunctionAst *func)
@@ -940,10 +940,11 @@ int CMakeProjectVisitor::visit(const FunctionAst *func)
     m.knownArgs=func->knownArgs();
     m.isFunction=true;
     
-    return declareFunction(m, func->content(), func->line());
+    return declareFunction(m, func->content(), func->line(), "endfunction");
 }
 
-int CMakeProjectVisitor::declareFunction(Macro m, const CMakeFileContent& content, int initial)
+int CMakeProjectVisitor::declareFunction(Macro m, const CMakeFileContent& content,
+                                         int initial, const QString& end)
 {
     CMakeFileContent::const_iterator it=content.constBegin()+initial;
     CMakeFileContent::const_iterator itEnd=content.constEnd();
@@ -951,7 +952,7 @@ int CMakeProjectVisitor::declareFunction(Macro m, const CMakeFileContent& conten
     int lines=0;
     for(; it!=itEnd; ++it)
     {
-        if(it->name.toLower()=="endfunction")
+        if(it->name.toLower()==end)
             break;
         m.code += *it;
         ++lines;
@@ -1959,7 +1960,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             element = new MacroCallAst;
 
         createUses(*it);
-//         kDebug(9042) << "resolving:" << it->writeBack();
+        kDebug(9042) << "resolving:" << it->writeBack();
             
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
