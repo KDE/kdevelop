@@ -595,8 +595,8 @@ bool CMakeManager::reload(KDevelop::ProjectBaseItem* it)
 {
     CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(it->folder());
     while(!item && it->parent()) {
-        item=dynamic_cast<CMakeFolderItem*>(it->folder());
         it=dynamic_cast<ProjectBaseItem*>(it->parent());
+        item=dynamic_cast<CMakeFolderItem*>(it->folder());
     }
     
     if (!item || it == it->project()->projectItem()) {
@@ -891,7 +891,9 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
 //     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
 
     ApplyChangesWidget e;
-    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Create a folder called '%1'.", relative));
+    e.setCaption(relative);
+    e.setInformation(i18n("Create a folder called '%1'.", relative));
+    e.addDocuments(IndexedString(lists), IndexedString(lists));
 
     e.document()->insertLine(e.document()->lines(), QString("add_subdirectory(%1)").arg(relative));
 
@@ -929,7 +931,9 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
     }
 
     ApplyChangesWidget e;
-    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Remove a folder called '%1'.", it->text()));
+    e.setCaption(it->text());
+    e.setInformation(i18n("Remove a folder called '%1'.", it->text()));
+    e.addDocuments(IndexedString(lists), IndexedString(lists));
     
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
     KTextEditor::Range r=cmit->descriptor().range().textRange();
@@ -986,8 +990,8 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
             for(int l=r.start.line; ;l++)
             {
                 QString line=doc->line(l);
-                int c;
-                if((c=line.indexOf(')'))>=0) {
+                int c=line.indexOf(')');
+                if(c>=0) {
                     r.end=SimpleCursor(l,c);
                     break;
                 } else if(line.isEmpty()) {
@@ -1036,7 +1040,9 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     lists.addPath("CMakeLists.txt");
 
     ApplyChangesWidget e;
-    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Remove a file called '%1'.", it->text()));
+    e.setCaption(it->text());
+    e.setInformation(i18n("Remove a file called '%1'.", it->text()));
+    e.addDocuments(IndexedString(lists), IndexedString(lists));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false);
     if(ret)
@@ -1069,6 +1075,8 @@ KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::Pro
 
 bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
 {
+    Q_ASSERT(!it->url().isEmpty());
+    
     QSet<QString> headerExt=QSet<QString>() << ".h" << ".hpp" << ".hxx";
     foreach(const QString& ext, headerExt)
     {
@@ -1091,9 +1099,11 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     lists.addPath("CMakeLists.txt");
 
     ApplyChangesWidget e;
-    e.addDocuments(IndexedString(lists), IndexedString(lists), i18n("Add a file called '%1' to target '%2'.", it->text(), target->text()));
+    e.setCaption(it->fileName());
+    e.setInformation(i18n("Add a file called '%1' to target '%2'.", it->fileName(), target->text()));
+    e.addDocuments(IndexedString(lists), IndexedString(lists));
 
-    bool ret=followUses(e.document(), r, ' '+it->text(), lists, true);
+    bool ret=followUses(e.document(), r, ' '+it->fileName(), lists, true);
 
     if(ret && e.exec())
         ret=e.applyAllChanges();
