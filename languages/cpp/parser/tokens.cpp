@@ -55,7 +55,7 @@ static char const * const _S_token_names[] = {
   "dynamic_cast",
   "ellipsis",
   "else",
-  "emit",
+  //"emit",
   "enum",
   "eq",
   "explicit",

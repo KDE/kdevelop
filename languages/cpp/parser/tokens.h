@@ -61,7 +61,7 @@ enum TOKEN_KIND
     Token_dynamic_cast,
     Token_ellipsis,
     Token_else,
-    Token_emit,
+    //Token_emit, // Disable emit as its also a valid function call and the token isn't used anywhere
     Token_enum,
     Token_eq,
     Token_explicit,

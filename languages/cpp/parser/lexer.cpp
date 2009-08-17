@@ -152,7 +152,7 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(double);
   ADD_TOKEN(dynamic_cast);
   ADD_TOKEN(else);
-  ADD_TOKEN(emit);
+  //ADD_TOKEN(emit);
   ADD_TOKEN(enum);
   ADD_TOKEN(explicit);
   ADD_TOKEN(export);
