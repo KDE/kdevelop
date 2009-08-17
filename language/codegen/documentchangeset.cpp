@@ -32,6 +32,7 @@
 #include <interfaces/isourceformatter.h>
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
+#include <algorithm>
 
 namespace KDevelop {
 
@@ -121,8 +122,15 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(DocumentChangePoint
     return ChangeResult(true);
 }
 
+/*
+ * Merges the changes from both DocumentChangeSets.
+ * Merging changes from two changesets that have each applied temp changes is not supported
+ * When temp files have been created in one change set, but not the other, all the changes from the
+ * original file need to be adjusted, so they correspond to the temp version.
+ */
 DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
 {
+#ifndef NDEBUG
     kDebug() << "Merging DocumentChangeSets, tempFiles.\nTemp Files in lhs:";
     for(QMap <KDevelop::IndexedString, KDevelop::DocumentChangeSetPrivate::TempPair >::iterator it = d->tempFiles.begin();
         it != d->tempFiles.end(); ++it)
@@ -131,18 +139,31 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
     for(QMap <KDevelop::IndexedString, KDevelop::DocumentChangeSetPrivate::TempPair >::iterator it = rhs.d->tempFiles.begin();
         it != rhs.d->tempFiles.end(); ++it)
         kDebug() << it.key().str() << " " << it->first.str();
+#endif //NDEBUG
+    
+    //If a temp has been created on the rhs changeset, then the changes in this one must be adjusted
+    //This is not an efficient method of adjusting them, however it is simpler to manage
+    foreach(const IndexedString & file, rhs.d->tempFiles.keys())
+        if(d->changes.contains(file))
+        {
+            foreach(const DocumentChangePointer & change, d->changes[file])
+                rhs.addChange(change);
+            d->changes.remove(file);
+        }
+    
+    /// @todo Possibly check for duplicates, since it could create a lot of bloat when big changes are merged
+    foreach(const QList<DocumentChangePointer> & changeList, rhs.d->changes.values())
+        foreach(const DocumentChangePointer & change, changeList)
+            addChange(change);
+
     /// @todo Fix for a possibility of two different temporaries created for the same fileName
     d->tempFiles.unite(rhs.d->tempFiles);
     Q_ASSERT(d->tempFiles.uniqueKeys().size() == d->tempFiles.size());
-    rhs.d->tempFiles.clear();
     d->tempToOriginal.unite(rhs.d->tempToOriginal);
     
-    /// @todo Possibly check for duplicates, since it could create a lot of bloat when big changes are merged
-    for(QMap< IndexedString, QList<DocumentChangePointer> >::iterator it = rhs.d->changes.begin();
-        it != rhs.d->changes.end(); ++it)
-        d->changes[it.key()] += *it;
     rhs.clear();
     
+#ifndef NDEBUG
     kDebug() << "Merged Changes: ";
     for(QMap <KDevelop::IndexedString, QList <KDevelop::DocumentChangePointer > >::iterator it = d->changes.begin();
         it != d->changes.end(); ++it)
@@ -151,6 +172,7 @@ DocumentChangeSet & DocumentChangeSet::operator<<(DocumentChangeSet & rhs)
         foreach(DocumentChangePointer p, *it)
             kDebug() << p->m_newText;
     }
+#endif  //NDEBUG
         
     
     return *this;
@@ -211,11 +233,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyToTemp(IndexedString fil
     QList<DocumentChangePointer> sortedChanges;
     QString newText;
     {
-        result = d->removeDuplicates(fileName, sortedChanges);
+        result = d->removeDuplicates(tempFile, sortedChanges);
         if(!result)
             return result;
         
-        result = d->generateNewText(fileName, sortedChanges, repr.data(), newText);
+        result = d->generateNewText(tempFile, sortedChanges, repr.data(), newText);
         if(!result)
             return result;
     }
@@ -228,8 +250,15 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyToTemp(IndexedString fil
         result = d->replaceOldText(repr.data(), newText, sortedChanges);
         //On success the changes' documents should be changed to the original to prevent double application
         if(result)
+        {
+            IndexedString original = d->tempToOriginal[tempFile];
+            d->changes.erase(d->changes.find(tempFile));
             foreach(DocumentChangePointer p, sortedChanges)
-                p->m_document = fileName;
+            {
+                p->m_document = original;
+                d->changes[original] << p;
+            }
+        }
     }
     
     return result;
@@ -296,8 +325,12 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllToTemp()
             }
             
             //On success the changes' documents should be changed to the original to prevent double application
+            d->changes.erase(d->changes.find(file));
             foreach(DocumentChangePointer p, filteredSortedChanges[file])
+            {
                 p->m_document = d->tempToOriginal[file];
+                d->changes[p->m_document] << p;
+            }
             
             kDebug() << "Applied new text: " << newTexts[file];
         }
@@ -509,7 +542,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
             }
             else
                 return DocumentChangeSet::ChangeResult(
-                       QString("Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"\"%9\"@%10:%11->%12:%13 ")
+                       QString("Inconsistent change-request at %1; intersecting changes: \"%2\"->\"%3\"@%4:%5->%6:%7 & \"%8\"->\"%9\"@%10:%11->%12:%13 ")
                        .arg(file.str(), ( *previous )->m_oldText, ( *previous )->m_newText).arg(( *previous )->m_range.start.line).arg(( *previous )->m_range.start.column)
                        .arg(( *previous )->m_range.end.line).arg(( *previous )->m_range.end.column).arg((*it)->m_oldText, (*it)->m_newText).arg((*it)->m_range.start.line)
                        .arg((*it)->m_range.start.column).arg((*it)->m_range.end.line).arg((*it)->m_range.end.column));
@@ -691,6 +724,7 @@ void DocumentChangeSetPrivate::adjustChangeToTemp(DocumentChangePointer newChang
     //Sort the changes to the original file
     QList<DocumentChangePointer> sortedChanges;
     removeDuplicates(newChange->m_document, sortedChanges );
+    std::reverse(sortedChanges.begin(), sortedChanges.end());
     
     //foreach changed
     foreach(DocumentChangePointer originalChange, sortedChanges)
@@ -719,6 +753,8 @@ void DocumentChangeSetPrivate::adjustChangeToTemp(DocumentChangePointer newChang
         }
     }
     newChange->m_document = tempFiles[newChange->m_document].first;
+    
+    kDebug() << "New range: " << newChange->m_range.textRange();
 }
 
 // Return a list of the files that are logically unapplied changes
@@ -728,7 +764,7 @@ QList<IndexedString> DocumentChangeSetPrivate::withoutOriginals()
     QList<KDevelop::IndexedString >::iterator it = files.begin();
     while(it != files.end())
     {
-        if(tempFiles.contains(*it) && files.contains(tempFiles[*it].first))
+        if(tempFiles.contains(*it))
             it = files.erase(it);
         else
             ++it;
