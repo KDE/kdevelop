@@ -41,8 +41,6 @@ private slots:
     void testRun();
     void testRun_data();
 
-private:
-    KDevelop::TopDUContext* m_fakeContext;
 };
 
 #endif

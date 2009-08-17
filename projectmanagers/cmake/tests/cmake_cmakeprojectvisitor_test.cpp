@@ -25,6 +25,8 @@
 #include <QString>
 #include <qtest_kde.h>
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
@@ -34,10 +36,8 @@ using namespace KDevelop;
 #undef FALSE
 
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
- : CMakeProjectVisitor( QString(), new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0)))
-{
-    m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
-}
+ : CMakeProjectVisitor( QString(), 0)
+{}
 
 void CMakeProjectVisitorTest::testVariables_data()
 {
@@ -361,6 +361,10 @@ void CMakeProjectVisitorTest::testRun()
     QFETCH(QList<StringPair>, cache);
     QFETCH(QList<StringPair>, results);
     
+    KDevelop::ReferencedTopDUContext fakeContext=
+                    new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+    DUChain::self()->addDocumentChain(fakeContext);
+    
     QFile file("cmake_visitor_test");
     QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
     
@@ -379,7 +383,7 @@ void CMakeProjectVisitorTest::testRun()
     
     vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
     
-    CMakeProjectVisitor v(file.fileName(), m_fakeContext);
+    CMakeProjectVisitor v(file.fileName(), fakeContext);
     v.setVariableMap(&vm);
     v.setMacroMap(&mm);
     v.setCacheValues( &val );
@@ -391,6 +395,10 @@ void CMakeProjectVisitorTest::testRun()
         arg.value=vp.first;
         
         QCOMPARE(vm.value(vp.first).join(QString(";")), vp.second);
+    }
+    {
+        KDevelop::DUChainWriteLocker lock(DUChain::lock());
+        DUChain::self()->removeDocumentChain(fakeContext);
     }
 }
 
