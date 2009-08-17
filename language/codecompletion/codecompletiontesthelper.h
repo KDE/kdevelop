@@ -116,8 +116,8 @@ struct CodeCompletionItemTester {
   }
 
   //Standard constructor
-  CodeCompletionItemTester(DUContext* context, QString text = "; ") {
-    completionContext = new  T(DUContextPointer(context), text, QString(), context->range().end);
+  CodeCompletionItemTester(DUContext* context, QString text = "; ", QString followingText = "") {
+    completionContext = new  T(DUContextPointer(context), text, followingText, context->range().end);
 
     init();
   }
