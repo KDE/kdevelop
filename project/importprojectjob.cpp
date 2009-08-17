@@ -37,10 +37,9 @@ namespace KDevelop
 class ImportProjectJobPrivate
 {
 public:
-    ImportProjectJobPrivate( ImportProjectJob* job ) : q(job) {}
+    ImportProjectJobPrivate( ImportProjectJob* job ) {}
     ProjectFolderItem *m_folder;
     IProjectFileManager *m_importer;
-    ImportProjectJob* q;
 
     void import(ProjectFolderItem* folder)
     {
