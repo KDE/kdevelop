@@ -216,8 +216,8 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
       }
       
       DocumentChangeSet changes;
-      DocumentChangePointer change(new DocumentChange(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data())));
-      change->m_ignoreOldText = true;
+      DocumentChange change(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data()));
+      change.m_ignoreOldText = true;
       changes.addChange( change );
       changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
       DocumentChangeSet::ChangeResult result = changes.applyAllChanges();

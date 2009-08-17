@@ -393,7 +393,7 @@ DocumentChangeSet::ChangeResult applyChangesToDeclarations(QString oldName, QStr
 //         oldName = destructorForName(Identifier(oldName)).identifier().str();
       }
     }
-    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChangePointer(new DocumentChange(top->url(), decl.data()->range(), oldName, newName)));
+    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), decl.data()->range(), oldName, newName));
     if(!result)
       return result;
   }
@@ -412,7 +412,7 @@ DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, D
        kDebug() << "found empty use";
        continue;
      }
-     DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChangePointer(new DocumentChange(context->url(), use.m_range, oldName, newName)));
+     DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(context->url(), use.m_range, oldName, newName));
      if(!result)
        return result;
    }
