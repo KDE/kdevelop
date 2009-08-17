@@ -20,11 +20,20 @@
     Boston, MA 02110-1301, USA.
 */
 #include "iprojectfilemanager.h"
+#include "projectmodel.h"
+#include "importprojectjob.h"
 
 namespace KDevelop
 {
 IProjectFileManager::~IProjectFileManager()
 {
 }
+
+KJob* IProjectFileManager::createImportJob(ProjectFolderItem* item)
+{
+    return new ImportProjectJob( item, this );
+}
+
+
 }
 

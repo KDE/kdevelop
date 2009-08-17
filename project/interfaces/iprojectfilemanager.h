@@ -29,6 +29,7 @@
 #include <interfaces/iextension.h>
 #include "../projectexport.h"
 
+class KJob;
 
 
 namespace KDevelop
@@ -84,6 +85,16 @@ public:
      * @return The created item
      */
     virtual ProjectFolderItem *import(IProject *project) = 0;
+    
+    /**
+     * This method creates an import job for the given @arg item
+     *
+     * The default implementation should be suitable for most needs,
+     * it'll create an instance of @class ImportProjectJob
+     *
+     * @return a job that imports the project
+     */
+    virtual KJob* createImportJob(ProjectFolderItem* item);
 
     /**
      * Add a folder to the project

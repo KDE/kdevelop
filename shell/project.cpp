@@ -48,7 +48,6 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <project/importprojectjob.h>
 #include <project/projectmodel.h>
 #include <language/duchain/indexedstring.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -499,7 +498,7 @@ void Project::reloadModel()
     }
 
     d->progress->setBuzzy();
-    ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
+    KJob* importJob = iface->createImportJob(d->topItem );
     connect(importJob, SIGNAL(finished(KJob*)), SLOT(reloadDone()));
     Core::self()->runController()->registerJob( importJob );
 }
@@ -528,7 +527,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
 
     d->loadVersionControlPlugin(projectGroup);
     d->progress->setBuzzy();
-    ImportProjectJob* importJob = new ImportProjectJob( d->topItem, iface );
+    KJob* importJob = iface->createImportJob(d->topItem );
     connect( importJob, SIGNAL( result( KJob* ) ), this, SLOT( importDone( KJob* ) ) );
     Core::self()->runController()->registerJob( importJob );
     return true;
