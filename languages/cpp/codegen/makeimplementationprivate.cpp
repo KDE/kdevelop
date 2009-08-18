@@ -258,21 +258,31 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
 {
     //Gather constructors
     DUChainReadLocker lock(DUChain::lock());
-    QList<ClassFunctionDeclaration *> constructors;
-    ClassFunctionDeclaration * assignmentOp = 0;
+    QList<Declaration *> constructors;
+    Declaration * assignmentOp = 0;
     
     foreach(Declaration * declaration, m_classContext->localDeclarations())
     {
         ClassFunctionDeclaration * fun = dynamic_cast<ClassFunctionDeclaration *>(declaration);
         if(fun)
         {
+            //Only gather constructors that have a definition
             if(fun->isConstructor())
-                constructors << fun;
+            {
+                Declaration * def = fun->logicalInternalContext(fun->topContext()) ? fun->logicalInternalContext(fun->topContext())->owner() : 0;
+                if(def)
+                    constructors << def;
+#ifndef NDEBUG                
+                else
+                    kDebug() << "Definition not found for constructor: " << fun->toString();
+#endif
+            }
+            //Gather the definition for the assignment operator
             else if(!assignmentOp)
             {
                 QString signature = fun->toString();
                 if(signature.contains("operator=") && fun->type<FunctionType>()->arguments().contains(m_classDeclaration->abstractType()))
-                    assignmentOp = fun;
+                     assignmentOp = fun->logicalInternalContext(fun->topContext()) ? fun->logicalInternalContext(fun->topContext())->owner() : 0;
             }
         }
     }
@@ -284,7 +294,7 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
         if(constructors.size() > 1)
             KMessageBox::warningContinueCancel(0, "Warning. It is not recommended to move initialization lists to private constructor when multiple constructors are defined.",
                                                "PIMPL Generation", KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "PIMPL multiple constructor warning");
-        foreach(ClassFunctionDeclaration * constructor, constructors)
+        foreach(Declaration * constructor, constructors)
         {
             CodeRepresentation::Ptr rangeRepresentation = representationFor(constructor->url());
             
@@ -295,9 +305,9 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
             documentChangeSet().addChange(DocumentChange(constructor->url(), constructor->range(), constructor->toString(), privateVersion));
             
             // Create a "new" version of the previous constructor so that the private one can be called
-            ParseSession::Ptr astPtr = astContainer(constructor->internalFunctionContext()->url());
-            documentChangeSet().addChange(DocumentChange(constructor->internalFunctionContext()->url(), SimpleRange(constructor->internalFunctionContext()->range().start, 0),
-                                                         QString(), constructor->toString() + "\n{\n}\n\n"));
+            //ParseSession::Ptr astPtr = astContainer(constructor->internalFunctionContext()->url());
+            //documentChangeSet().addChange(DocumentChange(constructor->internalFunctionContext()->url(), SimpleRange(constructor->internalFunctionContext()->range().start, 0),
+                                                        // QString(), constructor->toString() + "\n{\n}\n\n"));
         }
     }
     
@@ -308,16 +318,17 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
     
     QList<IndexedString> filesToUpdate;
     
-    foreach(ClassFunctionDeclaration * constructor, constructors)
+    lock.unlock();
+    foreach(Declaration * constructor, constructors)
     {
         
         //Find the definition of the constructor
-        lock.lock();
+        /*lock.lock();
         FunctionDefinition * definition = FunctionDefinition::definition(constructor);
-        lock.unlock();
-        ParseSession::Ptr astPtr = astContainer(definition->url());
+        lock.unlock();*/
+        ParseSession::Ptr astPtr = astContainer(constructor->url());
         
-        FunctionDefinitionAST * construct = AstUtils::node_cast<FunctionDefinitionAST>(astPtr->astNodeFromDeclaration(definition));
+        FunctionDefinitionAST * construct = AstUtils::node_cast<FunctionDefinitionAST>(astPtr->astNodeFromDeclaration(constructor));
         if(construct)
         {
             
@@ -328,30 +339,34 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
                 //Send the parameters this constructor takes into the new one
             }
             CppEditorIntegrator integrator(astPtr.data());
-            SimpleCursor insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
+            SimpleCursor insertionPoint;
             
             //Check for constructors without initializer list
-            if(!insertionPoint.isValid())
+            if(!construct->constructor_initializers)
             {
                 insertedText += ":";
-                insertionPoint = integrator.findPosition(construct->function_specifiers->toBack()->element);
+                insertionPoint = integrator.findPosition(construct->function_body->start_token);
+                if(insertionPoint.column > 0)
+                    insertionPoint.column = insertionPoint.column - 1;
             }
+            else
+              insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
             insertedText += " " + m_privatePointerName + "(" + CppUtils::insertMemoryAllocation(privateStruct) + ") ";
             
-            DocumentChange constructorChange(definition->url(), SimpleRange(insertionPoint, 0), QString(), insertedText);
+            DocumentChange constructorChange(constructor->url(), SimpleRange(insertionPoint, 0), QString(), insertedText);
             documentChangeSet().addChange(constructorChange);
             
             //Remove the old initializers
-            if(construct->constructor_initializers->member_initializers->count())
+            if(construct->constructor_initializers && construct->constructor_initializers->member_initializers->count())
             {
                 SimpleRange oldInitializers (integrator.findRange(construct->constructor_initializers->member_initializers->toFront()->element->start_token,
                                                                   construct->constructor_initializers->member_initializers->toBack()->element->end_token));
-                DocumentChange initializersChange(definition->url(), oldInitializers, QString(), QString());
+                DocumentChange initializersChange(constructor->url(), oldInitializers, QString(), QString());
                 initializersChange.m_ignoreOldText = true;
                 documentChangeSet().addChange(initializersChange);
             }
-            if(documentChangeSet().applyToTemp(definition->url()) && !filesToUpdate.contains(definition->url()))
-                filesToUpdate << definition->url();
+            if(documentChangeSet().applyToTemp(constructor->url()) && !filesToUpdate.contains(constructor->url()))
+                filesToUpdate << constructor->url();
         }
         else
             kWarning() << "A correct AST node for constructor: " << constructor->toString() << " was not found.";
@@ -398,10 +413,14 @@ void MakeImplementationPrivate::updateDestructor()
     } 
     else
     {
-      DocumentChange destructorChange(destructor->url(), SimpleRange(destructor->logicalInternalContext(destructor->topContext())->range().start, -1),
-                                      QString(), /*CppUtils::insertMemoryDeallocation()*/ "delete this->" + m_privatePointerName + ";\n");
+        DUContext * internal = destructor->logicalInternalContext(destructor->topContext());
+        SimpleCursor inside(internal->range().end);
+        if(inside.column > 0)
+            inside.column = inside.column - 1;
+        DocumentChange destructorChange(internal->url(), SimpleRange(inside, 0),
+                                        QString(), /*CppUtils::insertMemoryDeallocation()*/ "delete this->" + m_privatePointerName + ";\n");
     
-      documentChangeSet().addChange(destructorChange);
+        documentChangeSet().addChange(destructorChange);
     }
 }
 
@@ -417,12 +436,14 @@ void MakeImplementationPrivate::updateAllUses(UseList & allUses)
         for(QMap<IndexedString, QList<SimpleRange> >::iterator mapIt = it->begin();
             mapIt != it->end(); ++mapIt)
         {
+            kDebug() << "In file: " << mapIt.key().str();
             //If there is a temporary of this file, then ignore this file, and update the temporary uses
             if(documentChangeSet().tempNameForFile(mapIt.key()) == mapIt.key())
                 foreach(SimpleRange range, *mapIt)
                 {
                     CodeRepresentation::Ptr rangeRepresentation = representationFor(mapIt.key());
                     QString use = rangeRepresentation->rangeText(range.textRange());
+                    kDebug() << "Found use: " << use << "at: " << range.textRange();
                     DocumentChange useChange(mapIt.key(), range, use, accessString + use);
                     
                     Q_ASSERT(documentChangeSet().addChange(useChange));
