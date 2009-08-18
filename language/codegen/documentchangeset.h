@@ -115,7 +115,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     
     /// @return The mapping between all original file names and their temporaries
     /// @note If a file has not been applied to temp, it won't appear in the mapping
-    QList<QPair<IndexedString, IndexedString> > tempNamesForAll() const;
+    QMap<IndexedString, IndexedString> tempNamesForAll() const;
     
     /// Apply all the changes registered in this changeset
     ChangeResult applyAllChanges();

@@ -210,12 +210,12 @@ IndexedString DocumentChangeSet::tempNameForFile ( IndexedString file ) const
     return file;
 }
 
-QList<QPair<IndexedString, IndexedString> > DocumentChangeSet::tempNamesForAll() const
+QMap<IndexedString, IndexedString> DocumentChangeSet::tempNamesForAll() const
 {
-    QList<QPair<IndexedString, IndexedString> > names;
+    QMap<IndexedString, IndexedString> names;
     for(QMap< IndexedString, DocumentChangeSetPrivate::TempPair >::Iterator it = d->tempFiles.begin();
         it != d->tempFiles.end(); ++it)
-        names << qMakePair(it.key(), it.value().first);
+        names[it.key()] = it.value().first;
     
     return names;
 }
@@ -727,7 +727,6 @@ void DocumentChangeSetPrivate::adjustChangeToTemp(DocumentChangePointer newChang
     removeDuplicates(newChange->m_document, sortedChanges );
     std::reverse(sortedChanges.begin(), sortedChanges.end());
     
-    //foreach changed
     foreach(DocumentChangePointer originalChange, sortedChanges)
     {
         if(originalChange->m_range.textRange() < newChange->m_range.textRange() )

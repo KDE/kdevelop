@@ -225,9 +225,10 @@ bool CodeGeneratorBase::displayChanges()
     //TODO: Find some good information to put
     widget.setInformation("Info?");
     
-    typedef QPair<IndexedString, IndexedString> NameList;
-    foreach(const NameList & namePair, d->documentChanges.tempNamesForAll())
-        widget.addDocuments(namePair.first , namePair.second);
+    QMap<IndexedString, IndexedString> temps = d->documentChanges.tempNamesForAll();
+    for(QMap<IndexedString, IndexedString>::iterator it = temps.begin();
+        it != temps.end(); ++it)
+        widget.addDocuments(it.key() , it.value(), "Info?");
     
     if(widget.exec())
         return widget.applyAllChanges();
