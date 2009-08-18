@@ -74,7 +74,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   ~IndexedString();
 
   ///Creates an indexed string from a KUrl, this is expensive.
-  explicit IndexedString( const KUrl& url );
+  explicit IndexedString( KUrl url );
 
   ///Re-construct a KUrl from this indexed string, the result can be used with the
   ///KUrl-using constructor. This is expensive.
