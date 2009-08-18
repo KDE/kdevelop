@@ -228,7 +228,7 @@ bool CodeGeneratorBase::displayChanges()
     QMap<IndexedString, IndexedString> temps = d->documentChanges.tempNamesForAll();
     for(QMap<IndexedString, IndexedString>::iterator it = temps.begin();
         it != temps.end(); ++it)
-        widget.addDocuments(it.key() , it.value(), "Info?");
+        widget.addDocuments(it.key() , it.value());
     
     if(widget.exec())
         return widget.applyAllChanges();
