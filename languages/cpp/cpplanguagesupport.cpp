@@ -196,10 +196,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     newClassAction->setText( i18n("Create &New Class") );
     connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
     
-    KAction* pimplAction = actions->addAction("code_private_implementation");
-    pimplAction->setText( i18n("Make Class Implementation Private") );
-    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
-    connect(pimplAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executePrivateImplementationAction()));
+//    KAction* pimplAction = actions->addAction("code_private_implementation");
+//    pimplAction->setText( i18n("Make Class Implementation Private") );
+//    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
+//    connect(pimplAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executePrivateImplementationAction()));
 
     KAction* renameDeclarationAction = actions->addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
