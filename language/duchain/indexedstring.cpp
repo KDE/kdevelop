@@ -139,8 +139,7 @@ IndexedString::IndexedString( char c ) {
   m_index = 0xffff0000 | c;
 }
 
-IndexedString::IndexedString( KUrl url ) {
-  url.cleanPath();
+IndexedString::IndexedString( const KUrl& url ) {
   QByteArray array(url.pathOrUrl().toUtf8());
 
   const char* str = array.constData();
