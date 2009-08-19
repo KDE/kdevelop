@@ -174,8 +174,6 @@ struct DocumentControllerPrivate {
 
         KGlobal::config()->group("Open File").writeEntry( "Last Open File Directory", url.upUrl() );
 
-        bool emitOpened = false;
-
         // clean it and resolve possible symlink
         url.cleanPath( KUrl::SimplifyDirSeparators );
         if ( url.isLocalFile() )
@@ -290,8 +288,8 @@ struct DocumentControllerPrivate {
         //react on document deletion - we need to cleanup controller structures
         QObject::connect(sdoc, SIGNAL(aboutToDelete(Sublime::Document*)), controller, SLOT(removeDocument(Sublime::Document*)));
         //We check if it was already opened before
-        bool emitOpened = documents.contains(url);
-        if(!emitOpened)
+        bool emitOpened = !documents.contains(url);
+        if(emitOpened)
             documents[url]=doc;
         
         if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
