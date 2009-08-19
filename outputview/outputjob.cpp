@@ -90,7 +90,13 @@ void OutputJob::startOutput()
 void OutputJob::outputViewRemoved(int , int id)
 {
     if (id == m_outputId && m_killJobOnOutputClose)
-        kill();
+    {
+        // Make sure that the job emits result signal as the job
+        // might be used in composite jobs and that one depends
+        // on result being emitted to know wether a subjob
+        // is done.
+        kill( KJob::EmitResult );
+    }
 }
 
 void KDevelop::OutputJob::setTitle(const QString & title)
