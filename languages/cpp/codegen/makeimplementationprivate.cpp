@@ -159,8 +159,11 @@ bool MakeImplementationPrivate::gatherInformation()
     
     Ui::PrivateImplementationDialog privateDialog;
     KDialog dialog(KDevelop::ICore::self()->uiController()->activeMainWindow());
+    dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog.setWindowTitle(i18n("Private Class Implementation Options"));
+    dialog.setInitialSize(QSize(400, 250));
     
-    privateDialog.setupUi(&dialog);
+    privateDialog.setupUi(dialog.mainWidget());
     
     CodeGenUtils::IdentifierValidator localValidator(m_classContext);
     CodeGenUtils::IdentifierValidator globalValidator(m_classContext->topContext());

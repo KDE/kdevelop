@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PrivateImplementationDialog</class>
- <widget class="QDialog" name="PrivateImplementationDialog">
+ <widget class="QWidget" name="PrivateImplementationDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,9 +9,6 @@
     <width>400</width>
     <height>200</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Make Class Implementation Private</string>
   </property>
   <property name="whatsThis">
    <string>Options &amp; settings to move the private data fields of a class into a private structure</string>
