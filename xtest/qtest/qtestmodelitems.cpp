@@ -70,6 +70,7 @@ Case::Case(const QString& name, const QFileInfo& exe, Suite* parent)
         : Test(name, parent),
           m_executable(0)
 {
+    Q_UNUSED(exe);
     setSelectionToggle(true);
     setVerboseToggle(true);
 }
@@ -78,6 +79,7 @@ Case::Case(const QString& name, const KUrl& exe, Suite* parent)
         : Test(name, parent),
           m_executable(0)
 {
+    Q_UNUSED(exe);
     setSelectionToggle(true);
     setVerboseToggle(true);
 }

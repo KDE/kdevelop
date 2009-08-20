@@ -212,6 +212,7 @@ void AStylePreferences::setItemChecked(int idx, bool checked)
 
 void AStylePreferences::updatePreviewText(bool emitChangedSignal)
 {
+    Q_UNUSED(emitChangedSignal);
     QString text;
     int id = tabWidget->currentIndex();
     if(id == 0)

@@ -134,7 +134,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   private:
 
   virtual void usingDeclaration( AST* node, size_t start_token, size_t end_token, const KDevelop::DeclarationPointer& decl ) {
-
+        Q_UNUSED(node);
         m_builder->newUse(m_builder->editor()->findRange(start_token, end_token), decl.data());
     }
 

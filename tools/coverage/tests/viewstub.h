@@ -69,15 +69,15 @@ public:
 //       EditOverwrite = 1 /**< Overwrite mode. Characters will be replaced. */
 //     };
     virtual enum EditMode viewEditMode() const { return EditOverwrite; }
-    virtual void setContextMenu(QMenu *menu) {}
+    virtual void setContextMenu(QMenu *menu) { Q_UNUSED(menu); }
     virtual QMenu *contextMenu() const { return 0; }
-    virtual QMenu* defaultContextMenu(QMenu* menu = 0L) const { return 0; }
-    virtual bool setCursorPosition(KTextEditor::Cursor position) { return false; }
+    virtual QMenu* defaultContextMenu(QMenu* menu = 0L) const { Q_UNUSED(menu); return 0; }
+    virtual bool setCursorPosition(KTextEditor::Cursor position) { Q_UNUSED(position); return false; }
     virtual KTextEditor::Cursor cursorPosition() const { return KTextEditor::Cursor(); }
     virtual KTextEditor::Cursor cursorPositionVirtual() const { return KTextEditor::Cursor(); }
-    virtual QPoint cursorToCoordinate(const KTextEditor::Cursor& cursor) const { return QPoint(); }
+    virtual QPoint cursorToCoordinate(const KTextEditor::Cursor& cursor) const { Q_UNUSED(cursor); return QPoint(); }
     virtual QPoint cursorPositionCoordinates() const { return QPoint(); }
-    virtual bool setSelection(const KTextEditor::Range &range) { return true; }
+    virtual bool setSelection(const KTextEditor::Range &range) { Q_UNUSED(range); return true; }
     /*    virtual bool setSelection(const Cursor &position,
                                   int length,
                                   bool wrap = true);*/
@@ -89,11 +89,11 @@ public:
     virtual QString selectionText() const { return ""; }
     virtual bool removeSelection() { return true; }
     virtual bool removeSelectionText() { return true; }
-    virtual bool setBlockSelection(bool on) { return true; }
+    virtual bool setBlockSelection(bool on) { Q_UNUSED(on); return true; }
     virtual bool blockSelection() const { return true; }
 
     virtual bool mouseTrackingEnabled() const { return true; }
-    virtual bool setMouseTrackingEnabled(bool b) { return true; }
+    virtual bool setMouseTrackingEnabled(bool b) { Q_UNUSED(b); return true; }
 
 #if 0
                                       Q_SIGNALS:

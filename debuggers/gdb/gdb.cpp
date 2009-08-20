@@ -352,6 +352,8 @@ void GDB::processLine(const QByteArray& line)
 
 void GDB::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    Q_UNUSED(exitCode);
+    Q_UNUSED(exitStatus);
     kDebug(9012) << "GDB FINISHED\n";
     /* FIXME: return the status? */
     emit gdbExited();

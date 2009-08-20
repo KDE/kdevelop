@@ -65,7 +65,7 @@ void DumpChain::visit(AST *node)
   for( int a = 0; a < indent; a++ )
     indentation += "| ";
 
-  if (node)
+  if (node) {
     if (m_editor) {
       QString nodeText;
       for( std::size_t a = node->start_token; a != node->end_token; a++ ) {
@@ -83,6 +83,7 @@ void DumpChain::visit(AST *node)
     } else
       kDebug(9007) << indentation << "\\" << names[node->kind]
               << "[" << node->start_token << "," << node->end_token << "]" << endl;
+  }
 
   ++indent;
   DefaultVisitor::visit(node);

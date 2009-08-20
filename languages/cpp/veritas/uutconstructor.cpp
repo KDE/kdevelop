@@ -99,6 +99,7 @@ void printAllDeclarations(DUContext* ctx)
 
 void UUTConstructor::printUseInfo(int useId, const Use* use, DUContext* ctx)
 {
+    Q_UNUSED(useId);
     Declaration* decl = declarationForUse(use,ctx);
     if (!decl) return;
     kDebug() << "decl    " << decl->toString();

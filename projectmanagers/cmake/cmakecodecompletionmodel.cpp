@@ -47,6 +47,7 @@ bool isFunction(const Declaration* decl)
 
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
+    Q_UNUSED(invocationType);
     m_declarations.clear();
     DUChainReadLocker lock(DUChain::lock());
     KTextEditor::Document* d=view->document();

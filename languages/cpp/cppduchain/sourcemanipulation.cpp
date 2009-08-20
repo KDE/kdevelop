@@ -311,6 +311,7 @@ SimpleCursor SourceCodeInsertion::end() const
 }
 
 SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDevelop::Declaration::AccessPolicy policy, InsertionKind kind) const {
+  Q_UNUSED(policy);
   InsertionPoint ret;
   ret.line = end().line;
   

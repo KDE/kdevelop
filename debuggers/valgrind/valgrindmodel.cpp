@@ -291,11 +291,12 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
 
                 case Source:
                     if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
-                        if (!f->file.isEmpty())
+                        if (!f->file.isEmpty()) {
                             if (f->line >= 0)
                                 return f->file + ':' + f->line;
                             else
                                 return f->file;
+                        }
                     break;
 
                 case Object:
@@ -322,11 +323,12 @@ QVariant ValgrindModel::data ( const QModelIndex & index, int role ) const
         case Qt::ToolTipRole:
             switch (index.column()) {
                 case Source:
-                    if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item))
+                    if (ValgrindFrame* f = dynamic_cast<ValgrindFrame*>(item)) {
                         if (f->line >= 0)
                             return f->url().toLocalFile() + ':' + f->line;
                         else
                             return f->url().toLocalFile();
+                    }
                     break;
             }
             break;

@@ -90,6 +90,7 @@ void StaticCodeAssistant::eventuallyStartAssistant(KTextEditor::Document* docume
 }
 
 void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assistant, bool manage) {
+  Q_UNUSED(manage);
   if(m_activeAssistant)
     m_activeAssistant->doHide();
   

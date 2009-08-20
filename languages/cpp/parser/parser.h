@@ -32,6 +32,7 @@
 #include <hash_map>
 using namespace stdext;
 #else
+// use unordered_map, hash_map is marked as deprecated on g++/4.4
 #include <ext/hash_map>
 using namespace __gnu_cxx;
 #endif

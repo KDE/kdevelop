@@ -33,6 +33,7 @@ class CMakeNavigationContext: public AbstractNavigationContext
         virtual QString name() const { return mName; }
         virtual QString html(bool shorten = false)
         {
+            Q_UNUSED(shorten);
             return mDescription;
         }
         

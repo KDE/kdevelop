@@ -160,8 +160,9 @@ KTextEditor::CodeCompletionModel::CompletionProperties NormalDeclarationCompleti
   if (type) {
     if (type->modifiers() & AbstractType::ConstModifier)
       p |= CodeCompletionModel::Const;
-    if (type->modifiers() & AbstractType::VolatileModifier)
+    if (type->modifiers() & AbstractType::VolatileModifier) {
       ;//TODO
+    }
 
     switch (dec->abstractType()->whichType()) {
       case AbstractType::TypeIntegral:

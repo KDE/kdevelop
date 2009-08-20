@@ -1653,6 +1653,7 @@ void FltkWrapUiAst::writeBack( QString& ) const
 
 bool FltkWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -1751,6 +1752,7 @@ void GetDirPropertyAst::writeBack( QString& ) const
 
 bool GetDirPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -1998,6 +2000,7 @@ void IncludeExternalMsProjectAst::writeBack( QString& ) const
 
 bool IncludeExternalMsProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -2037,6 +2040,7 @@ void InstallAst::writeBack( QString& ) const
 
 bool InstallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -2688,6 +2692,7 @@ void QtWrapCppAst::writeBack( QString& ) const
 
 bool QtWrapCppAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -2705,6 +2710,7 @@ void QtWrapUiAst::writeBack( QString& ) const
 
 bool QtWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -3621,6 +3627,7 @@ void VtkMakeInstantiatorAst::writeBack( QString& ) const
 
 bool VtkMakeInstantiatorAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -3638,6 +3645,7 @@ void VtkWrapJavaAst::writeBack( QString& ) const
 
 bool VtkWrapJavaAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -3655,6 +3663,7 @@ void VtkWrapPythonAst::writeBack( QString& ) const
 
 bool VtkWrapPythonAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 
@@ -3672,6 +3681,7 @@ void VtkWrapTclAst::writeBack( QString& ) const
 
 bool VtkWrapTclAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
+    Q_UNUSED(func);
     return false;
 }
 

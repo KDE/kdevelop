@@ -219,6 +219,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
 	, m_engine(KStandardDirs::locateLocal("appdata", "qthelpcollection", QtHelpFactory::componentData()))
 {
+    Q_UNUSED(args);
 	QStringList qmakes;
     KStandardDirs::findAllExe(qmakes, "qmake");
 	QString dirName;

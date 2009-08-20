@@ -57,10 +57,13 @@ QVariant CovOutputModel::data(const QModelIndex& index, int role) const
 }
 
 void CovOutputModel::activate(const QModelIndex &idx)
-{}
+{
+    Q_UNUSED(idx);
+}
 
 void CovOutputModel::appendOutputs(const QStringList &lines)
 {
+    Q_UNUSED(lines);
     // stdout gets the lcov output, which contains the useful stuff
     // so do nothing here. stderr gets status messages
 }

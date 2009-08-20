@@ -476,6 +476,7 @@ namespace GDBDebugger
 
     void ViewerWidget::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState)
     {
+        Q_UNUSED(oldState);
         for(int i = 0; i < memoryViews_.size(); ++i)
         {
             memoryViews_[i]->debuggerStateChanged(newState);

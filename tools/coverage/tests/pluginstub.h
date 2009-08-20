@@ -36,7 +36,7 @@ public:
     virtual void unload() { Q_ASSERT(0); }
     KIconLoader* iconLoader() const { Q_ASSERT(0); return 0; }
     KDevelop::ICore *core() const { Q_ASSERT(0); return 0; }
-    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context ) { return KDevelop::ContextMenuExtension(); }
+    virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context ) { Q_UNUSED(context); return KDevelop::ContextMenuExtension(); }
 
 /*public Q_SLOTS:
     void newIconLoader() const;

@@ -74,6 +74,7 @@ QString IndentPlugin::description()
 
 QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 {
+	Q_UNUSED(mime);
 	return "C++";
 }
 
@@ -146,6 +147,7 @@ void IndentPlugin::setStyle(const QString &name, const QString &content)
 
 KDevelop::SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
 {
+	Q_UNUSED(mime);
 // 	return new IndentPreferences();
 	return 0;
 }

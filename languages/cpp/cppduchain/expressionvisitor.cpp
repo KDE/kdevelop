@@ -835,11 +835,15 @@ struct ConstantUnaryExpressionEvaluator {
 };
 
 template<>
-void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ){
+void ConstantUnaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+  Q_UNUSED(tokenKind);
+  Q_UNUSED(left);
 }
 
 template<>
-void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ){
+void ConstantUnaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left ) {
+  Q_UNUSED(tokenKind);
+  Q_UNUSED(left);
 }
 
 QString toString(AbstractType::Ptr t) {

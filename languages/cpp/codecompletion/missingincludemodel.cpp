@@ -104,6 +104,10 @@ MissingIncludeCompletionWorker* MissingIncludeCompletionModel::worker() const {
 }
 
 void MissingIncludeCompletionModel::completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url) {
+  Q_UNUSED(view);
+  Q_UNUSED(range);
+  Q_UNUSED(invocationType);
+  Q_UNUSED(url);
   QMutexLocker lock(&worker()->mutex);
   
 //   CodeCompletionModel::completionInvokedInternal(view, range, invocationType, url);
@@ -159,7 +163,7 @@ QString MissingIncludeCompletionModel::filterString(KTextEditor::View* view, con
 }
 
 void MissingIncludeCompletionWorker::doSpecialProcessing(unsigned int data) {
-  
+  Q_UNUSED(data);
   QMutexLocker localLock(&mutex);
   
   kDebug() << context.data() << aborting() << localExpression << prefixExpression;

@@ -135,10 +135,16 @@ struct ConstantBinaryExpressionEvaluator {
 
 template<>
 void ConstantBinaryExpressionEvaluator<double>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+  Q_UNUSED(tokenKind);
+  Q_UNUSED(left);
+  Q_UNUSED(right);
 }
 
 template<>
 void ConstantBinaryExpressionEvaluator<float>::evaluateSpecialTokens( int tokenKind, ConstantIntegralType* left, ConstantIntegralType* right ) {
+  Q_UNUSED(tokenKind);
+  Q_UNUSED(left);
+  Q_UNUSED(right);
 }
 
 

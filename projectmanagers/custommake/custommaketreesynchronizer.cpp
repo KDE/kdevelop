@@ -187,6 +187,7 @@ void CustomMakeTreeSynchronizer::fileChanged( const QString& file, KDevelop::Pro
 void CustomMakeTreeSynchronizer::parseDirectoryRecursively( KDevelop::ProjectFolderItem* dir,
         KDevelop::IProjectFileManager* manager )
 {
+    Q_UNUSED(manager);
     QQueue< QList<KDevelop::ProjectFolderItem*> > workQueue;
     QList<KDevelop::ProjectFolderItem*> initial;
     initial.append( dir );

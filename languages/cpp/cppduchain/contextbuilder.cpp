@@ -572,6 +572,8 @@ void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 
 void ContextBuilder::classContextOpened(ClassSpecifierAST *node, DUContext* context)
 {
+  Q_UNUSED(node);
+  Q_UNUSED(context);
 }
 
 void ContextBuilder::visitClassSpecifier (ClassSpecifierAST *node)

@@ -114,7 +114,6 @@ QString equalizeWhiteSpaceAtStart(QString original, QString output) {
 QString AStyleFormatter::formatSource(const QString &text, const QString& leftContext, const QString& rightContext)
 {
     QString useText = leftContext + text + rightContext;
-    int startLine = 0;
 
 //     kDebug() << "left context:" << leftContext;
 //     kDebug() << "right context:" << rightContext;

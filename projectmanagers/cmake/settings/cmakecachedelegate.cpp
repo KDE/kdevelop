@@ -153,6 +153,8 @@ QSize CMakeCacheDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 
 void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint)
 {
+    Q_UNUSED(editor);
+    Q_UNUSED(hint);
     kDebug() << "closing...";
 }
 
