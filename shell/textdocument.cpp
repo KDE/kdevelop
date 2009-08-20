@@ -593,9 +593,12 @@ KDevelop::TextEditorWidget::~TextEditorWidget()
     delete d;
 }
 
-void KDevelop::TextEditorWidget::viewStatusChanged(KTextEditor::View*, const KTextEditor::Cursor& newPosition)
+void KDevelop::TextEditorWidget::viewStatusChanged(KTextEditor::View* view, const KTextEditor::Cursor& )
 {
-    d->status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(newPosition.line() + 1, 0), KGlobal::locale()->formatNumber(newPosition.column() + 1, 0));
+    // This fetches the virtual cursor, which expands tab characters properly, i.e. instead of col == 1
+    // you'll get col == 9 with this when a tab is at the start of the line.
+    KTextEditor::Cursor pos = view->cursorPositionVirtual();
+    d->status = i18n(" Line: %1 Col: %2 ", KGlobal::locale()->formatNumber(pos.line() + 1, 0), KGlobal::locale()->formatNumber(pos.column() + 1, 0));
     emit statusChanged();
 }
 
