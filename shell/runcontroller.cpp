@@ -246,7 +246,6 @@ RunController::RunController(QObject *parent)
     d->q = this;
     d->delegate = new RunDelegate(this);
     d->launchChangeMapper = new QSignalMapper( this );
-    connect(d->launchChangeMapper, SIGNAL(mapped(int)), SLOT(launchChanged(int)) );
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
@@ -254,9 +253,8 @@ RunController::RunController(QObject *parent)
     }
 }
 
-void KDevelop::RunController::launchChanged( int i )
+void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 {
-    LaunchConfiguration* l = d->launchConfigurations.at( i );
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
         if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
@@ -631,8 +629,7 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
                 d->currentTargetAction->actions().first()->setChecked( true );
             }
         }
-        d->launchChangeMapper->setMapping( l, d->launchConfigurations.count() -1 );
-        connect( l, SIGNAL(nameChanged(QString)), d->launchChangeMapper, SLOT(map()) );
+        connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(launchChanged(LaunchConfiguration*)) );
     }    
 }
 
