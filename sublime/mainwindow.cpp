@@ -282,6 +282,9 @@ void MainWindow::loadSettings()
         state = QByteArray::fromBase64(state);
         // One day will need to load the version number, but for now, assume 0
         restoreState(state);
+    } else {
+        // If there's no state we use a default size of 700x600
+        resize(700,600);
     }
     
     KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
