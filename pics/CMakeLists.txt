@@ -6,7 +6,4 @@ add_subdirectory(misc)
 
 ########### install files ###############
 
-kde4_install_icons(${DATA_INSTALL_DIR}/kdevelop/icons)
-
-
-
+kde4_install_icons(${DATA_INSTALL_DIR})
