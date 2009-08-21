@@ -167,7 +167,7 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.filesList, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( fileDoubleClicked( const QModelIndex& ) ) );
     //connect( m_editPatch.cancelButton, SIGNAL( pressed() ), this, SLOT( slotEditCancel() ) );
 
-    connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
+    //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
 
     connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(updatePatchFromEdit()) );
     connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
@@ -180,7 +180,7 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.filename->lineEdit(), SIGNAL( returnPressed() ), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT(slotEditFileNameChanged()) );
-    connect( m_editPatch.filename, SIGNAL( urlSelected( const QString& ) ), this, SLOT(slotEditFileNameChanged()) );
+    connect( m_editPatch.filename, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.command, SIGNAL(textChanged(QString)), this, SLOT(slotEditCommandChanged()) );
     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
