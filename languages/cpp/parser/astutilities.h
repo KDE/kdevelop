@@ -21,6 +21,7 @@
 #define ASTUTILITIES_H
 
 #include "ast.h"
+#include "default_visitor.h"
 
 //! All Ast traversing and manipulating convenience functions
 namespace AstUtils
@@ -72,6 +73,38 @@ inline ParameterDeclarationAST * parameterAtIndex(ParameterDeclarationClauseAST 
 inline ParameterDeclarationAST * parameterAtIndex(DeclaratorAST * decl, int index)
 {
   return decl->parameter_declaration_clause ? parameterAtIndex(decl->parameter_declaration_clause, index) : 0;
+}
+
+
+//Helper class to collect all the nodes in an AST branch
+struct CollectorVisitor : public DefaultVisitor
+{
+    CollectorVisitor(int kind) : m_kind(kind) {}
+    
+    virtual void visit(AST * node)
+    {
+        if(node && node->kind == m_kind)
+            m_nodes.push_back(node);
+        
+        DefaultVisitor::visit(node);
+    }
+    
+    int m_kind;
+    QList<AST *> m_nodes;
+};
+
+/**
+ * Find all the AST nodes of the requested type down this @p branch in an AST
+ * @tparam Node must be a declared AST type
+ * @return A list of all the encountered nodes of the requested type
+ */
+template<typename Node>
+inline QList<AST *> findAllNodesInBranch(AST * branch)
+{
+  CollectorVisitor collector(Node::__node_kind);
+  collector.visit(branch);
+  
+  return collector.m_nodes;
 }
 
 }
