@@ -36,6 +36,12 @@ ClassDeclaration::ClassDeclaration(const KDevelop::SimpleRange& range, DUContext
   setContext(context);
 }
 
+ClassDeclaration::ClassDeclaration( ClassDeclarationData& data, const KDevelop::SimpleRange& range, DUContext* context )
+  : ClassMemberDeclaration( data, range )
+{
+  setContext(context);
+}
+
 ClassDeclaration::ClassDeclaration(ClassDeclarationData& data)
   : ClassMemberDeclaration(data)
 {

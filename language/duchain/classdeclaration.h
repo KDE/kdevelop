@@ -96,6 +96,7 @@ public:
   ClassDeclaration(const ClassDeclaration& rhs);
   ClassDeclaration(ClassDeclarationData& data);
   ClassDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
+  ClassDeclaration(ClassDeclarationData& data, const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
   ~ClassDeclaration();
 
   void clearBaseClasses();
