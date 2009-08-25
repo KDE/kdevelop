@@ -470,8 +470,10 @@ bool TextDocument::close(DocumentSaveMode mode)
     if (!PartDocument::close(mode))
         return false;
 
-    KDevelop::EditorIntegrator::removeDocument(d->document);
-    delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
+    if ( d->document ) {
+        KDevelop::EditorIntegrator::removeDocument(d->document);
+        delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
+    }
 
     return true;
 }
