@@ -51,18 +51,11 @@ void ProjectFolder::populateNode()
 FilteredProjectFolder::FilteredProjectFolder(NodesModelInterface* a_model, IProject* project)
   : ProjectFolder(a_model, project)
 {
-  // Initial update (mostly to update the display name)
-  updateFilterString(m_filterString);
 }
 
 void FilteredProjectFolder::updateFilterString(QString a_newFilterString)
 {
   m_filterString = a_newFilterString;
-  if ( m_filterString.isEmpty() ) {
-    m_displayName = i18n("Classes in project %1", m_project->name());
-  } else {
-    m_displayName = i18n("Filtered classes in project %1 for '%2''", m_project->name(), m_filterString);
-  }
 
   if ( isPopulated() ) {
 #if 1 // Choose speed over correctness.

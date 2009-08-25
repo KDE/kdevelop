@@ -25,6 +25,8 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
+#include <KLocalizedString>
+
 using namespace KDevelop;
 using namespace ClassModelNodes;
 
@@ -32,7 +34,7 @@ using namespace ClassModelNodes;
 //////////////////////////////////////////////////////////////////////////////
 
 AllClassesFolder::AllClassesFolder(NodesModelInterface* a_model)
-  : DocumentClassesFolder("All projects classes", a_model)
+  : DocumentClassesFolder(i18n("All projects classes"), a_model)
 {
 }
 
@@ -83,17 +85,11 @@ void AllClassesFolder::projectOpened(KDevelop::IProject* project)
 FilteredAllClassesFolder::FilteredAllClassesFolder(NodesModelInterface* a_model)
   : AllClassesFolder(a_model)
 {
-  // Initial update (mostly to update the display name)
-  updateFilterString(m_filterString);
 }
 
 void FilteredAllClassesFolder::updateFilterString(QString a_newFilterString)
 {
   m_filterString = a_newFilterString;
-  if ( m_filterString.isEmpty() )
-    m_displayName = "All projects classes";
-  else
-    m_displayName = "Filtered classes for '" + m_filterString + '\'';
 
   if ( isPopulated() )
   {
