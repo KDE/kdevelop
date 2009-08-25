@@ -43,6 +43,7 @@ namespace ClassModelNodes
 {
   class Node;
   class FilteredAllClassesFolder;
+  class FilteredProjectFolder;
   class FolderNode;
   class IdentifierNode;
 }
@@ -91,17 +92,23 @@ public Q_SLOTS:
   /// Call this to update the filter string for the search results folder.
   void updateFilterString(QString a_newFilterString);
 
+  /// removes the project-specific node
+  void removeProjectNode(KDevelop::IProject* project);
+  /// adds the project-specific node
+  void addProjectNode(KDevelop::IProject* project);
+
 private: // NodesModelInterface overrides
   virtual void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent);
   virtual void nodesLayoutChanged(ClassModelNodes::Node* a_parent);
   virtual void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last);
   virtual void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size);
   virtual void nodesAdded(ClassModelNodes::Node* a_parent);
-  
+
 private:
   /// Main level node - it's usually invisible.
   ClassModelNodes::Node* m_topNode;
   ClassModelNodes::FilteredAllClassesFolder* m_allClassesNode;
+  QMap<KDevelop::IProject*, ClassModelNodes::FilteredProjectFolder*> m_projectNodes;
 
 public Q_SLOTS:
   /// This slot needs to be attached to collapsed signal in the tree view.

@@ -23,8 +23,13 @@
 #include "classmodel.h"
 #include "classmodelnode.h"
 #include "allclassesfolder.h"
+#include "projectfolder.h"
 #include <language/duchain/persistentsymboltable.h>
 #include <typeinfo>
+
+#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
 using namespace KDevelop;
 using namespace ClassModelNodes;
@@ -45,6 +50,15 @@ ClassModel::ClassModel()
 
   m_allClassesNode = new FilteredAllClassesFolder(this);
   m_topNode->addNode( m_allClassesNode );
+
+  connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+          this, SLOT(removeProjectNode(KDevelop::IProject*)));
+  connect(ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
+          this, SLOT(addProjectNode(KDevelop::IProject*)));
+
+  foreach ( IProject* project, ICore::self()->projectController()->projects() ) {
+    addProjectNode(project);
+  }
 }
 
 ClassModel::~ClassModel()
@@ -55,6 +69,9 @@ ClassModel::~ClassModel()
 void ClassModel::updateFilterString(QString a_newFilterString)
 {
   m_allClassesNode->updateFilterString(a_newFilterString);
+  foreach ( ClassModelNodes::FilteredProjectFolder* folder, m_projectNodes ) {
+    folder->updateFilterString(a_newFilterString);
+  }
 }
 
 
@@ -231,6 +248,18 @@ void ClassModel::nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos,
 void ClassModel::nodesAdded(ClassModelNodes::Node*)
 {
   endInsertRows();
+}
+
+void ClassModel::addProjectNode( IProject* project )
+{
+  m_projectNodes[project] = new ClassModelNodes::FilteredProjectFolder(this, project);
+  m_topNode->addNode(m_projectNodes[project]);
+}
+
+void ClassModel::removeProjectNode( IProject* project )
+{
+  m_topNode->removeNode(m_projectNodes[project]);
+  m_projectNodes.remove(project);
 }
 
 #include "classmodel.moc"

@@ -22,6 +22,7 @@ set(kdevclassbrowser_PART_SRCS
     classmodelnodescontroller.cpp
     classtree.cpp
     documentclassesfolder.cpp
+    projectfolder.cpp
     allclassesfolder.cpp
 )
 
