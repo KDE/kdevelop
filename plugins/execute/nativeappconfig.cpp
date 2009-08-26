@@ -41,6 +41,7 @@
 
 #include "executeplugin.h"
 #include <util/kdevstringhandler.h>
+#include <util/environmentgrouplist.h>
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -98,6 +99,10 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+
+    KDevelop::EnvironmentGroupList env( KGlobal::config() );
+    environment->addItems( env.groups() );
+
 
     //connect signals to changed signal
     connect( projectTarget, SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
