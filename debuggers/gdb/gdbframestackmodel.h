@@ -22,7 +22,7 @@
 #ifndef KDEVELOP_GDB_FRAMESTACKMODEL_H
 #define KDEVELOP_GDB_FRAMESTACKMODEL_H
 
-#include <kdevplatform/debugger/framestack/framestackmodel.h>
+#include <debugger/framestack/framestackmodel.h>
 
 #include "debugsession.h"
 using namespace GDBDebugger;
