@@ -728,7 +728,14 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     QStringList path, files=fpath->filenames();
 
     if(!fpath->noDefaultPath())
+    {
+        locationOptions += m_vars->value("CMAKE_PREFIX_PATH");
+        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
+        locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
+    }
 
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files)
@@ -835,6 +842,15 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
 
     bool error=false;
     QStringList locationOptions = ffile->path()+ffile->hints();
+    if(!ffile->noDefaultPath())
+    {
+        locationOptions += m_vars->value("CMAKE_PREFIX_PATH");
+        locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
+        locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
+        locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
+        locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
+    }
     QStringList path, files=ffile->filenames();
 
     kDebug(9042) << "Find File:" << ffile->filenames();
