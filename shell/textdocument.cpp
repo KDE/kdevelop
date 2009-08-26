@@ -378,6 +378,10 @@ IDocument::DocumentState TextDocument::state() const
 
 KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
 {
+    if (!d->document) {
+        return KTextEditor::Cursor::invalid();
+    }
+
     KTextEditor::View *view = d->document->activeView();
 
     if (view)
@@ -388,7 +392,7 @@ KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
 
 void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
-    if (!cursor.isValid())
+    if (!cursor.isValid() || !d->document)
         return;
 
     KTextEditor::View *view = d->document->activeView();
@@ -402,6 +406,10 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 
 KTextEditor::Range TextDocument::textSelection() const
 {
+    if (!d->document) {
+        return KTextEditor::Range::invalid();
+    }
+
     KTextEditor::View *view = d->document->activeView();
 
     if (view && view->selection()) {
@@ -413,6 +421,10 @@ KTextEditor::Range TextDocument::textSelection() const
 
 QString TextDocument::textLine() const
 {
+    if (!d->document) {
+        return QString();
+    }
+
     KTextEditor::View *view = d->document->activeView();
 
     if (view) {
@@ -424,6 +436,10 @@ QString TextDocument::textLine() const
 
 QString TextDocument::textWord() const
 {
+    if (!d->document) {
+        return QString();
+    }
+
     KTextEditor::View *view = d->document->activeView();
 
     if (view) {
@@ -454,7 +470,7 @@ QString TextDocument::textWord() const
 
 void TextDocument::setTextSelection(const KTextEditor::Range &range)
 {
-    if (!range.isValid())
+    if (!range.isValid() || !d->document)
         return;
 
     KTextEditor::View *view = d->document->activeView();
