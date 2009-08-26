@@ -387,7 +387,7 @@ KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
     if (view)
         return view->cursorPosition();
 
-    return KTextEditor::Cursor();
+    return KTextEditor::Cursor::invalid();
 }
 
 void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
