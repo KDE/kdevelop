@@ -36,6 +36,7 @@
 #include "../../interfaces/idocument.h"
 #include "../debuggerexport.h"
 #include "../interfaces/idebugsession.h"
+#include "../interfaces/idebugcontroller.h"
 
 namespace GDBDebugger {
     class GdbTest;
@@ -176,7 +177,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableCollection : public TreeModel
 #endif
 
 public:
-    VariableCollection(QObject* parent);
+    VariableCollection(IDebugController* parent);
     virtual ~VariableCollection();
 
     VariablesRoot* root() const { return universe_; }

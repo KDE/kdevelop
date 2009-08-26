@@ -301,8 +301,8 @@ VariablesRoot::VariablesRoot(TreeModel* model)
     appendChild(locals_, true);
 }
 
-VariableCollection::VariableCollection(QObject* parent)
-: TreeModel(QVector<QString>() << "Name" << "Value", parent), m_widgetVisible(false)
+VariableCollection::VariableCollection(IDebugController* controller)
+: TreeModel(QVector<QString>() << "Name" << "Value", controller), m_widgetVisible(false)
 {
     universe_ = new VariablesRoot(this);
     setRootItem(universe_);
@@ -314,7 +314,7 @@ VariableCollection::VariableCollection(QObject* parent)
          this,
          SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
 
-    connect(ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
+    connect(controller, SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
              SLOT(updateAutoUpdate(KDevelop::IDebugSession*)));
 
     connect(locals(), SIGNAL(expanded()), SLOT(updateAutoUpdate()));
@@ -337,10 +337,8 @@ void VariableCollection::variableWidgetShown()
 
 void VariableCollection::updateAutoUpdate(IDebugSession* session)
 {
-    if (!session) {
-        session = ICore::self()->debugController()->currentSession();
-        if (!session) return;
-    }
+    if (!session) return;
+
     if (!m_widgetVisible) {
         session->variableController()->setAutoUpdate(IVariableController::UpdateNone);
     } else {
