@@ -103,14 +103,14 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     connect( &updateTimer_, SIGNAL(timeout()),
              this,  SLOT(flushPending()));
 
-    connect(KDevelop::ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
-            SLOT(sessionAdded(KDevelop::IDebugSession*)));
+    connect(KDevelop::ICore::self()->debugController(), 
+            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
+            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
 }
 
-
-void GDBOutputWidget::sessionAdded(KDevelop::IDebugSession* s)
+void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;

@@ -72,15 +72,16 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
 
     setHeaderLabels(QStringList() << i18n("Address") << i18n("Function") << i18n("Offset") << i18n("Instruction"));
 
-    connect(KDevelop::ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
-            SLOT(sessionAdded(KDevelop::IDebugSession*)));
+    connect(KDevelop::ICore::self()->debugController(), 
+            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
+            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
     connect(plugin, SIGNAL(reset()), this, SLOT(slotDeactivate()));
 }
 
 
-void DisassembleWidget::sessionAdded(KDevelop::IDebugSession* s)
+void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;

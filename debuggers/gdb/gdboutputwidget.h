@@ -74,7 +74,7 @@ public Q_SLOTS:
     void toggleShowInternalCommands();
 
 private Q_SLOTS:
-    void sessionAdded(KDevelop::IDebugSession *session);
+    void currentSessionChanged(KDevelop::IDebugSession *session);
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);

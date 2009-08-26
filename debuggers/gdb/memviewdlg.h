@@ -120,7 +120,7 @@ namespace GDBDebugger
 
         int debuggerState_;
     private slots:
-        void sessionAdded(KDevelop::IDebugSession* session);
+        void currentSessionChanged(KDevelop::IDebugSession* session);
     };
 }
 

@@ -67,7 +67,7 @@ public Q_SLOTS:
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
 
 private Q_SLOTS:
-    void sessionAdded(KDevelop::IDebugSession* session);
+    void currentSessionChanged(KDevelop::IDebugSession* session);
 
 protected:
     virtual void showEvent(QShowEvent*);

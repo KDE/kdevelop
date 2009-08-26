@@ -151,17 +151,20 @@ namespace GDBDebugger
         if (isOk())
             slotEnableOrDisable();
 
-        connect(KDevelop::ICore::self()->debugController(), SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
-                SLOT(sessionAdded(KDevelop::IDebugSession*)));
+        connect(KDevelop::ICore::self()->debugController(), 
+                SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
+                SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
         connect(this,        SIGNAL(setViewShown(bool)),
                 plugin,      SLOT(slotShowView(bool)));
     }
 
-    void MemoryView::sessionAdded(KDevelop::IDebugSession* s)
+    void MemoryView::currentSessionChanged(KDevelop::IDebugSession* s)
     {
         DebugSession *session = qobject_cast<DebugSession*>(s);
         if (!session) return;
-        connect( session, SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)), SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+        connect( session, 
+                 SIGNAL(gdbStateChanged(DBGStateFlags,DBGStateFlags)),
+                 SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
     }
 
     void MemoryView::initWidget()
