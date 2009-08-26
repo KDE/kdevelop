@@ -346,6 +346,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
     QStringList entriesL = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
     QSet<QString> entries = removeMatches("\\w*~$|\\w*\\.bak$", entriesL);
+    KUrl subroot=item->project()->folder();
     if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
         Q_ASSERT(folder->rowCount()==0);
@@ -437,8 +438,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             {
                 folder->setText(data.projectName);
             }
-
-            KUrl subroot=item->project()->folder();
 
             foreach (const QString& subf, data.subdirectories)
             {
@@ -571,7 +570,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
         KUrl cache=fileurl;
         cache.addPath("CMakeCache.txt");
-        if( QFileInfo( fileurl.toLocalFile() ).isDir())
+        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
             fileurl.adjustPath(KUrl::AddTrailingSlash);
             if(!QFile::exists(cache.toLocalFile()))
@@ -579,7 +578,15 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(m_pending.contains(fileurl))
                     item->appendRow(m_pending.take(fileurl));
                 else
-                    folderList.append(new KDevelop::ProjectFolderItem( item->project(), fileurl, item ));
+                {
+                    ProjectFolderItem* fitem=new ProjectFolderItem( item->project(), fileurl, item );
+                    
+                    //if it's not subparent, we don't add it to the list so that it's added recursively
+                    if(subroot.isParentOf(fileurl))
+                        folderList.append(fitem);
+                    
+                }
+                    
             }
         }
         else
