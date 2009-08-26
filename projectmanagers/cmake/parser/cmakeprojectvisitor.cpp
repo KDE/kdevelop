@@ -1960,7 +1960,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             element = new MacroCallAst;
 
         createUses(*it);
-        kDebug(9042) << "resolving:" << it->writeBack();
+//         kDebug(9042) << "resolving:" << it->writeBack();
             
         CMakeFunctionDesc func = resolveVariables(*it); //FIXME not correct in while case
         bool correct = element->parseFunctionInfo(func);
