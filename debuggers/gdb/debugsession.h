@@ -119,7 +119,8 @@ private Q_SLOTS:
 
 private:
     void _gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
-
+   
+    KDevelop::IFrameStackModel* createFrameStackModel();
     void setupController();
     void setSessionState(KDevelop::IDebugSession::DebuggerState state);
 

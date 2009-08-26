@@ -53,7 +53,9 @@
 #include "gdb.h"
 #include "gdbcommandqueue.h"
 #include "stty.h"
-#include "stackcontroller.h"
+#include "gdbframestackmodel.h"
+
+using namespace KDevelop;
 
 namespace GDBDebugger {
 
@@ -77,7 +79,6 @@ DebugSession::DebugSession()
     // Introduce functions to set them?
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);
-    m_stackController = new StackController(this);
 
     m_procLineMaker = new KDevelop::ProcessLineMaker(this);
 
@@ -130,6 +131,11 @@ void DebugSession::setSessionState(DebuggerState state)
         m_sessionState = state;
         emit stateChanged(state);
     }
+}
+
+KDevelop::IFrameStackModel* DebugSession::createFrameStackModel()
+{
+    return new GdbFrameStackModel(this);
 }
 
 void DebugSession::setupController()

@@ -38,7 +38,7 @@ set(kdevgdb_PART_SRCS
     gdblaunchconfig.cpp
     selectcoredialog.cpp
     variablecontroller.cpp
-    stackcontroller.cpp
+    gdbframestackmodel.cpp
 )
 
 set(kdevgdb_PART_UI
@@ -85,7 +85,7 @@ set(gdbtest_PART_SRCS
     stringhelpers.cpp
     debugsession.cpp
     variablecontroller.cpp
-    stackcontroller.cpp
+    gdbframestackmodel.cpp
 )
 
 kde4_add_ui_files(gdbtest_PART_SRCS
