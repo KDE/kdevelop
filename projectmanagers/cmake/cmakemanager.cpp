@@ -154,9 +154,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 }
 
 CMakeManager::~CMakeManager()
-{
-    delete m_doc;
-}
+{}
 
 KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
