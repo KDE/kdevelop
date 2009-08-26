@@ -36,7 +36,7 @@
 #include "../../interfaces/idocument.h"
 #include "../debuggerexport.h"
 #include "../interfaces/idebugsession.h"
-#include "../interfaces/idebugcontroller.h"
+#include "../../interfaces/idebugcontroller.h"
 
 namespace GDBDebugger {
     class GdbTest;

@@ -44,9 +44,11 @@
 namespace KDevelop {
 
 FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent)
-    : QSplitter(Qt::Horizontal, parent), m_controller(controller)
+: QSplitter(Qt::Horizontal, parent), m_session(0)
 {
-    connect(controller, SIGNAL(sessionAdded(KDevelop::IDebugSession*)), SLOT(sessionAdded(KDevelop::IDebugSession*)));
+    connect(controller, 
+            SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)), 
+            SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
     connect(controller, SIGNAL(raiseFramestackViews()), SIGNAL(requestRaise()));
 
     setWhatsThis(i18n("<b>Frame stack</b><p>"
@@ -81,6 +83,8 @@ FramestackWidget::~FramestackWidget() {}
 void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 {
     kDebug() << "Adding session:" << isVisible();
+
+    m_session = session;
     
     m_threads->setModel(session->frameStackModel());
     m_frames->setModel(session->frameStackModel());
@@ -93,18 +97,21 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
-    m_controller->currentSession()->frameStackModel()->setAutoUpdate(false);
+    if (m_session)
+        m_session->frameStackModel()->setAutoUpdate(false);
 }
 
 void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
 
-    m_controller->currentSession()->frameStackModel()->setAutoUpdate(true);
+    if (m_session)
+        m_session->frameStackModel()->setAutoUpdate(true);
 
-    IDebugSession *session = m_controller->currentSession();
-    if (session && session->state() != KDevelop::IDebugSession::EndedState) {
-        connect(m_controller->currentSession()->frameStackModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+    if (m_session && m_session->state() != KDevelop::IDebugSession::EndedState) 
+    {
+        connect(m_session->frameStackModel(), 
+                SIGNAL(rowsInserted(QModelIndex, int, int)),
                 SLOT(assignSomeThread()));
         assignSomeThread();
     }
@@ -113,7 +120,7 @@ void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& idx)
 {
     m_frames->setRootIndex(idx);
-    m_controller->currentSession()->frameStackModel()->setActiveThread(idx);
+    m_session->frameStackModel()->setActiveThread(idx);
 }
 
 void KDevelop::FramestackWidget::checkFetchMoreFrames()
@@ -124,13 +131,13 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
 
     kDebug() << val << max << m_frames->verticalScrollBar()->minimum();
     if (val + offset > max) {
-        m_controller->currentSession()->frameStackModel()->fetchMoreFrames();
+        m_session->frameStackModel()->fetchMoreFrames();
     }
 }
 
 void KDevelop::FramestackWidget::assignSomeThread()
 {
-    IFrameStackModel* model = m_controller->currentSession()->frameStackModel();
+    IFrameStackModel* model = m_session->frameStackModel();
     if (model->activeThread() && m_threads->selectionModel()->selectedRows().isEmpty()) {
         QModelIndex idx = model->activeThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
@@ -145,7 +152,7 @@ void KDevelop::FramestackWidget::assignSomeThread()
 
 void FramestackWidget::openFile(const QModelIndex& idx)
 {
-    IFrameStackModel::FrameItem f = m_controller->currentSession()->frameStackModel()->frame(idx);
+    IFrameStackModel::FrameItem f = m_session->frameStackModel()->frame(idx);
     /* If line is -1, then it's not a source file at all.  */
     if (f.line != -1)
         ICore::self()->documentController()->openDocument(f.file, KTextEditor::Cursor(f.line, 0));

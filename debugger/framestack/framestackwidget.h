@@ -56,7 +56,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
         void openFile(const QModelIndex& idx);
 
     private:
-        IDebugController *m_controller;
+        IDebugSession *m_session;
         QListView *m_threads;
         QWidget *m_threadsWidget;
         QTreeView *m_frames;
