@@ -39,7 +39,6 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../../interfaces/idocumentcontroller.h"
-#include "../interfaces/istackcontroller.h"
 #include "framestackmodel.h"
 
 namespace KDevelop {
@@ -60,12 +59,10 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
                     "previous calling functions.</p>"));
     setWindowIcon(KIcon("view-list-text"));
     m_threadsWidget = new QWidget(this);
-    m_threads = new QListView(m_threadsWidget);
-    m_threads->setModel(controller->frameStackModel());
+    m_threads = new QListView(m_threadsWidget);    
     m_frames = new QTreeView(this);
     m_frames->setRootIsDecorated(false);
-    m_frames->setModel(controller->frameStackModel());
-
+    
     m_threadsWidget->setLayout(new QVBoxLayout());
     m_threadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
     m_threadsWidget->layout()->addWidget(m_threads);
@@ -81,10 +78,13 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
 
 FramestackWidget::~FramestackWidget() {}
 
-void FramestackWidget::sessionAdded(KDevelop::IDebugSession* session)
+void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 {
-    Q_UNUSED(session);
     kDebug() << "Adding session:" << isVisible();
+    
+    m_threads->setModel(session->frameStackModel());
+    m_frames->setModel(session->frameStackModel());
+    
     if (isVisible()) {
         showEvent(0);
     }
@@ -93,18 +93,18 @@ void FramestackWidget::sessionAdded(KDevelop::IDebugSession* session)
 void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
-    m_controller->frameStackModel()->setAutoUpdate(false);
+    m_controller->currentSession()->frameStackModel()->setAutoUpdate(false);
 }
 
 void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
 
-    m_controller->frameStackModel()->setAutoUpdate(true);
+    m_controller->currentSession()->frameStackModel()->setAutoUpdate(true);
 
     IDebugSession *session = m_controller->currentSession();
     if (session && session->state() != KDevelop::IDebugSession::EndedState) {
-        connect(m_controller->frameStackModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
+        connect(m_controller->currentSession()->frameStackModel(), SIGNAL(rowsInserted(QModelIndex, int, int)),
                 SLOT(assignSomeThread()));
         assignSomeThread();
     }
@@ -113,7 +113,7 @@ void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& idx)
 {
     m_frames->setRootIndex(idx);
-    m_controller->frameStackModel()->setActiveThread(idx);
+    m_controller->currentSession()->frameStackModel()->setActiveThread(idx);
 }
 
 void KDevelop::FramestackWidget::checkFetchMoreFrames()
@@ -124,13 +124,13 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
 
     kDebug() << val << max << m_frames->verticalScrollBar()->minimum();
     if (val + offset > max) {
-        m_controller->frameStackModel()->fetchMoreFrames();
+        m_controller->currentSession()->frameStackModel()->fetchMoreFrames();
     }
 }
 
 void KDevelop::FramestackWidget::assignSomeThread()
 {
-    FrameStackModel* model = m_controller->frameStackModel();
+    IFrameStackModel* model = m_controller->currentSession()->frameStackModel();
     if (model->activeThread() && m_threads->selectionModel()->selectedRows().isEmpty()) {
         QModelIndex idx = model->activeThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
@@ -145,7 +145,7 @@ void KDevelop::FramestackWidget::assignSomeThread()
 
 void FramestackWidget::openFile(const QModelIndex& idx)
 {
-    FrameStackModel::FrameItem f = m_controller->frameStackModel()->frame(idx);
+    IFrameStackModel::FrameItem f = m_controller->currentSession()->frameStackModel()->frame(idx);
     /* If line is -1, then it's not a source file at all.  */
     if (f.line != -1)
         ICore::self()->documentController()->openDocument(f.file, KTextEditor::Cursor(f.line, 0));

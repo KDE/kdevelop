@@ -29,16 +29,15 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../../interfaces/iprojectcontroller.h"
 #include "../interfaces/isession.h"
-#include "../interfaces/istackcontroller.h"
 #include "../../shell/debugcontroller.h"
 
 namespace KDevelop {
 
-FrameStackModel::FrameStackModel(DebugController* parent)
-    : QAbstractItemModel(parent), m_autoUpdate(false), m_activeThread(0)
+FrameStackModel::FrameStackModel(IDebugSession *session)
+    : IFrameStackModel(session), m_autoUpdate(false), m_activeThread(0)
 {
-    connect(parent, SIGNAL(sessionAdded(KDevelop::IDebugSession*)),
-                SLOT(sessionAdded(KDevelop::IDebugSession*)));
+   connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+           SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 FrameStackModel::~FrameStackModel()
@@ -56,7 +55,7 @@ void FrameStackModel::setThreads(const QList<ThreadItem> &threads)
     }
 
     bool activeThreadIsValid = false;
-    int currentThreadNr = 0;
+    int currentThreadNr = -1;
     foreach (const ThreadItem &i, threads) {
         if (m_activeThread == i.nr) {
             activeThreadIsValid = true;
@@ -223,21 +222,11 @@ QVariant FrameStackModel::headerData(int section, Qt::Orientation orientation, i
     return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-
-void FrameStackModel::sessionAdded(IDebugSession* session)
-{
-    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-                SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
-}
-
 void FrameStackModel::setActiveThread(int threadNumber)
 {
     kDebug() << threadNumber;
-    if (m_activeThread != threadNumber) {
-        IDebugSession *session = ICore::self()->debugController()->currentSession();
-        if (session) {
-            session->stackController()->fetchFrames(threadNumber, 0, 20);
-        }
+    if (m_activeThread != threadNumber && threadNumber != -1) {
+        fetchFrames(threadNumber, 0, 20);
     }
     m_activeThread = threadNumber;
 }
@@ -269,9 +258,9 @@ QModelIndex FrameStackModel::activeThreadIndex() const
 }
 
 void FrameStackModel::setAutoUpdate(bool autoUpdate)
-{
-    IDebugSession *session = ICore::self()->debugController()->currentSession();
-    if (!m_autoUpdate && autoUpdate && session && (session->state() == IDebugSession::PausedState || session->state() == IDebugSession::StoppedState)) {
+{    
+    if (!m_autoUpdate && autoUpdate 
+        && (session()->state() == IDebugSession::PausedState || session()->state() == IDebugSession::StoppedState)) {
         update();
     }
     m_autoUpdate = autoUpdate;
@@ -279,12 +268,9 @@ void FrameStackModel::setAutoUpdate(bool autoUpdate)
 
 void FrameStackModel::update()
 {
-    IDebugSession *session = ICore::self()->debugController()->currentSession();
-    if (session) {
-        session->stackController()->fetchThreads();
-        if (m_activeThread) {
-            session->stackController()->fetchFrames(m_activeThread, 0, 20);
-        }
+    fetchThreads();
+    if (m_activeThread) {
+        fetchFrames(m_activeThread, 0, 20);
     }
 }
 
@@ -306,12 +292,11 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 
 
 void FrameStackModel::fetchMoreFrames()
-{
-    IDebugSession *session = ICore::self()->debugController()->currentSession();
-    if (session && m_activeThread && m_hasMoreFrames[m_activeThread]) {
-        session->stackController()->fetchFrames(m_activeThread,
-                                                m_frames[m_activeThread].count(),
-                                                m_frames[m_activeThread].count()-1+20);
+{    
+    if (m_activeThread && m_hasMoreFrames[m_activeThread]) {
+        fetchFrames(m_activeThread,
+                    m_frames[m_activeThread].count(),
+                    m_frames[m_activeThread].count()-1+20);
     }
 }
 

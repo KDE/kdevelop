@@ -22,6 +22,7 @@
 #define KDEV_IDEBUGSESSION_H
 
 #include <QtCore/QObject>
+#include <QtCore/QAbstractItemModel>
 #include "../debuggerexport.h"
 
 class KUrl;
@@ -30,7 +31,7 @@ namespace KDevelop {
 
 class IVariableController;
 class IBreakpointController;
-class IStackController;
+class IFrameStackModel;
 class Breakpoint;
 class StackModel;
 
@@ -69,8 +70,8 @@ public:
     bool isRunning() const;
     
     IBreakpointController *breakpointController() const;
-    IVariableController *variableController() const;
-    IStackController *stackController() const;
+    IVariableController *variableController() const;    
+    IFrameStackModel *frameStackModel() const; 
 
 public Q_SLOTS:
     virtual void restartDebugger() = 0;
@@ -92,12 +93,15 @@ Q_SIGNALS:
     void finished();
 
     void raiseFramestackViews();
+        
 
 protected:
+    
+    virtual IFrameStackModel* createFrameStackModel() = 0;
 
     IBreakpointController *m_breakpointController;
-    IVariableController *m_variableController;
-    IStackController *m_stackController;
+    IVariableController *m_variableController;    
+    mutable IFrameStackModel *m_frameStackModel;
 };
 
 }

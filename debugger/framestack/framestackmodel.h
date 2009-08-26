@@ -28,27 +28,19 @@
 
 #include "../debuggerexport.h"
 #include "../interfaces/idebugsession.h"
+#include "../interfaces/iframestackmodel.h"
 
 namespace KDevelop {
 
 class DebugController;
 
-class KDEVPLATFORMDEBUGGER_EXPORT FrameStackModel : public QAbstractItemModel
+class KDEVPLATFORMDEBUGGER_EXPORT FrameStackModel : public IFrameStackModel
 {
     Q_OBJECT
 public:
-    FrameStackModel(DebugController* parent);
+    FrameStackModel(IDebugSession* session);
     virtual ~FrameStackModel();
-
-    /** Stack frame */
-    struct FrameItem {
-        int nr;
-        QString name;
-        KUrl file;
-        /* If -1, it means that file is not necessary a source file,
-           but possibly a solib name.  */
-        int line;
-    };
+    
     struct ThreadItem {
         int nr;
         QString name;
@@ -74,13 +66,11 @@ public:
     void setActiveThread(const QModelIndex &index);
     int activeThread() const;
     QModelIndex activeThreadIndex() const;
-
-public Q_SLOTS:
+    
     void fetchMoreFrames();
 
 private Q_SLOTS:
-    void stateChanged(KDevelop::IDebugSession::DebuggerState state);
-    void sessionAdded(KDevelop::IDebugSession* session);
+    void stateChanged(KDevelop::IDebugSession::DebuggerState state);    
 
 private:
     void update();

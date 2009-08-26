@@ -29,7 +29,7 @@ namespace KDevelop {
 
 
 IDebugSession::IDebugSession()
-    : m_breakpointController(0), m_variableController(0), m_stackController(0)
+    : m_breakpointController(0), m_variableController(0), m_frameStackModel(0)
 {
 }
 
@@ -54,12 +54,18 @@ IVariableController *IDebugSession::variableController() const
     return m_variableController;
 }
 
-
-IStackController* IDebugSession::stackController() const
+IFrameStackModel* IDebugSession::frameStackModel() const
 {
-    return m_stackController;
+    /* The delayed initialization is used so that derived
+       class can override createFrameStackModel and have
+       it called. If we tried to call virtual function
+       from a constructor, it would not work.  */
+    if (m_frameStackModel == 0) {
+        m_frameStackModel = const_cast<IDebugSession*>(this)->createFrameStackModel();
+        Q_ASSERT(m_frameStackModel);
+    }
+    return m_frameStackModel;
 }
-
 
 }
 
