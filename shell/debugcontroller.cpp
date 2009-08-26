@@ -99,8 +99,7 @@ private:
 DebugController::DebugController(QObject *parent)
     : IDebugController(parent), KXMLGUIClient(),
       m_breakpointModel(new BreakpointModel(this)),
-      m_variableCollection(new VariableCollection(this)),
-      m_frameStackModel(new FrameStackModel(this))
+      m_variableCollection(new VariableCollection(this))
 {
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
@@ -149,13 +148,6 @@ VariableCollection* DebugController::variableCollection()
 {
     return m_variableCollection;
 }
-
-FrameStackModel* DebugController::frameStackModel()
-{
-    return m_frameStackModel;
-}
-
-
 
 void DebugController::partAdded(KParts::Part* part)
 {
@@ -286,15 +278,15 @@ void DebugController::addSession(IDebugSession* session)
         m_currentSession->stopDebugger();
     }
     m_currentSession = session;
-    
+        
     connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(debuggerStateChanged(KDevelop::IDebugSession::DebuggerState)));
     connect(session, SIGNAL(showStepInSource(KUrl,int)), SLOT(showStepInSource(KUrl,int)));
     connect(session, SIGNAL(clearExecutionPoint()), SLOT(clearExecutionPoint()));
     connect(session, SIGNAL(raiseFramestackViews()), SIGNAL(raiseFramestackViews()));
     
     updateDebuggerState(session->state(), session);
-    
-    emit sessionAdded(session);
+        
+    emit currentSessionChanged(session);
     
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 

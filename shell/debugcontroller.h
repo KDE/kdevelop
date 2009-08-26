@@ -52,7 +52,6 @@ public:
 
     virtual BreakpointModel* breakpointModel();
     virtual VariableCollection* variableCollection();
-    virtual FrameStackModel *frameStackModel();
 
 private Q_SLOTS:
     void restartDebugger();
@@ -98,8 +97,7 @@ private:
 
     QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
-    VariableCollection *m_variableCollection;
-    FrameStackModel *m_frameStackModel;
+    VariableCollection *m_variableCollection;    
 };
 
 }

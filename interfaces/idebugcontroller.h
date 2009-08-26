@@ -34,6 +34,11 @@ class ContextMenuExtension;
 class Context;
 class IDebugSession;
 
+/** Top level debugger object. Exists as long as KDevelop exists
+    and hold some global debugger state, like breakpoints.
+    Also holds IDebugSession for specific application while that
+    application is being debugged.
+*/
 class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
 {
     Q_OBJECT
@@ -42,15 +47,17 @@ public:
     virtual ~IDebugController();
 
     virtual void addSession(IDebugSession* session) = 0;
+    
+    /** Return the current debug session. At present, only
+        one session may be active at a time.  */
     virtual IDebugSession *currentSession() = 0;
     virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
 
     virtual BreakpointModel *breakpointModel() = 0;
     virtual VariableCollection *variableCollection() = 0;
-    virtual FrameStackModel *frameStackModel() = 0;
 
 Q_SIGNALS:
-    void sessionAdded(KDevelop::IDebugSession* session);
+    void currentSessionChanged(KDevelop::IDebugSession* session);
 };
 
 }
