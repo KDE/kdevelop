@@ -86,8 +86,8 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 
     m_session = session;
     
-    m_threads->setModel(session->frameStackModel());
-    m_frames->setModel(session->frameStackModel());
+    m_threads->setModel(session ? session->frameStackModel() : 0);
+    m_frames->setModel(session ? session->frameStackModel() : 0);
     
     if (isVisible()) {
         showEvent(0);
