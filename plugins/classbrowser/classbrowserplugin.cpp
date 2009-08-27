@@ -44,6 +44,7 @@
 
 #include "classmodel.h"
 #include "classtree.h"
+#include "classwidget.h"
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/functiondeclaration.h>

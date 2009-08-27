@@ -20,41 +20,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef CLASSTREE_H
-#define CLASSTREE_H
 
-#include <QtGui/QTreeView>
+#ifndef CLASSWIDGET_H
+#define CLASSWIDGET_H
 
-#include <language/duchain/identifier.h>
+#include <QtGui/QWidget>
 
 class ClassBrowserPlugin;
+class ClassTree;
 class ClassModel;
+class KLineEdit;
 
-class ClassTree : public QTreeView
+/// The class browser widget
+class ClassWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  ClassTree(QWidget* parent, ClassBrowserPlugin* plugin);
-  virtual ~ClassTree();
-
-public:
-  /// Find the given a_id in the tree and highlight it.
-  void highlightIdentifier(KDevelop::IndexedQualifiedIdentifier a_id);
-
-  static bool populatingClassBrowserContextMenu();
-  
-protected:
-  virtual void contextMenuEvent(QContextMenuEvent* e);
-  ClassModel* model();
-
-private Q_SLOTS:
-  void itemActivated(const QModelIndex& index);
+  ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin);
+  virtual ~ClassWidget();
 
 private:
   ClassBrowserPlugin* m_plugin;
+  ClassModel* m_model;
+  ClassTree* m_tree;
+  KLineEdit* m_searchLine;
 };
 
-#endif
+#endif // CLASSWIDGET_H
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on

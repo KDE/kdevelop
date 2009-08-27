@@ -23,25 +23,9 @@
 
 #include "classtree.h"
 
-#include <QHeaderView>
-#include <QMenu>
-#include <QCursor>
-#include <QContextMenuEvent>
-#include <QFrame>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QToolButton>
-#include <QLabel>
-
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kaction.h>
-#include <KMenu>
-#include <KLineEdit>
-#include <KHBox>
-
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
+#include <QtGui/QMenu>
+#include <QtGui/QHeaderView>
+#include <QtGui/QContextMenuEvent>
 
 #include "interfaces/contextmenuextension.h"
 #include "interfaces/icore.h"
@@ -61,60 +45,6 @@
 #include "classbrowserplugin.h"
 
 using namespace KDevelop;
- 
-ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
-  : QWidget(parent)
-  , m_plugin(plugin)
-  , m_model(new ClassModel())
-  , m_tree(new ClassTree(this, plugin))
-  , m_searchLine(new KLineEdit(this))
-{
-  setObjectName("Class Browser Tree");
-  setWindowTitle(i18n("Classes"));
-  setWindowIcon(SmallIcon("code-class"));
-
-  // Set tree in the plugin
-  m_plugin->setActiveClassTree(m_tree);
-
-  // Set model in the tree view
-  m_tree->setModel(m_model);
-
-  // We need notification in the model for the collapse/expansion of nodes.
-  connect(m_tree, SIGNAL(collapsed(const QModelIndex&)),
-          m_model, SLOT(collapsed(const QModelIndex&)));
-  connect(m_tree, SIGNAL(expanded(const QModelIndex&)),
-          m_model, SLOT(expanded(const QModelIndex&)));
-
-  // Init search box
-  m_searchLine->setClearButtonShown( true );
-  connect(m_searchLine, SIGNAL(textChanged(QString)), m_model, SLOT(updateFilterString(QString)));
-  QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );
-  searchLabel->setBuddy( m_searchLine );
-
-  QHBoxLayout* layout = new QHBoxLayout();
-  layout->setSpacing( 5 );
-  layout->setMargin( 0 );
-  layout->addWidget(searchLabel);
-  layout->addWidget(m_searchLine);
-
-  setFocusProxy( m_searchLine );
-
-  QVBoxLayout* vbox = new QVBoxLayout(this);
-  vbox->setMargin(0);
-  vbox->addLayout(layout);
-  vbox->addWidget(m_tree);
-  setLayout( vbox );
-
-  setWhatsThis( i18n( "Class Browser" ) );
-}
-
-ClassWidget::~ClassWidget()
-{
-  delete m_model;
-}
-
-
-
 
 ClassTree::ClassTree(QWidget* parent, ClassBrowserPlugin* plugin)
   : QTreeView(parent)
