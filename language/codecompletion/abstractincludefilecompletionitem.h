@@ -33,7 +33,7 @@ namespace KDevelop {
 
 //A completion item used for completing include-files
 template<typename NavigationWidget>
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractIncludeFileCompletionItem : public CompletionTreeItem {
+class AbstractIncludeFileCompletionItem : public CompletionTreeItem {
 public:
   AbstractIncludeFileCompletionItem(const IncludeItem& include) : includeItem(include) {
   }
