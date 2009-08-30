@@ -110,10 +110,11 @@ struct FileModificationSetRepository : public Utils::BasicSetRepository {
   }
 };
 
-FileModificationSetRepository fileModificationSetRepository;
+//FileModificationSetRepository fileModificationSetRepository;
 
 struct FileModificationSetRepositoryRepresenter {
   static FileModificationSetRepository& repository() {
+    static FileModificationSetRepository fileModificationSetRepository;
     return fileModificationSetRepository;
   }
 };
@@ -123,7 +124,7 @@ ModificationRevisionSet::ModificationRevisionSet(unsigned int index) : m_index(i
 }
 
 uint ModificationRevisionSet::size() const {
-  Utils::Set set = Utils::Set(m_index, &fileModificationSetRepository);
+  Utils::Set set = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   return set.count();
 }
 
@@ -131,7 +132,7 @@ void ModificationRevisionSet::clear() {
   QMutexLocker lock(&modificationRevisionSetMutex);
   
   if(m_index) {
-    Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
+    Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
     oldModificationTimes.staticUnref();
     m_index = 0;
   }
@@ -142,14 +143,14 @@ void ModificationRevisionSet::addModificationRevision(const IndexedString& url, 
   QMutexLocker lock(&modificationRevisionSetMutex);
   
   if(m_index == 0) {
-    Utils::Set set = fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
+    Utils::Set set = FileModificationSetRepositoryRepresenter::repository().createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
     set.staticRef();
     m_index = set.setIndex();
   }else{
-    Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
+    Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
     Utils::Set newModificationTimes = oldModificationTimes;
     
-    Utils::Set tempSet = fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
+    Utils::Set tempSet = FileModificationSetRepositoryRepresenter::repository().createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
     tempSet.staticRef();
     
     newModificationTimes += tempSet;
@@ -169,10 +170,10 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
 
   clearCache();
   
-  Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
+  Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set newModificationTimes = oldModificationTimes;
   
-  Utils::Set tempSet = fileModificationSetRepository.createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
+  Utils::Set tempSet = FileModificationSetRepositoryRepresenter::repository().createSet(fileModificationPairRepository().index(FileModificationPair(url, revision)));
   tempSet.staticRef();
   
   newModificationTimes -= tempSet;
@@ -214,7 +215,7 @@ static bool nodeNeedsUpdate(uint index) {
   
   bool result = false;
   
-  const Utils::SetNodeData* nodeData = fileModificationSetRepository.nodeFromIndex(index);
+  const Utils::SetNodeData* nodeData = FileModificationSetRepositoryRepresenter::repository().nodeFromIndex(index);
   if(nodeData->contiguous()) {
     //Do  the actual checking
     for(unsigned int a = nodeData->start; a < nodeData->end; ++a) {
@@ -239,7 +240,7 @@ QString ModificationRevisionSet::toString() const
 {
   QMutexLocker lock(&modificationRevisionSetMutex);
   QString ret = "[";
-  Utils::Set set(m_index, &fileModificationSetRepository);
+  Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
   bool first = true;
   while(it) {
@@ -260,7 +261,7 @@ bool ModificationRevisionSet::needsUpdate() const {
   QMutexLocker lock(&modificationRevisionSetMutex);
   
   #ifdef DEBUG_NEEDSUPDATE
-  Utils::Set set(m_index, &fileModificationSetRepository);
+  Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
   while(it) {
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
@@ -280,8 +281,8 @@ bool ModificationRevisionSet::needsUpdate() const {
 ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationRevisionSet& rhs) {
   QMutexLocker lock(&modificationRevisionSetMutex);
   
-  Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
-  Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &fileModificationSetRepository);
+  Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
+  Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &FileModificationSetRepositoryRepresenter::repository());
   
   Utils::Set newModificationTimes = oldModificationTimes;
   
@@ -299,8 +300,8 @@ ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationR
 ModificationRevisionSet& ModificationRevisionSet::operator-=(const ModificationRevisionSet& rhs) {
   QMutexLocker lock(&modificationRevisionSetMutex);
   
-  Utils::Set oldModificationTimes = Utils::Set(m_index, &fileModificationSetRepository);
-  Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &fileModificationSetRepository);
+  Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
+  Utils::Set otherModificationTimes = Utils::Set(rhs.m_index, &FileModificationSetRepositoryRepresenter::repository());
   
   Utils::Set newModificationTimes = oldModificationTimes;
   
