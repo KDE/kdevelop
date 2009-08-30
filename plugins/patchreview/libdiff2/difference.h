@@ -152,7 +152,7 @@ typedef Q3ValueVector<DifferenceString*> DifferenceStringList;
 typedef Q3ValueVector<DifferenceString*>::iterator DifferenceStringListIterator;
 typedef Q3ValueVector<DifferenceString*>::const_iterator DifferenceStringListConstIterator;
 
-class DIFF2_EXPORT Difference
+class Difference
 {
 public:
 	enum Type { Change, Insert, Delete, Unchanged };

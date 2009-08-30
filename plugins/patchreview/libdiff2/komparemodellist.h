@@ -38,7 +38,7 @@ class KompareProcess;
 namespace Diff2
 {
 
-class DIFF2_EXPORT KompareModelList : public QObject
+class KompareModelList : public QObject
 {
 	Q_OBJECT
 public:

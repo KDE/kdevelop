@@ -54,7 +54,7 @@ int findItem( const Pointer* item, const DifferenceList& container ) {
 class DiffHunk;
 class Difference;
 
-class DIFF2_EXPORT DiffModel : public QObject
+class DiffModel : public QObject
 {
 Q_OBJECT
 public:

@@ -26,7 +26,7 @@
 
 #include "diffexport.h"
 
-class DIFF2_EXPORT DiffSettings : public SettingsBase
+class DiffSettings : public SettingsBase
 {
 Q_OBJECT
 public:
