@@ -2,7 +2,7 @@
 
 ########### next target ###############
 
-add_definitions( -fexceptions)
+add_definitions( ${KDE4_ENABLE_EXCEPTION})
 
 set(patchreview_PART_SRCS      
     patchreview.cpp
