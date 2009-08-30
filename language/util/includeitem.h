@@ -21,23 +21,16 @@
 
 #include <kurl.h>
 
+#include "../languageexport.h"
+
 namespace KDevelop {
 
-struct IncludeItem {
-  IncludeItem() : isDirectory(false), pathNumber(0) {
-  }
+class KDEVPLATFORMLANGUAGE_EXPORT IncludeItem {
+public:
+  IncludeItem();
 
   ///Constructs the url from basePath and name.
-  KUrl url() const {
-    KUrl u;
-    if( !basePath.isEmpty() ) {
-      u = KUrl( basePath );
-      u.addPath( name );
-    }else{
-      u = KUrl( name );
-    }
-    return u;
-  }
+  KUrl url() const;
 
   ///If this is true, this item represents a sub-directory. Else it represents a file.
   bool isDirectory;
