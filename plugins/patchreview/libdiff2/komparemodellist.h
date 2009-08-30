@@ -42,7 +42,7 @@ class KompareModelList : public QObject
 {
 	Q_OBJECT
 public:
-	KompareModelList( DiffSettings* diffSettings, struct Kompare::Info& info, QObject* parent = 0, const char* name = 0 );
+	KompareModelList( DiffSettings* diffSettings, Kompare::Info& info, QObject* parent = 0, const char* name = 0 );
 	~KompareModelList();
 
 public:
@@ -191,7 +191,7 @@ private:
 	int                   m_noOfModified;
 	unsigned int          m_modelIndex;
 
-	struct Kompare::Info& m_info;
+	Kompare::Info& m_info;
 
 	KAction*              m_applyDifference;
 	KAction*              m_unApplyDifference;

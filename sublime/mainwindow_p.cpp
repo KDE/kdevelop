@@ -507,7 +507,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     m_mainWindow->setActiveView(0L);
 }
 
-void MainWindowPrivate::toolViewAdded(Sublime::View */*toolView*/, Sublime::Position position)
+void MainWindowPrivate::toolViewAdded(Sublime::View* /*toolView*/, Sublime::Position position)
 {
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, position);

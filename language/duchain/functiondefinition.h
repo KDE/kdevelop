@@ -24,7 +24,9 @@
 using namespace KDevelop;
 
 namespace KDevelop {
-  struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDefinitionData : public FunctionDeclarationData {
+  class KDEVPLATFORMLANGUAGE_EXPORT FunctionDefinitionData : public FunctionDeclarationData {
+  public:
+
     //Holds the declaration id for this definition, if this is a definition with separate declaration
     DeclarationId m_declaration;
   };

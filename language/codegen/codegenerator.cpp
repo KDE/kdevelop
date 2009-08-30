@@ -35,8 +35,10 @@
 namespace KDevelop
 {
 
-struct CodeGeneratorPrivate
+class CodeGeneratorPrivate
 {
+public:
+
     CodeGeneratorPrivate() : autoGen(false), context(0) {}
     
     QMap<IndexedString, DUChainChangeSet *> duchainChanges;

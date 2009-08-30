@@ -36,7 +36,10 @@ QString rangeToString( const KTextEditor::Range& r ) {
 }
   
 
-struct DumpDotGraphPrivate {
+class DumpDotGraphPrivate
+{
+public:
+
   QString dotGraphInternal(KDevelop::DUContext* contex, bool isMaster, bool shortened);
 
   void addDeclaration(QTextStream& stream, Declaration* decl);

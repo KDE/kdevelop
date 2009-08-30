@@ -60,7 +60,10 @@ using namespace KTextEditor;
 
 namespace KDevelop {
 
-struct CompletionWorkerThread : public QThread {
+class CompletionWorkerThread : public QThread
+{
+public:
+
    CompletionWorkerThread(CodeCompletionModel* model) : QThread(model), m_model(model), m_worker(0) {
    }
    ~CompletionWorkerThread() {

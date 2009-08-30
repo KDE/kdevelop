@@ -62,7 +62,9 @@ namespace KDevelop {
       uint m_index;
   };  
   
-  struct KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation {
+  class KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation {
+  public:
+
     InstantiationInformation();
     ///@todo include some information for instantiation only with default parameters
     InstantiationInformation(const InstantiationInformation& rhs, bool dynamic = true);

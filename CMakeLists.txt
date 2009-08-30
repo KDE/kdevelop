@@ -45,7 +45,7 @@ add_subdirectory(vcs)
 add_subdirectory(plugins)
 add_subdirectory(veritas)
 add_subdirectory(pics)
-macro_optional_add_subdirectory(doc)
+#macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(tests)
 

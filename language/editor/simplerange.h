@@ -25,7 +25,8 @@
 #include "simplecursor.h"
 
 namespace KDevelop {
-struct KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
+class KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
+public:
 
     SimpleCursor start, end;
 

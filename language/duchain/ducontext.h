@@ -172,7 +172,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
 };
 
 ///This class is used to trace imports while findDeclarationsInternal. The back-tracing may be needed for correctly resolving delayed types(templates)
-struct ImportTraceItem {
+class ImportTraceItem
+{
+public:
+
   ImportTraceItem(const DUContext* _ctx, SimpleCursor _pos = SimpleCursor::invalid()) : ctx(_ctx), position(_pos) {
   }
   ImportTraceItem() {

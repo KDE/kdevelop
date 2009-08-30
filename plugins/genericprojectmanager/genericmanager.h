@@ -108,7 +108,7 @@ private Q_SLOTS:
     void dirty( const QString &fileName );
 
 private:
-    struct GenericProjectManagerPrivate* const d;
+    class GenericProjectManagerPrivate* const d;
 };
 
 #endif // KDEVGENERICIMPORTER_H

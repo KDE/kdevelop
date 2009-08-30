@@ -81,7 +81,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT IndexedIdentifier : public ReferenceCountMana
 ///abilities or access to the contained data.
 ///This class does "disk reference counting"
 ///@warning Do not use this after QCoreApplication::aboutToQuit() has been emitted, items that are not disk-referenced will be invalid at that point
-struct KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier : public ReferenceCountManager {
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedQualifiedIdentifier : public ReferenceCountManager {
+public:
+
   IndexedQualifiedIdentifier();
   IndexedQualifiedIdentifier(const QualifiedIdentifier& id);
   IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& rhs);

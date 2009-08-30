@@ -102,7 +102,10 @@ class UsesRequestItem {
 };
 
 
-struct UsesPrivate {
+class UsesPrivate
+{
+public:
+
   UsesPrivate() : m_uses("Use Map") {
   }
   //Maps declaration-ids to Uses

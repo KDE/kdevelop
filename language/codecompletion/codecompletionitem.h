@@ -42,7 +42,7 @@ namespace KDevelop
 class CodeCompletionModel;
 
 struct CompletionTreeNode;
-struct CompletionTreeItem;
+class CompletionTreeItem;
 class IndexedType;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeElement : public KShared {
@@ -101,7 +101,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeEle
   QList<KSharedPtr<CompletionTreeElement> > children;
 };
 
-struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeElement {
+class KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeItem : public CompletionTreeElement
+{
+public:
+
   ///Execute the completion item. The default implementation does nothing.
   virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
 

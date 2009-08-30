@@ -89,7 +89,8 @@ typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false, false, 
 
 struct SetDataRepository;
 
-struct SetNodeDataRequest {
+class SetNodeDataRequest {
+public:
 
   enum {
     AverageSize = sizeof(SetNodeData)

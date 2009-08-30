@@ -74,7 +74,9 @@ namespace Kompare
 		Destination
 	};
 
-	struct Info {
+	class Info {
+   public:
+
 		Info (
 			enum Mode _mode = UnknownMode,
 			enum DiffMode _diffMode = UnknownDiffMode,

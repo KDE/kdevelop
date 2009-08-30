@@ -45,8 +45,10 @@
 
 namespace KDevelop {
 
-struct CreateClassWizardPrivate {
-    KUrl baseUrl;
+class CreateClassWizardPrivate {
+public:
+
+   KUrl baseUrl;
     OutputPage* output;
     ClassGenerator * generator;
 };
@@ -445,8 +447,10 @@ bool ClassIdentifierPage::validatePage ( void )
 }
 
 
-struct LicensePagePrivate
+class LicensePagePrivate
 {
+public:
+
     struct LicenseInfo
     {
         QString name;

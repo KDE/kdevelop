@@ -223,7 +223,9 @@ bool SetNodeDataRequest::equals(const SetNodeData* item) const {
     return item->leftNode == data.leftNode && item->rightNode == data.rightNode && item->start == data.start && item->end == data.end;
 }
 
-struct BasicSetRepository::Private {
+class BasicSetRepository::Private {
+public:
+
   Private(QString _name) : name(_name) {
   }
   ~Private() {
@@ -346,7 +348,9 @@ QString SetRepositoryAlgorithms::dumpDotGraph(uint nodeIndex) const {
 
 const int nodeStackAlloc = 500;
 
-struct Set::Iterator::IteratorPrivate {
+class Set::Iterator::IteratorPrivate {
+public:
+
   IteratorPrivate() : nodeStackSize(0), currentIndex(0), repository(0) {
     nodeStackData.resize(nodeStackAlloc);
     nodeStack = nodeStackData.data();

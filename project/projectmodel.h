@@ -28,7 +28,7 @@
 #include <KDE/KUrl>
 #include <KDE/KSharedConfig>
 
-template<typename T1,typename T2> class QPair;
+template<typename T1,typename T2> struct QPair;
 template<typename T> class QList;
 
 namespace KDevelop

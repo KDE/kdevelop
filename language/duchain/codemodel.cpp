@@ -151,7 +151,9 @@ class CodeModelRequestItem {
 };
 
 
-struct CodeModelPrivate {
+class CodeModelPrivate {
+public:
+
   CodeModelPrivate() : m_repository("Code Model") {
   }
   //Maps declaration-ids to items

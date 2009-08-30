@@ -62,8 +62,10 @@ static QHash<KDevelop::IndexedString, QList<KDevelop::TopDUContext::Features> > 
 namespace KDevelop
 {
 
-struct ParseJobPrivate
+class ParseJobPrivate
 {
+public:
+
     ParseJobPrivate(const KUrl& url) :
           document( IndexedString(url.pathOrUrl()) )
         , backgroundParser( 0 )

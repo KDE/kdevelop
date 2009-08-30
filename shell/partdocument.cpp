@@ -32,7 +32,9 @@
 
 namespace KDevelop {
 
-struct PartDocumentPrivate {
+class PartDocumentPrivate {
+public:
+
     QMap<QWidget*, KParts::Part*> partForView;
     QString preferredPart;
 };

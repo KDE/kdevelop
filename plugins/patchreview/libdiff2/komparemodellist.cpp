@@ -45,7 +45,7 @@
 
 using namespace Diff2;
 
-KompareModelList::KompareModelList( DiffSettings* diffSettings, struct Kompare::Info& info, QObject* parent, const char* name )
+KompareModelList::KompareModelList( DiffSettings* diffSettings, Kompare::Info& info, QObject* parent, const char* name )
 	: QObject( parent ),
 	m_diffProcess( 0 ),
 	m_diffSettings( diffSettings ),

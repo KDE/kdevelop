@@ -142,7 +142,7 @@ private:
     void saveGeometry(KConfigGroup &config);
     void loadGeometry(const KConfigGroup &config);
 
-    struct MainWindowPrivate *const d;
+    class MainWindowPrivate *const d;
     friend class MainWindowOperator;
     friend class MainWindowPrivate;
 };

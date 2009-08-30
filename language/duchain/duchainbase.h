@@ -52,7 +52,9 @@ class IndexedString;
 ///This also means that every item that is "semantically" deleted, _MUST_ have dynamic data before its destruction.
 ///This also means that DUChainBaseData based items should never be cloned using memcpy, but rather always using the copy-constructor,
 ///even if both sides are constant.
-struct KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectData {
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData : public DocumentRangeObjectData {
+public:
+
     DUChainBaseData() : classId(0) {
     }
     DUChainBaseData(const DUChainBaseData& rhs) : DocumentRangeObjectData(rhs), classId(rhs.classId) {

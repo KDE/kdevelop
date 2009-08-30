@@ -44,8 +44,10 @@
 namespace KDevelop
 {
     
-struct ApplyChangesWidgetPrivate
+class ApplyChangesWidgetPrivate
 {
+public:
+
     ApplyChangesWidgetPrivate(ApplyChangesWidget * p)
         : parent(p), m_index(0) {}
     ~ApplyChangesWidgetPrivate()

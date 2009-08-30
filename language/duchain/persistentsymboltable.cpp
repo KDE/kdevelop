@@ -195,7 +195,10 @@ struct CacheEntry {
   DataHash m_hash;
 };
 
-struct PersistentSymbolTablePrivate {
+class PersistentSymbolTablePrivate
+{
+public:
+
   PersistentSymbolTablePrivate() : m_declarations("Persistent Declaration Table"), m_contexts("Persistent Context Table") {
     m_contexts.setMutex(m_declarations.mutex());
   }

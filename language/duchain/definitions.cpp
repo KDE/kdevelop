@@ -100,7 +100,10 @@ class DefinitionsRequestItem {
 };
 
 
-struct DefinitionsPrivate {
+class DefinitionsPrivate
+{
+public:
+
   DefinitionsPrivate() : m_definitions("Definition Map") {
   }
   //Maps declaration-ids to definitions

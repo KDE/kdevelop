@@ -80,7 +80,7 @@ private:
     Q_PRIVATE_SLOT(d, void slotDocumentLoaded())
     Q_PRIVATE_SLOT(d, void documentSaved(KTextEditor::Document*,bool))
 
-    struct TextDocumentPrivate * const d;
+    class TextDocumentPrivate * const d;
     friend class TextDocumentPrivate;
 };
 

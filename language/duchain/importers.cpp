@@ -102,7 +102,10 @@ class ImportersRequestItem {
 };
 
 
-struct ImportersPrivate {
+class ImportersPrivate
+{
+public:
+
   ImportersPrivate() : m_importers("Importer Map") {
   }
   //Maps declaration-ids to Importers

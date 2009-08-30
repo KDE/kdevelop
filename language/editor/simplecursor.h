@@ -22,7 +22,8 @@
 #include "../languageexport.h"
 
 namespace KDevelop {
-struct KDEVPLATFORMLANGUAGE_EXPORT SimpleCursor {
+class KDEVPLATFORMLANGUAGE_EXPORT SimpleCursor {
+public:
 
  int line, column;
 

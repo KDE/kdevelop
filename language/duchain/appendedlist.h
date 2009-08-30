@@ -54,7 +54,7 @@ enum {
   DynamicAppendedListMask = 1 << 31
 };
 enum {
-  DynamicAppendedListRevertMask = 0xffffffff - DynamicAppendedListMask
+  DynamicAppendedListRevertMask = ~DynamicAppendedListMask
 };
 /**
  * Manages a repository of items for temporary usage. The items will be allocated with an index on alloc(),

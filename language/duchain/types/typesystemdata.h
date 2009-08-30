@@ -136,7 +136,7 @@ public:
   IndexedType m_baseType;
 };
 
-DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionTypeData, m_arguments, IndexedType)
 
 /// Private data structure for FunctionType
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionTypeData : public AbstractTypeData

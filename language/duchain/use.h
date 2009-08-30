@@ -45,8 +45,10 @@ class Declaration;
  * need smart-ranges. For that reason we do not store them here, but instead only map them to the uses
  * when there actually IS smart-ranges for them.
  */
-struct KDEVPLATFORMLANGUAGE_EXPORT Use
+class KDEVPLATFORMLANGUAGE_EXPORT Use
 {
+public:
+
   Use(const SimpleRange& range = SimpleRange::invalid(), int declarationIndex = std::numeric_limits<int>::max()) : m_range(range), m_declarationIndex(declarationIndex) {
   }
   
