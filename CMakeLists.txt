@@ -20,7 +20,7 @@ find_package(KDevPlatform 0.9.95 REQUIRED)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
 # create config.h
 include (ConfigureChecks.cmake)
@@ -38,7 +38,7 @@ add_subdirectory(tools)
 add_subdirectory(xtest)
 add_subdirectory(app_templates)
 add_subdirectory(documentation)
-macro_optional_add_subdirectory(doc)
+#macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()
 

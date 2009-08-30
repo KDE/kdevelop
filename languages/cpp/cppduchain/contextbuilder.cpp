@@ -929,16 +929,16 @@ void ContextBuilder::visitForStatement(ForStatementAST *node)
   m_importedParentContexts.clear();
 }
 
-void ContextBuilder::createTypeForInitializer(InitializerAST */*node*/) {
+void ContextBuilder::createTypeForInitializer(InitializerAST* /*node*/) {
 }
 
-void ContextBuilder::closeTypeForInitializer(InitializerAST */*node*/) {
+void ContextBuilder::closeTypeForInitializer(InitializerAST* /*node*/) {
 }
 
-void ContextBuilder::createTypeForDeclarator(DeclaratorAST */*node*/) {
+void ContextBuilder::createTypeForDeclarator(DeclaratorAST* /*node*/) {
 }
 
-void ContextBuilder::closeTypeForDeclarator(DeclaratorAST */*node*/) {
+void ContextBuilder::closeTypeForDeclarator(DeclaratorAST* /*node*/) {
 }
 
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)

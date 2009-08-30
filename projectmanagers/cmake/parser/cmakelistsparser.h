@@ -72,8 +72,10 @@ struct CMakeFunctionArgument
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
 
 
-struct KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
+class KDEVCMAKECOMMON_EXPORT CMakeFunctionDesc
 {
+public:
+
     QString name;
     QList<CMakeFunctionArgument> arguments;
     QString filePath;

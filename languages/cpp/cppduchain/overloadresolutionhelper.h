@@ -35,7 +35,9 @@ namespace Cpp
 {
   class ViableFunction;
   
-  struct KDEVCPPDUCHAIN_EXPORT OverloadResolutionFunction {
+  class KDEVCPPDUCHAIN_EXPORT OverloadResolutionFunction {
+  public:
+
     OverloadResolutionFunction();
     OverloadResolutionFunction( int _matchedArguments, const ViableFunction& _viable );
 

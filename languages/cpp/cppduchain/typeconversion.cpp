@@ -48,7 +48,10 @@ uint qHash(const ImplicitConversionParams& params) {
 }
 
 namespace Cpp {
-struct TypeConversionCache {
+class TypeConversionCache
+{
+public:
+
     QHash<ImplicitConversionParams, int> m_implicitConversionResults;
 /*    QHash<QPair<IndexedType, IndexedType>, uint> m_standardConversionResults;
     QHash<QPair<IndexedType, IndexedType>, uint> m_userDefinedConversionResults;*/

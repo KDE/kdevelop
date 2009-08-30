@@ -160,7 +160,9 @@ class MacroSet;
 
 DECLARE_LIST_MEMBER_HASH(EnvironmentFileData, m_includePaths, KDevelop::IndexedString)
 
-struct EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
+class EnvironmentFileData : public KDevelop::ParsingEnvironmentFileData {
+public:
+
     EnvironmentFileData() {
       m_contentStartLine = 0;
 //       m_includeFiles = 0;

@@ -38,8 +38,11 @@ KDEVCPPRPP_EXPORT DECLARE_LIST_MEMBER_HASH(pp_macro, definition, KDevelop::Index
 KDEVCPPRPP_EXPORT DECLARE_LIST_MEMBER_HASH(pp_macro, formals, KDevelop::IndexedString)
 
   //This contains the data of a macro that can be marshalled by directly copying the memory
-struct KDEVCPPRPP_EXPORT pp_macro
-{ ///@todo enable structure packing
+class KDEVCPPRPP_EXPORT pp_macro
+{
+public:
+
+   ///@todo enable structure packing
   pp_macro(const KDevelop::IndexedString& name = KDevelop::IndexedString());
   pp_macro(const char* name);
   pp_macro(const pp_macro& rhs, bool dynamic = true);

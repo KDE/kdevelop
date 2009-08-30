@@ -22,7 +22,9 @@
 
 namespace Cpp {
 
-struct KDEVCPPDUCHAIN_EXPORT QtFunctionDeclarationData : public KDevelop::ClassFunctionDeclarationData {
+class KDEVCPPDUCHAIN_EXPORT QtFunctionDeclarationData : public KDevelop::ClassFunctionDeclarationData {
+public:
+
   KDevelop::IndexedString normalizedSignature;
 };
   

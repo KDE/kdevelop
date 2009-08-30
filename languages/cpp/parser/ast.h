@@ -30,87 +30,89 @@ namespace KDevelop
 {
 class DUContext;
 }
-struct AccessSpecifierAST;
-struct AsmDefinitionAST;
-struct BaseClauseAST;
-struct BaseSpecifierAST;
-struct BinaryExpressionAST;
-struct CastExpressionAST;
-struct ClassMemberAccessAST;
-struct ClassSpecifierAST;
-struct CompoundStatementAST;
-struct ConditionAST;
-struct ConditionalExpressionAST;
-struct CppCastExpressionAST;
-struct CtorInitializerAST;
-struct DeclarationAST;
-struct DeclarationStatementAST;
-struct DeclaratorAST;
-struct DeleteExpressionAST;
-struct DoStatementAST;
-struct Elaborated;
-struct EnumSpecifierAST;
-struct EnumeratorAST;
-struct ExceptionSpecificationAST;
-struct ExpressionAST;
-struct ExpressionOrDeclarationStatementAST;
-struct ExpressionStatementAST;
-struct ForStatementAST;
-struct FunctionCallAST;
-struct FunctionDefinitionAST;
-struct IfStatementAST;
-struct IncrDecrExpressionAST;
-struct InitDeclaratorAST;
-struct InitializerAST;
-struct InitializerClauseAST;
-struct LabeledStatementAST;
-struct LinkageBodyAST;
-struct LinkageSpecificationAST;
-struct MemInitializerAST;
-struct NameAST;
-struct NamespaceAST;
-struct NamespaceAliasDefinitionAST;
-struct NewDeclaratorAST;
-struct NewExpressionAST;
-struct NewInitializerAST;
-struct NewTypeIdAST;
-struct OperatorAST;
-struct OperatorFunctionIdAST;
-struct ParameterDeclarationAST;
-struct ParameterDeclarationClauseAST;
-struct PostfixExpressionAST;
-struct PrimaryExpressionAST;
-struct PtrOperatorAST;
-struct PtrToMemberAST;
-struct ReturnStatementAST;
-struct SimpleDeclarationAST;
-struct SimpleTypeSpecifierAST;
-struct SizeofExpressionAST;
-struct StatementAST;
-struct StringLiteralAST;
-struct SubscriptExpressionAST;
-struct SwitchStatementAST;
-struct TemplateArgumentAST;
-struct TemplateDeclarationAST;
-struct TemplateParameterAST;
-struct ThrowExpressionAST;
-struct TranslationUnitAST;
-struct TryBlockStatementAST;
-struct CatchStatementAST;
-struct TypeIdAST;
-struct TypeIdentificationAST;
-struct TypeParameterAST;
-struct TypeSpecifierAST;
-struct TypedefAST;
-struct UnaryExpressionAST;
-struct UnqualifiedNameAST;
-struct UsingAST;
-struct UsingDirectiveAST;
-struct WhileStatementAST;
-struct WinDeclSpecAST;
+class AccessSpecifierAST;
+class AsmDefinitionAST;
+class BaseClauseAST;
+class BaseSpecifierAST;
+class BinaryExpressionAST;
+class CastExpressionAST;
+class ClassMemberAccessAST;
+class ClassSpecifierAST;
+class CompoundStatementAST;
+class ConditionAST;
+class ConditionalExpressionAST;
+class CppCastExpressionAST;
+class CtorInitializerAST;
+class DeclarationAST;
+class DeclarationStatementAST;
+class DeclaratorAST;
+class DeleteExpressionAST;
+class DoStatementAST;
+class Elaborated;
+class EnumSpecifierAST;
+class EnumeratorAST;
+class ExceptionSpecificationAST;
+class ExpressionAST;
+class ExpressionOrDeclarationStatementAST;
+class ExpressionStatementAST;
+class ForStatementAST;
+class FunctionCallAST;
+class FunctionDefinitionAST;
+class IfStatementAST;
+class IncrDecrExpressionAST;
+class InitDeclaratorAST;
+class InitializerAST;
+class InitializerClauseAST;
+class LabeledStatementAST;
+class LinkageBodyAST;
+class LinkageSpecificationAST;
+class MemInitializerAST;
+class NameAST;
+class NamespaceAST;
+class NamespaceAliasDefinitionAST;
+class NewDeclaratorAST;
+class NewExpressionAST;
+class NewInitializerAST;
+class NewTypeIdAST;
+class OperatorAST;
+class OperatorFunctionIdAST;
+class ParameterDeclarationAST;
+class ParameterDeclarationClauseAST;
+class PostfixExpressionAST;
+class PrimaryExpressionAST;
+class PtrOperatorAST;
+class PtrToMemberAST;
+class ReturnStatementAST;
+class SimpleDeclarationAST;
+class SimpleTypeSpecifierAST;
+class SizeofExpressionAST;
+class StatementAST;
+class StringLiteralAST;
+class SubscriptExpressionAST;
+class SwitchStatementAST;
+class TemplateArgumentAST;
+class TemplateDeclarationAST;
+class TemplateParameterAST;
+class ThrowExpressionAST;
+class TranslationUnitAST;
+class TryBlockStatementAST;
+class CatchStatementAST;
+class TypeIdAST;
+class TypeIdentificationAST;
+class TypeParameterAST;
+class TypeSpecifierAST;
+class TypedefAST;
+class UnaryExpressionAST;
+class UnqualifiedNameAST;
+class UsingAST;
+class UsingDirectiveAST;
+class WhileStatementAST;
+class WinDeclSpecAST;
 
-struct AST
+class AST
 {///@warning When adding new nodes here, also modify the names[] array in dumptree.cpp
+public:
+
   enum NODE_KIND
     {
       Kind_UNKNOWN = 0,
@@ -206,50 +208,69 @@ struct AST
   KDevelop::DUContext* ducontext;
 };
 
-struct CommentAST {
+class CommentAST
+{
+public:
+
   const ListNode<std::size_t> *comments; //A list of comment-tokens
 };
 
-struct TypeSpecifierAST: public AST
+class TypeSpecifierAST : public AST
 {
+public:
+
   const ListNode<std::size_t> *cv; // const or volatile tokens
 };
 
-struct StatementAST: public AST
+class StatementAST : public AST
 {
+public:
+
 };
 
-struct ExpressionAST: public AST
+class ExpressionAST : public AST
 {
+public:
+
 };
 
-struct DeclarationAST: public AST, public CommentAST
+class DeclarationAST : public AST, public CommentAST
 {
+public:
+
 };
 
-struct AccessSpecifierAST: public DeclarationAST
+class AccessSpecifierAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(AccessSpecifier)
 
   const ListNode<std::size_t> *specs;
 };
 
-struct AsmDefinitionAST: public DeclarationAST
+class AsmDefinitionAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(AsmDefinition)
 
   const ListNode<std::size_t> *cv;
 };
 
-struct BaseClauseAST: public AST // ### kill me
+class BaseClauseAST : public AST // ### kill me
 {
+public:
+
   DECLARE_AST_NODE(BaseClause)
 
   const ListNode<BaseSpecifierAST*> *base_specifiers;
 };
 
-struct BaseSpecifierAST: public AST
+class BaseSpecifierAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(BaseSpecifier)
 
   std::size_t virt;
@@ -257,8 +278,10 @@ struct BaseSpecifierAST: public AST
   NameAST *name;
 };
 
-struct BinaryExpressionAST: public ExpressionAST
+class BinaryExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(BinaryExpression)
 
   std::size_t op; //Index of the token that describes the operator
@@ -267,30 +290,38 @@ struct BinaryExpressionAST: public ExpressionAST
 };
 
 ///An expression used to do more detailed processing of SIGNAL(..) and SLOT(..) specifications
-struct SignalSlotExpressionAST : public ExpressionAST {
+class SignalSlotExpressionAST : public ExpressionAST {
+public:
+
   DECLARE_AST_NODE(SignalSlotExpression)
   //The unqualified name also contains the argument types in its template-arguments
   UnqualifiedNameAST *name;
 };
 
-struct CastExpressionAST: public ExpressionAST
+class CastExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(CastExpression)
 
   TypeIdAST *type_id;
   ExpressionAST *expression;
 };
 
-struct ClassMemberAccessAST: public ExpressionAST
+class ClassMemberAccessAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(ClassMemberAccess)
 
   std::size_t op; //Index of the token that describes the operator
   NameAST *name;
 };
 
-struct ClassSpecifierAST: public TypeSpecifierAST
+class ClassSpecifierAST : public TypeSpecifierAST
 {
+public:
+
   DECLARE_AST_NODE(ClassSpecifier)
 
   WinDeclSpecAST *win_decl_specifiers;
@@ -300,15 +331,19 @@ struct ClassSpecifierAST: public TypeSpecifierAST
   const ListNode<DeclarationAST*> *member_specs;
 };
 
-struct CompoundStatementAST: public StatementAST
+class CompoundStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(CompoundStatement)
 
   const ListNode<StatementAST*> *statements;
 };
 
-struct ConditionAST: public AST
+class ConditionAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(Condition)
 
   TypeSpecifierAST *type_specifier;
@@ -316,8 +351,10 @@ struct ConditionAST: public AST
   ExpressionAST *expression;
 };
 
-struct ConditionalExpressionAST: public ExpressionAST
+class ConditionalExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(ConditionalExpression)
 
   ExpressionAST *condition;
@@ -330,8 +367,10 @@ struct ConditionalExpressionAST: public ExpressionAST
  * expression is the expression casted from
  * sub_expressions is a list of post-fix expressions, see PostfixExpressionAST
  */
-struct CppCastExpressionAST: public ExpressionAST
+class CppCastExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(CppCastExpression)
 
   std::size_t op; //Index of the token that describes the operator
@@ -340,23 +379,29 @@ struct CppCastExpressionAST: public ExpressionAST
   const ListNode<ExpressionAST*> *sub_expressions;
 };
 
-struct CtorInitializerAST: public AST
+class CtorInitializerAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(CtorInitializer)
 
   std::size_t colon;
   const ListNode<MemInitializerAST*> *member_initializers;
 };
 
-struct DeclarationStatementAST: public StatementAST
+class DeclarationStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(DeclarationStatement)
 
   DeclarationAST *declaration;
 };
 
-struct DeclaratorAST: public AST
+class DeclaratorAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(Declarator)
 
   const ListNode<PtrOperatorAST*> *ptr_ops;
@@ -371,8 +416,10 @@ struct DeclaratorAST: public AST
   ExceptionSpecificationAST *exception_spec;
 };
 
-struct DeleteExpressionAST: public ExpressionAST
+class DeleteExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(DeleteExpression)
 
   std::size_t scope_token;
@@ -382,48 +429,60 @@ struct DeleteExpressionAST: public ExpressionAST
   ExpressionAST *expression;
 };
 
-struct DoStatementAST: public StatementAST
+class DoStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(DoStatement)
 
   StatementAST *statement;
   ExpressionAST *expression;
 };
 
-struct ElaboratedTypeSpecifierAST: public TypeSpecifierAST
+class ElaboratedTypeSpecifierAST : public TypeSpecifierAST
 {
+public:
+
   DECLARE_AST_NODE(ElaboratedTypeSpecifier)
 
   std::size_t type;
   NameAST *name;
 };
 
-struct EnumSpecifierAST: public TypeSpecifierAST
+class EnumSpecifierAST : public TypeSpecifierAST
 {
+public:
+
   DECLARE_AST_NODE(EnumSpecifier)
 
   NameAST *name;
   const ListNode<EnumeratorAST*> *enumerators;
 };
 
-struct EnumeratorAST: public AST, public  CommentAST
+class EnumeratorAST : public AST, public  CommentAST
 {
+public:
+
   DECLARE_AST_NODE(Enumerator)
 
   std::size_t id;
   ExpressionAST *expression;
 };
 
-struct ExceptionSpecificationAST: public AST
+class ExceptionSpecificationAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(ExceptionSpecification)
 
   std::size_t ellipsis;
   const ListNode<TypeIdAST*> *type_ids;
 };
 
-struct ExpressionOrDeclarationStatementAST: public StatementAST
+class ExpressionOrDeclarationStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(ExpressionOrDeclarationStatement)
 
   StatementAST *expression;
@@ -434,22 +493,28 @@ struct ExpressionOrDeclarationStatementAST: public StatementAST
 };
 
 ///An expression terminated by a semicolon or similar
-struct ExpressionStatementAST: public StatementAST
+class ExpressionStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(ExpressionStatement)
 
   ExpressionAST *expression;
 };
 
-struct FunctionCallAST: public ExpressionAST
+class FunctionCallAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(FunctionCall)
 
   ExpressionAST *arguments;
 };
 
-struct FunctionDefinitionAST: public DeclarationAST
+class FunctionDefinitionAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(FunctionDefinition)
 
   const ListNode<std::size_t> *storage_specifiers;
@@ -461,8 +526,10 @@ struct FunctionDefinitionAST: public DeclarationAST
   CtorInitializerAST *constructor_initializers;
 };
 
-struct ForStatementAST: public StatementAST
+class ForStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(ForStatement)
 
   StatementAST *init_statement;
@@ -471,8 +538,10 @@ struct ForStatementAST: public StatementAST
   StatementAST *statement;
 };
 
-struct IfStatementAST: public StatementAST
+class IfStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(IfStatement)
 
   ConditionAST *condition;
@@ -480,31 +549,39 @@ struct IfStatementAST: public StatementAST
   StatementAST *else_statement;
 };
 
-struct IncrDecrExpressionAST: public ExpressionAST
+class IncrDecrExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(IncrDecrExpression)
 
   std::size_t op; //Index of the token that describes the operator
 };
 
-struct InitDeclaratorAST: public AST
+class InitDeclaratorAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(InitDeclarator)
 
   DeclaratorAST *declarator;
   InitializerAST *initializer;
 };
 
-struct InitializerAST: public AST
+class InitializerAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(Initializer)
 
   InitializerClauseAST *initializer_clause;
   ExpressionAST *expression;
 };
 
-struct InitializerClauseAST: public AST
+class InitializerClauseAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(InitializerClause)
 
   // either 'expression' or 'initializer_list' or neither are used.
@@ -515,8 +592,10 @@ struct InitializerClauseAST: public AST
   const ListNode<InitializerClauseAST*> *initializer_list;
 };
 
-struct LabeledStatementAST: public StatementAST
+class LabeledStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(LabeledStatement)
 
   std::size_t label;
@@ -525,15 +604,19 @@ struct LabeledStatementAST: public StatementAST
   StatementAST* statement;
 };
 
-struct LinkageBodyAST: public AST
+class LinkageBodyAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(LinkageBody)
 
   const ListNode<DeclarationAST*> *declarations;
 };
 
-struct LinkageSpecificationAST: public DeclarationAST
+class LinkageSpecificationAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(LinkageSpecification)
 
   std::size_t extern_type;
@@ -541,16 +624,20 @@ struct LinkageSpecificationAST: public DeclarationAST
   DeclarationAST *declaration;
 };
 
-struct MemInitializerAST: public AST
+class MemInitializerAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(MemInitializer)
 
   NameAST *initializer_id;
   ExpressionAST *expression;
 };
 
-struct NameAST: public AST
+class NameAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(Name)
 
   bool global;
@@ -558,24 +645,30 @@ struct NameAST: public AST
   UnqualifiedNameAST *unqualified_name;
 };
 
-struct NamespaceAST: public DeclarationAST
+class NamespaceAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(Namespace)
 
   std::size_t namespace_name;
   LinkageBodyAST *linkage_body;
 };
 
-struct NamespaceAliasDefinitionAST: public DeclarationAST
+class NamespaceAliasDefinitionAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(NamespaceAliasDefinition)
 
   std::size_t namespace_name;
   NameAST *alias_name;
 };
 
-struct NewDeclaratorAST: public AST
+class NewDeclaratorAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(NewDeclarator)
 
   PtrOperatorAST *ptr_op;
@@ -583,8 +676,10 @@ struct NewDeclaratorAST: public AST
   const ListNode<ExpressionAST*> *expressions;
 };
 
-struct NewExpressionAST: public ExpressionAST
+class NewExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(NewExpression)
 
   std::size_t scope_token;
@@ -595,15 +690,19 @@ struct NewExpressionAST: public ExpressionAST
   NewInitializerAST *new_initializer;
 };
 
-struct NewInitializerAST: public AST
+class NewInitializerAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(NewInitializer)
 
   ExpressionAST *expression;
 };
 
-struct NewTypeIdAST: public AST
+class NewTypeIdAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(NewTypeId)
 
   TypeSpecifierAST *type_specifier;
@@ -611,8 +710,10 @@ struct NewTypeIdAST: public AST
   NewDeclaratorAST *new_declarator;
 };
 
-struct OperatorAST: public AST
+class OperatorAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(Operator)
 
   std::size_t op; //Index of the token that describes the operator
@@ -620,8 +721,10 @@ struct OperatorAST: public AST
   std::size_t close;
 };
 
-struct OperatorFunctionIdAST: public AST
+class OperatorFunctionIdAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(OperatorFunctionId)
 
   OperatorAST *op;
@@ -629,8 +732,10 @@ struct OperatorFunctionIdAST: public AST
   const ListNode<PtrOperatorAST*> *ptr_ops;
 };
 
-struct ParameterDeclarationAST: public AST
+class ParameterDeclarationAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(ParameterDeclaration)
 
   TypeSpecifierAST *type_specifier;
@@ -638,8 +743,10 @@ struct ParameterDeclarationAST: public AST
   ExpressionAST *expression;
 };
 
-struct ParameterDeclarationClauseAST: public AST
+class ParameterDeclarationClauseAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(ParameterDeclarationClause)
 
   const ListNode<ParameterDeclarationAST*> *parameter_declarations;
@@ -655,8 +762,10 @@ struct ParameterDeclarationClauseAST: public AST
  * "a->b"  : "a" is the primary expression, "->b" is a sub-expression
  * "a->b(5,3)" : "a" is the primary expression, "->b" is a sub-expression, and "(5,3)" is a sub-expression
  **/
-struct PostfixExpressionAST: public ExpressionAST
+class PostfixExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(PostfixExpression)
 
   TypeSpecifierAST *type_specifier;
@@ -664,8 +773,10 @@ struct PostfixExpressionAST: public ExpressionAST
   const ListNode<ExpressionAST*> *sub_expressions;
 };
 
-struct PrimaryExpressionAST: public ExpressionAST
+class PrimaryExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(PrimaryExpression)
 
   StringLiteralAST *literal;
@@ -675,8 +786,10 @@ struct PrimaryExpressionAST: public ExpressionAST
   NameAST *name;
 };
 
-struct PtrOperatorAST: public AST
+class PtrOperatorAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(PtrOperator)
 
   const ListNode<std::size_t> *cv;
@@ -684,13 +797,17 @@ struct PtrOperatorAST: public AST
   PtrToMemberAST *mem_ptr;
 };
 
-struct PtrToMemberAST: public AST
+class PtrToMemberAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(PtrToMember)
 };
 
-struct JumpStatementAST : public StatementAST
+class JumpStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(JumpStatement)
 
   // index of operator token which describes the jump, one of
@@ -701,15 +818,19 @@ struct JumpStatementAST : public StatementAST
   std::size_t identifier;
 };
 
-struct ReturnStatementAST: public StatementAST
+class ReturnStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(ReturnStatement)
 
   ExpressionAST *expression;
 };
 
-struct SimpleDeclarationAST: public DeclarationAST
+class SimpleDeclarationAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(SimpleDeclaration)
 
   const ListNode<std::size_t> *storage_specifiers;
@@ -719,8 +840,10 @@ struct SimpleDeclarationAST: public DeclarationAST
   WinDeclSpecAST *win_decl_specifiers;
 };
 
-struct SimpleTypeSpecifierAST: public TypeSpecifierAST
+class SimpleTypeSpecifierAST : public TypeSpecifierAST
 {
+public:
+
   DECLARE_AST_NODE(SimpleTypeSpecifier)
 
   const ListNode<std::size_t> *integrals;
@@ -730,8 +853,10 @@ struct SimpleTypeSpecifierAST: public TypeSpecifierAST
   NameAST *name;
 };
 
-struct SizeofExpressionAST: public ExpressionAST
+class SizeofExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(SizeofExpression)
 
   std::size_t sizeof_token;
@@ -739,39 +864,49 @@ struct SizeofExpressionAST: public ExpressionAST
   ExpressionAST *expression;
 };
 
-struct StringLiteralAST: public AST
+class StringLiteralAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(StringLiteral)
 
   const ListNode<std::size_t> *literals;
 };
 
 /// operator []
-struct SubscriptExpressionAST: public ExpressionAST
+class SubscriptExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(SubscriptExpression)
 
   ExpressionAST *subscript;
 };
 
-struct SwitchStatementAST: public StatementAST
+class SwitchStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(SwitchStatement)
 
   ConditionAST *condition;
   StatementAST *statement;
 };
 
-struct TemplateArgumentAST: public AST
+class TemplateArgumentAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(TemplateArgument)
 
   TypeIdAST *type_id;
   ExpressionAST *expression;
 };
 
-struct TemplateDeclarationAST: public DeclarationAST
+class TemplateDeclarationAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(TemplateDeclaration)
 
   std::size_t exported;
@@ -779,24 +914,32 @@ struct TemplateDeclarationAST: public DeclarationAST
   DeclarationAST* declaration;
 };
 
-struct TemplateParameterAST: public AST
+class TemplateParameterAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(TemplateParameter)
 
   TypeParameterAST *type_parameter; //This is used if this is a template-parameter like "class A"
   ParameterDeclarationAST *parameter_declaration; //This is used if this is a template-parameter like "int a"
 };
 
-struct ThrowExpressionAST: public ExpressionAST
+class ThrowExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(ThrowExpression)
 
   std::size_t throw_token;
   ExpressionAST *expression;
 };
 
-struct TranslationUnitAST: public AST, public CommentAST
+class TranslationUnitAST : public AST, public CommentAST
 {
+public:
+
+public:
+
   DECLARE_AST_NODE(TranslationUnit)
 
   const ListNode<DeclarationAST*> *declarations;
@@ -809,24 +952,30 @@ struct TranslationUnitAST: public AST, public CommentAST
   ParseSession* session;
 };
 
-struct TryBlockStatementAST: public StatementAST
+class TryBlockStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(TryBlockStatement)
 
   StatementAST* try_block;
   const ListNode<CatchStatementAST*> *catch_blocks;
 };
 
-struct CatchStatementAST: public StatementAST
+class CatchStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(CatchStatement)
 
   ConditionAST* condition;
   StatementAST* statement;
 };
 
-struct TypeIdAST: public AST
+class TypeIdAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(TypeId)
 
   TypeSpecifierAST *type_specifier;
@@ -834,8 +983,10 @@ struct TypeIdAST: public AST
 };
 
 ///"typename"
-struct TypeIdentificationAST: public ExpressionAST
+class TypeIdentificationAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(TypeIdentification)
 
   std::size_t typename_token;
@@ -843,8 +994,10 @@ struct TypeIdentificationAST: public ExpressionAST
   ExpressionAST *expression;
 };
 
-struct TypeParameterAST: public AST
+class TypeParameterAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(TypeParameter)
 
   std::size_t type;
@@ -854,24 +1007,30 @@ struct TypeParameterAST: public AST
   NameAST *template_name;
 };
 
-struct TypedefAST: public DeclarationAST
+class TypedefAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(Typedef)
 
   TypeSpecifierAST *type_specifier;
   const ListNode<InitDeclaratorAST*> *init_declarators;
 };
 
-struct UnaryExpressionAST: public ExpressionAST
+class UnaryExpressionAST : public ExpressionAST
 {
+public:
+
   DECLARE_AST_NODE(UnaryExpression)
 
   std::size_t op; //Index of the token that describes the operator
   ExpressionAST *expression;
 };
 
-struct UnqualifiedNameAST: public AST
+class UnqualifiedNameAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(UnqualifiedName)
 
   std::size_t tilde;
@@ -880,31 +1039,39 @@ struct UnqualifiedNameAST: public AST
   const ListNode<TemplateArgumentAST*> *template_arguments;
 };
 
-struct UsingAST: public DeclarationAST
+class UsingAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(Using)
 
   std::size_t type_name;
   NameAST *name;
 };
 
-struct UsingDirectiveAST: public DeclarationAST
+class UsingDirectiveAST : public DeclarationAST
 {
+public:
+
   DECLARE_AST_NODE(UsingDirective)
 
   NameAST *name;
 };
 
-struct WhileStatementAST: public StatementAST
+class WhileStatementAST : public StatementAST
 {
+public:
+
   DECLARE_AST_NODE(WhileStatement)
 
   ConditionAST *condition;
   StatementAST *statement;
 };
 
-struct WinDeclSpecAST: public AST
+class WinDeclSpecAST : public AST
 {
+public:
+
   DECLARE_AST_NODE(WinDeclSpec)
 
   std::size_t specifier;

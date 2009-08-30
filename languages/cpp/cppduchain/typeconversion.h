@@ -153,7 +153,9 @@ class KDEVCPPDUCHAIN_EXPORT TypeConversion {
 
 ///Use this to temporaily enable type-conversion caching
 ///@warning The duchain must not be locked while construction and destruction of this object!
-struct TypeConversionCacheEnabler {
+class TypeConversionCacheEnabler {
+public:
+
   TypeConversionCacheEnabler() {
     TypeConversion::startCache();
   }

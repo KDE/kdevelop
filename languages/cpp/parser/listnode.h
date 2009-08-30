@@ -27,8 +27,10 @@
  * @note ListNodes inside AST nodes are NOT guarantied to start from the beginning, call toFront.
  */
 template <typename Tp>
-struct ListNode
+class ListNode
 {
+public:
+
   Tp element;
   int index;
   mutable const ListNode<Tp> *next;

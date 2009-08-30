@@ -911,7 +911,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
   }
 }
 
-void DeclarationBuilder::classContextOpened(ClassSpecifierAST */*node*/, DUContext* context) {
+void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUContext* context) {
   
   //We need to set this early, so we can do correct search while building
   DUChainWriteLocker lock(DUChain::lock());

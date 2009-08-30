@@ -1808,7 +1808,9 @@ void TestCppCodeCompletion::testPreprocessor() {
 }
 
 
-struct TestPreprocessor : public rpp::Preprocessor {
+class TestPreprocessor : public rpp::Preprocessor
+{
+public:
 
   TestCppCodeCompletion* cc;
   IncludeFileList& included;

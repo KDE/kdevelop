@@ -17,7 +17,7 @@ namespace KDevelop
 class IProject;
 }
 
-template<typename T1,typename T2> class QPair;
+template<typename T1,typename T2> struct QPair;
 // template<typename T1,typename T2> class QHash;
 #include <QHash>
 #include <KUrl>

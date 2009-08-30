@@ -364,7 +364,7 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
   }
 }
 
-void TypeBuilder::closeTypeForInitializer(InitializerAST */*node*/) {
+void TypeBuilder::closeTypeForInitializer(InitializerAST* /*node*/) {
 }
 
 bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass) {

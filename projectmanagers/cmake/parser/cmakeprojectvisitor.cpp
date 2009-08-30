@@ -643,7 +643,10 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     topctx->clearImportedParentContexts();
     
     topctx->addImportedParentContext(aux);
-    aux->addImportedParentContext(topctx);
+
+    /// @todo should we check for NULL or assert?
+    if (aux)
+      aux->addImportedParentContext(topctx);
     
     return topctx;
 }
