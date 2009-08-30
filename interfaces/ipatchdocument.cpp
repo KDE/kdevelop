@@ -16,24 +16,13 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef IPATCHDOCUMENT_H
-#define IPATCHDOCUMENT_H
-
-#include "interfacesexport.h"
-
-class KUrl;
-class QString;
+#include "ipatchdocument.h"
 
 namespace KDevelop
 {
 
-class KDEVPLATFORMINTERFACES_EXPORT IPatchDocument
+IPatchDocument::~IPatchDocument() 
 {
-    public:
-        virtual ~IPatchDocument();
-        virtual void setDiff(const QString& tocompare, const KUrl& file) = 0;
-};
+}
 
 }
-#endif
-
