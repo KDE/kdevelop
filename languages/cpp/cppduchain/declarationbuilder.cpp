@@ -943,6 +943,8 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
 void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  PushValue<bool> setNotInTypedef(m_inTypedef, false);
+  
   /**Open helper contexts around the class, so the qualified identifier matches.
    * Example: "class MyClass::RealClass{}"
    * Will create one helper-context named "MyClass" around RealClass
@@ -1203,6 +1205,8 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
 
 void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
 {
+  PushValue<bool> setNotInTypedef(m_inTypedef, false);
+  
   int kind = editor()->parseSession()->token_stream->kind(node->type);
 
   if( kind == Token_typename ) {

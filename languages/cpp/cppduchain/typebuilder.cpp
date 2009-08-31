@@ -185,6 +185,8 @@ bool TypeBuilder::lastTypeWasInstance() const
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
+  PushValue<bool> setInTypedef(m_inTypedef, false);
+
   m_lastTypeWasInstance = false;
   AbstractType::Ptr type;
 
@@ -462,6 +464,7 @@ DUContext* TypeBuilder::searchContext() const {
 void TypeBuilder::visitTypedef(TypedefAST* node)
 {
   PushValue<bool> setInTypedef(m_inTypedef, true);
+  
 //   openType(KDevelop::TypeAliasType::Ptr(new KDevelop::TypeAliasType()));
 
   TypeBuilderBase::visitTypedef(node);
@@ -472,7 +475,6 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 AbstractType::Ptr TypeBuilder::typeForCurrentDeclaration()
 {
   if(m_inTypedef) {
-    kDebug() << "returning type alias type for declaration";
     KDevelop::TypeAliasType::Ptr alias(new KDevelop::TypeAliasType());
     alias->setType(lastType());
     return alias.cast<AbstractType>();

@@ -352,7 +352,7 @@ void TestDUChain::testContextSearch() {
   {
     QByteArray method("int t; struct C { }; void test() { C c; c.t = 3;}");
     
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 3);
     QVERIFY(top->localDeclarations()[0]->uses().isEmpty());
@@ -543,7 +543,7 @@ void TestDUChain::testProblematicUses()
   {
     QByteArray method("struct S { int a; }; int c; int q; int a; S* s; void test() { if(s->a < q && a > c) { } if(s->a < q && a > c) { } }");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 3);
@@ -567,7 +567,7 @@ void TestDUChain::testProblematicUses()
 ///@todo This works in g++, but not in kdevelops parser. Although it's butt ugly.
 //     if(A<b < 10 && b < 0>::Mem) {}
     
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 5);
@@ -591,7 +591,7 @@ void TestDUChain::testBaseUses()
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("namespace N { struct A { A(int); int m; }; }; struct B : public N::A { B() : N::A(5) { this->N::A::m = 5; } };");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -643,7 +643,7 @@ void TestDUChain::testTypedefUses()
     //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("namespace Search { typedef int StateHypothesisIndexwqeqrqwe; StateHypothesisIndexwqeqrqwe i; }");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -1150,7 +1150,7 @@ void TestDUChain::testDeclareStruct()
   {
     QByteArray method("class A { public: union { struct { int x; }; int p; }; struct { int b; }; struct { int c; } cc; }; A test; void test() { test.x = 1; test.b = 1; test.p = 1; test.cc.c = 1; }");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 3);
@@ -1198,12 +1198,13 @@ void TestDUChain::testDeclareStruct()
     QVERIFY(top->localDeclarations()[1]->isTypeAlias());
     QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("A"));
     QCOMPARE(top->localDeclarations()[2]->abstractType()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
-    QCOMPARE(top->localDeclarations()[1]->abstractType()->indexed(), top->localDeclarations()[0]->abstractType()->indexed());
 
     QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
     QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
 
     Declaration* defStructA = top->localDeclarations().first();
+    QVERIFY(!defStructA->isTypeAlias());
+    QVERIFY(defStructA->identifier().uniqueToken());
 
     QCOMPARE(idType->declaration(top), defStructA);
     QVERIFY(defStructA->type<CppClassType>());
@@ -1218,6 +1219,37 @@ void TestDUChain::testDeclareStruct()
     
     release(top);
   }
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("typedef struct B A; A instance;");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    AbstractType::Ptr t = top->localDeclarations()[0]->abstractType();
+    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.unsafeData());
+    QVERIFY(idType);
+    QVERIFY(idType->qualifiedIdentifier().count() == 1);
+
+    QVERIFY(top->localDeclarations()[1]->isTypeAlias());
+    QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("A"));
+    QCOMPARE(top->localDeclarations()[2]->abstractType()->indexed(), top->localDeclarations()[1]->abstractType()->indexed());
+
+    QCOMPARE(top->localDeclarations()[1]->uses().count(), 1);
+    QCOMPARE(top->localDeclarations()[1]->uses().begin()->count(), 1);
+
+    Declaration* defStructA = top->localDeclarations().first();
+    QVERIFY(!defStructA->isTypeAlias());
+    QVERIFY(defStructA->isForwardDeclaration());
+    
+    release(top);
+  }  
   {
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
@@ -1367,7 +1399,7 @@ void TestDUChain::testDeclareStructInNamespace()
   {
     QByteArray method("namespace B {class C {struct A;void test();};};using namespace B;struct C::A {};");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -2020,7 +2052,7 @@ void TestDUChain::testFunctionDefinition() {
   //               01234567890123456789012345678901234567890123456789012345678901234567890123456789
   QByteArray text("class B{}; class A { char at(B* b); A(); ~A(); }; \n char A::at(B* b) {B* b; at(b); }; A::A() : i(3) {}; A::~A() {}; ");
 
-  TopDUContext* top = parse(text, DumpAll);
+  TopDUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -2774,7 +2806,7 @@ void TestDUChain::testIntegralTemplates()
 void TestDUChain::testFunctionTemplates() {
   QByteArray method("template<class T> T test(const T& t) {};");
 
-  TopDUContext* top = parse(method, DumpAll);
+  TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
 
@@ -3133,7 +3165,7 @@ void TestDUChain::testSimplifiedTypeString()
 {
   {
     QByteArray method("typedef int *honk, **honk2; honk k;");
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
     
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 3);
@@ -3435,7 +3467,7 @@ void TestDUChain::testTemplateDefaultParameters() {
 void TestDUChain::testTemplates3() {
   QByteArray method("typedef int quakka; template<class T> struct Test { typedef T Value; const Value cv; const T cv2; ; typedef Value& ValueRef; typedef const ValueRef ConstValueRef; };");
 
-  TopDUContext* top = parse(method, DumpAll);
+  TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
   Declaration* qDecl = findDeclaration(top, QualifiedIdentifier("quakka"));
@@ -3821,7 +3853,7 @@ void TestDUChain::testOperatorUses()
   {
     QByteArray method("struct S { bool operator() () const {}  };void test() { S s; s(); S()(); } ");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
@@ -3837,7 +3869,7 @@ void TestDUChain::testOperatorUses()
   {
     QByteArray method("struct S { S operator() () const {}; S(int) {};  };void test() { S s(1); s(); S(1)()(); } ");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
