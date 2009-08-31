@@ -2540,10 +2540,10 @@ void TestDUChain::testSpecializedTemplates() {
     QVERIFY(decl3);
     QVERIFY(decl4);
     
-    QVERIFY(decl1->type<PointerType>());
-    QCOMPARE(decl1->indexedType(), decl2->indexedType());
-    QCOMPARE(decl1->indexedType(), decl3->indexedType());
-    QCOMPARE(decl1->indexedType(), decl4->indexedType());
+    QVERIFY(unAliasedType(decl1->abstractType()).cast<PointerType>());
+    QCOMPARE(unAliasedType(decl1->abstractType())->indexed(), unAliasedType(decl2->abstractType())->indexed());
+    QCOMPARE(unAliasedType(decl1->abstractType())->indexed(), unAliasedType(decl3->abstractType())->indexed());
+    QCOMPARE(unAliasedType(decl1->abstractType())->indexed(), unAliasedType(decl4->abstractType())->indexed());
     
     release(top);
   }
