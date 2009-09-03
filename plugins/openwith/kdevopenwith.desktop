@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=This plugin allows to open with files with associated external applications.
+Comment=This plugin allows to open files with associated external applications.
 Comment[bg]=Тази приставка позволява отваряне на файлове, асоциирани с външни програми.
 Comment[es]=Este complemento permite abrir archivos con aplicaciones externas asociadas.
 Comment[fr]=Ce module externe permet d'ouvrir des fichiers avec des applications externes associées.
