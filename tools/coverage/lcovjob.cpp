@@ -150,8 +150,27 @@ void LcovJob::slotFinished()
     emitResult();
 }
 
-void LcovJob::slotError(QProcess::ProcessError)
+void LcovJob::slotError(QProcess::ProcessError error)
 {
+    QStringList errorList;
+    if (error == QProcess::FailedToStart) {
+        //i18nc can't be used. It seems that at this moment (2009-09-04) only
+        //plain text can be used in the outputview
+        //errorList << i18nc("@info", "Failed to start <filename>%1</filename>. Make sure that the path to <command>geninfo</command> is specified correctly in <interface>Settings->Configure KDevelop...->Lcov Preferences->geninfo Executable</interface>.", m_lcov->program().first());
+        errorList << i18n("Failed to start '%1'. Make sure that the path to geninfo is specified correctly in Settings->Configure KDevelop...->Lcov Preferences->geninfo Executable.", m_lcov->program().first());
+    } else if (error == QProcess::Crashed) {
+        errorList << i18n("geninfo process crashed.");
+    } else if (error == QProcess::Timedout) {
+        errorList << i18n("geninfo process timed out.");
+    } else if (error == QProcess::WriteError) {
+        errorList << i18n("Failed to write to geninfo process.");
+    } else if (error == QProcess::ReadError) {
+        errorList << i18n("Failed to read from geninfo process.");
+    } else if (error == QProcess::UnknownError) {
+        errorList << i18n("Unknown geninfo process error.");
+    }
+    model()->appendErrors(errorList);
+
     m_lineMaker->flushBuffers();
     model()->slotCompleted();
     m_lcov->kill();
