@@ -51,10 +51,13 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
 {
     model_ = new TreeModel(QVector<QString>() << "Name" << "Type",
                            this);
+
     TooltipRoot* tr = new TooltipRoot(model_);
     model_->setRootItem(tr);
-    tr->init(identifier);
-    var_ = tr->var;
+    var_ = ICore::self()->debugController()->currentSession()->
+        variableController()->createVariable(
+            model_, tr, identifier);
+    tr->init(var_);
     var_->createVarobjMaybe(this, "variableCreated");
 
     QVBoxLayout* l = new QVBoxLayout(this);

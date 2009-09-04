@@ -22,6 +22,7 @@
 #define KDEVELOP_IVARIABLECONTROLLER_H
 
 #include <QtCore/QObject>
+class QString;
 
 #include "../debuggerexport.h"
 #include "idebugsession.h"
@@ -36,12 +37,20 @@ namespace KDevelop {
 class IDebugSession;
 class VariableCollection;
 class Variable;
+class TreeModel;
+class TreeItem;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IVariableController : public QObject
 {
     Q_OBJECT
 public:
     IVariableController(IDebugSession* parent);
+
+    /* Create a variable for the specified expression in the currentl
+       thread and frame.  */     
+    virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
+                                     const QString& expression,
+                                     const QString& display = "") = 0;
 
     virtual void createVarobj(Variable *variable, QObject *callback = 0, const char *callbackMethod = 0) = 0;
     virtual void fetchMoreChildren(Variable* variable) = 0;

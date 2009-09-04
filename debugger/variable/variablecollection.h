@@ -50,9 +50,12 @@ class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {
     friend class GDBDebugger::GdbTest;
 public:
+protected:
     Variable(TreeModel* model, TreeItem* parent,
              const QString& expression,
              const QString& display = "");
+
+public:
 
     QString varobj() const;
     QString expression() const;
@@ -100,15 +103,12 @@ private:
 class KDEVPLATFORMDEBUGGER_EXPORT TooltipRoot : public TreeItem
 {
 public:
-    Variable* var;
-
     TooltipRoot(TreeModel* model)
     : TreeItem(model)
     {}
 
-    void init(const QString& expression)
+    void init(Variable *var)
     {
-        var = new Variable(model(), this, expression);
         appendChild(var);
     }
 

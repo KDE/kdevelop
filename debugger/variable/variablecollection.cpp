@@ -199,7 +199,8 @@ Watches::Watches(TreeModel* model, TreeItem* parent)
 
 Variable* Watches::add(const QString& expression)
 {
-    Variable* v = new Variable(model(), this, expression);
+    Variable* v = currentSession()->variableController()->createVariable(
+        model(), this, expression);
     appendChild(v);
     v->createVarobjMaybe();
     return v;
@@ -211,7 +212,8 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
     {
         removeFinishResult();
     }
-    finishResult_ = new Variable(model(), this, convenienceVarible, "$ret");
+    finishResult_ = currentSession()->variableController()->createVariable(
+        model(), this, convenienceVarible, "$ret");
     appendChild(finishResult_);
     finishResult_->createVarobjMaybe();
     return finishResult_;
@@ -270,9 +272,13 @@ void Locals::updateLocals(QStringList locals)
         current << var;
         // If we currently don't display this local var, add it.
         if( !existing.contains( var ) ) {
-            KDevelop::Variable* v = new KDevelop::Variable(
-                ICore::self()->debugController()->variableCollection(),
-                this, var );
+            // FIXME: passing variableCollection this way is awkward.
+            // In future, variableCollection probably should get a
+            // method to create variable.
+            Variable* v = 
+                currentSession()->variableController()->createVariable(
+                    ICore::self()->debugController()->variableCollection(),
+                    this, var );
             appendChild( v, false );
             v->createVarobjMaybe();
         }
