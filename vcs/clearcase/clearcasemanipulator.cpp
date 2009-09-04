@@ -19,8 +19,11 @@
 #include <stdlib.h>
 #include <libgen.h>
 #include <errno.h>
+#ifdef __NetBSD__
+#include <sys/param.h>
+#endif
 
-#if defined(Q_OS_MACX) || defined(MACOSX) || defined(Q_OS_SOLARIS) || defined(Q_OS_FREEBSD)
+#if defined(Q_OS_MACX) || defined(MACOSX) || defined(Q_OS_SOLARIS) || defined(Q_OS_FREEBSD) || (defined(__NetBSD__) && (__NetBSD_Version__ < 599001500)) || defined(__DragonFly__)
 //this function is taken from GNU libc
 //it does not exist on macos
 int getline(char **lineptr, size_t *n, FILE *stream)
