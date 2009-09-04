@@ -64,6 +64,10 @@ public:
         return m_inactiveIcon;
     }
     
+    bool isPersistent() const ;
+    
+    void setPersistent(bool persistent) ;
+    
     QString id() const {
         return m_id;
     }
@@ -121,12 +125,16 @@ public:
         m_areas.removeAll(area);
     }
 
+    void deleteSet(bool force, bool silent = false);
+
 private slots:
+    void deleteSet() {
+        deleteSet(false);
+    }
     void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) ;
     void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/) ;
     void changingWorkingSet(Sublime::Area* area, QString from, QString to);
     void changedWorkingSet(Sublime::Area*, QString, QString);
-    void deleteSet();
     Q_SIGNALS:
     void setChangedSignificantly();
 private:

@@ -78,14 +78,21 @@ WorkingSetController::WorkingSetController(Core* core) : m_core(core)
 {
     //Load all working-sets
     KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
-    foreach(QString set, setConfig.groupList())
-        getWorkingSet(set);
+    foreach(QString set, setConfig.groupList())                                                                                                                                                
+        getWorkingSet(set);  
 }
 
 void WorkingSetController::cleanup()
 {
-    foreach(WorkingSet* set, m_workingSets)
+    foreach(WorkingSet* set, m_workingSets) {
+        kDebug() << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
+        if(!set->isPersistent() && !set->hasConnectedAreas()) {
+            kDebug() << "deleting";
+            set->deleteSet(true, true);
+        }
         delete set;
+    }
+    
     m_workingSets.clear();
 }
 
@@ -137,7 +144,6 @@ WorkingSet* WorkingSetController::getWorkingSet(QString id)
 void deleteGroupRecursive(KConfigGroup group) {
 //     kDebug() << "deleting" << group.name();
     foreach(QString entry, group.entryMap().keys()) {
-//         kDebug() << "deleting entry" << entry;
         group.deleteEntry(entry);
     }
     Q_ASSERT(group.entryMap().isEmpty());
@@ -149,6 +155,7 @@ void deleteGroupRecursive(KConfigGroup group) {
     //Why doesn't this work?
 //     Q_ASSERT(group.groupList().isEmpty());
     group.deleteGroup();
+    group.sync();
 }
 
 void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
@@ -164,8 +171,11 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     KConfigGroup group = setConfig.group(m_id);
     deleteGroupRecursive(group);
     saveFromArea(area, areaIndex, group);
+    
     if(isEmpty())
         deleteGroupRecursive(group);
+    
+    emit setChangedSignificantly();
 }
 
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
@@ -381,13 +391,15 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     }
 }
 
-void WorkingSet::deleteSet()
+void WorkingSet::deleteSet(bool force, bool silent)
 {
-    if(m_areas.isEmpty() && !m_id.isEmpty()) {
+    if((m_areas.isEmpty() || force) && !m_id.isEmpty()) {
         KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
         KConfigGroup group = setConfig.group(m_id);
         deleteGroupRecursive(group);
-        emit setChangedSignificantly();
+        
+        if(!silent)
+            emit setChangedSignificantly();
     }
 }
 
@@ -478,11 +490,15 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 void WorkingSetToolButton::intersectSet()
 {
     filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
+
+    m_set->setPersistent(true);
 }
 
 void WorkingSetToolButton::subtractSet()
 {
     filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
+    
+    m_set->setPersistent(true);
 }
 
 void WorkingSetToolButton::mergeSet()
@@ -499,10 +515,13 @@ void WorkingSetToolButton::duplicateSet()
     WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
     set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
     mainWindow()->area()->setWorkingSet(set->id());
+    set->setPersistent(true);
 }
 
 void WorkingSetToolButton::loadSet()
 {
+    m_set->setPersistent(true);
+    
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
     mainWindow()->area()->setWorkingSet(QString(m_set->id()));
@@ -510,6 +529,8 @@ void WorkingSetToolButton::loadSet()
 
 void WorkingSetToolButton::closeSet()
 {
+    m_set->setPersistent(true);
+    
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
     mainWindow()->area()->setWorkingSet(QString());
@@ -643,7 +664,6 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
 
 WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
     //Give the working-set icons one color, so they are less disruptive
-    KIconEffect effect;
     QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
     QImage imgInactive = imgActive;
     
@@ -816,6 +836,23 @@ WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, Mai
     
     connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
 }
+
+void WorkingSet::setPersistent(bool persistent) {
+    if(m_id.isEmpty())
+        return;
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup group = setConfig.group(m_id);
+    group.writeEntry("persistent", persistent);
+}
+
+bool WorkingSet::isPersistent() const {
+    if(m_id.isEmpty())
+        return false;
+    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup group = setConfig.group(m_id);
+    return group.readEntry("persistent", false);
+}
+
 
 #include "workingsetcontroller.moc"
 
