@@ -216,6 +216,8 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   DUChainReadLocker lock(DUChain::lock());
  
   foreach(DeclarationPointer base, m_baseClasses) {
+    if(!base.data())
+      continue;
     KSharedPtr<Cpp::MissingIncludeCompletionItem> item = Cpp::includeDirectiveFromUrl(headerUrl(), IndexedDeclaration(base.data()));
     if(item) {
       output << item->lineToInsert() << "\n";
@@ -237,8 +239,11 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   output << classId.toString();
 
   Q_ASSERT(m_baseClasses.size() == m_baseAccessSpecifiers.size());
-  for(int i = 0; i < m_baseClasses.size(); ++i)
+  for(int i = 0; i < m_baseClasses.size(); ++i) {
+      if(!m_baseClasses[i].data())
+        continue;
       output << (i == 0 ? " : " : ", ") << m_baseAccessSpecifiers[i] << ' ' << m_baseClasses[i]->qualifiedIdentifier().toString() ;
+  }
 
   output << "\n{\n";
 
