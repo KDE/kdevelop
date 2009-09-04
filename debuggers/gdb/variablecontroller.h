@@ -28,6 +28,8 @@
 
 #include "gdbglobal.h"
 
+using namespace KDevelop;
+
 namespace GDBMI {
 class ResultRecord;
 class Value;
@@ -44,6 +46,10 @@ class VariableController : public KDevelop::IVariableController
 
 public:
     VariableController(DebugSession* parent);
+
+    virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
+                                     const QString& expression,
+                                     const QString& display = "");
 
     virtual void createVarobj(KDevelop::Variable *variable, QObject *callback = 0, const char *callbackMethod = 0);
     virtual void fetchMoreChildren(KDevelop::Variable* variable);

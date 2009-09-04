@@ -23,14 +23,16 @@
 
 #include "variablecontroller.h"
 
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
-#include <debugger/variable/variablecollection.h>
-
 #include "gdbcommand.h"
 #include "debugsession.h"
 #include "stringhelpers.h"
+#include "gdbvariable.h"
+
+#include <debugger/variable/variablecollection.h>
 #include <debugger/breakpoint/breakpointmodel.h>
+
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
 
 using namespace GDBDebugger;
 
@@ -234,7 +236,9 @@ public:
                                 QString("--all-values \"%1\"").arg(child["name"].literal()),
                                 this/*use again as handler*/));
             } else {
-                KDevelop::Variable* var = new KDevelop::Variable(m_variable->model(), m_variable, child["exp"].literal());
+                KDevelop::Variable* var = m_session->variableController()->
+                    createVariable(m_variable->model(), m_variable, 
+                                   child["exp"].literal());
                 var->setTopLevel(false);
                 var->setVarobj(child["name"].literal());
                 var->setHasMoreInitial(child["numchild"].toInt());
@@ -336,5 +340,13 @@ void VariableController::addWatchpoint(const GDBMI::ResultRecord& r)
         KDevelop::ICore::self()->debugController()->breakpointModel()->addWatchpoint(r["path_expr"].literal());
     }
 }
+
+KDevelop::Variable* VariableController::
+createVariable(TreeModel* model, TreeItem* parent, 
+               const QString& expression, const QString& display)
+{
+    return new GdbVariable(model, parent, expression, display);
+}
+
 
 #include "variablecontroller.moc"
