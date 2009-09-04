@@ -189,6 +189,7 @@ const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  
 {
     DUChainReadLocker lock(DUChain::lock());
     
+    bool added = false;
     PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(newBaseClass)));
     
     //Search for all super classes
@@ -203,9 +204,13 @@ const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  
         {
             fetchSuperClasses(declaration);
             m_baseClasses << declaration;
+            added = true;
             break;
         }
     }
+    
+    if(!added)
+        m_baseClasses << DeclarationPointer(); //Some entities expect that there is always an item added to the list, so just add zero
     
     return m_baseClasses;
 }
