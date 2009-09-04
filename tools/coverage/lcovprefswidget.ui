@@ -40,13 +40,13 @@
    <item>
     <widget class="QGroupBox" name="colorsGroupBox">
      <property name="whatsThis">
-      <string comment="@info:whatsthis">Configuration for coverage report colors.
+      <string comment="@info:whatsthis">&lt;para&gt;Configuration for coverage report colors.&lt;/para&gt;
 
-In the directory view of the coverage report, each directory coverage percentage is represented using a color. 
+&lt;para&gt;In the directory view of the coverage report, each directory coverage percentage is represented using a color.&lt;/para&gt;
 
-The color associated to each percentage is taken from a color range, made up of several stop points. Stop points represent a color at a specific percentage. 
+&lt;para&gt;The color associated to each percentage is taken from a color range, made up of several stop points. Stop points represent a color at a specific percentage.&lt;/para&gt;
 
-A color range has two different and independent modes: discrete and gradient. In discrete type, all percentage values between the previous stop point and the current one have the color of the current one. In gradient type, the values are interpolated between the previous stop point's color and the current stop point's color.</string>
+&lt;para&gt;A color range has two different and independent modes: discrete and gradient. In discrete type, all percentage values between the previous stop point and the current one have the color of the current one. In gradient type, the values are interpolated between the previous stop point's color and the current stop point's color.&lt;/para&gt;</string>
      </property>
      <property name="title">
       <string comment="@title:group">Report colors</string>
