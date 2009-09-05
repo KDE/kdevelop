@@ -197,6 +197,9 @@ QString GDBCommand::gdbCommand() const
             command = "data-write-register-values";
             break;
 
+        case EnablePrettyPrinting:
+            command = "enable-pretty-printing";
+            break;
         case EnableTimings:
             command = "enable-timings";
             break;

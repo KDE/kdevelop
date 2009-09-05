@@ -61,6 +61,10 @@ namespace KDevelop
         void setVarobj(const QString& v);
         QString varobj_;
 
+        // How many children should be fetched in one
+        // increment.
+        static const int fetchStep = 5;
+
         /* Map from GDB varobj name to GdbVariable.
            FIXME: eventually, should be per-session map.  */
         static QMap<QString, GdbVariable*> allVariables_;

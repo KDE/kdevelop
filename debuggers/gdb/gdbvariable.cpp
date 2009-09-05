@@ -100,7 +100,14 @@ public:
             m_variable->deleteChildren();
             m_variable->setInScope(true);
             m_variable->setVarobj(r["name"].literal());
-            m_variable->setHasMore(r["numchild"].toInt());
+            
+            bool hasMore = false;
+            if (r.hasField("has_more"))
+                hasMore = r["has_more"].toInt();
+            else
+                hasMore = r["numchild"].toInt() != 0;
+            m_variable->setHasMore(hasMore);
+
             m_variable->setValue(r["value"].literal());
             hasValue = !r["value"].literal().isEmpty();
             if (m_variable->isExpanded() && r["numchild"].toInt()) {
@@ -159,30 +166,43 @@ public:
     {
         if (!m_variable) return;
         --m_activeCommands;
-        const GDBMI::Value& children = r["children"];
-        for (int i = 0; i < children.size(); ++i) {
-            const GDBMI::Value& child = children[i];
-            const QString& exp = child["exp"].literal();
-            if (exp == "public" || exp == "protected" || exp == "private") {
-                ++m_activeCommands;
-                m_session->addCommand(
-                    new GDBCommand(GDBMI::VarListChildren,
-                                QString("--all-values \"%1\"").arg(child["name"].literal()),
-                                this/*use again as handler*/));
-            } else {
-                KDevelop::Variable* xvar = m_session->variableController()->
-                    createVariable(m_variable->model(), m_variable, 
-                                   child["exp"].literal());
-                GdbVariable* var = static_cast<GdbVariable*>(xvar);
-                var->setTopLevel(false);
-                var->setVarobj(child["name"].literal());
-                var->setHasMoreInitial(child["numchild"].toInt());
-                m_variable->appendChild(var);
-                var->setValue(child["value"].literal());
+
+        if (r.hasField("children"))
+        {
+            const GDBMI::Value& children = r["children"];
+            for (int i = 0; i < children.size(); ++i) {
+                const GDBMI::Value& child = children[i];
+                const QString& exp = child["exp"].literal();
+                if (exp == "public" || exp == "protected" || exp == "private") {
+                    ++m_activeCommands;
+                    m_session->addCommand(
+                        new GDBCommand(GDBMI::VarListChildren,
+                                       QString("--all-values \"%1\"")
+                                       .arg(child["name"].literal()),
+                                       this/*use again as handler*/));
+                } else {
+                    KDevelop::Variable* xvar = m_session->variableController()->
+                        createVariable(m_variable->model(), m_variable, 
+                                       child["exp"].literal());
+                    GdbVariable* var = static_cast<GdbVariable*>(xvar);
+                    var->setTopLevel(false);
+                    var->setVarobj(child["name"].literal());
+                    var->setHasMoreInitial(child["numchild"].toInt());
+                    m_variable->appendChild(var);
+                    var->setValue(child["value"].literal());
+                }
             }
         }
 
-        m_variable->setHasMore(m_activeCommands != 0);
+        /* Note that we don't set hasMore to true if there are still active
+           commands. The reason is that we don't want the user to have
+           even theoretical ability to click on "..." item and confuse
+           us.  */
+        bool hasMore = false;
+        if (r.hasField("has_more"))
+            hasMore = r["has_more"].toInt();
+
+        m_variable->setHasMore(hasMore);
         if (m_activeCommands == 0) {
             delete this;
         }
@@ -204,6 +224,7 @@ private:
 
 void GdbVariable::fetchMoreChildren()
 {
+    int c = childItems.size();
     // FIXME: should not even try this if app is not started.
     // Probably need to disable open, or something
     if (hasStartedSession()) {
@@ -212,7 +233,8 @@ void GdbVariable::fetchMoreChildren()
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
             new GDBCommand(GDBMI::VarListChildren,
-                           QString("--all-values \"%1\"").arg(varobj_),
+                           QString("--all-values \"%1\" %2 %3").arg(varobj_)
+                           .arg(c).arg(c+5),
                            new FetchMoreChildrenHandler(this, s)));
     }
 }
@@ -223,6 +245,7 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
         && var["type_changed"].literal() == "true")
     {
         deleteChildren();
+        // FIXME: verify that this check is right.
         setHasMore(var["new_num_children"].toInt() != 0);
         fetchMoreChildren();
     }
@@ -234,7 +257,44 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
     else
     {
         setInScope(true);
+
+        if  (var.hasField("new_num_children")) {
+            int nc = var["new_num_children"].toInt();
+            Q_ASSERT(nc != -1);
+            setHasMore(false);
+            while (childCount() > nc) {
+                TreeItem *c = child(childCount()-1);
+                removeChild(childCount()-1);
+                delete c;
+            }
+        }
+                
+        // FIXME: the below code is essentially copy-paste from
+        // FetchMoreChildrenHandler. We need to introduce GDB-specific
+        // subclass of KDevelop::Variable that is capable of creating
+        // itself from MI output directly, and relay to that.
+        if (var.hasField("new_children"))
+        {                  
+            const GDBMI::Value& children = var["new_children"];
+            for (int i = 0; i < children.size(); ++i) {
+                const GDBMI::Value& child = children[i];
+                const QString& exp = child["exp"].literal();
+
+                IDebugSession* is = ICore::self()->debugController()->currentSession();
+                DebugSession* s = static_cast<DebugSession*>(is);
+                KDevelop::Variable* xvar = s->variableController()->
+                    createVariable(model(), this, exp);
+                GdbVariable* var = static_cast<GdbVariable*>(xvar);
+                var->setTopLevel(false);
+                var->setVarobj(child["name"].literal());
+                var->setHasMoreInitial(child["numchild"].toInt() != 0);
+                appendChild(var);
+                var->setValue(child["value"].literal());
+            }
+        }
+
         setValue(var["value"].literal());
+        setHasMore(var.hasField("has_more") && var["has_more"].toInt());
     }
 }
 

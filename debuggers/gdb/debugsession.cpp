@@ -965,6 +965,8 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     queueCmd(new GDBCommand(GDBMI::SignalHandle, "SIG41 pass nostop noprint"));
     queueCmd(new GDBCommand(GDBMI::SignalHandle, "SIG42 pass nostop noprint"));
     queueCmd(new GDBCommand(GDBMI::SignalHandle, "SIG43 pass nostop noprint"));
+    
+    queueCmd(new GDBCommand(GDBMI::EnablePrettyPrinting));
 
     QString fileName = KStandardDirs::locate("data", "kdevgdb/printers/gdbinit");
     if (!fileName.isEmpty()) {

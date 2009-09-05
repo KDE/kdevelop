@@ -86,6 +86,7 @@ int test_main(int ac, char* av[])
 
  
     QString s = "test test test test";
+    std::string ss = "test test test test";
     QString* sp = &s;
     const QString& sr = s;
     func(s);
@@ -94,10 +95,15 @@ int test_main(int ac, char* av[])
     std::vector<int> v;
     v.push_back(10);
     v.push_back(11);
+    v.pop_back();
     
     std::vector<std::string> v2;
     v2.push_back("hi");
     v2.push_back("there");
+    
+    std::vector<int> v3;
+    for (int i = 0; i < 20; ++i)
+        v3.push_back(i);
     
     Test* test = new Test;
     Test& test2 = *test;

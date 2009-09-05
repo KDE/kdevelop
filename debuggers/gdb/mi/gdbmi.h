@@ -57,6 +57,7 @@ namespace GDBMI
         DataWriteMemory,
         DataWriteRegisterVariables,
 
+        EnablePrettyPrinting,
         EnableTimings,
 
         EnvironmentCd,
