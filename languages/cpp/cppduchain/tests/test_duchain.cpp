@@ -1343,6 +1343,45 @@ void TestDUChain::testDeclareStruct()
 
     release(top);
   }
+  {
+    //                 0         1         2         3         4         5         6         7
+    //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("struct A { short i; }; struct A instance; void test(struct A * a) { a->i = instance.i; };");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QVERIFY(!top->parentContext());
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QVERIFY(top->localScopeIdentifier().isEmpty());
+
+    Declaration* defStructA = top->localDeclarations().first();
+    QCOMPARE(defStructA->identifier(), Identifier("A"));
+    QCOMPARE(defStructA->uses().count(), 1);
+    QCOMPARE(defStructA->uses().begin()->count(), 2);
+    QVERIFY(defStructA->type<CppClassType>());
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(defStructA);
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->classType(), ClassDeclarationData::Struct);
+
+    DUContext* structA = top->childContexts().first();
+    QCOMPARE(structA->parentContext(), top);
+    QCOMPARE(structA->importedParentContexts().count(), 0);
+    QCOMPARE(structA->childContexts().count(), 0);
+    QCOMPARE(structA->localDeclarations().count(), 1);
+    QCOMPARE(structA->localScopeIdentifier(), QualifiedIdentifier("A"));
+
+    Declaration* defI = structA->localDeclarations().first();
+    QCOMPARE(defI->identifier(), Identifier("i"));
+    QCOMPARE(defI->uses().count(), 1);
+    QCOMPARE(defI->uses().begin()->count(), 2);
+
+    QCOMPARE(findDeclaration(structA,  Identifier("i")), defI);
+
+    release(top);
+  }
 }
 
 void TestDUChain::testDeclareStructInNamespace()
