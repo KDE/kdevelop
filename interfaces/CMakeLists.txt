@@ -1,6 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
+    ipatchsource.cpp
     iassistant.cpp
     context.cpp
 	ipatchdocument.cpp

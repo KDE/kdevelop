@@ -89,9 +89,10 @@ public:
         controller->addDefaultArea(a);
 
         desired.clear();
-        desired["org.kdevelop.QTestTestRunner"] = Sublime::Right;
-        desired["org.kdevelop.CoverageReport"] = Sublime::Right;
-        a = new Sublime::Area(m_controller, "test", i18n("Test"));
+        desired["org.kdevelop.ProjectsView"] = Sublime::Left;
+        desired["org.kdevelop.PatchReview"] = Sublime::Bottom;
+        
+        a = new Sublime::Area(m_controller, "review", i18n("Review"));
         a->setDesiredToolViews(desired);
         a->setIconName("applications-engineering");
         controller->addDefaultArea(a);
@@ -496,6 +497,10 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
         KConfigGroup mainWindowConfig(&uiConfig,
                                       QString("Main Window %1").arg(w));
         QString currentArea = mainWindowConfig.readEntry("currentArea", "");
+        
+        if(currentArea == "test") ///@todo The area was renamed, and it will lead to a crash, so this is a dirty temporary workaround
+            currentArea = "review";
+        
         Sublime::MainWindow *mw = mainWindows()[w];
 
         /* We loop over default areas.  This means that if

@@ -66,27 +66,9 @@ std::string*/
 #include <kiconeffect.h>
 #include <kcolorutils.h>
 #include <kcolorscheme.h>
-
-QStringList splitArgs( const QString& str ) {
-    QStringList ret;
-    QString current = str;
-    int pos = 0;
-    while ( ( pos = current.indexOf( ' ', pos ) ) != -1 ) {
-        if ( current[ 0 ] == '"' ) {
-            int end = current.indexOf( '"' );
-            if ( end > pos )
-                pos = end;
-        }
-        QString s = current.left( pos );
-        if ( s.length() > 0 )
-            ret << s;
-        current = current.mid( pos + 1 );
-        pos = 0;
-    }
-    if ( current.length() )
-        ret << current;
-    return ret;
-}
+#include <sublime/controller.h>
+#include <sublime/mainwindow.h>
+#include <sublime/area.h>
 
 using namespace KDevelop;
 
@@ -110,45 +92,79 @@ PatchReviewToolView::~PatchReviewToolView() {
 
 void PatchReviewToolView::updatePatchFromEdit() {
 
-    LocalPatchSourcePointer ps = m_plugin->patch();
+    IPatchSource::Ptr ips = m_plugin->patch();
 
-    if ( !ps )
+    if ( !ips )
         return;
+    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ips.data());
+    if(!lpatch)
+      return;
 
-    ps->command = m_editPatch.command->text();
-    ps->filename = m_editPatch.filename->url();
-    ps->baseDir = m_editPatch.baseDir->url();
-    ps->depth = m_editPatch.depth->value();
+    lpatch->m_command = m_editPatch.command->text();
+    lpatch->m_filename = m_editPatch.filename->url();
+    lpatch->m_baseDir = m_editPatch.baseDir->url();
+    lpatch->m_depth = m_editPatch.depth->value();
 
     m_plugin->notifyPatchChanged();
 }
 
 void PatchReviewToolView::fillEditFromPatch() {
 
-    LocalPatchSourcePointer patch = m_plugin->patch();
-    if ( !patch )
+    IPatchSource::Ptr ipatch = m_plugin->patch();
+    if ( !ipatch )
         return ;
+    
+    disconnect( m_editPatch.patchSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(patchSelectionChanged(int)));
+    
+    m_editPatch.patchSelection->clear();
+    foreach(IPatchSource::Ptr patch, m_plugin->knownPatches())
+    {
+      if(!patch)
+        continue;
+      m_editPatch.patchSelection->addItem(patch->icon(), patch->name());
+      if(patch == ipatch)
+        m_editPatch.patchSelection->setCurrentIndex(m_editPatch.patchSelection->count()-1);
+    }
+    
+    connect( m_editPatch.patchSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(patchSelectionChanged(int)));
+    
+    LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ipatch.data());
+    if(!lpatch) {
+      m_editPatch.tabWidget->hide();
+      m_editPatch.baseDir->hide();
+      m_editPatch.depth->hide();
+      m_editPatch.label->hide();
+      m_editPatch.label_3->hide();
+      return;
+    }else{
+      m_editPatch.tabWidget->show();
+    }
+    
+    m_editPatch.command->setText( lpatch->m_command );
+    m_editPatch.filename->setUrl( lpatch->m_filename );
+    m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
+    m_editPatch.depth->setValue( lpatch->m_depth );
 
-    m_editPatch.command->setText( patch->command );
-    m_editPatch.filename->setUrl( patch->filename );
-    m_editPatch.baseDir->setUrl( patch->baseDir );
-    m_editPatch.depth->setValue( patch->depth );
-
-//   slotStateChanged();
-
-    if ( patch->command.isEmpty() )
+    if ( lpatch->m_command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
     else
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.commandTab ) );
 }
 
+void PatchReviewToolView::patchSelectionChanged(int selection)
+{
+    if(selection >= 0 && selection < m_plugin->knownPatches().size()) {
+      m_plugin->setPatch(m_plugin->knownPatches()[selection]);
+    }
+}
+
 void PatchReviewToolView::slotEditCommandChanged() {
-    m_editPatch.filename->lineEdit()->setText( "" );
+//     m_editPatch.filename->lineEdit()->setText( "" );
     updatePatchFromEdit();
 }
 
 void PatchReviewToolView::slotEditFileNameChanged() {
-    m_editPatch.command->setText( "" );
+//     m_editPatch.command->setText( "" );
     updatePatchFromEdit();
 }
 
@@ -184,6 +200,7 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.command, SIGNAL(textChanged(QString)), this, SLOT(slotEditCommandChanged()) );
     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
+    connect( m_editPatch.patchSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(patchSelectionChanged(int)));
     
     connect( m_editPatch.updateButton, SIGNAL(clicked(bool)), m_plugin, SLOT(forceUpdate()) );
 
@@ -206,10 +223,7 @@ void PatchReviewToolView::prevHunk() {
 
 KUrl PatchReviewPlugin::diffFile()
 {
-    if(!m_patch->filename.isEmpty())
-      return m_patch->filename;
-    else
-      return m_diffFile;
+    return m_patch->file();
 }
 
 void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
@@ -223,7 +237,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
             if ( !model || !model->differences() )
                 continue;
 
-            KUrl file = m_patch->baseDir;
+            KUrl file = m_patch->baseDir();
             
             file.addPath( model->sourcePath() );
             file.addPath( model->sourceFile() );
@@ -287,7 +301,7 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
             if ( !model )
                 continue;
 
-            KUrl file = m_patch->baseDir;
+            KUrl file = m_patch->baseDir();
             
             file.addPath( model->sourcePath() );
             file.addPath( model->sourceFile() );
@@ -328,7 +342,7 @@ void PatchReviewPlugin::highlightPatch() {
             if ( !model )
                 continue;
 
-            KUrl file = m_patch->baseDir;
+            KUrl file = m_patch->baseDir();
             
             file.addPath( model->sourcePath() );
             file.addPath( model->sourceFile() );
@@ -354,7 +368,7 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
         if ( !model )
             throw "bad model-value";
 
-        KUrl file = m_plugin->patch()->baseDir;
+        KUrl file = m_plugin->patch()->baseDir();
         
         file.addPath( model->sourcePath() );
         file.addPath( model->sourceFile() );
@@ -373,7 +387,7 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
 
 KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
 {
-  KUrl file = m_plugin->patch()->baseDir;
+  KUrl file = m_plugin->patch()->baseDir();
   
   file.addPath( model->sourcePath() );
   file.addPath( model->sourceFile() );
@@ -904,9 +918,8 @@ void PatchReviewPlugin::removeHighlighting( const KUrl& file ) {
 
 void PatchReviewPlugin::notifyPatchChanged()
 {
-    kDebug() << "notifying patch change: " << m_patch->filename;
+    kDebug() << "notifying patch change: " << m_patch->file();
     m_updateKompareTimer->start(500);
-    m_diffFile = KUrl();
 }
 
 void PatchReviewPlugin::showPatch()
@@ -917,38 +930,9 @@ void PatchReviewPlugin::showPatch()
 
 void PatchReviewPlugin::forceUpdate()
 {
+  m_patch->update();
+  
   notifyPatchChanged();
-
-  if(!m_patch->command.isEmpty()) {
-    KTemporaryFile temp;
-    temp.setSuffix(".diff");
-    temp.setAutoRemove(false);
-    if(temp.open()) {
-      temp.setAutoRemove(false);
-      QString filename = temp.fileName();
-      kDebug() << "temp file: " << filename;
-      temp.close();
-      KProcess proc;
-      proc.setWorkingDirectory(m_patch->baseDir.toLocalFile());
-      proc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-      proc.setStandardOutputFile(filename);
-      ///Try to apply, if it works, the patch is not applied
-      proc << splitArgs( m_patch->command );
-
-      kDebug() << "calling " << m_patch->command;
-
-      if ( proc.execute() ) {
-          kWarning() << "returned with bad exit code";
-          return;
-      }
-      
-      m_diffFile = KUrl(filename);
-      kDebug() << "success, diff: " << m_diffFile;
-      
-    }else{
-      kWarning() << "PROBLEM";
-    }
-  }
 }
 
 void PatchReviewPlugin::updateKompareModel() {
@@ -970,7 +954,7 @@ void PatchReviewPlugin::updateKompareModel() {
         try {
             ///@todo does not work with remote URLs
             ///@todo Only reverse if the patch is currently applied
-            if ( !m_modelList->openDirAndDiff( m_patch->baseDir.toLocalFile(), diffFile.toLocalFile(), true ) )
+            if ( !m_modelList->openDirAndDiff( m_patch->baseDir().toLocalFile(), diffFile.toLocalFile(), true ) )
                 throw "could not open diff " + diffFile.toLocalFile();
          } catch ( const QString & str ) {
             throw;
@@ -1015,7 +999,7 @@ public:
 
     virtual QString id() const
     {
-        return "org.kdevelop.PatchReviewToolview";
+        return "org.kdevelop.PatchReview";
     }
 
 private:
@@ -1025,20 +1009,139 @@ private:
 PatchReviewPlugin::~PatchReviewPlugin()
 {
     removeHighlighting();
+    delete m_patch;
 }
 
 void PatchReviewPlugin::commandToFile()
 {
-    if(!diffFile().isEmpty()) {
-      m_patch->filename = diffFile();
-      m_patch->command.clear();
-      notifyPatchChanged();
+//     if(!diffFile().isEmpty()) {
+//       m_patch->filename = diffFile();
+//       m_patch->command.clear();
+//       notifyPatchChanged();
+//     }
+}
+
+void PatchReviewPlugin::registerPatch(IPatchSource::Ptr patch)
+{
+  if(!m_knownPatches.contains(patch)) {
+    m_knownPatches << patch;
+    connect(patch, SIGNAL(destroyed(QObject*)), SLOT(clearPatch(QObject*)));
+  }
+}
+
+void PatchReviewPlugin::clearPatch(QObject* _patch)
+{
+  IPatchSource::Ptr patch((IPatchSource*)_patch);
+  m_knownPatches.removeAll(patch);
+  
+  if(patch == m_patch) {
+    if(!m_knownPatches.empty())
+      setPatch(m_knownPatches.first());
+    else
+      setPatch(IPatchSource::Ptr(new LocalPatchSource));
+  }
+}
+
+#if 0
+#if HAVE_KOMPARE
+void showDiff(const KDevelop::VcsDiff& d)
+{
+    ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+    foreach(const VcsLocation& l, d.leftTexts().keys())
+    {
+        KUrl to;
+        if(d.rightTexts().contains(l))
+        {
+            KTemporaryFile temp2;
+            temp2.setSuffix("2.patch");
+            temp2.setAutoRemove(false);
+            temp2.open();
+            QTextStream t2(&temp2);
+            t2 << d.rightTexts()[l];
+            temp2.close();
+            to=temp2.fileName();
+        }
+        else
+            to=l.localUrl();
+        
+        KUrl fakeUrl(to);
+        fakeUrl.setScheme("kdevpatch");
+        
+        IDocumentFactory* docf=ICore::self()->documentController()->factory("text/x-patch");
+        IDocument* doc=docf->create(fakeUrl, ICore::self());
+        IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
+        
+        Q_ASSERT(pdoc);
+        ICore::self()->documentController()->openDocument(doc);
+        pdoc->setDiff(d.leftTexts()[l], to);
     }
+}
+#endif
+#endif
+
+void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMode mode)
+{
+  setPatch(patch);
+  m_updateKompareTimer->stop();
+  updateKompareModel();
+  ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+  Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  w->area()->setWorkingSet("review");
+  w->area()->clearViews();
+  
+  //Open the diff itself
+#if HAVE_KOMPARE
+  fakeUrl.setScheme("kdevpatch");
+  IDocumentFactory* docf=ICore::self()->documentController()->factory("text/x-patch");
+  IDocument* doc=docf->create(fakeUrl, ICore::self());
+  IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
+  
+  Q_ASSERT(pdoc);
+  ICore::self()->documentController()->openDocument(doc);
+#else
+  ICore::self()->documentController()->openDocument(patch->file());
+#endif
+
+  if(m_modelList->modelCount() < 10) {
+    //Open all relates files
+    for(int a = 0; a < m_modelList->modelCount(); ++a) {
+      KUrl url(m_modelList->modelAt(a)->source());
+       ICore::self()->documentController()->openDocument(url);
+       seekHunk(true, url); //Jump to the first changed position
+    }
+  }
+  
+  bool b = ICore::self()->uiController()->findToolView(i18n("Patch Review"), m_factory);
+  Q_ASSERT(b);
+}
+
+void PatchReviewPlugin::setPatch(IPatchSource::Ptr patch)
+{
+  if(m_patch) {
+    QObject* objPatch = dynamic_cast<QObject*>(m_patch.data());
+    if(objPatch) {
+      disconnect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
+    }
+  }
+  m_patch = patch;
+
+  if(m_patch) {
+    kDebug() << "setting new patch" << patch->name() << "with file" << patch->file();
+    registerPatch(patch);
+    
+    QObject* objPatch = dynamic_cast<QObject*>(m_patch.data());
+    if(objPatch) {
+      connect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
+    }
+  }
+  
+  notifyPatchChanged();
 }
 
 PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent), m_factory(new PatchReviewToolViewFactory(this)) {
 
-    m_patch = LocalPatchSourcePointer(new LocalPatchSource);
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
+  
     core()->uiController()->addToolView(i18n("Patch Review"), m_factory);
     setXMLFile("kdevpatchreview.rc");
 
@@ -1048,6 +1151,8 @@ PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KD
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
     connect( m_updateKompareTimer, SIGNAL( timeout() ), this, SLOT( updateKompareModel() ) );
+    
+    setPatch(IPatchSource::Ptr(new LocalPatchSource));
 }
 
 void PatchReviewPlugin::documentClosed(IDocument* doc)

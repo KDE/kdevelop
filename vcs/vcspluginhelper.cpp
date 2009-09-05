@@ -60,9 +60,10 @@
 
 #include <config-kdevplatform.h>
 #if HAVE_KOMPARE
-#include <KTemporaryFile>
 #include <interfaces/ipatchdocument.h>
 #endif
+#include <interfaces/ipatchsource.h>
+#include <KTemporaryFile>
 
 namespace KDevelop
 {
@@ -230,45 +231,104 @@ void VcsPluginHelper::diffToHead()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-#if HAVE_KOMPARE
+///@todo The subversion library returns borked diffs, where the headers are at the end. This function
+///           takes those headers, and moves them into the correct place to create a valid working diff.
+///           Find the source of this problem.
+QString repairDiff(QString diff) {
+    kDebug() << "diff before repair:" << diff;
+    QStringList lines = diff.split('\n');
+    QMap<QString, QString> headers;
+    for(uint a = 0; a < lines.size()-1; ++a) {
+        if(lines[a].startsWith("Index: ") && lines[a+1].startsWith("=====")) {
+            QString fileName = lines[a].mid(strlen("Index: ")).trimmed();
+            headers[fileName] = lines[a];
+            kDebug() << "found header for" << fileName;
+            lines[a] = QString();
+            if(lines[a+1].startsWith("======")) {
+                headers[fileName] += "\n" + lines[a+1];
+            lines[a+1] = QString();
+            }
+        }
+    }
+    
+    QRegExp spaceRegExp("\\s");
+    
+    for(uint a = 0; a < lines.size()-1; ++a) {
+        if(lines[a].startsWith("--- ")) {
+            QString tail = lines[a].mid(strlen("--- "));
+            if(tail.indexOf(spaceRegExp) != -1) {
+                QString file = tail.left(tail.indexOf(spaceRegExp));
+                kDebug() << "checking for" << file;
+                if(headers.contains(file)) {
+                    kDebug() << "adding header for" << file << ":" << headers[file];
+                    lines[a] = headers[file] + "\n" + lines[a];
+                }
+            }
+        }
+    }
+    QString ret = lines.join("\n");
+    kDebug() << "repaired diff:" << ret;
+    return ret;
+}
+
+class VCSDiffPatchSource : public KDevelop::IPatchSource {
+    public:
+    VCSDiffPatchSource(const KDevelop::VcsDiff& d) {
+        KTemporaryFile temp2;
+        temp2.setSuffix("2.patch");
+        temp2.setAutoRemove(false);
+        temp2.open();
+        QTextStream t2(&temp2);
+        t2 << repairDiff(d.diff());
+        kDebug() << "filename:" << temp2.fileName();
+        m_file = KUrl(temp2.fileName());
+        temp2.close();
+        
+        kDebug() << "using file" << m_file;
+        
+        m_name = "VCS Diff";
+        m_base = KUrl("/");
+    }
+        
+    virtual KUrl baseDir() const {
+        return m_base;
+    }
+    
+    virtual KUrl file() const {
+        return m_file;
+    }
+    
+    virtual QString name() const {
+        return m_name;
+    }
+    
+    virtual void update() {
+    }
+    
+    KUrl m_base, m_file;
+    QString m_name;
+};
+
 void showDiff(const KDevelop::VcsDiff& d)
 {
-    ICore::self()->uiController()->switchToArea("test", KDevelop::IUiController::ThisWindow);
-    foreach(const VcsLocation& l, d.leftTexts().keys())
-    {
-        KUrl to;
-        if(d.rightTexts().contains(l))
-        {
-            KTemporaryFile temp2;
-            temp2.setSuffix("2.patch");
-            temp2.setAutoRemove(false);
-            temp2.open();
-            QTextStream t2(&temp2);
-            t2 << d.rightTexts()[l];
-            temp2.close();
-            to=temp2.fileName();
-        }
-        else
-            to=l.localUrl();
-        
-        KUrl fakeUrl(to);
-        fakeUrl.setScheme("kdevpatch");
-        
-        IDocumentFactory* docf=ICore::self()->documentController()->factory("text/x-patch");
-        IDocument* doc=docf->create(fakeUrl, ICore::self());
-        IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
-        
-        Q_ASSERT(pdoc);
-        ICore::self()->documentController()->openDocument(doc);
-        pdoc->setDiff(d.leftTexts()[l], to);
+    KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>("org.kdevelop.IPatchReview");
+
+    //Only give one VCS diff at a time to the patch review plugin
+    static KDevelop::IPatchSource::Ptr currentShownDiff;
+    if(currentShownDiff)
+        delete currentShownDiff;
+    
+    if( patchReview ) {
+        kDebug() << "starting review";
+        currentShownDiff = new VCSDiffPatchSource(d);
+        patchReview->startReview(currentShownDiff);
+    } else {
+        kWarning() << "Patch review plugin not found";
+        ICore::self()->documentController()->openDocumentFromText(d.diff());
     }
 }
-#else
-void showDiff(const KDevelop::VcsDiff& d)
-{
-    ICore::self()->documentController()->openDocumentFromText(d.diff());
-}
-#endif
+
+
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {

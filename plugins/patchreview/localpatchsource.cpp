@@ -12,4 +12,64 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
  ***************************************************************************/
 
 #include "localpatchsource.h"
+#include <ktemporaryfile.h>
+#include <kdebug.h>
+#include <kprocess.h>
 
+QStringList splitArgs( const QString& str ) {
+    QStringList ret;
+    QString current = str;
+    int pos = 0;
+    while ( ( pos = current.indexOf( ' ', pos ) ) != -1 ) {
+        if ( current[ 0 ] == '"' ) {
+            int end = current.indexOf( '"' );
+            if ( end > pos )
+                pos = end;
+        }
+        QString s = current.left( pos );
+        if ( s.length() > 0 )
+            ret << s;
+        current = current.mid( pos + 1 );
+        pos = 0;
+    }
+    if ( current.length() )
+        ret << current;
+    return ret;
+}
+
+void LocalPatchSource::update()
+{
+    if(!m_command.isEmpty()) {
+        KTemporaryFile temp;
+        temp.setSuffix(".diff");
+        temp.setAutoRemove(false);
+        if(temp.open()) {
+        temp.setAutoRemove(false);
+        QString filename = temp.fileName();
+        kDebug() << "temp file: " << filename;
+        temp.close();
+        KProcess proc;
+        proc.setWorkingDirectory(m_baseDir.toLocalFile());
+        proc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
+        proc.setStandardOutputFile(filename);
+        ///Try to apply, if it works, the patch is not applied
+        proc << splitArgs( m_command );
+
+        kDebug() << "calling " << m_command;
+
+        if ( proc.execute() ) {
+            kWarning() << "returned with bad exit code";
+            return;
+        }
+        
+        m_filename = KUrl(filename);
+        kDebug() << "success, diff: " << m_filename;
+        
+        }else{
+        kWarning() << "PROBLEM";
+        }
+        emit patchChanged();
+    }
+}
+
+#include "localpatchsource.moc"

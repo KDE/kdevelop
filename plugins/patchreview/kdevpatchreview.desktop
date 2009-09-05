@@ -40,6 +40,7 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevpatchreview
 X-KDevelop-Version=7
 X-KDevelop-Category=Global
+X-KDevelop-Interfaces=org.kdevelop.IPatchReview
 X-KDE-PluginInfo-Name=kdevpatchreview
 X-KDE-PluginInfo-Author=David Nolden
 X-KDE-PluginInfo-License=GPL

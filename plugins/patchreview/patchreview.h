@@ -130,10 +130,13 @@ private:
     PatchReviewPlugin* m_plugin;
 public slots:
     void documentActivated(KDevelop::IDocument*);
+    void patchSelectionChanged(int);
 };
 
-class PatchReviewPlugin : public KDevelop::IPlugin {
+class PatchReviewPlugin : public KDevelop::IPlugin, public KDevelop::IPatchReview {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IPatchReview )
+    
 public:
     PatchReviewPlugin(QObject *parent, const QVariantList & = QVariantList() );
     ~PatchReviewPlugin();
@@ -141,15 +144,17 @@ public:
 
     QWidget* createToolView(QWidget* parent);
 
-    LocalPatchSourcePointer patch() const {
+    KDevelop::IPatchSource::Ptr patch() const {
         return m_patch;
+    }
+
+    QList<KDevelop::IPatchSource::Ptr> knownPatches() const {
+      return m_knownPatches;
     }
 
     Diff2::KompareModelList* modelList() const {
         return m_modelList.get();
     }
-
-    void notifyPatchChanged();
 
     void seekHunk( bool forwards, const KUrl& file = KUrl() );
 
@@ -158,12 +163,20 @@ public:
     ///Returns whether the change is reversed:
     ///The source source is the current version of the document, and the destination is the version of the document before the patch was applied.
     bool isReverseChange() const ;
+
+    void setPatch(KDevelop::IPatchSource::Ptr patch);
+
+    void registerPatch(KDevelop::IPatchSource::Ptr patch);
+    
+    virtual void startReview(KDevelop::IPatchSource* patch, ReviewMode mode);
     
 Q_SIGNALS:
     void patchChanged();
 
 public Q_SLOTS:
-    void  highlightPatch();
+    void clearPatch(QObject* patch);
+    void notifyPatchChanged();
+    void highlightPatch();
     void updateKompareModel();
     void showPatch();
     void commandToFile();
@@ -173,11 +186,13 @@ private Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);
     void textDocumentCreated(KDevelop::IDocument*);
 private:
+  
+    QList<KDevelop::IPatchSource::Ptr> m_knownPatches;
 
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
 
-    LocalPatchSourcePointer m_patch;
+    KDevelop::IPatchSource::Ptr m_patch;
 
     QTimer* m_updateKompareTimer;
 

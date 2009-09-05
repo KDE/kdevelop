@@ -17,21 +17,34 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <ksharedptr.h>
 #include <QString>
 #include <KUrl>
+#include <interfaces/ipatchsource.h>
+#include <klocalizedstring.h>
 
-class LocalPatchSource : public KShared {
-
-    ///This class should be used for identification instead of just the name, because the type of comparison might change in future
+class LocalPatchSource : public KDevelop::IPatchSource {
+Q_OBJECT
 public:
 
-    KUrl filename;
-    KUrl baseDir;
-    uint depth;
-    QString command;
+    virtual QString name() const {
+        return i18n("Custom Patch");
+    }
+    
+    virtual KUrl baseDir() const {
+        return m_baseDir;
+    }
 
-    LocalPatchSource()  : depth(0) {
+    virtual KUrl file() const {
+        return m_filename;
+    }
+    
+    virtual void update();
+    
+    KUrl m_filename;
+    KUrl m_baseDir;
+    uint m_depth;
+    QString m_command;
+
+    LocalPatchSource()  : m_depth(0) {
     }
 };
-
-typedef KSharedPtr<LocalPatchSource> LocalPatchSourcePointer;
 
 #endif // LOCALPATCHSOURCE_H
