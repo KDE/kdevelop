@@ -22,7 +22,7 @@
 #include <language/editor/simplerange.h>
 #include <language/duchain/indexedstring.h>
 #include <ksharedptr.h>
-#include <KUrl>
+#include <KDE/KUrl>
 
 namespace KDevelop {
     
