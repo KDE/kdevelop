@@ -50,9 +50,6 @@ public:
     virtual Variable* createVariable(TreeModel* model, TreeItem* parent, 
                                      const QString& expression,
                                      const QString& display = "");
-
-    virtual void fetchMoreChildren(KDevelop::Variable* variable);
-    virtual void deleteVar(KDevelop::Variable* variable);
     virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor);
     virtual void addWatch(KDevelop::Variable* variable);
     virtual void addWatchpoint(KDevelop::Variable* variable);
@@ -69,6 +66,8 @@ private:
     void handleVarUpdate(const GDBMI::ResultRecord& r);
     void addWatch(const GDBMI::ResultRecord& r);
     void addWatchpoint(const GDBMI::ResultRecord& r);
+
+    void stateChanged(IDebugSession::DebuggerState state);
 
     static int nextId_;
 };

@@ -19,7 +19,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "mi/gdbmi.h"
+
 #include <debugger/variable/variablecollection.h>
+
+#include <QtCore/QMap>
+
+
+class CreateVarobjHandler;
+class FetchMoreChildrenHandler;
 
 namespace KDevelop
 {
@@ -29,7 +37,32 @@ namespace KDevelop
         GdbVariable(TreeModel* model, TreeItem* parent,
                     const QString& expression,
                     const QString& display = "");
+
+        ~GdbVariable();
+
+        /* FIXME: should eventually remove, so that existance of
+           varobjs is fully encapsulalated inside GdbVariable.  */
+        const QString& varobj() const;
+        void handleUpdate(const GDBMI::Value& var);
+
+        static GdbVariable *findByVarobjName(const QString& varobjName);
+
+        /* Called when GDB dies.  Clears the association between varobj names
+           and Variable instances.  */
+        static void markAllDead();
+
     private: // Variable overrides
-        void createVarobj(QObject *callback, const char *callbackMethod);
+        void attachMaybe(QObject *callback, const char *callbackMethod);
+        void fetchMoreChildren();
+
+    private: // Internal
+        friend class ::CreateVarobjHandler;
+        friend class ::FetchMoreChildrenHandler;
+        void setVarobj(const QString& v);
+        QString varobj_;
+
+        /* Map from GDB varobj name to GdbVariable.
+           FIXME: eventually, should be per-session map.  */
+        static QMap<QString, GdbVariable*> allVariables_;
     };
 }

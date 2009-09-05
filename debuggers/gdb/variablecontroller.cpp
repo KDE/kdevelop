@@ -35,6 +35,7 @@
 #include <interfaces/idebugcontroller.h>
 
 using namespace GDBDebugger;
+using namespace KDevelop;
 
 VariableController::VariableController(DebugSession* parent)
     : KDevelop::IVariableController(parent)
@@ -84,27 +85,11 @@ void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)
     for (int i = 0; i < changed.size(); ++i)
     {
         const GDBMI::Value& var = changed[i];
-        KDevelop::Variable* v = KDevelop::Variable::findByName(var["name"].literal());
+        GdbVariable* v = GdbVariable::findByVarobjName(var["name"].literal());
         // v can be NULL here if we've already removed locals after step,
         // but the corresponding -var-delete command is still in the queue.
         if (v) {
-            if (var.hasField("type_changed")
-                && var["type_changed"].literal() == "true")
-            {
-                v->deleteChildren();
-                v->setHasMore(var["new_num_children"].toInt() != 0);
-                v->fetchMoreChildren();
-            }
-
-            if (var.hasField("in_scope") && var["in_scope"].literal() == "false")
-            {
-                v->setInScope(false);
-            }
-            else
-            {
-                v->setInScope(true);
-                v->setValue(var["value"].literal());
-            }
+            v->handleUpdate(var);
         }
     }
 }
@@ -166,76 +151,6 @@ void VariableController::updateLocals()
                         new StackListLocalsHandler(debugSession())));
 }
 
-
-class FetchMoreChildrenHandler : public GDBCommandHandler
-{
-public:
-    FetchMoreChildrenHandler(KDevelop::Variable *variable, DebugSession *session)
-        : m_variable(variable), m_session(session), m_activeCommands(1)
-    {}
-
-    virtual void handle(const GDBMI::ResultRecord &r)
-    {
-        if (!m_variable) return;
-        --m_activeCommands;
-        const GDBMI::Value& children = r["children"];
-        for (int i = 0; i < children.size(); ++i) {
-            const GDBMI::Value& child = children[i];
-            const QString& exp = child["exp"].literal();
-            if (exp == "public" || exp == "protected" || exp == "private") {
-                ++m_activeCommands;
-                m_session->addCommand(
-                    new GDBCommand(GDBMI::VarListChildren,
-                                QString("--all-values \"%1\"").arg(child["name"].literal()),
-                                this/*use again as handler*/));
-            } else {
-                KDevelop::Variable* var = m_session->variableController()->
-                    createVariable(m_variable->model(), m_variable, 
-                                   child["exp"].literal());
-                var->setTopLevel(false);
-                var->setVarobj(child["name"].literal());
-                var->setHasMoreInitial(child["numchild"].toInt());
-                m_variable->appendChild(var);
-                var->setValue(child["value"].literal());
-            }
-        }
-
-        m_variable->setHasMore(m_activeCommands != 0);
-        if (m_activeCommands == 0) {
-            delete this;
-        }
-    }
-    virtual bool handlesError() {
-        // FIXME: handle error?
-        return false;
-    }
-    virtual bool autoDelete() {
-        // we delete ourselve
-        return false;
-    }
-
-private:
-    QPointer<KDevelop::Variable> m_variable;
-    DebugSession *m_session;
-    int m_activeCommands;
-};
-
-
-void VariableController::fetchMoreChildren(KDevelop::Variable* variable)
-{
-    debugSession()->addCommand(
-        new GDBCommand(GDBMI::VarListChildren,
-                    QString("--all-values \"%1\"").arg(variable->varobj()),
-                    new FetchMoreChildrenHandler(variable, debugSession())));
-}
-
-
-void VariableController::deleteVar(KDevelop::Variable* variable)
-{
-    debugSession()->addCommand(
-        new GDBCommand(GDBMI::VarDelete, QString("\"%1\"").arg(variable->varobj())));
-}
-
 QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor)
 {
     QString line = doc->line(cursor.line());
@@ -263,20 +178,34 @@ QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, co
 
 void VariableController::addWatch(KDevelop::Variable* variable)
 {
-    debugSession()->addCommand(
-        new GDBCommand(GDBMI::VarInfoPathExpression,
-                        variable->varobj(),
-                        this,
-                        &VariableController::addWatch));
+    // FIXME: should add async 'get full expression' method
+    // to GdbVariable, not poke at varobj. In that case,
+    // we will be able to make addWatch a generic method, not
+    // gdb-specific one.
+    if (GdbVariable *gv = dynamic_cast<GdbVariable*>(variable))
+    {
+        debugSession()->addCommand(
+            new GDBCommand(GDBMI::VarInfoPathExpression,
+                           gv->varobj(),
+                           this,
+                           &VariableController::addWatch));
+    }
 }
 
 void VariableController::addWatchpoint(KDevelop::Variable* variable)
 {
-    debugSession()->addCommand(
-        new GDBCommand(GDBMI::VarInfoPathExpression,
-                        variable->varobj(),
-                        this,
-                        &VariableController::addWatchpoint));
+    // FIXME: should add async 'get full expression' method
+    // to GdbVariable, not poke at varobj. In that case,
+    // we will be able to make addWatchpoint a generic method, not
+    // gdb-specific one.
+    if (GdbVariable *gv = dynamic_cast<GdbVariable*>(variable))
+    {
+        debugSession()->addCommand(
+            new GDBCommand(GDBMI::VarInfoPathExpression,
+                           gv->varobj(),
+                           this,
+                           &VariableController::addWatchpoint));
+    }
 }
 
 void VariableController::addWatch(const GDBMI::ResultRecord& r)
@@ -299,6 +228,13 @@ createVariable(TreeModel* model, TreeItem* parent,
                const QString& expression, const QString& display)
 {
     return new GdbVariable(model, parent, expression, display);
+}
+
+void VariableController::stateChanged(IDebugSession::DebuggerState state)
+{
+    IVariableController::stateChanged(state);
+    if (state == IDebugSession::EndedState)
+        GdbVariable::markAllDead();
 }
 
 
