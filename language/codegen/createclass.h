@@ -90,7 +90,7 @@ public Q_SLOTS:
     virtual void moveDownInheritance();
     
     /**
-     * Parses a parent class into a QualifiedIdentifier, the defaul implementation
+     * Parses a parent class into a QualifiedIdentifier, the default implementation
      * Just returns the string converted to a QualifiedIdentifier
      */
     virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
