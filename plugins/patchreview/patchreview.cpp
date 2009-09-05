@@ -1089,6 +1089,9 @@ void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMod
   w->area()->setWorkingSet("review");
   w->area()->clearViews();
   
+  if(!m_modelList)
+    return;
+  
   //Open the diff itself
 #if HAVE_KOMPARE
   fakeUrl.setScheme("kdevpatch");
