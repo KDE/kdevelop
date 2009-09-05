@@ -110,7 +110,7 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
     d->title = title;
     d->controller = controller;
     d->iconName = "kdevelop";
-    d->workingSet = QString();
+    d->workingSet.clear();
     kDebug() << "initial working-set:" << d->workingSet;
     initialize();
 }
