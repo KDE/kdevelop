@@ -93,7 +93,7 @@ void OutputJob::outputViewRemoved(int , int id)
     {
         // Make sure that the job emits result signal as the job
         // might be used in composite jobs and that one depends
-        // on result being emitted to know wether a subjob
+        // on result being emitted to know whether a subjob
         // is done.
         kill( KJob::EmitResult );
     }
