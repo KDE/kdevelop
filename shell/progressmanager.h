@@ -87,8 +87,8 @@ class ProgressItem : public QObject
     unsigned int progress() const { return mProgress; }
 
     /**
-     * Adjust wether this item has progress information or not.
-     * @param busy indicates wether this item can show progress information or not
+     * Adjust whether this item has progress information or not.
+     * @param busy indicates whether this item can show progress information or not
      */
     void setBusy( bool busy = true );
 
