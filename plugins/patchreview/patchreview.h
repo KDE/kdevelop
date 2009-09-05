@@ -11,8 +11,8 @@ Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EDITPATCH_H
-#define EDITPATCH_H
+#ifndef PATCHREVIEW_H
+#define PATCHREVIEW_H
 
 #include <QObject>
 #include <QPointer>
