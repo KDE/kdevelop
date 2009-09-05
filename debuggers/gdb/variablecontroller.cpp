@@ -36,8 +36,6 @@
 
 using namespace GDBDebugger;
 
-int VariableController::nextId_ = 0;
-
 VariableController::VariableController(DebugSession* parent)
     : KDevelop::IVariableController(parent)
 {
@@ -168,51 +166,6 @@ void VariableController::updateLocals()
                         new StackListLocalsHandler(debugSession())));
 }
 
-class CreateVarobjHandler : public GDBCommandHandler
-{
-public:
-    CreateVarobjHandler(KDevelop::Variable *variable, QObject *callback, const char *callbackMethod)
-        : m_variable(variable), m_callback(callback), m_callbackMethod(callbackMethod)
-    {}
-
-    virtual void handle(const GDBMI::ResultRecord &r)
-    {
-        if (!m_variable) return;
-        bool hasValue = false;
-        if (r.reason == "error") {
-            /* Probably should mark this disabled, or something.  */
-        } else {
-            m_variable->deleteChildren();
-            m_variable->setInScope(true);
-            m_variable->setVarobj(r["name"].literal());
-            m_variable->setHasMore(r["numchild"].toInt());
-            m_variable->setValue(r["value"].literal());
-            hasValue = !r["value"].literal().isEmpty();
-            if (m_variable->isExpanded() && r["numchild"].toInt()) {
-                m_variable->fetchMoreChildren();
-            }
-        }
-
-        if (m_callback && m_callbackMethod) {
-            QMetaObject::invokeMethod(m_callback, m_callbackMethod, Q_ARG(bool, hasValue));
-        }
-    }
-    virtual bool handlesError() { return true; }
-
-private:
-    QPointer<KDevelop::Variable> m_variable;
-    QObject *m_callback;
-    const char *m_callbackMethod;
-};
-
-void VariableController::createVarobj(KDevelop::Variable *variable, QObject *callback, const char *callbackMethod)
-{
-    debugSession()->addCommand(
-        new GDBCommand(
-            GDBMI::VarCreate,
-            QString("var%1 @ %2").arg(nextId_++).arg(variable->expression()),
-            new CreateVarobjHandler(variable, callback, callbackMethod)));
-}
 
 class FetchMoreChildrenHandler : public GDBCommandHandler
 {

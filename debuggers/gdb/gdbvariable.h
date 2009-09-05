@@ -29,5 +29,7 @@ namespace KDevelop
         GdbVariable(TreeModel* model, TreeItem* parent,
                     const QString& expression,
                     const QString& display = "");
+    private: // Variable overrides
+        void createVarobj(QObject *callback, const char *callbackMethod);
     };
 }

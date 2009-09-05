@@ -51,7 +51,6 @@ public:
                                      const QString& expression,
                                      const QString& display = "");
 
-    virtual void createVarobj(KDevelop::Variable *variable, QObject *callback = 0, const char *callbackMethod = 0);
     virtual void fetchMoreChildren(KDevelop::Variable* variable);
     virtual void deleteVar(KDevelop::Variable* variable);
     virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor);
