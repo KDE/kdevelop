@@ -138,7 +138,7 @@ void Variable::createVarobjMaybe(QObject *callback, const char *callbackMethod)
         return;
 
     if (hasStartedSession()) {
-        currentSession()->variableController()->createVarobj(this, callback, callbackMethod);
+        createVarobj(callback, callbackMethod);
     }
 }
 

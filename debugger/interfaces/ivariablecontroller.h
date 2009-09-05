@@ -52,7 +52,6 @@ public:
                                      const QString& expression,
                                      const QString& display = "") = 0;
 
-    virtual void createVarobj(Variable *variable, QObject *callback = 0, const char *callbackMethod = 0) = 0;
     virtual void fetchMoreChildren(Variable* variable) = 0;
     virtual void deleteVar(Variable* variable) = 0;
 

@@ -92,6 +92,9 @@ private: // TreeItem overrides
 
 private:
 
+    virtual void createVarobj(QObject *callback, const char *callbackMethod) 
+        = 0;
+
     QString expression_;
     QString varobj_;
     bool inScope_;
