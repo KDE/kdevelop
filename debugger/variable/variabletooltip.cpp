@@ -58,7 +58,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
         variableController()->createVariable(
             model_, tr, identifier);
     tr->init(var_);
-    var_->createVarobjMaybe(this, "variableCreated");
+    var_->attachMaybe(this, "variableCreated");
 
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);

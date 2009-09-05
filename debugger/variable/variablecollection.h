@@ -57,11 +57,9 @@ protected:
 
 public:
 
-    QString varobj() const;
     QString expression() const;
     bool inScope() const;
     void setInScope(bool v);
-    void setVarobj(const QString& v);
     void setValue(const QString &v);
     void setTopLevel(bool v);
     using TreeItem::setHasMore;
@@ -74,17 +72,17 @@ public:
 
     ~Variable();
 
-    void createVarobjMaybe(QObject *callback = 0, const char *callbackMethod = 0);
+    /* Connects this variable to debugger, fetching the current value and
+       otherwise preparing this variable to be displayed everywhere.  
+       The attempt may fail, for example if the expression is invalid.
+       Calls slot 'callbackMethod' in 'callback' to notify of the result.
+       The slot should be taking 'bool ok' parameter.  */
+    virtual void attachMaybe(QObject *callback = 0, const char *callbackMethod = 0) = 0;
 
     void die();
 
-    void fetchMoreChildren();
-
-    static Variable *findByName(const QString& name);
-    /* Called when GDB dies.  Clears the association between varobj names
-       and Variable instances.  */
-    static void markAllDead();
-
+protected:
+    bool topLevel() { return topLevel_; }
 
 private: // TreeItem overrides
 
@@ -92,15 +90,9 @@ private: // TreeItem overrides
 
 private:
 
-    virtual void createVarobj(QObject *callback, const char *callbackMethod) 
-        = 0;
-
     QString expression_;
-    QString varobj_;
     bool inScope_;
     bool topLevel_;
-
-    static QMap<QString, Variable*> allVariables_;
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT TooltipRoot : public TreeItem

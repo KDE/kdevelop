@@ -75,11 +75,6 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
         setData(QVector<QVariant>() << display << QString());
 }
 
-QString Variable::varobj() const
-{
-    return varobj_;
-}
-
 QString Variable::expression() const
 {
     return expression_;
@@ -109,52 +104,17 @@ void Variable::setInScope(bool v)
             var->setInScope(v);
         }
     }
-}
-
-void Variable::setVarobj(const QString& v)
-{
-    Q_ASSERT(varobj_.isEmpty());
-    varobj_ = v;
-    allVariables_[varobj_] = this;
+    reportChange();
 }
 
 Variable::~Variable()
 {
-    if (!varobj_.isEmpty())
-    {
-        // Delete only top-level variable objects.
-        if (topLevel_) {
-            if (hasStartedSession()) {
-                currentSession()->variableController()->deleteVar(this);
-            }
-        }
-        allVariables_.remove(varobj_);
-    }
-}
-
-void Variable::createVarobjMaybe(QObject *callback, const char *callbackMethod)
-{
-    if (!varobj_.isEmpty())
-        return;
-
-    if (hasStartedSession()) {
-        createVarobj(callback, callbackMethod);
-    }
 }
 
 void Variable::die()
 {
     removeSelf();
     deleteLater();
-}
-
-void Variable::fetchMoreChildren()
-{
-    // FIXME: should not even try this if app is not started.
-    // Probably need to disable open, or something
-    if (hasStartedSession()) {
-        currentSession()->variableController()->fetchMoreChildren(this);
-    }
 }
 
 QVariant Variable::data(int column, int role) const
@@ -170,27 +130,6 @@ QVariant Variable::data(int column, int role) const
     return TreeItem::data(column, role);
 }
 
-Variable* Variable::findByName(const QString& name)
-{
-    if (allVariables_.count(name) == 0)
-        return 0;
-    return allVariables_[name];
-}
-
-void Variable::markAllDead()
-{
-    QMap<QString, Variable*>::iterator i, e;
-    for (i = allVariables_.begin(), e = allVariables_.end(); i != e; ++i)
-    {
-        i.value()->varobj_.clear();
-        i.value()->inScope_ = false;
-        i.value()->reportChange();
-    }
-    allVariables_.clear();
-}
-
-QMap<QString, Variable*> Variable::allVariables_;
-
 Watches::Watches(TreeModel* model, TreeItem* parent)
 : TreeItem(model, parent), finishResult_(0)
 {
@@ -202,7 +141,7 @@ Variable* Watches::add(const QString& expression)
     Variable* v = currentSession()->variableController()->createVariable(
         model(), this, expression);
     appendChild(v);
-    v->createVarobjMaybe();
+    v->attachMaybe();
     return v;
 }
 
@@ -215,7 +154,7 @@ Variable *Watches::addFinishResult(const QString& convenienceVarible)
     finishResult_ = currentSession()->variableController()->createVariable(
         model(), this, convenienceVarible, "$ret");
     appendChild(finishResult_);
-    finishResult_->createVarobjMaybe();
+    finishResult_->attachMaybe();
     return finishResult_;
 }
 
@@ -247,7 +186,7 @@ void Watches::reinstall()
     for (int i = 0; i < childItems.size(); ++i)
     {
         Variable* v = static_cast<Variable*>(child(i));
-        v->createVarobjMaybe();
+        v->attachMaybe();
     }
 }
 
@@ -280,7 +219,7 @@ void Locals::updateLocals(QStringList locals)
                     ICore::self()->debugController()->variableCollection(),
                     this, var );
             appendChild( v, false );
-            v->createVarobjMaybe();
+            v->attachMaybe();
         }
     }
 

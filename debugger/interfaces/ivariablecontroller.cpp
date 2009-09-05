@@ -32,7 +32,7 @@ IVariableController::IVariableController(IDebugSession* parent)
     : QObject(parent)
 {
     connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-             SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
+             SLOT(xStateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 VariableCollection* IVariableController::variableCollection()
@@ -46,7 +46,6 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
         // Remove all locals.
         variableCollection()->locals()->deleteChildren();
         variableCollection()->locals()->setHasMore(false);
-        KDevelop::Variable::markAllDead();
     } else if (state == IDebugSession::PausedState) {
         if (!(m_autoUpdate & UpdateLocals)) {
             variableCollection()->locals()->setHasMore(true);
@@ -55,6 +54,12 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
             update();
         }
     }
+}
+
+void IVariableController::
+xStateChanged(KDevelop::IDebugSession::DebuggerState state)
+{
+    stateChanged(state);
 }
 
 void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)

@@ -52,9 +52,6 @@ public:
                                      const QString& expression,
                                      const QString& display = "") = 0;
 
-    virtual void fetchMoreChildren(Variable* variable) = 0;
-    virtual void deleteVar(Variable* variable) = 0;
-
     virtual QString expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor) = 0;
 
     virtual void addWatch(Variable* variable) = 0;
@@ -77,8 +74,10 @@ protected:
      **/
     VariableCollection *variableCollection();
 
+    virtual void stateChanged(KDevelop::IDebugSession::DebuggerState state);
+
 private Q_SLOTS:
-    void stateChanged(KDevelop::IDebugSession::DebuggerState state);
+    void xStateChanged(KDevelop::IDebugSession::DebuggerState state);
 
 private:
     QFlags<UpdateType> m_autoUpdate;
