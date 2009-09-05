@@ -24,7 +24,7 @@
 #include <interfaces/iextension.h>
 #include "../languageexport.h"
 #include <language/duchain/indexeditems.h>
-#include <KLineEdit>
+#include <KDE/KLineEdit>
 
 class QStringList;
 
