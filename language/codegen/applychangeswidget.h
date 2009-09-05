@@ -20,7 +20,7 @@
 #ifndef APPLYCHANGESWIDGET_H
 #define APPLYCHANGESWIDGET_H
 
-#include <KDialog>
+#include <KDE/KDialog>
 #include "../languageexport.h"
 
 namespace KTextEditor { class Document; class Range;}
