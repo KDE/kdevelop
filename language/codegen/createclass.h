@@ -305,7 +305,7 @@ public:
 private:
     class OutputPagePrivate* const d;
     
-private slots:
+private Q_SLOTS:
     virtual void updateFileNames();
     
     /**
