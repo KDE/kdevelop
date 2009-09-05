@@ -447,6 +447,7 @@ public:
 
   std::size_t type;
   NameAST *name;
+  bool isDeclaration; //Whether this type-specifier is a forward declaration rather than use use
 };
 
 class EnumSpecifierAST : public TypeSpecifierAST

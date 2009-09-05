@@ -1267,6 +1267,8 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
       }
     }
 
+    node->isDeclaration = true;
+
     // Create forward declaration
     switch (kind) {
       case Token_class:
