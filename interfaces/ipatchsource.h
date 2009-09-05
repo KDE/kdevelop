@@ -47,6 +47,15 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         ///Should return the base-dir of the patch
         virtual KUrl baseDir() const = 0;
         
+        ///Called when the user has reviewed and accepted this patch
+        virtual void finishReview();
+        
+        ///Called when the user has rejected this patch
+        virtual void cancelReview();
+        
+        ///Should return whether the user may cancel this review (cancelReview will be called when he does)
+        virtual bool canCancel() const;
+        
     Q_SIGNALS:
         ///Should be emitted whenever the patch has changed.
         void patchChanged();

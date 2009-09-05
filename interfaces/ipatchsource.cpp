@@ -30,4 +30,19 @@ IPatchReview::~IPatchReview()
 
 }
 
+void IPatchSource::cancelReview()
+{
+
+}
+
+void IPatchSource::finishReview()
+{
+
+}
+
+bool IPatchSource::canCancel() const
+{
+    return false;
+}
+
 #include "ipatchsource.moc"

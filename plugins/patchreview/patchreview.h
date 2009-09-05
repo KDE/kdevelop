@@ -164,7 +164,7 @@ public:
     ///The source source is the current version of the document, and the destination is the version of the document before the patch was applied.
     bool isReverseChange() const ;
 
-    void setPatch(KDevelop::IPatchSource::Ptr patch);
+    void setPatch(KDevelop::IPatchSource* patch);
 
     void registerPatch(KDevelop::IPatchSource::Ptr patch);
     
@@ -174,12 +174,16 @@ Q_SIGNALS:
     void patchChanged();
 
 public Q_SLOTS:
+    //Does parts of the review-starting that are problematic to do directly in startReview, as they may open dialogs etc.
+    void updateReview();
+    
+    void cancelReview();
+    void finishReview();
     void clearPatch(QObject* patch);
     void notifyPatchChanged();
     void highlightPatch();
     void updateKompareModel();
     void showPatch();
-    void commandToFile();
     void forceUpdate();
 
 private Q_SLOTS:
@@ -192,7 +196,7 @@ private:
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
 
-    KDevelop::IPatchSource::Ptr m_patch;
+    KDevelop::IPatchSource* m_patch;
 
     QTimer* m_updateKompareTimer;
 

@@ -103,7 +103,7 @@ void PatchReviewToolView::updatePatchFromEdit() {
     lpatch->m_command = m_editPatch.command->text();
     lpatch->m_filename = m_editPatch.filename->url();
     lpatch->m_baseDir = m_editPatch.baseDir->url();
-    lpatch->m_depth = m_editPatch.depth->value();
+//     lpatch->m_depth = m_editPatch.depth->value();
 
     m_plugin->notifyPatchChanged();
 }
@@ -127,23 +127,25 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
     
     connect( m_editPatch.patchSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(patchSelectionChanged(int)));
+
+    m_editPatch.cancelReview->setVisible(ipatch->canCancel());
     
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ipatch.data());
     if(!lpatch) {
       m_editPatch.tabWidget->hide();
       m_editPatch.baseDir->hide();
-      m_editPatch.depth->hide();
       m_editPatch.label->hide();
-      m_editPatch.label_3->hide();
       return;
     }else{
       m_editPatch.tabWidget->show();
+      m_editPatch.baseDir->show();
+      m_editPatch.label->show();
     }
     
     m_editPatch.command->setText( lpatch->m_command );
     m_editPatch.filename->setUrl( lpatch->m_filename );
     m_editPatch.baseDir->setUrl( lpatch->m_baseDir );
-    m_editPatch.depth->setValue( lpatch->m_depth );
+//     m_editPatch.depth->setValue( lpatch->m_depth );
 
     if ( lpatch->m_command.isEmpty() )
         m_editPatch.tabWidget->setCurrentIndex( m_editPatch.tabWidget->indexOf( m_editPatch.fileTab ) );
@@ -181,14 +183,19 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
     connect( m_editPatch.filesList, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( fileDoubleClicked( const QModelIndex& ) ) );
+    
+    connect( m_editPatch.cancelReview, SIGNAL(clicked(bool)), m_plugin, SLOT(cancelReview()) );
+    connect( m_editPatch.finishReview, SIGNAL(clicked(bool)), m_plugin, SLOT(finishReview()) );
     //connect( m_editPatch.cancelButton, SIGNAL( pressed() ), this, SLOT( slotEditCancel() ) );
 
     //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
 
-    connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(updatePatchFromEdit()) );
+//     connect( m_editPatch.depth, SIGNAL(valueChanged(int)), SLOT(updatePatchFromEdit()) );
     connect( m_editPatch.filename, SIGNAL( textChanged( const QString& ) ), SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.baseDir, SIGNAL(textChanged(QString)), SLOT(updatePatchFromEdit()) );
 
+    
+    
     m_editPatch.baseDir->setMode(KFile::Directory);
 
     connect( m_editPatch.command, SIGNAL( textChanged( const QString& ) ), this, SLOT(slotEditCommandChanged()) );
@@ -198,7 +205,7 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.filename->lineEdit(), SIGNAL( editingFinished() ), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.filename, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT(slotEditFileNameChanged()) );
     connect( m_editPatch.command, SIGNAL(textChanged(QString)), this, SLOT(slotEditCommandChanged()) );
-    connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
+//     connect( m_editPatch.commandToFile, SIGNAL(clicked(bool)), m_plugin, SLOT(commandToFile()) );
 
     connect( m_editPatch.patchSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(patchSelectionChanged(int)));
     
@@ -924,8 +931,7 @@ void PatchReviewPlugin::notifyPatchChanged()
 
 void PatchReviewPlugin::showPatch()
 {
-//     KRun::displayOpenWithDialog(KUrl::List() << diffFile(), core()->uiController()->activeMainWindow());
-      KRun::runCommand("kompare " + diffFile().pathOrUrl(), core()->uiController()->activeMainWindow());
+    startReview(m_patch, OpenAndRaise);
 }
 
 void PatchReviewPlugin::forceUpdate()
@@ -1012,15 +1018,6 @@ PatchReviewPlugin::~PatchReviewPlugin()
     delete m_patch;
 }
 
-void PatchReviewPlugin::commandToFile()
-{
-//     if(!diffFile().isEmpty()) {
-//       m_patch->filename = diffFile();
-//       m_patch->command.clear();
-//       notifyPatchChanged();
-//     }
-}
-
 void PatchReviewPlugin::registerPatch(IPatchSource::Ptr patch)
 {
   if(!m_knownPatches.contains(patch)) {
@@ -1031,10 +1028,13 @@ void PatchReviewPlugin::registerPatch(IPatchSource::Ptr patch)
 
 void PatchReviewPlugin::clearPatch(QObject* _patch)
 {
+  kDebug() << "clearing patch" << _patch << "current:" << (QObject*)m_patch;
   IPatchSource::Ptr patch((IPatchSource*)_patch);
   m_knownPatches.removeAll(patch);
+  m_knownPatches.removeAll(0);
   
   if(patch == m_patch) {
+    kDebug() << "is current patch";
     if(!m_knownPatches.empty())
       setPatch(m_knownPatches.first());
     else
@@ -1079,14 +1079,56 @@ void showDiff(const KDevelop::VcsDiff& d)
 #endif
 #endif
 
+void PatchReviewPlugin::cancelReview()
+{
+  if(m_patch) {
+    m_modelList.reset( 0 );
+    m_patch->cancelReview();
+    
+    delete m_patch;
+    
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    if(w->area()->workingSet().startsWith("review")) {
+      w->area()->clearViews();
+      ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
+    }
+  }
+}
+
+void PatchReviewPlugin::finishReview()
+{
+  if(m_patch) {
+    m_modelList.reset( 0 );
+    m_patch->finishReview();
+    if(!dynamic_cast<LocalPatchSource*>(m_patch))
+      delete m_patch;
+    
+    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    if(w->area()->workingSet().startsWith("review")) {
+      w->area()->clearViews();
+      ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
+    }
+  }
+}
+
 void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMode mode)
 {
   setPatch(patch);
+  QMetaObject::invokeMethod(this, "updateReview", Qt::QueuedConnection);
+}
+
+void PatchReviewPlugin::updateReview()
+{
+  if(!m_patch)
+    return;
+  
   m_updateKompareTimer->stop();
   updateKompareModel();
   ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
   Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-  w->area()->setWorkingSet("review");
+  if(!w->area()->workingSet().startsWith("review"))
+    w->area()->setWorkingSet("review");
+  
   w->area()->clearViews();
   
   if(!m_modelList.get())
@@ -1094,6 +1136,7 @@ void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMod
   
   //Open the diff itself
 #if HAVE_KOMPARE
+  KUrl fakeUrl(m_patch->file());
   fakeUrl.setScheme("kdevpatch");
   IDocumentFactory* docf=ICore::self()->documentController()->factory("text/x-patch");
   IDocument* doc=docf->create(fakeUrl, ICore::self());
@@ -1102,7 +1145,7 @@ void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMod
   Q_ASSERT(pdoc);
   ICore::self()->documentController()->openDocument(doc);
 #else
-  ICore::self()->documentController()->openDocument(patch->file());
+  ICore::self()->documentController()->openDocument(m_patch->file());
 #endif
 
   if(m_modelList->modelCount() < 10) {
@@ -1118,10 +1161,10 @@ void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMod
   Q_ASSERT(b);
 }
 
-void PatchReviewPlugin::setPatch(IPatchSource::Ptr patch)
+void PatchReviewPlugin::setPatch(IPatchSource* patch)
 {
   if(m_patch) {
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch.data());
+    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
     if(objPatch) {
       disconnect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
     }
@@ -1132,7 +1175,7 @@ void PatchReviewPlugin::setPatch(IPatchSource::Ptr patch)
     kDebug() << "setting new patch" << patch->name() << "with file" << patch->file();
     registerPatch(patch);
     
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch.data());
+    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
     if(objPatch) {
       connect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
     }
@@ -1141,7 +1184,7 @@ void PatchReviewPlugin::setPatch(IPatchSource::Ptr patch)
   notifyPatchChanged();
 }
 
-PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent), m_factory(new PatchReviewToolViewFactory(this)) {
+PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent), m_factory(new PatchReviewToolViewFactory(this)), m_patch(0) {
 
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
   
