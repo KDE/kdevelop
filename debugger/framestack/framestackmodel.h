@@ -24,7 +24,7 @@
 #include <QtCore/QModelIndex>
 #include <QtCore/QHash>
 
-#include <KUrl>
+#include <KDE/KUrl>
 
 #include "../debuggerexport.h"
 #include "../interfaces/idebugsession.h"
