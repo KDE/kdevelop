@@ -2,11 +2,13 @@
 Type=Service
 Exec=blubb
 Comment=This plugin allows to open files with associated external applications.
+Comment[bg]=Тази приставка позволява отваряне на файлове със съответни външни програми.
 Comment[pt]=Este 'plugin' permite abrir os ficheiros com as aplicações externas associadas.
 Comment[pt_BR]=Este 'plugin' permite abrir os ficheiros com as aplicações externas associadas.
 Comment[sv]=Insticksprogrammet tillåter att öppna filer med tillhörande externa program.
 Comment[uk]=За допомогою цього додатка ви зможете відкривати файли у пов’язаній з ними зовнішній програмі.
 Comment[x-test]=xxThis plugin allows to open files with associated external applications.xx
+Comment[zh_TW]=此外掛程式讓您可以用外部應用程式開啟檔案。
 Name=Open With
 Name[bg]=Отваряне с
 Name[es]=Abrir con
