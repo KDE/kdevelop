@@ -74,7 +74,9 @@ using namespace KDevelop;
 
 Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
-PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin ) : QWidget( parent ), m_plugin( plugin ), m_reversed( false ) {
+PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin ) 
+: QWidget( parent ), m_reversed( false ), m_plugin( plugin ) 
+{
     showEditDialog();
     connect( plugin, SIGNAL(patchChanged()), SLOT(patchChanged()) );
     patchChanged();
@@ -1184,8 +1186,10 @@ void PatchReviewPlugin::setPatch(IPatchSource* patch)
   notifyPatchChanged();
 }
 
-PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &) : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent), m_factory(new PatchReviewToolViewFactory(this)), m_patch(0) {
-
+PatchReviewPlugin::PatchReviewPlugin(QObject *parent, const QVariantList &)
+: KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent), 
+  m_patch(0), m_factory(new PatchReviewToolViewFactory(this))
+{
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IPatchReview )
   
     core()->uiController()->addToolView(i18n("Patch Review"), m_factory);
