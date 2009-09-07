@@ -253,6 +253,13 @@ RunController::RunController(QObject *parent)
     }
 }
 
+RunController::~RunController()
+{
+    delete d->launchChangeMapper;
+    delete d->delegate;
+    delete d;
+}
+
 void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 {
     foreach( QAction* a, d->currentTargetAction->actions() )
@@ -267,7 +274,7 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 
 void RunController::cleanup()
 {
-    
+    stopAllProcesses();
 }
 
 void RunController::initialize()
@@ -325,11 +332,6 @@ KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
     KJob* launch = launcher->start(runMode, run);
     registerJob(launch);
     return launch;
-}
-
-RunController::~ RunController()
-{
-    delete d;
 }
 
 void RunController::setupActions()
