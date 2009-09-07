@@ -255,8 +255,6 @@ RunController::RunController(QObject *parent)
 
 RunController::~RunController()
 {
-    delete d->launchChangeMapper;
-    delete d->delegate;
     delete d;
 }
 
