@@ -46,7 +46,22 @@ QString GDBCommand::cmdToSend()
 
 QString GDBCommand::initialString() const
 {
-    return (type() == NonMI ? QString() : gdbCommand() + ' ') + command_;
+    if (type() == NonMI)
+        return command_;
+    else
+    {
+        QString result = gdbCommand();
+
+        if (m_thread != -1)
+            result = result + QString(" --thread %1").arg(m_thread);
+        if (m_frame != -1)
+            result = result + QString(" --frame %1").arg(m_frame);
+
+        if (!command_.isEmpty())
+            result += ' ' + command_;
+        
+        return result;
+    }
 }
 
 bool GDBCommand::isUserCommand() const

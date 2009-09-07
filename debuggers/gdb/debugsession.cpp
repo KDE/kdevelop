@@ -610,23 +610,6 @@ bool DebugSession::executeCmd()
     if (!currentCmd)
         return false;
 
-    if (currentCmd->thread() != -1 && currentCmd->thread() != currentThread_) {
-        // put current command back for now
-        commandQueue_->enqueue(currentCmd, QueueAtFront);
-
-        // Switching threads will auto-select frame 0, maybe we want a different frame
-        if (currentCmd->frame() > 0)
-            commandQueue_->enqueue(new GDBCommand(GDBMI::StackSelectFrame, currentCmd->frame()), QueueAtFront);
-
-        currentCmd = new GDBCommand(GDBMI::ThreadSelect, currentCmd->thread());
-
-    } else if (currentCmd->frame() != -1 && currentCmd->frame() != currentFrame_) {
-        // put current command back for now
-        commandQueue_->enqueue(currentCmd, QueueAtFront);
-
-        currentCmd = new GDBCommand(GDBMI::StackSelectFrame, currentCmd->frame());
-    }
-
     QString commandText = currentCmd->cmdToSend();
     bool bad_command = false;
     QString message;
