@@ -601,7 +601,6 @@ void GdbTest::testStack()
     TestFrameStackModel *stackModel = session->frameStackModel();
     
     breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
-    stackModel->setAutoUpdate(true);    
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
@@ -644,7 +643,6 @@ void GdbTest::testStackFetchMore()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(fileName, 25);
-    stackModel->setAutoUpdate(true);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->frameStackModel()->fetchFramesCalled, 1);
@@ -716,16 +714,13 @@ void GdbTest::testStackDeactivateAndActive()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(debugeeFileName, 21);
-    stackModel->setAutoUpdate(true);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
 
     QModelIndex tIdx = stackModel->index(0,0);
 
-    stackModel->setAutoUpdate(false);
     session->stepOut();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    stackModel->setAutoUpdate(true);
     QTest::qWait(200);
     COMPARE_DATA(tIdx, "#1 at main");
     QCOMPARE(stackModel->rowCount(tIdx), 1);
@@ -748,7 +743,6 @@ void GdbTest::testStackSwitchThread()
     TestFrameStackModel *stackModel = session->frameStackModel();
 
     breakpoints()->addCodeBreakpoint(fileName, 38);
-    stackModel->setAutoUpdate(true);
     QVERIFY(session->startProgram(&cfg));
     QTest::qWait(500);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -819,7 +813,6 @@ void GdbTest::testCoreFile()
     
     TestFrameStackModel *stackModel = session->frameStackModel();
     
-    stackModel->setAutoUpdate(true);
     WAIT_FOR_STATE(session, DebugSession::StoppedState);
 
     QModelIndex tIdx = stackModel->index(0,0);
