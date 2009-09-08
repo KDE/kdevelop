@@ -614,6 +614,18 @@ bool DebugSession::executeCmd()
     bool bad_command = false;
     QString message;
 
+    if (currentCmd->type() >= GDBMI::VarAssign
+        && currentCmd->type() <= GDBMI::VarUpdate
+        && currentCmd->type() != GDBMI::VarDelete)
+    {
+        // Most var commands should be executed in the context
+        // of the selected thread and frame.
+        if (currentCmd->thread() == -1)
+            currentCmd->setThread(frameStackModel()->activeThread());
+
+        // FIXME: do the same for frame.
+    }
+
     int length = commandText.length();
     // No i18n for message since it's mainly for debugging.
     if (length == 0)
