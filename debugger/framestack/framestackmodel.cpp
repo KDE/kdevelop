@@ -34,7 +34,7 @@
 namespace KDevelop {
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
-    : IFrameStackModel(session), m_autoUpdate(false), m_activeThread(-1)
+    : IFrameStackModel(session), m_activeThread(-1)
 {
    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
            SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
@@ -257,19 +257,10 @@ QModelIndex FrameStackModel::activeThreadIndex() const
     return QModelIndex();
 }
 
-void FrameStackModel::setAutoUpdate(bool autoUpdate)
-{    
-    if (!m_autoUpdate && autoUpdate 
-        && (session()->state() == IDebugSession::PausedState || session()->state() == IDebugSession::StoppedState)) {
-        update();
-    }
-    m_autoUpdate = autoUpdate;
-}
-
 void FrameStackModel::update()
 {
     fetchThreads();
-    if (m_activeThread) {
+    if (m_activeThread != -1) {
         fetchFrames(m_activeThread, 0, 20);
     }
 }
@@ -285,15 +276,18 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
     //ignore if not current session
     if (sender() != ICore::self()->debugController()->currentSession()) return;
 
-    if (state == IDebugSession::PausedState || state == IDebugSession::StoppedState) {
-        if (m_autoUpdate) update();
+    if (state == IDebugSession::PausedState 
+        || state == IDebugSession::StoppedState) 
+    {
+        update();
     }
 }
 
-
+// FIXME: it should be possible to fetch more frames for
+// an arbitrary thread, without making it current.
 void FrameStackModel::fetchMoreFrames()
 {    
-    if (m_activeThread && m_hasMoreFrames[m_activeThread]) {
+    if (m_activeThread != -1 && m_hasMoreFrames[m_activeThread]) {
         fetchFrames(m_activeThread,
                     m_frames[m_activeThread].count(),
                     m_frames[m_activeThread].count()-1+20);

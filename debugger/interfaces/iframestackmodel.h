@@ -49,7 +49,6 @@ namespace KDevelop {
         
         IDebugSession* session() const { return m_session; }
         
-        virtual void setAutoUpdate(bool autoUpdate) = 0;
         virtual void setActiveThread(int threadNumber) = 0;
         virtual void setActiveThread(const QModelIndex &index) = 0;
         virtual int activeThread() const = 0;

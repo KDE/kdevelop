@@ -60,8 +60,6 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-
-    void setAutoUpdate(bool autoUpdate);
     void setActiveThread(int threadNumber);
     void setActiveThread(const QModelIndex &index);
     int activeThread() const;
@@ -76,7 +74,6 @@ private:
     void update();
     QModelIndex indexForThreadNumber(int threadNumber);
 
-    bool m_autoUpdate;
     int m_activeThread;
 
     QList<ThreadItem> m_threads;

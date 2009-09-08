@@ -97,16 +97,11 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
 void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
 {
     QWidget::hideEvent(e);
-    if (m_session)
-        m_session->frameStackModel()->setAutoUpdate(false);
 }
 
 void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
-
-    if (m_session)
-        m_session->frameStackModel()->setAutoUpdate(true);
 
     if (m_session && m_session->state() != KDevelop::IDebugSession::EndedState) 
     {
