@@ -198,7 +198,7 @@ void DocumentSwitcherPlugin::storeAreaViewList( Sublime::MainWindow* mainwindow,
     if( !documentLists.contains( mainwindow ) || !documentLists[mainwindow].contains(area) ) 
     {
         QMap<Sublime::Area*, QList<Sublime::View*> > areas;
-        kDebug() << "adding area views for area:" << area << area->title();
+        kDebug() << "adding area views for area:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
         foreach( Sublime::View* v, area->views() ) {
             kDebug() << "view:" << v  << v->document()->title();
         }
@@ -214,6 +214,7 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
     if( !mainwindow )  {
         return;
     }
+    kDebug() << "adding mainwindow:" << mainwindow << mainwindow->windowTitle();
     kDebug() << "storing all views from area:" << mainwindow->area()->title() << mainwindow->area();
     storeAreaViewList( mainwindow, mainwindow->area() );
     kDebug() << "connecting signals on mainwindow";
@@ -272,7 +273,7 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
     
-    kDebug() << "area changed:" << area << area->title();
+    kDebug() << "area changed:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
 
     //Since the main-window only emits aboutToRemoveView for views within the current area, we must forget all areas except the active one 
     documentLists.remove(mainwindow);
@@ -300,7 +301,7 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
         documentLists[mainwindow][area].removeAt( idx );
     }
     kDebug() << "moving view to front, list should now not contain this view anymore" << view << view->document()->title();
-    kDebug() << "current area is:" << area << area->title();
+    kDebug() << "current area is:" << area << area->title() << "mainwnidow:" << mainwindow << mainwindow->windowTitle();;
     kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     documentLists[mainwindow][area].prepend( view );
     enableActions(mainwindow);
@@ -323,7 +324,7 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     }
 
     kDebug() << "removing view, list should now not contain this view anymore" << view << view->document()->title();
-    kDebug() << "current area is:" << area << area->title();
+    kDebug() << "current area is:" << area << area->title() << "mainwnidow:" << mainwindow << mainwindow->windowTitle();;
     kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     enableActions(mainwindow);
 }
