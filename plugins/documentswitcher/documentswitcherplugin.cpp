@@ -50,8 +50,9 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent), view(0)
 {
     setXMLFile("kdevdocumentswitcher.rc");
-    connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL( mainWindowAdded( Sublime::MainWindow* ) ), SLOT( addMainWindow( Sublime::MainWindow* ) ) );
+    kDebug() << "Adding active mainwindow from constructor" << KDevelop::ICore::self()->uiController()->activeMainWindow(); 
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
+    connect( KDevelop::ICore::self()->uiController()->controller(), SIGNAL( mainWindowAdded( Sublime::MainWindow* ) ), SLOT( addMainWindow( Sublime::MainWindow* ) ) );
     
     forwardAction = actionCollection()->addAction ( "last_used_views_forward" );
     forwardAction->setText( i18n( "Last Used Views" ) );
@@ -197,6 +198,10 @@ void DocumentSwitcherPlugin::storeAreaViewList( Sublime::MainWindow* mainwindow,
     if( !documentLists.contains( mainwindow ) || !documentLists[mainwindow].contains(area) ) 
     {
         QMap<Sublime::Area*, QList<Sublime::View*> > areas;
+        kDebug() << "adding area views";
+        foreach( Sublime::View* v, area->views() ) {
+            kDebug() << "view:" << v  << v->document()->title();
+        }
         areas.insert( area, area->views() );
         documentLists.insert( mainwindow, areas );
     }
@@ -208,7 +213,9 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
     if( !mainwindow )  {
         return;
     }
+    kDebug() << "storing all views from area:" << mainwindow->area()->title() << mainwindow->area();
     storeAreaViewList( mainwindow, mainwindow->area() );
+    kDebug() << "connecting signals on mainwindow";
     connect( mainwindow, SIGNAL(areaChanged(Sublime::Area*)), SLOT(changeArea(Sublime::Area*)) );
     connect( mainwindow, SIGNAL(activeViewChanged(Sublime::View*)), SLOT(changeView(Sublime::View*)) );
     connect( mainwindow, SIGNAL(viewAdded(Sublime::View*)), SLOT(addView(Sublime::View*)) );
@@ -232,6 +239,10 @@ void DocumentSwitcherPlugin::addView( Sublime::View* view )
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     if( !mainwindow )
         return;
+
+    kDebug() << "got signal from mainwindow:" << mainwindow << mainwindow->windowTitle();
+    kDebug() << "its area is:" << mainwindow->area() << mainwindow->area()->title();
+    kDebug() << "adding view:" << view << view->document()->title();
     enableActions( mainwindow );
     documentLists[mainwindow][mainwindow->area()].append( view );
 }
@@ -265,6 +276,7 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
     
     if( !documentLists[mainwindow].contains( area ) )
     {
+        kDebug() << "got area change, storing its views";
         storeAreaViewList( mainwindow, area );
     }
     enableActions( mainwindow );
@@ -284,6 +296,8 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
     {
         documentLists[mainwindow][area].removeAt( idx );
     }
+    kDebug() << "moving view to front, list should now not contain this view anymore" << view << view->document()->title();
+    kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     documentLists[mainwindow][area].prepend( view );
     enableActions(mainwindow);
 }
@@ -303,6 +317,9 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     {
         documentLists[mainwindow][area].removeAt( idx );
     }
+
+    kDebug() << "removing view, list should now not contain this view anymore" << view << view->document()->title();
+    kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     enableActions(mainwindow);
 }
 
