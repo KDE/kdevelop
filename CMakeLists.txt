@@ -18,7 +18,8 @@ include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
 include (MacroLibrary)
 
-macro_optional_find_package(Kompare)
+set(KOMPARE_FOUND FALSE)
+#macro_optional_find_package(Kompare)
 macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
 macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
                         "http://www.caffeinated.me.uk/kompare/" FALSE ""
