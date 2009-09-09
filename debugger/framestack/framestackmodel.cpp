@@ -294,6 +294,12 @@ void FrameStackModel::fetchMoreFrames()
     }
 }
 
+void FrameStackModel::actOnStop(int threadNumber)
+{
+    if (threadNumber != -1)
+        setActiveThread(threadNumber);
+}
+
 }
 
 #include "framestackmodel.moc"

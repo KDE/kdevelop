@@ -60,6 +60,7 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
+    void actOnStop(int threadNumber) = 0;
     void setActiveThread(int threadNumber);
     void setActiveThread(const QModelIndex &index);
     int activeThread() const;
