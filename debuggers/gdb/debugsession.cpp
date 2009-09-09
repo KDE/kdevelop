@@ -755,9 +755,13 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
     if (!reason.contains("exited"))
     {
         // Update information
-        if (r.hasField("thread-id"))
+        if (r.hasField("thread-id")) {
             currentThread_ = r["thread-id"].toInt();
-
+            frameStackModel()->actOnStop(currentThread_);
+        } else {
+            frameStackModel()->actOnStop(-1);
+        }
+        
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
             if (frame.hasField("fullname")
