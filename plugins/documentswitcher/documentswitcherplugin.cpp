@@ -198,10 +198,11 @@ void DocumentSwitcherPlugin::storeAreaViewList( Sublime::MainWindow* mainwindow,
     if( !documentLists.contains( mainwindow ) || !documentLists[mainwindow].contains(area) ) 
     {
         QMap<Sublime::Area*, QList<Sublime::View*> > areas;
-        kDebug() << "adding area views";
+        kDebug() << "adding area views for area:" << area << area->title();
         foreach( Sublime::View* v, area->views() ) {
             kDebug() << "view:" << v  << v->document()->title();
         }
+        kDebug() << "done";
         areas.insert( area, area->views() );
         documentLists.insert( mainwindow, areas );
     }
@@ -271,6 +272,8 @@ void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
     Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
     
+    kDebug() << "area changed:" << area << area->title();
+
     //Since the main-window only emits aboutToRemoveView for views within the current area, we must forget all areas except the active one 
     documentLists.remove(mainwindow);
     
@@ -297,6 +300,7 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
         documentLists[mainwindow][area].removeAt( idx );
     }
     kDebug() << "moving view to front, list should now not contain this view anymore" << view << view->document()->title();
+    kDebug() << "current area is:" << area << area->title();
     kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     documentLists[mainwindow][area].prepend( view );
     enableActions(mainwindow);
@@ -319,6 +323,7 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     }
 
     kDebug() << "removing view, list should now not contain this view anymore" << view << view->document()->title();
+    kDebug() << "current area is:" << area << area->title();
     kDebug() << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     enableActions(mainwindow);
 }
