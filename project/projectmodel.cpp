@@ -166,8 +166,9 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         QStandardItem* item = child( i );
-        if ( item->type() == Target || item->type() == LibraryTarget ||
-             item->type() == ExecutableTarget)
+        Q_ASSERT(item);
+        if ( item && ( item->type() == Target || item->type() == LibraryTarget ||
+             item->type() == ExecutableTarget ) )
         {
             ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
             if ( kdevitem )
@@ -184,6 +185,7 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         QStandardItem* item = child( i );
+        Q_ASSERT(item);
         if ( item && item->type() == File )
         {
             ProjectFileItem *kdevitem = dynamic_cast<ProjectFileItem*>( item );
