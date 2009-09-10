@@ -1,4 +1,4 @@
 
 threads: threads.cpp
-	g++ -g -othreads threads.cpp -pthread
+	g++ -g -Wall -othreads threads.cpp -pthread
  

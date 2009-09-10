@@ -1,15 +1,53 @@
+/* This is a test program for KDevelop GDB debugger support.
+
+   There are two worker threads, they are programmed to call
+   the 'foo' function in strictly interleaved fashion.
+*/
 
 #include <pthread.h>
+#include <stdio.h>
+#include <unistd.h>
 
-void runner(int i)
+int schedule[] = {1, 2};
+int schedule_size = sizeof(schedule)/sizeof(schedule[0]);
+int index = 0;
+int exit = 0;
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition = PTHREAD_COND_INITIALIZER;
+
+void foo(int thread, int i)
 {
-    for(int i = 0; i < 1000000;)
-        ++i;
+    printf ("hi there, from thread %d on iteration %d\n", thread, i);
+}
+
+void runner(int id)
+{
+    for(int i = 0; i < 1000000 && !exit; ++i)
+    {
+        pthread_mutex_lock(&mutex);
+
+        while (schedule[index] != id) {
+            pthread_cond_wait(&condition, &mutex);
+        }
+
+        foo(id, i);
+        
+        ++index;
+        if (index >= schedule_size)
+            index = 0;
+               
+        pthread_cond_broadcast(&condition);
+        pthread_mutex_unlock(&mutex);
+
+        sleep(1);
+    }
 }
 
 void* thread(void* p)
 {
     runner((int)p);
+    return NULL;
 }
 
 int main()
