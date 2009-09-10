@@ -44,16 +44,16 @@
 #include <KIO/Job>
 #include <KIO/NetAccess>
 
-///FIXME: remove the hack and these includes
-#include <interfaces/isession.h>
-#include <language/backgroundparser/parseprojectjob.h>
-///END
+#include "genericmanagerlistjob.h"
 
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
 K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericprojectmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
 
 class GenericProjectManagerPrivate
 {
+public:
+    GenericProjectManagerPrivate()
+    {}
 };
 
 GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
@@ -61,9 +61,6 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
-    
-    connect( KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)),
-             this, SLOT(waitForProjectOpen(KDevelop::IProject*)) );
 }
 
 GenericProjectManager::~GenericProjectManager()
@@ -120,74 +117,39 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     return QList<KDevelop::ProjectFolderItem*>();
 }
 
-void GenericProjectManager::waitForProjectOpen(KDevelop::IProject* project)
+KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item )
 {
-    if ( project->managerPlugin() == this ) {
-        kDebug() << "generic project got opened:" << project->folder();
-        eventuallyReadFolder( project->projectItem() );
-    }
+    GenericManagerListJob* listJob = new GenericManagerListJob( item );
+    kDebug() << "adding job" << listJob << item->url() << "for project" << item->project();
+
+    KDevelop::ICore::self()->runController()->registerJob( listJob );
+
+    connect( listJob, SIGNAL(entries(KDevelop::IProject*,KUrl,KIO::UDSEntryList)),
+             this, SLOT(addJobItems(KDevelop::IProject*,KUrl, KIO::UDSEntryList)) );
+
+    connect( this, SIGNAL(appendSubDir(KDevelop::ProjectFolderItem*)),
+             listJob, SLOT(addSubDir(KDevelop::ProjectFolderItem*)));
+
+    return listJob;
 }
 
-void GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item )
-{
-    ///TODO: listRecursive does not follow directory links!
-    KIO::ListJob* job = KIO::listRecursive( item->url(), KIO::HideProgressInfo );
-    kDebug() << "adding job" << job << job->url() << "for project" << item->project();
-
-    KDevelop::ICore::self()->runController()->registerJob( job );
-
-    connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
-                this, SLOT(addJobItems(KIO::Job*, KIO::UDSEntryList)) );
-
-    /// FIXME: once async project managers are supported, we won't have to do this hack
-    /// since parse() cannot return anything the parseprojectjob gets a list of empty files
-    /// => hence this hack at least starts the parsepojrectjob if required
-    if ( item->isProjectRoot() &&
-         KDevelop::ICore::self()->activeSession()->config()->group( "Project Manager" ).readEntry( "Parse All Project Sources", true ) )
-    {
-        connect( job, SIGNAL(result(KJob*)),
-                this, SLOT(startProjectParseJob(KJob*)) );
-    }
-}
-
-void GenericProjectManager::startProjectParseJob( KJob* j )
-{
-    if ( j->error() ) {
-        return;
-    }
-    KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(j));
-    Q_ASSERT(job);
-
-    KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl(job->url());
-    if ( !project ) {
-        return;
-    }
-    KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
-    KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
-}
-
-void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
+void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl& listedDirUrl, KIO::UDSEntryList entries)
 {
     if ( entries.empty() ) {
         return;
     }
-
-    KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(j));
-    Q_ASSERT(job);
+    if ( !project ) {
+        kDebug() << "no project found for" << listedDirUrl;
+        return;
+    }
 
     // the folder we are currently adding items to
-    // the UDS_NAME is essentially a path relative to the job->url()
-    KUrl curUrl = job->url();
+    // the UDS_NAME is essentially a path relative to listedDirUrl
+    KUrl curUrl = listedDirUrl;
     curUrl.addPath( entries.first().stringValue( KIO::UDSEntry::UDS_NAME ) );
     curUrl.setFileName( "" );
 
     kDebug() << "reading contents of " << curUrl << "total entries:" << entries.count();
-
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( job->url() );
-    if ( !project ) {
-        kDebug() << "no project found for" << job->url();
-        return;
-    }
 
     QList<KDevelop::ProjectFolderItem*> fitems = project->foldersForUrl( curUrl );
     if ( fitems.isEmpty() ) {
@@ -205,13 +167,20 @@ void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
     KUrl::List files;
     KUrl::List folders;
     foreach ( KIO::UDSEntry entry, entries ) {
-        KUrl url = job->url();
+        KUrl url = listedDirUrl;
         url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
 
         if ( !isValid( url, entry.isDir(), project, includes, excludes ) ) {
             continue;
         } else {
             if ( entry.isDir() ) {
+                if( entry.isLink() ) {
+                    KUrl linkedUrl = listedDirUrl;
+                    linkedUrl.cd(entry.stringValue( KIO::UDSEntry::UDS_LINK_DEST ));
+                    // make sure we don't end in an infinite loop
+                    if( linkedUrl.isParentOf( project->folder() ) || project->folder().isParentOf( linkedUrl ) || linkedUrl == project->folder() )
+                        continue;
+                }
                 folders << url;
             } else {
                 files << url;
@@ -259,13 +228,13 @@ void GenericProjectManager::addJobItems(KIO::Job* j, KIO::UDSEntryList entries)
         project->addToFileSet( KDevelop::IndexedString( url ) );
     }
     foreach ( const KUrl& url, folders ) {
-        new KDevelop::ProjectFolderItem( project, url, item );
+        emit appendSubDir( new KDevelop::ProjectFolderItem( project, url, item ) );
     }
 }
 
 KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
-    KDevelop::ProjectFolderItem *projectRoot=new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
+    KDevelop::ProjectFolderItem *projectRoot = new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
     kDebug() << "imported new project" << project->name() << "at" << projectRoot->url();
     projectRoot->setProjectRoot(true);
 
@@ -279,6 +248,11 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
     }
 
     return projectRoot;
+}
+
+KJob* GenericProjectManager::createImportJob(KDevelop::ProjectFolderItem* item)
+{
+    return eventuallyReadFolder(item);
 }
 
 bool GenericProjectManager::reload( KDevelop::ProjectBaseItem* item )

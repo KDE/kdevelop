@@ -75,6 +75,7 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
     virtual KDevelop::ProjectFolderItem *import( KDevelop::IProject *project );
     virtual bool reload(KDevelop::ProjectBaseItem* item);
+    virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
 
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
@@ -88,15 +89,11 @@ Q_SIGNALS:
     void fileRemoved(KDevelop::ProjectFileItem* file);
     void fileRenamed(const KUrl& oldFile,
                      KDevelop::ProjectFileItem* newFile);
+    void appendSubDir( KDevelop::ProjectFolderItem* item );
 
 private Q_SLOTS:
-    void eventuallyReadFolder( KDevelop::ProjectFolderItem* item );
-    ///NOTE: make sure the project for the job's URL is already registered at the controller
-    void addJobItems(KIO::Job* j, KIO::UDSEntryList entries);
-    void waitForProjectOpen( KDevelop::IProject* project );
-
-    ///FIXME: remove this hack once async managers are better supported
-    void startProjectParseJob(KJob* j);
+    KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item );
+    void addJobItems(KDevelop::IProject* project, const KUrl& url, KIO::UDSEntryList entries);
 
 private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,

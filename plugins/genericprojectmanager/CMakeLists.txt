@@ -5,6 +5,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9517 )
 ########### next target ###############
 
 set(kdevgenericmanager_PART_SRCS
+    genericmanagerlistjob.cpp
     genericmanager.cpp
 )
 
