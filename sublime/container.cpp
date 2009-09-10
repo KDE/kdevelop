@@ -35,6 +35,8 @@
 #include <kglobal.h>
 #include <kdeversion.h>
 #include <kacceleratormanager.h>
+#include <kmenu.h>
+#include <kicon.h>
 
 #include "view.h"
 #include "document.h"
@@ -135,6 +137,7 @@ Container::Container(QWidget *parent)
     m_tabBarLayout->setSpacing(0);
 
     d->tabBar = new KTabBar(this);
+    d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tabBarLayout->addWidget(d->tabBar);
     d->fileStatus = new QLabel( this );
     d->fileStatus->setFixedSize( QSize( 16, 16 ) );
@@ -152,6 +155,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(closeRequest(int)), this, SLOT(closeRequest(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
+    connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -368,6 +372,46 @@ void Container::tabMoved(int from, int to)
     d->stack->removeWidget(w);
     d->stack->insertWidget(to, w);
     d->viewForWidget[w]->notifyPositionChanged(to);
+}
+
+void Container::contextMenuRequested( QPoint pos )
+{
+    int currentTab = d->tabBar->tabAt(pos);
+
+    KMenu menu;
+
+//     QAction* newFileAction = menu.addAction( KIcon("document-new"), i18n( "New File" ) );
+    QAction* closeTabAction = menu.addAction( KIcon("document-close"), i18n( "Close File" ) );
+    menu.addSeparator();
+    QAction* closeOtherTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close Other Files" ) );
+
+    QAction* triggered = menu.exec(mapToGlobal(pos));
+
+    if (triggered) {
+        /*if ( triggered == newFileAction ) {
+            kDebug() << "new file";
+            ///TODO
+        } else */
+        if ( triggered == closeTabAction ) {
+            closeRequest(currentTab);
+        } else if ( triggered == closeOtherTabsAction ) {
+            // activate the remaining tab
+            widgetActivated(currentTab);
+            // first get the widgets to be closed since otherwise the indices will be wrong
+            QList<QWidget*> otherTabs;
+            for ( int i = 0; i < count(); ++i ) {
+                if ( i != currentTab ) {
+                    otherTabs << widget(i);
+                }
+            }
+            // finally close other tabs
+            foreach( QWidget* tab, otherTabs ) {
+                closeRequest(tab);
+            }
+        } else {
+            kDebug() << "unhandled context menu action triggered:" << triggered;
+        }
+    }
 }
 
 }

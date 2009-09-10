@@ -78,6 +78,8 @@ private Q_SLOTS:
     void closeRequest(int idx);
     void tabMoved(int from, int to);
     void wheelScroll(int);
+    void contextMenuRequested( QPoint );
+
 private:
 
     struct ContainerPrivate * const d;
