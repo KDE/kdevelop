@@ -184,7 +184,7 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         QStandardItem* item = child( i );
-        if ( item->type() == File )
+        if ( item && item->type() == File )
         {
             ProjectFileItem *kdevitem = dynamic_cast<ProjectFileItem*>( item );
             if ( kdevitem )
