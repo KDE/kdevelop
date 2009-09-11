@@ -1445,8 +1445,6 @@ void DebugSession::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSta
                 STATE_CHECK(s_dbgNotStarted);
                 STATE_CHECK(s_appNotStarted);
                 STATE_CHECK(s_programExited);
-                STATE_CHECK(s_viewBT);
-                STATE_CHECK(s_viewBP);
                 STATE_CHECK(s_attached);
                 STATE_CHECK(s_core);
                 STATE_CHECK(s_waitTimer);
