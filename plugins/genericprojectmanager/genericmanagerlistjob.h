@@ -53,6 +53,7 @@ private:
     QQueue<KDevelop::ProjectFolderItem*> m_listQueue;
     KUrl m_topUrl;
     KDevelop::IProject* m_project;
+    KIO::UDSEntryList entryList;
 };
 
 #endif // GENERICMANAGERLISTJOB_H

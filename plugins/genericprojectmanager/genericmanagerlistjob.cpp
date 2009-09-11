@@ -58,8 +58,7 @@ void GenericManagerListJob::addSubDir( KDevelop::ProjectFolderItem* item )
 
 void GenericManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
 {
-    KIO::SimpleJob* simpleJob(dynamic_cast<KIO::SimpleJob*>(job));
-    emit entries(m_project, simpleJob->url(), entriesIn);
+    entryList.append(entriesIn);
 }
 
 void GenericManagerListJob::startNextJob()
@@ -72,6 +71,10 @@ void GenericManagerListJob::startNextJob()
 
 void GenericManagerListJob::slotResult(KJob* job)
 {
+    KIO::SimpleJob* simpleJob(dynamic_cast<KIO::SimpleJob*>(job));
+    emit entries(m_project, simpleJob->url(), entryList);
+    entryList.clear();
+
     if( job->error() ) {
         kDebug() << "error in list job:" << job->error() << job->errorString();
     }
