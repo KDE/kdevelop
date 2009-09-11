@@ -149,7 +149,7 @@ namespace CMakeParserUtils
             return 0;
         }
         
-        variables->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(variables->value("CMAKE_BINARY_DIR")[0]));
+        variables->insert("CMAKE_CURRENT_BINARY_DIR", variables->value("CMAKE_BINARY_DIR"));
         variables->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
         variables->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
         

@@ -27,6 +27,8 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <cmakecondition.h>
+#include <cmakeparserutils.h>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
@@ -401,6 +403,76 @@ void CMakeProjectVisitorTest::testRun()
         
         QCOMPARE(vm.value(vp.first).join(QString(";")), vp.second);
     }
+    {
+        KDevelop::DUChainWriteLocker lock(DUChain::lock());
+        DUChain::self()->removeDocumentChain(fakeContext);
+    }
+}
+
+void CMakeProjectVisitorTest::testFinder_data()
+{
+    QTest::addColumn<QString>("module");
+    
+    QTest::newRow("Qt4") << "Qt4";
+    QTest::newRow("KDE4") << "KDE4";
+}
+
+void CMakeProjectVisitorTest::init()
+{
+    QPair<VariableMap, QStringList> initials=CMakeParserUtils::initialVariables();
+    modulePath += initials.first.value("CMAKE_MODULE_PATH");
+//     modulePath += QStringList(CMAKE_TESTS_PROJECTS_DIR "/modules"); //Not used yet
+
+    initialVariables=initials.first;
+    buildstrap=initials.second;
+}
+
+void CMakeProjectVisitorTest::testFinder()
+{
+    QFETCH(QString, module);
+    
+    KDevelop::ReferencedTopDUContext fakeContext=
+                    new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+    DUChain::self()->addDocumentChain(fakeContext);
+    
+    QFile file("cmake_visitor_test");
+    QVERIFY(file.open(QIODevice::WriteOnly | QIODevice::Text));
+    
+    QTextStream out(&file);
+    out << QString("find_package(%1 REQUIRED)\n").arg(module);
+    file.close();
+    CMakeFileContent code=CMakeListsParser::readCMakeFile(file.fileName());
+    file.remove();
+    QVERIFY(code.count() != 0);
+    
+    MacroMap mm;
+    CacheValues val;
+    VariableMap vm;
+    vm=initialVariables;
+    vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
+    vm.insert("CMAKE_MODULE_PATH", modulePath);
+    
+    foreach(const QString& script, buildstrap)
+    {
+        QString scriptfile=CMakeProjectVisitor::findFile(script, modulePath, QStringList());
+        fakeContext=CMakeParserUtils::includeScript(scriptfile, fakeContext, &vm, &mm,
+                                                    "./", &val, modulePath);
+    }
+    
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
+    CMakeProjectVisitor v(file.fileName(), fakeContext);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.setCacheValues( &val );
+    v.walk(code, 0);
+    
+    QString foundvar=QString("%1_FOUND").arg(module.toUpper());
+    bool found=CMakeCondition(&v).condition(QStringList(foundvar));
+    if(!found)
+        qDebug() << "result: " << vm.value(foundvar);
+    
+    QVERIFY(found);
+    
     {
         KDevelop::DUChainWriteLocker lock(DUChain::lock());
         DUChain::self()->removeDocumentChain(fakeContext);

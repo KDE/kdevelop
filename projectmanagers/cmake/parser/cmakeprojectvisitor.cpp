@@ -795,7 +795,7 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
         foreach(const QString& s, opt)
             locationOptions.append(s+"/lib");
     }
-
+    
     foreach(const QString& p, files)
     {
         foreach(const QString& prefix, m_vars->value("CMAKE_FIND_LIBRARY_PREFIXES"))
@@ -1195,18 +1195,7 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 
     foreach(const QString& arg, argsTemp)
     {
-        if(arg.contains(' '))
-        {
-            QStringList val=arg.split(' ');
-            foreach(const QString& s, val)
-            {
-                args.append(s);
-            }
-        }
-        else
-        {
-            args.append(arg);
-        }
+        args += arg.split(' ');
     }
     kDebug(9042) << "Executing:" << execName << "::" << args << "in" << exec->workingDirectory();
 

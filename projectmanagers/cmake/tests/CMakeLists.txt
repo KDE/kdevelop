@@ -4,7 +4,7 @@ include_directories(
     ${KDEVPLATFORM_INCLUDE_DIR}
 )
 
-add_definitions( -DCMAKE_TESTS_PROJECTS_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/manual\\\" )
+add_definitions( "-DCMAKE_TESTS_PROJECTS_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/manual\\\"" )
 
 set(CMAKE_TEST_LIBRARIES 
     ${QT_QTTEST_LIBRARY}

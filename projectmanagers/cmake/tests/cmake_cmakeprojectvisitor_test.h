@@ -35,12 +35,20 @@ public:
     CMakeProjectVisitorTest();
 
 private slots:
+    void init();
+    
     void testVariables();
     void testVariables_data();
 
     void testRun();
     void testRun_data();
-
+    
+    void testFinder();
+    void testFinder_data();
+private:
+    QStringList modulePath;    
+    QStringList buildstrap;
+    VariableMap initialVariables;
 };
 
 #endif
