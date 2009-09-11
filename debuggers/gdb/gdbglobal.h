@@ -37,8 +37,7 @@ enum DBGStateFlag
   s_shuttingDown      = 4096,
   s_explicitBreakInto = (s_shuttingDown << 1),
   s_dbgBusy           = (s_explicitBreakInto << 1),
-  s_appRunning        = (s_dbgBusy << 1),
-  s_lastDbgState      = (s_appRunning << 1)
+  s_lastDbgState      = (s_dbgBusy << 1)
 
 };
 

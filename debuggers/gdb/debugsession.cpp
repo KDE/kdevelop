@@ -215,6 +215,13 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
         }
     }
 
+    // VP, 2009-9-11: temporary disabled because:
+    // - we don't have status bar at present
+    // - it's not clear how to display 'running/stopped' when
+    //   we have non-stop
+    // A better general solution would be to keep running/stopped
+    // state for each thread in the framestack model.
+#if 0
     if (changedState & s_appRunning) {
         if (newState & s_appRunning) {
             message = i18n("Application is running");
@@ -241,6 +248,7 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
             }
         }
     }
+#endif
 
     // And now? :-)
     kDebug(9012) << "Debugger state: " << newState << ": ";
@@ -280,9 +288,6 @@ void DebugSession::attachToProcess(int pid)
 
     setStateOff(s_appNotStarted|s_programExited);
     setStateOn(s_attached);
-
-    //set current state to running, after attaching we will get *stopped response
-    setStateOn(s_appRunning);
 
     if (stateIsOn(s_dbgNotStarted))
       startDebugger(0);
@@ -678,7 +683,6 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 {
     /* By default, reload all state on program stop.  */
     state_reload_needed = true;
-    setStateOff(s_appRunning);
 
     QString reason;
     if (r.hasField("reason")) reason = r["reason"].literal();
@@ -857,7 +861,6 @@ void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
         QString line = s.message;
         if (line.startsWith("Program terminated")) {
             //when examining core file
-            setStateOff(s_appRunning);
             setStateOn(s_appNotStarted|s_programExited);
         } else if (line.startsWith("The program no longer exists")
             || line.startsWith("Program exited"))
@@ -1451,7 +1454,6 @@ void DebugSession::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSta
                 STATE_CHECK(s_shuttingDown);
                 STATE_CHECK(s_explicitBreakInto);
                 STATE_CHECK(s_dbgBusy);
-                STATE_CHECK(s_appRunning);
 #undef STATE_CHECK
 
                 if (!found)
@@ -1466,7 +1468,6 @@ void DebugSession::debugStateChange(DBGStateFlags oldState, DBGStateFlags newSta
 
 void DebugSession::programRunning()
 {
-    setStateOn(s_appRunning);
     raiseEvent(program_running);
 }
 
