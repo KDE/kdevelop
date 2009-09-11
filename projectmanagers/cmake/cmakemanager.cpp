@@ -363,7 +363,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         {
             
             KDevelop::ReferencedTopDUContext curr;
-            if(item->parent()==0)
+            if(item==item->project()->projectItem())
                 curr=initializeProject(item->project(), item->project()->projectItem()->url());
             else
                 curr=folder->formerParent()->topDUContext();
@@ -513,7 +513,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 QString outputName=t.name;
                 if(data.properties[TARGET].contains(t.name) && data.properties[TARGET][t.name].contains("OUTPUT_NAME"))
                     outputName=data.properties[TARGET][t.name]["OUTPUT_NAME"].first();
-
+                
                 KUrl path;
                 switch(t.type)
                 {
