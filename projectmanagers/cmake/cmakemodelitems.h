@@ -92,14 +92,20 @@ class CMakeExecutableTargetItem
 {
     public:
         CMakeExecutableTargetItem(KDevelop::IProject* project, const QString &name,
-                                  CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
-            : KDevelop::ProjectExecutableTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
+                                  CMakeFolderItem *parent, KDevelop::IndexedDeclaration c,
+                                  const QString& _outputName, const KUrl& basepath)
+            : KDevelop::ProjectExecutableTargetItem( project, name, parent)
+            , DUChainAttatched(c)
+            , outputName(_outputName)
+            , path(basepath)
+        {}
         
         virtual KUrl builtUrl() const;
         virtual KUrl installedUrl() const { return KUrl(); }
         
     private:
         QString outputName;
+        KUrl path;
 };
 
 class CMakeLibraryTargetItem
@@ -107,7 +113,8 @@ class CMakeLibraryTargetItem
 {
     public:
         CMakeLibraryTargetItem(KDevelop::IProject* project, const QString &name,
-                               CMakeFolderItem *parent, KDevelop::IndexedDeclaration c, const QString& _outputName)
+                               CMakeFolderItem *parent, KDevelop::IndexedDeclaration c,
+                               const QString& _outputName, const KUrl& /*basepath*/)
             : KDevelop::ProjectLibraryTargetItem( project, name, parent), DUChainAttatched(c), outputName(_outputName) {}
             
     private:

@@ -27,7 +27,8 @@
 #include <language/duchain/parsingenvironment.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeFolderItem* item )
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name,
+                                  CMakeFolderItem* item)
     : KDevelop::ProjectBuildFolderItem( project, name, item ), m_formerParent(item)
 {}
 
@@ -46,7 +47,12 @@ QStringList CMakeFolderItem::includeDirectories() const
 
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
-    KUrl ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
+    KUrl ret;
+    if(path.isEmpty())
+        ret=project()->buildSystemManager()->buildDirectory(const_cast<CMakeExecutableTargetItem*>(this));
+    else
+        ret=path;
+    
     ret.addPath(outputName);
     return ret;
 }

@@ -514,17 +514,33 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(data.properties[TARGET].contains(t.name) && data.properties[TARGET][t.name].contains("OUTPUT_NAME"))
                     outputName=data.properties[TARGET][t.name]["OUTPUT_NAME"].first();
 
+                KUrl path;
+                switch(t.type)
+                {
+                    case Target::Library:
+                        path=KUrl(data.vm.value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString()));
+                        break;
+                    case Target::Executable:
+                        path=KUrl(data.vm.value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString()));
+                        break;
+                    case Target::Custom:
+                        break;
+                }
+                
                 KDevelop::ProjectTargetItem* targetItem = 0;
                 switch(t.type)
                 {
                     case Target::Library:
-                        targetItem = new CMakeLibraryTargetItem( item->project(), t.name, folder, t.declaration, outputName );
+                        targetItem = new CMakeLibraryTargetItem( item->project(), t.name,
+                                                                 folder, t.declaration, outputName, path );
                         break;
                     case Target::Executable:
-                        targetItem = new CMakeExecutableTargetItem( item->project(), t.name, folder, t.declaration, outputName );
+                        targetItem = new CMakeExecutableTargetItem( item->project(), t.name,
+                                                                    folder, t.declaration, outputName, path );
                         break;
                     case Target::Custom:
-                        targetItem = new CMakeCustomTargetItem( item->project(), t.name, folder, t.declaration, outputName );
+                        targetItem = new CMakeCustomTargetItem( item->project(), t.name,
+                                                                folder, t.declaration, outputName );
                         break;
                 }
                 DescriptorAttatched* datt=dynamic_cast<DescriptorAttatched*>(targetItem);
