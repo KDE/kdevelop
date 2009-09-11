@@ -47,7 +47,7 @@ void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, 
 {
     Snippet* snippet = m_snippets.at( row );
     //Instead of the name of the snippet we want its text
-    doc->replaceText( w, snippet->getSnippetPlainText() );
+    doc->replaceText( w, snippet->interpretSnippet() );
 }
 
 void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType)
