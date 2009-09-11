@@ -256,21 +256,25 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
 
             IDocument* doc = ICore::self()->documentController()->documentForUrl( file );
 
-            if ( doc && doc == ICore::self()->documentController()->activeDocument() ) {
+            if ( doc && doc == ICore::self()->documentController()->activeDocument() && m_highlighters.contains(doc->url()) && m_highlighters[doc->url()] ) {
+              
                 ICore::self()->documentController()->activateDocument( doc );
                 if ( doc->textDocument() ) {
+                  
+                    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc->textDocument() );
+                    Q_ASSERT(smart);
+                    QMutexLocker lock(smart->smartMutex());
+
+                    QList< KTextEditor::SmartRange* > ranges = m_highlighters[doc->url()]->ranges();
+                    
                     KTextEditor::View * v = doc->textDocument() ->activeView();
                     int bestLine = -1;
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
-                        for ( Diff2::DifferenceList::const_iterator it = model->differences() ->begin(); it != model->differences() ->end(); ++it ) {
+                        for ( QList< KTextEditor::SmartRange* >::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
                             int line;
-                            Diff2::Difference* diff = *it;
                             
-                            line = diff->sourceLineNumber();
-
-                            if ( line > 0 )
-                                line -= 1;
+                            line = (*it)->start().line();
 
                             if ( forwards ) {
                                 if ( line > c.line() && ( bestLine == -1 || line < bestLine ) )
@@ -281,6 +285,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                             }
                         }
                         if ( bestLine != -1 ) {
+                          lock.unlock();
                             v->setCursorPosition( KTextEditor::Cursor( bestLine, 0 ) );
                             return ;
                         }

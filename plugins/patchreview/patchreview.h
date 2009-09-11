@@ -58,6 +58,9 @@ public:
     PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
     ~PatchHighlighter();
     KDevelop::IDocument* doc();
+    QList<KTextEditor::SmartRange*> ranges() const {
+      return m_differencesForRanges.keys();
+    }
 private slots:
     void documentDestroyed();
 private:
