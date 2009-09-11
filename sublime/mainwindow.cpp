@@ -366,6 +366,11 @@ void MainWindow::setTabBarLeftCornerWidget(QWidget* widget)
     d->setTabBarLeftCornerWidget(widget);
 }
 
+void MainWindow::tabContextMenuRequested(View* , KMenu* )
+{
+    // do nothing
+}
+
 }
 
 #include "mainwindow.moc"

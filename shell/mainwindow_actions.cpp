@@ -31,6 +31,8 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow_p.h"
 #include "sessiondialog.h"
 
+#include "mainwindow.h"
+
 namespace KDevelop {
 
 // merge the gotoNext and gotoPrev code, to prevent copy/paste errors
@@ -179,6 +181,24 @@ void MainWindowPrivate::showAboutPlatform()
 {
     KAboutApplicationDialog dlg(Core::self()->componentData().aboutData(), m_mainWindow );
     dlg.exec();
+}
+
+void MainWindowPrivate::contextMenuFileNew()
+{
+    m_mainWindow->activateView(m_tabView);
+    fileNew();
+}
+
+void MainWindowPrivate::contextMenuSplitHorizontal()
+{
+    m_mainWindow->activateView(m_tabView);
+    splitHorizontal();
+}
+
+void MainWindowPrivate::contextMenuSplitVertical()
+{
+    m_mainWindow->activateView(m_tabView);
+    splitVertical();
 }
 
 }

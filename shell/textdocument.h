@@ -51,7 +51,6 @@ public:
     virtual bool close(DocumentSaveMode mode = Default);
 
     virtual bool save(DocumentSaveMode mode = Default);
-    virtual void reload();
     virtual DocumentState state() const;
 
     virtual KTextEditor::Cursor cursorPosition() const;
@@ -67,6 +66,9 @@ public:
     virtual KTextEditor::Document* textDocument() const;
 
     virtual QString documentType() const;
+
+public Q_SLOTS:
+    virtual void reload();
 
 protected:
     virtual Sublime::View *newView(Sublime::Document *doc);

@@ -103,6 +103,7 @@ protected:
     virtual void initializeStatusBar();
 protected Q_SLOTS:
     virtual void setupAreaSelector();
+    virtual void tabContextMenuRequested(Sublime::View*, KMenu*);
 
 public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.

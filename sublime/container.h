@@ -27,6 +27,8 @@ class QBoxLayout;
 
 class QPaintEvent;
 
+class KMenu;
+
 namespace Sublime {
 
 class View;
@@ -69,6 +71,7 @@ public:
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void closeRequest(QWidget *w);
+    void tabContextMenuRequested(Sublime::View* view, KMenu* menu);
 
 private Q_SLOTS:
     void widgetActivated(int idx);
@@ -78,7 +81,7 @@ private Q_SLOTS:
     void closeRequest(int idx);
     void tabMoved(int from, int to);
     void wheelScroll(int);
-    void contextMenuRequested( QPoint );
+    void contextMenu(int,QPoint);
 
 private:
 

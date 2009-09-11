@@ -59,6 +59,8 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
 
+#include "textdocument.h"
+
 namespace KDevelop {
 
 bool MainWindowPrivate::s_quitRequested = false;
@@ -400,6 +402,30 @@ void MainWindowPrivate::showErrorMessage(QString message, int timeout)
 {
     m_statusBar->showErrorMessage(message, timeout);
 }
+
+void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
+{
+    m_tabView = view;
+
+    QAction* action;
+
+    action = menu->addAction(KIcon("view-split-top-bottom"), i18n("Split View Top/Bottom"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(contextMenuSplitHorizontal()));
+
+    action = menu->addAction(KIcon("view-split-left-right"), i18n("Split View Left/Right"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(contextMenuSplitVertical()));
+    menu->addSeparator();
+
+    action = menu->addAction(KIcon("document-new"), i18n("New File"));
+
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(contextMenuFileNew()));
+
+    if ( TextDocument* doc = dynamic_cast<TextDocument*>(view->document()) ) {
+        action = menu->addAction(KIcon("view-refresh"), i18n("Reload"));
+        connect(action, SIGNAL(triggered(bool)), doc, SLOT(reload()));
+    }
+}
+
 
 }
 

@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <kxmlguiclient.h>
 
 class KActionCollection;
+class KMenu;
 
 namespace Sublime {
 class View;
@@ -62,6 +63,8 @@ public:
 
     void setupAreaSelectorActions();
     void setupAreaSelector();
+    
+    void tabContextMenuRequested(Sublime::View *view, KMenu* menu);
 
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );
@@ -110,7 +113,12 @@ public Q_SLOTS:
     void showErrorMessage(QString message, int timeout);
     void pluginDestroyed(QObject*);
 
-    
+    /// the following slots always activate the m_tabView before calling the normal slot above
+    /// @see m_tabView
+    /// @see tabContextMenuRequested
+    void contextMenuFileNew();
+    void contextMenuSplitHorizontal();
+    void contextMenuSplitVertical();
 private:
     KActionCollection *actionCollection();
 
@@ -122,6 +130,8 @@ private:
     QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
     
     static bool s_quitRequested;
+    /// the view of the tab that got it's context menu connected
+    Sublime::View* m_tabView;
 };
 
 }

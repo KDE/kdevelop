@@ -229,6 +229,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             //we need to create view container
             container = new Container(splitter);
             connect(container, SIGNAL(activateView(Sublime::View*)), d->m_mainWindow, SLOT(activateView(Sublime::View*)));
+            connect(container, SIGNAL(tabContextMenuRequested(Sublime::View*,KMenu*)),
+                    d->m_mainWindow, SLOT(tabContextMenuRequested(Sublime::View*,KMenu*)));
             connect(container, SIGNAL(closeRequest(QWidget*)),
                     d, SLOT(widgetCloseRequest(QWidget*)));
             splitter->addWidget(container);

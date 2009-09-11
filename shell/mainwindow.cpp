@@ -250,6 +250,12 @@ void MainWindow::showErrorMessage(const QString& message, int timeout)
     d->showErrorMessage(message, timeout);
 }
 
+void MainWindow::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
+{
+    Sublime::MainWindow::tabContextMenuRequested(view, menu);
+    d->tabContextMenuRequested(view, menu);
+}
+
 }
 
 #include "mainwindow.moc"

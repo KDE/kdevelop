@@ -155,7 +155,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(closeRequest(int)), this, SLOT(closeRequest(int)));
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
-    connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
+    connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
@@ -374,24 +374,19 @@ void Container::tabMoved(int from, int to)
     d->viewForWidget[w]->notifyPositionChanged(to);
 }
 
-void Container::contextMenuRequested( QPoint pos )
+void Container::contextMenu( int currentTab, QPoint pos )
 {
-    int currentTab = d->tabBar->tabAt(pos);
-
     KMenu menu;
 
-//     QAction* newFileAction = menu.addAction( KIcon("document-new"), i18n( "New File" ) );
-    QAction* closeTabAction = menu.addAction( KIcon("document-close"), i18n( "Close File" ) );
+    emit tabContextMenuRequested(viewForWidget(widget(currentTab)), &menu);
+
     menu.addSeparator();
+    QAction* closeTabAction = menu.addAction( KIcon("document-close"), i18n( "Close File" ) );
     QAction* closeOtherTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close Other Files" ) );
 
-    QAction* triggered = menu.exec(mapToGlobal(pos));
+    QAction* triggered = menu.exec(pos);
 
     if (triggered) {
-        /*if ( triggered == newFileAction ) {
-            kDebug() << "new file";
-            ///TODO
-        } else */
         if ( triggered == closeTabAction ) {
             closeRequest(currentTab);
         } else if ( triggered == closeOtherTabsAction ) {
@@ -408,9 +403,7 @@ void Container::contextMenuRequested( QPoint pos )
             foreach( QWidget* tab, otherTabs ) {
                 closeRequest(tab);
             }
-        } else {
-            kDebug() << "unhandled context menu action triggered:" << triggered;
-        }
+        } // else the action was handled by someone else
     }
 }
 

@@ -82,6 +82,9 @@ protected:
     virtual void cleanup();
     virtual void initializeStatusBar();
 
+protected Q_SLOTS:
+    virtual void tabContextMenuRequested(Sublime::View* , KMenu* );
+
 private Q_SLOTS:
     void documentActivated( KDevelop::IDocument* document );
     void documentStateChanged( KDevelop::IDocument* document );
