@@ -46,8 +46,10 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
 void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const
 {
     Snippet* snippet = m_snippets.at( row );
+    // copy range so it does not get deleted when the completion list loses focus
+    KTextEditor::Range range(w);
     //Instead of the name of the snippet we want its text
-    doc->replaceText( w, snippet->interpretSnippet() );
+    doc->replaceText( range, snippet->interpretSnippet() );
 }
 
 void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType)
