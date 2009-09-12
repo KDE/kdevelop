@@ -79,7 +79,7 @@ void SnippetView::slotAddRepo()
     dlg.setButtons(KDialog::Ok|KDialog::Cancel);
     dlg.setButtonText(KDialog::Ok, i18n("Add Repository"));
     addrepoui.setupUi(dlg.mainWidget());
-    addrepoui.location->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+    addrepoui.location->setMode(KFile::Directory | KFile::LocalOnly);
     if (dlg.exec() == QDialog::Accepted) {
         SnippetStore::instance()->createNewRepository(
                 NULL, // create a new toplevel repository

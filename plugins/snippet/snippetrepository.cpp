@@ -21,6 +21,10 @@
 #include "snippetstore.h"
 #include "snippet.h"
 
+#include <KMessageBox>
+#include <KLocalizedString>
+#include <QApplication>
+
 SnippetRepository::SnippetRepository(const QString& name, const QString& location)
  : QStandardItem(name)
 {
@@ -105,8 +109,7 @@ void SnippetRepository::changeLocation(const QString& newLocation, const QString
     //if the location changed, try to move the repository
     QString oldLocation = getLocation();
     QDir dir(oldLocation);
-    bool ok = dir.rename( oldLocation, newLocation );
-    if (ok) {
+    if (dir.rename( oldLocation, newLocation )) {
         // if moving was ok, set the location, tooltip and the name
         setLocation( newLocation );
         if (!newName.isEmpty())
@@ -115,15 +118,24 @@ void SnippetRepository::changeLocation(const QString& newLocation, const QString
         // as the snippets and subrepos now changed their
         // location on the disk, resync everything in this repo
         slotSyncRepository();
+    } else {
+        KMessageBox::error(
+            QApplication::activeWindow(),
+            i18n("Could not move repository from \"%1\" to \"%2\".", oldLocation, newLocation)
+        );
     }
 }
 
 void SnippetRepository::removeDirectory()
 {
     QDir dir( getLocation() );
-    bool ok = dir.rmdir( getLocation() );
-    if (ok) {
+    if (dir.rmdir( getLocation() )) {
         QStandardItem::parent()->removeRows( row(), 1 );
+    } else {
+        KMessageBox::error(
+            QApplication::activeWindow(),
+            i18n("Could not remove repository \"%1\".", getLocation())
+        );
     }
 }
 

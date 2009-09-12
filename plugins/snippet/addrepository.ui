@@ -1,43 +1,62 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>AddRepository</class>
- <widget class="QWidget" name="AddRepository" >
-  <property name="geometry" >
+ <widget class="QWidget" name="AddRepository">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
-    <height>79</height>
+    <width>404</width>
+    <height>174</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Add an existing Repository</string>
+  <property name="windowTitle">
+   <string>Add a Snippet Repository</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+  <layout class="QGridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Name:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QLineEdit" name="name" />
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="name"/>
    </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="label_2" >
-     <property name="text" >
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
       <string>Location:</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="KUrlRequester" name="location" />
+   <item row="2" column="1">
+    <widget class="KUrlRequester" name="location"/>
+   </item>
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label_3">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
+     <property name="text">
+      <string>Enter a name and a location for the new snippet repository.
+
+All snippets in this repository will be saved under that location.</string>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

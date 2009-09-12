@@ -20,6 +20,7 @@
 #include "snippetstore.h"
 #include "snippetrepository.h"
 #include "snippetvariablesubst.h"
+#include <KMessageBox>
 
 Snippet::Snippet(const QString& filename, SnippetRepository* repo)
     : QStandardItem(filename), repo_(repo), name_(filename)
@@ -83,9 +84,13 @@ void Snippet::changeName(const QString& newName)
         QString newFileName = getFileName();
 
         if ( QFile::exists( origFileName ) ) {
-            bool ok = QFile::rename(origFileName, newFileName);
-            if (ok) {
+            if (QFile::rename(origFileName, newFileName)) {
                 setText( newName );
+            } else {
+                KMessageBox::error(
+                    QApplication::activeWindow(),
+                    i18n("Could not more snippet file from \"%1\" to \"%2\".", origFileName, newFileName)
+                );
             }
         } else {
             setText( newName );
@@ -213,10 +218,14 @@ const QString Snippet::interpretSnippet()
 
 void Snippet::removeSnippetFile()
 {
-    bool ok = QFile::remove( getFileName() );
-    if (ok) {
+    if (QFile::remove( getFileName() )) {
         // if the file has been removed, also remove the Snippet from the model
         QStandardItem::parent()->removeRows( row(), 1 );
+    } else {
+        KMessageBox::error(
+            QApplication::activeWindow(),
+            i18n("Could not remove snippet file \"%1\".", getFileName())
+        );
     }
 }
 

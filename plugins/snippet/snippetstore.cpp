@@ -13,6 +13,10 @@
 
 #include "snippetrepository.h"
 
+#include <KMessageBox>
+#include <KLocalizedString>
+#include <QApplication>
+
 SnippetStore* SnippetStore::self_ = NULL;
 
 
@@ -38,6 +42,17 @@ SnippetStore* SnippetStore::instance()
 
 void SnippetStore::createNewRepository(SnippetRepository* parent, const QString& name, const QString& dir)
 {
+    {
+        QDir location(dir);
+        if ( !location.exists() && !location.mkpath(dir) ) {
+            KMessageBox::error(
+                QApplication::activeWindow(),
+                i18n("Could not create the repository folder \"%1\".", dir)
+            );
+            return;
+        }
+    }
+
     if (!parent) {
         // Check if the directory is not already in the SnippetStore
         // We allow each toplevel repository only once
