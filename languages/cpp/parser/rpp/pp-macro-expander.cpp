@@ -202,9 +202,12 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input;
           skip_blanks (input, devnull());
           
-          IndexedString previous = IndexedString::fromIndex(output.popLastOutput()); //Previous already has been expanded
-          while(output.offset() > 0 && isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ')
-            previous = IndexedString::fromIndex(output.popLastOutput());   
+          IndexedString previous;
+          if (output.offset() > 0) {
+            previous = IndexedString::fromIndex(output.popLastOutput()); //Previous already has been expanded
+            while(output.offset() > 0 && isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ')
+              previous = IndexedString::fromIndex(output.popLastOutput());   
+          }
           
           IndexedString add = IndexedString::fromIndex(skip_identifier (input));
           
