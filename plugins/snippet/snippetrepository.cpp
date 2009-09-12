@@ -129,7 +129,7 @@ void SnippetRepository::changeLocation(const QString& newLocation, const QString
 void SnippetRepository::removeDirectory()
 {
     QDir dir( getLocation() );
-    if (dir.rmdir( getLocation() )) {
+    if (!dir.exists() || dir.rmdir( getLocation() )) {
         QStandardItem::parent()->removeRows( row(), 1 );
     } else {
         KMessageBox::error(

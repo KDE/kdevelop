@@ -218,7 +218,7 @@ const QString Snippet::interpretSnippet()
 
 void Snippet::removeSnippetFile()
 {
-    if (QFile::remove( getFileName() )) {
+    if (!QFile::exists( getFileName() ) || QFile::remove( getFileName() )) {
         // if the file has been removed, also remove the Snippet from the model
         QStandardItem::parent()->removeRows( row(), 1 );
     } else {
