@@ -130,12 +130,20 @@ void SnippetRepository::removeDirectory()
 {
     QDir dir( getLocation() );
     if (!dir.exists() || dir.rmdir( getLocation() )) {
-        QStandardItem::parent()->removeRows( row(), 1 );
+        emit repositoryRemoved(this);
     } else {
         KMessageBox::error(
             QApplication::activeWindow(),
             i18n("Could not remove repository \"%1\".", getLocation())
         );
+    }
+}
+
+void SnippetRepository::slotSubRepositoryRemoved( SnippetRepository* repo )
+{
+    if ( subrepos_.contains(repo) ) {
+        removeRow(repo->row());
+        subrepos_.removeAll(repo);
     }
 }
 

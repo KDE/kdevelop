@@ -80,6 +80,12 @@ public:
      */
     void createSubRepo(const QString& subrepo);
 
+signals:
+    /**
+     * Gets emitted whenever this repository gets removed.
+     */
+    void repositoryRemoved(SnippetRepository* repo);
+
 public slots:
     /**
      * When this slot gets called, all stored snippets gets removed from the
@@ -88,6 +94,11 @@ public slots:
      * snippets_ list.
      */
     void slotSyncRepository();
+
+    /**
+     * Removes the sub-repository from the model and deletes it.
+     */
+    void slotSubRepositoryRemoved(SnippetRepository* repo);
 
 private:
     /**

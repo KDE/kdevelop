@@ -44,13 +44,14 @@ public:
      */
     void createNewRepository(SnippetRepository* parent, const QString& name, const QString& dir);
 
-    /**
-     *
-     */
-    void remove(SnippetRepository* repo);
-
     void load(KConfigGroup config);
     void save(KConfigGroup config);
+
+public slots:
+    /**
+     * Removes the repository from the model and deletes it.
+     */
+    void remove( SnippetRepository* repo );
 
 private:
     SnippetStore();
