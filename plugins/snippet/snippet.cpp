@@ -89,7 +89,7 @@ void Snippet::changeName(const QString& newName)
             } else {
                 KMessageBox::error(
                     QApplication::activeWindow(),
-                    i18n("Could not more snippet file from \"%1\" to \"%2\".", origFileName, newFileName)
+                    i18n("Could not move snippet file from \"%1\" to \"%2\".", origFileName, newFileName)
                 );
             }
         } else {
