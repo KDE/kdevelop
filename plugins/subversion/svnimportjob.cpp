@@ -22,6 +22,7 @@
 #include "svnimportjob_p.h"
 
 #include <QMutexLocker>
+#include <QFileInfo>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -45,13 +46,17 @@ void SvnImportInternalJob::run()
     try
     {
         QMutexLocker l( m_mutex );
-        QByteArray srcba = m_sourceDirectory.toLocalFile().toUtf8();
+        QString srcdir = QFileInfo( m_sourceDirectory.toLocalFile() ).canonicalFilePath();
+        QByteArray srcba = srcdir.toUtf8();
         QByteArray destba = m_destinationRepository.repositoryServer().toUtf8();
+        if( destba.right(1) == "/" ) {
+            destba = destba.left(destba.length() - 1);
+        }
         QByteArray msg = m_message.toUtf8();
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
     }catch( svn::ClientException ce )
     {
-        kDebug(9510) << "Exception while importing: "
+        kDebug() << "Exception while importing: "
                 << m_sourceDirectory
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
