@@ -247,10 +247,6 @@ private:
     void debugStateChange(DBGStateFlags oldState, DBGStateFlags newState);
     void commandDone();
 
-    /** Raises the specified event. Should be used instead of
-        emitting 'event' directly, since this method can perform
-        additional book-keeping for events.
-    */
     void raiseEvent(event_t e);
 
     void maybeAnnounceWatchpointHit();
@@ -313,14 +309,6 @@ Q_SIGNALS:
     void gdbUserCommandStdout (const QString& output);
     void gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
     void gdbShowStepInSource(const QString &fileName, int line, const QString &address);
-
-    /** This signal is emitted whenever the given event in a program
-        happens. See DESIGN.txt for expected handled of each event.
-
-        NOTE: this signal should never be emitted directly. Instead,
-        use raiseEvent.
-    */
-    void event(event_t e);
 
     void debuggerAbnormalExit();
 

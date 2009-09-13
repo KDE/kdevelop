@@ -230,10 +230,10 @@ createVariable(TreeModel* model, TreeItem* parent,
     return new GdbVariable(model, parent, expression, display);
 }
 
-void VariableController::stateChanged(IDebugSession::DebuggerState state)
+void VariableController::handleEvent(IDebugSession::event_t event)
 {
-    IVariableController::stateChanged(state);
-    if (state == IDebugSession::EndedState)
+    IVariableController::handleEvent(event);
+    if (event == IDebugSession::debugger_exited)
         GdbVariable::markAllDead();
 }
 

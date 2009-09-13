@@ -67,7 +67,7 @@ private:
     void addWatch(const GDBMI::ResultRecord& r);
     void addWatchpoint(const GDBMI::ResultRecord& r);
 
-    void stateChanged(IDebugSession::DebuggerState state);
+    void handleEvent(IDebugSession::event_t event);
 
     static int nextId_;
 };

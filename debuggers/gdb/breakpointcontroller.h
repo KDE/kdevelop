@@ -25,6 +25,7 @@
 #include <QObject>
 
 #include <debugger/interfaces/ibreakpointcontroller.h>
+#include <debugger/interfaces/idebugsession.h>
 
 #include "gdbglobal.h"
 
@@ -37,6 +38,8 @@ class Value;
 
 namespace GDBDebugger
 {
+using namespace KDevelop;
+
 class DebugSession;
 struct InsertedHandler;
 struct UpdateHandler;
@@ -46,7 +49,7 @@ struct DeletedHandler;
 * point of the debugger.
 * We may change, add or remove breakpoints in this class.
 */
-class BreakpointController : public KDevelop::IBreakpointController
+class BreakpointController : public IBreakpointController
 {
     Q_OBJECT
 
@@ -54,7 +57,7 @@ public:
     BreakpointController(DebugSession* parent);
 
 private slots:
-    void slotEvent(event_t);
+    void slotEvent(IDebugSession::event_t);
     void programStopped(const GDBMI::ResultRecord &r);
 
 private:

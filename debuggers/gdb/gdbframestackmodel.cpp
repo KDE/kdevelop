@@ -69,10 +69,11 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
         KDevelop::FrameStackModel::ThreadItem i;
         i.nr = threads[gidx]["id"].toInt();
         i.name = getFunctionOrAddress(threads[gidx]["frame"]);
-        i.isCurrent = r["current-thread-id"].toInt() == i.nr;
         threadsList << i;
     }
     setThreads(threadsList);
+    if (r.hasField("current-thread-id"))
+        setActiveThread(r["current-thread-id"].toInt());
 }
 
 

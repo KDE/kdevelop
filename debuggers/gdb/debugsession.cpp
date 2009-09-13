@@ -758,13 +758,12 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
 
     if (!reason.contains("exited"))
     {
-        // Update information
-        if (r.hasField("thread-id")) {
-            currentThread_ = r["thread-id"].toInt();
-            frameStackModel()->actOnStop(currentThread_);
-        } else {
-            frameStackModel()->actOnStop(-1);
-        }
+        // FIXME: we should immediately update the current thread and
+        // frame in the framestackmodel, so that any user actions
+        // are in that thread. However, the way current framestack model
+        // is implemented, we can't change thread id until we refresh
+        // the entire list of threads -- otherwise we might set a thread
+        // id that is not already in the list, and it will be upset.
         
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
@@ -1331,6 +1330,9 @@ void DebugSession::gdbExited()
     setStateOff(s_shuttingDown);
 }
 
+// FIXME: I don't fully remember what is the business with
+// stateReloadInProgress_ and whether we can lift it to the
+// generic level.
 void DebugSession::raiseEvent(event_t e)
 {
     if (e == program_exited || e == debugger_exited)
@@ -1344,7 +1346,7 @@ void DebugSession::raiseEvent(event_t e)
         kDebug(9012) << "State reload in progress\n";
     }
 
-    emit event(e);
+    IDebugSession::raiseEvent(e);
 
     if (e == program_state_changed)
     {

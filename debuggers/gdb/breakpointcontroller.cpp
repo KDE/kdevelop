@@ -127,8 +127,8 @@ BreakpointController::BreakpointController(DebugSession* parent)
     Q_ASSERT(parent);
     // FIXME: maybe, all debugger components should derive from
     // a base class that does this connect.
-    connect(debugSession(),     SIGNAL(event(event_t)),
-            this,       SLOT(slotEvent(event_t)));
+    connect(debugSession(),     SIGNAL(event(IDebugSession::event_t)),
+            this,       SLOT(slotEvent(IDebugSession::event_t)));
     connect(parent, SIGNAL(programStopped(GDBMI::ResultRecord)), SLOT(programStopped(GDBMI::ResultRecord)));
 }
 
@@ -139,10 +139,10 @@ DebugSession *BreakpointController::debugSession() const
 }
 
 
-void BreakpointController::slotEvent(event_t e)
+void BreakpointController::slotEvent(IDebugSession::event_t e)
 {
     switch(e) {
-        case program_state_changed:
+         case IDebugSession::program_state_changed:
             if (m_interrupted) {
                 m_interrupted = false;
                 debugSession()->addCommand(ExecContinue);
@@ -155,13 +155,13 @@ void BreakpointController::slotEvent(event_t e)
             }
             break;
 
-        case connected_to_program:
+        case IDebugSession::connected_to_program:
         {
             kDebug() << "connected to program";
             sendMaybeAll();
             break;
         }
-        case debugger_exited:
+        case IDebugSession::debugger_exited:
         {
             break;
         }
