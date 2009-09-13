@@ -125,7 +125,7 @@ void SvnImport::testImportIntoDir()
     QString origcontent = "This is a Test";
     setupSampleProject( projectDir.name(), origcontent );
 
-    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/" + QFileInfo( projectDir.name() ).fileName() );
+    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/" + QDir( projectDir.name() ).dirName() );
     VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
