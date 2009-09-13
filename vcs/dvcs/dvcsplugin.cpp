@@ -87,16 +87,9 @@ DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent
 
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 {
-    delete d->m_factory;
+    //TODO: Find out why this crashes on the svn tests delete d->m_factory;
     delete d;
 }
-
-
-void DistributedVersionControlPlugin::unload()
-{
-    core()->uiController()->removeToolView(d->m_factory);
-}
-
 
 // Begin:  KDevelop::IBasicVersionControl
 
