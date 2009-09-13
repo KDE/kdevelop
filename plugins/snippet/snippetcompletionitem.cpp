@@ -28,6 +28,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 
 #include "snippet.h"
+#include "selectionjumper.h"
 
 SnippetCompletionItem::SnippetCompletionItem( const QString& name, const QString& snippet )
     : CompletionTreeItem(), m_name(name), m_snippet(snippet), m_expandingWidget(0)
@@ -81,5 +82,49 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
 
 void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTextEditor::Range& word )
 {
+    // parse snippet for markers
+    QList<KTextEditor::Range> markers;
+    bool isEscaped = false;
+    int line = word.start().line();
+    int column = word.start().column();
+    KTextEditor::Cursor start = KTextEditor::Cursor::invalid();
+    QList<int> charsToRemove;
+    for ( int i = 0; i < m_snippet.size(); ++i ) {
+        if ( m_snippet[i] == '\\' ) {
+            ++column;
+            isEscaped = !isEscaped;
+        } else if ( m_snippet[i] == '\n' ) {
+            ++line;
+            column = 0;
+        } else if ( m_snippet[i] == '$' ) {
+            if ( isEscaped ) {
+                charsToRemove << i - 1;
+                isEscaped = false;
+            } else {
+                charsToRemove << i;
+                if ( start.isValid() ) {
+                    KTextEditor::Cursor end(line, column);
+                    markers << KTextEditor::Range(start, end);
+                    start = KTextEditor::Cursor::invalid();
+                } else {
+                    start = KTextEditor::Cursor(line, column);
+                }
+            }
+        } else {
+            isEscaped = false;
+            ++column;
+        }
+    }
+    // remove $'s
+    int deletedChars = 0;
+    foreach ( const int &pos, charsToRemove ) {
+        m_snippet.remove(pos - deletedChars, 1 );
+        ++deletedChars;
+    }
+
     document->replaceText( word, m_snippet );
+
+    if ( !markers.isEmpty() ) {
+        new SelectionJumper(markers, document);
+    }
 }

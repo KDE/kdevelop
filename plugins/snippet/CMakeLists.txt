@@ -14,6 +14,7 @@ set(kdevsnippet_PART_SRCS
     snippetfilterproxymodel.cpp
     snippetcompletionmodel.cpp
     snippetcompletionitem.cpp
+    selectionjumper.cpp
     snippet.cpp
     moverepository.cpp
     editsnippet.cpp
