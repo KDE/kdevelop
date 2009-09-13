@@ -31,8 +31,10 @@ public:
     virtual KUrl source() const;
     virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const;
+    virtual void setUseSourceDirForDestination( bool ) const;
 
 private:
+    bool useSourceDirForDestination;
     Ui::SvnImportMetadataWidget *m_ui;
 };
 

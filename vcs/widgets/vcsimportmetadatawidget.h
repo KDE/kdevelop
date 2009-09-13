@@ -41,6 +41,11 @@ public:
     virtual KUrl source() const = 0;
     virtual VcsLocation destination() const = 0;
     virtual QString message() const = 0;
+    /**
+     * Select wether the widget should re-use the last part of the source location
+     * for the destination. The default implementation simply ignores this setting.
+     */
+    virtual void setUseSourceDirForDestination( bool ) const {}
 public Q_SLOTS:
     virtual void setSourceLocation( const VcsLocation& ) = 0;
     virtual void setSourceLocationEditable( bool ) = 0;

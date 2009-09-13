@@ -38,9 +38,19 @@ KUrl SvnImportMetadataWidget::source() const
 KDevelop::VcsLocation SvnImportMetadataWidget::destination() const
 {
     KDevelop::VcsLocation destloc;
-    destloc.setRepositoryServer(m_ui->dest->url().url());
+    KUrl url = m_ui->dest->url();
+    if( useSourceDirForDestination ) {
+        url.addPath( m_ui->srcEdit->url().fileName() );
+    }
+    destloc.setRepositoryServer(url.url());
     return destloc;
 }
+
+void SvnImportMetadataWidget::setUseSourceDirForDestination( bool b ) const
+{
+    useSourceDirForDestination = b;
+}
+
 
 void SvnImportMetadataWidget::setSourceLocationEditable( bool enable )
 {
