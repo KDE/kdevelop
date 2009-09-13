@@ -44,7 +44,7 @@ extern "C" {
 
 SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     : ThreadWeaver::Job( parent ), m_ctxt( new svn::Context() ),
-      m_guiSemaphore( 0 ), m_mutex( new QMutex() ),
+      m_guiSemaphore( 0 ), m_mutex( new QMutex() ), m_killMutex( new QMutex() ),
       m_success( true ), sendFirstDelta( false ), killed( false )
 {
     m_ctxt->setListener(this);
@@ -191,7 +191,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
 
 bool SvnInternalJobBase::contextCancel()
 {
-    QMutexLocker lock( m_mutex );
+    QMutexLocker lock( m_killMutex );
     return killed;
 }
 
@@ -368,7 +368,7 @@ QString SvnInternalJobBase::errorMessage() const
 
 void SvnInternalJobBase::kill()
 {
-    QMutexLocker lock( m_mutex );
+    QMutexLocker lock( m_killMutex );
     killed = true;
 }
 

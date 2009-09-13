@@ -101,6 +101,7 @@ signals:
 
 protected:
     QMutex* m_mutex;
+    QMutex* m_killMutex;
     bool m_success;
     void setErrorMessage( const QString& );
 private:
