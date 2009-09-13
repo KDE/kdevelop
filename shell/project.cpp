@@ -611,7 +611,6 @@ int Project::fileCount() const
 
 KUrl Project::relativeUrl( const KUrl& absolute ) const
 {
-    kDebug() << "Creating relative url between: " << folder() << absolute;
     return KUrl::relativeUrl( folder(), absolute );
 }
 
