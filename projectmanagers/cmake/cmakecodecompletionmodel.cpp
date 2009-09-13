@@ -56,7 +56,6 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     QString line=d->line(range.end().line());
 //     m_inside=line.lastIndexOf('(', range.end().column())>=0;
     m_inside=line.lastIndexOf('(', range.end().column()-line.size()-1)>=0;
-    qDebug() << "ooooooooo"  << line << range << m_inside << range.end().column() << range.end().column()-line.size();
     
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
@@ -163,26 +162,30 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
 {
     switch(indexType(row))
     {
-        case Command:
-            document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+        case Command: {
+            QString code=data(index(row, Name, QModelIndex())).toString();
+            if(!document->line(word.start().line()).contains('('))
+                code.append('(');
+            
+            document->replaceText(word, code);
             break;
-        case Macro: {
-            int pos=row-m_commands.count();
-            DUChainReadLocker lock(DUChain::lock());
-            Declaration* decl = m_declarations[pos].data();
-            if(!decl)
-                return;
-            AbstractType::Ptr type; Q_ASSERT(type = m_declarations[pos].data()->abstractType());
-            FunctionType::Ptr func; Q_ASSERT(func = type.cast<FunctionType>());
-            document->replaceText(word, data(index(row, Name, QModelIndex())).toString()+'(');
+        } case Macro: {
+            QString code=data(index(row, Name, QModelIndex())).toString();
+            if(!document->line(word.start().line()).contains('('))
+                code.append('(');
+            
+            document->replaceText(word, code);
         }   break;
         case Variable: {
-            DUChainReadLocker lock(DUChain::lock());
-            Range r=word, prefix(Cursor(word.start().line(), word.start().column()-2), word.start());
+            Range r=word, prefix(word.start()-Cursor(0,2), word.start());
             QString bef=document->text(prefix);
             if(r.start().column()>=2 && bef=="${")
                 r.start().setColumn( r.start().column()-2 );
-            document->replaceText(r, "${"+data(index(row, Name, QModelIndex())).toString()+'}');
+            QString code="${"+data(index(row, Name, QModelIndex())).toString();
+            if(document->character(word.end())!='}')
+                code+='}';
+            
+            document->replaceText(r, code);
         }   break;
     }
 }
