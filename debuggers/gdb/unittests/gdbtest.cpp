@@ -758,7 +758,7 @@ void GdbTest::testStackSwitchThread()
 
     tIdx = stackModel->index(1,0);
     QVERIFY(stackModel->data(tIdx).toString().startsWith("#2 at pthread_cond_timedwait"));
-    stackModel->setActiveThread(2);
+    stackModel->setCurrentThread(2);
     QTest::qWait(200);
     int rows = stackModel->rowCount(tIdx);
     QVERIFY(rows > 3);

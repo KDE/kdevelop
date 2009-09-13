@@ -73,7 +73,7 @@ void GdbFrameStackModel::handleThreadInfo(const GDBMI::ResultRecord& r)
     }
     setThreads(threadsList);
     if (r.hasField("current-thread-id"))
-        setActiveThread(r["current-thread-id"].toInt());
+        setCurrentThread(r["current-thread-id"].toInt());
 }
 
 

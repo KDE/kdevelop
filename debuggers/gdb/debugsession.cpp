@@ -626,7 +626,7 @@ bool DebugSession::executeCmd()
         // Most var commands should be executed in the context
         // of the selected thread and frame.
         if (currentCmd->thread() == -1)
-            currentCmd->setThread(frameStackModel()->activeThread());
+            currentCmd->setThread(frameStackModel()->currentThread());
 
         // FIXME: do the same for frame.
     }
