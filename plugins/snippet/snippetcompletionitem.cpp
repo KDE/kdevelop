@@ -82,6 +82,17 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
 
 void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTextEditor::Range& word )
 {
+    // get indendation of the current line
+    QString indendation;
+    QString currentLine = document->line(word.start().line());
+    for ( int i = 0; i < currentLine.size(); ++i ) {
+        if ( currentLine[i].isSpace() ) {
+            indendation += currentLine[i];
+        } else {
+            break;
+        }
+    }
+
     // parse snippet for markers
     QList<KTextEditor::Range> markers;
     bool isEscaped = false;
@@ -95,7 +106,7 @@ void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTex
             isEscaped = !isEscaped;
         } else if ( m_snippet[i] == '\n' ) {
             ++line;
-            column = 0;
+            column = indendation.size();
         } else if ( m_snippet[i] == '$' ) {
             if ( isEscaped ) {
                 charsToRemove << i - 1;
@@ -121,6 +132,8 @@ void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTex
         m_snippet.remove(pos - deletedChars, 1 );
         ++deletedChars;
     }
+    // indent
+    m_snippet.replace('\n', '\n' + indendation);
 
     document->replaceText( word, m_snippet );
 
