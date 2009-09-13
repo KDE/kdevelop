@@ -46,7 +46,7 @@ KDevelop::VcsLocation SvnImportMetadataWidget::destination() const
     return destloc;
 }
 
-void SvnImportMetadataWidget::setUseSourceDirForDestination( bool b ) const
+void SvnImportMetadataWidget::setUseSourceDirForDestination( bool b )
 {
     useSourceDirForDestination = b;
 }

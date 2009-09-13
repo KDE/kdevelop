@@ -45,7 +45,7 @@ public:
      * Select wether the widget should re-use the last part of the source location
      * for the destination. The default implementation simply ignores this setting.
      */
-    virtual void setUseSourceDirForDestination( bool ) const {}
+    virtual void setUseSourceDirForDestination( bool ) {}
 public Q_SLOTS:
     virtual void setSourceLocation( const VcsLocation& ) = 0;
     virtual void setSourceLocationEditable( bool ) = 0;

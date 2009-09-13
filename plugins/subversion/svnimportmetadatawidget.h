@@ -31,7 +31,7 @@ public:
     virtual KUrl source() const;
     virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const;
-    virtual void setUseSourceDirForDestination( bool ) const;
+    virtual void setUseSourceDirForDestination( bool );
 
 private:
     bool useSourceDirForDestination;
