@@ -122,11 +122,13 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
 
     KAction* previousUse = actions.addAction("previous_use");
     previousUse->setText( i18n("&Previous Use") );
+    previousUse->setIcon( KIcon("go-previous-use") );
     previousUse->setShortcut( Qt::META | Qt::SHIFT |  Qt::Key_Left );
     QObject::connect(previousUse, SIGNAL(triggered(bool)), this, SLOT(previousUseShortcut()));
 
     KAction* nextUse = actions.addAction("next_use");
     nextUse->setText( i18n("&Next Use") );
+    nextUse->setIcon( KIcon("go-next-use") );
     nextUse->setShortcut( Qt::META | Qt::SHIFT | Qt::Key_Right );
     QObject::connect(nextUse, SIGNAL(triggered(bool)), this, SLOT(nextUseShortcut()));
 

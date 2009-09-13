@@ -373,6 +373,7 @@ void ProjectController::setupActions()
     d->m_openConfig = action = ac->addAction( "project_open_config" );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProjectConfig() ) );
     action->setText( i18n( "Open Configuration..." ) );
+    action->setIcon( KIcon("configure") );
     action->setEnabled( false );
 
     KSharedConfig * config = KGlobal::config().data();
