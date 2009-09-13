@@ -593,6 +593,19 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     if (stateReloadInProgress_)
         cmd->setStateReloading(true);
 
+    if (cmd->type() >= GDBMI::VarAssign
+        && cmd->type() <= GDBMI::VarUpdate
+        && cmd->type() != GDBMI::VarDelete)
+    {
+        // Most var commands should be executed in the context
+        // of the selected thread and frame.
+        if (cmd->thread() == -1)
+            cmd->setThread(frameStackModel()->currentThread());
+
+        if (cmd->frame() == -1)
+            cmd->setFrame(frameStackModel()->currentFrame());
+    }
+
     commandQueue_->enqueue(cmd, queue_where);
 
     kDebug(9012) << "QUEUE: " << cmd->initialString()
@@ -618,18 +631,6 @@ bool DebugSession::executeCmd()
     QString commandText = currentCmd->cmdToSend();
     bool bad_command = false;
     QString message;
-
-    if (currentCmd->type() >= GDBMI::VarAssign
-        && currentCmd->type() <= GDBMI::VarUpdate
-        && currentCmd->type() != GDBMI::VarDelete)
-    {
-        // Most var commands should be executed in the context
-        // of the selected thread and frame.
-        if (currentCmd->thread() == -1)
-            currentCmd->setThread(frameStackModel()->currentThread());
-
-        // FIXME: do the same for frame.
-    }
 
     int length = commandText.length();
     // No i18n for message since it's mainly for debugging.
