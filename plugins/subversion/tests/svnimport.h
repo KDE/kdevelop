@@ -21,6 +21,7 @@
 #define SVNIMPORT_H
 #include <QtCore/QObject>
 
+class KTempDir;
 namespace KDevelop
 {
 class TestCore;
@@ -36,6 +37,7 @@ private slots:
     void cleanupTestCase();
     void testBasic();
 private:
+    void validateImport( const QString& repo, KTempDir& checkout, const QString& origcontent );
     KDevelop::TestCore* core;
     KDevelop::ICentralizedVersionControl* vcs;
 };

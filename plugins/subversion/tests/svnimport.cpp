@@ -46,12 +46,29 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
     QVERIFY(j);
 
     if (!j->exec()) {
-        qDebug() << "ooops, no exec";
         kDebug() << j->errorString();
         // On error, wait for key in order to allow manual state inspection
     }
 
     QCOMPARE(j->status(), status);
+}
+
+void setupLocalRepository( const QString& name, VcsLocation & reposLoc )
+{
+    KProcess cmd;
+    cmd.setWorkingDirectory(name);
+    cmd << "svnadmin" << "create" << name;
+    QCOMPARE(cmd.execute(10000), 0);
+
+    reposLoc.setRepositoryServer("file://" + name );
+}
+
+void setupSampleProject( const QString& name, const QString& content )
+{
+    QFile sampleFile( name + "/sample.file" );
+    sampleFile.open( QIODevice::WriteOnly );
+    sampleFile.write( content.toUtf8() );
+    sampleFile.close();
 }
 
 void SvnImport::initTestCase()
@@ -84,35 +101,31 @@ void SvnImport::cleanupTestCase()
 void SvnImport::testBasic()
 {
     KTempDir reposDir;
-    KProcess cmd;
-    cmd.setWorkingDirectory(reposDir.name());
-    cmd << "svnadmin" << "create" << reposDir.name();
-    QCOMPARE(cmd.execute(10000), 0);
-    
     VcsLocation reposLoc;
-    reposLoc.setRepositoryServer("file://" + reposDir.name() );
+    setupLocalRepository( reposDir.name(), reposLoc );
     
     KTempDir projectDir;
-    QFile sampleFile( projectDir.name() + "/sample.file" );
-    sampleFile.open( QIODevice::WriteOnly );
     QString origcontent = "This is a Test";
-    sampleFile.write( origcontent.toUtf8() );
-    sampleFile.close();
+    setupSampleProject( projectDir.name(), origcontent );
 
     VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
     KTempDir checkoutDir;
-    checkoutDir.setAutoRemove(false);
-    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/" + QFileInfo( projectDir.name() ).fileName() );
-    job = vcs->createWorkingCopy( reposLoc, checkoutDir.name() );
+    validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
+}
+
+void SvnImport::validateImport( const QString& repourl, KTempDir& checkoutdir, const QString& origcontent )
+{
+    VcsLocation reposLoc;
+    reposLoc.setRepositoryServer( repourl );
+    VcsJob* job = vcs->createWorkingCopy( reposLoc, checkoutdir.name() );
     validatingExecJob(job);
 
-    QFile newfile(checkoutDir.name() + "/sample.file" );
+    QFile newfile( checkoutdir.name() + "/sample.file" );
     QVERIFY(newfile.exists());
     QVERIFY(newfile.open(QIODevice::ReadOnly));
     QCOMPARE(QString::fromUtf8( newfile.readAll() ), origcontent);
-    core->cleanup();
 }
 
 QTEST_KDEMAIN(SvnImport, GUI)
