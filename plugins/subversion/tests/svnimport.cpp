@@ -115,6 +115,24 @@ void SvnImport::testBasic()
     validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
 }
 
+void SvnImport::testImportIntoDir()
+{
+    KTempDir reposDir;
+    VcsLocation reposLoc;
+    setupLocalRepository( reposDir.name(), reposLoc );
+
+    KTempDir projectDir;
+    QString origcontent = "This is a Test";
+    setupSampleProject( projectDir.name(), origcontent );
+
+    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/" + QFileInfo( projectDir.name() ).fileName() );
+    VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
+    validatingExecJob(job);
+
+    KTempDir checkoutDir;
+    validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
+}
+
 void SvnImport::validateImport( const QString& repourl, KTempDir& checkoutdir, const QString& origcontent )
 {
     VcsLocation reposLoc;
