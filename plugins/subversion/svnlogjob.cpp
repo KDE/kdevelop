@@ -111,8 +111,8 @@ void SvnInternalLogJob::setLimit( int limit )
     m_limit = limit;
 }
 
-SvnLogJob::SvnLogJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnLogJob::SvnLogJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Log );
     m_job = new SvnInternalLogJob( this );

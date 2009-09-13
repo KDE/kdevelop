@@ -33,7 +33,7 @@ class SvnUpdateJob : public SvnJobBase
 {
     Q_OBJECT
 public:
-    SvnUpdateJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
+    SvnUpdateJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
     SvnInternalJobBase* internalJob() const;

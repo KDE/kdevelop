@@ -92,8 +92,8 @@ KUrl SvnInternalCheckoutJob::destination() const
     return m_destinationDirectory;
 }
 
-SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnCheckoutJob::SvnCheckoutJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
     m_job = new SvnInternalCheckoutJob( this );

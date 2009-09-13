@@ -92,8 +92,8 @@ void SvnInternalMoveJob::setForce( bool force )
     m_force = force;
 }
 
-SvnMoveJob::SvnMoveJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnMoveJob::SvnMoveJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Move );
     m_job = new SvnInternalMoveJob( this );

@@ -241,8 +241,8 @@ KDevelop::VcsRevision SvnInternalDiffJob::pegRevision() const
     return m_pegRevision;
 }
 
-SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalDiffJob( this );

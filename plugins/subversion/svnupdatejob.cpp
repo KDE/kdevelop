@@ -118,8 +118,8 @@ bool SvnInternalUpdateJob::recursive() const
     return m_recursive;
 }
 
-SvnUpdateJob::SvnUpdateJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnUpdateJob::SvnUpdateJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Verbose )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalUpdateJob( this );

@@ -89,8 +89,8 @@ KUrl SvnInternalInfoJob::location() const
     return m_location;
 }
 
-SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity ), m_provideInfo( SvnInfoJob::AllInfo )
+SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
 {
     setType( KDevelop::VcsJob::Add );
     m_job = new SvnInternalInfoJob( this );

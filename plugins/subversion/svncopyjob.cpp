@@ -80,8 +80,8 @@ KUrl SvnInternalCopyJob::sourceLocation() const
     return m_sourceLocation;
 }
 
-SvnCopyJob::SvnCopyJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnCopyJob::SvnCopyJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Copy );
     m_job = new SvnInternalCopyJob( this );

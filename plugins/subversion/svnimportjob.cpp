@@ -89,8 +89,8 @@ QString SvnImportInternalJob::message() const
     return m_message;
 }
 
-SvnImportJob::SvnImportJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity )
-    : SvnJobBase( parent, verbosity )
+SvnImportJob::SvnImportJob( KDevSvnPlugin* parent )
+    : SvnJobBase( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Import );
     m_job = new SvnImportInternalJob( this );

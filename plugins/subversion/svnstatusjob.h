@@ -33,7 +33,7 @@ class SvnStatusJob : public SvnJobBase
     Q_OBJECT
 public:
 
-    explicit SvnStatusJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
+    explicit SvnStatusJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
 

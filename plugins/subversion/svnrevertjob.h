@@ -33,7 +33,7 @@ class SvnRevertJob : public SvnJobBase
 {
     Q_OBJECT
 public:
-    SvnRevertJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
+    SvnRevertJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
     SvnInternalJobBase* internalJob() const;

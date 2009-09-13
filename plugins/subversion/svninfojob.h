@@ -72,7 +72,7 @@ public:
         RevisionOnly,
         RepoUrlOnly
     };
-    SvnInfoJob( KDevSvnPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
+    SvnInfoJob( KDevSvnPlugin* parent );
     QVariant fetchResults();
     void start();
     SvnInternalJobBase* internalJob() const;
