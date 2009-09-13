@@ -87,10 +87,16 @@ DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent
 
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 {
-    if (!core()->uiController())
-        delete d->m_factory; // When there is a GUI, it will probably owned by UIController
+    delete d->m_factory;
     delete d;
 }
+
+
+void DistributedVersionControlPlugin::unload()
+{
+    core()->uiController()->removeToolView(d->m_factory);
+}
+
 
 // Begin:  KDevelop::IBasicVersionControl
 
