@@ -345,6 +345,7 @@ CMakeProjectVisitor::VisitorState CMakeProjectVisitor::stackTop() const
 
 void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sources, Target::Type t)
 {
+    kDebug(9042) << "Defining target" << id;
     if (m_targetForId.contains(id))
         kDebug(9032) << "warning! there already was a target called" << id;
 
@@ -1422,21 +1423,20 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     switch(filecomp->type())
     {
         case GetFilenameComponentAst::PATH:
-            kDebug() << "aaaaa" << fi.path() << fi.canonicalFilePath() << fi.canonicalPath();
             val=fi.canonicalPath();
             break;
         case GetFilenameComponentAst::ABSOLUTE:
             val=fi.absoluteFilePath();
             break;
-        case GetFilenameComponentAst::NAME: {
+        case GetFilenameComponentAst::NAME:
             val=fi.fileName();
-        } break;
-        case GetFilenameComponentAst::EXT: {
+            break;
+        case GetFilenameComponentAst::EXT:
             val=fi.suffix();
-        } break;
-        case GetFilenameComponentAst::NAME_WE: {
+            break;
+        case GetFilenameComponentAst::NAME_WE:
             val=fi.fileName().left(fi.fileName().length()-fi.suffix().length()-1);
-        } break;
+            break;
         case GetFilenameComponentAst::PROGRAM:
             kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
             break;
