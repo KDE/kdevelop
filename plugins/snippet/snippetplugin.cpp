@@ -28,6 +28,9 @@
 #include <interfaces/isession.h>
 #include "snippetstore.h"
 
+#include "snippet.h"
+#include "snippetcompletionitem.h"
+
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
 K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
 
@@ -79,15 +82,19 @@ void SnippetPlugin::unload()
     core()->uiController()->removeToolView(m_factory);
 }
 
-void SnippetPlugin::insertText(const QString& snippet)
+void SnippetPlugin::insertSnippet(Snippet* snippet)
 {
-    kDebug(9500) << "Insert Snippet:" << snippet ;
+    kDebug(9500) << "Insert Snippet:" << snippet->text() << snippet->getSnippetPlainText();
 
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     if (!doc) return;
     if (doc->isTextDocument()) {
-        KTextEditor::Cursor pos = doc->cursorPosition();
-        doc->textDocument()->insertText(pos, snippet);
+        SnippetCompletionItem item(snippet->text(), snippet->getSnippetPlainText());
+        KTextEditor::Range range = doc->textSelection();
+        if ( !range.isValid() ) {
+            range = KTextEditor::Range(doc->cursorPosition(), doc->cursorPosition());
+        }
+        item.execute(doc->textDocument(), range);
     }
 }
 

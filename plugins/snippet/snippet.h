@@ -17,8 +17,6 @@
 #include <QStringList>
 #include <QStandardItem>
 
-#include "snippetvariablemodel.h"
-
 class SnippetRepository;
 
 /**
@@ -49,20 +47,12 @@ public:
     QStringList& getKeywordList() { return keywords_; }
 
     /**
-     * @attention This method only returns the snippet's plain text; If you would
-     *            like to get variables substituted which real values call
-     *            interpretSnippet() instead.
+     * @attention This method returns the snippet's plain text; If you would
+     *            like to get variables marked, create a snippet completion
+     *            item and execute it.
      * @return The snippet's plain text
      */
     const QString getSnippetPlainText() { return snippetText_; }
-
-    /**
-     * Returns the snippet's text. If the snippet conatins variables, a dialog will
-     * be opened in which the user can input the substituion values.
-     * @return Returns the substituted snippet text or an empty QString if the user
-     *         canceled the substitution dialog
-     */
-    const QString interpretSnippet();
 
     /**
      * Call to change the snippet's text
@@ -104,7 +94,6 @@ private:
      * private members.
      */
     void setRawData(const QString& data);
-    int initVariableModel(SnippetVariableModel& model);
     void handleMetaData(QStringList& metadata);
 
     SnippetRepository* repo_;

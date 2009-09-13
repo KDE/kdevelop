@@ -7,8 +7,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9521 )
 set(kdevsnippet_PART_SRCS
     snippetplugin.cpp
     snippetview.cpp
-    snippetvariablesubst.cpp
-    snippetvariablemodel.cpp
     snippetstore.cpp
     snippetrepository.cpp
     snippetfilterproxymodel.cpp
@@ -21,7 +19,6 @@ set(kdevsnippet_PART_SRCS
 )
 set(kdevsnippet_PART_UI
     snippetview.ui
-    snippetvariablesubst.ui
     editsnippet.ui
     addrepository.ui
 )

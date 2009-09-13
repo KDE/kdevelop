@@ -28,7 +28,6 @@
 #include "moverepository.h"
 #include <KMessageBox>
 
-
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
  : QWidget(parent), Ui::SnippetViewBase(), plugin_(plugin)
 {
@@ -99,10 +98,7 @@ void SnippetView::slotSnippetClicked (const QModelIndex & index)
     if (!snippet)
         return;
 
-    QString text = snippet->interpretSnippet();
-
-    if (!text.isEmpty())
-        plugin_->insertText( text );
+    plugin_->insertSnippet( snippet );
 }
 
 void SnippetView::contextMenu (const QPoint& pos)

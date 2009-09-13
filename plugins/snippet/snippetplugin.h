@@ -27,6 +27,8 @@ namespace KParts
 class Part;
 }
 
+class Snippet;
+
 /**
  * This is the main class of KDevelop's snippet plugin.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
@@ -44,7 +46,7 @@ public:
      * If the current active view is not inherited from KTextEditor::View
      * nothing will happen.
      */
-    void insertText(const QString& snippet);
+    void insertSnippet(Snippet* snippet);
 
     // KDevelop::IPlugin methods
     virtual void unload();
