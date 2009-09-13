@@ -26,8 +26,6 @@
 
 #include <language/codecompletion/codecompletionitem.h>
 
-class QWidget;
-
 class SnippetCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
@@ -40,7 +38,6 @@ public:
 private:
     QString m_name;
     QString m_snippet;
-    mutable QWidget *m_expandingWidget;
 };
 
 #endif // SNIPPETCOMPLETIONITEM_H

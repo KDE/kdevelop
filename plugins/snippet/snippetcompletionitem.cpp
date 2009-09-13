@@ -31,15 +31,12 @@
 #include "selectionjumper.h"
 
 SnippetCompletionItem::SnippetCompletionItem( const QString& name, const QString& snippet )
-    : CompletionTreeItem(), m_name(name), m_snippet(snippet), m_expandingWidget(0)
+    : CompletionTreeItem(), m_name(name), m_snippet(snippet)
 {
 }
 
 SnippetCompletionItem::~SnippetCompletionItem()
 {
-    if ( m_expandingWidget ) {
-        delete m_expandingWidget;
-    }
 }
 
 QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model ) const
@@ -60,19 +57,16 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
         return QVariant(true);
     case KDevelop::CodeCompletionModel::ExpandingWidget:
         {
-            if ( !m_expandingWidget ) {
-                QTextEdit *textEdit = new QTextEdit();
-                ///TODO: somehow make it possible to scroll like in other expanding widgets
-                // don't make it too large, only show a few lines
-                textEdit->resize(textEdit->width(), 100);
-                textEdit->setPlainText(m_snippet);
-                textEdit->setReadOnly(true);
-                textEdit->setLineWrapMode(QTextEdit::NoWrap);
-                m_expandingWidget = textEdit;
-            }
+        QTextEdit *textEdit = new QTextEdit();
+        ///TODO: somehow make it possible to scroll like in other expanding widgets
+        // don't make it too large, only show a few lines
+        textEdit->resize(textEdit->width(), 100);
+        textEdit->setPlainText(m_snippet);
+        textEdit->setReadOnly(true);
+        textEdit->setLineWrapMode(QTextEdit::NoWrap);
 
         QVariant v;
-        v.setValue<QWidget*>(m_expandingWidget);
+        v.setValue<QWidget*>(textEdit);
         return v;
         }
     }
