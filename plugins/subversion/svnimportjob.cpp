@@ -104,13 +104,13 @@ QVariant SvnImportJob::fetchResults()
 
 void SvnImportJob::start()
 {
-    if( m_job->isValid() )
+    if( !m_job->isValid() )
     {
         internalJobFailed( m_job );
         setErrorText( i18n( "Not enough information to import" ) );
     }else
     {
-        kDebug(9510) << "importing:" << m_job->source();
+        kDebug() << "importing:" << m_job->source();
         ThreadWeaver::Weaver::instance()->enqueue( m_job );
     }
 }
