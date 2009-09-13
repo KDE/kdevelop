@@ -37,6 +37,7 @@ private slots:
     void cleanupTestCase();
     void testBasic();
     void testImportIntoDir();
+    void testImportWithMissingDirs();
 private:
     void validateImport( const QString& repo, KTempDir& checkout, const QString& origcontent );
     KDevelop::TestCore* core;

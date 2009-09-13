@@ -49,7 +49,6 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
         kDebug() << j->errorString();
         // On error, wait for key in order to allow manual state inspection
     }
-
     QCOMPARE(j->status(), status);
 }
 
@@ -109,6 +108,25 @@ void SvnImport::testBasic()
     setupSampleProject( projectDir.name(), origcontent );
 
     VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
+    validatingExecJob(job);
+
+    KTempDir checkoutDir;
+    validateImport( reposLoc.repositoryServer(), checkoutDir, origcontent );
+}
+
+void SvnImport::testImportWithMissingDirs()
+{
+    KTempDir reposDir;
+    reposDir.setAutoRemove( false );
+    VcsLocation reposLoc;
+    setupLocalRepository( reposDir.name(), reposLoc );
+
+    KTempDir projectDir;
+    QString origcontent = "This is a Test";
+    setupSampleProject( projectDir.name(), origcontent );
+
+    reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/foobar/" + QDir( projectDir.name() ).dirName() );
+    job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
     KTempDir checkoutDir;
