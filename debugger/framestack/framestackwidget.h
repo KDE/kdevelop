@@ -53,7 +53,8 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
         void setThreadShown(const QModelIndex& idx);
         void checkFetchMoreFrames();
         void currentThreadChanged(int);
-        void openFile(const QModelIndex& idx);
+        void currentFrameChanged(int);
+        void frameClicked(const QModelIndex& idx);
 
     private:
         IDebugSession *m_session;

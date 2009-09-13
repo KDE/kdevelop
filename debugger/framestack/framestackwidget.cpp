@@ -75,7 +75,8 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     setStretchFactor(1, 3);
     connect(m_frames->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(checkFetchMoreFrames()));
     connect(m_threads, SIGNAL(clicked(QModelIndex)), this, SLOT(setThreadShown(QModelIndex)));
-    connect(m_frames, SIGNAL(clicked(QModelIndex)), SLOT(openFile(QModelIndex)));
+    connect(m_frames, SIGNAL(clicked(QModelIndex)), 
+            SLOT(frameClicked(QModelIndex)));
 }
 
 FramestackWidget::~FramestackWidget() {}
@@ -93,6 +94,9 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
         connect(session->frameStackModel(), SIGNAL(currentThreadChanged(int)),
                 SLOT(currentThreadChanged(int)));
         currentThreadChanged(session->frameStackModel()->currentThread());
+        connect(session->frameStackModel(), SIGNAL(currentFrameChanged(int)),
+                SLOT(currentFrameChanged(int)));
+        currentFrameChanged(session->frameStackModel()->currentFrame());
     }
 
     if (isVisible()) {
@@ -148,12 +152,26 @@ void KDevelop::FramestackWidget::currentThreadChanged(int thread)
     }
 }
 
-void FramestackWidget::openFile(const QModelIndex& idx)
+void KDevelop::FramestackWidget::currentFrameChanged(int frame)
+{
+    if (frame != -1) {
+        IFrameStackModel* model = m_session->frameStackModel();
+        QModelIndex idx = model->currentFrameIndex();
+        m_frames->selectionModel()->select(
+            idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    } else {
+        m_frames->selectionModel()->clear();
+    }
+}
+
+void FramestackWidget::frameClicked(const QModelIndex& idx)
 {
     IFrameStackModel::FrameItem f = m_session->frameStackModel()->frame(idx);
     /* If line is -1, then it's not a source file at all.  */
     if (f.line != -1)
         ICore::self()->documentController()->openDocument(f.file, KTextEditor::Cursor(f.line, 0));
+
+    m_session->frameStackModel()->setCurrentFrame(f.nr);
 }
 
 }

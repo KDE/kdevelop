@@ -34,7 +34,7 @@
 namespace KDevelop {
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
-    : IFrameStackModel(session), m_currentThread(-1)
+: IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1)
 {
    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
            SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
@@ -87,6 +87,11 @@ void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
     beginInsertRows(threadIndex, 0, frames.count()-1);
     m_frames[threadNumber] = frames;
     endInsertRows();
+
+    // FIXME: Ugly hack. Apparently, when rows are added, the selection
+    // in the view is cleared. Emit this so that some frame is still
+    // selected.
+    emit currentFrameChanged(m_currentFrame);
 }
 
 void FrameStackModel::insertFrames(int threadNumber, const QList<FrameItem> &frames)
@@ -219,9 +224,11 @@ void FrameStackModel::setCurrentThread(int threadNumber)
         // and therefore frames could not have changed.
         fetchFrames(threadNumber, 0, 20);
     }
-    bool changed = (threadNumber != m_currentThread);
+    bool changed = (threadNumber != m_currentThread) || (m_currentFrame != 0);
     m_currentThread = threadNumber;
+    m_currentFrame = 0;
     emit currentThreadChanged(threadNumber);
+    emit currentFrameChanged(0);
     if (changed)
         session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 }
@@ -250,6 +257,27 @@ QModelIndex FrameStackModel::currentThreadIndex() const
         ++i;
     }
     return QModelIndex();
+}
+
+int FrameStackModel::currentFrame() const
+{
+    return m_currentFrame;
+}
+
+QModelIndex FrameStackModel::currentFrameIndex() const
+{
+    QModelIndex idx = currentThreadIndex();
+    return idx.child(m_currentFrame, 0);
+}
+
+void FrameStackModel::setCurrentFrame(int frame)
+{
+    if (frame != m_currentFrame)
+    {
+        m_currentFrame = frame;
+        session()->raiseEvent(IDebugSession::thread_or_frame_changed);
+        emit currentFrameChanged(frame);
+    }
 }
 
 void FrameStackModel::update()

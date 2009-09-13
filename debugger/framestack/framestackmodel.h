@@ -73,6 +73,10 @@ public:
     void setCurrentThread(const QModelIndex &index);
     int currentThread() const;
     QModelIndex currentThreadIndex() const;
+
+    int currentFrame() const;
+    QModelIndex currentFrameIndex() const;
+    void setCurrentFrame(int frame);
     
     void fetchMoreFrames();
 
@@ -83,6 +87,7 @@ private:
     QModelIndex indexForThreadNumber(int threadNumber);
 
     int m_currentThread;
+    int m_currentFrame;
 
     QList<ThreadItem> m_threads;
     QHash<int, QList<FrameItem> > m_frames;
