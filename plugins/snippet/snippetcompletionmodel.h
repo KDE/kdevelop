@@ -28,7 +28,7 @@ namespace KTextEditor
 class Document;
 }
 
-class Snippet;
+class SnippetCompletionItem;
 
 class SnippetCompletionModel : public KTextEditor::CodeCompletionModel
 {
@@ -41,7 +41,7 @@ public:
     void executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const;
 private:
     void initData();
-    QList<Snippet*> m_snippets;
+    QList<SnippetCompletionItem*> m_snippets;
 };
 
 #endif

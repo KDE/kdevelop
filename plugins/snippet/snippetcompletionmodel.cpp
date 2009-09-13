@@ -20,9 +20,10 @@
 
 #include "snippetcompletionmodel.h"
 #include <ktexteditor/document.h>
-#include "snippet.h"
 #include "snippetstore.h"
 #include "snippetrepository.h"
+#include "snippet.h"
+#include "snippetcompletionitem.h"
 
 SnippetCompletionModel::SnippetCompletionModel()
     : KTextEditor::CodeCompletionModel(0)
@@ -37,19 +38,16 @@ SnippetCompletionModel::~SnippetCompletionModel()
 
 QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
 {
-    if( !idx.isValid() || role != Qt::DisplayRole || idx.row() < 0 || idx.row() >= rowCount()
-        || idx.column() != KTextEditor::CodeCompletionModel::Name )
+    if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() ) {
         return QVariant();
-    return m_snippets.at( idx.row() )->text();
+    } else {
+        return m_snippets.at( idx.row() )->data(idx, role, 0);
+    }
 }
 
 void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const
 {
-    Snippet* snippet = m_snippets.at( row );
-    // copy range so it does not get deleted when the completion list loses focus
-    KTextEditor::Range range(w);
-    //Instead of the name of the snippet we want its text
-    doc->replaceText( range, snippet->interpretSnippet() );
+    m_snippets.at( row )->execute(doc, w);
 }
 
 void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType)
@@ -69,7 +67,9 @@ void SnippetCompletionModel::initData()
         SnippetRepository* repo = dynamic_cast<SnippetRepository*>( store->item( i, 0 ) );
         if( repo )
         {
-            m_snippets += repo->getSnippets();
+            foreach (Snippet* snippet, repo->getSnippets()) {
+                m_snippets << new SnippetCompletionItem(snippet->text(), snippet->getSnippetPlainText());
+            }
         }
     }
     reset();
