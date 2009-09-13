@@ -26,6 +26,7 @@
 #include "editsnippet.h"
 #include "snippetfilterproxymodel.h"
 #include "moverepository.h"
+#include <KMessageBox>
 
 
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
@@ -260,7 +261,13 @@ void SnippetView::slotRemoveRepo()
     if (!repo)
         return;
 
-    repo->removeDirectory();
+    int ans = KMessageBox::warningContinueCancel(
+        QApplication::activeWindow(),
+        i18n("Do you really wand to delete the repository \"%1\" with all its sub-repositories and snippets?", repo->text())
+    );
+    if ( ans == KMessageBox::Continue ) {
+        repo->removeDirectory();
+    }
 }
 
 void SnippetView::slotCreateSubRepo()
