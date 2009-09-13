@@ -295,13 +295,11 @@ KDevelop::VcsJob* KDevSvnPlugin::resolve(const KUrl::List& /*localLocations*/,
     return 0;
 }
 
-KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository,
-                                        KDevelop::ICentralizedVersionControl::HandleMissingParts)
+KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
     SvnImportJob* job = new SvnImportJob(this);
     job->setMapping(sourceDirectory, destinationRepository);
     job->setMessage(commitMessage);
-    //job->setCreateMissingDirectories( option );
     return job;
 }
 

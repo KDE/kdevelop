@@ -118,9 +118,7 @@ public:
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl
-    KDevelop::VcsJob* import(const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository,
-                             KDevelop::ICentralizedVersionControl::HandleMissingParts =
-                             KDevelop::ICentralizedVersionControl::FailOnMissing);
+    KDevelop::VcsJob* import(const QString & commitMessage, const KUrl & sourceDirectory, const KDevelop::VcsLocation & destinationRepository);
 
     KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const KUrl & destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 
