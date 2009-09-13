@@ -88,7 +88,13 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
     
     m_threads->setModel(session ? session->frameStackModel() : 0);
     m_frames->setModel(session ? session->frameStackModel() : 0);
-    
+
+    if (session) {
+        connect(session->frameStackModel(), SIGNAL(activeThreadChanged(int)),
+                SLOT(activeThreadChanged(int)));
+        activeThreadChanged(session->frameStackModel()->activeThread());
+    }
+
     if (isVisible()) {
         showEvent(0);
     }
@@ -102,19 +108,10 @@ void KDevelop::FramestackWidget::hideEvent(QHideEvent* e)
 void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 {
     QWidget::showEvent(e);
-
-    if (m_session && m_session->state() != KDevelop::IDebugSession::EndedState) 
-    {
-        connect(m_session->frameStackModel(), 
-                SIGNAL(rowsInserted(QModelIndex, int, int)),
-                SLOT(assignSomeThread()));
-        assignSomeThread();
-    }
 }
 
 void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& idx)
 {
-    m_frames->setRootIndex(idx);
     m_session->frameStackModel()->setActiveThread(idx);
 }
 
@@ -130,18 +127,24 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
     }
 }
 
-void KDevelop::FramestackWidget::assignSomeThread()
+void KDevelop::FramestackWidget::activeThreadChanged(int thread)
 {
-    IFrameStackModel* model = m_session->frameStackModel();
-    if (model->activeThread() && m_threads->selectionModel()->selectedRows().isEmpty()) {
+    if (thread != -1) {
+        IFrameStackModel* model = m_session->frameStackModel();
         QModelIndex idx = model->activeThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-        setThreadShown(idx);
-    }
-    if (model->rowCount() <= 1) {
-        m_threadsWidget->hide();
+        m_frames->setModel(m_session->frameStackModel());
+        m_frames->setRootIndex(idx);
+
+        if (model->rowCount() <= 1) {
+            m_threadsWidget->hide();
+        } else {
+            m_threadsWidget->show();
+        }
     } else {
-        m_threadsWidget->show();
+        m_threadsWidget->hide();
+        m_threads->selectionModel()->clear();
+        m_frames->setModel(0);        
     }
 }
 

@@ -34,6 +34,16 @@ namespace KDevelop {
 
 class DebugController;
 
+/** FIXME: This class needs rework, since at present it is not true model.
+    Client cannot just obtain frames by grabbing a thread and listing
+    children. It should first setActiveThread beforehand, and it is the
+    method that will actually fetch threads. Therefore, if this model
+    is submitted to plain QTreeView, it won't work at all.
+
+    Ideally, this should hold current thread and current frame numbers,
+    and only fetch the list of threads, and list of frames inside thread
+    when asked for by the view.
+*/
 class KDEVPLATFORMDEBUGGER_EXPORT FrameStackModel : public IFrameStackModel
 {
     Q_OBJECT
@@ -44,7 +54,6 @@ public:
     struct ThreadItem {
         int nr;
         QString name;
-        bool isCurrent; ///< if the thread is the current one and selected by default
     };
     void setThreads(const QList<ThreadItem> &threads);
     void setFrames(int threadNumber, QList<FrameItem> frames);
@@ -60,7 +69,6 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    void actOnStop(int threadNumber);
     void setActiveThread(int threadNumber);
     void setActiveThread(const QModelIndex &index);
     int activeThread() const;
@@ -68,10 +76,9 @@ public:
     
     void fetchMoreFrames();
 
-private Q_SLOTS:
-    void stateChanged(KDevelop::IDebugSession::DebuggerState state);    
-
 private:
+    virtual void handleEvent(IDebugSession::event_t event);
+
     void update();
     QModelIndex indexForThreadNumber(int threadNumber);
 

@@ -54,19 +54,6 @@ void FrameStackModel::setThreads(const QList<ThreadItem> &threads)
         endRemoveRows();
     }
 
-    bool activeThreadIsValid = false;
-    int currentThreadNr = -1;
-    foreach (const ThreadItem &i, threads) {
-        if (m_activeThread == i.nr) {
-            activeThreadIsValid = true;
-            break;
-        }
-        if (i.isCurrent) currentThreadNr = i.nr;
-    }
-    if (!activeThreadIsValid) {
-        setActiveThread(currentThreadNr);
-    }
-
     if (!threads.isEmpty()) {
         beginInsertRows(QModelIndex(), 0, threads.count()-1);
         m_threads = threads;
@@ -226,9 +213,17 @@ void FrameStackModel::setActiveThread(int threadNumber)
 {
     kDebug() << threadNumber;
     if (m_activeThread != threadNumber && threadNumber != -1) {
+        // FIXME: this logic means that if we switch to thread 3 and
+        // then to thread 2 and then to thread 3, we'll request frames
+        // for thread 3 again, even if the program was not run in between
+        // and therefore frames could not have changed.
         fetchFrames(threadNumber, 0, 20);
     }
+    bool changed = (threadNumber != m_activeThread);
     m_activeThread = threadNumber;
+    emit activeThreadChanged(threadNumber);
+    if (changed)
+        session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 }
 
 void FrameStackModel::setActiveThread(const QModelIndex& index)
@@ -265,21 +260,21 @@ void FrameStackModel::update()
     }
 }
 
-void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
+void FrameStackModel::handleEvent(IDebugSession::event_t event)
 {
-    kDebug() << state;
-
-    if (state == IDebugSession::EndedState && !ICore::self()->debugController()->currentSession()) {
-        setThreads(QList<FrameStackModel::ThreadItem>());
-    }
-
-    //ignore if not current session
-    if (sender() != ICore::self()->debugController()->currentSession()) return;
-
-    if (state == IDebugSession::PausedState 
-        || state == IDebugSession::StoppedState) 
+    switch (event)
     {
+    case IDebugSession::debugger_exited:
+    case IDebugSession::program_exited:
+        setThreads(QList<FrameStackModel::ThreadItem>());
+        break;
+
+    case IDebugSession::program_state_changed:
         update();
+        break;
+
+    default:
+        break;
     }
 }
 
@@ -292,12 +287,6 @@ void FrameStackModel::fetchMoreFrames()
                     m_frames[m_activeThread].count(),
                     m_frames[m_activeThread].count()-1+20);
     }
-}
-
-void FrameStackModel::actOnStop(int threadNumber)
-{
-    if (threadNumber != -1)
-        setActiveThread(threadNumber);
 }
 
 }

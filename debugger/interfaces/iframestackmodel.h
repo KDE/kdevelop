@@ -32,6 +32,7 @@ namespace KDevelop {
     
     class KDEVPLATFORMDEBUGGER_EXPORT IFrameStackModel : public QAbstractItemModel
     {
+        Q_OBJECT    
     public:
         
         /** Stack frame */
@@ -48,17 +49,6 @@ namespace KDevelop {
         : QAbstractItemModel(session), m_session(session) {}
         
         IDebugSession* session() const { return m_session; }
-
-        /** Called whenever a stop is detected. threadNumber is
-            the thread that has directly caused the stop, via
-            breakpoint or other event. It may be -1 if no
-            specific thread is involved.
-
-            Implementation can use this to make the stop thread
-            active if appropriate.
-
-            This method may not be called by clients.  */
-        virtual void actOnStop(int threadNumber) = 0;
         
         virtual void setActiveThread(int threadNumber) = 0;
         virtual void setActiveThread(const QModelIndex &index) = 0;
@@ -69,12 +59,19 @@ namespace KDevelop {
         
         virtual void fetchThreads() = 0;
         virtual void fetchFrames(int threadNumber, int from, int to) = 0;
-        
+
+    Q_SIGNALS:                                                                        
+        void activeThreadChanged(int thread);
+
     public Q_SLOTS:
         // FIXME: why is this slot?
         virtual void fetchMoreFrames() = 0;
         
     private:
+
+        virtual void handleEvent(IDebugSession::event_t event) = 0;
+        friend class IDebugSession;
+
         IDebugSession *m_session;
     };
 }

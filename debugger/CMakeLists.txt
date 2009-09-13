@@ -5,6 +5,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9531 )
 
 set( kdevplatformdebugger_LIB_SRCS
     interfaces/idebugsession.cpp
+    interfaces/iframestackmodel.cpp
     interfaces/ibreakpointcontroller.cpp
     interfaces/ivariablecontroller.cpp
     util/treeitem.cpp

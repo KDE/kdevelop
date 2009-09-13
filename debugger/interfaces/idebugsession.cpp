@@ -19,6 +19,8 @@
  ***************************************************************************/
 
 #include "idebugsession.h"
+#include "iframestackmodel.h"
+#include "ivariablecontroller.h"
 
 #include <QApplication>
 #include <QWidget>
@@ -66,6 +68,15 @@ IFrameStackModel* IDebugSession::frameStackModel() const
     }
     return m_frameStackModel;
 }
+
+void IDebugSession::raiseEvent(event_t e)
+{
+    m_frameStackModel->handleEvent(e);
+    m_variableController->handleEvent(e);
+    // FIXME: consider if we actually need signals
+    emit event(e);
+}
+
 
 }
 

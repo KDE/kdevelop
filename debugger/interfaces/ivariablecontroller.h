@@ -74,12 +74,11 @@ protected:
      **/
     VariableCollection *variableCollection();
 
-    virtual void stateChanged(KDevelop::IDebugSession::DebuggerState state);
-
-private Q_SLOTS:
-    void xStateChanged(KDevelop::IDebugSession::DebuggerState state);
+    virtual void handleEvent(IDebugSession::event_t event);
+    friend class IDebugSession;
 
 private:
+
     QFlags<UpdateType> m_autoUpdate;
 };
 
