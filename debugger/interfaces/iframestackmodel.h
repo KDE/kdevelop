@@ -50,10 +50,10 @@ namespace KDevelop {
         
         IDebugSession* session() const { return m_session; }
         
-        virtual void setActiveThread(int threadNumber) = 0;
-        virtual void setActiveThread(const QModelIndex &index) = 0;
-        virtual int activeThread() const = 0;
-        virtual QModelIndex activeThreadIndex() const = 0;
+        virtual void setCurrentThread(int threadNumber) = 0;
+        virtual void setCurrentThread(const QModelIndex &index) = 0;
+        virtual int currentThread() const = 0;
+        virtual QModelIndex currentThreadIndex() const = 0;
         
         virtual FrameItem frame(const QModelIndex &index) = 0;
         
@@ -61,7 +61,7 @@ namespace KDevelop {
         virtual void fetchFrames(int threadNumber, int from, int to) = 0;
 
     Q_SIGNALS:                                                                        
-        void activeThreadChanged(int thread);
+        void currentThreadChanged(int thread);
 
     public Q_SLOTS:
         // FIXME: why is this slot?

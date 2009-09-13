@@ -36,7 +36,7 @@ class DebugController;
 
 /** FIXME: This class needs rework, since at present it is not true model.
     Client cannot just obtain frames by grabbing a thread and listing
-    children. It should first setActiveThread beforehand, and it is the
+    children. It should first setCurrentThread beforehand, and it is the
     method that will actually fetch threads. Therefore, if this model
     is submitted to plain QTreeView, it won't work at all.
 
@@ -69,10 +69,10 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
-    void setActiveThread(int threadNumber);
-    void setActiveThread(const QModelIndex &index);
-    int activeThread() const;
-    QModelIndex activeThreadIndex() const;
+    void setCurrentThread(int threadNumber);
+    void setCurrentThread(const QModelIndex &index);
+    int currentThread() const;
+    QModelIndex currentThreadIndex() const;
     
     void fetchMoreFrames();
 
@@ -82,7 +82,7 @@ private:
     void update();
     QModelIndex indexForThreadNumber(int threadNumber);
 
-    int m_activeThread;
+    int m_currentThread;
 
     QList<ThreadItem> m_threads;
     QHash<int, QList<FrameItem> > m_frames;

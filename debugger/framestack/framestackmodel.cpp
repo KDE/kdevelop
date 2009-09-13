@@ -34,7 +34,7 @@
 namespace KDevelop {
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
-    : IFrameStackModel(session), m_activeThread(-1)
+    : IFrameStackModel(session), m_currentThread(-1)
 {
    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
            SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
@@ -209,42 +209,42 @@ QVariant FrameStackModel::headerData(int section, Qt::Orientation orientation, i
     return QAbstractItemModel::headerData(section, orientation, role);
 }
 
-void FrameStackModel::setActiveThread(int threadNumber)
+void FrameStackModel::setCurrentThread(int threadNumber)
 {
     kDebug() << threadNumber;
-    if (m_activeThread != threadNumber && threadNumber != -1) {
+    if (m_currentThread != threadNumber && threadNumber != -1) {
         // FIXME: this logic means that if we switch to thread 3 and
         // then to thread 2 and then to thread 3, we'll request frames
         // for thread 3 again, even if the program was not run in between
         // and therefore frames could not have changed.
         fetchFrames(threadNumber, 0, 20);
     }
-    bool changed = (threadNumber != m_activeThread);
-    m_activeThread = threadNumber;
-    emit activeThreadChanged(threadNumber);
+    bool changed = (threadNumber != m_currentThread);
+    m_currentThread = threadNumber;
+    emit currentThreadChanged(threadNumber);
     if (changed)
         session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 }
 
-void FrameStackModel::setActiveThread(const QModelIndex& index)
+void FrameStackModel::setCurrentThread(const QModelIndex& index)
 {
     Q_ASSERT(index.isValid());
     Q_ASSERT(!index.internalId());
     Q_ASSERT(index.column() == 0);
-    setActiveThread(m_threads[index.row()].nr);
+    setCurrentThread(m_threads[index.row()].nr);
 }
 
 
-int FrameStackModel::activeThread() const
+int FrameStackModel::currentThread() const
 {
-    return m_activeThread;
+    return m_currentThread;
 }
 
-QModelIndex FrameStackModel::activeThreadIndex() const
+QModelIndex FrameStackModel::currentThreadIndex() const
 {
     int i = 0;
     foreach (const ThreadItem &t, m_threads) {
-        if (t.nr == activeThread()) {
+        if (t.nr == currentThread()) {
             return index(i, 0);
         }
         ++i;
@@ -255,8 +255,8 @@ QModelIndex FrameStackModel::activeThreadIndex() const
 void FrameStackModel::update()
 {
     fetchThreads();
-    if (m_activeThread != -1) {
-        fetchFrames(m_activeThread, 0, 20);
+    if (m_currentThread != -1) {
+        fetchFrames(m_currentThread, 0, 20);
     }
 }
 
@@ -282,10 +282,10 @@ void FrameStackModel::handleEvent(IDebugSession::event_t event)
 // an arbitrary thread, without making it current.
 void FrameStackModel::fetchMoreFrames()
 {    
-    if (m_activeThread != -1 && m_hasMoreFrames[m_activeThread]) {
-        fetchFrames(m_activeThread,
-                    m_frames[m_activeThread].count(),
-                    m_frames[m_activeThread].count()-1+20);
+    if (m_currentThread != -1 && m_hasMoreFrames[m_currentThread]) {
+        fetchFrames(m_currentThread,
+                    m_frames[m_currentThread].count(),
+                    m_frames[m_currentThread].count()-1+20);
     }
 }
 

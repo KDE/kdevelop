@@ -90,9 +90,9 @@ void FramestackWidget::currentSessionChanged(KDevelop::IDebugSession* session)
     m_frames->setModel(session ? session->frameStackModel() : 0);
 
     if (session) {
-        connect(session->frameStackModel(), SIGNAL(activeThreadChanged(int)),
-                SLOT(activeThreadChanged(int)));
-        activeThreadChanged(session->frameStackModel()->activeThread());
+        connect(session->frameStackModel(), SIGNAL(currentThreadChanged(int)),
+                SLOT(currentThreadChanged(int)));
+        currentThreadChanged(session->frameStackModel()->currentThread());
     }
 
     if (isVisible()) {
@@ -112,7 +112,7 @@ void KDevelop::FramestackWidget::showEvent(QShowEvent* e)
 
 void KDevelop::FramestackWidget::setThreadShown(const QModelIndex& idx)
 {
-    m_session->frameStackModel()->setActiveThread(idx);
+    m_session->frameStackModel()->setCurrentThread(idx);
 }
 
 void KDevelop::FramestackWidget::checkFetchMoreFrames()
@@ -127,11 +127,11 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
     }
 }
 
-void KDevelop::FramestackWidget::activeThreadChanged(int thread)
+void KDevelop::FramestackWidget::currentThreadChanged(int thread)
 {
     if (thread != -1) {
         IFrameStackModel* model = m_session->frameStackModel();
-        QModelIndex idx = model->activeThreadIndex();
+        QModelIndex idx = model->currentThreadIndex();
         m_threads->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
         m_frames->setModel(m_session->frameStackModel());
         m_frames->setRootIndex(idx);
