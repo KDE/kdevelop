@@ -39,6 +39,7 @@ private slots:
     void itemChanged( const QModelIndex&, const QModelIndex& );
     void urlEdited();
     void validateData();
+    void nameChanged();
 private:
     inline QByteArray encodedAppName();
     inline QString pathUp(const QString& aPath);

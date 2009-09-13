@@ -43,8 +43,16 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->templateView->selectionModel(), SIGNAL( currentChanged( const QModelIndex&, const QModelIndex& ) ),
              this, SLOT( itemChanged( const QModelIndex&, const QModelIndex& ) ) );
     connect( ui->appNameEdit, SIGNAL(textEdited(const QString&)),
-             this, SLOT( validateData() ) );
+             this, SLOT( nameChanged() ) );
 }
+
+
+void ProjectSelectionPage::nameChanged()
+{
+    validateData();
+    emit locationChanged( location() );
+}
+
 
 ProjectSelectionPage::~ProjectSelectionPage()
 {
@@ -88,7 +96,7 @@ QString ProjectSelectionPage::appName()
 void ProjectSelectionPage::urlEdited()
 {
     validateData();
-    emit locationChanged( ui->locationUrl->url() );
+    emit locationChanged( location() );
 }
 
 void ProjectSelectionPage::validateData()
