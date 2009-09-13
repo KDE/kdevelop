@@ -40,6 +40,11 @@ namespace KDevelop
 class ICentralizedVersionControl : public KDevelop::IBasicVersionControl
 {
 public:
+    enum ImportErrorOption {
+        FailOnError = 0,
+        TryErrorRecovery = 1
+    };
+    
     virtual ~ICentralizedVersionControl(){}
 
     /**
@@ -76,7 +81,10 @@ public:
     /**
      * take a mapping of local to repository locations and import that into the repository
      */
-    virtual VcsJob* import(const QString & commitMessage, const KUrl & sourceDirectory, const VcsLocation & destinationRepository) = 0;
+    virtual VcsJob* import(const QString & commitMessage, const KUrl & sourceDirectory,
+                           const VcsLocation & destinationRepository,
+                           ICentralizedVersionControl::ImportErrorOption =
+                           ICentralizedVersionControl::FailOnError ) = 0;
 };
 
 }

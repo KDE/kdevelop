@@ -95,7 +95,9 @@ public:
     virtual KDevelop::VcsJob* unedit(const KUrl& localLocation);
     virtual KDevelop::VcsJob* localRevision(const KUrl& localLocation,
                                             KDevelop::VcsRevision::RevisionType);
-    virtual KDevelop::VcsJob* import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository);
+    virtual KDevelop::VcsJob* import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository,
+                                     KDevelop::ICentralizedVersionControl::HandleMissingParts =
+                                     KDevelop::ICentralizedVersionControl::FailOnMissing );
 // End:  KDevelop::ICentralizedVersionControl
 
     CvsProxy* proxy();

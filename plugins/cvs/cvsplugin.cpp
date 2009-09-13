@@ -440,7 +440,8 @@ KDevelop::VcsJob * CvsPlugin::resolve(const KUrl::List & localLocations, KDevelo
     return NULL;
 }
 
-KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository)
+KDevelop::VcsJob * CvsPlugin::import(const QString& commitMessage, const KUrl& sourceDirectory, const KDevelop::VcsLocation& destinationRepository,
+                                     KDevelop::ICentralizedVersionControl::HandleMissingParts)
 {
     if (commitMessage.isEmpty()
             || !sourceDirectory.isLocalFile()
