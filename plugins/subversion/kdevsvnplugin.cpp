@@ -319,7 +319,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
 
     bool hasVersionControlledEntries = false;
     foreach(const KUrl &url, ctxUrlList) {
-        if (isVersionControlled(url)) {
+        if (isVersionControlled(url) || isVersionControlled(url.upUrl())) {
             hasVersionControlledEntries = true;
             break;
         }

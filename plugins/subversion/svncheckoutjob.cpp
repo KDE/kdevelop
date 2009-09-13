@@ -31,6 +31,7 @@
 #include "kdevsvncpp/path.hpp"
 
 #include <vcs/vcslocation.h>
+#include <QFileInfo>
 
 SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
@@ -51,8 +52,8 @@ void SvnInternalCheckoutJob::run()
     try
     {
         bool recurse = ( recursion() == KDevelop::IBasicVersionControl::Recursive );
-        QByteArray srcba = source().repositoryServer().toUtf8();
-        QByteArray destba = destination().toLocalFile().toUtf8();
+        QByteArray srcba = KUrl( source().repositoryServer() ).url( KUrl::RemoveTrailingSlash ).toUtf8();
+        QByteArray destba = QFileInfo( destination().toLocalFile() ).canonicalFilePath().toUtf8();
         kDebug(9510) << srcba << destba << recurse;
         svn_revnum_t rev = cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
     }catch( svn::ClientException ce )
