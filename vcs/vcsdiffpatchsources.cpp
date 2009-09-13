@@ -163,6 +163,8 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
 
     emit reviewFinished(message, selection);
 
+    deleteLater();
+    
     return true;
 }
 
