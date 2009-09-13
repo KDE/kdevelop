@@ -22,12 +22,23 @@
 #include "snippetcompletionitem.h"
 
 #include <KTextEditor/Document>
+#include <KLocalizedString>
+#include <QtGui/QTextEdit>
+
+#include <language/codecompletion/codecompletionmodel.h>
 
 #include "snippet.h"
 
 SnippetCompletionItem::SnippetCompletionItem( const QString& name, const QString& snippet )
-    : CompletionTreeItem(), m_name(name), m_snippet(snippet)
+    : CompletionTreeItem(), m_name(name), m_snippet(snippet), m_expandingWidget(0)
 {
+}
+
+SnippetCompletionItem::~SnippetCompletionItem()
+{
+    if ( m_expandingWidget ) {
+        delete m_expandingWidget;
+    }
 }
 
 QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model ) const
@@ -35,11 +46,36 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
     // as long as the snippet completion model is not a kdevelop code completion model,
     // model will usually be 0. hence don't use it.
     Q_UNUSED(model);
-    if ( role == Qt::DisplayRole ) {
+
+    switch ( role ) {
+    case Qt::DisplayRole:
         if ( index.column() == KTextEditor::CodeCompletionModel::Name ) {
             return m_name;
+        } else if ( index.column() == KTextEditor::CodeCompletionModel::Prefix ) {
+            return i18n("Snippet");
+        }
+        break;
+    case KDevelop::CodeCompletionModel::IsExpandable:
+        return QVariant(true);
+    case KDevelop::CodeCompletionModel::ExpandingWidget:
+        {
+            if ( !m_expandingWidget ) {
+                QTextEdit *textEdit = new QTextEdit();
+                ///TODO: somehow make it possible to scroll like in other expanding widgets
+                // don't make it too large, only show a few lines
+                textEdit->resize(textEdit->width(), 100);
+                textEdit->setPlainText(m_snippet);
+                textEdit->setReadOnly(true);
+                textEdit->setLineWrapMode(QTextEdit::NoWrap);
+                m_expandingWidget = textEdit;
+            }
+
+        QVariant v;
+        v.setValue<QWidget*>(m_expandingWidget);
+        return v;
         }
     }
+
     return QVariant();
 }
 

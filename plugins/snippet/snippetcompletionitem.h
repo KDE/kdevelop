@@ -26,16 +26,21 @@
 
 #include <language/codecompletion/codecompletionitem.h>
 
+class QWidget;
+
 class SnippetCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
     SnippetCompletionItem(const QString& name, const QString &snippet);
+    ~SnippetCompletionItem();
+
     virtual void execute( KTextEditor::Document* document, const KTextEditor::Range& word );
     virtual QVariant data( const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model ) const;
 
 private:
     QString m_name;
     QString m_snippet;
+    mutable QWidget *m_expandingWidget;
 };
 
 #endif // SNIPPETCOMPLETIONITEM_H
