@@ -19,31 +19,17 @@ ENDIF(SUBVERSION_INCLUDE_DIRS AND SUBVERSION_LIBRARIES)
 IF (NOT WIN32)
 
     MACRO(FIND_SUB_LIB targetvar libname)
-      IF (SUBVERSION_INSTALL_PATH)
-          FIND_LIBRARY(${targetvar} ${libname}
-              PATHS
-              ${SUBVERSION_INSTALL_PATH}/lib
-          )
-      ELSE(SUBVERSION_INSTALL_PATH)
-          FIND_LIBRARY(${targetvar} ${libname} )
-      ENDIF(SUBVERSION_INSTALL_PATH)
+      FIND_LIBRARY(${targetvar} ${libname}
+          HINTS
+          ${SUBVERSION_INSTALL_PATH}/lib
+      )
     ENDMACRO(FIND_SUB_LIB)
 
-    IF (SUBVERSION_INSTALL_PATH)
-        FIND_PATH(SUBVERSION_INCLUDE_DIR svn_version.h
-            PATHS
-            ${SUBVERSION_INSTALL_PATH}/include
-            ${SUBVERSION_INSTALL_PATH}/include/subversion-1
-            /usr/include/subversion-1
-            /usr/local/include/subversion-1
-        )
-    ELSE(SUBVERSION_INSTALL_PATH)
-        FIND_PATH(SUBVERSION_INCLUDE_DIR svn_version.h
-            PATHS
-            /usr/include/subversion-1
-            /usr/local/include/subversion-1
-        )
-    ENDIF(SUBVERSION_INSTALL_PATH)
+    FIND_PATH(SUBVERSION_INCLUDE_DIR svn_version.h
+        HINTS
+        ${SUBVERSION_INSTALL_PATH}/include
+        PATH_SUFFIXES subversion-1
+    )
 
     FIND_SUB_LIB(SUBVERSION_CLIENTLIB svn_client-1)
     FIND_SUB_LIB(SUBVERSION_REPOSITORYLIB svn_repos-1)
