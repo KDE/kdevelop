@@ -110,11 +110,12 @@ private slots:
 
     void slotEditFileNameChanged();
 
+    void finishReview();
+    
 private:
     void kompareModelChanged();
 
     void showEditDialog();
-    void editPatchReadOnly();
     ///Fills the editor views from m_editingPatch
     void fillEditFromPatch();
 
@@ -126,11 +127,12 @@ private:
     QPointer<KParts::Part> m_konsolePart;
 
     bool m_reversed;
-    QStandardItemModel* m_filesModel;
 
     KUrl urlForFileModel(const Diff2::DiffModel* model);
     
     PatchReviewPlugin* m_plugin;
+    
+    QPointer<QWidget> m_customWidget;
 public slots:
     void documentActivated(KDevelop::IDocument*);
     void patchSelectionChanged(int);
@@ -173,6 +175,8 @@ public:
     
     virtual void startReview(KDevelop::IPatchSource* patch, ReviewMode mode);
     
+    void finishReview(QList<KUrl> selection);
+    
 Q_SIGNALS:
     void patchChanged();
 
@@ -181,7 +185,6 @@ public Q_SLOTS:
     void updateReview();
     
     void cancelReview();
-    void finishReview();
     void clearPatch(QObject* patch);
     void notifyPatchChanged();
     void highlightPatch();

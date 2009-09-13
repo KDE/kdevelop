@@ -15,6 +15,7 @@
 #include <KDE/KUrl>
 #include "../vcsexport.h"
 
+class KJob;
 class QStringList;
 
 namespace KDevelop
@@ -28,14 +29,25 @@ class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public KDialog
 public:
     VcsCommitDialog( IPlugin *plugin, QWidget *parent = 0 );
     virtual ~VcsCommitDialog();
-    void setCommitCandidates( const KUrl::List &list );
+    ///Sets the commit candidates, and eventually shows the dialog
+    ///Should be called as last action
+    void setCommitCandidatesAndShow( const KUrl::List &list );
     void setMessage( const QString& );
     void setRecursive( bool );
     void setOldMessages( const QStringList& );
-    KUrl::List checkedUrls() const;
     bool recursive() const;
     QString message() const;
     IPlugin* versionControlPlugin();
+    
+    ///Returns the items that are changed and should be checked in.
+    ///All other changes like adding, deleting, etc. are done in place
+    KUrl::List determineUrlsForCheckin();
+    
+private Q_SLOTS:
+    void commitDiffJobFinished(KJob* job);
+    //Connection to the patch-review plugin
+    void reviewFinished(QString message, QList<KUrl> selection);
+
 Q_SIGNALS:
     void doCommit( KDevelop::VcsCommitDialog* dlg );
     void cancelCommit( KDevelop::VcsCommitDialog* dlg );

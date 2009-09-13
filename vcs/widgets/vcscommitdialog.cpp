@@ -35,6 +35,7 @@
 #include "../vcsstatusinfo.h"
 
 #include "ui_vcscommitdialog.h"
+#include <vcsdiffpatchsources.h>
 
 namespace KDevelop
 {
@@ -52,8 +53,9 @@ public:
                     Qt::CheckState checkstate = Qt::Checked)
     {
         QStringList strings;
-        strings << "" << state << url.pathOrUrl();
+        strings << "" << state << ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
         QTreeWidgetItem *item = new QTreeWidgetItem( ui.files, strings );
+        item->setData(0, Qt::UserRole, url);
         item->setForeground(2,  foregroundColor.brush(dlg));
         item->setCheckState(0, checkstate);
     }
@@ -67,11 +69,30 @@ public:
     {
         emit dlg->cancelCommit(dlg);
     }
+    
+    QList< KUrl > selection() {
+        if(!m_selection.isEmpty())
+            return m_selection;
+        
+        QList< KUrl > ret;
+        
+        QTreeWidgetItemIterator it( ui.files, QTreeWidgetItemIterator::Checked );
+        for( ; *it; ++it ){
+            QVariant v = (*it)->data(0, Qt::UserRole);
+            Q_ASSERT(v.canConvert<KUrl>());
+            ret << v.value<KUrl>();
+        }
+        
+        return ret;
+    }
 
+    QMap<KUrl, QString> urls;
     IPlugin *plugin;
     VcsCommitDialog* dlg;
-    QHash<QString, KDevelop::VcsStatusInfo> statusInfos;
+    QHash<KUrl, KDevelop::VcsStatusInfo> statusInfos;
     Ui::VcsCommitDialog ui;
+    QString diff;
+    QList< KUrl > m_selection;
 };
 
 VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
@@ -121,7 +142,7 @@ IPlugin* VcsCommitDialog::versionControlPlugin()
     return d->plugin;
 }
 
-void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
+void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl::List &urls )
 {
     kDebug() << "Fetching status for urls:" << urls;
     KDevelop::IBasicVersionControl *vcsiface = d->plugin->extension<KDevelop::IBasicVersionControl>();
@@ -130,6 +151,10 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
         kDebug() << "oops, no vcsiface";
         return;
     }
+    
+    d->urls.clear();
+    d->diff.clear();
+    
     //DVCS uses some "hack", see DistributedVersionControlPlugin::status()
     //Thus DVCS gets statuses for all files in the repo. But project->relativeUrl() below helps us
     VcsJob *job = vcsiface->status( urls );
@@ -148,41 +173,50 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
         {
             VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
 
+            d->statusInfos.insert(info.url(), info);
+            
             QString state;
-            QString path = info.url().pathOrUrl();
-            IProject* project = ICore::self()->projectController()->findProjectForUrl( info.url() );
-            if( project )
-            {
-                path = project->relativeUrl( info.url() ).pathOrUrl();
-            }
-            d->statusInfos.insert(path, info);
+            KStatefulBrush brush(KColorScheme::View, KColorScheme::NormalText);
+            Qt::CheckState checked = Qt::Checked;
+            
             switch( info.state() )
             {
                 case VcsStatusInfo::ItemAdded:
-                    d->insertRow( i18nc("file was added to versioncontrolsystem", "Added"), path, newGreen );
+                    state = i18nc("file was added to versioncontrolsystem", "Added");
+                    brush = newGreen;
                     break;
                 case VcsStatusInfo::ItemDeleted:
-                    d->insertRow( i18nc("file was deleted from versioncontrolsystem", "Deleted"), path, deletedRed );
+                    state = i18nc("file was deleted from versioncontrolsystem", "Deleted");
+                    brush = deletedRed;
                     break;
                 case VcsStatusInfo::ItemModified:
-                    d->insertRow( i18nc("version controlled file was modified", "Modified"), path );
+                    state = i18nc("version controlled file was modified", "Modified");
                     break;
                 case VcsStatusInfo::ItemUnknown:
-                    d->insertRow( i18nc("file is not known to versioncontrolsystem", "Unknown"),
-                                  path, newGreen, Qt::Unchecked );
+                    state = i18nc("file is not known to versioncontrolsystem", "Unknown");
+                    brush = newGreen;
+                    checked = Qt::Unchecked;
                     break;
                 //DVCS part
                 case VcsStatusInfo::ItemAddedIndex:
-                    d->insertRow( i18nc("file was added to index", "Added (in index)"), path, newGreen );
+                    state = i18nc("file was added to index", "Added (in index)");
+                    brush = newGreen;
                     break;
                 case VcsStatusInfo::ItemDeletedIndex:
-                    d->insertRow( i18nc("file was deleted from index", "Deleted (in index)"), path, deletedRed );
+                    state = i18nc("file was deleted from index", "Deleted (in index)");
+                    brush = deletedRed;
                     break;
                 case VcsStatusInfo::ItemModifiedIndex:
-                    d->insertRow( i18nc("file was modified in index", "Modified (in index)"), path);
+                    state = i18nc("file was modified in index", "Modified (in index)");
                     break;
                 default:
                     break;
+            }
+            
+            if(!state.isEmpty())
+            {
+                d->insertRow(state, info.url(), brush, checked);
+                d->urls[info.url()] = state;
             }
         }
     }
@@ -190,24 +224,52 @@ void VcsCommitDialog::setCommitCandidates( const KUrl::List &urls )
     {
         reject();
     }
+    
+    foreach(KUrl url, urls) {
+        KDevelop::VcsJob* job = vcsiface->diff(url,
+                                            KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
+                                            KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
+
+        connect(job, SIGNAL(finished(KJob*)), this, SLOT(commitDiffJobFinished(KJob*)));
+        job->exec();
+    }
+    
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(d->diff, d->urls, vcsiface);
+    
+    if(showVcsDiff(patchSource))
+    {
+        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(reviewFinished(QString,QList<KUrl>)));
+        connect(patchSource, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
+    }else{
+        delete patchSource;
+        show();
+    }
 }
 
-KUrl::List VcsCommitDialog::checkedUrls() const
+void VcsCommitDialog::reviewFinished(QString message, QList< KUrl > selection)
+{
+    d->ui.message->setPlainText(message);
+    d->m_selection = selection;
+    emit doCommit(this);
+}
+
+KUrl::List VcsCommitDialog::determineUrlsForCheckin()
 {
     KUrl::List list;
     KUrl::List addItems;
 
     if (KDevelop::ICentralizedVersionControl* iface = d->plugin->extension<KDevelop::ICentralizedVersionControl>())
     {
-        QTreeWidgetItemIterator it( d->ui.files, QTreeWidgetItemIterator::Checked );
-        for( ; *it; ++it ){
-            KUrl path;
-            VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
+        
+        foreach(KUrl url, d->selection()) {
+            VcsStatusInfo info = d->statusInfos[url];
+            
             if( info.state() == VcsStatusInfo::ItemUnknown ) {
                 addItems << info.url();
             }
             list << info.url();
         }
+
         if(addItems.isEmpty() )
             return list;
 
@@ -266,10 +328,11 @@ KUrl::List VcsCommitDialog::checkedUrls() const
 
 void VcsCommitDialog::getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const
 {
-    QTreeWidgetItemIterator it(d->ui.files);
-    for( ; *it; ++it )
+    QSet<KUrl> selection = d->selection().toSet();
+    
+    foreach(KUrl url, d->urls.keys())
     {
-        VcsStatusInfo info = d->statusInfos.value((*it)->text(2));
+        VcsStatusInfo info = d->statusInfos[url];
 
         bool indexed, deleted, unchecked;
         indexed = deleted = unchecked = false;
@@ -285,11 +348,12 @@ void VcsCommitDialog::getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFi
                 deleted = true;
         }
 
-        unchecked = (*it)->checkState(0) == Qt::Unchecked;
+        unchecked = !selection.contains(url);
 
         KUrl path;
         if (indexed && unchecked)
             resetFiles << info.url();
+        
         if (!indexed && !unchecked)
         {
             if (deleted)
@@ -305,6 +369,22 @@ bool VcsCommitDialog::recursive() const
     return d->ui.recursiveChk->isChecked();
 }
 
+void VcsCommitDialog::commitDiffJobFinished(KJob* job)
+{
+    KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
+    Q_ASSERT(vcsjob);
+
+    if (vcsjob) {
+        if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
+            KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
+            this->d->diff += repairDiff(d.diff()) + "\n";
+        } else {
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
+        }
+
+        vcsjob->disconnect(this);
+    }
+}
 
 }
 

@@ -35,14 +35,35 @@ void IPatchSource::cancelReview()
 
 }
 
-void IPatchSource::finishReview()
+bool IPatchSource::finishReview(QList< KUrl > selection)
 {
-
+    return true;
 }
 
 bool IPatchSource::canCancel() const
 {
     return false;
 }
+
+QMap<KUrl, QString> IPatchSource::additionalSelectableFiles() const
+{
+    return QMap<KUrl, QString>();
+}
+
+bool IPatchSource::canSelectFiles() const
+{
+    return false;
+}
+
+QString IPatchSource::finishReviewCustomText() const
+{
+    return QString();
+}
+
+QWidget* IPatchSource::customWidget() const
+{
+    return 0;
+}
+
 
 #include "ipatchsource.moc"

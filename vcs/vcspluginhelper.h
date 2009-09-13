@@ -22,6 +22,7 @@ class QActionGroup;
 
 namespace KDevelop
 {
+class VcsDiff;
 class IPlugin;
 class IBasicVersionControl;
 class Context;

@@ -16,6 +16,7 @@ set(kdevplatformvcs_UIS
 )
 
 set(kdevplatformvcs_LIB_SRCS
+    vcsdiffpatchsources.cpp
     vcsjob.cpp
     vcsrevision.cpp
     vcsannotation.cpp

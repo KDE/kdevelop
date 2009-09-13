@@ -46,15 +46,36 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         
         ///Should return the base-dir of the patch
         virtual KUrl baseDir() const = 0;
+
+        ///Can return a custom widget that should be shown to the user with this patch
+        ///The caller owns the widget
+        ///The default implementation returns zero
+        virtual QWidget* customWidget() const;
+        
+        ///May return a custom text for the "Finish Review" action.
+        ///The default implementation returns QString(), which means that the default is used
+        virtual QString finishReviewCustomText() const;
         
         ///Called when the user has reviewed and accepted this patch
-        virtual void finishReview();
+        ///If canSelectFiles() returned true, @p selection will contain the list of selected files
+        ///If this returns false, the review is not finished.
+        virtual bool finishReview(QList<KUrl> selection);
         
         ///Called when the user has rejected this patch
         virtual void cancelReview();
         
         ///Should return whether the user may cancel this review (cancelReview will be called when he does)
+        ///The default implementation returns false
         virtual bool canCancel() const;
+
+        ///Should return whether the user should be able to select files of the patch
+        ///The files available for selection will be all files affected by the patch, and the files return by additionalSelectableFiles()
+        ///The default implementation returns false
+        virtual bool canSelectFiles() const;
+        
+        ///May return an additional list of selectable files together with short description strings for this patch
+        ///The default implementation returns an empty list
+        virtual QMap<KUrl, QString> additionalSelectableFiles() const;
         
     Q_SIGNALS:
         ///Should be emitted whenever the patch has changed.

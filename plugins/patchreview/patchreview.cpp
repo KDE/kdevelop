@@ -69,6 +69,7 @@ std::string*/
 #include <sublime/controller.h>
 #include <sublime/mainwindow.h>
 #include <sublime/area.h>
+#include <interfaces/iprojectcontroller.h>
 
 using namespace KDevelop;
 
@@ -131,6 +132,25 @@ void PatchReviewToolView::fillEditFromPatch() {
     connect( m_editPatch.patchSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(patchSelectionChanged(int)));
 
     m_editPatch.cancelReview->setVisible(ipatch->canCancel());
+
+    QString finishText = i18n("Finish Review");
+    if(!ipatch->finishReviewCustomText().isEmpty())
+      finishText = ipatch->finishReviewCustomText();
+    kDebug() << "finish-text: " << finishText;
+    m_editPatch.finishReview->setText(finishText);
+    
+    if(m_customWidget) {
+      kDebug() << "removing custom widget";
+      m_customWidget->hide();
+      m_editPatch.verticalLayout->removeWidget(m_customWidget);
+    }
+
+    m_customWidget = ipatch->customWidget();
+    if(m_customWidget) {
+      m_editPatch.verticalLayout->insertWidget(0, m_customWidget);
+      m_customWidget->show();
+      kDebug() << "got custom widget";
+    }
     
     LocalPatchSource* lpatch = dynamic_cast<LocalPatchSource*>(ipatch.data());
     if(!lpatch) {
@@ -176,9 +196,9 @@ void PatchReviewToolView::showEditDialog() {
 
     m_editPatch.setupUi( this );
 
-    m_filesModel = new QStandardItemModel( m_editPatch.filesList );
-    m_editPatch.filesList->setModel( m_filesModel );
-
+    m_editPatch.filesList->header()->hide();
+    m_editPatch.filesList->setRootIsDecorated(false);
+    
     m_editPatch.previousHunk->setIcon(KIcon("arrow-up"));
     m_editPatch.nextHunk->setIcon(KIcon("arrow-down"));
     
@@ -187,7 +207,7 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.filesList, SIGNAL( doubleClicked( const QModelIndex& ) ), this, SLOT( fileDoubleClicked( const QModelIndex& ) ) );
     
     connect( m_editPatch.cancelReview, SIGNAL(clicked(bool)), m_plugin, SLOT(cancelReview()) );
-    connect( m_editPatch.finishReview, SIGNAL(clicked(bool)), m_plugin, SLOT(finishReview()) );
+    connect( m_editPatch.finishReview, SIGNAL(clicked(bool)), this, SLOT(finishReview()) );
     //connect( m_editPatch.cancelButton, SIGNAL( pressed() ), this, SLOT( slotEditCancel() ) );
 
     //connect( this, SIGNAL( finished( int ) ), this, SLOT( slotEditDialogFinished( int ) ) );
@@ -371,11 +391,45 @@ void PatchReviewPlugin::highlightPatch() {
     }
 }
 
+
+void PatchReviewToolView::finishReview()
+{
+    QList<KUrl> selectedUrls;
+    for(uint a = 0; a< m_editPatch.filesList->topLevelItemCount(); ++a) {
+      QTreeWidgetItem* item = m_editPatch.filesList->topLevelItem(a);
+      if(item && item->checkState(0) == Qt::Checked) {
+        QVariant v = item->data(0, Qt::UserRole);
+        if( v.canConvert<KUrl>() ) {
+          selectedUrls << v.value<KUrl>();
+        }else if ( v.canConvert<const Diff2::DiffModel*>() ) {
+          const Diff2::DiffModel* model = v.value<const Diff2::DiffModel*>();
+
+          KUrl file = m_plugin->patch()->baseDir();
+          
+          file.addPath( model->sourcePath() );
+          file.addPath( model->sourceFile() );
+          
+          selectedUrls << file;
+        }
+      }
+    }
+    kDebug() << "finishing review with" << selectedUrls;
+    m_plugin->finishReview(selectedUrls);
+}
+
 void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
     try {
         if ( !m_plugin->modelList() )
             throw "no model";
-        QVariant v = m_filesModel->data( i, Qt::UserRole );
+        
+        QVariant v = i.data( Qt::UserRole );
+        
+        if( v.canConvert<KUrl>() ) {
+          KUrl u = v.value<KUrl>();
+          ICore::self()->documentController()->openDocument( u, KTextEditor::Cursor() );
+          return;
+        }
+        
         if ( !v.canConvert<const Diff2::DiffModel*>() )
             throw "cannot convert";
         const Diff2::DiffModel* model = v.value<const Diff2::DiffModel*>();
@@ -411,16 +465,19 @@ KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
 
 void PatchReviewToolView::kompareModelChanged()
 {
-    m_filesModel->clear();
-    m_filesModel->insertColumns( 0, 1 );
+    m_editPatch.filesList->clear();
+    m_editPatch.filesList->setColumnCount(1);
 
     if (!m_plugin->modelList())
         return;
 
+    QMap<KUrl, QString> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+    
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if ( !models )
         throw "no diff-models";
     Diff2::DiffModelList::const_iterator it = models->begin();
+    QSet<KUrl> haveUrls;
     while ( it != models->end() ) {
         Diff2::DifferenceList * diffs = ( *it ) ->differences();
         int cnt = 0;
@@ -429,16 +486,55 @@ void PatchReviewToolView::kompareModelChanged()
 
         KUrl file = urlForFileModel(*it);
 
-        m_filesModel->insertRow( 0 );
-        QModelIndex i = m_filesModel->index( 0, 0 );
-        if ( i.isValid() ) {
-            //m_filesModel->setData( i, file, Qt::DisplayRole );
-            m_filesModel->setData( i, QString( "%1 (%2 hunks)" ).arg( file.toLocalFile() ).arg( cnt ), Qt::DisplayRole );
-            QVariant v;
-            v.setValue<const Diff2::DiffModel*>( *it );
-            m_filesModel->setData( i, v, Qt::UserRole );
-        }
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
+        
+        haveUrls.insert(file);
+        
+        m_editPatch.filesList->insertTopLevelItem(0, item);
+        QString text = QString( "%1 (%2 hunks" ).arg( ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain) ).arg( cnt );
+        
+        if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty())
+          text += ", " + additionalUrls[file];
+        
+        text += ")";
+        
+        item->setData( 0, Qt::DisplayRole, text );
+        QVariant v;
+        v.setValue<const Diff2::DiffModel*>( *it );
+        item->setData( 0, Qt::UserRole, v );
+        item->setCheckState( 0, Qt::Checked );
         ++it;
+    }
+    
+    ///First add files that a project was found for, then the other ones
+    ///findProject() excludes some useless files like backups, so we can use that to sort those files to the back
+    for(int withProject = 1; withProject >= 0; --withProject)
+    {
+      for(QMap<KUrl, QString>::const_iterator it = additionalUrls.begin(); it != additionalUrls.end(); ++it)
+      {
+        KUrl url = it.key();
+        
+          if(((bool)ICore::self()->projectController()->findProjectForUrl(url)) != (bool)withProject)
+            continue;
+        
+        if(!haveUrls.contains(url))
+        {
+          haveUrls.insert(url);
+          
+          QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
+          
+          m_editPatch.filesList->insertTopLevelItem(0, item);
+          QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
+          if(!(*it).isEmpty())
+            text += " (" + (*it) + ")";
+          
+          item->setData( 0, Qt::DisplayRole, text );
+          QVariant v;
+          v.setValue<KUrl>( url );
+          item->setData( 0, Qt::UserRole, v );
+          item->setCheckState( 0, Qt::Unchecked );
+        }
+      }
     }
 }
 
@@ -448,27 +544,19 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
     QModelIndexList i = m_editPatch.filesList->selectionModel() ->selectedIndexes();
     if ( !m_plugin->modelList() )
         return ;
-    for(uint a = 0; a < m_filesModel->rowCount(); ++a) {
+    for(uint a = 0; a < m_editPatch.filesList->topLevelItemCount(); ++a) {
       
-        QModelIndex index = m_filesModel->index(a, 0);
+        QTreeWidgetItem* item = m_editPatch.filesList->topLevelItem(a);
       
-        QVariant v = m_filesModel->data( index, Qt::UserRole );
+        QVariant v = item->data( 0, Qt::UserRole );
         if ( v.canConvert<const Diff2::DiffModel*>() ) {
             const Diff2::DiffModel * model = v.value<const Diff2::DiffModel*>();
             
             KUrl file = urlForFileModel(model);
             
             if(file == doc->url()) {
-              m_editPatch.filesList->setCurrentIndex(index);
+              m_editPatch.filesList->setCurrentItem(item);
               return;
-            
-              /*
-              if ( model ) {
-                  if ( model->differenceCount() != 0 ) {
-                      m_editPatch.nextHunk->setEnabled( true );
-                      m_editPatch.previousHunk->setEnabled( true );
-                  }
-              }*/
             }
         }
     }
@@ -1102,11 +1190,12 @@ void PatchReviewPlugin::cancelReview()
   }
 }
 
-void PatchReviewPlugin::finishReview()
+void PatchReviewPlugin::finishReview(QList< KUrl > selection)
 {
   if(m_patch) {
+    if(!m_patch->finishReview(selection))
+      return;
     m_modelList.reset( 0 );
-    m_patch->finishReview();
     if(!dynamic_cast<LocalPatchSource*>(m_patch))
       delete m_patch;
     

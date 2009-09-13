@@ -64,6 +64,11 @@
 #endif
 #include <interfaces/ipatchsource.h>
 #include <KTemporaryFile>
+#include <qtextedit.h>
+#include "vcsstatusinfo.h"
+#include <qboxlayout.h>
+#include <qlabel.h>
+#include "vcsdiffpatchsources.h"
 
 namespace KDevelop
 {
@@ -231,105 +236,6 @@ void VcsPluginHelper::diffToHead()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-///@todo The subversion library returns borked diffs, where the headers are at the end. This function
-///           takes those headers, and moves them into the correct place to create a valid working diff.
-///           Find the source of this problem.
-QString repairDiff(QString diff) {
-    kDebug() << "diff before repair:" << diff;
-    QStringList lines = diff.split('\n');
-    QMap<QString, QString> headers;
-    for(uint a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith("Index: ") && lines[a+1].startsWith("=====")) {
-            QString fileName = lines[a].mid(strlen("Index: ")).trimmed();
-            headers[fileName] = lines[a];
-            kDebug() << "found header for" << fileName;
-            lines[a] = QString();
-            if(lines[a+1].startsWith("======")) {
-                headers[fileName] += "\n" + lines[a+1];
-            lines[a+1] = QString();
-            }
-        }
-    }
-    
-    QRegExp spaceRegExp("\\s");
-    
-    for(uint a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith("--- ")) {
-            QString tail = lines[a].mid(strlen("--- "));
-            if(tail.indexOf(spaceRegExp) != -1) {
-                QString file = tail.left(tail.indexOf(spaceRegExp));
-                kDebug() << "checking for" << file;
-                if(headers.contains(file)) {
-                    kDebug() << "adding header for" << file << ":" << headers[file];
-                    lines[a] = headers[file] + "\n" + lines[a];
-                }
-            }
-        }
-    }
-    QString ret = lines.join("\n");
-    kDebug() << "repaired diff:" << ret;
-    return ret;
-}
-
-class VCSDiffPatchSource : public KDevelop::IPatchSource {
-    public:
-    VCSDiffPatchSource(const KDevelop::VcsDiff& d) {
-        KTemporaryFile temp2;
-        temp2.setSuffix("2.patch");
-        temp2.setAutoRemove(false);
-        temp2.open();
-        QTextStream t2(&temp2);
-        t2 << repairDiff(d.diff());
-        kDebug() << "filename:" << temp2.fileName();
-        m_file = KUrl(temp2.fileName());
-        temp2.close();
-        
-        kDebug() << "using file" << m_file;
-        
-        m_name = "VCS Diff";
-        m_base = KUrl("/");
-    }
-        
-    virtual KUrl baseDir() const {
-        return m_base;
-    }
-    
-    virtual KUrl file() const {
-        return m_file;
-    }
-    
-    virtual QString name() const {
-        return m_name;
-    }
-    
-    virtual void update() {
-    }
-    
-    KUrl m_base, m_file;
-    QString m_name;
-};
-
-void showDiff(const KDevelop::VcsDiff& d)
-{
-    KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>("org.kdevelop.IPatchReview");
-
-    //Only give one VCS diff at a time to the patch review plugin
-    static KDevelop::IPatchSource::Ptr currentShownDiff;
-    if(currentShownDiff)
-        delete currentShownDiff;
-    
-    if( patchReview ) {
-        kDebug() << "starting review";
-        currentShownDiff = new VCSDiffPatchSource(d);
-        patchReview->startReview(currentShownDiff);
-    } else {
-        kWarning() << "Patch review plugin not found";
-        ICore::self()->documentController()->openDocumentFromText(d.diff());
-    }
-}
-
-
-
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
     KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
@@ -338,7 +244,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            showDiff(d);
+            showVcsDiff(new VCSDiffPatchSource(repairDiff(d.diff())));
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }
@@ -418,13 +324,12 @@ void VcsPluginHelper::commit()
 {
     Q_ASSERT(!d->ctxUrls.isEmpty());
     KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog(d->plugin, d->plugin->core()->uiController()->activeMainWindow());
-    dlg->setCommitCandidates(d->ctxUrls);
 //     KConfigGroup vcsGroup(KSharedConfig::openConfig(componentData()), "VcsCommon");
 //     dlg->setOldMessages(vcsGroup.readEntry("OldCommitMessages", QStringList()));
 //     dlg->setRecursive(true);
     connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
     connect(dlg, SIGNAL(cancelCommit(KDevelop::VcsCommitDialog*)), this, SLOT(cancelCommit(KDevelop::VcsCommitDialog*)));
-    dlg->show();
+    dlg->setCommitCandidatesAndShow(d->ctxUrls);
 }
 
 void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)
@@ -435,7 +340,7 @@ void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)
     vcsGroup.writeEntry("OldCommitMessages", oldMessages);
 
     KDevelop::IBasicVersionControl* iface = dlg->versionControlPlugin()->extension<KDevelop::IBasicVersionControl>();
-    d->plugin->core()->runController()->registerJob(iface->commit(dlg->message(), dlg->checkedUrls(),
+    d->plugin->core()->runController()->registerJob(iface->commit(dlg->message(), dlg->determineUrlsForCheckin(),
             dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive));
 
     dlg->deleteLater();
