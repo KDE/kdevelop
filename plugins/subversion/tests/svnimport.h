@@ -21,12 +21,23 @@
 #define SVNIMPORT_H
 #include <QtCore/QObject>
 
+namespace KDevelop
+{
+class TestCore;
+class ICentralizedVersionControl;
+}
+
 class SvnImport
             : public QObject
 {
     Q_OBJECT
 private slots:
-    void test();
+    void initTestCase();
+    void cleanupTestCase();
+    void testBasic();
+private:
+    KDevelop::TestCore* core;
+    KDevelop::ICentralizedVersionControl* vcs;
 };
 
 #endif // SVNRECURSIVEADD_H

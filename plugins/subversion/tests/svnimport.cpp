@@ -19,7 +19,6 @@
 ***************************************************************************/
 
 #include "svnimport.h"
-#include <memory>
 #include <QtTest/QtTest>
 #include <qtest_kde.h>
 #include <KTempDir>
@@ -55,20 +54,14 @@ void validatingExecJob(VcsJob* j, VcsJob::JobStatus status = VcsJob::JobSucceede
     QCOMPARE(j->status(), status);
 }
 
-void SvnImport::test()
+void SvnImport::initTestCase()
 {
-    KTempDir reposDir;
-    KProcess cmd;
-    cmd.setWorkingDirectory(reposDir.name());
-    cmd << "svnadmin" << "create" << reposDir.name();
-    QCOMPARE(cmd.execute(10000), 0);
     AutoTestShell::init();
-    std::auto_ptr<TestCore> core(new TestCore());
+    core = new TestCore();
     core->initialize(Core::Default);
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
-    ICentralizedVersionControl* vcs = NULL;
     foreach(IPlugin* p,  plugins) {
-        qDebug() << "checking plugin" << p;    
+        qDebug() << "checking plugin" << p;
         ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)
             continue;
@@ -79,10 +72,27 @@ void SvnImport::test()
     }
     qDebug() << "ok, got vcs" << vcs;
     QVERIFY(vcs);
+}
+
+
+void SvnImport::cleanupTestCase()
+{
+    core->cleanup();
+    core->deleteLater();
+}
+
+void SvnImport::testBasic()
+{
+    KTempDir reposDir;
+    KProcess cmd;
+    cmd.setWorkingDirectory(reposDir.name());
+    cmd << "svnadmin" << "create" << reposDir.name();
+    QCOMPARE(cmd.execute(10000), 0);
+    
     VcsLocation reposLoc;
     reposLoc.setRepositoryServer("file://" + reposDir.name() );
+    
     KTempDir projectDir;
-
     QFile sampleFile( projectDir.name() + "/sample.file" );
     sampleFile.open( QIODevice::WriteOnly );
     QString origcontent = "This is a Test";
