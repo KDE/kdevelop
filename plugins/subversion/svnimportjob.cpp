@@ -48,8 +48,11 @@ void SvnImportInternalJob::run()
         QMutexLocker l( m_mutex );
         QString srcdir = QFileInfo( m_sourceDirectory.toLocalFile() ).canonicalFilePath();
         QByteArray srcba = srcdir.toUtf8();
-        QByteArray destba = KUrl( m_destinationRepository.repositoryServer() ).url( KUrl::RemoveTrailingSlash ).toUtf8();
+        KUrl desturl = KUrl( m_destinationRepository.repositoryServer() );
+        desturl.cleanPath(KUrl::SimplifyDirSeparators);
+        QByteArray destba = desturl.url( KUrl::RemoveTrailingSlash ).toUtf8();
         QByteArray msg = m_message.toUtf8();
+        qDebug() << "Importing" << srcba << "into" << destba;
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
     }catch( svn::ClientException ce )
     {

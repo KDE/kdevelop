@@ -52,7 +52,9 @@ void SvnInternalCheckoutJob::run()
     try
     {
         bool recurse = ( recursion() == KDevelop::IBasicVersionControl::Recursive );
-        QByteArray srcba = KUrl( source().repositoryServer() ).url( KUrl::RemoveTrailingSlash ).toUtf8();
+        KUrl desturl = KUrl( source().repositoryServer() );
+        desturl.cleanPath(KUrl::SimplifyDirSeparators);
+        QByteArray srcba = desturl.url( KUrl::RemoveTrailingSlash ).toUtf8();
         QByteArray destba = QFileInfo( destination().toLocalFile() ).canonicalFilePath().toUtf8();
         kDebug(9510) << srcba << destba << recurse;
         svn_revnum_t rev = cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
