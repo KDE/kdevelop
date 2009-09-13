@@ -126,7 +126,7 @@ void SvnImport::testImportWithMissingDirs()
     setupSampleProject( projectDir.name(), origcontent );
 
     reposLoc.setRepositoryServer( reposLoc.repositoryServer() + "/foobar/" + QDir( projectDir.name() ).dirName() );
-    job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
+    VcsJob* job = vcs->import( "import test", KUrl( projectDir.name() ), reposLoc );
     validatingExecJob(job);
 
     KTempDir checkoutDir;
