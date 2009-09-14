@@ -102,10 +102,17 @@ public:
             m_variable->setVarobj(r["name"].literal());
             
             bool hasMore = false;
-            if (r.hasField("has_more"))
-                hasMore = r["has_more"].toInt();
+            if (r.hasField("has_more") && r["has_more"].toInt())
+                // GDB swears there are more children. Trust it
+                hasMore = true;
             else
+                // There are no more children in addition to what
+                // numchild reports. But, in KDevelop, the variable
+                // is not yet expanded, and those numchild are not
+                // fetched yet. So, if numchild != 0, hasMore should
+                // be true.
                 hasMore = r["numchild"].toInt() != 0;
+
             m_variable->setHasMore(hasMore);
 
             m_variable->setValue(r["value"].literal());
