@@ -66,7 +66,7 @@ void SvnImportInternalJob::run()
 
 bool SvnImportInternalJob::isValid() const
 {
-    return !m_message.isEmpty() && m_sourceDirectory.isLocalFile() && !m_destinationRepository.repositoryServer().isEmpty();
+    return !m_message.isEmpty() && m_sourceDirectory.isLocalFile() && QFileInfo( m_sourceDirectory.toLocalFile() ).exists() && !m_destinationRepository.repositoryServer().isEmpty();
 }
 
 KUrl SvnImportInternalJob::source() const
