@@ -51,6 +51,7 @@
 
 #include "makeoutputdelegate.h"
 #include "makejob.h"
+#include <interfaces/iruncontroller.h>
 
 K_PLUGIN_FACTORY(MakeBuilderFactory, registerPlugin<MakeBuilder>(); )
 K_EXPORT_PLUGIN(MakeBuilderFactory(KAboutData("kdevmakebuilder","kdevmakebuilder", ki18n("Make Builder"), "0.1", ki18n("Support for building Make projects"), KAboutData::License_GPL)))
@@ -122,6 +123,16 @@ KJob* MakeBuilder::executeMakeTarget(KDevelop::ProjectBaseItem* item,
 
 KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandType c,  const QString& overrideTarget )
 {
+    ///Running the same builder twice may result in serious problems, so kill jobs already running on the same project
+    foreach(KJob* job, KDevelop::ICore::self()->runController()->currentJobs())
+    {
+        MakeJob* makeJob = dynamic_cast<MakeJob*>(job);
+        if( makeJob && item && makeJob->item() && makeJob->item()->project() == item->project() ) {
+            kDebug() << "killing running make job, due to new started build on same project";
+            job->kill(KJob::EmitResult);
+        }
+    }
+    
     MakeJob* job = new MakeJob(this, item, c, overrideTarget);
     job->setItem(item);
 
