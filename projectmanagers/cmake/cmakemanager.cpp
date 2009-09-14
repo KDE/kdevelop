@@ -146,11 +146,10 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
 
-    new CodeCompletion(this, new CMakeCodeCompletionModel(), name());
-
     m_highlight = new CMakeHighlighting(this);
     QString cmakeCmd = KStandardDirs::findExe("cmake");
     m_doc = new CMakeDocumentation(cmakeCmd, this);
+    new CodeCompletion(this, new CMakeCodeCompletionModel(m_doc), name());
 }
 
 CMakeManager::~CMakeManager()

@@ -54,6 +54,11 @@ void CMakeDocumentation::collectIds(const QString& param, Type type)
     }
 }
 
+QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
+{
+    return m_typeForName.keys(t);
+}
+
 class CMakeDoc : public KDevelop::IDocumentation
 {
     public:
@@ -74,9 +79,10 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     
     kDebug() << "seeking documentation for " << identifier;
     QString arg, id=identifier.toLower();
-    Type t;
+    
     if(m_typeForName.contains(id)) {
-        switch(t=m_typeForName[id])
+        Type t=m_typeForName[id];
+        switch(t)
         {
             case Command:
                 arg="--help-command";

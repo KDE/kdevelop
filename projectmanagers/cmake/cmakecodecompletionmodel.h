@@ -26,23 +26,25 @@
 #include <QStringList>
 #include <language/duchain/declaration.h>
 
+class CMakeDocumentation;
 namespace KTextEditor { class Document; class Range; }
 
 class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
     public:
-        CMakeCodeCompletionModel (QObject *parent=0);
+        CMakeCodeCompletionModel(CMakeDocumentation *doc);
 
         void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
         QVariant data ( const QModelIndex & index, int role = Qt::DisplayRole ) const;
         void executeCompletionItem(KTextEditor::Document* document, const KTextEditor::Range& word, int row) const;
     private:
+        const CMakeDocumentation* doc() const;
         enum Type { Command, Variable, Macro };
         Type indexType(int row) const;
-        QStringList m_commands;
+        static QStringList s_commands;
         QList< KDevelop::IndexedDeclaration > m_declarations;
-        int m_varCount;
         bool m_inside;
+        CMakeDocumentation* m_doc;
 };
 
 #endif

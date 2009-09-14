@@ -36,20 +36,22 @@ class CMakeDocumentation : public QObject
 {
     Q_OBJECT
     public:
+        enum Type { Command, Variable, Module, Property, Policy };
         CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m);
         KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
         
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
+        
+        QStringList names(Type t) const;
     public slots:
         void delayedInitialization();
         
     private:
-        enum Type { Command, Variable, Module, Property, Policy };
         void collectIds(const QString& param, Type type);
         
         QMap<QString, Type> m_typeForName;
         QString mCMakeCmd;
-        CMakeManager* m_manager;
+        const CMakeManager* m_manager;
 };
 
 #endif // CMAKEDOCUMENTATION_H

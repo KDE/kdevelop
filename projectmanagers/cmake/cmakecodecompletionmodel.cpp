@@ -31,12 +31,15 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include "astfactory.h"
+#include "cmakedocumentation.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
 
-CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject *parent)
-    : CodeCompletionModel(parent), m_commands(AstFactory::self()->commands())
+QStringList CMakeCodeCompletionModel::s_commands;
+
+CMakeCodeCompletionModel::CMakeCodeCompletionModel(CMakeDocumentation* doc)
+    : CodeCompletionModel(doc), m_doc(doc)
 {
 }
 
@@ -47,6 +50,10 @@ bool isFunction(const Declaration* decl)
 
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
+    if(s_commands.isEmpty()) {
+        s_commands=m_doc->names(CMakeDocumentation::Command);
+    }
+    
     Q_UNUSED(invocationType);
     m_declarations.clear();
     DUChainReadLocker lock(DUChain::lock());
@@ -66,20 +73,20 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         m_inside= !out && line.indexOf('(')>=0;
     }
     
-    int numRows = m_inside? 0 : m_commands.count();
-    m_varCount=0;
+    int numRows = 0;
+    if(!m_inside)
+        numRows += s_commands.count();
+    
     if(ctx)
     {
         typedef QPair<Declaration*, int> DeclPair;
         QList<DeclPair> list=ctx->allDeclarations( SimpleCursor(range.start()), ctx );
         
-        m_varCount=0;
         foreach(const DeclPair& pair, list)
         {
-            Declaration *d=pair.first;
-            bool func=isFunction(d);
+            bool func=isFunction(pair.first);
             if((func && !m_inside) || (!func && m_inside))
-                m_declarations.append(d);
+                m_declarations.append(pair.first);
         }
         
         numRows+=m_declarations.count();
@@ -94,10 +101,10 @@ CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) cons
         return Variable;
     else
     {
-        if(row<m_commands.count())
-            return Command;
-        else
+        if(row<m_declarations.count())
             return Macro;
+        else
+            return Command;
     }
 }
 
@@ -110,10 +117,10 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Name)
     {
         if(type==Command)
-            return m_commands[index.row()];
+            return s_commands[index.row()-m_declarations.size()];
         else if(type==Variable || type==Macro)
         {
-            int pos = (type==Variable) ? index.row() : index.row()-m_commands.count();
+            int pos = index.row();
             DUChainReadLocker lock(DUChain::lock());
             return m_declarations[pos].data()->identifier().toString();
         }
@@ -136,7 +143,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             case Macro:
             {
                 DUChainReadLocker lock(DUChain::lock());
-                int pos=index.row()-m_commands.count();
+                int pos=index.row();
                 AbstractType::Ptr type; 
                 type = m_declarations[pos].data()->abstractType();
                 Q_ASSERT(type);
@@ -162,14 +169,8 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
 {
     switch(indexType(row))
     {
+        case Macro:
         case Command: {
-            QString code=data(index(row, Name, QModelIndex())).toString();
-            if(!document->line(word.start().line()).contains('('))
-                code.append('(');
-            
-            document->replaceText(word, code);
-            break;
-        } case Macro: {
             QString code=data(index(row, Name, QModelIndex())).toString();
             if(!document->line(word.start().line()).contains('('))
                 code.append('(');
