@@ -71,6 +71,7 @@ public:
         desired["org.kdevelop.ContextBrowser"] = Sublime::Bottom;
         desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
         desired["org.kdevelop.KonsoleView"] = Sublime::Bottom;
+        desired["org.kdevelop.SnippetView"] = Sublime::Right;
         Sublime::Area* a =
             new Sublime::Area(m_controller, "code", i18n("Code"));
         a->setDesiredToolViews(desired);
