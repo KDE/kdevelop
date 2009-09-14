@@ -32,6 +32,7 @@
 #include <ktexteditor/view.h>
 #include "astfactory.h"
 #include "cmakedocumentation.h"
+#include <KLocalizedString>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -74,7 +75,12 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     }
     
     int numRows = 0;
-    if(!m_inside)
+    if(m_inside) {
+        QDir dir(d->url().upUrl().path());
+        m_paths=dir.entryList(QStringList() << d->text(range)+'*');
+        
+        numRows += m_paths.count();
+    } else
         numRows += s_commands.count();
     
     if(ctx)
@@ -98,7 +104,12 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
 CMakeCodeCompletionModel::Type CMakeCodeCompletionModel::indexType(int row) const
 {
     if(m_inside)
-        return Variable;
+    {
+        if(row<m_declarations.count())
+            return Variable;
+        else
+            return Path;
+    }
     else
     {
         if(row<m_declarations.count())
@@ -118,6 +129,8 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         if(type==Command)
             return s_commands[index.row()-m_declarations.size()];
+        else if(type==Path)
+            return m_paths[index.row()-m_declarations.size()];
         else if(type==Variable || type==Macro)
         {
             int pos = index.row();
@@ -129,9 +142,10 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         switch(type)
         {
-            case Command:   return "Command";
-            case Variable:  return "Variable";
-            case Macro:     return "Macro";
+            case Command:   return i18n("Command");
+            case Variable:  return i18n("Variable");
+            case Macro:     return i18n("Macro");
+            case Path:     return i18n("Path");
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Arguments)
@@ -139,6 +153,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         switch(type) {
             case Variable:
             case Command:
+            case Path:
                 break;
             case Macro:
             {
@@ -169,6 +184,8 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
 {
     switch(indexType(row))
     {
+        case Path:
+            document->replaceText(word, data(index(row, Name, QModelIndex())).toString());
         case Macro:
         case Command: {
             QString code=data(index(row, Name, QModelIndex())).toString();
