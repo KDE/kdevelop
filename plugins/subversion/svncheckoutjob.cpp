@@ -41,7 +41,7 @@ SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
 bool SvnInternalCheckoutJob::isValid() const
 {
     QMutexLocker l( m_mutex );
-    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile();
+    return m_sourceRepository.isValid() && m_destinationDirectory.isLocalFile() && !QFileInfo(m_destinationDirectory.toLocalFile()).exists() && QFileInfo(m_destinationDirectory.upUrl().toLocalFile()).exists();
 }
 
 void SvnInternalCheckoutJob::run()
@@ -55,7 +55,9 @@ void SvnInternalCheckoutJob::run()
         KUrl desturl = KUrl( source().repositoryServer() );
         desturl.cleanPath(KUrl::SimplifyDirSeparators);
         QByteArray srcba = desturl.url( KUrl::RemoveTrailingSlash ).toUtf8();
-        QByteArray destba = QFileInfo( destination().toLocalFile() ).canonicalFilePath().toUtf8();
+        KUrl destdir = KUrl(QFileInfo( destination().upUrl().toLocalFile() ).canonicalFilePath());
+        destdir.addPath( destination().fileName() );
+        QByteArray destba = destdir.toLocalFile().toUtf8();
         kDebug(9510) << srcba << destba << recurse;
         svn_revnum_t rev = cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
     }catch( svn::ClientException ce )
