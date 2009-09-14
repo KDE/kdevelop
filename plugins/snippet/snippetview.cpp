@@ -259,7 +259,7 @@ void SnippetView::slotRemoveRepo()
 
     int ans = KMessageBox::warningContinueCancel(
         QApplication::activeWindow(),
-        i18n("Do you really wand to delete the repository \"%1\" with all its sub-repositories and snippets?", repo->text())
+        i18n("Do you really want to delete the repository \"%1\" with all its sub-repositories and snippets?", repo->text())
     );
     if ( ans == KMessageBox::Continue ) {
         repo->removeDirectory();
