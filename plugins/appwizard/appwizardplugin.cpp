@@ -175,7 +175,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 
     kDebug() << "Importing" << info.sourceLocation << "to"
              << info.repository.repositoryServer();
-    VcsJob* job = cvcs->import( info.importCommitMessage, info.sourceLocation, info.repository);
+    VcsJob* job = cvcs->import( info.importCommitMessage, scratchArea.name(), info.repository);
         if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
         {
         vcsError(i18n("Could not import project"), scratchArea, info.repository.repositoryServer());
@@ -183,7 +183,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
         }
 
     kDebug() << "Checking out";
-    job = cvcs->createWorkingCopy( info.repository, info.sourceLocation, IBasicVersionControl::Recursive);
+    job = cvcs->createWorkingCopy( info.repository, info.location, IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded )
     {
         vcsError(i18n("Could not checkout imported project"), scratchArea, info.repository.repositoryServer());
