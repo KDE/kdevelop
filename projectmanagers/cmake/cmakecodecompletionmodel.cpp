@@ -33,6 +33,7 @@
 #include "astfactory.h"
 #include "cmakedocumentation.h"
 #include <KLocalizedString>
+#include <KIcon>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -165,7 +166,17 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
             case Command:   return i18n("Command");
             case Variable:  return i18n("Variable");
             case Macro:     return i18n("Macro");
-            case Path:     return i18n("Path");
+            case Path:      return i18n("Path");
+        }
+    }
+    else if(role==Qt::DecorationRole && index.column()==CodeCompletionModel::Icon)
+    {
+        switch(type)
+        {
+            case Command:   return KIcon("code-block").pixmap(16,16);
+            case Variable:  return KIcon("code-variable").pixmap(16,16);
+            case Macro:     return KIcon("code-function").pixmap(16,16);
+            case Path:      return KIcon("folder").pixmap(16,16);
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Arguments)
