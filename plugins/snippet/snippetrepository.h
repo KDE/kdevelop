@@ -47,19 +47,19 @@ public:
     /**
      * @return The snippets that are currently stored in this repository
      */
-    const QList<Snippet*>& getSnippets() { return snippets_; }
+    const QList<Snippet*> getSnippets() const;
 
     /**
      * @return The directory of the repository
      */
-    const QString& getLocation() { return location_; }
+    const QString& getLocation() const;
 
     /**
      * Calling this method will append @p repo to this repository.
      * This makes @p repo a child of this SnippetRepository.
      * @param repo @p repo will become a child of this SnippetRepository.
      */
-    void addSubRepo(SnippetRepository* repo) { appendRow( repo ); subrepos_.append( repo ); }
+    void addSubRepo(SnippetRepository* repo);
 
     /**
      * Change the location of the repository.
@@ -70,7 +70,7 @@ public:
     void changeLocation(const QString& newLocation, const QString& newName = "");
 
     /**
-     * Remove this repository from the disk.
+     * Remove this repository from the disk. Also deletes the item and all its children.
      */
     void removeDirectory();
 
@@ -79,12 +79,6 @@ public:
      * @note Also calles slotSyncRepository()
      */
     void createSubRepo(const QString& subrepo);
-
-signals:
-    /**
-     * Gets emitted whenever this repository gets removed.
-     */
-    void repositoryRemoved(SnippetRepository* repo);
 
 public slots:
     /**
@@ -95,21 +89,13 @@ public slots:
      */
     void slotSyncRepository();
 
-    /**
-     * Removes the sub-repository from the model and deletes it.
-     */
-    void slotSubRepositoryRemoved(SnippetRepository* repo);
-
 private:
     /**
      * @see changeLocation()
      */
-    void setLocation(QString loc) { location_ = QDir::cleanPath(loc); setToolTip(location_); }
+    void setLocation(QString loc);
 
     QString location_;
-
-    QList<Snippet*> snippets_;
-    QList<SnippetRepository*> subrepos_;
 };
 
 #endif

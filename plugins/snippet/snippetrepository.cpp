@@ -39,14 +39,6 @@ SnippetRepository::~SnippetRepository()
 {
     // remove all our children from both the model and our internal data structures
     removeRows( 0, rowCount() );
-
-    if (index().isValid()) {
-        // in case this item is still a member of a model, remove itself
-        QStandardItem::parent()->removeRows( row(), 1 );
-    }
-
-    snippets_.clear();
-    subrepos_.clear();
 }
 
 void SnippetRepository::slotSyncRepository()
@@ -54,8 +46,6 @@ void SnippetRepository::slotSyncRepository()
     // as we are going to reget all snippets from this base directory
     // we first need to remove all snippets and sub-repos
     removeRows( 0, rowCount() );
-    snippets_.clear();
-    subrepos_.clear();
 
     // now reget all snippets and sub-repos
     QFSFileEngine engine( location_ );
@@ -91,10 +81,36 @@ void SnippetRepository::slotSyncRepository()
     }
 }
 
+const QList< Snippet* > SnippetRepository::getSnippets() const
+{
+    QList< Snippet* > snippets;
+    for ( int i = 0; i < rowCount(); ++i ) {
+        if ( Snippet* snippet = dynamic_cast<Snippet*>(child(i)) ) {
+            snippets << snippet;
+        }
+    }
+    return snippets;
+}
+
+const QString& SnippetRepository::getLocation() const
+{
+    return location_;
+}
+
+void SnippetRepository::addSubRepo(SnippetRepository* repo)
+{
+    appendRow( repo );
+}
+
 void SnippetRepository::addSnippet( Snippet* snippet )
 {
     appendRow( snippet );
-    snippets_.append( snippet );
+}
+
+void SnippetRepository::setLocation(QString loc)
+{
+    location_ = QDir::cleanPath(loc);
+    setToolTip(location_);
 }
 
 void SnippetRepository::changeLocation(const QString& newLocation, const QString& newName)
@@ -130,20 +146,15 @@ void SnippetRepository::removeDirectory()
 {
     QDir dir( getLocation() );
     if (!dir.exists() || dir.rmdir( getLocation() )) {
-        emit repositoryRemoved(this);
+        if (index().isValid()) {
+            // in case this item is still a member of a model, remove itself
+            QStandardItem::parent()->removeRows( row(), 1 );
+        }
     } else {
         KMessageBox::error(
             QApplication::activeWindow(),
             i18n("Could not remove repository \"%1\".", getLocation())
         );
-    }
-}
-
-void SnippetRepository::slotSubRepositoryRemoved( SnippetRepository* repo )
-{
-    if ( subrepos_.contains(repo) ) {
-        removeRow(repo->row());
-        subrepos_.removeAll(repo);
     }
 }
 
