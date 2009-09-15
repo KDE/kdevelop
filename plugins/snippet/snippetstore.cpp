@@ -44,7 +44,7 @@ void SnippetStore::createNewRepository(SnippetRepository* parent, const QString&
 {
     {
         QDir location(dir);
-        if ( dir.isEmpty() || !location.exists() && !location.mkpath(dir) ) {
+        if ( dir.isEmpty() || (!location.exists() && !location.mkpath(dir)) ) {
             KMessageBox::error(
                 QApplication::activeWindow(),
                 i18n("Could not create the repository folder \"%1\".", dir)
