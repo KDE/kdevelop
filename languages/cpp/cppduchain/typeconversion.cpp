@@ -250,7 +250,10 @@ ConversionRank TypeConversion::pointerConversion( PointerType::Ptr from, Pointer
   
   //We can convert non-const -> const, but not const -> non-const
 //   if(to->modifiers() & AbstractType::ConstModifier || !(from->modifiers()& AbstractType::ConstModifier)) {
-  
+
+    if(!from || !to)
+      return NoMatch;
+ 
     AbstractType::Ptr nextFrom = unAliasedType(from->baseType());
     AbstractType::Ptr nextTo = unAliasedType(to->baseType());
 
@@ -327,6 +330,9 @@ ConversionRank TypeConversion::standardConversion( AbstractType::Ptr from, Abstr
   if( (categories & IdentityCategory) && identityConversion( from, to ) )
     return ExactMatch;
 
+  if(!from || !to)
+    return NoMatch;
+  
   ConversionRank bestRank = NoMatch;
 
   ///Try lvalue-transformation category
