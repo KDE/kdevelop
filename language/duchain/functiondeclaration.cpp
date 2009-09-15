@@ -70,13 +70,16 @@ void FunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
 }
 
 QString FunctionDeclaration::toString() const {
-  if( !abstractType() )
+  AbstractType::Ptr type = abstractType();
+  if( !type )
     return Declaration::toString();
 
-  TypePtr<FunctionType> function = type<FunctionType>();
-  Q_ASSERT(function);
-
-  return QString("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+  TypePtr<FunctionType> function = type.cast<FunctionType>();
+  if(function) {
+    return QString("%1 %2 %3").arg(function->partToString( FunctionType::SignatureReturn )).arg(identifier().toString()).arg(function->partToString( FunctionType::SignatureArguments ));
+  }else{
+    return Declaration::toString();
+  }
 }
 
 uint FunctionDeclaration::additionalIdentity() const
