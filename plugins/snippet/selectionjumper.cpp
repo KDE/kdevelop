@@ -104,6 +104,11 @@ bool SelectionJumper::eventFilter( QObject* object, QEvent* event )
     if ( event->type() == QEvent::ShortcutOverride ) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         if ( keyEvent->key() == Qt::Key_Escape ) {
+            // jump to end of last range
+            if ( m_doc->activeView() ) {
+                m_doc->activeView()->setCursorPosition(m_topRange->childRanges().last()->end());
+            }
+            // quit selection jumper
             deleteSelectionJumper();
             return true;
         } else if ( keyEvent->modifiers() & Qt::AltModifier &&

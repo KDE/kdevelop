@@ -120,6 +120,12 @@ void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTex
             ++column;
         }
     }
+    if ( !markers.isEmpty() ) {
+        // add jump-position to end of snippet
+        KTextEditor::Cursor jumpPosition(line, column);
+        markers << KTextEditor::Range(jumpPosition, jumpPosition);
+    }
+
     // remove $'s
     int deletedChars = 0;
     foreach ( const int &pos, charsToRemove ) {
