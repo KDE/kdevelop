@@ -199,6 +199,7 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
             int index = folders.indexOf( f->folderName() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
+                kDebug() << "removing folder:" << f->url();
                 item->removeRow( j );
                 --j;
             } else {
@@ -211,6 +212,7 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
             int index = files.indexOf( f->fileName() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
+                kDebug() << "removing file:" << f->url();
                 project->removeFromFileSet( KDevelop::IndexedString( f->url() ) );
                 item->removeRow( j );
                 --j;
