@@ -87,6 +87,8 @@ const QList< Snippet* > SnippetRepository::getSnippets() const
     for ( int i = 0; i < rowCount(); ++i ) {
         if ( Snippet* snippet = dynamic_cast<Snippet*>(child(i)) ) {
             snippets << snippet;
+        } else if ( SnippetRepository* repo = dynamic_cast<SnippetRepository*>(child(i)) ) {
+            snippets += repo->getSnippets();
         }
     }
     return snippets;
