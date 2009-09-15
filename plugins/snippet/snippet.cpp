@@ -58,7 +58,7 @@ void Snippet::save()
         input << snippetText_;
 
         foreach(const QString& keyword, keywords_) {
-            input << SNIPPET_METADATA << "keyword="<<keyword<<endl;
+            input << endl << SNIPPET_METADATA << "keyword=" << keyword;
         }
     }
 }
@@ -105,7 +105,7 @@ void Snippet::changeName(const QString& newName)
 
 void Snippet::setRawData(const QString& data)
 {
-    QStringList rows = data.split( QRegExp("[\\r\\n]+") );
+    QStringList rows = data.split( QRegExp("[\\r\\n]+"), QString::SkipEmptyParts );
     QStringList metadata;
 
     QString newText;
@@ -113,16 +113,18 @@ void Snippet::setRawData(const QString& data)
     // A snippet file can contain meta information
     // which needs to be separated from the snippet's text
     QStringListIterator it(rows);
+    bool needNewline = false;
     while (it.hasNext()) {
         QString str = it.next();
 
         if (str.startsWith(SNIPPET_METADATA)) {
             metadata << str;
         } else {
-            newText += str;
-            if (it.hasNext()) {
+            if ( needNewline ) {
                 newText += SNIPPET_END_OF_LINE;
             }
+            newText += str;
+            needNewline = true;
         }
     }
 
