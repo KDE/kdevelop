@@ -49,11 +49,15 @@ bool isFunction(const Declaration* decl)
     return decl->abstractType().cast<FunctionType>();
 }
 
+bool isPathChar(const QChar& c)
+{
+    return c.isLetterOrNumber() || c=='/' || c=='.';
+}
+
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
-    if(s_commands.isEmpty()) {
+    if(s_commands.isEmpty())
         s_commands=m_doc->names(CMakeDocumentation::Command);
-    }
     
     Q_UNUSED(invocationType);
     m_declarations.clear();
@@ -76,8 +80,24 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     
     int numRows = 0;
     if(m_inside) {
-        QDir dir(d->url().upUrl().path());
-        m_paths=dir.entryList(QStringList() << d->text(range)+'*');
+        Cursor start=range.start();
+        for(; isPathChar(d->character(start)); start-=Cursor(0,1))
+        {}
+        start+=Cursor(0,1);
+        
+        QString tocomplete=d->text(Range(start, range.end()-Cursor(0,1)));
+        
+        int lastdir=tocomplete.lastIndexOf('/');
+        QString path=d->url().upUrl().path(KUrl::AddTrailingSlash);
+        QString basePath;
+        if(lastdir>=0) {
+            basePath=tocomplete.mid(0, lastdir);
+            path+=basePath;
+        }
+        QDir dir(path);
+        
+        m_paths=dir.entryList(QStringList() << tocomplete.mid(lastdir+1)+'*',
+                                          QDir::AllEntries | QDir::NoDotAndDotDot);
         
         numRows += m_paths.count();
     } else
@@ -186,6 +206,7 @@ void CMakeCodeCompletionModel::executeCompletionItem(Document* document, const R
     {
         case Path:
             document->replaceText(word, data(index(row, Name, QModelIndex())).toString());
+            break;
         case Macro:
         case Command: {
             QString code=data(index(row, Name, QModelIndex())).toString();
