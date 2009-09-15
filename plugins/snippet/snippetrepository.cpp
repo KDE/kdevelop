@@ -145,6 +145,14 @@ void SnippetRepository::changeLocation(const QString& newLocation, const QString
 void SnippetRepository::removeDirectory()
 {
     QDir dir( getLocation() );
+    // remove all contents
+    for ( int i = 0; i < rowCount(); ++i ) {
+        if ( Snippet* snippet = dynamic_cast<Snippet*>(child(i)) ) {
+            snippet->removeSnippetFile();
+        } else if ( SnippetRepository* repo = dynamic_cast<SnippetRepository*>(child(i)) ) {
+            repo->removeDirectory();
+        }
+    }
     if (!dir.exists() || dir.rmdir( getLocation() )) {
         if (index().isValid()) {
             // in case this item is still a member of a model, remove itself
