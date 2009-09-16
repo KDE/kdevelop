@@ -46,7 +46,7 @@ QList<ActionFormat> ActionFormat::actionFormats = QList<ActionFormat>()
     //     << ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*-o (?:\\S* )(?:[^/;]*/)*([^/\\s;]+)");
     //     << ActionFormat( i18n("compiling"), 1, 2, "(gcc|CC|cc|distcc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-c (?:\\S* )*(?:[^/]*/)*([^/\\s;]*)");
     << ActionFormat( i18n("compiling"), 1, 2, "(?:^|[^=])\\b(gcc|CC|cc|distcc|c\\+\\+|"
-                     "g\\+\\+)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
+                     "g\\+\\+|icc|icpc)\\s+.*-c.*[/ '\\\\]+(\\w+\\.(?:cpp|CPP|c|C|cxx|CXX|cs|"
                      "java|hpf|f|F|f90|F90|f95|F95))")
     //moc and uic
     << ActionFormat( i18n("generating"), 1, 2, "/(moc|uic)\\b.*\\s-o\\s([^\\s;]+)")
@@ -57,7 +57,7 @@ QList<ActionFormat> ActionFormat::actionFormats = QList<ActionFormat>()
     << ActionFormat( i18n("compiling"), 1, 1, "^compiling (.*)" )
     << ActionFormat( i18n("generating"), 1, 2, "^generating (.*)" )
     << ActionFormat( i18nc("Linking object files into a library or executable",
-                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+)\\S* (?:\\S* )*-o ([^\\s;]+)")
+                     "linking"), 1, 2, "(gcc|cc|c\\+\\+|g\\+\\+|icc|icpc)\\S* (?:\\S* )*-o ([^\\s;]+)")
     << ActionFormat( i18nc("Linking object files into a library or executable",
                      "linking"), 1, 2, "^linking (.*)" )
     //cmake
