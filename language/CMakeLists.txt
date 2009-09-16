@@ -79,6 +79,7 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/repositories/itemrepository.cpp
     duchain/repositories/typerepository.cpp
 
+    duchain/navigation/problemnavigationcontext.cpp
     duchain/navigation/abstractnavigationwidget.cpp
     duchain/navigation/abstractnavigationcontext.cpp
     duchain/navigation/usesnavigationcontext.cpp

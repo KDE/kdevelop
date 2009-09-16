@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "iproblem.h"
 #include <duchain/duchainregister.h>
 #include <interfaces/iassistant.h>
+#include <klocalizedstring.h>
 
 namespace KDevelop {
 REGISTER_DUCHAIN_ITEM(Problem);
@@ -122,6 +123,27 @@ KDevelop::ProblemData::Severity KDevelop::Problem::severity() const {
 
 void KDevelop::Problem::setSeverity(ProblemData::Severity severity) {
     d_func_dynamic()->severity = severity;
+}
+
+QString Problem::sourceString() const
+{
+    switch (source()) {
+        case ProblemData::Disk:
+            return i18n("Disk");
+        case ProblemData::Preprocessor:
+            return i18n("Preprocessor");
+        case ProblemData::Lexer:
+            return i18n("Lexer");
+        case ProblemData::Parser:
+            return i18n("Parser");
+        case ProblemData::DUChainBuilder:
+            return i18n("Definition-Use Chain");
+        case ProblemData::SemanticAnalysis:
+            return i18n("Semantic Analysis");
+        case ProblemData::Unknown:
+        default:
+            return i18n("Unknown");
+    }
 }
 
 /*

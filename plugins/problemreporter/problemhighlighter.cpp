@@ -27,6 +27,15 @@
 #include <language/editor/hashedstring.h>
 
 #include <language/editor/editorintegrator.h>
+#include <ktexteditor/texthintinterface.h>
+#include <ktexteditor/smartinterface.h>
+#include <qwidget.h>
+#include <ktextbrowser.h>
+#include <qboxlayout.h>
+#include <language/duchain/navigation/abstractnavigationwidget.h>
+#include <language/duchain/navigation/problemnavigationcontext.h>
+#include <language/util/navigationtooltip.h>
+#include <ktexteditor/view.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -35,6 +44,46 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
 {
     Q_ASSERT(m_document);
+    
+    foreach(KTextEditor::View* view, m_document->views())
+        viewCreated(document, view);
+    
+    connect(m_document, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
+}
+
+void ProblemHighlighter::viewCreated(Document* , View* view)
+{
+    KTextEditor::TextHintInterface* iface = dynamic_cast<KTextEditor::TextHintInterface*>(view);
+    if( !iface )
+        return;
+
+    connect(view, SIGNAL(needTextHint(const KTextEditor::Cursor&, QString&)), this, SLOT(textHintRequested(const KTextEditor::Cursor&, QString&)));
+}
+
+void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QString& )
+{
+    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(m_document.data());
+    if(smart) {
+        QMutexLocker lock(smart->smartMutex());
+        foreach(SmartRange* range, m_topHLRanges) {
+            SmartRange* deepestRange = range->deepestRangeContaining(pos);
+            if(m_problemsForRanges.contains(deepestRange))
+            {
+                ProblemPointer problem = m_problemsForRanges[deepestRange];
+                
+                KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
+                widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
+                
+                KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(0, QCursor::pos() + QPoint(20, 40), widget);
+                
+                tooltip->resize( widget->sizeHint() + QSize(10, 10) );
+                ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
+                
+                //There is a problem that contains the smart-range
+                return;
+            }
+        }
+    }
 }
 
 ProblemHighlighter::~ProblemHighlighter()
@@ -59,9 +108,12 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
     LockedSmartInterface iface = editor.smart();
     if (!iface)
         return;
+    
+    m_problems = problems;
 
     qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
+    m_problemsForRanges.clear();
 
     KTextEditor::SmartRange* topRange = editor.topRange(iface, EditorIntegrator::Highlighting);
     m_topHLRanges.append(topRange);
@@ -73,6 +125,9 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             continue;
 
         KTextEditor::SmartRange* problemRange = editor.createRange(iface, problem->finalLocation());
+        
+        m_problemsForRanges.insert(problemRange, problem);
+        
 //         *range = problem->finalLocation();
         if (problemRange->isEmpty())
             problemRange->smartEnd().advance(1);
@@ -111,3 +166,4 @@ void ProblemHighlighter::rangeContentsChanged(KTextEditor::SmartRange* range)
     range->setAttribute(KTextEditor::Attribute::Ptr());
 }
 
+#include "problemhighlighter.moc"

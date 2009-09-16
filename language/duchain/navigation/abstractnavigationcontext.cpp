@@ -399,6 +399,11 @@ bool AbstractNavigationContext::alreadyComputed() const {
   return !m_currentText.isEmpty();
 }
 
+bool AbstractNavigationContext::isWidgetMaximized() const
+{
+  return true;
+}
+
 QWidget* AbstractNavigationContext::widget() const {
   return 0;
 }

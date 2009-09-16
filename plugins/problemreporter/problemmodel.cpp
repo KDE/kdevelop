@@ -85,23 +85,7 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
             case Qt::DisplayRole:
                 switch (index.column()) {
                     case Source:
-                        switch (p->source()) {
-                            case ProblemData::Unknown:
-                            default:
-                                return i18n("Unknown");
-                            case ProblemData::Disk:
-                                return i18n("Disk");
-                            case ProblemData::Preprocessor:
-                                return i18n("Preprocessor");
-                            case ProblemData::Lexer:
-                                return i18n("Lexer");
-                            case ProblemData::Parser:
-                                return i18n("Parser");
-                            case ProblemData::DUChainBuilder:
-                                return i18n("Definition-Use Chain");
-                            case ProblemData::SemanticAnalysis:
-                                return i18n("Semantic Analysis");
-                        }
+                        return p->sourceString();
                         break;
                     case Error:
                         return p->description();

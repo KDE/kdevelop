@@ -13,7 +13,7 @@ set(kdevproblemreporter_PART_SRCS
 )
 
 kde4_add_plugin(kdevproblemreporter ${kdevproblemreporter_PART_SRCS})
-target_link_libraries(kdevproblemreporter ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevplatformlanguage kdevplatforminterfaces)
+target_link_libraries(kdevproblemreporter ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KPARTS_LIBS} kdevplatformlanguage kdevplatforminterfaces kdevplatformutil)
 
 install(TARGETS kdevproblemreporter DESTINATION ${PLUGIN_INSTALL_DIR})
 

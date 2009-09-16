@@ -129,6 +129,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ITextAssistant : public IAssistant
   Q_OBJECT
 public:
   ITextAssistant(KTextEditor::View* view);
+  ~ITextAssistant();
   
   ///@return The view this text-assistant was created with. May be zero if it was deleted already.
   KTextEditor::View* view() const;

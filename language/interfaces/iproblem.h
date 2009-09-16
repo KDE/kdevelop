@@ -85,6 +85,11 @@ public:
     ProblemData::Source source() const;
     void setSource(ProblemData::Source source);
 
+    /**
+     * Returns a string version of the problem source
+     */
+    QString sourceString() const;
+
     virtual KDevelop::IndexedString url () const;
 
     /**

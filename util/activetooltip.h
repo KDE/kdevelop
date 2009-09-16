@@ -58,7 +58,8 @@ public:
     ///                The ownership stays with the caller.
     ///@param priority The priority of this tooltip. Lower is better. Multiple tooltips will be stacked down in the given order.
     ///                If it is zero, the given tooltip will be shown exclusively.
-    static void showToolTip(ActiveToolTip* tooltip, float priority = 100);
+    ///@param uniqueId If this is nonempty, ActiveTooltip will make sure that only one tooltip with the given id is shown at a time
+    static void showToolTip(ActiveToolTip* tooltip, float priority = 100, QString uniqueId = QString());
     
     bool eventFilter(QObject *object, QEvent *e);
     

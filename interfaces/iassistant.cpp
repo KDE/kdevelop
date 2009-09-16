@@ -33,7 +33,7 @@ KAction* KDevelop::IAssistantAction::toKAction() const {
     //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
     ret->setData(QVariant::fromValue(KSharedPtr<IAssistantAction>(const_cast<IAssistantAction*>(this))));
     
-    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()));
+    connect(ret, SIGNAL(triggered(bool)), SLOT(execute()), Qt::QueuedConnection);
     return ret;
 }
 
@@ -100,6 +100,11 @@ KDevelop::ITextAssistant::ITextAssistant(KTextEditor::View* view) {
   connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
   connect(view->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
   m_invocationCursor = view->cursorPosition();
+}
+
+ITextAssistant::~ITextAssistant()
+{
+
 }
 
 void KDevelop::ITextAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {

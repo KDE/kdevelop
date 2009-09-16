@@ -27,14 +27,18 @@
 #include <language/interfaces/iproblem.h>
 #include <qpointer.h>
 
-class ProblemHighlighter : public KTextEditor::SmartRangeWatcher
+class ProblemHighlighter : public QObject, KTextEditor::SmartRangeWatcher
 {
+    Q_OBJECT
 public:
     ProblemHighlighter(KTextEditor::Document* document);
     virtual ~ProblemHighlighter();
 
     void setProblems(const QList<KDevelop::ProblemPointer>& problems);
 
+private slots:
+    void viewCreated(KTextEditor::Document*,KTextEditor::View*);
+    void textHintRequested(const KTextEditor::Cursor&, QString&);
 private:
     /// Detect and respond to a highlighted range being deleted
     virtual void rangeDeleted(KTextEditor::SmartRange *range);
@@ -45,6 +49,8 @@ private:
 
     QPointer<KTextEditor::Document> m_document;
     QList<KTextEditor::SmartRange*> m_topHLRanges;
+    QList<KDevelop::ProblemPointer> m_problems;
+    QMap<KTextEditor::SmartRange*, KDevelop::ProblemPointer> m_problemsForRanges;
 };
 
 #endif // PROBLEM_HIGHLIGHT_H

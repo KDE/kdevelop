@@ -48,7 +48,10 @@ namespace KDevelop {
 
       virtual ~AbstractNavigationWidget();
 
+      void setContext(NavigationContextPointer context, int initBrowser = 400);
+      
       QSize sizeHint() const;
+      
     public slots:
       ///Keyboard-action "next"
       virtual void next();
@@ -90,8 +93,6 @@ namespace KDevelop {
 
       void initBrowser(int height);
       void update();
-
-      void setContext(NavigationContextPointer context);
 
       NavigationContextPointer m_context, m_startContext;
 

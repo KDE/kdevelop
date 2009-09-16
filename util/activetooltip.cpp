@@ -28,6 +28,7 @@
 #include <kdebug.h>
 #include <QPointer>
 #include <qdesktopwidget.h>
+#include <qmenu.h>
 
 namespace KDevelop
 {
@@ -72,6 +73,8 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
     case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
     {
+        if(insideThis(object))
+            return false;
         kDebug() << "closing because of window activation";
         close();
     }
@@ -81,8 +84,14 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
     case QEvent::Wheel:
         /* If the click is within tooltip, it's fine.
            Clicks outside close it.  */
+        {
+            //Do not close the widget when NoFocus widgets are used
+            QWidget* widget = dynamic_cast<QWidget*>(object);
+            if(widget && widget->focusPolicy() == Qt::NoFocus)
+                return false;
+        }
         if (!insideThis(object)) {
-            kDebug() << "closing because of click";
+            kDebug() << "closing because of click into" << object;
             close();
         }
 
@@ -97,7 +106,7 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
         {
             QPoint globalPos = static_cast<QMouseEvent*>(e)->globalPos();
             if (!d->rect_.isNull() 
-                && !d->rect_.contains(globalPos) && !d->rectExtensions_.contains(globalPos)) {
+                && !d->rect_.contains(globalPos) && !d->rectExtensions_.contains(globalPos) && !insideThis(object)) {
                 
                 int distance = (d->rect_.center() - static_cast<QMouseEvent*>(e)->globalPos()).manhattanLength();
                 
@@ -114,6 +123,7 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
             } else               
                 d->mouseOut_ = 0;
             if (d->mouseOut_ == 2) {
+                kDebug() << "closing because of mouse move";
                 close();
             }
         }
@@ -132,6 +142,8 @@ bool ActiveToolTip::insideThis(QObject* object)
 {
     while (object)
     {
+        if(dynamic_cast<QMenu*>(object))
+            return true;
         if (object == this || d->friendWidgets_.contains(object))
         {
             return true;
@@ -187,7 +199,7 @@ void ActiveToolTip::setBoundingGeometry(QRect r) {
 }
 
 namespace {
-    typedef QMultiMap<float, QPointer<ActiveToolTip> > ToolTipPriorityMap;
+    typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
     static ToolTipPriorityMap registeredToolTips;
     ActiveToolTipManager manager;
 }
@@ -199,27 +211,28 @@ void ActiveToolTipManager::doVisibility() {
     QRect fullGeometry; //Geometry of all visible tooltips together
     
     for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
-        if(*it) {
+        QPointer< ActiveToolTip > w = (*it).first;
+        if(w) {
             if(hideAll) {
-                (*it)->hide();
+                (w)->hide();
             }else{
-                QRect geom = (*it)->geometry();
-                if((*it)->geometry().top() < lastBottomPosition) {
+                QRect geom = (w)->geometry();
+                if((w)->geometry().top() < lastBottomPosition) {
                     geom.moveTop(lastBottomPosition);
                 }
                 if(lastLeftPosition != -1)
                     geom.moveLeft(lastLeftPosition);
                 
-                (*it)->setGeometry(geom);
-//                 (*it)->show();
+                (w)->setGeometry(geom);
+//                 (w)->show();
                     
-                lastBottomPosition = (*it)->geometry().bottom();
-                lastLeftPosition = (*it)->geometry().left();
+                lastBottomPosition = (w)->geometry().bottom();
+                lastLeftPosition = (w)->geometry().left();
                 
                 if(it == registeredToolTips.constBegin())
-                    fullGeometry = (*it)->geometry();
+                    fullGeometry = (w)->geometry();
                 else
-                    fullGeometry = fullGeometry.united((*it)->geometry());
+                    fullGeometry = fullGeometry.united((w)->geometry());
             }
             if(it.key() == 0) {
                 hideAll = true;
@@ -245,18 +258,18 @@ void ActiveToolTipManager::doVisibility() {
         QPoint offset = fullGeometry.topLeft() - oldFullGeometry.topLeft();
         if(!offset.isNull()) {
             for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
-                if(*it) {
-                    (*it)->move((*it)->pos() + offset);
+                if((*it).first) {
+                    (*it).first->move((*it).first->pos() + offset);
                 }
         }
     }
 
     //Set bounding geometry, and remove old tooltips
     for(ToolTipPriorityMap::iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ) {
-        if(!(*it)) {
+        if(!(*it).first) {
             it = registeredToolTips.erase(it);
         }else{
-            (*it)->setBoundingGeometry(fullGeometry);
+            (*it).first->setBoundingGeometry(fullGeometry);
             ++it;
         }
     }
@@ -264,14 +277,22 @@ void ActiveToolTipManager::doVisibility() {
     //Final step: Show all tooltips
     if(!hideAll) {
         for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
-            if(*it)
-                (*it)->show();
+            if(it->first)
+                (*it).first->show();
     }
 }
 
-void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority) {
-    registeredToolTips.insert(priority, tooltip);
+void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority, QString uniqueId) {
     
+    if(!uniqueId.isEmpty()) {
+        for(QMap< float, QPair< QPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ++it) {
+            if((*it).second == uniqueId)
+                delete (*it).first;
+        }
+    }
+
+    registeredToolTips.insert(priority, qMakePair(QPointer<KDevelop::ActiveToolTip>(tooltip), uniqueId));
+
     connect(tooltip, SIGNAL(resized()), &manager, SLOT(doVisibility()));
     QMetaObject::invokeMethod(&manager, "doVisibility", Qt::QueuedConnection);
 }

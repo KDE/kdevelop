@@ -61,7 +61,7 @@ typedef KSharedPtr<AbstractNavigationContext> NavigationContextPointer;
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
 {
   public:
-    AbstractNavigationContext( KDevelop::TopDUContextPointer topContext, AbstractNavigationContext* previousContext = 0 );
+    AbstractNavigationContext( KDevelop::TopDUContextPointer topContext = KDevelop::TopDUContextPointer(), AbstractNavigationContext* previousContext = 0 );
 
     virtual ~AbstractNavigationContext() {
     }
@@ -85,6 +85,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     ///The widget may have a signal "navigateDeclaration(KDevelop::IndexedDeclaration)".
     ///If that signal is emitted, the new declaration is navigated in the navigation-wdiget.
     virtual QWidget* widget() const;
+    
+    ///Whether the widget returned by widget() should take the maximum possible spsace.
+    ///The default implementation returns true.
+    virtual bool isWidgetMaximized() const;
 
     ///Returns whether this context's string has already been computed, and is up to date.
     ///After clear() was called, this returns false again.

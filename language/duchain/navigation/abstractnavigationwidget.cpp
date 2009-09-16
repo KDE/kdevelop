@@ -101,8 +101,11 @@ AbstractNavigationWidget::~AbstractNavigationWidget() {
     
 }
 
-void AbstractNavigationWidget::setContext(NavigationContextPointer context)
+void AbstractNavigationWidget::setContext(NavigationContextPointer context, int initBrows)
 {
+  if(m_browser == 0)
+    initBrowser(initBrows);
+    
   if(!context) {
     kDebug() << "no new context created";
     return;
@@ -163,16 +166,18 @@ void AbstractNavigationWidget::update() {
 
   m_currentWidget = m_context->widget();
   
+  m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  m_browser->setMaximumHeight(10000);
+  
   if(m_currentWidget) {
     //This connection is a bit hacky..
     connect(m_currentWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
     layout()->addWidget(m_currentWidget);
-    //Leave unused room to the widget
-    m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    m_browser->setMaximumHeight(25);
-  }else{
-    m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_browser->setMaximumHeight(10000);
+    if(m_context->isWidgetMaximized()) {
+      //Leave unused room to the widget
+      m_browser->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+      m_browser->setMaximumHeight(25);
+    }
   }
 
   setUpdatesEnabled(true);
