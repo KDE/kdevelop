@@ -189,7 +189,7 @@ void BranchManager::checkoutBranch()
     if (branchJob)
     {
         //we don't run here, because we have to save all unsaved files (reload proj), checkout and then reload again
-        emit checkouted(branchJob);
+        emit checkedOut(branchJob);
     }
     close();
 }

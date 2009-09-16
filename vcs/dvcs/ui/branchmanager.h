@@ -43,7 +43,7 @@ public:
     ~BranchManager();
 
 signals:
-    void checkouted(KJob*);
+    void checkedOut(KJob*);
 
 private slots:
     void createBranch();
