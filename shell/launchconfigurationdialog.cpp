@@ -404,7 +404,11 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                     } else if( index.column() == 1 )
                     {
                         LaunchConfiguration* l = configForIndex( index );
-                        return l->type()->launcherForId( l->launcherForMode( lmi->mode->id() ) )->name();
+                        ILauncher* launcher = l->type()->launcherForId( l->launcherForMode( lmi->mode->id() ) );
+                        if( launcher )
+                        {
+                            return launcher->name();
+                        }
                     }
                 }
                 break;
@@ -773,7 +777,10 @@ void LaunchConfigurationModelDelegate::setEditorData ( QWidget* editor, const QM
         KComboBox* box = qobject_cast<KComboBox*>( editor );
         box->setCurrentIndex( box->findData( index.data( Qt::EditRole ) ) );
     }
-    QItemDelegate::setEditorData ( editor, index );
+    else
+    {
+        QItemDelegate::setEditorData ( editor, index );
+    }
 }
 
 void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const
@@ -785,7 +792,10 @@ void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstract
         KComboBox* box = qobject_cast<KComboBox*>( editor );
         lmodel->setData( index, box->itemData( box->currentIndex() ) );
     }
-    QItemDelegate::setModelData ( editor, model, index );
+    else
+    {
+        QItemDelegate::setModelData ( editor, model, index );
+    }
 }
 
 
