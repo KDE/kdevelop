@@ -1,7 +1,13 @@
 [Desktop Entry]
 Name=kde4app
+Name[es]=kde4app
+Name[fr]=kde4app
 Name[nds]=kde4prog
+Name[pt]=kde4app
+Name[pt_BR]=kde4app
 Name[sv]=kde4pgm
+Name[tr]=kde4app
+Name[uk]=kde4app
 Name[x-test]=xxkde4appxx
 Name[zh_TW]=KDE4 應用程式
 Exec=kde4app %i -caption "%c"
