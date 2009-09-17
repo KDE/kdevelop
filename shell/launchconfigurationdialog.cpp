@@ -327,8 +327,14 @@ void LaunchConfigurationsModel::addItemForLaunchConfig( LaunchConfiguration* l )
     t->parent = parent;
     t->row = parent->children.count();
     parent->children.append( t );
+    addLaunchModeItemsForLaunchConfig ( t );
+}
+
+void LaunchConfigurationsModel::addLaunchModeItemsForLaunchConfig ( LaunchItem* t )
+{
+    QList<TreeItem*> items;
     QSet<QString> modes;
-    foreach( ILauncher* launcher, l->type()->launchers() )
+    foreach( ILauncher* launcher, t->launch->type()->launchers() )
     {
         foreach( const QString& mode, launcher->supportedModes() )
         {
@@ -339,9 +345,16 @@ void LaunchConfigurationsModel::addItemForLaunchConfig( LaunchConfiguration* l )
                 lmi->mode = Core::self()->runController()->launchModeForId( mode );
                 lmi->parent = t;
                 lmi->row = t->children.count();
-                t->children.append( lmi );
+                items.append( lmi );
             }
         }
+    }
+    if( !items.isEmpty() )
+    {
+        QModelIndex p = indexForConfig( t->launch );
+        beginInsertRows( p, t->children.count(), t->children.count() + items.count() - 1  );
+        t->children.append( items );
+        endInsertRows();
     }
 }
 
@@ -549,7 +562,16 @@ bool LaunchConfigurationsModel::setData(const QModelIndex& index, const QVariant
                     return true;
                 } else if( index.column() == 1 )
                 {
-                    t->launch->setType( value.toString() );
+                    if (t->launch->type()->id() != value.toString()) {
+                        t->launch->setType( value.toString() );
+                        QModelIndex p = indexForConfig(t->launch);
+                        kDebug() << data(p);
+                        beginRemoveRows( p, 0, t->children.count() );
+                        qDeleteAll( t->children );
+                        t->children.clear();
+                        endRemoveRows();
+                        addLaunchModeItemsForLaunchConfig( t );
+                    }
                     return true;
                 }
             }

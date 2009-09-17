@@ -115,6 +115,7 @@ private:
     };
     ProjectItem* findItemForProject( IProject* );
     void addItemForLaunchConfig( LaunchConfiguration* l );
+    void addLaunchModeItemsForLaunchConfig ( KDevelop::LaunchConfigurationsModel::LaunchItem* l );
     QList<TreeItem*> topItems;
 };
 
