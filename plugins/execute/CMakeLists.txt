@@ -10,7 +10,6 @@ set(kdevexecute_PART_UIS
 set(kdevexecute_PART_SRCS
     executeplugin.cpp
     nativeappconfig.cpp
-    projectitemlineedit.cpp
     nativeappjob.cpp
 )
 

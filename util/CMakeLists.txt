@@ -11,6 +11,7 @@ set(kdevplatformutil_LIB_SRCS
     environmentgrouplist.cpp
     activetooltip.cpp
     executecompositejob.cpp
+    projectitemlineedit.cpp
 )
 
 set (kdevplatformutil_LIB_UI
@@ -50,6 +51,7 @@ install( FILES
     embeddedfreetree.h
     executecompositejob.h
     convenientfreelist.h
+    projectitemlineedit.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES

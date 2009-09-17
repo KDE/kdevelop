@@ -17,10 +17,11 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef PROJECTITEMLINEEDIT_H
-#define PROJECTITEMLINEEDIT_H
+#ifndef KDEVPROJECTITEMLINEEDIT_H
+#define KDEVPROJECTITEMLINEEDIT_H
 
 #include <KLineEdit>
+#include "utilexport.h"
 
 namespace KDevelop { 
 class ProjectModel; 
@@ -30,7 +31,7 @@ class ProjectBaseItem;
 class ProjectItemValidator;
 class ProjectItemCompleter;
 
-class ProjectItemLineEdit : public KLineEdit
+class KDEVPLATFORMUTIL_EXPORT ProjectItemLineEdit : public KLineEdit
 {
     Q_OBJECT
 public:
