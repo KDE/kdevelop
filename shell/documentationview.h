@@ -23,22 +23,25 @@
 #include <KToolBar>
 #include <interfaces/idocumentation.h>
 
+class QLabel;
+
 class DocumentationView : public QWidget
 {
-	Q_OBJECT
-	public:
-		DocumentationView(QWidget* parent);
-		
-		void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
+    Q_OBJECT
+    public:
+        DocumentationView(QWidget* parent);
+        
+        void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
     public slots:
         void browseForward();
         void browseBack();
     private:
-        void replaceView(QWidget*);
+        void replaceView(KSharedPtr< KDevelop::IDocumentation > doc);
         
         KToolBar* mActions;
         QAction* mForward;
         QAction* mBack;
+        QLabel* mCurrentTitle;
         QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
         QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
 };

@@ -33,6 +33,9 @@ DocumentationView::DocumentationView(QWidget* parent)
     layout()->addWidget(mActions);
     mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
+    mActions->addSeparator();
+    mCurrentTitle=new QLabel(mActions);
+    mActions->addWidget(mCurrentTitle);
     
     mBack->setEnabled(false);
     mForward->setEnabled(false);
@@ -49,7 +52,7 @@ void DocumentationView::browseBack()
     mBack->setEnabled(mCurrent!=mHistory.begin());
     mForward->setEnabled(true);
     
-    replaceView((*mCurrent)->documentationWidget());
+    replaceView(*mCurrent);
 }
 
 void DocumentationView::browseForward()
@@ -58,22 +61,24 @@ void DocumentationView::browseForward()
     mForward->setEnabled(mCurrent+1!=mHistory.end());
     mBack->setEnabled(true);
     
-    replaceView((*mCurrent)->documentationWidget());
-}
-
-void DocumentationView::replaceView(QWidget* newView)
-{
-    delete layout()->takeAt(1);
-    layout()->addWidget(newView);
+    replaceView(*mCurrent);
 }
 
 void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
 {
-	kDebug(9529) << "showing" << doc;
-	replaceView(doc->documentationWidget(this));
+    kDebug(9529) << "showing" << doc;
+    replaceView(doc);
     
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);
     mHistory.append(doc);
     mCurrent=mHistory.end()-1;
+}
+
+void DocumentationView::replaceView(KSharedPtr< KDevelop::IDocumentation > doc)
+{
+    mCurrentTitle->setText(i18n("Current: %1", doc->name()));
+    
+    delete layout()->takeAt(1);
+    layout()->addWidget(doc->documentationWidget(this));
 }
