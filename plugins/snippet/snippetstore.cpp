@@ -67,8 +67,6 @@ void SnippetStore::createNewRepository(SnippetRepository* parent, const QString&
     SnippetRepository *item = new SnippetRepository(name, dir);
     if (parent) {
         parent->addSubRepo( item );
-        connect(item, SIGNAL(repositoryRemoved(SnippetRepository*)),
-                parent, SLOT(slotSubRepositoryRemoved(SnippetRepository*)));
     } else {
         repos_.append( item );
         appendRow( item );
