@@ -1,5 +1,14 @@
+find_package(KDE4 REQUIRED)
+find_package(KDevPlatform REQUIRED)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9515 )
+
+include_directories(
+    ${KDEVPLATFORM_INCLUDE_DIR}
+    ${KDE4_INCLUDES}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 ########### next target ###############
 
