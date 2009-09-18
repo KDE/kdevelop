@@ -37,6 +37,7 @@
 
 #include "qthelpnetwork.h"
 #include <QWebFrame>
+#include <KIcon>
 
 K_PLUGIN_FACTORY(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
@@ -44,14 +45,20 @@ K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHel
 class QtHelpDocumentation : public KDevelop::IDocumentation
 {
 	public:
-		QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, QHelpEngineCore* e)
-			: m_info(info), m_engine(e), m_name(name) { Q_ASSERT(!m_info.isEmpty()); }
-		
-		virtual QString name() const { return m_name; }
-		virtual QString description() const {
-            HelpNetworkAccessManager access(m_engine, 0);
-            QUrl url(m_info.values().first());
-            QByteArray data = m_engine->fileData(url);
+		QtHelpDocumentation(const QString& name, QtHelpPlugin* e)
+			: m_name(name) { s_provider=e; }
+
+        virtual QString name() const { return m_name; }
+        
+        virtual QString description() const
+        {
+            QMap< QString, QUrl > _info=info();
+            if(_info.isEmpty()) //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
+                return QString();
+            
+            HelpNetworkAccessManager access(s_provider->engine(), 0);
+            QUrl url(_info.values().first());
+            QByteArray data = s_provider->engine()->fileData(url);
 
             //Extract a short description from the html data
             QString dataString = QString::fromLatin1(data); ///@todo encoding
@@ -168,28 +175,35 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
                 return thisFragment;
             }
             
-            return QStringList(m_info.keys()).join(", ");
+            return QStringList(_info.keys()).join(", ");
         }
         
         virtual QWidget* documentationWidget(QWidget* parent)
         {
-            m_view=new QWebView(parent);
-            m_view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_engine, 0));
+            QMap<QString, QUrl> _info=info();
+            if(_info.isEmpty()) //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
+                return 0;
             
-            QUrl url=m_info[m_info.keys().first()];
+            m_view=new QWebView(parent);
+            m_view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(s_provider->engine(), 0));
+            
+            QUrl url=_info[_info.keys().first()];
             m_view->load(url);
             
             return m_view;
         }
         
         virtual bool providesWidget() const { return true; }
-
+        virtual KDevelop::IDocumentationProvider* provider() { return s_provider; }
+        
 	private:
-		QMap<QString, QUrl> m_info;
-		QHelpEngineCore* m_engine;
+        static QtHelpPlugin* s_provider;
+        QMap<QString, QUrl> info() const { return s_provider->engine()->linksForIdentifier(m_name); }
+        
 		QString m_name;
         QPointer<QWebView> m_view;
 };
+QtHelpPlugin* QtHelpDocumentation::s_provider=0;
 
 QString qtDocsLocation(const QString& qmake)
 {
@@ -212,8 +226,6 @@ QString qtDocsLocation(const QString& qmake)
 	Q_ASSERT(qmake.isEmpty() || !ret.isEmpty());
 	return ret;
 }
-
-
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
@@ -257,13 +269,15 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 
 KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec)
 {
-	KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
 	
 	if(dec) {
-        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
         QStringList idList;
+        {
+        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
         for(int a = 0; a < qid.count(); ++a)
             idList << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
+        }
         
 		QString id = idList.join("::");
 		if(!id.isEmpty()) {
@@ -271,10 +285,30 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration
             
             kDebug() << "doc_found" << id << links;
 			if(!links.isEmpty())
-				return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, links, &m_engine));
+				return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, this));
 		}
 	}
 	
 	return KSharedPtr<KDevelop::IDocumentation>();
 }
 
+QAbstractListModel* QtHelpPlugin::indexModel()
+{
+    return m_engine.indexModel();
+}
+
+KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForIndex(const QModelIndex& idx)
+{
+    QString name=m_engine.indexModel()->data(m_engine.indexModel()->index(idx.row()), Qt::DisplayRole).toString();
+    return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, this));
+}
+
+QIcon QtHelpPlugin::icon() const
+{
+    return KIcon("qtlogo");
+}
+
+QString QtHelpPlugin::name() const
+{
+    return i18n("QtHelp");
+}

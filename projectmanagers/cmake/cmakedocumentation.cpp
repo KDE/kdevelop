@@ -30,10 +30,32 @@
 #include <kmimetype.h>
 #include "cmakemanager.h"
 #include <cmakeparserutils.h>
+#include <QStringListModel>
+
+class CMakeDoc : public KDevelop::IDocumentation
+{
+    public:
+        CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
+        
+        virtual QWidget* documentationWidget(QWidget* ) { return 0; }
+        virtual QString description() const { return mDesc; }
+        virtual QString name() const { return mName; }
+        virtual bool providesWidget() const { return false; }
+        virtual KDevelop::IDocumentationProvider* provider() { return s_provider; }
+        
+        static CMakeManager* s_provider;
+        
+    private:
+        QString mName, mDesc;
+};
+CMakeManager* CMakeDoc::s_provider=0;
 
 CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m)
     : QObject(m), mCMakeCmd(cmakeCmd), m_manager(m)
 {
+    CMakeDoc::s_provider=m;
+    m_index= new QStringListModel(this);
+    
     QTimer::singleShot(0, this, SLOT(delayedInitialization()));
 }
 
@@ -52,25 +74,14 @@ void CMakeDocumentation::collectIds(const QString& param, Type type)
     {
         m_typeForName[name.toLower()]=type;
     }
+    
+    m_index->setStringList(ids);
 }
 
 QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
 {
     return m_typeForName.keys(t);
 }
-
-class CMakeDoc : public KDevelop::IDocumentation
-{
-    public:
-        CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
-        
-        virtual QWidget* documentationWidget(QWidget* ) { return 0; }
-        virtual QString description() const { return mDesc; }
-        virtual QString name() const { return mName; }
-        virtual bool providesWidget() const { return false; }
-    private:
-        QString mName, mDesc;
-};
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file)
 {
@@ -124,4 +135,14 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl)
 {
     return description(decl->identifier().toString(), decl->url().toUrl());
+}
+
+KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx)
+{
+    return description(idx.data().toString(), KUrl("CMakeLists.txt"));
+}
+
+QAbstractListModel* CMakeDocumentation::indexModel()
+{
+    return m_index;
 }

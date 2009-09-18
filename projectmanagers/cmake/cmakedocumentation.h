@@ -28,6 +28,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
 
+class QStringListModel;
 namespace KDevelop { class Declaration; }
 class CMakeManager;
 class KUrl;
@@ -40,9 +41,12 @@ class CMakeDocumentation : public QObject
         CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m);
         KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
         
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
+        KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
         
         QStringList names(Type t) const;
+        
+        QAbstractListModel* indexModel();
+        KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx);
     public slots:
         void delayedInitialization();
         
@@ -52,6 +56,7 @@ class CMakeDocumentation : public QObject
         QMap<QString, Type> m_typeForName;
         QString mCMakeCmd;
         const CMakeManager* m_manager;
+        QStringListModel* m_index;
 };
 
 #endif // CMAKEDOCUMENTATION_H

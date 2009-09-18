@@ -116,6 +116,10 @@ public:
 
     //IDocumentationProvider
     virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
+    virtual QIcon icon() const;
+    virtual QAbstractListModel* indexModel();
+    virtual KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx);
+
 public slots:
     void dirtyFile(const QString& file);
 

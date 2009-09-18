@@ -25,12 +25,19 @@
 #include <QVariantList>
 #include <QHelpEngine>
 
-
 class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
 	public:
 		QtHelpPlugin(QObject *parent, const QVariantList & args= QVariantList());
 		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*);
+        
+        virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx);
+        virtual QAbstractListModel* indexModel();
+        
+        virtual QIcon icon() const;
+        virtual QString name() const;
+        
+        QHelpEngine* engine() { return &m_engine; }
 	private:
 		QHelpEngine m_engine;
 };

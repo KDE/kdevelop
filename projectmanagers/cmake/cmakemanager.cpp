@@ -1199,4 +1199,19 @@ KSharedPtr< KDevelop::IDocumentation > CMakeManager::documentationForDeclaration
     return m_doc->documentationForDeclaration(declaration);
 }
 
+KSharedPtr< IDocumentation > CMakeManager::documentationForIndex(const QModelIndex& idx)
+{
+    return m_doc->documentationForIndex(idx);
+}
+
+QAbstractListModel* CMakeManager::indexModel()
+{
+    return m_doc->indexModel();
+}
+
+QIcon CMakeManager::icon() const
+{
+    return KIcon("text-x-cmake");
+}
+
 #include "cmakemanager.moc"
