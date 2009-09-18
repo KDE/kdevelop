@@ -238,21 +238,11 @@ void GdbVariable::fetchMoreChildren()
         // FIXME: Eventually, should be a property of variable.
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
-        // The first branch enables the python-based pretty-printing to work,
-        // but breaks with current CVS HEAD, so disable for now.
-#if 0
         s->addCommand(
             new GDBCommand(GDBMI::VarListChildren,
                            QString("--all-values \"%1\" %2 %3").arg(varobj_)
                            .arg(c).arg(c+5),
                            new FetchMoreChildrenHandler(this, s)));
-#else
-        s->addCommand(
-            new GDBCommand(GDBMI::VarListChildren,
-                           QString("--all-values \"%1\"").arg(varobj_),
-                           new FetchMoreChildrenHandler(this, s)));
-
-#endif
     }
 }
 
