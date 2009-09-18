@@ -19,6 +19,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef GDBVARIABLE_H
+#define GDBVARIABLE_H
+
 #include "mi/gdbmi.h"
 
 #include <debugger/variable/variablecollection.h>
@@ -70,3 +73,5 @@ namespace KDevelop
         static QMap<QString, GdbVariable*> allVariables_;
     };
 }
+
+#endif

@@ -1,4 +1,5 @@
 project(cpp)
+kde4_no_enable_final(cpp)
 include(CppBuildConfig.cmake)
 
 include_directories(
