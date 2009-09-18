@@ -23,7 +23,8 @@
 #include <KToolBar>
 #include <interfaces/idocumentation.h>
 
-class QLabel;
+class ProvidersModel;
+class QComboBox;
 
 class DocumentationView : public QWidget
 {
@@ -32,18 +33,24 @@ class DocumentationView : public QWidget
         DocumentationView(QWidget* parent);
         
         void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
+        
     public slots:
         void browseForward();
         void browseBack();
+        void changedSelection(int);
+        void changedProvider(int);
+        
     private:
-        void replaceView(KSharedPtr< KDevelop::IDocumentation > doc);
+        void updateView();
         
         KToolBar* mActions;
         QAction* mForward;
         QAction* mBack;
-        QLabel* mCurrentTitle;
+        QComboBox* mIdentifiers;
         QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
         QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
+        QComboBox* mProviders;
+        ProvidersModel* mProvidersModel;
 };
 
 #endif // DOCUMENTATIONVIEW_H

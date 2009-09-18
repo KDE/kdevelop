@@ -20,8 +20,8 @@
 #include "idocumentationprovider.h"
 
 namespace KDevelop
-{
-
+{  
+    
 IDocumentationProvider::~IDocumentationProvider()
 {    
 }

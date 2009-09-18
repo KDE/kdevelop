@@ -25,6 +25,9 @@
 #include "iextension.h"
 #include "interfacesexport.h"
 
+class QIcon;
+class QModelIndex;
+class QAbstractListModel;
 namespace KDevelop
 {
 class Declaration;
@@ -37,6 +40,18 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         
         /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
         virtual KSharedPtr<IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) = 0;
+        
+        /** @returns an instance of an interface to create an index for all the items provided by this class. */
+        virtual QAbstractListModel* indexModel()=0;
+        
+        /** @returns the documentation information related to the index in the model. */
+        virtual KSharedPtr<IDocumentation> documentationForIndex(const QModelIndex& idx)=0;
+    
+        /** @returns some icon associated to the provider. */
+        virtual QIcon icon() const=0;
+        
+        /** @returns a name to identify the provider to the user. */
+        virtual QString name() const=0;
 };
 
 }

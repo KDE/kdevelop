@@ -27,6 +27,7 @@ class QAction;
 
 namespace KDevelop
 {
+class IDocumentationProvider;
 class Core;
 
 class DocumentationController : public QObject, public KDevelop::IDocumentationController
@@ -37,6 +38,7 @@ class DocumentationController : public QObject, public KDevelop::IDocumentationC
         
         void initialize();
         
+        virtual QList<IDocumentationProvider*> documentationProviders() const;
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
         virtual ContextMenuExtension contextMenuExtension( Context* context );

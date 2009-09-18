@@ -103,24 +103,35 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
 
 KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationForDeclaration(Declaration* decl)
 {
-    QList<IPlugin*> m_plugins=ICore::self()->pluginController()->allPluginsForExtension(IDocumentationProvider_iid);
-    kDebug(9529) << "All plugins for" << IDocumentationProvider_iid << m_plugins;
     KSharedPtr<KDevelop::IDocumentation> ret;
     
-    foreach(IPlugin* p, m_plugins)
+    foreach(IDocumentationProvider* doc, documentationProviders())
     {
-        IDocumentationProvider *doc=dynamic_cast<IDocumentationProvider*>(p);
-        if(doc)
-        {
-            kDebug(9529) << "Documentation provider found:" << doc;
-            ret=doc->documentationForDeclaration(decl);
-            
-            kDebug(9529) << "Documentation proposed: " << ret;
-            if(ret)
-                break;
-        }
+        kDebug(9529) << "Documentation provider found:" << doc;
+        ret=doc->documentationForDeclaration(decl);
+        
+        kDebug(9529) << "Documentation proposed: " << ret;
+        if(ret)
+            break;
     }
     
+    return ret;
+}
+
+
+QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
+{
+    QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension(IDocumentationProvider_iid);
+    kDebug(9529) << "All plugins for" << IDocumentationProvider_iid << plugins;
+    
+    QList<IDocumentationProvider*> ret;
+    
+    foreach(IPlugin* p, plugins)
+    {
+        IDocumentationProvider *doc=dynamic_cast<IDocumentationProvider*>(p);
+        Q_ASSERT(doc);
+        ret.append(doc);
+    }
     return ret;
 }
 

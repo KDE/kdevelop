@@ -28,6 +28,7 @@ class QWidget;
 
 namespace KDevelop
 {
+class IDocumentationProvider;
 
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
 {
@@ -48,6 +49,8 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
         
         /** @returns whether the widget can provide extended information. */
         virtual bool providesWidget() const =0;
+        
+        virtual IDocumentationProvider* provider()=0;
 };
 
 }

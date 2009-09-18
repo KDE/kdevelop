@@ -23,9 +23,52 @@
 #include <KDebug>
 #include <KIcon>
 #include <KLocale>
+#include <QComboBox>
+#include "documentationsearchmodel.h"
+#include <interfaces/idocumentationprovider.h>
+#include <QLineEdit>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
+#include <QTextEdit>
+
+class ProvidersModel : public QAbstractListModel
+{
+    public:
+        ProvidersModel(QObject* parent = 0) : QAbstractListModel(parent) {}
+        
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
+        {
+            QVariant ret;
+            switch(role)
+            {
+                case Qt::DisplayRole:
+                    ret=provider(index.row())->name();
+                    break;
+                case Qt::DecorationRole:
+                    ret=provider(index.row())->icon();
+                    break;
+            }
+            return ret;
+        }
+        
+        virtual int rowCount(const QModelIndex&) const
+        {
+            return KDevelop::ICore::self()->documentationController()->documentationProviders().count();
+        }
+        
+        KDevelop::IDocumentationProvider* provider(int pos) const
+        {
+            return KDevelop::ICore::self()->documentationController()->documentationProviders()[pos];
+        }
+        
+        int rowForProvider(KDevelop::IDocumentationProvider* provider)
+        {
+            return KDevelop::ICore::self()->documentationController()->documentationProviders().indexOf(provider);
+        }
+};
 
 DocumentationView::DocumentationView(QWidget* parent)
- : QWidget(parent)
+    : QWidget(parent)
 {
     setWindowIcon(KIcon("documentation"));
     setLayout(new QVBoxLayout(this));
@@ -34,8 +77,17 @@ DocumentationView::DocumentationView(QWidget* parent)
     mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
     mActions->addSeparator();
-    mCurrentTitle=new QLabel(mActions);
-    mActions->addWidget(mCurrentTitle);
+    mProviders=new QComboBox(mActions);
+    mProvidersModel=new ProvidersModel(mProviders);
+    mProviders->setModel(mProvidersModel);
+    connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
+    mIdentifiers=new QComboBox(mActions);
+    mIdentifiers->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    mIdentifiers->setEditable(true);
+    connect(mIdentifiers, SIGNAL(activated(int)), SLOT(changedSelection(int)));
+    
+    mActions->addWidget(mProviders);
+    mActions->addWidget(mIdentifiers);
     
     mBack->setEnabled(false);
     mForward->setEnabled(false);
@@ -44,6 +96,8 @@ DocumentationView::DocumentationView(QWidget* parent)
     mCurrent=mHistory.begin();
     
     layout()->addWidget(new QLabel(i18n("There is no documentation selected yet"), this));
+    
+    changedProvider(0);
 }
 
 void DocumentationView::browseBack()
@@ -52,7 +106,7 @@ void DocumentationView::browseBack()
     mBack->setEnabled(mCurrent!=mHistory.begin());
     mForward->setEnabled(true);
     
-    replaceView(*mCurrent);
+    updateView();
 }
 
 void DocumentationView::browseForward()
@@ -61,24 +115,49 @@ void DocumentationView::browseForward()
     mForward->setEnabled(mCurrent+1!=mHistory.end());
     mBack->setEnabled(true);
     
-    replaceView(*mCurrent);
+    updateView();
+}
+
+void DocumentationView::changedSelection(int row)
+{
+    QModelIndex idx=mIdentifiers->model()->index(row, 0);
+    KSharedPtr<KDevelop::IDocumentation> doc=mProvidersModel->provider(mProviders->currentIndex())->documentationForIndex(idx);
+    if(doc)
+        showDocumentation(doc);
 }
 
 void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
 {
-    kDebug(9529) << "showing" << doc;
-    replaceView(doc);
+    kDebug(9529) << "showing" << doc->name();
     
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);
     mHistory.append(doc);
     mCurrent=mHistory.end()-1;
+    updateView();
 }
 
-void DocumentationView::replaceView(KSharedPtr< KDevelop::IDocumentation > doc)
+void DocumentationView::updateView()
 {
-    mCurrentTitle->setText(i18n("Current: %1", doc->name()));
+    mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
+    mIdentifiers->setModel((*mCurrent)->provider()->indexModel());
+    mIdentifiers->lineEdit()->setText((*mCurrent)->name());
     
     delete layout()->takeAt(1);
-    layout()->addWidget(doc->documentationWidget(this));
+    
+    QWidget* w;
+    if((*mCurrent)->providesWidget())
+        w=(*mCurrent)->documentationWidget(this);
+    else {
+        QTextEdit* widget=new QTextEdit(this);
+        widget->setText((*mCurrent)->description());
+        w=widget;
+    }
+    layout()->addWidget(w);
+}
+
+void DocumentationView::changedProvider(int row)
+{
+    mIdentifiers->setModel(mProvidersModel->provider(row)->indexModel());
+    mIdentifiers->lineEdit()->clear();
 }

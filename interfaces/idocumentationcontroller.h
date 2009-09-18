@@ -22,6 +22,7 @@
 #include <interfaces/idocumentation.h>
 
 namespace KDevelop {
+class IDocumentationProvider;
 class Context;
 class ContextMenuExtension;
 class Declaration;
@@ -36,6 +37,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController
     public:
         IDocumentationController();
         virtual ~IDocumentationController();
+        
+        /** Return the documentation provider plugin instances. */
+        virtual QList<IDocumentationProvider*> documentationProviders() const=0;
         
         /** Return the corresponding documentation instance for a determinate declaration. */
         virtual KSharedPtr<IDocumentation> documentationForDeclaration(Declaration* declaration)=0;
