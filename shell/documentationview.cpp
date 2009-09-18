@@ -24,7 +24,6 @@
 #include <KIcon>
 #include <KLocale>
 #include <QComboBox>
-#include "documentationsearchmodel.h"
 #include <interfaces/idocumentationprovider.h>
 #include <QLineEdit>
 #include <interfaces/icore.h>
