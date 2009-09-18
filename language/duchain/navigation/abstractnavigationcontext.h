@@ -133,7 +133,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     void addExternalHtml( const QString& text );
 
     ///Creates and registers a link to the given declaration, labeled by the given name
-    void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType );
+    virtual void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType );
 
     ///Creates a link that executes the given action
     void makeLink( const QString& name, QString targetId, const NavigationAction& action);
