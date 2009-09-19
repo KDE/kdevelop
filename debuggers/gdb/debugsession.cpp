@@ -593,9 +593,14 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
     if (stateReloadInProgress_)
         cmd->setStateReloading(true);
 
-    if (cmd->type() >= GDBMI::VarAssign
-        && cmd->type() <= GDBMI::VarUpdate
-        && cmd->type() != GDBMI::VarDelete)
+    bool varCommandWithContext= (cmd->type() >= GDBMI::VarAssign
+                                 && cmd->type() <= GDBMI::VarUpdate
+                                 && cmd->type() != GDBMI::VarDelete);
+
+    bool stackCommandWithContext = (cmd->type() >= GDBMI::StackInfoDepth
+                                    && cmd->type() <= GDBMI::StackListLocals);
+
+    if (varCommandWithContext || stackCommandWithContext)
     {
         // Most var commands should be executed in the context
         // of the selected thread and frame.

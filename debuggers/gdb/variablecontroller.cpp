@@ -66,12 +66,12 @@ void VariableController::update()
         variableCollection()->watches()->reinstall();
     }
 
-    if (autoUpdate() & UpdateLocals) {
+//    if (autoUpdate() & UpdateLocals) {
         updateLocals();
-    }
+//    }
 
-    if ((autoUpdate() & UpdateLocals) ||
-        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
+//    if ((autoUpdate() & UpdateLocals) ||
+//        ((autoUpdate() & UpdateWatches) && variableCollection()->watches()->childCount() > 0))
     {
         debugSession()->addCommand(
             new GDBCommand(GDBMI::VarUpdate, "--all-values *", this,
