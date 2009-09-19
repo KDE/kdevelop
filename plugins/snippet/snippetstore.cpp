@@ -70,8 +70,6 @@ void SnippetStore::createNewRepository(SnippetRepository* parent, const QString&
     } else {
         repos_.append( item );
         appendRow( item );
-        connect(item, SIGNAL(repositoryRemoved(SnippetRepository*)),
-                this, SLOT(remove(SnippetRepository*)));
     }
 }
 
