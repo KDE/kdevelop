@@ -59,7 +59,6 @@
 #include <language/codecompletion/codecompletion.h>
 #include <language/codegen/applychangeswidget.h>
 
-#include "cmakedocumentation.h"
 #include "cmakemodelitems.h"
 #include "cmakenavigationwidget.h"
 #include "cmakehighlighting.h"
@@ -68,10 +67,11 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakeexport.h"
 #include "cmakecodecompletionmodel.h"
-#include "icmakebuilder.h"
 #include "cmakeutils.h"
 #include "cmaketypes.h"
 #include "parser/cmakeparserutils.h"
+#include "icmakebuilder.h"
+#include "icmakedocumentation.h"
 
 #ifdef CMAKEDEBUGVISITOR
 #include "cmakedebugvisitor.h"
@@ -148,8 +148,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
     m_highlight = new CMakeHighlighting(this);
     QString cmakeCmd = KStandardDirs::findExe("cmake");
-    m_doc = new CMakeDocumentation(cmakeCmd, this);
-    new CodeCompletion(this, new CMakeCodeCompletionModel(m_doc), name());
+    new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 }
 
 CMakeManager::~CMakeManager()
@@ -1166,7 +1165,8 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
         {}
         
         QString id=e->text(KTextEditor::Range(start, end));
-        KSharedPtr<IDocumentation> desc=m_doc->description(id, url);
+        ICMakeDocumentation* docu=CMake::cmakeDocumentation();
+        KSharedPtr<IDocumentation> desc=docu->description(id, url);
         if(!desc.isNull())
         {
             doc=new CMakeNavigationWidget(top, desc);
@@ -1192,26 +1192,6 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
         ret.second=e.doc;
     }
     return ret;
-}
-
-KSharedPtr< KDevelop::IDocumentation > CMakeManager::documentationForDeclaration(KDevelop::Declaration* declaration)
-{
-    return m_doc->documentationForDeclaration(declaration);
-}
-
-KSharedPtr< IDocumentation > CMakeManager::documentationForIndex(const QModelIndex& idx)
-{
-    return m_doc->documentationForIndex(idx);
-}
-
-QAbstractListModel* CMakeManager::indexModel()
-{
-    return m_doc->indexModel();
-}
-
-QIcon CMakeManager::icon() const
-{
-    return KIcon("text-x-cmake");
 }
 
 #include "cmakemanager.moc"

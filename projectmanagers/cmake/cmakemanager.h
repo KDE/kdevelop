@@ -34,6 +34,7 @@
 #include <interfaces/idocumentationprovider.h>
 
 #include "cmakelistsparser.h"
+#include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
 class QDir;
@@ -63,13 +64,13 @@ class CMakeManager
     : public KDevelop::IPlugin
     , public KDevelop::IBuildSystemManager
     , public KDevelop::ILanguageSupport
-    , public KDevelop::IDocumentationProvider
+    , public ICMakeManager
 {
 Q_OBJECT
 Q_INTERFACES( KDevelop::IBuildSystemManager )
 Q_INTERFACES( KDevelop::IProjectFileManager )
 Q_INTERFACES( KDevelop::ILanguageSupport )
-Q_INTERFACES( KDevelop::IDocumentationProvider )
+Q_INTERFACES( ICMakeManager )
 public:
     explicit CMakeManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
@@ -105,7 +106,7 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
     
-    QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const;
+    virtual QPair<QString, QString> cacheValue(KDevelop::IProject* project, const QString& id) const;
     
     //LanguageSupport
     virtual QString name() const;
@@ -113,12 +114,6 @@ public:
     virtual KDevelop::ILanguage *language();
     virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
-
-    //IDocumentationProvider
-    virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
-    virtual QIcon icon() const;
-    virtual QAbstractListModel* indexModel();
-    virtual KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx);
 
 public slots:
     void dirtyFile(const QString& file);
@@ -143,7 +138,6 @@ private:
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KUrl, KDevelop::ProjectFolderItem*> m_pending;
     
-    CMakeDocumentation* m_doc;
     CMakeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;

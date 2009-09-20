@@ -34,7 +34,6 @@ set( cmakecommon_UI
 
 set( cmakemanager_SRCS
   cmakenavigationwidget.cpp
-  cmakedocumentation.cpp
   cmakemodelitems.cpp
   cmakemanager.cpp
   cmakehighlighting.cpp
@@ -53,6 +52,10 @@ set( cmakesettings_SRCS
 
 set( cmakesettings_UI
   settings/cmakebuildsettings.ui
+)
+
+set( cmakedoc_SRCS 
+  cmakedocumentation.cpp
 )
 
 remove_definitions( -DQT_NO_STL )
@@ -74,6 +77,12 @@ target_link_libraries( kdevcmakemanager ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS}
                         ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
                         ${KDE4_KTEXTEDITOR_LIBS})
+                        
+kde4_add_plugin( kdevcmakedocumentation ${cmakedoc_SRCS} )
+target_link_libraries( kdevcmakedocumentation
+                        ${KDEVPLATFORM_INTERFACES_LIBRARY} kdev4cmakecommon
+                        ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARY}
+                        ${KDE4_KTEXTEDITOR_LIBS})
 
 kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )
@@ -82,9 +91,11 @@ target_link_libraries( kcm_kdevcmake_settings ${KDE4_KIO_LIBS}
                        ${KDEVPLATFORM_INTERFACES_LIBRARY} ${KDEVPLATFORM_PROJECT_LIBRARY} ${KDE4_KIO_LIBRARY} kdev4cmakecommon )
 
 install(TARGETS kdevcmakemanager DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kdevcmakedocumentation DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kcm_kdevcmake_settings DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(TARGETS kdev4cmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install(FILES kdevcmakemanager.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES kdevcmakedocumentation.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kcm_kdevcmake_settings.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES data.kdev4 DESTINATION ${DATA_INSTALL_DIR}/kdevcmakemanager )
 

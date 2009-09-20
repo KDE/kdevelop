@@ -40,6 +40,9 @@
 #include <interfaces/iuicontroller.h>
 
 #include "cmakebuilddirchooser.h"
+#include "icmakedocumentation.h"
+#include <interfaces/idocumentationcontroller.h>
+#include <interfaces/iplugincontroller.h>
 
 static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
@@ -175,6 +178,17 @@ void setProjectRootRelative( KDevelop::IProject* project, const QString& relativ
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( projectRootRelativeKey, relative );
     cmakeGrp.sync();
+}
+
+ICMakeDocumentation* cmakeDocumentation()
+{
+    KDevelop::IPlugin* p=KDevelop::ICore::self()->pluginController()->pluginForExtension(ICMakeDocumentation_iid);
+    Q_ASSERT(p);
+    
+    ICMakeDocumentation* cmakedoc = qobject_cast<ICMakeDocumentation*>(p);
+    
+    Q_ASSERT(cmakedoc);
+    return cmakedoc;
 }
 
 }

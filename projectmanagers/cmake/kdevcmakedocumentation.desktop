@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Service
+Name=CMakeDocumentation
+Comment=Allows KDevelop to provide CMake documentation
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevcmakedocumentation
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-Email=aleixpol@kde.org
+X-KDE-PluginInfo-Name=KDevCMakeDocumentation
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=7
+X-KDevelop-Category=Global
+X-KDevelop-Language=CMake
+X-KDevelop-Interfaces=org.kdevelop.IDocumentationProvider,org.kdevelop.ICMakeDocumentation
+X-KDevelop-SupportedMimeTypes=text/x-cmake
+X-KDevelop-Mode=GUI

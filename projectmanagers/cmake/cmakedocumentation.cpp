@@ -31,6 +31,12 @@
 #include "cmakemanager.h"
 #include <cmakeparserutils.h>
 #include <QStringListModel>
+#include <interfaces/iproject.h>
+#include <KStandardDirs>
+#include <KIcon>
+
+K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
+K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmakedocumentation", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
 
 class CMakeDoc : public KDevelop::IDocumentation
 {
@@ -43,20 +49,23 @@ class CMakeDoc : public KDevelop::IDocumentation
         virtual bool providesWidget() const { return false; }
         virtual KDevelop::IDocumentationProvider* provider() { return s_provider; }
         
-        static CMakeManager* s_provider;
+        static CMakeDocumentation* s_provider;
         
     private:
         QString mName, mDesc;
 };
-CMakeManager* CMakeDoc::s_provider=0;
+CMakeDocumentation* CMakeDoc::s_provider=0;
 
-CMakeDocumentation::CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m)
-    : QObject(m), mCMakeCmd(cmakeCmd), m_manager(m)
+CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
+    : KDevelop::IPlugin( CMakeSupportDocFactory::componentData(), parent )
 {
-    CMakeDoc::s_provider=m;
+    mCMakeCmd=KStandardDirs::findExe("cmake");
+    CMakeDoc::s_provider=this;
     m_index= new QStringListModel(this);
     
     QTimer::singleShot(0, this, SLOT(delayedInitialization()));
+    
+    qDebug() << "BUAAAAAAA" << extensions();
 }
 
 void CMakeDocumentation::delayedInitialization()
@@ -115,9 +124,13 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     if(!arg.isEmpty())
         desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(arg) << identifier)+"</pre>";
     
+    KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
+    ICMakeManager* m=0;
+    if(p)
+        m=p->managerPlugin()->extension<ICMakeManager>();
+    if(m)
     {
-        KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
-        QPair<QString, QString> entry = m_manager->cacheValue(p, identifier);
+        QPair<QString, QString> entry = m->cacheValue(p, identifier);
         if(!entry.first.isEmpty())
             desc += i18n("<br /><em>Cache Value:</em> %1\n", entry.first);
         
@@ -145,4 +158,14 @@ KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(
 QAbstractListModel* CMakeDocumentation::indexModel()
 {
     return m_index;
+}
+
+QIcon CMakeDocumentation::icon() const
+{
+    return KIcon("text-x-cmake");
+}
+
+QString CMakeDocumentation::name() const
+{
+    return "CMake";
 }

@@ -26,27 +26,30 @@
 #include <QStringList>
 #include <QVariantList>
 #include <interfaces/iplugin.h>
-#include <interfaces/idocumentationprovider.h>
+#include "icmakedocumentation.h"
 
 class QStringListModel;
 namespace KDevelop { class Declaration; }
 class CMakeManager;
 class KUrl;
 
-class CMakeDocumentation : public QObject
+class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
 {
     Q_OBJECT
+    Q_INTERFACES( ICMakeDocumentation )
+    Q_INTERFACES( KDevelop::IDocumentationProvider )
     public:
-        enum Type { Command, Variable, Module, Property, Policy };
-        CMakeDocumentation(const QString& cmakeCmd, CMakeManager* m);
+        explicit CMakeDocumentation( QObject* parent = 0, const QVariantList& args = QVariantList() );
         KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
-        
-        KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
+        KSharedPtr<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration);
         
         QStringList names(Type t) const;
         
         QAbstractListModel* indexModel();
         KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx);
+        
+        virtual QIcon icon() const;
+        virtual QString name() const;
     public slots:
         void delayedInitialization();
         
@@ -55,7 +58,6 @@ class CMakeDocumentation : public QObject
         
         QMap<QString, Type> m_typeForName;
         QString mCMakeCmd;
-        const CMakeManager* m_manager;
         QStringListModel* m_index;
 };
 

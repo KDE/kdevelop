@@ -30,20 +30,22 @@
 #include <language/duchain/types/delayedtype.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-#include "astfactory.h"
-#include "cmakedocumentation.h"
 #include <KLocalizedString>
 #include <KIcon>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
+#include "astfactory.h"
+#include "cmakeutils.h"
+#include "icmakedocumentation.h"
 
 using namespace KTextEditor;
 using namespace KDevelop;
 
 QStringList CMakeCodeCompletionModel::s_commands;
 
-CMakeCodeCompletionModel::CMakeCodeCompletionModel(CMakeDocumentation* doc)
-    : CodeCompletionModel(doc), m_doc(doc)
-{
-}
+CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject* parent)
+    : CodeCompletionModel(parent)
+{}
 
 bool isFunction(const Declaration* decl)
 {
@@ -57,8 +59,12 @@ bool isPathChar(const QChar& c)
 
 void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range, InvocationType invocationType)
 {
-    if(s_commands.isEmpty())
-        s_commands=m_doc->names(CMakeDocumentation::Command);
+    if(s_commands.isEmpty()) {
+        ICMakeDocumentation* cmakedoc=CMake::cmakeDocumentation();
+        
+        if(cmakedoc)
+            s_commands=cmakedoc->names(ICMakeDocumentation::Command);
+    }
     
     Q_UNUSED(invocationType);
     m_declarations.clear();

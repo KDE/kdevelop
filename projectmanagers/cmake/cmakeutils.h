@@ -31,6 +31,7 @@ namespace KDevelop
 }
 
 class KUrl;
+class ICMakeDocumentation;
 
 namespace CMake
 {
@@ -99,6 +100,11 @@ namespace CMake
      * Sets the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setProjectRootRelative( KDevelop::IProject* project, const QString& path);
+    
+    /**
+     * Obtains a cmake documentation instance if it exists
+     */
+    KDEVCMAKECOMMON_EXPORT ICMakeDocumentation* cmakeDocumentation();
 }
 
 #endif
