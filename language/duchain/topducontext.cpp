@@ -970,7 +970,7 @@ struct TopDUContext::FindDeclarationsAcceptor {
   QFlags< KDevelop::DUContext::SearchFlag > flags;
 };
 
-bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags) const
+bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags, uint depth) const
 {
   ENSURE_CAN_READ
 

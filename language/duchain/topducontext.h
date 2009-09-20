@@ -348,7 +348,7 @@ public:
   
   bool usingImportsCache() const;
 
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth) const;
 protected:
   void setParsingEnvironmentFile(ParsingEnvironmentFile*);
 

@@ -48,6 +48,8 @@
 
 ///It is fine to use one global static mutex here
 
+const uint maxParentDepth = 20;
+
 using namespace KTextEditor;
 
 //Stored statically for performance-reasons
@@ -822,8 +824,13 @@ bool DUContext::foundEnough( const DeclarationList& ret, SearchFlags flags ) con
     return false;
 }
 
-bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const
+bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const
 {
+  if(depth > maxParentDepth) {
+    kDebug() << "maximum depth reached in" << scopeIdentifier(true);
+    return false;
+  }
+  
   DUCHAIN_D(DUContext);
   if( d_func()->m_contextType != Namespace ) { //If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
     for(int a = 0; a < baseIdentifiers.size(); ++a)
@@ -867,7 +874,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
         if( position.isValid() && d->m_importedContexts()[import].position.isValid() && position < d->m_importedContexts()[import].position )
           continue;
 
-        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext) )
+        if( !context->findDeclarationsInternal(nonGlobalIdentifiers,  url() == context->url() ? position : context->range().end, dataType, ret, source, flags | InImportedParentContext, depth+1) )
           return false;
       }
     }
@@ -879,7 +886,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   ///Step 3: Continue search in parent-context
   if (!(flags & DontSearchInParent) && shouldSearchInParent(flags) && m_dynamicData->m_parentContext) {
     applyUpwardsAliases(aliasedIdentifiers, source);
-    return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end, dataType, ret, source, flags);
+    return m_dynamicData->m_parentContext->findDeclarationsInternal(aliasedIdentifiers, url() == m_dynamicData->m_parentContext->url() ? position : m_dynamicData->m_parentContext->range().end, dataType, ret, source, flags, depth);
   }
   return true;
 }
@@ -892,7 +899,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(identifier));
 
-  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags, 0);
 
   return arrayToList(ret);
 }
@@ -1260,7 +1267,7 @@ QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, co
   DeclarationList ret;
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(QualifiedIdentifier(identifier)));
-  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags);
+  findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags, 0);
   return arrayToList(ret);
 }
 

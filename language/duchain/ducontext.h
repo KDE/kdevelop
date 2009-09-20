@@ -769,13 +769,13 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    *   search might stop as soon as one item is found.
    * - The source top-context is needed to correctly resolve template-parameters
    * @param position A valid position, if in doubt use textRange().end()
-   *
+   * @param depth Depth of the search in parents. This is used to prevent endless recursions in endless import loops.
    * @warning position Must be valid!
    * @return whether the search was successful. If it is false, it had to be stopped for special reasons(like some flags)
    * */
   typedef KDevVarLengthArray<Declaration*, 40> DeclarationList;
 
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const;
 
   ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
   void squeeze();
