@@ -223,7 +223,7 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   
   DUContext::DeclarationList tempDecls;
   if( !scopeContext ) {
-    m_context->findDeclarationsInternal( allIdentifiers, m_position, m_dataType, tempDecls, m_source, basicFlags | DUContext::DirectQualifiedLookup );
+    m_context->findDeclarationsInternal( allIdentifiers, m_position, m_dataType, tempDecls, m_source, basicFlags | DUContext::DirectQualifiedLookup, 0 );
     if( tempDecls.isEmpty() && m_source != m_context && !s.identifier.explicitlyGlobal() ) {
       //To simulate a search starting at searchContext->scopIdentifier, we must search the identifier with all partial scopes prepended
       //If we have a trace, walk the trace up so we're able to find the item in earlier imported contexts.
@@ -241,12 +241,12 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
       ///@todo do correct tracing for correct visibility
       ///@todo Create a test that depends on this behavior
       if(!(basicFlags & DUContext::DontSearchInParent))
-        m_source->findDeclarationsInternal( allIdentifiers, m_source->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup | basicFlags) );
+        m_source->findDeclarationsInternal( allIdentifiers, m_source->range().end, AbstractType::Ptr(), decls, m_source, (KDevelop::DUContext::SearchFlag)(KDevelop::DUContext::NoUndefinedTemplateParams | KDevelop::DUContext::DirectQualifiedLookup | basicFlags), 0 );
       if( !decls.isEmpty() )
         tempDecls = decls;
     }
   } else { //Create a new trace, so template-parameters can be resolved globally
-    scopeContext->findDeclarationsInternal( allIdentifiers, scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext(), basicFlags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup );
+    scopeContext->findDeclarationsInternal( allIdentifiers, scopeContext->url() == m_context->url() ? m_position : scopeContext->range().end, m_dataType, tempDecls, topContext(), basicFlags | DUContext::DontSearchInParent | DUContext::DirectQualifiedLookup, 0 );
   }
   
   s.result.clear();

@@ -43,10 +43,18 @@
 using namespace Cpp;
 using namespace KDevelop;
 
+const int maxParentDepth = 20;
+
 namespace Cpp {
 
-KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const TopDUContext* topContext ) {
+KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const TopDUContext* topContext, uint depth ) {
   QList<Declaration*> ret;
+
+  if(depth > maxParentDepth) {
+    kDebug() << "maximum parent depth reached on" << context->scopeIdentifier(true);
+    return ret;
+  }
+  
   ret += context->findLocalDeclarations( identifier, SimpleCursor::invalid(), topContext );
   if( !ret.isEmpty() )
     return ret;
@@ -57,7 +65,7 @@ KDEVCPPDUCHAIN_EXPORT  QList<KDevelop::Declaration*> findLocalDeclarations( KDev
   QVector<DUContext::Import> bases = context->importedParentContexts();
   for( QVector<DUContext::Import>::const_iterator it = bases.constBegin(); it != bases.constEnd(); ++it ) {
     if( it->context(topContext) )
-      ret += findLocalDeclarations( (*it).context(topContext), identifier, topContext );
+      ret += findLocalDeclarations( (*it).context(topContext), identifier, topContext, depth+1 );
   }
   return ret;
 }

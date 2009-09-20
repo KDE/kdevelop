@@ -242,7 +242,7 @@ class CppDUContext : public BaseContext {
     }
 
     ///Overridden to take care of templates and other c++ specific things
-    virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags ) const
+    virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags, uint depth ) const
     {
       if(this->type() == DUContext::Class && identifiers.count() == 1 && /*!identifiers[0]->hasNext() &&*/!(basicFlags & DUContext::OnlyFunctions) && this->localScopeIdentifier().count()) {
         
@@ -277,7 +277,7 @@ class CppDUContext : public BaseContext {
       if( basicFlags & BaseContext::DirectQualifiedLookup ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
         //We use DirectQualifiedLookup to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
-        return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, source, basicFlags );
+        return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, source, basicFlags, depth );
       }
       
       FOREACH_ARRAY( const DUContext::SearchItem::Ptr& item, identifiers )
@@ -307,7 +307,7 @@ class CppDUContext : public BaseContext {
       return true;
     }
 
-    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags ) const
+    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 

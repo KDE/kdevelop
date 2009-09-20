@@ -183,7 +183,7 @@ struct DelayedTypeResolver : public KDevelop::TypeExchanger {
         DUContext::SearchItem::PtrList identifiers;
         identifiers << DUContext::SearchItem::Ptr( new DUContext::SearchItem(qid) );
         DUContext::DeclarationList decls;
-        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, source, searchFlags ) )
+        if( !searchContext->findDeclarationsInternal( identifiers, searchContext->range().end, AbstractType::Ptr(), decls, source, searchFlags, 0 ) )
           return type;
         
 

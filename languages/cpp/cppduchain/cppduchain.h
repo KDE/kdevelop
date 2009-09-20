@@ -53,7 +53,7 @@ namespace Cpp {
  * @param topContext should be the top-context from where the search starts. This is needed to resolve template-parameters.
  * Du-chain must be locked before.
  * */
-KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::TopDUContext* topContext );
+KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::TopDUContext* topContext, uint depth = 0 );
 
 /**
  * Searches for declarations on the same level, either locally within the context, or namespace. \param identifier that will be declared in a given \param context
