@@ -59,13 +59,14 @@ CMakeDocumentation* CMakeDoc::s_provider=0;
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( CMakeSupportDocFactory::componentData(), parent )
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
+    KDEV_USE_EXTENSION_INTERFACE( ICMakeDocumentation )
+    
     mCMakeCmd=KStandardDirs::findExe("cmake");
     CMakeDoc::s_provider=this;
     m_index= new QStringListModel(this);
     
     QTimer::singleShot(0, this, SLOT(delayedInitialization()));
-    
-    qDebug() << "BUAAAAAAA" << extensions();
 }
 
 void CMakeDocumentation::delayedInitialization()
