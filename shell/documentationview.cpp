@@ -29,6 +29,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <QTextEdit>
+#include <QCompleter>
 
 class ProvidersModel : public QAbstractListModel
 {
@@ -80,10 +81,12 @@ DocumentationView::DocumentationView(QWidget* parent)
     mProvidersModel=new ProvidersModel(mProviders);
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
-    mIdentifiers=new QComboBox(mActions);
+    mIdentifiers=new QLineEdit(mActions);
+    mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
+    mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    mIdentifiers->setEditable(true);
-    connect(mIdentifiers, SIGNAL(activated(int)), SLOT(changedSelection(int)));
+    connect(mIdentifiers, SIGNAL(editingFinished()), SLOT(changedSelection()));
+    connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changedSelection(QModelIndex)));
     
     mActions->addWidget(mProviders);
     mActions->addWidget(mIdentifiers);
@@ -96,7 +99,7 @@ DocumentationView::DocumentationView(QWidget* parent)
     
     layout()->addWidget(new QLabel(i18n("There is no documentation selected yet"), this));
     
-    if(mProvidersModel->rowCount()>0)
+    if(mProvidersModel->rowCount(QModelIndex())>0)
         changedProvider(0);
 }
 
@@ -118,12 +121,19 @@ void DocumentationView::browseForward()
     updateView();
 }
 
-void DocumentationView::changedSelection(int row)
+void DocumentationView::changedSelection()
 {
-    QModelIndex idx=mIdentifiers->model()->index(row, 0);
-    KSharedPtr<KDevelop::IDocumentation> doc=mProvidersModel->provider(mProviders->currentIndex())->documentationForIndex(idx);
-    if(doc)
-        showDocumentation(doc);
+    changedSelection(mIdentifiers->completer()->currentIndex());
+}
+
+void DocumentationView::changedSelection(const QModelIndex& idx)
+{
+    if(idx.isValid())
+    {
+        KSharedPtr<KDevelop::IDocumentation> doc=mProvidersModel->provider(mProviders->currentIndex())->documentationForIndex(idx);
+        if(doc)
+            showDocumentation(doc);
+    }
 }
 
 void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
@@ -140,8 +150,8 @@ void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation >
 void DocumentationView::updateView()
 {
     mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
-    mIdentifiers->setModel((*mCurrent)->provider()->indexModel());
-    mIdentifiers->lineEdit()->setText((*mCurrent)->name());
+    mIdentifiers->completer()->setModel((*mCurrent)->provider()->indexModel());
+    mIdentifiers->setText((*mCurrent)->name());
     
     delete layout()->takeAt(1);
     
@@ -153,11 +163,12 @@ void DocumentationView::updateView()
         widget->setText((*mCurrent)->description());
         w=widget;
     }
+    Q_ASSERT(w);
     layout()->addWidget(w);
 }
 
 void DocumentationView::changedProvider(int row)
 {
-    mIdentifiers->setModel(mProvidersModel->provider(row)->indexModel());
-    mIdentifiers->lineEdit()->clear();
+    mIdentifiers->completer()->setModel(mProvidersModel->provider(row)->indexModel());
+    mIdentifiers->clear();
 }
