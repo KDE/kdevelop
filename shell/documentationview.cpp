@@ -20,16 +20,17 @@
 #include <QAction>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QComboBox>
+#include <QTextEdit>
+#include <QCompleter>
+#include <QLayout>
+#include <KLineEdit>
 #include <KDebug>
 #include <KIcon>
 #include <KLocale>
-#include <QComboBox>
-#include <interfaces/idocumentationprovider.h>
-#include <QLineEdit>
 #include <interfaces/icore.h>
+#include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationcontroller.h>
-#include <QTextEdit>
-#include <QCompleter>
 
 class ProvidersModel : public QAbstractListModel
 {
@@ -81,9 +82,10 @@ DocumentationView::DocumentationView(QWidget* parent)
     mProvidersModel=new ProvidersModel(mProviders);
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
-    mIdentifiers=new QLineEdit(mActions);
+    mIdentifiers=new KLineEdit(mActions);
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
-    mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+//     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     connect(mIdentifiers, SIGNAL(editingFinished()), SLOT(changedSelection()));
     connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changedSelection(QModelIndex)));
@@ -95,9 +97,11 @@ DocumentationView::DocumentationView(QWidget* parent)
     mForward->setEnabled(false);
     connect(mBack, SIGNAL(triggered()), this, SLOT(browseBack()));
     connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
-    mCurrent=mHistory.begin();
+    mCurrent=mHistory.end();
     
-    layout()->addWidget(new QLabel(i18n("There is no documentation selected yet"), this));
+    QLabel* message=new QLabel(i18n("There is no documentation selected yet"), this);
+    message->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+    layout()->addWidget(message);
     
     if(mProvidersModel->rowCount(QModelIndex())>0)
         changedProvider(0);
@@ -153,7 +157,11 @@ void DocumentationView::updateView()
     mIdentifiers->completer()->setModel((*mCurrent)->provider()->indexModel());
     mIdentifiers->setText((*mCurrent)->name());
     
-    delete layout()->takeAt(1);
+    QLayoutItem* lastview=layout()->takeAt(1);
+    if(lastview->widget()->parent()==this)
+        delete lastview->widget();
+    
+    delete lastview;
     
     QWidget* w;
     if((*mCurrent)->providesWidget())
