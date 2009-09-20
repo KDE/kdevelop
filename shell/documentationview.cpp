@@ -96,7 +96,8 @@ DocumentationView::DocumentationView(QWidget* parent)
     
     layout()->addWidget(new QLabel(i18n("There is no documentation selected yet"), this));
     
-    changedProvider(0);
+    if(mProvidersModel->rowCount()>0)
+        changedProvider(0);
 }
 
 void DocumentationView::browseBack()
