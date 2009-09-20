@@ -64,6 +64,8 @@ void CMakeDocumentation::delayedInitialization()
     collectIds("--help-command-list", Command);
     collectIds("--help-variable-list", Variable);
     collectIds("--help-module-list", Module);
+    
+    m_index->setStringList(m_typeForName.keys());
 }
 
 void CMakeDocumentation::collectIds(const QString& param, Type type)
@@ -74,8 +76,6 @@ void CMakeDocumentation::collectIds(const QString& param, Type type)
     {
         m_typeForName[name.toLower()]=type;
     }
-    
-    m_index->setStringList(ids);
 }
 
 QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
