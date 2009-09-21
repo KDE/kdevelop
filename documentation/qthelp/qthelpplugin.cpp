@@ -299,7 +299,7 @@ QAbstractListModel* QtHelpPlugin::indexModel()
 
 KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForIndex(const QModelIndex& idx)
 {
-    QString name=m_engine.indexModel()->data(m_engine.indexModel()->index(idx.row()), Qt::DisplayRole).toString();
+    QString name=idx.data(Qt::DisplayRole).toString();
     return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, this));
 }
 
