@@ -128,6 +128,8 @@ QString LaunchConfiguration::launcherForMode(const QString& mode) const
             return l->id();
         }
     }
+
+    return QString();
 }
 
 void LaunchConfiguration::setLauncherForMode(const QString& mode, const QString& id)
