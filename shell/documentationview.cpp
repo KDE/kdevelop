@@ -31,11 +31,15 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationcontroller.h>
+#include <QTextBrowser>
 
 class ProvidersModel : public QAbstractListModel
 {
     public:
-        ProvidersModel(QObject* parent = 0) : QAbstractListModel(parent) {}
+        ProvidersModel(QObject* parent = 0)
+            : QAbstractListModel(parent)
+            , mProviders(KDevelop::ICore::self()->documentationController()->documentationProviders())
+        {}
         
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
         {
@@ -54,18 +58,20 @@ class ProvidersModel : public QAbstractListModel
         
         virtual int rowCount(const QModelIndex&) const
         {
-            return KDevelop::ICore::self()->documentationController()->documentationProviders().count();
+            return mProviders.count();
         }
         
         KDevelop::IDocumentationProvider* provider(int pos) const
         {
-            return KDevelop::ICore::self()->documentationController()->documentationProviders()[pos];
+            return mProviders[pos];
         }
         
         int rowForProvider(KDevelop::IDocumentationProvider* provider)
         {
-            return KDevelop::ICore::self()->documentationController()->documentationProviders().indexOf(provider);
+            return mProviders.indexOf(provider);
         }
+    private:
+        QList<KDevelop::IDocumentationProvider*> mProviders;
 };
 
 DocumentationView::DocumentationView(QWidget* parent)
@@ -87,8 +93,8 @@ DocumentationView::DocumentationView(QWidget* parent)
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    connect(mIdentifiers, SIGNAL(editingFinished()), SLOT(changedSelection()));
-    connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changedSelection(QModelIndex)));
+    connect(mIdentifiers, SIGNAL(returnPressed()), SLOT(changedSelection()));
+    connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changeProvider(QModelIndex)));
     
     mActions->addWidget(mProviders);
     mActions->addWidget(mIdentifiers);
@@ -127,10 +133,10 @@ void DocumentationView::browseForward()
 
 void DocumentationView::changedSelection()
 {
-    changedSelection(mIdentifiers->completer()->currentIndex());
+    changeProvider(mIdentifiers->completer()->currentIndex());
 }
 
-void DocumentationView::changedSelection(const QModelIndex& idx)
+void DocumentationView::changeProvider(const QModelIndex& idx)
 {
     if(idx.isValid())
     {
@@ -167,7 +173,8 @@ void DocumentationView::updateView()
     if((*mCurrent)->providesWidget())
         w=(*mCurrent)->documentationWidget(this);
     else {
-        QTextEdit* widget=new QTextEdit(this);
+        QTextBrowser* widget=new QTextBrowser(this);
+        widget->setReadOnly(true);
         widget->setText((*mCurrent)->description());
         w=widget;
     }

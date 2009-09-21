@@ -41,7 +41,7 @@ class DocumentationView : public QWidget
         void browseBack();
         void changedSelection();
         void changedProvider(int);
-        void changedSelection(const QModelIndex &);
+        void changeProvider(const QModelIndex &);
         
     private:
         void updateView();
