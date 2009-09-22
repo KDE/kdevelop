@@ -417,11 +417,7 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                     } else if( index.column() == 1 )
                     {
                         LaunchConfiguration* l = configForIndex( index );
-                        ILauncher* launcher = l->type()->launcherForId( l->launcherForMode( lmi->mode->id() ) );
-                        if( launcher )
-                        {
-                            return launcher->name();
-                        }
+                        return l->type()->launcherForId( l->launcherForMode( lmi->mode->id() ) )->name();
                     }
                 }
                 break;
