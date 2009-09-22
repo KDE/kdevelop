@@ -40,6 +40,8 @@
 #include <KIcon>
 #include <QLabel>
 #include <QAction>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
 
 K_PLUGIN_FACTORY(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
@@ -47,14 +49,18 @@ K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHel
 class QtHelpDocumentation : public KDevelop::IDocumentation
 {
 	public:
-		QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
-			: m_name(name), m_info(info) {}
+        QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
+            : m_name(name), m_info(info), m_current(info.constBegin()) {}
+            
+        QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
+            : m_name(name), m_info(info), m_current(m_info.find(key))
+        { Q_ASSERT(m_current!=m_info.constEnd()); }
 
         virtual QString name() const { return m_name; }
         
         virtual QString description() const
         {
-            QUrl url(m_info.values().first());
+            QUrl url(m_current.value());
             QByteArray data = s_provider->engine()->fileData(url);
 
             //Extract a short description from the html data
@@ -186,11 +192,16 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
                 view->setContextMenuPolicy(Qt::ActionsContextMenu);
                 
                 foreach(const QString& name, m_info.keys()) {
-                    view->addAction(new QtHelpAlternativeLink(name, m_info[name], view));
+                    QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, view);
+                    
+                    act->setCheckable(true);
+                    act->setChecked(name==m_current.key());
+                    view->addAction(act);
                 }
                 
-                QUrl url=m_info[m_info.keys().first()];
-                view->load(url);
+                qDebug() << "XXXXX" << info();
+                qDebug() << "YYYYY" << m_current.value();
+                view->load(m_current.value());
                 ret=view;
             }
             return ret;
@@ -198,12 +209,14 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         
         virtual bool providesWidget() const { return true; }
         virtual KDevelop::IDocumentationProvider* provider() { return s_provider; }
+        QMap<QString, QUrl> info() const { return m_info; }
         
         static QtHelpPlugin* s_provider;
         
     private:
         const QString m_name;
         const QMap<QString, QUrl> m_info;
+        const QMap<QString, QUrl>::const_iterator m_current;
 };
 QtHelpPlugin* QtHelpDocumentation::s_provider=0;
 
@@ -319,13 +332,14 @@ QString QtHelpPlugin::name() const
 
 //AlternativeAction
 
-QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QUrl& url, QWebView* parent)
-    : QAction(name, parent), mUrl(url), mView(parent)
+QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent)
+    : QAction(name, parent), mDoc(doc), mName(name)
 {
     connect(this, SIGNAL(triggered()), SLOT(showUrl()));
 }
 
 void QtHelpAlternativeLink::showUrl()
 {
-    mView->load(mUrl);
+    KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
+    KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }

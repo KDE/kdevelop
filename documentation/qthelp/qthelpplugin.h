@@ -22,15 +22,15 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
-#include <QVariantList>
 #include <QHelpEngine>
 #include <QAction>
-#include <QWebView>
+
+class QtHelpDocumentation;
 
 class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
 	public:
-		QtHelpPlugin(QObject *parent, const QVariantList & args= QVariantList());
+		QtHelpPlugin(QObject *parent, const QVariantList & args);
 		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*);
         
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx);
@@ -48,14 +48,14 @@ class QtHelpAlternativeLink : public QAction
 {
     Q_OBJECT
     public:
-        QtHelpAlternativeLink(const QString& name, const QUrl& url, QWebView* parent);
+        QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent);
         
     public slots:
         void showUrl();
         
     private:
-        const QUrl mUrl;
-        QWebView* mView;
+        const QtHelpDocumentation* mDoc;
+        const QString mName;
 };
 
 #endif // QTHELPPLUGIN_H
