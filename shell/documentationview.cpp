@@ -165,7 +165,7 @@ void DocumentationView::updateView()
     
     QLayoutItem* lastview=layout()->takeAt(1);
     if(lastview->widget()->parent()==this)
-        delete lastview->widget();
+        lastview->widget()->deleteLater();
     
     delete lastview;
     
