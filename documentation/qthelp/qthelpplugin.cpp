@@ -38,26 +38,23 @@
 #include "qthelpnetwork.h"
 #include <QWebFrame>
 #include <KIcon>
+#include <QLabel>
+#include <QAction>
 
 K_PLUGIN_FACTORY(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
-
+        
 class QtHelpDocumentation : public KDevelop::IDocumentation
 {
 	public:
-		QtHelpDocumentation(const QString& name, QtHelpPlugin* e)
-			: m_name(name) { s_provider=e; }
+		QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
+			: m_name(name), m_info(info) {}
 
         virtual QString name() const { return m_name; }
         
         virtual QString description() const
         {
-            QMap< QString, QUrl > _info=info();
-            if(_info.isEmpty()) //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
-                return QString();
-            
-            HelpNetworkAccessManager access(s_provider->engine(), 0);
-            QUrl url(_info.values().first());
+            QUrl url(m_info.values().first());
             QByteArray data = s_provider->engine()->fileData(url);
 
             //Extract a short description from the html data
@@ -175,33 +172,38 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
                 return thisFragment;
             }
             
-            return QStringList(_info.keys()).join(", ");
+            return QStringList(m_info.keys()).join(", ");
         }
         
         virtual QWidget* documentationWidget(QWidget* parent)
         {
-            QMap<QString, QUrl> _info=info();
-            if(_info.isEmpty()) //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
-                return 0;
-            
-            m_view=new QWebView(parent);
-            m_view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(s_provider->engine(), 0));
-            
-            QUrl url=_info[_info.keys().first()];
-            m_view->load(url);
-            
-            return m_view;
+            QWidget* ret;
+            if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
+                ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
+            } else {
+                QWebView* view=new QWebView(parent);
+                view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(s_provider->engine(), 0));
+                view->setContextMenuPolicy(Qt::ActionsContextMenu);
+                
+                foreach(const QString& name, m_info.keys()) {
+                    view->addAction(new QtHelpAlternativeLink(name, m_info[name], view));
+                }
+                
+                QUrl url=m_info[m_info.keys().first()];
+                view->load(url);
+                ret=view;
+            }
+            return ret;
         }
         
         virtual bool providesWidget() const { return true; }
         virtual KDevelop::IDocumentationProvider* provider() { return s_provider; }
         
-	private:
         static QtHelpPlugin* s_provider;
-        QMap<QString, QUrl> info() const { return s_provider->engine()->linksForIdentifier(m_name); }
         
-		QString m_name;
-        QPointer<QWebView> m_view;
+    private:
+        const QString m_name;
+        const QMap<QString, QUrl> m_info;
 };
 QtHelpPlugin* QtHelpDocumentation::s_provider=0;
 
@@ -231,6 +233,8 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
 	, m_engine(KStandardDirs::locateLocal("appdata", "qthelpcollection", QtHelpFactory::componentData()))
 {
+    QtHelpDocumentation::s_provider=this;
+    
     Q_UNUSED(args);
 	QStringList qmakes;
     KStandardDirs::findAllExe(qmakes, "qmake");
@@ -285,7 +289,7 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration
             
             kDebug() << "doc_found" << id << links;
 			if(!links.isEmpty())
-				return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, this));
+				return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, m_engine.linksForIdentifier(id)));
 		}
 	}
 	
@@ -300,7 +304,7 @@ QAbstractListModel* QtHelpPlugin::indexModel()
 KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForIndex(const QModelIndex& idx)
 {
     QString name=idx.data(Qt::DisplayRole).toString();
-    return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, this));
+    return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
 }
 
 QIcon QtHelpPlugin::icon() const
@@ -311,4 +315,17 @@ QIcon QtHelpPlugin::icon() const
 QString QtHelpPlugin::name() const
 {
     return i18n("QtHelp");
+}
+
+//AlternativeAction
+
+QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QUrl& url, QWebView* parent)
+    : QAction(name, parent), mUrl(url), mView(parent)
+{
+    connect(this, SIGNAL(triggered()), SLOT(showUrl()));
+}
+
+void QtHelpAlternativeLink::showUrl()
+{
+    mView->load(mUrl);
 }

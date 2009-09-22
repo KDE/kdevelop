@@ -24,6 +24,8 @@
 #include <interfaces/idocumentationprovider.h>
 #include <QVariantList>
 #include <QHelpEngine>
+#include <QAction>
+#include <QWebView>
 
 class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
@@ -40,6 +42,20 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         QHelpEngine* engine() { return &m_engine; }
 	private:
 		QHelpEngine m_engine;
+};
+
+class QtHelpAlternativeLink : public QAction
+{
+    Q_OBJECT
+    public:
+        QtHelpAlternativeLink(const QString& name, const QUrl& url, QWebView* parent);
+        
+    public slots:
+        void showUrl();
+        
+    private:
+        const QUrl mUrl;
+        QWebView* mView;
 };
 
 #endif // QTHELPPLUGIN_H
