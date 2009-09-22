@@ -199,8 +199,6 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
                     view->addAction(act);
                 }
                 
-                qDebug() << "XXXXX" << info();
-                qDebug() << "YYYYY" << m_current.value();
                 view->load(m_current.value());
                 ret=view;
             }
