@@ -71,6 +71,8 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
             {
                 ProblemPointer problem = m_problemsForRanges[deepestRange];
                 
+                lock.unlock();
+                
                 KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
                 widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
                 
