@@ -77,6 +77,9 @@ public:
     virtual bool reload(KDevelop::ProjectBaseItem* item);
     virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
 
+    /// first item is includes, second excludes
+    typedef QPair<QStringList, QStringList> IncludeRules;
+
 Q_SIGNALS:
     void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
 
@@ -95,14 +98,14 @@ private Q_SLOTS:
     KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item );
     void addJobItems(KDevelop::IProject* project, const KUrl& url, KIO::UDSEntryList entries);
 
+    void deleted(const QString &path);
+    void created(const QString &path);
+
 private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
-                  const QStringList& includes, const QStringList& excludes ) const;
+                  const IncludeRules& rules ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KIO::Job*, KDevelop::IProject*> m_jobProjects;
-
-private Q_SLOTS:
-    void dirty( const QString &fileName );
 
 private:
     class GenericProjectManagerPrivate* const d;

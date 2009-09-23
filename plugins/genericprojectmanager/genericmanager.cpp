@@ -40,6 +40,7 @@
 
 #include <QtDesigner/QExtensionFactory>
 #include <QtCore/QRegExp>
+#include <QtCore/QFileInfo>
 
 #include <KIO/Job>
 #include <KIO/NetAccess>
@@ -56,6 +57,19 @@ public:
     {}
 };
 
+
+/**
+ * Reads project config and returns lists for include and exclude rules.
+ */
+GenericProjectManager::IncludeRules getIncludeRules(KDevelop::IProject* project) {
+    KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
+    QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
+    ///TODO: filter hidden files by default
+    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList("*/.*"));
+
+    return qMakePair(includes, excludes);
+}
+
 GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
         : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericProjectManagerPrivate )
 {
@@ -69,7 +83,7 @@ GenericProjectManager::~GenericProjectManager()
 }
 
 bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDevelop::IProject* project,
-                                     const QStringList &includes, const QStringList &excludes ) const
+                                     const IncludeRules &rules ) const
 {
     if ( isFolder && ( url.fileName() == "." || url.fileName() == ".."
             || ( url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) ) ) {
@@ -87,7 +101,7 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDeve
         isFolder ? KUrl::AddTrailingSlash : KUrl::RemoveTrailingSlash
     );
 
-    for ( QStringList::ConstIterator it = includes.constBegin(); !ok && it != includes.constEnd(); ++it ) {
+    for ( QStringList::ConstIterator it = rules.first.constBegin(); !ok && it != rules.first.constEnd(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
         if ( rx.exactMatch( relativePath ) ) {
             ok = true;
@@ -99,7 +113,7 @@ bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDeve
         return false;
     }
 
-    for ( QStringList::ConstIterator it = excludes.constBegin(); it != excludes.constEnd(); ++it ) {
+    for ( QStringList::ConstIterator it = rules.second.constBegin(); it != rules.second.constEnd(); ++it ) {
         QRegExp rx( *it, Qt::CaseSensitive, QRegExp::Wildcard );
         if ( rx.exactMatch( relativePath ) ) {
             return false;
@@ -157,11 +171,8 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
         return;
     }
     KDevelop::ProjectFolderItem* item = fitems.first();
-
-    KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
-    QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
-    ///TODO: filter hidden files by default
-    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList("*/.*"));
+    
+    const IncludeRules rules = getIncludeRules(project);
 
     // build lists of valid files and folders with relative urls to the project folder
     KUrl::List files;
@@ -170,7 +181,7 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
         KUrl url = listedDirUrl;
         url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
 
-        if ( !isValid( url, entry.isDir(), project, includes, excludes ) ) {
+        if ( !isValid( url, entry.isDir(), project, rules ) ) {
             continue;
         } else {
             if ( entry.isDir() ) {
@@ -244,9 +255,12 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
     if ( project->folder().isLocalFile() ) {
         m_watchers[project] = new KDirWatch( project );
 
-        connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirty(QString)));
+        connect(m_watchers[project], SIGNAL(created(QString)),
+                    this, SLOT(created(QString)));
+        connect(m_watchers[project], SIGNAL(deleted(QString)),
+                    this, SLOT(deleted(QString)));
 
-        m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs );
+        m_watchers[project]->addDir(project->folder().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
     }
 
     return projectRoot;
@@ -265,17 +279,46 @@ bool GenericProjectManager::reload( KDevelop::ProjectBaseItem* item )
     return true;
 }
 
-void GenericProjectManager::dirty( const QString &fileName )
+void GenericProjectManager::created(const QString &path)
 {
-    foreach ( KDevelop::IProject* p, KDevelop::ICore::self()->projectController()->projects() ) {
-        foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl( KUrl(fileName) ) ) {
-            kDebug() << "reloading item" << item->url();
+    QFileInfo info(path);
 
-            eventuallyReadFolder( item );
+    KUrl url = KUrl(path);
+    KUrl parent = url.upUrl();
+
+    foreach ( KDevelop::IProject* p, m_watchers.keys() ) {
+        if ( !isValid(url, info.isDir(), p, getIncludeRules(p)) ) {
+            continue;
+        }
+        foreach ( KDevelop::ProjectFolderItem* parentItem, p->foldersForUrl(parent) ) {
+            if ( info.isDir() ) {
+                eventuallyReadFolder(new KDevelop::ProjectFolderItem( p, url, parentItem ));
+            } else {
+                new KDevelop::ProjectFileItem( p, url, parentItem );
+                p->addToFileSet( KDevelop::IndexedString( url ) );
+            }
         }
     }
 }
 
+void GenericProjectManager::deleted(const QString &path)
+{
+    QFileInfo info(path);
+
+    KUrl url = KUrl(path);
+
+    foreach ( KDevelop::IProject* p, m_watchers.keys() ) {
+        if ( info.isDir() ) {
+            foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl(url) ) {
+                item->parent()->removeRow(item->row());
+            }
+        } else {
+            foreach ( KDevelop::ProjectFileItem* item, p->filesForUrl(url) ) {
+                item->parent()->removeRow(item->row());
+            }
+        }
+    }
+}
 
 KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,
         KDevelop::ProjectFolderItem * folder )
