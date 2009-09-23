@@ -235,7 +235,6 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
     }
 
     // add new rows
-    ///TODO: why do the fileitems look like remote folders, and why is the sorting fubar?
     foreach ( const KUrl& url, files ) {
         new KDevelop::ProjectFileItem( project, url, item );
         project->addToFileSet( KDevelop::IndexedString( url ) );
