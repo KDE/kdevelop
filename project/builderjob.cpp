@@ -117,6 +117,41 @@ void BuilderJob::addItem( BuildType t, ProjectBaseItem* item )
 
 void BuilderJob::start()
 {
+    #if 0
+    ///Running the same builder twice may result in serious problems, so kill jobs already running on the same project
+    QList<QPointer<KJob> > jobs;
+    foreach(KJob* job, KDevelop::ICore::self()->runController()->currentJobs()) {
+        kDebug() << "running" << job;
+        jobs << job;
+    }
+    
+    for(QList< QPointer< KJob > >::iterator it = jobs.begin(); it != jobs.end(); ++it)
+    {
+        QPointer< KJob > job = *it;
+        if(!job)
+            continue;
+        
+        BuilderJob* bJob = dynamic_cast<BuilderJob*>(job.data());
+        if( bJob && bJob != this )
+        {
+            kDebug() << "killing running builder job, due to new started build";
+
+            //Copy the subjobs into QPointers first, as we never know what is deleted when
+            QList<QPointer<KJob> > subJobs;
+            foreach(KJob* subJob, bJob->subjobs())
+                subJobs << subJob;
+            
+//             while(!subJobs.empty()) {
+//                 if(subJobs.back() && subJobs.back()->capabilities() & KJob::Killable)
+//                     subJobs.back()->kill(EmitResult);
+//                 subJobs.pop_front();
+//             }
+            if(job && job->capabilities() & KJob::Killable)
+                job->kill(EmitResult);
+        }
+    }
+    #endif
+    
     // Automatically save all documents before starting to build
     // might need an option to turn off at some point
     // Also should be moved into the builder and there try to find target(s) for the given item and then just save the documents of that target -> list??

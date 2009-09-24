@@ -40,7 +40,6 @@ namespace KDevelop
 
 EditorIntegratorStatic::EditorIntegratorStatic()
   : mutex(new QMutex)
-  , mutex2(new QMutex)
 {
   // This object must live on the main thread for the application.
   if (thread() != QCoreApplication::instance()->thread()) {
@@ -51,7 +50,6 @@ EditorIntegratorStatic::EditorIntegratorStatic()
 EditorIntegratorStatic::~EditorIntegratorStatic()
 {
   delete mutex;
-  delete mutex2;
 }
 
 void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
@@ -66,15 +64,6 @@ void EditorIntegratorStatic::insertLoadedDocument(KTextEditor::Document* doc)
   if (SmartInterface* smart = dynamic_cast<SmartInterface*>(doc)) {
     // Don't clear smart ranges on reload. They will be collapsed, and can be repositioned or deleted on the next parsing run.
     smart->setClearOnDocumentReload(false);
-    int rev = smart->currentRevision();
-    // Don't use revision 0, we don't want it (it's pre-loading from disk)
-    if (rev == 0) {
-      rev = -1;
-      smart->releaseRevision(0);
-    } else {
-      QMutexLocker lock(mutex2);
-      revisions.insert(doc, rev);
-    }
   }
 
   {
@@ -112,13 +101,6 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
   //disable all editor-integrators and deconvert the contexts within one cycle
   DUChainWriteLocker lock( DUChain::lock() );
   
-  int rev = -1;
-  {
-    QMutexLocker lock(mutex2);
-    if (revisions.contains(document))
-      rev = revisions[document];
-  }
-
   {
     QMutexLocker lock(mutex);
   
@@ -129,9 +111,6 @@ void EditorIntegratorStatic::removeDocument( KTextEditor::Document* document )
       // Grab the smart mutex to make sure kdevelop is finished with this document.
       SmartInterface* smart = dynamic_cast<SmartInterface*>(d);
       QMutexLocker smartLock(smart ? smart->smartMutex() : 0);
-      if (smart)
-        if (rev != -1)
-          smart->releaseRevision(rev);
   
       if (editorIntegrators.contains(document)) {
         foreach (EditorIntegrator* editor, editorIntegrators.values(document)) {

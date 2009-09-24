@@ -75,10 +75,6 @@ public:
 
   QHash<IndexedString, KTextEditor::Document*> documents;
   QMultiHash<KTextEditor::Document*, EditorIntegrator*> editorIntegrators;
-
-  QMutex* mutex2;
-  // This doesn't need to be thread local because there will only be a maximum of one thread using each document at any given time
-  QHash<KTextEditor::Document*, int> revisions;
 };
 
 }
