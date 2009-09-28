@@ -112,7 +112,7 @@ protected:
    */
   void newUse(T* node, KDevelop::Declaration* declaration)
   {
-    newUse(editorFindRange(node, node), declaration);
+    newUse(node, editorFindRange(node, node), declaration);
   }
 
   /**
@@ -121,7 +121,7 @@ protected:
    * \param newRange Text range which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(SimpleRange newRange, Declaration* declaration)
+  void newUse(T* node, const SimpleRange& newRange, Declaration* declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -138,7 +138,7 @@ protected:
 //         kDebug() << "translated by" << (translated.start.textCursor() - newRange.start.textCursor()) << (translated.end.textCursor() - newRange.end.textCursor()) << "to revision" << iface->currentRevision();
       
       KTextEditor::Range textTranslated  = translated.textRange();
-      
+
       /*
       * We need to find a context that this use fits into, which must not necessarily be the current one.
       * The reason are macros like SOME_MACRO(SomeClass), where SomeClass is expanded to be within a
@@ -187,6 +187,11 @@ protected:
           use = LanguageSpecificUseBuilderBase::editor()->currentRange(iface) ? LanguageSpecificUseBuilderBase::editor()->createRange(iface, newRange.textRange()) : 0;
           LanguageSpecificUseBuilderBase::editor()->exitCurrentRange(iface);
         }
+        
+        if (LanguageSpecificUseBuilderBase::m_mapAst)
+          LanguageSpecificUseBuilderBase::editor()->parseSession()->mapAstUse(
+            node, qMakePair<DUContextPointer, SimpleRange>(DUContextPointer(newContext), newRange));
+
         currentUseTracker().createUses << qMakePair(KDevelop::Use(newRange, declarationIndex), use);
       }
     }
