@@ -81,8 +81,6 @@ void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
   if(m_AstToUse.find(node) == m_AstToUse.end() || m_AstToUse[node] != use)
     kWarning() << "Found dupplicate use mapping for node" << node;
   
-  kDebug() << "Mapping AST node: " << names[node->kind] << "with use.";
-  
   m_AstToUse[node] = use;
   m_UseToAst[use] = node;
 }
