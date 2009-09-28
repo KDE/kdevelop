@@ -704,6 +704,7 @@ void CPPInternalParseJob::run()
               parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
               UseBuilder useBuilder(&editor);
+              useBuilder.setMapAst(newFeatures & TopDUContext::AST);
               useBuilder.buildUses(ast);
               DUChainWriteLocker l(DUChain::lock());
               foreach(KDevelop::ProblemPointer problem, useBuilder.problems())

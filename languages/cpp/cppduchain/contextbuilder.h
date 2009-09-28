@@ -128,7 +128,9 @@ public:
   inline CppEditorIntegrator* editor() const { return static_cast<CppEditorIntegrator*>(ContextBuilderBase::editor()); }
 
   void setOnlyComputeVisible(bool onlyVisible);
-
+  
+  void setMapAst(bool mapAst);
+  
 protected:
   QualifiedIdentifier identifierForNode(NameAST* id);
   void identifierForNode(NameAST* id, QualifiedIdentifier& target);
@@ -138,7 +140,7 @@ protected:
   virtual KTextEditor::Range editorFindRange( AST* fromRange, AST* toRange );
   virtual KTextEditor::Range editorFindRangeForContext( AST* fromRange, AST* toRange );
   virtual DUContext* newContext(const SimpleRange& range);
-
+  
   /**
    * Compile an identifier for the specified NameAST \a id.
    *
@@ -244,6 +246,9 @@ protected:
   QVector<KDevelop::DUContext::Import> m_importedParentContexts;
   QStack< QVector<KDevelop::DUContext::Import> > m_tryParentContexts;
   InitializerAST* m_currentInitializer;
+  
+  /// AST - DUChain/Uses mapping variables
+  bool m_mapAst;
 };
 
 #endif // CONTEXTBUILDER_H

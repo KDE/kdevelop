@@ -73,6 +73,18 @@ void ParseSession::mapAstDuChain ( AST * node , KDevelop::DeclarationPointer dec
   m_DuchainToAst[declaration] = node;
 }
 
+void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
+{
+  //Duplicates shouldn't exist(? Same for uses?)
+  if(m_AstToUse.find(node) == m_AstToUse.end() || m_AstToUse[node] != use)
+    kWarning() << "Found dupplicate use mapping for node" << node;
+  
+  kDebug() << "Mapping AST node: " << names[node->kind] << "with use.";
+  
+  m_AstToUse[node] = use;
+  m_UseToAst[use] = node;
+}
+
 AST * ParseSession::astNodeFromDeclaration(KDevelop::DeclarationPointer declaration)
 {
   //declaration was not mapped
@@ -85,6 +97,11 @@ AST * ParseSession::astNodeFromDeclaration(KDevelop::DeclarationPointer declarat
 AST * ParseSession::astNodeFromDeclaration(KDevelop::Declaration * declaration)
 {
   return astNodeFromDeclaration(KDevelop::DeclarationPointer(declaration));
+}
+
+AST * ParseSession::astNodeFromUse(const SimpleUse &use) const
+{
+  return m_UseToAst.value(use);
 }
 
 KDevelop::DeclarationPointer ParseSession::declarationFromAstNode(AST * node)

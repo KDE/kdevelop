@@ -34,6 +34,7 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/interfaces/iastcontainer.h>
+#include <language/editor/simplerange.h>
 
 namespace Cpp {
   class EnvironmentFile;
@@ -46,6 +47,7 @@ class TranslationUnitAST;
 class AST;
 
 typedef QVector<unsigned int> PreprocessedContents;
+typedef QPair<KDevelop::DUContextPointer, KDevelop::SimpleRange> SimpleUse;
 
 namespace rpp { class MacroBlock; class LocationTable; }
 
@@ -67,6 +69,8 @@ public:
   ///Create a mapping between an AST node, and its DUChain Declaration
   void mapAstDuChain(AST *, KDevelop::DeclarationPointer);
   
+  void mapAstUse(AST *node, const SimpleUse& use);
+  
   /**
    * \brief Request an AST node from a DeclarationPointer
    * \return The Associated AST if available, NULL otherwise
@@ -74,6 +78,8 @@ public:
   AST * astNodeFromDeclaration(KDevelop::DeclarationPointer declaration);
   
   AST * astNodeFromDeclaration(KDevelop::Declaration * declaration);
+  
+  AST * astNodeFromUse(const SimpleUse &use) const;
   
   /**
    * \brief Request a Declaration from an AST node
@@ -118,6 +124,9 @@ private:
   //AST-DUChain Mappings
   QMap<AST *, KDevelop::DeclarationPointer> m_AstToDuchain;
   QMap<KDevelop::DeclarationPointer, AST *> m_DuchainToAst;
+  
+  QMap<AST *, SimpleUse> m_AstToUse;
+  QMap<SimpleUse, AST *> m_UseToAst;
 };
 
 #endif

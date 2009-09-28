@@ -106,6 +106,7 @@ ContextBuilder::ContextBuilder ()
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
   , m_currentInitializer(0)
+  , m_mapAst(false)
 {
 }
 
@@ -116,6 +117,7 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
   , m_currentInitializer(0)
+  , m_mapAst(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
@@ -127,6 +129,7 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
   , m_currentInitializer(0)
+  , m_mapAst(false)
 {
   setEditor(editor, false);
 }
@@ -189,6 +192,11 @@ QualifiedIdentifier ContextBuilder::identifierForNode(NameAST* id) {
   QualifiedIdentifier ret;
   identifierForNode(id, ret);
   return ret;
+}
+
+void ContextBuilder::setMapAst(bool mapAst)
+{
+  m_mapAst = mapAst;
 }
 
 void ContextBuilder::identifierForNode(NameAST* id, QualifiedIdentifier& target)

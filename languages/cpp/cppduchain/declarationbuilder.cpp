@@ -88,22 +88,14 @@ bool DeclarationBuilder::changeWasSignificant() const
   return m_changeWasSignificant;
 }
 
-///Set if mappings between AST & DUChain should be built
-void DeclarationBuilder::setMapAst ( bool mapAst )
-{
-  kDebug() << "Creating mappings between AST & DUChain";
-  m_mapAstDuChain = mapAst;
-}
-
-
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_mapAstDuChain(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
   setEditor(new CppEditorIntegrator(session), true);
 }
 
 DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_mapAstDuChain(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
   setEditor(editor, false);
 }
@@ -187,7 +179,7 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   parseFunctionSpecifiers(node->function_specifiers);
   
   //Used to map to the top level function node once the Declaration is built
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     m_mappedNodes.push(node);
   
   m_functionDefinedStack.push(node->start_token);
@@ -196,7 +188,7 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 
   m_functionDefinedStack.pop();
   
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     m_mappedNodes.pop();
 
   popSpecifiers();
@@ -244,7 +236,7 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
   parseStorageSpecifiers(node->storage_specifiers);
   parseFunctionSpecifiers(node->function_specifiers);
 
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     m_mappedNodes.push(node);
   
   m_functionDefinedStack.push(0);
@@ -253,7 +245,7 @@ void DeclarationBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
   m_functionDefinedStack.pop();
   
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     m_mappedNodes.pop();
 
   popSpecifiers();
@@ -279,7 +271,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
     Declaration* decl = openFunctionDeclaration(node->id, node);
     
     ///Create mappings iff the AST feature is specified
-    if(m_mapAstDuChain && !m_mappedNodes.empty())
+    if(m_mapAst && !m_mappedNodes.empty())
       editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(decl));
 
     if( !m_functionDefinedStack.isEmpty() ) {
@@ -635,7 +627,7 @@ Declaration* DeclarationBuilder::openDefinition(NameAST* name, AST* rangeNode, b
   Declaration* ret = openNormalDeclaration(name, rangeNode, KDevelop::Identifier(), collapseRange);
   
   ///Create mappings iff the AST feature is specified
-  if(m_mapAstDuChain && !m_mappedNodes.empty())
+  if(m_mapAst && !m_mappedNodes.empty())
     editor()->parseSession()->mapAstDuChain(m_mappedNodes.top(), KDevelop::DeclarationPointer(ret));
 
   DUChainWriteLocker lock(DUChain::lock());
@@ -791,7 +783,7 @@ void DeclarationBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
   Declaration * declaration = openDefinition(node->name, node, node->name == 0);
   
   ///Create mappings iff the AST feature is specified
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));
 
   DeclarationBuilderBase::visitEnumSpecifier(node);
@@ -927,7 +919,7 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
     Declaration * declaration = openDeclarationReal<Declaration>(0, 0, id, false, false, &range);
     
     ///Create mappings iff the AST feature is specified
-    if(m_mapAstDuChain)
+    if(m_mapAst)
       editor()->parseSession()->mapAstDuChain(ast, KDevelop::DeclarationPointer(declaration));
   }
   
@@ -1057,7 +1049,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
   closeDeclaration();
   
   ///Create mappings iff the AST feature is specified
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     editor()->parseSession()->mapAstDuChain(node, KDevelop::DeclarationPointer(declaration));
   
   if(node->name)
@@ -1435,7 +1427,7 @@ void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* fu
 
 void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 {
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     m_mappedNodes.push(node);
   
   DeclarationBuilderBase::visitParameterDeclaration(node);
@@ -1458,7 +1450,7 @@ void DeclarationBuilder::visitParameterDeclaration(ParameterDeclarationAST* node
     }
   }
   
-  if(m_mapAstDuChain)
+  if(m_mapAst)
     m_mappedNodes.pop();
 }
 
