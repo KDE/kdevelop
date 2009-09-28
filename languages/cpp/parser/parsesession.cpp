@@ -66,8 +66,10 @@ void ParseSession::mapAstDuChain ( AST * node , KDevelop::DeclarationPointer dec
   Q_ASSERT(m_AstToDuchain.find(node) == m_AstToDuchain.end() ||
            m_AstToDuchain[node] != declaration);
   
-  kDebug() << "Mapping AST node: " << names[node->kind] <<
-              "With Declaration: " << declaration->toString();
+  // NOTE: Don't call declaration->toString() here. It seems that you cannot
+  //        assume at this point that the DUChain is at least locked for reading.
+  //kDebug() << "Mapping AST node: " << names[node->kind] <<
+  //            "With Declaration: " << declaration->toString();
   
   m_AstToDuchain[node] = declaration;
   m_DuchainToAst[declaration] = node;
