@@ -79,10 +79,10 @@ ColorCache::ColorCache(QObject* parent)
   m_self = this;
 
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
-           this, SLOT(adaptToColorChanges()));
+           this, SLOT(adaptToColorChanges()), Qt::QueuedConnection);
 
   connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-           this, SLOT(adaptToColorChanges()));
+           this, SLOT(adaptToColorChanges()), Qt::QueuedConnection);
 
   setupColors();
 }
