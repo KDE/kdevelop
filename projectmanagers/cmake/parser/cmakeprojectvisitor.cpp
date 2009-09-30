@@ -730,22 +730,16 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     bool error=false;
     QStringList locationOptions = fpath->path()+fpath->hints();
     QStringList path, files=fpath->filenames();
+    QStringList suffixes=fpath->pathSuffixes();
 
     if(!fpath->noDefaultPath())
     {
         // This is needed as find_path searches in <prefix>/include, not directly in <prefix>
-        foreach( const QString& prefix, m_vars->value("CMAKE_PREFIX_PATH") )
-        {
-            locationOptions += prefix + QDir::separator() + "include";
-        }
+        suffixes.append("include");
         
         locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-
-        foreach( const QString& prefix, m_vars->value("CMAKE_SYSTEM_PREFIX_PATH") )
-        {
-            locationOptions += prefix + QDir::separator() + "include";
-        }
+        locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
@@ -753,7 +747,7 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     kDebug(9042) << "Find:" << /*locationOptions << "@" <<*/ fpath->variableName() << /*"=" << files <<*/ " path.";
     foreach(const QString& p, files)
     {
-        QString p1=findFile(p, locationOptions, fpath->pathSuffixes(), true);
+        QString p1=findFile(p, locationOptions, suffixes, true);
         if(p1.isEmpty())
         {
             kDebug(9042) << p << "not found";
