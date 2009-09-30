@@ -733,10 +733,19 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     if(!fpath->noDefaultPath())
     {
-        locationOptions += m_vars->value("CMAKE_PREFIX_PATH");
+        // This is needed as find_path searches in <prefix>/include, not directly in <prefix>
+        for( const QString& prefix, m_vars->value("CMAKE_PREFIX_PATH") )
+        {
+            locationOptions += prefix + QFile::separator() + "include";
+        }
+        
         locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-        locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+
+        for( const QString& prefix, m_vars->value("CMAKE_SYSTEM_PREFIX_PATH") )
+        {
+            locationOptions += prefix + QFile::separator() + "include";
+        }
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
