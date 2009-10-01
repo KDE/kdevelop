@@ -796,6 +796,11 @@ int CMakeProjectVisitor::visit(const FindLibraryAst *flib)
 
     if(!flib->noDefaultPath())
     {
+
+        QStringList opt=m_vars->value("CMAKE_PREFIX_PATH");
+        foreach(const QString& s, opt)
+            locationOptions.append(s+"/lib");
+
         locationOptions += m_vars->value("CMAKE_LIBRARY_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
         
