@@ -1093,69 +1093,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-///@todo Use TypeASTVisitor
     clearLast();
 
-    if (node->integrals) {
-      uint type = IntegralType::TypeNone;
-      uint modifiers = AbstractType::NoModifiers;
-
-      const ListNode<std::size_t> *it = node->integrals->toFront();
-      const ListNode<std::size_t> *end = it;
-      do {
-        int kind = m_session->token_stream->kind(it->element);
-        switch (kind) {
-          case Token_char:
-            type = IntegralType::TypeChar;
-            break;
-          case Token_wchar_t:
-            type = IntegralType::TypeWchar_t;
-            break;
-          case Token_bool:
-            type = IntegralType::TypeBoolean;
-            break;
-          case Token_short:
-            modifiers |= AbstractType::ShortModifier;
-            break;
-          case Token_int:
-            type = IntegralType::TypeInt;
-            break;
-          case Token_long:
-            if (modifiers & AbstractType::LongModifier)
-              modifiers |= AbstractType::LongLongModifier;
-            else
-              modifiers |= AbstractType::LongModifier;
-            break;
-          case Token_signed:
-            modifiers |= AbstractType::SignedModifier;
-            break;
-          case Token_unsigned:
-            modifiers |= AbstractType::UnsignedModifier;
-            break;
-          case Token_float:
-            type = IntegralType::TypeFloat;
-            break;
-          case Token_double:
-            type = IntegralType::TypeDouble;
-            break;
-          case Token_void:
-            type = IntegralType::TypeVoid;
-            break;
-        }
-
-        it = it->next;
-      } while (it != end);
-
-      if(type == IntegralType::TypeNone)
-        type = IntegralType::TypeInt; //Happens, example: "unsigned short"
-
-      KDevelop::IntegralType::Ptr integral ( new KDevelop::IntegralType(type) );
-      integral->setModifiers(modifiers);
-      if (integral)
-        m_lastType = AbstractType::Ptr::staticCast(integral);
-    } else {
-      visitTypeSpecifier(node);
-    }
+    TypeASTVisitor tvisitor(m_session, this, m_currentContext, topContext(), m_currentContext);
+    tvisitor.run(node);
+    m_lastType = tvisitor.type();
   }
 
 

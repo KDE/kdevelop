@@ -161,6 +161,32 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
   return 0;
 }
 
+void TestExpressionParser::testIntegralType() {
+  QByteArray type("const char*");
+  DUContext* top = parse(type, DumpNone);
+  
+  Cpp::ExpressionParser parser(true,true);
+
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType(type, KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    
+    AbstractType::Ptr aType(result.type.abstractType());
+    PointerType::Ptr ptrType = aType.cast<PointerType>();
+    QVERIFY(ptrType);
+    QVERIFY(!(ptrType->modifiers() & PointerType::ConstModifier));
+    
+    AbstractType::Ptr aBaseType = ptrType->baseType();
+    QVERIFY(aBaseType);
+    IntegralType::Ptr iBaseType = aBaseType.cast<IntegralType>();
+    QVERIFY(iBaseType);
+    QCOMPARE(iBaseType->dataType(), (uint)IntegralType::TypeChar);
+    
+    /// FIXME: This currently fails.
+    QVERIFY(iBaseType->modifiers() & IntegralType::ConstModifier);
+  }
+}
+
 void TestExpressionParser::testTemplatesSimple() {
   QByteArray method("template<class T> T test(const T& t) {}; template<class T, class T2> class A { }; class B{}; class C{}; typedef A<B,C> B;");
 

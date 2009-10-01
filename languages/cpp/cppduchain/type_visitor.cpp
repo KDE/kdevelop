@@ -139,14 +139,34 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   if(m_stopSearch)
     return;
   
-  ///@todo Merge this with ExpressionVisitor::visitSimpleTypeSpecifier
   Cpp::FindDeclaration find( m_context, m_source, m_flags, m_context->range().end );
   find.openQualifiedIdentifier(false);
+  
+  // Don't forget the modifiers!
+  uint modifiers = AbstractType::NoModifiers;
+  if (node->cv) {
+    const ListNode<std::size_t> *it = node->cv->toFront();
+    const ListNode<std::size_t> *end = it;
+    do {
+      int kind = m_session->token_stream->kind(it->element);
+      switch (kind) {
+        case Token_const:
+          modifiers |= AbstractType::ConstModifier;
+          break;
+        case Token_volatile:
+          modifiers |= AbstractType::VolatileModifier;
+          break;
+        default:
+          //kDebug() << "Unknown modifier token" << kind;
+          break;
+      }
+      it = it->next;
+    } while (it != end);
+  }
   
   if (node->integrals)
     {
       uint type = IntegralType::TypeNone;
-      uint modifiers = AbstractType::NoModifiers;
 
       const ListNode<std::size_t> *it2 = node->integrals->toFront();
       const ListNode<std::size_t> *end = it2;

@@ -53,6 +53,7 @@ public:
 
 private slots:
   void initTestCase();
+  void testIntegralType();
   void testSimpleExpression();
   void testTypeConversion();
   void testTypeConversion2();
