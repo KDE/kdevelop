@@ -736,7 +736,6 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
     {
         QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
-            locationOptions += path;
             locationOptions += path+"/include";
         }
         locationOptions += pp;
@@ -745,7 +744,6 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& path, pp) {
-            locationOptions += path;
             locationOptions += path+"/include";
         }
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
@@ -861,7 +859,6 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     {
         QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
         foreach(const QString& path, pp) {
-            locationOptions += path;
             locationOptions += path+"/include";
         }
         locationOptions += pp;
@@ -870,7 +867,6 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
         
         pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
         foreach(const QString& path, pp) {
-            locationOptions += path;
             locationOptions += path+"/include";
         }
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
