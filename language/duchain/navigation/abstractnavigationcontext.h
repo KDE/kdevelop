@@ -160,7 +160,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     QString m_prefix, m_suffix;
     KDevelop::TopDUContextPointer m_topContext;
 
-    static QString declarationKind(DeclarationPointer decl);
+    virtual QString declarationKind(DeclarationPointer decl);
 
     static const Colorizer typeHighlight;
     static const Colorizer errorHighlight;
