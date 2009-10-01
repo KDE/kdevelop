@@ -734,12 +734,20 @@ int CMakeProjectVisitor::visit(const FindPathAst *fpath)
 
     if(!fpath->noDefaultPath())
     {
-        // This is needed as find_path searches in <prefix>/include, not directly in <prefix>
-        suffixes.append("include");
-        
+        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        foreach(const QString& path, pp) {
+            locationOptions += path;
+            locationOptions += path+"/include";
+        }
+        locationOptions += pp;
         locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-        locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        
+        pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        foreach(const QString& path, pp) {
+            locationOptions += path;
+            locationOptions += path+"/include";
+        }
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
@@ -851,10 +859,20 @@ int CMakeProjectVisitor::visit(const FindFileAst *ffile)
     QStringList locationOptions = ffile->path()+ffile->hints();
     if(!ffile->noDefaultPath())
     {
-        locationOptions += m_vars->value("CMAKE_PREFIX_PATH");
+        QStringList pp=m_vars->value("CMAKE_PREFIX_PATH");
+        foreach(const QString& path, pp) {
+            locationOptions += path;
+            locationOptions += path+"/include";
+        }
+        locationOptions += pp;
         locationOptions += m_vars->value("CMAKE_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_FRAMEWORK_PATH");
-        locationOptions += m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        
+        pp=m_vars->value("CMAKE_SYSTEM_PREFIX_PATH");
+        foreach(const QString& path, pp) {
+            locationOptions += path;
+            locationOptions += path+"/include";
+        }
         locationOptions += m_vars->value("CMAKE_SYSTEM_INCLUDE_PATH");
         locationOptions += m_vars->value("CMAKE_SYSTEM_FRAMEWORK_PATH");
     }
