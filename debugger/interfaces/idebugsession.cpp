@@ -71,8 +71,8 @@ IFrameStackModel* IDebugSession::frameStackModel() const
 
 void IDebugSession::raiseEvent(event_t e)
 {
-    frameStackModel()->handleEvent(e);
-    m_variableController->handleEvent(e);
+    if (frameStackModel()) frameStackModel()->handleEvent(e);
+    if (m_variableController) m_variableController->handleEvent(e);
     // FIXME: consider if we actually need signals
     emit event(e);
 }
