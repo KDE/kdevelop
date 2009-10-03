@@ -138,6 +138,7 @@ Watches::Watches(TreeModel* model, TreeItem* parent)
 
 Variable* Watches::add(const QString& expression)
 {
+    if (!currentSession()->variableController()) return 0;
     Variable* v = currentSession()->variableController()->createVariable(
         model(), this, expression);
     appendChild(v);
@@ -147,6 +148,7 @@ Variable* Watches::add(const QString& expression)
 
 Variable *Watches::addFinishResult(const QString& convenienceVarible)
 {
+    if (!currentSession()->variableController()) return 0;
     if( finishResult_ )
     {
         removeFinishResult();
@@ -283,6 +285,7 @@ void VariableCollection::variableWidgetShown()
 void VariableCollection::updateAutoUpdate(IDebugSession* session)
 {
     if (!session) return;
+    if (!session->variableController()) return;
 
     if (!m_widgetVisible) {
         session->variableController()->setAutoUpdate(IVariableController::UpdateNone);
@@ -333,6 +336,9 @@ textHintRequested(const KTextEditor::Cursor& cursor, QString&)
         return;
 
     if (!hasStartedSession())
+        return;
+
+    if (!currentSession()->variableController())
         return;
 
     // Figure what is the parent widget and what is the text to show
