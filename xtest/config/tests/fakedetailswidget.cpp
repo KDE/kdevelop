@@ -9,5 +9,4 @@ FakeDetailsWidget::~FakeDetailsWidget()
 {
 }
 
-#include "fakedetailswidget.moc"
 
