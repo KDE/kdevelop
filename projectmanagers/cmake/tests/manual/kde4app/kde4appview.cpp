@@ -38,8 +38,8 @@ void kde4appView::settingsChanged()
     pal.setColor( QPalette::WindowText, Settings::col_foreground());
     ui_kde4appview_base.kcfg_sillyLabel->setPalette( pal );
 
-    // i18n : internationalization
-    ui_kde4appview_base.kcfg_sillyLabel->setText( i18n("This project is %1 days old",Settings::val_time()) );
+    // i18np : internationalization
+    ui_kde4appview_base.kcfg_sillyLabel->setText( i18np("This project is one day old", "This project is %1 days old", Settings::val_time()) );
     emit signalChangeStatusbar( i18n("Settings changed") );
 }
 
