@@ -736,6 +736,9 @@ void IdealMainLayout::removeWidgets(Role role)
 
 void IdealMainLayout::removeWidget(QWidget * widget, Role role)
 {
+    if (m_maximizedWidget)
+        maximizeWidget(0);
+
     DockArea* area = m_items[role];
     area->removeWidget(widget);
     if (area->items().isEmpty())
