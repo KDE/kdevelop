@@ -162,7 +162,11 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
         {
             int pos = index.row();
             DUChainReadLocker lock(DUChain::lock());
-            return m_declarations[pos].data()->identifier().toString();
+            Declaration* dec=m_declarations[pos].data();
+            if(dec)
+                return dec->identifier().toString();
+            else
+                return i18n("INVALID");
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Prefix)
