@@ -170,13 +170,13 @@ bool CodeGeneratorBase::execute()
     
     if(!d->context)
     {
-        setErrorText("Error finding context for selection range");
+        setErrorText(i18n("Error finding context for selection range"));
         return false;
     }
     
     if(!checkPreconditions(d->context,d->range))
     {
-        setErrorText("Error checking conditions to generate code: " + errorText());
+        setErrorText(i18n("Error checking conditions to generate code: %1",errorText()));
         return false;
     }
     
@@ -185,7 +185,7 @@ bool CodeGeneratorBase::execute()
         kDebug() << "Gathering user information for the codegenerator";
         if(!gatherInformation())
         {
-            setErrorText("Error Gathering user information: " + errorText());
+            setErrorText(i18n("Error Gathering user information: %1",errorText()));
             return false;
         }
     }
@@ -193,7 +193,7 @@ bool CodeGeneratorBase::execute()
     kDebug() << "Generating code";
     if(!process())
     {
-        setErrorText("Error generating code: " + errorText());
+        setErrorText(i18n("Error generating code: %1",errorText()));
         return false;
     }
     
