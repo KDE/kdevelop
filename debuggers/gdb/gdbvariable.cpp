@@ -157,7 +157,6 @@ void GdbVariable::markAllDead()
     for (i = allVariables_.begin(), e = allVariables_.end(); i != e; ++i)
     {
         i.value()->varobj_.clear();
-        i.value()->setInScope(false);
     }
     allVariables_.clear();
 }
