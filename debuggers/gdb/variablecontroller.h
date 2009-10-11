@@ -68,8 +68,6 @@ private:
     void addWatchpoint(const GDBMI::ResultRecord& r);
 
     void handleEvent(IDebugSession::event_t event);
-
-    static int nextId_;
 };
 
 }
