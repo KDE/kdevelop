@@ -28,7 +28,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include <cppparserexport.h>
-#ifdef Q_OS_WIN
+#ifdef Q_CC_MSVC
 #include <hash_map>
 using namespace stdext;
 #else
