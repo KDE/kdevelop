@@ -46,6 +46,13 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
         // Remove all locals.
         variableCollection()->locals()->deleteChildren();
         variableCollection()->locals()->setHasMore(false);
+
+        for (int i=0; i < variableCollection()->watches()->childCount(); ++i) {
+            Variable *var = dynamic_cast<Variable*>(variableCollection()->watches()->child(i));
+            if (var) {
+                var->setInScope(false);
+            }
+        }
         break;
 
     case IDebugSession::program_state_changed:
