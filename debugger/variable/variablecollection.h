@@ -140,8 +140,12 @@ public:
     Locals(TreeModel* model, TreeItem* parent);
     void updateLocals(QStringList locals);
 
-    using TreeItem::deleteChildren;
     using TreeItem::setHasMore;
+    using TreeItem::child;
+    using TreeItem::childCount;
+    using TreeItem::appendChild;
+    using TreeItem::removeChild;
+    using TreeItem::deleteChildren;
 
     friend class VariableCollection;
 
