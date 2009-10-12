@@ -2,6 +2,7 @@
 Name=kde4app
 Name[es]=kde4app
 Name[fr]=kde4app
+Name[gl]=kde4app
 Name[nds]=kde4prog
 Name[pt]=kde4app
 Name[pt_BR]=kde4app
@@ -17,6 +18,7 @@ X-DocPath=kde4app/index.html
 GenericName=A KDE4 Application
 GenericName[es]=Una aplicación para KDE4
 GenericName[fr]=Une application pour KDE4
+GenericName[gl]=Un programa de KDE4
 GenericName[nds]=En KDE-4-Programm
 GenericName[pt]=Uma Aplicação do KDE4
 GenericName[pt_BR]=Um aplicativo do KDE4
