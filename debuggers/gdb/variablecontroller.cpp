@@ -51,6 +51,8 @@ DebugSession *VariableController::debugSession() const
 
 void VariableController::programStopped(const GDBMI::ResultRecord& r)
 {
+    if (debugSession()->stateIsOn(s_shuttingDown)) return;
+
     if (r.hasField("reason") && r["reason"].literal() == "function-finished"
         && r.hasField("gdb-result-var"))
     {
