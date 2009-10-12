@@ -139,6 +139,11 @@ void DebugController::initialize()
     stateChanged("ended");
 }
 
+DebugController::~DebugController()
+{
+    if (m_currentSession) m_currentSession->stopDebugger();
+}
+
 BreakpointModel* DebugController::breakpointModel()
 {
     return m_breakpointModel;

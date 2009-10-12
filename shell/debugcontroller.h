@@ -43,6 +43,7 @@ class DebugController : public IDebugController, public KXMLGUIClient
     Q_OBJECT
 public:
     DebugController(QObject *parent = 0);
+    ~DebugController();
     void initialize();
 
     virtual void addSession(IDebugSession* session);
