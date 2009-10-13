@@ -161,8 +161,7 @@ ILanguage *LanguageController::language(const QString &name) const
     else{
         ILanguage* ret = 0;
         QStringList constraints;
-        ///@todo Lookup by language-name still does not work
-        constraints << QString("'%1' in [X-KDevelop-Language]").arg(name);
+        constraints << QString("'%1' == [X-KDevelop-Language]").arg(name);
         QList<IPlugin*> supports = Core::self()->pluginController()->
             allPluginsForExtension("ILanguageSupport", constraints);
         if(!supports.isEmpty()) {
