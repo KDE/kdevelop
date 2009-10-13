@@ -45,6 +45,7 @@ public:
     DebugController(QObject *parent = 0);
     ~DebugController();
     void initialize();
+    void cleanup();
 
     virtual void addSession(IDebugSession* session);
     virtual IDebugSession* currentSession();

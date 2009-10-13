@@ -248,6 +248,7 @@ Core::Setup Core::setupFlags() const
 void Core::cleanup()
 {
     if (!d->m_cleanedUp) {
+        d->debugController->cleanup();
         d->selectionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
