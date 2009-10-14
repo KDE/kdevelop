@@ -82,7 +82,7 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
     } else {
         // report error
         KColorScheme scheme(palette().currentColorGroup());
-        const QString errorMsg = i18n("Selected url is invalid.");
+        const QString errorMsg = i18n("Selected URL is invalid.");
         QString msgTemplate;
         if ( layoutDirection() == Qt::LeftToRight ) {
             msgTemplate = QString(
