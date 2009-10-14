@@ -282,6 +282,9 @@ void DebugController::setupActions()
 void DebugController::addSession(IDebugSession* session)
 {
     kDebug() << session;
+    Q_ASSERT(session->variableController());
+    Q_ASSERT(session->breakpointController());
+    Q_ASSERT(session->frameStackModel());
 
     //TODO support multiple sessions
     if (m_currentSession) {
