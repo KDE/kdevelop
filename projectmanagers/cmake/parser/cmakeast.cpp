@@ -1477,7 +1477,7 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         else if(arg.value[0].isNumber())
         {
             bool correctmin, correctmaj;
-            QStringList version = func.arguments[1].value.split('.');
+            QStringList version = arg.value.split('.');
             m_minorVersion = version[0].toInt(&correctmin);
             m_majorVersion = version[1].toInt(&correctmaj);
             if(!correctmin || !correctmaj)
