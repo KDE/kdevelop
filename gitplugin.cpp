@@ -37,7 +37,6 @@
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
 #include <vcs/dvcs/dvcsjob.h>
-#include <shell/core.h>
 #include <vcs/vcsannotation.h>
 #include <QDateTime>
 
@@ -56,8 +55,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     Q_UNUSED(EasterEgg)
 
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
-    if (!(KDevelop::Core::self()->setupFlags() & KDevelop::Core::NoUi))
-        setXMLFile("kdevgit.rc");
+    setXMLFile("kdevgit.rc");
 }
 
 GitPlugin::~GitPlugin()
