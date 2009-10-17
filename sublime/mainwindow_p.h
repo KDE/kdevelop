@@ -52,7 +52,6 @@ class Controller;
 class AreaIndex;
 class IdealMainWidget;
 
-#if QT_VERSION >= 0x040500
 class AreaTabButton : public QWidget {
     public:
     AreaTabButton(QString text, QIcon icon, uint iconSize, QWidget* parent, bool isCurrent, QWidget* _customButtonWidget) ;
@@ -128,7 +127,6 @@ class AreaTabWidget : public QWidget {
     QHBoxLayout* m_layout;
     QVBoxLayout* m_leftLayout;
 };
-#endif
 
 class MainWindowPrivate: public QObject {
     Q_OBJECT
@@ -171,9 +169,7 @@ public:
     View *activeToolView;
 
     QWidget *centralWidget;
-#if QT_VERSION >= 0x040500
     AreaTabWidget* areaSwitcher;
-#endif
 
     IdealMainWidget *idealMainWidget;
     int ignoreDockShown;

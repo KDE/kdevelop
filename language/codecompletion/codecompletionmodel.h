@@ -49,17 +49,11 @@ class CodeCompletionWorker;
 class CompletionWorkerThread;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel2
-#if KDE_IS_VERSION(4,2,62)
 , public KTextEditor::CodeCompletionModelControllerInterface2
-#else
-, public KTextEditor::CodeCompletionModelControllerInterface
-#endif
 {
   Q_OBJECT
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
-#if KDE_IS_VERSION(4,2,62)
   Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
-#endif
 
   public:
     CodeCompletionModel(QObject* parent);

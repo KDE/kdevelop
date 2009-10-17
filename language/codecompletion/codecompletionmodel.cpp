@@ -211,10 +211,8 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
 
     lock.unlock();
 
-#if KDE_IS_VERSION(4,2,85)
     if(m_forceWaitForModel)
       emit waitForReset();
-#endif
     
     emit completionsNeeded(thisContext, range.start(), view);
   } else {

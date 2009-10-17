@@ -404,11 +404,7 @@ void WorkingSet::deleteSet(bool force, bool silent)
 }
 
 QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local, Sublime::Area* fixedArea) {
-#if QT_VERSION >= 0x040500
     return new WorkingSetWidget(parent, this, local, fixedArea);
-#else
-    return 0;
-#endif
 }
 
 WorkingSetWidget::WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini, Sublime::Area* fixedArea)

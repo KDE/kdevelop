@@ -587,12 +587,9 @@ void MainWindowPrivate::widgetCloseRequest(QWidget* widget)
 }
 
 void MainWindowPrivate::toggleArea ( int index ) {
-#if QT_VERSION >= 0x040500
     m_mainWindow->controller()->showArea(areaSwitcher->tabBar->areaId(index), m_mainWindow);
-#endif
 }
 
-#if QT_VERSION >= 0x040500
 void AreaTabBar::paintEvent ( QPaintEvent* ev ) {
     QTabBar::paintEvent(ev);
     if ( currentIndex() != -1 ) {
@@ -752,7 +749,6 @@ AreaTabButton::AreaTabButton ( QString text, QIcon icon, uint iconSize, QWidget*
     layout->addWidget ( iconLabel );
     layout->setMargin ( 0 );
 }
-#endif
 
 void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
 {

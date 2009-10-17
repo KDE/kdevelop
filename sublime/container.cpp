@@ -159,15 +159,9 @@ Container::Container(QWidget *parent)
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);
-#if KDE_VERSION < KDE_MAKE_VERSION(4,2,60)
-    d->tabBar->setHoverCloseButton(true);
-    d->tabBar->setCloseButtonEnabled(true);
-    d->tabBar->setTabReorderingEnabled(true);
-#else
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
     d->tabBar->setExpanding(false);
-#endif
 
     setOpenAfterCurrent(group.readEntry("TabBarOpenAfterCurrent", 1) == 1);
 }

@@ -46,10 +46,8 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
     connect(this, SIGNAL(destroyed()), controller, SLOT(areaReleased()));
 
     loadGeometry(KGlobal::config()->group("Main Window"));
-#if QT_VERSION >= 0x040500   
     d->areaSwitcher = new AreaTabWidget(menuBar());
     menuBar()->setCornerWidget(d->areaSwitcher, Qt::TopRightCorner);
-#endif
 }
 
 QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
@@ -58,7 +56,6 @@ QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
 }
 
 void MainWindow::setupAreaSelector() {
-#if QT_VERSION >= 0x040500
     disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
     
     d->areaSwitcher->tabBar->clearTabs();
@@ -88,7 +85,6 @@ void MainWindow::setupAreaSelector() {
     
     d->areaSwitcher->tabBar->setCurrentIndex(currentIndex);
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
-#endif
 }
 
 MainWindow::~MainWindow()
@@ -356,9 +352,7 @@ QWidget *MainWindow::statusBarLocation()
 
 void MainWindow::setAreaSwitcherCornerWidget(QWidget* widget)
 {
-#if QT_VERSION >= 0x040500
     d->areaSwitcher->setTabSideWidget(widget);
-#endif
 }
 
 void MainWindow::setTabBarLeftCornerWidget(QWidget* widget)
