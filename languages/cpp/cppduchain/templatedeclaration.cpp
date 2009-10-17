@@ -72,11 +72,7 @@ namespace Cpp {
 }
 
 struct AtomicIncrementer {
-#if QT_VERSION < 0x040400
-  typedef QBasicAtomic Int;
-#else
   typedef QBasicAtomicInt Int;
-#endif
   AtomicIncrementer( Int *cnt ) : c(cnt) {
     c->ref();
   }

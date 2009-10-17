@@ -60,9 +60,7 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
   protected:
     virtual void foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext);
     
-#if KDE_IS_VERSION(4,2,62)
     virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
-#endif
     
     virtual QString filterString ( KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position );
     virtual void updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range);

@@ -74,7 +74,6 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   setForceWaitForModel(true);
 }
 
-#if KDE_IS_VERSION(4,2,62)
 KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& matched) {
   KSharedPtr<CompletionTreeElement> element = itemForIndex(matched);
   //Do not hide the completion-list if the matched item is an implementation-helper
@@ -83,7 +82,6 @@ KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CodeCompleti
   else
     return CodeCompletionModelControllerInterface2::matchingItem(matched);
 }
-#endif
 
 bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
