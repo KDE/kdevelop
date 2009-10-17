@@ -139,9 +139,6 @@ private:
     CppTools::IncludePathResolver *m_includeResolver;
     IncludeFileDataProvider* m_quickOpenDataProvider;
     UIBlockTester* m_blockTester;
-
-    Veritas::StubContextAction* m_stubAction;
-    Veritas::UUTContextAction* m_uutAction;
     
     Cpp::StaticCodeAssistant * m_assistant;
 };

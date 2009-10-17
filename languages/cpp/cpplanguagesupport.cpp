@@ -83,9 +83,6 @@
 #include "environmentmanager.h"
 #include "cppduchain/navigation/navigationwidget.h"
 #include "cppduchain/cppduchain.h"
-#include "veritas/testswitch.h"
-#include "veritas/stubcontextaction.h"
-#include "veritas/uutcontextaction.h"
 #include "codegen/codeassistant.h"
 #include "codegen/cppnewclass.h"
 #include "codegen/makeimplementationprivate.h"
@@ -124,8 +121,6 @@ CppLanguageSupport* CppLanguageSupport::m_self = 0;
 KDevelop::ContextMenuExtension CppLanguageSupport::contextMenuExtension(KDevelop::Context* context)
 {
     ContextMenuExtension cm;
-//     m_stubAction->appendTo(cm, context);
-    m_uutAction->appendTo(cm, context);
     SimpleRefactoring::self().doContextMenu(cm, context);
     return cm;
 }
@@ -211,16 +206,7 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     moveIntoSourceAction->setText( i18n("Move into Source") );
     moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
     connect(moveIntoSourceAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeMoveIntoSourceAction()));
-    
-    Veritas::TestSwitch* ts = new Veritas::TestSwitch(this);
-    ts->setStandardMacros(const_cast<Cpp::ReferenceCountedMacroSet*>(&CppUtils::standardMacros()));
-    ts->connectAction(actionCollection());
-
-    m_stubAction = new Veritas::StubContextAction(this);
-    m_stubAction->setup();
-    m_uutAction = new Veritas::UUTContextAction(this);
-    m_uutAction->setup();
-
+ 
 #ifdef DEBUG_UI_LOCKUP
     m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
 #endif

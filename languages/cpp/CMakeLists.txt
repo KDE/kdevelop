@@ -11,7 +11,6 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9007 )
 
 add_subdirectory(parser)
 add_subdirectory(cppduchain)
-add_subdirectory(veritas)
 add_subdirectory(tests)
 ########### next target ###############
 
@@ -67,7 +66,6 @@ target_link_libraries(kdevcpplanguagesupport
     kdev4cpprpp
     kdev4cppduchain
     kdev4cppparser
-    veritascpp
     ${QT_QTDESIGNER_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}

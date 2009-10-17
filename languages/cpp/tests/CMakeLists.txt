@@ -66,7 +66,6 @@ target_link_libraries(cppcodecompletiontest ${QT_QTTEST_LIBRARY}
     kdev4cppduchain
     kdev4cpprpp
     kdev4cppparser
-    veritascpp
     ${QT_QTDESIGNER_LIBRARY}
     ${KDEVPLATFORM_INTERFACES_LIBRARY}
     ${KDEVPLATFORM_PROJECT_LIBRARY}
@@ -81,7 +80,6 @@ target_link_libraries(cppcodegentest
     kdev4cppduchain
     kdev4cpprpp
     kdev4cppparser
-    veritascpp
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${KDEVPLATFORM_LANGUAGE_LIBRARY}
