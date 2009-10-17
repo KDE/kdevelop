@@ -25,7 +25,6 @@
 #                                        classes with custom implementations
 # KDEVPLATFORM_UTIL_LIBRARY            - util module library
 # KDEVPLATFORM_VCS_LIBRARY             - vcs module library
-# KDEVPLATFORM_VERITAS_LIBRARY         - test module library
 # KDEVPLATFORM_SOURCEFORMATTER_LIBRARY - source formatter library
 # KDEVPLATFORM_DEBUGGER_LIBRARY        - debugger module library
 #

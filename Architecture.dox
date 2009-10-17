@@ -38,8 +38,6 @@ Platform consists of
 - vcs
   -  central & distributed version control library
   .
-- veritas
-  -  generic unit test runner library
 .
 
 \subsection platform_for_plugins What to Use in Plugins

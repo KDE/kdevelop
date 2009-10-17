@@ -73,7 +73,8 @@ KAboutData aboutData()
     aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
     aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and ident support"), "cedric.pasteur@free.fr" );
     aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
-    aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
+    //Veritas is outside in playground currently.
+    //aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
     aboutData.addCredit( ki18n("Robert Gruber") , ki18n( "SnippetPart, debugger and usability patches" ), "rgruber@users.sourceforge.net" );
     aboutData.addCredit( ki18n("Dukju Ahn"), ki18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), "dukjuahn@gmail.com" );
     return aboutData;
