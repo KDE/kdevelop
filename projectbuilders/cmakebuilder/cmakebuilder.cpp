@@ -226,7 +226,7 @@ KJob* CMakeBuilder::prune( KDevelop::IProject* project )
     }
     QDir d( builddir.toLocalFile() );
     KUrl::List urls;
-    foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot ) )
+    foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) )
     {
         KUrl tmp = builddir;
         tmp.addPath( entry );
