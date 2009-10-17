@@ -99,7 +99,6 @@ private:
     //void legacyLoading();
     void setupActions();
     void cleanup();
-    bool loadProjectPart();
     void initialize();
 
     // helper methods for closeProject()

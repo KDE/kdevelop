@@ -565,18 +565,7 @@ void ProjectController::openProject( const KUrl &projectFile )
         }
     }
 
-    //FIXME Create the hidden directory if it doesn't exist
-    if ( loadProjectPart() )
-    {
-        //The project file has been opened.
-        //Now we can load settings for all of the Core objects including this one!!
-//         Core::loadSettings();
-        d->m_core->pluginControllerInternal()->loadProjectPlugins();
-    } else {
-        KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
-                           i18n("Cannot Load Projects View plugin, aborting."));
-        return;
-    }
+    d->m_core->pluginControllerInternal()->loadProjectPlugins();
 
     Project* project = new Project();
     emit projectAboutToBeOpened( project );
@@ -715,12 +704,6 @@ void ProjectController::closeProject(IProject* proj)
     d->saveListOfOpenedProjects();
     emit projectClosed(proj);
     return;
-}
-
-bool ProjectController::loadProjectPart()
-{
-
-    return true;
 }
 
 ProjectModel* ProjectController::projectModel()
