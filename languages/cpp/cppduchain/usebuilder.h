@@ -23,7 +23,8 @@
 #include "cppduchainexport.h"
 #include <language/duchain/builders/abstractusebuilder.h>
 
-typedef KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> UseBuilderBase;
+class UseBuilderBase : public KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> {
+};
 
 /**
  * A class which iterates the AST to extract uses of definitions.
