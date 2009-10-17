@@ -58,7 +58,7 @@ public:
     UiControllerPrivate(UiController *controller)
     : cfgDlg(0), areasRestored(false), m_controller(controller)
     {
-        Core::self()->workingSetControllerInternal()->initializeController(controller);
+        Core::self()->workingSetControllerInternal()->initializeController(m_controller);
         
         QMap<QString, Sublime::Position> desired;
 
@@ -76,7 +76,7 @@ public:
             new Sublime::Area(m_controller, "code", i18n("Code"));
         a->setDesiredToolViews(desired);
         a->setIconName("document-edit");
-        controller->addDefaultArea(a);
+        m_controller->addDefaultArea(a);
 
         desired.clear();
         desired["org.kdevelop.debugger.VariablesView"] = Sublime::Left;
@@ -87,7 +87,7 @@ public:
         a = new Sublime::Area(m_controller, "debug", i18n("Debug"));
         a->setDesiredToolViews(desired);
         a->setIconName("tools-report-bug");
-        controller->addDefaultArea(a);
+        m_controller->addDefaultArea(a);
 
         desired.clear();
         desired["org.kdevelop.ProjectsView"] = Sublime::Left;
@@ -96,12 +96,12 @@ public:
         a = new Sublime::Area(m_controller, "review", i18n("Review"));
         a->setDesiredToolViews(desired);
         a->setIconName("applications-engineering");
-        controller->addDefaultArea(a);
+        m_controller->addDefaultArea(a);
 
         if(!(Core::self()->setupFlags() & Core::NoUi)) 
         {
-            defaultMainWindow = new MainWindow(controller);
-            controller->addMainWindow(defaultMainWindow);
+            defaultMainWindow = new MainWindow(m_controller);
+            m_controller->addMainWindow(defaultMainWindow);
             activeSublimeWindow = defaultMainWindow;
         }
         else
