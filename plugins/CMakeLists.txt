@@ -30,7 +30,6 @@ if(SUBVERSION_FOUND)
     macro_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND)
 
-macro_optional_add_subdirectory(git)
 macro_optional_add_subdirectory(mercurial)
 
 macro_display_feature_log()
