@@ -291,6 +291,7 @@ bool PluginController::unloadPlugin( const QString & pluginId )
 void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
     plugin->unload();
+    emit pluginUnloaded(plugin);
 
     //Remove the plugin from our list of plugins so we create a new
     //instance when we're asked for it again.
