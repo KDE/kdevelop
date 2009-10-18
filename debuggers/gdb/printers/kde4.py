@@ -29,6 +29,16 @@ class CursorPrinter:
     def to_string(self):
         return "[%d, %d]" % (self.val['m_line'], self.val['m_column'])
 
+class RangePrinter:
+    "Pretty Printer for KTextEditor::Range"
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return "[ (%d, %d) -> (%d, %d) ]" % (self.val['m_start']['m_line'], self.val['m_start']['m_column'],
+                                             self.val['m_end']['m_line'], self.val['m_end']['m_column'])
+
 def register_kde4_printers (obj):
     if obj == None:
         obj = gdb
@@ -65,6 +75,7 @@ def lookup_function (val):
 
 def build_dictionary ():
     pretty_printers_dict[re.compile('^KTextEditor::Cursor$')] = lambda val: CursorPrinter(val)
+    pretty_printers_dict[re.compile('^KTextEditor::Range$')] = lambda val: RangePrinter(val)
 
 
 pretty_printers_dict = {}
