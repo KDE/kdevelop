@@ -165,6 +165,8 @@ struct DocumentControllerPrivate {
 
         UiController *uiController = Core::self()->uiControllerInternal();
 
+        QString _encoding = encoding;
+        
         KUrl url = inputUrl;
 
         if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
@@ -183,7 +185,7 @@ struct DocumentControllerPrivate {
                                         i18n( "Open File" ) );
             if( !res.URLs.isEmpty() )
                 url = res.URLs.first();
-            encoding = res.encoding;
+            _encoding = res.encoding;
         }
         if ( url.isEmpty() )
             //still no url
@@ -255,7 +257,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self(), prefName);
                 } else  if ( Core::self()->partControllerInternal()->isTextType(mimeType)) 
                 {
-                    doc = new TextDocument(url, Core::self(), encoding);
+                    doc = new TextDocument(url, Core::self(), _encoding);
                 } else if( Core::self()->partControllerInternal()->canCreatePart(url) ) 
                 {
                     doc = new PartDocument(url, Core::self());
@@ -263,7 +265,7 @@ struct DocumentControllerPrivate {
                 {
                     int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
                     if (openAsText == KMessageBox::Yes)
-                        doc = new TextDocument(url, Core::self(), encoding);
+                        doc = new TextDocument(url, Core::self(), _encoding);
                     else
                         return 0;
                 }
