@@ -1481,9 +1481,9 @@ void DebugSession::programRunning()
 
 void DebugSession::handleVersion(const QStringList& s)
 {
-    const int minVersion1 = 6;
-    const int minVersion2 = 8;
-    const int minVersion3 = 50;
+    const int minVersion1 = 7;
+    const int minVersion2 = 0;
+    const int minVersion3 = 0;
 
     kDebug() << s.first();
     QRegExp rx("([0-9]+)\\.([0-9]+)(?:\\.([0-9]+))?");
@@ -1495,11 +1495,11 @@ void DebugSession::handleVersion(const QStringList& s)
     {
         if (qApp->type() == QApplication::Tty)  {
             //for unittest
-            qFatal("You need gdb 6.8.50 or higher.");
+            qFatal("You need gdb 7.0.0 or higher.");
         }
         KMessageBox::error(
             qApp->activeWindow(),
-            i18n("<b>You need gdb 6.8.50 or higher.</b><br />"
+            i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
             "You are using: %1", s.first()),
             i18n("gdb error"));
         stopDebugger();
