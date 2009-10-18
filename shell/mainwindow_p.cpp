@@ -43,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <kactioncollection.h>
 #include <ktoolbarpopupaction.h>
 #include <knotifyconfigwidget.h>
+#include <kxmlguiclient.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -108,6 +109,7 @@ void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
 {
     IPlugin* plugin = static_cast<IPlugin*>(pluginObj);
     Q_ASSERT(m_pluginCustomClients.contains(plugin));
+    m_mainWindow->guiFactory()->removeClient( m_pluginCustomClients[plugin] );
     delete m_pluginCustomClients[plugin];
     m_pluginCustomClients.remove(plugin);
 }
@@ -123,6 +125,7 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
     Q_ASSERT( plugin );
 
     if(m_pluginCustomClients.contains(plugin)) {
+        m_mainWindow->guiFactory()->removeClient( m_pluginCustomClients[plugin] );
         delete m_pluginCustomClients[plugin];
         m_pluginCustomClients.remove(plugin);
         disconnect(plugin, SIGNAL(destroyed(QObject*)), this, SLOT(pluginDestroyed(QObject*)));
