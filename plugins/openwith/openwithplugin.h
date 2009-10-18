@@ -46,7 +46,7 @@ private slots:
 private:
     QList<QAction*> actionsForServices( const KService::List& list, KService::Ptr pref );
     QSignalMapper* actionMap;
-    KUrl url;
+    QList<KUrl> urls;
 };
 
 #endif // OPENWITHPLUGIN_H

@@ -66,27 +66,30 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
         delete actionMap;
         actionMap = 0;
     }
-    url = KUrl();
+    urls = QList<KUrl>();
     FileContext* filectx = dynamic_cast<FileContext*>( context );
     ProjectItemContext* projctx = dynamic_cast<ProjectItemContext*>( context );
-    if( filectx && filectx->urls().count() == 1 )
+    if( filectx && filectx->urls().count() > 0 )
     {
-        url = filectx->urls().first();
-    } else if ( projctx && projctx->items().count() == 1 )
+        urls = filectx->urls();
+    } else if ( projctx && projctx->items().count() > 0 )
     {
-        ProjectBaseItem* item = projctx->items().first();
-        if( item->file() )
+        foreach( ProjectBaseItem* item, projctx->items() )
         {
-            url = item->file()->url();
+            if( item->file() )
+            {
+                urls << item->file()->url();
+            }
         }
     }
-    if( !url.isEmpty() && url.isValid() )
+    if( !urls.isEmpty() )
     {
         actionMap = new QSignalMapper( this );
         connect( actionMap, SIGNAL(mapped(const QString&)), SLOT(open(const QString&)) );
         
-        // Ok, lets fetch the mimetype for the url and the relevant services
-        KMimeType::Ptr mimetype = KMimeType::findByUrl( url );
+        // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
+        // TODO: Think about possible alternatives to using the mimetype of the first url.
+        KMimeType::Ptr mimetype = KMimeType::findByUrl( urls.first() );
         KService::List apps = KMimeTypeTrader::self()->query( mimetype->name() );
         KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( mimetype->name() );
         KService::List parts = KMimeTypeTrader::self()->query( mimetype->name(), "KParts/ReadOnlyPart" );
@@ -134,7 +137,9 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
 
 void OpenWithPlugin::openDefault()
 {
-    ICore::self()->documentController()->openDocument( url );
+    foreach( const KUrl& u, urls ) {
+        ICore::self()->documentController()->openDocument( u );
+    }
 }
 
 void OpenWithPlugin::open ( const QString& storageid )
@@ -142,7 +147,7 @@ void OpenWithPlugin::open ( const QString& storageid )
     KService::Ptr svc = KService::serviceByStorageId( storageid );
     if( svc->isApplication() )
     {
-        KRun::run( *svc, QList<KUrl>() << url, ICore::self()->uiController()->activeMainWindow() );
+        KRun::run( *svc, urls, ICore::self()->uiController()->activeMainWindow() );
     } else 
     {
         QString prefName = svc->desktopEntryName();
@@ -153,6 +158,9 @@ void OpenWithPlugin::open ( const QString& storageid )
             // TODO: Solve this rather inside DocumentController
             prefName = "";
         }
-        ICore::self()->documentController()->openDocument( url, prefName );
+        foreach( const KUrl& u, urls )
+        {
+            ICore::self()->documentController()->openDocument( u, prefName );
+        }
     }
 }
