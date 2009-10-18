@@ -145,7 +145,6 @@ struct DocumentControllerPrivate {
         
 
         UiController *uiController = Core::self()->uiControllerInternal();
-        Sublime::Area *area = uiController->activeArea();
 
         KUrl url = inputUrl;
         QString encoding = "";
