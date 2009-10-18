@@ -166,6 +166,13 @@ public:
 Q_SIGNALS:
     void loadingPlugin( const QString& );
     void pluginLoaded( KDevelop::IPlugin* );
+
+    /**
+     * This signal is emitted whenever a plugin is unloaded. 
+     * @note: that you shouldn't use the pointer anymore
+     * except for comparing it against against other pointers. The plugin instance can already have been completely
+     * deleted when this signal is emitted.
+     */
     void pluginUnloaded( KDevelop::IPlugin* );
 
 private:
