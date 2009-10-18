@@ -313,7 +313,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( "file_new" );
     action->setIcon(KIcon("document-new"));
     action->setShortcut( Qt::CTRL + Qt::Key_N );
-    action->setText( i18n( "&New File" ) );
+    action->setText( i18n( "&New" ) );
     action->setIconText( i18nc( "Shorter Text for 'New File' shown in the toolbar", "New") );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileNew() ) );
     action->setToolTip( i18n( "New File" ) );

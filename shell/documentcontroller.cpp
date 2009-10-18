@@ -435,7 +435,7 @@ void DocumentController::setupActions()
     action = ac->addAction( "file_open" );
     action->setIcon(KIcon("document-open"));
     action->setShortcut( Qt::CTRL + Qt::Key_O );
-    action->setText(i18n( "&Open File..." ) );
+    action->setText(i18n( "&Open..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( chooseDocument() ) );
     action->setToolTip( i18n( "Open file" ) );
     action->setWhatsThis( i18n( "<b>Open file</b><p>Opens a file for editing.</p>" ) );
@@ -464,7 +464,7 @@ void DocumentController::setupActions()
     action = d->close = ac->addAction( "file_close" );
     action->setIcon(KIcon("window-close"));
     action->setShortcut( Qt::CTRL + Qt::Key_W );
-    action->setText( i18n( "&Close File" ) );
+    action->setText( i18n( "&Close" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fileClose() ) );
     action->setToolTip( i18n( "Close File" ) );
     action->setWhatsThis( i18n( "<b>Close File</b><p>Closes current file.</p>" ) );
