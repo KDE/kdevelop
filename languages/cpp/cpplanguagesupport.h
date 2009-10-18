@@ -38,7 +38,6 @@ class IncludeFileDataProvider;
 namespace KDevelop { class ICodeHighlighting; class IProject; class IDocument; class SimpleRange; class CodeCompletion; template<class T> class DUChainPointer; typedef DUChainPointer<TopDUContext> TopDUContextPointer; }
 namespace Cpp { class EnvironmentManager; class StaticCodeAssistant; }
 namespace CppTools { class IncludePathResolver; }
-namespace Veritas { class StubContextAction; class UUTContextAction; }
 
 ///A class that helps detecting what exactly makes the UI block. To use it, just place a breakpoint on UIBlockTester::lockup() and inspect the execution-position of the main thread
 class UIBlockTester : public QObject {
