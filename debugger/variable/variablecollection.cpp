@@ -219,7 +219,6 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
                     ICore::self()->debugController()->variableCollection(),
                     this, var );
             appendChild( v, false );
-            v->attachMaybe();
         }
     }
 
