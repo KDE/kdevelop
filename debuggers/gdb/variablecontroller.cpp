@@ -113,8 +113,11 @@ public:
         for (int i = 0; i < vars.size(); i++) {
             names << vars[i]["name"].literal();
         }
-        KDevelop::ICore::self()->debugController()->variableCollection()
+        QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
                 ->locals()->updateLocals(names);
+        foreach (Variable *v, variables) {
+            v->attachMaybe();
+        }
     }
 
 private:
