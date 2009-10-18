@@ -175,6 +175,8 @@ void MainWindow::initialize()
     
     connect( Core::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)),
              d, SLOT(addPlugin(KDevelop::IPlugin*)));
+    connect( Core::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)),
+             d, SLOT(removePlugin(KDevelop::IPlugin*)));
     connect( Core::self()->partController(), SIGNAL(activePartChanged(KParts::Part*)),
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
