@@ -21,9 +21,9 @@ include (MacroLibrary)
 set(KOMPARE_FOUND FALSE)
 #macro_optional_find_package(Kompare)
 macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
-macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
-                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
-                        "Required for difference checking. From KDE SDK package, KDE 4.3.61 or higher needed.")
+#macro_log_feature(KOMPARE_FOUND "Kompare" "KPart to view file differences."
+#                        "http://www.caffeinated.me.uk/kompare/" FALSE ""
+#                        "Required for difference checking. From KDE SDK package, KDE 4.3.61 or higher needed.")
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
