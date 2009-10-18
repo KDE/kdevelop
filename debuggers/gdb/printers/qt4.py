@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 # Pretty-printers for Qt4.
 
 # Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
@@ -26,7 +26,12 @@ class QStringPrinter:
         self.val = val
 
     def to_string(self):
-        return self.val['d']['data'].string('UTF-16')
+        ret = ""
+        i = 0
+        while i < self.val['d']['size']:
+            ret += chr(self.val['d']['data'][i])
+            i = i + 1
+        return ret
 
     def display_hint (self):
         return 'string'
@@ -61,7 +66,6 @@ class QByteArrayPrinter:
 
     def display_hint (self):
         return 'string'
-
 class QListPrinter:
     "Print a QList"
 
