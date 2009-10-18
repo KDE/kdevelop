@@ -68,7 +68,7 @@ public:
 
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );
-    void removePlugin( IPlugin *plugin );
+    void removePlugin( KDevelop::IPlugin *plugin );
 
     void activePartChanged(KParts::Part *part);
     void changeActiveView(Sublime::View *view);
