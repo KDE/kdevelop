@@ -104,7 +104,26 @@ struct DocumentControllerPrivate {
     }
     void chooseDocument()
     {
-        controller->openDocument(KUrl());
+
+        KUrl dir;
+        if( controller->activeDocument() )
+        {
+            dir = KUrl( controller->activeDocument()->url().directory() );
+        }else
+        {
+            dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
+        }
+
+        KEncodingFileDialog::Result res = KEncodingFileDialog::getOpenUrlsAndEncoding( controller->encoding(), dir.url(), i18n( "*|Text File\n" ),
+                                    Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                    i18n( "Open File" ) );
+        if( !res.URLs.isEmpty() ) {
+            QString encoding = res.encoding;
+            foreach( KUrl u, res.URLs ) {
+                openDocumentInternal(u, QString(), KTextEditor::Range::invalid(), encoding  );
+            }
+        }
+        
     }
 
     void changeDocumentUrl(KDevelop::IDocument* document)
@@ -135,7 +154,7 @@ struct DocumentControllerPrivate {
     }
 
     IDocument* openDocumentInternal( const KUrl & inputUrl, const QString& prefName = QString(),
-        const KTextEditor::Range& range = KTextEditor::Range::invalid(),
+        const KTextEditor::Range& range = KTextEditor::Range::invalid(), const QString& encoding = "",
         DocumentController::DocumentActivationParams activationParams = 0 )
     {
         IDocument* previousActiveDocument = controller->activeDocument();
@@ -147,7 +166,6 @@ struct DocumentControllerPrivate {
         UiController *uiController = Core::self()->uiControllerInternal();
 
         KUrl url = inputUrl;
-        QString encoding = "";
 
         if ( url.isEmpty() && (!activationParams.testFlag(IDocumentController::DoNotCreateView)) )
         {
@@ -518,7 +536,7 @@ IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Range& range,
         DocumentActivationParams activationParams)
 {
-    return d->openDocumentInternal( inputUrl, "", range, activationParams );
+    return d->openDocumentInternal( inputUrl, "", range, "", activationParams );
 }
 
 
