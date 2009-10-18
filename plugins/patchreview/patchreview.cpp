@@ -608,9 +608,9 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* m
   
   if(diff->applied()) {
     if(m_plugin->isReverseChange())
-      html += i18n("<b>Reverted!</b><br/>");
+      html += i18n("<b>Reverted.</b><br/>");
     else
-      html += i18n("<b>Applied!</b><br/>");
+      html += i18n("<b>Applied.</b><br/>");
     
     html += i18n("<b>Previous:</b><br/>");
     lines = diff->sourceLines();
@@ -725,7 +725,7 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
     }
     
     if(currentText.join("\n").simplified() != replace.simplified()) {
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\"", replace, currentText.join("\n")));
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText.join("\n")));
       return;
     }
     
