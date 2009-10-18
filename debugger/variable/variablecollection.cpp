@@ -196,7 +196,7 @@ Locals::Locals(TreeModel* model, TreeItem* parent)
     setData(QVector<QVariant>() << "Locals" << QString());
 }
 
-void Locals::updateLocals(QStringList locals)
+QList<Variable*> Locals::updateLocals(QStringList locals)
 {
     setHasMore(false);
 
@@ -235,6 +235,13 @@ void Locals::updateLocals(QStringList locals)
 
     // Variables which changed just value are updated by a call to -var-update.
     // Variables that changed type -- likewise.
+
+    QList<Variable*> ret;
+    foreach (TreeItem *i, childItems) {
+        Q_ASSERT(dynamic_cast<Variable*>(i));
+        ret << static_cast<Variable*>(i);
+    }
+    return ret;
 }
 
 VariablesRoot::VariablesRoot(TreeModel* model)

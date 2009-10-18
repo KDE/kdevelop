@@ -138,7 +138,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
 {
 public:
     Locals(TreeModel* model, TreeItem* parent);
-    void updateLocals(QStringList locals);
+    QList<Variable*> updateLocals(QStringList locals);
 
     using TreeItem::setHasMore;
     using TreeItem::child;
