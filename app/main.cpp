@@ -68,7 +68,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor( ki18n("Amilcar do Carmo Lucas"), ki18n( "Website admin, API documentation, Doxygen and autoproject patches" ), "amilcar@kdevelop.org" );
 
     aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
-    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and ident support"), "cedric.pasteur@free.fr" );
+    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and indent support"), "cedric.pasteur@free.fr" );
     aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
     // QTest integration is separate in playground currently.
     //aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
