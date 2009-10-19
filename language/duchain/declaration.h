@@ -74,7 +74,8 @@ public:
     Instance /**< An instance of a type is declared("MyClass m;") */,
     NamespaceAlias/**< This is a namespace-alias. You can safely cast this object to NamespaceAliasDeclaration. */,
     Alias, /**<This is an alias-declaration. You can safely cast this object to AliasDeclaration. */
-    Namespace /**< Declaration of a namespace. */
+    Namespace, /**< Declaration of a namespace. */
+    Import /**< Declaration marks the Import of a file. */
   };
 
   /**
