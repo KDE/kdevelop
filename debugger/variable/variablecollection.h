@@ -137,7 +137,7 @@ private:
 class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
 {
 public:
-    Locals(TreeModel* model, TreeItem* parent);
+    Locals(TreeModel* model, TreeItem* parent, const QString &name);
     QList<Variable*> updateLocals(QStringList locals);
 
     using TreeItem::deleteChildren;
@@ -155,13 +155,13 @@ public:
     VariablesRoot(TreeModel* model);
 
     Watches *watches() const { return watches_; }
-    Locals *locals() const { return locals_; }
+    Locals *locals(const QString &name = "Locals");
 
     void fetchMoreChildren() {}
 
 private:
     Watches *watches_;
-    Locals *locals_;
+    QHash<QString, Locals*> locals_;
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT VariableCollection : public TreeModel
@@ -174,7 +174,7 @@ public:
 
     VariablesRoot* root() const { return universe_; }
     Watches* watches() const { return universe_->watches(); }
-    Locals* locals() const { return universe_->locals(); }
+    Locals* locals(const QString &name = "Locals") const { return universe_->locals(name); }
 
 public Q_SLOTS:
     void variableWidgetShown();

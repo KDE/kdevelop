@@ -190,10 +190,10 @@ void Watches::reinstall()
     }
 }
 
-Locals::Locals(TreeModel* model, TreeItem* parent)
+Locals::Locals(TreeModel* model, TreeItem* parent, const QString &name)
 : TreeItem(model, parent)
 {
-    setData(QVector<QVariant>() << "Locals" << QString());
+    setData(QVector<QVariant>() << name << QString());
 }
 
 QList<Variable*> Locals::updateLocals(QStringList locals)
@@ -248,9 +248,18 @@ VariablesRoot::VariablesRoot(TreeModel* model)
 {
     watches_ = new Watches(model, this);
     appendChild(watches_, true);
-    locals_ = new Locals(model, this);
-    appendChild(locals_, true);
 }
+
+
+Locals* VariablesRoot::locals(const QString& name)
+{
+    if (!locals_.contains(name)) {
+        locals_[name] = new Locals(model(), this, name);
+        appendChild(locals_[name]);
+    }
+    return locals_[name];
+}
+
 
 VariableCollection::VariableCollection(IDebugController* controller)
 : TreeModel(QVector<QString>() << "Name" << "Value", controller), m_widgetVisible(false)
