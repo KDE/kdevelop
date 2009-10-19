@@ -102,14 +102,15 @@ void CMakeBuildDirChooser::updated()
     bool emptyUrl=m_chooserUi->buildFolder->url().isEmpty();
     if( emptyUrl ) st |= BuildFolderEmpty;
 
-    bool dirEmpty = false, dirExists=false;
+    bool dirEmpty = false, dirExists= false, dirRelative = false;
     QString srcDir;
     if(!emptyUrl)
     {
         QDir d(m_chooserUi->buildFolder->url().toLocalFile());
         dirExists = d.exists();
-        dirEmpty=dirExists && d.count()<=2;
-        if(!dirEmpty && dirExists)
+        dirEmpty = dirExists && d.count()<=2;
+        dirRelative = d.isRelative();
+        if(!dirEmpty && dirExists && !dirRelative)
         {
             bool hasCache=QFile::exists(m_chooserUi->buildFolder->url().toLocalFile()+"/CMakeCache.txt");
             if(hasCache)
@@ -151,7 +152,7 @@ void CMakeBuildDirChooser::updated()
     }
     else
     {
-        bool correct = (dirEmpty || !dirExists) && !(st & DirAlreadyCreated);
+        bool correct = (dirEmpty || !dirExists) && !(st & DirAlreadyCreated) && !dirRelative;
         
         if(correct)
         {
@@ -166,6 +167,8 @@ void CMakeBuildDirChooser::updated()
             else if (!srcDir.isEmpty())
                 m_chooserUi->status->setText(i18n("This build directory is for %1, "
                         "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
+            else if(dirRelative)
+                m_chooserUi->status->setText(i18n("You may not select a relative build directory"));
             else if(!dirEmpty)
                 m_chooserUi->status->setText(i18n("The selected build directory is not empty"));
         }
