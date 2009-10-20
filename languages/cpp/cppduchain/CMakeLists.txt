@@ -56,9 +56,9 @@ set(kdevcppduchain_LIB_SRCS
 
 kde4_add_library(kdev4cppduchain SHARED ${kdevcppduchain_LIB_SRCS})
 target_link_libraries(kdev4cppduchain 
-		${KDEVPLATFORM_LANGUAGE_LIBRARY} 
-		${KDEVPLATFORM_INTERFACES_LIBRARY} 
-		${KDEVPLATFORM_UTIL_LIBRARY} 
+		${KDEVPLATFORM_LANGUAGE_LIBRARIES} 
+		${KDEVPLATFORM_INTERFACES_LIBRARIES} 
+		${KDEVPLATFORM_UTIL_LIBRARIES} 
 		kdev4cppparser 
 		${KDE4_KTEXTEDITOR_LIBS} 
 		kdev4cpprpp)
