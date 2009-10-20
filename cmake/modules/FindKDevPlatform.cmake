@@ -14,19 +14,19 @@
 # KDEVPLATFORM_VERSION_MINOR           - The minor version number of kdevplatform
 # KDEVPLATFORM_VERSION_PATCH           - The patch version number of kdevplatform
 # KDEVPLATFORM_INCLUDE_DIR             - include dir of the platform, for example /usr/include/kdevplatform
-# KDEVPLATFORM_INTERFACES_LIBRARY      - interfaces module library
-# KDEVPLATFORM_LANGUAGE_LIBRARY        - language module library
-# KDEVPLATFORM_OUTPUTVIEW_LIBRARY      - outputview module library
-# KDEVPLATFORM_PROJECT_LIBRARY         - project module library
-# KDEVPLATFORM_SUBLIME_LIBRARY         - sublime module library
-# KDEVPLATFORM_SHELL_LIBRARY           - shell module library
-# KDEVPLATFORM_TESTS_LIBRARY           - library to write tests for plugins,
+# KDEVPLATFORM_INTERFACES_LIBRARIES      - interfaces module library
+# KDEVPLATFORM_LANGUAGE_LIBRARIES        - language module library
+# KDEVPLATFORM_OUTPUTVIEW_LIBRARIES      - outputview module library
+# KDEVPLATFORM_PROJECT_LIBRARIES         - project module library
+# KDEVPLATFORM_SUBLIME_LIBRARIES         - sublime module library
+# KDEVPLATFORM_SHELL_LIBRARIES           - shell module library
+# KDEVPLATFORM_TESTS_LIBRARIES           - library to write tests for plugins,
 #                                        contains some useful tools and a way to replace parts of Core 
 #                                        classes with custom implementations
-# KDEVPLATFORM_UTIL_LIBRARY            - util module library
-# KDEVPLATFORM_VCS_LIBRARY             - vcs module library
-# KDEVPLATFORM_SOURCEFORMATTER_LIBRARY - source formatter library
-# KDEVPLATFORM_DEBUGGER_LIBRARY        - debugger module library
+# KDEVPLATFORM_UTIL_LIBRARIES            - util module library
+# KDEVPLATFORM_VCS_LIBRARIES             - vcs module library
+# KDEVPLATFORM_SOURCEFORMATTER_LIBRARIES - source formatter library
+# KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
 #
 # The following macros are added (from KDevPlatformMacros.cmake):
 #
