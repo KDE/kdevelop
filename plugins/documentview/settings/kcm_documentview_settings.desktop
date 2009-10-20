@@ -12,12 +12,14 @@ X-KDE-CfgDlgHierarchy=CORE
 
 Name=Document View
 Name[en_GB]=Document View
+Name[es]=Vista de documento
 Name[pt]=Área de Documentos
 Name[sv]=Dokumentvy
 Name[uk]=Перегляд документів
 Name[x-test]=xxDocument Viewxx
 Comment=Configure Document View settings
 Comment[en_GB]=Configure Document View settings
+Comment[es]=Configurar las preferencias de las vistas de documentos
 Comment[pt]=Configurar as opções da Área de Documentos
 Comment[sv]=Anpassa inställningar av dokumentvy
 Comment[uk]=Налаштувати параметри перегляду документа
