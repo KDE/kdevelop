@@ -5,17 +5,17 @@
 # This file sets various CMake Variables
 #
 # KDEVPLATFORM_INCLUDE_DIR             - The Include Directory for all KDEVPLATFORM libraries
-# KDEVPLATFORM_INTERFACES_LIBRARY      - the interfaces library
-# KDEVPLATFORM_LANGUAGE_LIBRARY        - the language library
-# KDEVPLATFORM_OUTPUTVIEW_LIBRARY      - the outputview library
-# KDEVPLATFORM_PROJECT_LIBRARY         - the project library
-# KDEVPLATFORM_SUBLIME_LIBRARY         - the sublime library
-# KDEVPLATFORM_SHELL_LIBRARY           - the shell library
-# KDEVPLATFORM_TESTS_LIBRARY           - the tests library
-# KDEVPLATFORM_UTIL_LIBRARY            - the util library
-# KDEVPLATFORM_VCS_LIBRARY             - the vcs library
-# KDEVPLATFORM_SOURCEFORMATTER_LIBRARY - the sourceformatter library
-# KDEVPLATFORM_DEBUGGER_LIBRARY        - debugger module library
+# KDEVPLATFORM_INTERFACES_LIBRARIES      - the interfaces library
+# KDEVPLATFORM_LANGUAGE_LIBRARIES        - the language library
+# KDEVPLATFORM_OUTPUTVIEW_LIBRARIES      - the outputview library
+# KDEVPLATFORM_PROJECT_LIBRARIES         - the project library
+# KDEVPLATFORM_SUBLIME_LIBRARIES         - the sublime library
+# KDEVPLATFORM_SHELL_LIBRARIES           - the shell library
+# KDEVPLATFORM_TESTS_LIBRARIES           - the tests library
+# KDEVPLATFORM_UTIL_LIBRARIES            - the util library
+# KDEVPLATFORM_VCS_LIBRARIES             - the vcs library
+# KDEVPLATFORM_SOURCEFORMATTER_LIBRARIES - the sourceformatter library
+# KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
 #
 # Copyright 2008  Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
@@ -40,7 +40,7 @@ if( NOT TARGET kdevplatforminterfaces )
 endif( NOT TARGET kdevplatforminterfaces )
 
 macro( _kdevplatform_set_lib_vars _prefix _lib )
-  set( KDEVPLATFORM_${_prefix}_LIBRARY ${_lib} )
+  set( KDEVPLATFORM_${_prefix}_LIBRARIES ${_lib} )
 endmacro( _kdevplatform_set_lib_vars )
 
 _kdevplatform_set_lib_vars( INTERFACES kdevplatforminterfaces )
@@ -58,15 +58,15 @@ _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
 include(${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformMacros.cmake)
 
 mark_as_advanced(
-    KDEVPLATFORM_INTERFACES_LIBRARY
-    KDEVPLATFORM_LANGUAGE_LIBRARY
-    KDEVPLATFORM_OUTPUTVIEW_LIBRARY
-    KDEVPLATFORM_PROJECT_LIBRARY
-    KDEVPLATFORM_SUBLIME_LIBRARY
-    KDEVPLATFORM_SHELL_LIBRARY
-    KDEVPLATFORM_UTIL_LIBRARY
-    KDEVPLATFORM_VCS_LIBRARY
-    KDEVPLATFORM_SOURCEFORMATTER_LIBRARY
-    KDEVPLATFORM_DEBUGGER_LIBRARY
-    KDEVPLATFORM_TESTS_LIBRARY
+    KDEVPLATFORM_INTERFACES_LIBRARIES
+    KDEVPLATFORM_LANGUAGE_LIBRARIES
+    KDEVPLATFORM_OUTPUTVIEW_LIBRARIES
+    KDEVPLATFORM_PROJECT_LIBRARIES
+    KDEVPLATFORM_SUBLIME_LIBRARIES
+    KDEVPLATFORM_SHELL_LIBRARIES
+    KDEVPLATFORM_UTIL_LIBRARIES
+    KDEVPLATFORM_VCS_LIBRARIES
+    KDEVPLATFORM_SOURCEFORMATTER_LIBRARIES
+    KDEVPLATFORM_DEBUGGER_LIBRARIES
+    KDEVPLATFORM_TESTS_LIBRARIES
 )
