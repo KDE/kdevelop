@@ -81,6 +81,7 @@ install( FILES
         DESTINATION "${_kdevplatform_CONFIG_DEST}" )
 install( EXPORT KDevPlatformTargets
          DESTINATION "${_kdevplatform_CONFIG_DEST}"
+         NAMESPACE KDevPlatformImport__
          FILE KDevPlatformTargets.cmake )
 
 # Put this last, so it can use _kdevplatform_CONFIG_DEST
