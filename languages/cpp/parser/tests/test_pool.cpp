@@ -90,6 +90,7 @@ void TestPool::testWastedMemoryDueToBlockAllocation()
 
 void TestPool::testStdlibCompliance()
 {
+#ifndef Q_CC_MSVC
     std::vector<int, rxx_allocator<int> > v;
     v.push_back(5);
     v.push_back(55);
@@ -103,6 +104,7 @@ void TestPool::testStdlibCompliance()
     QCOMPARE(v.size(), size_t(2));
     v.push_back(10);
     QCOMPARE(v[2], 10);
+#endif
 }
 
 #include "test_pool.moc"
