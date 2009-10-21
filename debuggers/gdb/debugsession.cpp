@@ -1055,8 +1055,12 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     QStringList arguments = iface->arguments(cfg, err);
     // Change the "Working directory" to the correct one
     QString dir = iface->workingDirectory(cfg).toLocalFile();
-    if (!dir.isEmpty())
-        queueCmd(new GDBCommand(GDBMI::EnvironmentCd, dir));
+    if (dir.isEmpty() || !KUrl(dir).isValid())
+    {
+        dir = QFileInfo(executable).absolutePath();
+    }
+    
+    queueCmd(new GDBCommand(GDBMI::EnvironmentCd, dir));
 
     // Set the run arguments
     if (!arguments.isEmpty())
