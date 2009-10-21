@@ -48,7 +48,7 @@ add_subdirectory(pics)
 add_subdirectory(debugger)
 add_subdirectory(tests)
 
-# Now set the usual KDEVPLATFORM_XXX_LIBRARY variable so we can more easily move plugins around
+# Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
 set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
 set(KDEVPLATFORM_INTERFACES_LIBRARIES kdevplatforminterfaces)
 set(KDEVPLATFORM_LANGUAGE_LIBRARIES kdevplatformlanguage)
