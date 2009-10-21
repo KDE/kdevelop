@@ -40,7 +40,7 @@ if( NOT TARGET kdevplatforminterfaces )
 endif( NOT TARGET kdevplatforminterfaces )
 
 macro( _kdevplatform_set_lib_vars _prefix _lib )
-  set( KDEVPLATFORM_${_prefix}_LIBRARIES ${_lib} )
+  set( KDEVPLATFORM_${_prefix}_LIBRARIES KDevPlatformImport__${_lib} )
 endmacro( _kdevplatform_set_lib_vars )
 
 _kdevplatform_set_lib_vars( INTERFACES kdevplatforminterfaces )
