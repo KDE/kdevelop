@@ -413,11 +413,12 @@ void CPPInternalParseJob::highlightIfNeeded()
 
 void CPPInternalParseJob::run()
 {
-    if(!ICore::self()->languageController()->language("C++")->languageSupport())
+    //Happens during shutdown
+    if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
     //If we have a parent, the parse-mutex is already locked
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
-    if(!ICore::self()->languageController()->language("C++")->languageSupport())
+    if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
     
     UrlParseLock urlLock(parentJob()->document());
