@@ -282,8 +282,8 @@ void TopDUContextDynamicData::loadData() const {
   if(!m_mappedFile) {
     QByteArray data = file->readAll();
     m_data.append(qMakePair(data, (uint)data.size()));
-    delete file;
   }
+  delete file;
 
   //Fill with zeroes for now, will be initialized on-demand
   m_contexts.resize(m_contextDataOffsets.size());
