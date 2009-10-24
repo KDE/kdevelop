@@ -1255,15 +1255,6 @@ QuickOpenLineEdit::~QuickOpenLineEdit() {
     delete m_widgetCreator;
 }
 
-void QuickOpenLineEdit::keyPressEvent(QKeyEvent* ev) {
-    if (ev->key() == Qt::Key_Escape) {
-      kDebug() << "escape";
-        deactivate();
-        ev->accept();
-    }
-    QLineEdit::keyPressEvent(ev);
-}
-
 bool QuickOpenLineEdit::insideThis(QObject* object) {
     while (object)
     {
@@ -1360,6 +1351,13 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
     if (!m_widget)
         return false;
     switch (e->type()) {
+    case QEvent::KeyPress:
+    case QEvent::ShortcutOverride:
+      if (static_cast<QKeyEvent*>(e)->key() == Qt::Key_Escape) {
+          deactivate();
+          e->accept();
+          return true;
+      }
      case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
         kDebug() << "closing because of window activation";

@@ -206,7 +206,6 @@ class QuickOpenLineEdit : public KDevelop::IQuickOpenLine {
     void deactivate() ;
     void checkFocus();
   private:
-    virtual void keyPressEvent(QKeyEvent* ev) ;
     virtual void focusInEvent(QFocusEvent* ev) ;
     virtual bool eventFilter(QObject* obj, QEvent* e) ;
     virtual void hideEvent(QHideEvent* );
