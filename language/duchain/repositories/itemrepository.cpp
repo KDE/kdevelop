@@ -32,6 +32,8 @@
 
 namespace KDevelop {
 
+//If KDevelop crashed this many times consicutively, clean up the repository
+const int crashesBeforeCleanup = 2;
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
@@ -248,6 +250,34 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
       clear = true;
     }
     
+    QFile crashesFile(m_path + QString("/crash_counter"));
+    if(crashesFile.open(QIODevice::ReadOnly)) {
+      int count;
+      QDataStream stream(&crashesFile);
+      stream >> count;
+
+      kDebug() << "current count of crashes: " << count;
+      
+      if(count >= crashesBeforeCleanup)
+      {
+        ///@todo Ask the user
+        kWarning() << "kdevelop crashed" << count << "times in a row with the duchain repository" << m_path << ", clearing it";
+        clear = true;
+      }else{
+        ///Increase the crash-count. It will be reset of kdevelop is shut down cleanly.
+        ++count;
+        crashesFile.close();
+        crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        QDataStream writeStream(&crashesFile);
+        writeStream << count;
+      }
+    }else{
+        ///Increase the crash-count. It will be reset of kdevelop is shut down cleanly.
+        crashesFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
+        QDataStream writeStream(&crashesFile);
+        writeStream << 1;
+    }
+    
     if(clear) {
         kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
   //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
@@ -351,6 +381,12 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry() {
   QMutexLocker lock(&m_mutex);
   foreach(QAtomicInt* counter, m_customCounters)
     delete counter;
+}
+
+void ItemRepositoryRegistry::shutdown() {
+  QFile::remove(m_path + QString("/crash_counter"));
+  if(m_lock)
+    m_lock->unlock();
 }
 
 }

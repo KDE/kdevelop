@@ -1548,6 +1548,8 @@ void DUChain::aboutToQuit()
   sdDUChainPrivate->m_openDocumentContexts.clear();
   sdDUChainPrivate->m_destroyed = true;
   sdDUChainPrivate->clear();
+  
+  globalItemRepositoryRegistry().shutdown();
 }
 
 uint DUChain::newTopContextIndex() {

@@ -159,6 +159,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ItemRepositoryRegistry {
     ///Should be called on a regular basis: Stores all repositories to disk, and eventually unloads unneeded data to save memory
     void store();
 
+    ///Must be called somewhere at the end of the shutdown sequence, to indicate that the application has been closed gracefully
+    void shutdown();
+    
     ///Does a big cleanup, removing all non-persistent items in the repositories
     ///Returns whether something was removed(Count of removed bytes)
     int finalCleanup();
