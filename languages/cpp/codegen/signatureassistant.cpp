@@ -112,18 +112,14 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   
   int pos = 0;
   foreach(Declaration* parameter, otherSideFunctionContext->localDeclarations()) {
-    QString id = parameter->identifier().identifier().str();
-    QString defaultParam = otherFunDecl->defaultParameterForArgument(pos).str();
-    if(!defaultParam.isEmpty())
-      id += " = " + defaultParam;
-    
-    m_oldSignature << qMakePair(parameter->indexedType(), id);
+    m_oldSignature.defaultParams << otherFunDecl->defaultParameterForArgument(pos).str();
+    m_oldSignature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
     ++pos;
   }
   
   KDevelop::FunctionType::Ptr funType = otherSide->type<KDevelop::FunctionType>();
   if(funType)
-    m_oldReturnType = funType->returnType()->indexed();
+    m_oldSignature.returnType = funType->returnType()->indexed();
   
   //Schedule an update, to make sure the ranges match
   DUChain::self()->updateContextForUrl(m_definitionContext->url(), KDevelop::TopDUContext::AllDeclarationsAndContexts);
@@ -146,25 +142,29 @@ DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDev
   return 0;
 }
 
-QString makeSignatureString(QList<SignatureItem> signature, DUContext* visibilityFrom) {
+QString makeSignatureString(Signature signature, DUContext* visibilityFrom) {
   QString ret;
-  foreach(SignatureItem item, signature) {
+  int pos = 0;
+  foreach(ParameterItem item, signature.parameters) {
     if(!ret.isEmpty())
       ret += ", ";
+    
     ret += Cpp::simplifiedTypeString(item.first.abstractType(),  visibilityFrom);
     
     if(!item.second.isEmpty())
       ret += " " + item.second;
+    
+    if (!signature.defaultParams[pos].isEmpty())
+      ret += " = " + signature.defaultParams[pos];
+    
+    ++pos;
   }
   return ret;
-}
-int min(int a, int b) {
-  return a < b ? a : b;
 }
 
 class AdaptSignatureAction : public KDevelop::IAssistantAction {
   public:
-    AdaptSignatureAction(KDevelop::DeclarationId definitionId, KDevelop::ReferencedTopDUContext definitionContext, QList<SignatureItem> oldSignature, QList<SignatureItem> newSignature) : 
+    AdaptSignatureAction(KDevelop::DeclarationId definitionId, KDevelop::ReferencedTopDUContext definitionContext, Signature oldSignature, Signature newSignature) : 
     m_otherSideId(definitionId), 
     m_otherSideContext(definitionContext), 
     m_oldSignature(oldSignature),
@@ -201,24 +201,17 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
         return;
       }
 
-      ///@todo Exactly watch what components are changed and how
       ///@todo Handle return-type
-      ///@todo Keep default-parameters
-      ///@todo Do matching of the arguments
-      ///@todo Eventually do real refactoring-like renaming
+      ///@todo Eventually do real refactoring-like renaming of the function?
       if(!functionContext || functionContext->type() != DUContext::Function) {
         kDebug() << "no correct function context";
         return;
       }
       
-      for(int a = 0; a < min(m_oldSignature.size(), m_newSignature.size()); ++a) {
-        m_newSignature[a].second = m_oldSignature[a].second;
-      }
-      
       DocumentChangeSet changes;
-      DocumentChange change(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data()));
-      change.m_ignoreOldText = true;
-      changes.addChange( change );
+      DocumentChange changeParameters(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data()));
+      changeParameters.m_ignoreOldText = true;
+      changes.addChange( changeParameters );
       changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
       DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
       if(!result) {
@@ -228,17 +221,18 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
     
     KDevelop::DeclarationId m_otherSideId;
     KDevelop::ReferencedTopDUContext m_otherSideContext;
-    QList<SignatureItem> m_oldSignature;
-    QList<SignatureItem> m_newSignature;
+    Signature m_oldSignature;
+    Signature m_newSignature;
 };
 
+/* -- only needed for return type updating, which isn't supported yet
 static QString typeToString(KDevelop::IndexedType type) {
   KDevelop::AbstractType::Ptr t = type.abstractType();
   if(t)
     return t->toString();
   else
     return QString();
-}
+}*/
 
 void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job) {
   if(job->document() == m_document) {
@@ -255,32 +249,64 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
     KDevelop::ReferencedTopDUContext top(DUChainUtils::standardContextForUrl(m_document.toUrl()));
     if(!top)
       return;
-    
+
     Declaration* decl = DUChainUtils::declarationInLine(currentPos, top.data());
     if(decl && decl->identifier() == m_declarationName) {
       DUContext* context = DUChainUtils::getFunctionContext(decl);
       if(context) {
-        QList<SignatureItem> newSignature;
+        int pos = 0;
+        Signature newSignature;
+        AbstractFunctionDeclaration* contextFunction = dynamic_cast<AbstractFunctionDeclaration*>(decl);
         foreach(Declaration* parameter, context->localDeclarations()) {
           kDebug() << "parameter:" << parameter->toString() << parameter->range().textRange();
-          newSignature << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
+          newSignature.defaultParams << contextFunction->defaultParameterForArgument(pos).str();
+          newSignature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
+          ++pos;
         }
         
-        KDevelop::IndexedType returnType;
+        KDevelop::IndexedType newReturnType;
         FunctionType::Ptr funType = decl->type<FunctionType>();
         if(funType)
-          returnType = funType->returnType()->indexed();
+          newSignature.returnType = funType->returnType()->indexed();
         
         bool changed = false;
-        if(newSignature.size() != m_oldSignature.size()){
-          changed = true;
-        }else{
-          for(int a = 0; a < newSignature.size(); ++a)
-            if(typeToString(newSignature[a].first) != typeToString(m_oldSignature[a].first))
-              changed = true;
+        bool canHaveDefault = false;
+        for (int curNewParam = newSignature.parameters.size() - 1; curNewParam >= 0 ; --curNewParam)
+        {//detect changes in parameters, assign default arguments as needed
+          int foundAt = -1;
+          canHaveDefault = canHaveDefault | (curNewParam == newSignature.parameters.size() - 1);
+          
+          for (int curOldParam = m_oldSignature.parameters.size() - 1; curOldParam >= 0 ; --curOldParam) {
+            if (newSignature.parameters[curNewParam].first == m_oldSignature.parameters[curOldParam].first) {
+               if (newSignature.parameters[curNewParam].second == m_oldSignature.parameters[curOldParam].second ||
+                   curOldParam == curNewParam) {
+                //given the same type and either the same position or the same name, it's (probably) the same argument
+                foundAt = curOldParam;
+                
+                if (newSignature.parameters[curNewParam].second != m_oldSignature.parameters[curOldParam].second ||
+                    curOldParam != curNewParam)
+                  changed = true; //Either the name changed at this position, or position of this name has changed
+                
+                if (newSignature.parameters[curNewParam].second == m_oldSignature.parameters[curOldParam].second)
+                  break; //Found an argument with the same name and type, no need to look further
+                //else: position/type match, but name match will trump, allowing: (int i=0, int j=1) => (int j=1, int i=0)
+              }
+            }
+          }
+          
+          if (foundAt < 0)
+            changed = true;
+          else if (!m_oldSignature.defaultParams[foundAt].isEmpty() &&
+                    newSignature.defaultParams[curNewParam].isEmpty()) {
+            //the other side's arg specified a default, this side didn't, preserve old default for this arg
+            if (canHaveDefault)
+              newSignature.defaultParams[curNewParam] = m_oldSignature.defaultParams[foundAt];
+          } else {
+            canHaveDefault = false; //This param didn't have a default, none that follow may either
+          }
         }
 
-        if(changed /*|| returnType != m_oldReturnType*/) {
+        if(changed /*|| newSignature.returnType != m_oldSignature.returnType*/) {
           kDebug() << "signature changed";
           addAction(IAssistantAction::Ptr(new AdaptSignatureAction(m_definitionId, m_definitionContext, m_oldSignature, newSignature)));
         }else{

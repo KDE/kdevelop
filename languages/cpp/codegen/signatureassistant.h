@@ -30,7 +30,13 @@ namespace KDevelop {
 class ParseJob;
 }
 namespace Cpp {
-typedef QPair<KDevelop::IndexedType, QString> SignatureItem;
+typedef QPair<KDevelop::IndexedType, QString> ParameterItem;
+struct Signature
+{
+  QList<ParameterItem> parameters;
+  QList<QString> defaultParams;
+  KDevelop::IndexedType returnType;
+};
 
 class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
   Q_OBJECT
@@ -45,8 +51,7 @@ class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
     
     KDevelop::DeclarationId m_definitionId;
     KDevelop::ReferencedTopDUContext m_definitionContext;
-    QList<SignatureItem> m_oldSignature; //Sold signature of the _other_ side
-    KDevelop::IndexedType m_oldReturnType;
+    Signature m_oldSignature; //old signature of the _other_side
     KDevelop::IndexedString m_document;
     KDevelop::SimpleRange m_invocationRange;
     
