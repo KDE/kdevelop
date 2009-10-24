@@ -161,6 +161,7 @@ private slots:
   void testContextSearch();
   
   void testFinalCleanup();
+  void testEllipsis();
   
   
 private:

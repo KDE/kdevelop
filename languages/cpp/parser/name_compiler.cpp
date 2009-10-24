@@ -129,6 +129,9 @@ void NameCompiler::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->id)
     tmp_name = m_session->token_stream->token(node->id).symbol();
 
+  if (node->ellipsis)
+    tmp_name = IndexedString("...");
+  
   if (node->tilde)
     tmp_name = IndexedString('~' + tmp_name.byteArray());
 

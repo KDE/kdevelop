@@ -1036,6 +1036,7 @@ public:
 
   std::size_t tilde;
   std::size_t id;
+  bool ellipsis;
   OperatorFunctionIdAST *operator_id;
   const ListNode<TemplateArgumentAST*> *template_arguments;
 };

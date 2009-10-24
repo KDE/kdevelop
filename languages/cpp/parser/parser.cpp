@@ -1943,9 +1943,6 @@ bool Parser::parseParameterDeclarationList(const ListNode<ParameterDeclarationAS
     {
       advance();
 
-      if (session->token_stream->lookAhead() == Token_ellipsis)
-        break;
-
       if (!parseParameterDeclaration(param))
         {
           rewind(start);
@@ -2647,6 +2644,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
 
   std::size_t tilde = 0;
   std::size_t id = 0;
+  bool ellipsis = false;
   OperatorFunctionIdAST *operator_id = 0;
 
   if (session->token_stream->lookAhead() == Token_identifier)
@@ -2668,6 +2666,11 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
       if (!parseOperatorFunctionId(operator_id))
         return false;
     }
+  else if (session->token_stream->lookAhead() == Token_ellipsis)
+    {
+      ellipsis = true;
+      advance();
+    }
   else
     {
       return false;
@@ -2676,6 +2679,7 @@ bool Parser::parseUnqualifiedName(UnqualifiedNameAST *&node,
   UnqualifiedNameAST *ast = CreateNode<UnqualifiedNameAST>(session->mempool);
   ast->tilde = tilde;
   ast->id = id;
+  ast->ellipsis = ellipsis;
   ast->operator_id = operator_id;
 
   if (parseTemplateId && !tilde)

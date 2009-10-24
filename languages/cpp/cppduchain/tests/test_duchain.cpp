@@ -348,6 +348,17 @@ void TestDUChain::testDeclareInt()
   release(top);
 }
 
+void TestDUChain::testEllipsis()
+{
+  QByteArray method("void infinity(int i, ...) { }");
+  TopDUContext* top = parse(method, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  Declaration* defInfinity = top->localDeclarations().first();
+  QCOMPARE(defInfinity->type<FunctionType>()->arguments().count(), 2);
+  QCOMPARE(defInfinity->type<FunctionType>()->arguments()[1]->toString(), QString("..."));
+  release(top);
+}
+
 void TestDUChain::testContextSearch() {
   {
     QByteArray method("int t; struct C { }; void test() { C c; c.t = 3;}");
