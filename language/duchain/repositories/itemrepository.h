@@ -227,10 +227,10 @@ struct RepositoryManager : public AbstractRepositoryManager{
         QMutexLocker lock(&m_registry.mutex());
         if(!m_repository) {
           m_repository = new ItemRepositoryType(m_name, &m_registry, m_version, const_cast<RepositoryManager*>(this));
-          
+#ifndef Q_OS_WIN          
           if(m_shareMutex)
             (*this)->setMutex(m_shareMutex()->repositoryMutex());
-          
+#endif
           (*this)->setUnloadingEnabled(unloadingEnabled);
         }
       }
