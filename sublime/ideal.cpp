@@ -141,7 +141,7 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
         opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
 
         QPixmap pix(opt.rect.width(), opt.rect.height());
-	QStylePainter painter(&pix, this);
+        QStylePainter painter(&pix, this);
         painter.fillRect(pix.rect(), opt.palette.background());
         painter.drawComplexControl(QStyle::CC_ToolButton, opt);
         painter.end();
@@ -302,12 +302,12 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     } break;
 
     case QEvent::ActionChanged: {
-	if (IdealToolButton *button = _buttons.value(action)) {
-	    button->setText(action->text());
-	    button->updateNormalIcon(action->icon());
-	    button->setShortcut(QKeySequence());
-	    Q_ASSERT(_widgets.contains(action));
-	    _widgets[action]->setWindowTitle(action->text());
+        if (IdealToolButton *button = _buttons.value(action)) {
+            button->setText(action->text());
+            button->updateNormalIcon(action->icon());
+            button->setShortcut(QKeySequence());
+            Q_ASSERT(_widgets.contains(action));
+            _widgets[action]->setWindowTitle(action->text());
         }
     } break;
 
@@ -338,30 +338,30 @@ IdealDockWidget::IdealDockWidget(QWidget *parent)
 {
 
     QAbstractButton *floatButton =
-	qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_floatbutton"));
+    qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_floatbutton"));
 
     QAbstractButton *closeButton =
-	qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_closebutton"));
+    qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_closebutton"));
 
     if (floatButton && closeButton) {
-	disconnect(floatButton, SIGNAL(clicked()), 0, 0);
-	disconnect(closeButton, SIGNAL(clicked()), 0, 0);
+    disconnect(floatButton, SIGNAL(clicked()), 0, 0);
+    disconnect(closeButton, SIGNAL(clicked()), 0, 0);
 
-	m_anchor = floatButton;
-	m_anchor->setCheckable(true);
-	m_anchor->setToolTip(i18n("Lock the tool"));
-	m_anchor->setWhatsThis(i18n("<b>Lock the tool</b><p>When a tool is unlocked, it "
-				    "will be automatically hidden when you click outside it. "
-				    "A locked tool will remain visible until you explicitly "
-				    "hide it, or switch to a different tool.</p>"));
-	connect(m_anchor, SIGNAL(toggled(bool)), SIGNAL(anchor(bool)));
+    m_anchor = floatButton;
+    m_anchor->setCheckable(true);
+    m_anchor->setToolTip(i18n("Lock the tool"));
+    m_anchor->setWhatsThis(i18n("<b>Lock the tool</b><p>When a tool is unlocked, it "
+                    "will be automatically hidden when you click outside it. "
+                    "A locked tool will remain visible until you explicitly "
+                    "hide it, or switch to a different tool.</p>"));
+    connect(m_anchor, SIGNAL(toggled(bool)), SIGNAL(anchor(bool)));
 
-	m_close = closeButton;
-	m_close->setToolTip(i18n("Remove the tool"));
-	m_close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
-				   "You can add the tool again by using the "
-				   "<tt>View->Add Tool View</tt> command.</p>"));
-	connect(m_close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
+    m_close = closeButton;
+    m_close->setToolTip(i18n("Remove the tool"));
+    m_close->setWhatsThis(i18n("<b>Remove the tool</b><p>Removes this tool completely. "
+                   "You can add the tool again by using the "
+                   "<tt>View->Add Tool View</tt> command.</p>"));
+    connect(m_close, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
     }
 }
 
@@ -831,7 +831,7 @@ void IdealSplitterHandle::paintEvent(QPaintEvent *)
     options.initFrom(this);
 
     if (m_orientation == Qt::Vertical)
-	options.state |= QStyle::State_Horizontal;
+    options.state |= QStyle::State_Horizontal;
 
     options.state |= QStyle::State_Enabled;
 
@@ -1086,14 +1086,14 @@ QSize IdealDockWidgetButton::sizeHint() const
     int size = 0;
 
     if (! icon().isNull()) {
-	const QPixmap pix =
-	    icon().pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
+    const QPixmap pix =
+        icon().pixmap(style()->pixelMetric(QStyle::PM_SmallIconSize));
 
-	size += qMax(pix.width(), pix.height());
+    size += qMax(pix.width(), pix.height());
     }
 
     const int titleBarButtonMargin =
-	style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin);
+    style()->pixelMetric(QStyle::PM_DockWidgetTitleBarButtonMargin);
 
     size += titleBarButtonMargin * 2;
 
@@ -1106,7 +1106,7 @@ QSize IdealDockWidgetButton::minimumSizeHint() const
 void IdealDockWidgetButton::enterEvent(QEvent *event)
 {
     if (isEnabled())
-	update();
+    update();
 
     QToolButton::enterEvent(event);
 }
@@ -1114,7 +1114,7 @@ void IdealDockWidgetButton::enterEvent(QEvent *event)
 void IdealDockWidgetButton::leaveEvent(QEvent *event)
 {
     if (isEnabled())
-	update();
+    update();
 
     QToolButton::leaveEvent(event);
 }
@@ -1128,11 +1128,11 @@ void IdealDockWidgetButton::paintEvent(QPaintEvent *)
     options.state |= QStyle::State_AutoRaise;
 
     if (isEnabled() && underMouse() && ! isChecked() && ! isDown())
-	options.state |= QStyle::State_Raised;
+    options.state |= QStyle::State_Raised;
     if (isChecked())
-	options.state |= QStyle::State_On;
+    options.state |= QStyle::State_On;
     if (isDown())
-	options.state |= QStyle::State_Sunken;
+    options.state |= QStyle::State_Sunken;
 
     options.subControls = QStyle::SC_None;
     options.activeSubControls = QStyle::SC_None;
