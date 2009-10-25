@@ -49,6 +49,7 @@ static QString currentCMakeBinaryKey = "Current CMake Binary";
 static QString currentBuildTypeKey = "CurrentBuildType";
 static QString currentInstallDirKey = "CurrentInstallDir";
 static QString projectRootRelativeKey = "ProjectRootRelative";
+static QString projectBuildDirs = "BuildDirs";
 
 namespace CMake
 {
@@ -189,6 +190,12 @@ ICMakeDocumentation* cmakeDocumentation()
     
     Q_ASSERT(cmakedoc);
     return cmakedoc;
+}
+
+QStringList allBuildDirs(KDevelop::IProject* project)
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry( projectBuildDirs, QStringList() );
 }
 
 }

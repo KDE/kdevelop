@@ -84,6 +84,7 @@
 #include <ktexteditor/smartinterface.h>
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
+#include <cmakeconfig.h>
 
 using namespace KDevelop;
 
@@ -580,12 +581,13 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         KUrl fileurl = item->url();
         fileurl.addPath( entry );
 
-        KUrl cache=fileurl;
-        cache.addPath("CMakeCache.txt");
         if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
+            KUrl cache=fileurl;
+            cache.addPath("CMakeCache.txt");
             fileurl.adjustPath(KUrl::AddTrailingSlash);
-            if(!QFile::exists(cache.toLocalFile()))
+            if(!QFile::exists(cache.toLocalFile())
+                && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
             {
                 if(m_pending.contains(fileurl))
                     item->appendRow(m_pending.take(fileurl));
