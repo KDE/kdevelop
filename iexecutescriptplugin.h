@@ -36,6 +36,7 @@ class QStringList;
 
 /**
 @author Andreas Pakulat
+@author Niko Sams
 */
 
 class IExecuteScriptPlugin
@@ -45,6 +46,7 @@ public:
 
     virtual QString interpreter( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual KUrl script( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
+    virtual QString remoteHost( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual QStringList arguments( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString environmentGroup( KDevelop::ILaunchConfiguration* ) const = 0;

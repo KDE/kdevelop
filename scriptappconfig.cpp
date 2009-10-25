@@ -69,6 +69,12 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         projectTargetRadio->setChecked( true );
         projectTarget->setItemPath( cfg.readEntry( ExecuteScriptPlugin::projectTargetEntry, QStringList() ) );
     }
+    if( cfg.readEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, false ) ) {
+        remoteHostRadio->setChecked( true );
+    } else {
+        localHostRadio->setChecked( true );
+    }
+    remoteHost->setText( cfg.readEntry( ExecuteScriptPlugin::remoteHostEntry, "" ) );
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, "default" ) );
@@ -116,6 +122,8 @@ void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
         cfg.writeEntry( ExecuteScriptPlugin::projectTargetEntry, projectTarget->itemPath() );
         cfg.deleteEntry( ExecuteScriptPlugin::executableEntry );
     }
+    cfg.writeEntry( ExecuteScriptPlugin::executeOnRemoteHostEntry, remoteHostRadio->isChecked() );
+    cfg.writeEntry( ExecuteScriptPlugin::remoteHostEntry, remoteHost->text() );
     cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecuteScriptPlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecuteScriptPlugin::environmentGroupEntry, environment->currentProfile() );

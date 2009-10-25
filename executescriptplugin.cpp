@@ -50,6 +50,8 @@ QString ExecuteScriptPlugin::_scriptAppConfigTypeId = "Script Application";
 QString ExecuteScriptPlugin::interpreterEntry = "Interpreter";
 QString ExecuteScriptPlugin::workingDirEntry = "Working Directory";
 QString ExecuteScriptPlugin::executableEntry = "Executable";
+QString ExecuteScriptPlugin::executeOnRemoteHostEntry = "Execute on Remote Host";
+QString ExecuteScriptPlugin::remoteHostEntry = "Remote Host";
 QString ExecuteScriptPlugin::argumentsEntry = "Arguments";
 QString ExecuteScriptPlugin::isExecutableEntry = "isExecutable";
 QString ExecuteScriptPlugin::environmentGroupEntry = "EnvironmentGroup";
@@ -130,6 +132,22 @@ KUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
         }
     }
     return script;
+}
+
+QString ExecuteScriptPlugin::remoteHost(ILaunchConfiguration* cfg, QString& err) const
+{
+    if (!cfg) return QString();
+    KConfigGroup grp = cfg->config();
+    if(grp.readEntry(ExecuteScriptPlugin::executeOnRemoteHostEntry, false)) {
+        QString host = grp.readEntry(ExecuteScriptPlugin::remoteHostEntry, "");
+        if (host.isEmpty()) {
+            err = i18n("No remote host set for launch configuration '%1'. "
+            "Aborting start.", cfg->name() );
+            kWarning() << "Launch Configuration:" << cfg->name() << "no remote host set";
+        }
+        return host;
+    }
+    return QString();
 }
 
 QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QString& err_ ) const

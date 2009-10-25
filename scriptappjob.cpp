@@ -73,6 +73,14 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         return;
     }
 
+    QString remoteHost = iface->remoteHost( cfg, err );
+    if( !err.isEmpty() )
+    {
+        setError( -4 );
+        setErrorText( err );
+        return;
+    }
+    
     if( envgrp.isEmpty() )
     {
         kWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment group specified, looks like a broken "
@@ -93,8 +101,7 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         kWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
-    arguments.prepend(script.toLocalFile());
-    
+
     proc = new KProcess( this );
     
     lineMaker = new KDevelop::ProcessLineMaker( proc, this );
@@ -117,12 +124,21 @@ ScriptAppJob::ScriptAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     }
     proc->setWorkingDirectory( wc.toLocalFile() );
     proc->setProperty( "executable", interpreter );
-    
-    kDebug() << "setting app:" << interpreter << arguments;
+
+    QStringList program;
+    if (!remoteHost.isEmpty()) {
+        program << "ssh";
+        program << remoteHost;
+    }
+    program << interpreter;
+    program << script.toLocalFile();
+    program << arguments;
+
+    kDebug() << "setting app:" << program;
     
     proc->setOutputChannelMode(KProcess::MergedChannels);
     
-    proc->setProgram( interpreter, arguments );
+    proc->setProgram( program );
     
     setTitle(cfg->name());
 }
@@ -172,6 +188,9 @@ void ScriptAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
 
 void ScriptAppJob::processError( QProcess::ProcessError error )
 {
+    qDebug() << proc->readAllStandardError();
+    qDebug() << proc->readAllStandardOutput();
+    qDebug() << proc->errorString();
     if( error == QProcess::FailedToStart )
     {
         setError( -1 );

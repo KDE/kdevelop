@@ -44,6 +44,8 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString interpreterEntry;
     static QString workingDirEntry;
     static QString executableEntry;
+    static QString executeOnRemoteHostEntry;
+    static QString remoteHostEntry;
     static QString argumentsEntry;
     static QString isExecutableEntry;
     static QString environmentGroupEntry;
@@ -55,6 +57,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     
     QString interpreter( KDevelop::ILaunchConfiguration*, QString& err ) const;
     KUrl script( KDevelop::ILaunchConfiguration*, QString& err ) const;
+    QString remoteHost(KDevelop::ILaunchConfiguration* , QString& err) const;
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
     KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
