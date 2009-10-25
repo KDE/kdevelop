@@ -26,10 +26,10 @@ kde4_add_ui_files( kdevexecutescript_PART_SRCS ${kdevexecutescript_PART_UIS} )
 kde4_add_plugin(kdevexecutescript ${kdevexecutescript_PART_SRCS}  )
 target_link_libraries(kdevexecutescript 
     ${KDE4_KDEUI_LIBS} 
-    kdevplatforminterfaces 
-    kdevplatformutil 
-    kdevplatformproject 
-    kdevplatformoutputview)
+    ${KDEVPLATFORM_INTERFACES_LIBRARIES} 
+    ${KDEVPLATFORM_UTIL_LIBRARIES} 
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES})
 
 install(TARGETS kdevexecutescript DESTINATION ${PLUGIN_INSTALL_DIR})
 
