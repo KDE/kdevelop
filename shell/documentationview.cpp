@@ -85,10 +85,12 @@ DocumentationView::DocumentationView(QWidget* parent)
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
     mActions->addSeparator();
     mProviders=new QComboBox(mActions);
+    mProviders->setFocusPolicy(Qt::NoFocus);
     mProvidersModel=new ProvidersModel(mProviders);
     mProviders->setModel(mProvidersModel);
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     mIdentifiers=new KLineEdit(mActions);
+    mIdentifiers->setClearButtonShown(true);
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);

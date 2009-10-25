@@ -24,7 +24,7 @@
 #include <interfaces/idocumentation.h>
 
 class QModelIndex;
-class QLineEdit;
+class KLineEdit;
 class ProvidersModel;
 class QComboBox;
 
@@ -49,7 +49,7 @@ class DocumentationView : public QWidget
         KToolBar* mActions;
         QAction* mForward;
         QAction* mBack;
-        QLineEdit* mIdentifiers;
+        KLineEdit* mIdentifiers;
         QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
         QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
         QComboBox* mProviders;
