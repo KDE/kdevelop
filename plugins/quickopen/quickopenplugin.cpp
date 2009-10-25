@@ -1358,6 +1358,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e) {
           e->accept();
           return true;
       }
+      break;
      case QEvent::WindowActivate:
     case QEvent::WindowDeactivate:
         kDebug() << "closing because of window activation";
