@@ -426,6 +426,9 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, KMenu* menu
     if ( TextDocument* doc = dynamic_cast<TextDocument*>(view->document()) ) {
         action = menu->addAction(KIcon("view-refresh"), i18n("Reload"));
         connect(action, SIGNAL(triggered(bool)), doc, SLOT(reload()));
+
+        action = menu->addAction(KIcon("view-refresh"), i18n("Reload All"));
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(reloadAll()));
     }
 }
 

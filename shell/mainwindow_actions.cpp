@@ -201,5 +201,12 @@ void MainWindowPrivate::contextMenuSplitVertical()
     splitVertical();
 }
 
+void MainWindowPrivate::reloadAll()
+{
+    foreach ( IDocument* doc, Core::self()->documentController()->openDocuments() ) {
+        doc->reload();
+    }
+}
+
 }
 

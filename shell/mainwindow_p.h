@@ -119,6 +119,10 @@ public Q_SLOTS:
     void contextMenuFileNew();
     void contextMenuSplitHorizontal();
     void contextMenuSplitVertical();
+
+    /// reload all open documents
+    void reloadAll();
+
 private:
     KActionCollection *actionCollection();
 
