@@ -24,6 +24,7 @@
 #include <QtCore/QStringList>
 #include <QtCore/QString>
 #include <kprocess.h>
+#include <kshell.h>
 
 namespace KDevelop
 {
@@ -32,7 +33,7 @@ class CommandExecutorPrivate
 {
 public:
     CommandExecutorPrivate( CommandExecutor* cmd )
-        : m_exec(cmd)
+        : m_exec(cmd), m_useShell(false)
     {
     }
     CommandExecutor* m_exec;
@@ -42,6 +43,7 @@ public:
     QStringList m_args;
     QString m_workDir;
     QMap<QString,QString> m_env;
+    bool m_useShell;
     void procError( QProcess::ProcessError error )
     {
         Q_UNUSED(error)
@@ -97,6 +99,16 @@ void CommandExecutor::setWorkingDirectory( const QString& dir )
     d->m_workDir = dir;
 }
 
+bool CommandExecutor::useShell() const
+{
+    return d->m_useShell;
+}
+
+void CommandExecutor::setUseShell( bool shell )
+{
+    d->m_useShell = shell;
+}
+
 void CommandExecutor::start()
 {
     Q_FOREACH( const QString &s, d->m_env.keys() )
@@ -104,7 +116,14 @@ void CommandExecutor::start()
         d->m_process->setEnv( s, d->m_env[s] );
     }
     d->m_process->setWorkingDirectory( d->m_workDir );
-    d->m_process->setProgram( d->m_command, d->m_args );
+    if( !d->m_useShell ) {
+        d->m_process->setProgram( d->m_command, d->m_args );
+    } else {
+        QStringList arguments;
+        Q_FOREACH( const QString &a, d->m_args ) arguments << KShell::quoteArg( a );
+        d->m_process->setShellCommand( d->m_command + " " + arguments.join( " " ) );
+    }
+
     d->m_process->start();
 }
 

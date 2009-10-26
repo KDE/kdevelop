@@ -83,7 +83,17 @@ public:
      * set the Command that should be started, now a commandexecutor can be reused
      */
     void setCommand( const QString& command );
+    
+    /**
+     * whether the commands are executed from a shell
+     */
+    bool useShell() const;
 
+    /**
+     * if @p shell is true, the command is executed from a shell
+     */
+    void setUseShell( bool shell );
+    
 Q_SIGNALS:
     void receivedStandardError( const QStringList& );
     void receivedStandardOutput( const QStringList& );
