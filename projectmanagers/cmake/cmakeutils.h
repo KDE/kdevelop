@@ -105,6 +105,11 @@ namespace CMake
      * Obtains a cmake documentation instance if it exists
      */
     KDEVCMAKECOMMON_EXPORT ICMakeDocumentation* cmakeDocumentation();
+    
+    /**
+     * Obtains a cmake documentation instance if it exists
+     */
+    KDEVCMAKECOMMON_EXPORT QStringList allBuildDirs(KDevelop::IProject* project);
 }
 
 #endif
