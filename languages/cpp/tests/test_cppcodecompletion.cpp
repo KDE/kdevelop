@@ -436,13 +436,26 @@ void TestCppCodeCompletion::testCompletionPrefix() {
 
 void TestCppCodeCompletion::testStringProblem() {
   TEST_FILE_PARSE_ONLY
-  QByteArray method("void test() {int i;};");
-  TopDUContext* top = parse(method, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->childContexts().count(), 2);
-  CompletionItemTester tester(top->childContexts()[1],QString("bla url(\"http://wwww.bla.de/\");"));
-  
-  QCOMPARE(tester.names.toSet(), (QStringList() << "i" << "test").toSet());;
+  {
+    QByteArray method("void test() {int i;};");
+    TopDUContext* top = parse(method, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 2);
+    CompletionItemTester tester(top->childContexts()[1],QString("bla url('\\\"');"));
+    
+    QCOMPARE(tester.names.toSet(), (QStringList() << "i" << "test").toSet());;
+    release(top);
+  }
+  {
+    QByteArray method("void test() {int i;};");
+    TopDUContext* top = parse(method, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 2);
+    CompletionItemTester tester(top->childContexts()[1],QString("bla url(\"http://wwww.bla.de/\");"));
+    
+    QCOMPARE(tester.names.toSet(), (QStringList() << "i" << "test").toSet());;
+    release(top);
+  }
 }
 
 void TestCppCodeCompletion::testInheritanceVisibility() {
