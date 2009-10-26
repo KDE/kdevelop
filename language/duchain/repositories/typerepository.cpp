@@ -82,11 +82,18 @@ class AbstractTypeDataRequest {
   const AbstractType& m_item;
 };
 
-RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> typeRepository("Type Repository");
+//The object is created in a function, to prevent initialization-order issues
+RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepositoryObject() {
+  static RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> repository("Type Repository");
+  return repository;
+}
 
 AbstractRepositoryManager* typeRepositoryManager() {
-  return &typeRepository;
+  return &typeRepositoryObject();
 }
+
+//For faster usage, the object is copied out of the static function here
+RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepository = typeRepositoryObject();
 
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
