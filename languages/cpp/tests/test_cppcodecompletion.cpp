@@ -587,14 +587,20 @@ void TestCppCodeCompletion::testTemplateArguments() {
 }
 
 void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
-    QByteArray method("template<class T> struct A { int m; }; typedef A<int> TInt; void test() {}");
+    QByteArray method("template<class T> struct A { A(T); int m; }; typedef A<int> TInt; void test() {}");
     TopDUContext* top = parse(method, DumpAll);
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
     
-    QCOMPARE(CompletionItemTester(top->childContexts()[3], "A<int>().").names, QStringList() << QString("m"));
-    QCOMPARE(CompletionItemTester(top->childContexts()[3], "TInt().").names, QStringList() << QString("m"));
+    //Member completion
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "A<int>().").names.toSet(), (QStringList() << QString("m") << QString("A")).toSet());
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "TInt().").names.toSet(), (QStringList() << QString("m") << QString("A")).toSet());
+    
+    //Argument-hints
+    kDebug() << CompletionItemTester(top->childContexts()[3], "TInt(").parent().names;
+    QVERIFY(CompletionItemTester(top->childContexts()[3], "TInt(").parent().names.contains("A"));
     
     release(top);
 }
