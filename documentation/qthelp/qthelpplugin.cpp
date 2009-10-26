@@ -237,7 +237,7 @@ QString qtDocsLocation(const QString& qmake)
 	
 	kDebug() << "qtdoc=" << ret;
 	Q_ASSERT(qmake.isEmpty() || !ret.isEmpty());
-	return ret;
+	return QDir::fromNativeSeparators(ret);
 }
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
@@ -251,8 +251,17 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     KStandardDirs::findAllExe(qmakes, "qmake");
 	QString dirName;
     foreach(const QString& qmake, qmakes) {
+        /// check both in doc/ and doc/qch/
         dirName=qtDocsLocation(qmake)+"/qch/";
         QString fileName=dirName+"qt.qch";
+        if(QFile::exists(fileName)) {
+            kDebug() << "checking doc: " << fileName;
+            break;
+        } else
+            dirName.clear();
+            
+        dirName=qtDocsLocation(qmake);
+        fileName=dirName+"/"+"qt.qch";
         if(QFile::exists(fileName)) {
             kDebug() << "checking doc: " << fileName;
             break;
@@ -274,7 +283,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
                     kDebug() << "error >> " << fileName << m_engine.error();
             }
             bool b=m_engine.setupData();
-            kDebug() << "setup" << b << fileNamespace << m_engine.error();
+//            kDebug() << "setup" << b << fileNamespace << m_engine.error();
         }
         kDebug() << "registered" << m_engine.error() << m_engine.registeredDocumentations();
     }
