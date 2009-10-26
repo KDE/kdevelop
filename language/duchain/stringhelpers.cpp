@@ -313,6 +313,34 @@ QString clearComments( QString str, QChar replacement ) {
 QString clearStrings( QString str, QChar replacement ) {
   bool inString = false;
   for(int pos = 0; pos < str.length(); ++pos) {
+    
+    //Skip a character a la 'b'
+    if(!inString && str[pos] == '\'' && pos + 3 <= str.length())
+    {
+      //skip the opening '
+      str[pos] = replacement;
+      ++pos;
+      
+      if(str[pos] == '\\')
+      {
+        //Skip an escape character
+        str[pos] = replacement;
+        ++pos;
+      }
+      
+      //Skip the actual character
+      str[pos] = replacement;
+      ++pos;
+      
+      //Skip the closing '
+      if(pos < str.length() && str[pos] == '\'')
+      {
+        str[pos] = replacement;
+      }
+      
+      continue;
+    }
+    
     bool intoString = false;
     if(str[pos] == '"' && !inString)
       intoString = true;
