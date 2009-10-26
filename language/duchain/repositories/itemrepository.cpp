@@ -281,6 +281,11 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
     if(clear) {
         kWarning() << QString("The data-repository at %1 has to be cleared.").arg(m_path);
   //     KMessageBox::information( 0, i18n("The data-repository at %1 has to be cleared. Either the disk format has changed, or KDevelop crashed while writing the repository.", m_path ) );
+#ifdef Q_OS_WIN
+        /// on Windows a file can't be deleted unless the last file handle gets closed
+        /// deleteDataDirectory would enter a never ending loop
+        crashesFile.close();
+#endif
         deleteDataDirectory();
         clear = false;
         //We need to re-check, because a new data-directory may have been picked
