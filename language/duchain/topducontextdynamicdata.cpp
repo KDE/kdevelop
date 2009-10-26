@@ -565,7 +565,7 @@ void TopDUContextDynamicData::store() {
       if (file.size() == 0) {
         kWarning() << "Saving zero size top ducontext data";
       }
-
+      file.close();
     } else {
       kWarning() << "Cannot open top-context for writing";
     }
