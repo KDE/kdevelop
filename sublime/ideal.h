@@ -67,24 +67,6 @@ private:
     bool showingIndicator;
 };
 
-class IdealDockWidgetButton: public QToolButton
-{
-    Q_OBJECT
-
-public:
-    IdealDockWidgetButton(QWidget *parent = 0);
-    virtual ~IdealDockWidgetButton();
-
-    QSize sizeHint() const;
-    QSize minimumSizeHint() const;
-
-protected:
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
-    virtual void paintEvent(QPaintEvent *event);
-};
-
-
 class IdealButtonBarWidget: public QWidget
 {
     Q_OBJECT
