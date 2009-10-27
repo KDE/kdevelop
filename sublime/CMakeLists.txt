@@ -14,7 +14,6 @@ set(sublime_LIB_SRCS
     mainwindow_p.cpp
     mainwindowoperator.cpp
     urldocument.cpp
-    switcher.cpp
     tooldocument.cpp
     view.cpp
     sublimedefs.cpp
