@@ -12,6 +12,7 @@ add_subdirectory(tests)
 set(kdevcppparser_LIB_SRCS
     ast.cpp
     default_visitor.cpp
+    parentvisitor.cpp
     memorypool.cpp
     name_compiler.cpp
     visitor.cpp

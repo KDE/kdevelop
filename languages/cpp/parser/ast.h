@@ -193,7 +193,7 @@ public:
       Kind_WinDeclSpec,                         // 74
       Kind_Comment,                             // 75
       Kind_JumpStatement,                       // 76
-      Kind_SignalSlotExpression,                     // 77
+      Kind_SignalSlotExpression,                // 77
       NODE_KIND_COUNT
     };
 
@@ -201,6 +201,12 @@ public:
 
   std::size_t start_token;
   std::size_t end_token;
+
+  /**
+    * The parent node of this AST node. This is only set when the ParentVisitor
+    * is ran over the tree.
+    */
+  AST *parent;
 
   /** Context opened by this AST
     *This is usually not filled for all AST's, only for those that open a new context
@@ -409,7 +415,7 @@ public:
   NameAST *id;
   ExpressionAST *bit_expression;
   const ListNode<ExpressionAST*> *array_dimensions;
-  
+
   bool parameter_is_initializer; //Used by the declaration-builder to mark a parameter-declaration clause as a mis-parsed initializer
   ParameterDeclarationClauseAST *parameter_declaration_clause;
   const ListNode<std::size_t> *fun_cv;
@@ -948,7 +954,7 @@ public:
   ///true if either a '}' was missing at the end, or there was a '}' too much.
   ///This indicates a temporary state where the user is typing, and the document is completely invalid.
   bool hadMissingCompoundTokens;
-  
+
   // Note: non AST related, saves parsing session...
   ParseSession* session;
 };

@@ -30,6 +30,7 @@
 #include <cctype>
 #include "ast.h"
 #include "dumptree.h"
+#include "parentvisitor.h"
 
 ParseSession::ParseSession()
   : mempool(new pool)
@@ -56,21 +57,21 @@ TranslationUnitAST * ParseSession::topAstNode(void)
 void ParseSession::topAstNode(TranslationUnitAST * node)
 {
   Q_ASSERT(!m_topAstNode);
-  
+
   m_topAstNode = node;
 }
 
-void ParseSession::mapAstDuChain ( AST * node , KDevelop::DeclarationPointer declaration)
+void ParseSession::mapAstDuChain (AST * node , KDevelop::DeclarationPointer declaration)
 {
   //Duplicates shouldn't exist
   Q_ASSERT(m_AstToDuchain.find(node) == m_AstToDuchain.end() ||
            m_AstToDuchain[node] != declaration);
-  
+
   // NOTE: Don't call declaration->toString() here. It seems that you cannot
   //        assume at this point that the DUChain is at least locked for reading.
   //kDebug() << "Mapping AST node: " << names[node->kind] <<
   //            "With Declaration: " << declaration->toString();
-  
+
   m_AstToDuchain[node] = declaration;
   m_DuchainToAst[declaration] = node;
 }
@@ -80,7 +81,7 @@ void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
   //Duplicates shouldn't exist(? Same for uses?)
   if(m_AstToUse.find(node) == m_AstToUse.end() || m_AstToUse[node] != use)
     kWarning() << "Found dupplicate use mapping for node" << node;
-  
+
   m_AstToUse[node] = use;
   m_UseToAst[use] = node;
 }
@@ -141,7 +142,7 @@ const uint* ParseSession::contents() const
  {
    return m_contents.data();
  }
- 
+
 const PreprocessedContents& ParseSession::contentsVector() const
 {
   return m_contents;
@@ -161,8 +162,14 @@ void ParseSession::setContentsAndGenerateLocationTable(const PreprocessedContent
   m_contents.append(0);
   m_contents.append(0);
   m_contents.append(0);
-  
+
   m_locationTable = new rpp::LocationTable(m_contents);
+}
+
+void ParseSession::setASTNodeParents()
+{
+  ParentVisitor visitor;
+  visitor.visit(m_topAstNode);
 }
 
 void ParseSession::setUrl(const KDevelop::IndexedString& url)

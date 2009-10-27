@@ -58,29 +58,29 @@ class KDEVCPPPARSER_EXPORT ParseSession : public KDevelop::IAstContainer
 public:
   ParseSession();
   ~ParseSession();
-  
+
   //Redefinitions from IAstContainer
   typedef KSharedPtr<ParseSession> Ptr;
   typedef TranslationUnitAST TopAstNode;
-  
+
   TopAstNode * topAstNode();
   void topAstNode(TopAstNode * node);
-  
+
   ///Create a mapping between an AST node, and its DUChain Declaration
   void mapAstDuChain(AST *, KDevelop::DeclarationPointer);
-  
+
   void mapAstUse(AST *node, const SimpleUse& use);
-  
+
   /**
    * \brief Request an AST node from a DeclarationPointer
    * \return The Associated AST if available, NULL otherwise
    */
   AST * astNodeFromDeclaration(KDevelop::DeclarationPointer declaration);
-  
+
   AST * astNodeFromDeclaration(KDevelop::Declaration * declaration);
-  
+
   AST * astNodeFromUse(const SimpleUse &use) const;
-  
+
   /**
    * \brief Request a Declaration from an AST node
    * \return The Associated Declaration if available, empty DeclarationPointer otherwise
@@ -94,7 +94,7 @@ public:
    * \note the return line starts from 0, not 1.
    */
   rpp::Anchor positionAt(std::size_t offset, bool collapseIfMacroExpansion = false) const;
-  
+
   QPair<rpp::Anchor, uint> positionAndSpaceAt(std::size_t offset, bool collapseIfMacroExpansion = false) const;
 
   ///The contents must already be tokenized. Either by the preprocessor, or by tokenizeFromByteArray(..)
@@ -102,6 +102,9 @@ public:
 
   /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
   void setContentsAndGenerateLocationTable(const PreprocessedContents& contents);
+
+  /// Visits the tree and sets the appropriate nodes as parent on each node of the tree.
+  void setASTNodeParents();
 
   void setUrl(const KDevelop::IndexedString& url);
   const KDevelop::IndexedString& url() const;
@@ -120,11 +123,11 @@ private:
   PreprocessedContents m_contents;
   rpp::LocationTable* m_locationTable;
   TranslationUnitAST * m_topAstNode;
-  
+
   //AST-DUChain Mappings
   QMap<AST *, KDevelop::DeclarationPointer> m_AstToDuchain;
   QMap<KDevelop::DeclarationPointer, AST *> m_DuchainToAst;
-  
+
   QMap<AST *, SimpleUse> m_AstToUse;
   QMap<SimpleUse, AST *> m_UseToAst;
 };
