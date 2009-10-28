@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kio/netaccess.h>
+#include <kio/copyjob.h>
 #include <kparts/mainwindow.h>
 #include <kparts/componentfactory.h>
 #include <KTemporaryFile>
@@ -283,6 +284,11 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             action->setIcon(KIcon("user-trash"));
             connect( action, SIGNAL(triggered()), this, SLOT(removeFolderFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
+            
+            action = new KAction( i18n( "Rename Folder" ), this );
+            action->setIcon(KIcon("edit-rename"));
+            connect( action, SIGNAL(triggered()), this, SLOT(renameFolderFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
         if ( !fileItemsAdded && item->file() )
@@ -291,6 +297,11 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             KAction* action = new KAction( i18n( "Remove File" ), this );
             action->setIcon(KIcon("user-trash"));
             connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+            
+            action = new KAction( i18n( "Rename File" ), this );
+            action->setIcon(KIcon("edit-rename"));
+            connect( action, SIGNAL(triggered()), this, SLOT(renameFileFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         else if ( !targetAdded && item->target() )
@@ -517,6 +528,58 @@ void ProjectManagerViewPlugin::removeFileFromContextMenu()
             }
             
             item->project()->projectFileManager()->removeFile(item->file());
+        }
+    }
+}
+
+void ProjectManagerViewPlugin::renameFileFromContextMenu()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        KDevelop::ProjectFileItem* file=item->file();
+        if(file) {
+            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+            
+            //Change QInputDialog->KFileSaveDialog?
+            QString name = QInputDialog::getText( window, i18n("Rename File"), i18n("New name for '%1'", item->text()) );
+            if (!name.isEmpty()) {
+                KUrl url = file->url().upUrl();
+                url.addPath( name );
+                
+                KIO::CopyJob* job=KIO::move(file->url(), url);
+                if(!KIO::NetAccess::synchronousRun(job, window)) {
+                    KMessageBox::error( window, i18n("Cannot rename '%1'.", file->url().prettyUrl()) );
+                    continue;
+                }
+                item->project()->projectFileManager()->renameFile(file, url);
+            }
+            
+        }
+    }
+}
+
+void ProjectManagerViewPlugin::renameFolderFromContextMenu()
+{
+    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
+    {
+        KDevelop::ProjectFolderItem* folder=item->folder();
+        if(folder) {
+            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+            
+            //Change QInputDialog->KFileSaveDialog?
+            QString name = QInputDialog::getText( window, i18n("Rename Folder"), i18n("New name for '%1'", item->text()) );
+            if (!name.isEmpty()) {
+                KUrl url = folder->url().upUrl();
+                url.addPath( name );
+                
+                KIO::CopyJob* job=KIO::move(folder->url(), url);
+                if(!KIO::NetAccess::synchronousRun(job, window)) {
+                    KMessageBox::error( window, i18n("Cannot rename '%1'.", folder->url().prettyUrl()) );
+                    continue;
+                }
+                item->project()->projectFileManager()->renameFolder(folder, url);
+            }
+            
         }
     }
 }
