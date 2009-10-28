@@ -89,6 +89,22 @@ public:
      */
     bool isRunning() const;
     
+    /**
+     * Returns the local Url for a source file used in the current debug session.
+     *
+     * The default implementation just returns the url and is sufficient for
+     * local debuggers. Remote debuggers can implement a path mapping mechanism.
+     */
+    virtual KUrl convertToLocalUrl(const KUrl &remoteUrl) const;
+
+    /**
+     * Returns the remote Url for a source file used in the current debug session.
+     *
+     * The default implementation just returns the url and is sufficient for
+     * local debuggers. Remote debuggers can implement a path mapping mechanism.
+     */
+    virtual KUrl convertToRemoteUrl(const KUrl &localUrl) const;
+
     IBreakpointController *breakpointController() const;
     IVariableController *variableController() const;    
     IFrameStackModel *frameStackModel() const; 

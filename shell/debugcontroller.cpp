@@ -330,9 +330,12 @@ void DebugController::showStepInSource(const KUrl &url, int lineNum)
 
     clearExecutionPoint();
     kDebug() << url << lineNum;
+
+    Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
+    KUrl openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(url);
     KDevelop::IDocument* document = KDevelop::ICore::self()
         ->documentController()
-        ->openDocument(url, KTextEditor::Cursor(lineNum, 0));
+        ->openDocument(openUrl, KTextEditor::Cursor(lineNum, 0));
 
     if( !document )
         return;
