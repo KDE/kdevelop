@@ -1028,6 +1028,11 @@ void IdealMainWidget::selectPreviousDock()
 
     IdealButtonBarWidget* bar = barForRole(role);
 
+    if ( bar->actions().isEmpty() ) {
+        // happens when all docks in a bar get removed
+        return;
+    }
+
     int index = bar->actions().indexOf(m_dockwidget_to_action.value(dock));
 
     if (index < 1)
