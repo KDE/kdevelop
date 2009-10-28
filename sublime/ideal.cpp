@@ -454,7 +454,8 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     KMenu menu;
 
-    menu.addTitle(i18n("Position"));
+    /// start position menu
+    QMenu* positionMenu = menu.addMenu(i18n("Position"));
 
     QActionGroup *g = new QActionGroup(this);
 
@@ -466,7 +467,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QAction* actions[] = {left, bottom, right, top};
     for (int i = 0; i < 4; ++i)
     {
-        menu.addAction(actions[i]);
+        positionMenu->addAction(actions[i]);
         actions[i]->setCheckable(true);
     }
     if (m_docking_area == Qt::TopDockWidgetArea)
@@ -477,11 +478,29 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         left->setChecked(true);
     else
         right->setChecked(true);
+    /// end position menu
+
+    menu.addSeparator();
+    QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove"));
+    QAction* toggleAnchored;
+    if ( isAnchored() ) {
+        toggleAnchored = menu.addAction(KIcon("document-decrypt"), i18n("Unlock"));
+    } else {
+        toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock"));
+    }
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 
     if (triggered)
     {
+        if ( triggered == remove ) {
+            slotRemove();
+            return;
+        } else if ( triggered == toggleAnchored ) {
+            setAnchored(!isAnchored(), true);
+            return;
+        }
+
         Sublime::Position pos;
         if (triggered == left)
             pos = Sublime::Left;
