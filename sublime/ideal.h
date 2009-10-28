@@ -100,7 +100,6 @@ private:
     Qt::DockWidgetArea _area;
     QHash<QAction *, IdealToolButton *> _buttons;
     QHash<QAction *, IdealDockWidget*> _widgets;
-    QActionGroup* _actions;
     QWidget *_corner;
 };
 

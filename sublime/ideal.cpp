@@ -165,12 +165,8 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
 IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWidget *parent)
     : QWidget(parent)
     , _area(area)
-    , _actions(new QActionGroup(this))
     , _corner(0)
 {
-    // TODO Only for now...
-    _actions->setExclusive(true);
-
     if (area == Qt::BottomDockWidgetArea)
     {
         QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::RightToLeft, this);
@@ -214,7 +210,6 @@ KAction *IdealButtonBarWidget::addWidget(const QString& title, IdealDockWidget *
     connect(action, SIGNAL(toggled(bool)), this, SLOT(showWidget(bool)));
 
     addAction(action);
-    _actions->addAction(action);
 
     return action;
 }
@@ -250,6 +245,19 @@ void IdealButtonBarWidget::showWidget(bool checked)
 
     IdealDockWidget *widget = _widgets.value(action);
     Q_ASSERT(widget);
+    
+    if ( checked ) {
+        // Make sure only one widget is visible at any time.
+        // The alternative to use a QActionCollection and setting that to "exclusive"
+        // has a big drawback: QActions in a collection that is exclusive cannot
+        // be un-checked by the user, e.g. in the View -> Tool Views menu.
+        foreach(QAction *otherAction, actions()) {
+            if ( otherAction != action && otherAction->isChecked() ) {
+                otherAction->setChecked(false);
+                break;
+            }
+        }
+    }
 
     parentWidget()->showDockWidget(widget, checked);
 }
