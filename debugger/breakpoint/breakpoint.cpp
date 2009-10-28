@@ -166,7 +166,7 @@ QVariant Breakpoint::data(int column, int role) const
     if (column == LocationColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
         QString ret;
         if (kind_ == CodeBreakpoint && m_line != -1) {
-            ret = m_url.toLocalFile(KUrl::RemoveTrailingSlash);
+            ret = m_url.pathOrUrl(KUrl::RemoveTrailingSlash);
             ret += ':' + QString::number(m_line+1);
         } else {
             ret = m_expression;
