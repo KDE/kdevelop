@@ -97,8 +97,6 @@ public Q_SLOTS:
     void stopButtonPressed();
     void showMenuBar();
 
-    void toggleStatusbar();
-
     void quitAll();
 
 //    void fixToolbar();

@@ -221,12 +221,6 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
-    action = KStandardAction::showStatusbar( this, SLOT( toggleStatusbar() ),
-                                        actionCollection());
-    action->setText( i18n( "Show &Status Bar" ) );
-    action->setToolTip( i18n( "Show status bar" ) );
-    action->setWhatsThis( i18n( "<b>Show status bar</b><p>Hides or shows the status bar.</p>" ) );
-
     action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );

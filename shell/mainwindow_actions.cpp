@@ -83,14 +83,6 @@ void MainWindowPrivate::newToolbarConfig()
     m_mainWindow->applyMainWindowSettings( KConfigGroup(KGlobal::config(), "MainWindow") );
 }
 
-void MainWindowPrivate::toggleStatusbar()
-{
-    KToggleAction * action =
-        qobject_cast< KToggleAction*>( actionCollection() ->action(
-                                "options_show_statusbar" ) );
-    m_mainWindow->statusBar()->setHidden( !action->isChecked() );
-}
-
 void MainWindowPrivate::stopButtonPressed()
 {}
 
