@@ -50,6 +50,8 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setIcons( "process-working-kde" );
+
+    setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 Qt::Orientation IdealToolButton::orientation() const
@@ -283,6 +285,8 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
             connect(_widgets[action]->view(), SIGNAL(showProgressIndicator()), button, SLOT(showProgressIndicator()));
             connect(_widgets[action]->view(), SIGNAL(hideProgressIndicator()), button, SLOT(hideProgressIndicator()));
+            connect(button, SIGNAL(customContextMenuRequested(QPoint)),
+                    _widgets[action], SLOT(contextMenuRequested(QPoint)));
         }
     } break;
 
@@ -336,6 +340,9 @@ IdealDockWidget::IdealDockWidget(QWidget *parent)
       m_docking_area(Qt::NoDockWidgetArea),
       m_maximized(false)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(contextMenuRequested(QPoint)));
 
     QAbstractButton *floatButton =
     qFindChild<QAbstractButton *>(this, QLatin1String("qt_dockwidget_floatbutton"));
@@ -440,8 +447,11 @@ void IdealDockWidget::slotRemove()
     m_area->removeToolView(m_view);
 }
 
-void IdealDockWidget::contextMenuEvent(QContextMenuEvent *event)
+void IdealDockWidget::contextMenuRequested(const QPoint &point)
 {
+    QWidget* senderWidget = qobject_cast<QWidget*>(sender());
+    Q_ASSERT(senderWidget);
+
     KMenu menu;
 
     menu.addTitle(i18n("Position"));
@@ -468,7 +478,7 @@ void IdealDockWidget::contextMenuEvent(QContextMenuEvent *event)
     else
         right->setChecked(true);
 
-    QAction* triggered = menu.exec(event->globalPos());
+    QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 
     if (triggered)
     {

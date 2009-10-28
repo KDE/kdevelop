@@ -129,8 +129,11 @@ public:
 
     virtual bool event(QEvent *event);
 
+public slots:
+    /// The IdealToolButton also connects to this slot to show the same context menu.
+    void contextMenuRequested(const QPoint &point);
+
 protected: // QWidget overrides
-    virtual void contextMenuEvent(QContextMenuEvent *);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
 
 Q_SIGNALS:
