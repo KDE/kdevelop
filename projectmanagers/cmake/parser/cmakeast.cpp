@@ -1469,25 +1469,23 @@ bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
 
     m_name = func.arguments[0].value;
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1;
+    QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.constEnd();
 
-    foreach( const CMakeFunctionArgument& arg, func.arguments )
+    for(; it!=itEnd; ++it)
     {
-        if(arg.value.isEmpty())
+        if(it->value.isEmpty())
         {}
-        else if(arg.value[0].isNumber())
+        else if(it->value[0].isNumber())
         {
-            bool correctmin, correctmaj;
-            QStringList version = arg.value.split('.');
-            m_minorVersion = version[0].toInt(&correctmin);
-            m_majorVersion = version[1].toInt(&correctmaj);
-            if(!correctmin || !correctmaj)
-                return false;
-        } else if(arg.value=="QUIET")
-            m_isQuiet=true;
-        else if(arg.value=="NO_MODULE")
-            m_noModule=true;
-        else if(arg.value=="REQUIRED")
-            m_isRequired=true;
+            m_version=it->value;
+        }
+        else
+        {
+            m_isQuiet |= it->value=="QUIET";
+            m_noModule |= it->value=="NO_MODULE";
+            m_isRequired |= it->value=="REQUIRED";
+        }
     }
     return true;
 }

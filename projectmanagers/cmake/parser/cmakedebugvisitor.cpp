@@ -138,7 +138,7 @@ int CMakeAstDebugVisitor::visit( const FindProgramAst * ast )
 
 int CMakeAstDebugVisitor::visit( const FindPackageAst * ast )
 {
-    WRITEOUT << "FINDPACKAGE: " << "(noModule,isRequired,majorVersion,minorVersion,isQuiet,name) = (" << ast->noModule() << "," << ast->isRequired() << "," << ast->majorVersion() << "," << ast->minorVersion() << "," << ast->isQuiet() << "," << ast->name() << ")";
+    WRITEOUT << "FINDPACKAGE: " << "(noModule,isRequired,version,isQuiet,name) = (" << ast->noModule() << "," << ast->isRequired() << "," << ast->version() << "," << ast->isQuiet() << "," << ast->name() << ")";
     return 1;
 }
 
