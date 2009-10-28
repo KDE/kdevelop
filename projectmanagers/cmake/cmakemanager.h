@@ -93,8 +93,8 @@ public:
     virtual bool removeFile( KDevelop::ProjectFileItem* );
     virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
 
-    virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
-    virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
+    virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
+    virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
 
     QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const;

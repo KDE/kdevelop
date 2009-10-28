@@ -971,13 +971,13 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
     return 0;
 }
 
-bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists, bool add)
+bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists, bool add, const QString& replace)
 {
     bool ret=false;
     QString txt=doc->text(r.textRange());
     if(!add && txt.contains(name))
     {
-        txt.remove(name);
+        txt.replace(name, replace);
         doc->replaceText(r.textRange(), txt);
         ret=true;
     }
@@ -1023,7 +1023,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
             if(!r.isEmpty())
             {
-                ret = ret || followUses(doc, r, name, lists, add);
+                ret = ret || followUses(doc, r, name, lists, add, replace);
             }
         }
     }
@@ -1065,7 +1065,7 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     e.setInformation(i18n("Remove a file called '%1'.", it->text()));
     e.addDocuments(IndexedString(lists), IndexedString(lists));
 
-    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false);
+    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, QString());
     if(ret)
     {
         if(e.exec())
@@ -1124,7 +1124,7 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     e.setInformation(i18n("Add a file called '%1' to target '%2'.", it->fileName(), target->text()));
     e.addDocuments(IndexedString(lists), IndexedString(lists));
 
-    bool ret=followUses(e.document(), r, ' '+it->fileName(), lists, true);
+    bool ret=followUses(e.document(), r, ' '+it->fileName(), lists, true, QString());
 
     if(ret && e.exec())
         ret=e.applyAllChanges();
@@ -1195,5 +1195,94 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
     }
     return ret;
 }
+
+
+bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
+{
+    ProjectTargetItem* target=static_cast<ProjectBaseItem*>(it->parent())->target();
+    if(!target) {
+        it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
+        it->setUrl(newUrl);
+        return true;
+    }
+    
+    CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
+
+    DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
+    SimpleRange r=desc->descriptor().range();
+    r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+
+    KUrl lists=folder->url();
+    lists.addPath("CMakeLists.txt");
+    
+    QString newName=KUrl::relativePath(it->url().upUrl().path(), newUrl.path());
+    if(newName.startsWith("./"))
+        newName.remove(0,2);
+
+    ApplyChangesWidget e;
+    e.setCaption(it->text());
+    e.setInformation(i18n("Remove a file called '%1'.", it->text()));
+    e.addDocuments(IndexedString(lists), IndexedString(lists));
+
+    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, newName);
+    if(ret)
+    {
+        if(e.exec())
+        {
+            bool saved=e.applyAllChanges();
+            if(!saved)
+                KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                    i18n("Cannot save the change."));
+            else
+                it->project()->removeFromFileSet(IndexedString(it->url()));
+        }
+    }
+    else
+    {
+        KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                              i18n("Cannot remove the file."));
+    }
+    return ret;
+}
+
+bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
+{
+    CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
+    KUrl lists=it->formerParent()->url();
+    lists.addPath("CMakeLists.txt");
+    if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
+    {
+        it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
+        it->setUrl(newUrl);
+        return true;
+    }
+    QString newName=KUrl::relativePath(lists.upUrl().path(), newUrl.path());
+    if(newName.startsWith("./"))
+        newName.remove(0,2);
+
+    ApplyChangesWidget e;
+    e.setCaption(it->text());
+    e.setInformation(i18n("Rename a folder called '%1'.", it->text()));
+    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    
+    CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
+    KTextEditor::Range r=cmit->descriptor().argRange().textRange();
+    kDebug(9042) << "For " << lists << " rename " << r;
+    
+    e.document()->replaceText(r, newName);
+    
+
+    bool ret=e.exec();
+    if(ret)
+    {
+        bool saved=e.applyAllChanges();
+        if(!saved)
+            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
+                                  i18n("Could not save the change."));
+        ret=saved;
+    }
+    return ret;
+}
+
 
 #include "cmakemanager.moc"
