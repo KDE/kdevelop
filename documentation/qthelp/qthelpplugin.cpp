@@ -282,8 +282,6 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
                 else
                     kDebug() << "error >> " << fileName << m_engine.error();
             }
-            bool b=m_engine.setupData();
-//            kDebug() << "setup" << b << fileNamespace << m_engine.error();
         }
         kDebug() << "registered" << m_engine.error() << m_engine.registeredDocumentations();
     }
