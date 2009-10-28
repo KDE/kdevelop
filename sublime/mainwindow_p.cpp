@@ -81,7 +81,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     action = new KAction(i18n("Focus Editor"), this);
     action->setShortcuts(QList<QKeySequence>() << (Qt::META | Qt::CTRL | Qt::Key_E) << Qt::META + Qt::Key_C);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(focusEditor()));
-    m_mainWindow->actionCollection()->addAction("focus_editor", action);
+    ac->addAction("focus_editor", action);
 
     action = new KAction(i18n("Hide/Restore Docks"), this);
     action->setShortcut(Qt::META | Qt::CTRL | Qt::Key_H);
