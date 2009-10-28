@@ -19,7 +19,7 @@
     </entry>
     <entry name="numberOfJobs" key="Number Of Jobs" type="UInt">
     </entry>
-    <entry name="makeBinary" key="Make Binary" type="String">
+    <entry name="makeBinary" key="Make Binary" type="Url">
     </entry>
     <entry name="defaultTarget" key="Default Target" type="String">
     </entry>
