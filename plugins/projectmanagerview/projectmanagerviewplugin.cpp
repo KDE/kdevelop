@@ -225,6 +225,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool fileItemsAdded = false;
     bool folderWithParentAdded = false;
     bool targetAdded = false;
+    bool renameAdded = false;
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
@@ -284,11 +285,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             action->setIcon(KIcon("user-trash"));
             connect( action, SIGNAL(triggered()), this, SLOT(removeFolderFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
-            
-            action = new KAction( i18n( "Rename Folder" ), this );
-            action->setIcon(KIcon("edit-rename"));
-            connect( action, SIGNAL(triggered()), this, SLOT(renameFolderFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
         if ( !fileItemsAdded && item->file() )
@@ -298,11 +294,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             action->setIcon(KIcon("user-trash"));
             connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
-            
-            action = new KAction( i18n( "Rename File" ), this );
-            action->setIcon(KIcon("edit-rename"));
-            connect( action, SIGNAL(triggered()), this, SLOT(renameFileFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         else if ( !targetAdded && item->target() )
         {
@@ -310,6 +301,15 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             KAction* action = new KAction( i18n( "Create File" ), this );
             action->setIcon(KIcon("document-new"));
             connect( action, SIGNAL(triggered()), this, SLOT(createFileInTargetFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+        }
+        
+        if( !renameAdded && (item->file() || item->folder()) )
+        {
+            renameAdded = true;
+            KAction* action = new KAction( i18n( "Rename" ), this );
+            action->setIcon(KIcon("edit-rename"));
+            connect( action, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
@@ -532,14 +532,16 @@ void ProjectManagerViewPlugin::removeFileFromContextMenu()
     }
 }
 
-void ProjectManagerViewPlugin::renameFileFromContextMenu()
+void ProjectManagerViewPlugin::renameItemFromContextMenu()
 {
+    QWidget* window=ICore::self()->uiController()->activeMainWindow()->window();
+    
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         KDevelop::ProjectFileItem* file=item->file();
+        KDevelop::ProjectFolderItem* folder=item->folder();
+        
         if(file) {
-            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            
             //Change QInputDialog->KFileSaveDialog?
             QString name = QInputDialog::getText( window, i18n("Rename File"), i18n("New name for '%1'", item->text()) );
             if (!name.isEmpty()) {
@@ -553,19 +555,7 @@ void ProjectManagerViewPlugin::renameFileFromContextMenu()
                 }
                 item->project()->projectFileManager()->renameFile(file, url);
             }
-            
-        }
-    }
-}
-
-void ProjectManagerViewPlugin::renameFolderFromContextMenu()
-{
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        KDevelop::ProjectFolderItem* folder=item->folder();
-        if(folder) {
-            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            
+        } else if(folder) {
             //Change QInputDialog->KFileSaveDialog?
             QString name = QInputDialog::getText( window, i18n("Rename Folder"), i18n("New name for '%1'", item->text()) );
             if (!name.isEmpty()) {
