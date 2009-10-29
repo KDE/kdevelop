@@ -85,7 +85,8 @@ public:
      * should emit the hideProgressIndicator() signal.
      * 
      * The default return value is false, indicating that no progress 
-     * indicator.
+     * indicator will be used.
+     *
      * @returns true if the toolviews created by this factory want to have a 
      * progress indicator.
      */
