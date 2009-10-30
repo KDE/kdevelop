@@ -134,6 +134,17 @@ int main( int argc, char *argv[] )
     KApplication app;
     KDevIDEExtension::init();
     
+    KSplashScreen* splash = 0;
+    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
+    if( !splashFile.isEmpty() )
+    {
+        QPixmap pm;
+        pm.load( splashFile );
+        splash = new KSplashScreen( pm );
+        splash->show();
+        QTimer::singleShot(0, splash, SLOT(deleteLater()));
+    }
+
     Core::initialize();
     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
