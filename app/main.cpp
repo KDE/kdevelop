@@ -34,6 +34,7 @@
 #include <kxmlguiwindow.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <ksplashscreen.h>
 #include <ktexteditor/cursor.h>
 
 #include <QFileInfo>
@@ -47,7 +48,6 @@
 #include <shell/documentcontroller.h>
 #include <shell/plugincontroller.h>
 
-#include "splashscreen.h"
 #include "kdevideextension.h"
 #include <KMessageBox>
 
