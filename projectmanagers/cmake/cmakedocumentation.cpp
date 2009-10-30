@@ -22,6 +22,8 @@
 #include "cmakeutils.h"
 #include <KDebug>
 #include <QTimer>
+#include <QString>
+#include <QRegExp>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentation.h>
@@ -101,6 +103,11 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     kDebug() << "seeking documentation for " << identifier;
     QString arg, id=identifier.toLower();
     
+    QString ident(identifier);
+    
+    // remove whitespaces
+    ident.remove(QRegExp("[\\s]"));
+    
     if(m_typeForName.contains(id)) {
         Type t=m_typeForName[id];
         switch(t)
@@ -123,7 +130,7 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     
     QString desc;
     if(!arg.isEmpty())
-        desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(arg) << identifier)+"</pre>";
+        desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(arg) << ident)+"</pre>";
     
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
     ICMakeManager* m=0;
@@ -131,7 +138,7 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
         m=p->managerPlugin()->extension<ICMakeManager>();
     if(m)
     {
-        QPair<QString, QString> entry = m->cacheValue(p, identifier);
+        QPair<QString, QString> entry = m->cacheValue(p, ident);
         if(!entry.first.isEmpty())
             desc += i18n("<br /><em>Cache Value:</em> %1\n", entry.first);
         
@@ -143,7 +150,7 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
     if(desc.isEmpty())
         return KSharedPtr<KDevelop::IDocumentation>();
     else
-        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
+        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(ident, desc));
 }
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl)
