@@ -53,6 +53,8 @@ using namespace KDevelop;
 class ContextBrowserViewFactory;
 class ContextBrowserView;
 
+QWidget* masterWidget(QWidget* w);
+
 class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRangeWatcher
 {
     Q_OBJECT
@@ -69,11 +71,10 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
 
     QWidget* toolbarWidgetForMainWindow(QWidget* widgetInWindow);
     
-  Q_SIGNALS:
+  public Q_SLOTS:
     void previousContextShortcut();
     void nextContextShortcut();
-
-  public slots:
+    
     void startDelayedBrowsing(KTextEditor::View* view);
     void stopDelayedBrowsing();
     

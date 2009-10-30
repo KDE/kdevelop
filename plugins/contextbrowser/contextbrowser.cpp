@@ -72,7 +72,7 @@ using KTextEditor::View;
 
 bool toolTipEnabled = true;
 
-static QWidget* masterWidget(QWidget* w) {
+QWidget* masterWidget(QWidget* w) {
   while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
     w = qobject_cast<QWidget*>(w->parent());
   return w;
@@ -112,13 +112,13 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     previousContext->setText( i18n("&Previous Visited Context") );
     previousContext->setIcon( KIcon("go-previous-context" ) );
     previousContext->setShortcut( Qt::META | Qt::Key_Left );
-    QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SIGNAL(previousContextShortcut()));
+    QObject::connect(previousContext, SIGNAL(triggered(bool)), this, SLOT(previousContextShortcut()));
 
     KAction* nextContext = actions.addAction("next_context");
     nextContext->setText( i18n("&Next Visited Context") );
     nextContext->setIcon( KIcon("go-next-context" ) );
     nextContext->setShortcut( Qt::META | Qt::Key_Right );
-    QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SIGNAL(nextContextShortcut()));
+    QObject::connect(nextContext, SIGNAL(triggered(bool)), this, SLOT(nextContextShortcut()));
 
     KAction* previousUse = actions.addAction("previous_use");
     previousUse->setText( i18n("&Previous Use") );
@@ -137,6 +137,30 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     QWidget* w = toolbarWidgetForMainWindow(window);
     w->setHidden(false);
     outline->setDefaultWidget(w);
+}
+
+
+void ContextBrowserPlugin::nextContextShortcut()
+{
+  foreach(ContextBrowserView* view, m_views)
+  {
+    kDebug() << masterWidget(ICore::self()->uiController()->activeMainWindow()) << masterWidget(view);
+    if(masterWidget(ICore::self()->uiController()->activeMainWindow()) == masterWidget(view)) {
+      view->historyNext();
+      return;
+    }
+  }
+}
+
+void ContextBrowserPlugin::previousContextShortcut()
+{
+  foreach(ContextBrowserView* view, m_views)
+  {
+    if(masterWidget(ICore::self()->uiController()->activeMainWindow()) == masterWidget(view)) {
+      view->historyPrevious();
+      return;
+    }
+  }
 }
 
 K_PLUGIN_FACTORY(ContextBrowserFactory, registerPlugin<ContextBrowserPlugin>(); )
@@ -532,7 +556,7 @@ bool ContextBrowserPlugin::showDeclarationView(View* view, const SimpleCursor& p
         return success;
 }
 
-bool ContextBrowserPlugin::showSpecialObjectView(View* view, const SimpleCursor& position, ILanguage* pickedLanguage, DUContext* ctx)
+bool ContextBrowserPlugin::showSpecialObjectView(View* view, const SimpleCursor& position, ILanguage* pickedLanguage, DUContext* /*ctx*/)
 {
         //Q_ASSERT(pickedLanguage != 0); // specialObject was found, pickedLanguage must have been set
         if (!pickedLanguage) {

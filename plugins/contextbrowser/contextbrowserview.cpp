@@ -135,6 +135,9 @@ void ContextBrowserView::documentJumpPerformed( KDevelop::IDocument* newDocument
         
     DUChainReadLocker lock(DUChain::lock());
     
+    if(newDocument && newDocument->textDocument() && newDocument->textDocument()->activeView() && masterWidget(newDocument->textDocument()->activeView()) != masterWidget(this))
+        return;
+    
     if(previousDocument && previousCursor.isValid()) {
         kDebug() << "updating jump source";
         DUContext* context = getContextAt(previousDocument->url(), previousCursor);
@@ -514,9 +517,6 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     setLayout(m_layout);
 
     m_plugin->registerToolView(this);
-    
-    connect(plugin, SIGNAL(previousContextShortcut()), this, SLOT(historyPrevious()));
-    connect(plugin, SIGNAL(nextContextShortcut()), this, SLOT(historyNext()));
     
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), m_outlineLine, SLOT(clear()));
