@@ -37,7 +37,8 @@ namespace KDevelop {
 class Core;
 class MainWindow;
 
-class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public IUiController {
+class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public IUiController
+{
     Q_OBJECT
 
 public:
@@ -62,9 +63,9 @@ public:
 
     virtual void addToolView(const QString &name, IToolViewFactory *factory);
     virtual void removeToolView(IToolViewFactory *factory);
-    
+
     virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags);
-    
+
     void addNewToolView(MainWindow *mw);
 
     void initialize();
@@ -88,7 +89,7 @@ public:
     virtual void hideAssistant(const KDevelop::IAssistant::Ptr& assistant);
 
     virtual void showErrorMessage(const QString& message, int timeout);
-    
+
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
@@ -99,6 +100,7 @@ private:
 
 public Q_SLOTS:
     void raiseToolView(Sublime::View * view);
+
 private Q_SLOTS:
     void assistantAction1();
     void assistantAction2(bool);
@@ -106,7 +108,6 @@ private Q_SLOTS:
     void assistantAction4(bool);
     void assistantHide();
     void assistantActionsChanged();
-    
 
 private:
     class UiControllerPrivate* const d;
