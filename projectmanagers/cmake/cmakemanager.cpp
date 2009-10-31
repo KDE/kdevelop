@@ -85,6 +85,8 @@
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
 #include <cmakeconfig.h>
+#include <kio/copyjob.h>
+#include <KIO/NetAccess>
 
 using namespace KDevelop;
 
@@ -1225,23 +1227,17 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
     e.addDocuments(IndexedString(lists), IndexedString(lists));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, newName);
-    if(ret)
+    if(ret && e.exec())
     {
-        if(e.exec())
-        {
-            bool saved=e.applyAllChanges();
-            if(!saved)
-                KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                    i18n("Cannot save the change."));
-            else
-                it->project()->removeFromFileSet(IndexedString(it->url()));
+        ret=e.applyAllChanges();
+        
+        if(ret) {
+            KIO::CopyJob* job=KIO::move(it->url(), newUrl);
+            ret=KIO::NetAccess::synchronousRun(job, 0);
+            it->project()->removeFromFileSet(IndexedString(it->url()));
         }
     }
-    else
-    {
-        KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                              i18n("Cannot remove the file."));
-    }
+
     return ret;
 }
 
@@ -1275,11 +1271,12 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     bool ret=e.exec();
     if(ret)
     {
-        bool saved=e.applyAllChanges();
-        if(!saved)
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Could not save the change."));
-        ret=saved;
+        ret=e.applyAllChanges();
+        
+        if(ret) {
+            KIO::CopyJob* job=KIO::move(it->url(), newUrl);
+            ret=KIO::NetAccess::synchronousRun(job, 0);
+        }
     }
     return ret;
 }
