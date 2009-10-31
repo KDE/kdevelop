@@ -35,9 +35,9 @@ set( KDEVPLATFORM_INCLUDE_DIR "${_KDEVPLATFORM_CURRENT_DIR}/../../../include/kde
 
 endif(NOT WIN32)
 
-if( NOT TARGET kdevplatforminterfaces )
+if( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )
     include("${_KDEVPLATFORM_CURRENT_DIR}/KDevPlatformTargets.cmake")
-endif( NOT TARGET kdevplatforminterfaces )
+endif( NOT TARGET KDevPlatformImport__kdevplatforminterfaces )
 
 macro( _kdevplatform_set_lib_vars _prefix _lib )
   set( KDEVPLATFORM_${_prefix}_LIBRARIES KDevPlatformImport__${_lib} )
