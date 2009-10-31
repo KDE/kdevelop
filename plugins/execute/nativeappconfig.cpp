@@ -339,6 +339,17 @@ KIcon NativeAppConfigType::icon() const
     return KIcon("system-run");
 }
 
+bool NativeAppConfigType::canLaunch ( KDevelop::ProjectBaseItem* item ) const
+{
+    if( item->target() && item->target()->executable() ) {
+        return canLaunch( item->target()->executable()->builtUrl() );
+    }
+    return false;
+}
 
+bool NativeAppConfigType::canLaunch ( const KUrl& file ) const
+{
+    return ( file.isLocalFile() && QFileInfo( file.toLocalFile() ).isExecutable() );
+}
 
 #include "nativeappconfig.moc"

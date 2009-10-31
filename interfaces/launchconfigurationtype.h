@@ -25,10 +25,11 @@
 #include <QtCore/QList>
 
 class KIcon;
+class KUrl;
 
 namespace KDevelop
 {
-
+class ProjectBaseItem;
 class ILauncher;
 class LaunchConfigurationPageFactory;
 
@@ -95,6 +96,20 @@ public:
      * @returns an icon to be used for representing launch configurations of this type
      */
     virtual KIcon icon() const = 0;
+    
+    /**
+     * Check wether this launch configuration type can launch the given project item
+     * @param item the project tree item to test
+     * @returns true if this configuration type can launch the given item, false otherwise
+     */
+    virtual bool canLaunch( KDevelop::ProjectBaseItem* item ) const = 0;
+    
+    /**
+    * Check wether this launch configuration type can launch the given file
+    * @param file the file to test launchability
+    * @returns true if this configuration type can launch the given file, false otherwise
+    */
+    virtual bool canLaunch( const KUrl& file ) const = 0;
 private:
     class LaunchConfigurationTypePrivate* const d;
 };
