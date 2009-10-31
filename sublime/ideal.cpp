@@ -295,6 +295,10 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             button->updateNormalIcon(action->icon());
             button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
+
+            Q_ASSERT(_widgets.contains(action));
+            _widgets[action]->setWindowTitle(action->text());
+
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
@@ -468,6 +472,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     Q_ASSERT(senderWidget);
 
     KMenu menu;
+    menu.addTitle(windowIcon(), windowTitle());
 
     /// start position menu
     QMenu* positionMenu = menu.addMenu(i18n("Position"));
