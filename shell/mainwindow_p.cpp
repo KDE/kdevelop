@@ -48,6 +48,7 @@ Boston, MA 02110-1301, USA.
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/document.h>
+#include <sublime/tooldocument.h>
 
 #include <interfaces/iplugin.h>
 
@@ -426,6 +427,30 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, KMenu* menu
     }
 }
 
+void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
+{
+    KMenu menu;
+    menu.addTitle(KIcon("window-new"), i18n("Add Tool View"));
+    QMap<IToolViewFactory*, Sublime::ToolDocument*> factories =
+        Core::self()->uiControllerInternal()->factoryDocuments();
+    QMap<QAction*, IToolViewFactory*> actionToFactory;
+    if ( !factories.isEmpty() ) {
+        for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = factories.constBegin();
+                it != factories.constEnd(); ++it)
+        {
+            QAction* action = menu.addAction(it.value()->statusIcon(), it.value()->title());
+            action->setIcon(it.value()->statusIcon());
+            actionToFactory.insert(action, it.key());
+        }
+    }
+
+    QAction* triggered = menu.exec(position);
+
+    Core::self()->uiControllerInternal()->addToolViewToDockArea(
+        triggered->text(), actionToFactory[triggered],
+        area
+    );
+}
 
 }
 

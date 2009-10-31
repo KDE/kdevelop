@@ -36,6 +36,7 @@
 class KAction;
 class KActionMenu;
 class KActionCollection;
+class KMenu;
 
 namespace Sublime {
 
@@ -82,6 +83,8 @@ public:
     IdealMainWidget* parentWidget() const;
 
     Qt::Orientation orientation() const;
+
+    Qt::DockWidgetArea area() const;
 
     IdealDockWidget* widgetForAction(QAction* action) const;
 
@@ -204,6 +207,10 @@ public:
 Q_SIGNALS:
     void dockShown(Sublime::View*, Sublime::Position pos, bool shown);
 
+    /// Emitted, when a context menu is requested on one of the dock bars.
+    /// When no actions gets associated to the KMenu, it won't be shown.
+    void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
+
 public Q_SLOTS:
     void showLeftDock(bool show);
     void showRightDock(bool show);
@@ -216,6 +223,11 @@ public Q_SLOTS:
     void selectNextDock();
     void selectPreviousDock();
     void removeView();
+
+private Q_SLOTS:
+    /// Map context menu event from dockbar to area and propagate to main window.
+    /// @see dockBarContextMenuRequested()
+    void slotDockBarContextMenuRequested(const QPoint& position);
 
 private:
     // helpers for toggleDocksShown

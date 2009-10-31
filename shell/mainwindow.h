@@ -84,6 +84,7 @@ protected:
 
 protected Q_SLOTS:
     virtual void tabContextMenuRequested(Sublime::View* , KMenu* );
+    virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
 
 private Q_SLOTS:
     void documentActivated( KDevelop::IDocument* document );

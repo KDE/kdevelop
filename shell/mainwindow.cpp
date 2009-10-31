@@ -258,6 +258,11 @@ void MainWindow::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
     d->tabContextMenuRequested(view, menu);
 }
 
+void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
+{
+    d->dockBarContextMenuRequested(area, position);
+}
+
 }
 
 #include "mainwindow.moc"

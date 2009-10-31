@@ -90,11 +90,19 @@ public:
 
     virtual void showErrorMessage(const QString& message, int timeout);
 
+    /// Returns list of available view factories together with their ToolDocuments.
+    /// @see addToolView(), removeToolView(), findToolView()
+    const QMap<IToolViewFactory*, Sublime::ToolDocument*>& factoryDocuments() const;
+
+    /// Adds a tool view in the active area to the dock area @p area.
+    /// @see activeArea()
+    void addToolViewToDockArea(const QString& name, IToolViewFactory* factory, Qt::DockWidgetArea area);
+
 private:
     void addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area);
-    void addToolViewToArea(IToolViewFactory* factory,
+    Sublime::View* addToolViewToArea(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area);
 

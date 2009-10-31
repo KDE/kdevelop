@@ -551,6 +551,16 @@ void UiController::loadAllAreas(KSharedConfig::Ptr config)
     d->areasRestored = true;
 }
 
+void UiController::addToolViewToDockArea(const QString& name,
+                                         IToolViewFactory* factory,
+                                         Qt::DockWidgetArea area)
+{
+    ///TODO: we should probably add a bool forcePosition member to
+    /// Area::addToolView(), to force adding at the given position.
+    Sublime::View* view = addToolViewToArea(factory, d->factoryDocuments[factory], activeArea());
+    activeArea()->moveToolView(view, Sublime::dockAreaToPosition(area));
+}
+
 void UiController::addToolViewIfWanted(IToolViewFactory* factory,
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area)
@@ -561,7 +571,7 @@ void UiController::addToolViewIfWanted(IToolViewFactory* factory,
     }
 }
 
-void UiController::addToolViewToArea(IToolViewFactory* factory,
+Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
                                      Sublime::ToolDocument* doc,
                                      Sublime::Area* area)
 {
@@ -574,6 +584,7 @@ void UiController::addToolViewToArea(IToolViewFactory* factory,
             SLOT(raiseToolView(Sublime::View*)));
 
     factory->viewCreated(view);
+    return view;
 }
 
 void UiController::registerStatus(QObject* status)
@@ -629,6 +640,11 @@ void UiController::popUpAssistant(const KDevelop::IAssistant::Ptr& assistant)
         connect(assistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
         connect(assistant.data(), SIGNAL(actionsChanged()), SLOT(assistantActionsChanged()), Qt::DirectConnection);
     }
+}
+
+const QMap< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
+{
+    return d->factoryDocuments;
 }
 
 void UiController::assistantAction1() {

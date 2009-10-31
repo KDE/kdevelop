@@ -344,6 +344,9 @@ void MainWindowPrivate::recreateCentralWidget()
             SIGNAL(widgetResized(IdealMainLayout::Role, int)),
             this,
             SLOT(widgetResized(IdealMainLayout::Role, int)));
+
+    connect(idealMainWidget, SIGNAL(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)),
+            m_mainWindow, SLOT(dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&)));
 }
 
 void MainWindowPrivate::

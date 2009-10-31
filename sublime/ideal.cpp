@@ -167,6 +167,8 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     , _area(area)
     , _corner(0)
 {
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
     if (area == Qt::BottomDockWidgetArea)
     {
         QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::RightToLeft, this);
@@ -234,6 +236,11 @@ Qt::Orientation IdealButtonBarWidget::orientation() const
         return Qt::Vertical;
 
     return Qt::Horizontal;
+}
+
+Qt::DockWidgetArea IdealButtonBarWidget::area() const
+{
+    return _area;
 }
 
 void IdealButtonBarWidget::showWidget(bool checked)
@@ -535,15 +542,23 @@ IdealMainWidget::IdealMainWidget(MainWindow* parent, KActionCollection* ac)
     Q_UNUSED(ac);
     leftBarWidget = new IdealButtonBarWidget(Qt::LeftDockWidgetArea, this);
     leftBarWidget->hide();
+    connect(leftBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
     rightBarWidget = new IdealButtonBarWidget(Qt::RightDockWidgetArea, this);
     rightBarWidget->hide();
+    connect(rightBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
     bottomBarWidget = new IdealButtonBarWidget(Qt::BottomDockWidgetArea, this);
     bottomStatusBarLocation = bottomBarWidget->corner();
+    connect(bottomBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
     topBarWidget = new IdealButtonBarWidget(Qt::TopDockWidgetArea, this);
     topBarWidget->hide();
+    connect(topBarWidget, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotDockBarContextMenuRequested(QPoint)));
 
     m_mainLayout = new IdealMainLayout(this);
     m_mainLayout->addButtonBar(leftBarWidget, IdealMainLayout::Left);
@@ -848,6 +863,14 @@ void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
     // Put the focus back on the editor if a dock was hidden
     if (!show)
         focusEditor();
+}
+
+void IdealMainWidget::slotDockBarContextMenuRequested(const QPoint& position)
+{
+    IdealButtonBarWidget* bar = qobject_cast<IdealButtonBarWidget*>(sender());
+    Q_ASSERT(bar);
+
+    emit dockBarContextMenuRequested(bar->area(), bar->mapToGlobal(position));
 }
 
 IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* parent, IdealMainLayout::Role resizeRole)

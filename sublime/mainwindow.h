@@ -104,6 +104,10 @@ protected:
 protected Q_SLOTS:
     virtual void setupAreaSelector();
     virtual void tabContextMenuRequested(Sublime::View*, KMenu*);
+    /**Called whenever the user requests a context menu on a dockwidget bar.
+       You can then e.g. add actions to add dockwidgets.
+       Default implementation does nothing.**/
+    virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
 
 public: // FIXME?
     /**Saves size/toolbar/menu/statusbar settings to the global configuration file.
