@@ -679,6 +679,46 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 }
 
 
+ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigurationType* type, 
+                                                                 const QPair<QString,QString>& launcher, 
+                                                                 IProject* project, const QString& name )
+{
+    KConfigGroup launchGroup;
+    if( project )
+    {
+        launchGroup = project->projectConfiguration()->group( RunController::LaunchConfigurationsGroup );
+        
+    } else 
+    {
+        launchGroup = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
+        
+    }
+    QStringList configs = launchGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
+    uint num = 0;
+    QString baseName = "Launch Configuration";
+    while( configs.contains( QString( "%1 %2" ).arg( baseName ).arg( num ) ) )
+    {
+        num++;
+    }
+    QString groupName = QString( "%1 %2" ).arg( baseName ).arg( num );
+    KConfigGroup launchConfigGroup = launchGroup.group( groupName );
+    QString cfgName = name;
+    if( name.isEmpty() )
+    {
+        cfgName = i18n("New %1 Configuration", type->name() );
+    }
+    launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry, cfgName );
+    launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry, type->id() );
+    launchConfigGroup.sync();
+    configs << groupName;
+    launchGroup.writeEntry( RunController::LaunchConfigurationsListEntry, configs );
+    launchGroup.sync();
+    LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, project );
+    l->setLauncherForMode( launcher.first, launcher.second );
+    Core::self()->runControllerInternal()->addLaunchConfiguration( l );
+    return l;
+}
+
 QItemDelegate * KDevelop::RunController::delegate() const
 {
     return d->delegate;

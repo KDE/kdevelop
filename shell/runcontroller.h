@@ -108,6 +108,11 @@ public:
      */
     LaunchConfigurationType* launchConfigurationTypeForId( const QString& );
 
+    virtual ILaunchConfiguration* createLaunchConfiguration ( LaunchConfigurationType* type,
+                                                              const QPair<QString,QString>& launcher, 
+                                                              IProject* project = 0,
+                                                              const QString& name = QString() );
+    
     virtual void executeDefaultLaunch(const QString& runMode);
 
 public Q_SLOTS:

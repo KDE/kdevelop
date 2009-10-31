@@ -668,41 +668,18 @@ void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
     ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
     if( parent.isValid() && t && !Core::self()->runController()->launchConfigurationTypes().isEmpty() )
     {
-        KConfigGroup launchGroup;
-        if( ti )
-        {
-            launchGroup = ti->project->projectConfiguration()->group( RunController::LaunchConfigurationsGroup );
-            
-        } else if( !t->parent )
-        {
-            launchGroup = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-            
-        } else 
+        if( !ti && t->parent )
         {
             kWarning() << "Expected project or global item, but didn't find either";
             return;
         }
         beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
-        QStringList configs = launchGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
-        uint num = 0;
-        QString baseName = "Launch Configuration";
-        while( configs.contains( QString( "%1 %2" ).arg( baseName ).arg( num ) ) )
-        {
-            num++;
-        }
-        QString groupName = QString( "%1 %2" ).arg( baseName ).arg( num );
-        KConfigGroup launchConfigGroup = launchGroup.group( groupName );
+        
         LaunchConfigurationType* type = Core::self()->runController()->launchConfigurationTypes().at(0);
-        launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationNameEntry, i18n( "New Configuration" ) );
-        launchConfigGroup.writeEntry(LaunchConfiguration::LaunchConfigurationTypeEntry, type->id() );
-        launchConfigGroup.sync();
-        configs << groupName;
-        launchGroup.writeEntry( RunController::LaunchConfigurationsListEntry, configs );
-        launchGroup.sync();
-        LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, ( ti ? ti->project : 0 ) );
-        l->setLauncherForMode( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
-        Core::self()->runControllerInternal()->addLaunchConfiguration( l );
-        addItemForLaunchConfig( l );
+        QPair<QString,QString> launcher = qMakePair( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
+        IProject* p = ( ti ? ti->project : 0 );
+        ILaunchConfiguration* l = Core::self()->runController()->createLaunchConfiguration( type, launcher, p );
+        addItemForLaunchConfig( dynamic_cast<LaunchConfiguration*>( l ) );
         endInsertRows();
     }
 }

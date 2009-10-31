@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
-
+class IProject;
 class ILaunchMode;
 class ILaunchConfiguration;
 class LaunchConfigurationType;
@@ -113,6 +113,22 @@ public:
      * @returns the launch configuration type if found, or 0 otherwise
      */
     virtual LaunchConfigurationType* launchConfigurationTypeForId( const QString& id ) = 0;
+    
+    /**
+     * Creates a new launch configuration in the given project or in the session if no project
+     * was provided using the given launch configuration type and launcher. The configuration 
+     * is also added to the list of configurations in the runcontroller.
+     * 
+     * @param type the launch configuration type to be used for the new config
+     * @param launcher the mode and id of the launcher to be used in the config
+     * @param project the project in which the launch configuration should be stored
+     * @param name the name of the new launch configuration, if this is empty a new default name will be generated
+     * @returns a new launch configuration
+     */
+    virtual ILaunchConfiguration* createLaunchConfiguration( LaunchConfigurationType* type,
+                                                             const QPair<QString,QString>& launcher,
+                                                             KDevelop::IProject* project = 0,
+                                                             const QString& name = QString() ) = 0;
 
 public Q_SLOTS:
     /**
