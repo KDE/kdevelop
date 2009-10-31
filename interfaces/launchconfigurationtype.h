@@ -26,6 +26,7 @@
 
 class KIcon;
 class KUrl;
+class KConfigGroup;
 
 namespace KDevelop
 {
@@ -103,6 +104,14 @@ public:
      * @returns true if this configuration type can launch the given item, false otherwise
      */
     virtual bool canLaunch( KDevelop::ProjectBaseItem* item ) const = 0;
+
+    /**
+     * Configure the given launch configuration to execute the selected item
+     * @param config the configuration to setup
+     * @param item the item to launch
+     */
+    virtual void configureLaunchFromItem( KConfigGroup config, 
+                                          KDevelop::ProjectBaseItem* item ) const = 0;
     
     /**
     * Check wether this launch configuration type can launch the given file

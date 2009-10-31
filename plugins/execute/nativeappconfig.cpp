@@ -352,4 +352,13 @@ bool NativeAppConfigType::canLaunch ( const KUrl& file ) const
     return ( file.isLocalFile() && QFileInfo( file.toLocalFile() ).isExecutable() );
 }
 
+void NativeAppConfigType::configureLaunchFromItem ( KConfigGroup cfg, KDevelop::ProjectBaseItem* item ) const
+{
+    cfg.writeEntry( ExecutePlugin::isExecutableEntry, false );
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    cfg.writeEntry( ExecutePlugin::projectTargetEntry, model->pathFromIndex( model->indexFromItem( item ) ) );
+    cfg.writeEntry( ExecutePlugin::workingDirEntry, item->executable()->builtUrl().upUrl() );
+    cfg.sync();
+}
+
 #include "nativeappconfig.moc"

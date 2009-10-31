@@ -83,6 +83,8 @@ public:
     KIcon icon() const;
     bool canLaunch( KDevelop::ProjectBaseItem* item ) const;
     bool canLaunch( const KUrl& file ) const;
+    void configureLaunchFromItem ( KConfigGroup cfg, 
+                                   KDevelop::ProjectBaseItem* item ) const;
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 };
