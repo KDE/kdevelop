@@ -174,6 +174,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         QList<QAction*> extActions;
         QList<QAction*> projectActions;
         QList<QAction*> fileActions;
+        QList<QAction*> runActions;
         foreach( const ContextMenuExtension& ext, extensions )
         {
             buildActions += ext.actions(ContextMenuExtension::BuildGroup);
@@ -181,6 +182,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
             projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
             vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
             extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
+            runActions += ext.actions(ContextMenuExtension::RunGroup);
         }
 
         KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
@@ -188,6 +190,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         projectActions << projectConfig;
 
         appendActions(menu, buildActions);
+        appendActions(menu, runActions );
         appendActions(menu, fileActions);
 
         QMenu* vcsmenu = &menu;
