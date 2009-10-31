@@ -548,12 +548,9 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
                 KUrl url = file->url().upUrl();
                 url.addPath( name );
                 
-                KIO::CopyJob* job=KIO::move(file->url(), url);
-                if(!KIO::NetAccess::synchronousRun(job, window)) {
-                    KMessageBox::error( window, i18n("Cannot rename '%1'.", file->url().prettyUrl()) );
-                    continue;
-                }
-                item->project()->projectFileManager()->renameFile(file, url);
+                bool ret=item->project()->projectFileManager()->renameFile(file, url);
+                if(!ret)
+                    KMessageBox::error( window, i18n("Could not rename '%1'.", file->url().prettyUrl()) );
             }
         } else if(folder) {
             //Change QInputDialog->KFileSaveDialog?
@@ -562,12 +559,9 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
                 KUrl url = folder->url().upUrl();
                 url.addPath( name );
                 
-                KIO::CopyJob* job=KIO::move(folder->url(), url);
-                if(!KIO::NetAccess::synchronousRun(job, window)) {
-                    KMessageBox::error( window, i18n("Cannot rename '%1'.", folder->url().prettyUrl()) );
-                    continue;
-                }
-                item->project()->projectFileManager()->renameFolder(folder, url);
+                bool ret=item->project()->projectFileManager()->renameFolder(folder, url);
+                if(!ret)
+                    KMessageBox::error( window, i18n("Could not rename '%1'.", folder->url().prettyUrl()) );
             }
             
         }
