@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/launchconfigurationtype.h>
 
 #include <outputview/outputjob.h>
+#include <interfaces/context.h>
 
 class QStyleOptionViewItem;
 class QPainter;
@@ -39,6 +40,7 @@ class KStatefulBrush;
 
 namespace KDevelop
 {
+class ContextMenuExtension;
 
 class IPlugin;
 class IProject;
@@ -114,6 +116,7 @@ public:
                                                               const QString& name = QString() );
     
     virtual void executeDefaultLaunch(const QString& runMode);
+    ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
     virtual void stopAllProcesses();

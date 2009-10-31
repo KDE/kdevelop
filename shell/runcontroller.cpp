@@ -724,6 +724,12 @@ QItemDelegate * KDevelop::RunController::delegate() const
     return d->delegate;
 }
 
+ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
+{
+    ContextMenuExtension ext;
+    return ext;
+}
+
 RunDelegate::RunDelegate( QObject* parent )
 : QItemDelegate(parent), runProviderBrush( KColorScheme::View, KColorScheme::PositiveText ),
 errorBrush( KColorScheme::View, KColorScheme::NegativeText )
