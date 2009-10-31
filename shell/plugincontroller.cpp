@@ -49,13 +49,14 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
 #include <interfaces/idebugcontroller.h>
+#include <interfaces/idocumentationcontroller.h>
 
 #include <kross/krossplugin.h>
 
 #include "mainwindow.h"
 #include "core.h"
 #include "shellextension.h"
-#include <interfaces/idocumentationcontroller.h>
+#include "runcontroller.h"
 
 namespace KDevelop
 {
@@ -591,6 +592,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
     }
     exts << ICore::self()->debugController()->contextMenuExtension( context );
     exts << ICore::self()->documentationController()->contextMenuExtension( context );
+    exts << Core::self()->runControllerInternal()->contextMenuExtension( context );
     return exts;
 }
 
