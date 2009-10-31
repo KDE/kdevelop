@@ -41,7 +41,6 @@ class KStatefulBrush;
 namespace KDevelop
 {
 class ContextMenuExtension;
-
 class IPlugin;
 class IProject;
 class LaunchConfiguration;
@@ -116,6 +115,7 @@ public:
                                                               const QString& name = QString() );
     
     virtual void executeDefaultLaunch(const QString& runMode);
+    
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
@@ -143,6 +143,7 @@ private:
     void checkState();
 
     Q_PRIVATE_SLOT(d, void configureLaunches())
+    Q_PRIVATE_SLOT(d, void launchAs(int))
 
     class RunControllerPrivate;
     RunControllerPrivate* const d;

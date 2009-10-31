@@ -52,6 +52,8 @@ Boston, MA 02110-1301, USA.
 #include "launchconfigurationdialog.h"
 #include <interfaces/isession.h>
 #include <QSignalMapper>
+#include <interfaces/contextmenuextension.h>
+#include <kmenu.h>
 
 using namespace KDevelop;
 
@@ -113,6 +115,9 @@ public:
     QList<LaunchConfiguration*> launchConfigurations;
     QMap<QString,ILaunchMode*> launchModes;
     QSignalMapper* launchChangeMapper;
+    QSignalMapper* launchAsMapper;
+    QMap<int,QPair<QString,QString> > launchAsInfo;
+    KDevelop::ProjectBaseItem* contextItem;
     bool hasLaunchConfigType( const QString& typeId ) 
     {
         return launchConfigurationTypes.contains( typeId );
@@ -154,7 +159,30 @@ public:
         }
         return label;
     }
-    
+
+    void launchAs( int id )
+    {
+        kDebug() << "Launching id:" << id;
+        QPair<QString,QString> info = launchAsInfo[id];
+        kDebug() << "fetching type and mode:" << info.first << info.second;
+        LaunchConfigurationType* type = launchConfigurationTypeForId( info.first );
+        ILaunchMode* mode = q->launchModeForId( info.second );
+        
+        kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
+        if( type && mode )
+        {
+            ILauncher* launcher = type->launchers().at(0);
+            ILaunchConfiguration* ilaunch = q->createLaunchConfiguration( type,
+                                                                         qMakePair( mode->id(), launcher->id() ),
+                                                                         contextItem->project(),
+                                                                         contextItem->text() );
+            LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
+            type->configureLaunchFromItem( launch->config(), contextItem );
+            kDebug() << "created config, launching";
+            q->execute( mode->id(), launch );
+        }
+    }
+
     void updateCurrentLaunchAction()
     {
         if (!currentTargetAction) return;
@@ -246,6 +274,8 @@ RunController::RunController(QObject *parent)
     d->q = this;
     d->delegate = new RunDelegate(this);
     d->launchChangeMapper = new QSignalMapper( this );
+    d->launchAsMapper = 0;
+    d->contextItem = 0;
 
     if(!(Core::self()->setupFlags() & Core::NoUi)) {
         // Note that things like registerJob() do not work without the actions, it'll simply crash.
@@ -726,9 +756,58 @@ QItemDelegate * KDevelop::RunController::delegate() const
 
 ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
 {
+    delete d->launchAsMapper;
+    d->launchAsMapper = new QSignalMapper( this );
+    kDebug() << "connected launchmapper:" << connect( d->launchAsMapper, SIGNAL( mapped( int ) ), SLOT( launchAs( int ) ) );
+    d->launchAsInfo.clear();
+    d->contextItem = 0;
     ContextMenuExtension ext;
+    if( ctx->type() == Context::ProjectItemContext ) {
+        KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>( ctx );
+        if( prjctx->items().count() == 1 ) 
+        {
+            ProjectBaseItem* itm = prjctx->items().at( 0 );
+            int i = 0;
+            foreach( ILaunchMode* mode, d->launchModes.values() )
+            {
+                KActionMenu* menu = new KActionMenu( i18n("%1 As...", mode->name() ), this );
+                foreach( LaunchConfigurationType* type, launchConfigurationTypes() )
+                {
+                    bool hasLauncher = false;
+                    foreach( ILauncher* launcher, type->launchers() )
+                    {
+                        if( launcher->supportedModes().contains( mode->id() ) )
+                        {
+                            hasLauncher = true;
+                        }
+                    }
+                    if( type->canLaunch(itm) && hasLauncher )
+                    {
+                        d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
+                        KAction* act = new KAction( d->launchAsMapper );
+                        act->setText( type->name() );
+                        kDebug() << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
+                        d->launchAsMapper->setMapping( act, i );
+                        kDebug() << "action connected:" << connect( act, SIGNAL( triggered() ), d->launchAsMapper, SLOT( map() ) );
+                        menu->addAction(act);
+                        i++;
+                    }
+                }
+                if( menu->menu()->actions().count() > 0 )
+                {
+                    ext.addAction( ContextMenuExtension::RunGroup, menu);
+                }
+            }
+            if( ext.actions( ContextMenuExtension::RunGroup ).count() > 0 )
+            {
+                d->contextItem = itm;
+            }
+        }
+    }
     return ext;
 }
+
+
 
 RunDelegate::RunDelegate( QObject* parent )
 : QItemDelegate(parent), runProviderBrush( KColorScheme::View, KColorScheme::PositiveText ),
