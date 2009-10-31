@@ -445,7 +445,9 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
     }
 
     QAction* triggered = menu.exec(position);
-
+    if ( !triggered ) {
+        return;
+    }
     Core::self()->uiControllerInternal()->addToolViewToDockArea(
         triggered->text(), actionToFactory[triggered],
         area
