@@ -24,6 +24,9 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDropEvent>
+#include <QtCore/QMimeData>
 
 #include <KDE/KApplication>
 #include <KDE/KActionCollection>
@@ -59,7 +62,7 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
     setAreaSwitcherCornerWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(this));
-    
+    setAcceptDrops( true );
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
     int bottomleft = cg.readEntry( "BottomLeftCornerOwner", 0 );
     int bottomright = cg.readEntry( "BottomRightCornerOwner", 0 );
@@ -102,6 +105,23 @@ MainWindow::~ MainWindow()
 
     delete d;
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
+}
+
+void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
+{
+    if( ev->mimeData()->hasFormat( "text/uri-list" ) && ev->mimeData()->hasUrls() )
+    {
+        ev->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent( QDropEvent* ev )
+{
+    foreach( QUrl u, ev->mimeData()->urls() )
+    {
+        Core::self()->documentController()->openDocument( KUrl( u ) );
+    }
+    ev->acceptProposedAction();
 }
 
 void MainWindow::loadSettings()

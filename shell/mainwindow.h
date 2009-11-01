@@ -81,6 +81,8 @@ protected:
     virtual void initialize();
     virtual void cleanup();
     virtual void initializeStatusBar();
+    void dragEnterEvent( QDragEnterEvent* );
+    void dropEvent( QDropEvent* );
 
 protected Q_SLOTS:
     virtual void tabContextMenuRequested(Sublime::View* , KMenu* );
