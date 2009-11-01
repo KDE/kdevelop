@@ -891,6 +891,32 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   return true;
 }
 
+QList< QualifiedIdentifier > DUContext::fullyApplyAliases(KDevelop::QualifiedIdentifier id, const KDevelop::TopDUContext* source) const
+{
+  ENSURE_CAN_READ
+  
+  if(!source)
+    source = topContext();
+
+  SearchItem::PtrList identifiers;
+  identifiers << SearchItem::Ptr(new SearchItem(id));
+
+  const DUContext* current = this;
+  while(current) {
+    SearchItem::PtrList aliasedIdentifiers;
+    current->applyAliases(identifiers, aliasedIdentifiers, SimpleCursor::invalid(), true, false);
+    current->applyUpwardsAliases(identifiers, source);
+    
+    current = current->parentContext();
+  }
+  
+  QList<QualifiedIdentifier> ret;
+  FOREACH_ARRAY(SearchItem::Ptr item, identifiers)
+    ret += item->toList();
+  
+  return ret;
+}
+
 QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ

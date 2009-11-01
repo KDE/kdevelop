@@ -780,6 +780,10 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
   void squeeze();
 
+  ///Returns the qualified identifier @p id with all aliases (for example namespace imports) applied
+  ///Example: If the namespace 'Foo' is imported, and id is 'Bar', then the returned list is 'Bar' and 'Foo::Bar'
+  QList<QualifiedIdentifier> fullyApplyAliases(KDevelop::QualifiedIdentifier id, const KDevelop::TopDUContext* source) const;
+  
   protected:
 
   /**
