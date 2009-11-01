@@ -1,4 +1,5 @@
 project(QMakeManager)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${QMakeManager_SOURCE_DIR}/cmake/)
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9024 )
 
 find_package(KDE4 4.2.0 REQUIRED)
