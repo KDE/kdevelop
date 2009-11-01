@@ -111,6 +111,7 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   }
   
   int pos = 0;
+
   foreach(Declaration* parameter, otherSideFunctionContext->localDeclarations()) {
     m_oldSignature.defaultParams << otherFunDecl->defaultParameterForArgument(pos).str();
     m_oldSignature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
@@ -259,10 +260,11 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
         AbstractFunctionDeclaration* contextFunction = dynamic_cast<AbstractFunctionDeclaration*>(decl);
         foreach(Declaration* parameter, context->localDeclarations()) {
           kDebug() << "parameter:" << parameter->toString() << parameter->range().textRange();
-          newSignature.defaultParams << contextFunction->defaultParameterForArgument(pos).str();
           newSignature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
           ++pos;
         }
+        
+        newSignature.defaultParams = m_oldSignature.defaultParams;
         
         KDevelop::IndexedType newReturnType;
         FunctionType::Ptr funType = decl->type<FunctionType>();
