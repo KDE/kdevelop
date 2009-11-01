@@ -790,5 +790,36 @@ DUContext* getTemplateContext(Declaration* decl, const TopDUContext* source) {
   return getTemplateContext(internal, source);
 }
 
+QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
+{
+  if(!ctx)
+    return id;
+  
+  QList<QualifiedIdentifier> imports = ctx->fullyApplyAliases(QualifiedIdentifier(), ctx->topContext());
+  if(imports.contains(id))
+    return QualifiedIdentifier(); ///The id is a namespace that is imported into the current context
+  
+  QList< Declaration* > basicDecls = ctx->findDeclarations(id);
+  
+  while(!id.isEmpty())
+  {
+    QualifiedIdentifier newId = id.mid(1);
+    QList< Declaration* > foundDecls = ctx->findDeclarations(newId);
+    
+    if(foundDecls == basicDecls)
+      id = newId;
+    else
+      break;
+  }
+
+  if(id.count() == 1)
+  {
+    //Check whether it is a namespace that is imported. If yes, return an empty qualified identifier
+    
+  }
+  
+  return id;
+}
+
 }
 

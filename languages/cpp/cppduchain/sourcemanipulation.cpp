@@ -134,7 +134,7 @@ void KDevelop::SourceCodeInsertion::setSubScope(KDevelop::QualifiedIdentifier sc
     }
   
     m_context = context;
-    m_scope = QualifiedIdentifier(needNamespace.join("::"));
+    m_scope  = Cpp::stripPrefixes(context, QualifiedIdentifier(needNamespace.join("::")));
 }
 
 QString KDevelop::SourceCodeInsertion::applySubScope(QString decl) const {

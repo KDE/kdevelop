@@ -153,7 +153,9 @@ KDevelop::AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, KDevelop
 KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* getTemplateContext(KDevelop::Declaration* decl, const KDevelop::TopDUContext* source = 0);
 ///Returns the template context import by this context, if any
 KDEVCPPDUCHAIN_EXPORT KDevelop::DUContext* getTemplateContext(KDevelop::DUContext* ctx, const KDevelop::TopDUContext* source = 0);
-
+///Removes all prefixes of the qualified identifier that are not required within the current context
+///(The returned identifier may be empty if the id identifies a namespace that is imported into the current context)
+KDEVCPPDUCHAIN_EXPORT KDevelop::QualifiedIdentifier stripPrefixes(KDevelop::DUContext* ctx, KDevelop::QualifiedIdentifier id);
 }
 
 #endif
