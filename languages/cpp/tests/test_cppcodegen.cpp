@@ -318,8 +318,8 @@ void TestCppCodegen::resetArtificialCode(void)
 void TestCppCodegen::parseFile(IndexedString file)
 {
     Core::self()->languageController()->backgroundParser()->addDocument(file.toUrl(), TopDUContext::AllDeclarationsContextsUsesAndAST);
-    ///TODO maybe only needs to be done once
-    Q_ASSERT(m_contexts[file] = DUChain::self()->waitForUpdate(file, TopDUContext::AllDeclarationsContextsUsesAndAST));
+    m_contexts[file] = DUChain::self()->waitForUpdate(file, TopDUContext::AllDeclarationsContextsUsesAndAST);
+    Q_ASSERT(m_contexts[file]);
 }
 
 #include "test_cppcodegen.moc"
