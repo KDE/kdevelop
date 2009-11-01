@@ -21,20 +21,21 @@
 #ifndef PROJECTBUILDSETMODEL_H
 #define PROJECTBUILDSETMODEL_H
 
+#include "projectexport.h"
+
 #include <QAbstractTableModel>
 #include <QSet>
 #include <QStringList>
+
+class KConfigGroup;
 
 namespace KDevelop
 {
 class ProjectBaseItem;
 class ICore;
 class IProject;
-}
 
-class KConfigGroup;
-
-class BuildItem
+class KDEVPLATFORMPROJECT_EXPORT BuildItem
 {
 public:
     BuildItem();
@@ -53,7 +54,7 @@ private:
 
 bool operator==( const BuildItem& rhs, const BuildItem& lhs );
 
-class ProjectBuildSetModel : public QAbstractTableModel
+class KDEVPLATFORMPROJECT_EXPORT ProjectBuildSetModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
@@ -77,6 +78,8 @@ public slots:
 private:
     QList<BuildItem> m_items;
 };
+
+}
 
 #endif
 

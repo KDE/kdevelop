@@ -34,6 +34,7 @@
 #include <KTemporaryFile>
 
 #include <project/projectmodel.h>
+#include <project/projectbuildsetmodel.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectfilemanager.h>
@@ -48,7 +49,6 @@
 #include <interfaces/iselectioncontroller.h>
 
 #include "projectmanagerview.h"
-#include "projectbuildsetmodel.h"
 #include "builditembuilderjob.h"
 
 using namespace KDevelop;
@@ -96,27 +96,17 @@ public:
     KAction* m_clean;
     KAction* m_configure;
     KAction* m_prune;
-    ProjectBuildSetModel* buildSet;
 };
 
 ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
         : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate),
         projectsBeingOpened( 0 )
 {
-    d->buildSet = new ProjectBuildSetModel( this );
-
     connect( core()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ),
              SLOT( projectToBeOpened() ) );
     connect( core()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ),
              SLOT( projectOpened() ) );
-    connect( core()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ),
-             d->buildSet, SLOT( loadFromProject( KDevelop::IProject* ) ) );
-
-    connect( core()->projectController(), SIGNAL( projectClosing( KDevelop::IProject* ) ),
-             d->buildSet, SLOT( saveToProject( KDevelop::IProject* ) ) );
-    connect( core()->projectController(), SIGNAL( projectClosed( KDevelop::IProject* ) ),
-             d->buildSet, SLOT( projectClosed( KDevelop::IProject* ) ) );
-
+    
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     d->m_buildAll->setIcon(KIcon("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
@@ -152,11 +142,11 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     core()->uiController()->addToolView( i18n("Projects"), d->factory );
     connect( core()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionState(KDevelop::Context*)));
-    connect( d->buildSet, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
              SLOT(updateFromBuildSetChange()));
-    connect( d->buildSet, SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
              SLOT(updateFromBuildSetChange()));
-    connect( d->buildSet, SIGNAL(modelReset()),
+    connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(modelReset()),
              SLOT(updateFromBuildSetChange()));
 }
 
@@ -182,7 +172,7 @@ void ProjectManagerViewPlugin::updateFromBuildSetChange()
 
 void ProjectManagerViewPlugin::updateActionState( KDevelop::Context* ctx )
 {
-    bool isEmpty = d->buildSet->items().isEmpty();
+    bool isEmpty = ICore::self()->projectController()->buildSetModel()->items().isEmpty();
     if( isEmpty ) 
     {
         isEmpty = !ctx || ctx->type() != Context::ProjectItemContext || dynamic_cast<ProjectItemContext*>( ctx )->items().isEmpty();
@@ -395,9 +385,9 @@ void ProjectManagerViewPlugin::buildAllProjects()
 void ProjectManagerViewPlugin::runBuilderJob( KDevelop::BuilderJob::BuildType t )
 {
     QList<ProjectBaseItem*> items;
-    if( !d->buildSet->items().isEmpty() )
+    if( !ICore::self()->projectController()->buildSetModel()->items().isEmpty() )
     {
-        ICore::self()->runController()->registerJob( new BuildItemBuilderJob( t, d->buildSet->items() ) );
+        ICore::self()->runController()->registerJob( new BuildItemBuilderJob( t, ICore::self()->projectController()->buildSetModel()->items() ) );
     } else
     {
         KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
@@ -430,16 +420,11 @@ void ProjectManagerViewPlugin::buildProjectItems()
     runBuilderJob( KDevelop::BuilderJob::Build );
 }
 
-ProjectBuildSetModel* ProjectManagerViewPlugin::buildSet()
-{
-    return d->buildSet;
-}
-
 void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        buildSet()->addProjectItem( item );
+        ICore::self()->projectController()->buildSetModel()->addProjectItem( item );
     }
 }
 

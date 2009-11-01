@@ -22,12 +22,11 @@
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
+#include <project/projectbuildsetmodel.h>
 
-#include "projectbuildsetmodel.h"
-
-BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, const QList<BuildItem>& items )
+BuildItemBuilderJob::BuildItemBuilderJob( KDevelop::BuilderJob::BuildType t, const QList<KDevelop::BuildItem>& items )
 {
-    foreach( const BuildItem &item, items )
+    foreach( const KDevelop::BuildItem &item, items )
     {
         KDevelop::ProjectBaseItem *it=item.findItem();
         //FIXME: should have disabled the building before

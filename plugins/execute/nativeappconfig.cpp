@@ -42,7 +42,7 @@
 #include "executeplugin.h"
 #include <util/kdevstringhandler.h>
 #include <util/environmentgrouplist.h>
-#include <util/projectitemlineedit.h>
+#include <project/projectitemlineedit.h>
 
 KIcon NativeAppConfigPage::icon() const
 {

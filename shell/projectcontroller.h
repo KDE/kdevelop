@@ -65,6 +65,7 @@ public:
     virtual int projectCount() const;
     virtual QList<IProject*> projects() const;
 
+    virtual ProjectBuildSetModel* buildSetModel();
     virtual ProjectModel* projectModel();
     virtual QItemSelectionModel* projectSelectionModel();
     virtual IProject* findProjectByName( const QString& name );

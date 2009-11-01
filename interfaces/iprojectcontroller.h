@@ -32,6 +32,7 @@ namespace KDevelop
 {
 
 class IProject;
+class ProjectBuildSetModel;
 class ProjectModel;
 class ProjectBaseItem;
 
@@ -55,6 +56,8 @@ public:
      */
     Q_SCRIPTABLE virtual ProjectModel* projectModel() = 0;
 
+    Q_SCRIPTABLE virtual ProjectBuildSetModel* buildSetModel() = 0;
+    
     /**
      * Provides access to the selection model of the project view.
      * This way it is possible to fetch the list of selected items in

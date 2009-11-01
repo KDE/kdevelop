@@ -32,8 +32,11 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include <project/projectmodel.h>
+#include "projectmodel.h"
 #include <util/kdevstringhandler.h>
+
+namespace KDevelop
+{
 
 BuildItem::BuildItem()
 {
@@ -268,4 +271,6 @@ void ProjectBuildSetModel::moveRowsToTop(int row, int count)
         m_items.insert( 0+i, items.at( i ) ); 
     }
     endInsertRows();
+}
+
 }

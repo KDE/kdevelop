@@ -6,6 +6,7 @@ set(kdevplatformproject_LIB_SRCS
     projectconfigskeleton.cpp
     importprojectjob.cpp
     builderjob.cpp
+    projectbuildsetmodel.cpp
     projectitemlineedit.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
@@ -42,6 +43,7 @@ install(FILES
     projectkcmodule.h
     projectexport.h
     projectitemlineedit.h
+    projectbuildsetmodel.h
     builderjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

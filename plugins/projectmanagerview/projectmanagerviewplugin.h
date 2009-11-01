@@ -57,8 +57,6 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
-    ProjectBuildSetModel* buildSet();
-
     int numProjectsBeingOpened();
 public Q_SLOTS:
     void buildProjectItems();

@@ -29,15 +29,14 @@ namespace KDevelop
 {
 class ProjectBaseItem;
 class IProject;
-}
-
 class BuildItem;
+}
 
 class BuildItemBuilderJob : public KDevelop::BuilderJob
 {
     Q_OBJECT
 public:
-    BuildItemBuilderJob( KDevelop::BuilderJob::BuildType, const QList<BuildItem>& );
+    BuildItemBuilderJob( KDevelop::BuilderJob::BuildType, const QList<KDevelop::BuildItem>& );
     BuildItemBuilderJob( KDevelop::BuilderJob::BuildType, const QList<KDevelop::ProjectBaseItem*>& items );
     BuildItemBuilderJob( KDevelop::BuilderJob::BuildType, const QList<KDevelop::IProject*>& items );
 };

@@ -57,6 +57,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iselectioncontroller.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
+#include <project/projectbuildsetmodel.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -105,6 +106,7 @@ public:
     QList<KUrl> m_currentlyOpening; // project-file urls that are being opened
     IProject* m_configuringProject;
     ProjectController* q;
+    ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
 
     ProjectControllerPrivate( ProjectController* p )
@@ -324,6 +326,14 @@ ProjectController::ProjectController( Core* core )
     setObjectName("ProjectController");
     d->m_core = core;
     d->model = new ProjectModel();
+    d->buildset = new ProjectBuildSetModel( this );
+    connect( this, SIGNAL( projectOpened( KDevelop::IProject* ) ),
+             d->buildset, SLOT( loadFromProject( KDevelop::IProject* ) ) );
+    connect( this, SIGNAL( projectClosing( KDevelop::IProject* ) ),
+             d->buildset, SLOT( saveToProject( KDevelop::IProject* ) ) );
+    connect( this, SIGNAL( projectClosed( KDevelop::IProject* ) ),
+             d->buildset, SLOT( projectClosed( KDevelop::IProject* ) ) );
+
     d->selectionModel = new QItemSelectionModel(d->model);
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 
@@ -795,6 +805,12 @@ QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) co
     } else {
         return prefixText + url.fileName();
     }
+}
+
+
+ProjectBuildSetModel* ProjectController::buildSetModel()
+{
+    return d->buildset;
 }
 
 }
