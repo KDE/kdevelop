@@ -37,7 +37,9 @@ class MakeBuilderPreferences : public ProjectKCModule<MakeBuilderSettings>
 public:
     explicit MakeBuilderPreferences(QWidget* parent = 0, const QVariantList& args = QVariantList());
     ~MakeBuilderPreferences();
-
+    void load();
+    void save();
+    void defaults();
 
 private:
     Ui::MakeConfig* m_prefsUi;

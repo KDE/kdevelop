@@ -40,6 +40,8 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
     QWidget* w = new QWidget;
     m_prefsUi = new Ui::MakeConfig;
     m_prefsUi->setupUi( w );
+    connect( m_prefsUi->makeBinary, SIGNAL( textChanged( const QString& ) ), SLOT( changed() ) );
+    connect( m_prefsUi->makeBinary, SIGNAL( urlSelected( const KUrl& ) ), SLOT( changed() ) );
     l->addWidget( w );
 
     KDevelop::EnvironmentGroupList env( KGlobal::config() );
@@ -49,6 +51,45 @@ MakeBuilderPreferences::MakeBuilderPreferences(QWidget* parent, const QVariantLi
 
     load();
 
+}
+
+void MakeBuilderPreferences::load()
+{
+    KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
+    if( item )
+    {
+        bool tmp = m_prefsUi->makeBinary->blockSignals( true );
+        m_prefsUi->makeBinary->setText( item->property().toString() );
+        m_prefsUi->makeBinary->blockSignals( tmp );
+    }
+    ProjectKCModule<MakeBuilderSettings>::load();
+}
+
+void MakeBuilderPreferences::save()
+{
+    KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
+    if( item && !item->isEqual( QVariant( m_prefsUi->makeBinary->text() ) ) )
+    {
+        item->setProperty( m_prefsUi->makeBinary->text() );
+        MakeBuilderSettings::self()->writeConfig();
+    }
+    ProjectKCModule<MakeBuilderSettings>::save();
+}
+
+void MakeBuilderPreferences::defaults()
+{
+    kDebug() << "setting to defaults";
+    KConfigSkeletonItem* item = MakeBuilderSettings::self()->findItem("makeBinary");
+    if( item ) 
+    {
+        bool sig = m_prefsUi->makeBinary->blockSignals( true );
+        item->swapDefault();
+        m_prefsUi->makeBinary->setText( item->property().toString() );
+        item->swapDefault();
+        m_prefsUi->makeBinary->blockSignals( sig );
+        unmanagedWidgetChangeState(true);
+    }
+    ProjectKCModule<MakeBuilderSettings>::defaults();
 }
 
 MakeBuilderPreferences::~MakeBuilderPreferences()

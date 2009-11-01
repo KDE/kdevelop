@@ -113,7 +113,7 @@
     </widget>
    </item>
    <item row="6" column="1">
-    <widget class="KUrlRequester" name="kcfg_makeBinary">
+    <widget class="KUrlRequester" name="makeBinary">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
