@@ -6,6 +6,7 @@ set(kdevplatformproject_LIB_SRCS
     projectconfigskeleton.cpp
     importprojectjob.cpp
     builderjob.cpp
+    projectitemlineedit.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
@@ -15,7 +16,8 @@ set(kdevplatformproject_LIB_SRCS
 kde4_add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
 target_link_libraries(kdevplatformproject 
         ${QT_QTDESIGNER_LIBRARY} 
-        kdevplatforminterfaces 
+        kdevplatforminterfaces
+        kdevplatformutil
         ${KDE4_KIO_LIBS})
 target_link_libraries(kdevplatformproject LINK_INTERFACE_LIBRARIES 
         ${QT_QTGUI_LIBRARY} 
@@ -39,6 +41,7 @@ install(FILES
     projectmodel.h
     projectkcmodule.h
     projectexport.h
+    projectitemlineedit.h
     builderjob.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

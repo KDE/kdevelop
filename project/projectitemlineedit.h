@@ -21,7 +21,7 @@
 #define KDEVPROJECTITEMLINEEDIT_H
 
 #include <KLineEdit>
-#include "utilexport.h"
+#include "projectexport.h"
 
 namespace KDevelop { 
 class ProjectModel; 
@@ -31,7 +31,7 @@ class ProjectBaseItem;
 class ProjectItemValidator;
 class ProjectItemCompleter;
 
-class KDEVPLATFORMUTIL_EXPORT ProjectItemLineEdit : public KLineEdit
+class KDEVPLATFORMPROJECT_EXPORT ProjectItemLineEdit : public KLineEdit
 {
     Q_OBJECT
 public:
