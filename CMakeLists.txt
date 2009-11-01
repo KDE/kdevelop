@@ -1,3 +1,6 @@
+project(executescript)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${executescript_SOURCE_DIR}/cmake)
+
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform REQUIRED)
 
