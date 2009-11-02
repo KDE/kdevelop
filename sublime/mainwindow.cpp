@@ -56,9 +56,6 @@ QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
 }
 
 void MainWindow::setupAreaSelector() {
-    
-    DisableUpdates disableUpdates(this);
-    
     disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
     
     d->areaSwitcher->tabBar->clearTabs();
@@ -98,8 +95,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::setArea(Area *area)
 {
-    DisableUpdates disableUpdates(this);
-    
     if (d->area)
         disconnect(d->area, 0, this, 0);
     
@@ -158,8 +153,6 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::clearArea()
 {
-    DisableUpdates disableUpdates(this);
-    
     emit areaCleared(d->area);
     d->clearArea();
 }
@@ -191,8 +184,6 @@ View *MainWindow::activeToolView()
 
 void MainWindow::activateView(View *view)
 {
-    DisableUpdates disableUpdates(this);
-    
     if (!d->viewContainers.contains(view))
         return;
     
@@ -204,8 +195,6 @@ void MainWindow::activateView(View *view)
 
 void MainWindow::setActiveView(View *view)
 {
-    DisableUpdates disableUpdates(this);
-    
     View* oldActiveView = d->activeView;
     
     d->activeView = view;
@@ -219,8 +208,6 @@ void MainWindow::setActiveView(View *view)
 
 void Sublime::MainWindow::setActiveToolView(View *view)
 {
-    DisableUpdates disableUpdates(this);
-    
     d->activeToolView = view;
     emit activeToolViewChanged(view);
 }
@@ -340,8 +327,6 @@ void MainWindow::saveGeometry(KConfigGroup &config)
 }
 void MainWindow::loadGeometry(const KConfigGroup &config)
 {
-    DisableUpdates disableUpdates(this);
-    
     // The below code, essentially, is copy-paste from
     // KMainWindow::restoreWindowSize.  Right now, that code is buggy,
     // as per http://permalink.gmane.org/gmane.comp.kde.devel.core/52423

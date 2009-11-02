@@ -364,8 +364,6 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     if(m_leftTabbarCornerWidget)
         m_leftTabbarCornerWidget->setParent(0);
     
@@ -392,15 +390,11 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
 
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     idealMainWidget->raiseView(view);
 }
 
 void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     if (!m_indexSplitters.contains(index))
         return;
 
@@ -520,16 +514,12 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
 void MainWindowPrivate::toolViewAdded(Sublime::View* /*toolView*/, Sublime::Position position)
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, position);
 }
 
 void MainWindowPrivate::aboutToRemoveToolView(Sublime::View *toolView, Sublime::Position /*position*/)
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     if (!docks.contains(toolView))
         return;
 
@@ -561,8 +551,6 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
 
 void MainWindowPrivate::switchToArea(QAction *action)
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     kDebug() << "for" << action;
     controller->showArea(m_actionAreas[action], m_mainWindow);
 }
@@ -575,8 +563,6 @@ void MainWindowPrivate::updateAreaSwitcher(Sublime::Area *area)
 
 void MainWindowPrivate::activateFirstVisibleView()
 {
-    DisableUpdates disableUpdates(m_mainWindow);
-    
     if (area->views().count() > 0)
         m_mainWindow->activateView(area->views().first());
 }
