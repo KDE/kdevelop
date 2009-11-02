@@ -509,6 +509,20 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock"));
     }
 
+    if ( QMainWindow* toolView = qobject_cast<QMainWindow*>(widget()) ) {
+        menu.addSeparator();
+        QToolBar* bar = 0;
+        foreach( QObject* child, toolView->children() ) {
+            if ( bar = qobject_cast<QToolBar*>(child) ) {
+                break;
+            }
+        }
+        Q_ASSERT(bar);
+        menu.addActions(bar->actions());
+        menu.addSeparator();
+        menu.addAction(bar->toggleViewAction());
+    }
+
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 
     if (triggered)
@@ -528,8 +542,10 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             pos = Sublime::Bottom;
         else if (triggered == right)
             pos = Sublime::Right;
-        else
+        else if (triggered == top)
             pos = Sublime::Top;
+        else
+            return;
 
         Area *area = m_area;
         View *view = m_view;
