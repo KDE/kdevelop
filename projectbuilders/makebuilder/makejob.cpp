@@ -173,7 +173,7 @@ QStringList MakeJob::computeBuildCommand() const
     KSharedConfig::Ptr configPtr = m_item->project()->projectConfiguration();
     KConfigGroup builderGroup( configPtr, "MakeBuilder" );
 
-    QString makeBin = KUrl(builderGroup.readEntry("Make Binary", "make")).toLocalFile();
+    QString makeBin = builderGroup.readEntry("Make Binary", "make");
     cmdline << makeBin;
 
     if( ! builderGroup.readEntry("Abort on First Error", true) )
