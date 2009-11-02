@@ -77,7 +77,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     m_fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_fullUpdateAction->setText(i18n("Force Full Update"));
     m_fullUpdateAction->setToolTip(i18n("Re-parse the current file and all its imports."));
-    m_fullUpdateAction->setIcon(KIcon("dirsync"));
+    m_fullUpdateAction->setIcon(KIcon("view-refresh"));
     connect(m_fullUpdateAction, SIGNAL(triggered(bool)), this, SLOT(forceFullUpdate()));
     addAction(m_fullUpdateAction);
     //new ModelTest(model());
