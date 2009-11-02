@@ -45,7 +45,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence, p
 {
     Q_OBJECT
 public:
-    ParseJob( const KUrl &url, QObject *parent );
+    ParseJob( const KUrl &url );
     virtual ~ParseJob();
 
     Q_SCRIPTABLE BackgroundParser* backgroundParser() const;

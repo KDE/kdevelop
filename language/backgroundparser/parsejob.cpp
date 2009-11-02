@@ -98,9 +98,8 @@ public:
     QList<QPointer<QObject> > notify;
 };
 
-ParseJob::ParseJob( const KUrl &url,
-                            QObject *parent )
-        : ThreadWeaver::JobSequence( parent ),
+ParseJob::ParseJob( const KUrl &url )
+        : ThreadWeaver::JobSequence(),
         d(new ParseJobPrivate(url))
 {}
 
