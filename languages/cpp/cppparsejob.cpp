@@ -136,7 +136,7 @@ void CPPParseJob::setNeedUpdateEverything(bool need) {
 
 CPPParseJob::CPPParseJob( const KUrl &url,
                     PreprocessJob* parentPreprocessor )
-        : KDevelop::ParseJob( url, 0 ),
+        : KDevelop::ParseJob( url ),
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
