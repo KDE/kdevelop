@@ -155,7 +155,7 @@ QString makeSignatureString(Signature signature, DUContext* visibilityFrom) {
     if(!item.second.isEmpty())
       ret += " " + item.second;
     
-    if (!signature.defaultParams[pos].isEmpty())
+    if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty())
       ret += " = " + signature.defaultParams[pos];
     
     ++pos;
