@@ -1,6 +1,7 @@
 /*
 * This file is part of KDevelop
 *
+* Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 * Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
 *
 * This program is free software; you can redistribute it and/or modify
