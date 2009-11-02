@@ -1254,47 +1254,53 @@ int CMakeProjectVisitor::visit(const ExecProgramAst *exec)
 int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
 {
     kDebug(9042) << "executing... " << exec->commands();
-    QList<KProcess*> procs;
-    foreach(const QStringList& _args, exec->commands())
+    if( !exec->commands().isEmpty() )
     {
-        QStringList args(_args);
-        KProcess *p=new KProcess(), *prev=0;
-        if(!procs.isEmpty())
+        QList<KProcess*> procs;
+        foreach(const QStringList& _args, exec->commands())
         {
-            prev=procs.last();
+            QStringList args(_args);
+            KProcess *p=new KProcess(), *prev=0;
+            if(!procs.isEmpty())
+            {
+                prev=procs.last();
+            }
+            p->setWorkingDirectory(exec->workingDirectory());
+            p->setOutputChannelMode(KProcess::MergedChannels);
+            QString execName=args.takeFirst();
+            p->setProgram(execName, args);
+            p->start();
+            procs.append(p);
+            kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
+    
+            if(prev)
+            {
+                prev->setStandardOutputProcess(p);
+            }
         }
-        p->setWorkingDirectory(exec->workingDirectory());
-        p->setOutputChannelMode(KProcess::MergedChannels);
-        QString execName=args.takeFirst();
-        p->setProgram(execName, args);
-        p->start();
-        procs.append(p);
-        kDebug(9042) << "Executing:" << execName << "::" << args /*<< "into" << *m_vars*/;
-
-        if(prev)
+    
+        foreach(KProcess* p, procs)
         {
-            prev->setStandardOutputProcess(p);
+            if(!p->waitForFinished())
+            {
+                kDebug(9042) << "error: failed to execute:" << p;
+            }
         }
-    }
-
-    foreach(KProcess* p, procs)
-    {
-        if(!p->waitForFinished())
+    
+        if(!exec->outputVariable().isEmpty())
         {
-            kDebug(9042) << "error: failed to execute:" << p;
+            QByteArray b = procs.last()->readAllStandardOutput();
+            QString t;
+            t.prepend(b.trimmed());
+            m_vars->insert(exec->outputVariable(), QStringList(t.trimmed().replace("\\", "\\\\")));
+            kDebug(9042) << "executed " << exec->outputVariable() << "=" << t;
         }
+        qDeleteAll(procs);
+        return 1;
+    } else {
+        kWarning() << "Invalid execute_process found, no COMMAND property set";
+        return 0;
     }
-
-    if(!exec->outputVariable().isEmpty())
-    {
-        QByteArray b = procs.last()->readAllStandardOutput();
-        QString t;
-        t.prepend(b.trimmed());
-        m_vars->insert(exec->outputVariable(), QStringList(t.trimmed().replace("\\", "\\\\")));
-        kDebug(9042) << "executed " << exec->outputVariable() << "=" << t;
-    }
-    qDeleteAll(procs);
-    return 1;
 }
 
 
