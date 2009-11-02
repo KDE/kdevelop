@@ -79,7 +79,7 @@ void ParseSession::mapAstDuChain (AST * node , KDevelop::DeclarationPointer decl
 void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
 {
   //Duplicates shouldn't exist(? Same for uses?)
-  if(m_AstToUse.find(node) == m_AstToUse.end() || m_AstToUse[node] != use)
+  if(m_AstToUse.contains(node) && m_AstToUse[node] != use)
     kWarning() << "Found dupplicate use mapping for node" << node;
 
   m_AstToUse[node] = use;
