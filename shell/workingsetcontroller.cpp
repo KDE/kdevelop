@@ -233,8 +233,10 @@ struct DisconnectMainWindowsFromArea
                     foreach(Sublime::Area* tempArea, Core::self()->uiControllerInternal()->areas(window)) {
                         if(tempArea != area) {
                             ///@todo This is insanely ugly..
-                            if(window->updatesEnabled())
+                            if(window->updatesEnabled()) {
                                 wasUpdatesEnabled.insert(window);
+                                window->setUpdatesEnabled(false);
+                            }
                             kDebug() << "changing temporarily to area" << tempArea->objectName();
                             Core::self()->uiControllerInternal()->showArea(tempArea->objectName(), window); //Show another area temporarily
                             hadTempArea = true;
