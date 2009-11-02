@@ -46,6 +46,22 @@ class QComboBox;
 
 namespace Sublime {
 
+///Little helper class that safely disables updating of a widget. Might be used somewhere else.
+struct DisableUpdates {
+    DisableUpdates(QWidget* widget) : m_widget(widget), m_wasEnabled(widget->updatesEnabled()) {
+        if(m_wasEnabled)
+            m_widget->setUpdatesEnabled(false);
+    }
+    
+    ~DisableUpdates() {
+        if(m_wasEnabled)
+            m_widget->setUpdatesEnabled(true);
+    }
+    
+    QWidget* m_widget;
+    bool m_wasEnabled;
+};
+
 class View;
 class Container;
 class Controller;
