@@ -22,14 +22,9 @@
 
 #include "problemwidget.h"
 
-#include <QHeaderView>
 #include <QMenu>
 #include <QCursor>
 #include <QContextMenuEvent>
-#include <QFrame>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QToolButton>
 
 #include <klocale.h>
 #include <kicon.h>
