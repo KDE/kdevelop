@@ -391,6 +391,11 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     skipFunctionArguments( expressionPrefix, otherArguments, parentContextEnd );
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
+    
+    #if 0
+    if(parentContextText == expressionPrefix && depth) //Do not use the same text for the parent as for this context
+      parentContextText = parentContextText.left(parentContextText.length()-1);
+    #endif
 
     log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
     m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), m_position, depth+1, otherArguments );
@@ -1645,6 +1650,9 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     return false;
   
   static IndexedIdentifier friendIdentifier(Identifier("friend"));
+  
+  if(decl->indexedIdentifier().isEmpty()) //Filter out nameless declarations
+    return false;
   
   if(decl->indexedIdentifier() == friendIdentifier)
     return false;
