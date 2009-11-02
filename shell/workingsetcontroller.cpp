@@ -233,7 +233,8 @@ struct DisconnectMainWindowsFromArea
                     foreach(Sublime::Area* tempArea, Core::self()->uiControllerInternal()->areas(window)) {
                         if(tempArea != area) {
                             ///@todo This is insanely ugly..
-                            window->setUpdatesEnabled(false);
+                            if(window->updatesEnabled())
+                                wasUpdatesEnabled.insert(window);
                             kDebug() << "changing temporarily to area" << tempArea->objectName();
                             Core::self()->uiControllerInternal()->showArea(tempArea->objectName(), window); //Show another area temporarily
                             hadTempArea = true;
@@ -253,7 +254,8 @@ struct DisconnectMainWindowsFromArea
                 Core::self()->uiControllerInternal()->showArea(m_area, window);
                 if(oldActiveView)
                     window->activateView(oldActiveView);
-                window->setUpdatesEnabled(true);
+                if(wasUpdatesEnabled.contains(window))
+                    window->setUpdatesEnabled(true);
             }
         }
     }
@@ -261,6 +263,7 @@ struct DisconnectMainWindowsFromArea
     Sublime::Area* m_area;
     QList<Sublime::MainWindow*> mainWindows;
     QPointer<Sublime::View> oldActiveView;
+    QSet<Sublime::MainWindow*> wasUpdatesEnabled;
 };
 
 void loadFileList(QStringList& ret, KConfigGroup group)
