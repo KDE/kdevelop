@@ -119,6 +119,9 @@ public:
     /** @return run controller */
     RunController *runControllerInternal();
 
+    /** @return documentation controller */
+    DocumentationController *documentationControllerInternal();
+
     /** @return debug controller */
     DebugController *debugControllerInternal();
 

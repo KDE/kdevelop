@@ -27,8 +27,11 @@ class QAction;
 
 namespace KDevelop
 {
+
 class IDocumentationProvider;
 class Core;
+class Context;
+class ContextMenuExtension;
 
 class DocumentationController : public QObject, public KDevelop::IDocumentationController
 {

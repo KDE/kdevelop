@@ -23,8 +23,6 @@
 
 namespace KDevelop {
 class IDocumentationProvider;
-class Context;
-class ContextMenuExtension;
 class Declaration;
 
 /**

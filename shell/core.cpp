@@ -374,6 +374,11 @@ IDocumentationController* Core::documentationController()
     return d->documentationController;
 }
 
+DocumentationController* Core::documentationControllerInternal()
+{
+    return d->documentationController;
+}
+
 IDebugController* Core::debugController()
 {
     return d->debugController;
@@ -383,7 +388,6 @@ DebugController* Core::debugControllerInternal()
 {
     return d->debugController;
 }
-
 
 WorkingSetController* Core::workingSetControllerInternal()
 {
