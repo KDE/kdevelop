@@ -48,7 +48,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         virtual KUrl baseDir() const = 0;
 
         ///Can return a custom widget that should be shown to the user with this patch
-        ///The caller owns the widget
+        ///The ownership of the widget is shared between the caller and the patch-source (both may delete it at will)
         ///The default implementation returns zero
         virtual QWidget* customWidget() const;
         
