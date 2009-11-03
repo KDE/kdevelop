@@ -30,8 +30,6 @@ namespace KDevelop {
 class VariableCollection;
 class BreakpointModel;
 class FrameStackModel;
-class ContextMenuExtension;
-class Context;
 class IDebugSession;
 
 /** Top level debugger object. Exists as long as KDevelop exists
@@ -51,7 +49,6 @@ public:
     /** Return the current debug session. At present, only
         one session may be active at a time.  */
     virtual IDebugSession *currentSession() = 0;
-    virtual ContextMenuExtension contextMenuExtension( Context* context ) = 0;
 
     virtual BreakpointModel *breakpointModel() = 0;
     virtual VariableCollection *variableCollection() = 0;

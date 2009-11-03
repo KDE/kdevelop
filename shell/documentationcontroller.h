@@ -41,7 +41,7 @@ class DocumentationController : public QObject, public KDevelop::IDocumentationC
         virtual QList<IDocumentationProvider*> documentationProviders() const;
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration(KDevelop::Declaration* declaration);
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
-        virtual ContextMenuExtension contextMenuExtension( Context* context );
+        ContextMenuExtension contextMenuExtension( Context* context );
         
     private slots:
         void doShowDocumentation();

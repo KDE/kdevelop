@@ -57,6 +57,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include "shellextension.h"
 #include "runcontroller.h"
+#include "debugcontroller.h"
 
 namespace KDevelop
 {
@@ -590,7 +591,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
         IPlugin* plug = d->loadedPlugins[info];
         exts << plug->contextMenuExtension( context );
     }
-    exts << ICore::self()->debugController()->contextMenuExtension( context );
+    exts << Core::self()->debugControllerInternal()->contextMenuExtension( context );
     exts << ICore::self()->documentationController()->contextMenuExtension( context );
     exts << Core::self()->runControllerInternal()->contextMenuExtension( context );
     return exts;

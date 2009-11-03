@@ -38,6 +38,9 @@ namespace KParts {
 }
 namespace KDevelop {
 
+class Context;
+class ContextMenuExtension;
+
 class DebugController : public IDebugController, public KXMLGUIClient
 {
     Q_OBJECT
@@ -50,7 +53,7 @@ public:
     virtual void addSession(IDebugSession* session);
     virtual IDebugSession* currentSession();
 
-    virtual ContextMenuExtension contextMenuExtension( Context* context );
+    ContextMenuExtension contextMenuExtension( Context* context );
 
     virtual BreakpointModel* breakpointModel();
     virtual VariableCollection* variableCollection();
