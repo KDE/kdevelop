@@ -36,6 +36,7 @@
 class ProvidersModel : public QAbstractListModel
 {
     public:
+        
         ProvidersModel(QObject* parent = 0)
             : QAbstractListModel(parent)
             , mProviders(KDevelop::ICore::self()->documentationController()->documentationProviders())
@@ -59,6 +60,10 @@ class ProvidersModel : public QAbstractListModel
         virtual int rowCount(const QModelIndex&) const
         {
             return mProviders.count();
+        }
+        
+        QList<KDevelop::IDocumentationProvider*> providers() {
+            return mProviders;
         }
         
         KDevelop::IDocumentationProvider* provider(int pos) const
@@ -88,6 +93,11 @@ DocumentationView::DocumentationView(QWidget* parent)
     mProviders->setFocusPolicy(Qt::NoFocus);
     mProvidersModel=new ProvidersModel(mProviders);
     mProviders->setModel(mProvidersModel);
+    foreach(KDevelop::IDocumentationProvider* p, mProvidersModel->providers()) {
+        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KSharedPtr<KDevelop::IDocumentation>)),
+                SLOT(addHistory(KSharedPtr<KDevelop::IDocumentation>)));
+    }
+    
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     mIdentifiers=new KLineEdit(mActions);
     mIdentifiers->setClearButtonShown(true);
@@ -152,11 +162,16 @@ void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation >
 {
     kDebug(9529) << "showing" << doc->name();
     
+    addHistory(doc);
+    updateView();
+}
+
+void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
+{
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);
     mHistory.append(doc);
     mCurrent=mHistory.end()-1;
-    updateView();
 }
 
 void DocumentationView::updateView()

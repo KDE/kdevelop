@@ -37,6 +37,8 @@ class DocumentationView : public QWidget
         void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
         
     public slots:
+        void addHistory(KSharedPtr< KDevelop::IDocumentation > doc);
+        
         void browseForward();
         void browseBack();
         void changedSelection();

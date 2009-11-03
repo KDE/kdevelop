@@ -52,6 +52,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         
         /** @returns a name to identify the provider to the user. */
         virtual QString name() const=0;
+        
+    Q_SIGNALS:
+        virtual void addHistory(const KSharedPtr<IDocumentation>& doc)=0;
 };
 
 }
