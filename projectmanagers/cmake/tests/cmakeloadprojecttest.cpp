@@ -69,9 +69,9 @@ void CMakeLoadProjectTest::testSmallKDE4Project()
     QCOMPARE(v.targets().at( 0 ).name, QString("kde4app") );
     QCOMPARE(v.targets().at( 0 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
                                                       << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_kde4appview_base.h" 
-                                                      << CMAKE_TESTS_PROJECTS_DIR "/manual/kde4app/ui_prefs_base.h" 
-                                                      << CMAKE_TESTS_PROJECTS_DIR "/manual/kde4app/settings.cpp" 
-                                                      << CMAKE_TESTS_PROJECTS_DIR "/manual/kde4app/settings.h" );
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_prefs_base.h" 
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.cpp" 
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/settings.h" );
 }
 
 CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir )
