@@ -790,29 +790,24 @@ bool PatchHighlighter::isRemoval(Diff2::Difference* diff)
 }
 
 
-PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString ) : m_doc( kdoc ), m_plugin(plugin) {
-//  connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
-    connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
-    connect( model, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
-
-    KTextEditor::Document* doc = kdoc->textDocument();
-    if ( doc->lines() == 0 )
-        return ;
-
-    if ( !model->differences() )
+void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Range range)
+{
+    if(range == doc->documentRange())
+    {
+      kWarning() << "re-doing";
+      //The document was loaded / reloaded
+    if ( !m_model->differences() )
         return ;
     KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc );
     if ( !smart )
-        throw QString( "no smart-interface" );
+        return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
     if( !markIface )
-      throw QString( "no mark-interface" );
+      return;
     
-    ///This requires the KDE 4.4 development branch from 12.8.2009
-    connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)), this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
-    connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)), this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
-
+    clear();
+    
     QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
     QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
     
@@ -843,7 +838,9 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
 
     KTextEditor::SmartRange* topRange = smart->newSmartRange(doc->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
 
-    for ( Diff2::DifferenceList::const_iterator it = model->differences() ->begin(); it != model->differences() ->end(); ++it ) {
+    topRange->addWatcher(this);
+    
+    for ( Diff2::DifferenceList::const_iterator it = m_model->differences() ->begin(); it != m_model->differences() ->end(); ++it ) {
         Diff2::Difference* diff = *it;
         int line, lineCount;
         Diff2::DifferenceStringList lines ;
@@ -865,6 +862,7 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
         if ( endC.isValid() && c.isValid() ) {
             KTextEditor::SmartRange * r = smart->newSmartRange( c, endC );
             r->setParentRange(topRange);
+            r->addWatcher(this);
             
             m_differencesForRanges[r] = *it;
 
@@ -875,6 +873,24 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     m_ranges << topRange;
 
     smart->addHighlightToDocument(topRange);
+    }
+}
+
+PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString ) : m_doc( kdoc ), m_plugin(plugin), m_model(model) {
+//  connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+    connect( kdoc->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)) );
+    connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+    connect( model, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+
+    KTextEditor::Document* doc = kdoc->textDocument();
+    if ( doc->lines() == 0 )
+        return ;
+
+    ///This requires the KDE 4.4 development branch from 12.8.2009
+    connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)), this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
+    connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)), this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
+    
+    textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
 
 void PatchHighlighter::removeLineMarker(KTextEditor::SmartRange* range, Diff2::Difference* difference)
@@ -968,7 +984,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     }
 }
 
-PatchHighlighter::~PatchHighlighter()
+void PatchHighlighter::clear()
 {
     KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( m_doc->textDocument() );
     if ( !smart )
@@ -990,10 +1006,16 @@ PatchHighlighter::~PatchHighlighter()
     
     QMutexLocker lock(smart->smartMutex());
 
-    for ( QSet<KTextEditor::SmartRange*>::iterator it = m_ranges.begin(); it != m_ranges.end(); ++it )
-        delete *it;
+    while(!m_ranges.isEmpty())
+      delete *m_ranges.begin();
 
-    m_ranges.clear();
+    Q_ASSERT(m_ranges.isEmpty());
+    Q_ASSERT(m_differencesForRanges.isEmpty());
+}
+
+PatchHighlighter::~PatchHighlighter()
+{
+    clear();
 }
 
 IDocument* PatchHighlighter::doc() {
