@@ -53,7 +53,7 @@ void CMakeLoadProjectTest::testTinyCMakeProject()
 
 void CMakeLoadProjectTest::testSmallQt4Project()
 {
-    CMakeProjectVisitor v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/qt4app");
+    CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/qt4app");
     QCOMPARE(v.targets().count(), 1);
     QCOMPARE(v.projectName(), QString("qt4app"));
     QCOMPARE(v.targets().at( 0 ).name, QString("qt4app") );
@@ -63,15 +63,15 @@ void CMakeLoadProjectTest::testSmallQt4Project()
 
 void CMakeLoadProjectTest::testSmallKDE4Project()
 {
-    CMakeProjectVisitor v = parseProject( QString(CMAKE_TESTS_PROJECTS_DIR)+"/kde4app");
+    CMakeProjectVisitor v = parseProject(CMAKE_TESTS_PROJECTS_DIR "/kde4app");
     QCOMPARE(v.targets().count(), 2);
     QCOMPARE(v.projectName(), QString("kde4app"));
     QCOMPARE(v.targets().at( 0 ).name, QString("kde4app") );
     QCOMPARE(v.targets().at( 0 ).files, QStringList() << "kde4app.cpp" << "main.cpp" << "kde4appview.cpp" 
-                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/ui_kde4appview_base.h" 
-                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/ui_prefs_base.h" 
-                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/settings.cpp" 
-                                                      << "/home/andreas/src/kdevelop/projectmanagers/cmake/tests/manual/kde4app/settings.h" );
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/kde4app/ui_kde4appview_base.h" 
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/manual/kde4app/ui_prefs_base.h" 
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/manual/kde4app/settings.cpp" 
+                                                      << CMAKE_TESTS_PROJECTS_DIR "/manual/kde4app/settings.h" );
 }
 
 CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir )
