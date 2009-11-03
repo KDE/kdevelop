@@ -2,6 +2,7 @@ add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9045 )
 
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
+    qthelpdocumentation.cpp
 )
 
 kde4_add_plugin(kdevqthelp ${kdevqthelp_SRCS})

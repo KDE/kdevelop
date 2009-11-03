@@ -23,12 +23,13 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
 #include <QHelpEngine>
-#include <QAction>
 
 class QtHelpDocumentation;
 
 class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
+    Q_OBJECT
+    Q_INTERFACES( KDevelop::IDocumentationProvider )
 	public:
 		QtHelpPlugin(QObject *parent, const QVariantList & args);
 		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*);
@@ -40,22 +41,13 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         virtual QString name() const;
         
         QHelpEngine* engine() { return &m_engine; }
+    public slots:
+        void jumpedTo(const QUrl& newUrl);
+        
+    Q_SIGNALS:
+        void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc);
 	private:
 		QHelpEngine m_engine;
-};
-
-class QtHelpAlternativeLink : public QAction
-{
-    Q_OBJECT
-    public:
-        QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent);
-        
-    public slots:
-        void showUrl();
-        
-    private:
-        const QtHelpDocumentation* mDoc;
-        const QString mName;
 };
 
 #endif // QTHELPPLUGIN_H
