@@ -246,7 +246,7 @@
   <customwidget>
    <class>ProjectItemLineEdit</class>
    <extends>KLineEdit</extends>
-   <header>util/projectitemlineedit.h</header>
+   <header>project/projectitemlineedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

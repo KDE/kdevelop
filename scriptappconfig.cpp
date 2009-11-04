@@ -43,7 +43,7 @@
 #include "executescriptplugin.h"
 #include <util/kdevstringhandler.h>
 #include <util/environmentgrouplist.h>
-#include <util/projectitemlineedit.h>
+#include <project/projectitemlineedit.h>
 
 KIcon ScriptAppConfigPage::icon() const
 {
@@ -215,6 +215,19 @@ KIcon ScriptAppConfigType::icon() const
     return KIcon("system-run");
 }
 
+bool ScriptAppConfigType::canLaunch(const KUrl& file) const
+{
+    return false;
+}
 
+bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
+{
+    return false;
+}
+
+void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
+{
+
+}
 
 #include "scriptappconfig.moc"

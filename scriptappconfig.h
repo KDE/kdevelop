@@ -72,6 +72,10 @@ public:
     QString name() const;
     QList<KDevelop::LaunchConfigurationPageFactory*> configPages() const;  
     KIcon icon() const;
+    virtual bool canLaunch( const KUrl& file ) const;
+    virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
+    virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;
+
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 };
