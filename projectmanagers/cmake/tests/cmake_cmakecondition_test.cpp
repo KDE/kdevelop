@@ -68,6 +68,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::addColumn<QStringList>( "expression" );
     QTest::addColumn<bool>( "result" );
     
+    QTest::newRow( "one" ) << QString("1").split(" ") << true;
     QTest::newRow( "variable check" ) << QStringList("ONE") << true;
     QTest::newRow( "false variable check" ) << QStringList("ZERO") << false;
     QTest::newRow( "not" ) << QString("NOT;ZERO").split(";") << true;

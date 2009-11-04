@@ -74,6 +74,7 @@ QMap<QString, CMakeCondition::conditionToken> initNameToToken()
 
 QVector<int> CMakeCondition::m_priorities=initPriorities();
 QMap<QString, CMakeCondition::conditionToken> CMakeCondition::nameToToken=initNameToToken();
+QSet<QString> CMakeCondition::s_falseDefinitions=QSet<QString>() << "" << "0" << "N" << "NO" << "OFF" << "FALSE" << "NOTFOUND" ;
 
 CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v) : m_vars(v->variables()), m_visitor(v)
 {
@@ -90,18 +91,18 @@ CMakeCondition::conditionToken CMakeCondition::typeName(const QString& _name)
 bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 {
 //     qDebug() << "+++++++ isTrue: " << varName;
-    QString varName=*it;
-    m_varUses.append(it);
-    if(m_vars->contains(varName))
+    QString val = *it;
+    if(m_vars->contains(*it))
     {
+        QString varName=*it;
+        m_varUses.append(it);
         const QStringList valu=m_vars->value(varName);
 
 //         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
-        QString val = valu.join(";").toUpper();
-        return !val.isEmpty() && val!="0" && val!="N" && val!="NO" && val!="OFF" && val!="FALSE" && val!="NOTFOUND" && !val.endsWith("_NOTFOUND");
+        val = valu.join(";").toUpper();
     }
-    else
-        return false;
+    
+    return !s_falseDefinitions.contains(val) && !val.endsWith("_NOTFOUND");
 }
 
 QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const
