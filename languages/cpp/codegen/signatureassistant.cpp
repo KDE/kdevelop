@@ -259,12 +259,11 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
         Signature newSignature;
         AbstractFunctionDeclaration* contextFunction = dynamic_cast<AbstractFunctionDeclaration*>(decl);
         foreach(Declaration* parameter, context->localDeclarations()) {
-          kDebug() << "parameter:" << parameter->toString() << parameter->range().textRange();
+//           kDebug() << "parameter:" << parameter->toString() << parameter->range().textRange();
+          newSignature.defaultParams << contextFunction->defaultParameterForArgument(pos).str();
           newSignature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
           ++pos;
         }
-        
-        newSignature.defaultParams = m_oldSignature.defaultParams;
         
         KDevelop::IndexedType newReturnType;
         FunctionType::Ptr funType = decl->type<FunctionType>();
@@ -307,7 +306,16 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
             canHaveDefault = false; //This param didn't have a default, none that follow may either
           }
         }
-
+        
+        if(newSignature.parameters.size() != m_oldSignature.parameters.size())
+          changed = true;
+        
+        //We only need to fiddle around with default parameters if we're updating the declaration
+        if(!m_editingDefinition) {
+          for(QList<QString>::iterator it = newSignature.defaultParams.begin(); it != newSignature.defaultParams.end(); ++it)
+            *it = QString();
+        }
+          
         if(changed /*|| newSignature.returnType != m_oldSignature.returnType*/) {
           kDebug() << "signature changed";
           addAction(IAssistantAction::Ptr(new AdaptSignatureAction(m_definitionId, m_definitionContext, m_oldSignature, newSignature)));
