@@ -1046,7 +1046,7 @@ bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 break;
         }
     }
-    return true;
+    return !m_commands.isEmpty();
 }
 
 ExportLibraryDepsAst::ExportLibraryDepsAst()
@@ -1750,8 +1750,20 @@ void GetDirPropertyAst::writeBack( QString& ) const
 
 bool GetDirPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    Q_UNUSED(func);
-    return false;
+    if(func.name.toLower()!="get_directory_property" || (func.arguments.count()!=2 && func.arguments.count()!=4))
+        return false;
+    
+    addOutputArgument(func.arguments[0]);
+    m_outputVariable = func.arguments[0].value;
+    int next=1;
+    if(func.arguments.count()==4) {
+        if(func.arguments[1].value!="DIRECTORY")
+            return false;
+        m_directory=func.arguments[2].value;
+        next=3;
+    }
+    m_propName=func.arguments[next].value;
+    return true;
 }
 
 GetFilenameComponentAst::GetFilenameComponentAst()

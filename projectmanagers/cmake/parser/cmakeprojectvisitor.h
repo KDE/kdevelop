@@ -70,6 +70,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         virtual int visit( const MathAst * );
         virtual int visit( const MacroAst * );
         virtual int visit( const ListAst * );
+        virtual int visit( const GetDirPropertyAst * );
         virtual int visit( const GetFilenameComponentAst * );
         virtual int visit( const GetSourceFilePropAst * );
         virtual int visit( const GetTargetPropAst * );

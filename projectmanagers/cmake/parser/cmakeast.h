@@ -397,6 +397,9 @@ CMAKE_END_AST_CLASS( GetPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetDirPropertyAst )
+CMAKE_ADD_AST_MEMBER( QString, propName )
+CMAKE_ADD_AST_MEMBER( QString, outputVariable )
+CMAKE_ADD_AST_MEMBER( QString, directory )
 CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 
@@ -477,7 +480,6 @@ struct InstallFileForm {
     QStringList files;
     
 };
-//TODO
 
 CMAKE_ADD_AST_MEMBER( QList<InstallTargetForm>, targets )
 CMAKE_END_AST_CLASS( InstallAst )
