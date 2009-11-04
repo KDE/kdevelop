@@ -1296,11 +1296,10 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
             kDebug(9042) << "executed " << exec->outputVariable() << "=" << t;
         }
         qDeleteAll(procs);
-        return 1;
     } else {
         kWarning() << "Invalid execute_process found, no COMMAND property set";
-        return 0;
     }
+    return 1;
 }
 
 
