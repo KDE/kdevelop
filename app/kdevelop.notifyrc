@@ -204,6 +204,7 @@ Action=None
 [Event/LoadingProject]
 Name=Loading Project
 Name[ca]=S'està carregant el projecte
+Name[cs]=Načítám projekt
 Name[de]=Projekt wird geladen
 Name[en_GB]=Loading Project
 Name[es]=Cargando proyecto
@@ -250,6 +251,7 @@ Action=Popup
 [Event/ProjectLoadedSuccessfully]
 Name=Project Loaded Successfully
 Name[ca]=El projecte s'ha carregat amb èxit
+Name[cs]=Projekt úspěšně načten
 Name[de]=Projekt erfolgreich geladen
 Name[en_GB]=Project Loaded Successfully
 Name[es]=Proyecto cargado con éxito
@@ -272,6 +274,7 @@ Name[zh_CN]=工程成功装入
 Name[zh_TW]=專案已成功載入
 Comment=A project has been loaded successfully
 Comment[ca]=S'ha carregat amb èxit un projecte
+Comment[cs]=Projekt byl úspěšně načten
 Comment[de]=Ein Projekt wurde erfolgreich geladen
 Comment[en_GB]=A project has been loaded successfully
 Comment[es]=Un proyecto ha sido cargado con éxito
@@ -296,6 +299,7 @@ Action=Popup
 
 [Context/debugger]
 Name=Debugger
+Name[cs]=Debugger
 Name[de]=Debugger
 Name[en_GB]=Debugger
 Name[es]=Depurador
@@ -318,6 +322,7 @@ Contexts=debugger
 Action=Taskbar
 IconName=script-error
 Name=Breakpoint Hit
+Name[cs]=Dosažen Breakpoint
 Name[de]=Haltepunkt erreicht
 Name[en_GB]=Breakpoint Hit
 Name[es]=Punto de interrupción alcanzado

@@ -2,6 +2,7 @@
 [General]
 Name=Qt4 CMake Core application
 Name[ca]=Aplicació principal Qt4 CMake
+Name[cs]=Aplikace Qt4 CMake Core
 Name[de]=Qt-4/CMake-Anwendung
 Name[el]=Βασική εφαμοργή Qt4 CMake
 Name[en_GB]=Qt4 CMake Core application

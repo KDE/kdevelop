@@ -2,6 +2,7 @@
 [General]
 Name=Qt4 CMake Gui application
 Name[ca]=Aplicació IGU Qt4 CMake
+Name[cs]=Aplikace Qt4 CMake Gui
 Name[de]=Qt-4/CMake-GUI-Anwendung
 Name[en_GB]=Qt4 CMake Gui application
 Name[es]=Aplicación de interfaz gráfica CMake para Qt4

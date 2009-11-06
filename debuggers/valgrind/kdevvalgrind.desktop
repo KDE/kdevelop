@@ -31,6 +31,7 @@ Comment[zh_CN]=Valgrind 是一个帮助您发现程序中内存管理错误的�
 Comment[zh_TW]=Valgrind 能協助您找到程式中記憶體管理上的問題。http://www.valgrind.org/
 Name=Valgrind Support
 Name[ca]=Implementació de Valgrind
+Name[cs]=Podpora Valgrind
 Name[de]=Unterstützung für Valgrind
 Name[el]=Υποστήριξη Valgrind
 Name[en_GB]=Valgrind Support

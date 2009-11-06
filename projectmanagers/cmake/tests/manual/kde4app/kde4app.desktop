@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=kde4app
+Name[cs]=kde4app
 Name[en_GB]=kde4app
 Name[es]=kde4app
 Name[fi]=kde4app
@@ -18,6 +19,7 @@ Icon=kde4app
 Type=Application
 X-DocPath=kde4app/index.html
 GenericName=A KDE4 Application
+GenericName[cs]=Aplikace prostředí KDE4
 GenericName[en_GB]=A KDE4 Application
 GenericName[es]=Una aplicación para KDE4
 GenericName[fi]=KDE4-sovellus

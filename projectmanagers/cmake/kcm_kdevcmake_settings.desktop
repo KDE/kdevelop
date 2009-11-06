@@ -45,6 +45,7 @@ Name[zh_CN]=CMake
 Name[zh_TW]=CMake
 Comment=Configure CMake settings
 Comment[ca]=Configura els arranjaments de CMake
+Comment[cs]=Zvolit nastavení CMake
 Comment[de]=CMake-Einstellungen
 Comment[el]=Ρύθμιση επιλογών CMake
 Comment[en_GB]=Configure CMake settings
