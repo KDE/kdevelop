@@ -28,6 +28,8 @@
 #include <language/duchain/types/indexedtype.h>
 #include <QTimer>
 
+typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
+
 namespace KTextEditor {
 class Document;
 class Range;
@@ -54,6 +56,7 @@ class StaticCodeAssistant : public QObject {
     void documentActivated(KDevelop::IDocument*);
     void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
     void timeout();
+    void eventuallyStartAssistant(SafeDocumentPointer, KTextEditor::Range range);
   private:
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
     ///@param manage If this is true, the static code-assistant manages the hiding of the assistant
@@ -62,7 +65,6 @@ class StaticCodeAssistant : public QObject {
     QPointer<KTextEditor::View> m_currentView;
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;
-    void eventuallyStartAssistant(KTextEditor::Document*, KTextEditor::Range range);
     KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
     bool m_activeProblemAssistant;
     QTimer* m_timer;

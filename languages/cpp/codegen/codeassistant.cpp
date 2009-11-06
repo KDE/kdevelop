@@ -34,11 +34,16 @@
 
 using namespace KDevelop;
 
+Q_DECLARE_METATYPE(SafeDocumentPointer)
 Q_DECLARE_METATYPE(KTextEditor::Range)
 
 namespace Cpp {
 
 StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
+  
+  qRegisterMetaType<KTextEditor::Range>("KTextEditor::Range");
+  qRegisterMetaType<SafeDocumentPointer>("SafeDocumentPointer");  
+  
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true),
   m_timer->setInterval(400);
@@ -51,10 +56,12 @@ StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
 }
 
 void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
-  qRegisterMetaType<KTextEditor::Range>("KTextEditor::Range");
-  if(document->textDocument()) {
-    connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)), Qt::QueuedConnection);
-    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)), Qt::QueuedConnection);
+  
+  if(document->textDocument())
+  {
+    ///@todo Make these connections non-queued, and then reach forward using a QPointer, since else a crash may happen when the document is destroyed before the message is processed
+    connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
   }
 }
 
@@ -63,13 +70,21 @@ void StaticCodeAssistant::assistantHide() {
   m_activeProblemAssistant = false;
 }
 
-void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range) {
-  range = KTextEditor::Range(range.start(), range.start());
-  eventuallyStartAssistant(document, range);
+void StaticCodeAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {
+  
+  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range));
 }
 
-void StaticCodeAssistant::eventuallyStartAssistant(KTextEditor::Document* document, KTextEditor::Range range) {
+void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range) {
+  range = KTextEditor::Range(range.start(), range.start());
+  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range));
+}
 
+void StaticCodeAssistant::eventuallyStartAssistant(SafeDocumentPointer document, KTextEditor::Range range) {
+
+  if(!document)
+    return;
+  
   if(m_activeAssistant) {
     kDebug() << "there still is an active assistant";
 //     if(abs(m_activeAssistant->invocationCursor().line() < range.start().line()) >= 1) {
@@ -129,10 +144,6 @@ void StaticCodeAssistant::cursorPositionChanged(KTextEditor::View* , KTextEditor
       m_activeAssistant->doHide();
     
   m_timer->start();
-}
-
-void StaticCodeAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {
-  eventuallyStartAssistant(document, range);
 }
 
 void StaticCodeAssistant::documentActivated(KDevelop::IDocument* doc) {
