@@ -66,6 +66,7 @@ class QByteArrayPrinter:
 
     def display_hint (self):
         return 'string'
+
 class QListPrinter:
     "Print a QList"
 
@@ -162,6 +163,69 @@ class QMapPrinter:
         if self.val['d']['size'] == 0:
             return 'empty QMap'
         return 'QMap'
+
+    def display_hint (self):
+        return 'map'
+
+class QHashPrinter:
+    "Print a QHash"
+
+    class _iterator:
+        def __init__(self, val):
+            self.val = val
+            self.ktype = self.val.type.template_argument(0)
+            self.vtype = self.val.type.template_argument(1)
+            self.bucketNum = 0
+            self.data_node = self.val['d']['buckets'][0]
+            self.end_node = self.val['d'].cast(gdb.lookup_type('QHashData::Node').pointer())
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def hashNode (self):
+            "Casts the current QHashData::Node to a QHashNode and returns the result. See also QHash::concrete()"
+
+            node_type = gdb.lookup_type('QHashNode<%s, %s>' % (self.ktype, self.vtype)).pointer()
+            return self.data_node.cast(node_type)
+
+        def nextNode (self):
+            "Get the nextNode after the current, see also QHashData::nextNode()."
+
+            next = self.data_node['next']
+            if next['next']:
+                return next
+            else:
+                self.bucketNum = self.bucketNum + 1
+                return self.val['d']['buckets'][self.bucketNum]
+
+        def next(self):
+            "GDB iteration, first call returns key, second value and then jumps to the next hash node."
+
+            if self.data_node == self.end_node:
+                raise StopIteration
+
+            node = self.hashNode()
+
+            if self.count % 2 == 0:
+                item = node['key']
+            else:
+                item = node['value']
+                self.data_node = self.nextNode()
+
+            self.count = self.count + 1
+            return ('[%d]' % self.count, item)
+
+    def __init__(self, val):
+        self.val = val
+
+    def children(self):
+        return self._iterator(self.val)
+
+    def to_string(self):
+        if self.val['d']['size'] == 0:
+            return 'empty QHash'
+        return 'QHash'
 
     def display_hint (self):
         return 'map'
@@ -283,6 +347,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QString')
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
+    pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)
     pretty_printers_dict[re.compile('^QTime$')] = lambda val: QTimePrinter(val)
     pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
