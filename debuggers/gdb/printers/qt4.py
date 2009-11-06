@@ -100,8 +100,11 @@ class QListPrinter:
 
     def to_string(self):
         if self.val['d']['end'] == self.val['d']['begin']:
-            return 'empty QList'
-        return 'QList'
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQList<%s>" % ( empty , self.itype )
 
 class QMapPrinter:
     "Print a QMap"
@@ -161,8 +164,11 @@ class QMapPrinter:
 
     def to_string(self):
         if self.val['d']['size'] == 0:
-            return 'empty QMap'
-        return 'QMap'
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQMap<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
@@ -224,8 +230,11 @@ class QHashPrinter:
 
     def to_string(self):
         if self.val['d']['size'] == 0:
-            return 'empty QHash'
-        return 'QHash'
+            empty = "empty "
+        else:
+            empty = ""
+
+        return "%sQMap<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
