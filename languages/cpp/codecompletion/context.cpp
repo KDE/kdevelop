@@ -520,6 +520,8 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   ifDebug( kDebug(9007) << "expression: " << expr; )
 
   if( !expr.trimmed().isEmpty() && !m_expressionResult.isValid() ) {
+    LOCKDUCHAIN;
+
     if(!m_isDeclarationTypePrefix) {
       m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
     }else{
