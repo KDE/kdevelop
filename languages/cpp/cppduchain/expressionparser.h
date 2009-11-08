@@ -61,6 +61,9 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      *
      * This function should be perfect for places in C++ where either a type-id, or a static expression are allowed, like template-arguments.
      *
+     * The duchain does not strictly need to be locked when this is called, but it should be locked if the entity evaluating the expression has no control over
+     * the lifetime of @p context 
+     *
      * @param exp The expression to evaluate
      * @param context the context within which the expression should be evaluated
      * @param forceExpression do not consider the expression to be a type-id
@@ -72,11 +75,18 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
 
     /**
      * Same as evaluateType, except that it does not consider type-ids, only expressions.
+     *
+     * The duchain does not strictly need to be locked when this is called, but it should be locked if the entity evaluating the expression has no control over
+     * the lifetime of @p context 
+     *
      * Equivalent with calling evaluateType(.., .., true), but should be preferred for better overview.
      * */
     ExpressionEvaluationResult evaluateExpression( const QByteArray& expression, DUContextPointer context, const KDevelop::TopDUContext* source = 0 );
     /**
      * Evaluates the type of an expression given as an AST.
+     *
+     * The duchain does not strictly need to be locked when this is called, but it should be locked if the entity evaluating the expression has no control over
+     * the lifetime of ast->context
      *
      * @param ast the AST. Its context must be built already, the context-member must be filled.
      * @param debug whether additional output to kdDebug should be issued
