@@ -94,10 +94,10 @@ public Q_SLOTS:
      * The project name is taken from the Name key in the project file in
      * the 'General' group
      */
-    virtual Q_SCRIPTABLE bool open(const KUrl &projectFileUrl);
+    bool open(const KUrl &projectFileUrl);
 
     /** This method is invoked when the project needs to be closed. */
-    virtual Q_SCRIPTABLE void close();
+    void close();
 
     /**
      * @brief Get the project folder

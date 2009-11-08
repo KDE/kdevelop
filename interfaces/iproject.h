@@ -135,20 +135,6 @@ public:
 
 public Q_SLOTS:
     /**
-     * @brief Open a project
-     * This method opens a project and starts the process of loading the
-     * data for the project from disk.
-     * @param projectFileUrl The url pointing to the location of the project
-     * file to load
-     * The project name is taken from the Name key in the project file in
-     * the 'General' group
-     */
-    virtual Q_SCRIPTABLE bool open(const KUrl &projectFileUrl) = 0;
-
-    /** This method is invoked when the project needs to be closed. */
-    virtual Q_SCRIPTABLE void close() = 0;
-
-    /**
      * @brief Get the project folder
      * @return The canonical absolute directory of the project.
      */

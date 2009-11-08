@@ -716,12 +716,20 @@ void ProjectController::initializePluginCleanup(IProject* proj)
     }
 }
 
-void ProjectController::closeProject(IProject* proj)
+void ProjectController::closeProject(IProject* proj_)
 {
-    if(!proj || d->m_projects.indexOf(proj) == -1)
+    if(!proj_ || d->m_projects.indexOf(proj_) == -1)
     {
         return;
     }
+    
+    Project* proj = dynamic_cast<KDevelop::Project*>( proj_ );
+    if( !proj ) 
+    {
+        kWarning() << "Unknown Project subclass found!";
+        return;
+    }
+    
     d->m_projects.removeAll(proj);
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
