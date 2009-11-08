@@ -28,5 +28,10 @@
         <label>Save all open documents before building anything</label>
         <whatsthis>If this option is set all open documents will be automatically saved before any build is started.</whatsthis>
     </entry>
+    <entry name="autoAddProjectsToBuildset" key="Automatically Add Projects to Buildset" type="Bool" default="true">
+        <default>true</default>
+        <label>Automatically add opened projects to the Buildset</label>
+        <whatsthis>If this option is enabled then any project that is opened will automatically be added to the buildset.</whatsthis>
+    </entry>
   </group>
 </kcfg>
