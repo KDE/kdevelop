@@ -16,7 +16,7 @@
     <default>false</default>
     </entry>
     <entry name="highlightSemanticProblems" key="highlightSemanticProblems" type="Bool">
-    <default>false</default>
+    <default>true</default>
     </entry>
     <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
     <default>false</default>
