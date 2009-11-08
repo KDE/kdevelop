@@ -81,6 +81,11 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
 
   ast->ducontext = context.data();
 
+  if(!ast->ducontext) {
+    kDebug() << "context disappeared";
+    return ExpressionEvaluationResult();
+  }
+  
   ///@todo think how useful it is to compute contexts and uses here. The main thing we need is the AST.
   /*
   static int testNumber = 0; //@todo what this url for?
