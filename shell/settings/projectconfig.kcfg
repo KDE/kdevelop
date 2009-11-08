@@ -5,7 +5,7 @@
   <kcfgfile name="kdeveloprc"/>
   <group name="Project Manager">
     <entry name="reopenProjectsOnStartup" key="Reopen Projects On Startup" type="Bool">
-        <default>false</default>
+        <default>true</default>
         <label>Open the last project(s) that were loaded on startup</label>
         <whatsthis>If this option is set, KDevelop will reopen the project(s) that
         were open when KDevelop was closed. If this option is not set, no project

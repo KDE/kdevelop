@@ -79,7 +79,7 @@ namespace KDevelop
 bool reopenProjectsOnStartup()
 {
     KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Reopen Projects On Startup", false );
+    return group.readEntry( "Reopen Projects On Startup", true );
 }
 
 bool parseAllProjectSources()
