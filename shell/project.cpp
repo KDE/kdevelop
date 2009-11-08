@@ -340,6 +340,10 @@ public:
         progress->projectName = name;
         if( Core::self()->projectController()->isProjectNameUsed( name ) ) 
         {
+            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
+                                i18n( "Could not load %1, a project with the same name '%2' is already open.",
+                                projectFileUrl.prettyUrl(), name ) );
+                                
             kWarning() << "Trying to open a project with a name thats already used by another open project";
             return true;
         }
