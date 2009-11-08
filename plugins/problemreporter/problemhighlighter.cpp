@@ -1,7 +1,8 @@
 /*
  * KDevelop Problem Reporter
  *
- * Copyright (c) 2008 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008-2009 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -36,6 +37,9 @@
 #include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/util/navigationtooltip.h>
 #include <ktexteditor/view.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -49,6 +53,13 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
         viewCreated(document, view);
     
     connect(m_document, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
+    connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), this, SLOT(settingsChanged()));
+}
+
+void ProblemHighlighter::settingsChanged()
+{
+    //Re-highlight
+    setProblems(m_problems);
 }
 
 void ProblemHighlighter::viewCreated(Document* , View* view)
@@ -134,23 +145,29 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         if (problemRange->isEmpty())
             problemRange->smartEnd().advance(1);
 
-        KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
-        if(problem->severity() == ProblemData::Error)
-            error->setUnderlineColor(Qt::red);
-        else if(problem->severity() == ProblemData::Warning)
-            error->setUnderlineColor(Qt::magenta);
-        else
-            error->setUnderlineColor(Qt::yellow);
-            
-        error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
+        if(problem->severity() != ProblemData::Hint || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
+        
+            KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
+            if(problem->severity() == ProblemData::Error)
+                error->setUnderlineColor(Qt::red);
+            else if(problem->severity() == ProblemData::Warning)
+                error->setUnderlineColor(Qt::magenta);
+            else if(problem->severity() == ProblemData::Hint)
+                error->setUnderlineColor(Qt::yellow);
+                
+            error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
-        /*KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());
-        dyn->setBackground(Qt::red);
-        error->setDynamicAttribute(Attribute::ActivateMouseIn, dyn);
-        error->setDynamicAttribute(Attribute::ActivateCaretIn, dyn);*/
+#if 0
+            KTextEditor::Attribute::Ptr dyn(new KTextEditor::Attribute());
+            QColor col(Qt::red);
+            col.setAlpha(40);
+            dyn->setBackground(col);
+            error->setDynamicAttribute(Attribute::ActivateMouseIn, dyn);
+            error->setDynamicAttribute(Attribute::ActivateCaretIn, dyn);
+#endif
 
-        // TODO text hint for problem
-        problemRange->setAttribute(error);
+            problemRange->setAttribute(error);
+        }
         problemRange->addWatcher(this);
         editor.exitCurrentRange(iface);
     }

@@ -1,7 +1,8 @@
 /*
  * KDevelop Problem Reporter
  *
- * Copyright (c) 2008 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008 Hamish Rodda <rodda@kde.org>
+ * Copyright 2008-2009 David Nolden <david.nolden.kdevelop@art-master.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -51,6 +52,8 @@ private:
     QList<KTextEditor::SmartRange*> m_topHLRanges;
     QList<KDevelop::ProblemPointer> m_problems;
     QMap<KTextEditor::SmartRange*, KDevelop::ProblemPointer> m_problemsForRanges;
+public slots:
+    void settingsChanged();
 };
 
 #endif // PROBLEM_HIGHLIGHT_H

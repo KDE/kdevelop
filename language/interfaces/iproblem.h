@@ -51,7 +51,7 @@ public:
     enum Severity {
         Error,
         Warning,
-        Hint        //For implementation-helpers and such stuff
+        Hint        //For implementation-helpers and such stuff. Is not highlighted if the user disables the "highlight semantic problems" option
     };
 
     ProblemData()
