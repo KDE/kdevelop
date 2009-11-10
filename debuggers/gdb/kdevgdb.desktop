@@ -52,6 +52,7 @@ Name[zh_CN]=GDB 支持
 Name[zh_TW]=GDB 支援
 GenericName=Debugger Frontend
 GenericName[ca]=Frontal del depurador
+GenericName[cs]=Rozhraní pro ladicí nástroj
 GenericName[da]=Fejlsøgningsbrugerflade
 GenericName[de]=Oberfläche für Debugger
 GenericName[el]=Σύστημα περιβάλλοντος αποσφαλματωτή
