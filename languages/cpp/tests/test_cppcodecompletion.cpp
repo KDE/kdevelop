@@ -410,6 +410,7 @@ void TestCppCodeCompletion::testCompletionPrefix() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().size(), 3);
     //Make sure the completion behind "for <" does not only show types
+    QVERIFY(CompletionItemTester(top->childContexts()[2], ";for(int a = 0; a <  t2->").names.contains("m"));
     QVERIFY(CompletionItemTester(top->childContexts()[2], ";for(int a = 0; a <  ").names.contains("t2"));
     //Make sure that only types are shown as template parameters
     QVERIFY(!CompletionItemTester(top->childContexts()[2], "Test<").names.contains("t2"));

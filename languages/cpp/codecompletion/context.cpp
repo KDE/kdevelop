@@ -381,7 +381,6 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   ///Handle recursive contexts(Example: "ret = function1(param1, function2(" )
   if( (expressionPrefix.endsWith( '<' ) || expressionPrefix.endsWith('(') || expressionPrefix.endsWith(',') || expressionPrefix.endsWith(':')) 
       && getEndOperator(expressionPrefix).length() < 2 ) { //Do not try a function-call for example with "<<", as that may lead to a quadratic expansion together with the operator expansion
-    log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
     //Our expression is within a function-call. We need to find out the possible argument-types we need to match, and show an argument-hint.
 
     //Find out which argument-number this expression is, and compute the beginning of the parent function-call(parentContextLast)
@@ -392,13 +391,15 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
     QString parentContextText = expressionPrefix.left(parentContextEnd);
     
-    #if 0
-    if(parentContextText == expressionPrefix && depth) //Do not use the same text for the parent as for this context
-      parentContextText = parentContextText.left(parentContextText.length()-1);
-    #endif
-
-    log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
-    m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), m_position, depth+1, otherArguments );
+    //Prevent useless endless recursion
+    if(depth == 0 || parentContextText != m_text)
+    {
+      log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
+      log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
+      m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), m_position, depth+1, otherArguments );
+    }else{
+      ifDebug( kDebug() << "not following at depth" << depth << " because:" << parentContextText << "==" << m_text; )
+    }
   }
 
   ///Handle signal/slot access
@@ -474,8 +475,13 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) || expressionPrefix.endsWith("return") ) {
-    log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
-    m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, QString(), m_position, depth+1 );
+    if(depth == 0 || m_text != expressionPrefix) {
+      log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
+      m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, QString(), m_position, depth+1 );
+    }else{
+      ifDebug( kDebug() << "not following operator at depth" << depth << " because:" << expressionPrefix  << "==" << m_text; )
+    }
+    
   }
 
   ///Now care about m_expression. It may still contain keywords like "new "
