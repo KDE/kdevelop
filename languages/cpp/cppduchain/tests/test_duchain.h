@@ -140,6 +140,7 @@ private slots:
   void testDoWhile();
   void testCodeModel();
   void testLoopNamespaceImport();
+  void testConstructorUses();
 
   void testSymbolTableValid();
   

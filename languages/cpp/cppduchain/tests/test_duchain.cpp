@@ -2352,6 +2352,39 @@ void TestDUChain::testLoopNamespaceImport() {
   release(top);
 }
 
+void TestDUChain::testConstructorUses()
+{
+  // NOTE: This test is currently broken because only the 2nd case is reported.
+  QByteArray text;
+  text += "class A {\n";
+  text += "public:\n";
+  text += "  A(int var) { }\n";
+  text += "};\n";
+  text += "int main(int argc, char* argv[]) {\n";
+  text += "  A  a1(123);\n";
+  text += "  A  a2 = A(123);\n";
+  text += "  A *a3 = new A(123);\n";
+  text += "}\n";
+  
+  TopDUContext* top = parse(text, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
+  
+  QCOMPARE(ctorDecl->uses().size(), 1);
+  QList<SimpleRange> uses = ctorDecl->uses().values().first();
+  
+  // NOTE: The following two test shows that it partially works
+  QCOMPARE(uses.size(), 1);
+  QCOMPARE(uses[0], SimpleRange(6, 11, 6, 12));
+  
+  // NOTE: But these are the actual expected results.
+  QCOMPARE(uses.size(), 3);
+  QCOMPARE(uses[0], SimpleRange(5, 7, 6, 8));
+  QCOMPARE(uses[1], SimpleRange(6, 11, 6, 12));
+  QCOMPARE(uses[2], SimpleRange(7, 15, 7, 16));
+}
+
 void TestDUChain::testCodeModel() {
   QByteArray text("class C{}; void test() {}; ");
   TopDUContext* top = parse(text, DumpNone);
