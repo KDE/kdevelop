@@ -528,8 +528,11 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         
         if(file) {
             //Change QInputDialog->KFileSaveDialog?
-            QString name = QInputDialog::getText( window, i18n("Rename File"), i18n("New name for '%1'", item->text()) );
-            if (!name.isEmpty()) {
+            QString name = QInputDialog::getText(
+                window, i18n("Rename File"), i18n("New name for '%1'", item->text()),
+                QLineEdit::Normal, item->text()
+            );
+            if (!name.isEmpty() && name != item->text()) {
                 KUrl url = file->url().upUrl();
                 url.addPath( name );
                 
@@ -539,8 +542,11 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
             }
         } else if(folder) {
             //Change QInputDialog->KFileSaveDialog?
-            QString name = QInputDialog::getText( window, i18n("Rename Folder"), i18n("New name for '%1'", item->text()) );
-            if (!name.isEmpty()) {
+            QString name = QInputDialog::getText(
+                window, i18n("Rename Folder"), i18n("New name for '%1'", item->text()),
+                QLineEdit::Normal, item->text()
+            );
+            if (!name.isEmpty() && name != item->text()) {
                 KUrl url = folder->url().upUrl();
                 url.addPath( name );
                 
