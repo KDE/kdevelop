@@ -2360,6 +2360,10 @@ void TestDUChain::testConstructorUses()
   text += "public:\n";
   text += "  A(int var) { }\n";
   text += "};\n";
+  text += "class B : public A {\n";
+  text += "public:\n";
+  text += "  B(int var) : A(var) { }\n";
+  text += "};\n";
   text += "int main(int argc, char* argv[]) {\n";
   text += "  A  a1(123);\n";
   text += "  A  a2 = A(123);\n";
@@ -2370,19 +2374,19 @@ void TestDUChain::testConstructorUses()
   DUChainWriteLocker lock(DUChain::lock());
   
   Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
-  
-  QCOMPARE(ctorDecl->uses().size(), 1);
   QList<SimpleRange> uses = ctorDecl->uses().values().first();
   
-  // NOTE: The following two test shows that it partially works
+  // NOTE: The following two test shows that it partially works, remove this when
+  //       all cases work.
   QCOMPARE(uses.size(), 1);
-  QCOMPARE(uses[0], SimpleRange(6, 11, 6, 12));
+  QCOMPARE(uses[0], SimpleRange(10, 11, 10, 12));
   
   // NOTE: But these are the actual expected results.
-  QCOMPARE(uses.size(), 3);
-  QCOMPARE(uses[0], SimpleRange(5, 7, 6, 8));
-  QCOMPARE(uses[1], SimpleRange(6, 11, 6, 12));
-  QCOMPARE(uses[2], SimpleRange(7, 15, 7, 16));
+  QCOMPARE(uses.size(), 4);
+  QCOMPARE(uses[0], SimpleRange(6, 16, 6, 17));
+  QCOMPARE(uses[1], SimpleRange(9, 7, 9, 8));
+  QCOMPARE(uses[2], SimpleRange(10, 11, 10, 12));
+  QCOMPARE(uses[3], SimpleRange(11, 15, 11, 16));
 }
 
 void TestDUChain::testCodeModel() {
