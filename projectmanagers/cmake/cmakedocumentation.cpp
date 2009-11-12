@@ -45,7 +45,6 @@ class CMakeDoc : public KDevelop::IDocumentation
     public:
         CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
         
-        virtual QWidget* documentationWidget(QWidget* ) { return 0; }
         virtual QString description() const { return mDesc; }
         virtual QString name() const { return mName; }
         virtual bool providesWidget() const { return false; }
@@ -176,4 +175,18 @@ QIcon CMakeDocumentation::icon() const
 QString CMakeDocumentation::name() const
 {
     return "CMake";
+}
+
+KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
+{
+    QString style="style='margin-left: 6 em'";
+    QString contents = i18n("<html><b>Contents:</b> Use the index to select what you are looking for.<p />");
+    contents += i18n("<b>Commands:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Command)).join("<br/>"));
+    contents += i18n("<b>Variables:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Variable)).join("<br/>"));
+    contents += i18n("<b>Modules:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Module)).join("<br/>"));
+    contents += i18n("<b>Properties:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Property)).join("<br/>"));
+    contents += i18n("<b>Policies:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Policy)).join("<br/>"));
+    contents += i18n("</html>");
+    
+    return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(i18n("CMake Contents"), contents));
 }
