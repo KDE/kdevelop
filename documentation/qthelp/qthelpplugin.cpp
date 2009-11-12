@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QHelpIndexModel>
 #include <QTemporaryFile>
+#include <QHelpContentModel>
 
 #include <KProcess>
 #include <kpluginfactory.h>
@@ -163,4 +164,9 @@ void QtHelpPlugin::jumpedTo(const QUrl& newUrl)
     
     KSharedPtr<KDevelop::IDocumentation> doc(new QtHelpDocumentation(newUrl.toString(), info));
     emit addHistory(doc);
+}
+
+KSharedPtr<KDevelop::IDocumentation> QtHelpPlugin::homePage() const
+{
+    return KSharedPtr<KDevelop::IDocumentation>(new HomeDocumentation);
 }

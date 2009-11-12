@@ -26,6 +26,7 @@
 #include <QtGui/QAction>
 #include <interfaces/idocumentation.h>
 
+class QModelIndex;
 class QWebView;
 class QtHelpPlugin;
 
@@ -43,7 +44,6 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         
         virtual QWidget* documentationWidget(QWidget* parent);
         
-        virtual bool providesWidget() const { return true; }
         virtual KDevelop::IDocumentationProvider* provider();
         QMap<QString, QUrl> info() const { return m_info; }
         
@@ -56,6 +56,19 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
         QWebView* lastView;
+};
+
+class HomeDocumentation : public QObject, public KDevelop::IDocumentation
+{
+    Q_OBJECT
+    public:
+        virtual QWidget* documentationWidget(QWidget* parent = 0);
+        virtual QString description() const { return QString(); }
+        virtual QString name() const;
+        virtual KDevelop::IDocumentationProvider* provider();
+        
+    public slots:
+        void clicked(const QModelIndex& idx);
 };
 
 class QtHelpAlternativeLink : public QAction

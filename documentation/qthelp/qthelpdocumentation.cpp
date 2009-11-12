@@ -26,6 +26,9 @@
 #include <interfaces/idocumentationcontroller.h>
 #include "qthelpnetwork.h"
 #include "qthelpplugin.h"
+#include <QtGui/QTreeView>
+#include <QHelpContentModel>
+#include <QHeaderView>
 
 QtHelpPlugin* QtHelpDocumentation::s_provider=0;
 
@@ -209,4 +212,35 @@ void QtHelpAlternativeLink::showUrl()
 {
     KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+}
+
+QWidget* HomeDocumentation::documentationWidget(QWidget* parent)
+{
+    QTreeView* w=new QTreeView(parent);
+    w->header()->setVisible(false);
+    w->setModel(QtHelpDocumentation::s_provider->engine()->contentModel());
+    
+    connect(w, SIGNAL(clicked(QModelIndex)), SLOT(clicked(QModelIndex)));
+    return w;
+}
+
+void HomeDocumentation::clicked(const QModelIndex& idx)
+{
+    QHelpContentModel* model=QtHelpDocumentation::s_provider->engine()->contentModel();
+    QHelpContentItem* it=model->contentItemAt(idx);
+    QMap<QString, QUrl> info;
+    info.insert(it->title(), it->url());
+    
+    KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
+    KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+}
+
+QString HomeDocumentation::name() const
+{
+    return i18n("QtHelp Home Page");
+}
+
+KDevelop::IDocumentationProvider* HomeDocumentation::provider()
+{
+    return QtHelpDocumentation::s_provider;
 }

@@ -40,6 +40,8 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         virtual QIcon icon() const;
         virtual QString name() const;
         
+        virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
+        
         QHelpEngine* engine() { return &m_engine; }
     public slots:
         void jumpedTo(const QUrl& newUrl);
