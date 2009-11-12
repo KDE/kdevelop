@@ -92,7 +92,8 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 {
 //     qDebug() << "+++++++ isTrue: " << varName;
     QString val = *it;
-    if(m_vars->contains(*it))
+    
+    if(m_vars->contains(val))
     {
         QString varName=*it;
         m_varUses.append(it);
@@ -100,9 +101,10 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 
 //         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
         val = valu.join(";").toUpper();
+        return !s_falseDefinitions.contains(val) && !val.endsWith("_NOTFOUND");
     }
-    
-    return !s_falseDefinitions.contains(val) && !val.endsWith("_NOTFOUND");
+    else
+        return val=="1"; //wtf
 }
 
 QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const
