@@ -45,10 +45,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
         /** @returns a widget with all the needed documentation information.
             \param parent defines the widget's parent
         */
-        virtual QWidget* documentationWidget(QWidget* parent=0)=0;
-        
-        /** @returns whether the widget can provide extended information. */
-        virtual bool providesWidget() const =0;
+        virtual QWidget* documentationWidget(QWidget* parent=0);
         
         virtual IDocumentationProvider* provider()=0;
 };

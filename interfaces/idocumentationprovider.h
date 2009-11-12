@@ -53,6 +53,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         /** @returns a name to identify the provider to the user. */
         virtual QString name() const=0;
         
+        /** @returns a documentation item where we can show some home page information such a context index. */
+        virtual KSharedPtr<IDocumentation> homePage() const=0;
+        
     Q_SIGNALS:
         virtual void addHistory(const KSharedPtr<IDocumentation>& doc)=0;
 };

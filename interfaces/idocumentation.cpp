@@ -18,11 +18,20 @@
 */
 
 #include "idocumentation.h"
+#include <qtextbrowser.h>
 
 namespace KDevelop
 {
 
 IDocumentation::~IDocumentation()
 {}
+
+QWidget* IDocumentation::documentationWidget(QWidget* parent)
+{
+    QTextBrowser* widget=new QTextBrowser(parent);
+    widget->setReadOnly(true);
+    widget->setText(description());
+    return widget;
+}
 
 }

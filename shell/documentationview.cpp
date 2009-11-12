@@ -85,10 +85,12 @@ DocumentationView::DocumentationView(QWidget* parent)
     setWindowIcon(KIcon("documentation"));
     setLayout(new QVBoxLayout(this));
     mActions=new KToolBar(this);
+    mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
     layout()->addWidget(mActions);
     mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
     mActions->addSeparator();
+    mActions->addAction(KIcon("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);
     mProviders->setFocusPolicy(Qt::NoFocus);
     mProvidersModel=new ProvidersModel(mProviders);
@@ -143,6 +145,13 @@ void DocumentationView::browseForward()
     updateView();
 }
 
+void DocumentationView::showHome()
+{
+    KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
+    
+    showDocumentation(prov->homePage());
+}
+
 void DocumentationView::changedSelection()
 {
     changeProvider(mIdentifiers->completer()->currentIndex());
@@ -152,7 +161,8 @@ void DocumentationView::changeProvider(const QModelIndex& idx)
 {
     if(idx.isValid())
     {
-        KSharedPtr<KDevelop::IDocumentation> doc=mProvidersModel->provider(mProviders->currentIndex())->documentationForIndex(idx);
+        KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
+        KSharedPtr<KDevelop::IDocumentation> doc=prov->documentationForIndex(idx);
         if(doc)
             showDocumentation(doc);
     }
@@ -186,15 +196,7 @@ void DocumentationView::updateView()
     
     delete lastview;
     
-    QWidget* w;
-    if((*mCurrent)->providesWidget())
-        w=(*mCurrent)->documentationWidget(this);
-    else {
-        QTextBrowser* widget=new QTextBrowser(this);
-        widget->setReadOnly(true);
-        widget->setText((*mCurrent)->description());
-        w=widget;
-    }
+    QWidget* w=(*mCurrent)->documentationWidget(this);
     Q_ASSERT(w);
     layout()->addWidget(w);
 }

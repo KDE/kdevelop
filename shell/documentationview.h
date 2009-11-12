@@ -44,6 +44,7 @@ class DocumentationView : public QWidget
         void changedSelection();
         void changedProvider(int);
         void changeProvider(const QModelIndex &);
+        void showHome();
         
     private:
         void updateView();
