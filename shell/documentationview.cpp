@@ -119,10 +119,6 @@ DocumentationView::DocumentationView(QWidget* parent)
     connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
     mCurrent=mHistory.end();
     
-    QLabel* message=new QLabel(i18n("There is no documentation selected yet"), this);
-    message->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
-    layout()->addWidget(message);
-    
     if(mProvidersModel->rowCount(QModelIndex())>0)
         changedProvider(0);
 }
@@ -191,7 +187,7 @@ void DocumentationView::updateView()
     mIdentifiers->setText((*mCurrent)->name());
     
     QLayoutItem* lastview=layout()->takeAt(1);
-    if(lastview->widget()->parent()==this)
+    if(lastview && lastview->widget()->parent()==this)
         lastview->widget()->deleteLater();
     
     delete lastview;
@@ -205,4 +201,6 @@ void DocumentationView::changedProvider(int row)
 {
     mIdentifiers->completer()->setModel(mProvidersModel->provider(row)->indexModel());
     mIdentifiers->clear();
+    
+    showHome();
 }
