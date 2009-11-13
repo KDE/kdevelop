@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=mercurial
 Exec=blubb
 Comment=This plugin integrates Mercurial to KDevelop
 Comment[bg]=Тaзи приставка интегрира Mercurial в KDevelop
