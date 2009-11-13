@@ -79,8 +79,8 @@ void CMakeJob::start()
 
     setStandardToolView( KDevelop::IOutputView::BuildView );
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-
-    setModel( new KDevelop::OutputModel(this), KDevelop::IOutputView::TakeOwnership );
+    KDevelop::OutputModel* m_model = new KDevelop::OutputModel(this);
+    setModel( m_model, KDevelop::IOutputView::TakeOwnership );
     startOutput();
 
     QString cmd = cmakeBinary( m_project );
@@ -101,6 +101,7 @@ void CMakeJob::start()
     connect( m_executor, SIGNAL( failed() ), this, SLOT( slotFailed() ) );
     connect( m_executor, SIGNAL( completed() ), this, SLOT( slotCompleted() ) );
     kDebug() << "Executing" << cmakeBinary( m_project ) << buildDirUrl.toLocalFile() << cmakeArguments( m_project );
+    m_model->appendLine( buildDirUrl.toLocalFile() + "> " + cmakeBinary( m_project ) + " " + cmakeArguments( m_project ).join(" ") );
     m_executor->start();
 }
 
