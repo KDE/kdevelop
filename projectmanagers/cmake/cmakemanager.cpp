@@ -1203,8 +1203,10 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 {
     ProjectTargetItem* target=static_cast<ProjectBaseItem*>(it->parent())->target();
     if(!target) {
+        it->project()->removeFromFileSet(IndexedString(it->url()));
         it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
         it->setUrl(newUrl);
+        it->project()->addToFileSet(IndexedString(it->url()));
         return true;
     }
     
