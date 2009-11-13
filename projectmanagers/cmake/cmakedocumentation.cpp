@@ -75,6 +75,7 @@ void CMakeDocumentation::delayedInitialization()
     collectIds("--help-command-list", Command);
     collectIds("--help-variable-list", Variable);
     collectIds("--help-module-list", Module);
+    collectIds("--help-property-list", Property);
     
     m_index->setStringList(m_typeForName.keys());
 }
