@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Icon=quickopen-class
+Icon=quickopen
 Exec=blubb
 Comment=This plugin allows quick access to project files and language-items like classes/functions.
 Comment[bg]=Тази приставка позволява бърз достъп до файловете на проекта и езиковите средства класове/уфнкции.
