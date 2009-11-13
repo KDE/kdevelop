@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=debugger
 Exec=blubb
 Comment=Valgrind is a tool that helps you find memory management problems in programs. http://www.valgrind.org/
 Comment[ca]=Valgrind és una eina que us ajuda a trobar problemes en la gestió de la memòria en els programes.  http://www.valgrind.org/
