@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=code-class
 Exec=blubb
 Comment=This plugin shows information about the current language context in a side view, and highlights relevant declarations and uses.
 Comment[bg]=Този приставка показва информация за текущата езикова настройка погледната отвън и маркира съответните декларации и употреби.

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=system-file-manager
 Exec=blubb
 Comment=This plugin brings a filemanager to KDevelop.
 Comment[bg]=Тaзи приставка вгражда файловия манипулатор към KDevelop.

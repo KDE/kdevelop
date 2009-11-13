@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=system-run
 Exec=blubb
 Comment=This plugin allows running of programs with no instrumentor, ie. natively by the current host.
 Comment[bg]=Тaзи приставка позволява изпълнение на програмата без основния модул, т.е. локално на текущата машина.

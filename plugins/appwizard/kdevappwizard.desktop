@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=document-new
 Exec=blubb
 Comment=Application Wizard
 Comment[bg]=Съветник на приложение

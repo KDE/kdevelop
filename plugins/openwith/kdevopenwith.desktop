@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=document-open
 Exec=blubb
 Comment=This plugin allows to open files with associated external applications.
 Comment[bg]=Тази приставка позволява отваряне на файлове със съответни външни програми.

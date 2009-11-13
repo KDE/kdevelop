@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Service
+Icon=emblem-important
 Exec=blubb
-Comment=This plugin provides a browsable model of the currently parsed classes and other items.
+Comment=This plugin shows errors in source code.
 Comment[bg]=Тази приставка дава модел за разглеждане на вече синтактично изгладени класове и други параграфи.
 Comment[ca]=Aquest connector proporciona un model navegable de les classes analitzades actualment i altres ítems.
 Comment[de]=Dieses Modul bietet eine Liste der aktuell eingelesenen Klassen und anderer Elemente.

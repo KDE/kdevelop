@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=code-class
 Exec=blubb
 Comment=This plugin provides a browsable model of the currently parsed classes and other items.
 Comment[bg]=Тази приставка дава модел за разглеждане на вече синтактично изгладени класове и други параграфи.

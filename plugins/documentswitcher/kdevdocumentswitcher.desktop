@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=document-open-recent
 Exec=blubb
 Comment=A most-recently-used document switcher for KDevPlatform.
 Comment[bg]=Последен използван превключвател на документи за KDevPlatform.

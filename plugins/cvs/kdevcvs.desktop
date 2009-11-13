@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=cervisia
 Exec=blubb
 Comment=This plugin integrates CVS to KDevelop
 Comment[bg]=Тaзи приставка вгражда CVS в KDevelop

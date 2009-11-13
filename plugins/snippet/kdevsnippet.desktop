@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
+Icon=edit-copy
 Comment=This plugin allows to store code snippets and insert them into open files
 Comment[bg]=Тази приставка позволява съхраняването на временни фрагменти от програмни низове и вмъкването им в отворени файлове
 Comment[ca]=Aquest connector permet desar retalls de codi i inserir-los a fitxers oberts
