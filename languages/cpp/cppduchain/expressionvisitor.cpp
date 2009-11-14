@@ -1100,11 +1100,68 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastType = tvisitor.type();
   }
 
+  void ExpressionVisitor::visitInitDeclarator(InitDeclaratorAST* node)
+  {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+    
+    if(node->declarator)
+    {
+      CppClassType::Ptr constructedType = computeConstructedType();
+      
+      //Build constructor uses (similar to visitFunctionCall)
+      
+      AbstractType::Ptr oldLastType = m_lastType;
+      Instance oldInstance = m_lastInstance;
+      QList< DeclarationPointer > declarations = m_lastDeclarations;
+      
+      clearLast();
+
+      bool fail = true;
+      
+      size_t token = node->start_token;
+      
+      if(node->initializer)
+      {
+        if(node->initializer->expression && !node->initializer->initializer_clause)
+        {
+          token = node->initializer->start_token;
+          fail = !buildParametersFromExpression(node->initializer->expression);
+        }
+      }
+      else if(node->declarator->parameter_is_initializer && node->declarator->parameter_declaration_clause)
+      {
+        token = node->declarator->parameter_declaration_clause->start_token-1;
+        fail = !buildParametersFromDeclaration(node->declarator->parameter_declaration_clause);
+      }
+      
+      if(fail || !constructedType) {
+        DefaultVisitor::visitInitDeclarator(node);
+        return;
+      }
+      
+      DeclarationPointer chosenFunction;
+      {
+        LOCKDUCHAIN;
+        
+        KDevelop::DUContextPointer ptr(m_currentContext);
+        OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
+
+        if( !fail )
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+        else if(!declarations.isEmpty())
+          chosenFunction = declarations.first();
+      }
+      
+      newUse( node , token, token+1, chosenFunction );
+    }else{
+      DefaultVisitor::visitInitDeclarator(node);
+    }
+  }
 
   //Used to parse pointer-depth and cv-qualifies of types in new-expessions and casts
   void ExpressionVisitor::visitDeclarator(DeclaratorAST* node)  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-
+#if 0
     if( !m_lastType ) {
       problem(node, "Declarator used without type");
       return;
@@ -1114,14 +1171,29 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       problem(node, "Declarator used on an instance instead of a type");
       return;
     }
+    #endif
 
+    AbstractType::Ptr oldLastType = m_lastType;
+    Instance oldLastInstance = m_lastInstance;
+
+    visit(node->sub_declarator);
+//     visit(node->id);
+    visit(node->bit_expression);
+    visitNodes(this, node->array_dimensions);
+
+    visit(node->parameter_declaration_clause);
+    visit(node->exception_spec);
+    
     LOCKDUCHAIN;
-    if( node->array_dimensions ) {
+    if( node->array_dimensions && oldLastType ) {
       ArrayType::Ptr p( new ArrayType() );
-      p->setElementType( m_lastType );
+      p->setElementType( oldLastType );
 
       m_lastType = p.cast<AbstractType>();
       m_lastInstance = Instance(false);
+    }else{
+      m_lastType = oldLastType;
+      m_lastInstance = oldLastInstance;
     }
 
     visitNodes(this, node->ptr_ops);
@@ -1250,15 +1322,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     clearLast();
     visit( node->expression );
     clearLast();
+    
+    CppClassType::Ptr constructedType;
+    
 
     //Visit declarator and type-specifier, which should build the type
     if( node->type_id ) {
       visit(node->type_id->type_specifier);
+      constructedType = computeConstructedType();
       visit(node->type_id->declarator);
     } else if( node->new_type_id ) {
       visit(node->new_type_id->type_specifier);
+      constructedType = computeConstructedType();
       visit(node->new_type_id->new_declarator);
     }
+    
     if( m_lastType )
     {
       LOCKDUCHAIN;
@@ -1267,7 +1345,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       p->setBaseType( m_lastType );
 
       m_lastType = p.cast<AbstractType>();
-
 
       m_lastInstance = Instance(true);
 
@@ -1280,7 +1357,35 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     AbstractType::Ptr lastType = m_lastType;
     Instance instance = m_lastInstance;
 
-    visit(node->new_initializer);
+    if(node->new_initializer) {
+
+      //Build constructor uses (similar to visitFunctionCall)
+      //Largely a copy of visitInitDeclarator()
+      
+      AbstractType::Ptr oldLastType = m_lastType;
+      Instance oldInstance = m_lastInstance;
+      QList< DeclarationPointer > declarations = m_lastDeclarations;
+      
+      clearLast();
+
+      bool fail = !buildParametersFromExpression(node->new_initializer->expression);
+      
+      size_t token = node->new_initializer->start_token;
+
+      DeclarationPointer chosenFunction;
+      {
+        LOCKDUCHAIN;
+        
+        KDevelop::DUContextPointer ptr(m_currentContext);
+        OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
+
+        if( !fail )
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+        else if(!declarations.isEmpty())
+          chosenFunction = declarations.first();
+      }
+      newUse( node , token, token+1, chosenFunction );    
+    }
 
     m_lastType = lastType;
     m_lastInstance = instance;
@@ -1531,12 +1636,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     //Just keep the function instance, set in findMember(..)
   }
   
-  void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
-    PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
-    /**
-     * If a class name was found, get its constructors.
-     * */
+  CppClassType::Ptr ExpressionVisitor::computeConstructedType()
+  {
     CppClassType::Ptr constructedType;
 
     AbstractType::Ptr oldLastType = m_lastType;
@@ -1562,6 +1664,94 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           m_lastDeclarations = convert(constructedDecl->internalContext()->findLocalDeclarations( constructedDecl->identifier(), constructedDecl->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
         }
       }
+    }
+
+    return constructedType;
+  }
+
+  bool ExpressionVisitor::buildParametersFromDeclaration(ParameterDeclarationClauseAST* node)
+  {
+    m_parameters.clear();
+    m_parameterNodes.clear();
+
+    if(node->parameter_declarations)
+    {
+      const ListNode<ParameterDeclarationAST*>
+        *it = node->parameter_declarations->toFront(),
+        *end = it;
+
+      do
+        {
+          visit(it->element);
+          m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
+          m_parameterNodes.append(it->element);
+          it = it->next;
+        }
+      while (it != end);
+    }
+    
+    
+    //Check if all parameters could be evaluated
+    int paramNum = 1;
+    bool fail = false;
+    for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it ) {
+      if( !(*it).type ) {
+        problem( node, QString("parameter %1 could not be evaluated").arg(paramNum) );
+        fail = true;
+        paramNum++;
+      }
+    }
+    
+    return !fail;
+  }
+
+  bool ExpressionVisitor::buildParametersFromExpression(AST* expression)
+  {
+    /**
+     * Evaluate the function-argument types. Those are represented a little strangely:
+     * expression contains them, using recursive binary expressions
+     * */
+    
+    m_parameters.clear();
+    m_parameterNodes.clear();
+    
+    if(!expression)
+      return true;
+    
+    visit(expression);
+
+    //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
+    if( m_lastType ) {
+      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) );
+      m_parameterNodes.append(expression);
+    }
+    
+    //Check if all parameters could be evaluated
+    int paramNum = 1;
+    bool fail = false;
+    for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it ) {
+      if( !(*it).type ) {
+        problem( expression, QString("parameter %1 could not be evaluated").arg(paramNum) );
+        fail = true;
+        paramNum++;
+      }
+    }
+    
+    return !fail;
+  }
+
+  void ExpressionVisitor::visitFunctionCall(FunctionCallAST* node) {
+    PushPositiveContext pushContext( m_currentContext, node->ducontext );
+
+    /**
+     * If a class name was found, get its constructors.
+     * */
+    AbstractType::Ptr oldLastType = m_lastType;
+    
+    CppClassType::Ptr constructedType;
+
+    if(!m_lastInstance) {
+      constructedType = computeConstructedType();
     }else{
       if(m_lastDeclarations.isEmpty() && m_lastType) {
         LOCKDUCHAIN;
@@ -1577,31 +1767,20 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
     }
 
-    /**
-     * Step 1: Evaluate the function-argument types. Those are represented a little strangely:
-     * node->arguments contains them, using recursive binary expressions
-     * */
     QList<DeclarationPointer> declarations = m_lastDeclarations;
     Instance oldInstance = m_lastInstance;
 
     QList<OverloadResolver::Parameter> oldParams = m_parameters;
     KDevVarLengthArray<AST*> oldParameterNodes = m_parameterNodes;
-    m_parameters.clear();
-    m_parameterNodes.clear();
 
     //Backup the current use and invalidate it, we will update and create it after overload-resolution
     CurrentUse oldCurrentUse = m_currentUse;
     m_currentUse.isValid = false;
 
     clearLast();
-    visit(node->arguments);
-
-    //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
-    if( m_lastType ) {
-      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) );
-      m_parameterNodes.append(node->arguments);
-    }
-
+    
+    bool fail = !buildParametersFromExpression(node->arguments);
+    
     if( declarations.isEmpty() && !constructedType ) {
 
       if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
@@ -1613,16 +1792,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return;
     }
 
-    //Check if all parameters could be evaluated
-    int paramNum = 1;
-    bool fail = false;
-    for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it ) {
-      if( !(*it).type ) {
-        problem( node, QString("parameter %1 could not be evaluated").arg(paramNum) );
-        fail = true;
-        paramNum++;
-      }
-    }
     LOCKDUCHAIN;
 
     if(declarations.isEmpty() && constructedType) {
@@ -1951,15 +2120,42 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       expressionType( node, m_lastType, m_lastInstance );
   }
 
+#if 0
   void ExpressionVisitor::visitNewTypeId(NewTypeIdAST* node)  {
     //Return a pointer to the type
-    problem(node, "node-type cannot be parsed");
+    problem(node);
   }
+  #endif
 
   void ExpressionVisitor::visitSimpleDeclaration(SimpleDeclarationAST* node)  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     ///Simple type-specifiers like "int" are parsed as SimpleDeclarationAST, so treat them here.
-    visit( node->type_specifier );
+    ///Also we use this to parse constructor uses
+    visit(node->type_specifier);
+    QList< DeclarationPointer > oldLastDecls = m_lastDeclarations;
+    AbstractType::Ptr oldLastType = m_lastType;
+    Instance oldLastInstance = m_lastInstance;
+
+    if(node->init_declarators)
+    {
+      const ListNode<InitDeclaratorAST*>
+        *it = node->init_declarators->toFront(),
+        *end = it;
+
+      do
+        {
+          //Make sure each init-declarator gets the same type assigned
+          m_lastDeclarations = oldLastDecls;
+          m_lastType = oldLastType;
+          m_lastInstance = oldLastInstance;
+          
+          visit(it->element);
+          it = it->next;
+        }
+      while (it != end);
+    }
+    
+    visit(node->win_decl_specifiers);
   }
 
   void ExpressionVisitor::visitDeclarationStatement(DeclarationStatementAST* node)  {
@@ -1989,6 +2185,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   }
 
   void ExpressionVisitor::visitMemInitializer(MemInitializerAST* node)  {
+
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     {
       LOCKDUCHAIN;
@@ -1996,6 +2193,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if(klass)
         m_lastType = klass->abstractType();
     }
+
     m_memberAccess = true;
     visit(node->initializer_id);
     m_memberAccess = false;
@@ -2012,46 +2210,43 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   }
 
   ///Nodes that are invalid inside an expression:
-  void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitOperator(OperatorAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitBaseClause(BaseClauseAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitBaseSpecifier(BaseSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitClassSpecifier(ClassSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { DefaultVisitor::visitPtrToMember(node); }
+  void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { DefaultVisitor::visitOperatorFunctionId(node); }
+  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { DefaultVisitor::visitTypeIdentification(node); }
+  void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { DefaultVisitor::visitUnqualifiedName(node); }
+  void ExpressionVisitor::visitOperator(OperatorAST* node)  { DefaultVisitor::visitOperator(node); }
+  void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { DefaultVisitor::visitAccessSpecifier(node); }
+  void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { DefaultVisitor::visitAsmDefinition(node); }
+  void ExpressionVisitor::visitBaseClause(BaseClauseAST* node)  { DefaultVisitor::visitBaseClause(node); }
+  void ExpressionVisitor::visitBaseSpecifier(BaseSpecifierAST* node)  { DefaultVisitor::visitBaseSpecifier(node); }
+  void ExpressionVisitor::visitClassSpecifier(ClassSpecifierAST* node)  { DefaultVisitor::visitClassSpecifier(node); }
 
-  void ExpressionVisitor::visitCtorInitializer(CtorInitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitDoStatement(DoStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitEnumSpecifier(EnumSpecifierAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitEnumerator(EnumeratorAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitExceptionSpecification(ExceptionSpecificationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitForStatement(ForStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitFunctionDefinition(FunctionDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitIfStatement(IfStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitInitDeclarator(InitDeclaratorAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitInitializer(InitializerAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitInitializerClause(InitializerClauseAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitLabeledStatement(LabeledStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitLinkageBody(LinkageBodyAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitLinkageSpecification(LinkageSpecificationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitNamespace(NamespaceAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitReturnStatement(ReturnStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitSwitchStatement(SwitchStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTemplateArgument(TemplateArgumentAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTemplateDeclaration(TemplateDeclarationAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTemplateParameter(TemplateParameterAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTryBlockStatement(TryBlockStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTypeParameter(TypeParameterAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitTypedef(TypedefAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitUsing(UsingAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitUsingDirective(UsingDirectiveAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitWhileStatement(WhileStatementAST* node)  { problem(node, "node-type cannot be parsed"); }
-  void ExpressionVisitor::visitWinDeclSpec(WinDeclSpecAST* node)  { problem(node, "node-type cannot be parsed"); }
+  void ExpressionVisitor::visitCtorInitializer(CtorInitializerAST* node)  { DefaultVisitor::visitCtorInitializer(node); }
+  void ExpressionVisitor::visitDoStatement(DoStatementAST* node)  { DefaultVisitor::visitDoStatement(node); }
+  void ExpressionVisitor::visitEnumSpecifier(EnumSpecifierAST* node)  { DefaultVisitor::visitEnumSpecifier(node); }
+  void ExpressionVisitor::visitEnumerator(EnumeratorAST* node)  { DefaultVisitor::visitEnumerator(node); }
+  void ExpressionVisitor::visitExceptionSpecification(ExceptionSpecificationAST* node)  { DefaultVisitor::visitExceptionSpecification(node); }
+  void ExpressionVisitor::visitForStatement(ForStatementAST* node)  { DefaultVisitor::visitForStatement(node); }
+  void ExpressionVisitor::visitFunctionDefinition(FunctionDefinitionAST* node)  { DefaultVisitor::visitFunctionDefinition(node); }
+  void ExpressionVisitor::visitIfStatement(IfStatementAST* node)  { DefaultVisitor::visitIfStatement(node); }
+  void ExpressionVisitor::visitLabeledStatement(LabeledStatementAST* node)  { DefaultVisitor::visitLabeledStatement(node); }
+  void ExpressionVisitor::visitLinkageBody(LinkageBodyAST* node)  { DefaultVisitor::visitLinkageBody(node); }
+  void ExpressionVisitor::visitLinkageSpecification(LinkageSpecificationAST* node)  { DefaultVisitor::visitLinkageSpecification(node); }
+  void ExpressionVisitor::visitNamespace(NamespaceAST* node)  { DefaultVisitor::visitNamespace(node); }
+  void ExpressionVisitor::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)  { DefaultVisitor::visitNamespaceAliasDefinition(node); }
+  void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { DefaultVisitor::visitParameterDeclaration(node); }
+  void ExpressionVisitor::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)  { DefaultVisitor::visitParameterDeclarationClause(node); }
+  void ExpressionVisitor::visitReturnStatement(ReturnStatementAST* node)  { DefaultVisitor::visitReturnStatement(node); }
+  void ExpressionVisitor::visitSwitchStatement(SwitchStatementAST* node)  { DefaultVisitor::visitSwitchStatement(node); }
+  void ExpressionVisitor::visitTemplateArgument(TemplateArgumentAST* node)  { DefaultVisitor::visitTemplateArgument(node); }
+  void ExpressionVisitor::visitTemplateDeclaration(TemplateDeclarationAST* node)  { DefaultVisitor::visitTemplateDeclaration(node); }
+  void ExpressionVisitor::visitTemplateParameter(TemplateParameterAST* node)  { DefaultVisitor::visitTemplateParameter(node); }
+  void ExpressionVisitor::visitTryBlockStatement(TryBlockStatementAST* node)  { DefaultVisitor::visitTryBlockStatement(node); }
+  void ExpressionVisitor::visitTypeParameter(TypeParameterAST* node)  { DefaultVisitor::visitTypeParameter(node); }
+  void ExpressionVisitor::visitTypedef(TypedefAST* node)  { DefaultVisitor::visitTypedef(node); }
+  void ExpressionVisitor::visitUsing(UsingAST* node)  { DefaultVisitor::visitUsing(node); }
+  void ExpressionVisitor::visitUsingDirective(UsingDirectiveAST* node)  { DefaultVisitor::visitUsingDirective(node); }
+  void ExpressionVisitor::visitWhileStatement(WhileStatementAST* node)  { DefaultVisitor::visitWhileStatement(node); }
+  void ExpressionVisitor::visitWinDeclSpec(WinDeclSpecAST* node)  { DefaultVisitor::visitWinDeclSpec(node); }
 }
 

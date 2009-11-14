@@ -26,6 +26,7 @@
 #include "default_visitor.h"
 #include "cppduchainexport.h"
 #include "overloadresolution.h" /* needed for OverloadResover::Parameter */
+#include "cpptypes.h"
 
 
 namespace KDevelop {
@@ -174,7 +175,15 @@ protected:
   const Token& tokenFromIndex( int index );
     
 private:
-
+    ///Fills m_parameters from the given argument-expression
+    ///Returns true if all parameters could be evaluated successfully
+    bool buildParametersFromExpression(AST* expression);
+    bool buildParametersFromDeclaration(ParameterDeclarationClauseAST* paramDecl);
+    
+    ///If m_lastType is a valid constructed class-type, returns that type,
+    ///and fills all its constructors into m_lastDeclarations
+    CppClassType::Ptr computeConstructedType();
+  
     void flushUse() {
       if( m_currentUse.isValid )
         usingDeclaration( m_currentUse.node, m_currentUse.start_token, m_currentUse.end_token, m_currentUse.declaration );
@@ -315,8 +324,6 @@ private:
   virtual void visitIfStatement(IfStatementAST *) ;
   virtual void visitIncrDecrExpression(IncrDecrExpressionAST *) ;
   virtual void visitInitDeclarator(InitDeclaratorAST *) ;
-  virtual void visitInitializer(InitializerAST *) ;
-  virtual void visitInitializerClause(InitializerClauseAST *) ;
   virtual void visitLabeledStatement(LabeledStatementAST *) ;
   virtual void visitLinkageBody(LinkageBodyAST *) ;
   virtual void visitLinkageSpecification(LinkageSpecificationAST *) ;
@@ -327,7 +334,6 @@ private:
   virtual void visitNewDeclarator(NewDeclaratorAST *) ;
   virtual void visitNewExpression(NewExpressionAST *) ;
   virtual void visitNewInitializer(NewInitializerAST *) ;
-  virtual void visitNewTypeId(NewTypeIdAST *) ;
   virtual void visitOperator(OperatorAST *) ;
   virtual void visitOperatorFunctionId(OperatorFunctionIdAST *) ;
   virtual void visitParameterDeclaration(ParameterDeclarationAST *) ;

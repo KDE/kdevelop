@@ -214,6 +214,25 @@ void UseBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST* node)
   }
 }
 
+void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
+{
+  if(node->init_declarators)
+  {
+    //Overridden so we can build uses for constructors like "A a(3);"
+    UseExpressionVisitor visitor( editor()->parseSession(), this );
+    if( !node->ducontext ) {
+      if(lastContext() && lastContext()->type() == DUContext::Template && lastContext()->parentContext() == currentContext())
+        node->ducontext = lastContext();//Use the template-context so we can build uses for the template-parameters of template functions
+      else
+        node->ducontext = currentContext();
+    }
+    
+    visitor.parse( node );
+  }else{
+    DefaultVisitor::visitSimpleDeclaration(node);    
+  }
+}
+
 void UseBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node)
 {
   UseBuilderBase::visitSimpleTypeSpecifier(node);

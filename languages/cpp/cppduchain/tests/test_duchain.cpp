@@ -2182,7 +2182,7 @@ Declaration* declaration(Declaration* decl, TopDUContext* top = 0) {
 
 void TestDUChain::testFunctionDefinition2() {
   {
-    QByteArray text("//ääää\nclass B{B();}; B::B() {} "); //the ääää tests whether the column-numbers are resistant to special characters
+    QByteArray text("//????\nclass B{B();}; B::B() {} "); //the ???? tests whether the column-numbers are resistant to special characters
 
     TopDUContext* top = parse(text, DumpNone);
 
@@ -2207,7 +2207,7 @@ void TestDUChain::testFunctionDefinition2() {
     release(top);
   }
   {
-    QByteArray text("void test(int a, int cc);"); //the ääää tests whether the column-numbers are resistant to special characters
+    QByteArray text("void test(int a, int cc);"); //the ???? tests whether the column-numbers are resistant to special characters
 
     TopDUContext* top = parse(text, DumpNone);
 
@@ -2356,37 +2356,49 @@ void TestDUChain::testConstructorUses()
 {
   // NOTE: This test is currently broken because only the 2nd case is reported.
   QByteArray text;
-  text += "class A {\n";
+  text += "class Q {\n";
   text += "public:\n";
-  text += "  A(int var) { }\n";
+  text += "  Q(int var) { }\n";
   text += "};\n";
-  text += "class B : public A {\n";
+  text += "class B : public Q {\n";
   text += "public:\n";
-  text += "  B(int var) : A(var) { }\n";
+  text += "  B(int var) : Q(var) { }\n";
   text += "};\n";
   text += "int main(int argc, char* argv[]) {\n";
-  text += "  A  a1(123);\n";
-  text += "  A  a2 = A(123);\n";
-  text += "  A *a3 = new A(123);\n";
+  text += "  Q  a1(123);\n";
+  text += "  Q  a2 = Q(123);\n";
+  text += "  Q *a3 = new Q(123);\n";
+  text += "  Q  a4(argc);\n";
   text += "}\n";
   
   TopDUContext* top = parse(text, DumpNone);
   DUChainWriteLocker lock(DUChain::lock());
   
+  QCOMPARE(top->childContexts().size(), 4);
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  
   Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
+  QCOMPARE(ctorDecl->uses().size(), 1);
   QList<SimpleRange> uses = ctorDecl->uses().values().first();
   
-  // NOTE: The following two test shows that it partially works, remove this when
-  //       all cases work.
-  QCOMPARE(uses.size(), 1);
-  QCOMPARE(uses[0], SimpleRange(10, 11, 10, 12));
+  QCOMPARE(uses.size(), 4);
+  kDebug() << uses[0].textRange();
+  QCOMPARE(uses[0], SimpleRange(9, 7, 9, 8));
+  QCOMPARE(uses[1], SimpleRange(10, 11, 10, 12));
+  kDebug() << uses[2].textRange();
+  QCOMPARE(uses[2], SimpleRange(11, 15, 11, 16));
+  QCOMPARE(uses[3], SimpleRange(12, 7, 12, 8));
   
-  // NOTE: But these are the actual expected results.
+  #if 0
+  // NOTE: These are the actual expected results. TODO: make all work
   QCOMPARE(uses.size(), 4);
   QCOMPARE(uses[0], SimpleRange(6, 16, 6, 17));
   QCOMPARE(uses[1], SimpleRange(9, 7, 9, 8));
   QCOMPARE(uses[2], SimpleRange(10, 11, 10, 12));
   QCOMPARE(uses[3], SimpleRange(11, 15, 11, 16));
+  QCOMPARE(uses[4], SimpleRange(12, 7, 12, 8));
+  #endif
+  release(top);
 }
 
 void TestDUChain::testCodeModel() {
@@ -3531,6 +3543,7 @@ void TestDUChain::testTemplateParameters() {
   QVERIFY(param3Decl);
   QVERIFY(!param3Decl->defaultParameter().isEmpty());
   
+  release(top);
 }
 
 void TestDUChain::testTemplateDefaultParameters() {
@@ -3967,10 +3980,9 @@ void TestDUChain::testOperatorUses()
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
-    ///@todo Also build constructor-uses for initializers
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
-//     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).textRange(), KTextEditor::Range(0, 68, 0, 69));
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).textRange(), KTextEditor::Range(0, 79, 0, 80));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).textRange(), KTextEditor::Range(0, 68, 0, 69));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(1).textRange(), KTextEditor::Range(0, 79, 0, 80));
 
     release(top);
   }

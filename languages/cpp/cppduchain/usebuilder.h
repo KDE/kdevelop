@@ -74,6 +74,7 @@ protected:
 //   virtual void visitBaseSpecifier(BaseSpecifierAST* node);
   virtual void visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *);
   virtual void visitSimpleTypeSpecifier(SimpleTypeSpecifierAST* node);
+  virtual void visitSimpleDeclaration(SimpleDeclarationAST* );  
   virtual void visitCondition(ConditionAST *node);
   virtual void visitDeclarator(DeclaratorAST* node);
   virtual void visitUsing(UsingAST *);
