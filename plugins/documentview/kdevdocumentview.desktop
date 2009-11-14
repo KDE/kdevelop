@@ -13,6 +13,7 @@ Comment[uk]=Цей додаток відображає у графічному �
 Comment[x-test]=xxThis plugin displays a graphical view of all documents currently loaded and separates them by mimetype.xx
 Comment[zh_TW]=這個外掛程式顯示目前載入並依 MIME 型態分類的文件的圖形檢視。
 Name=Document View
+Name[de]=Dokumentansicht
 Name[en_GB]=Document View
 Name[es]=Vista de documento
 Name[fr]=Vue Document
