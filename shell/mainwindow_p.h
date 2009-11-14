@@ -107,6 +107,7 @@ public Q_SLOTS:
     void configureSessions();
     void configureNotifications();
     void showAboutPlatform();
+    void showLoadedPlugins();
 
     void toggleArea(bool b);
     void showErrorMessage(QString message, int timeout);

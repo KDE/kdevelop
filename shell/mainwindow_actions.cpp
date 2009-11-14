@@ -32,6 +32,7 @@ Boston, MA 02110-1301, USA.
 #include "sessiondialog.h"
 
 #include "mainwindow.h"
+#include "loadedpluginsdialog.h"
 
 namespace KDevelop {
 
@@ -172,6 +173,12 @@ void MainWindowPrivate::configureNotifications()
 void MainWindowPrivate::showAboutPlatform()
 {
     KAboutApplicationDialog dlg(Core::self()->componentData().aboutData(), m_mainWindow );
+    dlg.exec();
+}
+
+void MainWindowPrivate::showLoadedPlugins()
+{
+    LoadedPluginsDialog dlg(m_mainWindow);
     dlg.exec();
 }
 

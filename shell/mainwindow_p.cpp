@@ -238,7 +238,11 @@ void MainWindowPrivate::setupActions()
     action->setStatusTip( i18n("Show Information about KDevelop Platform") );
     action->setWhatsThis( i18n( "<b>About KDevelop Platform</b><p>Shows a dialog with information about KDevelop Platform.</p>" ) );
 
-
+    action = actionCollection()->addAction( "loaded_plugins", this, SLOT( showLoadedPlugins() ) );
+    action->setText( i18n("Loaded Plugins") );
+    action->setStatusTip( i18n("Show a list of all loaded plugins") );
+    action->setWhatsThis( i18n( "<b>Loaded Plugins</b><p>Shows a dialog with information about all loaded plugins.</p>" ) );
+    
 //     KToolBarPopupAction *popupAction;
 //     popupAction = new KToolBarPopupAction( KIcon( "process-stop" ),
 //                                            i18n( "&Stop" ),
