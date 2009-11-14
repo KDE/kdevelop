@@ -1669,10 +1669,12 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     return constructedType;
   }
 
-  bool ExpressionVisitor::buildParametersFromDeclaration(ParameterDeclarationClauseAST* node)
+  bool ExpressionVisitor::buildParametersFromDeclaration(ParameterDeclarationClauseAST* node, bool store)
   {
-    m_parameters.clear();
-    m_parameterNodes.clear();
+    if(store) {
+      m_parameters.clear();
+      m_parameterNodes.clear();
+    }
 
     if(node->parameter_declarations)
     {
@@ -1682,23 +1684,40 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       do
         {
-          visit(it->element);
-          m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
-          m_parameterNodes.append(it->element);
+          visit(it->element->type_specifier);
+          
+          if(it->element->declarator) {
+            ///@todo Eventually build constructor uses for mis-parsed sub-declarators or parameter-declaration-clauses
+            if(it->element->declarator->sub_declarator && it->element->declarator->sub_declarator->id)
+            {
+              //Special handling is required: Things that really are initializers are treated as declarators in a mis-parsed ParameterDeclarationClause
+              visitName(it->element->declarator->sub_declarator->id);
+            }else if(it->element->declarator->parameter_declaration_clause)
+            {
+              buildParametersFromDeclaration(it->element->declarator->parameter_declaration_clause, false);
+            }
+          }
+          visit(it->element->expression);
+          if(store) {
+            m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
+            m_parameterNodes.append(it->element);
+          }
           it = it->next;
         }
       while (it != end);
     }
     
-    
-    //Check if all parameters could be evaluated
-    int paramNum = 1;
     bool fail = false;
-    for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it ) {
-      if( !(*it).type ) {
-        problem( node, QString("parameter %1 could not be evaluated").arg(paramNum) );
-        fail = true;
-        paramNum++;
+    
+    if(store) {
+      //Check if all parameters could be evaluated
+      int paramNum = 1;
+      for( QList<OverloadResolver::Parameter>::const_iterator it = m_parameters.constBegin(); it != m_parameters.constEnd(); ++it ) {
+        if( !(*it).type ) {
+          problem( node, QString("parameter %1 could not be evaluated").arg(paramNum) );
+          fail = true;
+          paramNum++;
+        }
       }
     }
     

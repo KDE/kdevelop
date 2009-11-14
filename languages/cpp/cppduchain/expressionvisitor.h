@@ -178,7 +178,7 @@ private:
     ///Fills m_parameters from the given argument-expression
     ///Returns true if all parameters could be evaluated successfully
     bool buildParametersFromExpression(AST* expression);
-    bool buildParametersFromDeclaration(ParameterDeclarationClauseAST* paramDecl);
+    bool buildParametersFromDeclaration(ParameterDeclarationClauseAST* paramDecl, bool store = true);
     
     ///If m_lastType is a valid constructed class-type, returns that type,
     ///and fills all its constructors into m_lastDeclarations

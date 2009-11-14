@@ -2354,51 +2354,72 @@ void TestDUChain::testLoopNamespaceImport() {
 
 void TestDUChain::testConstructorUses()
 {
-  // NOTE: This test is currently broken because only the 2nd case is reported.
-  QByteArray text;
-  text += "class Q {\n";
-  text += "public:\n";
-  text += "  Q(int var) { }\n";
-  text += "};\n";
-  text += "class B : public Q {\n";
-  text += "public:\n";
-  text += "  B(int var) : Q(var) { }\n";
-  text += "};\n";
-  text += "int main(int argc, char* argv[]) {\n";
-  text += "  Q  a1(123);\n";
-  text += "  Q  a2 = Q(123);\n";
-  text += "  Q *a3 = new Q(123);\n";
-  text += "  Q  a4(argc);\n";
-  text += "}\n";
-  
-  TopDUContext* top = parse(text, DumpNone);
-  DUChainWriteLocker lock(DUChain::lock());
-  
-  QCOMPARE(top->childContexts().size(), 4);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
-  
-  Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
-  QCOMPARE(ctorDecl->uses().size(), 1);
-  QList<SimpleRange> uses = ctorDecl->uses().values().first();
-  
-  QCOMPARE(uses.size(), 4);
-  kDebug() << uses[0].textRange();
-  QCOMPARE(uses[0], SimpleRange(9, 7, 9, 8));
-  QCOMPARE(uses[1], SimpleRange(10, 11, 10, 12));
-  kDebug() << uses[2].textRange();
-  QCOMPARE(uses[2], SimpleRange(11, 15, 11, 16));
-  QCOMPARE(uses[3], SimpleRange(12, 7, 12, 8));
-  
-  #if 0
-  // NOTE: These are the actual expected results. TODO: make all work
-  QCOMPARE(uses.size(), 4);
-  QCOMPARE(uses[0], SimpleRange(6, 16, 6, 17));
-  QCOMPARE(uses[1], SimpleRange(9, 7, 9, 8));
-  QCOMPARE(uses[2], SimpleRange(10, 11, 10, 12));
-  QCOMPARE(uses[3], SimpleRange(11, 15, 11, 16));
-  QCOMPARE(uses[4], SimpleRange(12, 7, 12, 8));
-  #endif
-  release(top);
+  {
+    QByteArray text = "struct A { A(A); A(A,A); }; void test() { A w; A a(A(w), A(w, w), w); }";
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().size(), 3);
+    QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->uses().begin()->size(), 4);
+
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    
+    ///@todo Make these work! (ExpressionVisitor::buildParametersFromDeclaration)
+    #if 0
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[0].uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1].uses().size(), 1);
+    #endif
+    
+    release(top);
+  }
+  {
+    // NOTE: This test is currently broken because only the 2nd case is reported.
+    QByteArray text;
+    text += "class Q {\n";
+    text += "public:\n";
+    text += "  Q(int var) { }\n";
+    text += "};\n";
+    text += "class B : public Q {\n";
+    text += "public:\n";
+    text += "  B(int var) : Q(var) { }\n";
+    text += "};\n";
+    text += "int main(int argc, char* argv[]) {\n";
+    text += "  Q  a1(123);\n";
+    text += "  Q  a2 = Q(123);\n";
+    text += "  Q *a3 = new Q(123);\n";
+    text += "  Q  a4(argc);\n";
+    text += "}\n";
+    
+    TopDUContext* top = parse(text, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    
+    QCOMPARE(top->childContexts().size(), 4);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+    
+    Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
+    QCOMPARE(ctorDecl->uses().size(), 1);
+    QList<SimpleRange> uses = ctorDecl->uses().values().first();
+    
+    QCOMPARE(uses.size(), 4);
+    kDebug() << uses[0].textRange();
+    QCOMPARE(uses[0], SimpleRange(9, 7, 9, 8));
+    QCOMPARE(uses[1], SimpleRange(10, 11, 10, 12));
+    kDebug() << uses[2].textRange();
+    QCOMPARE(uses[2], SimpleRange(11, 15, 11, 16));
+    QCOMPARE(uses[3], SimpleRange(12, 7, 12, 8));
+    
+    #if 0
+    // NOTE: These are the actual expected results. TODO: make all work
+    QCOMPARE(uses.size(), 4);
+    QCOMPARE(uses[0], SimpleRange(6, 16, 6, 17));
+    QCOMPARE(uses[1], SimpleRange(9, 7, 9, 8));
+    QCOMPARE(uses[2], SimpleRange(10, 11, 10, 12));
+    QCOMPARE(uses[3], SimpleRange(11, 15, 11, 16));
+    QCOMPARE(uses[4], SimpleRange(12, 7, 12, 8));
+    #endif
+    release(top);
+  }
 }
 
 void TestDUChain::testCodeModel() {
