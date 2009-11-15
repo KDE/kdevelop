@@ -33,6 +33,8 @@ SnippetRepository::SnippetRepository(const QString& name, const QString& locatio
 
     // Tell the new repository to load it's snippets
     QTimer::singleShot(0, this, SLOT(slotSyncRepository()));
+
+    kDebug() << "created new snippet repo" << location << this;
 }
 
 SnippetRepository::~SnippetRepository()
@@ -43,6 +45,8 @@ SnippetRepository::~SnippetRepository()
 
 void SnippetRepository::slotSyncRepository()
 {
+    kDebug() << "syncing repo" << location_ << "with" << rowCount() << "rows" << this;
+
     // as we are going to reget all snippets from this base directory
     // we first need to remove all snippets and sub-repos
     removeRows( 0, rowCount() );

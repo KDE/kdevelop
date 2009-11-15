@@ -20,6 +20,7 @@
 
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <KDebug>
 
 #include "snippetstore.h"
 #include "snippetrepository.h"
@@ -32,6 +33,8 @@ Snippet::Snippet(const QString& filename, SnippetRepository* repo)
 
     // tell the new snippet to get it's data from the file
     QTimer::singleShot(0, this, SLOT(slotSyncSnippet()));
+
+    kDebug() << "created new snippet" << getFileName() << this << repo_;
 }
 
 Snippet::~Snippet()
@@ -40,6 +43,8 @@ Snippet::~Snippet()
 
 void Snippet::slotSyncSnippet()
 {
+    kDebug() << "syncing snippet" << getFileName() << this << repo_;
+
     if (!QFile::exists( getFileName() ))
         return;
 
