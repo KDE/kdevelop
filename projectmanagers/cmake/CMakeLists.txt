@@ -56,6 +56,7 @@ set( cmakesettings_UI
 
 set( cmakedoc_SRCS 
   cmakedocumentation.cpp
+  cmakehelpdocumentation.cpp
 )
 
 remove_definitions( -DQT_NO_STL )

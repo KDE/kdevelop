@@ -51,6 +51,8 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         virtual QIcon icon() const;
         virtual QString name() const;
         virtual KSharedPtr<KDevelop::IDocumentation> homePage() const;
+        
+        QString descriptionForIdentifier(const QString& identifier, Type t);
     public slots:
         void delayedInitialization();
         

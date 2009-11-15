@@ -27,7 +27,7 @@ class KUrl;
 class ICMakeDocumentation : public KDevelop::IDocumentationProvider
 {
 public:
-    enum Type { Command, Variable, Module, Property, Policy };
+    enum Type { Command, Variable, Module, Property, Policy, EOType };
     
     virtual ~ICMakeDocumentation() {}
     virtual KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file)=0;

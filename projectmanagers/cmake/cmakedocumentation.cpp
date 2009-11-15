@@ -26,7 +26,6 @@
 #include <QRegExp>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
-#include <interfaces/idocumentation.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <kmimetype.h>
@@ -36,26 +35,14 @@
 #include <interfaces/iproject.h>
 #include <KStandardDirs>
 #include <KIcon>
+#include "cmakehelpdocumentation.h"
+#include "cmakedoc.h"
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
 K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmakedocumentation", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
 
-class CMakeDoc : public KDevelop::IDocumentation
-{
-    public:
-        CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
-        
-        virtual QString description() const { return mDesc; }
-        virtual QString name() const { return mName; }
-        virtual bool providesWidget() const { return false; }
-        virtual KDevelop::IDocumentationProvider* provider() { return s_provider; }
-        
-        static CMakeDocumentation* s_provider;
-        
-    private:
-        QString mName, mDesc;
-};
 CMakeDocumentation* CMakeDoc::s_provider=0;
+KDevelop::IDocumentationProvider* CMakeDoc::provider() { return s_provider; }
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( CMakeSupportDocFactory::componentData(), parent )
@@ -70,12 +57,13 @@ CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     QTimer::singleShot(0, this, SLOT(delayedInitialization()));
 }
 
+static const char* args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", 0, 0 };
+
 void CMakeDocumentation::delayedInitialization()
 {
-    collectIds("--help-command-list", Command);
-    collectIds("--help-variable-list", Variable);
-    collectIds("--help-module-list", Module);
-    collectIds("--help-property-list", Property);
+    for(int i=0; i<=Property; i++) {
+        collectIds(QString(args[i])+"-list", (Type) i);
+    }
     
     m_index->setStringList(m_typeForName.keys());
 }
@@ -86,7 +74,7 @@ void CMakeDocumentation::collectIds(const QString& param, Type type)
     ids.takeFirst();
     foreach(const QString& name, ids)
     {
-        m_typeForName[name.toLower()]=type;
+        m_typeForName[name]=type;
     }
 }
 
@@ -95,42 +83,30 @@ QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
     return m_typeForName.keys(t);
 }
 
+QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t)
+{
+    QString desc;
+    if(args[t])
+        desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified())+"</pre>";
+    
+    return desc;
+}
+
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file)
 {
-    if(KMimeType::findByUrl(file)->name()!="text/x-cmake")
+    if(!KMimeType::findByUrl(file)->is("text/x-cmake"))
         return KSharedPtr<KDevelop::IDocumentation>();
     
     kDebug() << "seeking documentation for " << identifier;
-    QString arg, id=identifier.toLower();
-    
-    QString ident(identifier);
-    
-    // remove whitespaces
-    ident.remove(QRegExp("[\\s]"));
-    
-    if(m_typeForName.contains(id)) {
-        Type t=m_typeForName[id];
-        switch(t)
-        {
-            case Command:
-                arg="--help-command";
-                break;
-            case Variable:
-                arg="--help-variable";
-                break;
-            case Module:
-                arg="--help-module";
-                break;
-            case Property:
-            case Policy:
-                break;
-        }
-        qDebug() << "type for" << id << m_typeForName[id];
-    }
-    
     QString desc;
-    if(!arg.isEmpty())
-        desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(arg) << ident)+"</pre>";
+
+    if(m_typeForName.contains(identifier)) {
+        desc=descriptionForIdentifier(identifier, m_typeForName[identifier]);
+    } else {
+        if(m_typeForName.contains(identifier.toUpper())) {
+            desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toUpper()]);
+        }
+    }
     
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
     ICMakeManager* m=0;
@@ -138,19 +114,18 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
         m=p->managerPlugin()->extension<ICMakeManager>();
     if(m)
     {
-        QPair<QString, QString> entry = m->cacheValue(p, ident);
+        QPair<QString, QString> entry = m->cacheValue(p, identifier);
         if(!entry.first.isEmpty())
             desc += i18n("<br /><em>Cache Value:</em> %1\n", entry.first);
         
         if(!entry.second.isEmpty())
             desc += i18n("<br /><em>Cache Documentation:</em> %1\n", entry.second);
-        kDebug() << "cache info:" << entry << file;
     }
     
     if(desc.isEmpty())
         return KSharedPtr<KDevelop::IDocumentation>();
     else
-        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(ident, desc));
+        return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
 }
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl)
@@ -180,14 +155,5 @@ QString CMakeDocumentation::name() const
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
 {
-    QString style="style='margin-left: 6 em'";
-    QString contents = i18n("<html><b>Contents:</b> Use the index to select what you are looking for.<p />");
-    contents += i18n("<b>Commands:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Command)).join("<br/>"));
-    contents += i18n("<b>Variables:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Variable)).join("<br/>"));
-    contents += i18n("<b>Modules:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Module)).join("<br/>"));
-    contents += i18n("<b>Properties:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Property)).join("<br/>"));
-    contents += i18n("<b>Policies:</b> <p %1>%2</p>", style, QStringList(m_typeForName.keys(Policy)).join("<br/>"));
-    contents += i18n("</html>");
-    
-    return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(i18n("CMake Contents"), contents));
+    return KSharedPtr<KDevelop::IDocumentation>(new CMakeHomeDocumentation);
 }
