@@ -614,7 +614,7 @@ void CPPInternalParseJob::run()
       ///@todo Think of a good mechanism to decide when we want to drop features, and when we want to keep them.
       if(!contentContext || !contentContext->smartRange())
         newFeatures = parentJob()->minimumFeatures();
-
+      
       if(newFeatures == TopDUContext::VisibleDeclarationsAndContexts)
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
 
@@ -701,7 +701,7 @@ void CPPInternalParseJob::run()
         }
 
         if (!parentJob()->abortRequested()) {
-          if (newFeatures & TopDUContext::AllDeclarationsContextsAndUses) {
+          if ((newFeatures & TopDUContext::AllDeclarationsContextsAndUses) == TopDUContext::AllDeclarationsContextsAndUses) {
               parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
               UseBuilder useBuilder(&editor);
