@@ -19,8 +19,6 @@
 #include "makeimplementationprivate.h"
 #include "ui_privateimplementation.h"
 
-#include "cpputils.h"
-
 #include "cppduchain/sourcemanipulation.h"
 #include "cppnewclass.h"
 #include <cppeditorintegrator.h>
@@ -368,7 +366,7 @@ void MakeImplementationPrivate::updateConstructors(const Declaration & privateSt
             }
             else
               insertionPoint = integrator.findPosition(construct->constructor_initializers->colon);
-            insertedText += " " + m_privatePointerName + "(" + CppUtils::insertMemoryAllocation(privateStruct) + ") ";
+            insertedText += " " + m_privatePointerName + "(" + insertMemoryAllocation(privateStruct) + ") ";
             
             DocumentChange constructorChange(constructor->url(), SimpleRange(insertionPoint, 0), QString(), insertedText);
             documentChangeSet().addChange(constructorChange);
@@ -435,7 +433,7 @@ void MakeImplementationPrivate::updateDestructor()
         if(inside.column > 0)
             inside.column = inside.column - 1;
         DocumentChange destructorChange(internal->url(), SimpleRange(inside, 0),
-                                        QString(), /*CppUtils::insertMemoryDeallocation()*/ "delete this->" + m_privatePointerName + ";\n");
+                                        QString(), "delete this->" + m_privatePointerName + ";\n");
     
         documentChangeSet().addChange(destructorChange);
     }
