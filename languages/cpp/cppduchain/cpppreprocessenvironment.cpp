@@ -105,7 +105,7 @@ void CppPreprocessEnvironment::merge( const Cpp::ReferenceCountedMacroSet& macro
 }
 
 void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file ) {
-    
+    ///@todo Do not copy all the macros, instead work on environment-sets directly.
     Cpp::ReferenceCountedMacroSet addedMacros = file->definedMacros() - m_environmentFile->definedMacros();
     
     for( Cpp::ReferenceCountedMacroSet::Iterator it(addedMacros.iterator()); it; ++it )

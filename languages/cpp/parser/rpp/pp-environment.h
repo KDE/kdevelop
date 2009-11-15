@@ -39,28 +39,6 @@ class pp_macro;
 class pp;
 class LocationTable;
 
-class KDEVCPPRPP_EXPORT MacroBlock
-{
-public:
-  MacroBlock(int _sourceLine);
-  virtual ~MacroBlock();
-
-  void setMacro(pp_macro* macro);
-
-  QList<MacroBlock*> childBlocks;
-
-  // The condition that opened this block(list of string indices)
-  QVector<uint> condition;
-  // The block to use if this block's condition was not met
-  MacroBlock* elseBlock;
-
-  // The source line where the block occurred
-  int sourceLine;
-
-  // This block is the owner of these macros
-  QList<pp_macro*> macros;
-};
-
 class KDEVCPPRPP_EXPORT Environment
 {
 public:
@@ -69,24 +47,9 @@ public:
   Environment(pp* preprocessor);
   virtual ~Environment();
 
-  MacroBlock* firstBlock() const;
-  MacroBlock* currentBlock() const;
-
-  void enterBlock(MacroBlock* block);
-  MacroBlock* enterBlock(int sourceLine, const QVector<uint>& condition = QVector<uint>());
-  MacroBlock* elseBlock(int sourceLine, const QVector<uint>& condition = QVector<uint>());
-  void leaveBlock();
-
-  // Replay previously saved blocks on this environment
-  void visitBlock(MacroBlock* block, int depth = 0);
-
-  void clear();
-
-  // For those not interested in the result, just in getting memory released etc.
-  void cleanup();
-
   void clearMacro(const KDevelop::IndexedString& name);
 
+  //The macro will be owned by the environment object
   //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
 
@@ -95,9 +58,10 @@ public:
   //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)
   pp_macro* retrieveStoredMacro(const KDevelop::IndexedString& name) const;
   
+  //Returns all currently visible macros
   QList<pp_macro*> allMacros() const;
 
-  //Take the set of environment-macros from the given environment
+  //Swap the macros with the given environment, includign ownership
   virtual void swapMacros( Environment* parentEnvironment );
 
   //Faster access then allMacros(..), because nothing is copied
@@ -109,8 +73,7 @@ public:
 private:
   EnvironmentMap m_environment;
 
-  QStack<MacroBlock*> m_blocks;
-  bool m_replaying;
+  QVector<pp_macro*> m_ownedMacros;
   pp* m_preprocessor;
   LocationTable* m_locationTable;
 };

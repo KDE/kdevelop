@@ -116,7 +116,6 @@ public:
   pool* mempool;
   TokenStream* token_stream;
 
-  rpp::MacroBlock* macros;
   KDevelop::IndexedString m_url; //Should contain the url from which the content was extracted, can also be empty.
 
 private:

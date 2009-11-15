@@ -145,13 +145,8 @@ void PreprocessJob::run()
     rpp::pp preprocessor(this);
     m_pp = &preprocessor;
 
-    // Create a new macro block if this is the master preprocess-job
-    if( parentJob()->masterJob() == parentJob() )
-        parentJob()->parseSession()->macros = new rpp::MacroBlock(0);
-    
     //Eventually initialize the environment with the parent-environment to get its macros
     m_currentEnvironment = new CppPreprocessEnvironment( &preprocessor, m_firstEnvironmentFile );
-    m_currentEnvironment->enterBlock(parentJob()->masterJob()->parseSession()->macros);
 
     //If we are included from another preprocessor, copy its macros
     if( parentJob()->parentPreprocessor() ) {

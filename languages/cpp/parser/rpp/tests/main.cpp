@@ -49,11 +49,7 @@ int main (int /*argc*/, char *argv[])
 
   preprocess.processFile(QString("pp-configuration")); // ### put your macros here!
 
-  preprocess.environment()->enterBlock(0, PreprocessedContents());
-
   QString result = QString::fromUtf8(stringFromContents(preprocess.processFile(QString(filename))));
-
-  preprocess.environment()->cleanup();
 
   QStringList resultLines = result.split('\n');
   for (int i = 0; i < resultLines.count(); ++i)

@@ -409,7 +409,6 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, Q
   }
 
   QString ret = QString::fromUtf8(stringFromContents(pp.processFile("anonymous", text.toUtf8())));
-  pp.environment()->cleanup();
   
   return ret;
 }

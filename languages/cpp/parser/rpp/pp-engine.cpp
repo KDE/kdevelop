@@ -1,6 +1,7 @@
 /*
   Copyright 2005 Roberto Raggi <roberto@kdevelop.org>
   Copyright 2006 Hamish Rodda <rodda@kde.org>
+  Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -817,8 +818,6 @@ void pp::handle_if (Stream& input)
       expand_condition(input, cs);
     }
 
-    environment()->enterBlock(input.inputPosition().line, condition);
-
     Stream cs(&condition, inputPosition);
     cs.setOriginalInputPosition(originalInputPosition);
     Value result = eval_expression(cs);
@@ -835,8 +834,6 @@ void pp::handle_if (Stream& input)
       Stream cs(&condition);
       expand_condition(input, cs);
     }
-
-    environment()->enterBlock(input.inputPosition().line, condition);
 
     _M_true_test[iflevel] = true;
     _M_skipping[iflevel] = true;
@@ -859,12 +856,10 @@ void pp::handle_else(int sourceLine)
   else if (iflevel > 0 && _M_skipping[iflevel - 1])
   {
     _M_skipping[iflevel] = true;
-    environment()->elseBlock(sourceLine);
   }
   else
   {
     _M_skipping[iflevel] = _M_true_test[iflevel];
-    environment()->elseBlock(sourceLine);
   }
 }
 
@@ -897,8 +892,6 @@ void pp::handle_elif(Stream& input)
       expand_condition(input, cs);
     }
 
-    environment()->elseBlock(input.inputPosition().line, condition);
-
     if (!_M_true_test[iflevel] && !_M_skipping[iflevel - 1])
     {
       Stream cs(&condition, inputPosition);
@@ -925,8 +918,6 @@ void pp::handle_endif(Stream& input, Stream& output)
   }
   else
   {
-    environment()->leaveBlock();
-
     _M_skipping[iflevel] = 0;
     _M_true_test[iflevel] = 0;
 
@@ -963,8 +954,6 @@ void pp::handle_ifdef (bool check_undefined, Stream& input)
 
   hadGuardCandidate = true;
   
-  environment()->enterBlock(input.inputPosition().line);//, QString("%1defined(%2)").arg(check_undefined ? "!" : "").arg(macro_name).toUtf8());
-
   if (test_if_level())
   {
     pp_macro* macro = m_environment->retrieveMacro(macro_name, true);
