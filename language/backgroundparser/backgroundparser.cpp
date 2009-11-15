@@ -223,7 +223,7 @@ public:
         }
 
         if(languages.isEmpty())
-            kWarning() << "found no languages for url" << url;
+            kDebug() << "found no languages for url" << url;
         else
             kWarning() << "could not create parse-job for url" << url;
 
