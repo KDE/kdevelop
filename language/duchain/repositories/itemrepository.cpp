@@ -245,9 +245,17 @@ bool ItemRepositoryRegistry::open(const QString& path, bool clear, KLockFile::Pt
     pathDir.setFilter(QDir::Files);
     
     //When there is only one file in the repository, it's the lock-file, and the repository has just been cleared
-    if(pathDir.count() != 1 && !QFile::exists( m_path + QString("/version_%1").arg(staticItemRepositoryVersion()) )) {
+    if(pathDir.count() != 1)
+    {
+      if(!QFile::exists( m_path + QString("/version_%1").arg(staticItemRepositoryVersion()) ))
+      {
       kWarning() << "version-hint not found, seems to be an old version";
       clear = true;
+      }else if(getenv("CLEAR_DUCHAIN_DIR"))
+      {
+        kWarning() << "clearing duchain directory because CLEAR_DUCHAIN_DIR is set";
+        clear = true;
+      }
     }
     
     QFile crashesFile(m_path + QString("/crash_counter"));
