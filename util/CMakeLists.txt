@@ -17,6 +17,8 @@ set (kdevplatformutil_LIB_UI
     runoptions.ui
 )
 
+add_subdirectory(duchainify)
+
 add_subdirectory(tests)
 
 kde4_add_ui_files(kdevplatformutil_LIB_SRCS ${kdevplatformutil_LIB_US})
