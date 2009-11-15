@@ -1148,11 +1148,12 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
         if( !fail )
           chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
-        else if(!declarations.isEmpty())
+        else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
       
-      newUse( node , token, token+1, chosenFunction );
+      if(chosenFunction)
+        newUse( node , token, token+1, chosenFunction );
     }else{
       DefaultVisitor::visitInitDeclarator(node);
     }
@@ -1381,10 +1382,12 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
         if( !fail )
           chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
-        else if(!declarations.isEmpty())
+        else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
-      newUse( node , token, token+1, chosenFunction );    
+      
+      if(chosenFunction)
+        newUse( node , token, token+1, chosenFunction );    
     }
 
     m_lastType = lastType;
