@@ -1170,10 +1170,13 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
         
         QString id=e->text(KTextEditor::Range(start, end));
         ICMakeDocumentation* docu=CMake::cmakeDocumentation();
-        KSharedPtr<IDocumentation> desc=docu->description(id, url);
-        if(!desc.isNull())
+        if( docu )
         {
-            doc=new CMakeNavigationWidget(top, desc);
+            KSharedPtr<IDocumentation> desc=docu->description(id, url);
+            if(!desc.isNull())
+            {
+                doc=new CMakeNavigationWidget(top, desc);
+            }
         }
     }
     

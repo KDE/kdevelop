@@ -184,8 +184,12 @@ void setProjectRootRelative( KDevelop::IProject* project, const QString& relativ
 ICMakeDocumentation* cmakeDocumentation()
 {
     KDevelop::IPlugin* p=KDevelop::ICore::self()->pluginController()->pluginForExtension(ICMakeDocumentation_iid);
-    Q_ASSERT(p);
     
+    if( !p ) 
+    {
+        return 0;
+    }
+
     ICMakeDocumentation* cmakedoc = qobject_cast<ICMakeDocumentation*>(p);
     
     Q_ASSERT(cmakedoc);
