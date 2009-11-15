@@ -104,7 +104,6 @@ public Q_SLOTS:
 
     bool applicationQuitRequested() const;
 
-    void configureSessions();
     void configureNotifications();
     void showAboutPlatform();
     void showLoadedPlugins();

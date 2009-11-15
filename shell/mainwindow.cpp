@@ -48,6 +48,7 @@ Boston, MA 02110-1301, USA.
 #include "documentcontroller.h"
 #include "debugcontroller.h"
 #include "workingsetcontroller.h"
+#include "sessioncontroller.h"
 
 namespace KDevelop
 {
@@ -209,6 +210,10 @@ void MainWindow::initialize()
         d->addPlugin(plugin);
     
     guiFactory()->addClient(Core::self()->debugControllerInternal());
+    guiFactory()->addClient(Core::self()->sessionController());
+    // Needed to re-plug the actions from the sessioncontroller as xmlguiclients don't
+    // seem to remember which actions where plugged in.
+    Core::self()->sessionController()->plugActions();
     d->setupGui();
 }
 

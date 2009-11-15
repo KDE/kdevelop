@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 #include <QtCore/QObject>
+#include <kxmlguiclient.h>
 
 namespace KDevelop
 {
@@ -30,7 +31,7 @@ namespace KDevelop
 class Session;
 class ISession;
 
-class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject
+class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
 public:
@@ -51,10 +52,14 @@ public:
     static QString sessionDirectory();
     static const QString cfgSessionGroup;
     static const QString cfgActiveSessionEntry;
+
+    void plugActions();
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
 private:
+    Q_PRIVATE_SLOT( d, void configureSessions() )
+    Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;
 };
 
