@@ -52,7 +52,7 @@ OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( KDevOpenWithFactory::componentData(), parent ),
     actionMap( 0 )
 {
-    setXMLFile( "kdevopenwithui.rc" );
+//    setXMLFile( "kdevopenwithui.rc" );
 }
 
 OpenWithPlugin::~OpenWithPlugin()
