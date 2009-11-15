@@ -268,6 +268,9 @@ void VcsPluginHelper::history()
 {
     SINGLEURL_SETUP_VARS
     KDevelop::VcsJob *job = iface->log(url);
+    if( !job ) {
+        kWarning() << "Couldn't create log job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+    }
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
     dlg->setCaption(i18n("%2 History (%1)", url.pathOrUrl(), iface->name()));
