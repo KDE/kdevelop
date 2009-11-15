@@ -191,11 +191,11 @@ public:
         QList<ILanguage*> languages = m_languageController->languagesForUrl(url);
         foreach (ILanguage* language, languages) {
             if(!language) {
-                kWarning(9504) << "got zero language for" << url;
+                kWarning() << "got zero language for" << url;
                 continue;
             }
             if(!language->languageSupport()) {
-                kWarning(9504) << "language has no language support assigned:" << language->name();
+                kWarning() << "language has no language support assigned:" << language->name();
                 continue;
             }
             ParseJob* job = language->languageSupport()->createParseJob(url);
@@ -223,9 +223,9 @@ public:
         }
 
         if(languages.isEmpty())
-            kWarning(9504) << "found no languages for url" << url;
+            kWarning() << "found no languages for url" << url;
         else
-            kWarning(9504) << "could not create parse-job for url" << url;
+            kWarning() << "could not create parse-job for url" << url;
 
         //Notify that we failed
         typedef QPointer<QObject> Notify;
