@@ -1203,11 +1203,17 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 {
     ProjectTargetItem* target=static_cast<ProjectBaseItem*>(it->parent())->target();
     if(!target) {
-        it->project()->removeFromFileSet(IndexedString(it->url()));
-        it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
-        it->setUrl(newUrl);
-        it->project()->addToFileSet(IndexedString(it->url()));
-        return true;
+        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
+        qDebug() << "pssss" << it->url() << "->" << newUrl;
+        bool ret=KIO::NetAccess::synchronousRun(job, 0);
+        
+        if(ret) {
+            it->project()->removeFromFileSet(IndexedString(it->url()));
+            it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
+            it->setUrl(newUrl);
+            it->project()->addToFileSet(IndexedString(it->url()));
+        }
+        return ret;
     }
     
     CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
@@ -1228,15 +1234,23 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
     e.setInformation(i18n("Remove a file called '%1'.", it->text()));
     e.addDocuments(IndexedString(lists), IndexedString(lists));
 
-    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, newName);
+    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, ' '+newName);
     if(ret && e.exec())
     {
         ret=e.applyAllChanges();
         
-        if(ret) {
+        if(ret)
+        {
             KIO::CopyJob* job=KIO::move(it->url(), newUrl);
-            ret=KIO::NetAccess::synchronousRun(job, 0);
-            it->project()->removeFromFileSet(IndexedString(it->url()));
+            bool ret=KIO::NetAccess::synchronousRun(job, 0);
+            
+            if(ret)
+            {
+                it->project()->removeFromFileSet(IndexedString(it->url()));
+                it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
+                it->setUrl(newUrl);
+                it->project()->addToFileSet(IndexedString(it->url()));
+            }
         }
     }
 
@@ -1245,14 +1259,21 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 
 bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
 {
+    if(_it->isProjectRoot())
+        return false;
+    
     CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
     KUrl lists=it->formerParent()->url();
     lists.addPath("CMakeLists.txt");
     if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
     {
-        it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
-        it->setUrl(newUrl);
-        return true;
+        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
+        bool ret=KIO::NetAccess::synchronousRun(job, 0);
+        if(ret) {
+            it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
+            it->setUrl(newUrl);
+        }
+        return ret;
     }
     QString newName=KUrl::relativePath(lists.upUrl().path(), newUrl.path());
     if(newName.startsWith("./"))
@@ -1278,6 +1299,10 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
         if(ret) {
             KIO::CopyJob* job=KIO::move(it->url(), newUrl);
             ret=KIO::NetAccess::synchronousRun(job, 0);
+            if(ret) {
+                it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
+                it->setUrl(newUrl);
+            }
         }
     }
     return ret;
