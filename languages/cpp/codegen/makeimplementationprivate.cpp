@@ -50,6 +50,20 @@
 namespace KDevelop
 {
 
+/**
+ * @param objectToAllocate The declaration of the object to allocate memory for
+ * @return the stringirized form of the user's preferred method of mamory allocation
+ */
+QString insertMemoryAllocation(const KDevelop::Declaration & objectToAllocate)
+{
+  return "new " + objectToAllocate.toString();
+}
+
+QString insertMemoryDeallocation(const KDevelop::Declaration& objectToDeallocate)
+{
+  return "delete " + objectToDeallocate.toString();
+}
+
 bool MakeImplementationPrivate::process()
 {
     //If invoked through auto generation, then gatherPrivateMembers wan't called

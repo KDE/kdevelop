@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Ramón Zarazúa <killerfox512+kde@gmail.com>
+   Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -39,18 +39,6 @@ class KUrl;
 namespace CppUtils
 {
   
-/**
- * @param objectToAllocate The declaration of the object to allocate memory for
- * @return the stringirized form of the user's preferred method of mamory allocation
- *
- * @todo Make this configurable by the user to use eg: new, malloc, or a custom memory allocation
- */
-QString insertMemoryAllocation(const KDevelop::Declaration & objectToAllocate);
-
-
-QString insertMemoryDeallocation(const KDevelop::Declaration & objectToDeallocate);
-
-
 ///If @param fast is true, no exhaustive search is done as fallback.
 KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false );
 

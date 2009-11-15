@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Ramón Zarazúa <killerfox512+kde@gmail.com>
+   Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -58,17 +58,6 @@ using namespace KDevelop;
 namespace CppUtils
 {
   
-QString insertMemoryAllocation(const KDevelop::Declaration & objectToAllocate)
-{
-  //TODO make this configurable by the user to use eg: new, malloc, or a custom memory allocation
-  return "new " + objectToAllocate.toString();
-}
-
-QString insertMemoryDeallocation(const KDevelop::Declaration& objectToDeallocate)
-{
-  return "delete " + objectToDeallocate.toString();
-}
-
 KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
 {
   QString urlPath = url.toLocalFile(); ///@todo Make this work with real urls
@@ -182,8 +171,10 @@ QStringList standardIncludePaths()
   static QStringList list;
   static bool init = false;
   
-  if(!init)
+  if(!init) {
+    init = true;
     CppTools::setupStandardIncludePaths(list);
+  }
   return list;
 }
 
