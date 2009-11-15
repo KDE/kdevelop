@@ -243,13 +243,13 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
             KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
-            close->setIcon(KIcon("project-close"));
+            close->setIcon(KIcon("project-development-close"));
             connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
             menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
             closeProjectsAdded = true;
         }
 
-        if ( !folderItemsAdded && item->folder() )
+        if ( !folderItemsAdded && prjitem )
         {
             folderItemsAdded = true;
             KAction* action = new KAction( i18n( "Create File" ), this );
