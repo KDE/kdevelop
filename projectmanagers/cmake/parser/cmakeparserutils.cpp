@@ -28,6 +28,7 @@
 #include <kprocess.h>
 #include <kstandarddirs.h>
 #include "cmakeprojectvisitor.h"
+#include <ktempdir.h>
 
 namespace CMakeParserUtils
 {
@@ -123,6 +124,8 @@ namespace CMakeParserUtils
         KProcess p;
         p.setOutputChannelMode(KProcess::MergedChannels);
         p.setProgram(execName, args);
+        KTempDir tmp(KStandardDirs::locateLocal("tmp", "kdevcmakemanager"));
+        p.setWorkingDirectory( tmp.name() );
         p.start();
         
         if(!p.waitForFinished())
@@ -134,7 +137,7 @@ namespace CMakeParserUtils
         QString t;
         t.prepend(b.trimmed());
         kDebug(9042) << "executed" << execName << "<" << t;
-        
+        tmp.unlink();
         return t;
     }
 
