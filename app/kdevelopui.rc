@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="98" name="kdevelop" >
+<kpartgui version="99" name="kdevelop" >
 <MenuBar>
   <Menu name="file">
     <text context="@title:menu">&amp;File</text>
@@ -114,11 +114,14 @@
 
   <Merge/>
 
+  <Menu name="sessions">
+    <text context="@title:menu">Sessions</text>
+  </Menu>
+
   <Menu name="settings">
     <text context="@title:menu">Settings</text>
     <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
     <DefineGroup append="show_merge" name="show_merge" />
-    <Action name="configure_sessions" append="configure_merge" />
     <Action name="options_configure_editors" append="configure_merge" />
     <DefineGroup append="configure_merge" name="configure_merge" />
   </Menu>
