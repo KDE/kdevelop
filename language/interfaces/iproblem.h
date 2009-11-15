@@ -56,6 +56,7 @@ public:
 
     ProblemData()
         : source(Unknown)
+        , severity(Error)
     {
     }
 
