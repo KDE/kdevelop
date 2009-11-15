@@ -72,7 +72,8 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecutePlugin::environmentGroupEntry, "default" ) );
-    runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
+    //TODO: Implement external terminal support
+    //runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
     foreach( QVariant dep, deps ) {
@@ -125,7 +126,8 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( moveDepUp, SIGNAL(clicked(bool)), SLOT(moveDependencyUp()) );
     connect( dependencies->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(checkActions(QItemSelection,QItemSelection)) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    //TODO: Implement external terminal support
+    //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
     connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
 }
@@ -235,7 +237,8 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecutePlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecutePlugin::environmentGroupEntry, environment->currentProfile() );
-    cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
+    //TODO: Implement external terminal support
+    //cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
     cfg.writeEntry( ExecutePlugin::dependencyActionEntry, dependencyAction->itemData( dependencyAction->currentIndex() ).toString() );
     QVariantList deps;
     for( int i = 0; i < dependencies->count(); i++ )
