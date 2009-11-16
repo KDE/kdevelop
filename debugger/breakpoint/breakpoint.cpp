@@ -86,8 +86,11 @@ bool Breakpoint::setData(int index, const QVariant& value)
             if (kind_ == CodeBreakpoint && idx != -1) {
                 m_url = KUrl(rx.cap(1));
                 m_line = rx.cap(2).toInt() - 1;
+                m_expression.clear();
             } else {
                 m_expression = s;
+                m_url.clear();
+                m_line = -1;
             }
         } else {
             m_condition = s;
