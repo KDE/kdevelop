@@ -17,7 +17,7 @@ set (kdevplatformutil_LIB_UI
     runoptions.ui
 )
 
-#add_subdirectory(duchainify)
+add_subdirectory(duchainify)
 
 add_subdirectory(tests)
 
