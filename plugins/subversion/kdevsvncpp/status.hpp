@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -29,8 +28,11 @@
 #include "svn_wc.h"
 
 // svncpp
-#include "kdevsvncpp/entry.hpp"
-#include "kdevsvncpp/pool.hpp"
+#include "svncpp/entry.hpp"
+#include "svncpp/pool.hpp"
+
+// stl
+#include "svncpp/vector_wrapper.hpp"
 
 namespace svn
 {
@@ -48,108 +50,108 @@ namespace svn
      * @param path
      * @param status
      */
-    Status (const char * path = 0, const svn_wc_status2_t * status = 0);
+    Status(const char * path = 0, const svn_wc_status2_t * status = 0);
 
     /**
      * copy constructor
      */
-    Status (const Status & src);
+    Status(const Status & src);
 
     /**
      * destructor
      */
-    ~Status ();
+    ~Status();
 
     /**
      * @return path of status entry
      */
     const char *
-    path () const;
+    path() const;
 
     /**
      * @return entry for this path
      * @retval entry.isValid () = false item is not versioned
      */
-    const Entry 
-    entry () const;
+    const Entry
+    entry() const;
 
     /**
-     * @return file status property enum of the "textual" component. 
+     * @return file status property enum of the "textual" component.
      */
-    const svn_wc_status_kind 
-    textStatus () const;
+    svn_wc_status_kind
+    textStatus() const;
 
     /**
-     * @return file status property enum of the "property" component. 
+     * @return file status property enum of the "property" component.
      */
-    const svn_wc_status_kind 
-    propStatus () const;
+    svn_wc_status_kind
+    propStatus() const;
 
     /**
      * @retval TRUE if under version control
      */
-    const bool 
-    isVersioned () const;
+    bool
+    isVersioned() const;
 
     /**
      * @retval TRUE if copied
      */
-    const bool 
-    isCopied () const;
+    bool
+    isCopied() const;
 
     /**
      * @retval TRUE if switched
      */
-    const bool
-    isSwitched () const;
+    bool
+    isSwitched() const;
 
     /**
      * @return the entry's text status in the repository
      */
-    const svn_wc_status_kind
-    reposTextStatus () const;
+    svn_wc_status_kind
+    reposTextStatus() const;
 
     /**
      * @return the entry's prop status in the repository
      */
-    const svn_wc_status_kind
-    reposPropStatus () const;
+    svn_wc_status_kind
+    reposPropStatus() const;
 
     /**
      * @return true if locked
      */
-    const bool
-    isLocked () const;
+    bool
+    isLocked() const;
 
     /**
      * @return true if has repository lock (not local)
      */
-    const bool
-    isRepLock () const;
+    bool
+    isRepLock() const;
 
     /**
      * @return lock token or null if not locked
      */
     const char *
-    lockToken () const;
+    lockToken() const;
 
     /**
      * @return lock owner or null if not locked
      */
     const char *
-    lockOwner () const;
+    lockOwner() const;
 
     /**
      * @return comment lock, null or no comment
      */
     const char *
-    lockComment () const;
+    lockComment() const;
 
     /**
      * @return lock creation date or 0 if not locked
      */
-    const apr_time_t
-    lockCreationDate () const;
+    apr_time_t
+    lockCreationDate() const;
 
     /**
      * assignment operator
@@ -157,18 +159,25 @@ namespace svn
     Status &
     operator = (const Status &);
 
-    /** 
+    /**
      * check whether the instance contains real data
      * or nothing if it has constructed with the default
      * constructor
+     *
+     * @note This is the successor of @a isset which had to be removed
+     *       since there was a name conflict with system headers on
+     *       some systems (see issue 676)
+     * @since 0.12
      */
     bool
-    isset () const;
+    isSet() const;
 
   private:
     struct Data;
     Data * m;
   };
+
+  typedef std::vector<Status> StatusVector;
 }
 
 #endif

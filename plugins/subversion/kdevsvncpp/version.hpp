@@ -22,69 +22,20 @@
  * ====================================================================
  */
 
-// apr
-#include "apr_date.h"
+#ifndef _SVNCPP_VERSION_H_
+#define _SVNCPP_VERSION_H_
 
-// svncpp
-#include "svncpp/datetime.hpp"
+/**
+ * This is the numeric representation of the
+ * current version:
+ * Bit 0-7: Patch
+ * Bit 8-15: Micro
+ * Bit 16-23: Minor
+ * Bit 24-31: Major
+ */
+#define SVNCPP_VERSION 0x000c0000
 
-
-namespace svn
-{
-  DateTime::DateTime()
-      : m_time(APR_DATE_BAD)
-  {
-  }
-
-  DateTime::DateTime(const apr_time_t time)
-      : m_time(time)
-  {
-  }
-
-  DateTime::DateTime(const DateTime & dateTime)
-      : m_time(dateTime.m_time)
-  {
-  }
-
-  const DateTime &
-  DateTime::operator =(const DateTime & dateTime)
-  {
-    m_time = dateTime.m_time;
-    return *this;
-  }
-
-  bool
-  DateTime::operator ==(const DateTime & dateTime)
-  {
-    return m_time == dateTime.m_time;
-  }
-
-  bool
-  DateTime::operator !=(const DateTime & dateTime)
-  {
-    return m_time != dateTime.m_time;
-  }
-
-  bool
-  DateTime::IsValid() const
-  {
-    return m_time != APR_DATE_BAD;
-  }
-
-  apr_time_t
-  DateTime::GetAPRTimeT() const
-  {
-    return m_time;
-  }
-
-  bool
-  DateTime::SetRFC822Date(const char* date)
-  {
-    m_time = apr_date_parse_rfc(date);
-    return IsValid();
-  }
-}
-
+#endif
 /* -----------------------------------------------------------------
  * local variables:
  * eval: (load-file "../../rapidsvn-dev.el")

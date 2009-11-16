@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -24,10 +23,10 @@
  */
 
 // stl
-#include <string>
+#include "svncpp/string_wrapper.hpp"
 
 // svncpp
-#include "kdevsvncpp/status.hpp"
+#include "svncpp/status.hpp"
 
 namespace svn
 {
@@ -38,106 +37,118 @@ namespace svn
     Pool pool;
     bool isVersioned;
 
-    Data (const char * path_, const svn_wc_status2_t * status_)
-      : status (0), path ("") 
+    Data(const char * path_, const svn_wc_status2_t * status_)
+        : status(0), path("")
     {
       if (path_ != 0)
         path = path_;
 
       if (status_ != 0)
       {
-        status = svn_wc_dup_status2 (
-          const_cast<svn_wc_status2_t *> (status_), pool);
+        status = svn_wc_dup_status2(
+                   const_cast<svn_wc_status2_t *>(status_), pool);
         isVersioned = status_->text_status > svn_wc_status_unversioned;
       }
     }
 
-    Data (const Data * src)
-      : status (0), path (src->path)
+    Data(const Data * src)
+        : status(0), path(src->path)
     {
       if (src->status != 0)
       {
-        status = svn_wc_dup_status2 (src->status, pool);
-        isVersioned = status->text_status > svn_wc_status_unversioned;
+        status = svn_wc_dup_status2(src->status, pool);
+
+        switch (status->text_status)
+        {
+        case svn_wc_status_none:
+        case svn_wc_status_unversioned:
+        case svn_wc_status_ignored:
+        case svn_wc_status_obstructed:
+          isVersioned = false;
+          break;
+
+        default:
+          isVersioned = true;
+        }
       }
     }
 
   };
 
-  Status::Status (const char * path, const svn_wc_status2_t * status)
-    : m (new Data (path, status))
+  Status::Status(const char * path, const svn_wc_status2_t * status)
+      : m(new Data(path, status))
   {
   }
 
-  Status::Status (const Status & src)
-    : m (new Data (src.m))
+  Status::Status(const Status & src)
+      : m(new Data(src.m))
   {
   }
 
-  Status::~Status ()
+  Status::~Status()
   {
     delete m;
   }
 
   const char *
-  Status::path () const
+  Status::path() const
   {
-    return m->path.c_str ();
+    return m->path.c_str();
   }
 
-  const Entry 
-  Status::entry () const
+  const Entry
+  Status::entry() const
   {
     if (0 == m->status)
-      return Entry ();
+      return Entry();
 
-    return Entry (m->status->entry);
+    return Entry(m->status->entry);
   }
 
-  const svn_wc_status_kind 
-  Status::textStatus () const
+  svn_wc_status_kind
+  Status::textStatus() const
   {
     return m->status->text_status;
   }
 
-  const svn_wc_status_kind 
-  Status::propStatus () const
+  svn_wc_status_kind
+  Status::propStatus() const
   {
     return m->status->prop_status;
   }
 
-  const bool 
-  Status::isVersioned () const
+  bool
+  Status::isVersioned() const
   {
     return m->isVersioned;
   }
 
-  const bool 
-  Status::isCopied () const
+  bool
+  Status::isCopied() const
   {
     return m->status->copied != 0;
   }
 
-  const bool
-  Status::isSwitched () const
+  bool
+  Status::isSwitched() const
   {
     return m->status->switched != 0;
   }
 
-  const svn_wc_status_kind
-  Status::reposTextStatus () const
+  svn_wc_status_kind
+  Status::reposTextStatus() const
   {
     return m->status->repos_text_status;
   }
 
-  const svn_wc_status_kind
-  Status::reposPropStatus () const
+  svn_wc_status_kind
+  Status::reposPropStatus() const
   {
     return m->status->repos_prop_status;
   }
 
-  const bool
-  Status::isLocked () const
+  bool
+  Status::isLocked() const
   {
     if (m->status->repos_lock && (m->status->repos_lock->token != 0))
       return true;
@@ -147,8 +158,8 @@ namespace svn
       return false;
   }
 
-  const bool
-  Status::isRepLock () const
+  bool
+  Status::isRepLock() const
   {
     if (m->status->entry && (m->status->entry->lock_token != 0))
       return false;
@@ -159,7 +170,7 @@ namespace svn
   }
 
   const char *
-  Status::lockToken () const
+  Status::lockToken() const
   {
     if (m->status->repos_lock && m->status->repos_lock->token != 0)
       return m->status->repos_lock->token;
@@ -170,7 +181,7 @@ namespace svn
   }
 
   const char *
-  Status::lockOwner () const
+  Status::lockOwner() const
   {
     if (m->status->repos_lock && m->status->repos_lock->token != 0)
       return m->status->repos_lock->owner;
@@ -181,7 +192,7 @@ namespace svn
   }
 
   const char *
-  Status::lockComment () const
+  Status::lockComment() const
   {
     if (m->status->repos_lock && m->status->repos_lock->token != 0)
       return m->status->repos_lock->comment;
@@ -191,8 +202,8 @@ namespace svn
       return "";
   }
 
-  const apr_time_t
-  Status::lockCreationDate () const
+  apr_time_t
+  Status::lockCreationDate() const
   {
     if (m->status->repos_lock && m->status->repos_lock->token != 0)
       return m->status->repos_lock->creation_date;
@@ -208,16 +219,16 @@ namespace svn
     if (this != &src)
     {
       delete m;
-      m = new Data (src.m);
+      m = new Data(src.m);
     }
 
     return *this;
   }
 
   bool
-  Status::isset () const
+  Status::isSet() const
   {
-    return m->path.length () > 0;
+    return m->path.length() > 0;
   }
 }
 /* -----------------------------------------------------------------

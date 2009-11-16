@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.  
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -26,18 +25,17 @@
 #ifndef _SVNCPP_TARGETS_HPP_
 #define _SVNCPP_TARGETS_HPP_
 
-// stl
-#include <vector>
-
 // apr api
 #include "apr_tables.h"
 
+// svncpp
+#include "svncpp/path.hpp"
 
 namespace svn
 {
   // forward declarations
-  class Path;
   class Pool;
+
 
   /**
    * Encapsulation for Subversion target arrays handling
@@ -45,20 +43,20 @@ namespace svn
   class Targets
   {
   public:
-    /** 
+    /**
      * Constructor
      *
      * @param targets vector of paths
      */
-    Targets (const std::vector<Path> & targets);
-    
+    Targets(const PathVector & targets);
+
     /**
      * Constructor from an APR array containing
      * char *.
      *
      * @param targets APR array header
      */
-    Targets (const apr_array_header_t * targets);
+    Targets(const apr_array_header_t * targets);
 
     /**
      * Constructor. Initializes list with just
@@ -66,19 +64,19 @@ namespace svn
      *
      * @param target
      */
-    Targets (const char * target = 0);
+    Targets(const char * target = 0);
 
     /**
      * Copy Constructor
      *
      * @param targets Source
      */
-    Targets (const Targets & targets);
+    Targets(const Targets & targets);
 
     /**
      * Destructor
      */
-    virtual ~Targets ();
+    virtual ~Targets();
 
     /**
      * Returns an apr array containing
@@ -87,27 +85,27 @@ namespace svn
      * @param pool Pool used for conversion
      */
     const apr_array_header_t *
-    array (const Pool & pool) const;
+    array(const Pool & pool) const;
 
     /**
      * Returns a vector of paths
      *
      * @return vector of paths
      */
-    const std::vector<Path> &
+    const PathVector &
     targets() const;
 
     /**
      * @return the number of targets
      */
-    size_t size () const;
+    size_t size() const;
 
     /**
      * operator to return the vector
      *
      * @return vector with targets
      */
-    operator const std::vector<Path> & () const
+    operator const PathVector & () const
     {
       return m_targets;
     }
@@ -121,7 +119,7 @@ namespace svn
      * @return single path
      */
     const Path
-    target () const;
+    target() const;
 
     /**
      * adds a @ref Path to the existing entries
@@ -130,24 +128,24 @@ namespace svn
      *         unique
      */
     void
-    push_back (const Path & path);
+    push_back(const Path & path);
 
-    
+
     /**
-     * clears all entries 
+     * clears all entries
      */
     void
-    clear ();
+    clear();
 
     /**
      * reserve the size for following calls
      * to @ref push_back
      */
     void
-    reserve (size_t size);
+    reserve(size_t size);
 
   private:
-    std::vector<Path> m_targets;
+    PathVector m_targets;
   };
 }
 

@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.  
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -29,13 +28,13 @@
 #include "svn_wc.h"
 
 // svncpp
-#include "kdevsvncpp/pool.hpp"
+#include "svncpp/pool.hpp"
 
 
 namespace svn
 {
   /**
-   * C++ API for Subversion. 
+   * C++ API for Subversion.
    * This class wraps around @a svn_wc_entry_t.
    */
   class Entry
@@ -43,7 +42,7 @@ namespace svn
   public:
     /**
      * default constructor. if @a src is set,
-     * copy its contents. 
+     * copy its contents.
      *
      * If @a src is not set (=0) this will be
      * a non-versioned entry. This can be checked
@@ -51,27 +50,27 @@ namespace svn
      *
      * @param src another entry to copy from
      */
-    Entry (const svn_wc_entry_t * src = 0);
+    Entry(const svn_wc_entry_t * src = 0);
 
     /**
      * copy constructor
      */
-    Entry (const Entry & src);
+    Entry(const Entry & src);
 
     /**
-     * destructor 
+     * destructor
      */
-    virtual ~Entry ();
+    virtual ~Entry();
 
     /**
      * returns whether this is a valid=versioned
-     * entry.    
+     * entry.
      *
      * @return is entry valid
      * @retval true valid entry
      * @retval false invalid or unversioned entry
      */
-    bool isValid () const
+    bool isValid() const
     {
       return m_valid;
     }
@@ -80,7 +79,7 @@ namespace svn
      * @return entry's name
      */
     const char *
-    name () const
+    name() const
     {
       return m_entry->name;
     }
@@ -88,8 +87,8 @@ namespace svn
     /**
      * @return base revision
      */
-    const svn_revnum_t 
-    revision () const
+    svn_revnum_t
+    revision() const
     {
       return m_entry->revision;
     }
@@ -97,8 +96,8 @@ namespace svn
     /**
      * @return url in repository
      */
-    const char * 
-    url () const
+    const char *
+    url() const
     {
       return m_entry->url;
     }
@@ -107,7 +106,7 @@ namespace svn
      * @return canonical repository url
      */
     const char *
-    repos () const
+    repos() const
     {
       return m_entry->repos;
     }
@@ -116,7 +115,7 @@ namespace svn
      * @return repository uuid
      */
     const char *
-    uuid () const
+    uuid() const
     {
       return m_entry->uuid;
     }
@@ -124,8 +123,8 @@ namespace svn
     /**
      * @return node kind (file, dir, ...)
      */
-    const svn_node_kind_t
-    kind () const
+    svn_node_kind_t
+    kind() const
     {
       return m_entry->kind;
     }
@@ -133,8 +132,8 @@ namespace svn
     /**
      * @return scheduling (add, delete, replace)
      */
-    const svn_wc_schedule_t
-    schedule () const
+    svn_wc_schedule_t
+    schedule() const
     {
       return m_entry->schedule;
     }
@@ -142,17 +141,17 @@ namespace svn
     /**
      * @return TRUE if copied
      */
-    const bool 
-    isCopied () const
+    bool
+    isCopied() const
     {
       return m_entry->copied != 0;
     }
-    
+
     /**
      * @return true if deleted
      */
-    const bool
-    isDeleted () const
+    bool
+    isDeleted() const
     {
       return m_entry->deleted != 0;
     }
@@ -160,8 +159,8 @@ namespace svn
     /**
      * @return true if deleted
      */
-    const bool
-    isAbsent () const
+    bool
+    isAbsent() const
     {
       return m_entry->absent != 0;
     }
@@ -170,7 +169,7 @@ namespace svn
      * @return copyfrom location
      */
     const char *
-    copyfromUrl () const
+    copyfromUrl() const
     {
       return m_entry->copyfrom_url;
     }
@@ -178,8 +177,8 @@ namespace svn
     /**
      * @return copyfrom revision
      */
-    const svn_revnum_t
-    copyfromRev () const
+    svn_revnum_t
+    copyfromRev() const
     {
       return m_entry->copyfrom_rev;
     }
@@ -188,7 +187,7 @@ namespace svn
      * @return old version of conflicted file
      */
     const char *
-    conflictOld () const
+    conflictOld() const
     {
       return m_entry->conflict_old;
     }
@@ -197,16 +196,16 @@ namespace svn
      * @return new version of conflicted file
      */
     const char *
-    conflictNew () const
+    conflictNew() const
     {
       return m_entry->conflict_new;
     }
-    
+
     /**
      * @return working version of conflicted file
      */
     const char *
-    conflictWrk () const
+    conflictWrk() const
     {
       return m_entry->conflict_wrk;
     }
@@ -215,7 +214,7 @@ namespace svn
      * @return property reject file
      */
     const char *
-    prejfile () const
+    prejfile() const
     {
       return m_entry->prejfile;
     }
@@ -224,18 +223,18 @@ namespace svn
      * @return last up-to-date time for text contents
      * @retval 0 no information available
      */
-    const apr_time_t
-    textTime () const
+    apr_time_t
+    textTime() const
     {
       return m_entry->text_time;
     }
-    
+
     /**
      * @return last up-to-date time for properties
      * @retval 0 no information available
      */
-    const apr_time_t
-    propTime () const
+    apr_time_t
+    propTime() const
     {
       return m_entry->prop_time;
     }
@@ -245,7 +244,7 @@ namespace svn
      * @retval NULL for backwards compatibility
      */
     const char *
-    checksum () const
+    checksum() const
     {
       return m_entry->checksum;
     }
@@ -253,8 +252,8 @@ namespace svn
     /**
      * @return last revision this was changed
      */
-    const svn_revnum_t
-    cmtRev () const
+    svn_revnum_t
+    cmtRev() const
     {
       return m_entry->cmt_rev;
     }
@@ -262,8 +261,8 @@ namespace svn
     /**
      * @return last date this was changed
      */
-    const apr_time_t
-    cmtDate () const
+    apr_time_t
+    cmtDate() const
     {
       return m_entry->cmt_date;
     }
@@ -272,7 +271,7 @@ namespace svn
      * @return last commit author of this file
      */
     const char *
-    cmtAuthor () const
+    cmtAuthor() const
     {
       return m_entry->cmt_author;
     }
@@ -299,9 +298,9 @@ namespace svn
     /**
      * initializes the members
      */
-    void 
-    init (const svn_wc_entry_t * src);
- };
+    void
+    init(const svn_wc_entry_t * src);
+  };
 
 }
 

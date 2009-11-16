@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.  
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -30,58 +29,78 @@
 #include "svn_path.h"
 
 // svncpp
-#include "kdevsvncpp/pool.hpp"
-#include "kdevsvncpp/url.hpp"
+#include "svncpp/pool.hpp"
+#include "svncpp/url.hpp"
+
+static void findAndReplace(std::string & source, const std::string & find, const std::string & replace)
+{
+  // start seaching from the beginning
+  size_t pos = 0;
+  size_t findLength = find.length();
+  size_t replaceLength = replace.length();
+
+  do
+  {
+    // search for the next occurrenc
+    pos = source.find(find, pos);
+    
+    // found?
+    if (pos != std::string::npos)
+    {
+      // yes, place
+      source.replace(pos, findLength, replace);
+
+      // Make sure we dont search from the beginning
+      // othwise replacing % with %25 would result 
+      // in an endless loop
+      pos = pos + replaceLength;
+    }
+  }
+  while (pos != std::string::npos);
+}
 
 namespace svn
 {
-  Url::Url () {}
+  Url::Url() {}
 
-  Url::~Url () {}
+  Url::~Url() {}
 
-  /**
-   * determines if a path is a url; escape unsupported characters
-   * before checking
-   *
-   * @param urlToValidate url to be validated
-   */
   bool
-  Url::isValid (const char * urlToValidate)
+  Url::isValid(const char * urlToValidate)
   {
-    std::string escapedUrlToValidate = escape (urlToValidate);
-
-    return svn_path_is_url (escapedUrlToValidate.c_str ()) != 0;
+    return svn_path_is_url(urlToValidate) != 0;
   }
 
-  /**
-   * returns a url with forbidden characters like spaces escaped
-   *
-   * @param url url to be escaped
-   *
-   * @return string escaped url
-   */
+
   std::string
-  Url::escape (const char * url)
+  Url::escape(const char * url)
   {
     Pool pool;
 
-    return svn_path_uri_autoescape (url, pool);
+    // First make sure % gets escaped
+    std::string partlyEscaped(url);
+    findAndReplace(partlyEscaped, "%", "%25");
+
+    // Let svn do the first part of the work
+    partlyEscaped=svn_path_uri_autoescape(partlyEscaped.c_str(), pool);
+
+    // Then worry about the rest
+    findAndReplace(partlyEscaped, "#", "%23");
+    findAndReplace(partlyEscaped, ";", "%3B");
+    findAndReplace(partlyEscaped, "?", "%3F");
+    findAndReplace(partlyEscaped, "[", "%5B");
+    findAndReplace(partlyEscaped, "]", "%5D");
+
+    return partlyEscaped;
   }
 
-  /**
-   * returns a url with unescaped special characters, undo changes of the
-   * previous, escape function
-   *
-   * @param url url to be unescaped
-   *
-   * @return string unescaped url
-   */
+
   std::string
-  Url::unescape (const char * url)
+  Url::unescape(const char * url)
   {
     Pool pool;
 
-    return svn_path_uri_decode (url, pool);
+    return svn_path_uri_decode(url, pool);
   }
 
   /**
@@ -90,7 +109,7 @@ namespace svn
    * we are lacking a higher level of abstraction
    */
   std::vector<std::string>
-  Url::supportedSchemas ()
+  Url::supportedSchemas()
   {
     std::vector<std::string> schemas;
 

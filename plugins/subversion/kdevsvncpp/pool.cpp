@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.  
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -24,7 +23,7 @@
  */
 
 // svncpp
-#include "kdevsvncpp/pool.hpp"
+#include "svncpp/pool.hpp"
 
 
 /**
@@ -34,53 +33,53 @@ namespace svn
 {
   static bool m_initialized = false;
 
-  inline static apr_pool_t * 
-  pool_create (apr_pool_t * parent)
+  inline static apr_pool_t *
+  pool_create(apr_pool_t * parent)
   {
     // CAUTION: this is not thread-safe!!!
     if (!m_initialized)
     {
       m_initialized = true;
-      apr_pool_initialize ();
+      apr_pool_initialize();
     }
 
-    return svn_pool_create (parent);
+    return svn_pool_create(parent);
   }
 
-  Pool::Pool (apr_pool_t * parent)
-    : m_parent (parent), m_pool (pool_create (parent))
+  Pool::Pool(apr_pool_t * parent)
+      : m_parent(parent), m_pool(pool_create(parent))
   {
   }
 
-  Pool::~Pool ()
+  Pool::~Pool()
   {
-    if(m_pool)
+    if (m_pool)
     {
-      svn_pool_destroy (m_pool);
+      svn_pool_destroy(m_pool);
     }
   }
 
   apr_pool_t *
-  Pool::pool () const
+  Pool::pool() const
   {
     return m_pool;
   }
 
   void
-  Pool::renew ()
+  Pool::renew()
   {
     if (m_pool)
     {
-      svn_pool_destroy (m_pool);
+      svn_pool_destroy(m_pool);
     }
-    m_pool = pool_create (m_parent);
+    m_pool = pool_create(m_parent);
   }
 
 //TODO
 //   apr_pool_t *
 //   Pool::operator=(const Pool & pool)
 //   {
-//     return 
+//     return
 //     if (this == &path)
 //       return *this;
 //     m_path = path.c_str();

@@ -1,22 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
- * Copyright (c) 2008 Andreas Pakulat <apaku@gmx.de>
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.  
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -33,9 +31,9 @@ namespace svn
 {
   // forward declarations
   class Path;
-    
+
   /**
-   * C++ API for Subversion. 
+   * C++ API for Subversion.
    * This class wraps around @a svn_info_t.
    */
   class Info
@@ -43,7 +41,7 @@ namespace svn
   public:
     /**
      * default constructor. if @a src is set,
-     * copy its contents. 
+     * copy its contents.
      *
      * If @a src is not set (=0) this will be
      * a non-versioned entry. This can be checked
@@ -51,17 +49,17 @@ namespace svn
      *
      * @param src another entry to copy from
      */
-    Info (const Path & path, const svn_info_t * src = 0);
+    Info(const Path & path, const svn_info_t * src = 0);
 
     /**
      * copy constructor
      */
-    Info (const Info & src);
+    Info(const Info & src);
 
     /**
-     * destructor 
+     * destructor
      */
-    virtual ~Info ();
+    virtual ~Info();
 
     /**
      * assignment operator
@@ -71,88 +69,54 @@ namespace svn
 
     /**
      * returns whether this is a valid=versioned
-     * entry.    
+     * entry.
      *
      * @return is entry valid
      * @retval true valid entry
      * @retval false invalid or unversioned entry
      */
-    bool isValid () const;
+    bool isValid() const;
 
     /** @return entry's name */
-    const Path & 
-    path () const;
+    const Path &
+    path() const;
 
     /** @return base revision */
-    const svn_revnum_t 
-    revision () const;
+    svn_revnum_t
+    revision() const;
 
     /** @return url in repository */
-    const char * 
-    url () const;
+    const char *
+    url() const;
 
     /** @return canonical repository url */
     const char *
-    repos () const;
+    repos() const;
 
     /** @return repository uuid */
     const char *
-    uuid () const;
+    uuid() const;
 
     /** @return node kind (file, dir, ...) */
-    const svn_node_kind_t
-    kind () const;
-    
-    /** @returns revision on which the file was last changed */
+    svn_node_kind_t
+    kind() const;
+
     svn_revnum_t
-    lastChangedRevision () const;
-    
-    /** @returns on which the date was last changed */
+    lastChangedRev() const;
+
     apr_time_t
-    lastChangedDate () const;
-    
-    /** @returns author that last changed the file */
+    lastChangedDate() const;
+
     const char *
-    lastChangedAuthor () const;
+    lastChangedAuthoer() const;
 
-    /** @return wether the info contains working copy stuff */
-    bool
-    hasWcInfo () const;
-
-    /** @return the scheduling state */
-    svn_wc_schedule_t schedule() const;
-
-    /** @return urls this entry was copied from */
-    const char* copyFromUrl() const;
-
-    /** @return the revision this entry was copied from */
-    svn_revnum_t copyFromRevision() const;
-
-    /** @return last up to date time for text */
-    apr_time_t textTime() const;
-
-    /** @return last update to date time for properties */
-    apr_time_t propertyTime() const;
-
-    /** @return the old version of the conflict file */
-    const char* oldConflictFile() const;
-    
-    /** @return the new version of the conflict file */
-    const char* newConflictFile() const;
-    
-    /** @return the working version of the conflict file */
-    const char* workingConflictFile() const;
-
-    /** @return the property reject file */
-    const char* propertyRejectFile() const;
-    
     /** @todo MORE ENTRIES FROM @ref svn_info_to IF NEEDED */
-    
+
   private:
     struct Data;
-      
+
     Data * m;
- };
+  };
 
 }
 

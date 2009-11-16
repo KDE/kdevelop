@@ -1,21 +1,20 @@
 /*
  * ====================================================================
- * Copyright (c) 2002-2008 The RapidSvn Group.  All rights reserved.
+ * Copyright (c) 2002-2009 The RapidSvn Group.  All rights reserved.
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library (in the file LGPL.txt); if not, 
- * write to the Free Software Foundation, Inc., 51 Franklin St, 
- * Fifth Floor, Boston, MA  02110-1301  USA
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program (in the file GPL.txt.
+ * If not, see <http://www.gnu.org/licenses/>.
  *
  * This software consists of voluntary contributions made by many
  * individuals.  For exact contribution history, see the revision
@@ -27,7 +26,8 @@
 #define _SVNCPP_PATH_HPP_
 
 // stl
-#include <string>
+#include "svncpp/string_wrapper.hpp"
+#include "svncpp/vector_wrapper.hpp"
 
 namespace svn
 {
@@ -45,7 +45,7 @@ namespace svn
      *
      * @param path Path string
      */
-    void init (const char * path);
+    void init(const char * path);
 
   public:
     /**
@@ -55,22 +55,22 @@ namespace svn
      *
      * @param path Path string
      */
-    Path (const std::string & path = "");
-    
+    Path(const std::string & path = "");
+
     /**
      * Constructor
      *
      * @see Path::Path (const std::string &)
      * @param path Path string
      */
-    Path (const char * path);
+    Path(const char * path);
 
     /**
      * Copy constructor
      *
      * @param path Path to be copied
      */
-    Path (const Path & path);
+    Path(const Path & path);
 
     /**
      * Assignment operator
@@ -87,31 +87,36 @@ namespace svn
      * @return Path string
      */
     const std::string &
-    path () const;
+    path() const;
 
     /**
      * @return Path string as c string
      */
-    const char * 
-    c_str () const;
+    const char *
+    c_str() const;
 
     /**
      * check whether a path is set. Right now
      * this checks only if the string is non-
      * empty.
      *
+     * @note This is the successor of @a isset which had to be removed
+     *       since there was a name conflict with system headers on
+     *       some systems (see issue 676)
+     * @since 0.12
+     *
      * @return true if there is a path set
      */
-    bool 
-    isset () const;
+    bool
+    isSet() const;
 
     /**
      * shows whether we have a path or url
      *
      * @return true if the path is a valid url
      */
-    const bool
-    isUrl () const;
+    bool
+    isUrl() const;
 
     /**
      * adds a new URL component to the path
@@ -119,7 +124,7 @@ namespace svn
      * @param component new component to add
      */
     void
-    addComponent (const char * component);
+    addComponent(const char * component);
 
     /**
      * adds a new URL component to the path
@@ -127,7 +132,7 @@ namespace svn
      * @param component new component to add
      */
     void
-    addComponent (const std::string & component);
+    addComponent(const std::string & component);
 
     /**
      * split path in its components
@@ -136,7 +141,7 @@ namespace svn
      * @param basename filename
      */
     void
-    split (std::string & dirpath, std::string & basename) const;
+    split(std::string & dirpath, std::string & basename) const;
 
     /**
      * split path in its components including
@@ -147,7 +152,7 @@ namespace svn
      * @param ext extension (including leading dot ".")
      */
     void
-    split (std::string & dir, std::string & filename, std::string & ext) const;
+    split(std::string & dir, std::string & filename, std::string & ext) const;
 
     /**
      * get a basename of a file
@@ -155,7 +160,7 @@ namespace svn
      * @return basename filename without path
      */
     std::string
-    basename () const;
+    basename() const;
 
     /**
      * get a name of directory containing file
@@ -163,16 +168,16 @@ namespace svn
      * @return dirpath path of directory
      */
     std::string
-    dirpath () const;
+    dirpath() const;
 
     /**
      * get a substring of a path, starting at index
      *
-     * @param index 
+     * @param index
      * @return substr substring
      */
     std::string
-    substr (const size_t index) const;
+    substr(const size_t index) const;
 
     /**
      * return path as a string with unescaped special characters
@@ -180,22 +185,26 @@ namespace svn
      * @return unescaped path
      */
     std::string
-    unescape () const;
+    unescape() const;
 
     /**
      * returns the temporary directory
      */
     static Path
-    getTempDir ();
+    getTempDir();
 
     /** return the length of the path-string */
-    size_t 
-    length () const;
+    size_t
+    length() const;
 
     /** returns the path with native separators */
     std::string
-    native () const;
+    native() const;
   };
+
+  typedef std::vector<Path> PathVector;
+
+  extern const PathVector EmptyPathVector;
 }
 
 #endif
