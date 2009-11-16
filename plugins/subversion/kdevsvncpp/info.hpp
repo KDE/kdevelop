@@ -82,7 +82,7 @@ namespace svn
     path() const;
 
     /** @return base revision */
-    svn_revnum_t
+    const svn_revnum_t
     revision() const;
 
     /** @return url in repository */
@@ -101,14 +101,48 @@ namespace svn
     svn_node_kind_t
     kind() const;
 
+    /** @returns revision on which the file was last changed */
     svn_revnum_t
-    lastChangedRev() const;
+    lastChangedRevision() const;
 
+    /** @returns on which the date was last changed */
     apr_time_t
     lastChangedDate() const;
-
+    
+    /** @returns author that last changed the file */
     const char *
-    lastChangedAuthoer() const;
+    lastChangedAuthor() const;
+
+    /** @return wether the info contains working copy stuff */
+    bool
+    hasWcInfo () const;
+
+    /** @return the scheduling state */
+    svn_wc_schedule_t schedule() const;
+
+    /** @return urls this entry was copied from */
+    const char* copyFromUrl() const;
+
+    /** @return the revision this entry was copied from */
+    svn_revnum_t copyFromRevision() const;
+
+    /** @return last up to date time for text */
+    apr_time_t textTime() const;
+
+    /** @return last update to date time for properties */
+    apr_time_t propertyTime() const;
+
+    /** @return the old version of the conflict file */
+    const char* oldConflictFile() const;
+
+    /** @return the new version of the conflict file */
+    const char* newConflictFile() const;
+
+    /** @return the working version of the conflict file */
+    const char* workingConflictFile() const;
+
+    /** @return the property reject file */
+    const char* propertyRejectFile() const;
 
     /** @todo MORE ENTRIES FROM @ref svn_info_to IF NEEDED */
 
