@@ -919,7 +919,14 @@ int CMakeProjectVisitor::visit(const TryCompileAst *tca)
     {
         kDebug(9042) << "project compile" << tca->projectName() << tca->targetName();
     }
-    m_vars->insert(tca->resultName(), QStringList("TRUE"));
+    
+    QString value;
+    if(m_cache->contains(tca->resultName()))
+        value=m_cache->value(tca->resultName()).value;
+    else
+        value="TRUE";
+    
+    m_vars->insert(tca->resultName(), QStringList(value));
     return 1;
 }
 
