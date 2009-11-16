@@ -26,8 +26,8 @@
 #define _SVNCPP_STATUS_SELECTION_HPP_
 
 // svncpp
-#include "svncpp/status.hpp"
-#include "svncpp/path.hpp"
+#include "kdevsvncpp/status.hpp"
+#include "kdevsvncpp/path.hpp"
 
 
 namespace svn

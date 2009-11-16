@@ -29,7 +29,7 @@
 #include "apr_tables.h"
 
 // svncpp
-#include "svncpp/path.hpp"
+#include "kdevsvncpp/path.hpp"
 
 namespace svn
 {

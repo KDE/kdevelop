@@ -23,9 +23,11 @@
  */
 
 // svncpp
-#include "svncpp/info.hpp"
-#include "svncpp/path.hpp"
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/info.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/pool.hpp"
+
+#include <cassert>
 
 namespace svn
 {

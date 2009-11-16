@@ -29,10 +29,10 @@
 #include "svn_client.h"
 
 // svncpp
-#include "svncpp/client.hpp"
-#include "svncpp/exception.hpp"
-#include "svncpp/pool.hpp"
-#include "svncpp/status.hpp"
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/exception.hpp"
+#include "kdevsvncpp/pool.hpp"
+#include "kdevsvncpp/status.hpp"
 
 
 namespace svn

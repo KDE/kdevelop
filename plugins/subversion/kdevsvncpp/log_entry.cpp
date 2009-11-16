@@ -23,11 +23,11 @@
  */
 
 // stl
-#include "svncpp/string_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
 
 // svncpp
-#include "svncpp/log_entry.hpp"
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/log_entry.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 // subversion api
 #include "svn_time.h"

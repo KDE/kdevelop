@@ -23,10 +23,10 @@
  */
 
 // stl
-#include "svncpp/string_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
 
 // svncpp
-#include "svncpp/dirent.hpp"
+#include "kdevsvncpp/dirent.hpp"
 
 namespace svn
 {

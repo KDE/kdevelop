@@ -30,9 +30,9 @@
 #include "apr_strings.h"
 
 // svncpp
-#include "svncpp/targets.hpp"
-#include "svncpp/path.hpp"
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/targets.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 namespace svn
 {

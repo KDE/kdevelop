@@ -29,9 +29,9 @@
 #include "apr_file_io.h"
 
 // svncpp
-#include "svncpp/path.hpp"
-#include "svncpp/pool.hpp"
-#include "svncpp/url.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/pool.hpp"
+#include "kdevsvncpp/url.hpp"
 
 namespace svn
 {

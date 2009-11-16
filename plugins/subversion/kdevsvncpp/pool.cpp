@@ -23,7 +23,7 @@
  */
 
 // svncpp
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 
 /**

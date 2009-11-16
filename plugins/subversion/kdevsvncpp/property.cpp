@@ -27,11 +27,11 @@
 //#include "svn_utf.h"
 
 // svncpp
-#include "svncpp/exception.hpp"
-#include "svncpp/path.hpp"
-#include "svncpp/pool.hpp"
-#include "svncpp/property.hpp"
-#include "svncpp/revision.hpp"
+#include "kdevsvncpp/exception.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/pool.hpp"
+#include "kdevsvncpp/property.hpp"
+#include "kdevsvncpp/revision.hpp"
 #include "m_check.hpp"
 
 namespace svn

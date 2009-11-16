@@ -28,11 +28,11 @@
 #include "svn_wc.h"
 
 // svncpp
-#include "svncpp/entry.hpp"
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/entry.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 // stl
-#include "svncpp/vector_wrapper.hpp"
+#include "kdevsvncpp/vector_wrapper.hpp"
 
 namespace svn
 {

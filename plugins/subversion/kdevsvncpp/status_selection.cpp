@@ -30,13 +30,13 @@
 
 // svncpp
 
-#include "svncpp/exception.hpp"
-#include "svncpp/path.hpp"
-#include "svncpp/pool.hpp"
-#include "svncpp/status.hpp"
-#include "svncpp/status_selection.hpp"
-#include "svncpp/targets.hpp"
-#include "svncpp/url.hpp"
+#include "kdevsvncpp/exception.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/pool.hpp"
+#include "kdevsvncpp/status.hpp"
+#include "kdevsvncpp/status_selection.hpp"
+#include "kdevsvncpp/targets.hpp"
+#include "kdevsvncpp/url.hpp"
 
 
 namespace svn

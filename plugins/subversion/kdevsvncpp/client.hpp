@@ -41,18 +41,18 @@
 
 
 // stl
-#include "svncpp/vector_wrapper.hpp"
-#include "svncpp/utility_wrapper.hpp"
-#include "svncpp/map_wrapper.hpp"
+#include "kdevsvncpp/vector_wrapper.hpp"
+#include "kdevsvncpp/utility_wrapper.hpp"
+#include "kdevsvncpp/map_wrapper.hpp"
 
 // svncpp
-#include "svncpp/context.hpp"
-#include "svncpp/exception.hpp"
-#include "svncpp/path.hpp"
-#include "svncpp/entry.hpp"
-#include "svncpp/revision.hpp"
-#include "svncpp/log_entry.hpp"
-#include "svncpp/annotate_line.hpp"
+#include "kdevsvncpp/context.hpp"
+#include "kdevsvncpp/exception.hpp"
+#include "kdevsvncpp/path.hpp"
+#include "kdevsvncpp/entry.hpp"
+#include "kdevsvncpp/revision.hpp"
+#include "kdevsvncpp/log_entry.hpp"
+#include "kdevsvncpp/annotate_line.hpp"
 
 
 namespace svn

@@ -29,8 +29,8 @@
 #include "svn_path.h"
 
 // svncpp
-#include "svncpp/pool.hpp"
-#include "svncpp/url.hpp"
+#include "kdevsvncpp/pool.hpp"
+#include "kdevsvncpp/url.hpp"
 
 static void findAndReplace(std::string & source, const std::string & find, const std::string & replace)
 {

@@ -23,11 +23,11 @@
  */
 
 // stl
-#include "svncpp/string_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
 #include <sstream>
 
 // svncpp
-#include "svncpp/exception.hpp"
+#include "kdevsvncpp/exception.hpp"
 
 
 namespace svn

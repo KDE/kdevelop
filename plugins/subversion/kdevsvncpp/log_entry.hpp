@@ -26,7 +26,7 @@
 #define _SVNCPP_LOG_ENTRY_H_
 
 // stl
-#include "svncpp/string_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
 #include <list>
 
 // apr

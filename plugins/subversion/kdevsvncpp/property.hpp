@@ -38,12 +38,12 @@
 
 
 // stl
-#include "svncpp/vector_wrapper.hpp"
-#include "svncpp/string_wrapper.hpp"
+#include "kdevsvncpp/vector_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
 
 // svncpp
-#include "svncpp/context.hpp"
-#include "svncpp/path.hpp"
+#include "kdevsvncpp/context.hpp"
+#include "kdevsvncpp/path.hpp"
 
 namespace svn
 {

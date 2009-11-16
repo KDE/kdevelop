@@ -26,13 +26,13 @@
 #define _SVNCPP_CONTEXT_HPP_
 
 // stl
-#include "svncpp/string_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
 
 // Subversion api
 #include "svn_client.h"
 
 // svncpp
-#include "svncpp/pool.hpp"
+#include "kdevsvncpp/pool.hpp"
 
 
 namespace svn

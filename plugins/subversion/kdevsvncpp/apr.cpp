@@ -26,7 +26,7 @@
 #include "apr_general.h"
 
 // svncpp
-#include "svncpp/apr.hpp"
+#include "kdevsvncpp/apr.hpp"
 
 
 /**

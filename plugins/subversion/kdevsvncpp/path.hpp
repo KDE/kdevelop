@@ -26,8 +26,8 @@
 #define _SVNCPP_PATH_HPP_
 
 // stl
-#include "svncpp/string_wrapper.hpp"
-#include "svncpp/vector_wrapper.hpp"
+#include "kdevsvncpp/string_wrapper.hpp"
+#include "kdevsvncpp/vector_wrapper.hpp"
 
 namespace svn
 {

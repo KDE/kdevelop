@@ -32,9 +32,9 @@
 //#include "svn_utf.h"
 
 // svncpp
-#include "svncpp/client.hpp"
-#include "svncpp/dirent.hpp"
-#include "svncpp/exception.hpp"
+#include "kdevsvncpp/client.hpp"
+#include "kdevsvncpp/dirent.hpp"
+#include "kdevsvncpp/exception.hpp"
 
 
 static int
