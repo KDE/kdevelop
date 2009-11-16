@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=applications-engineering
 Exec=blubb
 Comment=This plugin allows reviewing patches directly in the editor.
 Comment[bg]=Тази приставка позволява преглеждане на кръпки направо в редактора.
