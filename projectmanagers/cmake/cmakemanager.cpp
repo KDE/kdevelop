@@ -112,7 +112,7 @@ inline QString replaceBuildDir(QString in, QString buildDir)
     return in.replace("#[bin_dir]", buildDir);
 }
 
-inline QString replaceInstallDir(QString in, QString installDir)
+inline  QString replaceInstallDir(QString in, QString installDir)
 {
     return in.replace("#[install_dir]", installDir);
 }
@@ -515,29 +515,33 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 if(data.properties[TARGET].contains(t.name) && data.properties[TARGET][t.name].contains("OUTPUT_NAME"))
                     outputName=data.properties[TARGET][t.name]["OUTPUT_NAME"].first();
                 
-                KUrl path;
+                QString path;
                 switch(t.type)
                 {
                     case Target::Library:
-                        path=KUrl(data.vm.value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString()));
+                        path=data.vm.value("CMAKE_LIBRARY_OUTPUT_DIRECTORY").join(QString());
                         break;
                     case Target::Executable:
-                        path=KUrl(data.vm.value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString()));
+                        path=data.vm.value("CMAKE_RUNTIME_OUTPUT_DIRECTORY").join(QString());
                         break;
                     case Target::Custom:
                         break;
                 }
+                
+                KUrl resolvedPath;
+                if(!path.isEmpty())
+                    resolvedPath=resolveSystemDirs(folder->project(), QStringList(path)).first();
                 
                 KDevelop::ProjectTargetItem* targetItem = 0;
                 switch(t.type)
                 {
                     case Target::Library:
                         targetItem = new CMakeLibraryTargetItem( item->project(), t.name,
-                                                                 folder, t.declaration, outputName, path );
+                                                                 folder, t.declaration, outputName, resolvedPath);
                         break;
                     case Target::Executable:
                         targetItem = new CMakeExecutableTargetItem( item->project(), t.name,
-                                                                    folder, t.declaration, outputName, path );
+                                                                    folder, t.declaration, outputName, resolvedPath);
                         break;
                     case Target::Custom:
                         targetItem = new CMakeCustomTargetItem( item->project(), t.name,
