@@ -209,7 +209,6 @@ public:
     using QObject::event;
 
 private:
-    void parseLocals          (char type, char *buf);
 
     /** Handles a result response from a MI command -- that is
         all MI responses except for Stream and Prompt responses.
