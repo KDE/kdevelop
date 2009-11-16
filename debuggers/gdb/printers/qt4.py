@@ -84,7 +84,26 @@ class QListPrinter:
                 raise StopIteration
             count = self.count
             array = self.d['array'][self.d['begin'] + count]
-            node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype))
+
+            #from QTypeInfo::isLarge
+            isLarge = self.nodetype.sizeof > gdb.lookup_type('void').pointer().sizeof
+            isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
+
+            #unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
+            #this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
+            #(obviously it won't work for custom types)
+            movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
+                'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
+                'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
+                'QXmlStreamEntityDeclaration']
+            if movableTypes.count(self.nodetype.tag):
+                isStatic = False
+            else:
+                isStatic = not(isPointer)
+            if isLarge or isStatic: #see QList::Node::t()
+                node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype).pointer())
+            else:
+                node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype))
             self.count = self.count + 1
             return ('[%d]' % count, node['v'].cast(self.nodetype))
 
@@ -122,8 +141,7 @@ class QMapPrinter:
 
         def payload (self):
 
-            #we can't use QMapPayloadNode as it's never instanciated and so gcc
-            #doesn't include it in debug information.
+            #we can't use QMapPayloadNode as it's inlined
             #as a workaround take the sum of sizeof(members)
             ret = self.ktype.sizeof
             ret += self.vtype.sizeof
