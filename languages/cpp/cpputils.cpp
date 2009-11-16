@@ -362,9 +362,6 @@ void ReplaceCurrentAccess::exec(KUrl url, QString old, QString _new)
       }
     }
   }
-  
-  //Our job is done, delete the object created for the meta-method
-  deleteLater();
 }
 
 }

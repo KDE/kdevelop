@@ -62,6 +62,9 @@
 #include <cpputils.h>
 #include <interfaces/ilanguage.h>
 
+///Created statically as this object must be a child of the main thread
+CppUtils::ReplaceCurrentAccess accessReplacer;
+
 QString lastLines(QString str, int count = 40) {
   QStringList lines = str.split("\n");
   if(lines.count() < count)
@@ -1698,8 +1701,8 @@ bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUC
 
 void CodeCompletionContext::replaceCurrentAccess(QString old, QString _new)
 {
-  //We must not change the document from within the background, so we use a queued connection
-  QMetaObject::invokeMethod(new CppUtils::ReplaceCurrentAccess, "exec", Qt::QueuedConnection, Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
+  //We must not change the document from within the background, so we use a queued connection to an object created in the foregroud
+  QMetaObject::invokeMethod(&accessReplacer, "exec", Qt::QueuedConnection, Q_ARG(KUrl, m_duContext->url().toUrl()), Q_ARG(QString, old), Q_ARG(QString, _new));
 }
 
 int CodeCompletionContext::matchPosition() const {
