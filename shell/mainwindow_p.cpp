@@ -277,13 +277,13 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
     action->setIcon(KIcon("go-previous"));
 
-    action = actionCollection()->addAction( "new_window" );
+    /*action = actionCollection()->addAction( "new_window" );
     action->setIcon(KIcon( "window-new" ));
     action->setText( i18n( "&New Window" ) );
     action->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( newWindow() ) );
     action->setToolTip( i18n( "New Window" ) );
-    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of the current area.</p>" ) );
+    action->setWhatsThis( i18n( "<b>New Window</b><p>Creates a new window with a duplicate of the current area.</p>" ) );*/
 
     action = actionCollection()->addAction( "split_horizontal" );
     action->setIcon(KIcon( "view-split-top-bottom" ));
