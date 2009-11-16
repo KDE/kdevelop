@@ -271,6 +271,7 @@ void VcsPluginHelper::history()
     if( !job ) 
     {
         kWarning() << "Couldn't create log job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+        return;
     }
     KDialog* dlg = new KDialog();
     dlg->setButtons(KDialog::Close);
@@ -295,6 +296,7 @@ void VcsPluginHelper::annotation()
         if( !job ) 
         {
             kWarning() << "Couldn't create annotate job for:" << url << "with iface:" << iface << dynamic_cast<KDevelop::IPlugin*>( iface );
+            return;
         }
         KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
         KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->textDocument()->activeView());
