@@ -158,7 +158,7 @@ namespace svn
       svn_client_propset (name, 
                           NULL, // value = NULL
                           m_path.c_str (),
-                          false, // do not recurse
+                          false, //dont recurse
                           pool);
     if(error != NULL)
       throw ClientException (error);

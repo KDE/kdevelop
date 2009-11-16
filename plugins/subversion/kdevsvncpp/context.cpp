@@ -79,7 +79,7 @@ namespace svn
     translateString (const char * str, const char ** newStr,
                      apr_pool_t * /*pool*/)
     {
-      // due to problems with apr_xlate we do not perform
+      // due to problems with apr_xlate we dont perform
       // any conversion at this place. YOU will have to make
       // sure any strings passed are UTF 8 strings
       // svn_string_t *string = svn_string_create ("", pool);
@@ -138,7 +138,7 @@ namespace svn
       svn_config_ensure (c_configDir, pool);
 
 
-      // initialize authentication providers
+      // intialize authentication providers
       // * simple 
       // * username
       // * simple prompt
@@ -531,7 +531,7 @@ namespace svn
      * message using ContextListener::contextGetLogMessage. 
      * This return values is given back, then.
      *
-     * if the @a listener is not set it is checked whether
+     * if the @a listener is not set the its checked whether
      * the log message has been set using @a setLogMessage
      * yet. If not, return false otherwise true
      *

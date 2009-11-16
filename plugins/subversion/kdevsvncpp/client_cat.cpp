@@ -110,7 +110,7 @@ namespace svn
         strcpy (revstring, "HEAD");
       else
         sprintf (revstring, "%" SVN_REVNUM_T_FMT, revision.revnum ());
-      filename += '-';
+      filename += "-";
       filename += revstring;
 
       // replace the dir component with tempdir
@@ -123,7 +123,7 @@ namespace svn
           &file, &unique_name, 
           tempPath.c_str (), // path
           ext.c_str (), // suffix
-          0, // do not delete on close
+          0, // dont delete on close
           pool);
 
       if (error != 0)
