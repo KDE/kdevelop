@@ -42,14 +42,13 @@
 using namespace Sublime;
 
 IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
-    : KAnimatedButton(parent), _area(area), showingIndicator( false )
+    : QToolButton(parent), _area(area)
 {
     setFocusPolicy(Qt::NoFocus);
     KAcceleratorManager::setNoAccel(this);
     setCheckable(true);
     setAutoRaise(true);
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    setIcons( "process-working-kde" );
 
     setContextMenuPolicy(Qt::CustomContextMenu);
 }
@@ -60,29 +59,6 @@ Qt::Orientation IdealToolButton::orientation() const
         return Qt::Vertical;
 
     return Qt::Horizontal;
-}
-
-void IdealToolButton::hideProgressIndicator()
-{
-    stop();
-    setIcon( normalIcon );
-    showingIndicator = false;
-}
-
-void IdealToolButton::showProgressIndicator()
-{
-    setIcons( "process-working-kde" );
-    showingIndicator = true;
-    start();
-}
-
-void IdealToolButton::updateNormalIcon( const QIcon& icon )
-{
-    normalIcon = icon;
-    if( !showingIndicator )
-    {
-        setIcon( icon );
-    }
 }
 
 QSize IdealToolButton::sizeHint() const
@@ -223,8 +199,6 @@ QWidget* IdealButtonBarWidget::corner()
 
 void IdealButtonBarWidget::removeAction(QAction * action)
 {
-    disconnect(_widgets[action]->view(), SIGNAL(showProgressIndicator()), _buttons[action], 0);
-    disconnect(_widgets[action]->view(), SIGNAL(hideProgressIndicator()), _buttons[action], 0);
     _widgets.remove(action);
     delete _buttons.take(action);
     delete action;
@@ -292,7 +266,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _buttons.insert(action, button);
 
             button->setText(action->text());
-            button->updateNormalIcon(action->icon());
+            button->setIcon(action->icon());
             button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
 
@@ -302,8 +276,6 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             layout()->addWidget(button);
             connect(action, SIGNAL(toggled(bool)), SLOT(actionToggled(bool)));
             connect(button, SIGNAL(toggled(bool)), action, SLOT(setChecked(bool)));
-            connect(_widgets[action]->view(), SIGNAL(showProgressIndicator()), button, SLOT(showProgressIndicator()));
-            connect(_widgets[action]->view(), SIGNAL(hideProgressIndicator()), button, SLOT(hideProgressIndicator()));
             connect(button, SIGNAL(customContextMenuRequested(QPoint)),
                     _widgets[action], SLOT(contextMenuRequested(QPoint)));
         }
@@ -327,7 +299,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
     case QEvent::ActionChanged: {
         if (IdealToolButton *button = _buttons.value(action)) {
             button->setText(action->text());
-            button->updateNormalIcon(action->icon());
+            button->setIcon(action->icon());
             button->setShortcut(QKeySequence());
             Q_ASSERT(_widgets.contains(action));
             _widgets[action]->setWindowTitle(action->text());

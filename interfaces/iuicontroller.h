@@ -74,23 +74,6 @@ public:
      * @param view the new sublime view that is being shown
      */
     virtual void viewCreated(Sublime::View* view);
-    
-    /**
-     * Allows a factory to indicate that the widgets created by it 
-     * want to have a progress-indicator shown over the toolview icon
-     * when they execute some long-running action.
-     *
-     * To show the indicator the widget created from create() can
-     * emit the showProgressIndicator() signal. To hide it again it 
-     * should emit the hideProgressIndicator() signal.
-     * 
-     * The default return value is false, indicating that no progress 
-     * indicator will be used.
-     *
-     * @returns true if the toolviews created by this factory want to have a 
-     * progress indicator.
-     */
-    virtual bool viewsWantProgressIndicator() const { return false; }
 };
 
 /**

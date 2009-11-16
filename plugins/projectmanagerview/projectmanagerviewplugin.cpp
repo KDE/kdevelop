@@ -74,11 +74,6 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
             return "org.kdevelop.ProjectsView";
         }
         
-        virtual bool viewsWantProgressIndicator() const 
-        {
-            return true;
-        }
-
     private:
         ProjectManagerViewPlugin *mplugin;
 };
@@ -99,14 +94,8 @@ public:
 };
 
 ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
-        : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate),
-        projectsBeingOpened( 0 )
+        : IPlugin( ProjectManagerFactory::componentData(), parent ), d(new ProjectManagerViewPluginPrivate)
 {
-    connect( core()->projectController(), SIGNAL( projectAboutToBeOpened( KDevelop::IProject* ) ),
-             SLOT( projectToBeOpened() ) );
-    connect( core()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ),
-             SLOT( projectOpened() ) );
-    
     d->m_buildAll = new KAction( i18n("Build all Projects"), this );
     d->m_buildAll->setIcon(KIcon("run-build"));
     connect( d->m_buildAll, SIGNAL(triggered()), this, SLOT(buildAllProjects()) );
@@ -148,21 +137,6 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
              SLOT(updateFromBuildSetChange()));
     connect( ICore::self()->projectController()->buildSetModel(), SIGNAL(modelReset()),
              SLOT(updateFromBuildSetChange()));
-}
-
-void ProjectManagerViewPlugin::projectToBeOpened()
-{
-    projectsBeingOpened++;
-}
-
-void ProjectManagerViewPlugin::projectOpened()
-{
-    projectsBeingOpened--;
-}
-
-int ProjectManagerViewPlugin::numProjectsBeingOpened()
-{
-    return projectsBeingOpened;
 }
 
 void ProjectManagerViewPlugin::updateFromBuildSetChange()

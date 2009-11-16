@@ -28,8 +28,6 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QStyleOption>
 
-#include <kanimatedbutton.h>
-
 #include "ideallayout.h"
 #include "sublimedefs.h"
 
@@ -44,7 +42,7 @@ class Area;
 class View;
 class MainWindow;
 
-class IdealToolButton: public KAnimatedButton
+class IdealToolButton: public QToolButton
 {
     Q_OBJECT
 
@@ -54,18 +52,12 @@ public:
     Qt::Orientation orientation() const;
 
     virtual QSize sizeHint() const;
-    void updateNormalIcon( const QIcon& );
 
 protected:
     virtual void paintEvent(QPaintEvent *event);
 
-private slots:
-    virtual void showProgressIndicator();
-    virtual void hideProgressIndicator();
 private:
     Qt::DockWidgetArea _area;
-    QIcon normalIcon;
-    bool showingIndicator;
 };
 
 class IdealButtonBarWidget: public QWidget

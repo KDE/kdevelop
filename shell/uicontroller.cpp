@@ -157,12 +157,6 @@ public:
     }
 
     QString id() const { return m_factory->id(); }
-    
-    bool viewsWantProgressIndicator() const 
-    {
-            return m_factory->viewsWantProgressIndicator();
-    }
-
 private:
     IToolViewFactory *m_factory;
 };

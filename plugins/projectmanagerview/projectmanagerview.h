@@ -49,9 +49,6 @@ public:
 
     ProjectManagerViewPlugin* plugin() const { return m_plugin; }
     QList<KDevelop::ProjectBaseItem*> selectedItems() const;
-signals:
-    void showProgressIndicator();
-    void hideProgressIndicator();
 private slots:
     void selectionChanged();
     void locateCurrentDocument();
@@ -60,8 +57,6 @@ private slots:
     void fileCreated( const QString & );
     void fileDirty( const QString & );
     void fileDeleted( const QString & );
-    void projectToBeOpened();
-    void projectOpened();
 
 private:
     KAction* m_syncAction;
