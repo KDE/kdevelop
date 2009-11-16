@@ -260,6 +260,10 @@ Locals* VariablesRoot::locals(const QString& name)
     return locals_[name];
 }
 
+QHash<QString, Locals*> VariablesRoot::allLocals() const
+{
+    return locals_;
+}
 
 VariableCollection::VariableCollection(IDebugController* controller)
 : TreeModel(QVector<QString>() << "Name" << "Value", controller), m_widgetVisible(false)

@@ -44,8 +44,10 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
     case IDebugSession::program_exited:
     case IDebugSession::debugger_exited:
         // Remove all locals.
-        variableCollection()->locals()->deleteChildren();
-        variableCollection()->locals()->setHasMore(false);
+        foreach (Locals *l, variableCollection()->allLocals()) {
+            l->deleteChildren();
+            l->setHasMore(false);
+        }
 
         for (int i=0; i < variableCollection()->watches()->childCount(); ++i) {
             Variable *var = dynamic_cast<Variable*>(variableCollection()->watches()->child(i));
@@ -58,7 +60,9 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
     case IDebugSession::program_state_changed:
     case IDebugSession::thread_or_frame_changed:
         if (!(m_autoUpdate & UpdateLocals)) {
-            variableCollection()->locals()->setHasMore(true);
+            foreach (Locals *l, variableCollection()->allLocals()) {
+                l->setHasMore(true);
+            }
         }
         if (m_autoUpdate != UpdateNone) {
             update();

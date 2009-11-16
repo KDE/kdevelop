@@ -156,6 +156,7 @@ public:
 
     Watches *watches() const { return watches_; }
     Locals *locals(const QString &name = "Locals");
+    QHash<QString, Locals*> allLocals() const;
 
     void fetchMoreChildren() {}
 
@@ -175,6 +176,7 @@ public:
     VariablesRoot* root() const { return universe_; }
     Watches* watches() const { return universe_->watches(); }
     Locals* locals(const QString &name = "Locals") const { return universe_->locals(name); }
+    QHash<QString, Locals*> allLocals() const { return universe_->allLocals(); }
 
 public Q_SLOTS:
     void variableWidgetShown();
