@@ -149,13 +149,14 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
     cmakecache.addPath("CMakeCache.txt");
     if( !QFileInfo( cmakecache.toLocalFile() ).exists() )
     {
-        KSharedConfig::Ptr cfg = project->projectConfiguration();
-        
-        KConfigGroup group(cfg.data(), "CMake");
         args << QString("-DCMAKE_INSTALL_PREFIX=%1").arg(CMake::currentInstallDir(project).toLocalFile());
         args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
         args << CMake::projectRoot(project).toLocalFile();
+    } else 
+    {
+        args << ".";
     }
+
     return args;
 }
 
