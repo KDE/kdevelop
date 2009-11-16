@@ -1,0 +1,10 @@
+Do _NOT_ touch any of these files unless you know what you're doing. This is a
+copy of the rapidsvn svncpp library imported because we need to make some minor
+changes to use it in kdevelop.
+
+I repeat: Do _not_ change any of these files with things like
+spelling-mistakes, s/FALSE/false or commenting out unused parameters. That
+makes updating to a newer svncpp version a lot harder and any such changes will
+be reverted.
+
+Andreas Pakulat <apaku@gmx.de>, current maintainer of the subversion plugin
