@@ -1268,8 +1268,14 @@ bool QuickOpenLineEdit::insideThis(QObject* object) {
     return false;
 }
 
+void QuickOpenLineEdit::widgetDestroyed(QObject* obj)
+{
+  deactivate();
+}
+
 void QuickOpenLineEdit::showWithWidget(QuickOpenWidget* widget)
 {
+  connect(widget, SIGNAL(destroyed(QObject*)), SLOT(widgetDestroyed(QObject*)));
   kDebug() << "storing widget" << widget;
   deactivate();
   if(m_widget) {
