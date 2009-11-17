@@ -160,7 +160,7 @@ void SnippetRepository::removeDirectory()
         }
     }
     if (!dir.exists() || dir.rmdir( getLocation() )) {
-        if (index().isValid()) {
+        if (index().isValid() && QStandardItem::parent()) {
             // in case this item is still a member of a model, remove itself
             QStandardItem::parent()->removeRows( row(), 1 );
         }
