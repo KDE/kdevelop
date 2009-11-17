@@ -360,7 +360,7 @@ void Lexer::scan_char_constant()
   ++cursor;
   while (cursor != endCursor && *cursor && *cursor != '\'')
     {
-       if (*cursor == '\n')
+      if (*cursor == '\n')
         {
           KDevelop::ProblemPointer p = createProblem();
           p->setDescription("unexpected new line");
@@ -368,8 +368,8 @@ void Lexer::scan_char_constant()
           break;
         }
 
-      if (*cursor == '\\')
-	++cursor;
+      if (*cursor == '\\' && (cursor.current + 1) < endCursor)
+        ++cursor;
 
       ++cursor;
     }
@@ -406,8 +406,8 @@ void Lexer::scan_string_constant()
           break;
         }
 
-      if (*cursor == '\\')
-	++cursor;
+      if (*cursor == '\\' && (cursor.current + 1) < endCursor)
+        ++cursor;
 
       ++cursor;
     }
