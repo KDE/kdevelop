@@ -594,7 +594,7 @@ void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 4);
     QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
-    
+
     //Member completion
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "A<int>().").names.toSet(), (QStringList() << QString("m") << QString("A")).toSet());
     QCOMPARE(CompletionItemTester(top->childContexts()[3], "TInt().").names.toSet(), (QStringList() << QString("m") << QString("A")).toSet());
@@ -602,6 +602,7 @@ void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
     //Argument-hints
     kDebug() << CompletionItemTester(top->childContexts()[3], "TInt(").parent().names;
     QVERIFY(CompletionItemTester(top->childContexts()[3], "TInt(").parent().names.contains("A"));
+    QVERIFY(CompletionItemTester(top->childContexts()[3], "TInt ti(").parent().names.contains("A"));
     
     release(top);
 }

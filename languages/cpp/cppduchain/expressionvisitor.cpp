@@ -1098,6 +1098,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     TypeASTVisitor tvisitor(m_session, this, m_currentContext, topContext(), m_currentContext);
     tvisitor.run(node);
     m_lastType = tvisitor.type();
+    m_lastDeclarations = tvisitor.declarations();
+    m_lastInstance = Instance(false);
   }
 
   void ExpressionVisitor::visitInitDeclarator(InitDeclaratorAST* node)

@@ -229,7 +229,6 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
   if(doConstructorCompletion())
     return;
-  ///@todo template-parameters
 
   ///First: find out what kind of completion we are dealing with
 
@@ -367,12 +366,12 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   ///Handle constructions like "ClassType instance("
   if(!expressionPrefix.isEmpty() && (expressionPrefix.endsWith('>') || expressionPrefix[expressionPrefix.length()-1].isLetterOrNumber() || expressionPrefix[expressionPrefix.length()-1] == '_')) {
     int newExpressionStart = Utils::expressionAt(expressionPrefix, expressionPrefix.length());
-    if(newExpressionStart > 0) {
+    if(newExpressionStart >= 0) {
       QString newExpression = expressionPrefix.mid(newExpressionStart).trimmed();
       QString newExpressionPrefix = stripFinalWhitespace( expressionPrefix.left(newExpressionStart) );
       if(!isPrefixKeyword(newExpression)) {
         if(newExpressionPrefix.isEmpty() || newExpressionPrefix.endsWith(';') || newExpressionPrefix.endsWith('{') || newExpressionPrefix.endsWith('}')) {
-          kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression;
+          ifDebug( kDebug(9007) << "skipping expression" << m_expression << "and setting new expression" << newExpression; )
           m_expression = newExpression;
           expressionPrefix = newExpressionPrefix;
           m_isDeclarationTypePrefix = true;
@@ -524,6 +523,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     m_onlyShowTypes = true;
     m_pointerConversionsBeforeMatching = 1;
   }
+  
   ExpressionParser expressionParser/*(false, true)*/;
 
   ifDebug( kDebug(9007) << "expression: " << expr; )
