@@ -2502,10 +2502,8 @@ class ItemRepository : public AbstractItemRepository {
 
     if(!m_fastBuckets[bucketNumber]) {
       m_fastBuckets[bucketNumber] = new MyBucket();
-      bool doMMapLoading = false;
-#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
-      doMMapLoading = true;
-#endif
+
+      bool doMMapLoading = (bool)m_fileMap;
       
       uint offset = ((bucketNumber-1) * MyBucket::DataSize);
       if(m_file && offset < m_fileMapSize && doMMapLoading && *((uint*)(m_fileMap + offset)) == 0) {
