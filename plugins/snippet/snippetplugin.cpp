@@ -95,6 +95,9 @@ void SnippetPlugin::insertSnippet(Snippet* snippet)
             range = KTextEditor::Range(doc->cursorPosition(), doc->cursorPosition());
         }
         item.execute(doc->textDocument(), range);
+        if ( doc->textDocument()->activeView() ) {
+            doc->textDocument()->activeView()->setFocus();
+        }
     }
 }
 
