@@ -2369,7 +2369,13 @@ class ItemRepository : public AbstractItemRepository {
 
 #ifdef ITEMREPOSITORY_USE_MMAP_LOADING
     m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
-    m_fileMapSize = m_file->size() - BucketStartOffset;
+    Q_ASSERT(m_file->isOpen());
+    Q_ASSERT(m_file->size() >= BucketStartOffset);
+    if(m_fileMap) {
+      m_fileMapSize = m_file->size() - BucketStartOffset;
+    }else{
+      kWarning() << "mapping" << m_file->fileName() << "FAILED!";
+    }
 #else
     m_fileMap = 0;
     m_fileMapSize = 0;
