@@ -3,6 +3,7 @@ Type=Service
 Exec=blubb
 Comment=This plugin integrates Git to KDevelop
 Comment[en_GB]=This plugin integrates Git to KDevelop
+Comment[es]=Este complemento integra Git en KDevelop
 Comment[pt]=Este 'plugin' integra o Git no KDevelop
 Comment[sv]=Insticksprogrammet integrerar Git i KDevelop
 Comment[tr]=Bu eklenti Git'i KDevelop'a bütünleştirir
