@@ -12,40 +12,40 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QToolButton" name="addConfig">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>Add</string>
+      <string>Launch Configurations:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QToolButton" name="deleteConfig">
-     <property name="text">
-      <string>Delete</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>260</width>
+       <width>10</width>
        <height>21</height>
       </size>
      </property>
     </spacer>
    </item>
-   <item row="0" column="3" rowspan="2">
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+   <item row="0" column="2">
+    <widget class="QToolButton" name="addConfig">
+     <property name="text">
+      <string>Add</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
+   <item row="0" column="3">
+    <widget class="QToolButton" name="deleteConfig">
+     <property name="text">
+      <string>Delete</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" rowspan="2" colspan="4">
     <widget class="QTreeView" name="tree">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -55,7 +55,24 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="4">
+   <item row="1" column="4" rowspan="2">
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="5">
+    <widget class="QLabel" name="configName">
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>Name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="5">
     <widget class="QStackedWidget" name="stack">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -68,16 +85,6 @@
      </property>
      <widget class="QWidget" name="page"/>
      <widget class="QWidget" name="page_2"/>
-    </widget>
-   </item>
-   <item row="0" column="4">
-    <widget class="QLabel" name="configName">
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>Name</string>
-     </property>
     </widget>
    </item>
   </layout>
