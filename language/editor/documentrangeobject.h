@@ -140,22 +140,6 @@ public:
     void setRange(const SimpleRange& range);
 
     /**
-     * Returns the url of the document in which this object is located.
-     *
-     * This is a HashedString to allow for fast comparison. It was from a real url using KUrl::pathOrUrl() at some point.
-     *
-     * \returns the url of the document in which this object is located.
-     */
-    HashedString url() const;
-
-    /**
-     * Set the url of the document in which this object is located.
-     *
-     * \param document url of the document in which this object is located.
-     */
-    void setUrl(const HashedString& document);
-
-    /**
      * Determine if this range contains the given \a cursor.
      *
      * \param cursor cursor to check if it is contained by this range.
