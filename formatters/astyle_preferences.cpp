@@ -128,15 +128,18 @@ void AStylePreferences::updateWidgets()
     m_enableWidgetSignals = false;
     //indent
     if(m_formatter->option("Fill").toString() == "Tabs") {
-        if(m_formatter->option("FillForce").toBool())
+        if(m_formatter->option("FillForce").toBool()) {
             cbIndentType->setCurrentIndex(INDENT_TABSFORCE);
-        else
+            chkConvertTabs->setEnabled(false);
+        } else {
             cbIndentType->setCurrentIndex(INDENT_TABS);
-        inpNuberSpaces->setValue(m_formatter->option("FillCount").toInt());
+            chkConvertTabs->setEnabled(false);
+        }
     } else {
         cbIndentType->setCurrentIndex(INDENT_SPACES);
-        inpNuberSpaces->setValue(m_formatter->option("FillCount").toInt());
+        chkConvertTabs->setEnabled(true);
     }
+    inpNuberSpaces->setValue(m_formatter->option("FillCount").toInt());
     chkFillEmptyLines->setChecked(m_formatter->option("FillEmptyLines").toBool());
     chkConvertTabs->setChecked(m_formatter->option("FillForce").toBool());
 
@@ -233,18 +236,24 @@ void AStylePreferences::indentChanged()
 {
     if(!m_enableWidgetSignals)
         return;
-    m_formatter->setTabSpaceConversionMode( chkConvertTabs->isEnabled() );
+    
     switch(cbIndentType->currentIndex()) {
         case INDENT_TABS:
             m_formatter->setTabIndentation(inpNuberSpaces->value(), false);
+            chkConvertTabs->setEnabled(false);
             break;
         case INDENT_TABSFORCE:
             m_formatter->setTabIndentation(inpNuberSpaces->value(), true);
+            chkConvertTabs->setEnabled(false);
             break;
         case INDENT_SPACES:
             m_formatter->setSpaceIndentation(inpNuberSpaces->value());
+            chkConvertTabs->setEnabled(true);
             break;
     }
+    
+    m_formatter->setTabSpaceConversionMode( chkConvertTabs->isEnabled() & chkConvertTabs->isChecked() );
+    m_formatter->setFillEmptyLines( chkFillEmptyLines->isChecked() );
 
     updatePreviewText();
 }

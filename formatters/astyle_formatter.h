@@ -58,6 +58,7 @@ class AStyleFormatter : public astyle::ASFormatter
         void setTabIndentation(int length, bool forceTabs);
         void setSpaceIndentation(int length);
         void setTabSpaceConversionMode(bool mode);
+        void setFillEmptyLines(bool on);
         void setBlockIndent(bool on);
         void setBracketIndent(bool on);
         void setCaseIndent(bool on);

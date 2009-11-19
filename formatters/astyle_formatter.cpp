@@ -390,6 +390,12 @@ void AStyleFormatter::setTabSpaceConversionMode(bool mode)
     ASFormatter::setTabSpaceConversionMode(mode);
 }
 
+void AStyleFormatter::setFillEmptyLines(bool on)
+{
+    m_options["FillEmptyLines"] = on;
+    ASFormatter::setEmptyLineFill(on);
+}
+
 void AStyleFormatter::setBlockIndent(bool on)
 {
     m_options["IndentBlocks"] = on;
