@@ -10,6 +10,7 @@ Comment[pt]=Este 'plugin' apresenta os erros no código-fonte.
 Comment[sv]=Insticksprogrammet visar fel i källkod.
 Comment[uk]=За допомогою цього додатка можна переглянути повідомлення про помилки у коді.
 Comment[x-test]=xxThis plugin shows errors in source code.xx
+Comment[zh_TW]=此外掛程式顯示源碼中的錯誤。
 Name=Problem Reporter View
 Name[bg]=Преглед на съобщенията за грешки
 Name[ca]=Vista del notificador de problemes
