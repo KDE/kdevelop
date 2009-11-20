@@ -238,7 +238,15 @@ QStringList MakeJob::environmentVars() const
             "Default Make Environment Profile", "default" );
 
     const KDevelop::EnvironmentGroupList l(KGlobal::config());
-    return l.createEnvironment( defaultProfile, QProcess::systemEnvironment() );
+    QStringList env = QProcess::systemEnvironment();
+    QStringList::iterator it, end = env.end();
+    for( it = env.begin(); it != end; it++ ) {
+        if( (*it).startsWith("LC_MESSAGES") || (*it).startsWith("LC_ALL") ) {
+            env.erase( it );
+        }
+    }
+    env.append( "LC_MESSAGE=C" );
+    return l.createEnvironment( defaultProfile, env );
 }
 
 void MakeJob::addStandardOutput( const QStringList& lines )
