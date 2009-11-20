@@ -35,6 +35,18 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES}  ${
 set(KDEVPLATFORM_LIB_VERSION 1.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 1)
 
+# Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
+set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
+set(KDEVPLATFORM_INTERFACES_LIBRARIES kdevplatforminterfaces)
+set(KDEVPLATFORM_LANGUAGE_LIBRARIES kdevplatformlanguage)
+set(KDEVPLATFORM_PROJECT_LIBRARIES kdevplatformproject)
+set(KDEVPLATFORM_UTIL_LIBRARIES kdevplatformutil)
+set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES kdevplatformoutputview)
+set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
+set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
+set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
+set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
+
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
 add_subdirectory(project)
@@ -47,18 +59,6 @@ add_subdirectory(pics)
 #macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
 add_subdirectory(tests)
-
-# Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
-set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
-set(KDEVPLATFORM_INTERFACES_LIBRARIES kdevplatforminterfaces)
-set(KDEVPLATFORM_LANGUAGE_LIBRARIES kdevplatformlanguage)
-set(KDEVPLATFORM_PROJECT_LIBRARIES kdevplatformproject)
-set(KDEVPLATFORM_UTIL_LIBRARIES kdevplatformutil)
-set(KDEVPLATFORM_OUTPUTVIEW_LIBRARIES kdevplatformoutputview)
-set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
-set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
-set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
-set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
 
 add_subdirectory(plugins)
 
