@@ -1,1 +1,1 @@
-add_subdirectory(qthelp)
+macro_optional_add_subdirectory(qthelp)
