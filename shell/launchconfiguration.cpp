@@ -145,8 +145,7 @@ void LaunchConfiguration::setLauncherForMode(const QString& mode, const QString&
     QStringList launchers = baseGroup.readEntry( "Configured Launchers", QStringList() );
     if( launchers.count() > idx )
     {
-        launchers.insert( idx, id );
-        launchers.removeAt( idx );
+        launchers.replace(idx, id);
     } else
     {
         launchers.append( id );
