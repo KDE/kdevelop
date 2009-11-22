@@ -18,9 +18,11 @@
 #include "../duchain/repositories/itemrepository.h"
 #include <duchain/indexedstring.h>
 #include <util/setrepository.h>
+#include <time.h>
 
 //When uncommented, the reason for needed updates is printed
 // #define DEBUG_NEEDSUPDATE
+#include <sys/time.h>
 
 namespace KDevelop {
 
@@ -93,21 +95,18 @@ static FileModificationPairRepository& fileModificationPairRepository() {
   return rep;
 }
 
-QHash<uint, bool> needsUpdateCache;
+QHash<uint, std::pair<timeval, bool> > needsUpdateCache;
 
 void ModificationRevisionSet::clearCache() {
   QMutexLocker lock(&modificationRevisionSetMutex);
   ///@todo More intelligent clearing. We actually need to watch the directory for changes, and if there are changes, clear the cache.
   needsUpdateCache.clear();
-//   kDebug() << "clearing cache";
 }
 
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
   FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", &KDevelop::globalItemRepositoryRegistry(), true) {
   }
-  virtual void itemRemovedFromSets(uint index) {
-    fileModificationPairRepository().deleteItem(index);
-  }
+  virtual void itemRemovedFromSets(uint index);
 };
 
 //FileModificationSetRepository fileModificationSetRepository;
@@ -136,7 +135,6 @@ void ModificationRevisionSet::clear() {
     oldModificationTimes.staticUnref();
     m_index = 0;
   }
-  clearCache();
 }
 
 void ModificationRevisionSet::addModificationRevision(const IndexedString& url, const KDevelop::ModificationRevision& revision) {
@@ -168,8 +166,6 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
   if(!m_index)
     return false;
 
-  clearCache();
-  
   Utils::Set oldModificationTimes = Utils::Set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set newModificationTimes = oldModificationTimes;
   
@@ -209,9 +205,20 @@ static bool nodeNeedsUpdate(uint index) {
   if(!index)
     return false;
   
-  QHash<uint, bool>::const_iterator cached = needsUpdateCache.constFind(index);
-  if(cached != needsUpdateCache.constEnd())
-    return cached.value();
+  timeval currentTime;
+  gettimeofday(&currentTime, 0);
+  
+  QHash<uint, std::pair<timeval, bool> >::const_iterator cached = needsUpdateCache.constFind(index);
+  if(cached != needsUpdateCache.constEnd()) {
+    
+    timeval  age;
+    timersub(&currentTime, &(*cached).first, &age);
+    
+    if( age.tv_sec < cacheModificationTimesForSeconds )
+    {
+      return cached->second;
+    }
+  }
   
   bool result = false;
   
@@ -230,7 +237,7 @@ static bool nodeNeedsUpdate(uint index) {
     result = nodeNeedsUpdate(nodeData->leftNode) || nodeNeedsUpdate(nodeData->rightNode);
   }
   
-  needsUpdateCache.insert(index, result);
+  needsUpdateCache.insert(index, std::make_pair(currentTime, result));
   
   return result;
 }
@@ -292,8 +299,6 @@ ModificationRevisionSet& ModificationRevisionSet::operator+=(const ModificationR
   
   m_index = newModificationTimes.setIndex();
   
-  clearCache();
-  
   return *this;
 }
 
@@ -311,9 +316,13 @@ ModificationRevisionSet& ModificationRevisionSet::operator-=(const ModificationR
   
   m_index = newModificationTimes.setIndex();
 
-  clearCache();
-  
   return *this;
+}
+
+void FileModificationSetRepository::itemRemovedFromSets(uint index)
+{
+    fileModificationPairRepository().deleteItem(index);
+    needsUpdateCache.remove(index);
 }
 
 }

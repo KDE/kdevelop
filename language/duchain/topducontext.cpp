@@ -899,7 +899,11 @@ void TopDUContext::setAst(KSharedPtr<IAstContainer> ast)
     parsingEnvironmentFile()->setFeatures(features());
 }
 
-void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
+void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
+{
+  if(m_local->m_file) //Clear the "feature satisfaction" cache
+    m_local->m_file->setFeatures(Empty);
+  
   //We do not enforce a duchain lock here, since this is also used while loading a top-context
   m_local->m_file = KSharedPtr<ParsingEnvironmentFile>(file);
 

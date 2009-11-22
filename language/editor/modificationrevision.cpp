@@ -46,9 +46,9 @@ namespace std {
 #include "modificationrevisionset.h"
 #include <sys/time.h>
 
-const int cacheModTimeForSeconds = 2;
-
 namespace KDevelop {
+
+const int cacheModificationTimesForSeconds = 30;
 
 struct IndexedStringHash {
   uint operator() (const KDevelop::IndexedString& str) const {
@@ -94,7 +94,7 @@ QDateTime fileModificationTimeCached( const IndexedString& fileName ) {
     ///Use the cache for X seconds
     timeval  age;
     timersub(&currentTime, &(*it).second.m_readTime, &age);
-    if( age.tv_sec < cacheModTimeForSeconds )
+    if( age.tv_sec < cacheModificationTimesForSeconds )
       return (*it).second.m_modificationTime;
   }
 

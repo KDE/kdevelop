@@ -29,6 +29,8 @@ namespace KDevelop {
 
 class IndexedString;
 
+KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
+
 /**
  * Pairs together a date and a revision-number, for simpler moving around and comparison. Plus some convenience-functions.
  * Use this to track changes to files, by storing the file-modification time and the editor-revision if applicable(@see KTextEditor::SmartInterface)
@@ -44,7 +46,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 	///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
 	static ModificationRevision revisionForFile(const IndexedString& fileName);
 
-	///You can use this when you want to make sure that any cached modification-time is discarded and it's re-read on the next access
+	///You can use this when you want to make sure that any cached modification-time is discarded and it's re-read on the next access.
+    ///Otherwise, the modification-times are re-used for a specific amount of time
 	static void clearModificationCache(const IndexedString& fileName);
 
 	///The default-revision is 1, because that is the kate smart-revision for cleanly opened documents
