@@ -728,6 +728,9 @@ void TopDUContext::updateImportsCache() {
   Q_ASSERT(d_func_dynamic()->m_importsCache.contains(IndexedTopDUContext(this)));
   Q_ASSERT(usingImportsCache());
   Q_ASSERT(imports(this, SimpleCursor::invalid()));
+  
+  if(parsingEnvironmentFile())
+    parsingEnvironmentFile()->setImportsCache(d_func()->m_importsCache);
 }
 
 bool TopDUContext::usingImportsCache() const {
@@ -834,8 +837,17 @@ TopDUContext::~TopDUContext( )
 {
   if(!m_local->m_sharedDataOwner) {
     m_dynamicData->m_deleting = true;
+    
+    //Clear the AST, so that the 'feature satisfaction' cache is eventually updated
+    clearAst();
+    
     if(!isOnDisk())
+    {
+      //Clear the 'feature satisfaction' cache which is managed in ParsingEnvironmentFile
+      setFeatures(Empty);
+      
       clearUsedDeclarationIndices();
+    }
   }
   deleteChildContextsRecursively();
   deleteLocalDeclarations();
@@ -858,19 +870,33 @@ void TopDUContext::deleteSelf() {
 
 TopDUContext::Features TopDUContext::features() const
 {
-  return d_func()->m_features;
+  uint ret = d_func()->m_features;
+  
+  if(ast())
+    ret |= TopDUContext::AST;
+  
+  return (TopDUContext::Features)ret;
 }
 
 void TopDUContext::setFeatures(Features features)
 {
-  features = (TopDUContext::Features)(features & (~((uint)8))); //Remove the "Recursive" flag since that's only for searching
+  features = (TopDUContext::Features)(features & (~Recursive)); //Remove the "Recursive" flag since that's only for searching
   features = (TopDUContext::Features)(features & (~ForceUpdateRecursive)); //Remove the update flags
   features = (TopDUContext::Features)(features & (~AST)); //Remove the AST flag, it's only used while updating
   d_func_dynamic()->m_features = features;
 
   //Replicate features to ParsingEnvironmentFile
   if(parsingEnvironmentFile())
-    parsingEnvironmentFile()->setFeatures(features);
+    parsingEnvironmentFile()->setFeatures(this->features());
+}
+
+void TopDUContext::setAst(KSharedPtr<IAstContainer> ast)
+{
+  ENSURE_CAN_WRITE
+  m_local->m_ast = ast;
+  
+  if(parsingEnvironmentFile())
+    parsingEnvironmentFile()->setFeatures(features());
 }
 
 void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
@@ -880,6 +906,7 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file) {
   //Replicate features to ParsingEnvironmentFile
   if(file) {
     file->setTopContext(IndexedTopDUContext(ownIndex()));
+    Q_ASSERT(file->indexedTopContext().isValid());
     file->setFeatures(d_func()->m_features);
   }
 }
@@ -1461,6 +1488,12 @@ void TopDUContext::clearUsedDeclarationIndices() {
   d_func_dynamic()->m_usedDeclarationIdsList().clear();
 }
 
+void TopDUContext::deleteUsesRecursively()
+{
+    clearUsedDeclarationIndices();
+    KDevelop::DUContext::deleteUsesRecursively();
+}
+
 Declaration* TopDUContext::usedDeclarationForIndex(unsigned int declarationIndex) const {
   ENSURE_CAN_READ
   if(declarationIndex & (1<<31)) {
@@ -1547,18 +1580,12 @@ TopDUContext::Cache::~Cache() {
   delete d;
 }
 
-void TopDUContext::setAst(KSharedPtr<IAstContainer> ast)
-{
-  ENSURE_CAN_WRITE
-  m_local->m_ast = ast;
-}
-
 KSharedPtr<IAstContainer> TopDUContext::ast() const
 {
   return m_local->m_ast;
 }
 
-void TopDUContext::clearAst(void)
+void TopDUContext::clearAst()
 {
   setAst(KSharedPtr<IAstContainer>(0));
 }

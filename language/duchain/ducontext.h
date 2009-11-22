@@ -681,10 +681,15 @@ public:
   void deleteUse(int index);
 
   /**
-   * Clear and delete all uses in this context.
+   * Clear and delete all uses in this context, including smart-ranges etc.
    */
   virtual void deleteUses();
 
+  /**
+   * Recursively delete all uses in this context and all its child-contexts
+   */
+  virtual void deleteUsesRecursively();
+  
   /**
    * Returns the smart-ranges associated to the uses
    */

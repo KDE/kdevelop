@@ -130,7 +130,7 @@ int main(int argc, char** argv)
     options.add("verbose", ki18n("Show warnings and debug output"));
     options.add("force-update", ki18n("Enforce an update of the top-contexts corresponding to the given files"));
     options.add("threads <count>", ki18n("Number of threads to use"));
-    options.add("f <features>", ki18n("Features to build. Options: visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
+    options.add("f <features>", ki18n("Features to build. Options: empty, simplified-visible-declarations, visible-declarations (default), all-declarations, all-declarations-and-uses, all-declarations-and-uses-and-AST"));
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -176,8 +176,17 @@ int main(int argc, char** argv)
         }
         else if(featuresStr == "all-declarations-and-uses-and-AST")
         {
-            features = TopDUContext::AllDeclarationsContextsUsesAndAST;
-        }else{
+            features = TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST;
+        }
+        else if(featuresStr == "empty")
+        {
+            features = TopDUContext::Empty;
+        }
+        else if(featuresStr == "simplified-visible-declarations")
+        {
+            features = TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
+        }
+        else{
             std::cerr << "Wrong feature-string given\n";
             exit(2);
         }

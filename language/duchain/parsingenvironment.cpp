@@ -32,19 +32,41 @@
 
 namespace KDevelop
 {
+StaticParsingEnvironmentData* ParsingEnvironmentFile::m_staticData = 0;
+
+ #if 0
+///Wrapper class around objects that are managed through the DUChain, and may contain arbitrary objects
+///that support duchain-like store (IndexedString, StorableSet, and the likes). The object must not contain pointers
+///or other non-persistent data.
+///
+///The object is stored during the normal duchain storage/cleanup cycles.
+
+template<class T>
+struct PersistentDUChainObject {
+  ///@param fileName File-name that will be used to store the data of the object in the duchain directory
+  PersistentDUChainObject(QString fileName) {
+    object = (T*) new char[sizeof(T)];
+    if(!DUChain::self()->addPersistentObject(object, fileName, sizeof(T)))
+    {
+      //The constructor is called only if the object did not exist yet
+      new (object) T();
+    }
+  }
+  ~PersistentDUChainObject() {
+    DUChain::self()->unregisterPersistentObject(object);
+    delete[] object;
+  }
+  
+  T* object;
+};
+#endif
+
 REGISTER_DUCHAIN_ITEM(ParsingEnvironmentFile);
 
 TopDUContext::Features ParsingEnvironmentFile::features() const {
   ENSURE_READ_LOCKED
   
   return d_func()->m_features;
-}
-
-void ParsingEnvironmentFile::setFeatures(TopDUContext::Features features) {
-  if(d_func()->m_features == features)
-    return;
-  ENSURE_WRITE_LOCKED
-  d_func_dynamic()->m_features = features;
 }
 
 ParsingEnvironment::ParsingEnvironment() {
@@ -73,6 +95,11 @@ void ParsingEnvironmentFile::setTopContext(KDevelop::IndexedTopDUContext context
     return;
   ENSURE_WRITE_LOCKED
   d_func_dynamic()->m_topContext = context;
+  
+  //Enforce an update of the 'features satisfied' caches
+  TopDUContext::Features oldFeatures = features();
+  setFeatures(TopDUContext::Empty);
+  setFeatures(oldFeatures);
 }
 
 KDevelop::IndexedTopDUContext ParsingEnvironmentFile::indexedTopContext() const {
@@ -140,7 +167,7 @@ void ParsingEnvironmentFile::setIsProxyContext(bool is) {
   d_func_dynamic()->m_isProxyContext = is;
 }
 
-QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
+QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() const  {
   ENSURE_READ_LOCKED
 
   QList<IndexedDUContext> imp;
@@ -165,7 +192,7 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::imports() {
   return ret;
 }
 
-QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() {
+QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() const {
   ENSURE_READ_LOCKED
   
   QList<IndexedDUContext> imp;
@@ -189,41 +216,109 @@ QList< KSharedPtr<ParsingEnvironmentFile> > ParsingEnvironmentFile::importers() 
   return ret;
 }
 
+QMutex featureSatisfactionMutex;
+
+inline bool satisfied(TopDUContext::Features features, TopDUContext::Features required) {
+  return (features & required) == required;
+}
+
 ///Makes sure the the file has the correct features attached, and if minimumFeatures contains AllDeclarationsContextsAndUsesForRecursive, then also checks all imports.
-static bool featuresMatch(ParsingEnvironmentFilePointer file, TopDUContext::Features minimumFeatures, QSet<ParsingEnvironmentFilePointer>& checked) {
+bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeatures, QSet<const ParsingEnvironmentFile*>& checked) const {
   
-  if(checked.contains(file))
+  if(checked.contains(this))
     return true;
   
-  checked.insert(file);
+  checked.insert(this);
   
-  TopDUContext::Features localRequired = (TopDUContext::Features) (minimumFeatures | ParseJob::staticMinimumFeatures(file->url()));
+  TopDUContext::Features localRequired = (TopDUContext::Features) (minimumFeatures | ParseJob::staticMinimumFeatures(url()));
   
-  if(localRequired & TopDUContext::AST)
-    if(!file->indexedTopContext().isLoaded() || !file->topContext()->ast())
-      return false;
+  //Check other 'local' requirements
+  localRequired = (TopDUContext::Features)(localRequired & (TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST));
   
-  ///Remove all features that are not attached to the AST
-  localRequired = (TopDUContext::Features)(localRequired & TopDUContext::AllDeclarationsContextsAndUses);
-  
-  if(!((file->features() & localRequired) == localRequired ))
+  if(!satisfied(features(), localRequired))
     return false;
-  
-  ///@todo Before recursing, do a fast check whether one of the imports has special rules stored. Else it's not neede.
-  if(minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive || ParseJob::hasStaticMinimumFeatures())
-    foreach(const ParsingEnvironmentFilePointer &import, file->imports())
-      if(!featuresMatch(import, minimumFeatures == TopDUContext::AllDeclarationsContextsAndUsesForRecursive ? minimumFeatures : ((TopDUContext::Features)0), checked))
+
+  if(ParseJob::hasStaticMinimumFeatures())
+  {
+    //Do a manual recursion to check whether any of the relevant contexts has static minimum features set
+    ///@todo Only do this if one of the imports actually has static features attached (by RecursiveImports set intersection)
+    foreach(const ParsingEnvironmentFilePointer &import, imports())
+      if(!import->featuresMatch(minimumFeatures & TopDUContext::Recursive ? minimumFeatures : ((TopDUContext::Features)0), checked))
         return false;
+  }else if(minimumFeatures & TopDUContext::Recursive)
+  {
+    QMutexLocker lock(&featureSatisfactionMutex);
+    
+    TopDUContext::IndexedRecursiveImports recursiveImportIndices = d_func()->m_importsCache;
+    if(recursiveImportIndices.isEmpty()) {
+      //Unfortunately, we have to load the top-context
+      TopDUContext* top = topContext();
+      if(top)
+        recursiveImportIndices = top->recursiveImportIndices();
+    }
+
+    ///@todo Do not create temporary intersected sets
+
+    //Use the features-cache to efficiently check the recursive satisfaction of the features
+    if(satisfied(minimumFeatures, TopDUContext::AST) && !((m_staticData->ASTSatisfied & recursiveImportIndices) == recursiveImportIndices))
+      return false;
+    
+    if(satisfied(minimumFeatures, TopDUContext::AllDeclarationsContextsAndUses))
+      return (m_staticData->allDeclarationsAndUsesSatisfied & recursiveImportIndices) == recursiveImportIndices;
+    else if(satisfied(minimumFeatures, TopDUContext::AllDeclarationsAndContexts))
+      return (m_staticData->allDeclarationsSatisfied & recursiveImportIndices) == recursiveImportIndices;
+    else if(satisfied(minimumFeatures, TopDUContext::VisibleDeclarationsAndContexts))
+      return (m_staticData->visibleDeclarationsSatisfied & recursiveImportIndices) == recursiveImportIndices;
+    else if(satisfied(minimumFeatures, TopDUContext::SimplifiedVisibleDeclarationsAndContexts))
+      return (m_staticData->simplifiedVisibleDeclarationsSatisfied & recursiveImportIndices) == recursiveImportIndices;
+  }
   
   return true;
 }
 
-bool ParsingEnvironmentFile::featuresSatisfied(TopDUContext::Features minimumFeatures) {
+void ParsingEnvironmentFile::setFeatures(TopDUContext::Features features) {
+  if(d_func()->m_features == features)
+    return;
+  ENSURE_WRITE_LOCKED
+  d_func_dynamic()->m_features = features;
+  
+  if(indexedTopContext().isValid())
+  {
+    QMutexLocker lock(&featureSatisfactionMutex);
+    
+    if(!satisfied(features, TopDUContext::SimplifiedVisibleDeclarationsAndContexts))
+      m_staticData->simplifiedVisibleDeclarationsSatisfied.remove(indexedTopContext());
+    else
+      m_staticData->simplifiedVisibleDeclarationsSatisfied.insert(indexedTopContext());
+    
+    if(!satisfied(features, TopDUContext::VisibleDeclarationsAndContexts))
+      m_staticData->visibleDeclarationsSatisfied.remove(indexedTopContext());
+    else
+      m_staticData->visibleDeclarationsSatisfied.insert(indexedTopContext());
+    
+    if(!satisfied(features, TopDUContext::AllDeclarationsAndContexts))
+      m_staticData->allDeclarationsSatisfied.remove(indexedTopContext());
+    else
+      m_staticData->allDeclarationsSatisfied.insert(indexedTopContext());
+
+    if(!satisfied(features, TopDUContext::AllDeclarationsContextsAndUses))
+      m_staticData->allDeclarationsAndUsesSatisfied.remove(indexedTopContext());
+    else
+      m_staticData->allDeclarationsAndUsesSatisfied.insert(indexedTopContext());
+
+    if(!satisfied(features, TopDUContext::AST))
+      m_staticData->ASTSatisfied.remove(indexedTopContext());
+    else
+      m_staticData->ASTSatisfied.insert(indexedTopContext());
+  }
+}
+
+bool ParsingEnvironmentFile::featuresSatisfied(KDevelop::TopDUContext::Features minimumFeatures) const {
   ENSURE_READ_LOCKED
-  QSet<ParsingEnvironmentFilePointer> checked;
+  QSet<const ParsingEnvironmentFile*> checked;
   if(minimumFeatures & TopDUContext::ForceUpdate)
     return false;
-  return featuresMatch(ParsingEnvironmentFilePointer(this), minimumFeatures, checked);
+  return featuresMatch(minimumFeatures, checked);
 }
 
 void ParsingEnvironmentFile::clearModificationRevisions() {
@@ -278,5 +373,14 @@ void ParsingEnvironmentFile::setLanguage(IndexedString language) {
   d_func_dynamic()->m_language = language;
 }
 
+const KDevelop::TopDUContext::IndexedRecursiveImports& ParsingEnvironmentFile::importsCache() const
+{
+  return d_func()->m_importsCache;
+}
+
+void ParsingEnvironmentFile::setImportsCache(const KDevelop::TopDUContext::IndexedRecursiveImports& importsCache)
+{
+  d_func_dynamic()->m_importsCache = importsCache;
+}
 
 } //KDevelop

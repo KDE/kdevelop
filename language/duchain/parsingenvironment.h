@@ -63,6 +63,15 @@ enum ParsingEnvironmentType
   PhpParsingEnvironment      /**< a PHP parsing environment */
 };
 
+///Internal
+struct StaticParsingEnvironmentData {
+  TopDUContext::IndexedRecursiveImports simplifiedVisibleDeclarationsSatisfied;
+  TopDUContext::IndexedRecursiveImports visibleDeclarationsSatisfied;
+  TopDUContext::IndexedRecursiveImports allDeclarationsSatisfied;
+  TopDUContext::IndexedRecursiveImports allDeclarationsAndUsesSatisfied;
+  TopDUContext::IndexedRecursiveImports ASTSatisfied;
+};
+
 /**
  * Use this as base-class to define new parsing-environments.
  *
@@ -100,7 +109,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFileData : public DUChainBas
   KDevelop::IndexedString m_url;
   KDevelop::IndexedTopDUContext m_topContext;
   IndexedString m_language;
+  
+  ///If this is not empty, it means that the cache is used instead of the implicit structure.
+  TopDUContext::IndexedRecursiveImports m_importsCache;
 };
+
+typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
 
 /**
  * This represents all information about a specific parsed file that is needed
@@ -132,8 +146,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     
     KDevelop::IndexedString url() const;
     
-    void setTopContext(KDevelop::IndexedTopDUContext context);
-    
     ///Can additionally use language-specific information to decide whether the top-context that has this data attached needs to be reparsed.
     ///The standard-implementation checks the modification-time of this file stored using setModificationRevision, and all other modification-times
     ///stored with addModificationRevision(..).
@@ -160,15 +172,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     
     ///Returns the parsing-environment information of all importers of the coupled TopDUContext. This is more efficient than
     ///loading the top-context and finding out, because when a top-context is loaded, also all its recursive imports are loaded
-    QList< KSharedPtr<ParsingEnvironmentFile> > importers();
+    QList< KSharedPtr<ParsingEnvironmentFile> > importers() const;
 
     ///Returns the parsing-environment information of all imports of the coupled TopDUContext. This is more efficient than
     ///loading the top-context and finding out
-    QList< KSharedPtr<ParsingEnvironmentFile> > imports();
+    QList< KSharedPtr<ParsingEnvironmentFile> > imports() const;
     
     ///Returns true if this top-context satisfies at least the given minimum features.
     ///If there is static minimum features set up in ParseJob, this also checks against those.
-    bool featuresSatisfied(TopDUContext::Features minimumFeatures);
+    ///Features like "ForceUpdate" are treated specially.
+    ///@p minimumFeatures The features that must be satisfied. May be an arbitrary combination of features.
+    bool featuresSatisfied(TopDUContext::Features minimumFeatures) const;
     
     ///Should return a correctly filled ModificationRevision of the source it was created from.
     void setModificationRevision( const KDevelop::ModificationRevision& rev ) ;
@@ -187,6 +201,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     /// Returns the language for this top-context. If the string is empty, the language is unknown.
     IndexedString language() const;
     
+    /// If the recursive imports of the attached TopDUContext are cached, this returns the cached imports.
+    /// This works without loading the top-context.
+    const TopDUContext::IndexedRecursiveImports& importsCache() const;
+    
     ///Sets the language for this top-context. Each top-context should get the language assigned that can by used
     ///in order to load the language using ILanguageController.
     void setLanguage(IndexedString language);
@@ -199,10 +217,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     
   private:
     friend class TopDUContext;
+    friend class DUChainPrivate;
+    static StaticParsingEnvironmentData* m_staticData;
+    ///The features are managed by TopDUContext. They are set to TopDUContext::Empty when the top-context is persistently destroyed,
+    ///so the persistent feature-satisfaction cache can be cleared.
     void setFeatures(TopDUContext::Features);
+    void setTopContext(KDevelop::IndexedTopDUContext context);
+    bool featuresMatch(KDevelop::TopDUContext::Features minimumFeatures, QSet< const KDevelop::ParsingEnvironmentFile* >& checked) const;
+    void setImportsCache(const TopDUContext::IndexedRecursiveImports&);
 };
 
-typedef KSharedPtr<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
 }
 
 #endif

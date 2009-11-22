@@ -1346,6 +1346,14 @@ void DUContext::deleteUses()
   clearUseSmartRanges();
 }
 
+void DUContext::deleteUsesRecursively()
+{
+  deleteUses();
+  
+  FOREACH_FUNCTION(LocalIndexedDUContext childContext, d_func()->m_childContexts)
+    childContext.data(topContext())->deleteUsesRecursively();
+}
+
 bool DUContext::inDUChain() const {
   if( d_func()->m_anonymousInParent || !m_dynamicData->m_parentContext)
     return false;

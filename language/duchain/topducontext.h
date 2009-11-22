@@ -211,21 +211,26 @@ public:
   };
   
   enum Features {
-    VisibleDeclarationsAndContexts = 0, //Standard: The top-context should only contain publically accessible declarations and contexts
-    AllDeclarationsAndContexts = 2, //The top-context should also contain non-public declarations and contexts, but no uses
-    AllDeclarationsContextsAndUses = 4 + AllDeclarationsAndContexts, //The top-context should contain uses and all declarations + contexts
-    ///When this flag is set, also _all_ recursive imports have to be computed with AllDeclarationsContextsAndUses
-    ///This flag can not be set on a context, it is only used as a parameter to several updating functions. When you set it
-    ///on a top-context, its flag will be AllDeclarationsContextsAndUses.
-    AllDeclarationsContextsAndUsesForRecursive = 8 + AllDeclarationsContextsAndUses,
-    AST = 16,  //Use this flag if you want to signalize that the IAstContainer needs to be there
-    AllDeclarationsContextsUsesAndAST = AllDeclarationsContextsAndUses | AST,
-    ForceUpdate = 32, //This flag can not be set on a context, but is only used during updating
-    ForceUpdateRecursive = ForceUpdate | 64 //This flag can not be set on a context, but is only used during updating
+    ///Top-context features standard that can be requested from the duchain, and that are stored in the features() member.
+    Empty = 0, //Only the top-context structure (imports etc.) is built, but no declarations and no contexts
+    SimplifiedVisibleDeclarationsAndContexts = 2, //The top-context should only contain publically simplified accessible declarations and contexts, without doing type look-up,
+                                                                               //without extended information like function-argument declarations, etc., imported contexts can be parsed with 'Empty' features
+                                                                               //This flag essentially leads to a ctags-like processing level.
+    VisibleDeclarationsAndContexts = SimplifiedVisibleDeclarationsAndContexts + 4, //Default: The top-context should only contain publically accessible declarations and contexts
+    AllDeclarationsAndContexts = VisibleDeclarationsAndContexts + 8, //The top-context should also contain non-public declarations and contexts, but no uses
+    AllDeclarationsContextsAndUses = 16 + AllDeclarationsAndContexts, //The top-context should contain uses and all declarations + contexts
+    AST = 32,             //Signalizes that the ast() should be filled
+    AllDeclarationsContextsUsesAndAST = AST | AllDeclarationsContextsAndUses, //Convenience flag, combining AST and AllDeclarationsContextsAndUses
+
+    ///Additional update-flags that have a special meaning during updating, but are not set stored into a top-context
+    Recursive = 64,  //Request the given features on all recursively imported contexts. Only the features are applied recursively (including AST)
+    ForceUpdate = 128, //Enforce updating the top-context
+    ForceUpdateRecursive = ForceUpdate | 256 //Enforce updating the top-context and all its imports
   };
-  
+
+  ///Returns the currently active features of this top-context. The features will include AST if ast() is valid.
   Features features() const;
-  ///Set the features of this top-context. These features are ignored: AST, ForceUpdate, and ForeceUpdateRecursive.
+  ///Set the features of this top-context. These features are ignored: AST, ForceUpdate, and ForceUpdateRecursive.
   void setFeatures(Features);
 
   /**
@@ -253,6 +258,12 @@ public:
    * */
   void clearUsedDeclarationIndices();
 
+
+  /**
+   * Recursively deletes all contained uses, declaration-indices, etc.
+   */
+  virtual void deleteUsesRecursively();
+  
   /**
    * Use flags to mark top-contexts for special behavior. Any flags above LastFlag may be used for language-specific stuff.
    * */
@@ -366,6 +377,7 @@ protected:
 
   virtual ~TopDUContext();
   
+  void clearFeaturesSatisfied();
   void rebuildDynamicData(DUContext* parent, uint ownIndex);
   //Must be called after all imported top-contexts were loaded into the du-chain
   void rebuildDynamicImportStructure();

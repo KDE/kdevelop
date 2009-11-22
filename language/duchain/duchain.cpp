@@ -320,6 +320,22 @@ public:
     m_cleanup->start();
     
     duChainDeleted = false;
+    
+    {
+      ///@todo Solve this more duchain-like
+      QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
+      bool opened = f.open(QIODevice::ReadOnly);
+      ParsingEnvironmentFile::m_staticData = (StaticParsingEnvironmentData*) new char[sizeof(StaticParsingEnvironmentData)];
+      if(opened) {
+        kDebug() << "reading parsing-environment static data";
+        //Read
+        f.read((char*)ParsingEnvironmentFile::m_staticData, sizeof(StaticParsingEnvironmentData));
+      }else{
+        kDebug() << "creating new parsing-environment static data";
+        //Initialize
+        new (ParsingEnvironmentFile::m_staticData) StaticParsingEnvironmentData();
+      }
+    }
   }
   ~DUChainPrivate() {
     duChainDeleted = true;
@@ -803,6 +819,16 @@ public:
       //This must be the last step, due to the on-disk reference counting
       globalItemRepositoryRegistry().store(); //Stores all repositories
 
+      {
+        //Store the static parsing-environment file data
+        ///@todo Solve this more elegantly, using a general mechanism to store static duchain-like data
+        Q_ASSERT(ParsingEnvironmentFile::m_staticData);
+        QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
+        bool opened = f.open(QIODevice::WriteOnly);
+        Q_ASSERT(opened);
+        f.write((char*)ParsingEnvironmentFile::m_staticData, sizeof(StaticParsingEnvironmentData));
+      }
+      
       if(retries) {
         doMoreCleanup(retries-1, false);
         writeLock.lock();
