@@ -62,15 +62,18 @@ private slots:
     void documentUrlChanged( KDevelop::IDocument* document );
 
     void saveSelected();
+    void reloadSelected();
     void closeSelected();
+    void closeUnselected();
 
 protected:
     virtual void mousePressEvent( QMouseEvent * event );
     virtual void contextMenuEvent( QContextMenuEvent * event );
 
 private:
-    template<typename F> void visitSelected(F);
-    bool someDocHasChanges();
+    template<typename F> void visitItems(F, bool selectedItems);
+    bool selectedDocHasChanges();
+    void updateSelectedDocs();
 
 private:
     KDevDocumentViewPlugin *m_plugin;
@@ -79,6 +82,7 @@ private:
     KDevDocumentViewDelegate* m_delegate;
     QHash< KDevelop::IDocument*, KDevFileItem* > m_doc2index;
     QList<KUrl> m_selectedDocs; // used for ctx menu
+    QList<KUrl> m_unselectedDocs; // used for ctx menu
 };
 
 #endif // KDEVDOCUMENTVIEW_H

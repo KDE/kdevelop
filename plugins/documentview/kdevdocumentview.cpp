@@ -86,10 +86,13 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     if ( event->button() == Qt::LeftButton && index.parent().isValid() &&
             event->modifiers() == Qt::NoModifier )
     {
-        m_plugin->core()->documentController() ->openDocument(
-            static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) ) ->fileItem() ->url() );
-        return;
-
+        KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
+        KUrl documentUrl = static_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem()->url();
+        if (dc->documentForUrl(documentUrl) != dc->activeDocument())
+        {
+            dc->openDocument(documentUrl);
+            return;
+        }
     }
 
     if ( !index.parent().isValid() )
@@ -101,10 +104,12 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     QTreeView::mousePressEvent( event );
 }
 
-template<typename F> void KDevDocumentView::visitSelected(F f)
+template<typename F> void KDevDocumentView::visitItems(F f, bool selectedItems)
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    foreach(const KUrl& url, m_selectedDocs) {
+    QList<KUrl> docs = selectedItems ? m_selectedDocs : m_unselectedDocs;
+    
+    foreach(const KUrl& url, docs) {
        KDevelop::IDocument* doc = dc->documentForUrl(url);
        if (doc) f(doc);
     }
@@ -120,45 +125,55 @@ class DocCloser
 {
 public: void operator()(KDevelop::IDocument* doc) { doc->close(); }
 };
+class DocReloader
+{
+public: void operator()(KDevelop::IDocument* doc) { doc->reload(); }
+};
 }
 
 void KDevDocumentView::saveSelected()
 {
-    visitSelected(DocSaver());
+    visitItems(DocSaver(), true);
 }
 
 void KDevDocumentView::closeSelected()
 {
-    visitSelected(DocCloser());
+    visitItems(DocCloser(), true);
+}
+
+void KDevDocumentView::closeUnselected()
+{
+    visitItems(DocCloser(), false);
+}
+
+void KDevDocumentView::reloadSelected()
+{
+    visitItems(DocReloader(), true);
 }
 
 void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 {
-    QModelIndexList indexes = selectionModel() ->selectedIndexes();
-    KDevDocumentModel *docModel = qobject_cast<KDevDocumentModel*>( model() );
-
-    m_selectedDocs.clear();
-    foreach ( const QModelIndex& index, indexes )
-    {
-        if ( KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>( docModel->itemFromIndex( index ) )->fileItem() )
-        {
-            m_selectedDocs << fileItem->url();
-        }
-    }
+    updateSelectedDocs();
+    
     if (!m_selectedDocs.isEmpty())
     {
         KMenu* ctxMenu=new KMenu(this);
-        ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
+        
         KAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
-        save->setEnabled(someDocHasChanges());
+        save->setEnabled(selectedDocHasChanges());
         ctxMenu->addAction(save);
-
+        ctxMenu->addAction(KIcon("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));
+        ctxMenu->addSeparator();
+        ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
+        QAction* closeUnselected = ctxMenu->addAction(KIcon("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
+        closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
+        
         connect(ctxMenu,SIGNAL(aboutToHide()),ctxMenu,SLOT(deleteLater()));
         ctxMenu->popup( event->globalPos() );
     }
 }
 
-bool KDevDocumentView::someDocHasChanges()
+bool KDevDocumentView::selectedDocHasChanges()
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
     foreach(const KUrl& url, m_selectedDocs)
@@ -171,6 +186,27 @@ bool KDevDocumentView::someDocHasChanges()
         }
     }
     return false;
+}
+
+void KDevDocumentView::updateSelectedDocs()
+{
+    m_selectedDocs.clear();
+    m_unselectedDocs.clear();
+
+    for (int i = 0; i < m_documentModel->rowCount(); i++)
+    {
+        QList<QStandardItem*> allItems = m_documentModel->findItems("*", Qt::MatchWildcard | Qt::MatchRecursive);
+        foreach (QStandardItem* item, allItems)
+        {
+            if (KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>(item)->fileItem())
+            {
+                if (m_selectionModel->isSelected(m_documentModel->indexFromItem(fileItem)))
+                    m_selectedDocs << fileItem->url();
+                else
+                    m_unselectedDocs << fileItem->url();
+            }
+        }
+    }
 }
 
 void KDevDocumentView::activated( KDevelop::IDocument* document )
