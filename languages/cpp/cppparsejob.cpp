@@ -522,41 +522,59 @@ void CPPInternalParseJob::run()
 
     if(!parentJob()->keepDuchain()) {
 
+      TopDUContext::Features newFeatures = parentJob()->minimumFeatures();
+      if(contentContext)
+        newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
+
+      if(newFeatures & TopDUContext::ForceUpdate)
+        kDebug() << "update enforced";
+
+      ///At some point, we have to give up on features again, else processing will be just too slow.
+      ///Simple solution for now: Always go down to the minimum required level.
+      if(!contentContext || !contentContext->smartRange())
+        newFeatures = parentJob()->minimumFeatures();
+      
+      //Remove update-flags like 'Recursive' or 'ForceUpdate'
+      newFeatures = (TopDUContext::Features)(newFeatures & TopDUContext::AllDeclarationsContextsUsesAndAST);
+      
       TranslationUnitAST* ast = 0L;
 
       Control control;
       Parser parser(&control);
 
-      ast = parser.parse( parentJob()->parseSession().data() );
+      if(newFeatures != TopDUContext::Empty)
+      {
+        ast = parser.parse( parentJob()->parseSession().data() );
 
-      //This will be set to true if the duchain data should be left untouched
-      if(ast->hadMissingCompoundTokens && updatingContentContext) {
-        //Make sure we don't update into a completely invalid state where everything is invalidated temporarily.
-        DUChainWriteLocker l(DUChain::lock());
+        //This will be set to true if the duchain data should be left untouched
+        if(ast->hadMissingCompoundTokens && updatingContentContext) {
+          //Make sure we don't update into a completely invalid state where everything is invalidated temporarily.
+          DUChainWriteLocker l(DUChain::lock());
 
-        if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
-            updatingContentContext->smartRange() &&
-            updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
-          kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
-          ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
-          l.unlock();
-          doNotChangeDUChain = true;
-          ProblemPointer problem(new Problem);
-          problem->setSource(ProblemData::Parser);
-          problem->setDescription("Not updating the DUChain because of serious document inconsistency");
-          control.reportProblem(problem);
+          if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
+              updatingContentContext->smartRange() &&
+              updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
+            kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
+            ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
+            l.unlock();
+            doNotChangeDUChain = true;
+            ProblemPointer problem(new Problem);
+            problem->setSource(ProblemData::Parser);
+            problem->setDescription("Not updating the DUChain because of serious document inconsistency");
+            control.reportProblem(problem);
+          }
         }
-      }
 
-      if (parentJob()->abortRequested())
-          return /*parentJob()->abortJob()*/;
+        if (parentJob()->abortRequested())
+            return /*parentJob()->abortJob()*/;
 
-      if ( ast ) {
-          ast->session = parentJob()->parseSession().data();
+        if ( ast ) {
+            ast->session = parentJob()->parseSession().data();
 #ifdef DUMP_AST
-          DumpTree dump;
-          dump.dump(ast, parentJob()->parseSession()->token_stream);
+            DumpTree dump;
+            dump.dump(ast, parentJob()->parseSession()->token_stream);
 #endif
+        }
       }
 
       CppEditorIntegrator editor(parentJob()->parseSession().data());
@@ -602,21 +620,6 @@ void CPPInternalParseJob::run()
 
       DeclarationBuilder declarationBuilder(&editor);
 
-      TopDUContext::Features newFeatures = parentJob()->minimumFeatures();
-      if(contentContext)
-        newFeatures = (TopDUContext::Features)(newFeatures | contentContext->features());
-
-      if(newFeatures & TopDUContext::ForceUpdate)
-        kDebug() << "update enforced";
-
-      ///At some point, we have to give up on features again, else processing will be just too slow.
-      ///Simple solution for now: Always go down to the minimum required level.
-      if(!contentContext || !contentContext->smartRange())
-        newFeatures = parentJob()->minimumFeatures();
-      
-      //Remove update-flags like 'Recursive' or 'ForceUpdate'
-      newFeatures = (TopDUContext::Features)(newFeatures & TopDUContext::AllDeclarationsContextsUsesAndAST);
-      
       if(newFeatures == TopDUContext::VisibleDeclarationsAndContexts) {
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
       }

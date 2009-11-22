@@ -1,4 +1,4 @@
-/* This file is part of KDevelop
+  /* This file is part of KDevelop
     Copyright 2006 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
     Copyright 2007-2008 David Nolden <david.nolden.kdevelop@art-master.de>
@@ -453,8 +453,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
     setEncountered(topLevelContext);
 
-    node->ducontext = topLevelContext;
-
     if (includes) {
       if(removeOldImports) {
         foreach (const DUContext::Import &parent, topLevelContext->importedParentContexts())
@@ -489,6 +487,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext->cleanIfNotEncountered(QSet<DUChainBase*>());
   }else{
+    node->ducontext = topLevelContext;
     supportBuild(node);
   }
 
