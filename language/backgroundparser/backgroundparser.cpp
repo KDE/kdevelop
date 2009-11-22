@@ -225,7 +225,7 @@ public:
         if(languages.isEmpty())
             kDebug() << "found no languages for url" << url;
         else
-            kWarning() << "could not create parse-job for url" << url;
+            kDebug() << "could not create parse-job for url" << url;
 
         //Notify that we failed
         typedef QPointer<QObject> Notify;
