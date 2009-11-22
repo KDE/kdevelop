@@ -214,10 +214,10 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_assistant = new Cpp::StaticCodeAssistant;
 }
 
-///@todo Make this work again with non-class declarations/definitions
 void CppLanguageSupport::switchDefinitionDeclaration()
 {
   kDebug(9007) << "switching definition/declaration";
+  
   ///Step 1: Find the current top-level context of type DUContext::Other(the highest code-context).
   ///-- If it belongs to a function-declaration or definition, it can be retrieved through owner(), and we are in a definition.
   ///-- If no such context could be found, search for a declaration on the same line as the cursor, and switch to the according definition
@@ -226,6 +226,15 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     kDebug(9007) << "No active document";
     return;
   }
+  
+  KUrl switchCandidate = CppUtils::sourceOrHeaderCandidate(doc->textDocument()->url());
+  
+  if(switchCandidate.isValid())
+  {
+    kDebug(9007) << "Making sure that the switch-candidate" << switchCandidate << "is up to date";
+    DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
+  }
+  
   kDebug(9007) << "Document:" << doc->url();
 
   DUChainReadLocker lock(DUChain::lock());
@@ -292,7 +301,6 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     KUrl url(def->url().str());
     KTextEditor::Range targetRange = def->range().textRange();
 
-    ///@todo If the cursor is already in the target context, do not move it.
     if(def->internalContext()) {
       targetRange.end() = def->internalContext()->range().end.textCursor();
     }else{
@@ -317,10 +325,9 @@ void CppLanguageSupport::switchDefinitionDeclaration()
 
   lock.unlock();
   ///- If no definition/declaration could be found to switch to, just switch the document using normal header/source heuristic by file-extension
-  KUrl url = CppUtils::sourceOrHeaderCandidate(doc->textDocument()->url());
 
-  if(url.isValid()) {
-    core()->documentController()->openDocument(url);
+  if(switchCandidate.isValid()) {
+    core()->documentController()->openDocument(switchCandidate);
   }else{
     kDebug(9007) << "Found no source/header candidate to switch";
   }
