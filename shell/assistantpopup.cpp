@@ -35,8 +35,11 @@ void AssistantPopup::updateActions() {
     setGeometry(parent->width() / 6, parent->height() - 200, (parent->width() / 6) * 4, 200);
     QVBoxLayout* layout = new QVBoxLayout(this);
     QString title = m_assistant->title();
-    if(!title.isEmpty())
-        layout->addWidget(new QLabel(title));
+    if(!title.isEmpty()) {
+        QLabel* l = new QLabel(title);
+        l->setWordWrap(true);
+        layout->addWidget(l);
+    }
     
     m_actions = m_assistant->actions();
 
@@ -96,6 +99,7 @@ QWidget* AssistantPopup::widgetForAction(KDevelop::IAssistantAction::Ptr action)
         desc = i18n("Hide");
     
     QLabel* label = new QLabel(desc);
+    label->setWordWrap(true);
     label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     QToolButton* button = new QToolButton;
     button->setText(QString("%1").arg(index+1));
