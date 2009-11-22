@@ -36,6 +36,8 @@ ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
 
     m_ui->sourceLoc->setEnabled( false );
     m_ui->sourceLoc->setMode( KFile::Directory );
+    connect( m_ui->sourceLoc, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
+    connect( m_ui->sourceLoc, SIGNAL(urlSelected(KUrl)), this, SIGNAL(changed()) );
 }
 
 ImportMetadataWidget::~ImportMetadataWidget()

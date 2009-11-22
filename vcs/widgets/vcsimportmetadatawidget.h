@@ -46,6 +46,8 @@ public:
      * for the destination. The default implementation simply ignores this setting.
      */
     virtual void setUseSourceDirForDestination( bool ) {}
+Q_SIGNALS:
+    void changed();
 public Q_SLOTS:
     virtual void setSourceLocation( const VcsLocation& ) = 0;
     virtual void setSourceLocationEditable( bool ) = 0;
