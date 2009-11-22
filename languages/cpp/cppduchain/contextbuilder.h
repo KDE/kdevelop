@@ -127,7 +127,12 @@ public:
 
   inline CppEditorIntegrator* editor() const { return static_cast<CppEditorIntegrator*>(ContextBuilderBase::editor()); }
 
+  //If this flag is enabled, only publically visible declarations/contexts are computed
   void setOnlyComputeVisible(bool onlyVisible);
+  //If this flag is enabled, declarations and contexts are computed in a very simplified form (without types, without template- or function-contexts, etc.)
+  void setComputeSimplified(bool simplified);
+  //If this flag is set, the top-context will be empty, without any contexts or declarations
+  void setComputeEmpty(bool empty);
   
   void setMapAst(bool mapAst);
   
@@ -237,6 +242,8 @@ protected:
   QualifiedIdentifier m_openingFunctionBody; //Identifier of the currently opened function body, or empty.
 
   bool m_onlyComputeVisible;
+  bool m_onlyComputeSimplified;
+  bool m_computeEmpty;
 
 #ifdef DEBUG_CONTEXT_RANGES
   void checkRanges();

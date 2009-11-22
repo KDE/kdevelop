@@ -124,6 +124,13 @@ public:
      * */
     Cpp::EnvironmentFile* contentEnvironmentFile();
 
+    /**
+     * Returns the minimum required features for slave contexts.
+     * These features also must be satisfied on the main context,
+     * as the requirements may be recursive.
+     */
+    TopDUContext::Features slaveMinimumFeatures() const;
+    
     void setKeepEverything(bool);
     bool keepEverything() const;
     
@@ -177,6 +184,9 @@ public:
     KDevelop::ModificationRevisionSet includePathDependencies() const ;
     
 private:
+  
+    KDevelop::TopDUContext::Features standardMinimumFeatures() const;
+  
 
     QList<LineJobPair> m_delayedImports;
     QList<LineContextPair> m_delayedImporters;

@@ -611,12 +611,24 @@ void CPPInternalParseJob::run()
 
       ///At some point, we have to give up on features again, else processing will be just too slow.
       ///Simple solution for now: Always go down to the minimum required level.
-      ///@todo Think of a good mechanism to decide when we want to drop features, and when we want to keep them.
       if(!contentContext || !contentContext->smartRange())
         newFeatures = parentJob()->minimumFeatures();
       
-      if(newFeatures == TopDUContext::VisibleDeclarationsAndContexts)
+      //Remove update-flags like 'Recursive' or 'ForceUpdate'
+      newFeatures = (TopDUContext::Features)(newFeatures & TopDUContext::AllDeclarationsContextsUsesAndAST);
+      
+      if(newFeatures == TopDUContext::VisibleDeclarationsAndContexts) {
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
+      }
+      else if(newFeatures == TopDUContext::SimplifiedVisibleDeclarationsAndContexts)
+      {
+        declarationBuilder.setOnlyComputeVisible(true);
+        declarationBuilder.setComputeSimplified(true);
+        kDebug() << "computing simplified";
+      }else if(newFeatures == TopDUContext::Empty) {
+        kDebug() << "computing empty";
+        declarationBuilder.setComputeEmpty(true);
+      }
 
 
       if(newFeatures & TopDUContext::AST)
@@ -710,7 +722,12 @@ void CPPInternalParseJob::run()
               DUChainWriteLocker l(DUChain::lock());
               foreach(KDevelop::ProblemPointer problem, useBuilder.problems())
                 contentContext->addProblem(problem);
+          }else{
+              //Delete existing uses
+              DUChainWriteLocker lock( DUChain::lock() );
+              contentContext->deleteUsesRecursively();
           }
+          
           if (!parentJob()->abortRequested() && editor.smart()) {
 
             if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
@@ -972,6 +989,27 @@ const QStack< DocumentCursor > & CPPParseJob::includeStack() const
 void CPPParseJob::setIncludeStack(const QStack< DocumentCursor > & includeStack)
 {
   m_includeStack = includeStack;
+}
+
+TopDUContext::Features CPPParseJob::standardMinimumFeatures() const
+{
+    return TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
+}
+
+TopDUContext::Features CPPParseJob::slaveMinimumFeatures() const
+{
+    TopDUContext::Features slaveMinimumFeatures = standardMinimumFeatures();
+    
+    if(minimumFeatures() & TopDUContext::Recursive)
+      slaveMinimumFeatures = (TopDUContext::Features)(minimumFeatures() & (~TopDUContext::ForceUpdate));
+    else if((minimumFeatures() & TopDUContext::VisibleDeclarationsAndContexts) == TopDUContext::VisibleDeclarationsAndContexts)
+      slaveMinimumFeatures = TopDUContext::VisibleDeclarationsAndContexts;
+    
+    if((minimumFeatures() & TopDUContext::ForceUpdateRecursive) == TopDUContext::ForceUpdateRecursive)
+      slaveMinimumFeatures = (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::ForceUpdateRecursive);
+
+    //The selected minimum features are required on all imported contexts recursively
+    return (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::Recursive);
 }
 
 #include "cppparsejob.moc"

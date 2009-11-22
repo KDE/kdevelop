@@ -63,6 +63,10 @@ TypeBuilder::TypeBuilder()
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
+  if(m_onlyComputeSimplified) {
+    TypeBuilderBase::visitClassSpecifier(node);
+    return;
+  }
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
   
   /*int kind = */editor()->parseSession()->token_stream->kind(node->class_key);
@@ -79,6 +83,10 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
 void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
   if (node->name) {
     DUChainReadLocker lock(DUChain::lock());
 
@@ -101,6 +109,11 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
+  if(m_onlyComputeSimplified) {
+    TypeBuilderBase::visitEnumSpecifier(node);
+    return;
+  }
+  
   m_currentEnumeratorValue = 0;
 
   openType(EnumerationType::Ptr(new EnumerationType()));
@@ -112,6 +125,11 @@ void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
+  if(m_onlyComputeSimplified) {
+    TypeBuilderBase::visitEnumerator(node);
+    return;
+  }
+  
   bool openedType = false;
 
   if(node->expression) {
@@ -185,6 +203,10 @@ bool TypeBuilder::lastTypeWasInstance() const
 
 void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
   PushValue<bool> setInTypedef(m_inTypedef, false);
 
   m_lastTypeWasInstance = false;
@@ -248,6 +270,10 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
 void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
   bool openedType = false;
   m_lastTypeWasInstance = false;
 
@@ -322,6 +348,10 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 }
 
 void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
   IntegralType::Ptr integral = lastType().cast<IntegralType>();
   if(integral && (integral->modifiers() & AbstractType::ConstModifier) && node->initializer_clause && node->initializer_clause->expression) {
     //Parse the expression, and create a CppConstantIntegralType, since we know the value
@@ -474,6 +504,9 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
 
 AbstractType::Ptr TypeBuilder::typeForCurrentDeclaration()
 {
+  if(m_onlyComputeSimplified)
+    return AbstractType::Ptr();
+  
   if(m_inTypedef) {
     KDevelop::TypeAliasType::Ptr alias(new KDevelop::TypeAliasType());
     alias->setType(lastType());
@@ -523,6 +556,10 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
 void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
 {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
   bool typeOpened = false;
   if (node->op) {
     QString op = editor()->tokenToString(node->op);
@@ -587,6 +624,10 @@ void TypeBuilder::closeTypeForDeclarator(DeclaratorAST *node) {
 
 void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
 {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
   bool typeOpened = false;
 
   Cpp::ExpressionParser parser;
@@ -649,6 +690,10 @@ void TypeBuilder::openDelayedType(const IndexedTypeIdentifier& identifier, AST* 
 
 void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
 {
+  if(m_onlyComputeSimplified) {
+    return;
+  }
+  
 //   if(!ast->parameter_declaration)
     openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()));
 
@@ -663,7 +708,7 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 {
   TypeBuilderBase::visitParameterDeclaration(node);
 
-  if (hasCurrentType()) {
+  if (hasCurrentType() && !m_onlyComputeSimplified) {
     if (FunctionType::Ptr function = currentType<FunctionType>()) {
       function->addArgument(lastType());
     }
@@ -675,8 +720,11 @@ void TypeBuilder::visitUsing(UsingAST * node)
 {
   TypeBuilderBase::visitUsing(node);
 
-  bool openedType = openTypeFromName(node->name, AbstractType::NoModifiers, true);
+  if(!m_onlyComputeSimplified)
+  {
+    bool openedType = openTypeFromName(node->name, AbstractType::NoModifiers, true);
 
-  if( openedType )
-    closeType();
+    if( openedType )
+      closeType();
+  }
 }

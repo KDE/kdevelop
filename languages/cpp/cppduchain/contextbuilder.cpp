@@ -105,6 +105,8 @@ ContextBuilder::ContextBuilder ()
   , m_templateDeclarationDepth(0)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
+  , m_onlyComputeSimplified(false)
+  , m_computeEmpty(false)
   , m_currentInitializer(0)
   , m_mapAst(false)
 {
@@ -116,6 +118,8 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_templateDeclarationDepth(0)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
+  , m_onlyComputeSimplified(false)
+  , m_computeEmpty(false)
   , m_currentInitializer(0)
   , m_mapAst(false)
 {
@@ -128,6 +132,8 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
   , m_templateDeclarationDepth(0)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
   , m_onlyComputeVisible(false)
+  , m_onlyComputeSimplified(false)
+  , m_computeEmpty(false)
   , m_currentInitializer(0)
   , m_mapAst(false)
 {
@@ -137,6 +143,17 @@ ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
 void ContextBuilder::setOnlyComputeVisible(bool onlyVisible) {
   m_onlyComputeVisible = onlyVisible;
 }
+
+void ContextBuilder::setComputeSimplified(bool simplified)
+{
+  m_onlyComputeSimplified = simplified;
+}
+
+void ContextBuilder::setComputeEmpty(bool empty)
+{
+  m_computeEmpty = empty;
+}
+
 
 void ContextBuilder::createUserProblem(AST* node, QString text) {
     DUChainWriteLocker lock(DUChain::lock());
@@ -299,21 +316,24 @@ void ContextBuilder::closePrefixContext(const QualifiedIdentifier& id) {
 
 void ContextBuilder::visitTemplateDeclaration(TemplateDeclarationAST * ast) {
 
-  AST* first, *last;
-  getFirstLast(&first, &last, ast->template_parameters);
-  DUContext* ctx = 0;
-
   ++m_templateDeclarationDepth;
-
-  if( first && last )
-    ctx = openContext(first, last, DUContext::Template); //Open anonymous context for the template-parameters
-  else
-    ctx = openContextEmpty(ast, DUContext::Template); //Open an empty context, because there are no template-parameters
-
-  visitNodes(this,ast->template_parameters);
-  closeContext();
   
-  queueImportedContext(ctx); //Import the context into the following function-argument context(so the template-parameters can be found from there)
+  if(!m_onlyComputeSimplified)
+  {
+    AST* first, *last;
+    getFirstLast(&first, &last, ast->template_parameters);
+    DUContext* ctx = 0;
+
+    if( first && last )
+      ctx = openContext(first, last, DUContext::Template); //Open anonymous context for the template-parameters
+    else
+      ctx = openContextEmpty(ast, DUContext::Template); //Open an empty context, because there are no template-parameters
+
+    visitNodes(this,ast->template_parameters);
+    closeContext();
+    
+    queueImportedContext(ctx); //Import the context into the following function-argument context(so the template-parameters can be found from there)
+  }
 
   DefaultVisitor::visit(ast->declaration);
 
@@ -455,7 +475,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
       
       topLevelContext->updateImportsCache();
     }
-    
   }
 
   {
@@ -464,7 +483,14 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     ifDebugFile( HashedString(file->identity().url().str()), { kDebug() << stringFromContents(editor()->parseSession()->contentsVector()); Cpp::DumpChain dump; dump.dump(node, editor()->parseSession()); } );
   }
 
-  supportBuild(node);
+  if(m_computeEmpty)
+  {
+    //Empty the top-context, in case we're updating
+    DUChainWriteLocker lock(DUChain::lock());
+    topLevelContext->cleanIfNotEncountered(QSet<DUChainBase*>());
+  }else{
+    supportBuild(node);
+  }
 
   {
     LockedSmartInterface iface = editor()->smart();
@@ -565,6 +591,9 @@ void ContextBuilder::visitNamespace (NamespaceAST *node)
 
 void ContextBuilder::visitEnumSpecifier(EnumSpecifierAST* node)
 {
+  if(m_onlyComputeSimplified)
+    return;
+  
   //The created context must be unnamed, so the enumerators can be found globally with the correct scope
   openContext(node, DUContext::Enum, 0 );
 
@@ -860,6 +889,11 @@ public:
 
 void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarationStatementAST* node)
 {
+  if(m_onlyComputeSimplified) {
+    visit(node->declaration);
+    return;
+  }
+  
   DUContext::ContextType type;
   {
     DUChainReadLocker lock(DUChain::lock());
@@ -971,12 +1005,16 @@ void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 }
 
 void ContextBuilder::visitDeclarator(DeclaratorAST *node) {
+  
   //BEGIN Copied from default visitor
   visit(node->sub_declarator);
   visitNodes(this, node->ptr_ops);
   visit(node->id);
   visit(node->bit_expression);
   //END Finished with first part of default visitor
+
+  if(m_onlyComputeSimplified)
+    return;
 
   createTypeForDeclarator(node);
   

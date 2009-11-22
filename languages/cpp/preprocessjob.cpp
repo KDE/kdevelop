@@ -170,7 +170,7 @@ void PreprocessJob::run()
         
         if(parentJob()->masterJob() == parentJob() && updatingEnvironmentFile) {
           //Check whether we need to run at all, or whether the file is already up to date
-          if(updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures())) {
+          if(updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures()) && updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures())) {
             KUrl localPath(parentJob()->document().toUrl());
             localPath.setFileName(QString());
             Cpp::EnvironmentFile* cppEnv = dynamic_cast<Cpp::EnvironmentFile*>(updatingEnvironmentFile.data());
@@ -364,7 +364,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
             
-            if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures())) ) {
+            if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures()) && content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->slaveMinimumFeatures())) ) {
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
                 m_updatingEnvironmentFile = m_secondEnvironmentFile;
@@ -414,15 +414,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
       }
     }
     
-    
     KUrl fileNameUrl(_fileName);
     
-    TopDUContext::Features slaveMinimumFeatures = TopDUContext::VisibleDeclarationsAndContexts;
-    if((parentJob()->minimumFeatures() & TopDUContext::AllDeclarationsContextsAndUsesForRecursive) == TopDUContext::AllDeclarationsContextsAndUsesForRecursive)
-      slaveMinimumFeatures = parentJob()->minimumFeatures();
-    
-    if((parentJob()->minimumFeatures() & TopDUContext::ForceUpdateRecursive) == TopDUContext::ForceUpdateRecursive)
-      slaveMinimumFeatures = (TopDUContext::Features)(slaveMinimumFeatures | TopDUContext::ForceUpdateRecursive);
+    TopDUContext::Features slaveMinimumFeatures = parentJob()->slaveMinimumFeatures();
     
     QString fileName = fileNameUrl.pathOrUrl();
     
@@ -505,8 +499,9 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               Cpp::EnvironmentFilePointer includedEnvironment(dynamic_cast<Cpp::EnvironmentFile*>(includedContext->parsingEnvironmentFile().data()));
               if( includedEnvironment ) {
                 updateNeeded = CppUtils::needsUpdate(includedEnvironment, localPath, parentJob()->includePathUrls());
+                //The ForceUpdateRecursive flag is removed before checking for satisfied features, so we can prevent double-updating through "wasUpdated()" below (see *1)
                 updateNeeded |= !includedEnvironment->featuresSatisfied((TopDUContext::Features)(slaveMinimumFeatures & (~TopDUContext::ForceUpdateRecursive)));
-                //Do not update again if ForceUpdate is given and the context was already updated during this run
+                //(*1) Do not update again if ForceUpdate is given and the context was already updated during this run
                 updateNeeded |= (slaveMinimumFeatures & TopDUContext::ForceUpdate) && !parentJob()->masterJob()->wasUpdated(includedContext.data());
                 
                 ///NEVER update when the file is header-guarded in the current environment, because else it will be emptied
