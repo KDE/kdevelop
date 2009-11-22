@@ -162,6 +162,11 @@ public:
   APPENDED_LIST(pp_macro, IndexedString, formals, definition)
   END_APPENDED_LISTS(pp_macro, formals)
 
+  ///Returns true if this macro is stored in a central repository, else false.
+  bool isRepositoryMacro() const {
+    return !appendedListsDynamic();
+  }
+
   private:
     pp_macro& operator=(const pp_macro& rhs);
     void computeHash() const;

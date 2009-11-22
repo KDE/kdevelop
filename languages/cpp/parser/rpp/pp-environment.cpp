@@ -74,8 +74,8 @@ void Environment::clearMacro(const KDevelop::IndexedString& name)
 
 void Environment::setMacro(pp_macro* macro)
 {
-  
-  m_ownedMacros.append(macro);
+  if(!macro->isRepositoryMacro())
+    m_ownedMacros.append(macro);
 
   m_environment.insert(macro->name, macro);
 }

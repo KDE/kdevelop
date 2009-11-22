@@ -130,7 +130,6 @@ struct KDEVCPPDUCHAIN_EXPORT IndexedStringConversion {
   }
 };
 
-//This is expensive, because it needs to copy the complete macro with each conversion
 struct KDEVCPPDUCHAIN_EXPORT MacroIndexConversion {
   const rpp::pp_macro& toItem(uint index) const;
   uint toIndex(const rpp::pp_macro& _macro) const;
