@@ -44,11 +44,14 @@ class ProjectVcsPage : public AppWizardPageWidget
 public:
     ProjectVcsPage( KDevelop::IPluginController*, QWidget* parent = 0 );
     ~ProjectVcsPage();
+    bool shouldContinue();
 signals:
     void valid();
     void invalid();
 public slots:
     void setSourceLocation( const KUrl& );
+    void vcsTypeChanged(int);
+    void validateData();
 public:
     QString pluginName() const;
     KUrl source() const;

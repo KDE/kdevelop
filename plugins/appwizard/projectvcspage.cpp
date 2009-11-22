@@ -62,7 +62,31 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
     }
     connect( m_ui->vcsTypes, SIGNAL( activated(int) ),
              m_ui->vcsImportOptions, SLOT( setCurrentIndex(int) ) );
+    connect( m_ui->vcsTypes, SIGNAL(activated(int)),
+             this, SLOT(vcsTypeChanged(int)) );
+    validateData();
 }
+
+
+void ProjectVcsPage::vcsTypeChanged( int idx )
+{
+    int widgetidx = idx - 1;
+    disconnect( this, SLOT(validateData()) );
+    if ( widgetidx < 0 || widgetidx >= importWidgets.size())
+        return;
+    connect( importWidgets[widgetidx], SIGNAL(changed()), this, SLOT(validateData()) );
+    validateData();
+}
+
+void ProjectVcsPage::validateData()
+{
+    if( shouldContinue() ) {
+        emit valid();
+    } else {
+        emit invalid();
+    }
+}
+
 
 ProjectVcsPage::~ProjectVcsPage( )
 {
@@ -113,3 +137,16 @@ KDevelop::VcsLocation ProjectVcsPage::destination() const
 
     return importWidgets[idx]->destination();
 }
+
+
+bool ProjectVcsPage::shouldContinue()
+{
+    int idx = m_ui->vcsTypes->currentIndex() - 1;
+    if ( idx < 0 || idx >= importWidgets.size())
+        return true;
+
+    KDevelop::VcsImportMetadataWidget* widget = importWidgets[idx];
+    
+    return widget->hasValidData();
+}
+
