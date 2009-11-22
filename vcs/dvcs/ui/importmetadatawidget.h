@@ -46,6 +46,7 @@ public:
     virtual QString message() const; //Is not used, it returns QString("")
     virtual void setSourceLocation( const KDevelop::VcsLocation& );
     virtual void setSourceLocationEditable( bool );
+    virtual bool hasValidData() const;
 
 private:
     Ui::ImportMetadataWidget* m_ui;

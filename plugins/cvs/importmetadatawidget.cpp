@@ -69,4 +69,10 @@ void ImportMetadataWidget::setSourceLocationEditable( bool enable )
     m_ui->sourceLoc->setEnabled( enable );
 }
 
+bool ImportMetadataWidget::hasValidData() const
+{
+    return !m_ui->comment->toPlainText().isEmpty() && !m_ui->sourceLoc->text().isEmpty()
+    && !m_ui->module->text().isEmpty() && !m_ui->repository->text().isEmpty();
+}
+
 #include "importmetadatawidget.moc"

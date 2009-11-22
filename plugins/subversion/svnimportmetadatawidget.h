@@ -32,7 +32,7 @@ public:
     virtual KDevelop::VcsLocation destination() const;
     virtual QString message() const;
     virtual void setUseSourceDirForDestination( bool );
-
+    virtual bool hasValidData() const;
 private:
     bool useSourceDirForDestination;
     Ui::SvnImportMetadataWidget *m_ui;

@@ -67,4 +67,10 @@ QString SvnImportMetadataWidget::message() const
     return m_ui->message->toPlainText();
 }
 
+bool SvnImportMetadataWidget::hasValidData() const
+{
+    return !m_ui->message->toPlainText().isEmpty() && !m_ui->srcEdit->text().isEmpty();
+}
+
+
 #include "svnimportmetadatawidget.moc"

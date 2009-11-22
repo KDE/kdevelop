@@ -41,6 +41,13 @@ public:
     virtual KUrl source() const = 0;
     virtual VcsLocation destination() const = 0;
     virtual QString message() const = 0;
+
+    /**
+     * Check wether the given data is valid.
+     * @returns true if all data in the widget is valid
+     */
+    virtual bool hasValidData() const = 0;
+    
     /**
      * Select wether the widget should re-use the last part of the source location
      * for the destination. The default implementation simply ignores this setting.

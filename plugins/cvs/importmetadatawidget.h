@@ -40,6 +40,7 @@ public:
     virtual QString message() const;
     virtual void setSourceLocation( const KDevelop::VcsLocation& );
     virtual void setSourceLocationEditable( bool );
+    virtual bool hasValidData() const;
 
 private:
     Ui::ImportMetadataWidget* m_ui;
