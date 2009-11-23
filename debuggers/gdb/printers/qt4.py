@@ -334,6 +334,14 @@ class QDateTimePrinter:
         time = time.cast(gdb.lookup_type('QTime').pointer()).dereference();
         return "%s %s" % (date, time)
 
+class QUrlPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return "QUrl(\"%s\")" % QByteArrayPrinter(self.val['d']['encodedOriginal']).to_string()
+
 def register_qt4_printers (obj):
     if obj == None:
         obj = gdb
@@ -378,6 +386,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QDate$')] = lambda val: QDatePrinter(val)
     pretty_printers_dict[re.compile('^QTime$')] = lambda val: QTimePrinter(val)
     pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
+    pretty_printers_dict[re.compile('^QUrl$')] = lambda val: QUrlPrinter(val)
 
 
 pretty_printers_dict = {}
