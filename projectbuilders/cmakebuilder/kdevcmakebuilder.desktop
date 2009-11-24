@@ -57,6 +57,6 @@ X-KDE-PluginInfo-Name=KDevCMakeBuilder
 X-KDevelop-ProjectBuilder=CMake
 X-KDevelop-Version=7
 X-KDevelop-Category=Project
-X-KDevelop-Interfaces=org.kdevelop.ICMakeBuilder
+X-KDevelop-Interfaces=org.kdevelop.IProjectBuilder,org.kdevelop.ICMakeBuilder
 X-KDevelop-IRequired=org.kdevelop.IOutputView,org.kdevelop.IMakeBuilder
 X-KDevelop-Mode=NoGUI
