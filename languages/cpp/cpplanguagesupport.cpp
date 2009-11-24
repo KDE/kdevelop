@@ -217,17 +217,26 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 void CppLanguageSupport::switchDefinitionDeclaration()
 {
   kDebug(9007) << "switching definition/declaration";
+
+  KUrl docUrl;
+  SimpleCursor cursor;
   
   ///Step 1: Find the current top-level context of type DUContext::Other(the highest code-context).
   ///-- If it belongs to a function-declaration or definition, it can be retrieved through owner(), and we are in a definition.
   ///-- If no such context could be found, search for a declaration on the same line as the cursor, and switch to the according definition
-  KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-  if(!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
-    kDebug(9007) << "No active document";
-    return;
+  
+  {
+    KDevelop::IDocument* doc = core()->documentController()->activeDocument();
+    if(!doc || !doc->textDocument() || !doc->textDocument()->activeView()) {
+      kDebug(9007) << "No active document";
+      return;
+    }
+    
+    docUrl = doc->textDocument()->url();
+    cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition()); 
   }
   
-  KUrl switchCandidate = CppUtils::sourceOrHeaderCandidate(doc->textDocument()->url());
+  KUrl switchCandidate = CppUtils::sourceOrHeaderCandidate(docUrl);
   
   if(switchCandidate.isValid())
   {
@@ -235,14 +244,13 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
   }
   
-  kDebug(9007) << "Document:" << doc->url();
+  kDebug(9007) << "Document:" << docUrl;
 
   DUChainReadLocker lock(DUChain::lock());
 
-  TopDUContext* standardCtx = standardContext(doc->url());
+  TopDUContext* standardCtx = standardContext(docUrl);
   if(standardCtx) {
     Declaration* definition = 0;
-    SimpleCursor cursor = SimpleCursor(doc->textDocument()->activeView()->cursorPosition());
 
     DUContext* ctx = standardCtx->findContext(cursor);
     if(!ctx)
@@ -295,7 +303,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     kDebug(9007) << "Got no context for the current document";
   }
 
-  Declaration* def = definitionForCursorDeclaration(SimpleCursor(doc->textDocument()->activeView()->cursorPosition()), doc->url());
+  Declaration* def = definitionForCursorDeclaration(cursor, docUrl);
 
   if(def) {
     KUrl url(def->url().str());
