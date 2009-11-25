@@ -42,7 +42,7 @@ KUrl SvnImportMetadataWidget::source() const
 KDevelop::VcsLocation SvnImportMetadataWidget::destination() const
 {
     KDevelop::VcsLocation destloc;
-    QString url = m_ui->dest->toPlainText();
+    QString url = m_ui->dest->text();
     if( useSourceDirForDestination ) {
         url += "/" + m_ui->srcEdit->url().fileName();
     }
