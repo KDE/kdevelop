@@ -53,6 +53,10 @@ public:
   //Note: Undef-macros are allowed too
   virtual void setMacro(pp_macro* macro);
 
+  //Inserts a macro that will not be explicitly owned by the Environment,
+  //without notifying subclasses etc.
+  void insertMacro(pp_macro* macro);
+  
   virtual pp_macro* retrieveMacro(const KDevelop::IndexedString& name, bool isImportant) const;
   
   //Returns macros that are really stored locally(retrieveMacro may be overridden to perform more complex actions)

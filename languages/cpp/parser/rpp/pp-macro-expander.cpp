@@ -26,7 +26,7 @@
 #include <QTime>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <klocale.h> 
 
 #include <language/interfaces/iproblem.h>
 #include <language/duchain/indexedstring.h>
@@ -164,6 +164,25 @@ struct EnableMacroExpansion {
   Stream& input;
   bool hadMacroExpansion;
 };
+
+//A helper class that temporary hides a macro in the environment
+class MacroHider {
+  public:
+  MacroHider(pp_macro* macro, Environment* environment) : m_macro(macro), m_environment(environment) {
+    
+    m_hideMacro.name = macro->name;
+    m_hideMacro.hidden = true;
+    environment->insertMacro(&m_hideMacro);
+  }
+  ~MacroHider() {
+    m_environment->insertMacro(m_macro);
+  }
+  private:
+    pp_macro m_hideMacro;
+    pp_macro* m_macro;
+    Environment* m_environment;
+};
+
 
 IndexedString definedIndex = IndexedString("defined");
 IndexedString lineIndex = IndexedString("__LINE__");
@@ -378,8 +397,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
           if (macro->definitionSize()) {
-            macro->hidden = true;
-
+            
+            //Hide the expanded macro to prevent endless expansion
+            MacroHider hideMacro(macro, m_engine->environment());
+            
             pp_macro_expander expand_macro(m_engine);
             ///@todo UGLY conversion
             Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
@@ -400,8 +421,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               output.appendString(Anchor(input.inputPosition(), true), expanded);
               output << ' '; //Prevent implicit token merging
             }
-
-            macro->hidden = false;
           }
         }else if(input == '(') {
 
@@ -539,13 +558,15 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input;
         }else{
           pp_macro_expander expand_macro(m_engine, &frame);
-          macro->hidden = true;
+          
+          //Hide the expanded macro to prevent endless expansion
+          MacroHider hideMacro(macro, m_engine->environment());
+          
           ///@todo UGLY conversion
           Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
           ms.setOriginalInputPosition(input.originalInputPosition());
           expand_macro(ms, output);
           output << ' '; //Prevent implicit token merging
-          macro->hidden = false;
         }
       } else {
         output << input;
