@@ -128,7 +128,7 @@ public:
                     jobs.append(job);
                     specialParseJob = job;
                 } else {
-                    kWarning() << "No job created for url " << it.key();
+                    kDebug() << "No job created for url " << it.key();
                 }
                 delete *it;
                 it = m_delayedParseJobs.erase(it);
@@ -569,7 +569,7 @@ void BackgroundParser::updateProgressBar()
 {
     if (d->m_doneParseJobs >= d->m_maxParseJobs) {
         if(d->m_doneParseJobs > d->m_maxParseJobs) {
-            kWarning() << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
+            kDebug() << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
         }
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
