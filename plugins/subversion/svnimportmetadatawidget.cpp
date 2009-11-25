@@ -20,8 +20,7 @@ SvnImportMetadataWidget::SvnImportMetadataWidget( QWidget *parent )
     m_ui->srcEdit->setUrl( KUrl() );
     connect( m_ui->srcEdit, SIGNAL( textChanged(QString)), SIGNAL(changed()) );
     connect( m_ui->srcEdit, SIGNAL(urlSelected(KUrl)), SIGNAL(changed()) );
-    connect( m_ui->dest, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
-    connect( m_ui->dest, SIGNAL(urlSelected(KUrl)), this, SIGNAL(changed()) );
+    connect( m_ui->dest, SIGNAL(textChanged()), this, SIGNAL(changed()) );
     connect( m_ui->message, SIGNAL(textChanged()), this, SIGNAL(changed()) );
 }
 
@@ -43,11 +42,11 @@ KUrl SvnImportMetadataWidget::source() const
 KDevelop::VcsLocation SvnImportMetadataWidget::destination() const
 {
     KDevelop::VcsLocation destloc;
-    KUrl url = m_ui->dest->url();
+    QString url = m_ui->dest->toPlainText();
     if( useSourceDirForDestination ) {
-        url.addPath( m_ui->srcEdit->url().fileName() );
+        url += "/" + m_ui->srcEdit->url().fileName();
     }
-    destloc.setRepositoryServer(url.url());
+    destloc.setRepositoryServer(url);
     return destloc;
 }
 

@@ -25,7 +25,7 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="KUrlRequester" name="dest" >
+    <widget class="KTextEdit" name="dest" >
      <property name="toolTip" >
       <string>Repository Location</string>
      </property>
