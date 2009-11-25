@@ -125,8 +125,7 @@ void KDevelop::FramestackWidget::checkFetchMoreFrames()
     int max = m_frames->verticalScrollBar()->maximum();
     const int offset = 20;
 
-    kDebug() << val << max << m_frames->verticalScrollBar()->minimum();
-    if (val + offset > max) {
+    if (val + offset > max && m_session) {
         m_session->frameStackModel()->fetchMoreFrames();
     }
 }
