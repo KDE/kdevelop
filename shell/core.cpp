@@ -46,7 +46,7 @@
 #include "documentcontroller.h"
 #include "runcontroller.h"
 #include "documentationcontroller.h"
-#include "sourceformattercontroller.h"
+//#include "sourceformattercontroller.h"
 #include "progressmanager.h"
 #include "selectioncontroller.h"
 #include "debugcontroller.h"
@@ -132,10 +132,10 @@ void CorePrivate::initialize(Core::Setup mode)
         runController = new RunController(m_core);
     }
 
-    if( !sourceFormatterController )
+    /*if( !sourceFormatterController )
     {
         sourceFormatterController = new SourceFormatterController(m_core);
-    }
+    }*/
 
     if ( !progressController) 
     {
@@ -186,7 +186,7 @@ void CorePrivate::initialize(Core::Setup mode)
         uiController->defaultMainWindow()->show();
     }
     runController->initialize();
-    sourceFormatterController->initialize();
+    //sourceFormatterController->initialize();
     selectionController->initialize();
     documentationController->initialize();
     debugController->initialize();
@@ -202,7 +202,7 @@ CorePrivate::~CorePrivate()
     delete documentController;
     delete runController;
     delete sessionController;
-    delete sourceFormatterController;
+    //delete sourceFormatterController;
     delete documentationController;
     delete debugController;
     delete workingSetController;
@@ -261,7 +261,7 @@ void Core::cleanup()
         d->runController->cleanup();
 
         d->projectController->cleanup();
-        d->sourceFormatterController->cleanup();
+        //d->sourceFormatterController->cleanup();
         d->pluginController->cleanup();
         d->sessionController->cleanup();
     }
@@ -354,10 +354,10 @@ RunController *Core::runControllerInternal()
     return d->runController;
 }
 
-ISourceFormatterController* Core::sourceFormatterController()
+/*ISourceFormatterController* Core::sourceFormatterController()
 {
     return d->sourceFormatterController;
-}
+}*/
 
 ProgressManager *Core::progressController()
 {

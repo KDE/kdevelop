@@ -27,7 +27,7 @@ set(kdevplatformshell_LIB_SRCS
     session.cpp
     savedialog.cpp
     sessiondialog.cpp
-    sourceformattercontroller.cpp
+    #sourceformattercontroller.cpp
     completionsettings.cpp
     openprojectpage.cpp
     openprojectdialog.cpp
@@ -125,7 +125,7 @@ install(FILES
     languagecontroller.h
     session.h
     sessioncontroller.h
-    sourceformattercontroller.h
+    #formattercontroller.h
     language.h
     shellexport.h
     selectioncontroller.h

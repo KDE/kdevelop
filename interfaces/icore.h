@@ -45,7 +45,7 @@ class ILanguageController;
 class IDocumentController;
 class ISessionController;
 class IRunController;
-class ISourceFormatterController;
+//class ISourceFormatterController;
 class ISession;
 class ISelectionController;
 class IDocumentationController;
@@ -104,7 +104,7 @@ public:
     Q_SCRIPTABLE virtual KDevelop::ISession *activeSession() = 0;
 
     /** @return the sourceformatter controller */
-    Q_SCRIPTABLE virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
+    //Q_SCRIPTABLE virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
 
     /** @return the selection controller */
     Q_SCRIPTABLE virtual KDevelop::ISelectionController* selectionController() = 0;
