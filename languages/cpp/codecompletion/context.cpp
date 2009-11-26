@@ -145,7 +145,7 @@ QString extractLastLine(const QString& str) {
 }
 
 bool isPrefixKeyword(QString str) {
-  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete" || str == "emit" || str == "Q_EMIT";
+  return str == "new" || str == "return" || str == "else" || str == "throw" || str == "delete" || str == "emit" || str == "Q_EMIT" || str == "case";
 }
 
 int completionRecursionDepth = 0;
@@ -501,6 +501,12 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
       m_parentContext = new CodeCompletionContext( m_duContext, "return", QString(), m_position, depth+1 );
     }else{
       m_memberAccessOperation = ReturnAccess;
+    }
+  }
+  if( removePrefixWord(expr, "case") )  {
+    if(!expr.isEmpty() || depth == 0) {
+      //Create a new context for the "case"
+      m_parentContext = new CodeCompletionContext( m_duContext, "case", QString(), m_position, depth+1 );
     }
   }
   if( removePrefixWord(expr, "delete") )  {

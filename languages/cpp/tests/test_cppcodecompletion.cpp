@@ -106,6 +106,60 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testKeywords() {
+  QByteArray test = "struct Values { int Value1; int Value2; struct Sub { int SubValue; }; }; int test(int a) {}";
+
+  TopDUContext* context = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(context->childContexts().count(), 3);
+  
+  CompletionItemTester testCase(context->childContexts()[2], "switch (a) { case ");
+  QVERIFY(testCase.completionContext->isValid());
+  QCOMPARE(testCase.names, QStringList() << "a" << "Values" << "test");
+  CompletionItemTester testCase2(context->childContexts()[2], "switch (a) { case Values.");
+  QVERIFY(testCase2.completionContext->isValid());
+  QCOMPARE(testCase2.names, QStringList() << "Value1" << "Value2");
+  
+  CompletionItemTester testReturn(context->childContexts()[2], "return ");
+  QVERIFY(testReturn.completionContext->isValid());
+  QCOMPARE(testReturn.names, QStringList()  << "return int" << "a" << "Values" << "test");
+  CompletionItemTester testReturn2(context->childContexts()[2], "return Values.");
+  QVERIFY(testReturn2.completionContext->isValid());
+  QCOMPARE(testReturn2.names, QStringList() << "return int" << "Value1" << "Value2");
+  
+  CompletionItemTester testNew(context->childContexts()[2], "Values a = new ");
+  QVERIFY(testNew.completionContext->isValid());
+  QVERIFY(testNew.names.contains("Values"));
+  CompletionItemTester testNew2(context->childContexts()[2], "Values::Sub a = new Values::");
+  QVERIFY(testNew2.completionContext->isValid());
+  QCOMPARE(testNew2.names, QStringList() << "Value1" << "Value2" << "Sub" ); //A little odd to see Value1 & 2 here
+  
+  CompletionItemTester testElse(context->childContexts()[2], "if (a) {} else ");
+  QVERIFY(testElse.completionContext->isValid());
+  QCOMPARE(testElse.names, QStringList() << "a" << "Values" << "test");
+  CompletionItemTester testElse2(context->childContexts()[2], "if (a) {} else Values::");
+  QVERIFY(testElse2.completionContext->isValid());
+  QCOMPARE(testElse2.names, QStringList() << "Value1" << "Value2" << "Sub" );
+#if 0  
+  CompletionItemTester testThrow(context->childContexts()[2], "throw ");
+  QVERIFY(testThrow.completionContext->isValid());
+  QCOMPARE(testThrow.names, QStringList() << "a" << "Values" << "test");
+  CompletionItemTester testThrow2(context->childContexts()[2], "thow Values::");
+  QVERIFY(testThrow2.completionContext->isValid());
+  QCOMPARE(testThrow2.names, QStringList() << "Value1" << "Value2" << "Sub" );
+#endif
+  CompletionItemTester testDelete(context->childContexts()[2], "delete ");
+  QVERIFY(testDelete.completionContext->isValid());
+  QCOMPARE(testDelete.names, QStringList() << "a" << "Values" << "test");
+  CompletionItemTester testDelete2(context->childContexts()[2], "delete Values::");
+  QVERIFY(testDelete2.completionContext->isValid());
+  QCOMPARE(testDelete2.names, QStringList() << "Value1" << "Value2" << "Sub" );
+  
+  //TODO: emit, Q_EMIT;
+  
+  release(context);
+}
+
 void TestCppCodeCompletion::testArgumentMatching() {
   {
     QByteArray test = "struct A{ int m;}; void test(int q) { A a;  }";

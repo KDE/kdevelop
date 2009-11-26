@@ -65,6 +65,7 @@ public:
 
 private slots:
   void initTestCase();
+  void testKeywords();
   void testInclude();
   void testTypeConversion();
   void testTypeConversion2();
