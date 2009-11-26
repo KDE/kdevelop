@@ -108,6 +108,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
  
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
+    connect( m_modelFilter->sourceModel(), SIGNAL( rowsAboutToBeRemoved( const QModelIndex&, int, int ) ),
+             this, SLOT(selectionChanged() ) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
