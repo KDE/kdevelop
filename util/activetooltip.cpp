@@ -285,7 +285,7 @@ void ActiveToolTipManager::doVisibility() {
 void ActiveToolTip::showToolTip(KDevelop::ActiveToolTip* tooltip, float priority, QString uniqueId) {
     
     if(!uniqueId.isEmpty()) {
-        for(QMap< float, QPair< QPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.begin(); it != registeredToolTips.end(); ++it) {
+        for(QMap< float, QPair< QPointer< ActiveToolTip >, QString > >::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
             if((*it).second == uniqueId)
                 delete (*it).first;
         }
