@@ -41,7 +41,7 @@ QString ImplementationHelperItem::getOverrideName() const {
   QString ret;
   if(m_declaration) {
     ret = m_declaration->identifier().toString();
-  
+
     KDevelop::ClassFunctionDeclaration* classDecl = dynamic_cast<KDevelop::ClassFunctionDeclaration*>(declaration().data());
     if(classDecl && completionContext() && completionContext()->duContext()) {
       if(classDecl->isConstructor() || classDecl->isDestructor())
@@ -63,7 +63,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
           KDevelop::ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
           if(classFunction && classFunction->isAbstract())
             RETURN_CACHED_ICON("flag-red");
-          
+
           RETURN_CACHED_ICON("CTparents");
         }
         case CreateDefinition:
@@ -82,7 +82,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
         prefix = i18n("Implement");
       if(m_type == CreateSignalSlot)
         return i18n("Create Slot");
-      
+
       ret = prefix + " " + ret.toString();
     }
 
@@ -94,7 +94,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
 
         if(cDecl && ret.toString().isEmpty())
           ret = cDecl->identifier().toString();
-        
+
         return ret;
       }else if(m_type == Override) {
         ret = getOverrideName();
@@ -112,7 +112,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
         ret = ret.toString() + " = 0";
     }
   }
-  
+
   if(role == KTextEditor::CodeCompletionModel::ItemSelected) {
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     if(declaration().data() && m_type == Override) {
@@ -120,7 +120,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
       return i18n("From %1", parentScope.toString());
     }
   }
-  
+
   if(role == KTextEditor::CodeCompletionModel::InheritanceDepth)
     return QVariant(0);
   return ret;
@@ -144,22 +144,22 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   DUContext* duContext = 0;
   if(completionContext())
     duContext = completionContext()->duContext(); ///@todo Take the DUContext from somewhere lese
-  
+
   KDevelop::ClassFunctionDeclaration* classFunction = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
-  
+
   ///@todo Move these functionalities into sourcemanipulation.cpp
   if(m_type == Override) {
     if(!useAlternativeText) {
-      
+
       if(!classFunction || !classFunction->isConstructor())
         newText = "virtual ";
       if(m_declaration) {
         FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
         if(asFunction && asFunction->returnType())
             newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
-        
+
         newText += getOverrideName();
-        
+
         newText += signaturePart(true);
         newText += ";";
       } else {
@@ -174,9 +174,9 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       if(topContext) {
         duContext = topContext->findContextAt(position);
       }
-      
+
       QualifiedIdentifier scope = m_declaration->qualifiedIdentifier();
-      
+
       if(!forceParentScope.isEmpty() && !scope.isEmpty()) {
         scope = forceParentScope;
         scope.push(m_declaration->identifier());
@@ -186,36 +186,36 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
           scope = QualifiedIdentifier(simplifiedTypeString(m_declaration->context()->owner()->abstractType(), duContext)) + scope.last();
         }
       }
-      
+
 /*      if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
         return QString();
-      
+
       scope = scope.mid( localScope.count() );*/
-      
+
       FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
-      
+
       if(asFunction && asFunction->returnType())
           newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
       newText += scope.toString();
       newText += signaturePart(false);
-      
+
       if(classFunction && classFunction->isConstructor()) {
         KDevelop::DUContext* funCtx = classFunction->internalFunctionContext();
         if(funCtx) {
           int argsGiven = 0;
           bool started = false;
-          QVector< KDevelop::DUContext::Import > imports = classFunction->context()->importedParentContexts();
-          for(KDevelop::DUContext::Import* it = imports.begin(); it != imports.end() && argsGiven < funCtx->localDeclarations().size(); ++it) {
+          const QVector< KDevelop::DUContext::Import > imports = classFunction->context()->importedParentContexts();
+          for(QVector<KDevelop::DUContext::Import>::const_iterator it = imports.begin(); it != imports.end() && argsGiven < funCtx->localDeclarations().size(); ++it) {
             KDevelop::DUContext* ctx = it->context(topContext);
             if(ctx && ctx->type() == DUContext::Class && ctx->owner()) {
               Declaration* parentClassDecl = ctx->owner();
-              
+
               if(!started)
                 newText += ": ";
               else
                 newText += ", ";
               started = true;
-              
+
               newText += parentClassDecl->identifier().toString() + "(";
               int take = funCtx->localDeclarations().size()-argsGiven; ///@todo Allow distributing the arguments among multiple parents in multipe-inheritance case
               for(int a = 0; a < take; ++a) {
@@ -229,16 +229,16 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
           }
         }
       }
-      
+
       newText += "\n{\n";
-      
+
       if(asFunction) {
-      
+
         ClassFunctionDeclaration* overridden = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::getOverridden(m_declaration.data()));
-        
+
         if(!forceParentScope.isEmpty())
           overridden = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
-        
+
         if(overridden && !overridden->isAbstract()) {
           if(asFunction->returnType() && asFunction->returnType()->toString() != "void") {
             newText += "return ";
@@ -257,9 +257,9 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
               }
             }
           }while(foundShorter);
-          
+
           newText += baseScope.toString() + "(";
-          
+
           DUContext* ctx = m_declaration->internalContext();
           if(ctx->type() == DUContext::Function) {
             bool first = true;
@@ -270,11 +270,11 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
               newText += decl->identifier().toString();
             }
           }
-          
+
           newText += ");";
         }
       }
-      
+
       newText += "\n}\n";
   }
 
@@ -286,12 +286,12 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
   if(m_type == CreateSignalSlot) {
     //Step 1: Decide where to put the declaration
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-    
+
     IndexedString doc;
     {
       QList<DUContext*> containers = completionContext()->memberAccessContainers();
-      
-      if(containers.isEmpty()) 
+
+      if(containers.isEmpty())
         return;
       else
         doc = containers[0]->url();
@@ -300,35 +300,35 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     lock.unlock();
     //Make sure the top-context is up-to-date, waiting for an update if required
     KDevelop::ReferencedTopDUContext updated( DUChain::self()->waitForUpdate(doc, TopDUContext::AllDeclarationsAndContexts) );
-    
+
     if(!updated) {
       kDebug() << "not creating slot because failed to update" << doc.str();
       return;
     }
     lock.lock();
-    
+
     QList<DUContext*> containers = completionContext()->memberAccessContainers();
-    
+
     if(containers.isEmpty())
       return;
-    
+
     DUContext* classContext = containers.first();
-    
+
     Cpp::SourceCodeInsertion insertion(updated.data());
     insertion.setContext(classContext);
-    
+
     QString slotName = completionContext()->followingText();
     if(slotName.isEmpty())
       slotName = completionContext()->m_connectedSignalIdentifier.toString();
-    
+
     insertion.insertSlot(slotName, QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature));
 
     QString name = completionContext()->followingText();
     if(name.isEmpty() && m_declaration)
       name = m_declaration->identifier().toString();
-    
+
     lock.unlock();
-    
+
     if(!insertion.changes().applyAllChanges()) {
       kDebug() << "failed";
       return;

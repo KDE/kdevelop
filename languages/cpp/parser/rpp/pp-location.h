@@ -52,18 +52,18 @@ class KDEVCPPRPP_EXPORT LocationTable
     * Returns the found position stored in the anchor, and the possible maximum length until the next anchored position, or zero.
     */
     QPair<rpp::Anchor, uint> positionAt(std::size_t offset, const PreprocessedContents& contents, bool collapseIfMacroExpansion = false) const;
-    
+
     struct AnchorInTable {
       uint position; //Position of this anchor
       Anchor anchor; //This anchor
       uint nextPosition;//Position of the next following anchor, or zero
       Anchor nextAnchor;//The next following anchor
     };
-    
-    /** 
+
+    /**
       * Returns the nearest anchor before @param position, and the position of the anchor.
      * If the character is in a collapsed range, the collapsed member is true.
-      @param collapseIfMacroExpansion When this is true, all ranges that come from macro-expansion will be 
+      @param collapseIfMacroExpansion When this is true, all ranges that come from macro-expansion will be
                                       considered collapsed.(The returned anchor will also have the collapsed member set)
       * */
     AnchorInTable anchorForOffset(std::size_t position, bool collapseIfMacroExpansion = false) const;
@@ -76,10 +76,11 @@ class KDEVCPPRPP_EXPORT LocationTable
      * for the first character.
     * */
     void splitByAnchors(const PreprocessedContents& text, const Anchor& textStartPosition, QList<PreprocessedContents>& strings, QList<Anchor>& anchors) const;
-  
+
   private:
-    QMap<std::size_t, Anchor> m_offsetTable;
-    mutable QMap<std::size_t, Anchor>::ConstIterator m_currentOffset;
+    typedef QMap<std::size_t, Anchor> OffsetTable;
+    OffsetTable m_offsetTable;
+    mutable OffsetTable::ConstIterator m_currentOffset;
 };
 
 }
