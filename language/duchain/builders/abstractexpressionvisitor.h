@@ -70,6 +70,17 @@ class AbstractExpressionVisitor : public LanguageSpecificExpressionVisitorBase
       return m_lastType;
     }
 
+    void setLastType(KDevelop::AbstractType::Ptr type)
+    {
+      m_lastType = type;
+    }
+
+    template<class Type>
+    void setLastType(TypePtr<Type> type)
+    {
+      m_lastType = AbstractType::Ptr::staticCast(type);
+    }
+
     const Instance lastInstance() const
     {
       return m_lastInstance;
