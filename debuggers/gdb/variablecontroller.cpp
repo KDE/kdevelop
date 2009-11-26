@@ -95,29 +95,54 @@ void VariableController::handleVarUpdate(const GDBMI::ResultRecord& r)
         }
     }
 }
-
-class StackListVariablesHandler : public GDBCommandHandler
+class StackListArgumentsHandler : public GDBCommandHandler
 {
 public:
-    StackListVariablesHandler(DebugSession *session)
+    StackListArgumentsHandler(QStringList localsName)
+        : m_localsName(localsName)
+    {}
+
+    virtual void handle(const GDBMI::ResultRecord &r)
+    {
+        // FIXME: handle error.
+
+        const GDBMI::Value& locals = r["stack-args"][0]["args"];
+
+        for (int i = 0; i < locals.size(); i++) {
+            m_localsName << locals[i].literal();
+        }
+        QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
+                ->locals()->updateLocals(m_localsName);
+        foreach (Variable *v, variables) {
+            v->attachMaybe();
+        }
+    }
+
+private:
+    QStringList m_localsName;
+};
+
+class StackListLocalsHandler : public GDBCommandHandler
+{
+public:
+    StackListLocalsHandler(DebugSession *session)
         : m_session(session)
     {}
 
     virtual void handle(const GDBMI::ResultRecord &r)
     {
-        // FIXME: handle error?
+        // FIXME: handle error.
 
-        const GDBMI::Value& vars = r["variables"];
+        const GDBMI::Value& locals = r["locals"];
 
-        QStringList names;
-        for (int i = 0; i < vars.size(); i++) {
-            names << vars[i]["name"].literal();
+        QStringList localsName;
+        for (int i = 0; i < locals.size(); i++) {
+            const GDBMI::Value& var = locals[i];
+            localsName << var["name"].literal();
         }
-        QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
-                ->locals()->updateLocals(names);
-        foreach (Variable *v, variables) {
-            v->attachMaybe();
-        }
+        m_session->addCommand(                    //dont'show value, low-frame, high-frame
+            new GDBCommand(GDBMI::StackListArguments, "0 0 0",
+                        new StackListArgumentsHandler(localsName)));
     }
 
 private:
@@ -127,8 +152,8 @@ private:
 void VariableController::updateLocals()
 {
     debugSession()->addCommand(
-        new GDBCommand(GDBMI::StackListVariables, "--all-values",
-                        new StackListVariablesHandler(debugSession())));
+        new GDBCommand(GDBMI::StackListLocals, "--all-values",
+                        new StackListLocalsHandler(debugSession())));
 }
 
 QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor)

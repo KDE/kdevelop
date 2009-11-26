@@ -598,7 +598,7 @@ void DebugSession::queueCmd(GDBCommand *cmd, QueuePosition queue_where)
                                  && cmd->type() != GDBMI::VarDelete);
 
     bool stackCommandWithContext = (cmd->type() >= GDBMI::StackInfoDepth
-                                    && cmd->type() <= GDBMI::StackListVariables);
+                                    && cmd->type() <= GDBMI::StackListLocals);
 
     if (varCommandWithContext || stackCommandWithContext)
     {
