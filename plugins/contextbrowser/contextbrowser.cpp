@@ -728,7 +728,7 @@ void ContextBrowserPlugin::parseJobFinished(KDevelop::ParseJob* job)
     registerAsRangeWatcher(job->duChain());
   }
   
-  for(QMap< View*, DeclarationPointer >::const_iterator it = m_highlightedDeclarations.begin(); it != m_highlightedDeclarations.end(); ++it) {
+  for(QMap< View*, DeclarationPointer >::const_iterator it = m_highlightedDeclarations.constBegin(); it != m_highlightedDeclarations.constEnd(); ++it) {
     if(it.key()->document()->url() == job->document().toUrl()) {
       if(m_updateViews.isEmpty())
         m_updateTimer->start(highlightingTimeout);
@@ -1054,7 +1054,7 @@ QWidget* ContextBrowserPlugin::toolbarWidgetForMainWindow(QWidget* widgetInWindo
 {
   QWidget* master = masterWidget(widgetInWindow);
   
-  for(QList< QPointer< QWidget > >::iterator it = m_toolbarWidgets.begin(); it != m_toolbarWidgets.end(); ++it) {
+  for(QList< QPointer< QWidget > >::const_iterator it = m_toolbarWidgets.constBegin(); it != m_toolbarWidgets.constEnd(); ++it) {
     if((*it) && masterWidget(*it) == master) {
       return *it;
     }

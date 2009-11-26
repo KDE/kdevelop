@@ -195,8 +195,8 @@ void KompareProcess::writeCommandLine()
 
 	if ( m_diffSettings->m_excludeFilePattern )
 	{
-		QStringList::ConstIterator it = m_diffSettings->m_excludeFilePatternList.begin();
-		QStringList::ConstIterator end = m_diffSettings->m_excludeFilePatternList.end();
+		QStringList::ConstIterator it = m_diffSettings->m_excludeFilePatternList.constBegin();
+		QStringList::ConstIterator end = m_diffSettings->m_excludeFilePatternList.constEnd();
 		for ( ; it != end; ++it )
 		{
 			m_args << "-x" << *it ;
@@ -241,8 +241,8 @@ void KompareProcess::start()
 {
 #ifndef NDEBUG
 	QString cmdLine;
-	QStringList::ConstIterator it = m_args.begin();
-	for (; it != m_args.end(); ++it )
+	QStringList::ConstIterator it = m_args.constBegin();
+	for (; it != m_args.constEnd(); ++it )
 		cmdLine += "\"" + (*it) + "\" ";
 	kDebug(8101) << cmdLine;
 #endif

@@ -285,7 +285,7 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                     Q_ASSERT(smart);
                     QMutexLocker lock(smart->smartMutex());
 
-                    QList< KTextEditor::SmartRange* > ranges = m_highlighters[doc->url()]->ranges();
+                    const QList< KTextEditor::SmartRange* > ranges = m_highlighters[doc->url()]->ranges();
                     
                     KTextEditor::View * v = doc->textDocument() ->activeView();
                     int bestLine = -1;
@@ -476,9 +476,9 @@ void PatchReviewToolView::kompareModelChanged()
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if ( !models )
         throw "no diff-models";
-    Diff2::DiffModelList::const_iterator it = models->begin();
+    Diff2::DiffModelList::const_iterator it = models->constBegin();
     QSet<KUrl> haveUrls;
-    while ( it != models->end() ) {
+    while ( it != models->constEnd() ) {
         Diff2::DifferenceList * diffs = ( *it ) ->differences();
         int cnt = 0;
         if ( diffs )
@@ -510,7 +510,7 @@ void PatchReviewToolView::kompareModelChanged()
     ///findProject() excludes some useless files like backups, so we can use that to sort those files to the back
     for(int withProject = 1; withProject >= 0; --withProject)
     {
-      for(QMap<KUrl, QString>::const_iterator it = additionalUrls.begin(); it != additionalUrls.end(); ++it)
+      for(QMap<KUrl, QString>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
       {
         KUrl url = it.key();
         
@@ -745,7 +745,7 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
 
 KTextEditor::SmartRange* PatchHighlighter::rangeForMark(KTextEditor::Mark mark)
 {
-    for(QMap< KTextEditor::SmartRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.begin(); it != m_differencesForRanges.end(); ++it) {
+    for(QMap< KTextEditor::SmartRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it) {
       if(it.key()->start().line() == mark.line)
       {
         return it.key();
@@ -840,7 +840,7 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
 
     topRange->addWatcher(this);
     
-    for ( Diff2::DifferenceList::const_iterator it = m_model->differences() ->begin(); it != m_model->differences() ->end(); ++it ) {
+    for ( Diff2::DifferenceList::const_iterator it = m_model->differences() ->constBegin(); it != m_model->differences() ->constEnd(); ++it ) {
         Diff2::Difference* diff = *it;
         int line, lineCount;
         Diff2::DifferenceStringList lines ;

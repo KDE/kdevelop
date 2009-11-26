@@ -749,7 +749,7 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
     } else if( !mode && config && index.column() == 1 )
     {
         KComboBox* box = new KComboBox( parent );
-        QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
+        const QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
         for( QList<LaunchConfigurationType*>::const_iterator it = types.begin(); it != types.end(); it++ )
         {
             box->addItem( (*it)->name(), (*it)->id() );

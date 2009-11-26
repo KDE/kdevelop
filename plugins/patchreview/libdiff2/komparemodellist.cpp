@@ -965,8 +965,8 @@ bool KompareModelList::blendFile( DiffModel* model, const QString& fileContents 
 
 	QStringList lines = split( fileContents );
 
-	QStringList::ConstIterator linesIt = lines.begin();
-	QStringList::ConstIterator lEnd    = lines.end();
+	QStringList::ConstIterator linesIt = lines.constBegin();
+	QStringList::ConstIterator lEnd    = lines.constEnd();
 
 	DiffHunkList* hunks = model->hunks();
 	kDebug(8101) << "Hunks in hunklist:" << hunks->count();
