@@ -179,6 +179,7 @@ void Container::setLeftCornerWidget(QWidget* widget)
         return;
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     m_tabBarLayout->insertWidget(0, widget);
+    widget->show();
 }
 
 Container::~Container()

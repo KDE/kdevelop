@@ -257,8 +257,10 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
 
 void MainWindowPrivate::reconstruct()
 {
-    if(m_leftTabbarCornerWidget)
+    if(m_leftTabbarCornerWidget) {
+        m_leftTabbarCornerWidget->hide();
         m_leftTabbarCornerWidget->setParent(0);
+    }
     
     IdealToolViewCreator toolViewCreator(this);
     area->walkToolViews(toolViewCreator, Sublime::AllPositions);
@@ -364,8 +366,10 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
 
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
-    if(m_leftTabbarCornerWidget)
+    if(m_leftTabbarCornerWidget) {
+        m_leftTabbarCornerWidget->hide();
         m_leftTabbarCornerWidget->setParent(0);
+    }
     
     ViewCreator viewCreator(this);
     QSplitter *splitter = m_indexSplitters[index];
@@ -429,8 +433,10 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     }
     else
     {
-        if(m_leftTabbarCornerWidget)
+        if(m_leftTabbarCornerWidget) {
+            m_leftTabbarCornerWidget->hide();
             m_leftTabbarCornerWidget->setParent(0);
+        }
         
         // We've about to remove the last view of this container.  It will
         // be empty, so have to delete it, as well.
