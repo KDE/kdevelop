@@ -3,6 +3,7 @@ Type=Service
 Icon=emblem-important
 Exec=blubb
 Comment=This plugin shows errors in source code.
+Comment[de]=Dieses Modul zeigt Fehler im Quelltext an.
 Comment[en_GB]=This plugin shows errors in source code.
 Comment[es]=Este complemento muestra errores en el código fuente.
 Comment[gl]=Esta extensión mostra erros no código fonte.
