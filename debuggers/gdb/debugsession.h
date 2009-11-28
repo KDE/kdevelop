@@ -191,19 +191,6 @@ public:
        works the same as addCommand. */
     void addCommandBeforeRun(GDBCommand* cmd);
 
-    /** Selects the specified thread/frame. Immediately emits
-        thread_or_frame_changed event.
-    */
-    void selectFrame(int frameNo, int threadNo);
-
-    /** Returns the numerical identfier of the current thread,
-        or -1 if the program is not threaded (i.e. there's just
-        one thread.
-    */
-    int currentThread() const;
-
-    int currentFrame() const;
-
     bool stateIsOn(DBGStateFlags state) const;
 
     using QObject::event;
@@ -216,11 +203,6 @@ private:
         calls appropriate method.
     */
     void processMICommandResponse(const GDBMI::ResultRecord& r);
-
-    /** Handles reply from -stack-info-frame command issues
-        after switching the stack frame.
-    */
-    void handleMiFrameSwitch(const GDBMI::ResultRecord& r);
 
     /** Try to execute next command in the queue.  If GDB is not
         busy with previous command, and there's a command in the
@@ -275,8 +257,6 @@ private Q_SLOTS:
         Otherwise, shows a dialog box and reloads view state.  */
     void defaultErrorHandler(const GDBMI::ResultRecord& result);
 
-    void resultRecord(const GDBMI::ResultRecord& result);
-
     void programRunning();
 
     // All of these slots are entered in the controller's thread, as they use queued connections or are called internally
@@ -320,9 +300,6 @@ Q_SIGNALS:
                        const QString& oldValue, const QString& newValue);
 
 private:
-    int               currentFrame_;
-    int               currentThread_;
-
     CommandQueue*   commandQueue_;
 
     STTY*             tty_;

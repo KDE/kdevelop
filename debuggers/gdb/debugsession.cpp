@@ -64,8 +64,6 @@ DebugSession::DebugSession()
       m_sessionState(NotStartedState),
       justRestarted_(false),
       m_config(KGlobal::config(), "GDB Debugger"),
-      currentFrame_(0),
-      currentThread_(-1),
       commandQueue_(new CommandQueue),
       tty_(0),
       state_(s_dbgNotStarted|s_appNotStarted),
@@ -557,16 +555,6 @@ void DebugSession::addCommandBeforeRun(GDBCommand* cmd)
     queueCmd(cmd, QueueWhileInterrupted);
 }
 
-int  DebugSession::currentThread() const
-{
-    return currentThread_;
-}
-
-int DebugSession::currentFrame() const
-{
-    return currentFrame_;
-}
-
 // Fairly obvious that we'll add whatever command you give me to a queue
 // If you tell me to, I'll put it at the head of the queue so it'll run ASAP
 // Not quite so obvious though is that if we are going to run again. then any
@@ -805,11 +793,6 @@ void DebugSession::programNoApp(const QString& msg)
 
     destroyCmds();
 
-    // We're always at frame zero when the program stops
-    // and we must reset the active flag
-    currentThread_ = -1;
-    currentFrame_ = 0;
-
     // The application has existed, but it's possible that
     // some of application output is still in the pipe. We use
     // different pipes to communicate with gdb and to get application
@@ -872,27 +855,6 @@ void DebugSession::parseStreamRecord(const GDBMI::StreamRecord& s)
     }
 }
 
-void DebugSession::handleMiFrameSwitch(const GDBMI::ResultRecord& r)
-{
-    raiseEvent(thread_or_frame_changed);
-
-    const GDBMI::Value& frame = r["frame"];
-
-    QString file;
-    if (frame.hasField("fullname"))
-        file = frame["fullname"].literal();
-    else if (frame.hasField("file"))
-        file = frame["file"].literal();
-
-    int line = -1;
-    if (frame.hasField("line"))
-        line = frame["line"].literal().toInt();
-
-    emitShowStepInSource(file,
-                     line,
-                     frame["addr"].literal());
-}
-
 bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 {
     kDebug(9012) << "Starting debugger controller";
@@ -932,8 +894,6 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
 
     connect(m_gdb, SIGNAL(streamRecord(const GDBMI::StreamRecord&)),
             this, SLOT(parseStreamRecord(const GDBMI::StreamRecord&)));
-    connect(m_gdb, SIGNAL(resultRecord(const GDBMI::ResultRecord&)),
-            this, SLOT(resultRecord(const GDBMI::ResultRecord&)));
 
     // Start gdb. Do this after connecting all signals so that initial
     // GDB output, and important events like "GDB died" are reported.
@@ -1231,23 +1191,6 @@ void DebugSession::jumpTo(const KUrl& url, int line)
 
 // **************************************************************************
 
-void DebugSession::selectFrame(int frameNo, int threadNo)
-{
-    // FIXME: this either should be removed completely, or
-    // trigger an error message.
-    if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
-        return;
-
-    // Will emit the 'thread_or_frame_changed' event.
-    GDBCommand* stackInfoFrame = new GDBCommand(GDBMI::StackInfoFrame);
-    stackInfoFrame->setThread(threadNo);
-    stackInfoFrame->setFrame(frameNo);
-    stackInfoFrame->setHandler(this, &DebugSession::handleMiFrameSwitch);
-    queueCmd(stackInfoFrame);
-}
-
-// **************************************************************************
-
 // FIXME: connect to GDB's slot.
 void DebugSession::defaultErrorHandler(const GDBMI::ResultRecord& result)
 {
@@ -1281,23 +1224,6 @@ void DebugSession::defaultErrorHandler(const GDBMI::ResultRecord& result)
     // reloading!
     if (!m_gdb->currentCommand()->stateReloading())
         raiseEvent(program_state_changed);
-}
-
-void DebugSession::resultRecord(const GDBMI::ResultRecord& result)
-{
-    GDBCommand* cmd = m_gdb->currentCommand();
-    switch (cmd->type()) {
-    case GDBMI::ThreadSelect:
-        if (result.hasField("new-thread-id"))
-            currentThread_ = result["new-thread-id"].toInt();
-        currentFrame_ = 0;
-        break;
-    case GDBMI::StackSelectFrame:
-        currentFrame_ = cmd->command().toInt();
-        break;
-    default:
-        break;
-    }
 }
 
 void DebugSession::gdbReady()
