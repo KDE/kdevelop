@@ -840,6 +840,7 @@ void GdbTest::testVariablesLocals()
     breakpoints()->addCodeBreakpoint(debugeeFileName, 22);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000);
 
     QCOMPARE(variableCollection()->rowCount(), 2);
     QModelIndex i = variableCollection()->index(1, 0);
@@ -848,6 +849,7 @@ void GdbTest::testVariablesLocals()
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "0");
     session->run();
+    QTest::qWait(1000);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
@@ -865,7 +867,7 @@ void GdbTest::testVariablesLocalsStruct()
     breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
     QVERIFY(session->startProgram(&cfg));
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QTest::qWait(300);
+    QTest::qWait(1000);
 
     QModelIndex i = variableCollection()->index(1, 0);
     QCOMPARE(variableCollection()->rowCount(i), 4);
@@ -884,6 +886,7 @@ void GdbTest::testVariablesLocalsStruct()
 
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(1000);
     COMPARE_DATA(variableCollection()->index(1, 0, i), "ts");
     COMPARE_DATA(variableCollection()->index(1, 1, i), "{...}");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
