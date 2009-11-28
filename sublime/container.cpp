@@ -316,8 +316,9 @@ int Container::indexOf(QWidget* w) const
 void Sublime::Container::removeWidget(QWidget *w)
 {
     if (w) {
-        d->tabBar->removeTab(d->stack->indexOf(w));
+        int widgetIdx = d->stack->indexOf(w);
         d->stack->removeWidget(w);
+        d->tabBar->removeTab(widgetIdx);
         if (d->tabBar->currentIndex() != -1)
             d->fileNameCorner->setText(d->tabBar->tabText(d->tabBar->currentIndex()));
         View* view = d->viewForWidget.take(w);
