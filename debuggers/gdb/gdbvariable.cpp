@@ -33,7 +33,7 @@ QMap<QString, GdbVariable*> GdbVariable::allVariables_;
 
 static bool hasStartedSession()
 {
-    if (!ICore::self()) return false; //happens on shutdown
+    if (!ICore::self()->debugController()) return false; //happens on shutdown
 
     IDebugSession *session = ICore::self()->debugController()->currentSession();
     if (!session)
