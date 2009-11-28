@@ -24,13 +24,16 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../variable/variablecollection.h"
+#include "iframestackmodel.h"
 
 namespace KDevelop {
 
     
 IVariableController::IVariableController(IDebugSession* parent)
-    : QObject(parent)
+    : QObject(parent), m_activeThread(-1), m_activeFrame(-1)
 {
+    connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
+            SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 VariableCollection* IVariableController::variableCollection()
@@ -38,11 +41,18 @@ VariableCollection* IVariableController::variableCollection()
     return ICore::self()->debugController()->variableCollection();
 }
 
-void IVariableController::handleEvent(IDebugSession::event_t event)
+IDebugSession* IVariableController::session() const
 {
-    switch (event) {
-    case IDebugSession::program_exited:
-    case IDebugSession::debugger_exited:
+    return static_cast<IDebugSession*>(parent());
+}
+
+void IVariableController::stateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::ActiveState) {
+        //variables are now outdated, update them
+        m_activeThread = -1;
+        m_activeFrame = -1;
+    } else if (state == IDebugSession::StoppedState) {
         // Remove all locals.
         foreach (Locals *l, variableCollection()->allLocals()) {
             l->deleteChildren();
@@ -55,17 +65,32 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
                 var->setInScope(false);
             }
         }
-        break;
+    }
+}
 
+void IVariableController::updateIfFrameOrThreadChanged()
+{
+    IFrameStackModel *sm = session()->frameStackModel();
+    if (sm->currentThread() != m_activeThread || sm->currentFrame() != m_activeFrame) {
+        m_activeThread = sm->currentThread();
+        m_activeFrame = sm->currentFrame();
+        update();
+    }
+}
+
+void IVariableController::handleEvent(IDebugSession::event_t event)
+{
+    switch (event) {
     case IDebugSession::program_state_changed:
     case IDebugSession::thread_or_frame_changed:
+        kDebug() << m_autoUpdate;
         if (!(m_autoUpdate & UpdateLocals)) {
             foreach (Locals *l, variableCollection()->allLocals()) {
                 l->setHasMore(true);
             }
         }
         if (m_autoUpdate != UpdateNone) {
-            update();
+            updateIfFrameOrThreadChanged();
         }
         break;
 
@@ -76,10 +101,10 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
 
 void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
 {
-    IDebugSession::DebuggerState state = static_cast<IDebugSession*>(parent())->state();
+    IDebugSession::DebuggerState state = session()->state();
     m_autoUpdate = autoUpdate;
     if (m_autoUpdate != UpdateNone && state == IDebugSession::PausedState) {
-        update();
+        updateIfFrameOrThreadChanged();
     }
 }
 
