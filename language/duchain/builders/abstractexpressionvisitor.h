@@ -75,6 +75,17 @@ class AbstractExpressionVisitor : public LanguageSpecificExpressionVisitorBase
       m_lastType = type;
     }
 
+    void setInstantiatedType(bool instantiated = true)
+    {
+      m_lastInstance = Instance(instantiated);
+    }
+
+    void setInstantiatedType(KDevelop::AbstractType::Ptr type, bool instantiated = true)
+    {
+      m_lastType = type;
+      m_lastInstance = Instance(instantiated);
+    }
+
     template<class Type>
     void setLastType(TypePtr<Type> type)
     {
@@ -84,6 +95,15 @@ class AbstractExpressionVisitor : public LanguageSpecificExpressionVisitorBase
     const Instance lastInstance() const
     {
       return m_lastInstance;
+    }
+
+    void setLastInstance(Declaration* decl)
+    {
+      m_lastInstance = Instance(decl);
+      if (decl)
+        m_lastType = decl->abstractType();
+      else
+        m_lastType = 0;
     }
 
   protected:
@@ -123,7 +143,7 @@ class AbstractExpressionVisitor : public LanguageSpecificExpressionVisitorBase
     }
 
     /** The duchain is not locked when this is called */
-    virtual void usingDeclaration( T* node, TokenType start_token, TokenType end_token, const KDevelop::DeclarationPointer& decl ) {
+    virtual void usingDeclaration( T* node, const KDevelop::DeclarationPointer& decl, TokenType start_token = TokenType(), TokenType end_token = TokenType() ) {
       Q_UNUSED(node) Q_UNUSED(start_token) Q_UNUSED(end_token) Q_UNUSED(decl)
     }
 
