@@ -1,6 +1,6 @@
 include_directories(
-    ${CMAKE_SOURCE_DIR}/projectmanagers/cmake
-    ${CMAKE_SOURCE_DIR}/projectmanagers/cmake/parser
+    ${KDevelop_SOURCE_DIR}/projectmanagers/cmake
+    ${KDevelop_SOURCE_DIR}/projectmanagers/cmake/parser
     ${KDEVPLATFORM_INCLUDE_DIR}
 )
 

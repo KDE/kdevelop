@@ -1,8 +1,8 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
-    ${CMAKE_SOURCE_DIR}/languages/cpp
-    ${CMAKE_SOURCE_DIR}/languages/cpp/parser
-    ${CMAKE_BINARY_DIR}/languages/cpp
+    ${KDevelop_SOURCE_DIR}/languages/cpp
+    ${KDevelop_SOURCE_DIR}/languages/cpp/parser
+    ${KDevelop_BINARY_DIR}/languages/cpp
 )
 
 ########### next target ###############
@@ -16,8 +16,8 @@ target_link_libraries(cppexpressionparsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTE
 
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/languages/cpp/parser
-    ${CMAKE_SOURCE_DIR}/languages/cpp
+    ${KDevelop_SOURCE_DIR}/languages/cpp/parser
+    ${KDevelop_SOURCE_DIR}/languages/cpp
 )
 
 ########### next target ###############
