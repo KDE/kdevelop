@@ -1,7 +1,7 @@
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_SOURCE_DIR}
+    ${KDevPlatform_SOURCE_DIR}
     ${Boost_INCLUDE_DIRS}
 )
 

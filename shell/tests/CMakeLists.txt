@@ -2,11 +2,11 @@
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 # also needed for the plugin, so the plugincontrollertest knows the binary dir
-#add_definitions( -DBUILD_DIR="\\"${CMAKE_BINARY_DIR}\\"" )
+#add_definitions( -DBUILD_DIR="\\"${KDevPlatform_BINARY_DIR}\\"" )
 include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/interfaces
-    ${CMAKE_SOURCE_DIR}/shell
+    ${KDevPlatform_SOURCE_DIR}
+    ${KDevPlatform_SOURCE_DIR}/interfaces
+    ${KDevPlatform_SOURCE_DIR}/shell
     )
 
 # Disabled until I find out how to load plugins from builddir

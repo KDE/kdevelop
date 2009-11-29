@@ -18,11 +18,11 @@ FIND_PROGRAM(CVS NAMES cvs
 if (CVS)
 
 	include_directories( ${KDE4_INCLUDES}
-		${CMAKE_SOURCE_DIR}
-        ${CMAKE_SOURCE_DIR}/util
-        ${CMAKE_SOURCE_DIR}/interfaces
-		${CMAKE_SOURCE_DIR}/vcs
-		${CMAKE_SOURCE_DIR}/plugins/cvs
+		${KDevPlatform_SOURCE_DIR}
+        ${KDevPlatform_SOURCE_DIR}/util
+        ${KDevPlatform_SOURCE_DIR}/interfaces
+		${KDevPlatform_SOURCE_DIR}/vcs
+		${KDevPlatform_SOURCE_DIR}/plugins/cvs
 	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 	set(cvstest_SRCS cvstest.cpp

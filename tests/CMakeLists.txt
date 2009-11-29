@@ -1,7 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9532 )
 
-include_directories( ${CMAKE_SOURCE_DIR}/shell )
+include_directories( ${KDevPlatform_SOURCE_DIR}/shell )
 
 set(kdevplatformtests_LIB_SRCS
     kdevsignalspy.cpp

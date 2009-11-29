@@ -4,7 +4,7 @@ project(KDevPlatform)
 
 set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules)
 
 set(KDEVPLATFORM_VERSION_MAJOR 0)
 set(KDEVPLATFORM_VERSION_MINOR 9)
@@ -30,7 +30,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES}  ${CMAKE_BINARY_DIR})
+include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
 
 set(KDEVPLATFORM_LIB_VERSION 1.0.0)
 set(KDEVPLATFORM_LIB_SOVERSION 1)

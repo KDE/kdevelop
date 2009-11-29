@@ -1,6 +1,6 @@
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}
+    ${KDevPlatform_SOURCE_DIR}
 )
 
 ########### Plugin Selector
