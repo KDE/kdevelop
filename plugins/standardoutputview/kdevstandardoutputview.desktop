@@ -1,23 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Output View
-Name[bg]=Преглед на резултата
-Name[ca]=Vista de la sortida
-Name[de]=Ansicht für Ausgaben
-Name[en_GB]=Output View
-Name[es]=Vista de la salida
-Name[fr]=Vue de la sortie
-Name[ga]=Amharc Aschurtha
-Name[gl]=Vista da saída
-Name[ja]=出力ビュー
-Name[nds]=Utgaavansicht
-Name[pt]=Área de Resultados
-Name[sv]=Utmatningsvy
-Name[tr]=Çıktı Görünümü
 Name[uk]=Перегляд виводу
-Name[x-test]=xxOutput Viewxx
-Name[zh_CN]=输出视图
-Name[zh_TW]=輸出檢視
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview
