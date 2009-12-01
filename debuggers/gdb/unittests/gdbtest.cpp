@@ -926,6 +926,7 @@ void GdbTest::testVariablesWatches()
 
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(100);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "ts");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "{...}");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
