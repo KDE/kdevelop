@@ -39,13 +39,13 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         virtual ~IDocumentationProvider();
         
         /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
-        virtual KSharedPtr<IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) = 0;
+        virtual KSharedPtr<IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const=0;
         
         /** @returns an instance of an interface to create an index for all the items provided by this class. */
-        virtual QAbstractListModel* indexModel()=0;
+        virtual QAbstractListModel* indexModel() const=0;
         
         /** @returns the documentation information related to the index in the model. */
-        virtual KSharedPtr<IDocumentation> documentationForIndex(const QModelIndex& idx)=0;
+        virtual KSharedPtr<IDocumentation> documentationForIndex(const QModelIndex& idx) const=0;
     
         /** @returns some icon associated to the provider. */
         virtual QIcon icon() const=0;
