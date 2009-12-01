@@ -47,7 +47,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentation : public KShared
         */
         virtual QWidget* documentationWidget(QWidget* parent=0);
         
-        virtual IDocumentationProvider* provider()=0;
+        virtual IDocumentationProvider* provider() const = 0;
 };
 
 }
