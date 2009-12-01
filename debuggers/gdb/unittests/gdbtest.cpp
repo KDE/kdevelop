@@ -1029,6 +1029,38 @@ void GdbTest::testVariablesStartSecondSession()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testVariablesSwitchFrame()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg;
+
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
+    TestFrameStackModel *stackModel = session->frameStackModel();
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 24);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(500);
+
+    QModelIndex i = variableCollection()->index(1, 0);
+    COMPARE_DATA(i, "Locals");
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+
+    stackModel->setCurrentFrame(1);
+    QTest::qWait(200);
+
+    i = variableCollection()->index(1, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 4);
+    COMPARE_DATA(variableCollection()->index(2, 0, i), "argc");
+    COMPARE_DATA(variableCollection()->index(2, 1, i), "1");
+    COMPARE_DATA(variableCollection()->index(3, 0, i), "argv");
+
+    breakpoints()->removeRow(0);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
 
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
