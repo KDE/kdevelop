@@ -43,7 +43,7 @@ class CMakeContentsModel : public QAbstractItemModel
 class CMakeHomeDocumentation : public KDevelop::IDocumentation
 {
     public:
-        virtual KDevelop::IDocumentationProvider* provider();
+        virtual KDevelop::IDocumentationProvider* provider() const;
         virtual QString name() const;
         virtual QString description() const { return name(); }
         

@@ -42,7 +42,7 @@ QString CMakeHomeDocumentation::name() const
     return i18n("CMake Content Page");
 }
 
-KDevelop::IDocumentationProvider* CMakeHomeDocumentation::provider()
+KDevelop::IDocumentationProvider* CMakeHomeDocumentation::provider() const
 {
     return CMakeDoc::s_provider;
 }

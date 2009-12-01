@@ -44,7 +44,7 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         
         virtual QWidget* documentationWidget(QWidget* parent);
         
-        virtual KDevelop::IDocumentationProvider* provider();
+        virtual KDevelop::IDocumentationProvider* provider() const;
         QMap<QString, QUrl> info() const { return m_info; }
         
         static QtHelpPlugin* s_provider;
@@ -65,7 +65,7 @@ class HomeDocumentation : public QObject, public KDevelop::IDocumentation
         virtual QWidget* documentationWidget(QWidget* parent = 0);
         virtual QString description() const { return QString(); }
         virtual QString name() const;
-        virtual KDevelop::IDocumentationProvider* provider();
+        virtual KDevelop::IDocumentationProvider* provider() const;
         
     public slots:
         void clicked(const QModelIndex& idx);

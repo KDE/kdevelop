@@ -197,7 +197,7 @@ void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
     lastView->load(newUrl);
 }
 
-KDevelop::IDocumentationProvider* QtHelpDocumentation::provider()
+KDevelop::IDocumentationProvider* QtHelpDocumentation::provider() const
 {
     return s_provider;
 }
@@ -240,7 +240,7 @@ QString HomeDocumentation::name() const
     return i18n("QtHelp Home Page");
 }
 
-KDevelop::IDocumentationProvider* HomeDocumentation::provider()
+KDevelop::IDocumentationProvider* HomeDocumentation::provider() const
 {
     return QtHelpDocumentation::s_provider;
 }
