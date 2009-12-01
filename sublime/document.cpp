@@ -21,6 +21,7 @@
 #include <kdebug.h>
 
 #include "view.h"
+#include "area.h"
 #include "controller.h"
 
 namespace Sublime {
@@ -113,6 +114,22 @@ void Document::setStatusIcon(QIcon icon)
 QIcon Document::statusIcon() const
 {
     return d->statusIcon;
+}
+
+bool Document::closeDocument()
+{
+    foreach (Sublime::Area *area, controller()->allAreas())
+    {
+        QList<Sublime::View*> areaViews = area->views();
+        foreach (Sublime::View *view, areaViews) {
+            if (views().contains(view)) {
+                area->removeView(view);
+                delete view;
+            }
+        }
+    }
+    deleteLater();
+    return true;
 }
 
 }

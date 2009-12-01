@@ -72,11 +72,11 @@ public:
       *If closing is successful, all views should be deleted, and the document itself
       *be scheduled for deletion using deleteLater().
       *
+      *The default implementation will close all views and then deletes the document itself.
+      *Override this if you want to confirm closing with the user.
+      *
       * Returns whether closing was successful (The user did not push 'Cancel') */
-    virtual bool closeDocument() {
-        Q_ASSERT(0); //Every document should override this
-        return false;
-    }
+    virtual bool closeDocument();
 
     void setStatusIcon(QIcon icon);
     
