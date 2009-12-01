@@ -55,6 +55,7 @@ Example1Main::Example1Main()
     //areas (aka perspectives)
     kDebug(9504) << "constructing area 1";
     m_area1 = new Sublime::Area(m_controller, "Area 1");
+    m_controller->addDefaultArea(m_area1);
     m_area1->addView(doc1->createView());
     m_area1->addView(doc2->createView());
     m_area1->addView(doc3->createView());
@@ -63,6 +64,7 @@ Example1Main::Example1Main()
 
     kDebug(9504) << "constructing area 2";
     m_area2 = new Sublime::Area(m_controller, "Area 2");
+    m_controller->addDefaultArea(m_area2);
     Sublime::View *view1 = doc1->createView();
     m_area2->addView(view1);
     Sublime::View *view2 = doc2->createView();

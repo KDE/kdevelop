@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 
     Sublime::Controller *controller = new Sublime::Controller(&app);
     Sublime::Area *area = new Sublime::Area(controller, "Area");
+    controller->addDefaultArea(area);
     Sublime::Document *doc = new Sublime::UrlDocument(controller, KUrl::fromPath("~/foo.cpp"));
     area->addView(doc->createView());
     Example2Main *window = new Example2Main(controller);
