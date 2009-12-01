@@ -57,7 +57,7 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         void delayedInitialization();
         
     Q_SIGNALS:
-        virtual void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc);
+        virtual void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
     
     private:
         void collectIds(const QString& param, Type type);

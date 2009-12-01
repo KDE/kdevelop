@@ -44,10 +44,10 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         
         QHelpEngine* engine() { return &m_engine; }
     public slots:
-        void jumpedTo(const QUrl& newUrl);
+        void jumpedTo(const QUrl& newUrl) const;
         
     Q_SIGNALS:
-        void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc);
+        void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
 	private:
 		QHelpEngine m_engine;
 };

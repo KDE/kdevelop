@@ -157,7 +157,7 @@ QString QtHelpPlugin::name() const
     return i18n("QtHelp");
 }
 
-void QtHelpPlugin::jumpedTo(const QUrl& newUrl)
+void QtHelpPlugin::jumpedTo(const QUrl& newUrl) const
 {
     QMap<QString, QUrl> info;
     info.insert(newUrl.toString(), newUrl);
