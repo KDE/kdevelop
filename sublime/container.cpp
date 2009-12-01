@@ -222,7 +222,6 @@ void Container::widgetActivated(int idx)
     if (idx < 0)
         return;
     if (QWidget* w = d->stack->widget(idx)) {
-        w->setFocus();
         if(d->viewForWidget.contains(w))
             emit activateView(d->viewForWidget[w]);
     }
