@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     t1.start();
     t2.start();
     t3.start();
-    usleep(500);
-    usleep(600);
+    usleep(500000);
+    usleep(600000);
     return 0;
 }
