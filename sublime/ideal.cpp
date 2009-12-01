@@ -870,6 +870,7 @@ IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* p
     : QWidget(parent)
     , m_orientation(orientation)
     , m_hover(false)
+    , m_pressed(false)
     , m_resizeRole(resizeRole)
 {
     setCursor(orientation == Qt::Horizontal ? Qt::SplitVCursor : Qt::SplitHCursor);
@@ -887,6 +888,10 @@ void IdealSplitterHandle::paintEvent(QPaintEvent *)
     options.state |= QStyle::State_Horizontal;
 
     options.state |= QStyle::State_Enabled;
+    if (m_hover)
+        options.state |= QStyle::State_MouseOver;
+    if (m_pressed)
+        options.state |= QStyle::State_Sunken;
 
     painter.drawControl(QStyle::CE_Splitter, options);
 }
@@ -914,8 +919,31 @@ void IdealSplitterHandle::mouseMoveEvent(QMouseEvent * event)
 
 void IdealSplitterHandle::mousePressEvent(QMouseEvent * event)
 {
-    if (event->button() == Qt::LeftButton)
+    if (event->button() == Qt::LeftButton) {
         m_dragStart = convert(event->pos());
+        m_pressed = true;
+        update();
+    }
+}
+
+void IdealSplitterHandle::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        m_pressed = false;
+        update();
+    }
+}
+
+void IdealSplitterHandle::enterEvent(QEvent* /*event*/)
+{
+    m_hover = true;
+    update();
+}
+
+void IdealSplitterHandle::leaveEvent(QEvent* /*event*/)
+{
+    m_hover = false;
+    update();
 }
 
 IdealMainWidget * IdealButtonBarWidget::parentWidget() const

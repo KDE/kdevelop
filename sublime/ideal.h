@@ -274,12 +274,16 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void mouseMoveEvent(QMouseEvent* event);
     virtual void mousePressEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void enterEvent(QEvent* event);
+    virtual void leaveEvent(QEvent* event);
 
 private:
     inline int convert(const QPoint& pos) const { return m_orientation == Qt::Horizontal ? pos.y() : pos.x(); }
 
     Qt::Orientation m_orientation;
     bool m_hover;
+    bool m_pressed;
     int m_dragStart;
     IdealMainLayout::Role m_resizeRole;
 };
