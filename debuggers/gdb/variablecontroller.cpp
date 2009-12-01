@@ -23,16 +23,16 @@
 
 #include "variablecontroller.h"
 
+#include <debugger/variable/variablecollection.h>
+#include <debugger/breakpoint/breakpointmodel.h>
+#include <interfaces/icore.h>
+#include <interfaces/idebugcontroller.h>
+#include <debugger/interfaces/iframestackmodel.h>
+
 #include "gdbcommand.h"
 #include "debugsession.h"
 #include "stringhelpers.h"
 #include "gdbvariable.h"
-
-#include <debugger/variable/variablecollection.h>
-#include <debugger/breakpoint/breakpointmodel.h>
-
-#include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
 
 using namespace GDBDebugger;
 using namespace KDevelop;
@@ -140,8 +140,9 @@ public:
             const GDBMI::Value& var = locals[i];
             localsName << var["name"].literal();
         }
+        int frame = m_session->frameStackModel()->currentFrame();
         m_session->addCommand(                    //dont'show value, low-frame, high-frame
-            new GDBCommand(GDBMI::StackListArguments, "0 0 0",
+            new GDBCommand(GDBMI::StackListArguments, QString("0 %1 %2").arg(frame).arg(frame),
                         new StackListArgumentsHandler(localsName)));
     }
 
