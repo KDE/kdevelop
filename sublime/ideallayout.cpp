@@ -782,8 +782,14 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
         else
             offset = bar->geometry().height();
     }
+    
+    int newWidth = thickness - offset;
+    int minWidth = 0, softMinWidth = 0, minHeight = 0, softMinHeight = 0;
+    minimumSize(role, minWidth, softMinWidth, minHeight, softMinHeight);
+    if (newWidth < ((role == Left || role == Right) ? minWidth : minHeight))
+        return; //do not resize widget below its minimum size
 
-    m_items[role]->width = thickness - offset;
+    m_items[role]->width = newWidth;
 
     invalidate();
 
