@@ -40,19 +40,19 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
     Q_INTERFACES( KDevelop::IDocumentationProvider )
     public:
         explicit CMakeDocumentation( QObject* parent = 0, const QVariantList& args = QVariantList() );
-        KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file);
-        KSharedPtr<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration);
+        KSharedPtr<KDevelop::IDocumentation> description(const QString& identifier, const KUrl& file) const;
+        KSharedPtr<KDevelop::IDocumentation> documentationForDeclaration(KDevelop::Declaration* declaration) const;
         
         QStringList names(Type t) const;
         
-        QAbstractListModel* indexModel();
-        KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx);
+        QAbstractListModel* indexModel() const;
+        KSharedPtr<KDevelop::IDocumentation> documentationForIndex(const QModelIndex& idx) const;
         
         virtual QIcon icon() const;
         virtual QString name() const;
         virtual KSharedPtr<KDevelop::IDocumentation> homePage() const;
         
-        QString descriptionForIdentifier(const QString& identifier, Type t);
+        QString descriptionForIdentifier(const QString& identifier, Type t) const;
     public slots:
         void delayedInitialization();
         

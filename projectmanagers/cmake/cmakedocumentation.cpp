@@ -83,7 +83,7 @@ QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
     return m_typeForName.keys(t);
 }
 
-QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t)
+QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) const
 {
     QString desc;
     if(args[t])
@@ -92,7 +92,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t)
     return desc;
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file)
+KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
 {
     if(!KMimeType::findByUrl(file)->is("text/x-cmake"))
         return KSharedPtr<KDevelop::IDocumentation>();
@@ -128,17 +128,17 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
         return KSharedPtr<KDevelop::IDocumentation>(new CMakeDoc(identifier, desc));
 }
 
-KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl)
+KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::documentationForDeclaration(KDevelop::Declaration* decl) const
 {
     return description(decl->identifier().toString(), decl->url().toUrl());
 }
 
-KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx)
+KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
 {
     return description(idx.data().toString(), KUrl("CMakeLists.txt"));
 }
 
-QAbstractListModel* CMakeDocumentation::indexModel()
+QAbstractListModel* CMakeDocumentation::indexModel() const
 {
     return m_index;
 }

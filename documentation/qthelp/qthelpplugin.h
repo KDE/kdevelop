@@ -32,10 +32,10 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 	public:
 		QtHelpPlugin(QObject *parent, const QVariantList & args);
-		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*);
+		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*) const;
         
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx);
-        virtual QAbstractListModel* indexModel();
+        virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx) const;
+        virtual QAbstractListModel* indexModel() const;
         
         virtual QIcon icon() const;
         virtual QString name() const;

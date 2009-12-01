@@ -111,7 +111,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
         kDebug() << "no QtHelp found at all";
 }
 
-KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec)
+KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec) const
 {
 	
 	if(dec) {
@@ -136,12 +136,12 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration
 	return KSharedPtr<KDevelop::IDocumentation>();
 }
 
-QAbstractListModel* QtHelpPlugin::indexModel()
+QAbstractListModel* QtHelpPlugin::indexModel() const
 {
     return m_engine.indexModel();
 }
 
-KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForIndex(const QModelIndex& idx)
+KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForIndex(const QModelIndex& idx) const
 {
     QString name=idx.data(Qt::DisplayRole).toString();
     return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
