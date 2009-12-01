@@ -57,7 +57,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
         virtual KSharedPtr<IDocumentation> homePage() const=0;
         
     Q_SIGNALS:
-        virtual void addHistory(const KSharedPtr<IDocumentation>& doc)=0;
+        virtual void addHistory(const KSharedPtr<IDocumentation>& doc) const=0;
 };
 
 }
