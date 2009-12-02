@@ -1266,9 +1266,6 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 
 bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
 {
-    if(_it->isProjectRoot())
-        return false;
-    
     CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
     if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
     {
