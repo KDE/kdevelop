@@ -123,14 +123,6 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-#ifdef Q_WS_X11
-#if QT_VERSION >= 0x040502
-    //Text rendering on X11 is exceptionally slow, so force Qt
-    //raster graphics system (mostly) to make kate editor feel faster
-    QApplication::setGraphicsSystem("raster");
-#endif
-#endif
-
     KApplication app;
     KDevIDEExtension::init();
     
