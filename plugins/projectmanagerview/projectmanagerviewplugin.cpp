@@ -500,7 +500,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         KDevelop::ProjectFileItem* file=item->file();
         KDevelop::ProjectFolderItem* folder=item->folder();
 
-        if (!file && !folder) {
+        if ((!file && !folder) || !item->parent()) {
             continue;
         }
         //Change QInputDialog->KFileSaveDialog?
