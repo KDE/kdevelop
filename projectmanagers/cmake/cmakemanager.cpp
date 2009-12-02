@@ -1270,8 +1270,6 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
         return false;
     
     CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
-    KUrl lists=it->formerParent()->url();
-    lists.addPath("CMakeLists.txt");
     if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
     {
         KIO::CopyJob* job=KIO::move(it->url(), newUrl);
@@ -1282,6 +1280,8 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
         }
         return ret;
     }
+    KUrl lists=it->formerParent()->url();
+    lists.addPath("CMakeLists.txt");
     QString newName=KUrl::relativePath(lists.upUrl().path(), newUrl.path());
     if(newName.startsWith("./"))
         newName.remove(0,2);
