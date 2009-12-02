@@ -268,7 +268,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
-        if( !renameAdded && (item->file() || item->folder()) )
+        if( !renameAdded && (item->file() || item->folder()) && item->parent() )
         {
             renameAdded = true;
             KAction* action = new KAction( i18n( "Rename" ), this );
