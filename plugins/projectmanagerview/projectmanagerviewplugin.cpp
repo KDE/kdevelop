@@ -503,6 +503,9 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         if ((!file && !folder) || !item->parent()) {
             continue;
         }
+
+        const KUrl src = file ? file->url() : folder->url();
+
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
             window, file ? i18n("Rename File") : i18n("Rename Folder"),
@@ -511,23 +514,38 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         );
 
         if (!name.isEmpty() && name != item->text()) {
-            KUrl url;
-            if ( file ) {
-                url = file->url().upUrl();
-            } else {
-                url = folder->url().upUrl();
+            KUrl dest = src.upUrl();
+            dest.addPath( name );
+
+            KIO::UDSEntry entry;
+
+            if ( KIO::NetAccess::stat(dest, entry, window) ) {
+                if ( entry.isDir() ) {
+                    // never overwrite folders
+                    KMessageBox::error( window,
+                        i18n("Cannot rename '%1' to '%2':\nThere exists a folder with that name.",
+                             src.prettyUrl(), dest.prettyUrl())
+                    );
+                    return;
+                } else if ( folder ) {
+                    // cannot overwrite file with folder
+                    KMessageBox::error( window,
+                        i18n("Cannot rename folder '%1' to '%2':\nThere exists a file with that name.",
+                             src.prettyUrl(), dest.prettyUrl())
+                    );
+                    return;
+                } // else KIO asks for renaming the file
             }
-            url.addPath( name );
 
             bool ret;
             if (file) {
-                ret = item->project()->projectFileManager()->renameFile(file, url);
+                ret = item->project()->projectFileManager()->renameFile(file, dest);
             } else {
-                ret = item->project()->projectFileManager()->renameFolder(folder, url);
+                ret = item->project()->projectFileManager()->renameFolder(folder, dest);
             }
             if(!ret) {
                 KMessageBox::error( window,
-                    i18n("Could not rename '%1'.", (file ? file->url() : folder->url()).prettyUrl())
+                    i18n("Could not rename '%1'.", src.prettyUrl())
                 );
             }
         }
