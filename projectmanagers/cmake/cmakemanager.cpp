@@ -1270,7 +1270,6 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
         KIO::CopyJob* job=KIO::move(it->url(), newUrl);
         bool ret=KIO::NetAccess::synchronousRun(job, 0);
         if(ret) {
-            it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
             it->setUrl(newUrl);
         }
         return ret;
@@ -1302,7 +1301,6 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
             KIO::CopyJob* job=KIO::move(it->url(), newUrl);
             ret=KIO::NetAccess::synchronousRun(job, 0);
             if(ret) {
-                it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
                 it->setUrl(newUrl);
             }
         }
