@@ -1216,7 +1216,6 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         
         if(ret) {
             it->project()->removeFromFileSet(IndexedString(it->url()));
-            it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
             it->setUrl(newUrl);
             it->project()->addToFileSet(IndexedString(it->url()));
         }
@@ -1254,7 +1253,6 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
             if(ret)
             {
                 it->project()->removeFromFileSet(IndexedString(it->url()));
-                it->setText(newUrl.fileName(KUrl::IgnoreTrailingSlash));
                 it->setUrl(newUrl);
                 it->project()->addToFileSet(IndexedString(it->url()));
             }
