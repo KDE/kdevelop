@@ -106,6 +106,8 @@ private:
     void stopWatcher(KDevelop::ProjectFolderItem* folder);
     /// Continues watching the given folder for changes.
     void continueWatcher(KDevelop::ProjectFolderItem* folder);
+    /// Common renaming function.
+    bool rename( KDevelop::ProjectBaseItem* item, const KUrl& source, const KUrl& destination);
 
 private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
