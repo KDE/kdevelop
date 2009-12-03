@@ -112,9 +112,6 @@ private:
                   const IncludeRules& rules ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KIO::Job*, KDevelop::IProject*> m_jobProjects;
-
-private:
-    class GenericProjectManagerPrivate* const d;
 };
 
 #endif // KDEVGENERICIMPORTER_H

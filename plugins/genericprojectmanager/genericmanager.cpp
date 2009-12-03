@@ -51,13 +51,6 @@
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
 K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericprojectmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
 
-class GenericProjectManagerPrivate
-{
-public:
-    GenericProjectManagerPrivate()
-    {}
-};
-
 
 /**
  * Reads project config and returns lists for include and exclude rules.
@@ -72,7 +65,7 @@ GenericProjectManager::IncludeRules getIncludeRules(KDevelop::IProject* project)
 }
 
 GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
-        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager(), d( new GenericProjectManagerPrivate )
+        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager()
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     Q_UNUSED( args )
@@ -80,7 +73,6 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 
 GenericProjectManager::~GenericProjectManager()
 {
-    delete d;
 }
 
 bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, KDevelop::IProject* project,
