@@ -67,6 +67,7 @@ public:
     using TreeItem::appendChild;
     using TreeItem::deleteChildren;
     using TreeItem::isExpanded;
+    using TreeItem::parent;
 
     using TreeItem::model;
 

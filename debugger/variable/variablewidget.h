@@ -75,6 +75,13 @@ public:
 
     VariableCollection* collection() const;
 
+private:
+    void setupActions();
+    virtual void contextMenuEvent(QContextMenuEvent* event);
+
+private slots:
+    void deleteWatch();
+
 #if 0
 Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);
@@ -90,13 +97,12 @@ private: // helper functions
     void updateCurrentFrame();
 
     void copyToClipboard(AbstractVariableItem* item);
-#endif
 
-
-#if 0
     KMenu* activePopup_;
     QAction* toggleWatch_;
 #endif
+private:
+    QAction *m_watchDelete;
 };
 
 }

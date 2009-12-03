@@ -173,15 +173,63 @@ VariableTree::VariableTree(DebugController *controller,
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
     setExpanded(index, true);
+
+    setupActions();
 }
 
-// **************************************************************************
+
+VariableCollection* VariableTree::collection() const
+{
+    Q_ASSERT(qobject_cast<VariableCollection*>(model()));
+    return static_cast<VariableCollection*>(model());
+}
+
 
 VariableTree::~VariableTree()
 {
 }
 
-// **************************************************************************
+void VariableTree::setupActions()
+{
+    m_watchDelete = new QAction(
+        KIcon("edit-delete"),
+        i18n( "Remove Watch Variable" ),
+        this);
+    m_watchDelete->setShortcut(Qt::Key_Delete);
+    m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(deleteWatch()));
+    addAction(m_watchDelete);
+}
+
+
+void VariableTree::contextMenuEvent(QContextMenuEvent* event)
+{
+    QModelIndex index = indexAt(event->pos());
+    if (!index.isValid())
+        return;
+    TreeItem* item = collection()->itemForIndex(index);
+    if (!dynamic_cast<Variable*>(item)) return;
+
+    if (dynamic_cast<Watches*>(static_cast<Variable*>(item)->parent())) {
+        QMenu popup;
+        popup.addAction(m_watchDelete);
+        popup.exec(event->globalPos());
+    }
+}
+
+
+void VariableTree::deleteWatch()
+{
+    QModelIndexList selected = selectionModel()->selectedIndexes();
+    if (!selected.isEmpty()) {
+        TreeItem* item = collection()->itemForIndex(selected.first());
+        if (!dynamic_cast<Variable*>(item)) return;
+        if (!dynamic_cast<Watches*>(static_cast<Variable*>(item)->parent())) return;
+        static_cast<Variable*>(item)->die();
+    }
+}
+
+
 #if 0
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 {
