@@ -516,6 +516,12 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         if (!name.isEmpty() && name != item->text()) {
             KUrl dest = src.upUrl();
             dest.addPath( name );
+            if ( dest.upUrl() != src.upUrl() ) {
+                KMessageBox::error( window,
+                    i18n("Cannot rename '%1' to '%2'.", src.fileName(), name)
+                );
+                return;
+            }
 
             KIO::UDSEntry entry;
 
