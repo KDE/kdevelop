@@ -368,7 +368,7 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
 {
     if ( !isValid(destination, true, item->project(), getIncludeRules(item->project())) ) {
         int cancel = KMessageBox::warningContinueCancel( KDevelop::ICore::self()->uiController()->activeMainWindow(),
-            i18n("You try to rename '%1' to '%2', but the latter is filtered and will be hidden.\n"
+            i18n("You tried to rename '%1' to '%2', but the latter is filtered and will be hidden.\n"
                  "Do you want to continue?", item->text(), destination.fileName()),
             QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), "GenericManagerRenameToFiltered"
         );
