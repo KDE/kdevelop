@@ -154,6 +154,13 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * By subclassing \ref KDevelop::AbstractUseBuilder "AbstractUseBuilder", you can create uses when they are encountered
  * in your AST, and they will be automatically registered with the current context.
  *
+ * \subsection expr Expression Visitor
+ * By subclassing \ref KDevelop::AbstractExpressionVisitor "AbstractExpressionVisitor", you can provide a convenient
+ * way to request the type and/or instance information for a given expression.  This is useful in both
+ * figuring out what code completion to offer when it is invoked after or inside an expression, and to
+ * allow complete use building, ie. for uses within expressions.  In c++, this is a very complex matter,
+ * involving type conversion and overload resolution, while still tracking template types.
+ *
  * \section cc Implementing Code Completion
  *
  * To provide code completion for your language, you will need to implement the following:
