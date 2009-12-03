@@ -102,6 +102,12 @@ private Q_SLOTS:
     void created(const QString &path);
 
 private:
+    /// Stops watching the given folder for changes, only useful for local files.
+    void stopWatcher(KDevelop::ProjectFolderItem* folder);
+    /// Continues watching the given folder for changes.
+    void continueWatcher(KDevelop::ProjectFolderItem* folder);
+
+private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
                   const IncludeRules& rules ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;

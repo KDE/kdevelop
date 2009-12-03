@@ -44,6 +44,7 @@
 
 #include <KIO/Job>
 #include <KIO/NetAccess>
+#include <KIO/CopyJob>
 
 #include "genericmanagerlistjob.h"
 
@@ -347,16 +348,44 @@ KDevelop::ProjectFileItem* GenericProjectManager::addFile( const KUrl& url,
 bool GenericProjectManager::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
 {
     kDebug() << "trying to rename a folder:" << folder->url() << url;
-    Q_UNUSED( folder )
-    Q_UNUSED( url )
+    foreach ( KDevelop::ProjectFolderItem* parent, folder->project()->foldersForUrl(url.upUrl()) ) {
+        if ( parent->type() == KDevelop::ProjectBaseItem::Folder ) {
+            stopWatcher(parent);
+            KIO::CopyJob* job = KIO::move(folder->url(), url);
+            bool success = KIO::NetAccess::synchronousRun( job, KDevelop::ICore::self()->uiController()->activeMainWindow() );
+            continueWatcher(parent);
+            if ( success ) {
+                folder->setParent(parent);
+                folder->setUrl(url);
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
     return false;
 }
 
 bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const KUrl& url )
 {
     kDebug() << "trying to rename a file:" << file->url() << url;
-    Q_UNUSED(file)
-    Q_UNUSED(url)
+    foreach ( KDevelop::ProjectFolderItem* parent, file->project()->foldersForUrl(url.upUrl()) ) {
+        if ( parent->type() == KDevelop::ProjectBaseItem::Folder ) {
+            stopWatcher(parent);
+            KIO::CopyJob* job = KIO::move(file->url(), url);
+            bool success = KIO::NetAccess::synchronousRun( job, KDevelop::ICore::self()->uiController()->activeMainWindow() );
+            continueWatcher(parent);
+            if ( success ) {
+                file->setParent(parent);
+                file->project()->removeFromFileSet( KDevelop::IndexedString( file->url() ) );
+                file->setUrl(url);
+                file->project()->addToFileSet( KDevelop::IndexedString( url ) );
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
     return false;
 }
 
@@ -378,6 +407,24 @@ bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
         file->parent()->removeRow( file->row() );
     }
     return true;
+}
+
+void GenericProjectManager::stopWatcher(KDevelop::ProjectFolderItem* folder)
+{
+    if ( !folder->url().isLocalFile() ) {
+        return;
+    }
+    Q_ASSERT(m_watchers.contains(folder->project()));
+    m_watchers[folder->project()]->stopDirScan(folder->url().toLocalFile());
+}
+
+void GenericProjectManager::continueWatcher(KDevelop::ProjectFolderItem* folder)
+{
+    if ( !folder->url().isLocalFile() ) {
+        return;
+    }
+    Q_ASSERT(m_watchers.contains(folder->project()));
+    m_watchers[folder->project()]->restartDirScan(folder->url().toLocalFile());
 }
 
 
