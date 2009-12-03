@@ -530,14 +530,14 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
                     // never overwrite folders
                     KMessageBox::error( window,
                         i18n("Cannot rename '%1' to '%2':\nThere exists a folder with that name.",
-                             src.prettyUrl(), dest.prettyUrl())
+                             src.fileName(), dest.fileName())
                     );
                     return;
                 } else if ( folder ) {
                     // cannot overwrite file with folder
                     KMessageBox::error( window,
                         i18n("Cannot rename folder '%1' to '%2':\nThere exists a file with that name.",
-                             src.prettyUrl(), dest.prettyUrl())
+                             src.fileName(), dest.fileName())
                     );
                     return;
                 } // else KIO asks for renaming the file
@@ -551,7 +551,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
             }
             if(!ret) {
                 KMessageBox::error( window,
-                    i18n("Could not rename '%1'.", src.prettyUrl())
+                    i18n("Could not rename '%1'.", src.fileName())
                 );
             }
         }
