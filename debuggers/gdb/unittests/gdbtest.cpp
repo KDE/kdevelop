@@ -1063,6 +1063,51 @@ void GdbTest::testVariablesSwitchFrame()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testVariablesQuicklySwitchFrame()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg;
+
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
+    TestFrameStackModel *stackModel = session->frameStackModel();
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 24);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QTest::qWait(500);
+
+    QModelIndex i = variableCollection()->index(1, 0);
+    COMPARE_DATA(i, "Locals");
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "1");
+
+    stackModel->setCurrentFrame(1);
+    QTest::qWait(300);
+    stackModel->setCurrentFrame(0);
+    QTest::qWait(1);
+    stackModel->setCurrentFrame(1);
+    QTest::qWait(1);
+    stackModel->setCurrentFrame(0);
+    QTest::qWait(1);
+    stackModel->setCurrentFrame(1);
+    QTest::qWait(500);
+
+    i = variableCollection()->index(1, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 4);
+    QStringList locs;
+    for (int j = 0; j < variableCollection()->rowCount(i); ++j) {
+        locs << variableCollection()->index(j, 0, i).data().toString();
+    }
+    QVERIFY(locs.contains("argc"));
+    QVERIFY(locs.contains("argv"));
+    QVERIFY(locs.contains("x"));
+
+    breakpoints()->removeRow(0);
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {
