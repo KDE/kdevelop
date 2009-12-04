@@ -194,6 +194,16 @@ void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   popSpecifiers();
 }
 
+//Visitor that clears the ducontext from all AST nodes
+struct ClearDUContextVisitor : public DefaultVisitor {
+
+  virtual void visit(AST* node) {
+    if(node)
+      node->ducontext = 0;
+    DefaultVisitor::visit(node);
+  }
+};
+
 void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   PushValue<bool> setHasInitialize(m_declarationHasInitializer, (bool)node->initializer);
@@ -219,8 +229,16 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     node->declarator->parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
     closePrefixContext(id);
     
+    
+    
     if(tempContext != previous) {
+      
+      //Delete the temporary context again.
+      //We remove all of its traces from the AST using ClearDUContextVisitor to prevent any crashes.
+      ClearDUContextVisitor clear;
+      clear.visit(node);
       delete tempContext;
+      
       setLastContext(previousLast);
       m_importedParentContexts = importedParentContexts;
     }
