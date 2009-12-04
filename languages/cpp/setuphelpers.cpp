@@ -105,6 +105,53 @@ void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_macro& mac
   macros.insert(macro);
 }
 
+QVector<rpp::pp_macro> computeGccStandardMacros()
+{
+    QVector<rpp::pp_macro> ret;
+    //Get standard macros from gcc
+    KProcess proc;
+    proc.setOutputChannelMode(KProcess::MergedChannels);
+    proc.setTextModeEnabled(true);
+
+    // The output of the following gcc commands is several line in the format:
+    // "#define MACRO [definition]", where definition may or may not be present.
+    // Parsing each line sequentially, we can easily build the macro set.
+    proc <<"gcc" <<"-xc++" <<"-E" <<"-dM" <<"/dev/null";
+
+    if (proc.execute(5000) == 0) {
+        QString line;
+        while (proc.canReadLine()) {
+            QByteArray buff = proc.readLine();
+            if (!buff.isEmpty()) {
+                line = buff;
+                if (line.startsWith("#define ")) {
+                    line = line.right(line.length() - 8).trimmed();
+                    int pos = line.indexOf(' ');
+                    
+                    ret.resize(ret.size()+1);
+                    
+                    rpp::pp_macro& macro(ret.back());
+                    if (pos != -1) {
+                        macro.name = IndexedString( line.left(pos) );
+                        macro.setDefinitionText( line.right(line.length() - pos - 1).toUtf8() );
+                    } else {
+                        macro.name = IndexedString( line );
+                    }
+                }
+            }
+        }
+    } else {
+        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
+    }
+    return ret;
+}
+
+const QVector<rpp::pp_macro>& gccStandardMacros()
+{
+  static QVector<rpp::pp_macro> macros = computeGccStandardMacros();
+  return macros;
+}
+
 bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
 {
     //Add some macros to be compatible with the gnu c++ compiler
@@ -185,42 +232,10 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
       insertMacro( macros, m );
     }
     
+    foreach(const rpp::pp_macro& macro, gccStandardMacros())
+      insertMacro(macros, macro);
     
-    //Get standard macros from gcc
-    KProcess proc;
-    proc.setOutputChannelMode(KProcess::MergedChannels);
-    proc.setTextModeEnabled(true);
-
-    // The output of the following gcc commands is several line in the format:
-    // "#define MACRO [definition]", where definition may or may not be present.
-    // Parsing each line sequentially, we can easily build the macro set.
-    proc <<"gcc" <<"-xc++" <<"-E" <<"-dM" <<"/dev/null";
-
-    if (proc.execute(5000) == 0) {
-        QString line;
-        while (proc.canReadLine()) {
-            QByteArray buff = proc.readLine();
-            if (!buff.isEmpty()) {
-                line = buff;
-                if (line.startsWith("#define ")) {
-                    line = line.right(line.length() - 8).trimmed();
-                    int pos = line.indexOf(' ');
-                    rpp::pp_macro macro;
-                    if (pos != -1) {
-                        macro.name = IndexedString( line.left(pos) );
-                        macro.setDefinitionText( line.right(line.length() - pos - 1).toUtf8() );
-                    } else {
-                        macro.name = IndexedString( line );
-                    }
-                    insertMacro( macros, macro );
-                }
-            }
-        }
-        return true;
-    } else {
-        kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
-        return false;
-    }
+    return true;
 }
 
 }
