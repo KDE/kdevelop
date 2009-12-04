@@ -170,7 +170,6 @@ void PreprocessJob::run()
         
         if(parentJob()->masterJob() == parentJob() && updatingEnvironmentFile) {
           //Check whether we need to run at all, or whether the file is already up to date
-          kDebug() << "up-to-date checking" << parentJob()->document().toUrl() << updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures()) << updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures());
           if(updatingEnvironmentFile->featuresSatisfied(parentJob()->minimumFeatures()) && updatingEnvironmentFile->featuresSatisfied(parentJob()->slaveMinimumFeatures())) {
             KUrl localPath(parentJob()->document().toUrl());
             localPath.setFileName(QString());
@@ -194,8 +193,6 @@ void PreprocessJob::run()
               return;
             }
           }
-        }else{
-          kDebug() << "Not updating a file";
         }
     }
     
