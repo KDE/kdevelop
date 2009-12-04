@@ -351,7 +351,7 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
 
             kDebug() << "highlighting file" << file << "with doc" << doc;
             
-            if ( !doc )
+            if ( !doc || !doc->textDocument() )
                 continue;
 
             removeHighlighting( file );
