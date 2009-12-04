@@ -982,6 +982,17 @@ void ContextBuilder::createTypeForDeclarator(DeclaratorAST* /*node*/) {
 void ContextBuilder::closeTypeForDeclarator(DeclaratorAST* /*node*/) {
 }
 
+void ContextBuilder::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)
+{
+  //Don't assign the initializer to parameter-declarations
+  InitializerAST* oldCurrentInitializer = m_currentInitializer;
+  m_currentInitializer = 0;
+  
+  DefaultVisitor::visitParameterDeclarationClause(node);
+  
+  m_currentInitializer = oldCurrentInitializer;
+}
+
 void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
 {
   QualifiedIdentifier id;

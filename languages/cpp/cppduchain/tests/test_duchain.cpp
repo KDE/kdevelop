@@ -941,6 +941,22 @@ void TestDUChain::testEnum()
 void TestDUChain::testVirtualMemberFunction()
 {
   {
+    QByteArray text("class Foo { public: virtual void bar(const float i, const int i) = 0; }; \n");
+    TopDUContext* top = parse(text, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    ClassFunctionDeclaration* memberFun; // filled by assert macro below
+    ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
+    QVERIFY(memberFun->isVirtual());
+    QVERIFY(memberFun->isAbstract());
+    FunctionType::Ptr funType = memberFun->abstractType().cast<FunctionType>();
+    QVERIFY(funType);
+    QCOMPARE(funType->arguments().size(), 2);
+    QCOMPARE(funType->arguments()[0]->toString(), QString("const float"));
+    QCOMPARE(funType->arguments()[1]->toString(), QString("const int"));
+    release(top);
+  }
+  {
     QByteArray text("class Foo { public: virtual void bar(); }; \n");
     TopDUContext* top = parse(text, DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
@@ -949,7 +965,6 @@ void TestDUChain::testVirtualMemberFunction()
     ASSERT_SINGLE_MEMBER_FUNCTION_IN(top, memberFun);
     QVERIFY(memberFun->isVirtual());
     QVERIFY(!memberFun->isAbstract());
-    kDebug() << memberFun->toString();
     release(top);
   }
   {

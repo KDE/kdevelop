@@ -198,6 +198,7 @@ protected:
   virtual void createTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForInitializer(InitializerAST *node);
   virtual void closeTypeForDeclarator(DeclaratorAST *node);
+  virtual void visitParameterDeclarationClause(ParameterDeclarationClauseAST* node);
 
   void queueImportedContext(DUContext* context) {
     DUChainReadLocker lock(DUChain::lock());
