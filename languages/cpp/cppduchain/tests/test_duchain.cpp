@@ -717,9 +717,9 @@ void TestDUChain::testConstructorOperatorUses()
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
   
-  ///@todo Also create a constructor-use on the initializer paren in column 58
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 70, 0, 71));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 2);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 58, 0, 59));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(1), SimpleRange(0, 70, 0, 71));
   
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().count(), 1);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->count(), 1);
