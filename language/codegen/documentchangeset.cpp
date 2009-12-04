@@ -28,8 +28,8 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/parsingenvironment.h>
-// #include <interfaces/isourceformattercontroller.h>
-// #include <interfaces/isourceformatter.h>
+#include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
 #include <interfaces/iproject.h>
 #include <KLocalizedString>
 #include <algorithm>
@@ -462,9 +462,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                                                                           QString & output)
 {
 
-//     ISourceFormatter* formatter = 0;
-//     if(ICore::self())
-//         formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
+    ISourceFormatter* formatter = 0;
+    if(ICore::self())
+        formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
 
     //Create the actual new modified file
     QStringList textLines = repr->text().split('\n');
@@ -481,8 +481,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
             QString rightContext = QStringList(textLines.mid(change.m_range.end.line)).join("\n").mid(change.m_range.end.column);
 
-//             if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges)
-//                 change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
+            if(formatter && formatPolicy == DocumentChangeSet::AutoFormatChanges)
+                change.m_newText = formatter->formatSource(change.m_newText, KMimeType::findByUrl(file.toUrl()), leftContext, rightContext);
             
             textLines[change.m_range.start.line].replace(change.m_range.start.column, change.m_range.end.column-change.m_range.start.column, change.m_newText);
         }else{

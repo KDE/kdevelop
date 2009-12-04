@@ -35,7 +35,7 @@ class DocumentController;
 class RunController;
 class SessionController;
 class CorePrivate;
-//class SourceFormatterController;
+class SourceFormatterController;
 class ProgressManager;
 class SelectionController;
 class DocumentationController;
@@ -80,7 +80,7 @@ public:
     virtual IRunController *runController();
 
     /** @copydoc ICore::sourceFormatterController() */
-    //virtual ISourceFormatterController* sourceFormatterController();
+    virtual ISourceFormatterController* sourceFormatterController();
 
     /** @copydoc ICore::selectionController() */
     virtual ISelectionController* selectionController();

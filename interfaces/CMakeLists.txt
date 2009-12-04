@@ -18,8 +18,8 @@ set(kdevplatforminterfaces_LIB_SRCS
     istatus.cpp
     iruncontroller.cpp
     isession.cpp
-    #isourceformatter.cpp
-    #isourceformattercontroller.cpp
+    isourceformatter.cpp
+    isourceformattercontroller.cpp
     contextmenuextension.cpp
     icompletionsettings.cpp
     iselectioncontroller.cpp
@@ -67,8 +67,8 @@ install(FILES
     ilanguage.h
     idocument.h
     idocumentcontroller.h
-    #isourceformatter.h
-    #isourceformattercontroller.h
+    isourceformatter.h
+    isourceformattercontroller.h
     iextension.h
     interfacesexport.h
     istatus.h
