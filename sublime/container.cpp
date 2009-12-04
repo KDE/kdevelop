@@ -378,6 +378,7 @@ void Container::contextMenu( int currentTab, QPoint pos )
     menu.addSeparator();
     QAction* closeTabAction = menu.addAction( KIcon("document-close"), i18n( "Close File" ) );
     QAction* closeOtherTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close Other Files" ) );
+    QAction* closeAllTabsAction = menu.addAction( KIcon("document-close"), i18n( "Close All Files" ) );
 
     QAction* triggered = menu.exec(pos);
 
@@ -397,6 +398,13 @@ void Container::contextMenu( int currentTab, QPoint pos )
             // finally close other tabs
             foreach( QWidget* tab, otherTabs ) {
                 closeRequest(tab);
+            }
+        } else if ( triggered == closeAllTabsAction ) {
+            // activate last tab
+            widgetActivated(count() - 1);
+            // close all
+            while ( count() ) {
+                closeRequest(widget(0));
             }
         } // else the action was handled by someone else
     }
