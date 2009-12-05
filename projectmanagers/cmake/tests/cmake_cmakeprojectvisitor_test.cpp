@@ -34,8 +34,8 @@ QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
 using namespace KDevelop;
 
-#undef TRUE
-#undef FALSE
+#undef TRUE //krazy:exclude=captruefalse
+#undef FALSE //krazy:exclude=captruefalse
 
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
  : CMakeProjectVisitor( QString(), 0)
