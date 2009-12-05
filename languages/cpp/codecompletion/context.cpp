@@ -1071,6 +1071,9 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
 }
 
 void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext) {
+  if(!current)
+    return;
+  
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
     if(classFun && (classFun->isVirtual() || classFun->isConstructor())) {
