@@ -11,6 +11,7 @@ set( kdevplatformdebugger_LIB_SRCS
     util/treeitem.cpp
     util/treemodel.cpp
     util/treeview.cpp
+    util/pathmappings.cpp
     breakpoint/breakpoint.cpp
     breakpoint/breakpointmodel.cpp
     breakpoint/breakpointwidget.cpp
@@ -49,6 +50,7 @@ install(FILES
     util/treemodel.h
     util/treeitem.h
     util/treeview.h
+    util/pathmappings.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/debugger/util COMPONENT Devel
 )
 install(FILES
