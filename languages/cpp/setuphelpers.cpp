@@ -105,9 +105,9 @@ void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_macro& mac
   macros.insert(macro);
 }
 
-QVector<rpp::pp_macro> computeGccStandardMacros()
+QVector<rpp::pp_macro*> computeGccStandardMacros()
 {
-    QVector<rpp::pp_macro> ret;
+    QVector<rpp::pp_macro*> ret;
     //Get standard macros from gcc
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
@@ -128,9 +128,9 @@ QVector<rpp::pp_macro> computeGccStandardMacros()
                     line = line.right(line.length() - 8).trimmed();
                     int pos = line.indexOf(' ');
                     
-                    ret.resize(ret.size()+1);
+                    ret.append(new rpp::pp_macro);
                     
-                    rpp::pp_macro& macro(ret.back());
+                    rpp::pp_macro& macro(*ret.back());
                     if (pos != -1) {
                         macro.name = IndexedString( line.left(pos) );
                         macro.setDefinitionText( line.right(line.length() - pos - 1).toUtf8() );
@@ -146,9 +146,9 @@ QVector<rpp::pp_macro> computeGccStandardMacros()
     return ret;
 }
 
-const QVector<rpp::pp_macro>& gccStandardMacros()
+const QVector<rpp::pp_macro*>& gccStandardMacros()
 {
-  static QVector<rpp::pp_macro> macros = computeGccStandardMacros();
+  static QVector<rpp::pp_macro*> macros = computeGccStandardMacros();
   return macros;
 }
 
@@ -232,8 +232,8 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
       insertMacro( macros, m );
     }
     
-    foreach(const rpp::pp_macro& macro, gccStandardMacros())
-      insertMacro(macros, macro);
+    foreach(const rpp::pp_macro* macro, gccStandardMacros())
+      insertMacro(macros, *macro);
     
     return true;
 }
