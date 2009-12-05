@@ -284,6 +284,7 @@ public:
 
     using QStandardItemModel::item;
     ProjectBaseItem *item( const QModelIndex &index ) const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
     void resetModel();
 

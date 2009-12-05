@@ -211,6 +211,14 @@ ProjectBaseItem *ProjectModel::item( const QModelIndex &index ) const
     return dynamic_cast<ProjectBaseItem*>( itemFromIndex( index ) );
 }
 
+Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
+{
+    ///TODO: support edit mode, make rename, delete etc. work with it
+    ///      but make the projectmanagerview plugin reuse code in the model then
+    ///TODO: support drag'n'drop
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+}
+
 void ProjectModel::resetModel()
 {
     reset();
