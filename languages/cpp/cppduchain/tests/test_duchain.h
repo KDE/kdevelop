@@ -163,6 +163,8 @@ private slots:
   
   void testFinalCleanup();
   void testEllipsis();
+
+  void testMultiByteCStrings();
   
   
 private:

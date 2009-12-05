@@ -348,6 +348,18 @@ void TestDUChain::testDeclareInt()
   release(top);
 }
 
+void TestDUChain::testMultiByteCStrings()
+{
+  QByteArray method("char* c=\"ä\";c;");
+  TopDUContext* top = parse(method, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  Declaration* cDec = top->localDeclarations().first();
+  QCOMPARE(cDec->uses().size(), 1);
+  QCOMPARE(cDec->uses().begin()->size(), 1);
+  QVERIFY(cDec->uses().begin()->first() == SimpleRange(0, 12, 0, 13));
+  release(top);
+}
+
 void TestDUChain::testEllipsis()
 {
   QByteArray method("void infinity(int i, ...) { }");
