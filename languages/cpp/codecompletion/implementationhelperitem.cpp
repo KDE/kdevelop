@@ -182,9 +182,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
         scope.push(m_declaration->identifier());
       }else{
         //Shorten the scope considering the context
-        if(m_declaration->context()->type() == DUContext::Class && m_declaration->context()->owner() && !scope.isEmpty()) {
-          scope = QualifiedIdentifier(simplifiedTypeString(m_declaration->context()->owner()->abstractType(), duContext)) + scope.last();
-        }
+        scope = Cpp::stripPrefixes(duContext, scope);
       }
 
 /*      if(scope.count() <= localScope.count() || !scope.toString().startsWith(localScope.toString()))
