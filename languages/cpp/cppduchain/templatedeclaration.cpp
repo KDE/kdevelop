@@ -34,6 +34,7 @@
 #include <language/duchain/appendedlist.h>
 
 #include "templateparameterdeclaration.h"
+#include "qtfunctiondeclaration.h"
 #include "cppducontext.h"
 #include "expressionparser.h"
 #include <language/duchain/classdeclaration.h>
@@ -58,6 +59,7 @@ REGISTER_TEMPLATE_DECLARATION(TemplateParameterDeclaration)
 REGISTER_TEMPLATE_DECLARATION(ClassFunctionDeclaration)
 REGISTER_TEMPLATE_DECLARATION(ClassMemberDeclaration)
 REGISTER_TEMPLATE_DECLARATION(FunctionDeclaration)
+REGISTER_TEMPLATE_DECLARATION(QtFunctionDeclaration)
 REGISTER_TEMPLATE_DECLARATION(FunctionDefinition)
 REGISTER_TEMPLATE_DECLARATION(AliasDeclaration)
 REGISTER_TEMPLATE_DECLARATION(ForwardDeclaration)
