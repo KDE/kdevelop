@@ -74,6 +74,7 @@ private:
     template<typename F> void visitItems(F, bool selectedItems);
     bool selectedDocHasChanges();
     void updateSelectedDocs();
+    void appendActions(QMenu* menu, const QList< QAction* >& actions);
 
 private:
     KDevDocumentViewPlugin *m_plugin;

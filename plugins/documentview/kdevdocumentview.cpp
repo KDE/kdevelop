@@ -157,20 +157,59 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
     
     if (!m_selectedDocs.isEmpty())
     {
-        KMenu* ctxMenu=new KMenu(this);
+        KMenu* ctxMenu = new KMenu(this);
+        
+        KDevelop::FileContext context(m_selectedDocs);
+        QList<KDevelop::ContextMenuExtension> extensions =
+            m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+
+        QList<QAction*> vcsActions;
+        QList<QAction*> fileActions;
+        QList<QAction*> editActions;
+        QList<QAction*> extensionActions;
+        foreach( const KDevelop::ContextMenuExtension& ext, extensions )
+        {
+            fileActions += ext.actions(KDevelop::ContextMenuExtension::FileGroup);
+            vcsActions += ext.actions(KDevelop::ContextMenuExtension::VcsGroup);
+            editActions += ext.actions(KDevelop::ContextMenuExtension::EditGroup);
+            extensionActions += ext.actions(KDevelop::ContextMenuExtension::ExtensionGroup);
+        }
+        
+        appendActions(ctxMenu, fileActions);
         
         KAction* save = KStandardAction::save(this, SLOT(saveSelected()), ctxMenu);
         save->setEnabled(selectedDocHasChanges());
         ctxMenu->addAction(save);
         ctxMenu->addAction(KIcon("view-refresh"), i18n( "Reload" ), this, SLOT(reloadSelected()));
-        ctxMenu->addSeparator();
+        
+        appendActions(ctxMenu, editActions);
+        
         ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
         QAction* closeUnselected = ctxMenu->addAction(KIcon("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
         closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
+
+        QMenu* vcsmenu = ctxMenu;
+        if( vcsActions.count() > 1 )
+        {
+            vcsmenu = ctxMenu->addMenu( i18n("Version Control "));
+            fprintf(stderr, "vcs");
+        }
+        appendActions(vcsmenu, vcsActions);
         
-        connect(ctxMenu,SIGNAL(aboutToHide()),ctxMenu,SLOT(deleteLater()));
+        appendActions(ctxMenu, extensionActions);
+        
+        connect(ctxMenu, SIGNAL(aboutToHide()), ctxMenu, SLOT(deleteLater()));
         ctxMenu->popup( event->globalPos() );
     }
+}
+
+void KDevDocumentView::appendActions(QMenu* menu, const QList<QAction*>& actions)
+{
+    foreach( QAction* act, actions )
+    {
+        menu->addAction(act);
+    }
+    menu->addSeparator();
 }
 
 bool KDevDocumentView::selectedDocHasChanges()
