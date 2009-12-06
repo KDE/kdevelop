@@ -394,7 +394,7 @@ KDevelop::ILanguage *CppLanguageSupport::language()
     return core()->languageController()->language(name());
 }
 
-TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowProxyContext)
+TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyContext)
 {
   DUChainReadLocker lock(DUChain::lock());
   const ParsingEnvironment* env = PreprocessJob::standardEnvironment();
@@ -412,7 +412,7 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool allowPro
       top = candidates[0];
   }
 
-  if(top && (top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) && !allowProxyContext)
+  if(top && (top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) && !proxyContext)
   {
     if(!top->importedParentContexts().isEmpty())
     {

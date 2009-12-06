@@ -103,7 +103,7 @@ public:
  *
  * @warning The du-chain must be locked before calling this.
 * */
-  virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool allowProxyContext = false);
+  virtual KDevelop::TopDUContext *standardContext(const KUrl& url, bool proxyContext = false);
   
 public slots:
     void findIncludePathsForJob(CPPParseJob* job);
