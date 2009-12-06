@@ -47,6 +47,7 @@
 #include "specializationstore.h"
 #include "types/typeutils.h"
 #include "types/typealiastype.h"
+#include "classdeclaration.h"
 
 using namespace KTextEditor;
 
@@ -616,7 +617,7 @@ CodeModelItem::Kind kindForDeclaration(Declaration* decl) {
     kind = CodeModelItem::Function;
   }
 
-  if(decl->kind() == Declaration::Type && decl->type<StructureType>())
+  if(decl->kind() == Declaration::Type && (decl->type<StructureType>() || dynamic_cast<ClassDeclaration*>(decl)))
     kind = CodeModelItem::Class;
 
   if(kind == CodeModelItem::Unknown && decl->kind() == Declaration::Instance)
