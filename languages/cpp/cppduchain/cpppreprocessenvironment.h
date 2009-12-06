@@ -61,6 +61,8 @@ public:
 
   void removeString(KDevelop::IndexedString str);
   
+  ///Effectively removes the macro from the environment, without noting the change in the environment-file
+  ///and other bookkeeping data. This for example allows 'temporarily' shadowing header-guards to enforce the non-empty processing of a file.
   void removeMacro(KDevelop::IndexedString macroName);
   
   ///Restricts the header branching hash of searched contexts to the given number
