@@ -88,15 +88,15 @@ public:
     * @warning The duchain must _not_ be locked when this is called!
     *
     */
-   KDevelop::ReferencedTopDUContext waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool proxyContext = false);
+   KDevelop::ReferencedTopDUContext waitForUpdate(const IndexedString& document, TopDUContext::Features minFeatures, bool wantProxyContext = false);
    
   /**
    * Return any chain for the given document
    * If available, the version accepting IndexedString should be used instead of this, for performance reasons.
    * When no fitting chain is in memory, one may be loaded from disk.
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, bool proxyContext = false) const;
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, bool proxyContext = false) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
@@ -114,18 +114,18 @@ public:
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * When no fitting chain is in memory, one may be loaded from disk.
-   * @param proxyContext If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set. Else, only content-contexts will be returned.
+   * @param onlyProxyContexts If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set.
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const KUrl& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
    * When no fitting chain is in memory, one may be loaded from disk.
-   * @param proxyContext If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set. Else, only content-contexts will be returned.
+   * @param onlyProxyContexts If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set.
    *
    * Prefer this over the KUrl version.
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
+  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;
 
   /**
    * Find the environment-file of a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
@@ -133,11 +133,11 @@ public:
    *
    * This should be preferred over chainForDocument when only the environment-info is needed, because the TopDUContext is not loaded in this function.
    * 
-   ** @param proxyContext If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set. Else, only content-contexts will be returned.
+   ** @param onlyProxyContexts If this is true, only contexts are found that have an ParsingEnvironmentFile that has the proxy-flag set.
    *
    * Prefer this over the KUrl version.
    * */
-  Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext = false) const;  
+  Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts = false, bool noProxyContexts = false) const;  
 
   Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(IndexedTopDUContext topContext) const;  
   
