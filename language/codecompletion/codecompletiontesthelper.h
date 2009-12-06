@@ -26,6 +26,9 @@
 #include "../duchain/declaration.h"
 #include "../duchain/duchain.h"
 #include "codecompletionitem.h"
+#include <language/codegen/coderepresentation.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/parsingenvironment.h>
 
 
 using namespace KTextEditor;
@@ -100,9 +103,11 @@ namespace QTest {
   }
 }
 
-//Helper-class for testing completion-items
-//Just initialize it with the context and the text, and then use the members, for simple cases only "names"
-//the template parameter is your language specific CodeCompletionContext
+/**
+  * Helper-class for testing completion-items
+  * Just initialize it with the context and the text, and then use the members, for simple cases only "names"
+  * the template parameter is your language specific CodeCompletionContext
+  */
 template <class T>
 struct CodeCompletionItemTester {
    
@@ -173,6 +178,75 @@ struct CodeCompletionItemTester {
       foreach(Item i, items)
         names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
     }
+};
+
+/**
+ * Helper class that inserts the given text into the duchain under the specified name,
+ * allows parsing it with a simple call to parse(), and automatically releases the top-context
+ *
+ * The duchain must not be locked when this object is destroyed
+ */
+struct InsertIntoDUChain
+{
+  ///Artificially inserts a file called @p name with the text @p text
+  InsertIntoDUChain(QString name, QString text) : m_insertedCode(IndexedString(name), text), m_topContext(0) {
+  }
+
+  ~InsertIntoDUChain() {
+    get();
+    release();
+  }
+  
+  ///The duchain must not be locked when this is called
+  void release() {
+    if(m_topContext) {
+      DUChainWriteLocker lock;
+      
+      m_topContext = 0;
+      
+      QList< TopDUContext* > chains = DUChain::self()->chainsForDocument(m_insertedCode.file());
+      foreach(TopDUContext* top, chains)
+        DUChain::self()->removeDocumentChain(top);
+    }
+  }
+
+  TopDUContext* operator->() {
+    get();
+    return m_topContext.data();
+  }
+  
+  TopDUContext* tryGet() {
+    return DUChain::self()->chainForDocument(m_insertedCode.file(), false);
+  }
+  
+  void get() {
+    if(!m_topContext)
+      m_topContext = tryGet();
+  }
+  
+  TopDUContext* topContext() {
+    return m_topContext.data();
+  }
+  
+  /**
+    * Parses this inserted code as a stand-alone top-context
+    * The duchain must not be locked when this is called
+    *
+    * @param features The features that should be requested for the top-context
+    * @param update Whether the top-context should be updated if it already exists. Else it will be deleted.
+    */
+  void parse(uint features = TopDUContext::AllDeclarationsContextsAndUses, bool update = false) {
+    
+    if(!update)
+      release();
+    m_topContext = DUChain::self()->waitForUpdate(m_insertedCode.file(), (TopDUContext::Features)features, false);
+    Q_ASSERT(m_topContext);
+    DUChainReadLocker lock;
+    Q_ASSERT(!m_topContext->parsingEnvironmentFile()->isProxyContext());
+  }
+  
+  InsertArtificialCodeRepresentation m_insertedCode;
+  ReferencedTopDUContext m_topContext;
 };
 
 #endif // CODECOMPLETIONTESTHELPER_H
