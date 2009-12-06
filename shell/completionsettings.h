@@ -30,7 +30,7 @@ public:
     CompletionSettings()
         : m_level(MinimalWhenAutomatic), m_automatic(true),
           m_highlightSemanticProblems(true), m_showMultiLineInformation(false),
-          m_localColorizationLevel(170), m_globalColorizationLevel(255)
+          m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(10000)
     {
     }
 
@@ -80,12 +80,17 @@ public:
         return readBoolConfig("showMultiLineSelectionInformation", m_showMultiLineInformation);
     }
     
+    virtual int minFilesForSimplifiedParsing() const {
+        return readIntConfig("minFilesForSimplifiedParsing", m_minFilesForSimplifiedParsing);
+    }
+    
     static CompletionSettings& self();
     
     CompletionLevel m_level;
     bool m_automatic, m_highlightSemanticProblems, m_showMultiLineInformation;
     int m_localColorizationLevel;
     int m_globalColorizationLevel;
+    int m_minFilesForSimplifiedParsing;
 };
 
 #endif

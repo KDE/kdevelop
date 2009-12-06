@@ -33,6 +33,8 @@ namespace KDevelop {
                 MinimalWhenAutomatic,
                 AlwaysFull
             };
+
+            Q_SCRIPTABLE virtual int minFilesForSimplifiedParsing() const = 0;
             
             Q_SCRIPTABLE virtual CompletionLevel completionLevel() const = 0;
             

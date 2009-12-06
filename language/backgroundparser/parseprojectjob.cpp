@@ -23,6 +23,7 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/iproject.h>
 #include <klocalizedstring.h>
+#include <interfaces/icompletionsettings.h>
 
 using namespace KDevelop;
 
@@ -71,8 +72,13 @@ void ParseProjectJob::updateReady(KDevelop::IndexedString url, KDevelop::Referen
 
 void ParseProjectJob::start() {
     kDebug() << "starting project parse job";
-    foreach(KDevelop::IndexedString url, m_project->fileSet())
-        KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), KDevelop::TopDUContext::VisibleDeclarationsAndContexts, 10000, this );
+    QSet< IndexedString > files = m_project->fileSet();
+
+    TopDUContext::Features processingLevel = files.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
+                                    KDevelop::TopDUContext::VisibleDeclarationsAndContexts : KDevelop::TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
+    
+    foreach(KDevelop::IndexedString url, files)
+        KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, 10000, this );
 }
 
 #include "parseprojectjob.moc"
