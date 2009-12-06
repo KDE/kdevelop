@@ -1,6 +1,7 @@
 /*
    This file is part of KDevelop
-   Copyright 2009 Ramón Zarazúa <killerfox512+kde@gmail.com>
+   Copyright 2009 Ramon Zarazua <killerfox512+kde@gmail.com>
+   Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,47 +21,22 @@
 #ifndef TEST_CPPCODEGEN_H
 #define TEST_CPPCODEGEN_H
 
-#include <language/duchain/indexedstring.h>
-
 #include <QtCore/QObject>
-#include <QMap>
-#include <language/duchain/topducontext.h>
-
-namespace KDevelop
-{
-class InsertArtificialCodeRepresentation;
-}
-
 
 class TestCppCodegen : public QObject
 {
     Q_OBJECT
     
-    typedef QMap<KDevelop::IndexedString, KDevelop::ReferencedTopDUContext> ContextContainer;
-    
   private slots:
-    // Tests
-    void init();
     void initTestCase();
     void cleanupTestCase();
     
+    // Tests
+    void testSimplifiedUpdating();
     
     void testAstDuChainMapping();
-    void testCodeRepresentations();
     void testClassGeneration();
     void testPrivateImplementation();
-    
-  private:
-    void parseArtificialCode();
-    void resetArtificialCode();
-    void parseFile(KDevelop::IndexedString file);
-    
-    
-    void addArtificialCode(KDevelop::IndexedString fileName, const QString & code);
-    
-    QList<KDevelop::IndexedString> m_artificialCodeNames;
-    QList<KDevelop::InsertArtificialCodeRepresentation *> m_artificialCode;
-    ContextContainer m_contexts;
 };
 
 #endif // TEST_CPPCODEGEN_H
