@@ -48,9 +48,17 @@ QString DUChainItemData::text() const {
       
   QString text = decl->qualifiedIdentifier().toString();
   
-  TypePtr<FunctionType> function = decl->type<FunctionType>();
-  if( function )
-    text  += function->partToString( FunctionType::SignatureArguments );
+  if(!decl->abstractType()) {
+      
+      //With simplified representation, still mark functions as such by adding parens
+      if(dynamic_cast<AbstractFunctionDeclaration*>(decl))
+          text += "(...)";
+      
+  }else{
+    TypePtr<FunctionType> function = decl->type<FunctionType>();
+    if( function )
+        text  += function->partToString( FunctionType::SignatureArguments );
+  }
 
   return text;
 }
