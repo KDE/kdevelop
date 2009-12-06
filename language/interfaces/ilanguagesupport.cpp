@@ -26,8 +26,8 @@
 
 namespace KDevelop {
 
-TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool allowProxyContext) {
-  Q_UNUSED(allowProxyContext)
+TopDUContext* ILanguageSupport::standardContext(const KUrl& url, bool proxyContext) {
+  Q_UNUSED(proxyContext)
   return DUChain::self()->chainForDocument(url);
 }
 
