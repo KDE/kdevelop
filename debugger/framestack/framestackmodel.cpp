@@ -36,8 +36,6 @@ namespace KDevelop {
 FrameStackModel::FrameStackModel(IDebugSession *session)
 : IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1)
 {
-   connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)),
-           SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 FrameStackModel::~FrameStackModel()
