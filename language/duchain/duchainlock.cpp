@@ -53,6 +53,7 @@
 
 #include <kdebug.h>
 #include <sys/time.h>
+#include "duchain.h"
 
 namespace std {
 #if defined(Q_CC_MSVC)
@@ -350,6 +351,8 @@ bool DUChainLock::currentThreadHasWriteLock()
 DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout) : m_locked(false), m_timeout(timeout)
 {
   m_lock = duChainLock;
+  if(!m_lock)
+    m_lock =  DUChain::lock();
   m_timeout = timeout;
   lock();
 }
@@ -393,6 +396,10 @@ DUChainWriteLocker::DUChainWriteLocker(DUChainLock* duChainLock, uint timeout)
 {
   d->m_timeout = timeout;
   d->m_lock = duChainLock;
+  
+  if(!d->m_lock)
+    d->m_lock =  DUChain::lock();
+  
   lock();
 }
 DUChainWriteLocker::~DUChainWriteLocker()

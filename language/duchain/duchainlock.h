@@ -121,10 +121,10 @@ public:
   /**
    * Constructor.  Attempts to acquire a read lock.
    *
-   * \param duChainLock lock to read-acquire.
+   * \param duChainLock lock to read-acquire. If this is left zero, DUChain::lock() is used.
    * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
    */
-  DUChainReadLocker(DUChainLock* duChainLock, uint timeout = 0);
+  DUChainReadLocker(DUChainLock* duChainLock = 0, uint timeout = 0);
 
   /// Destructor.
   ~DUChainReadLocker();
@@ -138,6 +138,7 @@ public:
   bool locked() const;
 
 private:
+  ///This class does not use a d-pointer for performance reasons (allocation+deletion in every high frequency is expensive)
   DUChainLock* m_lock;
   bool m_locked;
   uint m_timeout;
@@ -152,10 +153,10 @@ public:
   /**
    * Constructor.  Attempts to acquire a write lock.
    *
-   * \param duChainLock lock to write-acquire.
+   * \param duChainLock lock to write-acquire. If this is left zero, DUChain::lock() is used.
    * \param timeout Timeout in milliseconds. If this is not zero, you've got to check locked() to see whether the lock succeeded.
    */
-  DUChainWriteLocker(DUChainLock* duChainLock, uint timeout = 0);
+  DUChainWriteLocker(DUChainLock* duChainLock = 0, uint timeout = 0);
   /// Destructor.
   ~DUChainWriteLocker();
 
