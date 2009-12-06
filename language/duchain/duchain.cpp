@@ -1286,7 +1286,7 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
   //Allow selecting a top-context even if there is no ParsingEnvironmentFile
   QList< TopDUContext* > ret = chainsForDocument(document);
   foreach(TopDUContext* ctx, ret) {
-    if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->isProxyContext() == proxyContext)
+    if(!ctx->parsingEnvironmentFile() || (ctx->parsingEnvironmentFile()->isProxyContext() == proxyContext))
       return ctx;
   }
 
