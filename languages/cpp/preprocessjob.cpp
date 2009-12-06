@@ -349,7 +349,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         if(m_updatingEnvironmentFile)
           content = KDevelop::ReferencedTopDUContext(contentFromProxy(m_updatingEnvironmentFile->topContext()));
         else
-          content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false, true);
+          content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment);
 
         m_currentEnvironment->disableIdentityOffsetRestriction();
 
@@ -417,7 +417,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
     KUrl fileNameUrl(_fileName);
     
     TopDUContext::Features slaveMinimumFeatures = parentJob()->slaveMinimumFeatures();
-    
     QString fileName = fileNameUrl.pathOrUrl();
     
     if (checkAbort())
@@ -460,7 +459,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
         KDevelop::ReferencedTopDUContext includedContext;
         bool updateNeeded = false;
-        bool updateForbidden = false;
 
         {
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -504,18 +502,17 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
                 //(*1) Do not update again if ForceUpdate is given and the context was already updated during this run
                 updateNeeded |= (slaveMinimumFeatures & TopDUContext::ForceUpdate) && !parentJob()->masterJob()->wasUpdated(includedContext.data());
                 
-                ///NEVER update when the file is header-guarded in the current environment, because else it will be emptied
-                if(!includedEnvironment->headerGuard().isEmpty() && m_currentEnvironment->macroNameSet().contains(includedEnvironment->headerGuard())) {
-                  updateForbidden = true;
-//                   kDebug() << "forbidding update of" << includedFile;
-                  updateNeeded = false;
+                //If header-guards should be ignored, unguard the file
+                if(Cpp::EnvironmentManager::ignoreGuardsForImporting() &&
+                  !includedEnvironment->headerGuard().isEmpty() && m_currentEnvironment->macroNameSet().contains(includedEnvironment->headerGuard()))
+                {
+                  m_currentEnvironment->removeMacro(includedEnvironment->headerGuard());
                 }
               }
             }
         }
 
-        if( includedContext && (updateForbidden ||
-                               (!updateNeeded && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(includedContext))) )) {
+        if( includedContext && (!updateNeeded && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(includedContext))) ) {
             ifDebug( kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": took included file from the du-chain" << fileName; )
 
             KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
@@ -530,7 +527,6 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
                 ifDebug( kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support"; )
             }
         } else {
-            Q_ASSERT(!updateForbidden);
             if(updateNeeded)
               kDebug(9007) << "PreprocessJob" << parentJob()->document().str() << ": need to update" << includedFile;
             else if(parentJob()->masterJob()->needUpdateEverything() && includedContext)
