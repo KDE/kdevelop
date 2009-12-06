@@ -533,9 +533,11 @@ void CPPInternalParseJob::run()
       ///Simple solution for now: Always go down to the minimum required level.
       if(!contentContext || !contentContext->smartRange())
         newFeatures = parentJob()->minimumFeatures();
+
+      bool keepAST = newFeatures & TopDUContext::AST;
       
-      //Remove update-flags like 'Recursive' or 'ForceUpdate'
-      newFeatures = (TopDUContext::Features)(newFeatures & TopDUContext::AllDeclarationsContextsUsesAndAST);
+      //Remove update-flags like 'Recursive' or 'ForceUpdate', and the AST flag
+      newFeatures = (TopDUContext::Features)(newFeatures & TopDUContext::AllDeclarationsContextsAndUses);
       
       TranslationUnitAST* ast = 0L;
 
@@ -634,7 +636,7 @@ void CPPInternalParseJob::run()
       }
 
 
-      if(newFeatures & TopDUContext::AST)
+      if(keepAST)
         declarationBuilder.setMapAst(true); //Set the property to map the AST & DUChain
 
       if(!doNotChangeDUChain) {
@@ -720,7 +722,7 @@ void CPPInternalParseJob::run()
               parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
               UseBuilder useBuilder(&editor);
-              useBuilder.setMapAst(newFeatures & TopDUContext::AST);
+              useBuilder.setMapAst(keepAST);
               useBuilder.buildUses(ast);
               DUChainWriteLocker l(DUChain::lock());
               foreach(KDevelop::ProblemPointer problem, useBuilder.problems())
@@ -750,11 +752,10 @@ void CPPInternalParseJob::run()
         contentContext->setFlags( (TopDUContext::Flags)(contentContext->flags() & (~TopDUContext::UpdatingContext)) );
 
         //Now that the Ast is fully built, add it to the TopDUContext if requested
-        if(newFeatures & TopDUContext::AST)
+        if(keepAST)
         {
-          kDebug() << "AST Is being kept for TopDUContext: ";
+          kDebug() << "AST Is being kept for" << parentJob()->document().toUrl();
           parentJob()->parseSession()->setASTNodeParents();
-          //!@todo Figure out a better way to convert to supperclass pointer
           contentContext->setAst(IAstContainer::Ptr( parentJob()->parseSession().data() ));
         }
 
