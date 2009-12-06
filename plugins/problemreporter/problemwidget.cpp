@@ -149,6 +149,8 @@ void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
 
   KDevelop::TopDUContext* chosen = 0;
 
+  DUChainReadLocker lock;
+  
   foreach( KDevelop::ILanguage* language, languages)
     if(!chosen)
       chosen = language->languageSupport()->standardContext(doc->url(), true);
@@ -161,6 +163,8 @@ void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
   KUrl url = job->document().toUrl();
   IDocument* active = ICore::self()->documentController()->activeDocument();
 
+  DUChainReadLocker lock;
+  
   if(active) {
     //For now, only show problems from the current document
     if(active->url() == url && job->duChain()) {
