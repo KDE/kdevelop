@@ -1195,8 +1195,8 @@ void DUChain::removeFromEnvironmentManager( TopDUContext * chain ) {
   sdDUChainPrivate->removeEnvironmentInformation(file);
 }
 
-TopDUContext* DUChain::chainForDocument(const KUrl& document) const {
-  return chainForDocument(IndexedString(document.pathOrUrl()));
+TopDUContext* DUChain::chainForDocument(const KUrl& document, bool proxyContext) const {
+  return chainForDocument(IndexedString(document.pathOrUrl()), proxyContext);
 }
 
 bool DUChain::isInMemory(uint topContextIndex) const {
@@ -1250,7 +1250,7 @@ TopDUContext* DUChain::chainForIndex(uint index) const {
   }
 }
 
-TopDUContext* DUChain::chainForDocument(const IndexedString& document) const
+TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document, bool proxyContext) const
 {
   if(sdDUChainPrivate->m_destroyed)
     return 0;
@@ -1266,21 +1266,27 @@ TopDUContext* DUChain::chainForDocument(const IndexedString& document) const
 
     }*/
 
-  // Match any parsed version of this document
-  if(sdDUChainPrivate->m_chainsByUrl.contains(document))
-    return *sdDUChainPrivate->m_chainsByUrl.find(document);
-
   //Eventually load an existing chain from disk
   l.unlock();
   
   QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
   
-  foreach(const ParsingEnvironmentFilePointer &file, list) {
-    if(isInMemory(file->indexedTopContext().index()))
-      return file->indexedTopContext().data();
+  foreach(const ParsingEnvironmentFilePointer &file, list)
+    if(isInMemory(file->indexedTopContext().index()) && file->isProxyContext() == proxyContext) {
+      return file->topContext();
+    }
+
+  foreach(const ParsingEnvironmentFilePointer &file, list)
+    if((proxyContext == file->isProxyContext())) {
+      return file->topContext();
+    }
+
+  //Allow selecting a top-context even if there is no ParsingEnvironmentFile
+  QList< TopDUContext* > ret = chainsForDocument(document);
+  foreach(TopDUContext* ctx, ret) {
+    if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->isProxyContext() == proxyContext)
+      return ctx;
   }
-  if(!list.isEmpty())
-    return list[0]->topContext(); //Load a top-context if there is none in memory
 
   return 0;
 }
@@ -1310,11 +1316,11 @@ QList<TopDUContext*> DUChain::chainsForDocument(const IndexedString& document) c
   return chains;
 }
 
-TopDUContext* DUChain::chainForDocument( const KUrl& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {
-  return chainForDocument( IndexedString(document), environment, onlyProxyContexts, noProxyContexts );
+TopDUContext* DUChain::chainForDocument( const KUrl& document, const KDevelop::ParsingEnvironment* environment, bool proxyContext ) const {
+  return chainForDocument( IndexedString(document), environment, proxyContext );
 }
 
-ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {
+ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext ) const {
 
   if(sdDUChainPrivate->m_destroyed)
     return ParsingEnvironmentFilePointer();
@@ -1324,7 +1330,7 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument( const Indexed
 
   QList< ParsingEnvironmentFilePointer>::const_iterator it = list.constBegin();
   while(it != list.constEnd()) {
-    if(*it && (*it)->matchEnvironment(environment) && (!onlyProxyContexts || (*it)->isProxyContext()) && (!noProxyContexts || !(*it)->isProxyContext())) {
+    if(*it && ((*it)->isProxyContext() == proxyContext) && (*it)->matchEnvironment(environment)) {
       return *it;
     }
     ++it;
@@ -1343,11 +1349,11 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument(IndexedTopDUCo
    return ParsingEnvironmentFilePointer(sdDUChainPrivate->loadInformation(topContext.index()));
 }
 
-TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool onlyProxyContexts, bool noProxyContexts ) const {
+TopDUContext* DUChain::chainForDocument( const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext ) const {
 
   if(sdDUChainPrivate->m_destroyed)
     return 0;
-  ParsingEnvironmentFilePointer envFile = environmentFileForDocument(document, environment, onlyProxyContexts, noProxyContexts);
+  ParsingEnvironmentFilePointer envFile = environmentFileForDocument(document, environment, proxyContext);
   if(envFile) {
     return envFile->topContext();
   }else{
@@ -1610,7 +1616,22 @@ void DUChain::emitDeclarationSelected(DeclarationPointer decl) {
   emit declarationSelected(decl);
 }
 
-KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool wantProxyContext) {
+TopDUContext* contentContextFromProxyContext(TopDUContext* top)
+{
+  if(!top)
+    return 0;
+  if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
+    if(!top->importedParentContexts().isEmpty())
+      return top->importedParentContexts()[0].context(0)->topContext();
+    else {
+      kDebug() << "Proxy-context imports no content-context";
+      return 0;
+    }
+  } else
+    return top;
+}
+
+KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool proxyContext) {
   Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
 
   WaitForUpdate waiter;
@@ -1633,10 +1654,9 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //     waiter.m_wait.wait(&waiter.m_waitMutex, 10);
   }
 
-  if(!wantProxyContext) {
+  if(!proxyContext) {
     DUChainReadLocker readLock(DUChain::lock());
-    if(waiter.m_topContext && waiter.m_topContext->parsingEnvironmentFile() && waiter.m_topContext->parsingEnvironmentFile()->isProxyContext() && !waiter.m_topContext->importedParentContexts().isEmpty())
-      return waiter.m_topContext->importedParentContexts()[0].context(0)->topContext();
+    return contentContextFromProxyContext(waiter.m_topContext);
   }
 
   return waiter.m_topContext;
