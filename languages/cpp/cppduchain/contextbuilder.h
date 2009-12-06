@@ -255,6 +255,8 @@ protected:
   QStack< QVector<KDevelop::DUContext::Import> > m_tryParentContexts;
   InitializerAST* m_currentInitializer;
   
+  QList<DUContextPointer> m_scheduledForDeletion;
+  
   /// AST - DUChain/Uses mapping variables
   bool m_mapAst;
 };

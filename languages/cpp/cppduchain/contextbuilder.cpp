@@ -489,6 +489,10 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   }else{
     node->ducontext = topLevelContext;
     supportBuild(node);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    foreach(DUContextPointer ctx, m_scheduledForDeletion)
+      delete ctx.data();
   }
 
   {

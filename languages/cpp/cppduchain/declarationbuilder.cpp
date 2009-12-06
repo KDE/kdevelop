@@ -237,7 +237,7 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
       //We remove all of its traces from the AST using ClearDUContextVisitor to prevent any crashes.
       ClearDUContextVisitor clear;
       clear.visit(node);
-      delete tempContext;
+      m_scheduledForDeletion << DUContextPointer(tempContext);
       
       setLastContext(previousLast);
       m_importedParentContexts = importedParentContexts;
@@ -761,6 +761,8 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
       currentDeclaration()->setType(type);
     }else{
       currentDeclaration()->setAbstractType(AbstractType::Ptr());
+      if(dynamic_cast<ClassDeclaration*>(currentDeclaration()))
+        currentDeclaration()->setKind(Declaration::Type);
     }
     if(TemplateDeclaration* templateDecl = dynamic_cast<TemplateDeclaration*>(currentDeclaration())) {
       //The context etc. may have been filled with new items, and the declaration may have been searched unsuccessfully, or wrong instantiations created.
