@@ -185,6 +185,11 @@ void Area::addView(View *view, View *after)
 void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 {
     AreaIndex *indexToSplit = indexOf(viewToSplit);
+    addView(view, indexToSplit, orientation);
+}
+
+void Area::addView(View* view, AreaIndex* indexToSplit, Qt::Orientation orientation)
+{
     indexToSplit->split(view, orientation);
     kDebug() << "view added in" << this;
     emit viewAdded(indexToSplit, view);

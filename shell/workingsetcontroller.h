@@ -158,7 +158,7 @@ private:
     }
     
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex * areaIndex, KConfigGroup & group);
-    void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group);
+    void loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool split, KConfigGroup group);
     
     WorkingSet(const WorkingSet& rhs)
     	: QObject() {

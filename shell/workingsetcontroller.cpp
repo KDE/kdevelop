@@ -220,51 +220,31 @@ bool WorkingSet::isEmpty() const
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
 }
 
-struct DisconnectMainWindowsFromArea
+struct DisableMainWindowUpdatesFromArea
 {
-    DisconnectMainWindowsFromArea(Sublime::Area* area) : m_area(area) {
+    DisableMainWindowUpdatesFromArea(Sublime::Area* area) : m_area(area) {
         if(area) {
             
             foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
                 if(window->area() == area) {
-                    mainWindows << window;
-                    oldActiveView = window->activeView();
-                    bool hadTempArea = false;
-                    foreach(Sublime::Area* tempArea, Core::self()->uiControllerInternal()->areas(window)) {
-                        if(tempArea != area) {
-                            ///@todo This is insanely ugly..
-                            if(window->updatesEnabled()) {
-                                wasUpdatesEnabled.insert(window);
-                                window->setUpdatesEnabled(false);
-                            }
-                            kDebug() << "changing temporarily to area" << tempArea->objectName();
-                            Core::self()->uiControllerInternal()->showArea(tempArea->objectName(), window); //Show another area temporarily
-                            hadTempArea = true;
-                            break;
-                        }
+                    if(window->updatesEnabled()) {
+                        wasUpdatesEnabled.insert(window);
+                        window->setUpdatesEnabled(false);
                     }
-                    Q_ASSERT(hadTempArea);
                 }
             }
         }
     }
     
-    ~DisconnectMainWindowsFromArea() {
+    ~DisableMainWindowUpdatesFromArea() {
         if(m_area) {
-            foreach(Sublime::MainWindow* window, mainWindows) {
-                kDebug() << "changing back";
-                Core::self()->uiControllerInternal()->showArea(m_area, window);
-                if(oldActiveView)
-                    window->activateView(oldActiveView);
-                if(wasUpdatesEnabled.contains(window))
-                    window->setUpdatesEnabled(true);
+            foreach(Sublime::MainWindow* window, wasUpdatesEnabled) {
+                window->setUpdatesEnabled(true);
             }
         }
     }
 
     Sublime::Area* m_area;
-    QList<Sublime::MainWindow*> mainWindows;
-    QPointer<Sublime::View> oldActiveView;
     QSet<Sublime::MainWindow*> wasUpdatesEnabled;
 };
 
@@ -313,7 +293,7 @@ QStringList WorkingSet::fileList() const
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
     PushValue<bool> enableLoading(m_loading, true);
     
-    DisconnectMainWindowsFromArea disconnectArea(area);
+    DisableMainWindowUpdatesFromArea disconnectArea(area);
     
     kDebug() << "loading working-set" << m_id << "into area" << area;
     
@@ -333,26 +313,26 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
 
-    loadToArea(area, areaIndex, group);
+    loadToArea(area, areaIndex, false, group);
 }
 
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
+void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool split, KConfigGroup group)
 {
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
 
         if (subgroups.contains("0")) {
-            if (!areaIndex->isSplitted()) {
-                areaIndex->split(group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal);
-            }
+            split = false;
+            if (!areaIndex->isSplitted())
+                split = true;
 
             KConfigGroup subgroup(&group, "0");
-            loadToArea(area, areaIndex->first(), subgroup);
+            loadToArea(area, areaIndex, split, subgroup);
 
             if (subgroups.contains("1")) {
                 Q_ASSERT(areaIndex->isSplitted());
                 KConfigGroup subgroup(&group, "1");
-                loadToArea(area, areaIndex->second(), subgroup);
+                loadToArea(area, areaIndex->second(), false, subgroup);
             }
         }
 
@@ -388,7 +368,12 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 if (!state.isEmpty())
                     view->setState(state);
 
-                area->addView(view, areaIndex);
+                if (i == 0 && split) {
+                    Qt::Orientation orientation = group.parent().readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
+                    area->addView(view, areaIndex, orientation);
+                    areaIndex = areaIndex->first();
+                } else
+                    area->addView(view, areaIndex);
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }

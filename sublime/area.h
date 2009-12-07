@@ -83,6 +83,9 @@ public:
     /**Adds the @p view to the area splitting the @p viewToSplit using
     given @p orientation.*/
     void addView(View *view, View *viewToSplit, Qt::Orientation orientation);
+    /**Adds the @p view to the area splitting the area index @p indexToSplit using
+    given @p orientation.*/
+    void addView(View *view, AreaIndex *indexToSplit, Qt::Orientation orientation);
     /**Removes the @p view from the area. Does not delete it. */
     View* removeView(View *view);
     /**@return the list of all views in this area in no particular order. To
