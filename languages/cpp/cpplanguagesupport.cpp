@@ -240,8 +240,16 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   
   if(switchCandidate.isValid())
   {
-    kDebug(9007) << "Making sure that the switch-candidate" << switchCandidate << "is up to date";
-    DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
+    
+    DUChainReadLocker lock;
+
+    //If the file has not been parsed yet, update it
+    if(!standardContext(docUrl))
+    {
+      lock.unlock();
+      kDebug(9007) << "Parsing switch-candidate before switching" << switchCandidate;
+      DUChain::self()->waitForUpdate(IndexedString(switchCandidate), TopDUContext::VisibleDeclarationsAndContexts);
+    }
   }
   
   kDebug(9007) << "Document:" << docUrl;
