@@ -41,6 +41,7 @@ public:
 
     void deleteFromDisk();
 
+    virtual QString description() const;    
     virtual QString name() const;
     void setName( const QString& );
     QUuid id() const;

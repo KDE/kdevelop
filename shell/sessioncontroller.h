@@ -57,6 +57,8 @@ public:
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
+private slots:
+    void updateSessionDescriptions();
 private:
     Q_PRIVATE_SLOT( d, void configureSessions() )
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )

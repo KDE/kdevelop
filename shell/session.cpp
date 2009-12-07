@@ -82,10 +82,35 @@ Session::~Session()
     delete d;
 }
 
-
 QString Session::name() const
 {
     return d->config->group("").readEntry( cfgSessionNameEntry, "" );
+}
+
+QString Session::description() const
+{
+    QString ret = name();
+    
+    KUrl::List openProjects = d->config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
+
+    if(!openProjects.isEmpty()) {
+        if(!ret.isEmpty())
+            ret += ":  ";
+        
+        QStringList projectNames;
+        
+        foreach(KUrl url, openProjects)
+        {
+            QString projectName = url.fileName();
+            if(projectName.endsWith(".kdev4"))
+                projectName = projectName.left(projectName.size()-6);
+            projectNames << projectName;
+        }
+        
+        ret += projectNames.join(", ");
+    }
+    
+    return ret;
 }
 
 KUrl Session::pluginDataArea( const IPlugin* p )

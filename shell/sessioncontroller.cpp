@@ -37,6 +37,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include "uicontroller.h"
 #include "sessiondialog.h"
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -93,7 +94,7 @@ public:
     void addSession( Session* s )
     {
         KAction* a = new KAction( grp );
-        a->setText( s->name() );
+        a->setText( s->description() );
         a->setCheckable( true );
         a->setData( s->id().toString() );
         sessionActions[s] = a;
@@ -107,6 +108,12 @@ public:
     SessionController* q;
     QActionGroup* grp;
 };
+
+void SessionController::updateSessionDescriptions()
+{
+    for(QHash< Session*, QAction* >::iterator it = d->sessionActions.begin(); it != d->sessionActions.end(); ++it)
+        (*it)->setText(it.key()->description());
+}
 
 SessionController::SessionController( QObject *parent )
         : QObject( parent ), d(new SessionControllerPrivate(this))
@@ -147,6 +154,9 @@ void SessionController::initialize()
         d->addSession( new Session( id ) );
     }
     loadDefaultSession();
+    
+    connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
+    connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
 }
 
 
