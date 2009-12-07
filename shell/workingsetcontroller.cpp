@@ -293,7 +293,7 @@ QStringList WorkingSet::fileList() const
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
     PushValue<bool> enableLoading(m_loading, true);
     
-    DisableMainWindowUpdatesFromArea disconnectArea(area);
+    DisableMainWindowUpdatesFromArea updatesDisabler(area);
     
     kDebug() << "loading working-set" << m_id << "into area" << area;
     
@@ -314,6 +314,16 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     KConfigGroup group = setConfig.group(m_id);
 
     loadToArea(area, areaIndex, false, group);
+    
+    //activate first view in the working set
+    Sublime::View *firstView = area->views().first();
+    if (firstView) {
+        foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+            if(window->area() == area) {
+                window->activateView(firstView);
+            }
+        }
+    }
 }
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool split, KConfigGroup group)
