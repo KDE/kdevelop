@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     
-    KApplication app;
+    KApplication app(false);
 
     AutoTestShell::init();
     Core::initialize(KDevelop::Core::NoUi);
