@@ -34,6 +34,7 @@
 #include "../../interfaces/ilanguage.h"
 #include "../interfaces/ilanguagesupport.h"
 #include "../duchain/duchain.h"
+#include "../duchain/duchainlock.h"
 
 // ######### start interpolation
 
@@ -147,9 +148,15 @@ void ColorCache::adaptToColorChanges()
 
   // rehighlight open documents
   foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
-    if ( TopDUContext* top = DUChain::self()->chainForDocument(doc->url()) ) {
-      foreach ( ILanguage* lang, ICore::self()->languageController()->languagesForUrl(doc->url()) ) {
-        if ( ILanguageSupport* langSupport = lang->languageSupport() ) {
+    foreach ( ILanguage* lang, ICore::self()->languageController()->languagesForUrl(doc->url()) ) {
+
+      if ( ILanguageSupport* langSupport = lang->languageSupport() ) {
+
+        DUChainReadLocker lock;
+
+        TopDUContext* top = langSupport->standardContext(doc->url());
+
+        if(top) {
           if ( const ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
             highlighting->highlightDUChain(top);
           }
