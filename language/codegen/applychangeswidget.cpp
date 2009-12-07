@@ -40,6 +40,8 @@
 #include <KPushButton>
 #include "coderepresentation.h"
 #include <KTemporaryFile>
+#include <KActionCollection>
+#include <QAction>
 
 namespace KDevelop
 {
@@ -209,7 +211,14 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     
     KMimeType::Ptr mimetype = KMimeType::findByUrl( url, 0, true );
     
-    m_editParts.insert(m_index, KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype->name(), widget, widget));
+    KParts::ReadWritePart* part=KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype->name(), widget, widget);
+    KTextEditor::Document* document=qobject_cast<KTextEditor::Document*>(part);
+    Q_ASSERT(document);
+    
+    Q_ASSERT(document->action("file_save"));
+    document->action("file_save")->setEnabled(false);
+    
+    m_editParts.insert(m_index, part);
     
     //Open the best code representation, even if it is artificial
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
