@@ -301,9 +301,9 @@ void TestDUChain::testContextRelationships()
 {
   TEST_FILE_PARSE_ONLY
 
-  QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
-
   DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
 
   DUContext* firstChild = new DUContext(SimpleRange(SimpleCursor(4,4), SimpleCursor(10,3)), topContext);
 
