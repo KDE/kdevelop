@@ -1,6 +1,6 @@
 /*
    This file is part of KDevelop
-   Copyright 2009 Ram¨®n Zaraz¨²a <killerfox512+kde@gmail.com>
+   Copyright 2009 Ramon Zarazua <killerfox512+kde@gmail.com>
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
    
    This library is free software; you can redistribute it and/or
@@ -183,7 +183,7 @@ void TestCppCodegen::testAstDuChainMapping()
   {
     InsertIntoDUChain code("ClassA.h", "class ClassA { public: ClassA(); private: int i;  float f, j;\
                                                         struct ContainedStruct { int i; ClassA * p;  } structVar; };");
-    code.parse();
+    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
 
     DUChainReadLocker lock;
     
@@ -233,8 +233,11 @@ void TestCppCodegen::testAstDuChainMapping()
   {
     //----ClassA.cpp----
     
+    InsertIntoDUChain codeH("ClassA.h", "class ClassA { public: ClassA(); private: int i;  float f, j;\
+                                                        struct ContainedStruct { int i; ClassA * p;  } structVar; };");
+    
     InsertIntoDUChain code("ClassA.cpp", "#include<ClassA.h> \n ClassA::ClassA() : i(0), j(0.0) {structVar.i = 0; ContainedStruct testStruct; }");
-    code.parse();
+    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
 
     DUChainReadLocker lock;
     
@@ -257,7 +260,7 @@ void TestCppCodegen::testAstDuChainMapping()
     InsertIntoDUChain code("AbstractClass.h", "class AbstractClass { public: virtual ~AbstractClass();\
                                                        virtual void pureVirtual() = 0; virtual const int constPure(const int &) const = 0; \
                                                        virtual void regularVirtual(); virtual const int constVirtual(const int &) const; int data; };");
-    code.parse();
+    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
 
     DUChainReadLocker lock;
     //----AbstractClass.h----
