@@ -308,7 +308,7 @@ TopDUContext* contentFromProxy(TopDUContext* ctx) {
         }
         if(ctx->importedParentContexts().isEmpty()) {
           kDebug() << "proxy-context for" << ctx->url().str() << "has no imports!" << ctx->ownIndex();
-          Q_ASSERT(0);
+          return 0;
         }
         Q_ASSERT(!ctx->importedParentContexts().isEmpty());
         return dynamic_cast<TopDUContext*>(ctx->importedParentContexts().first().context(0));
