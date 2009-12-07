@@ -233,11 +233,15 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     
     if(tempContext != previous) {
       
-      //Delete the temporary context again.
-      //We remove all of its traces from the AST using ClearDUContextVisitor to prevent any crashes.
+      //We remove all of its traces from the AST using ClearDUContextVisitor.
       ClearDUContextVisitor clear;
       clear.visit(node);
-      m_scheduledForDeletion << DUContextPointer(tempContext);
+
+      ///@todo We don't delete the tempContext, as that may cause crashes. Problem: This leaves garbage in the duchain
+      ///@todo Solve the redundancy issue once and for all, properly, using a SimpleDeclarationOrFunctionDeclarationAST or similar.
+      
+      //Since we don't delete the temporary context, at least collapse its range.
+      tempContext->setRange(SimpleRange(tempContext->range().start, tempContext->range().end));
       
       setLastContext(previousLast);
       m_importedParentContexts = importedParentContexts;
