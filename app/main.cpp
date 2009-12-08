@@ -126,21 +126,27 @@ int main( int argc, char *argv[] )
 
     KApplication app;
     KDevIDEExtension::init();
-    
-    KSplashScreen* splash = 0;
-    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
-    if( !splashFile.isEmpty() )
-    {
-        QPixmap pm;
-        pm.load( splashFile );
-        splash = new KSplashScreen( pm );
-        splash->show();
-        QTimer::singleShot(0, splash, SLOT(deleteLater()));
-    }
 
     QString sessionName = args->getOption("s");
     if(!sessionName.isEmpty())
         setenv("KDEV_SESSION", sessionName.toLatin1(), 1);
+
+    if(!getenv("KDEV_SESSION"))
+    {
+        ///Only show the splash-screen if no session has been given.
+        ///If a session has been given, that usually means that KDevelop has already been loaded,
+        ///and startup will be very fast. A splash-screen looks unaesthetical then.
+        KSplashScreen* splash = 0;
+        QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
+        if( !splashFile.isEmpty() )
+        {
+            QPixmap pm;
+            pm.load( splashFile );
+            splash = new KSplashScreen( pm );
+            splash->show();
+            QTimer::singleShot(0, splash, SLOT(deleteLater()));
+        }
+    }
 
     Core::initialize();
     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
