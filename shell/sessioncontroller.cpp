@@ -38,6 +38,8 @@ Boston, MA 02110-1301, USA.
 #include "uicontroller.h"
 #include "sessiondialog.h"
 #include <interfaces/iprojectcontroller.h>
+#include <qapplication.h>
+#include <kprocess.h>
 
 namespace KDevelop
 {
@@ -49,10 +51,7 @@ class SessionControllerPrivate
 {
 public:
     SessionControllerPrivate( SessionController* s ) : q(s) {}
-    bool knownSession( const QString& name ) const
-    {
-        return findSessionForName( name ) != 0;
-    }
+
     Session* findSessionForName( const QString& name ) const
     {
         foreach( Session* s, sessionActions.keys() )
@@ -62,18 +61,45 @@ public:
         }
         return 0;
     }
+    
+    Session* findSessionForId(QString idString)
+    {
+        QUuid id(idString);
+        
+        foreach( Session* s, sessionActions.keys() )
+        {
+            if( s->id() == id)
+                return s;
+        }
+        return 0;
+    }
+    
     void configureSessions()
     {
         SessionDialog dlg(ICore::self()->uiController()-> activeMainWindow());
         dlg.exec();
     }
 
+    void loadSessionExternally( Session* s )
+    {
+        Q_ASSERT( s );
+        KProcess::startDetached("kdevelop", QStringList() << "--s"  << s->id().toString());
+    }
+    
     void activateSession( Session* s )
     {
         Q_ASSERT( s );
         QHash<Session*,QAction*>::iterator it = sessionActions.find(s);
         Q_ASSERT( it != sessionActions.end() );
+        (*it)->setCheckable(true);
         (*it)->setChecked(true);
+        
+        for(it = sessionActions.begin(); it != sessionActions.end(); ++it)
+        {
+            if(it.key() != s)
+                (*it)->setCheckable(false);
+        }
+        
         KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
         grp.writeEntry( SessionController::cfgActiveSessionEntry, s->name() );
         grp.sync();
@@ -85,8 +111,7 @@ public:
         foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == QUuid( a->data().toString() ) ) {
-                activateSession( s );
-                break;
+                loadSessionExternally( s );
             }
         }
     }
@@ -102,7 +127,7 @@ public:
         q->unplugActionList( "available_sessions" );
         q->plugActionList( "available_sessions", grp->actions() );
     }
-
+    
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;
     SessionController* q;
@@ -165,9 +190,9 @@ ISession* SessionController::activeSession() const
     return d->activeSession;
 }
 
-void SessionController::loadSession( const QString& name )
+void SessionController::loadSession( const QString& nameOrId )
 {
-    d->activateSession( d->findSessionForName( name ) );
+    d->loadSessionExternally( session( nameOrId ) );
 }
 
 QList<QString> SessionController::sessions() const
@@ -188,10 +213,9 @@ Session* SessionController::createSession( const QString& name )
     return s;
 }
 
-void SessionController::deleteSession( const QString& name )
+void SessionController::deleteSession( const QString& nameOrId )
 {
-    Q_ASSERT( d->knownSession( name ) );
-    Session* s  = d->findSessionForName( name );
+    Session* s  = session(nameOrId);
     QHash<Session*,QAction*>::iterator it = d->sessionActions.find(s);
     Q_ASSERT( it != d->sessionActions.end() );
 
@@ -201,7 +225,7 @@ void SessionController::deleteSession( const QString& name )
     plugActionList( "available_sessions", d->grp->actions() );
     (*it)->deleteLater();
     s->deleteFromDisk();
-    emit sessionDeleted( name );
+    emit sessionDeleted( s->name() );
     if( s == d->activeSession ) 
     {
         loadDefaultSession();
@@ -212,18 +236,31 @@ void SessionController::deleteSession( const QString& name )
 
 void SessionController::loadDefaultSession()
 {
-    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
-    QString name = grp.readEntry( cfgActiveSessionEntry, "default" );
-    if( d->sessionActions.count() == 0 || !sessions().contains( name ) )
+    QString load = QString(getenv("KDEV_SESSION"));
+    
+    if(!load.isEmpty())
     {
-        createSession( name );
+        d->activateSession( session(load) );
+        return;
+    }
+    
+    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
+    load = grp.readEntry( cfgActiveSessionEntry, "default" );
+    if( !session( load ) )
+    {
+        createSession( load );
     }  
-    loadSession( name );
+    
+    d->activateSession( session(load) );
 }
 
-Session* SessionController::session( const QString& name ) const
+Session* SessionController::session( const QString& nameOrId ) const
 {
-    return d->findSessionForName( name );
+    Session* ret = d->findSessionForName( nameOrId );
+    if(ret)
+        return ret;
+    
+    return d->findSessionForId( nameOrId );
 }
 
 QString SessionController::sessionDirectory()
@@ -231,9 +268,9 @@ QString SessionController::sessionDirectory()
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
 }
 
-QString SessionController::cloneSession( const QString& sessionName )
+QString SessionController::cloneSession( const QString& nameOrid )
 {
-    Session* origSession = session( sessionName );
+    Session* origSession = session( nameOrid );
     QUuid id = QUuid::createUuid();
     KIO::NetAccess::dircopy( KUrl( sessionDirectory() + '/' + origSession->id().toString() ), 
                              KUrl( sessionDirectory() + '/' + id.toString() ), 

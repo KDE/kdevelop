@@ -40,15 +40,16 @@ public:
     void initialize();
     void cleanup();
 
-    Session* session( const QString& name ) const;
+    ///Finds a session by its name or by its UUID
+    Session* session( const QString& nameOrId ) const;
     virtual ISession* activeSession() const;
     QList<QString> sessions() const;
     Session* createSession( const QString& name );
     void loadDefaultSession();
 
-    void loadSession( const QString& );
-    void deleteSession( const QString& );
-    QString cloneSession( const QString& );
+    void loadSession( const QString& nameOrId );
+    void deleteSession( const QString& nameOrId );
+    QString cloneSession( const QString& nameOrid );
     static QString sessionDirectory();
     static const QString cfgSessionGroup;
     static const QString cfgActiveSessionEntry;
