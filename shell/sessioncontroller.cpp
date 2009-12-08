@@ -110,7 +110,7 @@ public:
     {
         foreach( Session* s, sessionActions.keys() )
         {
-            if( s->id() == QUuid( a->data().toString() ) ) {
+            if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
                 loadSessionExternally( s );
             }
         }
