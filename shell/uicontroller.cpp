@@ -322,10 +322,10 @@ MainWindow *UiController::defaultMainWindow()
 
 void UiController::initialize()
 {
+    d->initialize();
+
     if (!defaultMainWindow())
         return;
-
-    d->initialize();
 
     connect( QApplication::instance(),
              SIGNAL( focusChanged( QWidget*, QWidget* ) ),
