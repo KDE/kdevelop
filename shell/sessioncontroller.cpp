@@ -74,6 +74,13 @@ public:
         return 0;
     }
     
+    void newSession()
+    {
+        Session* session = new Session( QUuid::createUuid() );
+        KProcess::startDetached("kdevelop", QStringList() << "--s"  << session->id().toString());
+        delete session;
+    }
+    
     void configureSessions()
     {
         SessionDialog dlg(ICore::self()->uiController()-> activeMainWindow());
@@ -120,7 +127,7 @@ public:
     {
         KAction* a = new KAction( grp );
         a->setText( s->description() );
-        a->setCheckable( true );
+        a->setCheckable( false );
         a->setData( s->id().toString() );
         sessionActions[s] = a;
         q->actionCollection()->addAction( "session_"+s->id().toString(), a );
@@ -148,7 +155,11 @@ SessionController::SessionController( QObject *parent )
     
     setXMLFile("kdevsessionui.rc");
 
-    KAction* action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
+    KAction* action = actionCollection()->addAction( "new_session", this, SLOT( newSession() ) );
+    action->setText( i18n("Start New Session") );
+    action->setToolTip( i18n("Start a new KDevelop instance with an empty session") );
+    
+    action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
     action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session.</p>" ) );
@@ -176,7 +187,17 @@ void SessionController::initialize()
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        d->addSession( new Session( id ) );
+        Session* session = new Session( id );
+        
+        //Delete sessions that have no name and are empty
+        if( session->description().isEmpty() && (session->id().toString() != QString(getenv("KDEV_SESSION"))))
+        {
+            ///@todo Think about when we can do this. Another instance might still be using this session.
+//             session->deleteFromDisk();
+            delete session;
+        }else{
+            d->addSession( session );
+        }
     }
     loadDefaultSession();
     
@@ -216,6 +237,9 @@ Session* SessionController::createSession( const QString& name )
 void SessionController::deleteSession( const QString& nameOrId )
 {
     Session* s  = session(nameOrId);
+    
+    Q_ASSERT( s != d->activeSession ) ;
+    
     QHash<Session*,QAction*>::iterator it = d->sessionActions.find(s);
     Q_ASSERT( it != d->sessionActions.end() );
 
@@ -226,10 +250,6 @@ void SessionController::deleteSession( const QString& nameOrId )
     (*it)->deleteLater();
     s->deleteFromDisk();
     emit sessionDeleted( s->name() );
-    if( s == d->activeSession ) 
-    {
-        loadDefaultSession();
-    }
     d->sessionActions.remove(s);
     s->deleteLater();
 }
@@ -240,6 +260,9 @@ void SessionController::loadDefaultSession()
     
     if(!load.isEmpty())
     {
+        if(!session(load))
+            load = createSession("")->id().toString();
+        
         d->activateSession( session(load) );
         return;
     }

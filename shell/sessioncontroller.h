@@ -61,6 +61,7 @@ Q_SIGNALS:
 private slots:
     void updateSessionDescriptions();
 private:
+    Q_PRIVATE_SLOT( d, void newSession() )
     Q_PRIVATE_SLOT( d, void configureSessions() )
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;
