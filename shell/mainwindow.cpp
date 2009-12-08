@@ -49,6 +49,8 @@ Boston, MA 02110-1301, USA.
 #include "debugcontroller.h"
 #include "workingsetcontroller.h"
 #include "sessioncontroller.h"
+#include <interfaces/isession.h>
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -202,9 +204,6 @@ void MainWindow::initialize()
         d, SLOT(activePartChanged(KParts::Part*)));
     connect( this, SIGNAL(activeViewChanged(Sublime::View*)),
         d, SLOT(changeActiveView(Sublime::View*)));
-    connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
-    connect(Core::self()->documentController(), SIGNAL(documentStateChanged(KDevelop::IDocument*)), SLOT(documentStateChanged(KDevelop::IDocument*)));
-    connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(documentClosed(KDevelop::IDocument*)));
     
     foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
         d->addPlugin(plugin);
@@ -215,6 +214,11 @@ void MainWindow::initialize()
     // seem to remember which actions where plugged in.
     Core::self()->sessionController()->plugActions();
     d->setupGui();
+    
+    connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateCaption()));
+    connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateCaption()));
+    
+    updateCaption();
 }
 
 void MainWindow::cleanup()
@@ -235,23 +239,9 @@ bool MainWindow::queryClose()
     return Sublime::MainWindow::queryClose();
 }
 
-void MainWindow::documentActivated( IDocument* document )
+void MainWindow::updateCaption()
 {
-    setCaption(document->url().pathOrUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
-}
-
-void MainWindow::documentStateChanged( IDocument* document )
-{
-    setCaption(document->url().pathOrUrl(), document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified);
-}
-
-void MainWindow::documentClosed( IDocument* document )
-{
-    Q_UNUSED(document);
-    if (Core::self()->documentController()->openDocuments().count() == 0) 
-    {
-        setCaption(QString(), false);
-    }
+    setCaption(Core::self()->sessionController()->activeSession()->description());
 }
 
 void MainWindow::registerStatus(QObject* status)

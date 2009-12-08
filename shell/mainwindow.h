@@ -89,9 +89,7 @@ protected Q_SLOTS:
     virtual void dockBarContextMenuRequested(Qt::DockWidgetArea, const QPoint&);
 
 private Q_SLOTS:
-    void documentActivated( KDevelop::IDocument* document );
-    void documentStateChanged( KDevelop::IDocument* document );
-    void documentClosed( KDevelop::IDocument* document );
+    void updateCaption();
 
 private:
     class MainWindowPrivate *d;
