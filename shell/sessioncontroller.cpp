@@ -40,6 +40,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iprojectcontroller.h>
 #include <qapplication.h>
 #include <kprocess.h>
+#include <sublime/mainwindow.h>
 
 namespace KDevelop
 {
@@ -119,6 +120,11 @@ public:
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
                 loadSessionExternally( s );
+                
+                //Terminate this instance of kdevelop if the user agrees
+                foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+                    window->close();
+                break;
             }
         }
     }

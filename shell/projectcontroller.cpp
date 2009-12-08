@@ -803,7 +803,7 @@ void ProjectController::closeAllProjects()
 {
     Core::self()->sessionController()->startNewSession();
     
-    //Terminate this instance of kdevelop
+    //Terminate this instance of kdevelop if the user agrees
     foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
         window->close();
 }
