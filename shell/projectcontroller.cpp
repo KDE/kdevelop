@@ -72,6 +72,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iruncontroller.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <kio/job.h>
+#include "sessioncontroller.h"
 
 namespace KDevelop
 {
@@ -374,7 +375,7 @@ void ProjectController::setupActions()
     d->m_closeAllProjects = action = ac->addAction( "project_close_all" );
     action->setText( i18n( "Close All Projects" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllProjects() ) );
-    action->setToolTip( i18n( "Close all currently open projects" ) );
+    action->setToolTip( i18n( "Close the current session with all its open open projects, and start a new one" ) );
     action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects.</p>" ) );
     action->setEnabled( false );
     action->setIcon(KIcon("project-development-close-all"));
@@ -790,10 +791,11 @@ void ProjectController::addProject(IProject* project)
 
 void ProjectController::closeAllProjects()
 {
-    foreach (IProject* project, projects())
-    {
-        closeProject(project);
-    }
+    Core::self()->sessionController()->startNewSession();
+    
+    //Terminate this instance of kdevelop
+    foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+        window->close();
 }
 
 QItemSelectionModel* ProjectController::projectSelectionModel()

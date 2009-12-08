@@ -47,6 +47,8 @@ public:
     Session* createSession( const QString& name );
     void loadDefaultSession();
 
+    void startNewSession();
+    
     void loadSession( const QString& nameOrId );
     void deleteSession( const QString& nameOrId );
     QString cloneSession( const QString& nameOrid );

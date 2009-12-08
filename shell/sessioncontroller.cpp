@@ -173,6 +173,11 @@ SessionController::~SessionController()
     delete d;
 }
 
+void SessionController::startNewSession()
+{
+    d->newSession();
+}
+
 void SessionController::cleanup()
 {
     qDeleteAll(d->sessionActions);
