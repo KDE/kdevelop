@@ -7,7 +7,7 @@ http://api.kde.org/4.x-api/kdevplatform-apidocs/language/duchain/html/Implementi
 
 or generate it yourself:
 
-make apidox  ( the generated documentation will be at apidocs/html/ )
+look at HACKING
 
 or read the file:
 

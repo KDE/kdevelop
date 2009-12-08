@@ -4,6 +4,6 @@ http://www.kdevelop.org/
 
 or generate it yourself:
 
-make apidox  ( the generated documentation will be at apidocs/html )
+/path/to/kdelibs/doc/api/doxygen.sh --recurse --doxdatadir=/path/to/kdelibs/doc/common /path/to/kdevplatform  ( the generated documentation will be at kdevplatform-apidocs )
 
 or read *.dox files in the doc/api/ directory.
