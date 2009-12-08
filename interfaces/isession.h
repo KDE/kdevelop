@@ -46,6 +46,8 @@ public:
 
     /**
      * A short string nicely identifying the session, including contained projects
+     * 
+     * The string is empty if the session is empty and has no name.
      */
     virtual QString description() const = 0;
     virtual QString name() const = 0;
