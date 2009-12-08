@@ -58,8 +58,12 @@ public:
     UiControllerPrivate(UiController *controller)
     : cfgDlg(0), areasRestored(false), m_controller(controller)
     {
+    }
+
+    void initialize()
+    {
         Core::self()->workingSetControllerInternal()->initializeController(m_controller);
-        
+
         QMap<QString, Sublime::Position> desired;
 
         desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;
@@ -92,7 +96,7 @@ public:
         desired.clear();
         desired["org.kdevelop.ProjectsView"] = Sublime::Left;
         desired["org.kdevelop.PatchReview"] = Sublime::Bottom;
-        
+
         a = new Sublime::Area(m_controller, "review", i18n("Review"));
         a->setDesiredToolViews(desired);
         a->setIconName("applications-engineering");
@@ -174,40 +178,6 @@ UiController::UiController(Core *core)
 {
     setObjectName("UiController");
     d->core = core;
-
-    if (!defaultMainWindow())
-        return;
-
-    connect( QApplication::instance(),
-             SIGNAL( focusChanged( QWidget*, QWidget* ) ),
-            this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
-
-    KActionCollection * actions = defaultMainWindow()->actionCollection();
-
-    KAction* assistantaction1 = actions->addAction("assistant_action_1");
-    assistantaction1->setText( i18n("&Assistant Action 1") );
-    assistantaction1->setShortcut( Qt::ALT | Qt::Key_1 );
-    connect(assistantaction1, SIGNAL(triggered(bool)), this, SLOT(assistantAction1()));
-
-    KAction* assistantaction2 = actions->addAction("assistant_action_2");
-    assistantaction2->setText( i18n("&Assistant Action 2") );
-    assistantaction2->setShortcut( Qt::ALT | Qt::Key_2 );
-    connect(assistantaction2, SIGNAL(triggered(bool)), this, SLOT(assistantAction2(bool)));
-            
-    KAction* assistantaction3 = actions->addAction("assistant_action_3");
-    assistantaction3->setText( i18n("&Assistant Action 3") );
-    assistantaction3->setShortcut( Qt::ALT | Qt::Key_3 );
-    connect(assistantaction3, SIGNAL(triggered(bool)), this, SLOT(assistantAction3(bool)));
-
-    KAction* assistantaction4 = actions->addAction("assistant_action_4");
-    assistantaction4->setText( i18n("&Assistant Action 4") );
-    assistantaction4->setShortcut( Qt::ALT | Qt::Key_4 );
-    connect(assistantaction4, SIGNAL(triggered(bool)), this, SLOT(assistantAction4(bool)));
-
-    KAction* assistantactionhide = actions->addAction("assistant_action_hide");
-    assistantactionhide->setText( i18n("&Hide Assistant") );
-    assistantactionhide->setShortcut( Qt::ALT | Qt::Key_0 );
-    connect(assistantactionhide, SIGNAL(triggered(bool)), this, SLOT(assistantHide()));
 }
 
 UiController::~UiController()
@@ -352,6 +322,40 @@ MainWindow *UiController::defaultMainWindow()
 
 void UiController::initialize()
 {
+    if (!defaultMainWindow())
+        return;
+
+    connect( QApplication::instance(),
+             SIGNAL( focusChanged( QWidget*, QWidget* ) ),
+            this, SLOT( widgetChanged( QWidget*, QWidget* ) ) );
+
+    KActionCollection * actions = defaultMainWindow()->actionCollection();
+
+    KAction* assistantaction1 = actions->addAction("assistant_action_1");
+    assistantaction1->setText( i18n("&Assistant Action 1") );
+    assistantaction1->setShortcut( Qt::ALT | Qt::Key_1 );
+    connect(assistantaction1, SIGNAL(triggered(bool)), this, SLOT(assistantAction1()));
+
+    KAction* assistantaction2 = actions->addAction("assistant_action_2");
+    assistantaction2->setText( i18n("&Assistant Action 2") );
+    assistantaction2->setShortcut( Qt::ALT | Qt::Key_2 );
+    connect(assistantaction2, SIGNAL(triggered(bool)), this, SLOT(assistantAction2(bool)));
+
+    KAction* assistantaction3 = actions->addAction("assistant_action_3");
+    assistantaction3->setText( i18n("&Assistant Action 3") );
+    assistantaction3->setShortcut( Qt::ALT | Qt::Key_3 );
+    connect(assistantaction3, SIGNAL(triggered(bool)), this, SLOT(assistantAction3(bool)));
+
+    KAction* assistantaction4 = actions->addAction("assistant_action_4");
+    assistantaction4->setText( i18n("&Assistant Action 4") );
+    assistantaction4->setShortcut( Qt::ALT | Qt::Key_4 );
+    connect(assistantaction4, SIGNAL(triggered(bool)), this, SLOT(assistantAction4(bool)));
+
+    KAction* assistantactionhide = actions->addAction("assistant_action_hide");
+    assistantactionhide->setText( i18n("&Hide Assistant") );
+    assistantactionhide->setShortcut( Qt::ALT | Qt::Key_0 );
+    connect(assistantactionhide, SIGNAL(triggered(bool)), this, SLOT(assistantHide()));
+
     defaultMainWindow()->initialize();
 }
 
