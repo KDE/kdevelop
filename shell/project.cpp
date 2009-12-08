@@ -1,4 +1,4 @@
-/* This file is part of the KDE project
+    /* This file is part of the KDE project
    Copyright 2001 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>
    Copyright 2002-2003 Roberto Raggi <roberto@kdevelop.org>
    Copyright 2002 Simon Hausmann <hausmann@kde.org>
@@ -245,12 +245,17 @@ public:
     }
 
 
-    void importDone( KJob* )
+    void importDone( KJob* job)
     {
         progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
-        projCtrl->projectModel()->appendRow(topItem);
-        projCtrl->projectImportingFinished( project );
+        
+        if(job->errorText().isEmpty()) {
+            projCtrl->projectModel()->appendRow(topItem);
+            projCtrl->projectImportingFinished( project );
+        } else {
+            projCtrl->closeProject(project);
+        }
     }
 
     void initProjectUrl(const KUrl& projectFileUrl_)

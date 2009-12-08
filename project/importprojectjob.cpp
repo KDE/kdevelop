@@ -34,6 +34,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <QPointer>
+#include <KLocale>
 
 namespace KDevelop
 {
@@ -72,7 +73,7 @@ ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *i
     {
         folderItem = dynamic_cast<ProjectFolderItem*>( folder );
         d->m_project = folderItem->project();
-        setObjectName(QString("Project Import: %1").arg(d->m_project->name()));
+        setObjectName(i18n("Project Import: %1", d->m_project->name()));
     }
     d->m_folder = folderItem;
 }
@@ -95,15 +96,17 @@ void ImportProjectJob::importDone()
 {
     d->m_watcher->deleteLater(); /* Goodbye to the QFutureWatcher */
 
-    if(!d->cancel)
-        emitResult();
+    emitResult();
 }
 
 bool ImportProjectJob::doKill()
 {
-    kDebug() << "killiiiiiiiing";
     d->m_watcher->cancel();
     d->cancel=true;
+    
+    setError(1);
+    setErrorText(i18n("Project import cancelled."));
+    
     d->m_watcher->waitForFinished();
     return true;
 }
@@ -111,10 +114,6 @@ bool ImportProjectJob::doKill()
 void ImportProjectJob::importCanceled()
 {
     d->m_watcher->deleteLater();
-    
-    if(d->m_project) {
-        ICore::self()->projectController()->closeProject(d->m_project);
-    }
 }
 
 }
