@@ -548,6 +548,18 @@ void ProjectController::openProject( const KUrl &projectFile )
                 if(res == KMessageBox::Yes)
                 {
                     Core::self()->sessionController()->loadSession(session->id().toString());
+                    
+#if 0
+                    ///@todo Think about this! Problem: The session might already contain files, the debugger might be active, etc.
+                    //If this session is empty, close it
+                    if(Core::self()->sessionController()->activeSession()->description().isEmpty())
+                    {
+                        //Terminate this instance of kdevelop if the user agrees
+                        foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+                            window->close();
+                    }
+#endif
+                    
                     return;
                 }
             }
