@@ -43,6 +43,7 @@
 #include <qpushbutton.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/isession.h>
 
 using namespace KDevelop;
 
@@ -76,8 +77,12 @@ QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" <<
 
 WorkingSetController::WorkingSetController(Core* core) : m_core(core)
 {
+}
+
+void WorkingSetController::initialize()
+{
     //Load all working-sets
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     foreach(QString set, setConfig.groupList())                                                                                                                                                
         getWorkingSet(set);  
 }
@@ -167,7 +172,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     kDebug() << "saving" << m_id << "from area";
     
     ///@todo Make the working-sets session-specific
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     deleteGroupRecursive(group);
     saveFromArea(area, areaIndex, group);
@@ -215,7 +220,7 @@ bool WorkingSet::isEmpty() const
 {
     if(m_id.isEmpty())
         return true;
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
 }
@@ -283,7 +288,7 @@ QStringList WorkingSet::fileList() const
         return QStringList();
     
     QStringList ret;
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
 
     loadFileList(ret, group);
@@ -310,7 +315,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     if(m_id.isEmpty())
         return;
     
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
 
     loadToArea(area, areaIndex, false, group);
@@ -393,7 +398,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 void WorkingSet::deleteSet(bool force, bool silent)
 {
     if((m_areas.isEmpty() || force) && !m_id.isEmpty()) {
-        KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+        KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
         KConfigGroup group = setConfig.group(m_id);
         deleteGroupRecursive(group);
         
@@ -835,7 +840,7 @@ WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, Mai
 void WorkingSet::setPersistent(bool persistent) {
     if(m_id.isEmpty())
         return;
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("persistent", persistent);
 }
@@ -843,7 +848,7 @@ void WorkingSet::setPersistent(bool persistent) {
 bool WorkingSet::isPersistent() const {
     if(m_id.isEmpty())
         return false;
-    KConfigGroup setConfig(KGlobal::config(), "Working File Sets");
+    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return group.readEntry("persistent", false);
 }

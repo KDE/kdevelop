@@ -253,7 +253,7 @@ public:
     WorkingSet* newWorkingSet(QString prefix);
 
     WorkingSet* getWorkingSet(QString id);
-    void initialize() {}
+    void initialize();
     void cleanup();
     
     QList<WorkingSet*> allWorkingSets() {
