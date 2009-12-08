@@ -54,6 +54,8 @@
 #include "parsejob.h"
 #include "parserdependencypolicy.h"
 #include <editor/modificationrevisionset.h>
+#include <interfaces/icore.h>
+#include <qcoreapplication.h>
 
 //@todo Enable this again once languageForUrl is thread-safe
 const bool separateThreadForHighPriority = true;
@@ -65,7 +67,7 @@ class BackgroundParserPrivate
 {
 public:
     BackgroundParserPrivate(BackgroundParser *parser, ILanguageController *languageController)
-        :m_parser(parser), m_languageController(languageController), m_mutex(QMutex::Recursive)
+        :m_parser(parser), m_languageController(languageController), m_mutex(QMutex::Recursive), m_shuttingDown(false)
     {
         parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
@@ -109,6 +111,8 @@ public:
     // Non-mutex guarded functions, only call with m_mutex acquired.
     void parseDocumentsInternal()
     {
+        if(m_shuttingDown)
+            return;
         // Create delayed jobs, that is, jobs for documents which have been changed
         // by the user.
         QList<ParseJob*> jobs;
@@ -289,6 +293,9 @@ public:
     QTimer m_timer;
     int m_delay;
     int m_threads;
+    
+    bool m_shuttingDown;
+    
     struct DocumentParseTarget {
         QPointer<QObject> notifyWhenReady;
         int priority;
@@ -352,6 +359,12 @@ public:
 BackgroundParser::BackgroundParser(ILanguageController *languageController)
     : QObject(languageController), d(new BackgroundParserPrivate(this, languageController))
 {
+    connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
+}
+
+void BackgroundParser::aboutToQuit()
+{
+    d->m_shuttingDown = true;
 }
 
 BackgroundParser::~BackgroundParser()

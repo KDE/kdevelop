@@ -205,6 +205,7 @@ protected Q_SLOTS:
     void parseComplete(ThreadWeaver::Job *job);
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
     void startTimer();
+    void aboutToQuit();
 
 protected:
     // Receive changed notifications
