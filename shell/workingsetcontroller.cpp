@@ -316,11 +316,10 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     loadToArea(area, areaIndex, false, group);
     
     //activate first view in the working set
-    Sublime::View *firstView = area->views().first();
-    if (firstView) {
+    if (!area->views().isEmpty()) {
         foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
             if(window->area() == area) {
-                window->activateView(firstView);
+                window->activateView(area->views().first());
             }
         }
     }
