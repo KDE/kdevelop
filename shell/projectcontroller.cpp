@@ -158,9 +158,6 @@ public:
     }
     void saveListOfOpenedProjects()
     {
-        if(m_cleaningUp)
-            return;
-        
         KSharedConfig::Ptr config = Core::self()->activeSession()->config();
         KConfigGroup group = config->group( "General Options" );
     
@@ -425,14 +422,9 @@ void ProjectController::cleanup()
     KSharedConfig::Ptr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
 
-    KUrl::List openProjects;
-
     foreach( IProject* project, d->m_projects ) {
-        openProjects.append(project->projectFileUrl());
         closeProject( project );
     }
-
-    group.writeEntry( "Open Projects", openProjects.toStringList() );
 }
 
 void ProjectController::initialize()
@@ -628,7 +620,8 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_projectPlugins.insert( project, pluglist );
     d->m_projects.append( project );
 
-    d->saveListOfOpenedProjects();
+    if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(project->projectFileUrl()))
+        d->saveListOfOpenedProjects();
     
 //     KActionCollection * ac = d->m_core->uiController()->defaultMainWindow()->actionCollection();
 //     QAction * action;
@@ -760,7 +753,10 @@ void ProjectController::closeProject(IProject* proj_)
     {
         initializePluginCleanup(proj);
     }
-    d->saveListOfOpenedProjects();
+    
+    if(!d->m_cleaningUp)
+        d->saveListOfOpenedProjects();
+    
     emit projectClosed(proj);
     return;
 }
