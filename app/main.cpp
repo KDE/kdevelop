@@ -118,6 +118,7 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
     options.add("profile <profile>", ki18n( "Profile to load" ));
+    options.add("s <session>", ki18n("Session to load" ));
     options.add("project <project>", ki18n( "Url to project to load" ));
     options.add("+files", ki18n( "Files to load" ));
     KCmdLineArgs::addCmdLineOptions( options );
@@ -136,6 +137,10 @@ int main( int argc, char *argv[] )
         splash->show();
         QTimer::singleShot(0, splash, SLOT(deleteLater()));
     }
+
+    QString sessionName = args->getOption("s");
+    if(!sessionName.isEmpty())
+        setenv("KDEV_SESSION", sessionName.toLatin1(), 1);
 
     Core::initialize();
     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
