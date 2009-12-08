@@ -30,6 +30,10 @@
 #include <kdebug.h>
 
 #include <interfaces/iprojectfilemanager.h>
+#include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <QPointer>
 
 namespace KDevelop
 {
@@ -37,32 +41,38 @@ namespace KDevelop
 class ImportProjectJobPrivate
 {
 public:
-    ImportProjectJobPrivate( ImportProjectJob* job ) {}
+    ImportProjectJobPrivate( ImportProjectJob* job ) : cancel(false) {}
     ProjectFolderItem *m_folder;
     IProjectFileManager *m_importer;
+    QFutureWatcher<void> *m_watcher;
+    QPointer<IProject> m_project;
+    bool cancel;
 
     void import(ProjectFolderItem* folder)
     {
         QList<KDevelop::ProjectFolderItem*> subFolders = m_importer->parse(folder);
         foreach(KDevelop::ProjectFolderItem* sub, subFolders)
         {
-            import(sub);
+            if(!cancel)
+                import(sub);
         }  
     }
-
 
 };
 
 ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer)
     : KJob(0), d(new ImportProjectJobPrivate( this ) )
-
 {
+    setCapabilities(Killable);
+    
     d->m_importer = importer;
     ProjectFolderItem *folderItem = 0;
     if ( folder->type() == ProjectBaseItem::Folder ||
          folder->type() == ProjectBaseItem::BuildFolder)
     {
         folderItem = dynamic_cast<ProjectFolderItem*>( folder );
+        d->m_project = folderItem->project();
+        setObjectName(QString("Project Import: %1").arg(d->m_project->name()));
     }
     d->m_folder = folderItem;
 }
@@ -74,20 +84,38 @@ ImportProjectJob::~ImportProjectJob()
 
 void ImportProjectJob::start()
 {
-    QFutureWatcher<void>* watcher = new QFutureWatcher<void>();
-    connect(watcher, SIGNAL(finished()), SLOT(importDone()));
+    d->m_watcher = new QFutureWatcher<void>();
+    connect(d->m_watcher, SIGNAL(finished()), SLOT(importDone()));
+    connect(d->m_watcher, SIGNAL(canceled()), SLOT(importCanceled()));
     QFuture<void> f = QtConcurrent::run(d, &ImportProjectJobPrivate::import, d->m_folder);
-    watcher->setFuture(f);
+    d->m_watcher->setFuture(f);
 }
 
 void ImportProjectJob::importDone()
 {
-    if ( sender() )
-        sender()->deleteLater(); /* Goodbye to the QFutureWatcher */
+    d->m_watcher->deleteLater(); /* Goodbye to the QFutureWatcher */
 
-    emitResult();
+    if(!d->cancel)
+        emitResult();
 }
 
+bool ImportProjectJob::doKill()
+{
+    kDebug() << "killiiiiiiiing";
+    d->m_watcher->cancel();
+    d->cancel=true;
+    d->m_watcher->waitForFinished();
+    return true;
+}
+
+void ImportProjectJob::importCanceled()
+{
+    d->m_watcher->deleteLater();
+    
+    if(d->m_project) {
+        ICore::self()->projectController()->closeProject(d->m_project);
+    }
+}
 
 }
 #include "importprojectjob.moc"

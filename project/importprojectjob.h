@@ -45,9 +45,11 @@ public:
 
 public:
     void start();
+    virtual bool doKill();
 
 private Q_SLOTS:
     void importDone();
+    void importCanceled();
 
 private:
     class ImportProjectJobPrivate* const d;
