@@ -78,12 +78,6 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-bool reopenProjectsOnStartup()
-{
-    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Reopen Projects On Startup", true );
-}
-
 bool addProjectsToBuildset()
 {
     KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
@@ -437,14 +431,12 @@ void ProjectController::cleanup()
 
 void ProjectController::initialize()
 {
-    if (reopenProjectsOnStartup()) {
-        KSharedConfig::Ptr config = Core::self()->activeSession()->config();
-        KConfigGroup group = config->group( "General Options" );
-        KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
+    KSharedConfig::Ptr config = Core::self()->activeSession()->config();
+    KConfigGroup group = config->group( "General Options" );
+    KUrl::List openProjects = group.readEntry( "Open Projects", QStringList() );
 
-        foreach (const KUrl& url, openProjects)
-            openProject(url);
-    }
+    foreach (const KUrl& url, openProjects)
+        openProject(url);
 
     connect( Core::self()->selectionController(), SIGNAL(selectionChanged(KDevelop::Context*)),
              SLOT(updateActionStates(KDevelop::Context*)) );
