@@ -73,6 +73,7 @@ Boston, MA 02110-1301, USA.
 #include <language/backgroundparser/parseprojectjob.h>
 #include <kio/job.h>
 #include "sessioncontroller.h"
+#include "session.h"
 
 namespace KDevelop
 {
@@ -546,6 +547,23 @@ void ProjectController::openProject( const KUrl &projectFile )
 {
     KUrl url = projectFile;
 
+    if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(url))
+    {
+        foreach( const Session* session, Core::self()->sessionController()->sessions())
+        {
+            if(session->containedProjects().contains(url))
+            {
+                int res = KMessageBox::questionYesNo(Core::self()->uiControllerInternal()->activeMainWindow(),
+                                i18n("The project you are opening is part of the session %1, do you want to open the session instead?", session->description()));
+                if(res == KMessageBox::Yes)
+                {
+                    Core::self()->sessionController()->loadSession(session->id().toString());
+                    return;
+                }
+            }
+        }
+    }
+    
     if ( url.isEmpty() )
     {
         url = d->dialog->askProjectConfigLocation();

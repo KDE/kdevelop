@@ -43,8 +43,11 @@ public:
     ///Finds a session by its name or by its UUID
     Session* session( const QString& nameOrId ) const;
     virtual ISession* activeSession() const;
-    QList<QString> sessions() const;
+    QList<QString> sessionNames() const;
     Session* createSession( const QString& name );
+    
+    QList<const Session*> sessions() const;
+    
     void loadDefaultSession();
 
     void startNewSession();

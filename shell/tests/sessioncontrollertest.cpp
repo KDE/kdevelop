@@ -77,7 +77,7 @@ void SessionControllerTest::init()
 
 void SessionControllerTest::cleanupTestCase()
 {
-    foreach( const QString& name, m_sessionCtrl->sessions() )
+    foreach( const QString& name, m_sessionCtrl->sessionNames() )
     {
         m_sessionCtrl->deleteSession( name );
     }
@@ -100,10 +100,10 @@ void SessionControllerTest::createSession_data()
 void SessionControllerTest::createSession()
 {
     QFETCH(QString, sessionName);
-    int sessionCount = m_sessionCtrl->sessions().count();
+    int sessionCount = m_sessionCtrl->sessionNames().count();
     Session* s = m_sessionCtrl->createSession( sessionName );
-    QVERIFY( m_sessionCtrl->sessions().contains( sessionName )  );
-    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    QVERIFY( m_sessionCtrl->sessionNames().contains( sessionName )  );
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
 }
 
@@ -162,13 +162,13 @@ void SessionControllerTest::canRenameActiveSession()
 void SessionControllerTest::deleteSession()
 {
     const QString sessionName = "TestSession3";
-    int sessionCount = m_sessionCtrl->sessions().count();
+    int sessionCount = m_sessionCtrl->sessionNames().count();
     Session* s = m_sessionCtrl->createSession( sessionName );
-    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     verifySessionDir( s );
     QSignalSpy spy(m_sessionCtrl, SIGNAL(sessionDeleted(const QString&)));
     m_sessionCtrl->deleteSession( sessionName );
-    QCOMPARE( sessionCount, m_sessionCtrl->sessions().count() );
+    QCOMPARE( sessionCount, m_sessionCtrl->sessionNames().count() );
 
     QCOMPARE(spy.size(), 1);
     QList<QVariant> arguments = spy.takeFirst();
@@ -185,17 +185,17 @@ void SessionControllerTest::cloneSession()
     QString testgrp = "TestGroup";
     QString testentry = "TestEntry";
     QString testval = "TestValue";
-    int sessionCount = m_sessionCtrl->sessions().count();
+    int sessionCount = m_sessionCtrl->sessionNames().count();
     m_sessionCtrl->createSession( sessionName );
     Session* s = m_sessionCtrl->session( sessionName );
     s->config()->group( testgrp ).writeEntry( testentry, testval );
     s->config()->sync();
-    QCOMPARE( sessionCount+1, m_sessionCtrl->sessions().count() );
+    QCOMPARE( sessionCount+1, m_sessionCtrl->sessionNames().count() );
     QVERIFY( m_sessionCtrl->session( sessionName ) );
     
     QString newSession = m_sessionCtrl->cloneSession( sessionName );
     QVERIFY( m_sessionCtrl->session( newSession ) );
-    QCOMPARE( sessionCount+2, m_sessionCtrl->sessions().count() );
+    QCOMPARE( sessionCount+2, m_sessionCtrl->sessionNames().count() );
     Session* news = m_sessionCtrl->session( newSession );
     QCOMPARE( testval, news->config()->group( testgrp ).readEntry( testentry, "" ) );
     QCOMPARE( i18n( "Copy of %1", sessionName ), news->name() );

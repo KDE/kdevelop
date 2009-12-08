@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QObject>
 #include <QtCore/QUuid>
 #include <interfaces/isession.h>
+#include <kurl.h>
 
 namespace KDevelop
 {
@@ -41,6 +42,8 @@ public:
 
     void deleteFromDisk();
 
+    KUrl::List containedProjects() const;
+    
     virtual QString description() const;    
     virtual QString name() const;
     void setName( const QString& );

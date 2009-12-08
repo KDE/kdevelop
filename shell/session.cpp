@@ -87,11 +87,16 @@ QString Session::name() const
     return d->config->group("").readEntry( cfgSessionNameEntry, "" );
 }
 
+KUrl::List Session::containedProjects() const
+{
+    return d->config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
+}
+
 QString Session::description() const
 {
     QString ret = name();
     
-    KUrl::List openProjects = d->config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
+    KUrl::List openProjects = containedProjects();
 
     if(!openProjects.isEmpty()) {
         if(!ret.isEmpty())

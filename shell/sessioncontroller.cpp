@@ -221,7 +221,7 @@ void SessionController::loadSession( const QString& nameOrId )
     d->loadSessionExternally( session( nameOrId ) );
 }
 
-QList<QString> SessionController::sessions() const
+QList<QString> SessionController::sessionNames() const
 {
     QStringList l;
     foreach( const Session* s, d->sessionActions.keys() )
@@ -229,6 +229,15 @@ QList<QString> SessionController::sessions() const
         l << s->name();
     }
     return l;
+}
+
+QList< const KDevelop::Session* > SessionController::sessions() const
+{
+    QList< const KDevelop::Session* > ret;
+    foreach( const Session* s, d->sessionActions.keys() )
+        ret << s;
+    
+    return ret;
 }
 
 Session* SessionController::createSession( const QString& name )

@@ -41,7 +41,7 @@ int SessionModel::rowCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() )
         return 0;
-    return Core::self()->sessionController()->sessions().count();
+    return Core::self()->sessionController()->sessionNames().count();
 }
 
 QVariant SessionModel::headerData( int, Qt::Orientation, int ) const
@@ -56,7 +56,7 @@ QVariant SessionModel::data( const QModelIndex& idx, int role ) const
     {
         return QVariant();
     }
-    QString sname = Core::self()->sessionController()->sessions().at( idx.row() );
+    QString sname = Core::self()->sessionController()->sessionNames().at( idx.row() );
     if( role == Qt::DisplayRole || role == Qt::EditRole )
     {
         return sname;
@@ -95,7 +95,7 @@ bool SessionModel::setData( const QModelIndex& idx, const QVariant& value, int r
     {
         return false;
     }
-    QString sname = Core::self()->sessionController()->sessions().at( idx.row() );
+    QString sname = Core::self()->sessionController()->sessionNames().at( idx.row() );
     Session* s = Core::self()->sessionController()->session( sname );
     s->setName( value.toString() );
     emit dataChanged( idx, idx );
@@ -119,7 +119,7 @@ void SessionModel::deleteSessions( const QList<QModelIndex>& indexes )
     int startRow = rowCount(), endRow = -1;
     foreach( const QModelIndex& idx, indexes )
     {
-        QString sname = Core::self()->sessionController()->sessions().at( idx.row() );
+        QString sname = Core::self()->sessionController()->sessionNames().at( idx.row() );
         if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount()
             || Core::self()->sessionController()->session( sname ) == Core::self()->activeSession() )
         {
@@ -145,7 +145,7 @@ void SessionModel::activateSession( const QModelIndex& idx )
     {
         return;
     }
-    QStringList sessionList = Core::self()->sessionController()->sessions();
+    QStringList sessionList = Core::self()->sessionController()->sessionNames();
     QString sname = sessionList.at( idx.row() );
     QString aname = Core::self()->activeSession()->name();
     if( sname == aname )
