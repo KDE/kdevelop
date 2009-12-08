@@ -43,6 +43,10 @@ public:
     ISession( QObject* parent = 0 );
     virtual ~ISession();
 
+    /**
+     * A short string nicely identifying the session, including contained projects
+     */
+    virtual QString description() const = 0;
     virtual QString name() const = 0;
     virtual KUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
