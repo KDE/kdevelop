@@ -110,9 +110,10 @@ public:
     ProjectController* q;
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
+    bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
 
     ProjectControllerPrivate( ProjectController* p )
-        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false)
+        : m_core(0), model(0), selectionModel(0), dialog(0), m_configuringProject(0), q(p), m_foundProjectFile(false), m_cleaningUp(false)
     {
     }
 
@@ -157,6 +158,9 @@ public:
     }
     void saveListOfOpenedProjects()
     {
+        if(m_cleaningUp)
+            return;
+        
         KSharedConfig::Ptr config = Core::self()->activeSession()->config();
         KConfigGroup group = config->group( "General Options" );
     
@@ -416,6 +420,8 @@ ProjectController::~ProjectController()
 
 void ProjectController::cleanup()
 {
+    d->m_cleaningUp = true;
+    
     KSharedConfig::Ptr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
 
