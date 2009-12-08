@@ -216,6 +216,7 @@ struct InsertIntoDUChain
   }
   
   TopDUContext* tryGet() {
+      DUChainReadLocker lock;
     return DUChain::self()->chainForDocument(m_insertedCode.file(), false);
   }
   
