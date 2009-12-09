@@ -912,6 +912,8 @@ void TopDUContext::setParsingEnvironmentFile(ParsingEnvironmentFile* file)
     file->setTopContext(IndexedTopDUContext(ownIndex()));
     Q_ASSERT(file->indexedTopContext().isValid());
     file->setFeatures(d_func()->m_features);
+    
+    file->setImportsCache(d_func()->m_importsCache);
   }
 }
 
