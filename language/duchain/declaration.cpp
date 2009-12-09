@@ -209,7 +209,7 @@ Identifier Declaration::identifier( ) const
   return d_func()->m_identifier.identifier();
 }
 
-IndexedIdentifier Declaration::indexedIdentifier( ) const
+const IndexedIdentifier& Declaration::indexedIdentifier( ) const
 {
   //ENSURE_CAN_READ Commented out for performance reasons
   return d_func()->m_identifier;
