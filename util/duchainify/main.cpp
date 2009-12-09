@@ -66,7 +66,6 @@ void messageOutput(QtMsgType type, const char *msg)
 
 Manager::Manager()
 {
-    connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
 }
 
 
