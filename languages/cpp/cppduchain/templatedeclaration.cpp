@@ -574,7 +574,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               newInstance.baseClass = newType->indexed();
               klass->replaceBaseClass( num, newInstance );
             } else {
-              kDebug(9007) << "Resolved bad base-class";
+//               kDebug(9007) << "Resolved bad base-class";
             }
           }
           ++num;
@@ -727,6 +727,7 @@ void TemplateDeclaration::deleteAllInstantiations()
 #define ifDebugMatching(x)
 
 QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplateParameters(Cpp::InstantiationInformation info, const TopDUContext* source) {
+  Q_ASSERT(source);
   ///@todo match higher scopes
   InstantiationInformation specializedWith(this->specializedWith().information());
   
@@ -836,14 +837,17 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
       if(*it) {
         return dynamic_cast<Declaration*>(*it);
       }else{
-        ///@todo What the same thing is instantiated twice in parralel? Then this may trigger as well, altough one side should wait
+        ///@todo What if the same thing is instantiated twice in parralel? Then this may trigger as well, altough one side should wait
         ///We are currently instantiating this declaration with the same template arguments. This would lead to an assertion.
         kDebug() << "tried to recursively instantiate" << dynamic_cast<Declaration*>(this)->toString() << "with" << templateArguments.toString();
         ///Maybe problematic, because the returned declaration is not in the correct context etc.
-        return dynamic_cast<Declaration*>(this);
+        return 0;
       }
     }
   }
+  
+  if(!source)
+    return 0;
   
   DUContext* surroundingContext = dynamic_cast<const Declaration*>(this)->context();
   if(!surroundingContext) {
@@ -1063,8 +1067,7 @@ Declaration* SpecialTemplateDeclaration<ForwardDeclaration>::resolve(const TopDU
       Declaration* baseResolved = instantiatedFrom->resolve(topContext);
       TemplateDeclaration* baseTemplate = dynamic_cast<TemplateDeclaration*>(baseResolved);
       if( baseResolved && baseTemplate ) {
-        Declaration* ret = baseTemplate->instantiate(instantiatedWith().information(), topContext ? topContext : this->topContext());
-        return ret;
+        return baseTemplate->instantiate(instantiatedWith().information(), topContext ? topContext : this->topContext());
       }else{
           //Forward-declaration was not resolved
           return 0;

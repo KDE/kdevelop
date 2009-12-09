@@ -44,6 +44,9 @@
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/codemodel.h>
+#include <typeinfo>
+#include <language/duchain/classdeclaration.h>
+#include <cppducontext.h>
 
 QTEST_KDEMAIN(TestCppCodegen, GUI )
 
@@ -54,6 +57,8 @@ void TestCppCodegen::initTestCase()
   //Initialize KDevelop components
   AutoTestShell::init();
   Core::initialize(KDevelop::Core::NoUi);
+  
+  Core::self()->languageController()->backgroundParser()->setDelay(1);
   
   CodeRepresentation::setDiskChangesForbidden(true);
 }
@@ -85,6 +90,115 @@ void dumpDUChain(InsertIntoDUChain& code)
 
 void TestCppCodegen::testSimplifiedUpdating()
 {
+  {
+    InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member2; struct Member1; };");
+    InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_1.h>\n struct C : public A { Member1 m1; Member2 m2; };");
+    kWarning() << "********************* Parsing step 1";
+    code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+    
+    DUChainReadLocker lock;
+
+    QCOMPARE(code3->localDeclarations().size(), 1);
+    QCOMPARE(code3->childContexts().size(), 1);
+    QCOMPARE(code3->childContexts()[0]->localDeclarations().size(), 2);
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
+    QCOMPARE(code3->childContexts()[0]->importedParentContexts().size(), 1);
+    QCOMPARE(code1->childContexts().size(), 1);
+  }  
+  {
+    InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member1; };");
+    InsertIntoDUChain code2("duchaintest_2.h", "template<class T> struct B : public T{ struct Member2; };");
+    InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_2.h>\n #include <duchaintest_1.h>\n struct C : public B<A> { Member1 m1; Member2 m2; };");
+    kWarning() << "********************* Parsing step 1";
+    code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+    
+    DUChainReadLocker lock;
+
+    QCOMPARE(code3->localDeclarations().size(), 1);
+    QCOMPARE(code3->childContexts().size(), 1);
+    QCOMPARE(code3->childContexts()[0]->localDeclarations().size(), 2);
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
+    QCOMPARE(code3->childContexts()[0]->importedParentContexts().size(), 1);
+    QCOMPARE(code1->childContexts().size(), 1);
+    
+    QCOMPARE(code2->localDeclarations().size(), 1);
+    ClassDeclaration* BClass = dynamic_cast<ClassDeclaration*>(code2->localDeclarations()[0]);
+    QVERIFY(BClass);
+    QCOMPARE(BClass->baseClassesSize(), 1u);
+    QCOMPARE(BClass->baseClasses()[0].baseClass.abstractType()->toString(), QString("T"));
+    
+    QCOMPARE(code3->childContexts()[0]->importedParentContexts().size(), 1);
+    
+    DUContext* BAContext = code3->childContexts()[0]->importedParentContexts()[0].context(code3.topContext());
+    QVERIFY(BAContext);
+    QVERIFY(!BAContext->inSymbolTable());
+    
+    //2 contexts are imported: The template-context and the parent-class context
+    QCOMPARE(BAContext->importedParentContexts().size(), 2);
+    QCOMPARE(BAContext->importedParentContexts()[1].context(code3.topContext()), code1->childContexts()[0]);
+    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(BAContext->owner());
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->baseClassesSize(), 1u);
+    QCOMPARE(classDecl->baseClasses()[0].baseClass.index(), code1->localDeclarations()[0]->indexedType().index());
+    
+    lock.unlock();
+    kWarning() << "********************* Parsing step 2";
+    code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdateRecursive, true);
+    
+    lock.lock();
+    QCOMPARE(code3->localDeclarations().size(), 1);
+    QCOMPARE(code3->childContexts().size(), 1);
+    QCOMPARE(code3->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(code1->childContexts().size(), 1);
+
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
+    
+    //BClass should have been updated, not deleted
+    QVERIFY(BClass == dynamic_cast<ClassDeclaration*>(code2->localDeclarations()[0]));
+    QCOMPARE(BClass->baseClassesSize(), 1u);
+    QCOMPARE(BClass->baseClasses()[0].baseClass.abstractType()->toString(), QString("T"));
+
+    //The template-instantiation context "B<A>" should have been deleted
+    DUContext* BAContext2 = code3->childContexts()[0]->importedParentContexts()[0].context(code3.topContext());
+//     kDebug() << "BAContexts" << BAContext << BAContext2;
+//     QVERIFY(BAContext != BAContext2);
+    QCOMPARE(BAContext2->importedParentContexts().size(), 2);
+    QCOMPARE(BAContext2->importedParentContexts()[1].context(code3.topContext()), code1->childContexts()[0]);
+    
+    classDecl = dynamic_cast<ClassDeclaration*>(BAContext2->owner());
+    QVERIFY(classDecl);
+    QCOMPARE(classDecl->baseClassesSize(), 1u);
+    QCOMPARE(classDecl->baseClasses()[0].baseClass.index(), code1->localDeclarations()[0]->indexedType().index());
+  }
+  {
+    InsertIntoDUChain code1("duchaintest_1.h", "struct A { struct Member1; };");
+    InsertIntoDUChain code2("duchaintest_2.h", "template<class T> struct B : public T{ struct Member2; };");
+    InsertIntoDUChain code3("duchaintest_3.h", "#include <duchaintest_2.h>\n #include <duchaintest_1.h>\n typedef B<A> Parent; struct C : public Parent { Member1 m1; Member2 m2; };");
+    
+    code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+    
+    DUChainReadLocker lock;
+
+    QCOMPARE(code3->localDeclarations().size(), 2);
+    QCOMPARE(code3->childContexts().size(), 1);
+    QCOMPARE(code3->childContexts()[0]->localDeclarations().size(), 2);
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
+    
+    lock.unlock();
+    code3.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdateRecursive, true);
+    
+    lock.lock();
+    QCOMPARE(code3->localDeclarations().size(), 2);
+    QCOMPARE(code3->childContexts().size(), 1);
+    QCOMPARE(code3->childContexts()[0]->localDeclarations().size(), 2);
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QVERIFY(code3->childContexts()[0]->localDeclarations()[1]->abstractType().cast<StructureType>());
+  }
+  
   {
     QString text = "class C { class D d; };";
     

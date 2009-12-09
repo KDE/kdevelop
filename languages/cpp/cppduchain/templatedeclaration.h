@@ -83,6 +83,7 @@ namespace Cpp {
       /**
        * Either finds the existing instance instantiated with the given template-arguments, or creates a new one.
        * The template-arguments must chained up with the template-arguments of the parent, if the parent is a template class.
+       * @param source the top-context from which ones perspective the instantiation should happen. If @p topContext is zero, only existing specializations are returned
        * @param forceLocal if this is true, it is this exact declaration that is instantiated. Else, this declaration is instantiated again.
        * */
       KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source, bool forceLocal = false );

@@ -159,6 +159,8 @@ bool FindDeclaration::closeIdentifier(bool isFinalIdentifier) {
   DUContext::SearchItem::PtrList allIdentifiers;
   allIdentifiers.append( DUContext::SearchItem::Ptr( new DUContext::SearchItem(lookup) ) );
   
+  Q_ASSERT(m_source);
+  
   ///Search a Declaration of the identifier
 
   DUContext* scopeContext = 0;

@@ -440,13 +440,14 @@ class CppDUContext : public BaseContext {
                 memberInstantiationInformation = i;
                 current = current->parentContext();
               }
-              
+              Q_ASSERT(source);
               copy = templateDecl->instantiate(memberInstantiationInformation, source);
               //This can happen in case of explicit specializations
 //               if(copy->context() != this)
 //                 kWarning() << "serious problem: Instatiation is in wrong context, should be in this one";
 
-              ret.append(copy);
+              if(copy)
+                ret.append(copy);
             }
           }
         }
@@ -593,6 +594,7 @@ class CppDUContext : public BaseContext {
       }
     }
 
+    ///@see TemplateDeclaration::instantiate
     DUContext* instantiate(InstantiationInformation info, const TopDUContext* source) {
       if(!info.isValid() || m_instantiatedWith == info.indexed() || !this->parentContext())
         return this;
@@ -609,12 +611,10 @@ class CppDUContext : public BaseContext {
       if(this->owner()) {
         TemplateDeclaration* templ = dynamic_cast<TemplateDeclaration*>(this->owner());
         if(templ) {
-          DUContext* ret = templ->instantiate(info, source)->internalContext();
-          if(!ret) {
-            kWarning() << "Failed to instantiate template context";
-            return this;
-          }
-          return ret;
+          Declaration* instantiatedDecl = templ->instantiate(info, source);
+          if(!instantiatedDecl)
+            return 0;
+          return instantiatedDecl->internalContext();
         }
       }
       
@@ -626,6 +626,9 @@ class CppDUContext : public BaseContext {
         if(parent)
           surroundingContext = parent->instantiate(info.previousInstantiationInformation.information(), source);
       }
+      
+      if(!surroundingContext)
+        return 0;
       
       return instantiateDeclarationAndContext( surroundingContext, source, this, info, 0, 0 );
     }
@@ -700,6 +703,7 @@ class CppDUContext : public BaseContext {
 
     virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source,  bool searchInParents, int currentDepth) const
     {
+      Q_ASSERT(source);
 //       kDebug() << "checking in" << this->scopeIdentifier(true).toString();
       if( m_instantiatedFrom )
       {
