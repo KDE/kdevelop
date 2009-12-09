@@ -1261,14 +1261,13 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
         declarations = currentContext()->findDeclarations( id, pos);
 
-        if(declarations.isEmpty()) {
-          //We haven't found a declaration, so insert a forward-declaration in the global scope
-          forwardDeclarationGlobal = true;
-        }else{
-          //We have found a declaration. Do not create a new one, instead use the declarations type.
-          if(declarations.first()->abstractType()) {
-            //This belongs into the type-builder, but it's much easier to do here, since we already have all the information
-            ///@todo See above, only search for fitting declarations(of structure/enum/class/union type)
+        forwardDeclarationGlobal = true;
+        
+        //If a good declaration has been found, use its type. Else, create a new forward-declaration.
+        foreach(Declaration* decl, declarations)
+        {
+          if((decl->topContext() != currentContext()->topContext() || wasEncountered(decl)) && decl->abstractType())
+          {
             injectType(declarations.first()->abstractType());
             
             if( isFriendDeclaration ) {
@@ -1276,8 +1275,6 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
               createFriendDeclaration(node);
             }
             return;
-          }else{
-            kDebug(9007) << "Error: Bad declaration";
           }
         }
       }

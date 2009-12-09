@@ -86,6 +86,43 @@ void dumpDUChain(InsertIntoDUChain& code)
 void TestCppCodegen::testSimplifiedUpdating()
 {
   {
+    QString text = "class C { class D d; };";
+    
+    InsertIntoDUChain code("testsimplified.cpp", text);
+    
+    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+    
+    DUChainReadLocker lock;
+
+    dumpAST(code);
+    dumpDUChain(code);
+    //The forward-declaration of 'D' is forwarded into the top-context
+    QCOMPARE(code->localDeclarations().size(), 2);
+    Declaration* classDecl = code->localDeclarations()[0];
+    QCOMPARE(code->childContexts().size(), 1);
+    QCOMPARE(code->childContexts()[0]->localDeclarations().size(), 1);
+    QVERIFY(code->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QCOMPARE(code->childContexts()[0]->localDeclarations()[0]->abstractType()->toString(), QString("D"));
+    
+    lock.unlock();
+    
+    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::ForceUpdate, true);
+    lock.lock();
+    
+    dumpDUChain(code);
+    
+    QCOMPARE(code->localDeclarations().size(), 2);
+    
+    //Verify that an update has happened, rather than recreating everything
+    QCOMPARE(code->localDeclarations()[0], classDecl);
+    
+    QCOMPARE(code->childContexts().size(), 1);
+    QCOMPARE(code->childContexts()[0]->localDeclarations().size(), 1);
+    QVERIFY(code->childContexts()[0]->localDeclarations()[0]->abstractType().cast<StructureType>());
+    QCOMPARE(code->childContexts()[0]->localDeclarations()[0]->abstractType()->toString(), QString("D"));
+  }
+  
+  {
     QString text = "class C {int test(); int mem; }; void test(int a); int i;";
     
     InsertIntoDUChain code("testsimplified.cpp", text);
@@ -127,7 +164,7 @@ void TestCppCodegen::testSimplifiedUpdating()
     InsertIntoDUChain codeA("A.h", "#ifndef A_H\n #define A_H\n class A{}; \n#endif");
     InsertIntoDUChain codeB("B.h", "#include <A.h>\n class B{};");
     
-    codeB.parse(TopDUContext::VisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive);
+    codeB.parse(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive);
     
     DUChainReadLocker lock;
 
@@ -136,6 +173,19 @@ void TestCppCodegen::testSimplifiedUpdating()
 
     QCOMPARE(codeB->importedParentContexts().size(), 1);
     QCOMPARE(codeA->localDeclarations().size(), 1);
+    QVERIFY(codeA->parsingEnvironmentFile()->featuresSatisfied((TopDUContext::Features)(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive)));
+    QVERIFY(codeB->parsingEnvironmentFile()->featuresSatisfied((TopDUContext::Features)(TopDUContext::SimplifiedVisibleDeclarationsAndContexts | TopDUContext::AST | TopDUContext::Recursive)));
+    
+    lock.unlock();
+
+    //Update with more features
+    codeB.parse(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::Recursive, true);
+    
+    lock.lock();
+    QCOMPARE(codeB->importedParentContexts().size(), 1);
+    QCOMPARE(codeA->localDeclarations().size(), 1);
+    QVERIFY(codeA->parsingEnvironmentFile()->featuresSatisfied((TopDUContext::Features)(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::Recursive)));
+    QVERIFY(codeB->parsingEnvironmentFile()->featuresSatisfied((TopDUContext::Features)(TopDUContext::AllDeclarationsContextsUsesAndAST | TopDUContext::Recursive)));
   }
   {
     ///Test whether "empty" files work
