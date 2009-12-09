@@ -91,8 +91,10 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
   {
     Q_ASSERT(rc->firstRangeExtent.second > 0);
     --rc->firstRangeExtent.second;
-    if(rc->firstRangeExtent.second == 0)
+    if(rc->firstRangeExtent.second == 0) {
       rc->firstRangeExtent = qMakePair<uint, uint>(0, 0);
+      rc->firstRangeStart = 0;
+    }
   }
   else if(rc->hasAdditionalRanges)
   {
