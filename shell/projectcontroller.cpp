@@ -101,7 +101,6 @@ public:
     ProjectModel* model;
     QItemSelectionModel* selectionModel;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
-    QPointer<KAction> m_closeAllProjects;
     QPointer<KAction> m_closeProject;
     QPointer<KAction> m_openConfig;
     IProjectDialogProvider* dialog;
@@ -368,14 +367,6 @@ void ProjectController::setupActions()
 //    action->setWhatsThis( i18n( "<b>Close project</b><p>Closes the current project." ) );
 //    action->setEnabled( false );
 
-    d->m_closeAllProjects = action = ac->addAction( "project_close_all" );
-    action->setText( i18n( "Close All Projects" ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( closeAllProjects() ) );
-    action->setToolTip( i18n( "Close the current session with all its open open projects, and start a new one" ) );
-    action->setWhatsThis( i18n( "<b>Close all projects</b><p>Closes all of the currently open projects.</p>" ) );
-    action->setEnabled( false );
-    action->setIcon(KIcon("project-development-close-all"));
-
     d->m_closeProject = action = ac->addAction( "project_close" );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( closeSelectedProjects() ) );
     action->setText( i18n( "Close Project(s)" ) );
@@ -615,7 +606,6 @@ void ProjectController::openProject( const KUrl &projectFile )
     }
 
     d->m_currentlyOpening << url;
-    d->m_closeAllProjects->setEnabled(true);
     return;
 }
 
@@ -732,10 +722,6 @@ void ProjectController::initializePluginCleanup(IProject* proj)
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload
     connect(proj, SIGNAL(destroyed(QObject*)), this, SLOT(unloadAllProjectPlugins()));
-    if (d->m_closeAllProjects)
-    {
-        d->m_closeAllProjects->setEnabled(false);
-    }
 }
 
 void ProjectController::closeProject(IProject* proj_)
@@ -809,17 +795,6 @@ void ProjectController::configureProject( IProject* project )
 void ProjectController::addProject(IProject* project)
 {
     d->m_projects.append( project );
-}
-
-
-
-void ProjectController::closeAllProjects()
-{
-    Core::self()->sessionController()->startNewSession();
-    
-    //Terminate this instance of kdevelop if the user agrees
-    foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
-        window->close();
 }
 
 QItemSelectionModel* ProjectController::projectSelectionModel()

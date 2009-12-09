@@ -182,6 +182,10 @@ SessionController::~SessionController()
 void SessionController::startNewSession()
 {
     d->newSession();
+    
+    //Terminate this instance of kdevelop if the user agrees
+    foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+        window->close();
 }
 
 void SessionController::cleanup()
