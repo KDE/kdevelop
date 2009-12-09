@@ -390,6 +390,7 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
             }
         }
     }
+    return false;
 }
 
 bool GenericProjectManager::removeFolder( KDevelop::ProjectFolderItem * folder )
