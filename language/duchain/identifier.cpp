@@ -1199,14 +1199,13 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
     ifDebug( kDebug() << "decreasing"; )
     
     decrease(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-  
-  index = rhs.index;
-  
-  if(shouldDoDUChainReferenceCounting(this)) {
+
+    index = rhs.index;
+
     ifDebug( kDebug() << index << "increasing"; )
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
     increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
+  } else {
+    index = rhs.index;
   }
   
   return *this;
