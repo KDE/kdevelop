@@ -157,6 +157,8 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
   qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 
   switch( action.type ) {
+    case NavigationAction::ExecuteKey:
+      break;
     case NavigationAction::None:
       kDebug() << "Tried to execute an invalid action in navigation-widget" << endl;
       break;

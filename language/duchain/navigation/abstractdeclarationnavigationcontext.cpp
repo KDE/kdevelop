@@ -588,6 +588,8 @@ QString AbstractDeclarationNavigationContext::stringFromAccess(Declaration::Acce
       return "protected";
     case Declaration::Public:
       return "public";
+    default:
+      break;
   }
   return "";
 }
