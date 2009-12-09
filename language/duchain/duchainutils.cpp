@@ -61,6 +61,8 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
         case Declaration::Private:
           p |= CodeCompletionModel::Private;
           break;
+        default:
+          break;
       }
 
       if (member->isStatic())

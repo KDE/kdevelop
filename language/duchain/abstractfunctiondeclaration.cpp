@@ -68,7 +68,7 @@ IndexedString AbstractFunctionDeclaration::defaultParameterForArgument(int index
   FunctionType::Ptr fType = dynamic_cast<const Declaration*>(this)->type<FunctionType>();
   if(index >= 0 && index < fType->arguments().size()) {
     index -= (fType->arguments().size() - defaultParametersSize());
-    if(index >= 0 && index < defaultParametersSize())
+    if(index >= 0 && index < (int)defaultParametersSize())
       return defaultParameters()[index];
   }
   
