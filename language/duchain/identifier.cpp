@@ -1172,19 +1172,17 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const Qualifie
   ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
   
   if(shouldDoDUChainReferenceCounting(this)) {
+    QMutexLocker lock(qualifiedidentifierRepository->mutex());
+
     ifDebug( kDebug() << "decreasing"; )
-    
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
     decrease(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
-  }
-  
-  index = id.index();
-  
-  if(shouldDoDUChainReferenceCounting(this)) {
+
+    index = id.index();
+
     ifDebug( kDebug() << index << "increasing"; )
-    
-    QMutexLocker lock(qualifiedidentifierRepository->mutex());
     increase(qualifiedidentifierRepository->dynamicItemFromIndexSimple(index)->m_refCount, index);
+  } else {
+    index = id.index();
   }
   
   return *this;
