@@ -122,7 +122,7 @@ void ProblemWidget::forceFullUpdate() {
         return;
     }
     DUChainReadLocker lock(DUChain::lock());
-    DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), KDevelop::TopDUContext::ForceUpdateRecursive);
+    DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), (TopDUContext::Features)(KDevelop::TopDUContext::VisibleDeclarationsAndContexts | KDevelop::TopDUContext::ForceUpdateRecursive));
 }
 
 void ProblemWidget::showProblems(TopDUContext* ctx)
