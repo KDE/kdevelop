@@ -291,17 +291,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         output << '\"';
 
-        ///@todo Create a test-case for this code
         while (!is.atEnd()) {
-          if (is == '"') {
-            output << '\\' << is;
-
-          } else if (is == '\n') {
-            output << '"' << is << '"';
-
-          } else {
-            output << is;
-          }
+          output << is;
 
           skip_whitespaces(++is, output);
         }
