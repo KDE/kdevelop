@@ -213,9 +213,13 @@ int main(int argc, char** argv)
     
     manager.addToBackgroundParser(dir.toLocalFile(), (TopDUContext::Features)features);
     
-    std::cout << "Added " << manager.waiting().size() << " files to the background parser" << std::endl;
-    
-    app.exec();
+    if ( !manager.waiting().isEmpty() ) {
+        std::cout << "Added " << manager.waiting().size() << " files to the background parser" << std::endl;
+
+        app.exec();
+    } else {
+        std::cout << "no files added to the background parser" << std::endl;
+    }
 }
 
 #include "main.moc"
