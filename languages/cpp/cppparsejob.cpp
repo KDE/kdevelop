@@ -767,6 +767,11 @@ void CPPInternalParseJob::run()
         return /*parentJob()->abortJob()*/;
 
     }else{
+      {
+        DUChainWriteLocker l(DUChain::lock());
+        if(proxyContext && contentContext)
+          proxyContext->setFeatures(contentContext->features());
+      }
       kDebug() << "keeping duchain";
       highlightIfNeeded();
     }
