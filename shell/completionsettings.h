@@ -30,7 +30,7 @@ public:
     CompletionSettings()
         : m_level(MinimalWhenAutomatic), m_automatic(true),
           m_highlightSemanticProblems(true), m_showMultiLineInformation(false),
-          m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(10000)
+          m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(100000)
     {
     }
 

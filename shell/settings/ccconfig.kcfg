@@ -30,7 +30,7 @@
     <default>120</default>
     </entry>
     <entry name="minFilesForSimplifiedParsing" key="minFilesForSimplifiedParsing" type="Int">
-    <default>10000</default>
+    <default>100000</default>
     </entry>
   </group>
 </kcfg>
