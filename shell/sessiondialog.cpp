@@ -56,21 +56,24 @@ QVariant SessionModel::data( const QModelIndex& idx, int role ) const
     {
         return QVariant();
     }
-    QString sname = Core::self()->sessionController()->sessionNames().at( idx.row() );
-    if( role == Qt::DisplayRole || role == Qt::EditRole )
+    const Session* s = Core::self()->sessionController()->sessions().at( idx.row() );
+    if( role == Qt::DisplayRole )
     {
-        return sname;
+        return s->description();
+    } else if( role == Qt::EditRole )
+    {
+        return s->name();
     } else if( role == Qt::FontRole )
     {
         QFont f = KGlobalSettings::generalFont();
-        if( Core::self()->activeSession()->name() == sname )
+        if( Core::self()->activeSession()->name() == s->name() )
         {
             f.setBold( true );
         }
         return QVariant::fromValue( f );
     } else 
     {
-        if( Core::self()->activeSession()->name() == sname )
+        if( Core::self()->activeSession()->name() == s->name() )
         {
             return KColorScheme( QPalette::Active ).background( KColorScheme::ActiveBackground );
         } else
