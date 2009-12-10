@@ -64,7 +64,7 @@ void messageOutput(QtMsgType type, const char *msg)
 }
 
 
-Manager::Manager()
+Manager::Manager() : m_total(0)
 {
 }
 
@@ -75,7 +75,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     
     m_waiting.remove(url.toUrl());
     
-    std::cout << "still waiting: " << m_waiting.size() << std::endl;
+    std::cout << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
     
     if(m_waiting.isEmpty())
     {
@@ -95,6 +95,7 @@ void Manager::addToBackgroundParser(QString path, TopDUContext::Features feature
         KUrl pathUrl(path);
         
         m_waiting << pathUrl;
+        ++m_total;
         
         KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(pathUrl), features, this);
         

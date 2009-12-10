@@ -35,6 +35,7 @@ class Manager : public QObject {
         QSet<KUrl> waiting();
     private:
         QSet<KUrl> m_waiting;
+        uint m_total;
 public slots:
     void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
 };
