@@ -793,6 +793,9 @@ QPair<unsigned int, TemplateDeclaration*> TemplateDeclaration::matchTemplatePara
   if(templateContext->localDeclarations().count() != 0)
     instantiated = dynamic_cast<TemplateDeclaration*>(instantiate( instantiateWith, source, true ));
   
+  if(!instantiated)
+    return qMakePair(0u, (TemplateDeclaration*)0);
+  
   ifDebugMatching( kDebug() << "instantiated:" << dynamic_cast<Declaration*>(instantiated)->toString(); )
   
   InstantiationInformation instantiationSpecializedWith(instantiated->specializedWith().information());
