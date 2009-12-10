@@ -51,6 +51,9 @@ Boston, MA 02110-1301, USA.
 #include "sessioncontroller.h"
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
+#include <sublime/view.h>
+#include <sublime/document.h>
+#include <sublime/urldocument.h>
 
 namespace KDevelop
 {
@@ -215,6 +218,10 @@ void MainWindow::initialize()
     Core::self()->sessionController()->plugActions();
     d->setupGui();
     
+    //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
+    connect(Core::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
+    connect(Core::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), SLOT(updateCaption()), Qt::QueuedConnection);
+    
     connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateCaption()));
     connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateCaption()));
     
@@ -241,7 +248,24 @@ bool MainWindow::queryClose()
 
 void MainWindow::updateCaption()
 {
-    setCaption(Core::self()->sessionController()->activeSession()->description());
+    QString title = Core::self()->sessionController()->activeSession()->description();
+    
+    if(area()->activeView())
+    {
+        if(!title.isEmpty())
+            title += " - [ ";
+        
+        Sublime::Document* doc = area()->activeView()->document();
+        Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
+        if(urlDoc)
+            title += Core::self()->projectController()->prettyFileName(KUrl(urlDoc->documentSpecifier()), KDevelop::IProjectController::FormatPlain);
+        else
+            title += doc->title();
+        
+        title += " ]";
+    }
+    
+    setCaption(title);
 }
 
 void MainWindow::registerStatus(QObject* status)
