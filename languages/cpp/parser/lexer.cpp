@@ -954,7 +954,7 @@ KDevelop::ProblemPointer Lexer::createProblem() const
 
   KDevelop::ProblemPointer p(new KDevelop::Problem);
 
-  KDevelop::SimpleCursor position = session->positionAt(index - 1);
+  KDevelop::SimpleCursor position = session->positionAt(cursor.offsetIn(session->contents()), true);
   p->setSource(KDevelop::ProblemData::Lexer);
   p->setFinalLocation(KDevelop::DocumentRange(session->url().str(), KTextEditor::Range(position.textCursor(), 1)));
 
