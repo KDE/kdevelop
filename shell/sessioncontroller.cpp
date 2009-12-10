@@ -48,8 +48,9 @@ namespace KDevelop
 const QString SessionController::cfgSessionGroup = "Sessions";
 const QString SessionController::cfgActiveSessionEntry("Active Session");
 
-class SessionControllerPrivate
+class SessionControllerPrivate : public QObject
 {
+    Q_OBJECT
 public:
     SessionControllerPrivate( SessionController* s ) : q(s) {}
 
@@ -143,12 +144,21 @@ public:
         q->actionCollection()->addAction( "session_"+s->id().toString(), a );
         q->unplugActionList( "available_sessions" );
         q->plugActionList( "available_sessions", grp->actions() );
+        connect(s, SIGNAL(nameChanged(QString, QString)), SLOT(nameChanged()));
     }
-    
+
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;
     SessionController* q;
     QActionGroup* grp;
+
+private slots:
+    void nameChanged()
+    {
+        Q_ASSERT(qobject_cast<Session*>(sender()));
+        Session* s = static_cast<Session*>(sender());
+        sessionActions[s]->setText( s->description() );
+    }
 };
 
 void SessionController::updateSessionDescriptions()
@@ -335,4 +345,4 @@ void SessionController::plugActions()
 
 }
 #include "sessioncontroller.moc"
-
+#include "moc_sessioncontroller.cpp"
