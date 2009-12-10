@@ -271,7 +271,6 @@ void SessionController::deleteSession( const QString& nameOrId )
     d->grp->removeAction(*it);
     actionCollection()->removeAction(*it);
     plugActionList( "available_sessions", d->grp->actions() );
-    (*it)->deleteLater();
     s->deleteFromDisk();
     emit sessionDeleted( s->name() );
     d->sessionActions.remove(s);
