@@ -244,7 +244,9 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     DUChainReadLocker lock;
 
     //If the file has not been parsed yet, update it
-    if(!standardContext(docUrl))
+    TopDUContext* ctx = standardContext(docUrl);
+    //At least 'VisibleDeclarationsAndContexts' is required so we can do a switch
+    if(!ctx || (ctx->parsingEnvironmentFile() && !ctx->parsingEnvironmentFile()->featuresSatisfied(TopDUContext::VisibleDeclarationsAndContexts)))
     {
       lock.unlock();
       kDebug(9007) << "Parsing switch-candidate before switching" << switchCandidate;
