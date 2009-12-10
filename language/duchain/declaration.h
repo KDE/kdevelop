@@ -137,7 +137,8 @@ public:
    * Retrieve the declaration which is specialized with the given \a specialization index as seen from \a topContext.
    *
    * \param specialization the specialization index (see DeclarationId)
-   * \param topContext the top context to search from
+   * \param topContext the top context representing the perspective from which to specialize.
+   *                                if @p topContext is zero, only already existing specializations are returned, and if none exists, zero is returned.
    * \param upDistance upwards distance in the context-structure of the
    *                   given specialization-info. This allows specializing children.
    * */

@@ -121,7 +121,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
   return ret;
 }
 
-Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
+Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instantiateIfRequired) const
 {
   Declaration* ret = 0;
   
@@ -169,9 +169,22 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top) const
     ret = direct.declaration();
   }
   
+  
   if(ret)
-    return ret->specialize(m_specialization, top ? top : ret->topContext());
-  else
+  {
+    if(m_specialization.isValid())
+    {
+      const TopDUContext* topContextForSpecialization = top;
+      if(!instantiateIfRequired)
+        topContextForSpecialization = 0; //If we don't want to instantiate new declarations, set the top-context to zero, so specialize(..) will only look-up
+      else if(!topContextForSpecialization)
+        topContextForSpecialization = ret->topContext();
+      
+      return ret->specialize(m_specialization, topContextForSpecialization);
+    }else{
+      return ret;
+    }
+  }else
     return 0;
 }
 

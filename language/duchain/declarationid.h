@@ -124,9 +124,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * In order to be retrievable, the declaration must be in the symbol table.
      *
      * \param context Context in which to search for the Declaration.
+     * \param instantiateIfRequired Whether the declaration should be instantiated if required
      * \returns the referenced Declaration, or null if none was found.
      * */
-    Declaration* getDeclaration(const TopDUContext* context) const;
+    Declaration* getDeclaration(const TopDUContext* context, bool instantiateIfRequired = true) const;
 
     ///Same as getDeclaration(..), but returns all matching declarations if there are multiple. This also returns found forward-declarations.
     KDevVarLengthArray<Declaration*> getDeclarations(const TopDUContext* context) const;

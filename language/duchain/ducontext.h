@@ -360,7 +360,7 @@ public:
 
     ///@param topContext The top-context from where to start searching. This is important to find the correct imports
     ///                  in the case of templates or similar structures.
-    DUContext* context(const TopDUContext* topContext) const;
+    DUContext* context(const TopDUContext* topContext, bool instantiateIfRequired = true) const;
 
     //Returns the top-context index, if this import is not a specialization import.
     uint topContextIndex() const {
@@ -477,7 +477,8 @@ public:
    * Retrieve the context which is specialized with the given \a specialization as seen from the given \a topContext.
    *
    * \param specialization the specialization index (see DeclarationId)
-   * \param topContext the top context to search from
+   * \param topContext the top context representing the perspective from which to specialize.
+   *                                if @p topContext is zero, only already existing specializations are returned, and if none exists, zero is returned.
    * \param upDistance upwards distance in the context-structure of the
    *                   given specialization-info. This allows specializing children.
    * */

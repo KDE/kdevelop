@@ -1362,7 +1362,9 @@ bool DUContext::inDUChain() const {
   return top && top->inDUChain();
 }
 
-DUContext* DUContext::specialize(IndexedInstantiationInformation /*specialization*/, const TopDUContext* /*topContext*/, int /*upDistance*/) {
+DUContext* DUContext::specialize(IndexedInstantiationInformation /*specialization*/, const TopDUContext* topContext, int /*upDistance*/) {
+  if(!topContext)
+    return 0;
   return this;
 }
 
@@ -1735,7 +1737,7 @@ void DUContext::clearImportedParentContexts()
   DUCHAIN_D_DYNAMIC(DUContext);
 
   while( d->m_importedContextsSize() != 0 ) {
-    DUContext* ctx = d->m_importedContexts()[0].context(0);
+    DUContext* ctx = d->m_importedContexts()[0].context(0, false);
     if(ctx)
       ctx->m_dynamicData->removeImportedChildContext(this);
 
@@ -1935,9 +1937,9 @@ DUContext::Import::Import(const DeclarationId& id, const SimpleCursor& _position
   m_declaration = id;
 }
 
-DUContext* DUContext::Import::context(const TopDUContext* topContext) const {
+DUContext* DUContext::Import::context(const KDevelop::TopDUContext* topContext, bool instantiateIfRequired) const {
   if(m_declaration.isValid()) {
-    Declaration* decl = m_declaration.getDeclaration(topContext);
+    Declaration* decl = m_declaration.getDeclaration(topContext, instantiateIfRequired);
     if(decl)
       return decl->logicalInternalContext(topContext);
     else
