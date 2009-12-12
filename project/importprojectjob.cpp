@@ -105,7 +105,7 @@ bool ImportProjectJob::doKill()
     d->cancel=true;
     
     setError(1);
-    setErrorText(i18n("Project import cancelled."));
+    setErrorText(i18n("Project import canceled."));
     
     d->m_watcher->waitForFinished();
     return true;
