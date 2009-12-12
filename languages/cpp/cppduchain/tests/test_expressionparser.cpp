@@ -768,6 +768,33 @@ void TestExpressionParser::testTypeConversion() {
   release(c);
 }
 
+void TestExpressionParser::testEnum() {
+  TEST_FILE_PARSE_ONLY
+
+  QByteArray test = "enum Honk { Hank, Hunk }; void test() {}";
+  DUContext* c = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(c->childContexts().size(), 3);
+  
+  lock.unlock();
+  
+  Cpp::ExpressionParser parser;
+
+  //Reenable this once the type-parsing system etc. is fixed
+
+  Cpp::ExpressionEvaluationResult result = parser.evaluateExpression( "Hank", KDevelop::DUContextPointer(c));
+  lock.lock();
+  
+  kDebug() << typeid(*result.type.abstractType()).name();
+  
+  QVERIFY(result.type.type<EnumeratorType>());
+  
+  //QVERIFY(0);
+  //lock.lock();
+  release(c);
+}
+
 void TestExpressionParser::testCasts() {
   TEST_FILE_PARSE_ONLY
 
@@ -1094,11 +1121,6 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   delete session;
 
   return top;
-}
-
-void TestExpressionParser::testEnum()
-{
-    //TODO: Implement me
 }
 
 #include "test_expressionparser.moc"
