@@ -1096,4 +1096,9 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
   return top;
 }
 
+void TestExpressionParser::testEnum()
+{
+    //TODO: Implement me
+}
+
 #include "test_expressionparser.moc"
