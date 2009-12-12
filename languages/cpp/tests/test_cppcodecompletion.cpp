@@ -317,7 +317,7 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("member"));
       QVERIFY(mdp->type->assigned.type.isValid());
-      QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType(), context)->toString(), QString("int"));
     }
     release(context);
   }
@@ -334,7 +334,7 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(mdp->type->containerContext.data(), context->childContexts()[0]);
       QCOMPARE(mdp->type->identifier().toString(), QString("value"));
       QVERIFY(mdp->type->assigned.type.isValid());
-      QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->assigned.type.abstractType(), context)->toString(), QString("int"));
       QCOMPARE(context->childContexts().count(), 3);
     }
     {
@@ -357,7 +357,7 @@ void TestCppCodeCompletion::testAssistant() {
       QCOMPARE(mdp->type->identifier().toString(), QString("value3"));
       QVERIFY(!mdp->type->assigned.type.isValid());
       QVERIFY(mdp->type->convertedTo.type.isValid());
-      QCOMPARE(TypeUtils::removeConstants(mdp->type->convertedTo.type.abstractType())->toString(), QString("int"));
+      QCOMPARE(TypeUtils::removeConstants(mdp->type->convertedTo.type.abstractType(), context)->toString(), QString("int"));
       QCOMPARE(context->childContexts().count(), 3);
     }
     release(context);

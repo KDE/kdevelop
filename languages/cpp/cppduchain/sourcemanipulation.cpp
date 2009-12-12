@@ -230,7 +230,7 @@ QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature,
   foreach(SourceCodeInsertion::SignatureItem item, signature) {
     if(!ret.isEmpty())
       ret += ", ";
-    AbstractType::Ptr type = TypeUtils::removeConstants(item.type);
+    AbstractType::Ptr type = TypeUtils::removeConstants(item.type, context->topContext());
     ret += Cpp::simplifiedTypeString(type, context);
     
     if(!item.name.isEmpty())
@@ -262,7 +262,7 @@ bool KDevelop::SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Identifi
   if(!m_context)
     return false;
   
-  returnType = TypeUtils::removeConstants(returnType);
+  returnType = TypeUtils::removeConstants(returnType, m_topContext);
   
   QString decl = (returnType ? (Cpp::simplifiedTypeString(returnType, m_context) + " ") : QString()) + name.toString() + "(" + makeSignatureString(signature, m_context) + ")";
   
@@ -286,7 +286,7 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
   if(!m_context)
     return false;
   
-  type = TypeUtils::removeConstants(type);
+  type = TypeUtils::removeConstants(type, m_topContext);
   
   QString decl = Cpp::simplifiedTypeString(type, m_context) + " " + name.toString() + ";";
   

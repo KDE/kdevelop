@@ -47,6 +47,7 @@
 #include <typeinfo>
 #include <language/duchain/classdeclaration.h>
 #include <cppducontext.h>
+#include <interfaces/iassistant.h>
 
 QTEST_KDEMAIN(TestCppCodegen, GUI )
 
@@ -86,6 +87,30 @@ void dumpDUChain(InsertIntoDUChain& code)
     
     KDevelop::DumpChain dump;
     dump.dump(code.topContext());
+}
+
+
+void TestCppCodegen::testAssistants()
+{
+  {
+    //A missing-declaration assistant should be added, that creates a declaration "Honk val = ..."
+    InsertIntoDUChain code("test_assistants.cpp", "enum Honk { Hank };\nvoid test() {\n val = Hank;\n }\n");
+    kWarning() << "********************* Parsing step 1";
+    code.parse(TopDUContext::AllDeclarationsContextsUsesAndAST);
+    
+    DUChainReadLocker lock;
+
+    QCOMPARE(code->problems().size(), 2);
+    //There is one problem from the include-path resolver as it couldn't resolve include paths for the artificial code
+    //The second problem is the missing-declaration assistant problem
+    QVERIFY(code->problems()[1]->solutionAssistant());
+    QCOMPARE(code->problems()[1]->solutionAssistant()->actions().size(), 1);
+    code->problems()[1]->solutionAssistant()->actions()[0]->execute();
+    
+    //Make sure the assistant has inserted the correct solution
+    kDebug() << code.m_insertedCode.text();
+    QVERIFY(code.m_insertedCode.text().contains("Honk val = Hank;"));
+  }  
 }
 
 void TestCppCodegen::testSimplifiedUpdating()

@@ -278,10 +278,18 @@ AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
     return newPointer.cast<AbstractType>();
 }
 
-AbstractType::Ptr removeConstants(AbstractType::Ptr type) {
-      if(ConstantIntegralType::Ptr integral = type.cast<ConstantIntegralType>())
-        return AbstractType::Ptr(new IntegralType(*integral));
-      
-      return type;
+AbstractType::Ptr removeConstants(AbstractType::Ptr type, const TopDUContext* source) {
+  
+    if(TypePtr< EnumeratorType > enumerator = type.cast<EnumeratorType>())
+    {
+      Declaration* decl = enumerator->declaration(source);
+      if(decl && decl->context()->owner())
+      {
+        return decl->context()->owner()->abstractType();
+      }
+    }else if(ConstantIntegralType::Ptr integral = type.cast<ConstantIntegralType>())
+      return AbstractType::Ptr(new IntegralType(*integral));
+    
+    return type;
 }
 }

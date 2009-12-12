@@ -60,6 +60,7 @@ private slots:
   void testTypeConversionWithTypedefs();
   void testSmartPointer();
   void testCasts();
+  void testEnum();
   void testBaseClasses();
   void testTemplatesSimple();
   void testTemplates();

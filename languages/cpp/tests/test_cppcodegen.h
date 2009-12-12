@@ -32,6 +32,8 @@ class TestCppCodegen : public QObject
     void cleanupTestCase();
     
     // Tests
+    void testAssistants();
+    
     void testSimplifiedUpdating();
     
     void testAstDuChainMapping();

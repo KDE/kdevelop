@@ -64,7 +64,7 @@ class CreateLocalDeclarationAction : public IAssistantAction {
         }
       
         AbstractType::Ptr type() const {
-          AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(problem->type->assigned.type.abstractType()))->indexed().abstractType();
+          AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(problem->type->assigned.type.abstractType(), problem->topContext()))->indexed().abstractType();
           if(ret)
             ret->setModifiers(ret->modifiers() & (~AbstractType::ConstModifier)); //Remove "const" modifier
           return ret;
@@ -202,7 +202,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
         }
         
         AbstractType::Ptr type(AbstractType::Ptr base) const {
-          AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(base))->indexed().abstractType();
+          AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(base, problem->topContext()))->indexed().abstractType();
           if(ret)
             ret->setModifiers(ret->modifiers() & (~AbstractType::ConstModifier)); //Remove "const" modifier
           return ret;
