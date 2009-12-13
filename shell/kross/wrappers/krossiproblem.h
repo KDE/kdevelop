@@ -9,11 +9,9 @@ namespace KDevelop { class ProblemData; }
 namespace KDevelop { class Problem; }
 namespace Handlers
 {
-	QVariant _kDevelopProblemHandler(void* type);
 	QVariant kDevelopProblemHandler(KDevelop::Problem* type);
 	QVariant kDevelopProblemHandler(const KDevelop::Problem* type);
 
-	QVariant _kDevelopProblemDataHandler(void* type);
 	QVariant kDevelopProblemDataHandler(KDevelop::ProblemData* type);
 	QVariant kDevelopProblemDataHandler(const KDevelop::ProblemData* type);
 

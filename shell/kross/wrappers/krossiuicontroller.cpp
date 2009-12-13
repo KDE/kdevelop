@@ -18,7 +18,6 @@ class KrossKDevelopIToolViewFactory : public QObject, public Kross::WrapperInter
 		Q_SCRIPTABLE Qt::DockWidgetArea defaultPosition() { return wrapped->defaultPosition(); }
 		Q_SCRIPTABLE QList< QAction* > toolBarActions(QWidget* x0) const { return wrapped->toolBarActions(x0); }
 		Q_SCRIPTABLE void viewCreated(Sublime::View* x0) { wrapped->viewCreated(x0); }
-		Q_SCRIPTABLE bool viewsWantProgressIndicator() const { return wrapped->viewsWantProgressIndicator(); }
 	private:
 		KDevelop::IToolViewFactory* wrapped;
 };

@@ -8,7 +8,6 @@
 namespace KDevelop { class VcsRevision; }
 namespace Handlers
 {
-	QVariant _kDevelopVcsRevisionHandler(void* type);
 	QVariant kDevelopVcsRevisionHandler(KDevelop::VcsRevision* type);
 	QVariant kDevelopVcsRevisionHandler(const KDevelop::VcsRevision* type);
 

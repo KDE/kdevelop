@@ -20,6 +20,7 @@ class KrossKDevelopIProjectFileManager : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE KDevelop::IProjectFileManager::Features features() const { return wrapped->features(); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectFolderItem* > parse(KDevelop::ProjectFolderItem* x0) { return wrapped->parse(x0); }
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* import(KDevelop::IProject* x0) { return wrapped->import(x0); }
+		Q_SCRIPTABLE KJob* createImportJob(KDevelop::ProjectFolderItem* x0) { return wrapped->createImportJob(x0); }
 		Q_SCRIPTABLE KDevelop::ProjectFolderItem* addFolder(const KUrl& x0, KDevelop::ProjectFolderItem* x1) { return wrapped->addFolder(x0, x1); }
 		Q_SCRIPTABLE KDevelop::ProjectFileItem* addFile(const KUrl& x0, KDevelop::ProjectFolderItem* x1) { return wrapped->addFile(x0, x1); }
 		Q_SCRIPTABLE bool removeFolder(KDevelop::ProjectFolderItem* x0) { return wrapped->removeFolder(x0); }

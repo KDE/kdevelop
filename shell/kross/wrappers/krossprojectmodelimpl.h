@@ -6,6 +6,69 @@
 #include <kross/core/manager.h>
 #include <kross/core/wrapperinterface.h>
 #include <project/projectmodel.h>
+#include <interfaces/iproject.h>
+
+class KrossImplKDevelopProjectVisitor : public KDevelop::ProjectVisitor
+{
+	public:
+		KrossImplKDevelopProjectVisitor(Kross::Object::Ptr _obj) : obj(_obj) {}
+		void visit(KDevelop::IProject* x0)
+		{
+			Kross::Object* p=obj.data();
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << qVariantFromValue<QObject*>(x0));
+		}
+
+		void visit(KDevelop::ProjectBuildFolderItem* x0)
+		{
+			Kross::Object* p=obj.data();
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << Kross::Manager::self().metaTypeHandler("KDevelop::ProjectBuildFolderItem*")->callHandler(x0));
+		}
+
+		void visit(KDevelop::ProjectExecutableTargetItem* x0)
+		{
+			Kross::Object* p=obj.data();
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << Kross::Manager::self().metaTypeHandler("KDevelop::ProjectExecutableTargetItem*")->callHandler(x0));
+		}
+
+		void visit(KDevelop::ProjectFolderItem* x0)
+		{
+			Kross::Object* p=obj.data();
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << Kross::Manager::self().metaTypeHandler("KDevelop::ProjectFolderItem*")->callHandler(x0));
+		}
+
+		void visit(KDevelop::ProjectFileItem* x0)
+		{
+			Kross::Object* p=obj.data();
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << Kross::Manager::self().metaTypeHandler("KDevelop::ProjectFileItem*")->callHandler(x0));
+		}
+
+		void visit(KDevelop::ProjectLibraryTargetItem* x0)
+		{
+			Kross::Object* p=obj.data();
+			if(!p->methodNames().contains("visit"))
+				KDevelop::ProjectVisitor::visit(x0);
+			else
+				p->callMethod("visit", QVariantList() << Kross::Manager::self().metaTypeHandler("KDevelop::ProjectLibraryTargetItem*")->callHandler(x0));
+		}
+
+	private:
+		Kross::Object::Ptr obj;
+};
 
 class KrossImplKDevelopProjectBaseItem : public KDevelop::ProjectBaseItem
 {
@@ -49,7 +112,7 @@ class KrossImplKDevelopProjectBaseItem : public KDevelop::ProjectBaseItem
 
 		void setIcon()
 		{
-			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			Kross::Object* p=obj.data();
 			if(!p->methodNames().contains("setIcon"))
 				KDevelop::ProjectBaseItem::setIcon();
 			else
@@ -84,7 +147,7 @@ class KrossImplKDevelopProjectFolderItem : public KDevelop::ProjectFolderItem
 
 		void setIcon()
 		{
-			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			Kross::Object* p=obj.data();
 			if(!p->methodNames().contains("setIcon"))
 				KDevelop::ProjectFolderItem::setIcon();
 			else
@@ -110,7 +173,7 @@ class KrossImplKDevelopProjectBuildFolderItem : public KDevelop::ProjectBuildFol
 
 		void setIcon()
 		{
-			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			Kross::Object* p=obj.data();
 			if(!p->methodNames().contains("setIcon"))
 				KDevelop::ProjectBuildFolderItem::setIcon();
 			else
@@ -145,7 +208,7 @@ class KrossImplKDevelopProjectTargetItem : public KDevelop::ProjectTargetItem
 
 		void setIcon()
 		{
-			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			Kross::Object* p=obj.data();
 			if(!p->methodNames().contains("setIcon"))
 				KDevelop::ProjectTargetItem::setIcon();
 			else
@@ -235,7 +298,7 @@ class KrossImplKDevelopProjectFileItem : public KDevelop::ProjectFileItem
 
 		void setIcon()
 		{
-			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			Kross::Object* p=obj.data();
 			if(!p->methodNames().contains("setIcon"))
 				KDevelop::ProjectFileItem::setIcon();
 			else
@@ -250,9 +313,18 @@ class KrossImplKDevelopProjectModel : public KDevelop::ProjectModel
 {
 	public:
 		KrossImplKDevelopProjectModel(Kross::Object::Ptr _obj, QObject* x0=0) : KDevelop::ProjectModel(x0), obj(_obj) {}
-		void fetchMore(const QModelIndex& x0)
+		Qt::ItemFlags flags(const QModelIndex& x0) const
 		{
 			Kross::Object* p=const_cast<Kross::Object*>(obj.constData());
+			if(!p->methodNames().contains("flags"))
+				return KDevelop::ProjectModel::flags(x0);
+// 			else
+// 				return p->callMethod("flags", QVariantList() << QVariant()).value<int>();
+		}
+
+		void fetchMore(const QModelIndex& x0)
+		{
+			Kross::Object* p=obj.data();
 			if(!p->methodNames().contains("fetchMore"))
 				KDevelop::ProjectModel::fetchMore(x0);
 			else

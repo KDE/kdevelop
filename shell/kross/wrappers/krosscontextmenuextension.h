@@ -8,7 +8,6 @@
 namespace KDevelop { class ContextMenuExtension; }
 namespace Handlers
 {
-	QVariant _kDevelopContextMenuExtensionHandler(void* type);
 	QVariant kDevelopContextMenuExtensionHandler(KDevelop::ContextMenuExtension* type);
 	QVariant kDevelopContextMenuExtensionHandler(const KDevelop::ContextMenuExtension* type);
 

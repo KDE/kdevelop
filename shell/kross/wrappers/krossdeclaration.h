@@ -8,7 +8,6 @@
 namespace KDevelop { class Declaration; }
 namespace Handlers
 {
-	QVariant _kDevelopDeclarationHandler(void* type);
 	QVariant kDevelopDeclarationHandler(KDevelop::Declaration* type);
 	QVariant kDevelopDeclarationHandler(const KDevelop::Declaration* type);
 

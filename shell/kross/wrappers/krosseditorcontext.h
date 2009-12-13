@@ -8,7 +8,6 @@
 namespace KDevelop { class EditorContext; }
 namespace Handlers
 {
-	QVariant _kDevelopEditorContextHandler(void* type);
 	QVariant kDevelopEditorContextHandler(KDevelop::EditorContext* type);
 	QVariant kDevelopEditorContextHandler(const KDevelop::EditorContext* type);
 

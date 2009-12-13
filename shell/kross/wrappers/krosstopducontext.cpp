@@ -45,11 +45,11 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 	Q_FLAGS(Flags NoFlags UpdatingContext LastFlag)
 
 	Q_ENUMS(Features)
-	Q_FLAGS(Features VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses AllDeclarationsContextsAndUsesForRecursive AST AllDeclarationsContextsUsesAndAST ForceUpdate ForceUpdateRecursive)
+	Q_FLAGS(Features Empty SimplifiedVisibleDeclarationsAndContexts VisibleDeclarationsAndContexts AllDeclarationsAndContexts AllDeclarationsContextsAndUses AST AllDeclarationsContextsUsesAndAST Recursive ForceUpdate ForceUpdateRecursive)
 
 	public:
 		enum KrossFlags { NoFlags=KDevelop::TopDUContext::NoFlags, UpdatingContext=KDevelop::TopDUContext::UpdatingContext, LastFlag=KDevelop::TopDUContext::LastFlag };
-		enum KrossFeatures { VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses, AllDeclarationsContextsAndUsesForRecursive=KDevelop::TopDUContext::AllDeclarationsContextsAndUsesForRecursive, AST=KDevelop::TopDUContext::AST, AllDeclarationsContextsUsesAndAST=KDevelop::TopDUContext::AllDeclarationsContextsUsesAndAST, ForceUpdate=KDevelop::TopDUContext::ForceUpdate, ForceUpdateRecursive=KDevelop::TopDUContext::ForceUpdateRecursive };
+		enum KrossFeatures { Empty=KDevelop::TopDUContext::Empty, SimplifiedVisibleDeclarationsAndContexts=KDevelop::TopDUContext::SimplifiedVisibleDeclarationsAndContexts, VisibleDeclarationsAndContexts=KDevelop::TopDUContext::VisibleDeclarationsAndContexts, AllDeclarationsAndContexts=KDevelop::TopDUContext::AllDeclarationsAndContexts, AllDeclarationsContextsAndUses=KDevelop::TopDUContext::AllDeclarationsContextsAndUses, AST=KDevelop::TopDUContext::AST, AllDeclarationsContextsUsesAndAST=KDevelop::TopDUContext::AllDeclarationsContextsUsesAndAST, Recursive=KDevelop::TopDUContext::Recursive, ForceUpdate=KDevelop::TopDUContext::ForceUpdate, ForceUpdateRecursive=KDevelop::TopDUContext::ForceUpdateRecursive };
 		KrossKDevelopTopDUContext(KDevelop::TopDUContext* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::TopDUContext"); }
 		void* wrappedObject() const { return wrapped; }
 
@@ -73,6 +73,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE int indexForUsedDeclaration(KDevelop::Declaration* x0, bool x1=true) { return wrapped->indexForUsedDeclaration(x0, x1); }
 		Q_SCRIPTABLE KDevelop::Declaration* usedDeclarationForIndex(unsigned int x0) const { return wrapped->usedDeclarationForIndex(x0); }
 		Q_SCRIPTABLE void clearUsedDeclarationIndices() { wrapped->clearUsedDeclarationIndices(); }
+		Q_SCRIPTABLE void deleteUsesRecursively() { wrapped->deleteUsesRecursively(); }
 		Q_SCRIPTABLE KDevelop::TopDUContext::Flags flags() const { return wrapped->flags(); }
 		Q_SCRIPTABLE void setFlags(KDevelop::TopDUContext::Flags x0) { wrapped->setFlags(x0); }
 		Q_SCRIPTABLE KSharedPtr< KDevelop::IAstContainer > ast() const { return wrapped->ast(); }
@@ -90,7 +91,7 @@ class KrossKDevelopTopDUContext : public QObject, public Kross::WrapperInterface
 		Q_SCRIPTABLE KDevelop::TopDUContext::IndexedRecursiveImports recursiveImportIndices() const { return wrapped->recursiveImportIndices(); }
 		Q_SCRIPTABLE void updateImportsCache() { wrapped->updateImportsCache(); }
 		Q_SCRIPTABLE bool usingImportsCache() const { return wrapped->usingImportsCache(); }
-		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevelop::DUContext::SearchItem::PtrList& x0, const KDevelop::SimpleCursor& x1, const KDevelop::AbstractType::Ptr& x2, KDevelop::DUContext::DeclarationList& x3, const KDevelop::TopDUContext* x4, KDevelop::DUContext::SearchFlags x5) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5); }
+		Q_SCRIPTABLE bool findDeclarationsInternal(const KDevelop::DUContext::SearchItem::PtrList& x0, const KDevelop::SimpleCursor& x1, const KDevelop::AbstractType::Ptr& x2, KDevelop::DUContext::DeclarationList& x3, const KDevelop::TopDUContext* x4, KDevelop::DUContext::SearchFlags x5, uint x6) const { return wrapped->findDeclarationsInternal(x0, x1, x2, x3, x4, x5, x6); }
 	private:
 		KDevelop::TopDUContext* wrapped;
 };

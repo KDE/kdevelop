@@ -8,7 +8,6 @@
 namespace KDevelop { class IProjectFileManager; }
 namespace Handlers
 {
-	QVariant _kDevelopIProjectFileManagerHandler(void* type);
 	QVariant kDevelopIProjectFileManagerHandler(KDevelop::IProjectFileManager* type);
 	QVariant kDevelopIProjectFileManagerHandler(const KDevelop::IProjectFileManager* type);
 

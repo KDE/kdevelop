@@ -8,7 +8,6 @@
 namespace KDevelop { class Use; }
 namespace Handlers
 {
-	QVariant _kDevelopUseHandler(void* type);
 	QVariant kDevelopUseHandler(KDevelop::Use* type);
 	QVariant kDevelopUseHandler(const KDevelop::Use* type);
 

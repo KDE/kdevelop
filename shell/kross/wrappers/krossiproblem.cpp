@@ -53,6 +53,7 @@ class KrossKDevelopProblem : public QObject, public Kross::WrapperInterface
 
 		Q_SCRIPTABLE KDevelop::ProblemData::Source source() const { return wrapped->source(); }
 		Q_SCRIPTABLE void setSource(KDevelop::ProblemData::Source x0) { wrapped->setSource(x0); }
+		Q_SCRIPTABLE QString sourceString() const { return wrapped->sourceString(); }
 		Q_SCRIPTABLE KDevelop::IndexedString url() const { return wrapped->url(); }
 		Q_SCRIPTABLE QStack< KDevelop::DocumentCursor > locationStack() const { return wrapped->locationStack(); }
 		Q_SCRIPTABLE void addLocation(const KDevelop::DocumentCursor& x0) { wrapped->addLocation(x0); }

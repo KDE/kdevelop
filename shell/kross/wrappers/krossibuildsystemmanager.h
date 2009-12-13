@@ -8,7 +8,6 @@
 namespace KDevelop { class IBuildSystemManager; }
 namespace Handlers
 {
-	QVariant _kDevelopIBuildSystemManagerHandler(void* type);
 	QVariant kDevelopIBuildSystemManagerHandler(KDevelop::IBuildSystemManager* type);
 	QVariant kDevelopIBuildSystemManagerHandler(const KDevelop::IBuildSystemManager* type);
 

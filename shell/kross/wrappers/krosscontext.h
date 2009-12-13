@@ -10,15 +10,12 @@ namespace KDevelop { class FileContext; }
 namespace KDevelop { class ProjectItemContext; }
 namespace Handlers
 {
-	QVariant _kDevelopProjectItemContextHandler(void* type);
 	QVariant kDevelopProjectItemContextHandler(KDevelop::ProjectItemContext* type);
 	QVariant kDevelopProjectItemContextHandler(const KDevelop::ProjectItemContext* type);
 
-	QVariant _kDevelopFileContextHandler(void* type);
 	QVariant kDevelopFileContextHandler(KDevelop::FileContext* type);
 	QVariant kDevelopFileContextHandler(const KDevelop::FileContext* type);
 
-	QVariant _kDevelopContextHandler(void* type);
 	QVariant kDevelopContextHandler(KDevelop::Context* type);
 	QVariant kDevelopContextHandler(const KDevelop::Context* type);
 

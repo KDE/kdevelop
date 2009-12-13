@@ -9,11 +9,9 @@ namespace KDevelop { class IToolViewFactory; }
 namespace KDevelop { class IUiController; }
 namespace Handlers
 {
-	QVariant _kDevelopIUiControllerHandler(void* type);
 	QVariant kDevelopIUiControllerHandler(KDevelop::IUiController* type);
 	QVariant kDevelopIUiControllerHandler(const KDevelop::IUiController* type);
 
-	QVariant _kDevelopIToolViewFactoryHandler(void* type);
 	QVariant kDevelopIToolViewFactoryHandler(KDevelop::IToolViewFactory* type);
 	QVariant kDevelopIToolViewFactoryHandler(const KDevelop::IToolViewFactory* type);
 

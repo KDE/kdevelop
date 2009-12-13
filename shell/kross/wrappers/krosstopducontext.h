@@ -11,19 +11,15 @@ namespace KDevelop { class TopDUContext; }
 namespace KDevelop { class Cache; }
 namespace Handlers
 {
-	QVariant _kDevelopTopDUContextCacheHandler(void* type);
 	QVariant kDevelopTopDUContextCacheHandler(KDevelop::TopDUContext::Cache* type);
 	QVariant kDevelopTopDUContextCacheHandler(const KDevelop::TopDUContext::Cache* type);
 
-	QVariant _kDevelopTopDUContextHandler(void* type);
 	QVariant kDevelopTopDUContextHandler(KDevelop::TopDUContext* type);
 	QVariant kDevelopTopDUContextHandler(const KDevelop::TopDUContext* type);
 
-	QVariant _kDevelopReferencedTopDUContextHandler(void* type);
 	QVariant kDevelopReferencedTopDUContextHandler(KDevelop::ReferencedTopDUContext* type);
 	QVariant kDevelopReferencedTopDUContextHandler(const KDevelop::ReferencedTopDUContext* type);
 
-	QVariant _kDevelopRecursiveImportRepositoryHandler(void* type);
 	QVariant kDevelopRecursiveImportRepositoryHandler(KDevelop::RecursiveImportRepository* type);
 	QVariant kDevelopRecursiveImportRepositoryHandler(const KDevelop::RecursiveImportRepository* type);
 

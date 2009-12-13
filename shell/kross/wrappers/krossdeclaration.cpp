@@ -16,11 +16,11 @@ class KrossKDevelopDeclaration : public QObject, public Kross::WrapperInterface
 	Q_FLAGS(AccessPolicy Public Protected Private DefaultAccess)
 
 	Q_ENUMS(Kind)
-	Q_FLAGS(Kind Type Instance NamespaceAlias Alias Namespace)
+	Q_FLAGS(Kind Type Instance NamespaceAlias Alias Namespace Import)
 
 	public:
 		enum KrossAccessPolicy { Public=KDevelop::Declaration::Public, Protected=KDevelop::Declaration::Protected, Private=KDevelop::Declaration::Private, DefaultAccess=KDevelop::Declaration::DefaultAccess };
-		enum KrossKind { Type=KDevelop::Declaration::Type, Instance=KDevelop::Declaration::Instance, NamespaceAlias=KDevelop::Declaration::NamespaceAlias, Alias=KDevelop::Declaration::Alias, Namespace=KDevelop::Declaration::Namespace };
+		enum KrossKind { Type=KDevelop::Declaration::Type, Instance=KDevelop::Declaration::Instance, NamespaceAlias=KDevelop::Declaration::NamespaceAlias, Alias=KDevelop::Declaration::Alias, Namespace=KDevelop::Declaration::Namespace, Import=KDevelop::Declaration::Import };
 		KrossKDevelopDeclaration(KDevelop::Declaration* obj, QObject* parent=0) : QObject(parent), wrapped(obj)		{ setObjectName("KDevelop::Declaration"); }
 		void* wrappedObject() const { return wrapped; }
 

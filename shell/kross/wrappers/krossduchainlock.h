@@ -10,15 +10,12 @@ namespace KDevelop { class DUChainReadLocker; }
 namespace KDevelop { class DUChainWriteLocker; }
 namespace Handlers
 {
-	QVariant _kDevelopDUChainWriteLockerHandler(void* type);
 	QVariant kDevelopDUChainWriteLockerHandler(KDevelop::DUChainWriteLocker* type);
 	QVariant kDevelopDUChainWriteLockerHandler(const KDevelop::DUChainWriteLocker* type);
 
-	QVariant _kDevelopDUChainReadLockerHandler(void* type);
 	QVariant kDevelopDUChainReadLockerHandler(KDevelop::DUChainReadLocker* type);
 	QVariant kDevelopDUChainReadLockerHandler(const KDevelop::DUChainReadLocker* type);
 
-	QVariant _kDevelopDUChainLockHandler(void* type);
 	QVariant kDevelopDUChainLockHandler(KDevelop::DUChainLock* type);
 	QVariant kDevelopDUChainLockHandler(const KDevelop::DUChainLock* type);
 

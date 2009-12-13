@@ -8,7 +8,6 @@
 namespace KDevelop { class IProjectBuilder; }
 namespace Handlers
 {
-	QVariant _kDevelopIProjectBuilderHandler(void* type);
 	QVariant kDevelopIProjectBuilderHandler(KDevelop::IProjectBuilder* type);
 	QVariant kDevelopIProjectBuilderHandler(const KDevelop::IProjectBuilder* type);
 

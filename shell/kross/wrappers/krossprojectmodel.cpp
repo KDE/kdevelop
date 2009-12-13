@@ -156,6 +156,7 @@ class KrossKDevelopProjectModel : public QObject, public Kross::WrapperInterface
 		Q_PROPERTY(const QMetaObject  staticMetaObject READ getstaticMetaObject SCRIPTABLE true)
 		Q_SCRIPTABLE const QMetaObject  getstaticMetaObject() const { return wrapped->staticMetaObject; }
 		Q_SCRIPTABLE KDevelop::ProjectBaseItem* item(const QModelIndex& x0) const { return wrapped->item(x0); }
+		Q_SCRIPTABLE Qt::ItemFlags flags(const QModelIndex& x0) const { return wrapped->flags(x0); }
 		Q_SCRIPTABLE void resetModel() { wrapped->resetModel(); }
 		Q_SCRIPTABLE void fetchMore(const QModelIndex& x0) { wrapped->fetchMore(x0); }
 		Q_SCRIPTABLE bool canFetchMore(const QModelIndex& x0) const { return wrapped->canFetchMore(x0); }

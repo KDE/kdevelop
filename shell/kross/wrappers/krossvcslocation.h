@@ -8,7 +8,6 @@
 namespace KDevelop { class VcsLocation; }
 namespace Handlers
 {
-	QVariant _kDevelopVcsLocationHandler(void* type);
 	QVariant kDevelopVcsLocationHandler(KDevelop::VcsLocation* type);
 	QVariant kDevelopVcsLocationHandler(const KDevelop::VcsLocation* type);
 

@@ -8,7 +8,6 @@
 namespace  { class QToolBar; }
 namespace Handlers
 {
-	QVariant _qToolBarHandler(void* type);
 	QVariant qToolBarHandler(QToolBar* type);
 	QVariant qToolBarHandler(const QToolBar* type);
 

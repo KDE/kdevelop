@@ -8,7 +8,6 @@
 namespace KDevelop { class ILanguage; }
 namespace Handlers
 {
-	QVariant _kDevelopILanguageHandler(void* type);
 	QVariant kDevelopILanguageHandler(KDevelop::ILanguage* type);
 	QVariant kDevelopILanguageHandler(const KDevelop::ILanguage* type);
 
