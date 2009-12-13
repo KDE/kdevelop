@@ -32,6 +32,7 @@ class SnippetCompletionItem;
 
 class SnippetCompletionModel : public KTextEditor::CodeCompletionModel
 {
+    Q_OBJECT
 public:
     SnippetCompletionModel();
     ~SnippetCompletionModel();
