@@ -41,7 +41,6 @@ class KrossKDevelopProjectBaseItem : public QObject, public Kross::WrapperInterf
 		Q_SCRIPTABLE KDevelop::ProjectFileItem* file() const { return wrapped->file(); }
 		Q_SCRIPTABLE KDevelop::ProjectExecutableTargetItem* executable() const { return wrapped->executable(); }
 		Q_SCRIPTABLE void setParent(QStandardItem* x0) { wrapped->setParent(x0); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectFolderItem* > folderList() const { return wrapped->folderList(); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectTargetItem* > targetList() const { return wrapped->targetList(); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectFileItem* > fileList() const { return wrapped->fileList(); }
@@ -62,7 +61,6 @@ class KrossKDevelopProjectFolderItem : public KrossKDevelopProjectBaseItem
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
 		Q_SCRIPTABLE QString folderName() const { return wrapped->folderName(); }
 		Q_SCRIPTABLE void setUrl(const KUrl& x0) { wrapped->setUrl(x0); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 		Q_SCRIPTABLE bool isProjectRoot() const { return wrapped->isProjectRoot(); }
 		Q_SCRIPTABLE void setProjectRoot(bool x0) { wrapped->setProjectRoot(x0); }
 		Q_SCRIPTABLE bool hasFileOrFolder(const QString& x0) const { return wrapped->hasFileOrFolder(x0); }
@@ -79,7 +77,6 @@ class KrossKDevelopProjectBuildFolderItem : public KrossKDevelopProjectFolderIte
 		void* wrappedObject() const { return wrapped; }
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 	private:
 		KDevelop::ProjectBuildFolderItem* wrapped;
 };
@@ -94,7 +91,6 @@ class KrossKDevelopProjectTargetItem : public KrossKDevelopProjectBaseItem
 
 		Q_SCRIPTABLE int type() const { return wrapped->type(); }
 		Q_SCRIPTABLE KDevelop::ProjectTargetItem* target() const { return wrapped->target(); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 	private:
 		KDevelop::ProjectTargetItem* wrapped;
 };
@@ -141,7 +137,6 @@ class KrossKDevelopProjectFileItem : public KrossKDevelopProjectBaseItem
 		Q_SCRIPTABLE KUrl url() const { return wrapped->url(); }
 		Q_SCRIPTABLE QString fileName() const { return wrapped->fileName(); }
 		Q_SCRIPTABLE void setUrl(const KUrl& x0) { wrapped->setUrl(x0); }
-		Q_SCRIPTABLE void setIcon() { wrapped->setIcon(); }
 	private:
 		KDevelop::ProjectFileItem* wrapped;
 };

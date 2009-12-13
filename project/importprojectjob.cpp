@@ -27,7 +27,6 @@
 
 
 #include <kglobal.h>
-#include <kdebug.h>
 
 #include <interfaces/iprojectfilemanager.h>
 #include <interfaces/iproject.h>

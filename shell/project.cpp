@@ -431,7 +431,7 @@ public:
                                 i18n("Could not open project") );
             return false;
         }
-        topItem->setIcon();
+        
         return true;
     }
 

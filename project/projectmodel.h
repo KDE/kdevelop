@@ -105,7 +105,6 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /**  @param parent sets the item parent to @p parent */
         void setParent( QStandardItem* parent);
-        virtual void setIcon();
 
         /** @returns Returns a list of the folders that have this object as the parent. */
         QList<ProjectFolderItem*> folderList() const;
@@ -149,8 +148,6 @@ public:
     /** Set the url of this folder */
     void setUrl( const KUrl& );
 
-    virtual void setIcon();
-
     /** Returns whether it is the project root folder */
     bool isProjectRoot() const;
 
@@ -179,8 +176,6 @@ public:
     ///Reimplemented from QStandardItem
     virtual int type() const;
 
-    virtual void setIcon();
-
 protected:
     ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& );
 private:
@@ -202,7 +197,6 @@ public:
     virtual int type() const;
 
     virtual ProjectTargetItem *target() const;
-    virtual void setIcon();
 protected:
     ProjectTargetItem( ProjectTargetItemPrivate& );
 private:
@@ -262,8 +256,6 @@ public:
     /** Set the url of this file. */
     void setUrl( const KUrl& );
 
-    virtual void setIcon();
-
 protected:
     ProjectFileItem( ProjectFileItemPrivate& );
 private:
@@ -288,9 +280,6 @@ public:
 
     void resetModel();
 
-    virtual void fetchMore( const QModelIndex &parent );
-    virtual bool canFetchMore( const QModelIndex & parent ) const;
-    
     QModelIndex pathToIndex(const QStringList& tofetch) const;
     QStringList pathFromIndex(const QModelIndex& index) const;
 private:

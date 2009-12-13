@@ -114,10 +114,6 @@ void ProjectBaseItem::setParent( QStandardItem* parent )
         parent->setChild( parent->rowCount(), this );
 }
 
-void ProjectBaseItem::setIcon()
-{
-}
-
 void ProjectBaseItem::add( ProjectBaseItem* item )
 {
     appendRow( item );
@@ -224,29 +220,6 @@ void ProjectModel::resetModel()
     reset();
 }
 
-void ProjectModel::fetchMore( const QModelIndex &parent )
-{
-    QStandardItem *parentItem = itemFromIndex( parent );
-    if( !parentItem )
-        return;
-    int rowcount = parentItem->rowCount();
-    for( int i=0; i<rowcount; i++ )
-    {
-        ProjectBaseItem *childItem = dynamic_cast<ProjectBaseItem*>(parentItem->child(i));
-        if( childItem && childItem->icon().isNull() )
-            childItem->setIcon();
-    }
-}
-
-bool ProjectModel::canFetchMore( const QModelIndex & parent ) const
-{
-    QStandardItem *parentItem = itemFromIndex( parent );
-    if( !parentItem )
-        return false;
-    return true;
-}
-
-
 ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStandardItem * parent )
         : ProjectBaseItem( *new ProjectFolderItemPrivate )
 {
@@ -254,11 +227,13 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStan
     d->project = project;
     setUrl(dir);
     setParent(parent);
+    setIcon(KIcon("folder"));
 }
 
 ProjectFolderItem::ProjectFolderItem( ProjectFolderItemPrivate& dd)
     : ProjectBaseItem( dd )
 {
+    setIcon(KIcon("folder"));
 }
 
 ProjectFolderItem::~ProjectFolderItem()
@@ -295,11 +270,6 @@ void ProjectFolderItem::setUrl( const KUrl& url )
     setText( d->m_folderName );
 }
 
-void ProjectFolderItem::setIcon()
-{
-    QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, KIconLoader::Small ) );
-}
-
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
     for ( int i = 0; i < rowCount(); ++i )
@@ -319,6 +289,7 @@ bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 ProjectBuildFolderItem::ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& dd )
     : ProjectFolderItem( dd )
 {
+    setIcon(KIcon("folder-development"));
 }
 
 ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, QStandardItem *parent)
@@ -328,16 +299,12 @@ ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &d
     d->project = project;
     setUrl( dir );
     setParent( parent );
+    setIcon(KIcon("folder-development"));
 }
 
 int ProjectBuildFolderItem::type() const
 {
     return ProjectBaseItem::BuildFolder;
-}
-
-void ProjectBuildFolderItem::setIcon()
-{
-    QStandardItem::setIcon( KIcon("folder-development") );
 }
 
 void ProjectFolderItem::setProjectRoot(bool isRoot)
@@ -387,6 +354,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
     d->m_url = url;
     d->m_fileName = d->m_url.fileName();
     setText( d->m_fileName );
+    setIcon(KIcon(KMimeType::findByUrl(url)->iconName(url)));
 }
 
 int ProjectFileItem::type() const
@@ -397,11 +365,6 @@ int ProjectFileItem::type() const
 ProjectFileItem *ProjectFileItem::file() const
 {
     return const_cast<ProjectFileItem*>( this );
-}
-
-void ProjectFileItem::setIcon()
-{
-    QStandardItem::setIcon( KIO::pixmapForUrl( url(), 0, KIconLoader::Small ) );
 }
 
 ProjectTargetItem::ProjectTargetItem( ProjectTargetItemPrivate& dd)
@@ -416,6 +379,7 @@ ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, QS
     d->project = project;
     setText( name );
     setParent( parent );
+    setIcon( KIcon("system-run") );
 }
 
 int ProjectTargetItem::type() const
@@ -426,11 +390,6 @@ int ProjectTargetItem::type() const
 ProjectTargetItem *ProjectTargetItem::target() const
 {
     return const_cast<ProjectTargetItem*>( this );
-}
-
-void ProjectTargetItem::setIcon()
-{
-    QStandardItem::setIcon( KIcon("system-run") );
 }
 
 ProjectExecutableTargetItem::ProjectExecutableTargetItem( IProject* project, const QString &name, QStandardItem *parent )

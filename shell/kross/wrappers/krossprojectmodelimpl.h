@@ -110,15 +110,6 @@ class KrossImplKDevelopProjectBaseItem : public KDevelop::ProjectBaseItem
 				return dynamic_cast<KDevelop::ProjectExecutableTargetItem*>(p->callMethod("executable").value<QObject*>());
 		}
 
-		void setIcon()
-		{
-			Kross::Object* p=obj.data();
-			if(!p->methodNames().contains("setIcon"))
-				KDevelop::ProjectBaseItem::setIcon();
-			else
-				p->callMethod("setIcon");
-		}
-
 	private:
 		Kross::Object::Ptr obj;
 };
@@ -144,16 +135,7 @@ class KrossImplKDevelopProjectFolderItem : public KDevelop::ProjectFolderItem
 			else
 				return p->callMethod("type").value<int>();
 		}
-
-		void setIcon()
-		{
-			Kross::Object* p=obj.data();
-			if(!p->methodNames().contains("setIcon"))
-				KDevelop::ProjectFolderItem::setIcon();
-			else
-				p->callMethod("setIcon");
-		}
-
+		
 	private:
 		Kross::Object::Ptr obj;
 };
@@ -169,15 +151,6 @@ class KrossImplKDevelopProjectBuildFolderItem : public KDevelop::ProjectBuildFol
 				return KDevelop::ProjectBuildFolderItem::type();
 			else
 				return p->callMethod("type").value<int>();
-		}
-
-		void setIcon()
-		{
-			Kross::Object* p=obj.data();
-			if(!p->methodNames().contains("setIcon"))
-				KDevelop::ProjectBuildFolderItem::setIcon();
-			else
-				p->callMethod("setIcon");
 		}
 
 	private:
@@ -204,15 +177,6 @@ class KrossImplKDevelopProjectTargetItem : public KDevelop::ProjectTargetItem
 				return KDevelop::ProjectTargetItem::target();
 			else
 				return dynamic_cast<KDevelop::ProjectTargetItem*>(p->callMethod("target").value<QObject*>());
-		}
-
-		void setIcon()
-		{
-			Kross::Object* p=obj.data();
-			if(!p->methodNames().contains("setIcon"))
-				KDevelop::ProjectTargetItem::setIcon();
-			else
-				p->callMethod("setIcon");
 		}
 
 	private:
@@ -295,16 +259,7 @@ class KrossImplKDevelopProjectFileItem : public KDevelop::ProjectFileItem
 			else
 				return dynamic_cast<KDevelop::ProjectFileItem*>(p->callMethod("file").value<QObject*>());
 		}
-
-		void setIcon()
-		{
-			Kross::Object* p=obj.data();
-			if(!p->methodNames().contains("setIcon"))
-				KDevelop::ProjectFileItem::setIcon();
-			else
-				p->callMethod("setIcon");
-		}
-
+		
 	private:
 		Kross::Object::Ptr obj;
 };
