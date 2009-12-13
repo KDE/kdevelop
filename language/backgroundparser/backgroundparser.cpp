@@ -67,7 +67,7 @@ class BackgroundParserPrivate
 {
 public:
     BackgroundParserPrivate(BackgroundParser *parser, ILanguageController *languageController)
-        :m_parser(parser), m_languageController(languageController), m_mutex(QMutex::Recursive), m_shuttingDown(false)
+        :m_parser(parser), m_languageController(languageController), m_shuttingDown(false), m_mutex(QMutex::Recursive)
     {
         parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
