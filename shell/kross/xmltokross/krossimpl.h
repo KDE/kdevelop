@@ -22,6 +22,7 @@
 
 #include "duchainreader.h"
 #include <qset.h>
+#include <kross/core/manager.h>
 
 class KrossImpl : public DUChainReader
 {
@@ -131,8 +132,16 @@ class KrossImpl : public DUChainReader
         {
             if(type=="const QModelIndex&")
                  return "QVariant()";
-            else
-                 return varname;
+            else {
+                //FIXME: Shouldn't rely on that. make it runtime?
+                Kross::MetaTypeHandler* handler=Kross::Manager::self().metaTypeHandler(qPrintable(type));
+                if(handler) {
+                    return "Kross::Manager::self().metaTypeHandler(\""+type+"\")->callHandler("+varname+')';
+                } else if(type.endsWith("*"))
+                    return "qVariantFromValue<QObject*>("+varname+')';
+                else
+                    return "qVariantFromValue("+varname+')';
+            }
         }
         
         void writeEndFunction(const method& m)
@@ -185,14 +194,20 @@ class KrossImpl : public DUChainReader
             
             if(m.isConstructor)
             {
-                output += " : "+classname+"("+params+"), obj(_obj) {}\n";
+                output += " : ";
+                if(!params.isEmpty())
+                    output += classname+"("+params+"), ";
+                output += "obj(_obj) {}\n";
             }
             else
             {
                 if(m.isConst)
                     output+=" const";
-                output += "\n\t\t{\n"
-                          "\t\t\tKross::Object* p=const_cast<Kross::Object*>(obj.constData());\n";
+                output += "\n\t\t{\n";
+//                 if(m.isConst)
+//                     output += "\t\t\tKross::Object* p=const_cast<Kross::Object*>(obj.constData());\n";
+//                 else
+                    output += "\t\t\tKross::Object* p=obj.data();\n";
                 
                 if(!m.isAbstract) {
                     output+="\t\t\tif(!p->methodNames().contains(\""+m.funcname+"\"))\n\t\t\t\t"+

@@ -186,7 +186,6 @@ class KrossWrapper : public DUChainReader
             
             qDebug() << "creating handler " << classname << classNamespace;
             
-            handlersHeader += "\tQVariant _"+handlerName(classname)+"Handler(void* type);\n";
             handlersHeader += "\tQVariant "+handlerName(classname)+"Handler("+_classname+"* type);\n";
             handlersHeader += "\tQVariant "+handlerName(classname)+"Handler(const "+_classname+"* type);\n\n";
             
