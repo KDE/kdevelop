@@ -1131,7 +1131,6 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
     //Failed to resolve namespace
     kDebug(9007) << "Failed to resolve namespace \"" << identifier << "\"";
     QualifiedIdentifier ret = identifier;
-    ret.setExplicitlyGlobal(true);
     Q_ASSERT(ret.count());
     return ret;
   } else {
@@ -1139,7 +1138,6 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
     if(ret.isEmpty())
         return ret;
     Q_ASSERT(ret.count());
-    ret.setExplicitlyGlobal(true);
     return ret;
   }
 }
