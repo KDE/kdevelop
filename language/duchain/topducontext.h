@@ -390,7 +390,7 @@ protected:
   struct ApplyAliasesBuddyInfo;
 
   template<class Acceptor>
-  bool applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const;
+  bool applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const;
   //Same as imports, without the slow access-check, for internal usage
   bool importsPrivate(const DUContext * origin, const SimpleCursor& position) const;
   DUCHAIN_DECLARE_DATA(TopDUContext)

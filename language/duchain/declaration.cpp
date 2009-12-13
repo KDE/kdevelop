@@ -143,6 +143,12 @@ Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
   m_indexInTopContext = 0;
 }
 
+bool Declaration::persistentlyDestroying() const
+{
+  TopDUContext* topContext = this->topContext();
+  return !topContext->deleting() || !topContext->isOnDisk();
+}
+
 Declaration::~Declaration()
 {
   uint oldOwnIndex = m_indexInTopContext;
@@ -150,7 +156,7 @@ Declaration::~Declaration()
   TopDUContext* topContext = this->topContext();
 
   //Only perform the actions when the top-context isn't being deleted, or when it hasn't been stored to disk
-  if(!topContext->deleting() || !topContext->isOnDisk()) {
+  if(persistentlyDestroying()) {
     DUCHAIN_D_DYNAMIC(Declaration);
     // Inserted by the builder after construction has finished.
     if( d->m_internalContext.context() )

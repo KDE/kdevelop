@@ -74,8 +74,9 @@ DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 
 REGISTER_DUCHAIN_ITEM(DUContext);
 
-//This is ugly, but it prevents a possible crash during destruction. We don't need ~Identifier to be called.
+//We leak here, to prevent a possible crash during destruction, as the destructor of Identifier is not safe to be called after the duchain has been destroyed
 const Identifier& globalImportIdentifier(*new Identifier("{...import...}"));
+const Identifier& globalAliasIdentifier(*new Identifier("{...alias...}"));
 
 void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
 

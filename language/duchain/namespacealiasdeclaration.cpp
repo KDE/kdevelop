@@ -20,6 +20,7 @@
 
 #include "ducontext.h"
 #include "duchainregister.h"
+#include "persistentsymboltable.h"
 
 namespace KDevelop
 {
@@ -49,11 +50,47 @@ QualifiedIdentifier NamespaceAliasDeclaration::importIdentifier() const {
 }
 
 void NamespaceAliasDeclaration::setImportIdentifier(const QualifiedIdentifier& id) {
+  Q_ASSERT(!id.explicitlyGlobal());
   d_func_dynamic()->m_importIdentifier = id;
 }
 
 NamespaceAliasDeclaration::~NamespaceAliasDeclaration()
 {
+  if(persistentlyDestroying() && d_func()->m_inSymbolTable)
+    unregisterAliasIdentifier();
+}
+
+
+void NamespaceAliasDeclaration::setInSymbolTable(bool inSymbolTable)
+{
+  if(d_func()->m_inSymbolTable && !inSymbolTable)
+  {
+    unregisterAliasIdentifier();
+  }else if(!d_func()->m_inSymbolTable && inSymbolTable)
+  {
+    registerAliasIdentifier();
+  }
+  KDevelop::Declaration::setInSymbolTable(inSymbolTable);
+}
+
+void NamespaceAliasDeclaration::unregisterAliasIdentifier()
+{
+  if(indexedIdentifier() != globalImportIdentifier)
+  {
+    QualifiedIdentifier aliasId = qualifiedIdentifier();
+    aliasId.push(globalAliasIdentifier);
+    KDevelop::PersistentSymbolTable::self().removeDeclaration(aliasId, this);
+  }
+}
+
+void NamespaceAliasDeclaration::registerAliasIdentifier()
+{
+  if(indexedIdentifier() != globalImportIdentifier)
+  {
+    QualifiedIdentifier aliasId = qualifiedIdentifier();
+    aliasId.push(globalAliasIdentifier);
+    KDevelop::PersistentSymbolTable::self().addDeclaration(aliasId, this);
+  }
 }
 
 Declaration* NamespaceAliasDeclaration::clonePrivate() const {

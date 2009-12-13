@@ -321,7 +321,7 @@ public:
    *
    * \param inSymbolTable true to add this declaration to the symbol table, false to remove it.
    */
-  void setInSymbolTable(bool inSymbolTable);
+  virtual void setInSymbolTable(bool inSymbolTable);
 
   /**
    * Equivalence operator.
@@ -429,6 +429,14 @@ protected:
     */
   Declaration( DeclarationData & dd, const SimpleRange& range );
 
+  /**
+   * Returns true if this declaration is being currently destroyed persistently,
+   * which means that it should eventually deregister itself from persistent storage facilities.
+   *
+   * Only call this from destructors.
+   */
+  bool persistentlyDestroying() const;
+  
   DUCHAIN_DECLARE_DATA(Declaration)
 private:
    /**

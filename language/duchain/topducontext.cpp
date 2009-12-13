@@ -130,34 +130,6 @@ class TopDUContext::CacheData {
     TopDUContextPointer context;
 };
 
-struct TopDUContext::AliasChainElement {
-  AliasChainElement() { // Creates invalid entries, but we need it fast because it's used to initialize all items in KDevVarLengthArray
-  }
-  AliasChainElement(const AliasChainElement* _prev, Identifier id) : previous(_prev), ownsPrevious(false), identifier(id), length(0) {
-    if(previous) {
-      length = previous->length + 1;
-//       hash = QualifiedIdentifier::combineHash(previous->hash, previous->length, identifier);
-    } else{
-      length = 1;
-//       hash = QualifiedIdentifier::combineHash(0, 0, identifier);
-    }
-  }
-
-  //Computes the identifier represented by this chain element(generally the identifiers across the "previous" chain reversed
-  void buildQualifiedIdentifier(QualifiedIdentifier& target) const {
-    if(previous)
-      previous->buildQualifiedIdentifier(target);
-    
-    target.push(identifier);
-  }
-
-  const AliasChainElement* previous;
-  bool ownsPrevious;
-  Identifier identifier;
-//   uint hash;
-  uint length;
-};
-
 template <class T>
 void removeFromVector(QVector<T>& vec, const T& t) {
   for(int a  =0; a < vec.size(); ++a) {
@@ -934,19 +906,13 @@ struct TopDUContext::FindDeclarationsAcceptor {
     flags = _flags;
   }
 
-  bool operator() (const AliasChainElement& element) {
-    QualifiedIdentifier id;
-    element.buildQualifiedIdentifier(id);
-    
+  bool operator() (const QualifiedIdentifier& id) {
+
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << id.toString();
 #endif
 
     PersistentSymbolTable::Declarations allDecls;
-
-    //If the identifier wasn't found in the identifier repository, the item cannot exist.
-    if(!id.inRepository())
-      return true;
 
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDeclarationIterator filter;
@@ -1049,7 +1015,7 @@ struct TopDUContext::ApplyAliasesBuddyInfo {
 
 ///@todo Implement a cache so at least the global import checks don't need to be done repeatedly. The cache should be thread-local, using DUChainPointer for the hashed items, and when an item was deleted, it should be discarded
 template<class Acceptor>
-bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
+bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& accept, const SimpleCursor& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
 {
   if(recursionDepth > maxApplyAliasesRecursion) {
     QList<QualifiedIdentifier> searches = identifier->toList();
@@ -1059,23 +1025,27 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 
     kDebug() << "maximum apply-aliases recursion reached while searching" << id;
   }
-  ///@todo explicitlyGlobal if the first identifier los global
   bool foundAlias = false;
 
-  AliasChainElement newElement(backPointer, identifier->identifier); //Back-pointer for following elements. Also contains current hash and length.
+  QualifiedIdentifier id(previous);
+  id.push(identifier->identifier);
 
+  if(!id.inRepository())
+    return true; //If the qualified identifier is not in the identifier repository, it cannot be registered anywhere, so there's nothing we need to do
+  
   if( !identifier->next.isEmpty() || canBeNamespace ) { //If it cannot be a namespace, the last part of the scope will be ignored
 
-    QualifiedIdentifier id;
-    newElement.buildQualifiedIdentifier(id);
-
+    //Search for namespace-aliases, by using globalAliasIdentifier, which is inserted into the symbol-table by NamespaceAliasDeclaration
+    QualifiedIdentifier aliasId(id);
+    aliasId.push(globalAliasIdentifier);
+    
 #ifdef DEBUG_SEARCH
   kDebug() << "checking" << id.toString();
 #endif
     
-    if(id.inRepository() && !id.isEmpty()) {
+    if(aliasId.inRepository()) {
     //This iterator efficiently filters the visible declarations out of all declarations
-      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(aliasId, recursiveImportIndices());
 
       if(filter) {
         DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
@@ -1097,9 +1067,6 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           if(foundAlias)
               break;
 
-          if(aliasDecl->identifier() != newElement.identifier)  //Since we have retrieved the aliases by hash only, we still need to compare the name
-            continue;
-
           Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
 
           NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
@@ -1116,43 +1083,30 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
           if(buddy->alreadyImporting( importIdentifier ))
             continue; //This import has already been applied to this search
 
-          //Create a chain of AliasChainElements that represent the identifier
-          uint count = importIdentifier.count();
-
-          KDevVarLengthArray<AliasChainElement, 5> newChain;
-          newChain.resize(count);
-          for(uint a = 0; a < count; ++a)
-            newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
-
-          AliasChainElement* newAliasedElement = &newChain[importIdentifier.count()-1];
-
           ApplyAliasesBuddyInfo info(1, buddy, importIdentifier);
 
           if(identifier->next.isEmpty()) {
             //Just insert the aliased namespace identifier
-            if(!accept(*newAliasedElement))
+            if(!accept(importIdentifier))
               return false;
           }else{
             //Create an identifiers where namespace-alias part is replaced with the alias target
             FOREACH_ARRAY(SearchItem::Ptr item, identifier->next)
-              if(!applyAliases(newAliasedElement, item, accept, position, canBeNamespace, &info, recursionDepth+1))
+              if(!applyAliases(importIdentifier, item, accept, position, canBeNamespace, &info, recursionDepth+1))
                 return false;
           }
         }
       }
-    }else{
-      if(!identifier->identifier.isEmpty())
-        return true; //Normally the id should not be empty, but it is, so it wasn't found in the repo. Nothing to do.
     }
   }
 
   if(!foundAlias) { //If we haven't found an alias, put the current versions into the result list. Additionally we will compute the identifiers transformed through "using".
     if(identifier->next.isEmpty()) {
-      if(!accept(newElement)) //We're at the end of a qualified identifier, accept it
+      if(!accept(id)) //We're at the end of a qualified identifier, accept it
         return false;
     } else {
       FOREACH_ARRAY(SearchItem::Ptr next, identifier->next)
-        if(!applyAliases(&newElement, next, accept, position, canBeNamespace, 0, recursionDepth+1))
+        if(!applyAliases(id, next, accept, position, canBeNamespace, 0, recursionDepth+1))
           return false;
     }
   }
@@ -1163,19 +1117,16 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   //Find all namespace-imports at given scope
 
   {
-    AliasChainElement importChainItem(backPointer, globalImportIdentifier);
-
-    QualifiedIdentifier id;
-    importChainItem.buildQualifiedIdentifier(id);
+    QualifiedIdentifier importId(previous);
+    importId.push(globalImportIdentifier);
 
 #ifdef DEBUG_SEARCH
   kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));
 #endif
 
-    if(!id.isEmpty() && id.inRepository()) {
+    if(importId.inRepository()) {
       //This iterator efficiently filters the visible declarations out of all declarations
-      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(id, recursiveImportIndices());
-
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(importId, recursiveImportIndices());
 
       if(filter) {
         DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, 0);
@@ -1199,7 +1150,7 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
   #endif
 
           QualifiedIdentifier importIdentifier = alias->importIdentifier();
-
+          
           if(importIdentifier.isEmpty()) {
             kDebug() << "found empty import";
             continue;
@@ -1209,35 +1160,9 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
             continue; //This import has already been applied to this search
 
           ApplyAliasesBuddyInfo info(2, buddy, importIdentifier);
-
-          int count = importIdentifier.count();
-          KDevVarLengthArray<AliasChainElement, 5> newChain;
-          newChain.resize(importIdentifier.count());
-
-          for(int a = 0; a < count; ++a)
-            newChain[a] = AliasChainElement(a == 0 ? 0 : &newChain[a-1], importIdentifier.at(a));
-
-          AliasChainElement* newAliasedElement = &newChain[count-1];
-
-          bool recurse = !backPointer;
           
-          if(!recurse) {
-            //Check if qualified identifiers are changed
-            QualifiedIdentifier newId;
-            newAliasedElement->buildQualifiedIdentifier(newId);
-
-            QualifiedIdentifier backId;
-            backPointer->buildQualifiedIdentifier(backId);
-            
-            recurse |= newId != backId;
-          }
-          
-//   #ifdef DEBUG_SEARCH
-//           kDebug() << "imported" << newId.toString();
-//   #endif
-          //Prevent endless recursion by checking whether we're actually doing a change
-          if(recurse)
-            if(!applyAliases(newAliasedElement, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1))
+          if(previous != importIdentifier)
+            if(!applyAliases(importIdentifier, identifier, accept, importDecl->topContext() == this ? importDecl->range().start : position, canBeNamespace, &info, recursionDepth+1))
               return false;
         }
       }
@@ -1249,8 +1174,10 @@ bool TopDUContext::applyAliases( const AliasChainElement* backPointer, const Sea
 template<class Acceptor>
 void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Acceptor& acceptor, const SimpleCursor& position, bool canBeNamespace ) const
 {
+  QualifiedIdentifier emptyId;
+  
   FOREACH_ARRAY(SearchItem::Ptr item, identifiers)
-    applyAliases(0, item, acceptor, position, canBeNamespace, 0, 0);
+    applyAliases(emptyId, item, acceptor, position, canBeNamespace, 0, 0);
 }
 
 struct TopDUContext::FindContextsAcceptor {
@@ -1258,20 +1185,14 @@ struct TopDUContext::FindContextsAcceptor {
     cache = _top->m_local->currentCache();
   }
 
-  bool operator() (const AliasChainElement& element) {
+  bool operator() (const QualifiedIdentifier& id) {
+    
     PersistentSymbolTable::Contexts allDecls;
-
-    QualifiedIdentifier id;
-    element.buildQualifiedIdentifier(id);
 
 #ifdef DEBUG_SEARCH
     kDebug() << "accepting" << id.toString();
 #endif
     kDebug() << "accepting" << id.toString() << id.inRepository();
-
-    //If the identifier is not in the repository, there also can be no declaration in the repository.
-    if(!id.inRepository())
-      return true;
 
     //This iterator efficiently filters the visible declarations out of all declarations
     PersistentSymbolTable::FilteredDUContextIterator filter;

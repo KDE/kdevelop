@@ -868,6 +868,14 @@ private:
 KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier& globalImportIdentifier;
 
 /**
+ * This is the identifier that can be used to search namespace-alias declarations.
+ * It is stored statically for performance-reasons, so it doesn't need to be constructed every time it is used.
+ *
+ * @see NamespaceAliasDeclaration.
+ * */
+KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier& globalAliasIdentifier;
+
+/**
   * Collects all uses of the given @param declarationIndex
   * */
 KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyRanges = false);
