@@ -1130,7 +1130,10 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     e.setInformation(i18n("Add a file called '%1' to target '%2'.", it->fileName(), target->text()));
     e.addDocuments(IndexedString(lists), IndexedString(lists));
 
-    bool ret=followUses(e.document(), r, ' '+it->fileName(), lists, true, QString());
+    QString filename=KUrl::relativeUrl(folder->url(), it->url());
+    if(filename.startsWith("./"))
+        filename=filename.right(filename.size()-2);
+    bool ret=followUses(e.document(), r, ' '+filename, lists, true, QString());
 
     if(ret && e.exec())
         ret=e.applyAllChanges();
