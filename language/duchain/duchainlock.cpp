@@ -1,7 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2007 Kris Wong <kris.p.wong@gmail.com>
     Copyright 2007 Hamish Rodda <rodda@kde.org>
-   Copyright 2007 David Nolden <david.nolden.kdevelop@art-master.de>
+   Copyright 2007-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,55 +23,14 @@
 
 #include <unistd.h>
 #include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QWaitCondition>
-#include <QtCore/QHash>
-#include <QtCore/QStack>
-#include <QTime>
-#include <util/google/dense_hash_map>
 
-
-// Uncomment the following to turn on verbose locking information
-//#define DUCHAIN_LOCK_VERBOSE_OUTPUT
-
-// Uncomment this to enable checking for long lock times. It adds significant performance cost though.
-//#define DEBUG_LOG_TIMING
-
-// When uncommented, a backtrace will be printed whenever a too long lock-time is discovered
-//#define DEBUG_LOG_BACKTRACE
-
-//If DEBUG_LOG_TIMING is uncommented, and the duchain is locked for more than this count of milliseconds, a message is printed
-#define LOCK_LOG_MILLISECONDS 1000
-
-//If this is uncommented, backtraces are produced whenever the duchain is read-locked, and shows it when the same thread tries to get a write-lock, triggering an assertion.
-//Very expensive!
-//#define DEBUG_ASSERTION_BACKTRACES
-
-//Uncomment this to search for Deadlocks. DEBUG_LOG_TIMING must be enabled too, and DEBUG_LOG_BACKTRACE is recommended
-//Warning: this may result in a total spamming of the command-line.
-//#define SEARCH_DEADLOCKS
+//Nanoseconds to sleep when waiting for a lock
+const uint uSleepTime = 500;
 
 #include <kdebug.h>
 #include <sys/time.h>
 #include "duchain.h"
-
-namespace std {
-#if defined(Q_CC_MSVC)
-  using namespace stdext;
-#else
-  using namespace __gnu_cxx;
-#endif
-}
-
-#ifndef Q_CC_MSVC
-namespace __gnu_cxx {
-    template<>
-    struct hash<void *>
-    {
-        inline size_t operator() (const void *ptr) const { return reinterpret_cast<size_t>(ptr); }
-    };
-}
-#endif
+#include <QThreadStorage>
 
 namespace KDevelop
 {
@@ -82,8 +41,6 @@ public:
     m_writer = 0;
     m_writerRecursion = 0;
     m_totalReaderRecursion = 0;
-    m_readers.set_empty_key(0); //Assuming that no thread can ever have handle zero
-    m_readersEnd = m_readers.end(); //This is used to speedup currentThreadHasReadLock()
   }
 
   /**
@@ -95,56 +52,32 @@ public:
   }
 
   int ownReaderRecursion() const {
-    int ownReaderRecursion = 0;
-
-    ReaderMap::const_iterator it = m_readers.find( QThread::currentThreadId() );
-    if( it != m_readersEnd )
-      ownReaderRecursion = (*it).second;
-    return ownReaderRecursion;
+    if(m_readerRecursion.hasLocalData())
+      return *m_readerRecursion.localData();
+    else
+      return 0;
   }
-
-#ifdef DEBUG_LOG_TIMING
-  inline void auditTime() const {
-    int ms = m_lockTime.elapsed();
-    if (ms > LOCK_LOG_MILLISECONDS) {
-#ifndef DEBUG_LOG_BACKTRACE
-      kWarning(9512) << "Long lock time:" << ms << "milliseconds." ;
-#else
-      kWarning(9512) << "Long lock time:" << ms << "milliseconds, locked from:\n" << m_lockBacktrace ;
-#endif
-    }
-  }
-  inline void startLockTiming() {
-    m_lockTime.start();
-#ifdef DEBUG_LOG_BACKTRACE
-    m_lockBacktrace = kBacktrace();
-#endif
-  }
-#endif
-
-  QMutex m_mutex;
-  Qt::HANDLE m_writer;
-
-  int m_writerRecursion; ///How often is the chain write-locked by the writer?
-  int m_totalReaderRecursion; ///How often is the chain read-locked recursively by all readers? Should be sum of all m_reader values
-
-  QWaitCondition m_waitForWriter;
-
-  ///Map readers to the count of recursive read-locks they hold(0 if they do not hold a lock)
-  typedef google::dense_hash_map<Qt::HANDLE, int> ReaderMap;
-  ReaderMap m_readers;
-  DUChainLockPrivate::ReaderMap::const_iterator m_readersEnd; //Must always be updated when a new reader was added
-
-#ifdef DEBUG_LOG_TIMING
-  QTime m_lockTime;
-#ifdef DEBUG_LOG_BACKTRACE
-  QString m_lockBacktrace;
-#endif
-#endif
   
-#ifdef DEBUG_ASSERTION_BACKTRACES
-  QHash<Qt::HANDLE, QStack<QString> > m_readerBacktraces;
-#endif
+  void changeOwnReaderRecursion(int difference) {
+    if(m_readerRecursion.hasLocalData()) {
+      *m_readerRecursion.localData() += difference;
+    }else{
+      m_readerRecursion.setLocalData(new int(difference));
+    }
+    Q_ASSERT(*m_readerRecursion.localData() >= 0);
+    m_totalReaderRecursion.fetchAndAddOrdered(difference);
+  }
+
+  ///Holds the writer that currently has the write-lock, or zero. Is protected by m_writerRecursion.
+  volatile Qt::HANDLE m_writer;
+
+  ///How often is the chain write-locked by the writer? This value protects m_writer,
+  ///m_writer may only be changed by the thread that successfully increases this value from 0 to 1
+  QAtomicInt m_writerRecursion;
+  ///How often is the chain read-locked recursively by all readers? Should be sum of all m_readerRecursion values
+  QAtomicInt m_totalReaderRecursion;
+
+  QThreadStorage<int*> m_readerRecursion;
 };
 
 class DUChainWriteLockerPrivate
@@ -174,177 +107,122 @@ inline uint toMilliSeconds(timeval v) {
 
 bool DUChainLock::lockForRead(unsigned int timeout)
 {
-#ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9505) << "DUChain read lock requested by thread:" << QThread::currentThreadId();
-#endif
-  if(timeout == 0)
-    timeout = 60000;
-
-  d->m_mutex.lock();
-
-  bool locked = false;
-
-  timeval startTime;
-  gettimeofday(&startTime, 0);
+  ///Step 1: Increase the own reader-recursion. This will make sure no further write-locks will succeed
+  d->changeOwnReaderRecursion(1);
   
-  while((d->m_writer && d->m_writer != QThread::currentThreadId())) {
-    timeval currentTime;
-    gettimeofday(&currentTime, 0);
-    timeval waited;
-    timersub(&currentTime, &startTime, &waited);
-    
-    if(toMilliSeconds(waited) < timeout)
-      d->m_waitForWriter.wait(&d->m_mutex, timeout);
-    else
-      break;
-  }
-  
-  if (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) {
-    DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
-    if ( it != d->m_readers.end() ) {
-      ++(*it).second;
-    } else {
-      d->m_readers.insert( DUChainLockPrivate::ReaderMap::value_type(QThread::currentThreadId(), 1) );
-      d->m_readersEnd = d->m_readers.end();
+  if(d->m_writer == 0 || d->m_writer == QThread::currentThreadId())
+  {
+    //Successful lock: Either there is no writer, or we hold the write-lock by ourselves
+  }else{
+    ///Step 2: Start spinning until there is no writer any more
+
+    timeval startTime;
+    gettimeofday(&startTime, 0);
+
+    while(d->m_writer)
+    {
+      timeval currentTime;
+      gettimeofday(&currentTime, 0);
+      timeval waited;
+      timersub(&currentTime, &startTime, &waited);
+      
+      if(!timeout || toMilliSeconds(waited) < timeout) {
+        usleep(uSleepTime);
+      } else {
+        //Fail!
+        d->changeOwnReaderRecursion(-1);
+        return false;
+      }
     }
-    locked = true;
   }
-
-  if(locked) {
-    ++d->m_totalReaderRecursion;
-#ifdef DEBUG_LOCK_TIMING
-    d->startLockTiming();
-#endif
-    
-#ifdef DEBUG_ASSERTION_BACKTRACES
-    d->m_readerBacktraces[QThread::currentThreadId()].push(kBacktrace());
-    Q_ASSERT(d->m_readerBacktraces[QThread::currentThreadId()].size() == d->m_readers[QThread::currentThreadId()]);
-#endif
-  }
-
-  d->m_mutex.unlock();
-  return locked;
+  
+  return true;
 }
 
 bool DUChainLock::lockForRead() {
-  bool ret = lockForRead(100000);
+  bool ret = lockForRead(0);
   Q_ASSERT(currentThreadHasReadLock());
   return ret;
 }
 
 void DUChainLock::releaseReadLock()
 {
-#ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9505) << "DUChain read lock released by thread:" << QThread::currentThreadId();
-#endif
-
-  QMutexLocker lock(&d->m_mutex);
-  DUChainLockPrivate::ReaderMap::iterator it = d->m_readers.find( QThread::currentThreadId() );
-  Q_ASSERT(it != d->m_readers.end());
-  --(*it).second;
-  Q_ASSERT((*it).second>=0);
-  --d->m_totalReaderRecursion;
-
-  ///@todo Remove the all readers that do not exist any more at some point(leave other readers there with recursion 0
-  ///      because it is very probable that they will lock again, and not having to re-allocate the bucket might speed up the locking.
-
-/*  if( *it == 0 )
-    d->m_readers.erase(it); //Maybe it would even be wise simply leaving it there*/
-
-#ifdef DEBUG_ASSERTION_BACKTRACES
-  d->m_readerBacktraces[QThread::currentThreadId()].pop();
-#endif
-
-#ifdef DEBUG_LOCK_TIMING
-  d->auditTime();
-#endif
+  d->changeOwnReaderRecursion(-1);
 }
 
 bool DUChainLock::currentThreadHasReadLock()
 {
-  d->m_mutex.lock();
-  
-  DUChainLockPrivate::ReaderMap::const_iterator it = d->m_readers.find( QThread::currentThreadId() );
-  bool ret = false;
-  if( it != d->m_readersEnd )
-    ret = ((*it).second != 0);
-
-  d->m_mutex.unlock();
-  return ret;
+  return (bool)d->ownReaderRecursion();
 }
 
 bool DUChainLock::lockForWrite(uint timeout)
 {
-#ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9505) << "DUChain write lock requested by thread:" << QThread::currentThreadId();
-  kDebug(9505) << "Current backtrace:" << kBacktrace();
-#endif
-
-  if(timeout == 0)
-    timeout = 10000;
-  
-  QMutexLocker lock(&d->m_mutex);
   //It is not allowed to acquire a write-lock while holding read-lock
-
-#ifdef DEBUG_ASSERTION_BACKTRACES
-  if(d->ownReaderRecursion())
-    kWarning(9505) << "Tried to lock the duchain for writing, but it was already locked for reading here:\n" << d->m_readerBacktraces[QThread::currentThreadId()].top();
-#endif
 
   Q_ASSERT(d->ownReaderRecursion() == 0);
 
-  bool locked = false;
-  uint currentTime = 0;
-
-  //We cannot use m_waitForWriterForWriter here, because we also have to wait for other readers to finish
-  while ( ( (d->m_writer && d->m_writer != QThread::currentThreadId()) || d->haveOtherReaders()) && currentTime < timeout) {
-    lock.unlock();
-    usleep(10000);
-    currentTime++;
-    lock.relock();
-#ifdef DEBUG_LOG_BACKTRACE
-    d->auditTime(); //Search for deadlocks
-#endif
+  if(d->m_writer == QThread::currentThreadId())
+  {
+    //We already hold the write lock, just increase the recursion count and return
+    d->m_writerRecursion.fetchAndAddRelaxed(1);
+    return true;
   }
+  
+  timeval startTime;
+  gettimeofday(&startTime, 0);
 
-  if ( (d->m_writer == 0 || d->m_writer == QThread::currentThreadId()) && !d->haveOtherReaders()) {
-    d->m_writer = QThread::currentThreadId();
-    ++d->m_writerRecursion;
-    locked = true;
-#ifdef DEBUG_LOCK_TIMING
-    d->startLockTiming();
-#endif
+  while(1)
+  {
+    //Try acquiring the write-lcok
+    if(d->m_totalReaderRecursion == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1))
+    {
+      //Now we can be sure that there is no other writer, as we have increased m_writerRecursion from 0 to 1
+      d->m_writer = QThread::currentThreadId();
+      if(d->m_totalReaderRecursion == 0)
+      {
+        //There is still no readers, we have successfully acquired a write-lock
+        return true;
+      }else{
+        //There may be readers.. we have to continue spinning
+        d->m_writer = 0;
+        d->m_writerRecursion = 0;
+      }
+    }
+    
+    timeval currentTime;
+    gettimeofday(&currentTime, 0);
+    timeval waited;
+    timersub(&currentTime, &startTime, &waited);
+    
+    if(!timeout || toMilliSeconds(waited) < timeout) {
+      usleep(uSleepTime);
+    } else {
+      //Fail!
+      return false;
+    }
   }
-
-  return locked;
+  
+  return false;
 }
 
 void DUChainLock::releaseWriteLock()
 {
-#ifdef DUCHAIN_LOCK_VERBOSE_OUTPUT
-  kDebug(9505) << "DUChain write lock released by thread:" << QThread::currentThreadId();
-#endif
-
   Q_ASSERT(currentThreadHasWriteLock());
-  QMutexLocker lock(&d->m_mutex);
-  
-  --d->m_writerRecursion;
-  
-  if( !d->m_writerRecursion )
-    d->m_writer = 0;
 
-  d->m_waitForWriter.wakeAll();
-#ifdef DEBUG_LOCK_TIMING
-  d->auditTime();
-#endif
+  //The order is important here, m_writerRecursion protects m_writer
+  
+  if(d->m_writerRecursion == 1)
+  {
+    d->m_writer = 0;
+    d->m_writerRecursion = 0;
+  }else{
+    d->m_writerRecursion.fetchAndAddOrdered(-1);
+  }
 }
 
 bool DUChainLock::currentThreadHasWriteLock()
 {
-  d->m_mutex.lock();
-  bool ret = d->m_writer == QThread::currentThreadId();
-  d->m_mutex.unlock();
-  return ret;
+  return d->m_writer == QThread::currentThreadId();
 }
 
 
