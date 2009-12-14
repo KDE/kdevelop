@@ -1131,10 +1131,12 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
     //Failed to resolve namespace
     kDebug(9007) << "Failed to resolve namespace \"" << identifier << "\"";
     QualifiedIdentifier ret = identifier;
+    ret.setExplicitlyGlobal(false);
     Q_ASSERT(ret.count());
     return ret;
   } else {
     QualifiedIdentifier ret = contexts.first()->scopeIdentifier(true);
+    ret.setExplicitlyGlobal(false);
     if(ret.isEmpty())
         return ret;
     Q_ASSERT(ret.count());
