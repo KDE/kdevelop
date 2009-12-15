@@ -22,6 +22,8 @@
 #define SPINLOCK_H
 
 #include <QAtomicInt>
+#include <QMutex>
+#include <QWaitCondition>
 #include <sys/time.h>
 #include <unistd.h>
 
@@ -31,50 +33,73 @@ inline uint timevalToMilliSeconds(timeval v) {
   return v.tv_sec * 1000 + v.tv_usec / 1000;
 }
 
-///@param uSleep nanoseconds to sleep when waiting for the lock
-template<uint uSleep, int Timeout = 0>
+struct SpinLockData {
+    SpinLockData() {
+        lock = 0;
+    }
+    
+    QAtomicInt lock; //The variable that manages the lock
+    
+    QMutex waitingMutex;
+    QWaitCondition waitingCondition;
+};
+
+///This spin-lock uses a QWaitCondition together with a QMutex as fallback in case the lock is already taken.
+///That means that this spin-lock is only more efficient than a QMutex when there is a low amount of lock-contention.
+///When there is a high amount of lock-contention, QMutex should be more efficient.
+///@note This implementation does not guarantee an optimal behavior as QMutex does: There is no guarantee
+///      that a waiting thread is really woken up in exactly the moment the lock becomes available.
+///      In _most_ cases it should work, but in worst-case the thread sleeps @p mSleep milliseconds.
+///@param mSleep maximum number of milliseconds to sleep when waiting for the lock
+///@param Timeout the timeount value
+template<uint mSleep = 1, int mTimeout = 0>
 class SpinLock
 {
     public:
         
-        SpinLock(QAtomicInt& var) : m_var(var), m_locked(true) {
-            if(var.testAndSetOrdered(0, 1)) {
+        SpinLock(SpinLockData& data) : m_data(data), m_locked(true) {
+            if(m_data.lock.testAndSetOrdered(0, 1)) {
                 //Success at the first try
-            }else if(Timeout) {
+            }else if(mTimeout) {
                 //Spin with timeout
                 
                 //Start spinning
                 timeval startTime;
                 gettimeofday(&startTime, 0);
                 
-                while(!var.testAndSetOrdered(0, 1))
+                while(!m_data.lock.testAndSetOrdered(0, 1))
                 {
                     timeval currentTime;
                     gettimeofday(&currentTime, 0);
                     timeval waited;
                     timersub(&currentTime, &startTime, &waited);
                     
-                    if(Timeout && timevalToMilliSeconds(waited) > Timeout) {
+                    if(mTimeout && timevalToMilliSeconds(waited) > mTimeout) {
                         m_locked = false;
                         break;
                     }
                     
-                    if(uSleep)
-                        usleep(uSleep);
+                    //We need to wait now
+                    m_data.waitingMutex.lock();
+                    m_data.waitingCondition.wait(&m_data.waitingMutex, mSleep);
+                    m_data.waitingMutex.unlock();
                 }
             }else{
                 //No timeout
-                while(!var.testAndSetOrdered(0, 1))
+                while(!m_data.lock.testAndSetOrdered(0, 1))
                 {
-                    if(uSleep)
-                        usleep(uSleep);
+                    //We need to wait now
+                    m_data.waitingMutex.lock();
+                    m_data.waitingCondition.wait(&m_data.waitingMutex, mSleep);
+                    m_data.waitingMutex.unlock();
                 }
             }
         }
         
         ~SpinLock() {
             if(m_locked) {
-                m_var = 0;
+                m_data.lock = 0;
+                m_data.waitingCondition.wakeOne();
             }
         }
         
@@ -84,7 +109,7 @@ class SpinLock
         }
         
     private:
-        QAtomicInt& m_var;
+        SpinLockData& m_data;
         bool m_locked;
 };
 

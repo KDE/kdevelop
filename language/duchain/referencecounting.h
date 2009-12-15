@@ -36,7 +36,7 @@ namespace KDevelop {
   ///so the reference-counting code can be inlined.
   
   KDEVPLATFORMLANGUAGE_EXPORT extern bool doReferenceCounting;
-  KDEVPLATFORMLANGUAGE_EXPORT  extern QAtomicInt refCountingLock;
+  KDEVPLATFORMLANGUAGE_EXPORT  extern SpinLockData refCountingLock;
   KDEVPLATFORMLANGUAGE_EXPORT  extern QMap<void*, QPair<uint, uint> >* refCountingRanges;
   KDEVPLATFORMLANGUAGE_EXPORT  extern bool refCountingHasAdditionalRanges;
   KDEVPLATFORMLANGUAGE_EXPORT  extern void* refCountingFirstRangeStart;
@@ -60,7 +60,7 @@ namespace KDevelop {
     if(!doReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
       return false;
 
-    SpinLock<0> lock(refCountingLock);
+    SpinLock<> lock(refCountingLock);
 
     if(refCountingFirstRangeStart &&
        (((char*)refCountingFirstRangeStart) <= (char*)item) &&
