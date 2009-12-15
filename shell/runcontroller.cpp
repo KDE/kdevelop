@@ -171,15 +171,26 @@ public:
         kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
         if( type && mode )
         {
-            ILauncher* launcher = type->launchers().at(0);
-            ILaunchConfiguration* ilaunch = q->createLaunchConfiguration( type,
-                                                                         qMakePair( mode->id(), launcher->id() ),
-                                                                         contextItem->project(),
-                                                                         contextItem->text() );
-            LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
-            type->configureLaunchFromItem( launch->config(), contextItem );
-            kDebug() << "created config, launching";
-            q->execute( mode->id(), launch );
+            ILauncher* launcher = 0;
+            foreach (ILauncher *l, type->launchers())
+            {
+                kDebug() << "avaliable launcher" << l << l->id() << l->supportedModes();
+                if (l->supportedModes().contains(mode->id())) {
+                    launcher = l;
+                    break;
+                }
+            }
+            if (launcher)
+            {
+                ILaunchConfiguration* ilaunch = q->createLaunchConfiguration( type,
+                                                                            qMakePair( mode->id(), launcher->id() ),
+                                                                            contextItem->project(),
+                                                                            contextItem->text() );
+                LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
+                type->configureLaunchFromItem( launch->config(), contextItem );
+                kDebug() << "created config, launching";
+                q->execute( mode->id(), launch );
+            }
         }
     }
 
