@@ -593,12 +593,6 @@ public:
   QList< QPair<Declaration*, int> > allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
 
   /**
-   * Return all declarations in this context that have the given \a identifier, without any filtering.
-   * This includes declarations propagated from sub-contexts.
-   * */
-  QList<Declaration*> allLocalDeclarations(const Identifier& identifier) const;
-
-  /**
    * Delete and remove all slaves(uses, declarations, definitions, contexts) that are not in the given set
    */
   void cleanIfNotEncountered(const QSet<DUChainBase*>& encountered);

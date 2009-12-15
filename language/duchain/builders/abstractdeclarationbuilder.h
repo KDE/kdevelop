@@ -109,7 +109,7 @@ protected:
       LockedSmartInterface iface = LanguageSpecificDeclarationBuilderBase::editor()->smart();
       SimpleRange translated = LanguageSpecificDeclarationBuilderBase::editor()->translate(iface, newRange);
 
-      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->allLocalDeclarations(localId);
+      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, SimpleCursor::invalid(), AbstractType::Ptr(), this->topContext(), DUContext::NoFiltering);
       foreach( Declaration* dec, declarations ) {
 
         if( LanguageSpecificDeclarationBuilderBase::wasEncountered(dec) )

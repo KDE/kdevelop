@@ -1061,33 +1061,6 @@ bool DUContext::parentContextOf(DUContext* context) const
   return false;
 }
 
-QList<Declaration*> DUContext::allLocalDeclarations(const Identifier& identifier) const
-{
-  IndexedIdentifier indexedIdentifier(identifier);
-
-  ENSURE_CAN_READ
-  QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
-
-  QList<Declaration*> ret;
-
-  if(m_dynamicData->m_hasLocalDeclarationsHash) {
-    QHash<Identifier, DeclarationPointer>::const_iterator it = m_dynamicData->m_localDeclarationsHash.constFind(identifier);
-    QHash<Identifier, DeclarationPointer>::const_iterator end = m_dynamicData->m_localDeclarationsHash.constEnd();
-
-    for( ; it != end && it.key() == identifier; ++it )
-      ret << (*it).data();
-  }else{
-    DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
-    while(it) {
-      Declaration* decl = *it;
-      if(decl->indexedIdentifier() == indexedIdentifier)
-        ret << decl;
-      ++it;
-    }
-  }
-  return ret;
-}
-
 QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents) const
 {
   ENSURE_CAN_READ
@@ -1403,7 +1376,9 @@ QList<DUContext*> DUContext::findContexts(ContextType contextType, const Qualifi
 
 void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports) const {
 
-  QList<Declaration*> imports = allLocalDeclarations(globalImportIdentifier);
+  DeclarationList imports;
+  findLocalDeclarationsInternal(globalImportIdentifier, position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
+  
   if(imports.isEmpty() && onlyImports) {
     identifiers = baseIdentifiers;
     return;
@@ -1417,10 +1392,8 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
       if( !imports.isEmpty() )
       {
         //We have namespace-imports.
-        foreach( Declaration* importDecl, imports )
+        FOREACH_ARRAY( Declaration* importDecl, imports )
         {
-          if( importDecl->range().end > position )
-            continue;
           //Search for the identifier with the import-identifier prepended
           Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
           NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
@@ -1429,14 +1402,15 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
       }
 
       if( !identifier->isEmpty() && (identifier->hasNext() || canBeNamespace) ) {
-        QList<Declaration*> aliases = allLocalDeclarations(identifier->identifier);
+        
+        DeclarationList aliases;
+        findLocalDeclarationsInternal(identifier->identifier, position, AbstractType::Ptr(), imports, 0, DUContext::NoFiltering);
+        
         if(!aliases.isEmpty()) {
           //The first part of the identifier has been found as a namespace-alias.
           //In c++, we only need the first alias. However, just to be correct, follow them all for now.
-          foreach( Declaration* aliasDecl, aliases )
+          FOREACH_ARRAY( Declaration* aliasDecl, aliases )
           {
-            if( aliasDecl->range().end > position )
-              continue;
             if(!dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl))
               continue;
 

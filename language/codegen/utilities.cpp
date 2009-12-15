@@ -51,7 +51,7 @@ QValidator::State IdentifierValidator::validate (QString & input, int &) const
         return Acceptable;
     
     DUChainReadLocker lock(DUChain::lock(), 10);
-    return m_context->allLocalDeclarations(identifier).empty() ? Acceptable : Invalid;
+    return m_context->findLocalDeclarations(identifier, SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::NoFiltering).empty() ? Acceptable : Invalid;
 }
 
 IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
