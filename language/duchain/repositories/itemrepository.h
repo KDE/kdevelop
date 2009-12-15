@@ -956,8 +956,6 @@ class Bucket {
     }
 
     bool canAllocateItem(unsigned int size) const {
-      if(m_available < size)
-        return false;
       short unsigned int currentIndex = m_largestFreeItem;
       while(currentIndex) {
         short unsigned int currentFree = freeSize(currentIndex);
@@ -1436,7 +1434,6 @@ class ItemRepository : public AbstractItemRepository {
       //If we could not allocate the item in an empty bucket, then we need to create a monster-bucket that
       //can hold the data.
       if(bucketPtr->isEmpty() && !indexInBucket) {
-        ///Monster-bucket creation:
         ///@todo Move this compound statement into an own function
         uint totalSize = size + MyBucket::AdditionalSpacePerItem;
 
