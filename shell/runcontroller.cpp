@@ -162,19 +162,19 @@ public:
 
     void launchAs( int id )
     {
-        kDebug() << "Launching id:" << id;
+        //kDebug() << "Launching id:" << id;
         QPair<QString,QString> info = launchAsInfo[id];
-        kDebug() << "fetching type and mode:" << info.first << info.second;
+        //kDebug() << "fetching type and mode:" << info.first << info.second;
         LaunchConfigurationType* type = launchConfigurationTypeForId( info.first );
         ILaunchMode* mode = q->launchModeForId( info.second );
-        
-        kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
+
+        //kDebug() << "got mode and type:" << type << type->id() << mode << mode->id();
         if( type && mode )
         {
             ILauncher* launcher = 0;
             foreach (ILauncher *l, type->launchers())
             {
-                kDebug() << "avaliable launcher" << l << l->id() << l->supportedModes();
+                //kDebug() << "avaliable launcher" << l << l->id() << l->supportedModes();
                 if (l->supportedModes().contains(mode->id())) {
                     launcher = l;
                     break;
@@ -188,7 +188,7 @@ public:
                                                                             contextItem->text() );
                 LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
                 type->configureLaunchFromItem( launch->config(), contextItem );
-                kDebug() << "created config, launching";
+                //kDebug() << "created config, launching";
                 q->execute( mode->id(), launch );
             }
         }
