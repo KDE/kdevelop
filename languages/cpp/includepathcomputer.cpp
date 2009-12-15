@@ -31,6 +31,7 @@
 using namespace KDevelop;
 
 #define DEBUG_INCLUDE_PATHS 1
+const bool enableIncludePathResolution = true;
 
 QList<KUrl> convertToUrls(const QList<IndexedString>& stringList) {
   QList<KUrl> ret;
@@ -164,7 +165,7 @@ void IncludePathComputer::computeBackground() {
     
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
 
-    if( m_ret.isEmpty() || DEBUG_INCLUDE_PATHS ) {
+    if( (m_ret.isEmpty() || DEBUG_INCLUDE_PATHS) && enableIncludePathResolution ) {
         //Fallback-search using include-path resolver
 
         if(!m_effectiveBuildDirectory.isEmpty()) {
