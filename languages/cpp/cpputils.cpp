@@ -168,26 +168,14 @@ bool isHeader(const KUrl &url) {
 
 QStringList standardIncludePaths()
 {
-  static QStringList list;
-  static bool init = false;
-  
-  if(!init) {
-    init = true;
-    CppTools::setupStandardIncludePaths(list);
-  }
+  static QStringList list = CppTools::setupStandardIncludePaths();
   return list;
 }
 
 
 const Cpp::ReferenceCountedMacroSet& standardMacros()
 {
-  static Cpp::ReferenceCountedMacroSet macros;
-  static bool init = false;
-  
-  if(!init)
-    // Retrieve the standard include paths & macro definitions for this machine.
-    // Uses gcc commands to retrieve the information.
-    CppTools::setupStandardMacros(macros);
+  static Cpp::ReferenceCountedMacroSet macros = CppTools::setupStandardMacros();
   return macros;
 }
 

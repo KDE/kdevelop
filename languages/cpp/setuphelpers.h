@@ -23,6 +23,7 @@
 #define CPPTOOLSSETUPHELPERS_H
 
 #include "environmentmanager.h"
+#include "cppduchain/environmentmanager.h"
 
 class QStringList;
 
@@ -32,13 +33,13 @@ namespace CppTools {
     * This function attempts to run a gcc command to retrieve the standard
     * c++ include paths for this machine.
     */
-    bool setupStandardIncludePaths(QStringList& includePaths);
+    QStringList setupStandardIncludePaths();
 
     /**
     * This function attempts to run a gcc command to retrieve the standard
     * c++ macro definitions.
     */
-    bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros);
+    Cpp::ReferenceCountedMacroSet setupStandardMacros();
 
 }
 

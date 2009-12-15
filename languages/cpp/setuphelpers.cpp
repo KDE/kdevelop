@@ -34,8 +34,10 @@ using namespace KDevelop;
 
 namespace CppTools {
 
-bool setupStandardIncludePaths(QStringList& includePaths)
+QStringList setupStandardIncludePaths()
 {
+    QStringList includePaths;
+    
     KProcess proc;
     proc.setOutputChannelMode(KProcess::MergedChannels);
     proc.setTextModeEnabled(true);
@@ -93,11 +95,11 @@ bool setupStandardIncludePaths(QStringList& includePaths)
                 }
             }
         }
-        return true;
     } else {
         kDebug(9007) <<"Unable to read standard c++ macro definitions from gcc:" <<QString(proc.readAll()) ;
-        return false;
     }
+    
+    return includePaths;
 }
 
 void insertMacro(Cpp::ReferenceCountedMacroSet& macros, const rpp::pp_macro& macro)
@@ -152,8 +154,9 @@ const QVector<rpp::pp_macro*>& gccStandardMacros()
   return macros;
 }
 
-bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
+Cpp::ReferenceCountedMacroSet setupStandardMacros()
 {
+    Cpp::ReferenceCountedMacroSet macros;
     //Add some macros to be compatible with the gnu c++ compiler
     //Used in several headers like sys/time.h
     insertMacro( macros, rpp::pp_macro("__restrict") );
@@ -235,7 +238,7 @@ bool setupStandardMacros(Cpp::ReferenceCountedMacroSet& macros)
     foreach(const rpp::pp_macro* macro, gccStandardMacros())
       insertMacro(macros, *macro);
     
-    return true;
+    return macros;
 }
 
 }
