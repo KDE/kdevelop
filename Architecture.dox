@@ -317,6 +317,34 @@ NOTE: temporarily IUiController has KDevelop::IUiController::openUrl() method wh
 way to open files in KDevelop until DocumentController is ported.
 
 
+\subsection launch Launch Framework
+
+- Launch Configuration (\ref KDevelop::ILaunchConfiguration)<br />
+  one entry created by the user in Configure Launches
+  (ie an executable)
+  - has one Launch Configuration Type
+  - has a Launcher for every possible Launch Mode
+
+- Launch Configuration Type (\ref KDevelop::LaunchConfigurationType)<br />
+  native application / script
+  - has possible Launchers
+
+- Launcher (\ref KDevelop::ILauncher)<br />
+  creates the KJob for launching
+  - has LaunchConfigurationPageFactories
+  - supports a number of Launch Modes
+
+- Launch Mode: execute / debug / profile
+
+- Launch Configuration Page Factory (\ref KDevelop::LaunchConfigurationPageFactory)<br />
+  creates Widget used in Configure Launches
+
+- Launch Configuration Page (\ref KDevelop::LaunchConfigurationPage)<br />
+  Widget that configures a LaunchConfiguration
+
+- RunController (\ref KDevelop::IRunController)
+  - has possible Launch Configuration Types
+
 
 \section sublime Sublime UI
 
