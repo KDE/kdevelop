@@ -483,7 +483,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 #endif
 
     ///@todo maybe order the declarations within ducontext and change here back to walking the indices, because that's easier to debug and faster
-    QList<Declaration*> decls = currentContext()->allLocalDeclarations(localId);
+    QList<Declaration*> decls = currentContext()->findLocalDeclarations(localId, SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::NoFiltering);
     foreach( Declaration* dec, decls ) {
 
       if( wasEncountered(dec) )
