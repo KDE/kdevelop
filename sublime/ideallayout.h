@@ -121,6 +121,7 @@ public:
     void maximizeWidget(QWidget* widget);
 
     virtual QSize minimumSize() const;
+    virtual QSize maximumSize() const;
 
     virtual QSize sizeHint() const;
 
@@ -162,6 +163,7 @@ protected:
     void layout(Role role1, Role role2, Role role3, Role role4, QRect& rect) const;
     void layoutItem(Role role, QRect& rect) const;
     void minimumSize(Role role, int& minWidth, int& softMinWidth, int& minHeight, int& softMinHeight) const;
+    void maximumSize(Role role, int& maxWidth, int& maxHeight) const;
 
 private:
     void createArea(Role role);

@@ -390,6 +390,105 @@ void IdealMainLayout::minimumSize(Role role, int& minWidth, int& softMinWidth, i
     }
 }
 
+QSize IdealMainLayout::maximumSize() const
+{
+    return QLayout::maximumSize();
+}
+
+void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int& maxHeight) const
+{
+    IdealMainLayout::Role oppositeRole;
+    QList<IdealMainLayout::Role> rolesInBetween;
+    
+    switch (role) {
+        case Left:
+            oppositeRole = Right;
+            if (!m_bottomOwnsBottomLeft) rolesInBetween << Bottom;
+            if (!m_topOwnsTopLeft) rolesInBetween << Top;
+            break;
+        case Right:
+            oppositeRole = Left; 
+            if (!m_bottomOwnsBottomRight) rolesInBetween << Bottom;
+            if (!m_topOwnsTopRight) rolesInBetween << Top;
+            break;
+        case Top:
+            oppositeRole = Bottom;
+            if (m_topOwnsTopLeft) rolesInBetween << Left;
+            if (m_topOwnsTopRight) rolesInBetween << Right;
+            break;
+        case Bottom:
+            oppositeRole = Top; 
+            if (m_bottomOwnsBottomLeft) rolesInBetween << Left;
+            if (m_bottomOwnsBottomRight) rolesInBetween << Right;
+            break;
+        default:
+            break;
+    }
+    
+    maxWidth = geometry().width();
+    maxHeight = geometry().height();
+    
+    foreach (QLayoutItem* item, m_items[oppositeRole]->items()) {
+        const QSize itemSizeHint = item->sizeHint();
+        switch (role) {
+            case Left:
+            case Right:
+                if (m_items[oppositeRole]->anchored)
+                    maxWidth -= itemSizeHint.width() + splitterWidth();
+                break;
+
+            case Top:
+            case Bottom:
+                if (m_items[oppositeRole]->anchored)
+                    maxHeight -= itemSizeHint.height() + splitterWidth();
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+    int betweenWidth = 0;
+    int betweenHeight = 0;
+    foreach (IdealMainLayout::Role betweenRole, rolesInBetween) {
+        int betweenWidthForRole = 0;
+        int betweenHeightForRole = 0;
+        foreach (QLayoutItem* item, m_items[betweenRole]->items()) {
+            const QSize itemSizeHint = item->sizeHint();
+            switch (role) {
+                case Left:
+                case Right:
+                    if (m_items[betweenRole]->anchored)
+                        betweenWidthForRole += itemSizeHint.width();
+                    break;
+
+                case Top:
+                case Bottom:
+                    if (m_items[betweenRole]->anchored)
+                        betweenHeightForRole += itemSizeHint.height();
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        betweenWidth = qMax(betweenWidth, betweenWidthForRole);
+        betweenHeight = qMax(betweenHeight, betweenHeightForRole);
+    }
+    maxWidth -= betweenWidth;
+    maxHeight -= betweenHeight;
+
+    int centralWidth = 50;
+    int centralHeight = 50;
+    foreach (QLayoutItem* item, m_items[Central]->items()) {
+        const QSize itemSizeHint = item->sizeHint();
+        centralWidth = qMax(itemSizeHint.width(), centralWidth);
+        centralHeight = qMax(itemSizeHint.height(), centralHeight);
+    }
+    maxWidth -= centralWidth;
+    maxHeight -= centralHeight;
+}
+
 QLayoutItem * IdealMainLayout::itemAt(int index) const
 {
     int at = 0;
@@ -786,8 +885,12 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
     int newWidth = thickness - offset;
     int minWidth = 0, softMinWidth = 0, minHeight = 0, softMinHeight = 0;
     minimumSize(role, minWidth, softMinWidth, minHeight, softMinHeight);
+    int maxWidth = 0, maxHeight = 0;
+    maximumSize(role, maxWidth, maxHeight);
     if (newWidth < ((role == Left || role == Right) ? minWidth : minHeight))
         return; //do not resize widget below its minimum size
+    if (newWidth > ((role == Left || role == Right) ? maxWidth : maxHeight))
+        return; //do not resize widget above its maximum size
 
     m_items[role]->width = newWidth;
 
