@@ -53,6 +53,7 @@ install( FILES
     embeddedfreetree.h
     executecompositejob.h
     convenientfreelist.h
+    spinlock.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/util COMPONENT Devel)
 
 install( FILES
