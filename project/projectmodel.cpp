@@ -34,6 +34,8 @@
 #include <kdebug.h>
 
 #include <interfaces/iproject.h>
+#include "interfaces/iprojectfilemanager.h"
+#include <KIO/NetAccess>
 
 namespace KDevelop
 {
@@ -87,13 +89,13 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStand
     Q_D(ProjectBaseItem);
     d->project = project;
     setParent( parent );
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
 }
 
 ProjectBaseItem::ProjectBaseItem( ProjectBaseItemPrivate& dd)
     : d_ptr(&dd)
 {
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
 }
 
 ProjectBaseItem::~ProjectBaseItem()
@@ -207,14 +209,6 @@ ProjectBaseItem *ProjectModel::item( const QModelIndex &index ) const
     return dynamic_cast<ProjectBaseItem*>( itemFromIndex( index ) );
 }
 
-Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
-{
-    ///TODO: support edit mode, make rename, delete etc. work with it
-    ///      but make the projectmanagerview plugin reuse code in the model then
-    ///TODO: support drag'n'drop
-    return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-}
-
 void ProjectModel::resetModel()
 {
     reset();
@@ -228,12 +222,14 @@ ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStan
     setUrl(dir);
     setParent(parent);
     setIcon(KIcon("folder"));
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
 ProjectFolderItem::ProjectFolderItem( ProjectFolderItemPrivate& dd)
     : ProjectBaseItem( dd )
 {
     setIcon(KIcon("folder"));
+    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
 ProjectFolderItem::~ProjectFolderItem()
@@ -320,6 +316,22 @@ bool ProjectFolderItem::isProjectRoot() const
 	return d->m_isProjectRoot;
 }
 
+void ProjectFolderItem::setData(const QVariant& value, int role)
+{
+    if(role==Qt::EditRole) {
+        KUrl dest = url().upUrl();
+        dest.addPath(value.toString());
+        bool ret=!value.toString().contains('/');
+        
+        KIO::UDSEntry entry;
+        ret = ret && !KIO::NetAccess::stat(dest, entry, 0); //There exists a file with that name
+        ret = ret && project()->projectFileManager()->renameFolder(this, dest);
+        if(ret)
+            emitDataChanged();
+    } else
+        ProjectBaseItem::setData(value, role);
+}
+
 ProjectFileItem::ProjectFileItem( ProjectFileItemPrivate& dd)
     : ProjectBaseItem(dd)
 {
@@ -334,6 +346,22 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandar
     setUrl( file );
     setParent( parent );
     setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
+}
+
+void ProjectFileItem::setData(const QVariant& value, int role)
+{
+    if(role==Qt::EditRole) {
+        KUrl dest = url().upUrl();
+        dest.addPath(value.toString());
+        bool ret=!value.toString().contains('/');
+        
+        KIO::UDSEntry entry;
+        ret = ret && !KIO::NetAccess::stat(dest, entry, 0); //There exists a file with that name
+        ret = ret && project()->projectFileManager()->renameFile(this, dest);
+        if(ret)
+            emitDataChanged();
+    } else
+        ProjectBaseItem::setData(value, role);
 }
 
 const KUrl & ProjectFileItem::url( ) const

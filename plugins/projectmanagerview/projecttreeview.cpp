@@ -271,7 +271,7 @@ bool ProjectTreeView::event(QEvent* event)
 
 void ProjectTreeView::keyPressEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Return && currentIndex().isValid())
+    if (event->key() == Qt::Key_Return && currentIndex().isValid() && state()!=QAbstractItemView::EditingState)
     {
         event->accept();
         slotActivated(currentIndex());

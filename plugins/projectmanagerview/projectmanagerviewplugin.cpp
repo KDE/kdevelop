@@ -497,63 +497,24 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
 
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        KDevelop::ProjectFileItem* file=item->file();
-        KDevelop::ProjectFolderItem* folder=item->folder();
-
-        if ((!file && !folder) || !item->parent()) {
+        if ((item->type()!=ProjectBaseItem::BuildFolder
+                && item->type()!=ProjectBaseItem::Folder
+                && item->type()!=ProjectBaseItem::File) || !item->parent())
+        {
             continue;
         }
 
-        const KUrl src = file ? file->url() : folder->url();
+        const QString src = item->data(Qt::EditRole).toString();
 
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
-            window, file ? i18n("Rename File") : i18n("Rename Folder"),
+            window, i18n("Rename..."),
             i18n("New name for '%1'", item->text()),
             QLineEdit::Normal, item->text()
         );
 
-        if (!name.isEmpty() && name != item->text()) {
-            KUrl dest = src.upUrl();
-            dest.addPath( name );
-            if ( dest.upUrl() != src.upUrl() ) {
-                KMessageBox::error( window,
-                    i18n("Cannot rename '%1' to '%2'.", src.fileName(), name)
-                );
-                return;
-            }
-
-            KIO::UDSEntry entry;
-
-            if ( KIO::NetAccess::stat(dest, entry, window) ) {
-                if ( entry.isDir() ) {
-                    // never overwrite folders
-                    KMessageBox::error( window,
-                        i18n("Cannot rename '%1' to '%2':\nThere exists a folder with that name.",
-                             src.fileName(), dest.fileName())
-                    );
-                    return;
-                } else if ( folder ) {
-                    // cannot overwrite file with folder
-                    KMessageBox::error( window,
-                        i18n("Cannot rename folder '%1' to '%2':\nThere exists a file with that name.",
-                             src.fileName(), dest.fileName())
-                    );
-                    return;
-                } // else KIO asks for renaming the file
-            }
-
-            bool ret;
-            if (file) {
-                ret = item->project()->projectFileManager()->renameFile(file, dest);
-            } else {
-                ret = item->project()->projectFileManager()->renameFolder(folder, dest);
-            }
-            if(!ret) {
-                KMessageBox::error( window,
-                    i18n("Could not rename '%1'.", src.fileName())
-                );
-            }
+        if (!name.isEmpty() && name != src) {
+            item->setData(name, Qt::EditRole);
         }
     }
 }

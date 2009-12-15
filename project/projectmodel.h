@@ -87,7 +87,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
             Target = QStandardItem::UserType+5            /** item is a target */,
             File = QStandardItem::UserType+6              /** item is a file */
         };
-
+        
         /** @returns Returns the project that the item belongs to.  */
         IProject* project() const;
 
@@ -157,6 +157,9 @@ public:
     /** @returns Returns whether this folder directly contains the specified file or folder. */
     bool hasFileOrFolder(const QString& name) const;
 
+    /** If @p role is Qt::EditRole, it tells the projectcontroller that the folder name is changing to value.
+        Otherwise works like QStandardItem::setData */
+    void setData(const QVariant& value, int role = Qt::UserRole + 1);
 protected:
     ProjectFolderItem( ProjectFolderItemPrivate& );
 private:
@@ -255,6 +258,10 @@ public:
 
     /** Set the url of this file. */
     void setUrl( const KUrl& );
+    
+    /** If @p role is Qt::EditRole, it tells the projectcontroller that the folder name is changing to value.
+        Otherwise works like QStandardItem::setData */
+    virtual void setData(const QVariant& value, int role = Qt::UserRole + 1);
 
 protected:
     ProjectFileItem( ProjectFileItemPrivate& );
@@ -276,7 +283,6 @@ public:
 
     using QStandardItemModel::item;
     ProjectBaseItem *item( const QModelIndex &index ) const;
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
     void resetModel();
 
