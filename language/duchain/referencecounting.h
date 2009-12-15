@@ -22,20 +22,55 @@
 #define REFERENCECOUNTING_H
 
 #include "../languageexport.h"
+#include <QMap>
+#include <QPair>
 
 //When this is enabled, the duchain unloading is disabled as well, and you should start
 //with a cleared ~/.kdevduchain
 // #define TEST_REFERENCE_COUNTING
+#include <util/spinlock.h>
 
 namespace KDevelop {
-  KDEVPLATFORMLANGUAGE_EXPORT bool shouldDoDUChainReferenceCountingInternal(void* item);
+  
+  ///Since shouldDoDUChainReferenceCounting is called extremely often, we export some internals into the header here,
+  ///so the reference-counting code can be inlined.
+  
   KDEVPLATFORMLANGUAGE_EXPORT extern bool doReferenceCounting;
+  KDEVPLATFORMLANGUAGE_EXPORT  extern QAtomicInt refCountingLock;
+  KDEVPLATFORMLANGUAGE_EXPORT  extern QMap<void*, QPair<uint, uint> >* refCountingRanges;
+  KDEVPLATFORMLANGUAGE_EXPORT  extern bool refCountingHasAdditionalRanges;
+  KDEVPLATFORMLANGUAGE_EXPORT  extern void* refCountingFirstRangeStart;
+  KDEVPLATFORMLANGUAGE_EXPORT  extern QPair<uint, uint> refCountingFirstRangeExtent;
+
+  ///@internal The spin-lock ,must already be locked
+  inline bool shouldDoDUChainReferenceCountingInternal(void* item)
+  {
+    QMap< void*, QPair<uint, uint> >::iterator it = refCountingRanges->upperBound(item);
+    if(it != refCountingRanges->begin()) {
+      --it;
+      return ((char*)it.key()) <= (char*)item && (char*)item < ((char*)it.key()) + it.value().first;
+    }
+    
+    return false;
+  }
+  
   ///This is used by indexed items to decide whether they should do reference-counting
   inline bool shouldDoDUChainReferenceCounting(void* item) 
   {
     if(!doReferenceCounting) //Fast path, no place has been marked for reference counting, 99% of cases
       return false;
-    return shouldDoDUChainReferenceCountingInternal(item);
+
+    SpinLock<0> lock(refCountingLock);
+
+    if(refCountingFirstRangeStart &&
+       (((char*)refCountingFirstRangeStart) <= (char*)item) &&
+       ((char*)item < ((char*)refCountingFirstRangeStart) + refCountingFirstRangeExtent.first))
+        return true;
+
+    if(refCountingHasAdditionalRanges)
+      return shouldDoDUChainReferenceCountingInternal(item);
+    else
+      return false;
   }
   
   ///Enable reference-counting for the given range

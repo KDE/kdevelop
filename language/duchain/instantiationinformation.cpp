@@ -119,13 +119,16 @@ AbstractRepositoryManager* returnTypeRepository() {
 
 KDevelop::RepositoryManager<KDevelop::ItemRepository<InstantiationInformation, AppendedListItemRequest<InstantiationInformation> > > instantiationInformationRepository("Instantiation Information Repository", 1, &returnTypeRepository);
 
-const uint standardInstantiationInformationIndex = instantiationInformationRepository->index( InstantiationInformation() );
+uint standardInstantiationInformationIndex() {
+  static uint idx = instantiationInformationRepository->index( InstantiationInformation() );
+  return idx;
+}
 
 IndexedInstantiationInformation::IndexedInstantiationInformation() : m_index(0) {
 }
 
 IndexedInstantiationInformation::IndexedInstantiationInformation(uint index) : m_index(index) {
-  if(m_index == standardInstantiationInformationIndex)
+  if(m_index == standardInstantiationInformationIndex())
     m_index = 0;
   
   if(m_index && shouldDoDUChainReferenceCounting(this))
@@ -174,7 +177,7 @@ bool IndexedInstantiationInformation::isValid() const {
 }
 
 const InstantiationInformation& IndexedInstantiationInformation::information() const {
-  return *instantiationInformationRepository->itemFromIndex(m_index ? m_index : standardInstantiationInformationIndex);
+  return *instantiationInformationRepository->itemFromIndex(m_index ? m_index : standardInstantiationInformationIndex());
 }
 
 IndexedInstantiationInformation InstantiationInformation::indexed() const {

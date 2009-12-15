@@ -83,7 +83,7 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
       return KDevVarLengthArray<T, 10>::data();
     }
     void copy(T* /*target*/, const T* data, uint size) {
-      Q_ASSERT(!shouldDoDUChainReferenceCountingInternal(KDevVarLengthArray<T, 10>::data()));
+      Q_ASSERT(!shouldDoDUChainReferenceCounting(KDevVarLengthArray<T, 10>::data()));
       bool empty = KDevVarLengthArray<T, 10>::isEmpty();
       Q_ASSERT(empty);
       for(uint a = 0; a < size; ++a)
@@ -91,7 +91,7 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
     }
     
     void free(T*) {
-      Q_ASSERT(!shouldDoDUChainReferenceCountingInternal(KDevVarLengthArray<T, 10>::data()));
+      Q_ASSERT(!shouldDoDUChainReferenceCounting(KDevVarLengthArray<T, 10>::data()));
     }
 };
 
@@ -107,7 +107,7 @@ class AppendedList<false, T> {
     
     void free(T* position) {
       if(listSize)
-        Q_ASSERT(shouldDoDUChainReferenceCountingInternal(position)); //Since it's constant, it must be in the repository
+        Q_ASSERT(shouldDoDUChainReferenceCounting(position)); //Since it's constant, it must be in the repository
       for(unsigned int a = 0; a < listSize; ++a)
         (position+a)->~T();
     }
@@ -122,7 +122,7 @@ class AppendedList<false, T> {
     }
     void copy(T* target, const T* data, uint size) {
       if(size)
-        Q_ASSERT(shouldDoDUChainReferenceCountingInternal(target)); //Since it's constant, it must be in the repository
+        Q_ASSERT(shouldDoDUChainReferenceCounting(target)); //Since it's constant, it must be in the repository
       for(uint a = 0; a < size; ++a)
         new (target+a) T(data[a]); //Properly call all the copy constructors
       listSize = size;

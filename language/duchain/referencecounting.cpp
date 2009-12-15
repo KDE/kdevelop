@@ -25,81 +25,41 @@
 #include <QAtomicInt>
 #include <kdebug.h>
 #include "repositories/itemrepository.h"
+#include <util/spinlock.h>
 
 namespace KDevelop {
-  bool doReferenceCounting = false;
-}
 
-struct RefCountDecider {
-  RefCountDecider() : hasAdditionalRanges(false), firstRangeStart(0), firstRangeExtent(qMakePair(0u, 0u)) {
-  }
-  ~RefCountDecider() {
-  }
-  QMutex mutex;
-  bool hasAdditionalRanges; //Whether 'ranges' is non-empty
-  QMap<void*, QPair<uint, uint> > ranges; //ptr, <size, count>
+  bool doReferenceCounting = false;
+
+  //Protects the reference-counting data through a spin-lock
+  QAtomicInt refCountingLock = 0;
+  
+  QMap<void*, QPair<uint, uint> >* refCountingRanges = new QMap<void*, QPair<uint, uint> >(); //ptr, <size, count>, leaked intentionally!
+  bool refCountingHasAdditionalRanges = false; //Whether 'refCountingRanges' is non-empty
   
   //Speedup: In most cases there is only exactly one reference-counted range active,
   //so the first reference-counting range can be marked here.
-  void* firstRangeStart;
-  QPair<uint, uint> firstRangeExtent;
-};
-
-/**
- * In what places should reference-counting take place?
- * 
- */
-
-RefCountDecider* refcounting() {
-  // the RefCountDecider is leaked, since it needs to stay valid during shutdown
-  static RefCountDecider *ref = new RefCountDecider();
-  return ref;
-}
-
-bool KDevelop::shouldDoDUChainReferenceCountingInternal(void* item)
-{
-  RefCountDecider* rc = refcounting();
-  rc->mutex.lock();
-  
-  bool ret = false;
-
-  if(rc->firstRangeStart)
-  {
-    ret = ((char*)rc->firstRangeStart) <= (char*)item && (char*)item < ((char*)rc->firstRangeStart) + rc->firstRangeExtent.first;
-  }
-  
-  if(!ret && rc->hasAdditionalRanges)
-  {
-    QMap< void*, QPair<uint, uint> >::iterator it = rc->ranges.upperBound(item);
-    if(it != rc->ranges.begin()) {
-      --it;
-      ret = ((char*)it.key()) <= (char*)item && (char*)item < ((char*)it.key()) + it.value().first;
-    }
-  }
-  
-  rc->mutex.unlock();
-  return ret;
+  void* refCountingFirstRangeStart = 0;
+  QPair<uint, uint> refCountingFirstRangeExtent = qMakePair(0u, 0u);
 }
 
 void KDevelop::disableDUChainReferenceCounting(void* start)
 {
-  RefCountDecider* rc = refcounting();
-  
-  rc->mutex.lock();
+  SpinLock<0> lock(refCountingLock);
 
-  if(rc->firstRangeStart && ((char*)rc->firstRangeStart) <= (char*)start && (char*)start < ((char*)rc->firstRangeStart) + rc->firstRangeExtent.first)
+  if(refCountingFirstRangeStart && ((char*)refCountingFirstRangeStart) <= (char*)start && (char*)start < ((char*)refCountingFirstRangeStart) + refCountingFirstRangeExtent.first)
   {
-    Q_ASSERT(rc->firstRangeExtent.second > 0);
-    --rc->firstRangeExtent.second;
-    if(rc->firstRangeExtent.second == 0) {
-      rc->firstRangeExtent = qMakePair<uint, uint>(0, 0);
-      rc->firstRangeStart = 0;
+    Q_ASSERT(refCountingFirstRangeExtent.second > 0);
+    --refCountingFirstRangeExtent.second;
+    if(refCountingFirstRangeExtent.second == 0) {
+      refCountingFirstRangeExtent = qMakePair<uint, uint>(0, 0);
+      refCountingFirstRangeStart = 0;
     }
   }
-  else if(rc->hasAdditionalRanges)
+  else if(refCountingHasAdditionalRanges)
   {
-    QMap< void*, QPair<uint, uint> >::iterator it = rc->ranges.upperBound(start);
-    if(it != rc->ranges.begin()) {
+    QMap< void*, QPair<uint, uint> >::iterator it = refCountingRanges->upperBound(start);
+    if(it != refCountingRanges->begin()) {
       --it;
       if(((char*)it.key()) <= (char*)start && (char*)start < ((char*)it.key()) + it.value().first)
       {
@@ -111,52 +71,49 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
     Q_ASSERT(it.value().second > 0);
     --it.value().second;
     if(it.value().second == 0)
-      rc->ranges.erase(it);
-    rc->hasAdditionalRanges = !rc->ranges.isEmpty();
+      refCountingRanges->erase(it);
+    refCountingHasAdditionalRanges = !refCountingRanges->isEmpty();
   }else{
     Q_ASSERT(0);
   }
   
-  if(!rc->firstRangeStart && !rc->hasAdditionalRanges)
+  if(!refCountingFirstRangeStart && !refCountingHasAdditionalRanges)
     doReferenceCounting = false;
-  
-  rc->mutex.unlock();
 }
 
 void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
 {
-  RefCountDecider* rc = refcounting();
-  rc->mutex.lock();
+  SpinLock<0> lock(refCountingLock);
   
   doReferenceCounting = true;
   
-  if(rc->firstRangeStart && ((char*)rc->firstRangeStart) <= (char*)start && (char*)start < ((char*)rc->firstRangeStart) + rc->firstRangeExtent.first)
+  if(refCountingFirstRangeStart && ((char*)refCountingFirstRangeStart) <= (char*)start && (char*)start < ((char*)refCountingFirstRangeStart) + refCountingFirstRangeExtent.first)
   {
     //Increase the count for the first range
-    ++rc->firstRangeExtent.second;
-  }else if(rc->hasAdditionalRanges || rc->firstRangeStart)
+    ++refCountingFirstRangeExtent.second;
+  }else if(refCountingHasAdditionalRanges || refCountingFirstRangeStart)
   {
     //There is additional ranges in the ranges-structure. Add any new ranges there as well.
-    QMap< void*, QPair<uint, uint> >::iterator it = rc->ranges.upperBound(start);
-    if(it != rc->ranges.begin()) {
+    QMap< void*, QPair<uint, uint> >::iterator it = refCountingRanges->upperBound(start);
+    if(it != refCountingRanges->begin()) {
       --it;
       if(((char*)it.key()) <= (char*)start && (char*)start < ((char*)it.key()) + it.value().first)
       {
         //Contained, count up
       }else{
-        it = rc->ranges.end(); //Insert own item
+        it = refCountingRanges->end(); //Insert own item
       }
-    }else if(it != rc->ranges.end() && it.key() > start) {
+    }else if(it != refCountingRanges->end() && it.key() > start) {
       //The item is behind
-      it = rc->ranges.end();
+      it = refCountingRanges->end();
     }
     
-    if(it == rc->ranges.end()) {
-      QMap< void*, QPair<uint, uint> >::iterator inserted = rc->ranges.insert(start, qMakePair(size, 1u));
+    if(it == refCountingRanges->end()) {
+      QMap< void*, QPair<uint, uint> >::iterator inserted = refCountingRanges->insert(start, qMakePair(size, 1u));
       //Merge following ranges
       QMap< void*, QPair<uint, uint> >::iterator it = inserted;
       ++it;
-      while(it != rc->ranges.end() && it.key() < ((char*)start) + size) {
+      while(it != refCountingRanges->end() && it.key() < ((char*)start) + size) {
         
         inserted.value().second += it.value().second; //Accumulate count
         if(((char*)start) + size < ((char*)inserted.key()) + it.value().first) {
@@ -164,7 +121,7 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
           inserted.value().first = (((char*)inserted.key()) + it.value().first) - ((char*)start);
         }
         
-        it = rc->ranges.erase(it);
+        it = refCountingRanges->erase(it);
       }
     }else{
       ++it.value().second;
@@ -172,15 +129,14 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
         it.value().first = size;
     }
     
-    rc->hasAdditionalRanges = true;
+    refCountingHasAdditionalRanges = true;
   }else{
-    rc->firstRangeStart = start;
-    rc->firstRangeExtent.first = size;
-    rc->firstRangeExtent.second = 1;
+    refCountingFirstRangeStart = start;
+    refCountingFirstRangeExtent.first = size;
+    refCountingFirstRangeExtent.second = 1;
   }
   
-  Q_ASSERT(rc->hasAdditionalRanges == !rc->ranges.isEmpty());
-  refcounting()->mutex.unlock();
+  Q_ASSERT(refCountingHasAdditionalRanges == (refCountingRanges && !refCountingRanges->isEmpty()));
 #ifdef TEST_REFERENCE_COUNTING
   Q_ASSERT(shouldDoDUChainReferenceCounting(start));
   Q_ASSERT(shouldDoDUChainReferenceCounting(((char*)start + (size-1))));
