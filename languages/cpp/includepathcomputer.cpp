@@ -121,11 +121,9 @@ void IncludePathComputer::computeBackground() {
     m_includePathDependency = m_includeResolver.findIncludePathDependency(m_source.toLocalFile());
     kDebug() << "current include path dependency state:" << m_includePathDependency.toString();
     
+    ///@todo Resolve include-paths either once per directory, or once per target. Do not iterate over the duchain.
+    
     if(!m_ready) {
-    ///@todo Make modification-revisions dependent also on Makefiles, and on custom include paths files, so when those are changed, the files
-    ///           are marked for update.
-    ///           If there is no valid include-path dependency while custom include-paths are set no, do not do this.
-      
       //Try taking the include-paths from another file in the directory
       kDebug(9007) << "Did not get any include-paths for" << m_source;
       QFileInfo fileInfo(m_source.toLocalFile());
