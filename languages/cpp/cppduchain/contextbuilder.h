@@ -209,10 +209,6 @@ protected:
   
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
   
-  TopDUContext* topContext() const {
-    return currentContext()->topContext();
-  }
-
   virtual void preVisitSimpleDeclaration(SimpleDeclarationAST *);
 
   //DUChain must not be locked
