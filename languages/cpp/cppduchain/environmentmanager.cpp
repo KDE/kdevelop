@@ -27,6 +27,7 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/referencecounting.h>
+#include "cpppreprocessenvironment.h"
 
 using namespace KDevelop;
 
@@ -333,7 +334,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
   }
 #endif
-  if( previousOfSameName && d_func()->m_definedMacros.contains(*previousOfSameName) ) ///@todo Make this faster. We cannot remove the definedMacros.contains(..), because else we get problems.
+  if( previousOfSameName && d_func()->m_definedMacros.contains(*previousOfSameName) )
     d_func_dynamic()->m_definedMacros.remove( *previousOfSameName );
   else if( d_func()->m_definedMacroNames.contains(macro.name) ) {
     //Search if there is already a macro of the same name in the set, and remove it
@@ -487,7 +488,7 @@ void EnvironmentFile::addStrings( const std::set<Utils::BasicSetRepository::Inde
 }
 
 //The parameter should be a EnvironmentFile that was lexed AFTER the content of this file
-void EnvironmentFile::merge( const EnvironmentFile& file ) {
+void EnvironmentFile::merge( const EnvironmentFile& file, CppPreprocessEnvironment* env ) {
   ENSURE_WRITE_LOCKED
   //We have to read the other file
   ENSURE_FILE_READ_LOCKED(file)
@@ -534,20 +535,36 @@ void EnvironmentFile::merge( const EnvironmentFile& file ) {
   ///Add defined macros from the merged file.
 
   {
-    ReferenceCountedMacroSet potentiallyRemoveMacros = d_func()->m_definedMacros - file.d_func()->m_definedMacros;
-    
     Utils::Set otherDefinedMacroNamesSet = file.d_func()->m_definedMacroNames.set();
     Utils::Set otherUnDefinedMacroNamesSet = file.d_func()->m_unDefinedMacroNames.set();
     //Since merged macros overrule already stored ones, first remove the ones of the same name.
-    
+
+    Cpp::ReferenceCountedStringSet affectedMacros = d_func()->m_definedMacroNames & (file.d_func()->m_definedMacroNames + file.d_func()->m_unDefinedMacroNames);
+    ReferenceCountedMacroSet potentiallyRemoveMacros = d_func()->m_definedMacros - file.d_func()->m_definedMacros;
+
     std::set<uint> removeDefinedMacros;
-    ReferenceCountedMacroSet backup = d_func()->m_definedMacros;
-    
-    
-    for( ReferenceCountedMacroSet::Iterator it( potentiallyRemoveMacros.iterator() ); it; ++it ) {
-      const rpp::pp_macro& macro(it.ref());
-      if( otherDefinedMacroNamesSet.contains( macro.name.index() ) || otherUnDefinedMacroNamesSet.contains( macro.name.index() ) )
-        removeDefinedMacros.insert(it.index());
+    #if 0
+    if(env && affectedMacros.count() < potentiallyRemoveMacros.count()) {
+      //In the environment there is a map that maps from macro-names to macros, which allows us iterating through 'affectedMacros' directly
+      for( Cpp::ReferenceCountedStringSet::Iterator it( affectedMacros.iterator() ); it; ++it ) {
+        rpp::pp_macro* macro = env->retrieveStoredMacro(*it);
+        if(macro)
+        {
+          uint macroIndex = EnvironmentManager::macroDataRepository.findIndex( MacroRepositoryItemRequest(*macro) );
+          if(macroIndex && potentiallyRemoveMacros.containsIndex(macroIndex))
+            removeDefinedMacros.insert(macroIndex);
+        }
+      }
+    }else
+    #endif
+      
+    if(!affectedMacros.isEmpty()) {
+      //We have to iterate through all potentially removed macros
+      for( ReferenceCountedMacroSet::Iterator it( potentiallyRemoveMacros.iterator() ); it; ++it ) {
+        const rpp::pp_macro& macro(it.ref());
+        if( affectedMacros.contains( macro.name ) )
+          removeDefinedMacros.insert(it.index());
+      }
     }
     
     if(!removeDefinedMacros.empty())

@@ -534,9 +534,8 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             KDevelop::ParsingEnvironmentFilePointer file = includedContext->parsingEnvironmentFile();
             Cpp::EnvironmentFile* environmentFile = dynamic_cast<Cpp::EnvironmentFile*> (file.data());
             if( environmentFile ) {
-                m_currentEnvironment->merge( environmentFile );
+                m_currentEnvironment->merge( environmentFile, true );
                 ifDebug( kDebug() << "PreprocessJob" << parentJob()->document().str() << "Merging included file into environment-file"; )
-                m_currentEnvironment->environmentFile()->merge( *environmentFile );
             } else {
                 ifDebug( kDebug(9007) << "preprocessjob: included file" << includedFile << "found in du-chain, but it has no parse-environment information, or it was not parsed by c++ support"; )
             }

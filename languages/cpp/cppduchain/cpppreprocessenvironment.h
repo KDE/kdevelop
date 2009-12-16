@@ -50,7 +50,8 @@ public:
   void merge( const Cpp::ReferenceCountedMacroSet& macros );
   
   ///Merges the macros  from the given EnvironmentFile(including undef macros). Does not modify m_environmentFile.
-  void merge( const Cpp::EnvironmentFile* file );
+  ///@param mergeEnvironments Whether the environment-files should also be merged using Cpp::EnvironmentFile::merge
+  void merge( const Cpp::EnvironmentFile* file, bool mergeEnvironments = false );
 
   virtual void setMacro(rpp::pp_macro* macro);
 
