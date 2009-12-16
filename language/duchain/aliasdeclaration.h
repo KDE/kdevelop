@@ -19,18 +19,19 @@
 #ifndef ALIASDECLARATION_H
 #define ALIASDECLARATION_H
 
-#include "declaration.h"
+#include "classmemberdeclaration.h"
+#include "classmemberdeclarationdata.h"
 #include "duchainpointer.h"
 #include "declarationdata.h"
 
 namespace KDevelop
 {
-class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclarationData : public DeclarationData
+class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclarationData : public ClassMemberDeclarationData
 {
 public:
   AliasDeclarationData() {}
   AliasDeclarationData( const AliasDeclarationData& rhs )
-      : DeclarationData( rhs )
+      : ClassMemberDeclarationData( rhs )
   {
     m_aliasedDeclaration = rhs.m_aliasedDeclaration;
   }
@@ -41,7 +42,7 @@ public:
  * While searching in the duchain, an AliasDeclaration is transparently
  * replaced by its aliased declaration.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclaration : public Declaration
+class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclaration : public ClassMemberDeclaration
 {
 public:
   /// Copy constructor \param rhs declaration to copy

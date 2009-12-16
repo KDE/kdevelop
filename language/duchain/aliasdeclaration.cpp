@@ -28,12 +28,12 @@ namespace KDevelop
 REGISTER_DUCHAIN_ITEM(AliasDeclaration);
 
 AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs) 
-  : Declaration(*new AliasDeclarationData(*rhs.d_func())) {
+  : ClassMemberDeclaration(*new AliasDeclarationData(*rhs.d_func())) {
   setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)
-  : Declaration(*new AliasDeclarationData, range)
+  : ClassMemberDeclaration(*new AliasDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
   setKind(Alias);
@@ -41,7 +41,7 @@ AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)
     setContext( context );
 }
 
-AliasDeclaration::AliasDeclaration(AliasDeclarationData& data) : Declaration(data) {
+AliasDeclaration::AliasDeclaration(AliasDeclarationData& data) : ClassMemberDeclaration(data) {
 }
 
 
