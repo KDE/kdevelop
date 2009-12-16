@@ -27,7 +27,6 @@ namespace KDevelop
     class ProjectFileItem;
     class ProjectTargetItem;
     class IProjectBuilder;
-    class ContextMenuExtension;
 }
 
 class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
@@ -177,22 +176,11 @@ public:
     virtual bool renameFolder(KDevelop::ProjectFolderItem* oldFolder,
                               const KUrl& newFolder );
 
-    // IPlugin interface
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
-
     /**
      * Initialize targets by reading Makefile in @arg dir
      * @return Target lists in Makefile at @arg dir.
      */
     QStringList parseCustomMakeFile( const KUrl &makefile );
-
-private Q_SLOTS:
-    void slotCtxTriggered();
-    void updateTargetMenu();
-
-    /// Displays targets in top src dir
-    void targetMenuActivated( QAction* );
-    void slotBuilt( KDevelop::ProjectBaseItem* item );
 
 private:
     class Private;

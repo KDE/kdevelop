@@ -20,25 +20,15 @@
 #include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <project/projectmodel.h>
-#include <interfaces/context.h>
-#include <interfaces/contextmenuextension.h>
 #include <language/duchain/indexedstring.h>
 
-#include <QQueue>
 #include <QDir>
 #include <QFileInfoList>
 #include <QFile>
-#include <QActionGroup>
-#include <QVariant>
-#include <QStack>
-#include <QAction>
-#include <QtDesigner/QExtensionFactory>
 
 #include <kurl.h>
 #include <klocale.h>
-#include <kmenu.h>
-#include <kactionmenu.h>
-#include <kactioncollection.h>
+#include <kdebug.h>
 
 using namespace KDevelop;
 
@@ -48,13 +38,9 @@ K_EXPORT_PLUGIN(CustomMakeSupportFactory(KAboutData("kdevcustommakemanager","kde
 class CustomMakeManager::Private
 {
 public:
-    Private() : m_builder(0), m_targetGroup(0), m_targetMenu(0), m_ctxItem(0) {}
-    
-    IMakeBuilder *m_builder;
+    Private() : m_builder(0) {}
 
-    QActionGroup *m_targetGroup;
-    KMenu *m_targetMenu;
-    KDevelop::ProjectBaseItem *m_ctxItem;
+    IMakeBuilder *m_builder;
 
 //     QList< KDevelop::ProjectBaseItem* > m_testItems; // for debug
 };
@@ -74,35 +60,6 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     Q_ASSERT(i);
     d->m_builder = i->extension<IMakeBuilder>();
     Q_ASSERT(d->m_builder);
-
-    KActionMenu *actionMenu = new KActionMenu( i18n( "Build &Target" ), this );
-    actionCollection()->addAction("build_target", actionMenu);
-    d->m_targetMenu = actionMenu->menu();
-
-    d->m_targetGroup = new QActionGroup( this );
-//     d->m_targetObjectFilesGroup = new QActionGroup( this );
-//     d->m_targetOtherFilesGroup = new QActionGroup( this );
-
-    actionMenu->setToolTip( i18n( "Build target" ) );
-    actionMenu->setWhatsThis( i18n( "<b>Build target</b><p>Runs <b>make targetname</b> from the project directory (targetname is the name of the target selected).</p>"
-            "<p>Environment variables and make arguments can be specified "
-            "in the project settings dialog, <b>Build Options</b> tab.</p>" ) );
-
-//     d->m_targetObjectFilesMenu = new KMenu( i18n( "Object Files" ), d->m_targetMenu );
-//     d->m_targetOtherFilesMenu = new KMenu( i18n( "Other Files" ), d->m_targetMenu );
-
-    connect( d->m_targetMenu, SIGNAL( aboutToShow() ), this, SLOT( updateTargetMenu() ) );
-
-    connect( d->m_targetGroup, SIGNAL( triggered( QAction* ) ),
-             this, SLOT( targetMenuActivated( QAction* ) ) );
-
-    connect( i, SIGNAL(built( KDevelop::ProjectBaseItem* )),
-             this, SLOT(slotBuilt( KDevelop::ProjectBaseItem* )) );
-
-//     connect( d->m_targetObjectFilesGroup, SIGNAL( triggered(QAction*) ),
-//              this, SLOT( targetObjectMenuActivated( QAction* ) ) );
-//     connect( d->m_targetOtherFilesGroup, SIGNAL( triggered(QAction*) ),
-//              this, SLOT( targetOtherMenuActivated( QAction* ) ) );
 }
 
 CustomMakeManager::~CustomMakeManager()
@@ -178,20 +135,16 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
     QList<KDevelop::ProjectFolderItem*> folder_list;
     QDir dir( item->url().toLocalFile() );
 
-    QFileInfoList entries = dir.entryInfoList();
+    QFileInfoList entries = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files);
 
-    KDevelop::ProjectFolderItem *prjitem = item->project()->projectItem();
-    CustomMakeFolderItem *topItem = dynamic_cast<CustomMakeFolderItem*>( prjitem );
+    CustomMakeFolderItem *topItem = dynamic_cast<CustomMakeFolderItem*>( item->project()->projectItem() );
 
-    // fill subfolders
-    for ( int i = 0; i < entries.count(); ++i )
+    foreach ( const QFileInfo& fileInfo, entries )
     {
-        QFileInfo fileInfo = entries.at( i );
         QString fileName = fileInfo.fileName();
         QString absFilePath = fileInfo.absoluteFilePath();
-
-        if ( fileInfo.isDir() && fileName != QLatin1String( "." )
-             && fileName != QLatin1String( ".." ) )
+        
+        if ( fileInfo.isDir() )
         {
 //             KDevelop::ProjectFolderItem *cmfi= new KDevelop::ProjectFolderItem(
 //                     item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
@@ -210,7 +163,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
             KDevelop::ProjectFileItem *fileItem =
                 new KDevelop::ProjectFileItem( item->project(), fileUrl, item );
             item->project()->addToFileSet( KDevelop::IndexedString( fileUrl ) );
-            if( topItem && fileName == QString("Makefile") )
+            if( topItem && fileName == "Makefile" )
             {
                 topItem->fsWatcher()->addFile( absFilePath, fileItem );
                 QStringList targetlist = this->parseCustomMakeFile( KUrl(absFilePath) );
@@ -290,129 +243,8 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
     return false;
 }
 
-KDevelop::ContextMenuExtension CustomMakeManager::contextMenuExtension( KDevelop::Context* context )
-{
-    if( context->type() != KDevelop::Context::ProjectItemContext )
-    {
-        return IPlugin::contextMenuExtension( context );
-    }
-    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
-    QList<KDevelop::ProjectBaseItem*> baseitemList = ctx->items();
-    if( baseitemList.count() != 1 )
-        return IPlugin::contextMenuExtension( context );
-
-    KDevelop::ProjectBaseItem *baseitem = baseitemList.first();
-    IPlugin *manager = baseitem->project()->managerPlugin();
-    if( manager != this )
-    {
-        // This project is not managed by me. No context menu.
-        return IPlugin::contextMenuExtension( context );
-    }
-
-    KDevelop::ContextMenuExtension menuExt;
-    if( KDevelop::ProjectFolderItem *prjItem = dynamic_cast<KDevelop::ProjectFolderItem*>( baseitem ) )
-    {
-        KAction* prjBldAction = new KAction( i18n( "Build this project" ), this );
-        d->m_ctxItem = prjItem;
-        connect( prjBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::BuildGroup, prjBldAction );
-    }
-    else if( KDevelop::ProjectTargetItem *targetItem = baseitem->target() )
-    {
-        KAction* targetBldAction = new KAction( i18n( "Build this target" ), this );
-//         targetBldAction->setObjectName( d->build_objectname );
-//         d->contextMenuMapper->setMapping( targetBldAction, targetBldAction->objectName() );
-//         d->contexts[ targetBldAction->objectName() ] = context;
-//         connect( targetBldAction, SIGNAL(triggered()), d->contextMenuMapper, SLOT( map() ) );
-        d->m_ctxItem = targetItem;
-        connect( targetBldAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::BuildGroup, targetBldAction );
-    }
-    else if( baseitem->type() == KDevelop::ProjectBaseItem::BuildFolder )
-    {
-        KAction *bldFolderAction = new KAction( i18n( "Build this directory" ), this );
-        d->m_ctxItem = baseitem;
-        connect( bldFolderAction, SIGNAL(triggered()), this, SLOT(slotCtxTriggered()) );
-        menuExt.addAction( KDevelop::ContextMenuExtension::BuildGroup, bldFolderAction );
-    }
-
-    return menuExt;
-}
-
 /////////////////////////////////////////////////////////////////////////////
 // private slots
-void CustomMakeManager::slotCtxTriggered()
-{
-    if( d->m_ctxItem )
-    {
-        d->m_builder->build( d->m_ctxItem );
-    }
-    d->m_ctxItem = NULL;
-}
-
-void CustomMakeManager::updateTargetMenu()
-{
-    d->m_targetMenu->clear();
-//     d->m_targetObjectFilesMenu->clear();
-//     d->m_targetOtherFilesMenu->clear();
-//     d->m_targetMenu->addMenu( d->m_targetObjectFilesMenu );
-//     d->m_targetMenu->addMenu( d->m_targetOtherFilesMenu );
-
-//     d->m_makefilesToParse.clear();
-//     d->m_makefilesToParse.push( "Makefile" );
-//     d->m_makefilesToParse.push( "makefile" );
-//     putEnvVarsInVarMap();
-//     while ( !(d->m_makefilesToParse.isEmpty()) )
-//         parseMakefile( d->m_makefilesToParse.pop() );
-
-    // disabled because we shouldn't rely on rootItem.
-//     QStringList targetlist = parseCustomMakeFile( findMakefile( d->m_rootItem ) );
-//
-//     QAction *action = NULL;
-//     foreach( QString target, targetlist )
-//     {
-//         action = d->m_targetMenu->addAction( target );
-//         action->setData( target );
-//         action->setActionGroup( d->m_targetGroup );
-//     }
-
-//     for ( it = d->m_targetsObjectFiles.begin(); it != d->m_targetsObjectFiles.end(); ++it ){
-//         action = d->m_targetObjectFilesMenu->addAction( *it );
-//         action->setData( *it );
-//         action->setActionGroup( d->m_targetObjectFilesGroup );
-//     }
-//
-//     for ( it = d->m_targetsOtherFiles.begin(); it != d->m_targetsOtherFiles.end(); ++it ){
-//         action = d->m_targetOtherFilesMenu->addAction( *it );
-//         action->setData( *it );
-//         action->setActionGroup( d->m_targetOtherFilesGroup );
-//     }
-}
-
-void CustomMakeManager::targetMenuActivated( QAction* action )
-{
-    kDebug(9025) << "targetActivated:" << action->data().toString();
-    // test
-//     foreach( KDevelop::ProjectBaseItem *item , d->m_testItems )
-//     {
-//         builder( d->m_rootItem )->build( item );
-//     }
-
-}
-
-void CustomMakeManager::slotBuilt( KDevelop::ProjectBaseItem* item )
-{
-    if( item->type() != KDevelop::ProjectBaseItem::Target )
-        return;
-    kDebug(9025) << "CustomMakeManager:: slotBuilt()";
-//     KDevelop::ProjectTargetItem *target = static_cast< KDevelop::ProjectTargetItem* >( item );
-//
-//     if( d->m_targetsByMenu.contains( target ) )
-//     {
-//         d->m_targetsByMenu.removeAll( target );
-//         delete item;
-//     }
-}
 
 QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
 {
@@ -433,7 +265,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
     QRegExp targetRe( "^ *([^\\t$.#]\\S+) *:.*$" );
     targetRe.setMinimal( true );
 
-    QString str = "";
+    QString str;
     QTextStream stream( &f );
     while ( !stream.atEnd() )
     {

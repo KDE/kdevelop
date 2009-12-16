@@ -42,6 +42,8 @@ private:
 
 };
 
+
+/** Represents the root item */
 class CustomMakeFolderItem : public KDevelop::ProjectFolderItem
 {
 public:
