@@ -568,9 +568,11 @@ QString & LicensePage::readLicense(int licenseIndex)
             kDebug() << "Reading license: " << d->availableLicenses[licenseIndex].name ;
             QFile newLicense(d->availableLicenses[licenseIndex].path);
             
-            if(newLicense.open(QIODevice::ReadOnly))
+            if(newLicense.open(QIODevice::ReadOnly | QIODevice::Text))
             {
-                licenseText = newLicense.readAll();
+                QTextStream newLicenseText(&newLicense);
+                newLicenseText.setAutoDetectUnicode(true);
+                licenseText = newLicenseText.readAll();
                 newLicense.close();
             }
             else
