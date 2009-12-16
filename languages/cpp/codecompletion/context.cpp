@@ -1155,9 +1155,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                     
                     hadNamespaceDeclarations.insert(id);
                   }
-                    
+
                   if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
-                    if(decl.first->kind() != Declaration::Instance)
+                    if(decl.first->kind() != Declaration::Instance && decl.first->kind() != Declaration::Alias)
                       continue;
                     if(classMember && classMember->isStatic())
                       continue; //Skip static class members when not doing static access

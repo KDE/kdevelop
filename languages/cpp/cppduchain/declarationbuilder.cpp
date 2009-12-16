@@ -1163,6 +1163,11 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
     }else{
       kDebug(9007) << "Aliased declaration not found:" << id.toString();
     }
+
+    if(m_accessPolicyStack.isEmpty())
+      decl->setAccessPolicy(KDevelop::Declaration::Public);
+    else
+      decl->setAccessPolicy(currentAccessPolicy());
   }
 
   closeDeclaration();

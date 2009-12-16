@@ -27,6 +27,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/forwarddeclaration.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/aliasdeclaration.h>
 #include <language/editor/documentrange.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include "declarationbuilder.h"
@@ -104,6 +105,29 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   if (ret.count())
     return ret.first();
   return 0;
+}
+
+void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
+  QByteArray test = "namespace Base { int One; int Two; int Three };\
+  class List { public: using Base::One; protected: using Base::Two; private: using Base::Three; }; int main(List a) {}";
+  
+  TopDUContext* context = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(context->childContexts().count(), 4);
+  
+  CompletionItemTester testCase(context->childContexts()[3], "a.");
+  QVERIFY(testCase.completionContext->isValid());
+  QCOMPARE(testCase.names, QStringList() << "One");
+  
+  AliasDeclaration* aliasDeclOne = dynamic_cast<AliasDeclaration*>(context->childContexts()[1]->localDeclarations()[0]);
+  AliasDeclaration* aliasDeclTwo = dynamic_cast<AliasDeclaration*>(context->childContexts()[1]->localDeclarations()[1]);
+  AliasDeclaration* aliasDeclThree = dynamic_cast<AliasDeclaration*>(context->childContexts()[1]->localDeclarations()[2]);
+  QVERIFY(aliasDeclOne && aliasDeclTwo && aliasDeclThree);
+  QVERIFY(aliasDeclOne->accessPolicy() == KDevelop::Declaration::Public);
+  QVERIFY(aliasDeclTwo->accessPolicy() == KDevelop::Declaration::Protected);
+  QVERIFY(aliasDeclThree->accessPolicy() == KDevelop::Declaration::Private);
+  
+  release(context);
 }
 
 void TestCppCodeCompletion::testKeywords() {
