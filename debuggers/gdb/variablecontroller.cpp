@@ -104,8 +104,9 @@ public:
 
     virtual void handle(const GDBMI::ResultRecord &r)
     {
-        // FIXME: handle error.
+        if (!KDevelop::ICore::self()->debugController()) return; //happens on shutdown
 
+        // FIXME: handle error.
         const GDBMI::Value& locals = r["stack-args"][0]["args"];
 
         for (int i = 0; i < locals.size(); i++) {
