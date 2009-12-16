@@ -303,6 +303,10 @@ protected:
 
   inline void setLastContext(DUContext* context) { m_lastContext = context; }
 
+  TopDUContext* topContext() const {
+    return currentContext()->topContext();
+  }
+
   /**
    * Determine if we are recompiling an existing definition-use chain, or if
    * a new chain is being created from scratch.
