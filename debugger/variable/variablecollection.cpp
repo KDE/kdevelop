@@ -138,6 +138,8 @@ Watches::Watches(TreeModel* model, TreeItem* parent)
 
 Variable* Watches::add(const QString& expression)
 {
+    if (!hasStartedSession()) return 0;
+
     Variable* v = currentSession()->variableController()->createVariable(
         model(), this, expression);
     appendChild(v);

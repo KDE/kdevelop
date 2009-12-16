@@ -131,13 +131,15 @@ void VariableWidget::slotAddWatch(const QString &expression)
         watchVarEditor_->addToHistory(expression);
         kDebug(9012) << "Trying to add watch\n";
         Variable* v = variablesRoot_->watches()->add(expression);
-        QModelIndex index = variableCollection()->indexForItem(v, 0);
-        /* For watches on structures, we really do want them to be shown
-           expanded.  Except maybe for structure with custom pretty printing,
-           but will handle that later.
-           FIXME: it does not actually works now.
-        */
-        //varTree_->setExpanded(index, true);
+        if (v) {
+            QModelIndex index = variableCollection()->indexForItem(v, 0);
+            /* For watches on structures, we really do want them to be shown
+            expanded.  Except maybe for structure with custom pretty printing,
+            but will handle that later.
+            FIXME: it does not actually works now.
+            */
+            //varTree_->setExpanded(index, true);
+        }
         watchVarEditor_->clearEditText();
     }
 }
