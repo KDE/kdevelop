@@ -1325,14 +1325,20 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
   TypeIdAST *typeId = 0;
   ExpressionAST *expr = 0;
 
-  if (!parseTypeId(typeId) || (session->token_stream->lookAhead() != ','
-                               && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'))
+  if (!parseTypeId(typeId) ||
+       (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'))
+  {
+    rewind(start);
+
+    if (!parsePrimaryExpression(expr) ||
+         (session->token_stream->lookAhead() != ',' && session->token_stream->lookAhead() != '>' && session->token_stream->lookAhead() != ')'))
     {
       rewind(start);
-
-      if (!parseLogicalOrExpression(expr, true))
+      
+      if (!parseConditionalExpression(expr))
         return false;
     }
+  }
 
   TemplateArgumentAST *ast = CreateNode<TemplateArgumentAST>(session->mempool);
   ast->type_id = typeId;

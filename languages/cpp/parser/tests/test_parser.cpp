@@ -111,6 +111,19 @@ private slots:
     QVERIFY(ast->declarations != 0);
   }
   
+  void testTemplateArguments()
+  {
+    QByteArray templatetest("template <int N, int M> struct SeriesAdder{ enum { value = N + SeriesAdder< 0 >::value }; };");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(templatetest, &mem_pool);
+    QVERIFY(ast != 0);
+    QVERIFY(ast->declarations != 0);
+    for (int i = 0; i < control.problems().count(); i++)
+    {
+      QVERIFY(control.problems().at(i)->description() == "Unexpected end of file");
+    }
+  }
+  
   void testManyComparisons()
   {
     //Should not crash
