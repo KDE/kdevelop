@@ -211,6 +211,14 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextInde
   return ret;
 }
 
+bool TopDUContextDynamicData::fileExists(uint topContextIndex)
+{
+  QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";
+  QString fileName = baseDir + '/' + QString("%1").arg(topContextIndex);
+  QFile file(fileName);
+  return file.exists();
+}
+
 IndexedString TopDUContextDynamicData::loadUrl(uint topContextIndex) {
 
   QString baseDir = globalItemRepositoryRegistry().path() + "/topcontexts";

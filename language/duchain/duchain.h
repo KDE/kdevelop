@@ -159,7 +159,26 @@ public:
   
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
   ///The duchain must be read-locked when this is called
-  Q_SCRIPTABLE TopDUContext* chainForIndex(uint index) const;
+  ///This function is inlined because it is called in a very high frequency
+  Q_SCRIPTABLE inline TopDUContext* chainForIndex(uint index)
+  {
+    if(m_deleted)
+      return 0;
+
+    {
+      SpinLock<> lock(chainsByIndexLock);
+
+      if(chainsByIndex.size() > index)
+      {
+        TopDUContext* top = chainsByIndex[index];
+        if(top)
+          return top;
+      }
+    }
+    
+    //Load the top-context
+    return loadChain(index);
+  }
 
   ///Returns the url for the given top-context index if available. This does have some cost, so avoid it when possible.
   Q_SCRIPTABLE IndexedString urlForIndex(uint index) const;
@@ -262,6 +281,12 @@ private Q_SLOTS:
   void documentRenamed(KDevelop::IDocument* document);
   void aboutToQuit();
 private:
+  TopDUContext* loadChain(uint index);
+  //These two are exported here so that the extremely frequently called chainForIndex(..) can be inlined
+  static bool m_deleted;
+  static std::vector<TopDUContext*> chainsByIndex;
+  static SpinLockData chainsByIndexLock;
+  
   /// Increases the reference-count for the given top-context. The result: It will not be unloaded.
   /// Do this to prevent KDevelop from unloading a top-context that you plan to use. Don't forget calling unReferenceToContext again,
   /// else the top-context will stay in memory for ever.
