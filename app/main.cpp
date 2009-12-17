@@ -47,9 +47,11 @@
 #include <shell/projectcontroller.h>
 #include <shell/documentcontroller.h>
 #include <shell/plugincontroller.h>
+#include <shell/sessioncontroller.h>
 
 #include "kdevideextension.h"
 #include <KMessageBox>
+#include <KProcess>
 
 using KDevelop::Core;
 
@@ -127,25 +129,37 @@ int main( int argc, char *argv[] )
     KApplication app;
     KDevIDEExtension::init();
 
-    QString sessionName = args->getOption("s");
-    if(!sessionName.isEmpty())
-        setenv("KDEV_SESSION", sessionName.toLatin1(), 1);
-
+    ///Manage sessions: There always needs a KDEV_SESSION to be set, so the duchain can be stored in the session-specific directory
+    QString session = args->getOption("s");
     if(!getenv("KDEV_SESSION"))
     {
-        ///Only show the splash-screen if no session has been given.
-        ///If a session has been given, that usually means that KDevelop has already been loaded,
-        ///and startup will be very fast. A splash-screen looks unaesthetical then.
-        KSplashScreen* splash = 0;
-        QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
-        if( !splashFile.isEmpty() )
-        {
-            QPixmap pm;
-            pm.load( splashFile );
-            splash = new KSplashScreen( pm );
-            splash->show();
-            QTimer::singleShot(0, splash, SLOT(deleteLater()));
-        }
+        //No session is set, we have to pick one, then we restart kdevelop through kdev_starter, and forward all relevant arguments to it
+        session = KDevelop::SessionController::defaultSessionId(session);
+
+        kDebug() << "Starting with kdev_starter and default session" << session;
+        
+        QStringList args;
+        
+        args << KCmdLineArgs::appName() << session;
+        
+        //Forward all arguments, the session will be skipped automatically as KDEV_SESSION will be set
+        for(uint a = 1; a < argc; ++a)
+            args << QString(argv[a]);
+        
+        //@todo Eventually show a session-picking dialog
+        KProcess::startDetached("kdev_starter", args);
+        return 0;
+    }
+    
+    KSplashScreen* splash = 0;
+    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
+    if( !splashFile.isEmpty() )
+    {
+        QPixmap pm;
+        pm.load( splashFile );
+        splash = new KSplashScreen( pm );
+        splash->show();
+        QTimer::singleShot(0, splash, SLOT(deleteLater()));
     }
 
     Core::initialize();
