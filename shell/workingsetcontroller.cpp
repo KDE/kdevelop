@@ -44,6 +44,8 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/isession.h>
+#include "textdocument.h"
+#include <ktexteditor/document.h>
 
 using namespace KDevelop;
 
@@ -206,6 +208,13 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
         foreach (Sublime::View* view, area->views()) {
             group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
             group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
+            
+            TextDocument *textDoc = qobject_cast<KDevelop::TextDocument*>(view->document());
+            if (textDoc && textDoc->textDocument()) {
+                QString encoding = textDoc->textDocument()->encoding();
+                if (!encoding.isEmpty())
+                    group.writeEntry(QString("View %1 Encoding").arg(index), encoding);
+            }
             QString state = view->viewState();
             if (!state.isEmpty())
                 group.writeEntry(QString("View %1 State").arg(index), state);
@@ -360,6 +369,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         for (int i = 0; i < viewCount; ++i) {
             QString type = group.readEntry(QString("View %1 Type").arg(i), "");
             QString specifier = group.readEntry(QString("View %1").arg(i), "");
+            QString encoding = group.readEntry(QString("View %1 Encoding").arg(i), "");
 
             bool viewExists = false;
             foreach (Sublime::View* view, areaIndex->views()) {
@@ -373,7 +383,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 continue;
 
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
-                             KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
+                KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView,
+                encoding);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
                 Sublime::View* view = document->createView();
@@ -611,6 +622,7 @@ void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString t
     if (from == to)
         return;
     Q_ASSERT(m_areas.contains(area));
+    saveFromArea(area, area->rootIndex());
     disconnectArea(area);
     WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
     newSet->connectArea(area);

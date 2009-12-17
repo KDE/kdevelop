@@ -120,7 +120,8 @@ public Q_SLOTS:
     @param activationParams Indicates whether to fully activate the document.*/
     virtual Q_SCRIPTABLE IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = 0);
+            DocumentActivationParams activationParams = 0,
+            const QString& encoding = "");
 
     virtual Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data );
     

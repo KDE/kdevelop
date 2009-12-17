@@ -96,7 +96,8 @@ public Q_SLOTS:
     @param activate Indicates whether to fully activate the document.*/
     KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Cursor& cursor,
-            DocumentActivationParams activationParams = 0 );
+            DocumentActivationParams activationParams = 0,
+            const QString& encoding = "");
 
     /**Opens a new or existing document.
     @param url The full Url of the document to open.
@@ -104,7 +105,8 @@ public Q_SLOTS:
     @param activate Indicates whether to fully activate the document.*/
     virtual KDevelop::IDocument* openDocument( const KUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = 0 ) = 0;
+            DocumentActivationParams activationParams = 0,
+            const QString& encoding = "") = 0;
     
     /** Opens a document from the IDocument instance.
     @param doc The IDocument to add

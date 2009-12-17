@@ -536,9 +536,10 @@ IDocument* DocumentController::openDocument( const KUrl& inputUrl, const QString
 
 IDocument* DocumentController::openDocument( const KUrl & inputUrl,
         const KTextEditor::Range& range,
-        DocumentActivationParams activationParams)
+        DocumentActivationParams activationParams,
+        const QString& encoding)
 {
-    return d->openDocumentInternal( inputUrl, "", range, "", activationParams );
+    return d->openDocumentInternal( inputUrl, "", range, encoding, activationParams );
 }
 
 
