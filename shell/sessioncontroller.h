@@ -59,6 +59,11 @@ public:
     static const QString cfgSessionGroup;
     static const QString cfgActiveSessionEntry;
 
+    ///Returns the id of a valid session. Either the one that is currently set as 'active',
+    ///or a fresh one.
+    ///@param pickSession Name or UUID of a session that will be respected if possible.
+    static QString defaultSessionId(QString pickSession = QString());
+    
     void plugActions();
 Q_SIGNALS:
     void sessionLoaded( ISession* );

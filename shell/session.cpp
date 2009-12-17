@@ -33,10 +33,13 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugin.h>
 #include "core.h"
 #include "sessioncontroller.h"
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 namespace KDevelop
 {
 const QString Session::cfgSessionNameEntry = "SessionName";
+const QString Session::cfgSessionPrettyContentsEntry = "SessionPrettyContents";
 
 class SessionPrivate
 {
@@ -92,29 +95,47 @@ KUrl::List Session::containedProjects() const
     return d->config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
 }
 
-QString Session::description() const
+void Session::updateDescription()
 {
-    QString ret = name();
-    
     KUrl::List openProjects = containedProjects();
 
+    QString prettyContents;
+    
     if(!openProjects.isEmpty()) {
-        if(!ret.isEmpty())
-            ret += ":  ";
         
         QStringList projectNames;
         
         foreach(KUrl url, openProjects)
         {
-            QString projectName = url.fileName();
-            if(projectName.endsWith(".kdev4"))
-                projectName = projectName.left(projectName.size()-6);
-            projectNames << projectName;
+            IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+            if(project) {
+                projectNames << project->name();
+            }else{
+                QString projectName = url.fileName();
+                if(projectName.endsWith(".kdev4"))
+                    projectName = projectName.left(projectName.size()-6);
+                projectNames << projectName;
+            }
         }
         
-        ret += projectNames.join(", ");
+        prettyContents = projectNames.join(", ");
     }
     
+    d->config->group("").writeEntry( cfgSessionPrettyContentsEntry, prettyContents );
+}
+
+QString Session::description() const
+{
+    QString ret = name();
+    
+    QString prettyContents = d->config->group("").readEntry( cfgSessionPrettyContentsEntry, "" );
+    
+    if(!prettyContents.isEmpty())
+    {
+        if(!ret.isEmpty())
+            ret += ":  ";
+        ret += prettyContents;
+    }
     return ret;
 }
 

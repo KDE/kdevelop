@@ -1,0 +1,4 @@
+
+kde4_add_executable(kdev_starter main.cpp)
+target_link_libraries(kdev_starter QtCore)
+install(TARGETS kdev_starter ${INSTALL_TARGETS_DEFAULT_ARGS} )

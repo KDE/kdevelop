@@ -71,6 +71,12 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
    KComponentData component("item repositories temp", QByteArray(), KComponentData::SkipMainComponentRegistration);
     QString baseDir = QDir::homePath() + "/.kdevduchain";
     KStandardDirs::makeDir(baseDir);
+    
+    if(getenv("KDEV_SESSION"))
+      baseDir += "/" + QString(getenv("KDEV_SESSION"));
+    else
+      kWarning() << "Missing session environment variable KDEV_SESSION!";
+    
     //Since each instance of kdevelop needs an own directory, iterate until we find a not-yet-used one
     for(int a = 0; a < 100; ++a) {
       QString specificDir = baseDir + QString("/%1").arg(a);

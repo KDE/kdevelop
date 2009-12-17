@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QStringList>
 
 #include <kglobal.h>
+#include <kcmdlineargs.h>
 #include <kcomponentdata.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
@@ -41,12 +42,13 @@ Boston, MA 02110-1301, USA.
 #include <qapplication.h>
 #include <kprocess.h>
 #include <sublime/mainwindow.h>
+#include <KApplication>
 
 namespace KDevelop
 {
 
 const QString SessionController::cfgSessionGroup = "Sessions";
-const QString SessionController::cfgActiveSessionEntry("Active Session");
+const QString SessionController::cfgActiveSessionEntry("Active Session ID");
 
 class SessionControllerPrivate : public QObject
 {
@@ -79,7 +81,7 @@ public:
     void newSession()
     {
         Session* session = new Session( QUuid::createUuid() );
-        KProcess::startDetached("kdevelop", QStringList() << "--s"  << session->id().toString());
+        KProcess::startDetached("kdev_starter", QStringList() << KCmdLineArgs::appName() << session->id().toString());
         delete session;
         
         //Terminate this instance of kdevelop if the user agrees
@@ -96,7 +98,7 @@ public:
     void loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        KProcess::startDetached("kdevelop", QStringList() << "--s"  << s->id().toString());
+        KProcess::startDetached("kdev_starter", QStringList() << KCmdLineArgs::appName() << s->id().toString());
     }
     
     void activateSession( Session* s )
@@ -114,7 +116,7 @@ public:
         }
         
         KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
-        grp.writeEntry( SessionController::cfgActiveSessionEntry, s->name() );
+        grp.writeEntry( SessionController::cfgActiveSessionEntry, s->id().toString() );
         grp.sync();
         activeSession = s;
     }
@@ -163,8 +165,10 @@ private slots:
 
 void SessionController::updateSessionDescriptions()
 {
-    for(QHash< Session*, QAction* >::iterator it = d->sessionActions.begin(); it != d->sessionActions.end(); ++it)
+    for(QHash< Session*, QAction* >::iterator it = d->sessionActions.begin(); it != d->sessionActions.end(); ++it) {
+        it.key()->updateDescription();
         (*it)->setText(it.key()->description());
+    }
 }
 
 SessionController::SessionController( QObject *parent )
@@ -296,6 +300,10 @@ void SessionController::loadDefaultSession()
         if(!session(load))
             load = createSession("")->id().toString();
         
+        ///KDEV_SESSION must be the UUID of an existing session, and nothing else.
+        ///If this assertion fails, that was not the case.
+        Q_ASSERT(session(load)->id().toString() == load);
+        
         d->activateSession( session(load) );
         return;
     }
@@ -317,6 +325,43 @@ Session* SessionController::session( const QString& nameOrId ) const
         return ret;
     
     return d->findSessionForId( nameOrId );
+}
+
+QString SessionController::defaultSessionId(QString pickSession)
+{
+    if(!pickSession.isEmpty())
+    {
+        //Try picking the correct session out of the existing ones
+    
+        QDir sessiondir( SessionController::sessionDirectory() );
+        
+        foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+        {
+            QUuid id( s );
+            if( id.isNull() )
+                continue;
+
+            Session session( id );
+            
+            if(id.toString() == pickSession || session.name() == pickSession)
+                return id;
+        }
+    }
+    
+    //No existing session has been picked, try using the session marked as 'active'
+    
+    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
+    QString load = grp.readEntry( cfgActiveSessionEntry, "" );
+    
+    if(load.isEmpty())
+        load = QUuid::createUuid();
+    
+    //No session is marked active, 
+    
+    //Make sure the session does actually exist as a directory
+    Session session( load );
+    
+    return load;
 }
 
 QString SessionController::sessionDirectory()

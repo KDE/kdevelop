@@ -18,6 +18,7 @@ set (kdevplatformutil_LIB_UI
 )
 
 add_subdirectory(duchainify)
+add_subdirectory(kdev_starter)
 
 add_subdirectory(tests)
 
