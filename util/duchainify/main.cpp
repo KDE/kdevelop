@@ -140,7 +140,7 @@ int main(int argc, char** argv)
     KApplication app;
 
     AutoTestShell::init();
-    Core::initialize(KDevelop::Core::NoUi);
+    Core::initialize(0, KDevelop::Core::NoUi);
     
     
     KUrl::List includes;

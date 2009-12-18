@@ -22,10 +22,12 @@
 
 #include <QtGui/QApplication>
 #include <QtCore/QPointer>
+#include <QtCore/QTimer>
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <ksplashscreen.h>
 
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
@@ -209,13 +211,16 @@ CorePrivate::~CorePrivate()
 }
 
 
-void Core::initialize(Setup mode)
+void Core::initialize(KSplashScreen* splash, Setup mode)
 {
     if (m_self)
         return;
 
     m_self = new Core();
     m_self->d->initialize(mode);
+    if( splash ) {
+        QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
+    }
 }
 
 Core *KDevelop::Core::self()

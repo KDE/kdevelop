@@ -24,6 +24,8 @@
 #include "shellexport.h"
 #include <interfaces/icore.h>
 
+class KSplashScreen;
+
 namespace KDevelop {
 
 class UiController;
@@ -49,7 +51,7 @@ public:
     static QString version();
 
     /** Initialize the core of the kdevplatform application */
-    static void initialize(Setup mode=Default);
+    static void initialize(KSplashScreen* splash = 0, Setup mode=Default);
 
     /**
      * \brief Provide access an instance of Core
