@@ -159,10 +159,9 @@ int main( int argc, char *argv[] )
         pm.load( splashFile );
         splash = new KSplashScreen( pm );
         splash->show();
-        QTimer::singleShot(0, splash, SLOT(deleteLater()));
     }
 
-    Core::initialize();
+    Core::initialize(splash);
     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
 

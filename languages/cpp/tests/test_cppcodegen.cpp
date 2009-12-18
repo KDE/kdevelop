@@ -57,7 +57,7 @@ void TestCppCodegen::initTestCase()
 {
   //Initialize KDevelop components
   AutoTestShell::init();
-  Core::initialize(KDevelop::Core::NoUi);
+  Core::initialize(0, KDevelop::Core::NoUi);
   
   Core::self()->languageController()->backgroundParser()->setDelay(1);
   
