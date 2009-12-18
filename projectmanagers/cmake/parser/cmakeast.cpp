@@ -33,10 +33,6 @@
 #include "cmakelistsparser.h"
 #include "cmakeparserutils.h"
 
-#ifdef ABSOLUTE
-#undef ABSOLUTE
-#endif
-
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
@@ -1104,43 +1100,43 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     QString type = func.arguments.first().value;
     int min_args=-1;
     if(type=="WRITE") {
-       m_type = WRITE;
+       m_type = Write;
        min_args=3;
     } else if(type=="APPEND") {
-        m_type = APPEND;
+        m_type = Append;
         min_args=3;
     } else if(type=="READ") {
-        m_type = READ;
+        m_type = Read;
         min_args=3;
     } else if(type=="GLOB") {
-        m_type = GLOB;
+        m_type = Glob;
         min_args=3;
     } else if(type=="GLOB_RECURSE") {
-        m_type = GLOB_RECURSE;
+        m_type = GlobRecurse;
         min_args = 3;
     } else if(type=="REMOVE") {
-        m_type = REMOVE;
+        m_type = Remove;
         min_args=2;
     } else if(type=="REMOVE_RECURSE") {
-        m_type = REMOVE_RECURSE;
+        m_type = RemoveRecurse;
         min_args=2;
     } else if(type=="MAKE_DIRECTORY") {
-        m_type = MAKE_DIRECTORY;
+        m_type = MakeDirectory;
         min_args=2;
     } else if(type=="RELATIVE_PATH") {
-        m_type = RELATIVE_PATH;
+        m_type = RelativePath;
         min_args=4;
     } else if(type=="TO_CMAKE_PATH") {
-        m_type = TO_CMAKE_PATH;
+        m_type = ToCmakePath;
         min_args=3;
     } else if(type=="TO_NATIVE_PATH") {
-        m_type = TO_NATIVE_PATH;
+        m_type = ToNativePath;
         min_args=3;
     } else if(type=="STRINGS") {
-        m_type = STRINGS;
+        m_type = Strings;
         min_args=3;
     } else if(type=="DOWNLOADS") {
-        m_type = DOWNLOAD;
+        m_type = Download;
         min_args=3;
     } else
         return false;
@@ -1150,18 +1146,18 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd;
     switch(m_type) {
-        case WRITE:
-        case APPEND:
+        case Write:
+        case Append:
             m_path = func.arguments[1].value;
             m_message = func.arguments[2].value;
             break;
-        case READ:
+        case Read:
             m_path=func.arguments[1].value;
             m_variable = func.arguments[2].value;
             addOutputArgument(func.arguments[2]);
             break;
-        case GLOB:
-        case GLOB_RECURSE:
+        case Glob:
+        case GlobRecurse:
             addOutputArgument(func.arguments[1]);
             m_variable = func.arguments[1].value;
             it=func.arguments.constBegin()+2;
@@ -1178,28 +1174,28 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                     m_globbingExpressions << it->value;
             }
             break;
-        case REMOVE:
-        case REMOVE_RECURSE:
-        case MAKE_DIRECTORY:
+        case Remove:
+        case RemoveRecurse:
+        case MakeDirectory:
             it=func.arguments.constBegin()+1;
             itEnd=func.arguments.constEnd();
             
             for(; it!=itEnd; ++it)
                 m_directories << it->value;
             break;
-        case RELATIVE_PATH:
+        case RelativePath:
             addOutputArgument(func.arguments[1]);
             m_variable = func.arguments[1].value;
             m_directory = func.arguments[2].value;
             m_path = func.arguments[3].value;
             break;
-        case TO_CMAKE_PATH:
-        case TO_NATIVE_PATH:
+        case ToCmakePath:
+        case ToNativePath:
             addOutputArgument(func.arguments[2]);
             m_path = func.arguments[1].value;
             m_variable = func.arguments[2].value;
             break;
-        case DOWNLOAD:
+        case Download:
             m_url=func.arguments[1].value;
             m_path=func.arguments[2].value;
             it=func.arguments.constBegin()+3;
@@ -1220,7 +1216,7 @@ bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 }
             }
             break;
-        case STRINGS:
+        case Strings:
             m_path=func.arguments[1].value;
             m_variable=func.arguments[2].value;
             it=func.arguments.constBegin()+3;
@@ -1728,13 +1724,13 @@ bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     QString type=func.arguments[1].value.toUpper();
     if(type=="VARIABLES")
-        m_type=VARIABLES;
+        m_type=Variables;
     else if(type=="CACHE_VARIABLES")
-        m_type=CACHE_VARIABLES;
+        m_type=CacheVariables;
     else if(type=="COMMANDS")
-        m_type=COMMANDS;
+        m_type=Commands;
     else if(type=="MACROS")
-        m_type=MACROS;
+        m_type=Macros;
     else
         return false;
     return true;
@@ -1791,16 +1787,16 @@ bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_fileName = func.arguments[1].value;
     QString t = func.arguments[2].value;
     
-    if(t=="PATH") m_type=PATH;
-    else if(t=="ABSOLUTE") m_type=ABSOLUTE;
-    else if(t=="NAME") m_type=NAME;
-    else if(t=="EXT") m_type=EXT;
-    else if(t=="NAME_WE") m_type=NAME_WE;
-    else if(t=="PROGRAM") m_type=PROGRAM;
+    if(t=="PATH") m_type=Path;
+    else if(t=="ABSOLUTE") m_type=Absolute;
+    else if(t=="NAME") m_type=Name;
+    else if(t=="EXT") m_type=Ext;
+    else if(t=="NAME_WE") m_type=NameWe;
+    else if(t=="PROGRAM") m_type=Program;
     else
         return false;
     
-    if(m_type==PROGRAM) {
+    if(m_type==Program) {
         //TODO: Did not understand this option
     }
     
@@ -1965,20 +1961,20 @@ bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     int i=0;
-    m_includeType = DEFAULT;
+    m_includeType = Default;
     m_isSystem = false;
     
     if(func.arguments[i].value=="AFTER") {
-        if(m_includeType!=DEFAULT)
+        if(m_includeType!=Default)
             return false;
-        m_includeType = AFTER;
+        m_includeType = After;
         i++;
     }
     
     if(func.arguments[i].value=="BEFORE") {
-        if(m_includeType!=DEFAULT)
+        if(m_includeType!=Default)
             return false;
-        m_includeType = BEFORE;
+        m_includeType = Before;
         i++;
     }
 
@@ -2240,36 +2236,36 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
     QString argName = func.arguments.first().value;
     if(argName=="LENGTH")
-        m_type = LENGTH;
+        m_type = Length;
     else if(argName=="GET")
-        m_type=GET;
+        m_type=Get;
     else if(argName=="APPEND")
-        m_type = APPEND;
+        m_type = Append;
     else if(argName=="FIND")
-        m_type = FIND;
+        m_type = Find;
     else if(argName=="INSERT")
-        m_type = INSERT;
+        m_type = Insert;
     else if(argName=="REMOVE_ITEM")
-        m_type = REMOVE_ITEM;
+        m_type = RemoveItem;
     else if(argName=="REMOVE_AT")
-        m_type = REMOVE_AT;
+        m_type = RemoveAt;
     else if(argName=="SORT")
-        m_type = SORT;
+        m_type = Sort;
     else if(argName=="REVERSE")
-        m_type = REVERSE;
+        m_type = Reverse;
     else
         return false;
 
     m_list = func.arguments[1].value;
     switch(m_type)
     {
-        case LENGTH:
+        case Length:
             if(func.arguments.count()!=3)
                 return false;
             m_output = func.arguments[2].value;
             addOutputArgument(func.arguments[2]);
             break;
-        case GET: {
+        case Get: {
             if(func.arguments.count()<3)
                 return false;
             
@@ -2288,7 +2284,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 i++;
             }
         } break;
-        case APPEND: {
+        case Append: {
             if(func.arguments.count()<3)
                 return false;
             
@@ -2301,7 +2297,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 i++;
             }
         } break;
-        case FIND: {
+        case Find: {
             if(func.arguments.count()!=4)
                 return false;
             m_elements.append(func.arguments[2].value);
@@ -2309,7 +2305,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
             addOutputArgument(func.arguments[3]);
         } break;
-        case INSERT: {
+        case Insert: {
             bool correct;
             if(func.arguments.count()<4)
                 return false;
@@ -2325,7 +2321,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 i++;
             }
         } break;
-        case REMOVE_ITEM: {
+        case RemoveItem: {
             if(func.arguments.count()<3)
                 return false;
             int i=0;
@@ -2337,7 +2333,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 i++;
             }
         } break;
-        case REMOVE_AT: {
+        case RemoveAt: {
             if(func.arguments.count()<3)
                 return false;
             addOutputArgument(func.arguments[1]);
@@ -2354,8 +2350,8 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 i++;
             }
         } break;
-        case SORT:
-        case REVERSE:
+        case Sort:
+        case Reverse:
             addOutputArgument(func.arguments[1]);
             if(func.arguments.count()>2)
                 return false;
@@ -2597,11 +2593,11 @@ bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if(func.arguments.count()>1) {
         QString type=func.arguments.first().value;
         if(type=="SEND_ERROR")
-            m_type=SEND_ERROR;
+            m_type=SendError;
         else if(type=="STATUS")
-            m_type=STATUS;
+            m_type=Status;
         else if(type=="FATAL_ERROR")
-            m_type=FATAL_ERROR;
+            m_type=FatalError;
     }
     
     m_message.append(func.arguments.last().value); //Maybe should do a foreach
@@ -3129,14 +3125,14 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         if(func.arguments.count()<5)
             return false;
-        m_type=REGEX;
+        m_type=Regex;
         QString regexType = func.arguments[1].value.toUpper();
 
         int outpos=3;
-        if(regexType=="MATCH") m_cmdType=MATCH;
-        else if(regexType=="MATCHALL") m_cmdType=MATCHALL;
+        if(regexType=="MATCH") m_cmdType=Match;
+        else if(regexType=="MATCHALL") m_cmdType=MatchAll;
         else if(regexType=="REPLACE") {
-            m_cmdType=REGEX_REPLACE; 
+            m_cmdType=RegexReplace; 
             m_replace=func.arguments[3].value;
             outpos=4;
         }
@@ -3155,7 +3151,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="REPLACE")
     {
-        m_type=REPLACE;
+        m_type=Replace;
         m_regex = func.arguments[1].value;
         m_replace=func.arguments[2].value;
         m_outputVariable = func.arguments[3].value;
@@ -3172,12 +3168,12 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         if(func.arguments.count()!=5)
             return false;
-        m_type=COMPARE;
+        m_type=Compare;
         QString argumentType=func.arguments[1].value.toUpper();
-        if(argumentType=="EQUAL") m_cmdType=EQUAL;
-        else if(argumentType=="NOTEQUAL") m_cmdType=NOTEQUAL;
-        else if(argumentType=="LESS") m_cmdType=LESS;
-        else if(argumentType=="GREATER") m_cmdType=GREATER;
+        if(argumentType=="EQUAL") m_cmdType=Equal;
+        else if(argumentType=="NOTEQUAL") m_cmdType=NotEqual;
+        else if(argumentType=="LESS") m_cmdType=Less;
+        else if(argumentType=="GREATER") m_cmdType=Greater;
         
         m_input.append(func.arguments[2].value);
         m_input.append(func.arguments[3].value);
@@ -3186,7 +3182,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="ASCII")
     {
-        m_type=ASCII;
+        m_type=Ascii;
         QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1;
         QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
         for(; it!=itEnd; ++it)
@@ -3199,7 +3195,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="CONFIGURE")
     {
-        m_type=CONFIGURE;
+        m_type=Configure;
         if(func.arguments.isEmpty())
             return false;
         m_input += func.arguments[1].value;
@@ -3213,20 +3209,20 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="TOUPPER")
     {
-        m_type=TOUPPER;
+        m_type=ToUpper;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
     }
     else if(stringType=="TOLOWER")
     {
-        m_type=TOLOWER;
+        m_type=ToLower;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
         addOutputArgument(func.arguments[2]);
     }
     else if(stringType=="LENGTH")
     {
-        m_type=LENGTH;
+        m_type=Length;
         m_input.append(func.arguments[1].value);
         m_outputVariable = func.arguments[2].value;
         
@@ -3237,7 +3233,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         if(func.arguments.count()<5)
             return false;
         bool correctBegin, correctLength;
-        m_type=SUBSTRING;
+        m_type=Substring;
         m_input.append(func.arguments[1].value);
         m_begin = func.arguments[2].value.toInt(&correctBegin);
         m_length = func.arguments[3].value.toInt(&correctLength);
@@ -3248,7 +3244,7 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(stringType=="STRIP")
     {
-        m_type=STRIP;
+        m_type=Strip;
         if(func.arguments.count()!=3)
             return false;
         m_string = func.arguments[1].value;
@@ -3259,8 +3255,8 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         if(func.arguments.count()>6 || func.arguments.count()<2)
             return false;
-        m_type=RANDOM;
-        enum State { ALPHABET, LENGTH, None };
+        m_type=Random;
+        enum State { Alphabet, Length, None };
         State s = None;
         m_length=5;
         m_string="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -3272,11 +3268,11 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             
             bool correct=true;
             switch(s) {
-                case ALPHABET:
+                case Alphabet:
                     m_regex=arg.value;
                     s=None;
                     continue;
-                case LENGTH:
+                case Length:
                     m_length = arg.value.toInt(&correct);
                     if(!correct) return false;
                     s=None;
@@ -3286,12 +3282,12 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
             
             if(arg.value=="LENGTH")
-                s = LENGTH;
+                s = State::Length;
             else if(arg.value=="ALPHABET")
-                s = ALPHABET;
+                s = State::Alphabet;
             else
             {
-                s=None;
+                s=State::None;
                 if(!m_outputVariable.isEmpty())
                 {
                     return false;
@@ -3838,10 +3834,10 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             return false;
         return true;
     } else if(first=="PUSH") {
-        m_action=PUSH;
+        m_action=Push;
         return func.arguments.count()==1;
     } else if(first=="POP") {
-        m_action=POP;
+        m_action=Pop;
         return func.arguments.count()==1;
     }
     return false;
@@ -3940,11 +3936,11 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     QString propName=func.arguments.first().value;
-    if(propName=="GLOBAL") m_type=GLOBAL;
-    else if(propName=="DIRECTORY") m_type=DIRECTORY;
-    else if(propName=="TARGET") m_type=TARGET;
-    else if(propName=="SOURCE") m_type=SOURCE;
-    else if(propName=="TEST") m_type=TEST;
+    if(propName=="GLOBAL") m_type=Global;
+    else if(propName=="DIRECTORY") m_type=Directory;
+    else if(propName=="TARGET") m_type=Target;
+    else if(propName=="SOURCE") m_type=Source;
+    else if(propName=="TEST") m_type=Test;
     else
         return false;
     
@@ -3994,12 +3990,12 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     PropertyType t;
     QString propName=it->value;
-    if(propName=="GLOBAL") t=GLOBAL;
-    else if(propName=="DIRECTORY") t=DIRECTORY;
-    else if(propName=="TARGET") t=TARGET;
-    else if(propName=="SOURCE") t=SOURCE;
-    else if(propName=="TEST") t=TEST;
-    else if(propName=="VARIABLE") t=VARIABLE;
+    if(propName=="GLOBAL") t=Global;
+    else if(propName=="DIRECTORY") t=Directory;
+    else if(propName=="TARGET") t=Target;
+    else if(propName=="SOURCE") t=Source;
+    else if(propName=="TEST") t=Test;
+    else if(propName=="VARIABLE") t=Variable;
     else
         return false;
     ++it;
@@ -4015,10 +4011,10 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     m_behaviour=None;
     if(it!=itEnd) {
         QString ee=it->value;
-        if(ee=="SET") m_behaviour=SET;
-        else if(ee=="DEFINED") m_behaviour=DEFINED;
-        else if(ee=="BRIEF_DOCS") m_behaviour=BRIEF_DOCS;
-        else if(ee=="FULL_DOCS") m_behaviour=FULL_DOCS;
+        if(ee=="SET") m_behaviour=Set;
+        else if(ee=="DEFINED") m_behaviour=Defined;
+        else if(ee=="BRIEF_DOCS") m_behaviour=BriefDocs;
+        else if(ee=="FULL_DOCS") m_behaviour=FullDocs;
     }
     
     return !m_name.isEmpty();

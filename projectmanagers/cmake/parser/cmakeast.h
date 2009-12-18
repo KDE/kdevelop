@@ -31,10 +31,6 @@
 #include "cmakeastvisitor.h"
 #include "cmaketypes.h"
 
-#ifdef ABSOLUTE
-#undef ABSOLUTE
-#endif
-
 class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. */
 {
     public:
@@ -263,8 +259,8 @@ CMAKE_END_AST_CLASS( ExportLibraryDepsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( FileAst )
-enum TypeFile { WRITE, APPEND, READ, GLOB, GLOB_RECURSE, REMOVE, REMOVE_RECURSE,
-            MAKE_DIRECTORY, RELATIVE_PATH, TO_CMAKE_PATH, TO_NATIVE_PATH, STRINGS, DOWNLOAD };
+enum TypeFile { Write, Append, Read, Glob, GlobRecurse, Remove, RemoveRecurse,
+            MakeDirectory, RelativePath, ToCmakePath, ToNativePath, Strings, Download };
 CMAKE_ADD_AST_MEMBER( TypeFile, type )
 CMAKE_ADD_AST_MEMBER( QString, path )
 CMAKE_ADD_AST_MEMBER( QString, variable )
@@ -374,7 +370,7 @@ CMAKE_END_AST_CLASS( ForeachAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
-        enum PropertyType { VARIABLES, CACHE_VARIABLES, COMMANDS, MACROS };
+        enum PropertyType { Variables, CacheVariables, Commands, Macros };
 CMAKE_ADD_AST_MEMBER( PropertyType, type )
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( GetCMakePropertyAst )
@@ -395,7 +391,7 @@ CMAKE_ADD_AST_MEMBER( QString, outputVariable )
 CMAKE_ADD_AST_MEMBER( QString, typeName )
 CMAKE_ADD_AST_MEMBER( QString, name )
 
-enum Behaviour { None, SET, DEFINED, BRIEF_DOCS, FULL_DOCS };
+enum Behaviour { None, Set, Defined, BriefDocs, FullDocs };
 CMAKE_ADD_AST_MEMBER( Behaviour, behaviour )
 CMAKE_END_AST_CLASS( GetPropertyAst )
 
@@ -408,7 +404,7 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
-        enum ComponentType { PATH, ABSOLUTE, NAME, EXT, NAME_WE, PROGRAM };
+        enum ComponentType { Path, Absolute, Name, Ext, NameWe, Program };
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_ADD_AST_MEMBER( QString, fileName )
 CMAKE_ADD_AST_MEMBER( ComponentType, type )
@@ -452,7 +448,7 @@ CMAKE_END_AST_CLASS( IncludeAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeDirectoriesAst )
-        enum IncludeType { DEFAULT=0, AFTER, BEFORE };
+        enum IncludeType { Default=0, After, Before };
 CMAKE_ADD_AST_MEMBER( IncludeType, includeType )
 CMAKE_ADD_AST_MEMBER( bool, isSystem )
 CMAKE_ADD_AST_MEMBER( QStringList, includedDirectories )
@@ -528,7 +524,7 @@ CMAKE_END_AST_CLASS( LinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ListAst )
-    enum ListType { LENGTH, GET, APPEND, FIND, INSERT, REMOVE_ITEM, REMOVE_AT, SORT, REVERSE };
+    enum ListType { Length, Get, Append, Find, Insert, RemoveItem, RemoveAt, Sort, Reverse };
     CMAKE_ADD_AST_MEMBER( ListType, type )
     CMAKE_ADD_AST_MEMBER( QString, list )
     CMAKE_ADD_AST_MEMBER( QString, output )
@@ -579,7 +575,7 @@ CMAKE_END_AST_CLASS( MathAst )
 
 
 CMAKE_BEGIN_AST_CLASS( MessageAst )
-enum MessageType { SEND_ERROR, STATUS, FATAL_ERROR };
+enum MessageType { SendError, Status, FatalError };
 CMAKE_ADD_AST_MEMBER( MessageType, type )
 CMAKE_ADD_AST_MEMBER( QStringList, message )
 CMAKE_END_AST_CLASS( MessageAst )
@@ -682,9 +678,9 @@ CMAKE_END_AST_CLASS( SourceGroupAst )
 
 
 CMAKE_BEGIN_AST_CLASS( StringAst )
-enum StringAstType { REGEX, REPLACE, COMPARE, ASCII, CONFIGURE,
-    TOUPPER, TOLOWER, LENGTH, SUBSTRING, STRIP, RANDOM };
-enum CommandType { MATCH, MATCHALL, REGEX_REPLACE, EQUAL, NOTEQUAL, LESS, GREATER };
+enum StringAstType { Regex, Replace, Compare, Ascii, Configure,
+    ToUpper, ToLower, Length, Substring, Strip, Random };
+enum CommandType { Match, MatchAll, RegexReplace, Equal, NotEqual, Less, Greater };
 CMAKE_ADD_AST_MEMBER( StringAstType, type )
 CMAKE_ADD_AST_MEMBER( CommandType, cmdType )
 CMAKE_ADD_AST_MEMBER( QString, outputVariable )
@@ -806,7 +802,7 @@ CMAKE_BEGIN_AST_CLASS( BreakAst )
 CMAKE_END_AST_CLASS( BreakAst )
 
 CMAKE_BEGIN_AST_CLASS( CMakePolicyAst )
-enum Action { VERSION, SET, PUSH, POP };
+enum Action { Version, Set, Push, Pop };
 CMAKE_ADD_AST_MEMBER( Action, action )
 //VERSION
 CMAKE_ADD_AST_MEMBER( QList<int>, version )

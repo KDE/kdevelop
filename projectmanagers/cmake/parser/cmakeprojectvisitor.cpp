@@ -275,7 +275,7 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
     {
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
-            m_props[TARGET][tname][t.first] += t.second;
+            m_props[Target][tname][t.first] += t.second;
         }
     }
     return 1;
@@ -284,16 +284,16 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
     kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
-    if(m_props[TARGET].contains(prop->target()) && !m_props[TARGET][prop->target()].contains(prop->property())) {
-        if(prop->property().startsWith("LOCATION_") && m_props[TARGET][prop->target()].contains("IMPORTED_"+prop->property()))
-            m_props[TARGET][prop->target()][prop->property()]=m_props[TARGET][prop->target()]["IMPORTED_"+prop->property()];
+    if(m_props[Target].contains(prop->target()) && !m_props[Target][prop->target()].contains(prop->property())) {
+        if(prop->property().startsWith("LOCATION_") && m_props[Target][prop->target()].contains("IMPORTED_"+prop->property()))
+            m_props[Target][prop->target()][prop->property()]=m_props[Target][prop->target()]["IMPORTED_"+prop->property()];
             
 //         kDebug(9032) << "unexistent property" << prop->property() << "on" << prop->target();
     }
-//     kDebug(9042) << "current properties" << m_props[TARGET][prop->target()].keys();
-//     kDebug(9042) << "goooooot" << m_props[TARGET][prop->target()][prop->property()];
+//     kDebug(9042) << "current properties" << m_props[Target][prop->target()].keys();
+//     kDebug(9042) << "goooooot" << m_props[Target][prop->target()][prop->property()];
     
-    m_vars->insert(prop->variableName(), m_props[TARGET][prop->target()][prop->property()]);
+    m_vars->insert(prop->variableName(), m_props[Target][prop->target()][prop->property()]);
     return 1;
 }
 
@@ -409,15 +409,15 @@ int CMakeProjectVisitor::visit(const IncludeDirectoriesAst * dirs)
 
     QStringList toInclude = dirs->includedDirectories();
 
-    if(t==IncludeDirectoriesAst::DEFAULT)
+    if(t==IncludeDirectoriesAst::Default)
     {
         if(m_vars->contains("CMAKE_INCLUDE_DIRECTORIES_BEFORE") && m_vars->value("CMAKE_INCLUDE_DIRECTORIES_BEFORE")[0]=="ON")
-            t = IncludeDirectoriesAst::BEFORE;
+            t = IncludeDirectoriesAst::Before;
         else
-            t = IncludeDirectoriesAst::AFTER;
+            t = IncludeDirectoriesAst::After;
     }
 
-    if(t==IncludeDirectoriesAst::AFTER)
+    if(t==IncludeDirectoriesAst::After)
         m_includeDirectories += toInclude;
     else
         m_includeDirectories = toInclude + m_includeDirectories;
@@ -1313,13 +1313,13 @@ int CMakeProjectVisitor::visit(const FileAst *file)
     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
     switch(file->type()) //TODO
     {
-        case FileAst::WRITE:
+        case FileAst::Write:
             kDebug(9042) << "(ni) File write: " << file->path() << file->message();
             break;
-        case FileAst::APPEND:
+        case FileAst::Append:
             kDebug(9042) << "(ni) File append: " << file->path() << file->message();
             break;
-        case FileAst::READ:
+        case FileAst::Read:
         {
             KUrl filename=file->path();
             QFileInfo ifile(filename.toLocalFile());
@@ -1338,7 +1338,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "FileAst: read ";
         }
             break;
-        case FileAst::GLOB: {
+        case FileAst::Glob: {
             QStringList matches;
             QString relative=file->path();
             foreach(const QString& glob, file->globbingExpressions())
@@ -1364,7 +1364,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             m_vars->insert(file->variable(), matches);
             kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
         } break;
-        case FileAst::GLOB_RECURSE: {
+        case FileAst::GlobRecurse: {
             QString current;
             if(file->path().isEmpty())
                 current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
@@ -1390,18 +1390,18 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             m_vars->insert(file->variable(), matches);
             kDebug(9042) << "file glob_recurse" << file->path() << file->globbingExpressions() << matches;
         }   break;
-        case FileAst::REMOVE:
-        case FileAst::REMOVE_RECURSE:
+        case FileAst::Remove:
+        case FileAst::RemoveRecurse:
             kDebug(9042) << "warning. file-remove or remove_recurse. KDevelop won't remove anything.";
             break;
-        case FileAst::MAKE_DIRECTORY:
+        case FileAst::MakeDirectory:
             kDebug(9042) << "warning. file-make_directory. KDevelop won't create anything.";
             break;
-        case FileAst::RELATIVE_PATH:
+        case FileAst::RelativePath:
             m_vars->insert(file->variable(), QStringList(KUrl::relativePath(file->directory(), file->path())));
             kDebug(9042) << "file relative_path" << file->directory() << file->path();
             break;
-        case FileAst::TO_CMAKE_PATH:
+        case FileAst::ToCmakePath:
 #ifdef Q_OS_WIN
             m_vars->insert(file->variable(), file->path().replace("\\", "/").split(';'));
 #else
@@ -1410,7 +1410,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             kDebug(9042) << "file TO_CMAKE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
             break;
-        case FileAst::TO_NATIVE_PATH:
+        case FileAst::ToNativePath:
             m_vars->insert(file->variable(), QStringList(file->path().replace('/', QDir::separator())));
             kDebug(9042) << "file TO_NATIVE_PATH variable:" << file->variable() << "="
                     << m_vars->value(file->variable()) << "path:" << file->path();
@@ -1454,22 +1454,22 @@ int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
     QString val;
     switch(filecomp->type())
     {
-        case GetFilenameComponentAst::PATH:
+        case GetFilenameComponentAst::Path:
             val=fi.canonicalPath();
             break;
-        case GetFilenameComponentAst::ABSOLUTE:
+        case GetFilenameComponentAst::Absolute:
             val=fi.absoluteFilePath();
             break;
-        case GetFilenameComponentAst::NAME:
+        case GetFilenameComponentAst::Name:
             val=fi.fileName();
             break;
-        case GetFilenameComponentAst::EXT:
+        case GetFilenameComponentAst::Ext:
             val=fi.suffix();
             break;
-        case GetFilenameComponentAst::NAME_WE:
+        case GetFilenameComponentAst::NameWe:
             val=fi.fileName().left(fi.fileName().length()-fi.suffix().length()-1);
             break;
-        case GetFilenameComponentAst::PROGRAM:
+        case GetFilenameComponentAst::Program:
             kDebug(9042) << "error: filenamecopmonent PROGRAM not implemented"; //TODO: <<
             break;
     }
@@ -1502,11 +1502,11 @@ int CMakeProjectVisitor::visit(const ListAst *list)
     QStringList theList = m_vars->value(list->list());
     switch(list->type())
     {
-        case ListAst::LENGTH:
+        case ListAst::Length:
             m_vars->insert(output, QStringList(QString::number(theList.count())));
             kDebug(9042) << "List length" << m_vars->value(output);
             break;
-        case ListAst::GET: {
+        case ListAst::Get: {
             QStringList indices;
             foreach(int idx, list->index())
             {
@@ -1518,11 +1518,11 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(output, indices);
             kDebug(9042) << "List: Get" << list->list() << theList << list->output() << m_vars->value(list->output());
         }   break;
-        case ListAst::APPEND:
+        case ListAst::Append:
             theList += list->elements();
             m_vars->insert(list->list(), theList);
             break;
-        case ListAst::FIND: {
+        case ListAst::Find: {
             int idx=-1;
             foreach(const QString& val, theList)
             {
@@ -1533,7 +1533,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->output(), QStringList(QString::number(idx)));
             kDebug(9042) << "List: Find" << theList << list->output() << list->elements() << idx;
         }   break;
-        case ListAst::INSERT: {
+        case ListAst::Insert: {
             int p=list->index().first();
             foreach(const QString& elem, list->elements())
             {
@@ -1542,7 +1542,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             }
             m_vars->insert(list->list(), theList);
         }   break;
-        case ListAst::REMOVE_ITEM:
+        case ListAst::RemoveItem:
             kDebug(9042) << "list remove item: " << theList << list->elements();
             foreach(const QString& elem, list->elements())
             {
@@ -1551,7 +1551,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
 
             m_vars->insert(list->list(), theList);
             break;
-        case ListAst::REMOVE_AT: {
+        case ListAst::RemoveAt: {
             QList<int> indices=list->index();
             qSort(indices);
             QList<int>::const_iterator it=indices.constEnd();
@@ -1563,11 +1563,11 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             }
             m_vars->insert(list->list(), theList);
         }   break;
-        case ListAst::SORT:
+        case ListAst::Sort:
             qSort(theList);
             m_vars->insert(list->list(), theList);
             break;
-        case ListAst::REVERSE: {
+        case ListAst::Reverse: {
             QStringList reversed;
             foreach(const QString& elem, theList)
                 reversed.prepend(elem);
@@ -1639,7 +1639,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             QString totalInput = sast->input().join(QString());
             switch(sast->cmdType())
             {
-                case StringAst::MATCH:
+                case StringAst::Match:
                 {
                     int match=rx.indexIn(totalInput);
                     if(match>=0) {
@@ -1648,7 +1648,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     }
                     break;
                 }
-                case StringAst::MATCHALL:
+                case StringAst::MatchAll:
                 {
                     int pos = 0;
                     while( (pos = rx.indexIn( totalInput, pos ) ) != -1 )
@@ -1658,7 +1658,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     }
                     break;
                 }
-                case StringAst::REGEX_REPLACE:
+                case StringAst::RegexReplace:
                 {
                     foreach(const QString& in, sast->input())
                     {
@@ -1684,7 +1684,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), res);
         }
             break;
-        case StringAst::REPLACE: {
+        case StringAst::Replace: {
             QStringList out;
             foreach(const QString& _in, sast->input())
             {
@@ -1695,19 +1695,19 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             kDebug(9042) << "string REPLACE" << sast->input() << "=>" << out;
             m_vars->insert(sast->outputVariable(), out);
         }   break;
-        case StringAst::COMPARE:
+        case StringAst::Compare:
         {
             QString res;
             switch(sast->cmdType()){
-                case StringAst::EQUAL:
-                case StringAst::NOTEQUAL:
+                case StringAst::Equal:
+                case StringAst::NotEqual:
                     if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
                         res = "TRUE";
                     else
                         res = "FALSE";
                     break;
-                case StringAst::LESS:
-                case StringAst::GREATER:
+                case StringAst::Less:
+                case StringAst::Greater:
                     if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
                         res = "TRUE";
                     else
@@ -1719,7 +1719,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }
             break;
-        case StringAst::ASCII: {
+        case StringAst::Ascii: {
             QString res;
             foreach(const QString& ascii, sast->input())
             {
@@ -1729,29 +1729,29 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
 
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
-        case StringAst::CONFIGURE:
+        case StringAst::Configure:
             //This is not up to the cmake support
             kDebug(9032) << "warning! String configure is not supported!" << sast->content()[sast->line()].writeBack();
             break;
-        case StringAst::TOUPPER:
+        case StringAst::ToUpper:
             m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toUpper()));
             break;
-        case StringAst::TOLOWER:
+        case StringAst::ToLower:
             m_vars->insert(sast->outputVariable(), QStringList(sast->input()[0].toLower()));
             break;
-        case StringAst::LENGTH:
+        case StringAst::Length:
             m_vars->insert(sast->outputVariable(), QStringList(QString::number(sast->input()[0].count())));
             break;
-        case StringAst::SUBSTRING:
+        case StringAst::Substring:
         {
             QString res=sast->input()[0];
             res=res.mid(sast->begin(), sast->length());
             m_vars->insert(sast->outputVariable(), QStringList(res));
         }   break;
-        case StringAst::STRIP:
+        case StringAst::Strip:
             m_vars->insert(sast->outputVariable(), QStringList(CMakeFunctionArgument::unescapeValue( sast->string() )));
             break;
-        case StringAst::RANDOM: {
+        case StringAst::Random: {
             QString alphabet=sast->string(), result;
             for(int i=0; i<sast->length(); i++)
             {
@@ -1771,17 +1771,17 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
     QStringList output;
     switch(past->type())
     {
-        case GetCMakePropertyAst::VARIABLES:
+        case GetCMakePropertyAst::Variables:
             kDebug(9042) << "get cmake prop: variables:" << m_vars->size();
             output = m_vars->keys();
             break;
-        case GetCMakePropertyAst::CACHE_VARIABLES:
+        case GetCMakePropertyAst::CacheCariables:
             output = m_cache->keys();
             break;
-        case GetCMakePropertyAst::COMMANDS:      //FIXME: We do not have commands yet
+        case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands yet
             output = QStringList();
             break;
-        case GetCMakePropertyAst::MACROS:
+        case GetCMakePropertyAst::Macros:
             output = m_macros->keys();
             break;
     }
@@ -1881,8 +1881,8 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
     kDebug() << "setprops" << setp->type() << setp->name() << setp->values();
-    if(setp->type()==GLOBAL)
-        m_props[GLOBAL][QString()][setp->name()]=setp->values();
+    if(setp->type()==Global)
+        m_props[Global][QString()][setp->name()]=setp->values();
     else
     {
         CategoryType& cm=m_props[setp->type()];
@@ -1897,7 +1897,7 @@ int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
     kDebug() << "getprops";
     QStringList retv;
     QString catn;
-    if(getp->type()!=GLOBAL)
+    if(getp->type()!=Global)
     {
         catn=getp->typeName();
     }
@@ -1919,7 +1919,7 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
         dir=u.path();
     }
     
-    retv=m_props[DIRECTORY][dir][getdp->propName()];
+    retv=m_props[Directory][dir][getdp->propName()];
     m_vars->insert(getdp->outputVariable(), retv);
     
     return 1;
