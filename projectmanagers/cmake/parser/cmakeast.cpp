@@ -3282,12 +3282,12 @@ bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             }
             
             if(arg.value=="LENGTH")
-                s = State::Length;
+                s = Length;
             else if(arg.value=="ALPHABET")
-                s = State::Alphabet;
+                s = Alphabet;
             else
             {
-                s=State::None;
+                s=None;
                 if(!m_outputVariable.isEmpty())
                 {
                     return false;
@@ -3936,11 +3936,11 @@ bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         return false;
     
     QString propName=func.arguments.first().value;
-    if(propName=="GLOBAL") m_type=Global;
-    else if(propName=="DIRECTORY") m_type=Directory;
-    else if(propName=="TARGET") m_type=Target;
-    else if(propName=="SOURCE") m_type=Source;
-    else if(propName=="TEST") m_type=Test;
+    if(propName=="GLOBAL") m_type=GlobalProperty;
+    else if(propName=="DIRECTORY") m_type=DirectoryProperty;
+    else if(propName=="TARGET") m_type=TargetProperty;
+    else if(propName=="SOURCE") m_type=SourceProperty;
+    else if(propName=="TEST") m_type=TestProperty;
     else
         return false;
     
@@ -3990,12 +3990,12 @@ bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     
     PropertyType t;
     QString propName=it->value;
-    if(propName=="GLOBAL") t=Global;
-    else if(propName=="DIRECTORY") t=Directory;
-    else if(propName=="TARGET") t=Target;
-    else if(propName=="SOURCE") t=Source;
-    else if(propName=="TEST") t=Test;
-    else if(propName=="VARIABLE") t=Variable;
+    if(propName=="GLOBAL") t=GlobalProperty;
+    else if(propName=="DIRECTORY") t=DirectoryProperty;
+    else if(propName=="TARGET") t=TargetProperty;
+    else if(propName=="SOURCE") t=SourceProperty;
+    else if(propName=="TEST") t=TestProperty;
+    else if(propName=="VARIABLE") t=VariableProperty;
     else
         return false;
     ++it;

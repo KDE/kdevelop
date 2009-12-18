@@ -512,8 +512,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             {
                 QStringList files=t.files;
                 QString outputName=t.name;
-                if(data.properties[TARGET].contains(t.name) && data.properties[TARGET][t.name].contains("OUTPUT_NAME"))
-                    outputName=data.properties[TARGET][t.name]["OUTPUT_NAME"].first();
+                if(data.properties[TargetProperty].contains(t.name) && data.properties[TargetProperty][t.name].contains("OUTPUT_NAME"))
+                    outputName=data.properties[TargetProperty][t.name]["OUTPUT_NAME"].first();
                 
                 QString path;
                 switch(t.type)

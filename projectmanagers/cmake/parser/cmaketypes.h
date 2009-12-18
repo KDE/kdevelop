@@ -49,7 +49,7 @@ struct Target
     QString name;
 };
 
-enum PropertyType { Global, Directory, Target, Source, Test, Variable };
+enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
 typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
 typedef QMap<PropertyType, CategoryType > CMakeProperties;
 

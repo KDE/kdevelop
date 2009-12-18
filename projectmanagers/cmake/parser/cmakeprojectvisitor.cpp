@@ -275,7 +275,7 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
     {
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
-            m_props[Target][tname][t.first] += t.second;
+            m_props[TargetProperty][tname][t.first] += t.second;
         }
     }
     return 1;
@@ -284,16 +284,16 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
     kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
-    if(m_props[Target].contains(prop->target()) && !m_props[Target][prop->target()].contains(prop->property())) {
-        if(prop->property().startsWith("LOCATION_") && m_props[Target][prop->target()].contains("IMPORTED_"+prop->property()))
-            m_props[Target][prop->target()][prop->property()]=m_props[Target][prop->target()]["IMPORTED_"+prop->property()];
+    if(m_props[TargetProperty].contains(prop->target()) && !m_props[TargetProperty][prop->target()].contains(prop->property())) {
+        if(prop->property().startsWith("LOCATION_") && m_props[TargetProperty][prop->target()].contains("IMPORTED_"+prop->property()))
+            m_props[TargetProperty][prop->target()][prop->property()]=m_props[TargetProperty][prop->target()]["IMPORTED_"+prop->property()];
             
 //         kDebug(9032) << "unexistent property" << prop->property() << "on" << prop->target();
     }
-//     kDebug(9042) << "current properties" << m_props[Target][prop->target()].keys();
-//     kDebug(9042) << "goooooot" << m_props[Target][prop->target()][prop->property()];
+//     kDebug(9042) << "current properties" << m_props[TargetProperty][prop->target()].keys();
+//     kDebug(9042) << "goooooot" << m_props[TargetProperty][prop->target()][prop->property()];
     
-    m_vars->insert(prop->variableName(), m_props[Target][prop->target()][prop->property()]);
+    m_vars->insert(prop->variableName(), m_props[TargetProperty][prop->target()][prop->property()]);
     return 1;
 }
 
@@ -1632,7 +1632,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
     kDebug(9042) << "String to" /*<< sast->input()*/ << sast->outputVariable();
     switch(sast->type())
     {
-        case StringAst::REGEX:
+        case StringAst::Regex:
         {
             QStringList res;
             QRegExp rx(sast->regex());
@@ -1701,14 +1701,14 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
             switch(sast->cmdType()){
                 case StringAst::Equal:
                 case StringAst::NotEqual:
-                    if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::EQUAL)
+                    if(sast->input()[0]==sast->input()[1] && sast->cmdType()==StringAst::Equal)
                         res = "TRUE";
                     else
                         res = "FALSE";
                     break;
                 case StringAst::Less:
                 case StringAst::Greater:
-                    if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::LESS)
+                    if(sast->input()[0]<sast->input()[1] && sast->cmdType()==StringAst::Less)
                         res = "TRUE";
                     else
                         res = "FALSE";
@@ -1775,7 +1775,7 @@ int CMakeProjectVisitor::visit(const GetCMakePropertyAst *past)
             kDebug(9042) << "get cmake prop: variables:" << m_vars->size();
             output = m_vars->keys();
             break;
-        case GetCMakePropertyAst::CacheCariables:
+        case GetCMakePropertyAst::CacheVariables:
             output = m_cache->keys();
             break;
         case GetCMakePropertyAst::Commands:      //FIXME: We do not have commands yet
@@ -1881,8 +1881,8 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 int CMakeProjectVisitor::visit(const SetPropertyAst* setp)
 {
     kDebug() << "setprops" << setp->type() << setp->name() << setp->values();
-    if(setp->type()==Global)
-        m_props[Global][QString()][setp->name()]=setp->values();
+    if(setp->type()==GlobalProperty)
+        m_props[GlobalProperty][QString()][setp->name()]=setp->values();
     else
     {
         CategoryType& cm=m_props[setp->type()];
@@ -1897,7 +1897,7 @@ int CMakeProjectVisitor::visit(const GetPropertyAst* getp)
     kDebug() << "getprops";
     QStringList retv;
     QString catn;
-    if(getp->type()!=Global)
+    if(getp->type()!=GlobalProperty)
     {
         catn=getp->typeName();
     }
@@ -1919,7 +1919,7 @@ int CMakeProjectVisitor::visit(const GetDirPropertyAst* getdp)
         dir=u.path();
     }
     
-    retv=m_props[Directory][dir][getdp->propName()];
+    retv=m_props[DirectoryProperty][dir][getdp->propName()];
     m_vars->insert(getdp->outputVariable(), retv);
     
     return 1;
