@@ -31,6 +31,10 @@
 #include "cmakeastvisitor.h"
 #include "cmaketypes.h"
 
+#ifdef ABSOLUTE
+#undef ABSOLUTE
+#endif
+
 class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. */
 {
     public:

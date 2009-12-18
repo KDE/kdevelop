@@ -33,6 +33,10 @@
 #include "cmakelistsparser.h"
 #include "cmakeparserutils.h"
 
+#ifdef ABSOLUTE
+#undef ABSOLUTE
+#endif
+
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
