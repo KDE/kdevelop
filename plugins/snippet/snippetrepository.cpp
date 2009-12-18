@@ -77,7 +77,7 @@ void SnippetRepository::slotSyncRepository()
 
         if (info.isDir()) {
             // ... and create either a new repository ...
-            SnippetStore::instance()->createNewRepository( this, file, location_+QDir::separator()+file );
+            SnippetStore::self()->createNewRepository( this, file, location_+QDir::separator()+file );
         } else {
             // ... or a new snippet
             new Snippet(file, this);
@@ -160,9 +160,15 @@ void SnippetRepository::removeDirectory()
         }
     }
     if (!dir.exists() || dir.rmdir( getLocation() )) {
-        if (index().isValid() && QStandardItem::parent()) {
-            // in case this item is still a member of a model, remove itself
-            QStandardItem::parent()->removeRows( row(), 1 );
+        kDebug() << getLocation() << text() << index() << QStandardItem::parent();
+        if (index().isValid()) {
+            if ( QStandardItem::parent() ) {
+                // remove non-roots from model
+                QStandardItem::parent()->removeRows( row(), 1 );
+            } else {
+                // remove root items (i.e. the repository item) from model
+                SnippetStore::self()->remove( this );
+            }
         }
     } else {
         KMessageBox::error(

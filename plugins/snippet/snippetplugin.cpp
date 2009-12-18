@@ -25,7 +25,6 @@
 
 #include "snippetview.h"
 #include "snippetcompletionmodel.h"
-#include <interfaces/isession.h>
 #include "snippetstore.h"
 
 #include "snippet.h"
@@ -60,14 +59,15 @@ private:
 
 
 SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
-  : KDevelop::IPlugin(SnippetFactory::componentData(), parent), m_model( new SnippetCompletionModel )
+  : KDevelop::IPlugin(SnippetFactory::componentData(), parent)
 {
+    SnippetStore::init(this);
+
+    m_model = new SnippetCompletionModel;
+
     m_factory = new SnippetViewFactory(this);
     core()->uiController()->addToolView(i18n("Snippets"), m_factory);
     connect( core()->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
-
-    // load the repositories from the last run
-    SnippetStore::instance()->load(core()->activeSession()->config()->group("Snippets"));
 }
 
 SnippetPlugin::~SnippetPlugin()
@@ -76,10 +76,8 @@ SnippetPlugin::~SnippetPlugin()
 
 void SnippetPlugin::unload()
 {
-    // Save the currently configured repositories
-    SnippetStore::instance()->save(core()->activeSession()->config()->group("Snippets"));
-
     core()->uiController()->removeToolView(m_factory);
+    delete SnippetStore::self();
 }
 
 void SnippetPlugin::insertSnippet(Snippet* snippet)

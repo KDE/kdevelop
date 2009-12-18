@@ -16,7 +16,7 @@
 #include <kconfiggroup.h>
 
 class SnippetRepository;
-
+class SnippetPlugin;
 /**
  * This class is implemented as singelton.
  * It holds the toplevel repositories and acts as a model for the snippet tree.
@@ -29,10 +29,13 @@ class SnippetStore : public QStandardItemModel
 
 public:
     /**
-     * Retuns the SnippetStore.
-     * It will be created if it does not yet exist.
+     * Initialize the SnippetStore.
      */
-    static SnippetStore* instance();
+    static void init(SnippetPlugin* plugin);
+    /**
+     * Retuns the SnippetStore. Call init() to set it up first.
+     */
+    static SnippetStore* self();
 
     virtual ~SnippetStore();
 
@@ -44,8 +47,7 @@ public:
      */
     void createNewRepository(SnippetRepository* parent, const QString& name, const QString& dir);
 
-    void load(KConfigGroup config);
-    void save(KConfigGroup config);
+    void load();
 
 public slots:
     /**
@@ -54,11 +56,15 @@ public slots:
     void remove( SnippetRepository* repo );
 
 private:
-    SnippetStore();
+    SnippetStore(SnippetPlugin* plugin);
+
     virtual Qt::ItemFlags flags (const QModelIndex & index) const;
+
+    KConfigGroup getConfig();
 
     static SnippetStore* self_;
     QList<SnippetRepository*> repos_;
+    SnippetPlugin* plugin_;
 };
 
 #endif

@@ -17,6 +17,10 @@
 #include <kinputdialog.h>
 #include <kdialog.h>
 #include <kurlrequester.h>
+#include <KMessageBox>
+
+#include <interfaces/icore.h>
+#include <interfaces/isession.h>
 
 #include "ui_addrepository.h"
 #include "snippet.h"
@@ -26,7 +30,6 @@
 #include "editsnippet.h"
 #include "snippetfilterproxymodel.h"
 #include "moverepository.h"
-#include <KMessageBox>
 
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
  : QWidget(parent), Ui::SnippetViewBase(), plugin_(plugin)
@@ -50,7 +53,7 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
     proxy_ = new SnippetFilterProxyModel(this);
 
-    proxy_->setSourceModel( SnippetStore::instance() );
+    proxy_->setSourceModel( SnippetStore::self() );
 
     snippetTree->setModel( proxy_ );
 //     snippetTree->setModel( SnippetStore::instance() );
@@ -61,14 +64,14 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
 SnippetView::~SnippetView()
 {
-    delete SnippetStore::instance();
+    delete SnippetStore::self();
 }
 
 QStandardItem* SnippetView::currentItem()
 {
     QModelIndex index = snippetTree->currentIndex();
     index = proxy_->mapToSource(index);
-    return SnippetStore::instance()->itemFromIndex( index );
+    return SnippetStore::self()->itemFromIndex( index );
 }
 
 void SnippetView::slotAddRepo()
@@ -81,7 +84,7 @@ void SnippetView::slotAddRepo()
     addrepoui.setupUi(dlg.mainWidget());
     addrepoui.location->setMode(KFile::Directory | KFile::LocalOnly);
     if (dlg.exec() == QDialog::Accepted) {
-        SnippetStore::instance()->createNewRepository(
+        SnippetStore::self()->createNewRepository(
                 NULL, // create a new toplevel repository
                 addrepoui.name->text(),
                 addrepoui.location->url().toLocalFile());
@@ -90,7 +93,7 @@ void SnippetView::slotAddRepo()
 
 void SnippetView::slotSnippetClicked (const QModelIndex & index)
 {
-    QStandardItem* item = SnippetStore::instance()->itemFromIndex( proxy_->mapToSource(index) );
+    QStandardItem* item = SnippetStore::self()->itemFromIndex( proxy_->mapToSource(index) );
     if (!item)
         return;
 
@@ -105,7 +108,7 @@ void SnippetView::contextMenu (const QPoint& pos)
 {
     QModelIndex index = snippetTree->indexAt( pos );
     index = proxy_->mapToSource(index);
-    QStandardItem* item = SnippetStore::instance()->itemFromIndex( index );
+    QStandardItem* item = SnippetStore::self()->itemFromIndex( index );
     if (!item) {
         // User clicked into an empty place of the tree
         KMenu menu(this);
@@ -230,7 +233,7 @@ void SnippetView::slotHideRepository()
     if (!repo)
         return;
 
-    SnippetStore::instance()->remove( repo );
+    SnippetStore::self()->remove( repo );
 }
 
 void SnippetView::slotMoveRepository()

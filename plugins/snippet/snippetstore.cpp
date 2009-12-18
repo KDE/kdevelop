@@ -12,31 +12,40 @@
 
 
 #include "snippetrepository.h"
+#include "snippetplugin.h"
 
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <QApplication>
+#include <interfaces/icore.h>
+#include <interfaces/isession.h>
+#include <KDebug>
 
-SnippetStore* SnippetStore::self_ = NULL;
+SnippetStore* SnippetStore::self_ = 0;
 
 
-SnippetStore::SnippetStore()
+SnippetStore::SnippetStore(SnippetPlugin* plugin)
+    : plugin_(plugin)
 {
+    self_ = this;
+    load();
 }
 
 SnippetStore::~SnippetStore()
 {
     invisibleRootItem()->removeRows( 0, invisibleRootItem()->rowCount() );
     repos_.clear();
-    self_ = NULL;
+    self_ = 0;
 }
 
-SnippetStore* SnippetStore::instance()
+void SnippetStore::init(SnippetPlugin* plugin)
 {
-    if (!self_) {
-        self_ = new SnippetStore();
-    }
+    Q_ASSERT(!SnippetStore::self());
+    new SnippetStore(plugin);
+}
 
+SnippetStore* SnippetStore::self()
+{
     return self_;
 }
 
@@ -70,6 +79,9 @@ void SnippetStore::createNewRepository(SnippetRepository* parent, const QString&
     } else {
         repos_.append( item );
         appendRow( item );
+        KConfigGroup config = getConfig().group("repos");
+        config.writeEntry(item->text(), item->getLocation());
+        config.sync();
     }
 }
 
@@ -81,36 +93,37 @@ Qt::ItemFlags SnippetStore::flags(const QModelIndex & index) const
     return flags;
 }
 
+KConfigGroup SnippetStore::getConfig()
+{
+    return plugin_->core()->activeSession()->config()->group("Snippets");
+}
+
 void SnippetStore::remove(SnippetRepository* repo)
 {
+    kDebug() << "removing repo" << repo->text() << repo->getLocation();
     int idx = repos_.indexOf( repo );
 
     if (idx >= 0) {
+        KConfigGroup config = getConfig().group("repos");
+        kDebug() << config.keyList();
+        config.deleteEntry(repo->text());
+        config.sync();
+        kDebug() << "should be removed";
+        repos_.removeAt( idx );
         // Only remove the given item if it's really a tolevel repo
         invisibleRootItem()->removeRows( repo->row(), 1 );
-        repos_.removeAt( idx );
     }
 }
 
-void SnippetStore::load(KConfigGroup config)
+void SnippetStore::load()
 {
+    KConfigGroup config = getConfig();
     if (config.hasGroup("repos")) {
         KConfigGroup repoGroup = config.group("repos");
         QStringList keys = repoGroup.keyList();
         foreach(QString key, keys) {
             createNewRepository(0, key, repoGroup.readEntry(key));
         }
-    }
-}
-
-void SnippetStore::save(KConfigGroup config)
-{
-    // remove all old repos that might have changed
-    config.group("repos").deleteGroup();
-    config.sync();
-
-    foreach(SnippetRepository* repo, repos_) {
-        config.group("repos").writeEntry(repo->text(), repo->getLocation());
     }
 }
 

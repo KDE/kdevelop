@@ -16,7 +16,7 @@
 SnippetFilterProxyModel::SnippetFilterProxyModel(QObject *parent)
  : QSortFilterProxyModel(parent)
 {
-    connect(SnippetStore::instance(),
+    connect(SnippetStore::self(),
             SIGNAL( dataChanged(const QModelIndex&, const QModelIndex&) ),
             this,
             SLOT( dataChanged(const QModelIndex&, const QModelIndex&) ));
@@ -42,7 +42,7 @@ bool SnippetFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex 
 
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 
-    QStandardItem* item = SnippetStore::instance()->itemFromIndex( index );
+    QStandardItem* item = SnippetStore::self()->itemFromIndex( index );
     if (!item)
         return false;
 

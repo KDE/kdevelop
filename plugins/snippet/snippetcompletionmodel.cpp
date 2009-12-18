@@ -61,7 +61,7 @@ void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KT
 void SnippetCompletionModel::initData()
 {
     m_snippets.clear();
-    SnippetStore* store = SnippetStore::instance();
+    SnippetStore* store = SnippetStore::self();
     for(int i = 0; i < store->rowCount(); i++ )
     {
         SnippetRepository* repo = dynamic_cast<SnippetRepository*>( store->item( i, 0 ) );
