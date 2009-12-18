@@ -24,8 +24,6 @@
 // #include <ktexteditor/editorchooser.h>
 #include <ktexteditor/view.h>
 
-#include <shell/partcontroller.h>
-
 #include <kparts/part.h>
 
 #include <KTabWidget>
