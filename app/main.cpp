@@ -140,14 +140,14 @@ int main( int argc, char *argv[] )
         
         QStringList args;
         
-        args << KCmdLineArgs::appName() << session;
+        args << QApplication::applicationFilePath() << session;
         
         //Forward all arguments, the session will be skipped automatically as KDEV_SESSION will be set
         for(uint a = 1; a < argc; ++a)
             args << QString(argv[a]);
         
         //@todo Eventually show a session-picking dialog
-        KProcess::startDetached("kdev_starter", args);
+        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", args);
         return 0;
     }
     
