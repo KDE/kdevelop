@@ -69,6 +69,7 @@ All snippets in this repository will be saved under that location.</string>
  </customwidgets>
  <tabstops>
   <tabstop>name</tabstop>
+  <tabstop>location</tabstop>
  </tabstops>
  <resources/>
  <connections/>

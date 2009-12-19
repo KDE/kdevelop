@@ -27,6 +27,8 @@ EditSnippet::EditSnippet(Snippet *s, QWidget* parent)
 
     keywordList->clear();
     keywordList->insertStringList( s->getKeywordList() );
+
+    snippetName->setFocus();
 }
 
 EditSnippet::~EditSnippet()
