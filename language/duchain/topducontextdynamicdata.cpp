@@ -627,7 +627,7 @@ Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const {
 
   if(index < (0x0fffffff/2)) {
     if(index == 0 || index > uint(m_fastDeclarationsSize)) {
-      kWarning() << "index out of bounds:" << index << "count:" << m_fastDeclarationsSize;
+      kWarning() << "declaration index out of bounds:" << index << "count:" << m_fastDeclarationsSize;
       return 0;
     }
     else {
@@ -721,7 +721,7 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const {
     if(index == 0)
       return m_topContext;
     if(index > uint(m_fastContextsSize)) {
-      Q_ASSERT(0);
+      kWarning() << "declaration index out of bounds:" << index << "count:" << m_fastDeclarationsSize;
       return 0;
     } else {
       uint realIndex = index-1;
