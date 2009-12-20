@@ -123,12 +123,6 @@ private:
     static bool readCMakeFunction( cmListFileLexer*,
                                     CMakeFunctionDesc&,
                                     const QString& fileName);
-                                    
-//     static bool parseCMakeFunction( cmListFileLexer*,
-//                                     CMakeFunctionDesc&,
-//                                     const QString& fileName, CMakeAst* parent);
-// // public:
-//     static bool parseCMakeFile( CMakeAst* root, const QString& fileName );
 
 };
 

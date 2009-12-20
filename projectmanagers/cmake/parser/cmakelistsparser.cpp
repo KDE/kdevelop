@@ -29,45 +29,39 @@
 
 QMap<QChar, QChar> whatToScape()
 {
+    //Only add those where we're not scaping the next character
     QMap<QChar, QChar> ret;
     ret['n']='\n';
     ret['r']='\r';
     ret['t']='\t';
-    ret['\\']='\\';
     return ret;
 }
 
 QMap<QChar, QChar> CMakeFunctionArgument::scapings=whatToScape();
 
+static QChar scapingChar='\\';
 QString CMakeFunctionArgument::unescapeValue(const QString& value)
 {
-    QString newValue;
-    bool escape=false;
-
-    int firstScape=value.indexOf('\\');
+    int firstScape=value.indexOf(scapingChar);
     if (firstScape<0)
     {
         return value;
     }
     
-    newValue=value.mid(0, firstScape);
-
-    for(int i=firstScape; i<value.size(); i++)
+    QString newValue;
+    int last=0;
+    for(int i=firstScape; i<value.size() && i>=0; i=value.indexOf(scapingChar, i+2))
     {
-        if(!escape && value[i]=='\\') 
-        {
-            escape=true;
-        }
-        else if(escape && scapings.contains(value[i])) {
-            newValue += scapings[value[i]];
-            escape = false;
-        }
+        newValue+=value.mid(last, i-last);
+        QChar current=value[i+1];
+        if(scapings.contains(current))
+            newValue += scapings[current];
         else
-        {
-            newValue += value[i];
-            escape = false;
-        }
+            newValue += current;
+
+        last=i+2;
     }
+    newValue+=value.mid(last, value.size());
 //     qDebug() << "escapiiiiiiiiing" << value << newValue;
     return newValue;
 }
@@ -76,7 +70,7 @@ void CMakeFunctionDesc::addArguments( const QStringList& args )
 {
     if(args.isEmpty())
     {
-        CMakeFunctionArgument cmakeArg(""); //FIXME why ""?
+        CMakeFunctionArgument cmakeArg;
         arguments.append( cmakeArg );
     }
     else

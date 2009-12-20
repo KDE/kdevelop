@@ -321,6 +321,12 @@ void CMakeProjectVisitorTest::testRun_data()
                             "string(REGEX REPLACE \"t+\" \"b\" str ${str})\n"
                             << cacheValues << results;
                             
+    results.clear();
+    results << StringPair("str", "potatoe\"\npotatoe");
+    QTest::newRow("scaping") <<
+                            "set(str potatoe\\\"\\npotatoe)\n"
+                            << cacheValues << results;
+                            
     //This test should probably be linux-only
     results.clear();
     results << StringPair("good", "TRUE");
@@ -417,7 +423,7 @@ void CMakeProjectVisitorTest::testFinder_data()
     QTest::newRow("KDE4") << "KDE4";
 }
 
-void CMakeProjectVisitorTest::init()
+void CMakeProjectVisitorTest::testFinder_init()
 {
     QPair<VariableMap, QStringList> initials=CMakeParserUtils::initialVariables();
     modulePath += initials.first.value("CMAKE_MODULE_PATH");
@@ -430,6 +436,7 @@ void CMakeProjectVisitorTest::init()
 void CMakeProjectVisitorTest::testFinder()
 {
     QFETCH(QString, module);
+    testFinder_init();
     
     KDevelop::ReferencedTopDUContext fakeContext=
                     new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));

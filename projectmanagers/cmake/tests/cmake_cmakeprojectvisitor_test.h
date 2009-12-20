@@ -35,7 +35,6 @@ public:
     CMakeProjectVisitorTest();
 
 private slots:
-    void init();
     
     void testVariables();
     void testVariables_data();
@@ -43,6 +42,7 @@ private slots:
     void testRun();
     void testRun_data();
     
+    void testFinder_init();
     void testFinder();
     void testFinder_data();
 private:
