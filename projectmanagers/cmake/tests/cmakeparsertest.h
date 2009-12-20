@@ -49,10 +49,6 @@ private slots:
     //void testAstCreation();
 
     // void testWhitespaceHandling();
-
-private:
-    CMakeAst* fakeRoot; //our fake root
-
 };
 
 #endif

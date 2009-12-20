@@ -115,10 +115,6 @@ CMAKE_REGISTER_AST( WhileAst, while)
 CMAKE_REGISTER_AST( WriteFileAst, write_file)
 
 
-void CMakeAst::writeBack(QString& ) const
-{
-}
-
 enum Stage {NAMES, PATHS, PATH_SUFFIXES, HINTS};
 
 CustomCommandAst::CustomCommandAst()
@@ -130,10 +126,6 @@ CustomCommandAst::CustomCommandAst()
 }
 
 CustomCommandAst::~CustomCommandAst()
-{
-}
-
-void CustomCommandAst::writeBack( QString& /*buffer */ ) const
 {
 }
 
@@ -270,10 +262,6 @@ CustomTargetAst::~CustomTargetAst()
 {
 }
 
-void CustomTargetAst::writeBack( QString& ) const
-{
-}
-
 bool CustomTargetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != QLatin1String( "add_custom_target" ) )
@@ -384,10 +372,6 @@ AddDefinitionsAst::~AddDefinitionsAst()
 {
 }
 
-void AddDefinitionsAst::writeBack( QString& ) const
-{
-}
-
 bool AddDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "add_definitions" )
@@ -411,10 +395,6 @@ AddDependenciesAst::AddDependenciesAst()
 }
 
 AddDependenciesAst::~AddDependenciesAst()
-{
-}
-
-void AddDependenciesAst::writeBack( QString& ) const
 {
 }
 
@@ -448,10 +428,6 @@ AddExecutableAst::AddExecutableAst()
 }
 
 AddExecutableAst::~AddExecutableAst()
-{
-}
-
-void AddExecutableAst::writeBack( QString& ) const
 {
 }
 
@@ -499,10 +475,6 @@ AddLibraryAst::AddLibraryAst()
 }
 
 AddLibraryAst::~AddLibraryAst()
-{
-}
-
-void AddLibraryAst::writeBack( QString& ) const
 {
 }
 
@@ -573,10 +545,6 @@ AddSubdirectoryAst::~AddSubdirectoryAst()
 {
 }
 
-void AddSubdirectoryAst::writeBack( QString& ) const
-{
-}
-
 bool AddSubdirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "add_subdirectory" )
@@ -608,10 +576,6 @@ AddTestAst::~AddTestAst()
 {
 }
 
-void AddTestAst::writeBack( QString& ) const
-{
-}
-
 bool AddTestAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "add_test" )
@@ -637,10 +601,6 @@ AuxSourceDirectoryAst::~AuxSourceDirectoryAst()
 {
 }
 
-void AuxSourceDirectoryAst::writeBack( QString& ) const
-{
-}
-
 bool AuxSourceDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "aux_source_directory" )
@@ -660,10 +620,6 @@ BuildCommandAst::BuildCommandAst()
 }
 
 BuildCommandAst::~BuildCommandAst()
-{
-}
-
-void BuildCommandAst::writeBack( QString& ) const
 {
 }
 
@@ -689,10 +645,6 @@ BuildNameAst::~BuildNameAst()
 {
 }
 
-void BuildNameAst::writeBack( QString& ) const
-{
-}
-
 bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "build_name" )
@@ -711,10 +663,6 @@ CMakeMinimumRequiredAst::CMakeMinimumRequiredAst()
 }
 
 CMakeMinimumRequiredAst::~CMakeMinimumRequiredAst()
-{
-}
-
-void CMakeMinimumRequiredAst::writeBack( QString& ) const
 {
 }
 
@@ -748,9 +696,6 @@ ConfigureFileAst::~ConfigureFileAst()
 {
 }
 
-void ConfigureFileAst::writeBack( QString& ) const
-{
-}
 
 bool ConfigureFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -790,9 +735,6 @@ CreateTestSourcelistAst::~CreateTestSourcelistAst()
 {
 }
 
-void CreateTestSourcelistAst::writeBack( QString& ) const
-{
-}
 
 bool CreateTestSourcelistAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -840,9 +782,6 @@ EnableLanguageAst::~EnableLanguageAst()
 {
 }
 
-void EnableLanguageAst::writeBack( QString& ) const
-{
-}
 
 bool EnableLanguageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -867,9 +806,6 @@ EnableTestingAst::~EnableTestingAst()
 {
 }
 
-void EnableTestingAst::writeBack( QString& ) const
-{
-}
 
 bool EnableTestingAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -884,9 +820,6 @@ ExecProgramAst::~ExecProgramAst()
 {
 }
 
-void ExecProgramAst::writeBack( QString& ) const
-{
-}
 
 bool ExecProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -943,9 +876,6 @@ ExecuteProcessAst::~ExecuteProcessAst()
 {
 }
 
-void ExecuteProcessAst::writeBack( QString& ) const
-{
-}
 
 bool ExecuteProcessAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1058,9 +988,6 @@ ExportLibraryDepsAst::~ExportLibraryDepsAst()
 {
 }
 
-void ExportLibraryDepsAst::writeBack( QString& ) const
-{
-}
 
 bool ExportLibraryDepsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1088,9 +1015,6 @@ FileAst::~FileAst()
 {
 }
 
-void FileAst::writeBack( QString& ) const
-{
-}
 
 bool FileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1288,9 +1212,6 @@ FindFileAst::~FindFileAst()
 {
 }
 
-void FindFileAst::writeBack( QString& ) const
-{
-}
 
 bool FindFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1357,9 +1278,6 @@ MacroCallAst::~MacroCallAst()
 {
 }
 
-void MacroCallAst::writeBack( QString& ) const
-{
-}
 
 bool MacroCallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1383,9 +1301,6 @@ FindLibraryAst::~FindLibraryAst()
 {
 }
 
-void FindLibraryAst::writeBack( QString& ) const
-{
-}
 
 bool FindLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1453,9 +1368,6 @@ FindPackageAst::~FindPackageAst()
 {
 }
 
-void FindPackageAst::writeBack( QString& ) const
-{
-}
 
 bool FindPackageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1503,9 +1415,6 @@ FindPathAst::~FindPathAst()
 {
 }
 
-void FindPathAst::writeBack( QString& ) const
-{
-}
 
 bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1576,9 +1485,6 @@ FindProgramAst::~FindProgramAst()
 {
 }
 
-void FindProgramAst::writeBack( QString& ) const
-{
-}
 
 bool FindProgramAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1645,9 +1551,6 @@ FltkWrapUiAst::~FltkWrapUiAst()
 {
 }
 
-void FltkWrapUiAst::writeBack( QString& ) const
-{
-}
 
 bool FltkWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1663,9 +1566,6 @@ ForeachAst::~ForeachAst()
 {
 }
 
-void ForeachAst::writeBack( QString& ) const
-{
-}
 
 bool ForeachAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1711,9 +1611,6 @@ GetCMakePropertyAst::~GetCMakePropertyAst()
 {
 }
 
-void GetCMakePropertyAst::writeBack( QString& ) const
-{
-}
 
 bool GetCMakePropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1744,9 +1641,6 @@ GetDirPropertyAst::~GetDirPropertyAst()
 {
 }
 
-void GetDirPropertyAst::writeBack( QString& ) const
-{
-}
 
 bool GetDirPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1774,9 +1668,6 @@ GetFilenameComponentAst::~GetFilenameComponentAst()
 {
 }
 
-void GetFilenameComponentAst::writeBack( QString& ) const
-{
-}
 
 bool GetFilenameComponentAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1812,9 +1703,6 @@ GetSourceFilePropAst::~GetSourceFilePropAst()
 {
 }
 
-void GetSourceFilePropAst::writeBack( QString& ) const
-{
-}
 
 bool GetSourceFilePropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1835,9 +1723,6 @@ GetTargetPropAst::~GetTargetPropAst()
 {
 }
 
-void GetTargetPropAst::writeBack( QString& ) const
-{
-}
 
 bool GetTargetPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1858,9 +1743,6 @@ GetTestPropAst::~GetTestPropAst()
 {
 }
 
-void GetTestPropAst::writeBack( QString& ) const
-{
-}
 
 bool GetTestPropAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1879,11 +1761,6 @@ IfAst::IfAst()
 
 IfAst::~IfAst()
 {
-}
-
-void IfAst::writeBack( QString& s) const
-{
-    kDebug(9032)<< "if:" << s;
 }
 
 bool IfAst::parseFunctionInfo( const CMakeFunctionDesc& func )
@@ -1911,9 +1788,6 @@ IncludeAst::~IncludeAst()
 {
 }
 
-void IncludeAst::writeBack( QString& ) const
-{
-}
 
 bool IncludeAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -1951,9 +1825,6 @@ IncludeDirectoriesAst::~IncludeDirectoriesAst()
 {
 }
 
-void IncludeDirectoriesAst::writeBack( QString& ) const
-{
-}
 
 bool IncludeDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2004,9 +1875,6 @@ IncludeExternalMsProjectAst::~IncludeExternalMsProjectAst()
 {
 }
 
-void IncludeExternalMsProjectAst::writeBack( QString& ) const
-{
-}
 
 bool IncludeExternalMsProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2022,9 +1890,6 @@ IncludeRegularExpressionAst::~IncludeRegularExpressionAst()
 {
 }
 
-void IncludeRegularExpressionAst::writeBack( QString& ) const
-{
-}
 
 bool IncludeRegularExpressionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2044,9 +1909,6 @@ InstallAst::~InstallAst()
 {
 }
 
-void InstallAst::writeBack( QString& ) const
-{
-}
 
 bool InstallAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2062,9 +1924,6 @@ InstallFilesAst::~InstallFilesAst()
 {
 }
 
-void InstallFilesAst::writeBack( QString& ) const
-{
-}
 
 bool InstallFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2096,9 +1955,6 @@ InstallProgramsAst::~InstallProgramsAst()
 {
 }
 
-void InstallProgramsAst::writeBack( QString& ) const
-{
-}
 
 bool InstallProgramsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2131,9 +1987,6 @@ InstallTargetsAst::~InstallTargetsAst()
 {
 }
 
-void InstallTargetsAst::writeBack( QString& ) const
-{
-}
 
 bool InstallTargetsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2164,9 +2017,6 @@ LinkDirectoriesAst::~LinkDirectoriesAst()
 {
 }
 
-void LinkDirectoriesAst::writeBack( QString& ) const
-{
-}
 
 bool LinkDirectoriesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2186,9 +2036,6 @@ LinkLibrariesAst::~LinkLibrariesAst()
 {
 }
 
-void LinkLibrariesAst::writeBack( QString& ) const
-{
-}
 
 bool LinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2223,9 +2070,6 @@ ListAst::~ListAst()
 {
 }
 
-void ListAst::writeBack( QString& ) const
-{
-}
 
 bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2368,9 +2212,6 @@ LoadCacheAst::~LoadCacheAst()
 {
 }
 
-void LoadCacheAst::writeBack( QString& ) const
-{
-}
 
 bool LoadCacheAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2426,9 +2267,6 @@ LoadCommandAst::~LoadCommandAst()
 {
 }
 
-void LoadCommandAst::writeBack( QString& ) const
-{
-}
 
 bool LoadCommandAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2450,9 +2288,6 @@ MacroAst::~MacroAst()
 {
 }
 
-void MacroAst::writeBack( QString& ) const
-{
-}
 
 bool MacroAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2475,9 +2310,6 @@ FunctionAst::~FunctionAst()
 {
 }
 
-void FunctionAst::writeBack( QString& ) const
-{
-}
 
 bool FunctionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2500,9 +2332,6 @@ MakeDirectoryAst::~MakeDirectoryAst()
 {
 }
 
-void MakeDirectoryAst::writeBack( QString& ) const
-{
-}
 
 bool MakeDirectoryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2520,9 +2349,6 @@ MarkAsAdvancedAst::~MarkAsAdvancedAst()
 {
 }
 
-void MarkAsAdvancedAst::writeBack( QString& ) const
-{
-}
 
 
 bool MarkAsAdvancedAst::parseFunctionInfo( const CMakeFunctionDesc& func )
@@ -2559,9 +2385,6 @@ MathAst::~MathAst()
 {
 }
 
-void MathAst::writeBack( QString& ) const
-{
-}
 
 bool MathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2582,9 +2405,6 @@ MessageAst::~MessageAst()
 {
 }
 
-void MessageAst::writeBack( QString& ) const
-{
-}
 
 bool MessageAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2612,9 +2432,6 @@ OptionAst::~OptionAst()
 {
 }
 
-void OptionAst::writeBack( QString& ) const
-{
-}
 
 bool OptionAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2636,9 +2453,6 @@ OutputRequiredFilesAst::~OutputRequiredFilesAst()
 {
 }
 
-void OutputRequiredFilesAst::writeBack( QString& ) const
-{
-}
 
 bool OutputRequiredFilesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2657,9 +2471,6 @@ ProjectAst::~ProjectAst()
 {
 }
 
-void ProjectAst::writeBack( QString& ) const
-{
-}
 
 bool ProjectAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2696,9 +2507,6 @@ QtWrapCppAst::~QtWrapCppAst()
 {
 }
 
-void QtWrapCppAst::writeBack( QString& ) const
-{
-}
 
 bool QtWrapCppAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2714,9 +2522,6 @@ QtWrapUiAst::~QtWrapUiAst()
 {
 }
 
-void QtWrapUiAst::writeBack( QString& ) const
-{
-}
 
 bool QtWrapUiAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2732,9 +2537,6 @@ RemoveAst::~RemoveAst()
 {
 }
 
-void RemoveAst::writeBack( QString& ) const
-{
-}
 
 bool RemoveAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2759,9 +2561,6 @@ RemoveDefinitionsAst::~RemoveDefinitionsAst()
 {
 }
 
-void RemoveDefinitionsAst::writeBack( QString& ) const
-{
-}
 
 bool RemoveDefinitionsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2784,9 +2583,6 @@ SeparateArgumentsAst::~SeparateArgumentsAst()
 {
 }
 
-void SeparateArgumentsAst::writeBack( QString& ) const
-{
-}
 
 bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2807,9 +2603,6 @@ SetAst::~SetAst()
 {
 }
 
-void SetAst::writeBack( QString& ) const
-{
-}
 
 bool SetAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2865,9 +2658,6 @@ SetDirectoryPropsAst::~SetDirectoryPropsAst()
 {
 }
 
-void SetDirectoryPropsAst::writeBack( QString& ) const
-{
-}
 
 bool SetDirectoryPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2911,9 +2701,6 @@ SetSourceFilesPropsAst::~SetSourceFilesPropsAst()
 {
 }
 
-void SetSourceFilesPropsAst::writeBack( QString& ) const
-{
-}
 
 bool SetSourceFilesPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -2957,9 +2744,6 @@ SetTargetPropsAst::~SetTargetPropsAst()
 {
 }
 
-void SetTargetPropsAst::writeBack( QString& ) const
-{
-}
 
 bool SetTargetPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3003,9 +2787,6 @@ SetTestsPropsAst::~SetTestsPropsAst()
 {
 }
 
-void SetTestsPropsAst::writeBack( QString& ) const
-{
-}
 
 bool SetTestsPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3049,9 +2830,6 @@ SiteNameAst::~SiteNameAst()
 {
 }
 
-void SiteNameAst::writeBack( QString& ) const
-{
-}
 
 bool SiteNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3070,9 +2848,6 @@ SourceGroupAst::~SourceGroupAst()
 {
 }
 
-void SourceGroupAst::writeBack( QString& ) const
-{
-}
 
 bool SourceGroupAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3112,9 +2887,6 @@ StringAst::~StringAst()
 {
 }
 
-void StringAst::writeBack( QString& ) const
-{
-}
 
 bool StringAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3310,9 +3082,6 @@ SubdirDependsAst::~SubdirDependsAst()
 {
 }
 
-void SubdirDependsAst::writeBack( QString& ) const
-{
-}
 
 bool SubdirDependsAst::parseFunctionInfo( const CMakeFunctionDesc& func)
 {
@@ -3330,9 +3099,6 @@ SubdirsAst::~SubdirsAst()
 {
 }
 
-void SubdirsAst::writeBack( QString& ) const
-{
-}
 
 bool SubdirsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3367,9 +3133,6 @@ TargetLinkLibrariesAst::~TargetLinkLibrariesAst()
 {
 }
 
-void TargetLinkLibrariesAst::writeBack( QString& ) const
-{
-}
 
 bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3420,9 +3183,6 @@ TryCompileAst::~TryCompileAst()
 {
 }
 
-void TryCompileAst::writeBack( QString& ) const
-{
-}
 
 bool TryCompileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3484,9 +3244,6 @@ TryRunAst::~TryRunAst()
 {
 }
 
-void TryRunAst::writeBack( QString& ) const
-{
-}
 
 bool TryRunAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3548,9 +3305,6 @@ UseMangledMesaAst::~UseMangledMesaAst()
 {
 }
 
-void UseMangledMesaAst::writeBack( QString& ) const
-{
-}
 
 bool UseMangledMesaAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3569,9 +3323,6 @@ UtilitySourceAst::~UtilitySourceAst()
 {
 }
 
-void UtilitySourceAst::writeBack( QString& ) const
-{
-}
 
 bool UtilitySourceAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3599,9 +3350,6 @@ VariableRequiresAst::~VariableRequiresAst()
 {
 }
 
-void VariableRequiresAst::writeBack( QString& ) const
-{
-}
 
 bool VariableRequiresAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3631,9 +3379,6 @@ VtkMakeInstantiatorAst::~VtkMakeInstantiatorAst()
 {
 }
 
-void VtkMakeInstantiatorAst::writeBack( QString& ) const
-{
-}
 
 bool VtkMakeInstantiatorAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3649,9 +3394,6 @@ VtkWrapJavaAst::~VtkWrapJavaAst()
 {
 }
 
-void VtkWrapJavaAst::writeBack( QString& ) const
-{
-}
 
 bool VtkWrapJavaAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3667,9 +3409,6 @@ VtkWrapPythonAst::~VtkWrapPythonAst()
 {
 }
 
-void VtkWrapPythonAst::writeBack( QString& ) const
-{
-}
 
 bool VtkWrapPythonAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3685,9 +3424,6 @@ VtkWrapTclAst::~VtkWrapTclAst()
 {
 }
 
-void VtkWrapTclAst::writeBack( QString& ) const
-{
-}
 
 bool VtkWrapTclAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3703,9 +3439,6 @@ WhileAst::~WhileAst()
 {
 }
 
-void WhileAst::writeBack( QString& ) const
-{
-}
 
 bool WhileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3727,9 +3460,6 @@ WriteFileAst::~WriteFileAst()
 {
 }
 
-void WriteFileAst::writeBack( QString& ) const
-{
-}
 
 bool WriteFileAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3758,9 +3488,6 @@ CustomInvokationAst::~CustomInvokationAst()
 {
 }
 
-void CustomInvokationAst::writeBack( QString& ) const
-{
-}
 
 bool CustomInvokationAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3777,9 +3504,6 @@ BreakAst::~BreakAst()
 {
 }
 
-void BreakAst::writeBack( QString& ) const
-{
-}
 
 bool BreakAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3794,9 +3518,6 @@ CMakePolicyAst::~CMakePolicyAst()
 {
 }
 
-void CMakePolicyAst::writeBack( QString& ) const
-{
-}
 
 bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3851,9 +3572,6 @@ ExportAst::~ExportAst()
 {
 }
 
-void ExportAst::writeBack( QString& ) const
-{
-}
 
 bool ExportAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3909,9 +3627,6 @@ ReturnAst::~ReturnAst()
 {
 }
 
-void ReturnAst::writeBack( QString& ) const
-{
-}
 
 bool ReturnAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3926,9 +3641,6 @@ SetPropertyAst::~SetPropertyAst()
 {
 }
 
-void SetPropertyAst::writeBack( QString& ) const
-{
-}
 
 bool SetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
@@ -3974,9 +3686,6 @@ GetPropertyAst::GetPropertyAst()
 {}
 
 GetPropertyAst::~GetPropertyAst()
-{}
-
-void GetPropertyAst::writeBack( QString& ) const
 {}
 
 bool GetPropertyAst::parseFunctionInfo( const CMakeFunctionDesc& func )

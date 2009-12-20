@@ -28,14 +28,10 @@
 QTEST_MAIN( CMakeParserTest )
 
 CMakeParserTest::CMakeParserTest()
-{
-    fakeRoot = new CMakeAst;
-}
+{}
 
 CMakeParserTest::~CMakeParserTest()
-{
-    delete fakeRoot;
-}
+{}
 
 void CMakeParserTest::testLexerCreation()
 {

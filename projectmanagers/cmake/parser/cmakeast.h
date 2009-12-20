@@ -43,28 +43,23 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
         * Writes the information stored in the Ast into the @p buffer.
         * All Asts that are a child of this Ast are written back as well.
         */
-        virtual void writeBack(QString& buffer) const;
-        
         virtual bool isDeprecated() const { return false; }
     
-        virtual bool parseFunctionInfo( const CMakeFunctionDesc& ) { return false; }
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& )=0;
     
         int line() const { return m_line; }
         const CMakeFileContent & content() const { return m_content; }
         void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
         const QList<CMakeFunctionArgument> & outputArguments() const { return m_outputArguments; }
-        QStringList errors() const { return m_errors; }
     private:
-        CMakeAst( const CMakeAst&  ) /*: m_children( ast.m_children )*/ {}
+        CMakeAst( const CMakeAst&  ) {}
         
         QList<CMakeFunctionArgument> m_outputArguments;
+        CMakeFileContent m_content;
+
+        int m_line;
     protected:
         void addOutputArgument(const CMakeFunctionArgument& arg) { m_outputArguments.append(arg); }
-
-        CMakeFileContent m_content;
-        int m_line;
-        QStringList m_errors;
-
 };
 
 #define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
@@ -76,20 +71,14 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
         klassName();                                         \
        ~klassName();                                         \
                                                              \
-        virtual void writeBack( QString& buffer ) const;           \
         virtual int accept(CMakeAstVisitor * visitor) const { return visitor->visit(this); } \
-        virtual bool parseFunctionInfo( const CMakeFunctionDesc& ); \
-        QList<CMakeFunctionArgument> outputArguments;
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
 
 #define CMAKE_ADD_AST_MEMBER( returnType, returnName )             \
     public:                                                         \
         returnType returnName() const { return m_##returnName; }    \
     private:                                                        \
         returnType m_##returnName;
-
-#define CMAKE_ADD_AST_FUNCTION( function ) \
-    public:                                \
-       function;
 
 #define CMAKE_MARK_AS_DEPRECATED() virtual bool isDeprecated() const { return true; }
 

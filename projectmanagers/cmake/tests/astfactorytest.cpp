@@ -33,6 +33,7 @@ public:
     static CMakeAst* createFooAst() {
         return new FooAst;
     }
+    virtual bool parseFunctionInfo(const CMakeFunctionDesc& ) { return false; }
 };
 
 
