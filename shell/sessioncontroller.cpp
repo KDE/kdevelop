@@ -232,6 +232,7 @@ void SessionController::initialize()
     
     connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
     connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
+    updateSessionDescriptions();
 }
 
 
