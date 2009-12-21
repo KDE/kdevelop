@@ -497,6 +497,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     m_previousButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_nextButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_browseButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_toolbarWidgetLayout->setMargin(0);
     
     m_toolbarWidgetLayout->addWidget(m_previousButton);
     m_toolbarWidgetLayout->addWidget(m_outlineLine);
