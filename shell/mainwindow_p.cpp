@@ -102,8 +102,6 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
         connect(plugin, SIGNAL(destroyed(QObject*)), SLOT(pluginDestroyed(QObject*)));
         m_mainWindow->guiFactory()->addClient(ownClient);
     }
-    
-    setupAreaSelectorActions();
 }
 
 void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
@@ -133,7 +131,6 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
     }
     
     m_mainWindow->guiFactory()->removeClient( plugin );
-    setupAreaSelectorActions();
 }
 
 void MainWindowPrivate::activePartChanged(KParts::Part *part)
@@ -190,7 +187,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
         connect(viewWidget, SIGNAL(destroyed(QObject*)),
                 this, SLOT(xmlguiclientDestroyed(QObject*)));
     }
-    setupAreaSelectorActions();
 }
 
 void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
@@ -322,24 +318,6 @@ void MainWindowPrivate::setupActions()
     connect( action, SIGNAL( triggered( bool ) ),  SLOT( viewAddNewToolView() ) );
     action->setToolTip( i18n( "Add Tool View" ) );
     action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>" ) );
-}
-
-void MainWindowPrivate::setupAreaSelectorActions()
-{
-    m_mainWindow->unplugActionList("area_selector");
-    QActionGroup *group = new QActionGroup(this);
-    QList<QAction*> areaActions;
-    foreach (Sublime::Area *a, m_mainWindow->controller()->defaultAreas())
-    {
-        KToggleAction *t = new KToggleAction(KIcon(a->iconName()), i18n("%1 Area", a->title()), this);
-        t->setData(a->objectName());
-        if (a->objectName() == m_mainWindow->area()->objectName())
-            t->setChecked(true);
-        connect (t, SIGNAL(toggled(bool)), this, SLOT(toggleArea(bool)));
-        areaActions << t;
-        group->addAction(t);
-    }
-    m_mainWindow->plugActionList("area_selector", areaActions);
 }
 
 void MainWindowPrivate::setupAreaSelector()

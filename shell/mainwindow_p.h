@@ -61,7 +61,6 @@ public:
     void setupStatusBar();
     void registerStatus(QObject*);
 
-    void setupAreaSelectorActions();
     void setupAreaSelector();
     
     void tabContextMenuRequested(Sublime::View *view, KMenu* menu);
