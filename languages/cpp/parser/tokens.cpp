@@ -160,7 +160,7 @@ static char const * const _S_token_texts[] = {
   "dynamic_cast",
   "...",
   "else",
-  "emit",
+  //"emit",
   "enum",
   "==",
   "explicit",
