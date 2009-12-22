@@ -535,11 +535,12 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
   WinDeclSpecAST *winDeclSpec = 0;
   parseWinDeclSpec(winDeclSpec);
 
-  NameAST *ast = CreateNode<NameAST>(session->mempool);
+  NameAST *ast = 0;
+  bool setGlobal = false;
 
   if (session->token_stream->lookAhead() == Token_scope)
     {
-      ast->global = true;
+      setGlobal = true;
       advance();
     }
 
@@ -551,6 +552,9 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
       if (!parseUnqualifiedName(n)) {
         return false;
       }
+
+      if (!ast) 
+        ast = CreateNode<NameAST>(session->mempool);
 
       if (session->token_stream->lookAhead() == Token_scope)
         {
@@ -584,6 +588,8 @@ bool Parser::parseName(NameAST*& node, ParseNameAcceptTemplate acceptTemplateId)
 
   if (idx == session->token_stream->cursor())
     return false;
+  if (setGlobal)
+    ast->global = true;
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
   node = ast;
@@ -1222,14 +1228,16 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
         }
     }
 
-  SimpleTypeSpecifierAST *ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
+  SimpleTypeSpecifierAST *ast = 0;
 
   if (isIntegral)
     {
+      ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
       ast->integrals = integrals;
     }
   else if (session->token_stream->lookAhead() == Token___typeof)
     {
+      ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
       ast->type_of = session->token_stream->cursor();
       advance();
 
@@ -1259,12 +1267,14 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
     }
   else
     {
-      if (!parseName(ast->name, AcceptTemplate))
+      NameAST *name = 0;
+      if (!parseName(name, AcceptTemplate))
         {
-          ast->name = 0;
           rewind(start);
           return false;
         }
+      ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
+      ast->name = name;
     }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -2571,7 +2581,7 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
 
-  InitializerClauseAST *ast = CreateNode<InitializerClauseAST>(session->mempool);
+  InitializerClauseAST *ast = 0;
 
   if (session->token_stream->lookAhead() == '{')
     {
@@ -2584,15 +2594,19 @@ bool Parser::parseInitializerClause(InitializerClauseAST *&node)
         }
       ADVANCE('}',"}");
 
+      ast = CreateNode<InitializerClauseAST>(session->mempool);
       ast->initializer_list = initializer_list;
     }
   else
     {
-      if (!parseAssignmentExpression(ast->expression))
+      ExpressionAST *expression = 0;
+      if (!parseAssignmentExpression(expression))
         {
           reportError("Expression expected");
           return false;
         }
+      ast = CreateNode<InitializerClauseAST>(session->mempool);
+      ast->expression = expression;
     }
 
   UPDATE_POS(ast, start, _M_last_valid_token+1);
@@ -3677,11 +3691,12 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
 {
   std::size_t start = session->token_stream->cursor();
 
-  PrimaryExpressionAST *ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+  PrimaryExpressionAST *ast = 0;
 
   switch(session->token_stream->lookAhead())
     {
     case Token_string_literal:
+      ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       parseStringLiteral(ast->literal);
       break;
 
@@ -3690,6 +3705,7 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
     case Token_true:
     case Token_false:
     case Token_this:
+      ast = CreateNode<PrimaryExpressionAST>(session->mempool);
       ast->token = session->token_stream->cursor();
       advance();
       break;
@@ -3699,21 +3715,30 @@ bool Parser::parsePrimaryExpression(ExpressionAST *&node)
 
       if (session->token_stream->lookAhead() == '{')
         {
-          if (!parseCompoundStatement(ast->expression_statement))
+          StatementAST *expressionStatement = 0;
+          if (!parseCompoundStatement(expressionStatement))
             return false;
+          ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+          ast->expression_statement = expressionStatement;
         }
       else
         {
-          if (!parseExpression(ast->sub_expression))
+          ExpressionAST *expression = 0;
+          if (!parseExpression(expression))
             return false;
+          ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+          ast->sub_expression = expression;
         }
 
       CHECK(')');
       break;
 
     default:
-      if (!parseName(ast->name, EventuallyAcceptTemplate))
+      NameAST *name = 0;
+      if (!parseName(name, EventuallyAcceptTemplate))
         return false;
+      ast = CreateNode<PrimaryExpressionAST>(session->mempool);
+      ast->name = name;
 
       break;
     }
