@@ -1335,7 +1335,7 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
     {
       rewind(start);
       
-      if (!parseConditionalExpression(expr))
+      if (!parseConditionalExpression(expr, true))
         return false;
     }
   }
@@ -4548,11 +4548,11 @@ bool Parser::parseLogicalOrExpression(ExpressionAST *&node, bool templArgs)
   return true;
 }
 
-bool Parser::parseConditionalExpression(ExpressionAST *&node)
+bool Parser::parseConditionalExpression(ExpressionAST *&node, bool templArgs)
 {
   std::size_t start = session->token_stream->cursor();
 
-  if (!parseLogicalOrExpression(node))
+  if (!parseLogicalOrExpression(node, templArgs))
     return false;
 
   if (session->token_stream->lookAhead() == '?')

@@ -114,7 +114,7 @@ public:
   bool parseCommaExpression(ExpressionAST *&node);
   bool parseCompoundStatement(StatementAST *&node);
   bool parseCondition(ConditionAST *&node, bool initRequired = true);
-  bool parseConditionalExpression(ExpressionAST *&node);
+  bool parseConditionalExpression(ExpressionAST *&node, bool templArgs = false);
   bool parseConstantExpression(ExpressionAST *&node);
   bool parseCtorInitializer(CtorInitializerAST *&node);
   bool parseCvQualify(const ListNode<std::size_t> *&node);
