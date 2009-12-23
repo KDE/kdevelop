@@ -145,6 +145,8 @@ bool NativeAppJob::doKill()
 
 void NativeAppJob::processFinished( int exitCode , QProcess::ExitStatus status ) 
 {
+    lineMaker->flushBuffers();
+    
     if (exitCode == 0 && status == QProcess::NormalExit)
         model()->appendLine( i18n("*** Exited normally ***") );
     else
