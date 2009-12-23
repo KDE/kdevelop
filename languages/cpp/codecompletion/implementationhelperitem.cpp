@@ -101,6 +101,7 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
       }
       if(declaration().data() && m_type != Override) {
         QualifiedIdentifier parentScope = declaration()->context()->scopeIdentifier(true);
+        parentScope = Cpp::stripPrefixes(m_completionContext->duContext(), parentScope);
         if(!parentScope.isEmpty())
           ret = parentScope.toString() + "::" + ret.toString();
       }
@@ -337,10 +338,21 @@ void ImplementationHelperItem::execute(KTextEditor::Document* document, const KT
     QString localText = "SLOT(" + name + "(" + QString::fromUtf8(completionContext()->m_connectedSignalNormalizedSignature) + ")));";
     document->replaceText(word, localText);
   }else{
+    //this code assumes (safely for now) that the "word" range is on one line
+    KTextEditor::Range rangeToReplace(word.start().line(), 0, word.end().line(), word.end().column());
+    QString rangeToReplaceText = document->text(rangeToReplace);
+    QString replacementText = insertionText(document->url(), SimpleCursor(rangeToReplace.end()));
+    //Don't replace anything before end of comment, open or closing bracket, or semicolon
+    int noReplace = rangeToReplaceText.lastIndexOf(QRegExp("[{}/;]"));
+    if (noReplace >= 0)
+    {
+      rangeToReplace = KTextEditor::Range(word.start().line(), noReplace + 1, word.end().line(), word.end().column());
+      replacementText = "\n" + replacementText;
+    }
     DocumentChangeSet changes;
-    changes.addChange(DocumentChange(IndexedString(document->url()), SimpleRange(word), document->text(word), "\n"+insertionText(document->url(), SimpleCursor(word.end()))));
+    changes.addChange(DocumentChange(IndexedString(document->url()), rangeToReplace, document->text(rangeToReplace), replacementText));
     changes.applyAllChanges();
-  }
+   }
 }
 
 bool ImplementationHelperItem::dataChangedWithInput() const {

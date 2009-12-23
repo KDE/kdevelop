@@ -81,6 +81,7 @@ namespace Cpp {
         ReturnAccess,
         DeleteAccess   /// Any item which can be deleted or provide deletable results should be listed
       };
+      
       /**
        * The first context created will never be a FunctionCallAccess
        * context. Instead it will at least be a NoMemberAccess. The result completion-list types/return-types should then be matched
@@ -180,6 +181,16 @@ namespace Cpp {
       QList<ExpressionEvaluationResult> knownArgumentTypes() const;
       
     private:
+      
+      enum OnlyShow {
+        ShowAll,
+        ShowTypes,
+        ShowSignals,
+        ShowSlots,
+        ShowVariables,
+        ShowImplementationHelpers
+      };
+      
       QList<CompletionTreeItemPointer> keywordCompletionItems();
       QList<CompletionTreeItemPointer> getImplementationHelpers();
       QList<CompletionTreeItemPointer> getImplementationHelpersInternal(QualifiedIdentifier minimumScope, DUContext* context);
@@ -208,6 +219,8 @@ namespace Cpp {
       
       ///Returns whether the end of m_text is a valid completion-position
       bool isValidPosition();
+      ///Returns whether this is a valid context for implementation helpers
+      bool isImplementationHelperValid();
       ///Should preprocess the given text(replace macros with their body etc.)
       void preprocessText( int line );
       void processIncludeDirective(QString line);
@@ -260,7 +273,7 @@ namespace Cpp {
       
       QList<CompletionTreeItemPointer> m_storedItems; //Used to store pre-computed local completion-items.
       bool m_useStoredItems; //If this is true, m_storedItems will be used instead of computing items, no matter whether it is empty or not.
-      bool m_onlyShowTypes, m_onlyShowSignals, m_onlyShowSlots, m_onlyShowVariables;
+      OnlyShow m_onlyShow; //A specific completion item type to show, or ShowAll, see enum OnlyShow
       bool m_isDeclarationTypePrefix;//True if the expression is set to the type-part of a declaration like "int i"
       bool m_isConstructorCompletion;
       bool m_doAccessFiltering;

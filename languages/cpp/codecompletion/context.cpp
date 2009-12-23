@@ -168,8 +168,9 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     m_knownArgumentExpressions(knownArgumentExpressions),
     m_contextType(Normal),
     m_pointerConversionsBeforeMatching(0),
-    m_useStoredItems(false), m_onlyShowTypes(false), m_onlyShowSignals(false),
-    m_onlyShowSlots(false), m_onlyShowVariables(false), m_isConstructorCompletion(false),
+    m_useStoredItems(false),
+    m_onlyShow(ShowAll),
+    m_isConstructorCompletion(false),
     m_doAccessFiltering(doAccessFiltering)
 {
 #ifndef TEST_COMPLETION  
@@ -182,7 +183,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
       return;
 
     if((m_duContext->type() == DUContext::Class || m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
-      m_onlyShowTypes = true;
+      m_onlyShow = ShowTypes;
       ifDebug( kDebug() << "Only showing types"; )
     }
 
@@ -343,17 +344,17 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   
   if(m_expression == "const" || m_expression == "typedef") {
     //The cursor is behind a "const .."
-    m_onlyShowTypes = true;
+    m_onlyShow = ShowTypes;
     m_expression = QString();
   }
   
   if(m_expression == ":" || m_expression == "public" || m_expression == "protected" || m_expression == "private" || m_expression == "virtual") {
-    m_onlyShowTypes = true;
+    m_onlyShow = ShowTypes;
     m_expression = QString();
   }
   
   if(m_expression == "emit" || m_expression == "Q_EMIT")  {
-    m_onlyShowSignals = true;
+    m_onlyShow = ShowSignals;
     m_expression = QString();
   }
   
@@ -413,8 +414,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     bool needSignal = parentContext()->m_expression == "SIGNAL" || parentContext()->m_expression == "Q_SIGNAL";
     bool needSlot = parentContext()->m_expression == "SLOT" || parentContext()->m_expression == "Q_SLOT";
     if(needSignal || needSlot) {
-      m_onlyShowSignals = needSignal;
-      m_onlyShowSlots = needSlot;
+      m_onlyShow = needSignal ? ShowSignals : ShowSlots;
       
       //Remove the SIGNAL / SLOT function context that was added
       setParentContext(KSharedPtr<KDevelop::CodeCompletionContext>(parentContext()->parentContext()));
@@ -434,7 +434,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
               if(parentContext()->m_knownArgumentExpressions.size() > 1) {
                 QString connectedSignal = parentContext()->m_knownArgumentExpressions[1];
                 
-                uint skipSignal = 0;
+                int skipSignal = 0;
                 if(connectedSignal.startsWith("SIGNAL"))
                   skipSignal = 7;
                 if(connectedSignal.startsWith("Q_SIGNAL"))
@@ -472,7 +472,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     LOCKDUCHAIN;
     //This also happens in cases like "for(int a = 0; a < |", so test whether the previous expression is an instance.
     if(parentContext()->m_expressionResult.isValid() && !parentContext()->m_expressionResult.isInstance)
-      m_onlyShowTypes = true;
+      m_onlyShow = ShowTypes;
   }
 
   ///Handle overridden binary operator-functions
@@ -526,7 +526,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     isThrow = true;
   }
   if( removePrefixWord(expr, "new") ) {
-    m_onlyShowTypes = true;
+    m_onlyShow = ShowTypes;
     m_pointerConversionsBeforeMatching = 1;
   }
   
@@ -536,8 +536,8 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
   if( !expr.trimmed().isEmpty() && !m_expressionResult.isValid() ) {
     LOCKDUCHAIN;
-
-    if(!m_isDeclarationTypePrefix) {
+    
+    if(!m_isDeclarationTypePrefix && m_memberAccessOperation != NoMemberAccess) {
       m_expressionResult = expressionParser.evaluateExpression( expr.toUtf8(), m_duContext );
     }else{
       m_expressionResult = expressionParser.evaluateType( expr.toUtf8(), m_duContext );
@@ -567,12 +567,14 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
     case NoMemberAccess:
     {
-      if( !expr.trimmed().isEmpty() ) {
-        //This should never happen, because the position-cursor should be chosen at the beginning of a possible completion-context(not in the middle of a string)
-        log( QString("Cannot complete \"%1\" because there is an expression without an access-operation" ).arg(expr) );
-        m_valid  = false;
-      } else {
-        //Do nothing. We do not have a completion-container, which means that a global completion should be done.
+      //Either there's no expression, which means Global completion, and nothing need be done.
+      //Or there is an expression, which means only implementationhelperitems are wanted
+      if (!expr.isEmpty())
+      {
+        if (isImplementationHelperValid())
+          m_onlyShow = ShowImplementationHelpers;
+        else
+          m_valid = false;
       }
     }
     break;
@@ -746,8 +748,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   if(!container)
     return false;
   
-  m_onlyShowVariables = true;
-  m_onlyShowTypes = false;
+  m_onlyShow = ShowVariables;
   m_isConstructorCompletion = true;
   m_memberAccessOperation = MemberAccess;
   m_doAccessFiltering = false;
@@ -1010,6 +1011,15 @@ bool CodeCompletionContext::isValidPosition() {
     return false;
   }
   return true;
+}
+
+
+bool CodeCompletionContext::isImplementationHelperValid()
+{
+  if (!parentContext() && (m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global))
+    return true;
+  else
+    return false;
 }
 
 QString originalOperator( const QString& str ) {
@@ -1372,7 +1382,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
               
               foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
-                  if((classFun->isSignal() && !m_onlyShowSlots) || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
+                  if((classFun->isSignal() && m_onlyShow != ShowSlots) || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
                     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), KDevelop::CodeCompletionContext::Ptr(this), candidate.second );
                     item->m_isQtSignalSlotCompletion = true;
                     if(!m_connectedSignalIdentifier.isEmpty()) {
@@ -1404,10 +1414,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         }
         //Since there is 2 connect() functions, the third argument may be a slot as well as a QObject*, so also
         //give normal completion items
-       if(parentContext() && parentContext()->m_knownArgumentExpressions.size() != 2)
+        if(parentContext() && parentContext()->m_knownArgumentExpressions.size() != 2)
           break;
         default:
-          if(depth() == 0)
+          if(depth() == 0 && (m_onlyShow == ShowAll || m_onlyShow == ShowTypes))
             standardAccessCompletionItems(items);
           break;
       }
@@ -1439,8 +1449,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
         }
       }
 
-      if(!parentContext() && (m_duContext->type() == DUContext::Namespace || m_duContext->type() == DUContext::Global)) {
-        if(!m_onlyShowVariables && !m_isConstructorCompletion && m_memberAccessOperation == NoMemberAccess) {
+      if(isImplementationHelperValid()) {
+        if(m_onlyShow != ShowVariables && !m_isConstructorCompletion && 
+           (m_memberAccessOperation == NoMemberAccess || m_memberAccessOperation == StaticMemberChoose)) {
           QList<CompletionTreeItemPointer> helpers = getImplementationHelpers();
           if(!helpers.isEmpty()) {
             eventuallyAddGroup(i18n("Implement Function"), 0, helpers);
@@ -1619,14 +1630,16 @@ void CodeCompletionContext::standardAccessCompletionItems(QList<CompletionTreeIt
 
   ///Eventually add a "this" item
   DUContext* functionContext = m_duContext.data();
-  if(!m_onlyShowSignals && !m_onlyShowSlots && !m_onlyShowTypes) {
+  if(m_onlyShow != ShowSignals && m_onlyShow != ShowSlots && m_onlyShow != ShowTypes) {
     while(functionContext && functionContext->type() == DUContext::Other && functionContext->parentContext() && functionContext->parentContext()->type() == DUContext::Other)
       functionContext = functionContext->parentContext();
   }
 
   ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(functionContext->owner(), m_duContext->topContext()));
   
-  if(classFun && !classFun->isStatic() && classFun->context()->owner() && !m_onlyShowSignals && !m_onlyShowSlots && !m_onlyShowTypes) {
+  if(classFun && !classFun->isStatic() && classFun->context()->owner()
+              && m_onlyShow != ShowSignals && m_onlyShow != ShowSlots && m_onlyShow != ShowTypes)
+  {
     AbstractType::Ptr classType = classFun->context()->owner()->abstractType();
     if(classFun->abstractType()->modifiers() & AbstractType::ConstModifier)
       classType->setModifiers((AbstractType::CommonModifiers)(classType->modifiers() | AbstractType::ConstModifier));
@@ -1677,15 +1690,19 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(decl->indexedIdentifier() == friendIdentifier)
     return false;
   
-  if(m_onlyShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
+  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
     return false;
   
-  if(m_onlyShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))
+  if(m_onlyShow == ShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))
     return false;
+  
+  if(m_onlyShow == ShowImplementationHelpers)
+    return false; //Implementation helpers don't come here
     
-  if(m_onlyShowSignals || m_onlyShowSlots) {
+  if(m_onlyShow == ShowSignals || m_onlyShow == ShowSlots) {
     Cpp::QtFunctionDeclaration* qtFunction = dynamic_cast<Cpp::QtFunctionDeclaration*>(decl);
-    if(!qtFunction || (m_onlyShowSignals && !qtFunction->isSignal()) || (m_onlyShowSlots && !qtFunction->isSlot()))
+    if(!qtFunction || (m_onlyShow == ShowSignals && !qtFunction->isSignal())
+                   || (m_onlyShow == ShowSlots && !qtFunction->isSlot()))
       return false;
   }
   
@@ -1737,9 +1754,12 @@ QList< KSharedPtr< KDevelop::CompletionTreeItem > > CodeCompletionContext::keywo
   #define ADD_TOKEN(X) ADD_TYPED_TOKEN(X, KDevelop::IndexedType())
   #define ADD_TOKEN_S(X) ADD_TYPED_TOKEN_S(X, KDevelop::IndexedType())
 
-  bool restrictedItems = m_onlyShowSignals || m_onlyShowSlots || m_onlyShowTypes;
+  bool restrictedItems = (m_onlyShow == ShowSignals) ||
+                         (m_onlyShow == ShowSlots) || 
+                         (m_onlyShow == ShowTypes) ||
+                         (m_onlyShow == ShowImplementationHelpers);
   
-  if(!restrictedItems || m_onlyShowTypes) {
+  if(!restrictedItems || m_onlyShow == ShowTypes) {
     ADD_TOKEN(bool);
     ADD_TOKEN(char);
     ADD_TOKEN(const);

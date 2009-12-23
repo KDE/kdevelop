@@ -107,6 +107,43 @@ Declaration* TestCppCodeCompletion::findDeclaration(DUContext* context, const Qu
   return 0;
 }
 
+void TestCppCodeCompletion::testNoMemberAccess() {
+  QByteArray test = "class MyClass{ public:\n int myint; };\n\n";
+  
+  TopDUContext* context = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(context->childContexts().count(), 1);
+  
+  CompletionItemTester testCase(context, "void "); //NoMemberAccess with non-empty valid-type expression
+  QVERIFY(testCase.completionContext->isValid());
+  QCOMPARE(testCase.names, QStringList()); //Valid, but should not offer any completions in this case
+  
+  CompletionItemTester testCase1(context, "asdf "); //NoMemberAccess with non-empty invalid-type expression
+  QVERIFY(!testCase1.completionContext->isValid());
+  
+  CompletionItemTester testCase2(context, " "); //NoMemberAccess with empty expression
+  QVERIFY(testCase2.completionContext->isValid());
+  QCOMPARE(testCase.names, QStringList()); //Theoretically should have "MyClass", but global completions aren't included
+  
+  release(context);
+}
+
+void TestCppCodeCompletion::testFunctionImplementation() {
+  addInclude("myclass.h", "namespace mynamespace { class myclass { void students(); }; };");
+  QByteArray test = "#include \"myclass.h\"\nnamespace mynamespace { }";
+  
+  TopDUContext* context = parse(test, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(context->childContexts().count(), 1);
+  
+  CompletionItemTester testCase(context->childContexts()[0]);
+  QVERIFY(testCase.completionContext->isValid());
+  QCOMPARE(testCase.names, QStringList() << "mynamespace" << "myclass");
+  
+  //TODO: If it ever becomes possible to test implementationhelpers, here it should be done
+  release(context);
+}
+
 void TestCppCodeCompletion::testAliasDeclarationAccessPolicy() {
   QByteArray test = "namespace Base { int One; int Two; int Three };\
   class List { public: using Base::One; protected: using Base::Two; private: using Base::Three; }; int main(List a) {}";
@@ -151,10 +188,10 @@ void TestCppCodeCompletion::testKeywords() {
   QVERIFY(testReturn2.completionContext->isValid());
   QCOMPARE(testReturn2.names, QStringList() << "return int" << "Value1" << "Value2");
   
-  CompletionItemTester testNew(context->childContexts()[2], "Values a = new ");
+  CompletionItemTester testNew(context->childContexts()[2], "Values b = new ");
   QVERIFY(testNew.completionContext->isValid());
   QVERIFY(testNew.names.contains("Values"));
-  CompletionItemTester testNew2(context->childContexts()[2], "Values::Sub a = new Values::");
+  CompletionItemTester testNew2(context->childContexts()[2], "Values::Sub b = new Values::");
   QVERIFY(testNew2.completionContext->isValid());
   QCOMPARE(testNew2.names, QStringList() << "Value1" << "Value2" << "Sub" ); //A little odd to see Value1 & 2 here
   

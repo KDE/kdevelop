@@ -65,6 +65,8 @@ public:
 
 private slots:
   void initTestCase();
+  void testNoMemberAccess();
+  void testFunctionImplementation();
   void testAliasDeclarationAccessPolicy();
   void testKeywords();
   void testInclude();
