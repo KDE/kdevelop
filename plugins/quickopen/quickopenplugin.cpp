@@ -809,8 +809,9 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
     }
   }
   
-  connect( m_currentWidgetHandler, SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
-  connect( m_currentWidgetHandler, SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
+  connect( dialog->widget(), SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
+  //Not connecting itemsChanged to storeItems, as showQuickOpen doesn't use lastUsedItems and so shouldn't store item changes
+  //connect( dialog->widget(), SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
   
   if(quickOpenLine()) {
     quickOpenLine()->showWithWidget(dialog->widget());
@@ -1326,6 +1327,7 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     connect(m_widget, SIGNAL(ready()), SLOT(deactivate()));
 
     connect( m_widget, SIGNAL( scopesChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeScopes( const QStringList& ) ) );
+    connect( m_widget, SIGNAL( itemsChanged( const QStringList& ) ), QuickOpenPlugin::self(), SLOT( storeItems( const QStringList& ) ) );
     Q_ASSERT(m_widget->o.searchLine == this);
     m_widget->prepareShow();
     QRect widgetGeometry = QRect(mapToGlobal(QPoint(0, height())), mapToGlobal(QPoint(width(), height() + 400)));
