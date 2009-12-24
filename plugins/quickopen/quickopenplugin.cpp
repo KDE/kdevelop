@@ -812,6 +812,7 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   connect( dialog->widget(), SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   //Not connecting itemsChanged to storeItems, as showQuickOpen doesn't use lastUsedItems and so shouldn't store item changes
   //connect( dialog->widget(), SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
+  dialog->widget()->o.itemsButton->setEnabled(false);
   
   if(quickOpenLine()) {
     quickOpenLine()->showWithWidget(dialog->widget());
@@ -838,7 +839,10 @@ void QuickOpenPlugin::storeItems( const QStringList& items )
 
 void QuickOpenPlugin::quickOpen()
 {
-  showQuickOpen( All );
+  if(quickOpenLine()) //Same as clicking on Quick Open
+    quickOpenLine()->setFocus();
+  else
+    showQuickOpen( All );
 }
 
 void QuickOpenPlugin::quickOpenFile()
