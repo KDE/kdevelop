@@ -66,6 +66,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect( ui.activeCombo, SIGNAL(currentIndexChanged(int)),
              SLOT( activeGroupChanged(int)) );
     connect( ui.activeCombo, SIGNAL(editTextChanged(QString)), SLOT(enableButtons(QString)));
+    connect( groupModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SIGNAL( changed() ) );
     connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SIGNAL( changed() ) );
     connect( groupModel, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), SIGNAL( changed() ) );
     connect( groupModel, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SLOT( enableDeleteButton() ) );
@@ -145,15 +146,17 @@ void EnvironmentWidget::newButtonClicked()
 
 void EnvironmentWidget::deleteButtonClicked()
 {
-    kDebug() << "delete button clicked";
     QModelIndexList selected = ui.variableTable->selectionModel()->selectedRows();
     if( selected.isEmpty() )
         return;
+    
+    QModelIndexList mapped;
     foreach( const QModelIndex &idx, selected )
     {
-        kDebug() << "deleting index" << idx << proxyModel->mapToSource( idx );
-        groupModel->removeVariable( proxyModel->mapToSource( idx ) );
+        mapped << proxyModel->mapToSource( idx );
     }
+    
+    groupModel->removeVariables( mapped );
 }
 
 void EnvironmentWidget::addGroupClicked()

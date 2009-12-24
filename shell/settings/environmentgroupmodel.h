@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #define ENVIRONMENTGROUPMODEL_H
 
 #include <QtCore/QAbstractTableModel>
+#include <QtCore/QStringList>
 #include "util/environmentgrouplist.h"
 
 class QVariant;
@@ -45,12 +46,12 @@ public:
     void loadFromConfig( KConfig* );
     void saveToConfig( KConfig* );
     void addVariable( const QString& var, const QString& value );
-    void removeVariable( const QModelIndex& idx );
+    void removeVariables( QModelIndexList variables );
     void removeGroup( const QString& grp );
     void changeDefaultGroup( const QString& grp );
 
 private:
-    QMap<int, QString> m_variableMap;
+    QStringList m_varsByIndex;
     QString m_currentGroup;
 };
 

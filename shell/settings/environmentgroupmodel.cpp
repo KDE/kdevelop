@@ -37,7 +37,7 @@ int EnvironmentGroupModel::rowCount( const QModelIndex& parent ) const
     if( parent.isValid() )
         return 0;
     if( !m_currentGroup.isEmpty() )
-        return m_variableMap.count();
+        return m_varsByIndex.count();
     return 0;
 }
 
@@ -69,10 +69,10 @@ QVariant EnvironmentGroupModel::data( const QModelIndex& idx, int role ) const
 
     if( idx.column() == 0 )
     {
-        return m_variableMap[idx.row()];
+        return m_varsByIndex[idx.row()];
     } else
     {
-        QString var = m_variableMap[idx.row()];
+        QString var = m_varsByIndex[idx.row()];
         return variables( m_currentGroup ).value( var );
     }
 }
@@ -104,22 +104,28 @@ bool EnvironmentGroupModel::setData( const QModelIndex& idx, const QVariant& dat
 
     if( idx.column() == 0 )
     {
-        QString var = m_variableMap[idx.row()];
+        QString var = m_varsByIndex[idx.row()];
         QString value = variables( m_currentGroup ).value( var );
         variables( m_currentGroup ).remove( var );
         variables( m_currentGroup ).insert( data.toString(), value );
-        m_variableMap[idx.row()] = data.toString();
-    } else
-    {
-        variables( m_currentGroup ).insert( m_variableMap[idx.row()], data.toString() );
+        m_varsByIndex[idx.row()] = data.toString();
     }
+    else
+    {
+        variables( m_currentGroup ).insert( m_varsByIndex[idx.row()], data.toString() );
+    }
+    
+    emit dataChanged(idx, idx);
     return true;
 }
 
 void EnvironmentGroupModel::addVariable( const QString& var, const QString& value )
 {
+    if (m_varsByIndex.indexOf(var) > -1)
+        return; //No Duplicates
+    
     beginInsertRows( QModelIndex(), rowCount( QModelIndex() ), rowCount( QModelIndex() ) );
-    m_variableMap.insert( rowCount( QModelIndex() ), var );
+    m_varsByIndex << var;
     variables( m_currentGroup ).insert( var, value );
     endInsertRows();
 }
@@ -133,16 +139,22 @@ void EnvironmentGroupModel::removeGroup( const QString& grp )
     }
 }
 
-void EnvironmentGroupModel::removeVariable( const QModelIndex& idx )
+void EnvironmentGroupModel::removeVariables( QModelIndexList indexes )
 {
-    kDebug() << "checking idx" << idx << rowCount(QModelIndex()) << m_currentGroup << columnCount(QModelIndex());
-    if( idx.isValid() && !m_currentGroup.isEmpty()
-        && idx.row() >=0 && idx.row() < rowCount(QModelIndex())
-        && idx.column() >= 0 && idx.column() < columnCount(QModelIndex()) )
+    if (m_currentGroup.isEmpty())
+        return;
+    
+    //Need to have the indexes in order for reverse removal
+    qSort<QModelIndexList>(indexes);
+    
+    for (int i = indexes.size() - 1; i >= 0; --i)
     {
-        beginRemoveRows( QModelIndex(), idx.row(), idx.row() );
-        QString var = m_variableMap[idx.row()];
-        m_variableMap.remove(idx.row());
+        if (!indexes[i].isValid())
+            continue;
+        
+        beginRemoveRows( QModelIndex(), indexes[i].row(), indexes[i].row() );
+        QString var = m_varsByIndex[indexes[i].row()];
+        m_varsByIndex.removeAt(indexes[i].row());
         variables( m_currentGroup ).remove( var );
         endRemoveRows();
     }
@@ -153,11 +165,11 @@ void EnvironmentGroupModel::setCurrentGroup( const QString& group )
     if( group.isEmpty() )
         return;
     m_currentGroup = group;
-    m_variableMap.clear();
-    int i = 0;
+    m_varsByIndex.clear();
+
     foreach( const QString &var, variables( m_currentGroup ).keys() )
     {
-        m_variableMap.insert(i++, var);
+        m_varsByIndex << var;
     }
     reset();
 }

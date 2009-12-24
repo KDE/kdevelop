@@ -71,6 +71,7 @@ void encode( KConfigGroup cfg, EnvironmentGroupListPrivate* d )
     foreach( const QString &group, d->m_groups.keys() )
     {
         KConfigGroup envgrp( &cfg, group );
+        envgrp.deleteGroup();
         foreach( const QString &var, d->m_groups[group].keys() )
         {
             envgrp.writeEntry( var, d->m_groups[group][var] );
