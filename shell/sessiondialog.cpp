@@ -169,7 +169,10 @@ void SessionModel::cloneSession( const QModelIndex& idx )
     }
 
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-    Core::self()->sessionController()->cloneSession( data( idx ).toString() );
+
+    Core::self()->sessionController()->cloneSession(
+            Core::self()->sessionController()->sessions().at( idx.row() )->id()
+        );
     endInsertRows();
 }
 
