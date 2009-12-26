@@ -41,7 +41,6 @@
 #include <QDir>
 #include <QtCore/qglobal.h>
 #include <QByteArray>
-#include <QRegExp>
 #include <QFileInfo>
 #include <QScriptEngine>
 #include <QScriptValue>
@@ -1636,6 +1635,7 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
         {
             QStringList res;
             QRegExp rx(sast->regex());
+            rx.setPatternSyntax(QRegExp::RegExp2);
             QString totalInput = sast->input().join(QString());
             switch(sast->cmdType())
             {

@@ -23,7 +23,6 @@
 #include <KDebug>
 #include <QTimer>
 #include <QString>
-#include <QRegExp>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>

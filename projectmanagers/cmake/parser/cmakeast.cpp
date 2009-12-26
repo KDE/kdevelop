@@ -24,7 +24,6 @@
 
 #include "cmakeast.h"
 
-#include <QRegExp>
 #include <QString>
 
 #include <KDebug>
@@ -3536,7 +3535,7 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     }
     else if(first=="SET" && func.arguments.count()==3)
     {
-        QRegExp rx("CMP([1-9]*)");
+        static QRegExp rx("CMP([1-9]*)");
         rx.indexIn(func.arguments[1].value);
 
         QStringList cmpValue=rx.capturedTexts();
