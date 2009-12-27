@@ -66,6 +66,12 @@ namespace KDevelop
 
 static const QString pluginControllerGrp("Plugins");
 
+bool isUserSelectable( const KPluginInfo& info )
+{
+    QString loadMode = info.property( "X-KDevelop-LoadMode").toString();
+    return loadMode.isEmpty() || loadMode == "UserSelectable";
+}
+
 bool isGlobalPlugin( const KPluginInfo& info )
 {
     return info.property( "X-KDevelop-Category" ).toString() == "Global";
@@ -104,13 +110,11 @@ public:
 
     bool canUnload( const KPluginInfo& plugin )
     {
-        QStringList interfaces=plugin.property( "X-KDevelop-Interfaces" ).toStringList();
-        if(interfaces.contains("ILanguageSupport")) {
-            // Language supports can not be unloaded currently, mainly due to LanguageController and associated languages/mimetypes
-            // See: https://bugs.kde.org/show_bug.cgi?id=194337
-            return false; 
+        QStringList interfaces = plugin.property( "X-KDevelop-Interfaces" ).toStringList();
+        if( plugin.property( "X-KDevelop-LoadMode" ).toString() == "AlwaysOn" )
+        {
+            return false;
         }
-        
         foreach( const KPluginInfo& info, loadedPlugins.keys() )
         {
             if( info.pluginName() != plugin.pluginName() ) 
@@ -211,7 +215,7 @@ bool PluginController::isEnabled( const KPluginInfo& info )
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
     //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
-    return !isGlobalPlugin( info ) || isEnabled;
+    return !isGlobalPlugin( info ) || isUserSelectable( info ) || isEnabled;
 }
 
 void PluginController::initialize()
@@ -259,14 +263,21 @@ void PluginController::initialize()
         if( isGlobalPlugin( pi ) )
         {
             QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginName() );
-            if( it != pluginMap.constEnd() && it.value() )
+            if( it != pluginMap.constEnd() && ( it.value() || !isUserSelectable( pi ) ) )
             { 
                 // Plugin is mentioned in pluginmap and the value is true, so try to load it
                 loadPluginInternal( pi.pluginName() );
                 if( !grp.hasKey( pi.pluginName() + "Enabled" ) )
                 {
-                    // If plugin isn't listed yet, add it with true now
-                    grp.writeEntry( pi.pluginName()+"Enabled", true );
+                    if( isUserSelectable( pi ) )
+                    {
+                        // If plugin isn't listed yet, add it with true now
+                        grp.writeEntry( pi.pluginName()+"Enabled", true );
+                    }
+                } else if( grp.hasKey( pi.pluginName() + "Disabled" ) && !isUserSelectable( pi ) )
+                {
+                    // Remove now-obsolete entries
+                    grp.deleteEntry( pi.pluginName() + "Disabled" );
                 }
             }
         }
@@ -640,7 +651,7 @@ void PluginController::updateLoadedPlugins()
     {
         if( isGlobalPlugin( info ) )
         {
-            bool enabled = grp.readEntry( info.pluginName()+"Enabled", ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginName() ) ) );
+            bool enabled = grp.readEntry( info.pluginName()+"Enabled", ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginName() ) ) ) || !isUserSelectable( info );
             if( d->loadedPlugins.contains( info ) && !enabled ) 
             {
                 kDebug() << "unloading" << info.pluginName();

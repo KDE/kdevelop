@@ -49,7 +49,9 @@ PluginPreferences::PluginPreferences( QWidget *parent, const QVariantList &args 
     QList<KPluginInfo> plugins;
     foreach( KPluginInfo info, Core::self()->pluginControllerInternal()->allPluginInfos() )
     {
-        if( info.property("X-KDevelop-Category") == "Global" )
+        QString loadMode = info.property("X-KDevelop-LoadMode").toString();
+        if( info.property("X-KDevelop-Category") == "Global"
+            && ( loadMode.isEmpty() || loadMode == "UserSelectable") )
         {
             plugins << info;
         }
