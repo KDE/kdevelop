@@ -33,6 +33,7 @@ namespace KDevelop
 {
         class ISourceFormatter;
         class SettingsWidget;
+        class SourceFormatterStyle;
 }
 
 /** \short A simple dialog to add preview around a \ref SettingsWidget
@@ -43,7 +44,7 @@ class EditStyleDialog : public KDialog
 
 	public:
 		EditStyleDialog(KDevelop::ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-		        const QString &content = QString(), const QString &name = QString(), QWidget *parent = 0);
+		        const KDevelop::SourceFormatterStyle&, QWidget *parent = 0);
 		virtual ~EditStyleDialog();
 
 		/** \return The string representing the style given by the \ref SettingsWidget.

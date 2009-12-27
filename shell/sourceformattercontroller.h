@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 #define SOURCEFORMATTERCONTROLLER_H
 
 #include <interfaces/isourceformattercontroller.h>
+#include <interfaces/isourceformatter.h>
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -46,7 +47,21 @@ class IDocument;
 class ISourceFormatter;
 class IPlugin;
 
-typedef QHash<QString, QList<KDevelop::IPlugin*> > IPluginHash;
+struct KDEVPLATFORMSHELL_EXPORT SourceFormatterCfg
+{
+public:
+	ISourceFormatter* fmt;
+        QHash<QString,SourceFormatterStyle> styles;
+	QString selectedStyle;
+};
+
+struct KDEVPLATFORMSHELL_EXPORT SourceFormatterLanguage
+{
+public:
+	QString mimeType;
+	QHash<QString,SourceFormatterCfg> formatters;
+	QString selectedFormatter;
+};
 
 /** \short A singleton class managing all source formatter plugins
  */
@@ -62,11 +77,12 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 
 		/** \return The instance of this singleton.
 		*/
-		static SourceFormatterController* self();
+// 		static SourceFormatterController* self();
 
 		/** \return the formatter for the active language.
 		*/
-		ISourceFormatter* activeFormatter();
+// 		ISourceFormatter* activeFormatter();
+		//----------------- Public API defined in interfaces -------------------
 		/** \return The formatter corresponding to the language
 		* of the document corresponding to the \arg url.
 		*/
@@ -80,31 +96,21 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		*/
 		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
 
+		//----------------- Public API for the settings kcm -------------------
 		/** A list of all languages (corresponding to a
 		* \ref KDevelop::ILanguageSupport) supported by loaded plugins.
 		*/
-		QStringList languages();
+		QList<SourceFormatterLanguage> languages();
 		/** \return the language name corresponding to the mime type \arg name.
 		*/
-		QString languageNameForMimeType(const KMimeType::Ptr &mime);
-		/** \return All loaded plugins for this \arg lang.
-		*/
-		QList<KDevelop::IPlugin*> pluginListForLanguage(const QString &lang);
-		/** \return One mime type corresponding to the language \arg lang.
-		* It is useful because ISourceFormatter always expects a mime type,
-		* eg in preview text when the text does not correspond to any file.
-		*/
-		QString mimeTypeForLanguage(const QString &lang);
 		/** \return The name of an icon for the language.
 		*/
-		QString iconForLanguage(const QString &lang);
+		QString iconForLanguage(const SourceFormatterLanguage &lang);
 
-		/** Sets the active language (and optionnaly plugin). If \arg plugin is not given,
-		* the plugin used is the one defined in the config.
-		* The current style for this plugin is applied.
-		*/
-		void setActiveLanguage(const QString &lang, QString plugin = QString());
-		QString activeLanguage() const { return m_currentLang; }
+		/**
+		 * Sets the formatting style for the @p langname to @p language
+		 */
+		void updateFormatterLanguage( const SourceFormatterLanguage& language );
 
 		/** Reloads the config from the config file. It just clears any stored config
 		* and reparse the config file (ie discarding any non saved change).
@@ -117,36 +123,29 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		* (where styles are saved).
 		*/
 		KConfigGroup configGroup() const {
-			return m_activeConfigGroup;
+			return m_rootConfigGroup;
 		}
-
-		/** \return the current style for the currently active language and plugin.
-		*/
-		QString currentStyle() const;
-		/** Sets the style used by the current plugin (and language).
-		* \arg style can be the name of a predefined style or a custom style.
-		* It will be loaded from config file if necessary and applied to the source formatter.
-		*/
-		void setCurrentStyle(const QString &style);
 
 		/** Saves a custom style to the config, in the \ref configGroup()
 		*/
-		void saveStyle(const QString &name, const QString &content);
-		/** Changes the caption of a custom style in the config file.
-		*/
-		void renameStyle(const QString &name, const QString &caption);
+		void saveStyle(const QString& formatterId, const SourceFormatterStyle& style);
 		/** Deletes a style from the config style.
 		*/
-		void deleteStyle(const QString &name);
+		void deleteStyle(const QString& formatterId, const QString& style);
 		/** \return A name for a new style. It will be "User"+ the lowest
 		* number available.
 		*/
-		QString nameForNewStyle();
+                KDevelop::SourceFormatterStyle newStyle(const QString& l) const;
+
+                QString formatSourceForLanguage(const QString&, const SourceFormatterLanguage&) const;
+
+                QList<SourceFormatterStyle> userStyles( const QString& formatter ) const;
 
 		/** \return A modeline string (to add at the end or the beginning of a file)
 		* corresponding to the settings of the active language.
 		*/
-		QString addModelineForCurrentLang(QString input, const KMimeType::Ptr &mime);
+		QString addModelineForCurrentLang(const KDevelop::SourceFormatterLanguage&, QString input);
+		QString addModelineForCurrentLang(QString input, const KMimeType::Ptr&);
 		void setModelinesEnabled(bool enable);
 		bool modelinesEnabled() const {
 			return m_modelinesEnabled;
@@ -155,40 +154,23 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 	protected:
-		/** \return the language support plugin corresponding to
-		* a mime type name.
-		*/
-		KPluginInfo languageSupportForMimeType(const QString &name);
-		/** \return The name of the language corresponding to this mime type name.
-		*/
-		QString languageNameFromLanguageSupport(const QString &mime);
 		void loadPlugins();
 
-		ISourceFormatter* formatterForLanguage(const QString &language);
-		/** \return the formatter for the currently avtive language named \arg name.
-		*/
-		ISourceFormatter* formatterByName(const QString &language, const QString &name);
-		/** \return The name of kate indentation mode for the mime type.
-		* examples are cstyle, python, etc.
-		*/
-		QString indentationMode(const KMimeType::Ptr &mime);
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);
 		void beautifySource();
 		void formatFiles();
 	private:
+		/** \return The name of kate indentation mode for the mime type.
+		* examples are cstyle, python, etc.
+		*/
+		QString indentationMode(const KMimeType::Ptr &mime);
 		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
 		void formatFiles(KUrl::List &list);
-		static SourceFormatterController *m_instance;
+		KConfigGroup groupForLanguage( const SourceFormatterLanguage& l );
 		// all availables plugins and languages
-		IPluginHash m_plugins;
-		QHash<QString, QString> m_languages;
-		// currently selected plugins, styles and languages
-		QHash<QString, ISourceFormatter*> m_currentPlugins;
-		QString m_currentStyle;
+		QHash<QString,SourceFormatterLanguage> m_languages;
 		KConfigGroup m_rootConfigGroup;
-		KConfigGroup m_activeConfigGroup;
-		QString m_currentLang;
 		// config
 		bool m_modelinesEnabled;
 		// GUI actions
@@ -199,6 +181,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 };
 
 }
+Q_DECLARE_METATYPE( KDevelop::SourceFormatterLanguage )
 
 #endif // SOURCEFORMATTERMANAGER_H
 

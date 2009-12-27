@@ -27,7 +27,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
-	class ISourceFormatter;
+class ISourceFormatter;
 
 /** \short An interface to the controller managing all source formatter plugins
  */

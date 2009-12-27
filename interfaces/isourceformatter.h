@@ -29,6 +29,22 @@
 namespace KDevelop
 {
 
+class KDEVPLATFORMINTERFACES_EXPORT SourceFormatterStyle
+{
+public:
+        SourceFormatterStyle() {};
+	SourceFormatterStyle( const QString& name ) : m_name(name) {}
+	void setContent( const QString& content ) { m_content = content; }
+	void setCaption( const QString& caption ) { m_caption = caption; }
+	QString content() const { return m_content; }
+	QString caption() const { return m_caption; }
+	QString name() const { return m_name; }
+private:
+	QString m_name;
+	QString m_caption;
+	QString m_content;
+};
+
 /**
 * @short A widget to edit a style
 * A plugin should inherit this widget to create a widget to
@@ -48,7 +64,7 @@ class KDEVPLATFORMINTERFACES_EXPORT SettingsWidget : public QWidget
 		* the predefined style \arg name if it's not empty, or
 		* to the string \arg content.
 		*/
-		virtual void load(const QString &name, const QString &content) = 0;
+		virtual void load(const SourceFormatterStyle&) = 0;
 
 		/** \return A string representing the state of the config.
 		*/
@@ -99,7 +115,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		/** \return The highlighting mode for Kate corresponding to this mime.
 		*/
 		virtual QString highlightModeForMime(const KMimeType::Ptr &mime) = 0;
-
+		
 		/** Formats using the current style.
 		 * @param text The text to format
 		 * @param leftContext The context at the left side of the text. If it is in another line, it must end with a newline.
@@ -111,11 +127,14 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
-		virtual QMap<QString, QString> predefinedStyles(const KMimeType::Ptr &mime) = 0;
+		virtual QList<SourceFormatterStyle> predefinedStyles() = 0;
+
 		/** Load the predefined type of name \arg name, or if the first arg is empty, the style
 		*   defined by the options string \arg content.
 		*/
-		virtual void setStyle(const QString &name, const QString &content = QString()) = 0;
+		virtual void setStyle(const SourceFormatterStyle&) = 0;
+
+                virtual SourceFormatterStyle style() const = 0;
 
 		/** \return The widget to edit a style.
 		*/

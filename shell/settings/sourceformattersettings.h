@@ -24,6 +24,8 @@ Boston, MA 02110-1301, USA.
 #include <KCModule>
 #include <KMimeType>
 
+#include "interfaces/isourceformatter.h"
+
 #include "ui_sourceformattersettings.h"
 
 class QListWidgetItem;
@@ -35,6 +37,7 @@ namespace KTextEditor
 namespace KDevelop
 {
 class ISourceFormatter;
+class SourceFormatterLanguage;
 }
 
 /** \short The settings modulefor the Source formatter plugin.
@@ -45,38 +48,15 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 {
 		Q_OBJECT
 
-	typedef QHash<QString, QHash<QString, QString> > StyleHash;
-
 	public:
 		SourceFormatterSettings(QWidget *parent, const QVariantList &args);
 		virtual ~SourceFormatterSettings();
 
-	protected:
-		/** Create the text editor, connect the signals and initialise the widget.
-		*/
-		void init();
-		/** Populates the formatters combo box with all available formatters
-		* corresponding to the active language.
-		*/
-		void poulateFormattersList();
-		/**Populates the style list with all available style
-		* corresponding to the active language. This include custom styles loaded
-		* from the config file.
-		*/
-		void populateStyleList();
-		/** Sets the active language. Updates SouceFormetterManager.
-		* \p plugin can be empty to keep the default plugin.
-		*/
-		void setActiveLanguage(const QString &lang, const QString &plugin);
-
 	public slots:
 		virtual void load();
 		virtual void save();
-		void updatePreviewText();
-		void addItemInStyleList(const QString &caption, const QString &name, bool editable = false);
 
-	protected slots:
-		void currentTabChanged();
+	private slots:
 		void languagesStylesChanged(int idx);
 		void currentStyleChanged(QListWidgetItem *current, QListWidgetItem *previous);
 		void styleRenamed(QListWidgetItem *item);
@@ -85,18 +65,18 @@ class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSetti
 		void editStyle();
 		void modelineChanged();
 
-		void languagesFormattersChanged(int idx);
 		void formattersChanged(int idx);
 
 	private:
+		void populateStyleList( KDevelop::ISourceFormatter* );
+		void updatePreviewText();
+                void addItemInStyleList(const KDevelop::SourceFormatterStyle &style, bool editable = false );
+		void checkEnabled();
+		KDevelop::SourceFormatterLanguage currentLanguage();
+		void updateCurrentLanguage( KDevelop::SourceFormatterLanguage lang );
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
-		KDevelop::ISourceFormatter* m_currentFormatter;
-		int m_numberOfPredefinedStyles;
-		KMimeType::Ptr m_currentMimeType;
-		QString m_previewText;
-		QString m_currentLang;
-		StyleHash m_currentStyles;
+		QList<KDevelop::SourceFormatterLanguage> m_languages;
 };
 
 #endif // SOURCEFORMATTERSETTINGS_H

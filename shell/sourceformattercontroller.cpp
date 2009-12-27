@@ -52,8 +52,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 		: ISourceFormatterController(parent), m_modelinesEnabled(false)
 {
 	setObjectName("SourceFormatterController");
-    setComponentData(KComponentData("kdevsourceformatter"));
-    
+	setComponentData(KComponentData("kdevsourceformatter"));
 	setXMLFile("kdevsourceformatter.rc");
 
 	m_formatTextAction = actionCollection()->addAction("edit_reformat_source");
@@ -93,80 +92,42 @@ void SourceFormatterController::loadPlugins()
  	KDevelop::IPluginController *controller = KDevelop::ICore::self()->pluginController();
 
 	foreach(KDevelop::IPlugin *p,
-	        controller->allPluginsForExtension("org.kdevelop.ISourceFormatter")) {
+	        controller->allPluginsForExtension("org.kdevelop.ISourceFormatter"))
+	{
+		ISourceFormatter* fmt = p->extension<ISourceFormatter>();
+		Q_ASSERT(fmt);
 		KPluginInfo info = controller->pluginInfo(p);
 		QVariant mimes = info.property("X-KDevelop-SupportedMimeTypes");
 		kDebug() << "Found plugin " << info.name() << " for mimes " << mimes << endl;
 
 		QStringList mimeTypes = mimes.toStringList();
 		foreach(const QString &s, mimeTypes) {
-			QString lang = languageNameFromLanguageSupport(s);
-			QList<KDevelop::IPlugin*> &list = m_plugins[lang];
-			if (!list.contains(p))
-				list.append(p);
-			kDebug() << "Loading plugin " << info.name() << " for type " << s
-			<< " and lang " << lang << endl;
+			SourceFormatterLanguage l = m_languages[s];
+                        l.mimeType = s;
+			if(l.formatters.isEmpty())
+			{
+				l.selectedFormatter = fmt->name();
+			}
+			if (!l.formatters.contains(fmt->name()))
+			{
+				SourceFormatterCfg c;
+				c.fmt = fmt;
+				QList<SourceFormatterStyle> styles = fmt->predefinedStyles();
+				if( !styles.isEmpty() )
+				{
+					c.selectedStyle = styles.at(0).name();
+				}
+				l.formatters.insert( fmt->name(), c );
+			}
+			m_languages.insert( s, l );
 		}
 	}
 }
 
-KPluginInfo
-SourceFormatterController::languageSupportForMimeType(const QString &name)
+QString SourceFormatterController::iconForLanguage(const SourceFormatterLanguage &lang)
 {
-	QStringList constraints;
-	constraints << QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(name);
-
-	QList<KPluginInfo> list = KDevelop::IPluginController::queryExtensionPlugins("ILanguageSupport", constraints);
-	foreach(KPluginInfo p, list)
-		return p;
-
-	return KPluginInfo();
-}
-
-QString SourceFormatterController::languageNameFromLanguageSupport(const QString &name)
-{
-	if (m_languages.contains(name))
-		return m_languages[name];
-
-	QString lang = name;
-	// we're loading the plugin, find the name from the language support plugin
-	KPluginInfo p = languageSupportForMimeType(name);
-	if (p.isValid())
-		lang = p.property("X-KDevelop-Language").toString();
-
-	m_languages.insert(name, lang);
-	return lang;
-}
-
-QString SourceFormatterController::languageNameForMimeType(const KMimeType::Ptr &mime)
-{
-	if (m_languages.contains(mime->name()))
-		return m_languages[mime->name()];
-	return QString();
-}
-
-QString SourceFormatterController::iconForLanguage(const QString &lang)
-{
-	//  QString mime = mimeTypeForLanguage(lang);
-	KDevelop::IPlugin *p = KDevelop::ICore::self()
-	        ->pluginController()->pluginForExtension("org.kdevelop.ILanguageSupport", lang);//languageForMimeType(mime);
-	if (p) {
-		KPluginInfo info = KDevelop::ICore::self()->pluginController()->pluginInfo(p);
-		return info.icon();
-	}
-	return lang;
-}
-
-QList<KDevelop::IPlugin*> SourceFormatterController::pluginListForLanguage(const QString &lang)
-{
-	if (m_plugins.contains(lang))
-		return m_plugins[lang];
-	return QList<KDevelop::IPlugin*>();
-}
-
-ISourceFormatter* SourceFormatterController::activeFormatter()
-{
-	return m_currentPlugins[m_currentLang];
+	QString tmp = lang.mimeType;
+	return tmp.replace( QString("/"), QString("-") );
 }
 
 ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
@@ -180,9 +141,9 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeTyp
 	if (!m_languages.contains(mime->name())) //unknown mime type
 		return 0;
 
-	setActiveLanguage(languageNameForMimeType(mime));
-	kDebug() << "About to format file " << mime->name() << m_currentLang << endl;
-	return formatterForLanguage(m_languages[mime->name()]);
+	SourceFormatterLanguage l = m_languages[mime->name()];
+	ISourceFormatter* fmt = l.formatters[l.selectedFormatter].fmt;
+        return fmt;
 }
 
 bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
@@ -190,178 +151,106 @@ bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
 	return m_languages.contains(mime->name());
 }
 
-ISourceFormatter* SourceFormatterController::formatterForLanguage(const QString &language)
+QList<SourceFormatterLanguage> SourceFormatterController::languages()
 {
-	if (m_currentPlugins.contains(language))
-		return m_currentPlugins[language];
-
-	// else load the current plugin from config
-	KConfigGroup langGroup = m_rootConfigGroup.group(language);
-	QString formatterName = langGroup.readEntry("Plugin", "");
-	if (formatterName.isEmpty()) { // no formatters defined yet, load the first one
-		KDevelop::IPlugin *p = m_plugins[language].first();
-		if (!p)
-			return 0;
-		m_currentPlugins[language] = p->extension<ISourceFormatter>();
-	} else
-		m_currentPlugins[language] = formatterByName(language, formatterName);
-
-	return m_currentPlugins[language];
+	return m_languages.values();
 }
 
-ISourceFormatter* SourceFormatterController::formatterByName(const QString &language, const QString &name)
+
+void SourceFormatterController::updateFormatterLanguage(const KDevelop::SourceFormatterLanguage& language)
 {
-	QList<KDevelop::IPlugin*> list = m_plugins[language];
-	foreach(KDevelop::IPlugin *p, list) {
-		if (p) {
-			ISourceFormatter *f = p->extension<ISourceFormatter>();
-			if (f && (f->name() == name))
-				return f;
-		}
-	}
-	return 0;
-}
-
-// void SourceFormatterController::setFormatterForLanguage(const QString &lang, ISourceFormatter *formatter)
-// {
-//     m_currentPlugins[lang] = formatter;
-// }
-
-void SourceFormatterController::setActiveLanguage(const QString &lang, QString plugin)
-{
-	// find the plugin for this language
-	if (plugin.isEmpty()) {
-		if (m_currentLang == lang)
-			return; // no change
-		ISourceFormatter *f = formatterForLanguage(lang);
-		if (f)
-			plugin = f->name();
-	} else
-		m_currentPlugins[lang] = formatterByName(lang, plugin);
-	kDebug() << "Activating language " << lang << " with plugin " << plugin << " == " << m_currentPlugins[lang] << endl;
-
-	if (plugin.isEmpty()) {
-		kDebug() << "Cannot find a suitable plugin for language " << lang << endl;
-	}
-
-	// update the plugin entry in config
-// 	m_rootConfigGroup.group(lang).writeEntry("Plugin", plugin);
-	m_activeConfigGroup = m_rootConfigGroup.group(lang).group(plugin);
-	m_currentLang = lang;
-
-	// load the current style for this language
-	QString styleName = m_activeConfigGroup.readEntry("Style", "");
-	if (!styleName.isEmpty() && m_currentPlugins[lang])
-		setCurrentStyle(styleName);
-}
-
-QStringList SourceFormatterController::languages()
-{
-	QStringList list;
-	QHash<QString, QString>::const_iterator it = m_languages.constBegin();
-	for (; it != m_languages.constEnd(); ++it) {
-		if (!list.contains(it.value()))
-			list.append(it.value());
-	}
-	return list;
-}
-
-QString SourceFormatterController::mimeTypeForLanguage(const QString &lang)
-{
-	QHash<QString, QString>::const_iterator it = m_languages.constBegin();
-	for (; it != m_languages.constEnd(); ++it) {
-		if (it.value() == lang)
-			return it.key();
-	}
-	return QString();
+	m_languages[language.mimeType] = language;
 }
 
 void SourceFormatterController::loadConfig()
 {
-	// reload config that may have been modified by config dialog
-	m_currentPlugins.clear();
-	m_currentLang.clear();
-
-	m_modelinesEnabled = m_rootConfigGroup.readEntry("ModelinesEnabled",
-	        QVariant(false)).toBool();
-//     // load current plugins and styles
-//     foreach(QString l, languages()) {
-//         KConfigGroup langGroup = m_configGroup.group(l);
-//         QString plugin = langGroup.readEntry("Plugin", "");
-//         if(!plugin.isEmpty()) {
-//             KConfigGroup pluginGroup = langGroup.group(plugin);
-//             m_currentPlugins[l] = formatterByName(l, plugin);
-// //             m_currentStyles[l] = pluginGroup.readEntry("Style","");
-//         }
-//     }
+	m_languages.clear();
+	loadPlugins();
+	foreach( const QString& k, m_languages.keys() )
+	{
+		SourceFormatterLanguage lang = m_languages[k];
+		QString cfg = m_rootConfigGroup.readEntry( lang.mimeType, "" );
+		if( !cfg.isEmpty() )
+		{
+			QStringList cfglist = cfg.split("||");
+			Q_ASSERT(cfglist.size() == 2);
+			if( lang.formatters.contains( cfglist.at(0) ) )
+			{
+				lang.selectedFormatter = cfglist.at(0);
+				lang.formatters[lang.selectedFormatter].selectedStyle = cfglist.at(1);
+			}
+		}
+	}
+	m_modelinesEnabled = m_rootConfigGroup.readEntry("ModelinesEnabled", false);
 }
 
 void SourceFormatterController::saveConfig()
 {
-	// save current plugins
-	QHash<QString, ISourceFormatter*>::const_iterator it = m_currentPlugins.constBegin();
-	for (; it != m_currentPlugins.constEnd(); ++it) {
-		ISourceFormatter *f = it.value();
-		if(f) {
-			QString pluginName = f->name();
-			m_rootConfigGroup.group(it.key()).writeEntry("Plugin", pluginName);
-		}
+	foreach( const SourceFormatterLanguage& lang, m_languages.values() )
+	{
+		m_rootConfigGroup.writeEntry( lang.mimeType, lang.selectedFormatter + "||" + lang.formatters[lang.selectedFormatter].selectedStyle );
 	}
-
 	m_rootConfigGroup.writeEntry("ModelinesEnabled", m_modelinesEnabled);
 	m_rootConfigGroup.sync();
 }
 
-QString SourceFormatterController::currentStyle() const
+QList<SourceFormatterStyle> SourceFormatterController::userStyles( const QString& formatter ) const
 {
-    return m_currentStyle;
-// 	return m_activeConfigGroup.readEntry("Style", "");
+        QList<SourceFormatterStyle> styles;
+        KConfigGroup fmtgrp = m_rootConfigGroup.group( formatter );
+        foreach( const QString& grp, fmtgrp.groupList() )
+        {
+                if( grp.startsWith( "User" ) ) {
+                        SourceFormatterStyle st(grp);
+                        st.setCaption(fmtgrp.group(grp).readEntry("Caption", ""));
+                        st.setContent(fmtgrp.group(grp).readEntry("Content", ""));
+                        styles << st;
+                }
+        }
+        return styles;
 }
 
-void SourceFormatterController::setCurrentStyle(const QString &style)
+QString SourceFormatterController::formatSourceForLanguage(const QString& str, const SourceFormatterLanguage& lang ) const
 {
-	if (!m_currentPlugins[m_currentLang]) {
-		kDebug() << "currrent plugin is null for style " << m_currentLang << style << endl;
-		return;
+        SourceFormatterCfg cfg = lang.formatters[lang.selectedFormatter];
+        SourceFormatterStyle origStyle = cfg.fmt->style();
+        cfg.fmt->setStyle( cfg.styles[cfg.selectedStyle] );
+        QString formatted = cfg.fmt->formatSource( str, KMimeType::mimeType( lang.mimeType ) );
+        cfg.fmt->setStyle( origStyle );
+        return formatted;
+}
+
+void SourceFormatterController::saveStyle(const QString& formatterId, const SourceFormatterStyle& style)
+{
+	if( style.name().startsWith( "User" ) ) 
+	{
+		KConfigGroup cfg = m_rootConfigGroup.group( formatterId ).group( style.name() );
+		cfg.writeEntry("Content", style.content());
+		if( !style.caption().isEmpty() )
+		{
+			cfg.writeEntry("Caption" , style.caption());
+		}
 	}
-	kDebug() << "style is " << style << endl;
-
-	if (m_activeConfigGroup.hasKey(style)) { // custom style
-		QString content = m_activeConfigGroup.readEntry(style);
-		m_currentPlugins[m_currentLang]->setStyle(QString(), content);
-	} else // predefined style
-		m_currentPlugins[m_currentLang]->setStyle(style);
-
-	m_currentStyle = style;
-// 	m_activeConfigGroup.writeEntry("Style", style);
+	m_rootConfigGroup.sync();
 }
 
-void SourceFormatterController::saveStyle(const QString &name, const QString &content)
+void SourceFormatterController::deleteStyle(const QString& formatterId, const QString& style)
 {
-	m_activeConfigGroup.writeEntry(name, content);
+	m_rootConfigGroup.group( formatterId ).deleteGroup( style );
 }
 
-void SourceFormatterController::renameStyle(const QString &name, const QString &caption)
-{
-	m_activeConfigGroup.writeEntry("Caption" + name.mid(4), caption);
-}
-
-void SourceFormatterController::deleteStyle(const QString &name)
-{
-	m_activeConfigGroup.deleteEntry(name);
-}
-
-QString SourceFormatterController::nameForNewStyle()
+SourceFormatterStyle SourceFormatterController::newStyle( const QString& fmt ) const
 {
 	//find available number
 	int idx = 1;
 	QString s = "User" + QString::number(idx);
-	while (m_activeConfigGroup.hasKey(s)) {
+	KConfigGroup cfg = m_rootConfigGroup.group( fmt );
+	while (cfg.hasGroup(s) ) {
 		++idx;
 		s = "User" + QString::number(idx);
 	}
 
-	return s;
+	return SourceFormatterStyle(s);
 }
 
 QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
@@ -373,21 +262,32 @@ QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
 	return "none";
 }
 
-QString SourceFormatterController::addModelineForCurrentLang(QString input, const KMimeType::Ptr &mime)
+QString SourceFormatterController::addModelineForCurrentLang(QString input, const KMimeType::Ptr& mime)
 {
-	if (!m_currentPlugins[m_currentLang] || !m_modelinesEnabled)
+	if( !m_languages.contains(mime->name()) )
+	{
+		return input;
+	}
+	return addModelineForCurrentLang(m_languages[mime->name()], input);
+}
+QString SourceFormatterController::addModelineForCurrentLang(const SourceFormatterLanguage& lang, QString input)
+{
+	if (!m_modelinesEnabled)
 		return input;
 
 	QString output;
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
-
+	
+	ISourceFormatter* fmt = lang.formatters[lang.selectedFormatter].fmt;
+	Q_ASSERT(fmt);
+	
     QString modeline("// kate: ");
-	QString length = QString::number(m_currentPlugins[m_currentLang]->indentationLength());
+	QString length = QString::number(fmt->indentationLength());
 	// add indentation style
-	modeline.append("indent-mode ").append(indentationMode(mime)).append("; ");
+	modeline.append("indent-mode ").append(indentationMode(KMimeType::mimeType(lang.mimeType)).append("; "));
 
-	ISourceFormatter::IndentationType type = m_currentPlugins[m_currentLang]->indentationType();
+	ISourceFormatter::IndentationType type = fmt->indentationType();
 	if (type == ISourceFormatter::IndentWithTabs) {
 		modeline.append("replace-tabs off; ");
 		modeline.append("tab-width ").append(length).append("; ");

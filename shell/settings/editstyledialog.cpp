@@ -31,9 +31,10 @@ Boston, MA 02110-1301, USA.
 
 using KDevelop::ISourceFormatter;
 using KDevelop::SettingsWidget;
+using KDevelop::SourceFormatterStyle;
 
 EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
-        const QString &content, const QString &name, QWidget *parent)
+        const SourceFormatterStyle &style, QWidget *parent)
 		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime)
 {
 	m_content = new QWidget();
@@ -42,7 +43,7 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::P
 
 	m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
 	if (m_settingsWidget)
-		m_settingsWidget->load(name, content);
+		m_settingsWidget->load(style);
 	init();
 }
 
