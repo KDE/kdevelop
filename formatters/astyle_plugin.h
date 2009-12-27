@@ -48,11 +48,13 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         /** \return A map of predefined styles (a key and a caption for each type)
         */
-        virtual QMap<QString, QString> predefinedStyles(const KMimeType::Ptr &mime);
+        virtual QList<KDevelop::SourceFormatterStyle> predefinedStyles();
         /** Load the predefined type of name \arg name, or if the first arg is empty, the style
         *   defined by the options string \arg content.
         */
-        virtual void setStyle(const QString &name, const QString &content = QString());
+        virtual void setStyle(const KDevelop::SourceFormatterStyle &style);
+
+        virtual KDevelop::SourceFormatterStyle style() const;
 
         /** \return The widget to edit a style.
         */
@@ -75,6 +77,7 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
     private:
         AStyleFormatter *m_formatter;
+        KDevelop::SourceFormatterStyle currentStyle;
 };
 
 #endif // ASTYLEPLUGIN_H

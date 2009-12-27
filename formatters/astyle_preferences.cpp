@@ -106,12 +106,12 @@ void AStylePreferences::init()
     connect(chkKeepBlocks, SIGNAL(stateChanged(int)), this, SLOT(onelinersChanged()));
 }
 
-void AStylePreferences::load(const QString &name, const QString &content)
+void AStylePreferences::load(const KDevelop::SourceFormatterStyle &style)
 {
-    if(name.isEmpty())
-        m_formatter->loadStyle(content);
+    if(!style.content().isEmpty())
+        m_formatter->loadStyle(style.content());
     else
-        m_formatter->predefinedStyle(name);
+        m_formatter->predefinedStyle(style.name());
 
     updateWidgets();
     updatePreviewText();

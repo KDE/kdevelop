@@ -35,6 +35,7 @@ IndentPlugin::IndentPlugin(QObject *parent, const QVariantList&)
 		: IPlugin(IndentFactory::componentData(), parent)
 {
 	KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
+        m_currentStyle = predefinedStyles().at(0);
 }
 
 IndentPlugin::~IndentPlugin()
@@ -122,27 +123,37 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, c
 	return output.join("\n");
 }
 
-QMap<QString, QString> IndentPlugin::predefinedStyles(const KMimeType::Ptr &)
+QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
-	QMap<QString, QString> styles;
-	styles.insert("orig", "Original Berkeley indent style");
-	styles.insert("GNU", "GNU");
-	styles.insert("KR", "Kernighan & Ritchie");
-
+        QList<KDevelop::SourceFormatterStyle> styles;
+        KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "GNU" );
+        st.setCaption( "GNU" );
+        styles << st;
+        st = KDevelop::SourceFormatterStyle( "KR" );
+        st.setCaption( "Kernighan & Ritchie" );
+        styles << st;
+        st = KDevelop::SourceFormatterStyle( "orig" );
+        st.setCaption( "Original Berkeley indent style" );
+        styles << st;
 	return styles;
 }
 
-void IndentPlugin::setStyle(const QString &name, const QString &content)
+KDevelop::SourceFormatterStyle IndentPlugin::style() const
 {
-	if (!name.isEmpty()) {
+        return m_currentStyle;
+}
+
+void IndentPlugin::setStyle(const KDevelop::SourceFormatterStyle &style)
+{
+	if (!style.content().isEmpty()) {
 		m_options.clear();
-		if(name == "KR")
+		if(style.name() == "KR")
 			m_options << "-kr";
-		else if(name == "orig")
+		else if(style.name() == "orig")
 			m_options << "-orig";
 	}
 	else
-		m_options = content.split(' ');
+		m_options = style.content().split(' ');
 }
 
 KDevelop::SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)

@@ -37,7 +37,8 @@ AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
 		: IPlugin(AStyleFactory::componentData(), parent)
 {
     KDEV_USE_EXTENSION_INTERFACE(ISourceFormatter)
-	m_formatter = new AStyleFormatter();
+    m_formatter = new AStyleFormatter();
+    currentStyle = predefinedStyles().at(0);
 }
 
 AStylePlugin::~AStylePlugin()
@@ -82,24 +83,42 @@ QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
     return m_formatter->formatSource(text, leftContext, rightContext);
 }
 
-QMap<QString, QString> AStylePlugin::predefinedStyles(const KMimeType::Ptr &)
+QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
 {
-    QMap<QString, QString> styles;
-    styles.insert("ANSI", "ANSI");
-    styles.insert("GNU", "GNU");
-    styles.insert("Java", "Java");
-    styles.insert("KR", "Kernighan & Ritchie");
-    styles.insert("Linux", "Linux");
+    QList<KDevelop::SourceFormatterStyle> styles;
+
+    KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "ANSI" );
+    st.setCaption( "ANSI" );
+    styles << st;
+    st = KDevelop::SourceFormatterStyle( "GNU" );
+    st.setCaption( "GNU" );
+    styles << st;
+    st = KDevelop::SourceFormatterStyle( "Java" );
+    st.setCaption( "Java" );
+    styles << st;
+    st = KDevelop::SourceFormatterStyle( "KR" );
+    st.setCaption( "Kernighan & Ritchie" );
+    styles << st;
+    st = KDevelop::SourceFormatterStyle( "Linux" );
+    st.setCaption( "Linux" );
+    styles << st;
 
     return styles;
 }
 
-void AStylePlugin::setStyle(const QString &name, const QString &content)
+void AStylePlugin::setStyle(const KDevelop::SourceFormatterStyle &style)
 {
-    if(!name.isEmpty())
-        m_formatter->predefinedStyle(name);
-    else
-        m_formatter->loadStyle(content);
+    currentStyle = style;
+    if( style.content().isEmpty() ) {
+        m_formatter->predefinedStyle( style.name() );
+    } else {
+        m_formatter->loadStyle( style.content() );
+    }
+}
+
+KDevelop::SourceFormatterStyle AStylePlugin::style() const
+{
+    return currentStyle;
 }
 
 KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mime)
