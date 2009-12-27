@@ -79,8 +79,8 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 void SourceFormatterController::initialize()
 {
-	loadPlugins();
 	m_rootConfigGroup = KGlobal::config()->group("SourceFormatter");
+	loadPlugins();
 }
 
 SourceFormatterController::~SourceFormatterController()
