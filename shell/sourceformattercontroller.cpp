@@ -99,6 +99,20 @@ void SourceFormatterController::loadPlugins()
 		KPluginInfo info = controller->pluginInfo(p);
 		QVariant mimes = info.property("X-KDevelop-SupportedMimeTypes");
 		kDebug() << "Found plugin " << info.name() << " for mimes " << mimes << endl;
+                
+                QList<SourceFormatterStyle> fmtstyles;
+
+                if( m_rootConfigGroup.hasGroup( fmt->name() ) )
+                {
+                    KConfigGroup fmtgrp = m_rootConfigGroup.group(fmt->name());
+                    foreach( const QString& grp, fmtgrp.groupList() )
+                    {
+                        SourceFormatterStyle st(grp);
+                        st.setCaption( fmtgrp.group(grp).readEntry( "Caption", grp ) );
+                        st.setContent( fmtgrp.group(grp).readEntry( "Content", "" ) );
+                        fmtstyles << st;
+                    }
+                }
 
 		QStringList mimeTypes = mimes.toStringList();
 		foreach(const QString &s, mimeTypes) {
@@ -117,6 +131,14 @@ void SourceFormatterController::loadPlugins()
 				{
 					c.selectedStyle = styles.at(0).name();
 				}
+                                foreach( const SourceFormatterStyle& st, styles ) 
+                                {
+                                    c.styles.insert( st.name(), st );
+                                }
+                                foreach( const SourceFormatterStyle& st, fmtstyles ) 
+                                {
+                                    c.styles.insert( st.name(), st );
+                                }
 				l.formatters.insert( fmt->name(), c );
 			}
 			m_languages.insert( s, l );
