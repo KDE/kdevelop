@@ -199,9 +199,15 @@ void SourceFormatterController::loadConfig()
 			if( lang.formatters.contains( cfglist.at(0) ) )
 			{
 				lang.selectedFormatter = cfglist.at(0);
-				lang.formatters[lang.selectedFormatter].selectedStyle = cfglist.at(1);
+                                if( lang.formatters[lang.selectedFormatter].styles.contains( cfglist.at(1) ) )
+                                {
+                                    SourceFormatterCfg c = lang.formatters[lang.selectedFormatter];
+                                    c.selectedStyle = cfglist.at(1);
+				    lang.formatters[lang.selectedFormatter] = c;
+                                }
 			}
 		}
+                m_languages[k] = lang;
 	}
 	m_modelinesEnabled = m_rootConfigGroup.readEntry("ModelinesEnabled", false);
 }
