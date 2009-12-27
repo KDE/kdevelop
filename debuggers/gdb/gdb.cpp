@@ -237,10 +237,7 @@ void GDB::processLine(const QByteArray& line)
 
                GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
 
-               if (currentCmd_->isUserCommand())
-                   emit userCommandOutput(QString::fromLocal8Bit(line));
-               else
-                   emit internalCommandOutput(QString::fromLocal8Bit(line) + '\n');
+               emit internalCommandOutput(QString::fromLocal8Bit(line) + '\n');
                
                // FIXME: the code below should be reviewed to consider result record
                // subtype when doing all decisions.
