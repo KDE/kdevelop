@@ -213,7 +213,6 @@ void SourceFormatterSettings::languagesStylesChanged(int idx)
 	}
 	
 	checkEnabled();
-	changed();
 }
 
 void SourceFormatterSettings::populateStyleList( ISourceFormatter* fmt )
