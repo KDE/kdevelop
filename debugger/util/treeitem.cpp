@@ -118,11 +118,15 @@ void TreeItem::removeSelf()
 
 void TreeItem::deleteChildren()
 {
+    QVector<TreeItem*> copy = childItems;
+    clear();
+    // Only delete the children after removing them
+    // from model.  Otherwise, the model will touch
+    // deleted things, with undefined results.
     for (int i = 0; i < childItems.size(); ++i) {
         TreeItem* v = child(i);
         delete v;
     }
-    clear();
 }
 
 void TreeItem::clear()
