@@ -136,6 +136,7 @@ install(TARGETS kdevplatformshell EXPORT KDevPlatformTargets ${INSTALL_TARGETS_D
 
 install( FILES debugger/kdevdebuggershellui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevdebugger )
 install( FILES kdevsessionui.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsession )
+install( FILES kdevsourceformatter.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsourceformatter )
 
 if(NOT WIN32)
    macro_optional_add_subdirectory(kross)

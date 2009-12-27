@@ -49,6 +49,8 @@ Boston, MA 02110-1301, USA.
 #include "debugcontroller.h"
 #include "workingsetcontroller.h"
 #include "sessioncontroller.h"
+#include "sourceformattercontroller.h"
+
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
 #include <sublime/view.h>
@@ -212,6 +214,7 @@ void MainWindow::initialize()
     
     guiFactory()->addClient(Core::self()->debugControllerInternal());
     guiFactory()->addClient(Core::self()->sessionController());
+    guiFactory()->addClient(Core::self()->sourceFormatterControllerInternal());
     // Needed to re-plug the actions from the sessioncontroller as xmlguiclients don't
     // seem to remember which actions where plugged in.
     Core::self()->sessionController()->plugActions();

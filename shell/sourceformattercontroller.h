@@ -1,4 +1,5 @@
 /* This file is part of KDevelop
+Copyright 2009 Andreas Pakulat <apaku@gmx.de>
 Copyright (C) 2008 Cédric Pasteur <cedric.pasteur@free.fr>
 
 This library is free software; you can redistribute it and/or
@@ -24,30 +25,40 @@ Boston, MA 02110-1301, USA.
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
+#include <kxmlguiclient.h>
 #include <KDE/KMimeType>
 #include <KDE/KConfigGroup>
 #include <KDE/KPluginInfo>
 
 #include "shellexport.h"
 
+class KAction;
 namespace KDevelop
 {
-	class ISourceFormatter;
-	class IPlugin;
+
+class Context;
+
+class ContextMenuExtension;
+
+class ProjectBaseItem;
+
+class IDocument;
+class ISourceFormatter;
+class IPlugin;
 
 typedef QHash<QString, QList<KDevelop::IPlugin*> > IPluginHash;
 
 /** \short A singleton class managing all source formatter plugins
  */
-class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatterController
+class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatterController, public KXMLGUIClient
 {
-		Q_OBJECT
+	Q_OBJECT
 
 	public:
 		SourceFormatterController(QObject *parent = 0);
 		virtual ~SourceFormatterController();
 		void initialize();
-                void cleanup();
+		void cleanup();
 
 		/** \return The instance of this singleton.
 		*/
@@ -141,6 +152,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 			return m_modelinesEnabled;
 		}
 
+		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+
 	protected:
 		/** \return the language support plugin corresponding to
 		* a mime type name.
@@ -159,8 +172,13 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		* examples are cstyle, python, etc.
 		*/
 		QString indentationMode(const KMimeType::Ptr &mime);
-
+	private Q_SLOTS:
+		void activeDocumentChanged(KDevelop::IDocument *doc);
+		void beautifySource();
+		void formatFiles();
 	private:
+		void formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime);
+		void formatFiles(KUrl::List &list);
 		static SourceFormatterController *m_instance;
 		// all availables plugins and languages
 		IPluginHash m_plugins;
@@ -173,6 +191,11 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		QString m_currentLang;
 		// config
 		bool m_modelinesEnabled;
+		// GUI actions
+		KAction* m_formatTextAction;
+		KAction* m_formatFilesAction;
+		QList<KDevelop::ProjectBaseItem*> m_prjItems;
+		KUrl::List m_urls;
 };
 
 }

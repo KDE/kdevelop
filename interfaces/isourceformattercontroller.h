@@ -1,4 +1,5 @@
 /* This file is part of KDevelop
+Copyright 2009 Andreas Pakulat <apaku@gmx.de>
 Copyright (C) 2008 Cédric Pasteur <cedric.pasteur@free.fr>
 
 This library is free software; you can redistribute it and/or
@@ -20,19 +21,13 @@ Boston, MA 02110-1301, USA.
 #ifndef ISOURCEFORMATTERCONTROLLER_H
 #define ISOURCEFORMATTERCONTROLLER_H
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
 #include <KDE/KMimeType>
-#include <KDE/KConfigGroup>
 
 #include "interfacesexport.h"
 
 namespace KDevelop
 {
-        class ISourceFormatter;
-	class IPlugin;
-
-typedef QHash<QString, QList<KDevelop::IPlugin*> > IPluginHash;
+	class ISourceFormatter;
 
 /** \short An interface to the controller managing all source formatter plugins
  */
@@ -56,10 +51,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		/** \return Whether this mime type is supported by any plugin.
 		*/
 		virtual bool isMimeTypeSupported(const KMimeType::Ptr &mime) = 0;
-		/** \return A modeline string (to add at the end or the beginning of a file)
-		* corresponding to the settings of the active language.
-		*/
-		virtual QString addModelineForCurrentLang(QString input, const KMimeType::Ptr &mime) = 0;
 };
 
 }
