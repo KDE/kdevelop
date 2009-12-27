@@ -136,19 +136,23 @@ int main( int argc, char *argv[] )
         //No session is set, we have to pick one, then we restart kdevelop through kdev_starter, and forward all relevant arguments to it
         session = KDevelop::SessionController::defaultSessionId(session);
 
-        kDebug() << "Starting with kdev_starter and default session" << session;
-        
-        QStringList args;
-        
-        args << QApplication::applicationFilePath() << session;
-        
+        KProcess proc;
         //Forward all arguments, the session will be skipped automatically as KDEV_SESSION will be set
-        for(uint a = 1; a < argc; ++a)
-            args << QString(argv[a]);
+        for(uint a = 0; a < argc; ++a)
+            proc << QString::fromLocal8Bit(argv[a]);
         
         //@todo Eventually show a session-picking dialog
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", args);
-        return 0;
+        proc.setEnv( "KDEV_SESSION", session );
+        proc.start();
+        if( !proc.waitForStarted() )
+        {
+            return -2;
+        }
+        if( !proc.waitForFinished( -1 ) )
+        {
+            return -1;
+        }
+        return proc.exitCode();
     }
     
     KSplashScreen* splash = 0;
