@@ -129,6 +129,10 @@ public:
 
     /** @return working set controller */
     WorkingSetController* workingSetControllerInternal();
+
+    /** @return the real source formatter controller */
+    SourceFormatterController* sourceFormatterControllerInternal();
+
     /**
      * @return session controller
      * @internal

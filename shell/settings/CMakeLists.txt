@@ -103,6 +103,28 @@ kde4_add_ui_files( envsettings_cfg_SRCS ${envsettings_cfg_UI} )
 kde4_add_plugin( kcm_kdev_envsettings ${envsettings_cfg_SRCS} )
 target_link_libraries( kcm_kdev_envsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} kdevplatformshell kdevplatformutil)
 
+########## Formatter Settings
+set(kcm_kdevsourceformattersettings_SRCS
+    editstyledialog.cpp
+    sourceformattersettings.cpp
+)
+
+set(kcm_kdevsourceformattersettings_UI
+    editstyledialog.ui
+    sourceformattersettings.ui
+)
+
+kde4_add_ui_files(kcm_kdevsourceformattersettings_SRCS ${kcm_kdevsourceformattersettings_UI} )
+kde4_add_plugin(kcm_kdevsourceformattersettings ${kcm_kdevsourceformattersettings_SRCS})
+target_link_libraries(kcm_kdevsourceformattersettings
+    ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDE4_KPARTS_LIBS} kdevplatformshell kdevplatformutil)
+
+install(TARGETS  DESTINATION ${PLUGIN_INSTALL_DIR})
+
+
+########## Install TARGETS/Files
+
 install( TARGETS 
         kcm_kdev_projectsettings 
         kcm_kdev_ccsettings
@@ -110,6 +132,7 @@ install( TARGETS
         kcm_kdev_pluginsettings
         kcm_kdev_envsettings 
         kcm_kdev_uisettings 
+        kcm_kdevsourceformattersettings
         DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 install( FILES 
@@ -119,4 +142,5 @@ install( FILES
         kcm_kdev_projectsettings.desktop
         kcm_kdev_bgsettings.desktop
         kcm_kdev_ccsettings.desktop 
+        kcm_kdevsourceformattersettings.desktop
         DESTINATION ${SERVICES_INSTALL_DIR} )

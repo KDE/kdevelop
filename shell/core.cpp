@@ -364,6 +364,12 @@ ISourceFormatterController* Core::sourceFormatterController()
     return d->sourceFormatterController;
 }
 
+SourceFormatterController* Core::sourceFormatterControllerInternal()
+{
+    return d->sourceFormatterController;
+}
+
+
 ProgressManager *Core::progressController()
 {
     return d->progressController;
