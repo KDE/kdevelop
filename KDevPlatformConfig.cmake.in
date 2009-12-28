@@ -14,7 +14,6 @@
 # KDEVPLATFORM_TESTS_LIBRARIES           - the tests library
 # KDEVPLATFORM_UTIL_LIBRARIES            - the util library
 # KDEVPLATFORM_VCS_LIBRARIES             - the vcs library
-# KDEVPLATFORM_SOURCEFORMATTER_LIBRARIES - the sourceformatter library
 # KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
 #
 # Copyright 2008  Andreas Pakulat <apaku@gmx.de>
@@ -51,7 +50,6 @@ _kdevplatform_set_lib_vars( SHELL kdevplatformshell )
 _kdevplatform_set_lib_vars( SUBLIME sublime )
 _kdevplatform_set_lib_vars( VCS kdevplatformvcs )
 _kdevplatform_set_lib_vars( OUTPUTVIEW kdevplatformoutputview )
-_kdevplatform_set_lib_vars( SOURCEFORMATTER kdevplatformsourceformatter )
 _kdevplatform_set_lib_vars( DEBUGGER kdevplatformdebugger )
 _kdevplatform_set_lib_vars( TESTS kdevplatformtests )
 
@@ -66,7 +64,6 @@ mark_as_advanced(
     KDEVPLATFORM_SHELL_LIBRARIES
     KDEVPLATFORM_UTIL_LIBRARIES
     KDEVPLATFORM_VCS_LIBRARIES
-    KDEVPLATFORM_SOURCEFORMATTER_LIBRARIES
     KDEVPLATFORM_DEBUGGER_LIBRARIES
     KDEVPLATFORM_TESTS_LIBRARIES
 )
