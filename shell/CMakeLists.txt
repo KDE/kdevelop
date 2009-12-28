@@ -39,6 +39,7 @@ set(kdevplatformshell_LIB_SRCS
     launchconfiguration.cpp
     launchconfigurationdialog.cpp
     loadedpluginsdialog.cpp
+    restructuremenu.cpp
 
     progressmanager.cpp
     progresswidget.cpp

@@ -109,13 +109,15 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
         initStyleOption(&opt);
         // If we're drawing icons only it looks better if they're not rotated
         QPixmap ic = icon().pixmap(QSize(16,16), QIcon::Normal, QIcon::On);
+        
         QTransform tf;
         if(_area == Qt::LeftDockWidgetArea) {
             tf = tf.rotate(90);
         } else {
             tf = tf.rotate(-90);
         }
-        opt.icon = ic.transformed( tf, Qt::FastTransformation );
+        opt.icon = ic.transformed( tf, Qt::SmoothTransformation );
+        
         opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
 
         QPixmap pix(opt.rect.width(), opt.rect.height());

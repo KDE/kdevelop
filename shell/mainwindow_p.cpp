@@ -62,8 +62,13 @@ Boston, MA 02110-1301, USA.
 #include "workingsetcontroller.h"
 
 #include "textdocument.h"
+#include <KMenuBar>
+#include "restructuremenu.h"
 
 namespace KDevelop {
+
+//Since it's impossible to move "File" and "Edit" to another position through XMLGUI due to 'standards', we enforce the order we want here
+QStringList mainMenuOrder  = QStringList() << i18n("Sessions") << i18n("Project") << i18n("Run") << i18n("Navigation") << ">" << i18n("File") << i18n("Edit") << i18n("Editor") << i18n("Code") << "<" << i18n("Window") << i18n("Settings") << i18n("Help");
 
 bool MainWindowPrivate::s_quitRequested = false;
 
@@ -102,6 +107,10 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
         connect(plugin, SIGNAL(destroyed(QObject*)), SLOT(pluginDestroyed(QObject*)));
         m_mainWindow->guiFactory()->addClient(ownClient);
     }
+    
+    RestructureMenu menu(m_mainWindow->menuBar());
+    menu.setOrder(mainMenuOrder);
+    menu.restructure();
 }
 
 void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
@@ -162,6 +171,16 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
     kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
+    RestructureMenu menu(m_mainWindow->menuBar());
+    menu.record();
+    
+    QSet< QString > actionsBeforeMerge;
+
+    foreach(QAction* action, m_mainWindow->menuBar()->actions())
+    {
+        actionsBeforeMerge << action->objectName();;
+    }
+    
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {
@@ -177,7 +196,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 //             guiFactory()->removeClient(activePart);
     }
 
-
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
     {
@@ -187,6 +205,25 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
         connect(viewWidget, SIGNAL(destroyed(QObject*)),
                 this, SLOT(xmlguiclientDestroyed(QObject*)));
     }
+    
+    foreach(QAction* action, m_mainWindow->menuBar()->actions())
+    {
+        if(!actionsBeforeMerge.contains(action->objectName()))
+        {
+            kDebug() << "Added action:" << action->objectName() << "Parent:" << action->parent()->objectName();
+        }
+    }
+
+    menu.recordDifference();
+    
+    menu.map(QStringList() << i18n("Edit"), QStringList() << i18n("Edit"));
+    menu.map(QStringList() << i18n("File"), QStringList() << i18n("File"));
+//     menu.map(QStringList() << i18n("Settings"), QStringList() << i18n("Editor"));
+    menu.map(QStringList(), QStringList() << i18n("Editor"));
+
+    menu.setOrder(mainMenuOrder);
+    
+    menu.restructure();
 }
 
 void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
