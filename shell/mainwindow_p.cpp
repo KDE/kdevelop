@@ -68,7 +68,10 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop {
 
 //Since it's impossible to move "File" and "Edit" to another position through XMLGUI due to 'standards', we enforce the order we want here
-QStringList mainMenuOrder  = QStringList() << i18n("Sessions") << i18n("Project") << i18n("Run") << i18n("Navigation") << ">" << i18n("File") << i18n("Edit") << i18n("Editor") << i18n("Code") << "<" << i18n("Window") << i18n("Settings") << i18n("Help");
+QStringList mainMenuOrder  = QStringList() << "sessions" << "project" << "run" << "navigation" 
+                                           << "kdevseparator_file" << "file" << "edit" << "editor" 
+                                           << "code" << "kdevseparator_window" << "window" 
+                                           << "settings" << "help";
 
 bool MainWindowPrivate::s_quitRequested = false;
 
