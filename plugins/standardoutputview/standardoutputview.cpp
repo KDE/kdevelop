@@ -83,12 +83,12 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     KAction *action;
 
     action = actionCollection()->addAction("next_error");
-    action->setText(i18n("Next Build Error"));
+    action->setText(i18n("Jump To next Outputmark"));
     action->setShortcut( QKeySequence(Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectNextItem()));
 
     action = actionCollection()->addAction("prev_error");
-    action->setText(i18n("Previous Build Error"));
+    action->setText(i18n("Jump To previous Outputmark"));
     action->setShortcut( QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(selectPrevItem()));
 
