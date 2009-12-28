@@ -1,60 +1,10 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="100" name="kdevelop" >
+<kpartgui version="117" name="kdevelop" >
 <MenuBar>
-  <Menu name="file">
-    <text context="@title:menu">&amp;File</text>
-    <DefineGroup append="new_merge" name="new_merge"/>
-    <DefineGroup append="open_merge" name="open_merge"/>
-    <DefineGroup append="save_merge" name="save_merge"/>
-    <DefineGroup append="revert_merge" name="revert_merge"/>
-    <DefineGroup append="print_merge" name="print_merge"/>
-    <Action name="file_closeother" append="close_merge"/>
-    <DefineGroup append="close_merge" name="close_merge"/>
-  </Menu>
 
-  <Menu name="edit">
-    <text context="@title:menu">&amp;Edit</text>
-    <DefineGroup append="edit_undo_merge" name="edit_undo_merge"/>
-    <DefineGroup append="edit_paste_merge" name="edit_paste_merge"/>
-    <DefineGroup append="edit_select_merge" name="edit_select_merge"/>
-    <DefineGroup append="edit_find_merge" name="edit_find_merge"/>
-    <DefineGroup name="edit_formatting"/>
-    <Separator/>
-    <Merge/>
+  <Menu name="sessions">
+    <text context="@title:menu">Sessions</text>
   </Menu>
-
-  <Menu name="view">
-    <text context="@title:menu">&amp;View</text>
-    <Action name="add_toolview"/>
-    <Action name="select_next_dock"/>
-    <Action name="select_previous_dock"/>
-    <Action name="docks_submenu"/>
-    <Action name="user_interface"/>
-    <DefineGroup name="history_operations"/>
-    <Action name="history_back"/>
-    <Action name="history_forward"/>
-    <Separator/>
-    <Action name="file_switchto"/>
-    <Separator/>
-    <DefineGroup name="error_operations"/>
-    <Separator/>
-    <Merge/>
-    <Separator/>
-    <DefineGroup name="view_operations"/>
-  </Menu>
-
-  <Menu name="navigation">
-    <text context="@title:menu">&amp;Navigation</text>
-    <DefineGroup name="navigation_file"/>
-    <Separator />
-    <DefineGroup name="navigation_code"/>
-    <Separator />
-    <Merge />
-  </Menu>
-
-<!--
-  <Action name="bookmarks" group="search_menu_merge" />
--->
 
   <Menu name="project">
     <text context="@title:menu">&amp;Project</text>
@@ -96,40 +46,79 @@
     <Merge />
   </Menu>
 
-  <Menu name="tools">
-    <text context="@title:menu">Tools</text>
-
-    <DefineGroup name="tools_operations"/>
-    <Separator/>
-
-    <DefineGroup name="tools_file_operations"/>
-    <Separator/>
-
-    <DefineGroup name="tools_language_operations"/>
-    <Separator/>
-
-    <DefineGroup name="tools_project_operations"/>
-    <Separator/>
+  <Menu name="navigation">
+    <text context="@title:menu">&amp;Navigation</text>
+    <DefineGroup name="navigation_file"/>
+    <Separator />
+    <Action name="next_error" />
+    <Action name="previous_error" />
+    <Separator />
+    <DefineGroup name="navigation_code"/>
+    <Separator />
+    <Merge />
   </Menu>
 
-  <Merge/>
-
-  <Menu name="sessions">
-    <text context="@title:menu">Sessions</text>
+  <Menu name="separator">
+    <text context="@title:menu">&gt;</text>
   </Menu>
 
-  <Menu name="settings">
-    <text context="@title:menu">Settings</text>
-    <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
-    <DefineGroup append="show_merge" name="show_merge" />
-    <Action name="options_configure_editors" append="configure_merge" />
-    <DefineGroup append="configure_merge" name="configure_merge" />
+  <Menu name="file">
+    <text context="@title:menu">&amp;File</text>
+    <DefineGroup append="new_merge" name="new_merge"/>
+    <DefineGroup append="open_merge" name="open_merge"/>
+    <DefineGroup append="save_merge" name="save_merge"/>
+    <DefineGroup append="revert_merge" name="revert_merge"/>
+    <DefineGroup append="print_merge" name="print_merge"/>
+    <Action name="file_closeother" append="close_merge"/>
+    <DefineGroup append="close_merge" name="close_merge"/>
+  </Menu>
+
+  <Menu name="edit">
+    <text context="@title:menu">&amp;Edit</text>
+    <DefineGroup append="edit_undo_merge" name="edit_undo_merge"/>
+    <DefineGroup append="edit_paste_merge" name="edit_paste_merge"/>
+    <DefineGroup append="edit_select_merge" name="edit_select_merge"/>
+    <DefineGroup append="edit_find_merge" name="edit_find_merge"/>
+    <DefineGroup name="edit_formatting"/>
+    <Separator/>
+    <Merge/>
+  </Menu>
+
+  <Menu name="editor">
+    <text context="@title:menu">Editor</text>
+    <Merge/>
+  </Menu>
+
+  <Menu name="code">
+    <text context="@title:menu">Code</text>
+    <Merge/>
+  </Menu>
+
+  <Menu name="separator2">
+    <text context="@title:menu">&lt;</text>
   </Menu>
 
   <Menu name="window">
     <text context="@title:menu">&amp;Window</text>
     <Action name="new_window"/>
     <Separator/>
+    <Action name="add_toolview"/>
+    <Action name="select_next_dock"/>
+    <Action name="select_previous_dock"/>
+    <Action name="docks_submenu"/>
+    <Action name="user_interface"/>
+    <DefineGroup name="history_operations"/>
+    <Action name="history_back"/>
+    <Action name="history_forward"/>
+    <Separator/>
+    <Action name="file_switchto"/>
+    <Separator/>
+    <DefineGroup name="error_operations"/>
+    <Separator/>
+    <Merge/>
+    <Separator/>
+    <DefineGroup name="view_operations"/>
+    
     <Action name="view_next_window"/>
     <Action name="view_previous_window"/>
     <Separator/>
@@ -151,6 +140,14 @@
     <Merge/>
   </Menu>
   
+  <Menu name="settings">
+    <text context="@title:menu">Settings</text>
+    <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
+    <DefineGroup append="show_merge" name="show_merge" />
+    <Action name="options_configure_editors" append="configure_merge" />
+    <DefineGroup append="configure_merge" name="configure_merge" />
+  </Menu>
+
   <Menu name="help">
     <Action name="loaded_plugins" append="about_merge" />
     <Action name="about_platform" append="about_merge" />
