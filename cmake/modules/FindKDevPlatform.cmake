@@ -25,7 +25,6 @@
 #                                        classes with custom implementations
 # KDEVPLATFORM_UTIL_LIBRARIES            - util module library
 # KDEVPLATFORM_VCS_LIBRARIES             - vcs module library
-# KDEVPLATFORM_SOURCEFORMATTER_LIBRARIES - source formatter library
 # KDEVPLATFORM_DEBUGGER_LIBRARIES        - debugger module library
 #
 # The following macros are added (from KDevPlatformMacros.cmake):
