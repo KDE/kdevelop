@@ -16,11 +16,30 @@ include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
 
+if( extragear-sdk_SOURCE_DIR AND ( ${extragear-sdk_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR}  ) )
+    set( KDEVPLATFORM_FOUND TRUE )
+    include_directories( ${CMAKE_SOURCE_DIR}/kdevplatform ${CMAKE_SOURCE_DIR}/kdevplatform/plugins )
+    set( KDEVPLATFORM_INTERFACES_LIBRARIES kdevplatforminterfaces )
+    set( KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell )
+    set( KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests )
+    set( KDEVPLATFORM_UTIL_LIBRARIES kdevplatformutil )
+    set( KDEVPLATFORM_PROJECT_LIBRARIES kdevplatformproject )
+    set( KDEVPLATFORM_OUTPUTVIEW_LIBRARIES kdevplatformoutputview )
+    set( KDEVPLATFORM_LANGUAGE_LIBRARIES kdevplatformlanguage )
+    set( KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs )
+    set( KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger )
+    set( KDEVPLATFORM_SUBLIME_LIBRARIES sublime )
+    include( ${CMAKE_SOURCE_DIR}/kdevplatform/cmake/modules/KDevPlatformMacros.cmake )
+else( extragear-sdk_SOURCE_DIR AND ( ${extragear-sdk_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR}  ) )
+
 find_package(KDevPlatform 0.9.97 REQUIRED)
+include_directories(${KDEVPLATFORM_INCLUDE_DIR})
+
+endif( extragear-sdk_SOURCE_DIR AND ( ${extragear-sdk_SOURCE_DIR} STREQUAL ${CMAKE_SOURCE_DIR}  ) )
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 
-include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
+include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR} ${KDE4_INCLUDES} )
 
 # create config.h
 include (ConfigureChecks.cmake)
