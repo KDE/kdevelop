@@ -409,8 +409,10 @@ void BreakpointModel::load()
     KConfigGroup breakpoints = KGlobal::config()->group("breakpoints");
     int count = breakpoints.readEntry("number", 0);
     for (int i = 0; i < count; ++i) {
-        Breakpoint *b = new Breakpoint(this, breakpoints.group(QString::number(i)));
-        m_breakpoints << b;
+        if (!breakpoints.group(QString::number(i)).readEntry("kind", "").isEmpty()) {
+            Breakpoint *b = new Breakpoint(this, breakpoints.group(QString::number(i)));
+            m_breakpoints << b;
+        }
     }
     reset();
 }
