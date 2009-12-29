@@ -16,6 +16,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <KDE/KTextEditor/Document>
 #include "workingsetcontroller.h"
 #include <kconfiggroup.h>
 #include <kconfig.h>
@@ -40,6 +41,7 @@
 #include <qmenu.h>
 #include <sublime/urldocument.h>
 #include "partdocument.h"
+#include "textdocument.h"
 #include <qpushbutton.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
