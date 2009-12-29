@@ -35,19 +35,16 @@ QString nameForAction(QAction* action)
 {
     // Fallback for KDE 4.3, as there the action for the menu entry has no
     // object name assigned, only the menu itself.
-    if( action->objectName().isEmpty() && action->menu() ) 
+    QString objectName = action->objectName();
+    if(objectName.isEmpty() && action->menu())
+        objectName = action->menu()->objectName();
+    
+    if(objectName.startsWith("kdevseparator") )
     {
-        return action->menu()->objectName();
-    } else if( !action->objectName().isEmpty() ) 
-    {
-        return action->objectName();
-    } else if(action->isSeparator())
-    {
-        return QString("%1").arg((size_t)action);
-    } else
-    {
-        return action->text().remove('&');
+        return objectName;
     }
+    
+    return action->text().remove('&');
 }
 
 RestructureMenu::RestructureMenu(QMenuBar* _menuBar) : menuBar(_menuBar) {
@@ -140,12 +137,8 @@ void RestructureMenu::restructure() {
                 QAction* action = actions[m_order[a]];
 
                 //Disable 'separator' actions
-                if( action->objectName().startsWith("kdevseparator") 
-                    || ( action->menu() 
-                         && action->menu()->objectName().startsWith("kdevseparator") ) )
-                {
+                if( nameForAction(action).startsWith("kdevseparator") )
                     action->setEnabled(false);
-                }
                 
                 //Make sure this action is before all actions that should be behind
                 
