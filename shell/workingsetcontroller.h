@@ -60,9 +60,8 @@ public:
     QIcon activeIcon() const {
         return m_activeIcon;
     }
-    QIcon inactiveIcon() const {
-        return m_inactiveIcon;
-    }
+    
+    QIcon inactiveIcon() const;
     
     bool isPersistent() const ;
     
@@ -167,7 +166,7 @@ private:
 
     QString m_id;
     QString m_iconName;
-    QIcon m_activeIcon, m_inactiveIcon;
+    QIcon m_activeIcon, m_inactiveIcon, m_inactiveNonPersistentIcon;
     QList<QPointer<Sublime::Area> > m_areas;
     static bool m_loading;
 };
@@ -252,7 +251,7 @@ public:
 
     WorkingSet* newWorkingSet(QString prefix);
 
-    WorkingSet* getWorkingSet(QString id);
+    WorkingSet* getWorkingSet(QString id, QString icon = QString());
     void initialize();
     void cleanup();
     

@@ -44,8 +44,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/isession.h>
-#include "textdocument.h"
-#include <ktexteditor/document.h>
 
 using namespace KDevelop;
 
@@ -86,7 +84,7 @@ void WorkingSetController::initialize()
     //Load all working-sets
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     foreach(QString set, setConfig.groupList())                                                                                                                                                
-        getWorkingSet(set);  
+        getWorkingSet(set, setConfig.group(set).readEntry<QString>("iconName", QString()));
 }
 
 void WorkingSetController::cleanup()
@@ -124,16 +122,19 @@ WorkingSet* WorkingSetController::newWorkingSet(QString prefix)
     return getWorkingSet(newId);
 }
 
-WorkingSet* WorkingSetController::getWorkingSet(QString id)
+WorkingSet* WorkingSetController::getWorkingSet(QString id, QString icon)
 {
     if(!m_workingSets.contains(id)) {
-        QString icon;
-        for(int a = 0; a < 100; ++a) {
-            int pick = (qHash(id) + a) % setIcons.size(); ///@todo Pick icons semantically, by content, and store them in the config
-            if(!usingIcon(setIcons[pick])) {
-                if(iconValid(setIcons[pick])) {
-                    icon = setIcons[pick];
-                break;
+        
+        if(icon.isEmpty())
+        {
+            for(int a = 0; a < 100; ++a) {
+                int pick = (qHash(id) + a) % setIcons.size(); ///@todo Pick icons semantically, by content, and store them in the config
+                if(!usingIcon(setIcons[pick])) {
+                    if(iconValid(setIcons[pick])) {
+                        icon = setIcons[pick];
+                    break;
+                    }
                 }
             }
         }
@@ -173,14 +174,16 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     }
     kDebug() << "saving" << m_id << "from area";
     
-    ///@todo Make the working-sets session-specific
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
+    group.writeEntry("iconName", m_iconName);
     deleteGroupRecursive(group);
     saveFromArea(area, areaIndex, group);
     
     if(isEmpty())
         deleteGroupRecursive(group);
+    
+    setConfig.sync();
     
     emit setChangedSignificantly();
 }
@@ -369,7 +372,6 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         for (int i = 0; i < viewCount; ++i) {
             QString type = group.readEntry(QString("View %1 Type").arg(i), "");
             QString specifier = group.readEntry(QString("View %1").arg(i), "");
-            QString encoding = group.readEntry(QString("View %1 Encoding").arg(i), "");
 
             bool viewExists = false;
             foreach (Sublime::View* view, areaIndex->views()) {
@@ -383,8 +385,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 continue;
 
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
-                KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView,
-                encoding);
+                             KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
                 Sublime::View* view = document->createView();
@@ -412,6 +413,7 @@ void WorkingSet::deleteSet(bool force, bool silent)
         KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
         KConfigGroup group = setConfig.group(m_id);
         deleteGroupRecursive(group);
+        setConfig.sync();
         
         if(!silent)
             emit setChangedSignificantly();
@@ -500,16 +502,16 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 
 void WorkingSetToolButton::intersectSet()
 {
-    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
-
     m_set->setPersistent(true);
+    
+    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
 }
 
 void WorkingSetToolButton::subtractSet()
 {
-    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
-    
     m_set->setPersistent(true);
+    
+    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
 }
 
 void WorkingSetToolButton::mergeSet()
@@ -524,9 +526,9 @@ void WorkingSetToolButton::duplicateSet()
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
     WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
+    set->setPersistent(true);
     set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
     mainWindow()->area()->setWorkingSet(set->id());
-    set->setPersistent(true);
 }
 
 void WorkingSetToolButton::loadSet()
@@ -612,6 +614,7 @@ void WorkingSetToolButton::buttonTriggered()
     if(mainWindow()->area()->workingSet() == m_set->id()) {
         closeSet();
     }else{
+        m_set->setPersistent(true);
         mainWindow()->area()->setWorkingSet(m_set->id());
     }
 }
@@ -622,8 +625,6 @@ void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString t
     if (from == to)
         return;
     Q_ASSERT(m_areas.contains(area));
-    if (!m_id.isEmpty())
-        saveFromArea(area, area->rootIndex());
     disconnectArea(area);
     WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
     newSet->connectArea(area);
@@ -688,6 +689,12 @@ WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
     
     m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
     m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
+    
+    QImage imgNonPersistent = imgInactive;
+    
+    KIconEffect::deSaturate(imgNonPersistent, 1.0);
+    
+    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
     //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
 }
 
@@ -856,6 +863,8 @@ void WorkingSet::setPersistent(bool persistent) {
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("persistent", persistent);
+    group.sync();
+    kDebug() << "setting" << m_id << "persistent:" << persistent;
 }
 
 bool WorkingSet::isPersistent() const {
@@ -865,6 +874,14 @@ bool WorkingSet::isPersistent() const {
     KConfigGroup group = setConfig.group(m_id);
     return group.readEntry("persistent", false);
 }
+
+QIcon WorkingSet::inactiveIcon() const {
+    if(isPersistent())
+        return m_inactiveIcon;
+    else
+        return m_inactiveNonPersistentIcon;
+}
+
 
 
 #include "workingsetcontroller.moc"
