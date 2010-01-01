@@ -200,6 +200,9 @@
            <string>When a project contains more files than this number, the project will be
 parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.</string>
           </property>
+          <property name="suffix">
+           <string> files</string>
+          </property>
           <property name="maximum">
            <number>99999999</number>
           </property>
