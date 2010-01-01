@@ -19,8 +19,11 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QCheckBox" name="chkKateModelines">
+        <property name="toolTip">
+         <string>Add kate modeline to formatted documents.</string>
+        </property>
         <property name="text">
-         <string>Add Kate modelines</string>
+         <string>Add Kate modeline</string>
         </property>
        </widget>
       </item>
