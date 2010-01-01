@@ -151,6 +151,7 @@ public:
                                               << proj->developerFileUrl().url() );
         }
         m_configuringProject = proj;
+        m_cfgDlgs[proj]->setWindowTitle( i18n("Configure Project %1", proj->name()) );
         m_cfgDlgs[proj]->exec();
         proj->projectConfiguration()->sync();
         m_configuringProject = 0;
