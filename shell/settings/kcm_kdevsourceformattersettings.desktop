@@ -9,7 +9,7 @@ X-KDE-FactoryName=kcm_kdevsourceformattersettings
 X-KDE-ParentApp=kdevplatform
 X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=USERINTERFACE
-Name=Source Formatter Settings
+Name=Source Formatter
 Name[bg]=Настройки на форматиращият модул за програмен текст
 Name[ca]=Arranjament del formatador de codi font
 Name[de]=Einstellungen zur Quelltextformatierung
@@ -30,5 +30,5 @@ Name[uk]=Параметри інструменту форматування ко
 Name[x-test]=xxSource Formatter Settingsxx
 Name[zh_CN]=源代码格式化器设置
 Name[zh_TW]=源碼格式化設定
-
+Comment=Configure Source Formatter
 
