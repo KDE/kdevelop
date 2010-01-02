@@ -1,24 +1,6 @@
 [Desktop Entry]
 Type=Service
 Name=CMake Documentation
-Name[ca]=CMakeDocumentation
-Name[cs]=Dokumentace CMake
-Name[de]=CMake-Dokumentation
-Name[en_GB]=CMakeDocumentation
-Name[es]=CMakeDocumentation
-Name[fi]=CMake-dokumentaatio
-Name[fr]=CMakeDocumentation
-Name[gl]=CMakeDocumentation
-Name[nb]=CMakeDocumentation
-Name[nds]=CMake-Dokmentatschoon
-Name[nl]=CMakeDocumentatie
-Name[pt]=Documentação do CMake
-Name[pt_BR]=CMakeDocumentation
-Name[sv]=CMake-dokumentation
-Name[tr]=CMake Belgelendirmesi
-Name[uk]=CMakeDocumentation
-Name[x-test]=xxCMakeDocumentationxx
-Name[zh_TW]=CMakeDocumentation
 Comment=Allows KDevelop to provide CMake documentation
 Comment[ca]=Permet a KDevelop proporcionar informació de CMake
 Comment[cs]=Umožňuje KDevelop poskytovat dokumentaci CMake
