@@ -1,8 +1,8 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevsessionui" library="kdevsession" version="3">
+<kpartgui name="kdevsessionui" library="kdevsession" version="4">
     <MenuBar>
-        <Menu name="sessions">
-            <text context="@title:menu">Sessions</text>
+        <Menu name="session">
+            <text context="@title:menu">Session</text>
             <Action name="new_session" />
             <Separator />
             <ActionList name="available_sessions"/>
