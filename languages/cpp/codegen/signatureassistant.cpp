@@ -309,12 +309,6 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
         
         if(newSignature.parameters.size() != m_oldSignature.parameters.size())
           changed = true;
-        
-        //We only need to fiddle around with default parameters if we're updating the declaration
-        if(!m_editingDefinition) {
-          for(QList<QString>::iterator it = newSignature.defaultParams.begin(); it != newSignature.defaultParams.end(); ++it)
-            *it = QString();
-        }
           
         if(changed /*|| newSignature.returnType != m_oldSignature.returnType*/) {
           kDebug() << "signature changed";
