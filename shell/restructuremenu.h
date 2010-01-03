@@ -1,5 +1,5 @@
 /*
-    Copyright David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,29 +25,39 @@
 #include <QAction>
 
 class QMenuBar;
+
+/**
+ * A helper class that allows recording changes to a menu,
+ * and transforming the recorded changes according to specific maps.
+ */
+
 class RestructureMenu
 {
     public:
-    RestructureMenu(QMenuBar* _menuBar) ;
+    RestructureMenu(QMenuBar* _menuBar);
         
     ///Records the structure of the menu. Should be called _before_ something is merged into the menu
-    void record()
-    ;
+    void record();
     
     ///Should be called _after_ something was merged into the menu. The differences will be recorded,
     ///and can later be re-structured through maps.
-    void recordDifference()
-    ;
+    void recordDifference();
     
     ///Add maps to restructure the added parts of the menu
     ///More specific maps must be given first, then the less specific ones
-    void map(QStringList from, QStringList to)
-    ;
+    void map(QStringList from, QStringList to);
     
     ///Restructures the added parts of the menu according to the given maps
     void restructure();
     
+    ///Set a fixed order of the main-menu entries that will be enforced
     void setOrder(QStringList order);
+
+    ///Removes all actions in the list from the menu, without deleting them
+    void removeActions (QSet< QAction* > actions, QMenu* parentMenu = 0);
+
+    ///Returns all actions that were added
+    QList<QPointer<QAction> > addedActions();
     
     private:
     

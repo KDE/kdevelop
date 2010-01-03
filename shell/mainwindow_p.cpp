@@ -68,12 +68,12 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop {
 
 //Since it's impossible to move "File" and "Edit" to another position through XMLGUI due to 'standards', we enforce the order we want here
-QStringList mainMenuOrder  = QStringList() << i18n("Sessions") << i18n("Project") << i18n("Run") << i18n("Navigation") << "kdevseparator_file" << i18n("File") << i18n("Edit") << i18n("Editor") << i18n("Code") << "kdevseparator_window" << i18n("Window") << i18n("Settings") << i18n("Help");
+QStringList mainMenuOrder  = QStringList() << i18n("Session") << i18n("Project") << i18n("Run") << i18n("Navigation") << "kdevseparator_file" << i18n("File") << i18n("Edit") << i18n("Editor") << i18n("Code") << "kdevseparator_window" << i18n("Window") << i18n("Settings") << i18n("Help");
 
 bool MainWindowPrivate::s_quitRequested = false;
 
 MainWindowPrivate::MainWindowPrivate(MainWindow *mainWindow)
-: m_mainWindow(mainWindow), m_statusBar(0), lastXMLGUIClientView(0)
+: m_mainWindow(mainWindow), m_statusBar(0), lastXMLGUIClientView(0), m_changingActiveView(false)
 {
 }
 
@@ -150,6 +150,10 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
+    PushPositiveValue<bool> block(m_changingActiveView, true);
+
+    RestructureMenu menu(m_mainWindow->menuBar());
+    
     // If the previous view was KXMLGUIClient, remove its actions
     // In the case that that view was removed, lastActiveView
     // will auto-reset, and xmlguifactory will disconnect that
@@ -157,10 +161,22 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if (lastXMLGUIClientView)
     {
         kDebug() << "clearing last XML GUI client" << lastXMLGUIClientView;
-        m_mainWindow->guiFactory()->removeClient(
-            dynamic_cast<KXMLGUIClient*>(lastXMLGUIClientView));
+        
+        m_mainWindow->guiFactory()->removeClient(dynamic_cast<KXMLGUIClient*>(lastXMLGUIClientView));
+        
         disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
+
         lastXMLGUIClientView = NULL;
+        
+        //Since we restructure the actions, we cannot rely on KXmlGUI removing all of them from the menu.
+        //Some may be left back, and we remove those here
+        
+        QSet<QAction*> lastActions;
+        for(QList< QPointer< QAction > >::iterator it = m_menuActionsFromView.begin(); it != m_menuActionsFromView.end(); ++it)
+            if(*it)
+                lastActions.insert(*it);
+
+        menu.removeActions(lastActions);
     }
 
     if (!view)
@@ -171,7 +187,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
     kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
-    RestructureMenu menu(m_mainWindow->menuBar());
     menu.record();
     
     QSet< QString > actionsBeforeMerge;
@@ -222,6 +237,8 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     menu.map(QStringList(), QStringList() << i18n("Editor"));
 
     menu.setOrder(mainMenuOrder);
+
+    m_menuActionsFromView = menu.addedActions();
     
     menu.restructure();
 }
@@ -465,6 +482,11 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         triggered->text(), actionToFactory[triggered],
         area
     );
+}
+
+bool MainWindowPrivate::changingActiveView() const
+{
+    return m_changingActiveView;
 }
 
 }

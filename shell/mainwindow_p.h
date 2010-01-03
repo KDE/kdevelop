@@ -101,6 +101,9 @@ public Q_SLOTS:
 
 //    void fixToolbar();
 
+    ///Returns true if we're currently changing the active view through changeActiveView()
+    bool changingActiveView() const ;
+
     bool applicationQuitRequested() const;
 
     void configureNotifications();
@@ -131,7 +134,11 @@ private:
     
     QMap<IPlugin*, KXMLGUIClient*> m_pluginCustomClients;
     
+    //LIst of all actions that were merged from the active view into the main-menu
+    QList<QPointer<QAction> > m_menuActionsFromView;
+    
     static bool s_quitRequested;
+    bool m_changingActiveView;
     /// the view of the tab that got it's context menu connected
     Sublime::View* m_tabView;
 };

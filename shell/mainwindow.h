@@ -83,6 +83,8 @@ protected:
     virtual void initializeStatusBar();
     void dragEnterEvent( QDragEnterEvent* );
     void dropEvent( QDropEvent* );
+    virtual void applyMainWindowSettings ( const KConfigGroup& config, bool force = false );
+
 
 protected Q_SLOTS:
     virtual void tabContextMenuRequested(Sublime::View* , KMenu* );

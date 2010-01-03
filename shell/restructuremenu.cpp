@@ -1,5 +1,5 @@
 /*
-    Copyright David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,6 +75,38 @@ void RestructureMenu::setOrder(QStringList order)
     m_order = order;
 }
 
+void RestructureMenu::removeActions ( QSet< QAction* > actions, QMenu* parentMenu )
+{
+    QSet<QAction*> childActions;
+    if(!parentMenu)
+    {
+        childActions = menuBar->actions().toSet();
+    }else{
+        childActions = parentMenu->actions().toSet();
+        
+//         kDebug() << "matching" << actions.size() << "actions" << "with" << parentMenu->actions().size() << "actions in menu" << parentMenu->title();
+        
+        QSet<QAction*> jointActions = actions & childActions;
+        foreach(QAction* action, jointActions) {
+            kDebug() << "removing left action" << action;
+            parentMenu->removeAction(action);
+        }
+    }
+    
+    foreach(QAction* menuAction, childActions)
+    {
+        if(menuAction->menu())
+            removeActions(actions, menuAction->menu());
+    }
+}
+
+QList< QPointer< QAction > > RestructureMenu::addedActions()
+{
+    QList< QPointer< QAction > > ret;
+    for(QHash< QStringList, QList< QPointer< QAction > > >::iterator it = m_difference.begin(); it != m_difference.end(); ++it)
+        ret += *it;
+    return ret;
+}
 
 void RestructureMenu::restructure() {
     m_processed.clear();
@@ -96,7 +128,7 @@ void RestructureMenu::restructure() {
                 {
                     QStringList scope = it.key();
                     scope << nameForAction(*actionIt);
-                    kDebug() << "checking" << scope;
+//                     kDebug() << "checking" << scope;
                     
                     if(m_processed.find(scope) != m_processed.end())
                         continue;
@@ -169,7 +201,7 @@ void RestructureMenu::record(QStringList prefix, QAction* action) {
     if(action->menu())
         m_menuActions.insert(prefix, action);
     
-    kDebug() << "recording" << prefix;
+//     kDebug() << "recording" << prefix;
     
     if(action->menu())
     {
@@ -196,7 +228,7 @@ void RestructureMenu::recordDifference(QStringList prefix, QAction* action) {
     
     if(!m_recorded.contains(nextPrefix))
     {
-        kDebug() << "difference:" << nextPrefix << action->isSeparator();
+//         kDebug() << "difference:" << nextPrefix << action->isSeparator();
         
         m_difference[prefix] << action;
     }
@@ -212,7 +244,7 @@ void RestructureMenu::insertAction(QStringList prefix, QAction* action) {
     Q_ASSERT(action && menuBar);
     QMenu* previousMenu = 0;
     
-    kDebug() << "inserting" << action->text() << action->isSeparator();
+//     kDebug() << "inserting" << action->text() << action->isSeparator();
     
     for(uint a = 0; a < prefix.size(); ++a)
     {
