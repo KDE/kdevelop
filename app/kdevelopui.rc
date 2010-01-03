@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="125" name="kdevelop" >
+<kpartgui version="126" name="kdevelop" >
 <MenuBar>
 
-  <Menu name="sessions">
-    <text context="@title:menu">Sessions</text>
+  <Menu name="session">
+    <text context="@title:menu">Session</text>
   </Menu>
 
   <Menu name="project">
