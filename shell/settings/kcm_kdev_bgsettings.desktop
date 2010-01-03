@@ -32,4 +32,8 @@ Name[x-test]=xxBackground Parserxx
 Name[zh_CN]=后台解析
 Name[zh_TW]=背景剖析器
 Comment=Configure Background Parser
+Comment[en_GB]=Configure Background Parser
+Comment[pt]=Configurar o Processamento em Segundo Plano
+Comment[sv]=Anpassa bakgrundstolk
+Comment[uk]=Налаштування інструменту фонової обробки
 

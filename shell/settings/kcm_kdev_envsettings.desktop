@@ -38,4 +38,8 @@ Name[x-test]=xxEnvironmentxx
 Name[zh_CN]=环境
 Name[zh_TW]=環境
 Comment=Configure Environment Variables
+Comment[en_GB]=Configure Environment Variables
+Comment[pt]=Configurar as Variáveis de Ambiente
+Comment[sv]=Anpassa miljövariabler
+Comment[uk]=Налаштування змінних середовища
 

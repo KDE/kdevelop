@@ -36,4 +36,8 @@ Name[x-test]=xxUser Interfacexx
 Name[zh_CN]=用户界面
 Name[zh_TW]=使用者介面
 Comment=Configure User Interface
+Comment[en_GB]=Configure User Interface
+Comment[pt]=Configurar a Interface do Utilizador
+Comment[sv]=Anpassa användargränssnitt
+Comment[uk]=Налаштування інтерфейсу користувача
 
