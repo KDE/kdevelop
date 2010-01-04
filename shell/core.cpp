@@ -269,6 +269,9 @@ void Core::cleanup()
         d->sourceFormatterController->cleanup();
         d->pluginController->cleanup();
         d->sessionController->cleanup();
+        
+        //Disable the functionality of the language controller
+        d->languageController->cleanup();
     }
 
     d->m_cleanedUp = true;

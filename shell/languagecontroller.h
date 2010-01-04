@@ -37,6 +37,9 @@ public:
     virtual ~LanguageController();
 
     void initialize();
+    
+    //After this was called, no more languages will be returned
+    void cleanup();
 
     /** @copydoc ILanguageController::activeLanguages() */
     virtual QList<ILanguage*> activeLanguages();
@@ -50,7 +53,6 @@ public:
     virtual QList<ILanguage*> loadedLanguages() const;
     
     virtual ICompletionSettings *completionSettings() const;
-    
     
 private:
     Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))

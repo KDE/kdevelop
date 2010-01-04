@@ -46,7 +46,7 @@ typedef QHash<QString, QList<ILanguage*> > LanguageCache;
 
 struct LanguageControllerPrivate {
     LanguageControllerPrivate(LanguageController *controller)
-        : dataMutex(QMutex::Recursive), backgroundParser(new BackgroundParser(controller)), m_controller(controller) {}
+        : dataMutex(QMutex::Recursive), backgroundParser(new BackgroundParser(controller)), m_controller(controller), m_cleanedUp(false) {}
 
     void documentActivated(KDevelop::IDocument *document)
     {
@@ -78,6 +78,7 @@ struct LanguageControllerPrivate {
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
 
     BackgroundParser *backgroundParser;
+    bool m_cleanedUp;
     
     ILanguage* addLanguageForSupport(ILanguageSupport* support);
 
@@ -132,6 +133,12 @@ void LanguageController::initialize()
             SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
+void LanguageController::cleanup()
+{
+    QMutexLocker lock(&d->dataMutex);
+    d->m_cleanedUp = true;
+}
+
 QList<ILanguage*> LanguageController::activeLanguages()
 {
     QMutexLocker lock(&d->dataMutex);
@@ -147,6 +154,10 @@ QList<ILanguage*> LanguageController::loadedLanguages() const
 {
     QMutexLocker lock(&d->dataMutex);
     QList<ILanguage*> ret;
+    
+    if(d->m_cleanedUp)
+        return ret;
+    
     foreach(ILanguage* lang, d->languages)
         ret << lang;
     return ret;
@@ -155,6 +166,9 @@ QList<ILanguage*> LanguageController::loadedLanguages() const
 ILanguage *LanguageController::language(const QString &name) const
 {
     QMutexLocker lock(&d->dataMutex);
+    
+    if(d->m_cleanedUp)
+        return 0;
     
     if(d->languages.contains(name))
         return d->languages[name];
@@ -178,6 +192,9 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     QMutexLocker lock(&d->dataMutex);
     
     QList<ILanguage*> languages;
+    
+    if(d->m_cleanedUp)
+        return languages;
     
     QString fileName = url.fileName();
 
