@@ -1108,6 +1108,29 @@ void GdbTest::testVariablesQuicklySwitchFrame()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+
+void GdbTest::testSegfaultDebugee()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateLocals);
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeecrash"));
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeecrash.cpp";
+
+    breakpoints()->addCodeBreakpoint(fileName, 23);
+
+    QVERIFY(session->startProgram(&cfg));
+
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 23);
+    session->run();
+
+    WAIT_FOR_STATE(session, DebugSession::StoppedState);
+    QCOMPARE(session->line(), 24);
+
+    session->stopDebugger();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {
