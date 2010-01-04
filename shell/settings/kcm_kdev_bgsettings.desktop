@@ -33,6 +33,7 @@ Name[zh_CN]=后台解析
 Name[zh_TW]=背景剖析器
 Comment=Configure Background Parser
 Comment[en_GB]=Configure Background Parser
+Comment[es]=Configurar el analizador en segundo plano
 Comment[pt]=Configurar o Processamento em Segundo Plano
 Comment[sv]=Anpassa bakgrundstolk
 Comment[uk]=Налаштування інструменту фонової обробки

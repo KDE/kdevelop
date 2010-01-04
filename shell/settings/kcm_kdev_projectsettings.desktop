@@ -12,11 +12,13 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Projects
 Name[en_GB]=Projects
+Name[es]=Proyectos
 Name[pt]=Projectos
 Name[sv]=Projekt
 Name[uk]=Проекти
 Comment=Configure Projects
 Comment[en_GB]=Configure Projects
+Comment[es]=Configurar proyectos
 Comment[pt]=Configurar os Projectos
 Comment[sv]=Anpassa projekt
 Comment[uk]=Налаштування проектів
