@@ -358,9 +358,14 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             loadToArea(area, areaIndex, split, subgroup);
 
             if (subgroups.contains("1")) {
-                Q_ASSERT(areaIndex->isSplitted());
-                KConfigGroup subgroup(&group, "1");
-                loadToArea(area, areaIndex->second(), false, subgroup);
+                if(areaIndex->isSplitted())
+                {
+                    Q_ASSERT(areaIndex->isSplitted());
+                    KConfigGroup subgroup(&group, "1");
+                    loadToArea(area, areaIndex->second(), false, subgroup);
+                }else{
+                    kWarning() << "Area-index is not splitted although it should be, the area-configuration is broken!!";
+                }
             }
         }
 
