@@ -200,8 +200,6 @@ Locals::Locals(TreeModel* model, TreeItem* parent, const QString &name)
 
 QList<Variable*> Locals::updateLocals(QStringList locals)
 {
-    setHasMore(false);
-
     QSet<QString> existing, current;
     for (int i = 0; i < childItems.size(); i++)
     {
@@ -232,6 +230,11 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
             // FIXME: check that -var-delete is sent.
             delete v;
         }
+    }
+
+
+    if (hasMore()) {
+        setHasMore(false);
     }
 
     // Variables which changed just value are updated by a call to -var-update.

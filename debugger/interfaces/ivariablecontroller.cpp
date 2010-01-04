@@ -86,7 +86,9 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
         kDebug() << m_autoUpdate;
         if (!(m_autoUpdate & UpdateLocals)) {
             foreach (Locals *l, variableCollection()->allLocals()) {
-                l->setHasMore(true);
+                if (!l->isExpanded() && !l->childCount()) {
+                    l->setHasMore(true);
+                }
             }
         }
         if (m_autoUpdate != UpdateNone) {

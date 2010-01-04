@@ -145,6 +145,7 @@ public:
     using TreeItem::setHasMore;
 
     friend class VariableCollection;
+    friend class IVariableController;
 
 private:
     void fetchMoreChildren() {}
