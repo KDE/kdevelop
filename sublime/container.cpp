@@ -239,6 +239,7 @@ void Container::addWidget(View *view)
     else
         idx = d->stack->addWidget(w);
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
+    Q_ASSERT(view);
     d->viewForWidget[w] = view;
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
     connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));

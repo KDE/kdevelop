@@ -132,7 +132,8 @@ public:
     void remove(View *view);
     /**Splits the view in this position by given @p orientation
     and adds the @p newView into the splitter.
-    Does nothing if the view is already splitted.*/
+    Does nothing if the view is already splitted.
+    @p newView will be in the <b>second</b> child index.*/
     void split(View *newView, Qt::Orientation orientation);
     /**Splits the view in this position by given @p orientation.
     Does nothing if the view is already splitted.*/

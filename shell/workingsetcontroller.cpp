@@ -332,47 +332,43 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
 
-    loadToArea(area, areaIndex, false, group);
+    loadToArea(area, areaIndex, group);
     
     //activate first view in the working set
     if (!area->views().isEmpty()) {
         foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
             if(window->area() == area) {
+                window->setArea(area);
                 window->activateView(area->views().first());
             }
         }
     }
 }
 
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool split, KConfigGroup group)
+void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
 {
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
 
-        if (subgroups.contains("0")) {
-            split = false;
-            if (!areaIndex->isSplitted())
-                split = true;
+        if (subgroups.contains("0") && subgroups.contains("1")) {
+//             kDebug() << "has zero, split:" << split;
 
-            KConfigGroup subgroup(&group, "0");
-            loadToArea(area, areaIndex, split, subgroup);
-
-            if (subgroups.contains("1")) {
-                if(areaIndex->isSplitted())
-                {
-                    Q_ASSERT(areaIndex->isSplitted());
-                    KConfigGroup subgroup(&group, "1");
-                    loadToArea(area, areaIndex->second(), false, subgroup);
-                }else{
-                    kWarning() << "Area-index is not splitted although it should be, the area-configuration is broken!!";
-                }
+            Qt::Orientation orientation = group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
+            if(!areaIndex->isSplitted()){
+                areaIndex->split(orientation);
+            }else{
+                areaIndex->setOrientation(orientation);
             }
-        }
+            
+            loadToArea(area, areaIndex->first(), KConfigGroup(&group, "0"));
 
+            loadToArea(area, areaIndex->second(), KConfigGroup(&group, "1"));
+        }
     } else {
         while (areaIndex->isSplitted()) {
             areaIndex = areaIndex->first();
             Q_ASSERT(areaIndex);// Split area index did not contain a first child area index if this fails
+            kDebug() << "is already splitted, using first index" << areaIndex;
         }
 
         int viewCount = group.readEntry("View Count", 0);
@@ -388,8 +384,10 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 }
             }
 
-            if (viewExists)
+            if (viewExists) {
+                kDebug() << "View already exists!";
                 continue;
+            }
 
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
@@ -401,12 +399,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 if (!state.isEmpty())
                     view->setState(state);
 
-                if (i == 0 && split) {
-                    Qt::Orientation orientation = group.parent().readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
-                    area->addView(view, areaIndex, orientation);
-                    areaIndex = areaIndex->first();
-                } else
-                    area->addView(view, areaIndex);
+                area->addViewSilently(view, areaIndex);
             } else {
                 kWarning() << "Unable to create view of type " << type;
             }

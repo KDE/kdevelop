@@ -211,6 +211,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         else
         {
             parent = d->m_indexSplitters[index->parent()];
+            Q_ASSERT(parent);
             kDebug() << "adding new splitter to" << parent;
             splitter = new QSplitter(parent);
             d->m_indexSplitters[index] = splitter;

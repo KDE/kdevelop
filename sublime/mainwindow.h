@@ -76,6 +76,10 @@ public:
       *  The ownership goes to the target.  */
     void setTabBarLeftCornerWidget(QWidget* widget);
     
+    /**Sets the area of main window and fills it with views.
+      *The contents is reconstructed, even if the area equals the currently set area. */
+    void setArea(Area *area);
+    
 public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);
@@ -133,8 +137,6 @@ private:
     Q_PRIVATE_SLOT(d, void toolViewMoved(Sublime::View*, Sublime::Position))
 
     //Inherit MainWindowOperator to access four methods below
-    /**Sets the area of main window and fills it with views.*/
-    void setArea(Area *area);
     /**Unsets the area clearing main window.*/
     void clearArea();
     /**Sets the active view and focuses it.*/

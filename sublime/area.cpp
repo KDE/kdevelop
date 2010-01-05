@@ -170,6 +170,14 @@ void Sublime::Area::addView(View *view, AreaIndex *index)
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
+void Sublime::Area::addViewSilently(View *view, AreaIndex *index)
+{
+    index->add(view);
+    connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
+    kDebug() << "view added in" << this;
+    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+}
+
 void Area::addView(View *view, View *after)
 {
     AreaIndex *index = d->currentIndex;
@@ -191,7 +199,13 @@ void Area::addView(View *view, View *viewToSplit, Qt::Orientation orientation)
 void Area::addView(View* view, AreaIndex* indexToSplit, Qt::Orientation orientation)
 {
     indexToSplit->split(view, orientation);
-    kDebug() << "view added in" << this;
+    emit viewAdded(indexToSplit, view);
+    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
+}
+
+void Area::addViewFirst(View* view, AreaIndex* indexToSplit, Qt::Orientation orientation)
+{
+    indexToSplit->splitFirst(view, orientation);
     emit viewAdded(indexToSplit, view);
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }

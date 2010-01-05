@@ -78,13 +78,21 @@ public:
     /**Adds the @p view to the list of views at the given area index.*/
     void addView(View *view, AreaIndex *index);
 
+    /**Adds the @p view to the list of views at the given area index.
+       Does not emit viewAdded. @warning This may lead to an inconsistent state in main-windows, unless their contents is reconstructed*/
+    void addViewSilently(View *view, AreaIndex *index);
+    
     /**Adds the @p view to the list of views at the current area index.*/
     void addView(View *view, View *after = 0);
     /**Adds the @p view to the area splitting the @p viewToSplit using
-    given @p orientation.*/
+    given @p orientation.
+    @p view Will be in the second child index of the area-index containing the view.
+    */
     void addView(View *view, View *viewToSplit, Qt::Orientation orientation);
     /**Adds the @p view to the area splitting the area index @p indexToSplit using
-    given @p orientation.*/
+    given @p orientation.
+    @p view Will be in the <b>second</b> child index of the area-index containing the view.
+    */
     void addView(View *view, AreaIndex *indexToSplit, Qt::Orientation orientation);
     /**Removes the @p view from the area. Does not delete it. */
     View* removeView(View *view);
