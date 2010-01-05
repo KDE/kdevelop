@@ -14,12 +14,16 @@ Name=Projects
 Name[en_GB]=Projects
 Name[es]=Proyectos
 Name[pt]=Projectos
+Name[pt_BR]=Projetos
 Name[sv]=Projekt
 Name[uk]=Проекти
+Name[zh_TW]=專案
 Comment=Configure Projects
 Comment[en_GB]=Configure Projects
 Comment[es]=Configurar proyectos
 Comment[pt]=Configurar os Projectos
+Comment[pt_BR]=Configurar projetos
 Comment[sv]=Anpassa projekt
 Comment[uk]=Налаштування проектів
+Comment[zh_TW]=設定專案
 
