@@ -203,13 +203,6 @@ void Area::addView(View* view, AreaIndex* indexToSplit, Qt::Orientation orientat
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
-void Area::addViewFirst(View* view, AreaIndex* indexToSplit, Qt::Orientation orientation)
-{
-    indexToSplit->splitFirst(view, orientation);
-    emit viewAdded(indexToSplit, view);
-    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
-}
-
 View* Area::removeView(View *view)
 {
     AreaIndex *index = indexOf(view);
