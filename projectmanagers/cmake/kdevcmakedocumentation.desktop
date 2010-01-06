@@ -7,6 +7,7 @@ Name[pt]=Documentação do CMake
 Name[pt_BR]=Documentação do CMake
 Name[sv]=CMake-dokumentation
 Name[uk]=Документація з CMake
+Name[x-test]=xxCMake Documentationxx
 Name[zh_TW]=CMake 文件
 Comment=Allows KDevelop to provide CMake documentation
 Comment[ca]=Permet a KDevelop proporcionar informació de CMake
