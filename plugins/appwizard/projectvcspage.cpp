@@ -70,12 +70,12 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
 
 void ProjectVcsPage::vcsTypeChanged( int idx )
 {
+    validateData();
     int widgetidx = idx - 1;
     disconnect( this, SLOT(validateData()) );
     if ( widgetidx < 0 || widgetidx >= importWidgets.size())
         return;
     connect( importWidgets[widgetidx], SIGNAL(changed()), this, SLOT(validateData()) );
-    validateData();
 }
 
 void ProjectVcsPage::validateData()
