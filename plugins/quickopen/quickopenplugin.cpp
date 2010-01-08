@@ -624,7 +624,16 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           }
         } else {
           QString filterText = o.searchLine->text();
+          
+          //Safety: Track whether this object is deleted. When execute() is called, a dialog may be opened,
+          //which kills the quickopen widget.
+          QPointer<QObject> stillExists(this);
+          
           if( m_model->execute( o.list->currentIndex(), filterText ) ) {
+            
+            if(!stillExists)
+              return true;
+            
             if(!(keyEvent->modifiers() & Qt::ShiftModifier))
               emit ready();
           } else {
