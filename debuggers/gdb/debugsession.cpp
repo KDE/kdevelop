@@ -334,6 +334,8 @@ void DebugSession::restartDebugger()
 
 void DebugSession::stopDebugger()
 {
+    commandQueue_->clear();
+
     kDebug(9012) << "DebugSession::slotStopDebugger() called";
     if (stateIsOn(s_shuttingDown) || !m_gdb)
         return;
