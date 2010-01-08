@@ -146,7 +146,7 @@ void ProjectSelectionPage::validateData()
         emit valid();
     } else
     {
-        ui->locationValidLabel->setText( i18n("Invalid project template") );
+        ui->locationValidLabel->setText( i18n("Invalid project template, please choose a leaf item") );
         emit invalid();
         return;
     }
