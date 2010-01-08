@@ -1080,7 +1080,7 @@ void GdbTest::testVariablesQuicklySwitchFrame()
     COMPARE_DATA(i, "Locals");
     QCOMPARE(variableCollection()->rowCount(i), 1);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
-    COMPARE_DATA(variableCollection()->index(1, 0, i), "1");
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
 
     stackModel->setCurrentFrame(1);
     QTest::qWait(300);
