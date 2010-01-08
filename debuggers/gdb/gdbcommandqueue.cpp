@@ -27,6 +27,11 @@ CommandQueue::CommandQueue()
 {
 }
 
+CommandQueue::~CommandQueue()
+{
+    qDeleteAll(m_commandList);
+}
+
 void GDBDebugger::CommandQueue::enqueue(GDBCommand * command, QueuePosition insertPosition)
 {
     switch (insertPosition) {

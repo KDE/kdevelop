@@ -31,6 +31,7 @@ class CommandQueue
 {
 public:
     CommandQueue();
+    ~CommandQueue();
 
     void enqueue(GDBCommand* command, QueuePosition insertPosition);
 
