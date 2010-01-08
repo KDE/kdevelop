@@ -43,6 +43,10 @@ Boston, MA 02110-1301, USA.
 #include <kprocess.h>
 #include <sublime/mainwindow.h>
 #include <KApplication>
+#include <QLineEdit>
+#include <KMessageBox>
+#include <QGroupBox>
+#include <QBoxLayout>
 
 namespace KDevelop
 {
@@ -93,6 +97,39 @@ public:
     {
         SessionDialog dlg(ICore::self()->uiController()-> activeMainWindow());
         dlg.exec();
+    }
+
+    void deleteSession()
+    {
+        int choice = KMessageBox::warningContinueCancel(Core::self()->uiController()->activeMainWindow(), i18n("The current session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?"));
+        
+        if(choice == KMessageBox::Continue)
+        {
+            static_cast<Session*>(q->activeSession())->deleteFromDisk();
+            q->emitQuitSession();
+        }
+    }
+
+    void renameSession()
+    {
+        KDialog dialog;
+        dialog.setWindowTitle(i18n("Rename Session"));
+        QGroupBox box;
+        QHBoxLayout layout(&box);
+        
+        box.setTitle(i18n("New Session Name"));
+        QLineEdit edit;
+        layout.addWidget(&edit);
+        dialog.setButtons(KDialog::Ok | KDialog::Cancel);
+        edit.setText(q->activeSession()->name());
+        dialog.setMainWidget(&box);
+        
+        edit.setFocus();
+        
+        if(dialog.exec() == QDialog::Accepted)
+        {
+            static_cast<Session*>(q->activeSession())->setName(edit.text());
+        }
     }
 
     void loadSessionExternally( Session* s )
@@ -182,11 +219,26 @@ SessionController::SessionController( QObject *parent )
     KAction* action = actionCollection()->addAction( "new_session", this, SLOT( newSession() ) );
     action->setText( i18n("Start New Session") );
     action->setToolTip( i18n("Start a new KDevelop instance with an empty session") );
+    action->setIcon(KIcon("window-new"));
     
+    action = actionCollection()->addAction( "rename_session", this, SLOT( renameSession() ) );
+    action->setText( i18n("Rename...") );
+    action->setIcon(KIcon("edit-rename"));
+    
+    action = actionCollection()->addAction( "delete_session", this, SLOT( deleteSession() ) );
+    action->setText( i18n("Delete...") );
+    action->setIcon(KIcon("edit-delete"));
+
+    action = actionCollection()->addAction( "quit", this, SIGNAL( quitSession() ) );
+    action->setText( i18n("Quit") );
+    action->setIcon(KIcon("application-exit"));
+    
+    #if 0
     action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
     action->setText( i18n("Configure Sessions...") );
     action->setToolTip( i18n("Create/Delete/Activate Sessions") );
     action->setWhatsThis( i18n( "<b>Configure Sessions</b><p>Shows a dialog to Create/Delete Sessions and set a new active session.</p>" ) );
+    #endif
 
     d->grp = new QActionGroup( this );
     connect( d->grp, SIGNAL(triggered(QAction*)), this, SLOT(loadSessionFromAction(QAction*)) );

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kdevsessionui" library="kdevsession" version="4">
+<kpartgui name="kdevsessionui" library="kdevsession" version="5">
     <MenuBar>
         <Menu name="session">
             <text context="@title:menu">Session</text>
@@ -7,7 +7,10 @@
             <Separator />
             <ActionList name="available_sessions"/>
             <Separator />
-            <Action name="configure_sessions" />
+            <Action name="rename_session" />
+            <Action name="delete_session" />
+            <Separator />
+            <Action name="quit" />
         </Menu>
     </MenuBar>
 </kpartgui>

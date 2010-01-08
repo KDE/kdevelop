@@ -65,14 +65,23 @@ public:
     static QString defaultSessionId(QString pickSession = QString());
     
     void plugActions();
+    
+    void emitQuitSession()
+    {
+        emit quitSession();
+    }
+    
 Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& );
+    void quitSession();
 private slots:
     void updateSessionDescriptions();
 private:
     Q_PRIVATE_SLOT( d, void newSession() )
     Q_PRIVATE_SLOT( d, void configureSessions() )
+    Q_PRIVATE_SLOT( d, void deleteSession() )
+    Q_PRIVATE_SLOT( d, void renameSession() )
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;
 };

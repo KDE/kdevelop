@@ -64,6 +64,7 @@ Boston, MA 02110-1301, USA.
 #include "textdocument.h"
 #include <KMenuBar>
 #include "restructuremenu.h"
+#include "sessioncontroller.h"
 
 namespace KDevelop {
 
@@ -260,7 +261,7 @@ void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
 
 void MainWindowPrivate::setupActions()
 {
-    KStandardAction::quit( this, SLOT( quitAll() ), actionCollection() );
+    connect(Core::self()->sessionController(), SIGNAL(quitSession()), SLOT(quitAll()));
 
     KAction *action;
 
