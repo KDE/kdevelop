@@ -232,7 +232,16 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 
     menu.recordDifference();
     
-    menu.map(QStringList() << i18n("Edit"), QStringList() << i18n("Edit"));
+    //Specially restructure the "Edit" menu: We only want a very limited set of actions there, the rest should go into Edit -> Advanced
+    menu.map(QStringList() << i18n("Edit") << i18n("Undo"), QStringList() << i18n("Edit") << i18n("Undo"));
+    menu.map(QStringList() << i18n("Edit") << i18n("Redo"), QStringList() << i18n("Edit") << i18n("Redo"));
+    menu.map(QStringList() << i18n("Edit") << i18n("Cut"), QStringList() << i18n("Edit") << i18n("Cut"));
+    menu.map(QStringList() << i18n("Edit") << i18n("Copy"), QStringList() << i18n("Edit") << i18n("Copy"));
+    menu.map(QStringList() << i18n("Edit") << i18n("Paste"), QStringList() << i18n("Edit") << i18n("Paste"));
+    menu.map(QStringList() << i18n("Edit") << i18n("Find..."), QStringList() << i18n("Edit") << i18n("Find..."));
+    menu.map(QStringList() << i18n("Edit") << i18n("Replace..."), QStringList() << i18n("Edit") << i18n("Replace..."));
+    menu.map(QStringList() << i18n("Edit"), QStringList() << i18n("Edit") << i18n("Advanced"));
+    
     menu.map(QStringList() << i18n("File"), QStringList() << i18n("File"));
 //     menu.map(QStringList() << i18n("Settings"), QStringList() << i18n("Editor"));
     menu.map(QStringList(), QStringList() << i18n("Editor"));
