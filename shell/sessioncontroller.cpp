@@ -222,15 +222,15 @@ SessionController::SessionController( QObject *parent )
     action->setIcon(KIcon("window-new"));
     
     action = actionCollection()->addAction( "rename_session", this, SLOT( renameSession() ) );
-    action->setText( i18n("Rename...") );
+    action->setText( i18n("Rename Session...") );
     action->setIcon(KIcon("edit-rename"));
     
     action = actionCollection()->addAction( "delete_session", this, SLOT( deleteSession() ) );
-    action->setText( i18n("Delete...") );
+    action->setText( i18n("Delete Session...") );
     action->setIcon(KIcon("edit-delete"));
 
     action = actionCollection()->addAction( "quit", this, SIGNAL( quitSession() ) );
-    action->setText( i18n("Quit") );
+    action->setText( i18n("Quit Session") );
     action->setIcon(KIcon("application-exit"));
     
     #if 0
