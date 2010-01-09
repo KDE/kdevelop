@@ -289,6 +289,9 @@ void RestructureMenu::removeActionFromMenu(QStringList prefix, QAction* action) 
     {
         QHash< QStringList, QPointer< QAction > >::iterator it = m_menuActions.find(prefix.mid(0, a+1));
         
+        if(!(*it))
+            continue;
+        
         if(it != m_menuActions.end())
         {
             previousMenu = (*it)->menu();
