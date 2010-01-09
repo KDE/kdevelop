@@ -48,7 +48,7 @@ using namespace KDevelop;
 
 ClassTree::ClassTree(QWidget* parent, ClassBrowserPlugin* plugin)
   : QTreeView(parent)
-  , m_plugin(plugin)
+  , m_plugin(plugin), m_tooltip(0)
 {
   header()->hide();
   setIndentation(10);
@@ -94,6 +94,34 @@ void ClassTree::contextMenuEvent(QContextMenuEvent* e)
 
   if (!menu->actions().isEmpty())
     menu->exec(QCursor::pos());
+}
+
+bool ClassTree::event(QEvent* event)
+{
+    if (event->type() == QEvent::ToolTip)
+    {
+        // if we request a tooltip over a duobject item, show a tooltip for it
+        const QPoint &p = mapFromGlobal(QCursor::pos());
+        const QModelIndex &idxView = indexAt(p);
+
+        DUChainReadLocker readLock(DUChain::lock());
+        if (Declaration* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(idxView)))
+        {
+            if (m_tooltip) {
+                m_tooltip->close();
+            }
+            QWidget* navigationWidget = decl->topContext()->createNavigationWidget(decl);
+            if (navigationWidget)
+            {
+                m_tooltip = new KDevelop::NavigationToolTip(this, mapToGlobal(p) + QPoint(40, 0), navigationWidget);
+                m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
+                ActiveToolTip::showToolTip(m_tooltip);
+                return true;
+            }
+        }
+    }
+
+    return QAbstractItemView::event(event);
 }
 
 ClassModel* ClassTree::model()

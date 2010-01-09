@@ -24,8 +24,11 @@
 #define CLASSTREE_H
 
 #include <QtGui/QTreeView>
+#include <QtCore/QPointer>
 
 #include <language/duchain/identifier.h>
+
+#include "language/util/navigationtooltip.h"
 
 class ClassBrowserPlugin;
 class ClassModel;
@@ -47,12 +50,14 @@ public:
 protected:
   virtual void contextMenuEvent(QContextMenuEvent* e);
   ClassModel* model();
+  virtual bool event(QEvent* event);
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
 
 private:
   ClassBrowserPlugin* m_plugin;
+  QPointer<KDevelop::NavigationToolTip> m_tooltip;
 };
 
 #endif
