@@ -241,6 +241,7 @@ void Container::addWidget(View *view)
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     Q_ASSERT(view);
     d->viewForWidget[w] = view;
+    d->tabBar->setTabToolTip(idx,view->document()->toolTip());
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
     connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
     connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));

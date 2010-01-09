@@ -46,6 +46,7 @@ struct DocumentPrivate {
     Controller *controller;
     QList<View*> views;
     QIcon statusIcon;
+    QString documentToolTip;
 
     Document *m_document;
 };
@@ -91,10 +92,20 @@ QString Document::title() const
     return objectName();
 }
 
+QString Document::toolTip() const
+{
+    return d->documentToolTip;
+}
+
 void Document::setTitle(const QString& newTitle)
 {
     setObjectName(newTitle);
     emit titleChanged(this);
+}
+
+void Document::setToolTip(const QString& newToolTip)
+{
+    d->documentToolTip=newToolTip;
 }
 
 View *Document::newView(Document *doc)

@@ -38,6 +38,7 @@ struct UrlDocumentPrivate {
 UrlDocument::UrlDocument(Controller *controller, const KUrl &url)
     :Document(url.fileName(), controller), d( new UrlDocumentPrivate() )
 {
+    setToolTip(url.prettyUrl());
     // Deep copy please :)
     d->url.setEncodedUrl(url.url().toAscii());
 }

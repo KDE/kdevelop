@@ -60,7 +60,8 @@ public:
     QString title() const;
     /**Set the document title.*/
     void setTitle(const QString& newTitle);
-
+    void setToolTip(const QString& newToolTip);
+    QString toolTip() const;
     /**@return the type of document which can be written to config.*/
     virtual QString documentType() const = 0;
 
