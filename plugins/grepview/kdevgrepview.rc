@@ -1,9 +1,9 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kdevgrepview" version="5">
+<kpartgui name="kdevgrepview" version="6">
 <MenuBar>
-  <Menu name="edit">
-    <Text context="@title:menu">Edit</Text>
-    <Action name="edit_grep" group="edit_find_merge" />
+  <Menu name="navigation">
+    <Text context="@title:menu">Navigation</Text>
+    <Action name="edit_grep" />
   </Menu>
 </MenuBar>
 </kpartgui>
