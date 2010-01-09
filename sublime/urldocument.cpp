@@ -57,6 +57,7 @@ void UrlDocument::setUrl(const KUrl& newUrl)
 {
     d->url = newUrl;
     setTitle(newUrl.fileName());
+    setToolTip(newUrl.prettyUrl());
 }
 
 QWidget *UrlDocument::createViewWidget(QWidget *parent)
