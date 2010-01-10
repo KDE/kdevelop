@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=USERINTERFACE
 Name=Source Formatter
 Name[bg]=Форматиращ модул за програмен текст
 Name[ca]=Formatador de codi font
+Name[ca@valencia]=Formatador de codi font
 Name[de]=Quelltextformatierer
 Name[en_GB]=Source Formatter
 Name[es]=Formateador de código

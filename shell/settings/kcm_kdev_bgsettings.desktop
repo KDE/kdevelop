@@ -13,6 +13,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 Name=Background Parser
 Name[bg]=Фонов анализатор на синтаксиса
 Name[ca]=Analitzador en segon pla
+Name[ca@valencia]=Analitzador en segon pla
 Name[de]=Hintergrund-Parser
 Name[el]=Αναλυτής παρασκηνίου
 Name[en_GB]=Background Parser
