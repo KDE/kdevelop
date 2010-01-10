@@ -28,6 +28,7 @@ public:
   IncludeNavigationContext(const KDevelop::IncludeItem& item, KDevelop::TopDUContextPointer topContext);
 
 protected:
+    virtual bool filterDeclaration(KDevelop::Declaration* decl);
     virtual void getFileInfo(KDevelop::TopDUContext* duchain);
 };
 

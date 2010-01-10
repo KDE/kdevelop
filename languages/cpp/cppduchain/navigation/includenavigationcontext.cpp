@@ -35,6 +35,15 @@ IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, KDev
     : AbstractIncludeNavigationContext(item, topContext, CppParsingEnvironment)
 {}
 
+bool IncludeNavigationContext::filterDeclaration(Declaration* decl)
+{
+    QString declId = decl->identifier().identifier().str();
+      //filter out forward-declarations and macro-expansions without a range
+      //And filter out declarations with reserved identifiers
+      return !decl->qualifiedIdentifier().toString().isEmpty() && !decl->range().isEmpty() && !decl->isForwardDeclaration()
+                && !(declId.startsWith("__") || (declId.startsWith("_") && declId.length() > 1 && declId[1].isUpper()) );
+}
+
 void IncludeNavigationContext::getFileInfo(TopDUContext* duchain)
 {
     const Cpp::EnvironmentFile* f = dynamic_cast<const Cpp::EnvironmentFile*>(duchain->parsingEnvironmentFile().data());
