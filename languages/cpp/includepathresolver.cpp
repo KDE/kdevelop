@@ -103,9 +103,12 @@ namespace CppTools {
           cout << "Duplicate file: " << filename.toUtf8().constData() << endl;
           continue;
         }
+        
+        QByteArray bFileName = filename.toLocal8Bit();
+        const char* bFileNameC = bFileName.constData();
 
         struct stat s;
-        if( stat( filename.toLocal8Bit().constData(), &s ) == 0 ) 
+        if( stat( bFileNameC, &s ) == 0 ) 
         {
           ///Success
           m_stat[filename] = s.st_mtime;
@@ -116,7 +119,7 @@ namespace CppTools {
           times[1].tv_sec = m_newTime;
           times[1].tv_usec = 0;
 
-          if( utimes( filename.toLocal8Bit().constData(), times ) != 0 )
+          if( utimes( bFileNameC, times ) != 0 )
           {
             ifTest( cout << "failed to touch " << it->toUtf8().constData() << endl );
           }
@@ -135,17 +138,20 @@ namespace CppTools {
       {
         ifTest( cout << "untouching " << it.key().toUtf8().constData() << endl );
         
+        QByteArray bFileName = it.key().toLocal8Bit();
+        const char* bFileNameC = bFileName.constData();
+        
         struct stat s;
-        if( stat( it.key().toLocal8Bit().constData(), &s ) == 0 ) 
+        if( stat( bFileNameC, &s ) == 0 ) 
         {
           if( s.st_mtime == m_newTime ) {
             ///Still the modtime that we've set, change it back
             struct timeval times[2];
             times[0].tv_usec = 0;
             times[0].tv_sec = s.st_atime;
-            times[1].tv_usec = 0;
+            times[1].tv_usec = 0;  
             times[1].tv_sec = *it;
-            if( utimes( it.key().toLocal8Bit().constData(), times ) != 0 ) {
+            if( utimes( bFileNameC, times ) != 0 ) {
               perror("Resetting modification time");
               ifTest( cout << "failed to untouch " << it.key().toUtf8().constData() << endl );
             }
