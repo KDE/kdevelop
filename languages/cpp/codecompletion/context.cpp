@@ -101,6 +101,9 @@ QStringList allOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<
 const int maxOverloadedOperatorArgumentHints = 5;
 const int maxOverloadedArgumentHints = 20;
 
+//Whether identifiers starting with "__" or "_Uppercase" and that are not declared in the current file should be excluded from the code completion
+const bool excludeReservedIdentifiers = true;
+
 using namespace KDevelop;
 
 namespace Cpp {
@@ -1689,6 +1692,15 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   
   if(decl->indexedIdentifier() == friendIdentifier)
     return false;
+  
+  if(excludeReservedIdentifiers)
+  {
+    //Exclude identifiers starting with "__" or "_Uppercase"
+    IndexedString str = decl->indexedIdentifier().identifier().identifier();
+    const char* cstr = str.c_str();
+    if(str.length() > 2 && cstr[0] == '_' && (cstr[1] == '_' || QChar(cstr[1]).isUpper()) && decl->url() != m_duContext->url())
+      return false;
+  }
   
   if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
     return false;

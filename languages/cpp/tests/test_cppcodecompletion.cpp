@@ -129,7 +129,8 @@ void TestCppCodeCompletion::testNoMemberAccess() {
 }
 
 void TestCppCodeCompletion::testFunctionImplementation() {
-  addInclude("myclass.h", "namespace mynamespace { class myclass { void students(); }; };");
+  //__hidden1 and _Hidden2 should not be visible in the code-completion, as their identifiers are reserved to C++ implementations and standard libraries.
+  addInclude("myclass.h", "namespace mynamespace { class myclass { void students(); }; }; class __hidden1; int _Hidden2; ");
   QByteArray test = "#include \"myclass.h\"\nnamespace mynamespace { }";
   
   TopDUContext* context = parse(test, DumpNone);
@@ -632,19 +633,23 @@ void TestCppCodeCompletion::testFriendVisibility() {
 
 void TestCppCodeCompletion::testLocalUsingNamespace() {
   TEST_FILE_PARSE_ONLY
-  QByteArray method("namespace Foo { int test() {} } void Bar() { using namespace Foo; int b = test(); }");
-  TopDUContext* top = parse(method, DumpAll);
+  {
+    QByteArray method("namespace Fuu { int test0(); }; namespace Foo { using namespace Fuu; int test() {} } void Bar() { using namespace Foo; int b = test(); }");
+    TopDUContext* top = parse(method, DumpAll);
 
-  DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->childContexts().count(), 3);
-  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
-  QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 2);
-  QVERIFY(top->childContexts()[0]->localDeclarations()[0]->uses().size());
-  QVERIFY(top->childContexts()[2]->findLocalDeclarations(KDevelop::globalImportIdentifier, KDevelop::SimpleCursor::invalid(), 0, KDevelop::AbstractType::Ptr(), KDevelop::DUContext::NoFiltering).size());
-//   QVERIFY(top->childContexts()[2]->findDeclarations(KDevelop::globalImportIdentifier).size());
-  
-  QVERIFY(CompletionItemTester(top->childContexts()[2]).names.contains("test"));
-  release(top);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->childContexts().count(), 4);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[3]->localDeclarations().size(), 2);
+    QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().size());
+    QVERIFY(top->childContexts()[3]->findLocalDeclarations(KDevelop::globalImportIdentifier, KDevelop::SimpleCursor::invalid(), 0, KDevelop::AbstractType::Ptr(), KDevelop::DUContext::NoFiltering).size());
+  //   QVERIFY(top->childContexts()[2]->findDeclarations(KDevelop::globalImportIdentifier).size());
+    
+    QVERIFY(CompletionItemTester(top->childContexts()[3]).names.contains("test"));
+    QVERIFY(CompletionItemTester(top->childContexts()[3]).names.contains("test0"));
+//     QVERIFY(CompletionItemTester(top->childContexts()[3], "Foo::").names.contains("test0"));
+    release(top);
+  }
 }
 
 void TestCppCodeCompletion::testTemplateFunction() {
