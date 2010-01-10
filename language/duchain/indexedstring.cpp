@@ -106,6 +106,10 @@ inline QByteArray arrayFromItem(const IndexedStringData* item) {
   const unsigned short* textPos = (unsigned short*)(item+1);
   return QByteArray((char*)textPos, item->length);
 }  
+
+inline const char* c_strFromItem(const IndexedStringData* item) {
+  return (const char*)(item+1);
+}  
 }
 
 namespace {
@@ -273,6 +277,17 @@ int IndexedString::length() const {
     return 1;
   else
     return getGlobalIndexedStringRepository()->itemFromIndex(m_index)->length;
+}
+
+const char* IndexedString::c_str() const
+{
+  if(!m_index)
+    return 0;
+  else if((m_index & 0xffff0000) == 0xffff0000)
+    return ((char*)&m_index)+3; //The last byte contains the character
+  else
+    return c_strFromItem(getGlobalIndexedStringRepository()->itemFromIndex(m_index));
+
 }
 
 QByteArray IndexedString::byteArray() const {

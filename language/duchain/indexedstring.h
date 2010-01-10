@@ -98,6 +98,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
   //This is relatively expensive(needs a mutex lock, hash lookups, and eventual loading), so avoid it when possible.
   int length() const;
 
+  ///Returns the underlying c string, in utf-8 encoding. @warning The string is not 0-terminated, consider length()!
+  const char* c_str() const;
+
   ///Convenience function, avoid using it, it's relatively expensive
   QString str() const;
 
