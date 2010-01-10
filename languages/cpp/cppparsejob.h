@@ -196,7 +196,9 @@ private:
     const QList<IndexedString>& includePaths() const;
     //Only use from within the background thread, and make sure no mutexes are locked when calling it
     const KUrl::List& includePathUrls() const;
-    
+
+    //Merges the macro-definitions into the given environment
+    void mergeDefines(CppPreprocessEnvironment& env) const;
   
     bool m_needUpdateEverything;
     KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;

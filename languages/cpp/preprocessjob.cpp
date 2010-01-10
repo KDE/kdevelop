@@ -154,6 +154,8 @@ void PreprocessJob::run()
     } else {
         //Insert standard-macros
         KDevelop::ParsingEnvironment* standardEnv = createStandardEnvironment();
+        parentJob()->mergeDefines(static_cast<CppPreprocessEnvironment&>(*standardEnv));
+        
         m_currentEnvironment->swapMacros( dynamic_cast<CppPreprocessEnvironment*>(standardEnv) );
         delete standardEnv;
     }

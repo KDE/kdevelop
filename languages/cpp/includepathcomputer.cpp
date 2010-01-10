@@ -80,7 +80,6 @@ void IncludePathComputer::computeForeground() {
             continue;
         }
 
-
         m_projectName = project->name();
         m_projectDirectory = project->folder();
         m_effectiveBuildDirectory = m_buildDirectory = buildManager->buildDirectory(project->projectItem());
@@ -91,6 +90,8 @@ void IncludePathComputer::computeForeground() {
 
         KUrl::List dirs = buildManager->includeDirectories(file);
 
+        m_defines = buildManager->defines(file);
+        
         m_gotPathsFromManager = true;
 
         kDebug(9007) << "Got " << dirs.count() << " include-paths from build-manager";

@@ -63,6 +63,7 @@
 #include <language/duchain/duchainutils.h>
 #include "includepathcomputer.h"
 #include <interfaces/iuicontroller.h>
+#include <cpppreprocessenvironment.h>
 
 //#define DUMP_SMART_RANGES
 //#define DUMP_AST
@@ -229,8 +230,32 @@ const KUrl::List& CPPParseJob::includePathUrls() const {
   return masterJob()->m_includePathUrls;
 }
 
+void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
+{
+  //m_includePathsComputed is filled when includePaths() is called
+  masterJob()->includePaths();
+  QHash<QString, QString> defines = masterJob()->m_includePathsComputed->defines();
+  
+  ///@todo Most probably, the same macro-sets will be calculated again and again.
+  ///           One ReferenceCountedMacroSet would be enough.
+  
+  kDebug() << "DEFINES:" << defines;
+  
+  for(QHash<QString, QString>::const_iterator it = defines.begin(); it != defines.end(); ++it)
+  {
+    rpp::pp_macro* m = new rpp::pp_macro(IndexedString(it.key()));
+    m->setDefinitionText( *it );
+    
+    //Call rpp::Environment::setMacro directly, so we don't add the macro to the environment-file.
+    //It should be only part of the environment.
+    env.rpp::Environment::setMacro(m);
+  }
+}
+
 const QList<IndexedString>& CPPParseJob::includePaths() const {
     //If a lock was held here, we would get deadlocks
+    ///@todo This can lead to deadlocks during shutdown. Find a more elegant solution for the interaction between foreground and background,
+    ///           that also works well during shutdown.
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
@@ -238,6 +263,7 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
             qRegisterMetaType<CPPParseJob*>("CPPParseJob*");
             QMetaObject::invokeMethod(cpp(), "findIncludePathsForJob", Qt::QueuedConnection, Q_ARG(CPPParseJob*, const_cast<CPPParseJob*>(this)));
             //Will be woken once the include-paths are computed
+            ///@todo Maybe just wake up here regularly and check whether kdevelop is in shutdown. If yes, stop waiting.
             m_waitForIncludePaths.wait(&m_waitForIncludePathsMutex);
             m_waitForIncludePathsMutex.unlock();
             Q_ASSERT(m_includePathsComputed);

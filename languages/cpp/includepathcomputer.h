@@ -32,9 +32,14 @@ class IncludePathComputer  {
       return m_ret;
     }
     
+    const QHash<QString,QString>& defines() const {
+      return m_defines;
+    }
+    
     KDevelop::ModificationRevisionSet m_includePathDependency;
     
   private:
+    QHash<QString,QString> m_defines;
     KUrl m_source;
     QList<KDevelop::ProblemPointer>* m_problems;
     KUrl::List m_ret;
