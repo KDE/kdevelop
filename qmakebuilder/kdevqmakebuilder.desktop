@@ -2,6 +2,7 @@
 Type=Service
 Name=QMake Project Builder
 Name[ca]=Constructor de projecte QMake
+Name[ca@valencia]=Constructor de projecte QMake
 Name[en_GB]=QMake Project Builder
 Name[es]=Constructor de proyectos QMake
 Name[fr]=QMake Project Builder
@@ -13,6 +14,7 @@ Name[uk]=Інструмент збирання проектів QMake
 Name[x-test]=xxQMake Project Builderxx
 Comment=Builds QMake Projects
 Comment[ca]=Construeix projectes QMake
+Comment[ca@valencia]=Construeix projectes QMake
 Comment[en_GB]=Builds QMake Projects
 Comment[es]=Construye proyectos de QMake
 Comment[fr]=Builds QMake Projects

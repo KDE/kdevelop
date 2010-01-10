@@ -2,6 +2,7 @@
 Type=Service
 Name=QMake Project Manager
 Name[ca]=Gestor de projectes QMake
+Name[ca@valencia]=Gestor de projectes QMake
 Name[en_GB]=QMake Project Manager
 Name[es]=Gestor de proyectos QMake
 Name[fr]=QMake Project Manager
@@ -13,6 +14,7 @@ Name[uk]=Керування проектами QMake
 Name[x-test]=xxQMake Project Managerxx
 Comment=Imports and edits qmake projects
 Comment[ca]=Importa i edita projectes de QMake
+Comment[ca@valencia]=Importa i edita projectes de QMake
 Comment[en_GB]=Imports and edits qmake projects
 Comment[es]=Importa y edita proyectos de QMake
 Comment[fr]=importe et modife les projets qmake
