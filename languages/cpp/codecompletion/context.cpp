@@ -99,7 +99,7 @@ QStringList allOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<
 //Whether the list of argument-hints should contain all overloaded versions of operators.
 //Disabled for now, because there is usually a huge list of overloaded operators.
 const int maxOverloadedOperatorArgumentHints = 5;
-const int maxOverloadedArgumentHints = 5;
+const int maxOverloadedArgumentHints = 20;
 
 using namespace KDevelop;
 
