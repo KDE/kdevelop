@@ -208,7 +208,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   {
     //Since include-file completion has nothing in common with the other completion-types, process it within a separate function
     QString lineText = extractLastLine(m_text).trimmed();
-    if(lineText.startsWith("#include")) {
+    if(lineText.startsWith("#")) {
       processIncludeDirective(lineText);
       return;
     }
@@ -874,8 +874,18 @@ void CodeCompletionContext::processIncludeDirective(QString line)
   if(line.count('"') == 2 || line.endsWith('>'))
     return; //We are behind a complete include-directive
 
+  //The include-directive has not been fully opened
+//   if(!line.count('"') && !line.count("<"))
+//     return; 
+
+  int endOfInclude = CppUtils::findEndOfInclude(line);
+  if(endOfInclude == -1)
+    return;
+  
+  //Strip away #include
+  line = line.mid(endOfInclude).trimmed();
+  
   kDebug(9007) << "include line: " << line;
-  line = line.mid(8).trimmed(); //Strip away the #include
   kDebug(9007) << "trimmed include line: " << line;
 
   if(!line.startsWith('<') && !line.startsWith('"'))

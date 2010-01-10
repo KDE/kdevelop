@@ -39,6 +39,9 @@ class KUrl;
 namespace CppUtils
 {
   
+///Returns -1 if there is no #include in this line, else the first position behind the "#include" string, which may also look like " # include" or similar
+int findEndOfInclude(QString line);
+
 ///If @param fast is true, no exhaustive search is done as fallback.
 KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast = false );
 

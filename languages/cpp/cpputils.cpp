@@ -58,6 +58,21 @@ using namespace KDevelop;
 namespace CppUtils
 {
   
+int findEndOfInclude(QString line)
+{
+  QString tmp = line;
+  tmp = tmp.trimmed();
+  if(!tmp.startsWith("#"))
+    return -1;
+  
+  tmp = tmp.mid(1).trimmed();
+
+  if(!tmp.startsWith("include"))
+    return -1;
+  
+  return line.indexOf("include") + 7;
+}
+
 KUrl sourceOrHeaderCandidate( const KUrl &url, bool fast )
 {
   QString urlPath = url.toLocalFile(); ///@todo Make this work with real urls

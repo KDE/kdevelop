@@ -451,7 +451,7 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
 
   QString line = doc->textDocument()->text(KTextEditor::Range(lineNumber, 0, lineNumber, lineLength));
 
-  if(line.trimmed().startsWith("#include")) { //If it is an include, return the complete line
+  if(CppUtils::findEndOfInclude(line) != -1) { //If it is an include, return the complete line
     int start = 0;
     while(start < lineLength && line[start] == ' ')
       ++start;
@@ -519,7 +519,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
 
   Q_ASSERT(p);
 
-  if(word.startsWith("#include")) {
+  if(CppUtils::findEndOfInclude(word) != -1) {
     //It's an #include, find out which file was included at the given line
     foreach(const DUContext::Import &imported, ctx->importedParentContexts()) {
       if(imported.context(0)) {
