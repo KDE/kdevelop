@@ -129,7 +129,8 @@ void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
 
     //If a macro of the same name has been fixed, the new macro has no effect
     if(hadMacro && hadMacro->fixed) {
-      delete macro;
+      if(!macro->isRepositoryMacro())
+        delete macro;
       return;
     }
 
