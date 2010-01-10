@@ -2,6 +2,7 @@
 Type=Service
 Name=CMake Project Builder
 Name[ca]=Constructor de projecte CMake
+Name[ca@valencia]=Constructor de projecte CMake
 Name[de]=Ersteller für CMake-Projekte
 Name[en_GB]=CMake Project Builder
 Name[es]=Constructor de proyecto CMake
@@ -25,6 +26,7 @@ Name[zh_CN]=CMake 工程构建器
 Name[zh_TW]=CMake 專案建立器
 Comment=Builds CMake Projects
 Comment[ca]=Construeix projectes CMake
+Comment[ca@valencia]=Construeix projectes CMake
 Comment[de]=Erstellt CMake-Projekte
 Comment[el]=Κατασκευή έργων CMake
 Comment[en_GB]=Builds CMake Projects

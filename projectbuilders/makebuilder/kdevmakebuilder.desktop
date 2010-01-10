@@ -2,6 +2,7 @@
 Type=Service
 Name=Make Project Builder
 Name[ca]=Constructor de projecte Make
+Name[ca@valencia]=Constructor de projecte Make
 Name[de]=Ersteller für Make-Projekte
 Name[en_GB]=Make Project Builder
 Name[es]=Constructor de proyecto Make
@@ -25,6 +26,7 @@ Name[zh_CN]=Make 工程构建器
 Name[zh_TW]=Make 專案建立器
 Comment=KDevelop Make Builder
 Comment[ca]=Constructor KDevelop Make
+Comment[ca@valencia]=Constructor KDevelop Make
 Comment[de]=Make-Builder von KDevelop
 Comment[el]=Κατασκευαστής Make του KDevelop
 Comment[en_GB]=KDevelop Make Builder

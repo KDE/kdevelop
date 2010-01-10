@@ -11,6 +11,7 @@ Name[x-test]=xxCMake Documentationxx
 Name[zh_TW]=CMake 文件
 Comment=Allows KDevelop to provide CMake documentation
 Comment[ca]=Permet a KDevelop proporcionar informació de CMake
+Comment[ca@valencia]=Permet a KDevelop proporcionar informació de CMake
 Comment[cs]=Umožňuje KDevelop poskytovat dokumentaci CMake
 Comment[de]=Ermöglicht das Bereitstellen von Dokumentation für CMake
 Comment[en_GB]=Allows KDevelop to provide CMake documentation

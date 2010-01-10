@@ -2,6 +2,7 @@
 [General]
 Name=Simple CMake-based C++ application
 Name[ca]=Senzilla aplicació C++ basada en CMake
+Name[ca@valencia]=Senzilla aplicació C++ basada en CMake
 Name[cs]=Jednoduchá aplikace C++ založená na CMake
 Name[de]=Einfache auf CMake basierende C++-Anwendung
 Name[en_GB]=Simple CMake-based C++ application
