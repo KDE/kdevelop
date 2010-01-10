@@ -121,6 +121,11 @@ QString AbstractIncludeNavigationContext::name() const
   return m_item.name;
 }
 
+bool AbstractIncludeNavigationContext::filterDeclaration(Declaration* decl)
+{
+  return true;
+}
+
 void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first, QString indent)
 {
   //modifyHtml() += indent + ctx->localScopeIdentifier().toString() + "{<br />";
@@ -143,7 +148,7 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
 
     if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.constEnd()) && declarationIterator != declarations.constEnd() )
     {
-      if(!(*declarationIterator)->qualifiedIdentifier().toString().isEmpty() && !(*declarationIterator)->range().isEmpty() && !(*declarationIterator)->isForwardDeclaration()) {
+      if(filterDeclaration(*declarationIterator) ) {
         //Show the declaration
         if(!first)
           modifyHtml() += Qt::escape(", ");

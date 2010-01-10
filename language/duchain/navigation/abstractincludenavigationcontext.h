@@ -58,6 +58,10 @@ protected:
   /// By default only "included by" and "includes"
   /// NOTE: You should always append a newline (<br />) if you write anything.
   virtual void getFileInfo(KDevelop::TopDUContext* duchain);
+  
+  ///Should return true if this declaration should be shown, and false if not
+  ///The duchain is locked when this is called
+  virtual bool filterDeclaration(Declaration* decl);
 
 private:
   /// Only environments with this type will be considered
