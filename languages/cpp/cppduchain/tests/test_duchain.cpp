@@ -1662,7 +1662,7 @@ void TestDUChain::testDeclareFriend()
 
   //                 0         1         2         3         4         5         6         7
   //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
-  QByteArray method("class A { friend class F; }; ");
+  QByteArray method("class B {}; class A { friend class F; friend class B; }; ");
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -1675,23 +1675,27 @@ void TestDUChain::testDeclareFriend()
 //  kDebug() << "dot-graph: \n" << dump.dotGraph(top, false);
 
   QVERIFY(!top->parentContext());
-  QCOMPARE(top->childContexts().count(), 1);
-  QCOMPARE(top->localDeclarations().count(), 2); //1 Forward-declaration of F
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->localDeclarations().count(), 3); //1 Forward-declaration of F
   QVERIFY(top->localScopeIdentifier().isEmpty());
 
-  Declaration* defClassA = top->localDeclarations().first();
+  Declaration* defClassA = top->localDeclarations()[1];
   QCOMPARE(defClassA->identifier(), Identifier("A"));
   QCOMPARE(defClassA->uses().count(), 0);
   QVERIFY(defClassA->type<CppClassType>());
   QVERIFY(defClassA->internalContext());
-  QCOMPARE(defClassA->internalContext()->localDeclarations().count(), 1);
 
-  QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("F"));
+  QCOMPARE(top->localDeclarations()[2]->identifier(), Identifier("F"));
   
-  QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1); //friend-declaration
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->identifier(), Identifier("friend"));
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 2); //friend-declaration
+  QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->identifier(), Identifier("friend"));
+  QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->identifier(), Identifier("friend"));
   
-  QVERIFY(Cpp::isFriend(top->localDeclarations()[0], top->localDeclarations()[1]));
+  QVERIFY(Cpp::isFriend(top->localDeclarations()[1], top->localDeclarations()[2]));
+  QVERIFY(Cpp::isFriend(top->localDeclarations()[1], top->localDeclarations()[0]));
+
+  QVERIFY(top->localDeclarations()[0]->uses().size());
+  QVERIFY(top->localDeclarations()[0]->uses().begin()->size());
   
   release(top);
 }
