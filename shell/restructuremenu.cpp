@@ -122,7 +122,7 @@ void RestructureMenu::restructure() {
         
         for(uint difference = 0; difference < 5; ++difference)
         {
-            for(QHash< QStringList, QList<QPointer< QAction > > >::const_iterator it = m_difference.begin(); it != m_difference.end(); ++it)
+            for(QHash< QStringList, QList<QPointer< QAction > > >::const_iterator it = m_difference.constBegin(); it != m_difference.constEnd(); ++it)
             {
                 for(QList< QPointer< QAction > >::const_iterator actionIt = (*it).begin(); actionIt != (*it).end(); ++actionIt)
                 {
