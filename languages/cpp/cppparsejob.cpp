@@ -241,7 +241,7 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
   
   kDebug() << "DEFINES:" << defines;
   
-  for(QHash<QString, QString>::const_iterator it = defines.begin(); it != defines.end(); ++it)
+  for(QHash<QString, QString>::const_iterator it = defines.constBegin(); it != defines.constEnd(); ++it)
   {
     rpp::pp_macro* m = new rpp::pp_macro(IndexedString(it.key()));
     m->setDefinitionText( *it );
