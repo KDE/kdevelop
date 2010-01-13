@@ -785,7 +785,7 @@ void IdealMainLayout::createArea(Role role)
       area->setMainSplitter(createSplitter(role));
 }
 
-void IdealMainLayout::addWidget(QWidget * widget, Role role)
+void IdealMainLayout::addWidget(QWidget * widget, Role role, bool setFocus)
 {
     if (m_maximizedWidget)
         maximizeWidget(0);
@@ -813,7 +813,9 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role)
     }
 
     area->raise();
-    widget->setFocus();
+    
+    if (setFocus)
+        widget->setFocus();
 }
 
 void IdealMainLayout::addButtonBar(QWidget* widget, Role role)
