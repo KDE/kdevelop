@@ -197,18 +197,6 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl::List &urls )
                     brush = newGreen;
                     checked = Qt::Unchecked;
                     break;
-                //DVCS part
-                case VcsStatusInfo::ItemAddedIndex:
-                    state = i18nc("file was added to index", "Added (in index)");
-                    brush = newGreen;
-                    break;
-                case VcsStatusInfo::ItemDeletedIndex:
-                    state = i18nc("file was deleted from index", "Deleted (in index)");
-                    brush = deletedRed;
-                    break;
-                case VcsStatusInfo::ItemModifiedIndex:
-                    state = i18nc("file was modified in index", "Modified (in index)");
-                    break;
                 default:
                     break;
             }
@@ -258,9 +246,6 @@ KUrl::List VcsCommitDialog::determineUrlsForCheckin()
     KUrl::List list;
     KUrl::List addItems;
 
-    if (KDevelop::ICentralizedVersionControl* iface = d->plugin->extension<KDevelop::ICentralizedVersionControl>())
-    {
-        
         foreach(KUrl url, d->selection()) {
             VcsStatusInfo info = d->statusInfos[url];
             
@@ -270,98 +255,13 @@ KUrl::List VcsCommitDialog::determineUrlsForCheckin()
             list << info.url();
         }
 
-        if(addItems.isEmpty() )
-            return list;
-
-        KDevelop::VcsJob* job = iface->add( addItems, IBasicVersionControl::NonRecursive );
+    if (!addItems.isEmpty()) {
+        IBasicVersionControl* iface = d->plugin->extension<IBasicVersionControl>();
+        VcsJob* job = iface->add( addItems, IBasicVersionControl::NonRecursive );
         job->exec();
     }
-    else if (KDevelop::IDistributedVersionControl* idvcs = d->plugin->extension<KDevelop::IDistributedVersionControl>())
-    {
-        //if indexed file is unchecked then reset
-        KUrl::List resetFiles;
-        KUrl::List addFiles;
-        KUrl::List rmFiles;
 
-        getDVCSfileLists(resetFiles, addFiles, rmFiles);
-
-        kDebug() << "filesToReset" << resetFiles;
-        kDebug() << "filesToAdd" << addFiles;
-        kDebug() << "filesToRm" << rmFiles;
-
-        //repo will be extracted from one of the filenames
-        KUrl repo;
-        if (!resetFiles.isEmpty())
-        {
-            repo = resetFiles[0];
-            KJob* j = idvcs->reset(repo, QStringList(QString("--")), resetFiles);
-            if (!j) {
-                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not reset files. %1 returned no job to execute.", idvcs->name()));
-            } else {
-                j->exec();
-            }
-        }
-        if (!addFiles.isEmpty())
-        {
-            repo = addFiles[0];
-            KJob* j = idvcs->add(addFiles);
-            if( !j ) {
-                KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not add files to commit list. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to add files to commit" ) );
-            } else {
-                j->exec();
-            }
-        }
-        if (!rmFiles.isEmpty())
-        {
-            repo = rmFiles[0];
-            KJob* j = idvcs->remove(rmFiles);
-            if( !j ) {
-                KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not remove files. %1 returned no job to execute.", idvcs->name() ), i18n( "Failed to remove files" ) );
-            } else {
-                j->exec();
-            }
-        }
-        list << repo;
-    }
     return list;
-}
-
-void VcsCommitDialog::getDVCSfileLists(KUrl::List &resetFiles, KUrl::List &addFiles, KUrl::List &rmFiles) const
-{
-    QSet<KUrl> selection = d->selection().toSet();
-    
-    foreach(KUrl url, d->urls.keys())
-    {
-        VcsStatusInfo info = d->statusInfos[url];
-
-        bool indexed, deleted, unchecked;
-        indexed = deleted = unchecked = false;
-
-            //do not break!
-        switch(info.state())
-        {
-            case VcsStatusInfo::ItemAddedIndex:
-            case VcsStatusInfo::ItemModifiedIndex:
-            case VcsStatusInfo::ItemDeletedIndex:
-                indexed = true;
-            case VcsStatusInfo::ItemDeleted:
-                deleted = true;
-        }
-
-        unchecked = !selection.contains(url);
-
-        KUrl path;
-        if (indexed && unchecked)
-            resetFiles << info.url();
-        
-        if (!indexed && !unchecked)
-        {
-            if (deleted)
-                rmFiles << info.url();
-            else
-                addFiles << info.url();
-        }
-    }
 }
 
 bool VcsCommitDialog::recursive() const
