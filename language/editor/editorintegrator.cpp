@@ -331,11 +331,6 @@ void EditorIntegrator::setCurrentUrl(const IndexedString& url, bool useSmart)
 
   if (d->m_currentDocument) {
     data()->editorIntegrators.remove(d->m_currentDocument, this);
-
-    if (d->m_smart) {
-      // Extra safety
-      d->m_smart->clearRevision();
-    }
   }
 
   d->m_currentUrl = url;
