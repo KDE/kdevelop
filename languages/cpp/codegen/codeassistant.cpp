@@ -86,7 +86,7 @@ void StaticCodeAssistant::eventuallyStartAssistant(SafeDocumentPointer document,
     return;
   
   if(m_activeAssistant) {
-    kDebug() << "there still is an active assistant";
+//     kDebug() << "there still is an active assistant";
 //     if(abs(m_activeAssistant->invocationCursor().line() < range.start().line()) >= 1) {
 //       kDebug() << "assistant was not deleted in time";
 //     }else{

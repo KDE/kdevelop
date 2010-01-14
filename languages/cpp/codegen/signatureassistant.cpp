@@ -51,7 +51,7 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   
   m_invocationRange = SimpleRange(inserted);
   
-  kDebug() << "checking";
+//   kDebug() << "checking";
   
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock(), 300);
   if(!lock.locked()) {
@@ -65,12 +65,12 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   Declaration* funDecl = DUChainUtils::declarationInLine(m_invocationRange.start, top);
   
   if(!funDecl || !funDecl->type<KDevelop::FunctionType>()) {
-    kDebug() << "no declaration found in line";
+//     kDebug() << "no declaration found in line";
     return;
   }
   
   m_declarationName = funDecl->identifier();
-  kDebug() << "found local function declaration:" << m_declarationName.toString();
+//   kDebug() << "found local function declaration:" << m_declarationName.toString();
   m_document = top->url();
   
   KDevelop::FunctionDefinition* definition = dynamic_cast<KDevelop::FunctionDefinition*>(funDecl);
