@@ -45,6 +45,9 @@
 #include "ui_projectbuildsetwidget.h"
 #include <QHeaderView>
 #include <project/projectbuildsetmodel.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
+#include <interfaces/iplugincontroller.h>
 
 ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     : QWidget( parent ), m_view( 0 ),
@@ -111,14 +114,76 @@ ProjectBuildSetWidget::~ProjectBuildSetWidget()
     delete m_ui;
 }
 
+static void appendActions(QMenu& menu, const QList<QAction*>& actions)
+{
+    menu.addSeparator();
+    foreach( QAction* act, actions )
+    {
+        menu.addAction(act);
+    }
+}
+
 void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 {
     if( m_ui->itemView->selectionModel()->selectedRows().isEmpty() )
         return;
 
+    QList<KDevelop::ProjectBaseItem*> itemlist;
+    
+    if(m_ui->itemView->selectionModel()->selectedRows().count() == 1)
+    {
+        KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
+        
+        int row = m_ui->itemView->selectionModel()->selectedRows()[0].row();
+        if(row < buildSet->items().size())
+        {
+            KDevelop::ProjectBaseItem* item = buildSet->items()[row].findItem();
+            if(item)
+                itemlist << item;
+        }
+    }
+    
+
     KMenu m;
     m.setTitle( i18n("Buildset") );
     m.addAction( i18n( "Remove from buildset" ), this, SLOT( removeItems() ) );
+    
+    if( !itemlist.isEmpty() )
+    {
+        KDevelop::ProjectItemContext context(itemlist);
+        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+
+        QList<QAction*> buildActions;
+        QList<QAction*> vcsActions;
+        QList<QAction*> extActions;
+        QList<QAction*> projectActions;
+        QList<QAction*> fileActions;
+        QList<QAction*> runActions;
+        foreach( const KDevelop::ContextMenuExtension& ext, extensions )
+        {
+            buildActions += ext.actions(KDevelop::ContextMenuExtension::BuildGroup);
+            fileActions += ext.actions(KDevelop::ContextMenuExtension::FileGroup);
+            projectActions += ext.actions(KDevelop::ContextMenuExtension::ProjectGroup);
+            vcsActions += ext.actions(KDevelop::ContextMenuExtension::VcsGroup);
+            extActions += ext.actions(KDevelop::ContextMenuExtension::ExtensionGroup);
+            runActions += ext.actions(KDevelop::ContextMenuExtension::RunGroup);
+        }
+
+        appendActions(m, buildActions);
+        appendActions(m, runActions);
+        appendActions(m, fileActions);
+
+        QMenu* vcsm = &m;
+        if( vcsActions.count() > 1 )
+        {
+            vcsm = m.addMenu( i18n("Version Control "));
+        }
+        appendActions(*vcsm, vcsActions);
+        appendActions(m, extActions);
+
+        appendActions(m, projectActions);
+    }
+    
     m.exec( m_ui->itemView->viewport()->mapToGlobal( p ) );
 }
 
