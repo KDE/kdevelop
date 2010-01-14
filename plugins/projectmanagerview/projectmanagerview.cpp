@@ -113,6 +113,9 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
     selectionChanged();
+    
+    //Update the "sync" button after the initialization has completed, to see whether there already is some open documents
+    QMetaObject::invokeMethod(this, "updateSyncAction", Qt::QueuedConnection);
 }
 
 void ProjectManagerView::selectionChanged()
