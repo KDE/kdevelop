@@ -38,7 +38,7 @@ QList<QPair<QString, QString> > CustomMakeTargetItem::defines() const
 ///////////////////////////////////////////////////////////////
 
 CustomMakeFolderItem::CustomMakeFolderItem( CustomMakeManager* manager, KDevelop::IProject* project, const KUrl& url, QStandardItem *parent )
-    : KDevelop::ProjectFolderItem( project, url, parent )
+    : KDevelop::ProjectBuildFolderItem( project, url, parent )
 {
     m_watcher = new CustomMakeTreeSynchronizer( manager );
 }

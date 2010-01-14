@@ -44,7 +44,7 @@ private:
 
 
 /** Represents the root item */
-class CustomMakeFolderItem : public KDevelop::ProjectFolderItem
+class CustomMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
     CustomMakeFolderItem( CustomMakeManager*, KDevelop::IProject* project, const KUrl& , QStandardItem *parent = 0 );
