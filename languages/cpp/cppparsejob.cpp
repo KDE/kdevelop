@@ -575,7 +575,7 @@ void CPPInternalParseJob::run()
         ast = parser.parse( parentJob()->parseSession().data() );
 
         //This will be set to true if the duchain data should be left untouched
-        if(ast->hadMissingCompoundTokens && updatingContentContext) {
+        if((ast->hadMissingCompoundTokens || control.hasProblem(KDevelop::ProblemData::Lexer)) && updatingContentContext) {
           //Make sure we don't update into a completely invalid state where everything is invalidated temporarily.
           DUChainWriteLocker l(DUChain::lock());
 

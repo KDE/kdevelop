@@ -43,8 +43,11 @@ public:
   /**Adds a problem to the list of problems.*/
   void reportProblem(const KDevelop::ProblemPointer &problem);
 
+  /**Returns whether there is a problem from the given source */
+  bool hasProblem(KDevelop::ProblemData::Source source) const;
+  
 private:
-  QList<KDevelop::ProblemPointer> _M_problems;
+  QList<KDevelop::ProblemPointer> m_problems;
 };
 
 #endif // CONTROL_H

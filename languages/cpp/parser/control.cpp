@@ -29,10 +29,19 @@ Control::~Control()
 
 const QList<KDevelop::ProblemPointer>& Control::problems() const
 {
-  return _M_problems;
+  return m_problems;
 }
 
 void Control::reportProblem(const KDevelop::ProblemPointer &problem)
 {
-  _M_problems.append(problem);
+  m_problems.append(problem);
+}
+
+bool Control::hasProblem(KDevelop::ProblemData::Source source) const
+{
+  foreach(KDevelop::ProblemPointer problem, m_problems)
+    if(problem->source() == source)
+      return true;
+
+  return false;
 }
