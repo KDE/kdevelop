@@ -112,6 +112,7 @@ ParseJob::~ParseJob()
     if(KDevelop::LockedSmartInterface smart = editor.smart()) {
         smart->releaseRevision(d->revisionToken);
         smart->clearRevision();
+        ///@todo We need to know here what the currently used revision is, and assert that it still is being used
     }
     {
         //Only for testing
