@@ -99,7 +99,7 @@ void CorePrivate::initialize(Core::Setup mode)
         workingSetController = new WorkingSetController(m_core);
     }
     kDebug() << "Creating ui controller";
-    if( !uiController && !(mode & Core::NoUi) )
+    if( !uiController )
     {
         uiController = new UiController(m_core);
     }
@@ -267,10 +267,11 @@ void Core::cleanup()
 
         d->projectController->cleanup();
         d->sourceFormatterController->cleanup();
-        //Disable the functionality of the language controller
-        d->languageController->cleanup();
         d->pluginController->cleanup();
         d->sessionController->cleanup();
+        
+        //Disable the functionality of the language controller
+        d->languageController->cleanup();
     }
 
     d->m_cleanedUp = true;
