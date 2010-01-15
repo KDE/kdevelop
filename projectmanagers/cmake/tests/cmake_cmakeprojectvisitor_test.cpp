@@ -326,6 +326,11 @@ void CMakeProjectVisitorTest::testRun_data()
     QTest::newRow("scaping") <<
                             "set(str potatoe\\\"\\npotatoe)\n"
                             << cacheValues << results;
+    results.clear();
+    results << StringPair("str", "123");
+    QTest::newRow("regex") <<
+                            "STRING(REGEX REPLACE \"QT_LIBINFIX *= *([^\\n]*)\" \"\\\\1\" str \"QT_LIBINFIX = 123\")\n"
+                            << cacheValues << results;
                             
     //This test should probably be linux-only
     results.clear();

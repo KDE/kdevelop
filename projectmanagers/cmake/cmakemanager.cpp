@@ -1039,16 +1039,22 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
 {
     bool ret=true;
-    if(!static_cast<ProjectBaseItem*>(it->parent())->target())
+    it->project()->removeFromFileSet(KDevelop::IndexedString(it->url()));
+    
+    QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
+    QList<ProjectTargetItem*> targets;
+
+    //We loop through all the files with the same url
+    foreach(ProjectFileItem* file, files)
     {
-        it->project()->removeFromFileSet(KDevelop::IndexedString( it->url()));
-        it->parent()->removeRow(it->row());
+        ProjectTargetItem* target=static_cast<ProjectBaseItem*>(file->parent())->target();
+        if(target) {
+            bool res = removeFileFromTarget(file, target);
+            ret = ret && res;
+        } else
+            file->parent()->removeRow(file->row());
     }
-    else
-    {
-        ProjectTargetItem* target=static_cast<ProjectTargetItem*>(it->parent());
-        ret = removeFileFromTarget(it, target);
-    }
+
     return ret;
 }
 
@@ -1077,18 +1083,11 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
         if(e.exec())
         {
             bool saved=e.applyAllChanges();
-            if(!saved)
-                KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                    i18n("Cannot save the change."));
-            else
+            if(saved)
                 it->project()->removeFromFileSet(IndexedString(it->url()));
         }
     }
-    else
-    {
-        KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                              i18n("Cannot remove the file."));
-    }
+    
     return ret;
 }
 
@@ -1107,9 +1106,7 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     QSet<QString> headerExt=QSet<QString>() << ".h" << ".hpp" << ".hxx";
     foreach(const QString& ext, headerExt)
     {
-        if(it->url().fileName().endsWith(ext))
-            return false;
-        else if(it->url().fileName().endsWith(ext.toUpper()))
+        if(it->url().fileName().toLower().endsWith(ext))
             return false;
     }
     
@@ -1211,55 +1208,67 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
 
 bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 {
-    ProjectTargetItem* target=static_cast<ProjectBaseItem*>(it->parent())->target();
-    if(!target) {
+    QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
+    
+    QList<ProjectTargetItem*> targets;
+    
+    //We loop through all the files with the same url
+    foreach(ProjectFileItem* file, files)
+    {
+        ProjectTargetItem* t=static_cast<ProjectBaseItem*>(file->parent())->target();
+        if(t)
+            targets+=t;
+        else
+            file->setUrl(newUrl);
+    }
+        
+    if(targets.isEmpty())
+    {
         KIO::CopyJob* job=KIO::move(it->url(), newUrl);
-        qDebug() << "pssss" << it->url() << "->" << newUrl;
+        kDebug() << "rename" << it->url() << "->" << newUrl;
         bool ret=KIO::NetAccess::synchronousRun(job, 0);
         
         if(ret) {
             it->project()->removeFromFileSet(IndexedString(it->url()));
-            it->setUrl(newUrl);
-            it->project()->addToFileSet(IndexedString(it->url()));
+            it->project()->addToFileSet(IndexedString(newUrl));
         }
         return ret;
     }
     
-    CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
-
-    DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-    SimpleRange r=desc->descriptor().range();
-    r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
-
-    KUrl lists=folder->url();
-    lists.addPath("CMakeLists.txt");
-    
-    QString newName=KUrl::relativePath(it->url().upUrl().path(), newUrl.path());
-    if(newName.startsWith("./"))
-        newName.remove(0,2);
-
     ApplyChangesWidget e;
     e.setCaption(it->text());
     e.setInformation(i18n("Remove a file called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    
+    bool ret=false;
+    foreach(ProjectTargetItem* target, targets)
+    {
+        CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
 
-    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, ' '+newName);
+        DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
+        SimpleRange r=desc->descriptor().range();
+        r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+
+        KUrl lists=folder->url();
+        lists.addPath("CMakeLists.txt");
+        e.addDocuments(IndexedString(lists), IndexedString(lists));
+        
+        QString newName=KUrl::relativePath(it->url().upUrl().path(), newUrl.path());
+        if(newName.startsWith("./"))
+            newName.remove(0,2);
+        bool hasChanges = followUses(e.document(), r, ' '+it->text(), lists, false, ' '+newName);
+        ret = ret || hasChanges;
+    }
+
     if(ret && e.exec())
     {
+        it->project()->removeFromFileSet(IndexedString(it->url()));
+        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
         ret=e.applyAllChanges();
         
         if(ret)
-        {
-            KIO::CopyJob* job=KIO::move(it->url(), newUrl);
-            bool ret=KIO::NetAccess::synchronousRun(job, 0);
-            
-            if(ret)
-            {
-                it->project()->removeFromFileSet(IndexedString(it->url()));
-                it->setUrl(newUrl);
-                it->project()->addToFileSet(IndexedString(it->url()));
-            }
-        }
+            ret=KIO::NetAccess::synchronousRun(job, 0);
+        else
+            delete job;
     }
 
     return ret;
@@ -1298,15 +1307,13 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     bool ret=e.exec();
     if(ret)
     {
+        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
         ret=e.applyAllChanges();
         
-        if(ret) {
-            KIO::CopyJob* job=KIO::move(it->url(), newUrl);
+        if(ret)
             ret=KIO::NetAccess::synchronousRun(job, 0);
-            if(ret) {
-                it->setUrl(newUrl);
-            }
-        }
+        else
+            delete job;
     }
     return ret;
 }
