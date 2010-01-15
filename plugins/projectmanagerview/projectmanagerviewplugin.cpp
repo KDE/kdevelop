@@ -186,8 +186,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool buildItemsAdded = false;
     //bool hasTargets = false;
     bool folderItemsAdded = false;
-    bool fileItemsAdded = false;
-    bool folderWithParentAdded = false;
+    bool removeAdded = false;
     bool targetAdded = false;
     bool renameAdded = false;
     foreach( ProjectBaseItem* item, items )
@@ -242,24 +241,16 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
-        if ( !folderWithParentAdded && item->folder() && item->parent() )
+        if ( !removeAdded && ((item->folder() && item->parent()) || item->file()) )
         {
-            folderWithParentAdded = true;
-            KAction* action = new KAction( i18n( "Remove Folder" ), this );
+            removeAdded = true;
+            KAction* action = new KAction( i18n( "Remove" ), this );
             action->setIcon(KIcon("user-trash"));
-            connect( action, SIGNAL(triggered()), this, SLOT(removeFolderFromContextMenu()) );
+            connect( action, SIGNAL(triggered()), this, SLOT(removeFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
-        if ( !fileItemsAdded && item->file() )
-        {
-            fileItemsAdded = true;
-            KAction* action = new KAction( i18n( "Remove File" ), this );
-            action->setIcon(KIcon("user-trash"));
-            connect( action, SIGNAL(triggered()), this, SLOT(removeFileFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-        else if ( !targetAdded && item->target() )
+
+        if ( !targetAdded && item->target() )
         {
             targetAdded = true;
             KAction* action = new KAction( i18n( "Create File" ), this );
@@ -451,42 +442,29 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
     }
 }
 
-void ProjectManagerViewPlugin::removeFolderFromContextMenu()
+void ProjectManagerViewPlugin::removeFromContextMenu()
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        if ( item->folder() ) {
+        if ( item->folder() || item->file() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove the directory from the filesystem too?"));
+            int q=KMessageBox::questionYesNo(window,
+                item->folder() ? i18n("Do you want to remove the directory from the filesystem too?")
+                               : i18n("Do you want to remove the file from the filesystem too?"));
             if(q==KMessageBox::Yes)
             {
-                if ( !KIO::NetAccess::del( item->folder()->url(), window ) ) {
-                    KMessageBox::error( window, i18n( "Cannot remove folder." ) );
+                if ( !KIO::NetAccess::del( item->folder() ? item->folder()->url() : item->file()->url(), window ) ) {
+                    KMessageBox::error( window,
+                        item->folder() ? i18n( "Cannot remove folder." )
+                                       : i18n( "Cannot remove the file." ) );
                     continue;
                 }
             }
-            
-            item->project()->projectFileManager()->removeFolder(item->folder());
-        }
-    }
-}
-
-void ProjectManagerViewPlugin::removeFileFromContextMenu()
-{
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        if ( item->file() ) {
-            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            int q=KMessageBox::questionYesNo(window, i18n("Do you want to remove the file from the filesystem too?"));
-            if(q==KMessageBox::Yes)
-            {
-                if ( !KIO::NetAccess::del( item->file()->url(), window ) ) {
-                    KMessageBox::error( window, i18n( "Cannot remove the file." ) );
-                    continue;
-                }
+            if ( item->folder() ) {
+                item->project()->projectFileManager()->removeFolder(item->folder());
+            } else {
+                item->project()->projectFileManager()->removeFile(item->file());
             }
-            
-            item->project()->projectFileManager()->removeFile(item->file());
         }
     }
 }
