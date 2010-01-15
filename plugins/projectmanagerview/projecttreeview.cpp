@@ -151,14 +151,18 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
 
 void ProjectTreeView::popupContextMenu( const QPoint &pos )
 {
-    QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    QModelIndexList indexes = selectionModel()->selectedRows();
     QList<KDevelop::ProjectBaseItem*> itemlist;
 
-    foreach( const QModelIndex& index, indexes )
+    if ( indexAt(pos).isValid() )
     {
-        if ( KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
-            itemlist << item;
+        QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
+        QModelIndexList indexes = selectionModel()->selectedRows();
+
+        foreach( const QModelIndex& index, indexes )
+        {
+            if ( KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
+                itemlist << item;
+        }
     }
 
     if( !itemlist.isEmpty() )
