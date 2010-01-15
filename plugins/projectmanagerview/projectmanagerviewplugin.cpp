@@ -425,7 +425,7 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             QString name = QInputDialog::getText ( window,
-                                i18n ( "Create Folder" ), i18n ( "Folder Name" ) );
+                                i18n ( "Create Folder in %1", item->folder()->url().prettyUrl() ), i18n ( "Folder Name" ) );
             if (!name.isEmpty()) {
                 KUrl url = item->folder()->url();
                 url.addPath( name );
@@ -497,7 +497,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
 ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
-    QString name = QInputDialog::getText(window, i18n("Create File"), i18n("File Name"));
+    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->url().prettyUrl()), i18n("File Name"));
     
     if(name.isEmpty())
         return 0;
