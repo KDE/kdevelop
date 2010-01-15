@@ -189,7 +189,6 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     bool removeAdded = false;
     bool targetAdded = false;
     bool renameAdded = false;
-    bool createFileAdded = false;
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
@@ -226,15 +225,10 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( !folderItemsAdded && prjitem )
         {
             folderItemsAdded = true;
-            KAction* action;
-
-            if ( !createFileAdded ) {
-                action = new KAction( i18n( "Create File" ), this );
-                action->setIcon(KIcon("document-new"));
-                connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
-                menuExt.addAction( ContextMenuExtension::FileGroup, action );
-                createFileAdded = true;
-            }
+            KAction* action = new KAction( i18n( "Create File" ), this );
+            action->setIcon(KIcon("document-new"));
+            connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
 
             action = new KAction( i18n( "Create Folder" ), this );
             action->setIcon(KIcon("folder-new"));
@@ -259,13 +253,10 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         if ( !targetAdded && item->target() )
         {
             targetAdded = true;
-            if ( !createFileAdded ) {
-                KAction* action = new KAction( i18n( "Create File" ), this );
-                action->setIcon(KIcon("document-new"));
-                connect( action, SIGNAL(triggered()), this, SLOT(createFileInTargetFromContextMenu()) );
-                menuExt.addAction( ContextMenuExtension::FileGroup, action );
-                createFileAdded = true;
-            }
+            KAction* action = new KAction( i18n( "Create File" ), this );
+            action->setIcon(KIcon("document-new"));
+            connect( action, SIGNAL(triggered()), this, SLOT(createFileInTargetFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
         
         if( !renameAdded && (item->file() || item->folder()) && item->parent() )
