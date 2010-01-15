@@ -164,50 +164,55 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     if( !itemlist.isEmpty() )
     {
         m_ctxProject = itemlist.at(0)->project();
-        KMenu menu( this );
-
-        KDevelop::ProjectItemContext context(itemlist);
-        QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
-
-        QList<QAction*> buildActions;
-        QList<QAction*> vcsActions;
-        QList<QAction*> extActions;
-        QList<QAction*> projectActions;
-        QList<QAction*> fileActions;
-        QList<QAction*> runActions;
-        foreach( const ContextMenuExtension& ext, extensions )
-        {
-            buildActions += ext.actions(ContextMenuExtension::BuildGroup);
-            fileActions += ext.actions(ContextMenuExtension::FileGroup);
-            projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
-            vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
-            extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
-            runActions += ext.actions(ContextMenuExtension::RunGroup);
-        }
-
-        KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
-        connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
-        projectActions << projectConfig;
-
-        appendActions(menu, buildActions);
-        appendActions(menu, runActions );
-        appendActions(menu, fileActions);
-
-        QMenu* vcsmenu = &menu;
-        if( vcsActions.count() > 1 )
-        {
-            vcsmenu = menu.addMenu( i18n("Version Control "));
-        }
-        appendActions(*vcsmenu, vcsActions);
-        appendActions(menu, extActions);
-
-        appendActions(menu, projectActions);
-
-        menu.exec( mapToGlobal( pos ) );
-
     } else
     {
         m_ctxProject = 0;
+    }
+
+    KMenu menu( this );
+
+    KDevelop::ProjectItemContext context(itemlist);
+    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+
+    QList<QAction*> buildActions;
+    QList<QAction*> vcsActions;
+    QList<QAction*> extActions;
+    QList<QAction*> projectActions;
+    QList<QAction*> fileActions;
+    QList<QAction*> runActions;
+    foreach( const ContextMenuExtension& ext, extensions )
+    {
+        buildActions += ext.actions(ContextMenuExtension::BuildGroup);
+        fileActions += ext.actions(ContextMenuExtension::FileGroup);
+        projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
+        vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
+        extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
+        runActions += ext.actions(ContextMenuExtension::RunGroup);
+    }
+
+    appendActions(menu, buildActions);
+    appendActions(menu, runActions );
+    appendActions(menu, fileActions);
+
+    if ( !vcsActions.isEmpty() )
+    {
+        QMenu* vcsmenu = &menu;
+        vcsmenu = menu.addMenu( i18n("Version Control "));
+        appendActions(*vcsmenu, vcsActions);
+    }
+
+    appendActions(menu, extActions);
+
+    if ( !itemlist.isEmpty() )
+    {
+        KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
+        connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
+        projectActions << projectConfig;
+    }
+    appendActions(menu, projectActions);
+
+    if ( !menu.isEmpty() ) {
+        menu.exec( mapToGlobal( pos ) );
     }
 }
 
