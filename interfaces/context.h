@@ -61,27 +61,29 @@ actions directly to the menu but instead use the same mechanism.
 <b>How to show a context menu from a plugin:</b>
 -# Create a KMenu in context menu event handler: @code KMenu menu(this); @endcode
 -# Create a context: @code FileContext context(list). @endcode
--# Ask PluginController to fill the menu:
-@code core()->pluginController()->buildContextMenu(&menu, context); @endcode
+-# Query for plugins:
+@code @code QList<ContextMenuExtension> extensions =
+        ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( context ); @endcode
+-# Populate the menu:
+@code ContextMenuExtension::populateMenu(menu, extensions); @endcode
 -# Show the popup menu: @code menu.exec(mapToGlobal(pos)); @endcode
 
 <b>How to fill a context menu from a plugin:</b>
--# Implement the @code requestContextMenuActions(const Context &) @endcode
+-# Implement the @code contextMenuExtension(Context*) @endcode
    function in your plugin class.
--# Depending on the context return a pair of a submenu title and a list of
-   actions that should appear in the menu:\n
+-# Depending on the context fill the returned ContextMenuExtension with actions:\n
 @code
-QList<QAction*> actionlist;
+ContextMenuExtension ext;
 if (context->hasType(Context::EditorContext))
 {
-    actionlist << new QAction(...);
+    ext.addAction(ContextMenuExtension::EditorGroup, new QAction(...));
 }
 else if context->hasType(Context::FileContext))
 {
-    actionlist << new QAction(...);
+    ext.addAction(ContextMenuExtension::FileGroup, new QAction(...));
     ...
 }
-return qMakePair("Subversion", actionlist);
+return ext;
 @endcode
  */
 class KDEVPLATFORMINTERFACES_EXPORT Context
