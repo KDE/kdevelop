@@ -144,7 +144,8 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
   }
   if(ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context)) {
     //Actions on project-items
-    foreach(KDevelop::ProjectBaseItem* item, projectContext->items()) {
+    if(projectContext->items().count() == 1) {
+      ProjectBaseItem* item = projectContext->items().first();
       if(item->folder() || item->target()) {
         //Allow creating a class in the folder
         QAction* action = new QAction(i18n  ("Create Class"), this);
