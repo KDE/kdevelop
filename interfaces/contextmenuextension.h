@@ -32,7 +32,9 @@ template <typename T> class QList;
 
 namespace KDevelop
 {
-
+/**
+ * For documentation on how to use this class, @see interfaces/context.h
+ */
 class KDEVPLATFORMINTERFACES_EXPORT ContextMenuExtension
 {
 public:
