@@ -777,7 +777,7 @@ void DocumentController::closeAllOtherDocuments()
 IDocument* DocumentController::activeDocument() const
 {
     UiController *uiController = Core::self()->uiControllerInternal();
-    if( !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
+    if( !uiController || !uiController->activeSublimeWindow() || !uiController->activeSublimeWindow()->activeView() ) return 0;
     return dynamic_cast<IDocument*>(uiController->activeSublimeWindow()->activeView()->document());
 }
 

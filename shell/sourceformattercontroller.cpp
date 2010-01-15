@@ -522,7 +522,9 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 	} else if (context->hasType(KDevelop::Context::ProjectItemContext)) {
 		KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
 		m_prjItems = prjctx->items();
-		ext.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_formatFilesAction);
+		if ( !m_prjItems.isEmpty() ) {
+			ext.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_formatFilesAction);
+		}
 	}
 	return ext;
 }
