@@ -73,7 +73,7 @@ CreateClassWizard::~CreateClassWizard()
 
 void CreateClassWizard::setup()
 {
-    setWindowTitle(i18n("Create New Class"));
+    setWindowTitle(i18n("Create New Class in %1", d->baseUrl.prettyUrl()));
 
     if (QWizardPage* page = newIdentifierPage())
         addPage(page);
