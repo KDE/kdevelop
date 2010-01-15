@@ -54,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
 #include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
@@ -101,6 +102,7 @@ public:
     ProjectModel* model;
     QItemSelectionModel* selectionModel;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
+    QPointer<KAction> m_openProject;
     QPointer<KAction> m_closeProject;
     QPointer<KAction> m_openConfig;
     IProjectDialogProvider* dialog;
@@ -354,7 +356,7 @@ void ProjectController::setupActions()
 
     KAction *action;
 
-    action = ac->addAction( "project_open" );
+    d->m_openProject = action = ac->addAction( "project_open" );
     action->setText(i18n( "Open / Import Project..." ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open / Import Project" ) );
@@ -844,6 +846,16 @@ QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) co
     }
 }
 
+ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
+{
+    ContextMenuExtension ext;
+    if ( ctx->type() != Context::ProjectItemContext ) {
+        return ext;
+    }
+    ext.addAction(ContextMenuExtension::ProjectGroup, d->m_openProject);
+    ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentAction);
+    return ext;
+}
 
 ProjectBuildSetModel* ProjectController::buildSetModel()
 {

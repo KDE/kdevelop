@@ -60,6 +60,7 @@ Boston, MA 02110-1301, USA.
 #include "debugcontroller.h"
 #include "documentationcontroller.h"
 #include "sourceformattercontroller.h"
+#include "projectcontroller.h"
 
 namespace KDevelop
 {
@@ -608,6 +609,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
     exts << Core::self()->documentationControllerInternal()->contextMenuExtension( context );
     exts << Core::self()->sourceFormatterControllerInternal()->contextMenuExtension( context );
     exts << Core::self()->runControllerInternal()->contextMenuExtension( context );
+    exts << Core::self()->projectControllerInternal()->contextMenuExtension( context );
     return exts;
 }
 

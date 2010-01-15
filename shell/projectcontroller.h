@@ -37,6 +37,8 @@ namespace KDevelop
 class IProject;
 class Core;
 class UiController;
+class Context;
+class ContextMenuExtension;
 
 class KDEVPLATFORMSHELL_EXPORT IProjectDialogProvider : public QObject
 {
@@ -78,6 +80,8 @@ public:
 
     KUrl projectsBaseDirectory() const;
     QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const;
+
+    ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
 public Q_SLOTS:
     virtual void openProjectForUrl( const KUrl &sourceUrl );
