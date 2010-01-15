@@ -28,6 +28,7 @@ class AppWizardPlugin: public KDevelop::IPlugin {
 public:
     AppWizardPlugin( QObject *parent, const QVariantList & = QVariantList() );
     ~AppWizardPlugin();
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
 private slots:
     void slotNewProject();
@@ -38,7 +39,7 @@ private:
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
 
     ProjectTemplatesModel *m_templatesModel;
-
+    QAction* m_newFromTemplate;
     QHash<QString, QString> m_variables;
 };
 

@@ -44,6 +44,8 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 #include <vcs/vcslocation.h>
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
@@ -77,12 +79,12 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
 {
     setXMLFile("kdevappwizard.rc");
 
-    QAction *action = actionCollection()->addAction("project_new");
-    action->setIcon(KIcon("project-development-new-template"));
-    action->setText(i18n("New From Template..."));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
-    action->setToolTip( i18n("Generate a new project from a template") );
-    action->setWhatsThis( i18n("<b>New project</b><p>"
+    m_newFromTemplate = actionCollection()->addAction("project_new");
+    m_newFromTemplate->setIcon(KIcon("project-development-new-template"));
+    m_newFromTemplate->setText(i18n("New From Template..."));
+    connect(m_newFromTemplate, SIGNAL(triggered(bool)), this, SLOT(slotNewProject()));
+    m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
+    m_newFromTemplate->setWhatsThis( i18n("<b>New project</b><p>"
                                "This starts KDevelop's application wizard. "
                                "It helps you to generate a skeleton for your "
                                "application from a set of templates.</p>") );
@@ -427,6 +429,15 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
             return false;
         }
     }
+}
+KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::Context* context)
+{
+    KDevelop::ContextMenuExtension ext;
+    if ( context->type() != KDevelop::Context::ProjectItemContext ) {
+        return ext;
+    }
+    ext.addAction(KDevelop::ContextMenuExtension::ProjectGroup, m_newFromTemplate);
+    return ext;
 }
 
 #include "appwizardplugin.moc"
