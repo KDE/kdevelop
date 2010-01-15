@@ -75,7 +75,6 @@ protected Q_SLOTS:
     void reloadFromContextMenu();
     void createFolderFromContextMenu();
     void createFileFromContextMenu();
-    void createFileInTargetFromContextMenu();
     void removeFromContextMenu();
     void renameItemFromContextMenu();
     void updateActionState( KDevelop::Context* ctx );
