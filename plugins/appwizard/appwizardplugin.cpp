@@ -433,7 +433,7 @@ bool AppWizardPlugin::copyFileAndExpandMacros(const QString &source, const QStri
 KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     KDevelop::ContextMenuExtension ext;
-    if ( context->type() != KDevelop::Context::ProjectItemContext ) {
+    if ( context->type() != KDevelop::Context::ProjectItemContext || !static_cast<KDevelop::ProjectItemContext*>(context)->items().isEmpty() ) {
         return ext;
     }
     ext.addAction(KDevelop::ContextMenuExtension::ProjectGroup, m_newFromTemplate);

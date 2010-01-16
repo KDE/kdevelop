@@ -213,7 +213,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     appendActions(menu, extActions);
 
-    if ( !itemlist.isEmpty() )
+    if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && itemlist[0]->folder()->isProjectRoot() )
     {
         KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
         connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );

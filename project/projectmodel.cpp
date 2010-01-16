@@ -50,9 +50,11 @@ public:
 class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
 {
 public:
+    ProjectFolderItemPrivate() : m_isProjectRoot(false) {
+    }
     KUrl m_url;
     QString m_folderName;
-    bool m_isProjectRoot;
+    bool m_isProjectRoot; ///@todo Why is this needed at all? Shouldn't it equal "parent() == 0" ?
 };
 
 class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate

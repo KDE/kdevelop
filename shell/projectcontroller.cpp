@@ -849,9 +849,10 @@ QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) co
 ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
 {
     ContextMenuExtension ext;
-    if ( ctx->type() != Context::ProjectItemContext ) {
+    if ( ctx->type() != Context::ProjectItemContext || !static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
         return ext;
     }
+    
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_openProject);
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentAction);
     return ext;
