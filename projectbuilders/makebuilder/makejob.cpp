@@ -245,7 +245,7 @@ QStringList MakeJob::environmentVars() const
             env.erase( it );
         }
     }
-    env.append( "LC_MESSAGE=C" );
+    env.append( "LC_MESSAGES=C" );
     return l.createEnvironment( defaultProfile, env );
 }
 
