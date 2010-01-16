@@ -371,6 +371,11 @@ void MainWindow::tabContextMenuRequested(View* , KMenu* )
     // do nothing
 }
 
+void MainWindow::tabToolTipRequested(View*, QPoint)
+{
+    // do nothing
+}
+
 void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& )
 {
     // do nothing

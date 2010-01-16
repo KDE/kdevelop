@@ -39,9 +39,10 @@ public:
 
     virtual QString documentSpecifier() const;
 
+    KUrl url() const;
+    
 protected:
     virtual QWidget *createViewWidget(QWidget *parent = 0);
-    KUrl url() const;
     void setUrl(const KUrl& newUrl);
 
 private:

@@ -41,15 +41,42 @@
 #include "view.h"
 #include "document.h"
 #include <qpointer.h>
+#include <QEvent>
 
 namespace Sublime {
 
 // struct ContainerPrivate
 
+class ContainerTabBar : public KTabBar {
+    public:
+    ContainerTabBar(Container* container) : KTabBar(container), m_container(container) {
+    }
+    
+    virtual bool event(QEvent* ev) {
+        if(ev->type() == QEvent::ToolTip)
+        {
+            ev->accept();
+            
+            int tab = tabAt(mapFromGlobal(QCursor::pos()));
+            
+            if(tab != -1)
+            {
+                m_container->showTooltipForTab(tab);
+            }
+            
+            return true;
+        }
+        
+        return KTabBar::event(ev);
+    }
+    
+    Container* m_container;
+};
+
 struct ContainerPrivate {
     QMap<QWidget*, View*> viewForWidget;
 
-    KTabBar *tabBar;
+    ContainerTabBar *tabBar;
     QStackedWidget *stack;
     QLabel *fileNameCorner;
     QLabel *fileStatus;
@@ -120,7 +147,6 @@ public:
     }
 };
 
-
 // class Container
 
 Container::Container(QWidget *parent)
@@ -136,7 +162,7 @@ Container::Container(QWidget *parent)
     m_tabBarLayout->setMargin(0);
     m_tabBarLayout->setSpacing(0);
 
-    d->tabBar = new KTabBar(this);
+    d->tabBar = new ContainerTabBar(this);
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
     m_tabBarLayout->addWidget(d->tabBar);
     d->fileStatus = new QLabel( this );
@@ -241,9 +267,8 @@ void Container::addWidget(View *view)
     d->tabBar->insertTab(idx, view->document()->statusIcon(), view->document()->title());
     Q_ASSERT(view);
     d->viewForWidget[w] = view;
-    d->tabBar->setTabToolTip(idx,view->document()->toolTip());
     
-    // This works around a strange layouting bug, that could be reproduced like this: Open a few files in KDevelop, activate the rightmost tab.
+    // This fixes a strange layouting bug, that could be reproduced like this: Open a few files in KDevelop, activate the rightmost tab.
     // Then temporarily switch to another area, and then switch back. After that, the tab-bar was gone.
     // The problem could only be fixed by closing/opening another view.
     d->tabBar->setMinimumHeight(d->tabBar->sizeHint().height());
@@ -416,6 +441,11 @@ void Container::contextMenu( int currentTab, QPoint pos )
             }
         } // else the action was handled by someone else
     }
+}
+
+void Container::showTooltipForTab(int tab)
+{
+    emit tabToolTipRequested(viewForWidget(widget(tab)), QCursor::pos());
 }
 
 }

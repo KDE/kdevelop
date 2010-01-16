@@ -67,11 +67,13 @@ public:
     /** Adds a corner widget to the left of this containers tab-bar. To remove it again, just delete it.
       * The ownership otherwise goes to the container. */
     void setLeftCornerWidget(QWidget* widget);
+    void showTooltipForTab(int tab);
 
 Q_SIGNALS:
     void activateView(Sublime::View* view);
     void closeRequest(QWidget *w);
     void tabContextMenuRequested(Sublime::View* view, KMenu* menu);
+    void tabToolTipRequested(Sublime::View* view, QPoint pos);
 
 private Q_SLOTS:
     void widgetActivated(int idx);
