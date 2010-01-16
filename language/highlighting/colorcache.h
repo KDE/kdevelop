@@ -26,6 +26,8 @@
 #include <QtCore/QList>
 #include <QtGui/QColor>
 
+#include "../languageexport.h"
+
 namespace KDevelop {
 
 class CodeHighlightingColors;
@@ -33,7 +35,7 @@ class CodeHighlightingColors;
 /**
  * A singleton which holds the global default colors, adapted to the current color scheme
  */
-class ColorCache : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
 {
   Q_OBJECT
 
@@ -46,10 +48,15 @@ class ColorCache : public QObject
     /// setup the color cache, this needs to be called before self() is accessed
     static void initialize();
 
-    /// adapt a given color to the current color scheme
+    /// adapt a given foreground color to the current color scheme
     /// @p ratio between 0 and 255 where 0 gives @see m_foregroundColor
     /// and 255 gives @p color
     QColor blend(QColor color, uchar ratio) const;
+
+    /// adapt a given background color to the current color scheme
+    /// @p ratio between 0 and 255 where 0 gives @see m_backgroundColor
+    /// and 255 gives @p color
+    QColor blendBackground(QColor color, uchar ratio) const;
 
     /// blend a color for local colorization according to the user settings
     /// @see blend()
@@ -104,6 +111,9 @@ class ColorCache : public QObject
 
     /// the text color for the current color scheme
     QColor m_foregroundColor;
+
+    /// the background color for the current color scheme
+    QColor m_backgroundColor;
 
     /// How generated colors for local variables should be mixed with the foreground color.
     /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.

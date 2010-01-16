@@ -62,6 +62,7 @@
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
 #include <sublime/mainwindow.h>
+#include <language/highlighting/colorcache.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -399,8 +400,9 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardBoldAttribute ) {
       standardBoldAttribute= Attribute::Ptr( new Attribute() );
       standardBoldAttribute->setBackgroundFillWhitespace(true);
-      
-      standardBoldAttribute->setBackground(QColor(255, 255, 0, 150));//QApplication::palette().toolTipBase());
+      QColor c = ColorCache::self()->blendBackground(QColor(255, 255, 0, 150), 50);
+//       c.setAlpha(50);
+      standardBoldAttribute->setBackground(c);//QApplication::palette().toolTipBase());
       standardBoldAttribute->setFontBold(true);
     }
     return standardBoldAttribute;
@@ -409,12 +411,16 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardAttribute ) {
       standardAttribute = Attribute::Ptr( new Attribute() );
       standardAttribute->setBackgroundFillWhitespace(true);
-      standardAttribute->setBackground(QColor(255, 255, 0, 150));//QApplication::palette().toolTipBase());
+      QColor c = ColorCache::self()->blendBackground(QColor(255, 255, 0, 150), 50);
+//       c.setAlpha(50);
+      standardAttribute->setBackground(c);//QApplication::palette().toolTipBase());
     }
     return standardAttribute;
   }
 }
 
+///NOTE: when this gets used again we have to port it to ColorCache as well
+/*
 Attribute::Ptr highlightedDeclarationAttribute() {
   static Attribute::Ptr standardAttribute = Attribute::Ptr();
   if( !standardAttribute ) {
@@ -424,13 +430,16 @@ Attribute::Ptr highlightedDeclarationAttribute() {
   }
   return standardAttribute;
 }
+*/
 
 Attribute::Ptr highlightedSpecialObjectAttribute() {
   static Attribute::Ptr standardAttribute = Attribute::Ptr();
   if( !standardAttribute ) {
     standardAttribute = Attribute::Ptr( new Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
-    standardAttribute->setBackground(QColor(90, 255, 0, 150));//QApplication::palette().toolTipBase());
+    QColor c = ColorCache::self()->blendBackground(QColor(90, 255, 0, 150), 50);
+//     c.setAlpha(50);
+    standardAttribute->setBackground(c);//QApplication::palette().toolTipBase());
   }
   return standardAttribute;
 }

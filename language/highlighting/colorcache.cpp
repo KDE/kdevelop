@@ -114,7 +114,9 @@ void ColorCache::setupColors()
   m_globalColorRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
 
   ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
-  m_foregroundColor = KColorScheme(QPalette::Normal, KColorScheme::View).foreground(KColorScheme::NormalText).color();
+  KColorScheme scheme(QPalette::Normal, KColorScheme::View);
+  m_foregroundColor = scheme.foreground(KColorScheme::NormalText).color();
+  m_backgroundColor = scheme.background(KColorScheme::NormalBackground).color();
 
   if ( m_defaultColors ) {
     delete m_defaultColors;
@@ -166,14 +168,24 @@ void ColorCache::adaptToColorChanges()
   }
 }
 
-QColor ColorCache::blend(QColor color, uchar ratio) const
+QColor blendInternal(const QColor& base, QColor input, uchar ratio)
 {
-  if ( KColorUtils::luma(m_foregroundColor) >= 0.5 ) {
+  if ( KColorUtils::luma(base) >= 0.5 ) {
     // for dark color schemes, produce a fitting color first
-    color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
+    input = KColorUtils::tint(base, input, 0.5).rgb();
   }
   // adapt contrast
-  return KColorUtils::mix( m_foregroundColor, color, float(ratio) / float(0xff) );
+  return KColorUtils::mix( base, input, float(ratio) / float(0xff) );
+}
+
+QColor ColorCache::blend(QColor color, uchar ratio) const
+{
+  return blendInternal(m_foregroundColor, color, ratio);
+}
+
+QColor ColorCache::blendBackground(QColor color, uchar ratio) const
+{
+  return blendInternal(m_backgroundColor, color, ratio);
 }
 
 QColor ColorCache::blendGlobalColor(QColor color) const
