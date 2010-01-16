@@ -82,14 +82,27 @@ Declaration* ClassDeclaration::clonePrivate() const {
   return new ClassDeclaration(*this);
 }
 
-bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) const {
+bool isPublicBaseClassInternal( const ClassDeclaration* self, ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels, int depth, QSet<const ClassDeclaration*>* checked ) {
+  
+  if(checked) {
+    if(checked->contains(self))
+      return false;
+    checked->insert(self);
+  }
+  else if(depth > 3)
+  {
+    //Too much depth, to prevent endless recursion, we control the recursion using the 'checked' set
+    QSet<const ClassDeclaration*> checkedSet;
+    return isPublicBaseClassInternal(self, base, topContext, baseConversionLevels, depth, &checkedSet);
+  }
+  
   if( baseConversionLevels )
     *baseConversionLevels = 0;
 
-  if( indexedType() == base->indexedType() )
+  if( self->indexedType() == base->indexedType() )
     return true;
 
-  FOREACH_FUNCTION(const BaseClassInstance& b, baseClasses)
+  FOREACH_FUNCTION(const BaseClassInstance& b, self->baseClasses)
   {
     if( baseConversionLevels )
       ++ (*baseConversionLevels);
@@ -98,7 +111,7 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
       int nextBaseConversion = 0;
       if( StructureType::Ptr c = b.baseClass.type<StructureType>() ) {
         ClassDeclaration* decl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
-        if( decl && decl->isPublicBaseClass( base, topContext, &nextBaseConversion ) ) {
+        if( decl && isPublicBaseClassInternal( decl, base, topContext, &nextBaseConversion, depth+1, checked ) ) {
           if ( baseConversionLevels )
             *baseConversionLevels += nextBaseConversion;
           return true;
@@ -109,6 +122,10 @@ bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop
       -- (*baseConversionLevels);
   }
   return false;
+}
+
+bool ClassDeclaration::isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels ) const {
+  return isPublicBaseClassInternal( this, base, topContext, baseConversionLevels, 0, 0 );
 }
 
 QString ClassDeclaration::toString() const {
