@@ -1083,8 +1083,6 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
   QVector<Declaration*> ret;
   FOREACH_FUNCTION(LocalIndexedDeclaration decl, d_func()->m_localDeclarations) {
     ret << decl.data(topContext());
-    Q_ASSERT(ret.back()->context() == this);
-    ret.back()->identifier().isEmpty();
   }
 
   return ret;
