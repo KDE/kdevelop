@@ -38,9 +38,7 @@ struct UrlDocumentPrivate {
 UrlDocument::UrlDocument(Controller *controller, const KUrl &url)
     :Document(url.fileName(), controller), d( new UrlDocumentPrivate() )
 {
-    setToolTip(url.prettyUrl());
-    // Deep copy please :)
-    d->url.setEncodedUrl(url.url().toAscii());
+    setUrl(url);
 }
 
 UrlDocument::~UrlDocument()
@@ -55,7 +53,8 @@ KUrl UrlDocument::url() const
 
 void UrlDocument::setUrl(const KUrl& newUrl)
 {
-    d->url = newUrl;
+    //deep copy
+    d->url.setEncodedUrl(newUrl.url().toAscii());
     setTitle(newUrl.fileName());
     setToolTip(newUrl.prettyUrl());
 }
