@@ -381,6 +381,20 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& 
     // do nothing
 }
 
+View* MainWindow::viewForPosition(QPoint globalPos) const
+{
+    foreach(Container* container, d->viewContainers.values())
+    {
+        QRect globalGeom = QRect(container->mapToGlobal(QPoint(0,0)), container->mapToGlobal(QPoint(container->width(), container->height())));
+       if(globalGeom.contains(globalPos))
+       {
+           return d->widgetToView[container->currentWidget()];
+       }
+    }
+    
+    return 0;
+}
+
 }
 
 #include "mainwindow.moc"

@@ -28,6 +28,7 @@ class QDockWidget;
 
 namespace Sublime {
 
+class Container;
 class Area;
 class View;
 class Controller;
@@ -79,6 +80,10 @@ public:
     /**Sets the area of main window and fills it with views.
       *The contents is reconstructed, even if the area equals the currently set area. */
     void setArea(Area *area);
+    
+    /**Returns the view that is closest to the given global position, or zero.
+      * */
+    View* viewForPosition(QPoint globalPos) const;
     
 public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
