@@ -1131,6 +1131,30 @@ void GdbTest::testSegfaultDebugee()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testSwitchFrameGdbConsole()
+{
+    TestDebugSession *session = new TestDebugSession;
+
+    TestLaunchConfiguration cfg;
+
+    TestFrameStackModel *stackModel = session->frameStackModel();
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 24);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(stackModel->currentFrame(), 0);
+    stackModel->setCurrentFrame(1);
+    QCOMPARE(stackModel->currentFrame(), 1);
+    QTest::qWait(500);
+    QCOMPARE(stackModel->currentFrame(), 1);
+
+    session->slotUserGDBCmd("print x");
+    QTest::qWait(500);
+    //currentFrame must not reset to 0; Bug 222882
+    QCOMPARE(stackModel->currentFrame(), 1);
+
+}
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {

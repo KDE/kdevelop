@@ -300,6 +300,8 @@ Q_SIGNALS:
                        const QString& oldValue, const QString& newValue);
 
 private:
+    friend class GdbTest;
+
     CommandQueue*   commandQueue_;
 
     STTY*             tty_;

@@ -68,6 +68,7 @@ private Q_SLOTS:
     void testVariablesSwitchFrame();
     void testVariablesQuicklySwitchFrame();
     void testSegfaultDebugee();
+    void testSwitchFrameGdbConsole();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
