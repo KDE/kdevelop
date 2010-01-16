@@ -62,7 +62,6 @@
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
 #include <sublime/mainwindow.h>
-#include <language/highlighting/colorcache.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -400,9 +399,8 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardBoldAttribute ) {
       standardBoldAttribute= Attribute::Ptr( new Attribute() );
       standardBoldAttribute->setBackgroundFillWhitespace(true);
-      QColor c = ColorCache::self()->blendBackground(QColor(255, 255, 0, 150), 50);
-//       c.setAlpha(50);
-      standardBoldAttribute->setBackground(c);//QApplication::palette().toolTipBase());
+      
+      standardBoldAttribute->setBackground(QColor(255, 255, 0, 100));//QApplication::palette().toolTipBase());
       standardBoldAttribute->setFontBold(true);
     }
     return standardBoldAttribute;
@@ -411,15 +409,13 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardAttribute ) {
       standardAttribute = Attribute::Ptr( new Attribute() );
       standardAttribute->setBackgroundFillWhitespace(true);
-      QColor c = ColorCache::self()->blendBackground(QColor(255, 255, 0, 150), 50);
-//       c.setAlpha(50);
-      standardAttribute->setBackground(c);//QApplication::palette().toolTipBase());
+      standardAttribute->setBackground(QColor(255, 255, 0, 100));//QApplication::palette().toolTipBase());
     }
     return standardAttribute;
   }
 }
 
-///NOTE: when this gets used again we have to port it to ColorCache as well
+///NOTE: when this gets used again we have to set an alpha value as well
 /*
 Attribute::Ptr highlightedDeclarationAttribute() {
   static Attribute::Ptr standardAttribute = Attribute::Ptr();
@@ -437,9 +433,7 @@ Attribute::Ptr highlightedSpecialObjectAttribute() {
   if( !standardAttribute ) {
     standardAttribute = Attribute::Ptr( new Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
-    QColor c = ColorCache::self()->blendBackground(QColor(90, 255, 0, 150), 50);
-//     c.setAlpha(50);
-    standardAttribute->setBackground(c);//QApplication::palette().toolTipBase());
+    standardAttribute->setBackground(QColor(90, 255, 0, 100));//QApplication::palette().toolTipBase());
   }
   return standardAttribute;
 }
