@@ -242,6 +242,12 @@ void Container::addWidget(View *view)
     Q_ASSERT(view);
     d->viewForWidget[w] = view;
     d->tabBar->setTabToolTip(idx,view->document()->toolTip());
+    
+    // This works around a strange layouting bug, that could be reproduced like this: Open a few files in KDevelop, activate the rightmost tab.
+    // Then temporarily switch to another area, and then switch back. After that, the tab-bar was gone.
+    // The problem could only be fixed by closing/opening another view.
+    d->tabBar->setMinimumHeight(d->tabBar->sizeHint().height());
+    
     connect(view, SIGNAL(statusChanged(Sublime::View*)), this, SLOT(statusChanged(Sublime::View*)));
     connect(view->document(), SIGNAL(statusIconChanged(Sublime::Document*)), this, SLOT(statusIconChanged(Sublime::Document*)));
     connect(view->document(), SIGNAL(titleChanged(Sublime::Document*)), this, SLOT(documentTitleChanged(Sublime::Document*)));
