@@ -56,10 +56,7 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     {
         if(leftType==KDevelop::ProjectBaseItem::File)
         {
-            KMimeType::Ptr thisMime=KMimeType::findByUrl(iLeft->file()->url(), 0, false, true), otherMime=KMimeType::findByUrl(iRight->file()->url(), 0, false, true);
-    
-            if(thisMime->name()!=otherMime->name())
-                return thisMime->name()<otherMime->name();
+            return iLeft->file()->fileName().compare(iRight->file()->fileName(), Qt::CaseInsensitive) < 0;
         }
         return *iLeft<*iRight;
     }
