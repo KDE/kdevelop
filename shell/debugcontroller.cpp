@@ -189,7 +189,7 @@ void DebugController::setupActions()
     ac->addAction("debug_continue", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(run()));
 
-    m_restartDebugger = action = new KAction(KIcon("dbgrestart"), i18n("&Restart"), this);
+    m_restartDebugger = action = new KAction(KIcon("media-seek-backward"), i18n("&Restart"), this);
     action->setToolTip( i18n("Restart program") );
     action->setWhatsThis( i18n("<b>Restarts application</b><p>"
                                "Restarts applications from the beginning.</p>"
@@ -199,7 +199,7 @@ void DebugController::setupActions()
     ac->addAction("debug_restart", action);
 
 
-    m_stopDebugger = action = new KAction(KIcon("process-stop"), i18n("Sto&p"), this);
+    m_stopDebugger = action = new KAction(KIcon("media-playback-stop"), i18n("Sto&p"), this);
     action->setToolTip( i18n("Stop debugger") );
     action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stopDebugger()));
@@ -211,20 +211,20 @@ void DebugController::setupActions()
     connect(action, SIGNAL(triggered(bool)), this, SLOT(interruptDebugger()));
     ac->addAction("debug_pause", action);
 
-    m_runToCursor = action = new KAction(KIcon("dbgrunto"), i18n("Run to &Cursor"), this);
+    m_runToCursor = action = new KAction(KIcon("debug-run-cursor"), i18n("Run to &Cursor"), this);
     action->setToolTip( i18n("Run to cursor") );
     action->setWhatsThis(i18n("<b>Run to cursor</b><p>Continues execution until the cursor position is reached.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(runToCursor()));
     ac->addAction("debug_runtocursor", action);
 
 
-    m_jumpToCursor = action = new KAction(KIcon("dbgjumpto"), i18n("Set E&xecution Position to Cursor"), this);
+    m_jumpToCursor = action = new KAction(KIcon("debug-execute-to-cursor"), i18n("Set E&xecution Position to Cursor"), this);
     action->setToolTip( i18n("Jump to cursor") );
     action->setWhatsThis(i18n("<b>Set Execution Position </b><p>Set the execution pointer to the current cursor position.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(jumpToCursor()));
     ac->addAction("debug_jumptocursor", action);
 
-    m_stepOver = action = new KAction(KIcon("dbgnext"), i18n("Step &Over"), this);
+    m_stepOver = action = new KAction(KIcon("debug-step-over"), i18n("Step &Over"), this);
     action->setShortcut(Qt::Key_F10);
     action->setToolTip( i18n("Step over the next line") );
     action->setWhatsThis( i18n("<b>Step over</b><p>"
@@ -236,14 +236,14 @@ void DebugController::setupActions()
     ac->addAction("debug_stepover", action);
 
 
-    m_stepOverInstruction = action = new KAction(KIcon("dbgnextinst"), i18n("Step over Ins&truction"), this);
+    m_stepOverInstruction = action = new KAction(KIcon("debug-step-instruction"), i18n("Step over Ins&truction"), this);
     action->setToolTip( i18n("Step over instruction") );
     action->setWhatsThis(i18n("<b>Step over instruction</b><p>Steps over the next assembly instruction.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepIntoInstruction()));
     ac->addAction("debug_stepoverinst", action);
 
 
-    m_stepInto = action = new KAction(KIcon("dbgstep"), i18n("Step &Into"), this);
+    m_stepInto = action = new KAction(KIcon("debug-step-into"), i18n("Step &Into"), this);
     action->setShortcut(Qt::Key_F11);
     action->setToolTip( i18n("Step into the next statement") );
     action->setWhatsThis( i18n("<b>Step into</b><p>"
@@ -254,13 +254,13 @@ void DebugController::setupActions()
     ac->addAction("debug_stepinto", action);
 
 
-    m_stepIntoInstruction = action = new KAction(KIcon("dbgstepinst"), i18n("Step into I&nstruction"), this);
+    m_stepIntoInstruction = action = new KAction(KIcon("debug-step-into-instruction"), i18n("Step into I&nstruction"), this);
     action->setToolTip( i18n("Step into instruction") );
     action->setWhatsThis(i18n("<b>Step into instruction</b><p>Steps into the next assembly instruction.</p>"));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(stepOverInstruction()));
     ac->addAction("debug_stepintoinst", action);
 
-    m_stepOut = action = new KAction(KIcon("dbgstepout"), i18n("Step O&ut"), this);
+    m_stepOut = action = new KAction(KIcon("debug-step-out"), i18n("Step O&ut"), this);
     action->setShortcut(Qt::Key_F12);
     action->setToolTip( i18n("Steps out of the current function") );
     action->setWhatsThis( i18n("<b>Step out</b><p>"
