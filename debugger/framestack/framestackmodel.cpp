@@ -222,13 +222,13 @@ void FrameStackModel::setCurrentThread(int threadNumber)
         // and therefore frames could not have changed.
         fetchFrames(threadNumber, 0, 20);
     }
-    bool changed = (threadNumber != m_currentThread) || (m_currentFrame != 0);
-    m_currentThread = threadNumber;
-    m_currentFrame = 0;
+    if (threadNumber != m_currentThread) {
+        m_currentFrame = 0;
+        m_currentThread = threadNumber;
+        emit currentFrameChanged(m_currentFrame);
+    }
     emit currentThreadChanged(threadNumber);
-    emit currentFrameChanged(0);
-    if (changed)
-        session()->raiseEvent(IDebugSession::thread_or_frame_changed);
+    session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 }
 
 void FrameStackModel::setCurrentThread(const QModelIndex& index)
@@ -297,6 +297,7 @@ void FrameStackModel::handleEvent(IDebugSession::event_t event)
 
     case IDebugSession::program_state_changed:
         update();
+        setCurrentFrame(0);
         break;
 
     default:
