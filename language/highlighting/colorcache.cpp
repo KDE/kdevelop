@@ -202,6 +202,11 @@ uint ColorCache::validColorCount() const
   return m_validColorCount;
 }
 
+QColor ColorCache::foregroundColor() const
+{
+  return m_foregroundColor;
+}
+
 }
 
 #include "colorcache.moc"

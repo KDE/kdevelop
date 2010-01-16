@@ -62,6 +62,7 @@
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
 #include <sublime/mainwindow.h>
+#include <language/highlighting/colorcache.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -403,6 +404,9 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
       standardBoldAttribute->setBackground(QColor(255, 255, 0, 100));//QApplication::palette().toolTipBase());
       standardBoldAttribute->setFontBold(true);
     }
+    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
+    // foreground color could change, hence apply it everytime
+    standardBoldAttribute->setForeground(ColorCache::self()->foregroundColor());
     return standardBoldAttribute;
   }else{
     static Attribute::Ptr standardAttribute = Attribute::Ptr();
@@ -411,6 +415,9 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
       standardAttribute->setBackgroundFillWhitespace(true);
       standardAttribute->setBackground(QColor(255, 255, 0, 100));//QApplication::palette().toolTipBase());
     }
+    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
+    // foreground color could change, hence apply it everytime
+    standardAttribute->setForeground(ColorCache::self()->foregroundColor());
     return standardAttribute;
   }
 }
@@ -435,6 +442,9 @@ Attribute::Ptr highlightedSpecialObjectAttribute() {
     standardAttribute->setBackgroundFillWhitespace(true);
     standardAttribute->setBackground(QColor(90, 255, 0, 100));//QApplication::palette().toolTipBase());
   }
+  // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
+  // foreground color could change, hence apply it everytime
+  standardAttribute->setForeground(ColorCache::self()->foregroundColor());
   return standardAttribute;
 }
 
@@ -450,7 +460,7 @@ void ContextBrowserPlugin::changeHighlight( KTextEditor::SmartRange* range, bool
     else*/
 
     Attribute::Ptr attrib = highlightedUseAttribute(mouseHighlight, range->attribute() ? range->attribute()->fontBold() : false);
-    
+
     if( !m_backups.contains(range) ) {
       m_backups[range] = qMakePair(attrib, range->attribute());
       watchRange(range);

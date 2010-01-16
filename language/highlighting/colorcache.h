@@ -75,6 +75,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// @see generatedColor()
     uint validColorCount() const;
 
+    /// access the foreground color
+    QColor foregroundColor() const;
+
   public slots:
     /// will regenerate colors after taking changes in the color configuration into account
     /// @see colorsGotChanged()
