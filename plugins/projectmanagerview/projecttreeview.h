@@ -73,7 +73,6 @@ class ProjectTreeView: public QTreeView
     private:
         KDevelop::IProject* m_ctxProject;
         QPointer<KDevelop::NavigationToolTip> m_tooltip;
-        void appendActions(QMenu& menu, const QList<QAction*>& actions);
         QPersistentModelIndex m_idx;
 };
 

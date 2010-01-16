@@ -149,6 +149,12 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
     }
 }
 
+void appendActions(QMenu& menu, const QList<QAction*>& actions)
+{
+    menu.addActions(actions);
+    menu.addSeparator();
+}
+
 void ProjectTreeView::popupContextMenu( const QPoint &pos )
 {
     QList<KDevelop::ProjectBaseItem*> itemlist;
@@ -218,15 +224,6 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     if ( !menu.isEmpty() ) {
         menu.exec( mapToGlobal( pos ) );
     }
-}
-
-void ProjectTreeView::appendActions(QMenu& menu, const QList<QAction*>& actions)
-{
-    foreach( QAction* act, actions )
-    {
-        menu.addAction(act);
-    }
-    menu.addSeparator();
 }
 
 void ProjectTreeView::openProjectConfig()
