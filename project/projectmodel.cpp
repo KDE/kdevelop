@@ -382,7 +382,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
     d->m_url = url;
     d->m_fileName = d->m_url.fileName();
     setText( d->m_fileName );
-    setIcon(KIcon(KMimeType::findByUrl(url)->iconName(url)));
+    setIcon(KIcon(KMimeType::findByUrl(url, 0, false, true)->iconName(url)));
 }
 
 int ProjectFileItem::type() const
