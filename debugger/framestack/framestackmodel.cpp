@@ -36,6 +36,7 @@ namespace KDevelop {
 FrameStackModel::FrameStackModel(IDebugSession *session)
 : IFrameStackModel(session), m_currentThread(-1), m_currentFrame(-1)
 {
+    connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 FrameStackModel::~FrameStackModel()
@@ -224,9 +225,11 @@ void FrameStackModel::setCurrentThread(int threadNumber)
     }
     if (threadNumber != m_currentThread) {
         m_currentFrame = 0;
+        kDebug() << "currentFrame" << m_currentFrame;
         m_currentThread = threadNumber;
         emit currentFrameChanged(m_currentFrame);
     }
+    kDebug() << "currentThread: " << m_currentThread << "currentFrame: " << m_currentFrame;
     emit currentThreadChanged(threadNumber);
     session()->raiseEvent(IDebugSession::thread_or_frame_changed);
 }
@@ -270,6 +273,7 @@ QModelIndex FrameStackModel::currentFrameIndex() const
 
 void FrameStackModel::setCurrentFrame(int frame)
 {
+    kDebug() << frame;
     if (frame != m_currentFrame)
     {
         m_currentFrame = frame;
@@ -297,11 +301,17 @@ void FrameStackModel::handleEvent(IDebugSession::event_t event)
 
     case IDebugSession::program_state_changed:
         update();
-        setCurrentFrame(0);
         break;
 
     default:
         break;
+    }
+}
+
+void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::PausedState) {
+        setCurrentFrame(0);
     }
 }
 

@@ -80,6 +80,9 @@ public:
     
     void fetchMoreFrames();
 
+private Q_SLOTS:
+    void stateChanged(KDevelop::IDebugSession::DebuggerState state);
+
 private:
     virtual void handleEvent(IDebugSession::event_t event);
 
