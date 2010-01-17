@@ -244,7 +244,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            showVcsDiff(new VCSDiffPatchSource(repairDiff(d.diff())));
+            showVcsDiff(new VCSDiffPatchSource(d.diff()));
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }

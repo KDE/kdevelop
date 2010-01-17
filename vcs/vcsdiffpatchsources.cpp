@@ -29,46 +29,6 @@
 
 using namespace KDevelop;
 
-///@todo The subversion library returns borked diffs, where the headers are at the end. This function
-///           takes those headers, and moves them into the correct place to create a valid working diff.
-///           Find the source of this problem.
-QString repairDiff(QString diff) {
-    kDebug() << "diff before repair:" << diff;
-    QStringList lines = diff.split('\n');
-    QMap<QString, QString> headers;
-    for(int a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith("Index: ") && lines[a+1].startsWith("=====")) {
-            QString fileName = lines[a].mid(strlen("Index: ")).trimmed();
-            headers[fileName] = lines[a];
-            kDebug() << "found header for" << fileName;
-            lines[a] = QString();
-            if(lines[a+1].startsWith("======")) {
-                headers[fileName] += "\n" + lines[a+1];
-            lines[a+1] = QString();
-            }
-        }
-    }
-    
-    QRegExp spaceRegExp("\\s");
-    
-    for(int a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith("--- ")) {
-            QString tail = lines[a].mid(strlen("--- "));
-            if(tail.indexOf(spaceRegExp) != -1) {
-                QString file = tail.left(tail.indexOf(spaceRegExp));
-                kDebug() << "checking for" << file;
-                if(headers.contains(file)) {
-                    kDebug() << "adding header for" << file << ":" << headers[file];
-                    lines[a] = headers[file] + "\n" + lines[a];
-                }
-            }
-        }
-    }
-    QString ret = lines.join("\n");
-    kDebug() << "repaired diff:" << ret;
-    return ret;
-}
-
 VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const QString& d, QMap< KUrl, QString > selectable, IBasicVersionControl* vcs) : VCSDiffPatchSource(d), m_selectable(selectable), m_vcs(vcs) {
     
     Q_ASSERT(m_vcs);

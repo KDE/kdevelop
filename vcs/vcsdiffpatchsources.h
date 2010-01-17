@@ -86,6 +86,4 @@ public:
 ///Returns whether the diff was shown successfully
 bool showVcsDiff(KDevelop::IPatchSource* vcsDiff);
 
-QString repairDiff(QString diff);
-
 #endif // VCSDIFFPATCHSOURCES_H

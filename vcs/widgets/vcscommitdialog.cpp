@@ -277,7 +277,7 @@ void VcsCommitDialog::commitDiffJobFinished(KJob* job)
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            this->d->diff += repairDiff(d.diff()) + "\n";
+            this->d->diff += d.diff() + "\n";
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }
