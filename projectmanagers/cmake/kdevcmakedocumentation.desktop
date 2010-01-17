@@ -3,6 +3,7 @@ Type=Service
 Name=CMake Documentation
 Name[en_GB]=CMake Documentation
 Name[es]=Documentación de CMake
+Name[fr]=Documentation de CMake
 Name[pt]=Documentação do CMake
 Name[pt_BR]=Documentação do CMake
 Name[sv]=CMake-dokumentation
