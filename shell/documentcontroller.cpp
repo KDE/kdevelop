@@ -272,6 +272,9 @@ struct DocumentControllerPrivate {
             }
         }
         
+        // The url in the document must equal the current url, else the housekeeping will get broken
+        Q_ASSERT(!doc || doc->url() == url);
+        
         if(doc && openDocumentInternal(doc, range, activationParams))
             return doc;
         else
