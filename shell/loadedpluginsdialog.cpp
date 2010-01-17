@@ -1,5 +1,6 @@
 /**************************************************************************
-*   Copyright 2009 Andreas Pakulat <apaku@gmx.de                          *
+*   Copyright 2009 Andreas Pakulat <apaku@gmx.de>                         *
+*   Copyright 2010 Niko Sams <niko.sams@gmail.com>                        *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU Library General Public License as       *
@@ -19,17 +20,236 @@
 
 #include "loadedpluginsdialog.h"
 
+#include <QApplication>
+#include <QListView>
+#include <QVBoxLayout>
+#include <QPainter>
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <ktitlewidget.h>
 #include <kcomponentdata.h>
 #include <kaboutdata.h>
-#include <QVBoxLayout>
-#include <ktextbrowser.h>
+#include <kdebug.h>
+#include <kwidgetitemdelegate.h>
+#include <KPushButton>
+#include <kaboutapplicationdialog.h>
+
 #include "core.h"
 #include "plugincontroller.h"
-#include <qscrollbar.h>
-#include <kdebug.h>
+
+#define MARGIN 5
+
+
+class PluginsModel : public QAbstractListModel
+{
+public:
+    enum ExtraRoles {
+        CommentRole       = 0x19FC6DE2,
+    };
+    PluginsModel(QObject* parent = 0)
+        : QAbstractListModel(parent)
+    {
+        m_plugins = KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins();
+    }
+
+    KDevelop::IPlugin *plugin(const QModelIndex& index) const
+    {
+        if (!index.isValid()) return 0;
+        if (index.parent().isValid()) return 0;
+        if (index.column() != 0) return 0;
+        if (index.row() >= m_plugins.count()) return 0;
+        return m_plugins[index.row()];
+    }
+
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
+    {
+        KDevelop::IPlugin *p = plugin(index);
+        if (!p) return QVariant();
+        switch (role) {
+            case Qt::DisplayRole:
+            {
+                QString name(p->componentData().aboutData()->programName());
+                if (name.isEmpty()) name = p->componentData().componentName();
+                return name;
+            }
+            case CommentRole:
+                return p->componentData().aboutData()->shortDescription();
+            case Qt::DecorationRole:
+            {
+                KPluginInfo pi = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo(p);
+                return pi.icon();
+            }
+            default:
+                return QVariant();
+        };
+    }
+
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const
+    {
+        if (!parent.isValid()) {
+            return m_plugins.count();
+        }
+        return 0;
+    }
+
+private:
+    QList<KDevelop::IPlugin*> m_plugins;
+};
+
+class LoadedPluginsDelegate : public KWidgetItemDelegate
+{
+    Q_OBJECT
+
+public:
+
+    LoadedPluginsDelegate(QAbstractItemView *itemView, QObject *parent = 0)
+        : KWidgetItemDelegate(itemView, parent)
+        , pushButton(new KPushButton)
+    {
+        pushButton->setIcon(KIcon("dialog-information")); // only for getting size matters
+    }
+
+    ~LoadedPluginsDelegate()
+    {
+        delete pushButton;
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+    {
+        int i = 5;
+        int j = 1;
+
+        QFont font = titleFont(option.font);
+        QFontMetrics fmTitle(font);
+
+        return QSize(qMax(fmTitle.width(index.model()->data(index, Qt::DisplayRole).toString()),
+                        option.fontMetrics.width(index.model()->data(index, PluginsModel::CommentRole).toString())) +
+                        KIconLoader::SizeMedium + MARGIN * i + pushButton->sizeHint().width() * j,
+                    qMax(KIconLoader::SizeMedium + MARGIN * 2, fmTitle.height() + option.fontMetrics.height() + MARGIN * 2));
+
+    }
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const
+    {
+        if (!index.isValid()) {
+            return;
+        }
+
+        painter->save();
+
+        QApplication::style()->drawPrimitive(QStyle::PE_PanelItemViewItem, &option, painter, 0);
+
+        int iconSize = option.rect.height() - MARGIN * 2;
+        QPixmap pixmap = KIconLoader::global()->loadIcon(index.model()->data(index, Qt::DecorationRole).toString(),
+                                                        KIconLoader::Desktop, iconSize, KIconLoader::DefaultState);
+
+        painter->drawPixmap(QRect(dependantLayoutValue(MARGIN + option.rect.left(), iconSize, option.rect.width()), MARGIN + option.rect.top(), iconSize, iconSize), pixmap, QRect(0, 0, iconSize, iconSize));
+
+        QRect contentsRect(dependantLayoutValue(MARGIN * 2 + iconSize + option.rect.left(), option.rect.width() - MARGIN * 3 - iconSize, option.rect.width()), MARGIN + option.rect.top(), option.rect.width() - MARGIN * 3 - iconSize, option.rect.height() - MARGIN * 2);
+
+        int lessHorizontalSpace = MARGIN * 2 + pushButton->sizeHint().width();
+
+        contentsRect.setWidth(contentsRect.width() - lessHorizontalSpace);
+
+        if (option.state & QStyle::State_Selected) {
+            painter->setPen(option.palette.highlightedText().color());
+        }
+
+        if (itemView()->layoutDirection() == Qt::RightToLeft) {
+            contentsRect.translate(lessHorizontalSpace, 0);
+        }
+
+        painter->save();
+
+        painter->save();
+        QFont font = titleFont(option.font);
+        QFontMetrics fmTitle(font);
+        painter->setFont(font);
+        painter->drawText(contentsRect, Qt::AlignLeft | Qt::AlignTop, fmTitle.elidedText(index.model()->data(index, Qt::DisplayRole).toString(), Qt::ElideRight, contentsRect.width()));
+        painter->restore();
+
+        painter->drawText(contentsRect, Qt::AlignLeft | Qt::AlignBottom, option.fontMetrics.elidedText(index.model()->data(index, PluginsModel::CommentRole).toString(), Qt::ElideRight, contentsRect.width()));
+
+        painter->restore();
+        painter->restore();
+    }
+
+    QList<QWidget*> createItemWidgets() const
+    {
+        KPushButton *button = new KPushButton();
+        button->setIcon(KIcon("dialog-information"));
+        setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
+                             << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
+
+        connect(button, SIGNAL(clicked(bool)), this, SLOT(info()));
+        return QList<QWidget*>()
+            << button;
+    }
+
+    void updateItemWidgets(const QList<QWidget*> widgets,
+                           const QStyleOptionViewItem &option,
+                           const QPersistentModelIndex &index) const
+    {
+        Q_UNUSED(index);
+        KPushButton *aboutPushButton = static_cast<KPushButton*>(widgets[0]);
+        QSize aboutPushButtonSizeHint = aboutPushButton->sizeHint();
+        aboutPushButton->resize(aboutPushButtonSizeHint);
+        aboutPushButton->move(dependantLayoutValue(option.rect.width() - MARGIN - aboutPushButtonSizeHint.width(), aboutPushButtonSizeHint.width(), option.rect.width()), option.rect.height() / 2 - aboutPushButtonSizeHint.height() / 2);
+    }
+
+    int dependantLayoutValue(int value, int width, int totalWidth) const
+    {
+        if (itemView()->layoutDirection() == Qt::LeftToRight) {
+            return value;
+        }
+        return totalWidth - width - value;
+    }
+
+    QFont titleFont(const QFont &baseFont) const
+    {
+        QFont retFont(baseFont);
+        retFont.setBold(true);
+        return retFont;
+    }
+ 
+private Q_SLOTS:
+    void info()
+    {
+        PluginsModel *m = static_cast<PluginsModel*>(itemView()->model());
+        KDevelop::IPlugin *p = m->plugin(focusedIndex());
+        if (p) {
+            const KAboutData *aboutData = p->componentData().aboutData();
+            if (!aboutData->programName().isEmpty()) { // Be sure the about data is not completely empty
+                KAboutApplicationDialog aboutPlugin(aboutData, itemView());
+                aboutPlugin.exec();
+                return;
+            }
+        }
+    }
+private:
+    QPushButton *pushButton;
+};
+
+class PluginsView : public QListView
+{
+public:
+    PluginsView(QWidget* parent = 0)
+        :QListView(parent)
+    {
+        setModel(new PluginsModel());
+        setItemDelegate(new LoadedPluginsDelegate(this));
+        setVerticalScrollMode(QListView::ScrollPerPixel);
+    }
+
+    virtual QSize sizeHint() const
+    {
+        QSize ret = QListView::sizeHint();
+        ret.setWidth(qMax(ret.width(), sizeHintForColumn(0) + 30));
+        return ret;
+    }
+};
 
 LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     : KDialog( parent )
@@ -44,20 +264,8 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     title->setPixmap(KIcon(KGlobal::mainComponent().aboutData()->programIconName()), KTitleWidget::ImageLeft);
     title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>", KGlobal::mainComponent().aboutData()->programName()));
     vbox->addWidget(title);
-    
-    KTextBrowser* info = new KTextBrowser(this);
-    QStringList loadedpluginsinfo;
-    foreach( KDevelop::IPlugin* plugin,  KDevelop::Core::self()->pluginControllerInternal()->loadedPlugins() )
-    {
-        loadedpluginsinfo << i18n("Plugin Name: <b>%1</b><br />Plugin Description: %2<br/>",
-                                  plugin->componentData().aboutData()->programName(),
-                                  plugin->componentData().aboutData()->shortDescription() );
-    }
-    info->setHtml(i18n("<html>%1</html>", 
-                       loadedpluginsinfo.join("<br/>")));
-    QPalette transparentBackgroundPalette;
-    transparentBackgroundPalette.setColor(QPalette::Base, Qt::transparent);
-    transparentBackgroundPalette.setColor(QPalette::Text, transparentBackgroundPalette.color(QPalette::WindowText));
-    info->setPalette(transparentBackgroundPalette);
-    vbox->addWidget(info);
+    vbox->addWidget(new PluginsView());
 }
+
+#include "moc_loadedpluginsdialog.cpp"
+#include "loadedpluginsdialog.moc"
