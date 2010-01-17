@@ -25,12 +25,24 @@
 #include <QtCore/QObject>
 #include <QtCore/QList>
 #include <QtGui/QColor>
+#include <QtCore/QWeakPointer>
 
 #include "../languageexport.h"
+
+#include <kdeversion.h>
+#if KDE_VERSION > KDE_MAKE_VERSION(4, 3, 80)
+  #define HAVE_HIGHLIGHTIFACE
+#endif
+
+namespace KTextEditor {
+class Document;
+class View;
+}
 
 namespace KDevelop {
 
 class CodeHighlightingColors;
+class IDocument;
 
 /**
  * A singleton which holds the global default colors, adapted to the current color scheme
@@ -78,25 +90,37 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// access the foreground color
     QColor foregroundColor() const;
 
-  public slots:
-    /// will regenerate colors after taking changes in the color configuration into account
-    /// @see colorsGotChanged()
-    void adaptToColorChanges();
-
   signals:
     /// will be emitted whenever the colors got changed
-    /// @see adaptToColorChanges()
+    /// @see update()
     void colorsGotChanged();
+
+  private slots:
+    /// if neccessary, adapt to the colors of this document
+    void slotDocumentActivated(KDevelop::IDocument*);
+    /// settings got changed, update to the settings of the sender
+    void slotViewSettingsChanged();
+
+    /// will regenerate colors from global KDE color scheme
+    void updateColorsFromScheme();
+    /// will regenerate colors with the proper intensity settings
+    void updateColorsFromSettings();
 
   private:
     ColorCache(QObject *parent = 0);
     static ColorCache* m_self;
 
-    /// setup colors for the current settings
-    void setupColors();
+    /// get @p totalGeneratedColors colors from the color wheel and adapt them to the current color scheme
+    void generateColors();
 
-    /// get @p count colors from the color wheel and adapt them to the current color scheme
-    void generateColors(uint count);
+    /// regenerate colors and emits @p colorsGotChanged()
+    /// and finally triggers a rehighlight of the opened documents
+    void update();
+
+    /// try to access the KatePart settings for the given doc or fallback to the global KDE scheme
+    /// and update the colors if neccessary
+    /// @see generateColors(), updateColorsFromScheme()
+    void updateColorsFromDocument(KTextEditor::Document* doc);
 
     /// the default colors for the different types
     CodeHighlightingColors* m_defaultColors;
@@ -120,6 +144,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// How global colors (i.e. for types, uses, etc.) should be mixed with the foreground color.
     /// Between 0 and 255, where 255 means only foreground color, and 0 only the chosen color.
     uchar m_globalColorRatio;
+
+    /// The view we are listening to for setting changes.
+    QWeakPointer<KTextEditor::View> m_view;
 };
 
 }

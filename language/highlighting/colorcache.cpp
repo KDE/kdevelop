@@ -36,12 +36,21 @@
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 
+#ifdef HAVE_HIGHLIGHTIFACE
+  #include <KTextEditor/HighlightInterface>
+#endif
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+
 // ######### start interpolation
 
 uint totalColorInterpolationStepCount = 6;
 uint interpolationWaypoints[] = {0xff0000, 0xff9900, 0x00ff00, 0x00aaff, 0x0000ff, 0xaa00ff};
 //Do less steps when interpolating to/from green: Green is very dominant, and different mixed green tones are hard to distinguish(and always seem green).
 uint interpolationLengths[] = {0xff, 0xff, 0xbb, 0xbb, 0xbb, 0xff};
+
+uint totalGeneratedColors = 10;
 
 uint totalColorInterpolationSteps()
 {
@@ -77,15 +86,29 @@ ColorCache::ColorCache(QObject* parent)
 {
   Q_ASSERT(m_self == 0);
 
-  m_self = this;
+  updateColorsFromScheme(); // default / fallback
+  updateColorsFromSettings();
 
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
-           this, SLOT(adaptToColorChanges()), Qt::QueuedConnection);
+           this, SLOT(updateColorsFromSettings()), Qt::QueuedConnection);
 
-  connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-           this, SLOT(adaptToColorChanges()), Qt::QueuedConnection);
+  #ifdef HAVE_HIGHLIGHTIFACE
+    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
+            this, SLOT(slotDocumentActivated(KDevelop::IDocument*)), Qt::QueuedConnection);
 
-  setupColors();
+    if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
+      if ( doc->textDocument() ) {
+        updateColorsFromDocument(doc->textDocument());
+      }
+    }
+  #else
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+            this, SLOT(updateColorsFromScheme()), Qt::QueuedConnection);
+  #endif
+
+  m_self = this;
+
+  update();
 }
 
 ColorCache::~ColorCache()
@@ -108,31 +131,19 @@ void ColorCache::initialize()
   m_self = new ColorCache;
 }
 
-void ColorCache::setupColors()
+void ColorCache::generateColors()
 {
-  m_localColorRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
-  m_globalColorRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
-
-  ///@todo Find the correct text foreground color from kate! The palette thing below returns some strange other color.
-  KColorScheme scheme(QPalette::Normal, KColorScheme::View);
-  m_foregroundColor = scheme.foreground(KColorScheme::NormalText).color();
-
   if ( m_defaultColors ) {
     delete m_defaultColors;
   }
 
   m_defaultColors = new CodeHighlightingColors(this);
 
-  generateColors(10);
-}
-
-void ColorCache::generateColors(uint count)
-{
   m_colors.clear();
-  uint step = totalColorInterpolationSteps() / count;
+  uint step = totalColorInterpolationSteps() / totalGeneratedColors;
   uint currentPos = m_colorOffset;
   kDebug() << "text color:" << m_foregroundColor;
-  for(uint a = 0; a < count; ++a) {
+  for(uint a = 0; a < totalGeneratedColors; ++a) {
     m_colors.append( blendLocalColor( interpolate( currentPos ) ) );
     kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();
     currentPos += step;
@@ -141,9 +152,81 @@ void ColorCache::generateColors(uint count)
   m_colors.append(m_foregroundColor);
 }
 
-void ColorCache::adaptToColorChanges()
+void ColorCache::slotDocumentActivated(IDocument* doc)
 {
-  setupColors();
+  if ( doc->textDocument() ) {
+    updateColorsFromDocument(doc->textDocument());
+  }
+}
+
+void ColorCache::slotViewSettingsChanged()
+{
+  KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
+  Q_ASSERT(view);
+
+  updateColorsFromDocument(view->document());
+}
+
+void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
+{
+  QColor foreground(QColor::Invalid);
+
+  // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
+
+  #ifdef HAVE_HIGHLIGHTIFACE
+  if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
+    foreground = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal)->foreground().color();
+//     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
+    //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
+    if ( KTextEditor::View* view = m_view.data() ) {
+      // we only listen to a single view, i.e. the active one
+      disconnect(view, SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+    }
+    connect(doc->activeView(), SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
+    m_view = doc->activeView();
+  }
+  #endif
+
+  if ( !foreground.isValid() ) {
+    // fallback to colorscheme variant
+    updateColorsFromScheme();
+  } else if ( m_foregroundColor != foreground ) {
+    m_foregroundColor = foreground;
+    update();
+  }
+}
+
+void ColorCache::updateColorsFromScheme()
+{
+  KColorScheme scheme(QPalette::Normal, KColorScheme::View);
+
+  QColor foreground = scheme.foreground(KColorScheme::NormalText).color();
+
+  if ( foreground != m_foregroundColor ) {
+    m_foregroundColor = foreground;
+    update();
+  }
+}
+
+void ColorCache::updateColorsFromSettings()
+{
+  int localRatio = ICore::self()->languageController()->completionSettings()->localColorizationLevel();
+  int globalRatio = ICore::self()->languageController()->completionSettings()->globalColorizationLevel();
+
+  if ( localRatio != m_localColorRatio || globalRatio != m_globalColorRatio ) {
+    m_localColorRatio = localRatio;
+    m_globalColorRatio = globalRatio;
+    update();
+  }
+}
+
+void ColorCache::update()
+{
+  if ( !m_self ) { // don't update during startup
+    return;
+  }
+
+  generateColors();
 
   emit colorsGotChanged();
 
