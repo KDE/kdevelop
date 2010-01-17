@@ -234,6 +234,12 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
 {
   //m_includePathsComputed is filled when includePaths() is called
   masterJob()->includePaths();
+  
+  if(ICore::self()->shuttingDown())
+    return; //If the system is shutting down, include-paths were not computed properly
+  
+  Q_ASSERT(masterJob()->m_includePathsComputed);
+  
   QHash<QString, QString> defines = masterJob()->m_includePathsComputed->defines();
   
   ///@todo Most probably, the same macro-sets will be calculated again and again.
