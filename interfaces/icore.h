@@ -118,6 +118,9 @@ public:
     /** @return the component data of the framework, different from the main component which is created by the application */
     virtual KComponentData componentData() const = 0;
 
+    /** @return true if the application is currently being shut down */
+    virtual bool shuttingDown() const = 0;
+    
 protected:
     ICore(QObject *parent = 0);
     static ICore *m_self;

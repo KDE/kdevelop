@@ -83,7 +83,7 @@ KAboutData aboutData()
 }
 
 CorePrivate::CorePrivate(Core *core):
-    m_componentData( aboutData() ), m_core(core), m_cleanedUp(false)
+    m_componentData( aboutData() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
 {
 }
 
@@ -251,8 +251,15 @@ Core::Setup Core::setupFlags() const
     return d->m_mode;
 }
 
+bool Core::shuttingDown() const
+{
+    return d->m_shuttingDown;
+}
+
 void Core::cleanup()
 {
+    d->m_shuttingDown = true;
+    
     if (!d->m_cleanedUp) {
         d->debugController->cleanup();
         d->selectionController->cleanup();

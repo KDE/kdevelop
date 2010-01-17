@@ -66,6 +66,7 @@ public:
     KComponentData m_componentData;
     Core *m_core;
     bool m_cleanedUp;
+    bool m_shuttingDown;
     Core::Setup m_mode;
 };
 

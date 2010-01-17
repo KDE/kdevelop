@@ -146,6 +146,8 @@ public:
 
     void cleanup();
 
+    virtual bool shuttingDown() const;    
+    
     Core::Setup setupFlags() const;
 protected:
     Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
