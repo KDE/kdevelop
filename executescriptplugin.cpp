@@ -62,7 +62,9 @@ QString ExecuteScriptPlugin::projectTargetEntry = "Project Target";
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(KDevExecuteFactory, registerPlugin<ExecuteScriptPlugin>(); )
-K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutescript", ki18n("Execute script support"), "0.1", ki18n("Allows running of scripts"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(KDevExecuteFactory(KAboutData("kdevexecutescript", "kdevexecutescript", ki18n("Execute script support"), "0.1", ki18n("Allows running of scripts"), KAboutData::License_GPL)
+    .addAuthor(ki18n("Niko Sams"), ki18n("Author"), "niko.sams@gmail.com", "http://nikosams.blogspot.com")
+))
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevExecuteFactory::componentData(), parent)
