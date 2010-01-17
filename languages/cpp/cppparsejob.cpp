@@ -254,8 +254,9 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
 
 const QList<IndexedString>& CPPParseJob::includePaths() const {
     //If a lock was held here, we would get deadlocks
-    ///@todo This can lead to deadlocks during shutdown. Find a more elegant solution for the interaction between foreground and background,
-    ///           that also works well during shutdown.
+    if( ICore::self()->shuttingDown() )
+      return QList<IndexedString>();
+    
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
             Q_ASSERT(!DUChain::lock()->currentThreadHasReadLock() && !DUChain::lock()->currentThreadHasWriteLock());
@@ -263,8 +264,13 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
             qRegisterMetaType<CPPParseJob*>("CPPParseJob*");
             QMetaObject::invokeMethod(cpp(), "findIncludePathsForJob", Qt::QueuedConnection, Q_ARG(CPPParseJob*, const_cast<CPPParseJob*>(this)));
             //Will be woken once the include-paths are computed
-            ///@todo Maybe just wake up here regularly and check whether kdevelop is in shutdown. If yes, stop waiting.
-            m_waitForIncludePaths.wait(&m_waitForIncludePathsMutex);
+            while(!m_waitForIncludePaths.wait(&m_waitForIncludePathsMutex, 1000))
+            {
+              if(ICore::self()->shuttingDown())
+              {
+                return QList<IndexedString>();
+              }
+            }
             m_waitForIncludePathsMutex.unlock();
             Q_ASSERT(m_includePathsComputed);
             m_includePathsComputed->computeBackground();

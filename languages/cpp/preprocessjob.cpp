@@ -615,6 +615,11 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
 bool PreprocessJob::checkAbort()
 {
+  if(ICore::self()->shuttingDown()) {
+    kDebug(9007) << "The application is shutting down";
+    return true;
+  }
+  
   if(!ICore::self()->languageController()->language("C++") || !ICore::self()->languageController()->language("C++")->languageSupport()) {
     kDebug(9007) << "Environment-manager disappeared" ;
     return true;
