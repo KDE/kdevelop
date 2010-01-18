@@ -58,8 +58,11 @@ Boston, MA 02110-1301, USA.
     #include "patchdocument.h"
 #endif
 
+#define EMPTY_DOCUMENT_URL i18n("Untitled")
+
 namespace KDevelop
 {
+
 
 struct DocumentControllerPrivate {
     DocumentControllerPrivate(DocumentController* c)
