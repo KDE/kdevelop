@@ -45,7 +45,7 @@ class PluginsModel : public QAbstractListModel
 {
 public:
     enum ExtraRoles {
-        CommentRole       = 0x19FC6DE2,
+        CommentRole       = 0x19FC6DE2
     };
     PluginsModel(QObject* parent = 0)
         : QAbstractListModel(parent)
