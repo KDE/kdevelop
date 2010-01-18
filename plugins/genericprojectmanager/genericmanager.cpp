@@ -60,7 +60,6 @@ K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgener
 GenericProjectManager::IncludeRules getIncludeRules(KDevelop::IProject* project) {
     KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
     QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
-    ///TODO: filter hidden files by default
     QStringList excludes = filtersConfig.readEntry("Excludes", QStringList("*/.*"));
 
     return qMakePair(includes, excludes);
@@ -166,8 +165,8 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
         return;
     }
     KDevelop::ProjectFolderItem* item = fitems.first();
-    
-    const IncludeRules rules = getIncludeRules(project);
+
+    const IncludeRules& rules = getIncludeRules(project);
 
     // build lists of valid files and folders with relative urls to the project folder
     KUrl::List files;
