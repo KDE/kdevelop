@@ -180,7 +180,7 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   kDebug() << "base-classes:" << m_baseClasses.size();
   
   if(!license().isEmpty())
-    output << "/*\n" << license() << "\n*/\n\n";
+    output << license() << "\n\n";
 
   Identifier classId = Identifier(name());
 
