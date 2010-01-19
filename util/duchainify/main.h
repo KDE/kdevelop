@@ -27,17 +27,23 @@ namespace KDevelop {
 class ParseJob;
 }
 
+class KCmdLineArgs;
+
 class Manager : public QObject {
     Q_OBJECT
     public:
-        Manager();
+        Manager(KCmdLineArgs* args);
         void addToBackgroundParser(QString path, KDevelop::TopDUContext::Features features);
         QSet<KUrl> waiting();
     private:
         QSet<KUrl> m_waiting;
         uint m_total;
-public slots:
-    void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
+        KCmdLineArgs* m_args;
+
+    public slots:
+        // delay init into event loop so the DUChain can always shutdown gracefully
+        void init();
+        void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
 };
 
 #endif

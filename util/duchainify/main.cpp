@@ -31,6 +31,7 @@
 
 #include <QtCore/QStringList>
 #include <QtCore/QFile>
+#include <QtCore/QTimer>
 #include <stdio.h>
 #include <tests/autotestshell.h>
 #include <QDirIterator>
@@ -64,10 +65,86 @@ void messageOutput(QtMsgType type, const char *msg)
 }
 
 
-Manager::Manager() : m_total(0)
+Manager::Manager(KCmdLineArgs* args) : m_total(0), m_args(args)
 {
 }
 
+void Manager::init()
+{
+    KUrl::List includes;
+    KUrl dir;
+
+    if(m_args->count() == 0) {
+        std::cerr << "Need directory to duchainify" << std::endl;
+        QCoreApplication::exit(1);
+    }
+
+    for(int i=0; i<m_args->count(); i++)
+    {
+        QString arg=m_args->arg(i);
+        dir=KUrl(arg);
+    }
+
+    verbose=m_args->isSet("verbose");
+    warnings=m_args->isSet("warnings");
+
+    uint features = TopDUContext::VisibleDeclarationsAndContexts;
+    if(m_args->isSet("f"))
+    {
+        QString featuresStr = m_args->getOption("f");
+        if(featuresStr == "visible-declarations")
+        {
+            features = TopDUContext::VisibleDeclarationsAndContexts;
+        }
+        else if(featuresStr == "all-declarations")
+        {
+            features = TopDUContext::AllDeclarationsAndContexts;
+        }
+        else if(featuresStr == "all-declarations-and-uses")
+        {
+            features = TopDUContext::AllDeclarationsContextsAndUses;
+        }
+        else if(featuresStr == "all-declarations-and-uses-and-AST")
+        {
+            features = TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST;
+        }
+        else if(featuresStr == "empty")
+        {
+            features = TopDUContext::Empty;
+        }
+        else if(featuresStr == "simplified-visible-declarations")
+        {
+            features = TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
+        }
+        else{
+            std::cerr << "Wrong feature-string given\n";
+            QCoreApplication::exit(2);
+        }
+    }
+    if(m_args->isSet("force-update"))
+        features |= TopDUContext::ForceUpdate;
+    
+    if(m_args->isSet("threads"))
+    {
+        bool ok = false;
+        int count = m_args->getOption("threads").toInt(&ok);
+        ICore::self()->languageController()->backgroundParser()->setThreadCount(count);
+        if(!ok) {
+            std::cerr << "bad thread count\n";
+            QCoreApplication::exit(3);
+        }
+    }
+
+    m_args->clear();
+
+    addToBackgroundParser(dir.toLocalFile(), (TopDUContext::Features)features);
+
+    if ( !waiting().isEmpty() ) {
+        std::cout << "Added " << waiting().size() << " files to the background parser" << std::endl;
+    } else {
+        std::cout << "no files added to the background parser" << std::endl;
+    }
+}
 
 void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
 {
@@ -141,85 +218,10 @@ int main(int argc, char** argv)
 
     AutoTestShell::init();
     Core::initialize(0, KDevelop::Core::NoUi);
-    
-    
-    KUrl::List includes;
-    KUrl dir;
-    
-    if(args->count() == 0) {
-        std::cerr << "Need directory to duchainify" << std::endl;
-        exit(0);
-    }
-    
-    for(int i=0; i<args->count(); i++)
-    {
-        QString arg=args->arg(i);
-        dir=KUrl(arg);
-    }
+    Manager manager(args);
 
-    verbose=args->isSet("verbose");
-    warnings=args->isSet("warnings");
-
-    uint features = TopDUContext::VisibleDeclarationsAndContexts;
-    if(args->isSet("f"))
-    {
-        QString featuresStr = args->getOption("f");
-        if(featuresStr == "visible-declarations")
-        {
-            features = TopDUContext::VisibleDeclarationsAndContexts;
-        }
-        else if(featuresStr == "all-declarations")
-        {
-            features = TopDUContext::AllDeclarationsAndContexts;
-        }
-        else if(featuresStr == "all-declarations-and-uses")
-        {
-            features = TopDUContext::AllDeclarationsContextsAndUses;
-        }
-        else if(featuresStr == "all-declarations-and-uses-and-AST")
-        {
-            features = TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST;
-        }
-        else if(featuresStr == "empty")
-        {
-            features = TopDUContext::Empty;
-        }
-        else if(featuresStr == "simplified-visible-declarations")
-        {
-            features = TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
-        }
-        else{
-            std::cerr << "Wrong feature-string given\n";
-            exit(2);
-        }
-    }
-    if(args->isSet("force-update"))
-        features |= TopDUContext::ForceUpdate;
-    
-    if(args->isSet("threads"))
-    {
-        bool ok = false;
-        int count = args->getOption("threads").toInt(&ok);
-        ICore::self()->languageController()->backgroundParser()->setThreadCount(count);
-        if(!ok) {
-            std::cerr << "bad thread count\n";
-            exit(0);
-        }
-    }
-    
-    Manager manager;
-    
-    args->clear();
-    
-    manager.addToBackgroundParser(dir.toLocalFile(), (TopDUContext::Features)features);
-    
-    if ( !manager.waiting().isEmpty() ) {
-        std::cout << "Added " << manager.waiting().size() << " files to the background parser" << std::endl;
-
-        app.exec();
-    } else {
-        std::cout << "no files added to the background parser" << std::endl;
-    }
+    QTimer::singleShot(0, &manager, SLOT(init()));
+    app.exec();
 }
 
 #include "main.moc"
