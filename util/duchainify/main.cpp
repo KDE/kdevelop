@@ -80,7 +80,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     if(m_waiting.isEmpty())
     {
         std::cout << "ready" << std::endl;
-        QApplication::exit();
+        QApplication::quit();
     }
 }
 
