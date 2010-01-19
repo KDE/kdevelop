@@ -66,9 +66,10 @@ GenericProjectManager::IncludeRules getIncludeRules(KDevelop::IProject* project)
 }
 
 GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
-        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IProjectFileManager()
+        : KDevelop::IPlugin( GenericSupportFactory::componentData(), parent ), KDevelop::IGenericProjectManager()
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IGenericProjectManager )
     Q_UNUSED( args )
 }
 

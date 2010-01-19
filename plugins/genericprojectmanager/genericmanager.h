@@ -19,7 +19,7 @@
 #ifndef KDEVGENERICMANAGER_H
 #define KDEVGENERICMANAGER_H
 
-#include <project/interfaces/iprojectfilemanager.h>
+#include "igenericprojectmanager.h"
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
 
@@ -48,10 +48,11 @@ class ProjectFileItem;
 
 class KDialogBase;
 
-class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IProjectFileManager
+class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IGenericProjectManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectFileManager )
+    Q_INTERFACES( KDevelop::IGenericProjectManager )
 public:
     explicit GenericProjectManager( QObject *parent = 0,
                      const QVariantList &args = QVariantList() );
