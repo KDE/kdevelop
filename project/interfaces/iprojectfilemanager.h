@@ -154,8 +154,6 @@ public:
     virtual bool reload(ProjectBaseItem* item) = 0;
 
 Q_SIGNALS:
-    void projectItemConfigWidget(const QList<ProjectBaseItem*> &dom, KDialogBase *dialog);
-
     void folderAdded( ProjectFolderItem* folder );
     void folderRemoved( ProjectFolderItem* folder );
     void folderRenamed( const KUrl& oldFolder,

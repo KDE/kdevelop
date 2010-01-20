@@ -82,8 +82,6 @@ public:
     typedef QPair<QStringList, QStringList> IncludeRules;
 
 Q_SIGNALS:
-    void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
-
     void folderAdded( KDevelop::ProjectFolderItem* folder );
     void folderRemoved( KDevelop::ProjectFolderItem* folder );
     void folderRenamed( const KUrl& oldFolder,
