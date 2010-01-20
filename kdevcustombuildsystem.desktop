@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Service
+Name=Custom BuildSystem
+Comment=KDevelop Custom BuildSystem Support
+Icon=gear
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevcustombuildsystem
+X-KDE-PluginInfo-Name=KDevCustomBuildSystem
+X-KDevelop-Version=8
+X-KDevelop-Category=Project
+X-KDevelop-Interfaces=org.kdevelop.IProjectBuilder,org.kdevelop.IProjectFileManager,org.kdevelop.IBuildSystemManager
+X-KDevelop-IRequired=org.kdevelop.IOutputView,org.kdevelop.IGenericProjectManager
+X-KDevelop-Mode=NoGUI
