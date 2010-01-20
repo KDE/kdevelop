@@ -1722,7 +1722,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   return waiter.m_topContext;
 }
 
-void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady) const {
+void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady, int priority) const {
   DUChainReadLocker lock( DUChain::lock() );
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(document.toUrl());
   if(standardContext && standardContext->parsingEnvironmentFile() && !standardContext->parsingEnvironmentFile()->needsUpdate() && standardContext->parsingEnvironmentFile()->featuresSatisfied(minFeatures)) {
@@ -1731,7 +1731,7 @@ void DUChain::updateContextForUrl(const IndexedString& document, TopDUContext::F
     QMetaObject::invokeMethod(notifyReady, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, document), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext(standardContext)));
   }else{
     ///Start a parse-job for the given document
-    ICore::self()->languageController()->backgroundParser()->addDocument(document.toUrl(), minFeatures, 1, notifyReady);
+    ICore::self()->languageController()->backgroundParser()->addDocument(document.toUrl(), minFeatures, priority, notifyReady);
   }
 }
 
