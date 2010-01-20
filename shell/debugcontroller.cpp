@@ -179,7 +179,7 @@ void DebugController::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    KAction* action = m_continueDebugger = new KAction(KIcon("media-seek-play"), i18n("&Continue"), this);
+    KAction* action = m_continueDebugger = new KAction(KIcon("media-playback-play"), i18n("&Continue"), this);
     action->setToolTip( i18n("Continues the application execution") );
     action->setWhatsThis( i18n("<b>Continue application execution</b><p>"
         "Continues the execution of your application in the "
