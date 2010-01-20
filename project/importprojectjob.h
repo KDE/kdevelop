@@ -33,14 +33,14 @@ class Job;
 
 namespace KDevelop
 {
-
+class ProjectFolderItem;
 class IProjectFileManager;
 
 class KDEVPLATFORMPROJECT_EXPORT ImportProjectJob: public KJob
 {
     Q_OBJECT
 public:
-    ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer);
+    ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer);
     virtual ~ImportProjectJob();
 
 public:

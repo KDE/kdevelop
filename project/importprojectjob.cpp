@@ -60,21 +60,16 @@ public:
 
 };
 
-ImportProjectJob::ImportProjectJob(QStandardItem *folder, IProjectFileManager *importer)
+ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer)
     : KJob(0), d(new ImportProjectJobPrivate( this ) )
 {
     setCapabilities(Killable);
     
     d->m_importer = importer;
-    ProjectFolderItem *folderItem = 0;
-    if ( folder->type() == ProjectBaseItem::Folder ||
-         folder->type() == ProjectBaseItem::BuildFolder)
-    {
-        folderItem = dynamic_cast<ProjectFolderItem*>( folder );
-        d->m_project = folderItem->project();
-        setObjectName(i18n("Project Import: %1", d->m_project->name()));
-    }
-    d->m_folder = folderItem;
+    d->m_folder = folder;
+    d->m_project = folder->project();
+    
+    setObjectName(i18n("Project Import: %1", d->m_project->name()));
 }
 
 ImportProjectJob::~ImportProjectJob()
