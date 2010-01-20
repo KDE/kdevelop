@@ -52,6 +52,6 @@ X-KDE-Library=kdevgenericmanager
 X-KDE-PluginInfo-Name=KDevGenericManager
 X-KDevelop-FileManager=None
 X-KDevelop-Version=8
-X-KDevelop-Interfaces=org.kdevelop.IProjectFileManager,org.kdevelop.IGenericManager
+X-KDevelop-Interfaces=org.kdevelop.IProjectFileManager,org.kdevelop.IGenericProjectManager
 X-KDevelop-Mode=GUI
 
