@@ -735,6 +735,11 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
         topLayout->addWidget(m_deleteButton);
         layout2->addLayout(topLayout);
+        // horizontal line
+        QFrame* line = new QFrame();
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Raised);
+        layout2->addWidget(line);
     }
 
     // everything else is added to the following widget which just has a different background color
