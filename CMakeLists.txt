@@ -1,6 +1,6 @@
 project(kdevelop4-custom-buildsystem)
 
-find_package(KDE4 4.3.82 REQUIRED)
+find_package(KDE4 4.3.0 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
 find_package(KDevPlatform 0.9.97 REQUIRED)
