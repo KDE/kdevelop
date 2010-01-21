@@ -106,6 +106,11 @@ ProjectBaseItem::~ProjectBaseItem()
     delete d;
 }
 
+KUrl ProjectBaseItem::url() const
+{
+    return KUrl();
+}
+
 IProject* ProjectBaseItem::project() const
 {
     Q_D(const ProjectBaseItem);
@@ -248,7 +253,7 @@ int ProjectFolderItem::type() const
     return ProjectBaseItem::Folder;
 }
 
-const KUrl& ProjectFolderItem::url( ) const
+KUrl ProjectFolderItem::url( ) const
 {
     Q_D(const ProjectFolderItem);
     return d->m_url;
@@ -366,7 +371,7 @@ void ProjectFileItem::setData(const QVariant& value, int role)
         ProjectBaseItem::setData(value, role);
 }
 
-const KUrl & ProjectFileItem::url( ) const
+KUrl ProjectFileItem::url( ) const
 {
     Q_D(const ProjectFileItem);
     return d->m_url;

@@ -115,6 +115,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
 
+        /** @returns the url of this item if its a file or folder related object */
+        virtual KUrl url() const;
+
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
@@ -140,7 +143,7 @@ public:
     virtual int type() const;
 
     /** Get the url of this folder */
-    const KUrl& url() const;
+    KUrl url() const;
 
     /** Get the folder name, equal to url().fileName() but faster (precomputed) */
     const QString& folderName() const;
@@ -251,7 +254,7 @@ public:
     virtual ProjectFileItem *file() const;
 
     /** Get the url of this file. */
-    const KUrl& url() const;
+    KUrl url() const;
 
     /** Get the file name, equal to url().fileName() but faster (precomputed) */
     const QString& fileName() const;
