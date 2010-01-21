@@ -204,4 +204,10 @@ KJob* CustomBuildSystem::createImportJob( ProjectFolderItem* item )
     return genericManager()->createImportJob(item);
 }
 
+KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
+{
+    KConfigGroup grp = project->projectConfiguration()->group( "CustomBuildSystem" );
+    return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
+}
+
 #include "custombuildsystemplugin.moc"

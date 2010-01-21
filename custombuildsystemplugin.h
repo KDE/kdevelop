@@ -24,6 +24,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
 
+class KConfigGroup;
 class KDialogBase;
 
 namespace KDevelop
@@ -94,6 +95,7 @@ public:
 private:
     KDevelop::IGenericProjectManager* genericManager() const;
     KDevelop::IOutputView* outputView() const;
+    KConfigGroup configuration( KDevelop::IProject* ) const;
 };
 
 #endif
