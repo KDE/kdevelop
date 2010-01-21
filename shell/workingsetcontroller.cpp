@@ -776,6 +776,11 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
         actionsLayout->addWidget(m_subtractButton);
         bodyLayout->addLayout(actionsLayout);
+        // horizontal line
+        QFrame* line = new QFrame();
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+        bodyLayout->addWidget(line);
     }
 
     QStringList files = m_set->fileList();
