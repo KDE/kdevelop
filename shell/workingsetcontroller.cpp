@@ -706,6 +706,8 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     layout->setMargin(0);
     layout->addWidget(frame);
     QVBoxLayout* layout2 = new QVBoxLayout(frame);
+    layout2->setSpacing(0);
+    layout2->setContentsMargins(0, 0, 0, 0);
 
     // title bar
     {
@@ -734,6 +736,21 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addWidget(m_deleteButton);
         layout2->addLayout(topLayout);
     }
+
+    // everything else is added to the following widget which just has a different background color
+    QVBoxLayout* bodyLayout = new QVBoxLayout;
+    {
+        QWidget* body = new QWidget();
+        body->setLayout(bodyLayout);
+        QPalette palette = body->palette();
+        QColor bgColor = palette.color(QPalette::Background);
+        bgColor.setAlpha(0.75*255);
+        palette.setColor(QPalette::Background, bgColor);
+        body->setPalette(palette);
+        body->setAutoFillBackground(true);
+        layout2->addWidget(body);
+    }
+
     // document list actions
     {
         QHBoxLayout* actionsLayout = new QHBoxLayout;
@@ -758,11 +775,10 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_subtractButton->setFlat(true);
         connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
         actionsLayout->addWidget(m_subtractButton);
-        layout2->addLayout(actionsLayout);
+        bodyLayout->addLayout(actionsLayout);
     }
 
     QStringList files = m_set->fileList();
-    layout2->setSpacing(0);
     foreach(QString file, files) {
         QHBoxLayout* fileLayout = new QHBoxLayout;
 
@@ -776,7 +792,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 //         fileLabel->setToolTip(KUrl(file).pathOrUrl());
         fileLayout->addWidget(fileLabel);
         fileLayout->setMargin(0);
-        layout2->addLayout(fileLayout);
+        bodyLayout->addLayout(fileLayout);
 
         plusButton->setObjectName(file);
         fileLabel->setObjectName(file);
