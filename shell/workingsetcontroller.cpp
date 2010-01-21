@@ -707,20 +707,37 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     layout->addWidget(frame);
     QVBoxLayout* layout2 = new QVBoxLayout(frame);
 
+    // header bar
     QHBoxLayout* topLayout = new QHBoxLayout;
     m_setButton = new WorkingSetToolButton(this, set, mainwindow);
     m_setButton->disableTooltip();
 //     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     topLayout->addWidget(m_setButton);
 
+    QLabel* name = new QLabel(i18n("Working Set"));
+    topLayout->addWidget(name);
+
+    topLayout->addSpacing(30);
+
     m_openButton = new QPushButton;
     m_openButton->setIcon(KIcon(m_set->iconName()));
+    m_openButton->setFlat(true);
     topLayout->addWidget(m_openButton);
+
+    m_deleteButton = new QPushButton;
+    m_deleteButton->setIcon(KIcon("edit-delete"));
+    m_deleteButton->setText(i18n("Delete"));
+    m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
+    m_deleteButton->setFlat(true);
+    connect(m_deleteButton, SIGNAL(clicked(bool)), m_set, SLOT(deleteSet()));
+    connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
+    topLayout->addWidget(m_deleteButton);
 
     m_mergeButton = new QPushButton;
     m_mergeButton->setIcon(KIcon("list-add"));
     m_mergeButton->setText(i18n("Add All"));
     m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
+    m_mergeButton->setFlat(true);
     connect(m_mergeButton, SIGNAL(clicked(bool)), m_setButton, SLOT(mergeSet()));
     topLayout->addWidget(m_mergeButton);
 
@@ -728,18 +745,9 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     m_subtractButton->setIcon(KIcon("list-remove"));
     m_subtractButton->setText(i18n("Subtract All"));
     m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
+    m_subtractButton->setFlat(true);
     connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
     topLayout->addWidget(m_subtractButton);
-
-    topLayout->addSpacing(30);
-
-    m_deleteButton = new QPushButton;
-    m_deleteButton->setIcon(KIcon("edit-delete"));
-    m_deleteButton->setText(i18n("Delete"));
-    m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
-    connect(m_deleteButton, SIGNAL(clicked(bool)), m_set, SLOT(deleteSet()));
-    connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
-    topLayout->addWidget(m_deleteButton);
 
 
     layout2->addLayout(topLayout);
