@@ -721,7 +721,6 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addStretch();
 
         m_openButton = new QPushButton;
-        m_openButton->setIcon(KIcon(m_set->iconName()));
         m_openButton->setFlat(true);
         topLayout->addWidget(m_openButton);
 
@@ -825,11 +824,13 @@ void WorkingSetToolTipWidget::updateFileButtons()
     if(m_set->id() == mainWindow->area()->workingSet()) {
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
-        m_openButton->setText(i18n("Close Working Set"));
+        m_openButton->setIcon(KIcon("project-development-close"));
+        m_openButton->setText(i18n("Close"));
     }else{
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
-        m_openButton->setText(i18n("Load Working Set"));
+        m_openButton->setIcon(KIcon("project-open"));
+        m_openButton->setText(i18n("Load"));
     }
 }
 
