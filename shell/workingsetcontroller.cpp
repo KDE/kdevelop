@@ -713,11 +713,13 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     {
         QHBoxLayout* topLayout = new QHBoxLayout;
         m_setButton = new WorkingSetToolButton(this, set, mainwindow);
+        // make read-only
         m_setButton->disableTooltip();
+        m_setButton->setEnabled(false);
     //     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         topLayout->addWidget(m_setButton);
 
-        QLabel* name = new QLabel(i18n("Working Set"));
+        QLabel* name = new QLabel(i18n("<b>Working Set</b>"));
         topLayout->addWidget(name);
 
         topLayout->addStretch();
