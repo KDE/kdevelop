@@ -70,6 +70,7 @@ public:
     bool removeFolder( KDevelop::ProjectFolderItem* folder );
     bool renameFile( KDevelop::ProjectFileItem* oldFile, const KUrl& newFile );
     bool renameFolder( KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder );
+    KJob* createImportJob( KDevelop::ProjectFolderItem* item );
 signals:
     void folderAdded( KDevelop::ProjectFolderItem* folder );
     void folderRemoved( KDevelop::ProjectFolderItem* folder );

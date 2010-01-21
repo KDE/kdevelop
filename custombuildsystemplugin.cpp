@@ -199,5 +199,9 @@ IOutputView* CustomBuildSystem::outputView() const
     return view;
 }
 
+KJob* CustomBuildSystem::createImportJob( ProjectFolderItem* item )
+{
+    return genericManager()->createImportJob(item);
+}
 
 #include "custombuildsystemplugin.moc"
