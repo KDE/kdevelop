@@ -28,7 +28,9 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <outputview/ioutputview.h>
+#include <util/environmentgrouplist.h>
 #include <interfaces/iplugincontroller.h>
+#include "configconstants.h"
 
 #include <genericprojectmanager/igenericprojectmanager.h>
 
@@ -37,6 +39,7 @@ using KDevelop::ProjectFolderItem;
 using KDevelop::ProjectBaseItem;
 using KDevelop::ProjectFileItem;
 using KDevelop::IPlugin;
+using KDevelop::EnvironmentGroupList;
 using KDevelop::ICore;
 using KDevelop::IOutputView;
 using KDevelop::IGenericProjectManager;
@@ -80,9 +83,15 @@ KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
     return 0;
 }
 
-KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  ) const
+KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
 {
-    return KUrl();
+    KUrl u = item->url();
+    KUrl projecturl = item->project()->projectItem()->url();
+    QString relative = KUrl::relativeUrl( projecturl, u );
+    KUrl builddir = configuration( item->project() ).readEntry( ConfigConstants::buildDirKey, projecturl );
+    builddir.addPath( relative );
+    builddir.cleanPath();
+    return builddir;
 }
 
 IProjectBuilder* CustomBuildSystem::builder( ProjectFolderItem*  ) const
@@ -105,14 +114,25 @@ ProjectTargetItem* CustomBuildSystem::createTarget( const QString& target, Proje
     return 0;
 }
 
-QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem*  ) const
+QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) const
 {
-    return QHash<QString,QString>();
+    QHash<QString,QString> hash;
+    QByteArray data = configuration( item->project() ).readEntry( ConfigConstants::definesKey, QByteArray() );
+    QDataStream ds( data );
+    ds >> hash;
+    return hash;
 }
 
-QHash< QString, QString > CustomBuildSystem::environment( ProjectBaseItem*  ) const
+QHash< QString, QString > CustomBuildSystem::environment( ProjectBaseItem* item ) const
 {
-    return QHash<QString,QString>();
+    EnvironmentGroupList l( KGlobal::config() );
+    QHash<QString,QString> envvars;
+    foreach( QString s, l.createEnvironment( configuration( item->project() ).readEntry( 
+                            ConfigConstants::environmentKey, "default" ), QStringList() ) ) {
+        int idx = s.indexOf( "=" );
+        envvars.insert( s.left( idx ), s.mid( idx+1 ) );
+    }
+    return envvars;
 }
 
 IProjectFileManager::Features CustomBuildSystem::features() const
