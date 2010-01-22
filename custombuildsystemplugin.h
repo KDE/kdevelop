@@ -1,5 +1,5 @@
 /************************************************************************
- * TinyRSS a tiny rss feed reader                                       *
+ * KDevelop4 Custom Buildsystem Support                                 *
  *                                                                      *
  * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
  *                                                                      *
