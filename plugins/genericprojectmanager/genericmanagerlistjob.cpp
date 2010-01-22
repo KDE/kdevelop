@@ -63,6 +63,9 @@ void GenericManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& 
 
 void GenericManagerListJob::startNextJob()
 {
+    if ( m_listQueue.isEmpty() ) {
+        return;
+    }
     KIO::ListJob* job = KIO::listDir( m_listQueue.dequeue()->url(), KIO::HideProgressInfo );
     connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
              this, SLOT(slotEntries(KIO::Job*, KIO::UDSEntryList)) );
