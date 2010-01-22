@@ -1,0 +1,5 @@
+File=kcfg_custombuildsystemconfig.kcfg
+ClassName=CustomBuildSystemSettings
+Singleton=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=project/projectconfigskeleton.h

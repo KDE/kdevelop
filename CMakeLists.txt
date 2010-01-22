@@ -9,12 +9,24 @@ include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
 
+## KDevelop Plugin
 set( custom_SRCS custombuildsystemplugin.cpp )
-
 kde4_add_plugin( kdevcustombuildsystem ${custom_SRCS} )
 target_link_libraries( kdevcustombuildsystem ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
-install( TARGETS kdevcustombuildsystem DESTINATION ${PLUGIN_INSTALL_DIR} )
+## KCM for the Plugin
+set( custom_kcm_SRCS configwidget.cpp custombuildsystemconfig.cpp kcm_custombuildsystem.cpp )
+kde4_add_ui_files( custom_kcm_SRCS configwidget.ui custombuildsystemconfig.ui )
+kde4_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
+kde4_add_plugin( kcm_kdevcustombuildsystem ${custom_kcm_SRCS} )
+target_link_libraries( kcm_kdevcustombuildsystem ${KDE4_KIO_LIBS} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
-install( FILES kdevcustombuildsystem.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+## Installation
+install( TARGETS kcm_kdevcustombuildsystem
+                 kdevcustombuildsystem
+         DESTINATION ${PLUGIN_INSTALL_DIR} )
+
+install( FILES kdevcustombuildsystem.desktop
+               kcm_kdevcustombuildsystem.desktop
+         DESTINATION ${SERVICES_INSTALL_DIR} )
 
