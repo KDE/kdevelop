@@ -37,7 +37,7 @@ namespace KTextEditor
 namespace KDevelop
 {
 class ISourceFormatter;
-class SourceFormatterLanguage;
+struct SourceFormatterLanguage;
 }
 
 /** \short The settings modulefor the Source formatter plugin.
