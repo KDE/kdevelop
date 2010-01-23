@@ -54,6 +54,16 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
 {
     ui->setupUi( this );
     ui->kcfg_gdbPath->setMode(KFile::File|KFile::ExistingOnly|KFile::LocalOnly);
+    connect(ui->kcfg_asmDemangle, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    connect(ui->kcfg_breakOnLoadingLibrary, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    connect(ui->kcfg_configGdbScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+    connect(ui->kcfg_dbgTerminal, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    connect(ui->kcfg_debuggingShell, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+    connect(ui->kcfg_displayStaticMembers, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    connect(ui->kcfg_enableFloatingToolBar, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    connect(ui->kcfg_gdbPath, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+    connect(ui->kcfg_runGdbScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
+    connect(ui->kcfg_runShellScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
 }
 
 KIcon GdbConfigPage::icon() const
@@ -63,6 +73,7 @@ KIcon GdbConfigPage::icon() const
 
 void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IProject*  )
 {
+    bool block = blockSignals( true );
     ui->kcfg_gdbPath->setUrl( cfg.readEntry( GDBDebugger::gdbPathEntry, KUrl() ) );
     ui->kcfg_debuggingShell->setUrl( cfg.readEntry( GDBDebugger::debuggerShellEntry, KUrl() ) );
     ui->kcfg_configGdbScript->setUrl( cfg.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() ) );
@@ -75,6 +86,7 @@ void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IP
     ui->kcfg_breakOnLoadingLibrary->setChecked( cfg.readEntry( GDBDebugger::breakOnLibLoadEntry, true) );
     ui->kcfg_dbgTerminal->setChecked( cfg.readEntry( GDBDebugger::separateTerminalEntry, false) );
     ui->kcfg_enableFloatingToolBar->setChecked( cfg.readEntry(GDBDebugger::floatingToolbarEntry, false) );
+    blockSignals( block );
 }
 
 void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* ) const
