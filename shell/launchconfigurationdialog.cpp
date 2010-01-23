@@ -141,6 +141,7 @@ void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemS
                 } else {
                     LaunchConfigPagesContainer* tab = qobject_cast<LaunchConfigPagesContainer*>( stack->currentWidget() );
                     tab->setLaunchConfiguration( l );
+                    button( KDialog::Apply )->setEnabled( false );
                     currentPageChanged = false;
                 }
             }
