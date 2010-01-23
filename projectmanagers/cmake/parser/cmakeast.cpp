@@ -464,11 +464,17 @@ bool AddExecutableAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 
 }
 
+QMap<QString, AddLibraryAst::LibraryType> AddLibraryAst::s_typeForName;
 AddLibraryAst::AddLibraryAst()
 {
-    m_isShared = false;
-    m_isStatic = true;
-    m_isModule = false;
+    if(s_typeForName.isEmpty()) {
+        s_typeForName.insert("STATIC", Static);
+        s_typeForName.insert("SHARED", Shared);
+        s_typeForName.insert("MODULE", Module);
+        s_typeForName.insert("UNKNOWN", Unknown);
+    }
+    
+    m_type = Static;
     m_isImported = false;
     m_excludeFromAll = false;
 }
@@ -490,21 +496,9 @@ bool AddLibraryAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     ++it;
     for(; it != itEnd;)
     {
-        if ( it->value == "STATIC" && !libTypeSet )
+        if ( !libTypeSet && s_typeForName.contains(it->value) )
         {
-            m_isStatic = true;
-            libTypeSet = true;
-            ++it;
-        }
-        else if ( it->value == "SHARED" && !libTypeSet )
-        {
-            m_isShared = true;
-            libTypeSet = true;
-            ++it;
-        }
-        else if ( it->value == "MODULE" && !libTypeSet )
-        {
-            m_isModule = true;
+            m_type = s_typeForName.value(it->value);
             libTypeSet = true;
             ++it;
         }

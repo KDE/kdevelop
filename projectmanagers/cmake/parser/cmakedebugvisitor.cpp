@@ -228,7 +228,7 @@ int CMakeAstDebugVisitor::visit( const AddSubdirectoryAst * ast )
 
 int CMakeAstDebugVisitor::visit( const AddLibraryAst * ast )
 {
-    WRITEOUT << "ADDLIBRARY: " << "(isModule,isShared,isStatic,excludeFromAll,libraryName,sourceLists) = (" << ast->isModule() << "," << ast->isShared() << "," << ast->isStatic() << "," << ast->excludeFromAll() << "," << ast->libraryName() << "," << ast->sourceLists() << ")";
+    WRITEOUT << "ADDLIBRARY: " << "(type,excludeFromAll,libraryName,sourceLists) = (" << ast->type() << "," << ast->excludeFromAll() << "," << ast->libraryName() << "," << ast->sourceLists() << ")";
     return 1;
 }
 
