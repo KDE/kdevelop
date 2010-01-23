@@ -1,3 +1,4 @@
+add_subdirectory(tests)
 
 configure_file( gdbinit ${CMAKE_CURRENT_BINARY_DIR}/gdbinit )
 

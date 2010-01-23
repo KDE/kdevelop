@@ -29,7 +29,11 @@ class QStringPrinter:
         ret = ""
         i = 0
         while i < self.val['d']['size']:
-            ret += chr(self.val['d']['data'][i])
+            if self.val['d']['data'][i] > 256:
+                #TODO: fix this properly
+                ret += '?'
+            else:
+                ret += chr(self.val['d']['data'][i])
             i = i + 1
         return ret
 
@@ -87,19 +91,23 @@ class QListPrinter:
 
             #from QTypeInfo::isLarge
             isLarge = self.nodetype.sizeof > gdb.lookup_type('void').pointer().sizeof
-            isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
 
-            #unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
-            #this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
-            #(obviously it won't work for custom types)
-            movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
-                'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
-                'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
-                'QXmlStreamEntityDeclaration']
-            if movableTypes.count(self.nodetype.tag):
-                isStatic = False
-            else:
-                isStatic = not(isPointer)
+            #isStatic is not needed anymore since Qt 4.6
+            #isPointer = self.nodetype.code == gdb.TYPE_CODE_PTR
+            #
+            ##unfortunately we can't use QTypeInfo<T>::isStatic as it's all inlined, so use
+            ##this list of types that use Q_DECLARE_TYPEINFO(T, Q_MOVABLE_TYPE)
+            ##(obviously it won't work for custom types)
+            #movableTypes = ['QRect', 'QRectF', 'QString', 'QMargins', 'QLocale', 'QChar', 'QDate', 'QTime', 'QDateTime', 'QVector',
+            #    'QRegExpr', 'QPoint', 'QPointF', 'QByteArray', 'QSize', 'QSizeF', 'QBitArray', 'QLine', 'QLineF', 'QModelIndex', 'QPersitentModelIndex',
+            #    'QVariant', 'QFileInfo', 'QUrl', 'QXmlStreamAttribute', 'QXmlStreamNamespaceDeclaration', 'QXmlStreamNotationDeclaration',
+            #    'QXmlStreamEntityDeclaration']
+            #if movableTypes.count(self.nodetype.tag):
+            #    isStatic = False
+            #else:
+            #    isStatic = not isPointer
+            isStatic = False
+
             if isLarge or isStatic: #see QList::Node::t()
                 node = array.cast(gdb.lookup_type('QList<%s>::Node' % self.nodetype).pointer())
             else:
@@ -197,11 +205,11 @@ class QHashPrinter:
     class _iterator:
         def __init__(self, val):
             self.val = val
+            self.d = self.val['d']
             self.ktype = self.val.type.template_argument(0)
             self.vtype = self.val.type.template_argument(1)
-            self.bucketNum = 0
-            self.data_node = self.val['d']['buckets'][0]
-            self.end_node = self.val['d'].cast(gdb.lookup_type('QHashData::Node').pointer())
+            self.end_node = self.d.cast(gdb.lookup_type('QHashData::Node').pointer())
+            self.data_node = self.firstNode()
             self.count = 0
 
         def __iter__(self):
@@ -209,23 +217,68 @@ class QHashPrinter:
 
         def hashNode (self):
             "Casts the current QHashData::Node to a QHashNode and returns the result. See also QHash::concrete()"
+            return self.data_node.cast(gdb.lookup_type('QHashNode<%s, %s>' % (self.ktype, self.vtype)).pointer())
 
-            node_type = gdb.lookup_type('QHashNode<%s, %s>' % (self.ktype, self.vtype)).pointer()
-            return self.data_node.cast(node_type)
+        def firstNode (self):
+            "Get the first node, See QHashData::firstNode()."
+            e = self.d.cast(gdb.lookup_type('QHashData::Node').pointer())
+            #print "QHashData::firstNode() e %s" % e
+            bucketNum = 0
+            bucket = self.d['buckets'][bucketNum]
+            #print "QHashData::firstNode() *bucket %s" % bucket
+            n = self.d['numBuckets']
+            #print "QHashData::firstNode() n %s" % n
+            n -= 1
+            while n:
+                #print "QHashData::firstNode() in while, n %s" % n;
+                if bucket != e:
+                    #print "QHashData::firstNode() in while, return *bucket %s" % bucket
+                    return bucket
+                bucketNum += 1
+                bucket = self.d['buckets'][bucketNum]
+                #print "QHashData::firstNode() in while, new bucket %s" % bucket
+                n -= 1
+            #print "QHashData::firstNode() return e %s" % e
+            return e
 
-        def nextNode (self):
+
+        def nextNode (self, node):
             "Get the nextNode after the current, see also QHashData::nextNode()."
+            #print "******************************** nextNode"
+            e = self.d.cast(gdb.lookup_type('QHashData::Node').pointer())
 
-            next = self.data_node['next']
+            #print "nextNode: node %s" % node
+
+            next = node['next']
+            #print "nextNode: next %s" % next
             if next['next']:
+                #return "nextNode: return next"
                 return next
-            else:
-                self.bucketNum = self.bucketNum + 1
-                return self.val['d']['buckets'][self.bucketNum]
+
+            #print "nextNode: node->h %s" % node['h']
+            #print "nextNode: numBuckets %s" % self.d['numBuckets']
+            start = (node['h'] % self.d['numBuckets']) + 1
+            bucketNum = start
+            #print "nextNode: start %s" % start
+            bucket = self.d['buckets'][start]
+            #print "nextNode: bucket %s" % bucket
+            n = self.d['numBuckets'] - start
+            #print "nextNode: n %s" % n
+            while n:
+                #print "nextNode: in while; n %s" % n
+                #print "nextNode: in while; e %s" % e
+                #print "nextNode: in while; *bucket %s" % bucket
+                if bucket != e:
+                    #print "nextNode: in while; return bucket %s" % bucket
+                    return bucket
+                bucketNum += 1
+                bucket = self.d['buckets'][bucketNum]
+                n -= 1
+            #print "nextNode: return e %s" % e
+            return e
 
         def next(self):
             "GDB iteration, first call returns key, second value and then jumps to the next hash node."
-
             if self.data_node == self.end_node:
                 raise StopIteration
 
@@ -235,7 +288,7 @@ class QHashPrinter:
                 item = node['key']
             else:
                 item = node['value']
-                self.data_node = self.nextNode()
+                self.data_node = self.nextNode(self.data_node)
 
             self.count = self.count + 1
             return ('[%d]' % self.count, item)
@@ -340,7 +393,55 @@ class QUrlPrinter:
         self.val = val
 
     def to_string(self):
-        return "QUrl(\"%s\")" % QByteArrayPrinter(self.val['d']['encodedOriginal']).to_string()
+        try:
+            return self.val['d']['encodedOriginal']
+        except RuntimeError as error:
+            #if no debug information is avaliable for Qt, try guessing the correct address for encodedOriginal
+            #problem with this is that if QUrlPrivate members get changed, this fails
+            offset = gdb.lookup_type('int').sizeof
+            offset += offset % gdb.lookup_type('void').pointer().sizeof #alignment
+            offset += gdb.lookup_type('QString').sizeof * 6
+            offset += gdb.lookup_type('QByteArray').sizeof
+            encodedOriginal = self.val['d'].cast(gdb.lookup_type('char').pointer());
+            encodedOriginal += offset
+            encodedOriginal = encodedOriginal.cast(gdb.lookup_type('QByteArray').pointer()).dereference();
+            encodedOriginal = encodedOriginal['d']['data'].string()
+            return encodedOriginal
+
+class QSetPrinter:
+    "Print a QSet"
+
+    def __init__(self, val):
+        self.val = val
+
+    class _iterator:
+        def __init__(self, hashIterator):
+            self.hashIterator = hashIterator
+            self.count = 0
+
+        def __iter__(self):
+            return self
+
+        def next(self):
+            if self.hashIterator.data_node == self.hashIterator.end_node:
+                raise StopIteration
+
+            node = self.hashIterator.hashNode()
+
+            item = node['key']
+            self.hashIterator.data_node = self.hashIterator.nextNode(self.hashIterator.data_node)
+
+            self.count = self.count + 1
+            return ('[%d]' % (self.count-1), item)
+
+    def children(self):
+        hashPrinter = QHashPrinter(self.val['q_hash'])
+        hashIterator = hashPrinter._iterator(self.val['q_hash'])
+        return self._iterator(hashIterator)
+
+    def to_string(self):
+        return 'QSet'
+
 
 def register_qt4_printers (obj):
     if obj == None:
@@ -387,6 +488,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QTime$')] = lambda val: QTimePrinter(val)
     pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
     pretty_printers_dict[re.compile('^QUrl$')] = lambda val: QUrlPrinter(val)
+    pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
 
 
 pretty_printers_dict = {}
