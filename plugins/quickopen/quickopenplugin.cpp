@@ -236,8 +236,6 @@ QString cursorItemText() {
 
   TopDUContext* context = DUChainUtils::standardContextForUrl( doc->url() );
 
-// Hallo hier steht ein mist
-
   if( !context ) {
     kDebug() << "Got no standard context";
     return QString();
@@ -250,8 +248,6 @@ QString cursorItemText() {
 
   if(!decl->qualifiedIdentifier().isEmpty())
     return decl->qualifiedIdentifier().last().identifier().str();
-
-// Und hier ein anderer
 
   return QString();
 }
