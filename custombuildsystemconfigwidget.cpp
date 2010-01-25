@@ -93,7 +93,7 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* )
 void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
 {
     if( idx == -1 ) {
-        idx = 0;
+        return;
     }
     Q_ASSERT( idx >= 0 && idx < configs.size() );
     CustomBuildSystemConfig cfg = configs.at( idx );
