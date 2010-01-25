@@ -306,6 +306,8 @@ void VariableCollection::variableWidgetShown()
 
 void VariableCollection::updateAutoUpdate(IDebugSession* session)
 {
+    if (!session) session = currentSession();
+    kDebug() << session;
     if (!session) return;
 
     if (!m_widgetVisible) {
