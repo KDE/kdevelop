@@ -189,6 +189,7 @@ void DebugController::setupActions()
     ac->addAction("debug_continue", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(run()));
 
+    #if 0
     m_restartDebugger = action = new KAction(KIcon("media-seek-backward"), i18n("&Restart"), this);
     action->setToolTip( i18n("Restart program") );
     action->setWhatsThis( i18n("<b>Restarts application</b><p>"
@@ -197,6 +198,7 @@ void DebugController::setupActions()
     action->setEnabled(false);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(restartDebugger()));
     ac->addAction("debug_restart", action);
+    #endif
 
 
     m_stopDebugger = action = new KAction(KIcon("media-playback-stop"), i18n("Sto&p"), this);
@@ -379,25 +381,25 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
         case IDebugSession::StoppingState:
             kDebug() << "new state: stopped";
             stateChanged("stopped");
-            m_restartDebugger->setEnabled(session->restartAvaliable());
+            //m_restartDebugger->setEnabled(session->restartAvaliable());
             break;
         case IDebugSession::StartingState:
         case IDebugSession::PausedState:
             kDebug() << "new state: paused";
             stateChanged("paused");
-            m_restartDebugger->setEnabled(session->restartAvaliable());
+            //m_restartDebugger->setEnabled(session->restartAvaliable());
             break;
         case IDebugSession::ActiveState:
             kDebug() << "new state: active";
             stateChanged("active");
-            m_restartDebugger->setEnabled(false);
+            //m_restartDebugger->setEnabled(false);
             clearExecutionPoint();
             break;
         case IDebugSession::EndedState:
             kDebug() << "new state: ended";
             stateChanged("ended");
             clearExecutionPoint();
-            m_restartDebugger->setEnabled(false);
+            //m_restartDebugger->setEnabled(false);
             break;
     }
 }
@@ -423,11 +425,14 @@ ContextMenuExtension DebugController::contextMenuExtension( Context* context )
     return menuExt;
 }
 
+#if 0
 void DebugController::restartDebugger() {
     if (m_currentSession) {
         m_currentSession->restartDebugger();
     }
 }
+#endif
+
 void DebugController::stopDebugger() {
     if (m_currentSession) {
         m_currentSession->stopDebugger();

@@ -59,7 +59,7 @@ public:
     virtual VariableCollection* variableCollection();
 
 private Q_SLOTS:
-    void restartDebugger();
+    //void restartDebugger();
     void stopDebugger();
     void interruptDebugger();
     void run();
@@ -88,7 +88,7 @@ private:
     static const QPixmap* executionPointPixmap();
 
     KAction* m_continueDebugger;
-    KAction* m_restartDebugger;
+    //KAction* m_restartDebugger;
     KAction* m_stopDebugger;
     KAction* m_interruptDebugger;
     KAction* m_runToCursor;
