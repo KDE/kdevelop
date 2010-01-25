@@ -23,6 +23,7 @@
 #include <QWidget>
 
 #include "custombuildsystemconfig.h"
+#include <qabstractitemmodel.h>
 
 namespace Ui
 {
@@ -36,9 +37,18 @@ public:
     ConfigWidget( QWidget* parent = 0 );
     void loadConfig( CustomBuildSystemConfig cfg );
     CustomBuildSystemConfig config() const;
+signals:
+    void changed();
+private slots:
+    void changeAction(int);
 private:
+    void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
+    void fillIncludes( const QMap<QString,QStringList>& includes );
+    void fillDefines( const QMap<QString,QHash<QString,QString> >& defines );
+    void fillEnvironments( const QMap<QString,QString>& envs );
     Ui::ConfigWidget* ui;
     CustomBuildSystemConfig m_config;
+    int lastConfiguredActionTool;
 };
 
 #endif
