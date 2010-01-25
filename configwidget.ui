@@ -24,16 +24,87 @@
       </widget>
      </item>
      <item>
-      <widget class="KUrlRequester" name="buildDir"/>
+      <widget class="KUrlRequester" name="buildDir">
+       <property name="toolTip">
+        <string>Select the directory where the tools are being executed in.
+If this is the same as the source directory you can leave it empty.</string>
+       </property>
+       <property name="mode">
+        <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
+       </property>
+       <property name="clickMessage">
+        <string>The directory where the tools are executed</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
    <item>
     <widget class="QToolBox" name="toolBox">
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="includesPage">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>637</width>
+        <height>381</height>
+       </rect>
+      </property>
+      <attribute name="label">
+       <string>Include/Import Paths</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Configure Include/Import paths</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Project Path:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Include/Import
+Paths:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QListWidget" name="includePaths">
+         <property name="toolTip">
+          <string>The includes/imports to be used for the selected project path</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="KComboBox" name="kcombobox">
+         <property name="toolTip">
+          <string>Select the Project Path to configure includes/imports for.
+Use &quot;/&quot; to configure project-wide includes/imports.</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="autoCompletion">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="toolsPage">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -44,6 +115,9 @@
       </property>
       <attribute name="label">
        <string>Tools</string>
+      </attribute>
+      <attribute name="toolTip">
+       <string>Configure the tools for your buildsystem</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -56,7 +130,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="buildAction"/>
+          <widget class="KComboBox" name="buildAction"/>
          </item>
          <item>
           <spacer name="horizontalSpacer">
@@ -93,7 +167,11 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="KUrlRequester" name="actionExecutable"/>
+           <widget class="KUrlRequester" name="actionExecutable">
+            <property name="toolTip">
+             <string>This is the executable that should be executed when selecting the action from the Project menu</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_8">
@@ -103,7 +181,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="actionArguments"/>
+           <widget class="QLineEdit" name="actionArguments">
+            <property name="toolTip">
+             <string>The arguments that the tool needs to execute properly.</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_9">
@@ -113,7 +195,11 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QComboBox" name="actionEnvironment"/>
+           <widget class="QComboBox" name="actionEnvironment">
+            <property name="toolTip">
+             <string>Choose a pre-configured environment for your tool</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -133,50 +219,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>637</width>
-        <height>381</height>
-       </rect>
-      </property>
-      <attribute name="label">
-       <string>Include/Import Paths</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Project Path:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="includeProjectPath">
-         <property name="editable">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Include/Import
-Paths:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QListView" name="includePaths"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="page_3">
+     <widget class="QWidget" name="definesPage">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -188,18 +231,14 @@ Paths:</string>
       <attribute name="label">
        <string>Defines</string>
       </attribute>
+      <attribute name="toolTip">
+       <string>Setup Defines for your project</string>
+      </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
         <widget class="QLabel" name="label">
          <property name="text">
           <string>Project Path:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="definesProjectPath">
-         <property name="editable">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -213,8 +252,14 @@ Paths:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
+       <item row="1" column="2">
         <widget class="QTableWidget" name="defines">
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
          <column>
           <property name="text">
            <string>Define</string>
@@ -227,9 +272,23 @@ Paths:</string>
          </column>
         </widget>
        </item>
+       <item row="0" column="2">
+        <widget class="KComboBox" name="definesProjectPath">
+         <property name="toolTip">
+          <string>Select the Project Path to configure defines for.
+Use &quot;/&quot; to configure project-wide defines.</string>
+         </property>
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="autoCompletion">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_4">
+     <widget class="QWidget" name="environmentsPage">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -241,12 +300,25 @@ Paths:</string>
       <attribute name="label">
        <string>Environment Variables</string>
       </attribute>
+      <attribute name="toolTip">
+       <string>Setup Environment variables for your project</string>
+      </attribute>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QTableWidget" name="environments">
+         <property name="toolTip">
+          <string>Setup Environments to be used in specific parts of your project.
+Use &quot;/&quot; to indicate project-wide environment</string>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>true</bool>
+         </attribute>
          <column>
           <property name="text">
-           <string>Path</string>
+           <string>Project Path</string>
           </property>
          </column>
          <column>
@@ -267,6 +339,11 @@ Paths:</string>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
