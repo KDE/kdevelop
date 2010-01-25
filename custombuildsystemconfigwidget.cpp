@@ -77,7 +77,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
                 tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, KUrl() );
                 tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, "default" );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
-                config.tools << tool;
+                config.tools.insert( tool.type, tool );
             }
         }
         configs << config;

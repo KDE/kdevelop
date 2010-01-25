@@ -34,12 +34,14 @@ struct CustomBuildSystemTool
     ActionType type;
 };
 
+Q_DECLARE_METATYPE( CustomBuildSystemTool );
+
 struct CustomBuildSystemConfig
 {
     QString title;
     QString grpName;
     KUrl buildDir;
-    QList<CustomBuildSystemTool> tools;
+    QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool> tools;
     QMap<QString, QStringList> includes;
     QMap<QString, QHash<QString,QString> > defines;
     QMap<QString, QString> environments;
