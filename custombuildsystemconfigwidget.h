@@ -17,15 +17,34 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
+#ifndef CUSTOMBUILDSYSTEMCONFIGWIDGET_H
+#define CUSTOMBUILDSYSTEMCONFIGWIDGET_H
+
+#include <QWidget>
 #include "custombuildsystemconfig.h"
 
-#include "ui_custombuildsystemconfig.h"
+class KConfig;
 
-CustomBuildSystemConfig::CustomBuildSystemConfig( QWidget* parent )
-    : QWidget( parent ), ui( new Ui::CustomBuildSystemConfig )
+namespace Ui
 {
-    ui->setupUi( this );
+class CustomBuildSystemConfigWidget;
 }
 
-#include "custombuildsystemconfig.moc"
+class CustomBuildSystemConfigWidget : public QWidget
+{
+Q_OBJECT
+public:
+    CustomBuildSystemConfigWidget( QWidget* parent = 0 );
+    void loadFrom( KConfig* );
+    void saveTo( KConfig* );
+    void loadDefaults();
+signals:
+    void changed();
+private slots:
+    void changeCurrentConfig(int);
+private:
+    Ui::CustomBuildSystemConfigWidget* ui;
+    QList<CustomBuildSystemConfig> configs;
+};
 
+#endif

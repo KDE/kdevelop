@@ -20,20 +20,29 @@
 #ifndef CUSTOMBUILDSYSTEMCONFIG_H
 #define CUSTOMBUILDSYSTEMCONFIG_H
 
-#include <QWidget>
+#include <QMap>
+#include <QList>
+#include <QHash>
+#include <KUrl>
 
-namespace Ui
+struct CustomBuildSystemTool
 {
-class CustomBuildSystemConfig;
-}
+    enum ActionType { Build = 0, Configure, Install, Clean };
+    KUrl executable;
+    QString arguments;
+    QString envGrp;
+    ActionType type;
+};
 
-class CustomBuildSystemConfig : public QWidget
+struct CustomBuildSystemConfig
 {
-Q_OBJECT
-public:
-    CustomBuildSystemConfig( QWidget* parent = 0 );
-private:
-    Ui::CustomBuildSystemConfig* ui;
+    QString title;
+    QString grpName;
+    KUrl buildDir;
+    QList<CustomBuildSystemTool> tools;
+    QMap<QString, QStringList> includes;
+    QMap<QString, QHash<QString,QString> > defines;
+    QMap<QString, QString> environments;
 };
 
 #endif

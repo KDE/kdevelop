@@ -22,6 +22,8 @@
 
 #include <QWidget>
 
+#include "custombuildsystemconfig.h"
+
 namespace Ui
 {
 class ConfigWidget;
@@ -32,8 +34,11 @@ class ConfigWidget : public QWidget
 Q_OBJECT
 public:
     ConfigWidget( QWidget* parent = 0 );
+    void loadConfig( CustomBuildSystemConfig cfg );
+    CustomBuildSystemConfig config() const;
 private:
     Ui::ConfigWidget* ui;
+    CustomBuildSystemConfig m_config;
 };
 
 #endif

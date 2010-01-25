@@ -40,6 +40,7 @@ public:
     virtual void load();
     virtual void save();
 private:
+    class CustomBuildSystemConfigWidget* configWidget;
 };
 
 #endif

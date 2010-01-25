@@ -27,5 +27,15 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     ui->setupUi( this );
 }
 
+CustomBuildSystemConfig ConfigWidget::config() const
+{
+    return m_config;
+}
+
+void ConfigWidget::loadConfig(CustomBuildSystemConfig cfg)
+{
+}
+
+
 #include "configwidget.moc"
 

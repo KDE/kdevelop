@@ -127,7 +127,7 @@ QHash< QString, QString > CustomBuildSystem::environment( ProjectBaseItem* item 
 {
     EnvironmentGroupList l( KGlobal::config() );
     QHash<QString,QString> envvars;
-    foreach( QString s, l.createEnvironment( configuration( item->project() ).readEntry( 
+    foreach( QString s, l.createEnvironment( configuration( item->project() ).readEntry(
                             ConfigConstants::environmentKey, "default" ), QStringList() ) ) {
         int idx = s.indexOf( "=" );
         envvars.insert( s.left( idx ), s.mid( idx+1 ) );
@@ -226,7 +226,7 @@ KJob* CustomBuildSystem::createImportJob( ProjectFolderItem* item )
 
 KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
 {
-    KConfigGroup grp = project->projectConfiguration()->group( "CustomBuildSystem" );
+    KConfigGroup grp = project->projectConfiguration()->group( ConfigConstants::customBuildSystemGroup );
     return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
 }
 

@@ -22,7 +22,7 @@
 #include <KPluginFactory>
 #include <QVBoxLayout>
 
-#include "custombuildsystemconfig.h"
+#include "custombuildsystemconfigwidget.h"
 #include "kcfg_custombuildsystemconfig.h"
 
 K_PLUGIN_FACTORY(CustomBuildSystemKCModuleFactory, registerPlugin<CustomBuildSystemKCModule>(); )
@@ -32,10 +32,11 @@ CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVa
     : ProjectKCModule<CustomBuildSystemSettings>( CustomBuildSystemKCModuleFactory::componentData(), parent, args )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
-    CustomBuildSystemConfig* w = new CustomBuildSystemConfig;
-    layout->addWidget( w );
+    configWidget = new CustomBuildSystemConfigWidget( this );
+    connect( configWidget, SIGNAL(changed()), SIGNAL(changed()) );
+    layout->addWidget( configWidget );
 
-    addConfig( CustomBuildSystemSettings::self(), w );
+    addConfig( CustomBuildSystemSettings::self(), configWidget );
     load();
 }
 
@@ -46,16 +47,19 @@ CustomBuildSystemKCModule::~CustomBuildSystemKCModule()
 void CustomBuildSystemKCModule::load()
 {
     KCModule::load();
+    configWidget->loadFrom( CustomBuildSystemSettings::self()->config() );
 }
 
 void CustomBuildSystemKCModule::save()
 {
     KCModule::save();
+    configWidget->saveTo( CustomBuildSystemSettings::self()->config() );
 }
 
 void CustomBuildSystemKCModule::defaults()
 {
     KCModule::defaults();
+    configWidget->loadDefaults();
 }
 
 #include "kcm_custombuildsystem.moc"
