@@ -106,6 +106,8 @@ private:
     QToolButton*    m_Interrupt;
     QTextEdit*      m_gdbView;
 
+    bool m_cmdEditorHadFocus;
+
     void setShowInternalCommands(bool);
     friend class OutputText;
 

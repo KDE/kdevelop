@@ -301,7 +301,9 @@ void GDBOutputWidget::flushPending()
     m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_gdbView->setUpdatesEnabled(true);
     m_gdbView->update();
-    m_userGDBCmdEditor->setFocus();
+    if (m_cmdEditorHadFocus) {
+        m_userGDBCmdEditor->setFocus();
+    }
 }
 
 /***************************************************************************/
@@ -322,6 +324,9 @@ void GDBOutputWidget::slotStateChanged(DBGStateFlags oldStatus, DBGStateFlags ne
 
     if (newStatus & s_dbgBusy)
     {
+        if (m_userGDBCmdEditor->isEnabled()) {
+            m_cmdEditorHadFocus = m_userGDBCmdEditor->hasFocus();
+        }
         m_userGDBCmdEditor->setEnabled(false);
     }
     else
