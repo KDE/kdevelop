@@ -54,9 +54,6 @@ private slots:
     void locateCurrentDocument();
     void updateSyncAction();
     void openUrl( const KUrl& );
-    void fileCreated( const QString & );
-    void fileDirty( const QString & );
-    void fileDeleted( const QString & );
 
 private:
     KAction* m_syncAction;

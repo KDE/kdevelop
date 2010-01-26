@@ -174,19 +174,6 @@ void ProjectManagerView::locateCurrentDocument()
     }
 }
 
-void ProjectManagerView::fileDirty( const QString &fileName )
-{
-    Q_UNUSED(fileName)
-}
-void ProjectManagerView::fileCreated( const QString &fileName )
-{
-    Q_UNUSED(fileName)
-}
-void ProjectManagerView::fileDeleted( const QString &fileName )
-{
-    Q_UNUSED(fileName)
-}
-
 void ProjectManagerView::openUrl( const KUrl& url )
 {
         ICore::self()->documentController()->openDocument( url );
