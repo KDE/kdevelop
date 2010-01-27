@@ -22,6 +22,7 @@
 #include <language/duchain/indexedstring.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
+#include <editor/modificationrevision.h>
 
 namespace KDevelop {
     
@@ -47,6 +48,7 @@ QString CodeRepresentation::rangeText(KTextEditor::Range range) const
 class EditorCodeRepresentation : public DynamicCodeRepresentation {
   public:
   EditorCodeRepresentation(KTextEditor::Document* document) : m_document(document) {
+      m_url = IndexedString(m_document->url());
   }
   QString line(int line) const {
     if(line < 0 || line >= m_document->lines())
@@ -63,7 +65,9 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   }
   
   bool setText(QString text) {
-    return m_document->setText(text);
+    bool ret = m_document->setText(text);
+    ModificationRevision::clearModificationCache(m_url);
+    return ret;
   }
   
   bool fileExists(){
@@ -84,7 +88,10 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
           return false;
       }
       
-      return m_document->replaceText(range, newText);
+      bool ret = m_document->replaceText(range, newText);
+      ModificationRevision::clearModificationCache(m_url);
+      
+      return ret;
   }
   
   virtual QString rangeText(KTextEditor::Range range) const {
@@ -93,6 +100,7 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
   
   private:
     KTextEditor::Document* m_document;
+    IndexedString m_url;
 };
 
 class FileCodeRepresentation : public CodeRepresentation {
@@ -128,10 +136,15 @@ class FileCodeRepresentation : public CodeRepresentation {
       QString localFile(m_document.toUrl().toLocalFile());
 
       QFile file( localFile );
-      if ( file.open(QIODevice::WriteOnly) ) {
+      if ( file.open(QIODevice::WriteOnly) )
+      {
           QByteArray data = text.toLocal8Bit();
+          
           if(file.write(data) == data.size())
+          {
+              ModificationRevision::clearModificationCache(m_document);
               return true;
+          }
       }
       return false;
     }
