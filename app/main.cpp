@@ -123,7 +123,6 @@ int main( int argc, char *argv[] )
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
-    options.add("profile <profile>", ki18n( "Profile to load" ));
     options.add("s <session>", ki18n("Session to load" ));
     options.add("sessions", ki18n( "List available sessions and quit" ));
     options.add("project <project>", ki18n( "Url to project to load" ));
