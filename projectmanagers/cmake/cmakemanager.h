@@ -102,7 +102,7 @@ public:
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject *project );
     
-    virtual bool reload(KDevelop::ProjectBaseItem*);
+    virtual bool reload(KDevelop::ProjectFolderItem*);
 
     KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
     

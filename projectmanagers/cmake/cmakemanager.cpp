@@ -618,25 +618,28 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     return folderList;
 }
 
-bool CMakeManager::reload(KDevelop::ProjectBaseItem* it)
+bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
-    CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(it->folder());
-    while(!item && it->parent()) {
-        it=dynamic_cast<ProjectBaseItem*>(it->parent());
-        item=dynamic_cast<CMakeFolderItem*>(it->folder());
+    CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
+    if ( !item ) {
+        QStandardItem* it = folder;
+        while(!item && it->parent()) {
+            it = it->parent();
+            item = dynamic_cast<CMakeFolderItem*>(it);
+        }
     }
-    
-    if (!item || it == it->project()->projectItem()) {
-        it->project()->reloadModel();
+
+    if (!item || folder == folder->project()->projectItem()) {
+        folder->project()->reloadModel();
     } else {
         CMakeFolderItem* former=item->formerParent();
         QStandardItem* parent=item->parent();
         KUrl url=item->url();
         IProject* project=item->project();
-        
+
         item->parent()->removeRow(item->row());
         CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), 0);
-                                                    
+
         fi->setFormerParent(former);
         parent->appendRow(fi);
         reimport(fi);
