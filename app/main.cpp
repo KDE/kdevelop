@@ -53,6 +53,10 @@
 #include <KMessageBox>
 #include <KProcess>
 
+#include <iostream>
+#include <QtCore/QTextStream>
+#include <shell/session.h>
+
 using KDevelop::Core;
 
 int main( int argc, char *argv[] )
@@ -121,6 +125,7 @@ int main( int argc, char *argv[] )
     KCmdLineOptions options;
     options.add("profile <profile>", ki18n( "Profile to load" ));
     options.add("s <session>", ki18n("Session to load" ));
+    options.add("sessions", ki18n( "List available sessions and quit" ));
     options.add("project <project>", ki18n( "Url to project to load" ));
     options.add("+files", ki18n( "Files to load" ));
     KCmdLineArgs::addCmdLineOptions( options );
@@ -128,6 +133,17 @@ int main( int argc, char *argv[] )
 
     KApplication app;
     KDevIDEExtension::init();
+    if(args->isSet("sessions"))
+    {
+        QTextStream qout(stdout);
+        qout << endl << ki18n("Available sessions (use '-s HASH' to open a specific one):").toString() << endl << endl;
+        qout << QString("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Session contents").toString() << endl;
+        foreach(const QPointer<KDevelop::Session> session, KDevelop::SessionController::availableSessions())
+        {
+            qout << session->id().toString() << '\t' << session->description() << endl;
+        }
+        return 0;
+    }
 
     ///Manage sessions: There always needs a KDEV_SESSION to be set, so the duchain can be stored in the session-specific directory
     QString session = args->getOption("s");
