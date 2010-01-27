@@ -151,7 +151,7 @@ public:
      *
      * Reloads the item specified by @p item
      */
-    virtual bool reload(ProjectBaseItem* item) = 0;
+    virtual bool reload(ProjectFolderItem* item) = 0;
 
 Q_SIGNALS:
     void folderAdded( ProjectFolderItem* folder );

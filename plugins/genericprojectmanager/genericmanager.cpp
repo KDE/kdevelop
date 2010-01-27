@@ -265,12 +265,10 @@ KJob* GenericProjectManager::createImportJob(KDevelop::ProjectFolderItem* item)
     return eventuallyReadFolder(item);
 }
 
-bool GenericProjectManager::reload( KDevelop::ProjectBaseItem* item )
+bool GenericProjectManager::reload( KDevelop::ProjectFolderItem* item )
 {
-    if ( item->folder() ) {
-        kDebug() << "reloading item" << item->url();
-        eventuallyReadFolder( item->folder() );
-    }
+    kDebug() << "reloading item" << item->url();
+    eventuallyReadFolder( item->folder() );
     return true;
 }
 

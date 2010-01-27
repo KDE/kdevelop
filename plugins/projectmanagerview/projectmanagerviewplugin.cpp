@@ -414,7 +414,9 @@ void ProjectManagerViewPlugin::reloadFromContextMenu( )
 {
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
-        item->project()->projectFileManager()->reload(item);
+        if ( item->folder() ) {
+            item->project()->projectFileManager()->reload(item->folder());
+        }
     }
 }
 

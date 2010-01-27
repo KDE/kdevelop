@@ -75,7 +75,7 @@ public:
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem *item );
     virtual KDevelop::ProjectFolderItem *import( KDevelop::IProject *project );
-    virtual bool reload(KDevelop::ProjectBaseItem* item);
+    virtual bool reload(KDevelop::ProjectFolderItem* item);
     virtual KJob* createImportJob(KDevelop::ProjectFolderItem* item);
 
     /// first item is includes, second excludes

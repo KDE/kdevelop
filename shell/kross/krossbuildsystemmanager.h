@@ -45,7 +45,7 @@ public:
 
     QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     KDevelop::ProjectFolderItem* import(KDevelop::IProject *project );
-    bool reload(KDevelop::ProjectBaseItem *item);
+    bool reload(KDevelop::ProjectFolderItem *item);
 
     KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem*) const;
     KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;

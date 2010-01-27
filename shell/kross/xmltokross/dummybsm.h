@@ -60,7 +60,7 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         void setBuildDir(const KUrl& buildDir) { m_buildDir=buildDir; }
         void setIncludeDirectories(const KUrl::List& id) { m_includeDirectories=id; }
         void setDefinesDirectories(const QHash<QString, QString>& defs) { m_defines=defs; }
-	bool reload(KDevelop::ProjectBaseItem*) { return true; }
+        bool reload(KDevelop::ProjectFolderItem*) { return true; }
     private:
         KUrl::List m_controlledFiles;
         KUrl m_buildDir;
