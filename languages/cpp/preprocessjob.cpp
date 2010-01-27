@@ -371,7 +371,11 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             KUrl localPath(parentJob()->document().str());
             localPath.setFileName(QString());
             
-            if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures()) && content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->slaveMinimumFeatures())) ) {
+            if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures()) && content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->slaveMinimumFeatures())) 
+              && Cpp::EnvironmentManager::matchingLevel() != Cpp::EnvironmentManager::Disabled) {
+              ///@todo We never keep the duchain while updating now in disabled environment matching mode.
+              ///           We don't need it there, and changes in imports may be simply ignored when the keeping is enabled.
+              ///           However when full environment management is enabled this is needed, as the same content may be shared for multiple proxy contexts.
                 //We can completely re-use the specialized context:
                 m_secondEnvironmentFile = dynamic_cast<Cpp::EnvironmentFile*>(content->parsingEnvironmentFile().data());
                 m_updatingEnvironmentFile = m_secondEnvironmentFile;
