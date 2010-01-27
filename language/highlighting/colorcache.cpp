@@ -94,7 +94,7 @@ ColorCache::ColorCache(QObject* parent)
 
   #ifdef HAVE_HIGHLIGHTIFACE
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-            this, SLOT(slotDocumentActivated(KDevelop::IDocument*)), Qt::QueuedConnection);
+            this, SLOT(slotDocumentActivated(KDevelop::IDocument*)));
 
     if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
       if ( doc->textDocument() ) {
@@ -108,7 +108,7 @@ ColorCache::ColorCache(QObject* parent)
 
   m_self = this;
 
-  update();
+  update(true);
 }
 
 ColorCache::~ColorCache()
@@ -220,7 +220,15 @@ void ColorCache::updateColorsFromSettings()
   }
 }
 
-void ColorCache::update()
+void ColorCache::update(bool now)
+{
+  if(now)
+    updateInternal();
+  else
+    QMetaObject::invokeMethod(this, "updateInternal", Qt::QueuedConnection);
+}
+
+void ColorCache::updateInternal()
 {
   if ( !m_self ) { // don't update during startup
     return;

@@ -106,6 +106,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// will regenerate colors with the proper intensity settings
     void updateColorsFromSettings();
 
+    void updateInternal();
+
   private:
     ColorCache(QObject *parent = 0);
     static ColorCache* m_self;
@@ -115,7 +117,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
 
     /// regenerate colors and emits @p colorsGotChanged()
     /// and finally triggers a rehighlight of the opened documents
-    void update();
+    void update(bool now = false);
 
     /// try to access the KatePart settings for the given doc or fallback to the global KDE scheme
     /// and update the colors if neccessary
