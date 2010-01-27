@@ -418,6 +418,22 @@ QString SessionController::defaultSessionId(QString pickSession)
     return load;
 }
 
+QList< QPointer<Session> > SessionController::availableSessions()
+{
+    QList< QPointer<Session> > available;
+
+    QDir sessiondir( SessionController::sessionDirectory() );
+    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+    {
+        QUuid id( s );
+        if( id.isNull() )
+            continue;
+
+        available << QPointer<Session>(new Session( id ));
+    }
+    return available;
+}
+
 QString SessionController::sessionDirectory()
 {
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );

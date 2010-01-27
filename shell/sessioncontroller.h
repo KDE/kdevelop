@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include "shellexport.h"
 #include <QtCore/QObject>
 #include <kxmlguiclient.h>
+#include <QPointer>
 
 namespace KDevelop
 {
@@ -63,6 +64,7 @@ public:
     ///or a fresh one.
     ///@param pickSession Name or UUID of a session that will be respected if possible.
     static QString defaultSessionId(QString pickSession = QString());
+    static QList< QPointer<Session> > availableSessions();
     
     void plugActions();
     
