@@ -187,8 +187,24 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     //bool hasTargets = false;
     bool folderItemsAdded = false;
     bool removeAdded = false;
-    bool createFileAdded = false;
     bool renameAdded = false;
+
+    if ( items.count() == 1 ) {
+        // it only makes sense to create new stuff when a single folder/target was selected
+        if ( items.first()->folder() || items.first()->target() ) {
+            KAction* action = new KAction( i18n( "Create File" ), this );
+            action->setIcon(KIcon("document-new"));
+            connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+        }
+        if ( items.first()->folder() ) {
+            KAction* action = new KAction( i18n( "Create Folder" ), this );
+            action->setIcon(KIcon("folder-new"));
+            connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
+            menuExt.addAction( ContextMenuExtension::FileGroup, action );
+        }
+    }
+
     foreach( ProjectBaseItem* item, items )
     {
         d->ctxProjectItemList << item;
@@ -211,7 +227,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             menuExt.addAction( ContextMenuExtension::BuildGroup, action );
             buildItemsAdded = true;
         }
-        
+
         KDevelop::ProjectFolderItem *prjitem = item->folder();
         if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
         {
@@ -222,26 +238,11 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             closeProjectsAdded = true;
         }
 
-        if ( !createFileAdded && (item->folder() || item->target()) )
-        {
-            createFileAdded = true;
-
-            KAction* action = new KAction( i18n( "Create File" ), this );
-            action->setIcon(KIcon("document-new"));
-            connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-
         if ( !folderItemsAdded && prjitem )
         {
             folderItemsAdded = true;
 
-            KAction* action = new KAction( i18n( "Create Folder" ), this );
-            action->setIcon(KIcon("folder-new"));
-            connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-
-            action = new KAction( i18n( "Reload" ), this );
+            KAction* action = new KAction( i18n( "Reload" ), this );
             action->setIcon(KIcon("view-refresh"));
             connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
