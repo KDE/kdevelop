@@ -824,7 +824,7 @@ void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
     dock->setAnchored(m_mainLayout->isAreaAnchored(role), false);
 
     if (show) {
-        m_mainLayout->addWidget(dock, role, false);
+        m_mainLayout->addWidget(dock, role);
 
         bool isMaximized = dock->isMaximized();
         if (isMaximized)

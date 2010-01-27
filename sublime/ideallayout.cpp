@@ -785,14 +785,14 @@ void IdealMainLayout::createArea(Role role)
       area->setMainSplitter(createSplitter(role));
 }
 
-void IdealMainLayout::addWidget(QWidget * widget, Role role, bool setFocus)
+void IdealMainLayout::addWidget(QWidget * widget, Role role)
 {
     if (m_maximizedWidget)
         maximizeWidget(0);
 
-    if (IdealDockWidget* dock = qobject_cast<IdealDockWidget*>(widget))
-        if (dock->isFloating())
-            dock->setFloating(false);
+    IdealDockWidget* dock = qobject_cast<IdealDockWidget*>(widget);
+    if (dock && dock->isFloating())
+        dock->setFloating(false);
 
     if (widget->parent() != parentWidget()) {
         widget->setParent(parentWidget());
@@ -813,8 +813,14 @@ void IdealMainLayout::addWidget(QWidget * widget, Role role, bool setFocus)
     }
 
     area->raise();
-    
-    if (setFocus)
+
+    if (dock)
+    {
+        if (dock->widget()->focusPolicy() != Qt::NoFocus ||
+           (dock->widget()->focusProxy() && dock->widget()->focusProxy()->focusPolicy() != Qt::NoFocus))
+        widget->setFocus();
+    }
+    else
         widget->setFocus();
 }
 
@@ -1132,6 +1138,7 @@ void Sublime::IdealMainLayout::DockArea::raise()
 
     if (m_mainSplitter)
         m_mainSplitter->widget()->raise();
+    
 }
 
 Sublime::Position Sublime::IdealMainLayout::positionForRole(Role role)

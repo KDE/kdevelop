@@ -103,7 +103,7 @@ public:
 
     virtual ~IdealMainLayout();
 
-    void addWidget(QWidget* widget, Role role, bool setFocus = true);
+    void addWidget(QWidget* widget, Role role);
     void addButtonBar(QWidget* widget, Role role);
     void removeWidgets(Role role);
     void removeWidget(QWidget* widget, Role role);
