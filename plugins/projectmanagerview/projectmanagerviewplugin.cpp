@@ -413,11 +413,30 @@ void ProjectManagerViewPlugin::projectConfiguration( )
 
 void ProjectManagerViewPlugin::reloadFromContextMenu( )
 {
+    QList< KDevelop::ProjectFolderItem* > folders;
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         if ( item->folder() ) {
-            item->project()->projectFileManager()->reload(item->folder());
+            // since reloading should be recursive, only pass the upper-most items
+            bool found = false;
+            foreach ( KDevelop::ProjectFolderItem* existing, folders ) {
+                if ( existing->url().isParentOf(item->folder()->url()) ) {
+                    // simply skip this child
+                    found = true;
+                    break;
+                } else if ( item->folder()->url().isParentOf(existing->url()) ) {
+                    // remove the child in the list and add the current item instead
+                    folders.removeOne(existing);
+                    // continue since there could be more than one existing child
+                }
+            }
+            if ( !found ) {
+                folders << item->folder();
+            }
         }
+    }
+    foreach( KDevelop::ProjectFolderItem* folder, folders ) {
+        folder->project()->projectFileManager()->reload(folder);
     }
 }
 
