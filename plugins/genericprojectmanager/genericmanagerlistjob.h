@@ -25,7 +25,6 @@
 
 namespace KDevelop
 {
-    class IProject;
     class ProjectFolderItem;
 }
 
@@ -36,11 +35,8 @@ class GenericManagerListJob : public KIO::Job
 public:
     GenericManagerListJob(KDevelop::ProjectFolderItem* item);
 
-    KUrl url();
-    KDevelop::IProject* project();
-
 signals:
-    void entries(KDevelop::IProject* project, const KUrl& url, const KIO::UDSEntryList& entries );
+    void entries(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries);
     void nextJob();
 
 private slots:
@@ -51,8 +47,8 @@ private slots:
 
 private:
     QQueue<KDevelop::ProjectFolderItem*> m_listQueue;
-    KUrl m_topUrl;
-    KDevelop::IProject* m_project;
+    /// current base dir
+    KDevelop::ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
 };
 

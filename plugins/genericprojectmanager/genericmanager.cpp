@@ -133,8 +133,8 @@ KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* 
 
     KDevelop::ICore::self()->runController()->registerJob( listJob );
 
-    connect( listJob, SIGNAL(entries(KDevelop::IProject*,KUrl,KIO::UDSEntryList)),
-             this, SLOT(addJobItems(KDevelop::IProject*,KUrl, KIO::UDSEntryList)) );
+    connect( listJob, SIGNAL(entries(KDevelop::ProjectFolderItem*, KIO::UDSEntryList)),
+             this, SLOT(addJobItems(KDevelop::ProjectFolderItem*, KIO::UDSEntryList)) );
 
     connect( this, SIGNAL(appendSubDir(KDevelop::ProjectFolderItem*)),
              listJob, SLOT(addSubDir(KDevelop::ProjectFolderItem*)));
@@ -142,50 +142,37 @@ KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* 
     return listJob;
 }
 
-void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl& listedDirUrl, KIO::UDSEntryList entries)
+void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries)
 {
     if ( entries.empty() ) {
         return;
     }
-    if ( !project ) {
-        kDebug() << "no project found for" << listedDirUrl;
-        return;
-    }
 
-    // the folder we are currently adding items to
-    // the UDS_NAME is essentially a path relative to listedDirUrl
-    KUrl curUrl = listedDirUrl;
-    curUrl.addPath( entries.first().stringValue( KIO::UDSEntry::UDS_NAME ) );
-    curUrl.setFileName( "" );
+    kDebug() << "reading entries of" << baseItem->url();
 
-    kDebug() << "reading contents of " << curUrl << "total entries:" << entries.count();
-
-    QList<KDevelop::ProjectFolderItem*> fitems = project->foldersForUrl( curUrl );
-    if ( fitems.isEmpty() ) {
-        kDebug() << "parent was filtered";
-        return;
-    }
-    KDevelop::ProjectFolderItem* item = fitems.first();
-
-    const IncludeRules& rules = getIncludeRules(project);
+    const IncludeRules& rules = getIncludeRules(baseItem->project());
 
     // build lists of valid files and folders with relative urls to the project folder
     KUrl::List files;
     KUrl::List folders;
     foreach ( KIO::UDSEntry entry, entries ) {
-        KUrl url = listedDirUrl;
+        KUrl url = baseItem->url();
         url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
 
-        if ( !isValid( url, entry.isDir(), project, rules ) ) {
+        if ( !isValid( url, entry.isDir(), baseItem->project(), rules ) ) {
             continue;
         } else {
             if ( entry.isDir() ) {
                 if( entry.isLink() ) {
-                    KUrl linkedUrl = listedDirUrl;
+                    KUrl linkedUrl = baseItem->url();
                     linkedUrl.cd(entry.stringValue( KIO::UDSEntry::UDS_LINK_DEST ));
                     // make sure we don't end in an infinite loop
-                    if( linkedUrl.isParentOf( project->folder() ) || project->folder().isParentOf( linkedUrl ) || linkedUrl == project->folder() )
+                    if( linkedUrl.isParentOf( baseItem->project()->folder() ) ||
+                        baseItem->project()->folder().isParentOf( linkedUrl ) ||
+                        linkedUrl == baseItem->project()->folder() )
+                    {
                         continue;
+                    }
                 }
                 folders << url;
             } else {
@@ -198,29 +185,29 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
     kDebug() << "valid files:" << files;
 
     // remove obsolete rows
-    for ( int j = 0; j < item->rowCount(); ++j ) {
-        if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
-            KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
+    for ( int j = 0; j < baseItem->rowCount(); ++j ) {
+        if ( baseItem->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
+            KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( baseItem->child(j) );
             // check if this is still a valid folder
             int index = folders.indexOf( f->url() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
                 kDebug() << "removing folder:" << f->url();
-                item->removeRow( j );
+                baseItem->removeRow( j );
                 --j;
             } else {
                 // this folder already exists in the view
                 folders.removeAt( index );
             }
-        } else if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
-            KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
+        } else if ( baseItem->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
+            KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( baseItem->child(j) );
             // check if this is still a valid file
             int index = files.indexOf( f->url() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
                 kDebug() << "removing file:" << f->url();
-                project->removeFromFileSet( KDevelop::IndexedString( f->url() ) );
-                item->removeRow( j );
+                baseItem->project()->removeFromFileSet( KDevelop::IndexedString( f->url() ) );
+                baseItem->removeRow( j );
                 --j;
             } else {
                 // this file already exists in the view
@@ -231,11 +218,11 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
 
     // add new rows
     foreach ( const KUrl& url, files ) {
-        new KDevelop::ProjectFileItem( project, url, item );
-        project->addToFileSet( KDevelop::IndexedString( url ) );
+        new KDevelop::ProjectFileItem( baseItem->project(), url, baseItem );
+        baseItem->project()->addToFileSet( KDevelop::IndexedString( url ) );
     }
     foreach ( const KUrl& url, folders ) {
-        emit appendSubDir( new KDevelop::ProjectFolderItem( project, url, item ) );
+        emit appendSubDir( new KDevelop::ProjectFolderItem( baseItem->project(), url, baseItem ) );
     }
 }
 

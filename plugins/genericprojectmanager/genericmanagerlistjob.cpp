@@ -24,31 +24,16 @@
 
 #include <KDebug>
 
-GenericManagerListJob::GenericManagerListJob(KDevelop::ProjectFolderItem* item) : KIO::Job(), m_project(item->project())
+GenericManagerListJob::GenericManagerListJob(KDevelop::ProjectFolderItem* item)
+    : KIO::Job(), m_item(0)
 {
-    m_topUrl = item->url();
-
     /* the following line is not an error in judgement, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
      * so we give the job a chance to selfdestruct first */
     connect( this, SIGNAL(nextJob()), SLOT(startNextJob()), Qt::QueuedConnection );
 
-    KIO::ListJob* job = KIO::listDir( item->url(), KIO::HideProgressInfo );
-
-    connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
-             this, SLOT(slotEntries(KIO::Job*, KIO::UDSEntryList)) );
-
-    connect( job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)) );
-}
-
-KDevelop::IProject* GenericManagerListJob::project()
-{
-    return m_project;
-}
-
-KUrl GenericManagerListJob::url()
-{
-    return m_topUrl;
+    addSubDir(item);
+    startNextJob();
 }
 
 void GenericManagerListJob::addSubDir( KDevelop::ProjectFolderItem* item )
@@ -67,7 +52,8 @@ void GenericManagerListJob::startNextJob()
     if ( m_listQueue.isEmpty() ) {
         return;
     }
-    KIO::ListJob* job = KIO::listDir( m_listQueue.dequeue()->url(), KIO::HideProgressInfo );
+    m_item = m_listQueue.dequeue();
+    KIO::ListJob* job = KIO::listDir( m_item->url(), KIO::HideProgressInfo );
     connect( job, SIGNAL(entries(KIO::Job*, KIO::UDSEntryList)),
              this, SLOT(slotEntries(KIO::Job*, KIO::UDSEntryList)) );
     connect( job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)) );
@@ -75,8 +61,7 @@ void GenericManagerListJob::startNextJob()
 
 void GenericManagerListJob::slotResult(KJob* job)
 {
-    KIO::SimpleJob* simpleJob(dynamic_cast<KIO::SimpleJob*>(job));
-    emit entries(m_project, simpleJob->url(), entryList);
+    emit entries(m_item, entryList);
     entryList.clear();
 
     if( job->error() ) {

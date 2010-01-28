@@ -86,7 +86,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item );
-    void addJobItems(KDevelop::IProject* project, const KUrl& url, KIO::UDSEntryList entries);
+    void addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries);
 
     void deleted(const QString &path);
     void created(const QString &path);
