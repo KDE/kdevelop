@@ -288,19 +288,14 @@ void GenericProjectManager::created(const QString &path)
 
 void GenericProjectManager::deleted(const QString &path)
 {
-    QFileInfo info(path);
-
     KUrl url = KUrl(path);
 
     foreach ( KDevelop::IProject* p, m_watchers.keys() ) {
-        if ( info.isDir() ) {
-            foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl(url) ) {
-                item->parent()->removeRow(item->row());
-            }
-        } else {
-            foreach ( KDevelop::ProjectFileItem* item, p->filesForUrl(url) ) {
-                item->parent()->removeRow(item->row());
-            }
+        foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl(url) ) {
+            item->parent()->removeRow(item->row());
+        }
+        foreach ( KDevelop::ProjectFileItem* item, p->filesForUrl(url) ) {
+            item->parent()->removeRow(item->row());
         }
     }
 }
