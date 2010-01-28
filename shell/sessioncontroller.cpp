@@ -54,6 +54,25 @@ namespace KDevelop
 const QString SessionController::cfgSessionGroup = "Sessions";
 const QString SessionController::cfgActiveSessionEntry("Active Session ID");
 
+static QStringList standardArguments()
+{
+    QStringList ret;
+    for(int a = 0; a < QApplication::argc(); ++a)
+    {
+        QString arg = QString::fromLocal8Bit(QApplication::argv()[a]);
+        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
+        {
+            ret << arg;
+        }else if(arg.startsWith("--graphicssystem") || arg.startsWith("--style"))
+        {
+            ret << arg;
+            if(a+1 < QApplication::argc())
+                ret << QString::fromLocal8Bit(QApplication::argv()[a+1]);
+        }
+    }
+    return ret;
+}
+
 class SessionControllerPrivate : public QObject
 {
     Q_OBJECT
@@ -85,12 +104,14 @@ public:
     void newSession()
     {
         Session* session = new Session( QUuid::createUuid() );
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", QStringList() << QApplication::applicationFilePath() << session->id().toString());
-        delete session;
         
+        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", QStringList() << QApplication::applicationFilePath() << session->id().toString() << standardArguments());
+        delete session;
+#if 0        
         //Terminate this instance of kdevelop if the user agrees
         foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
             window->close();
+#endif
     }
     
     void configureSessions()
@@ -135,7 +156,7 @@ public:
     void loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", QStringList() << QApplication::applicationFilePath() << s->id().toString());
+        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", QStringList() << QApplication::applicationFilePath() << s->id().toString() << standardArguments());
     }
     
     void activateSession( Session* s )
