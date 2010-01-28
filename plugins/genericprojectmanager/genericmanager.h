@@ -82,15 +82,6 @@ public:
     typedef QPair<QStringList, QStringList> IncludeRules;
 
 Q_SIGNALS:
-    void folderAdded( KDevelop::ProjectFolderItem* folder );
-    void folderRemoved( KDevelop::ProjectFolderItem* folder );
-    void folderRenamed( const KUrl& oldFolder,
-                        KDevelop::ProjectFolderItem* newFolder );
-
-    void fileAdded(KDevelop::ProjectFileItem* file);
-    void fileRemoved(KDevelop::ProjectFileItem* file);
-    void fileRenamed(const KUrl& oldFile,
-                     KDevelop::ProjectFileItem* newFile);
     void appendSubDir( KDevelop::ProjectFolderItem* item );
 
 private Q_SLOTS:
@@ -112,7 +103,6 @@ private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
                   const IncludeRules& rules ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
-    QMap<KIO::Job*, KDevelop::IProject*> m_jobProjects;
 };
 
 #endif // KDEVGENERICIMPORTER_H

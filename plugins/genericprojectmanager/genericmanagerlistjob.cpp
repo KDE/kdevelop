@@ -58,6 +58,7 @@ void GenericManagerListJob::addSubDir( KDevelop::ProjectFolderItem* item )
 
 void GenericManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
 {
+    Q_UNUSED(job);
     entryList.append(entriesIn);
 }
 
