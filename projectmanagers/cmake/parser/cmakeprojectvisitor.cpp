@@ -1509,7 +1509,7 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             QStringList indices;
             foreach(int idx, list->index())
             {
-                if(idx>=theList.count())
+                if(idx>=theList.count() || idx < 0)
                     kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
                 else
                     indices += theList[idx];
