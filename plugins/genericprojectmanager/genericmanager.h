@@ -85,8 +85,9 @@ Q_SIGNALS:
     void appendSubDir( KDevelop::ProjectFolderItem* item );
 
 private Q_SLOTS:
-    KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item );
-    void addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries);
+    /// @p forceRecursion if true, existing folders will be re-read no matter what
+    KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceRecursion = false );
+    void addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
 
     void deleted(const QString &path);
     void created(const QString &path);

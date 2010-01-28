@@ -24,8 +24,8 @@
 
 #include <KDebug>
 
-GenericManagerListJob::GenericManagerListJob(KDevelop::ProjectFolderItem* item)
-    : KIO::Job(), m_item(0)
+GenericManagerListJob::GenericManagerListJob(KDevelop::ProjectFolderItem* item, const bool forceRecursion)
+    : KIO::Job(), m_item(0), m_forceRecursion(forceRecursion)
 {
     /* the following line is not an error in judgement, apparently starting a
      * listJob while the previous one hasn't self-destructed takes a lot of time,
@@ -61,7 +61,7 @@ void GenericManagerListJob::startNextJob()
 
 void GenericManagerListJob::slotResult(KJob* job)
 {
-    emit entries(m_item, entryList);
+    emit entries(m_item, entryList, m_forceRecursion);
     entryList.clear();
 
     if( job->error() ) {

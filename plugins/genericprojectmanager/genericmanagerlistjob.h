@@ -33,10 +33,10 @@ class GenericManagerListJob : public KIO::Job
     Q_OBJECT
 
 public:
-    GenericManagerListJob(KDevelop::ProjectFolderItem* item);
+    GenericManagerListJob(KDevelop::ProjectFolderItem* item, const bool forceRecursion);
 
 signals:
-    void entries(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries);
+    void entries(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
     void nextJob();
 
 private slots:
@@ -50,6 +50,7 @@ private:
     /// current base dir
     KDevelop::ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
+    const bool m_forceRecursion;
 };
 
 #endif // GENERICMANAGERLISTJOB_H

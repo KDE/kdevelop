@@ -126,15 +126,15 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     return QList<KDevelop::ProjectFolderItem*>();
 }
 
-KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item )
+KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceResursion )
 {
-    GenericManagerListJob* listJob = new GenericManagerListJob( item );
+    GenericManagerListJob* listJob = new GenericManagerListJob( item, forceResursion );
     kDebug() << "adding job" << listJob << item->url() << "for project" << item->project();
 
     KDevelop::ICore::self()->runController()->registerJob( listJob );
 
-    connect( listJob, SIGNAL(entries(KDevelop::ProjectFolderItem*, KIO::UDSEntryList)),
-             this, SLOT(addJobItems(KDevelop::ProjectFolderItem*, KIO::UDSEntryList)) );
+    connect( listJob, SIGNAL(entries(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)),
+             this, SLOT(addJobItems(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)) );
 
     connect( this, SIGNAL(appendSubDir(KDevelop::ProjectFolderItem*)),
              listJob, SLOT(addSubDir(KDevelop::ProjectFolderItem*)));
@@ -142,7 +142,8 @@ KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* 
     return listJob;
 }
 
-void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries)
+void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries,
+                                        const bool forceRecursion)
 {
     if ( entries.empty() ) {
         return;
@@ -198,6 +199,10 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
             } else {
                 // this folder already exists in the view
                 folders.removeAt( index );
+                if ( forceRecursion ) {
+                    //no need to add this item, but we still want to recurse into it
+                    emit appendSubDir( f );
+                }
             }
         } else if ( baseItem->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
             KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( baseItem->child(j) );
@@ -255,7 +260,7 @@ KJob* GenericProjectManager::createImportJob(KDevelop::ProjectFolderItem* item)
 bool GenericProjectManager::reload( KDevelop::ProjectFolderItem* item )
 {
     kDebug() << "reloading item" << item->url();
-    eventuallyReadFolder( item->folder() );
+    eventuallyReadFolder( item->folder(), true );
     return true;
 }
 
