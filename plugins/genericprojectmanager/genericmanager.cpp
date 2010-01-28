@@ -202,7 +202,7 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
         if ( item->child(j)->type() == KDevelop::ProjectBaseItem::Folder ) {
             KDevelop::ProjectFolderItem* f = static_cast<KDevelop::ProjectFolderItem*>( item->child(j) );
             // check if this is still a valid folder
-            int index = folders.indexOf( f->folderName() );
+            int index = folders.indexOf( f->url() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
                 kDebug() << "removing folder:" << f->url();
@@ -215,7 +215,7 @@ void GenericProjectManager::addJobItems(KDevelop::IProject* project, const KUrl&
         } else if ( item->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
             KDevelop::ProjectFileItem* f = static_cast<KDevelop::ProjectFileItem*>( item->child(j) );
             // check if this is still a valid file
-            int index = files.indexOf( f->fileName() );
+            int index = files.indexOf( f->url() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
                 kDebug() << "removing file:" << f->url();
