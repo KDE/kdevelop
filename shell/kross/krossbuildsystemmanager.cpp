@@ -137,22 +137,6 @@ QHash<QString,QString> KrossBuildSystemManager::defines(KDevelop::ProjectBaseIte
     return defs;
 }
 
-QHash<QString,QString> KrossBuildSystemManager::environment(KDevelop::ProjectBaseItem *item) const
-{
-    QVariant param=Handlers::kDevelopProjectBaseItemHandler(item);
-    QVariant result=action->callFunction( "environment", QVariantList()<<param);
-
-    QMap<QString, QVariant> resultEnv= result.toMap();
-    QHash<QString, QString> env;
-    
-    foreach(const QString& key, resultEnv.keys())
-    {
-        env[key]=resultEnv[key].toString();
-    }
-    
-    return env;
-}
-
 KDevelop::IBuildSystemManager::Features KrossBuildSystemManager::features() const
 {
     return Folders | Targets | Files;

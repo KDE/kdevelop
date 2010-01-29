@@ -20,7 +20,6 @@ class KrossKDevelopIBuildSystemManager : public QObject, public Kross::WrapperIn
 		Q_SCRIPTABLE KDevelop::IProjectBuilder* builder(KDevelop::ProjectFolderItem* x0) const { return wrapped->builder(x0); }
 		Q_SCRIPTABLE KUrl::List includeDirectories(KDevelop::ProjectBaseItem* x0) const { return wrapped->includeDirectories(x0); }
 		Q_SCRIPTABLE QHash< QString, QString > defines(KDevelop::ProjectBaseItem* x0) const { return wrapped->defines(x0); }
-		Q_SCRIPTABLE QHash< QString, QString > environment(KDevelop::ProjectBaseItem* x0) const { return wrapped->environment(x0); }
 		Q_SCRIPTABLE KDevelop::ProjectTargetItem* createTarget(const QString& x0, KDevelop::ProjectFolderItem* x1) { return wrapped->createTarget(x0, x1); }
 		Q_SCRIPTABLE bool removeTarget(KDevelop::ProjectTargetItem* x0) { return wrapped->removeTarget(x0); }
 		Q_SCRIPTABLE QList< KDevelop::ProjectTargetItem* > targets(KDevelop::ProjectFolderItem* x0) const { return wrapped->targets(x0); }

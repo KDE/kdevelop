@@ -66,7 +66,6 @@ public:
     bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
     bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
-    QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const;
     Features features() const;
 
 private:
