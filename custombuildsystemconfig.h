@@ -44,7 +44,6 @@ struct CustomBuildSystemConfig
     QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool> tools;
     QMap<QString, QStringList> includes;
     QMap<QString, QHash<QString,QString> > defines;
-    QMap<QString, QString> environments;
 };
 
 #endif

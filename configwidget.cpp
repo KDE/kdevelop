@@ -45,17 +45,12 @@ void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
     bool b = blockSignals( true );
     ui->buildDir->setUrl( cfg.buildDir );
     fillTools( cfg.tools );
-    fillEnvironments( cfg.environments );
     fillIncludes( cfg.includes );
     fillDefines( cfg.defines );
     blockSignals( b );
 }
 
 void ConfigWidget::fillDefines(const QMap< QString, QHash< QString, QString > >& defines)
-{
-}
-
-void ConfigWidget::fillEnvironments(const QMap< QString, QString >& envs)
 {
 }
 

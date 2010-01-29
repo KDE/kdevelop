@@ -87,7 +87,6 @@ public:
     IProjectBuilder* builder( KDevelop::ProjectFolderItem* ) const;
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
-    QHash<QString, QString> environment( KDevelop::ProjectBaseItem* ) const;
     KUrl::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
     bool removeFileFromTarget( KDevelop::ProjectFileItem* file, KDevelop::ProjectTargetItem* parent );
     bool removeTarget( KDevelop::ProjectTargetItem* target );

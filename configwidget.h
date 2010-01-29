@@ -45,7 +45,6 @@ private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     void fillIncludes( const QMap<QString,QStringList>& includes );
     void fillDefines( const QMap<QString,QHash<QString,QString> >& defines );
-    void fillEnvironments( const QMap<QString,QString>& envs );
     Ui::ConfigWidget* ui;
     CustomBuildSystemConfig m_config;
     int lastConfiguredActionTool;

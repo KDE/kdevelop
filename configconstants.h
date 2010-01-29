@@ -28,7 +28,6 @@ namespace ConfigConstants
     const QString currentConfigKey("CurrentConfiguration");
     const QString definesKey("Defines");
     const QString includesKey("Includes");
-    const QString environmentKey("Environment");
     const QString toolGroupPrefix("Tool");
     const QString toolArguments("Arguments");
     const QString toolExecutable("Executable");

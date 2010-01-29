@@ -56,13 +56,6 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         }
 
         {
-            QByteArray tmp = subgrp.readEntry( ConfigConstants::environmentKey, QByteArray() );
-            QDataStream s(tmp);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s >> config.environments;
-        }
-
-        {
             QByteArray tmp = subgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
             QDataStream s(tmp);
             s.setVersion( QDataStream::Qt_4_5 );

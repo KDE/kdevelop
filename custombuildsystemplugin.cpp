@@ -123,18 +123,6 @@ QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) co
     return hash;
 }
 
-QHash< QString, QString > CustomBuildSystem::environment( ProjectBaseItem* item ) const
-{
-    EnvironmentGroupList l( KGlobal::config() );
-    QHash<QString,QString> envvars;
-    foreach( QString s, l.createEnvironment( configuration( item->project() ).readEntry(
-                            ConfigConstants::environmentKey, "default" ), QStringList() ) ) {
-        int idx = s.indexOf( "=" );
-        envvars.insert( s.left( idx ), s.mid( idx+1 ) );
-    }
-    return envvars;
-}
-
 IProjectFileManager::Features CustomBuildSystem::features() const
 {
     return IProjectFileManager::Files | IProjectFileManager::Folders;
