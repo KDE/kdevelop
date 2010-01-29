@@ -66,7 +66,7 @@ public:
     Features features() const;
     KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
     QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    bool reload( KDevelop::ProjectBaseItem* item );
+    bool reload( KDevelop::ProjectFolderItem* item );
     bool removeFile( KDevelop::ProjectFileItem* file );
     bool removeFolder( KDevelop::ProjectFolderItem* folder );
     bool renameFile( KDevelop::ProjectFileItem* oldFile, const KUrl& newFile );

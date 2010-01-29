@@ -165,7 +165,7 @@ KJob* CustomBuildSystem::prune( IProject* )
     return 0;
 }
 
-bool CustomBuildSystem::reload( ProjectBaseItem* item )
+bool CustomBuildSystem::reload( ProjectFolderItem* item )
 {
     return genericManager()->reload( item );
 }
