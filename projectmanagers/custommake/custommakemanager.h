@@ -57,8 +57,6 @@ public:
      */
     virtual QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const;
 
-    virtual QHash<QString,QString> environment(KDevelop::ProjectBaseItem*) const { return QHash<QString,QString>(); }
-
     /**
      * Create a new target
      *
