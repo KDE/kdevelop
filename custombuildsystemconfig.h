@@ -36,14 +36,20 @@ struct CustomBuildSystemTool
 
 Q_DECLARE_METATYPE( CustomBuildSystemTool );
 
+struct CustomBuildSystemProjectPathConfig
+{
+    QString path;
+    QStringList includes;
+    QHash<QString,QString> defines;
+};
+
 struct CustomBuildSystemConfig
 {
     QString title;
     QString grpName;
     KUrl buildDir;
     QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool> tools;
-    QMap<QString, QStringList> includes;
-    QMap<QString, QHash<QString,QString> > defines;
+    QList<CustomBuildSystemProjectPathConfig> projectPaths;
 };
 
 #endif

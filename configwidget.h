@@ -48,8 +48,7 @@ private slots:
     void actionExecutableChanged( const QString& );
 private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
-    void fillIncludes( const QMap<QString,QStringList>& includes );
-    void fillDefines( const QMap<QString,QHash<QString,QString> >& defines );
+    void fillProjectPaths(const QList< CustomBuildSystemProjectPathConfig >& paths);
     Ui::ConfigWidget* ui;
     CustomBuildSystemConfig m_config;
 };

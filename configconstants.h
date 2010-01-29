@@ -33,6 +33,8 @@ namespace ConfigConstants
     const QString toolExecutable("Executable");
     const QString toolEnvironment("Environment");
     const QString toolType("Type");
+    const QString projectPathPrefix("ProjectPath");
+    const QString projectPathKey("Path");
     const QString customBuildSystemGroup("CustomBuildSystem");
 }
 

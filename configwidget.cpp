@@ -50,16 +50,11 @@ void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
     bool b = blockSignals( true );
     ui->buildDir->setUrl( cfg.buildDir );
     fillTools( cfg.tools );
-    fillIncludes( cfg.includes );
-    fillDefines( cfg.defines );
+    fillProjectPaths( cfg.projectPaths );
     blockSignals( b );
 }
 
-void ConfigWidget::fillDefines(const QMap< QString, QHash< QString, QString > >& defines)
-{
-}
-
-void ConfigWidget::fillIncludes(const QMap< QString, QStringList >& includes)
+void ConfigWidget::fillProjectPaths(const QList< CustomBuildSystemProjectPathConfig >& paths)
 {
 }
 

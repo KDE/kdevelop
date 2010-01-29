@@ -48,29 +48,33 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         config.grpName = grpName;
         config.buildDir = subgrp.readEntry( ConfigConstants::buildDirKey, "" );
 
-        {
-            QByteArray tmp = subgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
-            QDataStream s(tmp);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s >> config.defines;
-        }
-
-        {
-            QByteArray tmp = subgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
-            QDataStream s(tmp);
-            s.setVersion( QDataStream::Qt_4_5 );
-            s >> config.includes;
-        }
-
-        foreach( const QString& toolgrpName, subgrp.groupList() ) {
-            if( toolgrpName.startsWith( ConfigConstants::toolGroupPrefix ) ) {
-                KConfigGroup toolgrp = subgrp.group( toolgrpName );
+        foreach( const QString& subgrpName, subgrp.groupList() ) {
+            if( subgrpName.startsWith( ConfigConstants::toolGroupPrefix ) ) {
+                KConfigGroup toolgrp = subgrp.group( subgrpName );
                 CustomBuildSystemTool tool;
                 tool.arguments = toolgrp.readEntry( ConfigConstants::toolArguments, "" );
                 tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, KUrl() );
                 tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, "default" );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
                 config.tools.insert( tool.type, tool );
+            } else if( subgrpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
+                KConfigGroup pathgrp = subgrp.group( subgrpName );
+                CustomBuildSystemProjectPathConfig path;
+                path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
+                {
+                    QByteArray tmp = pathgrp.readEntry( ConfigConstants::definesKey, QByteArray() );
+                    QDataStream s(tmp);
+                    s.setVersion( QDataStream::Qt_4_5 );
+                    s >> path.defines;
+                }
+
+                {
+                    QByteArray tmp = pathgrp.readEntry( ConfigConstants::includesKey, QByteArray() );
+                    QDataStream s(tmp);
+                    s.setVersion( QDataStream::Qt_4_5 );
+                    s >> path.includes;
+                }
+                config.projectPaths << path;
             }
         }
         configs << config;
