@@ -28,8 +28,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
 {
     ui->setupUi( this );
-    connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
 
+    connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
     connect( ui->configWidget, SIGNAL(changed()), SIGNAL(changed()) );
 }
 
