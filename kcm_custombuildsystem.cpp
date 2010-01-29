@@ -33,12 +33,18 @@ CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVa
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
     configWidget = new CustomBuildSystemConfigWidget( this );
-    connect( configWidget, SIGNAL(changed()), SIGNAL(changed()) );
+    connect( configWidget, SIGNAL(changed()), SLOT(dataChanged()) );
     layout->addWidget( configWidget );
 
     addConfig( CustomBuildSystemSettings::self(), configWidget );
     load();
 }
+
+void CustomBuildSystemKCModule::dataChanged()
+{
+    emit changed(true);
+}
+
 
 CustomBuildSystemKCModule::~CustomBuildSystemKCModule()
 {

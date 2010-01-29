@@ -41,6 +41,8 @@ public:
     virtual void save();
 private:
     class CustomBuildSystemConfigWidget* configWidget;
+public slots:
+    void dataChanged();
 };
 
 #endif
