@@ -22,9 +22,8 @@
 #include "ui_configwidget.h"
 
 
-
 ConfigWidget::ConfigWidget( QWidget* parent )
-    : QWidget ( parent ), ui( new Ui::ConfigWidget ), lastConfiguredActionTool( -1 )
+    : QWidget ( parent ), ui( new Ui::ConfigWidget )
 {
     ui->setupUi( this );
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
@@ -33,6 +32,12 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     ui->buildAction->insertItem( CustomBuildSystemTool::Clean, i18n("Clean"), QVariant() );
 
     connect( ui->buildAction, SIGNAL(activated(int)), SLOT(changeAction(int)) );
+
+    connect( ui->enableAction, SIGNAL(toggled(bool)), SLOT(toggleActionEnablement(bool)) );
+    connect( ui->actionArguments, SIGNAL(textEdited(QString)), SLOT(actionArgumentsEdited(QString)) );
+    connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
+    connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
+    connect( ui->actionExecutable, SIGNAL(textChanged(QString)), SLOT(actionExecutableChanged(QString)) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -68,33 +73,21 @@ void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, Cus
             ui->buildAction->setItemData( i, QVariant() );
         }
     }
-    changeAction( CustomBuildSystemTool::Build );
+    ui->buildAction->setCurrentIndex( CustomBuildSystemTool::Build );
 }
+
+
 
 void ConfigWidget::changeAction( int idx )
 {
     Q_ASSERT( idx >= 0 && idx < ui->buildAction->count() );
 
-    if( idx == lastConfiguredActionTool ) {
-        return;
-    }
-
-    if( ui->enableAction->isChecked() ) {
-        CustomBuildSystemTool t;
-        t.arguments = ui->actionArguments->text();
-        t.executable = ui->actionExecutable->url();
-        t.envGrp = ui->actionEnvironment->currentText();
-        ui->buildAction->setItemData( lastConfiguredActionTool, QVariant::fromValue<CustomBuildSystemTool>( t ) );
-    } else {
-        ui->buildAction->setItemData( lastConfiguredActionTool, QVariant() );
-    }
-
-    emit changed();
-
     QVariant data = ui->buildAction->itemData( idx );
     if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
         CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
+        bool b = ui->enableAction->blockSignals( true );
         ui->enableAction->setChecked( true );
+        ui->enableAction->blockSignals( b );
         ui->actionArguments->setText( t.arguments );
         ui->actionExecutable->setUrl( t.executable );
         ui->actionEnvironment->setCurrentIndex( ui->actionEnvironment->findText( t.envGrp ) );
@@ -102,13 +95,64 @@ void ConfigWidget::changeAction( int idx )
         ui->actionArguments->setText( "" );
         ui->actionEnvironment->setCurrentIndex( -1 );
         ui->actionExecutable->setUrl( KUrl() );
+        bool b = ui->enableAction->blockSignals( true );
         ui->enableAction->setChecked( false );
+        ui->enableAction->blockSignals( b );
     }
-
-    lastConfiguredActionTool = idx;
 }
 
+void ConfigWidget::toggleActionEnablement( bool enable )
+{
+    if( enable ) {
+        CustomBuildSystemTool t;
+        t.arguments = ui->actionArguments->text();
+        t.envGrp = ui->actionEnvironment->currentProfile();
+        t.executable = ui->actionExecutable->url();
+        t.type = CustomBuildSystemTool::ActionType( ui->buildAction->currentIndex() );
+        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+    } else {
+        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant() );
+    }
+    emit changed();
+}
 
+void ConfigWidget::actionArgumentsEdited( const QString& txt )
+{
+    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
+    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
+        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
+        t.arguments = txt;
+        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+    }
+    emit changed();
+}
+
+void ConfigWidget::actionEnvironmentChanged( int )
+{
+    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
+    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
+        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
+        t.envGrp = ui->actionEnvironment->currentProfile();
+        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+    }
+    emit changed();
+}
+
+void ConfigWidget::actionExecutableChanged(const KUrl& url )
+{
+    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
+    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
+        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
+        t.executable = url;
+        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+    }
+    emit changed();
+}
+
+void ConfigWidget::actionExecutableChanged(const QString& txt )
+{
+    actionExecutableChanged( KUrl( txt ) );
+}
 
 #include "configwidget.moc"
 

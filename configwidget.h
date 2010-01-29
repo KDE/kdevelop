@@ -40,14 +40,18 @@ public:
 signals:
     void changed();
 private slots:
-    void changeAction(int);
+    void changeAction( int );
+    void toggleActionEnablement( bool );
+    void actionArgumentsEdited( const QString& );
+    void actionEnvironmentChanged( int );
+    void actionExecutableChanged( const KUrl& );
+    void actionExecutableChanged( const QString& );
 private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     void fillIncludes( const QMap<QString,QStringList>& includes );
     void fillDefines( const QMap<QString,QHash<QString,QString> >& defines );
     Ui::ConfigWidget* ui;
     CustomBuildSystemConfig m_config;
-    int lastConfiguredActionTool;
 };
 
 #endif
