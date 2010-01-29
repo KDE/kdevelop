@@ -61,16 +61,9 @@ public:
     virtual KUrl::List includeDirectories(ProjectBaseItem*) const = 0;
 
     /**
-     * Provide a list of files that contain the preprocessor defines for the
-     * project
+     * Provide a list of preprocessor defines for the project item
      */
     virtual QHash<QString,QString> defines(ProjectBaseItem*) const = 0;
-
-    /**
-     * Provide a list of files that contains environment variables for the
-     * project
-     */
-    virtual QHash<QString,QString> environment(ProjectBaseItem*) const = 0;
 
     /**
      * Create a new target
