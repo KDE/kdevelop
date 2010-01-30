@@ -31,6 +31,7 @@ class ConfigWidget;
 }
 
 class ProjectPathsModel;
+class QItemSelection;
 
 class ConfigWidget : public QWidget
 {
@@ -48,6 +49,7 @@ private slots:
     void actionEnvironmentChanged( int );
     void actionExecutableChanged( const KUrl& );
     void actionExecutableChanged( const QString& );
+    void projectPathSelected(const QItemSelection&, const QItemSelection& );
 private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     Ui::ConfigWidget* ui;

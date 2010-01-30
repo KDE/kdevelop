@@ -19,6 +19,8 @@
 
 #include "configwidget.h"
 
+#include <KDebug>
+
 #include "ui_configwidget.h"
 #include "projectpathsmodel.h"
 
@@ -41,6 +43,7 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionExecutable, SIGNAL(textChanged(QString)), SLOT(actionExecutableChanged(QString)) );
 
     ui->projectPaths->setModel( pathsModel );
+    connect( ui->projectPaths->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(projectPathSelected(QItemSelection,QItemSelection)) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -136,6 +139,14 @@ void ConfigWidget::actionExecutableChanged(const KUrl& url )
 void ConfigWidget::actionExecutableChanged(const QString& txt )
 {
     actionExecutableChanged( KUrl( txt ) );
+}
+
+void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& deselected )
+{
+    bool enable = !( selected.isEmpty() || selected.at(0).topLeft().row() == pathsModel->rowCount() - 1 );
+    ui->includePaths->setEnabled( enable );
+    ui->defines->setEnabled( enable );
+    ui->switchIncludeDefines->setEnabled( enable );
 }
 
 #include "configwidget.moc"
