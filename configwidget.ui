@@ -196,7 +196,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <string>List of include paths for the selected project item</string>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_4">
