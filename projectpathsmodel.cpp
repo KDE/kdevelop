@@ -81,7 +81,10 @@ Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
         return 0;
     }
 
-    return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsEditable | Qt::ItemIsEnabled );
+    if( index.row() == projectPaths.count() ) {
+        return Qt::ItemFlags( Qt::ItemIsEditable  | Qt::ItemIsEnabled );
+    }
+    return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }
 
 QList< CustomBuildSystemProjectPathConfig > ProjectPathsModel::paths() const
