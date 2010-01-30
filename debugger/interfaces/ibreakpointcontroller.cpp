@@ -176,6 +176,9 @@ void IBreakpointController::hit(KDevelop::Breakpoint* breakpoint, const QString 
             ev = new KNotification("WatchpointHit", ICore::self()->uiController()->activeMainWindow());
             ev->setText(i18n("Watchpoint hit: %1", breakpoint->location()) + msg);
             break;
+        default:
+            Q_ASSERT(0);
+            break;
     }
     if (ev) {
         ev->setPixmap(KIcon("script-error").pixmap(QSize(22,22)));
