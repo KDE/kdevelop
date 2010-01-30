@@ -97,4 +97,4 @@ void IncludesModel::setIncludes(const QStringList& includes )
     reset();
 }
 
-#include "projectpathsmodel.h"
+#include "includesmodel.moc"

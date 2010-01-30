@@ -119,4 +119,4 @@ void ProjectPathsModel::setPaths(const QList< CustomBuildSystemProjectPathConfig
     this->reset();
 }
 
-#include "projectpathsmodel.h"
+#include "projectpathsmodel.moc"
