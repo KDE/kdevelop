@@ -63,11 +63,13 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
     }
 
     if( index.row() == projectPaths.count() ) {
-        beginInsertRows( QModelIndex(), projectPaths.count(), projectPaths.count() );
-        CustomBuildSystemProjectPathConfig c;
-        c.path = value.toString();
-        projectPaths << c;
-        endInsertRows();
+        if( value.toString() != data( index ).toString() ) {
+            beginInsertRows( QModelIndex(), projectPaths.count(), projectPaths.count() );
+            CustomBuildSystemProjectPathConfig c;
+            c.path = value.toString();
+            projectPaths << c;
+            endInsertRows();
+        }
     } else {
         projectPaths[index.row()].path = value.toString();
     }
