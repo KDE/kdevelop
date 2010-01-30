@@ -166,6 +166,9 @@ If this is the same as the source directory you can leave it empty.</string>
       </item>
       <item row="1" column="1">
        <widget class="KComboBox" name="kcombobox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Switch between configuring Includes/Imports and Defines</string>
         </property>
@@ -193,7 +196,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <string>List of include paths for the selected project item</string>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_4">
@@ -202,6 +205,9 @@ If this is the same as the source directory you can leave it empty.</string>
           </property>
           <item row="0" column="0">
            <widget class="QListView" name="includePaths">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
@@ -219,6 +225,9 @@ If this is the same as the source directory you can leave it empty.</string>
           </property>
           <item row="0" column="0">
            <widget class="QTableView" name="defines">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
