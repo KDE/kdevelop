@@ -83,9 +83,6 @@ Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
         return 0;
     }
 
-    if( index.row() == projectPaths.count() ) {
-        return Qt::ItemFlags( Qt::ItemIsEditable  | Qt::ItemIsEnabled );
-    }
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }
 
