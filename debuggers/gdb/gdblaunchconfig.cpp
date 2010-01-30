@@ -236,12 +236,16 @@ bool GdbJob::doKill()
 
 void GdbJob::stderrReceived(const QStringList& l )
 {
-    model()->appendLines( l );
+    if (KDevelop::OutputModel* m = model()) {
+        m->appendLines( l );
+    }
 }
 
 void GdbJob::stdoutReceived(const QStringList& l )
 {
-    model()->appendLines( l );
+    if (KDevelop::OutputModel* m = model()) {
+        m->appendLines( l );
+    }
 }
 
 KDevelop::OutputModel* GdbJob::model()
