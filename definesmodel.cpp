@@ -132,6 +132,7 @@ QHash<QString,QVariant> DefinesModel::defines() const
 
 void DefinesModel::setDefines(const QHash<QString,QVariant>& includes )
 {
+    m_defines.clear();
     foreach( const QString& k, includes.keys() ) {
         m_defines << qMakePair<QString,QVariant>( k, includes[k] );
     }
