@@ -92,7 +92,8 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
                 projectPaths[index.row()].path = value.toString();
                 break;
         }
-
+        emit dataChanged( index, index );
+        return true;
     }
 
     return false;

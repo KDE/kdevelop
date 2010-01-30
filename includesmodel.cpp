@@ -70,6 +70,8 @@ bool IncludesModel::setData( const QModelIndex& index, const QVariant& value, in
         }
     } else {
         m_includes[index.row()] = value.toString();
+        emit dataChanged( index, index );
+        return true;
     }
 
     return false;

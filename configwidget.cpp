@@ -47,6 +47,12 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 
     ui->projectPaths->setModel( pathsModel );
     connect( ui->projectPaths->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(projectPathSelected(QItemSelection,QItemSelection)) );
+    connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
+    connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
+    connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
 
     ui->includePaths->setModel( includesModel );
 
