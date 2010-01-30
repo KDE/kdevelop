@@ -59,6 +59,7 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
 
     ui->defines->setModel( definesModel );
+    ui->defines->horizontalHeader()->setResizeMode( QHeaderView::Stretch );
     connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
@@ -166,7 +167,7 @@ void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QI
 {
     if( !deselected.isEmpty() && !deselected.indexes().first().row() == pathsModel->rowCount() - 1 ) {
         pathsModel->setData( deselected.indexes().first(), includesModel->includes(), ProjectPathsModel::SetIncludesRole );
-        //pathsModel->setData( deselected.indexes().first(), definesModel->defines(), ProjectPathsModel::SetDefinesRole );
+        pathsModel->setData( deselected.indexes().first(), definesModel->defines(), ProjectPathsModel::SetDefinesRole );
     }
     bool enable = !( selected.isEmpty() || selected.indexes().first().row() == pathsModel->rowCount() - 1 );
     ui->includePaths->setEnabled( enable );
@@ -175,8 +176,10 @@ void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QI
 
     if( enable ) {
         includesModel->setIncludes( pathsModel->data( selected.indexes().first(), ProjectPathsModel::IncludesDataRole ).toStringList() );
+        definesModel->setDefines( pathsModel->data( selected.indexes().first(), ProjectPathsModel::DefinesDataRole ).toHash() );
     } else {
         includesModel->setIncludes( QStringList() );
+        definesModel->setDefines( QHash<QString,QVariant>() );
     }
 }
 
