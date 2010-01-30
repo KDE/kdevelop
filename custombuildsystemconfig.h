@@ -22,6 +22,7 @@
 
 #include <QMap>
 #include <QList>
+#include <QStringList>
 #include <QHash>
 #include <KUrl>
 
