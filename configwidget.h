@@ -31,6 +31,7 @@ class ConfigWidget;
 }
 
 class ProjectPathsModel;
+class IncludesModel;
 class QItemSelection;
 
 class ConfigWidget : public QWidget
@@ -54,6 +55,7 @@ private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     Ui::ConfigWidget* ui;
     ProjectPathsModel* pathsModel;
+    IncludesModel* includesModel;
 };
 
 #endif

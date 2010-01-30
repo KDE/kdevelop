@@ -23,10 +23,13 @@
 
 #include "ui_configwidget.h"
 #include "projectpathsmodel.h"
+#include "includesmodel.h"
 
 
 ConfigWidget::ConfigWidget( QWidget* parent )
-    : QWidget ( parent ), ui( new Ui::ConfigWidget ), pathsModel( new ProjectPathsModel( this ) )
+    : QWidget ( parent ), ui( new Ui::ConfigWidget )
+    , pathsModel( new ProjectPathsModel( this ) )
+    , includesModel( new IncludesModel( this ) )
 {
     ui->setupUi( this );
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
@@ -44,6 +47,11 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 
     ui->projectPaths->setModel( pathsModel );
     connect( ui->projectPaths->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(projectPathSelected(QItemSelection,QItemSelection)) );
+
+    ui->includePaths->setModel( includesModel );
+
+    ui->switchIncludeDefines->setCurrentIndex( 0 );
+    ui->stackedWidget->setCurrentIndex( 0 );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -143,10 +151,20 @@ void ConfigWidget::actionExecutableChanged(const QString& txt )
 
 void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& deselected )
 {
-    bool enable = !( selected.isEmpty() || selected.at(0).topLeft().row() == pathsModel->rowCount() - 1 );
+    if( !deselected.isEmpty() && !deselected.indexes().first().row() == pathsModel->rowCount() - 1 ) {
+        pathsModel->setData( deselected.indexes().first(), includesModel->includes(), ProjectPathsModel::SetIncludesRole );
+        //pathsModel->setData( deselected.indexes().first(), definesModel->defines(), ProjectPathsModel::SetDefinesRole );
+    }
+    bool enable = !( selected.isEmpty() || selected.indexes().first().row() == pathsModel->rowCount() - 1 );
     ui->includePaths->setEnabled( enable );
     ui->defines->setEnabled( enable );
     ui->switchIncludeDefines->setEnabled( enable );
+
+    if( enable ) {
+        includesModel->setIncludes( pathsModel->data( selected.indexes().first(), ProjectPathsModel::IncludesDataRole ).toStringList() );
+    } else {
+        includesModel->setIncludes( QStringList() );
+    }
 }
 
 #include "configwidget.moc"
