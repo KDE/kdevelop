@@ -29,6 +29,7 @@
 struct CustomBuildSystemTool
 {
     enum ActionType { Build = 0, Configure, Install, Clean };
+    bool enabled;
     KUrl executable;
     QString arguments;
     QString envGrp;

@@ -62,11 +62,12 @@ void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, Cus
 {
     for( int i = 0; i < ui->buildAction->count(); i++ ) {
         QHash< CustomBuildSystemTool::ActionType, CustomBuildSystemTool>::const_iterator it = tools.find( CustomBuildSystemTool::ActionType( i ) );
+        CustomBuildSystemTool t;
+        t.enabled = false;
         if( it != tools.end() ) {
-            ui->buildAction->setItemData( i, QVariant::fromValue<CustomBuildSystemTool>( *it ) );
-        } else {
-            ui->buildAction->setItemData( i, QVariant() );
+            t = *it;
         }
+        ui->buildAction->setItemData( i, QVariant::fromValue<CustomBuildSystemTool>( t ) );
     }
     ui->buildAction->setCurrentIndex( CustomBuildSystemTool::Build );
 }
@@ -79,32 +80,22 @@ void ConfigWidget::changeAction( int idx )
     if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
         CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
         bool b = ui->enableAction->blockSignals( true );
-        ui->enableAction->setChecked( true );
+        ui->enableAction->setChecked( t.enabled );
         ui->enableAction->blockSignals( b );
+
         ui->actionArguments->setText( t.arguments );
         ui->actionExecutable->setUrl( t.executable );
         ui->actionEnvironment->setCurrentIndex( ui->actionEnvironment->findText( t.envGrp ) );
-    } else {
-        ui->actionArguments->setText( "" );
-        ui->actionEnvironment->setCurrentIndex( -1 );
-        ui->actionExecutable->setUrl( KUrl() );
-        bool b = ui->enableAction->blockSignals( true );
-        ui->enableAction->setChecked( false );
-        ui->enableAction->blockSignals( b );
     }
 }
 
 void ConfigWidget::toggleActionEnablement( bool enable )
 {
-    if( enable ) {
-        CustomBuildSystemTool t;
-        t.arguments = ui->actionArguments->text();
-        t.envGrp = ui->actionEnvironment->currentProfile();
-        t.executable = ui->actionExecutable->url();
-        t.type = CustomBuildSystemTool::ActionType( ui->buildAction->currentIndex() );
+    QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
+    if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
+        CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
+        t.enabled = enable;
         ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
-    } else {
-        ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant() );
     }
     emit changed();
 }
