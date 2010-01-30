@@ -1155,6 +1155,24 @@ void GdbTest::testSwitchFrameGdbConsole()
 
 }
 
+//Bug 201771
+void GdbTest::testInsertAndRemoveBreakpointWhileRunning()
+{
+    TestDebugSession *session = new TestDebugSession;
+    TestLaunchConfiguration cfg(KUrl(QDir::currentPath()+"/unittests/debugeeslow"));
+    QString fileName = QFileInfo(__FILE__).dir().path()+"/debugeeslow.cpp";
+
+    session->startProgram(&cfg);
+
+    WAIT_FOR_STATE(session, DebugSession::ActiveState);
+    QTest::qWait(2000);
+    kDebug() << "adding breakpoint";
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(fileName, 23);
+    b->setDeleted();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
+
+
 void GdbTest::waitForState(GDBDebugger::DebugSession *session, DebugSession::DebuggerState state,
                             const char *file, int line)
 {

@@ -94,6 +94,8 @@ struct InsertedHandler : public Handler
             } else if (r.hasField("hw-awpt")) {
                 controller->m_ids[breakpoint] = r["hw-awpt"]["number"].toInt();
             }
+            Q_ASSERT(controller->m_ids[breakpoint]);
+            kDebug() << "breakpoint id" << breakpoint << controller->m_ids[breakpoint];
         }
         controller->m_dirty[breakpoint].remove(KDevelop::Breakpoint::LocationColumn);
         controller->breakpointStateChanged(breakpoint);
@@ -179,20 +181,26 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
     bool addedCommand = false;
 
     /** See what is dirty, and send the changes.  For simplicity, send
-        changes one-by-one and call sendToGDB again in the completion
+        changes one-by-one and call sendMaybe again in the completion
         handler.
         FIXME: should handle and annotate the errors?
     */
+    kDebug() << breakpoint;
     if (breakpoint->deleted())
     {
+        kDebug() << "deleted";
         m_dirty.remove(breakpoint);
         m_errors.remove(breakpoint);
-        if (m_ids.contains(breakpoint)) {
-            debugSession()->addCommand(
-                new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
-                               new DeletedHandler(this, breakpoint)));
-            addedCommand = true;
+        if (m_ids.contains(breakpoint)) { //if id is 0 breakpoint insertion is still pending, InsertedHandler will call sendMaybe again and delete it
+            kDebug() << "breakpoint id" << m_ids[breakpoint];
+            if (m_ids[breakpoint]) {
+                debugSession()->addCommand(
+                    new GDBCommand(BreakDelete, QString::number(m_ids[breakpoint]),
+                                new DeletedHandler(this, breakpoint)));
+                addedCommand = true;
+            }
         } else {
+            kDebug() << "breakpoint doesn't have yet an id, just delete it";
             delete breakpoint;
         }
     }
@@ -201,7 +209,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             m_dirty[breakpoint].clear();
             breakpointStateChanged(breakpoint);
         } else {
-            if (m_ids.contains(breakpoint)) {
+            if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
                 /* We already have GDB breakpoint for this, so we need to remove
                 this one.  */
                 debugSession()->addCommand(
@@ -209,6 +217,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
                                 new DeletedHandler(this, breakpoint)));
                 addedCommand = true;
             } else {
+                m_ids[breakpoint] = 0; //add to m_ids so we don't delete it while insert command is still pending
                 if (breakpoint->kind() == KDevelop::Breakpoint::CodeBreakpoint) {
                     debugSession()->addCommand(
                         new GDBCommand(BreakInsert,
@@ -232,7 +241,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             }
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::EnableColumn)) {
-        if (m_ids.contains(breakpoint)) {
+        if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
             debugSession()->addCommandToFront(
                 new GDBCommand(breakpoint->enabled() ? BreakEnable : BreakDisable,
                             QString::number(m_ids[breakpoint]),
@@ -240,7 +249,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             addedCommand = true;
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::IgnoreHitsColumn)) {
-        if (m_ids.contains(breakpoint)) {
+        if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
             debugSession()->addCommandToFront(
                 new GDBCommand(BreakAfter,
                             QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->ignoreHits()),
@@ -248,7 +257,7 @@ void BreakpointController::sendMaybe(KDevelop::Breakpoint* breakpoint)
             addedCommand = true;
         }
     } else if (m_dirty[breakpoint].contains(KDevelop::Breakpoint::ConditionColumn)) {
-        if (m_ids.contains(breakpoint)) {
+        if (m_ids.contains(breakpoint) && m_ids[breakpoint]) {
             debugSession()->addCommandToFront(
                 new GDBCommand(BreakCondition,
                             QString("%0 %1").arg(m_ids[breakpoint]).arg(breakpoint->condition()),
@@ -316,8 +325,6 @@ void BreakpointController::update(KDevelop::Breakpoint *breakpoint, const GDBMI:
 {
     m_dontSendChanges++;
     
-    if (breakpoint->deleted()) return;
-
     m_ids[breakpoint] = b["number"].toInt();
 
     QString type = b["type"].literal();

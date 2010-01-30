@@ -69,6 +69,7 @@ private Q_SLOTS:
     void testVariablesQuicklySwitchFrame();
     void testSegfaultDebugee();
     void testSwitchFrameGdbConsole();
+    void testInsertAndRemoveBreakpointWhileRunning();
 private:
     KDevelop::TestCore* m_core;
     void waitForState(GDBDebugger::DebugSession *session, KDevelop::IDebugSession::DebuggerState state, const char *file, int line);
