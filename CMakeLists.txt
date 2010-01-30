@@ -15,7 +15,7 @@ kde4_add_plugin( kdevcustombuildsystem ${custom_SRCS} )
 target_link_libraries( kdevcustombuildsystem ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
 
 ## KCM for the Plugin
-set( custom_kcm_SRCS projectpathsmodel.cpp configwidget.cpp custombuildsystemconfigwidget.cpp kcm_custombuildsystem.cpp )
+set( custom_kcm_SRCS projectpathsmodel.cpp includesmodel.cpp configwidget.cpp custombuildsystemconfigwidget.cpp kcm_custombuildsystem.cpp )
 kde4_add_ui_files( custom_kcm_SRCS configwidget.ui custombuildsystemconfigwidget.ui )
 kde4_add_kcfg_files( custom_kcm_SRCS kcfg_custombuildsystemconfig.kcfgc )
 kde4_add_plugin( kcm_kdevcustombuildsystem ${custom_kcm_SRCS} )
