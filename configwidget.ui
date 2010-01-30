@@ -165,7 +165,7 @@ If this is the same as the source directory you can leave it empty.</string>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KComboBox" name="kcombobox">
+       <widget class="KComboBox" name="switchIncludeDefines">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -364,7 +364,7 @@ If this is the same as the source directory you can leave it empty.</string>
    </hints>
   </connection>
   <connection>
-   <sender>kcombobox</sender>
+   <sender>switchIncludeDefines</sender>
    <signal>activated(int)</signal>
    <receiver>stackedWidget</receiver>
    <slot>setCurrentIndex(int)</slot>
