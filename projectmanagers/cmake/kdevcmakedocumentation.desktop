@@ -2,6 +2,7 @@
 Type=Service
 Name=CMake Documentation
 Name[ca]=Documentació del CMake
+Name[ca@valencia]=Documentació del CMake
 Name[en_GB]=CMake Documentation
 Name[es]=Documentación de CMake
 Name[et]=CMake'i dokumentatsioon
