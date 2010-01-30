@@ -12,6 +12,7 @@ X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Projects
 Name[ca]=Projectes
+Name[ca@valencia]=Projectes
 Name[en_GB]=Projects
 Name[es]=Proyectos
 Name[et]=Projektid
@@ -26,6 +27,7 @@ Name[zh_CN]=工程
 Name[zh_TW]=專案
 Comment=Configure Projects
 Comment[ca]=Configura els projectes
+Comment[ca@valencia]=Configura els projectes
 Comment[en_GB]=Configure Projects
 Comment[es]=Configurar proyectos
 Comment[et]=Projektide seadistamine

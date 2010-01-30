@@ -41,6 +41,7 @@ Name[zh_CN]=环境
 Name[zh_TW]=環境
 Comment=Configure Environment Variables
 Comment[ca]=Configura les variables d'entorn
+Comment[ca@valencia]=Configura les variables d'entorn
 Comment[en_GB]=Configure Environment Variables
 Comment[es]=Configurar variables de entorno
 Comment[et]=Keskkonnamuutujate seadistamine
