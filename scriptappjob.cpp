@@ -150,7 +150,7 @@ void ScriptAppJob::start()
     if( proc )
     {
         startOutput();
-        model()->appendLine( i18n("Starting: %1", proc->program().join(" ") ) );
+        appendLine( i18n("Starting: %1", proc->program().join(" ") ) );
         proc->start();
     } else
     {
@@ -164,7 +164,7 @@ bool ScriptAppJob::doKill()
 {
     if( proc ) {
         proc->kill();
-        model()->appendLine( i18n( "*** Killed Application ***" ) );
+        appendLine( i18n( "*** Killed Application ***" ) );
     }
     return true;
 }
@@ -173,15 +173,15 @@ bool ScriptAppJob::doKill()
 void ScriptAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
 {
     if (exitCode == 0 && status == QProcess::NormalExit)
-        model()->appendLine( i18n("*** Exited normally ***") );
+        appendLine( i18n("*** Exited normally ***") );
     else
         if (status == QProcess::NormalExit)
-            model()->appendLine( i18n("*** Exited with return code: %1 ***", QString::number(exitCode)) );
+            appendLine( i18n("*** Exited with return code: %1 ***", QString::number(exitCode)) );
         else 
             if (error() == KJob::KilledJobError)
-                model()->appendLine( i18n("*** Process aborted ***") );
+                appendLine( i18n("*** Process aborted ***") );
             else
-                model()->appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
+                appendLine( i18n("*** Crashed with return code: %1 ***", QString::number(exitCode)) );
     kDebug() << "Process done";
     emitResult();
 }
@@ -201,6 +201,13 @@ void ScriptAppJob::processError( QProcess::ProcessError error )
         emitResult();
     }
     kDebug() << "Process error";
+}
+
+void ScriptAppJob::appendLine(const QString& l)
+{
+    if (KDevelop::OutputModel* m = model()) {
+        m->appendLine(l);
+    }
 }
 
 KDevelop::OutputModel* ScriptAppJob::model()
