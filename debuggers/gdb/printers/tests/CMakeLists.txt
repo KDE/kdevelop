@@ -48,5 +48,6 @@ target_link_libraries(qsetstring ${QT_QTCORE_LIBRARY})
 
 kde4_add_unit_test(qtprinters qtprinters.cpp)
 target_link_libraries(qtprinters
+    ${QT_QTCORE_LIBRARY}
     ${QT_QTTEST_LIBRARY}
 )
