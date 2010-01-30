@@ -29,7 +29,12 @@ class ProjectPathsModel : public QAbstractListModel
 {
 Q_OBJECT
 public:
-    enum SpecialRoles { SetIncludesRole = Qt::UserRole + 10, SetDefinesRoles = Qt::UserRole + 11 };
+    enum SpecialRoles {
+        IncludesDataRole = Qt::UserRole + 1,
+        DefinesDataRole = Qt::UserRole + 2,
+        SetIncludesRole = Qt::UserRole + 3,
+        SetDefinesRole = Qt::UserRole + 4
+    };
     ProjectPathsModel( QObject* parent = 0 );
     void setPaths( const QList<CustomBuildSystemProjectPathConfig>&  );
     QList<CustomBuildSystemProjectPathConfig> paths() const;

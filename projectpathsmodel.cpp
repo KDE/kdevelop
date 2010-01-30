@@ -30,7 +30,7 @@ ProjectPathsModel::ProjectPathsModel( QObject* parent )
 
 QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
 {
-    if( !index.isValid() || ( role != Qt::DisplayRole && role != Qt::EditRole ) ) {
+    if( !index.isValid() || ( role != Qt::DisplayRole && role != Qt::EditRole && role != IncludesDataRole && role != DefinesDataRole ) ) {
         return QVariant();
     }
 
@@ -41,7 +41,17 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
     if( index.row() == projectPaths.count() ) {
         return i18n( "Double Click here to insert a new path" );
     } else {
-        return projectPaths.at( index.row() ).path;
+        switch( role ) {
+        case IncludesDataRole:
+            return projectPaths.at( index.row() ).includes;
+            break;
+        case DefinesDataRole:
+            return projectPaths.at( index.row() ).defines;
+            break;
+        default:
+            return projectPaths.at( index.row() ).path;
+            break;
+        }
     }
 }
 
@@ -55,7 +65,7 @@ int ProjectPathsModel::rowCount( const QModelIndex& parent ) const
 
 bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    if( !index.isValid() || role != Qt::EditRole ) {
+    if( !index.isValid() || ( role != Qt::EditRole && role != SetIncludesRole && role != SetDefinesRole ) ) {
         return false;
     }
     if( index.row() < 0 || index.row() >= rowCount() || index.column() != 0 ) {
@@ -71,7 +81,18 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
             endInsertRows();
         }
     } else {
-        projectPaths[index.row()].path = value.toString();
+        switch( role ) {
+            case SetIncludesRole:
+                projectPaths[index.row()].includes = value.toStringList();
+                break;
+            case SetDefinesRole:
+                projectPaths[index.row()].defines = value.toHash();
+                break;
+            default:
+                projectPaths[index.row()].path = value.toString();
+                break;
+        }
+
     }
 
     return false;

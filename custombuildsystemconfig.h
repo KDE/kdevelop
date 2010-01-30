@@ -42,7 +42,7 @@ struct CustomBuildSystemProjectPathConfig
 {
     QString path;
     QStringList includes;
-    QHash<QString,QString> defines;
+    QHash<QString,QVariant> defines;
 };
 
 struct CustomBuildSystemConfig
