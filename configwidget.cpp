@@ -24,12 +24,14 @@
 #include "ui_configwidget.h"
 #include "projectpathsmodel.h"
 #include "includesmodel.h"
+#include "definesmodel.h"
 
 
 ConfigWidget::ConfigWidget( QWidget* parent )
     : QWidget ( parent ), ui( new Ui::ConfigWidget )
     , pathsModel( new ProjectPathsModel( this ) )
     , includesModel( new IncludesModel( this ) )
+    , definesModel( new DefinesModel( this ) )
 {
     ui->setupUi( this );
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
@@ -50,11 +52,16 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( pathsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+
+    ui->includePaths->setModel( includesModel );
     connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
     connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
     connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
 
-    ui->includePaths->setModel( includesModel );
+    ui->defines->setModel( definesModel );
+    connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
+    connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
 
     ui->switchIncludeDefines->setCurrentIndex( 0 );
     ui->stackedWidget->setCurrentIndex( 0 );

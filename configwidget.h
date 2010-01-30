@@ -32,6 +32,7 @@ class ConfigWidget;
 
 class ProjectPathsModel;
 class IncludesModel;
+class DefinesModel;
 class QItemSelection;
 
 class ConfigWidget : public QWidget
@@ -56,6 +57,7 @@ private:
     Ui::ConfigWidget* ui;
     ProjectPathsModel* pathsModel;
     IncludesModel* includesModel;
+    DefinesModel* definesModel;
 };
 
 #endif
