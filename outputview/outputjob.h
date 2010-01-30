@@ -74,7 +74,7 @@ private:
     bool m_killJobOnOutputClose;
     OutputJobVerbosity m_verbosity;
     int m_outputId;
-    QAbstractItemModel* m_outputModel;
+    QWeakPointer<QAbstractItemModel> m_outputModel;
     IOutputView::Ownership m_modelOwnership;
     QAbstractItemDelegate* m_outputDelegate;
     IOutputView::Ownership m_delegateOwnership;

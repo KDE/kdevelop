@@ -36,7 +36,6 @@ OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
     , m_killJobOnOutputClose(true)
     , m_verbosity(verbosity)
     , m_outputId(-1)
-    , m_outputModel(0)
     , m_modelOwnership(IOutputView::KeepOwnership)
     , m_outputDelegate(0)
     , m_delegateOwnership(IOutputView::KeepOwnership)
@@ -69,7 +68,7 @@ void OutputJob::startOutput()
             }
 
             // Keep the item model around after the job is gone
-            view->setModel(m_outputId, m_outputModel, m_modelOwnership);
+            view->setModel(m_outputId, m_outputModel.data(), m_modelOwnership);
 
             if (!m_outputDelegate) {
                 m_outputDelegate = new QItemDelegate(0);
@@ -87,7 +86,7 @@ void OutputJob::startOutput()
     }
 }
 
-void OutputJob::outputViewRemoved(int , int id)
+void OutputJob::outputViewRemoved(int idx, int id)
 {
     if (id == m_outputId && m_killJobOnOutputClose)
     {
@@ -133,7 +132,7 @@ void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate, IOutputV
 
 QAbstractItemModel * KDevelop::OutputJob::model() const
 {
-    return m_outputModel;
+    return m_outputModel.data();
 }
 
 void KDevelop::OutputJob::setStandardToolView(IOutputView::StandardToolView standard)
