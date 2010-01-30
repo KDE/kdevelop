@@ -1,0 +1,98 @@
+/************************************************************************
+ * KDevelop4 Custom Buildsystem Support                                 *
+ *                                                                      *
+ * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
+ *                                                                      *
+ * This program is free software; you can redistribute it and/or modify *
+ * it under the terms of the GNU General Public License as published by *
+ * the Free Software Foundation; either version 3 of the License, or    *
+ * (at your option) any later version.                                  *
+ *                                                                      *
+ * This program is distributed in the hope that it will be useful, but  *
+ * WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU     *
+ * General Public License for more details.                             *
+ *                                                                      *
+ * You should have received a copy of the GNU General Public License    *
+ * along with this program; if not, see <http://www.gnu.org/licenses/>. *
+ ************************************************************************/
+
+#include "projectpathsmodel.h"
+
+#include <klocale.h>
+
+#include "custombuildsystemconfig.h"
+
+ProjectPathsModel::ProjectPathsModel( QObject* parent )
+    : QAbstractListModel( parent )
+{
+}
+
+QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
+{
+    if( !index.isValid() || ( role != Qt::DisplayRole && role != Qt::EditRole ) ) {
+        return QVariant();
+    }
+
+    if( index.row() < 0 || index.row() >= rowCount() || index.column() != 0 ) {
+        return QVariant();
+    }
+
+    if( index.row() == projectPaths.count() ) {
+        return i18n( "Double Click here to insert a new path" );
+    } else {
+        return projectPaths.at( index.row() ).path;
+    }
+}
+
+int ProjectPathsModel::rowCount( const QModelIndex& parent ) const
+{
+    if( parent.isValid() ) {
+        return 0;
+    }
+    return projectPaths.count() + 1;
+}
+
+bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value, int role )
+{
+    if( !index.isValid() || role != Qt::EditRole ) {
+        return false;
+    }
+    if( index.row() < 0 || index.row() >= rowCount() || index.column() != 0 ) {
+        return false;
+    }
+
+    if( index.row() == projectPaths.count() ) {
+        beginInsertRows( QModelIndex(), projectPaths.count(), projectPaths.count() );
+        CustomBuildSystemProjectPathConfig c;
+        c.path = value.toString();
+        projectPaths << c;
+        endInsertRows();
+    } else {
+        projectPaths[index.row()].path = value.toString();
+    }
+
+    return false;
+}
+
+Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
+{
+    if( !index.isValid() ) {
+        return 0;
+    }
+
+    return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsEditable | Qt::ItemIsEnabled );
+}
+
+QList< CustomBuildSystemProjectPathConfig > ProjectPathsModel::paths() const
+{
+    return projectPaths;
+}
+
+void ProjectPathsModel::setPaths(const QList< CustomBuildSystemProjectPathConfig >& paths )
+{
+    projectPaths = paths;
+    this->reset();
+}
+
+#include "projectpathsmodel.h"

@@ -1,0 +1,44 @@
+/************************************************************************
+ * KDevelop4 Custom Buildsystem Support                                 *
+ *                                                                      *
+ * Copyright 2010 Andreas Pakulat <apaku@gmx.de>                        *
+ *                                                                      *
+ * This program is free software; you can redistribute it and/or modify *
+ * it under the terms of the GNU General Public License as published by *
+ * the Free Software Foundation; either version 3 of the License, or    *
+ * (at your option) any later version.                                  *
+ *                                                                      *
+ * This program is distributed in the hope that it will be useful, but  *
+ * WITHOUT ANY WARRANTY; without even the implied warranty of           *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU     *
+ * General Public License for more details.                             *
+ *                                                                      *
+ * You should have received a copy of the GNU General Public License    *
+ * along with this program; if not, see <http://www.gnu.org/licenses/>. *
+ ************************************************************************/
+
+#ifndef PROJECTPATHSMODEL_H
+#define PROJECTPATHSMODEL_H
+
+#include <QAbstractListModel>
+#include <QList>
+
+#include "custombuildsystemconfig.h"
+
+class ProjectPathsModel : public QAbstractListModel
+{
+Q_OBJECT
+public:
+    enum SpecialRoles { SetIncludesRole = Qt::UserRole + 10, SetDefinesRoles = Qt::UserRole + 11 };
+    ProjectPathsModel( QObject* parent = 0 );
+    void setPaths( const QList<CustomBuildSystemProjectPathConfig>&  );
+    QList<CustomBuildSystemProjectPathConfig> paths() const;
+    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+private:
+    QList<CustomBuildSystemProjectPathConfig> projectPaths;
+};
+
+#endif // PROJECTPATHSMODEL_H
