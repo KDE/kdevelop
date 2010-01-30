@@ -20,10 +20,11 @@
 #include "configwidget.h"
 
 #include "ui_configwidget.h"
+#include "projectpathsmodel.h"
 
 
 ConfigWidget::ConfigWidget( QWidget* parent )
-    : QWidget ( parent ), ui( new Ui::ConfigWidget )
+    : QWidget ( parent ), ui( new Ui::ConfigWidget ), pathsModel( new ProjectPathsModel( this ) )
 {
     ui->setupUi( this );
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
@@ -38,6 +39,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
     connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
     connect( ui->actionExecutable, SIGNAL(textChanged(QString)), SLOT(actionExecutableChanged(QString)) );
+
+    ui->projectPaths->setModel( pathsModel );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -50,12 +53,8 @@ void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
     bool b = blockSignals( true );
     ui->buildDir->setUrl( cfg.buildDir );
     fillTools( cfg.tools );
-    fillProjectPaths( cfg.projectPaths );
+    pathsModel->setPaths( cfg.projectPaths );
     blockSignals( b );
-}
-
-void ConfigWidget::fillProjectPaths(const QList< CustomBuildSystemProjectPathConfig >& paths)
-{
 }
 
 void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools)
