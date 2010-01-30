@@ -51,7 +51,6 @@ private slots:
 private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     Ui::ConfigWidget* ui;
-    CustomBuildSystemConfig m_config;
     ProjectPathsModel* pathsModel;
 };
 

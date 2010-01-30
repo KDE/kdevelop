@@ -45,7 +45,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 
 CustomBuildSystemConfig ConfigWidget::config() const
 {
-    return m_config;
+    CustomBuildSystemConfig c;
+    return c;
 }
 
 void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
@@ -69,8 +70,6 @@ void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, Cus
     }
     ui->buildAction->setCurrentIndex( CustomBuildSystemTool::Build );
 }
-
-
 
 void ConfigWidget::changeAction( int idx )
 {
