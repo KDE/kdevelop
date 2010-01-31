@@ -49,7 +49,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     static QString argumentsEntry;
     static QString isExecutableEntry;
     static QString environmentGroupEntry;
-    static QString useTerminalEntry;
+    //static QString useTerminalEntry;
     static QString userIdToRunEntry;
     static QString projectTargetEntry;
     
@@ -61,7 +61,7 @@ class ExecuteScriptPlugin : public KDevelop::IPlugin, public IExecuteScriptPlugi
     QStringList arguments( KDevelop::ILaunchConfiguration*, QString& err ) const;
     KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const;
     QString environmentGroup( KDevelop::ILaunchConfiguration* ) const;
-    bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
+    //bool useTerminal( KDevelop::ILaunchConfiguration* ) const;
     QString scriptAppConfigTypeId() const;
 };
 

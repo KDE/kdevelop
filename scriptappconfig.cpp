@@ -78,7 +78,7 @@ void ScriptAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     arguments->setText( cfg.readEntry( ExecuteScriptPlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecuteScriptPlugin::workingDirEntry, KUrl() ) );
     environment->setCurrentProfile( cfg.readEntry( ExecuteScriptPlugin::environmentGroupEntry, "default" ) );
-    runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
+    //runInTerminal->setChecked( cfg.readEntry( ExecuteScriptPlugin::useTerminalEntry, false ) );
     blockSignals( b );
 }
 
@@ -105,7 +105,7 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     connect( workingDirectory, SIGNAL(urlSelected(const KUrl&)), SIGNAL(changed()) );
     connect( workingDirectory->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
     connect( environment, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()) );
-    connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
+    //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
 }
 
 void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* project ) const
@@ -127,7 +127,7 @@ void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecuteScriptPlugin::argumentsEntry, arguments->text() );
     cfg.writeEntry( ExecuteScriptPlugin::workingDirEntry, workingDirectory->url() );
     cfg.writeEntry( ExecuteScriptPlugin::environmentGroupEntry, environment->currentProfile() );
-    cfg.writeEntry( ExecuteScriptPlugin::useTerminalEntry, runInTerminal->isChecked() );
+    //cfg.writeEntry( ExecuteScriptPlugin::useTerminalEntry, runInTerminal->isChecked() );
 }
 
 QString ScriptAppConfigPage::title() const

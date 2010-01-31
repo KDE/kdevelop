@@ -55,7 +55,7 @@ QString ExecuteScriptPlugin::remoteHostEntry = "Remote Host";
 QString ExecuteScriptPlugin::argumentsEntry = "Arguments";
 QString ExecuteScriptPlugin::isExecutableEntry = "isExecutable";
 QString ExecuteScriptPlugin::environmentGroupEntry = "EnvironmentGroup";
-QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
+//QString ExecuteScriptPlugin::useTerminalEntry = "Use External Terminal";
 QString ExecuteScriptPlugin::userIdToRunEntry = "User Id to Run";
 QString ExecuteScriptPlugin::projectTargetEntry = "Project Target";
 
@@ -229,7 +229,7 @@ QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, Q
     return interpreter;
 }
 
-
+/*
 bool ExecuteScriptPlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) const
 {
     if( !cfg )
@@ -239,7 +239,7 @@ bool ExecuteScriptPlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) con
     
     return cfg->config().readEntry( ExecuteScriptPlugin::useTerminalEntry, false );
 }
-
+*/
 
 KUrl ExecuteScriptPlugin::workingDirectory( KDevelop::ILaunchConfiguration* cfg ) const
 {

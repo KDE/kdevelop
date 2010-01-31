@@ -50,7 +50,7 @@ public:
     virtual QStringList arguments( KDevelop::ILaunchConfiguration*, QString& ) const = 0;
     virtual KUrl workingDirectory( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString environmentGroup( KDevelop::ILaunchConfiguration* ) const = 0;
-    virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
+    //virtual bool useTerminal( KDevelop::ILaunchConfiguration* ) const = 0;
     virtual QString scriptAppConfigTypeId() const = 0;
 };
 
