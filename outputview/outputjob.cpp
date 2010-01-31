@@ -68,7 +68,7 @@ void OutputJob::startOutput()
             }
 
             // Keep the item model around after the job is gone
-            view->setModel(m_outputId, m_outputModel.data(), m_modelOwnership);
+            view->setModel(m_outputId, m_outputModel, m_modelOwnership);
 
             if (!m_outputDelegate) {
                 m_outputDelegate = new QItemDelegate(0);
@@ -132,7 +132,7 @@ void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate, IOutputV
 
 QAbstractItemModel * KDevelop::OutputJob::model() const
 {
-    return m_outputModel.data();
+    return m_outputModel;
 }
 
 void KDevelop::OutputJob::setStandardToolView(IOutputView::StandardToolView standard)

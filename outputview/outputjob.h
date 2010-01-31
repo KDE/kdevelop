@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef OUTPUTJOB_H
 #define OUTPUTJOB_H
 
-#include <QtCore/QWeakPointer>
+#include <QtCore/QPointer>
 
 #include <kjob.h>
 
@@ -74,7 +74,7 @@ private:
     bool m_killJobOnOutputClose;
     OutputJobVerbosity m_verbosity;
     int m_outputId;
-    QWeakPointer<QAbstractItemModel> m_outputModel;
+    QPointer<QAbstractItemModel> m_outputModel;
     IOutputView::Ownership m_modelOwnership;
     QAbstractItemDelegate* m_outputDelegate;
     IOutputView::Ownership m_delegateOwnership;
