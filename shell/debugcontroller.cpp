@@ -381,6 +381,7 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
         case IDebugSession::StoppingState:
             kDebug() << "new state: stopped";
             stateChanged("stopped");
+            clearExecutionPoint();
             //m_restartDebugger->setEnabled(session->restartAvaliable());
             break;
         case IDebugSession::StartingState:
