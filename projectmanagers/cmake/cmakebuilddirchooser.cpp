@@ -40,6 +40,8 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
     QString cmakeBin=KStandardDirs::findExe( "cmake" );
     setCMakeBinary(KUrl(cmakeBin));
+    // Default to debug builds in kdevelop
+    setBuildType("Debug");
     
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
     connect(m_chooserUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
