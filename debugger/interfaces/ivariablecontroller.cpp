@@ -52,7 +52,7 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
         //variables are now outdated, update them
         m_activeThread = -1;
         m_activeFrame = -1;
-    } else if (state == IDebugSession::EndedState) {
+    } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
         // Remove all locals.
         foreach (Locals *l, variableCollection()->allLocals()) {
             l->deleteChildren();
