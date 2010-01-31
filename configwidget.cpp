@@ -98,6 +98,7 @@ void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, Cus
         ui->buildAction->setItemData( i, QVariant::fromValue<CustomBuildSystemTool>( t ) );
     }
     ui->buildAction->setCurrentIndex( CustomBuildSystemTool::Build );
+    changeAction( ui->buildAction->currentIndex() );
 }
 
 void ConfigWidget::changeAction( int idx )
