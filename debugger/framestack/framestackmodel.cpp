@@ -296,11 +296,6 @@ void FrameStackModel::handleEvent(IDebugSession::event_t event)
 {
     switch (event)
     {
-    case IDebugSession::debugger_exited:
-    case IDebugSession::program_exited:
-        setThreads(QList<FrameStackModel::ThreadItem>());
-        break;
-
     case IDebugSession::program_state_changed:
         update();
         break;
@@ -314,6 +309,8 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 {
     if (state == IDebugSession::PausedState) {
         setCurrentFrame(0);
+    } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
+        setThreads(QList<FrameStackModel::ThreadItem>());
     }
 }
 
