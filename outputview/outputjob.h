@@ -20,7 +20,7 @@ Boston, MA 02110-1301, USA.
 #ifndef OUTPUTJOB_H
 #define OUTPUTJOB_H
 
-#include <QtCore/QPointer>
+#include <QtCore/QWeakPointer>
 
 #include <kjob.h>
 
