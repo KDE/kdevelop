@@ -86,8 +86,79 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
     changeCurrentConfig( ui->currentConfig->findData( grp.readEntry( ConfigConstants::currentConfigKey, "" ) ) );
 }
 
-void CustomBuildSystemConfigWidget::saveTo( KConfig* )
+void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSystemConfig c )
 {
+    if( c.grpName.isEmpty() ) {
+        int maxnum = 0;
+        foreach( const QString& grpname, cfg.groupList() ) {
+            int grpnum = grpname.mid( QString("BuildConifg").length() ).toInt();
+            if( grpnum >= maxnum ) {
+                maxnum = grpnum + 1;
+            }
+        }
+        c.grpName = QString("BuildConfig%1").arg( maxnum );
+    }
+    KConfigGroup subgrp = cfg.group( c.grpName );
+    subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
+    subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
+    foreach( const CustomBuildSystemTool& tool, c.tools.values() ) {
+        KConfigGroup toolgrp;
+        switch( tool.type ) {
+            case CustomBuildSystemTool::Build: {
+                toolgrp = subgrp.group( QString("%1Build").arg( ConfigConstants::toolGroupPrefix ) );
+                break;
+            }
+            case CustomBuildSystemTool::Configure: {
+                toolgrp = subgrp.group( QString("%1Configure").arg( ConfigConstants::toolGroupPrefix ) );
+                break;
+            }
+            case CustomBuildSystemTool::Clean: {
+                toolgrp = subgrp.group( QString("%1Clean").arg( ConfigConstants::toolGroupPrefix ) );
+                break;
+            }
+            case CustomBuildSystemTool::Install: {
+                toolgrp = subgrp.group( QString("%1Install").arg( ConfigConstants::toolGroupPrefix ) );
+                break;
+            }
+        }
+        toolgrp.writeEntry( ConfigConstants::toolType, int(tool.type) );
+        toolgrp.writeEntry( ConfigConstants::toolEnvironment , tool.envGrp );
+        toolgrp.writeEntry( ConfigConstants::toolEnabled, tool.enabled );
+        toolgrp.writeEntry( ConfigConstants::toolExecutable, tool.executable );
+        toolgrp.writeEntry( ConfigConstants::toolArguments, tool.arguments );
+    }
+    for( int i = 0; i < c.projectPaths.count(); i++ ) {
+        KConfigGroup pathgrp = subgrp.group( QString("%1%2").arg( ConfigConstants::projectPathPrefix ).arg( i ) );
+        CustomBuildSystemProjectPathConfig path = c.projectPaths.at( i );
+        pathgrp.writeEntry( ConfigConstants::projectPathKey, path.path );
+        {
+            QByteArray tmp;
+            QDataStream s(&tmp, QIODevice::WriteOnly);
+            s.setVersion( QDataStream::Qt_4_5 );
+            s << path.includes;
+            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
+        }
+        {
+            QByteArray tmp;
+            QDataStream s(&tmp, QIODevice::WriteOnly);
+            s.setVersion( QDataStream::Qt_4_5 );
+            s << path.defines;
+            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
+        }
+    }
+}
+
+void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg )
+{
+    for( int i = 0; i < ui->currentConfig->count(); i++ ) {
+        CustomBuildSystemConfig c = configs.at( i );
+        c.title = ui->currentConfig->itemText( i );
+        KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
+        saveConfig( subgrp, c );
+    }
+    cfg->sync();
+}
+
 void CustomBuildSystemConfigWidget::configChanged()
 {
     CustomBuildSystemConfig c = configs[ ui->currentConfig->currentIndex() ];
