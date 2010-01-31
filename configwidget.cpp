@@ -183,5 +183,21 @@ void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QI
     }
 }
 
+void ConfigWidget::clear()
+{
+    pathsModel->setPaths( QList<CustomBuildSystemProjectPathConfig>() );
+    includesModel->setIncludes( QStringList() );
+    definesModel->setDefines( QHash<QString,QVariant>() );
+    for( int i = 0; i < ui->buildAction->count(); i++ ) {
+        CustomBuildSystemTool t;
+        t.type = CustomBuildSystemTool::ActionType( i );
+        ui->buildAction->setItemData( i, QVariant::fromValue( t ) );
+    }
+    ui->buildAction->setCurrentIndex( int( CustomBuildSystemTool::Build ) );
+    changeAction( ui->buildAction->currentIndex() );
+    ui->buildDir->setText("");
+}
+
+
 #include "configwidget.moc"
 

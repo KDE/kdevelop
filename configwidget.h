@@ -42,6 +42,7 @@ public:
     ConfigWidget( QWidget* parent = 0 );
     void loadConfig( CustomBuildSystemConfig cfg );
     CustomBuildSystemConfig config() const;
+    void clear();
 signals:
     void changed();
 private slots:
