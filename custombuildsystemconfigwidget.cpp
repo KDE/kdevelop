@@ -101,9 +101,12 @@ void CustomBuildSystemConfigWidget::configChanged()
 void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
 {
     if( idx == -1 ) {
+        ui->configWidget->setEnabled( false );
+        ui->configWidget->clear();
         return;
     }
     Q_ASSERT( idx >= 0 && idx < configs.size() );
+    ui->configWidget->setEnabled( true );
     CustomBuildSystemConfig cfg = configs.at( idx );
     ui->configWidget->loadConfig( cfg );
 }
