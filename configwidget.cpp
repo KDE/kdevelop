@@ -71,6 +71,17 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 CustomBuildSystemConfig ConfigWidget::config() const
 {
     CustomBuildSystemConfig c;
+    c.buildDir = ui->buildDir->url();
+    for( int i = 0; i < ui->buildAction->count(); i++ ) {
+        QVariant data = ui->buildAction->itemData( i );
+        CustomBuildSystemTool t;
+        if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
+            t = data.value<CustomBuildSystemTool>();
+        }
+        Q_ASSERT( t.type != CustomBuildSystemTool::Undefined );
+        c.tools[ CustomBuildSystemTool::ActionType( i ) ] = t;
+    }
+    c.projectPaths = pathsModel->paths();
     return c;
 }
 
