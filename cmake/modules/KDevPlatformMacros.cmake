@@ -73,8 +73,9 @@ macro(kdevplatform_add_app_templates _templateNames)
     endforeach(_templateName)
 endmacro(kdevplatform_add_app_templates)
 
-macro(kdevplatform_install_kross_plugin desktopfile subdir)
-    install( FILES ${desktopfile} DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( DIRECTORY ${subdir} DESTINATION ${DATA_INSTALL_DIR}/kdevkrossplugins )
-endmacro(kdevplatform_install_kross_plugin)
+# This needs to be reworked once we really support kross plugins
+#macro(kdevplatform_install_kross_plugin desktopfile subdir)
+#    install( FILES ${desktopfile} DESTINATION ${SERVICES_INSTALL_DIR} )
+#    install( DIRECTORY ${subdir} DESTINATION ${DATA_INSTALL_DIR}/kdevkrossplugins )
+#endmacro(kdevplatform_install_kross_plugin)
 
