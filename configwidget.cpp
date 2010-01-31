@@ -88,10 +88,13 @@ void ConfigWidget::fillTools(const QHash< CustomBuildSystemTool::ActionType, Cus
     for( int i = 0; i < ui->buildAction->count(); i++ ) {
         QHash< CustomBuildSystemTool::ActionType, CustomBuildSystemTool>::const_iterator it = tools.find( CustomBuildSystemTool::ActionType( i ) );
         CustomBuildSystemTool t;
+        t.type = CustomBuildSystemTool::ActionType( i );
         t.enabled = false;
         if( it != tools.end() ) {
             t = *it;
         }
+        Q_ASSERT( t.type != CustomBuildSystemTool::Undefined );
+        Q_ASSERT( t.type == CustomBuildSystemTool::ActionType( i ) );
         ui->buildAction->setItemData( i, QVariant::fromValue<CustomBuildSystemTool>( t ) );
     }
     ui->buildAction->setCurrentIndex( CustomBuildSystemTool::Build );
