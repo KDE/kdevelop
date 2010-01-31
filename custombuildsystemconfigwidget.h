@@ -43,6 +43,8 @@ signals:
 private slots:
     void configChanged();
     void changeCurrentConfig(int);
+    void addConfig();
+    void removeConfig();
 private:
     Ui::CustomBuildSystemConfigWidget* ui;
     QList<CustomBuildSystemConfig> configs;

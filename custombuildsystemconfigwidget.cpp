@@ -32,6 +32,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
     connect( ui->configWidget, SIGNAL(changed()), SLOT(configChanged()) );
 
+    connect( ui->addConfig, SIGNAL(clicked(bool)), SLOT(addConfig()));
+    connect( ui->removeConfig, SIGNAL(clicked(bool)), SLOT(removeConfig()));
 }
 
 void CustomBuildSystemConfigWidget::loadDefaults()
@@ -110,6 +112,28 @@ void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
     CustomBuildSystemConfig cfg = configs.at( idx );
     ui->configWidget->loadConfig( cfg );
 }
+
+void CustomBuildSystemConfigWidget::addConfig()
+{
+    CustomBuildSystemConfig c;
+    c.title = ui->currentConfig->currentText();
+    configs.append( c );
+    ui->currentConfig->addItem( c.title );
+    ui->currentConfig->setCurrentIndex( ui->currentConfig->count() - 1 );
+    changeCurrentConfig( ui->currentConfig->currentIndex() );
+}
+
+void CustomBuildSystemConfigWidget::removeConfig()
+{
+    int curidx = ui->currentConfig->currentIndex();
+    Q_ASSERT( curidx < configs.length() && curidx >= 0 );
+    configs.removeAt( curidx );
+    ui->currentConfig->removeItem( curidx );
+
+    ui->currentConfig->setCurrentIndex( curidx - 1 );
+    changeCurrentConfig( ui->currentConfig->currentIndex() );
+}
+
 
 #include "custombuildsystemconfigwidget.moc"
 
