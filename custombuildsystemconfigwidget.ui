@@ -25,23 +25,30 @@
      </item>
      <item>
       <widget class="QComboBox" name="currentConfig">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="editable">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="KPushButton" name="addConfig">
+       <property name="text">
+        <string>Add</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="removeConfig">
+       <property name="text">
+        <string>Remove</string>
        </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
    </item>
@@ -65,6 +72,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
   <customwidget>
    <class>ConfigWidget</class>
    <extends>QWidget</extends>
