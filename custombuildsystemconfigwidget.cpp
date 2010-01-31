@@ -30,7 +30,8 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     ui->setupUi( this );
 
     connect( ui->currentConfig, SIGNAL(activated(int)), SLOT(changeCurrentConfig(int)));
-    connect( ui->configWidget, SIGNAL(changed()), SIGNAL(changed()) );
+    connect( ui->configWidget, SIGNAL(changed()), SLOT(configChanged()) );
+
 }
 
 void CustomBuildSystemConfigWidget::loadDefaults()
@@ -85,6 +86,16 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 
 void CustomBuildSystemConfigWidget::saveTo( KConfig* )
 {
+void CustomBuildSystemConfigWidget::configChanged()
+{
+    CustomBuildSystemConfig c = configs[ ui->currentConfig->currentIndex() ];
+    CustomBuildSystemConfig updated = ui->configWidget->config();
+    // Only update the stuff thats configurable inside the configwidget, leave the grp and title alone
+    c.buildDir = updated.buildDir;
+    c.projectPaths = updated.projectPaths;
+    c.tools = updated.tools;
+    configs[ ui->currentConfig->currentIndex() ] = c;
+    emit changed();
 }
 
 void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )

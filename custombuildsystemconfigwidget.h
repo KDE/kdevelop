@@ -41,6 +41,7 @@ public:
 signals:
     void changed();
 private slots:
+    void configChanged();
     void changeCurrentConfig(int);
 private:
     Ui::CustomBuildSystemConfigWidget* ui;
