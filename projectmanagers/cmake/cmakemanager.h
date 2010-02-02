@@ -120,7 +120,6 @@ public slots:
     void jumpToDeclaration();
 
 private:
-    void parseOnly(KDevelop::IProject* project, const KUrl &url);
     void reimport(CMakeFolderItem*);
     CacheValues readCache(const KUrl &path) const;
 
