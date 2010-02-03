@@ -33,8 +33,8 @@
 #include "snippet.h"
 
 SnippetCompletionItem::SnippetCompletionItem( Snippet* snippet )
-    : CompletionTreeItem(), m_name(snippet->text()), m_snippet(snippet->snippet()), m_postfix(snippet->postfix()),
-      m_prefix(snippet->prefix()), m_arguments(snippet->arguments())
+    : CompletionTreeItem(), m_name(snippet->text()), m_snippet(snippet->snippet()), m_prefix(snippet->prefix()),
+      m_arguments(snippet->arguments()), m_postfix(snippet->postfix())
 {
 }
 
