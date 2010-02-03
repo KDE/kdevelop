@@ -117,10 +117,10 @@ IProject* ProjectBaseItem::project() const
     return d->project;
 }
 
-void ProjectBaseItem::setParent( QStandardItem* parent )
+void ProjectBaseItem::setParent( QStandardItem* newParent )
 {
-    if( parent )
-        parent->setChild( parent->rowCount(), this );
+    if( newParent && parent() != newParent )
+        newParent->setChild( newParent->rowCount(), this );
 }
 
 void ProjectBaseItem::add( ProjectBaseItem* item )
