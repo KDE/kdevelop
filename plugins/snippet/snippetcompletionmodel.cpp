@@ -83,7 +83,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
     SnippetStore* store = SnippetStore::self();
     for(int i = 0; i < store->rowCount(); i++ )
     {
-        if ( !store->item(i, 0)->isEnabled() ) {
+        if ( store->item(i, 0)->checkState() != Qt::Checked ) {
             continue;
         }
         SnippetRepository* repo = dynamic_cast<SnippetRepository*>( store->item( i, 0 ) );

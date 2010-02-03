@@ -49,11 +49,6 @@ private slots:
     void slotRemoveRepo();
 
     /**
-     * Toggles activated status of the currently selected repository.
-     */
-    void slotToggleRepo();
-
-    /**
      * Insert the selected snippet into the current file
      */
     void slotSnippetClicked(const QModelIndex & index);
@@ -91,7 +86,6 @@ private:
     KAction* m_addRepoAction;
     KAction* m_removeRepoAction;
     KAction* m_editRepoAction;
-    KAction* m_toggleRepoAction;
     KAction* m_addSnippetAction;
     KAction* m_removeSnippetAction;
     KAction* m_editSnippetAction;

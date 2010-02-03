@@ -57,9 +57,10 @@ SnippetStore* SnippetStore::self()
 
 Qt::ItemFlags SnippetStore::flags(const QModelIndex & index) const
 {
-    Q_UNUSED(index)
-
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    if ( !index.parent().isValid() ) {
+        flags |= Qt::ItemIsUserCheckable;
+    }
     return flags;
 }
 

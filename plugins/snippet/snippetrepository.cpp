@@ -37,14 +37,15 @@ SnippetRepository::SnippetRepository(const QString& file)
  : QStandardItem(i18n("<empty repository>")), m_file(file)
 {
     setIcon( KIcon("folder") );
-    setEnabled(SnippetStore::self()->getConfig().readEntry<QStringList>("enabledRepositories", QStringList()).contains(file));
+    bool activated = SnippetStore::self()->getConfig().readEntry<QStringList>("enabledRepositories", QStringList()).contains(file);
+    setCheckState(activated ? Qt::Checked : Qt::Unchecked);
 
     if ( QFile::exists(file) ) {
         // Tell the new repository to load it's snippets
         QTimer::singleShot(0, this, SLOT(slotParseFile()));
     }
 
-    kDebug() << "created new snippet repo" << file << this << isEnabled();
+    kDebug() << "created new snippet repo" << file << this;
 }
 
 SnippetRepository::~SnippetRepository()
@@ -61,7 +62,7 @@ SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
     SnippetRepository* repo = new SnippetRepository(KGlobal::dirs()->locateLocal( "data",
                                                     "kate/plugins/katesnippets_tng/data/" + cleanName + ".xml" ));
     repo->setText(name);
-    repo->setActive(true);
+    repo->setCheckState(Qt::Checked);
     KUser user;
     repo->setAuthors(user.property(KUser::FullName).toString());
     SnippetStore::self()->appendRow(repo);
@@ -110,6 +111,7 @@ void SnippetRepository::setLicense(const QString& license)
 void SnippetRepository::remove()
 {
     QFile::remove(m_file);
+    setCheckState(Qt::Unchecked);
     model()->invisibleRootItem()->removeRow(row());
 }
 
@@ -269,7 +271,7 @@ void SnippetRepository::slotParseFile()
 QVariant SnippetRepository::data(int role) const
 {
     if ( role == Qt::ToolTipRole ) {
-        if ( !isEnabled() ) {
+        if ( checkState() != Qt::Checked ) {
             return i18n("Repository is disabled, the contained snippets will not be shown during code-completion.");
         }
         if ( m_filetypes.isEmpty() ) {
@@ -277,7 +279,7 @@ QVariant SnippetRepository::data(int role) const
         } else {
             return i18n("Applies to the following filetypes: %1", m_filetypes.join(", "));
         }
-    } else if ( role == Qt::ForegroundRole && !isEnabled() ) {
+    } else if ( role == Qt::ForegroundRole && checkState() != Qt::Checked ) {
         ///TODO: make the selected items also "disalbed" so the toggle action is seen directly
         KColorScheme scheme(QPalette::Disabled, KColorScheme::View);
         QColor c = scheme.foreground(KColorScheme::ActiveText).color();
@@ -286,26 +288,29 @@ QVariant SnippetRepository::data(int role) const
     return QStandardItem::data(role);
 }
 
-void SnippetRepository::setActive(const bool active)
+void SnippetRepository::setData(const QVariant& value, int role)
 {
-    setEnabled(active);
-    KConfigGroup config = SnippetStore::self()->getConfig();
-    QStringList currentlyEnabled = config.readEntry("enabledRepositories", QStringList());
-    bool shouldSave = false;
-    if ( active && !currentlyEnabled.contains(m_file) ) {
-        currentlyEnabled << m_file;
-        shouldSave = true;
-    } else if ( !active && currentlyEnabled.contains(m_file) ) {
-        currentlyEnabled.removeAll(m_file);
-        shouldSave = true;
-    }
+    if ( role == Qt::CheckStateRole ) {
+        const int state = value.toInt();
+        if ( state != checkState() ) {
+            KConfigGroup config = SnippetStore::self()->getConfig();
+            QStringList currentlyEnabled = config.readEntry("enabledRepositories", QStringList());
+            bool shouldSave = false;
+            if ( state == Qt::Checked && !currentlyEnabled.contains(m_file) ) {
+                currentlyEnabled << m_file;
+                shouldSave = true;
+            } else if ( state == Qt::Unchecked && currentlyEnabled.contains(m_file) ) {
+                currentlyEnabled.removeAll(m_file);
+                shouldSave = true;
+            }
 
-    if ( shouldSave ) {
-        config.writeEntry("enabledRepositories", currentlyEnabled);
-        config.sync();
+            if ( shouldSave ) {
+                config.writeEntry("enabledRepositories", currentlyEnabled);
+                config.sync();
+            }
+        }
     }
-
-    emitDataChanged();
+    QStandardItem::setData(value, role);
 }
 
 #include "snippetrepository.moc"

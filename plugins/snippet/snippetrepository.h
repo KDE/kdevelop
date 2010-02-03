@@ -26,6 +26,9 @@ class Snippet;
  * To add a snippet, @p appendRow() it.
  * To access the name of the repository, use @p text() and @p setText().
  *
+ * NOTE: Unchecked repositores are considered "disabled" in the sense that their snippets
+ *       won't show up during code completion.
+ *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Milian Wolff <mail@milianw.de>
  */
@@ -93,15 +96,8 @@ public:
      */
     void save();
 
-    /**
-     * (De-)activates this repository. Deactivated repository are still shown in the view
-     * but their items wont be shown during code completion.
-     *
-     * To check whether an item is active, simply use isEnabled().
-     */
-    void setActive(const bool active);
-
     virtual QVariant data(int role = Qt::UserRole + 1) const;
+    virtual void setData(const QVariant& value, int role = Qt::UserRole + 1);
 
 private Q_SLOTS:
     /// parses the XML file and load the containing snippets.

@@ -61,10 +61,6 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_removeRepoAction = new KAction(KIcon("edit-delete"), i18n("Remove Repository"), this);
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
-    m_toggleRepoAction = new KAction(this);
-    m_toggleRepoAction->setIcon(KIcon("folder")); // just some default
-    connect(m_toggleRepoAction, SIGNAL(triggered()), this, SLOT(slotToggleRepo()));
-    addAction(m_toggleRepoAction);
 
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
@@ -99,19 +95,6 @@ void SnippetView::validateActions()
     m_addRepoAction->setEnabled(true);
     m_editRepoAction->setEnabled(selectedRepo);
     m_removeRepoAction->setEnabled(selectedRepo);
-
-    m_toggleRepoAction->setEnabled(selectedRepo);
-    if ( selectedRepo ) {
-        if ( selectedRepo->isEnabled() ) {
-            m_toggleRepoAction->setIcon(KIcon("folder-red"));
-            m_toggleRepoAction->setText(i18n("Disable Repository"));
-            m_toggleRepoAction->setToolTip(i18n("Snippets from disabled repositories will not be shown during code completion."));
-        } else {
-            m_toggleRepoAction->setIcon(KIcon("folder-green"));
-            m_toggleRepoAction->setText(i18n("Enable Repository"));
-            m_toggleRepoAction->setToolTip(i18n("Snippets from enabled repositories will be shown during code completion."));
-        }
-    }
 
     m_addSnippetAction->setEnabled(selectedRepo || selectedSnippet);
     m_editSnippetAction->setEnabled(selectedSnippet);
@@ -163,9 +146,6 @@ void SnippetView::contextMenu (const QPoint& pos)
     } else if (SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item )) {
         KMenu menu(this);
         menu.addTitle(i18n("Repository: %1", repo->text()));
-
-        menu.addAction(m_toggleRepoAction);
-        menu.addSeparator();
 
         menu.addAction(m_editRepoAction);
         menu.addAction(m_removeRepoAction);
@@ -269,16 +249,6 @@ void SnippetView::slotRemoveRepo()
     if ( ans == KMessageBox::Continue ) {
         repo->remove();
     }
-}
-
-void SnippetView::slotToggleRepo()
-{
-    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( currentItem() );
-    if ( !repo ) {
-        return;
-    }
-    repo->setActive(!repo->isEnabled());
-    validateActions();
 }
 
 void SnippetView::slotFilterChanged()
