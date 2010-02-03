@@ -173,17 +173,12 @@ void SnippetPlugin::createSnippetFromSelection()
         match->setFileTypes(QStringList() << mode);
     }
 
-    Snippet* snippet = new Snippet();
-    match->appendRow(snippet);
-    snippet->setText("");
-    snippet->setSnippet(m_view->selectionText());
-    EditSnippet dlg(match, snippet, m_view);
-    if ( dlg.exec() != KDialog::Accepted ) {
+    EditSnippet dlg(match, 0, m_view);
+    dlg.snippetContentsEdit->setText(m_view->selectionText());
+    int status = dlg.exec();
+    if ( created && status != KDialog::Accepted ) {
         // cleanup
-        delete snippet;
-        if ( created ) {
-            match->remove();
-        }
+        match->remove();
     }
 }
 
