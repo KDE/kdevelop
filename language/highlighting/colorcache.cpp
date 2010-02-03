@@ -169,6 +169,12 @@ void ColorCache::slotViewSettingsChanged()
 
 void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
 {
+  if ( !doc->activeView() ) {
+    // yeah, the HighlightInterface methods returning an Attribute
+    // require a View... kill me for that mess
+    return;
+  }
+
   QColor foreground(QColor::Invalid);
 
   // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
