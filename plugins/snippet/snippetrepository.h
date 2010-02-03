@@ -93,6 +93,8 @@ public:
      */
     void save();
 
+    virtual QVariant data(int role = Qt::UserRole + 1) const;
+
 private Q_SLOTS:
     /// parses the XML file and load the containing snippets.
     void slotParseFile();

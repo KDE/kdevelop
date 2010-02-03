@@ -259,4 +259,16 @@ void SnippetRepository::slotParseFile()
     }
 }
 
+QVariant SnippetRepository::data(int role) const
+{
+    if ( role == Qt::ToolTipRole ) {
+        if ( m_filetypes.isEmpty() ) {
+            return i18n("Applies to all filetypes");
+        } else {
+            return i18n("Applies to the following filetypes: %1", m_filetypes.join(", "));
+        }
+    }
+    return QStandardItem::data(role);
+}
+
 #include "snippetrepository.moc"

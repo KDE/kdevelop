@@ -63,3 +63,11 @@ void Snippet::setArguments(const QString& arguments)
 {
     m_arguments = arguments;
 }
+
+QVariant Snippet::data(int role) const
+{
+    if ( role == Qt::ToolTipRole ) {
+        return m_snippet;
+    }
+    return QStandardItem::data(role);
+}

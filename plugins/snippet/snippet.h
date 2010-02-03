@@ -71,6 +71,8 @@ public:
      */
     void setArguments(const QString& arguments);
 
+    virtual QVariant data(int role = Qt::UserRole + 1) const;
+
 private:
     /// the actual snippet contents aka \code<fillin>\endcode
     QString m_snippet;
