@@ -26,18 +26,24 @@
 
 #include <language/codecompletion/codecompletionitem.h>
 
+class Snippet;
+
 class SnippetCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
-    SnippetCompletionItem(const QString& name, const QString &snippet);
+    SnippetCompletionItem(Snippet* snippet);
     ~SnippetCompletionItem();
 
     virtual void execute( KTextEditor::Document* document, const KTextEditor::Range& word );
     virtual QVariant data( const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model ) const;
 
 private:
+    // we copy since the snippet itself can be deleted at any time
     QString m_name;
     QString m_snippet;
+    QString m_prefix;
+    QString m_arguments;
+    QString m_postfix;
 };
 
 #endif // SNIPPETCOMPLETIONITEM_H

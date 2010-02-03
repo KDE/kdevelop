@@ -69,7 +69,7 @@ void SnippetCompletionModel::initData()
         {
             for ( int j = 0; j < repo->rowCount(); ++j ) {
                 if ( Snippet* snippet = dynamic_cast<Snippet*>(repo->child(j)) ) {
-                    m_snippets << new SnippetCompletionItem(snippet->text(), snippet->snippet());
+                    m_snippets << new SnippetCompletionItem(snippet);
                 }
             }
         }

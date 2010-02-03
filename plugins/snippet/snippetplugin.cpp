@@ -85,7 +85,7 @@ void SnippetPlugin::insertSnippet(Snippet* snippet)
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
     if (!doc) return;
     if (doc->isTextDocument()) {
-        SnippetCompletionItem item(snippet->text(), snippet->snippet());
+        SnippetCompletionItem item(snippet);
         KTextEditor::Range range = doc->textSelection();
         if ( !range.isValid() ) {
             range = KTextEditor::Range(doc->cursorPosition(), doc->cursorPosition());

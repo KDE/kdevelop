@@ -32,8 +32,9 @@
 
 #include "snippet.h"
 
-SnippetCompletionItem::SnippetCompletionItem( const QString& name, const QString& snippet )
-    : CompletionTreeItem(), m_name(name), m_snippet(snippet)
+SnippetCompletionItem::SnippetCompletionItem( Snippet* snippet )
+    : CompletionTreeItem(), m_name(snippet->text()), m_snippet(snippet->snippet()), m_postfix(snippet->postfix()),
+      m_prefix(snippet->prefix()), m_arguments(snippet->arguments())
 {
 }
 
@@ -49,10 +50,15 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
 
     switch ( role ) {
     case Qt::DisplayRole:
-        if ( index.column() == KTextEditor::CodeCompletionModel::Name ) {
-            return m_name;
-        } else if ( index.column() == KTextEditor::CodeCompletionModel::Prefix ) {
-            return i18n("Snippet");
+        switch ( index.column() ) {
+            case KTextEditor::CodeCompletionModel::Name:
+                return m_name;
+            case KTextEditor::CodeCompletionModel::Prefix:
+                return m_prefix;
+            case KTextEditor::CodeCompletionModel::Postfix:
+                return m_postfix;
+            case KTextEditor::CodeCompletionModel::Arguments:
+                return m_arguments;
         }
         break;
     case KDevelop::CodeCompletionModel::IsExpandable:
