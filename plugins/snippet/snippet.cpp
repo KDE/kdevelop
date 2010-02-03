@@ -14,6 +14,8 @@
 #include <KLocalizedString>
 #include <KIcon>
 
+#include <KColorScheme>
+
 Snippet::Snippet()
     : QStandardItem(i18n("<empty snippet>"))
 {
@@ -68,6 +70,11 @@ QVariant Snippet::data(int role) const
 {
     if ( role == Qt::ToolTipRole ) {
         return m_snippet;
+    } else if ( role == Qt::ForegroundRole && !parent()->isEnabled() ) {
+        ///TODO: make the selected items also "disalbed" so the toggle action is seen directly
+        KColorScheme scheme(QPalette::Disabled, KColorScheme::View);
+        QColor c = scheme.foreground(KColorScheme::ActiveText).color();
+        return QVariant(c);
     }
     return QStandardItem::data(role);
 }

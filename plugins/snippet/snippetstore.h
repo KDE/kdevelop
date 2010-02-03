@@ -13,6 +13,7 @@
 #define __SNIPPETSTORE_H__
 
 #include <QStandardItemModel>
+#include <KConfigGroup>
 
 class SnippetRepository;
 class SnippetPlugin;
@@ -37,6 +38,7 @@ public:
     static SnippetStore* self();
 
     virtual ~SnippetStore();
+    KConfigGroup getConfig();
 
 private:
     SnippetStore(SnippetPlugin* plugin);

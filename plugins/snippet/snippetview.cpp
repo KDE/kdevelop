@@ -61,6 +61,9 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_removeRepoAction = new KAction(KIcon("edit-delete"), i18n("Remove Repository"), this);
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
+    m_toggleRepoAction = new KAction(this);
+    connect(m_toggleRepoAction, SIGNAL(triggered()), this, SLOT(slotToggleRepo()));
+    addAction(m_toggleRepoAction);
 
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
@@ -89,16 +92,29 @@ void SnippetView::validateActions()
 
     QStandardItem* item = currentItem();
 
-    bool snippetSelected = dynamic_cast<Snippet*>( item );
-    bool projectSelected = dynamic_cast<SnippetRepository*>( item );
+    Snippet* selectedSnippet = dynamic_cast<Snippet*>( item );
+    SnippetRepository* selectedRepo = dynamic_cast<SnippetRepository*>( item );
 
     m_addRepoAction->setEnabled(true);
-    m_editRepoAction->setEnabled(projectSelected);
-    m_removeRepoAction->setEnabled(projectSelected);
+    m_editRepoAction->setEnabled(selectedRepo);
+    m_removeRepoAction->setEnabled(selectedRepo);
 
-    m_addSnippetAction->setEnabled(projectSelected || snippetSelected);
-    m_editSnippetAction->setEnabled(snippetSelected);
-    m_removeSnippetAction->setEnabled(snippetSelected);
+    m_toggleRepoAction->setEnabled(selectedRepo);
+    if ( selectedRepo ) {
+        if ( selectedRepo->isEnabled() ) {
+            m_toggleRepoAction->setIcon(KIcon("folder-red"));
+            m_toggleRepoAction->setText(i18n("Disable Repository"));
+            m_toggleRepoAction->setToolTip(i18n("Snippets from disabled repositories will not be shown during code completion."));
+        } else {
+            m_toggleRepoAction->setIcon(KIcon("folder-green"));
+            m_toggleRepoAction->setText(i18n("Enable Repository"));
+            m_toggleRepoAction->setToolTip(i18n("Snippets from enabled repositories will be shown during code completion."));
+        }
+    }
+
+    m_addSnippetAction->setEnabled(selectedRepo || selectedSnippet);
+    m_editSnippetAction->setEnabled(selectedSnippet);
+    m_removeSnippetAction->setEnabled(selectedSnippet);
 }
 
 QStandardItem* SnippetView::currentItem()
@@ -153,6 +169,9 @@ void SnippetView::contextMenu (const QPoint& pos)
     } else if (SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item )) {
         KMenu menu(this);
         menu.addTitle(i18n("Repository")+": "+repo->text());
+
+        menu.addAction(m_toggleRepoAction);
+        menu.addSeparator();
 
         QAction* edit = menu.addAction(i18n("Edit"));
         edit->setIcon(KIcon("folder-txt"));
@@ -264,6 +283,16 @@ void SnippetView::slotRemoveRepo()
     if ( ans == KMessageBox::Continue ) {
         repo->remove();
     }
+}
+
+void SnippetView::slotToggleRepo()
+{
+    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( currentItem() );
+    if ( !repo ) {
+        return;
+    }
+    repo->setActive(!repo->isEnabled());
+    validateActions();
 }
 
 void SnippetView::slotFilterChanged()

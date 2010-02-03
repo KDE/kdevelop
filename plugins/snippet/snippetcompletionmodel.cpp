@@ -83,6 +83,9 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
     SnippetStore* store = SnippetStore::self();
     for(int i = 0; i < store->rowCount(); i++ )
     {
+        if ( !store->item(i, 0)->isEnabled() ) {
+            continue;
+        }
         SnippetRepository* repo = dynamic_cast<SnippetRepository*>( store->item( i, 0 ) );
         if( repo && (repo->fileTypes().isEmpty() || repo->fileTypes().contains(mode)) )
         {

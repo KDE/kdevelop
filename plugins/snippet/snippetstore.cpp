@@ -14,11 +14,13 @@
 #include "snippetplugin.h"
 #include "snippetrepository.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/isession.h>
+
 #include <KStandardDirs>
 #include <KDebug>
 
 SnippetStore* SnippetStore::self_ = 0;
-
 
 SnippetStore::SnippetStore(SnippetPlugin* plugin)
     : plugin_(plugin)
@@ -59,6 +61,11 @@ Qt::ItemFlags SnippetStore::flags(const QModelIndex & index) const
 
     Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     return flags;
+}
+
+KConfigGroup SnippetStore::getConfig()
+{
+    return plugin_->core()->activeSession()->config()->group("Snippets");
 }
 
 #include "snippetstore.moc"

@@ -27,17 +27,22 @@
 #include <KLocalizedString>
 #include <QApplication>
 
+#include <KColorScheme>
+
+#include "snippetstore.h"
+
 SnippetRepository::SnippetRepository(const QString& file)
  : QStandardItem(i18n("<empty repository>")), m_file(file)
 {
     setIcon( KIcon("folder") );
+    setEnabled(SnippetStore::self()->getConfig().readEntry<QStringList>("enabledRepositories", QStringList()).contains(file));
 
     if ( QFile::exists(file) ) {
         // Tell the new repository to load it's snippets
         QTimer::singleShot(0, this, SLOT(slotParseFile()));
     }
 
-    kDebug() << "created new snippet repo" << file << this;
+    kDebug() << "created new snippet repo" << file << this << isEnabled();
 }
 
 SnippetRepository::~SnippetRepository()
@@ -262,13 +267,43 @@ void SnippetRepository::slotParseFile()
 QVariant SnippetRepository::data(int role) const
 {
     if ( role == Qt::ToolTipRole ) {
+        if ( !isEnabled() ) {
+            return i18n("Repository is disabled, the contained snippets will not be shown during code-completion.");
+        }
         if ( m_filetypes.isEmpty() ) {
             return i18n("Applies to all filetypes");
         } else {
             return i18n("Applies to the following filetypes: %1", m_filetypes.join(", "));
         }
+    } else if ( role == Qt::ForegroundRole && !isEnabled() ) {
+        ///TODO: make the selected items also "disalbed" so the toggle action is seen directly
+        KColorScheme scheme(QPalette::Disabled, KColorScheme::View);
+        QColor c = scheme.foreground(KColorScheme::ActiveText).color();
+        return QVariant(c);
     }
     return QStandardItem::data(role);
+}
+
+void SnippetRepository::setActive(const bool active)
+{
+    setEnabled(active);
+    KConfigGroup config = SnippetStore::self()->getConfig();
+    QStringList currentlyEnabled = config.readEntry("enabledRepositories", QStringList());
+    bool shouldSave = false;
+    if ( active && !currentlyEnabled.contains(m_file) ) {
+        currentlyEnabled << m_file;
+        shouldSave = true;
+    } else if ( !active && currentlyEnabled.contains(m_file) ) {
+        currentlyEnabled.removeAll(m_file);
+        shouldSave = true;
+    }
+
+    if ( shouldSave ) {
+        config.writeEntry("enabledRepositories", currentlyEnabled);
+        config.sync();
+    }
+
+    emitDataChanged();
 }
 
 #include "snippetrepository.moc"

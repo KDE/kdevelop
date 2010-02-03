@@ -93,6 +93,14 @@ public:
      */
     void save();
 
+    /**
+     * (De-)activates this repository. Deactivated repository are still shown in the view
+     * but their items wont be shown during code completion.
+     *
+     * To check whether an item is active, simply use isEnabled().
+     */
+    void setActive(const bool active);
+
     virtual QVariant data(int role = Qt::UserRole + 1) const;
 
 private Q_SLOTS:

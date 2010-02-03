@@ -32,7 +32,7 @@ public:
     explicit SnippetView(SnippetPlugin* plugin, QWidget* parent = 0);
     virtual ~SnippetView();
 
-public slots:
+private slots:
     /**
      * Opens the "Add Repository" dialog.
      */
@@ -47,6 +47,11 @@ public slots:
      * Removes the selected repository from the disk.
      */
     void slotRemoveRepo();
+
+    /**
+     * Toggles activated status of the currently selected repository.
+     */
+    void slotToggleRepo();
 
     /**
      * Insert the selected snippet into the current file
@@ -73,7 +78,6 @@ public slots:
      */
     void slotFilterChanged();
 
-private slots:
     void contextMenu (const QPoint & pos);
     /// disables or enables available actions based on the currently selected item
     void validateActions();
@@ -87,6 +91,7 @@ private:
     KAction* m_addRepoAction;
     KAction* m_removeRepoAction;
     KAction* m_editRepoAction;
+    KAction* m_toggleRepoAction;
     KAction* m_addSnippetAction;
     KAction* m_removeSnippetAction;
     KAction* m_editSnippetAction;
