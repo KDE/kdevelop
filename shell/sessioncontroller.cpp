@@ -81,7 +81,7 @@ public:
 
     Session* findSessionForName( const QString& name ) const
     {
-        foreach( Session* s, sessionActions.keys() )
+        foreach( Session* s, sessions )
         {
             if( s->name() == name )
                 return s;
@@ -93,7 +93,7 @@ public:
     {
         QUuid id(idString);
         
-        foreach( Session* s, sessionActions.keys() )
+        foreach( Session* s, sessions )
         {
             if( s->id() == id)
                 return s;
@@ -162,6 +162,13 @@ public:
     void activateSession( Session* s )
     {
         Q_ASSERT( s );
+
+        KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
+        grp.writeEntry( SessionController::cfgActiveSessionEntry, s->id().toString() );
+        grp.sync();
+        activeSession = s;
+        if (Core::self()->setupFlags() & Core::NoUi) return;
+
         QHash<Session*,QAction*>::iterator it = sessionActions.find(s);
         Q_ASSERT( it != sessionActions.end() );
         (*it)->setCheckable(true);
@@ -173,15 +180,11 @@ public:
                 (*it)->setCheckable(false);
         }
         
-        KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
-        grp.writeEntry( SessionController::cfgActiveSessionEntry, s->id().toString() );
-        grp.sync();
-        activeSession = s;
     }
 
     void loadSessionFromAction( QAction* a )
     {
-        foreach( Session* s, sessionActions.keys() )
+        foreach( Session* s, sessions )
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
                 loadSessionExternally( s );
@@ -196,6 +199,10 @@ public:
 
     void addSession( Session* s )
     {
+        sessions << s;
+
+        if (Core::self()->setupFlags() & Core::NoUi) return;
+
         KAction* a = new KAction( grp );
         a->setText( s->description() );
         a->setCheckable( false );
@@ -207,6 +214,7 @@ public:
         connect(s, SIGNAL(nameChanged(QString, QString)), SLOT(nameChanged()));
     }
 
+    QList<Session*> sessions;
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;
     SessionController* q;
@@ -237,15 +245,17 @@ SessionController::SessionController( QObject *parent )
     
     setXMLFile("kdevsessionui.rc");
 
+    if (Core::self()->setupFlags() & Core::NoUi) return;
+
     KAction* action = actionCollection()->addAction( "new_session", this, SLOT( newSession() ) );
     action->setText( i18n("Start New Session") );
     action->setToolTip( i18n("Start a new KDevelop instance with an empty session") );
     action->setIcon(KIcon("window-new"));
-    
+
     action = actionCollection()->addAction( "rename_session", this, SLOT( renameSession() ) );
     action->setText( i18n("Rename Session...") );
     action->setIcon(KIcon("edit-rename"));
-    
+
     action = actionCollection()->addAction( "delete_session", this, SLOT( deleteSession() ) );
     action->setText( i18n("Delete Session...") );
     action->setIcon(KIcon("edit-delete"));
@@ -254,7 +264,7 @@ SessionController::SessionController( QObject *parent )
     action->setText( i18n("Quit Session") );
     action->setShortcut(Qt::CTRL | Qt::Key_Q);
     action->setIcon(KIcon("application-exit"));
-    
+
     #if 0
     action = actionCollection()->addAction( "configure_sessions", this, SLOT( configureSessions() ) );
     action->setText( i18n("Configure Sessions...") );
@@ -323,7 +333,7 @@ void SessionController::loadSession( const QString& nameOrId )
 QList<QString> SessionController::sessionNames() const
 {
     QStringList l;
-    foreach( const Session* s, d->sessionActions.keys() )
+    foreach( const Session* s, d->sessions )
     {
         l << s->name();
     }
@@ -333,9 +343,10 @@ QList<QString> SessionController::sessionNames() const
 QList< const KDevelop::Session* > SessionController::sessions() const
 {
     QList< const KDevelop::Session* > ret;
-    foreach( const Session* s, d->sessionActions.keys() )
+    foreach( const Session* s, d->sessions )
+    {
         ret << s;
-    
+    }
     return ret;
 }
 
@@ -363,6 +374,7 @@ void SessionController::deleteSession( const QString& nameOrId )
     s->deleteFromDisk();
     emit sessionDeleted( s->name() );
     d->sessionActions.remove(s);
+    d->sessions.removeAll(s);
     s->deleteLater();
 }
 

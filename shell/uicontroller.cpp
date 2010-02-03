@@ -59,6 +59,8 @@ public:
     : cfgDlg(0), areasRestored(false), m_controller(controller)
     {
         Core::self()->workingSetControllerInternal()->initializeController(m_controller);
+
+        if((Core::self()->setupFlags() & Core::NoUi)) return;
         
         QMap<QString, Sublime::Position> desired;
 
@@ -175,7 +177,7 @@ UiController::UiController(Core *core)
     setObjectName("UiController");
     d->core = core;
 
-    if (!defaultMainWindow())
+    if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
         return;
 
     connect( QApplication::instance(),

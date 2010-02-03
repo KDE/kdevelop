@@ -55,6 +55,8 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	setComponentData(KComponentData("kdevsourceformatter"));
 	setXMLFile("kdevsourceformatter.rc");
 
+	if (Core::self()->setupFlags() & Core::NoUi) return;
+
 	m_formatTextAction = actionCollection()->addAction("edit_reformat_source");
 	m_formatTextAction->setText(i18n("&Reformat Source"));
 	m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
