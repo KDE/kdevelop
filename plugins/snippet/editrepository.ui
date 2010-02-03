@@ -2,13 +2,11 @@
 <ui version="4.0">
  <class>EditRepositoryBase</class>
  <widget class="QWidget" name="EditRepositoryBase">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>398</width>
-    <height>323</height>
-   </rect>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>0</height>
+   </size>
   </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
