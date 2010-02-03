@@ -84,9 +84,6 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
 SnippetView::~SnippetView()
 {
-    ///TODO: shouldn't this be hanlded in a cleanup function in the plugin itself?
-    ///There could be multiple views, no?
-    delete SnippetStore::self();
 }
 
 void SnippetView::validateActions()
