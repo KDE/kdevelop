@@ -29,6 +29,7 @@ class Part;
 
 class Snippet;
 class KAction;
+class QMenu;
 
 /**
  * This is the main class of KDevelop's snippet plugin.
@@ -51,13 +52,19 @@ public:
 
     // KDevelop::IPlugin methods
     virtual void unload();
+
 private slots:
     void viewCreated( KTextEditor::Document*, KTextEditor::View* view );
     void documentLoaded(KParts::Part*);
+    void contextMenuAboutToShow(KTextEditor::View* view, QMenu* menu);
+public slots:
+    void createSnippetFromSelection();
 
 private:
     class SnippetViewFactory *m_factory;
     class SnippetCompletionModel* m_model;
+    /// view we requested the context menu for
+    KTextEditor::View* m_view;
 };
 
 #endif
