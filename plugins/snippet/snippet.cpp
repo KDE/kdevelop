@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -9,176 +10,54 @@
  ***************************************************************************/
 
 #include "snippet.h"
-#include "globals.h"
 
-#include <QtDebug>
-#include <QTimer>
-#include <QFile>
-#include <QTextStream>
-#include <QDir>
-#include <QApplication>
-
-#include <KMessageBox>
 #include <KLocalizedString>
-#include <KDebug>
 
-#include "snippetstore.h"
-#include "snippetrepository.h"
-
-Snippet::Snippet(const QString& filename, SnippetRepository* repo)
-    : QStandardItem(filename), repo_(repo), name_(filename)
+Snippet::Snippet()
+    : QStandardItem(i18n("<empty snippet>"))
 {
-    // append ourself to the given parent repo
-    repo->addSnippet( this );
-
-    // tell the new snippet to get it's data from the file
-    QTimer::singleShot(0, this, SLOT(slotSyncSnippet()));
-
-    kDebug() << "created new snippet" << getFileName() << this << repo_;
 }
 
 Snippet::~Snippet()
 {
 }
 
-void Snippet::slotSyncSnippet()
+QString Snippet::snippet() const
 {
-    kDebug() << "syncing snippet" << getFileName() << this << repo_;
-
-    if (!QFile::exists( getFileName() ))
-        return;
-
-    QFile f( getFileName() );
-    if(f.open(QIODevice::ReadOnly)) {
-        QTextStream input( &f );
-        setRawData( input.readAll() );
-    }
+    return m_snippet;
 }
 
-void Snippet::save()
+void Snippet::setSnippet(const QString& snippet)
 {
-    QFile f( getFileName() );
-    if(f.open(QIODevice::WriteOnly)) {
-        QTextStream input( &f );
-        input << snippetText_;
-
-        foreach(const QString& keyword, keywords_) {
-            input << endl << SNIPPET_METADATA << "keyword=" << keyword;
-        }
-    }
+    m_snippet = snippet;
 }
 
-const QString Snippet::getFileName()
+QString Snippet::prefix() const
 {
-    return repo_->getLocation() + QDir::separator() + name_;
+    return m_prefix;
 }
 
-void Snippet::changeName(const QString& newName)
+void Snippet::setPrefix(const QString& prefix)
 {
-    // If there is no name yet, e.g. the snippet has just been created
-    // we don't need to care about changing the filename
-    if (name_.isEmpty()) {
-        name_ = newName;
-        setText( newName );
-        return;
-    }
-
-    // In case the user changed the name of the snippet,
-    // we need to move the current file.
-    if (name_ != newName) {
-        QString origFileName = getFileName();
-        name_ = newName;
-        QString newFileName = getFileName();
-
-        if ( QFile::exists( origFileName ) ) {
-            if (QFile::rename(origFileName, newFileName)) {
-                setText( newName );
-            } else {
-                KMessageBox::error(
-                    QApplication::activeWindow(),
-                    i18n("Could not move snippet file from \"%1\" to \"%2\".", origFileName, newFileName)
-                );
-            }
-        } else {
-            setText( newName );
-            save();
-        }
-    }
-
-    // no need to do anything if the name didn't change
+    m_prefix = prefix;
 }
 
-void Snippet::setRawData(const QString& data)
+QString Snippet::postfix() const
 {
-    QStringList rows = data.split( QRegExp("[\\r\\n]+"), QString::SkipEmptyParts );
-    QStringList metadata;
-
-    QString newText;
-
-    // A snippet file can contain meta information
-    // which needs to be separated from the snippet's text
-    QStringListIterator it(rows);
-    bool needNewline = false;
-    while (it.hasNext()) {
-        QString str = it.next();
-
-        if (str.startsWith(SNIPPET_METADATA)) {
-            metadata << str;
-        } else {
-            if ( needNewline ) {
-                newText += SNIPPET_END_OF_LINE;
-            }
-            newText += str;
-            needNewline = true;
-        }
-    }
-
-    setSnippetText( newText );
-    keywords_.clear();
-
-    if (metadata.count() > 0) {
-        // if there is meta information, call handleMetaData() which is
-        // capable of parsing them
-        handleMetaData( metadata );
-    }
+    return m_postfix;
 }
 
-void Snippet::handleMetaData(QStringList& metadata)
+void Snippet::setPostfix(const QString& postfix)
 {
-    //Each line looks like this:
-    //##META## keyword = abcdef
-    QRegExp rx("(\\w+)\\s*=\\s*(\\w*)");
-
-    QString str;
-    foreach(str, metadata) {
-        // strip off the metadata prefix from the lines
-        str.remove(QString(SNIPPET_METADATA));
-
-        // now use the regexp to get the name and the value from this metadata-line
-        int pos = rx.indexIn( str );
-        if (pos > -1) {
-            QString name = rx.cap(1);
-            QString value = rx.cap(2);
-
-            // keywords get moved into the keywords list
-            if (name.toLower() == "keyword") {
-                keywords_ << value;
-            }
-        }
-    }
+    m_postfix = postfix;
 }
 
-void Snippet::removeSnippetFile()
+QString Snippet::arguments() const
 {
-    if (!QFile::exists( getFileName() ) || QFile::remove( getFileName() )) {
-        // if the file has been removed, also remove the Snippet from the model
-        QStandardItem::parent()->removeRows( row(), 1 );
-    } else {
-        KMessageBox::error(
-            QApplication::activeWindow(),
-            i18n("Could not remove snippet file \"%1\".", getFileName())
-        );
-    }
+    return m_arguments;
 }
 
-#include "snippet.moc"
+void Snippet::setArguments(const QString& arguments)
+{
+    m_arguments = arguments;
+}

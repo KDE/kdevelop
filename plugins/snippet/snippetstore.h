@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,17 +12,15 @@
 #ifndef __SNIPPETSTORE_H__
 #define __SNIPPETSTORE_H__
 
-#include <QList>
 #include <QStandardItemModel>
-#include <kconfiggroup.h>
 
 class SnippetRepository;
 class SnippetPlugin;
 /**
  * This class is implemented as singelton.
- * It holds the toplevel repositories and acts as a model for the snippet tree.
- * All toplevel repositories are stored in the @a repos_ QList.
+ * It represents the model containing all snippet repositories with their snippets.
  * @author Robert Gruber <rgruber@users.sourceforge.net>
+ * @author Milian Wolff <mail@milianw.de>
  */
 class SnippetStore : public QStandardItemModel
 {
@@ -39,31 +38,12 @@ public:
 
     virtual ~SnippetStore();
 
-    /**
-     * Creates a new repository and adds it to the model.
-     * If @a parent is NULL, the new repository will become a toplevel item and will therefor
-     * be stored in the @a repos_ QList.
-     * Other repos become a children of the passed @a parent.
-     */
-    void createNewRepository(SnippetRepository* parent, const QString& name, const QString& dir);
-
-    void load();
-
-public slots:
-    /**
-     * Removes the repository from the model and deletes it.
-     */
-    void remove( SnippetRepository* repo );
-
 private:
     SnippetStore(SnippetPlugin* plugin);
 
     virtual Qt::ItemFlags flags (const QModelIndex & index) const;
 
-    KConfigGroup getConfig();
-
     static SnippetStore* self_;
-    QList<SnippetRepository*> repos_;
     SnippetPlugin* plugin_;
 };
 

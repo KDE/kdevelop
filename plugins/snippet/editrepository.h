@@ -8,39 +8,36 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef EDITSNIPPET_H
-#define EDITSNIPPET_H
+#ifndef EDITREPOSITORY_H
+#define EDITREPOSITORY_H
 
-#include "ui_editsnippet.h"
+#include "ui_editrepository.h"
 
 #include <KDialog>
 
 class SnippetRepository;
-class Snippet;
-
-class QStandardItemModel;
 
 /**
- * This dialog is used to create/edit snippets in a given repository.
+ * This dialog is used to create/edit snippet repositories and
+ * the snippets in them.
  *
  * @author Milian Wolff <mail@milianw.de>
  */
-class EditSnippet : public KDialog, public Ui::EditSnippetBase
+class EditRepository : public KDialog, public Ui::EditRepositoryBase
 {
     Q_OBJECT
 
 public:
-    /// @p snippet set to 0 when you want to create a new snippet.
-    explicit EditSnippet(SnippetRepository* repo, Snippet* snippet, QWidget* parent = 0);
-    virtual ~EditSnippet();
+    /// @p repo set to 0 when you want to create a new repository.
+    explicit EditRepository(SnippetRepository* repo, QWidget* parent = 0);
+    virtual ~EditRepository();
 
 private:
     SnippetRepository* m_repo;
-    Snippet* m_snippet;
 
 private slots:
     void save();
-    void snippetNameChanged(const QString& name);
+    void repoNameChanged(const QString& name);
 };
 
 #endif

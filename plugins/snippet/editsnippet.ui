@@ -1,120 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EditSnippet</class>
- <widget class="QWidget" name="EditSnippet">
+ <class>EditSnippetBase</class>
+ <widget class="QWidget" name="EditSnippetBase">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>339</height>
+    <width>491</width>
+    <height>341</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Edit Snippet</string>
-  </property>
-  <layout class="QVBoxLayout">
-   <property name="spacing">
-    <number>6</number>
-   </property>
-   <property name="margin">
-    <number>9</number>
-   </property>
-   <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>0</number>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="snippetName">
+     <property name="text">
+      <string>Name:</string>
      </property>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Snippet</string>
-      </attribute>
-      <layout class="QGridLayout">
-       <property name="margin">
-        <number>9</number>
-       </property>
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QTextEdit" name="snippetText">
-         <property name="statusTip">
-          <string>test</string>
-         </property>
-         <property name="lineWrapMode">
-          <enum>QTextEdit::NoWrap</enum>
-         </property>
-         <property name="acceptRichText">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="snippetName"/>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>&lt;p align=&quot;justify&quot;&gt;Mark editable variables with &lt;i&gt;${...}.&lt;/i&gt; Read-only variables can be marked with &lt;i&gt;%{...}.&lt;/i&gt;&lt;/p&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Keywords</string>
-      </attribute>
-      <layout class="QGridLayout">
-       <property name="margin">
-        <number>9</number>
-       </property>
-       <property name="spacing">
-        <number>6</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="KEditListBox" name="keywordList">
-         <property name="title">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>These keywords are used when filtering.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KLineEdit" name="snippetNameEdit">
+     <property name="toolTip">
+      <string>The name will also be used as the identifier during code completion.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="snippetPrefixLabel">
+     <property name="text">
+      <string>Display Prefix:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KLineEdit" name="snippetPrefixEdit">
+     <property name="toolTip">
+      <string>The display prefix will be shown during code completion.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="snippetArgumentsLabel">
+     <property name="text">
+      <string>Display Arguments:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="KLineEdit" name="snippetArgumentsEdit">
+     <property name="toolTip">
+      <string>The arguments will be shown during code completion.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="snippetPostfixLabel">
+     <property name="text">
+      <string>Display Postfix:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="KLineEdit" name="snippetPostfixEdit">
+     <property name="toolTip">
+      <string>The postfix will be shown during code completion.</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="snippetContentsLabel">
+     <property name="text">
+      <string>Snippet:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <widget class="KTextEdit" name="snippetContentsEdit">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>The actual snippet contents that will be inserted.</string>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KEditListBox</class>
-   <extends>QGroupBox</extends>
-   <header>keditlistbox.h</header>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>snippetName</tabstop>
-  <tabstop>snippetText</tabstop>
+  <tabstop>snippetPrefixEdit</tabstop>
+  <tabstop>snippetArgumentsEdit</tabstop>
+  <tabstop>snippetPostfixEdit</tabstop>
+  <tabstop>snippetContentsEdit</tabstop>
  </tabstops>
  <resources/>
  <connections/>

@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,25 +12,17 @@
 #include "snippetview.h"
 
 
-#include <QHeaderView>
 #include <QContextMenuEvent>
-#include <kmenu.h>
-#include <kinputdialog.h>
-#include <kdialog.h>
-#include <kurlrequester.h>
+#include <KMenu>
 #include <KMessageBox>
 
-#include <interfaces/icore.h>
-#include <interfaces/isession.h>
-
-#include "ui_addrepository.h"
 #include "snippet.h"
 #include "snippetplugin.h"
 #include "snippetrepository.h"
 #include "snippetstore.h"
+#include "editrepository.h"
 #include "editsnippet.h"
 #include "snippetfilterproxymodel.h"
-#include "moverepository.h"
 
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
  : QWidget(parent), Ui::SnippetViewBase(), plugin_(plugin)
@@ -59,37 +52,21 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 //     snippetTree->setModel( SnippetStore::instance() );
 
     snippetTree->header()->hide();
-    setWindowTitle( i18n("Snippets") );
 }
 
 SnippetView::~SnippetView()
 {
+    ///TODO: shouldn't this be hanlded in a cleanup function in the plugin itself?
+    ///There could be multiple views, no?
     delete SnippetStore::self();
 }
 
 QStandardItem* SnippetView::currentItem()
 {
+    ///TODO: support multiple selected items
     QModelIndex index = snippetTree->currentIndex();
     index = proxy_->mapToSource(index);
     return SnippetStore::self()->itemFromIndex( index );
-}
-
-void SnippetView::slotAddRepo()
-{
-    Ui::AddRepository addrepoui;
-    KDialog dlg(this);
-    dlg.setCaption(i18n("Add an existing Repository"));
-    dlg.setButtons(KDialog::Ok|KDialog::Cancel);
-    dlg.setButtonText(KDialog::Ok, i18n("Add Repository"));
-    addrepoui.setupUi(dlg.mainWidget());
-    addrepoui.location->setMode(KFile::Directory | KFile::LocalOnly);
-    addrepoui.name->setFocus();
-    if (dlg.exec() == QDialog::Accepted) {
-        SnippetStore::self()->createNewRepository(
-                NULL, // create a new toplevel repository
-                addrepoui.name->text(),
-                addrepoui.location->url().toLocalFile());
-    }
 }
 
 void SnippetView::slotSnippetClicked (const QModelIndex & index)
@@ -118,56 +95,30 @@ void SnippetView::contextMenu (const QPoint& pos)
         QAction* add = menu.addAction(i18n("Add Repository"));
         connect(add, SIGNAL(triggered()), this, SLOT(slotAddRepo()));
 
-        emit popupContextMenu(&menu, NULL);
-
         menu.exec(snippetTree->mapToGlobal(pos));
-        return;
-    }
-
-    Snippet* snippet = dynamic_cast<Snippet*>( item );
-    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item );
-
-    if (snippet) {
+    } else if (Snippet* snippet = dynamic_cast<Snippet*>( item )) {
         KMenu menu(this);
-        menu.addTitle(i18n("Snippet")+ ": "+snippet->text());
-
-        QAction* sync = menu.addAction(i18n("Sync"));
-        connect(sync, SIGNAL(triggered()), snippet, SLOT(slotSyncSnippet()));
+        menu.addTitle(i18n("Snippet: %1", snippet->text()));
 
         QAction* edit = menu.addAction(i18n("Edit"));
         connect(edit, SIGNAL(triggered()), this, SLOT(slotEditSnippet()));
 
         QAction* del = menu.addAction(i18n("Delete"));
-        connect(del, SIGNAL(triggered()), this, SLOT(slotDeleteSnippet()));
-
-        emit popupContextMenu(&menu, item );
+        connect(del, SIGNAL(triggered()), this, SLOT(slotRemoveSnippet()));
 
         menu.exec(snippetTree->mapToGlobal(pos));
-    } else if (repo) {
+    } else if (SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item )) {
         KMenu menu(this);
         menu.addTitle(i18n("Repository")+": "+repo->text());
-
-        QAction* sync = menu.addAction(i18n("Sync"));
-        connect(sync, SIGNAL(triggered()), repo, SLOT(slotSyncRepository()));
 
         QAction* add = menu.addAction(i18n("Add Snippet"));
         connect(add, SIGNAL(triggered()), this, SLOT(slotAddSnippet()));
 
-        QAction* create = menu.addAction(i18n("Create Subrepository"));
-        connect(create, SIGNAL(triggered()), this, SLOT(slotCreateSubRepo()));
-
         QAction* move = menu.addAction(i18n("Edit"));
-        connect(move, SIGNAL(triggered()), this, SLOT(slotMoveRepository()));
-
-        if (repo->QStandardItem::parent() == 0x0) {
-            QAction* hide = menu.addAction(i18n("Hide"));
-            connect(hide, SIGNAL(triggered()), this, SLOT(slotHideRepository()));
-        }
+        connect(move, SIGNAL(triggered()), this, SLOT(slotEditRepo()));
 
         QAction* remove = menu.addAction(i18n("Remove"));
         connect(remove, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
-
-        emit popupContextMenu(&menu, item );
 
         menu.exec(snippetTree->mapToGlobal(pos));
     }
@@ -183,7 +134,11 @@ void SnippetView::slotEditSnippet()
     if (!snippet)
         return;
 
-    EditSnippet dlg(snippet, this);
+    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item->parent() );
+    if (!repo)
+        return;
+
+    EditSnippet dlg(repo, snippet, this);
     dlg.exec();
 }
 
@@ -197,34 +152,27 @@ void SnippetView::slotAddSnippet()
     if (!repo)
         return;
 
-    Snippet* snippet = new Snippet(i18n("New Snippet"), repo);
-    EditSnippet dlg(snippet, this);
-    if (dlg.exec() != QDialog::Accepted) {
-        // the snippet file has not been written, so we need to remove this item from the model
-        ///@todo maybe move this to somewhere else
-        snippet->QStandardItem::parent()->removeRows( snippet->row(), 1 );
-    }
+    EditSnippet dlg(repo, 0, this);
+    dlg.exec();
 }
 
-void SnippetView::slotFilterChanged()
-{
-    proxy_->changeFilter( filterText->text() );
-}
-
-void SnippetView::slotDeleteSnippet()
+void SnippetView::slotRemoveSnippet()
 {
     QStandardItem* item = currentItem();
     if (!item)
         return;
 
-    Snippet* snippet = dynamic_cast<Snippet*>( item );
-    if (!snippet)
-        return;
-
-    snippet->removeSnippetFile();
+    ///TODO: add confirmation dialog
+    item->parent()->removeRow(item->row());
 }
 
-void SnippetView::slotHideRepository()
+void SnippetView::slotAddRepo()
+{
+    EditRepository dlg(0, this);
+    dlg.exec();
+}
+
+void SnippetView::slotEditRepo()
 {
     QStandardItem* item = currentItem();
     if (!item)
@@ -234,20 +182,7 @@ void SnippetView::slotHideRepository()
     if (!repo)
         return;
 
-    SnippetStore::self()->remove( repo );
-}
-
-void SnippetView::slotMoveRepository()
-{
-    QStandardItem* item = currentItem();
-    if (!item)
-        return;
-
-    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item );
-    if (!repo)
-        return;
-
-    MoveRepository dlg(repo, this);
+    EditRepository dlg(repo, this);
     dlg.exec();
 }
 
@@ -263,29 +198,16 @@ void SnippetView::slotRemoveRepo()
 
     int ans = KMessageBox::warningContinueCancel(
         QApplication::activeWindow(),
-        i18n("Do you really want to delete the repository \"%1\" with all its sub-repositories and snippets?", repo->text())
+        i18n("Do you really want to delete the repository \"%1\" with all its snippets?", repo->text())
     );
     if ( ans == KMessageBox::Continue ) {
-        repo->removeDirectory();
+        repo->remove();
     }
 }
 
-void SnippetView::slotCreateSubRepo()
+void SnippetView::slotFilterChanged()
 {
-    QStandardItem* item = currentItem();
-    if (!item)
-        return;
-
-    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item );
-    if (!repo)
-        return;
-
-    QString subdir = KInputDialog::getText(
-                            i18n("Create a new subrepository"),
-                            i18n("Directory name"), QString(), 0, this);
-    if (!subdir.isEmpty()) {
-        repo->createSubRepo( subdir );
-    }
+    proxy_->changeFilter( filterText->text() );
 }
 
 #include "snippetview.moc"

@@ -9,32 +9,33 @@
  ***************************************************************************/
 
 #include "snippetrepository.h"
-#include "globals.h"
+
+#include "snippet.h"
 
 #include <QTimer>
-#include <QFSFileEngine>
-#include <QRegExp>
+#include <QFile>
+#include <QFileInfo>
 
-#include <kicon.h>
-#include <kdebug.h>
+#include <KIcon>
+#include <KDebug>
 
-#include "snippetstore.h"
-#include "snippet.h"
+#include <QDomDocument>
+#include <QDomElement>
+#include <KStandardDirs>
 
 #include <KMessageBox>
 #include <KLocalizedString>
 #include <QApplication>
 
-SnippetRepository::SnippetRepository(const QString& name, const QString& location)
- : QStandardItem(name)
+SnippetRepository::SnippetRepository(const QString& file)
+ : QStandardItem(i18n("<empty repository>")), m_file(file)
 {
     setIcon( KIcon("folder") );
-    setLocation( location );
 
     // Tell the new repository to load it's snippets
-    QTimer::singleShot(0, this, SLOT(slotSyncRepository()));
+    QTimer::singleShot(0, this, SLOT(slotParseFile()));
 
-    kDebug() << "created new snippet repo" << location << this;
+    kDebug() << "created new snippet repo" << file << this;
 }
 
 SnippetRepository::~SnippetRepository()
@@ -43,149 +44,212 @@ SnippetRepository::~SnippetRepository()
     removeRows( 0, rowCount() );
 }
 
-void SnippetRepository::slotSyncRepository()
+const QString& SnippetRepository::getFile() const
 {
-    kDebug() << "syncing repo" << location_ << "with" << rowCount() << "rows" << this;
+    return m_file;
+}
 
-    // as we are going to reget all snippets from this base directory
-    // we first need to remove all snippets and sub-repos
-    removeRows( 0, rowCount() );
+QString SnippetRepository::authors() const
+{
+    return m_authors;
+}
 
-    // now reget all snippets and sub-repos
-    QFSFileEngine engine( location_ );
+void SnippetRepository::setAuthors(const QString& authors)
+{
+    m_authors = authors;
+}
 
-    QStringList filter;
-    filter << "*";
+QStringList SnippetRepository::fileTypes() const
+{
+    return m_filetypes;
+}
 
-    QStringList list;
-    list = engine.entryList( QDir::Dirs|QDir::Files, filter);
+void SnippetRepository::setFileTypes(const QStringList& filetypes)
+{
+    if ( filetypes.contains("*") ) {
+        m_filetypes.clear();
+    } else {
+        m_filetypes = filetypes;
+    }
+}
 
-    // Ignore all files starting with a dot.
-    // On Linux this includes the "." and ".." entries of each directory.
-    QRegExp noHiddenFiles("^[^.]");
-    QStringList l = list.filter(noHiddenFiles);
+QString SnippetRepository::license() const
+{
+    return m_license;
+}
 
-    // Now run through all found entries ...
-    foreach (const QString &file, l) {
-        QFileInfo info(location_+QDir::separator()+file);
+void SnippetRepository::setLicense(const QString& license)
+{
+    m_license = license;
+}
 
-        if (info.isHidden()) {
-            // On Windows hidden files do not start with a dot.
-            // so we sort them out here
+void SnippetRepository::remove()
+{
+    QFile::remove(m_file);
+    deleteLater();
+}
+
+///copied code from snippets_tng/lib/completionmodel.cpp
+///@copyright 2009 Joseph Wenninger <jowenn@kde.org>
+static void addAndCreateElement(QDomDocument& doc, QDomElement& item, const QString& name, const QString &content)
+{
+    QDomElement element=doc.createElement(name);
+    element.appendChild(doc.createTextNode(content));
+    item.appendChild(element);
+}
+
+void SnippetRepository::save()
+{
+    ///based on the code from snippets_tng/lib/completionmodel.cpp
+    ///@copyright 2009 Joseph Wenninger <jowenn@kde.org>
+    /*
+    <snippets name="Testsnippets" filetype="*" authors="Joseph Wenninger" license="BSD">
+        <item>
+            <displayprefix>prefix</displayprefix>
+            <match>test1</match>
+            <displaypostfix>postfix</displaypostfix>
+            <displayarguments>(param1, param2)</displayarguments>
+            <fillin>This is a test</fillin>
+        </item>
+        <item>
+            <match>testtemplate</match>
+            <fillin>This is a test ${WHAT} template</fillin>
+        </item>
+    </snippets>
+    */
+    QDomDocument doc;
+
+    QDomElement root = doc.createElement("snippets");
+    root.setAttribute("name", text());
+    root.setAttribute("filetypes", m_filetypes.isEmpty() ? "*" : m_filetypes.join(";"));
+    root.setAttribute("authors", m_authors);
+    root.setAttribute("license", m_license);
+
+    doc.appendChild(root);
+
+    for ( int i = 0; i < rowCount(); ++i ) {
+        Snippet* snippet = dynamic_cast<Snippet*>(child(i));
+        if ( !snippet ) {
             continue;
         }
-
-        if (info.isDir()) {
-            // ... and create either a new repository ...
-            SnippetStore::self()->createNewRepository( this, file, location_+QDir::separator()+file );
+        QDomElement item = doc.createElement("item");
+        addAndCreateElement(doc, item, "displayprefix", snippet->prefix());
+        addAndCreateElement(doc, item, "match", snippet->text());
+        addAndCreateElement(doc, item, "displaypostfix", snippet->postfix());
+        addAndCreateElement(doc, item, "displayarguments", snippet->arguments());
+        addAndCreateElement(doc, item, "fillin", snippet->snippet());
+        root.appendChild(item);
+    }
+    //KMessageBox::information(0,doc.toString());
+    QFileInfo fi(m_file);
+    kDebug() << fi.fileName();
+    QString outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/" + fi.fileName() );
+    if ( m_file != outname) {
+        QFileInfo fiout(outname);
+//      if (fiout.exists()) {
+// there could be cases that new new name clashes with a global file, but I guess it is not that often.
+        bool ok = false;
+        for (int i=0;i<1000;i++) {
+            outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/"+QString("%1_").arg(i)+fi.fileName());
+            if (QFile::exists(outname)) {
+                ok = true;
+                break;
+            }
+        }
+        if (!ok) {
+            KMessageBox::error(0,i18n("You have edited a data file not located in your personal data directory, but a suitable filename could not be generated for storing a clone of the file within your personal data directory."));
+            return;
         } else {
-            // ... or a new snippet
-            new Snippet(file, this);
+            KMessageBox::information(0,i18n("You have edited a data file not located in your personal data directory; as such, a renamed clone of the original data file has been created within your personal data directory."));
         }
+//       } else
+//         KMessageBox::information(0,i18n("You have edited a data file not located in your personal data directory, creating a clone of the data file in your personal data directory"));
     }
-}
 
-const QList< Snippet* > SnippetRepository::getSnippets() const
-{
-    QList< Snippet* > snippets;
-    for ( int i = 0; i < rowCount(); ++i ) {
-        if ( Snippet* snippet = dynamic_cast<Snippet*>(child(i)) ) {
-            snippets << snippet;
-        } else if ( SnippetRepository* repo = dynamic_cast<SnippetRepository*>(child(i)) ) {
-            snippets += repo->getSnippets();
-        }
+    QFile outfile(outname);
+    if (!outfile.open(QIODevice::WriteOnly)) {
+        KMessageBox::error(0, i18n("Output file '%1' could not be opened for writing", outname));
+        return;
     }
-    return snippets;
+    outfile.write(doc.toByteArray());
+    outfile.close();
 }
 
-const QString& SnippetRepository::getLocation() const
+void SnippetRepository::slotParseFile()
 {
-    return location_;
-}
+    ///based on the code from snippets_tng/lib/completionmodel.cpp
+    ///@copyright 2009 Joseph Wenninger <jowenn@kde.org>
 
-void SnippetRepository::addSubRepo(SnippetRepository* repo)
-{
-    appendRow( repo );
-}
+    QFile f(m_file);
 
-void SnippetRepository::addSnippet( Snippet* snippet )
-{
-    appendRow( snippet );
-}
-
-void SnippetRepository::setLocation(QString loc)
-{
-    location_ = QDir::cleanPath(loc);
-    setToolTip(location_);
-}
-
-void SnippetRepository::changeLocation(const QString& newLocation, const QString& newName)
-{
-    // In case the location didn't change, we might still need to update the name
-    if (getLocation() == QDir::cleanPath(newLocation)) {
-        if (!newName.isEmpty())
-            setText( newName );
+    if ( !f.open(QIODevice::ReadOnly) ) {
+        KMessageBox::error( QApplication::activeWindow(), i18n("Cannot open snippet repository %1.", m_file) );
         return;
     }
 
-    //if the location changed, try to move the repository
-    QString oldLocation = getLocation();
-    QDir dir(oldLocation);
-    if (dir.rename( oldLocation, newLocation )) {
-        // if moving was ok, set the location, tooltip and the name
-        setLocation( newLocation );
-        if (!newName.isEmpty())
-            setText( newName );
+    QDomDocument doc;
+    QString errorMsg;
+    int line, col;
+    bool success = doc.setContent(&f, &errorMsg, &line, &col);
+    f.close();
 
-        // as the snippets and subrepos now changed their
-        // location on the disk, resync everything in this repo
-        slotSyncRepository();
-    } else {
-        KMessageBox::error(
-            QApplication::activeWindow(),
-            i18n("Could not move repository from \"%1\" to \"%2\".", oldLocation, newLocation)
-        );
+    if (!success) {
+        KMessageBox::error( QApplication::activeWindow(),
+                           i18n("<qt>The error <b>%4</b><br /> has been detected in the file %1 at %2/%3</qt>",
+                                m_file, line, col, i18nc("QXml", errorMsg.toUtf8())) );
+        return;
     }
-}
 
-void SnippetRepository::removeDirectory()
-{
-    QDir dir( getLocation() );
-    // remove all contents
-    for ( int i = 0; i < rowCount(); ++i ) {
-        if ( Snippet* snippet = dynamic_cast<Snippet*>(child(i)) ) {
-            snippet->removeSnippetFile();
-        } else if ( SnippetRepository* repo = dynamic_cast<SnippetRepository*>(child(i)) ) {
-            repo->removeDirectory();
+    // parse root item
+    const QDomElement& docElement = doc.documentElement();
+    if (docElement.tagName() != "snippets") {
+        KMessageBox::error( QApplication::activeWindow(), i18n("Invalid XML snippet file: %1", m_file) );
+        return;
+    }
+    setLicense(docElement.attribute("license"));
+    setAuthors(docElement.attribute("authors"));
+    setFileTypes(docElement.attribute("filetypes").split(';', QString::SkipEmptyParts));
+    setText(docElement.attribute("name"));
+
+    // parse children, i.e. <item>'s
+    const QDomNodeList& nodes = docElement.childNodes();
+    for(int i = 0; i < nodes.size(); ++i ) {
+        const QDomNode& node = nodes.at(i);
+        if ( !node.isElement() ) {
+            continue;
         }
-    }
-    if (!dir.exists() || dir.rmdir( getLocation() )) {
-        kDebug() << getLocation() << text() << index() << QStandardItem::parent();
-        if (index().isValid()) {
-            if ( QStandardItem::parent() ) {
-                // remove non-roots from model
-                QStandardItem::parent()->removeRows( row(), 1 );
-            } else {
-                // remove root items (i.e. the repository item) from model
-                SnippetStore::self()->remove( this );
+        const QDomElement& item = node.toElement();
+        if ( item.tagName() != "item" ) {
+            continue;
+        }
+        Snippet* snippet = new Snippet;
+        const QDomNodeList& children = node.childNodes();
+        for(int j = 0; j < children.size(); ++j) {
+            const QDomNode& childNode = children.at(j);
+            if ( !childNode.isElement() ) {
+                continue;
+            }
+            const QDomElement& child = childNode.toElement();
+            if ( child.tagName() == "match" ) {
+                snippet->setText(child.text());
+            } else if ( child.tagName() == "fillin" ) {
+                snippet->setSnippet(child.text());
+            } else if ( child.tagName() == "displayprefix" ) {
+                snippet->setPrefix(child.text());
+            } else if ( child.tagName() == "displaypostfix" ) {
+                snippet->setPostfix(child.text());
+            } else if ( child.tagName() == "displayarguments" ) {
+                snippet->setArguments(child.text());
             }
         }
-    } else {
-        KMessageBox::error(
-            QApplication::activeWindow(),
-            i18n("Could not remove repository \"%1\".", getLocation())
-        );
+        // require at least a non-empty name and snippet
+        if ( snippet->text().isEmpty() || snippet->snippet().isEmpty() ) {
+            delete snippet;
+            continue;
+        } else {
+            appendRow(snippet);
+        }
     }
-}
-
-void SnippetRepository::createSubRepo(const QString& subrepo)
-{
-    // First create the directory ...
-    QDir dir( location_ );
-    dir.mkdir( subrepo );
-
-    // ... then sync this repository in order to see the directory in the model
-    slotSyncRepository();
 }
 
 #include "snippetrepository.moc"

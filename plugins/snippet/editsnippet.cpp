@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -10,50 +11,71 @@
 
 #include "editsnippet.h"
 
-#include <keditlistbox.h>
-#include <kmessagebox.h>
+#include "snippetrepository.h"
 
-#include "snippet.h"
+#include <KLocalizedString>
+
+#include <KTextEditor/EditorChooser>
+#include <KPushButton>
+
 #include "snippetstore.h"
+#include "snippet.h"
 
-EditSnippet::EditSnippet(Snippet *s, QWidget* parent)
- : KDialog(parent), Ui::EditSnippet(), snippet_(s)
+EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidget* parent)
+    : KDialog(parent), Ui::EditSnippetBase(), m_repo(repository), m_snippet(snippet)
 {
-    Ui::EditSnippet::setupUi(mainWidget());
-    setCaption(i18n("Edit Snippet"));
-    snippetName->setText( s->text() );
-    snippetText->clear();
-    snippetText->insertPlainText( s->getSnippetPlainText() );
+    Q_ASSERT(m_repo);
 
-    keywordList->clear();
-    keywordList->insertStringList( s->getKeywordList() );
+    setButtons(/*Reset | */Apply | Cancel | Ok);
+    setupUi(mainWidget());
 
-    snippetName->setFocus();
+    connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+    connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
+
+    connect(snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(snippetNameChanged(QString)));
+
+    // if we edit a snippet, add all existing data
+    if ( m_snippet ) {
+        snippetNameEdit->setText(m_repo->text());
+
+        setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
+
+        snippetArgumentsEdit->setText(m_snippet->arguments());
+        snippetContentsEdit->setText(m_snippet->snippet());
+        snippetNameEdit->setText(m_snippet->text());
+        snippetPostfixEdit->setText(m_snippet->postfix());
+        snippetPrefixEdit->setText(m_snippet->prefix());
+    } else {
+        setWindowTitle(i18n("Create New Snippet in Repository %1", m_repo->text()));
+    }
 }
 
 EditSnippet::~EditSnippet()
 {
 }
 
-void EditSnippet::accept()
+void EditSnippet::snippetNameChanged(const QString& name)
 {
-    QString name = snippetName->text();
+    bool valid = !name.isEmpty() && !name.contains('/');
+    button(Ok)->setEnabled(valid);
+    button(Apply)->setEnabled(valid);
+}
 
-    if ( name.isEmpty() ) {
-        KMessageBox::error( this, i18n("Empty name"), i18n("Please enter a name") );
-        return;
+void EditSnippet::save()
+{
+    Q_ASSERT(!snippetNameEdit->text().isEmpty());
+
+    if ( !m_snippet ) {
+        // save as new snippet
+        m_snippet = new Snippet();
+        m_repo->appendRow(m_snippet);
     }
-
-    // First we need to save the user's data in our Snippet object
-    snippet_->changeName( name );
-    snippet_->setSnippetText( snippetText->toPlainText() );
-    snippet_->getKeywordList() = keywordList->items();
-
-    // Write the Snippet's data back to it's file
-    snippet_->save();
-
-    // Call baseclass' accept() method
-    KDialog::accept();
+    m_snippet->setArguments(snippetArgumentsEdit->text());
+    m_snippet->setSnippet(snippetContentsEdit->document()->toPlainText());
+    m_snippet->setText(snippetNameEdit->text());
+    m_snippet->setPostfix(snippetPostfixEdit->text());
+    m_snippet->setPrefix(snippetPrefixEdit->text());
+    m_repo->save();
 }
 
 #include "editsnippet.moc"

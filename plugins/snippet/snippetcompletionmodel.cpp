@@ -67,8 +67,10 @@ void SnippetCompletionModel::initData()
         SnippetRepository* repo = dynamic_cast<SnippetRepository*>( store->item( i, 0 ) );
         if( repo )
         {
-            foreach (Snippet* snippet, repo->getSnippets()) {
-                m_snippets << new SnippetCompletionItem(snippet->text(), snippet->getSnippetPlainText());
+            for ( int j = 0; j < repo->rowCount(); ++j ) {
+                if ( Snippet* snippet = dynamic_cast<Snippet*>(repo->child(j)) ) {
+                    m_snippets << new SnippetCompletionItem(snippet->text(), snippet->snippet());
+                }
             }
         }
     }

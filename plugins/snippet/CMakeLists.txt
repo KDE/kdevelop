@@ -13,15 +13,14 @@ set(kdevsnippet_PART_SRCS
     snippetcompletionmodel.cpp
     snippetcompletionitem.cpp
     snippet.cpp
-    moverepository.cpp
+    editrepository.cpp
     editsnippet.cpp
 )
 set(kdevsnippet_PART_UI
     snippetview.ui
+    editrepository.ui
     editsnippet.ui
-    addrepository.ui
 )
-
 
 kde4_add_ui_files(kdevsnippet_PART_SRCS ${kdevsnippet_PART_UI})
 kde4_add_plugin(kdevsnippet ${kdevsnippet_PART_SRCS})

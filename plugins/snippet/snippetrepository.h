@@ -1,5 +1,6 @@
 /***************************************************************************
  *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *   Copyright 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,18 +13,21 @@
 #define __SNIPPETREPOSITORY_H__
 
 #include <QObject>
-#include <QPointer>
-#include <QList>
 #include <QStandardItem>
-#include <QDir>
+#include <QStringList>
 
 class Snippet;
 
 /**
- * Each object of this type is a repository of snippets. Each repository
- * has a name and a directory from where the snippets get loaded.
- * The Snippets are stored in the @a snippets_ member.
+ * Each object of this type represents a repository of snippets. Each repository
+ * has a name and will be saved to an XML file that includes all items of this repository.
+ *
+ * To access the snippets in this repo, iterate over it's children and dynamic_cast as required.
+ * To add a snippet, @p appendRow() it.
+ * To access the name of the repository, use @p text() and @p setText().
+ *
  * @author Robert Gruber <rgruber@users.sourceforge.net>
+ * @author Milian Wolff <mail@milianw.de>
  */
 class SnippetRepository : public QObject, public QStandardItem
 {
@@ -31,71 +35,72 @@ class SnippetRepository : public QObject, public QStandardItem
 
 public:
     /**
-     * Creates a new SnippetRepository.
-     * After object creation slotSyncRepository() will be called.
-     * @param name A name for the repository
-     * @param location The directory from where to load the snippets
+     * Creates a new SnippetRepository. When @p file exists it will be parsed (XML).
+     *
+     * @param file Location of the snippet's repository file.
      */
-    SnippetRepository(const QString& name, const QString& location);
+    SnippetRepository(const QString& file);
     ~SnippetRepository();
 
     /**
-     * adds the snippet to this repository
+     * The license for the snippets contained in this repository.
      */
-    void addSnippet( Snippet* snippet );
+    QString license() const;
+    /**
+     * Sets the license for the snippets contained in this repository.
+     */
+    void setLicense(const QString& license);
 
     /**
-     * @return The snippets that are currently stored in this repository
+     * The author(s) of the snippets contained in this repository.
      */
-    const QList<Snippet*> getSnippets() const;
+    QString authors() const;
+    /**
+     * Sets the author(s) of the snippets contained in this repository.
+     */
+    void setAuthors(const QString& authors);
 
     /**
-     * @return The directory of the repository
+     * The valid filetypes for the snippets contained in this repository.
+     * Empty list means no restriction on the modes.
+     * @see KTextEditor::Document::mode()
      */
-    const QString& getLocation() const;
+    QStringList fileTypes() const;
+    /**
+     * Sets the valid filetypes for the snippets contained in this repository.
+     * An empty list, or any list which contains an element "*" is treated as
+     * a no-restriction filter.
+     */
+    void setFileTypes(const QStringList& filetypes);
 
     /**
-     * Calling this method will append @p repo to this repository.
-     * This makes @p repo a child of this SnippetRepository.
-     * @param repo @p repo will become a child of this SnippetRepository.
+     * The path to this repository's file.
      */
-    void addSubRepo(SnippetRepository* repo);
-
-    /**
-     * Change the location of the repository.
-     * If @p newName is not empty, the name of the repository will also be changed.
-     * @param newLocation The repository will be moved to this location
-     * @param newName If set, the name of the repository will be changed
-     */
-    void changeLocation(const QString& newLocation, const QString& newName = "");
+    const QString& getFile() const;
 
     /**
      * Remove this repository from the disk. Also deletes the item and all its children.
      */
-    void removeDirectory();
+    void remove();
 
     /**
-     * Creates a new subdirectory named @p subrepo.
-     * @note Also calles slotSyncRepository()
+     * Save this repository to disk.
      */
-    void createSubRepo(const QString& subrepo);
+    void save();
 
-public slots:
-    /**
-     * When this slot gets called, all stored snippets gets removed from the
-     * internal data structure and the directory of the repository get searched
-     * for snippets. All found snippets will then be stored in the internal
-     * snippets_ list.
-     */
-    void slotSyncRepository();
+private Q_SLOTS:
+    /// parses the XML file and load the containing snippets.
+    void slotParseFile();
 
 private:
-    /**
-     * @see changeLocation()
-     */
-    void setLocation(QString loc);
-
-    QString location_;
+    /// path to the repository file
+    const QString m_file;
+    /// license of the snippets in this repo
+    QString m_license;
+    /// author(s) of the snippets in this repo
+    QString m_authors;
+    /// valid filetypes for the snippets in this repo
+    QStringList m_filetypes;
 };
 
 #endif
