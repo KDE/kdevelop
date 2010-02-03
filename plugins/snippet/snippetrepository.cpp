@@ -32,8 +32,10 @@ SnippetRepository::SnippetRepository(const QString& file)
 {
     setIcon( KIcon("folder") );
 
-    // Tell the new repository to load it's snippets
-    QTimer::singleShot(0, this, SLOT(slotParseFile()));
+    if ( QFile::exists(file) ) {
+        // Tell the new repository to load it's snippets
+        QTimer::singleShot(0, this, SLOT(slotParseFile()));
+    }
 
     kDebug() << "created new snippet repo" << file << this;
 }
@@ -42,6 +44,11 @@ SnippetRepository::~SnippetRepository()
 {
     // remove all our children from both the model and our internal data structures
     removeRows( 0, rowCount() );
+}
+
+QString SnippetRepository::getFileForName(const QString& name)
+{
+    return KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/" + name + ".xml" );
 }
 
 const QString& SnippetRepository::getFile() const

@@ -37,7 +37,7 @@ private:
 
 private slots:
     void save();
-    void repoNameChanged(const QString& name);
+    void validate();
 };
 
 #endif

@@ -32,7 +32,7 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
 
-    connect(repoNameEdit, SIGNAL(textEdited(QString)), this, SLOT(repoNameChanged(QString)));
+    connect(repoNameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
 
     // fill list of available modes
     KTextEditor::Document *document = KTextEditor::EditorChooser::editor()->createDocument(0);
@@ -71,15 +71,17 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     } else {
         setWindowTitle(i18n("Create New Snippet Repository"));
     }
+
+    validate();
 }
 
 EditRepository::~EditRepository()
 {
 }
 
-void EditRepository::repoNameChanged(const QString& name)
+void EditRepository::validate()
 {
-    bool valid = !name.isEmpty() && !name.contains('/');
+    bool valid = !repoNameEdit->text().isEmpty() && !repoNameEdit->text().contains('/');
     button(Ok)->setEnabled(valid);
     button(Apply)->setEnabled(valid);
 }
@@ -89,7 +91,7 @@ void EditRepository::save()
     Q_ASSERT(!repoNameEdit->text().isEmpty());
     if ( !m_repo ) {
         // save as new repo
-        m_repo = new SnippetRepository(repoNameEdit->text()+".xml");
+        m_repo = new SnippetRepository(SnippetRepository::getFileForName(repoNameEdit->text()));
         SnippetStore::self()->appendRow(m_repo);
     }
     m_repo->setText(repoNameEdit->text());

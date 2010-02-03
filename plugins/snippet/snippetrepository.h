@@ -43,6 +43,11 @@ public:
     ~SnippetRepository();
 
     /**
+     * Returns a fitting file-path for a given repository name.
+     */
+    static QString getFileForName(const QString& name);
+
+    /**
      * The license for the snippets contained in this repository.
      */
     QString license() const;
@@ -94,7 +99,7 @@ private Q_SLOTS:
 
 private:
     /// path to the repository file
-    const QString m_file;
+    QString m_file;
     /// license of the snippets in this repo
     QString m_license;
     /// author(s) of the snippets in this repo
