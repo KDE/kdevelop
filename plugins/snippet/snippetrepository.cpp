@@ -93,7 +93,7 @@ void SnippetRepository::setLicense(const QString& license)
 void SnippetRepository::remove()
 {
     QFile::remove(m_file);
-    deleteLater();
+    model()->invisibleRootItem()->removeRow(row());
 }
 
 ///copied code from snippets_tng/lib/completionmodel.cpp
