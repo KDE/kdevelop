@@ -39,7 +39,9 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
 
     repoFileTypesList->addItems(document->modes());
     repoFileTypesList->sortItems();
-    repoFileTypesList->setSelectionMode(QAbstractItemView::MultiSelection);
+    repoFileTypesList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    connect(repoFileTypesList->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(updateFileTypesEdit()));
 
     delete document;
 
@@ -73,7 +75,7 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     }
 
     validate();
-
+    updateFileTypesEdit();
     repoNameEdit->setFocus();
 }
 
@@ -100,14 +102,19 @@ void EditRepository::save()
     m_repo->setAuthors(repoAuthorsEdit->text());
     m_repo->setLicense(repoLicenseEdit->currentText());
 
-    QStringList filetypes;
-    foreach (QListWidgetItem* item, repoFileTypesList->selectedItems() ) {
-        filetypes << item->text();
-    }
-    m_repo->setFileTypes(filetypes);
+    m_repo->setFileTypes(repoFileTypesEdit->text().split(";", QString::SkipEmptyParts));
     m_repo->save();
 
     setWindowTitle(i18n("Edit Snippet Repository %1", m_repo->text()));
+}
+
+void EditRepository::updateFileTypesEdit()
+{
+    QStringList types;
+    foreach( QListWidgetItem* item, repoFileTypesList->selectedItems() ) {
+        types << item->text();
+    }
+    repoFileTypesEdit->setText(types.join(";"));
 }
 
 #include "editrepository.moc"

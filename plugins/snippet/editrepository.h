@@ -38,6 +38,7 @@ private:
 private slots:
     void save();
     void validate();
+    void updateFileTypesEdit();
 };
 
 #endif
