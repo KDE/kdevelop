@@ -275,6 +275,10 @@ void GenericProjectManager::created(const QString &path)
         if ( !isValid(url, info.isDir(), p, getIncludeRules(p)) ) {
             continue;
         }
+        if ( !p->foldersForUrl(url).isEmpty() ) {
+            // exists already in this project, happens e.g. when we restart the dirwatcher
+            continue;
+        }
         foreach ( KDevelop::ProjectFolderItem* parentItem, p->foldersForUrl(parent) ) {
             if ( info.isDir() ) {
                 eventuallyReadFolder(new KDevelop::ProjectFolderItem( p, url, parentItem ));
