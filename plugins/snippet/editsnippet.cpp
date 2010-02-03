@@ -51,6 +51,8 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
     }
 
     validate();
+
+    snippetNameEdit->setFocus();
 }
 
 EditSnippet::~EditSnippet()

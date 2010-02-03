@@ -73,6 +73,8 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     }
 
     validate();
+
+    repoNameEdit->setFocus();
 }
 
 EditRepository::~EditRepository()
