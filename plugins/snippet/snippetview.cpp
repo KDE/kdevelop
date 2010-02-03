@@ -148,22 +148,15 @@ void SnippetView::contextMenu (const QPoint& pos)
         KMenu menu(this);
         menu.addTitle(i18n("Snippets"));
 
-        QAction* add = menu.addAction(i18n("Add Repository"));
-        add->setIcon(KIcon("folder-new"));
-        connect(add, SIGNAL(triggered()), this, SLOT(slotAddRepo()));
+        menu.addAction(m_addRepoAction);
 
         menu.exec(snippetTree->mapToGlobal(pos));
     } else if (Snippet* snippet = dynamic_cast<Snippet*>( item )) {
         KMenu menu(this);
         menu.addTitle(i18n("Snippet: %1", snippet->text()));
 
-        QAction* edit = menu.addAction(i18n("Edit"));
-        edit->setIcon(KIcon("document-edit"));
-        connect(edit, SIGNAL(triggered()), this, SLOT(slotEditSnippet()));
-
-        QAction* del = menu.addAction(i18n("Delete"));
-        del->setIcon(KIcon("document-close"));
-        connect(del, SIGNAL(triggered()), this, SLOT(slotRemoveSnippet()));
+        menu.addAction(m_editSnippetAction);
+        menu.addAction(m_removeSnippetAction);
 
         menu.exec(snippetTree->mapToGlobal(pos));
     } else if (SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item )) {
@@ -173,19 +166,11 @@ void SnippetView::contextMenu (const QPoint& pos)
         menu.addAction(m_toggleRepoAction);
         menu.addSeparator();
 
-        QAction* edit = menu.addAction(i18n("Edit"));
-        edit->setIcon(KIcon("folder-txt"));
-        connect(edit, SIGNAL(triggered()), this, SLOT(slotEditRepo()));
-
-        QAction* remove = menu.addAction(i18n("Remove"));
-        remove->setIcon(KIcon("edit-delete"));
-        connect(remove, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
-
+        menu.addAction(m_editRepoAction);
+        menu.addAction(m_removeRepoAction);
         menu.addSeparator();
 
-        QAction* add = menu.addAction(i18n("Add Snippet"));
-        add->setIcon(KIcon("document-new"));
-        connect(add, SIGNAL(triggered()), this, SLOT(slotAddSnippet()));
+        menu.addAction(m_addSnippetAction);
 
         menu.exec(snippetTree->mapToGlobal(pos));
     }
