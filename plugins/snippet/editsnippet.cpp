@@ -48,6 +48,8 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
     } else {
         setWindowTitle(i18n("Create New Snippet in Repository %1", m_repo->text()));
     }
+
+    snippetNameChanged(snippetNameEdit->text());
 }
 
 EditSnippet::~EditSnippet()
