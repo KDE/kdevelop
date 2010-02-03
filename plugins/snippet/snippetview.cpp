@@ -55,13 +55,14 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_addRepoAction = new KAction(KIcon("folder-new"), i18n("Add Repository"), this);
     connect(m_addRepoAction, SIGNAL(triggered()), this, SLOT(slotAddRepo()));
     addAction(m_addRepoAction);
-    m_editRepoAction = new KAction(KIcon("folder-text"), i18n("Edit Repository"), this);
+    m_editRepoAction = new KAction(KIcon("folder-txt"), i18n("Edit Repository"), this);
     connect(m_editRepoAction, SIGNAL(triggered()), this, SLOT(slotEditRepo()));
     addAction(m_editRepoAction);
     m_removeRepoAction = new KAction(KIcon("edit-delete"), i18n("Remove Repository"), this);
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
     m_toggleRepoAction = new KAction(this);
+    m_toggleRepoAction->setIcon(KIcon("folder")); // just some default
     connect(m_toggleRepoAction, SIGNAL(triggered()), this, SLOT(slotToggleRepo()));
     addAction(m_toggleRepoAction);
 
