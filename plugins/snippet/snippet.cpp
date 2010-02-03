@@ -12,10 +12,12 @@
 #include "snippet.h"
 
 #include <KLocalizedString>
+#include <KIcon>
 
 Snippet::Snippet()
     : QStandardItem(i18n("<empty snippet>"))
 {
+    setIcon(KIcon("text-plain"));
 }
 
 Snippet::~Snippet()

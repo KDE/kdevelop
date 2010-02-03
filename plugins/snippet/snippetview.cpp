@@ -93,6 +93,7 @@ void SnippetView::contextMenu (const QPoint& pos)
         menu.addTitle(i18n("Snippets"));
 
         QAction* add = menu.addAction(i18n("Add Repository"));
+        add->setIcon(KIcon("folder-new"));
         connect(add, SIGNAL(triggered()), this, SLOT(slotAddRepo()));
 
         menu.exec(snippetTree->mapToGlobal(pos));
@@ -101,9 +102,11 @@ void SnippetView::contextMenu (const QPoint& pos)
         menu.addTitle(i18n("Snippet: %1", snippet->text()));
 
         QAction* edit = menu.addAction(i18n("Edit"));
+        edit->setIcon(KIcon("document-edit"));
         connect(edit, SIGNAL(triggered()), this, SLOT(slotEditSnippet()));
 
         QAction* del = menu.addAction(i18n("Delete"));
+        del->setIcon(KIcon("document-close"));
         connect(del, SIGNAL(triggered()), this, SLOT(slotRemoveSnippet()));
 
         menu.exec(snippetTree->mapToGlobal(pos));
@@ -111,14 +114,19 @@ void SnippetView::contextMenu (const QPoint& pos)
         KMenu menu(this);
         menu.addTitle(i18n("Repository")+": "+repo->text());
 
-        QAction* add = menu.addAction(i18n("Add Snippet"));
-        connect(add, SIGNAL(triggered()), this, SLOT(slotAddSnippet()));
-
-        QAction* move = menu.addAction(i18n("Edit"));
-        connect(move, SIGNAL(triggered()), this, SLOT(slotEditRepo()));
+        QAction* edit = menu.addAction(i18n("Edit"));
+        edit->setIcon(KIcon("folder-txt"));
+        connect(edit, SIGNAL(triggered()), this, SLOT(slotEditRepo()));
 
         QAction* remove = menu.addAction(i18n("Remove"));
+        remove->setIcon(KIcon("edit-delete"));
         connect(remove, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
+
+        menu.addSeparator();
+
+        QAction* add = menu.addAction(i18n("Add Snippet"));
+        add->setIcon(KIcon("document-new"));
+        connect(add, SIGNAL(triggered()), this, SLOT(slotAddSnippet()));
 
         menu.exec(snippetTree->mapToGlobal(pos));
     }
