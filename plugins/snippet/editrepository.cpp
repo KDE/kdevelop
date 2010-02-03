@@ -102,6 +102,8 @@ void EditRepository::save()
     }
     m_repo->setFileTypes(filetypes);
     m_repo->save();
+
+    setWindowTitle(i18n("Edit Snippet Repository %1", m_repo->text()));
 }
 
 #include "editrepository.moc"

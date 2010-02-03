@@ -79,6 +79,8 @@ void EditSnippet::save()
     m_snippet->setPostfix(snippetPostfixEdit->text());
     m_snippet->setPrefix(snippetPrefixEdit->text());
     m_repo->save();
+
+    setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
 }
 
 #include "editsnippet.moc"
