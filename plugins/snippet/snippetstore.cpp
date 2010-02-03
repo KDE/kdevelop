@@ -20,12 +20,12 @@
 #include <KStandardDirs>
 #include <KDebug>
 
-SnippetStore* SnippetStore::self_ = 0;
+SnippetStore* SnippetStore::m_self = 0;
 
 SnippetStore::SnippetStore(SnippetPlugin* plugin)
-    : plugin_(plugin)
+    : m_plugin(plugin)
 {
-    self_ = this;
+    m_self = this;
 
     const QStringList list = KGlobal::dirs()->findAllResources("data",
         "kate/plugins/katesnippets_tng/data/*.xml", KStandardDirs::NoDuplicates)
@@ -41,7 +41,7 @@ SnippetStore::SnippetStore(SnippetPlugin* plugin)
 SnippetStore::~SnippetStore()
 {
     invisibleRootItem()->removeRows( 0, invisibleRootItem()->rowCount() );
-    self_ = 0;
+    m_self = 0;
 }
 
 void SnippetStore::init(SnippetPlugin* plugin)
@@ -52,7 +52,7 @@ void SnippetStore::init(SnippetPlugin* plugin)
 
 SnippetStore* SnippetStore::self()
 {
-    return self_;
+    return m_self;
 }
 
 Qt::ItemFlags SnippetStore::flags(const QModelIndex & index) const
@@ -65,7 +65,7 @@ Qt::ItemFlags SnippetStore::flags(const QModelIndex & index) const
 
 KConfigGroup SnippetStore::getConfig()
 {
-    return plugin_->core()->activeSession()->config()->group("Snippets");
+    return m_plugin->core()->activeSession()->config()->group("Snippets");
 }
 
 #include "snippetstore.moc"

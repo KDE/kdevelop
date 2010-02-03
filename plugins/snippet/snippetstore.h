@@ -45,8 +45,8 @@ private:
 
     virtual Qt::ItemFlags flags (const QModelIndex & index) const;
 
-    static SnippetStore* self_;
-    SnippetPlugin* plugin_;
+    static SnippetStore* m_self;
+    SnippetPlugin* m_plugin;
 };
 
 #endif
