@@ -39,6 +39,7 @@ public:
 
     virtual ~SnippetStore();
     KConfigGroup getConfig();
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
 private:
     SnippetStore(SnippetPlugin* plugin);

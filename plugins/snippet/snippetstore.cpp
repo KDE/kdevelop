@@ -59,13 +59,36 @@ Qt::ItemFlags SnippetStore::flags(const QModelIndex & index) const
 {
     Q_UNUSED(index)
 
-    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable;
     return flags;
 }
 
 KConfigGroup SnippetStore::getConfig()
 {
     return m_plugin->core()->activeSession()->config()->group("Snippets");
+}
+
+bool SnippetStore::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    const bool success = QStandardItemModel::setData(index, value, role);
+    if ( !success || role != Qt::EditRole ) {
+        return success;
+    }
+
+    // when we edited something, save the repository
+
+    QStandardItem* repoItem = 0;
+    if ( index.parent().isValid() ) {
+        repoItem = itemFromIndex(index.parent());
+    } else {
+        repoItem = itemFromIndex(index);
+    }
+
+    SnippetRepository* repo = dynamic_cast<SnippetRepository*>(repoItem);
+    if ( repo ) {
+        repo->save();
+    }
+    return true;
 }
 
 #include "snippetstore.moc"
