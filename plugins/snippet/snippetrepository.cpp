@@ -55,8 +55,11 @@ SnippetRepository::~SnippetRepository()
 
 SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
 {
+    QString cleanName = name;
+    cleanName.replace('/', '-');
+
     SnippetRepository* repo = new SnippetRepository(KGlobal::dirs()->locateLocal( "data",
-                                                    "kate/plugins/katesnippets_tng/data/" + name + ".xml" ));
+                                                    "kate/plugins/katesnippets_tng/data/" + cleanName + ".xml" ));
     repo->setText(name);
     repo->setActive(true);
     KUser user;
