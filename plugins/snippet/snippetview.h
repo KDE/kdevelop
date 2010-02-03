@@ -17,6 +17,7 @@
 class SnippetFilterProxyModel;
 class QStandardItem;
 class SnippetPlugin;
+class KAction;
 
 /**
  * This class gets embedded into the right tool view by the SnippetPlugin.
@@ -74,12 +75,21 @@ public slots:
 
 private slots:
     void contextMenu (const QPoint & pos);
+    /// disables or enables available actions based on the currently selected item
+    void validateActions();
 
 private:
     QStandardItem* currentItem();
 
     SnippetPlugin* plugin_;
     SnippetFilterProxyModel* proxy_;
+
+    KAction* m_addRepoAction;
+    KAction* m_removeRepoAction;
+    KAction* m_editRepoAction;
+    KAction* m_addSnippetAction;
+    KAction* m_removeSnippetAction;
+    KAction* m_editSnippetAction;
 };
 
 #endif

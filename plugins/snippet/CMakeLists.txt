@@ -29,4 +29,5 @@ install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 install( FILES kdevsnippet.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES kdevsnippet.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsnippet )
 

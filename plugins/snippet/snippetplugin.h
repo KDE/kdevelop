@@ -28,6 +28,7 @@ class Part;
 }
 
 class Snippet;
+class KAction;
 
 /**
  * This is the main class of KDevelop's snippet plugin.

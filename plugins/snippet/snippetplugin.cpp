@@ -65,6 +65,8 @@ SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
 
     m_model = new SnippetCompletionModel;
 
+    setXMLFile( "kdevsnippet.rc" );
+
     m_factory = new SnippetViewFactory(this);
     core()->uiController()->addToolView(i18n("Snippets"), m_factory);
     connect( core()->partController(), SIGNAL(partAdded(KParts::Part*)), this, SLOT(documentLoaded(KParts::Part*)) );
