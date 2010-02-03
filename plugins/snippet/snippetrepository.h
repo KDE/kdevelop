@@ -45,7 +45,7 @@ public:
     /**
      * Creates a snippet repository for the given name and adds it to the SnippetStore.
      */
-    static SnippetRepository* getRepoForName(const QString& name);
+    static SnippetRepository* createRepoFromName(const QString& name);
 
     /**
      * The license for the snippets contained in this repository.

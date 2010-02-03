@@ -169,7 +169,7 @@ void SnippetPlugin::createSnippetFromSelection()
     }
     bool created = !match;
     if ( created ) {
-        match = SnippetRepository::getRepoForName(i18n("%1 snippets", mode));
+        match = SnippetRepository::createRepoFromName(i18n("%1 snippets", mode));
         match->setFileTypes(QStringList() << mode);
     }
 

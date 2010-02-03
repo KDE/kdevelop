@@ -51,7 +51,7 @@ SnippetRepository::~SnippetRepository()
     removeRows( 0, rowCount() );
 }
 
-SnippetRepository* SnippetRepository::getRepoForName(const QString& name)
+SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
 {
     SnippetRepository* repo = new SnippetRepository(KGlobal::dirs()->locateLocal( "data",
                                                     "kate/plugins/katesnippets_tng/data/" + name + ".xml" ));
