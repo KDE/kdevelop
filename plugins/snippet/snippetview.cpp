@@ -32,14 +32,12 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
 
     setWindowTitle(i18n("Snippets"));
 
-    tbFilter->setIcon(KIcon("view-filter"));
-
     connect(filterText, SIGNAL(clearButtonClicked()),
+            this, SLOT(slotFilterChanged()));
+    connect(filterText, SIGNAL(textChanged(QString)),
             this, SLOT(slotFilterChanged()));
     connect(snippetTree, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(slotSnippetClicked(QModelIndex)));
-    connect(tbFilter, SIGNAL(clicked()),
-            this, SLOT(slotFilterChanged()));
 
     snippetTree->setContextMenuPolicy( Qt::CustomContextMenu );
     connect(snippetTree, SIGNAL(customContextMenuRequested(const QPoint&)),
