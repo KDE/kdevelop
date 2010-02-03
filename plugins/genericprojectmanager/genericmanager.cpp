@@ -292,8 +292,12 @@ void GenericProjectManager::created(const QString &path)
 
 void GenericProjectManager::deleted(const QString &path)
 {
-    KUrl url = KUrl(path);
+    if ( QFile::exists(path) ) {
+        // stopDirScan...
+        return;
+    }
 
+    KUrl url = KUrl(path);
     foreach ( KDevelop::IProject* p, m_watchers.keys() ) {
         foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl(url) ) {
             item->parent()->removeRow(item->row());
