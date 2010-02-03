@@ -161,7 +161,7 @@ void SnippetView::contextMenu (const QPoint& pos)
         menu.exec(snippetTree->mapToGlobal(pos));
     } else if (SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item )) {
         KMenu menu(this);
-        menu.addTitle(i18n("Repository")+": "+repo->text());
+        menu.addTitle(i18n("Repository: %1", repo->text()));
 
         menu.addAction(m_toggleRepoAction);
         menu.addSeparator();
