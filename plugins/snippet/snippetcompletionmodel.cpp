@@ -19,7 +19,17 @@
  ***************************************************************************/
 
 #include "snippetcompletionmodel.h"
-#include <ktexteditor/document.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+
+#include <kdeversion.h>
+
+#if KDE_VERSION > KDE_MAKE_VERSION(4, 3, 80)
+    #define HAVE_HIGHLIGHT_IFACE
+    #include <KTextEditor/HighlightInterface>
+#endif
+
 #include "snippetstore.h"
 #include "snippetrepository.h"
 #include "snippet.h"
@@ -28,7 +38,6 @@
 SnippetCompletionModel::SnippetCompletionModel()
     : KTextEditor::CodeCompletionModel(0)
 {
-    initData();
     setHasGroups(false);
 }
 
@@ -52,20 +61,30 @@ void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, 
 
 void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType)
 {
-    Q_UNUSED( view );
     Q_UNUSED( range );
     Q_UNUSED( invocationType );
-    initData();
+    initData(view);
 }
 
-void SnippetCompletionModel::initData()
+void SnippetCompletionModel::initData(KTextEditor::View* view)
 {
+    QString mode;
+    #ifdef HAVE_HIGHLIGHT_IFACE
+        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
+            mode = iface->modeAt(view->cursorPosition());
+        }
+    #endif // HAVE_HIGHLIGHT_IFACE
+
+    if ( mode.isEmpty() ) {
+        mode = view->document()->mode();
+    }
+
     m_snippets.clear();
     SnippetStore* store = SnippetStore::self();
     for(int i = 0; i < store->rowCount(); i++ )
     {
         SnippetRepository* repo = dynamic_cast<SnippetRepository*>( store->item( i, 0 ) );
-        if( repo )
+        if( repo && (repo->fileTypes().isEmpty() || repo->fileTypes().contains(mode)) )
         {
             for ( int j = 0; j < repo->rowCount(); ++j ) {
                 if ( Snippet* snippet = dynamic_cast<Snippet*>(repo->child(j)) ) {

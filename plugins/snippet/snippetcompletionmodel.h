@@ -26,6 +26,7 @@
 namespace KTextEditor
 {
 class Document;
+class View;
 }
 
 class SnippetCompletionItem;
@@ -41,7 +42,7 @@ public:
     void completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType);
     void executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const;
 private:
-    void initData();
+    void initData(KTextEditor::View* view);
     QList<SnippetCompletionItem*> m_snippets;
 };
 
