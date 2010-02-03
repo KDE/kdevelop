@@ -369,7 +369,9 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
             bool success = KIO::NetAccess::synchronousRun( job, KDevelop::ICore::self()->uiController()->activeMainWindow() );
             continueWatcher(parent);
             if ( success ) {
-                item->setParent(parent);
+                if ( parent != item->parent() ) {
+                    item->setParent(parent);
+                }
                 return true;
             } else {
                 return false;
