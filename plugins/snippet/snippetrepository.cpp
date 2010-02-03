@@ -29,6 +29,8 @@
 
 #include <KColorScheme>
 
+#include <KUser>
+
 #include "snippetstore.h"
 
 SnippetRepository::SnippetRepository(const QString& file)
@@ -57,6 +59,8 @@ SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
                                                     "kate/plugins/katesnippets_tng/data/" + name + ".xml" ));
     repo->setText(name);
     repo->setActive(true);
+    KUser user;
+    repo->setAuthors(user.property(KUser::FullName).toString());
     SnippetStore::self()->appendRow(repo);
     return repo;
 }

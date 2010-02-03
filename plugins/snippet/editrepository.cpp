@@ -21,6 +21,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 
+#include <KUser>
+
 #include "snippetstore.h"
 
 EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
@@ -72,6 +74,8 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
         setWindowTitle(i18n("Edit Snippet Repository %1", m_repo->text()));
     } else {
         setWindowTitle(i18n("Create New Snippet Repository"));
+        KUser user;
+        repoAuthorsEdit->setText(user.property(KUser::FullName).toString());
     }
 
     validate();
