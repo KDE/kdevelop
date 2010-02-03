@@ -162,8 +162,18 @@ void SnippetView::slotRemoveSnippet()
     if (!item)
         return;
 
-    ///TODO: add confirmation dialog
-    item->parent()->removeRow(item->row());
+    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item->parent() );
+    if (!repo)
+        return;
+
+    int ans = KMessageBox::warningContinueCancel(
+        QApplication::activeWindow(),
+        i18n("Do you really want to delete the snippet \"%1\"?", item->text())
+    );
+    if ( ans == KMessageBox::Continue ) {
+        item->parent()->removeRow(item->row());
+        repo->save();
+    }
 }
 
 void SnippetView::slotAddRepo()
