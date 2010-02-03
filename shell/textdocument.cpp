@@ -86,9 +86,6 @@ struct TextDocumentPrivate {
 
     void populateContextMenu( KTextEditor::View* v, QMenu* menu )
     {
-        menu->clear();
-        v->defaultContextMenu(menu);
-
         Context* c = new EditorContext( v, v->cursorPosition() );
         QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
         menu->addSeparator();
