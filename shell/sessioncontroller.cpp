@@ -81,7 +81,7 @@ public:
 
     Session* findSessionForName( const QString& name ) const
     {
-        foreach( Session* s, sessions )
+        foreach( Session* s, sessionActions.keys() )
         {
             if( s->name() == name )
                 return s;
@@ -93,7 +93,7 @@ public:
     {
         QUuid id(idString);
         
-        foreach( Session* s, sessions )
+        foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == id)
                 return s;
@@ -184,7 +184,7 @@ public:
 
     void loadSessionFromAction( QAction* a )
     {
-        foreach( Session* s, sessions )
+        foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
                 loadSessionExternally( s );
@@ -199,9 +199,10 @@ public:
 
     void addSession( Session* s )
     {
-        sessions << s;
-
-        if (Core::self()->setupFlags() & Core::NoUi) return;
+        if (Core::self()->setupFlags() & Core::NoUi) {
+            sessionActions[s] = 0;
+            return;
+        }
 
         KAction* a = new KAction( grp );
         a->setText( s->description() );
@@ -214,7 +215,6 @@ public:
         connect(s, SIGNAL(nameChanged(QString, QString)), SLOT(nameChanged()));
     }
 
-    QList<Session*> sessions;
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;
     SessionController* q;
@@ -233,7 +233,7 @@ void SessionController::updateSessionDescriptions()
 {
     for(QHash< Session*, QAction* >::iterator it = d->sessionActions.begin(); it != d->sessionActions.end(); ++it) {
         it.key()->updateDescription();
-        (*it)->setText(it.key()->description());
+        if (*it) (*it)->setText(it.key()->description());
     }
 }
 
@@ -333,7 +333,7 @@ void SessionController::loadSession( const QString& nameOrId )
 QList<QString> SessionController::sessionNames() const
 {
     QStringList l;
-    foreach( const Session* s, d->sessions )
+    foreach( const Session* s, d->sessionActions.keys() )
     {
         l << s->name();
     }
@@ -343,7 +343,7 @@ QList<QString> SessionController::sessionNames() const
 QList< const KDevelop::Session* > SessionController::sessions() const
 {
     QList< const KDevelop::Session* > ret;
-    foreach( const Session* s, d->sessions )
+    foreach( const Session* s, d->sessionActions.keys() )
     {
         ret << s;
     }
@@ -374,7 +374,6 @@ void SessionController::deleteSession( const QString& nameOrId )
     s->deleteFromDisk();
     emit sessionDeleted( s->name() );
     d->sessionActions.remove(s);
-    d->sessions.removeAll(s);
     s->deleteLater();
 }
 
