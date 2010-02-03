@@ -154,28 +154,17 @@ void SnippetRepository::save()
     }
     //KMessageBox::information(0,doc.toString());
     QFileInfo fi(m_file);
-    kDebug() << fi.fileName();
     QString outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/" + fi.fileName() );
     if ( m_file != outname) {
         QFileInfo fiout(outname);
 //      if (fiout.exists()) {
 // there could be cases that new new name clashes with a global file, but I guess it is not that often.
-        bool ok = false;
-        for (int i=0;i<1000;i++) {
-            outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/"+QString("%1_").arg(i)+fi.fileName());
-            if (QFile::exists(outname)) {
-                ok = true;
-                break;
-            }
+        int i = 0;
+        while(QFile::exists(outname)) {
+            outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/"+QString("%1_").arg(i++)+fi.fileName());
         }
-        if (!ok) {
-            KMessageBox::error(0,i18n("You have edited a data file not located in your personal data directory, but a suitable filename could not be generated for storing a clone of the file within your personal data directory."));
-            return;
-        } else {
-            KMessageBox::information(0,i18n("You have edited a data file not located in your personal data directory; as such, a renamed clone of the original data file has been created within your personal data directory."));
-        }
-//       } else
-//         KMessageBox::information(0,i18n("You have edited a data file not located in your personal data directory, creating a clone of the data file in your personal data directory"));
+        KMessageBox::information(QApplication::activeWindow(),
+            i18n("You have edited a data file not located in your personal data directory; as such, a renamed clone of the original data file has been created within your personal data directory."));
     }
 
     QFile outfile(outname);
@@ -185,6 +174,7 @@ void SnippetRepository::save()
     }
     outfile.write(doc.toByteArray());
     outfile.close();
+    m_file = outname;
 }
 
 void SnippetRepository::slotParseFile()
