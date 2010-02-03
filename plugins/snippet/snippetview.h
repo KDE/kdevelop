@@ -85,8 +85,8 @@ private slots:
 private:
     QStandardItem* currentItem();
 
-    SnippetPlugin* plugin_;
-    SnippetFilterProxyModel* proxy_;
+    SnippetPlugin* m_plugin;
+    SnippetFilterProxyModel* m_proxy;
 
     KAction* m_addRepoAction;
     KAction* m_removeRepoAction;

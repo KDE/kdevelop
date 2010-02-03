@@ -26,7 +26,7 @@
 #include "snippetfilterproxymodel.h"
 
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
- : QWidget(parent), Ui::SnippetViewBase(), plugin_(plugin)
+ : QWidget(parent), Ui::SnippetViewBase(), m_plugin(plugin)
 {
     Ui::SnippetViewBase::setupUi(this);
 
@@ -43,11 +43,11 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     connect(snippetTree, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(contextMenu(const QPoint&)));
 
-    proxy_ = new SnippetFilterProxyModel(this);
+    m_proxy = new SnippetFilterProxyModel(this);
 
-    proxy_->setSourceModel( SnippetStore::self() );
+    m_proxy->setSourceModel( SnippetStore::self() );
 
-    snippetTree->setModel( proxy_ );
+    snippetTree->setModel( m_proxy );
 //     snippetTree->setModel( SnippetStore::instance() );
 
     snippetTree->header()->hide();
@@ -121,13 +121,13 @@ QStandardItem* SnippetView::currentItem()
 {
     ///TODO: support multiple selected items
     QModelIndex index = snippetTree->currentIndex();
-    index = proxy_->mapToSource(index);
+    index = m_proxy->mapToSource(index);
     return SnippetStore::self()->itemFromIndex( index );
 }
 
 void SnippetView::slotSnippetClicked (const QModelIndex & index)
 {
-    QStandardItem* item = SnippetStore::self()->itemFromIndex( proxy_->mapToSource(index) );
+    QStandardItem* item = SnippetStore::self()->itemFromIndex( m_proxy->mapToSource(index) );
     if (!item)
         return;
 
@@ -135,13 +135,13 @@ void SnippetView::slotSnippetClicked (const QModelIndex & index)
     if (!snippet)
         return;
 
-    plugin_->insertSnippet( snippet );
+    m_plugin->insertSnippet( snippet );
 }
 
 void SnippetView::contextMenu (const QPoint& pos)
 {
     QModelIndex index = snippetTree->indexAt( pos );
-    index = proxy_->mapToSource(index);
+    index = m_proxy->mapToSource(index);
     QStandardItem* item = SnippetStore::self()->itemFromIndex( index );
     if (!item) {
         // User clicked into an empty place of the tree
@@ -282,7 +282,7 @@ void SnippetView::slotToggleRepo()
 
 void SnippetView::slotFilterChanged()
 {
-    proxy_->changeFilter( filterText->text() );
+    m_proxy->changeFilter( filterText->text() );
 }
 
 #include "snippetview.moc"
