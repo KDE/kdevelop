@@ -70,6 +70,10 @@ KConfigGroup SnippetStore::getConfig()
 
 bool SnippetStore::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+    if ( role == Qt::EditRole && value.toString().isEmpty() ) {
+        // don't allow empty names
+        return false;
+    }
     const bool success = QStandardItemModel::setData(index, value, role);
     if ( !success || role != Qt::EditRole ) {
         return success;
