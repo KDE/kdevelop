@@ -40,7 +40,7 @@ private:
 
 private slots:
     void save();
-    void snippetNameChanged(const QString& name);
+    void validate();
 };
 
 #endif

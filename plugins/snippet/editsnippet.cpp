@@ -32,7 +32,8 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
 
-    connect(snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(snippetNameChanged(QString)));
+    connect(snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
+    connect(snippetContentsEdit, SIGNAL(textChanged()), this, SLOT(validate()));
 
     // if we edit a snippet, add all existing data
     if ( m_snippet ) {
@@ -49,16 +50,16 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
         setWindowTitle(i18n("Create New Snippet in Repository %1", m_repo->text()));
     }
 
-    snippetNameChanged(snippetNameEdit->text());
+    validate();
 }
 
 EditSnippet::~EditSnippet()
 {
 }
 
-void EditSnippet::snippetNameChanged(const QString& name)
+void EditSnippet::validate()
 {
-    bool valid = !name.isEmpty() && !name.contains('/');
+    bool valid = !snippetNameEdit->text().isEmpty() && !snippetContentsEdit->document()->isEmpty();
     button(Ok)->setEnabled(valid);
     button(Apply)->setEnabled(valid);
 }
