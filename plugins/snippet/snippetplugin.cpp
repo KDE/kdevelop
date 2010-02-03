@@ -169,12 +169,8 @@ void SnippetPlugin::createSnippetFromSelection()
     }
     bool created = !match;
     if ( created ) {
-        const QString& name = i18n("%1 snippets", mode);
-        match = new SnippetRepository(SnippetRepository::getFileForName(name));
-        match->setText(name);
-        match->setActive(true);
+        match = SnippetRepository::getRepoForName(i18n("%1 snippets", mode));
         match->setFileTypes(QStringList() << mode);
-        SnippetStore::self()->appendRow(match);
     }
 
     Snippet* snippet = new Snippet();

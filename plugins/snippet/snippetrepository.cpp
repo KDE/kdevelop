@@ -51,9 +51,14 @@ SnippetRepository::~SnippetRepository()
     removeRows( 0, rowCount() );
 }
 
-QString SnippetRepository::getFileForName(const QString& name)
+SnippetRepository* SnippetRepository::getRepoForName(const QString& name)
 {
-    return KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/" + name + ".xml" );
+    SnippetRepository* repo = new SnippetRepository(KGlobal::dirs()->locateLocal( "data",
+                                                    "kate/plugins/katesnippets_tng/data/" + name + ".xml" ));
+    repo->setText(name);
+    repo->setActive(true);
+    SnippetStore::self()->appendRow(repo);
+    return repo;
 }
 
 const QString& SnippetRepository::getFile() const

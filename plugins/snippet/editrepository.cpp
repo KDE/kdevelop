@@ -95,9 +95,7 @@ void EditRepository::save()
     Q_ASSERT(!repoNameEdit->text().isEmpty());
     if ( !m_repo ) {
         // save as new repo
-        m_repo = new SnippetRepository(SnippetRepository::getFileForName(repoNameEdit->text()));
-        SnippetStore::self()->appendRow(m_repo);
-        m_repo->setActive(true);
+        m_repo = SnippetRepository::getRepoForName(repoNameEdit->text());
     }
     m_repo->setText(repoNameEdit->text());
     m_repo->setAuthors(repoAuthorsEdit->text());

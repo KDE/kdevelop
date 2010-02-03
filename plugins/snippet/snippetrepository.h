@@ -43,9 +43,9 @@ public:
     ~SnippetRepository();
 
     /**
-     * Returns a fitting file-path for a given repository name.
+     * Creates a snippet repository for the given name and adds it to the SnippetStore.
      */
-    static QString getFileForName(const QString& name);
+    static SnippetRepository* getRepoForName(const QString& name);
 
     /**
      * The license for the snippets contained in this repository.
