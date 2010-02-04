@@ -32,6 +32,12 @@ namespace KDevelop
 class Session;
 class ISession;
 
+struct SessionInfo
+{
+    QUuid uuid;
+    QString description;
+};
+
 class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGUIClient
 {
     Q_OBJECT
@@ -64,7 +70,7 @@ public:
     ///or a fresh one.
     ///@param pickSession Name or UUID of a session that will be respected if possible.
     static QString defaultSessionId(QString pickSession = QString());
-    static QList< QPointer<Session> > availableSessions();
+    static QList< SessionInfo > availableSessionInfo();
     
     void plugActions();
     

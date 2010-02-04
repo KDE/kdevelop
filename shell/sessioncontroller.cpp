@@ -445,14 +445,16 @@ QString SessionController::defaultSessionId(QString pickSession)
     //No session is marked active, 
     
     //Make sure the session does actually exist as a directory
-    Session session( load );
+    if( !QFileInfo( sessionDirectory() + "/" + load ).exists() ) {
+        QDir( sessionDirectory() ).mkdir( load );
+    }
     
     return load;
 }
 
-QList< QPointer<Session> > SessionController::availableSessions()
+QList< SessionInfo > SessionController::availableSessionInfo()
 {
-    QList< QPointer<Session> > available;
+    QList< SessionInfo > available;
 
     QDir sessiondir( SessionController::sessionDirectory() );
     foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
@@ -460,8 +462,23 @@ QList< QPointer<Session> > SessionController::availableSessions()
         QUuid id( s );
         if( id.isNull() )
             continue;
+        // TODO: Refactor the code here and in session.cpp so its shared
+        SessionInfo si;
+        si.uuid = id;
+        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
 
-        available << QPointer<Session>(new Session( id ));
+        QString desc = config->group( "" ).readEntry( "SessionName", "" );
+
+        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
+
+        if(!prettyContents.isEmpty())
+        {
+            if(!desc.isEmpty())
+                desc += ":  ";
+            desc += prettyContents;
+        }
+        si.description = desc;
+        available << si;
     }
     return available;
 }
