@@ -42,59 +42,100 @@
 #include <QTimer>
 #include <QDir>
 
+#include <shell/core.h>
+#include <shell/mainwindow.h>
+#include <shell/projectcontroller.h>
+#include <shell/documentcontroller.h>
+#include <shell/plugincontroller.h>
 #include <shell/sessioncontroller.h>
 
+#include "kdevideextension.h"
 #include <KMessageBox>
 #include <KProcess>
 
 #include <iostream>
 #include <QtCore/QTextStream>
+#include <shell/session.h>
+
+using KDevelop::Core;
 
 int main( int argc, char *argv[] )
 {
 static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
-                          i18n("%1", QString(VERSION) ).toUtf8(), ki18n(description), KAboutData::License_GPL,
+                          i18n("%1 (using KDevPlatform %2)", QString(VERSION), Core::version()).toUtf8(), ki18n(description), KAboutData::License_GPL,
                           ki18n( "Copyright 1999-2009, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
-#include "shared_app_init.cpp"
 
-    options.add("s <session>", ki18n("Session to load" ));
-    options.add("sessions", ki18n( "List available sessions and quit" ));
+#include "shared_app_init.cpp"
 
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+
     KApplication app;
+    KDevIDEExtension::init();
 
-    if(args->isSet("sessions"))
+    if(!getenv("KDEV_SESSION"))
     {
-        QTextStream qout(stdout);
-        qout << endl << ki18n("Available sessions (use '-s HASH' to open a specific one):").toString() << endl << endl;
-        qout << QString("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Session contents").toString() << endl;
-        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+        QTextStream qerr(stderr);
+        qerr << "Cannot run this internal app without KDEV_SESSION environment variable set!" << endl;
+        exit(-127);
+    }
+
+    KSplashScreen* splash = 0;
+    QString splashFile = KStandardDirs::locate( "appdata", "pics/kdevelop-splash.png" );
+    if( !splashFile.isEmpty() )
+    {
+        QPixmap pm;
+        pm.load( splashFile );
+        splash = new KSplashScreen( pm );
+        splash->show();
+    }
+
+    Core::initialize(splash);
+    KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
+    Core* core = Core::self();
+
+    QStringList projectNames = args->getOptionList("project");
+    if(!projectNames.isEmpty())
+    {
+        foreach(const QString& p, projectNames)
         {
-            qout << si.uuid.toString() << '\t' << si.description << endl;
-        }
-        return 0;
-    }
-
-    ///Manage sessions: There always needs a KDEV_SESSION to be set, so the duchain can be stored in the session-specific directory
-    QString session = args->getOption("s");
-
-    //No session is set, we have to pick one, then we restart kdevelop through kdev_starter, and forward all relevant arguments to it
-    session = KDevelop::SessionController::defaultSessionId(session);
-
-    //@todo Eventually show a session-picking dialog
-    KProcess proc;
-    proc << QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin" ;
-    //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
-    for(uint a = 1; a < argc; ++a) {
-        if( qstrcmp( argv[a], "-s" ) == 0 ) {
-            ++a;
-        } else {
-            proc << QString(argv[a]);
+            KUrl url(p);
+            QString ext = QFileInfo( url.fileName() ).suffix();
+            if( ext == "kdev4" )
+            {
+                core->projectController()->openProject( url );
+            }
         }
     }
-    proc.setEnv( "KDEV_SESSION", session );
-    return proc.execute();
+
+    int count=args->count();
+    for(int i=0; i<count; ++i)
+    {
+        QString file=args->arg(i);
+        //Allow opening specific lines in documents, like mydoc.cpp:10
+        int lineNumberOffset = file.lastIndexOf(':');
+        KTextEditor::Cursor line;
+        if( lineNumberOffset != -1 )
+        {
+            bool isInt;
+            int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
+            if (isInt)
+            {
+                file = file.left(lineNumberOffset);
+                line = KTextEditor::Cursor(lineNr, 0);
+            }
+        }
+
+        KUrl f(file);
+        if( f.isRelative() )
+            f=KUrl(QDir::currentPath(), file);
+
+        if(!core->documentController()->openDocument(f, line))
+            kWarning() << i18n("Could not open %1") << args->arg(i);
+    }
+    args->clear();
+
+    return app.exec();
 }
 
