@@ -60,8 +60,6 @@ public:
     {
         Core::self()->workingSetControllerInternal()->initializeController(m_controller);
 
-        if((Core::self()->setupFlags() & Core::NoUi)) return;
-        
         QMap<QString, Sublime::Position> desired;
 
         desired["org.kdevelop.ClassBrowserView"] = Sublime::Left;
