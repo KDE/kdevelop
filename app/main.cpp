@@ -139,9 +139,9 @@ int main( int argc, char *argv[] )
         QTextStream qout(stdout);
         qout << endl << ki18n("Available sessions (use '-s HASH' to open a specific one):").toString() << endl << endl;
         qout << QString("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Session contents").toString() << endl;
-        foreach(const QPointer<KDevelop::Session> session, KDevelop::SessionController::availableSessions())
+        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
-            qout << session->id().toString() << '\t' << session->description() << endl;
+            qout << si.uuid.toString() << '\t' << si.description << endl;
         }
         return 0;
     }
