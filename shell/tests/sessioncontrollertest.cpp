@@ -85,8 +85,8 @@ void SessionControllerTest::cleanupTestCase()
     // allow to delete the active session
     Session* s = static_cast<Session*>( Core::self()->activeSession() );
     KIO::NetAccess::del( SessionController::sessionDirectory() + "/" + s->id().toString(), 0 );
-    KGlobal::config()->group( SessionController::cfgSessionGroup ).deleteEntry( SessionController::cfgActiveSessionEntry );
-    KGlobal::config()->group( SessionController::cfgSessionGroup ).sync();
+    KGlobal::config()->group( SessionController::cfgSessionGroup() ).deleteEntry( SessionController::cfgActiveSessionEntry() );
+    KGlobal::config()->group( SessionController::cfgSessionGroup() ).sync();
 }
 
 void SessionControllerTest::createSession_data()
@@ -114,9 +114,9 @@ void SessionControllerTest::loadSession()
     ISession* s = m_sessionCtrl->activeSession();
     m_sessionCtrl->loadSession( sessionName );
     QEXPECT_FAIL("", "expecting a changed active session", Continue);
-    QCOMPARE( s, m_sessionCtrl->activeSession()); 
-    KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
-    QCOMPARE( grp.readEntry( SessionController::cfgActiveSessionEntry, "default" ), sessionName );
+    QCOMPARE( s, m_sessionCtrl->activeSession());
+    KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
+    QCOMPARE( grp.readEntry( SessionController::cfgActiveSessionEntry(), "default" ), sessionName );
 }
 
 void SessionControllerTest::renameSession()

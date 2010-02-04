@@ -51,9 +51,6 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-const QString SessionController::cfgSessionGroup = "Sessions";
-const QString SessionController::cfgActiveSessionEntry("Active Session ID");
-
 static QStringList standardArguments()
 {
     QStringList ret;
@@ -163,8 +160,8 @@ public:
     {
         Q_ASSERT( s );
 
-        KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup );
-        grp.writeEntry( SessionController::cfgActiveSessionEntry, s->id().toString() );
+        KConfigGroup grp = KGlobal::config()->group( SessionController::cfgSessionGroup() );
+        grp.writeEntry( SessionController::cfgActiveSessionEntry(), s->id().toString() );
         grp.sync();
         activeSession = s;
         if (Core::self()->setupFlags() & Core::NoUi) return;
@@ -393,9 +390,9 @@ void SessionController::loadDefaultSession()
         d->activateSession( session(load) );
         return;
     }
+    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+    load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     
-    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
-    load = grp.readEntry( cfgActiveSessionEntry, "default" );
     if( !session( load ) )
     {
         createSession( load );
@@ -409,83 +406,8 @@ Session* SessionController::session( const QString& nameOrId ) const
     Session* ret = d->findSessionForName( nameOrId );
     if(ret)
         return ret;
-    
+
     return d->findSessionForId( nameOrId );
-}
-
-QString SessionController::defaultSessionId(QString pickSession)
-{
-    if(!pickSession.isEmpty())
-    {
-        //Try picking the correct session out of the existing ones
-    
-        QDir sessiondir( SessionController::sessionDirectory() );
-        
-        foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
-        {
-            QUuid id( s );
-            if( id.isNull() )
-                continue;
-
-            Session session( id );
-            
-            if(id.toString() == pickSession || session.name() == pickSession)
-                return id;
-        }
-    }
-    
-    //No existing session has been picked, try using the session marked as 'active'
-    
-    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup );
-    QString load = grp.readEntry( cfgActiveSessionEntry, "" );
-    
-    if(load.isEmpty())
-        load = QUuid::createUuid();
-    
-    //No session is marked active, 
-    
-    //Make sure the session does actually exist as a directory
-    if( !QFileInfo( sessionDirectory() + "/" + load ).exists() ) {
-        QDir( sessionDirectory() ).mkdir( load );
-    }
-    
-    return load;
-}
-
-QList< SessionInfo > SessionController::availableSessionInfo()
-{
-    QList< SessionInfo > available;
-
-    QDir sessiondir( SessionController::sessionDirectory() );
-    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
-    {
-        QUuid id( s );
-        if( id.isNull() )
-            continue;
-        // TODO: Refactor the code here and in session.cpp so its shared
-        SessionInfo si;
-        si.uuid = id;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
-
-        QString desc = config->group( "" ).readEntry( "SessionName", "" );
-
-        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
-
-        if(!prettyContents.isEmpty())
-        {
-            if(!desc.isEmpty())
-                desc += ":  ";
-            desc += prettyContents;
-        }
-        si.description = desc;
-        available << si;
-    }
-    return available;
-}
-
-QString SessionController::sessionDirectory()
-{
-    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
 }
 
 QString SessionController::cloneSession( const QString& nameOrid )

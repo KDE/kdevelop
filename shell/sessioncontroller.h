@@ -22,8 +22,15 @@ Boston, MA 02110-1301, USA.
 
 #include "shellexport.h"
 #include <QtCore/QObject>
+#include <QtCore/QPointer>
+#include <QtCore/QUuid>
+#include <QtCore/QDir>
 #include <kxmlguiclient.h>
-#include <QPointer>
+#include <kconfiggroup.h>
+#include <kglobal.h>
+#include <ksharedconfig.h>
+#include <kstandarddirs.h>
+#include <kcomponentdata.h>
 
 namespace KDevelop
 {
@@ -63,8 +70,8 @@ public:
     void deleteSession( const QString& nameOrId );
     QString cloneSession( const QString& nameOrid );
     static QString sessionDirectory();
-    static const QString cfgSessionGroup;
-    static const QString cfgActiveSessionEntry;
+    static QString cfgSessionGroup();
+    static QString cfgActiveSessionEntry();
 
     ///Returns the id of a valid session. Either the one that is currently set as 'active',
     ///or a fresh one.
@@ -93,6 +100,90 @@ private:
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;
 };
+
+inline QString SessionController::cfgSessionGroup() { return "Sessions"; }
+inline QString SessionController::cfgActiveSessionEntry() { return "Active Session ID"; }
+
+// Inline so it can be used without linking to shell, currently needed to
+// be able to fork a new process with KDEV_SESSION envvar set so duchain
+// can benefit from sessions
+
+inline QString SessionController::defaultSessionId(QString pickSession)
+{
+    if(!pickSession.isEmpty())
+    {
+        //Try picking the correct session out of the existing ones
+
+        QDir sessiondir( SessionController::sessionDirectory() );
+
+        foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+        {
+            QUuid id( s );
+            if( id.isNull() )
+                continue;
+
+            KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
+
+            QString name = config->group( "" ).readEntry( "SessionName", "" );
+
+            if(id.toString() == pickSession || name == pickSession)
+                return id;
+        }
+    }
+
+    //No existing session has been picked, try using the session marked as 'active'
+
+    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+    QString load = grp.readEntry( cfgActiveSessionEntry(), "" );
+
+    if(load.isEmpty())
+        load = QUuid::createUuid();
+
+    //No session is marked active,
+
+    //Make sure the session does actually exist as a directory
+    if( !QFileInfo( sessionDirectory() + "/" + load ).exists() ) {
+        QDir( sessionDirectory() ).mkdir( load );
+    }
+
+    return load;
+}
+
+inline QList< SessionInfo > SessionController::availableSessionInfo()
+{
+    QList< SessionInfo > available;
+
+    QDir sessiondir( SessionController::sessionDirectory() );
+    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+    {
+        QUuid id( s );
+        if( id.isNull() )
+            continue;
+        // TODO: Refactor the code here and in session.cpp so its shared
+        SessionInfo si;
+        si.uuid = id;
+        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
+
+        QString desc = config->group( "" ).readEntry( "SessionName", "" );
+
+        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
+
+        if(!prettyContents.isEmpty())
+        {
+            if(!desc.isEmpty())
+                desc += ":  ";
+            desc += prettyContents;
+        }
+        si.description = desc;
+        available << si;
+    }
+    return available;
+}
+
+inline QString SessionController::sessionDirectory()
+{
+    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
+}
 
 }
 #endif
