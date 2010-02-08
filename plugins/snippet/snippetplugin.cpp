@@ -30,6 +30,8 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 
+#include <language/interfaces/editorcontext.h>
+
 #include "snippetview.h"
 #include "snippetcompletionmodel.h"
 #include "snippetstore.h"
@@ -114,8 +116,6 @@ void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view
     {
         cc->registerCompletionModel( m_model );
     }
-    connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)),
-            this, SLOT(contextMenuAboutToShow(KTextEditor::View*,QMenu*)));
 }
 
 void SnippetPlugin::documentLoaded( KParts::Part* part )
@@ -133,17 +133,20 @@ void SnippetPlugin::documentLoaded( KParts::Part* part )
 
 }
 
-void SnippetPlugin::contextMenuAboutToShow(KTextEditor::View* view, QMenu* menu)
+KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Context* context)
 {
-    QAction* action = menu->findChild<QAction*>("create-snippet-from-selection");
-    if ( !action ) {
-        action = menu->addAction(KIcon("document-new"), i18n("Create Snippet from Selection"));
-        action->setObjectName("create-snippet-from-selection");
-        action->setData(QVariant(QMetaType::VoidStar, view));
+    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+
+    if ( context->type() == KDevelop::Context::EditorContext ) {
+        KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+        QAction* action = new QAction(KIcon("document-new"), i18n("Create Snippet from Selection"), this);
         connect(action, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
+        action->setEnabled(econtext->view()->selection());
+        extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+        m_view = econtext->view();
     }
-    action->setEnabled(view->selection());
-    m_view = view;
+
+    return extension;
 }
 
 void SnippetPlugin::createSnippetFromSelection()

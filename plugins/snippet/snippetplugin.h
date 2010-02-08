@@ -12,6 +12,7 @@
 #define __SNIPPETPLUGIN_H__
 
 #include <interfaces/iplugin.h>
+#include <interfaces/contextmenuextension.h>
 #include <QtCore/QVariant>
 
 class SnippetCompletionModel;
@@ -49,6 +50,7 @@ public:
      * nothing will happen.
      */
     void insertSnippet(Snippet* snippet);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
     // KDevelop::IPlugin methods
     virtual void unload();
@@ -56,7 +58,6 @@ public:
 private slots:
     void viewCreated( KTextEditor::Document*, KTextEditor::View* view );
     void documentLoaded(KParts::Part*);
-    void contextMenuAboutToShow(KTextEditor::View* view, QMenu* menu);
 public slots:
     void createSnippetFromSelection();
 
