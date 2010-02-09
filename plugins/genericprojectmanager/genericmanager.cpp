@@ -299,6 +299,13 @@ void GenericProjectManager::deleted(const QString &path)
 
     KUrl url = KUrl(path);
     foreach ( KDevelop::IProject* p, m_watchers.keys() ) {
+        if ( url.equals(p->folder(), KUrl::CompareWithoutTrailingSlash) ) {
+            KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(),
+                               i18n("The base folder of project <b>%1</b> got deleted or moved outside of KDevelop.\n"
+                                    "The project has to be closed.", p->name()), i18n("Project Folder Deleted") );
+            KDevelop::ICore::self()->projectController()->closeProject(p);
+            continue;
+        }
         foreach ( KDevelop::ProjectFolderItem* item, p->foldersForUrl(url) ) {
             item->parent()->removeRow(item->row());
         }
