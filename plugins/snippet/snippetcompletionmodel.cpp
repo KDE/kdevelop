@@ -25,7 +25,7 @@
 
 #include <kdeversion.h>
 
-#if KDE_VERSION > KDE_MAKE_VERSION(4, 3, 80)
+#if KDE_VERSION > KDE_MAKE_VERSION(4, 4, 4)
     #define HAVE_HIGHLIGHT_IFACE
     #include <KTextEditor/HighlightInterface>
 #endif
