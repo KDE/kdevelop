@@ -751,7 +751,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         body->setLayout(bodyLayout);
         QPalette palette = body->palette();
         QColor bgColor = palette.color(QPalette::Background);
-        bgColor.setAlpha(0.75*255);
+        bgColor.setAlpha(0.4*255);
         palette.setColor(QPalette::Background, bgColor);
         body->setPalette(palette);
         body->setAutoFillBackground(true);
