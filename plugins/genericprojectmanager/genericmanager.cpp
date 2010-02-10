@@ -71,6 +71,14 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IGenericProjectManager )
     Q_UNUSED( args )
+
+    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+            this, SLOT(projectClosing(KDevelop::IProject*)));
+}
+
+void GenericProjectManager::projectClosing(KDevelop::IProject* project)
+{
+    delete m_watchers.take(project);
 }
 
 GenericProjectManager::~GenericProjectManager()

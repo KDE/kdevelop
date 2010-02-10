@@ -92,6 +92,8 @@ private Q_SLOTS:
     void deleted(const QString &path);
     void created(const QString &path);
 
+    void projectClosing(KDevelop::IProject* project);
+
 private:
     /// Stops watching the given folder for changes, only useful for local files.
     void stopWatcher(KDevelop::ProjectFolderItem* folder);
