@@ -71,7 +71,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
     QString mode;
     #ifdef HAVE_HIGHLIGHT_IFACE
         if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
-            mode = iface->modeAt(view->cursorPosition());
+            mode = iface->highlightingModeAt(view->cursorPosition());
         }
     #endif // HAVE_HIGHLIGHT_IFACE
 

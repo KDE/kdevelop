@@ -154,7 +154,7 @@ void SnippetPlugin::createSnippetFromSelection()
     QString mode;
     #ifdef HAVE_HIGHLIGHT_IFACE
         if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(m_view->document()) ) {
-            mode = iface->modeAt(m_view->selectionRange().start());
+            mode = iface->highlightingModeAt(m_view->selectionRange().start());
         }
     #endif
     if ( mode.isEmpty() ) {
