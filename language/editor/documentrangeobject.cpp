@@ -59,10 +59,12 @@ DocumentRangeObjectDynamicPrivate::DocumentRangeObjectDynamicPrivate() : m_smart
 void DocumentRangeObject::aboutToWriteData() {
 }
 
+const int smartLockTimeout = 10;
+
 struct OptionalMutexLocker {
   OptionalMutexLocker(QMutex& mutex, uint timeout) : m_mutex(mutex), m_locked(false)
   {
-    m_locked = m_mutex.tryLock(1000);
+    m_locked = m_mutex.tryLock(timeout);
   }
   
   ~OptionalMutexLocker() {
@@ -78,7 +80,7 @@ SimpleRange DocumentRangeObject::syncFromSmart() const {
     if(!dd_ptr)
       return d_ptr->m_range;
 
-    OptionalMutexLocker l(*dd_ptr->m_smartMutex, 1000);
+    OptionalMutexLocker l(*dd_ptr->m_smartMutex, smartLockTimeout);
 
     if(!dd_ptr->m_smartRange)
         return d_ptr->m_range;
@@ -100,7 +102,7 @@ bool DocumentRangeObject::canWriteData() const {
 void DocumentRangeObject::syncToSmart() const {
     if(!dd_ptr)
       return;
-    OptionalMutexLocker l(*dd_ptr->m_smartMutex, 1000);
+    OptionalMutexLocker l(*dd_ptr->m_smartMutex, smartLockTimeout);
 
     if(!dd_ptr->m_smartRange)
         return;
