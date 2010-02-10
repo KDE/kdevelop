@@ -343,8 +343,11 @@ void ContextBrowserView::updateDeclarationListBox(DUContext* context) {
     if(function)
         text += function->partToString(KDevelop::FunctionType::SignatureArguments);
     
-    m_outlineLine->setText(text);
-    m_outlineLine->setCursorPosition(0);
+    if(!m_outlineLine->hasFocus())
+    {
+        m_outlineLine->setText(text);
+        m_outlineLine->setCursorPosition(0); 
+    } 
     
     kDebug() << "updated" << text;
 }
