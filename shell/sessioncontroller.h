@@ -110,12 +110,12 @@ inline QString SessionController::cfgActiveSessionEntry() { return "Active Sessi
 
 inline QString SessionController::defaultSessionId(QString pickSession)
 {
+    QString uuid;
+    QDir sessiondir( SessionController::sessionDirectory() );
+
     if(!pickSession.isEmpty())
     {
         //Try picking the correct session out of the existing ones
-
-        QDir sessiondir( SessionController::sessionDirectory() );
-
         foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
         {
             QUuid id( s );
@@ -129,24 +129,28 @@ inline QString SessionController::defaultSessionId(QString pickSession)
             if(id.toString() == pickSession || name == pickSession)
                 return id;
         }
+    } else {
+        //No session has been picked, try using the session marked as 'active'
+        KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+        uuid = grp.readEntry( cfgActiveSessionEntry(), "" );
     }
 
-    //No existing session has been picked, try using the session marked as 'active'
-
-    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
-    QString load = grp.readEntry( cfgActiveSessionEntry(), "" );
-
-    if(load.isEmpty())
-        load = QUuid::createUuid();
-
-    //No session is marked active,
+    if(uuid.isEmpty()) {
+        // if this is empty, we create a new session
+        uuid = QUuid::createUuid();
+    }
 
     //Make sure the session does actually exist as a directory
-    if( !QFileInfo( sessionDirectory() + "/" + load ).exists() ) {
-        QDir( sessionDirectory() ).mkdir( load );
+    if( !QFileInfo( sessionDirectory() + "/" + uuid ).exists() ) {
+        QDir( sessionDirectory() ).mkdir( uuid );
+        // also create the config file with the name (if given)
+        if ( !pickSession.isEmpty() ) {
+            KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + uuid + "/sessionrc" );
+            config->group("").writeEntry("SessionName", pickSession);
+        }
     }
 
-    return load;
+    return uuid;
 }
 
 inline QList< SessionInfo > SessionController::availableSessionInfo()
