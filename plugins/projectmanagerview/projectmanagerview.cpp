@@ -52,6 +52,9 @@
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/projectmodel.h>
 
+#include <KParts/MainWindow>
+#include <sublime/mainwindow.h>
+
 #include "tests/modeltest.h"
 #include "projectproxymodel.h"
 #include "projectmanagerviewplugin.h"
@@ -110,7 +113,9 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
              this, SLOT(selectionChanged() ) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
              SLOT(updateSyncAction()));
-    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentOpened(KDevelop::IDocument*) ),
+    connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*) ),
+             SLOT(updateSyncAction()));
+    connect( qobject_cast<Sublime::MainWindow*>(KDevelop::ICore::self()->uiController()->activeMainWindow()), SIGNAL(areaChanged(Sublime::Area*)),
              SLOT(updateSyncAction()));
     selectionChanged();
     

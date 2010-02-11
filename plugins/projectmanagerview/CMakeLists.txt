@@ -17,7 +17,7 @@ kde4_add_ui_files( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui p
 
 kde4_add_plugin(kdevprojectmanagerview ${kdevprojectmanagerview_PLUGIN_SRCS})
 target_link_libraries(kdevprojectmanagerview ${KDE4_KDEUI_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS}
-                      kdevplatforminterfaces kdevplatformproject kdevplatformlanguage kdevplatformutil ${KDE4_THREADWEAVER_LIBRARIES} )
+                      kdevplatforminterfaces kdevplatformproject kdevplatformlanguage kdevplatformutil sublime ${KDE4_THREADWEAVER_LIBRARIES} )
 
 install(TARGETS kdevprojectmanagerview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
