@@ -223,7 +223,7 @@ QStringList MakeJob::computeBuildCommand() const
     {
         int suCommand = builderGroup.readEntry("Su Command", 0);
         QStringList kdesuline;
-        kdesuline << ((suCommand == 0) ? "kdesu" : "kdesudo" ) << "-t" << "-c" << cmdline;
+        kdesuline << ((suCommand == 0) ? "kdesu" : "kdesudo" ) << "-t" << "-c" << cmdline.join(" ");
         cmdline = kdesuline;
     }
 
