@@ -421,9 +421,9 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
         widgetToView.remove(view->widget());
     viewContainers.remove(view);
 
+    const bool wasActive = m_mainWindow->activeView() == view;
     if (container->count() > 1)
     {
-        bool wasActive = m_mainWindow->activeView() == view;
         //container is not empty or this is a root index
         //just remove a widget
 		if( view->widget() ) {
@@ -518,7 +518,9 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     }
 
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
-    m_mainWindow->setActiveView(0L);
+    if ( wasActive ) {
+        m_mainWindow->setActiveView(0L);
+    }
 }
 
 void MainWindowPrivate::toolViewAdded(Sublime::View* /*toolView*/, Sublime::Position position)
