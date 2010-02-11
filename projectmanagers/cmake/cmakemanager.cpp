@@ -590,23 +590,19 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             if(!QFile::exists(cache.toLocalFile())
                 && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
             {
-                ProjectFolderItem* folderItem=m_pending.take(fileurl);
-                if(folderItem)
-                    item->appendRow(folderItem);
-                else
+                if(m_pending.contains(fileurl))
+                    item->appendRow(m_pending.take(fileurl));
+                else if(subroot.isParentOf(fileurl))
                 {
+                    //if it's not subparent, we don't add it at all
                     ProjectFolderItem* fitem=new ProjectFolderItem( item->project(), fileurl, item );
-                    
-                    //if it's not subparent, we don't add it to the list so that it's added recursively
-                    if(subroot.isParentOf(fileurl))
-                        folderList.append(fitem);
-                    
+                    folderList.append(fitem);
                 }
-                    
             }
         }
-        else
+        else if ( subroot.isParentOf(fileurl) )
         {
+            //if it's not subparent, we don't add it at all
             addFile(fileurl, item);
         }
     }
