@@ -116,7 +116,7 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
                 // positions before closing.
                 
                 //Additional test: When the cursor has been moved towards the tooltip, don't close it.
-                if(distance > d->previousDistance_)
+                if(distance > (int)d->previousDistance_)
                     ++d->mouseOut_;
                 else
                     d->previousDistance_ = distance;
@@ -202,6 +202,12 @@ namespace {
     typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
     static ToolTipPriorityMap registeredToolTips;
     ActiveToolTipManager manager;
+    
+    QWidget* masterWidget(QWidget* w) {
+    while(w && w->parent() && qobject_cast<QWidget*>(w->parent()))
+        w = qobject_cast<QWidget*>(w->parent());
+    return w;
+    }
 }
 
 void ActiveToolTipManager::doVisibility() {
@@ -277,7 +283,7 @@ void ActiveToolTipManager::doVisibility() {
     //Final step: Show all tooltips
     if(!hideAll) {
         for(ToolTipPriorityMap::const_iterator it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
-            if(it->first)
+            if(it->first && masterWidget(it->first)->isActiveWindow())
                 (*it).first->show();
     }
 }
