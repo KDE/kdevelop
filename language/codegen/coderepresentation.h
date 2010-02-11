@@ -100,7 +100,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation : public QS
     public:
         /**
          * Inserts an artifial source-code representation with filename @p file and the contents @p text
-         * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artifialUrl() function.
+         * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artifialUrl()
+         * function, while ensuring that the name is unique.
          */
         InsertArtificialCodeRepresentation(IndexedString file, QString text);
         ~InsertArtificialCodeRepresentation();

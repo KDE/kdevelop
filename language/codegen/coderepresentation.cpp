@@ -263,10 +263,20 @@ KUrl CodeRepresentation::artificialUrl(const QString & name)
 }
 
 InsertArtificialCodeRepresentation::InsertArtificialCodeRepresentation(IndexedString file, QString text) : m_file(file) {
-    Q_ASSERT(!artificialStrings.contains(m_file));
     if(m_file.toUrl().isRelative())
-        m_file = IndexedString(CodeRepresentation::artificialUrl(m_file.str()));
+    {
+        m_file = IndexedString(CodeRepresentation::artificialUrl(file.str()));
+        
+        int idx = 0;
+        while(artificialStrings.contains(m_file))
+        {
+            ++idx;
+            m_file = IndexedString(CodeRepresentation::artificialUrl(QString("%1_%2").arg(idx).arg(file.str())));
+        }
+    }
     
+    Q_ASSERT(!artificialStrings.contains(m_file));
+
     artificialStrings.insert(m_file, KSharedPtr<ArtificialStringData>(new ArtificialStringData(text)));
 }
 

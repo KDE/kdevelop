@@ -117,7 +117,7 @@ void CodeGeneratorBase::clearChangeSets(void)
         delete changeSet;
     d->duchainChanges.clear();
     
-    d->documentChanges.clear();
+    d->documentChanges = DocumentChangeSet();
 }
 
 bool CodeGeneratorBase::execute()

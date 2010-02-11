@@ -23,6 +23,7 @@
 #include <language/duchain/indexedstring.h>
 #include <ksharedptr.h>
 #include <KDE/KUrl>
+#include "coderepresentation.h"
 
 namespace KDevelop {
     
@@ -49,13 +50,16 @@ public:
 
 typedef KSharedPtr<DocumentChange> DocumentChangePointer;
 
+/**
+ * Object representing an arbitrary set of changes to an arbitrary set of files that can be applied atomically.
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
   public:
     
-      DocumentChangeSet();
-      DocumentChangeSet(const DocumentChangeSet & rhs);
-      ~DocumentChangeSet();
-      DocumentChangeSet& operator=(const DocumentChangeSet& rhs);
+    DocumentChangeSet();
+    ~DocumentChangeSet();
+    DocumentChangeSet(const DocumentChangeSet & rhs);
+    DocumentChangeSet& operator=(const DocumentChangeSet& rhs);
     
     //Returns true on success
     struct ChangeResult {
@@ -76,11 +80,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     
     ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
     ChangeResult addChange(const DocumentChange& change);
-    ///Get rid of all the current changes
-    void clear();
-    
-    ///Merge two document change sets
-    DocumentChangeSet & operator<<(DocumentChangeSet &);
     
     enum ReplacementPolicy {
         IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
@@ -88,6 +87,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
                             ///but following changes are applied, and success is returned.
         StopOnFailedChange ///If this is given to applyAllChanges, then all replacements are reverted and an error returned on problems
     };
+    
     ///@param policy What should be done when a change could not be applied?
     void setReplacementPolicy(ReplacementPolicy policy);
     
@@ -95,6 +95,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
         NoAutoFormat, ///If this option is given, no automatic formatting is applied
         AutoFormatChanges      ///If this option is given, all changes are automatically reformatted using the formatter plugin for the mime type
     };
+    
     ///@param policy How the changed text should be formatted
     void setFormatPolicy(FormatPolicy policy);
     
@@ -103,28 +104,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
         SimpleUpdate ///The changed documents will be added to the background parser, plus all documents that are currently open and recursively import those documetns
         //FullUpdate       ///All documents in all open projects that recursively import any of the changed documents will be updated
     };
+    
     ///@param policy Whether a duchain update should be triggered for all affected documents
     void setUpdateHandling(DUChainUpdateHandling policy);
     
-    ///Apply all the registered changes for @p file, and keep them as temporary in memory
-    ///@note For multiple passes if the original file is given, then the previous temporary will be merged
-    ChangeResult applyToTemp(IndexedString file);
+    ///Applies all changes to temporary code representations, and returns a map from each file-name to
+    ///the respective inserted artificial code-representation.
+    QMap<IndexedString, InsertArtificialCodeRepresentationPointer> temporaryCodeRepresentations() const;
     
-    ///Apply all changes for all files, and keep them as temporary in memory
-    ChangeResult applyAllToTemp();
-    
-    /// @return The name for the latest temporary version of @p file if it exists, returns @p file otherwise
-    IndexedString tempNameForFile(IndexedString file) const;
-    
-    /// @return The mapping between all original file names and their temporaries
-    /// @note If a file has not been applied to temp, it won't appear in the mapping
-    QMap<IndexedString, IndexedString> tempNamesForAll() const;
-    
-    /// Apply all the changes registered in this changeset
+    /// Apply all the changes registered in this changeset to the actual files
     ChangeResult applyAllChanges();
     
   private:
-        
     DocumentChangeSetPrivate * d;
 };
 }
