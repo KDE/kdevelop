@@ -75,8 +75,8 @@ class CppNewClass : public KDevelop::ClassGenerator
     
     void setType(Type);
 
-    KDevelop::DocumentChangeSet generateHeader();
-    KDevelop::DocumentChangeSet generateImplementation();
+    void generateHeader(KDevelop::DocumentChangeSet& changes);
+    void generateImplementation(KDevelop::DocumentChangeSet& changes);
   
   private:
     QStringList m_namespaces;

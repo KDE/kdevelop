@@ -42,7 +42,6 @@ public slots:
   void executeRenameAction();
   void executeNewClassAction();
   void executeMoveIntoSourceAction();
-  void executePrivateImplementationAction();
   private:
     ///Duchain does not need to be read-locked
     ///If @p allowUse is false, a declaration that is declared in the current line is returned(if one exists)

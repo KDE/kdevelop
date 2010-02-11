@@ -556,15 +556,6 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   }
 }
 
-void SimpleRefactoring::executePrivateImplementationAction()
-{
-   MakeImplementationPrivate p;
-   if(!p.execute()) 
-   {
-     KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), p.errorText(), i18n("Error Generating code"));
-   }
-}
-
 KDevelop::IndexedDeclaration SimpleRefactoring::declarationUnderCursor(bool allowUse) {
   KDevelop::IDocument* doc = ICore::self()->documentController()->activeDocument();
   if(doc && doc->textDocument() && doc->textDocument()->activeView()) {

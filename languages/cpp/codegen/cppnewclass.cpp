@@ -96,10 +96,11 @@ CppOverridesPage* CppNewClassWizard::newOverridesPage()
 KDevelop::DocumentChangeSet CppNewClass::generate()
 {
   
-  KDevelop::DocumentChangeSet changeSet0 = generateHeader();
-  KDevelop::DocumentChangeSet changeSet1 = generateImplementation();
+  KDevelop::DocumentChangeSet changes;
+  generateHeader(changes);
+  generateImplementation(changes);
   
-  return changeSet0 << changeSet1;
+  return changes;
 }
 
 const QList<KDevelop::DeclarationPointer> & CppNewClass::addBaseClass(const QString & base)
@@ -171,7 +172,7 @@ KUrl CppNewClass::implementationUrlFromBase(KUrl baseUrl, bool toLower) {
   return url;
 }
 
-KDevelop::DocumentChangeSet CppNewClass::generateHeader()
+void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
 {
   QString header;
 
@@ -293,7 +294,6 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   if(!headerExists)
     output << "#endif // " << headerGuard << '\n';
   
-  DocumentChangeSet changes;
   changes.addChange(DocumentChange(IndexedString(headerUrl()),
                     SimpleRange(headerPosition(), 0), QString(), header));
 
@@ -352,11 +352,9 @@ KDevelop::DocumentChangeSet CppNewClass::generateHeader()
   lock.unlock(); //Never call openDocument while the duchain is locked
   //TODO DocumentChangeSet should take care of opening new documents in the editor
   ICore::self()->documentController()->openDocument(headerUrl());
-  
-  return changes;
 }
 
-KDevelop::DocumentChangeSet CppNewClass::generateImplementation()
+void CppNewClass::generateImplementation(KDevelop::DocumentChangeSet& changes)
 {
   QString implementation;
 
@@ -399,12 +397,8 @@ KDevelop::DocumentChangeSet CppNewClass::generateImplementation()
   }
   }
   
-  DocumentChangeSet changes;
-  
   changes.addChange(DocumentChange(IndexedString(implementationUrl()), SimpleRange(implementationPosition(), 0),
                                    QString(), implementation));
-  
-  return changes;
 }
 
 #include "cppnewclass.moc"

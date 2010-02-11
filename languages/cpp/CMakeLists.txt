@@ -41,12 +41,12 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/codeassistant.cpp
     codegen/signatureassistant.cpp
     codegen/unresolvedincludeassistant.cpp
-    codegen/makeimplementationprivate.cpp
+#     codegen/makeimplementationprivate.cpp
 )
 
 set(kdevcpplanguagesupport_LIB_UI
     codegen/ui/custom_include_paths.ui
-    codegen/ui/privateimplementation.ui
+#     codegen/ui/privateimplementation.ui
 )
 
 kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_LIB_UI})

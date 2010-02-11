@@ -26,7 +26,6 @@ set(cppcodecompletiontest_SRCS
   ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
-  ../codegen/makeimplementationprivate.cpp
   ../cpputils.cpp
   ../codecompletion/worker.cpp
   ../includepathcomputer.cpp
@@ -51,7 +50,6 @@ set(cppcodegentest_SRCS
   ../codegen/cppnewclass.cpp
   ../codegen/progressdialogs.cpp
   ../codegen/unresolvedincludeassistant.cpp
-  ../codegen/makeimplementationprivate.cpp
   ../cpputils.cpp
   ../codecompletion/worker.cpp
   ../includepathcomputer.cpp
