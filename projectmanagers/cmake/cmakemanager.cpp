@@ -1083,15 +1083,11 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
         {
             r.start=d->range().end;
 
-            for(int l=r.start.line; ;l++)
+            for(int lineNum = r.start.line; lineNum <= r.end.line; lineNum++)
             {
-                QString line=doc->line(l);
-                int c=line.indexOf(')');
-                if(c>=0) {
-                    r.end=SimpleCursor(l,c);
-                    break;
-                } else if(line.isEmpty()) {
-                    r=SimpleRange();
+                int endParenIndex = doc->line(lineNum).indexOf(')');
+                if(endParenIndex >= 0) {
+                    r.end = SimpleCursor(lineNum, endParenIndex);
                     break;
                 }
             }
