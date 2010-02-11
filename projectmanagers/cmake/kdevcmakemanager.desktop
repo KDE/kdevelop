@@ -72,3 +72,4 @@ X-KDevelop-SupportedMimeTypes=text/x-cmake
 X-KDevelop-Mode=GUI
 X-KDevelop-ProjectFilesFilter=CMakeLists.txt
 X-KDevelop-ProjectFilesFilterDescription=CMake Project Files
+X-KDevelop-LoadMode=AlwaysOn
