@@ -58,7 +58,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
                           ki18n( "Copyright 1999-2009, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
 #include "shared_app_init.cpp"
 
-    options.add("s <session>", ki18n("Session to load" ));
+    options.add("s <session>", ki18n("Session to load, use this also to start a new session by passing an unused name" ));
     options.add("sessions", ki18n( "List available sessions and quit" ));
 
     KCmdLineArgs::addCmdLineOptions( options );
