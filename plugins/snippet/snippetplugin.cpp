@@ -178,7 +178,7 @@ void SnippetPlugin::createSnippetFromSelection()
     }
 
     EditSnippet dlg(match, 0, m_view);
-    dlg.snippetContentsEdit->setText(m_view->selectionText());
+    dlg.snippetContentsEdit->setPlainText(m_view->selectionText());
     int status = dlg.exec();
     if ( created && status != KDialog::Accepted ) {
         // cleanup

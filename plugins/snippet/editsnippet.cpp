@@ -42,7 +42,7 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
         setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
 
         snippetArgumentsEdit->setText(m_snippet->arguments());
-        snippetContentsEdit->setText(m_snippet->snippet());
+        snippetContentsEdit->setPlainText(m_snippet->snippet());
         snippetNameEdit->setText(m_snippet->text());
         snippetPostfixEdit->setText(m_snippet->postfix());
         snippetPrefixEdit->setText(m_snippet->prefix());
