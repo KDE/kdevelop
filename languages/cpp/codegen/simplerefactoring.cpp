@@ -48,7 +48,7 @@
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include "cppnewclass.h"
-#include "makeimplementationprivate.h"
+//#include "makeimplementationprivate.h"
 #include <templatedeclaration.h>
 #include "../cpputils.h"
 #include <interfaces/iuicontroller.h>

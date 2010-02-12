@@ -24,7 +24,7 @@
 #include "ast.h"
 #include "astutilities.h"
 #include "codegen/cppnewclass.h"
-#include "codegen/makeimplementationprivate.h"
+//#include "codegen/makeimplementationprivate.h"
 
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/codegen/coderepresentation.h>

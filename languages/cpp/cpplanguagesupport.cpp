@@ -85,7 +85,7 @@
 #include "cppduchain/cppduchain.h"
 #include "codegen/codeassistant.h"
 #include "codegen/cppnewclass.h"
-#include "codegen/makeimplementationprivate.h"
+//#include "codegen/makeimplementationprivate.h"
 
 #include "includepathresolver.h"
 #include "setuphelpers.h"
