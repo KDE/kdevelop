@@ -558,8 +558,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     }
 
     if(prior && !editor()->currentRange(iface)) {
-      editor()->setCurrentRange(iface, backup[backup.count()-1]);
-      backup.resize(backup.size()-1);
+      editor()->setCurrentRange(iface, backup.back());
+      backup.pop_back();
     }
 
     SmartRange* range = editor()->currentRange(iface) ? editor()->createRange(iface, newRange.textRange()) : 0;
