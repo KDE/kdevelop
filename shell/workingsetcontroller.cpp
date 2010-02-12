@@ -86,7 +86,12 @@ void WorkingSetController::initialize()
     //Load all working-sets
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     foreach(QString set, setConfig.groupList())
-        getWorkingSet(set, setConfig.group(set).readEntry<QString>("iconName", QString()));
+    {
+        if(setConfig.hasKey("iconName"))
+            getWorkingSet(set, setConfig.group(set).readEntry<QString>("iconName", QString()));
+        else
+            kDebug() << "have garbage working set with id " << set;
+    }
 }
 
 void WorkingSetController::cleanup()
