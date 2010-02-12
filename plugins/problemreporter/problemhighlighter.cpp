@@ -114,6 +114,9 @@ ProblemHighlighter::~ProblemHighlighter()
 
 void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& problems)
 {
+    if(!m_document)
+        return;
+    
     KDevelop::EditorIntegrator editor;
     IndexedString url(m_document->url());
     editor.setCurrentUrl(url, true);
