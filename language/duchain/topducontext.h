@@ -225,7 +225,10 @@ public:
     ///Additional update-flags that have a special meaning during updating, but are not set stored into a top-context
     Recursive = 64,  //Request the given features on all recursively imported contexts. Only the features are applied recursively (including AST)
     ForceUpdate = 128, //Enforce updating the top-context
-    ForceUpdateRecursive = ForceUpdate | 256 //Enforce updating the top-context and all its imports
+    ForceUpdateRecursive = ForceUpdate | 256, //Enforce updating the top-context and all its imports
+
+    ///You can define own language-dependent features behind this flag
+    LastFeature = 512
   };
 
   ///Returns the currently active features of this top-context. The features will include AST if ast() is valid.
