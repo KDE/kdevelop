@@ -196,7 +196,10 @@ public Q_SLOTS:
     
     ///Returns true if the given url is queued for parsing
     bool isQueued(KUrl url) const;
-    
+
+    ///Returns the number of currently active or queued jobs
+    int queuedCount() const;
+
 protected:
     void loadSettings(bool projectIsLoaded);
     void saveSettings(bool projectIsLoaded);
