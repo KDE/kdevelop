@@ -139,11 +139,12 @@ KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Con
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
-        QAction* action = new QAction(KIcon("document-new"), i18n("Create Snippet from Selection"), this);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
-        action->setEnabled(econtext->view()->selection());
-        extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
-        m_view = econtext->view();
+        if ( econtext->view()->selection() ) {
+            QAction* action = new QAction(KIcon("document-new"), i18n("Create Snippet from Selection"), this);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
+            extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+            m_view = econtext->view();
+        }
     }
 
     return extension;
