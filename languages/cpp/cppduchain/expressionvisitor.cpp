@@ -1689,6 +1689,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       do
         {
+          //Just to make sure we build the uses. This problem only appears if we mis-parse a declarator as a parameter declaration
+          if(it->element->declarator && it->element->declarator->array_dimensions)
+          {
+            const ListNode< ExpressionAST* >* itt = it->element->declarator->array_dimensions->toFront(), *end2 = itt;
+            do{
+              visit(it->element->declarator->array_dimensions->element);
+            }while(itt != end2);
+          }
+          
           visit(it->element->type_specifier);
           
           if(it->element->declarator) {
