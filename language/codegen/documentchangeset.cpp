@@ -41,6 +41,7 @@ struct DocumentChangeSetPrivate
     DocumentChangeSet::ReplacementPolicy replacePolicy;
     DocumentChangeSet::FormatPolicy formatPolicy;
     DocumentChangeSet::DUChainUpdateHandling updatePolicy;
+    DocumentChangeSet::ActivationPolicy activationPolicy;
     
     QMap< IndexedString, QList<DocumentChangePointer> > changes;
     
@@ -82,6 +83,7 @@ DocumentChangeSet::DocumentChangeSet() : d(new DocumentChangeSetPrivate)
     d->replacePolicy = StopOnFailedChange;
     d->formatPolicy = AutoFormatChanges;
     d->updatePolicy = SimpleUpdate;
+    d->activationPolicy = DoNotActivate;
 }
 
 DocumentChangeSet::DocumentChangeSet(const DocumentChangeSet & rhs) : d(new DocumentChangeSetPrivate(*rhs.d))
@@ -125,6 +127,11 @@ void DocumentChangeSet::setFormatPolicy ( DocumentChangeSet::FormatPolicy policy
 void DocumentChangeSet::setUpdateHandling ( DocumentChangeSet::DUChainUpdateHandling policy )
 {
     d->updatePolicy = policy;
+}
+
+void DocumentChangeSet::setActivationPolicy(DocumentChangeSet::ActivationPolicy policy)
+{
+    d->activationPolicy = policy;
 }
 
 QMap< IndexedString, InsertArtificialCodeRepresentationPointer > DocumentChangeSet::temporaryCodeRepresentations() const
@@ -209,6 +216,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges() {
     ModificationRevisionSet::clearCache();
 
     d->updateFiles();
+    
+    if(d->activationPolicy == Activate)
+        foreach(const IndexedString& file, files)
+            ICore::self()->documentController()->openDocument(file.toUrl());
     
     return result;
 }

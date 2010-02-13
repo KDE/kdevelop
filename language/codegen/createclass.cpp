@@ -116,6 +116,7 @@ void CreateClassWizard::accept()
     DocumentChangeSet changes = d->generator->generate();
     
     changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
+    changes.setActivationPolicy(KDevelop::DocumentChangeSet::Activate);
     changes.applyAllChanges();
 }
 

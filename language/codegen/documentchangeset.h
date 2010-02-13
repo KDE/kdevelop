@@ -85,7 +85,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
         IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
         WarnOnFailedChange,///If this is given to applyAllChanges, a warning is given when a change could not be applied,
                             ///but following changes are applied, and success is returned.
-        StopOnFailedChange ///If this is given to applyAllChanges, then all replacements are reverted and an error returned on problems
+        StopOnFailedChange ///If this is given to applyAllChanges, then all replacements are reverted and an error returned on problems (default)
     };
     
     ///@param policy What should be done when a change could not be applied?
@@ -93,7 +93,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     
     enum FormatPolicy {
         NoAutoFormat, ///If this option is given, no automatic formatting is applied
-        AutoFormatChanges      ///If this option is given, all changes are automatically reformatted using the formatter plugin for the mime type
+        AutoFormatChanges      ///If this option is given, all changes are automatically reformatted using the formatter plugin for the mime type (default)
     };
     
     ///@param policy How the changed text should be formatted
@@ -101,12 +101,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     
     enum DUChainUpdateHandling {
         NoUpdate,       ///No updates will be scheduled
-        SimpleUpdate ///The changed documents will be added to the background parser, plus all documents that are currently open and recursively import those documetns
+        SimpleUpdate ///The changed documents will be added to the background parser, plus all documents that are currently open and recursively import those documents (default)
         //FullUpdate       ///All documents in all open projects that recursively import any of the changed documents will be updated
     };
     
     ///@param policy Whether a duchain update should be triggered for all affected documents
     void setUpdateHandling(DUChainUpdateHandling policy);
+    
+    enum ActivationPolicy {
+        Activate,           ///The affected files will be activated
+        DoNotActivate  ///The affected files will not be activated (default)
+    };
+    
+    ///@param policy Whether the affected documents should be activated when the change is applied
+    void setActivationPolicy(ActivationPolicy policy);
     
     ///Applies all changes to temporary code representations, and returns a map from each file-name to
     ///the respective inserted artificial code-representation.
