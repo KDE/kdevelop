@@ -73,6 +73,9 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         qout << QString("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Session contents").toString() << endl;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
+            if ( si.description.isEmpty() ) {
+                continue;
+            }
             qout << si.uuid.toString() << '\t' << si.description << endl;
         }
         return 0;
