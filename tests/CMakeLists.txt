@@ -6,11 +6,12 @@ include_directories( ${KDevPlatform_SOURCE_DIR}/shell )
 set(kdevplatformtests_LIB_SRCS
     kdevsignalspy.cpp
     testcore.cpp
+    testproject.cpp
 )
 
 kde4_add_library(kdevplatformtests SHARED ${kdevplatformtests_LIB_SRCS})
 target_link_libraries(kdevplatformtests 
-        ${QT_QTCORE_LIBRARY} kdevplatformshell)
+        ${QT_QTCORE_LIBRARY} kdevplatformshell kdevplatformlanguage)
 target_link_libraries(kdevplatformtests LINK_INTERFACE_LIBRARIES 
         ${QT_QTCORE_LIBRARY} kdevplatformshell)
 set_target_properties(kdevplatformtests PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
@@ -20,6 +21,7 @@ install( FILES
          autotestshell.h 
          kdevsignalspy.h
          testcore.h
+         testproject.h
          kdevplatformtestsexport.h
          DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/tests/ 
          COMPONENT Devel )
