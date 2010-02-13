@@ -798,12 +798,12 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   if(imports.contains(id))
     return QualifiedIdentifier(); ///The id is a namespace that is imported into the current context
   
-  QList< Declaration* > basicDecls = ctx->findDeclarations(id);
+  QList< Declaration* > basicDecls = ctx->findDeclarations(id, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::NoSelfLookUp);
   
   while(!id.isEmpty())
   {
     QualifiedIdentifier newId = id.mid(1);
-    QList< Declaration* > foundDecls = ctx->findDeclarations(newId);
+    QList< Declaration* > foundDecls = ctx->findDeclarations(newId, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::NoSelfLookUp);
     
     if(foundDecls == basicDecls)
       id = newId;
@@ -811,12 +811,6 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
       break;
   }
 
-  if(id.count() == 1)
-  {
-    //Check whether it is a namespace that is imported. If yes, return an empty qualified identifier
-    
-  }
-  
   return id;
 }
 
