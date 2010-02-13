@@ -95,7 +95,6 @@ CppOverridesPage* CppNewClassWizard::newOverridesPage()
 
 KDevelop::DocumentChangeSet CppNewClass::generate()
 {
-  
   KDevelop::DocumentChangeSet changes;
   generateHeader(changes);
   generateImplementation(changes);
@@ -174,6 +173,9 @@ KUrl CppNewClass::implementationUrlFromBase(KUrl baseUrl, bool toLower) {
 
 void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
 {
+  if(!headerUrl().isValid())
+    return;
+  
   QString header;
 
   QTextStream output(&header, QIODevice::WriteOnly);
@@ -356,6 +358,9 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
 
 void CppNewClass::generateImplementation(KDevelop::DocumentChangeSet& changes)
 {
+  if(!implementationUrl().isValid())
+    return;
+  
   QString implementation;
 
   QTextStream output(&implementation, QIODevice::WriteOnly);
