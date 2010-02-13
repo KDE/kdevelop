@@ -515,8 +515,10 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 	m_prjItems.clear();
 
 	if (context->hasType(KDevelop::Context::EditorContext))
-		ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatTextAction);
-	else if (context->hasType(KDevelop::Context::FileContext)) {
+	{
+		if(m_formatTextAction->isEnabled())
+			ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatTextAction);
+	} else if (context->hasType(KDevelop::Context::FileContext)) {
 		KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>(context);
 		m_urls = filectx->urls();
 		ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatFilesAction);
