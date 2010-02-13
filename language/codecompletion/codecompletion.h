@@ -26,10 +26,13 @@
 #include "../languageexport.h"
 
 namespace KParts { class Part; }
-namespace KTextEditor { class Document; class View; class CodeCompletionModel;  }
+namespace KTextEditor { class Document; class View; class CodeCompletionModel; 
+}
 
 namespace KDevelop
 {
+
+class IDocument;
 class ILanguage;
 
 class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
@@ -47,8 +50,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
   public Q_SLOTS:
     void documentLoaded(KParts::Part* document);
     void viewCreated(KTextEditor::Document *document, KTextEditor::View *view);
+    void documentSaved(KDevelop::IDocument*);
 
   private:
+    
+    void unregisterDocument(KTextEditor::Document*);
+    void checkDocument(KTextEditor::Document*);
+    
     KTextEditor::CodeCompletionModel* m_model;
     QString m_language;
 };

@@ -34,6 +34,7 @@
 #include "../duchain/duchain.h"
 #include "../duchain/topducontext.h"
 #include "codecompletionmodel.h"
+#include <interfaces/idocumentcontroller.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -46,6 +47,7 @@ CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel
     kdevModel->initialize();
   connect (KDevelop::ICore::self()->partController(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
+  connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)) );
   aModel->setParent(this);
 }
 
@@ -63,31 +65,57 @@ void CodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::
   }
 }
 
+void CodeCompletion::documentSaved(KDevelop::IDocument* document)
+{
+  // The URL may have changed, so we re-register the document
+  Document* textDocument = document->textDocument();
+  
+  if(textDocument)
+  {
+    unregisterDocument(textDocument);
+    checkDocument(textDocument);
+  }
+}
+
 void CodeCompletion::documentLoaded(KParts::Part* document)
 {
   KTextEditor::Document *textDocument = dynamic_cast<KTextEditor::Document*>(document);
   if (textDocument) {
-    QList<ILanguage*> langs=ICore::self()->languageController()->languagesForUrl( textDocument->url() );
-    
-    bool found=false;
-    foreach(ILanguage* lang, langs) {
-      if(m_language==lang->name()) {
-        found=true;
-        break;
-      }
-    }
-    if(!found && !m_language.isEmpty())
-        return;
-    
-    foreach (KTextEditor::View* view, textDocument->views())
-      viewCreated(textDocument, view);
-
-    connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
-
+    checkDocument(textDocument);
   } else {
     kDebug() << "Non-text editor document added";
   }
 }
+
+void CodeCompletion::unregisterDocument(Document* textDocument)
+{
+  foreach (KTextEditor::View* view, textDocument->views())
+    if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view))
+      cc->unregisterCompletionModel(m_model);
+    
+  disconnect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
+}
+
+void CodeCompletion::checkDocument(Document* textDocument)
+{
+  QList<ILanguage*> langs=ICore::self()->languageController()->languagesForUrl( textDocument->url() );
+  
+  bool found=false;
+  foreach(ILanguage* lang, langs) {
+    if(m_language==lang->name()) {
+      found=true;
+      break;
+    }
+  }
+  if(!found && !m_language.isEmpty())
+      return;
+  
+  foreach (KTextEditor::View* view, textDocument->views())
+    viewCreated(textDocument, view);
+
+  connect(textDocument, SIGNAL(viewCreated(KTextEditor::Document*, KTextEditor::View*)), SLOT(viewCreated(KTextEditor::Document*, KTextEditor::View*)));
+}
+
 
 #include "codecompletion.moc"
 
