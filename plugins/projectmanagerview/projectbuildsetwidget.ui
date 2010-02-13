@@ -16,7 +16,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Buildset</string>
+        <string>Project Selection</string>
        </property>
       </widget>
      </item>
