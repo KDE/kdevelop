@@ -102,7 +102,7 @@ public:
     {
         Session* session = new Session( QUuid::createUuid() );
         
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", QStringList() << QApplication::applicationFilePath() << session->id().toString() << standardArguments());
+        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop", QStringList() << "-s" << session->id().toString() << standardArguments());
         delete session;
 #if 0        
         //Terminate this instance of kdevelop if the user agrees
@@ -153,7 +153,7 @@ public:
     void loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdev_starter", QStringList() << QApplication::applicationFilePath() << s->id().toString() << standardArguments());
+        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop", QStringList() << "-s" << s->id().toString() << standardArguments());
     }
     
     void activateSession( Session* s )
