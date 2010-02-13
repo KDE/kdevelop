@@ -58,7 +58,8 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
                           ki18n( "Copyright 1999-2009, The KDevelop developers" ), KLocalizedString(), "http://www.kdevelop.org" );
 #include "shared_app_init.cpp"
 
-    options.add("s <session>", ki18n("Session to load, use this also to start a new session by passing an unused name" ));
+    options.add("cs <name>", ki18n("Create new session with given name."));
+    options.add("s <session>", ki18n("Session to load. You can pass either hash or the name of the session." ));
     options.add("sessions", ki18n( "List available sessions and quit" ));
 
     KCmdLineArgs::addCmdLineOptions( options );
@@ -77,20 +78,49 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         return 0;
     }
 
-    ///Manage sessions: There always needs a KDEV_SESSION to be set, so the duchain can be stored in the session-specific directory
-    QString session = args->getOption("s");
+    // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
+    QString session;
 
-    //No session is set, we have to pick one, then we restart kdevelop through kdev_starter, and forward all relevant arguments to it
+    if ( args->isSet("cs") )
+    {
+        session = args->getOption("cs");
+        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+        {
+            if ( session == si.name ) {
+                QTextStream qerr(stderr);
+                qerr << endl << i18n("A session with the name %1 exists already. Use the -s switch to open it.", session) << endl;
+                return 1;
+            }
+        }
+        // session doesn't exist, we can create it
+    } else if ( args->isSet("s") ) {
+        session = args->getOption("s");
+        bool found = false;
+        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+        {
+            if ( session == si.name || session == si.uuid.toString() ) {
+                found = true;
+                break;
+            }
+        }
+        if ( !found ) {
+            QTextStream qerr(stderr);
+            qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
+            return 1;
+        }
+    }
+
+    ///Manage sessions: There always needs a KDEV_SESSION to be set, so the duchain can be stored in the session-specific directory
     session = KDevelop::SessionController::defaultSessionId(session);
 
-    //@todo Eventually show a session-picking dialog
+    ///@TODO Eventually show a session-picking dialog
     KProcess proc;
     proc << QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin" ;
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
     for(uint a = 1; a < argc; ++a) {
-        if( qstrcmp( argv[a], "-s" ) == 0 ) {
+        if( qstrcmp( argv[a], "-s" ) == 0 || qstrcmp( argv[a], "-cs" ) == 0 ) {
             ++a;
-        } else {
+        } else if ( qstrcmp( argv[a], "--sessions" ) != 0 ) {
             proc << QString(argv[a]);
         }
     }
