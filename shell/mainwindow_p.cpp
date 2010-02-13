@@ -151,6 +151,10 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
+    // We sometimes call changeActiveView(activeView()) to re-merge the main menu. We always have to perform the action.
+    
+    bool wasActive = m_mainWindow->activeView() == view;
+    
     PushPositiveValue<bool> block(m_changingActiveView, true);
 
     RestructureMenu menu(m_mainWindow->menuBar());
@@ -201,7 +205,8 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if (doc)
     {
         //activate part if it is not yet activated
-        doc->activate(view, m_mainWindow);
+        if(!wasActive)
+            doc->activate(view, m_mainWindow);
     }
     else
     {
