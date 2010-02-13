@@ -117,8 +117,14 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     session = KDevelop::SessionController::defaultSessionId(session);
 
     ///@TODO Eventually show a session-picking dialog
+    QFileInfo fi(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin");
+    if( !fi.exists() ) {
+        QTextStream qerr(stderr);
+        qerr << endl << i18n("Cannot start KDevelop, the kdevelop.bin executable is missing in %1. Please fix your KDevelop installation.", fi.absolutePath() ) << endl;
+        return -1;
+    }
     KProcess proc;
-    proc << QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin" ;
+    proc << fi.absoluteFilePath();
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
     for(uint a = 1; a < argc; ++a) {
         if( qstrcmp( argv[a], "-s" ) == 0 || qstrcmp( argv[a], "-cs" ) == 0 ) {
