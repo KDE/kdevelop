@@ -261,7 +261,7 @@ void CPPParseJob::mergeDefines(CppPreprocessEnvironment& env) const
 const QList<IndexedString>& CPPParseJob::includePaths() const {
     //If a lock was held here, we would get deadlocks
     if( ICore::self()->shuttingDown() )
-      return QList<IndexedString>();
+      return m_includePaths;
     
     if( masterJob() == this ) {
         if( !m_includePathsComputed ) {
@@ -274,7 +274,7 @@ const QList<IndexedString>& CPPParseJob::includePaths() const {
             {
               if(ICore::self()->shuttingDown())
               {
-                return QList<IndexedString>();
+                return m_includePaths;
               }
             }
             m_waitForIncludePathsMutex.unlock();
