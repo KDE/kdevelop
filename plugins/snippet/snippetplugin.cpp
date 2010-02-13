@@ -19,6 +19,9 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <QMenu>
 
+#include <KActionCollection>
+#include <KAction>
+
 #include <kdeversion.h>
 #if KDE_VERSION > KDE_MAKE_VERSION(4, 4, 0)
     #define HAVE_HIGHLIGHT_IFACE
@@ -116,6 +119,9 @@ void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view
     {
         cc->registerCompletionModel( m_model );
     }
+
+    KAction* selectionAction = view->actionCollection()->addAction("edit_selection_snippet", this, SLOT(createSnippetFromSelection()));
+    selectionAction->setData(QVariant::fromValue<void *>(view));
 }
 
 void SnippetPlugin::documentLoaded( KParts::Part* part )
@@ -142,8 +148,8 @@ KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Con
         if ( econtext->view()->selection() ) {
             QAction* action = new QAction(KIcon("document-new"), i18n("Create Snippet from Selection"), this);
             connect(action, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
+            action->setData(QVariant::fromValue<void *>(econtext->view()));
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
-            m_view = econtext->view();
         }
     }
 
@@ -152,14 +158,19 @@ KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Con
 
 void SnippetPlugin::createSnippetFromSelection()
 {
+    QAction * action = qobject_cast<QAction*>(sender());
+    Q_ASSERT(action);
+    KTextEditor::View* view = static_cast<KTextEditor::View*>(action->data().value<void *>());
+    Q_ASSERT(view);
+
     QString mode;
     #ifdef HAVE_HIGHLIGHT_IFACE
-        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(m_view->document()) ) {
-            mode = iface->highlightingModeAt(m_view->selectionRange().start());
+        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
+            mode = iface->highlightingModeAt(view->selectionRange().start());
         }
     #endif
     if ( mode.isEmpty() ) {
-        mode = m_view->document()->mode();
+        mode = view->document()->mode();
     }
 
     // try to look for a fitting repo
@@ -177,8 +188,8 @@ void SnippetPlugin::createSnippetFromSelection()
         match->setFileTypes(QStringList() << mode);
     }
 
-    EditSnippet dlg(match, 0, m_view);
-    dlg.snippetContentsEdit->setPlainText(m_view->selectionText());
+    EditSnippet dlg(match, 0, view);
+    dlg.snippetContentsEdit->setPlainText(view->selectionText());
     int status = dlg.exec();
     if ( created && status != KDialog::Accepted ) {
         // cleanup

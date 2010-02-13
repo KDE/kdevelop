@@ -64,8 +64,6 @@ public slots:
 private:
     class SnippetViewFactory *m_factory;
     class SnippetCompletionModel* m_model;
-    /// view we requested the context menu for
-    KTextEditor::View* m_view;
 };
 
 #endif
