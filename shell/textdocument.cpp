@@ -296,30 +296,7 @@ void TextDocument::reload()
     if (!d->document)
         return;
 
-    if (d->document->isModified())
-    {
-        if (KMessageBox::warningYesNo(Core::self()->uiController()->activeMainWindow(),
-                i18n( "The file \"%1\" is modified "
-                      "in memory. Are you sure you "
-                      "want to reload it? (Local "
-                      "changes will be lost.)", url().toLocalFile() ),
-                i18n( "Document is Modified" ) ) == KMessageBox::Yes )
-            d->document->setModified(false);
-        else
-            return ;
-    }
-
-    QList<KTextEditor::Cursor> cursors;
-    foreach (KTextEditor::View *view, d->document->views())
-        cursors << view->cursorPosition();
-
-    d->document->openUrl(url());
-
-    notifyStateChanged();
-
-    int i = 0;
-    foreach (KTextEditor::View *view, d->document->views())
-        view->setCursorPosition(cursors[i++]);
+    d->document->documentReload();
 }
 
 bool TextDocument::save(DocumentSaveMode mode)
