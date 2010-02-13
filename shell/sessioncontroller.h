@@ -41,6 +41,7 @@ class ISession;
 
 struct SessionInfo
 {
+    QString name;
     QUuid uuid;
     QString description;
 };
@@ -169,6 +170,7 @@ inline QList< SessionInfo > SessionController::availableSessionInfo()
         KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
 
         QString desc = config->group( "" ).readEntry( "SessionName", "" );
+        si.name = desc;
 
         QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
 
