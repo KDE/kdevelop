@@ -327,19 +327,22 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return CMakeParserUtils::includeScript( file, parent, &m_varsPerProject[project], &m_macrosPerProject[project], project->folder().toLocalFile(KUrl::RemoveTrailingSlash), &m_projectCache[project], m_modulePathPerProject[project]);
 }
 
-QSet<QString> removeMatches(const QRegExp& rx, const QStringList& orig)
+QMutex rxFileFilterMutex; //We have to use a mutex-lock to protect static regular ex
+static QRegExp rxFileFilter("\\w*~$|\\w*\\.bak$"); ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
+
+QSet<QString> filterFiles(const QStringList& orig)
 {
+    QMutexLocker lock(&rxFileFilterMutex);
+    
     QSet<QString> ret;
     foreach(const QString& str, orig)
     {
-        if(rx.indexIn(str)<0)
+        if(rxFileFilter.indexIn(str)<0)
             ret.insert(str);
     }
     return ret;
 }
 
-
-static QRegExp rxFileFilter("\\w*~$|\\w*\\.bak$");
 QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolderItem* item )
 {
     QList<KDevelop::ProjectFolderItem*> folderList;
@@ -573,7 +576,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     }
 
     QStringList entriesL = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
-    QSet<QString> entries = removeMatches(rxFileFilter, entriesL);
+    QSet<QString> entries = filterFiles(entriesL);
     foreach( const QString& entry, entries )
     {
         if( item->hasFileOrFolder( entry ) )
@@ -808,7 +811,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             Q_ASSERT(folders.isEmpty() || folders.size()==1);
             
             QStringList entriesL = QDir(dirty).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
-            QSet<QString> entries = removeMatches(rxFileFilter, entriesL);
+            QSet<QString> entries = filterFiles(entriesL);
             
             if(!folders.isEmpty())
             {
