@@ -641,14 +641,15 @@ QList< KUrl > BackgroundParser::managedDocuments()
 
 void BackgroundParser::addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range)
 {
-    range->addWatcher(this);
+    Q_ASSERT(range);
+    range->addWatcher(this); ///@todo Smart-lock
     QMutexLocker l(&d->m_mutex);
     d->m_managedRanges.insert(range, document);
 }
 
 void BackgroundParser::removeManagedTopRange(KTextEditor::SmartRange* range)
 {
-   range->removeWatcher(this);
+   range->removeWatcher(this); ///@todo Smart-lock
    QMutexLocker l(&d->m_mutex);
    d->m_managedRanges.remove(range);
 }
