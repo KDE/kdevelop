@@ -69,7 +69,6 @@ public:
         desired["org.kdevelop.ProblemReporterView"] = Sublime::Bottom;
         desired["org.kdevelop.OutputView"] = Sublime::Bottom;
         desired["org.kdevelop.ContextBrowser"] = Sublime::Bottom;
-        desired["org.kdevelop.debugger.ConsoleView"] = Sublime::Bottom;
         desired["org.kdevelop.KonsoleView"] = Sublime::Bottom;
         desired["org.kdevelop.SnippetView"] = Sublime::Right;
         Sublime::Area* a =
