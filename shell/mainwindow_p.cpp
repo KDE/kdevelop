@@ -153,6 +153,9 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
     mergeView(view);
     
+    if(!view)
+        return;
+    
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {
