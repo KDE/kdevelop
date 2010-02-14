@@ -78,7 +78,7 @@ class ImportersRequestItem {
     return m_item.hash();
   }
   
-  size_t itemSize() const {
+  uint itemSize() const {
       return m_item.itemSize();
   }
 

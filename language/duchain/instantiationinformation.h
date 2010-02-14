@@ -102,7 +102,7 @@ namespace KDevelop {
     
     START_APPENDED_LISTS(InstantiationInformation)
     
-    static size_t classSize() {
+    static uint classSize() {
       return sizeof(InstantiationInformation);
     }
     

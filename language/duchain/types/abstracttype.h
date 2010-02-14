@@ -222,7 +222,7 @@ public:
 
   template<class Type>
   static typename Type::Data& copyData(const typename Type::Data& rhs) {
-    size_t size;
+    uint size;
     if(!rhs.m_dynamic)
       size = sizeof(typename Type::Data); //Create a dynamic data instance
     else
@@ -238,7 +238,7 @@ public:
    */
   template<class DataType>
   static DataType& copyDataDirectly(const DataType& rhs) {
-    size_t size;
+    uint size;
     if(!rhs.m_dynamic)
       size = sizeof(DataType); //Create a dynamic data instance
     else

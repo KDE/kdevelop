@@ -283,7 +283,7 @@ class ExampleItemRequest {
   }
 
   ///Should return the size of an item created with createItem
-  size_t itemSize() const {
+  uint itemSize() const {
       return 0;
   }
   ///Should create an item where the information of the requested item is permanently stored. The pointer

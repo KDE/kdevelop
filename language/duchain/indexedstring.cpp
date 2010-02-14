@@ -64,7 +64,7 @@ struct IndexedStringRepositoryItemRequest {
   }
   
   //Should return the size of an item created with createItem
-  size_t itemSize() const {
+  uint itemSize() const {
     return sizeof(IndexedStringData) + m_length;
   }
   //Should create an item where the information of the requested item is permanently stored. The pointer

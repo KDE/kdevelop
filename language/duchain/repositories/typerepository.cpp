@@ -42,7 +42,7 @@ class AbstractTypeDataRequest {
     return m_item.hash();
   }
 
-  size_t itemSize() const {
+  uint itemSize() const {
     return TypeSystem::self().dynamicSize(*m_item.d_ptr);
   }
 

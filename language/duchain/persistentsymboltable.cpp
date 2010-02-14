@@ -89,7 +89,7 @@ class PersistentSymbolTableRequestItem {
     return m_item.hash();
   }
   
-  size_t itemSize() const {
+  uint itemSize() const {
       return m_item.itemSize();
   }
 
@@ -134,7 +134,7 @@ class PersistentContextTableItem {
     return id.getIndex();
   }
   
-  size_t itemSize() const {
+  uint itemSize() const {
     return dynamicSize();
   }
   
@@ -163,7 +163,7 @@ class PersistentContextTableRequestItem {
     return m_item.hash();
   }
   
-  size_t itemSize() const {
+  uint itemSize() const {
       return m_item.itemSize();
   }
 

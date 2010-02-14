@@ -136,7 +136,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
 
     ///Returns the size of the derived class, not including dynamic data.
     ///Returns zero if the class is not known.
-    size_t dataClassSize(const DUChainBaseData& data) const;
+    uint dataClassSize(const DUChainBaseData& data) const;
 
     ///Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
     ///This should only be called when a duchain data-pointer is semantically deleted, eg. when it does not persist on disk.
@@ -151,7 +151,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainItemSystem {
 
   private:
     QVector<DUChainBaseFactory*> m_factories;
-    QVector<size_t> m_dataClassSizes;
+    QVector<uint> m_dataClassSizes;
 };
 
 /// Helper class to register an DUChainBase subclass.

@@ -217,13 +217,13 @@ class TemporaryDataManager {
 ///You can call appendedListsDynamic() to find out whether the item is marked as dynamic.
 ///When this item is used, the same rules have to be followed as for a class with appended lists: You have to call
 ///initializeAppendedLists(...) and freeAppendedLists(..)
-///Also, when you use this, you have to implement a size_t classSize() function, that returns the size of the class including derived classes,
+///Also, when you use this, you have to implement a uint classSize() function, that returns the size of the class including derived classes,
 ///but not including the dynamic data. Optionally you can implement a static bool appendedListDynamicDefault() function, that returns the default-value for the "dynamic" parameter.
 ///to initializeAppendedLists.
 #define APPENDED_LISTS_STUB(container) \
 bool m_dynamic : 1;                          \
 unsigned int offsetBehindLastList() const { return 0; } \
-size_t dynamicSize() const { return classSize(); } \
+uint dynamicSize() const { return classSize(); } \
 template<class T> bool listsEqual(const T& /*rhs*/) const { return true; } \
 template<class T> void copyAllFrom(const T& /*rhs*/) const { } \
 void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { m_dynamic = dynamic; }  \
@@ -301,7 +301,7 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
                                       void freeAppendedLists() { predecessor ## FreeChain(); } \
                                       bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
                                       unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
-                                      size_t dynamicSize() const { return offsetBehindLastList() + classSize(); }
+                                      uint dynamicSize() const { return offsetBehindLastList() + classSize(); }
 /**
  * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.
  * All your class needs to do is:
@@ -329,7 +329,7 @@ class AppendedListItemRequest {
     return m_item.hash();
   }
 
-  size_t itemSize() const {
+  uint itemSize() const {
       return m_item.dynamicSize();
   }
 

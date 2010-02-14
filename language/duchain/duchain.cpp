@@ -120,7 +120,7 @@ class EnvironmentInformationItem {
 
 struct ItemRepositoryIndexHash
 {
-  size_t
+  uint
   operator()(unsigned int __x) const
   { return 173*(__x>>2) + 11 * (__x >> 16); }
 };
@@ -144,7 +144,7 @@ class EnvironmentInformationRequest {
     return m_index;
   }
 
-  size_t itemSize() const {
+  uint itemSize() const {
     return sizeof(EnvironmentInformationItem) + DUChainItemSystem::self().dynamicSize(*m_file->d_func());
   }
 
@@ -234,7 +234,7 @@ class EnvironmentInformationListRequest {
     return m_file.hash();
   }
 
-  size_t itemSize() const {
+  uint itemSize() const {
     return m_item->itemSize();
   }
 

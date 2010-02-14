@@ -53,7 +53,7 @@ uint DUChainItemSystem::dynamicSize(const DUChainBaseData& data) const {
   return m_factories[data.classId]->dynamicSize(data);
 }
 
-size_t DUChainItemSystem::dataClassSize(const DUChainBaseData& data) const {
+uint DUChainItemSystem::dataClassSize(const DUChainBaseData& data) const {
   if(uint(m_dataClassSizes.size()) <= data.classId || m_dataClassSizes[data.classId] == 0)
     return 0;
   return m_dataClassSizes[data.classId];

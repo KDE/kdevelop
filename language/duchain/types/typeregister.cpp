@@ -37,7 +37,7 @@ uint TypeSystem::dynamicSize(const AbstractTypeData& data) const {
   return m_fastFactories[data.typeClassId]->dynamicSize(data);
 }
 
-size_t TypeSystem::dataClassSize(const AbstractTypeData& data) const {
+uint TypeSystem::dataClassSize(const AbstractTypeData& data) const {
   if(uint(m_dataClassSizes.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
     return 0;
   return m_fastDataClassSizes[data.typeClassId];

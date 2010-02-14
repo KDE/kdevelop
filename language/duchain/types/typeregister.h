@@ -169,7 +169,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
 
     ///Returns the size of the derived class, not including dynamic data.
     ///Returns zero if the class is not known.
-    size_t dataClassSize(const AbstractTypeData& data) const;
+    uint dataClassSize(const AbstractTypeData& data) const;
 
     ///Calls the destructor, but does not delete anything. This is needed because the data classes must not contain virtual members.
     void callDestructor(AbstractTypeData* data) const;
@@ -181,8 +181,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     QVector<AbstractTypeFactory*> m_factories;
     AbstractTypeFactory** m_fastFactories;
     
-    QVector<size_t> m_dataClassSizes;
-    size_t* m_fastDataClassSizes;
+    QVector<uint> m_dataClassSizes;
+    uint* m_fastDataClassSizes;
 };
 
 /// Helper class to register an AbstractType subclass.
