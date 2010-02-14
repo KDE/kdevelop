@@ -113,7 +113,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     
     proc->setProgram( executable.toLocalFile(), arguments );
     
-    setTitle(cfg->name());
+    setObjectName(cfg->name());
 }
 
 
