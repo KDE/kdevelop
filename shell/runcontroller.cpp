@@ -494,9 +494,7 @@ void KDevelop::RunController::registerJob(KJob * job)
         KAction* stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
         stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
         d->stopAction->addAction(stopJobAction);
-        //TODO: This produces nasty messageboxes atm, so re-activate only after
-        //moving to a nicer job delegate
-        // connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
+        connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
         connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
 
         job->setUiDelegate( new KDialogJobUiDelegate() );
