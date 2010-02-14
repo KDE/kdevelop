@@ -200,8 +200,8 @@ public:
 
   int kind;
 
-  std::size_t start_token;
-  std::size_t end_token;
+  uint start_token;
+  uint end_token;
 
   /**
     * The parent node of this AST node. This is only set when the ParentVisitor
@@ -219,14 +219,14 @@ class CommentAST
 {
 public:
 
-  const ListNode<std::size_t> *comments; //A list of comment-tokens
+  const ListNode<uint> *comments; //A list of comment-tokens
 };
 
 class TypeSpecifierAST : public AST
 {
 public:
 
-  const ListNode<std::size_t> *cv; // const or volatile tokens
+  const ListNode<uint> *cv; // const or volatile tokens
 };
 
 class StatementAST : public AST
@@ -253,7 +253,7 @@ public:
 
   DECLARE_AST_NODE(AccessSpecifier)
 
-  const ListNode<std::size_t> *specs;
+  const ListNode<uint> *specs;
 };
 
 class AsmDefinitionAST : public DeclarationAST
@@ -262,7 +262,7 @@ public:
 
   DECLARE_AST_NODE(AsmDefinition)
 
-  const ListNode<std::size_t> *cv;
+  const ListNode<uint> *cv;
 };
 
 class BaseClauseAST : public AST // ### kill me
@@ -280,8 +280,8 @@ public:
 
   DECLARE_AST_NODE(BaseSpecifier)
 
-  std::size_t virt;
-  std::size_t access_specifier;
+  uint virt;
+  uint access_specifier;
   NameAST *name;
 };
 
@@ -291,7 +291,7 @@ public:
 
   DECLARE_AST_NODE(BinaryExpression)
 
-  std::size_t op; //Index of the token that describes the operator
+  uint op; //Index of the token that describes the operator
   ExpressionAST *left_expression;
   ExpressionAST *right_expression;
 };
@@ -321,7 +321,7 @@ public:
 
   DECLARE_AST_NODE(ClassMemberAccess)
 
-  std::size_t op; //Index of the token that describes the operator
+  uint op; //Index of the token that describes the operator
   NameAST *name;
 };
 
@@ -332,7 +332,7 @@ public:
   DECLARE_AST_NODE(ClassSpecifier)
 
   WinDeclSpecAST *win_decl_specifiers;
-  std::size_t class_key;
+  uint class_key;
   NameAST *name;
   BaseClauseAST *base_clause;
   const ListNode<DeclarationAST*> *member_specs;
@@ -380,7 +380,7 @@ public:
 
   DECLARE_AST_NODE(CppCastExpression)
 
-  std::size_t op; //Index of the token that describes the operator
+  uint op; //Index of the token that describes the operator
   TypeIdAST *type_id;
   ExpressionAST *expression;
   const ListNode<ExpressionAST*> *sub_expressions;
@@ -392,7 +392,7 @@ public:
 
   DECLARE_AST_NODE(CtorInitializer)
 
-  std::size_t colon;
+  uint colon;
   const ListNode<MemInitializerAST*> *member_initializers;
 };
 
@@ -419,7 +419,7 @@ public:
 
   bool parameter_is_initializer; //Used by the declaration-builder to mark a parameter-declaration clause as a mis-parsed initializer
   ParameterDeclarationClauseAST *parameter_declaration_clause;
-  const ListNode<std::size_t> *fun_cv;
+  const ListNode<uint> *fun_cv;
   ExceptionSpecificationAST *exception_spec;
 };
 
@@ -429,10 +429,10 @@ public:
 
   DECLARE_AST_NODE(DeleteExpression)
 
-  std::size_t scope_token;
-  std::size_t delete_token;
-  std::size_t lbracket_token;
-  std::size_t rbracket_token;
+  uint scope_token;
+  uint delete_token;
+  uint lbracket_token;
+  uint rbracket_token;
   ExpressionAST *expression;
 };
 
@@ -452,7 +452,7 @@ public:
 
   DECLARE_AST_NODE(ElaboratedTypeSpecifier)
 
-  std::size_t type;
+  uint type;
   NameAST *name;
   bool isDeclaration; //Whether this type-specifier is a forward declaration rather than use use
 };
@@ -473,7 +473,7 @@ public:
 
   DECLARE_AST_NODE(Enumerator)
 
-  std::size_t id;
+  uint id;
   ExpressionAST *expression;
 };
 
@@ -483,7 +483,7 @@ public:
 
   DECLARE_AST_NODE(ExceptionSpecification)
 
-  std::size_t ellipsis;
+  uint ellipsis;
   const ListNode<TypeIdAST*> *type_ids;
 };
 
@@ -525,8 +525,8 @@ public:
 
   DECLARE_AST_NODE(FunctionDefinition)
 
-  const ListNode<std::size_t> *storage_specifiers;
-  const ListNode<std::size_t> *function_specifiers;
+  const ListNode<uint> *storage_specifiers;
+  const ListNode<uint> *function_specifiers;
   TypeSpecifierAST *type_specifier;
   InitDeclaratorAST *init_declarator;
   StatementAST *function_body;
@@ -563,7 +563,7 @@ public:
 
   DECLARE_AST_NODE(IncrDecrExpression)
 
-  std::size_t op; //Index of the token that describes the operator
+  uint op; //Index of the token that describes the operator
 };
 
 class InitDeclaratorAST : public AST
@@ -606,7 +606,7 @@ public:
 
   DECLARE_AST_NODE(LabeledStatement)
 
-  std::size_t label;
+  uint label;
   //The constant label expression
   ExpressionAST *expression;
   StatementAST* statement;
@@ -627,7 +627,7 @@ public:
 
   DECLARE_AST_NODE(LinkageSpecification)
 
-  std::size_t extern_type;
+  uint extern_type;
   LinkageBodyAST *linkage_body;
   DeclarationAST *declaration;
 };
@@ -659,7 +659,7 @@ public:
 
   DECLARE_AST_NODE(Namespace)
 
-  std::size_t namespace_name;
+  uint namespace_name;
   LinkageBodyAST *linkage_body;
 };
 
@@ -669,7 +669,7 @@ public:
 
   DECLARE_AST_NODE(NamespaceAliasDefinition)
 
-  std::size_t namespace_name;
+  uint namespace_name;
   NameAST *alias_name;
 };
 
@@ -690,8 +690,8 @@ public:
 
   DECLARE_AST_NODE(NewExpression)
 
-  std::size_t scope_token;
-  std::size_t new_token;
+  uint scope_token;
+  uint new_token;
   ExpressionAST *expression;
   TypeIdAST *type_id;
   NewTypeIdAST *new_type_id;
@@ -724,9 +724,9 @@ public:
 
   DECLARE_AST_NODE(Operator)
 
-  std::size_t op; //Index of the token that describes the operator
-  std::size_t open;
-  std::size_t close;
+  uint op; //Index of the token that describes the operator
+  uint open;
+  uint close;
 };
 
 class OperatorFunctionIdAST : public AST
@@ -758,7 +758,7 @@ public:
   DECLARE_AST_NODE(ParameterDeclarationClause)
 
   const ListNode<ParameterDeclarationAST*> *parameter_declarations;
-  std::size_t ellipsis;
+  uint ellipsis;
 };
 
 /**
@@ -788,7 +788,7 @@ public:
   DECLARE_AST_NODE(PrimaryExpression)
 
   StringLiteralAST *literal;
-  std::size_t token;
+  uint token;
   StatementAST *expression_statement;
   ExpressionAST *sub_expression;
   NameAST *name;
@@ -800,8 +800,8 @@ public:
 
   DECLARE_AST_NODE(PtrOperator)
 
-  const ListNode<std::size_t> *cv;
-  std::size_t op; //Index of the token that describes the operator. Is zero when mem_ptr is non-zero.
+  const ListNode<uint> *cv;
+  uint op; //Index of the token that describes the operator. Is zero when mem_ptr is non-zero.
   PtrToMemberAST *mem_ptr;
 };
 
@@ -821,9 +821,9 @@ public:
   // index of operator token which describes the jump, one of
   // 'break', 'continue' or 'goto.  Return statements are handled by
   // ReturnStatementAST
-  std::size_t op;
+  uint op;
   // identifier for 'goto' statements
-  std::size_t identifier;
+  uint identifier;
 };
 
 class ReturnStatementAST : public StatementAST
@@ -841,8 +841,8 @@ public:
 
   DECLARE_AST_NODE(SimpleDeclaration)
 
-  const ListNode<std::size_t> *storage_specifiers;
-  const ListNode<std::size_t> *function_specifiers;
+  const ListNode<uint> *storage_specifiers;
+  const ListNode<uint> *function_specifiers;
   TypeSpecifierAST *type_specifier;
   const ListNode<InitDeclaratorAST*> *init_declarators;
   WinDeclSpecAST *win_decl_specifiers;
@@ -854,8 +854,8 @@ public:
 
   DECLARE_AST_NODE(SimpleTypeSpecifier)
 
-  const ListNode<std::size_t> *integrals;
-  std::size_t type_of;
+  const ListNode<uint> *integrals;
+  uint type_of;
   TypeIdAST *type_id;
   ExpressionAST *expression;
   NameAST *name;
@@ -867,7 +867,7 @@ public:
 
   DECLARE_AST_NODE(SizeofExpression)
 
-  std::size_t sizeof_token;
+  uint sizeof_token;
   TypeIdAST *type_id;
   ExpressionAST *expression;
 };
@@ -878,7 +878,7 @@ public:
 
   DECLARE_AST_NODE(StringLiteral)
 
-  const ListNode<std::size_t> *literals;
+  const ListNode<uint> *literals;
 };
 
 /// operator []
@@ -917,7 +917,7 @@ public:
 
   DECLARE_AST_NODE(TemplateDeclaration)
 
-  std::size_t exported;
+  uint exported;
   const ListNode<TemplateParameterAST*> *template_parameters;
   DeclarationAST* declaration;
 };
@@ -938,7 +938,7 @@ public:
 
   DECLARE_AST_NODE(ThrowExpression)
 
-  std::size_t throw_token;
+  uint throw_token;
   ExpressionAST *expression;
 };
 
@@ -997,7 +997,7 @@ public:
 
   DECLARE_AST_NODE(TypeIdentification)
 
-  std::size_t typename_token;
+  uint typename_token;
   NameAST *name;
   ExpressionAST *expression;
 };
@@ -1008,7 +1008,7 @@ public:
 
   DECLARE_AST_NODE(TypeParameter)
 
-  std::size_t type;
+  uint type;
   NameAST *name;
   TypeIdAST *type_id;
   const ListNode<TemplateParameterAST*> *template_parameters;
@@ -1031,7 +1031,7 @@ public:
 
   DECLARE_AST_NODE(UnaryExpression)
 
-  std::size_t op; //Index of the token that describes the operator
+  uint op; //Index of the token that describes the operator
   ExpressionAST *expression;
 };
 
@@ -1041,8 +1041,8 @@ public:
 
   DECLARE_AST_NODE(UnqualifiedName)
 
-  std::size_t tilde;
-  std::size_t id;
+  uint tilde;
+  uint id;
   bool ellipsis;
   OperatorFunctionIdAST *operator_id;
   const ListNode<TemplateArgumentAST*> *template_arguments;
@@ -1054,7 +1054,7 @@ public:
 
   DECLARE_AST_NODE(Using)
 
-  std::size_t type_name;
+  uint type_name;
   NameAST *name;
 };
 
@@ -1083,8 +1083,8 @@ public:
 
   DECLARE_AST_NODE(WinDeclSpec)
 
-  std::size_t specifier;
-  std::size_t modifier;
+  uint specifier;
+  uint modifier;
 };
 
 template <class _Tp>

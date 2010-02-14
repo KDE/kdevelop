@@ -112,10 +112,10 @@ protected:
   virtual void visitWinDeclSpec (WinDeclSpecAST*);
 
 private:
-  void outputToken(std::size_t tokenPosition);
+  void outputToken(uint tokenPosition);
 
-  void print(const ListNode<std::size_t>* tokenList, bool followingSpace = false);
-  void print(std::size_t token, bool followingSpace = false);
+  void print(const ListNode<uint>* tokenList, bool followingSpace = false);
+  void print(uint token, bool followingSpace = false);
   void printToken(int token, bool followingSpace = false);
 
   template <class AstNode>

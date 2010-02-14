@@ -25,18 +25,18 @@
 #include <language/duchain/stringhelpers.h>
 
 
-QByteArray CommentFormatter::formatComment( size_t token, const ParseSession* session ) {
+QByteArray CommentFormatter::formatComment( uint token, const ParseSession* session ) {
   if( !token )
     return QByteArray();
   const Token& commentToken( (*session->token_stream)[token] );
   return KDevelop::formatComment( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) );
 }
 
-QByteArray CommentFormatter::formatComment( const ListNode<size_t>* comments, const ParseSession* session ) {
+QByteArray CommentFormatter::formatComment( const ListNode<uint>* comments, const ParseSession* session ) {
   QByteArray ret;
   if( comments )
   {
-    const ListNode<size_t> *it = comments->toFront(), *end = it;
+    const ListNode<uint> *it = comments->toFront(), *end = it;
     do {
       QByteArray c = CommentFormatter::formatComment(it->element, session);
 

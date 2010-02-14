@@ -281,8 +281,8 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     uint type = IntegralType::TypeNone;
     uint modifiers = AbstractType::NoModifiers;
 
-    const ListNode<std::size_t> *it = node->integrals->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = node->integrals->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
@@ -659,13 +659,13 @@ void TypeBuilder::visitArrayExpression(ExpressionAST* expression)
     closeType();
 }
 
-uint TypeBuilder::parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
+uint TypeBuilder::parseConstVolatile(ParseSession* session, const ListNode<uint> *cv)
 {
   uint ret = AbstractType::NoModifiers;
 
   if (cv) {
-    const ListNode<std::size_t> *it = cv->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = cv->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = session->token_stream->kind(it->element);
       if (kind == Token_const)

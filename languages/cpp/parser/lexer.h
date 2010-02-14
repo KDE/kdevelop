@@ -42,9 +42,9 @@ public:
   ///kind of the token @see TOKEN_KIND enum reference.
   int kind;
   ///position in the preprocessed buffer
-  std::size_t position;
+  uint position;
   ///size of the token in the preprocessed buffer. Do not confuse this with symbolLength.
-  std::size_t size;
+  uint size;
   ///pointer to the parse session.
   const ParseSession* session;
 
@@ -62,7 +62,7 @@ public:
   union
   {
     //const NameSymbol *symbol;
-    std::size_t right_brace;
+    uint right_brace;
   } extra;
 };
 
@@ -81,7 +81,7 @@ private:
 
 public:
   /**Creates a token stream with the default size of 1024 tokens.*/
-  inline TokenStream(std::size_t size = 1024)
+  inline TokenStream(uint size = 1024)
      : tokens(0),
        index(0),
        token_count(0)
@@ -93,12 +93,12 @@ public:
   { ::free(tokens); }
 
   /**@return the size of the token stream.*/
-  inline std::size_t size() const
+  inline uint size() const
   { return token_count; }
 
   /**@return the "cursor" - the offset (index) of the token
   currently "observed" from the beginning of the stream.*/
-  inline std::size_t cursor() const
+  inline uint cursor() const
   { return index; }
 
   /**Sets the cursor to the position @p i.*/
@@ -106,7 +106,7 @@ public:
   { index = i; }
 
   /**Resizes the token stream.*/
-  void resize(std::size_t size)
+  void resize(uint size)
   {
     Q_ASSERT(size > 0);
     tokens = (Token*) ::realloc(tokens, sizeof(Token) * size);
@@ -115,30 +115,30 @@ public:
 
   /**Updates the cursor position to point to the next token and returns
   the cursor.*/
-  inline std::size_t nextToken()
+  inline uint nextToken()
   { return index++; }
 
   /**@return the kind of the next (LA) token in the stream.*/
-  inline int lookAhead(std::size_t i = 0) const
+  inline int lookAhead(uint i = 0) const
   { return tokens[index + i].kind; }
 
   /**@return the kind of the current token in the stream.*/
-  inline int kind(std::size_t i) const
+  inline int kind(uint i) const
   { return tokens[i].kind; }
 
   /**@return the position of the current token in the c++ source buffer.*/
-  inline std::size_t position(std::size_t i) const
+  inline uint position(uint i) const
   { return tokens[i].position; }
 
   /**@return the name symbol of the current token.*/
-  //inline const NameSymbol *symbol(std::size_t i) const
+  //inline const NameSymbol *symbol(uint i) const
   //{ return tokens[i].extra.symbol; }
 
   /**@return the position of the matching right brace in the
   c++ source buffer.
   @todo this doesn't seem to work as the lexer does not provide this
   information at the moment.*/
-  inline std::size_t matchingBrace(std::size_t i) const
+  inline uint matchingBrace(uint i) const
   { return tokens[i].extra.right_brace; }
 
   /**@return the token at position @p index.*/
@@ -151,8 +151,8 @@ public:
 
 private:
   Token *tokens;
-  std::size_t index;
-  std::size_t token_count;
+  uint index;
+  uint token_count;
 
 private:
   friend class Lexer;
@@ -293,7 +293,7 @@ private:
   
   SpecialCursor cursor;
   const uint* endCursor;
-  std::size_t index;
+  uint index;
 
   bool m_leaveSize; //Marks the current token that its size should not be automatically set
   bool m_canMergeComment; //Whether we may append new comments to the last encountered one

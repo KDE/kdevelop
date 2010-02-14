@@ -130,8 +130,8 @@ private:
   //Opens either a ClassMemberDeclaration, or a Declaration
   Declaration* openNormalDeclaration(NameAST* name, AST* rangeNode, const Identifier& customName = Identifier(), bool collapseRange = false);
 
-  void parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers);
-  void parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers);
+  void parseStorageSpecifiers(const ListNode<uint>* storage_specifiers);
+  void parseFunctionSpecifiers(const ListNode<uint>* function_specifiers);
 
   inline KDevelop::Declaration::AccessPolicy currentAccessPolicy() { return ((KDevelop::Declaration::AccessPolicy)((m_accessPolicyStack.top() & (~((uint)FunctionIsSignal))) & (~((uint)FunctionIsSlot)))); }
   inline void setAccessPolicy(KDevelop::Declaration::AccessPolicy policy) { m_accessPolicyStack.top() = policy; }
@@ -139,7 +139,7 @@ private:
   Cpp::InstantiationInformation createSpecializationInformation(Cpp::InstantiationInformation base, UnqualifiedNameAST* name, KDevelop::DUContext* templateContext);
   Cpp::IndexedInstantiationInformation createSpecializationInformation(NameAST* name, DUContext* templateContext);
 
-  void parseComments(const ListNode<size_t> *comments);
+  void parseComments(const ListNode<uint> *comments);
 
   void applyStorageSpecifiers();
   void applyFunctionSpecifiers();
@@ -151,7 +151,7 @@ private:
 
   QStack<KDevelop::AbstractFunctionDeclaration::FunctionSpecifiers> m_functionSpecifiers;
   QStack<KDevelop::ClassMemberDeclaration::StorageSpecifiers> m_storageSpecifiers;
-  QStack<std::size_t> m_functionDefinedStack;
+  QStack<uint> m_functionDefinedStack;
 
   bool m_changeWasSignificant, m_ignoreDeclarators, m_declarationHasInitializer;
   

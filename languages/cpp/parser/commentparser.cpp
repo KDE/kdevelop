@@ -18,7 +18,7 @@
 #include "commentparser.h"
 // #include <kdebug.h>
 
-Comment::Comment( size_t token, int line ) : m_line(line), m_token( token ) {
+Comment::Comment( uint token, int line ) : m_line(line), m_token( token ) {
 }
 
 Comment::operator bool() const {

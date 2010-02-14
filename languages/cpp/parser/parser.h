@@ -117,7 +117,7 @@ public:
   bool parseConditionalExpression(ExpressionAST *&node, bool templArgs = false);
   bool parseConstantExpression(ExpressionAST *&node);
   bool parseCtorInitializer(CtorInitializerAST *&node);
-  bool parseCvQualify(const ListNode<std::size_t> *&node);
+  bool parseCvQualify(const ListNode<uint> *&node);
   bool parseDeclaration(DeclarationAST *&node);
   bool parseDeclarationInternal(DeclarationAST *&node);
   bool parseDeclarationStatement(StatementAST *&node);
@@ -138,7 +138,7 @@ public:
   bool parseForInitStatement(StatementAST *&node);
   bool parseForStatement(StatementAST *&node);
   bool parseFunctionBody(StatementAST *&node);
-  bool parseFunctionSpecifier(const ListNode<std::size_t> *&node);
+  bool parseFunctionSpecifier(const ListNode<uint> *&node);
   bool parseIfStatement(StatementAST *&node);
   bool parseInclusiveOrExpression(ExpressionAST *&node,
 				  bool templArgs = false);
@@ -190,7 +190,7 @@ public:
   bool parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
 				bool onlyIntegral = false);
   bool parseStatement(StatementAST *&node);
-  bool parseStorageClassSpecifier(const ListNode<std::size_t> *&node);
+  bool parseStorageClassSpecifier(const ListNode<uint> *&node);
   bool parseStringLiteral(StringLiteralAST *&node);
   bool parseSwitchStatement(StatementAST *&node);
   bool parseTemplateArgument(TemplateArgumentAST *&node);
@@ -226,7 +226,7 @@ public:
   void moveComments( CommentAST* ast );
 
   void advance(bool skipComment = true);
-  void rewind(size_t position);
+  void rewind(uint position);
   // private:
   TokenStream* token_stream;
 
@@ -240,11 +240,11 @@ private:
     IsNoTemplateArgumentList = 1
   };
   
-  TokenMarkers tokenMarkers(size_t tokenNumber) const;
-  void addTokenMarkers(size_t tokenNumber, TokenMarkers markers);
+  TokenMarkers tokenMarkers(uint tokenNumber) const;
+  void addTokenMarkers(uint tokenNumber, TokenMarkers markers);
 
 
-  int lineFromTokenNumber( size_t tokenNumber ) const;
+  int lineFromTokenNumber( uint tokenNumber ) const;
 
   void clear();
   
@@ -261,20 +261,20 @@ private:
   Comment m_currentComment;
   CommentStore m_commentStore;
  
-  hash_map<size_t, TokenMarkers> m_tokenMarkers;
+  hash_map<uint, TokenMarkers> m_tokenMarkers;
   int _M_problem_count;
   int _M_max_problem_count;
   ParseSession* session;
   bool _M_hold_errors;
-  size_t _M_last_valid_token; //Last encountered token that was not a comment
-  size_t _M_last_parsed_comment;
+  uint _M_last_valid_token; //Last encountered token that was not a comment
+  uint _M_last_parsed_comment;
   
   bool _M_hadMismatchingCompoundTokens;
   bool m_primaryExpressionWithTemplateParamsNeedsFunctionCall;
 
   // keeps track of tokens where a syntax error has been found
   // so that the same error is not reported twice for a token
-  QSet<std::size_t> m_syntaxErrorTokens;
+  QSet<uint> m_syntaxErrorTokens;
 
   // when _M_hold_errors is true, reported errors are held in m_pendingErrors
   // rather than being reported to the Control immediately.
@@ -283,7 +283,7 @@ private:
   struct PendingError
   {
    QString message;
-   std::size_t cursor;
+   uint cursor;
   };
   QQueue<PendingError> m_pendingErrors;
 

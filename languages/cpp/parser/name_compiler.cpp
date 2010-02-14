@@ -47,13 +47,13 @@ QString decode(ParseSession* session, AST* ast, bool without_spaces = false)
   return ret;
 }
 
-uint parseConstVolatile(ParseSession* session, const ListNode<std::size_t> *cv)
+uint parseConstVolatile(ParseSession* session, const ListNode<uint> *cv)
 {
   uint ret = AbstractType::NoModifiers;
 
   if (cv) {
-    const ListNode<std::size_t> *it = cv->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = cv->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = session->token_stream->kind(it->element);
       if (kind == Token_const)

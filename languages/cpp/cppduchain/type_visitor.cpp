@@ -145,8 +145,8 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   // Don't forget the modifiers!
   uint modifiers = AbstractType::NoModifiers;
   if (node->cv) {
-    const ListNode<std::size_t> *it = node->cv->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = node->cv->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = m_session->token_stream->kind(it->element);
       switch (kind) {
@@ -168,8 +168,8 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     {
       uint type = IntegralType::TypeNone;
 
-      const ListNode<std::size_t> *it2 = node->integrals->toFront();
-      const ListNode<std::size_t> *end = it2;
+      const ListNode<uint> *it2 = node->integrals->toFront();
+      const ListNode<uint> *end = it2;
       do {
         int kind = m_session->token_stream->kind(it2->element);
         switch (kind) {

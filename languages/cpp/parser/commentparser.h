@@ -26,7 +26,7 @@ class ParseSession;
 
 class Comment {
   public:
-    explicit Comment( size_t token = 0, int line = -1 );
+    explicit Comment( uint token = 0, int line = -1 );
 
     operator bool() const;
 
@@ -40,12 +40,12 @@ class Comment {
 
     bool isSame ( const Comment& rhs ) const;
 
-    size_t token() const {
+    uint token() const {
       return m_token;
     }
   private:
     int m_line;
-    size_t m_token;
+    uint m_token;
 };
 
 

@@ -165,7 +165,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   }
 }
 
-void DeclarationBuilder::parseComments(const ListNode<size_t> *comments)
+void DeclarationBuilder::parseComments(const ListNode<uint> *comments)
 {
   setComment(CommentFormatter::formatComment(comments, editor()->parseSession()));
 }
@@ -436,8 +436,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 {
   SimpleRange newRange;
   if(name) {
-    std::size_t start = name->unqualified_name->start_token;
-    std::size_t end = name->unqualified_name->end_token;
+    uint start = name->unqualified_name->start_token;
+    uint end = name->unqualified_name->end_token;
 
     //We must exclude the tilde. Else we may get totally messed up ranges when the name of a destructor is renamed in a macro
     if(name->unqualified_name->tilde)
@@ -898,7 +898,7 @@ void DeclarationBuilder::visitEnumerator(EnumeratorAST* node)
 {
   //Ugly hack: Since we want the identifier only to have the range of the id(not
   //the assigned expression), we change the range of the node temporarily
-  size_t oldEndToken = node->end_token;
+  uint oldEndToken = node->end_token;
   node->end_token = node->id + 1;
 
   Identifier id(editor()->parseSession()->token_stream->token(node->id).symbol());
@@ -1349,8 +1349,8 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
   bool isSlot = false;
   bool isSignal = false;
   if (node->specs) {
-    const ListNode<std::size_t> *it = node->specs->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = node->specs->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
@@ -1386,13 +1386,13 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
   DeclarationBuilderBase::visitAccessSpecifier(node);
 }
 
-void DeclarationBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* storage_specifiers)
+void DeclarationBuilder::parseStorageSpecifiers(const ListNode<uint>* storage_specifiers)
 {
   ClassMemberDeclaration::StorageSpecifiers specs = 0;
 
   if (storage_specifiers) {
-    const ListNode<std::size_t> *it = storage_specifiers->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = storage_specifiers->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
@@ -1423,13 +1423,13 @@ void DeclarationBuilder::parseStorageSpecifiers(const ListNode<std::size_t>* sto
   m_storageSpecifiers.push(specs);
 }
 
-void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<std::size_t>* function_specifiers)
+void DeclarationBuilder::parseFunctionSpecifiers(const ListNode<uint>* function_specifiers)
 {
   AbstractFunctionDeclaration::FunctionSpecifiers specs = 0;
 
   if (function_specifiers) {
-    const ListNode<std::size_t> *it = function_specifiers->toFront();
-    const ListNode<std::size_t> *end = it;
+    const ListNode<uint> *it = function_specifiers->toFront();
+    const ListNode<uint> *end = it;
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
@@ -1553,7 +1553,7 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
       ParameterDeclarationAST* ast = it->element;
       if(ast) {
         if(m_collectQtFunctionSignature) {
-          size_t endToken = ast->end_token;
+          uint endToken = ast->end_token;
           
           if(ast->type_specifier)
             endToken = ast->type_specifier->end_token;

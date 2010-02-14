@@ -46,7 +46,7 @@ QString CodeGenerator::output()
   return m_outputString;
 }
 
-void CodeGenerator::outputToken(std::size_t tokenPosition)
+void CodeGenerator::outputToken(uint tokenPosition)
 {
   if (tokenPosition) {
     const Token& t = m_session->token_stream->token(tokenPosition);
@@ -58,12 +58,12 @@ void CodeGenerator::outputToken(std::size_t tokenPosition)
   }
 }
 
-void CodeGenerator::print(const ListNode<std::size_t>* tokenList, bool followingSpace)
+void CodeGenerator::print(const ListNode<uint>* tokenList, bool followingSpace)
 {
   if (!tokenList)
     return;
 
-  const ListNode<std::size_t>* it = tokenList->toFront(), *end = it;
+  const ListNode<uint>* it = tokenList->toFront(), *end = it;
   bool first = true;
   do {
     if (first) first = false; else m_output << " ";
@@ -75,7 +75,7 @@ void CodeGenerator::print(const ListNode<std::size_t>* tokenList, bool following
     m_output << " ";
 }
 
-void CodeGenerator::print(std::size_t token, bool followingSpace)
+void CodeGenerator::print(uint token, bool followingSpace)
 {
   if (!token)
     return;

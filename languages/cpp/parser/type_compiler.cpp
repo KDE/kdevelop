@@ -41,8 +41,8 @@ void TypeCompiler::run(TypeSpecifierAST *node)
 
   if (node && node->cv)
     {
-      const ListNode<std::size_t> *it = node->cv->toFront();
-      const ListNode<std::size_t> *end = it;
+      const ListNode<uint> *it = node->cv->toFront();
+      const ListNode<uint> *end = it;
       do
         {
           int kind = m_session->token_stream->kind(it->element);
@@ -72,13 +72,13 @@ void TypeCompiler::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node
 
 void TypeCompiler::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
 {
-  if (const ListNode<std::size_t> *it = node->integrals)
+  if (const ListNode<uint> *it = node->integrals)
     {
       it = it->toFront();
-      const ListNode<std::size_t> *end = it;
+      const ListNode<uint> *end = it;
       do
         {
-          std::size_t token = it->element;
+          uint token = it->element;
           // FIXME
           _M_type.push(Identifier(token_name(m_session->token_stream->kind(token))));
           it = it->next;

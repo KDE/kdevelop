@@ -40,7 +40,7 @@ class KDEVCPPDUCHAIN_EXPORT TypeBuilder: public TypeBuilderBase
 public:
   TypeBuilder();
 
-  static uint parseConstVolatile(ParseSession* session, const ListNode<std::size_t>* cv);
+  static uint parseConstVolatile(ParseSession* session, const ListNode<uint>* cv);
   
 protected:
   ///Returns either the current context, or the last importend parent-context(needed to find template-argument function return-values)
