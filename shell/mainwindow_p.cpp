@@ -151,10 +151,25 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
-    // We sometimes call changeActiveView(activeView()) to re-merge the main menu. We always have to perform the action.
+    mergeView(view);
     
-    bool wasActive = m_mainWindow->activeView() == view;
-    
+    IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
+    if (doc)
+    {
+        doc->activate(view, m_mainWindow);
+    }
+    else
+    {
+        //activated view is not a part document so we need to remove active part gui
+        ///@todo adymo: only this window needs to remove GUI
+//         KParts::Part *activePart = Core::self()->partController()->activePart();
+//         if (activePart)
+//             guiFactory()->removeClient(activePart);
+    }
+}
+
+void MainWindowPrivate::mergeView(Sublime::View* view)
+{
     PushPositiveValue<bool> block(m_changingActiveView, true);
 
     RestructureMenu menu(m_mainWindow->menuBar());
@@ -201,22 +216,6 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
         actionsBeforeMerge << action->objectName();;
     }
     
-    IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
-    if (doc)
-    {
-        //activate part if it is not yet activated
-        if(!wasActive)
-            doc->activate(view, m_mainWindow);
-    }
-    else
-    {
-        //activated view is not a part document so we need to remove active part gui
-        ///@todo adymo: only this window needs to remove GUI
-//         KParts::Part *activePart = Core::self()->partController()->activePart();
-//         if (activePart)
-//             guiFactory()->removeClient(activePart);
-    }
-
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
     {

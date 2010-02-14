@@ -71,6 +71,7 @@ public Q_SLOTS:
     void removePlugin( KDevelop::IPlugin *plugin );
 
     void activePartChanged(KParts::Part *part);
+    void mergeView(Sublime::View *view);
     void changeActiveView(Sublime::View *view);
     void xmlguiclientDestroyed(QObject* obj);
 

@@ -73,7 +73,7 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config, bool force)
     //we need to re-merge the menu, so that the menu can be re-structured again.
     //We do this by simply calling changeActiveView(activeView()).
     if(!d->changingActiveView())
-        d->changeActiveView(activeView());
+        d->mergeView(activeView());
 }
 
 QWidget* MainWindow::customButtonForAreaSwitcher ( Sublime::Area* area )
