@@ -58,6 +58,8 @@ QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
 void MainWindow::setupAreaSelector() {
     disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
     
+    d->areaSwitcher->setUpdatesEnabled(false);
+    
     d->areaSwitcher->tabBar->clearTabs();
     
     int currentIndex = -1;
@@ -84,6 +86,11 @@ void MainWindow::setupAreaSelector() {
     }
     
     d->areaSwitcher->tabBar->setCurrentIndex(currentIndex);
+    
+    d->areaSwitcher->updateGeometry();
+    
+    d->areaSwitcher->setUpdatesEnabled(true);
+    
     connect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
 }
 
