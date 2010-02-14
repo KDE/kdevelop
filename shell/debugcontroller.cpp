@@ -356,7 +356,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 {
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
     IDebugSession* session = static_cast<IDebugSession*>(sender());
-    kDebug() << session << state;
+    kDebug() << session << state << "current" << m_currentSession;
     if (session == m_currentSession) {
         updateDebuggerState(state, session);
     }
@@ -365,6 +365,8 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
         if (session == m_currentSession) {
             m_currentSession = 0;
             emit currentSessionChanged(0);
+            ICore::self()->uiController()->switchToArea("code", IUiController::ThisWindow);
+            ICore::self()->uiController()->findToolView(i18n("Debug"), 0, IUiController::Raise);
         }
         session->deleteLater();
     }
