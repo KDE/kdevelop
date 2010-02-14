@@ -38,6 +38,7 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
     qDebug() << "execute composite" << jobs;
     foreach(KJob* job, jobs) {
         addSubjob(job);
+        if (objectName().isEmpty()) setObjectName(job->objectName());
     }
 }
 
