@@ -65,6 +65,8 @@ void ExecuteCompositeJob::slotResult(KJob* job)
         KJob* nextJob=subjobs().first();
         nextJob->start();
     } else {
+        setError(job->error());
+        setErrorText(job->errorString());
         emitResult();
     }
 }
