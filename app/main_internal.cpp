@@ -91,7 +91,9 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         splash->show();
     }
 
-    Core::initialize(splash);
+    if(!Core::initialize(splash))
+        return 5;
+    
     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
 
