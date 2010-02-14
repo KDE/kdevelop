@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <ksharedconfig.h>
 #include <kurl.h>
 
+struct QUuid;
 class QString;
 class KUrl;
 
@@ -54,6 +55,7 @@ public:
     virtual KUrl::List containedProjects() const = 0;
     virtual KUrl pluginDataArea( const IPlugin* ) = 0;
     virtual KSharedConfig::Ptr config() = 0;
+    virtual QUuid id() const = 0;
 };
 
 }

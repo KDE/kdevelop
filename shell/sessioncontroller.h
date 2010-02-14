@@ -54,6 +54,8 @@ public:
     virtual ~SessionController();
     void initialize();
     void cleanup();
+    
+    bool lockSession();
 
     ///Finds a session by its name or by its UUID
     Session* session( const QString& nameOrId ) const;

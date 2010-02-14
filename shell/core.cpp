@@ -54,6 +54,7 @@
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
+#include <KMessageBox>
 
 namespace KDevelop {
 
@@ -87,7 +88,7 @@ CorePrivate::CorePrivate(Core *core):
 {
 }
 
-void CorePrivate::initialize(Core::Setup mode)
+bool CorePrivate::initialize(Core::Setup mode)
 {
     m_mode=mode;
     if( !sessionController )
@@ -161,6 +162,13 @@ void CorePrivate::initialize(Core::Setup mode)
 
     kDebug() << "initializing ui controller";
     sessionController->initialize();
+    
+    if(!sessionController->lockSession())
+    {
+        KMessageBox::error(0, i18n("This session is already active in another running instance"));
+        return false;
+    }
+    
     if(!(mode & Core::NoUi)) uiController->initialize();
     languageController->initialize();
     projectController->initialize();
@@ -192,6 +200,8 @@ void CorePrivate::initialize(Core::Setup mode)
     selectionController->initialize();
     documentationController->initialize();
     debugController->initialize();
+    
+    return true;
 }
 CorePrivate::~CorePrivate()
 {
@@ -211,16 +221,21 @@ CorePrivate::~CorePrivate()
 }
 
 
-void Core::initialize(KSplashScreen* splash, Setup mode)
+bool Core::initialize(KSplashScreen* splash, Setup mode)
 {
     if (m_self)
-        return;
+        return true;
 
     m_self = new Core();
-    m_self->d->initialize(mode);
+    bool ret = m_self->d->initialize(mode);
     if( splash ) {
         QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
     }
+    
+    if(ret)
+        emit m_self->initializationCompleted();
+    
+    return ret;
 }
 
 Core *KDevelop::Core::self()

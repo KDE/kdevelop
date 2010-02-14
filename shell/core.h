@@ -50,8 +50,10 @@ public:
 
     static QString version();
 
-    /** Initialize the core of the kdevplatform application */
-    static void initialize(KSplashScreen* splash = 0, Setup mode=Default);
+    /** Initialize the core of the kdevplatform application
+      * returns false if the initialization fails, which may happen
+      * if the same session is already active in another instance */
+    static bool initialize(KSplashScreen* splash = 0, Setup mode=Default);
 
     /**
      * \brief Provide access an instance of Core

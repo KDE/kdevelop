@@ -121,6 +121,10 @@ public:
     /** @return true if the application is currently being shut down */
     virtual bool shuttingDown() const = 0;
     
+    Q_SIGNALS:
+        /** Emitted when the initialization of the core components has been completed */
+        void initializationCompleted();
+    
 protected:
     ICore(QObject *parent = 0);
     static ICore *m_self;
