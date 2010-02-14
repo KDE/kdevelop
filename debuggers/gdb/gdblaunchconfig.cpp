@@ -177,6 +177,8 @@ GdbJob::GdbJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguratio
     connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(stderrReceived(QStringList)));
     connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(stdoutReceived(QStringList)));
     connect(m_session, SIGNAL(finished()), SLOT(done()) );
+    
+    setObjectName(launchcfg->name());
 }
 
 void GdbJob::start()
