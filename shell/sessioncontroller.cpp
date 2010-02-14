@@ -384,71 +384,73 @@ private slots:
     
     void recoveryStorageTimeout()
     {
+        if(!recoveryDirectoryIsOwn)
+            return;
+        
         QDir recoveryDir(ownSessionDirectory() + "/recovery");
         
-        if(!recoveryDirectoryIsOwn && !recoveryDir.exists())
+        if(!recoveryDir.exists())
         {
             // Try "taking" the recovery directory
             QDir sessionDir(ownSessionDirectory());
-            if(sessionDir.mkdir("recovery"))
-                recoveryDirectoryIsOwn = true;
+            if(!sessionDir.mkdir("recovery"))
+                return;
         }
 
-        if(recoveryDirectoryIsOwn)
+        recoveryDir.mkpath("backup"); //Just to make sure that the recovery directory actually exists
         {
-            recoveryDir.mkpath("backup"); //Just to make sure that the recovery directory actually exists
+            //Clear the backup dir
+            QDir recoveryBackupDir(recoveryDir.path() + "/backup");
+            foreach(QFileInfo file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
             {
-                //Clear the backup dir
-                QDir recoveryBackupDir(recoveryDir.path() + "/backup");
-                foreach(QFileInfo file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
-                {
-                    QFile::remove(file.absoluteFilePath());
-                }
-                
-                bool removed = recoveryDir.rmdir("backup");
-                Q_ASSERT(removed);
+                QFile::remove(file.absoluteFilePath());
             }
             
-            //Make the current recovery dir the backup dir, so we always have a recovery available
-            recoveryDir.rename("current", "backup");
+            bool removed = recoveryDir.rmdir("backup");
+            Q_ASSERT(removed);
+        }
+        
+        //Make the current recovery dir the backup dir, so we always have a recovery available
+        recoveryDir.rename("current", "backup");
 
+        {
+            recoveryDir.mkdir("current_incomplete");
+            
+            QDir recoveryCurrentDir(recoveryDir.path() + "/current_incomplete");
+
+            uint num = 0;
+            
+            foreach(KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
             {
-                recoveryDir.mkdir("current_incomplete");
-                
-                QDir recoveryCurrentDir(recoveryDir.path() + "/current_incomplete");
-
-                uint num = 0;
-                
-                foreach(KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
+                if(document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified)
                 {
-                    if(document->state() == IDocument::Modified || document->state() == IDocument::DirtyAndModified)
+                    //This document was modified, create a recovery-backup
+                    if(document->textDocument())
                     {
-                        //This document was modified, create a recovery-backup
-                        if(document->textDocument())
-                        {
-                            //Currently we can only back-up text documents
-                            QString text = document->textDocument()->text();
-                            
-                            QFile urlFile(recoveryCurrentDir.path() + QString("/%1_url").arg(num));
-                            urlFile.open(QIODevice::WriteOnly);
-                            urlFile.write(document->url().pathOrUrl().toUtf8());
-                            
-                            QFile f(recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num));
-                            f.open(QIODevice::WriteOnly);
-                            f.write(text.toUtf8());
-                        }
+                        //Currently we can only back-up text documents
+                        QString text = document->textDocument()->text();
+                        
+                        QFile urlFile(recoveryCurrentDir.path() + QString("/%1_url").arg(num));
+                        urlFile.open(QIODevice::WriteOnly);
+                        urlFile.write(document->url().pathOrUrl().toUtf8());
+                        
+                        QFile f(recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num));
+                        f.open(QIODevice::WriteOnly);
+                        f.write(text.toUtf8());
+                        
+                        ++num;
                     }
                 }
             }
-            
-            recoveryDir.rename("current_incomplete", "current");
-            
-            {
-                //Write down the date of the recovery
-                QFile dateFile(recoveryDir.path() + "/date");
-                dateFile.open(QIODevice::WriteOnly);
-                dateFile.write(QDateTime::currentDateTime().toString(Qt::DefaultLocaleShortDate).toUtf8());
-            }
+        }
+        
+        recoveryDir.rename("current_incomplete", "current");
+        
+        {
+            //Write down the date of the recovery
+            QFile dateFile(recoveryDir.path() + "/date");
+            dateFile.open(QIODevice::WriteOnly);
+            dateFile.write(QDateTime::currentDateTime().toString(Qt::DefaultLocaleShortDate).toUtf8());
         }
     }
 };
