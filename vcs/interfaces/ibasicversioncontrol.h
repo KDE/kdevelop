@@ -129,6 +129,14 @@ public:
     virtual VcsJob* move( const KUrl& localLocationSrc,
                           const KUrl& localLocationDst ) = 0;
 
+    /**
+     * Fetches the status of the given local vcs locations.
+     *
+     * The returned VcsJob populates a QList<QVariant> that can be fetched
+     * using fetchResults(). The QVariant inside the list wraps a
+     * KDevelo::VcsStatusInfo object which contains all the relevant
+     * information about the status of a specific file or folder
+     */
     virtual VcsJob* status( const KUrl::List& localLocations,
                             RecursionMode recursion = IBasicVersionControl::Recursive ) = 0;
 
