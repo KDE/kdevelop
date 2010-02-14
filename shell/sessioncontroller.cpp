@@ -202,10 +202,17 @@ public:
         }
     }
 
-    void loadSessionExternally( Session* s )
+    bool loadSessionExternally( Session* s )
     {
         Q_ASSERT( s );
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop", QStringList() << "-s" << s->id().toString() << standardArguments());
+        if( !SessionController::tryLockSession(s->id().toString()) )
+        {
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("The selected session is already active in another running instance"));
+            return false;
+        }else{
+            KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop", QStringList() << "-s" << s->id().toString() << standardArguments());
+            return true;
+        }
     }
     
     void activateSession( Session* s )
@@ -236,11 +243,14 @@ public:
         foreach( Session* s, sessionActions.keys() )
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
-                loadSessionExternally( s );
+                bool loaded = loadSessionExternally( s );
                 
-                //Terminate this instance of kdevelop if the user agrees
-                foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
-                    window->close();
+                if(loaded)
+                {
+                    //Terminate this instance of kdevelop if the user agrees
+                    foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+                        window->close();
+                }
                 break;
             }
         }

@@ -31,6 +31,7 @@ Boston, MA 02110-1301, USA.
 #include <ksharedconfig.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
+#include <klockfile.h>
 
 namespace KDevelop
 {
@@ -54,6 +55,9 @@ public:
     virtual ~SessionController();
     void initialize();
     void cleanup();
+    
+    /// Returns whether the given session can be locked
+    static bool tryLockSession(QString id);
     
     bool lockSession();
 
@@ -191,6 +195,12 @@ inline QList< SessionInfo > SessionController::availableSessionInfo()
 inline QString SessionController::sessionDirectory()
 {
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
+}
+
+inline bool SessionController::tryLockSession(QString id)
+{
+    KLockFile::Ptr lock(new KLockFile(sessionDirectory() + "/" + id + "/lock"));
+    return lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
 }
 
 }
