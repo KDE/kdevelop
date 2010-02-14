@@ -4235,16 +4235,21 @@ bool Parser::parseCastExpression(ExpressionAST *&node)
     {
       advance();
 
-      CastExpressionAST *ast = CreateNode<CastExpressionAST>(session->mempool);
 
-      if (parseTypeId(ast->type_id))
+      TypeIdAST *typeIdAst = 0;
+      if (parseTypeId(typeIdAst))
         {
           if (session->token_stream->lookAhead() == ')')
             {
               advance();
 
-              if (parseCastExpression(ast->expression))
+              ExpressionAST *castExpressionAst = 0;
+              if (parseCastExpression(castExpressionAst))
                 {
+                  CastExpressionAST *ast = CreateNode<CastExpressionAST>(session->mempool);
+                  ast->type_id = typeIdAst;
+                  ast->expression = castExpressionAst;
+                  
                   UPDATE_POS(ast, start, _M_last_valid_token+1);
                   node = ast;
 
