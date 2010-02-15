@@ -86,7 +86,6 @@ set(kdevplatformshell_UI
 kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
 kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
 target_link_libraries(kdevplatformshell 
-        ${KDE4_KDE3SUPPORT_LIBS} 
         ${KDE4_KIO_LIBS} 
         ${KDE4_KFILE_LIBS}
         ${KDE4_KUTILS_LIBS} 

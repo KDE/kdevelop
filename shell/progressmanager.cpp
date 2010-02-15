@@ -25,7 +25,6 @@
 
 #include <KDebug>
 #include <KLocale>
-#include <K3StaticDeleter>
 
 namespace KDevelop
 {
@@ -132,7 +131,6 @@ ProgressManager::ProgressManager()
 {}
 
 ProgressManager::~ProgressManager() {} 
-static K3StaticDeleter<ProgressManager> progressManagerDeleter;
 
 ProgressItem *ProgressManager::createProgressItemImpl( ProgressItem *parent,
                                                        const QString &id,
@@ -203,13 +201,13 @@ void ProgressManager::slotStandardCancelHandler( ProgressItem *item )
 ProgressItem *ProgressManager::singleItem() const
 {
   ProgressItem *item = 0;
-  Q3DictIterator< ProgressItem > it( mTransactions );
-  for ( ; it.current(); ++it ) {
-    if ( !(*it)->parent() ) { // if it's a top level one, only those count
+  QHash< QString, ProgressItem* >::const_iterator it, end = mTransactions.constEnd();
+  for ( it = mTransactions.constBegin(); it != end; ++it ) {
+    if ( !(it.value())->parent() ) { // if it's a top level one, only those count
       if ( item ) {
         return 0; // we found more than one
       } else {
-        item = (*it);
+        item = (it.value());
       }
     }
   }
@@ -218,9 +216,9 @@ ProgressItem *ProgressManager::singleItem() const
 
 void ProgressManager::slotAbortAll()
 {
-  Q3DictIterator< ProgressItem > it( mTransactions );
-  for ( ; it.current(); ++it ) {
-    it.current()->cancel();
+  QHash< QString, ProgressItem* >::iterator it, end = mTransactions.end();
+  for ( it = mTransactions.begin(); it != end; ++it ) {
+    it.value()->cancel();
   }
 }
 

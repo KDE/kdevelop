@@ -29,7 +29,7 @@
 #include <QObject>
 #include <QString>
 #include <QMap>
-#include <Q3Dict>
+#include <QHash>
 
 namespace KDevelop
 {
@@ -41,7 +41,7 @@ class ProgressItem : public QObject
 {
   Q_OBJECT
   friend class ProgressManager;
-  friend class Q3Dict< ProgressItem >; // so it can be deleted from dicts
+  friend class QHash< QString, ProgressItem* >; // so it can be deleted from dicts
 
   public:
 
@@ -394,7 +394,7 @@ Q_OBJECT
                                                   bool cancellable);
     void emitShowProgressDialogImpl();
 
-    Q3Dict< ProgressItem > mTransactions;
+    QHash< QString, ProgressItem* > mTransactions;
     static unsigned int uID;
 };
 
