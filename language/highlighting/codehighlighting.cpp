@@ -53,9 +53,6 @@ namespace KDevelop {
 CodeHighlighting::CodeHighlighting( QObject * parent )
   : QObject(parent), m_localColorization(true), m_globalColorization(true)
 {
-  // make sure the singleton is setup
-  ColorCache::initialize();
-
   adaptToColorChanges();
 
   connect(ColorCache::self(), SIGNAL(colorsGotChanged()),

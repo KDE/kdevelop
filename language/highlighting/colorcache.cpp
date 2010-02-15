@@ -119,16 +119,10 @@ ColorCache::~ColorCache()
 
 ColorCache* ColorCache::self()
 {
-  return m_self;
-}
-
-void ColorCache::initialize()
-{
-  if (m_self) {
-    return;
+  if (!m_self) {
+    m_self = new ColorCache;
   }
-
-  m_self = new ColorCache;
+  return m_self;
 }
 
 void ColorCache::generateColors()
