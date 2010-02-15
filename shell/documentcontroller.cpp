@@ -692,15 +692,15 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
 {
     // Gather a list of all documents which have views only in the given main window
     QList<IDocument*> checkSave;
+    
     foreach (IDocument* doc, openDocuments()) {
         if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             bool inOtherWindow = false;
 
             foreach (Sublime::View* view, sdoc->views()) {
-                if (view->hasWidget() && view->widget()->window() != mw) {
-                    inOtherWindow = true;
-                    break;
-                }
+                foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows())
+                    if(window != mw && window->containsView(view))
+                        inOtherWindow = true;
             }
 
             if (!inOtherWindow)
