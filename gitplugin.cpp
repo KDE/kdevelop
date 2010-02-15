@@ -200,6 +200,8 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                         VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
 {
+    //TODO: control different types
+    
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, fileOrDirectory.toLocalFile()) ) {
         KUrl::List files;
@@ -871,7 +873,10 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
 
 void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 {
-    job->setResults(job->output());
+    VcsDiff diff;
+    diff.setDiff(job->output());
+    
+    job->setResults(qVariantFromValue(diff));
 }
 
 QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args,
