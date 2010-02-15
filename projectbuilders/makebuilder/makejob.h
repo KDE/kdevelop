@@ -56,7 +56,7 @@ public:
         IncorrectItemError = UserDefinedError,
         InvalidBuildDirectoryError,
         BuildCommandError,
-        FailedError
+        FailedError = FailedShownError
     };
 
     MakeJob( MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType command, const QString& overrideTarget = QString() );
