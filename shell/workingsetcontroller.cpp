@@ -675,10 +675,6 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
         return;
     }
     changed(area);
-    if (isEmpty()) {
-        kDebug() << "setting zero working set, because area" << area->objectName() << "is empty";
-        area->setWorkingSet(QString()); //Set the empty working-set if the area has been emptied
-    }
 }
 
 WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
