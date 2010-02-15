@@ -44,24 +44,6 @@ class CppDebuggerPlugin;
 class DebugSession;
 }
 
-class GdbJob : public KDevelop::OutputJob
-{
-Q_OBJECT
-public:
-    GdbJob( GDBDebugger::CppDebuggerPlugin*, KDevelop::ILaunchConfiguration*, QObject* parent = 0 );
-    virtual void start();
-protected:
-    virtual bool doKill();
-private slots:
-    void stdoutReceived(const QStringList&);
-    void stderrReceived(const QStringList&);
-    void done();
-private:
-    KDevelop::OutputModel* model();
-    GDBDebugger::DebugSession* m_session;
-    KDevelop::ILaunchConfiguration* m_launchcfg;
-};
-
 class GdbConfigPageFactory : public KDevelop::LaunchConfigurationPageFactory
 {
 public:

@@ -36,6 +36,7 @@ set(kdevgdb_PART_SRCS
     stringhelpers.cpp
     debugsession.cpp
     gdblaunchconfig.cpp
+    debugjob.cpp
     selectcoredialog.cpp
     variablecontroller.cpp
     gdbframestackmodel.cpp

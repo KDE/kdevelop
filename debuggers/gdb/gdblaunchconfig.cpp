@@ -34,13 +34,13 @@
 #include <outputview/outputmodel.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentgrouplist.h>
-#include <execute/iexecuteplugin.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectbuilder.h>
 #include <project/builderjob.h>
 #include <interfaces/iuicontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <util/executecompositejob.h>
+#include <execute/iexecuteplugin.h>
 
 #include "debugsession.h"
 #include "debuggerplugin.h"
@@ -48,6 +48,9 @@
 #include "ui_debuggerconfigwidget.h"
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/icore.h>
+#include "debugjob.h"
+
+using namespace KDevelop;
 
 GdbConfigPage::GdbConfigPage( QWidget* parent )
     : LaunchConfigurationPage(parent), ui( new Ui::DebuggerConfigWidget )
@@ -146,7 +149,7 @@ KJob* GdbLauncher::start(const QString& launchMode, KDevelop::ILaunchConfigurati
         {
             l << depjob;
         }
-        l << new GdbJob( m_plugin, cfg );
+        l << new GDBDebugger::DebugJob( m_plugin, cfg );
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
     }
     kWarning() << "Unknown launch mode" << launchMode << "for config:" << cfg->name();
@@ -168,98 +171,6 @@ KDevelop::LaunchConfigurationPage* GdbConfigPageFactory::createWidget( QWidget* 
     return new GdbConfigPage( parent );
 }
 
-GdbJob::GdbJob( GDBDebugger::CppDebuggerPlugin* p, KDevelop::ILaunchConfiguration* launchcfg, QObject* parent) 
-    : KDevelop::OutputJob(parent), m_launchcfg( launchcfg )
-{
-    setCapabilities(Killable);
-
-    m_session = p->createSession();
-    connect(m_session, SIGNAL(applicationStandardOutputLines(QStringList)), SLOT(stderrReceived(QStringList)));
-    connect(m_session, SIGNAL(applicationStandardErrorLines(QStringList)), SLOT(stdoutReceived(QStringList)));
-    connect(m_session, SIGNAL(finished()), SLOT(done()) );
-    
-    setObjectName(launchcfg->name());
-}
-
-void GdbJob::start()
-{
-    KConfigGroup grp = m_launchcfg->config();
-    KDevelop::EnvironmentGroupList l(KGlobal::config());
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
-    QString err;
-    QString executable = iface->executable( m_launchcfg, err ).toLocalFile();
-    QString envgrp = iface->environmentGroup( m_launchcfg );
-    
-    if( !err.isEmpty() )
-    {
-        setError( -1 );
-        setErrorText( err );
-        emitResult();
-        return;
-    }
-    
-    if( envgrp.isEmpty() )
-    {
-        kWarning() << i18n("No environment group specified, looks like a broken "
-        "configuration, please check run configuration '%1'. "
-        "Using default environment group.", m_launchcfg->name() );
-        envgrp = l.defaultGroup();
-    }
-    
-    QStringList arguments = iface->arguments( m_launchcfg, err );
-    if( !err.isEmpty() )
-    {
-        setError( -1 );
-        setErrorText( err );
-    }
-    if( error() != 0 )
-    {
-        emitResult();
-        return;
-    }
-    
-    setStandardToolView(KDevelop::IOutputView::DebugView);
-    setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
-    setTitle(m_launchcfg->name());
-    
-    startOutput();
-    
-    m_session->startProgram( m_launchcfg );
-}
-
-bool GdbJob::doKill()
-{
-    kDebug();
-    m_session->stopDebugger();
-    return true;
-}
-
-void GdbJob::stderrReceived(const QStringList& l )
-{
-    if (KDevelop::OutputModel* m = model()) {
-        m->appendLines( l );
-    }
-}
-
-void GdbJob::stdoutReceived(const QStringList& l )
-{
-    if (KDevelop::OutputModel* m = model()) {
-        m->appendLines( l );
-    }
-}
-
-KDevelop::OutputModel* GdbJob::model()
-{
-    return dynamic_cast<KDevelop::OutputModel*>( KDevelop::OutputJob::model() );
-}
-
-
-void GdbJob::done()
-{
-    emitResult();
-}
 
 
 #include "gdblaunchconfig.moc"
