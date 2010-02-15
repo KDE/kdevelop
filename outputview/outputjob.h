@@ -38,6 +38,10 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputJob : public KJob
     Q_OBJECT
 
 public:
+    enum
+    {
+        FailedShownError = UserDefinedError + 100 //job failed and failure is shown in OutputView
+    };
     enum OutputJobVerbosity { Silent, Verbose };
 
     OutputJob(QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);

@@ -569,6 +569,7 @@ void KDevelop::RunController::finished(KJob * job)
     switch (job->error()) {
         case KJob::NoError:
         case KJob::KilledJobError:
+        case OutputJob::FailedShownError:
             break;
 
         default:
