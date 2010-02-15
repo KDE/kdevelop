@@ -244,8 +244,10 @@ class CppDUContext : public BaseContext {
     ///Overridden to take care of templates and other c++ specific things
     virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags, uint depth ) const
     {
-      if(this->type() == DUContext::Class && identifiers.count() == 1 && !(basicFlags & DUContext::NoSelfLookUp) && !(basicFlags & DUContext::OnlyFunctions) && this->localScopeIdentifier().count()) {
-        
+      if(this->type() == DUContext::Class && identifiers.count() == 1 &&
+        !(basicFlags & DUContext::NoSelfLookUp) && !(basicFlags & DUContext::OnlyFunctions) && this->localScopeIdentifier().count() &&
+        !identifiers[0]->isExplicitlyGlobal) {
+
         //Check whether we're searching for just the name of this context's class. If yes, return this context's owner.
         if(matchSearchItem(identifiers[0], this)) {
           

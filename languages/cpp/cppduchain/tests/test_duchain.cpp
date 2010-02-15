@@ -1772,7 +1772,40 @@ void TestDUChain::testDeclareNamespace()
       QCOMPARE(items[a].referenceCount, 1u); //Once by the namespace, once by the declaration
     }
   }
+
+  release(top);
+}
+
+void TestDUChain::testDeclareNamespace2()
+{
+  TEST_FILE_PARSE_ONLY
+
+  //                 0         1         2         3         4         5         6         7
+  //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
+  QByteArray method("struct A {}; namespace B { struct A : ::A {}; }");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QVERIFY(!top->parentContext());
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 2);
+  QCOMPARE(top->childContexts()[1]->localDeclarations().count(), 1);
   
+  CppClassType::Ptr outerA = top->localDeclarations()[0]->abstractType().cast<CppClassType>();
+  CppClassType::Ptr innerA = top->childContexts()[1]->localDeclarations()[0]->abstractType().cast<CppClassType>();
+  
+  QVERIFY(outerA);
+  QVERIFY(innerA);
+  
+  Declaration* klassDecl = innerA->declaration(top);
+  ClassDeclaration* cppClassDecl = dynamic_cast<ClassDeclaration*>(klassDecl);
+
+  QVERIFY(cppClassDecl);
+  QCOMPARE(cppClassDecl->baseClassesSize(), (uint)1);
+  QCOMPARE(cppClassDecl->baseClasses()->baseClass, outerA->indexed());
+
   release(top);
 }
 

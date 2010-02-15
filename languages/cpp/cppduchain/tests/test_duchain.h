@@ -74,6 +74,7 @@ private slots:
   void testDeclareClass();
   void testDeclareFriend();
   void testDeclareNamespace();
+  void testDeclareNamespace2();
   void testDeclareUsingNamespace();
   void testUsingDeclaration();
   void testUsingDeclarationInTemplate();
