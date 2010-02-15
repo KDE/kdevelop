@@ -30,7 +30,6 @@
 #include <cctype>
 #include "ast.h"
 #include "dumptree.h"
-#include "parentvisitor.h"
 
 ParseSession::ParseSession()
   : mempool(new pool)
@@ -162,12 +161,6 @@ void ParseSession::setContentsAndGenerateLocationTable(const PreprocessedContent
   m_contents.append(0);
 
   m_locationTable = new rpp::LocationTable(m_contents);
-}
-
-void ParseSession::setASTNodeParents()
-{
-  ParentVisitor visitor;
-  visitor.visit(m_topAstNode);
 }
 
 void ParseSession::setUrl(const KDevelop::IndexedString& url)

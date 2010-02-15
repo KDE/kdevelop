@@ -793,7 +793,6 @@ void CPPInternalParseJob::run()
         if(keepAST)
         {
           kDebug() << "AST Is being kept for" << parentJob()->document().toUrl();
-          parentJob()->parseSession()->setASTNodeParents();
           contentContext->setAst(IAstContainer::Ptr( parentJob()->parseSession().data() ));
         }
 

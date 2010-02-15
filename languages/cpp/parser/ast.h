@@ -203,12 +203,6 @@ public:
   uint start_token;
   uint end_token;
 
-  /**
-    * The parent node of this AST node. This is only set when the ParentVisitor
-    * is ran over the tree.
-    */
-  AST *parent;
-
   /** Context opened by this AST
     *This is usually not filled for all AST's, only for those that open a new context
     */

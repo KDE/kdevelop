@@ -103,9 +103,6 @@ public:
   /// Unweildy name, but we want to be clear here, if there is already a location table, this would be the wrong setup function to call
   void setContentsAndGenerateLocationTable(const PreprocessedContents& contents);
 
-  /// Visits the tree and sets the appropriate nodes as parent on each node of the tree.
-  void setASTNodeParents();
-
   void setUrl(const KDevelop::IndexedString& url);
   const KDevelop::IndexedString& url() const;
 
