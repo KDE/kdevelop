@@ -90,9 +90,6 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
   if (node->name) {
     DUChainReadLocker lock(DUChain::lock());
 
-    CppClassType::Ptr klass = currentAbstractType().cast<CppClassType>();
-    Q_ASSERT( klass );
-
     bool openedType = openTypeFromName(node->name, AbstractType::NoModifiers, true);
 
     if( openedType ) {
