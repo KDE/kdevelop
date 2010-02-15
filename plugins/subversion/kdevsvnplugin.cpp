@@ -79,7 +79,8 @@ K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion", "kdevsubversion", ki
 
 KDevSvnPlugin::KDevSvnPlugin(QObject *parent, const QVariantList &)
         : KDevelop::IPlugin(KDevSvnFactory::componentData(), parent)
-        , m_common(new KDevelop::VcsPluginHelper(this, this))
+        , m_common(new KDevelop::VcsPluginHelper(this, this)), svnmenu( 0 ),
+        copy_action( 0 ), move_action( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::IBasicVersionControl)
     KDEV_USE_EXTENSION_INTERFACE(KDevelop::ICentralizedVersionControl)
@@ -331,25 +332,34 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
         return IPlugin::contextMenuExtension(context);
 
 
-    QMenu* menu = new QMenu("Subversion");
+    if( !svnmenu ) 
+    {
+        svnmenu = new QMenu("Subversion");
+    }
+    svnmenu->clear();
 
     QList<QAction*> actions = m_common->commonActions();
     if (!actions.empty()) {
-        menu->addActions(actions);
-        menu->addSeparator();
+        svnmenu->addActions(actions);
+        svnmenu->addSeparator();
     }
 
-    KAction *action;
-    action = new KAction(i18n("Copy..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxCopy()));
-    menu->addAction(action);
+    if( !copy_action )
+    {
+        copy_action = new KAction(i18n("Copy..."), this);
+        connect(copy_action, SIGNAL(triggered()), this, SLOT(ctxCopy()));
+    }
+    svnmenu->addAction(copy_action);
 
-    action = new KAction(i18n("Move..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxMove()));
-    menu->addAction(action);
+    if( !move_action )
+    {
+        move_action = new KAction(i18n("Move..."), this);
+        connect(move_action, SIGNAL(triggered()), this, SLOT(ctxMove()));
+    }
+    svnmenu->addAction(move_action);
 
     KDevelop::ContextMenuExtension menuExt;
-    menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction());
+    menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, svnmenu->menuAction());
 
     return menuExt;
 }
