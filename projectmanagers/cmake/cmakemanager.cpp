@@ -567,7 +567,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     }
                     
                     new KDevelop::ProjectFileItem( item->project(), sourceFile, targetItem );
-                    item->project()->addToFileSet( KDevelop::IndexedString( sourceFile ) );
                     kDebug(9042) << "..........Adding:" << sourceFile;
                 }
             }
@@ -862,7 +861,6 @@ void CMakeManager::dirtyFile(const QString & dirty)
                             case ProjectBaseItem::File:
                                 foreach(const ProjectFileItem* removed, p->filesForUrl(fileurl))
                                     removed->parent()->removeRow(removed->row());
-                                p->removeFromFileSet(IndexedString(fileurl));
                                 break;
                             case ProjectBaseItem::Folder:
                             case ProjectBaseItem::BuildFolder:
@@ -1107,8 +1105,6 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
 {
     bool ret=true;
-    it->project()->removeFromFileSet(KDevelop::IndexedString(it->url()));
-    
     QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
     QList<ProjectTargetItem*> targets;
 
@@ -1150,9 +1146,7 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     {
         if(e.exec())
         {
-            bool saved=e.applyAllChanges();
-            if(saved)
-                it->project()->removeFromFileSet(IndexedString(it->url()));
+            e.applyAllChanges();
         }
     }
     
@@ -1163,7 +1157,6 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
 KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
 {
     ProjectFileItem* it = new KDevelop::ProjectFileItem( parent->project(), url, parent );
-    parent->project()->addToFileSet( KDevelop::IndexedString( url ) );
     return it;
 }
 
@@ -1296,10 +1289,6 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         kDebug() << "rename" << it->url() << "->" << newUrl;
         bool ret=KIO::NetAccess::synchronousRun(job, 0);
         
-        if(ret) {
-            it->project()->removeFromFileSet(IndexedString(it->url()));
-            it->project()->addToFileSet(IndexedString(newUrl));
-        }
         return ret;
     }
     
@@ -1329,7 +1318,6 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 
     if(ret && e.exec())
     {
-        it->project()->removeFromFileSet(IndexedString(it->url()));
         KIO::CopyJob* job=KIO::move(it->url(), newUrl);
         ret=e.applyAllChanges();
         
