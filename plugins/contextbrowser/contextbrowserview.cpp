@@ -504,6 +504,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     
     m_toolbarWidgetLayout->addWidget(m_previousButton);
     m_toolbarWidgetLayout->addWidget(m_outlineLine);
+    m_outlineLine->setMaximumWidth(600);
     m_toolbarWidgetLayout->addWidget(m_nextButton);
     m_toolbarWidgetLayout->addWidget(m_browseButton);
     
