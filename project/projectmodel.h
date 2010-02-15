@@ -247,6 +247,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
 public:
     ProjectFileItem( IProject*, const KUrl& file, QStandardItem *parent = 0 );
+    ~ProjectFileItem();
 
     ///Reimplemented from QStandardItem
     virtual int type() const;

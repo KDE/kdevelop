@@ -219,7 +219,6 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
             if ( index == -1 ) {
                 // file got removed or is now invalid
                 kDebug() << "removing file:" << f->url();
-                baseItem->project()->removeFromFileSet( KDevelop::IndexedString( f->url() ) );
                 baseItem->removeRow( j );
                 --j;
             } else {
@@ -232,7 +231,6 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
     // add new rows
     foreach ( const KUrl& url, files ) {
         new KDevelop::ProjectFileItem( baseItem->project(), url, baseItem );
-        baseItem->project()->addToFileSet( KDevelop::IndexedString( url ) );
     }
     foreach ( const KUrl& url, folders ) {
         emit appendSubDir( new KDevelop::ProjectFolderItem( baseItem->project(), url, baseItem ) );
@@ -292,7 +290,6 @@ void GenericProjectManager::created(const QString &path)
                 eventuallyReadFolder(new KDevelop::ProjectFolderItem( p, url, parentItem ));
             } else {
                 new KDevelop::ProjectFileItem( p, url, parentItem );
-                p->addToFileSet( KDevelop::IndexedString( url ) );
             }
         }
     }
@@ -364,8 +361,6 @@ bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const 
     kDebug() << "trying to rename a file:" << file->url() << url;
 
     if ( rename(file, file->url(), url) ) {
-        file->project()->removeFromFileSet( KDevelop::IndexedString( file->url() ) );
-        file->project()->addToFileSet( KDevelop::IndexedString( url ) );
         file->setUrl(url);
         return true;
     } else {

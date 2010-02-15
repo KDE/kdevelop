@@ -19,6 +19,7 @@ target_link_libraries(kdevplatformproject
         ${QT_QTDESIGNER_LIBRARY} 
         kdevplatforminterfaces
         kdevplatformutil
+	kdevplatformlanguage
         ${KDE4_KIO_LIBS})
 target_link_libraries(kdevplatformproject LINK_INTERFACE_LIBRARIES 
         ${QT_QTGUI_LIBRARY} 

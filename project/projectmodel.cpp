@@ -36,6 +36,7 @@
 #include <interfaces/iproject.h>
 #include "interfaces/iprojectfilemanager.h"
 #include <KIO/NetAccess>
+#include <language/duchain/indexedstring.h>
 
 namespace KDevelop
 {
@@ -355,6 +356,12 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandar
     setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
 }
 
+ProjectFileItem::~ProjectFileItem()
+{
+    Q_D(ProjectFileItem);
+    project()->removeFromFileSet(KDevelop::IndexedString(d->m_url));
+}
+
 void ProjectFileItem::setData(const QVariant& value, int role)
 {
     if(role==Qt::EditRole) {
@@ -386,6 +393,10 @@ const QString& ProjectFileItem::fileName() const
 void ProjectFileItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectFileItem);
+    if(!d->m_url.isEmpty())
+        project()->removeFromFileSet( KDevelop::IndexedString(d->m_url) );
+    project()->addToFileSet( KDevelop::IndexedString(url) );
+    
     d->m_url = url;
     d->m_fileName = d->m_url.fileName();
     setText( d->m_fileName );
