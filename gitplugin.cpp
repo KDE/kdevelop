@@ -59,9 +59,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 }
 
 GitPlugin::~GitPlugin()
-{
-}
-
+{}
 
 void GitPlugin::unload()
 {
@@ -263,7 +261,8 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     return NULL;
 }
 
-KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&) {
+KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
+{
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocation.toLocalFile()) ) {
         *job << "git";
@@ -280,11 +279,12 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
     return job;
 }
 
-void GitPlugin::parseGitBlameOutput(DVcsJob *job) {
+void GitPlugin::parseGitBlameOutput(DVcsJob *job)
+{
     QList<QVariant> results;
     int lineNumber = 0;
-    QRegExp regex("(\\w{8}) .* ?\\((.*) (\\d+) [-+]\\d+\\s+\\d+\\)");
-    foreach(QString line, job->output().split('\n')) {
+    /*static? */QRegExp regex("(\\w{8}) .* ?\\((.*) (\\d+) [-+]\\d+\\s+\\d+\\)");
+    foreach(const QString& line, job->output().split('\n')) {
         if (regex.indexIn(line) == 0) {
             VcsAnnotationLine annotation;
             annotation.setAuthor(regex.cap(2));
@@ -309,8 +309,9 @@ DVcsJob* GitPlugin::var(const QString & repository)
         *job << "-l";
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    if (job)
+        delete job;
+    return 0;
 }
 
 DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branch)
@@ -323,8 +324,10 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
         *job << branch;
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    
+    if (job)
+        delete job;
+    return 0;
 }
 
 DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch, const QString &branch,
@@ -386,35 +389,37 @@ DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
 
 QString GitPlugin::curBranch(const QString &repository)
 {
+    QString branchName;
     DVcsJob* job = branch(repository);
     if (job)
     {
         kDebug() << "Getting branch list";
         job->exec();
+        
+        if (job->status() == KDevelop::VcsJob::JobSucceeded)
+            branchName = job->output();
     }
-    QString branch;
-    if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        branch = job->output();
 
-    branch = branch.prepend('\n').section("\n*", 1);
-    branch = branch.section('\n', 0, 0).trimmed();
-    kDebug() << "Current branch is: " << branch;
-    return branch;
+    branchName = branchName.prepend('\n').section("\n*", 1);
+    branchName = branchName.section('\n', 0, 0).trimmed();
+    kDebug() << "Current branch is: " << branchName;
+    return branchName;
 }
 
 QStringList GitPlugin::branches(const QString &repository)
 {
+    QStringList branchListDirty;
     DVcsJob* job = branch(repository);
     if (job)
     {
         kDebug() << "Getting branch list";
         job->exec();
+        
+        if (job->status() == KDevelop::VcsJob::JobSucceeded)
+            branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
+        else
+            return QStringList();
     }
-    QStringList branchListDirty;
-    if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
-    else
-        return QStringList();
 
     QStringList branchList;
     foreach(QString branch, branchListDirty)
@@ -422,13 +427,13 @@ QStringList GitPlugin::branches(const QString &repository)
         if (branch.contains('*'))
         {
             branch = branch.prepend('\n').section("\n*", 1);
-            branch = branch.trimmed();
         }
         else
         {
             branch = branch.prepend('\n').section('\n', 1);
-            branch = branch.trimmed();
         }
+        
+        branch = branch.trimmed();
         branchList<<branch;
     }
     return branchList;
@@ -466,13 +471,11 @@ QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory)
     QList<QVariant> modifiedFiles;
     foreach(const QString &line, output)
     {
-        QChar stCh = line[97];
-
         KUrl file(stripPathToDir(directory) + line.section('\t', 1).trimmed());
 
         VcsStatusInfo status;
         status.setUrl(file);
-        status.setState(charToState(stCh.toAscii() ) );
+        status.setState(charToState(line.section(' ', 4, 4)[0].toAscii()) );
         kDebug() << line[97] << " " << file.toLocalFile();
 
         modifiedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
@@ -519,15 +522,13 @@ QList<QVariant> GitPlugin::getCachedFiles(const QString &directory)
 
     foreach(const QString &line, output)
     {
-        QChar stCh = line[97];
-
         KUrl file(stripPathToDir(directory) + line.section('\t', 1).trimmed());
 
         VcsStatusInfo status;
         status.setUrl(file);
-        //TODO: use abother charToState or anything else! If order of constants is changed... dangerous!!!
-        status.setState(VcsStatusInfo::State(charToState(stCh.toAscii() ) +
-                                             VcsStatusInfo::ItemAddedIndex - VcsStatusInfo::ItemAdded) );
+        
+        status.setState(VcsStatusInfo::State(charToState(line.section(' ', 4, 4)[0].toAscii() ) +
+                                             VcsStatusInfo::ItemAdded) );
 
         kDebug() << line[97] << " " << file.toLocalFile();
 
@@ -856,23 +857,19 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
 {
     //Use prepareJob() here only if you like "dead" recursion and KDevelop crashes
     DVcsJob* job = new DVcsJob(this, verbosity);
-    if (job)
-    {
-        QString workDir = repository;
-        QFileInfo fsObject(workDir);
-        if (fsObject.isFile())
-            workDir = fsObject.path();
+    QString workDir = repository;
+    QFileInfo fsObject(workDir);
+    if (fsObject.isFile())
+        workDir = fsObject.path();
 
-        job->clear();
-        job->setDirectory(workDir);
-        *job << "git";
-        *job << "rev-parse";
-        foreach(const QString &arg, args)
-            *job << arg;
-        return job;
-    }
-    if (job) delete job;
-    return NULL;
+    job->clear();
+    job->setDirectory(workDir);
+    *job << "git";
+    *job << "rev-parse";
+    foreach(const QString &arg, args)
+        *job << arg;
+
+    return job;
 }
 
 DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &args)
@@ -885,35 +882,23 @@ DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &arg
             *job << arg;
         return job;
     }
-    if (job) delete job;
+    if (job)
+        delete job;
     return NULL;
 }
 
-KDevelop::VcsStatusInfo::State GitPlugin::charToState(const char ch)
+KDevelop::VcsStatusInfo::State GitPlugin::charToState(char ch)
 {
     switch (ch)
     {
         case 'M':
-        {
             return VcsStatusInfo::ItemModified;
-            break;
-        }
         case 'A':
-        {
             return VcsStatusInfo::ItemAdded;
-            break;
-        }
         case 'D':
-        {
             return VcsStatusInfo::ItemDeleted;
-            break;
-        }
-        //ToDo: hasConflicts
-        default:
-        {
+        default://TODO: hasConflicts
             return VcsStatusInfo::ItemUnknown;
-            break;
-        }
     }
     return VcsStatusInfo::ItemUnknown;
 }
