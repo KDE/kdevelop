@@ -286,7 +286,6 @@ CppDebuggerPlugin::~CppDebuggerPlugin()
 
 void CppDebuggerPlugin::initializeGuiState()
 {
-    stateChanged("stopped");
 }
 
 KDevelop::ContextMenuExtension CppDebuggerPlugin::contextMenuExtension( KDevelop::Context* context )
