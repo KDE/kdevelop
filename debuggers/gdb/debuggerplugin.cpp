@@ -80,6 +80,7 @@
 
 #include <iostream>
 #include "gdblaunchconfig.h"
+#include "debugjob.h"
 
 
 namespace GDBDebugger
@@ -362,7 +363,13 @@ void CppDebuggerPlugin::slotExamineCore()
 
     emit showMessage(this, i18n("Examining core file %1", dlg.core().toLocalFile()), 1000);
 
-    createSession()->examineCoreFile(dlg.binary(), dlg.core());
+    DebugSession* session = createSession();
+    session->examineCoreFile(dlg.binary(), dlg.core());    
+        
+    KillSessionJob *job = new KillSessionJob(session);
+    job->setObjectName(i18n("Debug core file"));
+    core()->runController()->registerJob(job);
+    job->start();
 }
 
 
@@ -386,7 +393,13 @@ void CppDebuggerPlugin::attachProcess(int pid)
 {
     emit showMessage(this, i18n("Attaching to process %1", pid), 1000);
 
-    createSession()->attachToProcess(pid);
+    DebugSession* session = createSession();
+    session->attachToProcess(pid);
+    
+    KillSessionJob *job = new KillSessionJob(session);
+    job->setObjectName(i18n("Debug process %1").arg(pid));
+    core()->runController()->registerJob(job);
+    job->start();    
 }
 
 // Used to disable breakpoint actions when non-text document selected

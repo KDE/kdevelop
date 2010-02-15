@@ -126,3 +126,26 @@ void DebugJob::done()
 {
     emitResult();
 }
+
+
+KillSessionJob::KillSessionJob(DebugSession *session, QObject* parent): m_session(session), KJob(parent)
+{
+    connect(m_session, SIGNAL(finished()), SLOT(sessionFinished()));
+    setCapabilities(Killable);
+}
+
+void KillSessionJob::start()
+{
+    //NOOP
+}
+
+bool KillSessionJob::doKill()
+{
+    m_session->stopDebugger();
+    return true;
+}
+
+void KillSessionJob::sessionFinished()
+{
+    emitResult();
+}

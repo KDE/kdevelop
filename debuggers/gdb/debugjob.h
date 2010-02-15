@@ -41,7 +41,7 @@ class DebugJob : public KDevelop::OutputJob
 {
 Q_OBJECT
 public:
-    DebugJob( GDBDebugger::CppDebuggerPlugin*, KDevelop::ILaunchConfiguration*, QObject* parent = 0 );
+    DebugJob( CppDebuggerPlugin*, KDevelop::ILaunchConfiguration*, QObject* parent = 0 );
     virtual void start();
 protected:
     virtual bool doKill();
@@ -51,8 +51,23 @@ private slots:
     void done();
 private:
     KDevelop::OutputModel* model();
-    GDBDebugger::DebugSession* m_session;
+    DebugSession* m_session;
     KDevelop::ILaunchConfiguration* m_launchcfg;
+};
+
+//this job is just here to be able to kill the debug session
+class KillSessionJob : public KJob
+{
+Q_OBJECT
+public:
+    KillSessionJob(DebugSession *session, QObject *parent = 0);
+    virtual void start();
+protected:
+    virtual bool doKill();
+private:
+    DebugSession* m_session;
+private slots:
+    void sessionFinished();
 };
 
 }
