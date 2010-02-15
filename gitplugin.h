@@ -68,6 +68,8 @@ public:
                              const KUrl::List& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
 
+    virtual KDevelop::VcsJob* diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
+                                   KDevelop::VcsDiff::Type, RecursionMode recursion);
     using KDevelop::DistributedVersionControlPlugin::log;
 
     KDevelop::VcsJob* log(const KUrl& localLocation,
@@ -123,6 +125,7 @@ protected:
 protected slots:
     void parseGitBlameOutput(DVcsJob *job);
     void parseGitLogOutput(DVcsJob *job);
+    void parseGitDiffOutput(DVcsJob* job);
 
 private:
     //commit dialog "main" helper

@@ -106,15 +106,15 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
         return false;
     }
 
-        job->exec();
+    job->exec();
     if (job->status() == KDevelop::VcsJob::JobSucceeded) {
         kDebug() << "Dir:" << dirPath << " is inside work tree of git (" << possibleRepoRoot << ')';
         m_lastRepoRoot = possibleRepoRoot;
-            return true;
+        return true;
     } else if (m_lastRepoRoot == possibleRepoRoot) {   // Not a repository anymore
-        m_lastRepoRoot = KUrl(); // Restart from scratch
+        m_lastRepoRoot.clear(); // Restart from scratch
         return isValidDirectory(dirPath);
-        }
+    }
 
     return false;
 }
@@ -122,7 +122,7 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 bool GitPlugin::isVersionControlled(const KUrl &path)
 {
     QFileInfo fsObject(path.toLocalFile());
-    if (!fsObject.isFile()) {
+    if (fsObject.isDir()) {
         return isValidDirectory(path);
     }
 
@@ -196,6 +196,38 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     noOp->setResults(QVariant(statuses));
     return noOp;
 }
+
+VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
+                        VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
+{
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, fileOrDirectory.toLocalFile()) ) {
+        KUrl::List files;
+        if(QFileInfo(fileOrDirectory.path()).isDir() && recursion==IBasicVersionControl::NonRecursive)
+            files = getLsFiles(fileOrDirectory.path());
+        else
+            files = fileOrDirectory;
+        
+        *job << "git";
+        *job << "diff";
+        if(srcRevision.revisionType()==VcsRevision::GlobalNumber && dstRevision.revisionType()==VcsRevision::GlobalNumber)
+            *job << srcRevision.revisionValue().toString()+".."+dstRevision.revisionValue().toString();
+        else if(srcRevision.revisionType()==VcsRevision::GlobalNumber)
+            *job << srcRevision.revisionValue().toString()+"..HEAD";
+        else if(dstRevision.revisionType()==VcsRevision::GlobalNumber)
+            *job << "HEAD.."+dstRevision.revisionValue().toString();
+        *job << "--";
+        addFileList(job, files);
+        
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitDiffOutput(DVcsJob*)));
+        return job;
+    }
+    
+    if (job)
+        delete job;
+    return 0;
+}
+
 
 //TODO: git doesn't like empty messages, but "KDevelop didn't provide any message, it may be a bug" looks ugly...
 //If no files specified then commit already added files
@@ -835,6 +867,11 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
     item.setMessage(message.trimmed());
     commits.append(QVariant::fromValue(item));
     job->setResults(commits);
+}
+
+void GitPlugin::parseGitDiffOutput(DVcsJob* job)
+{
+    job->setResults(job->output());
 }
 
 QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args,
