@@ -200,13 +200,6 @@ void DebugController::setupActions()
     ac->addAction("debug_restart", action);
     #endif
 
-
-    m_stopDebugger = action = new KAction(KIcon("media-playback-stop"), i18n("Sto&p"), this);
-    action->setToolTip( i18n("Stop debugger") );
-    action->setWhatsThis(i18n("<b>Stop debugger</b><p>Kills the executable and exits the debugger.</p>"));
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(stopDebugger()));
-    ac->addAction("debug_stop", action);
-
     m_interruptDebugger = action = new KAction(KIcon("media-playback-pause"), i18n("Interrupt"), this);
     action->setToolTip( i18n("Interrupt application") );
     action->setWhatsThis(i18n("<b>Interrupt application</b><p>Interrupts the debugged process or current debugger command.</p>"));

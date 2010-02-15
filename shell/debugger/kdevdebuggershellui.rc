@@ -6,7 +6,6 @@
             
             <Separator group="debug"/>
             <Action name="debug_continue" group="debug"/>
-            <Action name="debug_stop" group="debug"/>
             <Action name="debug_pause" group="debug"/>
             
             <Separator group="debug"/>
@@ -36,7 +35,6 @@
     <State name="ended">
         <disable>
             <Action name="debug_continue"/>
-            <Action name="debug_stop"/>
             <Action name="debug_pause"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>
@@ -49,7 +47,6 @@
     <State name="paused">
         <enable>
             <Action name="debug_continue"/>
-            <Action name="debug_stop"/>
             <Action name="debug_runtocursor"/>
             <Action name="debug_stepover"/>
             <Action name="debug_stepoverinst"/>
@@ -61,7 +58,6 @@
     <State name="active">
         <enable>
             <Action name="debug_pause"/>
-            <Action name="debug_stop"/>
         </enable>
         <disable>
             <Action name="debug_continue"/>
@@ -75,7 +71,6 @@
     </State>
     <State name="stopped">
         <enable>
-            <Action name="debug_stop"/>
         </enable>
         <disable>
             <Action name="debug_pause"/>
