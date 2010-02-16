@@ -26,6 +26,7 @@
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include <outputview/ioutputview.h>
 #include <util/environmentgrouplist.h>
@@ -118,9 +119,13 @@ ProjectTargetItem* CustomBuildSystem::createTarget( const QString& target, Proje
 QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) const
 {
     QHash<QString,QString> hash;
-    QByteArray data = configuration( item->project() ).readEntry( ConfigConstants::definesKey, QByteArray() );
-    QDataStream ds( data );
-    ds >> hash;
+    KConfigGroup cfg = configuration( item->project() );
+    QString pathgrp = findMatchingPathGroup( cfg, item );
+    if( !pathgrp.isEmpty() ) {
+        QByteArray data = cfg.group( pathgrp ).readEntry( ConfigConstants::definesKey, QByteArray() );
+        QDataStream ds( data );
+        ds >> hash;
+    }
     return hash;
 }
 
@@ -134,9 +139,17 @@ ProjectFolderItem* CustomBuildSystem::import( IProject* project )
     return genericManager()->import( project );
 }
 
-KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem*  ) const
+KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 {
-    return KUrl::List();
+    QStringList includes;
+    KConfigGroup cfg = configuration( item->project() );
+    QString pathgrp = findMatchingPathGroup( cfg, item );
+    if( !pathgrp.isEmpty() ) {
+        QByteArray data = cfg.group( pathgrp ).readEntry( ConfigConstants::includesKey, QByteArray() );
+        QDataStream ds( data );
+        ds >> includes;
+    }
+    return KUrl::List( includes );
 }
 
 KJob* CustomBuildSystem::install( ProjectBaseItem* item )
