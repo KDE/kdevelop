@@ -435,9 +435,9 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
     return true;
 }
 
-DVcsJob* DistributedVersionControlPlugin::empty_cmd()
+DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* j = new DVcsJob(this);
+    DVcsJob* j = new DVcsJob(this, verbosity);
     *j << "echo" << "-n";
     return j;
 }

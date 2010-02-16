@@ -34,6 +34,7 @@
 #include "dvcsevent.h"
 #include <vcs/vcsexport.h>
 #include <vcs/vcsstatusinfo.h>
+#include <outputview/outputjob.h>
 
 class QString;
 class KDevDVCSViewFactory;
@@ -194,7 +195,7 @@ protected:
     virtual QList<QVariant> getOtherFiles(const QString &directory);
 
     /** empty_cmd is used when something is not implemented, but has to return any job */
-    virtual DVcsJob* empty_cmd();
+    virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     /** Returs the list of all commits (in all branches).
      * @see CommitView and CommitViewDelegate to see how this list is used.
