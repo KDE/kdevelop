@@ -38,6 +38,8 @@
 #include "cmakeutils.h"
 #include "icmakedocumentation.h"
 
+#include <KMimeType>
+
 using namespace KTextEditor;
 using namespace KDevelop;
 
@@ -183,10 +185,13 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         switch(type)
         {
-            case Command:   return KIcon("code-block").pixmap(16,16);
-            case Variable:  return KIcon("code-variable").pixmap(16,16);
-            case Macro:     return KIcon("code-function").pixmap(16,16);
-            case Path:      return KIcon("folder").pixmap(16,16);
+            case Command:   return KIcon("code-block");
+            case Variable:  return KIcon("code-variable");
+            case Macro:     return KIcon("code-function");
+            case Path: {
+                QString url = m_paths[index.row()-m_declarations.size()];
+                return KIcon(KMimeType::findByUrl(url, 0, false, true)->iconName(url));
+            }
         }
     }
     else if(role==Qt::DisplayRole && index.column()==CodeCompletionModel::Arguments)
