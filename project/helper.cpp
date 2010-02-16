@@ -27,6 +27,10 @@
 #include <KLocalizedString>
 
 #include <QApplication>
+#include <interfaces/iproject.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <interfaces/iplugin.h>
+#include <vcs/vcsjob.h>
 
 bool KDevelop::removeUrl(const KUrl& url, const bool isFolder)
 {
@@ -80,9 +84,23 @@ bool KDevelop::createFolder(const KUrl& folder)
     return true;
 }
 
-bool KDevelop::renameUrl(const KUrl& oldname, const KUrl& newname)
+bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname)
 {
-    KIO::CopyJob* job=KIO::move(oldname, newname);
+    IPlugin* vcsplugin=project->versionControlPlugin();
+    IBasicVersionControl* vcs=0;
+    if(vcsplugin)
+        vcs=vcsplugin->extension<IBasicVersionControl>();
     
-    return KIO::NetAccess::synchronousRun(job, 0);
+    if(!vcs->isVersionControlled(oldname))
+        vcs=0;
+    
+    bool ret=false;
+    if(vcs) {
+        VcsJob* job=vcs->move(oldname, newname);
+        ret=job->exec();
+    } else {
+        KIO::CopyJob* job=KIO::move(oldname, newname);
+        ret=KIO::NetAccess::synchronousRun(job, 0);
+    }
+    return ret;
 }

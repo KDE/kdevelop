@@ -25,6 +25,7 @@
 #include <KUrl>
 
 namespace KDevelop {
+class IProject;
 
 /**
  * Deletes the url at @p url. The user is asked for confirmation.
@@ -49,7 +50,7 @@ bool KDEVPLATFORMPROJECT_EXPORT createFolder(const KUrl& folder);
  * Renames anything at @p oldname to @p oldname
  * @return whether it got renamed or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KUrl& oldname, const KUrl& newname);
+bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname);
 }
 
 #endif // KDEVPROJECTHELPER_H
