@@ -147,7 +147,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
             QDataStream s(&tmp, QIODevice::WriteOnly);
             s.setVersion( QDataStream::Qt_4_5 );
             s << path.defines;
-            pathgrp.writeEntry( ConfigConstants::includesKey, tmp );
+            pathgrp.writeEntry( ConfigConstants::definesKey, tmp );
         }
     }
 }
