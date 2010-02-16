@@ -219,4 +219,26 @@ KConfigGroup CustomBuildSystem::configuration( IProject* project ) const
     return grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
 }
 
+QString CustomBuildSystem::findMatchingPathGroup(const KConfigGroup& cfg, ProjectBaseItem* item) const
+{
+    // This might need some improvement on both the config-part as well as here to not be so string-based
+    // For now however it works as wanted.
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    QString path = "/" + KDevelop::removeProjectBasePath( model->pathFromIndex( model->indexFromItem( item ) ), item->project()->projectItem() ).join("/");
+    QString candidategrp;
+    QString candidatepath;
+    foreach( const QString& subgrp, cfg.groupList() ) {
+        if( subgrp.startsWith( ConfigConstants::projectPathPrefix ) ) {
+            QString projectpath = cfg.group( subgrp ).readEntry( ConfigConstants::projectPathKey, "" );
+            if( path.startsWith( projectpath ) ) {
+                if( projectpath.length() > candidatepath.length() || candidategrp.isEmpty() ) {
+                    candidategrp = subgrp;
+                    candidatepath = projectpath;
+                }
+            }
+        }
+    }
+    return candidategrp;
+}
+
 #include "custombuildsystemplugin.moc"
