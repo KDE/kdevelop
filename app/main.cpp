@@ -70,7 +70,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     {
         QTextStream qout(stdout);
         qout << endl << ki18n("Available sessions (use '-s HASH' or '-s NAME' to open a specific one):").toString() << endl << endl;
-        qout << QString("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Name and/or Contents").toString() << endl;
+        qout << QString("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Name: Opened Projects").toString() << endl;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
             if ( si.description.isEmpty() ) {
