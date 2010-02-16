@@ -47,6 +47,8 @@
 #include "debugsession.h"
 #include "gdbframestackmodel.h"
 
+using KDevelop::AutoTestShell;
+
 namespace GDBDebugger {
 
 
