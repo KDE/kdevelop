@@ -47,7 +47,7 @@ private slots:
     void addConfig();
     void removeConfig();
 private:
-    void saveConfig( KConfigGroup& , CustomBuildSystemConfig );
+    void saveConfig( KConfigGroup& , CustomBuildSystemConfig& );
     Ui::CustomBuildSystemConfigWidget* ui;
     QList<CustomBuildSystemConfig> configs;
 };

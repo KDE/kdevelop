@@ -88,7 +88,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
     changeCurrentConfig( ui->currentConfig->findData( grp.readEntry( ConfigConstants::currentConfigKey, "" ) ) );
 }
 
-void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSystemConfig c )
+void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSystemConfig& c )
 {
     if( c.grpName.isEmpty() ) {
         int maxnum = 0;
@@ -154,13 +154,15 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
 
 void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg )
 {
+    KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
     for( int i = 0; i < ui->currentConfig->count(); i++ ) {
         CustomBuildSystemConfig c = configs.at( i );
         c.title = ui->currentConfig->itemText( i );
-        KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
-        subgrp.writeEntry( ConfigConstants::currentConfigKey, ui->currentConfig->itemData( ui->currentConfig->currentIndex() ).toString() );
         saveConfig( subgrp, c );
+        configs[i] = c;
+        ui->currentConfig->setItemData( i, c.grpName );
     }
+    subgrp.writeEntry( ConfigConstants::currentConfigKey, ui->currentConfig->itemData( ui->currentConfig->currentIndex() ) );
     cfg->sync();
 }
 
