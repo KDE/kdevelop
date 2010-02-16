@@ -35,7 +35,7 @@
     <Separator group="edit_find_merge" />
     <Action name="goto_offset" group="edit_find_merge" />
   </Menu>
-  <Menu name="view">
+  <Menu name="view"><text>View</text>
     <Action name="view_zoom_in" group="view_operations" />
     <Action name="view_zoom_out" group="view_operations" />
     <Separator group="view_operations" />
