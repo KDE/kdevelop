@@ -37,7 +37,6 @@ CustomBuildSystemKCModule::CustomBuildSystemKCModule( QWidget* parent, const QVa
     layout->addWidget( configWidget );
 
     addConfig( CustomBuildSystemSettings::self(), configWidget );
-    load();
 }
 
 void CustomBuildSystemKCModule::dataChanged()
