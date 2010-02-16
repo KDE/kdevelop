@@ -52,6 +52,7 @@
 #include <language/duchain/dumpdotgraph.h>
 #include <language/duchain/dumpchain.h>
 #include <language/backgroundparser/parsejob.h>
+#include <language/backgroundparser/urlparselock.h>
 #include "cppeditorintegrator.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
@@ -70,33 +71,6 @@
 //#define DUMP_DUCHAIN
 
 using namespace KDevelop;
-
-///Facilities to prevent multiple parse-jobs from processing the same url.
-QMutex urlParseMutex;
-QMap<IndexedString, QPair<Qt::HANDLE, uint> > parsingUrls;
-
-UrlParseLock::UrlParseLock(IndexedString url) : m_url(url) {
-  QMutexLocker lock(&urlParseMutex);
-  while(parsingUrls.contains(m_url) && parsingUrls[m_url].first != QThread::currentThreadId()) {
-    //Wait here until no other thread is updating parsing the url
-    lock.unlock();
-    sleep(1);
-    lock.relock();
-  }
-  if(parsingUrls.contains(m_url))
-    ++parsingUrls[m_url].second;
-  else
-    parsingUrls.insert(m_url, qMakePair(QThread::currentThreadId(), 1u));
-}
-
-UrlParseLock::~UrlParseLock() {
-  QMutexLocker lock(&urlParseMutex);
-  Q_ASSERT(parsingUrls.contains(m_url));
-  Q_ASSERT(parsingUrls[m_url].first == QThread::currentThreadId());
-  --parsingUrls[m_url].second;
-  if(parsingUrls[m_url].second == 0)
-    parsingUrls.remove(m_url);
-}
 
 bool importsContext(const QVector<DUContext::Import>& contexts, const DUContext* context) {
   foreach(const DUContext::Import &listCtx, contexts)

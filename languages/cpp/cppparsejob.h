@@ -32,7 +32,6 @@
 
 #include <language/duchain/duchainpointer.h>
 #include <contextbuilder.h>
-#include <language/duchain/indexedstring.h>
 #include <qwaitcondition.h>
 #include "includepathcomputer.h"
 #include <parsesession.h>
@@ -259,12 +258,6 @@ private:
 
     bool m_initialized;
     int m_priority;
-};
-
-struct UrlParseLock {
-  UrlParseLock(IndexedString url);
-  ~UrlParseLock();
-  IndexedString m_url;
 };
 
 #endif
