@@ -99,9 +99,9 @@ public:
     QStringList branches(const QString &repository);
 
     //commit dialog helpers, send to main helper the arg for git-ls-files:
-    QList<QVariant> getModifiedFiles(const QString &directory);
-    QList<QVariant> getCachedFiles(const QString &directory);
-    QList<QVariant> getOtherFiles(const QString &directory);
+    QList<QVariant> getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    QList<QVariant> getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    QList<QVariant> getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     //graph helpers
     QList<DVcsEvent> getAllCommits(const QString &repo);

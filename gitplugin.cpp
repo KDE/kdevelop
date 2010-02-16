@@ -189,10 +189,10 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     QString repo = localLocations[0].toLocalFile();
     QList<QVariant> statuses;
     qDebug("GitPlugin::status");
-    statuses << getCachedFiles(repo)
-             << getModifiedFiles(repo)
-             << getOtherFiles(repo);
-    DVcsJob * noOp = empty_cmd();
+    statuses << getCachedFiles(repo, KDevelop::OutputJob::Silent)
+             << getModifiedFiles(repo, KDevelop::OutputJob::Silent)
+             << getOtherFiles(repo, KDevelop::OutputJob::Silent);
+    DVcsJob * noOp = empty_cmd(KDevelop::OutputJob::Silent);
     noOp->setResults(QVariant(statuses));
     return noOp;
 }
@@ -473,9 +473,9 @@ QStringList GitPlugin::branches(const QString &repository)
     return branchList;
 }
 
-QList<QVariant> GitPlugin::getOtherFiles(const QString &directory)
+QList<QVariant> GitPlugin::getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    QStringList otherFiles = getLsFiles(directory, QStringList(QString("--others")) );
+    QStringList otherFiles = getLsFiles(directory, QStringList(QString("--others")), verbosity );
 
     QList<QVariant> others;
     foreach(const QString &file, otherFiles)
@@ -488,9 +488,9 @@ QList<QVariant> GitPlugin::getOtherFiles(const QString &directory)
     return others;
 }
 
-QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory)
+QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(this);
+    DVcsJob* job = new DVcsJob(this, verbosity);
     if (prepareJob(job, directory) )
         *job << "git";
         *job << "diff-files";
@@ -518,9 +518,9 @@ QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory)
     return modifiedFiles;
 }
 
-QList<QVariant> GitPlugin::getCachedFiles(const QString &directory)
+QList<QVariant> GitPlugin::getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = gitRevParse(directory, QStringList(QString("--branches")));
+    DVcsJob* job = gitRevParse(directory, QStringList(QString("--branches")), verbosity);
     job->exec();
     QStringList shaArg;
     if (job->output().isEmpty())
@@ -529,7 +529,7 @@ QList<QVariant> GitPlugin::getCachedFiles(const QString &directory)
         //let's create an empty tree to use with git-diff-index
         //TODO: in newer version of git (AFAIK 1.5.5) we can do:
         //"git diff-index $(git rev-parse -q --verify HEAD  || echo 4b825dc642cb6eb9a060e54bf8d69288fbee4904)"
-        DVcsJob* job = new DVcsJob(this);
+        DVcsJob* job = new DVcsJob(this, verbosity);
         if (prepareJob(job, directory) )
         {
             *job << "git";
@@ -541,7 +541,7 @@ QList<QVariant> GitPlugin::getCachedFiles(const QString &directory)
     }
     else
         shaArg<<"HEAD";
-    job = new DVcsJob(this);
+    job = new DVcsJob(this, verbosity);
     if (prepareJob(job, directory) )
         *job << "git" << "diff-index" << "--cached" << shaArg;
     if (job)
