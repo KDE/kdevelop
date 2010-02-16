@@ -17,6 +17,7 @@ set(kdevplatformlanguage_LIB_SRCS
     backgroundparser/parserdependencypolicy.cpp
     backgroundparser/documentchangetracker.cpp
     backgroundparser/parseprojectjob.cpp
+    backgroundparser/urlparselock.cpp
 
     duchain/referencecounting.cpp
     duchain/specializationstore.cpp
@@ -186,6 +187,7 @@ install(FILES
 install(FILES
     backgroundparser/backgroundparser.h
     backgroundparser/parsejob.h
+    backgroundparser/urlparselock.h
     backgroundparser/documentchangetracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser COMPONENT Devel
 )
