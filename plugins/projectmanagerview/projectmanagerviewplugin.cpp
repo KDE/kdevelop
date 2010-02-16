@@ -27,11 +27,8 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
-#include <kio/copyjob.h>
 #include <kparts/mainwindow.h>
 #include <kparts/componentfactory.h>
-#include <KTemporaryFile>
 
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
@@ -451,10 +448,6 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
             if (!name.isEmpty()) {
                 KUrl url = item->folder()->url();
                 url.addPath( name );
-                if ( !KIO::NetAccess::mkdir( url, window ) ) {
-                    KMessageBox::error( window, i18n( "Cannot create folder." ) );
-                    continue;
-                }
                 item->project()->projectFileManager()->addFolder( url, item->folder() );
             }
         }
@@ -466,19 +459,6 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         if ( item->folder() || item->file() ) {
-            QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
-            int q=KMessageBox::questionYesNo(window,
-                item->folder() ? i18n("Do you want to remove the directory from the filesystem too?")
-                               : i18n("Do you want to remove the file from the filesystem too?"));
-            if(q==KMessageBox::Yes)
-            {
-                if ( !KIO::NetAccess::del( item->folder() ? item->folder()->url() : item->file()->url(), window ) ) {
-                    KMessageBox::error( window,
-                        item->folder() ? i18n( "Cannot remove folder." )
-                                       : i18n( "Cannot remove the file." ) );
-                    continue;
-                }
-            }
             if ( item->folder() ) {
                 item->project()->projectFileManager()->removeFolder(item->folder());
             } else {
@@ -526,23 +506,6 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
     
     KUrl url=item->url();
     url.addPath( name );
-
-    if (KIO::NetAccess::exists( url, KIO::NetAccess::SourceSide, window )) {
-        KMessageBox::error( window, i18n( "This file exists already." ) );
-        return 0;
-    }
-
-    {
-        KTemporaryFile temp;
-        if ( !temp.open() || temp.write("\n") == -1 ) {
-            KMessageBox::error( window, i18n( "Cannot create temporary file." ) );
-            return 0;
-        }
-        if ( !KIO::NetAccess::upload( temp.fileName(), url, window ) ) {
-            KMessageBox::error( window, i18n( "Cannot create file." ) );
-            return 0;
-        }
-    }
 
     ProjectFileItem* ret=item->project()->projectFileManager()->addFile( url, item->folder() );
     ICore::self()->documentController()->openDocument( url );

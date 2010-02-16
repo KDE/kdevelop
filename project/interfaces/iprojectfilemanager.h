@@ -97,7 +97,7 @@ public:
     virtual KJob* createImportJob(ProjectFolderItem* item);
 
     /**
-     * Add a folder to the project
+     * Add a folder to the project and create it on disk.
      *
      * Adds the folder specified by @p folder to @p parent and modifies the
      * underlying build system if needed
@@ -106,7 +106,7 @@ public:
 
 
     /**
-     * Add a file to a folder
+     * Add a file to a folder and create it on disk.
      *
      * Adds the file specified by @p file to the folder @p parent and modifies
      * the underlying build system if needed. The file is not added to a target
@@ -114,7 +114,7 @@ public:
     virtual ProjectFileItem* addFile(const KUrl& folder, ProjectFolderItem *parent) = 0;
 
     /**
-     * Remove a folder from the project
+     * Remove a folder from the project and remove it from disk.
      *
      * Removes the folder specified by @p folder from folder @p parent and
      * modifies the underlying build system if needed.
@@ -122,7 +122,7 @@ public:
     virtual bool removeFolder(ProjectFolderItem *folder) = 0;
 
     /**
-     * Remove a file from the project
+     * Remove a file from the project and remove it from disk.
      *
      * Removes the file specified by @p file and
      * modifies the underlying build system if needed. If the file being

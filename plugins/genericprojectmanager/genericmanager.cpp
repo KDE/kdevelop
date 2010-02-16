@@ -25,6 +25,7 @@
 #include <interfaces/iruncontroller.h>
 #include <language/duchain/indexedstring.h>
 #include <project/importprojectjob.h>
+#include <project/helper.h>
 #include <interfaces/iuicontroller.h>
 
 #include <kparts/mainwindow.h>
@@ -63,6 +64,18 @@ GenericProjectManager::IncludeRules getIncludeRules(KDevelop::IProject* project)
     QStringList excludes = filtersConfig.readEntry("Excludes", QStringList("*/.*"));
 
     return qMakePair(includes, excludes);
+}
+
+/**
+ * Returns the parent folder item for a given item or the project root item if there is no parent.
+ */
+KDevelop::ProjectFolderItem* getParentFolder(KDevelop::ProjectBaseItem* item)
+{
+    if ( item->parent() ) {
+        return static_cast<KDevelop::ProjectFolderItem*>(item->parent());
+    } else {
+        return item->project()->projectItem();
+    }
 }
 
 GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantList & args )
@@ -321,28 +334,30 @@ void GenericProjectManager::deleted(const QString &path)
 }
 
 KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,
-        KDevelop::ProjectFolderItem * folder )
+        KDevelop::ProjectFolderItem * parent )
 {
-    // dirwatcher cares about local folders, yet remote ones have to be added by hand
-    KDevelop::ProjectFolderItem* newFolder = 0;
-    if ( !url.isLocalFile() ) {
-        kDebug() << "adding remote folder" << url << "to" << folder->url();
-        newFolder = new KDevelop::ProjectFolderItem( folder->project(), url, folder );
+    kDebug() << "adding folder" << url << "to" << parent->url();
+    KDevelop::ProjectFolderItem* created = 0;
+    stopWatcher(parent);
+    if ( KDevelop::createFolder(url) ) {
+        created = new KDevelop::ProjectFolderItem( parent->project(), url, parent );
     }
-    return newFolder;
+    continueWatcher(parent);
+    return created;
 }
 
 
 KDevelop::ProjectFileItem* GenericProjectManager::addFile( const KUrl& url,
-        KDevelop::ProjectFolderItem * folder )
+        KDevelop::ProjectFolderItem * parent )
 {
-    // dirwatcher cares about local files, yet remote ones have to be added by hand
-    KDevelop::ProjectFileItem* file = 0;
-    if ( !url.isLocalFile() ) {
-        kDebug() << "adding remote file" << url << "to" << folder->url();
-        file = new KDevelop::ProjectFileItem( folder->project(), url, folder );
+    kDebug() << "adding file" << url << "to" << parent->url();
+    KDevelop::ProjectFileItem* created = 0;
+    stopWatcher(parent);
+    if ( KDevelop::createFile(url) ) {
+        created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
     }
-    return file;
+    continueWatcher(parent);
+    return created;
 }
 
 bool GenericProjectManager::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
@@ -399,22 +414,28 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
 
 bool GenericProjectManager::removeFolder( KDevelop::ProjectFolderItem * folder )
 {
-    // dirwatcher cares about local folders, yet remote ones have to be removed by hand
-    if ( !folder->url().isLocalFile() ) {
-        kDebug() << "removing folder" << folder->url();
+    kDebug() << "removing folder" << folder->url();
+    KDevelop::ProjectFolderItem* parent = getParentFolder(folder);
+    stopWatcher(parent);
+    const bool success = KDevelop::removeUrl(folder->url(), true);
+    if ( success ) {
         folder->parent()->removeRow( folder->row() );
     }
-    return true;
+    continueWatcher(parent);
+    return success;
 }
 
 bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
 {
-    // dirwatcher cares about local files, yet remote ones have to be removed by hand
-    if ( !file->url().isLocalFile() ) {
-        kDebug() << "removing file" << file->url();
+    kDebug() << "removing file" << file->url();
+    KDevelop::ProjectFolderItem* parent = getParentFolder(file);
+    stopWatcher(parent);
+    const bool success = KDevelop::removeUrl(file->url(), false);
+    if ( success ) {
         file->parent()->removeRow( file->row() );
     }
-    return true;
+    continueWatcher(parent);
+    return success;
 }
 
 void GenericProjectManager::stopWatcher(KDevelop::ProjectFolderItem* folder)
