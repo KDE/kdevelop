@@ -230,6 +230,7 @@ public:
         }
         return files;
     }
+    
     QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const
     {
         if( !url.isValid() ) {
@@ -586,6 +587,11 @@ QList<ProjectFileItem *> KDevelop::Project::files() const
     if ( d->topItem )
         files = d->recurseFiles( d->topItem );
     return files;
+}
+
+QList< ProjectBaseItem* > Project::itemsForUrl(const KUrl& url) const
+{
+    return d->itemsForUrl(url);
 }
 
 QList<ProjectFileItem*> Project::filesForUrl(const KUrl& url) const

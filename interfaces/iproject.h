@@ -46,6 +46,7 @@ namespace KDevelop
 class IPlugin;
 class IProjectFileManager;
 class IBuildSystemManager;
+class ProjectBaseItem;
 class ProjectFileItem;
 class ProjectFolderItem;
 class IndexedString;
@@ -111,10 +112,13 @@ public:
     /** Get a list of all files in the project */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> files() const = 0;
 
-    /** Get all items corresponding to the @p file url */
+    /** Get all items corresponding to the @p folder url */
+    Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const = 0;
+    
+    /** Get all file items corresponding to the @p file url */
     Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForUrl( const KUrl& file ) const = 0;
 
-    /** Get all items corresponding to the @p folder url */
+    /** Get all folder items corresponding to the @p folder url */
     Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForUrl( const KUrl& folder ) const = 0;
 
     /** Make the model to reload */
