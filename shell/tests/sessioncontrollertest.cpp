@@ -36,6 +36,7 @@ Q_DECLARE_METATYPE( KDevelop::ISession* )
 
 using KDevelop::SessionController;
 using KDevelop::ISession;
+using KDevelop::AutoTestShell;
 using KDevelop::Session;
 using KDevelop::Core;
 

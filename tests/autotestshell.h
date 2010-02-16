@@ -40,6 +40,9 @@
 
  */
 
+namespace KDevelop
+{
+
 class AutoTestShell : public KDevelop::ShellExtension
 {
 public:
@@ -57,6 +60,8 @@ public:
 
     static void init() { s_instance = new AutoTestShell; }
 };
+
+}
 
 #endif
 
