@@ -70,23 +70,6 @@ kde4_add_kcfg_files( projectsettings_cfg_SRCS projectconfig.kcfgc )
 kde4_add_plugin( kcm_kdev_projectsettings ${projectsettings_cfg_SRCS} )
 target_link_libraries( kcm_kdev_projectsettings ${KDE4_KUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell)
 
-########### Run Options
-
-#set( runsettings_cfg_SRCS
-#    runpreferences/projectitemlineedit.cpp
-#    runpreferences/runpreferences.cpp
-#    runpreferences/runconfig.cpp
-#)
-#
-#set( runsettings_cfg_UI
-#    runpreferences/runsettings.ui
-#    runpreferences/runconfig.ui
-#)
-#
-#kde4_add_ui_files( runsettings_cfg_SRCS ${runsettings_cfg_UI} )
-#kde4_add_plugin( kcm_kdev_runsettings ${runsettings_cfg_SRCS} )
-#target_link_libraries( kcm_kdev_runsettings ${KDE4_KUTILS_LIBS} ${KDE4_KIO_LIBS} kdevplatformshell kdevplatformutil kdevplatformproject kdevplatforminterfaces)
-
 ########### Environment widget
 
 set( envsettings_cfg_SRCS
