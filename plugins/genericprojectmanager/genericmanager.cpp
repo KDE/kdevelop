@@ -287,6 +287,7 @@ bool GenericProjectManager::reload( KDevelop::ProjectFolderItem* item )
 
 void GenericProjectManager::created(const QString &path)
 {
+    kDebug() << "created:" << path;
     QFileInfo info(path);
 
     KUrl url = KUrl(path);
@@ -296,8 +297,9 @@ void GenericProjectManager::created(const QString &path)
         if ( !isValid(url, info.isDir(), p, getIncludeRules(p)) ) {
             continue;
         }
-        if ( !p->foldersForUrl(url).isEmpty() ) {
+        if ( !p->foldersForUrl(url).isEmpty() || !p->filesForUrl(url).isEmpty() ) {
             // exists already in this project, happens e.g. when we restart the dirwatcher
+            // for files it also gets triggered for kate's backup files
             continue;
         }
         foreach ( KDevelop::ProjectFolderItem* parentItem, p->foldersForUrl(parent) ) {
@@ -316,6 +318,7 @@ void GenericProjectManager::deleted(const QString &path)
         // stopDirScan...
         return;
     }
+    kDebug() << "deleted:" << path;
 
     KUrl url = KUrl(path);
     foreach ( KDevelop::IProject* p, m_watchers.keys() ) {
