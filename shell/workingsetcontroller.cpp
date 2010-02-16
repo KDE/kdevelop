@@ -600,6 +600,12 @@ void WorkingSetWidget::workingSetsChanged()
 //             kDebug() << "skipping" << set->id() << "because empty";
             continue;
         }
+
+        // Don't show working-sets that are active in an area belong to this main-window, as those
+        // can be activated directly through the icons in the tabs
+        if(!m_mini && set->hasConnectedAreas(m_mainWindow->areas()))
+             continue;
+        
 //         kDebug() << "adding button for" << set->id();
         QToolButton* butt = new WorkingSetToolButton(this, set, m_mainWindow);
         butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));

@@ -90,7 +90,14 @@ public:
     bool hasConnectedAreas() const {
         return !m_areas.isEmpty();
     }
-    
+
+    bool hasConnectedAreas(QList<Sublime::Area*> areas) const {
+        foreach(Sublime::Area* area, areas)
+            if(m_areas.contains(area))
+                return true;
+        return false;
+    }
+
     void connectArea(Sublime::Area* area) {
         if(m_areas.contains(area)) {
             kDebug() << "tried to double-connect area";
