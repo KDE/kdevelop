@@ -302,10 +302,12 @@ void DebugController::addSession(IDebugSession* session)
 
 
     Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
-    Q_ASSERT(mainWindow);
-    QString workingSet = mainWindow->area()->workingSet();
-    ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
-    mainWindow->area()->setWorkingSet(workingSet);
+    if (mainWindow->area()->objectName() != "debug") {
+        QString workingSet = mainWindow->area()->workingSet();
+        if (mainWindow->area());
+        ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
+        mainWindow->area()->setWorkingSet(workingSet);
+    }
 }
 
 void DebugController::clearExecutionPoint()
