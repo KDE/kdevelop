@@ -26,10 +26,12 @@
 #include <QDir>
 #include <QFileInfoList>
 #include <QFile>
+#include <QApplication>
 
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KIO/NetAccess>
 
 using namespace KDevelop;
 
@@ -229,16 +231,12 @@ bool CustomMakeManager::removeFile(KDevelop::ProjectFileItem *file)
 
 bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)
 {
-    Q_UNUSED( oldFile )
-    Q_UNUSED( newFile )
-    return false;
+    return KIO::NetAccess::move( oldFile->url(), newFile, QApplication::activeWindow() );
 }
 
 bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder )
 {
-    Q_UNUSED( oldFolder )
-    Q_UNUSED( newFolder )
-    return false;
+    return KIO::NetAccess::move( oldFolder->url(), newFolder, QApplication::activeWindow() );
 }
 
 /////////////////////////////////////////////////////////////////////////////
