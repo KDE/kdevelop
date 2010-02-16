@@ -23,65 +23,14 @@
 #ifndef KDEVCMAKEHIGHLIGHTING_H
 #define KDEVCMAKEHIGHLIGHTING_H
 
-#include <QObject>
-#include <QHash>
-#include <QModelIndex>
+#include <language/highlighting/codehighlighting.h>
 
-#include <ktexteditor/attribute.h>
-#include <language/interfaces/icodehighlighting.h>
-
-namespace KTextEditor
-{
-    class SmartRange;
-}
-
-namespace KDevelop
-{
-    class DUContext;
-    class Declaration;
-}
-
-class CMakeHighlighting : public QObject, public KDevelop::ICodeHighlighting
+class CMakeHighlighting : public KDevelop::CodeHighlighting
 {
     Q_OBJECT
-    Q_INTERFACES(KDevelop::ICodeHighlighting)
 public:
-
-    enum Types
-    {
-        FunctionType,
-        ClassType,
-        NamespaceType,
-        FunctionVariableType,
-        ClassVariableType,
-        NamespaceVariableType,
-        ErrorVariableType
-    };
-    enum Contexts
-    {
-        DefinitionContext,
-        DeclarationContext,
-        NamespaceContext,
-        ReferenceContext
-    };
     CMakeHighlighting(QObject* parent=0);
     virtual ~CMakeHighlighting();
-
-    void highlightTree(KTextEditor::SmartRange* topRange) const;
-    void highlightDUChain(KDevelop::TopDUContext* context) const;
-
-    virtual void highlightDeclaration(KDevelop::Declaration* declaration) const;
-    virtual void highlightUses(KDevelop::DUContext*) const;
-    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context) const;
-private:
-    void highlightDUChain(KDevelop::DUContext* context) const;
-    void outputRange( KTextEditor::SmartRange * range ) const;
-
-    Types typeForDeclaration(KDevelop::Declaration* dec) const;
-
-    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
-    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_declarationAttributes;
-    mutable QHash<Types, KTextEditor::Attribute::Ptr> m_referenceAttributes;
 };
 
 #endif
