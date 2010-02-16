@@ -39,12 +39,14 @@
 #include "../interfaces/icore.h"
 #include "../interfaces/idocumentcontroller.h"
 #include "../interfaces/ipartcontroller.h"
-#include "../interfaces/iuicontroller.h"
 #include "../interfaces/contextmenuextension.h"
 #include "../interfaces/context.h"
 #include "../language/interfaces/editorcontext.h"
 #include "../sublime/view.h"
+#include "../sublime/mainwindow.h"
+#include "../sublime/area.h"
 #include "core.h"
+#include "uicontroller.h"
 #include "../debugger/breakpoint/breakpointmodel.h"
 #include "../debugger/breakpoint/breakpointwidget.h"
 #include "../debugger/variable/variablewidget.h"
@@ -298,7 +300,12 @@ void DebugController::addSession(IDebugSession* session)
     
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
+
+    Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
+    Q_ASSERT(mainWindow);
+    QString workingSet = mainWindow->area()->workingSet();
     ICore::self()->uiController()->switchToArea("debug", IUiController::ThisWindow);
+    mainWindow->area()->setWorkingSet(workingSet);
 }
 
 void DebugController::clearExecutionPoint()
