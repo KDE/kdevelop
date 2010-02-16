@@ -21,6 +21,8 @@
 
 #include <KTemporaryFile>
 #include <KIO/NetAccess>
+#include <kio/job.h>
+#include <kio/copyjob.h>
 #include <KMessageBox>
 #include <KLocalizedString>
 
@@ -76,4 +78,11 @@ bool KDevelop::createFolder(const KUrl& folder)
         return false;
     }
     return true;
+}
+
+bool KDevelop::renameUrl(const KUrl& oldname, const KUrl& newname)
+{
+    KIO::CopyJob* job=KIO::move(oldname, newname);
+    
+    return KIO::NetAccess::synchronousRun(job, 0);
 }

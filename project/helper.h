@@ -45,6 +45,11 @@ bool KDEVPLATFORMPROJECT_EXPORT createFile(const KUrl& file);
  */
 bool KDEVPLATFORMPROJECT_EXPORT createFolder(const KUrl& folder);
 
+/**
+ * Renames anything at @p oldname to @p oldname
+ * @return whether it got renamed or not
+ */
+bool KDEVPLATFORMPROJECT_EXPORT renameUrl(const KUrl& oldname, const KUrl& newname);
 }
 
 #endif // KDEVPROJECTHELPER_H
