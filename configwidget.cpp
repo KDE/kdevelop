@@ -125,8 +125,11 @@ void ConfigWidget::changeAction( int idx )
         ui->enableAction->blockSignals( b );
 
         ui->actionArguments->setText( t.arguments );
+        ui->actionArguments->setEnabled( t.enabled );
         ui->actionExecutable->setUrl( t.executable );
+        ui->actionExecutable->setEnabled( t.enabled );
         ui->actionEnvironment->setCurrentIndex( ui->actionEnvironment->findText( t.envGrp ) );
+        ui->actionEnvironment->setEnabled( t.enabled );
     }
 }
 
