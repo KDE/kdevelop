@@ -53,6 +53,8 @@ private slots:
     void actionExecutableChanged( const KUrl& );
     void actionExecutableChanged( const QString& );
     void projectPathSelected(const QItemSelection&, const QItemSelection& );
+    void includesChanged();
+    void definesChanged();
 private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     Ui::ConfigWidget* ui;

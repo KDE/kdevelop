@@ -54,15 +54,15 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( pathsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
 
     ui->includePaths->setModel( includesModel );
-    connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
-    connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( includesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(includesChanged()) );
+    connect( includesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(includesChanged())  );
+    connect( includesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(includesChanged())  );
 
     ui->defines->setModel( definesModel );
     ui->defines->horizontalHeader()->setResizeMode( QHeaderView::Stretch );
-    connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SIGNAL(changed()) );
-    connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SIGNAL(changed()) );
-    connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(changed()) );
+    connect( definesModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(definesChanged()) );
+    connect( definesModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(definesChanged()) );
+    connect( definesModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(definesChanged()) );
 
     ui->switchIncludeDefines->setCurrentIndex( 0 );
     ui->stackedWidget->setCurrentIndex( 0 );
@@ -178,12 +178,30 @@ void ConfigWidget::actionExecutableChanged(const QString& txt )
     actionExecutableChanged( KUrl( txt ) );
 }
 
+void ConfigWidget::definesChanged()
+{
+    QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
+    if( !idx.isEmpty() ) {
+        bool b = pathsModel->setData( idx.first(), definesModel->defines(), ProjectPathsModel::SetDefinesRole );
+        if( b ) {
+            emit changed();
+        }
+    }
+}
+
+void ConfigWidget::includesChanged()
+{
+    QList<QModelIndex> idx = ui->projectPaths->selectionModel()->selectedRows();
+    if( !idx.isEmpty() ) {
+        bool b = pathsModel->setData( idx.first(), includesModel->includes(), ProjectPathsModel::SetIncludesRole );
+        if( b ) {
+            emit changed();
+        }
+    }
+}
+
 void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& deselected )
 {
-    if( !deselected.isEmpty() && !deselected.indexes().first().row() == pathsModel->rowCount() - 1 ) {
-        pathsModel->setData( deselected.indexes().first(), includesModel->includes(), ProjectPathsModel::SetIncludesRole );
-        pathsModel->setData( deselected.indexes().first(), definesModel->defines(), ProjectPathsModel::SetDefinesRole );
-    }
     bool enable = !( selected.isEmpty() || selected.indexes().first().row() == pathsModel->rowCount() - 1 );
     ui->includePaths->setEnabled( enable );
     ui->defines->setEnabled( enable );
