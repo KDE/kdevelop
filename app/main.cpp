@@ -143,7 +143,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
 
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
     QList<QString> kdevelopBinArgs;
-    for(uint a = 1; a < argc; ++a) {
+    for(int a = 1; a < argc; ++a) {
         if( qstrcmp( argv[a], "-s" ) == 0 || qstrcmp( argv[a], "-cs" ) == 0 ) {
             ++a;
         } else if ( qstrcmp( argv[a], "--sessions" ) != 0 ) {
