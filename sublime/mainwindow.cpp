@@ -55,6 +55,23 @@ QWidget* MainWindow::customButtonForAreaSwitcher ( Area* /*area*/ )
     return 0;
 }
 
+bool MainWindow::containsView(View* view) const
+{
+    foreach(Area* area, areas())
+        if(area->views().contains(view))
+            return true;
+    return false;
+}
+
+QList< Area* > MainWindow::areas() const
+{
+    QList< Area* > areas = controller()->areas(const_cast<MainWindow*>(this));
+    if(areas.isEmpty())
+        areas = controller()->defaultAreas();
+
+    return areas;
+}
+
 void MainWindow::setupAreaSelector() {
     disconnect(d->areaSwitcher->tabBar, SIGNAL(currentChanged(int)), d, SLOT(toggleArea(int)));
     
@@ -64,9 +81,7 @@ void MainWindow::setupAreaSelector() {
     
     int currentIndex = -1;
     
-    QList< Area* > areas = controller()->areas(this);
-    if(areas.isEmpty())
-        areas = controller()->defaultAreas();
+    QList< Area* > areas = this->areas();
     
     QSet<QString> hadAreaName;
     

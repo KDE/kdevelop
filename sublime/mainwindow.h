@@ -85,6 +85,12 @@ public:
       * */
     View* viewForPosition(QPoint globalPos) const;
     
+    /**Returns true if this main-window contains this view*/
+    bool containsView(View* view) const;
+    
+    /**Returns all areas that belong to this main-window*/
+    QList<Area*> areas() const;
+    
 public Q_SLOTS:
     /**Shows the @p view and makes it active.*/
     void activateView(Sublime::View *view);
@@ -135,6 +141,7 @@ public: // FIXME?
     virtual QWidget* customButtonForAreaSwitcher ( Area* area );
 
 private:
+    
     Q_PRIVATE_SLOT(d, void viewAdded(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*))
     Q_PRIVATE_SLOT(d, void toolViewAdded(Sublime::View*, Sublime::Position))
