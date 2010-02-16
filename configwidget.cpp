@@ -200,7 +200,7 @@ void ConfigWidget::includesChanged()
     }
 }
 
-void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& deselected )
+void ConfigWidget::projectPathSelected( const QItemSelection& selected, const QItemSelection& )
 {
     bool enable = !( selected.isEmpty() || selected.indexes().first().row() == pathsModel->rowCount() - 1 );
     ui->includePaths->setEnabled( enable );
