@@ -51,6 +51,8 @@
 
 #include "genericmanagerlistjob.h"
 
+#define ifDebug(x)
+
 K_PLUGIN_FACTORY(GenericSupportFactory, registerPlugin<GenericProjectManager>(); )
 K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgenericprojectmanager",ki18n("Generic Project Manager"), "0.1", ki18n("A plugin to support basic project management on a filesystem level"), KAboutData::License_GPL)))
 
@@ -203,8 +205,8 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
         }
     }
 
-    kDebug() << "valid folders:" << folders;
-    kDebug() << "valid files:" << files;
+    ifDebug(kDebug() << "valid folders:" << folders;)
+    ifDebug(kDebug() << "valid files:" << files;)
 
     // remove obsolete rows
     for ( int j = 0; j < baseItem->rowCount(); ++j ) {
@@ -214,7 +216,7 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
             int index = folders.indexOf( f->url() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
-                kDebug() << "removing folder:" << f->url();
+                ifDebug(kDebug() << "removing folder:" << f->url();)
                 baseItem->removeRow( j );
                 --j;
             } else {
@@ -231,7 +233,7 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
             int index = files.indexOf( f->url() );
             if ( index == -1 ) {
                 // file got removed or is now invalid
-                kDebug() << "removing file:" << f->url();
+                ifDebug(kDebug() << "removing file:" << f->url();)
                 baseItem->removeRow( j );
                 --j;
             } else {
