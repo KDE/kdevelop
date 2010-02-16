@@ -122,6 +122,8 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
                 toolgrp = subgrp.group( QString("%1Install").arg( ConfigConstants::toolGroupPrefix ) );
                 break;
             }
+            default:
+                break;
         }
         toolgrp.writeEntry( ConfigConstants::toolType, int(tool.type) );
         toolgrp.writeEntry( ConfigConstants::toolEnvironment , tool.envGrp );
