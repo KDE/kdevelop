@@ -34,35 +34,6 @@
 static const QChar sep = '/';
 static const QChar escape = '\\';
 
-QStringList removeBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item )
-{
-    QStringList result = fullpath;
-    if( item )
-    {
-        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        QStringList basePath = model->pathFromIndex( model->indexFromItem( item ) );
-        if( basePath.count() >= fullpath.count() )
-        {
-            return QStringList();
-        }
-        for( int i = 0; i < basePath.count(); i++ )
-        {
-            result.takeFirst();
-        }
-    }
-    return result;
-}
-
-QStringList joinBasePath( const QStringList& partialpath, KDevelop::ProjectBaseItem* item )
-{
-    QStringList basePath;
-    if( item )
-    {
-        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        basePath = model->pathFromIndex( model->indexFromItem( item ) );
-    }
-    return basePath + partialpath;
-}
 
 class ProjectItemCompleter : public QCompleter
 {
@@ -104,7 +75,7 @@ ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
 
 QStringList ProjectItemCompleter::splitPath(const QString& path) const
 {
-    return joinBasePath( KDevelop::splitWithEscaping( path, sep, escape ), mBase ); 
+    return joinProjectBasePath( KDevelop::splitWithEscaping( path, sep, escape ), mBase ); 
 }
 
 QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
@@ -112,8 +83,8 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
     QString postfix;
     if(mModel->item(index)->folder())
         postfix=sep;
-    qDebug() << "path from index:" << index << removeBasePath( mModel->pathFromIndex(index), mBase );
-    return KDevelop::joinWithEscaping(removeBasePath( mModel->pathFromIndex(index), mBase ), sep, escape)+postfix;
+    qDebug() << "path from index:" << index << removeProjectBasePath( mModel->pathFromIndex(index), mBase );
+    return KDevelop::joinWithEscaping(removeProjectBasePath( mModel->pathFromIndex(index), mBase ), sep, escape)+postfix;
 }
 
 
@@ -126,7 +97,7 @@ QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
 {
     Q_UNUSED( pos );
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-    QStringList path = joinBasePath( KDevelop::splitWithEscaping( input, sep, escape ), mBase );
+    QStringList path = joinProjectBasePath( KDevelop::splitWithEscaping( input, sep, escape ), mBase );
     QModelIndex idx = model->pathToIndex( path );
     QValidator::State state = input.isEmpty() ? QValidator::Intermediate : QValidator::Invalid;
     if( idx.isValid() )
@@ -179,12 +150,12 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
 
 void ProjectItemLineEdit::setItemPath(const QStringList& list)
 {
-    setText( KDevelop::joinWithEscaping( removeBasePath( list, m_base ), sep, escape ) ); 
+    setText( KDevelop::joinWithEscaping( removeProjectBasePath( list, m_base ), sep, escape ) ); 
 }
 
 QStringList ProjectItemLineEdit::itemPath() const
 {
-    return joinBasePath( KDevelop::splitWithEscaping( text(), sep, escape ), m_base );
+    return joinProjectBasePath( KDevelop::splitWithEscaping( text(), sep, escape ), m_base );
 }
 
 void ProjectItemLineEdit::setBaseItem(KDevelop::ProjectBaseItem* item)

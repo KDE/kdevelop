@@ -34,12 +34,45 @@
 #include <kdebug.h>
 
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/icore.h>
 #include "interfaces/iprojectfilemanager.h"
 #include <KIO/NetAccess>
 #include <language/duchain/indexedstring.h>
 
 namespace KDevelop
 {
+
+QStringList removeProjectBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item )
+{
+    QStringList result = fullpath;
+    if( item )
+    {
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        QStringList basePath = model->pathFromIndex( model->indexFromItem( item ) );
+        if( basePath.count() >= fullpath.count() )
+        {
+            return QStringList();
+        }
+        for( int i = 0; i < basePath.count(); i++ )
+        {
+            result.takeFirst();
+        }
+    }
+    return result;
+}
+
+QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::ProjectBaseItem* item )
+{
+    QStringList basePath;
+    if( item )
+    {
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        basePath = model->pathFromIndex( model->indexFromItem( item ) );
+    }
+    return basePath + partialpath;
+}
+
 
 class ProjectBaseItemPrivate
 {

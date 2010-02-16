@@ -296,6 +296,9 @@ private:
     class ProjectModelPrivate* const d;
 };
 
+KDEVPLATFORMPROJECT_EXPORT QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::ProjectBaseItem* item );
+KDEVPLATFORMPROJECT_EXPORT QStringList removeProjectBasePath( const QStringList& fullpath, KDevelop::ProjectBaseItem* item );
+
 }
 
 #endif // KDEVPROJECTMODEL_H
