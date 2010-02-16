@@ -169,14 +169,17 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg )
 
 void CustomBuildSystemConfigWidget::configChanged()
 {
-    CustomBuildSystemConfig c = configs[ ui->currentConfig->currentIndex() ];
-    CustomBuildSystemConfig updated = ui->configWidget->config();
-    // Only update the stuff thats configurable inside the configwidget, leave the grp and title alone
-    c.buildDir = updated.buildDir;
-    c.projectPaths = updated.projectPaths;
-    c.tools = updated.tools;
-    configs[ ui->currentConfig->currentIndex() ] = c;
-    emit changed();
+    int idx = ui->currentConfig->currentIndex();
+    if( idx >= 0 && idx < configs.count() ) {
+        CustomBuildSystemConfig c = configs[ idx ];
+        CustomBuildSystemConfig updated = ui->configWidget->config();
+        // Only update the stuff thats configurable inside the configwidget, leave the grp and title alone
+        c.buildDir = updated.buildDir;
+        c.projectPaths = updated.projectPaths;
+        c.tools = updated.tools;
+        configs[ idx ] = c;
+        emit changed();
+    }
 }
 
 void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
