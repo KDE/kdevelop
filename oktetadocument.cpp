@@ -185,10 +185,6 @@ void OktetaDocument::setTextSelection( const KTextEditor::Range& ) {}
 
 void OktetaDocument::activate( Sublime::View* view, KParts::MainWindow* mainWindow )
 {
-//     KParts::Part *part = partForView(activeView->widget());
-//     if (Core::self()->partController()->activePart() != part)
-//         Core::self()->partController()->setActivePart(part);
-
     notifyActivated();
 }
 
