@@ -163,7 +163,7 @@ void ConfigWidget::actionEnvironmentChanged( int )
     }
 }
 
-void ConfigWidget::actionExecutableChanged(const KUrl& url )
+void ConfigWidget::actionExecutableChanged( const KUrl& url )
 {
     QVariant data = ui->buildAction->itemData( ui->buildAction->currentIndex() );
     if( data.isValid() && data.canConvert<CustomBuildSystemTool>() ) {
