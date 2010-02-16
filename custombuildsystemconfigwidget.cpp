@@ -60,6 +60,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
                 tool.arguments = toolgrp.readEntry( ConfigConstants::toolArguments, "" );
                 tool.executable = toolgrp.readEntry( ConfigConstants::toolExecutable, KUrl() );
                 tool.envGrp = toolgrp.readEntry( ConfigConstants::toolEnvironment, "default" );
+                tool.enabled = toolgrp.readEntry( ConfigConstants::toolEnabled, false );
                 tool.type = CustomBuildSystemTool::ActionType( toolgrp.readEntry( ConfigConstants::toolType, 0 ) );
                 config.tools.insert( tool.type, tool );
             } else if( subgrpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
