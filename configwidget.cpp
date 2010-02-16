@@ -20,6 +20,7 @@
 #include "configwidget.h"
 
 #include <KDebug>
+#include <KLineEdit>
 
 #include "ui_configwidget.h"
 #include "projectpathsmodel.h"
@@ -45,7 +46,7 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     connect( ui->actionArguments, SIGNAL(textEdited(QString)), SLOT(actionArgumentsEdited(QString)) );
     connect( ui->actionEnvironment, SIGNAL(activated(int)), SLOT(actionEnvironmentChanged(int)) );
     connect( ui->actionExecutable, SIGNAL(urlSelected(KUrl)), SLOT(actionExecutableChanged(KUrl)) );
-    connect( ui->actionExecutable, SIGNAL(textChanged(QString)), SLOT(actionExecutableChanged(QString)) );
+    connect( ui->actionExecutable->lineEdit(), SIGNAL(textEdited(QString)), SLOT(actionExecutableChanged(QString)) );
 
     ui->projectPaths->setModel( pathsModel );
     connect( ui->projectPaths->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(projectPathSelected(QItemSelection,QItemSelection)) );
