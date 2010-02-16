@@ -49,6 +49,7 @@
 #include <interfaces/context.h>
 #include <project/projectmodel.h>
 #include <project/importprojectjob.h>
+#include <project/helper.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchain.h>
@@ -605,7 +606,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         else if ( subroot.isParentOf(fileurl) )
         {
             //if it's not subparent, we don't add it at all
-            addFile(fileurl, item);
+            new KDevelop::ProjectFileItem( item->project(), fileurl, item );
         }
     }
 
@@ -839,7 +840,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
                     }
                     else
                     {
-                        addFile(fileurl, item);
+                        new KDevelop::ProjectFileItem( item->project(), fileurl, item );
                     }
                 }
                 
@@ -977,6 +978,9 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
 
 KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
+    if ( !KDevelop::createFolder(folder) ) {
+        return 0;
+    }
     Q_ASSERT(QFile::exists(folder.toLocalFile()));
     KUrl lists=parent->url();
     lists.addPath("CMakeLists.txt");
@@ -1019,6 +1023,9 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
 
 bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
 {
+    if ( !KDevelop::removeUrl(it->url(), true) ) {
+        return false;
+    }
     KUrl lists=it->url().upUrl();
     lists.addPath("CMakeLists.txt");
     if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
@@ -1104,6 +1111,10 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
 bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
 {
+    if ( !KDevelop::removeUrl(it->url(), false) ) {
+        return false;
+    }
+
     bool ret=true;
     QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
     QList<ProjectTargetItem*> targets;
@@ -1156,8 +1167,11 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
 //This is being called from ::parse() so we shouldn't make it block the ui
 KDevelop::ProjectFileItem* CMakeManager::addFile( const KUrl& url, KDevelop::ProjectFolderItem* parent)
 {
-    ProjectFileItem* it = new KDevelop::ProjectFileItem( parent->project(), url, parent );
-    return it;
+    KDevelop::ProjectFileItem* created = 0;
+    if ( KDevelop::createFile(url) ) {
+        created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
+    }
+    return created;
 }
 
 bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)

@@ -20,6 +20,7 @@
 #include <kaboutdata.h>
 #include <kpluginloader.h>
 #include <project/projectmodel.h>
+#include <project/helper.h>
 #include <language/duchain/indexedstring.h>
 
 #include <QDir>
@@ -204,28 +205,26 @@ KDevelop::ProjectFolderItem* CustomMakeManager::import(KDevelop::IProject *proje
 
 ProjectFolderItem* CustomMakeManager::addFolder(const KUrl& folder, KDevelop::ProjectFolderItem *parent)
 {
-    Q_UNUSED( folder )
-    Q_UNUSED( parent)
-    return NULL;
+    KDevelop::createFolder(folder);
+    Q_UNUSED(parent);
+    return 0;
 }
 
-ProjectFileItem* CustomMakeManager::addFile(const KUrl& folder, KDevelop::ProjectFolderItem *parent)
+ProjectFileItem* CustomMakeManager::addFile(const KUrl& file, KDevelop::ProjectFolderItem *parent)
 {
-    Q_UNUSED( folder )
-    Q_UNUSED( parent )
-    return NULL;
+    KDevelop::createFile(file);
+    Q_UNUSED(parent);
+    return 0;
 }
 
 bool CustomMakeManager::removeFolder(KDevelop::ProjectFolderItem *folder)
 {
-    Q_UNUSED( folder )
-    return false;
+    return KDevelop::removeUrl(folder->url(), true);
 }
 
 bool CustomMakeManager::removeFile(KDevelop::ProjectFileItem *file)
 {
-    Q_UNUSED( file )
-    return false;
+    return KDevelop::removeUrl(file->url(), false);
 }
 
 bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)

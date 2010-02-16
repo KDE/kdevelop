@@ -139,7 +139,7 @@ public:
      * Adds the file specified by @p file to the folder @p parent and modifies
      * the underlying build system if needed. The file is not added to a target
      */
-    virtual KDevelop::ProjectFileItem* addFile(const KUrl& folder, KDevelop::ProjectFolderItem *parent);
+    virtual KDevelop::ProjectFileItem* addFile(const KUrl& file, KDevelop::ProjectFolderItem *parent);
 
     /**
      * Remove a folder from the project
