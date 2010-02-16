@@ -51,12 +51,13 @@ K_PLUGIN_FACTORY(CustomBuildSystemFactory, registerPlugin<CustomBuildSystem>(); 
 K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kdevcustombuildsystem", ki18n("Custom BuildSystem"), "0.1", ki18n("Support for building and managing Custom Buildsystems"), KAboutData::License_GPL, ki18n("Copyright 2010 Andreas Pakulat <apaku@gmx.de>"), ki18n(""), "", "apaku@gmx.de" )))
 
 
-CustomBuildSystem::CustomBuildSystem(QObject *parent, const QVariantList &)
-    : IPlugin(CustomBuildSystemFactory::componentData(), parent)
+CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
+    : IPlugin( CustomBuildSystemFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
+
 }
 
 CustomBuildSystem::~CustomBuildSystem()
