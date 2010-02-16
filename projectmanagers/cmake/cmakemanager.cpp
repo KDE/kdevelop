@@ -35,7 +35,6 @@
 #include <KUrl>
 #include <KAction>
 #include <KMessageBox>
-#include <kio/job.h>
 #include <ktexteditor/document.h>
 #include <KStandardDirs>
 
@@ -86,8 +85,6 @@
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
 #include <cmakeconfig.h>
-#include <kio/copyjob.h>
-#include <KIO/NetAccess>
 
 using namespace KDevelop;
 
@@ -1297,11 +1294,7 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         
     if(targets.isEmpty())
     {
-        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
-        kDebug() << "rename" << it->url() << "->" << newUrl;
-        bool ret=KIO::NetAccess::synchronousRun(job, 0);
-        
-        return ret;
+        return KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
     
     ApplyChangesWidget e;
@@ -1330,13 +1323,9 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 
     if(ret && e.exec())
     {
-        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
-        ret=e.applyAllChanges();
-        
+        bool ret=e.applyAllChanges();
         if(ret)
-            ret=KIO::NetAccess::synchronousRun(job, 0);
-        else
-            delete job;
+            ret=KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
 
     return ret;
@@ -1344,16 +1333,11 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 
 bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
 {
-    CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
-    if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
+    if(_it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
     {
-        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
-        bool ret=KIO::NetAccess::synchronousRun(job, 0);
-        if(ret) {
-            it->setUrl(newUrl);
-        }
-        return ret;
+        return KDevelop::renameUrl(_it->project(), _it->url(), newUrl);
     }
+    CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
     KUrl lists=it->formerParent()->url();
     lists.addPath("CMakeLists.txt");
     QString newName=KUrl::relativePath(lists.upUrl().path(), newUrl.path());
@@ -1375,13 +1359,9 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     bool ret=e.exec();
     if(ret)
     {
-        KIO::CopyJob* job=KIO::move(it->url(), newUrl);
         ret=e.applyAllChanges();
-        
         if(ret)
-            ret=KIO::NetAccess::synchronousRun(job, 0);
-        else
-            delete job;
+            ret=KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
     return ret;
 }
