@@ -231,11 +231,10 @@ kDebug()<<document;
 
 void OktetaDocument::onByteArrayDocumentChanged( Kasten::LocalSyncState newState )
 {
-    if( newState == Kasten::LocalHasChanges )
-    {
-        mState = IDocument::Modified;
-        notifyStateChanged();
-    }
+    mState = ( newState == Kasten::LocalHasChanges ) ?
+        IDocument::Modified :
+        IDocument::Clean;
+    notifyStateChanged();
 }
 
 OktetaDocument::~OktetaDocument()
