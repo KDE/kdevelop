@@ -140,17 +140,35 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         qerr << endl << i18n("Cannot start KDevelop, the kdevelop.bin executable is missing in %1. Please fix your KDevelop installation.", fi.absolutePath() ) << endl;
         return -1;
     }
-    KProcess proc;
-    proc << fi.absoluteFilePath();
+
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
+    QList<QString> kdevelopBinArgs;
     for(uint a = 1; a < argc; ++a) {
         if( qstrcmp( argv[a], "-s" ) == 0 || qstrcmp( argv[a], "-cs" ) == 0 ) {
             ++a;
         } else if ( qstrcmp( argv[a], "--sessions" ) != 0 ) {
-            proc << QString(argv[a]);
+            kdevelopBinArgs << QString(argv[a]);
         }
+    }
+
+#ifdef Q_WS_WIN
+    KProcess proc;
+    proc << fi.absoluteFilePath();
+    foreach (const QString &arg, kdevelopBinArgs) {
+        proc << arg;
     }
     proc.setEnv( "KDEV_SESSION", session );
     return proc.execute();
-}
+#else
+    char **cmd = 0;
+    cmd = (char**)realloc(cmd, (kdevelopBinArgs.count() + 2) * sizeof(char*));
+    cmd[0] = fi.absoluteFilePath().toLocal8Bit().data();
+    for (int i = 0; i < kdevelopBinArgs.length(); ++i) {
+        cmd[i+1] = kdevelopBinArgs[i].toLocal8Bit().data();
+    }
+    cmd[kdevelopBinArgs.count() + 1] = 0;
+    setenv("KDEV_SESSION", session.toLocal8Bit().data(), true);
 
+    return execv(qPrintable(fi.absoluteFilePath()), cmd);
+#endif
+}
