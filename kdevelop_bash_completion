@@ -28,7 +28,7 @@ have kdevelop && _kdevelop()
     prev=${COMP_WORDS[COMP_CWORD-1]}
     case $prev in
         -s)
-            COMPREPLY=( $( kdevelop --sessions 2>/dev/null | egrep "^{" | sed 's/:.*//' | tr '\n' ' ' ) )
+            COMPREPLY=( $( kdevelop --sessions 2>/dev/null | egrep "^{" | sed 's/:.*//' | sed 's/\s*\[running\]//' | tr '\n' ' ' ) )
             COMPREPLY=( $( compgen -W '${COMPREPLY[@]}' -- $cur ) )
             return 0
             ;;
