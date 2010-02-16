@@ -31,6 +31,7 @@
 #include <jobmanager.h>
 #include <abstractloadjob.h>
 #include <abstractsyncwithremotejob.h>
+#include <abstractsyncfromremotejob.h>
 #include <abstractmodelsynchronizer.h>
 // KDevelop
 #include <shell/core.h>
@@ -98,8 +99,16 @@ bool OktetaDocument::save( IDocument::DocumentSaveMode mode )
 
 void OktetaDocument::reload()
 {
-    mState = IDocument::Clean;
-    notifyStateChanged();
+    Kasten::AbstractModelSynchronizer* synchronizer = mByteArrayDocument->synchronizer();
+
+    Kasten::AbstractSyncFromRemoteJob* syncJob = synchronizer->startSyncFromRemote();
+    const bool syncSucceeded = Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
+
+    if( syncSucceeded )
+    {
+        mState = IDocument::Clean;
+        notifyStateChanged();
+    }
 }
 
 bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
@@ -190,7 +199,6 @@ void OktetaDocument::setPlugin( OktetaPlugin* plugin )
 
 Sublime::View* OktetaDocument::newView( Sublime::Document* document )
 {
-    kDebug()<<document;
     if( mByteArrayDocument == 0 )
     {
         Kasten::ByteArrayRawFileSynchronizerFactory* synchronizerFactory =
