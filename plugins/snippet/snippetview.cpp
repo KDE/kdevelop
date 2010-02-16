@@ -11,7 +11,6 @@
 
 #include "snippetview.h"
 
-
 #include <QContextMenuEvent>
 #include <KMenu>
 #include <KMessageBox>

@@ -60,7 +60,7 @@ SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
     cleanName.replace('/', '-');
 
     SnippetRepository* repo = new SnippetRepository(KGlobal::dirs()->locateLocal( "data",
-                                                    "kate/plugins/katesnippets_tng/data/" + cleanName + ".xml" ));
+                                                    "ktexteditor_snippets/data/" + cleanName + ".xml" ));
     repo->setText(name);
     repo->setCheckState(Qt::Checked);
     KUser user;
@@ -168,14 +168,14 @@ void SnippetRepository::save()
     }
     //KMessageBox::information(0,doc.toString());
     QFileInfo fi(m_file);
-    QString outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/" + fi.fileName() );
+    QString outname = KGlobal::dirs()->locateLocal( "data", "ktexteditor_snippets/data/" + fi.fileName() );
     if ( m_file != outname) {
         QFileInfo fiout(outname);
 //      if (fiout.exists()) {
 // there could be cases that new new name clashes with a global file, but I guess it is not that often.
         int i = 0;
         while(QFile::exists(outname)) {
-            outname = KGlobal::dirs()->locateLocal( "data", "kate/plugins/katesnippets_tng/data/"+QString("%1_").arg(i++)+fi.fileName());
+            outname = KGlobal::dirs()->locateLocal( "data", "ktexteditor_snippets/data/"+QString("%1_").arg(i++)+fi.fileName());
         }
         KMessageBox::information(QApplication::activeWindow(),
             i18n("You have edited a data file not located in your personal data directory; as such, a renamed clone of the original data file has been created within your personal data directory."));

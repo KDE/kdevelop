@@ -89,6 +89,7 @@ private:
     KAction* m_addSnippetAction;
     KAction* m_removeSnippetAction;
     KAction* m_editSnippetAction;
+    KAction* m_getNewStuff;
 };
 
 #endif

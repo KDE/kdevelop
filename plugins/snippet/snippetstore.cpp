@@ -28,9 +28,9 @@ SnippetStore::SnippetStore(SnippetPlugin* plugin)
     m_self = this;
 
     const QStringList list = KGlobal::dirs()->findAllResources("data",
-        "kate/plugins/katesnippets_tng/data/*.xml", KStandardDirs::NoDuplicates)
+        "ktexteditor_snippets/data/*.xml", KStandardDirs::NoDuplicates)
                         << KGlobal::dirs()->findAllResources("data",
-        "kate/plugins/katesnippets_tng/data/ghns/*.xml", KStandardDirs::NoDuplicates);
+        "ktexteditor_snippets/ghns/*.xml", KStandardDirs::NoDuplicates);
 
     foreach(const QString& file, list ) {
         SnippetRepository* repo = new SnippetRepository(file);
