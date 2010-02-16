@@ -158,6 +158,7 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg )
         CustomBuildSystemConfig c = configs.at( i );
         c.title = ui->currentConfig->itemText( i );
         KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
+        subgrp.writeEntry( ConfigConstants::currentConfigKey, ui->currentConfig->itemData( ui->currentConfig->currentIndex() ).toString() );
         saveConfig( subgrp, c );
     }
     cfg->sync();
