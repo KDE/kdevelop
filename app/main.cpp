@@ -133,7 +133,6 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         session = QUuid::createUuid();
     }
 
-    ///@TODO Eventually show a session-picking dialog
     QFileInfo fi(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin");
     if( !fi.exists() ) {
         QTextStream qerr(stderr);

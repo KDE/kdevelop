@@ -41,6 +41,7 @@
 #include <QPixmap>
 #include <QTimer>
 #include <QDir>
+#include <QSessionManager>
 
 #include <shell/core.h>
 #include <shell/mainwindow.h>
@@ -59,6 +60,18 @@
 
 using KDevelop::Core;
 
+class KDevelopApplication: public KApplication {
+public:
+    explicit KDevelopApplication(bool GUIenabled = true): KApplication(GUIenabled) {}
+
+    void saveState( QSessionManager& sm ) {
+        if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController())
+            sm.setRestartCommand(QStringList() << "kdevelop" << "-s" << KDevelop::Core::self()->sessionController()->activeSession()->id().toString());
+        KApplication::saveState(sm);
+    }
+
+};
+
 int main( int argc, char *argv[] )
 {
 static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
@@ -71,7 +84,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-    KApplication app;
+    KDevelopApplication app;
     KDevIDEExtension::init();
 
     if(!getenv("KDEV_SESSION"))
