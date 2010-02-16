@@ -120,6 +120,10 @@ void Session::updateDescription()
         
         prettyContents = projectNames.join(", ");
     }
+
+    if ( prettyContents.isEmpty() ) {
+        prettyContents = i18n("(empty)");
+    }
     
     d->config->group("").writeEntry( cfgSessionPrettyContentsEntry, prettyContents );
 }
