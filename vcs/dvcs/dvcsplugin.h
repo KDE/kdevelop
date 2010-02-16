@@ -188,11 +188,11 @@ protected:
     // Additional interface to be implemented by derived plugins
     //commit dialog helpers:
     /** Returns the list of modified files (diff between workdir and index). */
-    virtual QList<QVariant> getModifiedFiles(const QString &directory);
+    virtual QList<QVariant> getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     /** Returns the list of already cached files (diff between index and HEAD). */
-    virtual QList<QVariant> getCachedFiles(const QString &directory);
+    virtual QList<QVariant> getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     /** Files are not in the repo, but in the repository location. */
-    virtual QList<QVariant> getOtherFiles(const QString &directory);
+    virtual QList<QVariant> getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     /** empty_cmd is used when something is not implemented, but has to return any job */
     virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);

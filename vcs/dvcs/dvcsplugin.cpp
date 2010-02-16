@@ -99,19 +99,19 @@ DistributedVersionControlPlugin::repositoryLocation(const KUrl &)
     return empty_cmd();
 }
 
-QList<QVariant> DistributedVersionControlPlugin::getModifiedFiles(const QString &)
+QList<QVariant> DistributedVersionControlPlugin::getModifiedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
 {
     Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
     return QList<QVariant>();
 }
 
-QList<QVariant> DistributedVersionControlPlugin::getCachedFiles(const QString &)
+QList<QVariant> DistributedVersionControlPlugin::getCachedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
 {
     Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
     return QList<QVariant>();
 }
 
-QList<QVariant> DistributedVersionControlPlugin::getOtherFiles(const QString &)
+QList<QVariant> DistributedVersionControlPlugin::getOtherFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
 {
     Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
     return QList<QVariant>();
