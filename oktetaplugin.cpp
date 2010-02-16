@@ -96,44 +96,6 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
 }
 
 
-// bool OktetaPlugin::saveFile()
-// {
-//     KSaveFile uiFile( localFilePath() );
-//     //FIXME: find a way to return an error. KSaveFile
-//     //doesn't use the KIO error codes
-//     if ( !uiFile.open() )
-//         return false;
-//
-//     QTextStream stream ( &uiFile );
-//     QByteArray windowXml = m_window->contents().toUtf8();
-//     stream << windowXml;
-//
-//     if ( !uiFile.finalize() )
-//         return false;
-//
-//     m_window->setDirty(false);
-//     setModified(false);
-//     return true;
-// }
-/*
-void OktetaPlugin::saveActiveDocument()
-{
-    kDebug(9038) << "going to save:" << mActiveDocument;
-    if( mActiveDocument )
-    {
-        mActiveDocument->save( KDevelop::IDocument::Default );
-    }
-}
-
-void OktetaPlugin::activateDocument( KDevelop::IDocument* doc )
-{
-    if( doc->mimeType()->is( "application/x-designer" ) )
-    {
-        kDebug(9038) << "Doc activated:" << doc;
-        mActiveDocument = doc;
-    }
-}*/
-
 void OktetaPlugin::addTool( Kasten::AbstractToolView* toolView, const QString& id )
 {
 //     if( dockWidget->isVisible() && mCurrentView )

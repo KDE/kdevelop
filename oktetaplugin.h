@@ -35,7 +35,6 @@ class AbstractToolView;
 
 namespace KDevelop
 {
-class IDocument;
 class OktetaDocumentFactory;
 
 
@@ -48,21 +47,10 @@ class OktetaPlugin: public IPlugin
 
     virtual ~OktetaPlugin();
 
-//   virtual bool openFile();
-//   virtual bool saveFile();
-
-public Q_SLOTS:
-//     void activateDocument( KDevelop::IDocument* );
   protected:
     void addTool( Kasten::AbstractToolView* toolView, const QString& id );
 
-private:
-
-  protected Q_SLOTS:
-//     void onDocumentActivated( KDevelop::IDocument* document );
-      //     void saveActiveDocument();
   protected:
-    IDocument* mActiveDocument;
     OktetaDocumentFactory* mDocumentFactory;
 };
 
