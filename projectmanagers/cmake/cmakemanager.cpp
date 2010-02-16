@@ -1293,8 +1293,6 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         ProjectTargetItem* t=static_cast<ProjectBaseItem*>(file->parent())->target();
         if(t)
             targets+=t;
-        else
-            file->setUrl(newUrl);
     }
         
     if(targets.isEmpty())
