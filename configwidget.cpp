@@ -137,8 +137,8 @@ void ConfigWidget::toggleActionEnablement( bool enable )
         CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
         t.enabled = enable;
         ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+        emit changed();
     }
-    emit changed();
 }
 
 void ConfigWidget::actionArgumentsEdited( const QString& txt )
@@ -148,8 +148,8 @@ void ConfigWidget::actionArgumentsEdited( const QString& txt )
         CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
         t.arguments = txt;
         ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+        emit changed();
     }
-    emit changed();
 }
 
 void ConfigWidget::actionEnvironmentChanged( int )
@@ -159,8 +159,8 @@ void ConfigWidget::actionEnvironmentChanged( int )
         CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
         t.envGrp = ui->actionEnvironment->currentProfile();
         ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+        emit changed();
     }
-    emit changed();
 }
 
 void ConfigWidget::actionExecutableChanged(const KUrl& url )
@@ -170,8 +170,8 @@ void ConfigWidget::actionExecutableChanged(const KUrl& url )
         CustomBuildSystemTool t = data.value<CustomBuildSystemTool>();
         t.executable = url;
         ui->buildAction->setItemData( ui->buildAction->currentIndex(), QVariant::fromValue( t ) );
+        emit changed();
     }
-    emit changed();
 }
 
 void ConfigWidget::actionExecutableChanged(const QString& txt )
