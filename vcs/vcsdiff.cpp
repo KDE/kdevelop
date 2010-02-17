@@ -186,5 +186,18 @@ void VcsDiff::setBaseDiff(const KUrl& url) const
     d->baseDiff=url;
 }
 
+void VcsDiff::clear()
+{
+//     d->content;
+//     d->type;
+    d->leftBinaries.clear();
+    d->rightBinaries.clear();
+    d->leftTexts.clear();
+    d->rightTexts.clear();
+    d->diff.clear();
+    d->baseDiff.clear();
+}
+
+
 }
 

@@ -153,7 +153,7 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl &url )
     }
     
     d->urls.clear();
-    d->diff=KDevelop::VcsDiff();
+    d->diff.clear();
     
     //DVCS uses some "hack", see DistributedVersionControlPlugin::status()
     //Thus DVCS gets statuses for all files in the repo. But project->relativeUrl() below helps us

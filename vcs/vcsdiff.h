@@ -124,6 +124,9 @@ public:
     
     /** @returns whether there are not changes on the diff */
     bool isEmpty() const;
+    
+    /** Clears the diff information and it becomes an empty patch. */
+    void clear();
 private:
     class VcsDiffPrivate* const d;
 };

@@ -143,6 +143,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         annotationAction->setEnabled(singleVersionedFile);
         diffToHeadAction->setEnabled(singleVersionedFile);
         diffToBaseAction->setEnabled(singleVersionedFile);
+        commitAction->setEnabled(singleVersionedFile);
         
         return menu;
     }
