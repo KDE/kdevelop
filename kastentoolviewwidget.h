@@ -29,6 +29,10 @@
 namespace Kasten {
 class AbstractToolView;
 }
+namespace Sublime {
+class MainWindow;
+class View;
+}
 
 
 namespace KDevelop
@@ -43,7 +47,9 @@ class KastenToolViewWidget : public QWidget
 
     virtual ~KastenToolViewWidget();
 
-  public:
+  protected Q_SLOTS:
+    void onMainWindowAdded( Sublime::MainWindow* mainWindow );
+    void onActiveViewChanged( Sublime::View* view );
 
   protected:
     Kasten::AbstractToolView* mToolView;

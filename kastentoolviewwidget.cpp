@@ -22,9 +22,18 @@
 
 #include "kastentoolviewwidget.h"
 
+// plugin
+#include "oktetaview.h"
+// Okteta Kasten
+#include <kasten/bytearrayview.h>
 // Kasten
 #include <Kasten/AbstractToolView>
 #include <Kasten/AbstractTool>
+// KDev
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/mainwindow.h>
+#include <sublime/controller.h>
 // Qt
 #include <QVBoxLayout>
 
@@ -35,9 +44,30 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
   : QWidget( parent ),
     mToolView( toolView )
 {
+    Sublime::Controller* controller = ICore::self()->uiController()->controller();
+    const QList<Sublime::MainWindow*>& mainWindows = controller->mainWindows();
+    foreach( Sublime::MainWindow* mainWindow, mainWindows )
+        onMainWindowAdded( mainWindow );
+    connect( controller, SIGNAL(mainWindowAdded(Sublime::MainWindow*)),
+             SLOT(onMainWindowAdded(Sublime::MainWindow*)) );
+
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
     layout->addWidget( mToolView->widget() );
+}
+
+void KastenToolViewWidget::onMainWindowAdded( Sublime::MainWindow* mainWindow )
+{
+    connect( mainWindow, SIGNAL(activeViewChanged(Sublime::View*)),
+             SLOT(onActiveViewChanged(Sublime::View*)) );
+}
+
+void KastenToolViewWidget::onActiveViewChanged( Sublime::View* view )
+{
+    // TODO: check if own mainWindow
+    OktetaView* oktetaView = qobject_cast<OktetaView*>( view );
+    Kasten::ByteArrayView* byteArrayView = oktetaView ? oktetaView->byteArrayView() : 0;
+    mToolView->tool()->setTargetModel( byteArrayView );
 }
 
 KastenToolViewWidget::~KastenToolViewWidget()

@@ -45,12 +45,18 @@ class OktetaView : public Sublime::View
 
     virtual ~OktetaView();
 
+  public:
+    Kasten::ByteArrayView* byteArrayView() const;
+
   protected: // Sublime::View API
     QWidget* createWidget( QWidget* parent = 0 );
 
   protected:
     Kasten::ByteArrayView* mByteArrayView;
 };
+
+
+inline Kasten::ByteArrayView* OktetaView::byteArrayView() const { return mByteArrayView; }
 
 }
 
