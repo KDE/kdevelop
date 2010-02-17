@@ -634,6 +634,9 @@ CodeModelItem::Kind kindForDeclaration(Declaration* decl) {
   if(decl->isForwardDeclaration())
     kind = (CodeModelItem::Kind)(kind | CodeModelItem::ForwardDeclaration);
 
+  if ( decl->context() && decl->context()->type() == DUContext::Class )
+    kind = (CodeModelItem::Kind)(kind | CodeModelItem::ClassMember);
+
   return kind;
 }
 
