@@ -72,7 +72,7 @@ struct DistributedVersionControlPluginPrivate {
             : m_factory(new KDevDVCSViewFactory(pThis))
             , m_common(new VcsPluginHelper(pThis, pThis)) {}
     KDevDVCSViewFactory* m_factory;
-    QScopedPointer<VcsPluginHelper> m_common;
+    std::auto_ptr<VcsPluginHelper> m_common;
 };
 
 //class DistributedVersionControlPlugin
