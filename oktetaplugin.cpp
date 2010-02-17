@@ -51,23 +51,23 @@
 #include <interfaces/iuicontroller.h>
 // KDE
 #include <KAboutData>
-#include <kaction.h>
-#include <kmimetype.h>
-#include <kxmlguiwindow.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kparts/mainwindow.h>
-#include <kparts/partmanager.h>
-#include <ksavefile.h>
-#include <kstandardaction.h>
-#include <kicon.h>
-#include <kactioncollection.h>
+// #include <kaction.h>
+// #include <kmimetype.h>
+// #include <kxmlguiwindow.h>
+// #include <kpluginfactory.h>
+// #include <kpluginloader.h>
+// #include <kparts/mainwindow.h>
+// #include <kparts/partmanager.h>
+// #include <ksavefile.h>
+// #include <kstandardaction.h>
+// #include <kicon.h>
+// #include <kactioncollection.h>
 // Qt
-#include <QObject>
-#include <QAction>
-#include <QFile>
-#include <QTextStream>
-#include <QPluginLoader>
+// #include <QObject>
+// #include <QAction>
+// #include <QFile>
+// #include <QTextStream>
+// #include <QPluginLoader>
 
 
 K_PLUGIN_FACTORY(OktetaPluginFactory, registerPlugin<KDevelop::OktetaPlugin>(); )
