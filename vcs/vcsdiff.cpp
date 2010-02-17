@@ -63,6 +63,12 @@ VcsDiff::VcsDiff( const VcsDiff& rhs )
     d->baseDiff =  rhs.d->baseDiff;
 }
 
+bool VcsDiff::isEmpty() const
+{
+    return d->diff.isEmpty() && d->leftBinaries.isEmpty() && d->rightBinaries.isEmpty()
+                             && d->leftTexts.isEmpty() && d->rightTexts.isEmpty();
+}
+
 VcsDiff::Type VcsDiff::type() const
 {
     return d->type;

@@ -255,6 +255,15 @@ void VcsPluginHelper::diffToHead()
     d->plugin->core()->runController()->registerJob(job);
 }
 
+QStringList locationListToString(const QList<VcsLocation>& locations)
+{
+    QStringList ret;
+    foreach(const VcsLocation& loc, locations) {
+        ret.append(loc.localUrl().prettyUrl());
+    }
+    return ret;
+}
+
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
     KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
@@ -263,7 +272,14 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            showVcsDiff(new VCSDiffPatchSource(d));
+            if(d.isEmpty())
+                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                   i18n("Cannot show the difference because there were none."),
+                                   i18n("VCS support"));
+            else {
+                VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
+                showVcsDiff(patch);
+            }
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }

@@ -121,6 +121,9 @@ public:
     void setType( Type );
     void setContentType( Content );
     VcsDiff& operator=( const VcsDiff& rhs);
+    
+    /** @returns whether there are not changes on the diff */
+    bool isEmpty() const;
 private:
     class VcsDiffPrivate* const d;
 };
