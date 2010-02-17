@@ -26,8 +26,6 @@
 // KDev
 #include <interfaces/iuicontroller.h>
 
-class QWidget;
-
 namespace Kasten {
 class AbstractToolViewFactory;
 class AbstractToolFactory;
@@ -35,8 +33,6 @@ class AbstractToolFactory;
 
 namespace KDevelop
 {
-class OktetaPlugin;
-
 
 class OktetaToolViewFactory : public IToolViewFactory
 {
