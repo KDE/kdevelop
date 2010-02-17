@@ -67,6 +67,7 @@ public:
     void jobReceivedResults( KDevelop::VcsJob* job );
     void diffToPrevious();
     void diffRevisions();
+    void currentRowChanged(const QModelIndex& start, const QModelIndex& end);
 };
 
 void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &point )
@@ -86,6 +87,12 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
     QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffRevisions()) );
 
     menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
+}
+
+void VcsEventWidgetPrivate::currentRowChanged(const QModelIndex& start, const QModelIndex& end)
+{
+    if(start.isValid())
+        eventViewClicked(start);
 }
 
 void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
@@ -203,6 +210,8 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
 
     connect( d->m_ui->eventView, SIGNAL( clicked( const QModelIndex& ) ),
              this, SLOT( eventViewClicked( const QModelIndex& ) ) );
+    connect( d->m_ui->eventView->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+             this, SLOT(currentRowChanged(QModelIndex,QModelIndex)));
     connect( d->m_ui->eventView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
              this, SLOT( eventViewCustomContextMenuRequested( const QPoint& ) ) );
 
