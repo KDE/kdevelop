@@ -151,11 +151,14 @@ void MainWindowPrivate::activePartChanged(KParts::Part *part)
 
 void MainWindowPrivate::changeActiveView(Sublime::View *view)
 {
+    //disable updates on a window to avoid toolbar flickering on xmlgui client change
+    m_mainWindow->setUpdatesEnabled( false );
     mergeView(view);
-    
+    m_mainWindow->setUpdatesEnabled( true );
+
     if(!view)
         return;
-    
+
     IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {
