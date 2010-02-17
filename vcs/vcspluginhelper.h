@@ -19,6 +19,7 @@
 class KJob;
 class QAction;
 class QActionGroup;
+class QMenu;
 
 namespace KDevelop
 {
@@ -40,7 +41,7 @@ public:
 
     void setupFromContext(KDevelop::Context*);
     KUrl::List const & contextUrlList();
-    QList<QAction*> commonActions();
+    QMenu* commonActions();
 
 private Q_SLOTS:
     void commit();

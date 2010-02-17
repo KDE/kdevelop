@@ -193,12 +193,8 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     if (!hasVersionControlledEntries)
         return IPlugin::contextMenuExtension(context);
 
-    QMenu* menu = new QMenu("CVS");
-    QList<QAction*> commonActions = d->m_common->commonActions();
-    if (!commonActions.empty()) {
-        menu->addActions(commonActions);
-        menu->addSeparator();
-    }
+    QMenu* menu = d->m_common->commonActions();
+    menu->addSeparator();
 
     KAction *action;
     // Just add actions which are not covered by the cvscommon plugin

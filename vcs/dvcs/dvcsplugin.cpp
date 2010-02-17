@@ -61,7 +61,6 @@
 #include "ui/revhistory/commitView.h"
 #include <language/interfaces/editorcontext.h>
 #include <vcs/vcspluginhelper.h>
-#include <memory>
 #include <KMenu>
 #include <kparts/mainwindow.h>
 
@@ -73,7 +72,7 @@ struct DistributedVersionControlPluginPrivate {
             : m_factory(new KDevDVCSViewFactory(pThis))
             , m_common(new VcsPluginHelper(pThis, pThis)) {}
     KDevDVCSViewFactory* m_factory;
-    std::auto_ptr<VcsPluginHelper> m_common;
+    QScopedPointer<VcsPluginHelper> m_common;
 };
 
 //class DistributedVersionControlPlugin
@@ -239,15 +238,9 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
         return ContextMenuExtension();
     }
 
-    QList<QAction*> commonActions = d->m_common->commonActions();
-
-    KMenu * menu = new KMenu(name());
-
-    if (!commonActions.isEmpty())  {
-        menu->addActions(commonActions);
-        menu->addSeparator();
-    }
-
+    QMenu * menu = d->m_common->commonActions();
+    menu->addSeparator();
+    
     KAction *action;
     action = new KAction(KIcon("arrow-up-double"), i18n("Push..."), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxPush()));

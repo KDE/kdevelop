@@ -68,6 +68,7 @@
 #include "vcsstatusinfo.h"
 #include <qboxlayout.h>
 #include <qlabel.h>
+#include <QMenu>
 #include "vcsdiffpatchsources.h"
 
 namespace KDevelop
@@ -76,8 +77,8 @@ namespace KDevelop
 struct VcsPluginHelper::VcsPluginHelperPrivate {
     IPlugin * plugin;
     IBasicVersionControl * vcs;
+
     KUrl::List ctxUrls;
-    QList<QAction*> actions;
     KAction * commitAction;
     KAction * addAction;
     KAction * removeAction;
@@ -86,26 +87,64 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * annotationAction;
     KAction * diffToHeadAction;
     KAction * diffToBaseAction;
-    KAction* revertAction;
+    KAction * revertAction;
+    
     void createActions(QObject * parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
-        actions.push_back(commitAction);
-        addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        actions.push_back(addAction);
-        removeAction = new KAction(KIcon("list-remove"), i18n("Remove"), parent);
-        actions.push_back(removeAction);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
-        actions.push_back(updateAction);
+        addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
+        removeAction = new KAction(KIcon("list-remove"), i18n("Remove"), parent);
         diffToHeadAction = new KAction(i18n("Compare to Head..."), parent);
-        actions.push_back(diffToHeadAction);
         diffToBaseAction = new KAction(i18n("Compare to Base..."), parent);
-        actions.push_back(diffToBaseAction);
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
-        actions.push_back(revertAction);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
-        actions.push_back(historyAction);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
-        actions.push_back(annotationAction);
+        
+        connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
+        connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
+        connect(removeAction, SIGNAL(triggered()), parent, SLOT(remove()));
+        connect(updateAction, SIGNAL(triggered()), parent, SLOT(update()));
+        connect(diffToHeadAction, SIGNAL(triggered()), parent, SLOT(diffToHead()));
+        connect(diffToBaseAction, SIGNAL(triggered()), parent, SLOT(diffToBase()));
+        connect(revertAction, SIGNAL(triggered()), parent, SLOT(revert()));
+        connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
+        connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
+    }
+    
+    QMenu* createMenu()
+    {
+        bool allVersioned=true;
+        foreach(const KUrl& url, ctxUrls) {
+            allVersioned=allVersioned && vcs->isVersionControlled(url);
+            
+            if(!allVersioned)
+                break;
+        }
+        
+        QMenu* menu=new QMenu(vcs->name());
+        menu->setIcon(KIcon(ICore::self()->pluginController()->pluginInfo(plugin).icon()));
+        
+        menu->addAction(commitAction);
+        menu->addAction(updateAction);
+        menu->addSeparator();
+        menu->addAction(addAction);
+        menu->addAction(removeAction);
+        menu->addAction(revertAction);
+        menu->addSeparator();
+        menu->addAction(historyAction);
+        menu->addAction(annotationAction);
+        menu->addAction(diffToHeadAction);
+        menu->addAction(diffToBaseAction);
+        
+        addAction->setEnabled(!allVersioned);
+        
+        const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
+        historyAction->setEnabled(singleVersionedFile);
+        annotationAction->setEnabled(singleVersionedFile);
+        diffToHeadAction->setEnabled(singleVersionedFile);
+        diffToBaseAction->setEnabled(singleVersionedFile);
+        
+        return menu;
     }
 };
 
@@ -114,25 +153,15 @@ VcsPluginHelper::VcsPluginHelper(KDevelop::IPlugin* parent, KDevelop::IBasicVers
         : QObject(parent)
         , d(new VcsPluginHelperPrivate())
 {
-    Q_ASSERT(0 != vcs);
-    Q_ASSERT(0 != parent);
+    Q_ASSERT(vcs);
+    Q_ASSERT(parent);
     d->plugin = parent;
     d->vcs = vcs;
     d->createActions(this);
-    connect(d->commitAction, SIGNAL(triggered()), this, SLOT(commit()));
-    connect(d->addAction, SIGNAL(triggered()), this, SLOT(add()));
-    connect(d->removeAction, SIGNAL(triggered()), this, SLOT(remove()));
-    connect(d->updateAction, SIGNAL(triggered()), this, SLOT(update()));
-    connect(d->diffToHeadAction, SIGNAL(triggered()), this, SLOT(diffToHead()));
-    connect(d->diffToBaseAction, SIGNAL(triggered()), this, SLOT(diffToBase()));
-    connect(d->revertAction, SIGNAL(triggered()), this, SLOT(revert()));
-    connect(d->historyAction, SIGNAL(triggered()), this, SLOT(history()));
-    connect(d->annotationAction, SIGNAL(triggered()), this, SLOT(annotation()));
 }
 
 VcsPluginHelper::~VcsPluginHelper()
-{
-}
+{}
 
 KUrl VcsPluginHelper::urlForItem(KDevelop::ProjectBaseItem* item) const
 {
@@ -188,7 +217,7 @@ KUrl::List const & VcsPluginHelper::contextUrlList()
     return d->ctxUrls;
 }
 
-QList<QAction*> VcsPluginHelper::commonActions()
+QMenu* VcsPluginHelper::commonActions()
 {
     /* TODO: the following logic to determine which actions need to be enabled
      * or disabled does not work properly. What needs to be implemented is that
@@ -199,17 +228,7 @@ QList<QAction*> VcsPluginHelper::commonActions()
      * one we assume the urls can be added but are not currently controlled. If
      * the url is already version controlled then just enable all except add
      */
-
-    if (d->ctxUrls.isEmpty())
-        return QList<QAction*>();
-
-    const bool singleFile = d->ctxUrls.count() == 1;
-    d->historyAction->setEnabled(singleFile);
-    d->annotationAction->setEnabled(singleFile);
-    d->diffToHeadAction->setEnabled(singleFile);
-    d->diffToBaseAction->setEnabled(singleFile);
-
-    return d->actions;
+    return d->createMenu();
 }
 
 #define EXECUTE_VCS_METHOD( method ) \

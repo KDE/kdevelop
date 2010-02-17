@@ -332,18 +332,9 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
         return IPlugin::contextMenuExtension(context);
 
 
-    if( !svnmenu ) 
-    {
-        svnmenu = new QMenu("Subversion");
-    }
-    svnmenu->clear();
-
-    QList<QAction*> actions = m_common->commonActions();
-    if (!actions.empty()) {
-        svnmenu->addActions(actions);
-        svnmenu->addSeparator();
-    }
-
+    QMenu* svnmenu= m_common->commonActions();
+    svnmenu->addSeparator();
+    
     if( !copy_action )
     {
         copy_action = new KAction(i18n("Copy..."), this);
