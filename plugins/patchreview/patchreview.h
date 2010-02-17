@@ -215,7 +215,6 @@ private:
     void determineState();
     #endif
 
-    KUrl m_diffFile;
     QPointer<DiffSettings> m_diffSettings;
     std::auto_ptr<Kompare::Info> m_kompareInfo;
     std::auto_ptr<Diff2::KompareModelList> m_modelList;

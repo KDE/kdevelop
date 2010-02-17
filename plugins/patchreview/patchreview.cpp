@@ -478,20 +478,19 @@ void PatchReviewToolView::kompareModelChanged()
         throw "no diff-models";
     Diff2::DiffModelList::const_iterator it = models->constBegin();
     QSet<KUrl> haveUrls;
-    while ( it != models->constEnd() ) {
+    for(; it != models->constEnd(); ++it) {
         Diff2::DifferenceList * diffs = ( *it ) ->differences();
         int cnt = 0;
         if ( diffs )
             cnt = diffs->count();
 
         KUrl file = urlForFileModel(*it);
+        haveUrls.insert(file);
 
         if(!QFileInfo(file.toLocalFile()).isReadable())
           continue;
           
         QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
-        
-        haveUrls.insert(file);
         
         m_editPatch.filesList->insertTopLevelItem(0, item);
         QString text = i18n( "%1 (%2 hunks", ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain), cnt );
@@ -504,7 +503,6 @@ void PatchReviewToolView::kompareModelChanged()
         item->setData( 0, Qt::DisplayRole, text );
         item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
         item->setCheckState( 0, Qt::Checked );
-        ++it;
     }
     
     ///First add files that a project was found for, then the other ones
