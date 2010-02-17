@@ -39,17 +39,28 @@ using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 
-void CustomBuildSystemPluginTest::init()
+void CustomBuildSystemPluginTest::cleanupTestCase()
+{
+    m_core->cleanup();
+    delete m_core;
+}
+void CustomBuildSystemPluginTest::initTestCase()
 {
     AutoTestShell::init();
     m_core = new KDevelop::TestCore();
     m_core->initialize( Core::Default );
-}
+    
+    QTimer timer;
+    QEventLoop loop;
+    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
+    timer.setSingleShot(true);
+    timer.start(5000);
+    loop.exec();
 
-void CustomBuildSystemPluginTest::cleanup()
-{
-    m_core->cleanup();
-    delete m_core;
+    foreach( IProject* p, m_core->projectController()->projects() )
+    {
+        m_core->projectController()->closeProject( p );
+    }
 }
 
 void CustomBuildSystemPluginTest::loadSimpleProject()
@@ -61,7 +72,8 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     if( !projectSpy->wait( 20000 ) ) {
         kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
     }
-    IProject* project = ICore::self()->projectController()->projects().at( 0 );
+    IProject* project = ICore::self()->projectController()->findProjectByName( "SimpleProject" );
+    QVERIFY( project );
     KUrl::List includes = project->buildSystemManager()->includeDirectories( project->projectItem() );
     
     QHash<QString,QString> defines;

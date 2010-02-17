@@ -31,8 +31,8 @@ class CustomBuildSystemPluginTest : public QObject
 {
 Q_OBJECT
 private slots:
-    void init();
-    void cleanup();
+    void initTestCase();
+    void cleanupTestCase();
     void loadSimpleProject();
 private:
     KDevelop::TestCore* m_core;
