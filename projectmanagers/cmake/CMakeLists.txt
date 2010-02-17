@@ -6,6 +6,7 @@ include_directories(
     ${cmakebuilder_SOURCE_DIR}
 )
 add_subdirectory(tests)
+add_subdirectory(icons)
 
 # enable this if you want to have the cmake debug visitor run on each CMakeLists.txt
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
