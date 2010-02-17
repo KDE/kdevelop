@@ -505,7 +505,7 @@ SessionController::SessionController( QObject *parent )
     action->setIcon(KIcon("edit-delete"));
 
     action = actionCollection()->addAction( "quit", this, SIGNAL( quitSession() ) );
-    action->setText( i18n("Quit Session") );
+    action->setText( i18n("Quit") );
     action->setShortcut(Qt::CTRL | Qt::Key_Q);
     action->setIcon(KIcon("application-exit"));
 
