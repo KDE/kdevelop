@@ -18,6 +18,7 @@ include_directories(
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9525)
 
 add_subdirectory(tests)
+add_subdirectory(icons)
 
 set(kdevgit_PART_SRCS
     gitplugin.cpp

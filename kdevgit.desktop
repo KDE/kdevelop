@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
+Icon=git
 Comment=This plugin integrates Git to KDevelop
 Comment[ca]=Aquest connector integra Git en KDevelop
 Comment[ca@valencia]=Este connector integra Git en KDevelop
