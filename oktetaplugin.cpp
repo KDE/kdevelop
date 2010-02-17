@@ -75,7 +75,7 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     addTool( new Kasten::ByteTableToolViewFactory(),
              new Kasten::ByteTableToolFactory(), "ByteTableToolView", i18n("Byte Table") );
     addTool( new Kasten::InfoToolViewFactory(),
-             new Kasten::InfoToolFactory(), "InfoToolView", i18n("File Info") );
+             new Kasten::InfoToolFactory(), "InfoToolView", i18n("Statistics") );
     addTool( new Kasten::PodDecoderToolViewFactory(),
              new Kasten::PodDecoderToolFactory(), "PODDecoderToolView", i18n("Decoding Table") );
     addTool( new Kasten::StructuresToolViewFactory(),
