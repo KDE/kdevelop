@@ -147,6 +147,7 @@ KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
     if( !pathgrp.isEmpty() ) {
         QByteArray data = cfg.group( pathgrp ).readEntry( ConfigConstants::includesKey, QByteArray() );
         QDataStream ds( data );
+        ds.setVersion( QDataStream::Qt_4_5 );
         ds >> includes;
     }
     return KUrl::List( includes );
