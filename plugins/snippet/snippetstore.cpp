@@ -96,4 +96,17 @@ bool SnippetStore::setData(const QModelIndex& index, const QVariant& value, int 
     return true;
 }
 
+SnippetRepository* SnippetStore::repositoryForFile(const QString& file)
+{
+    for ( int i = 0; i < rowCount(); ++i ) {
+        if ( SnippetRepository* repo = dynamic_cast<SnippetRepository*>(item(i)) ) {
+            if ( repo->file() == file ) {
+                return repo;
+            }
+        }
+    }
+    return 0;
+}
+
+
 #include "snippetstore.moc"

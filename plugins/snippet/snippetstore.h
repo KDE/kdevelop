@@ -40,6 +40,10 @@ public:
     virtual ~SnippetStore();
     KConfigGroup getConfig();
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    /**
+     * Returns the repository for the given @p file if there is any.
+     */
+    SnippetRepository* repositoryForFile(const QString &file);
 
 private:
     SnippetStore(SnippetPlugin* plugin);

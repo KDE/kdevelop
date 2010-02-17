@@ -15,6 +15,7 @@
 #include <KMenu>
 #include <KMessageBox>
 #include <KAction>
+#include <KDebug>
 
 #include "snippet.h"
 #include "snippetplugin.h"
@@ -23,6 +24,15 @@
 #include "editrepository.h"
 #include "editsnippet.h"
 #include "snippetfilterproxymodel.h"
+
+
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION( 4, 4, 0 )
+    #define SNIPPETS_HAVE_GHNS
+    #include <KNS3/DownloadDialog>
+    #include <knewstuff3/uploaddialog.h>
+#endif
 
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
  : QWidget(parent), Ui::SnippetViewBase(), m_plugin(plugin)
@@ -60,6 +70,10 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_removeRepoAction = new KAction(KIcon("edit-delete"), i18n("Remove Repository"), this);
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
+    m_putNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Publish Repository"), this);
+    connect(m_putNewStuffAction, SIGNAL(triggered()), this, SLOT(slotSnippetToGHNS()));
+    ///TODO: make it work (KNS3 issue?)
+//     addAction(m_putNewStuffAction);
 
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
@@ -74,6 +88,12 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_removeSnippetAction = new KAction(KIcon("document-close"), i18n("Remove Snippet"), this);
     connect(m_removeSnippetAction, SIGNAL(triggered()), this, SLOT(slotRemoveSnippet()));
     addAction(m_removeSnippetAction);
+
+    addAction(separator);
+
+    m_getNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Get New Snippets"), this);
+    connect(m_getNewStuffAction, SIGNAL(triggered()), this, SLOT(slotGHNS()));
+    addAction(m_getNewStuffAction);
 
     connect(snippetTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(validateActions()));
     validateActions();
@@ -94,6 +114,7 @@ void SnippetView::validateActions()
     m_addRepoAction->setEnabled(true);
     m_editRepoAction->setEnabled(selectedRepo);
     m_removeRepoAction->setEnabled(selectedRepo);
+    m_putNewStuffAction->setEnabled(selectedRepo);
 
     m_addSnippetAction->setEnabled(selectedRepo || selectedSnippet);
     m_editSnippetAction->setEnabled(selectedSnippet);
@@ -132,6 +153,7 @@ void SnippetView::contextMenu (const QPoint& pos)
         menu.addTitle(i18n("Snippets"));
 
         menu.addAction(m_addRepoAction);
+        menu.addAction(m_getNewStuffAction);
 
         menu.exec(snippetTree->mapToGlobal(pos));
     } else if (Snippet* snippet = dynamic_cast<Snippet*>( item )) {
@@ -148,6 +170,8 @@ void SnippetView::contextMenu (const QPoint& pos)
 
         menu.addAction(m_editRepoAction);
         menu.addAction(m_removeRepoAction);
+        ///TODO: make it work (KNS3 issue?)
+//     addAction(m_putNewStuffAction);
         menu.addSeparator();
 
         menu.addAction(m_addSnippetAction);
@@ -254,5 +278,46 @@ void SnippetView::slotFilterChanged()
 {
     m_proxy->changeFilter( filterText->text() );
 }
+
+#ifdef SNIPPETS_HAVE_GHNS
+void SnippetView::slotGHNS()
+{
+    KNS3::DownloadDialog dialog("ktexteditor_codesnippets_core.knsrc", this);
+    dialog.exec();
+    foreach ( const KNS3::Entry& entry, dialog.changedEntries() ) {
+        foreach ( const QString& path, entry.uninstalledFiles() ) {
+            if ( path.endsWith(".xml") ) {
+                if ( SnippetRepository* repo = SnippetStore::self()->repositoryForFile(path) ) {
+                    repo->remove();
+                }
+            }
+        }
+        foreach ( const QString& path, entry.installedFiles() ) {
+            if ( path.endsWith(".xml") ) {
+                SnippetStore::self()->appendRow(new SnippetRepository(path));
+            }
+        }
+    }
+}
+
+void SnippetView::slotSnippetToGHNS()
+{
+    QStandardItem* item = currentItem();
+    if ( !item)
+        return;
+
+    SnippetRepository* repo = dynamic_cast<SnippetRepository*>( item );
+    if ( !repo )
+        return;
+
+    KNS3::UploadDialog dialog("ktexteditor_codesnippets_core.knsrc", this);
+    dialog.setUploadFile(KUrl::fromPath(repo->file()));
+    dialog.setUploadName(repo->text());
+    dialog.exec();
+}
+#else
+void SnippetView::slotGHNS() {}
+void SnippetView::slotSnippetToGHNS() {}
+#endif
 
 #include "snippetview.moc"
