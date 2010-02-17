@@ -67,21 +67,29 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     Q_UNUSED(args)
 
     addTool( new Kasten::ChecksumToolViewFactory(), new Kasten::ChecksumToolFactory(),
-             "ChecksumToolView", i18n("Checksum"), Qt::RightDockWidgetArea );
+             "ChecksumToolView", "accessories-calculator", i18n("Checksum"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::FilterToolViewFactory(), new Kasten::FilterToolFactory(),
-             "FilterToolView", i18n("Binary Filter"), Qt::RightDockWidgetArea );
+             "FilterToolView", "okteta", i18n("Binary Filter"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::StringsExtractToolViewFactory, new Kasten::StringsExtractToolFactory(),
-             "StringsExtractToolView", i18n("Strings"), Qt::RightDockWidgetArea );
+             "StringsExtractToolView", "okteta", i18n("Strings"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::ByteTableToolViewFactory(), new Kasten::ByteTableToolFactory(),
-             "ByteTableToolView", i18n("Byte Table"), Qt::RightDockWidgetArea );
+             "ByteTableToolView", "table", i18n("Byte Table"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::InfoToolViewFactory(), new Kasten::InfoToolFactory(),
-             "InfoToolView", i18n("Statistics"), Qt::RightDockWidgetArea );
+             "InfoToolView", "okteta", i18n("Statistics"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::PodDecoderToolViewFactory(), new Kasten::PodDecoderToolFactory(),
-             "PODDecoderToolView", i18n("Decoding Table"), Qt::RightDockWidgetArea );
+             "PODDecoderToolView", "okteta", i18n("Decoding Table"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::StructuresToolViewFactory(), new Kasten::StructuresToolFactory(),
-             "StructToolView", i18n("Structures"), Qt::RightDockWidgetArea );
+             "StructToolView", "okteta", i18n("Structures"),
+             Qt::RightDockWidgetArea );
     addTool( new Kasten::BookmarksToolViewFactory, new Kasten::BookmarksToolFactory(),
-             "BookmarksToolView", i18n("Bookmarks"), Qt::RightDockWidgetArea );
+             "BookmarksToolView", "bookmarks", i18n("Bookmarks"),
+             Qt::RightDockWidgetArea );
 
     KDevelop::IDocumentController* idc = core()->documentController();
     idc->registerDocumentForMimetype("audio/x-wav", mDocumentFactory);
@@ -90,14 +98,15 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
 
 void OktetaPlugin::addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
                             Kasten::AbstractToolFactory* toolFactory,
-                            const QString& id, const QString& title, Qt::DockWidgetArea defaultPosition )
+                            const QString& id, const QString& iconName, const QString& title,
+                            Qt::DockWidgetArea defaultPosition )
 {
 //     if( dockWidget->isVisible() && mCurrentView )
 //         toolView->tool()->setTargetModel( mCurrentView );
 
 //     connect( dockWidget, SIGNAL(visibilityChanged( bool )), SLOT(onToolVisibilityChanged( bool )) );
     OktetaToolViewFactory* factory =
-        new OktetaToolViewFactory( toolViewFactory, toolFactory, id, defaultPosition );
+        new OktetaToolViewFactory( toolViewFactory, toolFactory, iconName, id, defaultPosition );
 
     core()->uiController()->addToolView( title, factory );
 }

@@ -28,6 +28,8 @@
 #include <Kasten/AbstractToolViewFactory>
 #include <Kasten/AbstractToolFactory>
 #include <Kasten/AbstractToolView>
+// KDE
+#include <KIcon>
 
 
 namespace KDevelop
@@ -35,10 +37,12 @@ namespace KDevelop
 
 OktetaToolViewFactory::OktetaToolViewFactory( Kasten::AbstractToolViewFactory* toolViewFactory,
                                               Kasten::AbstractToolFactory* toolFactory,
+                                              const QString& iconName,
                                               const QString& id, Qt::DockWidgetArea defaultPosition )
   : IToolViewFactory(),
     mToolViewFactory( toolViewFactory ),
     mToolFactory( toolFactory ),
+    mIconName( iconName ),
     mId( id ),
     mDefaultPosition( defaultPosition )
 {
@@ -49,7 +53,9 @@ QWidget* OktetaToolViewFactory::create( QWidget* parent )
     Kasten::AbstractTool* tool = mToolFactory->create();
     Kasten::AbstractToolView* toolView = mToolViewFactory->create( tool );
 
-    return new KastenToolViewWidget( toolView, parent );
+    QWidget* widget = new KastenToolViewWidget( toolView, parent );
+    widget->setWindowIcon( KIcon(mIconName) );
+    return widget;
 }
 
 Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition()
