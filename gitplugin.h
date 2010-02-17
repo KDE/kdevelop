@@ -76,6 +76,7 @@ public:
                           const KDevelop::VcsRevision& rev,
                           unsigned long limit);
     KDevelop::VcsJob* annotate(const KUrl &localLocation, const KDevelop::VcsRevision &rev);
+    KDevelop::VcsJob* revert(const KUrl::List& localLocations, RecursionMode recursion);
 
     // Begin:  KDevelop::IDistributedVersionControl
     KDevelop::VcsJob* init(const KUrl & directory);
@@ -99,9 +100,9 @@ public:
     QStringList branches(const QString &repository);
 
     //commit dialog helpers, send to main helper the arg for git-ls-files:
-    QList<QVariant> getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    QList<QVariant> getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    QList<QVariant> getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    QList<QVariant> getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity);
+    QList<QVariant> getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity);
+    QList<QVariant> getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity);
 
     //graph helpers
     QList<DVcsEvent> getAllCommits(const QString &repo);
@@ -129,8 +130,8 @@ protected slots:
 
 private:
     //commit dialog "main" helper
-    QStringList getLsFiles(const QString &directory, const QStringList &args = QStringList(),
-        KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    QStringList getLsFiles(const QString &directory, const QStringList &args,
+        KDevelop::OutputJob::OutputJobVerbosity verbosity);
 
     void initBranchHash(const QString &repo);
 

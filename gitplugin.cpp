@@ -45,6 +45,23 @@ K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1"
 
 using namespace KDevelop;
 
+QDir dotGitDirectory(const KUrl& dirPath)
+{
+    const QString initialPath(dirPath.toLocalFile(KUrl::RemoveTrailingSlash));
+    const QFileInfo finfo(initialPath);
+    QDir dir;
+    if (finfo.isFile()) {
+        dir = finfo.absoluteDir();
+    } else {
+        dir = QDir(initialPath);
+        dir.makeAbsolute();
+    }
+    
+    static const QString gitDir(".git");
+    while (!dir.cd(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
+    return dir;
+}
+
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData())
 {
@@ -74,24 +91,12 @@ QString GitPlugin::name() const
 
 bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 {
-    static const QString gitDir(".git");
-    const QString initialPath(dirPath.toLocalFile(KUrl::RemoveTrailingSlash));
-
     KUrl possibleRepoRoot = m_lastRepoRoot;
     if (!m_lastRepoRoot.isValid() || !m_lastRepoRoot.isParentOf(dirPath)) {
-        const QFileInfo finfo(initialPath);
-        QDir dir;
-        if (finfo.isFile()) {
-            dir = finfo.absoluteDir();
-        } else {
-            dir = QDir(initialPath);
-            dir.makeAbsolute();
-        }
+        QDir dir=dotGitDirectory(dirPath);
 
-        while (!dir.cd(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
-
-        if (gitDir != dir.dirName()) {  // We didn't find .git, so no need to call git
-            kDebug() << "Dir:" << dirPath << " is not inside work tree of git \"" << initialPath << '"';
+        if (".git" != dir.dirName()) {  // We didn't find .git, so no need to call git
+            kDebug() << "Dir:" << dirPath << " is not inside work tree of git \"" << dirPath << '"';
             return false;
         }
         dir.cdUp();
@@ -154,7 +159,7 @@ VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLo
         *job << "git";
         *job << "clone";
         *job << "--";
-        *job << localOrRepoLocationSrc.localUrl().pathOrUrl();
+        *job << localOrRepoLocationSrc.localUrl().toLocalFile();
         return job;
     }
     if (job) delete job;
@@ -197,6 +202,32 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     return noOp;
 }
 
+QString toRevisionName(const KDevelop::VcsRevision& rev)
+{
+    switch(rev.revisionType()) {
+        case VcsRevision::Special:
+            switch(rev.revisionValue().value<VcsRevision::RevisionSpecialType>()) {
+                case VcsRevision::Head:
+                    return "^HEAD";
+                case VcsRevision::Base:
+                    return "HEAD";
+                case VcsRevision::Working:
+                    return "";
+                case VcsRevision::Previous:
+                case VcsRevision::Start:
+                    Q_ASSERT(false && "i don't know how to do that");
+            }
+            break;
+        case VcsRevision::GlobalNumber:
+            return rev.revisionValue().toString();
+        case VcsRevision::Date:
+        case VcsRevision::FileNumber:
+        case VcsRevision::Invalid:
+            Q_ASSERT(false);
+    }
+    return QString();
+}
+
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                         VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
 {
@@ -205,28 +236,42 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, fileOrDirectory.toLocalFile()) ) {
         KUrl::List files;
-        if(QFileInfo(fileOrDirectory.path()).isDir() && recursion==IBasicVersionControl::NonRecursive)
-            files = getLsFiles(fileOrDirectory.path());
+        if(QFileInfo(fileOrDirectory.toLocalFile()).isDir() && recursion==IBasicVersionControl::NonRecursive)
+            files = getLsFiles(fileOrDirectory.toLocalFile(), QStringList(), KDevelop::OutputJob::Silent);
         else
             files = fileOrDirectory;
+        QDir dotgit=dotGitDirectory(fileOrDirectory);
+        if(dotgit.cdUp())
+            job->setDirectory(dotgit);
         
-        *job << "git";
-        *job << "diff";
-        if(srcRevision.revisionType()==VcsRevision::GlobalNumber && dstRevision.revisionType()==VcsRevision::GlobalNumber)
-            *job << srcRevision.revisionValue().toString()+".."+dstRevision.revisionValue().toString();
-        else if(srcRevision.revisionType()==VcsRevision::GlobalNumber)
-            *job << srcRevision.revisionValue().toString()+"..HEAD";
-        else if(dstRevision.revisionType()==VcsRevision::GlobalNumber)
-            *job << "HEAD.."+dstRevision.revisionValue().toString();
+        *job << "git" << "diff" << "--no-prefix";
+        if(dstRevision.revisionType()==VcsRevision::Special)
+            *job << toRevisionName(srcRevision);
+        else
+            *job << toRevisionName(srcRevision)+".."+toRevisionName(dstRevision);
         *job << "--";
         addFileList(job, files);
         
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitDiffOutput(DVcsJob*)));
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
         return job;
     }
     
-    if (job)
-        delete job;
+    delete job;
+    return 0;
+}
+
+VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
+{
+    DVcsJob* job = new DVcsJob(this);
+    if (!localLocations.isEmpty() && prepareJob(job, localLocations.first().toLocalFile()) ) {
+        *job << "git" << "checkout";
+        *job << "--";
+        addFileList(job, localLocations);
+        
+        return job;
+    }
+    
+    delete job;
     return 0;
 }
 
@@ -473,7 +518,7 @@ QStringList GitPlugin::branches(const QString &repository)
     return branchList;
 }
 
-QList<QVariant> GitPlugin::getOtherFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+QList<QVariant> GitPlugin::getOtherFiles(const QString& directory, OutputJob::OutputJobVerbosity verbosity)
 {
     QStringList otherFiles = getLsFiles(directory, QStringList(QString("--others")), verbosity );
 
@@ -875,6 +920,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 {
     VcsDiff diff;
     diff.setDiff(job->output());
+    diff.setBaseDiff(KUrl(job->getDirectory().absolutePath()));
     
     job->setResults(qVariantFromValue(diff));
 }
