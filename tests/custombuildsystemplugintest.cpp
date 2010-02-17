@@ -26,11 +26,15 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/kdevsignalspy.h>
+#include <shell/sessioncontroller.h>
+#include <kio/netaccess.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/isession.h>
 #include <KDebug>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+#include <kconfiggroup.h>
 
 using KDevelop::Core;
 using KDevelop::ICore;
@@ -39,28 +43,36 @@ using KDevelop::TestCore;
 using KDevelop::AutoTestShell;
 using KDevelop::KDevSignalSpy;
 
+void deleteDir( QDir dir )
+{
+    foreach( const QString& f, dir.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) ) {
+        if( QFileInfo( f ).isDir() ) {
+            deleteDir( QDir( dir.absoluteFilePath( f ) ) );
+            dir.rmdir( f );
+        } else {
+            dir.remove( f );
+        }
+    }
+}
+
 void CustomBuildSystemPluginTest::cleanupTestCase()
 {
+    QDir sessiondir( KDevelop::SessionController::sessionDirectory() );
+    QString sessionid = m_core->activeSession()->id().toString();
     m_core->cleanup();
     delete m_core;
+
+    // Delete the session dir and remove the default session entry from the config.
+    deleteDir( sessiondir.absoluteFilePath( sessionid ) );
+    sessiondir.rmdir( sessionid );
+    KGlobal::config()->group( KDevelop::SessionController::cfgSessionGroup() ).deleteEntry( KDevelop::SessionController::cfgActiveSessionEntry() );
+    KGlobal::config()->sync();
 }
 void CustomBuildSystemPluginTest::initTestCase()
 {
     AutoTestShell::init();
     m_core = new KDevelop::TestCore();
     m_core->initialize( Core::Default );
-    
-    QTimer timer;
-    QEventLoop loop;
-    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-    timer.setSingleShot(true);
-    timer.start(5000);
-    loop.exec();
-
-    foreach( IProject* p, m_core->projectController()->projects() )
-    {
-        m_core->projectController()->closeProject( p );
-    }
 }
 
 void CustomBuildSystemPluginTest::loadSimpleProject()
