@@ -67,21 +67,21 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     Q_UNUSED(args)
 
     addTool( new Kasten::ChecksumToolViewFactory(),
-             new Kasten::ChecksumToolFactory(), "ChecksumToolView" );
+             new Kasten::ChecksumToolFactory(), "ChecksumToolView", i18n("Checksum") );
     addTool( new Kasten::FilterToolViewFactory(),
-             new Kasten::FilterToolFactory(), "FilterToolView" );
+             new Kasten::FilterToolFactory(), "FilterToolView", i18n("Binary Filter") );
     addTool( new Kasten::StringsExtractToolViewFactory,
-             new Kasten::StringsExtractToolFactory(), "StringsExtractToolView" );
+             new Kasten::StringsExtractToolFactory(), "StringsExtractToolView", i18n("Strings") );
     addTool( new Kasten::ByteTableToolViewFactory(),
-             new Kasten::ByteTableToolFactory(), "ByteTableToolView" );
+             new Kasten::ByteTableToolFactory(), "ByteTableToolView", i18n("Byte Table") );
     addTool( new Kasten::InfoToolViewFactory(),
-             new Kasten::InfoToolFactory(), "InfoToolView" );
+             new Kasten::InfoToolFactory(), "InfoToolView", i18n("File Info") );
     addTool( new Kasten::PodDecoderToolViewFactory(),
-             new Kasten::PodDecoderToolFactory(), "PODDecoderToolView" );
+             new Kasten::PodDecoderToolFactory(), "PODDecoderToolView", i18n("Decoding Table") );
     addTool( new Kasten::StructuresToolViewFactory(),
-             new Kasten::StructuresToolFactory(), "StructToolView" );
+             new Kasten::StructuresToolFactory(), "StructToolView", i18n("Structures") );
     addTool( new Kasten::BookmarksToolViewFactory,
-             new Kasten::BookmarksToolFactory(), "BookmarksToolView" );
+             new Kasten::BookmarksToolFactory(), "BookmarksToolView", i18n("Bookmarks") );
 
     KDevelop::IDocumentController* idc = core()->documentController();
     idc->registerDocumentForMimetype("audio/x-wav", mDocumentFactory);
@@ -89,7 +89,8 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
 
 
 void OktetaPlugin::addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
-                            Kasten::AbstractToolFactory* toolFactory, const QString& id )
+                            Kasten::AbstractToolFactory* toolFactory,
+                            const QString& id, const QString& title )
 {
 //     if( dockWidget->isVisible() && mCurrentView )
 //         toolView->tool()->setTargetModel( mCurrentView );
@@ -97,7 +98,7 @@ void OktetaPlugin::addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
 //     connect( dockWidget, SIGNAL(visibilityChanged( bool )), SLOT(onToolVisibilityChanged( bool )) );
     OktetaToolViewFactory* factory = new OktetaToolViewFactory( toolViewFactory, toolFactory, id );
 
-    core()->uiController()->addToolView( QString("Okteta")/*toolView->title()*/, factory );
+    core()->uiController()->addToolView( title, factory );
 }
 
 OktetaPlugin::~OktetaPlugin()

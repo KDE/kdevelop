@@ -50,7 +50,8 @@ class OktetaPlugin: public IPlugin
 
   protected:
     void addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
-                  Kasten::AbstractToolFactory* toolFactory, const QString& id );
+                  Kasten::AbstractToolFactory* toolFactory,
+                  const QString& id, const QString& title );
 
   protected:
     OktetaDocumentFactory* mDocumentFactory;
