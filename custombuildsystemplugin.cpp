@@ -34,6 +34,7 @@
 #include "configconstants.h"
 
 #include <genericprojectmanager/igenericprojectmanager.h>
+#include "custombuildsystemconfigitem.h"
 
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectFolderItem;
@@ -176,6 +177,9 @@ KJob* CustomBuildSystem::install( ProjectBaseItem* item )
 
 QList< ProjectFolderItem* > CustomBuildSystem::parse( ProjectFolderItem* dom )
 {
+    if( dom->isProjectRoot() ) {
+        new CustomBuildSystemConfigItem( dom );
+    }
     return genericManager()->parse( dom );
 }
 
