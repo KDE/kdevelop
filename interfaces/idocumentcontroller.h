@@ -89,6 +89,8 @@ public:
     virtual void notifyDocumentClosed(IDocument* doc) = 0;
 
     virtual IDocumentFactory* factory(const QString& mime) const = 0;
+    
+    Q_SCRIPTABLE virtual KTextEditor::Document* globalTextEditorInstance()=0;
 public Q_SLOTS:
     /**Opens a new or existing document.
     @param url The full Url of the document to open.

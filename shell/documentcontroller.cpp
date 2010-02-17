@@ -68,6 +68,7 @@ struct DocumentControllerPrivate {
     DocumentControllerPrivate(DocumentController* c)
         : controller(c)
         , fileOpenRecent(0)
+        , globalTextEditorInstance(0)
     {
     }
 
@@ -405,6 +406,7 @@ struct DocumentControllerPrivate {
     QPointer<KAction> closeAll;
     QPointer<KAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
+    KTextEditor::Document* globalTextEditorInstance;
 
 /*    HistoryEntry createHistoryEntry();
     void addHistoryEntry();
@@ -832,6 +834,14 @@ IDocumentFactory* DocumentController::factory(const QString& mime) const
 {
     return d->factories.value(mime);
 }
+
+KTextEditor::Document* DocumentController::globalTextEditorInstance()
+{
+    if(!d->globalTextEditorInstance)
+        d->globalTextEditorInstance = Core::self()->partControllerInternal()->createTextPart(QString());
+    return d->globalTextEditorInstance;
+}
+
 
 }
 
