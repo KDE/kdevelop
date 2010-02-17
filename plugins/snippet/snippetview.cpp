@@ -15,6 +15,8 @@
 #include <KMenu>
 #include <KMessageBox>
 #include <KAction>
+#include <KNS3/DownloadDialog>
+#include <KDebug>
 
 #include "snippet.h"
 #include "snippetplugin.h"
@@ -74,6 +76,12 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_removeSnippetAction = new KAction(KIcon("document-close"), i18n("Remove Snippet"), this);
     connect(m_removeSnippetAction, SIGNAL(triggered()), this, SLOT(slotRemoveSnippet()));
     addAction(m_removeSnippetAction);
+
+    addAction(separator);
+
+    m_getNewStuff = new KAction(KIcon("get-hot-new-stuff"), i18n("Get New Snippets"), this);
+    connect(m_getNewStuff, SIGNAL(triggered()), this, SLOT(slotGHNS()));
+    addAction(m_getNewStuff);
 
     connect(snippetTree->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(validateActions()));
     validateActions();
@@ -254,5 +262,26 @@ void SnippetView::slotFilterChanged()
 {
     m_proxy->changeFilter( filterText->text() );
 }
+
+void SnippetView::slotGHNS()
+{
+    KNS3::DownloadDialog dialog("ktexteditor_codesnippets_core.knsrc", this);
+    dialog.exec();
+    foreach ( const KNS3::Entry& entry, dialog.changedEntries() ) {
+        foreach ( const QString& path, entry.uninstalledFiles() ) {
+            if ( path.endsWith(".xml") ) {
+                if ( SnippetRepository* repo = SnippetStore::self()->repositoryForFile(path) ) {
+                    repo->remove();
+                }
+            }
+        }
+        foreach ( const QString& path, entry.installedFiles() ) {
+            if ( path.endsWith(".xml") ) {
+                SnippetStore::self()->appendRow(new SnippetRepository(path));
+            }
+        }
+    }
+}
+
 
 #include "snippetview.moc"

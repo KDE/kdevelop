@@ -69,7 +69,7 @@ SnippetRepository* SnippetRepository::createRepoFromName(const QString& name)
     return repo;
 }
 
-const QString& SnippetRepository::getFile() const
+const QString& SnippetRepository::file() const
 {
     return m_file;
 }
