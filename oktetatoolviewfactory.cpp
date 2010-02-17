@@ -25,9 +25,9 @@
 // plugin
 #include "kastentoolviewwidget.h"
 // Kasten
-#include <abstracttoolviewfactory.h>
-#include <abstracttoolfactory.h>
-#include <abstracttoolview.h>
+#include <Kasten/AbstractToolViewFactory>
+#include <Kasten/AbstractToolFactory>
+#include <Kasten/AbstractToolView>
 
 
 namespace KDevelop
@@ -49,7 +49,6 @@ QWidget* OktetaToolViewFactory::create( QWidget* parent )
     Kasten::AbstractTool* tool = mToolFactory->create();
     Kasten::AbstractToolView* toolView = mToolViewFactory->create( tool );
 
-    // TODO: set icon to widget, so it get's used in the sidebar tabs
     return new KastenToolViewWidget( toolView, parent );
 }
 

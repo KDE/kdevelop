@@ -23,8 +23,8 @@
 #include "kastentoolviewwidget.h"
 
 // Kasten
-#include <kasten/abstracttoolview.h>
-#include <kasten/abstracttool.h>
+#include <Kasten/AbstractToolView>
+#include <Kasten/AbstractTool>
 // Qt
 #include <QVBoxLayout>
 

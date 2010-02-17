@@ -28,11 +28,11 @@
 #include <kasten/bytearrayrawfilesynchronizerfactory.h>
 #include <kasten/bytearraydocument.h>
 // Kasten
-#include <jobmanager.h>
-#include <abstractloadjob.h>
-#include <abstractsyncwithremotejob.h>
-#include <abstractsyncfromremotejob.h>
-#include <abstractmodelsynchronizer.h>
+#include <Kasten/JobManager>
+#include <Kasten/AbstractLoadJob>
+#include <Kasten/AbstractSyncWithRemoteJob>
+#include <Kasten/AbstractSyncFromRemoteJob>
+#include <Kasten/AbstractModelSynchronizer>
 // KDevelop
 #include <shell/core.h>
 #include <shell/uicontroller.h>
