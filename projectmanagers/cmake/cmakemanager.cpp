@@ -56,12 +56,12 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 #include <language/codecompletion/codecompletion.h>
 #include <language/codegen/applychangeswidget.h>
 
 #include "cmakemodelitems.h"
 #include "cmakenavigationwidget.h"
-#include "cmakehighlighting.h"
 #include "cmakecachereader.h"
 #include "cmakeastvisitor.h"
 #include "cmakeprojectvisitor.h"
@@ -85,6 +85,8 @@
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
 #include <cmakeconfig.h>
+
+#include <language/highlighting/codehighlighting.h>
 
 using namespace KDevelop;
 
@@ -147,7 +149,8 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
 
-    m_highlight = new CMakeHighlighting(this);
+    m_highlight = new KDevelop::CodeHighlighting(this);
+
     QString cmakeCmd = KStandardDirs::findExe("cmake");
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 }

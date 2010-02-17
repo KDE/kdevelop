@@ -37,7 +37,6 @@ set( cmakemanager_SRCS
   cmakenavigationwidget.cpp
   cmakemodelitems.cpp
   cmakemanager.cpp
-  cmakehighlighting.cpp
   cmakecodecompletionmodel.cpp
 )
 

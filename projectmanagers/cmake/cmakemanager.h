@@ -136,7 +136,7 @@ private:
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KUrl, KDevelop::ProjectFolderItem*> m_pending;
     
-    CMakeHighlighting *m_highlight;
+    KDevelop::ICodeHighlighting *m_highlight;
     
     QList<KDevelop::ProjectBaseItem*> m_clickedItems;
 };
