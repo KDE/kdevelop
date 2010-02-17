@@ -76,7 +76,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
     #endif // HAVE_HIGHLIGHT_IFACE
 
     if ( mode.isEmpty() ) {
-        mode = view->document()->mode();
+        mode = view->document()->highlightingMode();
     }
 
     m_snippets.clear();
