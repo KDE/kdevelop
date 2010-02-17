@@ -121,7 +121,7 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
     defines.insert( "BUILD", "debug" );
     QCOMPARE( includes, KUrl::List( QStringList() << "/usr/local/include/mydir" ) );
     QCOMPARE( project->buildSystemManager()->defines( mainfile ), defines );
-    QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ), KUrl( "file:///home/andreas/projects/testcustom/build2/src/" ) );
+    QCOMPARE( project->buildSystemManager()->buildDirectory( mainfile ).url(), KUrl( "file:///home/andreas/projects/testcustom/build2/src" ).url() );
 }
 
 QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
