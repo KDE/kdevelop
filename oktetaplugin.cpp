@@ -92,8 +92,8 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
              "BookmarksToolView", "bookmarks", i18n("Bookmarks"),
              Qt::RightDockWidgetArea );
 
-    KDevelop::IDocumentController* idc = core()->documentController();
-    idc->registerDocumentForMimetype("audio/x-wav", mDocumentFactory);
+    KDevelop::IDocumentController* documentController = core()->documentController();
+    documentController->registerDocumentForMimetype("audio/x-wav", mDocumentFactory);
 }
 
 
