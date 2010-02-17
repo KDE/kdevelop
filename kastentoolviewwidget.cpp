@@ -35,7 +35,7 @@
 #include <sublime/mainwindow.h>
 #include <sublime/controller.h>
 // Qt
-#include <QVBoxLayout>
+#include <QtGui/QVBoxLayout>
 
 namespace KDevelop
 {
