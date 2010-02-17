@@ -63,7 +63,12 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     }
     IProject* project = ICore::self()->projectController()->projects().at( 0 );
     KUrl::List includes = project->buildSystemManager()->includeDirectories( project->projectItem() );
+    
+    QHash<QString,QString> defines;
+    defines.insert( "_DEBUG", "" );
+    defines.insert( "VARIABLE", "VALUE" );
     QCOMPARE( includes, KUrl::List( QStringList() << "/usr/include/mydir" ) );
+    QCOMPARE( project->buildSystemManager()->defines( project->projectItem() ), defines );
 }
 
 QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
