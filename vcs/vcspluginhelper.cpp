@@ -88,23 +88,23 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffToBaseAction;
     KAction* revertAction;
     void createActions(QObject * parent) {
-        commitAction = new KAction(i18n("Commit..."), parent);
+        commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         actions.push_back(commitAction);
-        addAction = new KAction(i18n("Add"), parent);
+        addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
         actions.push_back(addAction);
-        removeAction = new KAction(i18n("Remove"), parent);
+        removeAction = new KAction(KIcon("list-add"), i18n("Remove"), parent);
         actions.push_back(removeAction);
-        updateAction = new KAction(i18n("Update"), parent);
+        updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         actions.push_back(updateAction);
         diffToHeadAction = new KAction(i18n("Compare to Head..."), parent);
         actions.push_back(diffToHeadAction);
         diffToBaseAction = new KAction(i18n("Compare to Base..."), parent);
         actions.push_back(diffToBaseAction);
-        revertAction = new KAction(i18n("Revert"), parent);
+        revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         actions.push_back(revertAction);
-        historyAction = new KAction(i18n("History..."), parent);
+        historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         actions.push_back(historyAction);
-        annotationAction = new KAction(i18n("Annotation..."), parent);
+        annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
         actions.push_back(annotationAction);
     }
 };
