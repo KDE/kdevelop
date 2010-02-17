@@ -107,7 +107,7 @@ void CustomBuildSystemPluginTest::loadMultiPathProject()
     }
     IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
     QVERIFY( project );
-    KDevelop::ProjectBaseItem* mainfile;
+    KDevelop::ProjectBaseItem* mainfile = 0;
     foreach( KDevelop::ProjectBaseItem* i, project->files() ) {
         if( i->text() == "main.cpp" ) {
             mainfile = i;
