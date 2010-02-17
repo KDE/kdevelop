@@ -61,11 +61,12 @@ namespace KDevelop {
 struct TextDocumentPrivate {
     TextDocumentPrivate(TextDocument *textDocument)
         : encoding(""), m_textDocument(textDocument)
-        , m_loaded(false)
+        , m_loaded(false), m_addedContextMenu(0)
     {
         document = 0;
         state = IDocument::Clean;
     }
+
     QPointer<KTextEditor::Document> document;
     IDocument::DocumentState state;
     QString encoding;
@@ -90,7 +91,29 @@ struct TextDocumentPrivate {
         QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
         menu->addSeparator();
 
-        ContextMenuExtension::populateMenu(menu, extensions);
+        // first we fill our container and than add those menus and actoins to the actual context menu
+        Q_ASSERT(m_addedContextMenu == 0);
+        m_addedContextMenu = new QMenu();
+        ContextMenuExtension::populateMenu(m_addedContextMenu, extensions);
+        foreach ( QAction* action, m_addedContextMenu->actions() ) {
+            menu->addAction(action);
+        }
+    }
+
+    /**
+     * Kate uses a static menu, comes from a limitation of the KXMLGUI stuff.
+     * Hence we have to remove every action we added by hand (in KDevelop we have much
+     * more dynamic actions than static ones).
+     */
+    void clearContextMenu()
+    {
+        QMenu* menu = qobject_cast<QMenu*>(m_textDocument->sender());
+        Q_ASSERT(menu);
+        foreach ( QAction* action, m_addedContextMenu->actions() ) {
+            menu->removeAction(action);
+        }
+        delete m_addedContextMenu;
+        m_addedContextMenu = 0;
     }
 
     void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
@@ -150,7 +173,7 @@ struct TextDocumentPrivate {
         EditorIntegrator::addDocument( m_textDocument->textDocument() );
         m_textDocument->notifyLoaded();
     }
-    
+
     void documentSaved(KTextEditor::Document* document, bool saveAs)
     {
         Q_UNUSED(document);
@@ -162,6 +185,8 @@ struct TextDocumentPrivate {
 private:
     TextDocument *m_textDocument;
     bool m_loaded;
+    // we want to remove the added stuff when the menu hides
+    QMenu* m_addedContextMenu;
 };
 
 class TextViewPrivate
@@ -267,6 +292,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     if (view) {
         view->setContextMenu( view->defaultContextMenu() );
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
+        connect(view->contextMenu(), SIGNAL(aboutToHide()),
+                this, SLOT(clearContextMenu()));
     }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))

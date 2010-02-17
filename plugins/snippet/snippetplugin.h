@@ -64,6 +64,7 @@ public slots:
 private:
     class SnippetViewFactory *m_factory;
     class SnippetCompletionModel* m_model;
+    KAction* m_createFromContextMenu;
 };
 
 #endif

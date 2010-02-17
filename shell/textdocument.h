@@ -76,6 +76,7 @@ protected:
 private:
     Q_PRIVATE_SLOT(d, void newDocumentStatus(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void populateContextMenu(KTextEditor::View*, QMenu*))
+    Q_PRIVATE_SLOT(d, void clearContextMenu())
     Q_PRIVATE_SLOT(d, void textChanged(KTextEditor::Document*))
     Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
     Q_PRIVATE_SLOT(d, void documentUrlChanged(KTextEditor::Document*))

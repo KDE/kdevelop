@@ -73,7 +73,8 @@ private:
 
 
 SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
-  : KDevelop::IPlugin(SnippetFactory::componentData(), parent)
+  : KDevelop::IPlugin(SnippetFactory::componentData(), parent),
+    m_createFromContextMenu(0)
 {
     SnippetStore::init(this);
 
@@ -146,10 +147,12 @@ KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Con
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
-            QAction* action = new QAction(KIcon("document-new"), i18n("Create Snippet from Selection"), this);
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
-            action->setData(QVariant::fromValue<void *>(econtext->view()));
-            extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+            if ( !m_createFromContextMenu ) {
+                m_createFromContextMenu = new KAction(KIcon("document-new"), i18n("Create Snippet from Selection"), this);
+                connect(m_createFromContextMenu, SIGNAL(triggered(bool)), this, SLOT(createSnippetFromSelection()));
+            }
+            m_createFromContextMenu->setData(QVariant::fromValue<void *>(econtext->view()));
+            extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_createFromContextMenu);
         }
     }
 
