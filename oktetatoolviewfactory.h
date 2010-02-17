@@ -29,7 +29,8 @@
 class QWidget;
 
 namespace Kasten {
-class AbstractToolView;
+class AbstractToolViewFactory;
+class AbstractToolFactory;
 }
 
 namespace KDevelop
@@ -40,7 +41,8 @@ class OktetaPlugin;
 class OktetaToolViewFactory : public IToolViewFactory
 {
   public:
-    OktetaToolViewFactory( Kasten::AbstractToolView* toolView, const QString& id );
+    OktetaToolViewFactory( Kasten::AbstractToolViewFactory* toolViewFactory,
+                           Kasten::AbstractToolFactory* toolFactory, const QString& id );
 
     virtual ~OktetaToolViewFactory();
 
@@ -51,7 +53,8 @@ class OktetaToolViewFactory : public IToolViewFactory
     virtual QString id() const;
 
   protected:
-    Kasten::AbstractToolView* mToolView;
+    Kasten::AbstractToolViewFactory* mToolViewFactory;
+    Kasten::AbstractToolFactory* mToolFactory;
     QString mId;
 };
 

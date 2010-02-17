@@ -27,24 +27,24 @@
 #include "oktetatoolviewfactory.h"
 #include "oktetadocument.h"
 // Okteta Kasten tools
-// #include <stringsextracttoolview.h>
-// #include <stringsextracttool.h>
-#include <infotoolview.h>
-#include <infotool.h>
-#include <filtertoolview.h>
-#include <filtertool.h>
-// #include <checksumtoolview.h>
-// #include <checksumtool.h>
-#include <documentinfotoolview.h>
-#include <documentinfotool.h>
-// #include <poddecodertoolview.h>
-// #include <poddecodertool.h>
-#include <bytetabletoolview.h>
-#include <bytetabletool.h>
-#include <bookmarkstoolview.h>
-#include <bookmarkstool.h>
-// #include <structtoolview.h>
-// #include <structtool.h>
+#include <stringsextracttoolviewfactory.h>
+#include <stringsextracttoolfactory.h>
+#include <infotoolviewfactory.h>
+#include <infotoolfactory.h>
+#include <filtertoolviewfactory.h>
+#include <filtertoolfactory.h>
+#include <checksumtoolviewfactory.h>
+#include <checksumtoolfactory.h>
+// #include <documentinfotoolview.h>
+// #include <documentinfotool.h>
+#include <poddecodertoolviewfactory.h>
+#include <poddecodertoolfactory.h>
+#include <bytetabletoolviewfactory.h>
+#include <bytetabletoolfactory.h>
+#include <bookmarkstoolviewfactory.h>
+#include <bookmarkstoolfactory.h>
+#include <structurestoolviewfactory.h>
+#include <structurestoolfactory.h>
 // KDev
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -82,29 +82,38 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
 {
     Q_UNUSED(args)
 
-//     addTool( new ChecksumToolView(new ChecksumTool()), "ChecksumToolView" );
-    addTool( new Kasten::FilterToolView(new Kasten::FilterTool()), "FilterToolView" );
-//     addTool( new StringsExtractToolView(new StringsExtractTool()), "StringsExtractToolView" );
-    addTool( new Kasten::ByteTableToolView(new Kasten::ByteTableTool()), "ByteTableToolView" );
-    addTool( new Kasten::InfoToolView(new Kasten::InfoTool()), "InfoToolView" );
-//     addTool( new PODDecoderToolView(new PODDecoderTool()), "PODDecoderToolView" );
-//     addTool( new StructToolView(new StructTool()), "StructToolView" );
-    addTool( new Kasten::BookmarksToolView(new Kasten::BookmarksTool()), "BookmarksToolView" );
+    addTool( new Kasten::ChecksumToolViewFactory(),
+             new Kasten::ChecksumToolFactory(), "ChecksumToolView" );
+    addTool( new Kasten::FilterToolViewFactory(),
+             new Kasten::FilterToolFactory(), "FilterToolView" );
+    addTool( new Kasten::StringsExtractToolViewFactory,
+             new Kasten::StringsExtractToolFactory(), "StringsExtractToolView" );
+    addTool( new Kasten::ByteTableToolViewFactory(),
+             new Kasten::ByteTableToolFactory(), "ByteTableToolView" );
+    addTool( new Kasten::InfoToolViewFactory(),
+             new Kasten::InfoToolFactory(), "InfoToolView" );
+    addTool( new Kasten::PodDecoderToolViewFactory(),
+             new Kasten::PodDecoderToolFactory(), "PODDecoderToolView" );
+    addTool( new Kasten::StructuresToolViewFactory(),
+             new Kasten::StructuresToolFactory(), "StructToolView" );
+    addTool( new Kasten::BookmarksToolViewFactory,
+             new Kasten::BookmarksToolFactory(), "BookmarksToolView" );
 
     KDevelop::IDocumentController* idc = core()->documentController();
     idc->registerDocumentForMimetype("audio/x-wav", mDocumentFactory);
 }
 
 
-void OktetaPlugin::addTool( Kasten::AbstractToolView* toolView, const QString& id )
+void OktetaPlugin::addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
+                            Kasten::AbstractToolFactory* toolFactory, const QString& id )
 {
 //     if( dockWidget->isVisible() && mCurrentView )
 //         toolView->tool()->setTargetModel( mCurrentView );
 
 //     connect( dockWidget, SIGNAL(visibilityChanged( bool )), SLOT(onToolVisibilityChanged( bool )) );
-    OktetaToolViewFactory* factory = new OktetaToolViewFactory( toolView, id );
+    OktetaToolViewFactory* factory = new OktetaToolViewFactory( toolViewFactory, toolFactory, id );
 
-    core()->uiController()->addToolView( toolView->title(), factory );
+    core()->uiController()->addToolView( QString("Okteta")/*toolView->title()*/, factory );
 }
 
 OktetaPlugin::~OktetaPlugin()

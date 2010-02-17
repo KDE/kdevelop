@@ -24,6 +24,7 @@
 
 // Kasten
 #include <kasten/abstracttoolview.h>
+#include <kasten/abstracttool.h>
 // Qt
 #include <QVBoxLayout>
 
@@ -41,7 +42,9 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
 
 KastenToolViewWidget::~KastenToolViewWidget()
 {
-    mToolView->widget()->setParent( 0 );
+    Kasten::AbstractTool* tool = mToolView->tool();
+    delete mToolView;
+    delete tool;
 }
 
 }

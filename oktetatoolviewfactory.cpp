@@ -25,23 +25,29 @@
 // plugin
 #include "kastentoolviewwidget.h"
 // Kasten
+#include <abstracttoolviewfactory.h>
+#include <abstracttoolfactory.h>
 #include <abstracttoolview.h>
-#include <abstracttool.h>
 
 
 namespace KDevelop
 {
 
-OktetaToolViewFactory::OktetaToolViewFactory( Kasten::AbstractToolView* toolView, const QString& id )
+OktetaToolViewFactory::OktetaToolViewFactory( Kasten::AbstractToolViewFactory* toolViewFactory,
+                                              Kasten::AbstractToolFactory* toolFactory, const QString& id )
   : IToolViewFactory(),
-    mToolView( toolView ),
+    mToolViewFactory( toolViewFactory ),
+    mToolFactory( toolFactory ),
     mId( id )
 {
 }
 
 QWidget* OktetaToolViewFactory::create( QWidget* parent )
 {
-    return new KastenToolViewWidget( mToolView, parent );
+    Kasten::AbstractTool* tool = mToolFactory->create();
+    Kasten::AbstractToolView* toolView = mToolViewFactory->create( tool );
+
+    return new KastenToolViewWidget( toolView, parent );
 }
 
 Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition()
@@ -56,9 +62,8 @@ QString OktetaToolViewFactory::id() const
 
 OktetaToolViewFactory::~OktetaToolViewFactory()
 {
-    Kasten::AbstractTool* tool = mToolView->tool();
-    delete mToolView;
-    delete tool;
+    delete mToolViewFactory;
+    delete mToolFactory;
 }
 
 }

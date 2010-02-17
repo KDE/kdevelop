@@ -29,7 +29,8 @@
 #include <QtCore/QVariantList>
 
 namespace Kasten {
-class AbstractToolView;
+class AbstractToolViewFactory;
+class AbstractToolFactory;
 }
 
 
@@ -48,7 +49,8 @@ class OktetaPlugin: public IPlugin
     virtual ~OktetaPlugin();
 
   protected:
-    void addTool( Kasten::AbstractToolView* toolView, const QString& id );
+    void addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
+                  Kasten::AbstractToolFactory* toolFactory, const QString& id );
 
   protected:
     OktetaDocumentFactory* mDocumentFactory;
