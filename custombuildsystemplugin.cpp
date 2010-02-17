@@ -118,15 +118,21 @@ ProjectTargetItem* CustomBuildSystem::createTarget( const QString& target, Proje
 
 QHash< QString, QString > CustomBuildSystem::defines( ProjectBaseItem* item ) const
 {
-    QHash<QString,QString> hash;
+    QHash<QString,QVariant> hash;
     KConfigGroup cfg = configuration( item->project() );
     QString pathgrp = findMatchingPathGroup( cfg, item );
     if( !pathgrp.isEmpty() ) {
         QByteArray data = cfg.group( pathgrp ).readEntry( ConfigConstants::definesKey, QByteArray() );
         QDataStream ds( data );
+        ds.setVersion( QDataStream::Qt_4_5 );
         ds >> hash;
     }
-    return hash;
+    QHash<QString,QString> defines;
+    foreach( const QString& k, hash.keys() )
+    {
+        defines.insert( k, hash[k].toString() );
+    }
+    return defines;
 }
 
 IProjectFileManager::Features CustomBuildSystem::features() const
