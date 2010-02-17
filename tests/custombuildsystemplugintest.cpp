@@ -69,6 +69,7 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     defines.insert( "VARIABLE", "VALUE" );
     QCOMPARE( includes, KUrl::List( QStringList() << "/usr/include/mydir" ) );
     QCOMPARE( project->buildSystemManager()->defines( project->projectItem() ), defines );
+    QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ), KUrl( "file:///home/andreas/projects/testcustom/build/" ) );
 }
 
 QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
