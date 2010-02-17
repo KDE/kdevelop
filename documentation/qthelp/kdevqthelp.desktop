@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
+Icon=qtlogo
 Comment=This plugin provides QtHelp integration
 Comment[ca]=Aquest connector proveeix d'integració amb QtHelp
 Comment[ca@valencia]=Este connector proveeix d'integració amb QtHelp
