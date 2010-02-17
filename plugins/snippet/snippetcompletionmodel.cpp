@@ -35,6 +35,8 @@
 #include "snippet.h"
 #include "snippetcompletionitem.h"
 
+#include <KLocalizedString>
+
 SnippetCompletionModel::SnippetCompletionModel()
     : KTextEditor::CodeCompletionModel(0)
 {
@@ -47,7 +49,21 @@ SnippetCompletionModel::~SnippetCompletionModel()
 
 QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
 {
-    if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() ) {
+    // grouping of snippets
+    if (role == KTextEditor::CodeCompletionModel::InheritanceDepth) {
+        return 1;
+    }
+    if (!idx.parent().isValid()) {
+        if (role == Qt::DisplayRole) {
+            return i18n("Snippets");
+        }
+        if (role == GroupRole) {
+            return Qt::DisplayRole;
+        }
+        return QVariant();
+    }
+    // snippets
+    if( !idx.isValid() || idx.row() < 0 || idx.row() >= m_snippets.count() ) {
         return QVariant();
     } else {
         return m_snippets.at( idx.row() )->data(idx, role, 0);
@@ -97,7 +113,41 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
         }
     }
     reset();
-    setRowCount( m_snippets.count() );
 }
 
+QModelIndex SnippetCompletionModel::parent(const QModelIndex& index) const {
+    if (index.internalId()) {
+        return createIndex(0, 0, 0);
+    } else {
+        return QModelIndex();
+    }
+}
+
+QModelIndex SnippetCompletionModel::index(int row, int column, const QModelIndex& parent) const {
+    if (!parent.isValid()) {
+        if (row == 0) {
+            return createIndex(row, column, 0); //header  index
+        } else {
+            return QModelIndex();
+        }
+    } else if (parent.parent().isValid()) { //we only have header and children, no subheaders
+        return QModelIndex();
+    }
+
+    if (row < 0 || row >= m_snippets.count() || column < 0 || column >= ColumnCount ) {
+        return QModelIndex();
+    }
+
+    return createIndex(row, column, 1); // normal item index
+}
+
+int SnippetCompletionModel::rowCount (const QModelIndex & parent) const {
+    if (!parent.isValid() && !m_snippets.isEmpty()) {
+        return 1; //one toplevel node (group header)
+    } else if(parent.parent().isValid()) {
+        return 0; //we don't have sub children
+    } else {
+        return m_snippets.count(); // only the children
+    }
+}
 #include "snippetcompletionmodel.moc"
