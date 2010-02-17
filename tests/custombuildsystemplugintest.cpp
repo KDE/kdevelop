@@ -84,6 +84,34 @@ void CustomBuildSystemPluginTest::loadSimpleProject()
     QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ), KUrl( "file:///home/andreas/projects/testcustom/build/" ) );
 }
 
+void CustomBuildSystemPluginTest::loadMultiPathProject()
+{
+    KUrl projecturl( PROJECTS_SOURCE_DIR"/multipathproject/multipathproject.kdev4" );
+    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL( projectOpened( KDevelop::IProject* ) ) );
+    ICore::self()->projectController()->openProject( projecturl );
+    // Wait for the project to be opened
+    if( !projectSpy->wait( 20000 ) ) {
+        kFatal() << "Expected project to be loaded within 20 seconds, but this didn't happen";
+    }
+    IProject* project = ICore::self()->projectController()->findProjectByName( "MultiPathProject" );
+    QVERIFY( project );
+    KDevelop::ProjectBaseItem* mainfile;
+    foreach( KDevelop::ProjectBaseItem* i, project->files() ) {
+        if( i->text() == "main.cpp" ) {
+            mainfile = i;
+            break;
+        }
+    }
+    QVERIFY(mainfile);
+    KUrl::List includes = project->buildSystemManager()->includeDirectories( mainfile );
+
+    QHash<QString,QString> defines;
+    defines.insert( "BUILD", "debug" );
+    QCOMPARE( includes, KUrl::List( QStringList() << "/usr/local/include/mydir" ) );
+    QCOMPARE( project->buildSystemManager()->defines( project->projectItem() ), defines );
+    QCOMPARE( project->buildSystemManager()->buildDirectory( project->projectItem() ), KUrl( "file:///home/andreas/projects/testcustom/build2/" ) );
+}
+
 QTEST_KDEMAIN(CustomBuildSystemPluginTest, GUI)
 
 #include "custombuildsystemplugintest.moc"
