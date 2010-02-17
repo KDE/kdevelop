@@ -52,6 +52,11 @@
 
 int main( int argc, char *argv[] )
 {
+    QList<QString> argvOrig;  //We copy the original argv here, as it seems that KCmdLineArgs changes the arguments ("--style" becomes "-style")
+
+    for(uint a = 0; a < argc; ++a)
+        argvOrig << QString::fromLocal8Bit(argv[a]);
+
 static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
                           i18n("%1", QString(VERSION) ).toUtf8(), ki18n(description), KAboutData::License_GPL,
@@ -141,12 +146,12 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     }
 
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
-    QList<QString> kdevelopBinArgs;
+    QList<QByteArray> kdevelopBinArgs;
     for(int a = 1; a < argc; ++a) {
-        if( qstrcmp( argv[a], "-s" ) == 0 || qstrcmp( argv[a], "-cs" ) == 0 ) {
+        if( argvOrig[a] =="-s" || argvOrig[a] == "-cs" ) {
             ++a;
-        } else if ( qstrcmp( argv[a], "--sessions" ) != 0 ) {
-            kdevelopBinArgs << QString(argv[a]);
+        } else if ( argvOrig[a] != "--sessions" ) {
+            kdevelopBinArgs << argv[a];
         }
     }
 
@@ -159,15 +164,19 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     proc.setEnv( "KDEV_SESSION", session );
     return proc.execute();
 #else
+    QByteArray pathData = fi.absoluteFilePath().toLocal8Bit();
+
     char **cmd = 0;
     cmd = (char**)realloc(cmd, (kdevelopBinArgs.count() + 2) * sizeof(char*));
-    cmd[0] = fi.absoluteFilePath().toLocal8Bit().data();
+    cmd[0] = pathData.data();
     for (int i = 0; i < kdevelopBinArgs.length(); ++i) {
-        cmd[i+1] = kdevelopBinArgs[i].toLocal8Bit().data();
+        cmd[i+1] = kdevelopBinArgs[i].data();
     }
     cmd[kdevelopBinArgs.count() + 1] = 0;
-    setenv("KDEV_SESSION", session.toLocal8Bit().data(), true);
 
+    QByteArray sessionData = session.toLocal8Bit();
+
+    setenv("KDEV_SESSION", sessionData.data(), true);
     return execv(qPrintable(fi.absoluteFilePath()), cmd);
 #endif
 }
