@@ -69,11 +69,6 @@ private slots:
     void slotAddSnippet();
 
     /**
-     * Slot to get hot new stuff.
-     */
-    void slotGHNS();
-
-    /**
      * Changes the filter of the proxy.
      */
     void slotFilterChanged();

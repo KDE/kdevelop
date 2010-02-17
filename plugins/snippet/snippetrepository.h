@@ -84,7 +84,7 @@ public:
     /**
      * The path to this repository's file.
      */
-    const QString& file() const;
+    const QString& getFile() const;
 
     /**
      * Remove this repository from the disk. Also deletes the item and all its children.
