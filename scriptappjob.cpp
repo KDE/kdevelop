@@ -172,6 +172,7 @@ bool ScriptAppJob::doKill()
 
 void ScriptAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
 {
+    lineMaker->flushBuffers();
     if (exitCode == 0 && status == QProcess::NormalExit)
         appendLine( i18n("*** Exited normally ***") );
     else
@@ -188,9 +189,9 @@ void ScriptAppJob::processFinished( int exitCode , QProcess::ExitStatus status )
 
 void ScriptAppJob::processError( QProcess::ProcessError error )
 {
-    qDebug() << proc->readAllStandardError();
-    qDebug() << proc->readAllStandardOutput();
-    qDebug() << proc->errorString();
+    kDebug() << proc->readAllStandardError();
+    kDebug() << proc->readAllStandardOutput();
+    kDebug() << proc->errorString();
     if( error == QProcess::FailedToStart )
     {
         setError( -1 );
