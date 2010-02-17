@@ -43,10 +43,13 @@ OktetaToolViewFactory::OktetaToolViewFactory( Kasten::AbstractToolViewFactory* t
     mToolViewFactory( toolViewFactory ),
     mToolFactory( toolFactory ),
     mIconName( iconName ),
-    mId( id ),
+    mId( "org.kde.okteta." + id ),
     mDefaultPosition( defaultPosition )
 {
 }
+
+QString OktetaToolViewFactory::id() const { return mId; }
+Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition() { return mDefaultPosition; }
 
 QWidget* OktetaToolViewFactory::create( QWidget* parent )
 {
@@ -58,15 +61,6 @@ QWidget* OktetaToolViewFactory::create( QWidget* parent )
     return widget;
 }
 
-Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition()
-{
-    return mDefaultPosition;
-}
-
-QString OktetaToolViewFactory::id() const
-{
-    return "org.kde.okteta." + mId;
-}
 
 OktetaToolViewFactory::~OktetaToolViewFactory()
 {
