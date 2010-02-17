@@ -1,9 +1,9 @@
 /***************************************************************************
-                                diffmodel.h  -  description
-                                -------------------
+                                diffmodel.h
+                                -----------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -18,52 +18,31 @@
 #ifndef DIFFMODEL_H
 #define DIFFMODEL_H
 
-#include <qobject.h>
-#include <qstringlist.h>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 #include "diffhunk.h"
 #include "kompare.h"
-
-#include "diffexport.h"
+#include "diff2export.h"
 
 namespace Diff2
 {
 
- template<class Container, class Item>
- int findItem( const Item& item, const Container* container ) {
-   int i = 0;
-   foreach( Item it, *container ) {
-     if( it == item )
-       return i;
-     i++;
-   }
-   return -1;
- }
-
-template<class Pointer>
-int findItem( const Pointer* item, const DifferenceList& container ) {
-  int i = 0;
-  foreach( Difference* it, container ) {
-    if( it == item )
-      return i;
-    i++;
-  }
-  return -1;
-}
-
 class DiffHunk;
 class Difference;
 
-class DiffModel : public QObject
+class DIFF2_EXPORT DiffModel
 {
-Q_OBJECT
 public:
 
 	DiffModel( const QString& srcBaseURL, const QString& destBaseURL );
 	DiffModel();
-	DiffModel( const DiffModel& ) : QObject() {};
 	~DiffModel();
 
+private:
+	DiffModel( const DiffModel& ) {};
+
+public:
 	int parseDiff( enum Kompare::Format format, const QStringList& list );
 
 	QString recreateDiff() const;
@@ -72,20 +51,15 @@ public:
 	int differenceCount() const { return m_differences.count(); }
 	int appliedCount() const    { return m_appliedCount; }
 
-	DiffHunk* hunkAt( int i )               { return *( m_hunks.at( i ) ); }
-	const Difference* differenceAt( int i ) { return *( m_differences.at( i ) ); }
+	DiffHunk* hunkAt( int i )               { return ( m_hunks.at( i ) ); }
+	const Difference* differenceAt( int i ) { return ( m_differences.at( i ) ); }
 
 	DiffHunkList*         hunks()             { return &m_hunks; }
 	const DiffHunkList*   hunks() const       { return &m_hunks; }
 	DifferenceList*       differences()       { return &m_differences; }
 	const DifferenceList* differences() const { return &m_differences; }
 
-	DifferenceList*       allDifferences();
-
-	int findDifference( Difference* diff ) const {
-          return findItem( diff, m_differences );
-        }
-          //return m_differences.( diff ); }
+	int findDifference( Difference* diff ) const { return m_differences.indexOf( diff ); }
 
 	Difference* firstDifference();
 	Difference* lastDifference();
@@ -103,19 +77,19 @@ public:
 	const QString sourceRevision() const       { return m_sourceRevision; }
 	const QString destinationRevision() const  { return m_destinationRevision; }
 
-	void setSourceFile( const QString& path );
-	void setDestinationFile( const QString& path );
-	void setSourceTimestamp( const QString& timestamp );
-	void setDestinationTimestamp( const QString& timestamp );
-	void setSourceRevision( const QString& revision );
-	void setDestinationRevision( const QString& revision );
+	void setSourceFile( QString path );
+	void setDestinationFile( QString path );
+	void setSourceTimestamp( QString timestamp );
+	void setDestinationTimestamp( QString timestamp );
+	void setSourceRevision( QString revision );
+	void setDestinationRevision( QString revision );
 
 	void addHunk( DiffHunk* hunk );
 	void addDiff( Difference* diff );
-	bool isModified() const { return m_modified; }
+	bool hasUnsavedChanges() const;
 
-	const int diffIndex( void ) const       { return m_diffIndex; }
-	void      setDiffIndex( int diffIndex ) { m_diffIndex = diffIndex; }
+	int  diffIndex( void ) const       { return m_diffIndex; }
+	void setDiffIndex( int diffIndex ) { m_diffIndex = diffIndex; }
 
 	void applyDifference( bool apply );
 	void applyAllDifferences( bool apply );
@@ -129,12 +103,6 @@ public:
 
 	bool isBlended() const { return m_blended; }
 	void setBlended( bool blended ) { m_blended = blended; }
-
-signals:
-	void setModified( bool modified );
-
-public slots:
-	void slotSetModified( bool modified );
 
 private:
 	void splitSourceInPathAndFileName();
@@ -158,12 +126,10 @@ private:
 
 	DiffHunkList   m_hunks;
 	DifferenceList m_differences;
-	DifferenceList m_allDifferences;
 
 	int  m_appliedCount;
-	bool m_modified;
 
-	unsigned int m_diffIndex;
+	int          m_diffIndex;
 	Difference*  m_selectedDifference;
 
 	bool m_blended;

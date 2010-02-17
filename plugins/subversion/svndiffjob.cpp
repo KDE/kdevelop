@@ -372,6 +372,7 @@ void SvnDiffJob::setNoDiffOnDelete( bool noDiffOnDelete )
 void SvnDiffJob::setDiff( const QString& diff )
 {
     m_diff = KDevelop::VcsDiff();
+    m_diff.setBaseDiff(KUrl("/"));
     m_diff.setType( KDevelop::VcsDiff::DiffUnified );
 
     m_diff.setContentType( KDevelop::VcsDiff::Text );

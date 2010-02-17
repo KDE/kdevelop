@@ -2,7 +2,7 @@
 **
 ** Filename   : levenshteintable.h
 ** Created on : 08 november, 2003
-** Copyright  : (c) 2003 Otto Bruggeman <bruggie@home.nl>
+** Copyright 2003 Otto Bruggeman <bruggie@home.nl>
 **
 *******************************************************************************/
 
@@ -15,12 +15,11 @@
 **
 *******************************************************************************/
 
-#ifndef _LEVENSHTEIN_H
-#define _LEVENSHTEIN_H
+#ifndef LEVENSHTEIN_H
+#define LEVENSHTEIN_H
 
 #include "difference.h"
 
-class QString;
 
 namespace Diff2 {
 
@@ -65,4 +64,4 @@ private:
 
 } // namespace Diff2
 
-#endif // _LEVENSHTEIN_H
+#endif // LEVENSHTEIN_H

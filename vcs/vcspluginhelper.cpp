@@ -92,7 +92,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         actions.push_back(commitAction);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
         actions.push_back(addAction);
-        removeAction = new KAction(KIcon("list-add"), i18n("Remove"), parent);
+        removeAction = new KAction(KIcon("list-remove"), i18n("Remove"), parent);
         actions.push_back(removeAction);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         actions.push_back(updateAction);
@@ -244,7 +244,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            showVcsDiff(new VCSDiffPatchSource(d.diff()));
+            showVcsDiff(new VCSDiffPatchSource(d));
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }
@@ -339,7 +339,7 @@ void VcsPluginHelper::commit()
 //     dlg->setRecursive(true);
     connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
     connect(dlg, SIGNAL(cancelCommit(KDevelop::VcsCommitDialog*)), this, SLOT(cancelCommit(KDevelop::VcsCommitDialog*)));
-    dlg->setCommitCandidatesAndShow(d->ctxUrls);
+    dlg->setCommitCandidatesAndShow(d->ctxUrls.first());
 }
 
 void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)

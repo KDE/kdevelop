@@ -39,7 +39,7 @@ class QWidget;
 
 class VCSDiffPatchSource : public KDevelop::IPatchSource {
     public:
-    VCSDiffPatchSource(const QString& diff) ;
+    VCSDiffPatchSource(const KDevelop::VcsDiff& diff) ;
         
     virtual KUrl baseDir() const ;
     
@@ -56,7 +56,7 @@ class VCSDiffPatchSource : public KDevelop::IPatchSource {
 class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     Q_OBJECT
     public:
-    VCSCommitDiffPatchSource(const QString& diff, QMap<KUrl, QString> selectable, KDevelop::IBasicVersionControl* vcs);
+    VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap<KUrl, QString> selectable, KDevelop::IBasicVersionControl* vcs);
     
     ~VCSCommitDiffPatchSource() ;
     

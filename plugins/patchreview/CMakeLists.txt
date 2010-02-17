@@ -3,11 +3,14 @@
 ########### next target ###############
 
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/settings)
 
 set(patchreview_PART_SRCS      
     patchreview.cpp
     documenthighlighter.cpp
     localpatchsource.cpp
+    settings/diffsettings.cpp
+    settings/settingsbase.cpp 
 
     libdiff2/kompareprocess.cpp
     libdiff2/komparemodellist.cpp
@@ -21,8 +24,6 @@ set(patchreview_PART_SRCS
     libdiff2/cvsdiffparser.cpp
     libdiff2/diffparser.cpp
     libdiff2/perforceparser.cpp
-    libdiff2/diffsettings.cpp
-    libdiff2/settingsbase.cpp 
 )
 
 set (patchreview_UI

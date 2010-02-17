@@ -243,17 +243,17 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 
     KMenu * menu = new KMenu(name());
 
-    if (!commonActions.empty())  {
+    if (!commonActions.isEmpty())  {
         menu->addActions(commonActions);
         menu->addSeparator();
     }
 
     KAction *action;
-    action = new KAction(i18n("Push..."), this);
+    action = new KAction(KIcon("arrow-up-double"), i18n("Push..."), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxPush()));
     menu->addAction(action);
 
-    action = new KAction(i18n("Pull..."), this);
+    action = new KAction(KIcon("arrow-down-double"), i18n("Pull..."), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxPull()));
     menu->addAction(action);
 
@@ -378,7 +378,7 @@ bool DistributedVersionControlPlugin::prepareJob(DVcsJob* job, const QString& re
         return false;
     }
 
-    QFileInfo repoInfo = QFileInfo(repository);
+    QFileInfo repoInfo(repository);
     if (!repoInfo.isAbsolute()) {
         //We don't want to have empty or non-absolute pathes for working dir
         return false;
@@ -419,13 +419,13 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
         //all urls should be relative to the working directory!
         //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
         QString file;
-        if (!url.isRelative())
+        
+        if (url.isEmpty())
+            file = '.';
+        else if (!url.isRelative())
             file = dir.relativeFilePath(url.toLocalFile());
         else
             file = url.toLocalFile();
-
-        if (file.isEmpty())
-            file = '.';
 
         args << file;
         kDebug() << "url is: " << url << "job->getDirectory(): " << workingDir << " file is: " << file;
@@ -438,7 +438,7 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
 DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
     DVcsJob* j = new DVcsJob(this, verbosity);
-    *j << "echo" << "-n";
+    *j << "echo" << "command not implemented" << "-n";
     return j;
 }
 

@@ -1,9 +1,9 @@
 /***************************************************************************
-                                difference.cpp  -  description
-                                -------------------
+                                difference.cpp
+                                --------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -25,21 +25,23 @@ Difference::Difference( int sourceLineNo, int destinationLineNo, int type ) :
 	m_sourceLineNo( sourceLineNo ),
 	m_destinationLineNo( destinationLineNo ),
 	m_applied( false ),
-	m_table( new LevenshteinTable() )
+	m_conflicts( false ),
+	m_unsaved( false )
 {
 }
 
 Difference::~Difference()
 {
-	delete m_table;
+	qDeleteAll( m_sourceLines );
+	qDeleteAll( m_destinationLines );
 }
 
-void Difference::addSourceLine( const QString& line )
+void Difference::addSourceLine( QString line )
 {
 	m_sourceLines.append( new DifferenceString( line ) );
 }
 
-void Difference::addDestinationLine( const QString& line )
+void Difference::addDestinationLine( QString line )
 {
 	m_destinationLines.append( new DifferenceString( line ) );
 }
@@ -57,6 +59,7 @@ int Difference::destinationLineCount() const
 void Difference::apply( bool apply )
 {
 	m_applied = apply;
+	m_unsaved = !m_unsaved;
 }
 
 void Difference::determineInlineDifferences()
@@ -67,26 +70,22 @@ void Difference::determineInlineDifferences()
 	// Do nothing for now when the slc != dlc
 	// One could try to find the closest matching destination string for any
 	// of the source strings but this is compute intensive
-	if ( sourceLineCount() != destinationLineCount() )
+	int slc = sourceLineCount();
+
+	if ( slc != destinationLineCount() )
 		return;
 
-	int slc = sourceLineCount();
-kDebug() << "determining differences";
+	LevenshteinTable table;
+
 	for ( int i = 0; i < slc; ++i )
 	{
 		DifferenceString* sl = sourceLineAt( i );
 		DifferenceString* dl = destinationLineAt( i );
 
-		// FIXME: If the table cant be created do not do the rest
-		m_table->createTable( sl, dl );
-
-		m_table->createListsOfMarkers();
+		// return value 0 means something went wrong creating the table so dont bother finding markers
+		if ( table.createTable( sl, dl ) != 0 )
+			table.createListsOfMarkers();
 	}
-
-	// No longer needed, if we ever need to recalculate the inline differences we should
-	// simply recreate the table
-	delete m_table;
-	m_table = 0;
 }
 
 QString Difference::recreateDifference() const
@@ -139,3 +138,4 @@ QString Difference::recreateDifference() const
 
 	return difference;
 }
+

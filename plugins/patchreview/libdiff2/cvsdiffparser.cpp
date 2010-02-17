@@ -2,8 +2,7 @@
 **                              cvsdiffparser.cpp
 **                              -----------------
 **      begin                   : Sun Aug  4 15:05:35 2002
-**      copyright               : (C) 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
-**
+**      Copyright 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 ***************************************************************************/
 /***************************************************************************
 **
@@ -13,14 +12,14 @@
 **   ( at your option ) any later version.
 **
 ***************************************************************************/
+
 #include "cvsdiffparser.h"
-#include <qregexp.h>
+
+#include <QtCore/QRegExp>
 
 #include <kdebug.h>
 
-
 #include "komparemodellist.h"
-
 
 using namespace Diff2;
 
@@ -52,27 +51,27 @@ enum Kompare::Format CVSDiffParser::determineFormat()
 
 	while( it != m_diffLines.end() )
 	{
-		if( (*it).indexOf( normalRE, 0 ) == 0 )
+		if( it->indexOf( normalRE, 0 ) == 0 )
 		{
 //			kDebug(8101) << "Difflines are from a Normal diff...";
 			return Kompare::Normal;
 		}
-		else if( (*it).indexOf( unifiedRE, 0 ) == 0 )
+		else if( it->indexOf( unifiedRE, 0 ) == 0 )
 		{
 //			kDebug(8101) << "Difflines are from a Unified diff...";
 			return Kompare::Unified;
 		}
-		else if( (*it).indexOf( contextRE, 0 ) == 0 )
+		else if( it->indexOf( contextRE, 0 ) == 0 )
 		{
 //			kDebug(8101) << "Difflines are from a Context diff...";
 			return Kompare::Context;
 		}
-		else if( (*it).indexOf( rcsRE, 0 ) == 0 )
+		else if( it->indexOf( rcsRE, 0 ) == 0 )
 		{
 //			kDebug(8101) << "Difflines are from a RCS diff...";
 			return Kompare::RCS;
 		}
-		else if( (*it).indexOf( edRE, 0 ) == 0 )
+		else if( it->indexOf( edRE, 0 ) == 0 )
 		{
 //			kDebug(8101) << "Difflines are from an ED diff...";
 			return Kompare::Ed;
@@ -94,11 +93,10 @@ bool CVSDiffParser::parseNormalDiffHeader()
 	{
 		if ( m_normalDiffHeader.exactMatch( *m_diffIterator ) )
 		{
-			kDebug(8101) << "Matched length Header =" << m_normalDiffHeader.matchedLength();
-			kDebug(8101) << "Matched string Header =" << m_normalDiffHeader.cap( 0 );
+			kDebug(8101) << "Matched length Header = " << m_normalDiffHeader.matchedLength();
+			kDebug(8101) << "Matched string Header = " << m_normalDiffHeader.cap( 0 );
 
 			m_currentModel = new DiffModel();
-			QObject::connect( m_currentModel, SIGNAL( setModified( bool ) ), m_list, SLOT( slotSetModified( bool ) ) );
 			m_currentModel->setSourceFile          ( m_normalDiffHeader.cap( 1 ) );
 			m_currentModel->setDestinationFile     ( m_normalDiffHeader.cap( 1 ) );
 
@@ -109,7 +107,7 @@ bool CVSDiffParser::parseNormalDiffHeader()
 		}
 		else
 		{
-			kDebug(8101) << "No match for:" << ( *m_diffIterator );
+			kDebug(8101) << "No match for: " << ( *m_diffIterator );
 		}
 		++m_diffIterator;
 	}
@@ -119,7 +117,6 @@ bool CVSDiffParser::parseNormalDiffHeader()
 		// Set this to the first line again and hope it is a single file diff
 		m_diffIterator = m_diffLines.begin();
 		m_currentModel = new DiffModel();
-		QObject::connect( m_currentModel, SIGNAL( setModified( bool ) ), m_list, SLOT( slotSetModified( bool ) ) );
 		m_singleFileDiff = true;
 	}
 

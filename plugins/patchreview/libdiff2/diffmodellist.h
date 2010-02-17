@@ -2,7 +2,7 @@
 **
 ** Filename   : diffmodellist.h
 ** Created on : 24 januari, 2004
-   copyright  : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
+** Copyright 2004-2005, 2009 Otto Bruggeman <bruggie@gmail.com>
 **
 *******************************************************************************/
 
@@ -18,24 +18,27 @@
 #ifndef DIFFMODELLIST_H
 #define DIFFMODELLIST_H
 
-#include <q3valuelist.h> // include for the base class
+#include <QtCore/QList> // include for the base class
 
 #include "diffmodel.h"
+#include "diff2export.h"
 
 namespace Diff2
 {
 
-typedef Q3ValueListIterator<DiffModel*> DiffModelListIterator;
-typedef Q3ValueListConstIterator<DiffModel*> DiffModelListConstIterator;
+typedef QList<DiffModel*>::Iterator DiffModelListIterator;
+typedef QList<DiffModel*>::ConstIterator DiffModelListConstIterator;
 
-class DiffModelList : public Q3ValueList<DiffModel*>
+class DIFF2_EXPORT DiffModelList : public QList<DiffModel*>
 {
 public:
 	DiffModelList() {}
-	DiffModelList( const DiffModelList &list ) : Q3ValueList<DiffModel*>( list ) {}
+	DiffModelList( const DiffModelList &list ) : QList<DiffModel*>( list ) {}
 	virtual ~DiffModelList()
 	{
-		clear();
+		// Memleak as indicated by valgrind
+		while ( !isEmpty() )
+			delete takeFirst();
 	}
 
 public:

@@ -100,6 +100,12 @@ public:
      * or a textual diff using raw format
      */
     QString diff() const;
+    
+    /** @returns the base directory of the diff. */
+    KUrl baseDiff() const;
+    
+    /** Sets the base directory of the diff to the @p url */
+    void setBaseDiff(const KUrl& url) const;
 
     void setDiff( const QString& );
     void addLeftBinary( const KDevelop::VcsLocation&, const QByteArray& );

@@ -31,7 +31,7 @@ public:
     virtual ~VcsCommitDialog();
     ///Sets the commit candidates, and eventually shows the dialog
     ///Should be called as last action
-    void setCommitCandidatesAndShow( const KUrl::List &list );
+    void setCommitCandidatesAndShow( const KUrl &list );
     void setMessage( const QString& );
     void setRecursive( bool );
     void setOldMessages( const QStringList& );

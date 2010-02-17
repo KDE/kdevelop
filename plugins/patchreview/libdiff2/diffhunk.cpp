@@ -1,9 +1,9 @@
 /***************************************************************************
-                                diffhunk.cpp  -  description
-                                -------------------
+                                diffhunk.cpp
+                                ------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -15,13 +15,13 @@
 **
 ***************************************************************************/
 
-
 #include "diffhunk.h"
+
 #include "difference.h"
 
 using namespace Diff2;
 
-DiffHunk::DiffHunk( int sourceLine, int destinationLine, const QString& function, Type type ) :
+DiffHunk::DiffHunk( int sourceLine, int destinationLine, QString function, Type type ) :
 	m_sourceLine( sourceLine ),
 	m_destinationLine( destinationLine ),
 	m_function( function ),
@@ -31,6 +31,7 @@ DiffHunk::DiffHunk( int sourceLine, int destinationLine, const QString& function
 
 DiffHunk::~DiffHunk()
 {
+	qDeleteAll( m_differences );
 }
 
 void DiffHunk::add( Difference* diff )
@@ -99,7 +100,7 @@ QString DiffHunk::recreateHunk() const
 	        .arg( m_sourceLine )
 	        .arg( m_destinationLine )
 	        .arg( slc )
-	        .arg( dlc );
+	        .arg( dlc ); 
 
 	if ( !m_function.isEmpty() )
 		hunk += ' ' + m_function;
@@ -108,6 +109,6 @@ QString DiffHunk::recreateHunk() const
 
 	hunk += differences;
 
-	kDebug( 8101 ) << hunk;
+	kDebug( 8101 ) << hunk << endl;
 	return hunk;
 }

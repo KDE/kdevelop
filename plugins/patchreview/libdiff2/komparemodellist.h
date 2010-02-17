@@ -1,9 +1,10 @@
 /***************************************************************************
-                          komparemodellist.h  -  description
-                             -------------------
+                          komparemodellist.h
+                          -------------------
     begin                : Tue Jun 26 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+    Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+    Copyright 2001-2005,2009 Otto Bruggeman <bruggie@gmail.com>
+    Copyright 2007-2008 Kevin Kofler   <kevin.kofler@chello.at>
  ***************************************************************************/
 
 /***************************************************************************
@@ -18,19 +19,16 @@
 #ifndef KOMPAREMODELLIST_H
 #define KOMPAREMODELLIST_H
 
-#include <qobject.h>
+#include <QtCore/QObject>
 
 #include "diffmodel.h"
 #include "diffmodellist.h"
 #include "kompare.h"
+#include "diff2export.h"
 
-#include "diffexport.h"
-
-class QFile;
 
 class KAction;
-class KDirWatch;
-class K3TempFile;
+class KTemporaryFile;
 
 class DiffSettings;
 class KompareProcess;
@@ -38,29 +36,29 @@ class KompareProcess;
 namespace Diff2
 {
 
-class KompareModelList : public QObject
+class DIFF2_EXPORT KompareModelList : public QObject
 {
 	Q_OBJECT
 public:
-	KompareModelList( DiffSettings* diffSettings, Kompare::Info& info, QObject* parent = 0, const char* name = 0 );
+	KompareModelList( DiffSettings* diffSettings, QWidget* widgetForKIO, QObject* parent, const char* name = 0 );
 	~KompareModelList();
 
 public:
+	void refresh();
 	// Swap source with destination and show differences
 	void swap();
 
 	/* Comparing methods */
-	bool compare( const QString& source, const QString& destination );
+	bool compare();
 
-	bool compareFiles( const QString& source, const QString& destination );
-	bool compareDirs( const QString& source, const QString& destination );
+	bool compare(Kompare::Mode);
 
 	bool openDiff( const QString& diff );
 
-	bool openFileAndDiff( const QString& file, const QString& diff );
-	bool openDirAndDiff( const QString& dir, const QString& diff, bool reverse = false );
+	bool openFileAndDiff();
+	bool openDirAndDiff();
 
-	bool saveDiff( const QString& url, const QString& directory, DiffSettings* diffSettings );
+	bool saveDiff( const QString& url, QString directory, DiffSettings* diffSettings );
 	bool saveAll();
 
 	bool saveDestination( DiffModel* model );
@@ -79,19 +77,20 @@ public:
 	// this is like patching but with a twist
 	bool blendOriginalIntoModelList( const QString& localURL );
 
-	enum Kompare::Mode    mode()   const { return m_info.mode; };
+	// This mode() method is superfluous now so FIXME
+	enum Kompare::Mode    mode()   const { return m_info->mode; };
 	const DiffModelList*  models() const { return m_models; };
 
 	int modelCount() const;
 	int differenceCount() const;
 	int appliedCount() const;
 
-	const DiffModel* modelAt( int i ) const { return *( m_models->at( i ) ); };
-	int              findModel( DiffModel* model ) const { return findItem( model, m_models ); };
+	const DiffModel* modelAt( int i ) const { return m_models->at( i ); };
+	int              findModel( DiffModel* model ) const { return m_models->indexOf( model ); };
 
-	bool isModified() const;
+	bool hasUnsavedChanges() const;
 
-	int currentModel() const      { return findItem( m_selectedModel, m_models  ); };
+	int currentModel() const      { return m_models->indexOf( m_selectedModel ); };
 	int currentDifference() const { return m_selectedModel ? m_selectedModel->findDifference( m_selectedDifference ) : -1; };
 
 	const DiffModel* selectedModel() const       { return m_selectedModel; };
@@ -122,9 +121,8 @@ signals:
 	void applyDifference( bool apply );
 	void applyAllDifferences( bool apply );
 	void applyDifference( const Diff2::Difference* diff, bool apply );
-
-	// Emits true when m_noOfModified > 0, false when m_noOfModified == 0
-	void setModified( bool modified );
+	void diffString( const QString& );
+	void updateActions();
 
 public slots:
 	void slotSelectionChanged( const Diff2::DiffModel* model, const Diff2::Difference* diff );
@@ -137,8 +135,7 @@ public slots:
 	void slotPreviousDifference();
 	void slotNextDifference();
 
-	// This slot is called by the diffmodels whenever their status changes to modified or unmodified
-	void slotSetModified( bool modified );
+	void slotKompareInfo( struct Kompare::Info* );
 
 protected slots:
 	void slotDiffProcessFinished( bool success );
@@ -170,7 +167,7 @@ private: // Helper methods
 	QStringList split( const QString& diff );
 
 private:
-	K3TempFile*            m_diffTemp;
+	KTemporaryFile*       m_diffTemp;
 	QString               m_diffURL;
 
 	KompareProcess*       m_diffProcess;
@@ -179,19 +176,12 @@ private:
 
 	DiffModelList*        m_models;
 
-	QString               m_source;
-	QString               m_destination;
-
 	DiffModel*            m_selectedModel;
 	Difference*           m_selectedDifference;
 
-	KDirWatch*            m_dirWatch;
-	KDirWatch*            m_fileWatch;
+	int                   m_modelIndex;
 
-	int                   m_noOfModified;
-	unsigned int          m_modelIndex;
-
-	Kompare::Info& m_info;
+	struct Kompare::Info* m_info;
 
 	KAction*              m_applyDifference;
 	KAction*              m_unApplyDifference;
@@ -206,6 +196,8 @@ private:
 
 	QString               m_encoding;
 	QTextCodec*           m_textCodec;
+
+	QWidget*              m_widgetForKIO;
 };
 
 } // End of namespace Diff2

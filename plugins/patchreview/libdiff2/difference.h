@@ -1,9 +1,9 @@
 /***************************************************************************
-                                difference.h  -  description
-                                -------------------
+                                difference.h
+                                ------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -18,21 +18,18 @@
 #ifndef DIFFERENCE_H
 #define DIFFERENCE_H
 
-#include <q3valuelist.h>
-#include <q3valuevector.h>
+#include <qvector.h>
 
 #include <kdebug.h>
-
-#include "diffexport.h"
+#include "diff2export.h"
 
 class QString;
 
 namespace Diff2
 {
 
-class LevenshteinTable;
 
-class Marker
+class DIFF2_EXPORT Marker
 {
 public:
 	enum Type { Start = 0, End = 1 };
@@ -62,22 +59,22 @@ private:
 	unsigned int      m_offset;
 };
 
-typedef Q3ValueList<Marker*> MarkerList;
-typedef Q3ValueList<Marker*>::iterator MarkerListIterator;
-typedef Q3ValueList<Marker*>::const_iterator MarkerListConstIterator;
+typedef QList<Marker*> MarkerList;
+typedef QList<Marker*>::iterator MarkerListIterator;
+typedef QList<Marker*>::const_iterator MarkerListConstIterator;
 
-class DifferenceString
+class DIFF2_EXPORT DifferenceString
 {
 public:
 	DifferenceString()
 	{
-//		kDebug(8101) << "DifferenceString::DifferenceString()";
+//		kDebug(8101) << "DifferenceString::DifferenceString()" << endl;
 	}
 	explicit DifferenceString( const QString& string, const MarkerList& markerList = MarkerList() ) :
 		m_string( string ),
 		m_markerList( markerList )
 	{
-//		kDebug(8101) << "DifferenceString::DifferenceString( " << string << ", " << markerList << " )";
+//		kDebug(8101) << "DifferenceString::DifferenceString( " << string << ", " << markerList << " )" << endl;
 		calculateHash();
 	}
 	DifferenceString( const DifferenceString& ds ) :
@@ -86,9 +83,12 @@ public:
 		m_hash( ds.m_hash ),
 		m_markerList( ds.m_markerList )
 	{
-//		kDebug(8101) << "DifferenceString::DifferenceString( const DifferenceString& " << ds << " )";
+//		kDebug(8101) << "DifferenceString::DifferenceString( const DifferenceString& " << ds << " )" << endl;
 	}
-	~DifferenceString() {}
+	~DifferenceString()
+	{
+		qDeleteAll( m_markerList );
+	}
 
 public:
 	const QString& string() const
@@ -148,11 +148,11 @@ private:
 	MarkerList   m_markerList;
 };
 
-typedef Q3ValueVector<DifferenceString*> DifferenceStringList;
-typedef Q3ValueVector<DifferenceString*>::iterator DifferenceStringListIterator;
-typedef Q3ValueVector<DifferenceString*>::const_iterator DifferenceStringListConstIterator;
+typedef QVector<DifferenceString*> DifferenceStringList;
+typedef QVector<DifferenceString*>::iterator DifferenceStringListIterator;
+typedef QVector<DifferenceString*>::const_iterator DifferenceStringListConstIterator;
 
-class Difference
+class DIFF2_EXPORT Difference
 {
 public:
 	enum Type { Change, Insert, Delete, Unchanged };
@@ -185,27 +185,27 @@ public:
 		m_conflicts = conflicts;
 	}
 
+	bool isUnsaved() const
+	{
+		return m_unsaved;
+	}
+	void setUnsaved( bool unsaved )
+	{
+		m_unsaved = unsaved;
+	}
+
 	void apply( bool apply );
 	bool applied() const { return m_applied; }
 
 	void setType( int type ) { m_type = type; }
 
-	void addSourceLine( const QString& line );
-	void addDestinationLine( const QString& line );
+	void addSourceLine( QString line );
+	void addDestinationLine( QString line );
 
 	/** This method will calculate the differences between the individual strings and store them as Markers */
 	void determineInlineDifferences();
 
 	QString recreateDifference() const;
-    
-    void reverse() {
-        int l = m_sourceLineNo;
-        m_sourceLineNo = m_destinationLineNo;
-        m_destinationLineNo = l;
-        DifferenceStringList t = m_destinationLines;
-        m_destinationLines = m_sourceLines;
-        m_sourceLines = t;
-    }
 
 private:
 	int                   m_type;
@@ -218,13 +218,12 @@ private:
 
 	bool                  m_applied;
 	bool                  m_conflicts;
-
-	LevenshteinTable*     m_table;
+	bool                  m_unsaved;
 };
 
-typedef Q3ValueList<Difference*> DifferenceList;
-typedef Q3ValueList<Difference*>::iterator DifferenceListIterator;
-typedef Q3ValueList<Difference*>::const_iterator DifferenceListConstIterator;
+typedef QList<Difference*> DifferenceList;
+typedef QList<Difference*>::iterator DifferenceListIterator;
+typedef QList<Difference*>::const_iterator DifferenceListConstIterator;
 
 } // End of namespace Diff2
 

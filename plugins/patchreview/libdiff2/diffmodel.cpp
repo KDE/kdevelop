@@ -1,9 +1,9 @@
 /***************************************************************************
-                                diffmodel.cpp  -  description
-                                -------------------
+                                diffmodel.cpp
+                                -------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -16,8 +16,8 @@
 ***************************************************************************/
 
 #include "diffmodel.h"
-#include <qregexp.h>
-#include <q3valuelist.h>
+
+#include <QtCore/QRegExp>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -40,7 +40,6 @@ DiffModel::DiffModel( const QString& source, const QString& destination ) :
 	m_sourceRevision( "" ),
 	m_destinationRevision( "" ),
 	m_appliedCount( 0 ),
-	m_modified( false ),
 	m_diffIndex( 0 ),
 	m_selectedDifference( 0 ),
 	m_blended( false )
@@ -61,7 +60,6 @@ DiffModel::DiffModel() :
 	m_sourceRevision( "" ),
 	m_destinationRevision( "" ),
 	m_appliedCount( 0 ),
-	m_modified( false ),
 	m_diffIndex( 0 ),
 	m_selectedDifference( 0 ),
 	m_blended( false )
@@ -71,6 +69,9 @@ DiffModel::DiffModel() :
 /**  */
 DiffModel::~DiffModel()
 {
+	m_selectedDifference = 0;
+
+	qDeleteAll( m_hunks );
 }
 
 void DiffModel::splitSourceInPathAndFileName()
@@ -85,7 +86,7 @@ void DiffModel::splitSourceInPathAndFileName()
 	else
 		m_sourceFile = m_source;
 
-	kDebug(8101) << m_source << "was split into" << m_sourcePath << "and" << m_sourceFile;
+	kDebug(8101) << m_source << " was split into " << m_sourcePath << " and " << m_sourceFile << endl;
 }
 
 void DiffModel::splitDestinationInPathAndFileName()
@@ -98,9 +99,9 @@ void DiffModel::splitDestinationInPathAndFileName()
 	if( ( pos = m_destination.lastIndexOf( "/" ) ) >= 0 )
 		m_destinationFile = m_destination.mid( pos+1, m_destination.length() - pos );
 	else
-		m_destinationFile = m_source;
+		m_destinationFile = m_destination;
 
-	kDebug(8101) << m_destination << "was split into" << m_destinationPath << "and" << m_destinationFile;
+	kDebug(8101) << m_destination << " was split into " << m_destinationPath << " and " << m_destinationFile << endl;
 }
 
 DiffModel& DiffModel::operator=( const DiffModel& model )
@@ -118,7 +119,6 @@ DiffModel& DiffModel::operator=( const DiffModel& model )
 		m_destinationTimestamp = model.m_destinationTimestamp;
 		m_destinationRevision = model.m_destinationRevision;
 		m_appliedCount = model.m_appliedCount;
-		m_modified = model.m_modified;
 
 		m_diffIndex = model.m_diffIndex;
 		m_selectedDifference = model.m_selectedDifference;
@@ -136,6 +136,9 @@ bool DiffModel::operator<( const DiffModel& model )
 
 int DiffModel::localeAwareCompareSource( const DiffModel& model )
 {
+	kDebug(8101) << "Path: " << model.m_sourcePath << endl;
+	kDebug(8101) << "File: " << model.m_sourceFile << endl;
+
 	int result = m_sourcePath.localeAwareCompare( model.m_sourcePath );
 
 	if ( result == 0 )
@@ -174,39 +177,11 @@ QString DiffModel::recreateDiff() const
 	return diff;
 }
 
-DifferenceList* DiffModel::allDifferences()
-{
-	if ( m_hunks.count() != 0 )
-	{
-		DiffHunkListConstIterator hunkIt = m_hunks.begin();
-		DiffHunkListConstIterator hEnd   = m_hunks.end();
-
-		for ( ; hunkIt != hEnd; ++hunkIt )
-		{
-			DiffHunk* hunk = *hunkIt;
-
-			DifferenceListConstIterator diffIt = hunk->differences().begin();
-			DifferenceListConstIterator dEnd   = hunk->differences().end();
-
-			for ( ; diffIt != dEnd; ++diffIt )
-			{
-				m_allDifferences.append( *diffIt );
-			}
-		}
-		return &m_allDifferences;
-	}
-	else
-	{
-		DifferenceList *diffList = new DifferenceList;
-		return diffList;
-	}
-}
-
 Difference* DiffModel::firstDifference()
 {
-	kDebug( 8101 ) << "DiffModel::firstDifference()";
+	kDebug(8101) << "DiffModel::firstDifference()" << endl;
 	m_diffIndex = 0;
-	kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+	kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 
 	m_selectedDifference = m_differences[ m_diffIndex ];
 
@@ -215,9 +190,9 @@ Difference* DiffModel::firstDifference()
 
 Difference* DiffModel::lastDifference()
 {
-	kDebug( 8101 ) << "DiffModel::lastDifference()";
+	kDebug(8101) << "DiffModel::lastDifference()" << endl;
 	m_diffIndex = m_differences.count() - 1;
-	kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+	kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 
 	m_selectedDifference = m_differences[ m_diffIndex ];
 
@@ -226,17 +201,17 @@ Difference* DiffModel::lastDifference()
 
 Difference* DiffModel::prevDifference()
 {
-	kDebug( 8101 ) << "DiffModel::prevDifference()";
-	if ( --m_diffIndex < m_differences.count() )
+	kDebug(8101) << "DiffModel::prevDifference()" << endl;
+	if ( m_diffIndex > 0 && --m_diffIndex < m_differences.count() )
 	{
-		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+		kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 		m_selectedDifference = m_differences[ m_diffIndex ];
 	}
 	else
 	{
 		m_selectedDifference = 0;
 		m_diffIndex = 0;
-		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+		kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 	}
 
 	return m_selectedDifference;
@@ -244,17 +219,17 @@ Difference* DiffModel::prevDifference()
 
 Difference* DiffModel::nextDifference()
 {
-	kDebug( 8101 ) << "DiffModel::nextDifference()";
+	kDebug(8101) << "DiffModel::nextDifference()" << endl;
 	if (  ++m_diffIndex < m_differences.count() )
 	{
-		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+		kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 		m_selectedDifference = m_differences[ m_diffIndex ];
 	}
 	else
 	{
 		m_selectedDifference = 0;
 		m_diffIndex = 0; // just for safety...
-		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+		kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 	}
 
 	return m_selectedDifference;
@@ -280,34 +255,34 @@ const QString DiffModel::destinationPath() const
 	return m_destinationPath;
 }
 
-void DiffModel::setSourceFile( const QString& path )
+void DiffModel::setSourceFile( QString path )
 {
 	m_source = path;
 	splitSourceInPathAndFileName();
 }
 
-void DiffModel::setDestinationFile( const QString& path )
+void DiffModel::setDestinationFile( QString path )
 {
 	m_destination = path;
 	splitDestinationInPathAndFileName();
 }
 
-void DiffModel::setSourceTimestamp( const QString& timestamp )
+void DiffModel::setSourceTimestamp( QString timestamp )
 {
 	m_sourceTimestamp = timestamp;
 }
 
-void DiffModel::setDestinationTimestamp( const QString& timestamp )
+void DiffModel::setDestinationTimestamp( QString timestamp )
 {
 	m_destinationTimestamp = timestamp;
 }
 
-void DiffModel::setSourceRevision( const QString& revision )
+void DiffModel::setSourceRevision( QString revision )
 {
-	m_destinationRevision = revision;
+	m_sourceRevision = revision;
 }
 
-void DiffModel::setDestinationRevision( const QString& revision )
+void DiffModel::setDestinationRevision( QString revision )
 {
 	m_destinationRevision = revision;
 }
@@ -322,6 +297,20 @@ void DiffModel::addDiff( Difference* diff )
 	m_differences.append( diff );
 }
 
+bool DiffModel::hasUnsavedChanges( void ) const
+{
+	DifferenceListConstIterator diffIt = m_differences.begin();
+	DifferenceListConstIterator endIt  = m_differences.end();
+
+	for ( ; diffIt != endIt; ++diffIt )
+	{
+		if ( (*diffIt)->isUnsaved() )
+			return true;
+	}
+
+	return false;
+}
+
 void DiffModel::applyDifference( bool apply )
 {
 	if ( apply && !m_selectedDifference->applied() )
@@ -329,42 +318,19 @@ void DiffModel::applyDifference( bool apply )
 	else if ( !apply && m_selectedDifference->applied() )
 		m_appliedCount--;
 
-	bool modified;
-
-	// Not setting the m_modified yet so i can still query the current
-	// modified status from the slot that is connected to the signal
-	if ( m_appliedCount == 0 )
-		modified = false;
-	else
-		modified = true;
-
-	emit setModified( modified );
-
-	m_modified = modified;
-
 	m_selectedDifference->apply( apply );
 }
 
 void DiffModel::applyAllDifferences( bool apply )
 {
-	bool modified;
-
-	// Not setting the m_modified yet so i can still query the current
-	// modified status from the slot that is connected to the signal
 	if ( apply )
 	{
 		m_appliedCount = m_differences.count();
-		modified = true;
 	}
 	else
 	{
 		m_appliedCount = 0;
-		modified = false;
 	}
-
-	emit setModified( modified );
-
-	m_modified = modified;
 
 	DifferenceListIterator diffIt = m_differences.begin();
 	DifferenceListIterator dEnd   = m_differences.end();
@@ -375,33 +341,22 @@ void DiffModel::applyAllDifferences( bool apply )
 	}
 }
 
-void DiffModel::slotSetModified( bool modified )
-{
-	// Not setting the m_modified yet so i can still query the current
-	// modified status from the slot that is connected to the signal
-	emit setModified( modified );
-
-	m_modified = modified;
-}
-
 bool DiffModel::setSelectedDifference( Difference* diff )
 {
-	kDebug(8101) << "diff =" << diff;
-	kDebug(8101) << "m_selectedDifference =" << m_selectedDifference;
+	kDebug(8101) << "diff = " << diff << endl;
+	kDebug(8101) << "m_selectedDifference = " << m_selectedDifference << endl;
 
 	if ( diff != m_selectedDifference )
 	{
-		if ( ( findItem( diff, m_differences ) ) == -1 )
+		if ( ( m_differences.indexOf( diff ) ) == -1 )
 			return false;
 		// Do not set m_diffIndex if it cant be found
-		m_diffIndex = findItem( diff, m_differences );
-		kDebug( 8101 ) << "m_diffIndex =" << m_diffIndex;
+		m_diffIndex = m_differences.indexOf( diff );
+		kDebug(8101) << "m_diffIndex = " << m_diffIndex << endl;
 		m_selectedDifference = diff;
 	}
 
 	return true;
 }
-
-#include "diffmodel.moc"
 
 /* vim: set ts=4 sw=4 noet: */

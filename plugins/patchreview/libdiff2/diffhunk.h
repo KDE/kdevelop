@@ -1,9 +1,9 @@
 /***************************************************************************
-                                diffhunk.h  -  description
-                                -------------------
+                                diffhunk.h
+                                ----------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2004,2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -19,8 +19,7 @@
 #define DIFFHUNK_H
 
 #include "difference.h"
-//Added by qt3to4:
-#include <Q3ValueList>
+
 
 namespace Diff2
 {
@@ -33,7 +32,7 @@ public:
 	enum Type { Normal, AddedByBlend };
 
 public:
-	DiffHunk( int sourceLine, int destinationLine, const QString& function = QString(), Type type = Normal );
+	DiffHunk( int sourceLine, int destinationLine, QString function = QString(), Type type = Normal );
 	~DiffHunk();
 
 	const DifferenceList& differences() const { return m_differences; };
@@ -45,21 +44,13 @@ public:
 	int sourceLineCount() const;
 	int destinationLineCount() const;
 
-	const Type type() const   { return m_type; }
+	Type type() const         { return m_type; }
 	void setType( Type type ) { m_type = type; }
 
 	void add( Difference* diff );
 
 	QString recreateHunk() const;
 
-    void reverse() {
-        int t = m_destinationLine;
-        m_destinationLine = m_sourceLine;
-        m_sourceLine = t;
-        for(int a = 0; a < m_differences.size(); ++a)
-            m_differences[a]->reverse();
-    }
-    
 private:
 	int            m_sourceLine;
 	int            m_destinationLine;
@@ -68,9 +59,9 @@ private:
 	Type           m_type;
 };
 
-typedef Q3ValueList<DiffHunk*> DiffHunkList;
-typedef Q3ValueList<DiffHunk*>::iterator DiffHunkListIterator;
-typedef Q3ValueList<DiffHunk*>::const_iterator DiffHunkListConstIterator;
+typedef QList<DiffHunk*> DiffHunkList;
+typedef QList<DiffHunk*>::iterator DiffHunkListIterator;
+typedef QList<DiffHunk*>::const_iterator DiffHunkListConstIterator;
 
 } // End of namespace Diff2
 

@@ -1,9 +1,10 @@
 /***************************************************************************
-     kompareprocess.cpp  -  description
-     -------------------
-    begin    : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+                                kompareprocess.cpp
+                                ------------------
+        begin                   : Sun Mar 4 2001
+        Copyright 2001-2005,2009 Otto Bruggeman <bruggie@gmail.com>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2007-2008 Kevin Kofler   <kevin.kofler@chello.at>
 ****************************************************************************/
 
 /***************************************************************************
@@ -16,12 +17,10 @@
 ***************************************************************************/
 
 #include "kompareprocess.h"
-#include <qdir.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
+
+#include <QtCore/QDir>
+#include <QtCore/QStringList>
+#include <QtCore/QTextCodec>
 
 #include <kcharsets.h>
 #include <kdebug.h>
@@ -29,25 +28,18 @@
 
 #include "diffsettings.h"
 
-
-KompareProcess::KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMode mode, const QString& source, const QString& destination, const QString& dir )
-	: m_diffSettings( diffSettings ),
-	m_mode( mode ),
-	m_textDecoder( 0 ),
-	m_proc(new QProcess)
+KompareProcess::KompareProcess( DiffSettings* diffSettings, Kompare::DiffMode diffMode, const QString & source, const QString & destination, const QString &dir, Kompare::Mode mode )
+	: KProcess(),
+	m_diffSettings( diffSettings ),
+	m_mode( diffMode ),
+	m_customString(0),
+	m_textDecoder( 0 )
 {
-
-	// connect the stdout and stderr signals
-	connect( m_proc, SIGNAL( readyReadStandardOutput() ),
-		SLOT  ( slotReceivedStdout( ) ) );
-	connect( this, SIGNAL( readyReadStandardError() ),
-		SLOT  ( slotReceivedStderr( ) ) );
-
 	// connect the signal that indicates that the proces has exited
 	connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-		SLOT  ( slotProcessExited( int, QProcess::ExitStatus ) ) );
+	         SLOT  ( slotFinished( int, QProcess::ExitStatus ) ) );
 
-	m_env << "LANG=C";
+	setEnv( "LANG", "C" );
 
 	// Write command and options
 	if( m_mode == Kompare::Default )
@@ -60,60 +52,77 @@ KompareProcess::KompareProcess( DiffSettings* diffSettings, enum Kompare::DiffMo
 	}
 
 	if( !dir.isEmpty() ) {
-		m_proc->setWorkingDirectory( dir );
+		setWorkingDirectory( dir );
 	}
 
 	// Write file names
-	m_args << "--";
-	m_args << constructRelativePath( dir, source );
-	m_args << constructRelativePath( dir, destination );
+	*this << "--";
+	
+	//Add the option for diff to read from stdin(QIODevice::write), and save a pointer to the string
+	if(mode == Kompare::ComparingStringFile)
+	{
+		*this << "-";
+		m_customString = &source;
+	}
+	else
+	{
+		*this << constructRelativePath( dir, source );
+	}
+	
+	if(mode == Kompare::ComparingFileString)
+	{
+		*this << "-";
+		m_customString = &destination;
+	}
+	else
+	{
+		*this << constructRelativePath( dir, destination );
+	}
 }
 
 void KompareProcess::writeDefaultCommandLine()
 {
 	if ( !m_diffSettings || m_diffSettings->m_diffProgram.isEmpty() )
 	{
-	m_prog = "diff";
-		m_args << "-dr";
+		*this << "diff" << "-dr";
 	}
 	else
 	{
-	m_prog = m_diffSettings->m_diffProgram;
-		m_args  << "-dr";
+		*this << m_diffSettings->m_diffProgram << "-dr";
 	}
 
-	m_args << "-U" << QString::number( m_diffSettings->m_linesOfContext );
+	*this << "-U" << QString::number( m_diffSettings->m_linesOfContext );
 }
 
 void KompareProcess::writeCommandLine()
 {
-	// load the executable into the K3Process
+	// load the executable into the KProcess
 	if ( m_diffSettings->m_diffProgram.isEmpty() )
 	{
-		kDebug(8101) << "Using the first diff in the path...";
-		m_prog =  "diff";
+		kDebug(8101) << "Using the first diff in the path..." << endl;
+		*this << "diff";
 	}
 	else
 	{
-		kDebug(8101) << "Using a user specified diff, namely:" << m_diffSettings->m_diffProgram;
-		m_prog = m_diffSettings->m_diffProgram;
+		kDebug(8101) << "Using a user specified diff, namely: " << m_diffSettings->m_diffProgram << endl;
+		*this << m_diffSettings->m_diffProgram;
 	}
 
 	switch( m_diffSettings->m_format ) {
 	case Kompare::Unified :
-		m_args << "-U" << QString::number( m_diffSettings->m_linesOfContext );
+		*this << "-U" << QString::number( m_diffSettings->m_linesOfContext );
 		break;
 	case Kompare::Context :
-		m_args << "-C" << QString::number( m_diffSettings->m_linesOfContext );
+		*this << "-C" << QString::number( m_diffSettings->m_linesOfContext );
 		break;
 	case Kompare::RCS :
-		m_args << "-n";
+		*this << "-n";
 		break;
 	case Kompare::Ed :
-		m_args << "-e";
+		*this << "-e";
 		break;
 	case Kompare::SideBySide:
-		m_args << "-y";
+		*this << "-y";
 		break;
 	case Kompare::Normal :
 	case Kompare::UnknownFormat :
@@ -124,67 +133,67 @@ void KompareProcess::writeCommandLine()
 	if ( m_diffSettings->m_largeFiles
 // default diff does not have -H on OpenBSD
 // so don't pass this option unless the user overrode the default program
-#if defined(__OpenBSD__)  //krazy:exclude=cpp
+#if defined(__OpenBSD__)
 		&& !m_diffSettings->m_diffProgram.isEmpty()
 #endif
 	   )
 	{
-		m_args << "-H";
+		*this << "-H";
 	}
 
 	if ( m_diffSettings->m_ignoreWhiteSpace )
 	{
-		m_args << "-b";
+		*this << "-b";
 	}
 
 	if ( m_diffSettings->m_ignoreAllWhiteSpace )
 	{
-		m_args << "-w";
+		*this << "-w";
 	}
 
 	if ( m_diffSettings->m_ignoreEmptyLines )
 	{
-		m_args << "-B";
+		*this << "-B";
 	}
 
 	if ( m_diffSettings->m_ignoreChangesDueToTabExpansion )
 	{
-		m_args << "-E";
+		*this << "-E";
 	}
 
 	if ( m_diffSettings->m_createSmallerDiff )
 	{
-		m_args << "-d";
+		*this << "-d";
 	}
 
 	if ( m_diffSettings->m_ignoreChangesInCase )
 	{
-		m_args << "-i";
+		*this << "-i";
 	}
 
 	if ( m_diffSettings->m_ignoreRegExp && !m_diffSettings->m_ignoreRegExpText.isEmpty() )
 	{
-		m_args << "-I" << m_diffSettings->m_ignoreRegExpText;
+		*this << "-I " << m_diffSettings->m_ignoreRegExpText;
 	}
 
 	if ( m_diffSettings->m_showCFunctionChange )
 	{
-		m_args << "-p";
+		*this << "-p";
 	}
 
 	if ( m_diffSettings->m_convertTabsToSpaces )
 	{
-		m_args << "-t";
+		*this << "-t";
 	}
 
 	if ( m_diffSettings->m_recursive )
 	{
-		m_args << "-r";
+		*this << "-r";
 	}
 
 	if ( m_diffSettings->m_newFiles )
 	{
-		m_args << "-N";
+		*this << "-N";
 	}
 
 // This option is more trouble than it is worth... please do not ever enable it unless you want really weird crashes
@@ -195,73 +204,79 @@ void KompareProcess::writeCommandLine()
 
 	if ( m_diffSettings->m_excludeFilePattern )
 	{
-		QStringList::ConstIterator it = m_diffSettings->m_excludeFilePatternList.constBegin();
-		QStringList::ConstIterator end = m_diffSettings->m_excludeFilePatternList.constEnd();
-		for ( ; it != end; ++it )
+		Q_FOREACH(const QString& it, m_diffSettings->m_excludeFilePatternList)
 		{
-			m_args << "-x" << *it ;
+			*this << "-x" << it;
 		}
 	}
 
 	if ( m_diffSettings->m_excludeFilesFile && !m_diffSettings->m_excludeFilesFileURL.isEmpty() )
 	{
-		m_args << "-X" << m_diffSettings->m_excludeFilesFileURL;
+		*this << "-X" << m_diffSettings->m_excludeFilesFileURL;
 	}
 }
 
 KompareProcess::~KompareProcess()
 {
-	delete m_proc;
+	delete m_textDecoder;
 }
 
 void KompareProcess::setEncoding( const QString& encoding )
 {
-	QTextCodec* textCodec = KGlobal::charsets()->codecForName( encoding.toLatin1() );
-	if ( textCodec )
-		m_textDecoder = textCodec->makeDecoder();
+	if ( !encoding.compare( "default", Qt::CaseInsensitive ) )
+	{
+		m_textDecoder = QTextCodec::codecForLocale()->makeDecoder();
+	}
 	else
 	{
-		kDebug(8101) << "Using locale codec as backup...";
-		textCodec = QTextCodec::codecForLocale();
-		m_textDecoder = textCodec->makeDecoder();
+		m_codec = KGlobal::charsets()->codecForName( encoding.toLatin1() );
+		if ( m_codec )
+			m_textDecoder = m_codec->makeDecoder();
+		else
+		{
+			kDebug(8101) << "Using locale codec as backup..." << endl;
+			m_codec = QTextCodec::codecForLocale();
+			m_textDecoder = m_codec->makeDecoder();
+		}
 	}
-}
-
-void KompareProcess::slotReceivedStdout( )
-{
-	m_stdout += m_proc->readAllStandardOutput();
-}
-
-void KompareProcess::slotReceivedStderr( )
-{
-	m_stderr += m_proc->readAllStandardError();
 }
 
 void KompareProcess::start()
 {
 #ifndef NDEBUG
 	QString cmdLine;
-	QStringList::ConstIterator it = m_args.constBegin();
-	for (; it != m_args.constEnd(); ++it )
-		cmdLine += "\"" + (*it) + "\" ";
-	kDebug(8101) << cmdLine;
+	QStringList program = KProcess::program();
+	QStringList::ConstIterator it = program.begin();
+	for (; it != program.end(); ++it )
+	    cmdLine += "\"" + (*it) + "\" ";
+	kDebug(8101) << cmdLine << endl;
 #endif
-	m_proc->setEnvironment(m_env);
-	m_proc->start(m_prog, m_args);
+	setOutputChannelMode( SeparateChannels );
+	setNextOpenMode(QIODevice::ReadWrite);
+	KProcess::start();
+
+	//If we have a string to compare against input it now
+	if(m_customString)
+		write(m_codec->fromUnicode(*m_customString));
+	closeWriteChannel();
 }
 
-QProcess* KompareProcess::process()
+void KompareProcess::slotFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
-	return m_proc;
-}
+	// add all output to m_stdout/m_stderr
+	if ( m_textDecoder )
+	{
+		m_stdout = m_textDecoder->toUnicode( readAllStandardOutput() );
+		m_stderr = m_textDecoder->toUnicode( readAllStandardError() );
+	}
+	else
+		kDebug(8101) << "KompareProcess::slotFinished : No decoder !!!" << endl;
 
-void KompareProcess::slotProcessExited( int code, QProcess::ExitStatus status )
-{
-	// exit status of 0: no differences
-	//   1: some differences
-	//   2: error but there may be differences !
-	kDebug(8101) << "Exited with exit status :" << status;
-	emit diffHasFinished( code == 0 && status != QProcess::CrashExit );
+	// exit code of 0: no differences
+	//              1: some differences
+	//              2: error but there may be differences !
+	kDebug(8101) << "Exited with exit code : " << exitCode << endl;
+	emit diffHasFinished( exitStatus == NormalExit && exitCode != 0 );
 }
 
 #include "kompareprocess.moc"

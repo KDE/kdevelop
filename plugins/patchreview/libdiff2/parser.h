@@ -2,8 +2,7 @@
 **                              parser.h
 **                              --------
 **      begin                   : Tue Jul 30 23:53:52 2002
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-**
+**      Copyright 2002-2004 Otto Bruggeman <otto.bruggeman@home.nl>
 ***************************************************************************/
 /***************************************************************************
 **
@@ -14,8 +13,8 @@
 **
 ***************************************************************************/
 
-#ifndef _DIFF2_PARSER_H
-#define _DIFF2_PARSER_H
+#ifndef DIFF2_PARSER_H
+#define DIFF2_PARSER_H
 
 #include "diffmodellist.h"
 #include "kompare.h"

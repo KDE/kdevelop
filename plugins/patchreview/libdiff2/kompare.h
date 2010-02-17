@@ -2,8 +2,8 @@
                                 kompare.h  -  description
                                 -------------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -19,6 +19,11 @@
 #define KOMPARE_H
 
 #include <kurl.h>
+
+#include "diff2export.h"
+
+// Forward declaration needed
+class KTempDir;
 
 namespace Kompare
 {
@@ -47,12 +52,14 @@ namespace Kompare
 	};
 
 	enum Mode {
-		ComparingFiles,  // compareFiles
-		ComparingDirs,   // compareDirs
-		ShowingDiff,     // openDiff
-		BlendingDir,     // openDirAnfDiff
-		BlendingFile,    // openFileAndDiff
-		UnknownMode      // Used to initialize the Infoi struct
+		ComparingFiles,      // compareFiles
+		ComparingFileString, // Compare a source file with a destination string
+		ComparingStringFile, // Compare a source string with a destination file
+		ComparingDirs,       // compareDirs
+		ShowingDiff,         // openDiff
+		BlendingDir,         // openDirAnfDiff
+		BlendingFile,        // openFileAndDiff
+		UnknownMode          // Used to initialize the Infoi struct
 	};
 
 	enum DiffMode {
@@ -74,9 +81,7 @@ namespace Kompare
 		Destination
 	};
 
-	class Info {
-   public:
-
+	struct Info {
 		Info (
 			enum Mode _mode = UnknownMode,
 			enum DiffMode _diffMode = UnknownDiffMode,
@@ -85,7 +90,9 @@ namespace Kompare
 			KUrl _source = KUrl(),
 			KUrl _destination = KUrl(),
 			QString _localSource = "",
-			QString _localDestination = ""
+			QString _localDestination = "",
+			KTempDir* _sourceKTempDir = 0,
+			KTempDir* _destinationKTempDir = 0
 		)
 		{
 			mode = _mode;
@@ -96,6 +103,22 @@ namespace Kompare
 			destination = _destination;
 			localSource = _localSource;
 			localDestination = _localDestination;
+			sourceKTempDir = _sourceKTempDir;
+			destinationKTempDir = _destinationKTempDir;
+		}
+		void swapSourceWithDestination()
+		{
+			KUrl url = source;
+			source = destination;
+			destination = url;
+
+			QString string = localSource;
+			localSource = localDestination;
+			localDestination = string;
+
+			KTempDir* tmpDir = sourceKTempDir;
+			sourceKTempDir = destinationKTempDir;
+			destinationKTempDir = tmpDir;
 		}
 		enum Mode      mode;
 		enum DiffMode  diffMode;
@@ -105,13 +128,15 @@ namespace Kompare
 		KUrl           destination;
 		QString        localSource;
 		QString        localDestination;
+		KTempDir*      sourceKTempDir;
+		KTempDir*      destinationKTempDir;
 	};
 } // End of namespace Kompare
 
 /*
 ** This should be removed and put somewhere else
 */
-class KompareFunctions
+class DIFF2_EXPORT KompareFunctions
 {
 public:
 	static QString constructRelativePath( const QString& from, const QString& to )

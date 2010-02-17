@@ -91,7 +91,7 @@ public:
     VcsCommitDialog* dlg;
     QHash<KUrl, KDevelop::VcsStatusInfo> statusInfos;
     Ui::VcsCommitDialog ui;
-    QString diff;
+    KDevelop::VcsDiff diff;
     QList< KUrl > m_selection;
 };
 
@@ -142,9 +142,9 @@ IPlugin* VcsCommitDialog::versionControlPlugin()
     return d->plugin;
 }
 
-void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl::List &urls )
+void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl &url )
 {
-    kDebug() << "Fetching status for urls:" << urls;
+    kDebug() << "Fetching status for urls:" << url;
     KDevelop::IBasicVersionControl *vcsiface = d->plugin->extension<KDevelop::IBasicVersionControl>();
     if( !vcsiface )
     {
@@ -153,15 +153,15 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl::List &urls )
     }
     
     d->urls.clear();
-    d->diff.clear();
+    d->diff=KDevelop::VcsDiff();
     
     //DVCS uses some "hack", see DistributedVersionControlPlugin::status()
     //Thus DVCS gets statuses for all files in the repo. But project->relativeUrl() below helps us
-    VcsJob *job = vcsiface->status( urls );
+    VcsJob *job = vcsiface->status( url );
     job->exec();
     if( job->status() != VcsJob::JobSucceeded )
     {
-        kDebug() << "Couldn't get status for urls: " << urls;
+        kDebug() << "Couldn't get status for urls: " << url;
     }else
     {
         QVariant varlist = job->fetchResults();
@@ -213,13 +213,13 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl::List &urls )
         reject();
     }
     
-    foreach(KUrl url, urls) {
-        KDevelop::VcsJob* job = vcsiface->diff(url,
-                                            KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
-                                            KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
+    {
+    KDevelop::VcsJob* job = vcsiface->diff(url,
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
 
-        connect(job, SIGNAL(finished(KJob*)), this, SLOT(commitDiffJobFinished(KJob*)));
-        job->exec();
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(commitDiffJobFinished(KJob*)));
+    job->exec();
     }
     
     VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(d->diff, d->urls, vcsiface);
@@ -246,14 +246,14 @@ KUrl::List VcsCommitDialog::determineUrlsForCheckin()
     KUrl::List list;
     KUrl::List addItems;
 
-        foreach(KUrl url, d->selection()) {
-            VcsStatusInfo info = d->statusInfos[url];
-            
-            if( info.state() == VcsStatusInfo::ItemUnknown ) {
-                addItems << info.url();
-            }
-            list << info.url();
+    foreach(KUrl url, d->selection()) {
+        VcsStatusInfo info = d->statusInfos[url];
+        
+        if( info.state() == VcsStatusInfo::ItemUnknown ) {
+            addItems << info.url();
         }
+        list << info.url();
+    }
 
     if (!addItems.isEmpty()) {
         IBasicVersionControl* iface = d->plugin->extension<IBasicVersionControl>();
@@ -276,8 +276,7 @@ void VcsCommitDialog::commitDiffJobFinished(KJob* job)
 
     if (vcsjob) {
         if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
-            KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            this->d->diff += d.diff() + "\n";
+            d->diff = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
         } else {
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
         }

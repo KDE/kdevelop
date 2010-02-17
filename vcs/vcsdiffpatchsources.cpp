@@ -29,7 +29,9 @@
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const QString& d, QMap< KUrl, QString > selectable, IBasicVersionControl* vcs) : VCSDiffPatchSource(d), m_selectable(selectable), m_vcs(vcs) {
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, QString > selectable, IBasicVersionControl* vcs)
+    : VCSDiffPatchSource(vcsdiff), m_selectable(selectable), m_vcs(vcs)
+{
     
     Q_ASSERT(m_vcs);
 
@@ -42,21 +44,22 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const QString& d, QMap< KUrl,
     layout->addWidget(m_commitMessageEdit);
 }
 
-VCSDiffPatchSource::VCSDiffPatchSource(const QString& diff) {
+VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& vcsdiff)
+{
     KTemporaryFile temp2;
     temp2.setSuffix("2.patch");
     temp2.setAutoRemove(false);
     temp2.open();
     QTextStream t2(&temp2);
-    t2 << diff;
+    t2 << vcsdiff.diff();
     kDebug() << "filename:" << temp2.fileName();
     m_file = KUrl(temp2.fileName());
     temp2.close();
 
-    kDebug() << "using file" << m_file;
+    kDebug() << "using file" << m_file << vcsdiff.diff();
 
     m_name = "VCS Diff";
-    m_base = KUrl("/");
+    m_base = vcsdiff.baseDiff();
 }
 
 KUrl VCSDiffPatchSource::baseDir() const {
@@ -135,8 +138,7 @@ bool showVcsDiff(IPatchSource* vcsDiff)
     KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>("org.kdevelop.IPatchReview");
 
     //Only give one VCS diff at a time to the patch review plugin
-    if(currentShownDiff)
-        delete currentShownDiff;
+    delete currentShownDiff;
     
     currentShownDiff = vcsDiff;
     

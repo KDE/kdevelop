@@ -1,9 +1,9 @@
 /***************************************************************************
-                                diffsettings.h  -  description
-                                -------------------
+                                diffsettings.h
+                                --------------
         begin                   : Sun Mar 4 2001
-        copyright               : (C) 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
-        copyright               : (C) 2001-2003 John Firebaugh <jfirebaugh@kde.org>
+        Copyright 2001-2003 Otto Bruggeman <otto.bruggeman@home.nl>
+        Copyright 2001-2003 John Firebaugh <jfirebaugh@kde.org>
 ****************************************************************************/
 
 /***************************************************************************
@@ -18,13 +18,11 @@
 #ifndef DIFFSETTINGS_H
 #define DIFFSETTINGS_H
 
-#include <qstringlist.h>
-#include <qwidget.h>
+#include <QtCore/QStringList>
+#include <QtGui/QWidget>
 
-#include "kompare.h"
+#include "../libdiff2/kompare.h"
 #include "settingsbase.h"
-
-#include "diffexport.h"
 
 class DiffSettings : public SettingsBase
 {

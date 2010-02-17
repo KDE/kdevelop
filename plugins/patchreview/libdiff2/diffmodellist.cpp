@@ -2,7 +2,7 @@
 **
 ** Filename   : diffmodellist.cpp
 ** Created on : 26 march, 2004
-** Copyright  : (c) 2004 Otto Bruggeman <bruggie@home.nl>
+** Copyright 2004 Otto Bruggeman <bruggie@gmail.com>
 **
 *******************************************************************************/
 
@@ -16,13 +16,17 @@
 *******************************************************************************/
 
 #include "diffmodellist.h"
+
 #include <kdebug.h>
-#include <q3tl.h>
 
 using namespace Diff2;
 
-void DiffModelList::sort()
+bool diffModelCompare(DiffModel* model1, DiffModel* model2)
 {
-	qHeapSort(*this);
+	return *model1 < *model2;
 }
 
+void DiffModelList::sort()
+{
+	qSort(begin(), end(), diffModelCompare);
+}
