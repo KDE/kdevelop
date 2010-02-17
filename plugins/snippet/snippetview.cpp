@@ -72,8 +72,7 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     addAction(m_removeRepoAction);
     m_putNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Publish Repository"), this);
     connect(m_putNewStuffAction, SIGNAL(triggered()), this, SLOT(slotSnippetToGHNS()));
-    ///TODO: make it work (KNS3 issue?)
-//     addAction(m_putNewStuffAction);
+    addAction(m_putNewStuffAction);
 
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
@@ -170,8 +169,7 @@ void SnippetView::contextMenu (const QPoint& pos)
 
         menu.addAction(m_editRepoAction);
         menu.addAction(m_removeRepoAction);
-        ///TODO: make it work (KNS3 issue?)
-//     addAction(m_putNewStuffAction);
+        addAction(m_putNewStuffAction);
         menu.addSeparator();
 
         menu.addAction(m_addSnippetAction);

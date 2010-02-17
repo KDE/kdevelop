@@ -32,3 +32,5 @@ install( TARGETS kdevsnippet DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES kdevsnippet.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevsnippet.rc DESTINATION ${DATA_INSTALL_DIR}/kdevsnippet )
 
+# until this stuff is in kdelibs, ship it ourself
+install( FILES ktexteditor_codesnippets_core.knsrc  DESTINATION  ${CONFIG_INSTALL_DIR} )
