@@ -106,7 +106,7 @@ void SvnInternalStatusJob::run()
     KUrl::List l = locations();
     foreach( const KUrl &url, l )
     {
-        kDebug(9510) << "Fetching status info for:" << url;
+        //kDebug(9510) << "Fetching status info for:" << url;
         try
         {
             QByteArray ba = url.toLocalFile( KUrl::RemoveTrailingSlash ).toUtf8();
