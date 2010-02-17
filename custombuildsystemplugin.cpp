@@ -87,7 +87,17 @@ KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
 
 KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
 {
-    KUrl u = item->url();
+    
+    KUrl u;
+    if( item->folder() ) {
+        u = item->url();
+    } else {
+        ProjectBaseItem* parent = item;
+        while( !parent->folder() ) {
+            parent = dynamic_cast<ProjectBaseItem*>( parent->parent() );
+        }
+        u = parent->url();
+    }
     KUrl projecturl = item->project()->projectItem()->url();
     QString relative = KUrl::relativeUrl( projecturl, u );
     KUrl builddir = configuration( item->project() ).readEntry( ConfigConstants::buildDirKey, projecturl );
