@@ -23,17 +23,6 @@
 #include <qfileinfo.h>
 #include <kmimetype.h>
 
-KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
-{
-    if( type == KDevelop::ProjectBaseItem::Folder || type == KDevelop::ProjectBaseItem::BuildFolder )
-        return KDevelop::ProjectBaseItem::Folder;
-    if( type == KDevelop::ProjectBaseItem::Target || type == KDevelop::ProjectBaseItem::ExecutableTarget
-        || type == KDevelop::ProjectBaseItem::LibraryTarget)
-        return KDevelop::ProjectBaseItem::Target;
-
-    return KDevelop::ProjectBaseItem::File;
-}
-
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
 {
@@ -51,19 +40,8 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
     if(!iLeft || !iRight) return false;
 
-    KDevelop::ProjectBaseItem::ProjectItemType leftType=baseType(iLeft->type()), rightType=baseType(iRight->type());
-    if(leftType==rightType)
-    {
-        if(leftType==KDevelop::ProjectBaseItem::File)
-        {
-            return iLeft->file()->fileName().compare(iRight->file()->fileName(), Qt::CaseInsensitive) < 0;
-        }
-        return *iLeft<*iRight;
-    }
-    else
-        return leftType<rightType;
-    
-    return false;
+    qDebug() << "calling less than on:" << iLeft << iRight;
+    return( iLeft->lessThan( iRight ) );
 }
 
 QModelIndex ProjectProxyModel::proxyIndexFromItem(QStandardItem* item) const

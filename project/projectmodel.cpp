@@ -145,6 +145,36 @@ KUrl ProjectBaseItem::url() const
     return KUrl();
 }
 
+KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
+{
+    if( type == KDevelop::ProjectBaseItem::Folder || type == KDevelop::ProjectBaseItem::BuildFolder )
+        return KDevelop::ProjectBaseItem::Folder;
+    if( type == KDevelop::ProjectBaseItem::Target || type == KDevelop::ProjectBaseItem::ExecutableTarget
+        || type == KDevelop::ProjectBaseItem::LibraryTarget)
+        return KDevelop::ProjectBaseItem::Target;
+
+    return static_cast<KDevelop::ProjectBaseItem::ProjectItemType>( type );
+}
+
+bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
+{
+    KDevelop::ProjectBaseItem::ProjectItemType leftType=baseType(type()), rightType=baseType(item->type());
+    if(leftType==rightType)
+    {
+        if(leftType==KDevelop::ProjectBaseItem::File)
+        {
+            return file()->fileName().compare(item->file()->fileName(), Qt::CaseInsensitive) < 0;
+        }
+        return *this<*item;
+    }
+    else
+    {
+        return leftType<rightType;
+    }
+
+    return false;
+}
+
 IProject* ProjectBaseItem::project() const
 {
     Q_D(const ProjectBaseItem);

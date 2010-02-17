@@ -118,6 +118,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         /** @returns the url of this item if its a file or folder related object */
         virtual KUrl url() const;
 
+        virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
+
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
