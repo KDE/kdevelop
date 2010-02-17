@@ -1,5 +1,7 @@
 project(kdevelop4-custom-buildsystem)
 
+set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
+
 find_package(KDE4 4.3.0 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)
@@ -8,6 +10,9 @@ find_package(KDevPlatform 0.9.97 REQUIRED)
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
+
+## Unittests
+add_subdirectory( tests )
 
 ## KDevelop Plugin
 set( custom_SRCS custombuildsystemplugin.cpp )
