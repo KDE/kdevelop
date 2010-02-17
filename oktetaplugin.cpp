@@ -54,8 +54,9 @@
 #include <KPluginFactory>
 
 
+// TODO: set programIconName to okteta
 K_PLUGIN_FACTORY(OktetaPluginFactory, registerPlugin<KDevelop::OktetaPlugin>(); )
-K_EXPORT_PLUGIN( OktetaPluginFactory( KAboutData( "kdevokteta","kdevokteta", ki18n("Okteta"), "0.1", ki18n("Provides simple Hex Editing"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN( OktetaPluginFactory( KAboutData( "kdevokteta","kdevokteta", ki18n("Okteta Plugin for KDevelop"), "0.1", ki18n("Provides simple Hex Editing"), KAboutData::License_GPL)))
 
 namespace KDevelop
 {
