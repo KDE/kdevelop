@@ -85,7 +85,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
             ExecutableTarget = QStandardItem::UserType+2  /** item is an executable target */,
             LibraryTarget = QStandardItem::UserType+3     /** item is a library target */,
             Target = QStandardItem::UserType+5            /** item is a target */,
-            File = QStandardItem::UserType+6              /** item is a file */
+            File = QStandardItem::UserType+6              /** item is a file */,
+            CustomProjectItemType = QStandardItem::UserType+100 /** type which should be used as base for custom types */
         };
         
         /** @returns Returns the project that the item belongs to.  */

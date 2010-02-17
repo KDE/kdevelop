@@ -158,6 +158,11 @@ KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
 
 bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
 {
+    if(item->type() >= KDevelop::ProjectBaseItem::CustomProjectItemType ) {
+        // For custom types we want to make sure that if they override lessThan, then we
+        // prefer their lessThan implementation
+        return !item->lessThan( this );
+    }
     KDevelop::ProjectBaseItem::ProjectItemType leftType=baseType(type()), rightType=baseType(item->type());
     if(leftType==rightType)
     {
