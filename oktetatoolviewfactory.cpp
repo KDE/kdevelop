@@ -34,11 +34,13 @@ namespace KDevelop
 {
 
 OktetaToolViewFactory::OktetaToolViewFactory( Kasten::AbstractToolViewFactory* toolViewFactory,
-                                              Kasten::AbstractToolFactory* toolFactory, const QString& id )
+                                              Kasten::AbstractToolFactory* toolFactory,
+                                              const QString& id, Qt::DockWidgetArea defaultPosition )
   : IToolViewFactory(),
     mToolViewFactory( toolViewFactory ),
     mToolFactory( toolFactory ),
-    mId( id )
+    mId( id ),
+    mDefaultPosition( defaultPosition )
 {
 }
 
@@ -47,12 +49,13 @@ QWidget* OktetaToolViewFactory::create( QWidget* parent )
     Kasten::AbstractTool* tool = mToolFactory->create();
     Kasten::AbstractToolView* toolView = mToolViewFactory->create( tool );
 
+    // TODO: set icon to widget, so it get's used in the sidebar tabs
     return new KastenToolViewWidget( toolView, parent );
 }
 
 Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition()
 {
-    return Qt::LeftDockWidgetArea;
+    return mDefaultPosition;
 }
 
 QString OktetaToolViewFactory::id() const

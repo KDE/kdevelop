@@ -42,7 +42,8 @@ class OktetaToolViewFactory : public IToolViewFactory
 {
   public:
     OktetaToolViewFactory( Kasten::AbstractToolViewFactory* toolViewFactory,
-                           Kasten::AbstractToolFactory* toolFactory, const QString& id );
+                           Kasten::AbstractToolFactory* toolFactory,
+                           const QString& id, Qt::DockWidgetArea defaultPosition );
 
     virtual ~OktetaToolViewFactory();
 
@@ -56,6 +57,7 @@ class OktetaToolViewFactory : public IToolViewFactory
     Kasten::AbstractToolViewFactory* mToolViewFactory;
     Kasten::AbstractToolFactory* mToolFactory;
     QString mId;
+    Qt::DockWidgetArea mDefaultPosition;
 };
 
 }

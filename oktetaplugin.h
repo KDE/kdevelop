@@ -51,7 +51,7 @@ class OktetaPlugin: public IPlugin
   protected:
     void addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
                   Kasten::AbstractToolFactory* toolFactory,
-                  const QString& id, const QString& title );
+                  const QString& id, const QString& title, Qt::DockWidgetArea defaultPosition );
 
   protected:
     OktetaDocumentFactory* mDocumentFactory;
