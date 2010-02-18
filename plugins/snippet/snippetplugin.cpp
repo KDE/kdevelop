@@ -32,7 +32,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
-
+#include <language/codecompletion/codecompletion.h>
 #include <language/interfaces/editorcontext.h>
 
 #include "snippetview.h"
@@ -78,6 +78,7 @@ SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
     SnippetStore::init(this);
 
     m_model = new SnippetCompletionModel;
+    new KDevelop::CodeCompletion(this, m_model, QString());
 
     setXMLFile( "kdevsnippet.rc" );
 
@@ -115,11 +116,6 @@ void SnippetPlugin::insertSnippet(Snippet* snippet)
 
 void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view )
 {
-    if( KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>( view ) )
-    {
-        cc->registerCompletionModel( m_model );
-    }
-
     KAction* selectionAction = view->actionCollection()->addAction("edit_selection_snippet", this, SLOT(createSnippetFromSelection()));
     selectionAction->setData(QVariant::fromValue<void *>(view));
 }
