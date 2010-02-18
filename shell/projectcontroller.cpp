@@ -79,12 +79,6 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-bool addProjectsToBuildset()
-{
-    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Automatically Add Projects to Buildset", true );
-}
-
 bool parseAllProjectSources()
 {
     KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
@@ -644,24 +638,6 @@ void ProjectController::projectImportingFinished( IProject* project )
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 
-    if( addProjectsToBuildset() )
-    {
-        // Add project to buildset, but only if there is no item for that
-        // project yet.
-        bool found = false;
-        foreach( BuildItem bi, d->buildset->items() )
-        {
-            if( bi.itemProject() == project->name() )
-            {
-                found = true;
-            }
-        }
-        if( !found )
-        {
-            d->buildset->addProjectItem( project->projectItem() );
-        }
-    }
-    
     if (parseAllProjectSources())
     {
         KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);

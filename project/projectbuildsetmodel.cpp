@@ -31,12 +31,19 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <kdevplatform/interfaces/isession.h>
 
 #include "projectmodel.h"
 #include <util/kdevstringhandler.h>
 
 namespace KDevelop
 {
+
+bool addProjectsToBuildset()
+{
+    KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
+    return group.readEntry( "Automatically Add Projects to Buildset", true );
+}
 
 BuildItem::BuildItem()
 {
@@ -219,12 +226,19 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
     QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
-    
+
     foreach(const QVariant& path, items)
     {
         beginInsertRows( QModelIndex(), rowCount(), rowCount() );
         m_items.append( BuildItem( path.toStringList() ) );
         endInsertRows();
+    }
+
+    if( addProjectsToBuildset() && items.isEmpty() )
+    {
+        // Add project to buildset, but only if there is no item for that
+        // project yet.
+        addProjectItem( project->projectItem() );
     }
 }
 
