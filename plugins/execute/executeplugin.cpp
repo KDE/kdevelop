@@ -184,7 +184,7 @@ KUrl ExecutePlugin::executable( KDevelop::ILaunchConfiguration* cfg, QString& er
             executable = item->executable()->builtUrl();
         }
     }
-    if( !executable.isLocalFile() || executable.isEmpty() )
+    if( executable.isEmpty() )
     {
         err = i18n("No valid executable specified");
         kWarning() << "Launch Configuration:" << cfg->name() << "no valid executable set";

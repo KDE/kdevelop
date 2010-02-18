@@ -167,7 +167,7 @@ void NativeAppJob::processError( QProcess::ProcessError error )
     {
         setError( -1 );
         QString errmsg =  i18n("Could not start program '%1'. Make sure that the "
-                           "path is specified correctly.", proc->property("executable").toString() );
+                           "path is specified correctly.", proc->program().join(" ") );
         KMessageBox::error( KDevelop::ICore::self()->uiController()->activeMainWindow(), errmsg, i18n("Could not start application") );
         setErrorText( errmsg );
         emitResult();

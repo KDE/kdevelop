@@ -56,7 +56,7 @@
            <bool>false</bool>
           </property>
           <property name="clickMessage">
-           <string>Enter the absolute path to an executable file</string>
+           <string>Enter the executable name or absolute path to an executable file</string>
           </property>
          </widget>
         </item>
