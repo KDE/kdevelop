@@ -40,7 +40,6 @@ bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & r
     KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
     if(!iLeft || !iRight) return false;
 
-    qDebug() << "calling less than on:" << iLeft << iRight;
     return( iLeft->lessThan( iRight ) );
 }
 
