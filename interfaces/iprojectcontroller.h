@@ -57,14 +57,6 @@ public:
     Q_SCRIPTABLE virtual ProjectModel* projectModel() = 0;
 
     Q_SCRIPTABLE virtual ProjectBuildSetModel* buildSetModel() = 0;
-    
-    /**
-     * Provides access to the selection model of the project view.
-     * This way it is possible to fetch the list of selected items in
-     * the project view and use that to prefill some thing.
-     * @returns the selection model
-     */
-    Q_SCRIPTABLE virtual QItemSelectionModel* projectSelectionModel() = 0;
 
     /**
      * Find an open project using the name of the project

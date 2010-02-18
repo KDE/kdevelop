@@ -58,7 +58,6 @@
 #include "tests/modeltest.h"
 #include "projectproxymodel.h"
 #include "projectmanagerviewplugin.h"
-#include "proxyselectionmodel.h"
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
@@ -107,7 +106,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_modelFilter->setSourceModel(overviewModel);
 
     m_ui->projectTreeView->setModel( m_modelFilter );
-    m_ui->projectTreeView->setSelectionModel( new ProxySelectionModel( m_ui->projectTreeView, ICore::self()->projectController()->projectSelectionModel(), this ) );
  
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );

@@ -9,7 +9,6 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projecttreeview.cpp
     projectbuildsetwidget.cpp
     projectproxymodel.cpp
-    proxyselectionmodel.cpp
     builditembuilderjob.cpp
 )
 
