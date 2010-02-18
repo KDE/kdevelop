@@ -225,20 +225,21 @@ void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
-    QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
+    if (base.hasKey("BuildItems")) {
+        QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
 
-    foreach(const QVariant& path, items)
-    {
-        beginInsertRows( QModelIndex(), rowCount(), rowCount() );
-        m_items.append( BuildItem( path.toStringList() ) );
-        endInsertRows();
-    }
-
-    if( addProjectsToBuildset() && items.isEmpty() )
-    {
+        foreach(const QVariant& path, items)
+        {
+            beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+            m_items.append( BuildItem( path.toStringList() ) );
+            endInsertRows();
+        }
+    } else {
         // Add project to buildset, but only if there is no item for that
         // project yet.
-        addProjectItem( project->projectItem() );
+        if( addProjectsToBuildset() ) {
+            addProjectItem( project->projectItem() );
+        }
     }
 }
 
