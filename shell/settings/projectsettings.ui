@@ -84,7 +84,7 @@ Before Building</string>
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Automatically Add Opened
-Projects to the Buildset</string>
+Projects to the Project Selection</string>
      </property>
     </widget>
    </item>
