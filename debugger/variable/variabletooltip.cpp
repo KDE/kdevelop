@@ -35,6 +35,7 @@
 #include <QDesktopWidget>
 #include <KTextEditor/View>
 #include <KLocale>
+#include <QPainter>
 
 #include "variablecollection.h"
 #include "../breakpoint/breakpointmodel.h"
@@ -45,11 +46,56 @@
 
 namespace KDevelop {
 
+class SizeGrip : public QWidget
+{
+public:
+    SizeGrip(QWidget* parent) : QWidget(parent) {
+        m_parent = parent;
+    }
+protected:
+    virtual void paintEvent(QPaintEvent *)
+    {
+      QPainter painter(this);
+      QStyleOptionSizeGrip opt;
+      opt.init(this);
+      opt.corner = Qt::BottomRightCorner;
+      style()->drawControl(QStyle::CE_SizeGrip, &opt, &painter, this);
+    }
+
+    virtual void mousePressEvent(QMouseEvent* e)
+    {
+        if (e->button() == Qt::LeftButton) {
+            m_pos = e->globalPos();
+            m_startSize = m_parent->size();
+            e->ignore();
+        }
+    }
+    virtual void mouseReleaseEvent(QMouseEvent*)
+    {
+        m_pos = QPoint();
+    }
+    virtual void mouseMoveEvent(QMouseEvent* e)
+    {
+        if (!m_pos.isNull()) {
+            m_parent->resize(
+                m_startSize.width() + (e->globalPos().x() - m_pos.x()),
+                m_startSize.height() + (e->globalPos().y() - m_pos.y())
+            );
+        }
+    }
+private:
+    QWidget *m_parent;
+    QSize m_startSize;
+    QPoint m_pos;
+};
+
 VariableToolTip::VariableToolTip(QWidget* parent, QPoint position, 
                                  const QString& identifier)
-: ActiveToolTip(parent, position)
+:  ActiveToolTip(parent, position)
 {
-    model_ = new TreeModel(QVector<QString>() << "Name" << "Type",
+    setPalette( QApplication::palette() );
+
+    model_ = new TreeModel(QVector<QString>() << i18n("Name") << i18n("Value"),
                            this);
 
     TooltipRoot* tr = new TooltipRoot(model_);
@@ -63,9 +109,8 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
     view_ = new AsyncTreeView(model_, this);
-    view_->header()->resizeSection(0, 200);
+    view_->header()->resizeSection(0, 150);
     view_->header()->resizeSection(1, 90);
-    view_->header()->hide();
     view_->setSelectionBehavior(QAbstractItemView::SelectRows);
     view_->setSelectionMode(QAbstractItemView::SingleSelection);
     view_->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -82,20 +127,28 @@ VariableToolTip::VariableToolTip(QWidget* parent, QPoint position,
                        QItemSelectionModel::Rows
                        | QItemSelectionModel::ClearAndSelect);
 
-    QHBoxLayout* inner = new QHBoxLayout();
-    inner->setContentsMargins(11, 0, 11, 6);
-    l->addLayout(inner);
+    QHBoxLayout* labelL = new QHBoxLayout();
+    labelL->setContentsMargins(11, 0, 11, 6);
     QLabel* label = new QLabel(i18n("<a href=add_watch>Watch this</a>"), this);
-    inner->addWidget(label);
+    labelL->addWidget(label);
     QLabel* label2 = new QLabel(i18n("<a href=watchpoint>Stop on change</a>"), 
                                 this);
-    inner->addWidget(label2);
+    labelL->addWidget(label2);
     connect(label, SIGNAL(linkActivated(const QString&)),
             this, SLOT(slotLinkActivated(const QString&)));
     connect(label2, SIGNAL(linkActivated(const QString&)),
             this, SLOT(slotLinkActivated(const QString&)));    
 
-        
+    QHBoxLayout* inner = new QHBoxLayout();
+    l->addLayout(inner);
+    inner->setContentsMargins(0, 0, 0, 0);
+    inner->addLayout(labelL);
+    inner->addStretch();
+
+    SizeGrip* g = new SizeGrip(this);
+    g->setFixedSize(16, 16);
+    inner->addWidget(g, 0, (Qt::Alignment)(Qt::AlignRight | Qt::AlignBottom));
+
     move(position);
     resize(310, 100);
 }
