@@ -169,7 +169,7 @@ void SnippetView::contextMenu (const QPoint& pos)
 
         menu.addAction(m_editRepoAction);
         menu.addAction(m_removeRepoAction);
-        addAction(m_putNewStuffAction);
+        menu.addAction(m_putNewStuffAction);
         menu.addSeparator();
 
         menu.addAction(m_addSnippetAction);
