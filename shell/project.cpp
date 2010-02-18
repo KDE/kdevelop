@@ -205,10 +205,10 @@ public:
             ProjectBaseItem* item=static_cast<ProjectBaseItem*>(folder->child(i));
             Q_ASSERT(item->type()>QStandardItem::UserType);
             
-            if( item->url() == url )
-                ret << item;
-            else if(item->type()!=ProjectBaseItem::File)
+            if(item->type()!=ProjectBaseItem::File)
                 ret << itemsForUrlInternal(url, item);
+            else if( item->url() == url )
+                ret << item;
             
         }
         return ret;

@@ -107,14 +107,6 @@ class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
 {
 };
 
-class WorkspaceItemPrivate
-{
-public:
-    QString name;
-    KSharedConfig::Ptr metadataConfig;
-    QString metadataDir;
-};
-
 class ProjectModelPrivate
 {
 };
