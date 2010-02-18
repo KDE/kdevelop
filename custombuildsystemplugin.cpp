@@ -153,11 +153,7 @@ IProjectFileManager::Features CustomBuildSystem::features() const
 
 ProjectFolderItem* CustomBuildSystem::import( IProject* project )
 {
-    ProjectFolderItem* top = genericManager()->import( project );
-    if( top->isProjectRoot() ) {
-        new CustomBuildSystemConfigItem( top );
-    }
-    return top;
+    return genericManager()->import( project );
 }
 
 KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
