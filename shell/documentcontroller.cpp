@@ -167,8 +167,6 @@ struct DocumentControllerPrivate {
             previousActivePosition = previousActiveDocument->textDocument()->activeView()->cursorPosition();
         
 
-        UiController *uiController = Core::self()->uiControllerInternal();
-
         QString _encoding = encoding;
         
         KUrl url = inputUrl;

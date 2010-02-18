@@ -113,7 +113,7 @@ class SessionControllerPrivate : public QObject
 {
     Q_OBJECT
 public:
-    SessionControllerPrivate( SessionController* s ) : q(s), recoveryDirectoryIsOwn(false), activeSession(0) {
+    SessionControllerPrivate( SessionController* s ) : q(s), activeSession(0), recoveryDirectoryIsOwn(false) {
         recoveryTimer.setInterval(recoveryStorageInterval * 1000);
         connect(&recoveryTimer, SIGNAL(timeout()), SLOT(recoveryStorageTimeout()));
         
@@ -314,8 +314,6 @@ private slots:
             QFile dateFile(recoveryDir.path() + "/date");
             dateFile.open(QIODevice::ReadOnly);
             QString date = QString::fromUtf8(dateFile.readAll());
-            
-            int numFiles = 0;
             
             QDir recoverySubDir(recoveryDir.path() + "/current");
             
