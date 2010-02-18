@@ -263,7 +263,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
     //For files on disk
     if (!repr->setText(newText))
     {
-        QString warningString = QString("Could not replace text for file in disk, or artificial code: %1").arg(sortedChangesList.begin()->data()->m_document.str());
+        QString warningString = QString("Could not replace text in the document: %1").arg(sortedChangesList.begin()->data()->m_document.str());
         if(replacePolicy == DocumentChangeSet::WarnOnFailedChange)
         {
             kWarning() << warningString;
