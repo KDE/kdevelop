@@ -48,11 +48,17 @@ void CustomBuildSystemConfigItem::projectConfigChanged( KDevelop::IProject* proj
     }
 }
 
+void CustomBuildSystemConfigItem::setConfigText()
+{
+    setText( i18n( "Build Configuration: %1", currentConfig ) );
+}
+
 void CustomBuildSystemConfigItem::updateCurrentConfig( KDevelop::IProject* project )
 {
     KConfigGroup grp = project->projectConfiguration()->group( ConfigConstants::customBuildSystemGroup );
     KConfigGroup configgrp = grp.group( grp.readEntry( ConfigConstants::currentConfigKey ) );
-    setText( i18n( "Build Configuration: %1", configgrp.readEntry( ConfigConstants::configTitleKey ) ) );
+    currentConfig = configgrp.readEntry( ConfigConstants::configTitleKey );
+    setConfigText();
 }
 
 int CustomBuildSystemConfigItem::type() const

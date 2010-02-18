@@ -33,8 +33,10 @@ public:
 private slots:
     void projectConfigChanged( KDevelop::IProject* );
 private:
+    void setConfigText();
     void updateCurrentConfig( KDevelop::IProject* );
     KDevelop::ProjectBaseItem* projectitem;
+    QString currentConfig;
 };
 
 #endif
