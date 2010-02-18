@@ -39,12 +39,6 @@
 namespace KDevelop
 {
 
-bool addProjectsToBuildset()
-{
-    KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Automatically Add Projects to Buildset", true );
-}
-
 BuildItem::BuildItem()
 {
 }
@@ -235,11 +229,8 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
             endInsertRows();
         }
     } else {
-        // Add project to buildset, but only if there is no item for that
-        // project yet.
-        if( addProjectsToBuildset() ) {
-            addProjectItem( project->projectItem() );
-        }
+        // Add project to buildset, but only if there is no configuration for this project yet.
+        addProjectItem( project->projectItem() );
     }
 }
 
