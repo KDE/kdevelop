@@ -26,6 +26,7 @@
 #include "projectpathsmodel.h"
 #include "includesmodel.h"
 #include "definesmodel.h"
+#include <util/environmentgrouplist.h>
 
 
 ConfigWidget::ConfigWidget( QWidget* parent )
@@ -35,6 +36,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     , definesModel( new DefinesModel( this ) )
 {
     ui->setupUi( this );
+    KDevelop::EnvironmentGroupList l( KGlobal::config() );
+    ui->actionEnvironment->addItems( l.groups() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18n("Install"), QVariant() );
