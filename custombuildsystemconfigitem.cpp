@@ -38,6 +38,28 @@ CustomBuildSystemConfigItem::CustomBuildSystemConfigItem( KDevelop::ProjectBaseI
     connect( KDevelop::ICore::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
              SLOT(projectConfigChanged(KDevelop::IProject*)) );
     updateCurrentConfig( item->project() );
+    setEditable( true );
+}
+
+QVariant CustomBuildSystemConfigItem::data( int role ) const
+{
+    if( role == Qt::EditRole ) {
+        return currentConfig;
+    } else if( role == KDevelop::ProjectModel::CustomEditorRole ) {
+        return QStringList() << "main" << "other";
+    }
+    return QStandardItem::data(role);
+}
+
+void CustomBuildSystemConfigItem::setData( const QVariant& value, int role )
+{
+    if( role == Qt::EditRole ) {
+        currentConfig = value.toString();
+        setConfigText();
+        return;
+    }
+    
+    QStandardItem::setData(value, role);
 }
 
 void CustomBuildSystemConfigItem::projectConfigChanged( KDevelop::IProject* project )
