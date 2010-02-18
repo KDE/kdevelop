@@ -225,6 +225,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     m_variables["APPNAME"] = info.name;
     m_variables["APPNAMEUC"] = info.name.toUpper();
     m_variables["APPNAMELC"] = info.name.toLower();
+    m_variables["PROJECTDIR"] = dest.toLocalFile();
     m_variables["PROJECTDIRNAME"] = dest.fileName();
     m_variables["VERSIONCONTROLPLUGIN"] = info.vcsPluginName;
 
