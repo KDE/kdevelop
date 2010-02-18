@@ -49,6 +49,8 @@ class VCSDiffPatchSource : public KDevelop::IPatchSource {
     
     virtual void update() ;
     
+    virtual bool isAlreadyApplied() const { return true; }
+    
     KUrl m_base, m_file;
     QString m_name;
 };

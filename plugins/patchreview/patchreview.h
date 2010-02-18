@@ -168,10 +168,6 @@ public:
 
     KUrl diffFile();
     
-    ///Returns whether the change is reversed:
-    ///The source source is the current version of the document, and the destination is the version of the document before the patch was applied.
-    bool isReverseChange() const ;
-
     void setPatch(KDevelop::IPatchSource* patch);
 
     void registerPatch(KDevelop::IPatchSource::Ptr patch);

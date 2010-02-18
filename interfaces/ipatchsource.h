@@ -37,6 +37,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         ///Icon that will be shown with the patch
         virtual QIcon icon() const;
         
+        /** Tells if the local version has this patch already applied or not, like in VCS's diff */
+        virtual bool isAlreadyApplied() const = 0;
+        
         ///Explicit updating of the patch: If it is a dynamic patch, it should re-compare the files or whatever needs to be done
         ///If the patch has changed, patchChanged needs to be emitted
         virtual void update() = 0;

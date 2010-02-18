@@ -607,21 +607,21 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* m
   
   Diff2::DifferenceStringList lines;
   
+  if(m_plugin->patch()->isAlreadyApplied() && !diff->applied())
+    html += i18n("<b>Reverted.</b><br/>");
+  else if(!m_plugin->patch()->isAlreadyApplied() && diff->applied())
+    html += i18n("<b>Applied.</b><br/>");
+  
   if(diff->applied()) {
-    if(m_plugin->isReverseChange())
-      html += i18n("<b>Reverted.</b><br/>");
-    else
-      html += i18n("<b>Applied.</b><br/>");
-    
     html += i18n("<b>Previous:</b><br/>");
-    lines = diff->destinationLines();
+    lines = diff->sourceLines();
   }else{
     if(isInsertion(diff)) {
       html += i18n("<b>Insertion</b><br/>");
     }else{
       html += i18n("<b>Alternative:</b><br/>");
       
-      lines = diff->sourceLines();
+      lines = diff->destinationLines();
     }
   }
 
@@ -713,22 +713,17 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
       if(!targetText.endsWith("\n"))
         targetText += "\n";
     }
-    Q_ASSERT(targetText != sourceText);
     
     QString replace;
     QString replaceWith;
     
-    if(diff->applied()) {
+    if(!diff->applied()) {
       replace = sourceText;
       replaceWith = targetText;
     }else {
       replace = targetText;
       replaceWith = sourceText;
     }
-    
-    Q_ASSERT(replace != replaceWith);
-    kDebug() << "apply!!!" << sourceText << targetText << diff->applied();
-    kDebug() << "apply!!!" << replace << replaceWith << diff->applied();
     
     if(currentText.join("\n").simplified() != replace.simplified()) {
       KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText.join("\n")));
@@ -780,7 +775,7 @@ void PatchHighlighter::markToolTipRequested(KTextEditor::Document* , KTextEditor
 
 bool PatchHighlighter::isInsertion(Diff2::Difference* diff)
 {
-  if(!m_plugin->isReverseChange())
+  if(!diff->applied())
     return diff->sourceLineCount() == 0;
   else
     return diff->destinationLineCount() == 0;
@@ -789,7 +784,7 @@ bool PatchHighlighter::isInsertion(Diff2::Difference* diff)
 
 bool PatchHighlighter::isRemoval(Diff2::Difference* diff)
 {
-  if(m_plugin->isReverseChange())
+  if(diff->applied())
     return diff->sourceLineCount() == 0;
   else
     return diff->destinationLineCount() == 0;
@@ -850,9 +845,15 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
         int line, lineCount;
         Diff2::DifferenceStringList lines ;
         
-        line = diff->destinationLineNumber();
-        lineCount = diff->destinationLineCount();
-        lines = diff->destinationLines();
+        if(diff->applied()) {
+          line = diff->destinationLineNumber();
+          lineCount = diff->destinationLineCount();
+          lines = diff->destinationLines();
+        } else {
+          line = diff->sourceLineNumber();
+          lineCount = diff->sourceLineCount();
+          lines = diff->sourceLines();
+        }
 
         if ( line > 0 )
             line -= 1;
@@ -931,7 +932,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
   
     KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
     
-    if(diff->applied()) {
+    if(!diff->applied()) {
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
     }else{
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 255, 20 ) ) );
@@ -942,7 +943,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     
     KTextEditor::MarkInterface::MarkTypes mark;
     
-    if(diff->applied()) {
+    if(!diff->applied()) {
       mark = KTextEditor::MarkInterface::markType27;
       
       if(isInsertion(diff))
@@ -962,7 +963,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     
     
     Diff2::DifferenceStringList lines;
-    if(!diff->applied())
+    if(diff->applied())
       lines = diff->destinationLines();
     else
       lines = diff->sourceLines();
@@ -1097,6 +1098,13 @@ void PatchReviewPlugin::updateKompareModel() {
         }
 
         emit patchChanged();
+        
+        for(int i=0; i<m_modelList->modelCount(); i++) {
+            const Diff2::DiffModel* model=m_modelList->modelAt(i);
+            for(int j=0; j<model->differences()->count(); j++) {
+                model->differences()->at(j)->apply(m_patch->isAlreadyApplied());
+            }
+        }
 
         highlightPatch();
 
@@ -1353,12 +1361,6 @@ QWidget* PatchReviewPlugin::createToolView(QWidget* parent)
 {
     return new PatchReviewToolView(parent, this);
 }
-
-bool PatchReviewPlugin::isReverseChange() const
-{
-    return true;
-}
-
 
 #if 0
 void PatchReviewPlugin::determineState() {

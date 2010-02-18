@@ -42,6 +42,7 @@ public:
     KUrl m_baseDir;
     uint m_depth;
     QString m_command;
+    virtual bool isAlreadyApplied() const { return false; }
 
     LocalPatchSource()  : m_depth(0) {
     }
