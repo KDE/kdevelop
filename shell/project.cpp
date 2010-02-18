@@ -202,9 +202,9 @@ public:
             ret << folder;
 
         for(int i=0; i<folder->rowCount(); i++) {
-            ProjectBaseItem* item=static_cast<ProjectBaseItem*>(folder->child(i));
-            Q_ASSERT(item->type()>=QStandardItem::UserType);
-            
+            ProjectBaseItem* item=dynamic_cast<ProjectBaseItem*>(folder->child(i));
+            Q_ASSERT(item);
+
             if(item->type()!=ProjectBaseItem::File)
                 ret << itemsForUrlInternal(url, item);
             else if( item->url() == url )
