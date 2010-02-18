@@ -31,7 +31,7 @@ class View;
 
 class SnippetCompletionItem;
 
-class SnippetCompletionModel : public KTextEditor::CodeCompletionModel
+class SnippetCompletionModel : public KTextEditor::CodeCompletionModel2
 {
     Q_OBJECT
 public:
@@ -39,8 +39,10 @@ public:
     ~SnippetCompletionModel();
 
     QVariant data( const QModelIndex& idx, int role = Qt::DisplayRole ) const;
-    void completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType);
-    void executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const;
+    void completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range,
+                           KTextEditor::CodeCompletionModel::InvocationType invocationType);
+    virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word,
+                                        const QModelIndex& index) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& index) const;

@@ -38,7 +38,7 @@
 #include <KLocalizedString>
 
 SnippetCompletionModel::SnippetCompletionModel()
-    : KTextEditor::CodeCompletionModel(0)
+    : KTextEditor::CodeCompletionModel2(0)
 {
     setHasGroups(false);
 }
@@ -59,7 +59,7 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
         if (role == Qt::DisplayRole) {
             return i18n("Snippets");
         }
-        if (role == GroupRole) {
+        if (role == KTextEditor::CodeCompletionModel::GroupRole) {
             return Qt::DisplayRole;
         }
         return QVariant();
@@ -72,9 +72,12 @@ QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
     }
 }
 
-void SnippetCompletionModel::executeCompletionItem( KTextEditor::Document* doc, const KTextEditor::Range& w, int row ) const
+void SnippetCompletionModel::executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word,
+                                                    const QModelIndex& index) const
 {
-    m_snippets.at( row )->execute(doc, w);
+    if ( index.parent().isValid() ) {
+        m_snippets[index.row()]->execute(document, word);
+    }
 }
 
 void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KTextEditor::Range &range, InvocationType invocationType)
