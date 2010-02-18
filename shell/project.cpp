@@ -192,43 +192,26 @@ public:
         return files;
     }
 
-    QList<ProjectBaseItem*> itemsForUrlInternal( const KUrl& url, ProjectFolderItem* folder ) const
+    QList<ProjectBaseItem*> itemsForUrlInternal( const KUrl& url, ProjectBaseItem* folder ) const
     {
-        QList<ProjectBaseItem*> files;
+        QList<ProjectBaseItem*> ret;
         if( !folder )
-            return files;
+            return ret;
 
         if( folder->url().equals( url, KUrl::CompareWithoutTrailingSlash ) )
-        {
-            files << folder;
-        }
+            ret << folder;
 
-        // Check top level files
-        foreach( ProjectFileItem* file, folder->fileList() )
-        {
-            if( file->url() == url )
-            {
-                files << file;
-            }
+        for(int i=0; i<folder->rowCount(); i++) {
+            ProjectBaseItem* item=static_cast<ProjectBaseItem*>(folder->child(i));
+            Q_ASSERT(item->type()>QStandardItem::UserType);
+            
+            if( item->url() == url )
+                ret << item;
+            else if(item->type()!=ProjectBaseItem::File)
+                ret << itemsForUrlInternal(url, item);
+            
         }
-
-        // Check top level targets
-        foreach( ProjectTargetItem* target, folder->targetList() )
-        {
-            foreach( ProjectFileItem* file, target->fileList() )
-            {
-                if( file->url() == url )
-                {
-                    files << file;
-                }
-            }
-        }
-
-        foreach( ProjectFolderItem* top, folder->folderList() )
-        {
-            files += itemsForUrlInternal( url, top );
-        }
-        return files;
+        return ret;
     }
     
     QList<ProjectBaseItem*> itemsForUrl( const KUrl& url ) const
