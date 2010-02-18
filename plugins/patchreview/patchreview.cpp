@@ -177,6 +177,7 @@ void PatchReviewToolView::fillEditFromPatch() {
 
 void PatchReviewToolView::patchSelectionChanged(int selection)
 {
+  m_editPatch.filesList->clear();
     if(selection >= 0 && selection < m_plugin->knownPatches().size()) {
       m_plugin->setPatch(m_plugin->knownPatches()[selection]);
     }
@@ -399,6 +400,7 @@ void PatchReviewToolView::finishReview()
       QTreeWidgetItem* item = m_editPatch.filesList->topLevelItem(a);
       if(item && item->checkState(0) == Qt::Checked) {
         QVariant v = item->data(0, Qt::UserRole);
+        
         if( v.canConvert<KUrl>() ) {
           selectedUrls << v.value<KUrl>();
         }else if ( v.canConvert<const Diff2::DiffModel*>() ) {
@@ -711,6 +713,7 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
       if(!targetText.endsWith("\n"))
         targetText += "\n";
     }
+    Q_ASSERT(targetText != sourceText);
     
     QString replace;
     QString replaceWith;
@@ -722,6 +725,10 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
       replace = targetText;
       replaceWith = sourceText;
     }
+    
+    Q_ASSERT(replace != replaceWith);
+    kDebug() << "apply!!!" << sourceText << targetText << diff->applied();
+    kDebug() << "apply!!!" << replace << replaceWith << diff->applied();
     
     if(currentText.join("\n").simplified() != replace.simplified()) {
       KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText.join("\n")));
@@ -843,9 +850,9 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
         int line, lineCount;
         Diff2::DifferenceStringList lines ;
         
-        line = diff->sourceLineNumber();
-        lineCount = diff->sourceLineCount();
-        lines = diff->sourceLines();
+        line = diff->destinationLineNumber();
+        lineCount = diff->destinationLineCount();
+        lines = diff->destinationLines();
 
         if ( line > 0 )
             line -= 1;
@@ -877,7 +884,7 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
 PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin ) throw( QString )
   : m_doc( kdoc ), m_plugin(plugin), m_model(model)
 {
-//  connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
+//     connect( kdoc, SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
     connect( kdoc->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)) );
     connect( kdoc->textDocument(), SIGNAL( destroyed( QObject* ) ), this, SLOT( documentDestroyed() ) );
 
@@ -924,7 +931,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
   
     KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
     
-    if(!diff->applied()) {
+    if(diff->applied()) {
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
     }else{
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 255, 20 ) ) );
@@ -935,7 +942,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     
     KTextEditor::MarkInterface::MarkTypes mark;
     
-    if(!diff->applied()) {
+    if(diff->applied()) {
       mark = KTextEditor::MarkInterface::markType27;
       
       if(isInsertion(diff))
@@ -955,7 +962,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     
     
     Diff2::DifferenceStringList lines;
-    if(diff->applied())
+    if(!diff->applied())
       lines = diff->destinationLines();
     else
       lines = diff->sourceLines();
