@@ -119,9 +119,14 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
         break;
       case AbstractType::TypeAbstract:
       case AbstractType::TypeDelayed:
+      case AbstractType::TypeUnsure:
+      case AbstractType::TypeAlias:
         // TODO
         break;
     }
+
+    if( dec->abstractType()->modifiers() & AbstractType::ConstModifier )
+      p |= CodeCompletionModel::Const;
 
     if( dec->kind() == Declaration::Instance && !dec->isFunctionDeclaration() )
       p |= CodeCompletionModel::Variable;
