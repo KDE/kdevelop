@@ -148,6 +148,8 @@ void MainWindow::setArea(Area *area)
         
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
+    connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)),
+        this, SLOT(viewRemovedInternal(Sublime::AreaIndex*, Sublime::View*)));
     connect(area, SIGNAL(requestToolViewRaise(Sublime::View*)),
         this, SLOT(raiseToolView(Sublime::View*)));
     connect(area, SIGNAL(aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*)),

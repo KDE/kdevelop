@@ -367,6 +367,13 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
     area->setShownToolView(pos, id);
 }
 
+void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
+{
+    // A formerly non-empty working-set has become empty, and a relayout of the area-selector may be required
+    if(m_mainWindow->area()->views().size() == 0)
+        m_mainWindow->setupAreaSelector();
+}
+
 void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view)
 {
     if(m_leftTabbarCornerWidget) {
@@ -393,6 +400,10 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
     emit m_mainWindow->viewAdded( view );
     
     setTabBarLeftCornerWidget(m_leftTabbarCornerWidget);
+    
+    // A formerly empty working-set may become non-empty, and a relayout of the area-selector may be required
+    if(m_mainWindow->area()->views().size() == 1)
+        m_mainWindow->setupAreaSelector();
 }
 
 void Sublime::MainWindowPrivate::raiseToolView(Sublime::View * view)
