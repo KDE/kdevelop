@@ -34,7 +34,6 @@
 #include "configconstants.h"
 
 #include <genericprojectmanager/igenericprojectmanager.h>
-#include "custombuildsystemconfigitem.h"
 
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectFolderItem;
