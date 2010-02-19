@@ -30,6 +30,7 @@ namespace KDevelop
 class ProjectBaseItem;
 class CommandExecutor;
 class OutputModel;
+class IProject;
 }
 
 class CustomBuildJob : public KDevelop::OutputJob
@@ -42,6 +43,7 @@ public:
         UnknownExecError,
         Crashed,
         WrongArgs,
+        ToolDisabled,
         NoCommand
     };
     
@@ -60,6 +62,7 @@ private:
     QString builddir;
     KDevelop::CommandExecutor* exec;
     bool killed;
+    bool enabled;
 };
 
 #endif 

@@ -35,52 +35,56 @@
 #include "configconstants.h"
 
 CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, CustomBuildSystemTool::ActionType t )
-    : OutputJob( plugin ), type( t ), killed( false )
+    : OutputJob( plugin ), type( t ), killed( false ), enabled( false )
 {
     setCapabilities( Killable );
+    QString subgrpname;
     QString title;
     switch( type ) {
         case CustomBuildSystemTool::Build:
             title = i18n( "Building:" );
+            subgrpname = QString( "%1Build" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Clean:
             title = i18n( "Cleaning:" );
+            subgrpname = QString( "%1Clean" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Install:
             title = i18n( "Installing:" );
+            subgrpname = QString( "%1Install" ).arg( ConfigConstants::toolGroupPrefix );
             break;
         case CustomBuildSystemTool::Configure:
             title = i18n( "Configuring:" );
+            subgrpname = QString( "%1Configure" ).arg( ConfigConstants::toolGroupPrefix );
+            break;
+        case CustomBuildSystemTool::Prune:
+            title = i18n( "Pruning:" );
+            subgrpname = QString( "%1Prune" ).arg( ConfigConstants::toolGroupPrefix );
             break;
     }
     setTitle( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     setObjectName( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     builddir = plugin->buildDirectory( item ).toLocalFile();
-    KConfigGroup grp = plugin->configuration( item->project() );
-    foreach( const QString& subgrp, grp.groupList() )
-    {
-        if( subgrp.startsWith( ConfigConstants::toolGroupPrefix ) ) {
-            KConfigGroup subgroup = grp.group( subgrp );
-            if( subgroup.readEntry( ConfigConstants::toolType, int(CustomBuildSystemTool::Undefined) ) == type
-                    && subgroup.readEntry( ConfigConstants::toolEnabled, false ) ) {
-                cmd = subgroup.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
-                environment = subgroup.readEntry( ConfigConstants::toolEnvironment, "" );
-                arguments = subgroup.readEntry( ConfigConstants::toolArguments, "" );
-                break;
-            }
-        }
-    }
+    KConfigGroup grp = plugin->configuration( item->project() ).group( subgrpname );
+    enabled = grp.readEntry( ConfigConstants::toolEnabled, false );
+    cmd = grp.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
+    environment = grp.readEntry( ConfigConstants::toolEnvironment, "" );
+    arguments = grp.readEntry( ConfigConstants::toolArguments, "" );
 }
 
 void CustomBuildJob::start()
 {
     if( type == CustomBuildSystemTool::Undefined ) {
         setError( UndefinedBuildType );
-        setErrorText( i18n("Undefined Build type" ) );
+        setErrorText( i18n( "Undefined Build type" ) );
         emitResult();
     } else if( cmd.isEmpty() ) {
         setError( NoCommand );
-        setErrorText( i18n("No command given" ) );
+        setErrorText( i18n( "No command given" ) );
+        emitResult();
+    } else if( enabled ) {
+        setError( ToolDisabled );
+        setErrorText( i18n( "This command is disabled" ) );
         emitResult();
     } else {
         KShell::Errors err;
