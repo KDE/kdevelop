@@ -23,7 +23,7 @@
 #define CMAKEJOB_H
 
 #include <outputview/outputjob.h>
-
+#include <QProcess>
 #include <QString>
 
 namespace KDevelop {
@@ -55,7 +55,7 @@ protected:
     bool doKill();
 
 private Q_SLOTS:
-    void slotFailed();
+    void slotFailed( QProcess::ProcessError );
     void slotCompleted();
 
 private:
