@@ -28,11 +28,6 @@
 // Qt
 #include <QtCore/QVariantList>
 
-namespace Kasten {
-class AbstractToolViewFactory;
-class AbstractToolFactory;
-}
-
 
 namespace KDevelop
 {
@@ -47,12 +42,6 @@ class OktetaPlugin: public IPlugin
     OktetaPlugin( QObject* parent, const QVariantList& args = QVariantList() );
 
     virtual ~OktetaPlugin();
-
-  protected:
-    void addTool( Kasten::AbstractToolViewFactory* toolViewFactory,
-                  Kasten::AbstractToolFactory* toolFactory,
-                  const QString& id, const QString& iconName, const QString& title,
-                  Qt::DockWidgetArea defaultPosition );
 
   protected:
     OktetaDocumentFactory* mDocumentFactory;

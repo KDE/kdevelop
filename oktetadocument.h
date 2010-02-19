@@ -81,14 +81,13 @@ class OktetaDocument : public Sublime::UrlDocument, public IDocument
     virtual Sublime::View* newView( Sublime::Document* document );
 
   protected Q_SLOTS:
-    void onByteArrayDocumentChanged( Kasten::LocalSyncState newState );
+    void onByteArrayDocumentChanged();
     void onByteArrayDocumentLoaded( Kasten::AbstractDocument* document );
 
   private:
     OktetaPlugin* mPlugin;
 
     Kasten::ByteArrayDocument* mByteArrayDocument;
-    IDocument::DocumentState mState;
 };
 
 

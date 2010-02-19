@@ -40,16 +40,17 @@
 namespace KDevelop
 {
 
+// TODO: find if hiddden, than unset target model
 KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, QWidget* parent )
   : QWidget( parent ),
     mToolView( toolView )
 {
     Sublime::Controller* controller = ICore::self()->uiController()->controller();
+    connect( controller, SIGNAL(mainWindowAdded(Sublime::MainWindow*)),
+             SLOT(onMainWindowAdded(Sublime::MainWindow*)) );
     const QList<Sublime::MainWindow*>& mainWindows = controller->mainWindows();
     foreach( Sublime::MainWindow* mainWindow, mainWindows )
         onMainWindowAdded( mainWindow );
-    connect( controller, SIGNAL(mainWindowAdded(Sublime::MainWindow*)),
-             SLOT(onMainWindowAdded(Sublime::MainWindow*)) );
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
@@ -60,6 +61,7 @@ void KastenToolViewWidget::onMainWindowAdded( Sublime::MainWindow* mainWindow )
 {
     connect( mainWindow, SIGNAL(activeViewChanged(Sublime::View*)),
              SLOT(onActiveViewChanged(Sublime::View*)) );
+    onActiveViewChanged( mainWindow->activeView() );
 }
 
 void KastenToolViewWidget::onActiveViewChanged( Sublime::View* view )

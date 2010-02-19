@@ -40,9 +40,6 @@
 #include <viewmodecontroller.h>
 #include <viewstatuscontroller.h>
 // Kasten
-// #include <jobmanager.h>
-// #include <abstractloadjob.h>
-// #include <abstractsyncwithremotejob.h>
 #include <readonlycontroller.h>
 // #include <document/readonly/readonlybarcontroller.h>
 // #include <io/synchronize/synchronizecontroller.h>
@@ -74,12 +71,6 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
     KXMLGUIClient(),
     mByteArrayView( byteArrayView )
 {
-    //     area->setScrollBarsEnabled( true ); //FIXME commented just to make it compile with the new qt-copy
-    //     area->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    //     area->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-
-//     QDesignerFormWindowInterface* form = mDocument->form();
-
     setComponentData( plugin->componentData() );
     setXMLFile( "kdevokteta.rc" );
 
@@ -119,17 +110,8 @@ void OktetaWidget::setupActions()
 //     mControllers.append( new ReadOnlyBarController(bottomBar) );
 //     mControllers.append( new ZoomBarController(bottomBar) );
 
-//     addTool( new ChecksumToolView(new ChecksumTool()) );
-//     addTool( new FilterToolView(new FilterTool()) );
-//     addTool( new StringsExtractToolView(new StringsExtractTool()) );
-//     addTool( new ByteTableToolView(new ByteTableTool()) );
-//     addTool( new InfoToolView(new InfoTool()) );
-//     addTool( new PODDecoderToolView(new PODDecoderTool()) );
-//     addTool( new StructToolView(new StructTool()) );
-//     addTool( new BookmarksToolView(new BookmarksTool()) );
-
-        foreach( Kasten::AbstractXmlGuiController* controller, mControllers )
-            controller->setTargetModel( mByteArrayView );
+    foreach( Kasten::AbstractXmlGuiController* controller, mControllers )
+        controller->setTargetModel( mByteArrayView );
 
 #if 0
     QDesignerFormWindowManagerInterface* manager = mDocument->form()->core()->formWindowManager();
@@ -150,75 +132,9 @@ void OktetaWidget::setupActions()
     ac->addAction( "designer_undo", manager->actionUndo() );
     ac->addAction( "designer_redo", manager->actionRedo() );
     ac->addAction( "designer_select_all", manager->actionSelectAll() );
-    KAction* action = ac->addAction( "widgeteditor" );
-    action->setCheckable( true );
-    action->setChecked( true );
-    action->setText( i18n("Edit Widgets") );
-    connect( action, SIGNAL(triggered()), SLOT(editWidgets()));
-    foreach (QObject *plugin, QPluginLoader::staticInstances())
-    {
-        if ( !plugin )
-            continue;
-
-        kDebug() << "checking plugin:" << plugin;
-        QDesignerFormEditorPluginInterface *fep;
-
-        if ( (fep = qobject_cast<QDesignerFormEditorPluginInterface*>(plugin)) )
-        {
-            // action name may have '&', remove them
-            QString actionText = fep->action()->text();
-            actionText = actionText.remove('&');
-
-            fep->action()->setCheckable(true);
-            if( actionText == "Edit Signals/Slots" ) {
-                connect(fep->action(), SIGNAL(triggered()), SLOT(editSignals()));
-                actionCollection()->addAction("signaleditor", fep->action());
-            }
-            if( actionText == "Edit Buddies" ) {
-                connect(fep->action(), SIGNAL(triggered()), SLOT(editBuddys()));
-                actionCollection()->addAction("buddyeditor", fep->action());
-            }
-            if( actionText == "Edit Tab Order" ) {
-                connect(fep->action(), SIGNAL(triggered()), SLOT(editTabOrder()));
-                actionCollection()->addAction("tabordereditor", fep->action());
-            }
-
-            kDebug(9038) << "Added action:" << fep->action()->objectName() << "|" << fep->action()->text();
-        }
-    }
 #endif
 }
 #if 0
-void OktetaWidget::editWidgets()
-{
-    QDesignerFormWindowInterface* form = mDocument->form();
-    form->editWidgets();
-    actionCollection()->action("signaleditor")->setChecked(false);
-    actionCollection()->action("buddyeditor")->setChecked(false);
-    actionCollection()->action("tabordereditor")->setChecked(false);
-}
-
-void OktetaWidget::editBuddys()
-{
-    actionCollection()->action("widgeteditor")->setChecked(false);
-    actionCollection()->action("signaleditor")->setChecked(false);
-    actionCollection()->action("tabordereditor")->setChecked(false);
-}
-
-void OktetaWidget::editSignals()
-{
-    actionCollection()->action("widgeteditor")->setChecked(false);
-    actionCollection()->action("buddyeditor")->setChecked(false);
-    actionCollection()->action("tabordereditor")->setChecked(false);
-}
-
-void OktetaWidget::editTabOrder()
-{
-    actionCollection()->action("widgeteditor")->setChecked(false);
-    actionCollection()->action("buddyeditor")->setChecked(false);
-    actionCollection()->action("signaleditor")->setChecked(false);
-}
-
 void OktetaWidget::save()
 {
     mDocument->save();

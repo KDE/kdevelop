@@ -30,7 +30,7 @@
 // Kasten
 #include <Kasten/JobManager>
 #include <Kasten/AbstractLoadJob>
-#include <Kasten/AbstractSyncWithRemoteJob>
+#include <Kasten/AbstractSyncToRemoteJob>
 #include <Kasten/AbstractSyncFromRemoteJob>
 #include <Kasten/AbstractModelSynchronizer>
 // KDevelop
@@ -57,8 +57,7 @@ namespace KDevelop
 OktetaDocument::OktetaDocument( const KUrl& url , ICore* core )
   : Sublime::UrlDocument( core->uiController()->controller(), url ),
     IDocument( core ),
-    mByteArrayDocument( 0 ),
-    mState( IDocument::Clean )
+    mByteArrayDocument( 0 )
 {
 }
 
@@ -69,8 +68,16 @@ KSharedPtr<KMimeType> OktetaDocument::mimeType() const { return KMimeType::findB
 
 KParts::Part* OktetaDocument::partForView( QWidget* ) const { return 0; }
 KTextEditor::Document* OktetaDocument::textDocument() const { return 0; }
+KTextEditor::Cursor OktetaDocument::cursorPosition() const { return KTextEditor::Cursor(); }
 
-IDocument::DocumentState OktetaDocument::state() const { return mState; }
+IDocument::DocumentState OktetaDocument::state() const
+{
+    return mByteArrayDocument ?
+               ( mByteArrayDocument->localSyncState() == Kasten::LocalHasChanges ?
+                   IDocument::Modified :
+                   IDocument::Clean ) :
+               IDocument::Clean;
+}
 
 
 bool OktetaDocument::save( IDocument::DocumentSaveMode mode )
@@ -78,18 +85,16 @@ bool OktetaDocument::save( IDocument::DocumentSaveMode mode )
     if( mode & Discard )
         return true;
 
-    if( mState == IDocument::Clean )
+    if(  state() == IDocument::Clean )
         return false;
 
     Kasten::AbstractModelSynchronizer* synchronizer = mByteArrayDocument->synchronizer();
 
-    Kasten::AbstractSyncWithRemoteJob *syncJob =
-        synchronizer->startSyncWithRemote( url(), Kasten::AbstractModelSynchronizer::ReplaceRemote );
+    Kasten::AbstractSyncToRemoteJob* syncJob = synchronizer->startSyncToRemote();
     const bool syncSucceeded = Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
 
     if( syncSucceeded )
     {
-        mState = IDocument::Clean;
         notifySaved();
         notifyStateChanged();
     }
@@ -106,10 +111,7 @@ void OktetaDocument::reload()
     const bool syncSucceeded = Kasten::JobManager::executeJob( syncJob, qApp->activeWindow() );
 
     if( syncSucceeded )
-    {
-        mState = IDocument::Clean;
         notifyStateChanged();
-    }
 }
 
 bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
@@ -125,8 +127,9 @@ bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
         }
         else
         {
-            if (state() == IDocument::Modified)
+            if( state() == IDocument::Modified )
             {
+                // TODO: use Kasten::*Manager
                 int code = KMessageBox::warningYesNoCancel(
                     qApp->activeWindow(),
                     i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
@@ -153,10 +156,11 @@ bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
 
     //close all views and then delete ourself
     ///@todo test this
-    foreach( Sublime::Area *area,
-        ICore::self()->uiController()->controller()->allAreas() )
+    const QList<Sublime::Area*>& allAreas =
+        ICore::self()->uiController()->controller()->allAreas();
+    foreach( Sublime::Area *area, allAreas )
     {
-        QList<Sublime::View*> areaViews = area->views();
+        const QList<Sublime::View*> areaViews = area->views();
         foreach( Sublime::View* view, areaViews )
         {
             if (views().contains(view))
@@ -213,11 +217,6 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* document )
     return new OktetaView( this );
 }
 
-KTextEditor::Cursor OktetaDocument::cursorPosition() const
-{
-    return KTextEditor::Cursor();
-}
-
 bool OktetaDocument::closeDocument()
 {
     return close();
@@ -225,20 +224,16 @@ bool OktetaDocument::closeDocument()
 
 void OktetaDocument::onByteArrayDocumentLoaded( Kasten::AbstractDocument* document )
 {
-kDebug()<<document;
     if( document )
     {
         mByteArrayDocument = static_cast<Kasten::ByteArrayDocument*>( document );
         connect( mByteArrayDocument, SIGNAL(localSyncStateChanged( Kasten::LocalSyncState )),
-                 SLOT(onByteArrayDocumentChanged( Kasten::LocalSyncState )) );
+                 SLOT(onByteArrayDocumentChanged()) );
     }
 }
 
-void OktetaDocument::onByteArrayDocumentChanged( Kasten::LocalSyncState newState )
+void OktetaDocument::onByteArrayDocumentChanged()
 {
-    mState = ( newState == Kasten::LocalHasChanges ) ?
-        IDocument::Modified :
-        IDocument::Clean;
     notifyStateChanged();
 }
 
