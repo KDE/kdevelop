@@ -33,6 +33,7 @@
 #include "configconstants.h"
 
 #include <genericprojectmanager/igenericprojectmanager.h>
+#include "custombuildjob.h"
 
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectFolderItem;
@@ -81,7 +82,7 @@ ProjectFolderItem* CustomBuildSystem::addFolder( const KUrl& folder, ProjectFold
 
 KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
 {
-    return 0;
+    return new CustomBuildJob( this, dom, CustomBuildSystemTool::Build );
 }
 
 KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
@@ -112,12 +113,12 @@ IProjectBuilder* CustomBuildSystem::builder( ProjectFolderItem*  ) const
 
 KJob* CustomBuildSystem::clean( ProjectBaseItem* dom )
 {
-    return 0;
+    return new CustomBuildJob( this, dom, CustomBuildSystemTool::Clean );
 }
 
-KJob* CustomBuildSystem::configure( IProject*  )
+KJob* CustomBuildSystem::configure( IProject* project )
 {
-    return 0;
+    return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Configure );
 }
 
 ProjectTargetItem* CustomBuildSystem::createTarget( const QString& target, ProjectFolderItem* parent )
@@ -170,7 +171,7 @@ KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
 
 KJob* CustomBuildSystem::install( ProjectBaseItem* item )
 {
-    return 0;
+    return new CustomBuildJob( this, item, CustomBuildSystemTool::Install );
 }
 
 QList< ProjectFolderItem* > CustomBuildSystem::parse( ProjectFolderItem* dom )
@@ -178,9 +179,9 @@ QList< ProjectFolderItem* > CustomBuildSystem::parse( ProjectFolderItem* dom )
     return genericManager()->parse( dom );
 }
 
-KJob* CustomBuildSystem::prune( IProject* )
+KJob* CustomBuildSystem::prune( IProject* project )
 {
-    return 0;
+    return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Prune );
 }
 
 bool CustomBuildSystem::reload( ProjectFolderItem* item )
