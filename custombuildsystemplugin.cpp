@@ -28,7 +28,6 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
-#include <outputview/ioutputview.h>
 #include <util/environmentgrouplist.h>
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
@@ -229,13 +228,6 @@ IGenericProjectManager* CustomBuildSystem::genericManager() const
     IGenericProjectManager* manager = ICore::self()->pluginController()->extensionForPlugin<KDevelop::IGenericProjectManager>( "org.kdevelop.IGenericProjectManager" );
     Q_ASSERT(manager);
     return manager;
-}
-
-IOutputView* CustomBuildSystem::outputView() const
-{
-    IOutputView* view = ICore::self()->pluginController()->extensionForPlugin<KDevelop::IOutputView>( "org.kdevelop.IOutputView" );
-    Q_ASSERT(view);
-    return view;
 }
 
 KJob* CustomBuildSystem::createImportJob( ProjectFolderItem* item )

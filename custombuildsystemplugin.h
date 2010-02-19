@@ -93,7 +93,6 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
 private:
     KDevelop::IGenericProjectManager* genericManager() const;
-    KDevelop::IOutputView* outputView() const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
     QString findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* ) const;
 };
