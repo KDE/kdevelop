@@ -62,7 +62,6 @@
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
 #include <sublime/mainwindow.h>
-#include <language/highlighting/colorcache.h>
 
 const unsigned int highlightingTimeout = 150;
 
@@ -400,24 +399,25 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardBoldAttribute ) {
       standardBoldAttribute= Attribute::Ptr( new Attribute() );
       standardBoldAttribute->setBackgroundFillWhitespace(true);
-      
-      standardBoldAttribute->setBackground(QColor(255, 255, 0, 100));//QApplication::palette().toolTipBase());
+
+      standardBoldAttribute->setBackground(QColor(255, 255, 0, 200));//QApplication::palette().toolTipBase());
       standardBoldAttribute->setFontBold(true);
+
+      // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
+      // foreground color could change, hence apply it everytime
+      standardBoldAttribute->setForeground(QColor(0, 0, 0, 200));
     }
-    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
-    // foreground color could change, hence apply it everytime
-    standardBoldAttribute->setForeground(ColorCache::self()->foregroundColor());
     return standardBoldAttribute;
   }else{
     static Attribute::Ptr standardAttribute = Attribute::Ptr();
     if( !standardAttribute ) {
       standardAttribute = Attribute::Ptr( new Attribute() );
       standardAttribute->setBackgroundFillWhitespace(true);
-      standardAttribute->setBackground(QColor(255, 255, 0, 100));//QApplication::palette().toolTipBase());
+      standardAttribute->setBackground(QColor(255, 255, 0, 200));//QApplication::palette().toolTipBase());
+      // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
+      // foreground color could change, hence apply it everytime
+      standardAttribute->setForeground(QColor(0, 0, 0, 200));
     }
-    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
-    // foreground color could change, hence apply it everytime
-    standardAttribute->setForeground(ColorCache::self()->foregroundColor());
     return standardAttribute;
   }
 }
@@ -440,11 +440,11 @@ Attribute::Ptr highlightedSpecialObjectAttribute() {
   if( !standardAttribute ) {
     standardAttribute = Attribute::Ptr( new Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
-    standardAttribute->setBackground(QColor(90, 255, 0, 100));//QApplication::palette().toolTipBase());
+    standardAttribute->setBackground(QColor(90, 255, 0, 200));//QApplication::palette().toolTipBase());
+    // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
+    // foreground color could change, hence apply it everytime
+    standardAttribute->setForeground(QColor(0, 0, 0, 200));
   }
-  // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
-  // foreground color could change, hence apply it everytime
-  standardAttribute->setForeground(ColorCache::self()->foregroundColor());
   return standardAttribute;
 }
 
