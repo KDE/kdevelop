@@ -56,6 +56,8 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
 
+#include <kdeversion.h>
+
 namespace KDevelop {
 
 struct TextDocumentPrivate {
@@ -290,7 +292,9 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     view = d->document->createView(parent);
 
     if (view) {
+        #if KDE_VERSION < KDE_MAKE_VERSION(4, 4, 60)
         view->setContextMenu( view->defaultContextMenu() );
+        #endif
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
         connect(view->contextMenu(), SIGNAL(aboutToHide()),
                 this, SLOT(clearContextMenu()));
