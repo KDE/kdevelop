@@ -31,7 +31,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <kdevplatform/interfaces/isession.h>
+#include <interfaces/isession.h>
 
 #include "projectmodel.h"
 #include <util/kdevstringhandler.h>
