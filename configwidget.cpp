@@ -133,6 +133,9 @@ void ConfigWidget::changeAction( int idx )
         ui->actionExecutable->setEnabled( t.enabled );
         ui->actionEnvironment->setCurrentIndex( ui->actionEnvironment->findText( t.envGrp ) );
         ui->actionEnvironment->setEnabled( t.enabled );
+        ui->execLabel->setEnabled( t.enabled );
+        ui->argLabel->setEnabled( t.enabled );
+        ui->envLabel->setEnabled( t.enabled );
     }
 }
 
