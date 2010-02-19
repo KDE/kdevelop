@@ -123,6 +123,10 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
                 toolgrp = subgrp.group( QString("%1Install").arg( ConfigConstants::toolGroupPrefix ) );
                 break;
             }
+            case CustomBuildSystemTool::Prune: {
+                toolgrp = subgrp.group( QString("%1Prune").arg( ConfigConstants::toolGroupPrefix ) );
+                break;
+            }
             default:
                 break;
         }

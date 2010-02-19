@@ -42,6 +42,7 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18n("Install"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Clean, i18n("Clean"), QVariant() );
+    ui->buildAction->insertItem( CustomBuildSystemTool::Prune, i18n("Prune"), QVariant() );
 
     connect( ui->buildAction, SIGNAL(activated(int)), SLOT(changeAction(int)) );
 

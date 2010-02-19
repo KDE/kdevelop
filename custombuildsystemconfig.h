@@ -28,7 +28,7 @@
 
 struct CustomBuildSystemTool
 {
-    enum ActionType { Build = 0, Configure, Install, Clean, Undefined };
+    enum ActionType { Build = 0, Configure, Install, Clean, Prune, Undefined };
     CustomBuildSystemTool() : enabled( false ), type( Undefined ) {}
     bool enabled;
     KUrl executable;
