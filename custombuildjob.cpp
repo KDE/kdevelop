@@ -20,43 +20,132 @@
 #include "custombuildjob.h"
 
 #include <KLocale>
+#include <KProcess>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KShell>
 
 #include <outputview/outputmodel.h>
+#include <util/processlinemaker.h>
+#include <util/environmentgrouplist.h>
+#include <util/commandexecutor.h>
 #include <project/projectmodel.h>
 
 #include "custombuildsystemplugin.h"
+#include "configconstants.h"
 
-CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, Type t )
-    : OutputJob( plugin ), type( t )
+CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBaseItem* item, CustomBuildSystemTool::ActionType t )
+    : OutputJob( plugin ), type( t ), killed( false )
 {
     setCapabilities( Killable );
-    QString cmd;
+    QString title;
     switch( type ) {
-        case Build:
-            cmd = i18n( "Building:" );
+        case CustomBuildSystemTool::Build:
+            title = i18n( "Building:" );
             break;
-        case Clean:
-            cmd = i18n( "Cleaning:" );
+        case CustomBuildSystemTool::Clean:
+            title = i18n( "Cleaning:" );
             break;
-        case Install:
-            cmd = i18n( "Installing:" );
+        case CustomBuildSystemTool::Install:
+            title = i18n( "Installing:" );
             break;
-        case Configure:
-            cmd = i18n( "Configuring:" );
+        case CustomBuildSystemTool::Configure:
+            title = i18n( "Configuring:" );
             break;
     }
     setTitle( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     setObjectName( QString("%1 %2").arg( cmd ).arg( item->text() ) );
+    builddir = plugin->buildDirectory( item ).toLocalFile();
+    KConfigGroup grp = plugin->configuration( item->project() );
+    foreach( const QString& subgrp, grp.groupList() )
+    {
+        if( subgrp.startsWith( ConfigConstants::toolGroupPrefix ) ) {
+            KConfigGroup subgroup = grp.group( subgrp );
+            if( subgroup.readEntry( ConfigConstants::toolType, int(CustomBuildSystemTool::Undefined) ) == type
+                    && subgroup.readEntry( ConfigConstants::toolEnabled, false ) ) {
+                cmd = subgroup.readEntry( ConfigConstants::toolExecutable, KUrl() ).toLocalFile();
+                environment = subgroup.readEntry( ConfigConstants::toolEnvironment, "" );
+                arguments = subgroup.readEntry( ConfigConstants::toolArguments, "" );
+                break;
+            }
+        }
+    }
 }
 
 void CustomBuildJob::start()
 {
-    setStandardToolView( KDevelop::IOutputView::BuildView );
-    setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-    KDevelop::OutputModel* model = new KDevelop::OutputModel( this );
-    setModel( model, KDevelop::IOutputView::TakeOwnership );
-    startOutput();
-    model->appendLine( QString(">%1").arg( objectName() ) );
+    if( type == CustomBuildSystemTool::Undefined ) {
+        setError( UndefinedBuildType );
+        setErrorText( i18n("Undefined Build type" ) );
+        emitResult();
+    } else if( cmd.isEmpty() ) {
+        setError( NoCommand );
+        setErrorText( i18n("No command given" ) );
+        emitResult();
+    } else {
+        KShell::Errors err;
+        QStringList strargs = KShell::splitArgs( arguments, KShell::AbortOnMeta, &err );
+        if( err != KShell::NoError ) {
+            setError( WrongArgs );
+            setErrorText( i18n( "The given arguments would need a real shell, this is not supported currently." ) );
+            emitResult();
+        }
+        setStandardToolView( KDevelop::IOutputView::BuildView );
+        setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
+        KDevelop::OutputModel* model = new KDevelop::OutputModel( this );
+        setModel( model, KDevelop::IOutputView::TakeOwnership );
+        startOutput();
+
+        exec = new KDevelop::CommandExecutor( cmd, this );
+
+        exec->setArguments( strargs );
+        exec->setEnvironment( KDevelop::EnvironmentGroupList( KGlobal::config() ).createEnvironment( environment, KProcess::systemEnvironment() ) );
+        exec->setWorkingDirectory( builddir );
+
+        
+        connect( exec, SIGNAL(completed()), SLOT(procFinished()) );
+        connect( exec, SIGNAL(failed( QProcess::ProcessError )), SLOT(procError( QProcess::ProcessError )) );
+
+        connect( exec, SIGNAL(receivedStandardError(QStringList)), model, SLOT(appendLines(QStringList)) );
+        connect( exec, SIGNAL(receivedStandardOutput(QStringList)), model, SLOT(appendLines(QStringList)) );
+
+        model->appendLine( QString("%1>%2 %3").arg( builddir ).arg( cmd ).arg( arguments ) );
+        exec->start();
+    }
+}
+
+bool CustomBuildJob::doKill()
+{
+    killed = true;
+    exec->kill();
+    return true;
+}
+
+void CustomBuildJob::procError( QProcess::ProcessError err )
+{
+    if( !killed ) {
+        if( err == QProcess::FailedToStart ) {
+            setError( FailedToStart );
+            setErrorText( i18n( "Failed to start command." ) );
+        } else if( err == QProcess::Crashed ) {
+            setError( Crashed );
+            setErrorText( i18n( "Command crashed." ) );
+        } else {
+            setError( UnknownExecError );
+            setErrorText( i18n( "Unknown error executing command." ) );
+        }
+    }
+    emitResult();
+}
+
+KDevelop::OutputModel* CustomBuildJob::model()
+{
+    return qobject_cast<KDevelop::OutputModel*>( OutputJob::model() );
+}
+
+void CustomBuildJob::procFinished()
+{
+    model()->appendLine( i18n( "*** Finished ***" ) );
     emitResult();
 }
 

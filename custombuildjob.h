@@ -21,30 +21,45 @@
 #define CUSTOMBUILDJOB_H
 
 #include <outputview/outputjob.h>
+#include "custombuildsystemconfig.h"
+#include <QProcess>
 
 class CustomBuildSystem;
 namespace KDevelop
 {
 class ProjectBaseItem;
+class CommandExecutor;
+class OutputModel;
 }
 
 class CustomBuildJob : public KDevelop::OutputJob
 {
 Q_OBJECT
 public:
-    enum Type {
-        Build,
-        Clean,
-        Install,
-        Configure
+    enum ErrorType {
+        UndefinedBuildType = UserDefinedError,
+        FailedToStart,
+        UnknownExecError,
+        Crashed,
+        WrongArgs,
+        NoCommand
     };
-    CustomBuildJob( CustomBuildSystem*, KDevelop::ProjectBaseItem*, Type t );
+    
+    CustomBuildJob( CustomBuildSystem*, KDevelop::ProjectBaseItem*, CustomBuildSystemTool::ActionType t );
     virtual void start();
+    virtual bool doKill();
+private slots:
+    void procFinished();
+    void procError( QProcess::ProcessError );
 private:
-    Type type;
+    KDevelop::OutputModel* model();
+    CustomBuildSystemTool::ActionType type;
     QString cmd;
     QString arguments;
     QString environment;
+    QString builddir;
+    KDevelop::CommandExecutor* exec;
+    bool killed;
 };
 
 #endif 
