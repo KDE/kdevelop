@@ -102,7 +102,7 @@ public:
 Q_SIGNALS:
     void receivedStandardError( const QStringList& );
     void receivedStandardOutput( const QStringList& );
-    void failed();
+    void failed( QProcess::ProcessError );
     void completed();
 private:
     Q_PRIVATE_SLOT( d, void procError( QProcess::ProcessError ) )

@@ -48,7 +48,7 @@ public:
     {
         Q_UNUSED(error)
         m_lineMaker->flushBuffers();
-        emit m_exec->failed();
+        emit m_exec->failed( error );
     }
     void procFinished( int code, QProcess::ExitStatus status )
     {
