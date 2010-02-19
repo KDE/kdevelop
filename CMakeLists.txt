@@ -15,9 +15,14 @@ add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
 add_subdirectory( tests )
 
 ## KDevelop Plugin
-set( custom_SRCS custombuildsystemplugin.cpp )
+set( custom_SRCS custombuildsystemplugin.cpp custombuildjob.cpp )
 kde4_add_plugin( kdevcustombuildsystem ${custom_SRCS} )
-target_link_libraries( kdevcustombuildsystem ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_UTIL_LIBRARIES} )
+target_link_libraries( kdevcustombuildsystem
+        ${KDEVPLATFORM_PROJECT_LIBRARIES}
+        ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+        ${KDEVPLATFORM_UTIL_LIBRARIES}
+        ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
+    )
 
 ## KCM for the Plugin
 set( custom_kcm_SRCS 
