@@ -91,10 +91,10 @@ public:
     bool removeFileFromTarget( KDevelop::ProjectFileItem* file, KDevelop::ProjectTargetItem* parent );
     bool removeTarget( KDevelop::ProjectTargetItem* target );
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
-private:
-    KDevelop::IGenericProjectManager* genericManager() const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
     QString findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* ) const;
+private:
+    KDevelop::IGenericProjectManager* genericManager() const;
 };
 
 #endif
