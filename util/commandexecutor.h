@@ -65,6 +65,11 @@ public:
     void setEnvironment( const QMap<QString,QString>& env );
 
     /**
+     * set additional environment variables to be used when executing the command
+     */
+    void setEnvironment( const QStringList& env );
+
+    /**
      * Sets the working directory of the command
      */
     void setWorkingDirectory( const QString& dir );

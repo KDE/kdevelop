@@ -89,6 +89,17 @@ void CommandExecutor::setEnvironment( const QMap<QString,QString>& env )
     d->m_env = env;
 }
 
+void CommandExecutor::setEnvironment( const QStringList& env )
+{
+    QMap<QString,QString> envmap;
+    foreach( const QString& var, env )
+    {
+        int sep = var.indexOf( '=' );
+        envmap.insert( var.left( sep ), var.mid( sep + 1 ) );
+    }
+    d->m_env = envmap;
+}
+
 void CommandExecutor::setArguments( const QStringList& args )
 {
     d->m_args = args;
