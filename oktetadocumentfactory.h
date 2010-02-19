@@ -54,21 +54,10 @@ inline OktetaDocumentFactory::OktetaDocumentFactory( OktetaPlugin* plugin )
 
 inline IDocument* OktetaDocumentFactory::create( const KUrl& url, ICore* core )
 {
-    IDocument* result;
-    kDebug() << "creating doc for Okteta?";
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( url );
-    kDebug() << "mimetype for" << url << "is" << mimetype->name();
-    if( mimetype->name() == "audio/x-wav" )
-    {
-        OktetaDocument* document = new OktetaDocument (url, core );
-        document->setPlugin( mPlugin );
+    OktetaDocument* document = new OktetaDocument( url, core );
+    document->setPlugin( mPlugin );
 //             m_plugin->activateDocument(d);
-        kDebug()<<document->url();
-        result = document;
-    }
-    else
-        result = 0;
-    return result;
+    return document;
 }
 
 }
