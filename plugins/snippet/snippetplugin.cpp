@@ -129,10 +129,7 @@ void SnippetPlugin::documentLoaded( KParts::Part* part )
 
         connect( textDocument, SIGNAL( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ), SLOT( viewCreated(KTextEditor::Document*, KTextEditor::View* ) ) );
 
-    } else {
-        kDebug() << "Non-text editor document added";
     }
-
 }
 
 KDevelop::ContextMenuExtension SnippetPlugin::contextMenuExtension(KDevelop::Context* context)
