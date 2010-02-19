@@ -114,12 +114,6 @@ ParseJob::~ParseJob()
         smart->clearRevision();
         ///@todo We need to know here what the currently used revision is, and assert that it still is being used
     }
-    {
-        //Only for testing
-        DUChainReadLocker lock(DUChain::lock());
-        if(d->duContext)
-            d->duContext->parsingEnvironmentFile();
-    }
     
     typedef QPointer<QObject> QObjectPointer;
     foreach(const QObjectPointer &p, d->notify)
