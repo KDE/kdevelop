@@ -8,6 +8,7 @@
  *   Copyright 2001-2002 Bernd Gehrmann <bernd@mail.berlios.de>            *
  *   Copyright 2001-2002 Matthias Hoelzer-Kluepfel <hoelzer@kde.org>       *
  *   Copyright 2003 Roberto Raggi <roberto@kdevelop.org>                   *
+ *   Copyright 2010 Niko Sams <niko.sams@gmail.com>                        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
