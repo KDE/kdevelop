@@ -113,4 +113,4 @@
     KCmdLineOptions options;
     options.add("project <project>", ki18n( "Url to project to load" ));
     options.add("+files", ki18n( "Files to load" ));
-    options.add("debug <debugger>", ki18n( "Start debugger" ));
+    options.add("debug <debugger>", ki18n( "Start debugger, for example gdb. The binay that should be debugged must follow - including arguments." ));
