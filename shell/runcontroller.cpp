@@ -188,6 +188,7 @@ public:
                                                                             contextItem->text() );
                 LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
                 type->configureLaunchFromItem( launch->config(), contextItem );
+                q->setDefaultLaunch(launch);
                 //kDebug() << "created config, launching";
                 q->execute( mode->id(), launch );
             }
