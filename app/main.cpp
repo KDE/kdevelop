@@ -52,10 +52,10 @@
 
 int main( int argc, char *argv[] )
 {
-    QList<QString> argvOrig;  //We copy the original argv here, as it seems that KCmdLineArgs changes the arguments ("--style" becomes "-style")
+    QList<QByteArray> argvOrig;  //We copy the original argv here, as it seems that KCmdLineArgs changes the arguments ("--style" becomes "-style")
 
-    for(uint a = 0; a < argc; ++a)
-        argvOrig << QString::fromLocal8Bit(argv[a]);
+    for(int a = 0; a < argc; ++a)
+        argvOrig << argv[a];
 
 static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
@@ -94,7 +94,18 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
 
-    if ( args->isSet("cs") )
+    if ( args->isSet("debug") ) {
+        if ( debugArgs.isEmpty() ) {
+            QTextStream qerr(stderr);
+            qerr << endl << i18n("Specify the binary you want to debug.") << endl;
+            return 1;
+        }
+        QString binary = debugArgs.first();
+        if ( binary.contains('/') ) {
+            binary = binary.right(binary.lastIndexOf('/'));
+        }
+        session = i18n("Debug")+" "+binary;
+    } else if ( args->isSet("cs") )
     {
         session = args->getOption("cs");
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
@@ -147,11 +158,11 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
 
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
     QList<QByteArray> kdevelopBinArgs;
-    for(int a = 1; a < argc; ++a) {
+    for(int a = 1; a < argvOrig.count(); ++a) {
         if( argvOrig[a] =="-s" || argvOrig[a] == "-cs" ) {
             ++a;
         } else if ( argvOrig[a] != "--sessions" ) {
-            kdevelopBinArgs << argv[a];
+            kdevelopBinArgs << argvOrig[a];
         }
     }
 

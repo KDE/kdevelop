@@ -49,6 +49,9 @@
 #include <shell/documentcontroller.h>
 #include <shell/plugincontroller.h>
 #include <shell/sessioncontroller.h>
+#include <shell/runcontroller.h>
+#include <shell/launchconfiguration.h>
+#include <interfaces/ilauncher.h>
 
 #include "kdevideextension.h"
 #include <KMessageBox>
@@ -124,32 +127,94 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         }
     }
 
-    int count=args->count();
-    for(int i=0; i<count; ++i)
-    {
-        QString file=args->arg(i);
-        //Allow opening specific lines in documents, like mydoc.cpp:10
-        int lineNumberOffset = file.lastIndexOf(':');
-        KTextEditor::Cursor line;
-        if( lineNumberOffset != -1 )
-        {
-            bool isInt;
-            int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
-            if (isInt)
-            {
-                file = file.left(lineNumberOffset);
-                line = KTextEditor::Cursor(lineNr, 0);
+    if ( args->isSet("debug") ) {
+        if ( debugArgs.isEmpty() ) {
+            QTextStream qerr(stderr);
+            qerr << endl << i18n("Specify the binary you want to debug.") << endl;
+            return 1;
+        }
+        QString binary = debugArgs.first();
+        if ( binary.contains('/') ) {
+            binary = binary.right(binary.lastIndexOf('/'));
+        }
+        QString launchName = i18n("Debug")+' '+binary;
+
+        KDevelop::LaunchConfiguration* launch = 0;
+        kDebug() << launchName;
+        foreach (KDevelop::LaunchConfiguration *l, core->runControllerInternal()->launchConfigurations()) {
+            kDebug() << l->name();
+            if (l->name() == launchName) {
+                launch = l;
             }
         }
 
-        KUrl f(file);
-        if( f.isRelative() )
-            f=KUrl(QDir::currentPath(), file);
+        KDevelop::LaunchConfigurationType *type = 0;
+        foreach (KDevelop::LaunchConfigurationType *t, core->runController()->launchConfigurationTypes()) {
+            kDebug() << t->id();
+            if (t->id() == "Native Application") {
+                type = t;
+                break;
+            }
+        }
+        if (!type) {
+            QTextStream qerr(stderr);
+            qerr << endl << i18n("Can't find native launch configuration type") << endl;
+            return 1;
+        }
 
-        if(!core->documentController()->openDocument(f, line))
-            kWarning() << i18n("Could not open %1") << args->arg(i);
+        if (launch && launch->type()->id() != "Native Application") launch = 0;
+        if (launch && launch->launcherForMode("debug") != args->getOption("debug")) launch = 0;
+        if (!launch) {
+            kDebug() << launchName << "not found, creating a new one";
+            QPair<QString,QString> launcher;
+            launcher.first = "debug";
+            foreach (KDevelop::ILauncher *l, type->launchers()) {
+                if (l->id() == args->getOption("debug")) {
+                    if (l->supportedModes().contains("debug")) {
+                        launcher.second = l->id();
+                    }
+                }
+            }
+            if (launcher.second.isEmpty()) {
+                QTextStream qerr(stderr);
+                qerr << endl << i18n("Can't find launcher %1").arg(args->getOption("debug")) << endl;
+                return 1;
+            }
+            KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, 0, launchName);
+            launch = dynamic_cast<KDevelop::LaunchConfiguration*>(ilaunch);
+        }
+
+        type->configureLaunchFromCmdLineArguments(launch->config(), debugArgs);
+
+        core->runControllerInternal()->execute("debug", launch);
+    } else {
+        int count=args->count();
+        for(int i=0; i<count; ++i)
+        {
+            QString file=args->arg(i);
+            //Allow opening specific lines in documents, like mydoc.cpp:10
+            int lineNumberOffset = file.lastIndexOf(':');
+            KTextEditor::Cursor line;
+            if( lineNumberOffset != -1 )
+            {
+                bool isInt;
+                int lineNr = file.mid(lineNumberOffset+1).toInt(&isInt);
+                if (isInt)
+                {
+                    file = file.left(lineNumberOffset);
+                    line = KTextEditor::Cursor(lineNr, 0);
+                }
+            }
+
+            KUrl f(file);
+            if( f.isRelative() )
+                f=KUrl(QDir::currentPath(), file);
+
+            if(!core->documentController()->openDocument(f, line))
+                kWarning() << i18n("Could not open %1") << args->arg(i);
+        }
+        args->clear();
     }
-    args->clear();
 
     return app.exec();
 }

@@ -83,7 +83,33 @@
     aboutData.addCredit( ki18n("Sascha Cunz") , ki18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
     aboutData.addCredit( ki18n("Zoran Karavla"), ki18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
 
+    //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
+    //so lookup the --debug switch and eat everything behind by decrementing argc
+    //debugArgs is filled with args after --debug <debuger>
+    QStringList debugArgs;
+    {
+        bool debugFound = false;
+        int c = argc;
+        for (int i=0; i < c; ++i) {
+            if (debugFound) {
+                debugArgs << argv[i];
+            } else if (QString(argv[i]) == "--debug") {
+                if (argc <= i+1) {
+                    argc = i + 1;
+                } else {
+                    i++;
+                    argc = i + 1;
+                }
+                debugFound = true;
+            } else if (QString(argv[i]).startsWith("--debug=")) {
+                argc = i + 1;
+                debugFound = true;
+            }
+        }
+    }
+
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
     options.add("project <project>", ki18n( "Url to project to load" ));
     options.add("+files", ki18n( "Files to load" ));
+    options.add("debug <debugger>", ki18n( "Start debugger" ));
