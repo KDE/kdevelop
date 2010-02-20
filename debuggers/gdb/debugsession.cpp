@@ -1077,52 +1077,16 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     }
     else
     {
-        QFileInfo app(executable);
-
-        if (!app.exists())
-        {
-            KMessageBox::error(
-                qApp->activeWindow(),
-                i18n("<b>Application does not exist</b>"
-                      "<p>The application you are trying to debug,<br>"
-                      "    %1\n"
-                      "<br>does not exist. Check that you have specified "
-                      "the right application in the debugger configuration.",
-                      app.fileName()),
-                i18n("Application does not exist"));
-
-            // FIXME: after this, KDevelop will still show that debugger
-            // is running, because DebuggerPart::slotStopDebugger won't be
-            // called, and core()->running(this, false) won't be called too.
-            stopDebugger();
-            return false;
-        }
-
-        if (!app.isExecutable())
-        {
-            KMessageBox::error(
-                qApp->activeWindow(),
-                i18n("<b>Could not run application '%1'.</b>"
-                      "<p>The application does not have the executable bit set. "
-                      "Try rebuilding the project, or change permissions "
-                      "manually.",
-                      app.fileName()),
-                i18n("Could not run application"));
-            stopDebugger();
-            return false;
-        }
-        else
-        {
-            queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, executable));
-            raiseEvent(connected_to_program);
-            queueCmd(new GDBCommand(GDBMI::ExecRun));
-        }
+        queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols, executable, this, &DebugSession::handleFileExecAndSymbols, true));
+        raiseEvent(connected_to_program);
+        queueCmd(new GDBCommand(GDBMI::ExecRun));
     }
 
     setStateOff(s_appNotStarted|s_programExited);
 
     return true;
 }
+
 
 // **************************************************************************
 //                                SLOTS
@@ -1438,6 +1402,19 @@ void DebugSession::handleVersion(const QStringList& s)
 }
 
 
+void DebugSession::handleFileExecAndSymbols(const GDBMI::ResultRecord& r)
+{
+    if (r.reason == "error") {
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>Could not start debugger:</b><br />")+
+            r["msg"].literal(),
+            i18n("Startup error"));
+        stopDebugger();
+    }
 }
+
+}
+
 
 #include "debugsession.moc"
