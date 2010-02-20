@@ -718,6 +718,17 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
     execute( runMode, defaultLaunch() );
 }
 
+void RunController::setDefaultLaunch(LaunchConfiguration* l)
+{
+    foreach( QAction* a, d->currentTargetAction->actions() )
+    {
+        if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
+        {
+            a->setChecked(true);
+            break;
+        }
+    }
+}
 
 ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigurationType* type, 
                                                                  const QPair<QString,QString>& launcher, 

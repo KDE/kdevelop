@@ -117,6 +117,8 @@ public:
                                                               const QString& name = QString() );
     
     virtual void executeDefaultLaunch(const QString& runMode);
+
+    void setDefaultLaunch(LaunchConfiguration* l);
     
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
