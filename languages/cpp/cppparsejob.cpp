@@ -925,6 +925,8 @@ void CPPInternalParseJob::run()
         }
       }
     }*/
+
+   parentJob()->cleanupSmartRevision();
 }
 
 void CPPParseJob::processDelayedImports() {
