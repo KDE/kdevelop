@@ -105,21 +105,16 @@ ParseJob::ParseJob( const KUrl &url )
 
 ParseJob::~ParseJob()
 {
-    //Here we release the revision
-    EditorIntegrator editor;
-    editor.setCurrentUrl(d->document);
-    
-    if(KDevelop::LockedSmartInterface smart = editor.smart()) {
-        smart->releaseRevision(d->revisionToken);
-        smart->clearRevision();
-        ///@todo We need to know here what the currently used revision is, and assert that it still is being used
+    if ( d->revisionToken != -1 ) {
+        kWarning() << "You must call cleanupSmartRevision() when your run() method has finished!";
+        cleanupSmartRevision();
     }
-    
+
     typedef QPointer<QObject> QObjectPointer;
     foreach(const QObjectPointer &p, d->notify)
         if(p)
             QMetaObject::invokeMethod(p, "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->document), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
-    
+
     delete d;
 }
 
@@ -195,6 +190,22 @@ bool ParseJob::contentsAvailableFromEditor()
     }
 
     return true;
+}
+
+void ParseJob::cleanupSmartRevision()
+{
+    if ( d->revisionToken != -1 ) {
+        //Here we release the revision
+        EditorIntegrator editor;
+        editor.setCurrentUrl(d->document);
+
+        if(KDevelop::LockedSmartInterface smart = editor.smart()) {
+            smart->releaseRevision(d->revisionToken);
+            smart->clearRevision();
+            d->revisionToken = -1;
+            ///@todo We need to know here what the currently used revision is, and assert that it still is being used
+        }
+    }
 }
 
 int ParseJob::revisionToken() const
@@ -278,6 +289,7 @@ void ParseJob::abortJob()
 {
     d->aborted = true;
     setFinished(true);
+    cleanupSmartRevision();
 }
 
 void ParseJob::setNotifyWhenReady(QList<QPointer<QObject> > notify) {

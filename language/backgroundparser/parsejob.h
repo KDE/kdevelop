@@ -59,8 +59,17 @@ public:
      * be made to the changedRanges().
      * You can then just call KTextEditor::SmartRange::text() on each of the changedRanges().
      * Or, you can parse the whole document, the text of which is available from contentsFromEditor().
+     *
+     * @NOTE: When this is called, make sure you call @p cleanupSmartRevision() properly.
      */
     Q_SCRIPTABLE bool contentsAvailableFromEditor();
+
+    /**
+     * Cleanup SmartRange revision after the job has run. 
+     * You must call this before exiting your @p run() method.
+     * @p abortJob() will call this automatically.
+     */
+    virtual void cleanupSmartRevision();
 
     /// Retrieve the contents of the file from the currently open editor.
     /// Ensure it is loaded by calling editorLoaded() first.
