@@ -70,9 +70,10 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
     m_removeRepoAction = new KAction(KIcon("edit-delete"), i18n("Remove Repository"), this);
     connect(m_removeRepoAction, SIGNAL(triggered()), this, SLOT(slotRemoveRepo()));
     addAction(m_removeRepoAction);
-    m_putNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Publish Repository"), this);
-    connect(m_putNewStuffAction, SIGNAL(triggered()), this, SLOT(slotSnippetToGHNS()));
-    addAction(m_putNewStuffAction);
+    ///TODO: reactivate once KNS3 is actually usable for uploading
+//     m_putNewStuffAction = new KAction(KIcon("get-hot-new-stuff"), i18n("Publish Repository"), this);
+//     connect(m_putNewStuffAction, SIGNAL(triggered()), this, SLOT(slotSnippetToGHNS()));
+//     addAction(m_putNewStuffAction);
 
     QAction* separator = new QAction(this);
     separator->setSeparator(true);
@@ -113,7 +114,8 @@ void SnippetView::validateActions()
     m_addRepoAction->setEnabled(true);
     m_editRepoAction->setEnabled(selectedRepo);
     m_removeRepoAction->setEnabled(selectedRepo);
-    m_putNewStuffAction->setEnabled(selectedRepo);
+    ///TODO: reactivate once KNS3 is actually usable for uploading
+//     m_putNewStuffAction->setEnabled(selectedRepo);
 
     m_addSnippetAction->setEnabled(selectedRepo || selectedSnippet);
     m_editSnippetAction->setEnabled(selectedSnippet);
@@ -169,7 +171,8 @@ void SnippetView::contextMenu (const QPoint& pos)
 
         menu.addAction(m_editRepoAction);
         menu.addAction(m_removeRepoAction);
-        menu.addAction(m_putNewStuffAction);
+        ///TODO: reactivate once KNS3 is actually usable for uploading
+//         menu.addAction(m_putNewStuffAction);
         menu.addSeparator();
 
         menu.addAction(m_addSnippetAction);
