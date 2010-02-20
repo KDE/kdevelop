@@ -50,7 +50,10 @@ ClassDeclaration::ClassDeclaration(ClassDeclarationData& data)
 REGISTER_DUCHAIN_ITEM(ClassDeclaration);
 
 void ClassDeclaration::clearBaseClasses() {
+  bool wasInSymbolTable = inSymbolTable();
+  setInSymbolTable(false);
   d_func_dynamic()->baseClassesList().clear();
+  setInSymbolTable(wasInSymbolTable);
 }
 
 uint ClassDeclaration::baseClassesSize() const {
@@ -62,12 +65,18 @@ const BaseClassInstance* ClassDeclaration::baseClasses() const {
 }
 
 void ClassDeclaration::addBaseClass(BaseClassInstance klass) {
+  bool wasInSymbolTable = inSymbolTable();
+  setInSymbolTable(false);
   d_func_dynamic()->baseClassesList().append(klass);
+  setInSymbolTable(wasInSymbolTable);
 }
 
 void ClassDeclaration::replaceBaseClass(uint n, BaseClassInstance klass) {
   Q_ASSERT(n <= d_func()->baseClassesSize());
+  bool wasInSymbolTable = inSymbolTable();
+  setInSymbolTable(false);
   d_func_dynamic()->baseClassesList()[n] = klass;
+  setInSymbolTable(wasInSymbolTable);
 }
 
 ClassDeclaration::~ClassDeclaration()
