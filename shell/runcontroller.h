@@ -33,6 +33,8 @@ Boston, MA 02110-1301, USA.
 #include <outputview/outputjob.h>
 #include <interfaces/context.h>
 
+#include "shellexport.h"
+
 class QStyleOptionViewItem;
 class QPainter;
 class QModelIndex;
@@ -45,7 +47,7 @@ class IPlugin;
 class IProject;
 class LaunchConfiguration;
 
-class RunController : public IRunController
+class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 {
     Q_OBJECT
 

@@ -23,6 +23,8 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <kconfiggroup.h>
 
+#include "shellexport.h"
+
 class QString;
 
 namespace KDevelop
@@ -34,7 +36,7 @@ class IProject;
 /**
  * @copydoc KDevelop::ILaunchConfiguration
  */
-class LaunchConfiguration : public QObject, public ILaunchConfiguration
+class KDEVPLATFORMSHELL_EXPORT LaunchConfiguration : public QObject, public ILaunchConfiguration
 {
 Q_OBJECT
 public:

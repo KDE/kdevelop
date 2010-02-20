@@ -129,6 +129,8 @@ install(FILES
     language.h
     shellexport.h
     selectioncontroller.h
+    runcontroller.h
+    launchconfiguration.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
 
