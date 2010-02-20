@@ -47,6 +47,8 @@
 #include <execute/iexecuteplugin.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/idebugcontroller.h>
+#include <debugger/breakpoint/breakpointmodel.h>
 
 #include "breakpointcontroller.h"
 #include "variablecontroller.h"
@@ -962,6 +964,21 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
 
     KConfigGroup grp = cfg->config();
     KDevelop::EnvironmentGroupList l(KGlobal::config());
+
+    if (grp.readEntry("Break on Start", false)) {
+        BreakpointModel* m = KDevelop::ICore::self()->debugController()->breakpointModel();
+        bool found = false;
+        foreach (KDevelop::Breakpoint *b, m->breakpoints()) {
+            if (b->location() == "main") {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            KDevelop::ICore::self()->debugController()->breakpointModel()->addCodeBreakpoint("main");
+        }
+    }
+
 
     // Configuration values
     bool    config_breakOnLoadingLibrary_ = grp.readEntry( GDBDebugger::breakOnLibLoadEntry, false );

@@ -186,6 +186,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         }
 
         type->configureLaunchFromCmdLineArguments(launch->config(), debugArgs);
+        launch->config().writeEntry("Break on Start", true);
         core->runControllerInternal()->setDefaultLaunch(launch);
 
         core->runControllerInternal()->execute("debug", launch);
