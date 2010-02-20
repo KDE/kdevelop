@@ -23,6 +23,7 @@
 #include "interfacesexport.h"
 
 #include <QtCore/QList>
+#include <QtCore/QStringList>
 
 class KIcon;
 class KUrl;
@@ -112,7 +113,15 @@ public:
      */
     virtual void configureLaunchFromItem( KConfigGroup config, 
                                           KDevelop::ProjectBaseItem* item ) const = 0;
-    
+
+    /**
+     * Configure the given launch configuration to execute the selected item
+     * @param config the configuration to setup
+     * @param item the item to launch
+     */
+    virtual void configureLaunchFromCmdLineArguments( KConfigGroup config,
+                                                      const QStringList &args ) const = 0;
+
     /**
     * Check wether this launch configuration type can launch the given file
     * @param file the file to test launchability

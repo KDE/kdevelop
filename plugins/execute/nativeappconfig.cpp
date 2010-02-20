@@ -364,4 +364,15 @@ void NativeAppConfigType::configureLaunchFromItem ( KConfigGroup cfg, KDevelop::
     cfg.sync();
 }
 
+void NativeAppConfigType::configureLaunchFromCmdLineArguments ( KConfigGroup cfg, const QStringList& args ) const
+{
+    cfg.writeEntry( ExecutePlugin::isExecutableEntry, true );
+    cfg.writeEntry( ExecutePlugin::executableEntry, args.first() );
+    QStringList a(args);
+    a.removeFirst();
+    cfg.writeEntry( ExecutePlugin::argumentsEntry, a);
+    cfg.sync();
+}
+
+
 #include "nativeappconfig.moc"
