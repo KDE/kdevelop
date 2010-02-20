@@ -122,7 +122,7 @@ void Session::updateDescription()
     }
 
     if ( prettyContents.isEmpty() ) {
-        prettyContents = i18n("(empty)");
+        prettyContents = i18n("(no projects)");
     }
     
     d->config->group("").writeEntry( cfgSessionPrettyContentsEntry, prettyContents );
