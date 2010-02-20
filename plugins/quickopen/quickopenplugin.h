@@ -63,6 +63,7 @@ public:
      * @param modes A combination of ModelTypes
      * */
     void showQuickOpen( ModelTypes modes = All );
+    void showQuickOpen( const QStringList &items );
 
     virtual void registerProvider( const QStringList& scope, const QStringList& type, KDevelop::QuickOpenDataProviderBase* provider );
 
@@ -107,6 +108,7 @@ private:
     QPair<KUrl, KDevelop::SimpleCursor> specialObjectJumpPosition() const;
     QWidget* specialObjectNavigationWidget() const;
     bool jumpToSpecialObject();
+    void showQuickOpenWidget(const QStringList &items, const QStringList &scopes, bool preselectText);
     
     QuickOpenModel* m_model;
     class ProjectFileDataProvider* m_projectFileData;

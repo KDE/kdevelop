@@ -782,6 +782,21 @@ void QuickOpenPlugin::unload()
 {
 }
 
+void QuickOpenPlugin::showQuickOpen(const QStringList& items)
+{
+  if(!freeModel())
+    return;
+
+  QStringList initialItems = items;
+
+  QStringList useScopes = lastUsedScopes;
+
+  if (!useScopes.contains(i18n("Currently Open")))
+    useScopes << i18n("Currently Open");
+
+  showQuickOpenWidget(initialItems, useScopes, false);
+}
+
 void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
 {
   if(!freeModel())
@@ -802,9 +817,15 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
   if((modes & OpenFiles) && !useScopes.contains(i18n("Currently Open")))
     useScopes << i18n("Currently Open");
 
-  QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Quick Open"), m_model, initialItems, useScopes );
+  bool preselectText = (!(modes & Files) || modes == QuickOpenPlugin::All);
+  showQuickOpenWidget(initialItems, useScopes, preselectText);
+}
+
+void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStringList& scopes, bool preselectText)
+{
+  QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog( i18n("Quick Open"), m_model, items, scopes );
   m_currentWidgetHandler = dialog;
-  if (!(modes & Files) || modes == QuickOpenPlugin::All)
+  if (preselectText)
   {
     KDevelop::IDocument *currentDoc = core()->documentController()->activeDocument();
     if (currentDoc && currentDoc->isTextDocument())
@@ -813,12 +834,12 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
       dialog->widget()->setPreselectedText(preselected);
     }
   }
-  
+
   connect( dialog->widget(), SIGNAL( scopesChanged( const QStringList& ) ), this, SLOT( storeScopes( const QStringList& ) ) );
   //Not connecting itemsChanged to storeItems, as showQuickOpen doesn't use lastUsedItems and so shouldn't store item changes
   //connect( dialog->widget(), SIGNAL( itemsChanged( const QStringList& ) ), this, SLOT( storeItems( const QStringList& ) ) );
   dialog->widget()->o.itemsButton->setEnabled(false);
-  
+
   if(quickOpenLine()) {
     quickOpenLine()->showWithWidget(dialog->widget());
     dialog->deleteLater();
@@ -826,7 +847,6 @@ void QuickOpenPlugin::showQuickOpen( ModelTypes modes )
     dialog->run();
   }
 }
-
 
 void QuickOpenPlugin::storeScopes( const QStringList& scopes )
 {

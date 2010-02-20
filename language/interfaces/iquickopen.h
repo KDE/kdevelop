@@ -55,6 +55,14 @@ public:
     virtual ~IQuickOpen();
 
     /**
+     * Shows the quickopen dialog with the entries of specified types
+     * Default types are: Files, Functions, Classes
+     * There might be other quick open providers with custom items.
+     * Note, the item name has to be translated, for example i18n("Files") should be passed.
+     * */
+    virtual void showQuickOpen( const QStringList &types ) = 0;
+
+    /**
      * Registers a new provider under a specified name.
      * There may be multiple providers with the same type/scope, they will be used simultaneously in that case.
      * type and scope will be shown in the GUI, so they should be translated.
