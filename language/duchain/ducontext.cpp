@@ -594,10 +594,6 @@ DUContext::~DUContext( )
 
   if(!top->deleting() || !top->isOnDisk()) {
     DUCHAIN_D_DYNAMIC(DUContext);
-    QualifiedIdentifier id(scopeIdentifier(true));
-    if(d->m_inSymbolTable && parentContext()) {
-      PersistentSymbolTable::self().removeContext(id, this);
-    }
 
     if(d->m_owner.declaration())
       d->m_owner.declaration()->setInternalContext(0);
