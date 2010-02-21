@@ -309,7 +309,7 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
         t->row = topItems.count();
         topItems << t;
     }
-    foreach( LaunchConfiguration* l, Core::self()->runControllerInternal()->launchConfigurations() )
+    foreach( LaunchConfiguration* l, Core::self()->runControllerInternal()->launchConfigurationsInternal() )
     {
         addItemForLaunchConfig( l );
     }    

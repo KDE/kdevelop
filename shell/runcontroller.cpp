@@ -342,13 +342,14 @@ void RunController::initialize()
     }
 }
 
-KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
+KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launch)
 {
-    if( !run )
+    if( !launch )
     {
         kDebug() << "execute called without launch config!";
         return 0;
     }
+    LaunchConfiguration *run = dynamic_cast<LaunchConfiguration*>(launch);
     //TODO: Port to launch framework, probably needs to be part of the launcher
     //if(!run.dependencies().isEmpty())
     //    ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
@@ -369,9 +370,9 @@ KJob* RunController::execute(const QString& runMode, LaunchConfiguration* run)
         return 0;
     }
 
-    KJob* launch = launcher->start(runMode, run);
-    registerJob(launch);
-    return launch;
+    KJob* launchJob = launcher->start(runMode, run);
+    registerJob(launchJob);
+    return launchJob;
 }
 
 void RunController::setupActions()
@@ -597,7 +598,15 @@ QList< KJob * > KDevelop::RunController::currentJobs() const
     return d->jobs.keys();
 }
 
-QList<LaunchConfiguration*> RunController::launchConfigurations() const
+QList<ILaunchConfiguration*> RunController::launchConfigurations() const
+{
+    QList<ILaunchConfiguration*> configs;
+    foreach (LaunchConfiguration *config, launchConfigurationsInternal())
+        configs << config;
+    return configs;
+}
+
+QList<LaunchConfiguration*> RunController::launchConfigurationsInternal() const
 {
     return d->launchConfigurations;
 }

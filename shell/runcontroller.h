@@ -62,7 +62,7 @@ public:
     virtual void unregisterJob(KJob *job);
     virtual QList<KJob*> currentJobs() const;
 
-    KJob* execute(const QString& launchMode, LaunchConfiguration* run);
+    KJob* execute(const QString& launchMode, ILaunchConfiguration* launch);
     LaunchConfiguration* defaultLaunch() const;
     QList<ILaunchMode*> launchModes() const;
     
@@ -89,7 +89,8 @@ public:
     void addLaunchConfiguration( LaunchConfiguration* l );
     void removeLaunchConfiguration( LaunchConfiguration* l );
     
-    QList<LaunchConfiguration*> launchConfigurations() const;
+    QList<LaunchConfiguration*> launchConfigurationsInternal() const;
+    virtual QList<ILaunchConfiguration*> launchConfigurations() const;
     /**
      * @copydoc IRunController::launchConfigurationTypes()
      */

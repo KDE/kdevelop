@@ -26,6 +26,8 @@ Boston, MA 02110-1301, USA.
 
 #include "interfacesexport.h"
 
+class KJob;
+
 namespace KDevelop
 {
 class IProject;
@@ -62,7 +64,12 @@ public:
      * @returns a list of registered launch modes
      */
     virtual QList<ILaunchMode*> launchModes() const = 0;
-    
+
+    /**
+     * Get a list of all available launch configurations
+     */
+    virtual QList<ILaunchConfiguration*> launchConfigurations() const = 0;
+
     /**
      * Get a specific launch mode based using its \a id
      * @param id the identifier of the launchmode to get
@@ -106,7 +113,9 @@ public:
      * @param runMode the launch mode to start with
      */
     virtual void executeDefaultLaunch( const QString& runMode ) = 0;
-    
+
+    virtual KJob* execute(const QString& launchMode, ILaunchConfiguration* launch) = 0;
+
     /**
      * tries to find a launch config type for the given @p id
      * @param id the id of the launch configuration type to search
