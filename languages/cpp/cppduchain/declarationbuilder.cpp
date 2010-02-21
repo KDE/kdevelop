@@ -60,11 +60,6 @@
 #include "name_visitor.h"
 #include "usebuilder.h"
 
-const Identifier& castIdentifier() {
-  static Identifier id("operator{...cast...}");
-  return id;
-}
-
 using namespace KTextEditor;
 using namespace KDevelop;
 using namespace Cpp;
@@ -936,10 +931,23 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUConte
 
 void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
-  if (ast->namespace_name) {
+  {
+    SimpleRange range;
+    Identifier id;
+    
+    if(ast->namespace_name)
+    {
+      id = Identifier(editor()->tokensToStrings(ast->namespace_name, ast->namespace_name+1));
+      range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
+    }else
+    {
+      id = unnamedNamespaceIdentifier.identifier();
+      range.start = editor()->findPosition(ast->linkage_body ? ast->linkage_body->start_token : ast->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      range.end = range.start;
+    }
+
     DUChainWriteLocker lock(DUChain::lock());
-    SimpleRange range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
-    Identifier id(editor()->tokenToString(ast->namespace_name));
+
     Declaration * declaration = openDeclarationReal<Declaration>(0, 0, id, false, false, &range);
     
     ///Create mappings iff the AST feature is specified
@@ -949,7 +957,7 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
   
   DeclarationBuilderBase::visitNamespace(ast);
   
-  if (ast->namespace_name) {
+  {
     DUChainWriteLocker lock(DUChain::lock());
     currentDeclaration()->setKind(KDevelop::Declaration::Namespace);
     clearLastType();
@@ -1126,7 +1134,14 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
 
 QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)
 {
-  QList<DUContext*> contexts = currentContext()->findContexts(DUContext::Namespace, identifier, position);
+  QList< Declaration* > decls = currentContext()->findDeclarations(identifier, position);
+  
+  QList<DUContext*> contexts;
+  
+  foreach(Declaration* decl, decls)
+    if(decl->kind() == Declaration::Namespace && decl->internalContext())
+      contexts << decl->internalContext();
+  
   if( contexts.isEmpty() ) {
     //Failed to resolve namespace
     kDebug(9007) << "Failed to resolve namespace \"" << identifier << "\"";

@@ -392,8 +392,6 @@ void TestDUChain::testContextSearch() {
     
     TopDUContext* top = parse(method, DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
-    QCOMPARE(top->findContexts(DUContext::Class, QualifiedIdentifier("Stru") ).count(), 1);
-    QCOMPARE(top->findContexts(DUContext::Namespace, QualifiedIdentifier("Stru") ).count(), 0);
     release(top);
   }
 }
@@ -2547,7 +2545,6 @@ void TestDUChain::testDeclareSubClass() {
   TopDUContext* top = parse(text, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QVERIFY(!top->findContexts(DUContext::Class, QualifiedIdentifier("Enclosing::Class")).isEmpty());
 
   QCOMPARE(top->childContexts().count(), 2);
   QCOMPARE(top->localDeclarations().count(), 1);
@@ -2575,9 +2572,6 @@ void TestDUChain::testDeclareSubClass() {
   QVERIFY(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType().unsafeData());
   QVERIFY(!top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->type<DelayedType>().unsafeData());
   QCOMPARE(top->childContexts()[1]->childContexts()[0]->localDeclarations()[2]->abstractType()->indexed(), top->childContexts()[0]->localDeclarations()[1]->abstractType()->indexed());
-
-  QVERIFY(!top->findContexts(DUContext::Class, QualifiedIdentifier("Enclosing")).isEmpty());
-  QVERIFY(!top->findContexts(DUContext::Class, QualifiedIdentifier("Enclosing::Class")).isEmpty());
 
   release(top);
 }

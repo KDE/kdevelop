@@ -814,5 +814,7 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   return id;
 }
 
+KDevelop::IndexedIdentifier castIdentifier(Identifier("operator{...cast...}"));
+KDevelop::IndexedIdentifier unnamedNamespaceIdentifier(Identifier("unnamed{...namespace...}"));
 }
 

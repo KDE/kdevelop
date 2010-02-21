@@ -53,6 +53,7 @@
 #include <language/duchain/functiondefinition.h>
 
 #include <language/codecompletion/codecompletiontesthelper.h>
+#include <language/duchain/persistentsymboltable.h>
 
 using namespace KTextEditor;
 
@@ -906,7 +907,7 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
 
   //                 0         1         2         3         4         5         6         7
   //                 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012
-  QByteArray method("namespace {int a;} namespace { int b; }; void test() {}");
+  QByteArray method("namespace {int a;} namespace { int b; }; void test() {a = 3;}");
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -914,8 +915,16 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
 
   QVERIFY(!top->parentContext());
   QCOMPARE(top->childContexts().count(), 4);
+  QCOMPARE(top->localDeclarations().count(), 3);
+  kDebug() << top->localDeclarations()[0]->range().textRange();
+  QCOMPARE(top->localDeclarations()[0]->range().textRange(), KTextEditor::Range(0, 10, 0, 10));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
+  QVERIFY(findDeclaration(top, QualifiedIdentifier("a"))->uses().size());
+  PersistentSymbolTable::FilteredDeclarationIterator decls = KDevelop::PersistentSymbolTable::self().getFilteredDeclarations(QualifiedIdentifier(Cpp::unnamedNamespaceIdentifier.identifier()), top->recursiveImportIndices());
+  QVERIFY(decls);
+  QCOMPARE(top->findLocalDeclarations(Cpp::unnamedNamespaceIdentifier.identifier()).size(), 2);
+  QCOMPARE(top->findDeclarations(QualifiedIdentifier(Cpp::unnamedNamespaceIdentifier.identifier())).size(), 2);
 
 //   lock.unlock();
   {

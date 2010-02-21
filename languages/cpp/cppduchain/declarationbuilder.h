@@ -162,7 +162,5 @@ private:
   QByteArray m_qtFunctionSignature;
 };
 
-KDEVCPPDUCHAIN_EXPORT const Identifier& castIdentifier();
-
 #endif // DECLARATIONBUILDER_H
 
