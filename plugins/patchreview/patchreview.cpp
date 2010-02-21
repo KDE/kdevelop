@@ -1220,6 +1220,8 @@ void PatchReviewPlugin::cancelReview()
   if(m_patch) {
     m_modelList.reset( 0 );
     m_patch->cancelReview();
+
+    emit patchChanged();
     
     delete m_patch;
     
@@ -1237,6 +1239,9 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     if(!m_patch->finishReview(selection))
       return;
     m_modelList.reset( 0 );
+    
+    emit patchChanged();
+    
     if(!dynamic_cast<LocalPatchSource*>(m_patch))
       delete m_patch;
     
