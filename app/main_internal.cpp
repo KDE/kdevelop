@@ -142,7 +142,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
 
         KDevelop::LaunchConfiguration* launch = 0;
         kDebug() << launchName;
-        foreach (KDevelop::LaunchConfiguration *l, core->runControllerInternal()->launchConfigurations()) {
+        foreach (KDevelop::LaunchConfiguration *l, core->runControllerInternal()->launchConfigurationsInternal()) {
             kDebug() << l->name();
             if (l->name() == launchName) {
                 launch = l;
