@@ -557,21 +557,6 @@ public:
   DUContext* findContext(const SimpleCursor& position, DUContext* parent = 0) const;
 
   /**
-   * Searches for the context with the given \a type and \a identifier.
-   *
-   * \param contextType type of context to locate; usually Namespace or Class.
-   * \param identifier identifier of the context which is being searched for.
-   * \param position cursor position to search from, or invalid to search the whole context.
-   *
-   * \returns the requested context if one was found, otherwise null.
-   *
-   * \warning this may return contexts which are not in this tree, you may need to lock them too...
-   * \warning this function is not as far developed as findDeclarations(..), and does not respect all of the details
-   *                so always use findDeclarations(..) instead when possible!
-   */
-  QList<DUContext*> findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* source = 0, SearchFlags flags = NoSearchFlags) const;
-
-  /**
    * Iterates the tree to see if the provided \a context is a subcontext of this context.
    * \returns true if \a context is a subcontext, otherwise false.
    */
@@ -804,9 +789,6 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
   virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
-
-  /// Context search implementation
-  virtual void findContextsInternal(ContextType contextType, const SearchItem::PtrList& identifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags = NoSearchFlags) const;
 
   /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.

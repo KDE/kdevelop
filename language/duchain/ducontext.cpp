@@ -1360,18 +1360,6 @@ QVector<DUContext::Import> DUContext::importedParentContexts() const
   return ret;
 }
 
-QList<DUContext*> DUContext::findContexts(ContextType contextType, const QualifiedIdentifier& identifier, const SimpleCursor& position, const TopDUContext* top, SearchFlags flags) const
-{
-  ENSURE_CAN_READ
-
-  QList<DUContext*> ret;
-  SearchItem::PtrList identifiers;
-  identifiers << SearchItem::Ptr(new SearchItem(identifier));
-
-  findContextsInternal(contextType, identifiers, position.isValid() ? position : range().end, ret, top ? top : topContext(), flags);
-  return ret;
-}
-
 void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports) const {
 
   DeclarationList imports;
@@ -1452,57 +1440,6 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopD
       newItem->isExplicitlyGlobal = true;
       insertToArray(identifiers, newItem, 0);
     }
-  }
-}
-
-void DUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags) const
-{
-  DUCHAIN_D(DUContext);
-  if (contextType == type()) {
-    FOREACH_ARRAY( const SearchItem::Ptr& identifier, baseIdentifiers )
-      if (identifier->match(scopeIdentifier(true)) && (!parentContext() || !identifier->isExplicitlyGlobal) )
-        ret.append(const_cast<DUContext*>(this));
-  }
-  ///@todo This doesn't seem quite correct: Local Contexts aren't found anywhere
-  ///Step 1: Apply namespace-aliases and -imports
-  SearchItem::PtrList aliasedIdentifiers;
-  //Because of namespace-imports and aliases, this identifier may need to be searched as under multiple names
-  applyAliases(baseIdentifiers, aliasedIdentifiers, position, contextType == Namespace, contextType != Namespace);
-
-  if( d->m_importedContextsSize() != 0 ) {
-    ///Step 2: Give identifiers that are not marked as explicitly-global to imported contexts(explicitly global ones are treatead in TopDUContext)
-    SearchItem::PtrList nonGlobalIdentifiers;
-    FOREACH_ARRAY( const SearchItem::Ptr& identifier, aliasedIdentifiers )
-      if( !identifier->isExplicitlyGlobal )
-        nonGlobalIdentifiers << identifier;
-
-    if( !nonGlobalIdentifiers.isEmpty() ) {
-      for(int a = d->m_importedContextsSize()-1; a >= 0; --a) {
-
-        DUContext* context = d->m_importedContexts()[a].context(source);
-
-        while( !context && a > 0 ) {
-          --a;
-          context = d->m_importedContexts()[a].context(source);
-        }
-
-        if(context == this) {
-          kDebug() << "resolved self as import:" << scopeIdentifier(true);
-          continue;
-        }
-
-        if( !context )
-          break;
-
-        context->findContextsInternal(contextType, nonGlobalIdentifiers, url() == context->url() ? position : context->range().end, ret, source, flags | InImportedParentContext);
-      }
-    }
-  }
-
-  ///Step 3: Continue search in parent
-  if ( !(flags & DontSearchInParent) && shouldSearchInParent(flags) && parentContext()) {
-    applyUpwardsAliases(aliasedIdentifiers, source);
-    parentContext()->findContextsInternal(contextType, aliasedIdentifiers, url() == parentContext()->url() ? position : parentContext()->range().end, ret, source, flags);
   }
 }
 
@@ -1688,17 +1625,6 @@ bool DUContext::inSymbolTable() const
 
 void DUContext::setInSymbolTable(bool inSymbolTable)
 {
-    if(parentContext()) {
-      if(!d_func()->m_inSymbolTable && inSymbolTable) {
-        QualifiedIdentifier id(scopeIdentifier(true));
-        PersistentSymbolTable::self().addContext(id, this);
-
-      }else if(d_func()->m_inSymbolTable && !inSymbolTable) {
-        QualifiedIdentifier id(scopeIdentifier(true));
-        PersistentSymbolTable::self().removeContext(id, this);
-      }
-    }
-
   d_func_dynamic()->m_inSymbolTable = inSymbolTable;
 }
 

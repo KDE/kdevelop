@@ -38,18 +38,6 @@ struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
   DUContext::SearchFlags flags;
 };
 
-struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::ContextChecker
-{
-  ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, DUContext::SearchFlags _flags);
-
-  bool operator()(const DUContext* context) const;
-
-  const TopDUContext* top;
-  const SimpleCursor& position;
-  ContextType contextType;
-  DUContext::SearchFlags flags;
-};
-
 }
 
 #endif // TOPDUCONTEXTUTILS_H

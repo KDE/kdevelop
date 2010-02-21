@@ -522,33 +522,6 @@ public:
   }
 };
 
-TopDUContext::ContextChecker::ContextChecker(const TopDUContext* _top, const SimpleCursor& _position, ContextType _contextType, DUContext::SearchFlags _flags) : top(_top), position(_position), contextType(_contextType), flags(_flags)
-{
-}
-
-bool TopDUContext::ContextChecker::operator()(const DUContext* ctx) const {
-
-  if(!ctx)
-    return false;
-
-  if (top != ctx->topContext()) {
-
-    // Make sure that this declaration is accessible
-
-    if (ctx->type() != contextType)
-      return false;
-  } else {
-    if (ctx->type() != contextType)
-      return false;
-
-    if (ctx->range().start > position)
-      if(!ctx->parentContext() || ctx->parentContext()->type() != Class)
-          return false;
-  }
-  //Success
-  return true;
-}
-
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
 ///The import-structure needs to be constructed and locked when this is used
 TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const SimpleCursor& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
@@ -1121,7 +1094,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
     importId.push(globalImportIdentifier);
 
 #ifdef DEBUG_SEARCH
-  kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));
+//   kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));
 #endif
 
     if(importId.inRepository()) {
@@ -1178,72 +1151,6 @@ void TopDUContext::applyAliases( const SearchItem::PtrList& identifiers, Accepto
   
   FOREACH_ARRAY(SearchItem::Ptr item, identifiers)
     applyAliases(emptyId, item, acceptor, position, canBeNamespace, 0, 0);
-}
-
-struct TopDUContext::FindContextsAcceptor {
-  FindContextsAcceptor(const TopDUContext* _top, QList<DUContext*>& _target, const ContextChecker& _check, SearchFlags _flags) : top(_top), target(_target), check(_check), flags(_flags) {
-    cache = _top->m_local->currentCache();
-  }
-
-  bool operator() (const QualifiedIdentifier& id) {
-    
-    PersistentSymbolTable::Contexts allDecls;
-
-#ifdef DEBUG_SEARCH
-    kDebug() << "accepting" << id.toString();
-#endif
-    kDebug() << "accepting" << id.toString() << id.inRepository();
-
-    //This iterator efficiently filters the visible declarations out of all declarations
-    PersistentSymbolTable::FilteredDUContextIterator filter;
-
-    //This is used if filterung is disabled
-    PersistentSymbolTable::Contexts::Iterator unchecked;
-    if(check.flags & DUContext::NoImportsCheck) {
-      allDecls = PersistentSymbolTable::self().getContexts(id);
-      unchecked = allDecls.iterator();
-    } else
-      filter = PersistentSymbolTable::self().getFilteredContexts(id, top->recursiveImportIndices());
-
-    while(filter || unchecked) {
-
-      IndexedDUContext iDecl;
-      if(filter) {
-        iDecl = *filter;
-        ++filter;
-      } else {
-        iDecl = *unchecked;
-        ++unchecked;
-      }
-
-      DUContext* ctx = iDecl.data();
-      if(!ctx)
-        continue;
-      
-      if(!check(ctx))
-        continue;
-
-      target << ctx;
-    }
-    return true;
-  }
-
-  const TopDUContext* top;
-  CacheData* cache;
-  QList<DUContext*>& target;
-  const ContextChecker& check;
-  SearchFlags flags;
-};
-
-void TopDUContext::findContextsInternal(ContextType contextType, const SearchItem::PtrList& baseIdentifiers, const SimpleCursor& position, QList<DUContext*>& ret, const TopDUContext* source, SearchFlags flags) const {
-  Q_UNUSED(source);
-  ENSURE_CAN_READ
-  ContextChecker check(this, position, contextType, flags & DUContext::NoImportsCheck);
-  FindContextsAcceptor storer(this, ret, check, flags);
-
-  ///The actual scopes are found within applyAliases, and each complete qualified identifier is given to FindContextsAcceptor.
-  ///That stores the found declaration to the output.
-  applyAliases(baseIdentifiers, storer, position, contextType == Namespace);
 }
 
 TopDUContext* TopDUContext::sharedDataOwner() const
