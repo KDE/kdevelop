@@ -73,15 +73,21 @@ std::string*/
 
 using namespace KDevelop;
 
+namespace {
+  // Maximum number of files to open directly within a tab when the review is started
+  const int maximumFilesToOpenDirectly = 15;
+}
+
 Q_DECLARE_METATYPE( const Diff2::DiffModel* )
 
 PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* plugin ) 
 : QWidget( parent ), m_reversed( false ), m_plugin( plugin ) 
 {
-    showEditDialog();
     connect( plugin, SIGNAL(patchChanged()), SLOT(patchChanged()) );
+    connect( ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)) );
+    
+    showEditDialog();
     patchChanged();
-    connect( ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
 }
 
 void PatchReviewToolView::patchChanged()
@@ -477,7 +483,7 @@ void PatchReviewToolView::kompareModelChanged()
     
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if ( !models )
-        throw "no diff-models";
+        return;
     Diff2::DiffModelList::const_iterator it = models->constBegin();
     QSet<KUrl> haveUrls;
     for(; it != models->constEnd(); ++it) {
@@ -643,9 +649,9 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* m
     Diff2::MarkerList markers = line->markerList();
 
     for(int b = 0; b < markers.size(); ++b) {
-      kDebug() << "marker at " << markers[b]->offset() << ": " << markers[b]->type();
       QString spanText = Qt::escape(string.mid(currentPos, markers[b]->offset() - currentPos));
-      if(markers[b]->type() == Diff2::Marker::End) {
+      if(markers[b]->type() == Diff2::Marker::End && (currentPos != 0 || markers[b]->offset() != string.size()))
+      {
         if(a == highlightMark.first && b == highlightMark.second)
           html += "<b><span style=\"background:#FF5555\">" + spanText + "</span></b>";
         else
@@ -982,15 +988,17 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
       Diff2::MarkerList markers = line->markerList();
 
       for(int b = 0; b < markers.size(); ++b) { 
-//         kDebug() << "marker at " << markers[b]->offset() << ": " << markers[b]->type();
         if(markers[b]->type() == Diff2::Marker::End)
         {
-          KTextEditor::SmartRange * r2 = smart->newSmartRange( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()), range );
-          
-          KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
+          if(currentPos != 0 || markers[b]->offset() != string.size())
+          {
+            KTextEditor::SmartRange * r2 = smart->newSmartRange( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()), range );
+            
+            KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
-          t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 0, 70 ) ) );
-          r2->setAttribute( t );
+            t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 0, 70 ) ) );
+            r2->setAttribute( t );
+          }
         }
         currentPos = markers[b]->offset();
       }
@@ -1076,26 +1084,25 @@ void PatchReviewPlugin::updateKompareModel() {
     kDebug() << "updating model";
     try {
         m_modelList.reset( 0 );
-        qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
         delete m_diffSettings;
+        removeHighlighting();
+        
+        emit patchChanged();
+
+        if ( m_patch->file().isEmpty() )
+            return;
+        
+        qRegisterMetaType<const Diff2::DiffModel*>( "const Diff2::DiffModel*" );
         m_diffSettings = new DiffSettings( 0 );
         m_kompareInfo.reset( new Kompare::Info() );
         m_kompareInfo->localDestination=m_patch->file().toLocalFile();
         m_kompareInfo->localSource=m_patch->baseDir().toLocalFile();
         
-        removeHighlighting();
-        
         m_modelList.reset(new Diff2::KompareModelList( m_diffSettings.data(), new QWidget, this ));
         m_modelList->slotKompareInfo(m_kompareInfo.get());
         
-        if ( m_patch->file().isEmpty() )
-            return;
-        
         try {
-            ///@todo does not work with remote URLs
-            ///@todo Only reverse if the patch is currently applied
-            
-            if ( !m_modelList->openDirAndDiff(/* m_patch->baseDir().toLocalFile(), diffFile.toLocalFile(), true */) )
+            if ( !m_modelList->openDirAndDiff() )
                 throw "could not open diff " + m_patch->file().prettyUrl() + " on " + m_patch->baseDir().prettyUrl();
          } catch ( const QString & str ) {
             throw;
@@ -1121,8 +1128,8 @@ void PatchReviewPlugin::updateKompareModel() {
         KMessageBox::error(0, str, "Kompare Model Update");
     }
     m_modelList.reset( 0 );
-    delete m_diffSettings;
     m_kompareInfo.reset( 0 );
+    delete m_diffSettings;
     
     emit patchChanged();
 }
@@ -1296,7 +1303,7 @@ void PatchReviewPlugin::updateReview()
   ICore::self()->documentController()->openDocument(m_patch->file());
 #endif
 
-  if(m_modelList->modelCount() < 10) {
+  if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
     for(int a = 0; a < m_modelList->modelCount(); ++a) {
       KUrl url(m_modelList->modelAt(a)->source());
