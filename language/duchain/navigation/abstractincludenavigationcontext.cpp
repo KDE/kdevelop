@@ -121,7 +121,7 @@ QString AbstractIncludeNavigationContext::name() const
   return m_item.name;
 }
 
-bool AbstractIncludeNavigationContext::filterDeclaration(Declaration* decl)
+bool AbstractIncludeNavigationContext::filterDeclaration(Declaration* /*decl*/)
 {
   return true;
 }
