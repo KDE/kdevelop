@@ -392,8 +392,6 @@ void ContextBrowserPlugin::clearMouseHover() {
   m_mouseHoverDocument.clear();
 }
 
-static const int highlightingAlpha = 100;
-
 Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
   if(bold) {
     static Attribute::Ptr standardBoldAttribute = Attribute::Ptr();
@@ -401,7 +399,8 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
       standardBoldAttribute= Attribute::Ptr( new Attribute() );
       standardBoldAttribute->setBackgroundFillWhitespace(true);
 
-      standardBoldAttribute->setBackground(QColor(255, 255, 0, highlightingAlpha));//QApplication::palette().toolTipBase());
+      // mixing (255, 255, 0, 100) with white yields this:
+      standardBoldAttribute->setBackground(QColor(251, 250, 150));
       standardBoldAttribute->setFontBold(true);
 
       // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
@@ -414,7 +413,8 @@ Attribute::Ptr highlightedUseAttribute(bool /*mouseHighlight*/, bool bold) {
     if( !standardAttribute ) {
       standardAttribute = Attribute::Ptr( new Attribute() );
       standardAttribute->setBackgroundFillWhitespace(true);
-      standardAttribute->setBackground(QColor(255, 255, 0, highlightingAlpha));//QApplication::palette().toolTipBase());
+      // mixing (255, 255, 0, 100) with white yields this:
+      standardAttribute->setBackground(QColor(251, 250, 150));
       // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
       // foreground color could change, hence apply it everytime
       standardAttribute->setForeground(QColor(0, 0, 0, 255)); //Don't use alpha here, as kate uses the alpha only to blend with the document background color
@@ -441,7 +441,8 @@ Attribute::Ptr highlightedSpecialObjectAttribute() {
   if( !standardAttribute ) {
     standardAttribute = Attribute::Ptr( new Attribute() );
     standardAttribute->setBackgroundFillWhitespace(true);
-    standardAttribute->setBackground(QColor(90, 255, 0, highlightingAlpha));//QApplication::palette().toolTipBase());
+    // mixing (90, 255, 0, 100) with white yields this:
+    standardAttribute->setBackground(QColor(190, 255, 155));
     // force a foreground color to overwrite default Kate highlighting, i.e. of Q_OBJECT or similar
     // foreground color could change, hence apply it everytime
     standardAttribute->setForeground(QColor(0, 0, 0, 255)); //Don't use alpha here, as kate uses the alpha only to blend with the document background color
