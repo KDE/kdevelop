@@ -241,12 +241,21 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
       }
     }
     
-    if(folder) {
+    if(folder)
+    {
       ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.implementationUrl(), folder);
       ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.headerUrl(), folder);
-      if(target) {
-        p->buildSystemManager()->addFileToTarget(file, target);
-        p->buildSystemManager()->addFileToTarget(header, target);
+      if(target)
+      {
+        if(file)
+          p->buildSystemManager()->addFileToTarget(file, target);
+        else
+          kWarning() << "Could not add source file to build manager" << newClassWizard.implementationUrl();
+        
+        if(header)
+          p->buildSystemManager()->addFileToTarget(header, target);
+        else
+          kWarning() << "Could not add header file to build-manager" << newClassWizard.headerUrl();
       }
     }
   }
