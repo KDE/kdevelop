@@ -274,9 +274,10 @@ public:
         connect(s, SIGNAL(nameChanged(QString, QString)), SLOT(nameChanged()));
     }
 
+    SessionController* q;
+
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;
-    SessionController* q;
     QActionGroup* grp;
     
     KLockFile::Ptr sessionLock;
