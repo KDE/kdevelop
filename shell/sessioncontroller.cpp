@@ -546,7 +546,8 @@ void SessionController::initialize()
         Session* session = new Session( id );
         
         //Delete sessions that have no name and are empty
-        if( session->description().isEmpty() && (session->id().toString() != QString(getenv("KDEV_SESSION"))))
+        if( session->containedProjects().isEmpty() && session->name().isEmpty()
+            && (session->id().toString() != QString(getenv("KDEV_SESSION"))))
         {
             ///@todo Think about when we can do this. Another instance might still be using this session.
 //             session->deleteFromDisk();

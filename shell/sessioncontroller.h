@@ -45,6 +45,7 @@ struct SessionInfo
     QString name;
     QUuid uuid;
     QString description;
+    KUrl::List projects;
 };
 
 class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGUIClient
@@ -177,6 +178,8 @@ inline QList< SessionInfo > SessionController::availableSessionInfo()
 
         QString desc = config->group( "" ).readEntry( "SessionName", "" );
         si.name = desc;
+
+        si.projects = config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
 
         QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
 
