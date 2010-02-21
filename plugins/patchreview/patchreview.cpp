@@ -613,12 +613,22 @@ void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* m
     html += i18n("<b>Applied.</b><br/>");
   
   if(diff->applied()) {
-    html += i18n("<b>Previous:</b><br/>");
-    lines = diff->sourceLines();
-  }else{
-    if(isInsertion(diff)) {
+    if(isInsertion(diff))
+    {
       html += i18n("<b>Insertion</b><br/>");
     }else{
+      if(isRemoval(diff))
+        html += i18n("<b>Removal</b><br/>");
+      html += i18n("<b>Previous:</b><br/>");
+      lines = diff->sourceLines();
+    }
+  }else{
+    if(isRemoval(diff)) {
+      html += i18n("<b>Removal</b><br/>");
+    }else{
+      if(isInsertion(diff))
+        html += i18n("<b>Insertion</b><br/>");
+      
       html += i18n("<b>Alternative:</b><br/>");
       
       lines = diff->destinationLines();
@@ -775,18 +785,12 @@ void PatchHighlighter::markToolTipRequested(KTextEditor::Document* , KTextEditor
 
 bool PatchHighlighter::isInsertion(Diff2::Difference* diff)
 {
-  if(!diff->applied())
     return diff->sourceLineCount() == 0;
-  else
-    return diff->destinationLineCount() == 0;
 }
 
 
 bool PatchHighlighter::isRemoval(Diff2::Difference* diff)
 {
-  if(diff->applied())
-    return diff->sourceLineCount() == 0;
-  else
     return diff->destinationLineCount() == 0;
 }
 
@@ -932,7 +936,9 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
   
     KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
     
-    if(!diff->applied()) {
+    bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
+    
+    if(isOriginalState) {
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
     }else{
       t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 255, 20 ) ) );
@@ -943,7 +949,7 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     
     KTextEditor::MarkInterface::MarkTypes mark;
     
-    if(!diff->applied()) {
+    if(isOriginalState) {
       mark = KTextEditor::MarkInterface::markType27;
       
       if(isInsertion(diff))
