@@ -149,8 +149,13 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
         QStandardItem *parent = folderItem->parent();
         KDevelop::ProjectFolderItem *parentItem = dynamic_cast<KDevelop::ProjectFolderItem*>( parent );
 
-        deletedList << folderItem;
-        emit directoriesDeleted( deletedList, parentItem );
+        if(parentItem)
+        {
+            deletedList << folderItem;
+            emit directoriesDeleted( deletedList, parentItem );
+        }else{
+            kWarning() << "Parent item of the deleted item is not a ProjectFolderItem:" << folderItem->url();
+        }
 
         return;
     }
