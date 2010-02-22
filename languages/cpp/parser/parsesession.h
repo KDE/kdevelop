@@ -71,6 +71,12 @@ public:
 
   void mapAstUse(AST *node, const SimpleUse& use);
 
+  ///Create a mapping between an AST node and its parent.
+  void mapAstParent(AST *node, AST *parent);
+
+  /// Visits the tree and sets the appropriate nodes as parent on each node of the tree.
+  void setASTNodeParents();
+
   /**
    * \brief Request an AST node from a DeclarationPointer
    * \return The Associated AST if available, NULL otherwise
@@ -80,6 +86,12 @@ public:
   AST * astNodeFromDeclaration(KDevelop::Declaration * declaration);
 
   AST * astNodeFromUse(const SimpleUse &use) const;
+
+  /**
+   * \brief Access the parent node for a given AST.
+   * \return Parent AST node or NULL for the root node.
+   */
+  AST * parentAstNode(AST* node);
 
   /**
    * \brief Request a Declaration from an AST node
@@ -126,6 +138,8 @@ private:
 
   QMap<AST *, SimpleUse> m_AstToUse;
   QMap<SimpleUse, AST *> m_UseToAst;
+
+  QMap<AST *, AST *> m_AstToParent;
 };
 
 #endif

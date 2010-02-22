@@ -30,6 +30,7 @@
 #include <cctype>
 #include "ast.h"
 #include "dumptree.h"
+#include "parentvisitor.h"
 
 ParseSession::ParseSession()
   : mempool(new pool)
@@ -83,6 +84,17 @@ void ParseSession::mapAstUse(AST *node, const SimpleUse& use)
   m_UseToAst[use] = node;
 }
 
+void ParseSession::setASTNodeParents()
+{
+  ParentVisitor visitor(this);
+  visitor.visit(m_topAstNode);
+}
+
+void ParseSession::mapAstParent(AST* node, AST* parent)
+{
+  m_AstToParent.insert(node, parent);
+}
+
 AST * ParseSession::astNodeFromDeclaration(KDevelop::DeclarationPointer declaration)
 {
   //declaration was not mapped
@@ -100,6 +112,11 @@ AST * ParseSession::astNodeFromDeclaration(KDevelop::Declaration * declaration)
 AST * ParseSession::astNodeFromUse(const SimpleUse &use) const
 {
   return m_UseToAst.value(use);
+}
+
+AST* ParseSession::parentAstNode(AST* node)
+{
+  return m_AstToParent.value(node, 0);
 }
 
 KDevelop::DeclarationPointer ParseSession::declarationFromAstNode(AST * node)
