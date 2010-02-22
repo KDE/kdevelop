@@ -77,12 +77,12 @@ void IDebugSession::raiseEvent(event_t e)
     emit event(e);
 }
 
-KUrl IDebugSession::convertToLocalUrl(const KUrl &remoteUrl) const
+QPair<KUrl, int> IDebugSession::convertToLocalUrl(const QPair<KUrl, int> &remoteUrl) const
 {
     return remoteUrl;
 }
 
-KUrl IDebugSession::convertToRemoteUrl(const KUrl& localUrl) const
+QPair<KUrl, int> IDebugSession::convertToRemoteUrl(const QPair<KUrl, int>& localUrl) const
 {
     return localUrl;
 }

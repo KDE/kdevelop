@@ -54,6 +54,7 @@ KUrl PathMappings::convertToLocalUrl(const KConfigGroup& config, const KUrl& rem
         KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, KUrl());
         KUrl local = pCfg.readEntry(pathMappingLocalEntry, KUrl());
         kDebug() << remote << local;
+        kDebug() << remoteUrl.pathOrUrl() << remote.pathOrUrl();
         if (remoteUrl.pathOrUrl().startsWith(remote.pathOrUrl())) {
             QString path = remoteUrl.pathOrUrl().mid(remote.pathOrUrl().length());
             local.addPath(path);
@@ -75,6 +76,7 @@ KUrl PathMappings::convertToRemoteUrl(const KConfigGroup& config, const KUrl& lo
         KUrl remote = pCfg.readEntry(pathMappingRemoteEntry, KUrl());
         KUrl local = pCfg.readEntry(pathMappingLocalEntry, KUrl());
         kDebug() << remote << local;
+        kDebug() << localUrl.pathOrUrl() << local.pathOrUrl();
         if (localUrl.pathOrUrl().startsWith(local.pathOrUrl())) {
             QString path = localUrl.pathOrUrl().mid(local.pathOrUrl().length());
             remote.addPath(path);

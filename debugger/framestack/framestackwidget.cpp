@@ -168,8 +168,8 @@ void FramestackWidget::frameClicked(const QModelIndex& idx)
     IFrameStackModel::FrameItem f = m_session->frameStackModel()->frame(idx);
     /* If line is -1, then it's not a source file at all.  */
     if (f.line != -1) {
-        KUrl url = m_session->convertToLocalUrl(f.file);
-        ICore::self()->documentController()->openDocument(url, KTextEditor::Cursor(f.line, 0));
+        QPair<KUrl, int> file = m_session->convertToLocalUrl(qMakePair(f.file, f.line));
+        ICore::self()->documentController()->openDocument(file.first, KTextEditor::Cursor(file.second, 0));
     }
 
     m_session->frameStackModel()->setCurrentFrame(f.nr);

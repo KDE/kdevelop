@@ -95,7 +95,7 @@ public:
      * The default implementation just returns the url and is sufficient for
      * local debuggers. Remote debuggers can implement a path mapping mechanism.
      */
-    virtual KUrl convertToLocalUrl(const KUrl &remoteUrl) const;
+    virtual QPair<KUrl, int> convertToLocalUrl(const QPair<KUrl, int> &remoteUrl) const;
 
     /**
      * Returns the remote Url for a source file used in the current debug session.
@@ -103,7 +103,7 @@ public:
      * The default implementation just returns the url and is sufficient for
      * local debuggers. Remote debuggers can implement a path mapping mechanism.
      */
-    virtual KUrl convertToRemoteUrl(const KUrl &localUrl) const;
+    virtual QPair<KUrl, int> convertToRemoteUrl(const QPair<KUrl, int> &localUrl) const;
 
     IBreakpointController *breakpointController() const;
     IVariableController *variableController() const;    
