@@ -251,11 +251,15 @@ void IncludePathComputer::computeBackground() {
         TopDUContext* ctx = KDevelop::DUChain::self()->chainForDocument(m_source);
         if( ctx && ctx->parsingEnvironmentFile() ) {
             Cpp::EnvironmentFile* envFile = dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data());
-            Q_ASSERT(envFile);
-            m_ret = convertToUrls(envFile->includePaths());
-            kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
-            foreach(const KUrl &url, m_ret)
-              m_hasPath.insert(url);
+            if(envFile)
+            {
+              m_ret = convertToUrls(envFile->includePaths());
+              kDebug(9007) << "Took include-path for" << m_source << "from a random parsed duchain-version of it";
+              foreach(const KUrl &url, m_ret)
+                m_hasPath.insert(url);
+            }else{
+              kWarning() << "Missing cpp environment-file for" << m_source;
+            }
         }
     }
 
