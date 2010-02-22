@@ -383,6 +383,11 @@ void DocumentChangeSetPrivate::updateFiles()
     if(updatePolicy != DocumentChangeSet::NoUpdate && ICore::self())
         foreach(const IndexedString &file, changes.keys())
         {
+                if(!file.toUrl().isValid()) {
+                    kWarning() << "Trying to apply changes to an invalid document";
+                    continue;
+                }
+                
                 ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
                 foreach(KUrl doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
                     DUChainReadLocker lock(DUChain::lock());
