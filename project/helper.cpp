@@ -87,20 +87,16 @@ bool KDevelop::createFolder(const KUrl& folder)
 bool KDevelop::renameUrl(const KDevelop::IProject* project, const KUrl& oldname, const KUrl& newname)
 {
     IPlugin* vcsplugin=project->versionControlPlugin();
-    IBasicVersionControl* vcs=0;
-    if(vcsplugin)
-        vcs=vcsplugin->extension<IBasicVersionControl>();
+    if(vcsplugin) {
+        IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
     
-    if(!vcs->isVersionControlled(oldname))
-        vcs=0;
-    
-    bool ret=false;
-    if(vcs) {
-        VcsJob* job=vcs->move(oldname, newname);
-        ret=job->exec();
-    } else {
-        KIO::CopyJob* job=KIO::move(oldname, newname);
-        ret=KIO::NetAccess::synchronousRun(job, 0);
+        // We have a vcs and the file/folder is controller, need to make the rename through vcs
+        if(vcs->isVersionControlled(oldname)) {
+            VcsJob* job=vcs->move(oldname, newname);
+            return job->exec();
+        }
     }
-    return ret;
+    // Fallback for the case of no vcs, or not-vcs-managed file/folder
+    KIO::CopyJob* job=KIO::move(oldname, newname);
+    return KIO::NetAccess::synchronousRun(job, 0);
 }
