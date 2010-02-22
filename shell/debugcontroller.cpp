@@ -335,10 +335,10 @@ void DebugController::showStepInSource(const KUrl &url, int lineNum)
     kDebug() << url << lineNum;
 
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
-    KUrl openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(url);
+    QPair<KUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<KUrl,int>( url, lineNum ));
     KDevelop::IDocument* document = KDevelop::ICore::self()
         ->documentController()
-        ->openDocument(openUrl, KTextEditor::Cursor(lineNum, 0));
+        ->openDocument(openUrl.first, KTextEditor::Cursor(openUrl.second, 0));
 
     if( !document )
         return;
