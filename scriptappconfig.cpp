@@ -227,7 +227,10 @@ bool ScriptAppConfigType::canLaunch(KDevelop::ProjectBaseItem* item) const
 
 void ScriptAppConfigType::configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const
 {
+}
 
+void ScriptAppConfigType::configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList &args) const
+{
 }
 
 #include "scriptappconfig.moc"

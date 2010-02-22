@@ -75,6 +75,7 @@ public:
     virtual bool canLaunch( const KUrl& file ) const;
     virtual bool canLaunch(KDevelop::ProjectBaseItem* item) const;
     virtual void configureLaunchFromItem(KConfigGroup config, KDevelop::ProjectBaseItem* item) const;
+    virtual void configureLaunchFromCmdLineArguments(KConfigGroup config, const QStringList& args) const;
 
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
