@@ -979,9 +979,12 @@ void IdealMainWidget::showDock(IdealMainLayout::Role role, bool show)
     }
 
     if (show) {
-        if (IdealDockWidget* widget = m_mainLayout->lastDockWidget(role))
+        if (IdealDockWidget* widget = m_mainLayout->lastDockWidget(role)) {
             if (QAction *action = m_dockwidget_to_action.value(widget))
-                return action->setChecked(show);
+                action->setChecked(show);
+
+            widget->setFocus(Qt::ShortcutFocusReason);
+        }
 
         if (barForRole(role)->actions().count())
             barForRole(role)->actions().first()->setChecked(show);
