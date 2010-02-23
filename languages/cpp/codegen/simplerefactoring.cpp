@@ -205,8 +205,10 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
       folder = folderList.first();
     }
 
-    
-    if(!target && item->project()->buildSystemManager()->features() & IBuildSystemManager::Targets && folder) {
+    // find target to add created class to
+    if(!target && folder && p->buildSystemManager() &&
+        p->buildSystemManager()->features() & IBuildSystemManager::Targets )
+    {
       QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
       for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
         KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
@@ -241,11 +243,12 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
       }
     }
     
-    if(folder)
+    if(folder && p->projectFileManager())
     {
-      ProjectFileItem* file=p->buildSystemManager()->addFile(newClassWizard.implementationUrl(), folder);
-      ProjectFileItem* header=p->buildSystemManager()->addFile(newClassWizard.headerUrl(), folder);
-      if(target)
+      ProjectFileItem* file=p->projectFileManager()->addFile(newClassWizard.implementationUrl(), folder);
+      ProjectFileItem* header=p->projectFileManager()->addFile(newClassWizard.headerUrl(), folder);
+
+      if(target && p->buildSystemManager())
       {
         if(file)
           p->buildSystemManager()->addFileToTarget(file, target);
