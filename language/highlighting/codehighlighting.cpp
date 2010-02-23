@@ -384,7 +384,7 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
   if(dec->kind() == Declaration::Namespace)
     return NamespaceType;
 
-  if (context && dec->context()->type() == DUContext::Class) {
+  if (context && dec->context() && dec->context()->type() == DUContext::Class) {
     //It is a use.
     //Determine the class we're in
     Declaration* klass = localClassFromCodeContext(context);
