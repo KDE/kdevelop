@@ -23,6 +23,7 @@
 #include <KDebug>
 #include <QTimer>
 #include <QString>
+#include <QTextDocument>
 #include <language/duchain/declaration.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
@@ -85,9 +86,12 @@ QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
 QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) const
 {
     QString desc;
-    if(args[t])
-        desc="<pre>"+CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified())+"</pre>";
-    
+    if(args[t]) {
+        desc = "<pre>" + Qt::escape(
+                    CMakeParserUtils::executeProcess(mCMakeCmd, QStringList(args[t]) << id.simplified())
+                ) + "</pre>";
+    }
+
     return desc;
 }
 
