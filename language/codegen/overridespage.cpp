@@ -194,7 +194,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, Declaration
         classItem->insertChild(0, overrideItem);
     }
     
-    d->declarationMap[overrideItem] = DeclarationPointer(childDeclaration);
+    d->declarationMap[overrideItem] = childDeclaration;
 }
 
 QTreeWidget* OverridesPage::overrideTree() const
