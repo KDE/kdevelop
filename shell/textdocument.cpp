@@ -69,6 +69,14 @@ struct TextDocumentPrivate {
         state = IDocument::Clean;
     }
 
+    ~TextDocumentPrivate()
+    {
+        if (m_addedContextMenu) {
+            delete m_addedContextMenu;
+            m_addedContextMenu = 0;
+        }
+    }
+
     QPointer<KTextEditor::Document> document;
     IDocument::DocumentState state;
     QString encoding;
@@ -89,33 +97,22 @@ struct TextDocumentPrivate {
 
     void populateContextMenu( KTextEditor::View* v, QMenu* menu )
     {
+        if (m_addedContextMenu) {
+            foreach ( QAction* action, m_addedContextMenu->actions() ) {
+                menu->removeAction(action);
+            }
+            delete m_addedContextMenu;
+        }
+
         Context* c = new EditorContext( v, v->cursorPosition() );
         QList<ContextMenuExtension> extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
         menu->addSeparator();
 
-        // first we fill our container and than add those menus and actoins to the actual context menu
-        Q_ASSERT(m_addedContextMenu == 0);
         m_addedContextMenu = new QMenu();
         ContextMenuExtension::populateMenu(m_addedContextMenu, extensions);
         foreach ( QAction* action, m_addedContextMenu->actions() ) {
             menu->addAction(action);
         }
-    }
-
-    /**
-     * Kate uses a static menu, comes from a limitation of the KXMLGUI stuff.
-     * Hence we have to remove every action we added by hand (in KDevelop we have much
-     * more dynamic actions than static ones).
-     */
-    void clearContextMenu()
-    {
-        QMenu* menu = qobject_cast<QMenu*>(m_textDocument->sender());
-        Q_ASSERT(menu);
-        foreach ( QAction* action, m_addedContextMenu->actions() ) {
-            menu->removeAction(action);
-        }
-        delete m_addedContextMenu;
-        m_addedContextMenu = 0;
     }
 
     void modifiedOnDisk(KTextEditor::Document *document, bool /*isModified*/,
@@ -296,8 +293,6 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         view->setContextMenu( view->defaultContextMenu() );
         #endif
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
-        connect(view->contextMenu(), SIGNAL(aboutToHide()),
-                this, SLOT(clearContextMenu()));
     }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
