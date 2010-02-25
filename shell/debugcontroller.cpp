@@ -406,6 +406,9 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
             //m_restartDebugger->setEnabled(false);
             break;
     }
+    if (state == IDebugSession::PausedState) {
+        ICore::self()->uiController()->activeMainWindow()->activateWindow();
+    }
 }
 
 ContextMenuExtension DebugController::contextMenuExtension( Context* context )
