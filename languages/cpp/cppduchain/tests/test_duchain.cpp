@@ -614,8 +614,8 @@ void TestDUChain::testBaseUses()
   TEST_FILE_PARSE_ONLY
 
 {
-    //                 0         1         2         3         4         5
-    //                 012345678901234567890123456789012345678901234567890123456789
+    //                 0         1         2         3         4         5         6         7         8
+    //                 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("namespace N { struct A { A(int); int m; }; }; struct B : public N::A { B() : N::A(5) { this->N::A::m = 5; } };");
 
     TopDUContext* top = parse(method, DumpNone);
@@ -630,7 +630,10 @@ void TestDUChain::testBaseUses()
     QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().count(), 2);
     QVERIFY(!top->childContexts()[0]->childContexts()[0]->localDeclarations()[1]->uses().isEmpty());
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
-
+    // the ctor usage
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().values().first().count(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().values().first().first(), SimpleRange(0, 81, 0, 82));
     release(top);
   }
 
