@@ -101,7 +101,9 @@ void GrepViewPlugin::showDialog()
     }
     if (len > 0 && pattern[len-1] == '\n')
         pattern.truncate(len-1);
-    dlg->setPattern( pattern );
+    if (!pattern.isEmpty()) {
+        dlg->setPattern( pattern );
+    }
 
     dlg->enableButtonOk( !pattern.isEmpty() );
     
