@@ -2471,24 +2471,14 @@ void TestDUChain::testConstructorUses()
     Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
     QCOMPARE(ctorDecl->uses().size(), 1);
     QList<SimpleRange> uses = ctorDecl->uses().values().first();
-    
-    QCOMPARE(uses.size(), 4);
-    kDebug() << uses[0].textRange();
-    QCOMPARE(uses[0], SimpleRange(9, 7, 9, 8));
-    QCOMPARE(uses[1], SimpleRange(10, 11, 10, 12));
-    kDebug() << uses[2].textRange();
-    QCOMPARE(uses[2], SimpleRange(11, 15, 11, 16));
-    QCOMPARE(uses[3], SimpleRange(12, 7, 12, 8));
-    
-    #if 0
-    // NOTE: These are the actual expected results. TODO: make all work
-    QCOMPARE(uses.size(), 4);
+
+    QCOMPARE(uses.size(), 5);
     QCOMPARE(uses[0], SimpleRange(6, 16, 6, 17));
     QCOMPARE(uses[1], SimpleRange(9, 7, 9, 8));
     QCOMPARE(uses[2], SimpleRange(10, 11, 10, 12));
     QCOMPARE(uses[3], SimpleRange(11, 15, 11, 16));
     QCOMPARE(uses[4], SimpleRange(12, 7, 12, 8));
-    #endif
+
     release(top);
   }
 }

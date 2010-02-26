@@ -2230,10 +2230,31 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_memberAccess = true;
     visit(node->initializer_id);
     m_memberAccess = false;
-    
+
     AbstractType::Ptr itemType = m_lastType;
+    Instance oldLastInstance = m_lastInstance;
+    QList< DeclarationPointer > declarations = m_lastDeclarations;
+    if (node->expression && buildParametersFromExpression(node->expression)) {
+      // build use for the ctor of the base class, see also visitInitDeclarator
+      DeclarationPointer chosenFunction;
+      {
+        LOCKDUCHAIN;
+
+        KDevelop::DUContextPointer ptr(m_currentContext);
+        OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldLastInstance );
+
+        chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+      }
+
+      if (chosenFunction) {
+        uint token = node->initializer_id->end_token;
+        newUse( node , token, token+1, chosenFunction );
+      }
+    }
+
     visit(node->expression);
     TypePtr< MissingDeclarationType > missingDeclType = itemType.cast<MissingDeclarationType>();
+
     if(m_lastType && missingDeclType) {
         Cpp::ExpressionEvaluationResult res;
         res.type = m_lastType->indexed();
