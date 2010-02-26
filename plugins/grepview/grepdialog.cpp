@@ -115,7 +115,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     recursiveCheck->setChecked(cg.readEntry("recursive", true));
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
-    filesCombo->addItems(filepatterns);
+    filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", QStringList() << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/" << "") );
 
     suppressErrorsCheck->setChecked(cg.readEntry("no_find_errs", true));
@@ -161,6 +161,7 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("case_sens", caseSensitiveCheck->isChecked());
     cg.writeEntry("no_find_errs", suppressErrorsCheck->isChecked());
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
+    cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
     cg.sync();
 }
 
