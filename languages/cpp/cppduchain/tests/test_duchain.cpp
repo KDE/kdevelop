@@ -104,6 +104,16 @@ namespace QTest {
     return qstrdup(ba.data());
   }
   template<>
+  char *toString(const SimpleRange &range)
+  {
+      QByteArray ba = "[ (";
+      ba += QByteArray::number(range.start.line) + ", " + QByteArray::number(range.start.column);
+      ba += ") -> (";
+      ba += QByteArray::number(range.end.line) + ", " + QByteArray::number(range.end.column);
+      ba += ") ]";
+      return qstrdup(ba.data());
+  }
+  template<>
   char* toString(const QualifiedIdentifier& id)
   {
     QByteArray arr = id.toString().toLatin1();
