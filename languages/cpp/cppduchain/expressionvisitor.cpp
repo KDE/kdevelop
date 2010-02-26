@@ -2234,7 +2234,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     AbstractType::Ptr itemType = m_lastType;
     Instance oldLastInstance = m_lastInstance;
     QList< DeclarationPointer > declarations = m_lastDeclarations;
-    if (node->expression && buildParametersFromExpression(node->expression)) {
+    if (buildParametersFromExpression(node->expression)) {
       // build use for the ctor of the base class, see also visitInitDeclarator
       DeclarationPointer chosenFunction;
       {
