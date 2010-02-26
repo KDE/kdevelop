@@ -138,8 +138,10 @@ static QStringList qCombo2StringList( QComboBox* combo )
         return list;
     }
     int skippedItem = -1;
+    if (!combo->currentText().isEmpty()) {
+        list << combo->currentText();
+    }
     if (combo->currentIndex() != -1 && !combo->itemText(combo->currentIndex()).isEmpty()) {
-        list << combo->itemText(combo->currentIndex());
         skippedItem = combo->currentIndex();
     }
     for (int i = 0; i < std::min(MAX_LAST_SEARCH_ITEMS_COUNT, combo->count()); ++i) {
