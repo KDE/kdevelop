@@ -481,7 +481,7 @@ void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int
     int centralWidth = 50;
     int centralHeight = 50;
     foreach (QLayoutItem* item, m_items[Central]->items()) {
-        const QSize itemSizeHint = item->sizeHint();
+        const QSize itemSizeHint = item->minimumSize();
         centralWidth = qMax(itemSizeHint.width(), centralWidth);
         centralHeight = qMax(itemSizeHint.height(), centralHeight);
     }
