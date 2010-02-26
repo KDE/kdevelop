@@ -83,6 +83,7 @@ QStringList filepatterns = QStringList()
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
+    setAttribute(Qt::WA_DeleteOnClose);
 
     setButtons( KDialog::Ok | KDialog::Cancel );
     setButtonText( KDialog::Ok, i18n("Search") );
@@ -276,7 +277,7 @@ void GrepDialog::search()
     
     m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
     
-    deleteLater();
+    close();
 }
 
 #include "grepdialog.moc"
