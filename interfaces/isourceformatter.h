@@ -125,16 +125,20 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
 
+		/**
+		 * Format with the given style, this is mostly for the kcm to format the preview text
+		 * Its a bit of a hassle that this needs to be public API, but I can't find a better way
+		 * to do this.
+		 */
+		virtual QString formatSourceWithStyle( SourceFormatterStyle,
+											   const QString& text,
+											   const KMimeType::Ptr &mime,
+											   const QString& leftContext,
+											   const QString& rightContext ) = 0;
+
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
 		virtual QList<SourceFormatterStyle> predefinedStyles() = 0;
-
-		/** Load the predefined type of name \arg name, or if the first arg is empty, the style
-		*   defined by the options string \arg content.
-		*/
-		virtual void setStyle(const SourceFormatterStyle&) = 0;
-
-		virtual SourceFormatterStyle style() const = 0;
 
 		/** \return The widget to edit a style.
 		*/
