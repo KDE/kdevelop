@@ -44,12 +44,13 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
+#include "plugincontroller.h"
 
 namespace KDevelop
 {
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
-		: ISourceFormatterController(parent), m_modelinesEnabled(false)
+		: ISourceFormatterController(parent)
 {
 	setObjectName("SourceFormatterController");
 	setComponentData(KComponentData("kdevsourceformatter"));
@@ -81,77 +82,10 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
 void SourceFormatterController::initialize()
 {
-	m_rootConfigGroup = KGlobal::config()->group("SourceFormatter");
-	loadPlugins();
 }
 
 SourceFormatterController::~SourceFormatterController()
 {
-}
-
-void SourceFormatterController::loadPlugins()
-{
- 	KDevelop::IPluginController *controller = KDevelop::ICore::self()->pluginController();
-
-	foreach(KDevelop::IPlugin *p,
-	        controller->allPluginsForExtension("org.kdevelop.ISourceFormatter"))
-	{
-		ISourceFormatter* fmt = p->extension<ISourceFormatter>();
-		Q_ASSERT(fmt);
-		KPluginInfo info = controller->pluginInfo(p);
-		QVariant mimes = info.property("X-KDevelop-SupportedMimeTypes");
-		kDebug() << "Found plugin " << info.name() << " for mimes " << mimes << endl;
-                
-                QList<SourceFormatterStyle> fmtstyles;
-
-                if( m_rootConfigGroup.hasGroup( fmt->name() ) )
-                {
-                    KConfigGroup fmtgrp = m_rootConfigGroup.group(fmt->name());
-                    foreach( const QString& grp, fmtgrp.groupList() )
-                    {
-                        SourceFormatterStyle st(grp);
-                        st.setCaption( fmtgrp.group(grp).readEntry( "Caption", grp ) );
-                        st.setContent( fmtgrp.group(grp).readEntry( "Content", "" ) );
-                        fmtstyles << st;
-                    }
-                }
-
-		QStringList mimeTypes = mimes.toStringList();
-		foreach(const QString &s, mimeTypes) {
-			SourceFormatterLanguage l = m_languages[s];
-                        l.mimeType = s;
-			if(l.formatters.isEmpty())
-			{
-				l.selectedFormatter = fmt->name();
-			}
-			if (!l.formatters.contains(fmt->name()))
-			{
-				SourceFormatterCfg c;
-				c.fmt = fmt;
-				QList<SourceFormatterStyle> styles = fmt->predefinedStyles();
-				if( !styles.isEmpty() )
-				{
-					c.selectedStyle = styles.at(0).name();
-				}
-                                foreach( const SourceFormatterStyle& st, styles ) 
-                                {
-                                    c.styles.insert( st.name(), st );
-                                }
-                                foreach( const SourceFormatterStyle& st, fmtstyles ) 
-                                {
-                                    c.styles.insert( st.name(), st );
-                                }
-				l.formatters.insert( fmt->name(), c );
-			}
-			m_languages.insert( s, l );
-		}
-	}
-}
-
-QString SourceFormatterController::iconForLanguage(const SourceFormatterLanguage &lang)
-{
-	QString tmp = lang.mimeType;
-	return tmp.replace( QString("/"), QString("-") );
 }
 
 ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
@@ -159,128 +93,33 @@ ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
 	KMimeType::Ptr mime = KMimeType::findByUrl(url);
 	return formatterForMimeType(mime);
 }
+KConfigGroup SourceFormatterController::configuration()
+{
+	return KGlobal::config()->group( "SourceFormatter" );
+}
 
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeType::Ptr &mime)
 {
-	if (!m_languages.contains(mime->name())) //unknown mime type
-		return 0;
 
-	SourceFormatterLanguage l = m_languages[mime->name()];
-	ISourceFormatter* fmt = l.formatters[l.selectedFormatter].fmt;
-        return fmt;
+	QString formatter = configuration().readEntry( mime->name(), "" );
+
+	if( formatter.isEmpty() )
+	{
+		return 0;
+	}
+
+	QStringList formatterinfo = formatter.split( "||" );
+
+	if( formatterinfo.size() != 2 ) {
+		kFatal() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
+	}
+
+	return  Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
 }
 
 bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
 {
-	return m_languages.contains(mime->name());
-}
-
-QList<SourceFormatterLanguage> SourceFormatterController::languages()
-{
-	return m_languages.values();
-}
-
-
-void SourceFormatterController::updateFormatterLanguage(const KDevelop::SourceFormatterLanguage& language)
-{
-	m_languages[language.mimeType] = language;
-}
-
-void SourceFormatterController::loadConfig()
-{
-	m_languages.clear();
-	loadPlugins();
-	foreach( const QString& k, m_languages.keys() )
-	{
-		SourceFormatterLanguage lang = m_languages[k];
-		QString cfg = m_rootConfigGroup.readEntry( lang.mimeType, "" );
-		if( !cfg.isEmpty() )
-		{
-			QStringList cfglist = cfg.split("||");
-			Q_ASSERT(cfglist.size() == 2);
-			if( lang.formatters.contains( cfglist.at(0) ) )
-			{
-				lang.selectedFormatter = cfglist.at(0);
-                                if( lang.formatters[lang.selectedFormatter].styles.contains( cfglist.at(1) ) )
-                                {
-                                    SourceFormatterCfg c = lang.formatters[lang.selectedFormatter];
-                                    c.selectedStyle = cfglist.at(1);
-				    lang.formatters[lang.selectedFormatter] = c;
-                                }
-			}
-		}
-                m_languages[k] = lang;
-	}
-	m_modelinesEnabled = m_rootConfigGroup.readEntry("ModelinesEnabled", false);
-}
-
-void SourceFormatterController::saveConfig()
-{
-	foreach( const SourceFormatterLanguage& lang, m_languages.values() )
-	{
-		m_rootConfigGroup.writeEntry( lang.mimeType, lang.selectedFormatter + "||" + lang.formatters[lang.selectedFormatter].selectedStyle );
-	}
-	m_rootConfigGroup.writeEntry("ModelinesEnabled", m_modelinesEnabled);
-	m_rootConfigGroup.sync();
-}
-
-QList<SourceFormatterStyle> SourceFormatterController::userStyles( const QString& formatter ) const
-{
-        QList<SourceFormatterStyle> styles;
-        KConfigGroup fmtgrp = m_rootConfigGroup.group( formatter );
-        foreach( const QString& grp, fmtgrp.groupList() )
-        {
-                if( grp.startsWith( "User" ) ) {
-                        SourceFormatterStyle st(grp);
-                        st.setCaption(fmtgrp.group(grp).readEntry("Caption", ""));
-                        st.setContent(fmtgrp.group(grp).readEntry("Content", ""));
-                        styles << st;
-                }
-        }
-        return styles;
-}
-
-QString SourceFormatterController::formatSourceForLanguage(const QString& str, const SourceFormatterLanguage& lang ) const
-{
-        SourceFormatterCfg cfg = lang.formatters[lang.selectedFormatter];
-        SourceFormatterStyle origStyle = cfg.fmt->style();
-        cfg.fmt->setStyle( cfg.styles[cfg.selectedStyle] );
-        QString formatted = cfg.fmt->formatSource( str, KMimeType::mimeType( lang.mimeType ) );
-        cfg.fmt->setStyle( origStyle );
-        return formatted;
-}
-
-void SourceFormatterController::saveStyle(const QString& formatterId, const SourceFormatterStyle& style)
-{
-	if( style.name().startsWith( "User" ) ) 
-	{
-		KConfigGroup cfg = m_rootConfigGroup.group( formatterId ).group( style.name() );
-		cfg.writeEntry("Content", style.content());
-		if( !style.caption().isEmpty() )
-		{
-			cfg.writeEntry("Caption" , style.caption());
-		}
-	}
-	m_rootConfigGroup.sync();
-}
-
-void SourceFormatterController::deleteStyle(const QString& formatterId, const QString& style)
-{
-	m_rootConfigGroup.group( formatterId ).deleteGroup( style );
-}
-
-SourceFormatterStyle SourceFormatterController::newStyle( const QString& fmt ) const
-{
-	//find available number
-	int idx = 1;
-	QString s = "User" + QString::number(idx);
-	KConfigGroup cfg = m_rootConfigGroup.group( fmt );
-	while (cfg.hasGroup(s) ) {
-		++idx;
-		s = "User" + QString::number(idx);
-	}
-
-	return SourceFormatterStyle(s);
+	return configuration().hasKey(mime->name());
 }
 
 QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
@@ -294,28 +133,24 @@ QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
 
 QString SourceFormatterController::addModelineForCurrentLang(QString input, const KMimeType::Ptr& mime)
 {
-	if( !m_languages.contains(mime->name()) )
+	if( !isMimeTypeSupported(mime) )
 	{
 		return input;
 	}
-	return addModelineForCurrentLang(m_languages[mime->name()], input);
-}
-QString SourceFormatterController::addModelineForCurrentLang(const SourceFormatterLanguage& lang, QString input)
-{
-	if (!m_modelinesEnabled)
+	if( !configuration().readEntry( "ModelinesEnabled", false ) )
 		return input;
 
 	QString output;
 	QTextStream os(&output, QIODevice::WriteOnly);
 	QTextStream is(&input, QIODevice::ReadOnly);
-	
-	ISourceFormatter* fmt = lang.formatters[lang.selectedFormatter].fmt;
+
+	ISourceFormatter* fmt = formatterForMimeType( mime );
 	Q_ASSERT(fmt);
-	
+
     QString modeline("// kate: ");
 	QString length = QString::number(fmt->indentationLength());
 	// add indentation style
-	modeline.append("indent-mode ").append(indentationMode(KMimeType::mimeType(lang.mimeType)).append("; "));
+	modeline.append("indent-mode ").append(indentationMode(mime).append("; "));
 
 	ISourceFormatter::IndentationType type = fmt->indentationType();
 	if (type == ISourceFormatter::IndentWithTabs) {
@@ -357,11 +192,6 @@ QString SourceFormatterController::addModelineForCurrentLang(const SourceFormatt
 	if (!modelinefound)
 		os << modeline << endl;
 	return output;
-}
-
-void SourceFormatterController::setModelinesEnabled(bool enable)
-{
-	m_modelinesEnabled = enable;
 }
 
 void SourceFormatterController::cleanup()
@@ -532,8 +362,6 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 	}
 	return ext;
 }
-
-
 
 /*
  Code copied from source formatter plugin, unused currently but shouldn't be just thrown away
