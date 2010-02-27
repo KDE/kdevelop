@@ -36,6 +36,7 @@ Boston, MA 02110-1301, USA.
 #include <shell/core.h>
 #include <interfaces/isourceformatter.h>
 #include <shell/sourceformattercontroller.h>
+#include <shell/plugincontroller.h>
 
 #include "editstyledialog.h"
 
@@ -46,403 +47,366 @@ K_EXPORT_PLUGIN(SourceFormatterSettingsFactory("kcm_kdevsourceformattersettings"
 
 using KDevelop::Core;
 using KDevelop::ISourceFormatter;
-using KDevelop::SourceFormatterController;
-using KDevelop::SourceFormatterLanguage;
 using KDevelop::SourceFormatterStyle;
-using KDevelop::SourceFormatterCfg;
+using KDevelop::SourceFormatterController;
+
+const QString SourceFormatterSettings::userStylePrefix( "User" );
 
 SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariantList &args)
-		: KCModule(SourceFormatterSettingsFactory::componentData(), parent, args), m_view(0), m_document(0)
+    : KCModule(SourceFormatterSettingsFactory::componentData(), parent, args)
 {
-	setupUi(this);
+    setupUi(this);
+    connect( cbLanguages, SIGNAL(currentIndexChanged(int)), SLOT(selectLanguage(int)) );
+    connect( cbFormatters, SIGNAL(currentIndexChanged(int)), SLOT(selectFormatter(int)) );
+    connect( chkKateModelines, SIGNAL(toggled(bool)), SIGNAL(changed(bool)) );
+    connect( styleList, SIGNAL(currentRowChanged(int)), SLOT(selectStyle(int)) );
+    connect( btnDelStyle, SIGNAL(clicked()), SLOT(deleteStyle()) );
+    connect( btnNewStyle, SIGNAL(clicked()), SLOT(newStyle()) );
+    connect( btnEditStyle, SIGNAL(clicked()), SLOT(editStyle()) );
+    connect( styleList, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(styleNameChanged(QListWidgetItem*)) );
 
-	// add texteditor preview
-	KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
-	if (!editor) {
-		KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
-		        "Please check your KDE installation."));
-        return;
+    KTextEditor::Editor *editor = KTextEditor::EditorChooser::editor();
+    if (!editor)
+        KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
+        "Please check your KDE installation."));
+    
+    m_document = editor->createDocument(this);
+    m_document->setReadWrite(false);
+    
+    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(m_document->createView(textEditor));
+    QVBoxLayout *layout2 = new QVBoxLayout(textEditor);
+    layout2->addWidget(view);
+    textEditor->setLayout(layout2);
+    view->show();
+    
+    KTextEditor::ConfigInterface *iface =
+    qobject_cast<KTextEditor::ConfigInterface*>(view);
+    if (iface) {
+        iface->setConfigValue("dynamic-word-wrap", false);
+        iface->setConfigValue("icon-bar", false);
     }
-
-	m_document = editor->createDocument(this);
-
-	m_view = qobject_cast<KTextEditor::View*>(m_document->createView(textEditor));
-	QVBoxLayout *layout = new QVBoxLayout(textEditor);
-	layout->addWidget(m_view);
-	textEditor->setLayout(layout);
-	m_view->show();
-
-	KTextEditor::ConfigInterface *iface =
-	    qobject_cast<KTextEditor::ConfigInterface*>(m_view);
-	if (iface) {
-		iface->setConfigValue("dynamic-word-wrap", false);
-		iface->setConfigValue("icon-bar", false);
-	}
-
-	// set buttons icons
-	btnNewStyle->setIcon(KIcon("list-add"));
-	btnDelStyle->setIcon(KIcon("list-remove"));
-	btnEditStyle->setIcon(KIcon("configure"));
-
-	connect(cbLanguagesStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(languagesStylesChanged(int)));
-	connect(listStyles, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)),
-	        this, SLOT(currentStyleChanged(QListWidgetItem*, QListWidgetItem*)));
-	connect(listStyles, SIGNAL(itemChanged(QListWidgetItem*)),
-	        this, SLOT(styleRenamed(QListWidgetItem*)));
-	connect(btnDelStyle, SIGNAL(clicked()), this, SLOT(deleteStyle()));
-	connect(btnNewStyle, SIGNAL(clicked()), this, SLOT(addStyle()));
-	connect(btnEditStyle, SIGNAL(clicked()), this, SLOT(editStyle()));
-	connect(chkKateModelines, SIGNAL(stateChanged(int)), this, SLOT(modelineChanged()));
-	connect(cbFormatters, SIGNAL(currentIndexChanged(int)), this, SLOT(formattersChanged(int)));
 }
 
 SourceFormatterSettings::~SourceFormatterSettings()
 {
-	delete m_document;
-}
-
-void SourceFormatterSettings::addItemInStyleList(const SourceFormatterStyle &style, bool editable)
-{
-	QListWidgetItem *item = new QListWidgetItem(style.caption());
-	item->setData(STYLE_ROLE, style.name());
-	if (editable)
-		item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-	listStyles->addItem(item);
-}
-
-void SourceFormatterSettings::updatePreviewText()
-{
-	m_document->setReadWrite(true);
-
-	// Fallback if the following code doesn't set a proper text
-	m_document->setText("No Formatter Available");
-	SourceFormatterController* ctrl = Core::self()->sourceFormatterControllerInternal();
-	SourceFormatterLanguage lang = currentLanguage();
-	SourceFormatterCfg cfg = lang.formatters[lang.selectedFormatter];
-	ISourceFormatter* fmt = cfg.fmt;
-	if( fmt )
-	{
-		KMimeType::Ptr mime = KMimeType::mimeType( lang.mimeType );
-		QString previewText = fmt->previewText( mime );
-		m_document->setHighlightingMode(fmt->highlightModeForMime(mime));
-		m_document->setText(ctrl->formatSourceForLanguage(previewText, lang));
-	}
-	m_document->setReadWrite(false);
 }
 
 void SourceFormatterSettings::load()
 {
-	bool blockSig = blockSignals( true );
-	cbLanguagesStyle->clear();
-	listStyles->clear();
-	cbFormatters->clear();
-	Core::self()->sourceFormatterControllerInternal()->loadConfig();
-	//init language combo box
-	SourceFormatterController *manager = Core::self()->sourceFormatterControllerInternal();
-	foreach(const SourceFormatterLanguage &l, manager->languages())
-	{
-		m_languages.append(l);
-		KIcon icon(manager->iconForLanguage(l));
-		cbLanguagesStyle->addItem(icon, l.mimeType, QVariant::fromValue( l ));
-	}
+    SourceFormatterController* fmtctrl = Core::self()->sourceFormatterControllerInternal();
+    foreach( KDevelop::IPlugin* plugin, KDevelop::ICore::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) )
+    {
+        KDevelop::ISourceFormatter* ifmt = plugin->extension<ISourceFormatter>();
+        KPluginInfo info = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo( plugin );
+        foreach( const QString& mime, info.property( "X-KDevelop-SupportedMimeTypes" ).toStringList() )
+        {
+            SourceFormatterLanguage l;
+            QMap<QString,SourceFormatterLanguage>::iterator it = languages.find( mime );
+            if( it != languages.end() )
+            {
+                l = it.value();
+            }
+            l.mimeType = mime;
+            SourceFormatter sfmt;
 
-	if( cbLanguagesStyle->count() > 0 )
-	{
-		cbLanguagesStyle->setCurrentIndex(0);
-	} else
-	{
-		// Invalid index, so the rest is disabled
-		cbLanguagesStyle->setCurrentIndex(-1);
-	}
-	checkEnabled();
-	//update kate modeline
-	chkKateModelines->setChecked(Core::self()->sourceFormatterControllerInternal()->modelinesEnabled());
+            Q_ASSERT( !l.formatters.contains( ifmt->name() ) );
 
-	blockSignals( blockSig );
-}
-
-void SourceFormatterSettings::checkEnabled()
-{
-	cbLanguagesStyle->setEnabled( ( cbLanguagesStyle->count() > 0 ) );
-	cbFormatters->setEnabled( cbFormatters->count() > 0 && cbLanguagesStyle->currentIndex() >= 0 );
-	listStyles->setEnabled( cbFormatters->count() > 0  && cbFormatters->currentIndex() >= 0 );
-	btnNewStyle->setEnabled( cbFormatters->count() > 0 && cbFormatters->currentIndex() >= 0 );
-	btnDelStyle->setEnabled( listStyles->currentItem() && (listStyles->currentItem()->flags() & Qt::ItemIsEditable) != 0);
-	btnEditStyle->setEnabled( listStyles->currentItem() && (listStyles->currentItem()->flags() & Qt::ItemIsEditable) != 0);
+            sfmt.formatter = ifmt;
+            
+            foreach( KDevelop::SourceFormatterStyle style, ifmt->predefinedStyles() )
+            {
+                sfmt.styles[ style.name() ] = style;
+            }
+            KConfigGroup grp = fmtctrl->configuration();
+            if( grp.hasGroup( ifmt->name() ) )
+            {
+                KConfigGroup fmtgrp = grp.group( ifmt->name() );
+                foreach( const QString& subgroup, fmtgrp.groupList() ) {
+                    SourceFormatterStyle s( subgroup );
+                    KConfigGroup stylegrp = fmtgrp.group( subgroup );
+                    s.setCaption( stylegrp.readEntry( SourceFormatterController::styleCaptionKey, "" ) );
+                    s.setContent( stylegrp.readEntry( SourceFormatterController::styleContentKey, "" ) );
+                    sfmt.styles[ s.name() ] = s;
+                }
+            }
+            l.formatters.insert( ifmt->name(), sfmt );
+            languages[mime] = l;
+        }
+    }
+    foreach( const QString& name, languages.keys() )
+    {
+        KConfigGroup grp = fmtctrl->configuration();
+        QStringList formatter = grp.readEntry( name, "" ).split( "||" );
+        SourceFormatterLanguage l = languages[name];
+        if( formatter.isEmpty() ) {
+            l.selectedFmt = l.formatters.begin().key();
+            SourceFormatter fmt = l.formatters[l.selectedFmt];
+            if( !fmt.styles.isEmpty() )
+            {
+                fmt.selectedStyle = fmt.styles.begin().key();
+            }
+            l.formatters[ fmt.formatter->name() ] = fmt;
+        } else {
+            l.selectedFmt = formatter.first();
+            SourceFormatter fmt = l.formatters[l.selectedFmt];
+            fmt.selectedStyle = formatter.at( 1 );
+            l.formatters[ fmt.formatter->name() ] = fmt;
+        }
+        languages[name] = l;
+    }
+    bool b = blockSignals( true );
+    cbLanguages->blockSignals( !b );
+    cbFormatters->blockSignals( !b );
+    styleList->blockSignals( !b );
+    chkKateModelines->blockSignals( !b );
+    cbLanguages->clear();
+    cbFormatters->clear();
+    styleList->clear();
+    chkKateModelines->setChecked( fmtctrl->configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) );
+    foreach( const QString& name, languages.keys() )
+    {
+        cbLanguages->addItem( name );
+    }
+    if( cbLanguages->count() == 0 )
+    {
+        cbLanguages->setEnabled( false );
+        selectLanguage( -1 );
+    } else
+    {
+        cbLanguages->setCurrentIndex( 0 );
+        selectLanguage( 0 );
+    }
+    updatePreview();
+    blockSignals( b );
+    cbLanguages->blockSignals( b );
+    cbFormatters->blockSignals( b );
+    styleList->blockSignals( b );
+    chkKateModelines->blockSignals( b );
 }
 
 void SourceFormatterSettings::save()
 {
-	//TODO:: Need to think about how to store "changes", we need to keep track of the formatter+currentstyle combo for each language
-	for( int i = 0; i < cbLanguagesStyle->count(); i++ )
-	{
-		QVariant data = cbLanguagesStyle->itemData( i );
-		if( data.isValid() && data.canConvert<KDevelop::SourceFormatterLanguage>() )
-		{
-			Core::self()->sourceFormatterControllerInternal()->updateFormatterLanguage( data.value<KDevelop::SourceFormatterLanguage>() );
-		}
-	}
-	Core::self()->sourceFormatterControllerInternal()->setModelinesEnabled(chkKateModelines->isChecked());
-	Core::self()->sourceFormatterControllerInternal()->saveConfig();
-}
+    KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
+    QSet<QString> savedFormatters;
+    foreach( const QString& k, languages.keys() )
+    {
+        SourceFormatterLanguage l = languages[k];
+        grp.writeEntry( l.mimeType, QString("%1||%2").arg(l.selectedFmt).arg(l.formatters[l.selectedFmt].selectedStyle ) );
 
-void SourceFormatterSettings::languagesStylesChanged(int idx)
-{
-	cbFormatters->clear();
-	if (idx < 0) // no selection
-	{
-		// Make sure the formatter has an invalid index if we have an invalid one
-		cbFormatters->setCurrentIndex( -1 );
-		return;
-	}
-
-	QVariant data = cbLanguagesStyle->itemData( idx );
-	if( data.isValid() && data.canConvert<KDevelop::SourceFormatterLanguage>() )
-	{
-		SourceFormatterLanguage lang = data.value<KDevelop::SourceFormatterLanguage>();
-		foreach( SourceFormatterCfg cfg, lang.formatters )
-		{
-			cbFormatters->addItem( cfg.fmt->caption(), cfg.fmt->name() );
-		}
-		int idx = -1;
-		if( lang.selectedFormatter != "" )
-		{
-			idx = cbFormatters->findData( lang.selectedFormatter  );
-		}
-		cbFormatters->setCurrentIndex( idx );
-	}
-	
-	checkEnabled();
-}
-
-void SourceFormatterSettings::populateStyleList( ISourceFormatter* fmt )
-{
-	//add predefined styles
-	QList<SourceFormatterStyle> styles;
-	if(fmt)
-	{
-		styles = fmt->predefinedStyles();
-	}
-
-        foreach( const SourceFormatterStyle& style, styles )
+        foreach( const QString& f, l.formatters.keys() )
         {
-                addItemInStyleList( style );
+            if( !savedFormatters.contains( f ) )
+            {
+                SourceFormatter fmt = l.formatters[f];
+                KConfigGroup fmtgrp = grp.group( fmt.formatter->name() );
+                foreach( const QString& s, fmt.styles.keys() )
+                {
+                    SourceFormatterStyle style = fmt.styles[s];
+                    if( style.name().startsWith( userStylePrefix ) )
+                    {
+                        KConfigGroup stylegrp = fmtgrp.group( style.name() );
+                        stylegrp.writeEntry( SourceFormatterController::styleCaptionKey, style.caption() );
+                        stylegrp.writeEntry( SourceFormatterController::styleContentKey, style.content() );
+                    }
+                }
+            }
+            savedFormatters << f;
         }
+    }
+    grp.writeEntry( SourceFormatterController::kateModeLineConfigKey, chkKateModelines->isChecked() );
+    grp.sync();
+}
 
-        styles = Core::self()->sourceFormatterControllerInternal()->userStyles( fmt->name() );
+void SourceFormatterSettings::enableStyleButtons()
+{
+    bool userEntry = styleList->currentItem()
+                     && styleList->currentItem()->data( STYLE_ROLE ).toString().startsWith( userStylePrefix );
+    btnDelStyle->setEnabled( userEntry );
+    btnEditStyle->setEnabled( userEntry );
+    btnNewStyle->setEnabled( cbFormatters->currentIndex() >= 0 );
+}
 
-        foreach( const SourceFormatterStyle& style, styles )
+void SourceFormatterSettings::selectLanguage( int idx )
+{
+    cbFormatters->clear();
+    if( idx < 0 )
+    {
+        cbFormatters->setEnabled( false );
+        selectFormatter( -1 );
+        return;
+    }
+    cbFormatters->setEnabled( true );
+    SourceFormatterLanguage l = languages[cbLanguages->itemText( idx )];
+    foreach( const QString& fmt, l.formatters.keys() )
+    {
+        cbFormatters->addItem( l.formatters[fmt].formatter->caption(), fmt );
+    }
+    cbFormatters->setCurrentIndex( cbFormatters->findData( l.selectedFmt ) );
+    selectFormatter( cbFormatters->currentIndex() );
+    emit changed( true );
+}
+
+void SourceFormatterSettings::selectFormatter( int idx )
+{
+    styleList->clear();
+    if( idx < 0 )
+    {
+        styleList->setEnabled( false );
+        enableStyleButtons();
+        return;
+    }
+    styleList->setEnabled( true );
+    SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
+    Q_ASSERT( idx < l.formatters.size() );
+    Q_ASSERT( l.formatters.find( cbFormatters->itemData( idx ).toString() ) != l.formatters.end() );
+    SourceFormatter fmt = l.formatters[ cbFormatters->itemData( idx ).toString() ];
+    l.selectedFmt = fmt.formatter->name();
+    languages[ cbLanguages->currentText() ] = l;
+    foreach( const QString& style, fmt.styles.keys() )
+    {
+        QListWidgetItem* item = addStyle( fmt.styles[style] );
+        if( style == fmt.selectedStyle )
         {
-                addItemInStyleList( style, true );
+            styleList->setCurrentItem( item );
         }
+    }
+    enableStyleButtons();
+    emit changed( true );
 }
 
-void SourceFormatterSettings::currentStyleChanged(QListWidgetItem *current, QListWidgetItem *)
+void SourceFormatterSettings::selectStyle( int row )
 {
-	SourceFormatterLanguage lang = currentLanguage();
-	if( current )
-	{
-		lang.formatters[lang.selectedFormatter].selectedStyle = current->data( STYLE_ROLE ).toString();
-	} else
-	{
-		lang.formatters[lang.selectedFormatter].selectedStyle = "";
-	}
-	cbLanguagesStyle->setItemData( cbLanguagesStyle->currentIndex(), QVariant::fromValue<KDevelop::SourceFormatterLanguage>( lang ) );
-	checkEnabled();
-	changed();
-	updatePreviewText();
-}
-
-void SourceFormatterSettings::styleRenamed(QListWidgetItem * current)
-{
-	SourceFormatterLanguage lang = currentLanguage();
-        SourceFormatterCfg cfg = lang.formatters[lang.selectedFormatter];
-        SourceFormatterStyle style = cfg.styles[cfg.selectedStyle];
-        style.setCaption( current->data( STYLE_ROLE ).toString() );
-        cfg.styles[cfg.selectedStyle] = style;
-        lang.formatters[lang.selectedFormatter] = cfg;
-	changed();
+    if( row < 0 )
+    {
+        enableStyleButtons();
+        return;
+    }
+    SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
+    SourceFormatter fmt = l.formatters[ l.selectedFmt ];
+    fmt.selectedStyle = styleList->item( row )->data( STYLE_ROLE ).toString();
+    l.formatters[ l.selectedFmt ] = fmt;
+    languages[ cbLanguages->currentText() ] = l;
+    enableStyleButtons();
+    updatePreview();
+    emit changed( true );
 }
 
 void SourceFormatterSettings::deleteStyle()
 {
-
-	int res = KMessageBox::questionYesNo(this, i18n("Are you sure you"
-	        " want to delete this style?"), i18n("Delete style"));
-	if (res == KMessageBox::No)
-	{
-		return;
-	}
-
-	//remove list item
-	int idx = listStyles->currentRow();
-	QListWidgetItem *item = listStyles->takeItem(idx);
-	if (!item)
-	{
-		return;
-	}
-	QString styleName = item->data(STYLE_ROLE).toString();
-
-	for( int i = 0; i < cbLanguagesStyle->count(); i++ ) 
-	{
-		QVariant data = cbLanguagesStyle->itemData( i );
-		Q_ASSERT( data.isValid() && data.canConvert<SourceFormatterLanguage>() );
-		SourceFormatterLanguage lang = data.value<KDevelop::SourceFormatterLanguage>();
-		if( lang.formatters[lang.selectedFormatter].selectedStyle == item->data( STYLE_ROLE ).toString() ) 
-		{
-			QString newStyle;
-			if( listStyles->count() > 0 )
-			{
-				newStyle = listStyles->item( 0 )->data( STYLE_ROLE ).toString();
-			} else {
-				newStyle = "";
-			}
-			lang.formatters[lang.selectedFormatter].selectedStyle = newStyle;
-			cbLanguagesStyle->setItemData( i, QVariant::fromValue( lang ) );
-		}
-	}
-	Core::self()->sourceFormatterControllerInternal()->deleteStyle(currentLanguage().selectedFormatter, styleName);
-	delete item;
-	if( listStyles->count() > 0 )
-	{
-		listStyles->setCurrentRow(idx - 1);
-	}
-	checkEnabled();
-	changed();
-}
-
-void SourceFormatterSettings::addStyle()
-{
-	//ask for caption
-	bool ok;
-	QString caption = QInputDialog::getText(this,
-	        i18n("New style"), i18n("Please enter a name for the new style"),
-	        QLineEdit::Normal, i18n("Custom Style"), &ok);
-	if (!ok) // dialog aborted
-	{
-		return;
-	}
-
-	SourceFormatterStyle style;
-	SourceFormatterLanguage lang = currentLanguage();
-	SourceFormatterCfg cfg = lang.formatters[lang.selectedFormatter];
-	ISourceFormatter* fmt = cfg.fmt;
-	KMimeType::Ptr mime = KMimeType::mimeType( lang.mimeType );
-	// This shouldn't be possible as the new-button should be disabled if there is no selected formatter
-	Q_ASSERT(fmt);
-	QListWidgetItem *item = listStyles->currentItem();
-	
-	// if user has selected a style, use it as base
-	if(item)
-	{
-			style = cfg.styles[cfg.selectedStyle];
-	} else // just use first predefined style as base
-	{
-			style = fmt->predefinedStyles().at(0);
-	}
-
-	EditStyleDialog dialog(fmt, mime, style);
-	if (dialog.exec() == QDialog::Accepted) {
-		SourceFormatterController *manager = Core::self()->sourceFormatterControllerInternal();
-		SourceFormatterStyle newstyle = manager->newStyle(lang.selectedFormatter);
-		newstyle.setContent( dialog.content() );
-		newstyle.setCaption( caption );
-		manager->saveStyle(lang.selectedFormatter, newstyle);
-		// add item in list and select it
-		addItemInStyleList(newstyle, true);
-		foreach( QListWidgetItem* item, listStyles->findItems( caption, Qt::MatchExactly ) )
-		{
-			if( item->data( STYLE_ROLE ).toString() == newstyle.name() )
-			{
-				listStyles->setCurrentItem(item);
-				break;
-			}
-		}
-	}
-
-	changed();
+    Q_ASSERT( styleList->currentRow() >= 0 );
+    
+    QListWidgetItem* item = styleList->takeItem( styleList->currentRow() );
+    
+    SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
+    SourceFormatter fmt = l.formatters[ l.selectedFmt ];
+    fmt.styles.remove( item->data( STYLE_ROLE ).toString() );
+    l.formatters[ l.selectedFmt ] = fmt;
+    languages[ cbLanguages->currentText() ] = l;
+    delete item;
+    selectStyle( styleList->count() > 0 ? 0 : -1 );
+    updatePreview();
+    emit changed( true );
 }
 
 void SourceFormatterSettings::editStyle()
 {
-	QListWidgetItem *item = listStyles->currentItem();
-	if (!item)
-	{
-		return;
-	}
-	QString styleName = item->data(STYLE_ROLE).toString();
+    QString mimetype = cbLanguages->currentText();
+    Q_ASSERT( languages.contains( mimetype ) );
+    SourceFormatterLanguage l = languages[ mimetype ];
+    SourceFormatter fmt = l.formatters[ l.selectedFmt ];
 
-	SourceFormatterController *manager = Core::self()->sourceFormatterControllerInternal();
-	
-	KDevelop::SourceFormatterLanguage lang = currentLanguage();
-        SourceFormatterCfg cfg = lang.formatters[lang.selectedFormatter];
-        SourceFormatterStyle style = cfg.styles[cfg.selectedStyle];
-
-	// Should never get here, edit button is supposed to be disabled if there's no formatter selected
-	Q_ASSERT(cfg.fmt);
-
-	EditStyleDialog dialog(cfg.fmt, KMimeType::mimeType( lang.mimeType ), style);
-	if (dialog.exec() == QDialog::Accepted)
-		Core::self()->sourceFormatterControllerInternal()->saveStyle(lang.selectedFormatter, style);
+    EditStyleDialog dlg( fmt.formatter, KMimeType::mimeType( l.mimeType ), fmt.styles[ fmt.selectedStyle ], this );
+    if( dlg.exec() == QDialog::Accepted )
+    {
+        SourceFormatterStyle s = fmt.styles[ fmt.selectedStyle ];
+        s.setContent( dlg.content() );
+        fmt.styles[ fmt.selectedStyle ] = s;
+        l.formatters[ l.selectedFmt ] = fmt;
+        languages[ mimetype ] = l;
+    }
+    updatePreview();
+    emit changed( true );
 }
 
-void SourceFormatterSettings::modelineChanged()
+void SourceFormatterSettings::newStyle()
 {
-	changed();
+    QListWidgetItem* item = styleList->currentItem();
+    SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
+    SourceFormatter fmt = l.formatters[ l.selectedFmt ];
+    int idx = 0;
+    for( int i = 0; i < styleList->count(); i++ )
+    {
+        QString name = styleList->item( i )->data( STYLE_ROLE ).toString();
+        if( name.startsWith( userStylePrefix ) && name.mid( userStylePrefix.length() ).toInt() >= idx )
+        {
+            idx = name.mid( userStylePrefix.length() ).toInt();
+        }
+    }
+    // Increase number for next style
+    idx++;
+    SourceFormatterStyle s( QString( "%1%2" ).arg( userStylePrefix ).arg( idx ) );
+    if( item ) {
+        SourceFormatterStyle existstyle = fmt.styles[ item->data( STYLE_ROLE ).toString() ];
+        s.setCaption( QString( "New %1" ).arg( existstyle.caption() ) );
+        s.setContent( existstyle.content() );
+    } else {
+        s.setCaption( QString( "New Style" ) );
+    }
+    fmt.styles[ s.name() ] = s;
+    l.formatters[ l.selectedFmt ] = fmt;
+    languages[ cbLanguages->currentText() ] = l;
+    QListWidgetItem* newitem = addStyle( s );
+    selectStyle( styleList->row( newitem ) );
+    styleList->editItem( newitem );
+    emit changed( true );
 }
 
-void SourceFormatterSettings::formattersChanged(int idx)
+void SourceFormatterSettings::styleNameChanged( QListWidgetItem* item )
 {
-	listStyles->clear();
-	// invalid index, lets clear the stylelist
-	if( idx < 0 )
-	{
-		checkEnabled();
-		return;
-	}
-	SourceFormatterLanguage lang = currentLanguage();
-	KMimeType::Ptr mime = KMimeType::mimeType( lang.mimeType );
-	ISourceFormatter* fmt = lang.formatters[ cbFormatters->itemData( idx ).toString() ].fmt;
-	Q_ASSERT(fmt);
-	lang.selectedFormatter = fmt->name();
-	populateStyleList( fmt );
+    SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
+    SourceFormatter fmt = l.formatters[ l.selectedFmt ];
 
-	QString style = lang.formatters[ fmt->name() ].selectedStyle;
-
-	// Fallback to first predefined if there exist one
-	if( style.isEmpty() && !fmt->predefinedStyles().isEmpty() )
-	{
-		style = fmt->predefinedStyles().at(0).name();
-	}
-
-	if( !style.isEmpty() )
-	{
-		lang.formatters[ lang.selectedFormatter ].selectedStyle = style;
-		for (int i = 0; i < listStyles->count(); ++i)
-		{
-			QListWidgetItem *item = listStyles->item(i);
-			if (item->data(STYLE_ROLE).toString() == style)
-			{
-				listStyles->setCurrentRow(i);
-				break;
-			}
-		}
-	}
-	updateCurrentLanguage( lang );
-	changed();
+    fmt.styles[ fmt.selectedStyle ].setCaption( item->text() );
+    l.formatters[ l.selectedFmt ] = fmt;
+    languages[ cbLanguages->currentText() ] = l;
+    emit changed( true );
 }
 
-void SourceFormatterSettings::updateCurrentLanguage( KDevelop::SourceFormatterLanguage lang )
+QListWidgetItem* SourceFormatterSettings::addStyle( const SourceFormatterStyle& s )
 {
-    cbLanguagesStyle->setItemData( cbLanguagesStyle->currentIndex(), QVariant::fromValue( lang ) );
+    QListWidgetItem* item = new QListWidgetItem( styleList );
+    item->setText( s.caption() );
+    item->setData( STYLE_ROLE, s.name() );
+    if( s.name().startsWith( userStylePrefix ) )
+    {
+        item->setFlags( item->flags() | Qt::ItemIsEditable );
+    }
+    styleList->addItem( item );
+    return item;
 }
 
-KDevelop::SourceFormatterLanguage SourceFormatterSettings::currentLanguage()
+void SourceFormatterSettings::updatePreview()
 {
-	QVariant data = cbLanguagesStyle->itemData( cbLanguagesStyle->currentIndex() );
-	Q_ASSERT( data.isValid() && data.canConvert<KDevelop::SourceFormatterLanguage>() );
-	return data.value<KDevelop::SourceFormatterLanguage>();
+    m_document->setReadWrite( true );
+
+    QString langName = cbLanguages->itemText( cbLanguages->currentIndex() );
+    if( !langName.isEmpty() )
+    {
+        SourceFormatterLanguage l = languages[ langName ];
+        SourceFormatter fmt = l.formatters[ l.selectedFmt ];
+        SourceFormatterStyle style = fmt.styles[ fmt.selectedStyle ];
+        ISourceFormatter* ifmt = fmt.formatter;
+        if( !ifmt ) {
+            qWarning() << "oops, no formatter for:" << l.selectedFmt << l.mimeType;
+        }
+        KMimeType::Ptr mime = KMimeType::mimeType( l.mimeType );
+        m_document->setHighlightingMode( ifmt->highlightModeForMime( mime ) );
+        m_document->setText( ifmt->formatSourceWithStyle( style, ifmt->previewText( mime ), mime ) );
+    } else
+    {
+        m_document->setText( i18n( "No Language selected" ) );
+    }
+    m_document->setReadWrite( false );
 }
 
 #include "sourceformattersettings.moc"
-// kate: indent-mode cstyle; space-indent off; tab-width 4;

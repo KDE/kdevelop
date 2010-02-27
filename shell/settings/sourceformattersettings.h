@@ -29,16 +29,30 @@ Boston, MA 02110-1301, USA.
 #include "ui_sourceformattersettings.h"
 
 class QListWidgetItem;
+
 namespace KTextEditor
 {
-	class Document;
-	class View;
+class Document;
 }
+
 namespace KDevelop
 {
 class ISourceFormatter;
-struct SourceFormatterLanguage;
 }
+
+struct SourceFormatter
+{
+    KDevelop::ISourceFormatter* formatter;
+    QMap<QString,KDevelop::SourceFormatterStyle> styles;
+    QString selectedStyle;
+};
+
+struct SourceFormatterLanguage
+{
+    QString mimeType;
+    QMap<QString,SourceFormatter> formatters;
+    QString selectedFmt;
+};
 
 /** \short The settings modulefor the Source formatter plugin.
 * It supports predefined and custom styles. A live preview of the style
@@ -46,38 +60,30 @@ struct SourceFormatterLanguage;
 */
 class SourceFormatterSettings : public KCModule, public Ui::SourceFormatterSettingsUI
 {
-		Q_OBJECT
+Q_OBJECT
 
-	public:
-		SourceFormatterSettings(QWidget *parent, const QVariantList &args);
-		virtual ~SourceFormatterSettings();
+public:
+    SourceFormatterSettings( QWidget *parent, const QVariantList &args );
+    virtual ~SourceFormatterSettings();
 
-	public slots:
-		virtual void load();
-		virtual void save();
-
-	private slots:
-		void languagesStylesChanged(int idx);
-		void currentStyleChanged(QListWidgetItem *current, QListWidgetItem *previous);
-		void styleRenamed(QListWidgetItem *item);
-		void deleteStyle();
-		void addStyle();
-		void editStyle();
-		void modelineChanged();
-
-		void formattersChanged(int idx);
-
-	private:
-		void populateStyleList( KDevelop::ISourceFormatter* );
-		void updatePreviewText();
-                void addItemInStyleList(const KDevelop::SourceFormatterStyle &style, bool editable = false );
-		void checkEnabled();
-		KDevelop::SourceFormatterLanguage currentLanguage();
-		void updateCurrentLanguage( KDevelop::SourceFormatterLanguage lang );
-		KTextEditor::View *m_view;
-		KTextEditor::Document *m_document;
-		QList<KDevelop::SourceFormatterLanguage> m_languages;
+public slots:
+    virtual void load();
+    virtual void save();
+private slots:
+    void deleteStyle();
+    void editStyle();
+    void newStyle();
+    void selectLanguage( int );
+    void selectFormatter( int );
+    void selectStyle( int );
+    void styleNameChanged( QListWidgetItem* );
+private:
+    void updatePreview();
+    QListWidgetItem* addStyle( const KDevelop::SourceFormatterStyle& s );
+    static const QString userStylePrefix;
+    void enableStyleButtons();
+    QMap<QString,SourceFormatterLanguage> languages;
+    KTextEditor::Document* m_document;
 };
 
 #endif // SOURCEFORMATTERSETTINGS_H
-// kate: indent-mode cstyle; space-indent off; tab-width 4;
