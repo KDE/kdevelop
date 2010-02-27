@@ -162,6 +162,9 @@ If this is the same as the source directory you can leave it empty.</string>
         <property name="toolTip">
          <string>A list pf project items to setup include/import paths and defines for.</string>
         </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -214,6 +217,9 @@ If this is the same as the source directory you can leave it empty.</string>
               <verstretch>8</verstretch>
              </sizepolicy>
             </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
            </widget>
           </item>
          </layout>
@@ -236,6 +242,9 @@ If this is the same as the source directory you can leave it empty.</string>
             </property>
             <property name="toolTip">
              <string>List of defines configured for the selected project item</string>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
             </property>
            </widget>
           </item>
