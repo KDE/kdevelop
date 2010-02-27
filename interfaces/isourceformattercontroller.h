@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 class ISourceFormatter;
+class SourceFormatterStyle;
 
 /** \short An interface to the controller managing all source formatter plugins
  */
@@ -51,6 +52,8 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		/** \return Whether this mime type is supported by any plugin.
 		*/
 		virtual bool isMimeTypeSupported(const KMimeType::Ptr &mime) = 0;
+
+		virtual KDevelop::SourceFormatterStyle styleForMimeType( const KMimeType::Ptr& mime ) = 0;
 };
 
 }

@@ -365,6 +365,23 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 	return ext;
 }
 
+SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeType::Ptr& mime )
+{
+	QStringList formatter = configuration().readEntry( mime->name(), "" ).split("||");
+	if( formatter.count() == 2 )
+	{
+		SourceFormatterStyle s( formatter.at( 0 ) );
+		KConfigGroup fmtgrp = configuration().group( formatter.at(0) );
+		if( fmtgrp.hasGroup( formatter.at(1) ) ) {
+			KConfigGroup stylegrp = fmtgrp.group( formatter.at(1) );
+			s.setCaption( stylegrp.readEntry( "Caption", "" ) );
+			s.setContent( stylegrp.readEntry( "Content", "" ) );
+		}
+		return s;
+	}
+	return SourceFormatterStyle();
+}
+
 /*
  Code copied from source formatter plugin, unused currently but shouldn't be just thrown away
 QString SourceFormatterPlugin::replaceSpacesWithTab(const QString &input, ISourceFormatter *formatter)

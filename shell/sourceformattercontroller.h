@@ -74,6 +74,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
 
 		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+
+		virtual KDevelop::SourceFormatterStyle styleForMimeType( const KMimeType::Ptr& mime );
 		
 		KConfigGroup configuration();
 
