@@ -69,16 +69,16 @@ SourceFormatterSettings::SourceFormatterSettings(QWidget *parent, const QVariant
     if (!editor)
         KMessageBox::error(this, i18n("A KDE text-editor component could not be found.\n"
         "Please check your KDE installation."));
-    
+
     m_document = editor->createDocument(this);
     m_document->setReadWrite(false);
-    
+
     KTextEditor::View* view = qobject_cast<KTextEditor::View*>(m_document->createView(textEditor));
     QVBoxLayout *layout2 = new QVBoxLayout(textEditor);
     layout2->addWidget(view);
     textEditor->setLayout(layout2);
     view->show();
-    
+
     KTextEditor::ConfigInterface *iface =
     qobject_cast<KTextEditor::ConfigInterface*>(view);
     if (iface) {
@@ -112,7 +112,7 @@ void SourceFormatterSettings::load()
             Q_ASSERT( !l.formatters.contains( ifmt->name() ) );
 
             sfmt.formatter = ifmt;
-            
+
             foreach( KDevelop::SourceFormatterStyle style, ifmt->predefinedStyles() )
             {
                 sfmt.styles[ style.name() ] = style;
@@ -187,6 +187,7 @@ void SourceFormatterSettings::load()
 void SourceFormatterSettings::save()
 {
     KConfigGroup grp = Core::self()->sourceFormatterControllerInternal()->configuration();
+
     QSet<QString> savedFormatters;
     foreach( const QString& k, languages.keys() )
     {
@@ -306,9 +307,9 @@ void SourceFormatterSettings::selectStyle( int row )
 void SourceFormatterSettings::deleteStyle()
 {
     Q_ASSERT( styleList->currentRow() >= 0 );
-    
+
     QListWidgetItem* item = styleList->takeItem( styleList->currentRow() );
-    
+
     SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
     SourceFormatter fmt = l.formatters[ l.selectedFmt ];
     fmt.styles.remove( item->data( STYLE_ROLE ).toString() );
