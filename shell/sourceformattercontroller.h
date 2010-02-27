@@ -52,8 +52,9 @@ class IPlugin;
 class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatterController, public KXMLGUIClient
 {
 	Q_OBJECT
-
 	public:
+		static const QString kateModeLineConfigKey;
+		
 		SourceFormatterController(QObject *parent = 0);
 		virtual ~SourceFormatterController();
 		void initialize();

@@ -49,6 +49,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabled";
+
 SourceFormatterController::SourceFormatterController(QObject *parent)
 		: ISourceFormatterController(parent)
 {
@@ -137,7 +139,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 	{
 		return input;
 	}
-	if( !configuration().readEntry( "ModelinesEnabled", false ) )
+	if( !configuration().readEntry( SourceFormatterController::kateModeLineConfigKey, false ) )
 		return input;
 
 	QString output;
