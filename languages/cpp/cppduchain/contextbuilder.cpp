@@ -517,9 +517,9 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
   if (!m_importedParentContexts.isEmpty()) {
     DUChainReadLocker lock(DUChain::lock());
-    kDebug(9007) << file->url().str() << "Previous parameter declaration context didn't get used??" ;
-    KDevelop::DumpChain dump;
-    dump.dump(topLevelContext);
+    kWarning() << file->url().str() << "Previous parameter declaration context didn't get used??" ;
+//    KDevelop::DumpChain dump;
+//    dump.dump(topLevelContext);
     m_importedParentContexts.clear();
   }
 
