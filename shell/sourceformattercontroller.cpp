@@ -112,7 +112,7 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeTyp
 		return 0;
 	}
 
-	QStringList formatterinfo = formatter.split( "||" );
+	QStringList formatterinfo = formatter.split( "||", QString::SkipEmptyParts );
 
 	if( formatterinfo.size() != 2 ) {
 		kFatal() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
@@ -369,7 +369,7 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 
 SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeType::Ptr& mime )
 {
-	QStringList formatter = configuration().readEntry( mime->name(), "" ).split("||");
+	QStringList formatter = configuration().readEntry( mime->name(), "" ).split( "||", QString::SkipEmptyParts );
 	if( formatter.count() == 2 )
 	{
 		SourceFormatterStyle s( formatter.at( 0 ) );
