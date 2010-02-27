@@ -45,6 +45,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include "plugincontroller.h"
+#include <interfaces/isession.h>
 
 namespace KDevelop
 {
@@ -99,7 +100,7 @@ ISourceFormatter* SourceFormatterController::formatterForUrl(const KUrl &url)
 }
 KConfigGroup SourceFormatterController::configuration()
 {
-	return KGlobal::config()->group( "SourceFormatter" );
+	return Core::self()->activeSession()->config()->group( "SourceFormatter" );
 }
 
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeType::Ptr &mime)
