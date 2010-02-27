@@ -35,7 +35,7 @@ using KDevelop::SourceFormatterStyle;
 
 EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::Ptr &mime,
         const SourceFormatterStyle &style, QWidget *parent)
-		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime)
+		: KDialog(parent), m_sourceFormatter(formatter), m_mimeType(mime), m_style( style )
 {
 	m_content = new QWidget();
 	m_ui.setupUi(m_content);
@@ -95,7 +95,7 @@ void EditStyleDialog::updatePreviewText(const QString &text)
 {
 	m_document->setReadWrite(true);
 	if (m_sourceFormatter)
-		m_document->setText(text);
+		m_document->setText(m_sourceFormatter->formatSourceWithStyle( m_style, text, m_mimeType ));
 	m_document->setReadWrite(false);
 }
 

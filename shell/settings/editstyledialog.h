@@ -22,6 +22,7 @@ Boston, MA 02110-1301, USA.
 
 #include <KDialog>
 #include <KMimeType>
+#include <interfaces/isourceformatter.h>
 #include "ui_editstyledialog.h"
 
 namespace KTextEditor
@@ -58,13 +59,14 @@ class EditStyleDialog : public KDialog
 		void updatePreviewText(const QString &text);
 
 	private:
-                KDevelop::ISourceFormatter *m_sourceFormatter;
+		KDevelop::ISourceFormatter *m_sourceFormatter;
 		KTextEditor::View *m_view;
 		KTextEditor::Document *m_document;
-                KDevelop::SettingsWidget *m_settingsWidget;
+		KDevelop::SettingsWidget *m_settingsWidget;
 		KMimeType::Ptr m_mimeType;
 		QWidget *m_content;
 		Ui::EditStyle m_ui;
+		KDevelop::SourceFormatterStyle m_style;
 };
 
 #endif // EDITSTYLEDIALOG_H
