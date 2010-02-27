@@ -116,7 +116,7 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeTyp
 		kFatal() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
 	}
 
-	return  Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
+	return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
 }
 
 bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
