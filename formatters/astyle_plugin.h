@@ -56,8 +56,8 @@ class AStylePlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
         virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
                                               const KMimeType::Ptr &mime,
-                                              const QString& leftContext,
-                                              const QString& rightContext );
+                                              const QString& leftContext = QString(),
+                                              const QString& rightContext = QString() );
         
         /** \return The text used in the config dialog to preview the current style.
         */

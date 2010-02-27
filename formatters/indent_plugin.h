@@ -45,8 +45,8 @@ class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 
 		virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
 											  const KMimeType::Ptr &mime,
-											  const QString& leftContext,
-											  const QString& rightContext );
+											  const QString& leftContext = QString(),
+											  const QString& rightContext = QString() );
 		
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
