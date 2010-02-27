@@ -414,6 +414,7 @@ void SourceFormatterSettings::updatePreview()
     {
         m_document->setText( i18n( "No Language selected" ) );
     }
+    m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
     m_document->setReadWrite( false );
 }
 
