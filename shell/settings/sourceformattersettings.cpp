@@ -229,9 +229,13 @@ void SourceFormatterSettings::enableStyleButtons()
 {
     bool userEntry = styleList->currentItem()
                      && styleList->currentItem()->data( STYLE_ROLE ).toString().startsWith( userStylePrefix );
+
+    SourceFormatterLanguage l = languages[cbLanguages->currentText()];
+    ISourceFormatter* fmt = l.formatters[ l.selectedFmt ].formatter;
+    bool hasEditWidget = ( fmt && fmt->editStyleWidget( KMimeType::mimeType( l.mimeType ) ) );
     btnDelStyle->setEnabled( userEntry );
-    btnEditStyle->setEnabled( userEntry );
-    btnNewStyle->setEnabled( cbFormatters->currentIndex() >= 0 );
+    btnEditStyle->setEnabled( userEntry && hasEditWidget );
+    btnNewStyle->setEnabled( cbFormatters->currentIndex() >= 0 && hasEditWidget );
 }
 
 void SourceFormatterSettings::selectLanguage( int idx )
