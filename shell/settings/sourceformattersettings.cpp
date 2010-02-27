@@ -199,6 +199,14 @@ void SourceFormatterSettings::save()
             {
                 SourceFormatter fmt = l.formatters[f];
                 KConfigGroup fmtgrp = grp.group( fmt.formatter->name() );
+
+                // delete all styles so we don't leave any behind when all user styles are deleted
+                foreach( const QString& subgrp, fmtgrp.groupList() )
+                {
+                    if( subgrp.startsWith( userStylePrefix ) ) {
+                        fmtgrp.deleteGroup( subgrp );
+                    }
+                }
                 foreach( const QString& s, fmt.styles.keys() )
                 {
                     SourceFormatterStyle style = fmt.styles[s];
