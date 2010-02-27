@@ -94,8 +94,12 @@ void EditStyleDialog::init()
 void EditStyleDialog::updatePreviewText(const QString &text)
 {
 	m_document->setReadWrite(true);
-	if (m_sourceFormatter)
+	if (m_sourceFormatter) {
 		m_document->setText(m_sourceFormatter->formatSourceWithStyle( m_style, text, m_mimeType ));
+	} else {
+		m_document->setText( i18n( "No Source Formatter available" ) );
+	}
+
 	m_document->activeView()->setCursorPosition( KTextEditor::Cursor( 0, 0 ) );
 	m_document->setReadWrite(false);
 }
