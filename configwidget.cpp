@@ -21,6 +21,7 @@
 
 #include <KDebug>
 #include <KLineEdit>
+#include <KAction>
 
 #include "ui_configwidget.h"
 #include "projectpathsmodel.h"
@@ -71,6 +72,24 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 
     ui->switchIncludeDefines->setCurrentIndex( 0 );
     ui->stackedWidget->setCurrentIndex( 0 );
+
+    KAction* delPathAction = new KAction( i18n("Delete Project Path"), this );
+    delPathAction->setShortcut( KShortcut( "Del" ) );
+    delPathAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
+    ui->projectPaths->addAction( delPathAction );
+    connect( delPathAction, SIGNAL(triggered()), SLOT(deleteProjectPath()) );
+
+    KAction* delIncAction = new KAction( i18n("Delete Include Path"), this );
+    delIncAction->setShortcut( KShortcut( "Del" ) );
+    delIncAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
+    ui->includePaths->addAction( delIncAction );
+    connect( delIncAction, SIGNAL(triggered()), SLOT(deleteIncludePath()) );
+
+    KAction* delDefAction = new KAction( i18n("Delete Define"), this );
+    delDefAction->setShortcut( KShortcut( "Del" ) );
+    delDefAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
+    ui->defines->addAction( delDefAction );
+    connect( delDefAction, SIGNAL(triggered()), SLOT(deleteDefine()) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const
@@ -242,6 +261,23 @@ void ConfigWidget::clear()
     ui->buildDir->setText("");
 }
 
+void ConfigWidget::deleteDefine()
+{
+    QModelIndex idx = ui->defines->currentIndex();
+    definesModel->removeRows( idx.row(), 1, QModelIndex() );
+}
+
+void ConfigWidget::deleteIncludePath()
+{
+    QModelIndex idx = ui->includePaths->currentIndex();
+    includesModel->removeRows( idx.row(), 1, QModelIndex() );
+}
+
+void ConfigWidget::deleteProjectPath()
+{
+    QModelIndex idx = ui->projectPaths->currentIndex();
+    pathsModel->removeRows( idx.row(), 1, QModelIndex() );
+}
 
 #include "configwidget.moc"
 

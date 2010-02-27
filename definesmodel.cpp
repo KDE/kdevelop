@@ -139,4 +139,16 @@ void DefinesModel::setDefines(const QHash<QString,QVariant>& includes )
     reset();
 }
 
+bool DefinesModel::removeRows( int row, int count, const QModelIndex& parent )
+{
+    if( row >= 0 && count > 0 && row < rowCount() - 1 ) {
+        beginRemoveRows( parent, row, row + count - 1 );
+        for( int i = row + count - 1; i >= row; i-- ) {
+            m_defines.removeAt( i );
+        }
+        endRemoveRows();
+    }
+    return false;
+}
+
 #include "definesmodel.moc"

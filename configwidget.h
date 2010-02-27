@@ -55,6 +55,9 @@ private slots:
     void projectPathSelected(const QItemSelection&, const QItemSelection& );
     void includesChanged();
     void definesChanged();
+    void deleteDefine();
+    void deleteIncludePath();
+    void deleteProjectPath();
 private:
     void fillTools( const QHash<CustomBuildSystemTool::ActionType, CustomBuildSystemTool>& tools );
     Ui::ConfigWidget* ui;
