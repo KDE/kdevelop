@@ -71,7 +71,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	m_formatFilesAction->setText(i18n("Format files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
 	m_formatFilesAction->setWhatsThis(i18n("<b>Format files</b><p>Formatting functionality using <b>astyle</b> library.</p>"));
-	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatItem()));
+	connect(m_formatFilesAction, SIGNAL(triggered()), this, SLOT(formatFiles()));
 
 	m_formatTextAction->setEnabled(false);
 	m_formatFilesAction->setEnabled(true);
