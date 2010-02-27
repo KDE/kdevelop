@@ -43,15 +43,14 @@ class IndentPlugin : public KDevelop::IPlugin, public KDevelop::ISourceFormatter
 		*/
 		virtual QString formatSource(const QString &text, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext);
 
+		virtual QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
+											  const KMimeType::Ptr &mime,
+											  const QString& leftContext,
+											  const QString& rightContext );
+		
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
 		virtual QList<KDevelop::SourceFormatterStyle> predefinedStyles();
-		/** Load the predefined type of name \arg name, or if the first arg is empty, the style
-		*   defined by the options string \arg content.
-		*/
-		virtual void setStyle(const KDevelop::SourceFormatterStyle& style);
-
-                KDevelop::SourceFormatterStyle style() const;
 
 		/** \return The widget to edit a style.
 		*/

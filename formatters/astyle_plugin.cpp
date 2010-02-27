@@ -24,6 +24,9 @@
 #include <KPluginFactory>
 #include <KAboutData>
 
+#include <interfaces/icore.h>
+#include <interfaces/isourceformattercontroller.h>
+
 #include "astyle_formatter.h"
 #include "astyle_stringiterator.h"
 #include "astyle_preferences.h"
@@ -71,7 +74,7 @@ QString AStylePlugin::highlightModeForMime(const KMimeType::Ptr &mime)
     return "C++";
 }
 
-QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const KMimeType::Ptr &mime, const QString& leftContext, const QString& rightContext )
 {
     if(mime->is("text/x-java-source"))
         m_formatter->setJavaStyle();
@@ -79,8 +82,21 @@ QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mi
         m_formatter->setSharpStyle();
     else
         m_formatter->setCStyle();
+
+    if( s.content().isEmpty() )
+    {
+        m_formatter->predefinedStyle( s.name() );
+    } else
+    {
+        m_formatter->loadStyle( s.content() );
+    }
     
     return m_formatter->formatSource(text, leftContext, rightContext);
+}
+
+QString AStylePlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+{
+    return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
 }
 
 QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
@@ -104,21 +120,6 @@ QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
     styles << st;
 
     return styles;
-}
-
-void AStylePlugin::setStyle(const KDevelop::SourceFormatterStyle &style)
-{
-    currentStyle = style;
-    if( style.content().isEmpty() ) {
-        m_formatter->predefinedStyle( style.name() );
-    } else {
-        m_formatter->loadStyle( style.content() );
-    }
-}
-
-KDevelop::SourceFormatterStyle AStylePlugin::style() const
-{
-    return currentStyle;
 }
 
 KDevelop::SettingsWidget* AStylePlugin::editStyleWidget(const KMimeType::Ptr &mime)

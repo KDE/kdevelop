@@ -25,6 +25,8 @@
 #include <QTextStream>
 #include <KDebug>
 #include <KProcess>
+#include <interfaces/icore.h>
+#include <interfaces/isourceformattercontroller.h>
 
 using namespace KDevelop;
 
@@ -79,19 +81,29 @@ QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 	return "C++";
 }
 
-QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, const QString& leftContext, const QString& rightContext)
+QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
+
+	if (!style.content().isEmpty()) {
+		m_options.clear();
+		if(style.name() == "KR")
+			m_options << "-kr";
+		else if(style.name() == "orig")
+			m_options << "-orig";
+	}
+	else
+		m_options = style.content().split(' ');
 	KProcess proc;
 	QTextStream ios(&proc);
 	proc.setProgram("indent", m_options);
 	proc.setOutputChannelMode(KProcess::MergedChannels);
-
+	
 	proc.start();
 	if(!proc.waitForStarted()) {
 		kDebug() << "Unable to start indent" << endl;
 		return text;
 	}
-
+	
 	QString useText = text;
 	//We can only respect the context if it is in a separate line
 	if(leftContext.endsWith("\n"))
@@ -99,7 +111,7 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, c
 	
 	if(rightContext.startsWith("\n"))
 		useText = useText + rightContext;
-
+	
 	proc.write(useText.toLocal8Bit());
 	proc.closeWriteChannel();
 	if(!proc.waitForFinished()) {
@@ -107,7 +119,7 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, c
 		return text;
 	}
 	///@todo Be able to detect errors in formatting, since indent returns the error as the output
-
+	
 	QStringList output = ios.readAll().split("\n");
 	
 	///@todo Correctly remove the contexts, if the context originally had a different ammount of lines
@@ -123,6 +135,11 @@ QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr&, c
 	return output.join("\n");
 }
 
+QString IndentPlugin::formatSource(const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
+{
+	return formatSourceWithStyle( KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, mime, leftContext, rightContext );
+}
+
 QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
 {
         QList<KDevelop::SourceFormatterStyle> styles;
@@ -136,24 +153,6 @@ QList<KDevelop::SourceFormatterStyle> IndentPlugin::predefinedStyles()
         st.setCaption( "Original Berkeley indent style" );
         styles << st;
 	return styles;
-}
-
-KDevelop::SourceFormatterStyle IndentPlugin::style() const
-{
-        return m_currentStyle;
-}
-
-void IndentPlugin::setStyle(const KDevelop::SourceFormatterStyle &style)
-{
-	if (!style.content().isEmpty()) {
-		m_options.clear();
-		if(style.name() == "KR")
-			m_options << "-kr";
-		else if(style.name() == "orig")
-			m_options << "-orig";
-	}
-	else
-		m_options = style.content().split(' ');
 }
 
 KDevelop::SettingsWidget* IndentPlugin::editStyleWidget(const KMimeType::Ptr &mime)
