@@ -327,17 +327,19 @@ void SourceFormatterSettings::editStyle()
     SourceFormatterLanguage l = languages[ mimetype ];
     SourceFormatter fmt = l.formatters[ l.selectedFmt ];
 
-    EditStyleDialog dlg( fmt.formatter, KMimeType::mimeType( l.mimeType ), fmt.styles[ fmt.selectedStyle ], this );
-    if( dlg.exec() == QDialog::Accepted )
-    {
-        SourceFormatterStyle s = fmt.styles[ fmt.selectedStyle ];
-        s.setContent( dlg.content() );
-        fmt.styles[ fmt.selectedStyle ] = s;
-        l.formatters[ l.selectedFmt ] = fmt;
-        languages[ mimetype ] = l;
+    if( fmt.formatter->editStyleWidget( KMimeType::mimeType( l.mimeType ) ) != 0 ) {
+        EditStyleDialog dlg( fmt.formatter, KMimeType::mimeType( l.mimeType ), fmt.styles[ fmt.selectedStyle ], this );
+        if( dlg.exec() == QDialog::Accepted )
+        {
+            SourceFormatterStyle s = fmt.styles[ fmt.selectedStyle ];
+            s.setContent( dlg.content() );
+            fmt.styles[ fmt.selectedStyle ] = s;
+            l.formatters[ l.selectedFmt ] = fmt;
+            languages[ mimetype ] = l;
+        }
+        updatePreview();
+        emit changed( true );
     }
-    updatePreview();
-    emit changed( true );
 }
 
 void SourceFormatterSettings::newStyle()
