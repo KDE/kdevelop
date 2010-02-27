@@ -50,6 +50,8 @@ namespace KDevelop
 {
 
 const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabled";
+const QString SourceFormatterController::styleCaptionKey = "Caption";
+const QString SourceFormatterController::styleContentKey = "Content";
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
 		: ISourceFormatterController(parent)
@@ -374,8 +376,8 @@ SourceFormatterStyle SourceFormatterController::styleForMimeType( const KMimeTyp
 		KConfigGroup fmtgrp = configuration().group( formatter.at(0) );
 		if( fmtgrp.hasGroup( formatter.at(1) ) ) {
 			KConfigGroup stylegrp = fmtgrp.group( formatter.at(1) );
-			s.setCaption( stylegrp.readEntry( "Caption", "" ) );
-			s.setContent( stylegrp.readEntry( "Content", "" ) );
+			s.setCaption( stylegrp.readEntry( styleCaptionKey, "" ) );
+			s.setContent( stylegrp.readEntry( styleContentKey, "" ) );
 		}
 		return s;
 	}
