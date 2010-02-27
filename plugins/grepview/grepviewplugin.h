@@ -13,6 +13,8 @@
 #define GREPVIEWPART_H_
 
 #include <interfaces/iplugin.h>
+#include <interfaces/contextmenuextension.h>
+
 #include <QtCore/QVariant>
 
 class GrepViewPlugin : public KDevelop::IPlugin
@@ -24,6 +26,7 @@ public:
     ~GrepViewPlugin();
 
     void rememberSearchDirectory(QString const & directory);
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     
 private Q_SLOTS:
     void showDialog();

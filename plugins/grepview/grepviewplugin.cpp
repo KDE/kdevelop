@@ -40,6 +40,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
+#include <language/interfaces/editorcontext.h>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
@@ -67,6 +68,22 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
 GrepViewPlugin::~GrepViewPlugin()
 {
     GrepOutputDelegate::self()->deleteLater();
+}
+
+KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
+{
+    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+
+    if ( context->type() == KDevelop::Context::EditorContext ) {
+        KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+        if ( econtext->view()->selection() ) {
+            QAction* action = new QAction(KIcon("edit-find"), i18n("&Find in Files"), this);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
+            extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
+        }
+    }
+
+    return extension;
 }
 
 void GrepViewPlugin::showDialog()
