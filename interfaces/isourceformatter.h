@@ -133,8 +133,8 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		virtual QString formatSourceWithStyle( SourceFormatterStyle,
 											   const QString& text,
 											   const KMimeType::Ptr &mime,
-											   const QString& leftContext,
-											   const QString& rightContext ) = 0;
+											   const QString& leftContext = QString(),
+											   const QString& rightContext = QString() ) = 0;
 
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
