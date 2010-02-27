@@ -73,6 +73,8 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		bool isMimeTypeSupported(const KMimeType::Ptr &mime);
 
 		KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+		
+		KConfigGroup configuration();
 
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);
@@ -94,7 +96,6 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		KAction* m_formatFilesAction;
 		QList<KDevelop::ProjectBaseItem*> m_prjItems;
 		KUrl::List m_urls;
-		KConfigGroup configuration();
 };
 
 }
