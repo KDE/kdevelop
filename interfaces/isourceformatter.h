@@ -32,7 +32,7 @@ namespace KDevelop
 class KDEVPLATFORMINTERFACES_EXPORT SourceFormatterStyle
 {
 public:
-        SourceFormatterStyle() {};
+	SourceFormatterStyle() {};
 	SourceFormatterStyle( const QString& name ) : m_name(name) {}
 	void setContent( const QString& content ) { m_content = content; }
 	void setCaption( const QString& caption ) { m_caption = caption; }
@@ -134,7 +134,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		*/
 		virtual void setStyle(const SourceFormatterStyle&) = 0;
 
-                virtual SourceFormatterStyle style() const = 0;
+		virtual SourceFormatterStyle style() const = 0;
 
 		/** \return The widget to edit a style.
 		*/
