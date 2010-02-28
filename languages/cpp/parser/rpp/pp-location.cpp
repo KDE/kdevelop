@@ -64,10 +64,10 @@ void LocationTable::anchor(std::size_t offset, Anchor anchor, const Preprocessed
 {
   Q_ASSERT(!offset || !anchor.column || contents);
 
-  if (offset && anchor.column) {
+  if (offset && anchor.column && !anchor.collapsed) {
     // Check to see if it's different to what we already know
     QPair<rpp::Anchor, uint> known = positionAt(offset, *contents);
-    if (known.first == anchor && !anchor.collapsed && known.first.macroExpansion == anchor.macroExpansion)
+    if (known.first == anchor && known.first.macroExpansion == anchor.macroExpansion)
       return;
   }
   m_currentOffset = OffsetTable::ConstIterator(m_offsetTable.insert(offset, anchor));
