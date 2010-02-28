@@ -69,6 +69,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
     return ret;
   }
 
+  //This is relatively expensive(needs a mutex lock, hash lookups, and eventual loading), so avoid it when possible.
+  static int lengthFromIndex(unsigned int index);
+
   IndexedString( const IndexedString& );
 
   ~IndexedString();

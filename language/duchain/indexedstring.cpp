@@ -271,12 +271,16 @@ QString IndexedString::str() const {
 }
 
 int IndexedString::length() const {
-  if(!m_index)
+  return lengthFromIndex(m_index);
+}
+
+int IndexedString::lengthFromIndex(unsigned int index) {
+  if(!index)
     return 0;
-  else if((m_index & 0xffff0000) == 0xffff0000)
+  else if((index & 0xffff0000) == 0xffff0000)
     return 1;
   else
-    return getGlobalIndexedStringRepository()->itemFromIndex(m_index)->length;
+    return getGlobalIndexedStringRepository()->itemFromIndex(index)->length;
 }
 
 const char* IndexedString::c_str() const
