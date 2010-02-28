@@ -116,7 +116,8 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeTyp
 	QStringList formatterinfo = formatter.split( "||", QString::SkipEmptyParts );
 
 	if( formatterinfo.size() != 2 ) {
-		kFatal() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
+		kDebug() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
+                return 0;
 	}
 
 	return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
