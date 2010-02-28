@@ -104,20 +104,32 @@ QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
 {
     QList<KDevelop::SourceFormatterStyle> styles;
 
+    AStyleFormatter fmt;
+    
     KDevelop::SourceFormatterStyle st = KDevelop::SourceFormatterStyle( "ANSI" );
     st.setCaption( "ANSI" );
+    fmt.predefinedStyle( "ANSI" );
+    st.setContent( fmt.saveStyle() );
     styles << st;
     st = KDevelop::SourceFormatterStyle( "GNU" );
     st.setCaption( "GNU" );
+    fmt.predefinedStyle( "GNU" );
+    st.setContent( fmt.saveStyle() );
     styles << st;
     st = KDevelop::SourceFormatterStyle( "Java" );
     st.setCaption( "Java" );
+    fmt.predefinedStyle( "Java" );
+    st.setContent( fmt.saveStyle() );
     styles << st;
     st = KDevelop::SourceFormatterStyle( "K&R" );
     st.setCaption( "Kernighan & Ritchie" );
+    fmt.predefinedStyle( "K&R" );
+    st.setContent( fmt.saveStyle() );
     styles << st;
     st = KDevelop::SourceFormatterStyle( "Linux" );
     st.setCaption( "Linux" );
+    fmt.predefinedStyle( "Linux" );
+    st.setContent( fmt.saveStyle() );
     styles << st;
 
     return styles;
