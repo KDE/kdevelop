@@ -226,6 +226,10 @@ void SourceFormatterController::beautifySource()
 	// load the appropriate formatter
 	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
 	ISourceFormatter *formatter = formatterForMimeType(mime);
+        if( !formatter ) {
+            kDebug() << "no formatter available for" << mime;
+            return;
+        }
 
 	bool has_selection = false;
 	KTextEditor::View *view = doc->textDocument()->views().first();
@@ -244,8 +248,9 @@ void SourceFormatterController::beautifySource()
 			output.resize(output.length() - 1);
 		//there was a selection, so only change the part of the text related to it
 		doc->textDocument()->replaceText(view->selectionRange(), output);
-	} else
+	} else {
 		formatDocument(doc, formatter, mime);
+        }
 }
 
 void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
