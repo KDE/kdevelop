@@ -77,7 +77,11 @@ const QStringList filepatterns = QStringList()
     << "*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder"
     << "CMakeLists.txt,*.cmake"
     << "*";
-    
+
+const QStringList excludepatterns = QStringList()
+    << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/,/.git/"
+    << "";
+
 }
 
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
@@ -116,7 +120,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     limitToProjectCheck->setChecked(cg.readEntry("search_project_files", true));
 
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
-    excludeCombo->addItems(cg.readEntry("exclude_patterns", QStringList() << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/" << "") );
+    excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
     suppressErrorsCheck->setChecked(cg.readEntry("no_find_errs", true));
 
