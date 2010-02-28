@@ -45,21 +45,21 @@ namespace {
 
 static int const MAX_LAST_SEARCH_ITEMS_COUNT = 15;
 
-QStringList template_desc = QStringList()
+const QStringList template_desc = QStringList()
     << "verbatim"
     << "assignment"
     << "->MEMBER("
     << "class::MEMBER("
     << "OBJECT->member(";
 
-QStringList template_str = QStringList()
+const QStringList template_str = QStringList()
     << "%s"
     << "\\<%s\\>[\\t ]*=[^=]"
     << "\\->[\\t ]*\\<%s\\>[\\t ]*\\("
     << "[a-z0-9_$]+[\\t ]*::[\\t ]*\\<%s\\>[\\t ]*\\("
     << "\\<%s\\>[\\t ]*\\->[\\t ]*[a-z0-9_$]+[\\t ]*\\(";
 
-QStringList filepatterns = QStringList()
+const QStringList filepatterns = QStringList()
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
     << "*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"
