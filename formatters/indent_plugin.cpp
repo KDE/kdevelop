@@ -46,7 +46,8 @@ IndentPlugin::~IndentPlugin()
 
 QString IndentPlugin::name()
 {
-	return "indent";
+	// This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
+	return "kdevindent";
 }
 
 QString IndentPlugin::caption()

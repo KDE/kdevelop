@@ -50,7 +50,8 @@ AStylePlugin::~AStylePlugin()
 
 QString AStylePlugin::name()
 {
-    return "astyle";
+    // This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
+    return "kdevastyle";
 }
 
 QString AStylePlugin::caption()
