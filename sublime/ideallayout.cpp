@@ -399,7 +399,7 @@ void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int
 {
     IdealMainLayout::Role oppositeRole;
     QList<IdealMainLayout::Role> rolesInBetween;
-    
+
     switch (role) {
         case Left:
             oppositeRole = Right;
@@ -407,7 +407,7 @@ void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int
             if (!m_topOwnsTopLeft) rolesInBetween << Top;
             break;
         case Right:
-            oppositeRole = Left; 
+            oppositeRole = Left;
             if (!m_bottomOwnsBottomRight) rolesInBetween << Bottom;
             if (!m_topOwnsTopRight) rolesInBetween << Top;
             break;
@@ -424,30 +424,45 @@ void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int
         default:
             break;
     }
-    
-    maxWidth = geometry().width();
-    maxHeight = geometry().height();
-    
-    foreach (QLayoutItem* item, m_items[oppositeRole]->items()) {
-        const QSize itemSizeHint = item->sizeHint();
-        switch (role) {
-            case Left:
-            case Right:
-                if (m_items[oppositeRole]->anchored)
-                    maxWidth -= itemSizeHint.width() + splitterWidth();
-                break;
 
-            case Top:
-            case Bottom:
-                if (m_items[oppositeRole]->anchored)
-                    maxHeight -= itemSizeHint.height() + splitterWidth();
-                break;
-                
-            default:
-                break;
-        }
+    //get the dimensions of ideal main widget
+    maxWidth = mainWidget()->width();
+    maxHeight = mainWidget()->height();
+//     kDebug(9504) << "window geometry" << maxWidth << maxHeight;
+
+    //substract our own button bar and splitter sizes
+    DockArea *ourArea = m_items[role];
+    if (ourArea->buttonBar()) {
+        maxWidth -= ourArea->buttonBar()->geometry().width();
+        maxHeight -= ourArea->buttonBar()->geometry().height();
+    }
+    if (ourArea->mainSplitter()) {
+        maxWidth -= ourArea->mainSplitter()->geometry().width();
+        maxHeight -= ourArea->mainSplitter()->geometry().height();
     }
 
+    //substract opposite button bar, toolview and splitter sizes
+    DockArea *oppositeArea = m_items[oppositeRole];
+    //FIXME: adymo: correct implementation would not substract the size
+    //of invisible opposite toolviews, but that would require to
+    //relayout widgets after showing/hiding it
+    //it would check for oppositeArea->isVisible() here as well
+    maxWidth -= widthForRole(oppositeRole);
+    maxHeight -= widthForRole(oppositeRole);
+
+    if (oppositeArea->mainSplitter()) {
+        maxWidth -= oppositeArea->mainSplitter()->geometry().width();
+        maxHeight -= oppositeArea->mainSplitter()->geometry().height();
+    }
+    if (oppositeArea->buttonBar()) {
+        maxWidth -= oppositeArea->buttonBar()->geometry().width();
+        maxHeight -= oppositeArea->buttonBar()->geometry().height();
+    }
+//     kDebug(9504) << "without opposite view" << maxWidth << maxHeight;
+
+    //substract the maximum of two sizes:
+    // - min size hint of a toolview in between (if any)
+    // - min size hint of a central widget (editors)
     int betweenWidth = 0;
     int betweenHeight = 0;
     foreach (IdealMainLayout::Role betweenRole, rolesInBetween) {
@@ -467,7 +482,7 @@ void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int
                     if (m_items[betweenRole]->anchored)
                         betweenHeightForRole += itemSizeHint.height();
                     break;
-                    
+
                 default:
                     break;
             }
@@ -475,18 +490,19 @@ void IdealMainLayout::maximumSize(IdealMainLayout::Role role, int& maxWidth, int
         betweenWidth = qMax(betweenWidth, betweenWidthForRole);
         betweenHeight = qMax(betweenHeight, betweenHeightForRole);
     }
-    maxWidth -= betweenWidth;
-    maxHeight -= betweenHeight;
 
-    int centralWidth = 50;
-    int centralHeight = 50;
+    //if central widget doesn't have an editor, leave some space for it
+    int centralWidth = 100;
+    int centralHeight = 100;
     foreach (QLayoutItem* item, m_items[Central]->items()) {
         const QSize itemSizeHint = item->minimumSize();
         centralWidth = qMax(itemSizeHint.width(), centralWidth);
         centralHeight = qMax(itemSizeHint.height(), centralHeight);
     }
-    maxWidth -= centralWidth;
-    maxHeight -= centralHeight;
+
+    maxWidth -= qMax(betweenWidth, centralWidth);
+    maxHeight -= qMax(betweenHeight, centralHeight);
+//     kDebug(9504) << "without central/between view" << maxWidth << maxHeight;
 }
 
 QLayoutItem * IdealMainLayout::itemAt(int index) const
@@ -889,7 +905,7 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
         else
             offset = bar->geometry().height();
     }
-    
+
     int newWidth = thickness - offset;
     int minWidth = 0, softMinWidth = 0, minHeight = 0, softMinHeight = 0;
     minimumSize(role, minWidth, softMinWidth, minHeight, softMinHeight);
@@ -897,8 +913,10 @@ void IdealMainLayout::resizeWidget(int thickness, IdealMainLayout::Role role)
     maximumSize(role, maxWidth, maxHeight);
     if (newWidth < ((role == Left || role == Right) ? minWidth : minHeight))
         return; //do not resize widget below its minimum size
-    if (newWidth > ((role == Left || role == Right) ? maxWidth : maxHeight))
-        return; //do not resize widget above its maximum size
+
+    int maxAllowedWidth = ((role == Left || role == Right) ? maxWidth : maxHeight);
+    if (newWidth > maxAllowedWidth)
+        newWidth = maxAllowedWidth; //do not resize widget above its maximum size
 
     m_items[role]->width = newWidth;
 
