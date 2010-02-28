@@ -132,7 +132,7 @@ Stream& Stream::operator--()
   if(m_inputPositionLocked)
     --m_inputLineStartedAt;
   else
-    m_inputLineStartedAt -= (1-KDevelop::IndexedString::fromIndex(*c).length());
+    m_inputLineStartedAt -= (1-KDevelop::IndexedString::lengthFromIndex(*c));
 
 
   return *this;
@@ -174,10 +174,10 @@ void Stream::seek(int offset)
   }else{
     if(offset < m_pos) {
       for(int a = offset; a < m_pos; ++a)
-        m_inputLineStartedAt -= (1-KDevelop::IndexedString::fromIndex(m_string->at(a)).length());
+        m_inputLineStartedAt -= (1-KDevelop::IndexedString::lengthFromIndex(m_string->at(a)));
     }else{
       for(int a = m_pos; a < offset; ++a)
-        m_inputLineStartedAt += (1-KDevelop::IndexedString::fromIndex(m_string->at(a)).length());
+        m_inputLineStartedAt += (1-KDevelop::IndexedString::lengthFromIndex(m_string->at(a)));
     }
   }
   

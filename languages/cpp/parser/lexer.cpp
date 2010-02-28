@@ -115,7 +115,7 @@ QString Token::symbolString() const {
 uint Token::symbolLength() const {
   uint ret = 0;
   for(uint a = position; a < position+size; ++a) {
-    ret += KDevelop::IndexedString::fromIndex(session->contents()[a]).length();
+    ret += KDevelop::IndexedString::lengthFromIndex(session->contents()[a]);
   }
   return ret;
 }
