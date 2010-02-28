@@ -40,9 +40,7 @@
 #include <climits>
 #include "cppdebughelper.h"
 #include "debugbuilders.h"
-#include <language/duchain/dumpchain.h>
 #include "rpp/chartools.h"
-#include <language/duchain/dumpchain.h>
 #include "tokens.h"
 #include <klocalizedstring.h>
 
