@@ -113,7 +113,7 @@ QList<KDevelop::SourceFormatterStyle> AStylePlugin::predefinedStyles()
     st = KDevelop::SourceFormatterStyle( "Java" );
     st.setCaption( "Java" );
     styles << st;
-    st = KDevelop::SourceFormatterStyle( "KR" );
+    st = KDevelop::SourceFormatterStyle( "K&R" );
     st.setCaption( "Kernighan & Ritchie" );
     styles << st;
     st = KDevelop::SourceFormatterStyle( "Linux" );
