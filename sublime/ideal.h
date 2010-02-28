@@ -103,7 +103,7 @@ class IdealDockWidget : public QDockWidget
     Q_OBJECT
 
 public:
-    IdealDockWidget(QWidget *parent);
+    IdealDockWidget(IdealMainWidget *parent);
     virtual ~IdealDockWidget();
 
     Area *area() const;
@@ -147,6 +147,7 @@ private:
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
     bool m_maximized;
+    IdealMainWidget *m_mainWidget;
 };
 
 class View;

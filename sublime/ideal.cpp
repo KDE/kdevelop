@@ -26,11 +26,14 @@
 #include <KIcon>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kglobal.h>
+#include <kshortcutwidget.h>
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KAcceleratorManager>
 #include <KMenu>
 #include <KToolBar>
+#include <KDialog>
 
 #include "area.h"
 #include "view.h"
@@ -326,12 +329,13 @@ void IdealButtonBarWidget::actionToggled(bool state)
     button->blockSignals(blocked);
 }
 
-IdealDockWidget::IdealDockWidget(QWidget *parent)
+IdealDockWidget::IdealDockWidget(IdealMainWidget *parent)
     : QDockWidget(parent),
       m_area(0),
       m_view(0),
       m_docking_area(Qt::NoDockWidgetArea),
-      m_maximized(false)
+      m_maximized(false),
+      m_mainWidget(parent)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
@@ -475,6 +479,9 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     /// end position menu
 
     menu.addSeparator();
+    QAction *setShortcut = menu.addAction(KIcon("configure-shortcuts"), i18n("Assign Shortcut..."));
+
+    menu.addSeparator();
     QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove"));
     QAction* toggleAnchored;
     if ( isAnchored() ) {
@@ -506,6 +513,31 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             return;
         } else if ( triggered == toggleAnchored ) {
             setAnchored(!isAnchored(), true);
+            return;
+        } else if ( triggered == setShortcut ) {
+            KDialog *dialog = new KDialog(this);
+            dialog->setCaption(i18n("Assign Shortcut For '%1' Toolview").arg(m_view->document()->title()));
+            dialog->setButtons( KDialog::Ok | KDialog::Cancel );
+            KShortcutWidget *w = new KShortcutWidget(dialog);
+            KShortcut shortcut;
+            shortcut.setPrimary(m_mainWidget->actionForView(m_view)->shortcuts().value(0));
+            shortcut.setAlternate(m_mainWidget->actionForView(m_view)->shortcuts().value(1));
+            w->setShortcut(shortcut);
+            dialog->setMainWidget(w);
+
+            if (dialog->exec() == QDialog::Accepted) {
+                m_mainWidget->actionForView(m_view)->setShortcuts(w->shortcut().toList());
+
+                //save shortcut config
+                KConfigGroup config = KGlobal::config()->group("UI");
+                QStringList shortcuts;
+                shortcuts << w->shortcut().primary().toString();
+                shortcuts << w->shortcut().alternate().toString();
+                config.writeEntry(QString("Shortcut for %1").arg(m_view->document()->title()), shortcuts);
+                config.sync();
+            }
+
+            delete dialog;
             return;
         }
 
@@ -622,6 +654,15 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
             view->document()->title(), dock,
             static_cast<MainWindow*>(parent())->area(), view);
         m_dockwidget_to_action[dock] = m_view_to_action[view] = action;
+
+        //restore toolview shortcut config
+        KConfigGroup config = KGlobal::config()->group("UI");
+        QStringList shortcuts = config.readEntry(QString("Shortcut for %1").arg(view->document()->title()), QStringList());
+        KShortcut shortcut;
+        shortcut.setPrimary(shortcuts.value(0));
+        shortcut.setAlternate(shortcuts.value(1));
+        action->setShortcut(shortcut);
+
         m_docks->addAction(action);
         bar->show();
     }
