@@ -96,8 +96,6 @@ public:
 protected:
     virtual void paintEvent(QPaintEvent *ev)
     {
-        QLabel::paintEvent(ev);
-
         if (m_tabBar->isVisible() && m_tabBar->count() > 0)
         {
             QStylePainter p(this);
@@ -121,6 +119,8 @@ protected:
                 p.drawPrimitive(QStyle::PE_FrameTabBarBase, optTabBase);
             }
         }
+
+        QLabel::paintEvent(ev);
     }
 
     KTabBar *m_tabBar;
