@@ -216,15 +216,10 @@ void AStylePreferences::setItemChecked(int idx, bool checked)
 void AStylePreferences::updatePreviewText(bool emitChangedSignal)
 {
     Q_UNUSED(emitChangedSignal);
-    QString text;
-    int id = tabWidget->currentIndex();
-    if(id == 0)
-        text = AStylePlugin::indentingSample();
+    if(tabWidget->currentIndex() == 0)
+        emit previewTextChanged(AStylePlugin::indentingSample());
     else
-        text = AStylePlugin::formattingSample();
-
-    QString output = m_formatter->formatSource(text);
-    emit previewTextChanged(output);
+        emit previewTextChanged(AStylePlugin::formattingSample());
 }
 
 void AStylePreferences::currentTabChanged()
