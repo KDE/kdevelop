@@ -805,72 +805,69 @@ void CMakeManager::dirtyFile(const QString & dirty)
     }
     else if(QFileInfo(dirty).isDir())
     {
-        foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
+        QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
+        Q_ASSERT(folders.isEmpty() || folders.size()==1);
+        
+        if(!folders.isEmpty())
         {
-            QList<ProjectFolderItem*> folders=project->foldersForUrl(dirty);
-            Q_ASSERT(folders.isEmpty() || folders.size()==1);
-            
             QStringList entriesL = QDir(dirty).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
             QSet<QString> entries = filterFiles(entriesL);
             
-            if(!folders.isEmpty())
+            ProjectFolderItem* item=folders.first();
+            KUrl folderurl = item->url();
+            
+            //We look for new elements
+            foreach( const QString& entry, entries )
             {
-                ProjectFolderItem* item=folders.first();
-                KUrl folderurl = item->url();
-                
-                //We look for new elements
-                foreach( const QString& entry, entries )
+                if( item->hasFileOrFolder( entry ) )
+                    continue;
+
+                KUrl fileurl = folderurl;
+                fileurl.addPath( entry );
+
+                if( QFileInfo( fileurl.toLocalFile() ).isDir() )
                 {
-                    if( item->hasFileOrFolder( entry ) )
-                        continue;
-
-                    KUrl fileurl = folderurl;
-                    fileurl.addPath( entry );
-
-                    if( QFileInfo( fileurl.toLocalFile() ).isDir() )
+                    KUrl cache=fileurl;
+                    cache.addPath("CMakeCache.txt");
+                    fileurl.adjustPath(KUrl::AddTrailingSlash);
+                    if(!QFile::exists(cache.toLocalFile())
+                        && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
                     {
-                        KUrl cache=fileurl;
-                        cache.addPath("CMakeCache.txt");
-                        fileurl.adjustPath(KUrl::AddTrailingSlash);
-                        if(!QFile::exists(cache.toLocalFile())
-                            && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
-                        {
-                            new ProjectFolderItem( item->project(), fileurl, item );    
-                        }
-                    }
-                    else
-                    {
-                        new KDevelop::ProjectFileItem( item->project(), fileurl, item );
+                        new ProjectFolderItem( item->project(), fileurl, item );    
                     }
                 }
-                
-                //We look for removed elements
-                for(int i=0; i<item->rowCount(); i++)
+                else
                 {
-                    QStandardItem* it=item->child(i, 0);
-                    if(it->type()==ProjectBaseItem::Target)
-                        continue;
-                    
-                    QString current=it->text();
-                    if(!entries.contains(current))
+                    new KDevelop::ProjectFileItem( item->project(), fileurl, item );
+                }
+            }
+            
+            //We look for removed elements
+            for(int i=0; i<item->rowCount(); i++)
+            {
+                QStandardItem* it=item->child(i, 0);
+                if(it->type()==ProjectBaseItem::Target)
+                    continue;
+                
+                QString current=it->text();
+                if(!entries.contains(current))
+                {
+                    KUrl fileurl = folderurl;
+                    fileurl.addPath(current);
+                
+                    switch(it->type())
                     {
-                        KUrl fileurl = folderurl;
-                        fileurl.addPath(current);
-                    
-                        switch(it->type())
-                        {
-                            case ProjectBaseItem::File:
-                                foreach(const ProjectFileItem* removed, p->filesForUrl(fileurl))
-                                    removed->parent()->removeRow(removed->row());
-                                break;
-                            case ProjectBaseItem::Folder:
-                            case ProjectBaseItem::BuildFolder:
-                                foreach(const ProjectFolderItem* removed, p->foldersForUrl(fileurl))
-                                    removed->parent()->removeRow(removed->row());
-                                break;
-                            default:
-                                break;
-                        }
+                        case ProjectBaseItem::File:
+                            foreach(const ProjectFileItem* removed, p->filesForUrl(fileurl))
+                                removed->parent()->removeRow(removed->row());
+                            break;
+                        case ProjectBaseItem::Folder:
+                        case ProjectBaseItem::BuildFolder:
+                            foreach(const ProjectFolderItem* removed, p->foldersForUrl(fileurl))
+                                removed->parent()->removeRow(removed->row());
+                            break;
+                        default:
+                            break;
                     }
                 }
             }
