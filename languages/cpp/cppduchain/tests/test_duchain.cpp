@@ -4191,9 +4191,10 @@ void TestDUChain::testOperatorUses()
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 2);
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 13, 1, 15));
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 13, 2, 23));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 1);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->size(), 2);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(2, 13, 2, 15));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(3, 13, 3, 23));
 
     release(top);
   }
@@ -4209,7 +4210,8 @@ void TestDUChain::testOperatorUses()
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 2);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 1);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->size(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 15, 1, 16));
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 3, 2, 12));
 
