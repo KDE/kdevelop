@@ -122,6 +122,7 @@ private slots:
   void testTemplateForwardDeclaration2();
   void testTemplateRecursiveInstantiation();
   void testTemplateInternalSearch();
+  void testTemplateImplicitInstantiations();
   void testStringSets();
   void testAssignedContexts();
   void testTryCatch();
@@ -166,8 +167,7 @@ private slots:
   void testEllipsis();
 
   void testMultiByteCStrings();
-  
-  
+
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 
