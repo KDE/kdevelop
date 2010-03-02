@@ -73,37 +73,37 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
   if (node->tilde)
     tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
 
-  if (OperatorFunctionIdAST *op_id = node->operator_id)
-    {
+  if (OperatorFunctionIdAST *op_id = node->operator_id) {
 #if defined(__GNUC__)
 #warning "NameASTVisitor::visitUnqualifiedName() -- implement me"
 #endif
 
-      QString tmpString;
-      tmpString += QLatin1String("operator");
+    QString tmpString;
+    tmpString += QLatin1String("operator");
 
-      if (op_id->op && op_id->op->op)
-        tmpString +=  decode(m_session, op_id->op, true);
-      else
-        tmpString += QLatin1String("{...cast...}");
+    if (op_id->op && op_id->op->op)
+      tmpString +=  decode(m_session, op_id->op, true);
+    else
+      tmpString += QLatin1String("{...cast...}");
 
-      tmp_name = IndexedString(tmpString);
+    tmp_name = IndexedString(tmpString);
 
-      m_typeSpecifier = op_id->type_specifier;
-    }
+    m_typeSpecifier = op_id->type_specifier;
+  }
 
   m_currentIdentifier = Identifier(tmp_name);
   m_find.openIdentifier(m_currentIdentifier);
 
-  if (node->template_arguments)
-    {
-      visitNodes(this, node->template_arguments);
-    }else if(node->end_token == node->start_token + 3 && node->id == node->start_token && m_session->token_stream->token(node->id+1).symbol() == KDevelop::IndexedString('<')) {
-      ///@todo Represent this nicer in the AST
-      ///It's probably a type-specifier with instantiation of the default-parameter, like "Bla<>".
-      m_find.openQualifiedIdentifier( ExpressionEvaluationResult() );
-      m_find.closeQualifiedIdentifier();
-    }
+  if (node->template_arguments) {
+    visitNodes(this, node->template_arguments);
+  } else if(node->end_token == node->start_token + 3 && node->id == node->start_token
+            && m_session->token_stream->token(node->id+1).symbol() == KDevelop::IndexedString('<'))
+  {
+    ///@todo Represent this nicer in the AST
+    ///It's probably a type-specifier with instantiation of the default-parameter, like "Bla<>".
+    m_find.openQualifiedIdentifier( ExpressionEvaluationResult() );
+    m_find.closeQualifiedIdentifier();
+  }
 
   {
     LOCKDUCHAIN;
