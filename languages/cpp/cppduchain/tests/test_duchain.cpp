@@ -4178,6 +4178,25 @@ void TestDUChain::testOperatorUses()
 
     release(top);
   }
+  {
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("struct foo { foo& operator=(const foo&){} };\n"
+                      "int main() { foo t1; foo t2 = t1;\n"
+                      // not valid in global context, hence put it into main
+                      "t1.operator=(t2); return 0; }");
+
+    TopDUContext* top = parse(method, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
+    qDebug() << top->childContexts().first()->localDeclarations().first()->toString();
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 2);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 15, 1, 16));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 3, 2, 11));
+
+    release(top);
+  }
 }
 
 struct TestContext {
