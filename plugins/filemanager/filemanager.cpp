@@ -34,9 +34,13 @@
 #include <klineedit.h>
 
 #include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/context.h>
 
 #include "kdevfilemanagerplugin.h"
+#include <QMenu>
+#include <interfaces/contextmenuextension.h>
 
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     :QWidget(parent)
@@ -58,6 +62,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     dirop->setView( KFile::Tree );
     dirop->setupMenu( KDirOperator::SortActions | KDirOperator::FileActions | KDirOperator::NavActions | KDirOperator::ViewActions );
     connect(dirop, SIGNAL(urlEntered(const KUrl&)), SLOT(updateNav(const KUrl&)));
+    connect(dirop, SIGNAL(contextMenuAboutToShow(KFileItem,QMenu*)), SLOT(fillContextMenu(KFileItem,QMenu*)));
     //KDirOperator emits fileSelected() twice because both activated() and doubleClicked() emit fileClicked().
     //activated() should be enough, so disconnect doubleClicked()
     disconnect(dirop->view(), SIGNAL(doubleClicked(const QModelIndex&)),
@@ -67,6 +72,15 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     connect( dirop, SIGNAL(fileSelected(const KFileItem&)), this, SLOT(openFile(const KFileItem&)) );
 
     setupActions();
+}
+
+void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
+{
+    if (item.isFile()) {
+        KDevelop::FileContext context(item.url());
+        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
+    }
 }
 
 void FileManager::openFile(const KFileItem& file)
