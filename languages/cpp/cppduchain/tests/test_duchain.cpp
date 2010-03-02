@@ -4181,6 +4181,25 @@ void TestDUChain::testOperatorUses()
   {
     //                 0         1         2         3         4         5
     //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("struct foo { bool operator==(const foo&){} };\n"
+                      "int main() { foo t1; foo t2;\n"
+                      // not valid in global context, hence put it into main
+                      "bool b1 = t1 == t2;\n"
+                      "bool b2 = t1.operator==(t2); }");
+
+    TopDUContext* top = parse(method, DumpAll);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 2);
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 13, 1, 15));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 13, 2, 23));
+
+    release(top);
+  }
+  {
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct foo { foo& operator=(const foo&){} };\n"
                       "int main() { foo t1; foo t2 = t1;\n"
                       // not valid in global context, hence put it into main
@@ -4190,10 +4209,9 @@ void TestDUChain::testOperatorUses()
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
-    qDebug() << top->childContexts().first()->localDeclarations().first()->toString();
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 15, 1, 16));
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 3, 2, 11));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 3, 2, 12));
 
     release(top);
   }

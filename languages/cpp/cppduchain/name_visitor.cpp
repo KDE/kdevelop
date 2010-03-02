@@ -69,10 +69,8 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
   if (node->id)
     tmp_name = m_session->token_stream->token(node->id).symbol();
-
   if (node->tilde)
     tmp_name = IndexedString(QLatin1String("~") + tmp_name.str());
-
   if (OperatorFunctionIdAST *op_id = node->operator_id) {
 #if defined(__GNUC__)
 #warning "NameASTVisitor::visitUnqualifiedName() -- implement me"
@@ -90,7 +88,6 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
     m_typeSpecifier = op_id->type_specifier;
   }
-
   m_currentIdentifier = Identifier(tmp_name);
   m_find.openIdentifier(m_currentIdentifier);
 
@@ -109,14 +106,22 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
     LOCKDUCHAIN;
     m_find.closeIdentifier(node == m_finalName);
   }
-
-  if( node->id && !m_find.lastDeclarations().isEmpty() ) {
+  if( (node->id || node->operator_id) && !m_find.lastDeclarations().isEmpty() ) {
     bool had = false;
+    uint start_token;
+    uint end_token;
+    if ( node->id ) {
+      start_token = node->id;
+      end_token = node->id + 1;
+    } else {
+      start_token = node->start_token;
+      end_token = node->end_token;
+    }
     foreach(const DeclarationPointer &decl, m_find.lastDeclarations()) {
       if(decl && !decl->isForwardDeclaration()) {
         //Prefer registering non forward-declaration uses
         if(m_visitor)
-          m_visitor->newUse( node, node->id, node->id+1, decl );
+          m_visitor->newUse( node, start_token, end_token, decl );
         had = true;
         break;
       }
@@ -124,7 +129,7 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
 
     if(!had) //only forward-declarations, register to any.
       if(m_visitor)
-        m_visitor->newUse( node, node->id, node->id+1, m_find.lastDeclarations()[0] );
+        m_visitor->newUse( node, start_token,end_token, m_find.lastDeclarations()[0] );
   } else {
     if(node == m_finalName) {
       if(m_visitor) { //Create a zero use, which will be highlighted as an error
