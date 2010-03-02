@@ -63,7 +63,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
 
     // Translate if the file has changed since grepping
     KTextEditor::Range range2 = range;
-    range = m_tracker.translateRange( url, range );
+//     range = m_tracker.translateRange( url, range );
 
     kDebug() << "range" << range2 << "translated to " << range;
 
