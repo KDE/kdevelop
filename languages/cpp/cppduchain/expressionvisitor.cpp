@@ -1128,6 +1128,18 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         {
           token = node->initializer->start_token;
           fail = !buildParametersFromExpression(node->initializer->expression);
+        } else if(!node->initializer->expression && node->initializer->initializer_clause && constructedType)
+        { // report operator= use in i.e.: foo = bar;
+          token = node->initializer->start_token;
+          fail = !buildParametersFromExpression(node->initializer->initializer_clause->expression);
+          LOCKDUCHAIN;
+          declarations.clear();
+          if ( ClassDeclaration* cdec = dynamic_cast<ClassDeclaration*>(constructedType->declaration(m_source)) ) {
+            ///TODO: global operator= functions, for now only class members are handled
+            foreach(Declaration* dec, cdec->internalContext()->findDeclarations(Identifier("operator="))) {
+              declarations << DeclarationPointer(dec);
+            }
+          }
         }
       }
       else if(node->declarator->parameter_is_initializer && node->declarator->parameter_declaration_clause)

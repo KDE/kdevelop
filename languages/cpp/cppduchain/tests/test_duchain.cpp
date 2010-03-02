@@ -4206,13 +4206,13 @@ void TestDUChain::testOperatorUses()
                       // not valid in global context, hence put it into main
                       "t1.operator=(t2); return 0; }");
 
-    TopDUContext* top = parse(method, DumpAll);
+    TopDUContext* top = parse(method, DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 2);
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->size(), 2);
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 15, 1, 16));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 28, 1, 29));
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 3, 2, 12));
 
     release(top);
