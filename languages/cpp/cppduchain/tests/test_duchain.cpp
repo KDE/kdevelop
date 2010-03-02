@@ -3260,18 +3260,19 @@ void TestDUChain::testTemplateInternalSearch() {
 
 void TestDUChain::testTemplateImplicitInstantiations()
 {
+  {
   QByteArray method("class A { template<typename T> static void foo(T){} };\n"
-                    "foo(5); foo('x'); foo(\"asdfasdfadf\");\n");
+                    "A::foo(5); A::foo('x'); A::foo(\"asdfasdfadf\");\n");
 
   TopDUContext* top = parse(method, DumpNone);
 
   DUChainWriteLocker lock(DUChain::lock());
-  QCOMPARE(top->childContexts().count(), 1);
   QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
   TemplateDeclaration* tpl = dynamic_cast<TemplateDeclaration*>(top->childContexts().first()->localDeclarations().first());
   QVERIFY(tpl);
   QCOMPARE(tpl->instantiations().size(), 3);
   release(top);
+  }
 }
 
 void TestDUChain::testSourceCodeInsertion()
