@@ -672,6 +672,34 @@ void TestDUChain::testBaseUses()
 
     release(top);
   }
+  {
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray method("template<typename T> class A{ A(){} };\n"
+                      "template<typename T> class B : public A<T> { B() : A<T>() {} };");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+
+    // uses of class A
+    QCOMPARE(top->localDeclarations().first()->uses().size(), 1);
+    QCOMPARE(top->localDeclarations().first()->uses().begin()->size(), 2);
+    // use in class B : public A<T>
+    QCOMPARE(top->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 38, 1, 39));
+    // use in B() : A<T>()
+    QCOMPARE(top->localDeclarations().first()->uses().begin()->at(1), SimpleRange(1, 51, 1, 52));
+
+    // use of A's ctor
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().size(), 1);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().begin()->size(), 1);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().begin()->first(), SimpleRange(1, 55, 1, 56));
+
+    release(top);
+  }
 }
 
 
