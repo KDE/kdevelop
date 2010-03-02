@@ -3268,7 +3268,22 @@ void TestDUChain::testTemplateImplicitInstantiations()
 
   DUChainWriteLocker lock(DUChain::lock());
   QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
+  QCOMPARE(top->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
   TemplateDeclaration* tpl = dynamic_cast<TemplateDeclaration*>(top->childContexts().first()->localDeclarations().first());
+  QVERIFY(tpl);
+  QCOMPARE(tpl->instantiations().size(), 3);
+  release(top);
+  }
+  {
+  QByteArray method("template<typename T> void foo(T){}\n"
+                    "foo(5); foo('x'); foo(\"asdfasdfadf\");\n");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+  QCOMPARE(top->localDeclarations().size(), 1);
+  TemplateDeclaration* tpl = dynamic_cast<TemplateDeclaration*>(top->localDeclarations().first());
   QVERIFY(tpl);
   QCOMPARE(tpl->instantiations().size(), 3);
   release(top);
