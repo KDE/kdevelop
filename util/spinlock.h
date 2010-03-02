@@ -34,12 +34,13 @@ inline uint timevalToMilliSeconds(timeval v) {
 }
 
 struct SpinLockData {
-    SpinLockData() {
+    SpinLockData() : needWake(false) {
         lock = 0;
     }
     
     QAtomicInt lock; //The variable that manages the lock
     
+    volatile bool needWake;
     QMutex waitingMutex;
     QWaitCondition waitingCondition;
 };
@@ -52,7 +53,7 @@ struct SpinLockData {
 ///      In _most_ cases it should work, but in worst-case the thread sleeps @p mSleep milliseconds.
 ///@param mSleep maximum number of milliseconds to sleep when waiting for the lock
 ///@param Timeout the timeount value
-template<uint mSleep = 1, int mTimeout = 0>
+template<uint mSleep = 10, int mTimeout = 0>
 class SpinLock
 {
     public:
@@ -81,6 +82,7 @@ class SpinLock
                     
                     //We need to wait now
                     m_data.waitingMutex.lock();
+                    m_data.needWake = true;
                     m_data.waitingCondition.wait(&m_data.waitingMutex, mSleep);
                     m_data.waitingMutex.unlock();
                 }
@@ -90,6 +92,7 @@ class SpinLock
                 {
                     //We need to wait now
                     m_data.waitingMutex.lock();
+                    m_data.needWake = true;
                     m_data.waitingCondition.wait(&m_data.waitingMutex, mSleep);
                     m_data.waitingMutex.unlock();
                 }
@@ -98,8 +101,13 @@ class SpinLock
         
         ~SpinLock() {
             if(m_locked) {
+                bool needWake = m_data.needWake;
+                
+                m_data.needWake = false;
                 m_data.lock = 0;
-                m_data.waitingCondition.wakeOne();
+                
+                if(needWake)
+                    m_data.waitingCondition.wakeOne();
             }
         }
         
