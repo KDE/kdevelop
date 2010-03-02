@@ -202,6 +202,17 @@ QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localP
         kDebug(9007) << "skipping path" << skipPath;
 #endif
 
+    if (includeName.startsWith('/')) {
+        QFileInfo info(includeName);
+        if (info.exists() && info.isReadable() && info.isFile()) {
+            //kDebug(9007) << "found include file:" << info.absoluteFilePath();
+            ret.first = KUrl(info.absoluteFilePath());
+            ret.first.cleanPath();
+            ret.second = KUrl("/");
+            return ret;
+        }
+    }
+
     if (includeType == rpp::Preprocessor::IncludeLocal && localPath != skipPath) {
       QString check = localPath.toLocalFile(KUrl::AddTrailingSlash) + includeName;
         QFileInfo info(check);
@@ -291,14 +302,19 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
     QMap<KUrl, bool> hadPaths; //Only process each path once
     QList<KDevelop::IncludeItem> ret;
 
-    KUrl::List paths = addIncludePaths;
-    if(!onlyAddedIncludePaths) {
-      paths += findIncludePaths(source, 0);
+    KUrl::List paths;
+    if ( addPath.startsWith('/') ) {
+      paths << KUrl("/");
+    } else {
+      paths = addIncludePaths;
+      if(!onlyAddedIncludePaths) {
+        paths += findIncludePaths(source, 0);
 
-      if(local) {
-          KUrl localPath = source;
-          localPath.setFileName(QString());
-          paths.push_front(localPath);
+        if(local) {
+            KUrl localPath = source;
+            localPath.setFileName(QString());
+            paths.push_front(localPath);
+        }
       }
     }
 
