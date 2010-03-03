@@ -646,6 +646,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       LOCKDUCHAIN;
       m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeChar));
       m_lastInstance = Instance( true );
+      Q_ASSERT(token.size == 3);
+      static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>( token.symbolByteArray().at(1) );
     } else if(token.symbol() == True || token.symbol() == False) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
