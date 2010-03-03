@@ -638,8 +638,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
     const Token& token(tokenFromIndex(node->token));
     
-    IndexedString True("true");
-    IndexedString False("false");
+    static const IndexedString True("true");
+    static const IndexedString False("false");
 
     if(token.kind == Token_char_literal) {
       // char literal e.g. 'x'
