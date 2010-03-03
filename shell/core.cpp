@@ -280,7 +280,9 @@ void Core::cleanup()
         d->selectionController->cleanup();
         // Save the layout of the ui here, so run it first
         d->uiController->cleanup();
-        d->workingSetController->cleanup();
+
+        if (d->workingSetController)
+            d->workingSetController->cleanup();
 
         /* Must be called before projectController->cleanup(). */
         // Closes all documents (discards, as already saved if the user wished earlier)
