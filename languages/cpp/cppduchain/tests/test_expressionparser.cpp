@@ -162,55 +162,38 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Qua
 }
 
 void TestExpressionParser::testIntegralType() {
+  DUContext* top = parse(" ", DumpNone);
+  Cpp::ExpressionParser parser(true,true);
+
   {
-    QByteArray type("const char*");
-    DUContext* top = parse(type, DumpNone);
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("const char*", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
     
-    Cpp::ExpressionParser parser(true,true);
+    AbstractType::Ptr aType(result.type.abstractType());
+    PointerType::Ptr ptrType = aType.cast<PointerType>();
+    QVERIFY(ptrType);
+    QVERIFY(!(ptrType->modifiers() & PointerType::ConstModifier));
+    
+    AbstractType::Ptr aBaseType = ptrType->baseType();
+    QVERIFY(aBaseType);
+    IntegralType::Ptr iBaseType = aBaseType.cast<IntegralType>();
+    QVERIFY(iBaseType);
+    QCOMPARE(iBaseType->dataType(), (uint)IntegralType::TypeChar);
 
-    {
-      Cpp::ExpressionEvaluationResult result = parser.evaluateType(type, KDevelop::DUContextPointer(top));
-      QVERIFY(result.isValid());
-      
-      AbstractType::Ptr aType(result.type.abstractType());
-      PointerType::Ptr ptrType = aType.cast<PointerType>();
-      QVERIFY(ptrType);
-      QVERIFY(!(ptrType->modifiers() & PointerType::ConstModifier));
-      
-      AbstractType::Ptr aBaseType = ptrType->baseType();
-      QVERIFY(aBaseType);
-      IntegralType::Ptr iBaseType = aBaseType.cast<IntegralType>();
-      QVERIFY(iBaseType);
-      QCOMPARE(iBaseType->dataType(), (uint)IntegralType::TypeChar);
-
-      QVERIFY(iBaseType->modifiers() & IntegralType::ConstModifier);
-    }
+    QVERIFY(iBaseType->modifiers() & IntegralType::ConstModifier);
   }
   {
-    QByteArray type("'x'");
-    DUContext* top = parse(type, DumpNone);
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("'x'", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
     
-    Cpp::ExpressionParser parser(true,true);
-
-    {
-      Cpp::ExpressionEvaluationResult result = parser.evaluateType(type, KDevelop::DUContextPointer(top));
-      QVERIFY(result.isValid());
-      
-      AbstractType::Ptr aType(result.type.abstractType());
-      ConstantIntegralType::Ptr ciType = aType.cast<ConstantIntegralType>();
-      QVERIFY(ciType);
-      QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeChar);
-      QCOMPARE(ciType->value<char>(), 'x');
-    }
+    AbstractType::Ptr aType(result.type.abstractType());
+    ConstantIntegralType::Ptr ciType = aType.cast<ConstantIntegralType>();
+    QVERIFY(ciType);
+    QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeChar);
+    QCOMPARE(ciType->value<char>(), 'x');
   }
   {
-    QByteArray type("5");
-    DUContext* top = parse(type, DumpNone);
-    
-    Cpp::ExpressionParser parser(true,true);
-
-    {
-      Cpp::ExpressionEvaluationResult result = parser.evaluateType(type, KDevelop::DUContextPointer(top));
+      Cpp::ExpressionEvaluationResult result = parser.evaluateType("5", KDevelop::DUContextPointer(top));
       QVERIFY(result.isValid());
       
       AbstractType::Ptr aType(result.type.abstractType());
@@ -218,24 +201,27 @@ void TestExpressionParser::testIntegralType() {
       QVERIFY(ciType);
       QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeInt);
       QCOMPARE(ciType->value<int>(), 5);
-    }
   }
   {
-    QByteArray type("true");
-    DUContext* top = parse(type, DumpNone);
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("true", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
     
-    Cpp::ExpressionParser parser(true,true);
-
-    {
-      Cpp::ExpressionEvaluationResult result = parser.evaluateType(type, KDevelop::DUContextPointer(top));
-      QVERIFY(result.isValid());
-      
-      AbstractType::Ptr aType(result.type.abstractType());
-      ConstantIntegralType::Ptr ciType = aType.cast<ConstantIntegralType>();
-      QVERIFY(ciType);
-      QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeBoolean);
-      QCOMPARE(ciType->value<bool>(), true);
-    }
+    AbstractType::Ptr aType(result.type.abstractType());
+    ConstantIntegralType::Ptr ciType = aType.cast<ConstantIntegralType>();
+    QVERIFY(ciType);
+    QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeBoolean);
+    QCOMPARE(ciType->value<bool>(), true);
+  }
+  {
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("'\n'", KDevelop::DUContextPointer(top));
+    QVERIFY(result.isValid());
+    
+    AbstractType::Ptr aType(result.type.abstractType());
+    ConstantIntegralType::Ptr ciType = aType.cast<ConstantIntegralType>();
+    QVERIFY(ciType);
+    QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeChar);
+    QEXPECT_FAIL("", "store values for chars of escape sequences in ExpressionVisitor::visitPrimaryExpression", Continue);
+    QCOMPARE(ciType->value<char>(), '\n');
   }
 }
 
