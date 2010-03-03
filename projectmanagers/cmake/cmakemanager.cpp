@@ -151,7 +151,6 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
 
     m_highlight = new KDevelop::CodeHighlighting(this);
 
-    QString cmakeCmd = KStandardDirs::findExe("cmake");
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
 }
 

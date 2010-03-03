@@ -1358,7 +1358,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 }
                 
                 QDir d(current);
-                matches+=d.entryList(globs);
+                matches+=d.entryList(globs, QDir::NoDotAndDotDot | QDir::TypeMask);
             }
             m_vars->insert(file->variable(), matches);
             kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
@@ -1377,15 +1377,11 @@ int CMakeProjectVisitor::visit(const FileAst *file)
                 QString dir=candidates.dequeue();
                 directories.append(dir);
                 QDir direc(dir);
-                foreach(const QString& s, direc.entryList(QDir::Dirs))
-                {
-                    if(s!=".." && s!=".")
-                        candidates.enqueue(s);
-                }
+                candidates += direc.entryList(QDir::NoDotAndDotDot | QDir::Dirs);
             }
 
             QDir d(current);
-            QStringList matches=d.entryList(file->globbingExpressions());
+            QStringList matches=d.entryList(file->globbingExpressions(), QDir::NoDotAndDotDot | QDir::TypeMask);
             m_vars->insert(file->variable(), matches);
             kDebug(9042) << "file glob_recurse" << file->path() << file->globbingExpressions() << matches;
         }   break;
