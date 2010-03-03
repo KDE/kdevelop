@@ -2537,6 +2537,66 @@ void TestDUChain::testConstructorUses()
 
     release(top);
   }
+  {
+    QByteArray text;
+    text += "template<typename T>\n";
+    text += "class Q {\n";
+    text += "public:\n";
+    text += "  Q(T var) { }\n";
+    text += "  Q() { }\n";
+    text += "};\n";
+    text += "template<typename T>\n";
+    text += "class B : public Q<T> {\n";
+    text += "public:\n";
+    text += "  B(T var) : Q<T>(var) { }\n";
+    text += "  B() : Q<T>() { }\n";
+    text += "};\n";
+    text += "int main(int argc, char* argv[]) {\n";
+    text += "  Q<int>  a1(123);\n";
+    text += "  Q<int>  a2 = Q<int>(123);\n";
+    text += "  Q<int> *a3 = new Q<int>(123);\n";
+    text += "  Q<int>  a4(argc);\n";
+    text += "  Q<int>  a12();\n";
+    text += "  Q<int>  a22 = Q<int>();\n";
+    text += "  Q<int> *a32 = new Q<int>();\n";
+    text += "}\n";
+
+    TopDUContext* top = parse(text, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->childContexts().size(), 6);
+    // first one is the template context
+    QCOMPARE(top->childContexts()[1]->type(), DUContext::Class);
+    QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
+
+    // Q(T var)
+    Declaration *ctorDecl = top->childContexts()[1]->localDeclarations()[0];
+    QEXPECT_FAIL("", "no uses get reported for ctors of template classes", Abort);
+    QCOMPARE(ctorDecl->uses().size(), 1);
+    ///TODO
+    /*
+    QList<SimpleRange> uses = ctorDecl->uses().values().first();
+
+    QCOMPARE(uses.size(), 5);
+    QCOMPARE(uses[0], SimpleRange(7, 16, 7, 17));
+    QCOMPARE(uses[1], SimpleRange(11, 7, 11, 8));
+    QCOMPARE(uses[2], SimpleRange(12, 11, 12, 12));
+    QCOMPARE(uses[3], SimpleRange(13, 15, 13, 16));
+    QCOMPARE(uses[4], SimpleRange(14, 7, 14, 8));
+
+    // Q()
+    ctorDecl = top->childContexts()[1]->localDeclarations()[1];
+    QCOMPARE(ctorDecl->uses().size(), 1);
+    uses = ctorDecl->uses().values().first();
+
+    QCOMPARE(uses.size(), 4);
+    QCOMPARE(uses[0], SimpleRange(8, 9, 8, 10));
+    QCOMPARE(uses[1], SimpleRange(15, 8, 15, 9));
+    QCOMPARE(uses[2], SimpleRange(16, 12, 16, 13));
+    QCOMPARE(uses[3], SimpleRange(17, 16, 17, 17));
+    */
+    release(top);
+  }
 }
 
 void TestDUChain::testCodeModel() {
