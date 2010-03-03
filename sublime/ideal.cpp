@@ -516,7 +516,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             return;
         } else if ( triggered == setShortcut ) {
             KDialog *dialog = new KDialog(this);
-            dialog->setCaption(i18n("Assign Shortcut For '%1' Toolview").arg(m_view->document()->title()));
+            dialog->setCaption(i18n("Assign Shortcut For '%1' Tool View").arg(m_view->document()->title()));
             dialog->setButtons( KDialog::Ok | KDialog::Cancel );
             KShortcutWidget *w = new KShortcutWidget(dialog);
             KShortcut shortcut;
