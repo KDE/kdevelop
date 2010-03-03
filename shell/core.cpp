@@ -95,7 +95,7 @@ bool CorePrivate::initialize(Core::Setup mode)
     {
         sessionController = new SessionController(m_core);
     }
-    if( !workingSetController )
+    if( !workingSetController && !(mode & Core::NoUi) )
     {
         workingSetController = new WorkingSetController(m_core);
     }
@@ -185,10 +185,10 @@ bool CorePrivate::initialize(Core::Setup mode)
 
     kDebug() << "loading session plugins";
     pluginController->initialize();
-    workingSetController->initialize();
 
     if(!(mode & Core::NoUi))
     {
+        workingSetController->initialize();
         /* Need to do this after everything else is loaded.  It's too
             hard to restore position of views, and toolbars, and whatever
             that are not created yet.  */
