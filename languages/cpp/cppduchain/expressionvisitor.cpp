@@ -640,8 +640,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     
     IndexedString True("true");
     IndexedString False("false");
-    
-    if(token.symbol() == True || token.symbol() == False) {
+
+    if(token.kind == Token_char_literal) {
+      // char literal e.g. 'x'
+      LOCKDUCHAIN;
+      m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeChar));
+      m_lastInstance = Instance( true );
+    } else if(token.symbol() == True || token.symbol() == False) {
       ///We have a boolean constant, we need to catch that here
       LOCKDUCHAIN;
       m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeBoolean));

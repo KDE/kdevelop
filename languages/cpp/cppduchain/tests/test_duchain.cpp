@@ -3290,7 +3290,7 @@ void TestDUChain::testTemplateImplicitInstantiations()
 {
   {
   QByteArray method("class A { template<typename T> static void foo(T){} };\n"
-                    "void test() { A::foo(5); /*A::foo('x');*/ A::foo(\"asdfasdfadf\");\n }");
+                    "void test() { A::foo(5); A::foo('x'); A::foo(\"asdfasdfadf\");\n }");
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -3300,12 +3300,12 @@ void TestDUChain::testTemplateImplicitInstantiations()
   QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
   TemplateDeclaration* tpl = dynamic_cast<TemplateDeclaration*>(top->childContexts().first()->localDeclarations().first());
   QVERIFY(tpl);
-  QCOMPARE(tpl->instantiations().size(), 2);
+  QCOMPARE(tpl->instantiations().size(), 3);
   release(top);
   }
   {
   QByteArray method("template<typename T> void foo(T){}\n"
-                    "void test() { foo(5); /*foo('x');*/ foo(\"asdfasdfadf\"); }\n");
+                    "void test() { foo(5); foo('x'); foo(\"asdfasdfadf\"); }\n");
 
   TopDUContext* top = parse(method, DumpNone);
 
@@ -3313,7 +3313,7 @@ void TestDUChain::testTemplateImplicitInstantiations()
   QCOMPARE(top->localDeclarations().size(), 2);
   TemplateDeclaration* tpl = dynamic_cast<TemplateDeclaration*>(top->localDeclarations().first());
   QVERIFY(tpl);
-  QCOMPARE(tpl->instantiations().size(), 2);
+  QCOMPARE(tpl->instantiations().size(), 3);
   release(top);
   }
 }
