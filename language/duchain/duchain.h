@@ -76,7 +76,7 @@ public:
    *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context
    *                    may be invalid if the update failed. A queued connection is used if a re-parse has to be done.
    * @param priority An optional priority for the job. The lower the value, the higher it's priority.
-   * @note The duchain must be at least read-locked locked when this is called!
+   * @note The duchain must not be locked when this is called!
    */
    Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0, int priority = 1) const;
   
