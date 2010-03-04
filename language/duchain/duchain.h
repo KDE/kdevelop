@@ -74,9 +74,10 @@ public:
    * @param notifyReady An optional pointer to a QObject that should contain a slot
    *                    "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
    *                    The notification is guaranteed to be called once for each call to updateContextForUrl. The given top-context
-   *                    may be invalid if the update failed. A queued connection is used if a re-parse has to be done.
+   *                    may be invalid if the update failed. A queued connection is used if a re-parse has to be done. The duchain
+   *                    will _not_ be locked when updateReady is called.
    * @param priority An optional priority for the job. The lower the value, the higher it's priority.
-   * @note The duchain must not be locked when this is called!
+   * @note The duchain must _not_ be locked when this is called!
    */
    Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = 0, int priority = 1) const;
   
