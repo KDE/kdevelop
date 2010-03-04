@@ -2935,6 +2935,32 @@ void TestDUChain::testSpecializedTemplates() {
     
     release(top);
   }
+  {
+    //                 0         1         2         3         4         5
+    //                 012345678901234567890123456789012345678901234567890123456789
+    QByteArray text("template<class T>\n"
+                    "class A { void foo(T arg); };\n"
+                    "template<class T> void A<T>::foo(T arg) {}");
+    TopDUContext* top = parse(text, DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+  
+    QCOMPARE(top->localDeclarations().count(), 2);
+    TemplateDeclaration* base = dynamic_cast<TemplateDeclaration*>(top->localDeclarations()[0]);
+    QVERIFY(base);
+    QCOMPARE(base->specializationsSize(), 0u);
+    QCOMPARE(base->instantiations().size(), 1);
+    QCOMPARE(base->instantiations().begin().value()->specializationsSize(), 0u);
+    // use of class T in A<T>
+    QCOMPARE(top->childContexts().size(), 5);
+    QCOMPARE(top->childContexts().at(2)->type(), DUContext::Template);
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().size(), 1);
+    QEXPECT_FAIL("", "The uses of T are not reported when we define the default implementation outside the class body", Abort);
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().size(), 1);
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->size(), 2);
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->at(0), SimpleRange(2, 22, 2, 23));
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 31, 2, 32));
+    release(top);
+  }
 }
 
 int value( const AbstractType::Ptr& type ) {
