@@ -1031,6 +1031,25 @@ VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
     return 0;
 }
 
+void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
+{
+    job->setResults(qVariantFromValue(KUrl(job->output())));
+}
+
+VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
+{
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, localLocation.toLocalFile())) {
+        //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
+        *job << "git" << "config" << "remote.origin.url";
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitRepoLocationOutput(DVcsJob*)));
+        return job;
+    }
+    
+    delete job;
+    return 0;
+}
+
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
     empty_cmd();
@@ -1055,8 +1074,3 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     return 0;
 }
 
-VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
-{
-    empty_cmd();
-    return 0;
-}

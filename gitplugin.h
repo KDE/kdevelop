@@ -160,6 +160,7 @@ protected slots:
     void parseGitBlameOutput(DVcsJob *job);
     void parseGitLogOutput(DVcsJob *job);
     void parseGitDiffOutput(DVcsJob* job);
+    void parseGitRepoLocationOutput(DVcsJob* job);
 
 private:
     //commit dialog "main" helper
@@ -168,8 +169,7 @@ private:
 
     void initBranchHash(const QString &repo);
 
-    static KDevelop::VcsStatusInfo::State charToState(const char ch);
-    static KDevelop::VcsStatusInfo::State lsTagToState(const char ch);
+    static KDevelop::VcsStatusInfo::State charToState(char ch);
 
     QList<QStringList> branchesShas;
     KUrl m_lastRepoRoot;
