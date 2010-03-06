@@ -139,7 +139,7 @@ bool ApplyChangesWidget::applyAllChanges()
     /// @todo implement safeguard in case a file saving fails
     
     bool ret = true;
-    for(unsigned int i = 0; i < static_cast<unsigned int>(d->m_files.size()); ++i )
+    for(int i = 0; i < d->m_files.size(); ++i )
         if(!d->m_editParts[i]->saveAs(d->m_files[i].first.toUrl()))
             ret = false;
         
