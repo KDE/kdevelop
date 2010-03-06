@@ -149,8 +149,8 @@ VcsJob* GitPlugin::init(const KUrl &directory)
         *job << "init";
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode)
@@ -163,15 +163,15 @@ VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLo
         *job << localOrRepoLocationSrc.localUrl().toLocalFile();
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(recursion)
     if (localLocations.empty())
-        return NULL;
+        return 0;
 
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocations.front().toLocalFile()) ) {
@@ -182,8 +182,8 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
 
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
@@ -286,7 +286,7 @@ VcsJob* GitPlugin::commit(const QString& message,
     Q_UNUSED(recursion)
 
     if (localLocations.empty() || message.isEmpty())
-        return NULL;
+        return 0;
 
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocations.front().toLocalFile()) ) {
@@ -299,14 +299,14 @@ VcsJob* GitPlugin::commit(const QString& message,
         addFileList(job, localLocations);
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
 {
     if (files.empty())
-        return NULL;
+        return 0;
 
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, files.front().toLocalFile()) ) {
@@ -316,8 +316,8 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
         addFileList(job, files);
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 
@@ -337,8 +337,8 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
@@ -389,8 +389,7 @@ DVcsJob* GitPlugin::var(const QString & repository)
         *job << "-l";
         return job;
     }
-    if (job)
-        delete job;
+    delete job;
     return 0;
 }
 
@@ -405,8 +404,7 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
         return job;
     }
     
-    if (job)
-        delete job;
+    delete job;
     return 0;
 }
 
@@ -427,14 +425,14 @@ DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch,
             *job << basebranch;
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const KUrl::List& files)
 {
     if (files.empty())
-        return NULL;
+        return 0;
 
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, repository.toLocalFile()) ) {
@@ -447,8 +445,8 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
         addFileList(job, files);
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
@@ -463,8 +461,8 @@ DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
             *job << args;
         return job;
     }
-    if (job) delete job;
-    return NULL;
+    delete job;
+    return 0;
 }
 
 QString GitPlugin::curBranch(const QString &repository)
