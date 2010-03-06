@@ -63,54 +63,13 @@ public:
     virtual ~DistributedVersionControlPlugin();
 
     // Begin: KDevelop::IBasicVersionControl
-    virtual QString name() const = 0;
-    virtual bool isVersionControlled(const KUrl& localLocation) = 0;
-    virtual VcsJob* repositoryLocation(const KUrl& localLocation);
-    virtual VcsJob* add(const KUrl::List& localLocations,
-                        IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
-    virtual VcsJob* remove(const KUrl::List& localLocations) = 0;
-    virtual VcsJob* status(const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
-    virtual VcsJob* copy(const KUrl& localLocationSrc,
-                         const KUrl& localLocationDst);
-    virtual VcsJob* move(const KUrl& localLocationSrc,
-                         const KUrl& localLocationDst);
-    virtual VcsJob* revert(const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive);
-    virtual VcsJob* update(const KUrl::List& localLocations,
-                           const VcsRevision& rev,
-                           IBasicVersionControl::RecursionMode recursion = IBasicVersionControl::Recursive);
-    virtual VcsJob* commit(const QString& message,
-                           const KUrl::List& localLocations,
-                           IBasicVersionControl::RecursionMode recursion  = IBasicVersionControl::Recursive) = 0;
-    virtual VcsJob* diff(const KUrl& fileOrDirectory,
-                         const VcsRevision& srcRevision,
-                         const VcsRevision& dstRevision,
-                         VcsDiff::Type = VcsDiff::DiffUnified,
-                         IBasicVersionControl::RecursionMode recursion
-                         = IBasicVersionControl::Recursive);
+
     virtual VcsJob* log(const KUrl& localLocation,
                         const VcsRevision& rev,
                         unsigned long limit) = 0;
     virtual VcsJob* log(const KUrl& localLocation,
                         const VcsRevision& rev,
                         const VcsRevision& limit);
-    virtual VcsJob* annotate(const KUrl& localLocation,
-                             const VcsRevision& rev);
-    virtual VcsJob* resolve(const KUrl::List& localLocations,
-                            IBasicVersionControl::RecursionMode recursion);
-    virtual VcsJob* createWorkingCopy(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive);
-    // End:  KDevelop::IBasicVersionControl
-
-    // Begin:  KDevelop::IDistributedVersionControl
-    virtual VcsJob* init(const KUrl& localRepositoryRoot) = 0;
-    virtual VcsJob* push(const KUrl& localRepositoryLocation,
-                         const VcsLocation& localOrRepoLocationDst);
-    virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
-                         const KUrl& localRepositoryLocation);
-    virtual VcsJob* reset(const KUrl& repository,
-                          const QStringList &args, const KUrl::List& files) = 0;
-    // End:  KDevelop::IDistributedVersionControl
 
     /** Used in KDevelop's appwizardplugin (creates import widget) */
     virtual VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);

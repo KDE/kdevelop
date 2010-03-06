@@ -91,13 +91,6 @@ DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 }
 
 // Begin:  KDevelop::IBasicVersionControl
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::repositoryLocation(const KUrl &)
-{
-    return empty_cmd();
-}
-
 QList<QVariant> DistributedVersionControlPlugin::getModifiedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
 {
     Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
@@ -116,43 +109,6 @@ QList<QVariant> DistributedVersionControlPlugin::getOtherFiles(const QString &, 
     return QList<QVariant>();
 }
 
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::copy(const KUrl&, const KUrl&)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::move(const KUrl&, const KUrl&)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::revert(const KUrl::List &, IBasicVersionControl::RecursionMode)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::update(const KUrl::List &, const VcsRevision &,
-                                        IBasicVersionControl::RecursionMode)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::diff(const KUrl &,
-                                      const VcsRevision &,
-                                      const VcsRevision &,
-                                      VcsDiff::Type,
-                                      IBasicVersionControl::RecursionMode)
-{
-    return empty_cmd();
-}
-
-
 KDevelop::VcsJob*
 DistributedVersionControlPlugin::log(const KUrl& url,
                                      const VcsRevision& from,
@@ -162,51 +118,10 @@ DistributedVersionControlPlugin::log(const KUrl& url,
     return log(url, from, 0);
 }
 
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::annotate(const KUrl&,
-        const VcsRevision&)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::resolve(const KUrl::List&,
-        IBasicVersionControl::RecursionMode)
-{
-    return empty_cmd();
-}
-
 // End:  KDevelop::IBasicVersionControl
 
 
 // Begin:  KDevelop::IDistributedVersionControl
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::push(const KUrl&,
-                                      const VcsLocation&)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::pull(const VcsLocation&,
-                                      const KUrl&)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::createWorkingCopy(const VcsLocation &, const KUrl &, RecursionMode)
-{
-    return empty_cmd();
-}
-
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::reset(const KUrl&,
-                                       const QStringList &, const KUrl::List&)
-{
-    return empty_cmd();
-}
 
 // End:  KDevelop::IDistributedVersionControl
 
