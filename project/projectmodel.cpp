@@ -39,6 +39,8 @@
 #include "interfaces/iprojectfilemanager.h"
 #include <KIO/NetAccess>
 #include <language/duchain/indexedstring.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 namespace KDevelop
 {
@@ -396,6 +398,8 @@ void ProjectFolderItem::setData(const QVariant& value, int role)
         ret = ret && project()->projectFileManager()->renameFolder(this, dest);
         if(ret)
             emitDataChanged();
+        else
+            KMessageBox::error(0, i18n("The name for '%1' could not be changed", url().prettyUrl()), i18n("Project Management"));
     } else
         ProjectBaseItem::setData(value, role);
 }
@@ -434,6 +438,8 @@ void ProjectFileItem::setData(const QVariant& value, int role)
         ret = ret && project()->projectFileManager()->renameFile(this, dest);
         if(ret)
             emitDataChanged();
+        else
+            KMessageBox::error(0, i18n("The name for '%1' could not be changed", url().prettyUrl()), i18n("Project Management"));
     } else
         ProjectBaseItem::setData(value, role);
 }
