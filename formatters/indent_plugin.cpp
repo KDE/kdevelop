@@ -85,7 +85,7 @@ QString IndentPlugin::highlightModeForMime(const KMimeType::Ptr &mime)
 QString IndentPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const KMimeType::Ptr& mime, const QString& leftContext, const QString& rightContext)
 {
 
-	if (!style.content().isEmpty()) {
+	if (style.content().isEmpty()) {
 		m_options.clear();
 		if(style.name() == "KR")
 			m_options << "-kr";
