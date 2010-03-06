@@ -754,6 +754,9 @@ void CMakeManager::dirtyFile(const QString & dirty)
 
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
+        QMutex m;
+        m.lock();
+        
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
         kDebug(9032) << dirtyFile << "is dirty" << files.count();
 
@@ -787,6 +790,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             }
 #endif
             reload(it);
+            m.unlock();
         }
         else
         {
@@ -1323,6 +1327,7 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
     if(ret && e.exec())
     {
         bool ret=e.applyAllChanges();
+        kDebug() << "teeeeeeeee " << ret;
         if(ret)
             ret=KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
