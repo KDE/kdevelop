@@ -39,6 +39,7 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include <QDateTime>
+#include <KIO/CopyJob>
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -970,9 +971,9 @@ DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &arg
             *job << arg;
         return job;
     }
-    if (job)
-        delete job;
-    return NULL;
+    
+    delete job;
+    return 0;
 }
 
 KDevelop::VcsStatusInfo::State GitPlugin::charToState(char ch)
@@ -991,4 +992,71 @@ KDevelop::VcsStatusInfo::State GitPlugin::charToState(char ch)
     return VcsStatusInfo::ItemUnknown;
 }
 
-// #include "gitplugin.moc"
+StandardCopyJob::StandardCopyJob(IPlugin* parent, const KUrl& source, const KUrl& dest,
+                                 OutputJob::OutputJobVerbosity verbosity)
+    : VcsJob(parent, verbosity)
+    , m_source(source), m_dest(dest)
+    , m_plugin(parent)
+    , m_status(JobNotStarted)
+{}
+
+void StandardCopyJob::start()
+{
+    KIO::CopyJob* job=KIO::copy(m_source, m_dest);
+    connect(job, SIGNAL(result(KJob*)), SLOT(result(KJob*)));
+    job->start();
+    m_status=JobRunning;
+}
+
+void StandardCopyJob::result(KJob* job)
+{
+    m_status=job->error() == 0? JobSucceeded : JobFailed; emitResult();
+}
+
+VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationDstn)
+{
+    //TODO: Probably we should "git add" after
+    return new StandardCopyJob(this, localLocationSrc, localLocationDstn, KDevelop::OutputJob::Silent);
+}
+
+VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
+{
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, source.toLocalFile())) {
+        *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
+        return job;
+    }
+    
+    delete job;
+    return 0;
+}
+
+VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
+{
+    empty_cmd();
+    return 0;
+}
+
+VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
+{
+    empty_cmd();
+    return 0;
+}
+
+VcsJob* GitPlugin::resolve(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
+{
+    empty_cmd();
+    return 0;
+}
+
+VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, IBasicVersionControl::RecursionMode recursion)
+{
+    empty_cmd();
+    return 0;
+}
+
+VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
+{
+    empty_cmd();
+    return 0;
+}

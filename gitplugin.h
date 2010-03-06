@@ -27,6 +27,7 @@
 #include <QObject>
 #include <vcs/vcsstatusinfo.h>
 #include <outputview/outputjob.h>
+#include <vcs/vcsjob.h>
 
 
 namespace KDevelop
@@ -34,6 +35,27 @@ namespace KDevelop
     class VcsJob;
     class VcsRevision;
 }
+
+class StandardCopyJob : public KDevelop::VcsJob
+{
+    Q_OBJECT
+    public:
+        StandardCopyJob(KDevelop::IPlugin* parent, const KUrl& source,
+                        const KUrl& dest, OutputJobVerbosity verbosity);
+        
+        virtual QVariant fetchResults() { return QVariant(); }
+        virtual void start();
+        virtual JobStatus status() const { return m_status; }
+        virtual KDevelop::IPlugin* vcsPlugin() const { return m_plugin; }
+        
+    public slots:
+        void result(KJob*);
+    
+    private:
+        const KUrl m_source, m_dest;
+        KDevelop::IPlugin* m_plugin;
+        JobStatus m_status;
+};
 
 /**
  * This is the main class of KDevelop's Git plugin.
@@ -55,6 +77,17 @@ public:
     QString name() const;
 
     bool isVersionControlled(const KUrl &path);
+    
+    virtual KDevelop::VcsJob* copy(const KUrl& localLocationSrc, const KUrl& localLocationDstn);
+    virtual KDevelop::VcsJob* move(const KUrl& localLocationSrc, const KUrl& localLocationDst);
+    
+    //TODO
+    virtual KDevelop::VcsJob* pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation);
+    virtual KDevelop::VcsJob* push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst);
+    virtual KDevelop::VcsJob* repositoryLocation(const KUrl& localLocation);
+    virtual KDevelop::VcsJob* resolve(const KUrl::List& localLocations, RecursionMode recursion);
+    virtual KDevelop::VcsJob* update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion);
+    //End of
 
     KDevelop::VcsJob* add(const KUrl::List& localLocations,
                           KDevelop::IBasicVersionControl::RecursionMode recursion = KDevelop::IBasicVersionControl::Recursive);
