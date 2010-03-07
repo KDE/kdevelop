@@ -56,6 +56,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		static const QString kateModeLineConfigKey;
 		static const QString styleCaptionKey;
 		static const QString styleContentKey;
+		static const QString supportedMimeTypesKey;
 		
 		SourceFormatterController(QObject *parent = 0);
 		virtual ~SourceFormatterController();

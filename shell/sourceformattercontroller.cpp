@@ -53,6 +53,7 @@ namespace KDevelop
 const QString SourceFormatterController::kateModeLineConfigKey = "ModelinesEnabled";
 const QString SourceFormatterController::styleCaptionKey = "Caption";
 const QString SourceFormatterController::styleContentKey = "Content";
+const QString SourceFormatterController::supportedMimeTypesKey = "X-KDevelop-SupportedMimeTypes";
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
 		: ISourceFormatterController(parent)

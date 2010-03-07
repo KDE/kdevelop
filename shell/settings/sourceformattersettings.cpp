@@ -98,7 +98,7 @@ void SourceFormatterSettings::load()
     {
         KDevelop::ISourceFormatter* ifmt = plugin->extension<ISourceFormatter>();
         KPluginInfo info = KDevelop::Core::self()->pluginControllerInternal()->pluginInfo( plugin );
-        foreach( const QString& mime, info.property( "X-KDevelop-SupportedMimeTypes" ).toStringList() )
+        foreach( const QString& mime, info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList() )
         {
             SourceFormatterLanguage l;
             QMap<QString,SourceFormatterLanguage>::iterator it = languages.find( mime );
