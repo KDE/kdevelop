@@ -82,7 +82,7 @@ void CustomBuildJob::start()
         setError( NoCommand );
         setErrorText( i18n( "No command given" ) );
         emitResult();
-    } else if( enabled ) {
+    } else if( !enabled ) {
         setError( ToolDisabled );
         setErrorText( i18n( "This command is disabled" ) );
         emitResult();
