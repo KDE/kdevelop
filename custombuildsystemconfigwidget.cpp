@@ -91,16 +91,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
 
 void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSystemConfig& c )
 {
-    KConfigGroup subgrp = cfg.group( c.grpName );
-
-    // Clear out all path-groups so we properly delete paths
-    // that were removed in the gui.
-    foreach( const QString& grpname, subgrp.groupList() ) {
-        if( grpname.startsWith( ConfigConstants::projectPathPrefix ) ) {
-            subgrp.deleteGroup( grpname );
-        }
-    }
-
+    // First generate a groupname if none exists yet
     if( c.grpName.isEmpty() ) {
         int maxnum = 0;
         foreach( const QString& grpname, cfg.groupList() ) {
@@ -111,6 +102,18 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
         }
         c.grpName = QString("BuildConfig%1").arg( maxnum );
     }
+
+    // then access the subgrp
+    KConfigGroup subgrp = cfg.group( c.grpName );
+
+    // Clear out all path-groups so we properly delete paths
+    // that were removed in the gui.
+    foreach( const QString& grpname, subgrp.groupList() ) {
+        if( grpname.startsWith( ConfigConstants::projectPathPrefix ) ) {
+            subgrp.deleteGroup( grpname );
+        }
+    }
+
     subgrp.writeEntry( ConfigConstants::configTitleKey, c.title );
     subgrp.writeEntry( ConfigConstants::buildDirKey, c.buildDir );
     foreach( const CustomBuildSystemTool& tool, c.tools.values() ) {
