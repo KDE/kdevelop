@@ -98,7 +98,7 @@ Q_SIGNALS:
 
     void reset();
 
-    void addMemoryView();
+    //void addMemoryView();
 
 private Q_SLOTS:
     void setupDBus();
@@ -152,7 +152,7 @@ private:
     DebugSession* m_session;
     DebuggerToolFactory< DisassembleWidget >* disassemblefactory;
     DebuggerToolFactory< GDBOutputWidget >* gdbfactory;
-    DebuggerToolFactory< ViewerWidget >* viewerfactory;
+    //DebuggerToolFactory< ViewerWidget >* viewerfactory;
     
 };
 

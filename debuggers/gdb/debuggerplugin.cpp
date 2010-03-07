@@ -145,9 +145,7 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
 
     gdbfactory = new DebuggerToolFactory<GDBOutputWidget>(
     this, "org.kdevelop.debugger.ConsoleView",Qt::BottomDockWidgetArea);
-    viewerfactory = new DebuggerToolFactory<ViewerWidget>(
-    this, "org.kdevelop.debugger.VariousViews", Qt::BottomDockWidgetArea);
-    
+
     core()->uiController()->addToolView(
         i18n("Disassemble"),
         disassemblefactory);
@@ -156,9 +154,13 @@ CppDebuggerPlugin::CppDebuggerPlugin( QObject *parent, const QVariantList & ) :
         i18n("GDB"),
         gdbfactory);
 
+    /*
+    viewerfactory = new DebuggerToolFactory<ViewerWidget>(
+    this, "org.kdevelop.debugger.VariousViews", Qt::BottomDockWidgetArea);
     core()->uiController()->addToolView(
         i18n("Debug views"),
         viewerfactory);
+    */
 
     setupActions();
 
@@ -183,13 +185,14 @@ void CppDebuggerPlugin::unload()
 {
     core()->uiController()->removeToolView(disassemblefactory);
     core()->uiController()->removeToolView(gdbfactory);
-    core()->uiController()->removeToolView(viewerfactory);
+    //core()->uiController()->removeToolView(viewerfactory);
 }
 
 void CppDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
+    /*
     KAction* action = new KAction(KIcon("dbgmemview"), i18n("Viewers"), this);
     action->setToolTip( i18n("Debugger viewers") );
     action->setWhatsThis(i18n("<b>Debugger viewers</b><p>Various information about application being executed. There are 4 views available:<br>"
@@ -199,9 +202,10 @@ void CppDebuggerPlugin::setupActions()
         "<b>Libraries</b>"));
     connect(action, SIGNAL(triggered(bool)), this, SIGNAL(addMemoryView()));
     ac->addAction("debug_memview", action);
+    */
 
 
-    action = new KAction(KIcon("core"), i18n("Examine Core File..."), this);
+    KAction* action = new KAction(KIcon("core"), i18n("Examine Core File..."), this);
     action->setToolTip( i18n("Examine core file") );
     action->setWhatsThis( i18n("<b>Examine core file</b><p>"
                                "This loads a core file, which is typically created "
