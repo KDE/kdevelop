@@ -104,21 +104,34 @@ KConfigGroup SourceFormatterController::configuration()
 	return Core::self()->activeSession()->config()->group( "SourceFormatter" );
 }
 
+static ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mime )
+{
+	foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
+		KPluginInfo info = Core::self()->pluginController()->pluginInfo( p );
+		if( info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList().contains( mime->name() ) ) {
+			return p->extension<ISourceFormatter>();
+		}
+	}
+	return 0;
+}
+
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeType::Ptr &mime)
 {
-
+	if( !isMimeTypeSupported( mime ) ) {
+		return 0;
+	}
 	QString formatter = configuration().readEntry( mime->name(), "" );
 
 	if( formatter.isEmpty() )
 	{
-		return 0;
+		return findFirstFormatterForMimeType( mime );
 	}
 
 	QStringList formatterinfo = formatter.split( "||", QString::SkipEmptyParts );
 
 	if( formatterinfo.size() != 2 ) {
 		kDebug() << "Broken formatting entry for mime:" << mime << "current value:" << formatter;
-                return 0;
+		return 0;
 	}
 
 	return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( "org.kdevelop.ISourceFormatter", formatterinfo.at(0) );
@@ -126,7 +139,10 @@ ISourceFormatter* SourceFormatterController::formatterForMimeType(const KMimeTyp
 
 bool SourceFormatterController::isMimeTypeSupported(const KMimeType::Ptr &mime)
 {
-	return configuration().hasKey(mime->name());
+	if( findFirstFormatterForMimeType( mime ) ) {
+		return true;
+	}
+	return false;
 }
 
 QString SourceFormatterController::indentationMode(const KMimeType::Ptr &mime)
