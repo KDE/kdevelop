@@ -122,7 +122,7 @@ public slots:
 private:
     void reimport(CMakeFolderItem*);
     CacheValues readCache(const KUrl &path) const;
-
+    QMutex m_reparsingMutex;
     
     KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
