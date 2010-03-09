@@ -94,8 +94,16 @@ public:
     { return KDevelop::SimpleRange(line-1, column-1, endLine-1, endColumn); }
     
     KDevelop::SimpleRange argRange() const
-    { return KDevelop::SimpleRange(arguments.first().range().start,
-                                   arguments.last().range().end); }
+    { 
+        if( !arguments.isEmpty() ) 
+        { 
+            return KDevelop::SimpleRange(arguments.first().range().start,
+                                   arguments.last().range().end); 
+        } else 
+        { 
+            return KDevelop::SimpleRange( line-1, column-1, endLine-1, endColumn); 
+        }
+    }
 
     bool operator==(const CMakeFunctionDesc &other) const;
     void addArguments( const QStringList& );
