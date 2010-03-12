@@ -214,10 +214,9 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
         KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
         t=bit->targetList();
       }
-      
       if(t.count()==1) //Just choose this one
         target=t.first();
-      else {
+      else if(t.count() > 1) {
         KDialog d;
         QWidget *w=new QWidget(&d);
         w->setLayout(new QVBoxLayout);
