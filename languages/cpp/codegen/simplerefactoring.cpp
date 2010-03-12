@@ -194,7 +194,7 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
     IProject* p=item->project();
     ProjectFolderItem* folder=item->folder();
     ProjectTargetItem* target=item->target();
-    
+
     if(target) {
       folder=static_cast<ProjectFolderItem*>(item->target()->parent());
       Q_ASSERT(folder->folder());
@@ -242,24 +242,38 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
         }
       }
     }
-    
-    if(folder && p->projectFileManager())
-    {
-      ProjectFileItem* file=p->projectFileManager()->addFile(newClassWizard.implementationUrl(), folder);
-      ProjectFileItem* header=p->projectFileManager()->addFile(newClassWizard.headerUrl(), folder);
 
-      if(target && p->buildSystemManager())
-      {
-        if(file)
-          p->buildSystemManager()->addFileToTarget(file, target);
-        else
-          kWarning() << "Could not add source file to build manager" << newClassWizard.implementationUrl();
-        
-        if(header)
-          p->buildSystemManager()->addFileToTarget(header, target);
-        else
-          kWarning() << "Could not add header file to build-manager" << newClassWizard.headerUrl();
+    if(target && p->buildSystemManager())
+    {
+      ProjectFileItem* file = 0;
+      ProjectFileItem* header = 0;
+
+      // usually the filemanager will have added these files automatically
+      // if not, do it manually
+      QList< ProjectFileItem* > matches = p->filesForUrl(newClassWizard.implementationUrl());
+      if (!matches.isEmpty()) {
+        file = matches.first();
+      } else if (p->projectFileManager()) {
+        ///TODO: this case will still show the "file already exists" error message
+        file = p->projectFileManager()->addFile(newClassWizard.implementationUrl(), folder);
       }
+      matches = p->filesForUrl(newClassWizard.headerUrl());
+      if (!matches.isEmpty()) {
+        header = matches.first();
+      } else if (p->projectFileManager()) {
+        ///TODO: this case will still show the "file already exists" error message
+        header = p->projectFileManager()->addFile(newClassWizard.headerUrl(), folder);
+      }
+
+      if(file)
+        p->buildSystemManager()->addFileToTarget(file, target);
+      else
+        kWarning() << "Could not add source file to build manager" << newClassWizard.implementationUrl();
+      
+      if(header)
+        p->buildSystemManager()->addFileToTarget(header, target);
+      else
+        kWarning() << "Could not add header file to build-manager" << newClassWizard.headerUrl();
     }
   }
 }
