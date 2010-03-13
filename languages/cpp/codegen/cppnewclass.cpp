@@ -183,7 +183,7 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
   kDebug() << "base-classes:" << m_baseClasses.size();
   
   if(!license().isEmpty())
-    output << (addCommentCharToLicense() ? "/*\n" : "") << license() << (addCommentCharToLicense() ? "\n*/" : "") << "\n\n";
+    output << (/*addCommentCharToLicense()*/true ? "/*\n" : "") << license() << (/*addCommentCharToLicense()*/true ? "\n*/" : "") << "\n\n";
 
   Identifier classId = Identifier(name());
 
@@ -366,7 +366,7 @@ void CppNewClass::generateImplementation(KDevelop::DocumentChangeSet& changes)
   QTextStream output(&implementation, QIODevice::WriteOnly);
 
   if(!license().isEmpty())
-    output << (addCommentCharToLicense() ? "/*\n" : "") << license() << (addCommentCharToLicense() ? "\n*/" : "") << "\n\n";
+    output << (/*addCommentCharToLicense()*/true ? "/*\n" : "") << license() << (/*addCommentCharToLicense()*/ true ? "\n*/" : "") << "\n\n";
 
   // #include our header
   QString path = KUrl::relativePath(implementationUrl().directory(), headerUrl().toLocalFile());
