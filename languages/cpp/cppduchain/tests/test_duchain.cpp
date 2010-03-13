@@ -4665,6 +4665,35 @@ void TestDUChain::testForwardDeclaration3()
   release(top);
 }
 
+void TestDUChain::testForwardDeclaration4()
+{
+  QByteArray method("class Forward;\n"
+                    "class Test\n"
+                    "{\n"
+                    "    virtual Test a(Forward) const=0;\n"
+                    "    virtual Forward b(Forward) const=0;\n"
+                    "    virtual Forward c(Forward);\n"
+                    "    virtual Test d(Forward);\n"
+                    "};");
+
+  TopDUContext* top = parse(method, DumpNone);
+
+  DUChainWriteLocker lock(DUChain::lock());
+
+  QCOMPARE(top->localDeclarations().count(), 2);
+  QCOMPARE(top->childContexts().count(), 1);
+
+  QVERIFY(dynamic_cast<ForwardDeclaration*>(top->localDeclarations()[0]));
+
+  ForwardDeclaration* forwardDecl = static_cast<ForwardDeclaration*>(top->localDeclarations()[0]);
+
+  QCOMPARE(forwardDecl->uses().size(), 1);
+  QEXPECT_FAIL("", "The uses in the argument lists of the const=0 methods are not reported", Abort);
+  QCOMPARE(forwardDecl->uses().begin()->size(), 6);
+
+  release(top);
+}
+
 void TestDUChain::testTemplateForwardDeclaration()
 {
   QByteArray method("class B{}; template<class T = B>class Test; Test<B> t; template<class T = B>class Test {}; ");
