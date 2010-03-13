@@ -35,7 +35,7 @@
 #include "../vcsstatusinfo.h"
 
 #include "ui_vcscommitdialog.h"
-#include <vcsdiffpatchsources.h>
+#include "vcsdiffpatchsources.h"
 
 namespace KDevelop
 {

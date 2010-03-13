@@ -16,7 +16,6 @@ set(kdevplatformvcs_UIS
 )
 
 set(kdevplatformvcs_LIB_SRCS
-    vcsdiffpatchsources.cpp
     vcsjob.cpp
     vcsrevision.cpp
     vcsannotation.cpp
@@ -29,6 +28,7 @@ set(kdevplatformvcs_LIB_SRCS
     widgets/vcseventwidget.cpp
     widgets/vcsdiffwidget.cpp
     widgets/vcscommitdialog.cpp
+    widgets/vcsdiffpatchsources.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp

@@ -69,7 +69,7 @@
 #include <qboxlayout.h>
 #include <qlabel.h>
 #include <QMenu>
-#include "vcsdiffpatchsources.h"
+#include "widgets/vcsdiffpatchsources.h"
 
 namespace KDevelop
 {
