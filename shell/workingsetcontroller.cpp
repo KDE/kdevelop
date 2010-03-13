@@ -430,8 +430,9 @@ QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool l
 }
 
 WorkingSetWidget::WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini, Sublime::Area* fixedArea)
-	: QWidget(parent), m_fixedArea(fixedArea), m_mini(mini), m_mainWindow(parent)
+	: QWidget(0), m_fixedArea(fixedArea), m_mini(mini), m_mainWindow(parent)
 {
+    setVisible(false);
     m_layout = new QHBoxLayout(this);
     m_layout->setMargin(0);
     if(!m_fixedArea)
