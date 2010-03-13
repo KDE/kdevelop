@@ -19,6 +19,7 @@
 #include "vcsdiffpatchsources.h"
 #include <qboxlayout.h>
 #include <qlabel.h>
+#include <kglobalsettings.h>
 #include <klocalizedstring.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
@@ -36,6 +37,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsd
     Q_ASSERT(m_vcs);
 
     m_commitMessageWidget = new QWidget;
+    m_commitMessageWidget->setFont( KGlobalSettings::fixedFont() );
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget);
 
     m_commitMessageEdit = new QTextEdit;
