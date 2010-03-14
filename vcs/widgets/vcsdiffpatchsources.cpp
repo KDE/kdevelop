@@ -37,11 +37,11 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsd
     Q_ASSERT(m_vcs);
 
     m_commitMessageWidget = new QWidget;
-    m_commitMessageWidget->setFont( KGlobalSettings::fixedFont() );
     QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget);
 
     m_commitMessageEdit = new QTextEdit;
-
+    m_commitMessageEdit->setFont( KGlobalSettings::fixedFont() );
+    
     layout->addWidget(new QLabel(i18n("Commit Message:")));
     layout->addWidget(m_commitMessageEdit);
 }
