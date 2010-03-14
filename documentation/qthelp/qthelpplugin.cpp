@@ -64,7 +64,7 @@ QString qtDocsLocation(const QString& qmake)
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
-	, m_engine(KStandardDirs::locateLocal("appdata", "qthelpcollection", QtHelpFactory::componentData())+QLatin1String("/collection.qhc"))
+	, m_engine(KStandardDirs::locateLocal("appdata", QString( "qthelpcollection.qhc" ), true, QtHelpFactory::componentData()))
 {
     if( !m_engine.setupData() ) {
         kWarning() << "Couldn't setup QtHelp Collection file, searching in Qt docs will fail";
