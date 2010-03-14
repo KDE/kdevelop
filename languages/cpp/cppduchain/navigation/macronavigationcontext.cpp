@@ -49,7 +49,7 @@ QString MacroNavigationContext::name() const
 QString MacroNavigationContext::html(bool shorten)
 {
   clear();
-  modifyHtml() += "<html><body><p><small><small>";
+  modifyHtml() += "<html><body><p>" + fontSizePrefix(shorten);
   addExternalHtml(m_prefix);
 
   QString args;
@@ -92,7 +92,7 @@ QString MacroNavigationContext::html(bool shorten)
 
   makeLink(u.pathOrUrl(), u.pathOrUrl(), action);
 
-  modifyHtml() += "</small></small></p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
   return currentHtml();
 }
 
