@@ -37,7 +37,7 @@ const int crashesBeforeCleanup = 2;
 
 uint staticItemRepositoryVersion() {
   //Increase this to reset incompatible item-repositories
-  return 66;
+  return 67;
 }
 
 AbstractItemRepository::~AbstractItemRepository() {
