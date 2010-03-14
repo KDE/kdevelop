@@ -234,7 +234,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     LOCKDUCHAIN;
     find.closeQualifiedIdentifier();
     m_declarations = find.lastDeclarations();
-    if(!m_declarations.isEmpty())
+    if(!m_declarations.isEmpty() && m_declarations[0])
       m_type = m_declarations[0]->abstractType();
   }
   
@@ -252,9 +252,12 @@ void TypeASTVisitor::visitName(NameAST *node)
     m_stopSearch = true;
     return;
   }
+  
+  LOCKDUCHAIN;
+  
   m_typeId = name_cc.identifier();
   m_declarations = name_cc.declarations();
-  if(!m_declarations.isEmpty())
+  if(!m_declarations.isEmpty() && m_declarations[0])
     m_type = m_declarations[0]->abstractType();
 }
 
