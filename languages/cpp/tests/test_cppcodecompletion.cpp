@@ -291,6 +291,24 @@ void TestCppCodeCompletion::testSubClassVisibility() {
   }
 }
 
+void TestCppCodeCompletion::testMacrosInCodeCompletion()
+{
+  QByteArray test = "#define test foo\n #define test2 fee\n struct A {int mem;}; void fun() { A foo; A* fee; }";
+  TopDUContext* context = parse( test, DumpNone /*DumpDUChain | DumpAST */);
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  QCOMPARE(context->childContexts().size(), 3);
+  
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "foo.", QString(), SimpleCursor(2, 0)).names, QStringList() << "mem");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "test.", QString(), SimpleCursor(2, 0)).names, QStringList() << "mem");
+  
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "fee->", QString(), SimpleCursor(2, 0)).names, QStringList() << "mem");
+  QCOMPARE(CompletionItemTester(context->childContexts()[2], "test2->", QString(), SimpleCursor(2, 0)).names, QStringList() << "mem");
+  
+  
+  release(context);
+}
+
 void TestCppCodeCompletion::testConstructorCompletion() {
   {
     QByteArray test = "class A {}; class Class : public A { Class(); int m_1; float m_2; char m_3; static int m_4; }; ";
@@ -331,6 +349,8 @@ void TestCppCodeCompletion::testConstructorCompletion() {
       QVERIFY(tester.completionContext->parentContext()->memberAccessOperation() == Cpp::CodeCompletionContext::FunctionCallAccess);
       QVERIFY(tester.completionContext->parentContext()->parentContext()->isConstructorInitialization());
     }
+    
+    release(context);
   }
 }
 

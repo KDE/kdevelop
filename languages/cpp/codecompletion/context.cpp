@@ -221,12 +221,14 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     return;
   }
 
-//   ifDebug( log( "non-processed text: " + m_text ); )
+  ifDebug( log( "non-processed text: " + m_text ); )
   if(depth == 0) {
     preprocessText( line );
     m_text = clearComments( m_text );
   }
     
+  ifDebug( log( "preprocessed text: " + m_text ); )
+
    m_text = stripFinalWhitespace( m_text );
    m_text = lastLines(m_text);
 
@@ -1070,6 +1072,18 @@ bool CodeCompletionContext::endsWithOperator( const QString& str ) const {
 //   return ret;
 // }
 
+static TopDUContext* proxyContextForUrl(KUrl url)
+{
+  QList< ILanguage* > languages = ICore::self()->languageController()->languagesForUrl(url);
+  foreach(ILanguage* language, languages)
+  {
+    if(language->languageSupport())
+      return language->languageSupport()->standardContext(url, true);
+  }
+  
+  return 0;
+}
+
 void CodeCompletionContext::preprocessText( int line ) {
 
   LOCKDUCHAIN;
@@ -1083,7 +1097,13 @@ void CodeCompletionContext::preprocessText( int line ) {
   disableMacros.insert(IndexedString("Q_SLOT"));
   
   if( m_duContext ) {
-  m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(m_duContext->topContext()->parsingEnvironmentFile().data()), line, disableMacros );
+    
+    // Use the proxy-context if possible, because that one contains most of the macros if existent
+    TopDUContext* useTopContext = proxyContextForUrl(m_duContext->url().toUrl());
+    if(!useTopContext)
+      useTopContext = m_duContext->topContext();
+    
+    m_text = preprocess( m_text,  dynamic_cast<Cpp::EnvironmentFile*>(useTopContext->parsingEnvironmentFile().data()), line, disableMacros );
   }else{
     kWarning() << "error: no ducontext";
   }
