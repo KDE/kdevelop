@@ -77,21 +77,18 @@ TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
 QString AbstractIncludeNavigationContext::html(bool shorten)
 {
   clear();
-  modifyHtml()  += "<html><body><p><small><small>";
+  modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
   addExternalHtml(m_prefix);
 
   KUrl u(m_item.url());
   NavigationAction action(u, KTextEditor::Cursor(0,0));
-  makeLink(u.fileName(), u.pathOrUrl(), action);
-  QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
+  makeLink(u.pathOrUrl(), u.pathOrUrl(), action);
   modifyHtml() += "<br />";
-  modifyHtml() += "path: " + u.pathOrUrl();
-
+  
+  QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
   //Pick the one duchain for this document that has the most child-contexts/declarations.
   //This prevents picking a context that is empty due to header-guards.
   TopDUContext* duchain = pickContextWithData(duchains, 2, m_type);
-
-  modifyHtml() += "<br />";
 
   if(duchain) {
     getFileInfo(duchain);
@@ -106,13 +103,13 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 
   addExternalHtml(m_suffix);
 
-  modifyHtml() += "</small></small></p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
   return currentHtml();
 }
 
 void AbstractIncludeNavigationContext::getFileInfo(TopDUContext* duchain)
 {
-    modifyHtml() += QString("%1: %2 %3: %4").arg(labelHighlight(i18nc("Files included into this file", "Includes"))).arg(duchain->importedParentContexts().count()).arg(i18nc("Count of files this file was included into", "Included by")).arg(duchain->importers().count());
+    modifyHtml() += QString("%1: %2 %3: %4").arg(labelHighlight(i18nc("Files included into this file", "Includes"))).arg(duchain->importedParentContexts().count()).arg(labelHighlight(i18nc("Count of files this file was included into", "Included by"))).arg(duchain->importers().count());
     modifyHtml() += "<br />";
 }
 

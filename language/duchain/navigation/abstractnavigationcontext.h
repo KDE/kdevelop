@@ -102,6 +102,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public KShared
     
   protected:
     
+    /// Returns the html font-size prefix (aka. <small> or similar) for the given mode
+    QString fontSizePrefix(bool shorten) const;
+    /// Returns the html font-size suffix (aka. <small> or similar) for the given mode
+    QString fontSizeSuffix(bool shorten) const;
+    
     virtual void setPreviousContext(AbstractNavigationContext* previous);
     
     struct TextHandler {

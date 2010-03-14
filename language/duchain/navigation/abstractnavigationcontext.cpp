@@ -440,10 +440,25 @@ QString AbstractNavigationContext::currentHtml() const {
   return m_currentText;
 }
 
+QString AbstractNavigationContext::fontSizePrefix(bool shorten) const
+{
+  if(shorten)
+    return "";
+  else
+    return "";
+}
+
+QString AbstractNavigationContext::fontSizeSuffix(bool shorten) const
+{
+  if(shorten)
+    return "";
+  else
+    return "";
+}
 
 const Colorizer AbstractNavigationContext::typeHighlight("006000");
 const Colorizer AbstractNavigationContext::errorHighlight("990000");
-const Colorizer AbstractNavigationContext::labelHighlight("000035");
+const Colorizer AbstractNavigationContext::labelHighlight("000000");
 const Colorizer AbstractNavigationContext::codeHighlight("005000");
 const Colorizer AbstractNavigationContext::propertyHighlight("009900");
 const Colorizer AbstractNavigationContext::navigationHighlight("000099");

@@ -36,9 +36,9 @@ QString UsesNavigationContext::name() const {
   return "Uses";
 }
 
-QString UsesNavigationContext::html(bool) {
+QString UsesNavigationContext::html(bool shorten) {
   clear();
-  modifyHtml()  += "<html><body><p><small><small>";
+  modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
   
   if( m_previousContext ) {
     modifyHtml() += navigationHighlight("Uses of ");
@@ -50,7 +50,7 @@ QString UsesNavigationContext::html(bool) {
     }
   }
   
-  modifyHtml() += "</small></small></p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
 
   return currentHtml();
 }

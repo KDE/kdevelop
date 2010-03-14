@@ -63,7 +63,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 {
   clear();
   m_shorten = shorten;
-  modifyHtml()  += "<html><body><p><small><small>";
+  modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
 
   addExternalHtml(m_prefix);
 
@@ -282,7 +282,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
   addExternalHtml(m_suffix);
 
-  modifyHtml() += "</small></small></p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
 
   return currentHtml();
 }
