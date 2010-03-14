@@ -801,16 +801,21 @@ QualifiedIdentifier stripPrefixes(DUContext* ctx, QualifiedIdentifier id)
   if(!ctx)
     return id;
   
+  QualifiedIdentifier basicId = id;
+  
   QList<QualifiedIdentifier> imports = ctx->fullyApplyAliases(QualifiedIdentifier(), ctx->topContext());
   if(imports.contains(id))
     return QualifiedIdentifier(); ///The id is a namespace that is imported into the current context
   
-  QList< Declaration* > basicDecls = ctx->findDeclarations(id, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::NoSelfLookUp);
+  QList< Declaration* > basicDecls = ctx->findDeclarations(id, SimpleCursor::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoSelfLookUp | DUContext::NoFiltering));
+  
+  if(basicDecls.isEmpty())
+    return id;
   
   while(!id.isEmpty())
   {
     QualifiedIdentifier newId = id.mid(1);
-    QList< Declaration* > foundDecls = ctx->findDeclarations(newId, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::NoSelfLookUp);
+    QList< Declaration* > foundDecls = ctx->findDeclarations(newId, SimpleCursor::invalid(), AbstractType::Ptr(), 0, (DUContext::SearchFlags)(DUContext::NoSelfLookUp | DUContext::NoFiltering));
     
     if(foundDecls == basicDecls)
       id = newId;

@@ -3526,6 +3526,7 @@ void TestDUChain::testSimplifiedTypeString()
     QualifiedIdentifier constructorId = top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->qualifiedIdentifier();
     QCOMPARE(constructorId.toString(), QString("A::B::B"));
     QCOMPARE(stripPrefixes(top->childContexts()[0], constructorId).toString(), QString("B::B"));
+    QCOMPARE(stripPrefixes(top, constructorId).toString(), QString("A::B::B"));
     
     release(top);
   }
