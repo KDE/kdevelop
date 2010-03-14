@@ -1331,10 +1331,12 @@ void TestCppCodeCompletion::testUpdateChain() {
 
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->childContexts().count(), 2);
-    QCOMPARE(top->childContexts()[1]->childContexts().count(), 3);
-    QCOMPARE(top->childContexts()[1]->childContexts()[2]->localDeclarations().count(), 1);
-    IndexedDeclaration decl(top->childContexts()[1]->childContexts()[2]->localDeclarations()[0]);
+    QCOMPARE(top->childContexts()[1]->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->childContexts()[1]->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[1]->childContexts()[1]->childContexts()[1]->localDeclarations().count(), 1);
+    IndexedDeclaration decl(top->childContexts()[1]->childContexts()[1]->childContexts()[1]->localDeclarations()[0]);
     QVERIFY(decl.data());
+    QCOMPARE(decl.data()->identifier().toString(), QString("i"));
     
     parse(text, DumpNone, 0, KUrl(), top);
     QVERIFY(decl.data()); //Make sure the declaration has been updated, and not deleted
