@@ -210,7 +210,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
 
       m.name = IndexedString("Q_PRIVATE_SLOT");
       m.formalsList().append(IndexedString("d"));
-      m.formalsList().append(IndexedString("sig"));
+      m.formalsList().append(IndexedString("sig;"));
       m.function_like = true;
       m.setDefinitionText( "sig" );
       insertMacro( macros, m );
