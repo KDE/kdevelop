@@ -194,44 +194,51 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
     }
     
-    ///@todo The following macros are only required for Qt, so only set them on projects that use Qt.
+    /// The following macros are required for qt only. That's why we set them to become active only when their
+    /// 'real' versions become defined in qobjectdefs.h. A slight problem is that they are 'fixed', so they will block
+    /// any other macros with the same names.
     {
-      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
       rpp::pp_macro m("Q_SLOTS");
-      m.setDefinitionText( "slots" );
-      m.fixed = true;
-      insertMacro( macros, m );
-    }
-    {
-      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_macro m("slots");
+      m.setDefinitionText( "__qt_slots__" );
+      
       m.defined = false;
+      m.defineOnOverride = true;
+      m.file = IndexedString("/qobjectdefs.h"); // Only define the macro if it is overriden in this file
       m.fixed = true;
+      
       insertMacro( macros, m );
-    }
 
-    {
-      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_macro m("Q_SIGNALS");
-      m.setDefinitionText( "signals" );
-      m.fixed = true;
+      m.name = IndexedString("Q_PRIVATE_SLOT");
+      m.formalsList().append(IndexedString("d"));
+      m.formalsList().append(IndexedString("sig"));
+      m.function_like = true;
+      m.setDefinitionText( "sig" );
       insertMacro( macros, m );
-    }
-    {
-      //These macros are "fixed" so they cannot be overridden, and so our lexer can process the information
-      rpp::pp_macro m("signals");
-      m.defined = false;
-      m.fixed = true;
+      
+      m.name = IndexedString("slots");
+      m.setDefinitionText("__qt_slots__");
+      m.formalsList().clear();
+      m.function_like = false;
       insertMacro( macros, m );
-    }
-    
-    {
-      rpp::pp_macro m("SIGNAL");
+
+      m.name = IndexedString("Q_SIGNALS");
+      m.setDefinitionText( "__qt_signals__" );
+      m.formalsList().clear();
+      insertMacro( macros, m );
+
+      m.name = IndexedString("signals");
+      m.setDefinitionText("__qt_signals__");
+      m.formalsList().clear();
+      insertMacro( macros, m );
+
+      m.name = IndexedString("SIGNAL");
       m.setDefinitionText("__qt_sig_slot__");
-      m.defined = true;
-      m.fixed = true;
+      m.formalsList().clear();
       insertMacro( macros, m );
+      
       m.name = IndexedString("SLOT");
+      m.setDefinitionText("__qt_sig_slot__");
+      m.formalsList().clear();
       insertMacro( macros, m );
     }
     

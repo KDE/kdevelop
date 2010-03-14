@@ -96,10 +96,10 @@ static char const * const _S_token_names[] = {
   "scope",
   "shift",
   "short",
-  "signals",
+  "__qt_signals__",
   "signed",
   "sizeof",
-  "slots",
+  "__qt_slots__",
   "static",
   "static_cast",
   "string_literal",
@@ -123,7 +123,8 @@ static char const * const _S_token_names[] = {
   "while",
   "whitespaces",
   "xor",
-  "xor_eq"
+  "xor_eq",
+  "__qt_sig_slot__"
 };
 
 static char const * const _S_token_texts[] = {
@@ -201,10 +202,10 @@ static char const * const _S_token_texts[] = {
   "::",
   "shift",
   "short",
-  "signals",
+  "__qt_signals__",
   "signed",
   "sizeof",
-  "slots",
+  "__qt_slots__",
   "static",
   "static_cast",
   "string_literal",
@@ -228,7 +229,8 @@ static char const * const _S_token_texts[] = {
   "while",
   "whitespaces",
   "^",
-  "^="
+  "^=",
+  "__qt_sig_slot__"
 };
 
 static char _S_printable[][2] = {

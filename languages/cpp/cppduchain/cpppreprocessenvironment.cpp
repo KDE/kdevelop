@@ -117,6 +117,7 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file, bool mer
     for( Cpp::ReferenceCountedStringSet::Iterator it = file->unDefinedMacroNames().iterator(); it; ++it ) {
         rpp::pp_macro* m = new rpp::pp_macro(*it);
         m->defined = false;
+        m->m_valueHashValid = false;
         rpp::Environment::setMacro(m); //Do not use our overridden setMacro(..), because addDefinedMacro(..) is not needed(macro-sets should be merged separately)
     }
 
@@ -127,17 +128,31 @@ void CppPreprocessEnvironment::merge( const Cpp::EnvironmentFile* file, bool mer
 void CppPreprocessEnvironment::setMacro(rpp::pp_macro* macro) {
     rpp::pp_macro* hadMacro = retrieveStoredMacro(macro->name);
 
-    //If a macro of the same name has been fixed, the new macro has no effect
     if(hadMacro && hadMacro->fixed) {
-      if(!macro->isRepositoryMacro())
-        delete macro;
-      return;
+      if(hadMacro->defineOnOverride && (hadMacro->file.isEmpty() ||
+          (macro->file.length() >= hadMacro->file.length() &&
+           memcmp(macro->file.c_str() + (macro->file.length() - hadMacro->file.length()), 
+                         hadMacro->file.c_str(),
+                         hadMacro->file.length()) == 0)))
+      {
+        // We have to define the macro now, as it is being overridden
+        rpp::pp_macro* definedMacro = new rpp::pp_macro(*hadMacro);
+        definedMacro->defined = true;
+        if(!macro->isRepositoryMacro())
+          delete macro;
+        macro = definedMacro;
+      }else{
+        // A fixed macro exists, simply ignore the added macro
+        if(!macro->isRepositoryMacro())
+          delete macro;
+        return;
+      }
     }
 
   //kDebug() << "setting macro" << macro->name.str() << "with body" << macro->definition << "is undef:" << macro->isUndef();
     //Note defined macros
     if( m_environmentFile )
-      m_environmentFile->addDefinedMacro(*macro, retrieveStoredMacro(macro->name));
+      m_environmentFile->addDefinedMacro(*macro, hadMacro);
 
     if( !macro->isUndef() )
       m_macroNameSet.insert(macro->name);

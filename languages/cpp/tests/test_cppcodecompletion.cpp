@@ -54,6 +54,7 @@
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/persistentsymboltable.h>
+#include <cpputils.h>
 
 using namespace KTextEditor;
 
@@ -334,25 +335,28 @@ void TestCppCodeCompletion::testConstructorCompletion() {
 }
 
 void TestCppCodeCompletion::testSignalSlotCompletion() {
-    addInclude("QObject.h", "class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
+    // By processing qobjectdefs.h, we make sure that the qt-specific macros are defined in the duchain through overriding (see setuphelpers.cpp)
+    addInclude("/qobjectdefs.h", "#define signals\n#define slots\n#define Q_SIGNALS\n#define Q_SLOTS\n#define Q_PRIVATE_SLOT\n#define SIGNAL\n#define SLOT\n int n;\n");
+  
+    addInclude("QObject.h", "#include \"/qobjectdefs.h\"\n class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); };");
     
-    QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } };");
+    QByteArray test("#include \"QObject.h\"\n class TE; class A : public QObject { public slots: void slot1(); void slot2(TE*); signals: void signal1(TE*, char);void signal2(); public: void test() { } slots: Q_PRIVATE_SLOT( d, void slot3(TE*) );  };");
 
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->childContexts().count(), 1);
-    QCOMPARE(context->childContexts()[0]->childContexts().count(), 6);
+    QCOMPARE(context->childContexts()[0]->childContexts().count(), 7);
     CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, ");
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2").toSet());
     kDebug() << "ITEMS:" << CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names;
-    QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "Connect to A::signal2 ()").toSet());
+    QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SIGNAL(").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2" << "Connect to A::signal2 ()").toSet());
-    QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names.toSet(), (QStringList() << "connect" << "slot1" << "slot2" << "Connect to A::signal2 ()" << "signal2").toSet());
+    QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), this, SLOT(").names.toSet(), (QStringList() << "connect" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()" << "signal2").toSet());
 
-    QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), ").names.toSet()).isEmpty());
+    QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "slot1" << "slot2" << "slot3" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), ").names.toSet()).isEmpty());
     QVERIFY(((QStringList() << "connect" << "signal1" << "signal2" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SIGNAL(").names.toSet()).isEmpty());
-    QVERIFY(((QStringList() << "connect" << "slot1" << "slot2" << "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SLOT(").names.toSet()).isEmpty());
+    QVERIFY(((QStringList() << "connect" << "slot1" << "slot2" << "slot3"<< "Connect to A::signal2 ()").toSet() - CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(signal2()), SLOT(").names.toSet()).isEmpty());
     
     release(context);
 }
@@ -2023,8 +2027,10 @@ QString TestCppCodeCompletion::preprocess( const HashedString& url, const QStrin
 
     if( parent )
       preprocessor.environment()->swapMacros(parent->environment());
+    else
+      currentEnvironment->merge(CppUtils::standardMacros());
 
-    PreprocessedContents contents = preprocessor.processFile("<test>", text.toUtf8());
+    PreprocessedContents contents = preprocessor.processFile(url.str(), text.toUtf8());
     if(targetContents)
       *targetContents = contents;
 

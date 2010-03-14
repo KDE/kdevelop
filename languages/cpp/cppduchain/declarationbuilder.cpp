@@ -1369,7 +1369,7 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
     do {
       int kind = editor()->parseSession()->token_stream->kind(it->element);
       switch (kind) {
-        case Token_slots:
+        case Token___qt_slots__:
         case Token_k_dcop:
           isSlot = true;
           break;
@@ -1377,7 +1377,7 @@ void DeclarationBuilder::visitAccessSpecifier(AccessSpecifierAST* node)
           setAccessPolicy(Declaration::Public);
           break;
         case Token_k_dcop_signals:
-        case Token_signals:
+        case Token___qt_signals__:
           isSignal = true;
         case Token_protected:
           setAccessPolicy(Declaration::Protected);

@@ -437,8 +437,8 @@ bool Parser::skipUntilDeclaration()
         case Token_public:
         case Token_protected:
         case Token_private:
-        case Token_signals:      // Qt
-        case Token_slots:        // Qt
+        case Token___qt_signals__:      // Qt
+        case Token___qt_slots__:        // Qt
           return true;
         case '}':
           return false;
@@ -2109,8 +2109,8 @@ bool Parser::parseAccessSpecifier(DeclarationAST *&node)
     {
       switch(session->token_stream->lookAhead())
         {
-        case Token_signals:
-        case Token_slots:
+        case Token___qt_signals__:
+        case Token___qt_slots__:
         case Token_k_dcop:
         case Token_k_dcop_signals:
         case Token_public:

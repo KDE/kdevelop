@@ -64,10 +64,14 @@ public:
   int sourceLine; //line
 
   bool defined: 1; // !isUndefMacro
-  bool hidden: 1;
+  bool hidden: 1; //A temporary flag, don't manipulate it from outside
   bool function_like: 1; // hasArguments
   bool variadics: 1;
   bool fixed : 1; //If this is set, the macro can not be overridden or undefined.
+  //If defineOnOverride is set, the macro is changed to "defined = true", if it is overridden.
+  //If the macro also has a valid "file" entry, the macro will only be defined if the file-name of the overriding
+  //macro ends with the string given in 'file'.
+  bool defineOnOverride : 1;
   mutable bool m_valueHashValid : 1;
   
   //The valueHash is not necessarily valid

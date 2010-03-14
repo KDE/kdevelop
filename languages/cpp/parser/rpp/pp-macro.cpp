@@ -48,6 +48,7 @@ bool pp_macro::operator==(const pp_macro& rhs) const {
          function_like == rhs.function_like &&
          variadics == rhs.variadics &&
          fixed == rhs.fixed &&
+         defineOnOverride == rhs.defineOnOverride &&
          listsEqual(rhs);
 }
 
@@ -62,6 +63,7 @@ pp_macro::pp_macro(const KDevelop::IndexedString& nm) : name(nm)
   , function_like(false)
   , variadics(false)
   , fixed(false)
+  , defineOnOverride(false)
   , m_valueHashValid(false)
   , m_valueHash(0)
 {
@@ -77,6 +79,7 @@ pp_macro::pp_macro(const pp_macro& rhs, bool dynamic) :
    function_like(rhs.function_like),
    variadics(rhs.variadics),
    fixed(rhs.fixed),
+   defineOnOverride(rhs.defineOnOverride),
    m_valueHashValid(true),
    m_valueHash(rhs.valueHash())
 {
@@ -91,6 +94,7 @@ pp_macro::pp_macro(const char* nm) : name(KDevelop::IndexedString(nm, strlen(nm)
   , function_like(false)
   , variadics(false)
   , fixed(false)
+  , defineOnOverride(false)
   , m_valueHashValid(false)
   , m_valueHash(0)
 {
@@ -123,6 +127,7 @@ void pp_macro::setDefinitionText(QString definition) {
 }
 
 void pp_macro::setDefinitionText(QByteArray definition) {
+  definitionList().clear();
   foreach(uint i, convertFromByteArray(definition))
     definitionList().append(KDevelop::IndexedString::fromIndex(i));
 }
@@ -133,7 +138,7 @@ void pp_macro::computeHash() const {
 
     m_valueHash = 27 * ( 137 + (defined ? 1 : 0 ) );
 
-    m_valueHash += 1741 * file.hash() + 238 * sourceLine + (hidden ? 19 : 0) + (function_like ? 811241 : 0) + (variadics ? 129119 : 0) + (fixed ? 1807 : 0);
+    m_valueHash += 1741 * file.hash() + 238 * sourceLine + (hidden ? 19 : 0) + (function_like ? 811241 : 0) + (variadics ? 129119 : 0) + (fixed ? 1807 : 0) + (defineOnOverride ? 31621 : 0);
   
     FOREACH_FUNCTION(const IndexedString& definitionComponent, definition)
       m_valueHash = definitionComponent.hash() + 17 * m_valueHash;
