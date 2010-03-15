@@ -26,6 +26,7 @@
 #include <QtGui/QLabel>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QHeaderView>
 
 #include <KLocalizedString>
 #include <KIconLoader>
@@ -53,6 +54,8 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
   // Set model in the tree view
   m_tree->setModel(m_model);
+  m_tree->header()->setResizeMode(0, QHeaderView::ResizeToContents);
+  m_tree->header()->setStretchLastSection(false);
 
   // We need notification in the model for the collapse/expansion of nodes.
   connect(m_tree, SIGNAL(collapsed(const QModelIndex&)),

@@ -63,8 +63,9 @@ KDevDocumentView::KDevDocumentView( KDevDocumentViewPlugin *plugin, QWidget *par
     setFocusPolicy( Qt::NoFocus );
 
     setRootIsDecorated( false );
-    header() ->hide();
-    header() ->setResizeMode( QHeaderView::Stretch );
+    header()->hide();
+    header()->setResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setStretchLastSection(false);
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
