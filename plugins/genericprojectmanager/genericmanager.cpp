@@ -422,7 +422,7 @@ bool GenericProjectManager::removeFolder( KDevelop::ProjectFolderItem * folder )
     kDebug() << "removing folder" << folder->url();
     KDevelop::ProjectFolderItem* parent = getParentFolder(folder);
     stopWatcher(parent);
-    const bool success = KDevelop::removeUrl(folder->url(), true);
+    const bool success = KDevelop::removeUrl(parent->project(), folder->url(), true);
     if ( success ) {
         folder->parent()->removeRow( folder->row() );
     }
@@ -435,7 +435,7 @@ bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
     kDebug() << "removing file" << file->url();
     KDevelop::ProjectFolderItem* parent = getParentFolder(file);
     stopWatcher(parent);
-    const bool success = KDevelop::removeUrl(file->url(), false);
+    const bool success = KDevelop::removeUrl(file->project(), file->url(), false);
     if ( success ) {
         file->parent()->removeRow( file->row() );
     }

@@ -32,7 +32,7 @@ class IProject;
  * Set @p isFolder properly to get the correct messages.
  * @return whether url got deleted or not
  */
-bool KDEVPLATFORMPROJECT_EXPORT removeUrl(const KUrl& url, const bool isFolder);
+bool KDEVPLATFORMPROJECT_EXPORT removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder);
 
 /**
  * Creates a file at @p url. Shows the user an error message on failure.

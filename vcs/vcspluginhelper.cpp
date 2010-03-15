@@ -81,7 +81,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KUrl::List ctxUrls;
     KAction * commitAction;
     KAction * addAction;
-    KAction * removeAction;
     KAction * updateAction;
     KAction * historyAction;
     KAction * annotationAction;
@@ -93,7 +92,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
         updateAction = new KAction(KIcon("svn-update"), i18n("Update"), parent);
         addAction = new KAction(KIcon("list-add"), i18n("Add"), parent);
-        removeAction = new KAction(KIcon("list-remove"), i18n("Remove"), parent);
         diffToHeadAction = new KAction(i18n("Compare to Head..."), parent);
         diffToBaseAction = new KAction(i18n("Compare to Base..."), parent);
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
@@ -102,7 +100,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
-        connect(removeAction, SIGNAL(triggered()), parent, SLOT(remove()));
         connect(updateAction, SIGNAL(triggered()), parent, SLOT(update()));
         connect(diffToHeadAction, SIGNAL(triggered()), parent, SLOT(diffToHead()));
         connect(diffToBaseAction, SIGNAL(triggered()), parent, SLOT(diffToBase()));
@@ -128,7 +125,6 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         menu->addAction(updateAction);
         menu->addSeparator();
         menu->addAction(addAction);
-        menu->addAction(removeAction);
         menu->addAction(revertAction);
         menu->addSeparator();
         menu->addAction(historyAction);
@@ -354,11 +350,6 @@ void VcsPluginHelper::annotation()
 void VcsPluginHelper::update()
 {
     EXECUTE_VCS_METHOD(update);
-}
-
-void VcsPluginHelper::remove()
-{
-    EXECUTE_VCS_METHOD(remove);
 }
 
 void VcsPluginHelper::add()

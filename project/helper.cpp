@@ -32,7 +32,7 @@
 #include <interfaces/iplugin.h>
 #include <vcs/vcsjob.h>
 
-bool KDevelop::removeUrl(const KUrl& url, const bool isFolder)
+bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder)
 {
     QWidget* window(QApplication::activeWindow());
     int q=KMessageBox::questionYesNo(window,
@@ -40,6 +40,18 @@ bool KDevelop::removeUrl(const KUrl& url, const bool isFolder)
                  : i18n("Do you want to remove the file <i>%1</i> from the filesystem too?", url.pathOrUrl()));
     if(q==KMessageBox::Yes)
     {
+        IPlugin* vcsplugin=project->versionControlPlugin();
+        if(vcsplugin) {
+            IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
+        
+            // We have a vcs and the file/folder is controller, need to make the rename through vcs
+            if(vcs->isVersionControlled(url)) {
+                VcsJob* job=vcs->remove(KUrl::List() << url);
+                return job->exec();
+            }
+        }
+        
+        //if we didn't find a VCS, we remove using KIO
         if ( !KIO::NetAccess::del( url, window ) ) {
             KMessageBox::error( window,
                 isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.pathOrUrl() )

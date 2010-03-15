@@ -46,7 +46,6 @@ public:
 private Q_SLOTS:
     void commit();
     void add();
-    void remove();
     void revert();
     void history();
     void annotation();
