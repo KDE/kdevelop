@@ -334,6 +334,7 @@ void ProjectFolderItem::setUrl( const KUrl& url )
     d->m_url = url;
     d->m_folderName = d->m_url.fileName();
     setText( d->m_folderName );
+    setToolTip( text() );
 }
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
@@ -378,6 +379,7 @@ void ProjectFolderItem::setProjectRoot(bool isRoot)
 	Q_D(ProjectFolderItem);
 	d->m_isProjectRoot=isRoot;
 	setText(project()->name());
+        setToolTip( text() );
 }
 
 bool ProjectFolderItem::isProjectRoot() const
@@ -466,6 +468,7 @@ void ProjectFileItem::setUrl( const KUrl& url )
     d->m_url = url;
     d->m_fileName = d->m_url.fileName();
     setText( d->m_fileName );
+    setToolTip( text() );
     setIcon(KIcon(KMimeType::findByUrl(url, 0, false, true)->iconName(url)));
 }
 
@@ -490,6 +493,7 @@ ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, QS
     Q_D(ProjectTargetItem);
     d->project = project;
     setText( name );
+    setToolTip( text() );
     setParent( parent );
     setIcon( KIcon("system-run") );
 }
