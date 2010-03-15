@@ -1021,7 +1021,7 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
 
 bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
 {
-    if ( !KDevelop::removeUrl(it->url(), true) ) {
+    if ( !KDevelop::removeUrl(it->project(), it->url(), true) ) {
         return false;
     }
     KUrl lists=it->url().upUrl();
@@ -1109,7 +1109,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
 bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
 {
-    if ( !KDevelop::removeUrl(it->url(), false) ) {
+    if ( !KDevelop::removeUrl(it->project(), it->url(), false) ) {
         return false;
     }
 

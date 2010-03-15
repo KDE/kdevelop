@@ -221,12 +221,12 @@ ProjectFileItem* CustomMakeManager::addFile(const KUrl& file, KDevelop::ProjectF
 
 bool CustomMakeManager::removeFolder(KDevelop::ProjectFolderItem *folder)
 {
-    return KDevelop::removeUrl(folder->url(), true);
+    return KDevelop::removeUrl(folder->project(), folder->url(), true);
 }
 
 bool CustomMakeManager::removeFile(KDevelop::ProjectFileItem *file)
 {
-    return KDevelop::removeUrl(file->url(), false);
+    return KDevelop::removeUrl(file->project(), file->url(), false);
 }
 
 bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)
