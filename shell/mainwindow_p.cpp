@@ -325,12 +325,6 @@ void MainWindowPrivate::setupActions()
 //     connect( popupAction->menu(), SIGNAL( triggered( Action* ) ),
 //              this, SLOT( stopPopupActivated( QAction* ) ) );
 
-    action = KStandardAction::showMenubar(
-                 this, SLOT( showMenuBar() ),
-                 actionCollection());
-    action->setToolTip( action->text() );
-    action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( action->text() ).arg( i18n( "Lets you toggle the menubar on/off." ) ) );
-
     action = actionCollection()->addAction( "view_next_window" );
     action->setText( i18n( "&Next Window" ) );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );

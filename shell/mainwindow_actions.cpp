@@ -95,9 +95,6 @@ void MainWindowPrivate::stopPopupActivated( int id )
 void MainWindowPrivate::stopMenuAboutToShow()
 {}
 
-void MainWindowPrivate::showMenuBar()
-{}
-
 void MainWindowPrivate::settingsDialog()
 {
     Core::self()->uiControllerInternal()->showSettingsDialog();
