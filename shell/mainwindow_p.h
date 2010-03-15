@@ -96,7 +96,6 @@ public Q_SLOTS:
     void stopPopupActivated( int );
     void stopMenuAboutToShow();
     void stopButtonPressed();
-    void showMenuBar();
 
     void quitAll();
 
