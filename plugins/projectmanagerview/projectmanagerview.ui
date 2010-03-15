@@ -26,6 +26,12 @@
         <verstretch>5</verstretch>
        </sizepolicy>
       </property>
+      <attribute name="headerStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="headerStretchLastSection">
+       <bool>false</bool>
+      </attribute>
      </widget>
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">

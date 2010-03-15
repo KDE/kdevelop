@@ -107,10 +107,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_ui->projectTreeView->setModel( m_modelFilter );
 
-// Need to set this to get horizontal scrollbar. Also needs to be done after
-// the setModel call
-    m_ui->projectTreeView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
-    m_ui->projectTreeView->header()->setStretchLastSection( false );
  
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
@@ -124,6 +120,10 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     
     //Update the "sync" button after the initialization has completed, to see whether there already is some open documents
     QMetaObject::invokeMethod(this, "updateSyncAction", Qt::QueuedConnection);
+
+    // Need to set this to get horizontal scrollbar. Also needs to be done after
+    // the setModel call
+    m_ui->projectTreeView->header()->setResizeMode( QHeaderView::ResizeToContents );
 }
 
 void ProjectManagerView::selectionChanged()

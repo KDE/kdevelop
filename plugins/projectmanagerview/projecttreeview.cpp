@@ -54,9 +54,6 @@ using namespace KDevelop;
 ProjectTreeView::ProjectTreeView( QWidget *parent )
         : QTreeView( parent ), m_ctxProject( 0 )
 {
-    header()->setResizeMode( QHeaderView::ResizeToContents );
-    header()->hide();
-
     setEditTriggers( QAbstractItemView::EditKeyPressed );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
