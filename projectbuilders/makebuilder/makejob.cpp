@@ -180,12 +180,13 @@ QStringList MakeJob::computeBuildCommand() const
     {
         cmdline << "-k";
     }
-    if( builderGroup.readEntry("Run Multiple Jobs", false ) )
-    {
-        int jobnumber = builderGroup.readEntry("Number Of Jobs", 1);
+    
+    int jobnumber = builderGroup.readEntry("Number Of Jobs", 1);
+    if(jobnumber>1) {
         QString jobNumberArg = QString("-j%1").arg(jobnumber);
         cmdline << jobNumberArg;
     }
+    
     if( builderGroup.readEntry("Display Only", false) )
     {
         cmdline << "-n";
