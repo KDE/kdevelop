@@ -99,7 +99,7 @@ void CMakeBuildDirChooser::updated()
 //  m_chooserUi->generator->setEnabled(haveCMake);
     if(!haveCMake)
     {
-        setStatus(i18n("You need to select a cmake binary"), false);
+        setStatus(i18n("You need to select a cmake binary."), false);
         return;
     }
 
@@ -142,14 +142,14 @@ void CMakeBuildDirChooser::updated()
     }
     else
     {
-        setStatus(i18n("You need to specify a build directory"), false);
+        setStatus(i18n("You need to specify a build directory."), false);
         return;
     }
     
     
     if(st & (BuildDirCreated | CorrectBuildDir))
     {
-        setStatus(i18n("Using an already created build directory"), true);
+        setStatus(i18n("Using an already created build directory."), true);
         m_chooserUi->installPrefix->setEnabled(false);
         m_chooserUi->buildType->setEnabled(false);
     }
@@ -169,11 +169,11 @@ void CMakeBuildDirChooser::updated()
                 setStatus(i18n("Build directory already configured."), false);
             else if (!srcDir.isEmpty())
                 setStatus(i18n("This build directory is for %1, "
-                               "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()), false);
+                               "but the project directory is %2.", srcDir, m_srcFolder.toLocalFile()), false);
             else if(dirRelative)
-                setStatus(i18n("You may not select a relative build directory"), false);
+                setStatus(i18n("You may not select a relative build directory."), false);
             else if(!dirEmpty)
-                setStatus(i18n("The selected build directory is not empty"), false);
+                setStatus(i18n("The selected build directory is not empty."), false);
         }
 
         m_chooserUi->installPrefix->setEnabled(correct);
