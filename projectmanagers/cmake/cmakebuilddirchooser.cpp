@@ -160,7 +160,7 @@ void CMakeBuildDirChooser::updated()
         if(correct)
         {
             st |= CorrectBuildDir;
-            setStatus("", true);
+            setStatus(i18n("Creating a new build directory."), true);
         }
         else
         {
