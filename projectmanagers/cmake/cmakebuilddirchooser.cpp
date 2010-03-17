@@ -55,6 +55,7 @@ void CMakeBuildDirChooser::setSourceFolder( const KUrl& srcFolder )
     KUrl proposedBuildUrl = KUrl( srcFolder.toLocalFile() + "/build" );
     proposedBuildUrl.cleanPath();
     m_chooserUi->buildFolder->setUrl(proposedBuildUrl);
+    setCaption(i18n("Configure a build directory for %1", srcFolder.toLocalFile()));
     update();
 }
 
