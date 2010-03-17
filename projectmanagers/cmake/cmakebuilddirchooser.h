@@ -60,6 +60,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         void setBuildType(const QString&);
         void setSourceFolder( const KUrl& srcFolder );
         void setAlreadyUsed(const QStringList& used);
+        void setStatus(const QString& message, bool canApply);
 
     private slots:
         void updated();

@@ -26,6 +26,8 @@
 #include <KStandardDirs>
 #include "ui_cmakebuilddirchooser.h"
 
+#include <KColorScheme>
+
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : KDialog(parent)
 {
@@ -97,8 +99,7 @@ void CMakeBuildDirChooser::updated()
 //  m_chooserUi->generator->setEnabled(haveCMake);
     if(!haveCMake)
     {
-        m_chooserUi->status->setText(i18n("You need to select a cmake binary"));
-        button(Ok)->setEnabled(false);
+        setStatus(i18n("You need to select a cmake binary"), false);
         return;
     }
 
@@ -141,15 +142,14 @@ void CMakeBuildDirChooser::updated()
     }
     else
     {
-        m_chooserUi->status->setText(i18n("You need to specify a build directory"));
-        button(Ok)->setEnabled(false);
+        setStatus(i18n("You need to specify a build directory"), false);
         return;
     }
     
     
     if(st & (BuildDirCreated | CorrectBuildDir))
     {
-        m_chooserUi->status->setText(i18n("Using an already created build directory"));
+        setStatus(i18n("Using an already created build directory"), true);
         m_chooserUi->installPrefix->setEnabled(false);
         m_chooserUi->buildType->setEnabled(false);
     }
@@ -160,26 +160,25 @@ void CMakeBuildDirChooser::updated()
         if(correct)
         {
             st |= CorrectBuildDir;
-            m_chooserUi->status->setText(QString());
+            setStatus("", true);
         }
         else
         {
             //Useful to explain what's going wrong
             if(st & DirAlreadyCreated)
-                m_chooserUi->status->setText(i18n("Build directory already configured."));
+                setStatus(i18n("Build directory already configured."), false);
             else if (!srcDir.isEmpty())
-                m_chooserUi->status->setText(i18n("This build directory is for %1, "
-                        "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()));
+                setStatus(i18n("This build directory is for %1, "
+                               "but the project directory is %2", srcDir, m_srcFolder.toLocalFile()), false);
             else if(dirRelative)
-                m_chooserUi->status->setText(i18n("You may not select a relative build directory"));
+                setStatus(i18n("You may not select a relative build directory"), false);
             else if(!dirEmpty)
-                m_chooserUi->status->setText(i18n("The selected build directory is not empty"));
+                setStatus(i18n("The selected build directory is not empty"), false);
         }
 
         m_chooserUi->installPrefix->setEnabled(correct);
         m_chooserUi->buildType->setEnabled(correct);
     }
-    button(Ok)->setEnabled(st & CorrectBuildDir);
 }
 
 void CMakeBuildDirChooser::setCMakeBinary(const KUrl& url) 
@@ -210,6 +209,19 @@ void CMakeBuildDirChooser::setAlreadyUsed (const QStringList & used)
 {
     m_alreadyUsed = used;
     updated();
+}
+
+void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
+{
+    KColorScheme scheme(QPalette::Normal);
+    KColorScheme::ForegroundRole role;
+    if (canApply) {
+        role = KColorScheme::PositiveText;
+    } else {
+        role = KColorScheme::NegativeText;
+    }
+    m_chooserUi->status->setText(QString("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name()).arg(message));
+    button(Ok)->setEnabled(canApply);
 }
 
 KUrl CMakeBuildDirChooser::cmakeBinary() const { return m_chooserUi->cmakeBin->url(); }
