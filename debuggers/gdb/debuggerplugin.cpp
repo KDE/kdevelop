@@ -401,7 +401,7 @@ void CppDebuggerPlugin::attachProcess(int pid)
     session->attachToProcess(pid);
     
     KillSessionJob *job = new KillSessionJob(session);
-    job->setObjectName(i18n("Debug process %1").arg(pid));
+    job->setObjectName(i18n("Debug process %1", pid));
     core()->runController()->registerJob(job);
     job->start();    
 }
