@@ -392,25 +392,19 @@ QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, Q
 
   {
       DUChainReadLocker lock(DUChain::lock());
-    kDebug(9007) << "defined macros: " << file->definedMacros().count();
     //Copy in all macros from the file
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->definedMacros().iterator() ); it; ++it ) {
-      kDebug() << "defined: " << (*it).toString();
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
         if(!disableMacros.contains( it.ref().name ))
         {
-          kDebug() << "Adding" << (*it).toString();
           pp.environment()->setMacro( new rpp::pp_macro(it.ref()) );
         }
       }
     }
-    kDebug(9007) << "used macros: " << file->usedMacros().count();
     for( Cpp::ReferenceCountedMacroSet::Iterator it( file->usedMacros().iterator() ); it; ++it ) {
-      kDebug() << "used: " << (*it).toString();
       if( line == -1 || line > it.ref().sourceLine || file->url() != it.ref().file ) {
         if(!disableMacros.contains( it.ref().name ))
           pp.environment()->setMacro( new rpp::pp_macro(it.ref()) );
-        kDebug() << "adding: " << (*it).toString();
       }
     }
   }
