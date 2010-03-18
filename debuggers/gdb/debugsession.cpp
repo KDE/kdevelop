@@ -295,7 +295,7 @@ void DebugSession::attachToProcess(int pid)
     // real binary name.
     queueCmd(new GDBCommand(GDBMI::FileExecAndSymbols));
 
-    queueCmd(new GDBCommand(GDBMI::TargetAttach, pid));
+    queueCmd(new GDBCommand(GDBMI::TargetAttach, pid, this, &DebugSession::handleTargetAttach, true));
 
     raiseEvent(connected_to_program);
 
@@ -1425,6 +1425,18 @@ void DebugSession::handleFileExecAndSymbols(const GDBMI::ResultRecord& r)
         KMessageBox::error(
             qApp->activeWindow(),
             i18n("<b>Could not start debugger:</b><br />")+
+            r["msg"].literal(),
+            i18n("Startup error"));
+        stopDebugger();
+    }
+}
+
+void DebugSession::handleTargetAttach(const GDBMI::ResultRecord& r)
+{
+    if (r.reason == "error") {
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("<b>Could not attach debugger:</b><br />")+
             r["msg"].literal(),
             i18n("Startup error"));
         stopDebugger();
