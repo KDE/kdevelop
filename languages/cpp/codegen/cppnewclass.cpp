@@ -259,6 +259,8 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
   // Overrides
 
   foreach (DeclarationPointer override, m_declarations) {
+    if(!override)
+      continue;
     if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(override.data())) {
       if (ap != member->accessPolicy()) {
         switch (member->accessPolicy()) {
