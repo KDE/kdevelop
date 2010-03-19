@@ -21,6 +21,7 @@
 #include "../duchain/declaration.h"
 #include "../duchain/duchainlock.h"
 #include "../duchain/types/functiontype.h"
+#include "../duchain/types/integraltype.h"
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -40,7 +41,9 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
   if(!declaration)
     return;
   
-  if( declaration->kind() == Declaration::Type || (declaration->type<FunctionType>() && declaration->type<FunctionType>()->indexedArgumentsSize()) )
+  TypePtr< FunctionType > funcType = declaration->type<FunctionType>();
+  
+  if( declaration->kind() == Declaration::Type || (funcType && funcType->indexedArgumentsSize()) )
     haveArguments = true;
   
   if( declaration->kind() == Declaration::Instance && !declaration->isFunctionDeclaration())
@@ -71,9 +74,19 @@ void insertFunctionParenText(KTextEditor::Document* document, const KTextEditor:
 
     KTextEditor::Cursor jumpPos = word.end() + KTextEditor::Cursor( 0, openingParen.length() );
 
-    //If no arguments, move the cursor behind the closing paren
+    // when function returns void, also add a semicolon
+    if (funcType) {
+      if (IntegralType::Ptr type = funcType->returnType().cast<IntegralType>()) {
+        if (type->dataType() == IntegralType::TypeVoid) {
+          closingParen += ';';
+        }
+      }
+    }
+
+    //If no arguments, move the cursor behind the closing paren (or semicolon)
     if( !haveArguments )
       jumpPos += KTextEditor::Cursor( 0, closingParen.length() );
+
 
     lock.unlock();
     document->insertText( word.end(), openingParen + closingParen );
