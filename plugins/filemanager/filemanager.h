@@ -25,6 +25,7 @@
 class KDirOperator;
 class KUrlNavigator;
 class KFileItem;
+class KAction;
 class QString;
 class QMenu;
 class KUrl;
@@ -41,9 +42,11 @@ private slots:
     void updateNav( const KUrl& url );
     void syncCurrentDocumentDirectory();
     void fillContextMenu(KFileItem item, QMenu *menu);
+    void createNewFile();
 private:
     void setupActions();
     QList<QAction*> tbActions;
+    KAction *newFileAction;
 
     KDirOperator* dirop;
     KUrlNavigator* urlnav;

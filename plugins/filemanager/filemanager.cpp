@@ -20,6 +20,7 @@
 #include "filemanager.h"
 
 #include <QDir>
+#include <QMenu>
 #include <QLayout>
 #include <QAbstractItemView>
 
@@ -32,15 +33,20 @@
 #include <kdiroperator.h>
 #include <kfileitem.h>
 #include <klineedit.h>
+#include <kinputdialog.h>
+#include <ktemporaryfile.h>
+#include <kio/netaccess.h>
+#include <kparts/mainwindow.h>
+#include <kmessagebox.h>
 
 #include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 
 #include "kdevfilemanagerplugin.h"
-#include <QMenu>
-#include <interfaces/contextmenuextension.h>
 
 FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     :QWidget(parent)
@@ -76,6 +82,8 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
 {
+    menu->addSeparator();
+    menu->addAction(newFileAction);
     if (item.isFile()) {
         KDevelop::FileContext context(item.url());
         QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
@@ -115,6 +123,35 @@ void FileManager::setupActions()
     tbActions << (dirop->actionCollection()->action("sorting menu"));
     tbActions << (dirop->actionCollection()->action("show hidden"));
 
+    newFileAction = new KAction(this);
+    newFileAction->setText(i18n("New File..."));
+    newFileAction->setIcon(KIcon("document-new"));
+    connect(newFileAction, SIGNAL(triggered()), this, SLOT(createNewFile()));
+}
+
+void FileManager::createNewFile()
+{
+    KParts::MainWindow *activeMainWindow = KDevelop::ICore::self()->uiController()->activeMainWindow();
+
+    //TODO: adymo: use KNameAndUrlInputDialog here once we depend on KDE 4.5
+    bool ok = false;
+    QString fileName = KInputDialog::getText(i18n("Create New File"),
+        i18n("File name:"), "", &ok, activeMainWindow);
+    if (!ok) return;
+
+    KTemporaryFile tmpFile;
+    if (!tmpFile.open()) {
+        kError() << "Couldn't create temp file!";
+        return;
+    }
+
+    KUrl destUrl = dirop->url();
+    destUrl.addPath(fileName);
+
+    if (KIO::NetAccess::file_copy(KUrl(tmpFile.fileName()), destUrl))
+        KDevelop::ICore::self()->documentController()->openDocument( destUrl );
+    else
+        KMessageBox::error(activeMainWindow, i18n("Unable to create file '%1'").arg(fileName));
 }
 
 void FileManager::syncCurrentDocumentDirectory()
