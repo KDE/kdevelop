@@ -804,7 +804,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
                 reload(project->projectItem());
         }
     }
-    else if(QFileInfo(dirty).isDir())
+    else if(p && QFileInfo(dirty).isDir())
     {
         QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
         Q_ASSERT(folders.isEmpty() || folders.size()==1);
