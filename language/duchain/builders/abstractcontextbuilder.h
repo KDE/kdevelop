@@ -140,12 +140,14 @@ public:
       }else
       {
 //         kDebug() << "compiling";
-        LockedSmartInterface iface = m_editor->smart();
-        top = newTopContext( iface.currentDocument()
-                                    ? SimpleRange( iface.currentDocument()->documentRange() )
-                                    : SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
-        top->setSmartRange( m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
-        top->setType( DUContext::Global );
+        {
+          LockedSmartInterface iface = m_editor->smart();
+          top = newTopContext( iface.currentDocument()
+                                      ? SimpleRange( iface.currentDocument()->documentRange() )
+                                      : SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
+          top->setSmartRange( m_editor->topRange( iface, EditorIntegrator::DefinitionUseChain ), DocumentRangeObject::Own );
+          top->setType( DUContext::Global );
+        }
         DUChain::self()->addDocumentChain( top );
       }
       setEncountered( top );
