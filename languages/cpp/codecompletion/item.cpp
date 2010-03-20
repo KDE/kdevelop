@@ -70,7 +70,7 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       if(slotAt != -1 && prefixText.mid(slotAt + slotRegExp.matchedLength()).trimmed().isEmpty())
         addSignalSlot = false;
     }
-    
+
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     QString functionSignature;
     Cpp::QtFunctionDeclaration* classFun = dynamic_cast<Cpp::QtFunctionDeclaration*>(m_declaration.data());
@@ -89,7 +89,24 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       }
     }
     lock.unlock();
-    document->replaceText(word, functionSignature);
+
+    int extendRange = 0;
+    {
+      //Check whether we need to remove existing stuff
+      //note: it might be that the identifier (e.g. Q_SIGNAL) is already included in
+      //the word, so be pretty forgiving in the regexp
+      const QString line = document->text(KTextEditor::Range(word.end().line(), word.end().column(),
+                                                       word.end().line(), document->lineLength(word.end().line())));
+      QRegExp existingRegExp("^\\s*((Q_)?(SIGNAL|SLOT)\\s*)?\\([^\\)]*\\s*\\)\\s*\\)");
+      int from = line.indexOf(existingRegExp);
+      if (from != -1) {
+          extendRange = existingRegExp.matchedLength();
+      }
+    }
+
+    document->replaceText(KTextEditor::Range(word.start().line(), word.start().column(),
+                                             word.end().line(), word.end().column() + extendRange),
+                          functionSignature);
     return;
   }
   
