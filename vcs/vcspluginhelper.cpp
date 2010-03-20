@@ -271,7 +271,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
             KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
             if(d.isEmpty())
                 KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                                   i18n("Cannot show the difference because there were none."),
+                                   i18n("Cannot show the differences because there were none."),
                                    i18n("VCS support"));
             else {
                 VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
