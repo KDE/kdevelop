@@ -85,6 +85,8 @@ public:
     virtual void addToFileSet( const IndexedString& );
     virtual void removeFromFileSet( const IndexedString& );
     virtual QSet<IndexedString> fileSet() const;
+    
+    virtual bool isReady() const;
 public Q_SLOTS:
     /**
      * @brief Open a project

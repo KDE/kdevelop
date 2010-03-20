@@ -134,6 +134,10 @@ public:
     virtual void removeFromFileSet( const IndexedString& ) = 0;
     virtual QSet<IndexedString> fileSet() const = 0;
 
+    /** Returns whether the project is ready to be used or not.
+        A project won't be ready for use when it's being reloaded or still loading
+    */
+    virtual bool isReady() const=0;
 //     virtual void setLocalFile( const KUrl& ) = 0;
 //     virtual void setGlobalFile( const KUrl& ) = 0;
 

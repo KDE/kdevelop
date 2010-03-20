@@ -150,14 +150,14 @@ public:
     KSharedConfig::Ptr m_cfg;
     IProject *project;
     QSet<KDevelop::IndexedString> fileSet;
-    bool reloading;
+    bool loading;
     bool scheduleReload;
     ProjectProgress* progress;
 
     void reloadDone()
     {
         progress->setDone();
-        reloading = false;
+        loading = false;
         Core::self()->projectController()->projectModel()->appendRow(topItem);
         if (scheduleReload) {
             scheduleReload = false;
@@ -237,6 +237,7 @@ public:
         progress->setDone();
         ProjectController* projCtrl = Core::self()->projectControllerInternal();
         
+        loading=false;
         if(job->errorText().isEmpty()) {
             projCtrl->projectModel()->appendRow(topItem);
             projCtrl->projectImportingFinished( project );
@@ -435,7 +436,7 @@ Project::Project( QObject *parent )
     d->topItem = 0;
     d->tmp = 0;
     d->vcsPlugin = 0;
-    d->reloading = false;
+    d->loading = false;
     d->scheduleReload = false;
     d->progress = new ProjectProgress;
     Core::self()->uiController()->registerStatus( d->progress );
@@ -475,11 +476,11 @@ const KUrl Project::folder() const
 
 void Project::reloadModel()
 {
-    if (d->reloading) {
+    if (d->loading) {
         d->scheduleReload = true;
         return;
     }
-    d->reloading = true;
+    d->loading = true;
     d->fileSet.clear();
 
     ProjectModel* model = Core::self()->projectController()->projectModel();
@@ -488,7 +489,7 @@ void Project::reloadModel()
     IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
     if (!d->importTopItem(iface))
     {
-            d->reloading = false;
+            d->loading = false;
             d->scheduleReload = false;
             return;
     }
@@ -521,6 +522,7 @@ bool Project::open( const KUrl& projectFileUrl_ )
         return false;
     }
 
+    d->loading=true;
     d->loadVersionControlPlugin(projectGroup);
     d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
@@ -669,6 +671,11 @@ void Project::removeFromFileSet( const IndexedString& file )
 QSet<IndexedString> Project::fileSet() const
 {
     return d->fileSet;
+}
+
+bool Project::isReady() const
+{
+    return !d->loading;
 }
 
 } // namespace KDevelop
