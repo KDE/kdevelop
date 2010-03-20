@@ -101,14 +101,6 @@ QString equalizeWhiteSpaceAtStart(QString original, QString output) {
             output = output.mid(outputNewline+1); //Skip the leading newline, the orginal had none as well
     }
 
-    if(output[0].isSpace() && !original[0].isSpace()) {
-        //The original text has no leading white space, remove all leading white space
-        int nonWhite = firstNonWhiteSpace(output);
-        if(nonWhite != -1)
-            output = output.mid(nonWhite);
-        else
-            output.clear();
-    }
     return output;
 }
 
