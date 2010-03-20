@@ -501,13 +501,16 @@ void PatchReviewToolView::kompareModelChanged()
         QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
         
         m_editPatch.filesList->insertTopLevelItem(0, item);
-        QString text = i18n( "%1 (%2 hunks", ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain), cnt );
-        
-        if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty())
-          text += i18n(", %1", additionalUrls[file]);
-        
-        text += i18n(")");
-        
+
+        const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
+
+        QString text;
+        if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty()) {
+            text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, additionalUrls[file]);
+        } else {
+            text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
+        }
+
         item->setData( 0, Qt::DisplayRole, text );
         item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
         item->setCheckState( 0, Qt::Checked );
