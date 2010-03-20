@@ -53,6 +53,7 @@ public:
     void addToFileSet( const IndexedString& file) { m_fileSet << file; }
     void removeFromFileSet( const IndexedString& file) { m_fileSet.remove(file); }
     QSet<IndexedString> fileSet() const { return m_fileSet; }
+    bool isReady() const { return true; }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
 public Q_SLOTS:
     const KUrl folder() const { return KUrl(); }
