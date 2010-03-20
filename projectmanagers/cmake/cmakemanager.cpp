@@ -754,6 +754,8 @@ void CMakeManager::dirtyFile(const QString & dirty)
 
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
+        if(p && !p->isReady())
+            return;
         QMutexLocker locker(&m_reparsingMutex); //Maybe we should have a mutex per project
         
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
@@ -770,8 +772,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         Q_ASSERT(files.count()==1);
         CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
 
-        KDevelop::IProject* proj=it->project();
-        KUrl projectBaseUrl=proj->projectItem()->url();
+        KUrl projectBaseUrl=p->projectItem()->url();
         projectBaseUrl.adjustPath(KUrl::AddTrailingSlash);
 
         kDebug(9032) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
@@ -793,7 +794,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         else
         {
     //         qDebug() << "reloading";
-            reload(proj->projectItem());
+            reload(p->projectItem());
         }
     }
     else if(dirty.endsWith(".cmake"))
