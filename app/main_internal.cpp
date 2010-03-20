@@ -159,7 +159,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         }
         if (!type) {
             QTextStream qerr(stderr);
-            qerr << endl << i18n("Can't find native launch configuration type") << endl;
+            qerr << endl << i18n("Cannot find native launch configuration type") << endl;
             return 1;
         }
 
@@ -178,7 +178,7 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
             }
             if (launcher.second.isEmpty()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18n("Can't find launcher %1").arg(args->getOption("debug")) << endl;
+                qerr << endl << i18n("Cannot find launcher %1").arg(args->getOption("debug")) << endl;
                 return 1;
             }
             KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, 0, launchName);
