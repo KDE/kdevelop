@@ -114,7 +114,7 @@ public:
      * \param plugin plugin to unload
      * \param deletion if true, delete the plugin later, if false, delete it now.
      */
-    void unloadPlugin(IPlugin* plugin, PluginDeletion deletion);
+    bool unloadPlugin(IPlugin* plugin, PluginDeletion deletion);
 
     /**
      * Queries for the plugin which supports given extension interface.

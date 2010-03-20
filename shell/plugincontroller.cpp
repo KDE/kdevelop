@@ -296,16 +296,23 @@ bool PluginController::unloadPlugin( const QString & pluginId )
 {
     IPlugin *thePlugin = plugin( pluginId );
     bool canUnload = d->canUnload( d->infoForId( pluginId ) );
+    kDebug() << "Unloading plugin:" << pluginId << "?" << thePlugin << canUnload;
     if( thePlugin && canUnload )
     {
-        unloadPlugin(thePlugin, Later);
-        return true;
+        return unloadPlugin(thePlugin, Later);
     }
     return (canUnload && thePlugin);
 }
 
-void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
+bool PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
+    kDebug() << "unloading plugin:" << plugin << pluginInfo( plugin ).name();
+    
+    if( !d->canUnload( pluginInfo( plugin ) ) ) {
+        kWarning() << "Attempted to unload plugin:" << pluginInfo( plugin ).name() << "which cannot be unloaded";
+        return false;
+    }
+
     plugin->unload();
     emit pluginUnloaded(plugin);
 
@@ -329,6 +336,7 @@ void PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
         plugin->deleteLater();
     else
         delete plugin;
+    return true;
 }
 
 KPluginInfo PluginController::infoForPluginId( const QString &pluginId ) const
