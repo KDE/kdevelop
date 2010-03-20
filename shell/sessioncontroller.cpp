@@ -344,6 +344,7 @@ private slots:
                     
                     if(choice == KMessageBox::Continue)
                     {
+                        #if 0
                         {
                             //Put the recovered documents into the "Review" area, and clear the working set
                             ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
@@ -351,6 +352,7 @@ private slots:
                             window->area()->setWorkingSet("recover");
                             window->area()->clearViews();
                         }
+                        #endif
                         
                         //Recover the files
                         
@@ -365,6 +367,12 @@ private slots:
                             QFile f(recoverySubDir.path() + "/" + QString("/%1_text").arg(num));
                             f.open(QIODevice::ReadOnly);
                             QString text = QString::fromUtf8(f.readAll());
+                            
+                            if(text.isEmpty())
+                            {
+                                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not recover %1, the recovery file is empty", originalFile.pathOrUrl()), i18n("Recovery"));
+                                continue;
+                            }
                             
                             kDebug() << "opening" << originalFile << "for recovery";
                             KDevelop::IDocument* doc = ICore::self()->documentController()->openDocument(originalFile);
@@ -439,15 +447,18 @@ private slots:
                         //Currently we can only back-up text documents
                         QString text = document->textDocument()->text();
                         
-                        QFile urlFile(recoveryCurrentDir.path() + QString("/%1_url").arg(num));
-                        urlFile.open(QIODevice::WriteOnly);
-                        urlFile.write(document->url().pathOrUrl().toUtf8());
-                        
-                        QFile f(recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num));
-                        f.open(QIODevice::WriteOnly);
-                        f.write(text.toUtf8());
-                        
-                        ++num;
+                        if(!text.isEmpty())
+                        {
+                            QFile urlFile(recoveryCurrentDir.path() + QString("/%1_url").arg(num));
+                            urlFile.open(QIODevice::WriteOnly);
+                            urlFile.write(document->url().pathOrUrl().toUtf8());
+                            
+                            QFile f(recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num));
+                            f.open(QIODevice::WriteOnly);
+                            f.write(text.toUtf8());
+                            
+                            ++num;
+                        }
                     }
                 }
             }
