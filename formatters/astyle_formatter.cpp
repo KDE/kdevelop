@@ -93,11 +93,12 @@ static QString reverse( const QString& str ) {
 
 ///Removes parts of the white-space at the start that are in @p output but not in @p text
 QString equalizeWhiteSpaceAtStart(QString original, QString output) {
-    if(leadingNewLine(output) != -1) {
+    int outputNewline = leadingNewLine(output);
+    if(outputNewline != -1) {
         if(leadingNewLine(original) != -1)
-            return output.mid(leadingNewLine(output)); //Exactly include the leading newline as in the original text
+            return output.mid(outputNewline); //Exactly include the leading newline as in the original text
         else
-            output = output.mid(leadingNewLine(output)+1); //Skip the leading newline, the orginal had none as well
+            output = output.mid(outputNewline+1); //Skip the leading newline, the orginal had none as well
     }
 
     if(output[0].isSpace() && !original[0].isSpace()) {
