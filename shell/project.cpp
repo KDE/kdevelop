@@ -87,12 +87,19 @@ class ProjectProgress : public QObject, public IStatus
         void showErrorMessage(const QString & message, int timeout = 0);
         void hideProgress(KDevelop::IStatus*);
         void showProgress(KDevelop::IStatus*,int minimum, int maximum, int value);
+        
+    private:
+        QTimer* m_timer;
 };
     
     
     
 ProjectProgress::ProjectProgress()
 {
+    m_timer = new QTimer(this);
+    m_timer->setSingleShot( true );
+    m_timer->setInterval( 1000 );
+    connect(m_timer, SIGNAL(timeout()),SLOT(slotClean()));
 }
 
 ProjectProgress::~ProjectProgress()
@@ -101,7 +108,7 @@ ProjectProgress::~ProjectProgress()
 
 QString ProjectProgress::statusName() const
 {
-    return i18n("Loading Project ") + projectName;
+    return i18n("Loading Project %1", projectName);
 }
 
 void ProjectProgress::setBuzzy()
@@ -109,7 +116,7 @@ void ProjectProgress::setBuzzy()
     kDebug() << "showing busy prorgess" << statusName();
     // show an indeterminate progressbar
     emit showProgress(this, 0,0,0);
-    emit showMessage(this, i18n("Loading") + " " + projectName);
+    emit showMessage(this, i18n("Loading %1", projectName));
 }
 
 
@@ -118,11 +125,7 @@ void ProjectProgress::setDone()
     kDebug() << "showing done progress" << statusName();
     // first show 100% bar for a second, then hide.
     emit showProgress(this, 0,1,1);
-    QTimer* t = new QTimer;
-    t->setSingleShot( true );
-    t->setInterval( 1000 );
-    connect(t, SIGNAL(timeout()),SLOT(slotClean()));
-    t->start();
+    m_timer->start();
 }
 
 void ProjectProgress::slotClean()
