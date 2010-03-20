@@ -60,14 +60,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       //Check whether we need to add SLOT( or SIGNAL(
       QString prefixText = document->text(KTextEditor::Range(word.start().line(), 0, word.start().line(), word.start().column()));
       kDebug() << "prefix" << prefixText;
-      QRegExp signalRegExp("(Q_)?SIGNAL\\s*\\(");
-      QRegExp slotRegExp("(Q_)?SLOT\\s*\\(");
-      int signalAt = signalRegExp.lastIndexIn(prefixText);
-      kDebug() << "signalRegExp found at" << signalAt;
-      if(signalAt != -1 && prefixText.mid(signalAt + signalRegExp.matchedLength()).trimmed().isEmpty())
-        addSignalSlot = false;
-      int slotAt = slotRegExp.lastIndexIn(prefixText);
-      if(slotAt != -1 && prefixText.mid(slotAt + slotRegExp.matchedLength()).trimmed().isEmpty())
+      QRegExp signalSlotRegExp("(Q_)?(SIGNAL|SLOT)\\s*\\(");
+      int signalSlotAt = signalSlotRegExp.lastIndexIn(prefixText);
+      kDebug() << "signalSlotRegExp found at" << signalSlotAt;
+      if(signalSlotAt != -1 && prefixText.mid(signalSlotAt + signalSlotRegExp.matchedLength()).trimmed().isEmpty())
         addSignalSlot = false;
     }
 
