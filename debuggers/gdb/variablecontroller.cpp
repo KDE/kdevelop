@@ -154,7 +154,7 @@ private:
 void VariableController::updateLocals()
 {
     debugSession()->addCommand(
-        new GDBCommand(GDBMI::StackListLocals, "--all-values",
+        new GDBCommand(GDBMI::StackListLocals, "--simple-values",
                         new StackListLocalsHandler(debugSession())));
 }
 
