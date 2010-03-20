@@ -136,7 +136,7 @@ void FileManager::createNewFile()
     //TODO: adymo: use KNameAndUrlInputDialog here once we depend on KDE 4.5
     bool ok = false;
     QString fileName = KInputDialog::getText(i18n("Create New File"),
-        i18n("File name:"), "", &ok, activeMainWindow);
+        i18n("Filename:"), "", &ok, activeMainWindow);
     if (!ok) return;
 
     KTemporaryFile tmpFile;
