@@ -166,7 +166,7 @@ QString VariableController::expressionUnderCursor(KTextEditor::Document* doc, co
     if (!c.isLetterOrNumber() && c != '_')
         return QString();
 
-    int start = Utils::expressionAt(line, index);
+    int start = Utils::expressionAt(line, index+1);
     int end = index;
     for (; end < line.size(); ++end)
     {
