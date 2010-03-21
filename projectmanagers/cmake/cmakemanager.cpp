@@ -730,8 +730,12 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
 
 void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent)
 {
+    Q_ASSERT(!isReloading(fi->project()));
+    
     KJob *job=createImportJob(fi);
     job->setProperty("parent", QUrl(parent));
+    
+    QMutexLocker locker(&m_busyProjectsMutex);
     m_busyProjects[job]=fi;
     
     connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
@@ -740,6 +744,7 @@ void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent)
 
 void CMakeManager::reimportDone(KJob* job)
 {
+    QMutexLocker locker(&m_busyProjectsMutex);
     Q_ASSERT(m_busyProjects.contains(job));
     ProjectFolderItem* it=m_busyProjects[job];
     
@@ -756,8 +761,9 @@ void CMakeManager::reimportDone(KJob* job)
     m_busyProjects.remove(job);
 }
 
-bool CMakeManager::isReloading(IProject* p) const
+bool CMakeManager::isReloading(IProject* p)
 {
+    QMutexLocker locker(&m_busyProjectsMutex);
     if(!p->isReady())
         return true;
     

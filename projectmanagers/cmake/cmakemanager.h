@@ -125,9 +125,10 @@ private slots:
 private:
     void reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent);
     CacheValues readCache(const KUrl &path) const;
-    bool isReloading(KDevelop::IProject* p) const;
+    bool isReloading(KDevelop::IProject* p);
     
     QMutex m_reparsingMutex;
+    QMutex m_busyProjectsMutex;
     KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
