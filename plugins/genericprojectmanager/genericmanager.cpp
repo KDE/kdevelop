@@ -63,7 +63,7 @@ K_EXPORT_PLUGIN(GenericSupportFactory(KAboutData("kdevgenericmanager","kdevgener
 GenericProjectManager::IncludeRules getIncludeRules(KDevelop::IProject* project) {
     KConfigGroup filtersConfig = project->projectConfiguration()->group("Filters");
     QStringList includes = filtersConfig.readEntry("Includes", QStringList("*"));
-    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList("*/.*"));
+    QStringList excludes = filtersConfig.readEntry("Excludes", QStringList() << "*/.*" << "*~");
 
     return qMakePair(includes, excludes);
 }
