@@ -748,35 +748,22 @@ void CMakeManager::reimport(CMakeFolderItem* fi)
 
 void CMakeManager::dirtyFile(const QString & dirty)
 {
-    KUrl dirtyFile(dirty);
-    KUrl dir(dirtyFile.upUrl());
+    const KUrl dirtyFile(dirty);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
 
+    if(p && !p->isReady())
+        return;
+    
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
     {
-        if(p && !p->isReady())
-            return;
         QMutexLocker locker(&m_reparsingMutex); //Maybe we should have a mutex per project
         
         QList<ProjectFileItem*> files=p->filesForUrl(dirtyFile);
         kDebug(9032) << dirtyFile << "is dirty" << files.count();
 
-        // Debug output as apparently the Q_ASSERT after this is sometimes hitting
-        // See https://bugs.kde.org/show_bug.cgi?id=187335
-        if( files.count() > 1 ) {
-            foreach(ProjectFileItem* item, files) {
-                kDebug() << "item:" << item << item->url() << item->text() << item->parent()->type() << item->parent()->text();
-            }
-        }
-
         Q_ASSERT(files.count()==1);
-        CMakeFolderItem *it=static_cast<CMakeFolderItem*>(files.first()->parent());
-
-        KUrl projectBaseUrl=p->projectItem()->url();
-        projectBaseUrl.adjustPath(KUrl::AddTrailingSlash);
-
-        kDebug(9032) << "reload:" << dir << projectBaseUrl << (dir!=projectBaseUrl);
-        if(dir!=projectBaseUrl)
+        CMakeFolderItem *folderItem=static_cast<CMakeFolderItem*>(files.first()->parent());
+        if(folderItem!=p->projectItem())
         {
 #if 0
             KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
@@ -789,11 +776,10 @@ void CMakeManager::dirtyFile(const QString & dirty)
                 parseOnly(proj, current);
             }
 #endif
-            reload(it);
+            reload(folderItem);
         }
         else
         {
-    //         qDebug() << "reloading";
             reload(p->projectItem());
         }
     }
