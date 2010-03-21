@@ -274,7 +274,14 @@ void QtPrintersTest::testQSetString()
     QVERIFY(out.contains("] = \"30\""));
 }
 
-//QSet
+void QtPrintersTest::testQChar()
+{
+    GdbProcess gdb("qchar");
+    gdb.execute("break qchar.cpp:5");
+    gdb.execute("run");
+    QVERIFY(gdb.execute("print c").contains("\"k\""));
+}
+
 
 }
 QTEST_MAIN(GDBDebugger::QtPrintersTest)

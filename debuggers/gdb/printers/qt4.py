@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: iso-8859-1 -*-
 # Pretty-printers for Qt4.
 
 # Copyright (C) 2009 Niko Sams <niko.sams@gmail.com>
@@ -442,6 +442,16 @@ class QSetPrinter:
     def to_string(self):
         return 'QSet'
 
+class QCharPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        return unichr(self.val['ucs'])
+
+    def display_hint (self):
+        return 'string'
 
 def register_qt4_printers (obj):
     if obj == None:
@@ -489,6 +499,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QDateTime$')] = lambda val: QDateTimePrinter(val)
     pretty_printers_dict[re.compile('^QUrl$')] = lambda val: QUrlPrinter(val)
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
+    pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
 
 
 pretty_printers_dict = {}
