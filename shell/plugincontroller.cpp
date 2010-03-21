@@ -109,20 +109,6 @@ public:
     };
     CleanupMode cleanupMode;
 
-    bool hasUnloadablePlugins()
-    {
-        InfoToPluginMap::const_iterator it, end = loadedPlugins.end();
-        for( it = loadedPlugins.begin(); it != end; it++ ) 
-        {
-            if( canUnload( it.key() ) ) 
-            {
-                // There's at least one unloadable plugin still available.
-                return true;
-            }
-        }
-        return false;
-    }
-
     bool canUnload( const KPluginInfo& plugin )
     {
         kDebug() << "checking can unload for:" << plugin.name() << plugin.property("X-KDevelop-LoadMode");
@@ -213,7 +199,7 @@ void PluginController::cleanup()
     d->cleanupMode = PluginControllerPrivate::CleaningUp;
 
     // Ask all plugins to unload
-    while ( d->hasUnloadablePlugins() )
+    while ( !d->loadedPlugins.isEmpty() )
     {
         //Let the plugin do some stuff before unloading
         unloadPlugin(d->loadedPlugins.begin().value(), Now);
@@ -324,11 +310,6 @@ bool PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
     kDebug() << "unloading plugin:" << plugin << pluginInfo( plugin ).name();
     
-    if( !d->canUnload( pluginInfo( plugin ) ) ) {
-        kWarning() << "Attempted to unload plugin:" << pluginInfo( plugin ).name() << "which cannot be unloaded";
-        return false;
-    }
-
     plugin->unload();
     emit pluginUnloaded(plugin);
 

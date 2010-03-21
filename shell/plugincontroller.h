@@ -108,15 +108,7 @@ public:
     void updateLoadedPlugins();
 
 
-    /**
-     * Directly unload the given \a plugin, either deleting it now or \a deletion.
-     *
-     * \param plugin plugin to unload
-     * \param deletion if true, delete the plugin later, if false, delete it now.
-     */
-    bool unloadPlugin(IPlugin* plugin, PluginDeletion deletion);
-
-    /**
+       /**
      * Queries for the plugin which supports given extension interface.
      * All already loaded plugins will be queried and the first one to support the extension interface
      * will be returned. Any plugin can be an extension, only "ServiceTypes=..." entry is
@@ -145,6 +137,14 @@ public:
 
 
 private:
+    /**
+     * Directly unload the given \a plugin, either deleting it now or \a deletion.
+     *
+     * \param plugin plugin to unload
+     * \param deletion if true, delete the plugin later, if false, delete it now.
+     */
+    bool unloadPlugin(IPlugin* plugin, PluginDeletion deletion);
+
 
     /**
      * @internal
