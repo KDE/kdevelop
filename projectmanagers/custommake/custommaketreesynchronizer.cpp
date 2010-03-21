@@ -69,7 +69,8 @@ void CustomMakeTreeSynchronizer::filesCreated( const KUrl::List &files,
 {
     Q_FOREACH( const KUrl& _file, files )
     {
-        if ( _file.fileName().endsWith('~') )
+        //TODO: make filtering generic
+        if ( _file.fileName().endsWith('~') || _file.fileName().endsWith(".o") )
         {
             continue;
         }
