@@ -37,6 +37,7 @@
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
+class QStandardItem;
 class QDir;
 class QObject;
 class CMakeHighlighting;
@@ -119,12 +120,14 @@ private slots:
 
     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
+    void reimportDone(KJob* job);
 
 private:
-    void reimport(CMakeFolderItem*);
+    void reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent);
     CacheValues readCache(const KUrl &path) const;
-    QMutex m_reparsingMutex;
+    bool isReloading(KDevelop::IProject* p) const;
     
+    QMutex m_reparsingMutex;
     KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
@@ -136,6 +139,8 @@ private:
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KUrl, KDevelop::ProjectFolderItem*> m_pending;
+    
+    QMap<KJob*, KDevelop::ProjectFolderItem*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     

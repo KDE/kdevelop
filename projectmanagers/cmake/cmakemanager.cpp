@@ -87,6 +87,7 @@
 #include <cmakeconfig.h>
 
 #include <language/highlighting/codehighlighting.h>
+#include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
 
@@ -629,7 +630,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         folder->project()->reloadModel();
     } else {
         CMakeFolderItem* former=item->formerParent();
-        QStandardItem* parent=item->parent();
+        ProjectFolderItem* parent=static_cast<ProjectFolderItem*>(item->parent());
         KUrl url=item->url();
         IProject* project=item->project();
 
@@ -637,8 +638,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), 0);
 
         fi->setFormerParent(former);
-        parent->appendRow(fi);
-        reimport(fi);
+        reimport(fi, parent->url());
     }
     return true;
 }
@@ -728,24 +728,44 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
     vm->remove("CMAKE_CURRENT_BINARY_DIR");
 }*/
 
-//Copied from ImportJob
-void CMakeManager::reimport(CMakeFolderItem* fi)
+void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent)
 {
-    QQueue< QList<KDevelop::ProjectFolderItem*> > workQueue;
-    QList<KDevelop::ProjectFolderItem*> initial;
-    initial.append( fi );
-    workQueue.enqueue( initial );
+    KJob *job=createImportJob(fi);
+    job->setProperty("parent", QUrl(parent));
+    m_busyProjects[job]=fi;
+    
+    connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
+    ICore::self()->runController()->registerJob( job );
+}
 
-    while( workQueue.count() > 0 )
+void CMakeManager::reimportDone(KJob* job)
+{
+    Q_ASSERT(m_busyProjects.contains(job));
+    ProjectFolderItem* it=m_busyProjects[job];
+    
+    QUrl parentUrl=job->property("parent").toUrl();
+    
+    QList<ProjectFolderItem*> folders=it->project()->foldersForUrl(parentUrl);
+    
+    if(!folders.isEmpty()) //If it was not removed while reparsing
     {
-        QList<KDevelop::ProjectFolderItem*> front = workQueue.dequeue();
-        Q_FOREACH( KDevelop::ProjectFolderItem* _item, front )
-        {
-            QList<KDevelop::ProjectFolderItem*> workingList = parse( _item );
-            if( workingList.count() > 0 )
-                workQueue.enqueue( workingList );
-        }
+        Q_ASSERT(folders.size()==1);
+        
+        folders.first()->appendRow(m_busyProjects[job]);
     }
+    m_busyProjects.remove(job);
+}
+
+bool CMakeManager::isReloading(IProject* p) const
+{
+    if(!p->isReady())
+        return true;
+    
+    foreach(KDevelop::ProjectFolderItem* it, m_busyProjects) {
+        if(it->project()==p)
+            return true;
+    }
+    return false;
 }
 
 void CMakeManager::dirtyFile(const QString & dirty)
@@ -753,7 +773,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
     const KUrl dirtyFile(dirty);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
 
-    if(p && !p->isReady())
+    if(p && isReloading(p))
         return;
     
     if(p && dirtyFile.fileName() == "CMakeLists.txt")
