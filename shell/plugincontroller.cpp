@@ -109,13 +109,29 @@ public:
     };
     CleanupMode cleanupMode;
 
+    bool hasUnloadablePlugins()
+    {
+        InfoToPluginMap::const_iterator it, end = loadedPlugins.end();
+        for( it = loadedPlugins.begin(); it != end; it++ ) 
+        {
+            if( canUnload( it.key() ) ) 
+            {
+                // There's at least one unloadable plugin still available.
+                return true;
+            }
+        }
+        return false;
+    }
+
     bool canUnload( const KPluginInfo& plugin )
     {
-        QStringList interfaces = plugin.property( "X-KDevelop-Interfaces" ).toStringList();
+        kDebug() << "checking can unload for:" << plugin.name() << plugin.property("X-KDevelop-LoadMode");
         if( plugin.property( "X-KDevelop-LoadMode" ).toString() == "AlwaysOn" )
         {
             return false;
         }
+        QStringList interfaces = plugin.property( "X-KDevelop-Interfaces" ).toStringList();
+        kDebug() << "checking dependencies:" << interfaces;
         foreach( const KPluginInfo& info, loadedPlugins.keys() )
         {
             if( info.pluginName() != plugin.pluginName() ) 
@@ -197,7 +213,7 @@ void PluginController::cleanup()
     d->cleanupMode = PluginControllerPrivate::CleaningUp;
 
     // Ask all plugins to unload
-    while ( !d->loadedPlugins.isEmpty() )
+    while ( d->hasUnloadablePlugins() )
     {
         //Let the plugin do some stuff before unloading
         unloadPlugin(d->loadedPlugins.begin().value(), Now);
