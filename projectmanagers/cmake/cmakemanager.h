@@ -114,10 +114,11 @@ public:
     virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
-public slots:
+private slots:
     void dirtyFile(const QString& file);
 
     void jumpToDeclaration();
+    void projectClosing(KDevelop::IProject*);
 
 private:
     void reimport(CMakeFolderItem*);

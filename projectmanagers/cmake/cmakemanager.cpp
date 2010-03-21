@@ -152,6 +152,8 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     m_highlight = new KDevelop::CodeHighlighting(this);
 
     new CodeCompletion(this, new CMakeCodeCompletionModel(this), name());
+    
+    connect(ICore::self()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)), SLOT(projectClosing(KDevelop::IProject*)));
 }
 
 CMakeManager::~CMakeManager()
@@ -1352,6 +1354,15 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
             ret=KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
     return ret;
+}
+
+void CMakeManager::projectClosing(IProject* p)
+{
+    m_modulePathPerProject.remove(p);
+    m_varsPerProject.remove(p); 
+    m_macrosPerProject.remove(p);
+    m_watchers.remove(p);
+    m_projectCache.remove(p);
 }
 
 #include "cmakemanager.moc"
