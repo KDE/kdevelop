@@ -61,6 +61,7 @@ QString RunController::LaunchConfigurationsGroup = "Launch";
 QString RunController::LaunchConfigurationsListEntry = "Launch Configurations";
 static QString CurrentLaunchConfigProjectEntry = "Current Launch Config Project";
 static QString CurrentLaunchConfigNameEntry = "Current Launch Config GroupName";
+static QString ConfiguredFromProjectItemEntry = "Configured from ProjectItem";
 
 typedef QPair<QString, IProject*> Target;
 Q_DECLARE_METATYPE(Target)
@@ -182,15 +183,30 @@ public:
             }
             if (launcher)
             {
-                ILaunchConfiguration* ilaunch = q->createLaunchConfiguration( type,
-                                                                            qMakePair( mode->id(), launcher->id() ),
-                                                                            contextItem->project(),
-                                                                            contextItem->text() );
-                LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
-                type->configureLaunchFromItem( launch->config(), contextItem );
-                q->setDefaultLaunch(launch);
-                //kDebug() << "created config, launching";
-                q->execute( mode->id(), launch );
+                QStringList itemPath = Core::self()->projectController()->projectModel()->pathFromIndex(contextItem->index());
+                ILaunchConfiguration* ilaunch = 0;
+                foreach (LaunchConfiguration *l, launchConfigurations) {
+                    QStringList path = l->config().readEntry(ConfiguredFromProjectItemEntry, QStringList());
+                    if (path == itemPath) {
+                        //kDebug() << "allready generated ilaunch" << ilaunch;
+                        ilaunch = l;
+                        break;
+                    }
+                }
+                if (!ilaunch) {
+                    ilaunch = q->createLaunchConfiguration( type,
+                                                            qMakePair( mode->id(), launcher->id() ),
+                                                            contextItem->project(),
+                                                            contextItem->text() );
+                    LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
+                    type->configureLaunchFromItem( launch->config(), contextItem );
+                    launch->config().writeEntry(ConfiguredFromProjectItemEntry, itemPath);
+                    //kDebug() << "created config, launching";
+                } else {
+                    //kDebug() << "reusing generated config, launching";
+                }
+                q->setDefaultLaunch(ilaunch);
+                q->execute( mode->id(), ilaunch );
             }
         }
     }
@@ -728,11 +744,11 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
     execute( runMode, defaultLaunch() );
 }
 
-void RunController::setDefaultLaunch(LaunchConfiguration* l)
+void RunController::setDefaultLaunch(ILaunchConfiguration* l)
 {
     foreach( QAction* a, d->currentTargetAction->actions() )
     {
-        if( static_cast<LaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
+        if( static_cast<ILaunchConfiguration*>( qVariantValue<void*>( a->data() ) ) == l )
         {
             a->setChecked(true);
             break;

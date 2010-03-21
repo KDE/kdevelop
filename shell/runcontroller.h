@@ -119,7 +119,7 @@ public:
     
     virtual void executeDefaultLaunch(const QString& runMode);
 
-    void setDefaultLaunch(LaunchConfiguration* l);
+    void setDefaultLaunch(ILaunchConfiguration* l);
     
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 
