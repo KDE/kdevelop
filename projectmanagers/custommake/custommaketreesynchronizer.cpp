@@ -69,6 +69,10 @@ void CustomMakeTreeSynchronizer::filesCreated( const KUrl::List &files,
 {
     Q_FOREACH( const KUrl& _file, files )
     {
+        if ( _file.fileName().endsWith('~') )
+        {
+            continue;
+        }
         KDevelop::ProjectFileItem *newitem = new KDevelop::ProjectFileItem(
             parentFolder->project(), _file, parentFolder );
         // if Makefile, parse new targets and add to watcher

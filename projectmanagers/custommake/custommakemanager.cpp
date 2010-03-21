@@ -160,7 +160,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
             if( topItem )
                 topItem->fsWatcher()->addDirectory( absFilePath, cmfi );
         }
-        else if ( fileInfo.isFile() )
+        else if ( fileInfo.isFile() && !fileName.endsWith('~') )
         {
             KUrl fileUrl( absFilePath );
             KDevelop::ProjectFileItem *fileItem =
