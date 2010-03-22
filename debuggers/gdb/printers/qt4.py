@@ -28,17 +28,19 @@ class QStringPrinter:
     def to_string(self):
         ret = ""
         i = 0
-        while i < self.val['d']['size']:
-            if self.val['d']['data'][i] > 256:
-                #TODO: fix this properly
-                ret += '?'
+        size = self.val['d']['size']
+        while i < size:
+            char = self.val['d']['data'][i]
+            if (char > 127):
+                ret += "\\u%x" % int(char)
             else:
-                ret += chr(self.val['d']['data'][i])
+                ret += chr(char)
             i = i + 1
         return ret
 
     def display_hint (self):
         return 'string'
+
 
 class QByteArrayPrinter:
 
@@ -441,6 +443,7 @@ class QSetPrinter:
 
     def to_string(self):
         return 'QSet'
+
 
 class QCharPrinter:
 
