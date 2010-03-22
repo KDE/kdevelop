@@ -145,7 +145,13 @@ inline QString SessionController::defaultSessionId(QString pickSession)
 
     if(uuid.isEmpty()) {
         // if this is empty, we create a new session
-        uuid = QUuid::createUuid();
+        uuid = QUuid::createUuid().toString();
+        QStringList sessiondirs = sessiondir.entryList( QDir::AllDirs | QDir::NoDotAndDotDot );
+        // This is needed as apparently QUuid::createUuid() returns the last
+        // created uuid from the loop above
+        while( sessiondirs.contains( uuid ) ) {
+            uuid = QUuid::createUuid().toString();
+        }
     }
 
     //Make sure the session does actually exist as a directory
