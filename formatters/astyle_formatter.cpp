@@ -53,14 +53,23 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix)
             ++textPos;
 
         if(prefixPos == prefix.length() || textPos == text.length())
-            return textPos;
-        
+            break;
+
         if(prefix[prefixPos] != text[textPos])
             return -1;
         ++prefixPos;
         ++textPos;
     }
-
+    // for expressions that don't start on a newline, e.g.
+    // int |bar| = 1; (assume |bar| is our 'text to format')
+    // we must ignore the sourrounding whitespace
+    if (textPos < text.length() && text[textPos] != '\n' && prefixPos == prefix.length() && !prefix.isEmpty()
+        && prefix[prefixPos-1] != '\n')
+    {
+        // ignore following whitespace
+        while (textPos < text.length() && text[textPos].isSpace())
+            ++textPos;
+    }
     return textPos;
 }
 
@@ -92,7 +101,7 @@ static QString reverse( const QString& str ) {
 }
 
 ///Removes parts of the white-space at the start that are in @p output but not in @p text
-QString equalizeWhiteSpaceAtStart(QString original, QString output) {
+QString equalizeWhiteSpaceAtStart(QString original, QString output, bool removeIndent = false) {
     int outputNewline = leadingNewLine(output);
     if(outputNewline != -1) {
         if(leadingNewLine(original) != -1)
@@ -101,6 +110,14 @@ QString equalizeWhiteSpaceAtStart(QString original, QString output) {
             output = output.mid(outputNewline+1); //Skip the leading newline, the orginal had none as well
     }
 
+    if(removeIndent && output[0].isSpace() && !original[0].isSpace()) {
+        //The original text has no leading white space, remove all leading white space
+        int nonWhite = firstNonWhiteSpace(output);
+        if(nonWhite != -1)
+            output = output.mid(nonWhite);
+        else
+            output.clear();
+    }
     return output;
 }
 
@@ -147,9 +164,8 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
             kWarning() << "problem matching the text while formatting";
             return formatSource(text); //Re-format without context
         }
-
         output = output.left(endOfText);
-        output = reverse(equalizeWhiteSpaceAtStart(reverse(text), reverse(output)));
+        output = reverse(equalizeWhiteSpaceAtStart(reverse(text), reverse(output), true));
     }
 
     return output;
