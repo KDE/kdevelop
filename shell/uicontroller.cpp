@@ -285,7 +285,9 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
         addToolViewToArea(factory, doc, activeArea());
         
         if(flags & Raise)
-            findToolView(name, factory, Raise);
+            return findToolView(name, factory, Raise);
+        else 
+            return findToolView(name, factory, None);
     }
 
     return 0;
