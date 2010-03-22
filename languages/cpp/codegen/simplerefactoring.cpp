@@ -121,23 +121,26 @@ void SimpleRefactoring::doContextMenu(KDevelop::ContextMenuExtension& extension,
     Declaration* declaration = declContext->declaration().data();
 
     if(declaration) {
-      QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
-      action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
-      action->setIcon(KIcon("edit-rename"));
-      connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
+      QFileInfo finfo(declaration->topContext()->url().str());
+      if (finfo.isWritable()) {
+        QAction* action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
+        action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
+        action->setIcon(KIcon("edit-rename"));
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(executeRenameAction()));
 
-      extension.addAction(ContextMenuExtension::RefactorGroup, action);
-      
-      if(declContext->use().isEmpty() && declaration->isFunctionDeclaration() && declaration->internalContext() && declaration->internalContext()->type() == DUContext::Other &&
-        !dynamic_cast<Cpp::TemplateDeclaration*>(declaration)) {
-        AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
-        if(funDecl && !funDecl->isInline() && !dynamic_cast<FunctionDefinition*>(funDecl)) {
-          //Is a candidate for moving into source
-          QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
-          action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
+        extension.addAction(ContextMenuExtension::RefactorGroup, action);
+
+        if(declContext->use().isEmpty() && declaration->isFunctionDeclaration() && declaration->internalContext() && declaration->internalContext()->type() == DUContext::Other &&
+          !dynamic_cast<Cpp::TemplateDeclaration*>(declaration)) {
+          AbstractFunctionDeclaration* funDecl = dynamic_cast<AbstractFunctionDeclaration*>(declaration);
+          if(funDecl && !funDecl->isInline() && !dynamic_cast<FunctionDefinition*>(funDecl)) {
+            //Is a candidate for moving into source
+            QAction* action = new QAction(i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
+            action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
 //           action->setIcon(KIcon("arrow-right"));
-          connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
-          extension.addAction(ContextMenuExtension::RefactorGroup, action);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(executeMoveIntoSourceAction()));
+            extension.addAction(ContextMenuExtension::RefactorGroup, action);
+          }
         }
       }
     }
@@ -460,6 +463,12 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   Declaration* declaration = decl.data();
   if(!declaration) {
     KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
+    return;
+  }
+  QFileInfo info(declaration->topContext()->url().str());
+  if (!info.isWritable()) {
+    KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                       i18n("Declaration is located in non-writeable file %1.", declaration->topContext()->url().str()));
     return;
   }
 
