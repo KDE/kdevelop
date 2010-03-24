@@ -30,6 +30,7 @@ private slots:
 
     void renameVariable();
     void overrideHelper();
+    void varTypeAssistant();
 
 private:
     AStyleFormatter* m_formatter;

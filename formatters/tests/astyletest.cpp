@@ -43,6 +43,8 @@ void AstyleTest::renameVariable()
     qDebug() << "formatted source:" << formattedSource;
     QCOMPARE(formattedSource, QString("asdf"));
 
+    // int main() {
+    //     if(asdf){}}
     formattedSource = m_formatter->formatSource(
         "asdf", "int main(){\n     if(", "){}}"
     );
@@ -55,11 +57,43 @@ void AstyleTest::overrideHelper()
     // think this:
     // virtual void asdf();
     // gets included into a class
+
+    // test1: not indented
     QString formattedSource = m_formatter->formatSource(
         "virtual void asdf();", "class asdf {\n    int bar();\n", "\n};"
     );
     qDebug() << "formatted source:" << formattedSource;
     QCOMPARE(formattedSource, QString("    virtual void asdf();"));
+
+    // test2: already indented
+    formattedSource = m_formatter->formatSource(
+        "virtual void asdf();", "class asdf {\n    int bar();\n    ", "\n};"
+    );
+    qDebug() << "formatted source:" << formattedSource;
+    QCOMPARE(formattedSource, QString("virtual void asdf();"));
+}
+
+void AstyleTest::varTypeAssistant()
+{
+    // think this:
+    // asdf = 1;
+    // and you execute the assitant to get:
+    // int asdf = 1;
+
+    // test1: already indented
+    QString formattedSource = m_formatter->formatSource(
+        "int ", "int main() {\n    ", "asdf = 1;\n}\n"
+    );
+    qDebug() << "formatted source:" << formattedSource;
+    QCOMPARE(formattedSource, QString("int "));
+
+    // test2: not yet indented
+    formattedSource = m_formatter->formatSource(
+        "int ", "int main() {\n", "asdf = 1;\n}\n"
+    );
+    qDebug() << "formatted source:" << formattedSource;
+    QCOMPARE(formattedSource, QString("    int "));
+
 }
 
 #include "astyletest.moc"

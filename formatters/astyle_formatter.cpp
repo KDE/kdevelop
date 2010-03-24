@@ -44,12 +44,10 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix)
 {
     int prefixPos = 0;
     int textPos = 0;
-
     while (prefixPos < prefix.length() && textPos < text.length()) {
-
-        while (prefixPos < prefix.length() && prefix[prefixPos].isSpace())
+        while (prefixPos < prefix.length() && prefix[prefixPos].isSpace() && prefix[prefixPos] != '\n')
             ++prefixPos;
-        while (textPos < text.length() && text[textPos].isSpace())
+        while (textPos < text.length() && text[textPos].isSpace() && prefix[prefixPos] != '\n')
             ++textPos;
 
         if(prefixPos == prefix.length() || textPos == text.length())
@@ -59,16 +57,6 @@ int matchPrefixIgnoringWhitespace(QString text, QString prefix)
             return -1;
         ++prefixPos;
         ++textPos;
-    }
-    // for expressions that don't start on a newline, e.g.
-    // int |bar| = 1; (assume |bar| is our 'text to format')
-    // we must ignore the sourrounding whitespace
-    if (textPos < text.length() && text[textPos] != '\n' && prefixPos == prefix.length() && !prefix.isEmpty()
-        && prefix[prefixPos-1] != '\n')
-    {
-        // ignore following whitespace
-        while (textPos < text.length() && text[textPos].isSpace())
-            ++textPos;
     }
     return textPos;
 }
@@ -146,9 +134,7 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
     //Now remove "leftContext" and "rightContext" from the sides
 
     if(!leftContext.isEmpty()) {
-        //By trimming the context, we include all the preceding whitespace behind the "physical" left context
-        //If we do not want o include the preceding whitespace, we match against the whole context
-        int endOfLeftContext = matchPrefixIgnoringWhitespace(output, leftContext.trimmed());
+        int endOfLeftContext = matchPrefixIgnoringWhitespace(output, leftContext);
         if(endOfLeftContext == -1) {
             kWarning() << "problem matching the left context";
             return formatSource(text); //Re-format without context
