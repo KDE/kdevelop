@@ -451,7 +451,12 @@ class QCharPrinter:
         self.val = val
 
     def to_string(self):
-        return unichr(self.val['ucs'])
+        char = self.val['ucs']
+        if (char > 127):
+            ret = "\\u%x" % int(char)
+        else:
+            ret = chr(char)
+        return ret
 
     def display_hint (self):
         return 'string'
