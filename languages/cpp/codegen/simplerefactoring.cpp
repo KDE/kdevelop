@@ -397,6 +397,9 @@ void SimpleRefactoring::executeRenameAction() {
 class SimpleRefactoringCollector : public KDevelop::UsesWidget::UsesWidgetCollector {
   public:
   SimpleRefactoringCollector(IndexedDeclaration decl) : UsesWidgetCollector(decl) {
+    setCollectConstructors(true);
+    setCollectDefinitions(true);
+    setCollectOverloads(true);
   }
 
   virtual void processUses(KDevelop::ReferencedTopDUContext topContext) {
