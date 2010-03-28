@@ -26,17 +26,19 @@ class QStringPrinter:
         self.val = val
 
     def to_string(self):
-        ret = ""
-        i = 0
+        #ret = ""
+        #i = 0
         size = self.val['d']['size']
-        while i < size:
-            char = self.val['d']['data'][i]
-            if (char > 127):
-                ret += "\\u%x" % int(char)
-            else:
-                ret += chr(char)
-            i = i + 1
-        return ret
+        #while i < size:
+        #    char = self.val['d']['data'][i]
+        #    if (char > 127):
+        #        ret += "\\u%x" % int(char)
+        #    else:
+        #        ret += chr(char)
+        #    i = i + 1
+        #return ret
+        dataAsCharPointer = self.val['d']['data'].cast(gdb.lookup_type("char").pointer())
+        return dataAsCharPointer.string(encoding = 'UTF-16', length = size * 2)
 
     def display_hint (self):
         return 'string'
@@ -451,12 +453,7 @@ class QCharPrinter:
         self.val = val
 
     def to_string(self):
-        char = self.val['ucs']
-        if (char > 127):
-            ret = "\\u%x" % int(char)
-        else:
-            ret = chr(char)
-        return ret
+        return unichr(self.val['ucs'])
 
     def display_hint (self):
         return 'string'
