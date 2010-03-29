@@ -233,11 +233,15 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
             QList<IPlugin*> supports = Core::self()->pluginController()->
                 allPluginsForExtension("ILanguageSupport", constraints);
 
-            foreach (IPlugin *support, supports) {
-                ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
-                kDebug() << "language-support:" << languageSupport;
-                if(languageSupport)
-                    return languages << d->addLanguageForSupport(languageSupport);
+            if (supports.isEmpty()) {
+                d->languageCache.insert(mimeType->name(), QList<ILanguage*>());
+            } else {
+                foreach (IPlugin *support, supports) {
+                    ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
+                    kDebug() << "language-support:" << languageSupport;
+                    if(languageSupport)
+                        return languages << d->addLanguageForSupport(languageSupport);
+                }
             }
         }
     }
