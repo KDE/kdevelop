@@ -202,14 +202,14 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
 
         ///non-crashy part: Use the mime-types of known languages
         ///Very inefficient right now
+        QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
         for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin(); it != d->mimeTypeCache.constEnd(); ++it) {
             foreach(QString pattern, it.key()->patterns()) {
                 if(pattern.startsWith('*'))
                 pattern = pattern.mid(1);
 
-                QRegExp exp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard);
+                exp.setPattern(pattern);
                 if(int position = exp.indexIn(fileName)) {
-                    
                     if(position != -1 && exp.matchedLength() + position == fileName.length())
                         languages << *it;
                 }
