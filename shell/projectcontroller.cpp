@@ -596,8 +596,6 @@ void ProjectController::openProject( const KUrl &projectFile )
     emit projectAboutToBeOpened( project );
     if ( !project->open( url ) )
     {
-        KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
-                           i18n( "Project could not be opened: %1", url.prettyUrl() ));
         delete project;
         return;
     }
