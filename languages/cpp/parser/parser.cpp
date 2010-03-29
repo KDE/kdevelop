@@ -3803,12 +3803,8 @@ bool Parser::parsePostfixExpressionInternal(ExpressionAST *&node)
         uint op = session->token_stream->cursor();
         advance();
 
-//         uint templ = 0;
-//         if (session->token_stream->lookAhead() == Token_template)
-//           {
-//             templ = session->token_stream->cursor();
-//             advance();
-//           }
+        if (session->token_stream->lookAhead() == Token_template)
+            advance();
 
         NameAST *name = 0;
         if (!parseName(name, EventuallyAcceptTemplate))
