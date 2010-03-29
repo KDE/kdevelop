@@ -58,6 +58,7 @@ class KDEVCPPRPP_EXPORT LocationTable
       Anchor anchor; //This anchor
       uint nextPosition;//Position of the next following anchor, or zero
       Anchor nextAnchor;//The next following anchor
+      bool operator==(const AnchorInTable& other) const;
     };
 
     /**
@@ -81,6 +82,10 @@ class KDEVCPPRPP_EXPORT LocationTable
     typedef QMap<std::size_t, Anchor> OffsetTable;
     OffsetTable m_offsetTable;
     mutable OffsetTable::ConstIterator m_currentOffset;
+    //cache for positionAt
+    mutable AnchorInTable m_lastAnchorInTable;
+    mutable int m_positionAtColumnCache;
+    mutable std::size_t m_positionAtLastOffset;
 };
 
 }

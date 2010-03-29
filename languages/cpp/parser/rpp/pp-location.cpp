@@ -27,6 +27,11 @@
 
 using namespace rpp;
 
+bool LocationTable::AnchorInTable::operator==(const LocationTable::AnchorInTable& other) const
+{
+  return other.nextPosition == nextPosition && other.position == position && other.anchor == anchor && other.nextAnchor == nextAnchor;
+}
+
 LocationTable::LocationTable()
 {
   anchor(0, Anchor(0,0), 0);
@@ -48,9 +53,26 @@ QPair<rpp::Anchor, uint> LocationTable::positionAt(std::size_t offset, const Pre
 {
   AnchorInTable ret = anchorForOffset(offset, collapseIfMacroExpansion);
 
-  if(!ret.anchor.collapsed)
+  if (m_lastAnchorInTable == ret && offset >= m_positionAtLastOffset) {
+    // use cached position
+    ret.anchor.column = m_positionAtColumnCache;
+
+    for(std::size_t a = m_positionAtLastOffset; a < offset; ++a)
+      ret.anchor.column += KDevelop::IndexedString::lengthFromIndex(contents[a]);
+
+    m_positionAtColumnCache = ret.anchor.column;
+    m_positionAtLastOffset = offset;
+  } else if(!ret.anchor.collapsed) {
+    // save anchor _before_ changing it's members
+    m_lastAnchorInTable = ret;
+
     for(std::size_t a = ret.position; a < offset; ++a)
       ret.anchor.column += KDevelop::IndexedString::lengthFromIndex(contents[a]);
+
+    m_positionAtColumnCache = ret.anchor.column;
+    m_positionAtLastOffset = offset;
+  }
+
 
   uint room = 0;
   if(ret.nextPosition)
