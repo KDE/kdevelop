@@ -55,9 +55,10 @@ public:
     virtual ICompletionSettings *completionSettings() const;
     
 private:
-    Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
 
     struct LanguageControllerPrivate *d;
+
+    Q_PRIVATE_SLOT(d, void documentActivated(KDevelop::IDocument *document))
 };
 
 }
