@@ -1,4 +1,6 @@
 /*
+   Copyright 2006 David Nolden <david.nolden.kdevelop@art-master.de>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -25,22 +27,24 @@
 
 namespace KDevelop {
 
-///Any entity may delete an IPatchSource based object at will, so it must always be referenced through a QPointer.
+///Any entity may delete an IPatchSource based object at will, so it must always be referenced through a QPointer (Just use IPatchSource::Ptr).
 class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
     Q_OBJECT
     public:
         typedef QPointer<IPatchSource> Ptr;
         
-        ///Name of the patch, that will be shown in a combo box. Should describe the patch in a useful way, for example "Difference to base in kdevplatform/language"
+        ///Name of the patch, that will be shown in a combo box. Should
+        ///describe the patch in a useful way, for example "Difference to base in kdevplatform/language"
         virtual QString name() const = 0;
         
         ///Icon that will be shown with the patch
         virtual QIcon icon() const;
         
-        /** Tells if the local version has this patch already applied or not, like in VCS's diff */
+        ///Should tell if the patch is already applied on the local version.
         virtual bool isAlreadyApplied() const = 0;
         
-        ///Explicit updating of the patch: If it is a dynamic patch, it should re-compare the files or whatever needs to be done
+        ///Explicit updating of the patch: If it is a dynamic patch, it
+        ///should re-compare the files or whatever needs to be done
         ///If the patch has changed, patchChanged needs to be emitted
         virtual void update() = 0;
         
@@ -72,8 +76,8 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchSource : public QObject {
         virtual bool canCancel() const;
 
         ///Should return whether the user should be able to select files of the patch
-        ///The files available for selection will be all files affected by the patch, and the files return by additionalSelectableFiles()
-        ///The default implementation returns false
+        ///The files available for selection will be all files affected by the patch, and the files
+        ///return by additionalSelectableFiles() The default implementation returns false
         virtual bool canSelectFiles() const;
         
         ///May return an additional list of selectable files together with short description strings for this patch
