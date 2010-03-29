@@ -56,6 +56,9 @@
 #include <language/duchain/persistentsymboltable.h>
 #include <cpputils.h>
 
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
+
 using namespace KTextEditor;
 
 using namespace KDevelop;
@@ -81,6 +84,10 @@ TestCppCodeCompletion::TestCppCodeCompletion()
 
 void TestCppCodeCompletion::initTestCase()
 {
+  KDevelop::AutoTestShell::init();
+  TestCore* core = new KDevelop::TestCore();
+  core->initialize(KDevelop::Core::NoUi);
+
   DUChain::self()->disablePersistentStorage();
   typeInt = AbstractType::Ptr(new IntegralType(IntegralType::TypeInt));
 
