@@ -1292,6 +1292,12 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
             kDebug(9042) << "error: failed to execute:" << p;
         }
     }
+    
+    if(!procs.isEmpty() && !exec->resultVariable().isEmpty())
+    {
+        kDebug(9042) << "execution returned: " << exec->resultVariable() << " = " << procs.last()->exitCode();
+        m_vars->insert(exec->resultVariable(), QStringList(QString::number(procs.last()->exitCode())));
+    }
 
     //FIXME: remove condition when filtering bad output
     if(!procs.isEmpty() && !exec->outputVariable().isEmpty())
