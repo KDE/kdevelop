@@ -1658,17 +1658,8 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                 {
                     foreach(const QString& in, sast->input())
                     {
-                        rx.indexIn(in);
-                        QStringList info = rx.capturedTexts();
-                        
-                        QString tmp = sast->replace();
-                        for(int i = 1; i < info.count(); i++)
-                        {
-                            tmp.replace(QString("\\%1").arg(i), info.at(i));
-                        }
-                        
-                        QString toret=in;
-                        res.append(toret.replace(rx, tmp));
+                        // QString() is required to get rid of the const
+                        res.append(QString(in).replace(rx, sast->replace()));
                     }
                 }
                     break;
