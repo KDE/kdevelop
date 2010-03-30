@@ -459,6 +459,9 @@ QPair<QPair<QString, SimpleRange>, QString> CppLanguageSupport::cursorIdentifier
     return qMakePair( qMakePair(line, SimpleRange(lineNumber, start, lineNumber, lineLength)), QString() );
   }
 
+  // not an include, if at all a Makro, hence clear strings
+  line = clearStrings(line);
+
   int start = position.column;
   int end = position.column;
 
