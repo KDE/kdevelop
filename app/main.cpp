@@ -150,7 +150,11 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         session = QUuid::createUuid();
     }
 
+#ifdef Q_WS_WIN
+    QFileInfo fi(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin.exe");
+#else
     QFileInfo fi(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop.bin");
+#endif
     if( !fi.exists() ) {
         QTextStream qerr(stderr);
         qerr << endl << i18n("Cannot start KDevelop, the kdevelop.bin executable is missing in %1. Please fix your KDevelop installation.", fi.absolutePath() ) << endl;
