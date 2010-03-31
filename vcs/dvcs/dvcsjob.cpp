@@ -72,7 +72,7 @@ DVcsJob::~DVcsJob()
 
 void DVcsJob::clear()
 {
-    //Do not use KProcess::clearEnvironment() (it sets the environment to kde_dummy.
+    //Do not use KProcess::clearEnvironment() (it sets the environment to kde_dummy).
     //Also DVCSjob can't set it, so it's ok.
     d->command.clear();
     d->output.clear();

@@ -84,8 +84,8 @@ public:
     KDevelop::IBasicVersionControl* m_vcs;
 };
 
-///Sends the diff to the patch-review plugin
-///Returns whether the diff was shown successfully
+///Sends the diff to the patch-review plugin.
+///Returns whether the diff was shown successfully.
 bool showVcsDiff(KDevelop::IPatchSource* vcsDiff);
 
 #endif // VCSDIFFPATCHSOURCES_H

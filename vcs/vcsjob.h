@@ -36,8 +36,8 @@ namespace KDevelop
 class IPlugin;
 
 /**
- * This class provides an extension of KJob to get various Vcs
- * specific information about the job. This includes the type, the state
+ * This class provides an extension of KJob to get various VCS-specific
+ * information about the job. This includes the type, the state
  * and the results provided by the job.
  *
  */
@@ -48,7 +48,7 @@ public:
     VcsJob( QObject* parent = 0, OutputJobVerbosity verbosity = OutputJob::Verbose);
     virtual ~VcsJob();
     /**
-     * To easily check which type of job this is
+     * To easily check which type of job this is.
      *
      * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not
      * QFlags!)
@@ -78,7 +78,7 @@ public:
     };
 
     /**
-     * Simple enum to define how the job finished
+     * Simple enum to define how the job finished.
      */
     enum JobStatus
     {
@@ -99,7 +99,7 @@ public:
     virtual QVariant fetchResults() = 0;
 
     /**
-     * Find out in which state the job is, it can be running, cancelled
+     * Find out in which state the job is. It can be running, canceled,
      * failed or finished
      *
      * @return the status of the job
@@ -108,7 +108,7 @@ public:
     virtual JobStatus status() const = 0;
 
     /**
-     * Used to find out about the type of job
+     * Used to find out about the type of job.
      *
      * @return the type of job
      */
@@ -117,14 +117,14 @@ public:
     /**
      * Used to get at the version control plugin. The plugin
      * can be used to get one of the interfaces to execute
-     * more vcs actions, depending on this jobs results
+     * more vcs actions, depending on this job's results
      * (like getting a diff for an entry in a log)
      */
     virtual KDevelop::IPlugin* vcsPlugin() const = 0;
 
 protected:
     /**
-     * This can be used to set the type of the vcs job in subclasses
+     * This can be used to set the type of the vcs job in subclasses.
      */
     void setType( JobType );
 

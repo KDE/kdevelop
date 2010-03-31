@@ -31,11 +31,11 @@ namespace KDevelop
 {
 
 /**
- * Encapsulates a vcs revision number, date or range of revisions
+ * Encapsulates a vcs revision number, date or range of revisions.
  *
  * The type of the QVariant value depends on the type of the revision,
  * the following table lists the standard types and the according datatype
- * in the qvariant:
+ * in the QVariant:
  *
  * <table>
  * <tr><th>Revision type</th><th>QVariant type</th></tr>
@@ -109,8 +109,8 @@ public:
     RevisionType revisionType() const;
 
     /**
-     * return the value of this revision
-     * The actualy content depends on the type of this revision, the possible
+     * Return the value of this revision.
+     * The actual content depends on the type of this revision, the possible
      * combinations are:
      *
      * FileNumber/GlobalNumber -> qlonglong

@@ -264,7 +264,7 @@ void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
     kDebug() << "Project was closed, now it will be opened";
     core()->projectController()->openProject(projectFile);
 //  maybe  IProject::reloadModel?
-//     emit jobFinished(_checkoutJob); //couses crash!
+//     emit jobFinished(_checkoutJob); //causes crash!
 }
 
 KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const

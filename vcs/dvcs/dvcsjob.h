@@ -39,13 +39,13 @@ class DVcsJobPrivate;
 
 /**
  * This class is capable of running our dvcs commands. 
- * Most of all DVCSjobs are created in DVCS executors, but executed in DistributedVersionControlPlugin or 
+ * Most of all DVcsJob are created in DVCS executors, but executed in DistributedVersionControlPlugin or
  * any managers like BranchManager.
- * @note Connect to Kjob::result(KJob*) to be notified when the job finished.
+ * @note Connect to KJob::result(KJob*) to be notified when the job finished.
  * 
- * How to create DVCSjob:
+ * How to create DVcsJob:
  * @code
- * DVCSjob* job = new DVCSjob(vcsplugin);
+ * DVcsJob* job = new DVcsJob(vcsplugin);
  * if (job)
  * {
  *     job->setDirectory(workDir);
@@ -61,7 +61,7 @@ class DVcsJobPrivate;
  * Usage example 1:
  * @code
  * VcsJob* j = add(DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
- * DVCSjob* job = dynamic_cast<DVCSjob*>(j);
+ * DVcsJob* job = dynamic_cast<DVCSjob*>(j);
  * if (job) {
  *     connect(job, SIGNAL(result(KJob*) ),
  *             this, SIGNAL(jobFinished(KJob*) ));
@@ -71,15 +71,15 @@ class DVcsJobPrivate;
  * 
  * Usage example 2:
  * @code
- * DVCSjob *branchJob = d->branch(repo, baseBranch, newBranch);
- * DVCSjob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
+ * DVcsJob* branchJob = d->branch(repo, baseBranch, newBranch);
+ * DVcsJob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
  * if (job)
  * {
  *     job->exec();
  *     if (job->status() == KDevelop::VcsJob::JobSucceeded)
  *         return true;
  *     else
- *     //something, mabe even just
+ *     //something, maybe even just
  *         return false
  * }
  * @endcode
@@ -106,13 +106,13 @@ public:
 
     /**
      * Sets working directory.
-     * @param directory Should contain only absolute path. Relative path or "" (working dir) are deprecated and will make job failed.
-     * @note In DVCS plugins directory variable is used to get relative pathes.
+     * @param directory Should contain only absolute path. Relative paths or "" (working dir) are deprecated and will make the job fail.
+     * @note In DVCS plugins directory variable is used to get relative paths.
      */
     void setDirectory(const QDir & directory);
 
     /**
-     * Sets standart Input file.
+     * Sets standard input file.
      */
     void setStandardInputFile(const QString &fileName);
 
@@ -140,19 +140,19 @@ public:
     DVcsJob& operator<<(const QStringList& args);
 
     /**
-     * Call this mehod to start this job.
-     * @note Default communiaction mode is KProcess::AllOutput.
+     * Call this method to start this job.
+     * @note Default communication mode is KProcess::AllOutput.
      * @see Use setCommunicationMode() to override the default communication mode.
      */
     virtual void start();
 
     /**
-     * In some cases it's needed to specify the communisation mode between the
+     * In some cases it's needed to specify the communication mode between the
      * process and the job object. This is for instance done for the "git status"
-     * command. If stdout and stderr are processed as separate streams their signals
-     * do not always get emmited in correct order by KProcess. Which will lead to a
+     * command. If stdout and stderr are processed as separate streams, their signals
+     * do not always get emitted in correct order by KProcess, which will lead to a
      * screwed up output.
-     * @note Default communiaction mode is KProcess::SeparateChannels.
+     * @note Default communication mode is KProcess::SeparateChannels.
      */
     void setCommunicationMode(KProcess::OutputChannelMode comm);
 
@@ -174,7 +174,7 @@ public:
     // Begin:  KDevelop::VcsJob
 
     /** 
-     * Sets executions reults.
+     * Sets executions results.
      * In most cases this method is used by IDVCSexecutor
      * @see fetchResults()
      */
@@ -190,8 +190,8 @@ public:
     /**
      * Sets exit status (d->failed variable).
      * Since only executors can parse the job to set result, they can connect parsers to readyForParsing(DVCSjob) using
-     * Qt::DirectConnection to set the result. For example git-status can return exit status 1 
-     * if you don't set exit status in your parser then you will have JobFailes in status() result.
+     * Qt::DirectConnection to set the result. For example git-status can return exit status 1.
+     * If you don't set exit status in your parser then you will have JobFailed in status() result.
      * @note First result is set in slotProcessExited() or slotProcessError().
      */
     virtual void setExitStatus(const bool exitStatus);

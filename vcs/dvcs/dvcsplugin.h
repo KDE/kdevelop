@@ -51,7 +51,7 @@ struct DistributedVersionControlPluginPrivate;
  * KDevelop::IBasicVersionControl, KDevelop::IDistributedVersionControl and KDevelop::IPlugin (contextMenuExtension).
  * DistributedVersionControlPlugin class uses IDVCSexecutor to get all jobs
  * from real DVCS plugins like Git. It is based on KDevelop's CVS plugin (also looks like svn plugin is it's relative too).
- * @note Create only special items in contextMenuExtension, all standart menu items are created in vcscommon plugin!
+ * @note Create only special items in contextMenuExtension, all standard menu items are created in vcscommon plugin!
  */
 class KDEVPLATFORMVCS_EXPORT DistributedVersionControlPlugin : public IPlugin, public IDistributedVersionControl
 {
@@ -76,7 +76,7 @@ public:
 
     // From KDevelop::IPlugin
     /** Creates context menu
-     * @note Create only special items here (like checkout), all standart menu items are created in vcscommon plugin!
+     * @note Create only special items here (like checkout), all standard menu items are created in vcscommon plugin!
      */
     virtual ContextMenuExtension contextMenuExtension(Context*);
 
@@ -156,7 +156,7 @@ protected:
     /** empty_cmd is used when something is not implemented, but has to return any job */
     virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
-    /** Returs the list of all commits (in all branches).
+    /** Returns the list of all commits (in all branches).
      * @see CommitView and CommitViewDelegate to see how this list is used.
      */
     virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
@@ -184,7 +184,7 @@ protected:
 
     /** Always returns directory path.
      * @param path a path of a file or a directory.
-     * @return if path argument if file then returns parent directory, otherwice path arg is returned.
+     * @return if path argument if file then returns parent directory, otherwise path arg is returned.
      * @todo it will be nice to change prepareJob() so it can change its repository argument.
      */
     static QString stripPathToDir(const QString &path);
