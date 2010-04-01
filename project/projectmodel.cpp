@@ -390,7 +390,7 @@ bool ProjectFolderItem::isProjectRoot() const
 
 void ProjectFolderItem::setData(const QVariant& value, int role)
 {
-    if(role==Qt::EditRole) {
+    if(role==Qt::EditRole && value != data(role)) {
         KUrl dest = url().upUrl();
         dest.addPath(value.toString());
         bool ret=!value.toString().contains('/');
@@ -430,7 +430,7 @@ ProjectFileItem::~ProjectFileItem()
 
 void ProjectFileItem::setData(const QVariant& value, int role)
 {
-    if(role==Qt::EditRole) {
+    if(role==Qt::EditRole && value != data(role)) {
         KUrl dest = url().upUrl();
         dest.addPath(value.toString());
         bool ret=!value.toString().contains('/');
