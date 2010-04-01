@@ -81,6 +81,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       if(!context->owner()->type<FunctionType>()->returnType()) {
         //For constructor completion, we need some more context
         contextRange.start().setLine(contextRange.start().line() > 30 ? contextRange.start().line()-30 : 0);
+        contextRange.start().setColumn(0);
         contextText = view->document()->text(contextRange);
       }
     }
