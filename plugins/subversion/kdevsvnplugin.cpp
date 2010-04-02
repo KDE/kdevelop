@@ -350,7 +350,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
     svnmenu->addAction(move_action);
 
     KDevelop::ContextMenuExtension menuExt;
-    menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, svnmenu->menuAction());
+    menuExt.addAction(KDevelop::ContextMenuExtension::VcsGroup, svnmenu->menuAction());
 
     return menuExt;
 }

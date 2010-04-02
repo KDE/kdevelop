@@ -202,14 +202,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     appendActions(menu, buildActions);
     appendActions(menu, runActions );
     appendActions(menu, fileActions);
-
-    if ( !vcsActions.isEmpty() )
-    {
-        QMenu* vcsmenu = &menu;
-        vcsmenu = menu.addMenu( i18n("Version Control "));
-        appendActions(*vcsmenu, vcsActions);
-    }
-
+    appendActions(menu, vcsActions);
     appendActions(menu, extActions);
 
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && itemlist[0]->folder()->isProjectRoot() )

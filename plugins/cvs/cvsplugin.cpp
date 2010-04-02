@@ -211,7 +211,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     menu->addAction(action);
 
     KDevelop::ContextMenuExtension menuExt;
-    menuExt.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction());
+    menuExt.addAction(KDevelop::ContextMenuExtension::VcsGroup, menu->menuAction());
 
     return menuExt;
 }

@@ -174,7 +174,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     menu->addAction(action);
 
     ContextMenuExtension menuExt;
-    menuExt.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction());
+    menuExt.addAction(ContextMenuExtension::VcsGroup, menu->menuAction());
 
     return menuExt;
 

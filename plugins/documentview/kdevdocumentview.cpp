@@ -189,13 +189,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         QAction* closeUnselected = ctxMenu->addAction(KIcon("document-close"), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
         closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
 
-        QMenu* vcsmenu = ctxMenu;
-        if( vcsActions.count() > 1 )
-        {
-            vcsmenu = ctxMenu->addMenu( i18n("Version Control "));
-            fprintf(stderr, "vcs");
-        }
-        appendActions(vcsmenu, vcsActions);
+        appendActions(ctxmenu, vcsActions);
         
         appendActions(ctxMenu, extensionActions);
         

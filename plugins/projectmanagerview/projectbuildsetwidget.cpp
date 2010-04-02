@@ -173,12 +173,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
         appendActions(m, runActions);
         appendActions(m, fileActions);
 
-        QMenu* vcsm = &m;
-        if( vcsActions.count() > 1 )
-        {
-            vcsm = m.addMenu( i18n("Version Control "));
-        }
-        appendActions(*vcsm, vcsActions);
+        appendActions(m, vcsActions);
         appendActions(m, extActions);
 
         appendActions(m, projectActions);
