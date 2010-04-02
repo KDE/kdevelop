@@ -56,7 +56,7 @@ ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevgenericmanager
 X-KDE-PluginInfo-Name=KDevGenericManager
 X-KDevelop-FileManager=None
-X-KDevelop-Version=8
+X-KDevelop-Version=9
 X-KDevelop-Interfaces=org.kdevelop.IProjectFileManager,org.kdevelop.IGenericProjectManager
 X-KDevelop-Mode=GUI
 
