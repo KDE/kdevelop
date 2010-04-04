@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="127" name="kdevelop" >
+<kpartgui version="128" name="kdevelop" >
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -84,6 +84,8 @@
     <Merge/>
   </Menu>
 
+  <Merge />
+
   <Menu name="editor">
     <text context="@title:menu">Editor</text>
     <Merge/>
@@ -97,8 +99,6 @@
   <Menu name="kdevseparator_window">
     <text context="@title:menu">|</text>
   </Menu>
-
-  <Merge />
 
   <Menu name="window">
     <text context="@title:menu">&amp;Window</text>
