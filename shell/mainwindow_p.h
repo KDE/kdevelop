@@ -101,6 +101,9 @@ public Q_SLOTS:
 
 //    void fixToolbar();
 
+    ///Returns true if we're currently changing the active view through changeActiveView()
+    bool changingActiveView() const ;
+
     bool applicationQuitRequested() const;
 
     void configureNotifications();
