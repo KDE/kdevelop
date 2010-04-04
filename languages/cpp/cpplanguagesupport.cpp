@@ -180,14 +180,23 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     else
         kWarning() << "Quickopen not found";
 
-    KActionCollection* actions = actionCollection();
+#ifdef DEBUG_UI_LOCKUP
+    m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
+#endif
 
-    KAction* switchDefinitionDeclaration = actions->addAction("switch_definition_declaration");
+    m_assistant = new Cpp::StaticCodeAssistant;
+}
+
+void CppLanguageSupport::createActionsForMainWindow (Sublime::MainWindow* window, QString& _xmlFile, KActionCollection& actions)
+{
+    _xmlFile = xmlFile();
+
+    KAction* switchDefinitionDeclaration = actions.addAction("switch_definition_declaration");
     switchDefinitionDeclaration->setText( i18n("&Switch Definition/Declaration") );
     switchDefinitionDeclaration->setShortcut( Qt::CTRL | Qt::SHIFT | Qt::Key_C );
     connect(switchDefinitionDeclaration, SIGNAL(triggered(bool)), this, SLOT(switchDefinitionDeclaration()));
 
-    KAction* newClassAction = actions->addAction("code_new_class");
+    KAction* newClassAction = actions.addAction("code_new_class");
     newClassAction->setText( i18n("Create &New Class") );
     connect(newClassAction, SIGNAL(triggered(bool)), this, SLOT(newClassWizard()));
     
@@ -196,22 +205,16 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
 //    pimplAction->setShortcut(Qt::ALT | Qt::META | Qt::Key_P);
 //    connect(pimplAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executePrivateImplementationAction()));
 
-    KAction* renameDeclarationAction = actions->addAction("code_rename_declaration");
+    KAction* renameDeclarationAction = actions.addAction("code_rename_declaration");
     renameDeclarationAction->setText( i18n("Rename Declaration") );
     renameDeclarationAction->setIcon(KIcon("edit-rename"));
     renameDeclarationAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_R);
     connect(renameDeclarationAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeRenameAction()));
 
-    KAction* moveIntoSourceAction = actions->addAction("code_move_definition");
+    KAction* moveIntoSourceAction = actions.addAction("code_move_definition");
     moveIntoSourceAction->setText( i18n("Move into Source") );
     moveIntoSourceAction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_S);
     connect(moveIntoSourceAction, SIGNAL(triggered(bool)), &SimpleRefactoring::self(), SLOT(executeMoveIntoSourceAction()));
- 
-#ifdef DEBUG_UI_LOCKUP
-    m_blockTester = new UIBlockTester(LOCKUP_INTERVAL);
-#endif
-
-    m_assistant = new Cpp::StaticCodeAssistant;
 }
 
 void CppLanguageSupport::switchDefinitionDeclaration()

@@ -90,6 +90,7 @@ public:
     
     static CppLanguageSupport* self();
 
+    virtual void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions);
 /**
  * There may be multiple differnt parsed versions of a document available in the du-chain.
  * This function helps choosing the right one, by creating a standard parsing-environment,
