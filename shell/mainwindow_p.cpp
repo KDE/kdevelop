@@ -63,7 +63,6 @@ Boston, MA 02110-1301, USA.
 
 #include "textdocument.h"
 #include <KMenuBar>
-#include "restructuremenu.h"
 #include "sessioncontroller.h"
 
 namespace KDevelop {
@@ -108,10 +107,6 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
         connect(plugin, SIGNAL(destroyed(QObject*)), SLOT(pluginDestroyed(QObject*)));
         m_mainWindow->guiFactory()->addClient(ownClient);
     }
-    
-    RestructureMenu menu(m_mainWindow->menuBar());
-    menu.setOrder(mainMenuOrder);
-    menu.restructure();
 }
 
 void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
@@ -178,8 +173,6 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
 {
     PushPositiveValue<bool> block(m_changingActiveView, true);
 
-    RestructureMenu menu(m_mainWindow->menuBar());
-    
     // If the previous view was KXMLGUIClient, remove its actions
     // In the case that that view was removed, lastActiveView
     // will auto-reset, and xmlguifactory will disconnect that
@@ -193,16 +186,6 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
         disconnect (lastXMLGUIClientView, SIGNAL(destroyed(QObject*)), this, 0);
 
         lastXMLGUIClientView = NULL;
-        
-        //Since we restructure the actions, we cannot rely on KXmlGUI removing all of them from the menu.
-        //Some may be left back, and we remove those here
-        
-        QSet<QAction*> lastActions;
-        for(QList< QPointer< QAction > >::iterator it = m_menuActionsFromView.begin(); it != m_menuActionsFromView.end(); ++it)
-            if(*it)
-                lastActions.insert(*it);
-
-        menu.removeActions(lastActions);
     }
 
     if (!view)
@@ -213,15 +196,6 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
 
     kDebug() << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
-    menu.record();
-    
-    QSet< QString > actionsBeforeMerge;
-
-    foreach(QAction* action, m_mainWindow->menuBar()->actions())
-    {
-        actionsBeforeMerge << action->objectName();;
-    }
-    
     // If the new view is KXMLGUIClient, add it.
     if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
     {
@@ -231,36 +205,6 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
         connect(viewWidget, SIGNAL(destroyed(QObject*)),
                 this, SLOT(xmlguiclientDestroyed(QObject*)));
     }
-    
-    foreach(QAction* action, m_mainWindow->menuBar()->actions())
-    {
-        if(!actionsBeforeMerge.contains(action->objectName()))
-        {
-            kDebug() << "Added action:" << action->objectName() << "Parent:" << action->parent()->objectName();
-        }
-    }
-
-    menu.recordDifference();
-    
-    //Specially restructure the "Edit" menu: We only want a very limited set of actions there, the rest should go into Edit -> Advanced
-    menu.map(QStringList() << i18n("Edit") << i18n("Undo"), QStringList() << i18n("Edit") << i18n("Undo"));
-    menu.map(QStringList() << i18n("Edit") << i18n("Redo"), QStringList() << i18n("Edit") << i18n("Redo"));
-    menu.map(QStringList() << i18n("Edit") << i18n("Cut"), QStringList() << i18n("Edit") << i18n("Cut"));
-    menu.map(QStringList() << i18n("Edit") << i18n("Copy"), QStringList() << i18n("Edit") << i18n("Copy"));
-    menu.map(QStringList() << i18n("Edit") << i18n("Paste"), QStringList() << i18n("Edit") << i18n("Paste"));
-    menu.map(QStringList() << i18n("Edit") << i18n("Find..."), QStringList() << i18n("Edit") << i18n("Find..."));
-    menu.map(QStringList() << i18n("Edit") << i18n("Replace..."), QStringList() << i18n("Edit") << i18n("Replace..."));
-    menu.map(QStringList() << i18n("Edit"), QStringList() << i18n("Edit") << i18n("Advanced"));
-    
-    menu.map(QStringList() << i18n("File"), QStringList() << i18n("File"));
-//     menu.map(QStringList() << i18n("Settings"), QStringList() << i18n("Editor"));
-    menu.map(QStringList(), QStringList() << i18n("Editor"));
-
-    menu.setOrder(mainMenuOrder);
-
-    m_menuActionsFromView = menu.addedActions();
-    
-    menu.restructure();
 }
 
 void MainWindowPrivate::xmlguiclientDestroyed(QObject* obj)
