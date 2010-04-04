@@ -34,14 +34,11 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "loadedpluginsdialog.h"
 
-#include <valgrind/callgrind.h>
-
 namespace KDevelop {
 
 // merge the gotoNext and gotoPrev code, to prevent copy/paste errors
 static void gotoPrevNextWindow(bool next)
 {
-    CALLGRIND_START_INSTRUMENTATION
     UiController* ui = Core::self()->uiControllerInternal();
 
     if( !ui->activeSublimeWindow() )
@@ -67,7 +64,6 @@ static void gotoPrevNextWindow(bool next)
 
     if (viewIndex >= 0 && viewIndex < index->views().count())
         ui->activeSublimeWindow()->activateView(index->views().at(viewIndex));
-    CALLGRIND_STOP_INSTRUMENTATION
 }
 
 void MainWindowPrivate::gotoNextWindow()
