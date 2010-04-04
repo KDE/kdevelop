@@ -211,10 +211,8 @@ int main(int argc, char** argv)
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    
-    ///TODO: pass false to ctor, since we want to run this also in NoUi mode!
-    ///      for now: ssh -X to your remote machines without a xserver...
-    KApplication app;
+
+    KApplication app(false);
 
     AutoTestShell::init();
     Core::initialize(0, KDevelop::Core::NoUi);
