@@ -1,12 +1,12 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="126" name="kdevelop" >
+<kpartgui version="127" name="kdevelop" >
 <MenuBar>
 
-  <Menu name="session">
+  <Menu name="session" append="first_menu">
     <text context="@title:menu">Session</text>
   </Menu>
 
-  <Menu name="project">
+  <Menu name="project" append="first_menu">
     <text context="@title:menu">&amp;Project</text>
     <DefineGroup name="project_new"/>
     <Separator/>
@@ -24,7 +24,7 @@
     <Action name="project_close_all"/>
   </Menu>
 
-  <Menu name="run">
+  <Menu name="run" append="first_menu">
     <text name="@title:menu">&amp;Run</text>
 
     <Action name="run_default_target" />
@@ -46,7 +46,7 @@
     <Merge />
   </Menu>
 
-  <Menu name="navigation">
+  <Menu name="navigation" append="first_menu">
     <text context="@title:menu">&amp;Navigation</text>
     <DefineGroup name="navigation_file"/>
     <Separator />
@@ -58,7 +58,7 @@
     <Merge />
   </Menu>
 
-  <Menu name="kdevseparator_file">
+  <Menu name="kdevseparator_file" append="first_menu">
     <text context="@title:menu">|</text>
   </Menu>
 
@@ -97,6 +97,8 @@
   <Menu name="kdevseparator_window">
     <text context="@title:menu">|</text>
   </Menu>
+
+  <Merge />
 
   <Menu name="window">
     <text context="@title:menu">&amp;Window</text>
