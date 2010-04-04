@@ -106,12 +106,19 @@ KConfigGroup SourceFormatterController::configuration()
 
 static ISourceFormatter* findFirstFormatterForMimeType( const KMimeType::Ptr& mime )
 {
+	static QHash<QString, ISourceFormatter*> knownFormatters;
+	if (knownFormatters.contains(mime->name()))
+		return knownFormatters[mime->name()];
+	
 	foreach( IPlugin* p, Core::self()->pluginController()->allPluginsForExtension( "org.kdevelop.ISourceFormatter" ) ) {
 		KPluginInfo info = Core::self()->pluginController()->pluginInfo( p );
 		if( info.property( SourceFormatterController::supportedMimeTypesKey ).toStringList().contains( mime->name() ) ) {
-			return p->extension<ISourceFormatter>();
+			ISourceFormatter *formatter = p->extension<ISourceFormatter>();
+			knownFormatters[mime->name()] = formatter;
+			return formatter;
 		}
 	}
+	knownFormatters[mime->name()] = 0;
 	return 0;
 }
 
