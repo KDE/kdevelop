@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QDockWidget>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDropEvent>
+#include <QtGui/QMenuBar>
 #include <QtCore/QMimeData>
 
 #include <KDE/KApplication>
@@ -128,6 +129,28 @@ MainWindow::~ MainWindow()
 
     delete d;
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
+}
+
+QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)
+{
+    QAction* before = 0L;
+    if (index > 0 && index < parent->actions().count())
+        before = parent->actions().at(index);
+
+    //KDevelop needs to ensure that separators defined as <Separator style="visible" />
+    //are always shown in the menubar. For those, we create special disabled actions
+    //instead of calling QMenuBar::addSeparator() because menubar separators are ignored
+    if (element.tagName().toLower() == QLatin1String("separator")
+            && element.attribute("style") == QLatin1String("visible")) {
+        if ( QMenuBar* bar = qobject_cast<QMenuBar*>( parent ) ) {
+            QAction *separatorAction = new QAction("|", this);
+            bar->insertAction( before, separatorAction );
+            separatorAction->setDisabled(true);
+            return separatorAction;
+        }
+    }
+
+    return KXMLGUIBuilder::createCustomElement(parent, index, element);
 }
 
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
