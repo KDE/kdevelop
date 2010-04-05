@@ -653,18 +653,15 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   ///STEP 3.1: Try resolution using the absolute path
   PathResolutionResult res;
   //Try for each possible target
-  for( QStringList::const_iterator it = possibleTargets.constBegin(); it != possibleTargets.constEnd(); ++it ) {
-    res = resolveIncludePathInternal( absoluteFile, wd, *it, source );
-    if( res ) {
-      break;
-    } else {
-      ifTest( cout << "Try for possible target " << (*it).toLocal8Bit().data() << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl; )
-    }
+  res = resolveIncludePathInternal( absoluteFile, wd, possibleTargets.join(" "), source );
+  if (!res) {
+    ifTest( cout << "Try for absolute file " << absoluteFile.toLocal8Bit().data() << " and targets " << possibleTargets.join(", ").toLocal8Bit().data()
+                 << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl; )
   }
   
   res.includePathDependency = dependency;
   
-  if( res ) {
+  if( !res.paths.isEmpty() ) {
     res.addPathsUnique(resultOnFail);
     QMutexLocker l( &m_cacheMutex );
     CacheEntry ce;
@@ -678,10 +675,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
 
   ///STEP 3.2: Try resolution using the relative path
   QString relativeFile = KUrl::relativePath(wd, absoluteFile);
-  for( QStringList::const_iterator it = possibleTargets.constBegin(); it != possibleTargets.constEnd(); ++it ) {
-    res = resolveIncludePathInternal( relativeFile, wd, *it, source );
-    if( res ) break;
-  }
+  res = resolveIncludePathInternal( relativeFile, wd, possibleTargets.join(" "), source );
   
   res.includePathDependency = dependency;
 
