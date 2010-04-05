@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
     }
 
     bool operator==(const ModificationRevisionSet& rhs) const {
-      return m_index != rhs.m_index;
+      return m_index == rhs.m_index;
     }
     
     ModificationRevisionSet& operator+=(const ModificationRevisionSet& rhs);
