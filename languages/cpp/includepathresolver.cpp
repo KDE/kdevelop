@@ -737,8 +737,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
 
   QString fullOutput;
   PathResolutionResult res = getFullOutput( source.getCommand( file, makeParameters ), workingDirectory, fullOutput );
-  if( !res )
-    return res;
 
   QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
   QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
