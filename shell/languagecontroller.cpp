@@ -198,53 +198,53 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     
     QString fileName = url.fileName();
 
-    for(int a = 0; a < 2; ++a) {
-
-        ///non-crashy part: Use the mime-types of known languages
-        ///Very inefficient right now
-        QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
-        for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin(); it != d->mimeTypeCache.constEnd(); ++it) {
-            foreach(QString pattern, it.key()->patterns()) {
-                if(pattern.startsWith('*'))
+    QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
+    ///non-crashy part: Use the mime-types of known languages
+    ///Very inefficient right now
+    for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin();
+        it != d->mimeTypeCache.constEnd(); ++it)
+    {
+        foreach(QString pattern, it.key()->patterns()) {
+            if(pattern.startsWith('*'))
                 pattern = pattern.mid(1);
 
-                exp.setPattern(pattern);
-                if(int position = exp.indexIn(fileName)) {
-                    if(position != -1 && exp.matchedLength() + position == fileName.length())
-                        languages << *it;
-                }
-            }
-        }
-        
-        //Never use findByUrl from within a background thread, and never load a language support
-        //from within the backgruond thread. Both is unsafe, and can lead to crashes
-        if(!languages.isEmpty() || a || QThread::currentThread() != thread())
-            return languages;
-        
-        ///Crashy and unsafe part: Load missing language-supports
-        KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
-
-        LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
-        if (it != d->languageCache.constEnd()) {
-            languages = it.value();
-        } else {
-            QStringList constraints;
-            constraints << QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
-            QList<IPlugin*> supports = Core::self()->pluginController()->
-                allPluginsForExtension("ILanguageSupport", constraints);
-
-            if (supports.isEmpty()) {
-                d->languageCache.insert(mimeType->name(), QList<ILanguage*>());
-            } else {
-                foreach (IPlugin *support, supports) {
-                    ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
-                    kDebug() << "language-support:" << languageSupport;
-                    if(languageSupport)
-                        return languages << d->addLanguageForSupport(languageSupport);
-                }
+            exp.setPattern(pattern);
+            if(int position = exp.indexIn(fileName)) {
+                if(position != -1 && exp.matchedLength() + position == fileName.length())
+                    languages << *it;
             }
         }
     }
+
+    //Never use findByUrl from within a background thread, and never load a language support
+    //from within the backgruond thread. Both is unsafe, and can lead to crashes
+    if(!languages.isEmpty() || QThread::currentThread() != thread())
+        return languages;
+
+    ///Crashy and unsafe part: Load missing language-supports
+    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
+
+    LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
+    if (it != d->languageCache.constEnd()) {
+        languages = it.value();
+    } else {
+        QStringList constraints;
+        constraints << QString("'%1' in [X-KDevelop-SupportedMimeTypes]").arg(mimeType->name());
+        QList<IPlugin*> supports = Core::self()->pluginController()->
+            allPluginsForExtension("ILanguageSupport", constraints);
+
+        if (supports.isEmpty()) {
+            d->languageCache.insert(mimeType->name(), QList<ILanguage*>());
+        } else {
+            foreach (IPlugin *support, supports) {
+                ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
+                kDebug() << "language-support:" << languageSupport;
+                if(languageSupport)
+                    languages << d->addLanguageForSupport(languageSupport);
+            }
+        }
+    }
+
     return languages;
 }
 
