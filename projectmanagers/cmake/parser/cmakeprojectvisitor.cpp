@@ -280,6 +280,18 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
     return 1;
 }
 
+int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
+{
+    kDebug(9042) << "setting directory props for " << dirProps->properties();
+    
+    QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+    foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
+    {
+        m_props[DirectoryProperty][dir][t.first] += t.second;
+    }
+    return 1;
+}
+
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
     kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
