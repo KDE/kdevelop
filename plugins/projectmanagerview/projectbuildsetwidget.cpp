@@ -80,6 +80,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
              SLOT( moveToBottom() ) );
     
     m_ui->itemView->horizontalHeader()->setStretchLastSection(true);
+    m_ui->itemView->verticalHeader()->setVisible(false);
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
              SLOT(showContextMenu(const QPoint&) ) );
