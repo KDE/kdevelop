@@ -118,7 +118,6 @@ namespace CppTools {
       PathResolutionResult validateDirectory(QDir& directory, QFile& file);
 
       ///Executes the command using KProcess
-      PathResolutionResult getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const;
       bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;
       ///file should be the name of the target, without extension(because that may be different)
       PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source );

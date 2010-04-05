@@ -694,12 +694,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   return res;
 }
 
-PathResolutionResult IncludePathResolver::getFullOutput( const QString& command, const QString& workingDirectory, QString& output ) const {
-  if( !executeCommand(command, workingDirectory, output) )
-    return PathResolutionResult( false, i18n("Make process failed"), i18n("Output: %1", output ) );
-  return PathResolutionResult(true);
-}
-
 PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source ) {
 
   QString processStdout;
@@ -712,7 +706,8 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   FileModificationTimeWrapper touch( touchFiles, workingDirectory );
 
   QString fullOutput;
-  PathResolutionResult res = getFullOutput( source.getCommand( file, workingDirectory, makeParameters ), workingDirectory, fullOutput );
+  executeCommand(source.getCommand( file, workingDirectory, makeParameters ), workingDirectory, fullOutput);
+  PathResolutionResult res;
 
   QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
   QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
