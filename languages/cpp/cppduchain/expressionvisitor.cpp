@@ -646,10 +646,17 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       LOCKDUCHAIN;
       m_lastType = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeChar));
       m_lastInstance = Instance( true );
-
       if ( token.size == 3 ) {
         static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>( token.symbolByteArray().at(1) );
-      } ///TODO: add support for escape sequences
+      } else if (token.size == 4) {
+        if (token.symbolByteArray() == "'\\t'") {
+          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>('\t');
+        } else if (token.symbolByteArray() == "'\\n'") {
+          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>('\n');
+        } else if (token.symbolByteArray() == "'\\r'") {
+          static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<char>('\r');
+        }
+      }
 
     } else if(token.symbol() == True || token.symbol() == False) {
       ///We have a boolean constant, we need to catch that here

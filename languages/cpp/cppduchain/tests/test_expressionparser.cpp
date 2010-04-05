@@ -213,14 +213,13 @@ void TestExpressionParser::testIntegralType() {
     QCOMPARE(ciType->value<bool>(), true);
   }
   {
-    Cpp::ExpressionEvaluationResult result = parser.evaluateType("'\n'", KDevelop::DUContextPointer(top));
+    Cpp::ExpressionEvaluationResult result = parser.evaluateType("'\\n'", KDevelop::DUContextPointer(top));
     QVERIFY(result.isValid());
     
     AbstractType::Ptr aType(result.type.abstractType());
     ConstantIntegralType::Ptr ciType = aType.cast<ConstantIntegralType>();
     QVERIFY(ciType);
     QCOMPARE(ciType->dataType(), (uint)ConstantIntegralType::TypeChar);
-    QEXPECT_FAIL("", "store values for chars of escape sequences in ExpressionVisitor::visitPrimaryExpression", Continue);
     QCOMPARE(ciType->value<char>(), '\n');
   }
 }
