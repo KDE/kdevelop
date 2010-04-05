@@ -191,11 +191,13 @@ namespace CppTools {
       m_shouldTouchFiles = b;
     }
 
-    QString getCommand( const QString& sourceFile, const QString& makeParameters ) const {
-      if( isUnsermake() )
+    QString getCommand( const QString& absoluteFile, const QString& workingDirectory, const QString& makeParameters ) const {
+      if( isUnsermake() ) {
         return "unsermake -k --no-real-compare -n " + makeParameters;
-      else
-        return "make -k --no-print-directory -W \'" + sourceFile + "\' -n " + makeParameters;
+      } else {
+        QString relativeFile = KUrl::relativePath(workingDirectory, absoluteFile);
+        return "make -k --no-print-directory -W \'" + absoluteFile + "\' -W \'" + relativeFile + "\' -n " + makeParameters;
+      }
     }
 
     bool hasMakefile() const {
@@ -660,26 +662,6 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   }
   
   res.includePathDependency = dependency;
-  
-  if( !res.paths.isEmpty() ) {
-    res.addPathsUnique(resultOnFail);
-    QMutexLocker l( &m_cacheMutex );
-    CacheEntry ce;
-    ce.errorMessage = res.errorMessage;
-    ce.longErrorMessage = res.longErrorMessage;
-    ce.modificationTime = dependency;
-    ce.paths = res.paths;
-    m_cache[dir.path()] = ce;
-    return res;
-  }
-
-  ///STEP 3.2: Try resolution using the relative path
-  QString relativeFile = KUrl::relativePath(wd, absoluteFile);
-  res = resolveIncludePathInternal( relativeFile, wd, possibleTargets.join(" "), source );
-  
-  res.includePathDependency = dependency;
-
-  res.addPathsUnique(resultOnFail);
 
   if( res.paths.isEmpty() )
       res.paths = cachedPaths; //We failed, maybe there is an old cached result, use that.
@@ -730,7 +712,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   FileModificationTimeWrapper touch( touchFiles, workingDirectory );
 
   QString fullOutput;
-  PathResolutionResult res = getFullOutput( source.getCommand( file, makeParameters ), workingDirectory, fullOutput );
+  PathResolutionResult res = getFullOutput( source.getCommand( file, workingDirectory, makeParameters ), workingDirectory, fullOutput );
 
   QString includeParameterRx( "\\s(-I|--include-dir=|-I\\s)" );
   QString quotedRx( "(\\').*(\\')|(\\\").*(\\\")" ); //Matches "hello", 'hello', 'hello"hallo"', etc.
@@ -864,7 +846,9 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
   }
 
   if(ret.paths.isEmpty())
-    return PathResolutionResult( false, i18n("Could not extract include paths from make output"), i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory, source.getCommand(file, makeParameters), fullOutput) );
+    return PathResolutionResult( false, i18n("Could not extract include paths from make output"),
+                                 i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
+                                      source.getCommand(file, workingDirectory, makeParameters), fullOutput) );
   
   return ret;
 }
