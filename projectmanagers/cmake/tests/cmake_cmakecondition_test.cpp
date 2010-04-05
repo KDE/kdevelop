@@ -108,6 +108,8 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "parenthese3" ) << QString("( ZERO AND ZERO ) OR ONE").split(" ") << true;
     QTest::newRow( "parenthese4" ) << QString("( ZERO AND ZERO ) OR ZERO").split(" ") << false;
     QTest::newRow( "parenthese5" ) << QString("( ONE AND ZERO ) OR ( ZERO OR ONE )").split(" ") << true;
+    
+    QTest::newRow( "case" ) << QString("NOT settings.kcfgc STREQUAL GENERATE_MOC AND NOT settings.kcfgc STREQUAL USE_RELATIVE_PATH").split(" ") << true;
 }
 
 void CMakeConditionTest::testBadParse()
