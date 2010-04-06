@@ -2656,34 +2656,23 @@ bool SetDirectoryPropsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="set_directory_properties" || func.arguments.count()<3)
         return false;
-    bool props=false;
+    if(func.arguments.first().value!="PROPERTIES")
+        return false;
     
-    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin();
+    QList<CMakeFunctionArgument>::const_iterator it=func.arguments.begin()+1;
     QList<CMakeFunctionArgument>::const_iterator itEnd=func.arguments.end();
-    QString prop;
+    
     for(; it!=itEnd; ++it)
     {
-        if(it->value=="PROPERTIES")
-        {
-            props=true;
-            continue;
-        }
-        if(!props)
-        {
+        QString prop=it->value;
+        ++it;
+        
+        if(it==itEnd)
             return false;
-        }
-        else
-        {
-            if(prop.isEmpty())
-                prop=it->value;
-            else
-            {
-                m_properties.append(PropPair(prop, it->value));
-                prop.clear();
-            }
-        }
+        
+        m_properties.append(PropPair(prop, it->value));
     }
-    return prop.isEmpty();
+    return !m_properties.isEmpty();
 }
 
 SetSourceFilesPropsAst::SetSourceFilesPropsAst()

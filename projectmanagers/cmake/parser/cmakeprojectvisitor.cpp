@@ -281,10 +281,9 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
 }
 
 int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
-{
-    kDebug(9042) << "setting directory props for " << dirProps->properties();
-    
+{   
     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").join(QString());
+    kDebug(9042) << "setting directory props for " << dirProps->properties() << dir;
     foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
     {
         m_props[DirectoryProperty][dir][t.first] += t.second;
@@ -302,9 +301,9 @@ int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 //         kDebug(9032) << "unexistent property" << prop->property() << "on" << prop->target();
     }
 //     kDebug(9042) << "current properties" << m_props[TargetProperty][prop->target()].keys();
-//     kDebug(9042) << "goooooot" << m_props[TargetProperty][prop->target()][prop->property()];
     
     m_vars->insert(prop->variableName(), m_props[TargetProperty][prop->target()][prop->property()]);
+//     kDebug(9042) << "goooooot" << m_vars->value(prop->variableName());
     return 1;
 }
 
@@ -379,6 +378,20 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     target.desc=p.code->at(p.line);
     
     m_targetForId[id]=target;
+
+    QString exe=id;
+    switch(t) {
+        case Target::Executable:
+            exe += m_vars->value("CMAKE_EXECUTABLE_SUFFIX").join(QString());
+            break;
+        case Target::Library:
+            exe = QString("%1%2%3").arg(m_vars->value("CMAKE_LIBRARY_PREFIX").join(QString())).arg(id).arg(m_vars->value("CMAKE_LIBRARY_SUFFIX").join(QString()));
+            break;
+        case Target::Custom:
+            break;
+    }
+    
+    m_props[TargetProperty][id]["LOCATION"]=QStringList(m_vars->value("CMAKE_CURRENT_BINARY_DIR").join(QString())+'/'+exe);
 }
 
 int CMakeProjectVisitor::visit(const AddExecutableAst *exec)
