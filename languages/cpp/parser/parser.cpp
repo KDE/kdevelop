@@ -2564,6 +2564,12 @@ bool Parser::parseInitializerList(const ListNode<InitializerClauseAST*> *&node)
       if (list)
         advance(); // skip ',' separator between clauses
 
+      if (session->token_stream->lookAhead() == '}') {
+        // see https://bugs.kde.org/show_bug.cgi?id=233328
+        // init lists may have a trailing comma
+        break;
+      }
+
       InitializerClauseAST *init_clause = 0;
       if (!parseInitializerClause(init_clause))
         {

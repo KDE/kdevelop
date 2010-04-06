@@ -407,6 +407,22 @@ private slots:
     dumper.dump(ast, lastSession->token_stream);
   }
 
+  void testInitListTrailingComma()
+  {
+    //see bug https://bugs.kde.org/show_bug.cgi?id=233328
+
+    QByteArray code("const int foo [] = {1,};");
+    pool memPool;
+    TranslationUnitAST* ast = parse(code, &memPool);
+    dumper.dump(ast, lastSession->token_stream);
+
+    QCOMPARE(ast->declarations->count(), 1);
+    SimpleDeclarationAST* simpleDecl = reinterpret_cast<SimpleDeclarationAST*>(ast->declarations->at(0)->element);
+    QVERIFY(simpleDecl);
+
+    QCOMPARE(simpleDecl->init_declarators->count(), 1);
+  }
+
   /*void testParseFile()
   {
      QFile file(TEST_FILE);
