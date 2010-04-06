@@ -1458,22 +1458,33 @@ int DUContext::usesCount() const
   return d_func()->m_usesSize();
 }
 
+bool usesRangeLessThan(const Use& left, const Use& right)
+{
+  return left.m_range.start < right.m_range.start;
+}
+
 int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEditor::SmartRange* smartRange, int insertBefore)
 {
   DUCHAIN_D_DYNAMIC(DUContext);
   ENSURE_CAN_WRITE
 
+  Use use(range, declarationIndex);
   if(insertBefore == -1) {
     //Find position where to insert
-    unsigned int a = 0;
     const unsigned int size = d->m_usesSize();
     const Use* uses = d->m_uses();
-    for(; a < size && range.start > uses[a].m_range.start; ++a) { ///@todo do binary search
+    const Use* lowerBound = qLowerBound(uses, uses + size, use, usesRangeLessThan);
+    insertBefore = lowerBound - uses;
+    // comment out to test this:
+    /*
+    unsigned int a = 0;
+    for(; a < size && range.start > uses[a].m_range.start; ++a) {
     }
-    insertBefore = a;
+    Q_ASSERT(a == insertBefore);
+    */
   }
 
-  insertToArray(d->m_usesList(), Use(range, declarationIndex), insertBefore);
+  insertToArray(d->m_usesList(), use, insertBefore);
   if(smartRange) {
     ///When this assertion triggers, then the updated context probably was not smart-converted before processing. @see SmartConverter
     Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d->m_usesSize()-1);
