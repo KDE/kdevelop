@@ -1466,7 +1466,9 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
   if(insertBefore == -1) {
     //Find position where to insert
     unsigned int a = 0;
-    for(; a < d->m_usesSize() && range.start > d->m_uses()[a].m_range.start; ++a) { ///@todo do binary search
+    const unsigned int size = d->m_usesSize();
+    const Use* uses = d->m_uses();
+    for(; a < size && range.start > uses[a].m_range.start; ++a) { ///@todo do binary search
     }
     insertBefore = a;
   }
