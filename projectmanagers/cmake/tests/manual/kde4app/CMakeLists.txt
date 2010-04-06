@@ -15,6 +15,7 @@ kde4_add_ui_files(kde4app_SRCS kde4appview_base.ui prefs_base.ui)
 
 kde4_add_kcfg_files(kde4app_SRCS settings.kcfgc )
 
+message(STATUS "SSSSSSS ${kde4app_SRCS}")
 kde4_add_executable(kde4app ${kde4app_SRCS})
 
 target_link_libraries(kde4app ${KDE4_KDEUI_LIBS} )

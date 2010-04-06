@@ -274,7 +274,7 @@ int CMakeProjectVisitor::visit( const SetTargetPropsAst * targetProps)
     {
         foreach(const SetTargetPropsAst::PropPair& t, targetProps->properties())
         {
-            m_props[TargetProperty][tname][t.first] += t.second;
+            m_props[TargetProperty][tname][t.first] = t.second.split(';');
         }
     }
     return 1;
@@ -286,7 +286,7 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
     kDebug(9042) << "setting directory props for " << dirProps->properties() << dir;
     foreach(const SetDirectoryPropsAst::PropPair& t, dirProps->properties())
     {
-        m_props[DirectoryProperty][dir][t.first] += t.second;
+        m_props[DirectoryProperty][dir][t.first] = t.second.split(';');
     }
     return 1;
 }
