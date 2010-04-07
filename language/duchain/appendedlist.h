@@ -197,9 +197,16 @@ class TemporaryDataManager {
 
 ///Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
 //This might be a little slow
-#define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1, containerSize = container ## Size(); a < containerSize; ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
+#define FOREACH_FUNCTION(item, container) \
+    for(uint a = 0, mustDo = 1, containerSize = container ## Size(); a < containerSize; ++a) \
+      if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) \
+        for(item(container()[a]); mustDo; mustDo = 0)
 //More efficient version that does not repeatedly call functions on the container, but the syntax is a bit less nice
-// #define FOREACH_FUNCTION_EFFICIENT(itemType, itemName, container) for(itemType* start = container(), end = start + container ## Size(), fake = start; start != end; ++start) for( itemType itemName(*start); fake != end; fake = end)
+/*
+#define FOREACH_FUNCTION_EFFICIENT(itemType, itemName, container) \
+    for(itemType* start = container(), end = start + container ## Size(), fake = start; start != end; ++start) \
+      for( itemType itemName(*start); fake != end; fake = end)
+*/
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
     typedef KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10> > temporaryHash ## container ## member ## Type; \
@@ -208,7 +215,8 @@ class TemporaryDataManager {
         return *temporaryHash ## container ## member ## Static; \
     }
 
-#define DECLARE_LIST_MEMBER_HASH(container, member, type) KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10> >& temporaryHash ## container ## member();
+#define DECLARE_LIST_MEMBER_HASH(container, member, type) \
+    KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10> >& temporaryHash ## container ## member();
 
 ///This implements the interfaces so this container can be used as a predecessor for classes with appended lists.
 ///You should do this within the abstract base class that opens a tree of classes that can have appended lists,
@@ -221,27 +229,27 @@ class TemporaryDataManager {
 ///but not including the dynamic data. Optionally you can implement a static bool appendedListDynamicDefault() function, that returns the default-value for the "dynamic" parameter.
 ///to initializeAppendedLists.
 #define APPENDED_LISTS_STUB(container) \
-bool m_dynamic : 1;                          \
-unsigned int offsetBehindLastList() const { return 0; } \
-uint dynamicSize() const { return classSize(); } \
-template<class T> bool listsEqual(const T& /*rhs*/) const { return true; } \
-template<class T> void copyAllFrom(const T& /*rhs*/) const { } \
-void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { m_dynamic = dynamic; }  \
-void freeAppendedLists() { } \
-bool appendedListsDynamic() const { return m_dynamic; }
+    bool m_dynamic : 1;                          \
+    unsigned int offsetBehindLastList() const { return 0; } \
+    uint dynamicSize() const { return classSize(); } \
+    template<class T> bool listsEqual(const T& /*rhs*/) const { return true; } \
+    template<class T> void copyAllFrom(const T& /*rhs*/) const { } \
+    void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { m_dynamic = dynamic; }  \
+    void freeAppendedLists() { } \
+    bool appendedListsDynamic() const { return m_dynamic; }
 
 
 ///use this if the class does not have a base class that also uses appended lists
 #define START_APPENDED_LISTS(container) \
-unsigned int offsetBehindBase() const { return 0; } \
-void freeDynamicData() { freeAppendedLists(); }
+    unsigned int offsetBehindBase() const { return 0; } \
+    void freeDynamicData() { freeAppendedLists(); }
 
 ///Use this if one of the base-classes of the container also has the appended lists interfaces implemented.
 ///To reduce the probability of future problems, you should give the direct base class this one inherits from.
 ///@note: Multiple inheritance is not supported, however it will work ok if only one of the base-classes uses appended lists.
 #define START_APPENDED_LISTS_BASE(container, base) \
-unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); } \
-void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
+    unsigned int offsetBehindBase() const { return base :: offsetBehindLastList(); } \
+    void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
 
 
 #define APPENDED_LIST_COMMON(container, type, name) \
@@ -268,40 +276,69 @@ void freeDynamicData() { freeAppendedLists(); base::freeDynamicData(); }
             new (curr) type(*otherCurr); /* Call the copy constructors */ \
         }\
       } \
-      void name ## NeedDynamicList() { Q_ASSERT(appendedListsDynamic()); if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) { name ## Data = temporaryHash ## container ## name().alloc(); Q_ASSERT(temporaryHash ## container ## name().getItem(name ## Data).isEmpty());  } } \
+      void name ## NeedDynamicList() { \
+        Q_ASSERT(appendedListsDynamic()); \
+        if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) {\
+          name ## Data = temporaryHash ## container ## name().alloc();\
+          Q_ASSERT(temporaryHash ## container ## name().getItem(name ## Data).isEmpty()); \
+        } \
+      } \
       void name ## Initialize(bool dynamic) { name ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); }  \
-      void name ## Free() { if(appendedListsDynamic()) { if(name ## Data & KDevelop::DynamicAppendedListRevertMask) temporaryHash ## container ## name().free(name ## Data); } else { type* curr = const_cast<type*>(name());  type* end = curr + name ## Size(); for(; curr < end; ++curr) curr->~type(); /*call destructors*/ } }  \
+      void name ## Free() { \
+        if(appendedListsDynamic()) { \
+          if(name ## Data & KDevelop::DynamicAppendedListRevertMask) temporaryHash ## container ## name().free(name ## Data);\
+        } else { \
+          type* curr = const_cast<type*>(name()); \
+          type* end = curr + name ## Size(); \
+          for(; curr < end; ++curr) curr->~type(); /*call destructors*/ \
+        } \
+      }  \
 
 
 ///@todo Make these things a bit faster(less recursion)
 
-#define APPENDED_LIST_FIRST(container, type, name)        APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const { if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + offsetBehindBase()); else return temporaryHash ## container ## name().getItem(name ## Data).data(); } \
-                                               unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
-                                               template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
-                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
-                                               void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); }  \
-                                               void name ## FreeChain() { name ## Free(); }
+#define APPENDED_LIST_FIRST(container, type, name) \
+    APPENDED_LIST_COMMON(container, type, name) \
+    const type* name() const { \
+      if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; \
+      if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + offsetBehindBase()); \
+      else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
+    } \
+    unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
+    template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
+    template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## CopyFrom(rhs); } \
+    void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); }  \
+    void name ## FreeChain() { name ## Free(); }
 
-#define APPENDED_LIST(container, type, name, predecessor) APPENDED_LIST_COMMON(container, type, name) \
-                                               const type* name() const {if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); else return temporaryHash ## container ## name().getItem(name ## Data).data();  } \
-                                               unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
-                                               template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
-                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { predecessor ## CopyAllFrom(rhs); name ## CopyFrom(rhs); } \
-                                               void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## InitializeChain(dynamic);  }  \
-                                               void name ## FreeChain() { name ## Free(); predecessor ## FreeChain(); }
+#define APPENDED_LIST(container, type, name, predecessor) \
+    APPENDED_LIST_COMMON(container, type, name) \
+    const type* name() const {\
+      if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; \
+      if(!appendedListsDynamic()) return (type*)(((char*)this) + classSize() + predecessor ## OffsetBehind()); \
+      else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
+    } \
+    unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
+    template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
+    template<class T> void name ## CopyAllFrom( const T& rhs ) { predecessor ## CopyAllFrom(rhs); name ## CopyFrom(rhs); } \
+    void name ## InitializeChain(bool dynamic) { name ## Initialize(dynamic); predecessor ## InitializeChain(dynamic);  }  \
+    void name ## FreeChain() { name ## Free(); predecessor ## FreeChain(); }
 
-#define END_APPENDED_LISTS(container, predecessor) /* Returns the size of the object containing the appended lists, including them */ \
-                                      unsigned int completeSize() const { return classSize() + predecessor ## OffsetBehind(); } \
-                                     /* Compares all local appended lists(not from base classes) and returns true if they are equal */                \
-                                      template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
-                                     /* Copies all the local appended lists(not from base classes) from the given item.*/   \
-                                      template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
-                                      void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); predecessor ## InitializeChain(dynamic); } \
-                                      void freeAppendedLists() { predecessor ## FreeChain(); } \
-                                      bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
-                                      unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
-                                      uint dynamicSize() const { return offsetBehindLastList() + classSize(); }
+#define END_APPENDED_LISTS(container, predecessor) \
+    /* Returns the size of the object containing the appended lists, including them */ \
+    unsigned int completeSize() const { return classSize() + predecessor ## OffsetBehind(); } \
+    /* Compares all local appended lists(not from base classes) and returns true if they are equal */                \
+    template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
+    /* Copies all the local appended lists(not from base classes) from the given item.*/   \
+    template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); } \
+    void initializeAppendedLists(bool dynamic = appendedListDynamicDefault()) { \
+      predecessor ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); \
+      predecessor ## InitializeChain(dynamic); \
+    } \
+    void freeAppendedLists() { predecessor ## FreeChain(); } \
+    bool appendedListsDynamic() const { return predecessor ## Data & KDevelop::DynamicAppendedListMask; } \
+    unsigned int offsetBehindLastList() const { return predecessor ## OffsetBehind(); } \
+    uint dynamicSize() const { return offsetBehindLastList() + classSize(); }
+
 /**
  * This is a class that allows you easily putting instances of your class into an ItemRepository as seen in itemrepository.h.
  * All your class needs to do is:

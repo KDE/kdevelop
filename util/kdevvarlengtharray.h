@@ -51,7 +51,10 @@
 
 ///Foreach macro that also works with QVarLengthArray or KDevVarLengthArray
 ///@warning Unlike the Qt foreach macro, this does not temporarily copy the array, which means its size must not be changed during the iteration.
-#define FOREACH_ARRAY(item, container) for(int a = 0, mustDo = 1; a < container.size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container[a]); mustDo; mustDo = 0)
+#define FOREACH_ARRAY(item, container) \
+        for(int a = 0, mustDo = 1; a < container.size(); ++a) \
+            if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) \
+                for(item(container[a]); mustDo; mustDo = 0)
 
 QT_BEGIN_HEADER
 
