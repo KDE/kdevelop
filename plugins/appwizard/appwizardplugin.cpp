@@ -195,6 +195,13 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
     return true; // initialization phase complete
 }
 
+QString generateIdentifier( const QString& appname )
+{
+    QString tmp = appname;
+    QRegExp re("[^a-zA-Z0-9_]");
+    return tmp.replace(re, "_");
+}
+
 } // end anonymous namespace
 
 QString AppWizardPlugin::createProject(const ApplicationInfo& info)
@@ -225,6 +232,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     m_variables["APPNAME"] = info.name;
     m_variables["APPNAMEUC"] = info.name.toUpper();
     m_variables["APPNAMELC"] = info.name.toLower();
+    m_variables["APPNAMEID"] = generateIdentifier(info.name);
     m_variables["PROJECTDIR"] = dest.toLocalFile();
     m_variables["PROJECTDIRNAME"] = dest.fileName();
     m_variables["VERSIONCONTROLPLUGIN"] = info.vcsPluginName;
