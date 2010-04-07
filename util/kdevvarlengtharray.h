@@ -176,6 +176,8 @@ public:
     inline const T *data() const { return ptr; }
     inline const T * constData() const { return ptr; }
 
+    //BEGIN custom additions to QVarLengthArray
+
     ///Returns whether the given item is contained in this array
     bool contains(const T& value) const {
       for(int a = 0; a < s; ++a) {
@@ -229,6 +231,8 @@ public:
         Q_ASSERT(s > 0);
         resize(s-1);
     }
+
+    //END custom additions to QVarLengthArray
 
 private:
     void realloc(int size, int alloc);
