@@ -104,6 +104,10 @@ void CustomMakeTreeSynchronizer::directoriesCreated( const KUrl::List &files,
 {
     Q_FOREACH( const KUrl& _file, files )
     {
+        if ( _file.fileName() == ".svn" || _file.fileName() == "CVS" || _file.fileName() == ".git" )
+        {
+            continue;
+        }
         KDevelop::ProjectBuildFolderItem *newitem = new KDevelop::ProjectBuildFolderItem(
                 parentFolder->project(), _file, parentFolder );
 

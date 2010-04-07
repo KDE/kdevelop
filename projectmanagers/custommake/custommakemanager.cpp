@@ -149,6 +149,11 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
         
         if ( fileInfo.isDir() )
         {
+            //TODO: make filtering generic
+            if ( fileName == ".svn" || fileName == "CVS" || fileName == ".git" )
+            {
+                continue;
+            }
 //             KDevelop::ProjectFolderItem *cmfi= new KDevelop::ProjectFolderItem(
 //                     item->project(), KUrl( fileInfo.absoluteFilePath() ), item );
             // TODO more faster algorithm. should determine whether this directory
