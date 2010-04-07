@@ -76,7 +76,7 @@ public:
       //this must stay thread-safe(may be called by multiple threads at a time)
       //The thread-safety is given because all threads will have the same result, and it will only be written once at the end.
       uint hash = m_identifier.hash();
-      FOREACH_FUNCTION(IndexedTypeIdentifier templateIdentifier, templateIdentifiers)
+      FOREACH_FUNCTION(const IndexedTypeIdentifier& templateIdentifier, templateIdentifiers)
         hash = hash * 13 + IndexedTypeIdentifier(templateIdentifier).hash();
       hash += m_unique;
       m_hash = hash;
@@ -209,7 +209,7 @@ public:
     if( m_hash == 0 )
     {
       uint mhash = 0;
-      FOREACH_FUNCTION( IndexedIdentifier identifier, identifiers )
+      FOREACH_FUNCTION( const IndexedIdentifier& identifier, identifiers )
         mhash = 11*mhash + Identifier(identifier).hash();
 
       if(mhash != m_hash)
@@ -592,10 +592,10 @@ QStringList QualifiedIdentifier::toStringList() const
     ret.append(QString());
 
   if(m_index) {
-    FOREACH_FUNCTION(IndexedIdentifier index, cd->identifiers)
+    FOREACH_FUNCTION(const IndexedIdentifier& index, cd->identifiers)
       ret << index.identifier().toString();
   }else{
-    FOREACH_FUNCTION(IndexedIdentifier index, dd->identifiers)
+    FOREACH_FUNCTION(const IndexedIdentifier& index, dd->identifiers)
       ret << index.identifier().toString();
   }
 
@@ -610,7 +610,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
 
   bool first = true;
   if(m_index) {
-    FOREACH_FUNCTION(IndexedIdentifier index, cd->identifiers)
+    FOREACH_FUNCTION(const IndexedIdentifier& index, cd->identifiers)
     {
       if( !first )
         ret += "::";
@@ -620,7 +620,7 @@ QString QualifiedIdentifier::toString(bool ignoreExplicitlyGlobal) const
       ret += index.identifier().toString();
     }
   }else{
-    FOREACH_FUNCTION(IndexedIdentifier index, dd->identifiers)
+    FOREACH_FUNCTION(const IndexedIdentifier& index, dd->identifiers)
     {
       if( !first )
         ret += "::";

@@ -732,7 +732,7 @@ QList<KTextEditor::SmartRange*> Declaration::smartUses() const
 
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  FOREACH_ARRAY(IndexedTopDUContext indexedContext, useContexts) {
+  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     if(!indexedContext.isLoaded())
       continue;
     TopDUContext* context = indexedContext.data();
@@ -759,7 +759,7 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
 
   KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
 
-  FOREACH_ARRAY(IndexedTopDUContext indexedContext, useContexts) {
+  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
       QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);

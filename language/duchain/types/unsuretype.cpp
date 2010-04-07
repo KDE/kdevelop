@@ -30,7 +30,7 @@ UnsureType::UnsureType() : AbstractType(createData<UnsureType>()) {
 }
 
 void UnsureType::accept0(KDevelop::TypeVisitor* v) const {
-  FOREACH_FUNCTION(IndexedType type, d_func()->m_types) {
+  FOREACH_FUNCTION(const IndexedType& type, d_func()->m_types) {
     AbstractType::Ptr t = type.abstractType();
     v->visit(t.unsafeData());
   }
@@ -43,7 +43,7 @@ KDevelop::AbstractType* UnsureType::clone() const {
 QString UnsureType::toString() const {
   QString ret = "unsure (";
   bool first = true;
-  FOREACH_FUNCTION(IndexedType type, d_func()->m_types) {
+  FOREACH_FUNCTION(const IndexedType& type, d_func()->m_types) {
     if(!first)
       ret += ", ";
     first = false;
@@ -77,7 +77,7 @@ bool UnsureType::equals(const KDevelop::AbstractType* rhs) const {
 
 uint UnsureType::hash() const {
   uint ret = AbstractType::hash();
-  FOREACH_FUNCTION(IndexedType type, d_func()->m_types)
+  FOREACH_FUNCTION(const IndexedType& type, d_func()->m_types)
     ret = 17 * ret + type.hash();
   
   return ret;

@@ -182,7 +182,7 @@ KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) cons
   
   if(index) {
     const UsesItem* repositoryItem = d->m_uses.itemFromIndex(index);
-    FOREACH_FUNCTION(IndexedTopDUContext decl, repositoryItem->uses)
+    FOREACH_FUNCTION(const IndexedTopDUContext& decl, repositoryItem->uses)
       ret.append(decl);
   }
   

@@ -180,7 +180,7 @@ KDevVarLengthArray<IndexedDeclaration> Definitions::definitions(const Declaratio
   
   if(index) {
     const DefinitionsItem* repositoryItem = d->m_definitions.itemFromIndex(index);
-    FOREACH_FUNCTION(IndexedDeclaration decl, repositoryItem->definitions)
+    FOREACH_FUNCTION(const IndexedDeclaration& decl, repositoryItem->definitions)
       ret.append(decl);
   }
   

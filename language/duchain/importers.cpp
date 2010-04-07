@@ -182,7 +182,7 @@ KDevVarLengthArray<IndexedDUContext> Importers::importers(const DeclarationId& i
   
   if(index) {
     const ImportersItem* repositoryItem = d->m_importers.itemFromIndex(index);
-    FOREACH_FUNCTION(IndexedDUContext decl, repositoryItem->importers)
+    FOREACH_FUNCTION(const IndexedDUContext& decl, repositoryItem->importers)
       ret.append(decl);
   }
   

@@ -183,7 +183,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImporters(uint topContextIn
      //We only read the most needed stuff, not the whole top-context data
      QByteArray data = file.read(readValue);
      const TopDUContextData* topData = (const TopDUContextData*)data.constData();
-     FOREACH_FUNCTION(IndexedDUContext importer, topData->m_importers)
+     FOREACH_FUNCTION(const IndexedDUContext& importer, topData->m_importers)
       ret << importer;
   }
 
@@ -204,7 +204,7 @@ QList<IndexedDUContext> TopDUContextDynamicData::loadImports(uint topContextInde
      //We only read the most needed stuff, not the whole top-context data
      QByteArray data = file.read(readValue);
      const TopDUContextData* topData = (const TopDUContextData*)data.constData();
-     FOREACH_FUNCTION(DUContext::Import import, topData->m_importedContexts)
+     FOREACH_FUNCTION(const DUContext::Import& import, topData->m_importedContexts)
       ret << import.indexedContext();
   }
 
