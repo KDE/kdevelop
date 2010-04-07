@@ -135,7 +135,7 @@ struct CodeCompletionItemTester {
   }
 
   void addElements(QList<Element> elements) {
-    foreach(const Element& element, elements) {
+    foreach(Element element, elements) {
       Item item(dynamic_cast<CompletionTreeItem*>(element.data()));
       if(item)
         items << item;
