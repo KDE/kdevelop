@@ -119,7 +119,7 @@ public:
     QSignalMapper* launchAsMapper;
     QMap<int,QPair<QString,QString> > launchAsInfo;
     KDevelop::ProjectBaseItem* contextItem;
-    bool hasLaunchConfigType( const QString& typeId ) 
+    bool hasLaunchConfigType( const QString& typeId )
     {
         return launchConfigurationTypes.contains( typeId );
     }
@@ -147,11 +147,11 @@ public:
         LaunchConfigurationDialog dlg;
         dlg.exec();
     }
-    
+
     QString launchActionText( LaunchConfiguration* l )
     {
         QString label;
-        if( l->project() ) 
+        if( l->project() )
         {
             label = QString("%1 : %2").arg( l->project()->name()).arg(l->name());
         } else
@@ -218,7 +218,7 @@ public:
         KConfigGroup launchGrp = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
         QString currentLaunchProject = launchGrp.readEntry( CurrentLaunchConfigProjectEntry, "" );
         QString currentLaunchName = launchGrp.readEntry( CurrentLaunchConfigNameEntry, "" );
-        
+
         LaunchConfiguration* l = 0;
         if( currentTargetAction->currentAction() )
         {
@@ -233,8 +233,8 @@ public:
             foreach( QAction* a, currentTargetAction->actions() )
             {
                 LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qvariant_cast<void*>( a->data() ) );
-                if( currentLaunchName == l->configGroupName() 
-                    && ( ( currentLaunchProject.isEmpty() && !l->project() ) 
+                if( currentLaunchName == l->configGroupName()
+                    && ( ( currentLaunchProject.isEmpty() && !l->project() )
                          || ( l->project() && l->project()->name() == currentLaunchProject ) ) )
                 {
                     a->setChecked( true );
@@ -276,7 +276,7 @@ public:
     LaunchConfigurationType* launchConfigurationTypeForId( const QString& id )
     {
         QMap<QString, LaunchConfigurationType*>::iterator it = launchConfigurationTypes.find( id );
-        if( it != launchConfigurationTypes.end() ) 
+        if( it != launchConfigurationTypes.end() )
         {
             return it.value();
         } else
@@ -284,7 +284,7 @@ public:
             kWarning() << "couldn't find type for id:" << id << ". Known types:" << launchConfigurationTypes.keys();
         }
         return 0;
-        
+
     }
 
 };
@@ -379,9 +379,9 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     kDebug() << "mode:" << runMode;
     QString launcherId = run->launcherForMode( runMode );
     kDebug() << "launcher id:" << launcherId;
-    
+
     ILauncher* launcher = run->type()->launcherForId( launcherId );
-    
+
     if( !launcher ) {
         kWarning() << i18n("Launcher could not be found for the name '%1'. Check the launch configuration.", launcherId );
         return 0;
@@ -414,7 +414,7 @@ void RunController::setupActions()
     d->runAction->setWhatsThis(i18n("<b>Execute Launch</b><p>Executes the target or the program specified in currently active launch configuration.</p>"));
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
-    
+
     d->dbgAction = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug Launch' used in the toolbar", "Debug") );
@@ -423,7 +423,7 @@ void RunController::setupActions()
     d->dbgAction->setWhatsThis(i18n("<b>Debug Launch</b><p>Executes the target or the program specified in currently active launch configuration inside a Debugger.</p>"));
     ac->addAction("run_debug", d->dbgAction);
     connect(d->dbgAction, SIGNAL(triggered(bool)), this, SLOT(slotDebug()));
-    
+
     d->profileAction = new KAction( KIcon(""), i18n("Profile Launch"), this);
     d->profileAction->setToolTip(i18n("Profile current Launch"));
     d->profileAction->setStatusTip(i18n("Profile current Launch"));
@@ -645,7 +645,7 @@ void RunController::removeConfigurationType( LaunchConfigurationType* type )
 {
     foreach( LaunchConfiguration* l, d->launchConfigurations )
     {
-        if( l->type() == type ) 
+        if( l->type() == type )
         {
             d->launchConfigurations.removeAll( l );
             delete l;
@@ -654,7 +654,7 @@ void RunController::removeConfigurationType( LaunchConfigurationType* type )
     d->launchConfigurationTypes.remove( type->id() );
 }
 
-void KDevelop::RunController::addLaunchMode(KDevelop::ILaunchMode* mode) 
+void KDevelop::RunController::addLaunchMode(KDevelop::ILaunchMode* mode)
 {
     if( !d->launchModes.contains( mode->id() ) )
     {
@@ -672,10 +672,10 @@ void KDevelop::RunController::removeLaunchMode(KDevelop::ILaunchMode* mode)
     d->launchModes.remove( mode->id() );
 }
 
-KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& id) const 
+KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& id) const
 {
     QMap<QString,ILaunchMode*>::iterator it = d->launchModes.find( id );
-    if( it != d->launchModes.end() ) 
+    if( it != d->launchModes.end() )
     {
         return it.value();
     }
@@ -684,7 +684,7 @@ KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& i
 
 void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfiguration* l)
 {
-    if( !d->launchConfigurations.contains( l ) ) 
+    if( !d->launchConfigurations.contains( l ) )
     {
         d->addLaunchAction( l );
         d->launchConfigurations << l;
@@ -697,7 +697,7 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
             }
         }
         connect( l, SIGNAL(nameChanged(LaunchConfiguration*)), SLOT(launchChanged(LaunchConfiguration*)) );
-    }    
+    }
 }
 
 void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfiguration* l)
@@ -729,9 +729,9 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
     }
 
     d->launchConfigurations.removeAll( l );
-    
+
     d->enableLaunchActions();
-    
+
     delete l;
 }
 
@@ -757,19 +757,19 @@ void RunController::setDefaultLaunch(ILaunchConfiguration* l)
     }
 }
 
-ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigurationType* type, 
-                                                                 const QPair<QString,QString>& launcher, 
+ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigurationType* type,
+                                                                 const QPair<QString,QString>& launcher,
                                                                  IProject* project, const QString& name )
 {
     KConfigGroup launchGroup;
     if( project )
     {
         launchGroup = project->projectConfiguration()->group( RunController::LaunchConfigurationsGroup );
-        
-    } else 
+
+    } else
     {
         launchGroup = Core::self()->activeSession()->config()->group( RunController::LaunchConfigurationsGroup );
-        
+
     }
     QStringList configs = launchGroup.readEntry( RunController::LaunchConfigurationsListEntry, QStringList() );
     uint num = 0;
@@ -812,7 +812,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
     ContextMenuExtension ext;
     if( ctx->type() == Context::ProjectItemContext ) {
         KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>( ctx );
-        if( prjctx->items().count() == 1 ) 
+        if( prjctx->items().count() == 1 )
         {
             ProjectBaseItem* itm = prjctx->items().at( 0 );
             int i = 0;
