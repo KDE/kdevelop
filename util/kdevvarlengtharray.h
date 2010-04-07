@@ -178,9 +178,11 @@ public:
 
     ///Returns whether the given item is contained in this array
     bool contains(const T& value) const {
-      for(int a = 0; a < s; ++a)
-          if(ptr[a] == value)
-          return true;
+      for(int a = 0; a < s; ++a) {
+          if(ptr[a] == value) {
+            return true;
+          }
+      }
 
       return false;
     }
@@ -204,15 +206,15 @@ public:
         resize(s-1);
     }
 
-    // Removes exactly one occurrence of the given value from the array. Returns false if none was found.
+    /// Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     bool removeOne(const T& value) {
-    for(int a = 0; a < s; ++a) {
-        if(ptr[a] == value) {
-        erase(a);
-        return true;
+        for(int a = 0; a < s; ++a) {
+            if(ptr[a] == value) {
+                erase(a);
+                return true;
+            }
         }
-    }
-    return false;
+        return false;
     }
 
     T& back() {
