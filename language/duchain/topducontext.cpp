@@ -40,7 +40,6 @@
 #include "aliasdeclaration.h"
 #include "abstractfunctiondeclaration.h"
 #include "uses.h"
-#include "arrayhelpers.h"
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"

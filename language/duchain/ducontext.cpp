@@ -43,7 +43,6 @@
 #include "indexedstring.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
-#include "arrayhelpers.h"
 #include "importers.h"
 
 ///It is fine to use one global static mutex here
@@ -704,7 +703,7 @@ QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifi
 
   DeclarationList ret;
   findLocalDeclarationsInternal(identifier, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags);
-  return arrayToList(ret);
+  return ret.toList();
 }
 
 bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* context) {
@@ -924,7 +923,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
 
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, dataType, ret, topContext ? topContext : this->topContext(), flags, 0);
 
-  return arrayToList(ret);
+  return ret.toList();
 }
 
 bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*/ ) const
@@ -1262,7 +1261,7 @@ QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, co
   SearchItem::PtrList identifiers;
   identifiers << SearchItem::Ptr(new SearchItem(QualifiedIdentifier(identifier)));
   findDeclarationsInternal(identifiers, position.isValid() ? position : range().end, AbstractType::Ptr(), ret, topContext ? topContext : this->topContext(), flags, 0);
-  return arrayToList(ret);
+  return ret.toList();
 }
 
 void DUContext::deleteUse(int index)

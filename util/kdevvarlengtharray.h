@@ -89,6 +89,19 @@ class KDevVarLengthArray : public QVector<T> {
             append(buf[a]);
         }
     }
+
+    QVector<T> toVector() const {
+        return *this;
+    }
+    
+    QList<T> toList() const {
+        QList<T> ret;
+        for (int a = 0; a < this->size(); ++a) {
+            ret << this->at(a);
+        }
+
+        return ret;
+    }
 };
 #else
 
@@ -226,6 +239,25 @@ public:
         resize(s-1);
     }
 
+    /// @return QList of items in this array
+    QList<T> toList() const {
+        QList<T> ret;
+        for(int a = 0; a < s; ++a) {
+            ret << ptr[a];
+        }
+
+        return ret;
+    }
+
+    /// @return QVector of items in this array
+    QVector<T> toVector() const {
+        QVector<T> ret;
+        for(int a = 0; a < s; ++a) {
+            ret << ptr[a];
+        }
+
+        return ret;
+    }
     //END custom additions to QVarLengthArray
 
 private:

@@ -207,7 +207,6 @@ install(FILES
     duchain/codemodel.h
     duchain/ducontext.h
     duchain/ducontextdata.h
-    duchain/arrayhelpers.h
     duchain/topducontext.h
     duchain/topducontextutils.h
     duchain/topducontextdata.h

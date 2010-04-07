@@ -23,7 +23,6 @@
 #include "duchain.h"
 #include "declaration.h"
 #include "persistentsymboltable.h"
-#include "arrayhelpers.h"
 #include "instantiationinformation.h"
 #include <util/convenientfreelist.h>
 
