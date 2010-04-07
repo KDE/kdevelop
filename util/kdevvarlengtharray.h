@@ -93,15 +93,6 @@ class KDevVarLengthArray : public QVector<T> {
     QVector<T> toVector() const {
         return *this;
     }
-    
-    QList<T> toList() const {
-        QList<T> ret;
-        for (int a = 0; a < this->size(); ++a) {
-            ret << this->at(a);
-        }
-
-        return ret;
-    }
 };
 #else
 
