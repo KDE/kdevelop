@@ -143,17 +143,6 @@ void removeFromVector(QVector<T>& vec, const T& t) {
 
 QMutex importStructureMutex(QMutex::Recursive);
 
-template<class Container>
-bool removeOneImport(Container& container, const DUContext* value) {
-  for(int a = 0; a < container.size(); ++a) {
-    if(container[a].context() == value) {
-      removeFromArray(container, a);
-      return true;
-    }
-  }
-  return false;
-}
-
 //Contains data that is not shared among top-contexts that share their duchain entries
 class TopDUContextLocalPrivate {
 public:

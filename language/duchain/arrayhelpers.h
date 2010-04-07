@@ -45,24 +45,5 @@ QList<T> arrayToVector(const KDevVarLengthArray<T, num>& array) {
   return ret;
 }
 
-template<class Container>
-void removeFromArray(Container& array, int position) {
-  Q_ASSERT(position >= 0 && position < array.size());
-  for(int a = position; a < array.size()-1; ++a) {
-    array[a] = array[a+1];
-  }
-  array.resize(array.size()-1);
-}
-
-template<class Container, class Type>
-bool removeOne(Container& container, const Type& value) {
-  for(int a = 0; a < container.size(); ++a) {
-    if(container[a] == value) {
-      removeFromArray(container, a);
-      return true;
-    }
-  }
-  return false;
-}
 }
 #endif

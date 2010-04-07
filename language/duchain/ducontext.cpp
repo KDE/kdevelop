@@ -411,7 +411,7 @@ bool DUContextDynamicData::removeDeclaration(Declaration* declaration)
   if(!m_topContext->deleting()) //We can save a lot of time by just not caring about the hash while deleting
     removeDeclarationFromHash(declaration->identifier(), declaration);
 
-  if( removeOne(m_context->d_func_dynamic()->m_localDeclarationsList(), LocalIndexedDeclaration(declaration)) ) {
+  if( m_context->d_func_dynamic()->m_localDeclarationsList().removeOne(LocalIndexedDeclaration(declaration)) ) {
     //DUChain::contextChanged(m_context, DUChainObserver::Removal, DUChainObserver::LocalDeclarations, declaration);
     return true;
   }else {
@@ -475,7 +475,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
 bool DUContextDynamicData::removeChildContext( DUContext* context ) {
 //   ENSURE_CAN_WRITE
 
-  if( removeOne(m_context->d_func_dynamic()->m_childContextsList(), LocalIndexedDUContext(context)) )
+  if( m_context->d_func_dynamic()->m_childContextsList().removeOne(LocalIndexedDUContext(context)) )
     return true;
   else
     return false;
@@ -509,7 +509,7 @@ void DUContextDynamicData::removeImportedChildContext( DUContext * context )
   DUContext::Import import(m_context, context);
   
   if(import.isDirect()) {
-    removeOne(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context));
+    m_context->d_func_dynamic()->m_importersList().removeOne(IndexedDUContext(context));
   }else{
     //Indirect importers are registered separately
     Importers::self().removeImporter(import.indirectDeclarationId(), IndexedDUContext(context));
@@ -981,7 +981,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a] == import) {
-      removeFromArray(d->m_importedContextsList(), a);
+      d->m_importedContextsList().remove(a);
       break;
     }
   }
@@ -1269,7 +1269,7 @@ void DUContext::deleteUse(int index)
 {
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
-  removeFromArray(d->m_usesList(), index);
+  d->m_usesList().remove(index);
 
   if(!m_dynamicData->m_rangesForUses.isEmpty()) {
     if(m_dynamicData->m_rangesForUses[index]) {

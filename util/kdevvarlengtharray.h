@@ -71,11 +71,8 @@ class KDevVarLengthArray : public QVector<T> {
     int i = this->indexOf(value);
     if(i == -1)
     return false;
-    erase(i);
+    this->remove(i);
     return true;
-    }
-    void erase(int pos) {
-    this->remove(pos);
     }
     void append(const T& item) {
         QVector<T>::append(item);
@@ -195,7 +192,7 @@ public:
     }
 
     ///Removes the given position from the array, moving all items behind it one back.
-    void erase(int position) {
+    void remove(int position) {
         Q_ASSERT(position >= 0 && position < s);
         for(int a = position; a < s-1; ++a) {
             ptr[a] = ptr[a+1];
@@ -207,7 +204,7 @@ public:
     bool removeOne(const T& value) {
         for(int a = 0; a < s; ++a) {
             if(ptr[a] == value) {
-                erase(a);
+                remove(a);
                 return true;
             }
         }
