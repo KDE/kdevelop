@@ -387,7 +387,7 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
     if(child == newDeclaration)
       return;
     if (start > child->range().start) {
-      insertToArray(m_context->d_func_dynamic()->m_localDeclarationsList(), newDeclaration, i+1);
+      m_context->d_func_dynamic()->m_localDeclarationsList().insert(i+1, newDeclaration);
       if(!m_context->d_func()->m_localDeclarations()[i+1].data(m_topContext))
         kFatal() << "Inserted a not addressable declaration";
 
@@ -396,7 +396,7 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
     }
   }
   if( !inserted ) //We haven't found any child that is before this one, so prepend it
-    insertToArray(m_context->d_func_dynamic()->m_localDeclarationsList(), newDeclaration, 0);
+    m_context->d_func_dynamic()->m_localDeclarationsList().insert(0, newDeclaration);
 
     addDeclarationToHash(newDeclaration->identifier(), newDeclaration);
   }
@@ -450,7 +450,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
     if (context == child)
       return;
     if (context->range().start >= child->range().start) {
-      insertToArray(m_context->d_func_dynamic()->m_childContextsList(), indexed, i+1);
+      m_context->d_func_dynamic()->m_childContextsList().insert(i+1, indexed);
       context->m_dynamicData->m_parentContext = m_context;
       inserted = true;
       break;
@@ -458,7 +458,7 @@ void DUContextDynamicData::addChildContext( DUContext * context )
   }
 
   if( !inserted ) {
-    m_context->d_func_dynamic()->m_childContextsList().insert(indexed, 0);
+    m_context->d_func_dynamic()->m_childContextsList().insert(0, indexed);
     context->m_dynamicData->m_parentContext = m_context;
   }
 
@@ -1434,7 +1434,7 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopD
       }
 
       newItem->isExplicitlyGlobal = true;
-      insertToArray(identifiers, newItem, 0);
+      identifiers.insert(0, newItem);
     }
   }
 }
@@ -1484,7 +1484,7 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
     */
   }
 
-  insertToArray(d->m_usesList(), use, insertBefore);
+  d->m_usesList().insert(insertBefore, use);
   if(smartRange) {
     ///When this assertion triggers, then the updated context probably was not smart-converted before processing. @see SmartConverter
     Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d->m_usesSize()-1);

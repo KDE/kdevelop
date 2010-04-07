@@ -938,7 +938,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
         KDevVarLengthArray<IndexedTopDUContext> usingFiles = DUChain::uses()->uses(decl->id());
         
         if(DUChainUtils::contextHasUse(decl->topContext(), decl) && usingFiles.indexOf(decl->topContext()) == -1)
-          usingFiles.insert(decl->topContext(), 0);
+          usingFiles.insert(0, decl->topContext());
         
         if(decl->range().contains(c) && decl->url() == chosen->url()) {
             //The cursor is directly on the declaration. Jump to the first or last use.

@@ -45,16 +45,6 @@ QList<T> arrayToVector(const KDevVarLengthArray<T, num>& array) {
   return ret;
 }
 
-template<class Container, class Type>
-void insertToArray(Container& array, const Type& item, int position) {
-  Q_ASSERT(position >= 0 && position <= array.size());
-  array.resize(array.size()+1);
-  for(int a = array.size()-1; a > position; --a) {
-    array[a] = array[a-1];
-  }
-  array[position] = item;
-}
-
 template<class Container>
 void removeFromArray(Container& array, int position) {
   Q_ASSERT(position >= 0 && position < array.size());

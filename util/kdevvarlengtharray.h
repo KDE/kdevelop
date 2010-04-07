@@ -190,7 +190,7 @@ public:
     }
 
     ///Inserts the given item at the given position, moving all items behind the position back
-    void insert(const T& item, int position) {
+    void insert(int position, const T& item) {
         Q_ASSERT(position >= 0 && position <= size());
         resize(s+1);
         for(int a = s-1; a > position; --a) {
