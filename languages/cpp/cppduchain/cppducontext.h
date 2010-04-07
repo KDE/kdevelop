@@ -58,7 +58,6 @@ While construction:
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/arrayhelpers.h>
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/namespacealiasdeclaration.h>
 #include "typeutils.h"

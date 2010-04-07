@@ -22,7 +22,6 @@
 #include <language/editor/modificationrevision.h>
 #include "parser/rpp/macrorepository.h"
 #include "cppdebughelper.h"
-#include <language/duchain/arrayhelpers.h>
 #include <language/duchain/duchainregister.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>

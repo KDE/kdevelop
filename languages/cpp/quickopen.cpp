@@ -38,7 +38,6 @@
 #include "codecompletion/model.h"
 #include "cpplanguagesupport.h"
 #include <interfaces/icore.h>
-#include <language/duchain/arrayhelpers.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguage.h>
 #include "cpputils.h"
