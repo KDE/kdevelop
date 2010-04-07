@@ -43,7 +43,10 @@ namespace KDevelop {
 
 // Foreach macro that takes a container and a function-name, and will iterate through the vector returned by that function, using the length returned by the function-name with "Size" appended.
 //This might be a little slow
-#define FOREACH_FUNCTION(item, container) for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) for(item(container()[a]); mustDo; mustDo = 0)
+#define FOREACH_FUNCTION(item, container) \
+      for(uint a = 0, mustDo = 1; a < container ## Size(); ++a) \
+        if((mustDo == 0 || mustDo == 1) && (mustDo = 2)) \
+          for(item(container()[a]); mustDo; mustDo = 0)
 
 #define START_APPENDED_LISTS(selftype) typedef selftype SelfType;
 
@@ -59,26 +62,29 @@ namespace KDevelop {
 
 ///@todo Make these things a bit faster(less recursion)
 
-#define APPENDED_LIST_FIRST(type, name)        APPENDED_LIST_COMMON(type, name) \
-                                               const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) ); } \
-                                               unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize(); } \
-                                               template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
-                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); }
-                                                                                              
-#define APPENDED_LIST(type, name, predecessor) APPENDED_LIST_COMMON(type, name) \
-                                               const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) + predecessor ## OffsetBehind() ); } \
-                                               unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize() + predecessor ## OffsetBehind(); } \
-                                               template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
-                                               template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); predecessor ## CopyAllFrom(); }
+#define APPENDED_LIST_FIRST(type, name) \
+      APPENDED_LIST_COMMON(type, name) \
+      const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) ); } \
+      unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize(); } \
+      template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
+      template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); }
 
-#define END_APPENDED_LISTS(predecessor) /* Returns the size of the object containing the appended lists, including them */ \
-                                      unsigned int completeSize() const { return sizeof(SelfType) + predecessor ## OffsetBehind(); } \
-                                      unsigned int lastOffsetBehind() const { return predecessor ## OffsetBehind(); } \
-                                     /* Compares all appended lists and returns true if they are equal */                \
-                                      template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
-                                      template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); }
+#define APPENDED_LIST(type, name, predecessor) \
+      APPENDED_LIST_COMMON(type, name) \
+      const type* name() const { return name ## List.data( ((char*)this) + sizeof(SelfType) + predecessor ## OffsetBehind() ); } \
+      unsigned int name ## OffsetBehind() const { return name ## List.dynamicDataSize() + predecessor ## OffsetBehind(); } \
+      template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \
+      template<class T> void name ## CopyAllFrom( const T& rhs ) { name ## List.copy(const_cast<type*>(name()), rhs.name(), rhs.name ## Size()); predecessor ## CopyAllFrom(); }
 
-  template<bool dynamic, class T> 
+#define END_APPENDED_LISTS(predecessor) \
+      /* Returns the size of the object containing the appended lists, including them */ \
+      unsigned int completeSize() const { return sizeof(SelfType) + predecessor ## OffsetBehind(); } \
+      unsigned int lastOffsetBehind() const { return predecessor ## OffsetBehind(); } \
+      /* Compares all appended lists and returns true if they are equal */                \
+      template<class T> bool listsEqual(const T& rhs) const { return predecessor ## ListChainEquals(rhs); } \
+      template<class T> void copyListsFrom(const T& rhs) { return predecessor ## CopyAllFrom(rhs); }
+
+template<bool dynamic, class T>
 class AppendedList : public KDevVarLengthArray<T, 10> {
   public: 
     unsigned int dynamicDataSize() const {
