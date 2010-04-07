@@ -84,7 +84,7 @@ QList< CMakeProjectVisitor::IntPair > CMakeProjectVisitor::parseArgument(const Q
     bool gotDollar=false;
     for(int i=exp.indexOf('$'); i<exp.size(); i++)
     {
-        switch(exp[i].toAscii())
+        switch(exp[i].unicode())
         {
             case '$':
                 gotDollar=true;
