@@ -177,45 +177,16 @@ public:
     //BEGIN custom additions to QVarLengthArray
 
     ///Returns whether the given item is contained in this array
-    bool contains(const T& value) const {
-      for(int a = 0; a < s; ++a) {
-          if(ptr[a] == value) {
-            return true;
-          }
-      }
-
-      return false;
-    }
+    bool contains(const T& value) const;
 
     ///Inserts the given item at the given position, moving all items behind the position back
-    void insert(int position, const T& item) {
-        Q_ASSERT(position >= 0 && position <= size());
-        resize(s+1);
-        for(int a = s-1; a > position; --a) {
-            ptr[a] = ptr[a-1];
-        }
-        ptr[position] = item;
-    }
+    void insert(int position, const T& item);
 
     ///Removes the given position from the array, moving all items behind it one back.
-    void remove(int position) {
-        Q_ASSERT(position >= 0 && position < s);
-        for(int a = position; a < s-1; ++a) {
-            ptr[a] = ptr[a+1];
-        }
-        resize(s-1);
-    }
+    void remove(int position);
 
     /// Removes exactly one occurrence of the given value from the array. Returns false if none was found.
-    bool removeOne(const T& value) {
-        for(int a = 0; a < s; ++a) {
-            if(ptr[a] == value) {
-                remove(a);
-                return true;
-            }
-        }
-        return false;
-    }
+    bool removeOne(const T& value);
 
     T& back() {
         return ptr[s-1];
@@ -231,24 +202,10 @@ public:
     }
 
     /// @return QList of items in this array
-    QList<T> toList() const {
-        QList<T> ret;
-        for(int a = 0; a < s; ++a) {
-            ret << ptr[a];
-        }
-
-        return ret;
-    }
+    QList<T> toList() const;
 
     /// @return QVector of items in this array
-    QVector<T> toVector() const {
-        QVector<T> ret;
-        for(int a = 0; a < s; ++a) {
-            ret << ptr[a];
-        }
-
-        return ret;
-    }
+    QVector<T> toVector() const;
     //END custom additions to QVarLengthArray
 
 private:
@@ -361,6 +318,78 @@ Q_OUTOFLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::realloc(int asize, in
     if (oldPtr != reinterpret_cast<T *>(array) && oldPtr != ptr)
         qFree(oldPtr);
 }
+
+//BEGIN custom additions to QVarLengthArray
+
+template <class T, int Prealloc>
+Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::contains(const T& value) const
+{
+    for(int a = 0; a < s; ++a) {
+        if(ptr[a] == value) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+template <class T, int Prealloc>
+Q_INLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::insert(int position, const T& item)
+{
+    Q_ASSERT(position >= 0 && position <= size());
+    resize(s+1);
+    for(int a = s-1; a > position; --a) {
+        ptr[a] = ptr[a-1];
+    }
+    ptr[position] = item;
+}
+
+template <class T, int Prealloc>
+Q_INLINE_TEMPLATE void KDevVarLengthArray<T, Prealloc>::remove(int position)
+{
+    Q_ASSERT(position >= 0 && position < s);
+    for(int a = position; a < s-1; ++a) {
+        ptr[a] = ptr[a+1];
+    }
+    resize(s-1);
+}
+
+template <class T, int Prealloc>
+Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::removeOne(const T& value)
+{
+    for(int a = 0; a < s; ++a) {
+        if(ptr[a] == value) {
+            remove(a);
+            return true;
+        }
+    }
+    return false;
+}
+
+template <class T, int Prealloc>
+Q_OUTOFLINE_TEMPLATE QList< T > KDevVarLengthArray<T, Prealloc>::toList() const
+{
+    QList<T> ret;
+    for(int a = 0; a < s; ++a) {
+        ret << ptr[a];
+    }
+
+    return ret;
+}
+
+template <class T, int Prealloc>
+Q_OUTOFLINE_TEMPLATE QVector< T > KDevVarLengthArray<T, Prealloc>::toVector() const
+{
+    QVector<T> ret;
+    for(int a = 0; a < s; ++a) {
+        ret << ptr[a];
+    }
+
+    return ret;
+}
+
+//END custom additions to QVarLengthArray
+
 #endif
 QT_END_NAMESPACE
 
