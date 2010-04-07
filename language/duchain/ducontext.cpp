@@ -718,7 +718,6 @@ bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* conte
 
 void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
 {
-  IndexedIdentifier indexedIdentifier(identifier);
   {
      QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
@@ -800,6 +799,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
      }else {
        //Iterate through all declarations
       DUContextDynamicData::VisibleDeclarationIterator it(m_dynamicData);
+      IndexedIdentifier indexedIdentifier(identifier);
       while(it) {
         Declaration* declaration = *it;
         if(declaration->indexedIdentifier() == indexedIdentifier) {
