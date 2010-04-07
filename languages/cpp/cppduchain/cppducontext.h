@@ -552,7 +552,7 @@ class CppDUContext : public BaseContext {
             newItem->addToEachNode(identifiers);
             
             if(!newItem->next.isEmpty()) //Can happen if the identifier was explicitly global
-              insertToArray(identifiers, newItem, 0);
+              identifiers.insert(0, newItem);
           }
         }
       }
