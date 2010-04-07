@@ -488,7 +488,7 @@ void DUContextDynamicData::addImportedChildContext( DUContext * context )
   
   if(import.isDirect()) {
     //Direct importers are registered directly within the data
-    if(arrayContains(m_context->d_func_dynamic()->m_importersList(), IndexedDUContext(context))) {
+    if(m_context->d_func_dynamic()->m_importersList().contains(IndexedDUContext(context))) {
       kDebug(9505) << m_context->scopeIdentifier(true).toString() << "importer added multiple times:" << context->scopeIdentifier(true).toString();
       return;
     }

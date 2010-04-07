@@ -46,14 +46,6 @@ QList<T> arrayToVector(const KDevVarLengthArray<T, num>& array) {
 }
 
 template<class Container, class Type>
-bool arrayContains(Container& container, const Type& value) {
-  for(int a = 0; a < container.size(); ++a)
-    if(container[a] == value)
-      return true;
-
-  return false;
-}
-template<class Container, class Type>
 void insertToArray(Container& array, const Type& item, int position) {
   Q_ASSERT(position >= 0 && position <= array.size());
   array.resize(array.size()+1);
