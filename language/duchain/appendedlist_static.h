@@ -50,7 +50,12 @@ namespace KDevelop {
 #define APPENDED_LIST_COMMON(type, name) \
       KDevelop::AppendedList<dynamic, type> name ## List; \
       unsigned int name ## Size() const { return name ## List.size(); } \
-      template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); if(size != rhs.name ## Size()) return false; for(uint a = 0; a < size; ++a) {if(!(name()[a] == rhs.name()[a])) return false;} return true; }
+      template<class T> bool name ## Equals(const T& rhs) const { \
+        unsigned int size = name ## Size(); \
+        if(size != rhs.name ## Size()) return false; \
+        for(uint a = 0; a < size; ++a) {if(!(name()[a] == rhs.name()[a])) return false;} \
+        return true; \
+      }
 
 ///@todo Make these things a bit faster(less recursion)
 
