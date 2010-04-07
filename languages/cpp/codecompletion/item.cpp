@@ -340,17 +340,16 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
         
         int bestQuality = 0;
         foreach(const IndexedType& type, currentMatchContext) {
-        
-        Cpp::TypeConversion conv(model->currentTopContext().data());
- 
-        AbstractType::Ptr ownType = effectiveType(dec);
-        
-        bool fromLValue = (bool)ownType.cast<ReferenceType>() || (!dynamic_cast<AbstractFunctionDeclaration*>(dec) && dec->kind() == Declaration::Instance);
-        
-        ///@todo fill the lvalue-ness correctly
-        int q = ( conv.implicitConversion( completionContext()->applyPointerConversionForMatching(ownType->indexed(), fromLValue), type, fromLValue )  * 10 ) / Cpp::MaximumConversionResult;
-        if(q > bestQuality)
-          bestQuality = q;
+          Cpp::TypeConversion conv(model->currentTopContext().data());
+  
+          AbstractType::Ptr ownType = effectiveType(dec);
+          
+          bool fromLValue = (bool)ownType.cast<ReferenceType>() || (!dynamic_cast<AbstractFunctionDeclaration*>(dec) && dec->kind() == Declaration::Instance);
+          
+          ///@todo fill the lvalue-ness correctly
+          int q = ( conv.implicitConversion( completionContext()->applyPointerConversionForMatching(ownType->indexed(), fromLValue), type, fromLValue )  * 10 ) / Cpp::MaximumConversionResult;
+          if(q > bestQuality)
+            bestQuality = q;
         }
         
         return QVariant(bestQuality);
@@ -606,10 +605,9 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
       }
       
       if( currentMatchContext.size() ) {
+        int bestQuality = 0;
         
-          int bestQuality = 0;
-          
-          foreach(const IndexedType& type, currentMatchContext) {
+        foreach(const IndexedType& type, currentMatchContext) {
           Cpp::TypeConversion conv(model->currentTopContext().data());
 
           ///@todo Think about lvalue-ness
