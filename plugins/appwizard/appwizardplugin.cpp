@@ -314,11 +314,11 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         kDebug() << "failed to open template archive";
         return QString();
     }
-    
+
     QString projectFileName = QDir::cleanPath( dest.toLocalFile() + '/' + info.name + ".kdev4" );
 
     kDebug() << "Returning" << projectFileName << QFileInfo( projectFileName ).exists() ;
-    
+
     if( ! QFileInfo( projectFileName ).exists() )
     {
         kDebug() << "creating .kdev4 file";
@@ -326,8 +326,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         KConfigGroup project = cfg->group( "Project" );
         project.writeEntry( "Name", info.name );
         QString manager = "KDevGenericManager";
-        
-        QDir d( dest.toLocalFile() ); 
+
+        QDir d( dest.toLocalFile() );
         foreach(const KPluginInfo& info, KDevelop::IPluginController::queryExtensionPlugins( "org.kdevelop.IProjectFileManager" ) )
         {
             QVariant filter = info.property("X-KDevelop-ProjectFilesFilter");
@@ -346,7 +346,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         KConfigGroup project2 = cfg->group( "Project" );
         kDebug() << "kdev4 file contents:" << project2.readEntry("Name", "") << project2.readEntry("Manager", "" );
     }
-    
+
     return projectFileName;
 }
 
