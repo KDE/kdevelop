@@ -66,11 +66,6 @@ QT_MODULE(Core)
 template<class T, int Prealloc = 256>
 class KDevVarLengthArray : public QVector<T> {
     public:
-    ///Inserts the given item at the given position, moving all items behind the position back
-    void insert(const T& item, int position) {
-    QVector<T>::insert(position, item);
-    }
-
     // Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     bool removeOne(const T& value) {
     int i = this->indexOf(value);
