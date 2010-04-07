@@ -1,11 +1,11 @@
 #include <QtGui/QApplication>
-#include "%{APPNAME}.h"
+#include "%{APPNAMEID}.h"
 
 
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    %{APPNAME} foo;
+    %{APPNAMEID} foo;
     foo.show();
     return app.exec();
 }

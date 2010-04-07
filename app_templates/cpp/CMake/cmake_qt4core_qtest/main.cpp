@@ -1,10 +1,10 @@
 #include <QCoreApplication>
-#include "%{APPNAME}.h"
+#include "%{APPNAMEID}.h"
 
 
 int main(int argc, char** argv)
 {
     QCoreApplication app(argc, argv);
-    %{APPNAME} foo;
+    %{APPNAMEID} foo;
     return app.exec();
 }
