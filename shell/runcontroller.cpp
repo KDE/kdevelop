@@ -331,6 +331,7 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 void RunController::cleanup()
 {
     stopAllProcesses();
+    d->saveCurrentLaunchAction();
 }
 
 void RunController::initialize()
