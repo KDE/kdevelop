@@ -164,9 +164,10 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     //Forward all arguments, except -s as the internal app doesn't setup -s or --sessions arguments
     QList<QByteArray> kdevelopBinArgs;
     for(int a = 1; a < argvOrig.count(); ++a) {
-        if( argvOrig[a] =="-s" || argvOrig[a] == "--cs" ) {
+        // note: KCmdLineArgs does not care whether an option gets passed as with one or two dashes
+        if( argvOrig[a] =="-s" || argvOrig[a] == "--s" || argvOrig[a] == "--cs" || argvOrig[a] == "-cs" ) {
             ++a;
-        } else if ( argvOrig[a] != "--sessions" ) {
+        } else if ( argvOrig[a] != "--sessions" && argvOrig[a] != "-sessions" ) {
             kdevelopBinArgs << argvOrig[a];
         }
     }
