@@ -419,7 +419,7 @@ const QList<IndexedString> EnvironmentFile::includePaths() const {
   if(d_func()->m_includePaths) {
     const IncludePathListItem* item = includePathsRepository.itemFromIndex(d_func()->m_includePaths);
     
-    FOREACH_FUNCTION(IndexedString include, item->m_includePaths)
+    FOREACH_FUNCTION(const IndexedString& include, item->m_includePaths)
       ret << include;
   }
   return ret;

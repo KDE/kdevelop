@@ -504,7 +504,7 @@ class CppDUContext : public BaseContext {
         }
         
         id.clearTemplateIdentifiers();
-        FOREACH_FUNCTION(IndexedType arg, templateArguments.templateParameters) {
+        FOREACH_FUNCTION(const IndexedType& arg, templateArguments.templateParameters) {
           AbstractType::Ptr type(arg.abstractType());
           IdentifiedType* identified = dynamic_cast<IdentifiedType*>(type.unsafeData());
           if(identified)

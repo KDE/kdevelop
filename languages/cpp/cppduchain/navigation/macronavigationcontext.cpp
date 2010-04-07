@@ -58,7 +58,7 @@ QString MacroNavigationContext::html(bool shorten)
     args = "(";
 
     bool first = true;
-    FOREACH_CUSTOM(IndexedString b, m_macro->formals(), m_macro->formalsSize()) {
+    FOREACH_CUSTOM(const IndexedString& b, m_macro->formals(), m_macro->formalsSize()) {
       if(!first)
         args += ", ";
       first = false;

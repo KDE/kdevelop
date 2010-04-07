@@ -355,7 +355,7 @@ void updateIdentifierTemplateParameters( Identifier& identifier, Declaration* ba
     InstantiationInformation specializedWith(tempDecl->specializedWith().information());
     if(specializedWith.templateParametersSize()) {
       //Use the information from the specialization-information to build the template-identifiers
-      FOREACH_FUNCTION(IndexedType indexedType, specializedWith.templateParameters) {
+      FOREACH_FUNCTION(const IndexedType& indexedType, specializedWith.templateParameters) {
         AbstractType::Ptr type = indexedType.abstractType();
         if(type)
           identifier.appendTemplateIdentifier( IndexedTypeIdentifier(type->toString()) );
@@ -626,7 +626,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
               //Replace the delayed types in the specialization-information with their real types
               InstantiationInformation newSpecializedWith(oldSpecializedWith);
               newSpecializedWith.templateParametersList().clear();
-              FOREACH_FUNCTION(IndexedType type, oldSpecializedWith.templateParameters)
+              FOREACH_FUNCTION(const IndexedType& type, oldSpecializedWith.templateParameters)
                 newSpecializedWith.addTemplateParameter(resolveDelayedTypes(type.abstractType(), instantiatedDeclaration->internalContext() ? instantiatedDeclaration->internalContext() : parentContext, source ));
               instantiatedTemplate->setSpecializedWith(newSpecializedWith.indexed());
               globalTemplateArguments = newSpecializedWith;
@@ -960,7 +960,7 @@ Declaration* TemplateDeclaration::instantiate( const InstantiationInformation& _
   TemplateDeclaration* instantiatedSpecialization =  0;
   uint specializationMatchQuality = 0;
   //Check whether there is a specialization that matches the template parameters
-  FOREACH_FUNCTION(IndexedDeclaration decl, specializations) {
+  FOREACH_FUNCTION(const IndexedDeclaration& decl, specializations) {
     //We only use visible specializations here
     
     if(source->recursiveImportIndices().contains(decl.indexedTopContext())) {
