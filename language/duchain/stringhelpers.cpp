@@ -146,7 +146,7 @@ QString reverse( const QString& str ) {
   QString ret;
   int len = str.length();
   for( int a = len-1; a >= 0; --a ) {
-    switch(str[a].toAscii()) {
+    switch(str[a].unicode()) {
     case '(':
       ret += ')';
       continue;
