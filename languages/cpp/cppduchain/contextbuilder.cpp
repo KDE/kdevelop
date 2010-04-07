@@ -1056,12 +1056,12 @@ void ContextBuilder::addImportedContexts()
   if (compilingContexts() && !m_importedParentContexts.isEmpty()) {
     DUChainWriteLocker lock(DUChain::lock());
 
-    foreach (DUContext::Import imported, m_importedParentContexts)
+    foreach (const DUContext::Import& imported, m_importedParentContexts)
       if(DUContext* imp = imported.context(topContext()))
         addImportedParentContextSafely(currentContext(), imp);
 
     //Move on the internal-context of Declarations/Definitions
-    foreach( DUContext::Import importedContext, m_importedParentContexts )  {
+    foreach( const DUContext::Import& importedContext, m_importedParentContexts )  {
       if( DUContext* imp = importedContext.context(topContext()) )
         if( imp->type() == DUContext::Template || imp->type() == DUContext::Function )
           if( imp->owner() && imp->owner()->internalContext() == imp )

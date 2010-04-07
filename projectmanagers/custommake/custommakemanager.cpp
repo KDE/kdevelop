@@ -188,7 +188,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
 //     if( makefileUrl.isValid() )
 //     {
 //         QStringList targetlist = this->parseCustomMakeFile( makefileUrl );
-//         foreach( QString target, targetlist )
+//         foreach(const  QString& target, targetlist )
 //         {
 //             new CustomMakeTargetItem( item->project(), target, item );
 // //             d->m_testItems.append( targetItem ); // debug

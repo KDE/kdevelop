@@ -92,7 +92,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
             if(problem->type->isFunction) {
               QList<Cpp::SourceCodeInsertion::SignatureItem> signature;
               int num = 1;
-              foreach(OverloadResolver::Parameter arg, problem->type->arguments) {
+              foreach(const OverloadResolver::Parameter& arg, problem->type->arguments) {
                 Cpp::SourceCodeInsertion::SignatureItem item;
                 item.type = type(arg.type);
                 item.name = QString("arg%1").arg(num);
@@ -166,7 +166,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           if(problem->type->isFunction) {
             QString ret = "(";
             bool first = true;
-            foreach(OverloadResolver::Parameter arg, problem->type->arguments) {
+            foreach(const OverloadResolver::Parameter& arg, problem->type->arguments) {
               if(!first)
                 ret += ", ";
               else

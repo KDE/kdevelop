@@ -801,7 +801,7 @@ void CPPInternalParseJob::run()
 
     if(!doNotChangeDUChain) {
       DUChainReadLocker lock(DUChain::lock());
-      foreach(LineContextPair import, parentJob()->includedFiles()) {
+      foreach(const LineContextPair& import, parentJob()->includedFiles()) {
         if(import.temporary)
           continue;
         LineContextPair context = contentFromProxy(import);
@@ -932,13 +932,13 @@ void CPPInternalParseJob::run()
 
 void CPPParseJob::processDelayedImports() {
   if(!m_delayedImports.isEmpty()) {
-    foreach(LineJobPair job, m_delayedImports)
+    foreach(const LineJobPair& job, m_delayedImports)
       job.first->addDelayedImporter(LineContextPair(m_parseJob->proxyContext ? m_parseJob->proxyContext : m_parseJob->contentContext, job.second));
     m_delayedImports.clear();
   }
   if(!m_delayedImporters.isEmpty()) {
     DUChainWriteLocker l(DUChain::lock());
-    foreach(LineContextPair context, m_delayedImporters) {
+    foreach(const LineContextPair& context, m_delayedImporters) {
       Q_ASSERT(context.context->parsingEnvironmentFile());
       if(context.context->parsingEnvironmentFile()->isProxyContext()) {
         Q_ASSERT(m_parseJob->proxyContext);

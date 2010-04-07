@@ -354,7 +354,7 @@ CustomIncludePathsSettings CustomIncludePathsSettings::read(QString storagePath)
       
       QString read = QString::fromLocal8Bit(f.readAll());
       QStringList lines = read.split('\n', QString::SkipEmptyParts);
-      foreach(QString line, lines) {
+      foreach(const QString& line, lines) {
         if(!line.isEmpty()) {
           QString textLine = line;
           if(textLine.startsWith("RESOLVE:")) {
@@ -403,7 +403,7 @@ bool CppTools::CustomIncludePathsSettings::write() {
       f.write(buildDir.toLocal8Bit());
       f.write("\n");
     }
-    foreach(QString customPath, paths) {
+    foreach(const QString& customPath, paths) {
       f.write(customPath.toLocal8Bit());
       f.write("\n");
     }

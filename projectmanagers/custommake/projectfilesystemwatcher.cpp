@@ -230,7 +230,7 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
 //                 if( diskFile.endsWith( "/Makefile" ) ) // TODO portable, setting aware
 //                 {
 //                     QStringList newTargets = parseCustomMakeFile( KUrl(diskFile) );
-//                     Q_FOREACH( QString newTarget, newTargets )
+//                     Q_FOREACH( const QString& newTarget, newTargets )
 //                     {
 //                         new CustomMakeTargetItem( folderItem->project(), newTarget, folderItem );
 //                     }

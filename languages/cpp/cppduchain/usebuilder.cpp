@@ -128,7 +128,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
   }
   ~UseExpressionVisitor() {
     typedef KSharedPtr<KDevelop::Problem> P;
-    foreach(P problem, realProblems())
+    foreach(const P& problem, realProblems())
       m_builder->addProblem(problem);
   }
   private:

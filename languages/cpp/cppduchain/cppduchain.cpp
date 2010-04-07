@@ -238,7 +238,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
   
   if(context->type() == DUContext::Other) {
     //Jump from code-context to function-context
-    foreach(DUContext::Import import, context->importedParentContexts()) {
+    foreach(const DUContext::Import& import, context->importedParentContexts()) {
       if(DUContext* i = import.context(context->topContext())) {
         if(i->type() == DUContext::Function) {
           context = i;
@@ -250,7 +250,7 @@ Declaration* localClassFromCodeContext(DUContext* context)
   
   //For external function definitions, find the class-context by following the import-structure
   if(context->type() == DUContext::Function) {
-    foreach(DUContext::Import import, context->importedParentContexts()) {
+    foreach(const DUContext::Import& import, context->importedParentContexts()) {
       DUContext* ctx = import.context(context->topContext());
       if(ctx && ctx->type() == DUContext::Class && ctx->owner())
         return ctx->owner();
@@ -276,7 +276,7 @@ Declaration* localFunctionFromCodeContext(DUContext* context)
 
   if(context->type() == DUContext::Other) {
     //Jump from code-context to function-context
-    foreach(DUContext::Import import, context->importedParentContexts()) {
+    foreach(const DUContext::Import& import, context->importedParentContexts()) {
       if(DUContext* i = import.context(context->topContext())) {
         if(i->type() == DUContext::Function) {
           return i->owner();
@@ -538,7 +538,7 @@ KDevelop::IndexedTypeIdentifier stripPrefixIdentifiers(KDevelop::IndexedTypeIden
 int reservedIdentifierCount(QString name) {
   QStringList l = name.split("::");
   int ret = 0;
-  foreach(QString s, l)
+  foreach(const QString& s, l)
     if(s.startsWith('_'))
       ++ret;
     

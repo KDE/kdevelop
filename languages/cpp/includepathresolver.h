@@ -39,7 +39,7 @@ namespace CppTools {
     QStringList paths;
 
     void addPathsUnique(const PathResolutionResult& rhs) {
-      foreach(QString path, rhs.paths) {
+      foreach(const QString& path, rhs.paths) {
         if(!paths.contains(path))
           paths.append(path);
       }

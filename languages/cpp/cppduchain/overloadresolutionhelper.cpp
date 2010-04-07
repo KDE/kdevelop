@@ -107,7 +107,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
 
 //   log("parameters given to overload-resolution:");
 //   lock.unlock();
-//   foreach( ExpressionEvaluationResult result, m_knownArgumentTypes ) {
+//   foreach( const ExpressionEvaluationResult& result, m_knownArgumentTypes ) {
 //     log( result.toString() );
 //   }
 //   lock.lock();

@@ -131,7 +131,7 @@ void IncludePathComputer::computeBackground() {
       QDirIterator it(fileInfo.dir().path());
       while(it.hasNext()) {
         QString file = it.next();
-        foreach(QString ext, sourceExtensions) {
+        foreach(const QString& ext, sourceExtensions) {
           if(file != fileInfo.fileName() && file.endsWith(ext)) {
             DUChainReadLocker lock(DUChain::lock(), 300);
             if(lock.locked()) {
@@ -144,7 +144,7 @@ void IncludePathComputer::computeBackground() {
                   continue;
                 if(envFile->includePaths().size() <= standardPaths.size() )
                   continue;
-                foreach(KDevelop::IndexedString str, envFile->includePaths()) {
+                foreach(const KDevelop::IndexedString& str, envFile->includePaths()) {
                   m_ret << str.toUrl();
                 }
                 kDebug(9007) << "took include-paths for" <<  m_source << "from duchain of" <<  file;

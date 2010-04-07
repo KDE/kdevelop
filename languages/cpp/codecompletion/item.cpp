@@ -339,7 +339,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       if( currentMatchContext.size()) {
         
         int bestQuality = 0;
-        foreach(IndexedType type, currentMatchContext) {
+        foreach(const IndexedType& type, currentMatchContext) {
         
         Cpp::TypeConversion conv(model->currentTopContext().data());
  
@@ -609,11 +609,11 @@ QVariant TypeConversionCompletionItem::data(const QModelIndex& index, int role, 
         
           int bestQuality = 0;
           
-          foreach(IndexedType type, currentMatchContext) {
+          foreach(const IndexedType& type, currentMatchContext) {
           Cpp::TypeConversion conv(model->currentTopContext().data());
 
           ///@todo Think about lvalue-ness
-          foreach(IndexedType ownType, typeForArgumentMatching()) {
+          foreach(const IndexedType& ownType, typeForArgumentMatching()) {
             int quality = ( conv.implicitConversion( completionContext->applyPointerConversionForMatching(ownType, false), type, false )  * 10 ) / Cpp::MaximumConversionResult;
             if(quality > bestQuality)
               bestQuality = quality;

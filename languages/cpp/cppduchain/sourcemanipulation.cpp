@@ -81,13 +81,13 @@ QString zeroIndentation(QString str, int fromLine = 0) {
   
   QRegExp nonWhiteSpace("\\S");
   int minLineStart = 10000;
-  foreach(QString line, lines) {
+  foreach(const QString& line, lines) {
     int lineStart = line.indexOf(nonWhiteSpace);
     if(lineStart < minLineStart)
       minLineStart = lineStart;
   }
   
-  foreach(QString line, lines)
+  foreach(const QString& line, lines)
     ret << line.mid(minLineStart);
 
   return ret.join("\n");
@@ -147,12 +147,12 @@ QString KDevelop::SourceCodeInsertion::applySubScope(QString decl) const {
     scopeClose =  ";";
   }
   
-  foreach(QString scope, m_scope.toStringList())
+  foreach(const QString& scope, m_scope.toStringList())
     ret += scopeType + " " + scope + " {\n";
   
   ret += decl;
 
-  foreach(QString scope, m_scope.toStringList())
+  foreach(const QString& scope, m_scope.toStringList())
     ret += "}" + scopeClose + "\n";
   
   return ret;
@@ -216,7 +216,7 @@ QString KDevelop::SourceCodeInsertion::applyIndentation(QString decl) const {
   QStringList lines = decl.split('\n');
   QString ind = indentation();
   QStringList ret;
-  foreach(QString line, lines) {
+  foreach(const QString& line, lines) {
     if(!line.isEmpty())
       ret << ind + line;
     else
@@ -227,7 +227,7 @@ QString KDevelop::SourceCodeInsertion::applyIndentation(QString decl) const {
 
 QString makeSignatureString(QList<SourceCodeInsertion::SignatureItem> signature, DUContext* context) {
   QString ret;
-  foreach(SourceCodeInsertion::SignatureItem item, signature) {
+  foreach(const SourceCodeInsertion::SignatureItem& item, signature) {
     if(!ret.isEmpty())
       ret += ", ";
     AbstractType::Ptr type = TypeUtils::removeConstants(item.type, context->topContext());

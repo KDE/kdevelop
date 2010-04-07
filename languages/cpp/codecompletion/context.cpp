@@ -784,7 +784,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   if(!initializedNormalItems) {
     //Only offer constructor initializations before variables were initialized
     pos = 0;
-    foreach(DUContext::Import import, container->importedParentContexts()) {
+    foreach(const DUContext::Import& import, container->importedParentContexts()) {
       DUContext* ctx = import.context(m_duContext->topContext());
       if(ctx && ctx->type() == DUContext::Class && ctx->owner()) {
           items.insert(pos, CompletionTreeItemPointer(new NormalDeclarationCompletionItem( DeclarationPointer(ctx->owner()), KDevelop::CodeCompletionContext::Ptr(this), pos )));
@@ -858,7 +858,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
     //Filter away all global binary operators that do not have the first argument matched
     QList< Function > oldFunctions = m_functions;
     m_functions.clear();
-    foreach(Function f, oldFunctions) {
+    foreach(const Function& f, oldFunctions) {
       if(f.matchedArguments == 1 && !f.function.isViable())
         continue;
       else

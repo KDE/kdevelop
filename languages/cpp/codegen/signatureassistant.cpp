@@ -146,7 +146,7 @@ DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDev
 QString makeSignatureString(Signature signature, DUContext* visibilityFrom) {
   QString ret;
   int pos = 0;
-  foreach(ParameterItem item, signature.parameters) {
+  foreach(const ParameterItem& item, signature.parameters) {
     if(!ret.isEmpty())
       ret += ", ";
     

@@ -232,7 +232,7 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
     output << "\n\n";
   
   //Support for nested namespaces
-  foreach(QString ns, m_namespaces)
+  foreach(const QString& ns, m_namespaces)
     output << "namespace " << ns << " {\n\n";
 
   output << (m_type == Class || m_type == DefaultType ? "class " : "struct ");

@@ -61,7 +61,7 @@ void Cpp::AddCustomIncludePathAction::execute() {
     o.storageDirectory->setUrl(current);
     o.sourceDirectory->setPath(oldSettings.sourceDir);
     o.buildDirectory->setPath(oldSettings.buildDir);
-    foreach(QString customPath, oldSettings.paths)
+    foreach(const QString& customPath, oldSettings.paths)
       if(!customPath.isEmpty())
         o.customIncludePaths->appendPlainText(customPath);
     if(!oldSettings.paths.isEmpty())
@@ -83,7 +83,7 @@ void Cpp::AddCustomIncludePathAction::execute() {
       oldSettings.sourceDir = o.sourceDirectory->url().toLocalFile();
       oldSettings.buildDir = o.buildDirectory->url().toLocalFile();
       oldSettings.paths.clear();
-      foreach(QString customPath, o.customIncludePaths->document()->toPlainText().split("\n", QString::SkipEmptyParts))
+      foreach(const QString& customPath, o.customIncludePaths->document()->toPlainText().split("\n", QString::SkipEmptyParts))
         if(!customPath.isEmpty())
           oldSettings.paths << customPath;
       kDebug() << "saving, paths" << oldSettings.paths;
