@@ -389,7 +389,7 @@ void DocumentChangeSetPrivate::updateFiles()
                 }
                 
                 ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
-                foreach(KUrl doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+                foreach(const KUrl& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
                     DUChainReadLocker lock(DUChain::lock());
                     TopDUContext* top = DUChainUtils::standardContextForUrl(doc);
                     if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {

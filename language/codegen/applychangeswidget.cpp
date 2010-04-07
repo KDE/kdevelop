@@ -125,7 +125,7 @@ void ApplyChangesWidget::addDocuments(const IndexedString & original, const Inde
 #ifndef NDEBUG
     //Duplicated originals should not exist
     typedef QPair<IndexedString, IndexedString> StringPair;
-    foreach( StringPair files, d->m_files)
+    foreach( const StringPair& files, d->m_files)
         Q_ASSERT(files.first != original);
 #endif
     d->m_files.insert(d->m_index, qMakePair(original, modified));

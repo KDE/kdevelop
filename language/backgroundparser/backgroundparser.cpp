@@ -233,7 +233,7 @@ public:
 
         //Notify that we failed
         typedef QPointer<QObject> Notify;
-        foreach(Notify n, notifyWhenReady)
+        foreach(const Notify& n, notifyWhenReady)
             if(n)
                 QMetaObject::invokeMethod(n, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 

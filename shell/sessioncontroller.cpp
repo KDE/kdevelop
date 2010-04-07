@@ -418,7 +418,7 @@ private slots:
         {
             //Clear the backup dir
             QDir recoveryBackupDir(recoveryDir.path() + "/backup");
-            foreach(QFileInfo file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
+            foreach(const QFileInfo& file, recoveryBackupDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs))
             {
                 QFile::remove(file.absoluteFilePath());
             }

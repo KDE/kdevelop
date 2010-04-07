@@ -111,12 +111,12 @@ public:
 
     virtual QList<ProjectFolderItem*> parse(ProjectFolderItem *dom) {
         KUrl::List files = m_filesInFolder[dom->url()];
-        foreach (KUrl file, files) {
+        foreach (const KUrl& file, files) {
             new ProjectFileItem(dom->project(), file, dom);
         }
         KUrl::List folderUrls = m_subFoldersInFolder[dom->url()];
         QList<ProjectFolderItem*> folders;
-        foreach (KUrl folderUrl, folderUrls) {
+        foreach (const KUrl& folderUrl, folderUrls) {
             folders << new ProjectFolderItem(dom->project(), folderUrl, dom);
         }
         return folders;

@@ -161,7 +161,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
     if(dropToView)
         activateView(dropToView);
     
-    foreach( QUrl u, ev->mimeData()->urls() )
+    foreach( const QUrl& u, ev->mimeData()->urls() )
     {
         Core::self()->documentController()->openDocument( KUrl( u ) );
     }

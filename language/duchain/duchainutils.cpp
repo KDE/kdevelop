@@ -545,7 +545,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
 DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
   DUContext* functionContext = decl->internalContext();
   if(functionContext && functionContext->type() != DUContext::Function) {
-    foreach(DUContext::Import import, functionContext->importedParentContexts()) {
+    foreach(const DUContext::Import& import, functionContext->importedParentContexts()) {
       DUContext* ctx = import.context(decl->topContext());
       if(ctx && ctx->type() == DUContext::Function)
         functionContext = ctx;

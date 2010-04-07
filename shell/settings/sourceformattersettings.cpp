@@ -113,7 +113,7 @@ void SourceFormatterSettings::load()
 
             sfmt.formatter = ifmt;
 
-            foreach( KDevelop::SourceFormatterStyle style, ifmt->predefinedStyles() )
+            foreach( const KDevelop::SourceFormatterStyle& style, ifmt->predefinedStyles() )
             {
                 sfmt.styles[ style.name() ] = style;
             }

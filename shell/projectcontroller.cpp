@@ -459,7 +459,7 @@ QList<IProject*> ProjectController::projects() const
 void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryList entries ) {
     KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(_job));
     Q_ASSERT(job);
-    foreach(KIO::UDSEntry entry, entries) {
+    foreach(const KIO::UDSEntry& entry, entries) {
         if(d->m_foundProjectFile)
             break;
         if(!entry.isDir()) {
@@ -662,7 +662,7 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
     d->m_projectPlugins.remove( proj );
 
     QList<IPlugin*> otherProjectPlugins;
-    Q_FOREACH( QList<IPlugin*> _list, d->m_projectPlugins )
+    Q_FOREACH( const QList<IPlugin*>& _list, d->m_projectPlugins )
     {
         otherProjectPlugins << _list;
     }

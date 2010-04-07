@@ -550,7 +550,7 @@ void LicensePage::initializeLicenses(void)
     QStringList licenseDirs = dirs->findDirs("data", "kdevcodegen/licenses");
     
     //Iterate through the possible directories that contain licenses, and load their names
-    foreach(QString currentDir, licenseDirs)
+    foreach(const QString& currentDir, licenseDirs)
     {
         QDirIterator it(currentDir, QDir::Files | QDir::Readable);
         while(it.hasNext())

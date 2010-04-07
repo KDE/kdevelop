@@ -425,7 +425,7 @@ static QStringList splitAndKeep(QString str, QRegExp regExp) {
 
 void AbstractNavigationContext::addHtml(QString html) {
   QRegExp newLineRegExp("<br>|<br */>");
-  foreach(QString line, splitAndKeep(html, newLineRegExp)) {
+  foreach(const QString& line, splitAndKeep(html, newLineRegExp)) {
     m_currentText +=  line;
     if(line.indexOf(newLineRegExp) != -1) {
       ++m_currentLine;

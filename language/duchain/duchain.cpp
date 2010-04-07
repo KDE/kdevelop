@@ -1552,7 +1552,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
         //This is not exactly right, as the direct imports don't necessarily equal the real imports used by uses
         //but it approximates the correct behavior.
         bool allImportsLoaded = true;
-        foreach(DUContext::Import import, standardContext->importedParentContexts())
+        foreach(const DUContext::Import& import, standardContext->importedParentContexts())
           if(!import.indexedContext().indexedTopContext().isLoaded())
             allImportsLoaded = false;
 

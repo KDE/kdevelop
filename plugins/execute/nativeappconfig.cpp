@@ -76,7 +76,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     //runInTerminal->setChecked( cfg.readEntry( ExecutePlugin::useTerminalEntry, false ) );
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
-    foreach( QVariant dep, deps ) {
+    foreach( const QVariant& dep, deps ) {
         QListWidgetItem* item = new QListWidgetItem( KDevelop::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
     }

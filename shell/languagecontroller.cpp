@@ -98,7 +98,7 @@ ILanguage* LanguageControllerPrivate::addLanguageForSupport(KDevelop::ILanguageS
 
     QVariant mimetypes = Core::self()->pluginController()->pluginInfo(dynamic_cast<IPlugin*>(languageSupport)).property("X-KDevelop-SupportedMimeTypes");
 
-    foreach(QString mimeTypeName, mimetypes.toStringList()) {
+    foreach(const QString& mimeTypeName, mimetypes.toStringList()) {
         kDebug() << "adding supported mimetype:" << mimeTypeName << "language:" << languageSupport->name();
         languageCache[mimeTypeName] << ret;
         KMimeType::Ptr mime = KMimeType::mimeType(mimeTypeName);

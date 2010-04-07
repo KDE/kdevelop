@@ -90,7 +90,7 @@ IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
     }
     
     QMultiMap<unsigned int, IndexedString> sorter;
-    foreach(IndexedString file, implementationsInFile.keys())
+    foreach(const IndexedString& file, implementationsInFile.keys())
         sorter.insert(implementationsInFile[file], file);
     
     QList<IndexedString> sortedFiles = sorter.values();
@@ -110,7 +110,7 @@ IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
         
         IndexedString mostUsesFile;
         unsigned int mostUses = 0;
-        foreach(IndexedString currentFile, tiedFiles)
+        foreach(const IndexedString& currentFile, tiedFiles)
             if(static_cast<unsigned int>(uses[currentFile].size()) > mostUses)
             {
                 mostUses = uses[currentFile].size();

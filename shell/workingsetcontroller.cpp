@@ -85,7 +85,7 @@ void WorkingSetController::initialize()
 {
     //Load all working-sets
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    foreach(QString set, setConfig.groupList())
+    foreach(const QString& set, setConfig.groupList())
     {
         if(setConfig.hasKey("iconName"))
             getWorkingSet(set, setConfig.group(set).readEntry<QString>("iconName", QString()));
@@ -158,12 +158,12 @@ WorkingSet* WorkingSetController::getWorkingSet(QString id, QString icon)
 
 void deleteGroupRecursive(KConfigGroup group) {
 //     kDebug() << "deleting" << group.name();
-    foreach(QString entry, group.entryMap().keys()) {
+    foreach(const QString& entry, group.entryMap().keys()) {
         group.deleteEntry(entry);
     }
     Q_ASSERT(group.entryMap().isEmpty());
 
-    foreach(QString subGroup, group.groupList()) {
+    foreach(const QString& subGroup, group.groupList()) {
         deleteGroupRecursive(group.group(subGroup));
         group.deleteGroup(subGroup);
     }
@@ -522,7 +522,7 @@ void WorkingSetToolButton::subtractSet()
 void WorkingSetToolButton::mergeSet()
 {
     QSet< QString > loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
-    foreach(QString file, loadFiles)
+    foreach(const QString& file, loadFiles)
         Core::self()->documentController()->openDocument(file);
 }
 
@@ -798,7 +798,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     }
 
     QStringList files = m_set->fileList();
-    foreach(QString file, files) {
+    foreach(const QString& file, files) {
         QHBoxLayout* fileLayout = new QHBoxLayout;
 
         QToolButton* plusButton = new QToolButton;

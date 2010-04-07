@@ -246,7 +246,7 @@ KUrl::List VcsCommitDialog::determineUrlsForCheckin()
     KUrl::List list;
     KUrl::List addItems;
 
-    foreach(KUrl url, d->selection()) {
+    foreach(const KUrl& url, d->selection()) {
         VcsStatusInfo info = d->statusInfos[url];
         
         if( info.state() == VcsStatusInfo::ItemUnknown ) {

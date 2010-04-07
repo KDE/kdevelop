@@ -179,7 +179,7 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
     // build lists of valid files and folders with relative urls to the project folder
     KUrl::List files;
     KUrl::List folders;
-    foreach ( KIO::UDSEntry entry, entries ) {
+    foreach ( const KIO::UDSEntry& entry, entries ) {
         KUrl url = baseItem->url();
         url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
 

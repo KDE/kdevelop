@@ -77,7 +77,7 @@ void ParseProjectJob::start() {
     TopDUContext::Features processingLevel = files.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
                                     KDevelop::TopDUContext::VisibleDeclarationsAndContexts : KDevelop::TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
     
-    foreach(KDevelop::IndexedString url, files)
+    foreach(const KDevelop::IndexedString& url, files)
         KDevelop::ICore::self()->languageController()->backgroundParser()->addDocument( url.toUrl(), processingLevel, 10000, this );
 }
 

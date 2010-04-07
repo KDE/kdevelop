@@ -123,7 +123,7 @@ struct DocumentControllerPrivate {
                                     i18n( "Open File" ) );
         if( !res.URLs.isEmpty() ) {
             QString encoding = res.encoding;
-            foreach( KUrl u, res.URLs ) {
+            foreach( const KUrl& u, res.URLs ) {
                 openDocumentInternal(u, QString(), KTextEditor::Range::invalid(), encoding  );
             }
         }

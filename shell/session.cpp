@@ -105,7 +105,7 @@ void Session::updateDescription()
         
         QStringList projectNames;
         
-        foreach(KUrl url, openProjects)
+        foreach(const KUrl& url, openProjects)
         {
             IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
             if(project) {

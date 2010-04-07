@@ -116,7 +116,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
 
     kDebug() << "Finishing with selection" << selection;
     QString text = i18n("Files will be committed:") + "\n";
-    foreach(KUrl url, selection)
+    foreach(const KUrl& url, selection)
         text += ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "\n";
 
     text += "\n" + i18n("With message:") + "\n" + message;
