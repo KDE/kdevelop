@@ -68,11 +68,12 @@ class KDevVarLengthArray : public QVector<T> {
     public:
     // Removes exactly one occurrence of the given value from the array. Returns false if none was found.
     bool removeOne(const T& value) {
-    int i = this->indexOf(value);
-    if(i == -1)
-    return false;
-    this->remove(i);
-    return true;
+        int i = this->indexOf(value);
+        if(i == -1) {
+            return false;
+        }
+        this->remove(i);
+        return true;
     }
     void append(const T& item) {
         QVector<T>::append(item);
@@ -84,8 +85,9 @@ class KDevVarLengthArray : public QVector<T> {
     }
     
     void append(const T *buf, int size) {
-    for(int a = 0; a < size; ++a)
-        append(buf[a]);
+        for(int a = 0; a < size; ++a) {
+            append(buf[a]);
+        }
     }
 };
 #else
