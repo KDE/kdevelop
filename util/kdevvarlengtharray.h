@@ -161,10 +161,15 @@ public:
     }
 
     inline void append(const T &t) {
-        const int idx = s++;
-        ///This is currently the difference to KDevVarLengthArray(which uses s == a), and it prevents a crash.
-        if (s >= a)
+        // we append hence the size can only be less or equal to the capacity
+        Q_ASSERT(s <= a);
+        const int idx = s;
+        if (s == a) {
+            // if size equals capacity we have to make room for more items
             realloc(s, s<<1);
+        }
+        // we add an element below, hence increase size.
+        ++s;
         if (QTypeInfo<T>::isComplex) {
             new (ptr + idx) T(t);
         } else {
