@@ -102,10 +102,9 @@ class KDevVarLengthArray : public QVector<T> {
 /**
  * This is a copy of QVarLengthArray from Qt 4.4 or 4.5.
  *
- * TODO: when we depent on Qt 4.6, get rid of the copied code
+ * TODO: when we depend on Qt 4.6, get rid of the copied code
  *       and extend QVarLengthArray instead. It looks like
- *       the old issues from back than got fixed, there are now
- *       much more changes.
+ *       the old issues from back then got fixed.
  * TODO: document custom added API
  */
 template<class T, int Prealloc = 256>
