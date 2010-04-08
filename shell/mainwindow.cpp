@@ -147,6 +147,20 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     return KXMLGUIBuilder::createCustomElement(parent, index, element);
 }
 
+QWidget* MainWindow::createContainer(QWidget* parent, int index,
+    const QDomElement& element, QAction*& containerAction)
+{
+#if KDE_VERSION < KDE_MAKE_VERSION(4, 4, 0)
+    //for KDE < 4.4 we need to remove "Editor" toplevel menu - it will
+    //always be empty because our custom katepartui.rc is not used
+    const QString tagName = element.tagName().toLower();
+    if (tagName == QLatin1String("menu") &&
+            element.attribute(QLatin1String("name")).toUtf8() == "editor")
+        return 0;
+#endif
+    return KXMLGUIBuilder::createContainer(parent, index, element, containerAction);
+}
+
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 {
     if( ev->mimeData()->hasFormat( "text/uri-list" ) && ev->mimeData()->hasUrls() )
