@@ -353,6 +353,10 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             int start = input.offset();
             
             skip_blanks(input, devnull());
+            if (input.atEnd()) {
+              // this might happen in e.g. /usr/include/bits/mathcalls.h
+              continue;
+            }
             //Omit paste tokens behind empty used actuals, else we will merge with the previous text
             if(input == '#' && (++input) == '#') {
               ++input;
