@@ -128,6 +128,7 @@ private slots:
   void testAssignedContexts();
   void testTryCatch();
   void testIndexedStrings();
+  void testKDevVarLengthArray();
   void testEnum();
   void testCaseUse();
   void testConstructorOperatorUses();

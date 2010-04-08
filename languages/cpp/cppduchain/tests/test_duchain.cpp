@@ -5240,6 +5240,24 @@ void TestDUChain::testIndexedStrings() {
   kDebug() << a << "successful tests";
 }
 
+void TestDUChain::testKDevVarLengthArray()
+{
+  KDevVarLengthArray<IndexedString, 2> array;
+
+  for(int a = 0; a < 3; ++a) {
+    QString testString;
+    int length = rand() % 10;
+    for(int b = 0; b < length; ++b)
+      testString.append((char)(rand() % 6) + 'a');
+    QByteArray byteArray = testString.toUtf8();
+    IndexedString indexed(byteArray.constData(), byteArray.size(), IndexedString::hashString(byteArray.constData(), byteArray.size()));
+    qDebug() << "hash of" << byteArray << "is:" << indexed.hash();
+    array << indexed;
+  }
+
+  array.clear();
+}
+
 TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
   if (dump)
