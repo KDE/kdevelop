@@ -155,17 +155,14 @@
 
 <ToolBar name="mainToolBar" position="Top" noMerge="1">
   <text>Main Toolbar</text>
-  <Action name="file_new" />
-  <Separator/>
   <DefineGroup append="build_operations" name="build_operations"/>
-  <Separator/>
   <DefineGroup append="run_operations" name="run_operations"/>
   <Action name="run_execute" group="run_operations"/>
   <Action name="run_debug" group="run_operations"/>
   <Action name="run_stop" group="run_operations" />
   <Separator/>
+  <Action name="file_new" />
   <DefineGroup append="file_operations" name="file_operations"/>
-  <Separator/>
   <DefineGroup append="edit_operations" name="edit_operations"/>
 </ToolBar>
 
