@@ -309,7 +309,7 @@ void MainWindow::loadSettings()
         // One day will need to load the version number, but for now, assume 0
         restoreState(state);
     } else {
-        // If there's no state we use a default size of 700x600
+        // If there's no state we use a default size of 800x650
         resize(800,650);
     }
     
