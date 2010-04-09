@@ -99,7 +99,9 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "not+empty" ) << QString("NOT;EMPTY").split(";") << true;
     QTest::newRow( "empty+strequal" ) << QString("NOT;;STREQUAL;").split(";") << false;
     QTest::newRow( "weirdmatch" ) << QString("EXP MATCHES expression").split(" ") << true;
-    
+    QTest::newRow( "isabsolute+true" ) << QString("IS_ABSOLUTE /foo/bar").split(" ") << true;
+    QTest::newRow( "isabsolute+false" ) << QString("IS_ABSOLUTE ../bar").split(" ") << false;
+
     //parentheses: 2.6.3
     QTest::newRow( "parenthese0" ) << QString("ONE AND ( NOT ZERO OR ZERO )").split(" ") << true;
     QTest::newRow( "parenthese01" ) << QString("ZERO AND ( ZERO OR ZERO )").split(" ") << false;

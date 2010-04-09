@@ -30,7 +30,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         bool condition(const QStringList &expression);
         QList<int> variableArguments() const { return m_argUses; }
         
-        enum conditionToken { None=0, variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, MATCHES,
+        enum conditionToken { None=0, variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, IS_ABSOLUTE, MATCHES,
             LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, LPR, RPR, Last };
     private:
         static conditionToken typeName(const QString& name);

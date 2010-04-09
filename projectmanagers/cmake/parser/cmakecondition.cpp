@@ -43,6 +43,7 @@ QVector<int> initPriorities()
     ret[CMakeCondition::COMMAND]=3;
     ret[CMakeCondition::EXISTS]=3;
     ret[CMakeCondition::IS_DIRECTORY]=3;
+    ret[CMakeCondition::IS_ABSOLUTE]=3;
     ret[CMakeCondition::LPR]=-1;
     ret[CMakeCondition::RPR]=-1;
     return ret;
@@ -58,6 +59,7 @@ QMap<QString, CMakeCondition::conditionToken> initNameToToken()
     ret["EXISTS"]=CMakeCondition::EXISTS;
     ret["IS_NEWER_THAN"]=CMakeCondition::IS_NEWER_THAN;
     ret["IS_DIRECTORY"]=CMakeCondition::IS_DIRECTORY;
+    ret["IS_ABSOLUTE"]=CMakeCondition::IS_ABSOLUTE;
     ret["MATCHES"]=CMakeCondition::MATCHES;
     ret["LESS"]=CMakeCondition::LESS;
     ret["GREATER"]=CMakeCondition::GREATER;
@@ -174,6 +176,13 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 CHECK_NEXT(it2);
                 QFileInfo f(*(it2+1));
                 last = f.isDir();
+                itEnd=it2;
+            }   break;
+            case IS_ABSOLUTE: {
+                CHECK_NEXT(it2);
+                QFileInfo f(*(it2+1));
+                qDebug() << f.filePath() << f.isAbsolute();
+                last = f.isAbsolute();
                 itEnd=it2;
             }   break;
             case DEFINED:
