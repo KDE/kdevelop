@@ -238,7 +238,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
         if(!forceParentScope.isEmpty())
           overridden = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
 
-        if(overridden && !overridden->isAbstract()) {
+        if(overridden && !overridden->isAbstract() && !overridden->isDestructor()) {
           if(asFunction->returnType() && asFunction->returnType()->toString() != "void") {
             newText += "return ";
           }
