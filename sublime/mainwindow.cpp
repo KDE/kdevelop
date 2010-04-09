@@ -310,7 +310,7 @@ void MainWindow::loadSettings()
         restoreState(state);
     } else {
         // If there's no state we use a default size of 700x600
-        resize(700,600);
+        resize(800,650);
     }
     
     KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
