@@ -101,26 +101,26 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>-1</number>
+      <number>0</number>
      </property>
      <item>
       <property name="text">
-       <string>debug</string>
+       <string notr="true">Debug</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>release</string>
+       <string notr="true">Release</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>RelWithDebInfo</string>
+       <string notr="true">RelWithDebInfo</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>MinSizeRel</string>
+       <string notr="true">MinSizeRel</string>
       </property>
      </item>
     </widget>
