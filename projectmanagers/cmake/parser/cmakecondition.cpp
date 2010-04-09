@@ -181,7 +181,6 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
             case IS_ABSOLUTE: {
                 CHECK_NEXT(it2);
                 QFileInfo f(*(it2+1));
-                qDebug() << f.filePath() << f.isAbsolute();
                 last = f.isAbsolute();
                 itEnd=it2;
             }   break;
