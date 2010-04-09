@@ -34,7 +34,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->locationUrl->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
     ui->locationUrl->setUrl(KDevelop::ICore::self()->projectController()->projectsBaseDirectory());
 
-    ui->locationValidLabel->setText(QString());
+    ui->locationValidLabel->setText(QString(" "));
     
     connect( ui->locationUrl->lineEdit(), SIGNAL(textEdited(const QString&)),
              this, SLOT(urlEdited() ));
@@ -142,7 +142,7 @@ void ProjectSelectionPage::validateData()
     QStandardItem* item = m_templatesModel->itemFromIndex( ui->templateView->currentIndex() );
     if( item && !item->hasChildren() )
     {
-        ui->locationValidLabel->setText( QString() );
+        ui->locationValidLabel->setText( QString(" ") );
         emit valid();
     } else
     {
