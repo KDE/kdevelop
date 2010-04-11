@@ -285,18 +285,6 @@ void MainWindow::loadSettings()
             KToolBar::setToolBarsLocked(false);
     }
 
-    int n = 1; // Toolbar counter. toolbars are counted from 1,
-    foreach (KToolBar* toolbar, toolBars()) {
-        QString group("Toolbar");
-        // Give a number to the toolbar, but prefer a name if there is one,
-        // because there's no real guarantee on the ordering of toolbars
-        group += (toolbar->objectName().isEmpty() ? QString::number(n) : QString(" ")+toolbar->objectName());
-
-        KConfigGroup toolbarGroup(&cg, group);
-        toolbar->applySettings(toolbarGroup, false);
-        n++;
-    }
-   
     // Utilise the QMainWindow::restoreState() functionality
     // Note that we're fixing KMainWindow bug here -- the original
     // code has this fragment above restoring toolbar properties.
@@ -312,7 +300,19 @@ void MainWindow::loadSettings()
         // If there's no state we use a default size of 870x650
         resize(870,650);
     }
-    
+
+    int n = 1; // Toolbar counter. toolbars are counted from 1,
+    foreach (KToolBar* toolbar, toolBars()) {
+        QString group("Toolbar");
+        // Give a number to the toolbar, but prefer a name if there is one,
+        // because there's no real guarantee on the ordering of toolbars
+        group += (toolbar->objectName().isEmpty() ? QString::number(n) : QString(" ")+toolbar->objectName());
+
+        KConfigGroup toolbarGroup(&cg, group);
+        toolbar->applySettings(toolbarGroup, false);
+        n++;
+    }
+
     KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
     foreach (Container *container, findChildren<Container*>())
     {
