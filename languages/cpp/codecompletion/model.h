@@ -63,6 +63,7 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
     virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
     
     virtual QString filterString ( KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position );
+    virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
     virtual void updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range);
     virtual void aborted(KTextEditor::View* view);
     virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);

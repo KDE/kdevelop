@@ -121,8 +121,12 @@ bool isValidIncludeDirectiveCharacter(QChar character) {
   return character.isLetterOrNumber() || character == '_' || character == '-' || character == '.';
 }
 
-bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion) {
-  
+bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion)
+{
+  if(view->cursorPosition() < range.start() || view->cursorPosition() > range.end())
+    return true; //Always abort when the completion-range has been left
+  //Do not abort completions when the text has been empty already before and a newline has been entered
+
   QString line = view->document()->line(range.start().line()).trimmed();
   if(line.startsWith("#include")) {
     //Do custom check for include directives, since we allow more character then during usual completion
@@ -134,10 +138,8 @@ bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const K
     return false;
   }
   
-  
-  bool ret = KDevelop::CodeCompletionModel::shouldAbortCompletion(view, range, currentCompletion);
-  
-  return ret;
+  static const QRegExp allowedText("^\\~?(\\w*)");
+  return !allowedText.exactMatch(currentCompletion);
 }
 
 KDevelop::CodeCompletionWorker* CodeCompletionModel::createCompletionWorker() {
@@ -214,6 +216,20 @@ void CodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEd
 
 QString CodeCompletionModel::filterString (KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position) {
   return KDevelop::CodeCompletionModel::filterString(view, range, position);
+}
+
+Range CodeCompletionModel::completionRange(View* view, const KTextEditor::Cursor& position)
+{
+    Range range = KDevelop::CodeCompletionModel::completionRange(view, position);
+    if (range.start().column() > 0) {
+        KTextEditor::Range preRange(Cursor(range.start().line(), range.start().column() - 1),
+                                    Cursor(range.start().line(), range.start().column()));
+        const QString contents = view->document()->text(preRange);
+        if ( contents == "~" ) {
+            range.expandToRange(preRange);
+        }
+    }
+    return range;
 }
 
 void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext) {
