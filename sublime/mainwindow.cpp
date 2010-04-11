@@ -245,6 +245,14 @@ void MainWindow::saveSettings()
     /* This will try to save window size, too.  But it's OK, since we
        won't use this information when loading.  */
     saveMainWindowSettings(cg);
+
+    //debugToolBar visibility is stored separately to allow a area dependent default value
+    foreach (KToolBar* toolbar, toolBars()) {
+        if (toolbar->objectName() == "debugToolBar") {
+            cg.writeEntry("debugToolBarVisibility", toolbar->isVisible());
+        }
+    }
+
     cg.sync();
 }
 
@@ -310,6 +318,12 @@ void MainWindow::loadSettings()
 
         KConfigGroup toolbarGroup(&cg, group);
         toolbar->applySettings(toolbarGroup, false);
+
+        if (toolbar->objectName() == "debugToolBar") {
+            //debugToolBar visibility is stored separately to allow a area dependent default value
+            bool visibility = cg.readEntry("debugToolBarVisibility", area()->objectName() == "debug");
+            toolbar->setVisible(visibility);
+        }
         n++;
     }
 
