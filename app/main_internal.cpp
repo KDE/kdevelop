@@ -119,11 +119,9 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
     {
         foreach(const QString& p, projectNames)
         {
-            KUrl url(p);
-            QString ext = QFileInfo( url.fileName() ).suffix();
-            if( ext == "kdev4" )
-            {
-                core->projectController()->openProject( url );
+            QFileInfo info( p );
+            if( info.suffix() == "kdev4" ) {
+                core->projectController()->openProject( KUrl(info.absoluteFilePath()) );
             }
         }
     }
