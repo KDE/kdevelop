@@ -2205,6 +2205,30 @@ void TestDUChain::testSignalSlotUse() {
 
     release(top);
   }
+  {
+    // test signals with default arguments
+    QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot);\n"
+                    "  void connect(QObject* from, const char* signal, const char* slot); };\n"
+                    "struct AA : QObject { __qt_signals__: void signal1(bool arg1 = false); };\n"
+                    "class A : AA { public __qt_slots__: void slot1();\n"
+                    "  public: void test() { connect(this, __qt_sig_slot__(signal1()), this, __qt_sig_slot__(slot1()));} };");
+    TopDUContext* top = parse(text, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QVERIFY(top->problems().isEmpty());
+
+    QCOMPARE(top->localDeclarations().count(), 3);
+    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->childContexts().at(1)->localDeclarations().size(), 1);
+    ClassFunctionDeclaration* sig = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts().at(1)->localDeclarations().first());
+    QVERIFY(sig);
+    QVERIFY(sig->identifier() == Identifier("signal1"));
+    QVERIFY(sig->isSignal());
+    QEXPECT_FAIL("", "since ExpressionVisitor::visitSignalSlotExpression compares against normalizedSignature() it fails, since it does not cope with default arguments", Abort);
+    QCOMPARE(sig->uses().size(), 1);
+    QCOMPARE(sig->uses().begin()->count(), 1);
+    QCOMPARE(sig->uses().begin()->first(), SimpleRange(4, 54, 4, 61));
+  }
 }
 
 void TestDUChain::testFunctionDefinition() {
