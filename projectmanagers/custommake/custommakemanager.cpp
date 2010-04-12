@@ -248,6 +248,7 @@ bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, con
 /////////////////////////////////////////////////////////////////////////////
 // private slots
 
+///TODO: move to background thread, probably best would be to use a proper ParseJob
 QStringList CustomMakeManager::parseCustomMakeFile( const KUrl &makefile )
 {
     if( !makefile.isValid() )
