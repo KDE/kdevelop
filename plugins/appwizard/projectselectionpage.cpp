@@ -23,6 +23,7 @@
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
 #include "appwizardplugin.h"
+#include <KColorScheme>
 
 ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel, QWidget *parent)
     : AppWizardPageWidget(parent), m_templatesModel(templatesModel)
@@ -99,12 +100,20 @@ void ProjectSelectionPage::urlEdited()
     emit locationChanged( location() );
 }
 
+void setForeground(QLabel* label, KColorScheme::ForegroundRole role)
+{
+    QPalette p = label->palette();
+    KColorScheme::adjustForeground(p, role, label->foregroundRole(), KColorScheme::Window);
+    label->setPalette(p);
+}
+
 void ProjectSelectionPage::validateData()
 {
     KUrl url = ui->locationUrl->url();
     if( !url.isLocalFile() || url.isEmpty() )
     {
         ui->locationValidLabel->setText( i18n("Invalid location") );
+        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
         emit invalid();
         return;
     }
@@ -112,6 +121,7 @@ void ProjectSelectionPage::validateData()
     if( appName().isEmpty() )
     {
         ui->locationValidLabel->setText( i18n("Empty project name") );
+        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
         emit invalid();
         return;
     }
@@ -119,6 +129,7 @@ void ProjectSelectionPage::validateData()
     if( appName() == "." || appName() == "..")
     {
         ui->locationValidLabel->setText( i18n("Invalid project name") );
+        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
         emit invalid();
         return;
     }
@@ -134,6 +145,7 @@ void ProjectSelectionPage::validateData()
         {
             ui->locationValidLabel->setText( i18n("Unable to create subdirectories, "
                                                   "missing permissions on: %1", tDir.absolutePath()) );
+            setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
             emit invalid();
             return;
         }
@@ -143,10 +155,12 @@ void ProjectSelectionPage::validateData()
     if( item && !item->hasChildren() )
     {
         ui->locationValidLabel->setText( QString(" ") );
+        setForeground(ui->locationValidLabel, KColorScheme::NormalText);
         emit valid();
     } else
     {
         ui->locationValidLabel->setText( i18n("Invalid project template, please choose a leaf item") );
+        setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
         emit invalid();
         return;
     }
@@ -159,6 +173,7 @@ void ProjectSelectionPage::validateData()
         if( !QDir( fi.absoluteFilePath()).entryList( QDir::NoDotAndDotDot | QDir::AllEntries ).isEmpty() )
         {
             ui->locationValidLabel->setText( i18n("Path already exists and contains files") );
+            setForeground(ui->locationValidLabel, KColorScheme::NegativeText);
         }
     }
 }
