@@ -24,7 +24,6 @@
 
 #include <language/duchain/types/abstracttype.h>
 
-class NormalDeclarationCompletionItem;
 class QString;
 class QVariant;
 template<class T>
@@ -37,6 +36,7 @@ namespace KDevelop {
 
 namespace Cpp {
 
+class NormalDeclarationCompletionItem;
 void createArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true, bool noShortening = false );
 
 void createTemplateArgumentList(const NormalDeclarationCompletionItem& item, QString& ret, QList<QVariant>* highlighting, bool includeDefaultParams = true );
