@@ -45,6 +45,8 @@
 #include "expressionvisitor.h"
 #include "expressionparser.h"
 #include "codecompletion/context.h"
+#include "codecompletion/helpers.h"
+#include "codecompletion/item.h"
 #include "cpppreprocessenvironment.h"
 #include <language/duchain/classdeclaration.h>
 #include "cppduchain/missingdeclarationproblem.h"
@@ -2019,6 +2021,22 @@ void TestCppCodeCompletion::testPreprocessor() {
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("boHallo"));
+  }
+}
+
+void TestCppCodeCompletion::testArgumentList()
+{
+  {
+    TopDUContext* top = parse(QByteArray("void foo(int arg[]){}"), DumpNone);
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().size(), 1);
+    
+    CompletionItemTester complCtx(top, "");
+    Cpp::NormalDeclarationCompletionItem item(DeclarationPointer(top->localDeclarations().first()), KSharedPtr<KDevelop::CodeCompletionContext>(complCtx.completionContext.data()));
+    QString ret;
+    Cpp::createArgumentList(item, ret, 0);
+    QEXPECT_FAIL("", "The type gets prepended to the identifier in createArgumentList, see helpers.cpp loc 143ff", Continue);
+    QCOMPARE(ret, QString("(int arg[])"));
   }
 }
 

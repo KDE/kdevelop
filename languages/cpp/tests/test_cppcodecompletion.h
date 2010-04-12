@@ -113,6 +113,7 @@ private slots:
   void testSubClassVisibility();
   void testSignalSlotCompletion();
   void testStringProblem();
+  void testArgumentList();
 
 public:
   enum DumpArea {
