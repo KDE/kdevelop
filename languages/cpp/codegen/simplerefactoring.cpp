@@ -46,7 +46,6 @@
 #include <language/duchain/functiondefinition.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
-#include <project/interfaces/ibuildsystemmanager.h>
 #include "cppnewclass.h"
 //#include "makeimplementationprivate.h"
 #include <templatedeclaration.h>
@@ -59,8 +58,6 @@
 #include <kparts/mainwindow.h>
 #include <language/duchain/duchainutils.h>
 #include <dumptree.h>
-#include <KDialog>
-#include <QListWidget>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iselectioncontroller.h>
 
@@ -174,6 +171,7 @@ void SimpleRefactoring::executeNewClassAction() {
 
 void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
 {
+  ///TODO: refactor and put this also into the CppNewClassWizard
   KUrl u;
   
   //Pick a folder to guess Possible URL for new class
@@ -187,97 +185,11 @@ void SimpleRefactoring::createNewClass(ProjectBaseItem* item)
   }
   else
     u = folderFromSelection();
-  
+
   //Run wizard
-  CppNewClass newClassGenerator;
+  CppNewClass newClassGenerator(item);
   CppNewClassWizard newClassWizard(qApp->activeWindow(), &newClassGenerator, u);
-  int result=newClassWizard.exec();
-  if(result==QDialog::Accepted && item) {
-    //Pick the folder Item that should contain the new class
-    IProject* p=item->project();
-    ProjectFolderItem* folder=item->folder();
-    ProjectTargetItem* target=item->target();
-
-    if(target) {
-      folder=static_cast<ProjectFolderItem*>(item->target()->parent());
-      Q_ASSERT(folder->folder());
-    } else if(!folder) {
-      QList<ProjectFolderItem*> folderList = p->foldersForUrl(newClassWizard.implementationUrl().upUrl());
-      if(folderList.isEmpty())
-        return;
-      folder = folderList.first();
-    }
-
-    // find target to add created class to
-    if(!target && folder && p->buildSystemManager() &&
-        p->buildSystemManager()->features() & IBuildSystemManager::Targets )
-    {
-      QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
-      for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
-        KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
-        t=bit->targetList();
-      }
-      if(t.count()==1) //Just choose this one
-        target=t.first();
-      else if(t.count() > 1) {
-        KDialog d;
-        QWidget *w=new QWidget(&d);
-        w->setLayout(new QVBoxLayout);
-        w->layout()->addWidget(new QLabel("Choose one target to add the file or cancel if you do not want to do so."));
-        QListWidget* targetsWidget=new QListWidget(w);
-        targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        foreach(ProjectTargetItem* it, t) {
-          targetsWidget->addItem(it->text());
-        }
-        w->layout()->addWidget(targetsWidget);
-        
-        targetsWidget->setCurrentRow(0);
-        d.setButtons( KDialog::Ok | KDialog::Cancel);
-        d.enableButtonOk(true);
-        d.setMainWidget(w);
-      
-        if(d.exec()==QDialog::Accepted) {
-          if(targetsWidget->selectedItems().isEmpty())
-            QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
-          else
-            target= t[targetsWidget->currentRow()];
-        }
-      }
-    }
-
-    if(target && p->buildSystemManager())
-    {
-      ProjectFileItem* file = 0;
-      ProjectFileItem* header = 0;
-
-      // usually the filemanager will have added these files automatically
-      // if not, do it manually
-      QList< ProjectFileItem* > matches = p->filesForUrl(newClassWizard.implementationUrl());
-      if (!matches.isEmpty()) {
-        file = matches.first();
-      } else if (p->projectFileManager()) {
-        ///TODO: this case will still show the "file already exists" error message
-        file = p->projectFileManager()->addFile(newClassWizard.implementationUrl(), folder);
-      }
-      matches = p->filesForUrl(newClassWizard.headerUrl());
-      if (!matches.isEmpty()) {
-        header = matches.first();
-      } else if (p->projectFileManager()) {
-        ///TODO: this case will still show the "file already exists" error message
-        header = p->projectFileManager()->addFile(newClassWizard.headerUrl(), folder);
-      }
-
-      if(file)
-        p->buildSystemManager()->addFileToTarget(file, target);
-      else
-        kWarning() << "Could not add source file to build manager" << newClassWizard.implementationUrl();
-      
-      if(header)
-        p->buildSystemManager()->addFileToTarget(header, target);
-      else
-        kWarning() << "Could not add header file to build-manager" << newClassWizard.headerUrl();
-    }
-  }
+  newClassWizard.exec();
 }
 
 void SimpleRefactoring::executeMoveIntoSourceAction() {

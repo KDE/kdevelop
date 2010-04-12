@@ -26,6 +26,11 @@
 #include <language/codegen/overridespage.h>
 #include "cppduchain/cpptypes.h"
 
+namespace KDevelop
+{
+class ProjectBaseItem;
+}
+
 class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
 {
   Q_OBJECT
@@ -57,7 +62,9 @@ class CppNewClass : public KDevelop::ClassGenerator
       Struct
     };
     
-    CppNewClass() : m_type(DefaultType), m_objectType(new CppClassType) {};
+    CppNewClass(KDevelop::ProjectBaseItem* parentItem)
+      : m_type(DefaultType), m_objectType(new CppClassType), m_parentItem(parentItem)
+    {};
     virtual ~CppNewClass(void) {};
     
     virtual KDevelop::DocumentChangeSet generate();
@@ -84,6 +91,8 @@ class CppNewClass : public KDevelop::ClassGenerator
     Type m_type;
     
     mutable CppClassType::Ptr m_objectType;
+
+    KDevelop::ProjectBaseItem* m_parentItem;
 };
 
 //!@todo  Tag the overrided methods with the name of the parent class

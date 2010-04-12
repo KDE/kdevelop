@@ -41,6 +41,15 @@
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/coderepresentation.h>
 
+#include <project/projectmodel.h>
+#include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectfilemanager.h>
+#include <KDialog>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QLabel>
+
 #include "../codecompletion/implementationhelperitem.h"
 #include "../codecompletion/missingincludeitem.h"
 
@@ -98,7 +107,75 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
   KDevelop::DocumentChangeSet changes;
   generateHeader(changes);
   generateImplementation(changes);
-  
+
+  //Pick the folder Item that should contain the new class
+  IProject* p=m_parentItem->project();
+  ProjectFolderItem* folder=m_parentItem->folder();
+  ProjectTargetItem* target=m_parentItem->target();
+
+  if(target) {
+    folder=static_cast<ProjectFolderItem*>(m_parentItem->target()->parent());
+    Q_ASSERT(folder->folder());
+  }else if(!folder) {
+    QList<ProjectFolderItem*> folderList = p->foldersForUrl(implementationUrl().upUrl());
+    if(folderList.isEmpty())
+      return changes;
+    folder = folderList.first();
+  }
+
+  // find target to add created class to
+  if(!target && folder && p->buildSystemManager() &&
+      p->buildSystemManager()->features() & KDevelop::IBuildSystemManager::Targets )
+  {
+    QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
+    for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
+      KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
+      t=bit->targetList();
+    }
+    if(t.count()==1) //Just choose this one
+      target=t.first();
+    else if(t.count() > 1) {
+      KDialog d;
+      QWidget *w=new QWidget(&d);
+      w->setLayout(new QVBoxLayout);
+      w->layout()->addWidget(new QLabel("Choose one target to add the file or cancel if you do not want to do so."));
+      QListWidget* targetsWidget=new QListWidget(w);
+      targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+      foreach(ProjectTargetItem* it, t) {
+        targetsWidget->addItem(it->text());
+      }
+      w->layout()->addWidget(targetsWidget);
+      
+      targetsWidget->setCurrentRow(0);
+      d.setButtons( KDialog::Ok | KDialog::Cancel);
+      d.enableButtonOk(true);
+      d.setMainWidget(w);
+    
+      if(d.exec()==QDialog::Accepted) {
+        if(targetsWidget->selectedItems().isEmpty())
+          QMessageBox::warning(0, QString(), i18n("Did not select anything, not adding to a target."));
+        else
+          target= t[targetsWidget->currentRow()];
+      }
+    }
+  }
+
+  if(target && p->buildSystemManager())
+  {
+    ProjectFileItem* file = p->projectFileManager()->addFile(implementationUrl(), folder);
+    ProjectFileItem* header = p->projectFileManager()->addFile(headerUrl(), folder);
+
+    if(file)
+      p->buildSystemManager()->addFileToTarget(file, target);
+    else
+      kWarning() << "Could not add source file to build manager" << implementationUrl();
+    
+    if(header)
+      p->buildSystemManager()->addFileToTarget(header, target);
+    else
+      kWarning() << "Could not add header file to build-manager" << headerUrl();
+  }
+
   return changes;
 }
 
