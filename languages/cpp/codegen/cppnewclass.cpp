@@ -252,7 +252,7 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
 
   // if (baseClassIsQObjectDerivative) output << "\tQ_OBJECT\n\n";
 
-  Declaration::AccessPolicy ap = m_type == Class ? Declaration::Private : Declaration::Public;
+  Declaration::AccessPolicy ap = (m_type == Class || m_type == DefaultType) ? Declaration::Private : Declaration::Public;
 
   // Constructor(s)
 
