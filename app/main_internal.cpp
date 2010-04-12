@@ -53,6 +53,7 @@
 #include <shell/runcontroller.h>
 #include <shell/launchconfiguration.h>
 #include <interfaces/ilauncher.h>
+#include <interfaces/iproject.h>
 
 #include "kdevideextension.h"
 #include <KMessageBox>
@@ -121,7 +122,18 @@ static const char description[] = I18N_NOOP( "The KDevelop Integrated Developmen
         {
             QFileInfo info( p );
             if( info.suffix() == "kdev4" ) {
-                core->projectController()->openProject( KUrl(info.absoluteFilePath()) );
+                // make sure the project is not already opened by the session controller
+                bool shouldOpen = true;
+                KUrl url(info.absoluteFilePath());
+                foreach(KDevelop::IProject* p, core->projectController()->projects()) {
+                    if (p->projectFileUrl() == url) {
+                        shouldOpen = false;
+                        break;
+                    }
+                }
+                if (shouldOpen) {
+                    core->projectController()->openProject( url );
+                }
             }
         }
     }
