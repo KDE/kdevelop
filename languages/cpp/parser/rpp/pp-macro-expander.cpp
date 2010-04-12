@@ -382,9 +382,9 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           else if (name == fileIndex)
             output.appendString(inputPosition, convertFromByteArray(QString("\"%1\"").arg(m_engine->currentFileNameString()).toUtf8()));
           else if (name == dateIndex)
-            output.appendString(inputPosition, convertFromByteArray(QDate::currentDate().toString("MMM dd yyyy").toUtf8()));
+            output.appendString(inputPosition, convertFromByteArray(QDate::currentDate().toString("\"MMM dd yyyy\"").toUtf8()));
           else if (name == timeIndex)
-            output.appendString(inputPosition, convertFromByteArray(QTime::currentTime().toString("hh:mm:ss").toUtf8()));
+            output.appendString(inputPosition, convertFromByteArray(QTime::currentTime().toString("\"hh:mm:ss\"").toUtf8()));
           else
             output.appendString(inputPosition, name);
           continue;

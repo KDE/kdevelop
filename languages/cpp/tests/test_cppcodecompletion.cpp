@@ -1652,6 +1652,33 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
 }
 }
 
+void TestCppCodeCompletion::testTimeMacro()
+{
+  QString test("const char* str = __TIME__;");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QVERIFY(ctx->problems().isEmpty());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+}
+
+void TestCppCodeCompletion::testDateMacro()
+{
+  QString test("const char* str = __DATE__;");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QVERIFY(ctx->problems().isEmpty());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+}
+
+void TestCppCodeCompletion::testFileMacro()
+{
+  QString test("const char* str = __FILE__;");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QVERIFY(ctx->problems().isEmpty());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+}
+
 void TestCppCodeCompletion::testNaiveMatching() {
   return;
     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Naive);
