@@ -108,6 +108,12 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
   generateHeader(changes);
   generateImplementation(changes);
 
+  if (!m_parentItem) {
+    // happens when we don't select anything in the project view
+    // and create a new class from the code menu
+    return changes;
+  }
+
   //Pick the folder Item that should contain the new class
   IProject* p=m_parentItem->project();
   ProjectFolderItem* folder=m_parentItem->folder();
