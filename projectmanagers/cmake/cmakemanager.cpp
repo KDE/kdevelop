@@ -432,9 +432,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 folder->setText(data.projectName);
             }
 
+            QStringList alreadyAdded;
             foreach (const Subdirectory& subf, data.subdirectories)
             {
-                if(subf.name.isEmpty()) //This would not be necessary if we didn't parse the wrong lines
+                if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't parse the wrong lines
                     continue;
                 
                 KUrl path(subf.name);
@@ -449,6 +450,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 kDebug(9042) << "Found subdir " << path << "which should be into" << subroot;
                 if(subroot.isParentOf(path) || path.isParentOf(subroot))
                 {
+                    alreadyAdded.append(subf.name);
                     CMakeFolderItem* parent=folder;
                     if(path.upUrl()!=folder->url())
                         parent=0;
