@@ -17,3 +17,5 @@ make
 
 And to install run:
 make install
+
+Please also see: http://www.kdevelop.org/mediawiki/index.php/KDevelop_4/compiling
