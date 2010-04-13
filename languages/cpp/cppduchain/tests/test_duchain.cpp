@@ -2145,6 +2145,31 @@ void TestDUChain::testSignalSlotDeclaration() {
 
     release(top);
   }
+  {
+    // should be valid signals even if the arguments are not found
+    QByteArray text("class C {__qt_signals__: void signal2(NotFound); public __qt_slots__: void slot2(NotFound);}; ");
+
+    TopDUContext* top = parse(text, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+    QCOMPARE(top->localDeclarations().count(), 1);
+    QCOMPARE(top->childContexts().count(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
+
+    ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
+    QEXPECT_FAIL("", "DeclarationBuilder::visitInitDeclarator cannot find the arguments in checkParameterDeclarationClause and hence sets parameter_is_initializer.\n"
+                     "That way the declaration won't even be a function", Abort);
+    QVERIFY(classFun);
+    QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Protected);
+    QVERIFY(classFun->isSignal());
+
+    classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[1]);
+    QVERIFY(classFun);
+    QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Public);
+    QVERIFY(classFun->isSlot());
+
+    release(top);
+  }
 }
 
 void TestDUChain::testSignalSlotUse() {
