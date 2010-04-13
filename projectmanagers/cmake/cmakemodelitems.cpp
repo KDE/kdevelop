@@ -27,9 +27,9 @@
 #include <language/duchain/parsingenvironment.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
-CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name,
+CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const QString &name, const QString& build,
                                   CMakeFolderItem* item)
-    : KDevelop::ProjectBuildFolderItem( project, name, item ), m_formerParent(item)
+    : KDevelop::ProjectBuildFolderItem( project, name, item ), m_formerParent(item), m_buildDir(build)
 {}
 
 QStringList CMakeFolderItem::includeDirectories() const

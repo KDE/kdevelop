@@ -65,7 +65,7 @@ class DUChainAttatched
 class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public DescriptorAttatched
 {
     public:
-        CMakeFolderItem( KDevelop::IProject *project, const QString &name, CMakeFolderItem* parent);
+        CMakeFolderItem( KDevelop::IProject *project, const QString &name, const QString& builddir, CMakeFolderItem* parent);
         virtual ~CMakeFolderItem() {}
         void setIncludeDirectories(const QStringList &l) { m_includeList=l; }
         QStringList includeDirectories() const;
@@ -80,11 +80,14 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         CMakeFolderItem* formerParent() const { return m_formerParent; }
         
         void setFormerParent(CMakeFolderItem* parent) { m_formerParent=parent; }
+        
+        QString buildDir() const { return m_buildDir; }
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;
         CMakeDefinitions m_defines;
         CMakeFolderItem* m_formerParent;
+        QString m_buildDir;
 };
 
 class CMakeExecutableTargetItem 

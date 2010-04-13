@@ -103,12 +103,10 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         const CMakeDefinitions& definitions() const { return m_defs; }
         
         QString projectName() const { return m_projectName; }
-        QStringList subdirectories() const { return m_subdirectories; }
+        QList<Subdirectory> subdirectories() const { return m_subdirectories; }
         QList<Target> targets() const { return m_targetForId.values(); }
         QStringList resolveDependencies(const QStringList& target) const;
         QStringList includeDirectories() const { return m_includeDirectories; }
-            
-        QMap<QString, CMakeFunctionDesc> folderDeclarations() const { return m_folderDesc; }
             
         int walk(const CMakeFileContent& fc, int line, bool isClean=false);
         
@@ -173,10 +171,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         CMakeProperties m_props;
         QStringList m_modulePath;
         QString m_projectName;
-        QStringList m_subdirectories;
+        QList<Subdirectory> m_subdirectories;
         QStringList m_includeDirectories;
         QMap<QString, QStringList> m_generatedFiles;
-        QMap<QString, CMakeFunctionDesc> m_folderDesc;
         QMap<QString, Target> m_targetForId;
         
         QStack< VisitorState > m_backtrace;

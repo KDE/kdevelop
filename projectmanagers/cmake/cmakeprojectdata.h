@@ -7,11 +7,10 @@
 struct CMakeProjectData
 {
     QString projectName;
-    QStringList subdirectories;
+    QList<Subdirectory> subdirectories;
     QStringList includeDirectories;
     CMakeDefinitions definitions;
     QList<Target> targets;
-    QMap<QString, CMakeFunctionDesc> folderDeclarations;
     
     VariableMap vm;
     MacroMap mm;

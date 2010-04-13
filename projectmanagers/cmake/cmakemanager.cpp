@@ -162,31 +162,19 @@ CMakeManager::~CMakeManager()
 
 KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
-    KUrl path = CMake::currentBuildDir(item->project());
-    if(path.isEmpty())
-    {
-        return KUrl();
+    KUrl ret;
+    if(item) {
+        if(item==item->project()->projectItem())
+            ret=CMake::currentBuildDir(item->project());
+        else {
+            ret=buildDirectory(dynamic_cast<CMakeFolderItem*>(item->parent()));
+            CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
+            if(fi)
+                ret.addPath(fi->buildDir());
+        }
+//         kDebug() << "Xol...." << item->url() << ret;
     }
-
-    CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
-    for(; !fi && item; )
-    {
-        item=static_cast<ProjectBaseItem*>(item->parent());
-        fi=dynamic_cast<CMakeFolderItem*>(item);
-    }
-    if(!fi) {
-        return path;
-    }
-
-    //Can't get it from item->project()->projectItem()->url() because
-    //it might not be created yet.
-    KUrl projectPath = CMake::projectRoot(item->project());
-    QString relative=KUrl::relativeUrl( projectPath, fi->url() );
-    path.addPath(relative);
-    path.cleanPath();
-
-    kDebug() << "Build folder: " << path;
-    return path;
+    return ret;
 }
 
 KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project, const KUrl& baseUrl)
@@ -303,7 +291,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             }
         }
 
-        m_rootItem = new CMakeFolderItem(project, folderUrl.url(), 0 );
+        m_rootItem = new CMakeFolderItem(project, folderUrl.url(), QString(), 0 );
         m_rootItem->setProjectRoot(true);
 
         KUrl cachefile=buildDirectory(m_rootItem);
@@ -417,7 +405,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 data.definitions=v.definitions();
                 data.includeDirectories=v.includeDirectories();
                 data.targets=v.targets();
-                data.folderDeclarations=v.folderDeclarations();
                 data.properties=v.properties();
                 
                 QList<Target>::iterator it=data.targets.begin(), itEnd=data.targets.end();
@@ -445,16 +432,16 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 folder->setText(data.projectName);
             }
 
-            foreach (const QString& subf, data.subdirectories)
+            foreach (const Subdirectory& subf, data.subdirectories)
             {
-                if(subf.isEmpty()) //This would not be necessary if we didn't parse the wrong lines
+                if(subf.name.isEmpty()) //This would not be necessary if we didn't parse the wrong lines
                     continue;
                 
-                KUrl path(subf);
+                KUrl path(subf.name);
                 if(path.isRelative())
                 {
                     KUrl pp=KUrl(folder->url());
-                    pp.addPath(subf);
+                    pp.addPath(subf.name);
                     path=pp;
                 }
                 path.adjustPath(KUrl::AddTrailingSlash);
@@ -466,7 +453,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     if(path.upUrl()!=folder->url())
                         parent=0;
 
-                    CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf, parent );
+                    CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf.name, subf.build_dir, parent );
                     kDebug() << "folder: " << a << a->index();
                     a->setUrl(path);
                     a->setDefinitions(data.definitions);
@@ -478,7 +465,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     }
 
                     DescriptorAttatched* datt=static_cast<DescriptorAttatched*>(a);
-                    datt->setDescriptor(data.folderDeclarations[subf]);
+                    datt->setDescriptor(subf.desc);
                 }
             }
 
@@ -635,7 +622,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         IProject* project=item->project();
 
         parent->removeRow(item->row());
-        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), 0);
+        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), QString(), 0);
 
         fi->setFormerParent(former);
         reimport(fi, parent->url());

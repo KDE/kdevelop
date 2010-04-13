@@ -312,16 +312,30 @@ int CMakeProjectVisitor::visit(const AddSubdirectoryAst *subd)
     kDebug(9042) << "adding subdirectory" << subd->sourceDir();
 
     VisitorState p=stackTop();
-    m_folderDesc[subd->sourceDir()]=p.code->at(p.line);
 
-    m_subdirectories += subd->sourceDir();
+    Subdirectory d;
+    d.name=subd->sourceDir();
+    d.build_dir=subd->binaryDir().isEmpty() ? d.name : subd->binaryDir();
+    d.desc=p.code->at(p.line);
+    
+    m_subdirectories += d;
     return 1;
 }
 
 int CMakeProjectVisitor::visit(const SubdirsAst *sdirs)
 {
     kDebug(9042) << "adding subdirectories" << sdirs->directories() << sdirs->exluceFromAll();
-    m_subdirectories += sdirs->directories() << sdirs->exluceFromAll();
+    VisitorState p=stackTop();
+    CMakeFunctionDesc desc=p.code->at(p.line);
+    
+    foreach(const QString& dir, sdirs->directories() + sdirs->exluceFromAll()) {
+        Subdirectory d;
+        d.name=dir;
+        d.build_dir=dir;
+        d.desc=desc;
+        
+        m_subdirectories += d;
+    }
     return 1;
 }
 

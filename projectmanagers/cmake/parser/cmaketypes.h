@@ -49,6 +49,13 @@ struct Target
     QString name;
 };
 
+struct Subdirectory
+{
+    QString name;
+    CMakeFunctionDesc desc;
+    QString build_dir;
+};
+
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, VariableProperty };
 typedef QMap<QString, QMap<QString, QStringList> > CategoryType;
 typedef QMap<PropertyType, CategoryType > CMakeProperties;
