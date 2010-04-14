@@ -21,6 +21,7 @@
 #define MAIN_H
 
 #include <QObject>
+#include <QAtomicInt>
 #include <language/duchain/topducontext.h>
 
 namespace KDevelop {
@@ -39,6 +40,7 @@ class Manager : public QObject {
         QSet<KUrl> m_waiting;
         uint m_total;
         KCmdLineArgs* m_args;
+        QAtomicInt m_allFilesAdded;
 
     public slots:
         // delay init into event loop so the DUChain can always shutdown gracefully

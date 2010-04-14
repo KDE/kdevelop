@@ -65,7 +65,7 @@ void messageOutput(QtMsgType type, const char *msg)
 }
 
 
-Manager::Manager(KCmdLineArgs* args) : m_total(0), m_args(args)
+Manager::Manager(KCmdLineArgs* args) : m_total(0), m_args(args), m_allFilesAdded(0)
 {
 }
 
@@ -138,9 +138,10 @@ void Manager::init()
     m_args->clear();
 
     addToBackgroundParser(dir.toLocalFile(), (TopDUContext::Features)features);
+    m_allFilesAdded = 1;
 
-    if ( !waiting().isEmpty() ) {
-        std::cout << "Added " << waiting().size() << " files to the background parser" << std::endl;
+    if ( m_total ) {
+        std::cout << "Added " << m_total << " files to the background parser" << std::endl;
     } else {
         std::cout << "no files added to the background parser" << std::endl;
     }
@@ -154,7 +155,7 @@ void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
     
     std::cout << "processed " << (m_total - m_waiting.size()) << " out of " << m_total << std::endl;
     
-    if(m_waiting.isEmpty())
+    if(m_waiting.isEmpty() && m_allFilesAdded)
     {
         std::cout << "ready" << std::endl;
         QApplication::quit();
