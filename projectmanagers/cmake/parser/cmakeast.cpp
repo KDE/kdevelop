@@ -2576,7 +2576,8 @@ SeparateArgumentsAst::~SeparateArgumentsAst()
 {
 }
 
-
+/// @todo Parse the UNIX_COMMAND and WINDOWS_COMMAND keywords
+/// introduced in CMake 2.8.
 bool SeparateArgumentsAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if ( func.name.toLower() != "separate_arguments" || func.arguments.count()!=1)

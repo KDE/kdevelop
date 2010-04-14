@@ -1899,6 +1899,8 @@ int CMakeProjectVisitor::visit(const MarkAsAdvancedAst *maa)
     return 1;
 }
 
+/// @todo Add support for platform-specific argument splitting
+/// (UNIX_COMMAND and WINDOWS_COMMAND) introduced in CMake 2.8.
 int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
 {
     QString varName=separgs->variableName();
@@ -1907,6 +1909,7 @@ int CMakeProjectVisitor::visit( const SeparateArgumentsAst * separgs )
     {
         res += value.split(' ');
     }
+    m_vars->insert(separgs->variableName(), res);
     return 1;
 }
 

@@ -371,6 +371,17 @@ void CMakeProjectVisitorTest::testRun_data()
     QTest::newRow("unfinished function") <<
                             "function(test)\n"
                             << cacheValues << results;
+    results.clear();
+
+    
+    results << StringPair("args", "one;two;three;four");
+    results << StringPair("args2", "one;two;\"three;four\"");
+    QTest::newRow("separate arguments") <<
+                            "SET(args \"one two three four\")\n"
+                            "SET(args2 \"one two \\\"three four\\\"\")\n"
+                            "SEPARATE_ARGUMENTS(args)\n"
+                            "SEPARATE_ARGUMENTS(args2)\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
