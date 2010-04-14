@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDEVELOP_VERSION_MAJOR 3 )
 set( KDEVELOP_VERSION_MINOR 10 )
-set( KDEVELOP_VERSION_PATCH 0 )
+set( KDEVELOP_VERSION_PATCH 1 )
 
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
@@ -36,7 +36,7 @@ endif( extragear-sdk_SOURCE_DIR )
 
 if( NOT KDEVPLATFORM_FOUND )
 
-    find_package(KDevPlatform 0.10.0 REQUIRED)
+    find_package(KDevPlatform 0.10.1 REQUIRED)
     include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
 endif( NOT KDEVPLATFORM_FOUND )
