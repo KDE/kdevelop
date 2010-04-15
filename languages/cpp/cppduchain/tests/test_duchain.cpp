@@ -2236,7 +2236,7 @@ void TestDUChain::testSignalSlotUse() {
                     "  void connect(QObject* from, const char* signal, const char* slot); };\n"
                     "struct AA : QObject { __qt_signals__: void signal1(bool arg1 = false); };\n"
                     "class A : AA { public __qt_slots__: void slot1();\n"
-                    "  public: void test() { connect(this, __qt_sig_slot__(signal1()), this, __qt_sig_slot__(slot1()));} };");
+                    "  public: void test() { connect(this, __qt_signal__(signal1()), this, __qt_slot__(slot1()));} };");
     TopDUContext* top = parse(text, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
