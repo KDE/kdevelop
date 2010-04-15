@@ -237,12 +237,12 @@ bool CustomMakeManager::removeFile(KDevelop::ProjectFileItem *file)
 
 bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)
 {
-    return KIO::NetAccess::move( oldFile->url(), newFile, QApplication::activeWindow() );
+    return KDevelop::renameUrl( oldFile->project(), oldFile->url(), newFile );
 }
 
 bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder )
 {
-    return KIO::NetAccess::move( oldFolder->url(), newFolder, QApplication::activeWindow() );
+    return KDevelop::renameUrl( oldFolder->project(), oldFolder->url(), newFolder );
 }
 
 /////////////////////////////////////////////////////////////////////////////
