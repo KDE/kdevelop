@@ -55,6 +55,7 @@ public:
 
   /**
    * Set this array type's dimension.
+   * If @p dimension is zero, the array is considered dimensionless (eg. int[]).
    *
    * \param dimension new dimension, set to zero for a dimensionless type (eg. int[])
    */
