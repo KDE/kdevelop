@@ -31,7 +31,6 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <KIO/NetAccess>
 
 using namespace KDevelop;
 
