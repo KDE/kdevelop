@@ -626,12 +626,15 @@ void ProjectController::projectImportingFinished( IProject* project )
     //action = ac->action( "project_close" );
     //action->setEnabled( true );
 
-    d->m_recentAction->addUrl( project->projectFileUrl() );
-    KSharedConfig * config = KGlobal::config().data();
-    KConfigGroup recentGroup = config->group("RecentProjects");
-    d->m_recentAction->saveEntries( recentGroup );
+    if (Core::self()->setupFlags() != Core::NoUi)
+    {
+        d->m_recentAction->addUrl( project->projectFileUrl() );
+        KSharedConfig * config = KGlobal::config().data();
+        KConfigGroup recentGroup = config->group("RecentProjects");
+        d->m_recentAction->saveEntries( recentGroup );
 
-    config->sync();
+        config->sync();
+    }
 
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );

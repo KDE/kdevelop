@@ -510,15 +510,19 @@ void KDevelop::RunController::registerJob(KJob * job)
         return;
 
     if (!d->jobs.contains(job)) {
-        KAction* stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
-        stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
-        d->stopAction->addAction(stopJobAction);
-        connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
-        connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
+        KAction* stopJobAction = 0;
+        if (Core::self()->setupFlags() != Core::NoUi) {
+            stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
+            stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
+            d->stopAction->addAction(stopJobAction);
+            connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
 
-        job->setUiDelegate( new KDialogJobUiDelegate() );
+            job->setUiDelegate( new KDialogJobUiDelegate() );
+        }
 
         d->jobs.insert(job, stopJobAction);
+
+        connect( job, SIGNAL(finished(KJob*)), SLOT(finished(KJob*)) );
 
         IRunController::registerJob(job);
 
@@ -537,7 +541,9 @@ void KDevelop::RunController::unregisterJob(KJob * job)
     Q_ASSERT(d->jobs.contains(job));
 
     // Delete the stop job action
-    d->jobs.take(job)->deleteLater();
+    QAction *action = d->jobs.take(job);
+    if (action)
+        action->deleteLater();
 
     checkState();
 
@@ -560,7 +566,8 @@ void KDevelop::RunController::checkState()
         emit runStateChanged(d->state);
     }
 
-    d->stopAction->setEnabled(running);
+    if (Core::self()->setupFlags() != Core::NoUi)
+        d->stopAction->setEnabled(running);
 }
 
 void KDevelop::RunController::stopAllProcesses()
