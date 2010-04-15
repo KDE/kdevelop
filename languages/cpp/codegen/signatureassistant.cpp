@@ -34,6 +34,8 @@
 #include <kmessagebox.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/parsingenvironment.h>
+#include <language/duchain/types/arraytype.h>
+
 #include "signatureassistant.h"
 #include "cppduchain.h"
 
@@ -150,10 +152,27 @@ QString makeSignatureString(Signature signature, DUContext* visibilityFrom) {
     if(!ret.isEmpty())
       ret += ", ";
     
-    ret += Cpp::simplifiedTypeString(item.first.abstractType(),  visibilityFrom);
+    ///TODO: merge common code with helpers.cpp::createArgumentList
+    AbstractType::Ptr type = item.first.abstractType();
+
+    QString arrayAppendix;
+    ArrayType::Ptr arrayType;
+    while (arrayType = type.cast<ArrayType>()) {
+      type = arrayType->elementType();
+      //note: we have to prepend since we iterate from outside, i.e. from right to left.
+      if (arrayType->dimension()) {
+        arrayAppendix.prepend(QString("[%1]").arg(arrayType->dimension()));
+      } else {
+        // dimensionless
+        arrayAppendix.prepend("[]");
+      }
+    }
+    ret += Cpp::simplifiedTypeString(type,  visibilityFrom);
     
     if(!item.second.isEmpty())
       ret += " " + item.second;
+    
+    ret += arrayAppendix;
     
     if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty())
       ret += " = " + signature.defaultParams[pos];
