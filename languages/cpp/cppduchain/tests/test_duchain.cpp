@@ -2174,7 +2174,7 @@ void TestDUChain::testSignalSlotDeclaration() {
 
 void TestDUChain::testSignalSlotUse() {
   {
-    QByteArray text("class TE; class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class A : public QObject { public __qt_slots__: void slot1(); void slot2(TE*); __qt_signals__: void signal1(TE*, char);void signal2(); public: void test() { \nconnect(this, __qt_sig_slot__( signal1(TE*, const char&)), this, __qt_sig_slot__(slot2(TE*))); \nconnect(this, __qt_sig_slot__(signal2()), \n__qt_sig_slot__(slot1())); } };");
+    QByteArray text("class TE; class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; class A : public QObject { public __qt_slots__: void slot1(); void slot2(TE*); __qt_signals__: void signal1(TE*, char);void signal2(); public: void test() { \nconnect(this, __qt_signal__( signal1(TE*, const char&)), this, __qt_slot__(slot2(TE*))); \nconnect(this, __qt_signal__(signal2()), \n__qt_slot__(slot1())); } };");
 
     TopDUContext* top = parse(text, DumpNone);
 
@@ -2189,13 +2189,13 @@ void TestDUChain::testSignalSlotUse() {
     //kDebug() << top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange();
     //kDebug() << top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first().textRange();
     //kDebug() << top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first().textRange();
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange(), SimpleRange(3, 16, 3, 21).textRange());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange(), SimpleRange(3, 12, 3, 17).textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 81, 1, 86).textRange());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 75, 1, 80).textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[2]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), SimpleRange(1, 31, 1, 38));
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), SimpleRange(1, 29, 1, 36));
     QVERIFY(top->childContexts()[1]->localDeclarations()[3]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first(), SimpleRange(2, 30, 2, 37));
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first(), SimpleRange(2, 28, 2, 35));
 
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 4);
@@ -2203,7 +2203,7 @@ void TestDUChain::testSignalSlotUse() {
     release(top);
   }
   {
-    QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; struct AA : QObject { __qt_signals__: void signal1(int); void signal2(); };struct T{operator AA*() const; };class A : AA { public __qt_slots__: void slot1(); void slot2(); __qt_signals__: void signal1();public: void test() {T t;connect(t, __qt_sig_slot__(signal2()), this, __qt_sig_slot__(slot2()));connect(this, __qt_sig_slot__(signal1(int)), __qt_sig_slot__(slot1())); } }; ");
+    QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot); void connect(QObject* from, const char* signal, const char* slot); }; struct AA : QObject { __qt_signals__: void signal1(int); void signal2(); };struct T{operator AA*() const; };class A : AA { public __qt_slots__: void slot1(); void slot2(); __qt_signals__: void signal1();public: void test() {T t;connect(t, __qt_signal__(signal2()), this, __qt_slot__(slot2()));connect(this, __qt_signal__(signal1(int)), __qt_slot__(slot1())); } }; ");
 
     TopDUContext* top = parse(text, DumpNone);
 

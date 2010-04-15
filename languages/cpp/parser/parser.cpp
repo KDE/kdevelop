@@ -4661,9 +4661,15 @@ bool Parser::parseExpression(ExpressionAST *&node)
 }
 
 bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
-  if(session->token_stream->lookAhead() == Token___qt_sig_slot__) {
+  if(session->token_stream->lookAhead() == Token___qt_signal__ ||
+     session->token_stream->lookAhead() == Token___qt_slot__) {
     uint start = session->token_stream->cursor();
-    CHECK(Token___qt_sig_slot__);
+
+    if(session->token_stream->lookAhead() == Token___qt_signal__)
+      CHECK(Token___qt_signal__);
+    else
+      CHECK(Token___qt_slot__);
+
     CHECK('(');
 
     SignalSlotExpressionAST *ast = CreateNode<SignalSlotExpressionAST>(session->mempool);

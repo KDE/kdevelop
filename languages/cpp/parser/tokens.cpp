@@ -124,7 +124,8 @@ static char const * const _S_token_names[] = {
   "whitespaces",
   "xor",
   "xor_eq",
-  "__qt_sig_slot__"
+  "__qt_signal__",
+  "__qt_slot__"
 };
 
 static char const * const _S_token_texts[] = {
@@ -230,7 +231,8 @@ static char const * const _S_token_texts[] = {
   "whitespaces",
   "^",
   "^=",
-  "__qt_sig_slot__"
+  "__qt_signal__",
+  "__qt_slot__"
 };
 
 static char _S_printable[][2] = {

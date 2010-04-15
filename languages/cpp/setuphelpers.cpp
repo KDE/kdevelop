@@ -232,12 +232,12 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
 
       m.name = IndexedString("SIGNAL");
-      m.setDefinitionText("__qt_sig_slot__");
+      m.setDefinitionText("__qt_signal__");
       m.formalsList().clear();
       insertMacro( macros, m );
       
       m.name = IndexedString("SLOT");
-      m.setDefinitionText("__qt_sig_slot__");
+      m.setDefinitionText("__qt_slot__");
       m.formalsList().clear();
       insertMacro( macros, m );
     }
