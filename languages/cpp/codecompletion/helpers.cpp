@@ -141,14 +141,33 @@ void createArgumentList(const NormalDeclarationCompletionItem& item, QString& re
       }
 
       if( paramNameIt != parameters.constEnd() /*&& !(*paramNameIt)->identifier().isEmpty()*/ ) {
+        // make sure that something like 'int foo[][1][2]' gets printed as such
+        // and not like 'int[0][1][2] foo'
+        AbstractType::Ptr type;
+        if(ctx)
+          type = typeForShortenedString(*paramNameIt);
+        else
+          type = argument;
+
+        QString arrayAppendix;
+        ArrayType::Ptr arrayType;
+        while (arrayType = type.cast<ArrayType>()) {
+          type = arrayType->elementType();
+          //note: we have to prepend since we iterate from outside, i.e. from right to left.
+          if (arrayType->dimension()) {
+            arrayAppendix.prepend(QString("[%1]").arg(arrayType->dimension()));
+          } else {
+            // dimensionless
+            arrayAppendix.prepend("[]");
+          }
+        }
+
         if(noShortening) {
-          if(ctx)
-            ret += Cpp::shortenedTypeString(*paramNameIt, ctx, 1000000);
-          else
-            ret += argument->toString();
+          ret += Cpp::shortenedTypeString(type, ctx, 1000000);
         }else
-          ret += Cpp::shortenedTypeString(*paramNameIt, ctx, desiredArgumentTypeLength, item.stripPrefix());
+          ret += Cpp::shortenedTypeString(type, ctx, desiredArgumentTypeLength, item.stripPrefix());
         ret += " " + (*paramNameIt)->identifier().toString();
+        ret += arrayAppendix;
       } else if (argument)
         ret += argument->toString();
       else

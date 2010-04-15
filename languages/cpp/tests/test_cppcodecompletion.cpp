@@ -2026,17 +2026,28 @@ void TestCppCodeCompletion::testPreprocessor() {
 
 void TestCppCodeCompletion::testArgumentList()
 {
-  {
-    TopDUContext* top = parse(QByteArray("void foo(int arg[]){}"), DumpNone);
+  QMap<QByteArray, QString> codeToArgList;
+  codeToArgList.insert("void foo(int arg[]){}", "(int arg[])");
+  codeToArgList.insert("void foo(int arg[1]){}", "(int arg[1])");
+  codeToArgList.insert("void foo(int arg[][1]){}", "(int arg[][1])");
+  codeToArgList.insert("void foo(int arg[1][1]){}", "(int arg[1][1])");
+  codeToArgList.insert("void foo(int arg[][1][1]){}", "(int arg[][1][1])");
+  QMap< QByteArray, QString >::const_iterator it = codeToArgList.constBegin();
+  while (it != codeToArgList.constEnd()){
+    qDebug() << "input function is:" << it.key();
+    TopDUContext* top = parse(it.key(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().size(), 1);
-    
+
     CompletionItemTester complCtx(top, "");
     Cpp::NormalDeclarationCompletionItem item(DeclarationPointer(top->localDeclarations().first()), KSharedPtr<KDevelop::CodeCompletionContext>(complCtx.completionContext.data()));
     QString ret;
     Cpp::createArgumentList(item, ret, 0);
-    QEXPECT_FAIL("", "The type gets prepended to the identifier in createArgumentList, see helpers.cpp loc 143ff", Continue);
-    QCOMPARE(ret, QString("(int arg[])"));
+    QCOMPARE(ret, it.value());
+
+    release(top);
+
+    ++it;
   }
 }
 

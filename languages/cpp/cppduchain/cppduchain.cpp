@@ -672,21 +672,25 @@ AbstractType::Ptr stripType(KDevelop::AbstractType::Ptr type, DUContext* ctx) {
   return type;
 }
 
-QString shortenedTypeString(KDevelop::Declaration* decl, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
+AbstractType::Ptr typeForShortenedString (Declaration* decl)
+{
   AbstractType::Ptr type = decl->abstractType();
   if(decl->isTypeAlias()) {
       if(type.cast<TypeAliasType>())
         type = type.cast<TypeAliasType>()->type();
   }
-  
+
   if(decl->isFunctionDeclaration()) {
     FunctionType::Ptr funType = decl->type<FunctionType>();
     if(!funType)
-      return QString();
+      return AbstractType::Ptr();
     type = funType->returnType();
   }
-  
-  return shortenedTypeString(type, ctx, desiredLength, stripPrefix);
+  return type;
+}
+
+QString shortenedTypeString(KDevelop::Declaration* decl, KDevelop::DUContext* ctx, int desiredLength, KDevelop::QualifiedIdentifier stripPrefix) {
+  return shortenedTypeString(typeForShortenedString(decl), ctx, desiredLength, stripPrefix);
 }
 
 QString simplifiedTypeString(KDevelop::AbstractType::Ptr type, KDevelop::DUContext* visibilityFrom) {

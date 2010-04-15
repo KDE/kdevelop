@@ -133,6 +133,8 @@ KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier unTypedefType(KDevelop::De
 ///the qualified identifier will be set to an expression.
 KDEVCPPDUCHAIN_EXPORT KDevelop::IndexedTypeIdentifier identifierForType(KDevelop::AbstractType::Ptr type, KDevelop::TopDUContext* top);
 
+///Returns the type that should be used for shortened printing of the same.
+KDEVCPPDUCHAIN_EXPORT KDevelop::AbstractType::Ptr typeForShortenedString(KDevelop::Declaration* decl);
 ///Returns a shortened string version of the type attached to the given declaration.
 ///@param desiredLength the desired length. No guarantee that the resulting string will be this short. With the default-value, no shortening will happen in most cases.
 ///@param ctx visibility context to consider. All prefixes of types are shortened to the minimum length while staying visible from here
