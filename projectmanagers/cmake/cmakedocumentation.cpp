@@ -148,7 +148,7 @@ QAbstractListModel* CMakeDocumentation::indexModel() const
 
 QIcon CMakeDocumentation::icon() const
 {
-    return KIcon("text-x-cmake");
+    return KIcon("cmake");
 }
 
 QString CMakeDocumentation::name() const
