@@ -105,10 +105,10 @@ KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QStri
 
     if(m_typeForName.contains(identifier)) {
         desc=descriptionForIdentifier(identifier, m_typeForName[identifier]);
-    } else {
-        if(m_typeForName.contains(identifier.toUpper())) {
-            desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toUpper()]);
-        }
+    } else if(m_typeForName.contains(identifier.toLower())) {
+        desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toLower()]);
+    } else if(m_typeForName.contains(identifier.toUpper())) {
+        desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toUpper()]);
     }
     
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
