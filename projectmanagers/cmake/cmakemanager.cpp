@@ -172,7 +172,6 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
             if(fi)
                 ret.addPath(fi->buildDir());
         }
-//         kDebug() << "Xol...." << item->url() << ret;
     }
     return ret;
 }
@@ -619,12 +618,13 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         folder->project()->reloadModel();
     } else {
         CMakeFolderItem* former=item->formerParent();
+        QString buildDir=item->buildDir();
         ProjectFolderItem* parent=static_cast<ProjectFolderItem*>(item->parent());
         KUrl url=item->url();
         IProject* project=item->project();
 
         parent->removeRow(item->row());
-        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), QString(), 0);
+        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), buildDir, 0);
 
         fi->setFormerParent(former);
         reimport(fi, parent->url());
