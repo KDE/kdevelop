@@ -36,6 +36,9 @@
 
 class QWidget;
 
+///@todo Move the complete handling of smart-ranges out of here, so that the duchain is independent of the editor.
+///           Use the foreground-lock instead of the smart-lock everywhere.
+
 namespace KTextEditor {
   class SmartRange;
 }
@@ -824,8 +827,6 @@ private:
   friend class IndexedDUContext;
   friend class LocalIndexedDUContext;
   friend class TopDUContextDynamicData;
-  void synchronizeUsesFromSmart() const;
-  void synchronizeUsesToSmart() const;
 
   void clearDeclarationIndices();
   void updateDeclarationIndices();
