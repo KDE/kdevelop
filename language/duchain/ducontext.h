@@ -827,7 +827,10 @@ private:
   friend class IndexedDUContext;
   friend class LocalIndexedDUContext;
   friend class TopDUContextDynamicData;
-
+  
+  void synchronizeUsesFromSmart() const;
+  void synchronizeUsesToSmart() const;
+  
   void clearDeclarationIndices();
   void updateDeclarationIndices();
 
