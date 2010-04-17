@@ -220,7 +220,7 @@ int main(int argc, char** argv)
     Manager manager(args);
 
     QTimer::singleShot(0, &manager, SLOT(init()));
-    app.exec();
+    return app.exec();
 }
 
 #include "main.moc"
