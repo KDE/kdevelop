@@ -163,7 +163,7 @@ bool CorePrivate::initialize(Core::Setup mode)
     kDebug() << "initializing ui controller";
     sessionController->initialize();
     
-    if(!sessionController->lockSession())
+    if(!(mode & Core::NoUi) && !sessionController->lockSession())
     {
         KMessageBox::error(0, i18n("This session is already active in another running instance"));
         return false;
