@@ -156,7 +156,7 @@ CodeHighlightingInstance* CodeHighlighting::createInstance() const
 
 void CodeHighlighting::highlightDUChain(TopDUContext* context) const
 {
-  kDebug() << "highlighting du chain" << context->url().c_str();
+  kDebug() << "highlighting du chain" << context->url().toUrl();
 
   DUChainReadLocker lock(DUChain::lock());
 
