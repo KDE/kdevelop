@@ -68,8 +68,6 @@
 
 using KDevelop::Core;
 
-static Qt::HANDLE mainThread = QThread::currentThreadId();
-
 class KDevelopApplication: public KApplication {
 public:
     explicit KDevelopApplication(bool GUIenabled = true): KApplication(GUIenabled) {}
@@ -85,7 +83,7 @@ public:
 
 bool KDevelopApplication::notify(QObject* receiver, QEvent* event)
 {
-    KDevelop::ForegroundLock lock(QThread::currentThreadId() == mainThread);
+    KDevelop::ForegroundLock lock(QThread::currentThread() == qApp->thread());
     return KApplication::notify(receiver, event);
 }
 
