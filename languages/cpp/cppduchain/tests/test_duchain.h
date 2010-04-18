@@ -75,6 +75,7 @@ private slots:
   void testDeclareFriend();
   void testDeclareNamespace();
   void testDeclareNamespace2();
+  void testLocalNamespaceAlias();
   void testDeclareUsingNamespace();
   void testUsingDeclaration();
   void testUsingDeclarationInTemplate();

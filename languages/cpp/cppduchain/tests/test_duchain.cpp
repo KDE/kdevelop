@@ -2061,6 +2061,28 @@ void TestDUChain::testDeclareUsingNamespace2()
   release(top);
 }
 
+void TestDUChain::testLocalNamespaceAlias()                                                                                                                                
+{                                                                                                                                                                          
+  QEXPECT_FAIL("", "Local namespace aliases currently don't work, bug 207548", Abort);                                                                                   
+                                                                                                                                                                          
+  QByteArray method("namespace foo { int bar(); } int test() { namespace afoo = foo; afoo::bar(); }");                                                                   
+                                                                                                                                                                          
+  TopDUContext* top = parse(method, DumpAll);                                                                                                                            
+                                                                                                                                                                          
+  DUChainWriteLocker lock(DUChain::lock());                                                                                                                              
+                                                                                                                                                                          
+  QCOMPARE(top->childContexts().count(), 3);                                                                                                                             
+  QCOMPARE(top->childContexts()[2]->localDeclarations().size(), 1);                                                                                                      
+  NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(top->childContexts()[2]->localDeclarations()[0]);                                      
+  QVERIFY(aliasDecl);                                                                                                                                                    
+  QCOMPARE(aliasDecl->importIdentifier(), QualifiedIdentifier("foo"));                                                                                                   
+  QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));                                                                                                                 
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);                                                                                                      
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);                                                                                           
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);                                                                                  
+                                                                                                                                                                          
+  release(top);                                                                                                                                                          
+}
 
 void TestDUChain::testDeclareUsingNamespace()
 {
