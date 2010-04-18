@@ -1376,9 +1376,13 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
         FOREACH_ARRAY( Declaration* importDecl, imports )
         {
           //Search for the identifier with the import-identifier prepended
-          Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
-          NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
-          identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
+          if(dynamic_cast<NamespaceAliasDeclaration*>(importDecl))
+          {
+            NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+            identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
+          }else{
+            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().textRange();
+          }
         }
       }
 
