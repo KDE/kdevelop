@@ -1473,6 +1473,24 @@ void TestDUChain::testDeclareStructInNamespace()
   TEST_FILE_PARSE_ONLY
 
   {
+    QByteArray method("namespace A { class B { class C; } ; } namespace A { class A::B::C { }; }");
+    
+    TopDUContext* top = parse(method, DumpAll);
+    
+    DUChainWriteLocker lock(DUChain::lock());
+    
+    QCOMPARE(top->childContexts().count(), 2);
+    QCOMPARE(top->childContexts()[0]->childContexts().size(), 1);
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations().size(), 1);
+    
+    ForwardDeclaration* forwardDecl = dynamic_cast<ForwardDeclaration*>(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]);
+    QVERIFY(forwardDecl);
+    QVERIFY(forwardDecl->resolve(top));
+    
+    release(top);
+  }
+
+  {
     //                 0         1         2         3         4         5         6         7
     //                 01234567890123456789012345678901234567890123456789012345678901234567890123456789
     QByteArray method("struct A {A(); struct B;}; struct A::B { B(); struct C; }; struct A::B::C { A mem; B mem2; void test(A param); }; void A::B::C::test(A param) {};");

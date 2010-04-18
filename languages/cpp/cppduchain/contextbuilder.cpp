@@ -262,12 +262,8 @@ QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const Q
     DUChainReadLocker lock(DUChain::lock());
 
     QualifiedIdentifier currentScopeId = currentContext()->scopeIdentifier(true);
-    
-    QualifiedIdentifier globalId = currentScopeId;
-    globalId += prefixId;
-    globalId.setExplicitlyGlobal(true);
 
-    QList<Declaration*> decls = currentContext()->findDeclarations(globalId, pos);
+    QList<Declaration*> decls = currentContext()->findDeclarations(prefixId, pos);
 
     if(!decls.isEmpty()) {
       DUContext* classContext = decls.first()->logicalInternalContext(0);
@@ -276,7 +272,7 @@ QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const Q
         //Change the prefix-id so it respects namespace-imports
         
         prefixId = classContext->scopeIdentifier(true);
-        if(prefixId.count() >= currentScopeId.count())
+        if(prefixId.count() >= currentScopeId.count() && prefixId.left(currentScopeId.count()) == currentScopeId)
           prefixId = prefixId.mid(currentScopeId.count());
         else
           kDebug() << "resolved bad prefix context. Should start with" << currentScopeId.toString() << "but is" << prefixId.toString();
