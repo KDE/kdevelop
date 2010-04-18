@@ -426,7 +426,28 @@ bool Area::closeView(View* view)
 {
     QPointer<Document> doc = view->document();
 
-    if(doc && doc->views().count() == 1) {
+    bool mustclosedoc = true;
+    
+    int inviewcnt = 0;
+    if (doc)
+        foreach(Sublime::View *testview, doc->views())
+            if (views().contains(testview))
+                inviewcnt++;
+    if (inviewcnt > 1)
+        mustclosedoc = false;
+            
+    if (doc)
+        foreach(Sublime::Area *testarea, controller()->allAreas())
+        foreach(Sublime::View *testview, doc->views())
+            if (testarea->views().contains(testview) &&
+                view->document() == testview->document() 
+                && testarea->workingSet() != this->workingSet())
+                mustclosedoc = false;
+                
+
+    
+    //if(doc && doc->views().count() == 1) {
+    if (mustclosedoc) {
         if(!doc->closeDocument())
             return false;
         else
