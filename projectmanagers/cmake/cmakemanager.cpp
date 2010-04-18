@@ -996,7 +996,7 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
     ApplyChangesWidget e;
     e.setCaption(relative);
     e.setInformation(i18n("Create a folder called '%1'.", relative));
-    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    e.addDocuments(IndexedString(lists));
 
     e.document()->insertLine(e.document()->lines(), QString("add_subdirectory(%1)").arg(relative));
 
@@ -1039,7 +1039,7 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
     ApplyChangesWidget e;
     e.setCaption(it->text());
     e.setInformation(i18n("Remove a folder called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    e.addDocuments(IndexedString(lists));
     
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
     KTextEditor::Range r=cmit->descriptor().range().textRange();
@@ -1161,7 +1161,7 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     ApplyChangesWidget e;
     e.setCaption(it->text());
     e.setInformation(i18n("Remove a file called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    e.addDocuments(IndexedString(lists));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, QString());
     if(ret)
@@ -1211,7 +1211,7 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     ApplyChangesWidget e;
     e.setCaption(it->fileName());
     e.setInformation(i18n("Add a file called '%1' to target '%2'.", it->fileName(), target->text()));
-    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    e.addDocuments(IndexedString(lists));
 
     QString filename=KUrl::relativeUrl(folder->url(), it->url());
     if(filename.startsWith("./"))
@@ -1326,7 +1326,7 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 
         KUrl lists=folder->url();
         lists.addPath("CMakeLists.txt");
-        e.addDocuments(IndexedString(lists), IndexedString(lists));
+        e.addDocuments(IndexedString(lists));
         
         QString newName=KUrl::relativePath(it->url().upUrl().path(), newUrl.path());
         if(newName.startsWith("./"))
@@ -1361,7 +1361,7 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     ApplyChangesWidget e;
     e.setCaption(it->text());
     e.setInformation(i18n("Rename a folder called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists), IndexedString(lists));
+    e.addDocuments(IndexedString(lists));
     
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
     KTextEditor::Range r=cmit->descriptor().argRange().textRange();
