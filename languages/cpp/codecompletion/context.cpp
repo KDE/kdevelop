@@ -694,7 +694,7 @@ bool CodeCompletionContext::doConstructorCompletion() {
   LOCKDUCHAIN;
 
   if(!m_duContext)
-    return;
+    return false;
 
   QStringList hadItems;
   
