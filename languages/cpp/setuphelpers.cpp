@@ -242,6 +242,16 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       insertMacro( macros, m );
     }
     
+    {
+      // We don't provide a real implementation of offsetof, but at least provide a stub that allows correct use-building for the member.
+      rpp::pp_macro m("__builtin_offsetof");
+      m.function_like = true;
+      m.formalsList().append(IndexedString("TYPE"));
+      m.formalsList().append(IndexedString("MEMBER"));
+      m.setDefinitionText("(size_t)((void)TYPE::MEMBER)");
+      insertMacro( macros, m );
+    }
+    
     foreach(const rpp::pp_macro* macro, gccStandardMacros())
       insertMacro(macros, *macro);
     
