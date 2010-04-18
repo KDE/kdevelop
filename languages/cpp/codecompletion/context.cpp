@@ -693,6 +693,9 @@ bool CodeCompletionContext::doConstructorCompletion() {
   QString text = m_text.trimmed();
   LOCKDUCHAIN;
 
+  if(!m_duContext)
+    return;
+
   QStringList hadItems;
   
   text = text.trimmed();
