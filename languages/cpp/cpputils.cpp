@@ -45,6 +45,23 @@
 QStringList headerExtensions(QString("h,H,hh,hxx,hpp,tlh,h++").split(','));
 QStringList sourceExtensions(QString("c,cc,cpp,c++,cxx,C,m,mm,M,inl,_impl.h").split(','));
 
+template<class T>
+QList<T> makeListUnique(QList<T> list)
+{
+  QList<T> ret;
+  
+  QSet<T> set;
+  foreach(T item, list)
+  {
+    if(!set.contains(item))
+    {
+      ret << item;
+      set.insert(item);
+    }
+  }
+  
+  return ret;
+}
 
 QString addDot(QString ext) {
   if(ext.contains('.')) //We need this check because of the _impl.h thing
@@ -318,6 +335,7 @@ QList<KDevelop::IncludeItem> allFilesInIncludePath(const KUrl& source, bool loca
       }
     }
 
+    paths = makeListUnique<KUrl>(paths);
     int pathNumber = 0;
 
     foreach(const KUrl& path, paths)
