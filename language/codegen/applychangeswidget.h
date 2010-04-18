@@ -44,7 +44,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         KTextEditor::Document* document() const;
         
         ///@param modified may be an artifial code representation (@ref KDevelop::InsertArtificialCodeRepresentation)
-        void addDocuments(const IndexedString & original, const IndexedString & modified);
+        void addDocuments(const IndexedString & original);
         
         ///This will save all the modified files into their originals
         bool applyAllChanges();

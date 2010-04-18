@@ -62,11 +62,11 @@ public:
 
     
     ApplyChangesWidget * const parent;
-    unsigned int m_index;
+    int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
     QList<QStandardItemModel*> m_changes;
     QList<KTemporaryFile * > m_temps;
-    QList<QPair<IndexedString, IndexedString> > m_files;
+    QList<IndexedString > m_files;
     KTabWidget * m_documentTabs;
     QLabel* m_info;
     
@@ -115,22 +115,20 @@ void ApplyChangesWidget::setInformation(const QString & info)
     d->m_info->setText(info);
 }
 
-void ApplyChangesWidget::addDocuments(const IndexedString & original, const IndexedString & modified)
+void ApplyChangesWidget::addDocuments(const IndexedString & original)
 {
-    
-    QWidget * w = new QWidget;
-    d->m_documentTabs->addTab(w, original.index() ? original.str() : modified.str());
-    d->m_documentTabs->setCurrentWidget(w);
-    
-#ifndef NDEBUG
-    //Duplicated originals should not exist
-    typedef QPair<IndexedString, IndexedString> StringPair;
-    foreach( const StringPair& files, d->m_files)
-        Q_ASSERT(files.first != original);
-#endif
-    d->m_files.insert(d->m_index, qMakePair(original, modified));
-    
-    d->createEditPart(modified);
+    int idx=d->m_files.indexOf(original);
+    if(idx<0) {
+        QWidget * w = new QWidget;
+        d->m_documentTabs->addTab(w, original.str());
+        d->m_documentTabs->setCurrentWidget(w);
+
+        
+        d->m_files.insert(d->m_index, original);
+        d->createEditPart(original);
+    } else {
+        d->m_index=idx;
+    }
     switchEditView();
 }
 
@@ -140,7 +138,7 @@ bool ApplyChangesWidget::applyAllChanges()
     
     bool ret = true;
     for(int i = 0; i < d->m_files.size(); ++i )
-        if(!d->m_editParts[i]->saveAs(d->m_files[i].first.toUrl()))
+        if(!d->m_editParts[i]->saveAs(d->m_files[i].toUrl()))
             ret = false;
         
     return ret;
@@ -177,7 +175,7 @@ void ApplyChangesWidget::jump( const QModelIndex & idx)
 
 void ApplyChangesWidgetPrivate::jump( const QModelIndex & idx)
 {
-    Q_ASSERT( static_cast<int>(m_index) == m_documentTabs->currentIndex());
+    Q_ASSERT( m_index == m_documentTabs->currentIndex());
     
     QStandardItem *it=m_changes[m_index]->itemFromIndex(idx);
     KTextEditor::View* view=qobject_cast<KTextEditor::View*>(m_editParts[m_index]->widget());
@@ -282,7 +280,7 @@ void ApplyChangesWidget::switchEditView()
     {
         d->m_editParts[d->m_index]->widget()->parentWidget()->setVisible(false);
         //Change into KomparePart
-        d->m_kompare.compare(d->m_files[d->m_index].first, document()->text(),
+        d->m_kompare.compare(d->m_files[d->m_index], document()->text(),
                              d->m_documentTabs->widget(d->m_index), d->m_index);
     }
     
