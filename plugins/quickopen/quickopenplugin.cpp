@@ -76,6 +76,8 @@
 
 using namespace KDevelop;
 
+const uint rowCountForDisablingScrollBar = 5000;
+
 const bool noHtmlDestriptionInOutline = true;
 
 class QuickOpenWidgetCreator {
@@ -380,6 +382,8 @@ void QuickOpenWidget::prepareShow()
   }
   connect( o.list->selectionModel(), SIGNAL(currentRowChanged( const QModelIndex&, const QModelIndex& )), this, SLOT(currentChanged( const QModelIndex&, const QModelIndex& )) );
   connect( o.list->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection& )), this, SLOT(currentChanged( const QItemSelection&, const QItemSelection& )) );
+  
+  updateScrollBarState();
 }
 
 void QuickOpenWidgetDialog::run() {
@@ -462,10 +466,19 @@ void QuickOpenWidget::updateProviders() {
   m_model->enableProviders( checkedItems, checkedScopes );
 }
 
+void QuickOpenWidget::updateScrollBarState()
+{
+  if(m_model->rowCount(QModelIndex()) > rowCountForDisablingScrollBar)
+    o.list->verticalScrollBar()->setEnabled(false);
+  else
+    o.list->verticalScrollBar()->setEnabled(true);
+}
 
 void QuickOpenWidget::textChanged( const QString& str ) {
   m_model->textChanged( str );
 
+  updateScrollBarState();
+  
   QModelIndex currentIndex = m_model->index(0, 0, QModelIndex());
   o.list->selectionModel()->setCurrentIndex( currentIndex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows | QItemSelectionModel::Current );
 

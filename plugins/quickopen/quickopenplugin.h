@@ -155,6 +155,8 @@ class QuickOpenWidget : public QFrame {
   void textChanged( const QString& str );
   void updateProviders();
   void doubleClicked ( const QModelIndex & index );
+
+  void updateScrollBarState();
   
   private:
   void callRowSelected();
