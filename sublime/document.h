@@ -31,6 +31,7 @@ class QWidget;
 
 namespace Sublime {
 
+class Area;
 class View;
 class Controller;
 
@@ -82,6 +83,9 @@ public:
     void setStatusIcon(QIcon icon);
     
     QIcon statusIcon() const;
+    
+    // return true if the document has unique view. SameWorkingset is false when one view in two (or more) areas with same workingset is not unique
+    bool uniqueView(Area *area, View *view, bool sameWorkingset = true);
     
 Q_SIGNALS:
     /**Emitted when the view is added or deleted. Use Document::views to find out
