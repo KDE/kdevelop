@@ -1,7 +1,6 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
-set(kdevplatforminterfaces_LIB_SRCS 
-    foregroundlock.cpp
+set(kdevplatforminterfaces_LIB_SRCS
     ipatchsource.cpp
     iassistant.cpp
     context.cpp
@@ -58,7 +57,6 @@ install(FILES
     iassistant.h
     context.h
     contextmenuextension.h
-    foregroundlock.h
     iplugin.h
     icore.h
     iuicontroller.h
