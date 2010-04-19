@@ -442,7 +442,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   tabWidget.addTab(&uses, i18n("Uses"));
   if(navigationWidget)
-    tabWidget.addTab(navigationWidget, "Declaration Info");
+    tabWidget.addTab(navigationWidget, i18n("Declaration Info"));
 
   verticalLayout.addWidget(&tabWidget);
 
