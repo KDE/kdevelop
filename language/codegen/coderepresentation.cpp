@@ -120,7 +120,7 @@ class FileCodeRepresentation : public CodeRepresentation {
     if(line < 0 || line >= lineData.size())
       return QString();
       
-      return lineData[line];
+      return lineData.at(line);
     }
     
     virtual int lines() const {
@@ -191,7 +191,7 @@ class StringCodeRepresentation : public CodeRepresentation {
     if(line < 0 || line >= data->lines().size())
       return QString();
       
-      return data->lines()[line];
+      return data->lines().at(line);
     }
     
     virtual int lines() const {
