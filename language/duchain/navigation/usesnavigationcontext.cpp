@@ -41,7 +41,7 @@ QString UsesNavigationContext::html(bool shorten) {
   modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
   
   if( m_previousContext ) {
-    modifyHtml() += navigationHighlight("Uses of ");
+    modifyHtml() += navigationHighlight(i18n("Uses of "));
     makeLink( m_previousContext->name(), m_previousContext->name(), NavigationAction(m_previousContext) );
   }else{
     KDevelop::DUChainReadLocker lock(DUChain::lock());

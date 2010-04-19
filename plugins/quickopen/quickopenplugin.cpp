@@ -1288,7 +1288,7 @@ QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget
     setMaximumWidth(400);
 
     deactivate();
-    setDefaultText("Quick Open...");
+    setDefaultText(i18n("Quick Open..."));
     setObjectName(m_widgetCreator->objectNameForLine());
     setFocusPolicy(Qt::ClickFocus);
 }
