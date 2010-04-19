@@ -306,7 +306,11 @@ void MainWindow::loadSettings()
         restoreState(state);
     } else {
         // If there's no state we use a default size of 870x650
-        resize(870,650);
+        // Resize only when showing "code" area. If we do that for other areas,
+        // then we'll hit bug https://bugs.kde.org/show_bug.cgi?id=207990
+        // TODO: adymo: this is more like a hack, we need a proper first-start initialization
+        if (area() && area()->objectName() == "code")
+            resize(870,650);
     }
 
     int n = 1; // Toolbar counter. toolbars are counted from 1,
