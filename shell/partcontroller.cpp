@@ -113,6 +113,9 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
             "KTextEditor/Document",
             "KTextEditor::Editor" ));
 
+        //TODO: turn into KMessageBox with translatable error message
+        Q_ASSERT_X(editorFactory, "PartController::createTextPart", "could not find KTextEditor::Factory, check your installation");
+
         d->m_textEditor = editorFactory->editor();
     }
     KTextEditor::Document* doc = d->m_textEditor->createDocument(this);
