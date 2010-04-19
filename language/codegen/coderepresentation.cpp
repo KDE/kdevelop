@@ -110,7 +110,7 @@ class FileCodeRepresentation : public CodeRepresentation {
   
         QFile file( localFile );
         if ( file.open(QIODevice::ReadOnly) ) {
-          data = file.readAll();
+          data = QString::fromLocal8Bit(file.readAll());
           lineData = data.split('\n');
         }
         m_exists = file.exists();
@@ -120,7 +120,7 @@ class FileCodeRepresentation : public CodeRepresentation {
     if(line < 0 || line >= lineData.size())
       return QString();
       
-      return QString::fromLocal8Bit(lineData[line]);
+      return lineData[line];
     }
     
     virtual int lines() const {
@@ -128,7 +128,7 @@ class FileCodeRepresentation : public CodeRepresentation {
     }
     
     QString text() const {
-      return QString::fromLocal8Bit(data);
+      return data;
     }
     
     bool setText(QString text) {
@@ -157,8 +157,8 @@ class FileCodeRepresentation : public CodeRepresentation {
     //We use QByteArray, because the column-numbers are measured in utf-8
     IndexedString m_document;
     bool m_exists;
-    QList<QByteArray> lineData;
-    QByteArray data;
+    QStringList lineData;
+    QString data;
 };
 
 class ArtificialStringData : public QSharedData {
