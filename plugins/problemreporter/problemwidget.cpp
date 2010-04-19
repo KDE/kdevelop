@@ -133,8 +133,12 @@ void ProblemWidget::showProblems(TopDUContext* ctx)
     DUChainReadLocker lock(DUChain::lock());
     collectProblems(allProblems, ctx, hadContexts);
     model()->setProblems(allProblems, m_activeDirectory);
-    for (int i = 0; i < model()->columnCount(); ++i)
-        resizeColumnToContents(i);
+    if (isVisible()) {
+        // no need to resize columns if the toolview isn't visible
+        // we will resize them right after show anyway
+        for (int i = 0; i < model()->columnCount(); ++i)
+            resizeColumnToContents(i);
+    }
   }else{
     model()->clear();
   }
