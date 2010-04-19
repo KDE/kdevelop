@@ -516,6 +516,8 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     m_buttons->addWidget(m_lockButton);
 
     m_layout = new QVBoxLayout;
+    m_layout->setSpacing(0);
+    m_layout->setMargin(0);
     m_layout->addLayout(m_buttons);
     m_layout->addWidget(m_navigationWidget);
     //m_layout->addStretch();
