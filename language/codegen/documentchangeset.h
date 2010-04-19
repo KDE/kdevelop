@@ -80,6 +80,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
     
     ///If the change has multiple lines, a problem will be returned. these don't work at he moment.
     ChangeResult addChange(const DocumentChange& change);
+    ChangeResult addChange(DocumentChangePointer change);
     
     enum ReplacementPolicy {
         IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored

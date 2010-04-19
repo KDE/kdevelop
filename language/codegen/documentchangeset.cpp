@@ -106,6 +106,11 @@ KDevelop::DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const KDe
     return d->addChange(DocumentChangePointer(new DocumentChange(change)));
 }
 
+DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(DocumentChangePointer change)
+{
+    return d->addChange(change);
+}
+
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(DocumentChangePointer change) {
     if(change->m_range.start.line != change->m_range.end.line)
         return DocumentChangeSet::ChangeResult("Multi-line ranges are not supported");
