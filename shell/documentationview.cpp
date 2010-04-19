@@ -84,6 +84,8 @@ DocumentationView::DocumentationView(QWidget* parent)
 {
     setWindowIcon(KIcon("documentation"));
     setLayout(new QVBoxLayout(this));
+    layout()->setMargin(0);
+    layout()->setSpacing(0);
     mActions=new KToolBar(this);
     mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
     layout()->addWidget(mActions);
