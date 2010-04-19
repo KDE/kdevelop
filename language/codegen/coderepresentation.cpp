@@ -51,9 +51,9 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
       m_url = IndexedString(m_document->url());
   }
   QString line(int line) const {
-    if(line < 0 || line >= m_document->lines())
-      return QString();
-    return m_document->line(line);
+        if(line < 0 || line >= m_document->lines())
+            return QString();
+        return m_document->line(line);
   }
   
   virtual int lines() const {
@@ -110,15 +110,15 @@ class FileCodeRepresentation : public CodeRepresentation {
   
         QFile file( localFile );
         if ( file.open(QIODevice::ReadOnly) ) {
-          data = QString::fromLocal8Bit(file.readAll());
-          lineData = data.split('\n');
+            data = QString::fromLocal8Bit(file.readAll());
+            lineData = data.split('\n');
         }
         m_exists = file.exists();
     }
     
     QString line(int line) const {
-    if(line < 0 || line >= lineData.size())
-      return QString();
+        if(line < 0 || line >= lineData.size())
+            return QString();
       
       return lineData.at(line);
     }
@@ -188,8 +188,8 @@ class StringCodeRepresentation : public CodeRepresentation {
     }
     
     QString line(int line) const {
-    if(line < 0 || line >= data->lines().size())
-      return QString();
+        if(line < 0 || line >= data->lines().size())
+            return QString();
       
       return data->lines().at(line);
     }
@@ -240,12 +240,12 @@ bool artificialCodeRepresentationExists(IndexedString url)
 CodeRepresentation::Ptr createCodeRepresentation(IndexedString url) {
     if(artificialCodeRepresentationExists(url))
         return CodeRepresentation::Ptr(new StringCodeRepresentation(representationForUrl(url)));
-    
-  IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
-  if(document && document->textDocument())
-    return CodeRepresentation::Ptr(new EditorCodeRepresentation(document->textDocument()));
-  else
-    return CodeRepresentation::Ptr(new FileCodeRepresentation(url));
+
+    IDocument* document = ICore::self()->documentController()->documentForUrl(url.toUrl());
+    if(document && document->textDocument())
+        return CodeRepresentation::Ptr(new EditorCodeRepresentation(document->textDocument()));
+    else
+        return CodeRepresentation::Ptr(new FileCodeRepresentation(url));
 }
 
 void CodeRepresentation::setDiskChangesForbidden(bool changesForbidden)
