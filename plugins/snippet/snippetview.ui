@@ -34,9 +34,6 @@
        <property name="toolTip">
         <string>Define filter here</string>
        </property>
-       <property name="frame">
-        <bool>false</bool>
-       </property>
        <property name="clickMessage">
         <string>Filter...</string>
        </property>
@@ -49,12 +46,6 @@
    </item>
    <item>
     <widget class="QTreeView" name="snippetTree">
-     <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Sunken</enum>
-     </property>
     </widget>
    </item>
   </layout>
