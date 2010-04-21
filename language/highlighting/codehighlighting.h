@@ -95,6 +95,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
 
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, const QColor &color) const;
     virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor &color) const;
+    ///TODO: evaluate whether this should stay virtual for 4.1 and later
     virtual void highlightUses(KDevelop::DUContext* context) const;
 
     void highlightDUChainSimple(KDevelop::DUContext* context) const;

@@ -470,25 +470,7 @@ void CodeHighlightingInstance::highlightUse(DUContext* context, int index, const
 void CodeHighlightingInstance::highlightUses(DUContext* context) const
 {
   for(int a = 0; a < context->usesCount(); ++a) {
-    if (SmartRange* range = context->useSmartRange(a)) {
-      Types type = ErrorVariableType;
-      Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
-      if (decl)
-        type = typeForDeclaration(decl, context);
-
-    LOCK_SMART(range);
-
-    if(!m_highlighting->isCodeHighlight(range->attribute()))
-      continue;
-
-    if(type != ErrorVariableType || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems())
-        range->setAttribute(m_highlighting->attributeForType(type, ReferenceContext, QColor(QColor::Invalid)));
-    else
-        range->setAttribute(KTextEditor::Attribute::Ptr());
-
-//     kDebug() << range->attribute()->underlineStyle() << range->attribute()->background().iscolor().isValid();
-    Q_ASSERT(m_highlighting->isCodeHighlight(range->attribute()));
-    }
+    highlightUse(context, a, QColor(QColor::Invalid));
   }
 }
 
