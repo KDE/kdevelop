@@ -106,6 +106,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
     KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
     /**
      * @param context Should be the context from where the declaration is used, if a use is highlighted.
+     * TODO: make this virtual for 4.1
      * */
     Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const;
 
