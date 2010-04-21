@@ -142,8 +142,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     //Returns whether the given attribute was set by the code highlighting, and not by something else
     //Always returns true when the attribute is zero
     bool isCodeHighlight(KTextEditor::Attribute::Ptr attr) const;
+
+  ///TODO: 4.1 - reorder the functions to make more sense, cannot do now without changing ABI
+  protected:
     //Can be overridden to create an own instance type
     virtual CodeHighlightingInstance* createInstance() const;
+
+  private:
     friend class CodeHighlightingInstance;
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
