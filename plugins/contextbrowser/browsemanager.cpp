@@ -216,7 +216,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(textCursor)) );
                 
                 if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains(SimpleCursor(textCursor))) {
-                    ///A declaration was clicked directory. Jumping to it is useless, so jump to the definition or something useful
+                    ///A declaration was clicked directly. Jumping to it is useless, so jump to the definition or something useful
 
                     bool foundBetter = false;
 
