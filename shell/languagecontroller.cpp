@@ -198,6 +198,9 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
     
     QString fileName = url.fileName();
 
+    ///TODO: evaluate on what the memory impact would be to cache the QRegExp
+    ///      for every pattern
+    ///      right now > 70% in languagesForUrl is spent in setPattern...
     QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
     ///non-crashy part: Use the mime-types of known languages
     ///Very inefficient right now
