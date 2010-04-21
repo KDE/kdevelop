@@ -27,8 +27,10 @@
 #include "codehighlighting.h"
 #include "colorcache.h"
 
+#include "../languageexport.h"
+
 namespace KDevelop {
-class ConfigurableHighlightingColors {
+class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
   public:
     ConfigurableHighlightingColors(QString highlightingName);
 

@@ -328,6 +328,7 @@ install(FILES
 install(FILES
     highlighting/codehighlighting.h
     highlighting/colorcache.h
+    highlighting/configurablecolors.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/highlighting COMPONENT Devel
 )
 
