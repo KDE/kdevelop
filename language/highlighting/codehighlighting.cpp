@@ -215,6 +215,7 @@ void CodeHighlightingInstance::highlightDUChainSimple(DUContext* context) const
     return;
   }
 
+  ///TODO: 4.1 make this overloadable, e.g. in PHP we also want local colorization in global context
   bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
 
   if( isInFunction && m_highlighting->m_localColorization ) {
