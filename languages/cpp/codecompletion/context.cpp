@@ -1209,8 +1209,6 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                   if(memberAccessOperation() != Cpp::CodeCompletionContext::StaticMemberChoose) {
                     if(decl.first->kind() != Declaration::Instance && decl.first->kind() != Declaration::Alias)
                       continue;
-                    if(classMember && classMember->isStatic())
-                      continue; //Skip static class members when not doing static access
                     if(decl.first->abstractType().cast<EnumeratorType>())
                       continue; //Skip enumerators
                   }else{

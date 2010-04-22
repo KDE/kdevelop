@@ -2051,6 +2051,54 @@ void TestCppCodeCompletion::testArgumentList()
   }
 }
 
+void TestCppCodeCompletion::testStaticMethods()
+{
+  QByteArray code("struct A {\n"
+                  "  public: static void myPublicStatic() {}\n"
+                  "  protected: static void myProtectedStatic() {}\n"
+                  "  private: static void myPrivateStatic() {}\n"
+                  "  public: void myPublicNonStatic() {}\n"
+                  "  protected: void myProtectedNonStatic() {}\n"
+                  "  private: void myPrivateNonStatic() {}\n"
+                  "};\n"
+                  "A a; int main() { return 0;}");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->childContexts().size(), 3);
+  {
+    // in body of main
+    CompletionItemTester complCtx(top->childContexts().last(), "a.");
+    QVERIFY(complCtx.completionContext->isValid());
+    QCOMPARE(complCtx.names, QStringList() << "myPublicStatic" << "myPublicNonStatic");
+  }
+  {
+    // in body of main
+    CompletionItemTester complCtx(top->childContexts().last(), "A::");
+    QVERIFY(complCtx.completionContext->isValid());
+    QEXPECT_FAIL("", "non-static functions don't get filtered. comment in context.cpp: ///@todo what NOT to show on static member choose? Actually we cannot hide all non-static functions, because of function-pointers", Continue);
+    QCOMPARE(complCtx.names, QStringList() << "myPublicStatic"); // fails and gets skipped
+    // this is a fallback to verify the current behavior
+    QCOMPARE(complCtx.names, QStringList() << "myPublicStatic" << "myPublicNonStatic");
+  }
+  {
+    // in body of myPrivate
+    CompletionItemTester complCtx(top->childContexts().first()->childContexts().last(), "this->");
+    QVERIFY(complCtx.completionContext->isValid());
+    QCOMPARE(complCtx.names, QStringList() << "myPublicStatic" << "myProtectedStatic" << "myPrivateStatic" << "myPublicNonStatic" << "myProtectedNonStatic" << "myPrivateNonStatic");
+  }
+  {
+    // in body of myPrivate
+    CompletionItemTester complCtx(top->childContexts().first()->childContexts().last(), "A::");
+    QVERIFY(complCtx.completionContext->isValid());
+    QEXPECT_FAIL("", "non-static functions don't get filtered. comment in context.cpp: ///@todo what NOT to show on static member choose? Actually we cannot hide all non-static functions, because of function-pointers", Continue);
+    QCOMPARE(complCtx.names, QStringList() << "myPublicStatic" << "myProtectedStatic" << "myPrivateStatic"); // fails and gets skipped
+    // this is a fallback to verify the current behavior
+    QCOMPARE(complCtx.names, QStringList() << "myPublicStatic" << "myProtectedStatic" << "myPrivateStatic" << "myPublicNonStatic" << "myProtectedNonStatic" << "myPrivateNonStatic");
+  }
+  release(top);
+}
+
 
 class TestPreprocessor : public rpp::Preprocessor
 {

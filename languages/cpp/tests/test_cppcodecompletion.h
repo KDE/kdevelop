@@ -114,6 +114,7 @@ private slots:
   void testSignalSlotCompletion();
   void testStringProblem();
   void testArgumentList();
+  void testStaticMethods();
 
 public:
   enum DumpArea {
