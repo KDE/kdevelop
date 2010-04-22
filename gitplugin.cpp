@@ -79,6 +79,13 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 GitPlugin::~GitPlugin()
 {}
 
+DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+{
+    DVcsJob* j = new DVcsJob(this, verbosity);
+    *j << "echo" << i18n("error: %1", error) << "-n";
+    return j;
+}
+
 void GitPlugin::unload()
 {
     core()->uiController()->removeToolView( dvcsViewFactory() );
@@ -150,7 +157,7 @@ VcsJob* GitPlugin::init(const KUrl &directory)
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not initialize the repository"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode)
@@ -164,7 +171,7 @@ VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLo
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not create the working copy"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
@@ -183,7 +190,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not add the files"), OutputJob::Verbose);
 }
 
 KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
@@ -258,7 +265,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     }
     
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not create the patch"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
@@ -273,7 +280,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
     }
     
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
 }
 
 
@@ -300,7 +307,7 @@ VcsJob* GitPlugin::commit(const QString& message,
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Commiting failed"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
@@ -317,7 +324,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not remove the files"), OutputJob::Verbose);
 }
 
 
@@ -338,7 +345,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not generate the log"), OutputJob::Verbose);
 }
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
@@ -352,11 +359,9 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
         *job << "--";
         addFileList(job, localLocation);
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
-    } else {
-        delete job;
-        job = 0;
     }
-    return job;
+    delete job;
+    return errorsFound(i18n("Could not read the annotations"), OutputJob::Verbose);
 }
 
 void GitPlugin::parseGitBlameOutput(DVcsJob *job)
@@ -390,7 +395,7 @@ DVcsJob* GitPlugin::var(const QString & repository)
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not retrieve some repository variable"), OutputJob::Verbose);
 }
 
 DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branch)
@@ -405,7 +410,7 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
     }
     
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not switch the branch"), OutputJob::Verbose);
 }
 
 DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch, const QString &branch,
@@ -426,7 +431,7 @@ DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch,
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not create the new branch"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const KUrl::List& files)
@@ -446,7 +451,7 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not reset"), OutputJob::Verbose);
 }
 
 DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
@@ -462,7 +467,7 @@ DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
         return job;
     }
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not list files"), OutputJob::Verbose);
 }
 
 QString GitPlugin::curBranch(const QString &repository)
@@ -971,7 +976,7 @@ DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &arg
     }
     
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not get the rev list"), OutputJob::Verbose);
 }
 
 KDevelop::VcsStatusInfo::State GitPlugin::charToState(char ch)
@@ -1045,30 +1050,26 @@ VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
     }
     
     delete job;
-    return 0;
+    return errorsFound(i18n("Could not get the repository location"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
-    empty_cmd();
-    return 0;
+    return empty_cmd();
 }
 
 VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
-    empty_cmd();
-    return 0;
+    return empty_cmd();
 }
 
 VcsJob* GitPlugin::resolve(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
-    empty_cmd();
-    return 0;
+    return empty_cmd();
 }
 
 VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, IBasicVersionControl::RecursionMode recursion)
 {
-    empty_cmd();
-    return 0;
+    return empty_cmd();
 }
 
