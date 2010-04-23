@@ -61,6 +61,7 @@ public:
 private slots:
   void initTestCase();
   void cleanupTestCase();
+  void testTypeof();
   void testIdentifiers();
   void testContextRelationships();
   void testDeclareInt();

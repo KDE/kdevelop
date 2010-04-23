@@ -226,8 +226,13 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     }
   else if (node->type_of)
     {
-      // ### implement me
-      m_typeId.push(Identifier("typeof<...>"));
+      if (node->expression)
+      {
+        ExpressionParser parser;
+        ExpressionEvaluationResult result = parser.evaluateType(node->expression, m_session);
+        m_type = result.type.abstractType();
+        m_typeId = QualifiedIdentifier(result.toString());
+      }
     }
 
   {

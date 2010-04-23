@@ -274,7 +274,13 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   bool openedType = false;
   m_lastTypeWasInstance = false;
 
-  if (node->integrals) {
+  if (node->type_of && node->expression) {
+    node->expression->ducontext = currentContext();
+    ExpressionParser parser;
+    ExpressionEvaluationResult result = parser.evaluateType(node->expression, editor()->parseSession());
+    openType(result.type.abstractType());
+    openedType = true;
+  } else if (node->integrals) {
     uint type = IntegralType::TypeNone;
     uint modifiers = AbstractType::NoModifiers;
 

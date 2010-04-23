@@ -560,6 +560,23 @@ void TestDUChain::testConversionReturn() {
   release(top);
 }
 
+void TestDUChain::testTypeof() {
+  TEST_FILE_PARSE_ONLY
+  
+  {
+    QByteArray method("__typeof__(wchar_t) x; typedef typeof(++x) x_t;");
+
+    TopDUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->localDeclarations().count(), 2);
+    QCOMPARE(unAliasedType(top->localDeclarations()[1]->abstractType())->toString(), QString("wchar_t"));
+    
+    release(top);
+  }
+}
+
 void TestDUChain::testArrayType()
 {
   TEST_FILE_PARSE_ONLY

@@ -1249,6 +1249,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
           if (!parseTypeId(ast->type_id) || session->token_stream->lookAhead() != ')')
             {
               ast->type_id = 0;
+              ast->integrals = 0;
               rewind(saved);
               parseCommaExpression(ast->expression);
             }
