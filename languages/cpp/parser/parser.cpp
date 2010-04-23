@@ -1246,8 +1246,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
           advance();
 
           uint saved = session->token_stream->cursor();
-          parseTypeId(ast->type_id);
-          if (session->token_stream->lookAhead() != ')')
+          if (!parseTypeId(ast->type_id) || session->token_stream->lookAhead() != ')')
             {
               ast->type_id = 0;
               rewind(saved);
