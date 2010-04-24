@@ -212,7 +212,7 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.formalsList().append(IndexedString("d"));
       m.formalsList().append(IndexedString("sig"));
       m.function_like = true;
-      m.setDefinitionText( "private slots: sig; private:" );
+      m.setDefinitionText( "private slots: sig{ d; }; private:" );
       insertMacro( macros, m );
       
       m.name = IndexedString("slots");
