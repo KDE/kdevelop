@@ -229,6 +229,7 @@ void TypeASTVisitor::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
       if (node->expression)
       {
         ExpressionParser parser;
+        node->expression->ducontext = const_cast<DUContext*>(m_context);
         ExpressionEvaluationResult result = parser.evaluateType(node->expression, m_session);
         m_type = result.type.abstractType();
         m_typeId = QualifiedIdentifier(result.toString());

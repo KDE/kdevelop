@@ -88,7 +88,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionParser {
      * The duchain does not strictly need to be locked when this is called, but it should be locked if the entity evaluating the expression has no control over
      * the lifetime of ast->context
      *
-     * @param ast the AST. Its context must be built already, the context-member must be filled.
+     * @param ast the AST. @warning its ducontext must be built already, the ducontext member variable must be filled.
      * @param debug whether additional output to kdDebug should be issued
     */
     ExpressionEvaluationResult evaluateType( AST* ast, ParseSession* session, const KDevelop::TopDUContext* source = 0 );
