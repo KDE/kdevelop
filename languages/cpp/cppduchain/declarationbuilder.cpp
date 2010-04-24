@@ -221,7 +221,8 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
     openPrefixContext(node, id, pos); //We create a temporary prefix-context to search from within the right scope
     
     DUContext* tempContext = currentContext();
-    node->declarator->parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
+    if (currentContext()->type() != DUContext::Class)
+      node->declarator->parameter_is_initializer = !checkParameterDeclarationClause(node->declarator->parameter_declaration_clause);
     closePrefixContext(id);
     
     
