@@ -66,6 +66,8 @@
 #define ifTest(x)
 #endif
 
+const int maximumInternalResolutionDepth = 3;
+
 using namespace std;
 
 
@@ -655,7 +657,7 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   ///STEP 3.1: Try resolution using the absolute path
   PathResolutionResult res;
   //Try for each possible target
-  res = resolveIncludePathInternal( absoluteFile, wd, possibleTargets.join(" "), source );
+  res = resolveIncludePathInternal( absoluteFile, wd, possibleTargets.join(" "), source, maximumInternalResolutionDepth );
   if (!res) {
     ifTest( cout << "Try for absolute file " << absoluteFile.toLocal8Bit().data() << " and targets " << possibleTargets.join(", ").toLocal8Bit().data()
                  << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl; )
@@ -694,8 +696,12 @@ PathResolutionResult IncludePathResolver::resolveIncludePath( const QString& fil
   return res;
 }
 
-PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source ) {
+PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source, int maxDepth ) {
 
+  --maxDepth;
+  if(maxDepth < 0)
+    return PathResolutionResult(false);
+  
   QString processStdout;
 
   QStringList touchFiles;
@@ -763,6 +769,12 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
             newWorkingDirectory = u.toLocalFile();
           }
         }
+        
+        if(newWorkingDirectory == workingDirectory)
+        {
+          return PathResolutionResult( false, i18n("Failed to extract new working directory"), i18n("Output was: %1", fullOutput) );
+        }
+        
         QFileInfo d( newWorkingDirectory );
         if( d.exists() ) {
           ///The recursive working-directory exists.
@@ -777,10 +789,10 @@ PathResolutionResult IncludePathResolver::resolveIncludePathInternal( const QStr
             u.cleanPath();
             ///Try once with absolute, and if that fails with relative path of the file
             SourcePathInformation newSource( newWorkingDirectory );
-            PathResolutionResult res = resolveIncludePathInternal( u.toLocalFile(), newWorkingDirectory, makeParams, newSource );
+            PathResolutionResult res = resolveIncludePathInternal( u.toLocalFile(), newWorkingDirectory, makeParams, newSource, maxDepth );
             if( res )
               return res;
-            return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory,u.toLocalFile()), newWorkingDirectory, makeParams , newSource );
+            return resolveIncludePathInternal( KUrl::relativePath(newWorkingDirectory, u.toLocalFile()), newWorkingDirectory, makeParams , newSource, maxDepth );
           }else{
             return PathResolutionResult( false, i18n("Recursive make call failed"), i18n("The parameter string \"%1\" does not seem to be valid. Output was: %2.", makeParams, fullOutput) );
           }

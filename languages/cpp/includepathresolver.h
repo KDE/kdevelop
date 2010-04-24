@@ -120,7 +120,7 @@ namespace CppTools {
       ///Executes the command using KProcess
       bool executeCommand( const QString& command, const QString& workingDirectory, QString& result ) const;
       ///file should be the name of the target, without extension(because that may be different)
-      PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source );
+      PathResolutionResult resolveIncludePathInternal( const QString& file, const QString& workingDirectory, const QString& makeParameters, const SourcePathInformation& source, int maxDepth );
       bool m_outOfSource;
       QString m_source;
       QString m_build;
