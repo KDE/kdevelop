@@ -2304,7 +2304,7 @@ void TestDUChain::testSignalSlotUse() {
     release(top);
   }
   {
-    // test signals with default arguments
+    // test signals without full signal signature specification
     QByteArray text("class QObject { void connect(QObject* from, const char* signal, QObject* to, const char* slot);\n"
                     "  void connect(QObject* from, const char* signal, const char* slot); };\n"
                     "struct AA : QObject { __qt_signals__: void signal1(bool arg1 = false); };\n"
@@ -2322,10 +2322,9 @@ void TestDUChain::testSignalSlotUse() {
     QVERIFY(sig);
     QVERIFY(sig->identifier() == Identifier("signal1"));
     QVERIFY(sig->isSignal());
-    QEXPECT_FAIL("", "since ExpressionVisitor::visitSignalSlotExpression compares against normalizedSignature() it fails, since it does not cope with default arguments", Abort);
     QCOMPARE(sig->uses().size(), 1);
     QCOMPARE(sig->uses().begin()->count(), 1);
-    QCOMPARE(sig->uses().begin()->first(), SimpleRange(4, 54, 4, 61));
+    QCOMPARE(sig->uses().begin()->first(), SimpleRange(4, 52, 4, 59));
   }
 }
 

@@ -1993,11 +1993,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     CppEditorIntegrator editor(session());
     QByteArray tokenByteArray = editor.tokensToByteArray(node->name->id, node->name->end_token);
     
-    IndexedString sig;
+    QByteArray sig;
     if(node->name->end_token-1 >= node->name->id+2) {
-      QByteArray tempSig = QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+1, node->name->end_token) );
-      tempSig = tempSig.mid(1, tempSig.length()-2);
-      sig = IndexedString(tempSig);
+      sig = QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+1, node->name->end_token) );
+      sig = sig.mid(1, sig.length()-2);
     }
 
     Identifier id(tokenFromIndex(node->name->id).symbol());
@@ -2005,11 +2004,22 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(!id.isEmpty()) {
       foreach(Declaration* decl, container->findDeclarations(id, SimpleCursor::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         QtFunctionDeclaration* qtFunction = dynamic_cast<QtFunctionDeclaration*>(decl);
-        if(qtFunction && qtFunction->normalizedSignature() == sig) {
-            //Match
-            lock.unlock();
-            newUse( node, node->name->id, node->name->id+1, DeclarationPointer(qtFunction) );
-            return;
+        if(qtFunction) {
+            ///Allow incomplete matching between the specified signature and the real signature, as Qt allows it.
+            ///@todo: For signals, we should only allow it when at least as many arguments are specified as in the slot declaration.
+            ///@todo: For slots, we should only allow it if the parameter has a default argument.
+            uint functionSigLength = qtFunction->normalizedSignature().length();
+            const char* functionSig = qtFunction->normalizedSignature().c_str();
+            
+            if(functionSigLength >= sig.length() &&
+               strncmp(functionSig, sig.data(), sig.length()) == 0 &&
+               (sig.isEmpty() || functionSigLength == sig.length() || functionSig[sig.length()] == ' ' || functionSig[sig.length()] == ','))
+            {
+              //Match
+              lock.unlock();
+              newUse( node, node->name->id, node->name->id+1, DeclarationPointer(qtFunction) );
+              return;
+            }
         }
       }
     }
