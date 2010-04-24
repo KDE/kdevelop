@@ -374,7 +374,7 @@ void TestCppCodeCompletion::testSignalSlotCompletion() {
     TopDUContext* context = parse( test, DumpAll );
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(context->childContexts().count(), 1);
-    QCOMPARE(context->childContexts()[0]->childContexts().count(), 7);
+    QCOMPARE(context->childContexts()[0]->childContexts().count(), 8);
     CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, ");
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, ").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2").toSet());
     QCOMPARE(CompletionItemTester(context->childContexts()[0]->childContexts()[5], "connect( this, SIGNAL(").names.toSet(), (QStringList() << "connect" << "signal1" << "signal2").toSet());
