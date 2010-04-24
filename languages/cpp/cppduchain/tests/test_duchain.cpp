@@ -2230,8 +2230,6 @@ void TestDUChain::testSignalSlotDeclaration() {
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
 
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(top->childContexts()[0]->localDeclarations()[0]);
-    QEXPECT_FAIL("", "DeclarationBuilder::visitInitDeclarator cannot find the arguments in checkParameterDeclarationClause and hence sets parameter_is_initializer.\n"
-                     "That way the declaration won't even be a function", Abort);
     QVERIFY(classFun);
     QVERIFY(classFun->accessPolicy() == ClassMemberDeclaration::Protected);
     QVERIFY(classFun->isSignal());
