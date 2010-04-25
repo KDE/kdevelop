@@ -77,7 +77,12 @@ GdbVariable* GdbVariable::findByVarobjName(const QString& varobjName)
 
 void GdbVariable::setVarobj(const QString& v)
 {
-    Q_ASSERT(varobj_.isEmpty());
+    if (!varobj_.isEmpty()) {
+        // this should not happen
+        // but apperently it does when attachMaybe is called a second time before
+        // the first -var-create call returned
+        allVariables_.remove(varobj_);
+    }
     varobj_ = v;
     allVariables_[varobj_] = this;
 }
