@@ -135,21 +135,6 @@ If you are not &quot;dlopen&quot;ing libs then leave this unchecked.</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QCheckBox" name="kcfg_enableFloatingToolBar">
-          <property name="whatsThis">
-           <string>Use the floating toolbar. This toolbar always stays
-on top of all windows so that if the app covers KDevelop
-you have control of the app through the small toolbar. It
-can also be docked into the panel.
-
-This toolbar is in addition to the toolbar in KDevelop.</string>
-          </property>
-          <property name="text">
-           <string>E&amp;nable floating toolbar</string>
-          </property>
-         </widget>
-        </item>
         <!--
         <item>
          <widget class="QCheckBox" name="kcfg_dbgTerminal">
@@ -311,7 +296,6 @@ This script is intended for the actual commands needed to connect to a remotely 
   <tabstop>kcfg_displayStaticMembers</tabstop>
   <tabstop>kcfg_asmDemangle</tabstop>
   <tabstop>kcfg_breakOnLoadingLibrary</tabstop>
-  <tabstop>kcfg_enableFloatingToolBar</tabstop>
   <tabstop>kcfg_dbgTerminal</tabstop>
   <tabstop>kcfg_configGdbScript</tabstop>
   <tabstop>kcfg_runShellScript</tabstop>

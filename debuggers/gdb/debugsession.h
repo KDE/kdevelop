@@ -63,7 +63,6 @@ static QString staticMembersEntry = "Display Static Members";
 static QString demangleNamesEntry = "Display Demangle Names";
 static QString breakOnLibLoadEntry = "Try Setting Breakpoints On Loading Libraries";
 //static QString separateTerminalEntry = "Separate Terminal For Application IO";
-static QString floatingToolbarEntry = "Floating Toolbar";
 static QString allowForcedBPEntry = "Allow Forced Breakpoint Set";
 
 class DebugSession : public KDevelop::IDebugSession
@@ -128,7 +127,6 @@ private:
     KDevelop::ProcessLineMaker *m_gdbLineMaker;
     DebuggerState m_sessionState;
     bool justRestarted_;
-    QPointer<KToolBar> floatingToolBar;
     KConfigGroup m_config;
     QPointer<GDB> m_gdb;
 

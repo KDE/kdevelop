@@ -167,20 +167,9 @@ void DebugSession::_gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newSta
     if (changedState & s_dbgNotStarted) {
         if (newState & s_dbgNotStarted) {
             message = i18n("Debugger stopped");
-            if (floatingToolBar)
-                floatingToolBar->hide();
 
         } else {
             setSessionState(StartingState);
-            if (m_config.readEntry("Floating Toolbar", false))
-            {
-            #ifndef QT_MAC
-                if (!floatingToolBar) {
-                    floatingToolBar = new KToolBar(qApp->activeWindow());
-                    floatingToolBar->show();
-                }
-            #endif
-            }
         }
 
         //core()->running(this, false);
