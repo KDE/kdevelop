@@ -60,7 +60,7 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
     connect(ui->kcfg_asmDemangle, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
     connect(ui->kcfg_breakOnLoadingLibrary, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
     connect(ui->kcfg_configGdbScript, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
-    connect(ui->kcfg_dbgTerminal, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    //connect(ui->kcfg_dbgTerminal, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
     connect(ui->kcfg_debuggingShell, SIGNAL(textChanged(QString)), this, SIGNAL(changed()));
     connect(ui->kcfg_displayStaticMembers, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
     connect(ui->kcfg_enableFloatingToolBar, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
@@ -87,7 +87,7 @@ void GdbConfigPage::loadFromConfiguration( const KConfigGroup& cfg, KDevelop::IP
     //TODO: add ui for this
     //ui->kcfg_allowForceBP->setChecked( cfg.readEtnry( GDBDebugger::allowForcedBPEntry, true ) );
     ui->kcfg_breakOnLoadingLibrary->setChecked( cfg.readEntry( GDBDebugger::breakOnLibLoadEntry, true) );
-    ui->kcfg_dbgTerminal->setChecked( cfg.readEntry( GDBDebugger::separateTerminalEntry, false) );
+    //ui->kcfg_dbgTerminal->setChecked( cfg.readEntry( GDBDebugger::separateTerminalEntry, false) );
     ui->kcfg_enableFloatingToolBar->setChecked( cfg.readEntry(GDBDebugger::floatingToolbarEntry, false) );
     blockSignals( block );
 }
@@ -102,7 +102,7 @@ void GdbConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProject* )
     cfg.writeEntry(GDBDebugger::staticMembersEntry, ui->kcfg_displayStaticMembers->isChecked() );
     cfg.writeEntry(GDBDebugger::demangleNamesEntry, ui->kcfg_asmDemangle->isChecked() );
     cfg.writeEntry(GDBDebugger::breakOnLibLoadEntry, ui->kcfg_breakOnLoadingLibrary->isChecked() );
-    cfg.writeEntry(GDBDebugger::separateTerminalEntry, ui->kcfg_dbgTerminal->isChecked() );
+    //cfg.writeEntry(GDBDebugger::separateTerminalEntry, ui->kcfg_dbgTerminal->isChecked() );
     cfg.writeEntry(GDBDebugger::floatingToolbarEntry, ui->kcfg_enableFloatingToolBar->isChecked() );
 }
 

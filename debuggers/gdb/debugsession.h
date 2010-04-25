@@ -62,7 +62,7 @@ static QString remoteGdbRunEntry = "Remote GDB Run Script";
 static QString staticMembersEntry = "Display Static Members";
 static QString demangleNamesEntry = "Display Demangle Names";
 static QString breakOnLibLoadEntry = "Try Setting Breakpoints On Loading Libraries";
-static QString separateTerminalEntry = "Separate Terminal For Application IO";
+//static QString separateTerminalEntry = "Separate Terminal For Application IO";
 static QString floatingToolbarEntry = "Floating Toolbar";
 static QString allowForcedBPEntry = "Allow Forced Breakpoint Set";
 

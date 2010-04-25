@@ -985,7 +985,8 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
-    bool    config_dbgTerminal_ = grp.readEntry( GDBDebugger::separateTerminalEntry, false );
+    //bool    config_dbgTerminal_ = grp.readEntry( GDBDebugger::separateTerminalEntry, false );
+    bool    config_dbgTerminal_ = false;
     KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, KUrl() );
     KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() );
     KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );

@@ -150,6 +150,7 @@ This toolbar is in addition to the toolbar in KDevelop.</string>
           </property>
          </widget>
         </item>
+        <!--
         <item>
          <widget class="QCheckBox" name="kcfg_dbgTerminal">
           <property name="whatsThis">
@@ -163,6 +164,7 @@ Otherwise leave it unchecked.</string>
           </property>
          </widget>
         </item>
+        -->
         <item>
          <spacer>
           <property name="orientation">
