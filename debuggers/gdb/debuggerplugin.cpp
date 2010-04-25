@@ -283,8 +283,6 @@ void CppDebuggerPlugin::slotCloseDrKonqi()
 
 CppDebuggerPlugin::~CppDebuggerPlugin()
 {
-    delete floatingToolBar;
-
     GDBParser::destroy();
 }
 

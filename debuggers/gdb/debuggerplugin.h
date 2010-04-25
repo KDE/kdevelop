@@ -134,8 +134,6 @@ private:
     void attachProcess(int pid);
     void setupActions();
 
-    QPointer<KToolBar> floatingToolBar;
-
     QHash<QString, QDBusInterface*> m_drkonqis;
     QSignalMapper* m_drkonqiMap;
     QString m_drkonqi;
