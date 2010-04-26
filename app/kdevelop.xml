@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="text/x-kdevelop">
+    <comment>KDevelop 4 Project File</comment>
+    <comment xml:lang="ca">Fitxer de projecte de KDevelop 4</comment>
+    <comment xml:lang="ca@valencia">Fitxer de projecte de KDevelop 4</comment>
+    <comment xml:lang="cs">Soubor projektu Kdevelop 4</comment>
+    <comment xml:lang="da">KDevelop 4 projektfil</comment>
+    <comment xml:lang="de">KDevelop-4-Projektdatei</comment>
+    <comment xml:lang="el">Αρχείο έργου KDevelop 4</comment>
+    <comment xml:lang="en_GB">KDevelop 4 Project File</comment>
+    <comment xml:lang="es">Archivo de proyecto de KDevelop 4</comment>
+    <comment xml:lang="et">KDevelop 4 projektifail</comment>
+    <comment xml:lang="fa">پروندۀ پروژۀ KDevelop 4</comment>
+    <comment xml:lang="fi">KDevelop 4-projektitiedosto</comment>
+    <comment xml:lang="fr">Fichier projet KDevelop 4</comment>
+    <comment xml:lang="ga">Comhad Tionscadail KDevelop 4</comment>
+    <comment xml:lang="gl">Ficheiro de proxecto de KDevelop 4</comment>
+    <comment xml:lang="hi">के-डेवलप ४ परियोजना फ़ाइल</comment>
+    <comment xml:lang="hne">के-डेवलप ४ परियोजना फाइल</comment>
+    <comment xml:lang="it">File di progetto per KDevelop 4</comment>
+    <comment xml:lang="ja">KDevelop 4 プロジェクトファイル</comment>
+    <comment xml:lang="ko">KDevelop 4 프로젝트 파일</comment>
+    <comment xml:lang="lv">KDevelop 4 projekta fails</comment>
+    <comment xml:lang="nb">KDevelop 4 prosjektfil</comment>
+    <comment xml:lang="nds">KDevelop4-Projektdatei</comment>
+    <comment xml:lang="ne">केडीई विकास ४ परियोजना फाइल</comment>
+    <comment xml:lang="nl">KDevelop 4 projectbestand</comment>
+    <comment xml:lang="pl">Plik projektu KDevelopa 4</comment>
+    <comment xml:lang="pt">Ficheiro de Projecto do KDevelop 4</comment>
+    <comment xml:lang="pt_BR">Arquivo de Projeto do KDevelop 4</comment>
+    <comment xml:lang="ro">Fișier Proiect Kdevelop 4</comment>
+    <comment xml:lang="ru">Файл проекта KDevelop 4</comment>
+    <comment xml:lang="sl">Projektna datoteka KDevelop 4</comment>
+    <comment xml:lang="sv">KDevelop 4-projektfil</comment>
+    <comment xml:lang="tr">KDevelop 4 Proje Dosyası</comment>
+    <comment xml:lang="uk">Файл проекту KDevelop 4</comment>
+    <comment xml:lang="zh_CN">KDevelop 4 工程文件</comment>
+    <comment xml:lang="zh_TW">KDevelop 4 專案檔</comment>
+    <glob pattern="*.kdev4"/>
+  </mime-type>
+</mime-info>
