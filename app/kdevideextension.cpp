@@ -18,15 +18,8 @@
  ***************************************************************************/
 #include "kdevideextension.h"
 
-#include <QCheckBox>
-#include <qradiobutton.h>
-
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdialog.h>
-#include <kurlrequester.h>
-#include <kpagedialog.h>
-#include <kpagewidgetmodel.h>
+#include <QStringList>
+#include <KLocalizedString>
 
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
