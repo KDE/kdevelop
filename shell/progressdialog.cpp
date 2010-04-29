@@ -247,6 +247,7 @@ ProgressDialog::ProgressDialog( ProgressManager* progressManager, QWidget* align
     : OverlayWidget( alignWidget, parent, name ), mWasLastShown( false )
 {
   setFrameStyle( QFrame::Panel | QFrame::Sunken ); // QFrame
+  setAutoFillBackground( true );
 
   mScrollView = new TransactionItemView( this, "ProgressScrollView" );
   layout()->addWidget( mScrollView );
