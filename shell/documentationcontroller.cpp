@@ -144,7 +144,10 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
     }
     
     DocumentationView* view = dynamic_cast<DocumentationView*>(w);
-    Q_ASSERT(view);
+    if( !view ) {
+        kWarning() << "Could not cast toolview" << w << "to DocumentationView class!";
+        return;
+    }
     view->showDocumentation(doc);
 }
 
