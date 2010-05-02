@@ -70,6 +70,6 @@ private slots:
     }
 };
 
-QTEST_MAIN(TestKDevVarLengthArray);
+QTEST_MAIN(TestKDevVarLengthArray)
 
 #include "test_kdevvarlengtharray.moc"
