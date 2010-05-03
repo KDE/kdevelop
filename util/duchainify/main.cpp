@@ -139,6 +139,7 @@ void Manager::init()
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
     } else {
         std::cout << "no files added to the background parser" << std::endl;
+        QCoreApplication::exit(0);
     }
 }
 
