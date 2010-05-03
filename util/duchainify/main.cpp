@@ -72,17 +72,10 @@ Manager::Manager(KCmdLineArgs* args) : m_total(0), m_args(args), m_allFilesAdded
 void Manager::init()
 {
     KUrl::List includes;
-    KUrl dir;
 
     if(m_args->count() == 0) {
         std::cerr << "Need directory to duchainify" << std::endl;
         QCoreApplication::exit(1);
-    }
-
-    for(int i=0; i<m_args->count(); i++)
-    {
-        QString arg=m_args->arg(i);
-        dir=KUrl(arg);
     }
 
     verbose=m_args->isSet("verbose");
@@ -135,9 +128,11 @@ void Manager::init()
         }
     }
 
-    m_args->clear();
+    for(int i=0; i<m_args->count(); i++)
+    {
+        addToBackgroundParser(m_args->arg(i), (TopDUContext::Features)features);
+    }
 
-    addToBackgroundParser(dir.toLocalFile(), (TopDUContext::Features)features);
     m_allFilesAdded = 1;
 
     if ( m_total ) {
