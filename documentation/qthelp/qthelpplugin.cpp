@@ -72,9 +72,13 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     QtHelpDocumentation::s_provider=this;
     
     Q_UNUSED(args);
-	QStringList qmakes;
-    KStandardDirs::findAllExe(qmakes, "qmake");
-	QString dirName;
+    QStringList qmakes;
+    QStringList tmp;
+    KStandardDirs::findAllExe(tmp, "qmake");
+    qmakes += tmp;
+    KStandardDirs::findAllExe(tmp, "qmake-qt4");
+    qmakes += tmp;
+    QString dirName;
     foreach(const QString& qmake, qmakes) {
         /// check both in doc/ and doc/qch/
         dirName=qtDocsLocation(qmake)+"/qch/";
