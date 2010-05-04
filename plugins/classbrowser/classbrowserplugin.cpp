@@ -237,7 +237,20 @@ void ClassBrowserPlugin::openDefinition()
   Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
 
   DeclarationPointer declPtr = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
-  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declPtr.data());
+  readLock.unlock();
+
+  // Delegate to real function
+  showDefinition(declPtr.data());
+}
+
+void ClassBrowserPlugin::showDefinition(Declaration* declaration)
+{
+  if ( declaration == 0)
+    return;
+
+  DUChainReadLocker readLock(DUChain::lock());
+
+  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declaration);
 
   // If it's a function, find the function definition to go to the actual declaration.
   if ( bestDeclaration && bestDeclaration->isFunctionDeclaration() )

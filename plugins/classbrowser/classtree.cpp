@@ -133,17 +133,12 @@ void ClassTree::itemActivated(const QModelIndex& index)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  DUChainBase* base = model()->duObjectForIndex(index);
-  if (base)
-  {
-    KUrl url = KUrl(base->url().str());
-    KTextEditor::Range range = base->range().textRange();
+  Declaration* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(index));
+  readLock.unlock();
 
-    readLock.unlock();
+  // Delegate to plugin function
+  m_plugin->showDefinition(decl);
 
-    m_plugin->core()->documentController()->openDocument(url, range.start());
-  }
-  
   if(isExpanded(index))
       collapse(index);
   else

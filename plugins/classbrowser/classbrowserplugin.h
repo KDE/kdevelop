@@ -48,6 +48,7 @@ public: // KDevelop::Plugin overrides
   virtual void unload();
   virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
+  void showDefinition(KDevelop::Declaration* declaration);
 private Q_SLOTS:
   void openDeclaration();
   void openDefinition();
