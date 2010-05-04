@@ -95,12 +95,13 @@ public:
     VcsEvent();
     virtual ~VcsEvent();
     VcsEvent( const VcsEvent& );
-    VcsRevision revision();
-    QString author();
-    QDateTime date();
-    QString message();
-    VcsItemEvent::Actions actions();
-    QList<VcsItemEvent> items();
+
+    VcsRevision revision() const;
+    QString author() const;
+    QDateTime date() const;
+    QString message() const;
+    VcsItemEvent::Actions actions() const;
+    QList<VcsItemEvent> items() const;
 
     void setRevision( const VcsRevision& );
     void setAuthor( const QString& );

@@ -151,32 +151,32 @@ VcsEvent::VcsEvent( const VcsEvent& rhs )
     d->items = rhs.d->items;
 }
 
-VcsRevision VcsEvent::revision()
+VcsRevision VcsEvent::revision() const
 {
     return d->revision;
 }
 
-QString VcsEvent::author()
+QString VcsEvent::author() const
 {
     return d->author;
 }
 
-QDateTime VcsEvent::date()
+QDateTime VcsEvent::date() const
 {
     return d->date;
 }
 
-QString VcsEvent::message()
+QString VcsEvent::message() const
 {
     return d->message;
 }
 
-VcsItemEvent::Actions VcsEvent::actions()
+VcsItemEvent::Actions VcsEvent::actions() const
 {
     return d->actions;
 }
 
-QList<VcsItemEvent> VcsEvent::items()
+QList<VcsItemEvent> VcsEvent::items() const
 {
     return d->items;
 }
