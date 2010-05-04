@@ -32,8 +32,8 @@ add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
 
-set(KDEVPLATFORM_LIB_VERSION 1.0.0)
-set(KDEVPLATFORM_LIB_SOVERSION 1)
+set(KDEVPLATFORM_LIB_VERSION 2.0.0)
+set(KDEVPLATFORM_LIB_SOVERSION 2)
 
 # Now set the usual KDEVPLATFORM_XXX_LIBRARIES variable so we can more easily move plugins around
 set(KDEVPLATFORM_SUBLIME_LIBRARIES sublime)
