@@ -1265,16 +1265,19 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
             //Don't show annoying empty argument-hints
 /*            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)
               break;*/
-            //When there is too many overloaded functions, do not show them. They can just be too many.
-            if (functions().count() > maxOverloadedOperatorArgumentHints) {
-              items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(),  KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, 0 ) );
-              if(functions().count())
-                items.back()->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.  The numeric argument is always greater than one, so translation of the singular case is only necessary in languages where the singular form is used for 21, 31 etc.", "1 overload of %2", "%1 overloads of %2", functions().count(), functionName());
-            }else if(functions().count() == 0 && additionalContextType() != Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
+            if(functions().count() == 0 && additionalContextType() != Cpp::CodeCompletionContext::BinaryOperatorFunctionCall) {
               items += missingIncludeCompletionItems(m_expression, QString(), m_expressionResult, m_duContext.data(), depth(), true );
             }else if(!functions().isEmpty()) {
               int num = 0;
               foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
+                if (num == maxOverloadedOperatorArgumentHints) {
+                  //When there are too many overloaded functions, do not show them all if completion was invoked automatically
+                  CompletionTreeItemPointer item( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(),  KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, 0 ) );
+                  item->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2", "%1 more overloads of %2", functions().count() - num, functionName());
+                  items << item;
+                  break;
+                }
+
                 items << CompletionTreeItemPointer( new NormalDeclarationCompletionItem( function.function.declaration(), KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, num ) );
                 ++num;
               }
