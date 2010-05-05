@@ -28,13 +28,19 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include <cppparserexport.h>
+
 #ifdef Q_CC_MSVC
 #include <hash_map>
 using namespace stdext;
-#else
-// use unordered_map, hash_map is marked as deprecated on g++/4.4
+
+#elif defined GXX_LT_4_3
 #include <ext/hash_map>
 using namespace __gnu_cxx;
+
+#else // CXX-0
+#include <unordered_map>
+template <class Key, class Data>
+class  hash_map : public std::unordered_map<Key, Data> { };
 #endif
 
 class TokenStream;
