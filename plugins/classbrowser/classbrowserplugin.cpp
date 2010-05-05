@@ -240,17 +240,17 @@ void ClassBrowserPlugin::openDefinition()
   readLock.unlock();
 
   // Delegate to real function
-  showDefinition(declPtr.data());
+  showDefinition(declPtr);
 }
 
-void ClassBrowserPlugin::showDefinition(Declaration* declaration)
+void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
 {
-  if ( declaration == 0)
+  DUChainReadLocker readLock(DUChain::lock());
+  
+  if ( !declaration )
     return;
 
-  DUChainReadLocker readLock(DUChain::lock());
-
-  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declaration);
+  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declaration.data());
 
   // If it's a function, find the function definition to go to the actual declaration.
   if ( bestDeclaration && bestDeclaration->isFunctionDeclaration() )

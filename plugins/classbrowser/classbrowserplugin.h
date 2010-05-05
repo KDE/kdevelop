@@ -26,6 +26,7 @@
 
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
+#include <language/duchain/duchainpointer.h>
 
 class ClassTree;
 
@@ -48,7 +49,8 @@ public: // KDevelop::Plugin overrides
   virtual void unload();
   virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* );
 
-  void showDefinition(KDevelop::Declaration* declaration);
+  // The duchain must not be locked when this is called!
+  void showDefinition(KDevelop::DeclarationPointer declaration);
 private Q_SLOTS:
   void openDeclaration();
   void openDefinition();

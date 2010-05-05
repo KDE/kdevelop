@@ -133,7 +133,7 @@ void ClassTree::itemActivated(const QModelIndex& index)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  Declaration* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(index));
+  DeclarationPointer decl = DeclarationPointer(dynamic_cast<Declaration*>(model()->duObjectForIndex(index)));
   readLock.unlock();
 
   // Delegate to plugin function
