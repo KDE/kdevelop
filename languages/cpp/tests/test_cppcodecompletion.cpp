@@ -755,8 +755,9 @@ void TestCppCodeCompletion::testCompletionBehindTypedeffedConstructor() {
     QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
 
     //Member completion
-    QCOMPARE(CompletionItemTester(top->childContexts()[3], "A<int>().").names.toSet(), (QStringList() << QString("m") << QString("A")).toSet());
-    QCOMPARE(CompletionItemTester(top->childContexts()[3], "TInt().").names.toSet(), (QStringList() << QString("m") << QString("A")).toSet());
+    // NOTE: constructor A is not listed, as you can't call the constructor in this way
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "A<int>().").names.toSet(), (QStringList() << QString("m")).toSet());
+    QCOMPARE(CompletionItemTester(top->childContexts()[3], "TInt().").names.toSet(), (QStringList() << QString("m")).toSet());
     
     //Argument-hints
     kDebug() << CompletionItemTester(top->childContexts()[3], "TInt(").parent().names;

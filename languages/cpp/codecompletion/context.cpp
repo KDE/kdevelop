@@ -1197,6 +1197,13 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                     continue;
                   else if(!filterDeclaration(decl.first, ctx))
                     continue;
+
+                  if (memberAccessOperation() == MemberAccess || memberAccessOperation() == ArrowMemberAccess) {
+                    // Don't allow constructors to be accessed with . or ->
+                    if (ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(classMember))
+                      if (classFun->isConstructor())
+                       continue;
+                  }
                   
                   if(decl.first->kind() == Declaration::Namespace) {
                     QualifiedIdentifier id = decl.first->qualifiedIdentifier();
