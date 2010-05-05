@@ -47,6 +47,7 @@ public:
     
     void addProblem(KDevelop::ProblemPointer problem);
     void setProblems(const QList<KDevelop::ProblemPointer>& problems, KUrl base);
+    QList<KDevelop::ProblemPointer> allProblems() const;
   
     void clear();
 

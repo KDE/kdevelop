@@ -31,6 +31,7 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <ktexteditor/markinterface.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -125,8 +126,25 @@ void ProblemWidget::forceFullUpdate() {
     DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), (TopDUContext::Features)(KDevelop::TopDUContext::VisibleDeclarationsAndContexts | KDevelop::TopDUContext::ForceUpdateRecursive));
 }
 
-void ProblemWidget::showProblems(TopDUContext* ctx)
+void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
 {
+  KTextEditor::MarkInterface* iface = dynamic_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+  if (iface) {
+    foreach(ProblemPointer p, model()->allProblems()) {
+        if (!p->finalLocation().isValid()) {
+            continue;
+        }
+        uint mark;
+        if (p->severity() == ProblemData::Error) {
+            mark = KTextEditor::MarkInterface::Error;
+        } else if (p->severity() == ProblemData::Warning) {
+            mark = KTextEditor::MarkInterface::Warning;
+        } else {
+            continue;
+        }
+        iface->removeMark(p->finalLocation().start().line(), mark);
+    }
+  }
   if(ctx) {
     QList<ProblemPointer> allProblems;
     QSet<TopDUContext*> hadContexts;
@@ -138,6 +156,22 @@ void ProblemWidget::showProblems(TopDUContext* ctx)
         // we will resize them right after show anyway
         for (int i = 0; i < model()->columnCount(); ++i)
             resizeColumnToContents(i);
+    }
+    if (iface) {
+        foreach(ProblemPointer p, allProblems) {
+            if (!p->finalLocation().isValid()) {
+                continue;
+            }
+            uint mark;
+            if (p->severity() == ProblemData::Error) {
+                mark = KTextEditor::MarkInterface::Error;
+            } else if (p->severity() == ProblemData::Warning) {
+                mark = KTextEditor::MarkInterface::Warning;
+            } else {
+                continue;
+            }
+            iface->addMark(p->finalLocation().start().line(), mark);
+        }
     }
   }else{
     model()->clear();
@@ -159,7 +193,7 @@ void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
     if(!chosen)
       chosen = language->languageSupport()->standardContext(doc->url(), true);
 
-  showProblems(chosen);
+  showProblems(chosen, doc);
 }
 
 void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
@@ -172,7 +206,7 @@ void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
   if(active) {
     //For now, only show problems from the current document
     if(active->url() == url && job->duChain()) {
-      showProblems(job->duChain());
+      showProblems(job->duChain(), active);
     }
   }
 }

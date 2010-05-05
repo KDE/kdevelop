@@ -64,7 +64,7 @@ private Q_SLOTS:
   void forceFullUpdate();
   
 private:
-  void showProblems(KDevelop::TopDUContext* ctx);
+  void showProblems(KDevelop::TopDUContext* ctx, KDevelop::IDocument* doc);
   ProblemReporterPlugin* m_plugin;
   KUrl m_activeDirectory;
   KUrl m_activeUrl;
