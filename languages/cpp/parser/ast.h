@@ -195,6 +195,7 @@ public:
       Kind_Comment,                             // 75
       Kind_JumpStatement,                       // 76
       Kind_SignalSlotExpression,                // 77
+      Kind_QPropertyDeclaration,                // 78
       NODE_KIND_COUNT
     };
 
@@ -297,6 +298,34 @@ public:
   DECLARE_AST_NODE(SignalSlotExpression)
   //The unqualified name also contains the argument types in its template-arguments
   UnqualifiedNameAST *name;
+};
+
+// An node used to do more detailed processing of Q_PROPERTY specifications
+class QPropertyDeclarationAST : public DeclarationAST
+{
+public:
+
+  DECLARE_AST_NODE(QPropertyDeclaration)
+
+  TypeSpecifierAST *type;
+  const ListNode<PtrOperatorAST*> *ptr_ops;
+  NameAST *name;
+
+  NameAST *getter;
+  NameAST *setter;
+  NameAST *resetter;
+  NameAST *notifier;
+
+  NameAST *designableMethod;
+  bool designableValue;
+
+  NameAST *scriptableMethod;
+  bool scriptableValue;
+
+  bool stored;
+  bool user;
+  bool constant;
+  bool final;
 };
 
 class CastExpressionAST : public ExpressionAST

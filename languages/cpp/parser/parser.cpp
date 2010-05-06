@@ -2171,6 +2171,10 @@ bool Parser::parseMemberSpecification(DeclarationAST *&node)
     {
       return true;
     }
+  else if (parseQProperty(node))
+    {
+      return true;
+    }
 
   rewind(start);
 
@@ -4685,6 +4689,137 @@ bool Parser::parseSignalSlotExpression(ExpressionAST *&node) {
 
     if(ast->name)
       ast->name->end_token = _M_last_valid_token+1;
+
+    CHECK(')');
+
+    UPDATE_POS(ast, start, _M_last_valid_token+1);
+    node = ast;
+
+    return true;
+  }else{
+    return false;
+  }
+}
+
+bool Parser::parseQProperty(DeclarationAST *&node)
+{
+  if(session->token_stream->lookAhead() == Token___qt_property__) {
+    uint start = session->token_stream->cursor();
+    QPropertyDeclarationAST *ast = CreateNode<QPropertyDeclarationAST>(session->mempool);
+
+    ast->getter = 0;
+    ast->setter = 0;
+    ast->resetter = 0;
+    ast->notifier = 0;
+    ast->designableMethod = 0;
+    ast->designableValue = true;
+    ast->scriptableMethod = 0;
+    ast->scriptableValue = true;
+    ast->stored = true;
+    ast->user = false;
+    ast->constant = false;
+    ast->final = false;
+
+
+    CHECK(Token___qt_property__);
+    CHECK('(');
+
+    if(!parseTypeSpecifier(ast->type))
+      return false;
+
+    PtrOperatorAST *ptrOp = 0;
+    while (parsePtrOperator(ptrOp))
+      ast->ptr_ops = snoc(ast->ptr_ops, ptrOp, session->mempool);
+
+    if(!parseName(ast->name))
+      return false;
+
+    static KDevelop::IndexedString readStr("READ");
+    static KDevelop::IndexedString writeStr("WRITE");
+    static KDevelop::IndexedString resetStr("RESET");
+    static KDevelop::IndexedString notifyStr("NOTIFY");
+    static KDevelop::IndexedString designableStr("DESIGNABLE");
+    static KDevelop::IndexedString scriptableStr("SCRIPTABLE");
+    static KDevelop::IndexedString storedStr("STORED");
+    static KDevelop::IndexedString userStr("USER");
+    static KDevelop::IndexedString constantStr("CONSTANT");
+    static KDevelop::IndexedString finalStr("FINAL");
+
+    while(session->token_stream->lookAhead() != ')') {
+      const Token token = session->token_stream->token(session->token_stream->cursor());
+      const KDevelop::IndexedString propertyField = token.symbol();
+      if(propertyField == readStr) {
+        advance(); // skip READ
+        if(!parseName(ast->getter))
+          return false;
+      }else if(propertyField == writeStr){
+        advance(); // skip WRITE
+        if(!parseName(ast->setter))
+          return false;
+      }else if(propertyField == resetStr){
+        advance(); // skip RESET
+        if(!parseName(ast->resetter))
+          return false;
+      }else if(propertyField == notifyStr){
+        advance(); // skip NOTIFY
+        if(!parseName(ast->notifier))
+          return false;
+      }else if(propertyField == designableStr){
+        advance(); // skip DESIGNABLE
+        if(session->token_stream->lookAhead() == Token_true){
+          advance(); // skip 'true'
+          ast->designableValue = true;
+        }else if(session->token_stream->lookAhead() == Token_false){
+          advance(); // skip 'false'
+          ast->designableValue = false;
+        }else{
+          if(!parseName(ast->designableMethod))
+            return false;
+        }
+      }else if(propertyField == scriptableStr){
+        advance(); // skip SCRIPTABLE
+        if(session->token_stream->lookAhead() == Token_true){
+          advance(); // skip 'true'
+          ast->scriptableValue = true;
+        }else if(session->token_stream->lookAhead() == Token_false){
+          advance(); // skip 'false'
+          ast->scriptableValue = false;
+        }else{
+          if(!parseName(ast->scriptableMethod))
+            return false;
+        }
+      }else if(propertyField == storedStr){
+        advance(); // skip STORED
+        if(session->token_stream->lookAhead() == Token_true){
+          advance(); // skip 'true'
+          ast->stored = true;
+        }else if(session->token_stream->lookAhead() == Token_false){
+          advance(); // skip 'false'
+          ast->stored = false;
+        }else{
+          return false;
+        }
+      }else if(propertyField == userStr){
+        advance(); // skip USER
+        if(session->token_stream->lookAhead() == Token_true){
+          advance(); // skip 'true'
+          ast->user = true;
+        }else if(session->token_stream->lookAhead() == Token_false){
+          advance(); // skip 'false'
+          ast->user = false;
+        }else{
+          return false;
+        }
+      }else if(propertyField == constantStr){
+        advance(); // skip CONSTANT
+        ast->constant = true;
+      }else if(propertyField == finalStr){
+        advance(); // skip FINAL
+        ast->final = true;
+      }else{
+        return false;
+      }
+    }
 
     CHECK(')');
 

@@ -240,6 +240,11 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       m.setDefinitionText("__qt_slot__");
       m.formalsList().clear();
       insertMacro( macros, m );
+
+      m.name = IndexedString("Q_PROPERTY");
+      m.setDefinitionText("__qt_property__");
+      m.formalsList().clear();
+      insertMacro( macros, m );
     }
     
     {

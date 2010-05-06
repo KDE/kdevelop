@@ -111,6 +111,7 @@ public:
   bool parseCastExpression(ExpressionAST *&node);
   bool parseClassSpecifier(TypeSpecifierAST *&node);
   bool parseSignalSlotExpression(ExpressionAST *&node);
+  bool parseQProperty(DeclarationAST *&node);
   bool parseCommaExpression(ExpressionAST *&node);
   bool parseCompoundStatement(StatementAST *&node);
   bool parseCondition(ConditionAST *&node, bool initRequired = true);
