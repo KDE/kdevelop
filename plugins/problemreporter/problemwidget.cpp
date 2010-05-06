@@ -129,9 +129,10 @@ void ProblemWidget::forceFullUpdate() {
 void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
 {
   KTextEditor::MarkInterface* iface = dynamic_cast<KTextEditor::MarkInterface*>(doc->textDocument());
+  HashedString currentDoc(doc->url().pathOrUrl());
   if (iface) {
     foreach(ProblemPointer p, model()->allProblems()) {
-        if (!p->finalLocation().isValid()) {
+        if (!p->finalLocation().isValid() || p->finalLocation().document() != currentDoc) {
             continue;
         }
         uint mark;
@@ -159,7 +160,7 @@ void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
     }
     if (iface) {
         foreach(ProblemPointer p, allProblems) {
-            if (!p->finalLocation().isValid()) {
+            if (!p->finalLocation().isValid() || p->finalLocation().document() != currentDoc) {
                 continue;
             }
             uint mark;
