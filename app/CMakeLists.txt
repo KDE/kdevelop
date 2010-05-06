@@ -2,9 +2,10 @@
 
 find_package(SharedMimeInfo REQUIRED)
 
+set(kdevelop_SRCS main.cpp)
 kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
-kde4_add_executable(kdevelop "main.cpp")
+kde4_add_executable(kdevelop ${kdevelop_SRCS} )
 
 set(kdevelop_bin_SRCS
     main_internal.cpp
