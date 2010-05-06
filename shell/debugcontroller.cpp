@@ -367,7 +367,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
             m_currentSession = 0;
             emit currentSessionChanged(0);
             Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
-            if (mainWindow->area()->objectName() != "code") {
+            if (mainWindow && mainWindow->area()->objectName() != "code") {
                 QString workingSet = mainWindow->area()->workingSet();
                 ICore::self()->uiController()->switchToArea("code", IUiController::ThisWindow);
                 mainWindow->area()->setWorkingSet(workingSet);
