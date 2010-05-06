@@ -1362,6 +1362,8 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
 
 bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
 {
+  if(session->token_stream->lookAhead() == Token_typename)
+    session->token_stream->nextToken();
   uint start = session->token_stream->cursor();
 
   const ListNode<uint> *cv = 0;
