@@ -40,6 +40,7 @@ class ConsoleIDEExtension : public KDevelop::ShellExtension
         static void init() { s_instance = new ConsoleIDEExtension(); } 
 
         virtual QString xmlFile() { return QString(); }
+        virtual QString binaryPath() { return QString(); };
         virtual QString defaultProfile() { return QString(); }
         virtual KDevelop::AreaParams defaultArea(){
             KDevelop::AreaParams params = {"code", i18n("Code")};

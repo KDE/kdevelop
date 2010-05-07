@@ -38,6 +38,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include "uicontroller.h"
 #include "sessiondialog.h"
+#include "shellextension.h"
 #include <interfaces/iprojectcontroller.h>
 #include <qapplication.h>
 #include <kprocess.h>
@@ -154,7 +155,7 @@ public:
     {
         Session* session = new Session( QUuid::createUuid() );
         
-        KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop", QStringList() << "-s" << session->id().toString() << standardArguments());
+        KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
         delete session;
 #if 0        
         //Terminate this instance of kdevelop if the user agrees
@@ -210,7 +211,7 @@ public:
             KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("The selected session is already active in another running instance"));
             return false;
         }else{
-            KProcess::startDetached(QFileInfo(QApplication::applicationFilePath()).path() + "/kdevelop", QStringList() << "-s" << s->id().toString() << standardArguments());
+            KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << s->id().toString() << standardArguments());
             return true;
         }
     }

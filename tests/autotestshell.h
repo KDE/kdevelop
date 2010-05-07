@@ -47,6 +47,7 @@ class AutoTestShell : public KDevelop::ShellExtension
 {
 public:
     QString xmlFile() { return QString(); }
+    virtual QString binaryPath() { return QString(); };
     QString defaultProfile() { return "kdevtest"; }
     KDevelop::AreaParams defaultArea() {
         KDevelop::AreaParams params;
