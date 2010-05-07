@@ -494,33 +494,49 @@ void CMakeAstTest::testBuildNameBadParse_data()
     QTest::newRow( "ban wrong name" ) << func2;
 }
 
+Q_DECLARE_METATYPE(QList<int>);
 void CMakeAstTest::testCMakeMinimumRequiredGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("cmake_minimum_required");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
+
+    CMakeMinimumRequiredAst* minimumRequiredAst = static_cast<CMakeMinimumRequiredAst*>(ast);
+
+    QFETCH(QList<int>, version);
+    QFETCH(bool, fatal);
+
+    QCOMPARE(minimumRequiredAst->version(), version);
+    QEXPECT_FAIL("", "this is known to be broken", Continue);
+    QCOMPARE(minimumRequiredAst->wrongVersionIsFatal(), fatal);
+
     delete ast;
 }
 
 void CMakeAstTest::testCMakeMinimumRequiredGoodParse_data()
 {
-    CMakeFunctionDesc func1, func2, func3;
+    CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "CMAKE_MINIMUM_REQUIRED";
-    func2.name = func3.name = func1.name.toLower();
-    QStringList argList1, argList2, argList3;
+    func2.name = func3.name = func4.name = func1.name.toLower();
+    QStringList argList1, argList2, argList3, argList4;
 
     argList1 << "VERSION" << "2.4";
     argList2 = argList1;
     argList2 << "FATAL_ERROR";
+    argList4 << "VERSION" << "2.6.3";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList1 );
     func3.addArguments( argList2 );
+    func4.addArguments( argList4 );
 
-    QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "good upper case" ) << func1;
-    QTest::newRow( "good lower case" ) << func2;
-    QTest::newRow( "good all args" ) << func3;
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    QTest::addColumn<QList<int> >("version");
+    QTest::addColumn<bool>("fatal");
+    QTest::newRow( "good upper case" ) << func1 << (QList<int>() << 2 << 4) << false;
+    QTest::newRow( "good lower case" ) << func2 << (QList<int>() << 2 << 4) << false;
+    QTest::newRow( "good all args" ) << func3 << (QList<int>() << 2 << 4) << true;
+    QTest::newRow( "good three components" ) << func4 << (QList<int>() << 2 << 6 << 3) << false;
 }
 
 void CMakeAstTest::testCMakeMinimumRequiredBadParse()
