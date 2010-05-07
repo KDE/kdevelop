@@ -21,6 +21,8 @@
 #include <QStringList>
 #include <KLocalizedString>
 
+#include <QApplication>
+
 KDevIDEExtension::KDevIDEExtension()
  : ShellExtension()
 {
@@ -34,6 +36,11 @@ void KDevIDEExtension::init()
 QString KDevIDEExtension::xmlFile()
 {
     return "kdevelopui.rc";
+}
+
+QString KDevIDEExtension::binaryPath()
+{
+    return QApplication::applicationDirPath() + "/kdevelop";
 }
 
 KDevelop::AreaParams KDevIDEExtension::defaultArea()
