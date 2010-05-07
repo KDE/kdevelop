@@ -2502,7 +2502,6 @@ void CMakeAstTest::testMarkAsAdvancedBadParse_data()
 
 void CMakeAstTest::testMathGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("math");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -2511,11 +2510,29 @@ void CMakeAstTest::testMathGoodParse()
 
 void CMakeAstTest::testMathGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc func;
+    func.name = "MATH";
+    func.addArguments(QStringList() << "EXPR" << "myvar" << "2+2");
+    QTest::newRow("simple sum") << func;
+
+    func.arguments.clear();
+    // in a CMakeLists.txt, this would be MATH(EXPR myvar "2 + 2")
+    // (with quotes around the expression)
+    func.addArguments(QStringList() << "EXPR" << "myvar" << "2 +  2");
+    QTest::newRow("spaces around op") << func;
+
+    func.arguments.clear();
+    func.addArguments(QStringList() << "EXPR" << "myvar" << " 2 + 2 ");
+    QTest::newRow("spaces around expr") << func;
+
+    func.name = "math";
+    QTest::newRow("lowercase command") << func;
 }
 
 void CMakeAstTest::testMathBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("math");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -2524,6 +2541,34 @@ void CMakeAstTest::testMathBadParse()
 
 void CMakeAstTest::testMathBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc f1;
+    f1.name = "math";
+    f1.addArguments(QStringList());
+    QTest::newRow("no arguments") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EPXR" << "myvar" << "2+2");
+    QTest::newRow("bad EXPR") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "expr" << "myvar" << "2+2");
+    QTest::newRow("lowercase expr") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EXPR");
+    QTest::newRow("missing output var") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EXPR" << "myvar");
+    QTest::newRow("missing expression") << f1;
+
+    // in a CMakeLists.txt, this would be MATH(EXPR myvar 2 + 2)
+    // (without quotes around the expression)
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EXPR" << "myvar" << "2" << "+" << "2");
+    QTest::newRow("multiarg expression") << f1;
 }
 
 
