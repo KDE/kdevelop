@@ -1362,6 +1362,11 @@ bool Parser::parseTemplateArgument(TemplateArgumentAST *&node)
 
 bool Parser::parseTypeSpecifier(TypeSpecifierAST *&node)
 {
+  ///TODO: Proper parsing of typename, this is some kind a hack, typename will be eaten, wrong typename-usages will be accepted, e.g. outside of templates. Please have a look at the C++-language-specification, if you want to fix it.
+  if(session->token_stream->lookAhead() == Token_typename)
+    session->token_stream->nextToken();
+  ///</hack> ;)
+
   uint start = session->token_stream->cursor();
 
   const ListNode<uint> *cv = 0;
