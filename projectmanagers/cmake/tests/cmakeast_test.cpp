@@ -507,7 +507,6 @@ void CMakeAstTest::testCMakeMinimumRequiredGoodParse()
     QFETCH(bool, fatal);
 
     QCOMPARE(minimumRequiredAst->version(), version);
-    QEXPECT_FAIL("", "this is known to be broken", Continue);
     QCOMPARE(minimumRequiredAst->wrongVersionIsFatal(), fatal);
 
     delete ast;

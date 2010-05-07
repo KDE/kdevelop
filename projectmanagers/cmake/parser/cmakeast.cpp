@@ -651,7 +651,8 @@ bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     return true;
 }
 
-CMakeMinimumRequiredAst::CMakeMinimumRequiredAst()
+CMakeMinimumRequiredAst::CMakeMinimumRequiredAst():
+    m_wrongVersionIsFatal(false)
 {
 }
 
