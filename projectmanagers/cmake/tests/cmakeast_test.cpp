@@ -3449,7 +3449,22 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
     QTest::newRow( "whatever" ) << func4;
 
 }
+void CMakeAstTest::testTargetLinkLibrariesMembers()
+{
+    CMakeAst* ast = AstFactory::self()->createAst("target_link_libraries");
+    CMakeFunctionDesc func;
+    func.name = "TARGET_LINK_LIBRARIES";
+    QStringList argList;
+    argList << "mytarget" << "mylibrary";
+    func.addArguments(argList);
+    QVERIFY( ast->parseFunctionInfo( func ) == true );
 
+    TargetLinkLibrariesAst* targetLinkAst = static_cast<TargetLinkLibrariesAst*>(ast);
+
+    QCOMPARE(targetLinkAst->target(), QString("mytarget"));
+    QCOMPARE(targetLinkAst->otherLibs(), QStringList() << "mylibrary");
+    delete ast;
+}
 
 
 

@@ -3127,6 +3127,7 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 2 )
         return false;
 
+    m_target = func.arguments[0].value;
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd;
     it = func.arguments.begin() + 1;

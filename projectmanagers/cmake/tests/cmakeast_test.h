@@ -328,6 +328,7 @@ private slots:
     void testTargetLinkLibrariesGoodParse_data();
     void testTargetLinkLibrariesBadParse();
     void testTargetLinkLibrariesBadParse_data();
+    void testTargetLinkLibrariesMembers();
     void testTryCompileGoodParse();
     void testTryCompileGoodParse_data();
     void testTryCompileBadParse();
