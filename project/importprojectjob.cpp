@@ -41,7 +41,7 @@ namespace KDevelop
 class ImportProjectJobPrivate
 {
 public:
-    ImportProjectJobPrivate( ImportProjectJob* job ) : cancel(false) {}
+    ImportProjectJobPrivate() : cancel(false) {}
     ProjectFolderItem *m_folder;
     IProjectFileManager *m_importer;
     QFutureWatcher<void> *m_watcher;
@@ -61,7 +61,7 @@ public:
 };
 
 ImportProjectJob::ImportProjectJob(ProjectFolderItem *folder, IProjectFileManager *importer)
-    : KJob(0), d(new ImportProjectJobPrivate( this ) )
+    : KJob(0), d(new ImportProjectJobPrivate )
 {
     setCapabilities(Killable);
     
