@@ -999,20 +999,46 @@ void CMakeAstTest::testExecuteProcessBadParse_data()
 
 void CMakeAstTest::testExportGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("export");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
     delete ast;
 }
-
+/// @todo Test EXPORT(PACKAGE name), introduced in CMake 2.8
 void CMakeAstTest::testExportGoodParse_data()
 {
+    const int NUM_TESTDATA = 8;
+    CMakeFunctionDesc funcs[NUM_TESTDATA];
+
+    QString args[NUM_TESTDATA];
+
+    args[0] = "TARGETS main FILE main.cmake";
+    args[1] = "TARGETS main foo FILE main.cmake";
+    args[2] = "TARGETS FILE main.cmake"; // tested in cmake 2.8.1, having no targets really does work
+    args[3] = "TARGETS main NAMESPACE ns FILE main.cmake";
+    args[4] = "TARGETS main APPEND FILE main.cmake";
+    args[5] = "TARGETS main APPEND NAMESPACE ns FILE main.cmake";
+    args[6] = "TARGETS main NAMESPACE ns APPEND FILE main.cmake";
+    args[7] = "TARGETS TARGETS FILE main.cmake";
+    
+    for (int i = 0; i < NUM_TESTDATA; ++i) {
+        funcs[i].name = "EXPORT";
+        funcs[i].addArguments(args[i].split(' '));
+    }
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "single target" ) << funcs[0];
+    QTest::newRow( "two targets" ) << funcs[1];
+    QTest::newRow( "no targets" ) << funcs[2];
+    QTest::newRow( "namespace" ) << funcs[3];
+    QTest::newRow( "append" ) << funcs[4];
+    QTest::newRow( "append and namespace" ) << funcs[5];
+    QTest::newRow( "namespace and append" ) << funcs[6];
+    QTest::newRow( "target called TARGETS" ) << funcs[7];
 }
 
 void CMakeAstTest::testExportBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("export");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -1021,6 +1047,29 @@ void CMakeAstTest::testExportBadParse()
 
 void CMakeAstTest::testExportBadParse_data()
 {
+    const int NUM_TESTDATA = 5;
+    CMakeFunctionDesc funcs[NUM_TESTDATA];
+
+    QString args[NUM_TESTDATA];
+
+    args[0] = "TARGETS main FILE main.cmake";
+    args[1] = "CAKES main FILE main.cmake";
+    args[2] = "TARGETS main";
+    args[3] = "TARGETS main FILE";
+    args[4] = "";
+
+    for (int i = 0; i < NUM_TESTDATA; ++i) {
+        funcs[i].name = "EXPORT";
+        funcs[i].addArguments(args[i].split(' '));
+    }
+    funcs[0].name="exprt";
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow("bad func name") << funcs[0];
+    QTest::newRow("bad subcommand") << funcs[1];
+    QTest::newRow("no FILE") << funcs[2];
+    QTest::newRow("nothing after FILE") << funcs[3];
+    QTest::newRow("no args") << funcs[4];
 }
 
 

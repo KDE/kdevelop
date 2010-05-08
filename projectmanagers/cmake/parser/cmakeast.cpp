@@ -3558,6 +3558,7 @@ ExportAst::~ExportAst()
 }
 
 
+/// @todo Implement EXPORT(PACKAGE name), introduced in CMake 2.8
 bool ExportAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="export" || func.arguments.count() < 2 || func.arguments[0].value!="TARGETS")
@@ -3601,7 +3602,7 @@ bool ExportAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             opt=TARGETS;
         }
     }
-    return !m_targets.isEmpty();
+    return !m_filename.isEmpty();
 }
 
 ReturnAst::ReturnAst()
