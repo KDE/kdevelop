@@ -46,7 +46,7 @@ typedef QHash<QString, QList<ILanguage*> > LanguageCache;
 
 struct LanguageControllerPrivate {
     LanguageControllerPrivate(LanguageController *controller)
-        : dataMutex(QMutex::Recursive), backgroundParser(new BackgroundParser(controller)), m_controller(controller), m_cleanedUp(false) {}
+        : dataMutex(QMutex::Recursive), backgroundParser(new BackgroundParser(controller)), m_cleanedUp(false), m_controller(controller) {}
 
     void documentActivated(KDevelop::IDocument *document)
     {
