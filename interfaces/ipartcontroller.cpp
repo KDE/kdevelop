@@ -61,10 +61,8 @@ KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, con
         {
             ptr = offers.first();
         }
-        KParts::Factory *factory = static_cast<KParts::Factory*>    (
-                        KLibLoader::self()->factory(
-                        QFile::encodeName( ptr->library() ) ) );
-        return factory;
+        KPluginLoader loader( QFile::encodeName( ptr->library() ) );
+        return static_cast<KParts::Factory*>( loader.factory() );
     }
                                                                                                   
     return 0;
