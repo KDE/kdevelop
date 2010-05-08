@@ -153,7 +153,7 @@ void GdbVariable::attachMaybe(QObject *callback, const char *callbackMethod)
         s->addCommand(
             new GDBCommand(
                 GDBMI::VarCreate,
-                QString("var%1 @ %2").arg(nextId++).arg(expression()),
+                QString("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
                 new CreateVarobjHandler(this, callback, callbackMethod)));
     }
 }
@@ -314,4 +314,12 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
 const QString& GdbVariable::varobj() const
 {
     return varobj_;
+}
+
+QString GdbVariable::enquotedExpression() const
+{
+    QString expr = expression();
+    expr.replace('"', "\\\"");
+    expr = expr.prepend('"').append('"');
+    return expr;
 }
