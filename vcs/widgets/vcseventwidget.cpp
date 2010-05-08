@@ -91,6 +91,7 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
 
 void VcsEventWidgetPrivate::currentRowChanged(const QModelIndex& start, const QModelIndex& end)
 {
+    Q_UNUSED(end);
     if(start.isValid())
         eventViewClicked(start);
 }

@@ -86,8 +86,9 @@ void OutputJob::startOutput()
     }
 }
 
-void OutputJob::outputViewRemoved(int idx, int id)
+void OutputJob::outputViewRemoved(int toolViewId, int id)
 {
+    Q_UNUSED(toolViewId);
     if (id == m_outputId && m_killJobOnOutputClose)
     {
         // Make sure that the job emits result signal as the job

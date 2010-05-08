@@ -355,6 +355,7 @@ void MainWindow::tabContextMenuRequested(Sublime::View* view, KMenu* menu)
 
 void MainWindow::tabToolTipRequested(Sublime::View* view, QPoint point)
 {
+    Q_UNUSED(point);
     static QPointer<NavigationToolTip> toolTip;
     
     if(toolTip)

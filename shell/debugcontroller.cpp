@@ -380,6 +380,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 
 void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, IDebugSession *session)
 {
+    Q_UNUSED(session);
     if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     kDebug() << state;

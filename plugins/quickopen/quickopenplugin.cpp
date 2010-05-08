@@ -1313,6 +1313,7 @@ bool QuickOpenLineEdit::insideThis(QObject* object) {
 
 void QuickOpenLineEdit::widgetDestroyed(QObject* obj)
 {
+  Q_UNUSED(obj);
   deactivate();
 }
 

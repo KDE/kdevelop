@@ -494,7 +494,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         menu.addSeparator();
         QToolBar* bar = 0;
         foreach( QObject* child, toolView->children() ) {
-            if ( bar = qobject_cast<QToolBar*>(child) ) {
+            if ( (bar = qobject_cast<QToolBar*>(child)) ) {
                 break;
             }
         }
