@@ -26,18 +26,21 @@
 
 #if defined(Q_CC_MSVC)
 #include <hash_map>
-#else
-// DEPRECATED (should use unordered_map), but needed to support gcc 3.4 and early 4.x
+using namespace stdext;
+#elif defined GXX_LT_4_3
 #include <ext/hash_map>
+using namespace __gnu_cxx;
+#else // C++0X
+// TODO: Replace hash_map with unordered map when support for G++ < 4.3 has 
+//       ended. This class was added as a temporary workaround, to get rid of
+//       hash_map related warnings for g++ >= 4.3.
+#include <unordered_map>
+template<class _Key, class _Tp,
+       class _Hash = std::hash<_Key>,
+       class _Pred = std::equal_to<_Key>,
+       class _Alloc = std::allocator<std::pair<const _Key, _Tp> > >
+class  hash_map : public std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc> { };
 #endif
-
-namespace std {
-#if defined(Q_CC_MSVC)
-  using namespace stdext;
-#else
-  using namespace __gnu_cxx;
-#endif
-}
 
 
 #include "editorintegrator.h"
@@ -72,11 +75,8 @@ struct FileModificationCache {
   timeval m_readTime;
   QDateTime m_modificationTime;
 };
-#ifdef Q_CC_MSVC
-    typedef stdext::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
-#else    
-    typedef __gnu_cxx::hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
-#endif
+
+typedef hash_map<KDevelop::IndexedString, FileModificationCache, IndexedStringHash> FileModificationMap;
 
 FileModificationMap& fileModificationCache() {
   static FileModificationMap cache;
