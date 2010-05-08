@@ -36,24 +36,23 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
     public:
         CMakeAst() : m_line(-1) { }
         virtual ~CMakeAst() { /*qDeleteAll( m_children );*/ }
-        
+
         virtual int accept(CMakeAstVisitor * v) const { return v->visit(this); }
-    
+
         /**
-        * Writes the information stored in the Ast into the @p buffer.
-        * All Asts that are a child of this Ast are written back as well.
-        */
+         * Returns \c true if this command is deprecated.
+         */
         virtual bool isDeprecated() const { return false; }
-    
-        virtual bool parseFunctionInfo( const CMakeFunctionDesc& )=0;
-    
+
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& func )=0;
+
         int line() const { return m_line; }
         const CMakeFileContent & content() const { return m_content; }
         void setContent(const CMakeFileContent &cont, int nline=0) { m_content=cont; m_line=nline; }
         const QList<CMakeFunctionArgument> & outputArguments() const { return m_outputArguments; }
     private:
         CMakeAst( const CMakeAst&  ) {}
-        
+
         QList<CMakeFunctionArgument> m_outputArguments;
         CMakeFileContent m_content;
 
@@ -72,9 +71,9 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
        ~klassName();                                         \
                                                              \
         virtual int accept(CMakeAstVisitor * visitor) const { return visitor->visit(this); } \
-        virtual bool parseFunctionInfo( const CMakeFunctionDesc& );
+        virtual bool parseFunctionInfo( const CMakeFunctionDesc& func );
 
-#define CMAKE_ADD_AST_MEMBER( returnType, returnName )             \
+#define CMAKE_ADD_AST_MEMBER( returnType, returnName )              \
     public:                                                         \
         returnType returnName() const { return m_##returnName; }    \
     private:                                                        \
@@ -95,7 +94,7 @@ CMAKE_BEGIN_AST_CLASS( CustomCommandAst )
     CMAKE_ADD_AST_MEMBER( BuildStage, buildStage )
     CMAKE_ADD_AST_MEMBER( QStringList, outputs )
     CMAKE_ADD_AST_MEMBER( QStringList, commands )
-    CMAKE_ADD_AST_MEMBER( QString, mainDependency )    
+    CMAKE_ADD_AST_MEMBER( QString, mainDependency )
     CMAKE_ADD_AST_MEMBER( QStringList, otherDependencies )
     CMAKE_ADD_AST_MEMBER( QString, workingDirectory )
     CMAKE_ADD_AST_MEMBER( QString, comment )
@@ -110,7 +109,7 @@ CMAKE_ADD_AST_MEMBER( QStringList, arguments )
 CMAKE_END_AST_CLASS( MacroCallAst )
 
 CMAKE_BEGIN_AST_CLASS( CustomTargetAst )
-typedef QMap<QString, QStringList> cmdAndArgs; //Just to make preprocessor not to cry
+typedef QMap<QString, QStringList> cmdAndArgs; //Just to make preprocessor not cry
 CMAKE_ADD_AST_MEMBER( QString, target )
 CMAKE_ADD_AST_MEMBER( bool, buildAlways )
 CMAKE_ADD_AST_MEMBER( cmdAndArgs, commandArgs )
@@ -359,7 +358,7 @@ CMAKE_END_AST_CLASS( ForeachAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetCMakePropertyAst )
-        enum PropertyType { Variables, CacheVariables, Commands, Macros };
+    enum PropertyType { Variables, CacheVariables, Commands, Macros };
 CMAKE_ADD_AST_MEMBER( PropertyType, type )
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_END_AST_CLASS( GetCMakePropertyAst )
@@ -393,7 +392,7 @@ CMAKE_END_AST_CLASS( GetDirPropertyAst )
 
 
 CMAKE_BEGIN_AST_CLASS( GetFilenameComponentAst )
-        enum ComponentType { Path, Absolute, Name, Ext, NameWe, Program };
+    enum ComponentType { Path, Absolute, Name, Ext, NameWe, Program };
 CMAKE_ADD_AST_MEMBER( QString, variableName )
 CMAKE_ADD_AST_MEMBER( QString, fileName )
 CMAKE_ADD_AST_MEMBER( ComponentType, type )
@@ -437,7 +436,7 @@ CMAKE_END_AST_CLASS( IncludeAst )
 
 
 CMAKE_BEGIN_AST_CLASS( IncludeDirectoriesAst )
-        enum IncludeType { Default=0, After, Before };
+    enum IncludeType { Default=0, After, Before };
 CMAKE_ADD_AST_MEMBER( IncludeType, includeType )
 CMAKE_ADD_AST_MEMBER( bool, isSystem )
 CMAKE_ADD_AST_MEMBER( QStringList, includedDirectories )
@@ -628,27 +627,27 @@ CMAKE_END_AST_CLASS( SetAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetDirectoryPropsAst )
-        typedef QPair<QString, QString> PropPair;
+    typedef QPair<QString, QString> PropPair;
 CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetDirectoryPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetSourceFilesPropsAst )
-        typedef QPair<QString, QString> PropPair;
+    typedef QPair<QString, QString> PropPair;
 CMAKE_ADD_AST_MEMBER( QStringList, files )
 CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetSourceFilesPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetTargetPropsAst )
-        typedef QPair<QString, QString> PropPair;
+    typedef QPair<QString, QString> PropPair;
 CMAKE_ADD_AST_MEMBER( QStringList, targets )
 CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetTargetPropsAst )
 
 
 CMAKE_BEGIN_AST_CLASS( SetTestsPropsAst )
-        typedef QPair<QString, QString> PropPair;
+    typedef QPair<QString, QString> PropPair;
 CMAKE_ADD_AST_MEMBER( QStringList, tests )
 CMAKE_ADD_AST_MEMBER( QList<PropPair>, properties )
 CMAKE_END_AST_CLASS( SetTestsPropsAst )
@@ -793,10 +792,7 @@ CMAKE_END_AST_CLASS( BreakAst )
 CMAKE_BEGIN_AST_CLASS( CMakePolicyAst )
 enum Action { Version, Set, Push, Pop };
 CMAKE_ADD_AST_MEMBER( Action, action )
-//VERSION
 CMAKE_ADD_AST_MEMBER( QList<int>, version )
-
-//SET
 CMAKE_ADD_AST_MEMBER( int, policyNum )
 CMAKE_ADD_AST_MEMBER( bool, isNew )
 CMAKE_END_AST_CLASS( CMakePolicyAst )
