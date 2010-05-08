@@ -1271,6 +1271,7 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
 
 void PatchReviewPlugin::startReview(IPatchSource* patch, IPatchReview::ReviewMode mode)
 {
+  Q_UNUSED(mode);
   setPatch(patch);
   QMetaObject::invokeMethod(this, "updateReview", Qt::QueuedConnection);
 }

@@ -67,6 +67,7 @@ void SvnJobBase::askForLogin( const QString& realm )
 
 void SvnJobBase::showNotification( const QString& path, const QString& msg )
 {
+    Q_UNUSED(path);
     outputMessage(msg);
 }
 
