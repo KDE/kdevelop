@@ -174,6 +174,7 @@ CMAKE_END_AST_CLASS( BuildCommandAst )
 
 
 CMAKE_BEGIN_AST_CLASS( BuildNameAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_ADD_AST_MEMBER( QString, buildName )
 CMAKE_END_AST_CLASS( BuildNameAst )
 
@@ -732,12 +733,14 @@ CMAKE_END_AST_CLASS( TryRunAst )
 
 
 CMAKE_BEGIN_AST_CLASS( UseMangledMesaAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_ADD_AST_MEMBER( QString, pathToMesa )
 CMAKE_ADD_AST_MEMBER( QString, outputDir )
 CMAKE_END_AST_CLASS( UseMangledMesaAst )
 
 
 CMAKE_BEGIN_AST_CLASS( UtilitySourceAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_ADD_AST_MEMBER( QString, cacheEntry )
 CMAKE_ADD_AST_MEMBER( QString, executableName )
 CMAKE_ADD_AST_MEMBER( QString, pathToSource )
@@ -746,6 +749,7 @@ CMAKE_END_AST_CLASS( UtilitySourceAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VariableRequiresAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_ADD_AST_MEMBER( QString, testVariable )
 CMAKE_ADD_AST_MEMBER( QString, resultVariable )
 CMAKE_ADD_AST_MEMBER( QStringList, requiredVariables )
@@ -753,18 +757,22 @@ CMAKE_END_AST_CLASS( VariableRequiresAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VtkMakeInstantiatorAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( VtkMakeInstantiatorAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VtkWrapJavaAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( VtkWrapJavaAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VtkWrapPythonAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( VtkWrapPythonAst )
 
 
 CMAKE_BEGIN_AST_CLASS( VtkWrapTclAst )
+CMAKE_MARK_AS_DEPRECATED()
 CMAKE_END_AST_CLASS( VtkWrapTclAst )
 
 
