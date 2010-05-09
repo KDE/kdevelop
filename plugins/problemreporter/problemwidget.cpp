@@ -128,22 +128,20 @@ void ProblemWidget::forceFullUpdate() {
 
 void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
 {
+  ///TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
+  ///      but having no background.
+  ///      also make it nicer together with other plugins, this would currently fail with
+  ///      this method...
+  const uint errorMarkType = KTextEditor::MarkInterface::Error;
+  const uint warningMarkType = KTextEditor::MarkInterface::Warning;
   KTextEditor::MarkInterface* iface = dynamic_cast<KTextEditor::MarkInterface*>(doc->textDocument());
   HashedString currentDoc(doc->url().pathOrUrl());
   if (iface) {
-    foreach(ProblemPointer p, model()->allProblems()) {
-        if (!p->finalLocation().isValid() || p->finalLocation().document() != currentDoc) {
-            continue;
+    // clear previously added marks
+    foreach(KTextEditor::Mark* mark, iface->marks().values()) {
+        if (mark->type == errorMarkType || mark->type == warningMarkType) {
+            iface->removeMark(mark->line, mark->type);
         }
-        uint mark;
-        if (p->severity() == ProblemData::Error) {
-            mark = KTextEditor::MarkInterface::Error;
-        } else if (p->severity() == ProblemData::Warning) {
-            mark = KTextEditor::MarkInterface::Warning;
-        } else {
-            continue;
-        }
-        iface->removeMark(p->finalLocation().start().line(), mark);
     }
   }
   if(ctx) {
@@ -165,9 +163,9 @@ void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
             }
             uint mark;
             if (p->severity() == ProblemData::Error) {
-                mark = KTextEditor::MarkInterface::Error;
+                mark = errorMarkType;
             } else if (p->severity() == ProblemData::Warning) {
-                mark = KTextEditor::MarkInterface::Warning;
+                mark = warningMarkType;
             } else {
                 continue;
             }
