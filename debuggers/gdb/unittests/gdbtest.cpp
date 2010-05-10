@@ -937,6 +937,46 @@ void GdbTest::testVariablesWatches()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
 
+void GdbTest::testVariablesWatchesQuotes()
+{
+    TestDebugSession *session = new TestDebugSession;
+    session->variableController()->setAutoUpdate(KDevelop::IVariableController::UpdateWatches);
+
+    TestLaunchConfiguration cfg;
+
+    const QString testString("test");
+    const QString quotedTestString("\"" + testString + "\"");
+
+    breakpoints()->addCodeBreakpoint(debugeeFileName, 38);
+    QVERIFY(session->startProgram(&cfg));
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+
+    variableCollection()->watches()->add(quotedTestString); //just a constant string
+    QTest::qWait(300);
+
+    QModelIndex i = variableCollection()->index(0, 0);
+    QCOMPARE(variableCollection()->rowCount(i), 1);
+    COMPARE_DATA(variableCollection()->index(0, 0, i), quotedTestString);
+    COMPARE_DATA(variableCollection()->index(0, 1, i), "[" + QString::number(testString.length() + 1) + "]");
+
+    QModelIndex testStr = variableCollection()->index(0, 0, i);
+    COMPARE_DATA(variableCollection()->index(0, 0, testStr), "...");
+    variableCollection()->expanded(testStr);
+    QTest::qWait(100);
+    int len = testString.length();
+    for (int ind = 0; ind < len; ind++)
+    {
+        COMPARE_DATA(variableCollection()->index(ind, 0, testStr), QString::number(ind));
+        QChar c = testString.at(ind);
+        QString value = QString::number(c.toLatin1()) + " '" + c + "'";
+        COMPARE_DATA(variableCollection()->index(ind, 1, testStr), value);
+    }
+    COMPARE_DATA(variableCollection()->index(len, 0, testStr), QString::number(len));
+    COMPARE_DATA(variableCollection()->index(len, 1, testStr), "0 '\\000'");
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::EndedState);
+}
 
 void GdbTest::testVariablesWatchesTwoSessions()
 {

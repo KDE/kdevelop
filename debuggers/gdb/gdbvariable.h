@@ -61,6 +61,7 @@ namespace KDevelop
     private: // Internal
         friend class ::CreateVarobjHandler;
         friend class ::FetchMoreChildrenHandler;
+        QString enquotedExpression() const;
         void setVarobj(const QString& v);
         QString varobj_;
 
