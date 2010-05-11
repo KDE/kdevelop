@@ -63,9 +63,7 @@ DocumentationController::DocumentationController(Core* core)
 
 void DocumentationController::initialize()
 {
-    if(!(Core::self()->setupFlags() & Core::NoUi)) {
-        Core::self()->uiController()->addToolView( i18n("Documentation"), m_factory );
-    }
+    Core::self()->uiController()->addToolView( i18n("Documentation"), m_factory );
 }
 
 

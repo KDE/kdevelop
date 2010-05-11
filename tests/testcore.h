@@ -60,7 +60,7 @@ class KDEVPLATFORMTESTS_EXPORT TestCore : public Core
     Q_OBJECT
 public:
     TestCore();
-    void initialize( Core::Setup );
+    void initialize();
     void setSessionController( SessionController* );
     void setPluginController( PluginController* );
     void setRunController( RunController* );

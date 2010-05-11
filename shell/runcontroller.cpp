@@ -305,10 +305,8 @@ RunController::RunController(QObject *parent)
     d->launchAsMapper = 0;
     d->contextItem = 0;
 
-    if(!(Core::self()->setupFlags() & Core::NoUi)) {
-        // Note that things like registerJob() do not work without the actions, it'll simply crash.
-        setupActions();
-    }
+    // Note that things like registerJob() do not work without the actions, it'll simply crash.
+    setupActions();
 }
 
 RunController::~RunController()
@@ -351,12 +349,9 @@ void RunController::initialize()
     connect(Core::self()->projectController(), SIGNAL(projectConfigurationChanged(KDevelop::IProject*)),
              this, SLOT(slotRefreshProject(KDevelop::IProject*)));
 
-    if( (Core::self()->setupFlags() & Core::NoUi) == 0 )
-    {
-        // Only do this in GUI mode
-        d->updateCurrentLaunchAction();
-        d->enableLaunchActions();
-    }
+    // Only do this in GUI mode
+    d->updateCurrentLaunchAction();
+    d->enableLaunchActions();
 }
 
 KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launch)
@@ -513,14 +508,12 @@ void KDevelop::RunController::registerJob(KJob * job)
 
     if (!d->jobs.contains(job)) {
         KAction* stopJobAction = 0;
-        if (Core::self()->setupFlags() != Core::NoUi) {
-            stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
-            stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
-            d->stopAction->addAction(stopJobAction);
-            connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
+        stopJobAction = new KAction(job->objectName().isEmpty() ? i18n("Unnamed job") : job->objectName(), this);
+        stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
+        d->stopAction->addAction(stopJobAction);
+        connect (stopJobAction, SIGNAL(triggered(bool)), SLOT(slotKillJob()));
 
-            job->setUiDelegate( new KDialogJobUiDelegate() );
-        }
+        job->setUiDelegate( new KDialogJobUiDelegate() );
 
         d->jobs.insert(job, stopJobAction);
 
@@ -568,8 +561,7 @@ void KDevelop::RunController::checkState()
         emit runStateChanged(d->state);
     }
 
-    if (Core::self()->setupFlags() != Core::NoUi)
-        d->stopAction->setEnabled(running);
+    d->stopAction->setEnabled(running);
 }
 
 void KDevelop::RunController::stopAllProcesses()

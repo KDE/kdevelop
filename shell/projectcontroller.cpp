@@ -334,7 +334,7 @@ ProjectController::ProjectController( Core* core )
              d->buildset, SLOT( projectClosed( KDevelop::IProject* ) ) );
 
     d->selectionModel = new QItemSelectionModel(d->model);
-    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+    setupActions();
 
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d);
@@ -626,15 +626,12 @@ void ProjectController::projectImportingFinished( IProject* project )
     //action = ac->action( "project_close" );
     //action->setEnabled( true );
 
-    if (Core::self()->setupFlags() != Core::NoUi)
-    {
-        d->m_recentAction->addUrl( project->projectFileUrl() );
-        KSharedConfig * config = KGlobal::config().data();
-        KConfigGroup recentGroup = config->group("RecentProjects");
-        d->m_recentAction->saveEntries( recentGroup );
+    d->m_recentAction->addUrl( project->projectFileUrl() );
+    KSharedConfig * config = KGlobal::config().data();
+    KConfigGroup recentGroup = config->group("RecentProjects");
+    d->m_recentAction->saveEntries( recentGroup );
 
-        config->sync();
-    }
+    config->sync();
 
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );

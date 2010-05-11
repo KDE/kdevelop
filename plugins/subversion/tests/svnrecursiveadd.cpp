@@ -118,7 +118,7 @@ void SvnRecursiveAdd::test()
     QCOMPARE(cmd.execute(10000), 0);
     AutoTestShell::init();
     std::auto_ptr<TestCore> core(new TestCore());
-    core->initialize(Core::Default);
+    core->initialize();
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
     IBasicVersionControl* vcs = NULL;
     foreach(IPlugin* p,  plugins) {

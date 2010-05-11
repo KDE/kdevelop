@@ -97,16 +97,9 @@ public:
         a->setIconName("applications-engineering");
         m_controller->addDefaultArea(a);
 
-        if(!(Core::self()->setupFlags() & Core::NoUi)) 
-        {
-            defaultMainWindow = new MainWindow(m_controller);
-            m_controller->addMainWindow(defaultMainWindow);
-            activeSublimeWindow = defaultMainWindow;
-        }
-        else
-        {
-            activeSublimeWindow = defaultMainWindow = 0;
-        }
+        defaultMainWindow = new MainWindow(m_controller);
+        m_controller->addMainWindow(defaultMainWindow);
+        activeSublimeWindow = defaultMainWindow;
     }
 
     void widgetChanged(QWidget*, QWidget* now)
@@ -174,7 +167,7 @@ UiController::UiController(Core *core)
     setObjectName("UiController");
     d->core = core;
 
-    if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
+    if (!defaultMainWindow() )
         return;
 
     connect( QApplication::instance(),

@@ -422,7 +422,7 @@ DocumentController::DocumentController( QObject *parent )
 
     connect(this, SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(changeDocumentUrl(KDevelop::IDocument*)));
 
-    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
+    setupActions();
 
 #if HAVE_KOMPARE    
     registerDocumentForMimetype("text/x-patch", new PatchDocumentFactory);

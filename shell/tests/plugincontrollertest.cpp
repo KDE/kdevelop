@@ -68,7 +68,7 @@ void PluginControllerTest::initTestCase()
     p.execute();
 
     AutoTestShell::init();
-    Core::initialize( Core::NoUi );
+    Core::initialize();
     m_core = Core::self();
     m_pluginCtrl = m_core->pluginControllerInternal();
 }

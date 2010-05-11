@@ -88,14 +88,13 @@ CorePrivate::CorePrivate(Core *core):
 {
 }
 
-bool CorePrivate::initialize(Core::Setup mode)
+bool CorePrivate::initialize()
 {
-    m_mode=mode;
     if( !sessionController )
     {
         sessionController = new SessionController(m_core);
     }
-    if( !workingSetController && !(mode & Core::NoUi) )
+    if( !workingSetController )
     {
         workingSetController = new WorkingSetController(m_core);
     }
@@ -110,7 +109,7 @@ bool CorePrivate::initialize(Core::Setup mode)
     {
         pluginController = new PluginController(m_core);
     }
-    if( !partController && !(mode & Core::NoUi))
+    if( !partController )
     {
         partController = new PartController(m_core, uiController->defaultMainWindow());
     }
@@ -150,7 +149,7 @@ bool CorePrivate::initialize(Core::Setup mode)
         selectionController = new SelectionController(m_core);
     }
     
-    if( !documentationController && !(mode & Core::NoUi) )
+    if( !documentationController )
     {
         documentationController = new DocumentationController(m_core);
     }
@@ -163,13 +162,13 @@ bool CorePrivate::initialize(Core::Setup mode)
     kDebug() << "initializing ui controller";
     sessionController->initialize();
     
-    if(!(mode & Core::NoUi) && !sessionController->lockSession())
+    if( !sessionController->lockSession())
     {
         KMessageBox::error(0, i18n("This session is already active in another running instance"));
         return false;
     }
     
-    if(!(mode & Core::NoUi)) uiController->initialize();
+    uiController->initialize();
     languageController->initialize();
     projectController->initialize();
     documentController->initialize();
@@ -186,15 +185,13 @@ bool CorePrivate::initialize(Core::Setup mode)
     kDebug() << "loading session plugins";
     pluginController->initialize();
 
-    if(!(mode & Core::NoUi))
-    {
-        workingSetController->initialize();
-        /* Need to do this after everything else is loaded.  It's too
-            hard to restore position of views, and toolbars, and whatever
-            that are not created yet.  */
-        uiController->loadAllAreas(KGlobal::config());
-        uiController->defaultMainWindow()->show();
-    }
+    workingSetController->initialize();
+    /* Need to do this after everything else is loaded.  It's too
+        hard to restore position of views, and toolbars, and whatever
+        that are not created yet.  */
+    uiController->loadAllAreas(KGlobal::config());
+    uiController->defaultMainWindow()->show();
+
     runController->initialize();
     sourceFormatterController->initialize();
     selectionController->initialize();
@@ -221,13 +218,13 @@ CorePrivate::~CorePrivate()
 }
 
 
-bool Core::initialize(KSplashScreen* splash, Setup mode)
+bool Core::initialize(KSplashScreen* splash)
 {
     if (m_self)
         return true;
 
     m_self = new Core();
-    bool ret = m_self->d->initialize(mode);
+    bool ret = m_self->d->initialize();
     if( splash ) {
         QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
     }
@@ -259,11 +256,6 @@ Core::~Core()
     kDebug() ;
     //Cleanup already called before mass destruction of GUI
     delete d;
-}
-
-Core::Setup Core::setupFlags() const
-{
-    return d->m_mode;
 }
 
 bool Core::shuttingDown() const

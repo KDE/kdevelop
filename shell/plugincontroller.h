@@ -135,6 +135,12 @@ public:
 
     void resetToDefaults();
 
+protected:
+    /*
+     * Overridable function to define wether GUI plugins should be loadable by
+     * this plugincontroller or not
+     */
+    virtual bool supportsGui() const;
 
 private:
     /**
