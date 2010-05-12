@@ -460,6 +460,8 @@ void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 
 void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 {
+    if (!d->currentTargetAction) return;
+
     foreach (QAction* action, d->currentTargetAction->actions()) {
         LaunchConfiguration* l = static_cast<LaunchConfiguration*>(qvariant_cast<void*>(action->data()));
         if ( project == l->project() ) {
