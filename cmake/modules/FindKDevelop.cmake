@@ -28,7 +28,7 @@ if( NOT KDEVELOP_INCLUDE_DIR )
         PATHS
         ${CMAKE_INSTALL_PREFIX}/include
         ${_KDEVELOP_INCLUDE_DIR}
-	${KDE4_INCLUDE_DIR}
+        ${KDE4_INCLUDE_DIR}
     )
     if(_kdevIncDir)
         set(KDEVELOP_INCLUDE_DIR ${_kdevIncDir}/kdevelop)
