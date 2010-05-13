@@ -36,7 +36,10 @@ const uint MinimumCountForCache = 1;
 
 namespace KDevelop {
 
-Utils::BasicSetRepository recursiveImportCacheRepository("Recursive Imports Cache", 0, false);
+Utils::BasicSetRepository* RecursiveImportCacheRepository::repository() {
+  static Utils::BasicSetRepository recursiveImportCacheRepositoryObject("Recursive Imports Cache", 0, false);
+  return &recursiveImportCacheRepositoryObject;
+}
 
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
 

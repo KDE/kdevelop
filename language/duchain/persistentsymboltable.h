@@ -112,12 +112,8 @@ struct DUContextTopContextExtractor {
   }
 };
 
-KDEVPLATFORMLANGUAGE_EXPORT extern Utils::BasicSetRepository recursiveImportCacheRepository;
-
 struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
-  inline static Utils::BasicSetRepository* repository() {
-    return &recursiveImportCacheRepository;
-  }
+  static Utils::BasicSetRepository* repository();
 };
 
 /**

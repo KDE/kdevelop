@@ -121,7 +121,7 @@ QPair<QString, KLockFile::Ptr> allocateRepository() {
 }
 
 ///The global item-repository registry that is used by default
-ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
+static ItemRepositoryRegistry& allocateGlobalItemRepositoryRegistry() {
   QPair<QString, KLockFile::Ptr> repo = allocateRepository();
   
   ///We intentionally leak the registry, to prevent problems in the destruction order, where

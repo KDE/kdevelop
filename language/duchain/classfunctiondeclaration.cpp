@@ -27,7 +27,10 @@
 
 namespace KDevelop
 {
-Identifier conversionIdentifier("operator{...cast...}");
+static Identifier& conversionIdentifier() {
+  static Identifier conversionIdentifierObject("operator{...cast...}");
+  return conversionIdentifierObject;
+}
 
 REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
 
@@ -163,7 +166,7 @@ void ClassFunctionDeclaration::setIsSlot(bool isSlot) {
 }
 
 bool ClassFunctionDeclaration::isConversionFunction() const {
-  return identifier() == conversionIdentifier;
+  return identifier() == conversionIdentifier();
 }
 
 bool ClassFunctionDeclaration::isConstructor() const
