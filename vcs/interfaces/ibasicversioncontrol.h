@@ -35,6 +35,8 @@ namespace KDevelop
 class VcsJob;
 class VcsLocation;
 class VcsImportMetadataWidget;
+class VcsLocationWidget;
+
 /**
  * This is the basic interface that all Version Control or Source Code Management
  * plugins need to implement. None of the methods in this interface are optional.
@@ -245,6 +247,8 @@ public:
      * @param destinationDirectory location of the created working copy (local repository)
      */
     virtual VcsJob* createWorkingCopy(const VcsLocation & sourceRepository, const KUrl & destinationDirectory, RecursionMode recursion = IBasicVersionControl::Recursive) = 0;
+    
+    virtual VcsLocationWidget* vcsLocation(QWidget* parent) const=0;
 
 };
 

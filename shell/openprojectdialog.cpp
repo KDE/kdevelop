@@ -30,6 +30,7 @@
 #include "uicontroller.h"
 #include "mainwindow.h"
 #include "shellextension.h"
+#include "projectsourcepage.h"
 
 namespace KDevelop
 {
@@ -39,17 +40,30 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
 {
     resize(QSize(700, 500));
     
-    QWidget* page = new OpenProjectPage( startUrl, this );
+    QWidget* page = new ProjectSourcePage( startUrl, this );
+//     connect( page, SIGNAL( correctSelection(bool) ), this, SLOT( validateSourceUrl(KUrl) ) );
+    sourcePage = addPage( page, "Select the source" );
+    
+    page = new OpenProjectPage( startUrl, this );
     connect( page, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
-    openPage = addPage( page, "Select Directory/Project File" );
+    openPage = addPage( page, "Select the project" );
+    
     page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
-    projectInfoPage = addPage( page, "Project Information" );
+    projectInfoPage = addPage( page, "Project information" );
+    
+    setValid( sourcePage, false );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
     showButton( KDialog::Help, false );
+}
+
+void OpenProjectDialog::validateSourceUrl(const KUrl& url)
+{
+//     kDebug() << "XXXXXXX" << url << url.isLocalFile();
+    setValid(sourcePage, url.isLocalFile() || url.isEmpty());
 }
 
 void OpenProjectDialog::validateOpenUrl( const KUrl& url )
@@ -63,8 +77,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         QFileInfo info( url.toLocalFile() );
         isValid = info.exists();
         if ( isValid ) {
-            isDir = QFileInfo( url.toLocalFile() ).isDir();
-            extension = QFileInfo( url.toLocalFile() ).suffix();
+            isDir = info.isDir();
+            extension = info.suffix();
         }
     } else 
     {

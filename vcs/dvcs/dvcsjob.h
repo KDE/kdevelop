@@ -119,7 +119,7 @@ public:
     /**
      * Returns current working directory.
      */
-    QDir const & getDirectory() const;
+    QDir getDirectory() const;
 
     /**
      * Call this method to set command to execute and its arguments.

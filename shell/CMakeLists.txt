@@ -44,6 +44,7 @@ set(kdevplatformshell_LIB_SRCS
     progresswidget.cpp
     overlaywidget.cpp
     progressdialog.cpp
+    projectsourcepage.cpp
 
     kross/krossplugin.cpp
     kross/krossbuildsystemmanager.cpp
@@ -80,6 +81,7 @@ set(kdevplatformshell_UI
     sessiondialog.ui
     projectinfopage.ui
     launchconfigurationdialog.ui
+    projectsourcepage.ui
 )
 
 kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )

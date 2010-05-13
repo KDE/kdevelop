@@ -50,7 +50,6 @@ struct DVcsJobPrivate
     KProcess*   childproc;
     QStringList command;
     QString     server;
-    QDir        directory;
     bool        isRunning;
     bool        wasStarted;
     bool        failed;
@@ -77,7 +76,7 @@ void DVcsJob::clear()
     d->command.clear();
     d->output.clear();
     d->server.clear();
-    d->directory = QDir::temp();
+    d->childproc->setWorkingDirectory(QDir::temp().absolutePath());
     d->isRunning = d->failed = d->wasStarted = false;
 }
 
@@ -88,7 +87,9 @@ void DVcsJob::setServer(const QString& server)
 
 void DVcsJob::setDirectory(const QDir& directory)
 {
-    d->directory = directory;
+    const QString workingDirectory = directory.absolutePath();
+    kDebug() << "Working directory:" << workingDirectory;
+    d->childproc->setWorkingDirectory(workingDirectory);
 }
 
 void DVcsJob::setStandardInputFile(const QString &fileName)
@@ -96,9 +97,9 @@ void DVcsJob::setStandardInputFile(const QString &fileName)
     d->childproc->setStandardInputFile(fileName);
 }
 
-const QDir & DVcsJob::getDirectory() const
+QDir DVcsJob::getDirectory() const
 {
-    return d->directory;
+    return QDir(d->childproc->workingDirectory());
 }
 
 bool DVcsJob::isRunning() const
@@ -175,10 +176,6 @@ void DVcsJob::start()
         return;
     }
 #endif
-    const QString workingDirectory = d->directory.absolutePath();
-    kDebug() << "Working directory:" << workingDirectory;
-    d->childproc->setWorkingDirectory(workingDirectory);
-
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
@@ -198,8 +195,8 @@ void DVcsJob::start()
     d->childproc->setProgram( d->command );
     d->childproc->setEnvironment(QProcess::systemEnvironment());
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
-    d->childproc->waitForStarted();
     d->childproc->start();
+    d->childproc->waitForStarted();
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
