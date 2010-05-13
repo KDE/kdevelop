@@ -108,38 +108,35 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
     if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
         QToolButton::paintEvent(event);
     } else {
-        QStyleOptionToolButton opt;
-        initStyleOption(&opt);
-        // If we're drawing icons only it looks better if they're not rotated
-        QPixmap ic = icon().pixmap(QSize(16,16), QIcon::Normal, QIcon::On);
-        
-        QTransform tf;
+        // rotated paint
+        QStylePainter painter(this);
+        QStyleOptionToolButton option;
+        initStyleOption(&option);
+
+        // first draw normal frame and not text/icon
+        option.text = QString();
+        option.icon = QIcon();
+        painter.drawComplexControl(QStyle::CC_ToolButton, option);
+
+        // rotate the options
+        QSize size( option.rect.size() );
+        size.transpose();
+        option.rect.setSize( size );
+
+        // rotate the painter
         if(_area == Qt::LeftDockWidgetArea) {
-            tf = tf.rotate(90);
+            painter.translate( 0, height() );
+            painter.rotate( -90 );
         } else {
-            tf = tf.rotate(-90);
+            painter.translate( width(), 0 );
+            painter.rotate( 90 );
         }
-        opt.icon = ic.transformed( tf, Qt::SmoothTransformation );
-        
-        opt.rect.setSize(QSize(opt.rect.height(), opt.rect.width()));
 
-        QPixmap pix(opt.rect.width(), opt.rect.height());
-        QStylePainter painter(&pix, this);
-        painter.fillRect(pix.rect(), opt.palette.background());
-        painter.drawComplexControl(QStyle::CC_ToolButton, opt);
+        // paint text and icon
+        option.text = text();
+        option.icon = icon();
+        painter.drawControl(QStyle::CE_ToolButtonLabel, option);
         painter.end();
-
-        QPainter p(this);
-
-        if (_area == Qt::LeftDockWidgetArea) {
-            p.translate(0, height());
-            p.rotate(-90);
-        } else {
-            p.translate(width(), 0);
-            p.rotate(90);
-        }
-
-        p.drawPixmap(0, 0, pix);
     }
 }
 
