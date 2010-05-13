@@ -681,7 +681,7 @@ void TestCppCodeCompletion::testLocalUsingNamespace() {
     QCOMPARE(top->childContexts()[1]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[3]->localDeclarations().size(), 2);
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().size());
-    QVERIFY(top->childContexts()[3]->findLocalDeclarations(KDevelop::globalImportIdentifier, KDevelop::SimpleCursor::invalid(), 0, KDevelop::AbstractType::Ptr(), KDevelop::DUContext::NoFiltering).size());
+    QVERIFY(top->childContexts()[3]->findLocalDeclarations(KDevelop::globalImportIdentifier(), KDevelop::SimpleCursor::invalid(), 0, KDevelop::AbstractType::Ptr(), KDevelop::DUContext::NoFiltering).size());
   //   QVERIFY(top->childContexts()[2]->findDeclarations(KDevelop::globalImportIdentifier).size());
     
     QVERIFY(CompletionItemTester(top->childContexts()[3]).names.contains("test"));
