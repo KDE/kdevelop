@@ -34,6 +34,8 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
     public:
         StandardVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
         virtual VcsLocation location() const;
+        virtual bool isCorrect() const;
+        
     private:
         KUrlRequester* m_urlWidget;
 };

@@ -38,3 +38,8 @@ VcsLocation StandardVcsLocationWidget::location() const
 {
     return VcsLocation(m_urlWidget->url());
 }
+
+bool KDevelop::StandardVcsLocationWidget::isCorrect() const
+{
+    return !m_urlWidget->url().isRelative();
+}

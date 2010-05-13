@@ -13,9 +13,14 @@
 
 #include <QWidget>
 
-namespace Ui { class ProjectSourcePage; }
-namespace KDevelop { class IPlugin; }
+class KJob;
 class KUrl;
+namespace Ui { class ProjectSourcePage; }
+namespace KDevelop {
+    class IPlugin;
+    class IBasicVersionControl;
+    class VcsLocationWidget;
+}
 
 class ProjectSourcePage : public QWidget
 {
@@ -25,10 +30,19 @@ class ProjectSourcePage : public QWidget
         
     private slots:
         void sourceChanged(int index);
+        void sourceLocationChanged();
+        void getVcsProject();
+        void projectReceived(KJob* job);
+        
+    signals:
+        void isCorrect(bool);
         
     private:
+        KDevelop::IBasicVersionControl* vcsPerIndex(int index);
+        
         Ui::ProjectSourcePage* m_ui;
         QList<KDevelop::IPlugin*> m_plugins;
+        KDevelop::VcsLocationWidget* m_locationWidget;
 };
 
 #endif // PROJECTSOURCEPAGE_H

@@ -32,7 +32,7 @@ public:
     QString projectName();
     QString projectManager();
 private slots:
-    void validateSourceUrl( const KUrl& );
+    void validateSourcePage( bool );
     void validateOpenUrl( const KUrl& );
     void validateProjectName( const QString& );
     void validateProjectManager( const QString& );

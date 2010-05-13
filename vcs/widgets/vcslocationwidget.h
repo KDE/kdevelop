@@ -34,6 +34,10 @@ class VcsLocationWidget : public QWidget
         VcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
         
         virtual VcsLocation location() const=0;
+        virtual bool isCorrect() const=0;
+        
+    signals:
+        void changed();
 };
 
 }

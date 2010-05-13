@@ -64,14 +64,20 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="get">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>PushButton</string>
+         <string>Get</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QProgressBar" name="progressBar">
+       <widget class="QProgressBar" name="creationProgress">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="value">
          <number>0</number>
         </property>

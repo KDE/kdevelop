@@ -13,8 +13,10 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/widgets/vcslocationwidget.h>
+#include <vcs/vcsjob.h>
 #include <QVBoxLayout>
 
 using namespace KDevelop;
@@ -26,6 +28,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->setupUi(this);
     
     m_ui->workingDir->setUrl(initial);
+    m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
     m_ui->sources->addItem(KIcon("folder"), i18n("Local"));
     m_plugins.append(0);
@@ -37,30 +40,60 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
         m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), pluginManager->pluginInfo(p).name());
     }
     connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(sourceChanged(int)));
-
+    connect(m_ui->get, SIGNAL(clicked()), SLOT(getVcsProject()));
+    
     sourceChanged(0);
 }
 
 void ProjectSourcePage::sourceChanged(int index)
 {
-    IPlugin* p=m_plugins[index];
-    if(p) {
-        QLayout* remoteWidgetLayout = m_ui->remoteWidget->layout();
-        if(remoteWidgetLayout) {
-            QLayoutItem *child;
-            while ((child = remoteWidgetLayout->takeAt(0)) != 0) {
-                delete child->widget();
-                delete child;
-            }
-        } else
-            remoteWidgetLayout = new QVBoxLayout(m_ui->remoteWidget);
-            
-        IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
-        if(iface) {
-            VcsLocationWidget* w=iface->vcsLocation(m_ui->sourceBox);
-            remoteWidgetLayout->addWidget(w);
-        }
+    m_locationWidget=0;
+    QLayout* remoteWidgetLayout = m_ui->remoteWidget->layout();
+    QLayoutItem *child;
+    while ((child = remoteWidgetLayout->takeAt(0)) != 0) {
+        delete child->widget();
+        delete child;
     }
-    m_ui->sourceBox->setVisible(p!=0);
     
+    IBasicVersionControl* vcIface = vcsPerIndex(index);
+    if(vcIface) {
+        m_locationWidget=vcIface->vcsLocation(m_ui->sourceBox);
+        connect(m_locationWidget, SIGNAL(changed()), SLOT(sourceLocationChanged()));
+        
+        remoteWidgetLayout->addWidget(m_locationWidget);
+    }
+    emit isCorrect(vcIface!=0);
+    
+    m_ui->sourceBox->setVisible(vcIface!=0);
+}
+
+IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
+{
+    IPlugin* p=m_plugins[index];
+    if(!p)
+        return 0;
+    else
+        return p->extension<KDevelop::IBasicVersionControl>();
+}
+
+void ProjectSourcePage::getVcsProject()
+{
+    IBasicVersionControl* iface=vcsPerIndex(m_ui->sources->currentIndex());
+    Q_ASSERT(iface && m_locationWidget);
+
+    emit isCorrect(false);
+    VcsJob* job=iface->createWorkingCopy(m_locationWidget->location(), m_ui->workingDir->url());
+    
+    connect(job, SIGNAL(finished(KJob*)), SLOT(projectReceived(KJob*)));
+    ICore::self()->runController()->registerJob(job);
+}
+
+void ProjectSourcePage::projectReceived(KJob* job)
+{
+    emit isCorrect(job->error()!=0);
+}
+
+void ProjectSourcePage::sourceLocationChanged()
+{
+    m_ui->get->setEnabled(m_locationWidget->isCorrect());
 }

@@ -41,7 +41,7 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
     resize(QSize(700, 500));
     
     QWidget* page = new ProjectSourcePage( startUrl, this );
-//     connect( page, SIGNAL( correctSelection(bool) ), this, SLOT( validateSourceUrl(KUrl) ) );
+    connect( page, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
     sourcePage = addPage( page, "Select the source" );
     
     page = new OpenProjectPage( startUrl, this );
@@ -60,10 +60,9 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
     showButton( KDialog::Help, false );
 }
 
-void OpenProjectDialog::validateSourceUrl(const KUrl& url)
+void OpenProjectDialog::validateSourcePage(bool valid)
 {
-//     kDebug() << "XXXXXXX" << url << url.isLocalFile();
-    setValid(sourcePage, url.isLocalFile() || url.isEmpty());
+    setValid(sourcePage, valid);
 }
 
 void OpenProjectDialog::validateOpenUrl( const KUrl& url )
