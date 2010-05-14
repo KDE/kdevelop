@@ -117,6 +117,7 @@ CMAKE_REGISTER_AST( VariableRequiresAst, variable_requires )
 CMAKE_REGISTER_AST( WhileAst, while)
 CMAKE_REGISTER_AST( WriteFileAst, write_file)
 
+#undef CMAKE_REGISTER_AST
 
 enum Stage {NAMES, PATHS, PATH_SUFFIXES, HINTS};
 
