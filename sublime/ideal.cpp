@@ -650,7 +650,6 @@ void IdealMainWidget::addView(Qt::DockWidgetArea area, View* view)
 
     dock->setWindowTitle(view->widget()->windowTitle());
     dock->setWindowIcon(view->widget()->windowIcon());
-    dock->setAutoFillBackground(true);
     dock->setFocusProxy(dock->widget());
 
     if (IdealButtonBarWidget* bar = barForRole(roleForArea(area))) {
@@ -922,7 +921,6 @@ IdealSplitterHandle::IdealSplitterHandle(Qt::Orientation orientation, QWidget* p
 {
     setCursor(orientation == Qt::Horizontal ? Qt::SplitVCursor : Qt::SplitHCursor);
     setMouseTracking(true);
-    setAutoFillBackground(true);
 }
 
 void IdealSplitterHandle::paintEvent(QPaintEvent *)
