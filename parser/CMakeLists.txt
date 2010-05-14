@@ -11,23 +11,12 @@ set(parser_STAT_SRCS
 
 include_directories( ${QMakeManager_SOURCE_DIR}/parser ${QMakeManager_BINARY_DIR}/parser )
 
-if(KDEVPGQT_FOUND)
-    kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
-        "${QMakeManager_SOURCE_DIR}/parser/qmake.g"
-        "${QMakeManager_SOURCE_DIR}/parser/qmakelexer.h")
+kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
+    "${QMakeManager_SOURCE_DIR}/parser/qmake.g"
+    "${QMakeManager_SOURCE_DIR}/parser/qmakelexer.h")
 
-    include_directories(
-        ${KDEVPGQT_INCLUDE_DIR} )
-
-else(KDEVPGQT_FOUND)
-    message(STATUS "Assuming existence of the generated parser files for the parser")
-    set(parser_GEN_SRCS
-        generated/qmakeparser.cpp
-        generated/qmakedefaultvisitor.cpp
-        generated/qmakevisitor.cpp)
-    include_directories( generated
-        generated/kdevelop-pg-qt )
-endif(KDEVPGQT_FOUND)
+include_directories(
+    ${KDEVPGQT_INCLUDE_DIR} )
 
 add_subdirectory(tests)
 
@@ -45,21 +34,4 @@ kde4_add_library( kdev4qmakeparser SHARED ${parser_STAT_SRCS} ${parser_GEN_SRCS}
 target_link_libraries(kdev4qmakeparser ${KDE4_KDECORE_LIBS})
 
 install(TARGETS kdev4qmakeparser ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-add_custom_target( copy-generated
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakeast.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeast.h"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeparser.cpp"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakeparser.h"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakevisitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakevisitor.h"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakevisitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakevisitor.cpp"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakedefaultvisitor.h" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakedefaultvisitor.h"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_BINARY_DIR}/qmakedefaultvisitor.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/generated/qmakedefaultvisitor.cpp"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakeast.h"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.cpp"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakeparser.h"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakedefaultvisitor.h"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakedefaultvisitor.cpp"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakevisitor.h"
-    DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/qmakevisitor.h"
-    )
 

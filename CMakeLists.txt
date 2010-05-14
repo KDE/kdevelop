@@ -11,7 +11,7 @@ include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} ${KDEVELOP_INC
 add_subdirectory(qmakebuilder)
 add_subdirectory(app_templates)
 
-find_package(KDevelop-PG-Qt QUIET)
+find_package(KDevelop-PG-Qt REQUIRED)
 include_directories(
     ${qmakebuilder_SOURCE_DIR}
     ${QMakeManager_SOURCE_DIR}
