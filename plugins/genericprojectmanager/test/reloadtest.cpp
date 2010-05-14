@@ -30,6 +30,8 @@
 #include <kconfiggroup.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/iprojectfilemanager.h>
+#include <language/duchain/indexedstring.h>
+#include <project/projectmodel.h>
 
 QTEST_KDEMAIN(ProjectLoadTest, GUI)
 
@@ -48,6 +50,12 @@ void ProjectLoadTest::cleanup()
 
 void ProjectLoadTest::loadSimpleProject()
 {
+    QTest::qWait(500); //wait for previously loaded projects
+    foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
+        KDevelop::ICore::self()->projectController()->closeProject(p);
+    }
+    Q_ASSERT(KDevelop::ICore::self()->projectController()->projects().isEmpty());
+
     QString path;
     QString projectName;
     do {
@@ -73,7 +81,10 @@ void ProjectLoadTest::loadSimpleProject()
     f.close();
 
     KDevelop::ICore::self()->projectController()->openProject(projecturl);
-    QTest::qWait(1000);
+    QTest::qWait(500);
+
+    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
+    Q_ASSERT(project->projectFileUrl() == projecturl);
 
     //KDirWatch adds/removes the file automatically
     for (int i=0; i<100; ++i) {
@@ -85,12 +96,26 @@ void ProjectLoadTest::loadSimpleProject()
         QFile f2(path+"/blub"+QString::number(i));
         f2.remove();
     }
+    QTest::qWait(500);
+    kDebug() << "*********************";
+    kDebug() << project->fileSet().count();
+    foreach (const KDevelop::IndexedString &i, project->fileSet()) {
+        kDebug() << i.str();
+    }
+    QCOMPARE(project->filesForUrl(path+"/blub"+QString::number(50)).count(), 1);
+    KDevelop::ProjectFileItem* file = project->filesForUrl(path+"/blub"+QString::number(50)).first();
+    project->projectFileManager()->removeFile(file); //message box has to be accepted manually :(
+    for (int i=51; i<100; ++i) {
+        QFile f2(path+"/blub"+QString::number(i));
+        f2.remove();
+    }
 
-    QTest::qWait(1000);
+    QTest::qWait(2000);
 
-    KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->projects().first();
-    Q_ASSERT(project->projectFileUrl() == projecturl);
-    QCOMPARE(1+100-50, project->fileCount());
+    foreach (const KDevelop::IndexedString &i, project->fileSet()) {
+        kDebug() << i.str();
+    }
+    QCOMPARE(project->fileCount(), 1);
 
     foreach (KDevelop::IProject *p, KDevelop::ICore::self()->projectController()->projects()) {
         KDevelop::ICore::self()->projectController()->closeProject(p);
