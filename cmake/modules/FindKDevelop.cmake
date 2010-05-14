@@ -31,8 +31,6 @@ if( NOT KDEVELOP_INCLUDE_DIR )
     if(_kdevIncDir)
         set(KDEVELOP_INCLUDE_DIR ${_kdevIncDir} CACHE PATH "kdevelop include directory containing the various platform modules")
     endif(_kdevIncDir)
-else( NOT KDEVELOP_INCLUDE_DIR )
-    set(KDEVELOP_INCLUDE_DIR ${KDEVELOP_INCLUDE_DIR} CACHE PATH "kdevelop include directory containing the various platform modules")
 endif( NOT KDEVELOP_INCLUDE_DIR )
 
 include(FindPackageHandleStandardArgs)
