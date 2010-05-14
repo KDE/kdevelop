@@ -74,7 +74,7 @@ void SvnImport::initTestCase()
 {
     AutoTestShell::init();
     core = new TestCore();
-    core->initialize();
+    core->initialize(Core::Default);
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
     foreach(IPlugin* p,  plugins) {
         qDebug() << "checking plugin" << p;

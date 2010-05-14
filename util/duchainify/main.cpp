@@ -212,7 +212,7 @@ int main(int argc, char** argv)
     KApplication app(false);
 
     AutoTestShell::init();
-    Core::initialize(0);
+    Core::initialize(0, KDevelop::Core::NoUi);
     Manager manager(args);
 
     QTimer::singleShot(0, &manager, SLOT(init()));

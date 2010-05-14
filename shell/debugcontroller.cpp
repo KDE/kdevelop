@@ -106,6 +106,7 @@ DebugController::DebugController(QObject *parent)
     setComponentData(KComponentData("kdevdebugger"));
     setXMLFile("kdevdebuggershellui.rc");
 
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
     setupActions();
 
     ICore::self()->uiController()->addToolView(
@@ -297,6 +298,9 @@ void DebugController::addSession(IDebugSession* session)
         
     emit currentSessionChanged(session);
     
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
+
+
     Sublime::MainWindow* mainWindow = Core::self()->uiControllerInternal()->activeSublimeWindow();
     if (mainWindow->area()->objectName() != "debug") {
         QString workingSet = mainWindow->area()->workingSet();
@@ -325,6 +329,8 @@ void DebugController::clearExecutionPoint()
 
 void DebugController::showStepInSource(const KUrl &url, int lineNum)
 {
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
+
     clearExecutionPoint();
     kDebug() << url << lineNum;
 
@@ -375,6 +381,7 @@ void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerStat
 void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, IDebugSession *session)
 {
     Q_UNUSED(session);
+    if((Core::self()->setupFlags() & Core::NoUi)) return;
 
     kDebug() << state;
     switch (state) {

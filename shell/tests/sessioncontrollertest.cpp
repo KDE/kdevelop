@@ -66,7 +66,7 @@ void verifySessionDir( Session* s, bool exists = true )
 void SessionControllerTest::initTestCase()
 {
     AutoTestShell::init();
-    Core::initialize( 0 );
+    Core::initialize( 0, KDevelop::Core::NoUi );
     m_core = Core::self();
     qRegisterMetaType<KDevelop::ISession*>();
 }

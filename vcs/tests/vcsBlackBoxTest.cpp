@@ -322,7 +322,7 @@ void VcsBlackBoxTest::initTestCase()
 {
     AutoTestShell::init();
     TestCore* core = new TestCore();
-    core->initialize();
+    core->initialize(Core::Default);
     IPluginController *pluginController = Core::self()->pluginController();
     QList<IPlugin*> plugins = pluginController ->allPluginsForExtension("org.kdevelop.IBasicVersionControl");
 

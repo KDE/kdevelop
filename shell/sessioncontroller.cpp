@@ -224,6 +224,7 @@ public:
         grp.writeEntry( SessionController::cfgActiveSessionEntry(), s->id().toString() );
         grp.sync();
         activeSession = s;
+        if (Core::self()->setupFlags() & Core::NoUi) return;
 
         QHash<Session*,QAction*>::iterator it = sessionActions.find(s);
         Q_ASSERT( it != sessionActions.end() );
@@ -258,6 +259,11 @@ public:
 
     void addSession( Session* s )
     {
+        if (Core::self()->setupFlags() & Core::NoUi) {
+            sessionActions[s] = 0;
+            return;
+        }
+
         KAction* a = new KAction( grp );
         a->setText( s->description() );
         a->setCheckable( false );
@@ -493,6 +499,8 @@ SessionController::SessionController( QObject *parent )
     setComponentData(KComponentData("kdevsession"));
     
     setXMLFile("kdevsessionui.rc");
+
+    if (Core::self()->setupFlags() & Core::NoUi) return;
 
     KAction* action = actionCollection()->addAction( "new_session", this, SLOT( newSession() ) );
     action->setText( i18n("Start New Session") );

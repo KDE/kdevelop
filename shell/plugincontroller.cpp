@@ -372,7 +372,8 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return 0;
     }
 
-    if( info.property("X-KDevelop-Mode") == "GUI" && supportsGui() )
+    if( info.property("X-KDevelop-Mode") == "GUI"
+        && Core::self()->setupFlags() == Core::NoUi )
     {
         kDebug() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
         return 0;
@@ -692,11 +693,6 @@ void PluginController::resetToDefaults()
         grp.writeEntry( s+"Enabled", true );
     }
     grp.sync();
-}
-
-bool PluginController::supportsGui() const
-{
-    return false;
 }
 
 }

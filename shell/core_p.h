@@ -47,7 +47,7 @@ class KDEVPLATFORMSHELL_EXPORT CorePrivate {
 public:
     CorePrivate(Core *core);
     ~CorePrivate();
-    bool initialize();
+    bool initialize( Core::Setup mode );
     QPointer<PluginController> pluginController;
     QPointer<UiController> uiController;
     QPointer<ProjectController> projectController;
@@ -67,6 +67,7 @@ public:
     Core *m_core;
     bool m_cleanedUp;
     bool m_shuttingDown;
+    Core::Setup m_mode;
 };
 
 }

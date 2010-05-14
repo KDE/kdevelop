@@ -97,7 +97,7 @@ int main(int argc, char** argv)
     
     KApplication app;
     ConsoleIDEExtension::init();
-    Core::initialize(0);
+    Core::initialize(0, Core::NoUi);
     
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     KUrl::List includes;

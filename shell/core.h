@@ -46,12 +46,14 @@ class WorkingSetController;
 
 class KDEVPLATFORMSHELL_EXPORT Core: public ICore {
 public:
+    enum Setup { Default=0, NoUi=1 };
+
     static QString version();
 
     /** Initialize the core of the kdevplatform application
       * returns false if the initialization fails, which may happen
       * if the same session is already active in another instance */
-    static bool initialize(KSplashScreen* splash = 0);
+    static bool initialize(KSplashScreen* splash = 0, Setup mode=Default);
 
     /**
      * \brief Provide access an instance of Core
@@ -146,7 +148,9 @@ public:
 
     void cleanup();
 
-    virtual bool shuttingDown() const;
+    virtual bool shuttingDown() const;    
+    
+    Core::Setup setupFlags() const;
 protected:
     Core( KDevelop::CorePrivate* dd, QObject* parent = 0 );
     KDevelop::CorePrivate *d;
