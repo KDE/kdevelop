@@ -32,6 +32,10 @@
 #include "cmakelistsparser.h"
 #include "cmakeparserutils.h"
 
+#define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
+        CMakeAst* Create##klassName() { return new klassName; }            \
+        bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
+
 CMAKE_REGISTER_AST( AddDefinitionsAst, add_definitions )
 CMAKE_REGISTER_AST( AddDependenciesAst, add_dependencies )
 CMAKE_REGISTER_AST( AddExecutableAst, add_executable )
