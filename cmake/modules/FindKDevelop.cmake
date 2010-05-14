@@ -30,3 +30,5 @@ find_path(KDEVELOP_INCLUDE_DIR make/imakebuilder.h
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(KDevelop DEFAULT_MSG KDEVELOP_INCLUDE_DIR)
+
+mark_as_advanced(KDEVELOP_INCLUDE_DIR)
