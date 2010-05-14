@@ -19,19 +19,14 @@ if(WIN32)
     set(_KDEVELOP_INCLUDE_DIR ${KDE4_INCLUDE_DIR} ${_progFiles}/kdevelop/include)
 endif(WIN32)
 
-if( NOT KDEVELOP_INCLUDE_DIR )
-    find_path( _kdevIncDir make/imakebuilder.h
-        PATHS
-        ${CMAKE_INSTALL_PREFIX}/include
-        ${_KDEVELOP_INCLUDE_DIR}
-        ${KDE4_INCLUDE_DIR}
-        PATH_SUFFIXES
-        kdevelop
-    )
-    if(_kdevIncDir)
-        set(KDEVELOP_INCLUDE_DIR ${_kdevIncDir} CACHE PATH "kdevelop include directory containing the various platform modules")
-    endif(_kdevIncDir)
-endif( NOT KDEVELOP_INCLUDE_DIR )
+find_path(KDEVELOP_INCLUDE_DIR make/imakebuilder.h
+    PATHS
+    ${CMAKE_INSTALL_PREFIX}/include
+    ${_KDEVELOP_INCLUDE_DIR}
+    ${KDE4_INCLUDE_DIR}
+    PATH_SUFFIXES
+    kdevelop
+)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(KDevelop DEFAULT_MSG KDEVELOP_INCLUDE_DIR)
