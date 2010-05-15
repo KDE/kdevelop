@@ -354,10 +354,16 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         if(m_updatingEnvironmentFile)
           content = KDevelop::ReferencedTopDUContext(contentFromProxy(m_updatingEnvironmentFile->topContext()));
         else
-          content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment);
+          content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false);
 
         m_currentEnvironment->disableIdentityOffsetRestriction();
 
+        if(content && content->parsingEnvironmentFile()->isProxyContext())
+        {
+          kWarning() << "Got proxy-context as content-context for file" << content->url().str() << ", not updating";
+          content = KDevelop::ReferencedTopDUContext();
+        }
+        
         if(content) {
             //We have found a content-context that we can use
             parentJob()->setUpdatingContentContext(content);
