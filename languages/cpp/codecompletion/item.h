@@ -103,6 +103,23 @@ private:
   mutable KSharedPtr<CachedArgumentList> m_cachedArgumentList;
 };
 
+// Helper-item that manages the number of shown argument-hints
+// When the user selects the item, the item stores an increased maximum in resetMaxArgumentHints()
+// The number is reset after resetMaxArgumentHints() was called the next time.
+class MoreArgumentHintsCompletionItem : public NormalDeclarationCompletionItem {
+public:
+  MoreArgumentHintsCompletionItem(KSharedPtr<KDevelop::CodeCompletionContext> context, QString text, uint oldNumber);
+  
+  virtual void execute(KTextEditor::Document* document, const KTextEditor::Range& word);
+  
+  // Maximum number of argument-hints that should be shown by code completion
+  // Whenever this is called, the maximum number of arguments is reset afterwards,
+  // so make sure you call it only once in the correct place.
+  static uint resetMaxArgumentHints();
+private:
+  uint m_oldNumber;
+};
+
 typedef KDevelop::AbstractIncludeFileCompletionItem<Cpp::NavigationWidget> BaseIncludeFileCompletionItem;
 
 class IncludeFileCompletionItem : public BaseIncludeFileCompletionItem {
