@@ -369,6 +369,8 @@ slotDockShown(Sublime::View* view, Sublime::Position pos, bool shown)
 
 void MainWindowPrivate::viewRemovedInternal(AreaIndex* index, View* view)
 {
+    Q_UNUSED(index);
+    Q_UNUSED(view);
     // A formerly non-empty working-set has become empty, and a relayout of the area-selector may be required
     if(m_mainWindow->area()->views().size() == 0)
         m_mainWindow->setupAreaSelector();

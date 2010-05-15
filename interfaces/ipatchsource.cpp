@@ -39,6 +39,7 @@ void IPatchSource::cancelReview()
 
 bool IPatchSource::finishReview(QList< KUrl > selection)
 {
+    Q_UNUSED(selection);
     return true;
 }
 

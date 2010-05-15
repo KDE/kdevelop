@@ -49,6 +49,7 @@ void ControllerTest::areaDeletion()
     Document *doc = new ToolDocument("tool", controller, new SimpleToolWidgetFactory<QTextEdit>("tool"));
     //create a view which does not belong to an area
     View* view1 = doc->createView();
+    Q_UNUSED(view1);
     //create an area and two views in it
     Area *area = new Area(controller, "MyArea");
     controller->addDefaultArea(area);

@@ -1136,7 +1136,7 @@ void IndexedTypeIdentifier::setIdentifier(KDevelop::IndexedQualifiedIdentifier i
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQualifiedIdentifierPrivateIndex()) {
-  ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
+  ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
   
   if(shouldDoDUChainReferenceCounting(this)) {
     ifDebug( kDebug() << "increasing"; )
@@ -1148,7 +1148,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier() : index(emptyConstantQu
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier& id) : index(id.index()) {
-  ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
+  ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
   
   if(shouldDoDUChainReferenceCounting(this)) {
     ifDebug( kDebug() << "increasing"; )
@@ -1158,7 +1158,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const QualifiedIdentifier
 }
 
 IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIdentifier& id) : index(id.index) {
-  ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
+  ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
   
   if(shouldDoDUChainReferenceCounting(this)) {
     ifDebug( kDebug() << "increasing"; )
@@ -1169,7 +1169,7 @@ IndexedQualifiedIdentifier::IndexedQualifiedIdentifier(const IndexedQualifiedIde
 }
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const QualifiedIdentifier& id) {
-  ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
+  ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
   
   if(shouldDoDUChainReferenceCounting(this)) {
     QMutexLocker lock(qualifiedidentifierRepository->mutex());
@@ -1190,7 +1190,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const Qualifie
 
 IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQualifiedIdentifier& rhs) {
   
-  ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
+  ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
   
   if(shouldDoDUChainReferenceCounting(this)) {
     QMutexLocker lock(qualifiedidentifierRepository->mutex());
@@ -1210,7 +1210,7 @@ IndexedQualifiedIdentifier& IndexedQualifiedIdentifier::operator=(const IndexedQ
 }
 
 IndexedQualifiedIdentifier::~IndexedQualifiedIdentifier() {
-  ifDebug( kDebug() << "(" << ++cnt << ")" << m_id << identifier().toString() << index; )
+  ifDebug( kDebug() << "(" << ++cnt << ")" << identifier().toString() << index; )
   if(shouldDoDUChainReferenceCounting(this)) {
     ifDebug( kDebug() << index << "decreasing"; )
     QMutexLocker lock(qualifiedidentifierRepository->mutex());

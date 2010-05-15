@@ -59,7 +59,7 @@ void SvnInternalCheckoutJob::run()
         destdir.addPath( destination().fileName() );
         QByteArray destba = destdir.toLocalFile().toUtf8();
         kDebug(9510) << srcba << destba << recurse;
-        svn_revnum_t rev = cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
+        cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
     }catch( svn::ClientException ce )
     {
         kDebug(9510) << "Exception while checking out: "

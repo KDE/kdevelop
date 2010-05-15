@@ -108,7 +108,9 @@ DocumentationView::DocumentationView(QWidget* parent)
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);
-    mIdentifiers->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    /* vertical size policy should be left to the style. */
+    mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
     connect(mIdentifiers, SIGNAL(returnPressed()), SLOT(changedSelection()));
     connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changeProvider(QModelIndex)));
     

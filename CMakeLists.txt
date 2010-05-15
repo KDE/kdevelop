@@ -30,6 +30,18 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+  # TODO: Remove when LTS for g++ < 4.3 has ended.
+  #       See also: languages/cpp/parser/parser.h
+  macro_ensure_version("4.3.0" "${_gcc_version}" GCC_IS_NEWER_THAN_4_3)
+  if (GCC_IS_NEWER_THAN_4_3)
+    message(STATUS "Enabling c++0x support for unordered map")
+    add_definitions( -std=c++0x ) # For unordered_map
+  else(GCC_IS_NEWER_THAN_4_3)
+    add_definitions( -DGXX_LT_4_3 )
+  endif (GCC_IS_NEWER_THAN_4_3)
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR} ${KDE4_INCLUDES})
 
 set(KDEVPLATFORM_LIB_VERSION 2.0.0)
