@@ -1,0 +1,3 @@
+[Project]
+Name=with_build_dir
+Manager=KDevCMakeManager

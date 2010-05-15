@@ -149,6 +149,7 @@ CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::ILanguageSupport )
+    KDEV_USE_EXTENSION_INTERFACE( ICMakeManager)
 
     m_highlight = new KDevelop::CodeHighlighting(this);
 

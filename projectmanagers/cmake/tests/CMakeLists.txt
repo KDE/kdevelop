@@ -43,3 +43,5 @@ target_link_libraries( cmakeparserutilstest ${CMAKE_TEST_LIBRARIES} ${KDE4_KTEXT
 kde4_add_unit_test( cmakeloadprojecttest cmakeloadprojecttest.cpp )
 target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
 
+kde4_add_unit_test( cmakemanagertest cmakemanagertest.cpp )
+target_link_libraries( cmakemanagertest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})

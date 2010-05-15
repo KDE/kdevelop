@@ -1,0 +1,8 @@
+# This is the CMakeCache file.
+# It has been mercilessly truncated for test purposes only.
+
+//Value Computed by CMake
+with_build_dir_BINARY_DIR:STATIC=/home/xxx/kdesvn/src/KDE/kdevelop/projectmanagers/cmake/tests/manual/with_build_dir/builddir
+
+//Value Computed by CMake
+with_build_dir_SOURCE_DIR:STATIC=/home/xxx/kdesvn/src/KDE/kdevelop/projectmanagers/cmake/tests/manual/with_build_dir
