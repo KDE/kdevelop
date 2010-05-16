@@ -399,6 +399,8 @@ QuickOpenWidget::~QuickOpenWidget() {
 QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
 {
   m_widget = new QuickOpenWidget(title, model, initialItems, initialScopes, listOnly, noSearchField);
+  // the QMenu might close on esc and we want to close the whole dialog then
+  connect( m_widget, SIGNAL(aboutToHide()), this, SLOT(deleteLater()) );
   
   //KDialog always sets the focus on the "OK" button, so we use QDialog
   m_dialog = new QDialog( ICore::self()->uiController()->activeMainWindow() );
@@ -1362,8 +1364,6 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     
     m_widget->setParent(0, Qt::ToolTip);
     m_widget->setFocusPolicy(Qt::NoFocus);
-    m_widget->setFrameStyle(QFrame::Raised | QFrame::StyledPanel);
-    m_widget->setLineWidth(5);
     m_widget->setAlternativeSearchField(this);
     
     QuickOpenPlugin::self()->m_currentWidgetHandler = m_widget;
@@ -1379,12 +1379,6 @@ void QuickOpenLineEdit::focusInEvent(QFocusEvent* ev) {
     if (widgetGeometry.right() > screenGeom.right())
         widgetGeometry.moveRight(screenGeom.right());
     m_widget->setGeometry(widgetGeometry);
-
-    //Hack so we don't have a frame it top, where the widget docks to the line
-    QRect frameRect = m_widget->frameRect();
-    frameRect.setTop(frameRect.top()-10);
-    m_widget->setFrameRect(frameRect);
-
     m_widget->show();
     
     m_widgetCreator->widgetShown();

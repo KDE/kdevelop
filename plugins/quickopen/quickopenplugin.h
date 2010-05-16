@@ -25,6 +25,7 @@
 #include <interfaces/iplugin.h>
 #include <language/interfaces/iquickopen.h>
 #include <QtCore/QVariant>
+#include <QtGui/QMenu>
 #include <language/interfaces/quickopendataprovider.h>
 #include "ui_quickopen.h"
 
@@ -122,7 +123,7 @@ private:
 };
 
 ///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently
-class QuickOpenWidget : public QFrame {
+class QuickOpenWidget : public QMenu {
   Q_OBJECT
   public:
   /**
