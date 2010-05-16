@@ -65,9 +65,9 @@ kde4_add_ui_files(kdevcpplanguagesupport_PART_SRCS ${kdevcpplanguagesupport_LIB_
 
 option(BUILD_kdev_includepathresolver "Build the includepath resolver debugging tool" OFF)
 if(BUILD_kdev_includepathresolver)
-  ADD_EXECUTABLE(kdev_includepathresolver includepathresolver.cpp)
-  SET_TARGET_PROPERTIES( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
-  TARGET_LINK_LIBRARIES( kdev_includepathresolver
+  add_executable(kdev_includepathresolver includepathresolver.cpp)
+  set_target_properties( kdev_includepathresolver PROPERTIES COMPILE_FLAGS -DTEST )
+  target_link_libraries( kdev_includepathresolver
   ${KDEVPLATFORM_INTERFACES_LIBRARIES}  ${KDEVPLATFORM_PROJECT_LIBRARIES}
   ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
   install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
