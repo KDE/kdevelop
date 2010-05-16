@@ -546,7 +546,7 @@ void SessionController::cleanup()
     qDeleteAll(d->sessionActions);
 }
 
-void SessionController::initialize()
+void SessionController::initialize( const QString& session )
 {
     QDir sessiondir( SessionController::sessionDirectory() );
     foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
@@ -555,21 +555,21 @@ void SessionController::initialize()
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* session = new Session( id );
-        
+        Session* ses = new Session( id );
+
         //Delete sessions that have no name and are empty
-        if( session->containedProjects().isEmpty() && session->name().isEmpty()
-            && (session->id().toString() != QString(getenv("KDEV_SESSION"))))
+        if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
+            && ses->id().toString() != session && ses->name() != session )
         {
             ///@todo Think about when we can do this. Another instance might still be using this session.
 //             session->deleteFromDisk();
-            delete session;
+            delete ses;
         }else{
-            d->addSession( session );
+            d->addSession( ses );
         }
     }
-    loadDefaultSession();
-    
+    loadDefaultSession( session );
+
     connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
     connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
     updateSessionDescriptions();
@@ -633,31 +633,23 @@ void SessionController::deleteSession( const QString& nameOrId )
     s->deleteLater();
 }
 
-void SessionController::loadDefaultSession()
+void SessionController::loadDefaultSession( const QString& session )
 {
-    QString load = QString(getenv("KDEV_SESSION"));
-    
-    if(!load.isEmpty())
+    Session* s = this->session( session );
+    if( s )
     {
-        if(!session(load))
-            load = createSession("")->id().toString();
-        
-        ///KDEV_SESSION must be the UUID of an existing session, and nothing else.
-        ///If this assertion fails, that was not the case.
-        Q_ASSERT(session(load)->id().toString() == load);
-        
-        d->activateSession( session(load) );
+        d->activateSession( s );
         return;
     }
     KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
-    load = grp.readEntry( cfgActiveSessionEntry(), "default" );
-    
-    if( !session( load ) )
+    QString load = grp.readEntry( cfgActiveSessionEntry(), "default" );
+
+    if( !this->session( load ) )
     {
         createSession( load );
-    }  
-    
-    d->activateSession( session(load) );
+    }
+
+    d->activateSession( this->session(load) );
 }
 
 Session* SessionController::session( const QString& nameOrId ) const

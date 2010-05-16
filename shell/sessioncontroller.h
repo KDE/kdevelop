@@ -54,7 +54,7 @@ class KDEVPLATFORMSHELL_EXPORT SessionController : public QObject, public KXMLGU
 public:
     SessionController( QObject *parent = 0 );
     virtual ~SessionController();
-    void initialize();
+    void initialize( const QString& session );
     void cleanup();
     
     /// Returns whether the given session can be locked
@@ -70,7 +70,7 @@ public:
     
     QList<const Session*> sessions() const;
     
-    void loadDefaultSession();
+    void loadDefaultSession( const QString& session );
 
     void startNewSession();
     

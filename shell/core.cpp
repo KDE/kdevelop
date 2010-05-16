@@ -88,7 +88,7 @@ CorePrivate::CorePrivate(Core *core):
 {
 }
 
-bool CorePrivate::initialize(Core::Setup mode)
+bool CorePrivate::initialize(Core::Setup mode, const QString& session )
 {
     m_mode=mode;
     if( !sessionController )
@@ -161,11 +161,18 @@ bool CorePrivate::initialize(Core::Setup mode)
     }
 
     kDebug() << "initializing ui controller";
-    sessionController->initialize();
-    
-    if(!(mode & Core::NoUi) && !sessionController->lockSession())
+    sessionController->initialize( session );
+
+    if(!sessionController->lockSession())
     {
-        KMessageBox::error(0, i18n("This session is already active in another running instance"));
+        QString errmsg = i18n("This session (%1) is already active in another running instance",
+                              sessionController->activeSession() ? "null" : sessionController->activeSession()->id().toString() );
+        if( mode & Core::NoUi ) {
+            QTextStream qerr(stderr);
+            qerr << endl << errmsg << endl;
+        } else {
+            KMessageBox::error(0, errmsg);
+        }
         return false;
     }
     
@@ -221,13 +228,13 @@ CorePrivate::~CorePrivate()
 }
 
 
-bool Core::initialize(KSplashScreen* splash, Setup mode)
+bool Core::initialize(KSplashScreen* splash, Setup mode, const QString& session )
 {
     if (m_self)
         return true;
 
     m_self = new Core();
-    bool ret = m_self->d->initialize(mode);
+    bool ret = m_self->d->initialize(mode, session);
     if( splash ) {
         QTimer::singleShot( 200, splash, SLOT(deleteLater()) );
     }
