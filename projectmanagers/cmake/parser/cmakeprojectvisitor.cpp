@@ -557,55 +557,66 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
     if(!haveToFind(pack->name()))
         return 1;
-    QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath << "No module: " << pack->noModule();
 
-    QStringList possibs;
-    if(pack->noModule())
+    QStringList possibleModuleNames;
+    if(!pack->noModule()) //TODO Also implied by a whole slew of additional options.
     {
-        QString var="CMAKE_INSTALL_PREFIX";
-        QString instPath;
-        if(m_vars->contains(var))
-            instPath = m_vars->value(var).join(QString());
-        else if(m_cache->contains(var))
-            instPath = m_cache->value(var).value;
-
-         kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
-
-#if defined(Q_OS_WIN)
-        modulePath.prepend(instPath);
-        modulePath.prepend(instPath+"/cmake");
-#endif
-        QString name=pack->name();
-        QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
-        foreach(const QString& post, postfix)
-        {
-            modulePath.prepend(instPath+"/share/"+name.toLower()+post);
-            modulePath.prepend(instPath+"/lib/"+name.toLower()+post);
-        }
-        
-        QString varName=pack->name()+"_DIR";
-        if(m_cache->contains(varName))
-            modulePath.prepend(m_cache->value(varName).value);
-
-        possibs+=QString("%1Config.cmake").arg(pack->name());
-        possibs+=QString("%1-config.cmake").arg(pack->name().toLower());
-    }
-    else
-    {
+        // Look for a Find{package}.cmake
         QString possib=pack->name();
         if(!possib.endsWith(".cmake"))
             possib += ".cmake";
         possib.prepend("Find");
-        possibs += possib;
+        possibleModuleNames += possib;
     }
 
+    QString var="CMAKE_INSTALL_PREFIX";
+    QString instPath;
+    if(m_vars->contains(var))
+        instPath = m_vars->value(var).join(QString());
+    else if(m_cache->contains(var))
+        instPath = m_cache->value(var).value;
+
+    kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
+
+    #if defined(Q_OS_WIN)
+    modulePath.prepend(instPath);
+    modulePath.prepend(instPath+"/cmake");
+    #endif
+    QString name=pack->name();
+    QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
+    QStringList configPath;
+    foreach(const QString& post, postfix)
+    {
+        configPath.prepend(instPath+"/share/"+name.toLower()+post);
+        configPath.prepend(instPath+"/lib/"+name.toLower()+post);
+    }
+
+    QString varName=pack->name()+"_DIR";
+    if(m_cache->contains(varName))
+        configPath.prepend(m_cache->value(varName).value);
+
+    QStringList possibleConfigNames;
+    possibleConfigNames+=QString("%1Config.cmake").arg(pack->name());
+    possibleConfigNames+=QString("%1-config.cmake").arg(pack->name().toLower());
+
     QString path;
-    foreach(const QString& possib, possibs)
+    foreach(const QString& possib, possibleModuleNames)
     {
         path=findFile(possib, modulePath);
-        if(!path.isEmpty())
+        if(!path.isEmpty()) {
             break;
+        }
+    }
+    if (path.isEmpty()) {
+        foreach(const QString& possib, possibleConfigNames) {
+            path = findFile(possib, configPath);
+            if (!path.isEmpty()) {
+                m_vars->insert(pack->name()+"_DIR", QStringList(KUrl(path).directory()));
+                break;
+            }
+        }
     }
 
     if(!path.isEmpty())
@@ -633,10 +644,13 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         }
         m_vars->take("CMAKE_CURRENT_LIST_FILE");
     }
-    else if(pack->isRequired())
+    else
     {
-        //FIXME: Put here the error.
-        kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
+        if(pack->isRequired()) {
+            //FIXME: Put here the error.
+            kDebug(9032) << "error: Could not find" << pack->name() << "into" << modulePath;
+        }
+        m_vars->insert(QString("%1_DIR").arg(pack->name()), QStringList(QString("%1_DIR-NOTFOUND").arg(pack->name())));
     }
     kDebug(9042) << "Exit. Found:" << pack->name() << m_vars->value(pack->name()+"_FOUND");
 
