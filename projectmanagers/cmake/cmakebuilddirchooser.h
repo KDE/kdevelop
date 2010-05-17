@@ -53,6 +53,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         KUrl installPrefix() const;
         KUrl buildFolder() const;
         QString buildType() const;
+        QString extraArguments() const;
 
         void setCMakeBinary(const KUrl&);
         void setInstallPrefix(const KUrl&);
@@ -61,6 +62,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public KDialog
         void setSourceFolder( const KUrl& srcFolder );
         void setAlreadyUsed(const QStringList& used);
         void setStatus(const QString& message, bool canApply);
+        void setExtraArguments(const QString& args);
 
     private slots:
         void updated();

@@ -9,6 +9,7 @@
     <entry name="buildDirs" key="BuildDirs" type="PathList" />
     <entry name="currentBuildDir" key="CurrentBuildDir" type="Url" />
     <entry name="currentInstallDir" key="CurrentInstallDir" type="Url" />
+    <entry name="currentExtraArguments" key="Extra Arguments" type="String" />
     <entry name="currentBuildType" key="CurrentBuildType" type="String" />
     <entry name="cmakeDir" key="CMakeDir" type="Url" />
     

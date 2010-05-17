@@ -48,6 +48,7 @@ static QString currentBuildDirKey = "CurrentBuildDir";
 static QString currentCMakeBinaryKey = "Current CMake Binary";
 static QString currentBuildTypeKey = "CurrentBuildType";
 static QString currentInstallDirKey = "CurrentInstallDir";
+static QString currentExtraArgumentsKey = "Extra Arguments";
 static QString projectRootRelativeKey = "ProjectRootRelative";
 static QString projectBuildDirs = "BuildDirs";
 
@@ -91,6 +92,7 @@ bool checkForNeedingConfigure( KDevelop::ProjectBaseItem* item )
         cmakeGrp.writeEntry( currentBuildDirKey, bd.buildFolder() );
         cmakeGrp.writeEntry( currentCMakeBinaryKey, bd.cmakeBinary() );
         cmakeGrp.writeEntry( currentInstallDirKey, bd.installPrefix() );
+        cmakeGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
         cmakeGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
 
         if(!builddirs.contains(bd.buildFolder().toLocalFile())) {
@@ -146,6 +148,12 @@ QString projectRootRelative( KDevelop::IProject* project )
     return cmakeGrp.readEntry( projectRootRelativeKey, QString());
 }
 
+QString currentExtraArguments( KDevelop::IProject* project )
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    return cmakeGrp.readEntry( currentExtraArgumentsKey, "");
+}
+
 void setCurrentInstallDir( KDevelop::IProject* project, const KUrl& url )
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
@@ -178,6 +186,13 @@ void setProjectRootRelative( KDevelop::IProject* project, const QString& relativ
 {
     KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
     cmakeGrp.writeEntry( projectRootRelativeKey, relative );
+    cmakeGrp.sync();
+}
+
+void setCurrentExtraArguments( KDevelop::IProject* project, const QString& string)
+{
+    KConfigGroup cmakeGrp = project->projectConfiguration()->group("CMake");
+    cmakeGrp.writeEntry( currentExtraArgumentsKey, string );
     cmakeGrp.sync();
 }
 
