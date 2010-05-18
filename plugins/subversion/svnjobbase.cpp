@@ -138,7 +138,7 @@ void SvnJobBase::internalJobDone( ThreadWeaver::Job* job )
     emitResult();
     if( m_status == VcsJob::JobCanceled )
     {
-        deleteLater();
+     deleteLater();
     }
 }
 
@@ -157,10 +157,9 @@ void SvnJobBase::internalJobFailed( ThreadWeaver::Job* job )
             m_status = KDevelop::VcsJob::JobFailed;
         }
     }
-    emitResult();
     if( m_status == VcsJob::JobCanceled )
     {
-        deleteLater();
+      deleteLater();
     }
 }
 
