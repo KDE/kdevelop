@@ -1005,8 +1005,10 @@ void DeclarationBuilder::classContextOpened(ClassSpecifierAST* /*node*/, DUConte
 
 void DeclarationBuilder::closeContext()
 {
-  if(m_pendingPropertyDeclarations.contains(currentContext()))
-    resolvePendingPropertyDeclarations(m_pendingPropertyDeclarations.values(currentContext()));
+  if (!m_pendingPropertyDeclarations.isEmpty()) {
+    if(m_pendingPropertyDeclarations.contains(currentContext()))
+      resolvePendingPropertyDeclarations(m_pendingPropertyDeclarations.values(currentContext()));
+  }
 
   DeclarationBuilderBase::closeContext();
 }
