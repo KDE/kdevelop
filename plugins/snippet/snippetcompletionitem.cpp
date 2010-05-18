@@ -31,11 +31,15 @@
 #include <ktexteditor/view.h>
 
 #include "snippet.h"
+#include "snippetrepository.h"
 
-SnippetCompletionItem::SnippetCompletionItem( Snippet* snippet )
+SnippetCompletionItem::SnippetCompletionItem( Snippet* snippet, SnippetRepository* repo )
     : CompletionTreeItem(), m_name(snippet->text()), m_snippet(snippet->snippet()), m_prefix(snippet->prefix()),
       m_arguments(snippet->arguments()), m_postfix(snippet->postfix())
 {
+    if (repo) {
+        m_name.prepend( repo->completionNamespace() );
+    }
 }
 
 SnippetCompletionItem::~SnippetCompletionItem()

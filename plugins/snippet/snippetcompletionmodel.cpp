@@ -113,7 +113,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
         {
             for ( int j = 0; j < repo->rowCount(); ++j ) {
                 if ( Snippet* snippet = dynamic_cast<Snippet*>(repo->child(j)) ) {
-                    m_snippets << new SnippetCompletionItem(snippet);
+                    m_snippets << new SnippetCompletionItem(snippet, repo);
                 }
             }
         }
