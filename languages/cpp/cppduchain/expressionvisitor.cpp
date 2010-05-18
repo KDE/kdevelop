@@ -2303,45 +2303,5 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         missingDeclType->assigned = res;
     }
   }
-
-  ///Nodes that are invalid inside an expression:
-  void ExpressionVisitor::visitPtrToMember(PtrToMemberAST* node)  { DefaultVisitor::visitPtrToMember(node); }
-  void ExpressionVisitor::visitOperatorFunctionId(OperatorFunctionIdAST* node)  { DefaultVisitor::visitOperatorFunctionId(node); }
-  void ExpressionVisitor::visitTypeIdentification(TypeIdentificationAST* node)  { DefaultVisitor::visitTypeIdentification(node); }
-  void ExpressionVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)  { DefaultVisitor::visitUnqualifiedName(node); }
-  void ExpressionVisitor::visitOperator(OperatorAST* node)  { DefaultVisitor::visitOperator(node); }
-  void ExpressionVisitor::visitAccessSpecifier(AccessSpecifierAST* node)  { DefaultVisitor::visitAccessSpecifier(node); }
-  void ExpressionVisitor::visitAsmDefinition(AsmDefinitionAST* node)  { DefaultVisitor::visitAsmDefinition(node); }
-  void ExpressionVisitor::visitBaseClause(BaseClauseAST* node)  { DefaultVisitor::visitBaseClause(node); }
-  void ExpressionVisitor::visitBaseSpecifier(BaseSpecifierAST* node)  { DefaultVisitor::visitBaseSpecifier(node); }
-  void ExpressionVisitor::visitClassSpecifier(ClassSpecifierAST* node)  { DefaultVisitor::visitClassSpecifier(node); }
-
-  void ExpressionVisitor::visitCtorInitializer(CtorInitializerAST* node)  { DefaultVisitor::visitCtorInitializer(node); }
-  void ExpressionVisitor::visitDoStatement(DoStatementAST* node)  { DefaultVisitor::visitDoStatement(node); }
-  void ExpressionVisitor::visitEnumSpecifier(EnumSpecifierAST* node)  { DefaultVisitor::visitEnumSpecifier(node); }
-  void ExpressionVisitor::visitEnumerator(EnumeratorAST* node)  { DefaultVisitor::visitEnumerator(node); }
-  void ExpressionVisitor::visitExceptionSpecification(ExceptionSpecificationAST* node)  { DefaultVisitor::visitExceptionSpecification(node); }
-  void ExpressionVisitor::visitForStatement(ForStatementAST* node)  { DefaultVisitor::visitForStatement(node); }
-  void ExpressionVisitor::visitFunctionDefinition(FunctionDefinitionAST* node)  { DefaultVisitor::visitFunctionDefinition(node); }
-  void ExpressionVisitor::visitIfStatement(IfStatementAST* node)  { DefaultVisitor::visitIfStatement(node); }
-  void ExpressionVisitor::visitLabeledStatement(LabeledStatementAST* node)  { DefaultVisitor::visitLabeledStatement(node); }
-  void ExpressionVisitor::visitLinkageBody(LinkageBodyAST* node)  { DefaultVisitor::visitLinkageBody(node); }
-  void ExpressionVisitor::visitLinkageSpecification(LinkageSpecificationAST* node)  { DefaultVisitor::visitLinkageSpecification(node); }
-  void ExpressionVisitor::visitNamespace(NamespaceAST* node)  { DefaultVisitor::visitNamespace(node); }
-  void ExpressionVisitor::visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST* node)  { DefaultVisitor::visitNamespaceAliasDefinition(node); }
-  void ExpressionVisitor::visitParameterDeclaration(ParameterDeclarationAST* node)  { DefaultVisitor::visitParameterDeclaration(node); }
-  void ExpressionVisitor::visitParameterDeclarationClause(ParameterDeclarationClauseAST* node)  { DefaultVisitor::visitParameterDeclarationClause(node); }
-  void ExpressionVisitor::visitReturnStatement(ReturnStatementAST* node)  { DefaultVisitor::visitReturnStatement(node); }
-  void ExpressionVisitor::visitSwitchStatement(SwitchStatementAST* node)  { DefaultVisitor::visitSwitchStatement(node); }
-  void ExpressionVisitor::visitTemplateArgument(TemplateArgumentAST* node)  { DefaultVisitor::visitTemplateArgument(node); }
-  void ExpressionVisitor::visitTemplateDeclaration(TemplateDeclarationAST* node)  { DefaultVisitor::visitTemplateDeclaration(node); }
-  void ExpressionVisitor::visitTemplateParameter(TemplateParameterAST* node)  { DefaultVisitor::visitTemplateParameter(node); }
-  void ExpressionVisitor::visitTryBlockStatement(TryBlockStatementAST* node)  { DefaultVisitor::visitTryBlockStatement(node); }
-  void ExpressionVisitor::visitTypeParameter(TypeParameterAST* node)  { DefaultVisitor::visitTypeParameter(node); }
-  void ExpressionVisitor::visitTypedef(TypedefAST* node)  { DefaultVisitor::visitTypedef(node); }
-  void ExpressionVisitor::visitUsing(UsingAST* node)  { DefaultVisitor::visitUsing(node); }
-  void ExpressionVisitor::visitUsingDirective(UsingDirectiveAST* node)  { DefaultVisitor::visitUsingDirective(node); }
-  void ExpressionVisitor::visitWhileStatement(WhileStatementAST* node)  { DefaultVisitor::visitWhileStatement(node); }
-  void ExpressionVisitor::visitWinDeclSpec(WinDeclSpecAST* node)  { DefaultVisitor::visitWinDeclSpec(node); }
 }
 
