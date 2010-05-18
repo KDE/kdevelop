@@ -28,12 +28,14 @@ class QTreeWidgetItem;
 
 namespace KDevelop {
 
+class ClassGenerator;
+
 class KDEVPLATFORMLANGUAGE_EXPORT OverridesPage : public QWizardPage
 {
     Q_OBJECT
 
 public:
-    OverridesPage(QWizard* parent);
+    OverridesPage(ClassGenerator* generator, QWizard* parent);
     virtual ~OverridesPage();
 
     QTreeWidget* overrideTree() const;
@@ -56,6 +58,9 @@ public:
      * @p childDeclaration The overridable function.
      */
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration);
+
+protected:
+    ClassGenerator* generator() const;
 
 public Q_SLOTS:
     virtual void selectAll();
