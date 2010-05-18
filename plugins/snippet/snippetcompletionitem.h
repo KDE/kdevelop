@@ -27,11 +27,12 @@
 #include <language/codecompletion/codecompletionitem.h>
 
 class Snippet;
+class SnippetRepository;
 
 class SnippetCompletionItem : public KDevelop::CompletionTreeItem
 {
 public:
-    SnippetCompletionItem(Snippet* snippet);
+    SnippetCompletionItem(Snippet* snippet, SnippetRepository* repo);
     ~SnippetCompletionItem();
 
     virtual void execute( KTextEditor::Document* document, const KTextEditor::Range& word );

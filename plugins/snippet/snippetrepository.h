@@ -87,6 +87,16 @@ public:
     const QString& file() const;
 
     /**
+     * The namespace associated with this repository.
+     * Used in CodeCompletion for filtering.
+     */
+    QString completionNamespace() const;
+    /**
+     * Sets the code completion namespace for this repository.
+     */
+    void setCompletionNamespace(const QString& completionNamespace);
+
+    /**
      * Remove this repository from the disk. Also deletes the item and all its children.
      */
     void remove();
@@ -112,6 +122,8 @@ private:
     QString m_authors;
     /// valid filetypes for the snippets in this repo
     QStringList m_filetypes;
+    /// filtering namespace for code completion
+    QString m_namespace;
 };
 
 #endif

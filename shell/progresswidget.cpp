@@ -58,10 +58,12 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressManager* progressManag
   m_pButton = new QPushButton( this );
   m_pButton->setSizePolicy( QSizePolicy( QSizePolicy::Minimum,
                                          QSizePolicy::Minimum ) );
-  m_pButton->setIcon( SmallIcon( "go-up" ) );
+  QPixmap smallIcon = SmallIcon( "go-up" );
+  m_pButton->setIcon( smallIcon );
   box->addWidget( m_pButton  );
   stack = new QStackedWidget( this );
-  stack->setMaximumHeight( fontMetrics().height() );
+  int maximumHeight = qMax( smallIcon.height(), fontMetrics().height() );
+  stack->setMaximumHeight( maximumHeight );
   box->addWidget( stack );
 
   m_pButton->setToolTip( i18n("Open detailed progress dialog") );
@@ -76,7 +78,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressManager* progressManag
   m_pLabel->installEventFilter( this );
   m_pLabel->setMinimumWidth( w );
   stack->insertWidget( 2, m_pLabel );
-  m_pButton->setMaximumHeight( fontMetrics().height() );
+  m_pButton->setMaximumHeight( maximumHeight );
 
   mode = None;
   setMode();

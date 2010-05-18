@@ -108,6 +108,16 @@ void SnippetRepository::setLicense(const QString& license)
     m_license = license;
 }
 
+QString SnippetRepository::completionNamespace() const
+{
+    return m_namespace;
+}
+
+void SnippetRepository::setCompletionNamespace(const QString& completionNamespace)
+{
+    m_namespace = completionNamespace;
+}
+
 void SnippetRepository::remove()
 {
     QFile::remove(m_file);
@@ -129,7 +139,7 @@ void SnippetRepository::save()
     ///based on the code from snippets_tng/lib/completionmodel.cpp
     ///@copyright 2009 Joseph Wenninger <jowenn@kde.org>
     /*
-    <snippets name="Testsnippets" filetype="*" authors="Joseph Wenninger" license="BSD">
+    <snippets name="Testsnippets" filetype="*" authors="Joseph Wenninger" license="BSD" namespace="test::">
         <item>
             <displayprefix>prefix</displayprefix>
             <match>test1</match>
@@ -150,6 +160,7 @@ void SnippetRepository::save()
     root.setAttribute("filetypes", m_filetypes.isEmpty() ? "*" : m_filetypes.join(";"));
     root.setAttribute("authors", m_authors);
     root.setAttribute("license", m_license);
+    root.setAttribute("namespace", m_namespace);
 
     doc.appendChild(root);
 
@@ -226,6 +237,7 @@ void SnippetRepository::slotParseFile()
     setAuthors(docElement.attribute("authors"));
     setFileTypes(docElement.attribute("filetypes").split(';', QString::SkipEmptyParts));
     setText(docElement.attribute("name"));
+    setCompletionNamespace(docElement.attribute("namespace"));
 
     // parse children, i.e. <item>'s
     const QDomNodeList& nodes = docElement.childNodes();

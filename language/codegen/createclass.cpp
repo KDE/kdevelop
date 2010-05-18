@@ -85,20 +85,6 @@ void CreateClassWizard::setup()
     addPage(d->output = new OutputPage(this));
 }
 
-
-int CreateClassWizard::nextId() const
-{
-    if( ClassIdentifierPage* idpage = dynamic_cast<ClassIdentifierPage*>( currentPage() ) )
-    {
-        if( idpage->inheritanceList().isEmpty() )
-        {
-            return page( idpage->nextId() )->nextId();
-        }
-    }
-    return QWizard::nextId();
-}
-
-
 void CreateClassWizard::accept()
 {
     QWizard::accept();
@@ -132,7 +118,7 @@ ClassIdentifierPage* CreateClassWizard::newIdentifierPage()
 
 OverridesPage* CreateClassWizard::newOverridesPage()
 {
-    return new OverridesPage(this);
+    return new OverridesPage(d->generator, this);
 }
 
 struct ClassGeneratorPrivate
