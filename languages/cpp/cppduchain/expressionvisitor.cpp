@@ -1868,6 +1868,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
       }
       flushUse();
+      m_parameterNodes = oldParameterNodes;
+      m_parameters = oldParams;
       return;
     }
 
