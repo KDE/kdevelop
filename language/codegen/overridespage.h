@@ -43,9 +43,20 @@ public:
     virtual void initializePage();
     virtual void cleanupPage();
     virtual bool validatePage();
+    /**
+     * Default implementation populates the tree with all virtual functions in the base classes.
+     * Calls @c addPotentialOverride() on each function, where more filtering can be applied.
+     * @param baseList Declarations of implemented base classes.
+     */
     virtual void populateOverrideTree(const QList<DeclarationPointer> & baseList);
+    /**
+     * Add @p childDeclaration as potential override. Don't call @c KDevelop::OverridesPage::addPotentialOverride()
+     * in overloaded class to filter a declaration.
+     * @p classItem The parent class from which @p childDeclaration stems from. Should be used as parent for the override item.
+     * @p childDeclaration The overridable function.
+     */
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, DeclarationPointer childDeclaration);
-    
+
 public Q_SLOTS:
     virtual void selectAll();
     virtual void deselectAll();
