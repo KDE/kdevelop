@@ -28,16 +28,19 @@
 #include <KUrl>
 #include <KMessageBox>
 #include <KLocale>
+#include <KTemporaryFile>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <language/duchain/identifier.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/persistentsymboltable.h>
 #include <language/duchain/classdeclaration.h>
+#include <language/duchain/duchainutils.h>
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/coderepresentation.h>
 
@@ -49,6 +52,7 @@
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QLabel>
+#include <QTreeWidget>
 
 #include "../codecompletion/implementationhelperitem.h"
 #include "../codecompletion/missingincludeitem.h"
@@ -71,9 +75,54 @@ QualifiedIdentifier CppClassIdentifierPage::parseParentClassId(const QString & i
   return QualifiedIdentifier(identifier);
 }
 
-CppOverridesPage::CppOverridesPage(QWizard* parent)
-  : KDevelop::OverridesPage(parent)
+CppOverridesPage::CppOverridesPage(ClassGenerator* generator, QWizard* parent)
+  : KDevelop::OverridesPage(generator, parent)
 {
+}
+
+void CppOverridesPage::populateOverrideTree(const QList< DeclarationPointer >& baseList)
+{
+  OverridesPage::populateOverrideTree(baseList);
+
+  // add standard functions that most classes need
+  // we need some context first though...
+  const QString newClass = generator()->name();
+
+  // generate CPP code with default methods and get a context for that
+  KTemporaryFile file;
+  file.setSuffix( ".cpp" );
+  file.setAutoRemove(false);
+  file.open();
+  QTextStream stream(&file);
+  stream << "class " << newClass << " {\n"
+       << "  public:\n"
+       // default ctor
+       << "    " << newClass << "();\n"
+       // copy ctor
+       << "    " << newClass << "(const " << newClass << "& other);\n"
+       // default dtor
+       << "    ~" << newClass << "();\n"
+       // assignment operator
+       << "    " << newClass << "& operator=(const " << newClass << "& other);\n"
+       // equality operator
+       << "    bool operator==(const " << newClass << "& other) const;\n"
+       << "};\n";
+  file.close();
+  ReferencedTopDUContext context(DUChain::self()->waitForUpdate( IndexedString(file.fileName()), KDevelop::TopDUContext::AllDeclarationsAndContexts ));
+  DUChainReadLocker lock;
+
+  if (!context || !context->childContexts().size() == 1) {
+    kWarning() << "invalid context for generated cpp file with default methods" << file.fileName();
+    return;
+  }
+
+  // add items
+  QTreeWidgetItem* defaultItems = new QTreeWidgetItem(overrideTree(), QStringList() << i18n("Default Methods"));
+  foreach( Declaration* dec, context->childContexts().first()->localDeclarations() ) {
+    addPotentialOverride(defaultItems, DeclarationPointer(dec));
+  }
+
+  file.remove();
 }
 
 void CppOverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::DeclarationPointer childDeclaration)
@@ -99,7 +148,7 @@ CppClassIdentifierPage* CppNewClassWizard::newIdentifierPage()
 
 CppOverridesPage* CppNewClassWizard::newOverridesPage()
 {
-  return new CppOverridesPage(this);
+  return new CppOverridesPage(generator(), this);
 }
 
 KDevelop::DocumentChangeSet CppNewClass::generate()

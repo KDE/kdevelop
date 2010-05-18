@@ -29,6 +29,7 @@
 namespace KDevelop
 {
 class ProjectBaseItem;
+class ClassGenerator;
 }
 
 class CppClassIdentifierPage : public KDevelop::ClassIdentifierPage
@@ -46,8 +47,9 @@ class CppOverridesPage : public KDevelop::OverridesPage
   Q_OBJECT
 
 public:
-    CppOverridesPage(QWizard* parent);
+    CppOverridesPage(KDevelop::ClassGenerator* generator, QWizard* parent);
 
+    virtual void populateOverrideTree(const QList< KDevelop::DeclarationPointer >& baseList);
     virtual void addPotentialOverride(QTreeWidgetItem* classItem, KDevelop::DeclarationPointer childDeclaration);
 };
 
