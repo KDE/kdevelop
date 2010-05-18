@@ -1138,8 +1138,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       bool fail = true;
       
       size_t token = node->start_token;
-      
-      if(node->initializer)
+      //NOTE: we might have an initializer in a class for pure virtual methods,
+      //      but we just ignore that. See also TestDUChain::testForwardDeclaration4
+      if(node->initializer && m_currentContext->type() != DUContext::Class)
       {
         if(node->initializer->expression && !node->initializer->initializer_clause)
         {

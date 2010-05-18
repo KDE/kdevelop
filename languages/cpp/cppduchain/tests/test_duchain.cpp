@@ -4808,8 +4808,13 @@ void TestDUChain::testForwardDeclaration4()
   ForwardDeclaration* forwardDecl = static_cast<ForwardDeclaration*>(top->localDeclarations()[0]);
 
   QCOMPARE(forwardDecl->uses().size(), 1);
-  QEXPECT_FAIL("", "The uses in the argument lists of the const=0 methods are not reported", Abort);
   QCOMPARE(forwardDecl->uses().begin()->size(), 6);
+  QCOMPARE(forwardDecl->uses().begin()->at(0), SimpleRange(3, 19, 3, 26));
+  QCOMPARE(forwardDecl->uses().begin()->at(1), SimpleRange(4, 12, 4, 19));
+  QCOMPARE(forwardDecl->uses().begin()->at(2), SimpleRange(4, 22, 4, 29));
+  QCOMPARE(forwardDecl->uses().begin()->at(3), SimpleRange(5, 12, 5, 19));
+  QCOMPARE(forwardDecl->uses().begin()->at(4), SimpleRange(5, 22, 5, 29));
+  QCOMPARE(forwardDecl->uses().begin()->at(5), SimpleRange(6, 19, 6, 26));
 
   release(top);
 }
