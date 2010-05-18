@@ -22,6 +22,7 @@
 #define SNIPPETCOMPLETIONMODEL_H
 
 #include <ktexteditor/codecompletionmodel.h>
+#include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 
 namespace KTextEditor
 {
@@ -31,9 +32,12 @@ class View;
 
 class SnippetCompletionItem;
 
-class SnippetCompletionModel : public KTextEditor::CodeCompletionModel2
+class SnippetCompletionModel : public KTextEditor::CodeCompletionModel2,  public KTextEditor::CodeCompletionModelControllerInterface2
 {
     Q_OBJECT
+    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
+    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
+
 public:
     SnippetCompletionModel();
     ~SnippetCompletionModel();
@@ -46,6 +50,9 @@ public:
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual QModelIndex parent(const QModelIndex& index) const;
+
+    virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
+    virtual bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
 private:
     void initData(KTextEditor::View* view);
     QList<SnippetCompletionItem*> m_snippets;
