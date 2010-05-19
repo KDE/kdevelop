@@ -176,7 +176,7 @@ struct DocumentControllerPrivate {
             KUrl dir;
             if( controller->activeDocument() )
             {
-                dir = KUrl( controller->activeDocument()->url().directory() );
+                dir = controller->activeDocument()->url().upUrl();
             }else
             {
                 dir = KGlobal::config()->group("Open File").readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
