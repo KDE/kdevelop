@@ -34,8 +34,10 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars->insert("ZERO", QStringList("0"));
     m_vars->insert("ONE", QStringList("1"));
     m_vars->insert("EXP", QStringList("-llala -lexpression"));
+    m_vars->insert("UNFORTUNATE-NOTFOUND", QStringList("TRUE"));
     
     m_vars->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
+    m_vars->insert("MYTRUE", QStringList("NOT FALSE"));
     
     m_macros=new MacroMap();
     Macro m;
@@ -112,6 +114,29 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "parenthese5" ) << QString("( ONE AND ZERO ) OR ( ZERO OR ONE )").split(" ") << true;
     
     QTest::newRow( "case" ) << QString("NOT settings.kcfgc STREQUAL GENERATE_MOC AND NOT settings.kcfgc STREQUAL USE_RELATIVE_PATH").split(" ") << true;
+
+    // Constants
+    QTest::newRow( "false constant 1" ) << QStringList("") << false;
+    QTest::newRow( "false constant 2" ) << QStringList("/a/path/to/somewhere") << false;
+    QTest::newRow( "false constant 3" ) << QStringList("0") << false;
+    QTest::newRow( "false constant 4" ) << QStringList("1 ") << false;
+    QTest::newRow( "false constant 5" ) << QStringList("OFF") << false;
+    QTest::newRow( "false constant 6" ) << QStringList("NO") << false;
+    QTest::newRow( "false constant 7" ) << QStringList("FALSE") << false;
+    QTest::newRow( "false constant 8" ) << QStringList("N") << false;
+    QTest::newRow( "false constant 9" ) << QStringList("xxxx-NOTFOUND") << false;
+    QTest::newRow( "false constant 10" ) << QStringList("faLsE") << false;
+    QTest::newRow( "false constant 11" ) << QStringList("-0") << false;
+    QTest::newRow( "false constant 12" ) << QStringList("UNFORTUNATE-NOTFOUND") << false;
+
+    QTest::newRow( "true constant 1" ) << QStringList(" 10") << true;
+    QTest::newRow( "true constant 2" ) << QStringList("10") << true;
+    QTest::newRow( "true constant 3" ) << QStringList("1") << true;
+    QTest::newRow( "true constant 4" ) << QStringList("ON") << true;
+    QTest::newRow( "true constant 5" ) << QStringList("YeS") << true;
+    QTest::newRow( "true constant 6" ) << QStringList("tRUe") << true;
+    QTest::newRow( "true constant 7" ) << QStringList("Y") << true;
+    QTest::newRow( "true constant 8" ) << QStringList("-2") << true;
 }
 
 void CMakeConditionTest::testBadParse()

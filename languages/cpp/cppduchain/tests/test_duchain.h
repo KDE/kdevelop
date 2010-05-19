@@ -171,6 +171,8 @@ private slots:
 
   void testMultiByteCStrings();
 
+  void testUses();
+
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 

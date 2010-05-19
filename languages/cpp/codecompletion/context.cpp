@@ -95,13 +95,6 @@ QStringList arithmeticComparisonOperators = QString("!= <= >= < >" ).split( ' ',
 
 QStringList allOperators = QString("++ + -- += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= && || [ - * / % & | = < >" ).split( ' ', QString::SkipEmptyParts );
 
-
-
-//Whether the list of argument-hints should contain all overloaded versions of operators.
-//Disabled for now, because there is usually a huge list of overloaded operators.
-const int maxOverloadedOperatorArgumentHints = 5;
-const int maxOverloadedArgumentHints = 20;
-
 //Whether identifiers starting with "__" or "_Uppercase" and that are not declared in the current file should be excluded from the code completion
 const bool excludeReservedIdentifiers = true;
 
@@ -1269,6 +1262,8 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
           {
             ifDebug( kDebug() << "functionCallAccess" << functions().count() << m_expression; )
             
+            uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints();
+            
             //Don't show annoying empty argument-hints
 /*            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)
               break;*/
@@ -1277,10 +1272,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
             }else if(!functions().isEmpty()) {
               int num = 0;
               foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
-                if (num == maxOverloadedOperatorArgumentHints) {
+                if (num == max) {
                   //When there are too many overloaded functions, do not show them all if completion was invoked automatically
-                  CompletionTreeItemPointer item( new NormalDeclarationCompletionItem( KDevelop::DeclarationPointer(),  KSharedPtr <KDevelop::CodeCompletionContext >(this), 0, 0 ) );
-                  item->asItem<NormalDeclarationCompletionItem>()->alternativeText = i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2", "%1 more overloads of %2", functions().count() - num, functionName());
+                  CompletionTreeItemPointer item( new MoreArgumentHintsCompletionItem( KSharedPtr <KDevelop::CodeCompletionContext >(this), i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2 (show more)", "%1 more overloads of %2 (show more)", functions().count() - num, functionName()), num ) );
                   items << item;
                   break;
                 }

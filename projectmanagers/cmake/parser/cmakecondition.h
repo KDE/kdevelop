@@ -43,6 +43,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         static QVector<int> m_priorities;
         static QMap<QString, conditionToken> nameToToken;
         static QSet<QString> s_falseDefinitions;
+        static QSet<QString> s_trueDefinitions;
         
         QList<QStringList::const_iterator> m_varUses;
         QList<int> m_argUses;

@@ -41,6 +41,7 @@
 #include <templatedeclaration.h>
 #include <language/codecompletion/codecompletionhelper.h>
 #include "context.h"
+#include <ktexteditor/codecompletioninterface.h>
 
 using namespace KDevelop;
 
@@ -632,6 +633,36 @@ int TypeConversionCompletionItem::argumentHintDepth() const {
 }
 
 TypeConversionCompletionItem::TypeConversionCompletionItem(QString text, KDevelop::IndexedType type, int argumentHintDepth, KSharedPtr<Cpp::CodeCompletionContext> _completionContext) : m_text(text), m_type(type), m_argumentHintDepth(argumentHintDepth), completionContext(_completionContext) {
+}
+
+MoreArgumentHintsCompletionItem::MoreArgumentHintsCompletionItem(KSharedPtr< KDevelop::CodeCompletionContext > context, QString text, uint oldNumber) : NormalDeclarationCompletionItem(DeclarationPointer(), context) {
+  alternativeText = text;
+  m_oldNumber = oldNumber;
+}
+
+namespace {
+  const uint defaultMaxArgumentHints = 8;
+  const uint maxArgumentHintsExtensionSteps = 20;
+  uint currentMaxArgumentHints = defaultMaxArgumentHints;
+};
+
+uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints()
+{
+  uint ret = currentMaxArgumentHints;
+  currentMaxArgumentHints = defaultMaxArgumentHints;
+  return ret;
+}
+
+void MoreArgumentHintsCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word)
+{
+  currentMaxArgumentHints = m_oldNumber + maxArgumentHintsExtensionSteps;
+  
+  // Restart code-completion
+  KTextEditor::CodeCompletionInterface* iface = dynamic_cast<KTextEditor::CodeCompletionInterface*>(document->activeView());
+  Q_ASSERT(iface);
+  iface->abortCompletion();
+    ///@todo 1. This is a non-public interface, and 2. Completion should be started in "automatic invocation" mode
+  QMetaObject::invokeMethod(document->activeView(), "userInvokedCompletion", Qt::QueuedConnection);
 }
 
 }

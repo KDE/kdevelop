@@ -1,4 +1,4 @@
-PROJECT(%{APPNAMELC})
+project(%{APPNAMELC})
 
-ADD_EXECUTABLE(%{APPNAMELC} main.cpp)
+add_executable(%{APPNAMELC} main.cpp)
 

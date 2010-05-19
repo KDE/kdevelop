@@ -61,10 +61,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. *
         void addOutputArgument(const CMakeFunctionArgument& arg) { m_outputArguments.append(arg); }
 };
 
-#define CMAKE_REGISTER_AST( klassName, astId ) namespace {                 \
-        CMakeAst* Create##klassName() { return new klassName; }            \
-        bool b_##astId = AstFactory::self()->registerAst( QLatin1String( #astId ), Create##klassName ); }
-
 #define CMAKE_BEGIN_AST_CLASS( klassName ) class klassName : public CMakeAst {  \
     public:                                                  \
         klassName();                                         \
@@ -821,6 +817,13 @@ CMAKE_END_AST_CLASS( FunctionAst )
 CMAKE_BEGIN_AST_CLASS( ReturnAst )
 CMAKE_END_AST_CLASS( ReturnAst )
 
+#undef CMAKE_END_AST_CLASS
+
+#undef CMAKE_MARK_AS_DEPRECATED
+
+#undef CMAKE_ADD_AST_MEMBER
+
+#undef CMAKE_BEGIN_AST_CLASS
 
 #endif
 

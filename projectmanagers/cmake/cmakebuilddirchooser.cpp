@@ -46,6 +46,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     connect(m_chooserUi->cmakeBin, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
     connect(m_chooserUi->buildFolder, SIGNAL(textChanged(const QString &)), this, SLOT(updated()));
     connect(m_chooserUi->buildType, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(updated()));
+    connect(m_chooserUi->extraArguments, SIGNAL(textEdited(const QString &)), this, SLOT(updated()));
     updated();
 }
 
@@ -210,6 +211,12 @@ void CMakeBuildDirChooser::setAlreadyUsed (const QStringList & used)
     updated();
 }
 
+void CMakeBuildDirChooser::setExtraArguments(const QString& args)
+{
+    m_chooserUi->extraArguments->setText(args);
+    updated();
+}
+
 void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
 {
     KColorScheme scheme(QPalette::Normal);
@@ -230,6 +237,8 @@ KUrl CMakeBuildDirChooser::installPrefix() const { return m_chooserUi->installPr
 KUrl CMakeBuildDirChooser::buildFolder() const { return m_chooserUi->buildFolder->url(); }
 
 QString CMakeBuildDirChooser::buildType() const { return m_chooserUi->buildType->currentText(); }
+
+QString CMakeBuildDirChooser::extraArguments() const { return m_chooserUi->extraArguments->text(); }
 
 #include "cmakebuilddirchooser.moc"
 

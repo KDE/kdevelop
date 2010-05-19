@@ -238,39 +238,87 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
         if(!forceParentScope.isEmpty())
           overridden = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
 
-        if(overridden && !overridden->isAbstract() && !overridden->isDestructor()) {
-          if(asFunction->returnType() && asFunction->returnType()->toString() != "void") {
-            newText += "return ";
-          }
+        if(overridden && !overridden->isAbstract() && !overridden->isDestructor() && !overridden->isConstructor()) {
           QualifiedIdentifier baseScope = overridden->qualifiedIdentifier();
-          bool foundShorter = true;
-          do {
-            foundShorter = false;
-            QualifiedIdentifier candidate = baseScope;
-            if(candidate.count() > 2) {
-              candidate.pop();
-              QList<Declaration*> decls = m_declaration->context()->findDeclarations(candidate);
-              if(decls.contains(overridden)) {
-                foundShorter = true;
-                baseScope = candidate;
+          // baseScope == scope is the case for the "default method" implementations in the CreateClass wizard
+          const bool callParent = baseScope != scope;
+          QString parentCall;
+          if (callParent) {
+            bool foundShorter = true;
+            do {
+              foundShorter = false;
+              QualifiedIdentifier candidate = baseScope;
+              if(candidate.count() > 2) {
+                candidate.pop();
+                QList<Declaration*> decls = m_declaration->context()->findDeclarations(candidate);
+                if(decls.contains(overridden)) {
+                  foundShorter = true;
+                  baseScope = candidate;
+                }
+              }
+            }while(foundShorter);
+
+            parentCall += baseScope.toString() + '(';
+            DUContext* ctx = m_declaration->internalContext();
+            if(ctx->type() == DUContext::Function) {
+              bool first = true;
+              foreach(Declaration* decl, ctx->localDeclarations()) {
+                if(!first)
+                  parentCall += ", ";
+                first = false;
+                parentCall += decl->identifier().toString();
               }
             }
-          }while(foundShorter);
 
-          newText += baseScope.toString() + "(";
+            parentCall += ");";
+          }
 
-          DUContext* ctx = m_declaration->internalContext();
-          if(ctx->type() == DUContext::Function) {
-            bool first = true;
-            foreach(Declaration* decl, ctx->localDeclarations()) {
-              if(!first)
-                newText += ", ";
-              first = false;
-              newText += decl->identifier().toString();
+          const bool needsReturn = asFunction->returnType() && asFunction->returnType()->toString() != "void";
+          // true when we return something like Foo* and are currently in class Foo
+          bool returnThis = false;
+          // true when we return something like const Foo& and are currently in class Foo
+          bool returnThisDeref = false;
+          QualifiedIdentifier parentScope = scope;
+          parentScope.pop(); // function identifier
+          if (needsReturn) {
+            StructureType::Ptr sType;
+            bool wasRef = false;
+            bool wasPtr = false;
+            if (ReferenceType::Ptr refType = asFunction->returnType().cast<ReferenceType>()) {
+              wasRef = true;
+              sType = refType->baseType().cast<StructureType>();
+            } else if (PointerType::Ptr ptrType = asFunction->returnType().cast<PointerType>()) {
+              wasPtr = true;
+              sType = ptrType->baseType().cast<StructureType>();
+            }
+            if (sType && sType->qualifiedIdentifier() == parentScope) {
+              Q_ASSERT(wasPtr || wasRef);
+              if (wasPtr) {
+                returnThis = true;
+              } else if (wasRef) {
+                returnThisDeref = true;
+              }
             }
           }
 
-          newText += ");";
+          if (!needsReturn && callParent) {
+            newText += parentCall;
+          } else if (needsReturn && (returnThisDeref || returnThis)) {
+            if (callParent) {
+              newText += parentCall;
+            }
+            newText += "return ";
+            if (returnThisDeref) {
+              newText += "*this;";
+            } else {
+              newText += "this;";
+            }
+          } else if (needsReturn && callParent) {
+            newText += "return " + parentCall;
+          } else if (needsReturn) {
+            newText += "///TODO: return ...;";
+          }
+
         }
       }
 

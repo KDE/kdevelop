@@ -45,6 +45,7 @@
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kshell.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdialog.h>
@@ -156,6 +157,21 @@ QStringList CMakeJob::cmakeArguments( KDevelop::IProject* project )
         if( !CMake::currentBuildType(project).isEmpty() )
         {
             args << QString("-DCMAKE_BUILD_TYPE=%1").arg(CMake::currentBuildType(project));
+        }
+        if( !CMake::currentExtraArguments(project).isEmpty() ) {
+            KShell::Errors err;
+            QString cmakeargs = CMake::currentExtraArguments(project);
+            QStringList tmp = KShell::splitArgs( cmakeargs, KShell::TildeExpand | KShell::AbortOnMeta, &err );
+            if( err == KShell::NoError ) {
+                args += tmp;
+            } else {
+                kWarning() << "Ignoring cmake Extra arguments";
+                if( err == KShell::BadQuoting ) {
+                    kWarning() << "CMake arguments badly quoted:" << cmakeargs;
+                } else {
+                    kWarning() << "CMake arguments had meta character:" << cmakeargs;
+                }
+            }
         }
         args << CMake::projectRoot(project).toLocalFile();
     } else 

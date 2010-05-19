@@ -67,6 +67,11 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT KUrl currentInstallDir( KDevelop::IProject* project );
     
     /**
+     * @returns the current extra arguments for the given project or "" as default value.
+     */
+    KDEVCMAKECOMMON_EXPORT QString currentExtraArguments( KDevelop::IProject* project );
+
+    /**
      * Sets the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT QString projectRootRelative( KDevelop::IProject* project );
@@ -100,6 +105,11 @@ namespace CMake
      * Sets the current build dir for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setProjectRootRelative( KDevelop::IProject* project, const QString& path);
+    
+    /**
+     * Sets the current extra arguments for the given project.
+     */
+    KDEVCMAKECOMMON_EXPORT void setCurrentExtraArguments( KDevelop::IProject* project, const QString& args );
     
     /**
      * Obtains a cmake documentation instance if it exists

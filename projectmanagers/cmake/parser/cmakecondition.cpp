@@ -76,6 +76,7 @@ QMap<QString, CMakeCondition::conditionToken> initNameToToken()
 QVector<int> CMakeCondition::m_priorities=initPriorities();
 QMap<QString, CMakeCondition::conditionToken> CMakeCondition::nameToToken=initNameToToken();
 QSet<QString> CMakeCondition::s_falseDefinitions=QSet<QString>() << "" << "0" << "N" << "NO" << "OFF" << "FALSE" << "NOTFOUND" ;
+QSet<QString> CMakeCondition::s_trueDefinitions=QSet<QString>() << "1" << "ON" << "YES" << "TRUE" << "Y";
 
 CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v) : m_vars(v->variables()), m_visitor(v)
 {
@@ -93,21 +94,49 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
 {
 //     qDebug() << "+++++++ isTrue: " << varName;
     QString val = *it;
+    QString valUpper = val.toUpper();
     bool ret;
-    
-    if(m_vars->contains(val))
+
+//         Documentation currently say
+//         * if(<constant>)
+//         *    True if the constant is 1, ON, YES, TRUE, Y, or a non-zero number. False if the constant is 0, OFF, NO, FALSE, N, IGNORE, "", or ends in the suffix '-NOTFOUND'. Named boolean constants are case-insensitive.
+//         Then, if not one of the named constant, it is apparently treated as a variables or an expression.
+    if (!val.isEmpty() && val.at(val.size()-1).isDigit())
     {
+        // Number case
+        bool ok;
+        int n = val.toInt(&ok);
+        if (ok && n!=0) {
+            ret = true;
+        } else {
+            ret = false;
+        }
+    }
+    else if (s_trueDefinitions.contains(valUpper))
+    {
+        // TODO Don't go here if CMP0012 is OLD
+        ret = true;
+    }
+    else if (s_falseDefinitions.contains(valUpper) || valUpper.endsWith("-NOTFOUND"))
+    {
+        // TODO Don't go here if CMP0012 is OLD
+        ret = false;
+    }
+    else if(m_vars->contains(val))
+    {
+        //         A variable is expanded (dereferenced) and then checked if it equals one of the above
+        //         FALSE constants.
         QString varName=*it;
         m_varUses.append(it);
         const QStringList valu=m_vars->value(varName);
-
-//         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
         val = valu.join(";").toUpper();
         ret=!s_falseDefinitions.contains(val) && !val.endsWith("_NOTFOUND");
+//         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
+    } else {
+        // Treat as variable, and expand it to "", which evaluates to false.
+        ret = false;
     }
-    else
-        ret=val=="1"; //wtf
-        
+
     return ret;
 }
 
