@@ -29,10 +29,6 @@
 #include <klocale.h>
 #include <kicon.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/markinterface.h>
-
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -53,7 +49,6 @@
 #include <interfaces/iassistant.h>
 
 //#include "modeltest.h"
-#include <interfaces/icompletionsettings.h>
 
 using namespace KDevelop;
 
@@ -129,22 +124,6 @@ void ProblemWidget::forceFullUpdate() {
 
 void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
 {
-  ///TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
-  ///      but having no background.
-  ///      also make it nicer together with other plugins, this would currently fail with
-  ///      this method...
-  const uint errorMarkType = KTextEditor::MarkInterface::Error;
-  const uint warningMarkType = KTextEditor::MarkInterface::Warning;
-  KTextEditor::MarkInterface* iface = dynamic_cast<KTextEditor::MarkInterface*>(doc->textDocument());
-  HashedString currentDoc(doc->url().pathOrUrl());
-  if (iface) {
-    // clear previously added marks
-    foreach(KTextEditor::Mark* mark, iface->marks().values()) {
-        if (mark->type == errorMarkType || mark->type == warningMarkType) {
-            iface->removeMark(mark->line, mark->type);
-        }
-    }
-  }
   if(ctx) {
     QList<ProblemPointer> allProblems;
     QSet<TopDUContext*> hadContexts;
@@ -156,24 +135,6 @@ void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
         // we will resize them right after show anyway
         for (int i = 0; i < model()->columnCount(); ++i)
             resizeColumnToContents(i);
-    }
-    if (iface) {
-        foreach(ProblemPointer p, allProblems) {
-            if (!p->finalLocation().isValid() || p->finalLocation().document() != currentDoc) {
-                continue;
-            }
-            uint mark;
-            if (p->severity() == ProblemData::Error) {
-                mark = errorMarkType;
-            } else if (p->severity() == ProblemData::Warning) {
-                mark = warningMarkType;
-            } else {
-                continue;
-            }
-            if ( ICore::self()->languageController()->completionSettings()->highlightProblematicLines() ) {
-                iface->addMark(p->finalLocation().start().line(), mark);
-            }
-        }
     }
   }else{
     model()->clear();
