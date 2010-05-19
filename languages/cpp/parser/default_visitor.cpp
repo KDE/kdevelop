@@ -468,3 +468,22 @@ void DefaultVisitor::visitSignalSlotExpression(SignalSlotExpressionAST * node) {
   visit(node->name);
 }
 
+void DefaultVisitor::visitQPropertyDeclaration(QPropertyDeclarationAST *node)
+{
+  visit(node->type);
+  visitNodes(this, node->ptr_ops);
+  visit(node->name);
+
+  if (node->getter)
+    visit(node->getter);
+  if (node->setter)
+    visit(node->setter);
+  if (node->resetter)
+    visit(node->resetter);
+  if (node->notifier)
+    visit(node->notifier);
+  if (node->designableMethod)
+    visit(node->designableMethod);
+  if (node->scriptableMethod)
+    visit(node->scriptableMethod);
+}

@@ -28,6 +28,11 @@
 #include <language/duchain/classfunctiondeclaration.h>
 #include <language/duchain/classdeclaration.h>
 
+namespace Cpp
+{
+class QPropertyDeclaration;
+}
+
 namespace KDevelop
 {
 class Declaration;
@@ -94,9 +99,12 @@ protected:
   virtual void visitNamespaceAliasDefinition(NamespaceAliasDefinitionAST*);
   virtual void visitTypeId(TypeIdAST *);
   virtual void visitInitDeclarator(InitDeclaratorAST *node);
+  virtual void visitQPropertyDeclaration(QPropertyDeclarationAST *);
 
   virtual void classTypeOpened(KDevelop::AbstractType::Ptr);
   virtual void classContextOpened(ClassSpecifierAST *node, DUContext* context);
+
+  virtual void closeContext();
 
 private:
   //Returns true if the given parameter declaration clause is really a parameter declaration clause, depending on the given parameters.
@@ -160,6 +168,12 @@ private:
 
   bool m_collectQtFunctionSignature;
   QByteArray m_qtFunctionSignature;
+
+  // QProperty handling
+  typedef QPair<Cpp::QPropertyDeclaration*, QPropertyDeclarationAST*> PropertyResolvePair;
+  QMultiHash<DUContext*, PropertyResolvePair> m_pendingPropertyDeclarations;
+  KDevelop::IndexedDeclaration resolveMethodName(NameAST *node);
+  void resolvePendingPropertyDeclarations(const QList<PropertyResolvePair> &pairs);
 };
 
 #endif // DECLARATIONBUILDER_H

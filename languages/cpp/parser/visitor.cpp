@@ -96,7 +96,8 @@ Visitor::visitor_fun_ptr Visitor::_S_table[AST::NODE_KIND_COUNT] = {
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitWinDeclSpec),
   0,
   reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitJumpStatement),
-  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitSignalSlotExpression)
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitSignalSlotExpression),
+  reinterpret_cast<Visitor::visitor_fun_ptr>(&Visitor::visitQPropertyDeclaration)
 };
 
 Visitor::Visitor()
