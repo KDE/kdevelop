@@ -494,33 +494,48 @@ void CMakeAstTest::testBuildNameBadParse_data()
     QTest::newRow( "ban wrong name" ) << func2;
 }
 
+Q_DECLARE_METATYPE(QList<int>);
 void CMakeAstTest::testCMakeMinimumRequiredGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("cmake_minimum_required");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
+
+    CMakeMinimumRequiredAst* minimumRequiredAst = static_cast<CMakeMinimumRequiredAst*>(ast);
+
+    QFETCH(QList<int>, version);
+    QFETCH(bool, fatal);
+
+    QCOMPARE(minimumRequiredAst->version(), version);
+    QCOMPARE(minimumRequiredAst->wrongVersionIsFatal(), fatal);
+
     delete ast;
 }
 
 void CMakeAstTest::testCMakeMinimumRequiredGoodParse_data()
 {
-    CMakeFunctionDesc func1, func2, func3;
+    CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "CMAKE_MINIMUM_REQUIRED";
-    func2.name = func3.name = func1.name.toLower();
-    QStringList argList1, argList2, argList3;
+    func2.name = func3.name = func4.name = func1.name.toLower();
+    QStringList argList1, argList2, argList3, argList4;
 
     argList1 << "VERSION" << "2.4";
     argList2 = argList1;
     argList2 << "FATAL_ERROR";
+    argList4 << "VERSION" << "2.6.3";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList1 );
     func3.addArguments( argList2 );
+    func4.addArguments( argList4 );
 
-    QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "good upper case" ) << func1;
-    QTest::newRow( "good lower case" ) << func2;
-    QTest::newRow( "good all args" ) << func3;
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    QTest::addColumn<QList<int> >("version");
+    QTest::addColumn<bool>("fatal");
+    QTest::newRow( "good upper case" ) << func1 << (QList<int>() << 2 << 4) << false;
+    QTest::newRow( "good lower case" ) << func2 << (QList<int>() << 2 << 4) << false;
+    QTest::newRow( "good all args" ) << func3 << (QList<int>() << 2 << 4) << true;
+    QTest::newRow( "good three components" ) << func4 << (QList<int>() << 2 << 6 << 3) << false;
 }
 
 void CMakeAstTest::testCMakeMinimumRequiredBadParse()
@@ -984,20 +999,46 @@ void CMakeAstTest::testExecuteProcessBadParse_data()
 
 void CMakeAstTest::testExportGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("export");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
     delete ast;
 }
-
+/// @todo Test EXPORT(PACKAGE name), introduced in CMake 2.8
 void CMakeAstTest::testExportGoodParse_data()
 {
+    const int NUM_TESTDATA = 8;
+    CMakeFunctionDesc funcs[NUM_TESTDATA];
+
+    QString args[NUM_TESTDATA];
+
+    args[0] = "TARGETS main FILE main.cmake";
+    args[1] = "TARGETS main foo FILE main.cmake";
+    args[2] = "TARGETS FILE main.cmake"; // tested in cmake 2.8.1, having no targets really does work
+    args[3] = "TARGETS main NAMESPACE ns FILE main.cmake";
+    args[4] = "TARGETS main APPEND FILE main.cmake";
+    args[5] = "TARGETS main APPEND NAMESPACE ns FILE main.cmake";
+    args[6] = "TARGETS main NAMESPACE ns APPEND FILE main.cmake";
+    args[7] = "TARGETS TARGETS FILE main.cmake";
+    
+    for (int i = 0; i < NUM_TESTDATA; ++i) {
+        funcs[i].name = "EXPORT";
+        funcs[i].addArguments(args[i].split(' '));
+    }
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "single target" ) << funcs[0];
+    QTest::newRow( "two targets" ) << funcs[1];
+    QTest::newRow( "no targets" ) << funcs[2];
+    QTest::newRow( "namespace" ) << funcs[3];
+    QTest::newRow( "append" ) << funcs[4];
+    QTest::newRow( "append and namespace" ) << funcs[5];
+    QTest::newRow( "namespace and append" ) << funcs[6];
+    QTest::newRow( "target called TARGETS" ) << funcs[7];
 }
 
 void CMakeAstTest::testExportBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("export");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -1006,6 +1047,29 @@ void CMakeAstTest::testExportBadParse()
 
 void CMakeAstTest::testExportBadParse_data()
 {
+    const int NUM_TESTDATA = 5;
+    CMakeFunctionDesc funcs[NUM_TESTDATA];
+
+    QString args[NUM_TESTDATA];
+
+    args[0] = "TARGETS main FILE main.cmake";
+    args[1] = "CAKES main FILE main.cmake";
+    args[2] = "TARGETS main";
+    args[3] = "TARGETS main FILE";
+    args[4] = "";
+
+    for (int i = 0; i < NUM_TESTDATA; ++i) {
+        funcs[i].name = "EXPORT";
+        funcs[i].addArguments(args[i].split(' '));
+    }
+    funcs[0].name="exprt";
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow("bad func name") << funcs[0];
+    QTest::newRow("bad subcommand") << funcs[1];
+    QTest::newRow("no FILE") << funcs[2];
+    QTest::newRow("nothing after FILE") << funcs[3];
+    QTest::newRow("no args") << funcs[4];
 }
 
 
@@ -2487,7 +2551,6 @@ void CMakeAstTest::testMarkAsAdvancedBadParse_data()
 
 void CMakeAstTest::testMathGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("math");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -2496,11 +2559,29 @@ void CMakeAstTest::testMathGoodParse()
 
 void CMakeAstTest::testMathGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc func;
+    func.name = "MATH";
+    func.addArguments(QStringList() << "EXPR" << "myvar" << "2+2");
+    QTest::newRow("simple sum") << func;
+
+    func.arguments.clear();
+    // in a CMakeLists.txt, this would be MATH(EXPR myvar "2 + 2")
+    // (with quotes around the expression)
+    func.addArguments(QStringList() << "EXPR" << "myvar" << "2 +  2");
+    QTest::newRow("spaces around op") << func;
+
+    func.arguments.clear();
+    func.addArguments(QStringList() << "EXPR" << "myvar" << " 2 + 2 ");
+    QTest::newRow("spaces around expr") << func;
+
+    func.name = "math";
+    QTest::newRow("lowercase command") << func;
 }
 
 void CMakeAstTest::testMathBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("math");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -2509,6 +2590,34 @@ void CMakeAstTest::testMathBadParse()
 
 void CMakeAstTest::testMathBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc f1;
+    f1.name = "math";
+    f1.addArguments(QStringList());
+    QTest::newRow("no arguments") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EPXR" << "myvar" << "2+2");
+    QTest::newRow("bad EXPR") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "expr" << "myvar" << "2+2");
+    QTest::newRow("lowercase expr") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EXPR");
+    QTest::newRow("missing output var") << f1;
+
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EXPR" << "myvar");
+    QTest::newRow("missing expression") << f1;
+
+    // in a CMakeLists.txt, this would be MATH(EXPR myvar 2 + 2)
+    // (without quotes around the expression)
+    f1.arguments.clear();
+    f1.addArguments(QStringList() << "EXPR" << "myvar" << "2" << "+" << "2");
+    QTest::newRow("multiarg expression") << f1;
 }
 
 
@@ -3449,7 +3558,22 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
     QTest::newRow( "whatever" ) << func4;
 
 }
+void CMakeAstTest::testTargetLinkLibrariesMembers()
+{
+    CMakeAst* ast = AstFactory::self()->createAst("target_link_libraries");
+    CMakeFunctionDesc func;
+    func.name = "TARGET_LINK_LIBRARIES";
+    QStringList argList;
+    argList << "mytarget" << "mylibrary";
+    func.addArguments(argList);
+    QVERIFY( ast->parseFunctionInfo( func ) == true );
 
+    TargetLinkLibrariesAst* targetLinkAst = static_cast<TargetLinkLibrariesAst*>(ast);
+
+    QCOMPARE(targetLinkAst->target(), QString("mytarget"));
+    QCOMPARE(targetLinkAst->otherLibs(), QStringList() << "mylibrary");
+    delete ast;
+}
 
 
 

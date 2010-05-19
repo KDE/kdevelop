@@ -657,6 +657,7 @@ bool BuildNameAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 }
 
 CMakeMinimumRequiredAst::CMakeMinimumRequiredAst()
+    : m_wrongVersionIsFatal(false)
 {
 }
 
@@ -3132,6 +3133,7 @@ bool TargetLinkLibrariesAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     if ( func.arguments.size() < 2 )
         return false;
 
+    m_target = func.arguments[0].value;
 
     QList<CMakeFunctionArgument>::const_iterator it, itEnd;
     it = func.arguments.begin() + 1;
@@ -3561,6 +3563,7 @@ ExportAst::~ExportAst()
 }
 
 
+/// @todo Implement EXPORT(PACKAGE name), introduced in CMake 2.8
 bool ExportAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
     if(func.name.toLower()!="export" || func.arguments.count() < 2 || func.arguments[0].value!="TARGETS")
@@ -3604,7 +3607,7 @@ bool ExportAst::parseFunctionInfo( const CMakeFunctionDesc& func )
             opt=TARGETS;
         }
     }
-    return !m_targets.isEmpty();
+    return !m_filename.isEmpty();
 }
 
 ReturnAst::ReturnAst()
