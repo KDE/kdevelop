@@ -86,6 +86,7 @@ void CCPreferences::writeToSettings()
     settings.m_localColorizationLevel = preferencesDialog->kcfg_localColorization->value();
     settings.m_globalColorizationLevel = preferencesDialog->kcfg_globalColorization->value();
     settings.m_highlightSemanticProblems = preferencesDialog->kcfg_highlightSemanticProblems->isChecked();
+    settings.m_highlightProblematicLines = preferencesDialog->kcfg_highlightProblematicLines->isChecked();
     settings.m_showMultiLineInformation = preferencesDialog->kcfg_showMultiLineSelectionInformation->isChecked();
     settings.m_minFilesForSimplifiedParsing = preferencesDialog->kcfg_minFilesForSimplifiedParsing->value();
     

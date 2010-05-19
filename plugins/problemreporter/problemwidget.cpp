@@ -53,6 +53,7 @@
 #include <interfaces/iassistant.h>
 
 //#include "modeltest.h"
+#include <interfaces/icompletionsettings.h>
 
 using namespace KDevelop;
 
@@ -169,7 +170,9 @@ void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
             } else {
                 continue;
             }
-            iface->addMark(p->finalLocation().start().line(), mark);
+            if ( ICore::self()->languageController()->completionSettings()->highlightProblematicLines() ) {
+                iface->addMark(p->finalLocation().start().line(), mark);
+            }
         }
     }
   }else{
