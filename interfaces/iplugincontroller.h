@@ -45,6 +45,22 @@ class ProfileEngine;
  * The KDevelop plugin controller.
  * The Plugin controller is responsible for querying, loading and unloading
  * available plugins.
+ *
+ * Most of the time if you want to get at a plugin you should be using
+ * extensionForPlugin with the extension interface name. If you need to get at
+ * the actual \c IPlugin* pointer to connect signals/slots you should use
+ * \c pluginForExtension() and then the IPlugin's extension member function to get
+ * at the extension interface if necessary.
+ *
+ * If you have the need to load a specific plugin for a given extension both
+ * functions have an optional second parameter that allows to specify the name
+ * of the plugin as declared in the \c .desktop file under the
+ * \c X-KDE-PluginInfo-Name property. This should be used only very seldomly in
+ * real code and is mostly meant for testing and for implementation in the
+ * shell as it makes the code dependent on the pluginname which may change and
+ * also the actual plugin implementation so users cannot exchange one plugin
+ * with another also implementing the same interface.
+ *
  */
 class KDEVPLATFORMINTERFACES_EXPORT IPluginController : public QObject
 {
