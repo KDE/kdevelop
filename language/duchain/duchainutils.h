@@ -50,7 +50,9 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForProperties(KTextEditor::CodeCompletionModel::CompletionProperties p);
   KDEVPLATFORMLANGUAGE_EXPORT QIcon iconForDeclaration(const Declaration* dec);
   /** Asks the language-plugins for standard-contexts for the given url, and returns one if available.
-    * If there is no language-plugin registered for the given url, it will just try to get any top-context for the file from the du-chain. */
+    * If there is no language-plugin registered for the given url, it will just try to get any top-context for the file from the du-chain.
+    * NOTE: The DUChain needs to be read or write locked when you call this.
+    */
   KDEVPLATFORMLANGUAGE_EXPORT KDevelop::TopDUContext* standardContextForUrl(const KUrl& url);
   /** Returns the Declaration/Definition under the cursor, or zero. DUChain does not need to be locked.
    * If the item under the cursor is a use, the declaration is returned. */

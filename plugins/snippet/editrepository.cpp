@@ -56,6 +56,7 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     if ( m_repo ) {
         repoNameEdit->setText(m_repo->text());
         repoAuthorsEdit->setText(m_repo->authors());
+        repoNamespaceEdit->setText(m_repo->completionNamespace());
         if ( !m_repo->license().isEmpty() ) {
             int index = repoLicenseEdit->findText(m_repo->license());
             if ( index == -1 ) {
@@ -104,6 +105,7 @@ void EditRepository::save()
     m_repo->setText(repoNameEdit->text());
     m_repo->setAuthors(repoAuthorsEdit->text());
     m_repo->setLicense(repoLicenseEdit->currentText());
+    m_repo->setCompletionNamespace(repoNamespaceEdit->text());
 
     m_repo->setFileTypes(repoFileTypesEdit->text().split(";", QString::SkipEmptyParts));
     m_repo->save();

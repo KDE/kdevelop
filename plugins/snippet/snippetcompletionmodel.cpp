@@ -113,7 +113,7 @@ void SnippetCompletionModel::initData(KTextEditor::View* view)
         {
             for ( int j = 0; j < repo->rowCount(); ++j ) {
                 if ( Snippet* snippet = dynamic_cast<Snippet*>(repo->child(j)) ) {
-                    m_snippets << new SnippetCompletionItem(snippet);
+                    m_snippets << new SnippetCompletionItem(snippet, repo);
                 }
             }
         }
@@ -156,4 +156,43 @@ int SnippetCompletionModel::rowCount (const QModelIndex & parent) const {
         return m_snippets.count(); // only the children
     }
 }
+KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position)
+{
+    const QString& line = view->document()->line(position.line());
+    KTextEditor::Range range(position, position);
+    // include everything non-space before
+    for ( int i = position.column() - 1; i >= 0; --i ) {
+        if ( line.at(i).isSpace() ) {
+            break;
+        } else {
+            range.start().setColumn(i);
+        }
+    }
+    // include everything non-space after
+    for ( int i = position.column() + 1; i < line.length(); ++i ) {
+        if ( line.at(i).isSpace() ) {
+            break;
+        } else {
+            range.end().setColumn(i);
+        }
+    }
+    return range;
+}
+
+bool SnippetCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion)
+{
+    if(view->cursorPosition() < range.start() || view->cursorPosition() > range.end()) {
+        return true; //Always abort when the completion-range has been left
+    }
+
+    for ( int i = 0; i < currentCompletion.length(); ++i ) {
+        if ( currentCompletion.at(i).isSpace() ) {
+            return true;
+        }
+    }
+    // else it's valid
+    return false;
+}
+
+
 #include "snippetcompletionmodel.moc"

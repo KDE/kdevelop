@@ -896,6 +896,7 @@ void IdealMainWidget::showDockWidget(IdealDockWidget * dock, bool show)
     else
     {
         Q_ASSERT (0 && "unexpect position");
+        return;
     }
     emit dockShown(dock->view(), pos, show);
 

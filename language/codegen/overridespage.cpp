@@ -39,20 +39,20 @@ using namespace KDevelop;
 class KDevelop::OverridesPagePrivate
 {
 public:
-    OverridesPagePrivate()
-        : overrides(0)
+    OverridesPagePrivate(ClassGenerator* g)
+        : generator(g), overrides(0)
     {
     }
-
+    ClassGenerator* generator;
     Ui::OverridesDialog* overrides;
     QMultiHash<Identifier, DeclarationPointer> overriddenFunctions;
     QMap<QTreeWidgetItem *, DeclarationPointer> declarationMap;
     QList<DeclarationPointer> chosenOverrides;
 };
 
-OverridesPage::OverridesPage(QWizard* parent)
+OverridesPage::OverridesPage(ClassGenerator* generator, QWizard* parent)
     : QWizardPage(parent)
-    , d(new OverridesPagePrivate)
+    , d(new OverridesPagePrivate(generator))
 {
     setTitle(i18n("Override Methods"));
     setSubTitle( i18n("Select any methods you would like to override in the new class.") );
@@ -224,5 +224,11 @@ void OverridesPage::deselectAll()
             item->child(j)->setCheckState(0, Qt::Unchecked);
     }
 }
+
+ClassGenerator* OverridesPage::generator() const
+{
+    return d->generator;
+}
+
 
 #include "overridespage.moc"

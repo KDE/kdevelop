@@ -61,7 +61,17 @@ EditSnippet::~EditSnippet()
 
 void EditSnippet::validate()
 {
-    bool valid = !snippetNameEdit->text().isEmpty() && !snippetContentsEdit->document()->isEmpty();
+    const QString& name = snippetNameEdit->text();
+    bool valid = !name.isEmpty() && !snippetContentsEdit->document()->isEmpty();
+    if (valid) {
+        // make sure the snippetname includes no spaces
+        for ( int i = 0; i < name.length(); ++i ) {
+            if ( name.at(i).isSpace() ) {
+                valid = false;
+                break;
+            }
+        }
+    }
     button(Ok)->setEnabled(valid);
     button(Apply)->setEnabled(valid);
 }

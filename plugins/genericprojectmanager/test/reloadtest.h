@@ -34,7 +34,9 @@ Q_OBJECT
 private slots:
   void init();
   void cleanup();
-  void loadSimpleProject();
+
+  void addRemoveFiles();
+  void addLotsOfFiles();
 private:
   KDevelop::TestCore* m_core;
 };
