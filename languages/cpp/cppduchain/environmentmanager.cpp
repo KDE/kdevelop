@@ -34,8 +34,6 @@ using namespace KDevelop;
 #define ENSURE_READ_LOCKED   ENSURE_FILE_READ_LOCKED(*this)
 #define ENSURE_WRITE_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
 
-// #define DEBUG_LEXERCACHE
-
 DEFINE_LIST_MEMBER_HASH(IncludePathListItem, m_includePaths, KDevelop::IndexedString)
 
 struct IncludePathListItem {
@@ -93,8 +91,7 @@ IncludePathsRepository includePathsRepository("include path repository");
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::m_matchingLevel = Cpp::EnvironmentManager::Full;
-//  #define DEBUG_LEXERCACHE
-//   #define ifDebug(X) X
+
 //If DYNAMIC_DEBUGGING is defined, debugging can be started at any point in runtime,
 //by calling setIsDebugging(true) from within the debugger
 // #define DYNAMIC_DEBUGGING
