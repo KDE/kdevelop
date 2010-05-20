@@ -5,7 +5,7 @@ option(CPP_DEBUG_LEXERCACHE "Enable debugging the C++ lexer cache" OFF)
 option(CPP_DEBUG_CONTEXT_RANGES "Enable debugging the C++ context ranges" OFF)
 option(CPP_DEBUG_UPDATE_MATCHING "Enable debugging the C++ update matching" OFF)
 
-macro_bool_to_01(CPP_DEBUG_LEXERCACHE LEXERCACHE_DEBUG)
+macro_bool_to_01(CPP_DEBUG_LEXERCACHE DEBUG_LEXERCACHE)
 macro_bool_to_01(CPP_DEBUG_UI_LOCKUP DEBUG_UI_LOCKUP)
 macro_bool_to_01(CPP_DEBUG_EXTRA DEBUG)
 macro_bool_to_01(CPP_DEBUG_INCLUDE_PATHS DEBUG_INCLUDE_PATHS)
