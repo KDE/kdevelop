@@ -170,7 +170,7 @@ using namespace KDevelop;
       FOREACH_FUNCTION(const KDevelop::BaseClassInstance& base, cppClassDecl->baseClasses) {
         if( base.access != KDevelop::Declaration::Private ) { //we need const-cast here because the constant list makes also the pointers constant, which is not intended
           CppClassType::Ptr baseClass = base.baseClass.type<CppClassType>();
-          if( baseClass )
+          if( baseClass && !baseClass->equals(klass.constData()) )
             getMemberFunctions( baseClass, topContext, functions, functionName,   mustBeConstant);
         }
       }
