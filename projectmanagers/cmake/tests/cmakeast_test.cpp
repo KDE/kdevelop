@@ -559,7 +559,7 @@ void CMakeAstTest::testCMakeMinimumRequiredBadParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "wrong_name";
-    func2.name = func3.name = "cmake_required_version";
+    func2.name = func3.name = "cmake_minimum_required";
     func4.name = func3.name;
     QStringList argList1, argList2, argList3, argList4;
 
@@ -569,7 +569,7 @@ void CMakeAstTest::testCMakeMinimumRequiredBadParse_data()
 
 
     func1.addArguments( argList1 );
-    func2.addArguments( argList1 );
+    func2.addArguments( argList2 );
     func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
