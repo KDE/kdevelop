@@ -207,7 +207,7 @@ void CMakeAstTest::testAddSubdirectoryGoodParse_data()
 
     func4.name = "add_subdirectory";
     QStringList argList4;
-    argList4 << "foodri" << "binary_foo_dir";
+    argList4 << "foodir" << "binary_foo_dir";
     func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
@@ -227,15 +227,17 @@ void CMakeAstTest::testAddSubdirectoryBadParse()
 
 void CMakeAstTest::testAddSubdirectoryBadParse_data()
 {
-    CMakeFunctionDesc func, func2;
-    func.name = "ADD_SUBDIRECTORY";
+    CMakeFunctionDesc func, func2, func3;
+    func.name = func3.name = "ADD_SUBDIRECTORY";
     func2.name = "foobar";
 
-    func2.addArguments( QStringList( "foodir" ) );
+    func2.addArguments( QStringList() << "foodir" );
+    func3.addArguments( QStringList() << "srcdir" << "bindir" << "spuriousdir" );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "good lowercase" ) << func;
-    QTest::newRow( "good uppercase" ) << func2;
+    QTest::newRow( "no arguments" ) << func;
+    QTest::newRow( "bad func name" ) << func2;
+    QTest::newRow( "too many arguments" ) << func3;
 }
 
 void CMakeAstTest::testAddTestGoodParse()
