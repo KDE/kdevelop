@@ -3537,7 +3537,7 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "wrong_func_name";
-    func2.name = func3.name, func4.name = "target_link_libraries";
+    func2.name = func3.name = func4.name = "target_link_libraries";
 
     QStringList argList1, argList2, argList3, argList4;
 
