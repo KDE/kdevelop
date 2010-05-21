@@ -3510,7 +3510,7 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
 
     QStringList argList1, argList2, argList3;
 
-    argList1 << "MYTARGET" << "SOME_VAR";
+    argList1 << "MYTARGET" << "somelib";
     argList2 << "MYTARGET" << "debug" << "onlydebuglib";
     argList3 << "MYTARGET" << "optimized" << "onlyoptimizedlib";
 
@@ -3519,9 +3519,9 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
     func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "whatever" ) << func1;
-    QTest::newRow( "whatever" ) << func2;
-    QTest::newRow( "whatever" ) << func3;
+    QTest::newRow( "simple" ) << func1;
+    QTest::newRow( "debug only" ) << func2;
+    QTest::newRow( "optimized only" ) << func3;
 
 }
 
@@ -3541,7 +3541,7 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
 
     QStringList argList1, argList2, argList3, argList4;
 
-    argList1 << "MYTARGET" << "SOME_VAR";
+    argList1 << "MYTARGET" << "somelib";
     argList2 << "MYTARGET";
     argList3 << "MYTARGET" << "optimized";
     argList4 << "MYTARGET" << "debug";
@@ -3552,10 +3552,10 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
     func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "whatever" ) << func1;
-    QTest::newRow( "whatever" ) << func2;
-    QTest::newRow( "whatever" ) << func3;
-    QTest::newRow( "whatever" ) << func4;
+    QTest::newRow( "wrong func name" ) << func1;
+    QTest::newRow( "missing libs" ) << func2;
+    QTest::newRow( "missing libs optimized" ) << func3;
+    QTest::newRow( "missing libs debug" ) << func4;
 
 }
 void CMakeAstTest::testTargetLinkLibrariesMembers()
