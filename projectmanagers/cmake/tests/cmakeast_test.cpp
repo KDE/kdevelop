@@ -831,19 +831,22 @@ void CMakeAstTest::testEnableLanguageBadParse()
 
 void CMakeAstTest::testEnableLanguageBadParse_data()
 {
-    CMakeFunctionDesc func1, func2;
+    CMakeFunctionDesc func1, func2, func3;
     func1.name = "ENABLE_LANGUAGES";
-    func2.name = "enable_language";
+    func2.name = func3.name = "enable_language";
 
-    QStringList argList1, argList2;
+    QStringList argList1, argList2, argList3;
     argList1 << "C++";
+    argList3 << "C++" << "Java";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "bad uppercase" ) << func1;
-    QTest::newRow( "bad lowercase. no param" ) << func2;
+    QTest::newRow( "bad func name" ) << func1;
+    QTest::newRow( "no arguments" ) << func2;
+    QTest::newRow( "too many arguments" ) << func3;
 }
 
 
