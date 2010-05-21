@@ -87,10 +87,17 @@ void CMakeAstTest::testAddExecutableBadParse_data()
     QStringList argList3;
     func3.addArguments( argList3 );
 
+    CMakeFunctionDesc func4;
+    func4.name = "add_executable";
+    QStringList argList4;
+    argList4 << "foo" << "WIN32";
+    func4.addArguments( argList4 );
+
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "no sources" ) << func;
     QTest::newRow( "wrong name" ) << func2;
     QTest::newRow( "no arguments" ) << func3;
+    QTest::newRow( "flags but no sources" ) << func4;
 
 }
 
