@@ -206,6 +206,11 @@ void ProblemModel::setProblems(const QList<KDevelop::ProblemPointer>& problems, 
   reset();
 }
 
+QList< ProblemPointer > ProblemModel::allProblems() const
+{
+    return m_problems;
+}
+
 void ProblemModel::clear()
 {
   m_problems.clear();

@@ -23,6 +23,7 @@
 #include "problemhighlighter.h"
 
 #include <KTextEditor/Document>
+#include <KTextEditor/MarkInterface>
 
 #include <language/duchain/indexedstring.h>
 #include <language/editor/hashedstring.h>
@@ -125,6 +126,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
     if (!iface)
         return;
     
+    const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 
     qDeleteAll(m_topHLRanges);
@@ -133,8 +135,24 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 
     KTextEditor::SmartRange* topRange = editor.topRange(iface, EditorIntegrator::Highlighting);
     m_topHLRanges.append(topRange);
-    
+
     HashedString hashedUrl = url.str();
+
+    ///TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
+    ///      but having no background.
+    ///      also make it nicer together with other plugins, this would currently fail with
+    ///      this method...
+    const uint errorMarkType = KTextEditor::MarkInterface::Error;
+    const uint warningMarkType = KTextEditor::MarkInterface::Warning;
+    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>(m_document.data());
+    if (markIface && hadProblems) {
+        // clear previously added marks
+        foreach(KTextEditor::Mark* mark, markIface->marks().values()) {
+            if (mark->type == errorMarkType || mark->type == warningMarkType) {
+                markIface->removeMark(mark->line, mark->type);
+            }
+        }
+    }
 
     foreach (const KDevelop::ProblemPointer& problem, problems) {
         if (problem->finalLocation().document() != hashedUrl || !problem->finalLocation().isValid())
@@ -178,6 +196,18 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         }
         problemRange->addWatcher(this);
         editor.exitCurrentRange(iface);
+        
+        if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
+            uint mark;
+            if (problem->severity() == ProblemData::Error) {
+                mark = errorMarkType;
+            } else if (problem->severity() == ProblemData::Warning) {
+                mark = warningMarkType;
+            } else {
+                continue;
+            }
+            markIface->addMark(problem->finalLocation().start().line(), mark);
+        }
     }
     
     editor.exitCurrentRange(iface);

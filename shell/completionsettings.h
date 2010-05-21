@@ -29,7 +29,7 @@ class CompletionSettings : public KDevelop::ICompletionSettings {
 public:
     CompletionSettings()
         : m_level(MinimalWhenAutomatic), m_automatic(true),
-          m_highlightSemanticProblems(true), m_showMultiLineInformation(false),
+          m_highlightSemanticProblems(true), m_highlightProblematicLines(false), m_showMultiLineInformation(false),
           m_localColorizationLevel(170), m_globalColorizationLevel(255), m_minFilesForSimplifiedParsing(100000)
     {
     }
@@ -76,6 +76,10 @@ public:
         return readBoolConfig("highlightSemanticProblems", m_highlightSemanticProblems);
     }
     
+    virtual bool highlightProblematicLines() const {
+        return readBoolConfig("highlightProblematicLines", m_highlightProblematicLines);
+    }
+    
     virtual bool showMultiLineSelectionInformation() const {
         return readBoolConfig("showMultiLineSelectionInformation", m_showMultiLineInformation);
     }
@@ -87,7 +91,7 @@ public:
     static CompletionSettings& self();
     
     CompletionLevel m_level;
-    bool m_automatic, m_highlightSemanticProblems, m_showMultiLineInformation;
+    bool m_automatic, m_highlightSemanticProblems, m_highlightProblematicLines, m_showMultiLineInformation;
     int m_localColorizationLevel;
     int m_globalColorizationLevel;
     int m_minFilesForSimplifiedParsing;

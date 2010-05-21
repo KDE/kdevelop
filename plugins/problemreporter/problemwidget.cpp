@@ -29,9 +29,6 @@
 #include <klocale.h>
 #include <kicon.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -125,7 +122,7 @@ void ProblemWidget::forceFullUpdate() {
     DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), (TopDUContext::Features)(KDevelop::TopDUContext::VisibleDeclarationsAndContexts | KDevelop::TopDUContext::ForceUpdateRecursive));
 }
 
-void ProblemWidget::showProblems(TopDUContext* ctx)
+void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
 {
   if(ctx) {
     QList<ProblemPointer> allProblems;
@@ -159,7 +156,7 @@ void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
     if(!chosen)
       chosen = language->languageSupport()->standardContext(doc->url(), true);
 
-  showProblems(chosen);
+  showProblems(chosen, doc);
 }
 
 void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
@@ -172,7 +169,7 @@ void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
   if(active) {
     //For now, only show problems from the current document
     if(active->url() == url && job->duChain()) {
-      showProblems(job->duChain());
+      showProblems(job->duChain(), active);
     }
   }
 }

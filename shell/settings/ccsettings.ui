@@ -164,6 +164,16 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="kcfg_highlightProblematicLines">
+        <property name="toolTip">
+         <string>When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.</string>
+        </property>
+        <property name="text">
+         <string>Highlight Problematic Lines</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
