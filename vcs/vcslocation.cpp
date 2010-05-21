@@ -30,32 +30,20 @@ class VcsLocationPrivate
 {
 public:
     KUrl m_localUrl;
-    QString m_repoServer;
-    QString m_repoPath;
     QString m_repoModule;
     QString m_repoBranch;
     QString m_repoTag;
-    VcsLocation::LocationType m_type;
     QVariant m_userData;
 };
 
 VcsLocation::VcsLocation()
     : d(new VcsLocationPrivate)
-{
-    d->m_type = VcsLocation::LocalLocation;
-}
-
+{}
 
 VcsLocation::VcsLocation( const KUrl& u )
     : d(new VcsLocationPrivate)
 {
     setLocalUrl( u );
-}
-
-VcsLocation::VcsLocation( const QString& s )
-    : d(new VcsLocationPrivate)
-{
-    setRepositoryServer( s );
 }
 
 VcsLocation::~VcsLocation()
@@ -66,10 +54,7 @@ VcsLocation::~VcsLocation()
 VcsLocation::VcsLocation( const VcsLocation& rhs )
     : d(new VcsLocationPrivate)
 {
-    d->m_type = rhs.d->m_type;
     d->m_localUrl = rhs.d->m_localUrl;
-    d->m_repoServer = rhs.d->m_repoServer;
-    d->m_repoPath = rhs.d->m_repoPath;
     d->m_repoModule = rhs.d->m_repoModule;
     d->m_repoBranch = rhs.d->m_repoBranch;
     d->m_repoTag = rhs.d->m_repoTag;
@@ -80,10 +65,7 @@ VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
 {
     if( &rhs == this )
         return *this;
-    d->m_type = rhs.d->m_type;
     d->m_localUrl = rhs.d->m_localUrl;
-    d->m_repoServer = rhs.d->m_repoServer;
-    d->m_repoPath = rhs.d->m_repoPath;
     d->m_repoModule = rhs.d->m_repoModule;
     d->m_repoBranch = rhs.d->m_repoBranch;
     d->m_repoTag = rhs.d->m_repoTag;
@@ -97,45 +79,36 @@ KUrl VcsLocation::localUrl() const
 }
 QString VcsLocation::repositoryServer() const
 {
-    return d->m_repoServer;
+    return d->m_localUrl.host();
 }
 
 VcsLocation::LocationType VcsLocation::type() const
 {
-    return d->m_type;
+    return d->m_localUrl.isLocalFile() ? LocalLocation : RepositoryLocation;
 }
 
 bool VcsLocation::isValid() const
 {
-    return( ( d->m_localUrl.isValid()
-              && d->m_type == VcsLocation::LocalLocation )
-            || ( !d->m_repoServer.isEmpty()
-                && d->m_type == VcsLocation::RepositoryLocation ) );
+    return true;
 }
 
 void VcsLocation::setLocalUrl( const KUrl& url )
 {
-    d->m_repoServer.clear();
     d->m_repoModule.clear();
     d->m_repoBranch.clear();
     d->m_repoTag.clear();
-    d->m_repoPath.clear();
-    d->m_type = VcsLocation::LocalLocation;
     d->m_localUrl = url;
 }
 void VcsLocation::setRepositoryServer( const QString& location )
 {
-    d->m_repoServer = location;
-    d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl = KUrl();
+    d->m_localUrl.clear();
+    d->m_localUrl.setHost(location);
 }
 
 bool VcsLocation::operator==( const KDevelop::VcsLocation& rhs )
 {
-    return( type() == rhs.type()
-            && repositoryServer() == rhs.repositoryServer()
-            && localUrl() == rhs.localUrl()
-            && repositoryPath() == rhs.repositoryPath()
+    return(
+            localUrl() == rhs.localUrl()
             && repositoryModule() == rhs.repositoryModule()
             && repositoryBranch() == rhs.repositoryBranch()
             && repositoryTag() == rhs.repositoryTag()
@@ -160,37 +133,28 @@ QString VcsLocation::repositoryBranch( ) const
 
 QString VcsLocation::repositoryPath( ) const
 {
-    return d->m_repoPath;
+    return d->m_localUrl.path();
 }
 
 void VcsLocation::setRepositoryModule( const QString & module )
 {
     d->m_repoModule = module;
-    d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl.clear();
 }
 
 void VcsLocation::setRepositoryBranch( const QString & branch )
 {
     d->m_repoBranch = branch;
-    d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl.clear();
 }
 
 void VcsLocation::setRepositoryTag( const QString & tag )
 {
     d->m_repoTag = tag;
-    d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl.clear();
 }
 
 void VcsLocation::setRepositoryPath( const QString & path )
 {
-    d->m_repoPath = path;
-    d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl.clear();
+    d->m_localUrl.setPath(path);
 }
-
 
 QVariant VcsLocation::userData( ) const
 {
@@ -199,8 +163,6 @@ QVariant VcsLocation::userData( ) const
 
 void VcsLocation::setUserData( const QVariant& data )
 {
-    d->m_type = VcsLocation::RepositoryLocation;
-    d->m_localUrl.clear();
     d->m_userData = data;
 }
 

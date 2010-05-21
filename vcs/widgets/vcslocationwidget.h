@@ -37,7 +37,7 @@ class VcsLocationWidget : public QWidget
         virtual bool isCorrect() const=0;
         
     signals:
-        void changed();
+        virtual void changed()=0;
 };
 
 }

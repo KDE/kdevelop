@@ -48,7 +48,6 @@ public:
 
     VcsLocation();
     VcsLocation( const KUrl& );
-    VcsLocation( const QString& );
     ~VcsLocation();
     VcsLocation( const VcsLocation& );
     VcsLocation& operator=( const VcsLocation& );

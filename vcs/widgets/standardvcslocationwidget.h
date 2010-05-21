@@ -36,6 +36,12 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
         virtual VcsLocation location() const;
         virtual bool isCorrect() const;
         
+    public slots:
+        void textChanged(const QString& str);
+        
+    signals:
+        virtual void changed();
+        
     private:
         KUrlRequester* m_urlWidget;
 };

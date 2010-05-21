@@ -107,6 +107,11 @@ KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
     return u;
 }
 
+void OpenProjectPage::setUrl(const KUrl& url)
+{
+    fileWidget->setUrl(url, false);
+}
+
 void OpenProjectPage::highlightFile( const QString& file )
 {
     emit urlSelected( getAbsoluteUrl( file ) );

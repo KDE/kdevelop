@@ -16,11 +16,11 @@
 class KJob;
 class KUrl;
 namespace Ui { class ProjectSourcePage; }
-namespace KDevelop {
+namespace KDevelop
+{
     class IPlugin;
     class IBasicVersionControl;
     class VcsLocationWidget;
-}
 
 class ProjectSourcePage : public QWidget
 {
@@ -28,11 +28,14 @@ class ProjectSourcePage : public QWidget
     public:
         ProjectSourcePage(const KUrl& initial, QWidget* parent = 0);
         
+        KUrl workingDir() const;
+        
     private slots:
         void sourceChanged(int index);
         void sourceLocationChanged();
         void getVcsProject();
         void projectReceived(KJob* job);
+        void reevaluateCorrection();
         
     signals:
         void isCorrect(bool);
@@ -45,4 +48,5 @@ class ProjectSourcePage : public QWidget
         KDevelop::VcsLocationWidget* m_locationWidget;
 };
 
+}
 #endif // PROJECTSOURCEPAGE_H

@@ -20,26 +20,37 @@
 
 #include "standardvcslocationwidget.h"
 #include <QVBoxLayout>
+#include <QDebug>
 #include <KUrlRequester>
-#include <vcs/vcslocation.h>
 #include <KLocalizedString>
+#include <vcs/vcslocation.h>
 
 using namespace KDevelop;
 
-StandardVcsLocationWidget::StandardVcsLocationWidget(QWidget* parent, Qt::WindowFlags f): VcsLocationWidget(parent, f)
+StandardVcsLocationWidget::StandardVcsLocationWidget(QWidget* parent, Qt::WindowFlags f)
+    : VcsLocationWidget(parent, f)
 {
     setLayout(new QVBoxLayout(this));
     m_urlWidget = new KUrlRequester(this);
     m_urlWidget->setClickMessage(i18n("Introduce the repository URL..."));
     layout()->addWidget(m_urlWidget);
+    
+    connect(m_urlWidget, SIGNAL(textChanged(QString)), SLOT(textChanged(QString)));
 }
 
 VcsLocation StandardVcsLocationWidget::location() const
 {
-    return VcsLocation(m_urlWidget->url());
+    VcsLocation v(m_urlWidget->url());
+    qDebug() << "XAAAAAAA" << v.localUrl();
+    return v;
 }
 
-bool KDevelop::StandardVcsLocationWidget::isCorrect() const
+bool StandardVcsLocationWidget::isCorrect() const
 {
     return !m_urlWidget->url().isRelative();
+}
+
+void StandardVcsLocationWidget::textChanged(const QString& str)
+{
+    emit changed();
 }

@@ -27,6 +27,8 @@ Q_OBJECT
 public:
     OpenProjectPage( const KUrl& startUrl, QWidget* parent = 0 );
     QMap<QString,QStringList> projectFilters() const;
+    void setUrl(const KUrl& url);
+    
 signals:
     void urlSelected( const KUrl& );
 private slots:

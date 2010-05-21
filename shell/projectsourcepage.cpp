@@ -18,6 +18,7 @@
 #include <vcs/widgets/vcslocationwidget.h>
 #include <vcs/vcsjob.h>
 #include <QVBoxLayout>
+#include <QDebug>
 
 using namespace KDevelop;
 
@@ -28,6 +29,8 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->setupUi(this);
     
     m_ui->workingDir->setUrl(initial);
+    m_ui->workingDir->setMode(KFile::Directory);
+    connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
     m_ui->sources->addItem(KIcon("folder"), i18n("Local"));
@@ -62,7 +65,7 @@ void ProjectSourcePage::sourceChanged(int index)
         
         remoteWidgetLayout->addWidget(m_locationWidget);
     }
-    emit isCorrect(vcIface!=0);
+    reevaluateCorrection();
     
     m_ui->sourceBox->setVisible(vcIface!=0);
 }
@@ -82,18 +85,41 @@ void ProjectSourcePage::getVcsProject()
     Q_ASSERT(iface && m_locationWidget);
 
     emit isCorrect(false);
-    VcsJob* job=iface->createWorkingCopy(m_locationWidget->location(), m_ui->workingDir->url());
     
-    connect(job, SIGNAL(finished(KJob*)), SLOT(projectReceived(KJob*)));
+    VcsJob* job=iface->createWorkingCopy(m_locationWidget->location(), m_ui->workingDir->url());
+    m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
+    
+    connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
     ICore::self()->runController()->registerJob(job);
 }
 
 void ProjectSourcePage::projectReceived(KJob* job)
 {
-    emit isCorrect(job->error()!=0);
+    m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
+    if(job->error()==0)
+        reevaluateCorrection();
 }
 
 void ProjectSourcePage::sourceLocationChanged()
 {
+    m_ui->creationProgress->setEnabled(m_locationWidget->isCorrect());
     m_ui->get->setEnabled(m_locationWidget->isCorrect());
+}
+
+void ProjectSourcePage::reevaluateCorrection()
+{
+    KUrl cwd=m_ui->workingDir->url();
+    bool correct=!cwd.isEmpty() && (!cwd.isLocalFile() || QFile::exists(cwd.toLocalFile()));
+    
+    if(correct) {
+        QDir d(cwd.toLocalFile());
+        correct &= d.exists() && !d.entryList().isEmpty();
+    }
+    
+    emit isCorrect(correct);
+}
+
+KUrl ProjectSourcePage::workingDir() const
+{
+    return m_ui->workingDir->url();
 }

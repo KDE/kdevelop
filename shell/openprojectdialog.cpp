@@ -40,15 +40,15 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
 {
     resize(QSize(700, 500));
     
-    QWidget* page = new ProjectSourcePage( startUrl, this );
-    connect( page, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
-    sourcePage = addPage( page, "Select the source" );
+    sourcePageWidget = new ProjectSourcePage( startUrl, this );
+    connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
+    sourcePage = addPage( sourcePageWidget, "Select the source" );
     
-    page = new OpenProjectPage( startUrl, this );
-    connect( page, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
-    openPage = addPage( page, "Select the project" );
+    openPageWidget = new OpenProjectPage( startUrl, this );
+    connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
+    openPage = addPage( openPageWidget, "Select the project" );
     
-    page = new ProjectInfoPage( this );
+    QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
     projectInfoPage = addPage( page, "Project information" );
@@ -63,6 +63,7 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
 void OpenProjectDialog::validateSourcePage(bool valid)
 {
     setValid(sourcePage, valid);
+    openPageWidget->setUrl(sourcePageWidget->workingDir());
 }
 
 void OpenProjectDialog::validateOpenUrl( const KUrl& url )

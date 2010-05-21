@@ -22,6 +22,8 @@ class Job;
 
 namespace KDevelop
 {
+class ProjectSourcePage;
+class OpenProjectPage;
 
 class OpenProjectDialog : public KAssistantDialog
 {
@@ -46,6 +48,9 @@ private:
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
     QStringList m_fileList;
+
+    KDevelop::OpenProjectPage* openPageWidget;
+    KDevelop::ProjectSourcePage* sourcePageWidget;
 };
 
 }
