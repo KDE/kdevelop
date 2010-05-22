@@ -2490,7 +2490,7 @@ void CMakeAstTest::testFunctionGoodParse_data()
 void CMakeAstTest::testFunctionBadParse()
 {
     QFETCH( CMakeFunctionDesc, function );
-    CMakeAst* ast = AstFactory::self()->createAst("macro");
+    CMakeAst* ast = AstFactory::self()->createAst("function");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
     delete ast;
 }
