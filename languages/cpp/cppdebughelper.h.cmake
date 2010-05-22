@@ -6,7 +6,7 @@
 //Set it to 1 to debug build-managers.
 #cmakedefine DEBUG_INCLUDE_PATHS 1
 
-#cmakedefine LEXERCACHE_DEBUG
+#cmakedefine DEBUG_LEXERCACHE
 #cmakedefine DEBUG_UPDATE_MATCHING
 #cmakedefine DEBUG_UPDATE_RANGES
 

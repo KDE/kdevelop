@@ -34,8 +34,6 @@ using namespace KDevelop;
 #define ENSURE_READ_LOCKED   ENSURE_FILE_READ_LOCKED(*this)
 #define ENSURE_WRITE_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }
 
-// #define LEXERCACHE_DEBUG
-
 DEFINE_LIST_MEMBER_HASH(IncludePathListItem, m_includePaths, KDevelop::IndexedString)
 
 struct IncludePathListItem {
@@ -93,8 +91,7 @@ IncludePathsRepository includePathsRepository("include path repository");
 
 bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
 Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::m_matchingLevel = Cpp::EnvironmentManager::Full;
-//  #define LEXERCACHE_DEBUG
-//   #define ifDebug(X) X
+
 //If DYNAMIC_DEBUGGING is defined, debugging can be started at any point in runtime,
 //by calling setIsDebugging(true) from within the debugger
 // #define DYNAMIC_DEBUGGING
@@ -111,7 +108,7 @@ void setIsDebugging(bool is) {
   is_debugging = is;
 }
 
-#define LEXERCACHE_DEBUG
+#define DEBUG_LEXERCACHE
 #define ifDebug(x) if(debugging()) {x;}
 #else
 inline bool debugging() {
@@ -208,7 +205,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
     return false;
 
   if( cppEnvironment->identityOffsetRestrictionEnabled() && cppEnvironment->identityOffsetRestriction() != identityOffset() ) {
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
     kDebug( 9007 ) << "file" << url().str() << "does not match branching hash. Restriction:" << cppEnvironment->identityOffsetRestriction() << "Actual:" << identityOffset();
 #endif
     return false;
@@ -221,7 +218,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
   ///@todo Pick the version that is already in the environment if there is multiple
   if(EnvironmentManager::matchingLevel() == EnvironmentManager::Naive)
     if(cppEnvironment->macroNameSet().contains(headerGuard())) {
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
       kDebug( 9007 ) << "file" << url().str() << "environment contains the header-guard, returning true";
 #endif
       return true;
@@ -235,7 +232,7 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
     rpp::pp_macro* m = cppEnvironment->retrieveStoredMacro( *it );
     if(m && !m->isUndef()) {
       
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
       if(debugging()) {
         kDebug(9007) << "The environment contains a macro that can affect the cached file, but that should not exist:" << m->name.str();
       }
@@ -328,7 +325,7 @@ int EnvironmentFile::contentStartLine() const {
 
 void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp_macro* previousOfSameName ) {
   ENSURE_WRITE_LOCKED
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
   if(debugging()) {
   kDebug( 9007 )  << id(this) << "defined macro" << macro.name.str();
   }
@@ -362,7 +359,7 @@ void EnvironmentFile::addDefinedMacro( const rpp::pp_macro& macro, const rpp::pp
 void EnvironmentFile::usingMacro( const rpp::pp_macro& macro ) {
   ENSURE_WRITE_LOCKED
   if ( !d_func()->m_definedMacroNames.contains( macro.name ) && !d_func()->m_unDefinedMacroNames.contains( macro.name ) && !macro.isUndef() ) {
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
   if(debugging()) {
     kDebug( 9007 ) << id(this) << "used macro" << macro.name.str() << "from" << macro.file.str();
   }
@@ -492,7 +489,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file, CppPreprocessEnvironme
   //We have to read the other file
   ENSURE_FILE_READ_LOCKED(file)
   
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
   if(debugging()) {
   kDebug( 9007 ) <<  id(this) << ": merging" << id(&file)  << "defined in macros this:" << print(d_func()->m_definedMacroNames)  << "defined macros in other:" << print(file.d_func()->m_definedMacroNames) << "undefined macros in other:" << print(file.d_func()->m_unDefinedMacroNames) << "strings in other:" << print(file.strings());
   }
@@ -584,7 +581,7 @@ void EnvironmentFile::merge( const EnvironmentFile& file, CppPreprocessEnvironme
   
   addModificationRevisions(file.allModificationRevisions());
 
-#ifdef LEXERCACHE_DEBUG
+#ifdef DEBUG_LEXERCACHE
   if(debugging()) {
   kDebug( 9007 ) << id(this) << ": defined macro names in this after merge:" << d_func()->m_definedMacroNames.set().count() << print(d_func()->m_definedMacroNames);
   kDebug( 9007 ) << id(this) << ": defined in this after merge:" << d_func()->m_definedMacros.set().count() << print(d_func()->m_definedMacros);
