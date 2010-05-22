@@ -557,26 +557,27 @@ void CMakeAstTest::testCMakeMinimumRequiredBadParse()
 
 void CMakeAstTest::testCMakeMinimumRequiredBadParse_data()
 {
-    CMakeFunctionDesc func1, func2, func3, func4;
+    CMakeFunctionDesc func1, func2, func3, func4, func5;
     func1.name = "wrong_name";
-    func2.name = func3.name = "cmake_minimum_required";
-    func4.name = func3.name;
-    QStringList argList1, argList2, argList3, argList4;
+    func2.name = func3.name = func4.name = func5.name = "cmake_minimum_required";
+    QStringList argList1, argList2, argList3, argList5;
 
     argList1 << "VERSION" << "2.4";
     argList2 << "VERSION";
     argList3 << "VERSION" << "FATAL_ERROR";
-
+    argList5 << "VERSION" << "2.4" << "JUNK";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
     func3.addArguments( argList3 );
+    func5.addArguments( argList5 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "wrong name" ) << func1;
     QTest::newRow( "no version number 1" ) << func2;
     QTest::newRow( "no version number 2" ) << func3;
     QTest::newRow( "no arguments" ) << func4;
+    QTest::newRow( "invalid third arg" ) << func5;
 }
 
 void CMakeAstTest::testCMakePolicyGoodParse()
