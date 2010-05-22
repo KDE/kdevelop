@@ -87,10 +87,17 @@ void CMakeAstTest::testAddExecutableBadParse_data()
     QStringList argList3;
     func3.addArguments( argList3 );
 
+    CMakeFunctionDesc func4;
+    func4.name = "add_executable";
+    QStringList argList4;
+    argList4 << "foo" << "WIN32";
+    func4.addArguments( argList4 );
+
     QTest::addColumn<CMakeFunctionDesc>( "function" );
     QTest::newRow( "no sources" ) << func;
     QTest::newRow( "wrong name" ) << func2;
     QTest::newRow( "no arguments" ) << func3;
+    QTest::newRow( "flags but no sources" ) << func4;
 
 }
 
@@ -200,7 +207,7 @@ void CMakeAstTest::testAddSubdirectoryGoodParse_data()
 
     func4.name = "add_subdirectory";
     QStringList argList4;
-    argList4 << "foodri" << "binary_foo_dir";
+    argList4 << "foodir" << "binary_foo_dir";
     func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
@@ -220,15 +227,17 @@ void CMakeAstTest::testAddSubdirectoryBadParse()
 
 void CMakeAstTest::testAddSubdirectoryBadParse_data()
 {
-    CMakeFunctionDesc func, func2;
-    func.name = "ADD_SUBDIRECTORY";
+    CMakeFunctionDesc func, func2, func3;
+    func.name = func3.name = "ADD_SUBDIRECTORY";
     func2.name = "foobar";
 
-    func2.addArguments( QStringList( "foodir" ) );
+    func2.addArguments( QStringList() << "foodir" );
+    func3.addArguments( QStringList() << "srcdir" << "bindir" << "spuriousdir" );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "good lowercase" ) << func;
-    QTest::newRow( "good uppercase" ) << func2;
+    QTest::newRow( "no arguments" ) << func;
+    QTest::newRow( "bad func name" ) << func2;
+    QTest::newRow( "too many arguments" ) << func3;
 }
 
 void CMakeAstTest::testAddTestGoodParse()
@@ -550,7 +559,7 @@ void CMakeAstTest::testCMakeMinimumRequiredBadParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "wrong_name";
-    func2.name = func3.name = "cmake_required_version";
+    func2.name = func3.name = "cmake_minimum_required";
     func4.name = func3.name;
     QStringList argList1, argList2, argList3, argList4;
 
@@ -560,7 +569,7 @@ void CMakeAstTest::testCMakeMinimumRequiredBadParse_data()
 
 
     func1.addArguments( argList1 );
-    func2.addArguments( argList1 );
+    func2.addArguments( argList2 );
     func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
@@ -822,19 +831,22 @@ void CMakeAstTest::testEnableLanguageBadParse()
 
 void CMakeAstTest::testEnableLanguageBadParse_data()
 {
-    CMakeFunctionDesc func1, func2;
+    CMakeFunctionDesc func1, func2, func3;
     func1.name = "ENABLE_LANGUAGES";
-    func2.name = "enable_language";
+    func2.name = func3.name = "enable_language";
 
-    QStringList argList1, argList2;
+    QStringList argList1, argList2, argList3;
     argList1 << "C++";
+    argList3 << "C++" << "Java";
 
     func1.addArguments( argList1 );
     func2.addArguments( argList2 );
+    func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "bad uppercase" ) << func1;
-    QTest::newRow( "bad lowercase. no param" ) << func2;
+    QTest::newRow( "bad func name" ) << func1;
+    QTest::newRow( "no arguments" ) << func2;
+    QTest::newRow( "too many arguments" ) << func3;
 }
 
 
@@ -3510,7 +3522,7 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
 
     QStringList argList1, argList2, argList3;
 
-    argList1 << "MYTARGET" << "SOME_VAR";
+    argList1 << "MYTARGET" << "somelib";
     argList2 << "MYTARGET" << "debug" << "onlydebuglib";
     argList3 << "MYTARGET" << "optimized" << "onlyoptimizedlib";
 
@@ -3519,9 +3531,9 @@ void CMakeAstTest::testTargetLinkLibrariesGoodParse_data()
     func3.addArguments( argList3 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "whatever" ) << func1;
-    QTest::newRow( "whatever" ) << func2;
-    QTest::newRow( "whatever" ) << func3;
+    QTest::newRow( "simple" ) << func1;
+    QTest::newRow( "debug only" ) << func2;
+    QTest::newRow( "optimized only" ) << func3;
 
 }
 
@@ -3537,11 +3549,11 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
 {
     CMakeFunctionDesc func1, func2, func3, func4;
     func1.name = "wrong_func_name";
-    func2.name = func3.name, func4.name = "target_link_libraries";
+    func2.name = func3.name = func4.name = "target_link_libraries";
 
     QStringList argList1, argList2, argList3, argList4;
 
-    argList1 << "MYTARGET" << "SOME_VAR";
+    argList1 << "MYTARGET" << "somelib";
     argList2 << "MYTARGET";
     argList3 << "MYTARGET" << "optimized";
     argList4 << "MYTARGET" << "debug";
@@ -3552,10 +3564,10 @@ void CMakeAstTest::testTargetLinkLibrariesBadParse_data()
     func4.addArguments( argList4 );
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "whatever" ) << func1;
-    QTest::newRow( "whatever" ) << func2;
-    QTest::newRow( "whatever" ) << func3;
-    QTest::newRow( "whatever" ) << func4;
+    QTest::newRow( "wrong func name" ) << func1;
+    QTest::newRow( "missing libs" ) << func2;
+    QTest::newRow( "missing libs optimized" ) << func3;
+    QTest::newRow( "missing libs debug" ) << func4;
 
 }
 void CMakeAstTest::testTargetLinkLibrariesMembers()
