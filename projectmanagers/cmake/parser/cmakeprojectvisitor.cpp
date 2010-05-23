@@ -49,6 +49,10 @@
 
 using namespace KDevelop;
 
+void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
+
+CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=0;
+
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
     : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
 {
@@ -1479,7 +1483,7 @@ int CMakeProjectVisitor::visit(const FileAst *file)
 
 int CMakeProjectVisitor::visit(const MessageAst *msg)
 {
-    kDebug(9032) << "message:" << msg->message();
+    s_msgcallback(msg->message().join(QString()));
     return 1;
 }
 

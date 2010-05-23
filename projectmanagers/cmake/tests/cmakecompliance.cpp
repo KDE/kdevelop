@@ -27,8 +27,14 @@
 #include <KProcess>
 #include <QFile>
 #include <KStandardDirs>
+#include <cmakeparserutils.h>
+#include <language/duchain/duchain.h>
+
+using namespace KDevelop;
 
 QTEST_MAIN( CMakeCompliance )
+
+QString CMakeCompliance::output;
 
 //Copied from CMakeManager
 QString executeProcess(const QString& execName, const QStringList& args=QStringList())
@@ -78,6 +84,74 @@ void CMakeCompliance::testEnumerate_data()
     {
         QTest::newRow( qPrintable(path) ) << (path);
     }
+}
+
+CMakeProjectVisitor parseFile( const QString& sourcefile )
+{
+    QString projectfile = sourcefile;
+    CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
+
+    QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
+    MacroMap mm;
+    VariableMap vm = initials.first;
+    CacheValues cv;
+    QString sourcedir=sourcefile.left(sourcefile.lastIndexOf('/'));
+    vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
+    
+    KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
+    DUChain::self()->addDocumentChain(buildstrapContext);
+    ReferencedTopDUContext ref=buildstrapContext;
+    QStringList modulesPath = vm["CMAKE_MODULE_PATH"];
+    foreach(const QString& script, initials.second)
+    {
+        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &vm, &mm, sourcedir, &cv, modulesPath );
+    }
+    
+    vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));
+    vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(projectfile));
+    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
+
+    CMakeProjectVisitor v(projectfile, ref);
+    v.setVariableMap(&vm);
+    v.setMacroMap(&mm);
+    v.setCacheValues(&cv);
+    v.setModulePath(modulesPath);
+    v.walk(code, 0);
+
+    ReferencedTopDUContext ctx=v.context();
+    return v;
+}
+
+void CMakeCompliance::testCMakeTests()
+{
+    QFETCH(QString, exe);
+    QFETCH(QString, file);
+
+    output.clear();
+    CMakeProjectVisitor v = parseFile(file);
+    CMakeProjectVisitor::setMessageCallback(addOutput);
+    
+    executeProcess(exe, QStringList("-P") << file);
+}
+
+void CMakeCompliance::testCMakeTests_data()
+{
+    QTest::addColumn<QString>("exe");
+    QTest::addColumn<QString>("file");
+    
+    QStringList files=QStringList() << "CMakeTests/IfTest.cmake.in";
+    
+    QStringList cmakes;
+    KStandardDirs::findAllExe(cmakes, "cmake");
+    foreach(const QString& exe, cmakes) {
+        foreach(const QString& file, files)
+            QTest::newRow( qPrintable(exe+file) ) << exe << file;
+    }
+}
+
+void CMakeCompliance::addOutput(const QString& msg)
+{
+    output += msg;
 }
 
 #include "cmakecompliance.moc"

@@ -42,6 +42,8 @@ namespace KDevelop
 class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
 {
     public:
+        typedef void (*message_callback)(const QString& message);
+        
         explicit CMakeProjectVisitor(const QString& root, KDevelop::ReferencedTopDUContext parent);
         virtual ~CMakeProjectVisitor() {}
         
@@ -132,6 +134,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
             KDevelop::ReferencedTopDUContext context;
         };
         CMakeProperties properties() { return m_props; }
+        
+        static void setMessageCallback(message_callback f) { s_msgcallback=f; }
     protected:
         struct IntPair
         {
@@ -150,6 +154,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         static QList< IntPair > parseArgument(const QString &exp);
         
     private:
+        static message_callback s_msgcallback;
+        
         static KDevelop::ReferencedTopDUContext
             createContext(const KUrl& path, KDevelop::ReferencedTopDUContext aux, int endl ,int endc, bool isClean);
         

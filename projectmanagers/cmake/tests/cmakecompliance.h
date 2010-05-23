@@ -26,13 +26,20 @@
 class CMakeCompliance : public QObject
 {
     Q_OBJECT
-public:
-    CMakeCompliance() {}
-    virtual ~CMakeCompliance() {}
+    public:
+        CMakeCompliance() {}
+        virtual ~CMakeCompliance() {}
 
-private slots:
-    void testEnumerate();
-    void testEnumerate_data();
+    private slots:
+        void testEnumerate();
+        void testEnumerate_data();
+        
+        void testCMakeTests();
+        void testCMakeTests_data();
+        
+    private:
+        static void addOutput(const QString& msg);
+        static QString output;
 };
 
 #endif
