@@ -509,7 +509,7 @@ CMAKE_END_AST_CLASS( LinkLibrariesAst )
 
 
 CMAKE_BEGIN_AST_CLASS( ListAst )
-    enum ListType { Length, Get, Append, Find, Insert, RemoveItem, RemoveAt, Sort, Reverse };
+    enum ListType { Length, Get, Append, Find, Insert, RemoveItem, RemoveAt, Sort, Reverse, RemoveDuplicates };
     CMAKE_ADD_AST_MEMBER( ListType, type )
     CMAKE_ADD_AST_MEMBER( QString, list )
     CMAKE_ADD_AST_MEMBER( QString, output )

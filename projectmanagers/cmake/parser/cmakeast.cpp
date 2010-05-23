@@ -2096,6 +2096,8 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         m_type = Sort;
     else if(argName=="REVERSE")
         m_type = Reverse;
+    else if(argName=="REMOVE_DUPLICATES")
+        m_type = RemoveDuplicates;
     else
         return false;
 
@@ -2113,17 +2115,20 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 return false;
             
             addOutputArgument(func.arguments[1]);
-            bool correct;
             addOutputArgument(func.arguments.last());
+            
             m_output = func.arguments.last().value;
-            m_index.append(func.arguments[2].value.toInt(&correct));
-            if(!correct)
-                return false;
-            int i=0;
-            foreach(const CMakeFunctionArgument& arg, func.arguments)
+            
+            QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+2, itEnd=func.arguments.constEnd();
+            int i=2;
+            bool correct;
+            for(; it!=itEnd; ++it)
             {
-                if(i>2 && i<func.arguments.count())
-                    m_elements.append(arg.value);
+                if(i!=func.arguments.size()-1) {
+                    m_index.append(it->value.toInt(&correct));
+                    if(!correct)
+                        return false;
+                }
                 i++;
             }
         } break;
@@ -2169,11 +2174,11 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
                 return false;
             int i=0;
             addOutputArgument(func.arguments[1]);
-            foreach(const CMakeFunctionArgument& arg, func.arguments)
+            
+            QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+2, itEnd=func.arguments.constEnd();
+            for(; it!=itEnd; ++it)
             {
-                if(i>2)
-                    m_elements.append(arg.value);
-                i++;
+                m_elements.append(it->value);
             }
         } break;
         case RemoveAt: {
@@ -2195,6 +2200,7 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         } break;
         case Sort:
         case Reverse:
+        case RemoveDuplicates:
             addOutputArgument(func.arguments[1]);
             if(func.arguments.count()>2)
                 return false;

@@ -86,12 +86,14 @@ void CMakeCompliance::testEnumerate_data()
     }
 }
 
-CMakeProjectVisitor parseFile( const QString& sourcefile )
+CMakeProjectVisitor CMakeCompliance::parseFile( const QString& sourcefile )
 {
+    CMakeProjectVisitor::setMessageCallback(CMakeCompliance::addOutput);
     QString projectfile = sourcefile;
+    
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
 
-    QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
+    static QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
     MacroMap mm;
     VariableMap vm = initials.first;
     CacheValues cv;
@@ -116,6 +118,7 @@ CMakeProjectVisitor parseFile( const QString& sourcefile )
     v.setMacroMap(&mm);
     v.setCacheValues(&cv);
     v.setModulePath(modulesPath);
+    output.clear();
     v.walk(code, 0);
 
     ReferencedTopDUContext ctx=v.context();
@@ -127,11 +130,14 @@ void CMakeCompliance::testCMakeTests()
     QFETCH(QString, exe);
     QFETCH(QString, file);
 
-    output.clear();
     CMakeProjectVisitor v = parseFile(file);
-    CMakeProjectVisitor::setMessageCallback(addOutput);
     
-    executeProcess(exe, QStringList("-P") << file);
+    QString ret=executeProcess(exe, QStringList("-P") << file);
+    
+    QStringList outputList = output.split('\n'), cmakeList=ret.split('\n');
+    for(int i=0; i<outputList.size(); i++) {
+        QCOMPARE(outputList[i], cmakeList[i]);
+    }
 }
 
 void CMakeCompliance::testCMakeTests_data()
@@ -139,19 +145,22 @@ void CMakeCompliance::testCMakeTests_data()
     QTest::addColumn<QString>("exe");
     QTest::addColumn<QString>("file");
     
-    QStringList files=QStringList() << "CMakeTests/IfTest.cmake.in";
+    QStringList files=QStringList()
+//         << "/CMakeTests/IfTest.cmake.in"
+        << "/CMakeTests/ListTest.cmake.in"
+    ;
     
     QStringList cmakes;
     KStandardDirs::findAllExe(cmakes, "cmake");
     foreach(const QString& exe, cmakes) {
         foreach(const QString& file, files)
-            QTest::newRow( qPrintable(exe+file) ) << exe << file;
+            QTest::newRow( qPrintable(exe+file) ) << exe << CMAKE_TESTS_PROJECTS_DIR + file;
     }
 }
 
 void CMakeCompliance::addOutput(const QString& msg)
 {
-    output += msg;
+    output += "-- "+msg+'\n';
 }
 
 #include "cmakecompliance.moc"

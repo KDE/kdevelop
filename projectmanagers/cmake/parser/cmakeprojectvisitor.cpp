@@ -51,7 +51,7 @@ using namespace KDevelop;
 
 void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; }
 
-CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=0;
+CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
     : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
@@ -1557,6 +1557,7 @@ int CMakeProjectVisitor::visit(const OptionAst *opt)
 int CMakeProjectVisitor::visit(const ListAst *list)
 {
     QString output = list->output();
+    
     QStringList theList = m_vars->value(list->list());
     switch(list->type())
     {
@@ -1565,29 +1566,30 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             kDebug(9042) << "List length" << m_vars->value(output);
             break;
         case ListAst::Get: {
+            bool contains = m_vars->contains(list->list());
             QStringList indices;
-            foreach(int idx, list->index())
-            {
-                if(idx>=theList.count() || idx < 0)
-                    kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
-                else
-                    indices += theList[idx];
-            }
+            if(contains) {
+                foreach(int idx, list->index())
+                {
+                    if(idx>=theList.count())
+                        kDebug(9032) << "error! trying to GET an element that doesn't exist!" << idx;
+                    else if(idx>=0)
+                        indices += theList[idx];
+                    else
+                        indices += theList[theList.size()+idx];
+                }
+            } else
+                indices += "NOTFOUND";
             m_vars->insert(output, indices);
-            kDebug(9042) << "List: Get" << list->list() << theList << list->output() << m_vars->value(list->output());
+            kDebug(9042) << "List: Get" << list->list() << theList << list->output() << list->index();
         }   break;
         case ListAst::Append:
             theList += list->elements();
             m_vars->insert(list->list(), theList);
             break;
         case ListAst::Find: {
-            int idx=-1;
-            foreach(const QString& val, theList)
-            {
-                if(val==list->elements().first())
-                    break;
-                idx++;
-            }
+            int idx=theList.indexOf(list->elements().first());
+            
             m_vars->insert(list->output(), QStringList(QString::number(idx)));
             kDebug(9042) << "List: Find" << theList << list->output() << list->elements() << idx;
         }   break;
@@ -1595,8 +1597,8 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             int p=list->index().first();
             foreach(const QString& elem, list->elements())
             {
-                theList.insert(p, elem);
-                p++;
+                theList.insert(p >=0 ? p : (theList.size()+p), elem);
+                p += p>=0? 1 : 0;
             }
             m_vars->insert(list->list(), theList);
         }   break;
@@ -1614,11 +1616,11 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             qSort(indices);
             QList<int>::const_iterator it=indices.constEnd();
             kDebug(9042) << "list remove: " << theList << indices;
-            while(it!=indices.constBegin())
+            do
             {
                 --it;
-                theList.removeAt(*it);
-            }
+                theList.removeAt(*it >= 0 ? *it : theList.size()+*it);
+            } while(it!=indices.constBegin());
             m_vars->insert(list->list(), theList);
         }   break;
         case ListAst::Sort:
@@ -1632,6 +1634,14 @@ int CMakeProjectVisitor::visit(const ListAst *list)
             m_vars->insert(list->list(), reversed);
             }
             break;
+        case ListAst::RemoveDuplicates: {
+            QStringList noduplicates;
+            foreach(const QString& elem, theList) {
+                if(!noduplicates.contains(elem))
+                    noduplicates.append(elem);
+            }
+            m_vars->insert(list->list(), noduplicates);
+        }   break;
     }
     kDebug(9042) << "List!!" << list->output() << '='<< m_vars->value(list->output()) << " -> " << m_vars->value(list->list());
     return 1;

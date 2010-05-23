@@ -23,12 +23,14 @@
 
 #include <QtTest/QtTest>
 
+class CMakeProjectVisitor;
 class CMakeCompliance : public QObject
 {
     Q_OBJECT
     public:
         CMakeCompliance() {}
         virtual ~CMakeCompliance() {}
+        static void addOutput(const QString& msg);
 
     private slots:
         void testEnumerate();
@@ -38,7 +40,7 @@ class CMakeCompliance : public QObject
         void testCMakeTests_data();
         
     private:
-        static void addOutput(const QString& msg);
+        CMakeProjectVisitor parseFile( const QString& sourcefile );
         static QString output;
 };
 
