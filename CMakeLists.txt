@@ -10,7 +10,6 @@ set( KDEVELOP_VERSION_PATCH 60 )
 
 set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
-#find_package(BerkeleyDB)
 include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
