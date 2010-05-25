@@ -421,6 +421,26 @@ private slots:
     QVERIFY(simpleDecl);
 
     QCOMPARE(simpleDecl->init_declarators->count(), 1);
+    
+  }
+
+  void testAsmVolatile()
+  {
+    //see bug https://bugs.kde.org/show_bug.cgi?id=238772
+    QByteArray code("__asm__ __volatile__ (\"cld; rep; \" \"stosq\" : \"=c\""
+                    "  (__d0), \"=D\" (__d1) : \"a\" (0), \"0\" (sizeof (fd_set) / sizeof (__fd_mask)),"
+                    "  \"1\""
+                    "  (&((&rfds)->__fds_bits)[0]) : \"memory\");");
+    pool memPool;
+    TranslationUnitAST* ast = parse(code, &memPool);
+    dumper.dump(ast, lastSession->token_stream);
+
+    QCOMPARE(ast->declarations->count(), 1);
+    AsmDefinitionAST* asmDecl = reinterpret_cast<AsmDefinitionAST*>(ast->declarations->at(0)->element);
+    QVERIFY(asmDecl);
+
+    QCOMPARE(asmDecl->cv->count(), 1);
+    QVERIFY(lastSession->token_stream->kind(asmDecl->cv->at(0)->element) == Token_volatile);
   }
 
   /*void testParseFile()
