@@ -847,7 +847,7 @@ private:
  *
  * @see NamespaceAliasDeclaration.
  * */
-KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier& globalImportIdentifier;
+KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalImportIdentifier();
 
 /**
  * This is the identifier that can be used to search namespace-alias declarations.
@@ -855,7 +855,7 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier& globalImportIdentifier;
  *
  * @see NamespaceAliasDeclaration.
  * */
-KDEVPLATFORMLANGUAGE_EXPORT extern const Identifier& globalAliasIdentifier;
+KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalAliasIdentifier();
 
 /**
   * Collects all uses of the given @param declarationIndex

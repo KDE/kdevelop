@@ -189,9 +189,8 @@ KDevVarLengthArray<IndexedDUContext> Importers::importers(const DeclarationId& i
   return ret;
 }
 
-static Importers globalImporters;
-
 Importers& Importers::self() {
+  static Importers globalImporters;
   return globalImporters;
 }
 

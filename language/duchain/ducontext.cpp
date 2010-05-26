@@ -74,8 +74,14 @@ DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 REGISTER_DUCHAIN_ITEM(DUContext);
 
 //We leak here, to prevent a possible crash during destruction, as the destructor of Identifier is not safe to be called after the duchain has been destroyed
-const Identifier& globalImportIdentifier(*new Identifier("{...import...}"));
-const Identifier& globalAliasIdentifier(*new Identifier("{...alias...}"));
+Identifier& globalImportIdentifier() {
+  static Identifier globalImportIdentifierObject(*new Identifier("{...import...}"));
+  return globalImportIdentifierObject;
+}
+Identifier& globalAliasIdentifier() {
+  static Identifier globalAliasIdentifierObject(*new Identifier("{...alias...}"));
+  return globalAliasIdentifierObject;
+}
 
 void DUContext::rebuildDynamicData(DUContext* parent, uint ownIndex) {
 
@@ -1358,7 +1364,7 @@ QVector<DUContext::Import> DUContext::importedParentContexts() const
 void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports) const {
 
   DeclarationList imports;
-  findLocalDeclarationsInternal(globalImportIdentifier, position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
+  findLocalDeclarationsInternal(globalImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
   
   if(imports.isEmpty() && onlyImports) {
     identifiers = baseIdentifiers;

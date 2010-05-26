@@ -83,23 +83,20 @@ class AbstractTypeDataRequest {
 };
 
 //The object is created in a function, to prevent initialization-order issues
-RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepositoryObject() {
+static RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepository() {
   static RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false> repository("Type Repository");
   return repository;
 }
 
 AbstractRepositoryManager* typeRepositoryManager() {
-  return &typeRepositoryObject();
+  return &typeRepository();
 }
-
-//For faster usage, the object is copied out of the static function here
-RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataRequest>, false>& typeRepository = typeRepositoryObject();
 
 uint TypeRepository::indexForType(AbstractType::Ptr input) {
   if(!input)
     return 0;
 
-  uint i = typeRepository->index(AbstractTypeDataRequest(*input));
+  uint i = typeRepository()->index(AbstractTypeDataRequest(*input));
 #ifdef DEBUG_TYPE_REPOSITORY
   AbstractType::Ptr t = typeForIndex(i);
   if(!t->equals(input.unsafeData())) {
@@ -118,14 +115,14 @@ AbstractType::Ptr TypeRepository::typeForIndex(uint index) {
   if(index == 0)
     return AbstractType::Ptr();
 
-  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(typeRepository->itemFromIndex(index))) );
+  return AbstractType::Ptr( TypeSystem::self().create(const_cast<AbstractTypeData*>(typeRepository()->itemFromIndex(index))) );
 }
 
 void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* manager) {
   if(!index)
     return;
-  QMutexLocker lock(typeRepository->mutex());
-  AbstractTypeData* data = typeRepository->dynamicItemFromIndexSimple(index);
+  QMutexLocker lock(typeRepository()->mutex());
+  AbstractTypeData* data = typeRepository()->dynamicItemFromIndexSimple(index);
   Q_ASSERT(data);
   if(manager)
     manager->increase(data->refCount, index);
@@ -136,8 +133,8 @@ void TypeRepository::increaseReferenceCount(uint index, ReferenceCountManager* m
 void TypeRepository::decreaseReferenceCount(uint index, ReferenceCountManager* manager) {
   if(!index)
     return;
-  QMutexLocker lock(typeRepository->mutex());
-  AbstractTypeData* data = typeRepository->dynamicItemFromIndexSimple(index);
+  QMutexLocker lock(typeRepository()->mutex());
+  AbstractTypeData* data = typeRepository()->dynamicItemFromIndexSimple(index);
   Q_ASSERT(data);
   Q_ASSERT(data->refCount > 0);
   if(manager)
