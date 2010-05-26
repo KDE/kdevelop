@@ -28,7 +28,6 @@
 #include <QtCore/QList>
 #include <QtCore/QPointer>
 #include <QtCore/QPair>
-#include <QtDesigner/QExtensionManager>
 #include "interfacesexport.h"
 
 class KIconLoader;
@@ -51,7 +50,7 @@ namespace Sublime {
  */
 
 #define KDEV_USE_EXTENSION_INTERFACE( Extension ) \
-    addExtension( Q_TYPEID( Extension ) );
+    addExtension( qobject_interface_iid<Extension*>() );
 
 namespace KDevelop
 {
@@ -164,16 +163,16 @@ public:
      */
     Q_SCRIPTABLE ICore *core() const;
 
-    Q_SCRIPTABLE void registerExtensions();
-    Q_SCRIPTABLE void unregisterExtensions();
-
     Q_SCRIPTABLE QStringList extensions() const;
 
     template<class Extension> Extension* extension()
     {
-        return qt_extension<Extension*>( extensionManager(), this );
+        if( extensions().contains( qobject_interface_iid<Extension*>() ) ) {
+            return qobject_cast<Extension*>( this );
+        }
+        return 0;
     }
-
+    
     /**
      * ask the plugin for a ContextActionContainer, which contains actions
      * that will be merged into the context menu.
@@ -226,7 +225,6 @@ private:
 
     friend class IPluginPrivate;
     class IPluginPrivate* const d;
-    QExtensionManager* extensionManager();
 };
 
 }

@@ -22,7 +22,6 @@
 #define IGENERICPROJECTMANAGER_H
 
 #include <project/interfaces/iprojectfilemanager.h>
-#include <interfaces/iextension.h>
 
 /**
 @author Andreas Pakulat
@@ -40,7 +39,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IGenericProjectManager, "org.kdevelop.IGenericProjectManager" )
 Q_DECLARE_INTERFACE( KDevelop::IGenericProjectManager, "org.kdevelop.IGenericProjectManager" )
 
 #endif

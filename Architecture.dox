@@ -120,16 +120,13 @@ specific details from shell.
 
 \subsubsection declare_extension To declare an extension interface:
 - Create an abstract class
-- Include <iextension.h>
 - Add macros declaring the interface to your abstract class' header file
   - If your abstract class is in a namespace use the following:
     \code
-    KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IMyInterface, "org.kdevelop.IMyInterface")
     Q_DECLARE_INTERFACE( KDevelop::IMyInterface, "org.kdevelop.IMyInterface" )
     \endcode
   - Otherwise use:
     \code
-    KDEV_DECLARE_EXTENSION_INTERFACE( IMyInterface, "org.kdevelop.IMyInterface" )
     Q_DECLARE_INTERFACE( IMyInterface, "org.kdevelop.IMyInterface" )
     \endcode
   .

@@ -121,8 +121,7 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
 
 QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
 {
-    QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension(IDocumentationProvider_iid);
-    kDebug(9529) << "All plugins for" << IDocumentationProvider_iid << plugins;
+    QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProvider");
     
     QList<IDocumentationProvider*> ret;
     

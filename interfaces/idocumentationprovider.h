@@ -21,8 +21,7 @@
 #define IDOCUMENTATIONPROVIDER_H
 
 #include <KDE/KSharedPtr>
-
-#include "iextension.h"
+#include <QtCore/QObject>
 #include "interfacesexport.h"
 
 class QIcon;
@@ -62,7 +61,6 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProvider
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IDocumentationProvider, "org.kdevelop.IDocumentationProvider")
 Q_DECLARE_INTERFACE( KDevelop::IDocumentationProvider, "org.kdevelop.IDocumentationProvider")
 
 #endif

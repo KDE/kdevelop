@@ -22,7 +22,6 @@
 #ifndef IREPOSITORYVERSIONCONTROL_H
 #define IREPOSITORYVERSIONCONTROL_H
 
-#include <iextension.h>
 class QString;
 class VcsRevision;
 class QStringList;
@@ -59,7 +58,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IRepositoryVersionControl, "org.kdevelop.IRepositoryVersionControl" )
 Q_DECLARE_INTERFACE( KDevelop::IRepositoryVersionControl, "org.kdevelop.IRepositoryVersionControl" )
 #endif
 

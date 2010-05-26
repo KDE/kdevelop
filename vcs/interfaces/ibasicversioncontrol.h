@@ -22,7 +22,6 @@
 #ifndef IBASICVERSIONCONTROL_H
 #define IBASICVERSIONCONTROL_H  
 
-#include <interfaces/iextension.h>
 #include <KDE/KUrl>
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
@@ -250,7 +249,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBasicVersionControl, "org.kdevelop.IBasicVersionControl" )
 Q_DECLARE_INTERFACE( KDevelop::IBasicVersionControl, "org.kdevelop.IBasicVersionControl" )
 
 #endif

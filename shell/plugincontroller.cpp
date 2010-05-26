@@ -27,7 +27,6 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QTimer>
 #include <QtGui/QApplication>
 #include <QtGui/QAction>
-#include <QtDesigner/QExtensionManager>
 
 #include <kcmdlineargs.h>
 #include <klibloader.h>
@@ -120,7 +119,7 @@ public:
         kDebug() << "checking dependencies:" << interfaces;
         foreach( const KPluginInfo& info, loadedPlugins.keys() )
         {
-            if( info.pluginName() != plugin.pluginName() ) 
+            if( info.pluginName() != plugin.pluginName() )
             {
                 QStringList dependencies = info.property( "X-KDevelop-IRequired" ).toStringList();
                 dependencies += info.property( "X-KDevelop-IOptional" ).toStringList();
@@ -149,7 +148,6 @@ public:
     }
 
     Core *core;
-    QExtensionManager* m_manager;
 };
 
 PluginController::PluginController(Core *core)
@@ -161,7 +159,6 @@ PluginController::PluginController(Core *core)
     d->plugins = KPluginInfo::fromServices( KServiceTypeTrader::self()->query( QLatin1String( "KDevelop/Plugin" ),
         QString( "[X-KDevelop-Version] == %1" ).arg(KDEVELOP_PLUGIN_VERSION) ) );
     d->cleanupMode = PluginControllerPrivate::Running;
-    d->m_manager = new QExtensionManager();
     // Register the KDevelop::IPlugin* metatype so we can properly unload it
     qRegisterMetaType<KDevelop::IPlugin*>( "KDevelop::IPlugin*" );
 }
@@ -173,7 +170,6 @@ PluginController::~PluginController()
                        << endl << kBacktrace() << endl;
     }
 
-    delete d->m_manager;
     delete d;
 }
 
@@ -213,7 +209,7 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
     return loadPluginInternal( pluginName );
 }
 
-bool PluginController::isEnabled( const KPluginInfo& info ) 
+bool PluginController::isEnabled( const KPluginInfo& info )
 {
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
@@ -224,7 +220,7 @@ bool PluginController::isEnabled( const KPluginInfo& info )
 void PluginController::initialize()
 {
     QMap<QString, bool> pluginMap;
-    if( ShellExtension::getInstance()->defaultPlugins().isEmpty() ) 
+    if( ShellExtension::getInstance()->defaultPlugins().isEmpty() )
     {
         foreach( const KPluginInfo& pi, d->plugins )
         {
@@ -246,7 +242,7 @@ void PluginController::initialize()
     for ( it = entries.begin(); it != entries.end(); ++it )
     {
         QString key = it.key();
-        if ( key.endsWith( QLatin1String( "Enabled" ) ) ) 
+        if ( key.endsWith( QLatin1String( "Enabled" ) ) )
         {
             QString pluginid = key.left( key.length() - 7 );
             bool defValue;
@@ -267,7 +263,7 @@ void PluginController::initialize()
         {
             QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginName() );
             if( it != pluginMap.constEnd() && ( it.value() || !isUserSelectable( pi ) ) )
-            { 
+            {
                 // Plugin is mentioned in pluginmap and the value is true, so try to load it
                 loadPluginInternal( pi.pluginName() );
                 if( !grp.hasKey( pi.pluginName() + "Enabled" ) )
@@ -309,7 +305,7 @@ bool PluginController::unloadPlugin( const QString & pluginId )
 bool PluginController::unloadPlugin(IPlugin* plugin, PluginDeletion deletion)
 {
     kDebug() << "unloading plugin:" << plugin << pluginInfo( plugin ).name();
-    
+
     plugin->unload();
     emit pluginUnloaded(plugin);
 
@@ -378,10 +374,10 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         kDebug() << "Unable to load plugin named" << pluginId << ". Running in No-Ui mode, but the plugin says it needs a GUI";
         return 0;
     }
-    
+
     bool isKrossPlugin = false;
     QString krossScriptFile;
-    if( info.property("X-KDevelop-PluginType").toString() == "Kross" ) 
+    if( info.property("X-KDevelop-PluginType").toString() == "Kross" )
     {
         isKrossPlugin = true;
         krossScriptFile = KStandardDirs::locate( "appdata", info.service()->library(), KComponentData("kdevkrossplugins"));
@@ -402,21 +398,21 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     {
         QVariant prop = info.property( "X-KDevelop-PluginType" );
         kDebug() << "Checked... starting to load:" << info.name() << "type:" << prop;
-        
+
         QString failedPlugin;
-        if( !loadDependencies( info, failedPlugin ) ) 
+        if( !loadDependencies( info, failedPlugin ) )
         {
             kWarning() << "Could not load a required dependency:" << failedPlugin;
             return 0;
         }
         loadOptionalDependencies( info );
-        
+
         if( isKrossPlugin )
         {
             // Kross is special, we create always the same "plugin" which hooks up
             // the script and makes the connection between C++ and script side
             kDebug() << "it is a kross plugin!!";
-            // Workaround for KAboutData constructor needing a KLocalizedString and 
+            // Workaround for KAboutData constructor needing a KLocalizedString and
             // KLocalized string storing the char* for later usage
             QString tmp = info.name();
             int len = tmp.toUtf8().size();
@@ -442,7 +438,6 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( plugin )
     {
         d->loadedPlugins.insert( info, plugin );
-        plugin->registerExtensions();
         info.setPluginEnabled( true );
 
         kDebug() << "Successfully loaded plugin '" << pluginId << "'";
@@ -576,7 +571,7 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
         IPlugin* plugin;
         if( d->loadedPlugins.contains( info ) )
             plugin = d->loadedPlugins[ info ];
-        else 
+        else
             plugin = loadPluginInternal( info.pluginName() );
 
         if (plugin)
@@ -585,11 +580,6 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
             kWarning(9501) << "Null plugin retrieved! Loading error?";
     }
     return plugins;
-}
-
-QExtensionManager* PluginController::extensionManager()
-{
-    return d->m_manager;
 }
 
 QStringList PluginController::allPluginNames()
@@ -659,14 +649,14 @@ void PluginController::updateLoadedPlugins()
         if( isGlobalPlugin( info ) )
         {
             bool enabled = grp.readEntry( info.pluginName()+"Enabled", ( defaultPlugins.isEmpty() || defaultPlugins.contains( info.pluginName() ) ) ) || !isUserSelectable( info );
-            if( d->loadedPlugins.contains( info ) && !enabled ) 
+            if( d->loadedPlugins.contains( info ) && !enabled )
             {
                 kDebug() << "unloading" << info.pluginName();
-                if( !unloadPlugin( info.pluginName() ) ) 
+                if( !unloadPlugin( info.pluginName() ) )
                 {
                     grp.writeEntry( info.pluginName()+"Enabled", false );
                 }
-            } else if( !d->loadedPlugins.contains( info ) && enabled ) 
+            } else if( !d->loadedPlugins.contains( info ) && enabled )
             {
                 loadPluginInternal( info.pluginName() );
             }
@@ -681,7 +671,7 @@ void PluginController::resetToDefaults()
     cfg->sync();
     KConfigGroup grp = cfg->group( pluginControllerGrp );
     QStringList plugins = ShellExtension::getInstance()->defaultPlugins();
-    if( plugins.isEmpty() ) 
+    if( plugins.isEmpty() )
     {
         foreach( const KPluginInfo& info, d->plugins )
         {

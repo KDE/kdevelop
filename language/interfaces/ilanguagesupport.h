@@ -21,7 +21,6 @@
 
 #include <kurl.h>
 
-#include <interfaces/iextension.h>
 #include "../editor/simplerange.h"
 #include "../languageexport.h"
 
@@ -86,7 +85,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, ILanguageSupport, "org.kdevelop.ILanguageSupport")
 Q_DECLARE_INTERFACE( KDevelop::ILanguageSupport, "org.kdevelop.ILanguageSupport")
 
 #endif

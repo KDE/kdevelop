@@ -21,7 +21,6 @@
 #ifndef IEXECUTEPLUGIN_H
 #define IEXECUTEPLUGIN_H
 
-#include <interfaces/iextension.h>
 #include <QtCore/QString>
 
 namespace KDevelop
@@ -51,7 +50,6 @@ public:
     virtual QString nativeAppConfigTypeId() const = 0;
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( IExecutePlugin, "org.kdevelop.IExecutePlugin" )
 Q_DECLARE_INTERFACE( IExecutePlugin, "org.kdevelop.IExecutePlugin" )
 
 #endif

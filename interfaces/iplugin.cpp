@@ -40,38 +40,15 @@
 #include "iplugincontroller.h"
 #include "iprojectcontroller.h"
 #include "contextmenuextension.h"
-#include <QtDesigner/QExtensionFactory>
-#include <QtDesigner/QExtensionManager>
 
 namespace KDevelop
 {
-
-class PluginExtensionFactory : public QExtensionFactory {
-public:
-    PluginExtensionFactory( const QStringList& extensions, QExtensionManager *parent = 0 )
-        :QExtensionFactory( parent ), m_extensions( extensions )
-    {
-    }
-    protected:
-    virtual QObject *createExtension(QObject* object, const QString& iid, QObject* parent ) const
-    {
-        Q_UNUSED(parent)
-        if( !m_extensions.contains( iid ) )
-            return 0;
-        IPlugin* p = qobject_cast<IPlugin *>(object);
-        if( !p )
-            return 0;
-        return object;
-    }
-    private:
-        QStringList m_extensions;
-};
 
 class IPluginPrivate
 {
 public:
     IPluginPrivate(IPlugin *q)
-        : q(q), iconLoader(0), m_factory(0)
+        : q(q), iconLoader(0)
     {}
 
     ~IPluginPrivate()
@@ -92,7 +69,7 @@ public:
     {
 	const int projectCount =
 	    ICore::self()->projectController()->projectCount();
-    
+
 	IPlugin::ReverseStateChange reverse = IPlugin::StateNoReverse;
 	if (! projectCount)
 	    reverse = IPlugin::StateReverse;
@@ -103,7 +80,6 @@ public:
     IPlugin *q;
     ICore *core;
     KIconLoader* iconLoader;
-    PluginExtensionFactory* m_factory;
     QStringList m_extensions;
 };
 
@@ -172,41 +148,11 @@ ICore *IPlugin::core() const
     return d->core;
 }
 
-QExtensionManager* IPlugin::extensionManager()
-{
-    return core()->pluginController()->extensionManager();
-}
-
 }
 
 QStringList KDevelop::IPlugin::extensions( ) const
 {
   return d->m_extensions;
-}
-
-void KDevelop::IPlugin::registerExtensions( )
-{
-    if( extensions().isEmpty() )
-        return;
-    if( !d->m_factory )
-        d->m_factory = new PluginExtensionFactory( extensions(), extensionManager() );
-    Q_FOREACH( const QString& ext, extensions() )
-    {
-        extensionManager()->registerExtensions( d->m_factory, ext );
-    }
-}
-
-void KDevelop::IPlugin::unregisterExtensions( )
-{
-    if( extensions().isEmpty() )
-        return;
-    if( !d->m_factory )
-        return;
-    Q_FOREACH( const QString& ext, extensions() )
-    {
-        extensionManager()->unregisterExtensions( d->m_factory, ext );
-    }
-
 }
 
 void KDevelop::IPlugin::addExtension( const QString& ext )
@@ -238,7 +184,7 @@ KXMLGUIClient* KDevelop::IPlugin::createGUIForMainWindow(Sublime::MainWindow* wi
     CustomXmlGUIClient* ret = new CustomXmlGUIClient(componentData());
     QString file;
     createActionsForMainWindow(window, file, *ret->actionCollection());
-    
+
     if(!ret->actionCollection()->isEmpty()) {
         Q_ASSERT(!file.isEmpty()); //A file must have been set
         ret->setXmlFile(file);

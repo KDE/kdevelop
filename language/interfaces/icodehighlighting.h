@@ -19,7 +19,6 @@
 #ifndef ICODEHIGHLIGHTING_H
 #define ICODEHIGHLIGHTING_H
 
-#include <interfaces/iextension.h>
 #include "../languageexport.h"
 
 namespace KDevelop
@@ -45,7 +44,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, ICodeHighlighting, "org.kdevelop.ICodeHighlighting")
 Q_DECLARE_INTERFACE(KDevelop::ICodeHighlighting, "org.kdevelop.ICodeHighlighting")
 
 #endif // ICODEHIGHLIGHTING_H

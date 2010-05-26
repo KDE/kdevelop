@@ -22,7 +22,6 @@
 #ifndef IBRANCHINGVERSIONCONTROL_H
 #define IBRANCHINGVERSIONCONTROL_H
 
-#include <iextension.h>
 
 class QString;
 class VcsMapping;
@@ -73,7 +72,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBranchingVersionControl, "org.kdevelop.IBranchingVersionControl" )
 Q_DECLARE_INTERFACE( KDevelop::IBranchingVersionControl, "org.kdevelop.IBranchingVersionControl" )
 
 #endif

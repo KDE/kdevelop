@@ -21,7 +21,7 @@
 #define ISTATUS_H
 
 #include "interfacesexport.h"
-#include "iextension.h"
+#include <QtCore/QObject>
 
 namespace KDevelop {
 
@@ -80,7 +80,6 @@ Q_SIGNALS:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IStatus, "org.kdevelop.IStatus" )
 Q_DECLARE_INTERFACE( KDevelop::IStatus, "org.kdevelop.IStatus" )
 
 #endif

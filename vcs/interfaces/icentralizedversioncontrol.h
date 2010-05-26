@@ -81,7 +81,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, ICentralizedVersionControl, "org.kdevelop.ICentralizedVersionControl" )
 Q_DECLARE_INTERFACE( KDevelop::ICentralizedVersionControl, "org.kdevelop.ICentralizedVersionControl" )
 
 #endif
