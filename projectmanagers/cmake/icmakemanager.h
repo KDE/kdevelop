@@ -19,7 +19,6 @@
 #ifndef ICMAKEMANAGER_H
 #define ICMAKEMANAGER_H
 
-#include <interfaces/iextension.h>
 class ICMakeManager
 {
 public:
@@ -29,7 +28,6 @@ public:
 
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( ICMakeManager, "org.kdevelop.ICMakeManager" )
 Q_DECLARE_INTERFACE( ICMakeManager, "org.kdevelop.ICMakeManager" )
 
 #endif

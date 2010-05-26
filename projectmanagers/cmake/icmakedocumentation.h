@@ -19,7 +19,6 @@
 #ifndef ICMAKEDOCUMENTATION_H
 #define ICMAKEDOCUMENTATION_H
 
-#include <interfaces/iextension.h>
 #include <interfaces/idocumentationprovider.h>
 
 class KUrl;
@@ -34,7 +33,6 @@ public:
     virtual QStringList names(Type t) const=0;
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( ICMakeDocumentation, "org.kdevelop.ICMakeDocumentation" )
 Q_DECLARE_INTERFACE( ICMakeDocumentation, "org.kdevelop.ICMakeDocumentation" )
 
 #endif

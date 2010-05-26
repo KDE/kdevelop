@@ -198,17 +198,15 @@ void setCurrentExtraArguments( KDevelop::IProject* project, const QString& strin
 
 ICMakeDocumentation* cmakeDocumentation()
 {
-    KDevelop::IPlugin* p=KDevelop::ICore::self()->pluginController()->pluginForExtension(ICMakeDocumentation_iid);
+    ICMakeDocumentation* p=KDevelop::ICore::self()->pluginController()->extensionForPlugin<ICMakeDocumentation>("org.kdevelop.ICMakeDocumentation");
     
     if( !p ) 
     {
         return 0;
     }
 
-    ICMakeDocumentation* cmakedoc = qobject_cast<ICMakeDocumentation*>(p);
-    
-    Q_ASSERT(cmakedoc);
-    return cmakedoc;
+    Q_ASSERT(p);
+    return p;
 }
 
 QStringList allBuildDirs(KDevelop::IProject* project)

@@ -22,7 +22,6 @@
 #define IMAKEBUILDER_H
 
 #include <project/interfaces/iprojectbuilder.h>
-#include <interfaces/iextension.h>
 
 class IProject;
 class ProjectItem;
@@ -43,7 +42,6 @@ signals:
     void makeTargetBuilt( KDevelop::ProjectBaseItem* item, const QString& targetname );
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
 Q_DECLARE_INTERFACE( IMakeBuilder, "org.kdevelop.IMakeBuilder" )
 
 #endif

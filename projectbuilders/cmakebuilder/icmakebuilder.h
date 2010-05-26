@@ -20,7 +20,6 @@
 #define ICMAKEBUILDER_H
 
 #include <project/interfaces/iprojectbuilder.h>
-#include <interfaces/iextension.h>
 
 /**
 @author Andreas Pakulat
@@ -34,7 +33,6 @@ public:
 
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( ICMakeBuilder, "org.kdevelop.ICMakeBuilder" )
 Q_DECLARE_INTERFACE( ICMakeBuilder, "org.kdevelop.ICMakeBuilder" )
 
 #endif
