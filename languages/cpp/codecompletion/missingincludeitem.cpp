@@ -182,7 +182,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
   AbstractType::Ptr type = TypeUtils::targetType(expressionResult.type.abstractType(), context->topContext());
   
   //Collect all visible "using namespace" imports
-  QList<Declaration*> imports = context->findDeclarations( globalImportIdentifier );
+  QList<Declaration*> imports = context->findDeclarations( globalImportIdentifier() );
   QSet<QualifiedIdentifier> prefixes;
   prefixes.insert(QualifiedIdentifier());
   foreach(Declaration* importDecl, imports) {

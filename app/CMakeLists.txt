@@ -2,18 +2,15 @@
 
 find_package(SharedMimeInfo REQUIRED)
 
-set(kdevelop_SRCS main.cpp)
+set(kdevelop_SRCS main.cpp kdevideextension.cpp)
 kde4_add_app_icon(kdevelop_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
 kde4_add_executable(kdevelop ${kdevelop_SRCS} )
 
-set(kdevelop_bin_SRCS
-    main_internal.cpp
-    kdevideextension.cpp
-)
-
 target_link_libraries(kdevelop
     ${KDE4_KDECORE_LIBS}
+    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    ${KDEVPLATFORM_SHELL_LIBRARIES}
     ${KDE4_KIO_LIBS}
     ${KDE4_KUTILS_LIBS}
     ${KDE4_KPARTS_LIBS}
@@ -25,8 +22,6 @@ install(TARGETS kdevelop ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 kde4_add_app_icon(kdevelop_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../pics/hi*-app-kdevelop.png")
 
-kde4_add_executable(kdevelop.bin ${kdevelop_bin_SRCS})
-
 if (Q_WS_MAC)
 	#sets MacOSX bundle properties for all targets in this cmake file
 	#make those assignments target-dependent when cmake 2.6 is useful on MacOSX
@@ -34,19 +29,6 @@ if (Q_WS_MAC)
 	set(MACOSX_BUNDLE_BUNDLE_VERSION "4.0")
 	set(MACOSX_BUNDLE_COPYRIGHT "KDevelop Team")
 endif (Q_WS_MAC)
-
-target_link_libraries(kdevelop.bin
-	${KDE4_KDECORE_LIBS}
-	${KDEVPLATFORM_INTERFACES_LIBRARIES}
-	${KDEVPLATFORM_SHELL_LIBRARIES}
-	${KDE4_KIO_LIBS}
-	${KDE4_KUTILS_LIBS}
-	${KDE4_KPARTS_LIBS}
-	${KDE4_KNOTIFYCONFIG_LIBS}
-	${KDE4_KTEXTEDITOR_LIBS}
-	${KDE4_THREADWEAVER_LIBRARIES}
-	${QT_QTDESIGNER_LIBRARY} )
-install(TARGETS kdevelop.bin ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 ########### install files ###############

@@ -1601,7 +1601,7 @@ void CodeCompletionContext::standardAccessCompletionItems(QList<CompletionTreeIt
 
   if(m_duContext) {
     //Collect the Declarations from all "using namespace" imported contexts
-    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier, m_position, 0, DUContext::NoFiltering );
+    QList<Declaration*> imports = m_duContext->findDeclarations( globalImportIdentifier(), m_position, 0, DUContext::NoFiltering );
 
     QSet<QualifiedIdentifier> ids;
     foreach(Declaration* importDecl, imports) {
