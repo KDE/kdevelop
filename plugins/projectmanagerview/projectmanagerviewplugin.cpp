@@ -21,6 +21,7 @@
 
 #include <QtCore/QList>
 #include <QtGui/QInputDialog>
+#include <QtGui/QApplication>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -459,10 +460,18 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         if ( item->folder() || item->file() ) {
-            if ( item->folder() ) {
-                item->project()->projectFileManager()->removeFolder(item->folder());
-            } else {
-                item->project()->projectFileManager()->removeFile(item->file());
+
+            QWidget* window(QApplication::activeWindow());
+            int q=KMessageBox::questionYesNo(window,
+                item->folder() ? i18n("Do you really want to remove the directory <i>%1</i>?", item->folder()->url().pathOrUrl())
+                        : i18n("Do you really to remove the file <i>%1</i>?", item->file()->url().pathOrUrl()));
+            if(q==KMessageBox::Yes)
+            {
+                if ( item->folder() ) {
+                    item->project()->projectFileManager()->removeFolder(item->folder());
+                } else {
+                    item->project()->projectFileManager()->removeFile(item->file());
+                }
             }
         }
     }
