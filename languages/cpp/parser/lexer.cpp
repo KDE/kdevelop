@@ -222,6 +222,9 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   return ret;
 }
 
+//A very simple lookup table: First level contains all pairs grouped by with (index % index_size), then there is a simple list
+KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > indicesForTokens = createIndicesForTokens();
+
 scan_fun_ptr Lexer::s_scan_table[256];
 bool Lexer::s_initialized = false;
 
@@ -490,9 +493,6 @@ void Lexer::scan_identifier_or_keyword()
   }
   
   uint bucket = (*cursor.current) % index_size;
-
-  //A very simple lookup table: First level contains all pairs grouped by with (index % index_size), then there is a simple list
-  static const KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size > indicesForTokens = createIndicesForTokens();
   for(int a = 0; a < indicesForTokens[bucket].size(); ++a) {
     if(indicesForTokens[bucket][a].first == *cursor.current) {
       (*session->token_stream)[index++].kind = indicesForTokens[bucket][a].second;

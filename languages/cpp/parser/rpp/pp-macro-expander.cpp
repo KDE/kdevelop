@@ -183,6 +183,13 @@ class MacroHider {
     Environment* m_environment;
 };
 
+
+IndexedString definedIndex = IndexedString("defined");
+IndexedString lineIndex = IndexedString("__LINE__");
+IndexedString fileIndex = IndexedString("__FILE__");
+IndexedString dateIndex = IndexedString("__DATE__");
+IndexedString timeIndex= IndexedString("__TIME__");
+
 void pp_macro_expander::operator()(Stream& input, Stream& output)
 {
   skip_blanks(input, output);
@@ -368,14 +375,8 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         
         if (!macro || !macro->defined || macro->hidden || macro->function_like || m_engine->hideNextMacro())
         {
-          static const IndexedString definedIndex = IndexedString("defined");
           m_engine->setHideNextMacro(name == definedIndex);
 
-
-        static const IndexedString lineIndex = IndexedString("__LINE__");
-        static const IndexedString fileIndex = IndexedString("__FILE__");
-        static const IndexedString dateIndex = IndexedString("__DATE__");
-        static const IndexedString timeIndex = IndexedString("__TIME__");
           if (name == lineIndex)
             output.appendString(inputPosition, convertFromByteArray(QString::number(input.inputPosition().line).toUtf8()));
           else if (name == fileIndex)

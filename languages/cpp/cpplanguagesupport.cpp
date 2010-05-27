@@ -162,12 +162,12 @@ CppLanguageSupport::CppLanguageSupport( QObject* parent, const QVariantList& /*a
     m_highlights = new CppHighlighting( this );
     m_cc = new KDevelop::CodeCompletion( this, new Cpp::CodeCompletionModel(0), name() );
     m_missingIncludeCompletion = new KDevelop::CodeCompletion( this, new Cpp::MissingIncludeCompletionModel(0), name() );
-
-    Cpp::EnvironmentManager::init();
-    Cpp::EnvironmentManager::self()->setSimplifiedMatching(true);
-    Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Disabled);
-//     Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Naive);
-//     Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Full);
+    
+    Cpp::EnvironmentManager::setSimplifiedMatching(true);
+    
+    Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Disabled);
+//     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Naive);
+//     Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Full);
 
     m_includeResolver = new CppTools::IncludePathResolver;
 
@@ -412,7 +412,7 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
   DUChainReadLocker lock(DUChain::lock());
   const ParsingEnvironment* env = PreprocessJob::standardEnvironment();
   KDevelop::TopDUContext* top;
-  top = KDevelop::DUChain::self()->chainForDocument(url, env, Cpp::EnvironmentManager::self()->isSimplifiedMatching());
+  top = KDevelop::DUChain::self()->chainForDocument(url, env, Cpp::EnvironmentManager::isSimplifiedMatching());
 
   if( !top ) {
     //kDebug(9007) << "Could not find perfectly matching version of " << url << " for completion";

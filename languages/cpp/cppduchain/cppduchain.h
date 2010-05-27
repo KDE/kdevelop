@@ -49,9 +49,9 @@ namespace KDevelop {
 namespace Cpp {
   class EnvironmentFile;
   
-KDEVCPPDUCHAIN_EXPORT const KDevelop::IndexedIdentifier& castIdentifier();
+KDEVCPPDUCHAIN_EXPORT extern KDevelop::IndexedIdentifier castIdentifier;
 
-KDEVCPPDUCHAIN_EXPORT const KDevelop::IndexedIdentifier& unnamedNamespaceIdentifier();
+KDEVCPPDUCHAIN_EXPORT extern KDevelop::IndexedIdentifier unnamedNamespaceIdentifier;
   
 /**
  * Searches context, and if the identifier is not found there, in its base-classes, as it should be in c++(Only if it's a class context).

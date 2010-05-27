@@ -89,7 +89,6 @@ void TestCppCodeCompletion::initTestCase()
   KDevelop::AutoTestShell::init();
   TestCore* core = new KDevelop::TestCore();
   core->initialize(KDevelop::Core::NoUi);
-  Cpp::EnvironmentManager::init();
 
   DUChain::self()->disablePersistentStorage();
   typeInt = AbstractType::Ptr(new IntegralType(IntegralType::TypeInt));
@@ -961,10 +960,10 @@ void TestCppCodeCompletion::testUnnamedNamespace() {
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("b")));
   QVERIFY(findDeclaration(top, QualifiedIdentifier("a"))->uses().size());
-  PersistentSymbolTable::FilteredDeclarationIterator decls = KDevelop::PersistentSymbolTable::self().getFilteredDeclarations(QualifiedIdentifier(Cpp::unnamedNamespaceIdentifier().identifier()), top->recursiveImportIndices());
+  PersistentSymbolTable::FilteredDeclarationIterator decls = KDevelop::PersistentSymbolTable::self().getFilteredDeclarations(QualifiedIdentifier(Cpp::unnamedNamespaceIdentifier.identifier()), top->recursiveImportIndices());
   QVERIFY(decls);
-  QCOMPARE(top->findLocalDeclarations(Cpp::unnamedNamespaceIdentifier().identifier()).size(), 2);
-  QCOMPARE(top->findDeclarations(QualifiedIdentifier(Cpp::unnamedNamespaceIdentifier().identifier())).size(), 2);
+  QCOMPARE(top->findLocalDeclarations(Cpp::unnamedNamespaceIdentifier.identifier()).size(), 2);
+  QCOMPARE(top->findDeclarations(QualifiedIdentifier(Cpp::unnamedNamespaceIdentifier.identifier())).size(), 2);
 
 //   lock.unlock();
   {
@@ -1690,7 +1689,7 @@ void TestCppCodeCompletion::testFileMacro()
 
 void TestCppCodeCompletion::testNaiveMatching() {
   return;
-    Cpp::EnvironmentManager::self()->setMatchingLevel(Cpp::EnvironmentManager::Naive);
+    Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::Naive);
     {
       addInclude("recursive_test_1.h", "#include \"recursive_test_2.h\"\nint i1;\n");
       addInclude("recursive_test_2.h", "#include \"recursive_test_1.h\"\nint i2;\n");

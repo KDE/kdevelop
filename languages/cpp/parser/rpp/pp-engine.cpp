@@ -100,19 +100,19 @@ void pp::processFileInternal(const QString& fileName, const QByteArray& fileCont
     result.squeeze();
 }
 
+uint ifDirective = KDevelop::IndexedString("if").index();
+uint elseDirective = KDevelop::IndexedString("else").index();
+uint elifDirective = KDevelop::IndexedString("elif").index();
+uint ifdefDirective = KDevelop::IndexedString("ifdef").index();
+uint undefDirective = KDevelop::IndexedString("undef").index();
+uint endifDirective = KDevelop::IndexedString("endif").index();
+uint ifndefDirective = KDevelop::IndexedString("ifndef").index();
+uint defineDirective = KDevelop::IndexedString("define").index();
+uint includeDirective = KDevelop::IndexedString("include").index();
+uint includeNextDirective = KDevelop::IndexedString("include_next").index();
+
 void pp::handle_directive(uint directive, Stream& input, Stream& output)
 {
-  static const uint ifDirective = KDevelop::IndexedString("if").index();
-  static const uint elseDirective = KDevelop::IndexedString("else").index();
-  static const uint elifDirective = KDevelop::IndexedString("elif").index();
-  static const uint ifdefDirective = KDevelop::IndexedString("ifdef").index();
-  static const uint undefDirective = KDevelop::IndexedString("undef").index();
-  static const uint endifDirective = KDevelop::IndexedString("endif").index();
-  static const uint ifndefDirective = KDevelop::IndexedString("ifndef").index();
-  static const uint defineDirective = KDevelop::IndexedString("define").index();
-  static const uint includeDirective = KDevelop::IndexedString("include").index();
-  static const uint includeNextDirective = KDevelop::IndexedString("include_next").index();
-
   skip_blanks (input, output);
   if(!(directive == ifndefDirective)) {
     hadGuardCandidate = true; //Too late, the guard must be the first directive
@@ -987,6 +987,8 @@ void pp::handle_undef(Stream& input)
   m_environment->setMacro(macro);
 }
 
+KDevelop::IndexedString definedText("defined");
+
 int pp::next_token (Stream& input)
 {
   if (haveNextToken)
@@ -1103,7 +1105,6 @@ int pp::next_token (Stream& input)
       if (isLetter(ch) || ch == '_' || !isCharacter(input.current()))
       {
         token_text = KDevelop::IndexedString::fromIndex( skip_identifier (input) );
-        static const KDevelop::IndexedString definedText("defined");
         if (token_text == definedText)
           nextToken = TOKEN_DEFINED;
         else

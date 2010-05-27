@@ -3,10 +3,6 @@
 #include <language/duchain/repositories/itemrepository.h>
 #include <stdlib.h>
 #include <time.h>
-
-#include <tests/testcore.h>
-#include <tests/autotestshell.h>
-
 struct TestItem {
   TestItem(uint hash, uint dataSize) : m_hash(hash), m_dataSize(dataSize) {
   }
@@ -92,11 +88,7 @@ TestItem* createItem(uint id, uint size) {
 class TestItemRepository : public QObject {
   Q_OBJECT
   private slots:
-    void initTestCase() {
-      KDevelop::AutoTestShell::init();
-      KDevelop::TestCore* core = new KDevelop::TestCore();
-      core->initialize(KDevelop::Core::NoUi);
-    }
+    
     void testItemRepository() {
       KDevelop::ItemRepository<TestItem, TestItemRequest> repository("TestItemRepository");
       uint itemId = 0;

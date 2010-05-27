@@ -324,36 +324,16 @@ typedef KSharedPtr<EnvironmentFile>  EnvironmentFilePointer;
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
   public:
-    static EnvironmentManager* self()
-    {
-      Q_ASSERT_X(m_self, "EnvironmentManager::self()", "call EnvironmentManager::init() before ::self()");
-      return m_self;
-    }
-    /**
-     * Initialize the static EnvironmentManager
-     */
-    static void init();
-
-    MacroDataRepository& macroDataRepository()
-    {
-      return m_macroDataRepository;
-    }
+    
+    static MacroDataRepository macroDataRepository;
     //Set-repository that contains the string-sets
-    Utils::StringSetRepository& stringSetRepository()
-    {
-      return m_stringSetRepository;
-    }
+    static Utils::StringSetRepository stringSetRepository;
     //Set-repository that contains the macro-sets
-    MacroSetRepository& macroSetRepository()
-    {
-      return m_macroSetRepository;
-    }
-
+    static MacroSetRepository macroSetRepository;
+        
     ///See the comment about simplified matching at the top
-    void setSimplifiedMatching(bool simplified);
-    bool isSimplifiedMatching() const {
-      return m_simplifiedMatching;
-    }
+    static void setSimplifiedMatching(bool simplified);
+    static bool isSimplifiedMatching();
     
     enum MatchingLevel {
       IgnoreGuardsForImporting = 1,
@@ -363,26 +343,15 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
       Full = 1 << 7
     };
     
-    bool ignoreGuardsForImporting() const {
+    static bool ignoreGuardsForImporting() {
       return matchingLevel() & IgnoreGuardsForImporting;
     }
     
-    void setMatchingLevel(MatchingLevel level);
-    MatchingLevel matchingLevel() const {
-      return m_matchingLevel;
-    }
-
-  private:
-    EnvironmentManager();
-    static EnvironmentManager* m_self;
-    MatchingLevel m_matchingLevel;
-    bool m_simplifiedMatching;
-    //Repository that contains the actual macros, and maps them to indices
-    MacroDataRepository m_macroDataRepository;
-    //Set-repository that contains the string-sets
-    Utils::StringSetRepository m_stringSetRepository;
-    //Set-repository that contains the macro-sets
-    MacroSetRepository m_macroSetRepository;
+    static void setMatchingLevel(MatchingLevel level);
+    static MatchingLevel matchingLevel();
+    
+    static bool m_simplifiedMatching;
+    static MatchingLevel m_matchingLevel;
 };
 
 }

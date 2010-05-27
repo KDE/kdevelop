@@ -22,8 +22,6 @@
 #include <rpp/chartools.h>
 #include <rpp/pp-engine.h>
 
-#include <tests/autotestshell.h>
-#include <tests/testcore.h>
 
 bool hasKind(AST*, AST::NODE_KIND);
 AST* getAST(AST*, AST::NODE_KIND, int num = 0);
@@ -44,9 +42,6 @@ private slots:
 
   void initTestCase()
   {
-    KDevelop::AutoTestShell::init();
-    KDevelop::TestCore* core = new KDevelop::TestCore();
-    core->initialize(KDevelop::Core::NoUi);
   }
 
   void testSymbolTable()

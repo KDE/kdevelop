@@ -1594,7 +1594,7 @@ void CodeCompletionContext::standardAccessCompletionItems(QList<CompletionTreeIt
   QList<DeclarationDepthPair> decls = m_duContext->allDeclarations(m_duContext->type() == DUContext::Class ? m_duContext->range().end : m_position, m_duContext->topContext());
 
   //Collect the contents of unnamed namespaces
-  QList<Declaration*> unnamed = m_duContext->findDeclarations(QualifiedIdentifier(unnamedNamespaceIdentifier().identifier()), m_position);
+  QList<Declaration*> unnamed = m_duContext->findDeclarations(QualifiedIdentifier(unnamedNamespaceIdentifier.identifier()), m_position);
   foreach(Declaration* ns, unnamed)
     if(ns->kind() == Declaration::Namespace && ns->internalContext())
       decls += ns->internalContext()->allDeclarations(m_position, m_duContext->topContext(), false);
@@ -1734,7 +1734,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
   if(decl->indexedIdentifier().isEmpty()) //Filter out nameless declarations
     return false;
   
-  if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier())
+  if(decl->indexedIdentifier() == friendIdentifier || decl->indexedIdentifier() == Cpp::unnamedNamespaceIdentifier)
     return false;
   
   if(excludeReservedIdentifiers)

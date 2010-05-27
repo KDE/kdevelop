@@ -402,7 +402,7 @@ void CPPInternalParseJob::initialize() {
 /*    if(!contentContext)
       contentContext = ContextBuilder::createEmptyTopContext(parentJob()->document());
 
-    if(!proxyContext && Cpp::EnvironmentManager::self()->isSimplifiedMatching())
+    if(!proxyContext && Cpp::EnvironmentManager::isSimplifiedMatching())
       proxyContext = ContextBuilder::createEmptyTopContext(parentJob()->document());*/
 }
 
@@ -653,7 +653,7 @@ void CPPInternalParseJob::run()
 
       if(!doNotChangeDUChain) {
 
-        if(Cpp::EnvironmentManager::self()->matchingLevel() == Cpp::EnvironmentManager::Disabled) {
+        if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
             DUChainWriteLocker lock(DUChain::lock());
             if(contentContext)
               contentContext->clearImportedParentContexts();
@@ -818,7 +818,7 @@ void CPPInternalParseJob::run()
 
     if( proxyEnvironmentFile ) {
         ContextBuilder builder(parentJob()->parseSession().data());
-        if(Cpp::EnvironmentManager::self()->matchingLevel() == Cpp::EnvironmentManager::Disabled) {
+        if(Cpp::EnvironmentManager::matchingLevel() == Cpp::EnvironmentManager::Disabled) {
             DUChainWriteLocker lock(DUChain::lock());
             if(updatingProxyContext)
               updatingProxyContext->clearImportedParentContexts();

@@ -20,9 +20,6 @@
 #include <rpp/chartools.h>
 #include <rpp/pp-engine.h>
 
-#include <tests/autotestshell.h>
-#include <tests/testcore.h>
-
 bool operator==(const Token& t1, const Token& t2)
 {
   return t1.kind == t2.kind && t1.symbolString() == t2.symbolString();
@@ -77,9 +74,6 @@ public:
 private slots:
   void initTestCase()
   {
-    KDevelop::AutoTestShell::init();
-    KDevelop::TestCore* core = new KDevelop::TestCore();
-    core->initialize(KDevelop::Core::NoUi);
   }
 
   void testIf()

@@ -44,9 +44,6 @@
 #include "expressionparser.h"
 #include <language/duchain/classfunctiondeclaration.h>
 
-#include <tests/autotestshell.h>
-#include <tests/testcore.h>
-
 #include <typeinfo>
 
 using namespace KTextEditor;
@@ -141,11 +138,6 @@ TestExpressionParser::TestExpressionParser()
 
 void TestExpressionParser::initTestCase()
 {
-  AutoTestShell::init();
-  TestCore* core = new TestCore();
-  core->initialize(KDevelop::Core::NoUi);
-  EnvironmentManager::init();
-
   DUChain::self()->disablePersistentStorage();
 }
 
