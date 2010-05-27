@@ -36,8 +36,8 @@ bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, con
 {
     QWidget* window(QApplication::activeWindow());
     int q=KMessageBox::questionYesNo(window,
-        isFolder ? i18n("Do you want to remove the directory <i>%1</i> from the filesystem too?", url.pathOrUrl())
-                 : i18n("Do you want to remove the file <i>%1</i> from the filesystem too?", url.pathOrUrl()));
+        isFolder ? i18n("Do you really want to remove the directory <i>%1</i>?", url.pathOrUrl())
+                 : i18n("Do you really to remove the file <i>%1</i>?", url.pathOrUrl()));
     if(q==KMessageBox::Yes)
     {
         IPlugin* vcsplugin=project->versionControlPlugin();
