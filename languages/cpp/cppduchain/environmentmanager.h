@@ -324,16 +324,36 @@ typedef KSharedPtr<EnvironmentFile>  EnvironmentFilePointer;
 
 class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
   public:
-    
-    static MacroDataRepository macroDataRepository;
+    static EnvironmentManager* self()
+    {
+      Q_ASSERT_X(m_self, "EnvironmentManager::self()", "call EnvironmentManager::init() before ::self()");
+      return m_self;
+    }
+    /**
+     * Initialize the static EnvironmentManager
+     */
+    static void init();
+
+    MacroDataRepository& macroDataRepository()
+    {
+      return m_macroDataRepository;
+    }
     //Set-repository that contains the string-sets
-    static Utils::StringSetRepository stringSetRepository;
+    Utils::StringSetRepository& stringSetRepository()
+    {
+      return m_stringSetRepository;
+    }
     //Set-repository that contains the macro-sets
-    static MacroSetRepository macroSetRepository;
-        
+    MacroSetRepository& macroSetRepository()
+    {
+      return m_macroSetRepository;
+    }
+
     ///See the comment about simplified matching at the top
-    static void setSimplifiedMatching(bool simplified);
-    static bool isSimplifiedMatching();
+    void setSimplifiedMatching(bool simplified);
+    bool isSimplifiedMatching() const {
+      return m_simplifiedMatching;
+    }
     
     enum MatchingLevel {
       IgnoreGuardsForImporting = 1,
@@ -343,15 +363,26 @@ class KDEVCPPDUCHAIN_EXPORT EnvironmentManager {
       Full = 1 << 7
     };
     
-    static bool ignoreGuardsForImporting() {
+    bool ignoreGuardsForImporting() const {
       return matchingLevel() & IgnoreGuardsForImporting;
     }
     
-    static void setMatchingLevel(MatchingLevel level);
-    static MatchingLevel matchingLevel();
-    
-    static bool m_simplifiedMatching;
-    static MatchingLevel m_matchingLevel;
+    void setMatchingLevel(MatchingLevel level);
+    MatchingLevel matchingLevel() const {
+      return m_matchingLevel;
+    }
+
+  private:
+    EnvironmentManager();
+    static EnvironmentManager* m_self;
+    MatchingLevel m_matchingLevel;
+    bool m_simplifiedMatching;
+    //Repository that contains the actual macros, and maps them to indices
+    MacroDataRepository m_macroDataRepository;
+    //Set-repository that contains the string-sets
+    Utils::StringSetRepository m_stringSetRepository;
+    //Set-repository that contains the macro-sets
+    MacroSetRepository m_macroSetRepository;
 };
 
 }

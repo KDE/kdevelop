@@ -60,6 +60,9 @@
 #include <language/duchain/codemodel.h>
 #include <language/codegen/coderepresentation.h>
 
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
 #include "tokens.h"
 #include "parsesession.h"
 #include "astutilities.h"
@@ -201,6 +204,11 @@ TestDUChain::TestDUChain()
 void TestDUChain::initTestCase()
 {
   noDef = 0;
+
+  AutoTestShell::init();
+  TestCore* core = new TestCore();
+  core->initialize(KDevelop::Core::NoUi);
+  EnvironmentManager::init();
 
   DUChain::self()->disablePersistentStorage();
   KDevelop::CodeRepresentation::setDiskChangesForbidden(true);

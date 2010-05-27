@@ -9,7 +9,7 @@ set(parsertest_SRCS test_parser.cpp)
 
 
 kde4_add_unit_test(parsertest ${parsertest_SRCS})
-target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdev4cpprpp kdev4cppparser)
+target_link_libraries(parsertest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} kdev4cpprpp kdev4cppparser)
 
 
 ########### next target ###############
@@ -18,7 +18,7 @@ set(generatortest_SRCS test_generator.cpp)
 
 
 kde4_add_unit_test(generatortest ${generatortest_SRCS})
-target_link_libraries(generatortest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} kdev4cpprpp kdev4cppparser)
+target_link_libraries(generatortest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTTEST_LIBRARY} ${KDEVPLATFORM_TESTS_LIBRARIES} kdev4cpprpp kdev4cppparser)
 
 
 ########### next target ###############

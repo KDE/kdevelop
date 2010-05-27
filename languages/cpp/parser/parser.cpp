@@ -260,8 +260,6 @@ Parser::TokenMarkers Parser::tokenMarkers(uint tokenNumber) const
     return None;
 }
 
-KDevelop::IndexedString declSpecString("__declspec");
-
 bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
 {
   if (session->token_stream->lookAhead() != Token_identifier)
@@ -270,6 +268,7 @@ bool Parser::parseWinDeclSpec(WinDeclSpecAST *&node)
   uint start = session->token_stream->cursor();
 
   KDevelop::IndexedString name = session->token_stream->token(session->token_stream->cursor()).symbol();
+  static const KDevelop::IndexedString declSpecString("__declspec");
   if (name != declSpecString)
     return false;
   uint specifier = session->token_stream->cursor();
