@@ -87,10 +87,11 @@ struct IncludePathListItem {
 typedef AppendedListItemRequest<IncludePathListItem, 40*4> IncludePathsRequest;
 
 typedef KDevelop::ItemRepository<IncludePathListItem, IncludePathsRequest> IncludePathsRepository;
-IncludePathsRepository includePathsRepository("include path repository");
-
-bool Cpp::EnvironmentManager::m_simplifiedMatching = false;
-Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::m_matchingLevel = Cpp::EnvironmentManager::Full;
+IncludePathsRepository& includePathsRepository()
+{
+  static IncludePathsRepository repo("include path repository");
+  return repo;
+}
 
 //If DYNAMIC_DEBUGGING is defined, debugging can be started at any point in runtime,
 //by calling setIsDebugging(true) from within the debugger
@@ -120,31 +121,24 @@ using namespace Cpp;
 
 REGISTER_DUCHAIN_ITEM(EnvironmentFile);
 
-//Repository that contains the actual macros, and maps them to indices
-MacroDataRepository Cpp::EnvironmentManager::macroDataRepository("macro repository");
-//Set-repository that contains the string-sets
-Utils::StringSetRepository Cpp::EnvironmentManager::stringSetRepository("string sets");
-//Set-repository that contains the macro-sets
-MacroSetRepository Cpp::EnvironmentManager::macroSetRepository;
-
 namespace Cpp {
   Utils::BasicSetRepository* StaticStringSetRepository::repository() {
-    return &Cpp::EnvironmentManager::stringSetRepository;
+    return &Cpp::EnvironmentManager::self()->stringSetRepository();
   }
   Utils::BasicSetRepository* StaticMacroSetRepository::repository() {
-    return &Cpp::EnvironmentManager::macroSetRepository;
+    return &Cpp::EnvironmentManager::self()->macroSetRepository();
   }
   void MacroSetRepository::itemRemovedFromSets(uint index) {
-    Cpp::EnvironmentManager::macroDataRepository.deleteItem(index);
+    Cpp::EnvironmentManager::self()->macroDataRepository().deleteItem(index);
   }
 }
 
 const rpp::pp_macro& Cpp::MacroIndexConversion::toItem(uint index) const {
-  return *EnvironmentManager::macroDataRepository.itemFromIndex( index );
+  return *EnvironmentManager::self()->macroDataRepository().itemFromIndex( index );
 }
 
 uint Cpp::MacroIndexConversion::toIndex(const rpp::pp_macro& macro) const {
-  return EnvironmentManager::macroDataRepository.index( MacroRepositoryItemRequest(macro) );
+  return EnvironmentManager::self()->macroDataRepository().index( MacroRepositoryItemRequest(macro) );
 }
 
 //For debugging
@@ -182,20 +176,27 @@ QString print(const Cpp::ReferenceCountedMacroSet& set) {
   return ret;
 }
 
-void EnvironmentManager::setSimplifiedMatching(bool simplified) {
-  m_simplifiedMatching = simplified;
+EnvironmentManager* EnvironmentManager::m_self = 0;
+
+EnvironmentManager::EnvironmentManager()
+  : m_simplifiedMatching(false), m_matchingLevel(Full),
+    m_macroDataRepository("macro repository"), m_stringSetRepository("string sets"), m_macroSetRepository()
+{
 }
 
-Cpp::EnvironmentManager::MatchingLevel Cpp::EnvironmentManager::matchingLevel() {
-  return m_matchingLevel;
+void EnvironmentManager::init()
+{
+  Q_ASSERT_X(!m_self, "EnvironmentManager::init()", "do not call init() twice");
+  m_self = new EnvironmentManager();
+}
+
+void EnvironmentManager::setSimplifiedMatching(bool simplified)
+{
+  m_simplifiedMatching = simplified;
 }
 
 void Cpp::EnvironmentManager::setMatchingLevel(Cpp::EnvironmentManager::MatchingLevel level) {
   m_matchingLevel = level;
-}
-
-bool EnvironmentManager::isSimplifiedMatching() {
-  return m_simplifiedMatching;
 }
 
 bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) const {
@@ -211,12 +212,12 @@ bool EnvironmentFile::matchEnvironment(const ParsingEnvironment* _environment) c
     return false;
   }
   
-  if(EnvironmentManager::matchingLevel() == EnvironmentManager::Disabled)
+  if(EnvironmentManager::self()->matchingLevel() == EnvironmentManager::Disabled)
     return true;
   
   //Consider files that are out-guarded by the header-guard as a match, without looking into their content
   ///@todo Pick the version that is already in the environment if there is multiple
-  if(EnvironmentManager::matchingLevel() == EnvironmentManager::Naive)
+  if(EnvironmentManager::self()->matchingLevel() == EnvironmentManager::Naive)
     if(cppEnvironment->macroNameSet().contains(headerGuard())) {
 #ifdef DEBUG_LEXERCACHE
       kDebug( 9007 ) << "file" << url().str() << "environment contains the header-guard, returning true";
@@ -286,7 +287,7 @@ bool EnvironmentFile::needsUpdate(const ParsingEnvironment* environment) const {
   
   //When in naive matching mode, we even use the non-guarded version when inappropriate. We must make sure not to update it in such
   //a situation, else it will end up empty
-  if(cppEnvironment && EnvironmentManager::matchingLevel() <= EnvironmentManager::Naive && !headerGuard().isEmpty() && cppEnvironment->macroNameSet().contains(headerGuard()))
+  if(cppEnvironment && EnvironmentManager::self()->matchingLevel() <= EnvironmentManager::Naive && !headerGuard().isEmpty() && cppEnvironment->macroNameSet().contains(headerGuard()))
     return false;
   
   return ParsingEnvironmentFile::needsUpdate(environment) || d_func()->m_includePathDependencies.needsUpdate();
@@ -413,7 +414,7 @@ const QList<IndexedString> EnvironmentFile::includePaths() const {
   ENSURE_READ_LOCKED
   QList<IndexedString> ret;
   if(d_func()->m_includePaths) {
-    const IncludePathListItem* item = includePathsRepository.itemFromIndex(d_func()->m_includePaths);
+    const IncludePathListItem* item = includePathsRepository().itemFromIndex(d_func()->m_includePaths);
     
     FOREACH_FUNCTION(const IndexedString& include, item->m_includePaths)
       ret << include;
@@ -424,21 +425,21 @@ const QList<IndexedString> EnvironmentFile::includePaths() const {
 void EnvironmentFile::setIncludePaths( const QList<IndexedString>& paths ) {
   ENSURE_WRITE_LOCKED
   
-  QMutexLocker lock(includePathsRepository.mutex());
+  QMutexLocker lock(includePathsRepository().mutex());
   
   if(d_func()->m_includePaths) {
-    KDevelop::DynamicItem<IncludePathListItem, true> item = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
+    KDevelop::DynamicItem<IncludePathListItem, true> item = includePathsRepository().dynamicItemFromIndex(d_func()->m_includePaths);
     --item->m_refCount;
     if(!item->m_refCount)
-      includePathsRepository.deleteItem(d_func()->m_includePaths);
+      includePathsRepository().deleteItem(d_func()->m_includePaths);
     d_func_dynamic()->m_includePaths = 0;
   }
   if(!paths.isEmpty()) {
     IncludePathListItem item;
     foreach(const IndexedString &include, paths)
       item.m_includePathsList().append(include);
-    d_func_dynamic()->m_includePaths = includePathsRepository.index(item);
-    KDevelop::DynamicItem<IncludePathListItem, true> gotItem = includePathsRepository.dynamicItemFromIndex(d_func()->m_includePaths);
+    d_func_dynamic()->m_includePaths = includePathsRepository().index(item);
+    KDevelop::DynamicItem<IncludePathListItem, true> gotItem = includePathsRepository().dynamicItemFromIndex(d_func()->m_includePaths);
     ++gotItem->m_refCount;
   }
 }

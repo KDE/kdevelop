@@ -107,7 +107,7 @@ void PreprocessJob::foundHeaderGuard(rpp::Stream& stream, KDevelop::IndexedStrin
   m_currentEnvironment->environmentFile()->setHeaderGuard(guardName);
   
   //In naive matching mode, we ignore the dependence on header-guards
-  if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive)
+  if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive)
     m_currentEnvironment->removeString(guardName);
 }
 
@@ -134,7 +134,7 @@ void PreprocessJob::run()
     {
       KDevelop::DUChainReadLocker readLock(KDevelop::DUChain::lock());
       
-      if(Cpp::EnvironmentManager::isSimplifiedMatching()) {
+      if(Cpp::EnvironmentManager::self()->isSimplifiedMatching()) {
         //Make sure that proxy-contexts and content-contexts never have the same identity, even if they have the same content.
         m_firstEnvironmentFile->setIdentityOffset(1); //Mark the first environment-file as the proxy
         IndexedString u = parentJob()->document();
@@ -237,7 +237,7 @@ void PreprocessJob::run()
 
     PreprocessedContents result = preprocessor.processFile(parentJob()->document().str(), m_contents);
 
-    if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
+    if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
       if(macroNamesAtBeginning.contains(m_firstEnvironmentFile->headerGuard())) {
         //Remove the header-guard, and re-preprocess, since we don't do real environment-management(We don't allow empty versions)
         m_currentEnvironment->removeMacro(m_firstEnvironmentFile->headerGuard());
@@ -378,7 +378,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
             localPath.setFileName(QString());
             
             if(contentEnvironment->matchEnvironment(m_currentEnvironment) && !CppUtils::needsUpdate(contentEnvironment, localPath, parentJob()->includePathUrls()) && (!parentJob()->masterJob()->needUpdateEverything() || parentJob()->masterJob()->wasUpdated(content)) && (content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->minimumFeatures()) && content->parsingEnvironmentFile()->featuresSatisfied(parentJob()->slaveMinimumFeatures())) 
-              && Cpp::EnvironmentManager::matchingLevel() != Cpp::EnvironmentManager::Disabled) {
+              && Cpp::EnvironmentManager::self()->matchingLevel() != Cpp::EnvironmentManager::Disabled) {
               ///@todo We never keep the duchain while updating now in disabled environment matching mode.
               ///           We don't need it there, and changes in imports may be simply ignored when the keeping is enabled.
               ///           However when full environment management is enabled this is needed, as the same content may be shared for multiple proxy contexts.
@@ -483,7 +483,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
             includedContext = KDevelop::DUChain::self()->chainForDocument(includedFile, m_currentEnvironment, (bool)m_secondEnvironmentFile);
             
             //Check if the same file is being processed by one of the parents, and if it is, import it later on
-            if(Cpp::EnvironmentManager::matchingLevel() <= Cpp::EnvironmentManager::Naive) {
+            if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive) {
               
               CPPParseJob* job = parentJob();
               while(job->parentPreprocessor()) {
@@ -522,7 +522,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
                 
                 #if 0
                 //If header-guards should be ignored, unguard the file
-                if(Cpp::EnvironmentManager::ignoreGuardsForImporting() &&
+                if(Cpp::EnvironmentManager::self()->ignoreGuardsForImporting() &&
                   !includedEnvironment->headerGuard().isEmpty() && m_currentEnvironment->macroNameSet().contains(includedEnvironment->headerGuard()))
                 {
                   m_currentEnvironment->removeMacro(includedEnvironment->headerGuard());

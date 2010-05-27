@@ -1025,7 +1025,7 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
       range = editor()->findRange(ast->namespace_name, ast->namespace_name+1);
     }else
     {
-      id = unnamedNamespaceIdentifier.identifier();
+      id = unnamedNamespaceIdentifier().identifier();
       range.start = editor()->findPosition(ast->linkage_body ? ast->linkage_body->start_token : ast->start_token, KDevelop::EditorIntegrator::FrontEdge);
       range.end = range.start;
     }
