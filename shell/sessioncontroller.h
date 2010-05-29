@@ -105,58 +105,6 @@ private:
     class SessionControllerPrivate* const d;
 };
 
-inline QString SessionController::cfgSessionGroup() { return "Sessions"; }
-inline QString SessionController::cfgActiveSessionEntry() { return "Active Session ID"; }
-
-// Inline so it can be used without linking to shell, currently needed to
-// be able to fork a new process with KDEV_SESSION envvar set so duchain
-// can benefit from sessions
-
-inline QList< SessionInfo > SessionController::availableSessionInfo()
-{
-    QList< SessionInfo > available;
-
-    QDir sessiondir( SessionController::sessionDirectory() );
-    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
-    {
-        QUuid id( s );
-        if( id.isNull() )
-            continue;
-        // TODO: Refactor the code here and in session.cpp so its shared
-        SessionInfo si;
-        si.uuid = id;
-        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
-
-        QString desc = config->group( "" ).readEntry( "SessionName", "" );
-        si.name = desc;
-
-        si.projects = config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
-
-        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
-
-        if(!prettyContents.isEmpty())
-        {
-            if(!desc.isEmpty())
-                desc += ":  ";
-            desc += prettyContents;
-        }
-        si.description = desc;
-        available << si;
-    }
-    return available;
-}
-
-inline QString SessionController::sessionDirectory()
-{
-    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
-}
-
-inline bool SessionController::tryLockSession(QString id)
-{
-    KLockFile::Ptr lock(new KLockFile(sessionDirectory() + "/" + id + "/lock"));
-    return lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
-}
-
 }
 #endif
 
