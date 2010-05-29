@@ -412,7 +412,7 @@ void DebugController::updateDebuggerState(IDebugSession::DebuggerState state, ID
             //m_restartDebugger->setEnabled(false);
             break;
     }
-    if (state == IDebugSession::PausedState) {
+    if (state == IDebugSession::PausedState && ICore::self()->uiController()->activeMainWindow()) {
         ICore::self()->uiController()->activeMainWindow()->activateWindow();
     }
 }

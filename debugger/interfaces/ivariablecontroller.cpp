@@ -38,6 +38,7 @@ IVariableController::IVariableController(IDebugSession* parent)
 
 VariableCollection* IVariableController::variableCollection()
 {
+    if (!ICore::self()) return 0;
     return ICore::self()->debugController()->variableCollection();
 }
 
@@ -80,6 +81,8 @@ void IVariableController::updateIfFrameOrThreadChanged()
 
 void IVariableController::handleEvent(IDebugSession::event_t event)
 {
+    if (!variableCollection()) return;
+
     switch (event) {
     case IDebugSession::program_state_changed:
     case IDebugSession::thread_or_frame_changed:
