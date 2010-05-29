@@ -635,21 +635,18 @@ void SessionController::deleteSession( const QString& nameOrId )
 
 void SessionController::loadDefaultSession( const QString& session )
 {
-    Session* s = this->session( session );
-    if( s )
-    {
-        d->activateSession( s );
-        return;
-    }
-    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
-    QString load = grp.readEntry( cfgActiveSessionEntry(), "default" );
-
-    if( !this->session( load ) )
-    {
-        createSession( load );
+    QString load = session;
+    if (load.isEmpty()) {
+        KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+        load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     }
 
-    d->activateSession( this->session(load) );
+    Session* s = this->session( load );
+    if( !s )
+    {
+        s = createSession( load );
+    }
+    d->activateSession( s );
 }
 
 Session* SessionController::session( const QString& nameOrId ) const
