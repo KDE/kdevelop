@@ -170,7 +170,7 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     if(!sessionController->lockSession())
     {
         QString errmsg = i18n("This session (%1) is already active in another running instance",
-                              sessionController->activeSession() ? "null" : sessionController->activeSession()->id().toString() );
+                              sessionController->activeSession() ? sessionController->activeSession()->description() : "null" );
         if( mode & Core::NoUi ) {
             QTextStream qerr(stderr);
             qerr << endl << errmsg << endl;
