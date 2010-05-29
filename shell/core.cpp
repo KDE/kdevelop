@@ -162,10 +162,6 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
 
     kDebug() << "initializing ui controller";
     sessionController->initialize( session );
-    // Initialize the item repository as first thing after loading the session,
-    // TODO: Is this early enough, or should we put the loading of the session into
-    // the controller construct
-    globalItemRepositoryRegistry();
 
     if(!sessionController->lockSession())
     {
@@ -179,6 +175,10 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         }
         return false;
     }
+    // Initialize the item repository as first thing after loading the session,
+    // TODO: Is this early enough, or should we put the loading of the session into
+    // the controller construct
+    globalItemRepositoryRegistry();
     
     if(!(mode & Core::NoUi)) uiController->initialize();
     languageController->initialize();
