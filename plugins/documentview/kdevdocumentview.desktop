@@ -11,6 +11,7 @@ Comment[en_GB]=This plugin displays a graphical view of all documents currently 
 Comment[es]=Este complemento muestra una vista gráfica de todos los documentos cargados actualmente y los separa por su tipo MIME.
 Comment[et]=See plugin näitab graafiliselt kõiki laaditud dokumente ja eraldab need MIME tüübi alusel.
 Comment[fr]=Ce module externe affiche une vue graphique de tous les documents actuellement chargés et les sépare par type MIME.
+Comment[ga]=Taispeánann an breiseán seo amharc grafach ar gach cáipéis atá luchtaithe faoi láthair, agus dealaíonn sé iad de réir a gcineál MIME.
 Comment[gl]=Esta extensión mostra unha vista gráfica de todos os documentos agora cargados e sepáraos segundo o seu tipo mime.
 Comment[it]=Questa estensione mostra una vista grafica di tutti i documenti attualmente caricati e li separa per il tipo MIME.
 Comment[nb]=Dette programtillegget gir en grafisk visning av alle dokumenter som nå er lastet inn og skiller dem etter mimetype.
