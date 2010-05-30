@@ -28,7 +28,7 @@ class CMakeCompliance : public QObject
 {
     Q_OBJECT
     public:
-        CMakeCompliance() {}
+        CMakeCompliance();
         virtual ~CMakeCompliance() {}
         static void addOutput(const QString& msg);
 

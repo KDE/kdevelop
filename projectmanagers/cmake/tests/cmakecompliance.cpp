@@ -29,6 +29,7 @@
 #include <KStandardDirs>
 #include <cmakeparserutils.h>
 #include <language/duchain/duchain.h>
+#include <tests/autotestshell.h>
 
 using namespace KDevelop;
 
@@ -161,6 +162,11 @@ void CMakeCompliance::testCMakeTests_data()
 void CMakeCompliance::addOutput(const QString& msg)
 {
     output += "-- "+msg+'\n';
+}
+
+CMakeCompliance::CMakeCompliance() {
+    AutoTestShell::init();
+    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
 }
 
 #include "cmakecompliance.moc"

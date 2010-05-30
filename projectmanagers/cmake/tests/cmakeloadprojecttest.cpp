@@ -30,6 +30,7 @@
 #include "cmakeprojectvisitor.h"
 #include "cmakeast.h"
 #include <cmakeparserutils.h>
+#include <tests/autotestshell.h>
 
 QTEST_MAIN( CMakeLoadProjectTest )
 
@@ -37,6 +38,8 @@ using namespace KDevelop;
 
 CMakeLoadProjectTest::CMakeLoadProjectTest()
 {
+    AutoTestShell::init();
+    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
 }
 
 CMakeLoadProjectTest::~CMakeLoadProjectTest()

@@ -29,6 +29,7 @@
 #include <language/duchain/duchain.h>
 #include <cmakecondition.h>
 #include <cmakeparserutils.h>
+#include <tests/autotestshell.h>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
@@ -39,7 +40,10 @@ using namespace KDevelop;
 
 CMakeProjectVisitorTest::CMakeProjectVisitorTest()
  : CMakeProjectVisitor( QString(), 0)
-{}
+{
+    AutoTestShell::init();
+    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
+}
 
 void CMakeProjectVisitorTest::testVariables_data()
 {

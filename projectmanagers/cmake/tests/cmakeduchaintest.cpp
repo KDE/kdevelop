@@ -29,6 +29,7 @@
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/use.h>
 #include <language/duchain/indexedstring.h>
+#include <tests/autotestshell.h>
 
 using namespace KDevelop;
 
@@ -36,8 +37,9 @@ QTEST_MAIN( CMakeDUChainTest )
 
 Q_DECLARE_METATYPE(QList<SimpleRange>)
 
-CMakeDUChainTest::CMakeDUChainTest()
-{
+CMakeDUChainTest::CMakeDUChainTest() {
+    AutoTestShell::init();
+    KDevelop::Core::initialize(0, KDevelop::Core::NoUi);
 }
 
 CMakeDUChainTest::~CMakeDUChainTest()

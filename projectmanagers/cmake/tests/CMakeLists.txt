@@ -17,7 +17,7 @@ kde4_add_unit_test(cmake-parsertest cmakeparsertest.cpp)
 target_link_libraries( cmake-parsertest ${CMAKE_TEST_LIBRARIES})
 
 kde4_add_unit_test(cmakecompliance cmakecompliance.cpp)
-target_link_libraries( cmakecompliance ${CMAKE_TEST_LIBRARIES})
+target_link_libraries( cmakecompliance ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 kde4_add_unit_test(cmake-astfactorytest astfactorytest.cpp)
 target_link_libraries( cmake-astfactorytest ${CMAKE_TEST_LIBRARIES})
@@ -30,18 +30,18 @@ target_link_libraries( cmake-cmakecondition ${CMAKE_TEST_LIBRARIES}
     ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
   
 kde4_add_unit_test( cmakeduchaintest cmakeduchaintest.cpp)
-target_link_libraries( cmakeduchaintest ${CMAKE_TEST_LIBRARIES} 
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
+target_link_libraries( cmakeduchaintest ${CMAKE_TEST_LIBRARIES}
+${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 kde4_add_unit_test( cmakeprojectvisitortest cmake_cmakeprojectvisitor_test.cpp)
 target_link_libraries( cmakeprojectvisitortest ${CMAKE_TEST_LIBRARIES}
-    ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
+${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS}  ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 kde4_add_unit_test( cmakeparserutilstest cmakeparserutilstest.cpp)
 target_link_libraries( cmakeparserutilstest ${CMAKE_TEST_LIBRARIES} ${KDE4_KTEXTEDITOR_LIBS})
 
 kde4_add_unit_test( cmakeloadprojecttest cmakeloadprojecttest.cpp )
-target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
+target_link_libraries( cmakeloadprojecttest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
 
 kde4_add_unit_test( cmakemanagertest cmakemanagertest.cpp )
 target_link_libraries( cmakemanagertest ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
