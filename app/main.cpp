@@ -80,11 +80,6 @@ public:
 
 int main( int argc, char *argv[] )
 {
-    QList<QByteArray> argvOrig;  //We copy the original argv here, as it seems that KCmdLineArgs changes the arguments ("--style" becomes "-style")
-
-    for(int a = 0; a < argc; ++a)
-        argvOrig << argv[a];
-
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( "kdevelop", 0, ki18n( "KDevelop" ),
                           i18n("%1", QString(VERSION) ).toUtf8(), ki18n(description), KAboutData::License_GPL,
