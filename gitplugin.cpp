@@ -307,7 +307,7 @@ VcsJob* GitPlugin::commit(const QString& message,
         return job;
     }
     delete job;
-    return errorsFound(i18n("Commiting failed"), OutputJob::Verbose);
+    return errorsFound(i18n("Committing failed"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
