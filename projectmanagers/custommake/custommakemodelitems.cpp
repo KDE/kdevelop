@@ -15,7 +15,7 @@
 #include <interfaces/iproject.h>
 #include "custommakemanager.h"
 
-CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, QStandardItem *parent )
+CustomMakeTargetItem::CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, ProjectBaseItem*parent )
     : KDevelop::ProjectTargetItem( project, name, parent )
 {
 }
@@ -37,7 +37,7 @@ QList<QPair<QString, QString> > CustomMakeTargetItem::defines() const
 
 ///////////////////////////////////////////////////////////////
 
-CustomMakeFolderItem::CustomMakeFolderItem( CustomMakeManager* manager, KDevelop::IProject* project, const KUrl& url, QStandardItem *parent )
+CustomMakeFolderItem::CustomMakeFolderItem( CustomMakeManager* manager, KDevelop::IProject* project, const KUrl& url, ProjectBaseItem*parent )
     : KDevelop::ProjectBuildFolderItem( project, url, parent )
 {
     m_watcher = new CustomMakeTreeSynchronizer( manager );

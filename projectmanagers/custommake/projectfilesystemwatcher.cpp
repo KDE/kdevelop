@@ -146,7 +146,7 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
 //         this->removeDirectory( dir );
 
         QList<KDevelop::ProjectFolderItem*> deletedList;
-        QStandardItem *parent = folderItem->parent();
+        KDevelop::ProjectBaseItem *parent = folderItem->parent();
         KDevelop::ProjectFolderItem *parentItem = dynamic_cast<KDevelop::ProjectFolderItem*>( parent );
 
         if(parentItem)

@@ -167,7 +167,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     if(item) {
         bool isroot = false;
         if (ProjectFolderItem* projectFolderItem = dynamic_cast<ProjectFolderItem*>(item)) {
-            if(projectFolderItem->isProjectRoot()) {
+            if(!projectFolderItem->parent()) {
                 isroot = true;
             }
         }
@@ -299,7 +299,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         }
 
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), QString(), 0 );
-        m_rootItem->setProjectRoot(true);
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
@@ -615,7 +614,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
     CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
     if ( !item ) {
-        QStandardItem* it = folder;
+        ProjectBaseItem* it = folder;
         while(!item && it->parent()) {
             it = it->parent();
             item = dynamic_cast<CMakeFolderItem*>(it);
@@ -858,7 +857,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             //We look for removed elements
             for(int i=0; i<item->rowCount(); i++)
             {
-                QStandardItem* it=item->child(i, 0);
+                ProjectBaseItem* it=item->child(i);
                 if(it->type()==ProjectBaseItem::Target)
                     continue;
                 
