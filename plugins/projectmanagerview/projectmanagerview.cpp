@@ -71,7 +71,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     setWindowIcon( SmallIcon( "project-development" ) );
     setWhatsThis( i18n( "Project Manager" ) );
 
-    m_syncAction = new KAction(this);
+    m_syncAction = plugin->actionCollection()->action("locate_document");
+    Q_ASSERT(m_syncAction);
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_syncAction->setText(i18n("Locate Current Document"));
     m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
