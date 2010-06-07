@@ -20,6 +20,13 @@
 #include <KStandardDirs>
 #include <KDebug>
 
+
+#ifdef SNIPPETS_HAVE_TPLIFACE2
+    #include <ktexteditor/editor.h>
+    #include <interfaces/ipartcontroller.h>
+    #include <ktexteditor/templateinterface2.h>
+#endif
+
 SnippetStore* SnippetStore::m_self = 0;
 
 SnippetStore::SnippetStore(SnippetPlugin* plugin)
@@ -36,6 +43,10 @@ SnippetStore::SnippetStore(SnippetPlugin* plugin)
         SnippetRepository* repo = new SnippetRepository(file);
         appendRow(repo);
     }
+
+    #ifdef SNIPPETS_HAVE_TPLIFACE2
+    m_scriptregistrar = qobject_cast<KTextEditor::TemplateScriptRegistrar*>(KDevelop::ICore::self()->partController()->editorPart());
+    #endif
 }
 
 SnippetStore::~SnippetStore()
@@ -106,6 +117,29 @@ SnippetRepository* SnippetStore::repositoryForFile(const QString& file)
         }
     }
     return 0;
+}
+
+void SnippetStore::unregisterScript(const QString& token)
+{
+#ifdef SNIPPETS_HAVE_TPLIFACE2
+    if ( m_scriptregistrar ) {
+        m_scriptregistrar->unregisterTemplateScript(token);
+    }
+#else
+    Q_UNUSED(token);
+#endif
+}
+
+QString SnippetStore::registerScript(const QString& script)
+{
+#ifdef SNIPPETS_HAVE_TPLIFACE2
+    if ( m_scriptregistrar ) {
+        return m_scriptregistrar->registerTemplateScript(this, script);
+    }
+#else
+    Q_UNUSED(script);
+#endif
+    return QString();
 }
 
 

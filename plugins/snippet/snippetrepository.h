@@ -97,6 +97,23 @@ public:
     void setCompletionNamespace(const QString& completionNamespace);
 
     /**
+     * The QtScript(s) associated with this repository.
+     *
+     * @since KDE 4.5
+     */
+    QString script() const;
+    /**
+     * The token identifying the script in this repository.
+     */
+    QString scriptToken() const;
+    /**
+     * Sets the QtScript(s) associated with this repository.
+     * 
+     * @since KDE 4.5
+     */
+    void setScript(const QString& script);
+
+    /**
      * Remove this repository from the disk. Also deletes the item and all its children.
      */
     void remove();
@@ -124,6 +141,10 @@ private:
     QStringList m_filetypes;
     /// filtering namespace for code completion
     QString m_namespace;
+    /// QtScript with functions to be used in the snippet
+    QString m_script;
+    /// token identifiyng the script
+    QString m_scriptToken;
 };
 
 #endif

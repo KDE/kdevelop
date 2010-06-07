@@ -15,8 +15,15 @@
 #include <QStandardItemModel>
 #include <KConfigGroup>
 
+#include "snippetfeatures.h"
+
 class SnippetRepository;
 class SnippetPlugin;
+
+namespace KTextEditor {
+class TemplateScriptRegistrar;
+}
+
 /**
  * This class is implemented as singelton.
  * It represents the model containing all snippet repositories with their snippets.
@@ -45,6 +52,22 @@ public:
      */
     SnippetRepository* repositoryForFile(const QString &file);
 
+    /**
+     * Register @p script to make it available in snippets.
+     * 
+     * @return token identifying the script
+     * 
+     * @since KDE 4.5
+     */
+    QString registerScript(const QString& script);
+
+    /**
+     * Unregister script identified by @p token.
+     *
+     * @since KDE 4.5
+     */
+    void unregisterScript(const QString& token);
+
 private:
     SnippetStore(SnippetPlugin* plugin);
 
@@ -52,6 +75,9 @@ private:
 
     static SnippetStore* m_self;
     SnippetPlugin* m_plugin;
+#ifdef SNIPPETS_HAVE_TPLIFACE2
+    KTextEditor::TemplateScriptRegistrar* m_scriptregistrar;
+#endif
 };
 
 #endif

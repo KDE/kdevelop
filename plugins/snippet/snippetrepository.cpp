@@ -118,6 +118,22 @@ void SnippetRepository::setCompletionNamespace(const QString& completionNamespac
     m_namespace = completionNamespace;
 }
 
+QString SnippetRepository::script() const
+{
+    return m_script;
+}
+
+QString SnippetRepository::scriptToken() const
+{
+    return m_scriptToken;
+}
+
+void SnippetRepository::setScript(const QString& script)
+{
+    m_script = script;
+    m_scriptToken = SnippetStore::self()->registerScript(m_script);
+}
+
 void SnippetRepository::remove()
 {
     QFile::remove(m_file);
@@ -140,6 +156,9 @@ void SnippetRepository::save()
     ///@copyright 2009 Joseph Wenninger <jowenn@kde.org>
     /*
     <snippets name="Testsnippets" filetype="*" authors="Joseph Wenninger" license="BSD" namespace="test::">
+        <script>
+            JavaScript
+        </script>
         <item>
             <displayprefix>prefix</displayprefix>
             <match>test1</match>
@@ -163,6 +182,8 @@ void SnippetRepository::save()
     root.setAttribute("namespace", m_namespace);
 
     doc.appendChild(root);
+
+    addAndCreateElement(doc, root, "script", m_script);
 
     for ( int i = 0; i < rowCount(); ++i ) {
         Snippet* snippet = dynamic_cast<Snippet*>(child(i));
@@ -247,6 +268,9 @@ void SnippetRepository::slotParseFile()
             continue;
         }
         const QDomElement& item = node.toElement();
+        if ( item.tagName() == "script" ) {
+            setScript(item.text());
+        }
         if ( item.tagName() != "item" ) {
             continue;
         }
