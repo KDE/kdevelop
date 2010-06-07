@@ -28,6 +28,7 @@ Name[uk]=Звичайний засіб керування проектом
 Name[x-test]=xxGeneric Project Managerxx
 Name[zh_CN]=常规工程管理器
 Name[zh_TW]=一般專案管理員
+GenericName=Project Manager
 Comment=Allow KDevelop to manage generic projects
 Comment[bg]=Рарешаване на KDevelop обобщено манипулиране на проекти
 Comment[ca]=Permet a KDevelop gestionar projectes genèrics
