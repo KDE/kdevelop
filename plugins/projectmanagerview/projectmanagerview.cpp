@@ -164,6 +164,8 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 
 void ProjectManagerView::locateCurrentDocument()
 {
+    ICore::self()->uiController()->raiseToolView(this);
+
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
 
     // We should _never_ get a null pointer for the document, as
