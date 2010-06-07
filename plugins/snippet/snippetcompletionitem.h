@@ -45,6 +45,7 @@ private:
     QString m_prefix;
     QString m_arguments;
     QString m_postfix;
+    SnippetRepository* m_repo;
 };
 
 #endif // SNIPPETCOMPLETIONITEM_H

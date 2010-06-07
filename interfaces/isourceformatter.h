@@ -23,7 +23,6 @@
 #include <QtCore/QStringList>
 #include <KDE/KMimeType>
 
-#include "iextension.h"
 #include "interfacesexport.h"
 
 namespace KDevelop
@@ -174,7 +173,6 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, ISourceFormatter, "org.kdevelop.ISourceFormatter")
 Q_DECLARE_INTERFACE(KDevelop::ISourceFormatter, "org.kdevelop.ISourceFormatter")
 
 #endif // ISOURCEFORMATTER_H

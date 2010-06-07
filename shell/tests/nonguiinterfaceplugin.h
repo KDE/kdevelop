@@ -23,7 +23,6 @@
 #define NONGUIINTERFACEPLUGIN
 
 #include <interfaces/iplugin.h>
-#include <interfaces/iextension.h>
 #include <QtCore/QVariant>
 #include <QtCore/QObject>
 
@@ -33,7 +32,6 @@ public:
     virtual ~ITestNonGuiInterface() {}
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( ITestNonGuiInterface, "org.kdevelop.tests.TestNonGuiInterface" )
 Q_DECLARE_INTERFACE( ITestNonGuiInterface, "org.kdevelop.tests.TestNonGuiInterface" )
 
 

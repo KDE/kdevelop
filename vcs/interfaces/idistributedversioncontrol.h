@@ -78,7 +78,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IDistributedVersionControl, "org.kdevelop.IDistributedVersionControl" )
 Q_DECLARE_INTERFACE( KDevelop::IDistributedVersionControl, "org.kdevelop.IDistributedVersionControl" )
 
 #endif

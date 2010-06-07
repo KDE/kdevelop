@@ -71,7 +71,8 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     setWindowIcon( SmallIcon( "project-development" ) );
     setWhatsThis( i18n( "Project Manager" ) );
 
-    m_syncAction = new KAction(this);
+    m_syncAction = plugin->actionCollection()->action("locate_document");
+    Q_ASSERT(m_syncAction);
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     m_syncAction->setText(i18n("Locate Current Document"));
     m_syncAction->setToolTip(i18n("Locates the current document in the project tree and selects it."));
@@ -163,22 +164,35 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 
 void ProjectManagerView::locateCurrentDocument()
 {
+    ICore::self()->uiController()->raiseToolView(this);
+
     KDevelop::IDocument *doc = ICore::self()->documentController()->activeDocument();
 
     // We should _never_ get a null pointer for the document, as
     // the action is only enabled when there is an active document.
     Q_ASSERT(doc); 
-   
+
+    QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
         foreach (KDevelop::ProjectFileItem* item, proj->filesForUrl(doc->url())) {
             QModelIndex index = m_modelFilter->proxyIndexFromItem(item);
             if (index.isValid()) {
-                m_ui->projectTreeView->setCurrentIndex(index);
-                m_ui->projectTreeView->expand(index);
-                m_ui->projectTreeView->scrollTo(index);
-                return;
+                if (!bestMatch.isValid()) {
+                    bestMatch = index;
+                } else if (KDevelop::ProjectFolderItem* folder = dynamic_cast<KDevelop::ProjectFolderItem*>(item->parent())) {
+                    // prefer files in their real folders over the 'copies' in the target folders
+                    if (!folder->target()) {
+                        bestMatch = index;
+                        break;
+                    }
+                }
             }
         }
+    }
+    if (bestMatch.isValid()) {
+        m_ui->projectTreeView->setCurrentIndex(bestMatch);
+        m_ui->projectTreeView->expand(bestMatch);
+        m_ui->projectTreeView->scrollTo(bestMatch);
     }
 }
 

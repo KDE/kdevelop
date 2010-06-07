@@ -37,9 +37,9 @@ TestCore::TestCore()
     KDevelop::Core::m_self = this;
 }
 
-void TestCore::initialize( Core::Setup mode )
+void TestCore::initialize( Core::Setup mode, const QString& session )
 {
-    d->initialize( mode );
+    d->initialize( mode, session );
 }
 
 void TestCore::setSessionController( SessionController* ctrl )

@@ -26,7 +26,6 @@
 
 #include <kurl.h>
 
-#include <interfaces/iextension.h>
 #include "../projectexport.h"
 
 class KJob;
@@ -169,7 +168,6 @@ Q_SIGNALS:
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IProjectFileManager::Features )
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IProjectFileManager, "org.kdevelop.IProjectFileManager")
 Q_DECLARE_INTERFACE( KDevelop::IProjectFileManager, "org.kdevelop.IProjectFileManager")
 
 #endif

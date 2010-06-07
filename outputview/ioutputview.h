@@ -24,8 +24,6 @@
 #include <QtCore/QFlags>
 #include <KDE/KIcon>
 
-#include <interfaces/iextension.h>
-
 class QString;
 class QAbstractItemModel;
 class QModelIndex;
@@ -164,7 +162,6 @@ Q_SIGNALS:
 Q_DECLARE_OPERATORS_FOR_FLAGS(IOutputView::Behaviours)
 
 }
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IOutputView, "org.kdevelop.IOutputView" )
 Q_DECLARE_INTERFACE( KDevelop::IOutputView, "org.kdevelop.IOutputView" )
 
 #endif

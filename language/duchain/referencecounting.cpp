@@ -196,8 +196,14 @@ struct ReferenceCountItem {
   }
 };
 
-RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem, false, true, sizeof(ReferenceCountItem)>, false> references("Reference Count Debugging");
-RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem, false, true, sizeof(ReferenceCountItem)>, false> oldReferences("Old Reference Count Debugging");
+static RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem, false, true, sizeof(ReferenceCountItem)>, false>& references() {
+  static RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem, false, true, sizeof(ReferenceCountItem)>, false> referencesObject("Reference Count Debugging");
+  return referencesObject;
+}
+static RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem, false, true, sizeof(ReferenceCountItem)>, false>& oldReferences() {
+  static RepositoryManager< ItemRepository<ReferenceCountItem, ReferenceCountItem, false, true, sizeof(ReferenceCountItem)>, false> oldReferencesObject("Old Reference Count Debugging");
+  return oldReferencesObject;
+}
 
 ReferenceCountManager::~ReferenceCountManager() {
   //Make sure everything is cleaned up when the object is destroyed

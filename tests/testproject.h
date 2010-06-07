@@ -17,6 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
+#ifndef KDEVPLATFORM_TEST_PROJECT_H
+#define KDEVPLATFORM_TEST_PROJECT_H
+
 #include <QSet>
 
 #include <KGlobal>
@@ -37,6 +40,7 @@ class KDEVPLATFORMTESTS_EXPORT TestProject : public IProject
 {
     Q_OBJECT
 public:
+    TestProject(QObject* parent = 0);
     IProjectFileManager* projectFileManager() const { return 0; }
     IBuildSystemManager* buildSystemManager() const { return 0; }
     IPlugin* managerPlugin() const { return 0; }
@@ -48,13 +52,15 @@ public:
     QList<ProjectFileItem*> filesForUrl( const KUrl& ) const { return QList<ProjectFileItem*>(); }
     QList<ProjectFolderItem*> foldersForUrl( const KUrl& ) const { return QList<ProjectFolderItem*>(); }
     void reloadModel() { }
-    KUrl projectFileUrl() const { return KUrl(); }
-    KSharedConfig::Ptr projectConfiguration() const { return KGlobal::config(); }
+    KUrl projectFileUrl() const { return m_projectFileUrl; }
+    KSharedConfig::Ptr projectConfiguration() const { return m_projectConfiguration; }
     void addToFileSet( const IndexedString& file) { m_fileSet << file; }
     void removeFromFileSet( const IndexedString& file) { m_fileSet.remove(file); }
     QSet<IndexedString> fileSet() const { return m_fileSet; }
     bool isReady() const { return true; }
     virtual QList< ProjectBaseItem* > itemsForUrl(const KUrl&) const { return QList< ProjectBaseItem* >(); }
+
+    void set_projectFileUrl(const KUrl& url);
 public Q_SLOTS:
     const KUrl folder() const { return KUrl(); }
     QString name() const { return "Test Project"; }
@@ -62,6 +68,8 @@ public Q_SLOTS:
     bool inProject(const KUrl &) const { return false; }
 private:
     QSet<IndexedString> m_fileSet;
+    KUrl m_projectFileUrl;
+    KSharedConfig::Ptr m_projectConfiguration;
 };
 
 /**
@@ -84,3 +92,4 @@ private:
 };
 
 }
+#endif

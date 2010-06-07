@@ -546,7 +546,7 @@ void SessionController::cleanup()
     qDeleteAll(d->sessionActions);
 }
 
-void SessionController::initialize()
+void SessionController::initialize( const QString& session )
 {
     QDir sessiondir( SessionController::sessionDirectory() );
     foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
@@ -555,21 +555,21 @@ void SessionController::initialize()
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* session = new Session( id );
-        
+        Session* ses = new Session( id );
+
         //Delete sessions that have no name and are empty
-        if( session->containedProjects().isEmpty() && session->name().isEmpty()
-            && (session->id().toString() != QString(getenv("KDEV_SESSION"))))
+        if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
+            && ses->id().toString() != session && ses->name() != session )
         {
             ///@todo Think about when we can do this. Another instance might still be using this session.
 //             session->deleteFromDisk();
-            delete session;
+            delete ses;
         }else{
-            d->addSession( session );
+            d->addSession( ses );
         }
     }
-    loadDefaultSession();
-    
+    loadDefaultSession( session );
+
     connect(Core::self()->projectController(), SIGNAL(projectClosed(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
     connect(Core::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)), SLOT(updateSessionDescriptions()));
     updateSessionDescriptions();
@@ -633,31 +633,20 @@ void SessionController::deleteSession( const QString& nameOrId )
     s->deleteLater();
 }
 
-void SessionController::loadDefaultSession()
+void SessionController::loadDefaultSession( const QString& session )
 {
-    QString load = QString(getenv("KDEV_SESSION"));
-    
-    if(!load.isEmpty())
-    {
-        if(!session(load))
-            load = createSession("")->id().toString();
-        
-        ///KDEV_SESSION must be the UUID of an existing session, and nothing else.
-        ///If this assertion fails, that was not the case.
-        Q_ASSERT(session(load)->id().toString() == load);
-        
-        d->activateSession( session(load) );
-        return;
+    QString load = session;
+    if (load.isEmpty()) {
+        KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
+        load = grp.readEntry( cfgActiveSessionEntry(), "default" );
     }
-    KConfigGroup grp = KGlobal::config()->group( cfgSessionGroup() );
-    load = grp.readEntry( cfgActiveSessionEntry(), "default" );
-    
-    if( !session( load ) )
+
+    Session* s = this->session( load );
+    if( !s )
     {
-        createSession( load );
-    }  
-    
-    d->activateSession( session(load) );
+        s = createSession( load );
+    }
+    d->activateSession( s );
 }
 
 Session* SessionController::session( const QString& nameOrId ) const
@@ -686,6 +675,55 @@ void SessionController::plugActions()
 {
     unplugActionList( "available_sessions" );
     plugActionList( "available_sessions", d->grp->actions() );
+}
+
+
+QString SessionController::cfgSessionGroup() { return "Sessions"; }
+QString SessionController::cfgActiveSessionEntry() { return "Active Session ID"; }
+
+QList< SessionInfo > SessionController::availableSessionInfo()
+{
+    QList< SessionInfo > available;
+
+    QDir sessiondir( SessionController::sessionDirectory() );
+    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
+    {
+        QUuid id( s );
+        if( id.isNull() )
+            continue;
+        // TODO: Refactor the code here and in session.cpp so its shared
+        SessionInfo si;
+        si.uuid = id;
+        KSharedConfig::Ptr config = KSharedConfig::openConfig( sessiondir.absolutePath() + "/" + s +"/sessionrc" );
+
+        QString desc = config->group( "" ).readEntry( "SessionName", "" );
+        si.name = desc;
+
+        si.projects = config->group( "General Options" ).readEntry( "Open Projects", QStringList() );
+
+        QString prettyContents = config->group("").readEntry( "SessionPrettyContents", "" );
+
+        if(!prettyContents.isEmpty())
+        {
+            if(!desc.isEmpty())
+                desc += ":  ";
+            desc += prettyContents;
+        }
+        si.description = desc;
+        available << si;
+    }
+    return available;
+}
+
+QString SessionController::sessionDirectory()
+{
+    return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
+}
+
+bool SessionController::tryLockSession(QString id)
+{
+    KLockFile::Ptr lock(new KLockFile(sessionDirectory() + "/" + id + "/lock"));
+    return lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
 }
 
 }

@@ -295,6 +295,20 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
     return ret;
 }
 
+void UiController::raiseToolView(QWidget* toolViewWidget)
+{
+    if(!d->areasRestored)
+        return;
+
+    QList< Sublime::View* > views = activeArea()->toolViews();
+    foreach(Sublime::View* view, views) {
+        if(view->widget() == toolViewWidget) {
+            view->requestRaise();
+            return;
+        }
+    }
+}
+
 void UiController::addToolView(const QString & name, IToolViewFactory *factory)
 {
     kDebug() ;

@@ -105,6 +105,11 @@ public:
        * Returns zero on failure */
     virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags = CreateAndRaise) = 0;
 
+    /**
+     * Makes sure that the toolview that contains the widget @p toolViewWidget is visible to the user.
+     */
+    virtual void raiseToolView(QWidget* toolViewWidget) = 0;
+
     /** @return active mainwindow or 0 if no such mainwindow is active.*/
     virtual KParts::MainWindow *activeMainWindow() = 0;
 

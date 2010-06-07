@@ -52,8 +52,14 @@ public:
 
     /** Initialize the core of the kdevplatform application
       * returns false if the initialization fails, which may happen
-      * if the same session is already active in another instance */
-    static bool initialize(KSplashScreen* splash = 0, Setup mode=Default);
+      * if the same session is already active in another instance
+      *
+      * @param splash the splashscreen instance that should be hidden once the GUI is ready
+      * @param mode the mode in which to run
+      * @param session the name or uuid of the session to be loaded
+      *
+      */
+    static bool initialize(KSplashScreen* splash = 0, Setup mode=Default, const QString& session = "" );
 
     /**
      * \brief Provide access an instance of Core

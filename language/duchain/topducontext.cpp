@@ -59,7 +59,10 @@ namespace std {
 namespace KDevelop
 {
 
-Utils::BasicSetRepository recursiveImportRepository("Recursive Imports", &KDevelop::globalItemRepositoryRegistry());
+Utils::BasicSetRepository* RecursiveImportRepository::repository() {
+  static Utils::BasicSetRepository recursiveImportRepositoryObject("Recursive Imports", &KDevelop::globalItemRepositoryRegistry());
+  return &recursiveImportRepositoryObject;
+}
 
 ReferencedTopDUContext::ReferencedTopDUContext(TopDUContext* context) : m_topContext(context) {
   if(m_topContext)
@@ -998,7 +1001,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
     //Search for namespace-aliases, by using globalAliasIdentifier, which is inserted into the symbol-table by NamespaceAliasDeclaration
     QualifiedIdentifier aliasId(id);
-    aliasId.push(globalAliasIdentifier);
+    aliasId.push(globalAliasIdentifier());
     
 #ifdef DEBUG_SEARCH
   kDebug() << "checking" << id.toString();
@@ -1079,7 +1082,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
   {
     QualifiedIdentifier importId(previous);
-    importId.push(globalImportIdentifier);
+    importId.push(globalImportIdentifier());
 
 #ifdef DEBUG_SEARCH
 //   kDebug() << "checking imports in" << (backPointer ? id.toString() : QString("global"));

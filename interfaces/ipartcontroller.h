@@ -28,6 +28,11 @@ namespace KParts
 class Factory;
 }
 
+namespace KTextEditor
+{
+class Editor;
+}
+
 namespace KDevelop {
 
 class ICore;
@@ -41,6 +46,11 @@ public:
                                              const QString& parttype,
                                              const QString& preferredName = QString() );
     KParts::Part* createPart( const QString& mimetype, const QString& prefName = QString() );
+
+    /**
+     * Returns the global editor instance.
+     */
+    virtual KTextEditor::Editor* editorPart() const = 0;
 };
 
 }

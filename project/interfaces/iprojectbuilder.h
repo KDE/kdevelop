@@ -20,8 +20,8 @@
 #ifndef IPROJECTBUILDER_H
 #define IPROJECTBUILDER_H
 
-#include <interfaces/iextension.h>
 #include "../projectexport.h"
+#include <QtCore/QObject>
 
 class KJob;
 
@@ -111,7 +111,6 @@ Q_SIGNALS:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IProjectBuilder, "org.kdevelop.IProjectBuilder" )
 Q_DECLARE_INTERFACE( KDevelop::IProjectBuilder, "org.kdevelop.IProjectBuilder" )
 
 #endif

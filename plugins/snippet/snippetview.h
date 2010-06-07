@@ -87,6 +87,8 @@ private slots:
     /// disables or enables available actions based on the currently selected item
     void validateActions();
 
+    /// insert snippet on double click
+    virtual bool eventFilter(QObject* , QEvent* );
 private:
     QStandardItem* currentItem();
 

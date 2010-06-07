@@ -129,7 +129,7 @@ public:
     virtual QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList()) = 0;
 
      /**
-     * Retrieve the plugin which supports given extension interface and 
+     * Retrieve the plugin which supports given extension interface and
      * returns a pointer to the extension interface.
      *
      * All already loaded plugins will be queried and the first one to support the extension interface
@@ -139,33 +139,39 @@ public:
      * @param pluginname The name of the plugin to load if multiple plugins for the extension exist, corresponds to the X-KDE-PluginInfo-Name
      * @return Pointer to the extension interface or 0 if no plugin supports it
       */
-    template<class Extension> Extension* extensionForPlugin( const QString &extension, const QString &pluginname = "") {
-        IPlugin *plugin = pluginForExtension(extension, pluginname);
-        if (plugin)
-            return plugin->IPlugin::extension<Extension>();
-        else
-            return 0L;
+    template<class Extension> Extension* extensionForPlugin( const QString &extension = "", const QString &pluginname = "") {
+        QString ext;
+        if( extension.isEmpty() ) {
+            ext = qobject_interface_iid<Extension*>();
+        } else {
+            ext = extension;
+        }
+        IPlugin *plugin = pluginForExtension(ext, pluginname);
+        if (plugin) {
+            return plugin->extension<Extension>();
+        }
+        return 0L;
     }
 
 
     /**
-     * Query for a KDevelop service. 
+     * Query for a KDevelop service.
      *
      * The service version is checked for automatically
      * @param serviceType The service type to query for. Examples include:
      * "KDevelop/Plugin" or "KDevelop/SourceFormatter."
-     * @param constraint A constraint for the service. Do not include plugin 
+     * @param constraint A constraint for the service. Do not include plugin
      * version number - it is done automatically.
      * @return The list of plugin offers.
      */
     static KPluginInfo::List query( const QString &serviceType, const QString &constraint );
 
     /**
-     * Query for a KDevelop plugin. 
+     * Query for a KDevelop plugin.
      *
      * The service version is checked for automatically and the only serviceType
      * searched for is "KDevelop/Plugin"
-     * @param constraint A constraint for the service. Do not include plugin 
+     * @param constraint A constraint for the service. Do not include plugin
      * version number - it is done automatically.
      * @return The list of plugin offers.
      */
@@ -175,8 +181,6 @@ public:
 
     static KPluginInfo::List queryExtensionPlugins(const QString &extension, const QStringList &constraints = QStringList());
 
-    virtual QExtensionManager* extensionManager() = 0;
-
     virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
 
 Q_SIGNALS:
@@ -184,7 +188,7 @@ Q_SIGNALS:
     void pluginLoaded( KDevelop::IPlugin* );
 
     /**
-     * This signal is emitted whenever a plugin is unloaded. 
+     * This signal is emitted whenever a plugin is unloaded.
      * @note: that you shouldn't use the pointer anymore
      * except for comparing it against against other pointers. The plugin instance can already have been completely
      * deleted when this signal is emitted.

@@ -95,7 +95,6 @@ target_link_libraries(kdevplatformshell
         ${KDE4_KTEXTEDITOR_LIBS} 
         ${KDE4_THREADWEAVER_LIBRARIES} 
         ${KDE4_KROSSCORE_LIBS}
-        ${QT_QTDESIGNER_LIBRARY} 
         kdevplatforminterfaces 
         kdevplatformproject 
         kdevplatformvcs

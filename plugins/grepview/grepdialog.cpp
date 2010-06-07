@@ -79,7 +79,7 @@ const QStringList filepatterns = QStringList()
     << "*";
 
 const QStringList excludepatterns = QStringList()
-    << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/,/.git/"
+    << "/CVS/,/SCCS/,/\\.svn/,/_darcs/,/build/,/\\.git/"
     << "";
 
 }

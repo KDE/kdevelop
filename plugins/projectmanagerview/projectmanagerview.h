@@ -56,7 +56,7 @@ private slots:
     void openUrl( const KUrl& );
 
 private:
-    KAction* m_syncAction;
+    QAction* m_syncAction;
     Ui::ProjectManagerView* m_ui;
     QStringList m_cachedFileList;
     ProjectProxyModel* m_modelFilter;

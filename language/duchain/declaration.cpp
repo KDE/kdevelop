@@ -55,7 +55,10 @@ namespace KDevelop
 {
 
 ///@todo Use reference counting
-Repositories::StringRepository commentRepository("Comment Repository");
+static Repositories::StringRepository& commentRepository() {
+    static Repositories::StringRepository commentRepositoryObject("Comment Repository");
+    return commentRepositoryObject;
+}
 
 REGISTER_DUCHAIN_ITEM(Declaration);
 
@@ -194,7 +197,7 @@ QByteArray Declaration::comment() const {
   if(!d->m_comment)
     return 0;
   else
-    return Repositories::arrayFromItem(commentRepository.itemFromIndex(d->m_comment));
+    return Repositories::arrayFromItem(commentRepository().itemFromIndex(d->m_comment));
 }
 
 void Declaration::setComment(const QByteArray& str) {
@@ -202,7 +205,7 @@ void Declaration::setComment(const QByteArray& str) {
   if(str.isEmpty())
     d->m_comment = 0;
   else
-    d->m_comment = commentRepository.index(Repositories::StringRepositoryItemRequest(str, IndexedString::hashString(str, str.length()), str.length()));
+    d->m_comment = commentRepository().index(Repositories::StringRepositoryItemRequest(str, IndexedString::hashString(str, str.length()), str.length()));
 }
 
 void Declaration::setComment(const QString& str) {

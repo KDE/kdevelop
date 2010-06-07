@@ -22,7 +22,6 @@
 #include <ksharedptr.h>
 #include <kurl.h>
 #include <qpointer.h>
-#include <interfaces/iextension.h>
 #include "interfacesexport.h"
 
 namespace KDevelop {
@@ -102,7 +101,6 @@ class KDEVPLATFORMINTERFACES_EXPORT IPatchReview {
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, IPatchReview, "org.kdevelop.IPatchReview")
 Q_DECLARE_INTERFACE(KDevelop::IPatchReview, "org.kdevelop.IPatchReview")
 
 #endif // KDEVELOP_IPATCHSOURCE_H

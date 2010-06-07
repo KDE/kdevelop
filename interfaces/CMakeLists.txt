@@ -69,7 +69,6 @@ install(FILES
     idocumentcontroller.h
     isourceformatter.h
     isourceformattercontroller.h
-    iextension.h
     interfacesexport.h
     istatus.h
     isession.h

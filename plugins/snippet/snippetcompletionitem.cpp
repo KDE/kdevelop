@@ -33,13 +33,18 @@
 #include "snippet.h"
 #include "snippetrepository.h"
 
+#include "snippetfeatures.h"
+
+#ifdef SNIPPETS_HAVE_TPLIFACE2
+#include <ktexteditor/templateinterface2.h>
+#endif
+
 SnippetCompletionItem::SnippetCompletionItem( Snippet* snippet, SnippetRepository* repo )
     : CompletionTreeItem(), m_name(snippet->text()), m_snippet(snippet->snippet()), m_prefix(snippet->prefix()),
-      m_arguments(snippet->arguments()), m_postfix(snippet->postfix())
+      m_arguments(snippet->arguments()), m_postfix(snippet->postfix()), m_repo(repo)
 {
-    if (repo) {
-        m_name.prepend( repo->completionNamespace() );
-    }
+    Q_ASSERT(m_repo);
+    m_name.prepend( repo->completionNamespace() );
 }
 
 SnippetCompletionItem::~SnippetCompletionItem()
@@ -89,6 +94,13 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
 void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTextEditor::Range& word )
 {
     if ( document->activeView() ) {
+        #ifdef SNIPPETS_HAVE_TPLIFACE2
+            if ( KTextEditor::TemplateInterface2* templateIface2 = qobject_cast<KTextEditor::TemplateInterface2*>(document->activeView()) ) {
+                document->removeText(word);
+                templateIface2->insertTemplateText(word.start(), m_snippet, QMap<QString, QString>(), m_repo->scriptToken());
+                return;
+            }
+        #endif
         KTextEditor::TemplateInterface* templateIface
             = qobject_cast<KTextEditor::TemplateInterface*>(document->activeView());
         if ( templateIface ) {

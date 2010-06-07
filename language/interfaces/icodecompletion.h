@@ -22,7 +22,6 @@
 
 #include <kurl.h>
 
-#include <interfaces/iextension.h>
 #include "../languageexport.h"
 
 namespace KDevelop {
@@ -34,7 +33,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, ICodeCompletion, "org.kdevelop.ICodeCompletion")
 Q_DECLARE_INTERFACE( KDevelop::ICodeCompletion, "org.kdevelop.ICodeCompletion")
 
 #endif

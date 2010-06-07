@@ -119,7 +119,6 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::IBuildSystemManager::BuildFeatures )
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
 Q_DECLARE_INTERFACE( KDevelop::IBuildSystemManager, "org.kdevelop.IBuildSystemManager" )
 
 #endif

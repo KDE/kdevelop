@@ -22,7 +22,6 @@
 #ifndef IBROWSABLEVERSIONCONTROL_H
 #define IBROWSABLEVERSIONCONTROL_H
 
-#include <iextension.h>
 #include "../vcsrevision.h"
 
 class QString;
@@ -91,7 +90,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS( KDevelop, IBrowsableVersionControl, "org.kdevelop.IBrowsableVersionControl" )
 Q_DECLARE_INTERFACE( KDevelop::IBrowsableVersionControl, "org.kdevelop.IBrowsableVersionControl" )
 
 #endif

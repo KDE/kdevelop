@@ -21,7 +21,6 @@
 
 #include <QtCore/QSet>
 #include <KDE/KUrl>
-#include <interfaces/iextension.h>
 #include "../languageexport.h"
 #include <language/duchain/indexeditems.h>
 #include <KDE/KLineEdit>
@@ -95,7 +94,6 @@ public:
 
 }
 
-KDEV_DECLARE_EXTENSION_INTERFACE_NS(KDevelop, IQuickOpen, "org.kdevelop.IQuickOpen")
 Q_DECLARE_INTERFACE(KDevelop::IQuickOpen, "org.kdevelop.IQuickOpen")
 
 #endif // IQuickOpen_H

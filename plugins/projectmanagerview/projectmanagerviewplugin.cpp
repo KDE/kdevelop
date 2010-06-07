@@ -123,6 +123,10 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     d->m_prune->setEnabled( false );
     connect( d->m_prune, SIGNAL(triggered()), this, SLOT(pruneProjectItems()) );
     actionCollection()->addAction( "project_prune", d->m_prune );
+    // only add the action so that its known in the actionCollection
+    // and so that it's shortcut etc. pp. is restored
+    // apparently that is not possible to be done in the view itself *sigh*
+    actionCollection()->addAction( "locate_document" );
     setXMLFile( "kdevprojectmanagerview.rc" );
     d->factory = new KDevProjectManagerViewFactory( this );
     core()->uiController()->addToolView( i18n("Projects"), d->factory );

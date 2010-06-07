@@ -122,8 +122,6 @@ public:
 
     QList<IPlugin*> allPluginsForExtension(const QString &extension, const QStringList &constraints = QStringList());
 
-    QExtensionManager* extensionManager();
-
     QStringList allPluginNames();
 
     QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const;
@@ -171,7 +169,7 @@ private:
 
     void cleanup();
     void initialize();
-    
+
     bool isEnabled( const KPluginInfo& info );
 
 private:
