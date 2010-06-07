@@ -58,6 +58,7 @@ public:
     virtual ~PartController();
 
     KTextEditor::Document* createTextPart( const QString &encoding );
+    virtual KTextEditor::Editor* editorPart() const;
 
     bool canCreatePart( const KUrl &url );
 

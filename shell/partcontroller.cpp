@@ -104,7 +104,7 @@ bool PartController::isTextType( KMimeType::Ptr mimeType )
              || mimeType->is( "application/x-zerosize" ) );
 }
 
-KTextEditor::Document* PartController::createTextPart(const QString &encoding)
+KTextEditor::Editor* PartController::editorPart() const
 {
     if (!d->m_textEditor)
     {
@@ -118,7 +118,12 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
 
         d->m_textEditor = editorFactory->editor();
     }
-    KTextEditor::Document* doc = d->m_textEditor->createDocument(this);
+    return d->m_textEditor;
+}
+
+KTextEditor::Document* PartController::createTextPart(const QString &encoding)
+{
+    KTextEditor::Document* doc = editorPart()->createDocument(this);
 
     if ( !encoding.isNull() )
     {
