@@ -382,6 +382,13 @@ void CMakeProjectVisitorTest::testRun_data()
                             "SEPARATE_ARGUMENTS(args)\n"
                             "SEPARATE_ARGUMENTS(args2)\n"
                             << cacheValues << results;
+    
+    results.clear();
+    QTest::newRow("break") <<
+                            "while(1)\n"
+                            "break()\n"
+                            "endwhile(1)\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
