@@ -22,6 +22,7 @@ Name[uk]=Документація з CMake
 Name[x-test]=xxCMake Documentationxx
 Name[zh_CN]=CMake 文档
 Name[zh_TW]=CMake 文件
+GenericName=Documentation Support
 Comment=Allows KDevelop to provide CMake documentation
 Comment[ca]=Permet a KDevelop proporcionar informació de CMake
 Comment[ca@valencia]=Permet a KDevelop proporcionar informació de CMake
