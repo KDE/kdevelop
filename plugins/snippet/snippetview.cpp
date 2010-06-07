@@ -25,6 +25,7 @@
 #include "editsnippet.h"
 #include "snippetfilterproxymodel.h"
 
+#include <KGlobalSettings>
 
 #include <kdeversion.h>
 
@@ -45,10 +46,9 @@ SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
             this, SLOT(slotFilterChanged()));
     connect(filterText, SIGNAL(textChanged(QString)),
             this, SLOT(slotFilterChanged()));
-    connect(snippetTree, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(slotSnippetClicked(QModelIndex)));
 
     snippetTree->setContextMenuPolicy( Qt::CustomContextMenu );
+    snippetTree->viewport()->installEventFilter( this );
     connect(snippetTree, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(contextMenu(const QPoint&)));
 
@@ -320,5 +320,26 @@ void SnippetView::slotSnippetToGHNS()
 void SnippetView::slotGHNS() {}
 void SnippetView::slotSnippetToGHNS() {}
 #endif
+
+bool SnippetView::eventFilter(QObject* obj, QEvent* e)
+{
+    // no, listening to activated() is not enough since that would also trigger the edit mode which we _dont_ want here
+    // users may still rename stuff via select + F2 though
+    if (obj == snippetTree->viewport()) {
+        const bool singleClick = KGlobalSettings::singleClick();
+        if ( (!singleClick && e->type() == QEvent::MouseButtonDblClick) || (singleClick && e->type() == QEvent::MouseButtonRelease) ) {
+            QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
+            Q_ASSERT(mouseEvent);
+            QModelIndex clickedIndex = snippetTree->indexAt(mouseEvent->pos());
+            if (clickedIndex.isValid()) {
+                slotSnippetClicked(clickedIndex);
+                e->accept();
+                return true;
+            }
+        }
+    }
+    return QObject::eventFilter(obj, e);
+}
+
 
 #include "snippetview.moc"
