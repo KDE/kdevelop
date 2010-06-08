@@ -561,7 +561,6 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
 {
     if(!haveToFind(pack->name()))
         return 1;
-    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     kDebug(9042) << "Find:" << pack->name() << "package." << m_modulePath << "No module: " << pack->noModule();
 
     QStringList possibleModuleNames;
@@ -585,8 +584,9 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
 
     #if defined(Q_OS_WIN)
-    modulePath.prepend(instPath);
-    modulePath.prepend(instPath+"/cmake");
+    const QStringList modulePath << instPath + "/cmake" << instPath << m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    #else
+    const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     #endif
     QString name=pack->name();
     QStringList postfix=QStringList() << QString() << "/cmake" << "/CMake";
