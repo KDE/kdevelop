@@ -52,6 +52,7 @@ GenericName[uk]=Перегляд виводу
 GenericName[x-test]=xxOutput Viewxx
 GenericName[zh_CN]=输出视图
 GenericName[zh_TW]=輸出檢視
+Comment=Provides a text output toolview for other plugins to use, to show things like compiler messages.
 Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview
