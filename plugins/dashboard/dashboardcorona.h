@@ -17,13 +17,16 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "dashboardview.h"
-#include <QLabel>
-#include "dashboardcorona.h"
-#include "dashboard.h"
+#ifndef DASHBOARDCORONA_H
+#define DASHBOARDCORONA_H
 
-QWidget* DashboardView::createWidget(QWidget* parent)
+#include <plasma/corona.h>
+
+class DashboardCorona : public Plasma::Corona
 {
-    DashboardCorona* corona=new DashboardCorona;
-    return new dashboard(corona);
-}
+	public:
+		DashboardCorona(QObject* parent = 0);
+		
+};
+
+#endif // DASHBOARDCORONA_H
