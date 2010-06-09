@@ -1,9 +1,27 @@
+/* This file is part of KDevelop
+  Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Library General Public
+  License as published by the Free Software Foundation; either
+  version 2 of the License, or (at your option) any later version.
+
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Library General Public License for more details.
+
+  You should have received a copy of the GNU Library General Public License
+  along with this library; see the file COPYING.LIB.  If not, write to
+  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+  Boston, MA 02110-1301, USA.
+*/
+
 #include "dashboarddocument.h"
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iuicontroller.h>
-#include <QLabel>
-#include <sublime/view.h>
+#include "dashboardview.h"
 
 using namespace KDevelop;
 
@@ -59,20 +77,6 @@ KMimeType::Ptr DashboardDocument::mimeType() const
 {
     return KMimeType::mimeType("text/x-kdevelop");
 }
-
-class DashboardView : public Sublime::View
-{
-    public:
-        DashboardView(Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip)
-            : View(doc, ws) {}
-            
-        virtual QWidget* createWidget(QWidget* parent)
-        {
-            QLabel* label=new QLabel("hello world", parent);
-            label->setPixmap(QPixmap("/home/kde-devel/imatges/kamoso_09462009_174659.png"));
-            return label;
-        }
-};
 
 Sublime::View* DashboardDocument::newView(Sublime::Document* doc)
 {
