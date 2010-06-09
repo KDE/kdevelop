@@ -26,7 +26,8 @@
 using namespace KDevelop;
 
 DashboardDocument::DashboardDocument(KDevelop::IProject* project)
-    : IDocument(ICore::self()), Sublime::UrlDocument(ICore::self()->uiController()->controller(), project->projectFileUrl()), m_project(project)
+    : Sublime::UrlDocument(ICore::self()->uiController()->controller(), project->projectFileUrl()), IDocument(ICore::self())
+    , m_project(project)
 {}
 
 void DashboardDocument::activate(Sublime::View* activeView, KParts::MainWindow* mainWindow)
@@ -80,9 +81,9 @@ KMimeType::Ptr DashboardDocument::mimeType() const
 
 Sublime::View* DashboardDocument::newView(Sublime::Document* doc)
 {
-    if( dynamic_cast<DashboardDocument*>( doc ) ) {
+    if( dynamic_cast<DashboardDocument*>( doc ) )
         return new DashboardView(doc);
-    }
+    
     return 0;
 }
 
