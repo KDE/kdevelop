@@ -17,13 +17,19 @@
   Boston, MA 02110-1301, USA.
 */
 
-#include "dashboardview.h"
-#include <QLabel>
 #include "dashboardcorona.h"
-#include "dashboard.h"
 
-QWidget* DashboardView::createWidget(QWidget* parent)
+DashboardCorona::DashboardCorona(QObject* parent)
+	: Plasma::Corona(parent)
 {
-    DashboardCorona* corona=new DashboardCorona;
-    return new dashboard(corona);
+	Plasma::Containment* c=addContainmentDelayed("newspaper");
+	
+	c->init();
+	
+	c->setWallpaper("color");
+	c->setFormFactor(Plasma::Planar);
+	c->updateConstraints(Plasma::StartupCompletedConstraint);
+	c->flushPendingConstraintsEvents();
 }
+
+
