@@ -17,7 +17,7 @@ kde4_add_unit_test(cmake-parsertest cmakeparsertest.cpp)
 target_link_libraries( cmake-parsertest ${CMAKE_TEST_LIBRARIES})
 
 kde4_add_unit_test(cmakecompliance cmakecompliance.cpp)
-target_link_libraries( cmakecompliance ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+target_link_libraries( cmakecompliance ${CMAKE_TEST_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES})
 
 kde4_add_unit_test(cmake-astfactorytest astfactorytest.cpp)
 target_link_libraries( cmake-astfactorytest ${CMAKE_TEST_LIBRARIES})

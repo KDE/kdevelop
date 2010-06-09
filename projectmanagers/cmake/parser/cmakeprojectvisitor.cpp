@@ -584,7 +584,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     kDebug(9042) << "config mode" << m_vars->value(var).join(QString()) << m_cache->value(var).value << instPath;
 
     #if defined(Q_OS_WIN)
-    const QStringList modulePath << instPath + "/cmake" << instPath << m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
+    const QStringList modulePath = QStringList() << instPath + "/cmake" << instPath << m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     #else
     const QStringList modulePath = m_vars->value("CMAKE_MODULE_PATH") + m_modulePath;
     #endif
