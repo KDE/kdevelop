@@ -27,8 +27,9 @@ namespace KDevelop {
     class IProject;
 }
 
-class DashboardDocument : public KDevelop::IDocument, public Sublime::UrlDocument
+class DashboardDocument : public Sublime::UrlDocument, public KDevelop::IDocument
 {
+    Q_OBJECT
     public:
         DashboardDocument(KDevelop::IProject* project);
         
