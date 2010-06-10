@@ -151,7 +151,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedString {
    uint m_index;
 };
 
-KDEVPLATFORMLANGUAGE_EXPORT inline uint qHash( const KDevelop::IndexedString& str ) {
+// the following function would need to be exported in case you'd remove the inline keyword.
+inline uint qHash( const KDevelop::IndexedString& str ) {
   return str.index();
 }
 }
