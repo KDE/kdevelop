@@ -20,10 +20,15 @@
 #include "dashboardview.h"
 #include <QLabel>
 #include "dashboardcorona.h"
+#include <plasma/corona.h>
 #include "dashboard.h"
+#include <interfaces/iproject.h>
+
+using namespace Plasma;
 
 QWidget* DashboardView::createWidget(QWidget* parent)
 {
-    DashboardCorona* corona=new DashboardCorona;
+    DashboardCorona* corona=new DashboardCorona(this);
+    corona->initializeLayout(m_project->projectFileUrl().toLocalFile()); //TODO: decide what to do with remote files
     return new dashboard(corona);
 }

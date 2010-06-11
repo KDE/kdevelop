@@ -27,6 +27,7 @@ class DashboardCorona : public Plasma::Corona
 	public:
 		DashboardCorona(QObject* parent = 0);
 		
+        virtual void loadDefaultLayout();
 };
 
 #endif // DASHBOARDCORONA_H

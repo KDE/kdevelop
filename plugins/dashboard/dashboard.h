@@ -21,6 +21,7 @@ class dashboard : public Plasma::View
 	private slots:
 		void init();
 		void updateView();
+        void updateConfigurationMode ( bool );
 		
 	private:
 		DashboardCorona* corona;
