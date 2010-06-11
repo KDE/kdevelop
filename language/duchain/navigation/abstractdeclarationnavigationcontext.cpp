@@ -107,6 +107,9 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       if( m_declaration->kind() == Declaration::Type && m_declaration->abstractType().cast<StructureType>() ) {
         htmlClass();
       }
+      if ( m_declaration->kind() == Declaration::Namespace ) {
+        modifyHtml() += i18n("namespace %1 <br />", nameHighlight(Qt::escape(m_declaration->qualifiedIdentifier().toString())));
+      }
 
       if(m_declaration->type<EnumerationType>()) {
         EnumerationType::Ptr enumeration = m_declaration->type<EnumerationType>();
