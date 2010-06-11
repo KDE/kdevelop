@@ -6,7 +6,7 @@
 using namespace Plasma;
 
 dashboard::dashboard(DashboardCorona* corona, QWidget* parent)
-	: View(corona->containments().first(), parent), corona(corona)
+	: View(0, parent), corona(corona)
 {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -18,25 +18,30 @@ dashboard::dashboard(DashboardCorona* corona, QWidget* parent)
 }
 
 dashboard::~dashboard()
-{}
+{
+    corona->saveLayout(QString());
+}
 
 void dashboard::init()
 {
-	QVariantList args;
-	for(int i=0; i<5; ++i) {
-		Applet* applet = Applet::load("clock", 0, args);
-		
-		corona->containments().first()->addApplet(applet);
-	}
 	setScene(corona);
 	updateView();
 }
 
 void dashboard::updateView()
 {
-	Containment* c=corona->containments().first();
-	c->resize(size());
-	fitInView(c);
+    if(!corona->containments().isEmpty()) {
+        Containment* c=corona->containments().first();
+        if(c->size()==size())
+            return;
+        
+        c->resize(size());
+        fitInView(c);
+        
+//         c->setMaximumSize(size());
+//         c->setMinimumSize(size());
+//         c->resize(size());
+    }
 }
 
 void dashboard::resizeEvent(QResizeEvent* event)
@@ -44,5 +49,11 @@ void dashboard::resizeEvent(QResizeEvent* event)
 // 	QGraphicsView::resizeEvent(event);
 	updateView();
 }
+
+void dashboard::updateConfigurationMode ( bool )
+{
+    updateView();
+}
+
 
 #include "dashboard.moc"

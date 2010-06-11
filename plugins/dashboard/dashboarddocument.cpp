@@ -82,7 +82,7 @@ KMimeType::Ptr DashboardDocument::mimeType() const
 Sublime::View* DashboardDocument::newView(Sublime::Document* doc)
 {
     if( dynamic_cast<DashboardDocument*>( doc ) )
-        return new DashboardView(doc);
+        return new DashboardView(m_project, doc);
     
     return 0;
 }
