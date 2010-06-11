@@ -514,7 +514,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
       //Also create full type-links for the context around
       AbstractType::Ptr contextType = decl->context()->owner()->abstractType();
       IdentifiedType* contextIdType = dynamic_cast<IdentifiedType*>(contextType.unsafeData());
-      if(contextIdType) {
+      if(contextIdType && !contextIdType->equals(idType)) {
         //Create full type information for the context
         if(!id.isEmpty())
           id = id.mid(id.count()-1);
