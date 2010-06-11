@@ -4,10 +4,12 @@
 #include <QtCore/QObject>
 #include <plasma/view.h>
 
+class AppletSelector;
+class DashboardCorona;
+
 namespace Plasma {
 	class Corona;
 }
-class DashboardCorona;
 
 class dashboard : public Plasma::View
 {
@@ -21,10 +23,12 @@ class dashboard : public Plasma::View
 	private slots:
 		void init();
 		void updateView();
-        void updateConfigurationMode ( bool );
+		void updateConfigurationMode(bool);
+		void addApplet(const QString& name);
 		
 	private:
 		DashboardCorona* corona;
+		AppletSelector* m_selector;
 };
 
 #endif // dashboard_H
