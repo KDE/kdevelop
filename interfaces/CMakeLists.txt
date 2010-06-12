@@ -1,6 +1,7 @@
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
+    foregroundlock.cpp
     ipatchsource.cpp
     iassistant.cpp
     context.cpp
@@ -54,6 +55,7 @@ set_target_properties(kdevplatforminterfaces PROPERTIES VERSION ${KDEVPLATFORM_L
 install(TARGETS kdevplatforminterfaces EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES
+    foregroundlock.h
     iassistant.h
     context.h
     contextmenuextension.h
