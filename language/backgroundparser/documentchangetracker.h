@@ -1,7 +1,7 @@
 /*
 * This file is part of KDevelop
 *
-* Copyright 2008 Hamish Rodda <rodda@kde.org>
+* Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -22,65 +22,90 @@
 #ifndef DOCUMENTCHANGETRACKER_H
 #define DOCUMENTCHANGETRACKER_H
 
-#include <KDE/KTextEditor/SmartRangeWatcher>
-
 #include "../languageexport.h"
+#include <QPair>
+#include <language/editor/simplerange.h>
 
-class QMutex;
+namespace KTextEditor
+{
+class Document;
+class MovingRange;
+class MovingInterface;
+}
 
 namespace KDevelop
 {
 
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker : protected KTextEditor::SmartRangeWatcher
+/**
+ * This object belongs to the foreground, and thus can only be accessed from background threads if the foreground lock is held.
+ * */
+
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker : public QObject
 {
+    Q_OBJECT
 public:
-    DocumentChangeTracker();
+    DocumentChangeTracker( KTextEditor::Document* document );
     virtual ~DocumentChangeTracker();
 
     /**
-     * Retrieve the list of changed smart ranges since the last successful parse.
-     * Changes in child ranges will be replaced by changes in parent ranges if they occur.
-     */
-    QList<KTextEditor::SmartRange*> changedRanges() const;
+     * Completions of the users current edits that are supposed to complete
+     * not-yet-finished statements, like for example for-loops for parsing.
+     * */
+    virtual QList<QPair<KDevelop::SimpleRange, QString> > completions() const;
+    
+    /**
+     * Resets the tracking to the current revision.
+     * */
+    virtual void reset();
 
     /**
-     * Sets the list of changed smart ranges. For use when a new parse job is created,
-     * and changed ranges already exist.
-     */
-    void setChangedRanges(const QList<KTextEditor::SmartRange*>& changedRanges);
+     * Returns the document revision at which reset() was called last
+     * */
+    qint64 startRevision() const;
 
     /**
-     * Add a changed smart range.
-     * This will select the highest encompassing range automatically.
-     *
-     * Child classes may reimplement this function, and decide to restart parsing if
-     * they are not particularly far through parsing the previously retrieved text.
-     *
-     * \return true for success (if the job had not already started retrieving text from the editor),
-     *         otherwise false to indicate failure (because it was already too late to add the range)
-     */
-    virtual bool addChangedRange(KTextEditor::SmartRange* range);
-
+     * Returns the document text at the start revision
+     * */
+    QString startRevisionText() const;
+    
+    /**
+     * Returns the current revision
+     * */
+    qint64 currentRevision() const;
+    
+    /**
+     * Returns the range that was changed since the last reset
+     * */
+    virtual KTextEditor::Range changedRange() const;
+    
+    /**
+     * Whether the changes that happened since the last reset are significant enough to require an update
+     * */
+    virtual bool needUpdate() const;
+    
+    /**
+     * Returns the tracked document
+     **/
+    KTextEditor::Document* document() const;
+    
 protected:
-    /**
-     * Informs the tracker not to accept any further changes to the changedRanges().
-     */
-    void finaliseChangedRanges();
-
-    /// Mutex used to protect the changed ranges list
-    QMutex* changeMutex() const;
-
-    /// Check if the range changes are finalised. Call with the mutex held.
-    bool rangeChangesFinalised() const;
-
-    /// Performs the addition, call with the mutex held.
-    void addChangedRangeInternal(KTextEditor::SmartRange* range);
-
-    /// Detect and respond to a contained range being deleted
-    virtual void rangeDeleted(KTextEditor::SmartRange *range);
-
-private:
-    class DocumentChangeTrackerPrivate* const d;
+    QString m_textAtStartRevision;
+    qint64 m_startRevision;
+    bool m_needUpdate;
+    QString m_currentCleanedInsertion;
+    KTextEditor::Cursor m_lastInsertionPosition;
+    KTextEditor::MovingRange* m_changedRange;
+    
+    KTextEditor::Document* m_document;
+    KTextEditor::MovingInterface* m_moving;
+    
+    void updateChangedRange(KTextEditor::Range changed);
+public slots:
+    virtual void textInserted( KTextEditor::Document*,KTextEditor::Range );
+    virtual void textRemoved( KTextEditor::Document* document, KTextEditor::Range range );
+    virtual void textChanged( KTextEditor::Document* document, KTextEditor::Range oldRange, KTextEditor::Range newRange );
+    void documentDestroyed( QObject* );
+    void aboutToInvalidateMovingInterfaceContent ( KTextEditor::Document* document );
 };
 
 }

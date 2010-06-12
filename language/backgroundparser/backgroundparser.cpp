@@ -56,8 +56,8 @@
 #include <editor/modificationrevisionset.h>
 #include <interfaces/icore.h>
 #include <qcoreapplication.h>
+#include <interfaces/idocumentcontroller.h>
 
-//@todo Enable this again once languageForUrl is thread-safe
 const bool separateThreadForHighPriority = true;
 
 namespace KDevelop
@@ -104,8 +104,6 @@ public:
             it.value()->setBackgroundParser(0);
             delete it.value();
         }
-
-        qDeleteAll(m_delayedParseJobs);
     }
 
     // Non-mutex guarded functions, only call with m_mutex acquired.
@@ -116,28 +114,6 @@ public:
         // Create delayed jobs, that is, jobs for documents which have been changed
         // by the user.
         QList<ParseJob*> jobs;
-        for(QHash<KUrl, DocumentChangeTracker*>::iterator it = m_delayedParseJobs.begin(); it != m_delayedParseJobs.end(); ) {
-            KUrl url(it.key());
-
-            if(m_parseJobs.contains(url)) {
-                kDebug() << "already parsing" << url << ", delaying the parse-job";
-                ++it; //Add the delayed job later
-            }else{
-                kDebug() << "creating job from delayed job";
-                ParseJob* job = createParseJob(url,
-                                            TopDUContext::AllDeclarationsContextsAndUses,
-                                            QList<QPointer<QObject> >());
-                if (job) {
-                    job->setChangedRanges(it.value()->changedRanges());
-                    jobs.append(job);
-                    specialParseJob = job;
-                } else {
-                    kDebug() << "No job created for url " << it.key();
-                }
-                delete *it;
-                it = m_delayedParseJobs.erase(it);
-            }
-        }
 
         for (QMap<int, QSet<KUrl> >::Iterator it1 = m_documentsForPriority.begin();
              it1 != m_documentsForPriority.end(); ++it1 )
@@ -185,9 +161,6 @@ public:
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
         if(m_doneParseJobs == m_maxParseJobs)
             emit m_parser->hideProgress(m_parser);
-        
-        if(!m_delayedParseJobs.isEmpty())
-            startTimerThreadSafe();
     }
 
     ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QPointer<QObject> > notifyWhenReady)
@@ -335,14 +308,14 @@ public:
             return ret;
         }
     };
-    // A list of known documents, and their priority
+    // A list of documents that are planned to be parsed, and their priority
     QMap<KUrl, DocumentParsePlan > m_documents;
+    // The documents ordered by priority
     QMap<int, QSet<KUrl> > m_documentsForPriority;
-    // Current parse jobs
+    // Currently running parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
-    QHash<KUrl, DocumentChangeTracker*> m_delayedParseJobs;
-
-    QHash<KTextEditor::SmartRange*, KUrl> m_managedRanges;
+    // A change tracker for each managed document
+    QHash<KUrl, DocumentChangeTracker*> m_managed;
 
     ThreadWeaver::Weaver m_weaver;
     ParserDependencyPolicy m_dependencyPolicy;
@@ -359,6 +332,8 @@ public:
 BackgroundParser::BackgroundParser(ILanguageController *languageController)
     : QObject(languageController), d(new BackgroundParserPrivate(this, languageController))
 {
+    connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 }
 
@@ -410,13 +385,6 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QStri
     updateProgressBar();
 }
 
-// void BackgroundParser::addUpdateJob(ReferencedTopDUContext topContext, TopDUContext::Features features, QObject* notifyWhenReady, int priority)
-// {
-//     QMutexLocker lock(&d->m_mutex);
-//     {
-//     }
-// }
-
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
     QPointer<QObject> p(notifyWhenReady);
@@ -458,7 +426,7 @@ void BackgroundParser::addDocument(const KUrl& url, TopDUContext::Features featu
         target.features = features;
         target.notifyWhenReady = QPointer<QObject>(notifyWhenReady);
 
-        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan >::iterator it = d->m_documents.find(url);
+        QMap<KUrl, BackgroundParserPrivate::DocumentParsePlan>::iterator it = d->m_documents.find(url);
 
         if (it != d->m_documents.end()) {
             //Update the stored plan
@@ -554,13 +522,13 @@ void BackgroundParser::enableProcessing()
 
 bool BackgroundParser::isQueued(KUrl url) const {
     QMutexLocker lock(&d->m_mutex);
-    return d->m_documents.contains(url) || d->m_delayedParseJobs.contains(url);
+    return d->m_documents.contains(url);
 }
 
 int BackgroundParser::queuedCount() const
 {
     QMutexLocker lock(&d->m_mutex);
-    return d->m_documents.count() + d->m_delayedParseJobs.count();
+    return d->m_documents.count();
 }
 
 void BackgroundParser::setNeededPriority(int priority)
@@ -636,62 +604,42 @@ void BackgroundParser::setDelay(int miliseconds)
 QList< KUrl > BackgroundParser::managedDocuments()
 {
     QMutexLocker l(&d->m_mutex);
-    return d->m_managedRanges.values();
+    return d->m_managed.keys();
 }
 
-void BackgroundParser::addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range)
-{
-    Q_ASSERT(range);
-    range->addWatcher(this); ///@todo Smart-lock
-    QMutexLocker l(&d->m_mutex);
-    d->m_managedRanges.insert(range, document);
-}
-
-void BackgroundParser::removeManagedTopRange(KTextEditor::SmartRange* range)
-{
-   range->removeWatcher(this); ///@todo Smart-lock
-   QMutexLocker l(&d->m_mutex);
-   d->m_managedRanges.remove(range);
-}
-
-void BackgroundParser::rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild)
+void BackgroundParser::documentClosed ( IDocument* document )
 {
     QMutexLocker l(&d->m_mutex);
-
-    // Smart mutex is already locked
-    KUrl documentUrl = range->document()->url();
-
-    ///@todo Also detect these changes on-disk and do clearing
-    ModificationRevisionSet::clearCache();
-    KDevelop::ModificationRevision::clearModificationCache(IndexedString(documentUrl));
-
-    if (d->m_parseJobs.contains(documentUrl)) {
-        ParseJob* job = d->m_parseJobs[documentUrl];
-        if (job->addChangedRange( mostSpecificChild ))
-            // Success
-            return;
+    
+    if(document->textDocument())
+    {
+        kDebug() << "adding" << document->url() << "to background parser";
+        Q_ASSERT(d->m_managed.contains(document->url()));
+        
+        delete d->m_managed[document->url()];
+        d->m_managed.remove(document->url());
     }
+}
 
-    // Initially I just created a new parse job here, but that causes a deadlock as the smart mutex is locked
-    // So store the info in a class with just the changed ranges information...
-    DocumentChangeTracker* newTracker = 0;
-    if (d->m_delayedParseJobs.contains(documentUrl))
-        newTracker = d->m_delayedParseJobs[documentUrl];
-
-    if (!newTracker) {
-        newTracker = new DocumentChangeTracker();
-        d->m_delayedParseJobs.insert(documentUrl, newTracker);
+void BackgroundParser::documentLoadedPrepare ( IDocument* document )
+{
+    QMutexLocker l(&d->m_mutex);
+    
+    if(document->textDocument())
+    {
+        // Some debugging because we had issues with this
+        if(d->m_managed.contains(document->url()))
+            Q_ASSERT(d->m_managed[document->url()]->document() == document->textDocument());
+            
+        Q_ASSERT(!d->m_managed.contains(document->url()));
+        
+        d->m_managed.insert(document->url(), new DocumentChangeTracker(document->textDocument()));
     }
-
-    newTracker->addChangedRange( mostSpecificChild );
-
-    d->startTimerThreadSafe();
 }
 
 void BackgroundParser::startTimer() {
     d->m_timer.start(d->m_delay);
 }
-
 
 }
 

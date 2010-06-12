@@ -32,8 +32,6 @@
 
 #include <KDE/KUrl>
 
-#include <KDE/KTextEditor/SmartRangeWatcher>
-
 #include "../languageexport.h"
 #include <interfaces/istatus.h>
 #include <language/duchain/topducontext.h>
@@ -48,12 +46,12 @@ class Job;
 
 namespace KDevelop
 {
-
+class IDocument;
 class ILanguageController;
 class ParseJob;
 class ParserDependencyPolicy;
 
-class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus, public KTextEditor::SmartRangeWatcher
+class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
@@ -102,23 +100,11 @@ public:
     Q_SCRIPTABLE void setDelay(int miliseconds);
 
     /**
-     * Inform the background parser that \a document has a given top smart \a range.
-     *
-     * This will be watched for modifications and background jobs scheduled accordingly.
-     */
-    Q_SCRIPTABLE void addManagedTopRange(const KUrl& document, KTextEditor::SmartRange* range);
-
-    /**
      * Returns all documents that were added through addManagedTopRange. This is typically the currently
      * open documents.
      */
     Q_SCRIPTABLE QList<KUrl> managedDocuments();
     
-    /**
-     * Remove an associated top \a range from modification watching.
-     */
-    Q_SCRIPTABLE void removeManagedTopRange(KTextEditor::SmartRange* range);
-
 Q_SIGNALS:
     /** 
 	 * Emitted whenever a document parse-job has finished. 
@@ -199,6 +185,9 @@ public Q_SLOTS:
 
     ///Returns the number of currently active or queued jobs
     int queuedCount() const;
+    
+    void documentLoadedPrepare ( KDevelop::IDocument* );
+    void documentClosed ( KDevelop::IDocument* );
 
 protected:
     void loadSettings(bool projectIsLoaded);
@@ -209,11 +198,6 @@ protected Q_SLOTS:
     void parseProgress(KDevelop::ParseJob*, float value, QString text);
     void startTimer();
     void aboutToQuit();
-
-protected:
-    // Receive changed notifications
-    using KTextEditor::SmartRangeWatcher::rangeContentsChanged;
-    virtual void rangeContentsChanged(KTextEditor::SmartRange* range, KTextEditor::SmartRange* mostSpecificChild);
 
 private:
     friend class BackgroundParserPrivate;

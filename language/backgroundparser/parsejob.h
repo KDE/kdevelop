@@ -41,7 +41,7 @@ class ReferencedTopDUContext;
 /**
  * The base class for background parser jobs.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence, public DocumentChangeTracker
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
 {
     Q_OBJECT
 public:
@@ -64,6 +64,16 @@ public:
      */
     Q_SCRIPTABLE bool contentsAvailableFromEditor();
 
+    /**
+     * Assigns a document change tracker to this job.
+     * */
+    void setTracker(DocumentChangeTracker* tracker);
+    
+    /**
+     * Returns the document change tracker for this job. May be zero if the document is not open in an editor.
+     * */
+    DocumentChangeTracker* tracker() const;
+    
     /**
      * Cleanup SmartRange revision after the job has run. 
      * You must call this before exiting your @p run() method.

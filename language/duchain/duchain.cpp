@@ -403,9 +403,6 @@ public:
     
     m_chainsByUrl.remove(context->url(), context);
 
-    if (context->smartRange())
-      ICore::self()->languageController()->backgroundParser()->removeManagedTopRange(context->smartRange());
-
     if(!context->isOnDisk())
       instance->removeFromEnvironmentManager(context);
 
@@ -1173,10 +1170,6 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
 //   kDebug(9505) << "duchain: adding document" << chain->url().str() << " " << chain;
   Q_ASSERT(chain);
-  if (chain->smartRange()) {
-    Q_ASSERT(!chain->smartRange()->parentRange());
-    ICore::self()->languageController()->backgroundParser()->addManagedTopRange(KUrl(chain->url().str()), chain->smartRange());
-  }
 
   Q_ASSERT(!sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
 
@@ -1538,7 +1531,6 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
       }
       sc.convertDUChain(standardContext);
       Q_ASSERT(standardContext->smartRange());
-      ICore::self()->languageController()->backgroundParser()->addManagedTopRange(doc->url(), standardContext->smartRange());
     }
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);

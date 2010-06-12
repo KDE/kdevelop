@@ -23,6 +23,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <backgroundparser/documentchangetracker.h>
 
 namespace KDevelop {
 
@@ -55,6 +56,11 @@ const ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
 
 ILanguage* ILanguageSupport::language() {
     return ICore::self()->languageController()->language(name());
+}
+
+DocumentChangeTracker* ILanguageSupport::createChangeTrackerForDocument ( KTextEditor::Document* document ) const
+{
+    return new DocumentChangeTracker(document);
 }
 
 }

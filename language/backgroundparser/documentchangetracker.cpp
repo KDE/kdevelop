@@ -1,7 +1,7 @@
 /*
 * This file is part of KDevelop
 *
-* Copyright 2008 Hamish Rodda <rodda@kde.org>
+* Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU Library General Public License as
@@ -25,148 +25,199 @@
 #include <QMutexLocker>
 
 #include <kdebug.h>
-
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
+#include <ktexteditor/movinginterface.h>
+
+#include <interfaces/foregroundlock.h>
+#include <editor/modificationrevisionset.h>
+#include <duchain/indexedstring.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include "backgroundparser.h"
 
 using namespace KTextEditor;
+
+/**
+ * @todo Track the exact changes to the document, and then:
+ * Dont reparse if:
+ *  - Comment added/changed
+ *  - Newlines added/changed (ready)
+ * Complete the document for validation:
+ *  - Incomplete for-loops
+ *  - ...
+ * Incremental parsing:
+ *  - All changes within a local function (or function parameter context): Update only the context (and all its importers)
+ * */
+
+namespace {
+    QRegExp whiteSpaceRegExp("\\s");
+};
 
 namespace KDevelop
 {
 
-class DocumentChangeTrackerPrivate
+DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
+    : m_needUpdate(false), m_changedRange(0)
 {
-public:
-    DocumentChangeTrackerPrivate()
-        : contentsRetrieved(false)
-        , contentsRetrievedMutex(new QMutex)
+    connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)));
+    connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
+    
+    m_moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
+    Q_ASSERT(m_moving);
+    m_changedRange = m_moving->newMovingRange(KTextEditor::Range(), KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
+    
+    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)));
+    
+    reset();
+}
+
+QList< QPair< SimpleRange, QString > > DocumentChangeTracker::completions() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    QList< QPair< SimpleRange , QString > > ret;
+    return ret;
+}
+
+Range DocumentChangeTracker::changedRange() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    return m_changedRange->toRange();
+}
+
+void DocumentChangeTracker::reset()
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    // We don't reset the insertion here, as it may continue
+    m_needUpdate = false;
+    m_changedRange->setRange(KTextEditor::Range::invalid());
+    
+    m_startRevision = m_moving->revision();
+    m_textAtStartRevision = m_document->text();
+}
+
+qint64 DocumentChangeTracker::currentRevision() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    return m_moving->revision();
+}
+
+qint64 DocumentChangeTracker::startRevision() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    return m_startRevision;
+}
+
+QString DocumentChangeTracker::startRevisionText() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    return m_textAtStartRevision;
+}
+
+bool DocumentChangeTracker::needUpdate() const
+{
+    VERIFY_FOREGROUND_LOCKED
+    
+    return m_needUpdate;
+}
+
+void DocumentChangeTracker::textChanged( Document* document, Range oldRange, Range newRange )
+{
+    m_currentCleanedInsertion.clear();
+
+    QString oldText = document->text(oldRange);
+    QString newText = document->text(newRange);
+    
+    if(oldText.remove(whiteSpaceRegExp).isEmpty() && newText.remove(whiteSpaceRegExp).isEmpty())
     {
+        // Only whitespace was changed, no update is required
+    }else{
+        m_needUpdate = true;
+    }
+    
+    m_currentCleanedInsertion.clear();
+    m_lastInsertionPosition = KTextEditor::Cursor::invalid();
+    
+    updateChangedRange(newRange);
+}
+
+void DocumentChangeTracker::updateChangedRange( Range changed )
+{
+    if(m_changedRange->toRange() == KTextEditor::Range::invalid())
+        m_changedRange->setRange(changed);
+    else
+        m_changedRange->setRange(changed.encompass(m_changedRange->toRange()));
+    
+    ModificationRevisionSet::clearCache();
+    KDevelop::ModificationRevision::clearModificationCache(IndexedString(m_document->url()));
+    
+    if(needUpdate())
+        ICore::self()->languageController()->backgroundParser()->addDocument(m_document->url(), TopDUContext::AllDeclarationsContextsAndUses);
+}
+
+void DocumentChangeTracker::textInserted( Document* document, Range range )
+{
+    QString text = document->text(range);
+    
+    if(text.remove(whiteSpaceRegExp).isEmpty())
+    {
+        // Only whitespace was changed, no update is required
+    }else{
+        m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
+    }
+    
+    if(m_lastInsertionPosition == KTextEditor::Cursor::invalid() || m_lastInsertionPosition == range.start())
+    {
+        m_currentCleanedInsertion.append(text);
+        m_lastInsertionPosition = range.end();
     }
 
-    ~DocumentChangeTrackerPrivate()
-    {
-        delete contentsRetrievedMutex;
-    }
+    updateChangedRange(range);
+}
 
-    bool contentsRetrieved;
-
-    QMutex* contentsRetrievedMutex;
-    QList<SmartRange*> changedRanges;
-};
-
-DocumentChangeTracker::DocumentChangeTracker()
-    : d(new DocumentChangeTrackerPrivate)
+void DocumentChangeTracker::textRemoved( Document* document, Range range )
 {
+    QString text = document->text(range);
+    
+    if(text.remove(whiteSpaceRegExp).isEmpty())
+    {
+        // Only whitespace was changed, no update is required
+    }else{
+        m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
+    }
+    
+    m_currentCleanedInsertion.clear();
+    m_lastInsertionPosition = KTextEditor::Cursor::invalid();
+    
+    updateChangedRange(range);
+}
+
+void DocumentChangeTracker::documentDestroyed( QObject* )
+{
+    m_document = 0;
+    m_moving = 0;
+    m_changedRange = 0;
 }
 
 DocumentChangeTracker::~DocumentChangeTracker()
 {
-    foreach (SmartRange* range, d->changedRanges)
-        range->removeWatcher(this);
-
-    delete d;
 }
 
-QList<SmartRange*> DocumentChangeTracker::changedRanges() const
+Document* DocumentChangeTracker::document() const
 {
-    return d->changedRanges;
+    return m_document;
 }
 
-bool DocumentChangeTracker::addChangedRange(SmartRange* changed)
+void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* )
 {
-    QMutexLocker l(d->contentsRetrievedMutex);
-    if (d->contentsRetrieved)
-        return false;
-
-    addChangedRangeInternal(changed);
-
-    return true;
-}
-
-void DocumentChangeTracker::addChangedRangeInternal(SmartRange* changed)
-{
-    QMutableListIterator<SmartRange*> it = d->changedRanges;
-    bool foundOverlap = false;
-    while (it.hasNext()) {
-        if (it.next() == changed) {
-            foundOverlap = true;
-            break;
-        }
-
-        if (it.value()->overlaps(*changed)) {
-            int rangeDepth = it.value()->depth();
-            int changedDepth = changed->depth();
-
-            if (changedDepth < rangeDepth) {
-                // We have a new parent range
-                it.value()->removeWatcher(this);
-                
-                if (!foundOverlap) {
-                    // Replace current range
-                    it.value() = changed;
-                    changed->addWatcher(this);
-                    foundOverlap = true;
-                    
-                } else {
-                    // Remove now child range
-                    it.remove();
-                }
-
-            } else {
-                // We're contained by the range we found
-                // Nothing more to do
-                foundOverlap = true;
-                break;
-            }
-        }
-    }
-
-    if (!foundOverlap) {
-        d->changedRanges.append(changed);
-        changed->addWatcher(this);
-    }
-}
-
-void DocumentChangeTracker::finaliseChangedRanges()
-{
-    QMutexLocker l(d->contentsRetrievedMutex);
-    d->contentsRetrieved = true;
-}
-
-QMutex* DocumentChangeTracker::changeMutex() const
-{
-    return d->contentsRetrievedMutex;
-}
-
-void DocumentChangeTracker::setChangedRanges(const QList<SmartRange*>& changedRanges)
-{
-    QMutexLocker l(d->contentsRetrievedMutex);
-    Q_ASSERT(!d->contentsRetrieved);
-    Q_ASSERT(d->changedRanges.isEmpty());
-    
-    d->changedRanges = changedRanges;
-
-    foreach (SmartRange* range, d->changedRanges)
-        range->addWatcher(this);
-}
-
-bool DocumentChangeTracker::rangeChangesFinalised() const
-{
-    return d->contentsRetrieved;
-}
-
-void DocumentChangeTracker::rangeDeleted(SmartRange *range)
-{
-    QMutexLocker l(d->contentsRetrievedMutex);
-
-    int index = d->changedRanges.indexOf(range);
-    Q_ASSERT(index != -1);
-    d->changedRanges.removeAt(index);
-
-    if (range->parentRange())
-        addChangedRangeInternal(range->parentRange());
-    else
-        kWarning() << "Top range deleted?";
 }
 
 }

@@ -96,12 +96,23 @@ public:
     TopDUContext::Features features;
     QString contentsFromEditor;
     QList<QPointer<QObject> > notify;
+    QPointer<DocumentChangeTracker> tracker;
 };
 
 ParseJob::ParseJob( const KUrl &url )
         : ThreadWeaver::JobSequence(),
         d(new ParseJobPrivate(url))
 {}
+
+void ParseJob::setTracker ( DocumentChangeTracker* tracker )
+{
+    d->tracker = tracker;
+}
+
+DocumentChangeTracker* ParseJob::tracker() const
+{
+    return d->tracker;
+}
 
 ParseJob::~ParseJob()
 {
@@ -172,8 +183,6 @@ bool ParseJob::contentsAvailableFromEditor()
     KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(d->document.str()));
     if (!doc)
         return false;
-
-    finaliseChangedRanges();
 
     if (d->revisionToken == -1) {
         SmartInterface* iface = qobject_cast<SmartInterface*>(doc);
