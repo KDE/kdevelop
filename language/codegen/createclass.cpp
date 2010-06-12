@@ -358,6 +358,7 @@ ClassIdentifierPage::ClassIdentifierPage(QWizard* parent)
     connect(d->classid->removeInheritancePushButton, SIGNAL(pressed()), this, SLOT(removeInheritance()));
     connect(d->classid->moveUpPushButton, SIGNAL(pressed()), this, SLOT(moveUpInheritance()));
     connect(d->classid->moveDownPushButton, SIGNAL(pressed()), this, SLOT(moveDownInheritance()));
+    connect(d->classid->inheritanceList, SIGNAL(currentRowChanged(int)), this, SLOT(checkMoveButtonState()));
 
     registerField("classIdentifier*", d->classid->identifierLineEdit);
     registerField("classInheritance", this, "inheritance", SIGNAL(inheritanceChanged()));
