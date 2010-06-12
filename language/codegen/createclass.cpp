@@ -400,6 +400,8 @@ void ClassIdentifierPage::removeInheritance()
     if (d->classid->inheritanceList->count() == 0)
         d->classid->removeInheritancePushButton->setEnabled(false);
 
+    checkMoveButtonState();
+
     emit inheritanceChanged();
 }
 
