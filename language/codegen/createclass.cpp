@@ -413,6 +413,7 @@ void ClassIdentifierPage::moveUpInheritance()
 
     QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
     d->classid->inheritanceList->insertItem(currentRow - 1, item);
+    d->classid->inheritanceList->setCurrentItem(item);
 
     emit inheritanceChanged();
 }
@@ -427,6 +428,7 @@ void ClassIdentifierPage::moveDownInheritance()
 
     QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
     d->classid->inheritanceList->insertItem(currentRow + 1, item);
+    d->classid->inheritanceList->setCurrentItem(item);
 
     emit inheritanceChanged();
 }
