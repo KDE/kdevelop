@@ -183,7 +183,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         QMap<QString, Target> m_targetForId;
         
         QStack<VisitorState> m_backtrace;
-        QStack<QString> m_loopType;
         QString m_root;
         VariableMap *m_vars;
         MacroMap *m_macros;
@@ -191,6 +190,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         CMakeDefinitions m_defs;
         KDevelop::ReferencedTopDUContext m_topctx;
         KDevelop::ReferencedTopDUContext m_parentCtx;
+        bool m_hitBreak;
 
 };
 

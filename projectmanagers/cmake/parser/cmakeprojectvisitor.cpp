@@ -54,7 +54,7 @@ void debugMsgs(const QString& message) { kDebug(9032) << "message:" << message; 
 CMakeProjectVisitor::message_callback CMakeProjectVisitor::s_msgcallback=debugMsgs;
 
 CMakeProjectVisitor::CMakeProjectVisitor(const QString& root, ReferencedTopDUContext parent)
-    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent)
+    : m_root(root), m_vars(0), m_macros(0), m_topctx(0), m_parentCtx(parent), m_hitBreak(false)
 {
 }
 
@@ -1995,15 +1995,17 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[whileast->line()]);
 
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
-    int end=whileast->line()+1;
     if(result)
     {
-        end=walk(whileast->content(), whileast->line()+1);
-        if(end<whileast->content().size() && whileast->content()[end].name.toUpper()!="BREAK") {
+        walk(whileast->content(), whileast->line()+1);
+        
+        if(m_hitBreak) {
+            kDebug() << "break found. leaving loop";
+            m_hitBreak=false;
+        } else
             walk(whileast->content(), whileast->line());
-        }
     }
-    CMakeFileContent::const_iterator it=whileast->content().constBegin()+end;
+    CMakeFileContent::const_iterator it=whileast->content().constBegin()+whileast->line()+1;
     CMakeFileContent::const_iterator itEnd=whileast->content().constEnd();
     int lines=0, inside=1;
     for(; inside>0 && it!=itEnd; ++it, lines++)
@@ -2018,6 +2020,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     if(it!=itEnd) {
         usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, *(it-1));
     }
+    qDebug() << "while done" << lines;
     return lines;
 }
 
@@ -2037,7 +2040,7 @@ CMakeFunctionDesc CMakeProjectVisitor::resolveVariables(const CMakeFunctionDesc 
     return ret;
 }
 
-enum RecursivityType { No, Yes, End };
+enum RecursivityType { No, Yes, End, Break };
 
 RecursivityType recursivity(const QString& functionName)
 {
@@ -2045,10 +2048,10 @@ RecursivityType recursivity(const QString& functionName)
     if(upperFunctioName=="IF" || upperFunctioName=="WHILE" ||
        upperFunctioName=="FOREACH" || upperFunctioName=="MACRO")
         return Yes;
-    else if(upperFunctioName=="ELSE" || upperFunctioName=="ELSEIF")
+    else if(upperFunctioName=="ELSE" || upperFunctioName=="ELSEIF" || upperFunctioName.startsWith("END"))
         return End;
-    else if(upperFunctioName.startsWith("END") || upperFunctioName=="BREAK")
-        return End;
+    else if(upperFunctioName=="BREAK")
+        return Break;
     return No;
 }
 
@@ -2080,6 +2083,19 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
 
         Q_ASSERT( *it == fc[line] );
 //         kDebug(9042) << "At line" << line << "/" << fc.count();
+
+        RecursivityType r = recursivity(it->name);
+        if(r==End || r==Break || m_hitBreak)
+        {
+//             kDebug(9042) << "Found an end." << func.writeBack();
+            m_backtrace.pop();
+            m_topctx=aux;
+            
+            if(r==Break)
+                m_hitBreak=true;
+            return line;
+        }
+        
         CMakeAst* element = AstFactory::self()->createAst(it->name);
 
         if(!element)
@@ -2097,17 +2113,6 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
                 << " at" << func.filePath << ":" << func.line << endl;
             //FIXME: Should avoid to run?
         }
-
-        RecursivityType r = recursivity(func.name);
-        if(r==End)
-        {
-//             kDebug(9042) << "Found an end." << func.writeBack();
-            delete element;
-            m_backtrace.pop();
-            m_topctx=aux;
-            return line;
-        } else if(r==Yes)
-            m_loopType.push(func.name.toUpper());
         
         if(element->isDeprecated()) {
             kDebug(9032) << "Warning: Using the function: " << func.name << " which is deprecated by cmake.";

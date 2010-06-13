@@ -3503,7 +3503,7 @@ BreakAst::~BreakAst()
 
 bool BreakAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 {
-    return func.arguments.isEmpty() && func.name.toLower()=="break";
+    return func.name.toLower()=="break";
 }
 
 CMakePolicyAst::CMakePolicyAst()
