@@ -22,7 +22,7 @@
 #ifndef IEXECUTESCRIPTPLUGIN_H
 #define IEXECUTESCRIPTPLUGIN_H
 
-#include <interfaces/iextension.h>
+#include <QObject>
 #include <QtCore/QString>
 
 namespace KDevelop
@@ -54,7 +54,6 @@ public:
     virtual QString scriptAppConfigTypeId() const = 0;
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( IExecuteScriptPlugin, "org.kdevelop.IExecuteScriptPlugin" )
 Q_DECLARE_INTERFACE( IExecuteScriptPlugin, "org.kdevelop.IExecuteScriptPlugin" )
 
 #endif
