@@ -431,7 +431,7 @@ void RunController::setupActions()
     ac->addAction("run_profile", d->profileAction);
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
-    action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
+    action = d->stopAction = new KActionMenu( KIcon("process-stop"), i18n("Stop Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop Jobs' used in the toolbar", "Stop"));
     action->setShortcut(Qt::Key_Escape);
     action->setToolTip(i18n("Stop all currently running jobs"));
