@@ -70,7 +70,7 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         {
             return "org.kdevelop.ProjectsView";
         }
-        
+
     private:
         ProjectManagerViewPlugin *mplugin;
 };
@@ -144,7 +144,7 @@ void ProjectManagerViewPlugin::updateFromBuildSetChange()
 void ProjectManagerViewPlugin::updateActionState( KDevelop::Context* ctx )
 {
     bool isEmpty = ICore::self()->projectController()->buildSetModel()->items().isEmpty();
-    if( isEmpty ) 
+    if( isEmpty )
     {
         isEmpty = !ctx || ctx->type() != Context::ProjectItemContext || dynamic_cast<ProjectItemContext*>( ctx )->items().isEmpty();
     }
@@ -244,7 +244,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
+
         if ( !removeAdded && ((item->folder() && item->parent()) || item->file()) )
         {
             removeAdded = true;
@@ -253,7 +253,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(removeFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
+
         if( !renameAdded && (item->file() || item->folder()) && item->parent() )
         {
             renameAdded = true;
@@ -262,7 +262,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
+
         //TODO: Port to launch framework
 //         if(!hasTargets && item->executable())
 //         {
@@ -273,7 +273,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 //         }
 
     }
-    
+
     return menuExt;
 }
 
@@ -501,10 +501,10 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
     QString name = QInputDialog::getText(window, i18n("Create File in %1", item->url().prettyUrl()), i18n("File Name"));
-    
+
     if(name.isEmpty())
         return 0;
-    
+
     KUrl url=item->url();
     url.addPath( name );
 

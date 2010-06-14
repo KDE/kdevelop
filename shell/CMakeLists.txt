@@ -85,25 +85,25 @@ set(kdevplatformshell_UI
 
 kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
 kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
-target_link_libraries(kdevplatformshell 
-        ${KDE4_KIO_LIBS} 
+target_link_libraries(kdevplatformshell
+        ${KDE4_KIO_LIBS}
         ${KDE4_KFILE_LIBS}
-        ${KDE4_KUTILS_LIBS} 
-        ${KDE4_KPARTS_LIBS} 
-        ${KDE4_KNOTIFYCONFIG_LIBS} 
-        ${KDE4_KTEXTEDITOR_LIBS} 
-        ${KDE4_THREADWEAVER_LIBRARIES} 
+        ${KDE4_KUTILS_LIBS}
+        ${KDE4_KPARTS_LIBS}
+        ${KDE4_KNOTIFYCONFIG_LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
+        ${KDE4_THREADWEAVER_LIBRARIES}
         ${KDE4_KROSSCORE_LIBS}
-        kdevplatforminterfaces 
-        kdevplatformproject 
+        kdevplatforminterfaces
+        kdevplatformproject
         kdevplatformvcs
-        kdevplatformlanguage 
-        sublime 
-        kdevplatformutil 
+        kdevplatformlanguage
+        sublime
+        kdevplatformutil
         kdevplatformoutputview
         kdevplatformdebugger)
 # need to add kdevplatform* once those are exported targets
-target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES 
+target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KDECORE_LIBS}
 	kdevplatforminterfaces)
