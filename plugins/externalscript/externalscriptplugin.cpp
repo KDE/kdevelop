@@ -1,0 +1,82 @@
+/*
+    This plugin is part of KDevelop.
+
+    Copyright (C) 2010 Milian Wolff <mail@milianw.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+*/
+
+#include "externalscriptplugin.h"
+
+#include "externalscriptview.h"
+
+#include <KPluginFactory>
+#include <KAboutData>
+
+#include <QStandardItemModel>
+
+#include <interfaces/iuicontroller.h>
+#include <interfaces/icore.h>
+
+K_PLUGIN_FACTORY(ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
+K_EXPORT_PLUGIN(ExternalScriptFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
+
+class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
+{
+public:
+    ExternalScriptViewFactory(ExternalScriptPlugin *plugin): m_plugin(plugin) {}
+
+    virtual QWidget* create(QWidget *parent = 0)
+    {
+        return new ExternalScriptView( m_plugin, parent );
+    }
+
+    virtual Qt::DockWidgetArea defaultPosition()
+    {
+        return Qt::RightDockWidgetArea;
+    }
+
+    virtual QString id() const
+    {
+        return "org.kdevelop.ExternalScript";
+    }
+
+private:
+    ExternalScriptPlugin *m_plugin;
+};
+
+ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
+    : IPlugin( ExternalScriptFactory::componentData(), parent ),
+      m_model( new QStandardItemModel(this) )
+{
+    setXMLFile( "kdevexternalscript.rc" );
+}
+
+ExternalScriptPlugin::~ExternalScriptPlugin()
+{
+
+}
+
+void ExternalScriptPlugin::unload()
+{
+    core()->uiController()->removeToolView(m_factory);
+    KDevelop::IPlugin::unload();
+}
+
+QStandardItemModel* ExternalScriptPlugin::model() const
+{
+    return m_model;
+}
