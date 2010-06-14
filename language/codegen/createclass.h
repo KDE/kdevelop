@@ -95,8 +95,10 @@ public Q_SLOTS:
      */
     virtual QualifiedIdentifier parseParentClassId(const QString& inheritedObject);
 
-private:
+private Q_SLOTS:
     void checkMoveButtonState();
+
+private:
 
     class ClassIdentifierPagePrivate* const d;
 };
