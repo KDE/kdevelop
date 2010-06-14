@@ -29,22 +29,25 @@ class QStandardItemModel;
 
 class ExternalScriptPlugin : public KDevelop::IPlugin
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    ExternalScriptPlugin(QObject *parent, const QVariantList &args = QVariantList() );
+  ExternalScriptPlugin( QObject *parent, const QVariantList &args = QVariantList() );
 
-    virtual ~ExternalScriptPlugin();
-    virtual void unload();
+  virtual ~ExternalScriptPlugin();
+  virtual void unload();
 
-    /**
-     * @return The model storing all external scripts managed by this plugin.
-     */
-    QStandardItemModel* model() const;
+  /**
+   * @return The model storing all external scripts managed by this plugin.
+   */
+  QStandardItemModel* model() const;
 
 private:
-    QStandardItemModel* m_model;
-    class ExternalScriptViewFactory *m_factory;
+  QStandardItemModel* m_model;
+
+  class ExternalScriptViewFactory *m_factory;
 };
 
 #endif // EXTERNALSCRIPTPLUGIN_H
+
+// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

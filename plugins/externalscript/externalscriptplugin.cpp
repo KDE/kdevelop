@@ -31,40 +31,39 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
 
-K_PLUGIN_FACTORY(ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
-K_EXPORT_PLUGIN(ExternalScriptFactory(KAboutData("kdevexternalscript","kdevexternalscript", ki18n("External Scripts"),
-                                                 "0.1", ki18n("Support for running external scripts."),
-                                                 KAboutData::License_GPL)))
+K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
+K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
+                                        "0.1", ki18n( "Support for running external scripts." ),
+                                        KAboutData::License_GPL ) ) )
 
 class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-    ExternalScriptViewFactory(ExternalScriptPlugin *plugin): m_plugin(plugin) {}
+  ExternalScriptViewFactory( ExternalScriptPlugin *plugin ): m_plugin( plugin ) {}
 
-    virtual QWidget* create(QWidget *parent = 0)
-    {
-        return new ExternalScriptView( m_plugin, parent );
-    }
+  virtual QWidget* create( QWidget *parent = 0 ) {
+    return new ExternalScriptView( m_plugin, parent );
+  }
 
-    virtual Qt::DockWidgetArea defaultPosition()
-    {
-        return Qt::RightDockWidgetArea;
-    }
+  virtual Qt::DockWidgetArea defaultPosition() {
+    return Qt::RightDockWidgetArea;
+  }
 
-    virtual QString id() const
-    {
-        return "org.kdevelop.ExternalScript";
-    }
+  virtual QString id() const {
+    return "org.kdevelop.ExternalScript";
+  }
 
 private:
-    ExternalScriptPlugin *m_plugin;
+  ExternalScriptPlugin *m_plugin;
 };
 
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
     : IPlugin( ExternalScriptFactory::componentData(), parent ),
-      m_model( new QStandardItemModel(this) )
+    m_model( new QStandardItemModel( this ) ), m_factory( new ExternalScriptViewFactory( this ) )
 {
-    setXMLFile( "kdevexternalscript.rc" );
+  setXMLFile( "kdevexternalscript.rc" );
+
+  core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
 }
 
 ExternalScriptPlugin::~ExternalScriptPlugin()
@@ -74,13 +73,15 @@ ExternalScriptPlugin::~ExternalScriptPlugin()
 
 void ExternalScriptPlugin::unload()
 {
-    core()->uiController()->removeToolView(m_factory);
-    KDevelop::IPlugin::unload();
+  core()->uiController()->removeToolView( m_factory );
+  KDevelop::IPlugin::unload();
 }
 
 QStandardItemModel* ExternalScriptPlugin::model() const
 {
-    return m_model;
+  return m_model;
 }
 
 #include "externalscriptplugin.moc"
+
+// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

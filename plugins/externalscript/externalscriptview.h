@@ -26,19 +26,22 @@
 #include "ui_externalscriptview.h"
 
 class QSortFilterProxyModel;
+
 class ExternalScriptPlugin;
 
 class ExternalScriptView : public QWidget, Ui::ExternalScriptViewBase
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent = 0);
-    virtual ~ExternalScriptView();
+  ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent = 0 );
+  virtual ~ExternalScriptView();
 
 private:
-    ExternalScriptPlugin* m_plugin;
-    QSortFilterProxyModel* m_model;
+  ExternalScriptPlugin* m_plugin;
+  QSortFilterProxyModel* m_model;
 };
 
 #endif // EXTERNALSCRIPTVIEW_H
+
+// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

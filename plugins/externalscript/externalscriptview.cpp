@@ -30,16 +30,16 @@
 ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent )
     : QWidget( parent ), m_plugin( plugin )
 {
-    Ui::ExternalScriptViewBase::setupUi( this );
+  Ui::ExternalScriptViewBase::setupUi( this );
 
-    setWindowTitle( i18n("External Scripts") );
+  setWindowTitle( i18n( "External Scripts" ) );
 
-    m_model = new QSortFilterProxyModel( this );
-    m_model->setSourceModel( m_plugin->model() );
-    connect( filterText, SIGNAL(userTextChanged(QString)),
-             m_model, SLOT(setFilterWildcard(QString)) );
+  m_model = new QSortFilterProxyModel( this );
+  m_model->setSourceModel( m_plugin->model() );
+  connect( filterText, SIGNAL( userTextChanged( QString ) ),
+           m_model, SLOT( setFilterWildcard( QString ) ) );
 
-    scriptTree->setModel( m_model );
+  scriptTree->setModel( m_model );
 }
 
 ExternalScriptView::~ExternalScriptView()
@@ -48,3 +48,5 @@ ExternalScriptView::~ExternalScriptView()
 }
 
 #include "externalscriptview.moc"
+
+// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;
