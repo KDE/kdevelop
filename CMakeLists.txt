@@ -4,6 +4,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${executescript_SOURCE_DIR}/cmake)
 find_package(KDE4 REQUIRED)
 find_package(KDevPlatform REQUIRED)
 
+remove_definitions( -DKDE_DEFAULT_DEBUG_AREA=24000 )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9515 )
 
 include_directories(
