@@ -226,7 +226,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         }
 
         KDevelop::ProjectFolderItem *prjitem = item->folder();
-        if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
+        if ( !closeProjectsAdded && prjitem && !prjitem->parent() )
         {
             KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
             close->setIcon(KIcon("project-development-close"));
@@ -481,7 +481,8 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
             continue;
         }
 
-        const QString src = item->data(Qt::EditRole).toString();
+        //TODO: Re-Enable after enabling editing in new project model
+        /*const QString src = item->data(Qt::EditRole).toString();
 
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
@@ -492,7 +493,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
 
         if (!name.isEmpty() && name != src) {
             item->setData(name, Qt::EditRole);
-        }
+        }*/
     }
 }
 

@@ -27,16 +27,16 @@ class ProjectModel;
 class ProjectBaseItem;
 }
 
-class QStandardItem;
-
 class ProjectProxyModel : public QSortFilterProxyModel
 {
     public:
         ProjectProxyModel(QObject *parent);
         bool lessThan ( const QModelIndex & left, const QModelIndex & right ) const;
 
-        QModelIndex proxyIndexFromItem(QStandardItem* item) const;
+        QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;
         KDevelop::ProjectBaseItem* itemFromProxyIndex( const QModelIndex& ) const;
+
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
     private:
         KDevelop::ProjectModel* projectModel() const;

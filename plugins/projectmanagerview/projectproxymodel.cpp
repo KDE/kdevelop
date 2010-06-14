@@ -22,6 +22,7 @@
 #include <KDebug>
 #include <qfileinfo.h>
 #include <kmimetype.h>
+#include <kicon.h>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)
@@ -37,13 +38,13 @@ KDevelop::ProjectModel * ProjectProxyModel::projectModel() const
 
 bool ProjectProxyModel::lessThan(const QModelIndex & left, const QModelIndex & right) const
 {
-    KDevelop::ProjectBaseItem *iLeft=projectModel()->item(left), *iRight=projectModel()->item(right);
+    KDevelop::ProjectBaseItem *iLeft=projectModel()->itemFromIndex(left), *iRight=projectModel()->itemFromIndex(right);
     if(!iLeft || !iRight) return false;
 
     return( iLeft->lessThan( iRight ) );
 }
 
-QModelIndex ProjectProxyModel::proxyIndexFromItem(QStandardItem* item) const
+QModelIndex ProjectProxyModel::proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const
 {
     return mapFromSource(projectModel()->indexFromItem(item));
 }
@@ -51,5 +52,13 @@ QModelIndex ProjectProxyModel::proxyIndexFromItem(QStandardItem* item) const
 KDevelop::ProjectBaseItem* ProjectProxyModel::itemFromProxyIndex( const QModelIndex& idx ) const
 {
     return static_cast<KDevelop::ProjectBaseItem*>( projectModel()->itemFromIndex( mapToSource( idx ) ) );
+}
+
+QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
+{
+    if( role == Qt::DecorationRole && index.isValid() ) {
+        return KIcon( QSortFilterProxyModel::data(index, role).toString() );
+    }
+    return QSortFilterProxyModel::data(index, role);
 }
 
