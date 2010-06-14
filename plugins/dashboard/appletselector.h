@@ -22,23 +22,27 @@
 
 #include <KDE/KDialog>
 
+class IDashboardPlasmoidFactory;
+class IDashboardWidgetFactory;
 class QModelIndex;
 namespace Ui { class AppletSelector; }
 
 class AppletSelector : public KDialog
 {
-	Q_OBJECT
-	public:
-		AppletSelector(QWidget* parent = 0);
-		
-	public slots:
-		void selected(const QModelIndex& idx);
-		
-	signals:
-		void addApplet(const QString& name);
-		
-	private:
-		Ui::AppletSelector* m_ui;
+    Q_OBJECT
+    public:
+        AppletSelector(QWidget* parent = 0);
+        
+    public slots:
+        void selected(const QModelIndex& idx);
+        
+    signals:
+        void addApplet(const QString& name);
+        void addApplet(IDashboardPlasmoidFactory* w);
+        void addApplet(IDashboardWidgetFactory* w);
+        
+    private:
+        Ui::AppletSelector* m_ui;
 };
 
 #endif // APPLETSELECTOR_H

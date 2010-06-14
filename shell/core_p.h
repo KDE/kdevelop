@@ -41,6 +41,7 @@ class ProgressManager;
 class SelectionController;
 class DocumentationController;
 class DebugController;
+class DashboardController;
 class WorkingSetController;
 
 class KDEVPLATFORMSHELL_EXPORT CorePrivate {
@@ -62,6 +63,7 @@ public:
     QPointer<DocumentationController> documentationController;
     QPointer<DebugController> debugController;
     QPointer<WorkingSetController> workingSetController;
+    QPointer<DashboardController> dashboardController;
 
     KComponentData m_componentData;
     Core *m_core;
