@@ -177,5 +177,89 @@ void ProjectModelTest::testCreateTargetItems_data()
         << 0;
 }
 
+void ProjectModelTest::testCreateSimpleHierarchy()
+{
+    QString folderName = "rootfolder";
+    QString fileName = "file";
+    QString targetName = "testtarged";
+    QString cppFileName = "file.cpp";
+    ProjectFolderItem* rootFolder = new ProjectFolderItem( 0, KUrl("file:///"+folderName) );
+    ProjectFileItem* file = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+fileName), rootFolder );
+    ProjectTargetItem* target = new ProjectTargetItem( 0, targetName );
+    rootFolder->appendRow( target );
+    ProjectFileItem* targetfile = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+cppFileName), target );
+
+    model->appendRow( rootFolder );
+
+    QCOMPARE( model->rowCount(), 1 );
+    QModelIndex folderIdx = model->index( 0, 0, QModelIndex() );
+    QCOMPARE( model->data( folderIdx ).toString(), folderName );
+    QCOMPARE( model->rowCount( folderIdx ), 2 );
+    QCOMPARE( model->itemFromIndex( folderIdx ), rootFolder );
+    QVERIFY( rootFolder->hasFileOrFolder( fileName ) );
+
+    QModelIndex fileIdx = model->index( 0, 0, folderIdx );
+    QCOMPARE( model->data( fileIdx ).toString(), fileName );
+    QCOMPARE( model->rowCount( fileIdx ), 0 );
+    QCOMPARE( model->itemFromIndex( fileIdx ), file );
+
+    QModelIndex targetIdx = model->index( 1, 0, folderIdx );
+    QCOMPARE( model->data( targetIdx ).toString(), targetName );
+    QCOMPARE( model->rowCount( targetIdx ), 1 );
+    QCOMPARE( model->itemFromIndex( targetIdx ), target );
+
+    QModelIndex targetFileIdx = model->index( 0, 0, targetIdx );
+    QCOMPARE( model->data( targetFileIdx ).toString(), cppFileName );
+    QCOMPARE( model->rowCount( targetFileIdx ), 0 );
+    QCOMPARE( model->itemFromIndex( targetFileIdx ), targetfile );
+
+    rootFolder->removeRow( 1 );
+    QCOMPARE( model->rowCount( folderIdx ), 1 );
+    delete file;
+    file = 0;
+
+    // Check that we also find a folder with the fileName
+    new ProjectFolderItem( 0, fileName, rootFolder );
+    QVERIFY( rootFolder->hasFileOrFolder( fileName ) );
+
+    delete rootFolder;
+    QCOMPARE( model->rowCount(), 0 );
+}
+
+void ProjectModelTest::testItemSanity()
+{
+    ProjectBaseItem* parent = new ProjectBaseItem( 0, "test" );
+    ProjectBaseItem* child = new ProjectBaseItem( 0, "test", parent );
+    ProjectBaseItem* child2 = new ProjectBaseItem( 0, "ztest", parent );
+    ProjectFileItem* child3 = new ProjectFileItem( 0, KUrl("file:///bcd"), parent );
+    ProjectFileItem* child4 = new ProjectFileItem(  0, KUrl("file:///abcd"), parent  );
+
+    // Just some basic santiy checks on the API
+    QCOMPARE( parent->child( 0 ), child );
+    QVERIFY( !parent->child( -1 ) );
+    QVERIFY( !parent->file() );
+    QVERIFY( !parent->folder() );
+    QVERIFY( !parent->project() );
+    QVERIFY( !parent->child( parent->rowCount() ) );
+    QCOMPARE( parent->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled ) );
+    QCOMPARE( parent->iconName(), QString() );
+    QCOMPARE( parent->index(), QModelIndex() );
+
+    child->setFlags( child->flags() | Qt::ItemIsEditable );
+    QCOMPARE( child->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable ) );
+    QCOMPARE( child->type(), (int)ProjectBaseItem::BaseItem );
+
+    QCOMPARE( child->lessThan( child2 ), true );
+    QCOMPARE( child3->lessThan( child4 ), false );
+
+    // Check that model is properly emitting data-changes
+    model->appendRow( parent );
+    parent->setFlags( child->flags() | Qt::ItemIsEditable );
+    QCOMPARE( parent->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable ) );
+    QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
+    parent->setText( "newtest" );
+    QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
+}
+
 QTEST_KDEMAIN( ProjectModelTest, GUI)
 #include "projectmodeltest.moc"

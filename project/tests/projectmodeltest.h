@@ -37,6 +37,8 @@ private slots:
     void testCreateFileSystemItems_data();
     void testCreateTargetItems();
     void testCreateTargetItems_data();
+    void testCreateSimpleHierarchy();
+    void testItemSanity();
 private:
     KDevelop::ProjectModel* model;
 };
