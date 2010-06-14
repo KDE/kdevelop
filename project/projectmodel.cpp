@@ -495,7 +495,9 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
     setUrl( file );
     // Need to this manually here as setUrl() is virtual and hence the above
     // only calls the version in ProjectBaseItem and not ours
-    project->addToFileSet( KDevelop::IndexedString(file) );
+    if( project ) {
+        project->addToFileSet( KDevelop::IndexedString(file) );
+    }
 }
 
 ProjectFileItem::~ProjectFileItem()
@@ -534,9 +536,11 @@ QString ProjectFileItem::fileName() const
 
 void ProjectFileItem::setUrl( const KUrl& url )
 {
-    if(!this->url().isEmpty())
-        project()->removeFromFileSet( KDevelop::IndexedString(this->url()) );
-    project()->addToFileSet( KDevelop::IndexedString(url) );
+    if( project() ) {
+        if(!this->url().isEmpty())
+            project()->removeFromFileSet( KDevelop::IndexedString(this->url()) );
+        project()->addToFileSet( KDevelop::IndexedString(url) );
+    }
 
     ProjectBaseItem::setUrl( url );
 }
