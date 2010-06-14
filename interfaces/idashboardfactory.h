@@ -77,7 +77,7 @@ class IDashboardPlasmoidFactory : public IDashboardFactory
 {
     public:
         /** @returns the plasmoid that is going to be added when the user selects it for the Dashboard */
-        virtual Plasma::Applet* plasmaApplet(QGraphicsItem* parent, const QString& serviceId) = 0;
+        virtual Plasma::Applet* plasmaApplet(const QString& serviceId) = 0;
 };
 
 #endif // IDASHBOARDFACTORY_H
