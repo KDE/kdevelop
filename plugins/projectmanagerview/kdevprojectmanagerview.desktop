@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Exec=blubb
-Comment=KDevProjectManager
+Comment=Lets you manage the project contents.
 Comment[bg]=KDevProjectManager
 Comment[ca]=KDevProjectManager
 Comment[ca@valencia]=KDevProjectManager

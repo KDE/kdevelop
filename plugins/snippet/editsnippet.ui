@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>EditSnippetBase</class>
  <widget class="QWidget" name="EditSnippetBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>329</height>
+   </rect>
+  </property>
   <property name="minimumSize">
    <size>
     <width>500</width>
@@ -66,14 +74,14 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0">
+   <item row="5" column="0">
     <widget class="QLabel" name="snippetContentsLabel">
      <property name="text">
       <string>Snippet:</string>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item row="6" column="0" colspan="2">
     <widget class="KTextEdit" name="snippetContentsEdit">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
@@ -89,6 +97,16 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="snippetShortcutLabel">
+     <property name="text">
+      <string>Shortcut:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="KShortcutWidget" name="snippetShortcutWidget"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -96,6 +114,11 @@
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KShortcutWidget</class>
+   <extends>QWidget</extends>
+   <header>kshortcutwidget.h</header>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>
