@@ -46,3 +46,5 @@ ExternalScriptView::~ExternalScriptView()
 {
 
 }
+
+#include "externalscriptview.moc"

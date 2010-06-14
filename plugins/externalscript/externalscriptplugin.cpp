@@ -82,3 +82,5 @@ QStandardItemModel* ExternalScriptPlugin::model() const
 {
     return m_model;
 }
+
+#include "externalscriptplugin.moc"
