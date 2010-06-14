@@ -32,7 +32,9 @@
 #include <interfaces/icore.h>
 
 K_PLUGIN_FACTORY(ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
-K_EXPORT_PLUGIN(ExternalScriptFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(ExternalScriptFactory(KAboutData("kdevexternalscript","kdevexternalscript", ki18n("External Scripts"),
+                                                 "0.1", ki18n("Support for running external scripts."),
+                                                 KAboutData::License_GPL)))
 
 class ExternalScriptViewFactory: public KDevelop::IToolViewFactory
 {
