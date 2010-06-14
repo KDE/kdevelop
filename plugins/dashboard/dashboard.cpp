@@ -3,11 +3,14 @@
 #include <QTimer>
 #include "dashboardcorona.h"
 #include "appletselector.h"
+#include <interfaces/idashboardfactory.h>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsProxyWidget>
 
 using namespace Plasma;
 
-dashboard::dashboard(DashboardCorona* corona, QWidget* parent)
-    : View(0, parent), corona(corona), m_selector(0)
+dashboard::dashboard(KDevelop::IProject* project, DashboardCorona* corona, QWidget* parent)
+    : View(0, parent), corona(corona), m_selector(0), m_project(project)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -73,6 +76,27 @@ void dashboard::addApplet(const QString& name)
 {
     Applet* app=containment()->addApplet(name);
     Q_ASSERT(app);
+}
+
+void dashboard::addApplet(IDashboardPlasmoidFactory* fact)
+{
+    fact->setProject(m_project);
+    Applet* applet=fact->plasmaApplet(QString());
+    containment()->addApplet(applet);
+}
+
+void dashboard::addApplet(IDashboardWidgetFactory* fact)
+{
+    fact->setProject(m_project);
+    QWidget* w=fact->widget();
+    
+    Applet* a = new Applet;
+    QGraphicsLinearLayout* l=new QGraphicsLinearLayout(Qt::Horizontal);
+    QGraphicsProxyWidget* proxy=new QGraphicsProxyWidget(a);
+    proxy->setWidget(w);
+    l->addItem(proxy);
+    a->setLayout(l);
+    containment()->addApplet(a);
 }
 
 #include "dashboard.moc"

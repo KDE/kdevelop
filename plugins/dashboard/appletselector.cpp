@@ -32,6 +32,7 @@ enum Source { PlasmaPlugin, PlasmoidFactory, WidgetFactory };
 AppletSelector::AppletSelector(QWidget* parent)
     : KDialog(parent)
 {
+    setButtons(Close);
     QWidget* w = new QWidget(this);
     
     m_ui = new Ui::AppletSelector;
@@ -44,7 +45,7 @@ AppletSelector::AppletSelector(QWidget* parent)
     foreach(const KPluginInfo& info, list) {
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
         item->setToolTip(info.comment());
-        item->setData(PlasmaPlugin);
+        item->setData(qVariantFromValue<uint>(PlasmaPlugin));
         item->setData(info.pluginName(), Qt::UserRole+2);
         
         model->appendRow(item);
@@ -54,7 +55,7 @@ AppletSelector::AppletSelector(QWidget* parent)
     foreach(IDashboardPlasmoidFactory* fact, facts) {
         QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
         item->setToolTip(fact->comment());
-        item->setData(PlasmoidFactory);
+        item->setData(qVariantFromValue<uint>(PlasmoidFactory));
         item->setData(qVariantFromValue<void*>(fact), Qt::UserRole+2);
         
         model->appendRow(item);
@@ -64,12 +65,11 @@ AppletSelector::AppletSelector(QWidget* parent)
     foreach(IDashboardWidgetFactory* fact, factsW) {
         QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
         item->setToolTip(fact->comment());
-        item->setData(WidgetFactory);
+        item->setData(qVariantFromValue<uint>(WidgetFactory));
         item->setData(qVariantFromValue<void*>(fact), Qt::UserRole+2);
         
         model->appendRow(item);
     }
-    m_ui->label->setText(QString("a: %1, b: %2").arg(facts.size()).arg(factsW.size()));
     
     m_ui->plugins->setModel(model);
     
@@ -78,18 +78,16 @@ AppletSelector::AppletSelector(QWidget* parent)
 
 void AppletSelector::selected(const QModelIndex& idx)
 {
-    Source s = idx.data(Qt::UserRole+1).value<Source>();
+    Source s = (Source) idx.data(Qt::UserRole+1).value<uint>();
     switch(s) {
         case PlasmaPlugin:
             emit addApplet(idx.data(Qt::UserRole+2).toString());
             break;
         case PlasmoidFactory:
-            IDashboardPlasmoidFactory* fact = (IDashboardPlasmoidFactory*) idx.data(Qt::UserRole+1).value<void*>();
-            emit addApplet(fact);
+            emit addApplet((IDashboardPlasmoidFactory*) idx.data(Qt::UserRole+2).value<void*>());
             break;
         case WidgetFactory:
-            IDashboardWidgetFactory* fact = (IDashboardWidgetFactory*) idx.data(Qt::UserRole+1).value<void*>();
-            emit addApplet(fact);
+            emit addApplet((IDashboardWidgetFactory*) idx.data(Qt::UserRole+2).value<void*>());
             break;
     }
 }

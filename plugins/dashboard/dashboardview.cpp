@@ -30,5 +30,5 @@ QWidget* DashboardView::createWidget(QWidget* parent)
 {
     DashboardCorona* corona=new DashboardCorona(this);
     corona->initializeLayout(m_project->projectFileUrl().toLocalFile()); //TODO: decide what to do with remote files
-    return new dashboard(corona);
+    return new dashboard(m_project, corona);
 }
