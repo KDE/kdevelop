@@ -59,7 +59,9 @@ void dashboard::updateConfigurationMode(bool mode)
 	if(mode) { //TODO: Wrong place to put it, can't figure out the correct one yet
 		if(!m_selector) {
 			m_selector=new AppletSelector(this);
-			connect(m_selector, SIGNAL(addApplet(QString)), SLOT(addApplet(QString)));
+            connect(m_selector, SIGNAL(addApplet(QString)), SLOT(addApplet(QString)));
+            connect(m_selector, SIGNAL(addApplet(IDashboardPlasmoidFactory*)), SLOT(addApplet(IDashboardPlasmoidFactory*)));
+            connect(m_selector, SIGNAL(addApplet(IDashboardWidgetFactory*)), SLOT(addApplet(IDashboardWidgetFactory*)));
 		}
 		
 		m_selector->show();

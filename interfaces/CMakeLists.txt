@@ -83,6 +83,8 @@ install(FILES
     idocumentationprovider.h
     idocumentationcontroller.h
     idebugcontroller.h
+    idashboardcontroller.h
+    idashboardfactory.h
     ipartcontroller.h
     ilaunchmode.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel

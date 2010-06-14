@@ -100,6 +100,9 @@ public:
 
     /** @copydoc ICore::debugController() */
     virtual IDebugController* debugController();
+    
+    /** @copydoc ICore::dashboardController() */
+    virtual IDashboardController* dashboardController();
 
     /** @copydoc ICore::activeSession() */
     virtual ISession *activeSession();
