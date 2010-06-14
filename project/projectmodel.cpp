@@ -669,8 +669,8 @@ QModelIndex ProjectModel::parent( const QModelIndex& child ) const
 
 QModelIndex ProjectModel::indexFromItem( const ProjectBaseItem* item ) const
 {
-    if( item && item->parent() ) {
-        return createIndex( item->row(), 0, item->parent() );
+    if( item && item->d_func()->parent ) {
+        return createIndex( item->row(), 0, item->d_func()->parent );
     }
     return QModelIndex();
 }
