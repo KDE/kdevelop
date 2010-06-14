@@ -33,8 +33,10 @@ Q_OBJECT
 private slots:
     void initTestCase();
     void init();
-    void testCreateFolders();
-    void testCreateFolders_data();
+    void testCreateFileSystemItems();
+    void testCreateFileSystemItems_data();
+    void testCreateTargetItems();
+    void testCreateTargetItems_data();
 private:
     KDevelop::ProjectModel* model;
 };

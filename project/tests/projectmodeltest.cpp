@@ -27,6 +27,10 @@
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
 using KDevelop::ProjectFolderItem;
+using KDevelop::ProjectFileItem;
+using KDevelop::ProjectExecutableTargetItem;
+using KDevelop::ProjectLibraryTargetItem;
+using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectBuildFolderItem;
 
 void ProjectModelTest::initTestCase()
@@ -40,7 +44,7 @@ void ProjectModelTest::init()
     model->clear();
 }
 
-void ProjectModelTest::testCreateFolders()
+void ProjectModelTest::testCreateFileSystemItems()
 {
     QFETCH( int, itemType );
     QFETCH( KUrl, itemUrl );
@@ -57,6 +61,9 @@ void ProjectModelTest::testCreateFolders()
         case ProjectBaseItem::BuildFolder:
             newitem = new ProjectBuildFolderItem( 0, itemUrl );
             break;
+        case ProjectBaseItem::File:
+            newitem = new ProjectFileItem( 0, itemUrl );
+            break;
     }
     int origRowCount = model->rowCount();
     model->appendRow( newitem );
@@ -67,6 +74,12 @@ void ProjectModelTest::testCreateFolders()
     QCOMPARE( model->itemFromIndex( idx ), newitem );
     QCOMPARE( newitem->text(), expectedItemText );
     QCOMPARE( newitem->url(), expectedItemUrl );
+    if( itemType == ProjectBaseItem::File ) {
+        QCOMPARE( dynamic_cast<ProjectFileItem*>( newitem )->fileName(), expectedItemText );
+    }
+    if( itemType == ProjectBaseItem::Folder || itemType == ProjectBaseItem::BuildFolder ) {
+        QCOMPARE( dynamic_cast<ProjectFolderItem*>( newitem )->folderName(), expectedItemText );
+    }
     QCOMPARE( newitem->type(), itemType );
     QCOMPARE( model->data( idx ).toString(), expectedItemText );
     QCOMPARE( model->indexFromItem( newitem ), idx );
@@ -74,7 +87,7 @@ void ProjectModelTest::testCreateFolders()
     QCOMPARE( model->pathToIndex( expectedItemPath ), idx );
 }
 
-void ProjectModelTest::testCreateFolders_data()
+void ProjectModelTest::testCreateFileSystemItems_data()
 {
     QTest::addColumn<int>( "itemType" );
     QTest::addColumn<KUrl>( "itemUrl" );
@@ -99,6 +112,69 @@ void ProjectModelTest::testCreateFolders_data()
         << ( QStringList() << "rootdir" )
         << 0;
 
+    QTest::newRow("RootFile")
+        << (int)ProjectBaseItem::File
+        << KUrl("file:///rootfile")
+        << KUrl("file:///rootfile")
+        << QString::fromLatin1("rootfile")
+        << ( QStringList() << "rootfile" )
+        << 0;
+
+}
+
+void ProjectModelTest::testCreateTargetItems()
+{
+    QFETCH( int, itemType );
+    QFETCH( QString, itemText );
+    QFETCH( QString, expectedItemText );
+    QFETCH( QStringList, expectedItemPath );
+    QFETCH( int, expectedItemRow );
+
+    ProjectBaseItem* newitem = 0;
+    switch( itemType ) {
+        case ProjectBaseItem::Target:
+            newitem = new ProjectTargetItem( 0, itemText );
+            break;
+        case ProjectBaseItem::LibraryTarget:
+            newitem = new ProjectLibraryTargetItem( 0, itemText );
+            break;
+    }
+    int origRowCount = model->rowCount();
+    model->appendRow( newitem );
+    QCOMPARE( model->rowCount(), origRowCount+1 );
+    QCOMPARE( newitem->row(), expectedItemRow );
+    QModelIndex idx = model->index( expectedItemRow, 0, QModelIndex() );
+    QVERIFY( model->itemFromIndex( idx ) );
+    QCOMPARE( model->itemFromIndex( idx ), newitem );
+    QCOMPARE( newitem->text(), expectedItemText );
+    QCOMPARE( newitem->type(), itemType );
+    QCOMPARE( model->data( idx ).toString(), expectedItemText );
+    QCOMPARE( model->indexFromItem( newitem ), idx );
+    QCOMPARE( model->pathFromIndex( idx ), expectedItemPath );
+    QCOMPARE( model->pathToIndex( expectedItemPath ), idx );
+}
+
+void ProjectModelTest::testCreateTargetItems_data()
+{
+    QTest::addColumn<int>( "itemType" );
+    QTest::addColumn<QString>( "itemText" );
+    QTest::addColumn<QString>( "expectedItemText" );
+    QTest::addColumn<QStringList>( "expectedItemPath" );
+    QTest::addColumn<int>( "expectedItemRow" );
+
+    QTest::newRow("RootTarget")
+        << (int)ProjectBaseItem::Target
+        << "target"
+        << QString::fromLatin1("target")
+        << ( QStringList() << "target" )
+        << 0;
+
+    QTest::newRow("RootLibraryTarget")
+        << (int)ProjectBaseItem::LibraryTarget
+        << "libtarget"
+        << QString::fromLatin1("libtarget")
+        << ( QStringList() << "libtarget" )
+        << 0;
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)
