@@ -22,6 +22,7 @@
 #include <qtest_kde.h>
 
 #include <projectmodel.h>
+#include <tests/modeltest.h>
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
@@ -31,6 +32,7 @@ using KDevelop::ProjectBuildFolderItem;
 void ProjectModelTest::initTestCase()
 {
     model = new ProjectModel( this );
+    ModelTest* mt = new ModelTest( model, this );
 }
 
 void ProjectModelTest::init()
