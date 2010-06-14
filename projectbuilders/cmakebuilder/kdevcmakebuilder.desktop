@@ -28,6 +28,7 @@ Name[uk]=Інструмент збирання проектів CMake
 Name[x-test]=xxCMake Project Builderxx
 Name[zh_CN]=CMake 工程构建器
 Name[zh_TW]=CMake 專案建立器
+GenericName=Project Builder
 Comment=Builds CMake Projects
 Comment[ca]=Construeix projectes CMake
 Comment[ca@valencia]=Construeix projectes CMake

@@ -56,6 +56,7 @@ Name[uk]=Сервер форматування Indent
 Name[x-test]=xxIndent Formatter Backendxx
 Name[zh_CN]=Indent 格式化器后端
 Name[zh_TW]=Indent 格式器後端介面
+GenericName=Formatter Backend
 
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevindent
