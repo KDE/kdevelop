@@ -25,6 +25,9 @@
 
 #include "ui_externalscriptview.h"
 
+class ExternalScriptItem;
+class KAction;
+
 class QSortFilterProxyModel;
 
 class ExternalScriptPlugin;
@@ -37,9 +40,29 @@ public:
   ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent = 0 );
   virtual ~ExternalScriptView();
 
+  /// @return Currently selected script item.
+  ExternalScriptItem* currentItem() const;
+
+private slots:
+  void contextMenu ( const QPoint& pos );
+
+  void addScript();
+  void removeScript();
+  void editScript();
+
+  /// disables or enables available actions based on the currently selected item
+  void validateActions();
+
+protected:
+  /// insert snippet on double click
+  virtual bool eventFilter( QObject* obj, QEvent* event );
+
 private:
   ExternalScriptPlugin* m_plugin;
   QSortFilterProxyModel* m_model;
+  KAction* m_addScriptAction;
+  KAction* m_editScriptAction;
+  KAction* m_removeScriptAction;
 };
 
 #endif // EXTERNALSCRIPTVIEW_H

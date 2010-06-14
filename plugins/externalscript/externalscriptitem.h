@@ -110,4 +110,6 @@ private:
 
 #endif // EXTERNALSCRIPTITEM_H
 
+Q_DECLARE_METATYPE(ExternalScriptItem*)
+
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 
