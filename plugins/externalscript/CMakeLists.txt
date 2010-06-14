@@ -3,6 +3,7 @@
 set(kdevexternalscript_PART_SRCS
     externalscriptplugin.cpp
     externalscriptview.cpp
+    externalscriptitem.cpp
 )
 
 set(kdevexternalscript_PART_UI
