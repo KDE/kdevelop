@@ -611,7 +611,7 @@ QModelIndex ProjectModel::pathToIndex(const QStringList& tofetch_) const
         const QString& currentName = tofetch[a];
 
         bool matched = false;
-        QModelIndexList l = match(current, Qt::EditRole, currentName, -1, Qt::MatchExactly);
+        QModelIndexList l = match(current, Qt::DisplayRole, currentName, -1, Qt::MatchExactly);
         foreach(const QModelIndex& idx, l) {
             //If this is not the last item, only match folders, as there may be targets and folders with the same name
             if(a == tofetch.size()-1 || itemFromIndex(idx)->folder()) {
@@ -638,7 +638,7 @@ QStringList ProjectModel::pathFromIndex(const QModelIndex& index) const
     QModelIndex idx = index;
     QStringList list;
     do {
-        QString t = data(idx, Qt::EditRole).toString();
+        QString t = data(idx, Qt::DisplayRole).toString();
         list.prepend(t);
         QModelIndex parent = idx.parent();
         idx = parent.sibling(parent.row(), index.column());
