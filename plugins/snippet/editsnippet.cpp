@@ -18,6 +18,8 @@
 #include <KTextEditor/EditorChooser>
 #include <KPushButton>
 
+#include <KAction>
+
 #include "snippetstore.h"
 #include "snippet.h"
 
@@ -46,6 +48,7 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
         snippetNameEdit->setText(m_snippet->text());
         snippetPostfixEdit->setText(m_snippet->postfix());
         snippetPrefixEdit->setText(m_snippet->prefix());
+        snippetShortcutWidget->setShortcut(m_snippet->action()->shortcut());
     } else {
         setWindowTitle(i18n("Create New Snippet in Repository %1", m_repo->text()));
     }
@@ -90,6 +93,7 @@ void EditSnippet::save()
     m_snippet->setText(snippetNameEdit->text());
     m_snippet->setPostfix(snippetPostfixEdit->text());
     m_snippet->setPrefix(snippetPrefixEdit->text());
+    m_snippet->action()->setShortcut(snippetShortcutWidget->shortcut());
     m_repo->save();
 
     setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
