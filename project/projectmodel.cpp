@@ -502,7 +502,9 @@ ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectB
 
 ProjectFileItem::~ProjectFileItem()
 {
-    project()->removeFromFileSet(KDevelop::IndexedString(url()));
+    if( project() ) {
+        project()->removeFromFileSet(KDevelop::IndexedString(url()));
+    }
 }
 
 QString ProjectFileItem::iconName() const
