@@ -22,6 +22,7 @@
 #include "externalscriptplugin.h"
 
 #include "externalscriptview.h"
+#include "externalscriptitem.h"
 
 #include <KPluginFactory>
 #include <KAboutData>
@@ -64,6 +65,13 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   setXMLFile( "kdevexternalscript.rc" );
 
   core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
+
+  ExternalScriptItem* item = new ExternalScriptItem;
+  item->setText("quick compile");
+  item->setCommand("g++ -o %F %f && ./%F");
+  item->setSaveMode(ExternalScriptItem::SaveCurrentDocument);
+
+  m_model->appendRow(item);
 }
 
 ExternalScriptPlugin::~ExternalScriptPlugin()

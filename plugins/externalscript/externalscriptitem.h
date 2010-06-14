@@ -99,6 +99,7 @@ public:
   ///TODO: custom icon
   ///TODO: mimetype / language filter
   ///TODO: kate commandline integration
+  ///TODO: shortcuts
 
 private:
   QString m_command;
