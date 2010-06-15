@@ -31,7 +31,7 @@ DUChainChangeSet::DUChainChangeSet(ReferencedTopDUContext topContext) :
 {
 }
 
-DUChainChangeSet::~DUChainChangeSet(void)
+DUChainChangeSet::~DUChainChangeSet()
 {
     foreach(DUChainRef * reference, m_objectRefs)
         delete reference;

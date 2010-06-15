@@ -105,7 +105,7 @@ void CreateClassWizard::accept()
     changes.applyAllChanges();
 }
 
-ClassGenerator * CreateClassWizard::generator(void)
+ClassGenerator * CreateClassWizard::generator()
 {
     return d->generator;
 }
@@ -132,17 +132,17 @@ struct ClassGeneratorPrivate
     KUrl implementationUrl;
 };
 
-ClassGenerator::ClassGenerator(void) :
+ClassGenerator::ClassGenerator() :
                              d(new ClassGeneratorPrivate)
 {
 }
 
-ClassGenerator::~ClassGenerator(void)
+ClassGenerator::~ClassGenerator()
 {
     delete d;
 }
 
-const QString & ClassGenerator::name(void) const
+const QString & ClassGenerator::name() const
 {
     return d->name;
 }
@@ -152,7 +152,7 @@ void ClassGenerator::identifier(const QString & identifier)
     name(identifier);
 }
 
-QString ClassGenerator::identifier(void) const
+QString ClassGenerator::identifier() const
 {
     return name();
 }
@@ -202,18 +202,18 @@ const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  
     return m_baseClasses;
 }
 
-const QList<DeclarationPointer> & ClassGenerator::inheritanceList(void) const
+const QList<DeclarationPointer> & ClassGenerator::inheritanceList() const
 {
     return d->inheritedClasses;
 }
 
-void ClassGenerator::clearInheritance(void)
+void ClassGenerator::clearInheritance()
 {
     m_baseClasses.clear();
     d->inheritedClasses.clear();
 }
 
-void ClassGenerator::clearDeclarations(void)
+void ClassGenerator::clearDeclarations()
 {
     m_declarations.clear();
 }
@@ -284,7 +284,7 @@ void ClassGenerator::license(const QString & license)
 }
 
 /// Get the license specified for this classes
-const QString & ClassGenerator::license(void) const
+const QString & ClassGenerator::license() const
 {
     return d->license;
 }
@@ -486,7 +486,7 @@ LicensePage::LicensePage(QWizard* parent)
     registerField("license", d->license->licenseTextEdit);
 }
 
-LicensePage::~LicensePage(void)
+LicensePage::~LicensePage()
 {
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
     //Do not save invalid license numbers'
@@ -503,7 +503,7 @@ LicensePage::~LicensePage(void)
 }
 
 // If the user entered a custom license that they want to save, save it
-bool LicensePage::validatePage(void)
+bool LicensePage::validatePage()
 {
     if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) && 
         d->license->saveLicense->isChecked())
@@ -513,7 +513,7 @@ bool LicensePage::validatePage(void)
 }
 
 //! Read all the license files in the global and local config dirs
-void LicensePage::initializeLicenses(void)
+void LicensePage::initializeLicenses()
 {
     kDebug() << "Searching for available licenses";
     KStandardDirs * dirs = KGlobal::dirs();
@@ -595,7 +595,7 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->licenseTextEdit->setText(readLicense(selectedLicense));
 }
 
-bool LicensePage::saveLicense(void)
+bool LicensePage::saveLicense()
 {
     kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
     

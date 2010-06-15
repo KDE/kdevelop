@@ -57,7 +57,7 @@ public:
     /// Returns a list of inheritances for the new class
     QStringList inheritanceList() const;
     
-    virtual bool validatePage(void);
+    virtual bool validatePage();
 
 Q_SIGNALS:
     void inheritanceChanged();
@@ -108,9 +108,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT LicensePage : public QWizardPage
 
 public:
     LicensePage(QWizard* parent);
-    virtual ~LicensePage(void);
+    virtual ~LicensePage();
     
-    bool validatePage(void);
+    bool validatePage();
 
 public Q_SLOTS:
     virtual void licenseComboChanged(int license);
@@ -120,9 +120,9 @@ private:
     class LicensePagePrivate* const d;
     
     // methods
-    void        initializeLicenses(void);
+    void        initializeLicenses();
     QString &   readLicense(int licenseIndex);
-    bool        saveLicense(void);
+    bool        saveLicense();
 };
 
 /**
@@ -133,8 +133,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
 {
   public:
     
-    ClassGenerator(void);
-    virtual ~ClassGenerator(void);
+    ClassGenerator();
+    virtual ~ClassGenerator();
       
     /**
      * Generate the actual DocumentChangeSet
@@ -144,12 +144,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /**
      * Remove all previous base classes
      */
-    virtual void clearInheritance(void);
+    virtual void clearInheritance();
     
     /**
      * Clear all in class declarations
      */
-    void clearDeclarations(void);
+    void clearDeclarations();
     
     /**
      * Add another base class, must be the pure identifier
@@ -169,7 +169,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     const QList<DeclarationPointer> declarations() const;
     
     /// \return The list of all of the inherited classes
-    const QList<DeclarationPointer> & inheritanceList(void) const;
+    const QList<DeclarationPointer> & inheritanceList() const;
 
     /**
      *Should return the suggested url of the header file for the given class-name
@@ -205,7 +205,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /**
      * \return The name of the class to generate (excluding namespaces)
      */
-    const QString & name(void) const;
+    const QString & name() const;
     
     /**
      * @param identifier The Qualified identifier that the class will have
@@ -220,9 +220,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /**
      * \return The Identifier of the class to generate (including all used namespaces)
      */
-    virtual QString identifier(void) const;
+    virtual QString identifier() const;
     
-    const QString & license(void) const;
+    const QString & license() const;
     void license(const QString & license);
 
   protected:
