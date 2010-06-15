@@ -54,8 +54,8 @@ class MakeImplementationPrivate : public CodeGenerator<ParseSession>
     MakeImplementationPrivate() : m_classContext(0) {}
     ~MakeImplementationPrivate() {}
     // Implementations from CodeGenerator
-    virtual bool process(void);
-    virtual bool gatherInformation(void);
+    virtual bool process();
+    virtual bool gatherInformation();
     virtual bool checkPreconditions(DUContext* context, const DocumentRange& position);
     
     //Options for auto generation

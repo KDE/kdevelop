@@ -67,7 +67,7 @@ class CppNewClass : public KDevelop::ClassGenerator
     CppNewClass(KDevelop::ProjectBaseItem* parentItem)
       : m_type(DefaultType), m_objectType(new CppClassType), m_parentItem(parentItem)
     {};
-    virtual ~CppNewClass(void) {};
+    virtual ~CppNewClass() {};
     
     virtual KDevelop::DocumentChangeSet generate();
     

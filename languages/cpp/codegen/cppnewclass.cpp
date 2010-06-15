@@ -277,7 +277,7 @@ void CppNewClass::setType(Type type)
 }
 
 
-QString CppNewClass::identifier(void) const
+QString CppNewClass::identifier() const
 {
   QString identifier = m_namespaces.join("::");
   
