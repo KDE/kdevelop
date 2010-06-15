@@ -225,9 +225,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     const QString & license(void) const;
     void license(const QString & license);
 
-    void setAddCommentCharToLicense( bool addcomment );
-    bool addCommentCharToLicense() const;
-    
   protected:
     
     /**

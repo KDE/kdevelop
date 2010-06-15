@@ -91,7 +91,6 @@ void CreateClassWizard::accept()
     
     //Transmit all the final information to the generator
     d->generator->license(field("license").toString());
-    d->generator->setAddCommentCharToLicense(field("addComment").toBool());
     kDebug() << "Header Url: " << field("headerUrl").toString();
     /*
     d->generator->setHeaderUrl(field("headerUrl").toString());
@@ -125,7 +124,6 @@ struct ClassGeneratorPrivate
 {
     QString name; ///< The name for the class to be generated (does not include namespace if relevant)
     QString license;
-    bool addCommentChar;
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
     SimpleCursor headerPosition;
     SimpleCursor implementationPosition;
@@ -290,17 +288,6 @@ const QString & ClassGenerator::license(void) const
 {
     return d->license;
 }
-
-bool ClassGenerator::addCommentCharToLicense() const
-{
-    return d->addCommentChar;
-}
-
-void ClassGenerator::setAddCommentCharToLicense(bool addcomment)
-{
-    d->addCommentChar = addcomment;
-}
-
 
 void ClassGenerator::fetchSuperClasses(DeclarationPointer derivedClass)
 {
@@ -492,13 +479,11 @@ LicensePage::LicensePage(QWizard* parent)
     
     //Set the license selection to the previous one
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
-    d->license->addComment->setChecked( config.readEntry( "AddCommentCharacter", true ) );
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
     //Needed to avoid a bug where licenseComboChanged doesn't get called by QComboBox if the past selection was 0
     licenseComboChanged(d->license->licenseComboBox->currentIndex());
 
     registerField("license", d->license->licenseTextEdit);
-    registerField("addComment", d->license->addComment);
 }
 
 LicensePage::~LicensePage(void)
@@ -506,7 +491,6 @@ LicensePage::~LicensePage(void)
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
     //Do not save invalid license numbers'
     int index = d->license->licenseComboBox->currentIndex();
-    config.writeEntry("AddCommentCharacter", !d->license->addComment->isEnabled() || d->license->addComment->isChecked() );
     if( index >= 0 || index < d->availableLicenses.size() )
     {
         config.writeEntry("LastSelectedLicense", index);
@@ -598,14 +582,11 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->licenseTextEdit->clear();
         d->license->licenseTextEdit->setReadOnly(false);
         d->license->saveLicense->setEnabled(true);
-        d->license->addComment->setEnabled(true);
     }
     else
     {
         d->license->saveLicense->setEnabled(false);
         d->license->licenseTextEdit->setReadOnly(true);
-        d->license->addComment->setEnabled(false);
-        d->license->addComment->setChecked(true);
     }
     
     if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
