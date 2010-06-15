@@ -23,11 +23,16 @@
 #include "externalscriptitem.h"
 
 #include <QFileInfo>
+#include <QApplication>
 
 #include <KProcess>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <KShell>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include <outputview/outputmodel.h>
 #include <util/processlinemaker.h>
@@ -35,9 +40,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
-#include <QApplication>
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
+
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
     : KDevelop::OutputJob( parent ),
@@ -105,6 +108,10 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     command.replace( "%b", info.baseName() );
     command.replace( "%n", info.fileName() );
     command.replace( "%d", info.path() );
+
+    if ( active->textDocument() && active->textDocument()->activeView() && active->textDocument()->activeView()->selection() ) {
+      command.replace( "%s", KShell::quoteArg( active->textDocument()->activeView()->selectionText() ) );
+    }
   }
 
   m_proc = new KProcess( this );

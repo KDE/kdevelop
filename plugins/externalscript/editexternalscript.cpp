@@ -49,7 +49,9 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
     "  <dt><code>%b</code></dt>\n"
     "  <dd>Gets replaced by the name of the active document without its extension.</dd>\n"
     "  <dt><code>%d</code></dt>\n"
-    "  <dd>Gets replaced by the path to the directory of the active document</dd>\n"
+    "  <dd>Gets replaced by the path to the directory of the active document.</dd>\n"
+    "  <dt><code>%s</code></dt>\n"
+    "  <dd>Gets replaced with the shell escaped contents of the selection in the active document.</dd>\n"
     "</dl>\n"
     "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous commands that could lead to data loss.</p>\n"
   );
