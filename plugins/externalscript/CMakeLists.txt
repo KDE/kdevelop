@@ -4,6 +4,7 @@ set(kdevexternalscript_PART_SRCS
     externalscriptplugin.cpp
     externalscriptview.cpp
     externalscriptitem.cpp
+    externalscriptjob.cpp
 )
 
 set(kdevexternalscript_PART_UI
@@ -17,6 +18,7 @@ kde4_add_plugin(kdevexternalscript ${kdevexternalscript_PART_SRCS})
 target_link_libraries(kdevexternalscript
     ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} ${KDE4_KNEWSTUFF3_LIBS}
     kdevplatformlanguage kdevplatforminterfaces
+    kdevplatformutil kdevplatformoutputview
 )
 
 install( TARGETS kdevexternalscript DESTINATION ${PLUGIN_INSTALL_DIR} )

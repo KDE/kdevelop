@@ -24,7 +24,6 @@
 
 #include <interfaces/iplugin.h>
 #include <QVariantList>
-#include <QProcess>
 
 class ExternalScriptItem;
 class QStandardItemModel;
@@ -48,9 +47,6 @@ public:
    * Executes @p script.
    */
   void execute(ExternalScriptItem* item) const;
-
-public slots:
-    void scriptFinished( int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
   QStandardItemModel* m_model;
