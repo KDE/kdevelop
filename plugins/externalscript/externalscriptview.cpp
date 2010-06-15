@@ -45,6 +45,7 @@ ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* p
   scriptTree->setModel( m_model );
   scriptTree->setContextMenuPolicy( Qt::CustomContextMenu );
   scriptTree->viewport()->installEventFilter( this );
+  scriptTree->header()->hide();
   connect(scriptTree, SIGNAL(customContextMenuRequested(const QPoint&)),
           this, SLOT(contextMenu(const QPoint&)));
 
