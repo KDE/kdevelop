@@ -126,6 +126,7 @@ void ExternalScriptPlugin::execute( ExternalScriptItem* item ) const
   }
 
   cmd->setShellCommand( command );
+  cmd->setOutputChannelMode( KProcess::SeparateChannels );
   connect( cmd, SIGNAL(finished(int, QProcess::ExitStatus)),
            this, SLOT(scriptFinished(int, QProcess::ExitStatus)));
   cmd->start();
