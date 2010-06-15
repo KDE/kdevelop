@@ -76,7 +76,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     }
   }
 
-  if ( item->saveMode() == ExternalScriptItem::SaveCurrentDocument ) {
+  if ( item->saveMode() == ExternalScriptItem::SaveCurrentDocument && active ) {
     active->save();
   } else if ( item->saveMode() == ExternalScriptItem::SaveAllDocuments ) {
     foreach ( KDevelop::IDocument* doc, KDevelop::ICore::self()->documentController()->openDocuments() ) {
