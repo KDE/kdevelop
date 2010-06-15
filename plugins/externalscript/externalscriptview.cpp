@@ -71,10 +71,19 @@ ExternalScriptView::~ExternalScriptView()
 
 ExternalScriptItem* ExternalScriptView::currentItem() const
 {
-    QModelIndex index = scriptTree->currentIndex();
-    index = m_model->mapToSource( index );
-    return static_cast<ExternalScriptItem*>( m_plugin->model()->itemFromIndex( index ) );
+  return itemForIndex(scriptTree->currentIndex());
 }
+
+ExternalScriptItem* ExternalScriptView::itemForIndex( const QModelIndex& index ) const
+{
+  if ( !index.isValid() ) {
+    return 0;
+  }
+
+  const QModelIndex mappedIndex = m_model->mapToSource( index );
+  return static_cast<ExternalScriptItem*>( m_plugin->model()->itemFromIndex( mappedIndex ) );
+}
+
 
 void ExternalScriptView::validateActions()
 {
@@ -98,9 +107,10 @@ bool ExternalScriptView::eventFilter(QObject* obj, QEvent* e)
         if ( (!singleClick && e->type() == QEvent::MouseButtonDblClick) || (singleClick && e->type() == QEvent::MouseButtonRelease) ) {
             QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
             Q_ASSERT(mouseEvent);
-            QModelIndex clickedIndex = scriptTree->indexAt(mouseEvent->pos());
-            if (clickedIndex.isValid()) {
-                ///TODO: execute script
+            ExternalScriptItem* item = itemForIndex( scriptTree->indexAt( mouseEvent->pos() ) );
+            if ( item ) {
+                item->execute();
+
                 e->accept();
                 return true;
             }

@@ -42,6 +42,8 @@ public:
 
   /// @return Currently selected script item.
   ExternalScriptItem* currentItem() const;
+  /// @return Item for @p index.
+  ExternalScriptItem* itemForIndex(const QModelIndex& index) const;
 
 private slots:
   void contextMenu ( const QPoint& pos );

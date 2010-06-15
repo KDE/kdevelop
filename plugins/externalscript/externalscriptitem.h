@@ -96,10 +96,16 @@ public:
    */
   void setInputMode( InputMode mode );
 
+  /**
+   * Executes this command.
+   */
+  void execute() const;
+
   ///TODO: custom icon
   ///TODO: mimetype / language filter
   ///TODO: kate commandline integration
   ///TODO: shortcuts
+  ///TODO: filter for local/remote files
 
 private:
   QString m_command;
