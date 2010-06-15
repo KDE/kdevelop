@@ -109,8 +109,8 @@ private:
   InputMode m_inputMode;
 };
 
-#endif // EXTERNALSCRIPTITEM_H
-
 Q_DECLARE_METATYPE(ExternalScriptItem*)
+
+#endif // EXTERNALSCRIPTITEM_H
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

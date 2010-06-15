@@ -75,8 +75,14 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   item->setText("quick compile");
   item->setCommand("g++ -o %b %f && ./%b");
   item->setSaveMode(ExternalScriptItem::SaveCurrentDocument);
-
   m_model->appendRow(item);
+
+  item = new ExternalScriptItem;
+  item->setText( "uniq" );
+  item->setCommand( "uniq" );
+  item->setInputMode( ExternalScriptItem::InputSelection );
+  item->setReplaceMode( ExternalScriptItem::ReplaceSelection );
+  m_model->appendRow( item );
 }
 
 ExternalScriptPlugin::~ExternalScriptPlugin()

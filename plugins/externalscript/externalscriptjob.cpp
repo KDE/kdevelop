@@ -36,10 +36,14 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <QApplication>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
     : KDevelop::OutputJob( parent ), m_proc( new KProcess( this ) ),
-    m_lineMaker( new KDevelop::ProcessLineMaker( m_proc, this ) )
+    m_lineMaker( new KDevelop::ProcessLineMaker( m_proc, this ) ),
+    m_replaceMode( item->replaceMode() ), m_inputMode( item->inputMode() ),
+    m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() )
 {
   kDebug() << "creating external script job";
 
@@ -49,6 +53,26 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
 
   KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
+
+  if ( m_replaceMode != ExternalScriptItem::ReplaceNone || m_inputMode != ExternalScriptItem::InputNone ) {
+    if ( !active || !active->isTextDocument() ) {
+      KMessageBox::error( QApplication::activeWindow(),
+                          i18n("Cannot run script '%1' since it tries to replace "
+                               "the editor contents but no document is open.", item->text()),
+                          i18n("No Document Open")
+      );
+      return;
+    }
+    m_document = active->textDocument();
+    connect( m_document, SIGNAL(aboutToClose(KTextEditor::Document*)),
+             this, SLOT(kill()) );
+
+    if ( item->replaceMode() == ExternalScriptItem::ReplaceSelection ) {
+      if ( m_document->activeView() && m_document->activeView()->selection() ) {
+        m_selectionRange = m_document->activeView()->selectionRange();
+      }
+    }
+  }
 
   QString command = item->command();
 
@@ -93,6 +117,18 @@ void ExternalScriptJob::start()
     startOutput();
     appendLine( i18n( "Running external script: %1", m_proc->program().join(" ") ) );
     m_proc->start();
+    if ( m_inputMode != ExternalScriptItem::InputNone ) {
+      QString inputText;
+      if ( m_selectionRange.isValid() ) {
+        inputText = m_document->text( m_selectionRange );
+      } else {
+        inputText = m_document->text();
+      }
+      ///TODO: what to do with the encoding here?
+      ///      maybe ask Christoph for what kate returns...
+      m_proc->write( inputText.toUtf8() );
+      m_proc->closeWriteChannel();
+    }
   } else {
     kWarning() << "No process, something went wrong when creating the job";
     // No process means we've returned early on from the constructor, some bad error happened
@@ -115,9 +151,23 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
 {
   m_lineMaker->flushBuffers();
 
-  if ( exitCode == 0 && status == QProcess::NormalExit )
+  if ( exitCode == 0 && status == QProcess::NormalExit ) {
+    if ( m_replaceMode != ExternalScriptItem::ReplaceNone ) {
+      QStringList output;
+      ///TODO: filter stderr?
+      //note: start at 1 since we add one line ourselves
+      for ( int i = 1, c = model()->rowCount(); i < c; ++i ) {
+        output << model()->data( model()->index(i, 0) ).toString();
+      }
+      if ( m_selectionRange.isValid() ) {
+        m_document->replaceText( m_selectionRange, output.join("\n")  );
+      } else {
+        m_document->setText( output.join("\n") );
+      }
+    }
+
     appendLine( i18n( "*** Exited normally ***" ) );
-  else
+  } else {
     if ( status == QProcess::NormalExit )
       appendLine( i18n( "*** Exited with return code: %1 ***", QString::number( exitCode ) ) );
     else
@@ -125,6 +175,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
         appendLine( i18n( "*** Process aborted ***" ) );
       else
         appendLine( i18n( "*** Crashed with return code: %1 ***", QString::number( exitCode ) ) );
+  }
 
   kDebug() << "Process done";
 

@@ -24,6 +24,10 @@
 #include <QtCore/QProcess>
 #include <outputview/outputjob.h>
 
+#include "externalscriptitem.h"
+
+#include <KTextEditor/Range>
+
 namespace KDevelop
 {
 class ProcessLineMaker;
@@ -31,9 +35,12 @@ class OutputModel;
 class Document;
 }
 
-class KProcess;
+namespace KTextEditor
+{
+class Document;
+}
 
-class ExternalScriptItem;
+class KProcess;
 
 class ExternalScriptJob : public KDevelop::OutputJob
 {
@@ -53,6 +60,11 @@ private:
   void appendLine( const QString &l );
   KProcess* m_proc;
   KDevelop::ProcessLineMaker* m_lineMaker;
+  ExternalScriptItem::ReplaceMode m_replaceMode;
+  ExternalScriptItem::InputMode m_inputMode;
+  KTextEditor::Document* m_document;
+  /// invalid when whole doc should be replaced
+  KTextEditor::Range m_selectionRange;
 };
 
 #endif // EXTERNALSCRIPTJOB_H
