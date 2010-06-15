@@ -31,6 +31,7 @@
 #include <QSortFilterProxyModel>
 #include <QMouseEvent>
 #include <KMessageBox>
+#include <QMenu>
 
 ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent )
     : QWidget( parent ), m_plugin( plugin )
@@ -98,7 +99,10 @@ void ExternalScriptView::validateActions()
 
 void ExternalScriptView::contextMenu( const QPoint& pos )
 {
+  QMenu menu;
+  menu.addActions( actions() );
 
+  menu.exec( scriptTree->mapToGlobal( pos ) );
 }
 
 bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
