@@ -77,7 +77,7 @@ class CppNewClass : public KDevelop::ClassGenerator
     virtual KUrl headerUrlFromBase(KUrl baseUrl, bool toLower=true);
     virtual KUrl implementationUrlFromBase(KUrl baseUrl, bool toLower=true);
     
-    virtual void identifier(const QString & identifier);
+    virtual void setIdentifier(const QString & identifier);
     virtual QString identifier() const;
     
     virtual KDevelop::StructureType::Ptr objectType() const;

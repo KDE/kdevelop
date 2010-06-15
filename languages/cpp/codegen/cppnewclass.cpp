@@ -257,10 +257,10 @@ void CppNewClass::clearInheritance()
     m_baseAccessSpecifiers.clear();
 }
 
-void CppNewClass::identifier(const QString & identifier)
+void CppNewClass::setIdentifier(const QString & identifier)
 {
   QStringList list = identifier.split("::");
-  name(list.last());
+  setName(list.last());
   m_objectType->setDeclarationId(DeclarationId(QualifiedIdentifier(name())));
   list.pop_back();
   m_namespaces = list;
