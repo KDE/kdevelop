@@ -24,8 +24,12 @@
 
 #include <interfaces/iplugin.h>
 #include <QVariantList>
+#include <KConfigGroup>
+#include <QModelIndex>
 
 class ExternalScriptItem;
+
+class QStandardItem;
 class QStandardItemModel;
 
 class ExternalScriptPlugin : public KDevelop::IPlugin
@@ -42,6 +46,7 @@ public:
 
   /**
    * @return The model storing all external scripts managed by this plugin.
+   * @NOTE: always append() items, never insert in the middle!
    */
   QStandardItemModel* model() const;
 
@@ -50,10 +55,24 @@ public:
    */
   void execute(ExternalScriptItem* item) const;
 
+  /**
+   * Returns config group to store all settings for this plugin in.
+   */
+  KConfigGroup getConfig() const;
+
+  void saveItem(const ExternalScriptItem* item);
+
 public slots:
   void executeScriptFromActionData() const;
 
+private slots:
+  void rowsRemoved( const QModelIndex& parent, int start, int end );
+  void rowsInserted( const QModelIndex& parent, int start, int end );
+
 private:
+  /// @param item row in the model for the item to save
+  void saveItemForRow( int row );
+
   QStandardItemModel* m_model;
   static ExternalScriptPlugin* m_self;
 

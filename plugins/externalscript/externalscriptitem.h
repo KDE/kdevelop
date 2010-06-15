@@ -109,6 +109,10 @@ public:
   ///TODO: shortcuts
   ///TODO: filter for local/remote files
 
+  /**
+   * Saves this item after changes.
+   */
+  void save() const;
 private:
   QString m_command;
   SaveMode m_saveMode;

@@ -37,6 +37,7 @@
 
 #include <QStandardItemModel>
 #include <KAction>
+#include <interfaces/isession.h>
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
 K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
@@ -75,20 +76,33 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
 
   setXMLFile( "kdevexternalscript.rc" );
 
+  //BEGIN load config
+  KConfigGroup config = getConfig();
+  foreach( const QString group, config.groupList() ) {
+    qDebug() << group;
+    KConfigGroup script = config.group( group );
+    if ( script.hasKey( "name" ) && script.hasKey( "command" ) ) {
+      ExternalScriptItem* item = new ExternalScriptItem;
+      item->setText( script.readEntry( "name" ) );
+      item->setCommand( script.readEntry( "command" ));
+      item->setInputMode( static_cast<ExternalScriptItem::InputMode>( script.readEntry( "inputMode", 0u ) ) );
+      item->setReplaceMode( static_cast<ExternalScriptItem::ReplaceMode>( script.readEntry( "replaceMode", 0u ) ) );
+      item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
+      item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
+      m_model->appendRow( item );
+      qDebug() << item << item->text() << item->command();
+    }
+  }
+  //END load config
+
   core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
 
-  ExternalScriptItem* item = new ExternalScriptItem;
-  item->setText("quick compile");
-  item->setCommand("g++ -o %b %f && ./%b");
-  item->setSaveMode(ExternalScriptItem::SaveCurrentDocument);
-  m_model->appendRow(item);
-
-  item = new ExternalScriptItem;
-  item->setText( "uniq" );
-  item->setCommand( "uniq" );
-  item->setInputMode( ExternalScriptItem::InputSelection );
-  item->setReplaceMode( ExternalScriptItem::ReplaceSelection );
-  m_model->appendRow( item );
+  connect( m_model, SIGNAL(itemChanged(QStandardItem*)),
+           this, SLOT(itemChanged(QStandardItem*)));
+  connect( m_model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+           this, SLOT(rowsRemoved(QModelIndex, int, int)) );
+  connect( m_model, SIGNAL(rowsInserted(QModelIndex, int, int)),
+           this, SLOT(rowsInserted(QModelIndex, int, int)) );
 }
 
 ExternalScriptPlugin* ExternalScriptPlugin::self()
@@ -105,6 +119,11 @@ void ExternalScriptPlugin::unload()
 {
   core()->uiController()->removeToolView( m_factory );
   KDevelop::IPlugin::unload();
+}
+
+KConfigGroup ExternalScriptPlugin::getConfig() const
+{
+  return KGlobal::config()->group("External Scripts");
 }
 
 QStandardItemModel* ExternalScriptPlugin::model() const
@@ -128,6 +147,50 @@ void ExternalScriptPlugin::executeScriptFromActionData() const
   Q_ASSERT( item );
 
   execute( item );
+}
+
+void ExternalScriptPlugin::rowsInserted( const QModelIndex& /*parent*/, int start, int end )
+{
+  for ( int i = start; i <= end; ++i ) {
+    saveItemForRow( i );
+  }
+}
+
+void ExternalScriptPlugin::rowsRemoved( const QModelIndex& /*parent*/, int start, int end )
+{
+  KConfigGroup config = getConfig();
+  for ( int i = start; i <= end; ++i ) {
+    KConfigGroup child = config.group( QString("script %1").arg(i) );
+    qDebug() << "removing config group:" << child.name();
+    child.deleteGroup();
+  }
+  config.sync();
+}
+
+void ExternalScriptPlugin::saveItem( const ExternalScriptItem* item )
+{
+  const QModelIndex index = m_model->indexFromItem( item );
+  Q_ASSERT( index.isValid() );
+  saveItemForRow( index.row() );
+}
+
+void ExternalScriptPlugin::saveItemForRow( int row )
+{
+  const QModelIndex idx = m_model->index( row, 0 );
+  Q_ASSERT( idx.isValid() );
+
+  ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
+  Q_ASSERT( item );
+
+  qDebug() << "save extern script:" << item << idx;
+  KConfigGroup config = getConfig().group( QString("script %1").arg( row ) );
+  config.writeEntry( "name", item->text() );
+  config.writeEntry( "command", item->command() );
+  config.writeEntry( "inputMode", (uint) item->inputMode() );
+  config.writeEntry( "replaceMode", (uint) item->replaceMode() );
+  config.writeEntry( "saveMode", (uint) item->saveMode() );
+  config.writeEntry( "shortcuts", item->action()->shortcut().toString() );
+  config.sync();
 }
 
 #include "externalscriptplugin.moc"

@@ -134,7 +134,6 @@ void ExternalScriptView::addScript()
   int ret = dlg.exec();
   if ( ret == KDialog::Accepted || ret == KDialog::Apply ) {
     m_plugin->model()->appendRow( item );
-    // TODO: save config
   } else {
     delete item;
   }
@@ -157,7 +156,6 @@ void ExternalScriptView::removeScript()
         m_plugin->model()->indexFromItem( item ).row()
     );
   }
-  //TODO: update config
 }
 
 void ExternalScriptView::editScript()
@@ -170,7 +168,7 @@ void ExternalScriptView::editScript()
   EditExternalScript dlg( item, this );
   int ret = dlg.exec();
   if ( ret == KDialog::Accepted || ret == KDialog::Apply ) {
-    // TODO: update config
+    item->save();
   }
 }
 
