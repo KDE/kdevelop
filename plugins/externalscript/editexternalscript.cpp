@@ -34,12 +34,6 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   setButtons( /*Reset | */Apply | Cancel | Ok );
   setupUi( mainWidget() );
 
-  connect(this, SIGNAL(okClicked()), this, SLOT(save()));
-  connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
-
-  connect(nameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
-  connect(commandEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
-
   //BEGIN setup tooltips
   QString tooltip = i18n(
     "<p>Defines the command that should be executed when this script is run. Basic shell features of your platform should be available.</p>\n"
@@ -92,9 +86,23 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   saveCombo->setToolTip( tooltip );
   //END setup tooltips
 
+  //BEGIN item to UI copying
+  nameEdit->setText( item->text() );
+  commandEdit->setText( item->command() );
+  stdinCombo->setCurrentIndex( item->inputMode() );
+  stdoutCombo->setCurrentIndex( item->replaceMode() );
+  saveCombo->setCurrentIndex( item->saveMode() );
+  //END item to UI copying
+
   validate();
 
   nameEdit->setFocus();
+
+  connect(this, SIGNAL(okClicked()), this, SLOT(save()));
+  connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
+
+  connect(nameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
+  connect(commandEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
 }
 
 EditExternalScript::~EditExternalScript()
