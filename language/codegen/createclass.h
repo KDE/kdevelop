@@ -208,14 +208,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     const QString & name() const;
     
     /**
-     * @param identifier The Qualified identifier that the class will have
+     * \param identifier The Qualified identifier that the class will have
      */
-    virtual void identifier(const QString & identifier);
-    
-    /**
-     * \return The class to be generated as a Type
-     */
-    virtual StructureType::Ptr objectType() const = 0;
+    virtual void setIdentifier(const QString & identifier);
     
     /**
      * \return The Identifier of the class to generate (including all used namespaces)
@@ -223,14 +218,19 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     virtual QString identifier() const;
     
     const QString & license() const;
-    void license(const QString & license);
+    void setLicense(const QString & license);
+
+    /**
+     * \return The class to be generated as a Type
+     */
+    virtual StructureType::Ptr objectType() const = 0;
 
   protected:
     
     /**
      * Set the name (without namespace) for this class
      */
-    void name(const QString &);
+    void setName(const QString &);
     
     SimpleCursor headerPosition();
     SimpleCursor implementationPosition();

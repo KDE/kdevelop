@@ -90,7 +90,7 @@ void CreateClassWizard::accept()
     QWizard::accept();
     
     //Transmit all the final information to the generator
-    d->generator->license(field("license").toString());
+    d->generator->setLicense(field("license").toString());
     kDebug() << "Header Url: " << field("headerUrl").toString();
     /*
     d->generator->setHeaderUrl(field("headerUrl").toString());
@@ -147,9 +147,9 @@ const QString & ClassGenerator::name() const
     return d->name;
 }
 
-void ClassGenerator::identifier(const QString & identifier)
+void ClassGenerator::setName(const QString & newName)
 {
-    name(identifier);
+    d->name = newName;
 }
 
 QString ClassGenerator::identifier() const
@@ -157,9 +157,9 @@ QString ClassGenerator::identifier() const
     return name();
 }
 
-void ClassGenerator::name(const QString & newName)
+void ClassGenerator::setIdentifier(const QString & identifier)
 {
-    d->name = newName;
+    setName(identifier);
 }
 
 void ClassGenerator::addDeclaration(DeclarationPointer newDeclaration)
@@ -277,7 +277,7 @@ KUrl & ClassGenerator::implementationUrl()
 }
 
 /// Specify license for this class
-void ClassGenerator::license(const QString & license)
+void ClassGenerator::setLicense(const QString & license)
 {
     kDebug() << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
@@ -428,7 +428,7 @@ bool ClassIdentifierPage::validatePage ( void )
 {
     //save the information in the generator
     ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
-    generator->identifier(field("classIdentifier").toString());
+    generator->setIdentifier(field("classIdentifier").toString());
     
     //Remove old base classes, and add the new ones
     generator->clearInheritance();
