@@ -79,7 +79,6 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   //BEGIN load config
   KConfigGroup config = getConfig();
   foreach( const QString group, config.groupList() ) {
-    qDebug() << group;
     KConfigGroup script = config.group( group );
     if ( script.hasKey( "name" ) && script.hasKey( "command" ) ) {
       ExternalScriptItem* item = new ExternalScriptItem;
@@ -90,7 +89,6 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
       item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
       m_model->appendRow( item );
-      qDebug() << item << item->text() << item->command();
     }
   }
   //END load config
