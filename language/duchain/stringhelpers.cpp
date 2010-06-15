@@ -290,6 +290,11 @@ QString clearComments( QString str, QChar replacement ) {
       lastPos = i+2;
       if( lastPos == len ) break;
     } else {
+      if ( i == -1 ) {
+        // unterminated comment, might happen during code completion
+        // see also: https://bugs.kde.org/show_bug.cgi?id=231351
+        fillString( str, pos, len, replacement );
+      }
       break;
     }
   }
