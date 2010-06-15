@@ -74,7 +74,7 @@ ExternalScriptView::~ExternalScriptView()
 
 ExternalScriptItem* ExternalScriptView::currentItem() const
 {
-  return itemForIndex(scriptTree->currentIndex());
+  return itemForIndex( scriptTree->currentIndex() );
 }
 
 ExternalScriptItem* ExternalScriptView::itemForIndex( const QModelIndex& index ) const
@@ -92,8 +92,8 @@ void ExternalScriptView::validateActions()
 {
   bool itemSelected = currentItem();
 
-  m_removeScriptAction->setEnabled(itemSelected);
-  m_editScriptAction->setEnabled(itemSelected);
+  m_removeScriptAction->setEnabled( itemSelected );
+  m_editScriptAction->setEnabled( itemSelected );
 }
 
 void ExternalScriptView::contextMenu( const QPoint& pos )
@@ -101,24 +101,24 @@ void ExternalScriptView::contextMenu( const QPoint& pos )
 
 }
 
-bool ExternalScriptView::eventFilter(QObject* obj, QEvent* e)
+bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
 {
-    // no, listening to activated() is not enough since that would also trigger the edit mode which we _dont_ want here
-    // users may still rename stuff via select + F2 though
-    if (obj == scriptTree->viewport()) {
-        const bool singleClick = KGlobalSettings::singleClick();
-        if ( (!singleClick && e->type() == QEvent::MouseButtonDblClick) || (singleClick && e->type() == QEvent::MouseButtonRelease) ) {
-            QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
-            Q_ASSERT(mouseEvent);
-            ExternalScriptItem* item = itemForIndex( scriptTree->indexAt( mouseEvent->pos() ) );
-            if ( item ) {
-                m_plugin->execute( item );
-                e->accept();
-                return true;
-            }
-        }
+  // no, listening to activated() is not enough since that would also trigger the edit mode which we _dont_ want here
+  // users may still rename stuff via select + F2 though
+  if ( obj == scriptTree->viewport() ) {
+    const bool singleClick = KGlobalSettings::singleClick();
+    if ( ( !singleClick && e->type() == QEvent::MouseButtonDblClick ) || ( singleClick && e->type() == QEvent::MouseButtonRelease ) ) {
+      QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
+      Q_ASSERT( mouseEvent );
+      ExternalScriptItem* item = itemForIndex( scriptTree->indexAt( mouseEvent->pos() ) );
+      if ( item ) {
+        m_plugin->execute( item );
+        e->accept();
+        return true;
+      }
     }
-    return QObject::eventFilter(obj, e);
+  }
+  return QObject::eventFilter( obj, e );
 }
 
 void ExternalScriptView::addScript()
