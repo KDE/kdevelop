@@ -23,6 +23,8 @@
 
 #include <QStandardItemModel>
 
+class KAction;
+
 /**
  * NOTE: use @c text() and @c setText() to define the label/name of the external script.
  */
@@ -96,6 +98,11 @@ public:
    */
   void setInputMode( InputMode mode );
 
+  /**
+   * Action to trigger insertion of this snippet.
+   */
+  KAction* action();
+
   ///TODO: custom icon
   ///TODO: mimetype / language filter
   ///TODO: kate commandline integration
@@ -107,6 +114,7 @@ private:
   SaveMode m_saveMode;
   ReplaceMode m_replaceMode;
   InputMode m_inputMode;
+  KAction* m_action;
 };
 
 Q_DECLARE_METATYPE(ExternalScriptItem*)

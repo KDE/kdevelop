@@ -38,6 +38,8 @@ public:
   virtual ~ExternalScriptPlugin();
   virtual void unload();
 
+  static ExternalScriptPlugin* self();
+
   /**
    * @return The model storing all external scripts managed by this plugin.
    */
@@ -48,8 +50,12 @@ public:
    */
   void execute(ExternalScriptItem* item) const;
 
+public slots:
+  void executeScriptFromActionData() const;
+
 private:
   QStandardItemModel* m_model;
+  static ExternalScriptPlugin* m_self;
 
   class ExternalScriptViewFactory *m_factory;
 };

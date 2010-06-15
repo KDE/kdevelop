@@ -36,6 +36,7 @@
 #include <KAboutData>
 
 #include <QStandardItemModel>
+#include <KAction>
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
 K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
@@ -63,10 +64,15 @@ private:
   ExternalScriptPlugin *m_plugin;
 };
 
+ExternalScriptPlugin* ExternalScriptPlugin::m_self = 0;
+
 ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList& /*args*/ )
     : IPlugin( ExternalScriptFactory::componentData(), parent ),
     m_model( new QStandardItemModel( this ) ), m_factory( new ExternalScriptViewFactory( this ) )
 {
+  Q_ASSERT( !m_self );
+  m_self = this;
+
   setXMLFile( "kdevexternalscript.rc" );
 
   core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
@@ -85,9 +91,14 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   m_model->appendRow( item );
 }
 
+ExternalScriptPlugin* ExternalScriptPlugin::self()
+{
+  return m_self;
+}
+
 ExternalScriptPlugin::~ExternalScriptPlugin()
 {
-
+  m_self = 0;
 }
 
 void ExternalScriptPlugin::unload()
@@ -106,6 +117,17 @@ void ExternalScriptPlugin::execute( ExternalScriptItem* item ) const
   ExternalScriptJob* job = new ExternalScriptJob( item, const_cast<ExternalScriptPlugin*>(this) );
 
   KDevelop::ICore::self()->runController()->registerJob( job );
+}
+
+void ExternalScriptPlugin::executeScriptFromActionData() const
+{
+  KAction* action = dynamic_cast<KAction*>( sender() );
+  Q_ASSERT( action );
+
+  ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
+  Q_ASSERT( item );
+
+  execute( item );
 }
 
 #include "externalscriptplugin.moc"

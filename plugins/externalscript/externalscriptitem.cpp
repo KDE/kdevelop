@@ -20,6 +20,15 @@
 
 #include "externalscriptitem.h"
 
+#include "externalscriptplugin.h"
+
+#include <KAction>
+#include <KParts/MainWindow>
+#include <KLocalizedString>
+
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+
 ExternalScriptItem::ExternalScriptItem()
   : m_saveMode(SaveNone), m_replaceMode(ReplaceNone), m_inputMode(InputNone)
 {
@@ -64,6 +73,25 @@ ExternalScriptItem::InputMode ExternalScriptItem::inputMode() const
 void ExternalScriptItem::setInputMode( ExternalScriptItem::InputMode mode )
 {
   m_inputMode = mode;
+}
+
+KAction* ExternalScriptItem::action()
+{
+    ///TODO: this is quite ugly, or is it? if someone knows how to do it better, please refactor
+    if ( !m_action ) {
+        static int actionCount = 0;
+        m_action = new KAction( QString("executeScript%1").arg(actionCount), ExternalScriptPlugin::self() );
+        m_action->setData( QVariant::fromValue<ExternalScriptItem*>(this) );
+        ExternalScriptPlugin::self()->connect(
+            m_action, SIGNAL(triggered()),
+            ExternalScriptPlugin::self(), SLOT(executeScriptFromActionData())
+        );
+        // action needs to be added to a widget before it can work...
+        KDevelop::ICore::self()->uiController()->activeMainWindow()->addAction(m_action);
+    }
+    m_action->setText( i18n("insert snippet %1").arg(text()) );
+
+    return m_action;
 }
 
 // kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 
