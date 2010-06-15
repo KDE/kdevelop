@@ -101,6 +101,30 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
            this, SLOT(rowsRemoved(QModelIndex, int, int)) );
   connect( m_model, SIGNAL(rowsInserted(QModelIndex, int, int)),
            this, SLOT(rowsInserted(QModelIndex, int, int)) );
+
+  const bool firstUse = config.readEntry( "firstUse", true );
+  if ( firstUse ) {
+    // some example scripts
+    ExternalScriptItem* item = new ExternalScriptItem;
+    item->setText( i18n("quick compile") );
+    item->setCommand( "g++ -o %b %f && ./%b" );
+    m_model->appendRow( item );
+
+    item = new ExternalScriptItem;
+    item->setText( i18n("google selection") );
+    item->setCommand( "xdg-open \"http://www.google.de/search?q=%s\"" );
+    m_model->appendRow( item );
+
+    item = new ExternalScriptItem;
+    item->setText( i18n("sort selection") );
+    item->setCommand( "sort" );
+    item->setInputMode( ExternalScriptItem::InputSelection );
+    item->setReplaceMode( ExternalScriptItem::ReplaceSelection );
+    m_model->appendRow( item );
+
+    config.writeEntry( "firstUse", false );
+    config.sync();
+  }
 }
 
 ExternalScriptPlugin* ExternalScriptPlugin::self()
