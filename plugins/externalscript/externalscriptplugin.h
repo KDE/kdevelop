@@ -24,7 +24,9 @@
 
 #include <interfaces/iplugin.h>
 #include <QVariantList>
+#include <QProcess>
 
+class ExternalScriptItem;
 class QStandardItemModel;
 
 class ExternalScriptPlugin : public KDevelop::IPlugin
@@ -41,6 +43,14 @@ public:
    * @return The model storing all external scripts managed by this plugin.
    */
   QStandardItemModel* model() const;
+
+  /**
+   * Executes @p script.
+   */
+  void execute(ExternalScriptItem* item) const;
+
+public slots:
+    void scriptFinished( int exitCode, QProcess::ExitStatus exitStatus);
 
 private:
   QStandardItemModel* m_model;

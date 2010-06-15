@@ -24,13 +24,19 @@
 #include "externalscriptview.h"
 #include "externalscriptitem.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <interfaces/idocumentcontroller.h>
+
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KProcess>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QStandardItemModel>
-
-#include <interfaces/iuicontroller.h>
-#include <interfaces/icore.h>
+#include <QApplication>
+#include <QFileInfo>
 
 K_PLUGIN_FACTORY( ExternalScriptFactory, registerPlugin<ExternalScriptPlugin>(); )
 K_EXPORT_PLUGIN( ExternalScriptFactory( KAboutData( "kdevexternalscript", "kdevexternalscript", ki18n( "External Scripts" ),
@@ -88,6 +94,52 @@ void ExternalScriptPlugin::unload()
 QStandardItemModel* ExternalScriptPlugin::model() const
 {
   return m_model;
+}
+
+void ExternalScriptPlugin::execute( ExternalScriptItem* item ) const
+{
+  ///TODO: user feedback
+  if ( item->command().isEmpty() ) {
+    return;
+  }
+
+  KProcess* cmd = new KProcess( const_cast<ExternalScriptPlugin*>( this ) );
+
+  KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
+
+  QString command = item->command();
+
+  if ( active ) {
+    const KUrl url = active->url();
+    if ( url.isLocalFile() ) {
+      cmd->setWorkingDirectory( active->url().directory() );
+    }
+    ///TODO: make those placeholders escapeable
+    command.replace( "%u", url.pathOrUrl() );
+    ///TODO: does that work with remote files?
+    ///TODO: document the available placeholders
+    QFileInfo info( url.pathOrUrl() );
+    command.replace( "%f", info.filePath() );
+    command.replace( "%b", info.baseName() );
+    command.replace( "%n", info.fileName() );
+    command.replace( "%d", info.path() );
+  }
+
+  cmd->setShellCommand( command );
+  connect( cmd, SIGNAL(finished(int, QProcess::ExitStatus)),
+           this, SLOT(scriptFinished(int, QProcess::ExitStatus)));
+  cmd->start();
+}
+
+void ExternalScriptPlugin::scriptFinished( int exitCode , QProcess::ExitStatus exitStatus )
+{
+  KProcess* cmd = dynamic_cast<KProcess*>( sender() );
+  Q_ASSERT( cmd );
+  qDebug() << "stderr:" << cmd->readAllStandardError();
+  qDebug() << "stdout:" << cmd->readAllStandardOutput();
+  qDebug() << "exitcode:" << exitCode << "status:" << exitStatus;
+
+  delete cmd;
 }
 
 #include "externalscriptplugin.moc"

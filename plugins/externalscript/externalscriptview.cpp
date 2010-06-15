@@ -110,8 +110,7 @@ bool ExternalScriptView::eventFilter(QObject* obj, QEvent* e)
             Q_ASSERT(mouseEvent);
             ExternalScriptItem* item = itemForIndex( scriptTree->indexAt( mouseEvent->pos() ) );
             if ( item ) {
-                item->execute();
-
+                m_plugin->execute( item );
                 e->accept();
                 return true;
             }
