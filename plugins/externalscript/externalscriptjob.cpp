@@ -99,7 +99,6 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     command.replace( "%u", url.pathOrUrl() );
 
     ///TODO: does that work with remote files?
-    ///TODO: document the available placeholders
     QFileInfo info( url.pathOrUrl() );
 
     command.replace( "%f", info.filePath() );

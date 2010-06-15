@@ -87,7 +87,6 @@ KAction* ExternalScriptItem::action()
       ExternalScriptPlugin::self(), SLOT(executeScriptFromActionData())
     );
     m_action->setShortcutConfigurable( true );
-    ///TODO: load from settings
     m_action->setShortcut( KShortcut() );
     // action needs to be added to a widget before it can work...
     KDevelop::ICore::self()->uiController()->activeMainWindow()->addAction(m_action);

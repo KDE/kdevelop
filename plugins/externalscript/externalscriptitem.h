@@ -106,7 +106,6 @@ public:
   ///TODO: custom icon
   ///TODO: mimetype / language filter
   ///TODO: kate commandline integration
-  ///TODO: shortcuts
   ///TODO: filter for local/remote files
 
   /**
