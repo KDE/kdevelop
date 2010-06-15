@@ -27,6 +27,7 @@
 #include <KPushButton>
 
 #include <KShell>
+#include <KAction>
 
 EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* parent, Qt::WFlags flags )
     : KDialog( parent, flags ), m_item( item )
@@ -92,6 +93,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   stdinCombo->setCurrentIndex( item->inputMode() );
   stdoutCombo->setCurrentIndex( item->replaceMode() );
   saveCombo->setCurrentIndex( item->saveMode() );
+  shortcutWidget->setShortcut( item->action()->shortcut() );
   //END item to UI copying
 
   validate();
@@ -129,6 +131,8 @@ void EditExternalScript::save()
       saveCombo->currentIndex()
   );
   m_item->setSaveMode( saveMode );
+
+  m_item->action()->setShortcut( shortcutWidget->shortcut() );
 }
 
 void EditExternalScript::validate()
