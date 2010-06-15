@@ -166,6 +166,13 @@
    <header>kshortcutwidget.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>nameEdit</tabstop>
+  <tabstop>commandEdit</tabstop>
+  <tabstop>stdinCombo</tabstop>
+  <tabstop>stdoutCombo</tabstop>
+  <tabstop>saveCombo</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
