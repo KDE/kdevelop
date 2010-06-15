@@ -40,8 +40,8 @@
 #include <KTextEditor/View>
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
-    : KDevelop::OutputJob( parent ), m_proc( new KProcess( this ) ),
-    m_lineMaker( new KDevelop::ProcessLineMaker( m_proc, this ) ),
+    : KDevelop::OutputJob( parent ),
+    m_proc( 0 ), m_lineMaker( 0 ),
     m_replaceMode( item->replaceMode() ), m_inputMode( item->inputMode() ),
     m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() )
 {
@@ -85,13 +85,14 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   }
 
   QString command = item->command();
+  QString workingDir;
 
   if ( active ) {
     const KUrl url = active->url();
 
     if ( url.isLocalFile() ) {
       ///TODO: make configurable, use fallback to project dir
-      m_proc->setWorkingDirectory( active->url().directory() );
+      workingDir = active->url().directory();
     }
 
     ///TODO: make those placeholders escapeable
@@ -107,6 +108,11 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     command.replace( "%d", info.path() );
   }
 
+  m_proc = new KProcess( this );
+  if ( !workingDir.isEmpty() ) {
+    m_proc->setWorkingDirectory( workingDir );
+  }
+  m_lineMaker = new KDevelop::ProcessLineMaker( m_proc, this );
   connect( m_lineMaker, SIGNAL( receivedStdoutLines( QStringList ) ),
            model(), SLOT( appendLines( QStringList ) ) );
   connect( m_proc, SIGNAL( error( QProcess::ProcessError ) ),
