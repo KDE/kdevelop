@@ -22,6 +22,7 @@
 
 #include "externalscriptplugin.h"
 #include "externalscriptitem.h"
+#include "editexternalscript.h"
 
 #include <KLocalizedString>
 #include <KAction>
@@ -29,6 +30,7 @@
 #include <QStandardItemModel>
 #include <QSortFilterProxyModel>
 #include <QMouseEvent>
+#include <KMessageBox>
 
 ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent )
     : QWidget( parent ), m_plugin( plugin )
@@ -121,16 +123,49 @@ bool ExternalScriptView::eventFilter(QObject* obj, QEvent* e)
 
 void ExternalScriptView::addScript()
 {
-
+  ExternalScriptItem* item = new ExternalScriptItem;
+  EditExternalScript dlg( item, this );
+  int ret = dlg.exec();
+  if ( ret == KDialog::Accepted || ret == KDialog::Apply ) {
+    m_plugin->model()->appendRow( item );
+    // TODO: save config
+  } else {
+    delete item;
+  }
 }
 
 void ExternalScriptView::removeScript()
 {
+  ExternalScriptItem* item = currentItem();
+  if ( !item ) {
+    return;
+  }
+
+  int ret = KMessageBox::questionYesNo( this, 
+    i18n("<p>Do you really want to remove the external script configuration for <i>%1</i>?</p>"
+         "<p><i>Note:</i> The script itself will not be removed.</p>", item->text()),
+    i18n("Confirm External Script Removal")
+  );
+  if ( ret == KMessageBox::Yes ) {
+    m_plugin->model()->removeRow(
+        m_plugin->model()->indexFromItem( item ).row()
+    );
+  }
+  //TODO: update config
 }
 
 void ExternalScriptView::editScript()
 {
+  ExternalScriptItem* item = currentItem();
+  if ( !item ) {
+    return;
+  }
 
+  EditExternalScript dlg( item, this );
+  int ret = dlg.exec();
+  if ( ret == KDialog::Accepted || ret == KDialog::Apply ) {
+    // TODO: update config
+  }
 }
 
 #include "externalscriptview.moc"

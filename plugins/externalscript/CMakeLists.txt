@@ -5,10 +5,12 @@ set(kdevexternalscript_PART_SRCS
     externalscriptview.cpp
     externalscriptitem.cpp
     externalscriptjob.cpp
+    editexternalscript.cpp
 )
 
 set(kdevexternalscript_PART_UI
     externalscriptview.ui
+    editexternalscript.ui
 )
 
 kde4_add_ui_files(kdevexternalscript_PART_SRCS ${kdevexternalscript_PART_UI})

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditExternalScriptBase</class>
+ <widget class="QWidget" name="EditExternalScriptBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>539</width>
+    <height>206</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>500</width>
+    <height>0</height>
+   </size>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <property name="fieldGrowthPolicy">
+    <enum>QFormLayout::ExpandingFieldsGrow</enum>
+   </property>
+   <item row="0" column="0">
+    <widget class="QLabel" name="nameLabel">
+     <property name="text">
+      <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="KLineEdit" name="nameEdit">
+     <property name="toolTip">
+      <string>&lt;p&gt;The name will also be used as the identifier during code completion.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; No spaces allowed.&lt;/p&gt;</string>
+     </property>
+     <property name="clickMessage">
+      <string>please insert a name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="shortcutLabel">
+     <property name="toolTip">
+      <string>&lt;p&gt;Defines shortcuts you can use to execute this script.&lt;/p&gt;</string>
+     </property>
+     <property name="text">
+      <string>Shortcut:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="KShortcutWidget" name="shortcutWidget"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="commandLabel">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>Command:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KLineEdit" name="commandEdit">
+     <property name="clickMessage">
+      <string>please insert a command to execute</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="stdinLabel">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>STDIN:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QComboBox" name="stdinCombo">
+     <item>
+      <property name="text">
+       <string>nothing</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>selection in current file</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>contents of current file</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="stdoutLabel">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string>STDOUT:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QComboBox" name="stdoutCombo">
+     <item>
+      <property name="text">
+       <string>ignore</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace selection in current file</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace contents of current file</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="saveLabel">
+     <property name="text">
+      <string>Save Mode:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QComboBox" name="saveCombo">
+     <item>
+      <property name="text">
+       <string>save nothing</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>save active document</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>save all open documents</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KShortcutWidget</class>
+   <extends>QWidget</extends>
+   <header>kshortcutwidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
