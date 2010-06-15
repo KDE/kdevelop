@@ -57,15 +57,17 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   if ( m_replaceMode != ExternalScriptItem::ReplaceNone || m_inputMode != ExternalScriptItem::InputNone ) {
     if ( !active || !active->isTextDocument() ) {
       KMessageBox::error( QApplication::activeWindow(),
-                          i18n("Cannot run script '%1' since it tries to replace "
-                               "the editor contents but no document is open.", item->text()),
-                          i18n("No Document Open")
-      );
+                          i18n( "Cannot run script '%1' since it tries to replace "
+                                "the editor contents but no document is open.", item->text() ),
+                          i18n( "No Document Open" )
+                        );
       return;
     }
+
     m_document = active->textDocument();
-    connect( m_document, SIGNAL(aboutToClose(KTextEditor::Document*)),
-             this, SLOT(kill()) );
+
+    connect( m_document, SIGNAL( aboutToClose( KTextEditor::Document* ) ),
+             this, SLOT( kill() ) );
 
     if ( item->replaceMode() == ExternalScriptItem::ReplaceSelection ) {
       if ( m_document->activeView() && m_document->activeView()->selection() ) {
@@ -78,15 +80,19 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
   if ( active ) {
     const KUrl url = active->url();
+
     if ( url.isLocalFile() ) {
       ///TODO: make configurable, use fallback to project dir
       m_proc->setWorkingDirectory( active->url().directory() );
     }
+
     ///TODO: make those placeholders escapeable
     command.replace( "%u", url.pathOrUrl() );
+
     ///TODO: does that work with remote files?
     ///TODO: document the available placeholders
     QFileInfo info( url.pathOrUrl() );
+
     command.replace( "%f", info.filePath() );
     command.replace( "%b", info.baseName() );
     command.replace( "%n", info.fileName() );
@@ -115,18 +121,22 @@ void ExternalScriptJob::start()
 
   if ( m_proc ) {
     startOutput();
-    appendLine( i18n( "Running external script: %1", m_proc->program().join(" ") ) );
+    appendLine( i18n( "Running external script: %1", m_proc->program().join( " " ) ) );
     m_proc->start();
+
     if ( m_inputMode != ExternalScriptItem::InputNone ) {
       QString inputText;
+
       if ( m_selectionRange.isValid() ) {
         inputText = m_document->text( m_selectionRange );
       } else {
         inputText = m_document->text();
       }
+
       ///TODO: what to do with the encoding here?
       ///      maybe ask Christoph for what kate returns...
       m_proc->write( inputText.toUtf8() );
+
       m_proc->closeWriteChannel();
     }
   } else {
@@ -146,7 +156,6 @@ bool ExternalScriptJob::doKill()
   return true;
 }
 
-
 void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus status )
 {
   m_lineMaker->flushBuffers();
@@ -156,13 +165,15 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
       QStringList output;
       ///TODO: filter stderr?
       //note: start at 1 since we add one line ourselves
+
       for ( int i = 1, c = model()->rowCount(); i < c; ++i ) {
-        output << model()->data( model()->index(i, 0) ).toString();
+        output << model()->data( model()->index( i, 0 ) ).toString();
       }
+
       if ( m_selectionRange.isValid() ) {
-        m_document->replaceText( m_selectionRange, output.join("\n")  );
+        m_document->replaceText( m_selectionRange, output.join( "\n" ) );
       } else {
-        m_document->setText( output.join("\n") );
+        m_document->setText( output.join( "\n" ) );
       }
     }
 
@@ -211,4 +222,4 @@ KDevelop::OutputModel* ExternalScriptJob::model()
 
 #include "externalscriptjob.moc"
 
-// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 
+// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;
