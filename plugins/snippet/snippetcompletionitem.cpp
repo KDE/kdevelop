@@ -97,7 +97,7 @@ void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTex
         #ifdef SNIPPETS_HAVE_TPLIFACE2
             if ( KTextEditor::TemplateInterface2* templateIface2 = qobject_cast<KTextEditor::TemplateInterface2*>(document->activeView()) ) {
                 document->removeText(word);
-                templateIface2->insertTemplateText(word.start(), m_snippet, QMap<QString, QString>(), m_repo->scriptToken());
+                templateIface2->insertTemplateText(word.start(), m_snippet, QMap<QString, QString>(), m_repo->registeredScript());
                 return;
             }
         #endif

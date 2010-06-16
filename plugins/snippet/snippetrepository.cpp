@@ -126,15 +126,18 @@ QString SnippetRepository::script() const
     return m_script;
 }
 
-QString SnippetRepository::scriptToken() const
+KTextEditor::TemplateScript* SnippetRepository::registeredScript() const
 {
-    return m_scriptToken;
+    return m_registeredScript;
 }
 
 void SnippetRepository::setScript(const QString& script)
 {
     m_script = script;
-    m_scriptToken = SnippetStore::self()->registerScript(m_script);
+    if ( m_registeredScript ) {
+        SnippetStore::self()->unregisterScript(m_registeredScript);
+    }
+    m_registeredScript = SnippetStore::self()->registerScript(m_script);
 }
 
 void SnippetRepository::remove()
