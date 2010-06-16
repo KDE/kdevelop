@@ -381,9 +381,7 @@ protected:
   
   struct AliasChainElement;
   struct FindDeclarationsAcceptor;
-  struct FindContextsAcceptor;
   struct DeclarationChecker;
-  struct ContextChecker;
   struct ApplyAliasesBuddyInfo;
 
   template<class Acceptor>
