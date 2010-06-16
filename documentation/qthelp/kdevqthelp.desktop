@@ -53,6 +53,9 @@ Name[x-test]=xxQt Documentationxx
 Name[zh_CN]=Qt 文档
 Name[zh_TW]=Qt 文件
 GenericName=Documentation Support
+GenericName[pt]=Suporte à Documentação
+GenericName[pt_BR]=Suporte à Documentação
+GenericName[uk]=Підтримка роботи з документацією
 GenericName[x-test]=xxDocumentation Supportxx
 ServiceTypes=KDevelop/Plugin
 
