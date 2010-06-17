@@ -2,6 +2,7 @@
 Type=Service
 Exec=blubb
 Comment=Lets you manage the project contents.
+Comment[nl]=Laat u de projectinhoud beheren.
 Comment[pt]=Permite-lhe gerir o conteúdo do projecto.
 Comment[pt_BR]=Permite-lhe gerenciar o conteúdo do projeto.
 Comment[uk]=Надає вам змогу керувати вмістом проектів.
