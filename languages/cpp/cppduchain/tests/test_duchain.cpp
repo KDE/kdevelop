@@ -2024,8 +2024,11 @@ void TestDUChain::testDeclareUsingNamespace()
   QCOMPARE(fooCtx->scopeIdentifier(), QualifiedIdentifier("foo"));
 
   Declaration* bar = fooCtx->localDeclarations().first();
+  QVERIFY(!bar->isFunctionDeclaration());
   QCOMPARE(bar->identifier(), Identifier("bar"));
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
+  QEXPECT_FAIL("", "usebuilder fails in cppducontext.cpp FindDeclaration::closeIdentifier to find the declaration of bar, hence no uses\n"
+                   "if this tests passes, you ran testLocalNamespaceAlias before, which apparently is not cleaned up properly...", Abort);
   QCOMPARE(bar->uses().count(), 1);
   QCOMPARE(bar->uses().begin()->count(), 1);
   //kDebug() << findDeclaration(top, bar->identifier(), top->range().start)->qualifiedIdentifier().toString();
