@@ -228,7 +228,8 @@ void TestDUChain::initTestCase()
   typeShort = s->indexed();
 }
 
-void TestDUChain::testFinalCleanup() {
+void TestDUChain::cleanupTestCase()
+{
   //Just a few tests so there is always something cleared away
   QualifiedIdentifier id("test_bla12310915205342");
   IndexedQualifiedIdentifier indexedId(id);
@@ -236,10 +237,7 @@ void TestDUChain::testFinalCleanup() {
   delayed->setIdentifier(IndexedTypeIdentifier("frokkoflasdasotest_bla12310915205342"));
   IndexedType indexed = delayed->indexed();
   DUChain::self()->finalCleanup();
-}
 
-void TestDUChain::cleanupTestCase()
-{
   /*delete type1;
   delete type2;
   delete type3;*/
@@ -4965,16 +4963,6 @@ void TestDUChain::testUses()
 
   DUChainWriteLocker lock;
 
-  /**
-   * FIXME: somehow this test fails sometimes when
-   *        run together with the rest of the tests in this suite.
-   *        running it alone works though...
-   *        Apparently the AST is completely different and I have no clue why...
-   */
-  if (top->childContexts().size() == 2) {
-    // expect that error...
-    QEXPECT_FAIL("", "the AST gets completely FUBAR when this test is run together with the others, running it alone works like a charm though...", Abort);
-  }
   QCOMPARE(top->childContexts().size(), 4);
   QCOMPARE(top->childContexts().at(0)->type(), DUContext::Class);
   QCOMPARE(top->childContexts().at(1)->type(), DUContext::Template);
