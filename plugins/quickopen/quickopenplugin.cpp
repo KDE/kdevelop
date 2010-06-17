@@ -568,6 +568,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Up, Qt::NoModifier));
           return true;
         }
+        break;
       case Qt::Key_Down:
       case Qt::Key_Up:
       {
