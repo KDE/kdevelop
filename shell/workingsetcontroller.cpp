@@ -197,6 +197,8 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
 {
+    //Q_ASSERT(0);
+    kDebug() << "*********************************************************************************";
     if (area->isSplitted()) {
         group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
@@ -216,6 +218,7 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
 
         int index = 0;
         foreach (Sublime::View* view, area->views()) {
+            kDebug() << view->document()->title();
             group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
             group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
 
@@ -352,6 +355,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
 {
+    kDebug() << "***************************************************************************";
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
 
@@ -398,6 +402,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
+                kDebug() << document->title();
                 Sublime::View* view = document->createView();
 
                 QString state = group.readEntry(QString("View %1 State").arg(i), "");
