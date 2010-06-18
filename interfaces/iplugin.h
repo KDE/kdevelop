@@ -67,54 +67,62 @@ class ContextMenuExtension;
  * description. The .desktop file template looks like:
  * @code
  * [Desktop Entry]
- * Encoding=UTF-8
  * Type=Service
+ * Exec=blubb
  * Name=
  * GenericName=
  * Comment=
  * Icon=
- * X-KDevelop-Plugin-Version=
- * X-KDevelop-Plugin-Homepage=
- * X-KDevelop-Plugin-BugsEmailAddress=
- * X-KDevelop-Plugin-Copyright=
+ * ServiceTypes=KDevelop/Plugin
  * X-KDE-Library=
+ * X-KDE-PluginInfo-Name=
+ * X-KDE-PluginInfo-Author=
+ * X-KDE-PluginInfo-Version=
+ * X-KDE-PluginInfo-License=
  * X-KDevelop-Version=
  * X-KDevelop-Category=
- * X-KDevelop-Properties=
- * X-KDevelop-Args=
+ * X-KDevelop-Mode=GUI
+ * X-KDevelop-LoadMode=
+ * X-KDevelop-Language=
+ * X-KDevelop-SupportedMimeTypes=
+ * X-KDevelop-Interfaces=
+ * X-KDevelop-IOptional=
+ * X-KDevelop-IRequired=
  * @endcode
  * <b>Description of parameters in .desktop file:</b>
- * - <i>Name</i> is a non-translatable name of a plugin, it is used in KTrader
- * queries to search for a plugin (required);
- * - <i>GenericName</i> is a translatable name of a plugin, it is used to show
- * plugin names in GUI (required);
+ * - <i>Name</i> is a translatable name of a plugin, it is used in the plugin 
+ *   selection list (required);
+ * - <i>GenericName</i> is a translatable generic name of a plugin, it should 
+ *   describe in general what the plugin can do  (required);
  * - <i>Comment</i> is a short description about the plugin (optional);
  * - <i>Icon</i> is a plugin icon (preferred);
- * - <i>X-KDevelop-Plugin-Version</i> is a version of a plugin (optional);
+ *   <i>X-KDE-library</i>this is the name of the .so file to load for this plugin (required);
+ * - <i>X-KDE-PluginInfo-Name</i> is a non-translateable user-readable plugin
+ *   identifier used in KTrader queries (required);
+ * - <i>X-KDE-PluginInfo-Author</i> is a non-translateable name of the plugin
+ *   author (optional);
+ * - <i>X-KDE-PluginInfo-Version</i> is version number of the plugin (optional);
+ * - <i>X-KDE-PluginInfo-License</i> is a license (optional). can be: GPL,
+ * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
+ * considered as unknown;
+ * - <i>X-KDevelop-Plugin-Version</i> is the KDevPlatform API version this plugin
+ *   works with (required);
  * - <i>X-KDevelop-Interfaces</i> is a list of extension interfaces that this
  * plugin implements (optional);
  * - <i>X-KDevelop-IRequired</i> is a list of extension interfaces that this
  * plugin depends on (optional);
  * - <i>X-KDevelop-IOptional</i> is a list of extension interfaces that this
  * plugin will use if they are available (optional);
- * - <i>X-KDevelop-Plugin-Homepage</i> is a home page of a plugin (optional);
- * - <i>X-KDevelop-Plugin-License</i> is a license (optional). can be: GPL,
- * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
- * considered as unknown;
- * - <i>X-KDevelop-Plugin-BugsEmailAddress</i> is an email address for bug
- * reports (optional);
- * - <i>X-KDevelop-Plugin-Copyright</i> is a copyright statement (optional);
- * - <i>X-KDE-Library</i> is a name of library which contains the plugin
- * (required);
- * - <i>X-KDevelop-Version</i> is a version of KDevelop interfaces which is
- * supported by the plugin (required);
+ * - <i>X-KDevelop-Language</i> is the name of the language the plugin provides 
+ *   support for (optional);
+ * - <i>X-KDevelop-SupportedMimeTypes</i> is a list of mimetypes that the 
+ *   language-parser in this plugin supports (optional);
+ * - <i>X-KDevelop-Mode</i> is either GUI or NoGUI to indicate wether a plugin can run
+ *   with the GUI components loaded or not (required);
  * - <i>X-KDevelop-Category</i> is a scope of a plugin (see below for
  * explanation) (required);
- * - <i>X-KDevelop-Args</i> is a list of additional arguments passed to plugins
- * constructor (optional);
- * - <i>X-KDevelop-Properties</i> is a list of properties which this plugin
- * supports, see the Profile documentation for an explanation (required to work
- * with shells that support profiles).
+ * - <i>X-KDevelop-LoadMode</i> can be set to AlwaysOn in which case the plugin will
+ *   never be unloaded even if requested via the API. (optional);
  *
  * Plugin scope can be either:
  * - Global

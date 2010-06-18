@@ -15,6 +15,7 @@
 #include <QStandardItem>
 
 class SnippetRepository;
+class KAction;
 
 /**
  * One object of this class represents a single snippet.
@@ -71,6 +72,11 @@ public:
      */
     void setArguments(const QString& arguments);
 
+    /**
+     * Action to trigger insertion of this snippet.
+     */
+    KAction* action();
+
     virtual QVariant data(int role = Qt::UserRole + 1) const;
 
 private:
@@ -82,6 +88,10 @@ private:
     QString m_prefix;
     /// the display arguments aka \code<displayarguments>\endcode
     QString m_arguments;
+    /// the insertion action for this snippet.
+    KAction* m_action;
 };
+
+Q_DECLARE_METATYPE ( Snippet* )
 
 #endif

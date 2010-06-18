@@ -18,6 +18,11 @@
 
 class Snippet;
 
+namespace KTextEditor
+{
+class TemplateScript;
+}
+
 /**
  * Each object of this type represents a repository of snippets. Each repository
  * has a name and will be saved to an XML file that includes all items of this repository.
@@ -105,7 +110,7 @@ public:
     /**
      * The token identifying the script in this repository.
      */
-    QString scriptToken() const;
+    KTextEditor::TemplateScript* registeredScript() const;
     /**
      * Sets the QtScript(s) associated with this repository.
      * 
@@ -143,8 +148,8 @@ private:
     QString m_namespace;
     /// QtScript with functions to be used in the snippet
     QString m_script;
-    /// token identifiyng the script
-    QString m_scriptToken;
+    /// registered script
+    KTextEditor::TemplateScript* m_registeredScript;
 };
 
 #endif

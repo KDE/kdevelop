@@ -14,8 +14,12 @@
 
 #include <kdeversion.h>
 
-#if KDE_IS_VERSION(4, 4, 60)
+#if KDE_IS_VERSION(4, 4, 90)
   #define SNIPPETS_HAVE_TPLIFACE2
+#endif
+
+#if KDE_IS_VERSION(4, 4, 60)
+  #define SNIPPETS_ENABLE_GHNS_UPLOAD
 #endif
 
 #endif // SNIPPETFEATURES_H
