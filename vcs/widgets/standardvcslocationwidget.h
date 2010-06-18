@@ -24,6 +24,7 @@
 #include <vcs/widgets/vcslocationwidget.h>
 #include "../vcsexport.h"
 
+class KUrl;
 class KUrlRequester;
 namespace KDevelop
 {
@@ -35,6 +36,7 @@ class KDEVPLATFORMVCS_EXPORT StandardVcsLocationWidget : public VcsLocationWidge
         StandardVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
         virtual VcsLocation location() const;
         virtual bool isCorrect() const;
+        KUrl url() const;
         
     public slots:
         void textChanged(const QString& str);

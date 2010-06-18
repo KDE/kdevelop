@@ -38,10 +38,14 @@ StandardVcsLocationWidget::StandardVcsLocationWidget(QWidget* parent, Qt::Window
     connect(m_urlWidget, SIGNAL(textChanged(QString)), SLOT(textChanged(QString)));
 }
 
+KUrl StandardVcsLocationWidget::url() const
+{
+    return m_urlWidget->url();
+}
+
 VcsLocation StandardVcsLocationWidget::location() const
 {
     VcsLocation v(m_urlWidget->url());
-    qDebug() << "XAAAAAAA" << v.localUrl();
     return v;
 }
 

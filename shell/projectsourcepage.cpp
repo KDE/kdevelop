@@ -30,7 +30,6 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     
     m_ui->workingDir->setUrl(initial);
     m_ui->workingDir->setMode(KFile::Directory);
-    connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
     m_ui->sources->addItem(KIcon("folder"), i18n("Local"));
@@ -42,6 +41,8 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
         m_plugins.append(p);
         m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), pluginManager->pluginInfo(p).name());
     }
+    
+    connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
     connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(sourceChanged(int)));
     connect(m_ui->get, SIGNAL(clicked()), SLOT(getVcsProject()));
     
@@ -116,6 +117,7 @@ void ProjectSourcePage::reevaluateCorrection()
         correct &= d.exists() && !d.entryList().isEmpty();
     }
     
+//     qDebug() << "reevaluateCorrection" << correct;
     emit isCorrect(correct);
 }
 

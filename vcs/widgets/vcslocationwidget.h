@@ -22,12 +22,13 @@
 #define VCSLOCATIONWIDGET_H
 
 #include <QWidget>
+#include "../vcsexport.h"
 
 namespace KDevelop
 {
 class VcsLocation; 
 
-class VcsLocationWidget : public QWidget
+class KDEVPLATFORMVCS_EXPORT VcsLocationWidget : public QWidget
 {
     Q_OBJECT
     public:
