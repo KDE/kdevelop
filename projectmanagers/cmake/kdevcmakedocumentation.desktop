@@ -24,6 +24,7 @@ Name[x-test]=xxCMake Documentationxx
 Name[zh_CN]=CMake 文档
 Name[zh_TW]=CMake 文件
 GenericName=Documentation Support
+GenericName[en_GB]=Documentation Support
 GenericName[nl]=Documentatie-ondersteuning
 GenericName[pt]=Suporte à Documentação
 GenericName[pt_BR]=Suporte à Documentação

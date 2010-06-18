@@ -29,6 +29,7 @@ Name[x-test]=xxCMake Project Builderxx
 Name[zh_CN]=CMake 工程构建器
 Name[zh_TW]=CMake 專案建立器
 GenericName=Project Builder
+GenericName[en_GB]=Project Builder
 GenericName[nl]=Projectbouwer
 GenericName[pt]=Construtor de Projectos
 GenericName[pt_BR]=Construtor de Projetos
