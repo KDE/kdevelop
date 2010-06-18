@@ -44,6 +44,7 @@ AppletSelector::AppletSelector(QWidget* parent)
     KPluginInfo::List list=Plasma::Applet::listAppletInfo();
     foreach(const KPluginInfo& info, list) {
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
+        item->setEditable(false);
         item->setToolTip(info.comment());
         item->setData(qVariantFromValue<uint>(PlasmaPlugin));
         item->setData(info.pluginName(), Qt::UserRole+2);
@@ -54,6 +55,7 @@ AppletSelector::AppletSelector(QWidget* parent)
     QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
     foreach(IDashboardPlasmoidFactory* fact, facts) {
         QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
+        item->setEditable(false);
         item->setToolTip(fact->comment());
         item->setData(qVariantFromValue<uint>(PlasmoidFactory));
         item->setData(qVariantFromValue<void*>(fact), Qt::UserRole+2);
@@ -65,6 +67,7 @@ AppletSelector::AppletSelector(QWidget* parent)
     foreach(IDashboardWidgetFactory* fact, factsW) {
         QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
         item->setToolTip(fact->comment());
+        item->setEditable(false);
         item->setData(qVariantFromValue<uint>(WidgetFactory));
         item->setData(qVariantFromValue<void*>(fact), Qt::UserRole+2);
         

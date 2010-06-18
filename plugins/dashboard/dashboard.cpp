@@ -89,8 +89,10 @@ void dashboard::addApplet(IDashboardWidgetFactory* fact)
 {
     fact->setProject(m_project);
     QWidget* w=fact->widget();
+    w->setAttribute(Qt::WA_NoSystemBackground);
     
-    Applet* a = new Applet;
+    Applet* a = new Applet(0, "clock");
+    a->setBackgroundHints(Plasma::Applet::StandardBackground);
     QGraphicsLinearLayout* l=new QGraphicsLinearLayout(Qt::Horizontal);
     QGraphicsProxyWidget* proxy=new QGraphicsProxyWidget(a);
     proxy->setWidget(w);
