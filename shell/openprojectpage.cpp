@@ -28,7 +28,6 @@
 
 #include "shellextension.h"
 #include "core.h"
-#include "projectcontroller.h"
 #include "plugincontroller.h"
 #include <kdiroperator.h>
 #include <kactioncollection.h>
@@ -41,11 +40,7 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
 
-    KUrl start = Core::self()->projectController()->projectsBaseDirectory();
-    if(startUrl.isValid())
-        start = startUrl;
-    
-    fileWidget = new KFileWidget( start, this);
+    fileWidget = new KFileWidget( startUrl, this);
 
     QStringList filters;
     QStringList allEntry;

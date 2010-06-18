@@ -32,7 +32,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
-    m_ui->sources->addItem(KIcon("folder"), i18n("Local"));
+    m_ui->sources->addItem(KIcon("folder"), i18n("Not versioned"));
     m_plugins.append(0);
     
     IPluginController* pluginManager = ICore::self()->pluginController();
@@ -112,12 +112,12 @@ void ProjectSourcePage::reevaluateCorrection()
     KUrl cwd=m_ui->workingDir->url();
     bool correct=!cwd.isEmpty() && (!cwd.isLocalFile() || QFile::exists(cwd.toLocalFile()));
     
-    if(correct) {
+    if(correct && cwd.isLocalFile()) {
         QDir d(cwd.toLocalFile());
         correct &= d.exists() && !d.entryList().isEmpty();
     }
     
-//     qDebug() << "reevaluateCorrection" << correct;
+    qDebug() << "reevaluateCorrection" << cwd << correct;
     emit isCorrect(correct);
 }
 

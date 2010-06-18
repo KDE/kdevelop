@@ -31,6 +31,7 @@
 #include "mainwindow.h"
 #include "shellextension.h"
 #include "projectsourcepage.h"
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -40,11 +41,12 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
 {
     resize(QSize(700, 500));
     
-    sourcePageWidget = new ProjectSourcePage( startUrl, this );
+    KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    sourcePageWidget = new ProjectSourcePage( start, this );
     connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
     sourcePage = addPage( sourcePageWidget, "Select the source" );
     
-    openPageWidget = new OpenProjectPage( startUrl, this );
+    openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
     openPage = addPage( openPageWidget, "Select the project" );
     
@@ -53,7 +55,7 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
     projectInfoPage = addPage( page, "Project information" );
     
-    setValid( sourcePage, false );
+    setValid( sourcePage, true );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
