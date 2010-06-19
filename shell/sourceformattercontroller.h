@@ -85,6 +85,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 	private Q_SLOTS:
 		void activeDocumentChanged(KDevelop::IDocument *doc);
 		void beautifySource();
+		void beautifyLine();
 		void formatFiles();
 	private:
 		/** \return A modeline string (to add at the end or the beginning of a file)
@@ -100,6 +101,7 @@ class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatt
 		// GUI actions
 		KAction* m_formatTextAction;
 		KAction* m_formatFilesAction;
+		KAction* m_formatLine;
 		QList<KDevelop::ProjectBaseItem*> m_prjItems;
 		KUrl::List m_urls;
 };

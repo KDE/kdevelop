@@ -71,6 +71,13 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 	        "functionality using <b>astyle</b> library.</p>"));
 	connect(m_formatTextAction, SIGNAL(triggered()), this, SLOT(beautifySource()));
 
+	m_formatLine = actionCollection()->addAction("edit_reformat_line");
+	m_formatLine->setText(i18n("Reformat Line"));
+	m_formatLine->setToolTip(i18n("Reformat current line using AStyle"));
+	m_formatLine->setWhatsThis(i18n("<b>Reformat line</b>"
+	                                "<p>Source reformatting of line under cursor using <b>astyle</b> library.</p>"));
+	connect(m_formatLine, SIGNAL(triggered()), this, SLOT(beautifyLine()));
+
 	m_formatFilesAction = actionCollection()->addAction("tools_astyle");
 	m_formatFilesAction->setText(i18n("Format files"));
 	m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
@@ -276,6 +283,34 @@ void SourceFormatterController::beautifySource()
 	} else {
 		formatDocument(doc, formatter, mime);
         }
+}
+
+void SourceFormatterController::beautifyLine()
+{
+	KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
+	KDevelop::IDocument *doc = docController->activeDocument();
+	if (!doc || !doc->isTextDocument())
+		return;
+	KTextEditor::Document *tDoc = doc->textDocument();
+	if (!tDoc->activeView())
+		return;
+	// load the appropriate formatter
+	KMimeType::Ptr mime = KMimeType::findByUrl(doc->url());
+	ISourceFormatter *formatter = formatterForMimeType(mime);
+	if( !formatter ) {
+		kDebug() << "no formatter available for" << mime;
+		return;
+	}
+
+	const KTextEditor::Cursor cursor = tDoc->activeView()->cursorPosition();
+	const QString line = tDoc->line(cursor.line());
+	const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
+	const QString post = tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
+	
+	const QString formatted = formatter->formatSource(line, mime, prev, post);
+	tDoc->replaceText(KTextEditor::Range(cursor.line(), 0, cursor.line(), line.length()), formatted);
+	// advance cursor one line
+	tDoc->activeView()->setCursorPosition(KTextEditor::Cursor(cursor.line() + 1, 0));
 }
 
 void SourceFormatterController::formatDocument(KDevelop::IDocument *doc, ISourceFormatter *formatter, const KMimeType::Ptr &mime)
