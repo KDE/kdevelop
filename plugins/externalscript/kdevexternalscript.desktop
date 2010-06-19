@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Service
+Icon=system-run
+Exec=
+Comment=Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.
+Comment[x-test]=xxRun external scripts or applications to manipulate the editor contents or do other arbitrary actions.xx
+Name=External Scripts
+Name[x-test]=xxExternal Scriptsxx
+GenericName=External Scripts
+GenericName[x-test]=xxExternal Scriptsxx
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevexternalscript
+X-KDevelop-Version=10
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=kdevexternalscript
+X-KDE-PluginInfo-Author=Milian Wolff
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Interfaces=org.kdevelop.IPlugin
+X-KDevelop-Mode=GUI
+X-KDevelop-IRequired=org.kdevelop.IOutputView
