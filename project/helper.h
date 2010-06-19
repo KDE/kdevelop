@@ -28,7 +28,7 @@ namespace KDevelop {
 class IProject;
 
 /**
- * Deletes the url at @p url. The user is asked for confirmation.
+ * Deletes the url at @p url. The user is NOT asked for confirmation.
  * Set @p isFolder properly to get the correct messages.
  * @return whether url got deleted or not
  */
