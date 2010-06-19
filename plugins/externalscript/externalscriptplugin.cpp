@@ -58,7 +58,7 @@ public:
   }
 
   virtual QString id() const {
-    return "org.kdevelop.ExternalScript";
+    return "org.kdevelop.ExternalScriptView";
   }
 
 private:
