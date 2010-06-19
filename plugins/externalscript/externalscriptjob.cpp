@@ -40,6 +40,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
@@ -90,6 +92,8 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   QString command = item->command();
   QString workingDir;
 
+  command.replace( "%i", QString::number( QCoreApplication::applicationPid() ) );
+
   if ( active ) {
     const KUrl url = active->url();
 
@@ -100,7 +104,6 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
     ///TODO: make those placeholders escapeable
     command.replace( "%u", KShell::quoteArg( url.pathOrUrl() ) );
-    command.replace( "%p", QString::number( QCoreApplication::applicationPid() ) );
 
     ///TODO: does that work with remote files?
     QFileInfo info( url.pathOrUrl() );
@@ -112,6 +115,10 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
     if ( active->textDocument() && active->textDocument()->activeView() && active->textDocument()->activeView()->selection() ) {
       command.replace( "%s", KShell::quoteArg( active->textDocument()->activeView()->selectionText() ) );
+    }
+
+    if ( KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl( url ) ) {
+      command.replace( "%p", project->folder().pathOrUrl() );
     }
   }
 
