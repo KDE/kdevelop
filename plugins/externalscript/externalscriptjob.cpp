@@ -99,16 +99,16 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     }
 
     ///TODO: make those placeholders escapeable
-    command.replace( "%u", url.pathOrUrl() );
+    command.replace( "%u", KShell::quoteArg( url.pathOrUrl() ) );
     command.replace( "%p", QString::number( QCoreApplication::applicationPid() ) );
 
     ///TODO: does that work with remote files?
     QFileInfo info( url.pathOrUrl() );
 
-    command.replace( "%f", info.filePath() );
-    command.replace( "%b", info.baseName() );
-    command.replace( "%n", info.fileName() );
-    command.replace( "%d", info.path() );
+    command.replace( "%f", KShell::quoteArg( info.filePath() ) );
+    command.replace( "%b", KShell::quoteArg( info.baseName() ) );
+    command.replace( "%n", KShell::quoteArg( info.fileName() ) );
+    command.replace( "%d", KShell::quoteArg( info.path() ) );
 
     if ( active->textDocument() && active->textDocument()->activeView() && active->textDocument()->activeView()->selection() ) {
       command.replace( "%s", KShell::quoteArg( active->textDocument()->activeView()->selectionText() ) );
