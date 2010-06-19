@@ -52,6 +52,8 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
     "  <dd>Gets replaced by the path to the directory of the active document.</dd>\n"
     "  <dt><code>%s</code></dt>\n"
     "  <dd>Gets replaced with the shell escaped contents of the selection in the active document.</dd>\n"
+    "  <dt><code>%p</code></dt>\n"
+    "  <dd>Gets replaced with the PID of the currently running KDevelop process.</dd>\n"
     "</dl>\n"
     "<p><b>NOTE:</b>  It is your responsibility to prevent running hazardous commands that could lead to data loss.</p>\n"
   );

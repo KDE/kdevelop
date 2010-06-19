@@ -100,6 +100,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
     ///TODO: make those placeholders escapeable
     command.replace( "%u", url.pathOrUrl() );
+    command.replace( "%p", QString::number( QCoreApplication::applicationPid() ) );
 
     ///TODO: does that work with remote files?
     QFileInfo info( url.pathOrUrl() );
