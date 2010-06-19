@@ -30,7 +30,8 @@
 #include <interfaces/iuicontroller.h>
 
 ExternalScriptItem::ExternalScriptItem()
-  : m_saveMode(SaveNone), m_replaceMode(ReplaceNone), m_inputMode(InputNone), m_action( 0 )
+  : m_saveMode(SaveNone), m_replaceMode(ReplaceNone), m_inputMode(InputNone), m_action( 0 ),
+    m_showOutput( true )
 {
 
 }
@@ -94,6 +95,16 @@ KAction* ExternalScriptItem::action()
 
   Q_ASSERT( m_action );
   return m_action;
+}
+
+bool ExternalScriptItem::showOutput() const
+{
+  return m_showOutput;
+}
+
+void ExternalScriptItem::setShowOutput( bool show )
+{
+  m_showOutput = show;
 }
 
 void ExternalScriptItem::save() const

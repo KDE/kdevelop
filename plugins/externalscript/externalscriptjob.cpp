@@ -48,7 +48,8 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     : KDevelop::OutputJob( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
     m_replaceMode( item->replaceMode() ), m_inputMode( item->inputMode() ),
-    m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() )
+    m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() ),
+    m_showOutput( item->showOutput() )
 {
   kDebug() << "creating external script job";
 
@@ -148,7 +149,9 @@ void ExternalScriptJob::start()
   kDebug() << "launching?" << m_proc;
 
   if ( m_proc ) {
-    startOutput();
+    if ( m_showOutput ) {
+      startOutput();
+    }
     appendLine( i18n( "Running external script: %1", m_proc->program().join( " " ) ) );
     m_proc->start();
 

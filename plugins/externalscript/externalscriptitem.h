@@ -103,6 +103,15 @@ public:
    */
   KAction* action();
 
+  /**
+   * @return True when this command should have its output shown, false otherwise.
+   */
+  bool showOutput() const;
+  /**
+   * Set @p show to true when the output of this command shout be shown, false otherwise.
+   */
+  void setShowOutput( bool show );
+
   ///TODO: custom icon
   ///TODO: mimetype / language filter
   ///TODO: kate commandline integration
@@ -118,6 +127,7 @@ private:
   ReplaceMode m_replaceMode;
   InputMode m_inputMode;
   KAction* m_action;
+  bool m_showOutput;
 };
 
 Q_DECLARE_METATYPE(ExternalScriptItem*)

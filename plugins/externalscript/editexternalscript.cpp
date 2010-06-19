@@ -91,6 +91,11 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   );
   saveLabel->setToolTip( tooltip );
   saveCombo->setToolTip( tooltip );
+
+  tooltip = i18n(
+    "<p>Defines whether the output of the script should be shown in a toolview.</p>"
+  );
+  showOutputBox->setToolTip( tooltip );
   //END setup tooltips
 
   //BEGIN item to UI copying
@@ -100,6 +105,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   stdoutCombo->setCurrentIndex( item->replaceMode() );
   saveCombo->setCurrentIndex( item->saveMode() );
   shortcutWidget->setShortcut( item->action()->shortcut() );
+  showOutputBox->setChecked( item->showOutput() );
   //END item to UI copying
 
   validate();
@@ -137,6 +143,8 @@ void EditExternalScript::save()
       saveCombo->currentIndex()
   );
   m_item->setSaveMode( saveMode );
+
+  m_item->setShowOutput( showOutputBox->isChecked() );
 
   m_item->action()->setShortcut( shortcutWidget->shortcut() );
 }

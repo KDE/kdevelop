@@ -65,6 +65,7 @@ private:
   KTextEditor::Document* m_document;
   /// invalid when whole doc should be replaced
   KTextEditor::Range m_selectionRange;
+  bool m_showOutput;
 };
 
 #endif // EXTERNALSCRIPTJOB_H
