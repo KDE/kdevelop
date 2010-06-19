@@ -1816,7 +1816,6 @@ void CMakeAstTest::testGetTestPropBadParse_data()
 
 void CMakeAstTest::testIfGoodParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("if");
     QVERIFY( ast->parseFunctionInfo( function ) == true );
@@ -1825,11 +1824,38 @@ void CMakeAstTest::testIfGoodParse()
 
 void CMakeAstTest::testIfGoodParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+    CMakeFunctionDesc if1, if2, if3;
+    if1.name = if2.name = "if";
+    if3.name = "IF";
+
+    if1.addArguments(QStringList() << "TRUE");
+    if2.addArguments(QStringList() << "myvar");
+    if3.addArguments(QStringList() << "myvar" << "STREQUAL" << "\"foo\"");
+
+    QTest::newRow("if true constant") << if1;
+    QTest::newRow("if variable alone") << if2;
+    QTest::newRow("if strequal") << if3;
+
+    CMakeFunctionDesc else1;
+    else1.name = "else";
+    QTest::newRow("else no args") << else1;
+
+    CMakeFunctionDesc elif1, elif2, elif3;
+    elif1.name = elif2.name = "elseif";
+    elif3.name = "ELSEIF";
+
+    elif1.addArguments(QStringList() << "TRUE");
+    elif2.addArguments(QStringList() << "myvar");
+    elif3.addArguments(QStringList() << "myvar" << "STREQUAL" << "\"foo\"");
+
+    QTest::newRow("elseif constant") << elif1;
+    QTest::newRow("elseif variable alone") << elif2;
+    QTest::newRow("elseif strequal") << elif3;
 }
 
 void CMakeAstTest::testIfBadParse()
 {
-    TDD_TODO;
     QFETCH( CMakeFunctionDesc, function );
     CMakeAst* ast = AstFactory::self()->createAst("if");
     QVERIFY( ast->parseFunctionInfo( function ) == false );
@@ -1838,6 +1864,30 @@ void CMakeAstTest::testIfBadParse()
 
 void CMakeAstTest::testIfBadParse_data()
 {
+    QTest::addColumn<CMakeFunctionDesc>("function");
+
+    CMakeFunctionDesc badFuncName;
+    badFuncName.name = "iif";
+    badFuncName.addArguments(QStringList() << "myvar" << "STREQUAL" << "\"foo\"");
+    QTest::newRow("bad function name") << badFuncName;
+
+    //This is currently disabled because the parser doesn't fail on IF() with no args,
+    //but official CMake doesn't either, so I don't know if it's *supposed* to fail.
+    //Then again, CMake doesn't fail when you do pass arguments to ELSE() either...
+    if(0) {
+    CMakeFunctionDesc ifEmptyArgs;
+    ifEmptyArgs.name = "if";
+    QTest::newRow("if empty arguments") << ifEmptyArgs;
+
+    CMakeFunctionDesc elifEmptyArgs;
+    elifEmptyArgs.name = "elseif";
+    QTest::newRow("elseif empty arguments") << elifEmptyArgs;
+    }
+
+    CMakeFunctionDesc elseWithArgs;
+    elseWithArgs.name = "else";
+    elseWithArgs.addArguments(QStringList() << "foo");
+    QTest::newRow("else with arguments") << elseWithArgs;
 }
 
 
