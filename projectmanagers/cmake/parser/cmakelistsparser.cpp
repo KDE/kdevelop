@@ -313,6 +313,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
             }
         }
     }
+    cmListFileLexer_Delete(lexer);
 
     return ret;
 }
