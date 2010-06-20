@@ -382,18 +382,11 @@ void CMakeAstTest::testBreakBadParse()
 
 void CMakeAstTest::testBreakBadParse_data()
 {
-    CMakeFunctionDesc func1, func2;
-    func1.name = "break";
-    func2.name = "wrong name";
-
-    QStringList argList;
-    argList << "foo1" << "foo2";
-
-    func1.addArguments( argList );
+    CMakeFunctionDesc func1;
+    func1.name = "wrong name";
 
     QTest::addColumn<CMakeFunctionDesc>( "function" );
-    QTest::newRow( "bad with args" ) << func1;
-    QTest::newRow( "bad wrong name" ) << func2;
+    QTest::newRow( "bad wrong name" ) << func1;
 }
 
 void CMakeAstTest::testBuildCommandGoodParse()
