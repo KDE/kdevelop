@@ -95,8 +95,6 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
 
   core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
 
-  connect( m_model, SIGNAL(itemChanged(QStandardItem*)),
-           this, SLOT(itemChanged(QStandardItem*)));
   connect( m_model, SIGNAL(rowsRemoved(QModelIndex, int, int)),
            this, SLOT(rowsRemoved(QModelIndex, int, int)) );
   connect( m_model, SIGNAL(rowsInserted(QModelIndex, int, int)),
