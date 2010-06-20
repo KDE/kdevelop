@@ -1995,6 +1995,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, whileast->content()[whileast->line()]);
 
     kDebug(9042) << "Visiting While" << whileast->condition() << "?" << result;
+    int end=whileast->line()+1;
     if(result)
     {
         walk(whileast->content(), whileast->line()+1);
@@ -2005,7 +2006,7 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
         } else
             walk(whileast->content(), whileast->line());
     }
-    CMakeFileContent::const_iterator it=whileast->content().constBegin()+whileast->line()+1;
+    CMakeFileContent::const_iterator it=whileast->content().constBegin()+end;
     CMakeFileContent::const_iterator itEnd=whileast->content().constEnd();
     int lines=0, inside=1;
     for(; inside>0 && it!=itEnd; ++it, lines++)

@@ -393,7 +393,7 @@ void CMakeProjectVisitorTest::testRun_data()
                             "break()\n"
                             "endwhile(1)\n"
                             << cacheValues << results;
-                            
+    
     results.clear();
     QTest::newRow("break1") <<
                             "while(1)\n"
