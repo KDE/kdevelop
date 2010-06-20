@@ -14,6 +14,10 @@ include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
 
+# Make sure that we're having RPATH on our installed libs, else using kdevelop
+# from prefixes like $HOME/kdevelop breaks
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 find_package(KDevPlatform 1.0.0 REQUIRED)
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
