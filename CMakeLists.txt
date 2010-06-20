@@ -18,6 +18,10 @@ include (KDE4Defaults)
 include (MacroWriteBasicCMakeVersionFile)
 include (MacroLibrary)
 
+# Make sure that we're having RPATH on our installed libs, else using kdevelop
+# from prefixes like $HOME/kdevelop breaks
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
 set(KOMPARE_FOUND FALSE)
 #macro_optional_find_package(Kompare)
 macro_bool_to_01(KOMPARE_FOUND HAVE_KOMPARE)
