@@ -229,7 +229,7 @@ QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localP
         QFileInfo info(includeName);
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.absoluteFilePath());
+            ret.first = KUrl(info.canonicalFilePath());
             ret.first.cleanPath();
             ret.second = KUrl("/");
             return ret;
@@ -241,7 +241,7 @@ QPair<KUrl, KUrl> findInclude(const KUrl::List& includePaths, const KUrl& localP
         QFileInfo info(check);
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.absoluteFilePath());
+            ret.first = KUrl(info.canonicalFilePath());
             ret.first.cleanPath();
             ret.second = localPath;
             return ret;
@@ -265,7 +265,7 @@ restart:
 
         if (info.exists() && info.isReadable() && info.isFile()) {
             //kDebug(9007) << "found include file:" << info.absoluteFilePath();
-            ret.first = KUrl(info.absoluteFilePath());
+            ret.first = KUrl(info.canonicalFilePath());
             ret.first.cleanPath();
             ret.second = path.toLocalFile();
             return ret;
