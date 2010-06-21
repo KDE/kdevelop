@@ -25,42 +25,38 @@
 #include <kio/copyjob.h>
 #include <KMessageBox>
 #include <KLocalizedString>
+#include <kparts/mainwindow.h>
 
 #include <QApplication>
 #include <interfaces/iproject.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <interfaces/iplugin.h>
 #include <vcs/vcsjob.h>
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 
 bool KDevelop::removeUrl(const KDevelop::IProject* project, const KUrl& url, const bool isFolder)
 {
-    QWidget* window(QApplication::activeWindow());
-    int q=KMessageBox::questionYesNo(window,
-        isFolder ? i18n("Do you really want to remove the directory <i>%1</i>?", url.pathOrUrl())
-                 : i18n("Do you really to remove the file <i>%1</i>?", url.pathOrUrl()));
-    if(q==KMessageBox::Yes)
-    {
-        IPlugin* vcsplugin=project->versionControlPlugin();
-        if(vcsplugin) {
-            IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
-        
-            // We have a vcs and the file/folder is controller, need to make the rename through vcs
-            if(vcs->isVersionControlled(url)) {
-                VcsJob* job=vcs->remove(KUrl::List() << url);
-                return job->exec();
-            }
+    IPlugin* vcsplugin=project->versionControlPlugin();
+    if(vcsplugin) {
+        IBasicVersionControl* vcs=vcsplugin->extension<IBasicVersionControl>();
+
+        // We have a vcs and the file/folder is controller, need to make the rename through vcs
+        if(vcs->isVersionControlled(url)) {
+            VcsJob* job=vcs->remove(KUrl::List() << url);
+            return job->exec();
         }
-        
-        //if we didn't find a VCS, we remove using KIO
-        if ( !KIO::NetAccess::del( url, window ) ) {
-            KMessageBox::error( window,
-                isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.pathOrUrl() )
-                         : i18n( "Cannot remove file <i>%1</i>.", url.pathOrUrl() ) );
-            return false;
-        }
-        return true;
     }
-    return false;
+
+    //if we didn't find a VCS, we remove using KIO
+    QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
+    if ( !KIO::NetAccess::del( url, window ) ) {
+        KMessageBox::error( window,
+            isFolder ? i18n( "Cannot remove folder <i>%1</i>.", url.pathOrUrl() )
+                        : i18n( "Cannot remove file <i>%1</i>.", url.pathOrUrl() ) );
+        return false;
+    }
+    return true;
 }
 
 bool KDevelop::createFile(const KUrl& file)
