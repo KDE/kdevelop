@@ -34,6 +34,8 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
 {
   setButtons( /*Reset | */Apply | Cancel | Ok );
   setupUi( mainWidget() );
+  mainWidget()->layout()->setMargin(0);
+  shortcutWidget->layout()->setMargin(0);
 
   //BEGIN setup tooltips
   QString tooltip = i18n(

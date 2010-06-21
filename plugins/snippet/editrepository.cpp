@@ -32,6 +32,7 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
 {
     setButtons(/*Reset | */Apply | Cancel | Ok);
     setupUi(mainWidget());
+    mainWidget()->layout()->setMargin(0);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
