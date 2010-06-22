@@ -2021,7 +2021,6 @@ int CMakeProjectVisitor::visit( const WhileAst * whileast)
     if(it!=itEnd) {
         usesForArguments(whileast->condition(), cond.variableArguments(), m_topctx, *(it-1));
     }
-    qDebug() << "while done" << lines;
     return lines;
 }
 
