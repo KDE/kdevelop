@@ -52,15 +52,15 @@ SnippetCompletionModel::~SnippetCompletionModel()
 QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
 {
     // grouping of snippets
-    if (role == KTextEditor::CodeCompletionModel::InheritanceDepth) {
-        return 1;
-    }
     if (!idx.parent().isValid()) {
         if (role == Qt::DisplayRole) {
             return i18n("Snippets");
         }
         if (role == KTextEditor::CodeCompletionModel::GroupRole) {
             return Qt::DisplayRole;
+        }
+        if (role == KTextEditor::CodeCompletionModel::InheritanceDepth) {
+            return 800;
         }
         return QVariant();
     }
