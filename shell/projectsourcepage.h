@@ -36,6 +36,8 @@ class ProjectSourcePage : public QWidget
         void getVcsProject();
         void projectReceived(KJob* job);
         void reevaluateCorrection();
+        void progressChanged(KJob*, unsigned long);
+        void infoMessage(KJob*, const QString& text, const QString& rich);
         
     signals:
         void isCorrect(bool);

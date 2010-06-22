@@ -91,7 +91,19 @@ void ProjectSourcePage::getVcsProject()
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     
     connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
+    connect(job, SIGNAL(percent(KJob*, unsigned long)), SLOT(progressChanged(KJob*, unsigned long)));
     ICore::self()->runController()->registerJob(job);
+}
+
+void ProjectSourcePage::progressChanged(KJob*, unsigned long value)
+{
+    m_ui->creationProgress->setValue(value);
+}
+
+void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& rich)
+{
+    m_ui->creationProgress->setFormat(i18nc("Format of the progress bar text. progress and info",
+                                            "%1 : %p%", text));
 }
 
 void ProjectSourcePage::projectReceived(KJob* job)
