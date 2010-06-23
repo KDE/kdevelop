@@ -138,7 +138,7 @@ class ContextMenuExtension;
  * information then this is a project plugin.
  *
  *
- * @sa Core class documentation for an information about features which are available to
+ * @sa Core class documentation for information about features available to
  * plugins from shell applications.
  */
 class KDEVPLATFORMINTERFACES_EXPORT IPlugin: public QObject, public KXMLGUIClient
@@ -182,7 +182,7 @@ public:
     }
     
     /**
-     * ask the plugin for a ContextActionContainer, which contains actions
+     * Ask the plugin for a ContextActionContainer, which contains actions
      * that will be merged into the context menu.
      * @param context the context describing where the context menu was requested
      * @returns a container describing which actions to merge into which context menu part
@@ -223,7 +223,7 @@ protected:
     void addExtension( const QString& );
 
     /**
-     * Initialize the XML Gui State.
+     * Initialize the XML GUI State.
      */
     virtual void initializeGuiState();
 

@@ -33,9 +33,9 @@ class FrameStackModel;
 class IDebugSession;
 
 /** Top level debugger object. Exists as long as KDevelop exists
-    and hold some global debugger state, like breakpoints.
-    Also holds IDebugSession for specific application while that
-    application is being debugged.
+    and holds some global debugger state, like breakpoints.
+    Also holds the IDebugSession for the specific application
+    that is being debugged.
 */
 class KDEVPLATFORMINTERFACES_EXPORT IDebugController : public QObject
 {
