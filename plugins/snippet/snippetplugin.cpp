@@ -22,9 +22,9 @@
 #include <KActionCollection>
 #include <KAction>
 
-#include <kdeversion.h>
-#if KDE_VERSION >= KDE_MAKE_VERSION(4, 4, 0)
-    #define HAVE_HIGHLIGHT_IFACE
+#include "snippetfeatures.h"
+
+#ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
     #include <KTextEditor/HighlightInterface>
 #endif
 
@@ -177,7 +177,7 @@ void SnippetPlugin::createSnippetFromSelection()
     Q_ASSERT(view);
 
     QString mode;
-    #ifdef HAVE_HIGHLIGHT_IFACE
+    #ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
         if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
             mode = iface->highlightingModeAt(view->selectionRange().start());
         }
