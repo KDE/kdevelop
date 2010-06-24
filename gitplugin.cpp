@@ -161,11 +161,11 @@ VcsJob* GitPlugin::init(const KUrl &directory)
     return errorsFound(i18n("Could not initialize the repository"), OutputJob::Verbose);
 }
 
-VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLocationSrc, const KUrl& localRepositoryRoot, KDevelop::IBasicVersionControl::RecursionMode)
+VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const KUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
 {
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localRepositoryRoot.toLocalFile(), GitPlugin::Init) ) {
-        *job << "git" << "clone" << "--" << localOrRepoLocationSrc.localUrl().prettyUrl();
+    if (prepareJob(job, dest.toLocalFile(), GitPlugin::Init) ) {
+        *job << "git" << "clone" << "--" << source.localUrl().prettyUrl() << dest.toLocalFile();
         return job;
     }
     delete job;
