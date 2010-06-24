@@ -105,7 +105,7 @@ class ContextMenuExtension;
  * - <i>X-KDE-PluginInfo-License</i> is a license (optional). can be: GPL,
  * LGPL, BSD, Artistic, QPL or Custom. If this property is not set, license is
  * considered as unknown;
- * - <i>X-KDevelop-Plugin-Version</i> is the KDevPlatform API version this plugin
+ * - <i>X-KDevelop-Version</i> is the KDevPlatform API version this plugin
  *   works with (required);
  * - <i>X-KDevelop-Interfaces</i> is a list of extension interfaces that this
  * plugin implements (optional);
