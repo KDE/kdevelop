@@ -38,6 +38,7 @@
 #include <vcs/vcsevent.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
+#include <vcs/widgets/standardvcslocationwidget.h>
 #include <QDateTime>
 #include <KIO/CopyJob>
 
@@ -164,10 +165,7 @@ VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & localOrRepoLo
 {
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localRepositoryRoot.toLocalFile(), GitPlugin::Init) ) {
-        *job << "git";
-        *job << "clone";
-        *job << "--";
-        *job << localOrRepoLocationSrc.localUrl().toLocalFile();
+        *job << "git" << "clone" << "--" << localOrRepoLocationSrc.localUrl().prettyUrl();
         return job;
     }
     delete job;
@@ -1073,3 +1071,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     return empty_cmd();
 }
 
+KDevelop::VcsLocationWidget* GitPlugin::vcsLocation(QWidget* parent) const
+{
+    return new KDevelop::StandardVcsLocationWidget(parent);
+}
