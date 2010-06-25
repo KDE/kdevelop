@@ -28,6 +28,7 @@
 #include <KDebug>
 #include <QFileInfo>
 #include <QDir>
+#include <QDateTime>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -39,8 +40,8 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
-#include <QDateTime>
 #include <KIO/CopyJob>
+#include "gitclonejob.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -163,9 +164,11 @@ VcsJob* GitPlugin::init(const KUrl &directory)
 
 VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const KUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
 {
-    DVcsJob* job = new DVcsJob(this);
+    DVcsJob* job = new GitCloneJob(this);
     if (prepareJob(job, dest.toLocalFile(), GitPlugin::Init) ) {
-        *job << "git" << "clone" << "--" << source.localUrl().prettyUrl() << dest.toLocalFile();
+        *job << "git" << "clone"
+             << "--progress"
+             << "--" << source.localUrl().prettyUrl() << dest.toLocalFile();
         return job;
     }
     delete job;
