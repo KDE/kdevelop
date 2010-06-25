@@ -29,12 +29,13 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
+#include <QtCore/QDir>
+#include <QtGui/QStandardItemModel>
 
 #include <KDE/KDebug>
 #include <KDE/KLocale>
 
 #include <interfaces/iplugin.h>
-#include <QDir>
 
 struct DVcsJobPrivate
 {
@@ -62,6 +63,14 @@ DVcsJob::DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbos
     : VcsJob(parent, verbosity), d(new DVcsJobPrivate)
 {
     d->vcsplugin = parent;
+
+    connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
+            SLOT(slotProcessExited(int, QProcess::ExitStatus)));
+    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
+            SLOT(slotProcessError(QProcess::ProcessError)));
+
+    connect(d->childproc, SIGNAL(readyReadStandardOutput()),
+                SLOT(slotReceivedStdout()));
 }
 
 DVcsJob::~DVcsJob()
@@ -177,16 +186,6 @@ void DVcsJob::start()
     }
 #endif
 
-    connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            SLOT(slotProcessExited(int, QProcess::ExitStatus)));
-    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
-            SLOT(slotProcessError(QProcess::ProcessError)));
-
-    connect(d->childproc, SIGNAL(readyReadStandardError()),
-                SLOT(slotReceivedStderr()));
-    connect(d->childproc, SIGNAL(readyReadStandardOutput()),
-                SLOT(slotReceivedStdout()));
-
     kDebug() << "Execute dvcs command:" << dvcsCommand();
 
     d->output.clear();
@@ -197,6 +196,8 @@ void DVcsJob::start()
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     d->childproc->waitForStarted();
+    
+    displayOutput(d->command.join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -211,9 +212,6 @@ void DVcsJob::cancel()
 
 void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
-    // disconnect all connections to childproc's signals; they are no longer needed
-    d->childproc->disconnect();
-
     d->isRunning = false;
 
     //NOTE: some DVCS commands can use stderr...
@@ -255,9 +253,6 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    // disconnect all connections to childproc's signals; they are no longer needed
-    d->childproc->disconnect();
-
     d->isRunning = false;
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0)
@@ -267,16 +262,19 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     jobIsReady();
 }
 
-void DVcsJob::slotReceivedStdout()
+void DVcsJob::displayOutput(const QString& data)
 {
-    // accumulate output
-    d->output.append(d->childproc->readAllStandardOutput());
+    static_cast<QStandardItemModel*>(model())->appendRow(new QStandardItem(data));
 }
 
-void DVcsJob::slotReceivedStderr()
+void DVcsJob::slotReceivedStdout()
 {
+    QByteArray output = d->childproc->readAllStandardOutput();
+    
     // accumulate output
-    d->output.append(d->childproc->readAllStandardError());
+    d->output.append(output);
+    
+    displayOutput(output);
 }
 
 KDevelop::VcsJob::JobStatus DVcsJob::status() const

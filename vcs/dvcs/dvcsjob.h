@@ -209,6 +209,8 @@ public:
     // End:  KDevelop::VcsJob
     
     KProcess *getChildproc();
+    
+    void displayOutput(const QString& output);
 
 public Q_SLOTS:
     /**
@@ -228,7 +230,6 @@ private Q_SLOTS:
     void slotProcessError( QProcess::ProcessError );
     void slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus);
     void slotReceivedStdout();
-    void slotReceivedStderr();
 
 private:
     void jobIsReady();
