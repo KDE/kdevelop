@@ -39,7 +39,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IBasicVersionControl" ) )
     {
         m_plugins.append(p);
-        m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), pluginManager->pluginInfo(p).name());
+        m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), p->extension<IBasicVersionControl>()->name());
     }
     
     connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
@@ -92,6 +92,7 @@ void ProjectSourcePage::getVcsProject()
     
     connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
     connect(job, SIGNAL(percent(KJob*, unsigned long)), SLOT(progressChanged(KJob*, unsigned long)));
+    connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(infoMessage(KJob*,QString,QString)));
     ICore::self()->runController()->registerJob(job);
 }
 
@@ -109,8 +110,8 @@ void ProjectSourcePage::infoMessage(KJob* , const QString& text, const QString& 
 void ProjectSourcePage::projectReceived(KJob* job)
 {
     m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
-    if(job->error()==0)
-        reevaluateCorrection();
+    
+    reevaluateCorrection();
 }
 
 void ProjectSourcePage::sourceLocationChanged()
@@ -129,8 +130,9 @@ void ProjectSourcePage::reevaluateCorrection()
         correct &= d.exists() && !d.entryList().isEmpty();
     }
     
-    qDebug() << "reevaluateCorrection" << cwd << correct;
+//     qDebug() << "reevaluateCorrection" << cwd << correct;
     emit isCorrect(correct);
+    m_ui->get->setEnabled(correct);
 }
 
 KUrl ProjectSourcePage::workingDir() const
