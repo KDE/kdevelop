@@ -38,7 +38,6 @@
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 
-#include "../editor/editorintegrator.h"
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
 #include "../backgroundparser/backgroundparser.h"
@@ -53,7 +52,6 @@
 #include "use.h"
 #include "uses.h"
 #include "abstractfunctiondeclaration.h"
-#include "smartconverter.h"
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "repositories/itemrepository.h"
@@ -1104,13 +1102,13 @@ DUChain::DUChain()
 {
   connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeletedFinal(KTextEditor::Document*)), SLOT(documentAboutToBeDeletedFinal(KTextEditor::Document*)));
   if(ICore::self()) {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentRenamed(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), this, SLOT(documentActivated(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
+    
   }
 }
 
@@ -1189,19 +1187,6 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   Q_ASSERT(sdDUChainPrivate->hasChainForIndex(chain->ownIndex()));
   
-/*  {
-    //This is just for debugging, and should be disabled later.
-    int realChainCount = 0;
-    int proxyChainCount = 0;
-    for(QMap<IdentifiedFile, TopDUContext*>::const_iterator it = sdDUChainPrivate->m_chains.begin(); it != sdDUChainPrivate->m_chains.end(); ++it) {
-      if((*it)->flags() & TopDUContext::ProxyContextFlag)
-        ++proxyChainCount;
-      else
-        ++realChainCount;
-    }
-
-    kDebug(9505) << "new count of real chains: " << realChainCount << " proxy-chains: " << proxyChainCount;
-  }*/
   chain->setInDuChain(true);
   
   l.unlock();
@@ -1210,8 +1195,8 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
 
-  KTextEditor::Document* doc = EditorIntegrator::documentForUrl(chain->url());
-  if(doc) {
+  if(ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
+  {
     //Make sure the context stays alive at least as long as the context is open
     ReferencedTopDUContext ctx(chain);
     sdDUChainPrivate->m_openDocumentContexts.insert(ctx);
@@ -1457,47 +1442,16 @@ void DUChain::documentActivated(KDevelop::IDocument* doc)
       ICore::self()->languageController()->backgroundParser()->addDocument(doc->url());
 }
 
-static void deconvertDUChainInternal(DUContext* context)
-{
-  foreach (Declaration* dec, context->localDeclarations())
-    dec->clearSmartRange();
-
-  context->clearUseSmartRanges();
-
-  foreach (DUContext* child, context->childContexts())
-    deconvertDUChainInternal(child);
-
-  context->clearSmartRange();
-}
-
-void DUChain::documentAboutToBeDeletedFinal(KTextEditor::Document* doc)
+void DUChain::documentClosed(IDocument* document)
 {
   if(sdDUChainPrivate->m_destroyed)
     return;
   
-  QList<TopDUContext*> chains = chainsForDocument(doc->url());
+  IndexedString url(document->url());
 
-  KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc);
-  if(!smart)
-    return;
-  
-  foreach (TopDUContext* top, chains) {
-    
-    QMutexLocker lockSmart(smart->smartMutex());
-    
-    deconvertDUChainInternal(top);
-  }
-}
-
-void DUChain::documentAboutToBeDeleted(KTextEditor::Document* doc)
-{
-  if(sdDUChainPrivate->m_destroyed)
-    return;
-
-  foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts) {
-    if(top->url().str() == doc->url().pathOrUrl())
+  foreach(const ReferencedTopDUContext &top, sdDUChainPrivate->m_openDocumentContexts)
+    if(top->url() == url)
       sdDUChainPrivate->m_openDocumentContexts.remove(top);
-  }
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
@@ -1507,11 +1461,6 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   DUChainWriteLocker lock( DUChain::lock() );
   QMutexLocker l(&sdDUChainPrivate->m_chainsMutex);
 
-  // Convert any duchains to the smart equivalent first
-  EditorIntegrator editor;
-  if(doc->textDocument())
-    editor.insertLoadedDocument(doc->textDocument()); //Make sure the editor-integrator knows the document
-
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   QList<TopDUContext*> chains = chainsForDocument(doc->url());
 
@@ -1519,19 +1468,6 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
-
-    {
-      ///Make the standard-context editor-smart
-      SmartConverter sc(&editor);
-      
-      if(standardContext->smartRange()) {
-        Q_ASSERT(standardContext->smartRange()->document() == doc->textDocument());
-        kWarning() << "Strange: context already has smart-range! Probably another document is already open for it. Deconverting";
-        sc.deconvertDUChain(standardContext);
-      }
-      sc.convertDUChain(standardContext);
-      Q_ASSERT(standardContext->smartRange());
-    }
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
 

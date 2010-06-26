@@ -27,13 +27,14 @@
 #include <QSet>
 #include <QMap>
 #include <QList>
-#include <ktexteditor/smartrange.h>
 #include <ktexteditor/rangefeedback.h>
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
 #include <language/editor/simplerange.h>
 #include <language/duchain/declaration.h>
+#include <KUrl>
+#include <language/editor/persistentmovingrange.h>
 
 namespace KDevelop {
   class IDocument;
@@ -55,7 +56,19 @@ class ContextBrowserView;
 
 QWidget* masterWidget(QWidget* w);
 
-class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::SmartRangeWatcher
+struct ViewHighlights
+{
+  ViewHighlights() : keep(false) {
+  }
+  // Whether the same highlighting should be kept highlighted (usually during typing)
+  bool keep;
+  // The declaration that is highlighted for this view
+  IndexedDeclaration declaration;
+  // Highlighted ranges. Those may also be contained by different views.
+  QList<PersistentMovingRange::Ptr> highlights;
+};
+
+class ContextBrowserPlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
   public:
@@ -104,43 +117,25 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     virtual void createActionsForMainWindow(Sublime::MainWindow* /*window*/, QString& xmlFile, KActionCollection& actions);
     void switchUse(bool forward);
     void clearMouseHover();
-    virtual void rangeDeleted (KTextEditor::SmartRange *range);
-    virtual void mouseEnteredRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
-    virtual void mouseExitedRange(KTextEditor::SmartRange* range, KTextEditor::View* view);
 
-    void changeHighlight( KTextEditor::SmartRange* range, bool highlight, bool declaration, bool mouseHighlight );
-    void changeHighlight( KTextEditor::View* view, KDevelop::Declaration* decl, bool highlight, bool mouseHighlight );
-
-    void watchRange(KTextEditor::SmartRange* range);
-    void ignoreRange(KTextEditor::SmartRange* range);
-
-    void registerAsRangeWatcher(KDevelop::DUChainBase* base);
-    void registerAsRangeWatcher(KDevelop::DUContext* ctx);
+    void addHighlight( KTextEditor::View* view, KDevelop::Declaration* decl );
 
     /** helper for updateBrowserView().
      *  Tries to find a 'specialLanguageObject' (eg macro) in @p view under cursor @c.
      *  If found returns true and sets @p pickedLanguage to the language this object belongs to */
-    bool findSpecialObject(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::ILanguage*& pickedLanguage);
     KDevelop::Declaration* findDeclaration(KTextEditor::View* view, const KDevelop::SimpleCursor&, bool mouseHighlight);
-    bool showDeclarationView(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::Declaration* dcl, KDevelop::DUContext*);
-    bool showSpecialObjectView(KTextEditor::View* view, const KDevelop::SimpleCursor&, KDevelop::ILanguage*, KDevelop::DUContext*);
-    void showContextView(KTextEditor::View* view, const SimpleCursor& cursor, KDevelop::DUContext*);
-    void updateBrowserWidgetFor(KTextEditor::View* view);
+    void updateForView(KTextEditor::View* view);
 
   private:
-    //Unhighlights all currently highlighted declarations
-    void unHighlightAll(KTextEditor::View* selectView = 0);
+    
+    ContextBrowserView* browserViewForTextView(KTextEditor::View* view);
+    
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
-    //Must be locked before doing anything with m_backups, and _after_ the relevant smart-mutex has been locked
-    QMutex m_backupsMutex;
+    
     //Contains the range, the old attribute, and the attribute it was replaced with
-    QMap<KTextEditor::SmartRange*, QPair<KTextEditor::Attribute::Ptr,KTextEditor::Attribute::Ptr> > m_backups;
     QSet<KTextEditor::View*> m_updateViews;
-    QMap<KTextEditor::View*, DeclarationPointer> m_highlightedDeclarations;
-    QMap<KTextEditor::View*, KTextEditor::SmartRange*> m_highlightedRange; //Special language-object range
-
-    QSet<KTextEditor::SmartRange*> m_watchedRanges;
+    QMap<KTextEditor::View*, ViewHighlights > m_highlightedRanges;
 
     //Holds a list of all active context browser tool views
     QList<ContextBrowserView*> m_views;
@@ -156,14 +151,10 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     IndexedDeclaration m_currentToolTipDeclaration;
     QAction* m_findUses;
     
-    //This is just a marker, only used for comparison. Never expect it to be valid!
-    KTextEditor::Document* m_lastInsertionDocument;
+    QPointer<KTextEditor::Document> m_lastInsertionDocument;
     KTextEditor::Cursor m_lastInsertionPos;
-    QSet<KTextEditor::View*> m_keepHighlightedDeclaration;
     QList<QPointer<QWidget> > m_toolbarWidgets;
 };
-
-DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext);
 
 #endif // CONTEXTBROWSERPLUGIN_H
 

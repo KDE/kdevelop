@@ -186,11 +186,11 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
       DUChainReadLocker lock(DUChain::lock());
       KDevelop::ProblemPointer problem = model()->problemForIndex(index);
       if (!index.internalPointer()) {
-        url = KUrl(problem->finalLocation().document().str());
-        start = problem->finalLocation().start();
+        url = KUrl(problem->finalLocation().document.str());
+        start = problem->finalLocation().start.textCursor();
       }else{
-        url = KUrl(problem->locationStack().at(index.row()).document().str());
-        start = problem->locationStack().at(index.row());
+        url = KUrl(problem->locationStack().at(index.row()).document.str());
+        start = problem->locationStack().at(index.row()).textCursor();
       }
     }
 

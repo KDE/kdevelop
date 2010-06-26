@@ -25,6 +25,7 @@
 #include <QtCore/QAbstractItemModel>
 
 #include <language/interfaces/iproblem.h>
+#include <KUrl>
 
 class ProblemReporterPlugin;
 

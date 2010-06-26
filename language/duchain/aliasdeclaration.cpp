@@ -29,7 +29,6 @@ REGISTER_DUCHAIN_ITEM(AliasDeclaration);
 
 AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs) 
   : ClassMemberDeclaration(*new AliasDeclarationData(*rhs.d_func())) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)

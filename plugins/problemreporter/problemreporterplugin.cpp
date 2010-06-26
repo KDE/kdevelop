@@ -38,7 +38,6 @@
 #include <interfaces/idocumentcontroller.h>
 
 #include <language/backgroundparser/parsejob.h>
-#include <language/editor/editorintegrator.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/duchainlock.h>
@@ -89,7 +88,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList
   core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
 
-  connect(EditorIntegrator::notifier(), SIGNAL(documentAboutToBeDeleted(KTextEditor::Document*)), SLOT(documentAboutToBeDeleted(KTextEditor::Document*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
   connect(ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)), this, SLOT(textDocumentCreated(KDevelop::IDocument*)));
   connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
 }
@@ -104,14 +103,15 @@ void ProblemReporterPlugin::unload()
   core()->uiController()->removeToolView(m_factory);
 }
 
-void ProblemReporterPlugin::documentAboutToBeDeleted(KTextEditor::Document* doc)
+void ProblemReporterPlugin::documentClosed(IDocument* doc)
 {
-  if(!doc)
-      return;
+  if(!doc->textDocument())
+    return;
+  
   QMutableHashIterator<IndexedString, ProblemHighlighter*> it = m_highlighters;
-
+  
   IndexedString url(doc->url().pathOrUrl());
-
+  
   if (m_highlighters.contains(url))
     delete m_highlighters.take(url);
 }

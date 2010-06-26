@@ -56,7 +56,6 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 /* Exclude this file from doublequote_chars check as krazy doesn't understand
 std::string*/
 //krazy:excludeall=doublequote_chars
-#include <language/editor/editorintegrator.h>
 #include <krun.h>
 #include <kparts/mainwindow.h>
 #include <qtextdocument.h>

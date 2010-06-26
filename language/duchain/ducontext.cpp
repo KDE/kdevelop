@@ -25,9 +25,6 @@
 #include <QSet>
 
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
-
-#include "../editor/editorintegrator.h"
 
 #include "ducontextdata.h"
 #include "declaration.h"
@@ -72,6 +69,10 @@ DEFINE_LIST_MEMBER_HASH(DUContextData, m_localDeclarations, LocalIndexedDeclarat
 DEFINE_LIST_MEMBER_HASH(DUContextData, m_uses, Use)
 
 REGISTER_DUCHAIN_ITEM(DUContext);
+
+DUChainVisitor::~DUChainVisitor()
+{
+}
 
 //We leak here, to prevent a possible crash during destruction, as the destructor of Identifier is not safe to be called after the duchain has been destroyed
 Identifier& globalImportIdentifier() {
@@ -220,73 +221,6 @@ DUContext* IndexedDUContext::context() const {
     return ctx;
 
   return ctx->m_dynamicData->getContextForIndex(m_contextIndex);
-}
-
-void DUContext::synchronizeUsesFromSmart() const
-{
-  DUCHAIN_D(DUContext);
-
-  if(m_dynamicData->m_rangesForUses.isEmpty() || !m_dynamicData->m_rangesChanged)
-    return;
-
-  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.count()) == d->m_usesSize());
-
-  for(unsigned int a = 0; a < d->m_usesSize(); a++)
-    if(m_dynamicData->m_rangesForUses[a]) ///@todo somehow signalize the change
-      const_cast<Use&>(d->m_uses()[a]).m_range = SimpleRange(*m_dynamicData->m_rangesForUses[a]);
-
-  m_dynamicData->m_rangesChanged = false;
-}
-
-void DUContext::synchronizeUsesToSmart() const
-{
-  DUCHAIN_D(DUContext);
-  if(m_dynamicData->m_rangesForUses.isEmpty())
-    return;
-  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.count()) == d->m_usesSize());
-
-  // TODO: file close race? from here
-  KTextEditor::SmartInterface *iface = qobject_cast<KTextEditor::SmartInterface*>( smartRange()->document() );
-  Q_ASSERT(iface);
-
-  // TODO: file close race to here
-  QMutexLocker l(iface->smartMutex());
-
-  for(unsigned int a = 0; a < d->m_usesSize(); a++) {
-    if(a % 10 == 0) { //Unlock the smart-lock time by time, to increase responsiveness
-      l.unlock();
-      l.relock();
-    }
-    if(m_dynamicData->m_rangesForUses[a]) {
-      m_dynamicData->m_rangesForUses[a]->start() = d->m_uses()[a].m_range.start.textCursor();
-      m_dynamicData->m_rangesForUses[a]->end() = d->m_uses()[a].m_range.end.textCursor();
-    }else{
-      kDebug() << "bad smart-range";
-    }
-  }
-}
-
-void DUContext::rangePositionChanged(KTextEditor::SmartRange* range)
-{
-  if(range != smartRange())
-    m_dynamicData->m_rangesChanged = true;
-}
-
-void DUContext::rangeDeleted(KTextEditor::SmartRange* range)
-{
-  if(range == smartRange()) {
-    DocumentRangeObject::rangeDeleted(range);
-  } else {
-    range->removeWatcher(this);
-    int index = m_dynamicData->m_rangesForUses.indexOf(range);
-    if(index != -1) {
-      d_func_dynamic()->m_usesList()[index].m_range = SimpleRange(*range);
-      m_dynamicData->m_rangesForUses[index] = 0;
-    }
-
-    if(m_dynamicData->m_rangesForUses.count(0) == m_dynamicData->m_rangesForUses.size())
-      m_dynamicData->m_rangesForUses.clear();
-  }
 }
 
 void DUContextDynamicData::enableLocalDeclarationsHash(DUContext* ctx, const Identifier& currentIdentifier, Declaration* currentDecl)
@@ -619,8 +553,6 @@ DUContext::~DUContext( )
 
   if(!topContext()->deleting() || !topContext()->isOnDisk())
     deleteUses();
-  else
-    clearUseSmartRanges();
 
   deleteLocalDeclarations();
 
@@ -1275,38 +1207,6 @@ void DUContext::deleteUse(int index)
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_usesList().remove(index);
-
-  if(!m_dynamicData->m_rangesForUses.isEmpty()) {
-    if(m_dynamicData->m_rangesForUses[index]) {
-      EditorIntegrator editor;
-      editor.setCurrentUrl(url(), (bool)smartRange());
-      LockedSmartInterface iface = editor.smart();
-      if (iface) {
-        m_dynamicData->m_rangesForUses[index]->removeWatcher(this);
-        EditorIntegrator::releaseRange(m_dynamicData->m_rangesForUses[index]);
-      }
-    }
-    m_dynamicData->m_rangesForUses.remove(index);
-  }
-}
-
-QVector<KTextEditor::SmartRange*> DUContext::takeUseRanges()
-{
-  ENSURE_CAN_WRITE
-  QVector<KTextEditor::SmartRange*> ret = m_dynamicData->m_rangesForUses;
-
-  foreach(KTextEditor::SmartRange* range, ret)
-    if(range)
-      range->removeWatcher(this);
-
-  m_dynamicData->m_rangesForUses.clear();
-  return ret;
-}
-
-QVector<KTextEditor::SmartRange*> DUContext::useRanges()
-{
-  ENSURE_CAN_READ
-  return m_dynamicData->m_rangesForUses;
 }
 
 void DUContext::deleteUses()
@@ -1315,8 +1215,6 @@ void DUContext::deleteUses()
 
   DUCHAIN_D_DYNAMIC(DUContext);
   d->m_usesList().clear();
-
-  clearUseSmartRanges();
 }
 
 void DUContext::deleteUsesRecursively()
@@ -1458,7 +1356,6 @@ const Use* DUContext::uses() const
 {
   ENSURE_CAN_READ
 
-  synchronizeUsesFromSmart();
   return d_func()->m_uses();
 }
 
@@ -1472,7 +1369,7 @@ bool usesRangeLessThan(const Use& left, const Use& right)
   return left.m_range.start < right.m_range.start;
 }
 
-int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEditor::SmartRange* smartRange, int insertBefore)
+int DUContext::createUse(int declarationIndex, const SimpleRange& range, int insertBefore)
 {
   DUCHAIN_D_DYNAMIC(DUContext);
   ENSURE_CAN_WRITE
@@ -1494,77 +1391,14 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, KTextEd
   }
 
   d->m_usesList().insert(insertBefore, use);
-  if(smartRange) {
-    ///When this assertion triggers, then the updated context probably was not smart-converted before processing. @see SmartConverter
-    Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d->m_usesSize()-1);
-    m_dynamicData->m_rangesForUses.insert(insertBefore, smartRange);
-    smartRange->addWatcher(this);
-//     smartRange->setWantsDirectChanges(true);
-
-    d->m_usesList()[insertBefore].m_range = SimpleRange(*smartRange);
-  }else{
-    // This can happen eg. when a document is closed during its parsing, and has no ill effects.
-    //Q_ASSERT(m_dynamicData->m_rangesForUses.isEmpty());
-  }
 
   return insertBefore;
 }
 
-KTextEditor::SmartRange* DUContext::useSmartRange(int useIndex)
-{
-  ENSURE_CAN_READ
-  if(m_dynamicData->m_rangesForUses.isEmpty())
-    return 0;
-  else{
-    if(useIndex >= 0 && useIndex < m_dynamicData->m_rangesForUses.size())
-      return m_dynamicData->m_rangesForUses.at(useIndex);
-    else
-      return 0;
-  }
-}
-
-
-void DUContext::setUseSmartRange(int useIndex, KTextEditor::SmartRange* range)
+void DUContext::changeUseRange(int useIndex, const KDevelop::SimpleRange& range)
 {
   ENSURE_CAN_WRITE
-  if(m_dynamicData->m_rangesForUses.isEmpty())
-      m_dynamicData->m_rangesForUses.insert(0, d_func()->m_usesSize(), 0);
-
-  Q_ASSERT(uint(m_dynamicData->m_rangesForUses.size()) == d_func()->m_usesSize());
-
-  if(m_dynamicData->m_rangesForUses[useIndex]) {
-    EditorIntegrator editor;
-    editor.setCurrentUrl(url(), (bool)range);
-    LockedSmartInterface iface = editor.smart();
-    if (iface) {
-      m_dynamicData->m_rangesForUses[useIndex]->removeWatcher(this);
-      EditorIntegrator::releaseRange(m_dynamicData->m_rangesForUses[useIndex]);
-    }
-  }
-
-  m_dynamicData->m_rangesForUses[useIndex] = range;
-  d_func_dynamic()->m_usesList()[useIndex].m_range = SimpleRange(*range);
-  range->addWatcher(this);
-//   range->setWantsDirectChanges(true);
-}
-
-void DUContext::clearUseSmartRanges()
-{
-  ENSURE_CAN_WRITE
-
-  if (!m_dynamicData->m_rangesForUses.isEmpty()) {
-    EditorIntegrator editor;
-    editor.setCurrentUrl(url(), (bool)smartRange());
-    LockedSmartInterface iface = editor.smart();
-    if (iface) {
-      foreach (SmartRange* range, m_dynamicData->m_rangesForUses) {
-        range->removeWatcher(this);
-        EditorIntegrator::releaseRange(range);
-      }
-    }
-
-    m_dynamicData->m_rangesForUses.clear();
-  }
+  d_func_dynamic()->m_usesList()[useIndex].m_range = range;
 }
 
 void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
@@ -1623,8 +1457,6 @@ DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
 int DUContext::findUseAt(const SimpleCursor & position) const
 {
   ENSURE_CAN_READ
-
-  synchronizeUsesFromSmart();
 
   if (!range().contains(position))
     return -1;
@@ -1690,9 +1522,6 @@ QWidget* DUContext::createNavigationWidget(Declaration* /*decl*/, TopDUContext* 
 
 void DUContext::squeeze()
 {
-  if(!m_dynamicData->m_rangesForUses.isEmpty())
-    m_dynamicData->m_rangesForUses.squeeze();
-
   FOREACH_FUNCTION(const LocalIndexedDUContext& child, d_func()->m_childContexts)
     child.data(topContext())->squeeze();
 }
@@ -1707,25 +1536,6 @@ QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmpt
 
   foreach(DUContext* child, context->childContexts())
     ret += allUses(child, declarationIndex, noEmptyUses);
-
-  return ret;
-}
-
-QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex)
-{
-  QList<KTextEditor::SmartRange*> ret;
-
-  const Use* uses(context->uses());
-
-  for(int a = 0; a < context->usesCount(); ++a)
-    if(uses[a].m_declarationIndex == declarationIndex) {
-      KTextEditor::SmartRange* range = context->useSmartRange(a);
-      if(range)
-        ret << range;
-    }
-
-  foreach(DUContext* child, context->childContexts())
-    ret += allSmartUses(child, declarationIndex);
 
   return ret;
 }
@@ -1868,6 +1678,23 @@ DUContext* DUContext::Import::context(const KDevelop::TopDUContext* topContext, 
 
 bool DUContext::Import::isDirect() const {
   return m_context.isValid();
+}
+
+void DUContext::visit(DUChainVisitor& visitor)
+{
+  visitor.visit(this);
+  
+  TopDUContext* top = topContext();
+  
+  {
+    QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
+    
+    FOREACH_FUNCTION(const LocalIndexedDeclaration& decl, d_func()->m_localDeclarations)
+      visitor.visit(decl.data(top));
+  }
+    
+  FOREACH_FUNCTION(const LocalIndexedDUContext& ctx, d_func()->m_childContexts)
+  ctx.data(top)->visit(visitor);
 }
 
 }

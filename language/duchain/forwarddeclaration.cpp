@@ -19,7 +19,6 @@
 
 #include "forwarddeclaration.h"
 
-#include <ktexteditor/smartrange.h>
 #include <ktexteditor/document.h>
 #include <klocale.h>
 
@@ -37,7 +36,6 @@ namespace KDevelop
 REGISTER_DUCHAIN_ITEM(ForwardDeclaration);
 
 ForwardDeclaration::ForwardDeclaration(const ForwardDeclaration& rhs) : Declaration(*new ForwardDeclarationData(*rhs.d_func())) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 ForwardDeclaration::ForwardDeclaration(ForwardDeclarationData& data) : Declaration(data) {

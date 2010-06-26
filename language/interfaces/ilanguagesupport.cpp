@@ -50,7 +50,7 @@ QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& url
     return 0;
 }
 
-const ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
+ICodeHighlighting* ILanguageSupport::codeHighlighting() const {
     return 0;
 }
 

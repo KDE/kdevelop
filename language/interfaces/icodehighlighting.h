@@ -39,7 +39,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ICodeHighlighting
 public:
     virtual ~ICodeHighlighting() {}
 
-    virtual void highlightDUChain(TopDUContext* context) const = 0;
+    virtual void highlightDUChain(TopDUContext* context) = 0;
 };
 
 }

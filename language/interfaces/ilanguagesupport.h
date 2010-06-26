@@ -64,7 +64,7 @@ public:
     /**
       * Should return a code-highlighting instance for this language, or zero.
       */
-    virtual const ICodeHighlighting* codeHighlighting() const;
+    virtual ICodeHighlighting* codeHighlighting() const;
 
     /**
      * Should return a document change-tracker for this language that tracks the changes in the given document 

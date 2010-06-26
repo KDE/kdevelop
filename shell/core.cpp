@@ -32,7 +32,6 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 
-#include <language/editor/editorintegrator.h>
 #include <language/backgroundparser/backgroundparser.h>
 
 #include "shellextension.h"

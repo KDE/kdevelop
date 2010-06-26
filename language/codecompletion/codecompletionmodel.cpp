@@ -39,7 +39,6 @@
 #include "../duchain/duchain.h"
 #include "../duchain/namespacealiasdeclaration.h"
 #include "../duchain/parsingenvironment.h"
-#include "../editor/editorintegrator.h"
 #include "../duchain/duchainlock.h"
 #include "../duchain/duchainbase.h"
 #include "../duchain/topducontext.h"

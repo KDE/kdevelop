@@ -36,7 +36,6 @@ REGISTER_DUCHAIN_ITEM(ClassFunctionDeclaration);
 
 ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaration& rhs)
     : ClassFunctionDeclarationBase(*new ClassFunctionDeclarationData( *rhs.d_func() )) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {

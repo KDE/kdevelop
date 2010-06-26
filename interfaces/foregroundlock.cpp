@@ -1,6 +1,6 @@
 /*
-    Copyright 2010 David Nolden
-
+    Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
+ 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -78,3 +78,33 @@ bool KDevelop::ForegroundLock::isLocked() const
     return m_locked;
 }
 
+namespace KDevelop {
+    const int __fg_dummy1 = 0, __fg_dummy2 = 0, __fg_dummy3 = 0, __fg_dummy4 = 0, __fg_dummy5 = 0, __fg_dummy6 = 0, __fg_dummy7 = 0, __fg_dummy8 = 0, __fg_dummy9 = 0;
+
+    void DoInForeground::doIt() {
+        if(QThread::currentThread() == QApplication::instance()->thread())
+        {
+            // We're already in the foreground, just call the handler code
+            doInternal();
+        }else{
+            QMutexLocker lock(&m_mutex);
+            QMetaObject::invokeMethod(this, "doInternalSlot", Qt::QueuedConnection);
+            m_wait.wait(&m_mutex);
+        }
+    }
+
+    DoInForeground::~DoInForeground() {
+    }
+
+    DoInForeground::DoInForeground() {
+        moveToThread(QApplication::instance()->thread());
+    }
+
+    void DoInForeground::doInternalSlot()
+    {
+        VERIFY_FOREGROUND_LOCKED
+        doInternal();
+        QMutexLocker lock(&m_mutex);
+        m_wait.wakeAll();
+    }
+}

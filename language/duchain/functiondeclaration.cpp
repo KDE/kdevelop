@@ -38,7 +38,6 @@ FunctionDeclaration::FunctionDeclaration(FunctionDeclarationData& data, const Si
 }
 
 FunctionDeclaration::FunctionDeclaration(const FunctionDeclaration& rhs) : FunctionDeclarationBase(*new FunctionDeclarationData( *rhs.d_func() )) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 FunctionDeclaration::FunctionDeclaration(const SimpleRange& range, DUContext* context)

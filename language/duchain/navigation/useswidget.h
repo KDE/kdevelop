@@ -27,6 +27,7 @@
 #include <language/editor/simplecursor.h>
 #include "../../languageexport.h"
 #include "usescollector.h"
+#include <language/editor/persistentmovingrange.h>
 
 class KComboBox;
 class QComboBox;
@@ -42,20 +43,18 @@ namespace KDevelop {
   
     class IndexedDeclaration;
     ///A widget representing one use of a Declaration in a speicific context
-    class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QLabel, public KTextEditor::SmartRangeWatcher {
+    class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QLabel {
       Q_OBJECT
       public:
-        OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code, KTextEditor::SmartRange* smartRange);
+        OneUseWidget(IndexedDeclaration declaration, IndexedString document, SimpleRange range, const CodeRepresentation& code);
         ~OneUseWidget();
         
       private slots:
         void jumpTo();
       private:
         virtual void resizeEvent ( QResizeEvent * event );
-        virtual void rangeDeleted(KTextEditor::SmartRange* range);
         
-        SimpleRange m_range;
-        KTextEditor::SmartRange* m_smartRange;
+        PersistentMovingRange::Ptr m_range;
         IndexedDeclaration m_declaration;
         IndexedString m_document;
         QString m_sourceLine;

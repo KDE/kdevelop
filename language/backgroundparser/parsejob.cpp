@@ -38,9 +38,6 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/smartinterface.h>
 
-#include "../editor/editorintegrator.h"
-#include "../editor/hashedstring.h"
-
 #include "backgroundparser.h"
 #include "parserdependencypolicy.h"
 #include "duchain/topducontext.h"
@@ -48,6 +45,15 @@
 #include "duchain/duchainlock.h"
 #include "duchain/duchain.h"
 #include "duchain/parsingenvironment.h"
+#include <interfaces/foregroundlock.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <codegen/coderepresentation.h>
+#include <ktexteditor/movinginterface.h>
+#include <ktexteditor/view.h>
+#include <QApplication>
+#include <duchain/declaration.h>
+#include <duchain/use.h>
 
 
 using namespace KTextEditor;
@@ -70,10 +76,11 @@ public:
           document( IndexedString(url.pathOrUrl()) )
         , backgroundParser( 0 )
         , abortMutex(new QMutex)
-        , revisionToken(-1)
         , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
+        , hasReadContents( false )
+        , previousDocumentRevision( -1 )
     {
     }
 
@@ -89,14 +96,20 @@ public:
     BackgroundParser* backgroundParser;
 
     QMutex* abortMutex;
-    int revisionToken;
 
+    ParseJob::Contents contents;
+    
+    bool hasReadContents : 1;
     volatile bool abortRequested : 1;
     bool aborted : 1;
     TopDUContext::Features features;
-    QString contentsFromEditor;
     QList<QPointer<QObject> > notify;
     QPointer<DocumentChangeTracker> tracker;
+    RevisionReference revision;
+    RevisionReference previousRevision;
+    
+    // Document revision at the previous parse run, as retrieved from the tracker.
+    qint64 previousDocumentRevision;
 };
 
 ParseJob::ParseJob( const KUrl &url )
@@ -116,11 +129,6 @@ DocumentChangeTracker* ParseJob::tracker() const
 
 ParseJob::~ParseJob()
 {
-    if ( d->revisionToken != -1 ) {
-        kWarning() << "You must call cleanupSmartRevision() when your run() method has finished!";
-        cleanupSmartRevision();
-    }
-
     typedef QPointer<QObject> QObjectPointer;
     foreach(const QObjectPointer &p, d->notify)
         if(p)
@@ -176,68 +184,6 @@ void ParseJob::setDuChain(ReferencedTopDUContext duChain)
 ReferencedTopDUContext ParseJob::duChain() const
 {
     return d->duContext;
-}
-
-bool ParseJob::contentsAvailableFromEditor()
-{
-    KTextEditor::Document* doc = EditorIntegrator::documentForUrl(HashedString(d->document.str()));
-    if (!doc)
-        return false;
-
-    if (d->revisionToken == -1) {
-        SmartInterface* iface = qobject_cast<SmartInterface*>(doc);
-        if (iface) {
-            QMutexLocker smartLock(iface->smartMutex());
-            //Here we save the revision
-            d->revisionToken = iface->currentRevision();
-            iface->useRevision(d->revisionToken);
-
-            // You must have called contentsAvailableFromEditor, it sets state
-
-            d->contentsFromEditor = doc->text();
-        }
-    }
-
-    return true;
-}
-
-void ParseJob::cleanupSmartRevision()
-{
-    if ( d->revisionToken != -1 ) {
-        //Here we release the revision
-        EditorIntegrator editor;
-        editor.setCurrentUrl(d->document);
-
-        if(KDevelop::LockedSmartInterface smart = editor.smart()) {
-            smart->releaseRevision(d->revisionToken);
-            smart->clearRevision();
-            d->revisionToken = -1;
-            ///@todo We need to know here what the currently used revision is, and assert that it still is being used
-        }
-    }
-}
-
-int ParseJob::revisionToken() const
-{
-    return d->revisionToken;
-}
-
-QString ParseJob::contentsFromEditor()
-{
-    return d->contentsFromEditor;
-}
-
-int ParseJob::priority() const
-{
-    ///@todo adymo: reenable after documentcontroller is ported
-    return 0;
-/*    if (d->openDocument)
-        if (d->openDocument->isActive())
-            return 2;
-        else
-            return 1;
-    else
-        return 0;*/
 }
 
 void ParseJob::addJob(Job* job)
@@ -298,7 +244,6 @@ void ParseJob::abortJob()
 {
     d->aborted = true;
     setFinished(true);
-    cleanupSmartRevision();
 }
 
 void ParseJob::setNotifyWhenReady(QList<QPointer<QObject> > notify) {
@@ -315,6 +260,193 @@ void ParseJob::unsetStaticMinimumFeatures(IndexedString url, TopDUContext::Featu
     ::staticMinimumFeatures[url].removeOne(features);
     if(::staticMinimumFeatures[url].isEmpty())
       ::staticMinimumFeatures.remove(url);
+}
+
+KDevelop::ProblemPointer ParseJob::readContents()
+{
+    Q_ASSERT(!d->hasReadContents);
+    d->hasReadContents = true;
+    
+    QString localFile(document().toUrl().toLocalFile());
+    QFileInfo fileInfo( localFile );
+
+    QDateTime lastModified = fileInfo.lastModified();
+    
+    ForegroundLock lock;
+    
+    //Try using an artificial code-representation, which overrides everything else
+    if(artificialCodeRepresentationExists(document())) {
+        CodeRepresentation::Ptr repr = createCodeRepresentation(document());
+        d->contents.contents = repr->text().toUtf8();
+        kDebug() << "took contents for " << document().str() << " from artificial code-representation";
+        return KDevelop::ProblemPointer();
+    }
+    
+    if(d->tracker)
+    {
+        // The file is open in an editor
+        d->previousDocumentRevision = d->tracker->revisionAtLastReset();
+
+        if(d->previousDocumentRevision != -1)
+            d->previousRevision = d->tracker->acquireRevision(d->previousDocumentRevision);
+        
+        d->tracker->reset(); // Reset the tracker to the current revision
+        
+        d->contents.contents = tracker()->textAtLastReset().toUtf8();
+        d->contents.modification = KDevelop::ModificationRevision( lastModified, tracker()->revisionAtLastReset() );
+        
+        d->revision = d->tracker->acquireRevision(d->contents.modification.revision);
+    }else{
+        // We have to load the file from disk
+        
+        lock.unlock(); // Unlock the foreground lock before reading from disk, so the UI won't block due to I/O
+        
+        QFile file( localFile );
+        
+        if ( !file.open( QIODevice::ReadOnly ) )
+        {
+            KDevelop::ProblemPointer p(new Problem());
+            p->setSource(KDevelop::ProblemData::Disk);
+            p->setDescription(i18n( "Could not open file '%1'", localFile ));
+            switch (file.error()) {
+              case QFile::ReadError:
+                  p->setExplanation(i18n("File could not be read from disk."));
+                  break;
+              case QFile::OpenError:
+                  p->setExplanation(i18n("File could not be opened."));
+                  break;
+              case QFile::PermissionsError:
+                  p->setExplanation(i18n("File could not be read from disk due to permissions."));
+                  break;
+              default:
+                  break;
+            }
+            p->setFinalLocation(DocumentRange(document(), SimpleRange::invalid()));
+            
+            kWarning( 9007 ) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
+            
+            return p;
+        }
+        
+        d->contents.contents = file.readAll(); ///@todo Convert from local encoding to utf-8 if they don't match
+        d->contents.modification = KDevelop::ModificationRevision(lastModified);
+        
+        file.close();
+    }
+    
+    return KDevelop::ProblemPointer();
+}
+
+const KDevelop::ParseJob::Contents& ParseJob::contents() const
+{
+    Q_ASSERT(d->hasReadContents);
+    return d->contents;
+}
+
+struct MovingRangeTranslator : public DUChainVisitor
+{
+    MovingRangeTranslator(qint64 _source, qint64 _target, MovingInterface* _moving) : source(_source), target(_target), moving(_moving) {
+    }
+    
+    virtual void visit(DUContext* context) {
+        translateRange(context);
+        ///@todo Also map import-positions
+        // Translate uses
+        uint usesCount = context->usesCount();
+        for(uint u = 0; u < usesCount; ++u)
+        {
+            SimpleRange r = context->uses()[u].m_range;
+            translateRange(r);
+            context->changeUseRange(u, r);
+        }
+    }
+    
+    virtual void visit(Declaration* declaration) {
+        translateRange(declaration);
+    }
+    
+    void translateRange(DUChainBase* object)
+    {
+        SimpleRange r = object->range();
+        translateRange(r);
+        object->setRange(r);
+    }
+
+    void translateRange(SimpleRange& r)
+    {
+        moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
+        moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
+    }
+
+    KTextEditor::Range range;
+    qint64 source;
+    qint64 target;
+    MovingInterface* moving;
+};
+
+void ParseJob::translateDUChainToRevision(TopDUContext* context)
+{
+    qint64 targetRevision = d->contents.modification.revision;
+    
+    if(targetRevision == -1)
+        return;
+    
+    qint64 sourceRevision;
+
+    {
+        DUChainReadLocker duChainLock;
+        
+        Q_ASSERT(context->parsingEnvironmentFile());
+        
+        // Cannot map if there is no source revision
+        sourceRevision = context->parsingEnvironmentFile()->modificationRevision().revision;
+        
+        if(sourceRevision == -1)
+            return;
+    }
+    
+    if(sourceRevision > targetRevision)
+    {
+        kDebug() << "for document" << document().str() << ": source revision is higher than target revision:" << sourceRevision << " > " << targetRevision;
+        return;
+    }
+    
+    ForegroundLock lock;
+    if(d->tracker)
+    {
+        if(sourceRevision != d->previousDocumentRevision)
+        {
+            kDebug() << "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
+            return;
+        }
+        
+        if(!d->tracker->holdingRevision(sourceRevision) || !d->tracker->holdingRevision(targetRevision))
+        {
+            kDebug() << "lost one of the translation revisions, not doing the map";
+            return;
+        }
+        
+        // Perform translation
+        MovingInterface* moving = d->tracker->documentMovingInterface();
+        
+        DUChainWriteLocker wLock;
+        
+        MovingRangeTranslator translator(sourceRevision, targetRevision, moving);
+        context->visit(translator);
+
+        QList< ProblemPointer > problems = context->problems();
+        for(QList< ProblemPointer >::iterator problem = problems.begin(); problem != problems.end(); ++problem)
+        {
+            SimpleRange r = (*problem)->range();
+            translator.translateRange(r);
+            (*problem)->setRange(r);
+        }
+        
+        // Update the modification revision in the meta-data
+        ModificationRevision modRev = context->parsingEnvironmentFile()->modificationRevision();
+        modRev.revision = targetRevision;
+        context->parsingEnvironmentFile()->setModificationRevision(modRev);
+    }
 }
 
 }

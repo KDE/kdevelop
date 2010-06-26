@@ -47,13 +47,13 @@ KDevelop::IndexedString KDevelop::Problem::url() const
 
 DocumentRange Problem::finalLocation() const
 {
-    return DocumentRange(d_func()->url.str(), range().textRange());
+    return DocumentRange(d_func()->url, range());
 }
 
 void Problem::setFinalLocation(const DocumentRange & location)
 {
-    setRange(SimpleRange(location));
-    d_func_dynamic()->url = IndexedString(location.document().str());
+    setRange(location);
+    d_func_dynamic()->url = location.document;
 }
 
 QStack< DocumentCursor > Problem::locationStack() const

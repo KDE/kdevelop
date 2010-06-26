@@ -45,7 +45,6 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 
-#include <language/editor/editorintegrator.h>
 #include <language/interfaces/editorcontext.h>
 
 #include "core.h"
@@ -170,8 +169,6 @@ struct TextDocumentPrivate {
             return;
         // Tell the editor integrator first
         m_loaded = true;
-        EditorIntegrator::addDocument( m_textDocument->textDocument() );
-        m_textDocument->notifyLoaded();
     }
 
     void documentSaved(KTextEditor::Document* document, bool saveAs)
@@ -496,7 +493,6 @@ bool TextDocument::close(DocumentSaveMode mode)
         return false;
 
     if ( d->document ) {
-        KDevelop::EditorIntegrator::removeDocument(d->document);
         delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
     }
 

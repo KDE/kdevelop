@@ -63,6 +63,14 @@ const int maxHistoryLength = 30;
 
 using namespace KDevelop;
 
+DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
+{
+    DUContext* ctx = topContext->findContextAt(position);
+    while(ctx && (ctx->type() == DUContext::Template || ctx->type() == DUContext::Helper || ctx->localScopeIdentifier().isEmpty()) && ctx->parentContext())
+    ctx = ctx->parentContext();
+    return ctx;
+}
+    
 ///Duchain must be locked
 DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
@@ -146,7 +154,7 @@ void ContextBrowserView::documentJumpPerformed( KDevelop::IDocument* newDocument
         }else{
             //We just want this place in the history
             m_history.resize(m_nextHistoryIndex); // discard forward history
-            m_history.append(HistoryEntry(DocumentCursor(previousDocument->url().prettyUrl(), previousCursor)));
+            m_history.append(HistoryEntry(DocumentCursor(IndexedString(previousDocument->url()), SimpleCursor(previousCursor))));
             ++m_nextHistoryIndex;
         }
     }
@@ -159,7 +167,7 @@ void ContextBrowserView::documentJumpPerformed( KDevelop::IDocument* newDocument
         }else{
             //We just want this place in the history
             m_history.resize(m_nextHistoryIndex); // discard forward history
-            m_history.append(HistoryEntry(DocumentCursor(newDocument->url().prettyUrl(), newCursor)));
+            m_history.append(HistoryEntry(DocumentCursor(IndexedString(newDocument->url()), SimpleCursor(newCursor))));
             ++m_nextHistoryIndex;
             m_outlineLine->clear();
         }
@@ -187,11 +195,11 @@ void ContextBrowserView::openDocument(int historyIndex) {
     Q_ASSERT_X(historyIndex >= 0, "openDocument", "negative history index");
     Q_ASSERT_X(historyIndex < m_history.size(), "openDocument", "history index out of range");
     DocumentCursor c = m_history[historyIndex].computePosition();
-    if (c.isValid() && !c.document().str().isEmpty()) {
+    if (c.isValid() && !c.document.str().isEmpty()) {
         
         disconnect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this,      SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
         
-        ICore::self()->documentController()->openDocument(KUrl(c.document().str()), c);
+        ICore::self()->documentController()->openDocument(c.document.toUrl(), c.textCursor());
         
         connect(ICore::self()->documentController(), SIGNAL(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)), this, SLOT(documentJumpPerformed(KDevelop::IDocument*, KTextEditor::Cursor, KDevelop::IDocument*, KTextEditor::Cursor)));
 
@@ -220,15 +228,15 @@ QString ContextBrowserView::actionTextFor(int historyIndex)
     if(actionText.isEmpty())
         actionText = "<unnamed>";
     actionText += " @ ";
-    QString fileName = KUrl(entry.absoluteCursorPosition.document().str()).fileName();
-    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line()+1);
+    QString fileName = entry.absoluteCursorPosition.document.toUrl().fileName();
+    actionText += QString("%1:%2").arg(fileName).arg(entry.absoluteCursorPosition.line+1);
     return actionText;
 }
 
 inline QDebug operator<<(QDebug debug, const ContextBrowserView::HistoryEntry &he)
 {
     DocumentCursor c = he.computePosition();
-    debug << "\n\tHistoryEntry " << c.line() << " " << c.document().str();
+    debug << "\n\tHistoryEntry " << c.line << " " << c.document.str();
     return debug;
 }
 
@@ -298,8 +306,8 @@ DocumentCursor ContextBrowserView::HistoryEntry::computePosition() const {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     DocumentCursor ret;
     if(context.data()) {
-        ret = DocumentCursor(context.data()->url().str(), relativeCursorPosition.textCursor());
-        ret.setLine(ret.line() + context.data()->range().start.line);
+        ret = DocumentCursor(context.data()->url(), relativeCursorPosition);
+        ret.line += context.data()->range().start.line;
     }else{
         ret = absoluteCursorPosition;
     }
@@ -309,7 +317,7 @@ DocumentCursor ContextBrowserView::HistoryEntry::computePosition() const {
 void ContextBrowserView::HistoryEntry::setCursorPosition(const KDevelop::SimpleCursor& cursorPosition) {
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
     if(context.data()) {
-        absoluteCursorPosition =  DocumentCursor(context.data()->url().str(), cursorPosition.textCursor());
+        absoluteCursorPosition =  DocumentCursor(context.data()->url(), cursorPosition);
         relativeCursorPosition = cursorPosition;
         relativeCursorPosition.line -= context.data()->range().start.line;
     }

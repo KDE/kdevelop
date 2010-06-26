@@ -249,7 +249,7 @@ void ColorCache::updateInternal()
         TopDUContext* top = langSupport->standardContext(doc->url());
 
         if(top) {
-          if ( const ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
+          if ( ICodeHighlighting* highlighting = langSupport->codeHighlighting() ) {
             highlighting->highlightDUChain(top);
           }
         }

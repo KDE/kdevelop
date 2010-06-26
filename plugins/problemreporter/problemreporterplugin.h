@@ -50,7 +50,6 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
 
   private Q_SLOTS:
     void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
-    void documentAboutToBeDeleted(KTextEditor::Document* doc);
     void textDocumentCreated(KDevelop::IDocument* document);
     void parseJobFinished(KDevelop::ParseJob* parseJob);
 
@@ -58,6 +57,8 @@ class ProblemReporterPlugin : public KDevelop::IPlugin
     class ProblemReporterFactory* m_factory;
 
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
+public slots:
+    void documentClosed(KDevelop::IDocument*);
 };
 
 #endif // PROBLEMREPORTERPLUGIN_H

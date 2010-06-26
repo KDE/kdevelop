@@ -125,7 +125,6 @@ uint Declaration::ownIndex() const
 
 Declaration::Declaration(const Declaration& rhs)
   : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
   m_topContext = 0;
   m_context = 0;
   m_indexInTopContext = 0;
@@ -722,32 +721,6 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   return m_context->equalScopeIdentifier(m_context);
 }
 
-QList<KTextEditor::SmartRange*> Declaration::smartUses() const
-{
-  Q_ASSERT(topContext());
-  ENSURE_CAN_READ
-  QSet<KTextEditor::SmartRange*> tempUses;
-  //First, search for uses within the own context
-  {
-    foreach(KTextEditor::SmartRange* range, allSmartUses(topContext(), const_cast<Declaration*>(this)))
-      tempUses.insert(range);
-  }
-
-  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
-
-  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
-    if(!indexedContext.isLoaded())
-      continue;
-    TopDUContext* context = indexedContext.data();
-    if(context) {
-      foreach(KTextEditor::SmartRange* range, allSmartUses(context, const_cast<Declaration*>(this)))
-        tempUses.insert(range);
-    }
-  }
-
-  return tempUses.toList();
-}
-
 QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
 {
   ENSURE_CAN_READ
@@ -768,6 +741,43 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
       QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
       foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
         ranges[range] = true;
+    }
+  }
+
+  QMap<IndexedString, QList<SimpleRange> > ret;
+
+  for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
+    if(!(*it).isEmpty()) {
+      QList<SimpleRange>& list(ret[it.key()]);
+      for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
+        list << it2.key();
+    }
+  }
+  return ret;
+}
+
+QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() const
+{
+  ENSURE_CAN_READ
+  QMap<IndexedString, QMap<SimpleRange, bool> > tempUses;
+
+  //First, search for uses within the own context
+  {
+    QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
+    foreach(const SimpleRange& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    {
+      ranges[topContext()->transformFromLocalRevision(range)] = true;
+    }
+  }
+
+  KDevVarLengthArray<IndexedTopDUContext> useContexts = DUChain::uses()->uses(id());
+
+  FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
+    TopDUContext* context = indexedContext.data();
+    if(context) {
+      QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
+      foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
+        ranges[context->transformFromLocalRevision(range)] = true;
     }
   }
 

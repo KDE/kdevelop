@@ -276,10 +276,9 @@ public Q_SLOTS:
 
 private Q_SLOTS:
   void documentActivated(KDevelop::IDocument* doc);
-  void documentAboutToBeDeleted(KTextEditor::Document* doc);
-  void documentAboutToBeDeletedFinal(KTextEditor::Document* doc);
   void documentLoadedPrepare(KDevelop::IDocument* document);
   void documentRenamed(KDevelop::IDocument* document);
+  void documentClosed(KDevelop::IDocument*);
   void aboutToQuit();
 private:
   TopDUContext* loadChain(uint index);

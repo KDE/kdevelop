@@ -151,7 +151,6 @@ void GrepOutputModel::appendOutputs( const QStringList &lines )
                     _lastfilename = filename;
                     appendRow(new GrepOutputItem(filename, "0", filename, true));
                     appendRow(new GrepOutputItem(filename, linenumber, str, false));
-                    m_tracker.addUrl(KUrl(filename));
                 }
                 else
                 {

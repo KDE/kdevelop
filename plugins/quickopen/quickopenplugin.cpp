@@ -52,7 +52,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
-#include <language/editor/hashedstring.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>

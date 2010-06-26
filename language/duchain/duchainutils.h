@@ -37,7 +37,7 @@ class Declaration;
 class DUChainBase;
 class DUContext;
 class SimpleCursor;
-class HashedString;
+class IndexedString;
 class TopDUContext;
 class IndexedDUContext;
 class IndexedDeclaration;

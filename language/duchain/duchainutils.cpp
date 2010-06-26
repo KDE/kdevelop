@@ -323,7 +323,7 @@ Declaration* DUChainUtils::declarationInLine(const KDevelop::SimpleCursor& curso
     if(decl->range().start.line == cursor.line)
       return decl;
     DUContext* funCtx = getFunctionContext(decl);
-    if(funCtx && funCtx->contains(cursor))
+    if(funCtx && funCtx->range().contains(cursor))
       return decl;
   }
 

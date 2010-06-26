@@ -57,7 +57,6 @@ ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclara
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(*rhs.d_func())) {
-  setSmartRange(rhs.smartRange(), DocumentRangeObject::DontOwn);
 }
 
 REGISTER_DUCHAIN_ITEM(ClassMemberDeclaration);

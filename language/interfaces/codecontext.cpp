@@ -99,7 +99,7 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cur
             int use = specific->findUseAt(SimpleCursor(position));
             if(use != -1) {
                 //Found a use under the cursor:
-                useRange = DocumentRange(HashedString(specific->url().str()), specific->uses()[use].m_range.textRange());
+                useRange = DocumentRange(IndexedString(specific->url().str()), specific->uses()[use].m_range.textRange());
                 declaration = IndexedDeclaration(specific->topContext()->usedDeclarationForIndex( specific->uses()[use].m_declarationIndex ));
             }else{
                 declaration = IndexedDeclaration(specific->findDeclarationAt(SimpleCursor(position)));

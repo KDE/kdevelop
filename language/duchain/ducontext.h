@@ -26,7 +26,6 @@
 #include <QtCore/QVector>
 #include <util/kdevvarlengtharray.h>
 
-#include "../editor/documentcursorobject.h"
 #include "identifier.h"
 #include "duchainbase.h"
 #include "types/abstracttype.h"
@@ -35,13 +34,6 @@
 #include "indexeditems.h"
 
 class QWidget;
-
-///@todo Move the complete handling of smart-ranges out of here, so that the duchain is independent of the editor.
-///           Use the foreground-lock instead of the smart-lock everywhere.
-
-namespace KTextEditor {
-  class SmartRange;
-}
 
 namespace KDevelop
 {
@@ -52,6 +44,13 @@ class Use;
 class TopDUContext;
 class DUContext;
 class DUContextData;
+
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainVisitor {
+public:
+  virtual void visit(DUContext* context) = 0;
+  virtual void visit(Declaration* declaration) = 0;
+  virtual ~DUChainVisitor();
+};
 
 ///Represents a context only by its global indices
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDUContext {
@@ -293,20 +292,35 @@ public:
   virtual TopDUContext* topContext() const;
 
   /**
+   * Visits all duchain objects in the whole duchain. Classes that hold a unique link to duchain objects
+   * like instantiations have to pass the visitor over to those classes.
+   * */
+  virtual void visit(DUChainVisitor& visitor);
+  
+  /**
    * Find the context which most specifically covers \a position.
    * @param includeRightBorder When this is true, contexts will also be found that have the position on their right border.
    * The search is recursive, so the most specific context is found.
+   * 
+   * @warning This uses the ranges in the local revision of the document (at last parsing time).
+   *                  Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
    */
   DUContext* findContextAt(const SimpleCursor& position, bool includeBorders = false) const;
 
   /**
    * Find a child declaration that has a rang that covers the given position
    * The search is local, not recursive.
+   * 
+   * @warning This uses the ranges in the local revision of the document (at last parsing time).
+   *                  Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
    */
   Declaration* findDeclarationAt(const SimpleCursor& position) const;
 
   /**
    * Find the context which most specifically covers \a range.
+   * 
+   * @warning This uses the ranges in the local revision of the document (at last parsing time).
+   *                  Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
    */
   DUContext* findContextIncluding(const SimpleRange& range) const;
 
@@ -602,16 +616,10 @@ public:
     *
     * The actual uses are stored within DUContext, where each use consists of a range and the declaration-index of
     * the used declaration.
-    *
-    * To save memory, smart-ranges are only attached to the uses when the document is actually loaded.
-    * Uses need to be ordered by their appearance.
     * */
 
   /**
    * Return a vector of all uses which occur in this context.
-   * When the uses have smart-ranges attached, those are synced in the moment that uses() is called, so you should
-   * call this immediately before using the returned ranges, and you should hold the smart-lock while calling this
-   * if you want to compare the ranges, so you can be sure they aren't changed in the meantime.
    * To get the actual declarations, use TopDUContext::usedDeclarationForIndex(..) with the declarationIndex.
    */
   const Use* uses() const;
@@ -625,22 +633,11 @@ public:
    */
   int findUseAt(const SimpleCursor& position) const;
 
+  
   /**
-   * Returns the SmartRange assigned to the given use, or zero.
+   * The change must not break the ordering
    * */
-  KTextEditor::SmartRange* useSmartRange(int useIndex);
-
-  /**
-   * Assigns the given SmartRange to the given use.
-   * If one use gets a smart range, all uses need to get a smart range.
-   * The ownership of the range is given to this context.
-   * */
-  void setUseSmartRange(int useIndex, KTextEditor::SmartRange* range);
-
-  /**
-   * Clears all smart ranges associated with uses.
-   */
-  void clearUseSmartRanges();
+  void changeUseRange(int useIndex, const SimpleRange& range);
 
   /**
    * Assigns the declaration represented by @param declarationIndex to the use with index @param useIndex
@@ -651,14 +648,13 @@ public:
    * Creates a new use of the declaration given  through @param declarationIndex.
    * The index must be retrieved through TopDUContext::indexForUsedDeclaration(..).
    * @param range The range of the use
-   * @param smartRange The smart range, or zero if the document is not opened.
    * @param insertBefore A hint where in the vector of uses to insert the use.
    *                     Must be correct so the order is preserved(ordered by position),
    *                     or -1 to automatically choose the position.
    *
    * @return Local index of the created use
    * */
-  int createUse(int declarationIndex, const SimpleRange& range, KTextEditor::SmartRange* smartRange, int insertBefore = -1);
+  int createUse(int declarationIndex, const SimpleRange& range, int insertBefore = -1);
 
   /**
    * Deletes the use number @param index . index is the position in the vector of uses, not a used declaration index.
@@ -666,7 +662,7 @@ public:
   void deleteUse(int index);
 
   /**
-   * Clear and delete all uses in this context, including smart-ranges etc.
+   * Clear and delete all uses in this context.
    */
   virtual void deleteUses();
 
@@ -674,16 +670,6 @@ public:
    * Recursively delete all uses in this context and all its child-contexts
    */
   virtual void deleteUsesRecursively();
-  
-  /**
-   * Returns the smart-ranges associated to the uses
-   */
-  QVector<KTextEditor::SmartRange*> useRanges();
-  
-  /**
-   * Takes the smart-ranges away from the uses, without deleting them.
-   */
-  QVector<KTextEditor::SmartRange*> takeUseRanges();
   
   /**
    * Can be specialized by languages to create a navigation/information-widget.
@@ -828,14 +814,8 @@ private:
   friend class LocalIndexedDUContext;
   friend class TopDUContextDynamicData;
   
-  void synchronizeUsesFromSmart() const;
-  void synchronizeUsesToSmart() const;
-  
   void clearDeclarationIndices();
   void updateDeclarationIndices();
-
-  virtual void rangePositionChanged(KTextEditor::SmartRange* range);
-  virtual void rangeDeleted(KTextEditor::SmartRange* range);
 
   DUCHAIN_DECLARE_DATA(DUContext)
   class DUContextDynamicData* m_dynamicData;
@@ -861,11 +841,6 @@ KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalAliasIdentifier();
   * Collects all uses of the given @param declarationIndex
   * */
 KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyRanges = false);
-
-/**
-  * Collects the smart-ranges of all uses of the given @param declarationIndex
-  * */
-KDEVPLATFORMLANGUAGE_EXPORT QList<KTextEditor::SmartRange*> allSmartUses(DUContext* context, int declarationIndex);
 }
 
 #endif // DUCONTEXT_H

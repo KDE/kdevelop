@@ -394,12 +394,12 @@ void DocumentChangeSetPrivate::updateFiles()
                 }
                 
                 ICore::self()->languageController()->backgroundParser()->addDocument(file.toUrl());
-                foreach(const KUrl& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+                foreach(const IndexedString& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
                     DUChainReadLocker lock(DUChain::lock());
-                    TopDUContext* top = DUChainUtils::standardContextForUrl(doc);
+                    TopDUContext* top = DUChainUtils::standardContextForUrl(doc.toUrl());
                     if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
                         lock.unlock();
-                        ICore::self()->languageController()->backgroundParser()->addDocument(doc);
+                        ICore::self()->languageController()->backgroundParser()->addDocument(doc.toUrl());
                     }
                 }
         }

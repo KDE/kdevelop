@@ -30,7 +30,7 @@ namespace KDevelop {
   class QualifiedIdentifier;
   class DUContext;
   class TopDUContext;
-  class HashedString;
+  class IndexedString;
   class SimpleRange;
 }
 

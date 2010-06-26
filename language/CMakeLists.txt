@@ -2,16 +2,11 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
 
 set(kdevplatformlanguage_LIB_SRCS
+    editor/persistentmovingrangeprivate.cpp
+    editor/persistentmovingrange.cpp
     editor/modificationrevisionset.cpp
-    editor/documentrange.cpp
     editor/documentrangeobject.cpp
-    editor/documentcursor.cpp
-    editor/documentcursorobject.cpp
-    editor/editorintegrator.cpp
-    editor/editorintegratorstatic.cpp
-    editor/hashedstring.cpp
     editor/modificationrevision.cpp
-    editor/editorrevisiontracker.cpp
     backgroundparser/backgroundparser.cpp
     backgroundparser/parsejob.cpp
     backgroundparser/parserdependencypolicy.cpp
@@ -34,7 +29,6 @@ set(kdevplatformlanguage_LIB_SRCS
     duchain/classfunctiondeclaration.cpp
     duchain/classdeclaration.cpp
     duchain/use.cpp
-    duchain/smartconverter.cpp
     duchain/forwarddeclaration.cpp
     duchain/duchainbase.cpp
     duchain/duchainlock.cpp
@@ -170,17 +164,14 @@ install(FILES
 )
 
 install(FILES
+    editor/persistentmovingrange.h
     editor/documentrange.h
     editor/documentrangeobject.h
     editor/documentcursor.h
-    editor/documentcursorobject.h
-    editor/editorintegrator.h
-    editor/hashedstring.h
     editor/simplecursor.h
     editor/simplerange.h
     editor/modificationrevision.h
     editor/modificationrevisionset.h
-    editor/editorrevisiontracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor COMPONENT Devel
 )
 
@@ -218,7 +209,6 @@ install(FILES
     duchain/classdeclaration.h
     duchain/functiondefinition.h
     duchain/use.h
-    duchain/smartconverter.h
     duchain/forwarddeclaration.h
     duchain/duchainbase.h
     duchain/duchainpointer.h

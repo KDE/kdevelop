@@ -24,7 +24,6 @@
 
 #include <QtCore/QThread>
 
-#include "../editor/hashedstring.h"
 #include "../interfaces/iproblem.h"
 
 #include <util/kdevvarlengtharray.h>
@@ -1372,14 +1371,6 @@ if(!declaration)
     DUChain::uses()->addUse(id, this);
 
   return d_func()->m_usedDeclarationIdsSize()-1;
-}
-
-QList<KTextEditor::SmartRange*> allSmartUses(TopDUContext* context, Declaration* declaration) {
-  QList<KTextEditor::SmartRange*> ret;
-  int declarationIndex = context->indexForUsedDeclaration(declaration, false);
-  if(declarationIndex == std::numeric_limits<int>::max())
-    return ret;
-  return allSmartUses(context, declarationIndex);
 }
 
 QList<SimpleRange> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges) {

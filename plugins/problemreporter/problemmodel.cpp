@@ -23,7 +23,6 @@
 
 #include <klocale.h>
 
-#include <language/editor/hashedstring.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 
@@ -90,15 +89,15 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return p->description();
                     case File: {
-                        return getDisplayUrl(p->finalLocation().document().str(), m_base);
+                        return getDisplayUrl(p->finalLocation().document.str(), m_base);
                     }
                     case Line:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().line() + 1);
+                            return QString::number(p->finalLocation().start.line + 1);
                         break;
                     case Column:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().column() + 1);
+                            return QString::number(p->finalLocation().start.column + 1);
                         break;
                 }
                 break;
@@ -117,14 +116,14 @@ QVariant ProblemModel::data(const QModelIndex & index, int role) const
                     case Error:
                         return i18n("In file included from:");
                     case File: {
-                        return getDisplayUrl(p->locationStack().at(index.row()).document().str(), m_base);
+                        return getDisplayUrl(p->locationStack().at(index.row()).document.str(), m_base);
                     } case Line:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().line() + 1);
+                            return QString::number(p->finalLocation().start.line + 1);
                         break;
                     case Column:
                         if (p->finalLocation().isValid())
-                            return QString::number(p->finalLocation().start().column() + 1);
+                            return QString::number(p->finalLocation().start.column + 1);
                         break;
                 }
                 break;

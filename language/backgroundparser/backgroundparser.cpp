@@ -315,7 +315,7 @@ public:
     // Currently running parse jobs
     QHash<KUrl, ParseJob*> m_parseJobs;
     // A change tracker for each managed document
-    QHash<KUrl, DocumentChangeTracker*> m_managed;
+    QHash<IndexedString, DocumentChangeTracker*> m_managed;
 
     ThreadWeaver::Weaver m_weaver;
     ParserDependencyPolicy m_dependencyPolicy;
@@ -601,10 +601,22 @@ void BackgroundParser::setDelay(int miliseconds)
     }
 }
 
-QList< KUrl > BackgroundParser::managedDocuments()
+QList< IndexedString > BackgroundParser::managedDocuments()
 {
     QMutexLocker l(&d->m_mutex);
+    
     return d->m_managed.keys();
+}
+
+DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedString& url) const
+{
+    QMutexLocker l(&d->m_mutex);
+    
+    QHash< IndexedString, DocumentChangeTracker* >::iterator it = d->m_managed.find(url);
+    if(it != d->m_managed.end())
+        return *it;
+    else
+        return 0;
 }
 
 void BackgroundParser::documentClosed ( IDocument* document )
@@ -613,11 +625,12 @@ void BackgroundParser::documentClosed ( IDocument* document )
     
     if(document->textDocument())
     {
+        IndexedString url(document->url());
         kDebug() << "adding" << document->url() << "to background parser";
-        Q_ASSERT(d->m_managed.contains(document->url()));
+        Q_ASSERT(d->m_managed.contains(url));
         
-        delete d->m_managed[document->url()];
-        d->m_managed.remove(document->url());
+        delete d->m_managed[IndexedString(url)];
+        d->m_managed.remove(IndexedString(url));
     }
 }
 
@@ -627,13 +640,14 @@ void BackgroundParser::documentLoadedPrepare ( IDocument* document )
     
     if(document->textDocument())
     {
+        IndexedString url(document->url());
         // Some debugging because we had issues with this
-        if(d->m_managed.contains(document->url()))
-            Q_ASSERT(d->m_managed[document->url()]->document() == document->textDocument());
+        if(d->m_managed.contains(url))
+            Q_ASSERT(d->m_managed[url]->document() == document->textDocument());
             
-        Q_ASSERT(!d->m_managed.contains(document->url()));
+        Q_ASSERT(!d->m_managed.contains(url));
         
-        d->m_managed.insert(document->url(), new DocumentChangeTracker(document->textDocument()));
+        d->m_managed.insert(url, new DocumentChangeTracker(document->textDocument()));
     }
 }
 
