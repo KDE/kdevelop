@@ -112,7 +112,7 @@ public:
     virtual QString name() const;
     virtual KDevelop::ParseJob *createParseJob(const KUrl &url);
     virtual KDevelop::ILanguage *language();
-    virtual const KDevelop::ICodeHighlighting* codeHighlighting() const;
+    virtual KDevelop::ICodeHighlighting* codeHighlighting() const;
     virtual QWidget* specialLanguageObjectNavigationWidget(const KUrl& url, const KDevelop::SimpleCursor& position);
 
 private slots:

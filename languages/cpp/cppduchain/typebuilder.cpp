@@ -56,15 +56,15 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
     return QString::fromUtf8( stringFromContents(session->contentsVector(), startPosition, endPosition - startPosition) );
 }
 
-TypeBuilder::TypeBuilder()
-  : TypeBuilderBase(), m_inTypedef(false), m_lastTypeWasInstance(false)
+TypeBuilder::TypeBuilder(ParseSession* session)
+  : ContextBuilder(session), m_inTypedef(false), m_lastTypeWasInstance(false)
 {
 }
 
 void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 {
   if(m_onlyComputeSimplified) {
-    TypeBuilderBase::visitClassSpecifier(node);
+    ContextBuilder::visitClassSpecifier(node);
     return;
   }
   PushValue<bool> setNotInTypedef(m_inTypedef, false);
@@ -76,7 +76,7 @@ void TypeBuilder::visitClassSpecifier(ClassSpecifierAST *node)
 
   classTypeOpened( currentAbstractType() ); //This callback is needed, because the type of the class-declaration needs to be set early so the class can be referenced from within itself
 
-  TypeBuilderBase::visitClassSpecifier(node);
+  ContextBuilder::visitClassSpecifier(node);
 
   closeType();
 }
@@ -101,13 +101,13 @@ void TypeBuilder::visitBaseSpecifier(BaseSpecifierAST *node)
     }
   }
 
-  TypeBuilderBase::visitBaseSpecifier(node);
+  ContextBuilder::visitBaseSpecifier(node);
 }
 
 void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 {
   if(m_onlyComputeSimplified) {
-    TypeBuilderBase::visitEnumSpecifier(node);
+    ContextBuilder::visitEnumSpecifier(node);
     return;
   }
   
@@ -115,7 +115,7 @@ void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 
   openType(EnumerationType::Ptr(new EnumerationType()));
 
-  TypeBuilderBase::visitEnumSpecifier(node);
+  ContextBuilder::visitEnumSpecifier(node);
 
   closeType();
 }
@@ -123,7 +123,7 @@ void TypeBuilder::visitEnumSpecifier(EnumSpecifierAST *node)
 void TypeBuilder::visitEnumerator(EnumeratorAST* node)
 {
   if(m_onlyComputeSimplified) {
-    TypeBuilderBase::visitEnumerator(node);
+    ContextBuilder::visitEnumerator(node);
     return;
   }
   
@@ -186,7 +186,7 @@ void TypeBuilder::visitEnumerator(EnumeratorAST* node)
     enumerator->setValue<qint64>(m_currentEnumeratorValue);
   }
 
-  TypeBuilderBase::visitEnumerator(node);
+  ContextBuilder::visitEnumerator(node);
 
   closeType();
 
@@ -215,7 +215,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
     //For typename, just find the type and return
     bool openedType = openTypeFromName(node->name, parseConstVolatile(editor()->parseSession(), node->cv));
 
-    TypeBuilderBase::visitElaboratedTypeSpecifier(node);
+    ContextBuilder::visitElaboratedTypeSpecifier(node);
 
     if(openedType)
       closeType();
@@ -259,7 +259,7 @@ void TypeBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST *node)
 
   // TODO.. figure out what to do with this now... parseConstVolatile(node->cv);
 
-  TypeBuilderBase::visitElaboratedTypeSpecifier(node);
+  ContextBuilder::visitElaboratedTypeSpecifier(node);
 
   if (type)
     closeType();
@@ -344,7 +344,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
     openedType = openTypeFromName(node->name, parseConstVolatile(editor()->parseSession(), node->cv));
   }
 
-  TypeBuilderBase::visitSimpleTypeSpecifier(node);
+  ContextBuilder::visitSimpleTypeSpecifier(node);
 
   if (openedType)
     closeType();
@@ -411,7 +411,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
   bool delay = false;
 
   if(!delay) {
-    SimpleCursor pos = editor()->findPosition(name->start_token, EditorIntegrator::FrontEdge);
+    SimpleCursor pos = editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
     ifDebug( kDebug() << "searching" << id.toString(); )
     ifDebugCurrentFile( kDebug() << "searching" << id.toString(); )
@@ -500,7 +500,7 @@ void TypeBuilder::visitTypedef(TypedefAST* node)
   
 //   openType(KDevelop::TypeAliasType::Ptr(new KDevelop::TypeAliasType()));
 
-  TypeBuilderBase::visitTypedef(node);
+  ContextBuilder::visitTypedef(node);
 
 //   closeType();
 }
@@ -526,7 +526,7 @@ void TypeBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
   if(!node->init_declarator && node->type_specifier)
     m_typeSpecifierWithoutInitDeclarators = node->type_specifier->start_token;
 
-  TypeBuilderBase::visitFunctionDeclaration(node);
+  ContextBuilder::visitFunctionDeclaration(node);
 }
 
 void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
@@ -584,7 +584,7 @@ void TypeBuilder::visitPtrOperator(PtrOperatorAST* node)
     }
   }
 
-  TypeBuilderBase::visitPtrOperator(node);
+  ContextBuilder::visitPtrOperator(node);
 
   if (typeOpened)
     closeType();
@@ -700,7 +700,7 @@ void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
 //   if(!ast->parameter_declaration)
     openType(CppTemplateParameterType::Ptr(new CppTemplateParameterType()));
 
-  TypeBuilderBase::visitTemplateParameter(ast);
+  ContextBuilder::visitTemplateParameter(ast);
   
 //   if(!ast->parameter_declaration)
     closeType();
@@ -709,9 +709,9 @@ void TypeBuilder::visitTemplateParameter(TemplateParameterAST *ast)
 
 void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 {
-  TypeBuilderBase::visitParameterDeclaration(node);
+  ContextBuilder::visitParameterDeclaration(node);
 
-  if (hasCurrentType() && !m_onlyComputeSimplified) {
+  if (currentAbstractType() && !m_onlyComputeSimplified) {
     if (FunctionType::Ptr function = currentType<FunctionType>()) {
       function->addArgument(lastType());
     }
@@ -721,7 +721,7 @@ void TypeBuilder::visitParameterDeclaration(ParameterDeclarationAST* node)
 
 void TypeBuilder::visitUsing(UsingAST * node)
 {
-  TypeBuilderBase::visitUsing(node);
+  ContextBuilder::visitUsing(node);
 
   if(!m_onlyComputeSimplified)
   {
@@ -730,4 +730,46 @@ void TypeBuilder::visitUsing(UsingAST * node)
     if( openedType )
       closeType();
   }
+}
+
+bool TypeBuilder::openTypeFromName(QualifiedIdentifier id, AST* typeNode, bool needClass) {
+    bool openedType = false;
+
+    bool delay = false;
+
+    if (!delay) {
+        SimpleCursor pos(editorFindRange(typeNode, typeNode).start());
+        DUChainReadLocker lock(DUChain::lock());
+
+        QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
+
+        if ( dec.isEmpty() )
+            delay = true;
+
+        if (!delay) {
+            foreach( Declaration* decl, dec ) {
+                // gcc 4.0.1 doesn't eath this // if( needClass && !decl->abstractType().cast<StructureType>() )
+                if ( needClass && !decl->abstractType().cast(static_cast<StructureType *>(0)) )
+                    continue;
+
+                if (decl->abstractType() ) {
+                    openedType = true;
+                    openType(decl->abstractType());
+                    break;
+                }
+            }
+        }
+
+        if (!openedType)
+            delay = true;
+    }
+
+    /*if(delay) {
+    //Either delay the resolution for template-dependent types, or create an unresolved type that stores the name.
+    openedType = true;
+    openDelayedType(id, name, templateDeclarationDepth() ? DelayedType::Delayed : DelayedType::Unresolved );
+
+    ifDebug( if(templateDeclarationDepth() == 0) kDebug() << "no declaration found for" << id.toString() << "in context \"" << searchContext()->scopeIdentifier(true).toString() << "\"" << "" << searchContext() )
+    }*/
+    return openedType;
 }

@@ -82,7 +82,7 @@ public:
 
     QString name() const;
 
-    const KDevelop::ICodeHighlighting *codeHighlighting() const;
+    KDevelop::ICodeHighlighting *codeHighlighting() const;
     KDevelop::ILanguage *language();
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
     KDevelop::ParseJob *createParseJob( const KUrl &url );

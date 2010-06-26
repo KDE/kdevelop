@@ -78,10 +78,7 @@
 #endif
 
 #include "ui_cmakepossibleroots.h"
-#include <language/editor/editorintegrator.h>
-#include <language/duchain/smartconverter.h>
 #include <language/duchain/use.h>
-#include <ktexteditor/smartinterface.h>
 #include <interfaces/idocumentation.h>
 #include "cmakeprojectdata.h"
 #include <cmakeconfig.h>
@@ -908,7 +905,7 @@ KDevelop::ILanguage * CMakeManager::language()
     return core()->languageController()->language(name());
 }
 
-const KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
+KDevelop::ICodeHighlighting* CMakeManager::codeHighlighting() const
 {
     return m_highlight;
 }

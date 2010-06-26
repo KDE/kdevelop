@@ -39,7 +39,6 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
-#include <language/editor/editorintegrator.h>
 #include <language/interfaces/iproblem.h>
 
 #include <threadweaver/Thread.h>
@@ -463,7 +462,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
               KDevelop::ProblemPointer p(new Problem()); ///@todo create special include-problem
               p->setSource(KDevelop::ProblemData::Preprocessor);
               p->setDescription(i18n("File was included recursively from within itself: %1", fileName ));
-              p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
+              p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
               p->setLocationStack(parentJob()->includeStack());
               parentJob()->addPreprocessorProblem(p);
               return 0;
@@ -580,7 +579,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
 
             slaveJob->setIncludedFromPath(included.second);
 
-            includeStack.append(DocumentCursor(HashedString(parentJob()->document().str()), KTextEditor::Cursor(sourceLine, 0)));
+            includeStack.append(DocumentCursor(parentJob()->document(), SimpleCursor(sourceLine, 0)));
             slaveJob->setIncludeStack(includeStack);
 
             slaveJob->parseForeground();
@@ -610,7 +609,7 @@ rpp::Stream* PreprocessJob::sourceNeeded(QString& _fileName, IncludeType type, i
         p->setSource(KDevelop::ProblemData::Preprocessor);
         p->setDescription(i18n("Included file was not found: %1", fileName ));
         p->setExplanation(i18n("Searched include path:\n%1", urlsToString(parentJob()->includePathUrls())));
-        p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor(sourceLine,0), KTextEditor::Cursor(sourceLine+1,0)));
+        p->setFinalLocation(DocumentRange(parentJob()->document(), SimpleRange(sourceLine,0, sourceLine+1,0)));
         p->setLocationStack(parentJob()->includeStack());
         p->setSolutionAssistant(KSharedPtr<KDevelop::IAssistant>(new Cpp::MissingIncludePathAssistant(parentJob()->masterJob()->document(), _fileName)));
         parentJob()->addPreprocessorProblem(p);
@@ -655,71 +654,22 @@ bool PreprocessJob::checkAbort()
 
 bool PreprocessJob::readContents()
 {
-    bool readFromDisk = !parentJob()->contentsAvailableFromEditor();
-    parentJob()->setReadFromDisk(readFromDisk);
-    
-    QString localFile(parentJob()->document().toUrl().toLocalFile());
+  KDevelop::ProblemPointer p = parentJob()->readContents();
   
-    QFileInfo fileInfo( localFile );
-    
-    if ( readFromDisk )
-    {
-        QFile file( localFile );
-        if ( !file.open( QIODevice::ReadOnly ) )
-        {
-            //Try using a code-representation, as artificial code may have been inserted
-            if(artificialCodeRepresentationExists(parentJob()->document())) {
-              CodeRepresentation::Ptr repr = createCodeRepresentation(parentJob()->document());
-              m_contents = repr->text().toUtf8();
-              kDebug() << "took contents for " << parentJob()->document().toUrl() << " from code-representation:\n" << m_contents;
-              return true;
-            }
-          
-            KDevelop::ProblemPointer p(new Problem());
-            p->setSource(KDevelop::ProblemData::Disk);
-            p->setDescription(i18n( "Could not open file '%1'", localFile ));
-            switch (file.error()) {
-              case QFile::ReadError:
-                  p->setExplanation(i18n("File could not be read from."));
-                  break;
-              case QFile::OpenError:
-                  p->setExplanation(i18n("File could not be opened."));
-                  break;
-              case QFile::PermissionsError:
-                  p->setExplanation(i18n("File permissions prevent opening for read."));
-                  break;
-              default:
-                  break;
-            }
-            p->setFinalLocation(DocumentRange(parentJob()->document().str(), KTextEditor::Cursor::invalid(), KTextEditor::Cursor::invalid()));
-            p->setLocationStack(parentJob()->includeStack());
-            parentJob()->addPreprocessorProblem(p);
-
-            kWarning( 9007 ) << "Could not open file" << parentJob()->document().str() << "(path" << localFile << ")" ;
-            return false;
-        }
-        m_contents = file.readAll(); ///@todo respect local encoding settings. Currently, the file is expected to be utf-8
-        file.close();
-        m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision(fileInfo.lastModified()) );
-    }
-    else{
-        ///This has to be done, before parentJob()->revisionToken() is read, as it sets the token.
-        m_contents = parentJob()->contentsFromEditor().toUtf8();
-        m_firstEnvironmentFile->setModificationRevision( KDevelop::ModificationRevision( fileInfo.lastModified(), parentJob()->revisionToken() ) );
-    }
-    
-    ///@todo Modify parsing foronly changed ranges on editor files
-#if 0
-    //===--- Incremental Parsing!!! yay :) ---===//
-    kDebug() << "We could have just parsed the changed ranges:";
-    foreach (KTextEditor::SmartRange* range, parentJob()->changedRanges())
-        kDebug() << *range << range->text().join("\n").left(20) << "...";
-#endif
+  if(p)
+  {
+    p->setLocationStack(parentJob()->includeStack());
+    parentJob()->addPreprocessorProblem(p);
+    return false;
+  }
+  
+  m_firstEnvironmentFile->setModificationRevision( parentJob()->contents().modification );
+  
     
     ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().str()
     << "<== readFromDisk:" << readFromDisk
-    << "size:" << contents.length()
+    << "size:" << contents.contents.length()
     << endl; )
     
     return true;

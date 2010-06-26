@@ -277,7 +277,7 @@ void pp::operator () (Stream& input, Stream& output)
 
 void pp::createProblem(Stream& input, const QString& description) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
-    problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 0)));
     problem->setDescription(description);
     problemEncountered(problem);
 }
@@ -447,7 +447,7 @@ Value pp::eval_primary(Stream& input)
       if (token != TOKEN_IDENTIFIER)
       {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
-        problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
+        problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 1)));
         QChar tk(token);
         problem->setDescription(i18n("Expected \"identifier\", found: %1", (tk < TOKENS_END && tk > TOKENS_START) ? QString(tk) : i18n("character %1", token)));
         problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
@@ -465,7 +465,7 @@ Value pp::eval_primary(Stream& input)
       if (expect_paren) {
         if (token != ')') {
           KDevelop::ProblemPointer problem(new KDevelop::Problem);
-          problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+          problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 0)));
           QChar tk(token);
           problem->setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
           problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
@@ -497,7 +497,7 @@ Value pp::eval_primary(Stream& input)
 
       if (token != ')') {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
-        problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
+        problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 1)));
         QChar tk(token);
         problem->setDescription(i18n("Expected \")\", found %1", tk.isLetterOrNumber() ? QString(tk) : i18n("character %1", token)));
         problem->setExplanation(i18n("<h5>Token text</h5><pre>%1</pre><h5>Input</h5><pre>%2</pre>", token_text.str(), QString::fromUtf8(input.stringFrom(start))));
@@ -534,7 +534,7 @@ Value pp::eval_multiplicative(Stream& input)
     } else if (token == '/') {
       if (value.is_zero()) {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
-        problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+        problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 0)));
         problem->setDescription(i18n("Division by zero"));
         problem->setDescription(i18n("Input text: %1", QString::fromUtf8(input.stringFrom(start))));
         problemEncountered(problem);
@@ -547,7 +547,7 @@ Value pp::eval_multiplicative(Stream& input)
     } else {
       if (value.is_zero()) {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
-        problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+        problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 0)));
         problem->setDescription(i18n("Division by zero"));
         problem->setDescription(i18n("Input text: %1", QString::fromUtf8(input.stringFrom(start))));
         problemEncountered(problem);
@@ -785,7 +785,7 @@ Value pp::eval_constant_expression(Stream& input)
     else
     {
       KDevelop::ProblemPointer problem(new KDevelop::Problem);
-      problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 1)));
+      problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 1)));
       problem->setDescription(i18n("expected ``:'' = %1", int(token)));
       problemEncountered(problem);
       result = left_value;
@@ -849,7 +849,7 @@ void pp::handle_else(int sourceLine)
   if (iflevel == 0 && !skipping ())
   {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
-    problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(KTextEditor::Cursor(sourceLine, 0), 0)));
+    problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(KDevelop::SimpleCursor(sourceLine, 0), 0)));
     problem->setDescription(i18n("#else without #if"));
     problemEncountered(problem);
   }
@@ -874,7 +874,7 @@ void pp::handle_elif(Stream& input)
   if (iflevel == 0 && !skipping())
   {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
-    problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 0)));
     problem->setDescription(i18n("#else without #if"));
     problemEncountered(problem);
   }
@@ -912,7 +912,7 @@ void pp::handle_endif(Stream& input, Stream& output)
   if (iflevel == 0 && !skipping())
   {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
-    problem->setFinalLocation(KDevelop::DocumentRange(currentFileNameString(), KTextEditor::Range(input.originalInputPosition().textCursor(), 0)));
+    problem->setFinalLocation(KDevelop::DocumentRange(currentFileName(), KDevelop::SimpleRange(input.originalInputPosition(), 0)));
     problem->setDescription(i18n("#endif without #if at output line %1", m_environment->locationTable()->anchorForOffset(output.offset()).anchor.line));
     problemEncountered(problem);
   }

@@ -25,7 +25,7 @@ class EnvironmentFile;
 }
 
 namespace KDevelop {
-class HashedString;
+class IndexedString;
 }
 
 class KDEVCPPDUCHAIN_EXPORT CppPreprocessEnvironment : public rpp::Environment, public KDevelop::ParsingEnvironment {

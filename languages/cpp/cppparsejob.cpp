@@ -115,7 +115,6 @@ CPPParseJob::CPPParseJob( const KUrl &url,
         m_needUpdateEverything( false ),
         m_parentPreprocessor( parentPreprocessor ),
         m_session( new ParseSession ),
-        m_readFromDisk( false ),
         m_includePathsComputed( 0 ),
         m_keepDuchain( false ),
         m_parsedIncludes( 0 ),
@@ -408,19 +407,17 @@ void CPPInternalParseJob::initialize() {
 
 void CPPInternalParseJob::highlightIfNeeded()
 {
-    if(!KDevelop::EditorIntegrator::documentForUrl(parentJob()->document()))
+    if(!ICore::self()->languageController()->backgroundParser()->trackerForUrl(parentJob()->document()))
       return;
 
     DUChainReadLocker l(DUChain::lock());
     ReferencedTopDUContext standardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
-    if(standardContext && standardContext->smartRange()) {
-      kDebug( 9007 ) << "Highlighting" << parentJob()->document().str();
-      //If the document has a smart-range, at least re-do the highlighting
-      l.unlock();
-      if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
-        parentJob()->cpp()->codeHighlighting()->highlightDUChain( standardContext.data() );
-    }
+    kDebug( 9007 ) << "Highlighting" << parentJob()->document().str();
+    //If the document has a smart-range, at least re-do the highlighting
+    l.unlock();
+    if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
+      parentJob()->cpp()->codeHighlighting()->highlightDUChain( standardContext.data() );
 }
 
 void CPPInternalParseJob::run()
@@ -428,11 +425,18 @@ void CPPInternalParseJob::run()
     //Happens during shutdown
     if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
+    
     //If we have a parent, the parse-mutex is already locked
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
     if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
 
+    if(updatingContentContext)
+      parentJob()->translateDUChainToRevision(updatingContentContext.data());
+    
+    if(updatingProxyContext)
+      parentJob()->translateDUChainToRevision(updatingProxyContext.data());
+    
     UrlParseLock urlLock(parentJob()->document());
 
     if(!parentJob()->needsUpdate()) {
@@ -531,6 +535,7 @@ void CPPInternalParseJob::run()
     ///Now we build/update the content-context
 
     bool doNotChangeDUChain = false;
+    bool isOpenInEditor = ICore::self()->languageController()->backgroundParser()->trackerForUrl(parentJob()->document());
 
     if(!parentJob()->keepDuchain()) {
 
@@ -543,7 +548,7 @@ void CPPInternalParseJob::run()
 
       ///At some point, we have to give up on features again, else processing will be just too slow.
       ///Simple solution for now: Always go down to the minimum required level.
-      if(!contentContext || !contentContext->smartRange())
+      if(!contentContext || !isOpenInEditor)
         newFeatures = parentJob()->minimumFeatures();
 
       bool keepAST = newFeatures & TopDUContext::AST;
@@ -566,7 +571,7 @@ void CPPInternalParseJob::run()
           DUChainWriteLocker l(DUChain::lock());
 
           if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
-              updatingContentContext->smartRange() &&
+            isOpenInEditor &&
               updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
             kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
             ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
@@ -591,37 +596,13 @@ void CPPInternalParseJob::run()
         }
       }
 
-      CppEditorIntegrator editor(parentJob()->parseSession().data());
       bool isStandardContext = false;
       {
         DUChainWriteLocker l(DUChain::lock());
         TopDUContext* knownStandardContext = DUChainUtils::standardContextForUrl(parentJob()->document().toUrl());
 
         isStandardContext = (parentJob()->masterJob() == parentJob() || knownStandardContext == updatingContentContext || !knownStandardContext);
-
-        if(isStandardContext) {
-          //Delete the smart-ranges of all other contexts, so we never get problems with smart uses/highlighting
-          foreach(TopDUContext* context, DUChain::self()->chainsForDocument(parentJob()->document())) {
-            if(context != updatingContentContext && context->smartRange()) {
-              SmartConverter sc(&editor);
-              sc.deconvertDUChain(context);
-              kDebug() << "smart-deconverting a non-standard context";
-            }
-          }
-
-          editor.setCurrentUrl(parentJob()->document(), true);
-
-          if(updatingContentContext && !updatingContentContext->smartRange() && editor.smart()) {
-            kWarning() << "updated context has not been smartened yet! Smartening it";
-            SmartConverter sc(&editor);
-            sc.convertDUChain(updatingContentContext);
-            Q_ASSERT(updatingContentContext->smartRange());
-            ICore::self()->languageController()->backgroundParser()->addManagedTopRange(updatingContentContext->smartRange()->document()->url(), updatingContentContext->smartRange());
-          }
-        }
       }
-
-      editor.setCurrentUrl(parentJob()->document(), isStandardContext);
 
       kDebug( 9007 ) << (contentContext ? "updating" : "building") << "duchain for" << parentJob()->document().str();
 
@@ -632,7 +613,7 @@ void CPPInternalParseJob::run()
         oldItemCount = contentContext->childContexts().size() + contentContext->localDeclarations().size();
       }
 
-      DeclarationBuilder declarationBuilder(&editor);
+      DeclarationBuilder declarationBuilder(parentJob()->parseSession().data());
 
       if(newFeatures == TopDUContext::VisibleDeclarationsAndContexts) {
         declarationBuilder.setOnlyComputeVisible(true); //Only visible declarations/contexts need to be built.
@@ -733,7 +714,7 @@ void CPPInternalParseJob::run()
           if ((newFeatures & TopDUContext::AllDeclarationsContextsAndUses) == TopDUContext::AllDeclarationsContextsAndUses) {
               parentJob()->setLocalProgress(0.5, i18n("Building uses"));
 
-              UseBuilder useBuilder(&editor);
+              UseBuilder useBuilder(parentJob()->parseSession().data());
               useBuilder.setMapAst(keepAST);
               useBuilder.buildUses(ast);
               DUChainWriteLocker l(DUChain::lock());
@@ -745,7 +726,7 @@ void CPPInternalParseJob::run()
               contentContext->deleteUsesRecursively();
           }
           
-          if (!parentJob()->abortRequested() && editor.smart()) {
+          if (!parentJob()->abortRequested() && isOpenInEditor) {
 
             if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
             {
@@ -846,7 +827,7 @@ void CPPInternalParseJob::run()
 
         //Put the problems into the proxy-context
         foreach( const ProblemPointer& problem, parentJob()->preprocessorProblems() ) {
-          if(problem->finalLocation().start().line() < proxyEnvironmentFile->contentStartLine())
+          if(problem->finalLocation().start.line < proxyEnvironmentFile->contentStartLine())
             proxyContext->addProblem(problem);
         }
 
@@ -906,28 +887,9 @@ void CPPInternalParseJob::run()
         //kDebug(9007) << "Dot-graph:\n" << dumpGraph.dotGraph(topContext, true);
     }
 
-    //DumpTree dumpTree;
-
     kDebug( 9007 ) << "===-- Parsing finished --===>" << parentJob()->document().str();
 
     parentJob()->processDelayedImports();
-
-    //Check the import structure
-/*    if(parentJob()->masterJob() == parentJob()) {
-      DUChainReadLocker l(DUChain::lock());
-      foreach(const DUContext* context, parentJob()->updated()) {
-        if(context == contentContext || context == proxyContext)
-          continue;
-        if(static_cast<const TopDUContext*>(context)->flags() & TopDUContext::ProxyContextFlag){
-//           Q_ASSERT(proxyContext->imports(context, proxyContext->range().end));
-        }else{
-          kDebug( 9007 ) << "lost an instance of" << context->url().str() << "with" << context->childContexts().count() << "child-contexts and " << context->localDeclarations().count() << "local declarations";
-//          Q_ASSERT(contentContext->imports(context, contentContext->range().end));
-        }
-      }
-    }*/
-
-   parentJob()->cleanupSmartRevision();
 }
 
 void CPPParseJob::processDelayedImports() {
@@ -977,16 +939,6 @@ void CPPParseJob::requestDependancies()
 ParseSession::Ptr CPPParseJob::parseSession() const
 {
     return m_session;
-}
-
-void CPPParseJob::setReadFromDisk(bool readFromDisk)
-{
-    m_readFromDisk = readFromDisk;
-}
-
-bool CPPParseJob::wasReadFromDisk() const
-{
-    return m_readFromDisk;
 }
 
 CPPInternalParseJob * CPPParseJob::parseJob() const

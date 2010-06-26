@@ -22,8 +22,12 @@
 #include "contextbuilder.h"
 #include "cppduchainexport.h"
 #include <language/duchain/builders/abstractusebuilder.h>
+#include <parsesession.h>
 
 class UseBuilderBase : public KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder> {
+  public:
+  UseBuilderBase(ParseSession* session) : KDevelop::AbstractUseBuilder<AST, NameAST, ContextBuilder>(session) {
+  }
 };
 
 /**
@@ -33,7 +37,6 @@ class KDEVCPPDUCHAIN_EXPORT  UseBuilder: public UseBuilderBase
 {
 public:
   UseBuilder(ParseSession* session);
-  UseBuilder(CppEditorIntegrator* editor);
   virtual ~UseBuilder();
 
   /**
@@ -93,10 +96,6 @@ private:
   QStack<QVector<int> > m_skippedUses;
   QStack<DUContext*> m_contexts;
 
-  //Whether not encountered uses should be deleted during closeContext()
-  bool m_finishContext;
-  bool m_localUsesBuilt;
-  
   QList< KSharedPtr< KDevelop::Problem > > m_problems;
 };
 

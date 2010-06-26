@@ -533,7 +533,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
           CppEditorIntegrator editor(session());
           
-          problem->setFinalLocation(DocumentRange(m_currentContext->url().str(), editor.findRange(node).textRange()));
+          problem->setFinalLocation(DocumentRange(m_currentContext->url(), editor.findRange(node)));
           if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
             m_problems << problem;
         }

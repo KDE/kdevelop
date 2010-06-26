@@ -385,7 +385,7 @@ KDevelop::ParseJob *CppLanguageSupport::createParseJob( const KUrl &url )
     return new CPPParseJob( url );
 }
 
-const KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
+KDevelop::ICodeHighlighting *CppLanguageSupport::codeHighlighting() const
 {
     return m_highlights;
 }

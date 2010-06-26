@@ -176,7 +176,7 @@ void IncludePathComputer::computeBackground() {
                 newProblem->setSource(KDevelop::ProblemData::Preprocessor);
                 newProblem->setDescription(i18n("Build manager for project %1 did not return a build directory", m_projectName));
                 newProblem->setExplanation(i18n("The include path resolver needs the build directory to resolve additional include paths. Consider setting up a build directory in the project manager if you have not done so yet."));
-                newProblem->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Range::invalid()));
+                newProblem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
                 (*m_problems) << KDevelop::ProblemPointer(newProblem);
             }
             m_includeResolver.resetOutOfSourceBuild();
@@ -218,7 +218,7 @@ void IncludePathComputer::computeBackground() {
                         p->setSource(KDevelop::ProblemData::Preprocessor);
                         p->setDescription(i18n("Build manager did not return an include path" ));
                         p->setExplanation(i18n("The build manager did not return the include path %1, which could be resolved by the include path resolver", r.pathOrUrl()));
-                        p->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Range::invalid()));
+                        p->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
                         *m_problems << p;
                       }
                   }
@@ -237,7 +237,7 @@ void IncludePathComputer::computeBackground() {
             problem->setSource(KDevelop::ProblemData::Preprocessor);
             problem->setDescription(i18n("Include path resolver: %1", result.errorMessage));
             problem->setExplanation(i18n("Used build directory: \"%1\"\nInclude path resolver: %2", m_effectiveBuildDirectory.pathOrUrl(), result.longErrorMessage));
-            problem->setFinalLocation(DocumentRange(m_source.pathOrUrl(), KTextEditor::Range::invalid()));
+            problem->setFinalLocation(DocumentRange(IndexedString(m_source), SimpleRange::invalid()));
             
         }
     }

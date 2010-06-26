@@ -1392,7 +1392,7 @@ void TestCppCodeCompletion::testHeaderSections() {
 
   IncludeFileList includes;
 
-  HashedString turl("ths.h");
+  IndexedString turl("ths.h");
 
   QCOMPARE(preprocess(turl, "#include \"someHeader.h\"\nHello", includes, 0, true), QString("\n"));
   QCOMPARE(includes.count(), 1);
@@ -1909,7 +1909,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   
   {
     QString a = "#define Q(c) c; char* q = #c; \n Q(int i;\n char* c = \"a\";)\n";
-    QString preprocessed = preprocess(HashedString(), a, includes);  
+    QString preprocessed = preprocess(IndexedString(), a, includes);  
     kDebug() << "preprocessed:" << preprocessed;
     QVERIFY(preprocessed.contains("\"int i;\\n char* c = \\\"a\\\";")); //The newline must have been escaped correctly, and the string as well
     TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
@@ -1922,7 +1922,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   }
   {
     QString a = "#define Q(c) c ## ULL \n void test() {int i = Q(0x5);}";
-    QString preprocessed = preprocess(HashedString(), a, includes);  
+    QString preprocessed = preprocess(IndexedString(), a, includes);  
     kDebug() << "preprocessed:" << preprocessed;
     TopDUContext* top = parse(a.toLocal8Bit(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1931,7 +1931,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   }
   {
     QString a = "#define MA(x) T<x> a\n #define MB(x) T<x>\n #define MC(X) int\n #define MD(X) c\n template <typename P1> struct A {}; template <typename P2> struct T {}; int main(int argc, char ** argv) { MA(A<int>); A<MB(int)> b; MC(a)MD(b); MC(a)d; }";
-    QString preprocessed = preprocess(HashedString(), a, includes);  
+    QString preprocessed = preprocess(IndexedString(), a, includes);  
     kDebug() << "preprocessed:" << preprocessed;
     TopDUContext* top = parse(a.toUtf8(), DumpAll);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1941,7 +1941,7 @@ void TestCppCodeCompletion::testPreprocessor() {
     #ifdef TEST_MACRO_EXPANSION_ORDER
     //Not working yet
   {//No macro-expansion should happen on the first layer of a macro-call
-  QString preprocessed = preprocess(HashedString(), "#define VAL_KIND A \n#define DO_CAT_I(a, b) a ## b \n#define DO_CAT(a, b) DO_CAT_I(a, b) \nint DO_CAT(Value_, VAL_KIND); \nint DO_CAT_I(Value_, VAL_KIND);\n int VAL_KIND;\nint DO_CAT(VAL_KIND, _Value);\nint DO_CAT(VAL_KIND, _Value);\n", includes);
+  QString preprocessed = preprocess(IndexedString(), "#define VAL_KIND A \n#define DO_CAT_I(a, b) a ## b \n#define DO_CAT(a, b) DO_CAT_I(a, b) \nint DO_CAT(Value_, VAL_KIND); \nint DO_CAT_I(Value_, VAL_KIND);\n int VAL_KIND;\nint DO_CAT(VAL_KIND, _Value);\nint DO_CAT(VAL_KIND, _Value);\n", includes);
   kDebug() << preprocessed;
     TopDUContext* top = parse(preprocessed.toUtf8(), DumpNone);
     DUChainWriteLocker lock(DUChain::lock());
@@ -1954,7 +1954,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   }
   #endif
   {//Test macro redirection
-    QString test = preprocess(HashedString(), "#define M1(X) X ## _m1 \n#define M2(X) M ## X\n#define M3 M2\n#define M4 M3 \nM4(1)(hallo)", includes);
+    QString test = preprocess(IndexedString(), "#define M1(X) X ## _m1 \n#define M2(X) M ## X\n#define M3 M2\n#define M4 M3 \nM4(1)(hallo)", includes);
     kDebug() << test;
     QCOMPARE(test.trimmed(), QString("hallo_m1"));
   }
@@ -1967,7 +1967,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   {//Test merging
     TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
-    kDebug() << preprocess(HashedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
+    kDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
@@ -2012,7 +2012,7 @@ void TestCppCodeCompletion::testPreprocessor() {
   {//Test merging
     TopDUContext* top = parse(QByteArray("#define D(X,Y) X ## Y \nint D(a,ba);"), DumpNone);
     IncludeFileList includes;
-    kDebug() << preprocess(HashedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
+    kDebug() << preprocess(IndexedString("somefile"), "#define D(X,Y) X ## Y \nint D(a,ba);", includes);
     DUChainWriteLocker lock(DUChain::lock());
     QCOMPARE(top->localDeclarations().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("aba"));
@@ -2143,7 +2143,7 @@ public:
   }
 };
 
-QString TestCppCodeCompletion::preprocess( const HashedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
+QString TestCppCodeCompletion::preprocess( const IndexedString& url, const QString& text, IncludeFileList& included, rpp::pp* parent, bool stopAfterHeaders, KSharedPtr<Cpp::EnvironmentFile>* paramEnvironmentFile, rpp::LocationTable** returnLocationTable, PreprocessedContents* targetContents ) {
   TestPreprocessor ppc( this, included, stopAfterHeaders );
 
 
@@ -2198,9 +2198,9 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
    ;
 
   static int testNumber = 0;
-  HashedString url(QString("file:///internal/%1").arg(testNumber++));
+  IndexedString url(QString("file:///internal/%1").arg(testNumber++));
   if( !_identity.isEmpty() )
-      url = _identity.pathOrUrl();
+      url = IndexedString(_identity);
 
    IncludeFileList included;
    QList<DUContext*> temporaryIncluded;
@@ -2255,14 +2255,6 @@ TopDUContext* TestCppCodeCompletion::parse(const QByteArray& unit, DumpAreas dum
 
     DUChainWriteLocker lock(DUChain::lock());
     dumper.dump(top);
-  }
-
-  if (dump & DumpType) {
-    kDebug(9007) << "===== Types:";
-    DumpTypes dt;
-    DUChainWriteLocker lock(DUChain::lock());
-    foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
-      dt.dump(type.unsafeData());
   }
 
   if( parent ) {

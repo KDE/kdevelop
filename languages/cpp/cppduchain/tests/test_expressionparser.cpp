@@ -1152,14 +1152,6 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
     dumper.dump(top);
   }
 
-  if (dump & DumpType) {
-    kDebug(9007) << "===== Types:";
-    DumpTypes dt;
-    DUChainWriteLocker lock(DUChain::lock());
-    foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
-      dt.dump(type.unsafeData());
-  }
-
   if (dump)
     kDebug(9007) << "===== Finished test case.";
 

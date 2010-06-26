@@ -27,7 +27,6 @@
 
 #include <language/duchain/parsingenvironment.h>
 #include <language/editor/modificationrevision.h>
-#include <language/editor/editorintegrator.h>
 #include <language/interfaces/iproblem.h>
 #include <language/duchain/topducontext.h>
 

@@ -19,7 +19,6 @@
 #ifndef CPPEDITORINTEGRATOR_H
 #define CPPEDITORINTEGRATOR_H
 
-#include <language/editor/editorintegrator.h>
 #include <language/editor/simplerange.h>
 #include "cppduchainexport.h"
 #include "lexer.h"
@@ -34,13 +33,23 @@ class AST;
  *
  * \todo introduce stacks for the state?
  */
-class KDEVCPPDUCHAIN_EXPORT CppEditorIntegrator : public KDevelop::EditorIntegrator
+class KDEVCPPDUCHAIN_EXPORT CppEditorIntegrator
 {
 public:
   CppEditorIntegrator(ParseSession* session);
 
   ParseSession* parseSession() const;
 
+  enum Edge {
+    FrontEdge,
+    BackEdge
+  };
+  
+  enum RangeEdge {
+    InnerEdge,
+    OuterEdge
+  };
+  
   /**
    * Finds the location and \a file where the given \a token was parsed from.  This function
    * does not change any of the CppEditorIntegrator's state.
@@ -62,8 +71,6 @@ public:
    * \returns the requested cursor relating to the start or end of the given token.
    */
   KDevelop::SimpleCursor findPosition(std::size_t token, Edge edge = BackEdge) const;
-
-  using KDevelop::EditorIntegrator::createRange;
 
   /**
    * Create a range encompassing the given AST \a node.

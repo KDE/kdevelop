@@ -44,7 +44,6 @@
 #include <QFileInfo>
 #include <QScriptEngine>
 #include <QScriptValue>
-#include <language/editor/editorintegrator.h>
 #include <language/duchain/smartconverter.h>
 
 using namespace KDevelop;
@@ -669,12 +668,6 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     
     if(topctx)
     {
-        EditorIntegrator editor;
-        editor.setCurrentUrl(topctx->url());
-        
-        SmartConverter converter(&editor);
-        converter.deconvertDUChain(topctx);
-        
         if(isClean) {
             topctx->deleteLocalDeclarations();
             topctx->deleteChildContextsRecursively();
@@ -2115,7 +2108,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(url.prettyUrl(), KTextEditor::Range(fc.first().range().start.textCursor(), fc.last().range().end.textCursor())));
+            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::SimpleRange(fc.first().range().start, fc.last().range().end)));
             m_topctx->addProblem(p);
         }
         element->setContent(fc, line);
@@ -2134,7 +2127,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(url.prettyUrl(), KTextEditor::Range(fc.first().range().start.textCursor(), fc.last().range().end.textCursor())));
+            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::SimpleRange(fc.first().range().start, fc.last().range().end)));
             m_topctx->addProblem(p);
             
             break;

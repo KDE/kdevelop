@@ -21,8 +21,6 @@
 #include "contextbuilder.h"
 
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
 #include <language/duchain/duchain.h>
@@ -96,22 +94,8 @@ void getFirstLast(AST** first, AST** last, const ListNode<_Tp> *nodes)
   while (it != end);
 }
 
-
-ContextBuilder::ContextBuilder ()
-  : m_nameCompiler(0)
-  , m_inFunctionDefinition(false)
-  , m_templateDeclarationDepth(0)
-  , m_typeSpecifierWithoutInitDeclarators((uint)-1)
-  , m_onlyComputeVisible(false)
-  , m_onlyComputeSimplified(false)
-  , m_computeEmpty(false)
-  , m_currentInitializer(0)
-  , m_mapAst(false)
-{
-}
-
 ContextBuilder::ContextBuilder (ParseSession* session)
-  : m_nameCompiler(0)
+: m_nameCompiler(session)
   , m_inFunctionDefinition(false)
   , m_templateDeclarationDepth(0)
   , m_typeSpecifierWithoutInitDeclarators((uint)-1)
@@ -120,22 +104,8 @@ ContextBuilder::ContextBuilder (ParseSession* session)
   , m_computeEmpty(false)
   , m_currentInitializer(0)
   , m_mapAst(false)
+  , m_editor(session)
 {
-  setEditor(new CppEditorIntegrator(session), true);
-}
-
-ContextBuilder::ContextBuilder (CppEditorIntegrator* editor)
-  : m_nameCompiler(0)
-  , m_inFunctionDefinition(false)
-  , m_templateDeclarationDepth(0)
-  , m_typeSpecifierWithoutInitDeclarators((uint)-1)
-  , m_onlyComputeVisible(false)
-  , m_onlyComputeSimplified(false)
-  , m_computeEmpty(false)
-  , m_currentInitializer(0)
-  , m_mapAst(false)
-{
-  setEditor(editor, false);
 }
 
 void ContextBuilder::setOnlyComputeVisible(bool onlyVisible) {
@@ -158,7 +128,7 @@ void ContextBuilder::createUserProblem(AST* node, QString text) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
     problem->setDescription(text);
     problem->setSource(KDevelop::ProblemData::DUChainBuilder);
-    problem->setFinalLocation(DocumentRange(HashedString(currentContext()->url().str()), editor()->findRange(node).textRange()));
+    problem->setFinalLocation(DocumentRange(IndexedString(currentContext()->url().str()), editor()->findRange(node).textRange()));
     currentContext()->topContext()->addProblem(problem);
 }
 
@@ -187,13 +157,6 @@ void ContextBuilder::addBaseType( KDevelop::BaseClassInstance base, BaseSpecifie
     createUserProblem(node, text);
   }
 }
-
-void ContextBuilder::setEditor(CppEditorIntegrator* editor, bool ownsEditorIntegrator)
-{
-  ContextBuilderBase::setEditor(editor, ownsEditorIntegrator);
-  m_nameCompiler = new NameCompiler(editor->parseSession());
-}
-
 
 void addImportedParentContextSafely(DUContext* context, DUContext* import) {
   if(import->imports(context)) {
@@ -246,7 +209,6 @@ KTextEditor::Range ContextBuilder::editorFindRangeForContext( AST* fromRange, AS
 
 ContextBuilder::~ContextBuilder ()
 {
-  delete m_nameCompiler;
 }
 
 QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const QualifiedIdentifier& id, KDevelop::SimpleCursor pos) {
@@ -339,9 +301,6 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
   Cpp::EnvironmentFile* filePtr = const_cast<Cpp::EnvironmentFile*>(file.data() );
   
   filePtr->setIsProxyContext(true);
-  
-  //Never give smart-ranges to proxy-contexts
-  editor()->setCurrentUrl(file->url(), false);
 
   TopDUContext* topLevelContext = 0;
   {
@@ -360,7 +319,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
     } else {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: compiling";
 
-      topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), SimpleRange(), filePtr);
+      topLevelContext = new CppDUContext<TopDUContext>(file->url(), SimpleRange(), filePtr);
       topLevelContext->setType(DUContext::Global);
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
@@ -399,34 +358,14 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     }
   }
 
-  if(editor()->currentUrl() != file->url())
-    editor()->setCurrentUrl(file->url(), true);
-
   ReferencedTopDUContext topLevelContext;
   {
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext;
 
-    if( topLevelContext && topLevelContext->smartRange() && !(topLevelContext->parsingEnvironmentFile() && topLevelContext->parsingEnvironmentFile()->isProxyContext()))
-      if (topLevelContext->smartRange()->parentRange()) { //Top-range must have no parent, else something is wrong with the structure
-        kWarning() << *topLevelContext->smartRange() << "erroneously has a parent range" << *topLevelContext->smartRange()->parentRange();
-        Q_ASSERT(false);
-      }
-
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
       setRecompiling(true);
-
-      if (compilingContexts()) {
-        // To here...
-        LockedSmartInterface iface = editor()->smart();
-        if (iface && topLevelContext->range().textRange() != iface.currentDocument()->documentRange()) {
-          topLevelContext->setRange(SimpleRange(iface.currentDocument()->documentRange()));
-          //This happens the whole file is deleted, and then a space inserted.
-          kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->range().textRange() << " should be: " << iface.currentDocument()->documentRange();
-        }
-      }
-
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
     } else {
       kDebug(9007) << "ContextBuilder::buildContexts: compiling";
@@ -434,10 +373,8 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
       Q_ASSERT(compilingContexts());
 
-      LockedSmartInterface iface = editor()->smart();
-      topLevelContext = new CppDUContext<TopDUContext>(editor()->currentUrl(), iface.currentDocument() ? SimpleRange(iface.currentDocument()->documentRange()) : SimpleRange(SimpleCursor(0,0), SimpleCursor(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(file->url(), SimpleRange(SimpleCursor(0,0), SimpleCursor(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
 
-      topLevelContext->setSmartRange(editor()->topRange(iface, CppEditorIntegrator::DefinitionUseChain), DocumentRangeObject::Own);
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
       DUChain::self()->addDocumentChain(topLevelContext);
@@ -472,7 +409,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   {
     DUChainReadLocker lock(DUChain::lock());
     //If we're debugging the current file, dump its preprocessed contents and the AST
-    ifDebugFile( HashedString(file->identity().url().str()), { kDebug() << stringFromContents(editor()->parseSession()->contentsVector()); Cpp::DumpChain dump; dump.dump(node, editor()->parseSession()); } );
+    ifDebugFile( IndexedString(file->identity().url().str()), { kDebug() << stringFromContents(editor()->parseSession()->contentsVector()); Cpp::DumpChain dump; dump.dump(node, editor()->parseSession()); } );
   }
 
   if(m_computeEmpty)
@@ -486,19 +423,11 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   }
 
   {
-    LockedSmartInterface iface = editor()->smart();
-    if (iface && topLevelContext->range().textRange() != iface.currentDocument()->documentRange()) {
-      kDebug(9007) << "WARNING: Top-level context has wrong size: " << topLevelContext->range().textRange() << " should be: " << iface.currentDocument()->documentRange();
-      topLevelContext->setRange( SimpleRange(iface.currentDocument()->documentRange()) );
-    }
-  }
-
-  {
     DUChainReadLocker lock(DUChain::lock());
 
     kDebug(9007) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
     //If we're debugging the current file, dump the du-chain and the smart ranges
-    ifDebugFile( HashedString(file->identity().url().str()), { KDevelop::DumpChain dump; dump.dump(topLevelContext); if(topLevelContext->smartRange()) dump.dumpRanges(topLevelContext->smartRange()); } );
+    ifDebugFile( IndexedString(file->identity().url().str()), { KDevelop::DumpChain dump; dump.dump(topLevelContext); if(topLevelContext->smartRange()) dump.dumpRanges(topLevelContext->smartRange()); } );
 
 /*     if( m_recompiling ) {
       DumpChain dump;
@@ -522,41 +451,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
   topLevelContext->squeeze();
   return topLevelContext;
 }
-
-// KDevelop::DUContext* ContextBuilder::buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
-//   setCompilingContexts(true);
-//   setRecompiling(false);
-//
-//   editor()->setCurrentUrl(url);
-//
-//   node->ducontext = parent;
-//
-//   {
-//     //copied out of supportBuild
-//
-//     openContext(node->ducontext);
-//
-//     editor()->setCurrentRange(editor()->topRange(EditorIntegrator::DefinitionUseChain));
-//
-//     visit (node);
-//
-//     closeContext();
-//   }
-//
-//   setCompilingContexts(false);
-//
-//   if( node->ducontext == parent ) {
-//     //The node's du-context should have been replaced!
-//     //Maybe dump the node
-//     kDebug(9007) << "Error in ContextBuilder::buildSubContexts(...): du-context was not replaced with new one";
-//     DUChainWriteLocker lock(DUChain::lock());
-//     delete node->ducontext;
-//
-//     node->ducontext = 0;
-//   }
-//
-//   return node->ducontext;
-// }
 
 void ContextBuilder::visitNamespace (NamespaceAST *node)
 {
@@ -728,10 +622,6 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
 
   } else {
     openContext(rangeNode->ducontext);
-    {
-      LockedSmartInterface iface = editor()->smart();
-      editor()->setCurrentRange(iface, currentContext()->smartRange());
-    }
     return currentContext();
   }
 }
@@ -992,7 +882,7 @@ void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   QualifiedIdentifier id;
   if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
     //Build a prefix-context for external variable-definitions
-    SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);
     
     openPrefixContext(node, id, pos);
@@ -1219,11 +1109,7 @@ void ContextBuilder::identifierForNode(NameAST* id, TypeSpecifierAST** typeSpeci
     target = QualifiedIdentifier();
   }
 
-  m_nameCompiler->run(id, &target);
+  m_nameCompiler.run(id, &target);
   if( typeSpecifier )
-    *typeSpecifier = m_nameCompiler->lastTypeSpecifier();
-}
-
-bool ContextBuilder::smart() const {
-  return editor()->smart();
+    *typeSpecifier = m_nameCompiler.lastTypeSpecifier();
 }

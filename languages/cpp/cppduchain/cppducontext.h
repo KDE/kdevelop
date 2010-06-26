@@ -454,6 +454,14 @@ class CppDUContext : public BaseContext {
         }
     }
     
+    virtual void visit(DUChainVisitor& visitor) {
+      QMutexLocker l(&cppDuContextInstantiationsMutex);
+      foreach(CppDUContext<BaseContext>* ctx, m_instatiations)
+        ctx->visit(visitor);
+      
+      BaseContext::visit(visitor);
+    }
+    
     virtual void deleteUses() {
       QMutexLocker l(&cppDuContextInstantiationsMutex);
       foreach(CppDUContext<BaseContext>* ctx, m_instatiations)

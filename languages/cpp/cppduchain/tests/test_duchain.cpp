@@ -5484,14 +5484,6 @@ TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUCo
     dumper.dump(top);
   }
 
-  if (dump & DumpType) {
-    kDebug(9007) << "===== Types:";
-    DUChainWriteLocker lock(DUChain::lock());
-    DumpTypes dt;
-    foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
-      dt.dump(type.unsafeData());
-  }
-
   if (dump)
     kDebug(9007) << "===== Finished test case.";
 

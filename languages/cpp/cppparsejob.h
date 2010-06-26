@@ -203,7 +203,6 @@ private:
     KSharedPtr<Cpp::EnvironmentFile> m_proxyEnvironmentFile;
     PreprocessJob* m_parentPreprocessor;
     ParseSession::Ptr m_session;
-    bool m_readFromDisk;
     PreprocessJob* m_preprocessJob;
     CPPInternalParseJob* m_parseJob;
     KTextEditor::Range m_textRangeToParse;

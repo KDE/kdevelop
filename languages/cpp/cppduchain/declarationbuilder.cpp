@@ -26,9 +26,6 @@
 
 #include "templatedeclaration.h"
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
-
 #include "parser/type_compiler.h"
 #include "parser/commentformatter.h"
 
@@ -85,15 +82,8 @@ bool DeclarationBuilder::changeWasSignificant() const
 }
 
 DeclarationBuilder::DeclarationBuilder (ParseSession* session)
-  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
+  : DeclarationBuilderBase(session), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
 {
-  setEditor(new CppEditorIntegrator(session), true);
-}
-
-DeclarationBuilder::DeclarationBuilder (CppEditorIntegrator* editor)
-  : DeclarationBuilderBase(), m_changeWasSignificant(false), m_ignoreDeclarators(false), m_declarationHasInitializer(false), m_collectQtFunctionSignature(false)
-{
-  setEditor(editor, false);
 }
 
 ReferencedTopDUContext DeclarationBuilder::buildDeclarations(Cpp::EnvironmentFilePointer file, AST *node, IncludeFileList* includes, const ReferencedTopDUContext& updateContext, bool removeOldImports)
@@ -105,15 +95,6 @@ ReferencedTopDUContext DeclarationBuilder::buildDeclarations(Cpp::EnvironmentFil
 
   return top;
 }
-
-// DUContext* DeclarationBuilder::buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent) {
-//   DUContext* top = buildSubContexts(url, node, parent);
-//
-//   Q_ASSERT(m_accessPolicyStack.isEmpty());
-//   Q_ASSERT(m_functionDefinedStack.isEmpty());
-//
-//   return top;
-// }
 
 void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
   
@@ -166,7 +147,6 @@ void DeclarationBuilder::parseComments(const ListNode<uint> *comments)
   setComment(CommentFormatter::formatComment(comments, editor()->parseSession()));
 }
 
-
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)
 {
 
@@ -210,7 +190,7 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   }else if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
     //Decide whether the parameter-declaration clause is valid
     DUChainWriteLocker lock(DUChain::lock());
-    SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     
     QualifiedIdentifier id;
     identifierForNode(node->declarator->id, id);    
@@ -396,7 +376,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
       if (id.count() > 1 ||
            (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
-        SimpleCursor pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), KDevelop::EditorIntegrator::FrontEdge);
+        SimpleCursor pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), CppEditorIntegrator::FrontEdge);
         // TODO: potentially excessive locking
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
@@ -543,14 +523,6 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   if (recompiling()) {
     // Seek a matching declaration
 
-    // Translate cursor to take into account any changes the user may have made since the text was retrieved
-    LockedSmartInterface iface = editor()->smart();
-    SimpleRange translated = editor()->translate(iface, newRange);
-
-#ifdef DEBUG_UPDATE_MATCHING
-    kDebug() << "checking" << localId.toString() << "range" << translated.textRange();
-#endif
-
     ///@todo maybe order the declarations within ducontext and change here back to walking the indices, because that's easier to debug and faster
     QList<Declaration*> decls = currentContext()->findLocalDeclarations(localId, SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::NoFiltering);
     foreach( Declaration* dec, decls ) {
@@ -558,19 +530,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       if( wasEncountered(dec) )
         continue;
 
-#ifdef DEBUG_UPDATE_MATCHING
-      if( !(typeid(*dec) == typeid(T)) )
-        kDebug() << "typeid mismatch:" << typeid(*dec).name() << typeid(T).name();
-
-      if (!(dec->range() == translated))
-        kDebug() << "range mismatch" << dec->range().textRange() << translated.textRange();
-
-      if(!(localId == dec->identifier()))
-        kDebug() << "id mismatch" << dec->identifier().toString() << localId.toString();
-#endif
-
-        //This works because dec->textRange() is taken from a smart-range. This means that now both ranges are translated to the current document-revision.
-      if (dec->range() == translated &&
+      if (dec->range() == newRange &&
           (localId == dec->identifier() || (localId.isUnique() && dec->identifier().isUnique())) &&
           typeid(T) == typeid(*dec)
          )
@@ -597,7 +557,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
         {
           // Match
           declaration = dynamic_cast<T*>(dec);
-          declaration->setRange(translated);
+          declaration->setRange(newRange);
           break;
         }
       }
@@ -613,35 +573,8 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
   if (!declaration) {
     if(currentContext()->inSymbolTable())
       m_changeWasSignificant = true; //We are adding a declaration that comes into the symbol table, so mark the change significant
-/*    if( recompiling() )
-      kDebug(9007) << "creating new declaration while recompiling: " << localId << "(" << newRange.textRange() << ")";*/
-    LockedSmartInterface iface = editor()->smart();
-
-    SmartRange* prior = editor()->currentRange(iface);
-
-    ///We don't want to move the parent range around if the context is collapsed, so we find a parent range that can hold this range.
-    KDevVarLengthArray<SmartRange*, 5> backup;
-    while(editor()->currentRange(iface) && !editor()->currentRange(iface)->contains(newRange.textRange())) {
-      backup.append(editor()->currentRange(iface));
-      editor()->exitCurrentRange(iface);
-    }
-
-    if(prior && !editor()->currentRange(iface)) {
-      editor()->setCurrentRange(iface, backup.back());
-      backup.pop_back();
-    }
-
-    SmartRange* range = editor()->currentRange(iface) ? editor()->createRange(iface, newRange.textRange()) : 0;
-
-    editor()->exitCurrentRange(iface);
-
-    for(int a = backup.size()-1; a >= 0; --a)
-      editor()->setCurrentRange(iface, backup[a]);
-  
-    Q_ASSERT(editor()->currentRange(iface) == prior);
 
     declaration = new T(newRange, currentContext());
-    declaration->setSmartRange(range);
     declaration->setIdentifier(localId);
   }
 
@@ -661,7 +594,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
       localId.clearTemplateIdentifiers();
 
       ///@todo Make sure the searched class is in the same namespace
-      QList<Declaration*> decls = currentContext()->findDeclarations(QualifiedIdentifier(localId), editor()->findPosition(name->start_token, KDevelop::EditorIntegrator::FrontEdge) );
+      QList<Declaration*> decls = currentContext()->findDeclarations(QualifiedIdentifier(localId), editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge) );
 
       if( !decls.isEmpty() )
       {
@@ -685,7 +618,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
 
   setEncountered(declaration);
 
-  openDeclarationInternal(declaration);
+  m_declarationStack.push(declaration);
 
   return declaration;
 }
@@ -861,7 +794,7 @@ void DeclarationBuilder::closeDeclaration(bool forceInstance)
 
   ifDebugCurrentFile( DUChainReadLocker lock(DUChain::lock()); kDebug() << "closing declaration" << currentDeclaration()->toString() << "type" << (currentDeclaration()->abstractType() ? currentDeclaration()->abstractType()->toString() : QString("notype")) << "last:" << (lastType() ? lastType()->toString() : QString("(notype)")); )
 
-  DeclarationBuilderBase::closeDeclaration();
+  m_declarationStack.pop();
 }
 
 void DeclarationBuilder::visitTypedef(TypedefAST *def)
@@ -1026,7 +959,7 @@ void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
     }else
     {
       id = unnamedNamespaceIdentifier().identifier();
-      range.start = editor()->findPosition(ast->linkage_body ? ast->linkage_body->start_token : ast->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      range.start = editor()->findPosition(ast->linkage_body ? ast->linkage_body->start_token : ast->start_token, CppEditorIntegrator::FrontEdge);
       range.end = range.start;
     }
 
@@ -1058,7 +991,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
    * Will create one helper-context named "MyClass" around RealClass
    * */
 
-  SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+  SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
 
   IndexedInstantiationInformation specializedWith;
   
@@ -1255,7 +1188,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
   {
     DUChainWriteLocker lock(DUChain::lock());
 
-    SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+    SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
     if(!declarations.isEmpty()) {
       decl->setAliasedDeclaration(declarations[0]);
@@ -1358,7 +1291,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
       ///@todo think how this interacts with re-using duchains. In some cases a forward-declaration should still be created.
       QList<Declaration*> declarations;
-      SimpleCursor pos = editor()->findPosition(node->start_token, KDevelop::EditorIntegrator::FrontEdge);
+      SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
 
       {
         DUChainReadLocker lock(DUChain::lock());
@@ -1372,7 +1305,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
         {
           if((decl->topContext() != currentContext()->topContext() || wasEncountered(decl)) && decl->abstractType())
           {
-            injectType(declarations.first()->abstractType());
+            setLastType(declarations.first()->abstractType());
             
             if( isFriendDeclaration ) {
               lock.unlock();
@@ -1405,15 +1338,13 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
           }
 
           //Just temporarily insert the new context
-          LockedSmartInterface iface = editor()->smart();
-          injectContext( iface, globalCtx, currentContext()->smartRange() );
+          injectContext( globalCtx );
         }
 
         openForwardDeclaration(node->name, node);
 
         if(forwardDeclarationGlobal) {
-          LockedSmartInterface iface = editor()->smart();
-          closeInjectedContext(iface);
+          closeInjectedContext();
         }
 
         openedDeclaration = true;
@@ -1696,4 +1627,32 @@ bool DeclarationBuilder::checkParameterDeclarationClause(ParameterDeclarationCla
     setLastType(oldLastType);
 
     return ret;
+}
+
+/// Set the internal context of a declaration; for example, a class declaration's internal context
+/// is the context inside the brackets: class ClassName { ... }
+void DeclarationBuilder::eventuallyAssignInternalContext()
+{
+  if (TypeBuilder::lastContext()) {
+    DUChainWriteLocker lock(DUChain::lock());
+
+    if( dynamic_cast<ClassFunctionDeclaration*>(currentDeclaration()) )
+      Q_ASSERT( !static_cast<ClassFunctionDeclaration*>(currentDeclaration())->isConstructor() || currentDeclaration()->context()->type() == DUContext::Class );
+
+    if(TypeBuilder::lastContext() && 
+      (TypeBuilder::lastContext()->type() == DUContext::Class || 
+        TypeBuilder::lastContext()->type() == DUContext::Other || 
+        TypeBuilder::lastContext()->type() == DUContext::Function || 
+        TypeBuilder::lastContext()->type() == DUContext::Template || 
+        TypeBuilder::lastContext()->type() == DUContext::Enum ||
+        (TypeBuilder::lastContext()->type() == DUContext::Namespace && currentDeclaration()->kind() == Declaration::Namespace)
+        ) )
+    {
+      if( !TypeBuilder::lastContext()->owner() || !TypeBuilder::wasEncountered(TypeBuilder::lastContext()->owner()) ) { //if the context is already internalContext of another declaration, leave it alone
+        currentDeclaration()->setInternalContext(TypeBuilder::lastContext());
+
+        TypeBuilder::clearLastContext();
+      }
+    }
+  }
 }

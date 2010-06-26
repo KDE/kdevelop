@@ -40,6 +40,7 @@
 
 //Uncomment this to debug what happens to context ranges when new ones are inserted
 //#define DEBUG_CONTEXT_RANGES
+#include <name_compiler.h>
 
 namespace KDevelop
 {
@@ -90,12 +91,8 @@ class KDEVCPPDUCHAIN_EXPORT  ContextBuilder: public ContextBuilderBase, protecte
   friend class IdentifierVerifier;
 
 public:
-  ContextBuilder();
   ContextBuilder(ParseSession* session);
-  ContextBuilder(CppEditorIntegrator* editor);
   virtual ~ContextBuilder ();
-
-  void setEditor(CppEditorIntegrator* editor, bool ownsEditorIntegrator);
 
   /**
    * Builds or updates a proxy-context that represents a content-context under a different environment.
@@ -123,9 +120,7 @@ public:
    *
    * \param parent Context that will be used as parent for this context
    */
-//   KDevelop::DUContext* buildSubContexts(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
-
-  inline CppEditorIntegrator* editor() const { return static_cast<CppEditorIntegrator*>(ContextBuilderBase::editor()); }
+//   KDevelop::DUContext* buildSubContexts(const IndexedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   //If this flag is enabled, only publically visible declarations/contexts are computed
   void setOnlyComputeVisible(bool onlyVisible);
@@ -135,6 +130,10 @@ public:
   void setComputeEmpty(bool empty);
   
   void setMapAst(bool mapAst);
+  
+  CppEditorIntegrator* editor() {
+    return &m_editor;
+  }
   
 protected:
   QualifiedIdentifier identifierForNode(NameAST* id);
@@ -228,11 +227,12 @@ protected:
   }
 
   // Variables
-  NameCompiler* m_nameCompiler;
 
   bool m_inFunctionDefinition;
-  bool smart() const;
 
+  CppEditorIntegrator m_editor;
+  NameCompiler m_nameCompiler;
+  
   int m_templateDeclarationDepth;
   uint m_typeSpecifierWithoutInitDeclarators; //Start-token of the last opened type-specifier without init-declarators (Only filled in specific cases)
 

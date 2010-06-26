@@ -37,15 +37,8 @@ using namespace KTextEditor;
 using namespace KDevelop;
 
 UseBuilder::UseBuilder (ParseSession* session)
-  : UseBuilderBase(), m_finishContext(true), m_localUsesBuilt(false)
+  : UseBuilderBase(session)
 {
-  setEditor(new CppEditorIntegrator(session), true);
-}
-
-UseBuilder::UseBuilder (CppEditorIntegrator* editor)
-  : UseBuilderBase(), m_finishContext(true)
-{
-  setEditor(editor, false);
 }
 
 UseBuilder::~UseBuilder()

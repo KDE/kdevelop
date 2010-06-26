@@ -86,45 +86,9 @@ ExpressionEvaluationResult ExpressionParser::evaluateType( const QByteArray& uni
     return ExpressionEvaluationResult();
   }
   
-  ///@todo think how useful it is to compute contexts and uses here. The main thing we need is the AST.
-  /*
-  static int testNumber = 0; //@todo what this url for?
-  KUrl url(QString("file:///internal/evaluate_%1").arg(testNumber++));
-  kDebug(9007) << "url:" << url;
-
-  DeclarationBuilder definitionBuilder(session);
-  DUContext* top = definitionBuilder.buildSubDeclarations(url, ast, context);
-
-  UseBuilder useBuilder(session);
-  useBuilder.buildUses(ast);
-
-  if (m_debug) {
-    kDebug(9007) << "===== DUChain:";
-
-    DUChainReadLocker lock(DUChain::lock());
-    dumper.dump(top, false);
-  }
-
-  if (m_debug) {
-    kDebug(9007) << "===== Types:";
-    DumpTypes dt;
-    DUChainReadLocker lock(DUChain::lock());
-    foreach (const AbstractType::Ptr& type, definitionBuilder.topTypes())
-      dt.dump(type.data());
-  }
-
-  if (m_debug)
-    kDebug(9007) << "===== Finished evaluation.";
-  */
   ExpressionEvaluationResult ret = evaluateType( ast, session, source );
 
   delete session;
-
-  /*
-  {
-    DUChainReadLocker lock(DUChain::lock());
-    delete top;
-  }*/
 
   return ret;
 }

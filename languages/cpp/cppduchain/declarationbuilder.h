@@ -45,9 +45,7 @@ enum SignalSlotFlags {
   FunctionIsSlot = 1 << 5
 };
 
-class DeclarationBuilderBase : public KDevelop::AbstractDeclarationBuilder<AST, NameAST, TypeBuilder>
-{
-};
+typedef TypeBuilder DeclarationBuilderBase;
 
 /**
  * A class which iterates the AST to extract definitions of types.
@@ -56,7 +54,6 @@ class KDEVCPPDUCHAIN_EXPORT DeclarationBuilder: public DeclarationBuilderBase
 {
 public:
   DeclarationBuilder(ParseSession* session);
-  DeclarationBuilder(CppEditorIntegrator* editor);
 
   /**
    * Compile either a context-definition chain, or add uses to an existing
@@ -76,7 +73,7 @@ public:
    *
    * \param parent Context that will be used as parent for this context
    */
-//   KDevelop::DUContext* buildSubDeclarations(const HashedString& url, AST *node, KDevelop::DUContext* parent = 0);
+//   KDevelop::DUContext* buildSubDeclarations(const IndexedString& url, AST *node, KDevelop::DUContext* parent = 0);
 
   bool changeWasSignificant() const;
 
@@ -149,6 +146,7 @@ private:
 
   void parseComments(const ListNode<uint> *comments);
 
+  void eventuallyAssignInternalContext();
   void applyStorageSpecifiers();
   void applyFunctionSpecifiers();
   void popSpecifiers();
@@ -174,6 +172,24 @@ private:
   QMultiHash<DUContext*, PropertyResolvePair> m_pendingPropertyDeclarations;
   KDevelop::IndexedDeclaration resolveMethodName(NameAST *node);
   void resolvePendingPropertyDeclarations(const QList<PropertyResolvePair> &pairs);
+  
+  /// Inherited from AbstractDeclarationBuilder:
+
+  inline Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
+  /// Access the current declaration, casted to type \a DeclarationType. \returns the current declaration if one exists and is an instance of the given \a DeclarationType.
+  template<class DeclarationType>
+  inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
+
+  /// Access the current comment. \returns the current comment, or an empty string if none exists.
+  inline const QByteArray& comment() const { return m_lastComment; }
+  /// Set the current \a comment. \param comment the new comment.
+  inline void setComment(const QByteArray& comment) { m_lastComment = comment; }
+  /// Clears the current comment.
+  inline void clearComment() { m_lastComment.clear(); }
+
+private:
+  QStack<Declaration*> m_declarationStack;
+  QByteArray m_lastComment;  
 };
 
 #endif // DECLARATIONBUILDER_H
