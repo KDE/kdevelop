@@ -115,7 +115,6 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
     Q_D(ProjectBaseItem);
     d->project = project;
     d->text = name;
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
     if( parent ) {
         parent->appendRow( this );
     }
@@ -139,12 +138,6 @@ ProjectBaseItem* ProjectBaseItem::child( int row ) const
         return 0;
     }
     return d->childs.at( row );
-}
-
-Qt::ItemFlags ProjectBaseItem::flags() const
-{
-    Q_D(const ProjectBaseItem);
-    return d->flags;
 }
 
 ProjectBaseItem* ProjectBaseItem::removeRow( int row )
@@ -211,15 +204,6 @@ QString ProjectBaseItem::text() const
 {
     Q_D(const ProjectBaseItem);
     return d->text;
-}
-
-void ProjectBaseItem::setFlags( Qt::ItemFlags flags )
-{
-    Q_D(ProjectBaseItem);
-    d->flags = flags;
-    if( model() ) {
-        model()->dataChanged( index(), index() );
-    }
 }
 
 void ProjectBaseItem::setModel( ProjectModel* model )

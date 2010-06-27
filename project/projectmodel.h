@@ -133,12 +133,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * @param text the new text
          */
         void setText( const QString& text );
-        /** @returns the flags for the model API. */
-        Qt::ItemFlags flags() const;
-        /**
-         * Set the model API flags for this item.
-         */
-        void setFlags( Qt::ItemFlags flags );
+
         /** @returns the number of children of this item, or 0 if there are none. */
         int rowCount() const;
 

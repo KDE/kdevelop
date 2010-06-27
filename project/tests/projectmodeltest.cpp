@@ -243,12 +243,9 @@ void ProjectModelTest::testItemSanity()
     QVERIFY( !parent->folder() );
     QVERIFY( !parent->project() );
     QVERIFY( !parent->child( parent->rowCount() ) );
-    QCOMPARE( parent->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled ) );
     QCOMPARE( parent->iconName(), QString() );
     QCOMPARE( parent->index(), QModelIndex() );
 
-    child->setFlags( child->flags() | Qt::ItemIsEditable );
-    QCOMPARE( child->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable ) );
     QCOMPARE( child->type(), (int)ProjectBaseItem::BaseItem );
 
     QCOMPARE( child->lessThan( child2 ), true );
@@ -256,8 +253,6 @@ void ProjectModelTest::testItemSanity()
 
     // Check that model is properly emitting data-changes
     model->appendRow( parent );
-    parent->setFlags( child->flags() | Qt::ItemIsEditable );
-    QCOMPARE( parent->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable ) );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     QSignalSpy s( model, SIGNAL(dataChanged( const QModelIndex&, const QModelIndex& )) );
     parent->setText( "newtest" );
