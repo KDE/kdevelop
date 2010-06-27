@@ -46,31 +46,32 @@ set(kdevplatformshell_LIB_SRCS
     progressdialog.cpp
     projectsourcepage.cpp
 
-    kross/krossplugin.cpp
-    kross/krossbuildsystemmanager.cpp
-    kross/krossdistributedversioncontrol.cpp
-    kross/krosstoolviewfactory.cpp
-    kross/krossvcsjob.cpp
-    kross/wrappers/krosscontext.cpp
-    kross/wrappers/krosscontextmenuextension.cpp
-    kross/wrappers/krossvcsrevision.cpp
-    kross/wrappers/krossvcslocation.cpp
-    kross/wrappers/krossprojectmodel.cpp
-#    kross/wrappers/krossiuicontroller.cpp
-    kross/wrappers/krossidocument.cpp
-#    kross/wrappers/krosstopducontext.cpp
-#    kross/wrappers/krossducontext.cpp
-    kross/wrappers/krossilanguage.cpp
-#     kross/wrappers/krossdeclaration.cpp
-#     kross/wrappers/krossuse.cpp
-    kross/wrappers/krossidentifier.cpp
-    kross/wrappers/krossduchainlock.cpp
-    kross/wrappers/krossiproblem.cpp
-    kross/wrappers/krossibuildsystemmanager.cpp
-    kross/wrappers/krossiprojectfilemanager.cpp
-    kross/wrappers/krossiprojectbuilder.cpp
-    kross/wrappers/krosseditorcontext.cpp
-    kross/wrappers/krossqtoolbar.cpp
+# TODO: Re-Enable after generating new kross bindings for project model
+#     kross/krossplugin.cpp
+#     kross/krossbuildsystemmanager.cpp
+#     kross/krossdistributedversioncontrol.cpp
+#     kross/krosstoolviewfactory.cpp
+#     kross/krossvcsjob.cpp
+#     kross/wrappers/krosscontext.cpp
+#     kross/wrappers/krosscontextmenuextension.cpp
+#     kross/wrappers/krossvcsrevision.cpp
+#     kross/wrappers/krossvcslocation.cpp
+#     kross/wrappers/krossprojectmodel.cpp
+# #    kross/wrappers/krossiuicontroller.cpp
+#     kross/wrappers/krossidocument.cpp
+# #    kross/wrappers/krosstopducontext.cpp
+# #    kross/wrappers/krossducontext.cpp
+#     kross/wrappers/krossilanguage.cpp
+# #     kross/wrappers/krossdeclaration.cpp
+# #     kross/wrappers/krossuse.cpp
+#     kross/wrappers/krossidentifier.cpp
+#     kross/wrappers/krossduchainlock.cpp
+#     kross/wrappers/krossiproblem.cpp
+#     kross/wrappers/krossibuildsystemmanager.cpp
+#     kross/wrappers/krossiprojectfilemanager.cpp
+#     kross/wrappers/krossiprojectbuilder.cpp
+#     kross/wrappers/krosseditorcontext.cpp
+#     kross/wrappers/krossqtoolbar.cpp
 )
 
 if(HAVE_KOMPARE)
@@ -86,25 +87,25 @@ set(kdevplatformshell_UI
 
 kde4_add_ui_files( kdevplatformshell_LIB_SRCS ${kdevplatformshell_UI} )
 kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
-target_link_libraries(kdevplatformshell 
-        ${KDE4_KIO_LIBS} 
+target_link_libraries(kdevplatformshell
+        ${KDE4_KIO_LIBS}
         ${KDE4_KFILE_LIBS}
-        ${KDE4_KUTILS_LIBS} 
-        ${KDE4_KPARTS_LIBS} 
-        ${KDE4_KNOTIFYCONFIG_LIBS} 
-        ${KDE4_KTEXTEDITOR_LIBS} 
-        ${KDE4_THREADWEAVER_LIBRARIES} 
+        ${KDE4_KUTILS_LIBS}
+        ${KDE4_KPARTS_LIBS}
+        ${KDE4_KNOTIFYCONFIG_LIBS}
+        ${KDE4_KTEXTEDITOR_LIBS}
+        ${KDE4_THREADWEAVER_LIBRARIES}
         ${KDE4_KROSSCORE_LIBS}
-        kdevplatforminterfaces 
-        kdevplatformproject 
+        kdevplatforminterfaces
+        kdevplatformproject
         kdevplatformvcs
-        kdevplatformlanguage 
-        sublime 
-        kdevplatformutil 
+        kdevplatformlanguage
+        sublime
+        kdevplatformutil
         kdevplatformoutputview
         kdevplatformdebugger)
 # need to add kdevplatform* once those are exported targets
-target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES 
+target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KDECORE_LIBS}
 	kdevplatforminterfaces)

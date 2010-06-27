@@ -81,7 +81,7 @@ ProjectFolderItem *ProjectTreeView::currentFolderItem() const
 
     while ( current.isValid() )
     {
-        if ( ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>( projectModel()->item( current ) ) )
+        if ( ProjectFolderItem *folderItem = dynamic_cast<ProjectFolderItem*>( projectModel()->itemFromIndex( current ) ) )
             return folderItem;
 
         current = proxy->mapFromSource(projectModel()->parent( current ));
@@ -101,7 +101,7 @@ ProjectFileItem *ProjectTreeView::currentFileItem() const
 
     while ( current.isValid() )
     {
-        if ( ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>( projectModel()->item( current ) ) )
+        if ( ProjectFileItem *fileItem = dynamic_cast<ProjectFileItem*>( projectModel()->itemFromIndex( current ) ) )
             return fileItem;
 
         current = proxy->mapFromSource(projectModel()->parent( current ));
@@ -120,7 +120,7 @@ ProjectTargetItem *ProjectTreeView::currentTargetItem() const
 
     while ( current.isValid() )
     {
-        if ( ProjectTargetItem *targetItem = dynamic_cast<ProjectTargetItem*>( projectModel()->item( current ) ) )
+        if ( ProjectTargetItem *targetItem = dynamic_cast<ProjectTargetItem*>( projectModel()->itemFromIndex( current ) ) )
             return targetItem;
 
         current = projectModel()->parent( current );
@@ -141,7 +141,7 @@ KDevelop::ProjectModel *ProjectTreeView::projectModel() const
 void ProjectTreeView::slotActivated( const QModelIndex &index )
 {
     QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
-    KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) );
+    KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex( proxy->mapToSource(index) );
     if ( item && item->file() )
     {
         emit activateUrl( item->file()->url() );
@@ -165,7 +165,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
         foreach( const QModelIndex& index, indexes )
         {
-            if ( KDevelop::ProjectBaseItem *item = projectModel()->item( proxy->mapToSource(index) ) )
+            if ( KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex( proxy->mapToSource(index) ) )
                 itemlist << item;
         }
     }
@@ -205,7 +205,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     appendActions(menu, vcsActions);
     appendActions(menu, extActions);
 
-    if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && itemlist[0]->folder()->isProjectRoot() )
+    if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )
     {
         KAction* projectConfig = new KAction(i18n("Open Configuration..."), this);
         connect( projectConfig, SIGNAL( triggered() ), this, SLOT( openProjectConfig() ) );
@@ -237,7 +237,7 @@ bool ProjectTreeView::event(QEvent* event)
         QAbstractProxyModel *proxy = qobject_cast<QAbstractProxyModel*>(model());
         QModelIndex idx = proxy->mapToSource(idxView);
         
-        ProjectBaseItem* it=projectModel()->item(idx);
+        ProjectBaseItem* it=projectModel()->itemFromIndex(idx);
         if((m_idx!=idx || !m_tooltip) && it && it->file())
         {
             m_idx=idx;

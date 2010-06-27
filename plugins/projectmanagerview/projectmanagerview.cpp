@@ -84,7 +84,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(plugin->actionCollection()->action("project_build"));
     addAction(plugin->actionCollection()->action("project_install"));
     addAction(plugin->actionCollection()->action("project_clean"));
-    
+
     m_ui->projectTreeView->setWhatsThis( i18n( "Project Overview" ) );
     QSizePolicy pol( QSizePolicy::Expanding, QSizePolicy::Expanding );
     pol.setVerticalStretch( 6 );
@@ -102,13 +102,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     m_ui->buildSetView->setSizePolicy( pol );
     m_ui->buildSetView->setWhatsThis( i18n( "Build Items:" ) );
 
-    QStandardItemModel *overviewModel = ICore::self()->projectController()->projectModel();
     m_modelFilter = new ProjectProxyModel( this );
-    m_modelFilter->setSourceModel(overviewModel);
+    m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
 
     m_ui->projectTreeView->setModel( m_modelFilter );
 
- 
+
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
     connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*) ),
@@ -118,7 +117,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     connect( qobject_cast<Sublime::MainWindow*>(KDevelop::ICore::self()->uiController()->activeMainWindow()), SIGNAL(areaChanged(Sublime::Area*)),
              SLOT(updateSyncAction()));
     selectionChanged();
-    
+
     //Update the "sync" button after the initialization has completed, to see whether there already is some open documents
     QMetaObject::invokeMethod(this, "updateSyncAction", Qt::QueuedConnection);
 
@@ -153,7 +152,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
     foreach( const QModelIndex &idx, m_ui->projectTreeView->selectionModel()->selectedIndexes() )
     {
         KDevelop::ProjectBaseItem* item =
-                ICore::self()->projectController()->projectModel()->item( m_modelFilter->mapToSource(idx) );
+                ICore::self()->projectController()->projectModel()->itemFromIndex( m_modelFilter->mapToSource(idx) );
         if( item )
             items << item;
         else
@@ -170,7 +169,7 @@ void ProjectManagerView::locateCurrentDocument()
 
     // We should _never_ get a null pointer for the document, as
     // the action is only enabled when there is an active document.
-    Q_ASSERT(doc); 
+    Q_ASSERT(doc);
 
     QModelIndex bestMatch;
     foreach (IProject* proj, ICore::self()->projectController()->projects()) {
