@@ -296,6 +296,10 @@ public:
     virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
 
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+
 private:
     class ProjectModelPrivate* const d;
     friend class ProjectBaseItem;

@@ -779,6 +779,24 @@ bool ProjectModel::hasChildren(const QModelIndex& parent) const
     return b;
 }
 
+bool ProjectModel::insertColumns(int column, int count, const QModelIndex& parent)
+{
+    // Not supported
+    return false;
+}
+
+bool ProjectModel::insertRows(int row, int count, const QModelIndex& parent)
+{
+    // Not supported
+    return false;
+}
+
+bool ProjectModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    // Not supported
+    return false;
+}
+
 void ProjectVisitor::visit ( IProject* prj )
 {
     visit( prj->projectItem() );
