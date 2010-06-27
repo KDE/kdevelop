@@ -237,6 +237,7 @@ void ProjectModelTest::testItemSanity()
 
     // Just some basic santiy checks on the API
     QCOMPARE( parent->child( 0 ), child );
+    QCOMPARE( parent->row(), -1 );
     QVERIFY( !parent->child( -1 ) );
     QVERIFY( !parent->file() );
     QVERIFY( !parent->folder() );

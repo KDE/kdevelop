@@ -96,7 +96,7 @@ public:
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0), parent(0), model(0) {}
+    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0) {}
     IProject* project;
     ProjectBaseItem* parent;
     int row;
