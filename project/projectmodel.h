@@ -131,7 +131,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         ProjectModel* model() const;
 
         void appendRow( ProjectBaseItem* item );
-        void removeRow( int row );
+        ProjectBaseItem* removeRow( int row );
 
         virtual int type() const;
 

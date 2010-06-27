@@ -259,8 +259,18 @@ void ProjectModelTest::testItemSanity()
     parent->setFlags( child->flags() | Qt::ItemIsEditable );
     QCOMPARE( parent->flags(), Qt::ItemFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable ) );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
+    QSignalSpy s( model, SIGNAL(dataChanged( const QModelIndex&, const QModelIndex& )) );
     parent->setText( "newtest" );
+    QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
+
+    ProjectBaseItem* removeditem = parent->removeRow( child->row() );
+    QCOMPARE( removeditem, child );
+    QCOMPARE( removeditem->row(), -1 );
+    QCOMPARE( removeditem->model(), (ProjectModel*)0 );
+    QCOMPARE( removeditem->parent(), (ProjectBaseItem*)0 );
+    QCOMPARE( removeditem->index(), QModelIndex() );
+    QCOMPARE( removeditem->rowCount(), 0 );
 }
 
 void ProjectModelTest::testRename()

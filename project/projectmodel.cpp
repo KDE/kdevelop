@@ -147,21 +147,24 @@ Qt::ItemFlags ProjectBaseItem::flags() const
     return d->flags;
 }
 
-void ProjectBaseItem::removeRow( int row )
+ProjectBaseItem* ProjectBaseItem::removeRow( int row )
 {
     Q_D(ProjectBaseItem);
+    ProjectBaseItem* olditem = 0;
     if( row >= 0 && row < d->childs.size() ) {
         if( model() ) {
             model()->beginRemoveRows( index(), row, row );
         }
-        ProjectBaseItem* item = d->childs.at( row );
-        item->d_func()->parent = 0;
-        item->d_func()->model = 0;
+        olditem = d->childs.at( row );
+        olditem->d_func()->parent = 0;
+        olditem->d_func()->row = -1;
+        olditem->d_func()->model = 0;
         d->childs.removeAt( row );
         if( model() ) {
             model()->endRemoveRows();
         }
     }
+    return olditem;
 }
 
 QModelIndex ProjectBaseItem::index() const
