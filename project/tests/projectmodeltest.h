@@ -21,6 +21,7 @@
 #define KDEVELOP_PROJECT_PROJECTMODELTEST_INCLUDED
 
 #include <QtCore/QObject>
+#include <QtCore/QModelIndex>
 
 namespace KDevelop
 {
@@ -39,8 +40,12 @@ private slots:
     void testCreateTargetItems_data();
     void testCreateSimpleHierarchy();
     void testItemSanity();
+    void testRename();
+    void testRename_data();
 private:
     KDevelop::ProjectModel* model;
 };
+
+Q_DECLARE_METATYPE( QModelIndex );
 
 #endif

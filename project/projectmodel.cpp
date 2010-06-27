@@ -37,6 +37,8 @@
 #include <language/duchain/indexedstring.h>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <kio/udsentry.h>
+#include <kio/netaccess.h>
 
 namespace KDevelop
 {
@@ -241,6 +243,12 @@ void ProjectBaseItem::setText( const QString& text )
     }
 }
 
+ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newname)
+{
+    setText( newname );
+    return RenameOk;
+}
+
 KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
 {
     if( type == KDevelop::ProjectBaseItem::Folder || type == KDevelop::ProjectBaseItem::BuildFolder )
@@ -435,6 +443,36 @@ QString ProjectFolderItem::folderName() const
     return url().fileName();
 }
 
+
+ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
+{
+    //TODO: Same as ProjectFileItem, so should be shared somehow
+    KUrl dest = url().upUrl();
+    dest.addPath(newname);
+    if( !newname.contains('/') )
+    {
+        KIO::UDSEntry entry;
+        //There exists a file with that name?
+        if( !KIO::NetAccess::stat(dest, entry, 0) )
+        {
+            if( !project() || project()->projectFileManager()->renameFolder(this, dest) )
+            {
+                setUrl( dest );
+                return ProjectBaseItem::RenameOk;
+            } else
+            {
+                return ProjectBaseItem::ProjectManagerRenameFailed;
+            }
+        } else
+        {
+            return ProjectBaseItem::ExistingItemSameName;
+        }
+    } else
+    {
+        return ProjectBaseItem::InvalidNewName;
+    }
+}
+
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
     for ( int i = 0; i < rowCount(); ++i )
@@ -471,24 +509,6 @@ QString ProjectBuildFolderItem::iconName() const
     return "folder-development";
 }
 
-void ProjectFolderItem::setData(const QVariant& value, int role)
-{
-    /*if(role==Qt::EditRole && value != data(role)) {
-        KUrl dest = url().upUrl();
-        dest.addPath(value.toString());
-        bool ret=!value.toString().contains('/');
-
-        KIO::UDSEntry entry;
-        ret = ret && !KIO::NetAccess::stat(dest, entry, 0); //There exists a file with that name
-        ret = ret && project()->projectFileManager()->renameFolder(this, dest);
-        if(ret)
-            emitDataChanged();
-        else
-            KMessageBox::error(0, i18n("The name for '%1' could not be changed", url().prettyUrl()), i18n("Project Management"));
-    } else
-        ProjectBaseItem::setData(value, role);*/
-}
-
 ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectBaseItem * parent )
         : ProjectBaseItem( project, file.fileName(), parent )
 {
@@ -512,24 +532,33 @@ QString ProjectFileItem::iconName() const
     return KMimeType::findByUrl(url(), 0, false, true)->iconName(url());
 }
 
-void ProjectFileItem::setData(const QVariant& value, int role)
+ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
 {
-    /*if(role==Qt::EditRole && value != data(role)) {
-        KUrl dest = url().upUrl();
-        dest.addPath(value.toString());
-        bool ret=!value.toString().contains('/');
-
+    KUrl dest = url().upUrl();
+    dest.addPath(newname);
+    if( !newname.contains('/') )
+    {
         KIO::UDSEntry entry;
-        ret = ret && !KIO::NetAccess::stat(dest, entry, 0); //There exists a file with that name
-        ret = ret && project()->projectFileManager()->renameFile(this, dest);
-        if(ret)
-            emitDataChanged();
-        else
-            KMessageBox::error(0, i18n("The name for '%1' could not be changed", url().prettyUrl()), i18n("Project Management"));
+        //There exists a file with that name?
+        if( !KIO::NetAccess::stat(dest, entry, 0) )
+        {
+            if( !project() || project()->projectFileManager()->renameFile(this, dest) )
+            {
+                setUrl( dest );
+                return ProjectBaseItem::RenameOk;
+            } else
+            {
+                return ProjectBaseItem::ProjectManagerRenameFailed;
+            }
+        } else
+        {
+            return ProjectBaseItem::ExistingItemSameName;
+        }
     } else
-        ProjectBaseItem::setData(value, role);*/
+    {
+        return ProjectBaseItem::InvalidNewName;
+    }
 }
-
 
 QString ProjectFileItem::fileName() const
 {

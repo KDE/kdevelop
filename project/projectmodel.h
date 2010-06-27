@@ -84,6 +84,14 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
             CustomProjectItemType = 100 /** type which should be used as base for custom types */
         };
 
+        enum RenameStatus
+        {
+            RenameOk = 0,
+            ExistingItemSameName = 1,
+            ProjectManagerRenameFailed = 2,
+            InvalidNewName = 3
+        };
+
         /** @returns Returns the project that the item belongs to.  */
         IProject* project() const;
 
@@ -135,6 +143,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         /** Get the url of this item (if any) */
         KUrl url() const;
 
+        virtual RenameStatus rename( const QString& newname );
+
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
@@ -166,11 +176,9 @@ public:
 
     /** @returns Returns whether this folder directly contains the specified file or folder. */
     bool hasFileOrFolder(const QString& name) const;
-
-    /** If @p role is Qt::EditRole, it tells the projectcontroller that the folder name is changing to value.
-        Otherwise works like QStandardItem::setData */
-    void setData(const QVariant& value, int role = Qt::UserRole + 1);
+    
     virtual QString iconName() const;
+    virtual RenameStatus rename(const QString& newname);
 };
 
 
@@ -251,11 +259,9 @@ public:
     /** Get the file name, equal to url().fileName() but faster (precomputed) */
     QString fileName() const;
 
-    /** If @p role is Qt::EditRole, it tells the projectcontroller that the folder name is changing to value.
-        Otherwise works like QStandardItem::setData */
-    virtual void setData(const QVariant& value, int role = Qt::UserRole + 1);
     virtual void setUrl( const KUrl& );
     virtual QString iconName() const;
+    virtual RenameStatus rename(const QString& newname);
 };
 
 /**

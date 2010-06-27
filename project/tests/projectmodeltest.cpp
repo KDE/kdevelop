@@ -35,6 +35,7 @@ using KDevelop::ProjectBuildFolderItem;
 
 void ProjectModelTest::initTestCase()
 {
+    qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
     ModelTest* mt = new ModelTest( model, this );
 }
@@ -259,6 +260,96 @@ void ProjectModelTest::testItemSanity()
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     parent->setText( "newtest" );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
+}
+
+void ProjectModelTest::testRename()
+{
+    QFETCH( int, itemType );
+    QFETCH( QString, itemText );
+    QFETCH( QString, newName );
+    QFETCH( bool, datachangesignal );
+    QFETCH( QString, expectedItemText );
+    QFETCH( int, expectedRenameCode );
+
+    ProjectBaseItem* item = 0;
+    if( itemType == ProjectBaseItem::Target ) {
+        item = new ProjectTargetItem( 0, itemText );
+    } else if( itemType == ProjectBaseItem::File ) {
+        item = new ProjectFileItem( 0, KUrl(itemText) );
+    } else if( itemType == ProjectBaseItem::Folder ) {
+        item = new ProjectFolderItem( 0, KUrl(itemText) );
+    } else if( itemType == ProjectBaseItem::BuildFolder ) {
+        item = new ProjectBuildFolderItem( 0, KUrl(itemText) );
+    }
+    Q_ASSERT( item );
+    
+    model->appendRow( item );
+    QSignalSpy s( model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)) );
+    ProjectBaseItem::RenameStatus stat = item->rename( newName );
+    QCOMPARE( (int)stat, expectedRenameCode );
+    if( datachangesignal ) {
+        QCOMPARE( s.count(), 1 );
+        QCOMPARE( qvariant_cast<QModelIndex>( s.takeFirst().at(0) ), item->index() );
+    }
+    QCOMPARE( item->text(), expectedItemText );
+}
+
+void ProjectModelTest::testRename_data()
+{
+    QTest::addColumn<int>( "itemType" );
+    QTest::addColumn<QString>( "itemText" );
+    QTest::addColumn<QString>( "newName" );
+    QTest::addColumn<bool>( "datachangesignal" );
+    QTest::addColumn<QString>( "expectedItemText" );
+    QTest::addColumn<int>( "expectedRenameCode" );
+    
+    QTest::newRow("RenameableTarget")
+    << (int)ProjectBaseItem::Target
+    << QString::fromLatin1("target")
+    << QString::fromLatin1("othertarget")
+    << true
+    << QString::fromLatin1("othertarget")
+    << (int)ProjectBaseItem::RenameOk;
+    
+    QTest::newRow("RenameableFile")
+    << (int)ProjectBaseItem::File
+    << QString::fromLatin1("newfile.cpp")
+    << QString::fromLatin1("otherfile.cpp")
+    << true
+    << QString::fromLatin1("otherfile.cpp")
+    << (int)ProjectBaseItem::RenameOk;
+    
+    QTest::newRow("RenameableFolder")
+    << (int)ProjectBaseItem::Folder
+    << QString::fromLatin1("newfolder")
+    << QString::fromLatin1("otherfolder")
+    << true
+    << QString::fromLatin1("otherfolder")
+    << (int)ProjectBaseItem::RenameOk;
+    
+    QTest::newRow("RenameableBuildFolder")
+    << (int)ProjectBaseItem::BuildFolder
+    << QString::fromLatin1("newbfolder")
+    << QString::fromLatin1("otherbfolder")
+    << true
+    << QString::fromLatin1("otherbfolder")
+    << (int)ProjectBaseItem::RenameOk;
+
+    QTest::newRow("ExistingFileError")
+    << (int)ProjectBaseItem::Folder
+    << QString::fromLatin1("mynew")
+    << QString::fromLatin1("bin")
+    << false
+    << QString::fromLatin1("mynew")
+    << (int)ProjectBaseItem::ExistingItemSameName;
+
+    QTest::newRow("InvalidNameError")
+    << (int)ProjectBaseItem::File
+    << QString::fromLatin1("mynew")
+    << QString::fromLatin1("other/bash")
+    << false
+    << QString::fromLatin1("mynew")
+    << (int)ProjectBaseItem::InvalidNewName;
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)
