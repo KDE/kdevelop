@@ -118,31 +118,63 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
 
+        /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;
+        /** @returns a valid QModelIndex for usage with the model API for this item. */
         QModelIndex index() const;
+        /** @returns The parent item if this item has one, else it return 0. */
         virtual ProjectBaseItem* parent() const;
+        /** @returns the displayed text of this item. */
         QString text() const;
+        /** @returns the row in the list of children of this items parent, or -1. */
         int row() const;
+        /**
+         * Allows to change the displayed text of this item.
+         * @param text the new text
+         */
         void setText( const QString& text );
+        /** @returns the flags for the model API. */
         Qt::ItemFlags flags() const;
+        /**
+         * Set the model API flags for this item.
+         */
         void setFlags( Qt::ItemFlags flags );
+        /** @returns the number of children of this item, or 0 if there are none. */
         int rowCount() const;
 
+        /** @returns the model to which this item belongs, or 0 if its not associated to a model. */
         ProjectModel* model() const;
 
+        /**
+         * Adds a new child item to this item.
+         */
         void appendRow( ProjectBaseItem* item );
+        /**
+         * Removes the item at the given row if there is one. The item is not being deleted.
+         * @returns the removed item or 0
+         */
         ProjectBaseItem* removeRow( int row );
 
+        /** @returns RTTI info, allows to know the type of item */
         virtual int type() const;
 
+        /** @returns a string to pass to KIcon as icon-name suitable to represent this item. */
         virtual QString iconName() const;
 
-        /** Set the url of this item */
+        /**
+         * Set the url of this item.
+         * Note this function never renames the item in the project manager or on the filesystem,
+         * it only changes the url and possibly the text nothing else.
+         */
         virtual void setUrl( const KUrl& );
 
         /** Get the url of this item (if any) */
         KUrl url() const;
 
+        /**
+         * Renames the item to the new name.
+         * @returns status information wether the renaming succeeded.
+         */
         virtual RenameStatus rename( const QString& newname );
 
     protected:
