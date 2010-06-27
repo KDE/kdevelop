@@ -18,7 +18,7 @@ include (MacroOptionalAddSubdirectory)
 # from prefixes like $HOME/kdevelop breaks
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-find_package(KDevPlatform 1.0.0 REQUIRED)
+find_package(KDevPlatform 1.0.60 REQUIRED)
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
