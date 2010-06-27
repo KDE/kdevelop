@@ -183,9 +183,8 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
       p->buildSystemManager()->features() & KDevelop::IBuildSystemManager::Targets )
   {
     QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
-    for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
-      KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
-      t=bit->targetList();
+    for(ProjectBaseItem* it=folder; it && t.isEmpty(); it=it->parent()) {
+      t=it->targetList();
     }
     if(t.count()==1) //Just choose this one
       target=t.first();
