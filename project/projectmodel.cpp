@@ -685,7 +685,7 @@ QStringList ProjectModel::pathFromIndex(const QModelIndex& index) const
     return list;
 }
 
-int ProjectModel::columnCount( const QModelIndex& parent ) const
+int ProjectModel::columnCount( const QModelIndex& ) const
 {
     return 1;
 }
@@ -782,19 +782,19 @@ bool ProjectModel::hasChildren(const QModelIndex& parent) const
     return b;
 }
 
-bool ProjectModel::insertColumns(int column, int count, const QModelIndex& parent)
+bool ProjectModel::insertColumns(int, int, const QModelIndex&)
 {
     // Not supported
     return false;
 }
 
-bool ProjectModel::insertRows(int row, int count, const QModelIndex& parent)
+bool ProjectModel::insertRows(int, int, const QModelIndex&)
 {
     // Not supported
     return false;
 }
 
-bool ProjectModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
 {
     // Not supported
     return false;
