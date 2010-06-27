@@ -481,8 +481,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
             continue;
         }
 
-        //TODO: Re-Enable after enabling editing in new project model
-        /*const QString src = item->data(Qt::EditRole).toString();
+        const QString src = item->text();
 
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
@@ -492,8 +491,8 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         );
 
         if (!name.isEmpty() && name != src) {
-            item->setData(name, Qt::EditRole);
-        }*/
+            item->rename( name );
+        }
     }
 }
 
