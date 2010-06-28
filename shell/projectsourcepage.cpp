@@ -19,6 +19,8 @@
 #include <vcs/vcsjob.h>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <KMessageBox>
+#include <KColorScheme>
 
 using namespace KDevelop;
 
@@ -32,7 +34,7 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
     m_ui->workingDir->setMode(KFile::Directory);
     m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
     
-    m_ui->sources->addItem(KIcon("folder"), i18n("Not versioned"));
+    m_ui->sources->addItem(KIcon("folder"), i18n("Do not obtain"));
     m_plugins.append(0);
     
     IPluginController* pluginManager = ICore::self()->pluginController();
@@ -86,8 +88,17 @@ void ProjectSourcePage::getVcsProject()
     Q_ASSERT(iface && m_locationWidget);
 
     emit isCorrect(false);
+    KUrl url=m_ui->workingDir->url();
+    QDir d(url.toLocalFile());
+    if(!url.isLocalFile() && !d.exists()) {
+        bool corr = d.mkpath(d.path());
+        if(!corr) {
+            KMessageBox::error(0, i18n("Could not create the directory: %1", d.path()));
+            return;
+        }
+    }
     
-    VcsJob* job=iface->createWorkingCopy(m_locationWidget->location(), m_ui->workingDir->url());
+    VcsJob* job=iface->createWorkingCopy(m_locationWidget->location(), url);
     m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     
     connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
@@ -112,27 +123,47 @@ void ProjectSourcePage::projectReceived(KJob* job)
     m_ui->creationProgress->setValue(m_ui->creationProgress->maximum());
     
     reevaluateCorrection();
+    m_ui->creationProgress->setFormat("%p%");
 }
 
 void ProjectSourcePage::sourceLocationChanged()
 {
     m_ui->creationProgress->setEnabled(m_locationWidget->isCorrect());
-    m_ui->get->setEnabled(m_locationWidget->isCorrect());
 }
 
 void ProjectSourcePage::reevaluateCorrection()
 {
+    //TODO: Probably we should just ignore remote URL's, I don't think we're ever going
+    //to support checking out to remote directories
     KUrl cwd=m_ui->workingDir->url();
-    bool correct=!cwd.isEmpty() && (!cwd.isLocalFile() || QFile::exists(cwd.toLocalFile()));
+    bool correct=!cwd.isEmpty() && (!cwd.isLocalFile() || QDir(cwd.upUrl().toLocalFile()).exists());
+    emit isCorrect(correct);
     
-    if(correct && cwd.isLocalFile()) {
-        QDir d(cwd.toLocalFile());
-        correct &= d.exists() && !d.entryList().isEmpty();
+    QDir d(cwd.toLocalFile());
+    bool validToCheckout=correct; //To checkout, if it exists, it should be an empty dir
+    if(correct && cwd.isLocalFile() && d.exists()) {
+        validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
     
-//     qDebug() << "reevaluateCorrection" << cwd << correct;
-    emit isCorrect(correct);
-    m_ui->get->setEnabled(correct);
+    m_ui->get->setEnabled(validToCheckout && m_locationWidget->isCorrect());
+    
+    if(!correct)
+        setStatus(i18n("You need to specify a valid or unexistent directory to check out a project"));
+    else if(!m_ui->get->isEnabled())
+        setStatus(i18n("You need to specify a valid location for the project"));
+    else
+        validStatus();
+}
+
+void ProjectSourcePage::setStatus(const QString& message)
+{
+    KColorScheme scheme(QPalette::Normal);
+    m_ui->status->setText(QString("<font color='%1'>%2</font>").arg(scheme.foreground(KColorScheme::NegativeText).color().name()).arg(message));
+}
+
+void ProjectSourcePage::validStatus()
+{
+    m_ui->status->clear();
 }
 
 KUrl ProjectSourcePage::workingDir() const

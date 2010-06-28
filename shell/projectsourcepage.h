@@ -43,6 +43,9 @@ class ProjectSourcePage : public QWidget
         void isCorrect(bool);
         
     private:
+        void setStatus(const QString& message);
+        void validStatus();
+        
         KDevelop::IBasicVersionControl* vcsPerIndex(int index);
         
         Ui::ProjectSourcePage* m_ui;

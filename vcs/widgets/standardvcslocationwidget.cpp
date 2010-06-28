@@ -51,7 +51,7 @@ VcsLocation StandardVcsLocationWidget::location() const
 
 bool StandardVcsLocationWidget::isCorrect() const
 {
-    return !m_urlWidget->url().isRelative();
+    return !m_urlWidget->url().isEmpty();
 }
 
 void StandardVcsLocationWidget::textChanged(const QString& str)

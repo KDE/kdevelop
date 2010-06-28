@@ -19,6 +19,7 @@ class SvnLocationWidget : public KDevelop::StandardVcsLocationWidget
     public:
         SvnLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0);
         virtual KDevelop::VcsLocation location() const;
+        virtual bool isCorrect() const;
 };
 
 #endif // SVNLOCATIONWIDGET_H

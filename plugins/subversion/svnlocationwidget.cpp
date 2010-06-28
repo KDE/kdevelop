@@ -23,3 +23,7 @@ KDevelop::VcsLocation SvnLocationWidget::location() const
     return ret;
 }
 
+bool SvnLocationWidget::isCorrect() const
+{
+    return !url().isRelative();
+}

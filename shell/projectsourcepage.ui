@@ -76,6 +76,9 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QLabel" name="status"/>
+      </item>
      </layout>
     </widget>
    </item>
