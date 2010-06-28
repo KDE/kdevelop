@@ -35,6 +35,7 @@ private slots:
     void highlightFile(const QString&);
     void opsEntered(const KUrl& item );
     void comboTextChanged(const QString& );
+    void dirChanged(const KUrl& url);
 private:
     
     KUrl getAbsoluteUrl( const QString& ) const;

@@ -31,6 +31,7 @@
 #include "plugincontroller.h"
 #include <kdiroperator.h>
 #include <kactioncollection.h>
+#include <KIO/NetAccess>
 
 namespace KDevelop
 {
@@ -89,6 +90,8 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     // Emitted when clicking on a file in the fileview area
     connect( fileWidget, SIGNAL(fileHighlighted(const QString&)), SLOT(highlightFile(const QString&)) );
+    
+    connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(KUrl)), SLOT(dirChanged(KUrl)));
 }
 
 KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
@@ -105,6 +108,17 @@ KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
 void OpenProjectPage::setUrl(const KUrl& url)
 {
     fileWidget->setUrl(url, false);
+}
+
+void OpenProjectPage::dirChanged(const KUrl& url)
+{
+    if(fileWidget->selectedFiles().isEmpty()) {
+        KFileItemList items=fileWidget->dirOperator()->dirLister()->items();
+        foreach(const KFileItem& item, items) {
+            if(item.url().path().endsWith(ShellExtension::getInstance()->projectFileExtension()) && item.isFile())
+                fileWidget->setSelection(item.url().url());
+        }
+    }
 }
 
 void OpenProjectPage::highlightFile( const QString& file )
