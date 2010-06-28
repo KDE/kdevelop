@@ -145,7 +145,7 @@ void ProjectSourcePage::reevaluateCorrection()
         validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
     
-    m_ui->get->setEnabled(validToCheckout && m_locationWidget->isCorrect());
+    m_ui->get->setEnabled(validToCheckout && m_locationWidget && m_locationWidget->isCorrect());
     
     if(!correct)
         setStatus(i18n("You need to specify a valid or unexistent directory to check out a project"));
