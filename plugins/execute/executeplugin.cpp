@@ -122,7 +122,7 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
         QList<KDevelop::ProjectBaseItem*> items;
         foreach( const QVariant& dep, deps )
         {
-            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.toStringList() ) );
+            KDevelop::ProjectBaseItem* item = model->itemFromIndex( model->pathToIndex( dep.toStringList() ) );
             if( item )
             {
                 items << item;
