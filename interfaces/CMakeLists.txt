@@ -33,6 +33,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 	ilauncher.cpp
 	ilaunchconfiguration.cpp
 	ilaunchmode.cpp
+	iprojectprovider.cpp
 )
 
 

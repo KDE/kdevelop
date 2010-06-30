@@ -21,8 +21,9 @@
 #ifndef IPROJECTPROVIDER_H
 #define IPROJECTPROVIDER_H
 #include <QString>
+#include <QWidget>
+#include "interfacesexport.h"
 
-class QWidget;
 class KUrl;
 
 namespace KDevelop
@@ -32,23 +33,30 @@ class VcsLocationWidget;
 class VcsLocation;
 class VcsJob;
 
-class IProjectProvider
+class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
 {
     public:
-        virtual QString name() const = 0;
-        
-        virtual VcsLocationWidget* vcsLocation(QWidget* parent) const=0;
+        IProjectProviderWidget(QWidget* parent = 0);
         
         /**
-         * @returns a job that will create a working copy for the specified location.
+         * @returns a job that will create a working copy given the current state of the widget.
          * 
-         * @param sourceRepository source of the checkout
-         * @param destinationDirectory location of the created working copy (local repository)
+         * @param destinationDirectory where the project will be downloaded.
          */
-        virtual VcsJob* createWorkingCopy(const VcsLocation & sourceRepository, const KUrl & destinationDirectory) = 0;
+        virtual VcsJob* createWorkingCopy(const KUrl & destinationDirectory) = 0;
 };
 
-Q_DECLARE_INTERFACE( KDevelop::IProjectProvider, "org.kdevelop.IProjectProvider" )
+class KDEVPLATFORMINTERFACES_EXPORT IProjectProvider
+{
+    public:
+        virtual ~IProjectProvider();
+        
+        virtual QString name() const = 0;
+        
+        virtual IProjectProviderWidget* providerWidget(QWidget* parent) = 0;
+};
 
 }
+Q_DECLARE_INTERFACE( KDevelop::IProjectProvider, "org.kdevelop.IProjectProvider" )
+
 #endif
