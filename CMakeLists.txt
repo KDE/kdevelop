@@ -20,6 +20,12 @@ include (MacroLibrary)
 
 # Make sure that we're having RPATH on our installed libs, else using kdevelop
 # from prefixes like $HOME/kdevelop breaks
+# Code taken from FindKDE4Internal.cmake for KDE 4.5
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}"
+  _isSystemLibDir)
+if("${_isSystemLibDir}" STREQUAL "-1")
+  set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 set(KOMPARE_FOUND FALSE)
