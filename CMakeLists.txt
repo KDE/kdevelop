@@ -16,9 +16,16 @@ include (MacroOptionalAddSubdirectory)
 
 # Make sure that we're having RPATH on our installed libs, else using kdevelop
 # from prefixes like $HOME/kdevelop breaks
+# Code taken from FindKDE4Internal.cmake from KDE 4.5
+list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${LIB_INSTALL_DIR}"
+  _isSystemLibDir)
+if("${_isSystemLibDir}" STREQUAL "-1")
+ set(CMAKE_INSTALL_RPATH "${LIB_INSTALL_DIR}")
+endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 find_package(KDevPlatform 1.0.60 REQUIRED)
+
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
