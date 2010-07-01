@@ -365,9 +365,10 @@ int main( int argc, char *argv[] )
                 }
             }
 
-            KUrl f(file);
-            if( f.isRelative() )
-                f=KUrl(QDir::currentPath(), file);
+            if( QFileInfo(file).isRelative() ) {
+                file = QDir::currentPath() + QDir::separator() + file;
+            }
+            KUrl f( "file://"+file );
 
             if(!core->documentController()->openDocument(f, line))
                 kWarning() << i18n("Could not open %1") << args->arg(i);
