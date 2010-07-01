@@ -27,6 +27,7 @@
 class KDEProviderPlugin : public KDevelop::IPlugin, KDevelop::IProjectProvider
 {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IProjectProvider )
     public:
         KDEProviderPlugin ( QObject* parent, const QList<QVariant>& args  );
         virtual ~KDEProviderPlugin();

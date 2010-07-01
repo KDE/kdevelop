@@ -13,3 +13,4 @@ X-KDE-PluginInfo-Name=kdevkdeprovider
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Mode=GUI
+X-KDevelop-Interfaces=org.kdevelop.IProjectProvider
