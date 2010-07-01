@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <KMessageBox>
 #include <KColorScheme>
+#include <interfaces/iprojectprovider.h>
 
 using namespace KDevelop;
 
@@ -44,6 +45,12 @@ ProjectSourcePage::ProjectSourcePage(const KUrl& initial, QWidget* parent)
         m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), p->extension<IBasicVersionControl>()->name());
     }
     
+    foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IProjectProvider" ) )
+    {
+        m_plugins.append(p);
+        m_ui->sources->addItem(KIcon(pluginManager->pluginInfo(p).icon()), p->extension<IProjectProvider>()->name());
+    }
+    
     connect(m_ui->workingDir, SIGNAL(textChanged(QString)), SLOT(reevaluateCorrection()));
     connect(m_ui->sources, SIGNAL(currentIndexChanged(int)), SLOT(sourceChanged(int)));
     connect(m_ui->get, SIGNAL(clicked()), SLOT(getVcsProject()));
@@ -62,11 +69,20 @@ void ProjectSourcePage::sourceChanged(int index)
     }
     
     IBasicVersionControl* vcIface = vcsPerIndex(index);
+    IProjectProvider* providerIface;
     if(vcIface) {
         m_locationWidget=vcIface->vcsLocation(m_ui->sourceBox);
-        connect(m_locationWidget, SIGNAL(changed()), SLOT(sourceLocationChanged()));
+        connect(m_locationWidget, SIGNAL(changed()), SLOT(reevaluateCorrection()));
         
         remoteWidgetLayout->addWidget(m_locationWidget);
+    } else {
+        providerIface = providerPerIndex(index);
+        if(providerIface) {
+            m_providerWidget=providerIface->providerWidget(m_ui->sourceBox);
+            connect(m_providerWidget, SIGNAL(changed()), SLOT(reevaluateCorrection()));
+            
+            remoteWidgetLayout->addWidget(m_providerWidget);   
+        }
     }
     reevaluateCorrection();
     
@@ -80,6 +96,15 @@ IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)
         return 0;
     else
         return p->extension<KDevelop::IBasicVersionControl>();
+}
+
+IProjectProvider* ProjectSourcePage::providerPerIndex(int index)
+{
+    IPlugin* p=m_plugins[index];
+    if(!p)
+        return 0;
+    else
+        return p->extension<KDevelop::IProjectProvider>();
 }
 
 void ProjectSourcePage::getVcsProject()
@@ -126,11 +151,6 @@ void ProjectSourcePage::projectReceived(KJob* job)
     m_ui->creationProgress->setFormat("%p%");
 }
 
-void ProjectSourcePage::sourceLocationChanged()
-{
-    m_ui->creationProgress->setEnabled(m_locationWidget->isCorrect());
-}
-
 void ProjectSourcePage::reevaluateCorrection()
 {
     //TODO: Probably we should just ignore remote URL's, I don't think we're ever going
@@ -140,12 +160,13 @@ void ProjectSourcePage::reevaluateCorrection()
     emit isCorrect(correct);
     
     QDir d(cwd.toLocalFile());
-    bool validToCheckout=correct; //To checkout, if it exists, it should be an empty dir
+    bool validToCheckout=correct && (!m_locationWidget || m_locationWidget->isCorrect()); //To checkout, if it exists, it should be an empty dir
     if(correct && cwd.isLocalFile() && d.exists()) {
         validToCheckout = d.entryList(QDir::AllEntries | QDir::NoDotAndDotDot).isEmpty();
     }
     
-    m_ui->get->setEnabled(validToCheckout && m_locationWidget && m_locationWidget->isCorrect());
+    m_ui->get->setEnabled(validToCheckout);
+    m_ui->creationProgress->setEnabled(validToCheckout);
     
     if(!correct)
         setStatus(i18n("You need to specify a valid or unexistent directory to check out a project"));

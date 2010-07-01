@@ -18,6 +18,9 @@ class KUrl;
 namespace Ui { class ProjectSourcePage; }
 namespace KDevelop
 {
+
+class IProjectProvider;
+    class IProjectProviderWidget;
     class IPlugin;
     class IBasicVersionControl;
     class VcsLocationWidget;
@@ -32,7 +35,6 @@ class ProjectSourcePage : public QWidget
         
     private slots:
         void sourceChanged(int index);
-        void sourceLocationChanged();
         void getVcsProject();
         void projectReceived(KJob* job);
         void reevaluateCorrection();
@@ -47,10 +49,12 @@ class ProjectSourcePage : public QWidget
         void validStatus();
         
         KDevelop::IBasicVersionControl* vcsPerIndex(int index);
+        KDevelop::IProjectProvider* providerPerIndex(int index);
         
         Ui::ProjectSourcePage* m_ui;
         QList<KDevelop::IPlugin*> m_plugins;
         KDevelop::VcsLocationWidget* m_locationWidget;
+        KDevelop::IProjectProviderWidget* m_providerWidget;
 };
 
 }
