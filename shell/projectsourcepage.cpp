@@ -70,7 +70,9 @@ void ProjectSourcePage::sourceChanged(int index)
     
     IBasicVersionControl* vcIface = vcsPerIndex(index);
     IProjectProvider* providerIface;
+    bool found=false;
     if(vcIface) {
+        found=true;
         m_locationWidget=vcIface->vcsLocation(m_ui->sourceBox);
         connect(m_locationWidget, SIGNAL(changed()), SLOT(reevaluateCorrection()));
         
@@ -78,15 +80,15 @@ void ProjectSourcePage::sourceChanged(int index)
     } else {
         providerIface = providerPerIndex(index);
         if(providerIface) {
+            found=true;
             m_providerWidget=providerIface->providerWidget(m_ui->sourceBox);
-            connect(m_providerWidget, SIGNAL(changed()), SLOT(reevaluateCorrection()));
             
             remoteWidgetLayout->addWidget(m_providerWidget);   
         }
     }
     reevaluateCorrection();
     
-    m_ui->sourceBox->setVisible(vcIface!=0);
+    m_ui->sourceBox->setVisible(found);
 }
 
 IBasicVersionControl* ProjectSourcePage::vcsPerIndex(int index)

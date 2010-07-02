@@ -35,6 +35,7 @@ class VcsJob;
 
 class KDEVPLATFORMINTERFACES_EXPORT IProjectProviderWidget : public QWidget
 {
+    Q_OBJECT
     public:
         IProjectProviderWidget(QWidget* parent = 0);
         
