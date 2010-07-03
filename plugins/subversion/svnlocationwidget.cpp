@@ -18,9 +18,7 @@ SvnLocationWidget::SvnLocationWidget(QWidget* parent, Qt::WindowFlags f)
 KDevelop::VcsLocation SvnLocationWidget::location() const
 {
     KUrl loc=url();
-    KDevelop::VcsLocation ret;
-    ret.setRepositoryServer(loc.prettyUrl());
-    return ret;
+    return KDevelop::VcsLocation(loc.prettyUrl());
 }
 
 bool SvnLocationWidget::isCorrect() const
