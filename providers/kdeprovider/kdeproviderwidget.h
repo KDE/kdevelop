@@ -23,6 +23,7 @@
 
 #include <interfaces/iprojectprovider.h>
 
+class KConfigDialog;
 class QComboBox;
 class KDEProviderWidget : public KDevelop::IProjectProviderWidget
 {
@@ -31,8 +32,13 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
         KDEProviderWidget(QWidget* parent = 0);
         
         virtual KDevelop::VcsJob* createWorkingCopy(const KUrl& destinationDirectory);
+        
+    private slots:
+        void showSettings();
+        
     private:
         QComboBox* m_projects;
+        KConfigDialog* m_dialog;
 };
 
 #endif // KDEPROVIDERWIDGET_H

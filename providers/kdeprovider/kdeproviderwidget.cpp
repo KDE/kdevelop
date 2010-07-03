@@ -22,9 +22,15 @@
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <KIcon>
+#include <KPushButton>
+#include <KConfigDialog>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include "ui_kdeconfig.h"
+#include "kdeconfig.h"
+
+using namespace KDevelop;
 
 struct Source
 {
@@ -36,9 +42,17 @@ struct Source
     QString icon;
     VcsType type;
     QString url;
+    
+    QString plugin() const { return type==SVN ? "kdevsubversion" : "kdevgit"; }
+    
+    static VcsLocation svnLocation(const Source& s)
+    {
+        QString svnPrefix=KDEProviderSettings::self()->svnPrefix();
+        QString path = QString(s.url).replace("%PREFIX", svnPrefix);
+        return VcsLocation(path);
+    }
+    VcsLocation location() const { return type==SVN ? svnLocation(*this) : VcsLocation(KUrl(url)); }
 };
-
-using namespace KDevelop;
 
 namespace
 {
@@ -69,20 +83,27 @@ Source kdeProjects[nOfKDEProjects] = {
 KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     : IProjectProviderWidget(parent)
 {
-    setLayout(new QVBoxLayout(this));
+    setLayout(new QHBoxLayout(this));
     m_projects = new QComboBox(this);
     for(uint i=0; i<nOfKDEProjects; ++i) {
         const Source& s = kdeProjects[i];
         m_projects->addItem(KIcon(s.icon), s.name);
     }
     layout()->addWidget(m_projects);
-}
-
-VcsLocation svnLocation(const Source& s)
-{
-    QString svnPrefix="svn+ssh://apol@svn.kde.org/home/kde";
-    QString path = QString(s.url).replace("%PREFIX", svnPrefix);
-    return VcsLocation(path);
+    
+    QPushButton* settings=new QPushButton(KIcon("configure"), i18n("Settings"), this);
+    settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    connect(settings, SIGNAL(clicked()), SLOT(showSettings()));
+    
+    layout()->addWidget(settings);
+    
+    m_dialog = new KConfigDialog(this, "settings", KDEProviderSettings::self());
+    m_dialog->setFaceType(KPageDialog::Auto);
+    QWidget* page = new QWidget(m_dialog);
+    Ui::KDEConfig().setupUi(page);
+    
+    m_dialog->addPage(page, i18n("General") );
+    connect(m_dialog, SIGNAL(settingsChanged(const QString&)), this, SLOT(loadSettings()));
 }
 
 VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
@@ -91,19 +112,18 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const KUrl& destinationDirectory)
     if(pos<0)
         return 0;
     
-    VcsJob* ret=0;
     const Source& s = kdeProjects[pos];
-    if(s.type==Source::SVN) {
-        IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevsubversion");
-        
-        IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
-        ret = vcIface->createWorkingCopy(svnLocation(s), destinationDirectory);
-    } else { //Git
-        IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", "kdevgit");
-        IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
-        
-        ret = vcIface->createWorkingCopy(VcsLocation(KUrl(s.url)), destinationDirectory);
-    }
+    IPlugin* plugin = ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IBasicVersionControl", s.plugin());
+    IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
+    VcsJob* ret = vcIface->createWorkingCopy(s.location(), destinationDirectory);
+    
     return ret;
 }
 
+void KDEProviderWidget::showSettings()
+{
+    if(KConfigDialog::showDialog("kdesettings"))
+        return;
+    
+    m_dialog->show();
+}
