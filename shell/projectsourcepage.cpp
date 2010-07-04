@@ -109,11 +109,24 @@ IProjectProvider* ProjectSourcePage::providerPerIndex(int index)
         return p->extension<KDevelop::IProjectProvider>();
 }
 
+VcsJob* ProjectSourcePage::jobPerCurrent()
+{
+    KUrl url=m_ui->workingDir->url();
+    IPlugin* p=m_plugins[m_ui->sources->currentIndex()];
+    VcsJob* job=0;
+    
+    if(IBasicVersionControl* iface=p->extension<IBasicVersionControl>()) {
+        Q_ASSERT(iface && m_locationWidget);
+        job=iface->createWorkingCopy(m_locationWidget->location(), url);
+    } else if(m_providerWidget) {
+        job=m_providerWidget->createWorkingCopy(url);
+    }
+    Q_ASSERT(job);
+    return job;
+}
+
 void ProjectSourcePage::getVcsProject()
 {
-    IBasicVersionControl* iface=vcsPerIndex(m_ui->sources->currentIndex());
-    Q_ASSERT(iface && m_locationWidget);
-
     emit isCorrect(false);
     KUrl url=m_ui->workingDir->url();
     QDir d(url.toLocalFile());
@@ -125,9 +138,9 @@ void ProjectSourcePage::getVcsProject()
         }
     }
     
-    VcsJob* job=iface->createWorkingCopy(m_locationWidget->location(), url);
-    m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
+    VcsJob* job=jobPerCurrent();
     
+    m_ui->creationProgress->setValue(m_ui->creationProgress->minimum());
     connect(job, SIGNAL(result(KJob*)), SLOT(projectReceived(KJob*)));
     connect(job, SIGNAL(percent(KJob*, unsigned long)), SLOT(progressChanged(KJob*, unsigned long)));
     connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(infoMessage(KJob*,QString,QString)));

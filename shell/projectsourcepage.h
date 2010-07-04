@@ -18,8 +18,8 @@ class KUrl;
 namespace Ui { class ProjectSourcePage; }
 namespace KDevelop
 {
-
-class IProjectProvider;
+    class VcsJob;
+    class IProjectProvider;
     class IProjectProviderWidget;
     class IPlugin;
     class IBasicVersionControl;
@@ -50,6 +50,7 @@ class ProjectSourcePage : public QWidget
         
         KDevelop::IBasicVersionControl* vcsPerIndex(int index);
         KDevelop::IProjectProvider* providerPerIndex(int index);
+        KDevelop::VcsJob* jobPerCurrent();
         
         Ui::ProjectSourcePage* m_ui;
         QList<KDevelop::IPlugin*> m_plugins;
