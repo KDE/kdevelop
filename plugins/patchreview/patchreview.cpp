@@ -1030,14 +1030,8 @@ void PatchHighlighter::clear()
     
     QMutexLocker lock(smart->smartMutex());
 
-    while(!m_ranges.isEmpty()) {
-      KTextEditor::SmartRange* range = *m_ranges.begin();
-      range->removeWatcher(this);
-      foreach(KTextEditor::SmartRange* child, range->childRanges()) {
-        child->removeWatcher(this);
-      }
+    while(!m_ranges.isEmpty())
       delete *m_ranges.begin();
-    }
 
     Q_ASSERT(m_ranges.isEmpty());
     Q_ASSERT(m_differencesForRanges.isEmpty());
