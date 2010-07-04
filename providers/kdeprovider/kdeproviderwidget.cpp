@@ -61,21 +61,21 @@ const uint nOfKDEProjects = 15;
 Source kdeProjects[nOfKDEProjects] = {
     //SVN - kde modules
     Source("applications-system", "kdebase", Source::SVN, "%PREFIX/trunk/KDE/kdebase"),
-    Source("kdebindings", "kdebindings", Source::SVN, "%PREFIX/trunk/KDE/kdebindings"),
+    Source("", "kdebindings", Source::SVN, "%PREFIX/trunk/KDE/kdebindings"),
     Source("applications-education-university", "kdeedu", Source::SVN, "%PREFIX/trunk/KDE/kdeedu"),
     Source("applications-games", "kdegames", Source::SVN, "%PREFIX/trunk/KDE/kdegames"),
     Source("applications-graphics", "kdegraphics", Source::SVN, "%PREFIX/trunk/KDE/kdegraphics"),
-    Source("kdelibs", "kdelibs", Source::SVN, "%PREFIX/trunk/KDE/kdelibs"),
+    Source("", "kdelibs", Source::SVN, "%PREFIX/trunk/KDE/kdelibs"),
     Source("applications-multimedia", "kdemultimedia", Source::SVN, "%PREFIX/trunk/KDE/kdemultimedia"),
     Source("applications-internet", "kdenetwork", Source::SVN, "%PREFIX/trunk/KDE/kdenetwork"),
     Source("kontact", "kdepim", Source::SVN, "%PREFIX/trunk/KDE/kdepim"),
-    Source("kdepimlibs", "kdepimlibs", Source::SVN, "%PREFIX/trunk/KDE/kdepimlibs"),
+    Source("", "kdepimlibs", Source::SVN, "%PREFIX/trunk/KDE/kdepimlibs"),
     Source("plasma", "kdeplasma-addons", Source::SVN, "%PREFIX/trunk/KDE/kdeplasma-addons"),
     Source("applications-development", "kdesdk", Source::SVN, "%PREFIX/trunk/KDE/kdesdk"),
-    Source("kdesupport", "kdesupport", Source::SVN, "%PREFIX/trunk/kdesupport"),
+    Source("", "kdesupport", Source::SVN, "%PREFIX/trunk/kdesupport"),
     
     //GIT
-    Source("kdevplatform", "kdevplatform", Source::Git, "git@gitorious.org:kdevplatform/kdevplatform.git"),
+    Source("", "kdevplatform", Source::Git, "git@gitorious.org:kdevplatform/kdevplatform.git"),
     Source("kdevelop", "kdevelop", Source::Git, "git@gitorious.org:kdevelop/kdevelop.git")
 };
 }
