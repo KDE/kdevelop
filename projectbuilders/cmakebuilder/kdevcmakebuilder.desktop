@@ -35,6 +35,7 @@ GenericName[fr]=Constructeur de projets
 GenericName[nl]=Projectbouwer
 GenericName[pt]=Construtor de Projectos
 GenericName[pt_BR]=Construtor de Projetos
+GenericName[sv]=Projektbyggverktyg
 GenericName[uk]=Збирання проектів
 GenericName[x-test]=xxProject Builderxx
 Comment=Builds CMake Projects
