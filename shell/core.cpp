@@ -54,6 +54,7 @@
 #include "debugcontroller.h"
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
+#include "dashboardcontroller.h"
 #include <KMessageBox>
 
 namespace KDevelop {
@@ -159,6 +160,11 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     {
         debugController = new DebugController(m_core);
     }
+    
+    if( !dashboardController )
+    {
+        dashboardController = new DashboardController(m_core);
+    }
 
     kDebug() << "initializing ui controller";
     sessionController->initialize( session );
@@ -228,6 +234,7 @@ CorePrivate::~CorePrivate()
     delete sourceFormatterController;
     delete documentationController;
     delete debugController;
+    delete dashboardController;
     delete workingSetController;
 }
 
@@ -436,6 +443,11 @@ IDebugController* Core::debugController()
 DebugController* Core::debugControllerInternal()
 {
     return d->debugController;
+}
+
+IDashboardController* Core::dashboardController()
+{
+    return d->dashboardController;
 }
 
 WorkingSetController* Core::workingSetControllerInternal()

@@ -36,6 +36,7 @@ set(kdevplatformshell_LIB_SRCS
     documentationcontroller.cpp
     documentationview.cpp
     debugcontroller.cpp
+    dashboardcontroller.cpp
     launchconfiguration.cpp
     launchconfigurationdialog.cpp
     loadedpluginsdialog.cpp
