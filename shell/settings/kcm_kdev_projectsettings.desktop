@@ -11,6 +11,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 
 Name=Projects
+Name[bg]=Проекти
 Name[ca]=Projectes
 Name[ca@valencia]=Projectes
 Name[cs]=Projekty
@@ -34,6 +35,7 @@ Name[x-test]=xxProjectsxx
 Name[zh_CN]=工程
 Name[zh_TW]=專案
 Comment=Configure Projects
+Comment[bg]=Настройки на проекти
 Comment[ca]=Configura els projectes
 Comment[ca@valencia]=Configura els projectes
 Comment[cs]=Nastavit projekty

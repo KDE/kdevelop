@@ -39,6 +39,7 @@ Name[x-test]=xxBackground Parserxx
 Name[zh_CN]=后台解析
 Name[zh_TW]=背景剖析器
 Comment=Configure Background Parser
+Comment[bg]=Настройки на фонов анализатор на синтаксиса
 Comment[ca]=Configura l'analitzador en segon pla
 Comment[ca@valencia]=Configura l'analitzador en segon pla
 Comment[da]=Indstil baggrundsfortolker
