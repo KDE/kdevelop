@@ -60,6 +60,7 @@ private Q_SLOTS:
     void slotAddBlankAccessWatchpoint();
     void slotRemoveBreakpoint();
     void slotUpdateBreakpointDetail();
+    void slotRowClicked(const QModelIndex& index);
     void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
     void breakpointHit(KDevelop::Breakpoint *b);
 

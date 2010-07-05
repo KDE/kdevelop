@@ -39,6 +39,8 @@
 #include "../../shell/debugcontroller.h"
 
 #define IF_DEBUG(x)
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 using namespace KDevelop;
 
@@ -72,6 +74,7 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
 
     table_->setModel(m_debugController->breakpointModel());
 
+    connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotRowClicked(QModelIndex)));
     connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
@@ -327,6 +330,17 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     pop->setView("", msg);
     pop->setTimeout(-1);
     pop->show(p);
+}
+
+void BreakpointWidget::slotRowClicked(const QModelIndex& index)
+{
+    if (index.column() != Breakpoint::LocationColumn)
+        return;
+    Breakpoint *bp = static_cast<BreakpointModel*>(table_->model())->breakpoint(index.row());
+    if (!bp)
+        return;
+   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0));
+   
 }
 
 #include "breakpointwidget.moc"
