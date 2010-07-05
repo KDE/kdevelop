@@ -56,6 +56,7 @@
 #include "missingincludemodel.h"
 #include <templateparameterdeclaration.h>
 #include <language/duchain/classdeclaration.h>
+#include "qpropertydeclaration.h"
 
 // #define ifDebug(x) x
 
@@ -1767,7 +1768,7 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     if(classMember)
       return filterDeclaration(classMember, declarationContext, typeIsConst);
   }
-  
+
   return true;
 }
 
@@ -1777,6 +1778,10 @@ bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUC
       return false;
     if(!Cpp::isAccessible(m_localClass ? m_localClass.data() : m_duContext.data(), decl, m_duContext->topContext(), declarationContext))
       return false;
+  }
+  // filter properties from code completion, they mostly have to be accessed via their getter/setters
+  if (QPropertyDeclaration* property = dynamic_cast<QPropertyDeclaration*>(property)) {
+    return false;
   }
   return filterDeclaration((Declaration*)decl, declarationContext, false);
 }

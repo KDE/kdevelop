@@ -53,6 +53,7 @@
 #include "cppduchain/missingdeclarationassistant.h"
 #include <qstandarditemmodel.h>
 #include <language/duchain/functiondefinition.h>
+#include "qpropertydeclaration.h"
 
 #include <language/codecompletion/codecompletiontesthelper.h>
 #include <language/duchain/persistentsymboltable.h>
@@ -2101,6 +2102,67 @@ void TestCppCodeCompletion::testStaticMethods()
   release(top);
 }
 
+void TestCppCodeCompletion::testStringInComment_data()
+{
+  QTest::addColumn<QString>("prefix");
+
+  QTest::newRow("cpp comment") << QString("/* \" */\n");
+  QTest::newRow("c comment") << QString("// \"\n");
+}
+
+void TestCppCodeCompletion::testStringInComment()
+{
+  QByteArray code("");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QVERIFY(top->problems().isEmpty());
+
+  QFETCH(QString, prefix);
+
+  CompletionItemTester complCtx(top, prefix);
+  QVERIFY(complCtx.completionContext->isValid());
+}
+
+void TestCppCodeCompletion::testProperties()
+{
+  QByteArray code("struct A{\n__qt_property__(bool myProp READ prop); function foo() {}\n}; A aStack; A* aHeap = new A;");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QVERIFY(top->problems().isEmpty());
+  QCOMPARE(top->findDeclarations(QualifiedIdentifier("A::myProp")).count(), 1);
+  QVERIFY(dynamic_cast<Cpp::QPropertyDeclaration*>(top->findDeclarations(QualifiedIdentifier("A::myProp")).first()));
+
+  {
+  CompletionItemTester complCtx(top, "");
+  QVERIFY(complCtx.completionContext->isValid());
+  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
+  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  }
+  {
+  CompletionItemTester complCtx(top, "aStack.");
+  QVERIFY(complCtx.completionContext->isValid());
+  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::MemberAccess);
+  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  }
+  {
+  CompletionItemTester complCtx(top, "aHeap->");
+  QVERIFY(complCtx.completionContext->isValid());
+  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::ArrowMemberAccess);
+  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  }
+  {
+  CompletionItemTester complCtx(top->childContexts().first(), "");
+  QVERIFY(complCtx.completionContext->isValid());
+  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
+  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  }
+  {
+  CompletionItemTester complCtx(top->childContexts().first()->childContexts().last(), "");
+  QVERIFY(complCtx.completionContext->isValid());
+  QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
+  QVERIFY(!complCtx.names.contains(QString("myProp")));
+  }
+}
 
 class TestPreprocessor : public rpp::Preprocessor
 {
