@@ -171,6 +171,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * @returns status information wether the renaming succeeded.
          */
         virtual RenameStatus rename( const QString& newname );
+        
+        bool isProjectRoot() const;
 
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
