@@ -38,6 +38,8 @@ AppletSelector::AppletSelector(QWidget* parent)
     m_ui = new Ui::AppletSelector;
     m_ui->setupUi(w);
     
+    m_ui->plugins->header()->setSortIndicator(0, Qt::AscendingOrder);
+    
     setMainWidget(w);
     
     QStandardItemModel* model = new QStandardItemModel(this);
