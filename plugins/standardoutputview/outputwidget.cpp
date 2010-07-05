@@ -77,10 +77,6 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
-    copyAction = KStandardAction::copy(this);
-    copyAction->setShortcut(KShortcut());
-    connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
-    addAction(copyAction);
     activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
     addAction(activateOnSelect);
     activateOnSelect->setChecked( true );
@@ -88,6 +84,14 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     addAction(focusOnSelect);
     focusOnSelect->setChecked( false );
 
+    QAction *separator = new QAction(this);
+    separator->setSeparator(true);
+    addAction(separator);
+    
+    copyAction = KStandardAction::copy(this);
+    copyAction->setShortcut(KShortcut());
+    connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
+    addAction(copyAction);
 
     connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
