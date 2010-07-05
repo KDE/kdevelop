@@ -20,7 +20,10 @@
    <item row="0" column="0">
     <widget class="QLabel" name="snippetName">
      <property name="text">
-      <string>Name:</string>
+      <string>&amp;Name:</string>
+     </property>
+     <property name="buddy">
+      <cstring>snippetNameEdit</cstring>
      </property>
     </widget>
    </item>
@@ -35,7 +38,10 @@
    <item row="1" column="0">
     <widget class="QLabel" name="snippetPrefixLabel">
      <property name="text">
-      <string>Display Prefix:</string>
+      <string>Display &amp;Prefix:</string>
+     </property>
+     <property name="buddy">
+      <cstring>snippetPrefixEdit</cstring>
      </property>
     </widget>
    </item>
@@ -49,7 +55,10 @@
    <item row="2" column="0">
     <widget class="QLabel" name="snippetArgumentsLabel">
      <property name="text">
-      <string>Display Arguments:</string>
+      <string>Display &amp;Arguments:</string>
+     </property>
+     <property name="buddy">
+      <cstring>snippetArgumentsEdit</cstring>
      </property>
     </widget>
    </item>
@@ -63,7 +72,10 @@
    <item row="3" column="0">
     <widget class="QLabel" name="snippetPostfixLabel">
      <property name="text">
-      <string>Display Postfix:</string>
+      <string>Display P&amp;ostfix:</string>
+     </property>
+     <property name="buddy">
+      <cstring>snippetPostfixEdit</cstring>
      </property>
     </widget>
    </item>
@@ -77,7 +89,10 @@
    <item row="5" column="0">
     <widget class="QLabel" name="snippetContentsLabel">
      <property name="text">
-      <string>Snippet:</string>
+      <string>&amp;Snippet:</string>
+     </property>
+     <property name="buddy">
+      <cstring>snippetContentsEdit</cstring>
      </property>
     </widget>
    </item>
