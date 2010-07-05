@@ -30,6 +30,8 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStackedWidget>
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -37,6 +39,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <ktabwidget.h>
+#include <kstandardaction.h>
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
@@ -74,6 +77,10 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
         addAction(nextAction);
     }
 
+    copyAction = KStandardAction::copy(this);
+    copyAction->setShortcut(KShortcut());
+    connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
+    addAction(copyAction);
     activateOnSelect = new KToggleAction( KIcon(), i18n("Select activated Item"), this );
     addAction(activateOnSelect);
     activateOnSelect->setChecked( true );
@@ -102,6 +109,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 void OutputWidget::addOutput( int id )
 {
     QTreeView* listview = createListView(id);
+    listview->setSelectionMode(QAbstractItemView::ContiguousSelection);
     setCurrentWidget( listview );
     connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
@@ -431,5 +439,25 @@ void OutputWidget::scrollToIndex( const QModelIndex& idx )
     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(w);
     view->scrollTo( idx );
 }
+
+void OutputWidget::copySelection()
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    QClipboard *cb = QApplication::clipboard();
+    QModelIndexList indexes = view->selectionModel()->selectedRows();
+    QString content;
+    Q_FOREACH( QModelIndex index, indexes) {
+      content += view->model()->data(index).toString() + "\n";
+    }
+    cb->setText(content);
+}
+
+
 
 #include "outputwidget.moc"
