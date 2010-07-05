@@ -17,27 +17,6 @@
       <string>Executable</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="projectTargetRadio">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="ProjectItemLineEdit" name="projectTarget">
-          <property name="clickMessage">
-           <string>Enter a project target as path in the tree</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -57,6 +36,27 @@
           </property>
           <property name="clickMessage">
            <string>Enter the executable name or absolute path to an executable file</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="projectTargetRadio">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="ProjectItemLineEdit" name="projectTarget">
+          <property name="clickMessage">
+           <string>Enter a project target as path in the tree</string>
           </property>
          </widget>
         </item>
@@ -151,7 +151,7 @@
         </property>
        </widget>
       </item>
-      </layout>
+     </layout>
     </widget>
    </item>
    <item>
@@ -192,7 +192,7 @@
          <string>Removes the selected dependencies from the list.</string>
         </property>
         <property name="text">
-         <string></string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -205,7 +205,7 @@
          <string>Move a dependency up in the list.</string>
         </property>
         <property name="text">
-         <string></string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -218,7 +218,7 @@
          <string>Moves the selected dependency down in the list.</string>
         </property>
         <property name="text">
-         <string></string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -244,7 +244,7 @@
          <string>Adds the listed target to the dependency list.</string>
         </property>
         <property name="text">
-         <string></string>
+         <string/>
         </property>
        </widget>
       </item>
@@ -272,11 +272,6 @@
         <item>
          <property name="text">
           <string>Build and Install</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Build and Install (as Superuser)</string>
          </property>
         </item>
        </widget>
@@ -355,7 +350,6 @@
   <tabstop>arguments</tabstop>
   <tabstop>workingDirectory</tabstop>
   <tabstop>environment</tabstop>
-  <tabstop>runInTerminal</tabstop>
   <tabstop>targetDependency</tabstop>
   <tabstop>addDependency</tabstop>
   <tabstop>dependencies</tabstop>
