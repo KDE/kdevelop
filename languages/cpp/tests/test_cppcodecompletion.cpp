@@ -2101,6 +2101,26 @@ void TestCppCodeCompletion::testStaticMethods()
   release(top);
 }
 
+void TestCppCodeCompletion::testStringInComment_data()
+{
+  QTest::addColumn<QString>("prefix");
+
+  QTest::newRow("cpp comment") << QString("/* \" */\n");
+  QTest::newRow("c comment") << QString("// \"\n");
+}
+
+void TestCppCodeCompletion::testStringInComment()
+{
+  QByteArray code("");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock(DUChain::lock());
+  QVERIFY(top->problems().isEmpty());
+
+  QFETCH(QString, prefix);
+
+  CompletionItemTester complCtx(top, prefix);
+  QVERIFY(complCtx.completionContext->isValid());
+}
 
 class TestPreprocessor : public rpp::Preprocessor
 {

@@ -115,6 +115,8 @@ private slots:
   void testStringProblem();
   void testArgumentList();
   void testStaticMethods();
+  void testStringInComment_data();
+  void testStringInComment();
 
 public:
   enum DumpArea {
