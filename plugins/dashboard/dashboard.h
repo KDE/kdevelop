@@ -28,7 +28,7 @@ class dashboard : public Plasma::View
     private slots:
         void init();
         void updateView();
-        void updateConfigurationMode(bool);
+        void showAppletsSwitcher();
         void addApplet(const QString& name);
         void addApplet(IDashboardPlasmoidFactory* w);
         void addApplet(IDashboardWidgetFactory* w);
