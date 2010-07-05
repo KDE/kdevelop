@@ -9,6 +9,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projecttreeview.cpp
     projectbuildsetwidget.cpp
     builditembuilderjob.cpp
+    projectdashboardwidget.cpp
 )
 
 kde4_add_ui_files( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
