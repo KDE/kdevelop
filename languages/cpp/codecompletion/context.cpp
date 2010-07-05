@@ -1780,7 +1780,7 @@ bool  CodeCompletionContext::filterDeclaration(ClassMemberDeclaration* decl, DUC
       return false;
   }
   // filter properties from code completion, they mostly have to be accessed via their getter/setters
-  if (QPropertyDeclaration* property = dynamic_cast<QPropertyDeclaration*>(property)) {
+  if (QPropertyDeclaration* property = dynamic_cast<QPropertyDeclaration*>(decl)) {
     return false;
   }
   return filterDeclaration((Declaration*)decl, declarationContext, false);
