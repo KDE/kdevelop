@@ -101,6 +101,11 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   //END setup tooltips
 
   //BEGIN item to UI copying
+  if ( item->text().isEmpty() ) {
+    setWindowTitle( i18n("Create new external script") );
+  } else {
+    setWindowTitle( i18n("Edit external script '%1'", item->text()) );
+  }
   nameEdit->setText( item->text() );
   commandEdit->setText( item->command() );
   stdinCombo->setCurrentIndex( item->inputMode() );
