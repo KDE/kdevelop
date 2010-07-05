@@ -224,12 +224,19 @@ QStringList MakeJob::computeBuildCommand() const
     {
         int suCommand = builderGroup.readEntry("Su Command", 0);
         QStringList kdesuline;
-        QString suCommandName = "kdesu";
-        if (suCommand == 1)
-            suCommandName = "kdesudo";
-        else if (suCommand == 2)
-            suCommandName = "sudo";
-        kdesuline << suCommandName << "-t" << "-c" << cmdline;
+        QStringList arguments;
+        QString suCommandName;
+        if (suCommand == 1) {
+          suCommandName = "kdesudo";
+          arguments << "-t" << "-c" << cmdline;
+        } else if (suCommand == 2) {
+          suCommandName = "sudo";
+          arguments << cmdline;
+        } else { //default
+          suCommandName = "kdesu";   
+          arguments << "-t" << "-c" << cmdline;
+        }
+        kdesuline << suCommandName << arguments;
         cmdline = kdesuline;
     }
 
