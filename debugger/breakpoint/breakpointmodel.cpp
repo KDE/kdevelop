@@ -115,19 +115,29 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 QVariant 
 BreakpointModel::headerData(int section, Qt::Orientation orientation,
                                  int role) const
-{ 
-    if (orientation == Qt::Horizontal && role == Qt::DecorationRole
-        && section == 0)
-        return KIcon("dialog-ok-apply");
-    else if (orientation == Qt::Horizontal && role == Qt::DecorationRole
-             && section == 1)
-        return KIcon("system-switch-user");
+{
+    if (orientation == Qt::Vertical)
+        return QVariant();
+    
+    if (role == Qt::DecorationRole ) {
+        if (section == 0)
+            return KIcon("dialog-ok-apply");
+        else if (section == 1)
+            return KIcon("system-switch-user");
+    }
 
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole) {
         if (section == 0 || section == 1) return "";
         if (section == 2) return i18n("Type");
         if (section == 3) return i18n("Location");
         if (section == 4) return i18n("Condition");
+    }
+
+    if (role == Qt::ToolTipRole) {
+        if (section == 0) return i18n("Active status");
+        if (section == 1) return i18n("State");
+        return headerData(section, orientation, Qt::DisplayRole);
+        
     }
     return QVariant();
 }
