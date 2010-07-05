@@ -98,18 +98,15 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="KLineEdit" name="repoFileTypesEdit">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="clickMessage">
-          <string>leave empty for general purpose snippets</string>
-         </property>
-        </widget>
-       </item>
        <item row="5" column="0" colspan="2">
         <widget class="QListWidget" name="repoFileTypesList"/>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLabel" name="repoFileTypesListLabel">
+         <property name="text">
+          <string notr="true">list of selected filetypes</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
