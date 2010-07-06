@@ -56,7 +56,7 @@
 #include <sublime/mainwindow.h>
 
 #include "tests/modeltest.h"
-#include "projectproxymodel.h"
+#include <project/projectproxymodel.h>
 #include "projectmanagerviewplugin.h"
 #include "ui_projectmanagerview.h"
 
