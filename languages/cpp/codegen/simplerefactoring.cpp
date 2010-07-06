@@ -392,7 +392,7 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
 
   // if renaming a ctor, use the class instead which will trigger renaming of all ctors as well
   if(ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(declaration)) {
-    if (cFunc->isConstructor() && cFunc->context() && cFunc->context()->type() == DUContext::Class && cFunc->context()->owner()) {
+    if ((cFunc->isConstructor() || cFunc->isDestructor()) && cFunc->context() && cFunc->context()->type() == DUContext::Class && cFunc->context()->owner()) {
       declaration = cFunc->context()->owner();
     }
   }
