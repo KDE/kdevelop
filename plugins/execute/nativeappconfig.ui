@@ -17,6 +17,29 @@
       <string>Executable</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QRadioButton" name="projectTargetRadio">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="ProjectTargetsComboBox" name="projectTarget"/>
+        </item>
+       </layout>
+      </item>
       <item row="1" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
@@ -36,27 +59,6 @@
           </property>
           <property name="clickMessage">
            <string>Enter the executable name or absolute path to an executable file</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QRadioButton" name="projectTargetRadio">
-          <property name="text">
-           <string/>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="ProjectItemLineEdit" name="projectTarget">
-          <property name="clickMessage">
-           <string>Enter a project target as path in the tree</string>
           </property>
          </widget>
         </item>
@@ -341,10 +343,14 @@
    <extends>KLineEdit</extends>
    <header>project/projectitemlineedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>ProjectTargetsComboBox</class>
+   <extends>QComboBox</extends>
+   <header>projecttargetscombobox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>projectTargetRadio</tabstop>
-  <tabstop>projectTarget</tabstop>
   <tabstop>executableRadio</tabstop>
   <tabstop>executablePath</tabstop>
   <tabstop>arguments</tabstop>
@@ -362,22 +368,6 @@
   <connection>
    <sender>projectTargetRadio</sender>
    <signal>toggled(bool)</signal>
-   <receiver>projectTarget</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>142</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>337</x>
-     <y>60</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>projectTargetRadio</sender>
-   <signal>toggled(bool)</signal>
    <receiver>executablePath</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
@@ -388,22 +378,6 @@
     <hint type="destinationlabel">
      <x>384</x>
      <y>92</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>executableRadio</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>projectTarget</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>142</x>
-     <y>87</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>473</x>
-     <y>60</y>
     </hint>
    </hints>
   </connection>

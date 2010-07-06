@@ -1,5 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2009 Andreas Pakulat <apaku@gmx.de>
+    Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -43,6 +44,7 @@
 #include <util/kdevstringhandler.h>
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
+#include "projecttargetscombobox.h"
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -60,14 +62,9 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
     } else 
     {
-        if( project )
-        {
-            projectTarget->setBaseItem( project->projectItem() );
-        } else {
-            projectTarget->setBaseItem( 0 );
-        }
+        projectTarget->setBaseItem( project->projectItem() );
+        projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
         projectTargetRadio->setChecked( true );
-        projectTarget->setItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
     }
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
@@ -231,7 +228,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
         cfg.deleteEntry( ExecutePlugin::projectTargetEntry );
     } else
     {
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->itemPath() );
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->currentItemPath() );
         cfg.deleteEntry( ExecutePlugin::executableEntry );
     }
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );
