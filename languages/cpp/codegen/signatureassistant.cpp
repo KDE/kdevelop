@@ -233,12 +233,13 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
         kDebug() << "no correct function context";
         return;
       }
-      
+
       DocumentChangeSet changes;
       DocumentChange changeParameters(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data()));
       changeParameters.m_ignoreOldText = true;
       changes.addChange( changeParameters );
       if (m_oldSignature.isConst != m_newSignature.isConst) {
+        ///TODO: also use code representation here
         SimpleRange range = functionContext->range();
         // go after closing paren
         range.end.column++;
@@ -254,6 +255,20 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
         }
         DocumentChange changeConstness(functionContext->url(), range, oldText, newText);
         changes.addChange(changeConstness);
+      }
+      if (m_oldSignature.returnType != m_newSignature.returnType) {
+        CodeRepresentation::Ptr document = createCodeRepresentation(functionContext->url());
+        int l = functionContext->range().start.line;
+        QString line = document->line(l);
+        QRegExp exe( QString("^(\\s*)(.+)\\s+(?:\\w+::)*\\b%1\\s*\\(").arg(otherSide->identifier().toString()), Qt::CaseSensitive, QRegExp::RegExp2 );
+        int pos = exe.indexIn(line);
+        if (pos != -1) {
+          QString oldText = exe.cap(2);
+          SimpleRange range = SimpleRange(l, exe.cap(1).length(), l, exe.cap(1).length() + oldText.length());
+          QString newText = Cpp::simplifiedTypeString(m_newSignature.returnType.abstractType(), functionContext->parentContext());
+          DocumentChange changeRetType(functionContext->url(), range, oldText, newText);
+          changes.addChange(changeRetType);
+        }
       }
       changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
       DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
@@ -361,8 +376,10 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
           for(QList<QString>::iterator it = newSignature.defaultParams.begin(); it != newSignature.defaultParams.end(); ++it)
             *it = QString();
         }
-          
-        if(changed /*|| newSignature.returnType != m_oldSignature.returnType*/) {
+
+        changed = changed || newSignature.returnType != m_oldSignature.returnType;
+
+        if(changed) {
           kDebug() << "signature changed";
           addAction(IAssistantAction::Ptr(new AdaptSignatureAction(m_definitionId, m_definitionContext, m_oldSignature, newSignature)));
         }else{
