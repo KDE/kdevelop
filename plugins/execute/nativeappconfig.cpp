@@ -51,6 +51,11 @@ KIcon NativeAppConfigPage::icon() const
     return KIcon("system-run");
 }
 
+static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop::ProjectModel* model)
+{
+    return model->itemFromIndex(model->pathToIndex(path));
+}
+
 //TODO: Make sure to auto-add the executable target to the dependencies when its used.
 
 void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject* project ) 
@@ -74,7 +79,11 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
     foreach( const QVariant& dep, deps ) {
-        QListWidgetItem* item = new QListWidgetItem( KDevelop::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
+        QStringList deplist = dep.toStringList();
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        KIcon icon = KIcon(itemForPath(deplist, model)->iconName());
+        
+        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
     }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
@@ -198,11 +207,16 @@ void NativeAppConfigPage::moveDependencyUp()
 
 void NativeAppConfigPage::addDep()
 {
-    QListWidgetItem* item = new QListWidgetItem( targetDependency->text(), dependencies );
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    KIcon icon = KIcon(itemForPath(KDevelop::splitWithEscaping(targetDependency->text(),'/', '\\'), model)->iconName());
+
+    QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
     item->setData( Qt::UserRole, targetDependency->itemPath() );
     targetDependency->setText("");
     addDependency->setEnabled( false );
-    dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    dependencies->selectionModel()->clearSelection();
+    item->setSelected(true);
+//     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
 }
 
 void NativeAppConfigPage::removeDep()
