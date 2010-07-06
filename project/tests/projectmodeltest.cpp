@@ -19,6 +19,7 @@
 
 #include "projectmodeltest.h"
 #include <QtTest/QTest>
+#include <QtGui/QSortFilterProxyModel>
 #include <qtest_kde.h>
 
 #include <projectmodel.h>
@@ -176,6 +177,23 @@ void ProjectModelTest::testCreateTargetItems_data()
         << QString::fromLatin1("libtarget")
         << ( QStringList() << "libtarget" )
         << 0;
+}
+
+void ProjectModelTest::testChangeWithProxyModel()
+{
+    QSortFilterProxyModel* proxy = new QSortFilterProxyModel( this );
+    proxy->setSourceModel( model );
+    ProjectFolderItem* root = new ProjectFolderItem( 0, KUrl("file:///folder1") );
+    root->appendRow( new ProjectFileItem( 0, KUrl("file:///folder1/file1") ) );
+    model->appendRow( root );
+
+    QCOMPARE( model->rowCount(), 1 );
+    QCOMPARE( proxy->rowCount(), 1 );
+
+    model->removeRow( 0 );
+
+    QCOMPARE( model->rowCount(), 0 );
+    QCOMPARE( proxy->rowCount(), 0 );
 }
 
 void ProjectModelTest::testCreateSimpleHierarchy()
