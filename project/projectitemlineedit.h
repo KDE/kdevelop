@@ -56,10 +56,18 @@ public:
      * and can just start typing the name of one of the subitems
      */
     void setBaseItem( KDevelop::ProjectBaseItem* item );
+    
     /**
      * @returns the currently used base item
      */
     KDevelop::ProjectBaseItem* baseItem() const;
+    
+public slots:
+    void selectItemDialog();
+    
+private slots:
+    void showCtxMenu(const QPoint& p);
+    
 private:
     KDevelop::ProjectBaseItem* m_base;
     ProjectItemCompleter* m_completer;

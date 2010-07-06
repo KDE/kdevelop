@@ -81,7 +81,10 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     foreach( const QVariant& dep, deps ) {
         QStringList deplist = dep.toStringList();
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-        KIcon icon = KIcon(itemForPath(deplist, model)->iconName());
+        KDevelop::ProjectBaseItem* pitem=itemForPath(deplist, model);
+        KIcon icon;
+        if(pitem)
+            icon=KIcon(pitem->iconName());
         
         QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
@@ -110,6 +113,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
 
     KDevelop::EnvironmentGroupList env( KGlobal::config() );
     environment->addItems( env.groups() );
+    browseProject->setIcon(KIcon("folder-document"));
 
 
     //connect signals to changed signal
@@ -136,6 +140,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
     connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
+    connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
 }
 
 
@@ -208,7 +213,10 @@ void NativeAppConfigPage::moveDependencyUp()
 void NativeAppConfigPage::addDep()
 {
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-    KIcon icon = KIcon(itemForPath(KDevelop::splitWithEscaping(targetDependency->text(),'/', '\\'), model)->iconName());
+    KIcon icon;
+    KDevelop::ProjectBaseItem* pitem = itemForPath(KDevelop::splitWithEscaping(targetDependency->text(),'/', '\\'), model);
+    if(pitem)
+        icon= KIcon(pitem->iconName());
 
     QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
     item->setData( Qt::UserRole, targetDependency->itemPath() );
