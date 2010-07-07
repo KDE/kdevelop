@@ -61,6 +61,7 @@ private slots:
     void previousOutput();
     void rowsInserted(const QModelIndex&, int, int);
     void copySelection();
+    void selectAll();
 
 private:
     QTreeView* createListView(int id);
@@ -76,7 +77,6 @@ private:
     QToolButton* m_closeButton;
     KAction* nextAction;
     KAction* previousAction;
-    KAction* copyAction;
     KToggleAction* activateOnSelect;
     KToggleAction* focusOnSelect;
 };

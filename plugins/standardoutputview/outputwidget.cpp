@@ -88,8 +88,13 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     separator->setSeparator(true);
     addAction(separator);
     
-    copyAction = KStandardAction::copy(this);
-//     copyAction->setShortcut(KShortcut());
+    KAction *selectAllAction = KStandardAction::selectAll(this);
+    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
+    selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));
+    addAction(selectAllAction);
+
+    KAction *copyAction = KStandardAction::copy(this);
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
     addAction(copyAction);
@@ -461,6 +466,18 @@ void OutputWidget::copySelection()
       content += view->model()->data(index).toString() + "\n";
     }
     cb->setText(content);
+}
+
+void OutputWidget::selectAll()
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    view->selectAll();
 }
 
 
