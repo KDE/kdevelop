@@ -7,7 +7,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/settings)
 
 set(patchreview_PART_SRCS      
     patchreview.cpp
-    documenthighlighter.cpp
     localpatchsource.cpp
     settings/diffsettings.cpp
     settings/settingsbase.cpp 
