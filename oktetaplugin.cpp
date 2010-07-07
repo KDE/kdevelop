@@ -46,10 +46,14 @@
 #include <structurestoolviewfactory.h>
 #include <structurestoolfactory.h>
 // KDev
+#include <project/projectmodel.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
 // KDE
+#include <KAction>
 #include <KAboutData>
 #include <KPluginFactory>
 
@@ -94,7 +98,57 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     addTool( uiController, new Kasten::BookmarksToolViewFactory, new Kasten::BookmarksToolFactory() );
 
     KDevelop::IDocumentController* documentController = core()->documentController();
-    documentController->registerDocumentForMimetype("audio/x-wav", mDocumentFactory);
+    documentController->registerDocumentForMimetype("application/octet-stream", mDocumentFactory);
+}
+
+ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
+{
+    mContextUrls.clear();
+
+    FileContext* fileContext = dynamic_cast<FileContext*>( context );
+    ProjectItemContext* projectItemContext = dynamic_cast<ProjectItemContext*>( context );
+    if( fileContext )
+        mContextUrls = fileContext->urls();
+    else if( projectItemContext ) 
+    {
+        foreach( ProjectBaseItem* item, projectItemContext->items() )
+        {
+            ProjectFileItem* file = item->file();
+            if( file )
+                mContextUrls << file->url();
+        }
+    }
+
+    if( ! mContextUrls.isEmpty() )
+    {
+        KAction* openAction = new KAction( i18n("Open As Byte Array"), this );
+        openAction->setIcon( KIcon("document-open") );
+        connect( openAction, SIGNAL(triggered()), SLOT(onOpenTriggered()) );
+
+        KDevelop::ContextMenuExtension contextMenuExtension;
+        contextMenuExtension.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
+        return contextMenuExtension;
+    }
+
+    return KDevelop::IPlugin::contextMenuExtension( context );
+}
+
+void OktetaPlugin::onOpenTriggered()
+{
+    KDevelop::ICore* core = KDevelop::ICore::self();
+    IDocumentController* documentController = core->documentController();
+
+    foreach( const KUrl& url, mContextUrls )
+    {
+        IDocument* existingDocument = documentController->documentForUrl(url);
+        if( existingDocument )
+            if( ! existingDocument->close() )
+                continue;
+
+        IDocument* createdDocument = mDocumentFactory->create( url, core );
+        if( createdDocument )
+            documentController->openDocument( createdDocument );
+    }
 }
 
 OktetaPlugin::~OktetaPlugin()

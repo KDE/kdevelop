@@ -28,6 +28,8 @@
 // Qt
 #include <QtCore/QVariantList>
 
+class KUrl;
+
 
 namespace KDevelop
 {
@@ -39,12 +41,19 @@ class OktetaPlugin: public IPlugin
     Q_OBJECT
 
   public:
-    OktetaPlugin( QObject* parent, const QVariantList& args = QVariantList() );
+    explicit OktetaPlugin( QObject* parent, const QVariantList& args = QVariantList() );
 
     virtual ~OktetaPlugin();
 
+  public: // KDevelop::IPlugin API
+    virtual ContextMenuExtension contextMenuExtension( Context* context );
+
+  private Q_SLOTS:
+    void onOpenTriggered();
+
   protected:
     OktetaDocumentFactory* mDocumentFactory;
+    QList<KUrl> mContextUrls;
 };
 
 }
