@@ -30,7 +30,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QTreeView>
+#include <QMenu>
 
+#include <KAction>
+#include <KStandardAction>
 #include <KDebug>
 #include <KLocalizedString>
 #include <KIcon>
@@ -40,6 +43,8 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../../interfaces/idocumentcontroller.h"
 #include "framestackmodel.h"
+#include <QApplication>
+#include <QClipboard>
 
 namespace KDevelop {
 
@@ -64,6 +69,26 @@ FramestackWidget::FramestackWidget(IDebugController* controller, QWidget* parent
     m_threads = new QListView(m_threadsWidget);    
     m_frames = new QTreeView(this);
     m_frames->setRootIsDecorated(false);
+    m_frames->setSelectionMode(QAbstractItemView::ContiguousSelection);
+    m_frames->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_frames->setAllColumnsShowFocus(true);
+    m_frames->setContextMenuPolicy(Qt::CustomContextMenu);
+    
+    m_framesContextMenu = new QMenu(m_frames);                                                                                
+
+    KAction *selectAllAction = KStandardAction::selectAll(m_frames);                                                                        
+    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?            
+    selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);                                                                
+    connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));                                                                   
+    m_framesContextMenu->addAction(selectAllAction);                                                                                                         
+                                                                                                                                        
+    KAction *copyAction = KStandardAction::copy(m_frames);                                                                                  
+    copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);                                                                     
+    connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));                                                                    
+    m_framesContextMenu->addAction(copyAction);
+    addAction(copyAction);
+    
+    connect(m_frames, SIGNAL(customContextMenuRequested(QPoint)), SLOT(frameContextMenuRequested(QPoint)));
     
     m_threadsWidget->setLayout(new QVBoxLayout());
     m_threadsWidget->layout()->addWidget(new QLabel(i18n("Threads:")));
@@ -173,6 +198,28 @@ void FramestackWidget::frameClicked(const QModelIndex& idx)
     }
 
     m_session->frameStackModel()->setCurrentFrame(f.nr);
+}
+
+void FramestackWidget::frameContextMenuRequested(const QPoint& pos)
+{
+    m_framesContextMenu->popup( m_frames->mapToGlobal(pos) + QPoint(0, m_frames->header()->height()) );
+}
+
+void FramestackWidget::copySelection()
+{
+    QClipboard *cb = QApplication::clipboard();                                                                                         
+    QModelIndexList indexes = m_frames->selectionModel()->selectedRows();                                                                   
+    QString content;                                                                                                                    
+    Q_FOREACH( QModelIndex index, indexes) {       
+        IFrameStackModel::FrameItem frame = m_session->frameStackModel()->frame(index);
+        content += QString("#%1 %2() at %3:%4\n").arg(frame.nr).arg(frame.name).arg(frame.file.pathOrUrl(KUrl::RemoveTrailingSlash)).arg(frame.line);
+    }                                                                                                                                   
+    cb->setText(content);                                                                                                               
+}
+
+void FramestackWidget::selectAll()
+{
+    m_frames->selectAll();
 }
 
 }
