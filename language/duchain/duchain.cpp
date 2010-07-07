@@ -780,7 +780,7 @@ public:
             QMutexLocker l(&m_referenceCountsMutex);
             //Test if the context is imported by a referenced one
             foreach(TopDUContext* context, m_referenceCounts.keys()) {
-              if(context == unload || context->imports(unload, SimpleCursor())) {
+              if(context == unload || context->imports(unload, CursorInRevision())) {
                 workOnContexts.remove(unload);
                 hasReference = true;
               }

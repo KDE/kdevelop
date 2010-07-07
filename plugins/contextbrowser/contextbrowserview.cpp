@@ -63,7 +63,7 @@ const int maxHistoryLength = 30;
 
 using namespace KDevelop;
 
-DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
+DUContext* contextAt(const CursorInRevision& position, TopDUContext* topContext)
 {
     DUContext* ctx = topContext->findContextAt(position);
     while(ctx && (ctx->type() == DUContext::Template || ctx->type() == DUContext::Helper || ctx->localScopeIdentifier().isEmpty()) && ctx->parentContext())
@@ -75,7 +75,7 @@ DUContext* contextAt(const SimpleCursor& position, TopDUContext* topContext)
 DUContext* getContextAt(KUrl url, KTextEditor::Cursor cursor) {
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
     if (!topContext) return 0;
-    return contextAt(SimpleCursor(cursor), topContext);
+    return contextAt(topContext->transformToLocalRevision(SimpleCursor(cursor)), topContext);
 }
 
 static bool useNavigationFromView(QObject* viewObject) {

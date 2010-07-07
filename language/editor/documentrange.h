@@ -22,6 +22,7 @@
 #include "../languageexport.h"
 #include "simplerange.h"
 #include <language/duchain/indexedstring.h>
+#include "rangeinrevision.h"
 
 namespace KDevelop
 {
@@ -30,7 +31,7 @@ class IndexedString;
 /**
  * Lightweight object that extends a range with information about the URL to which the range refers.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public KDevelop::SimpleRange
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public SimpleRange
 {
 public:
     DocumentRange() {

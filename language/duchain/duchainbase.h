@@ -21,6 +21,7 @@
 #define DUCHAINBASE_H
 
 #include <language/editor/simplerange.h>
+#include <language/editor/rangeinrevision.h>
 #include "../languageexport.h"
 #include "appendedlist.h"
 #include "duchainpointer.h"
@@ -69,7 +70,7 @@ public:
       freeAppendedLists();
     }
     
-    SimpleRange m_range;
+    RangeInRevision m_range;
     
     APPENDED_LISTS_STUB(DUChainBaseData)
     
@@ -125,7 +126,7 @@ public:
    * \param url url of the document where this occurred
    * \param range range of the alias declaration's identifier
    */
-  DUChainBase(const SimpleRange& range);
+  DUChainBase(const RangeInRevision& range);
   /// Destructor
   virtual ~DUChainBase();
 
@@ -156,35 +157,35 @@ public:
   virtual void setData(DUChainBaseData*, bool constructorCalled = true);
   
   ///Returns the range assigned to this object, in the document revision when this document was last parsed.
-  SimpleRange range() const;
+  RangeInRevision range() const;
 
   ///Changes the range assigned to this object, in the document revision when this document is parsed.
-  void setRange(const SimpleRange& range);
+  void setRange(const RangeInRevision& range);
   
   ///Returns the range assigned to this object, transformed into the current revision of the document.
-  ///This must only be called from the foreground thread, or with the foreground lock acquired.
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
   SimpleRange rangeInCurrentRevision() const;
 
   ///Returns the range assigned to this object, transformed into the current revision of the document.
   ///The returned object is unique at each call, so you can use it and change it in whatever way you want.
-  ///This must only be called from the foreground thread, or with the foreground lock acquired.
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
   PersistentMovingRange::Ptr createRangeMoving() const;
   
   ///Transforms the given cursor in the current document revision to its according position
   ///in the parsed document containing this duchain object. The resulting cursor will be directly comparable to the non-translated
   ///range() members in the duchain, but only for one duchain locking cycle.
-  ///This must only be called from the foreground thread, or with the foreground lock acquired.
-  SimpleCursor transformToLocalRevision(const SimpleCursor& cursor) const;
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
+  CursorInRevision transformToLocalRevision(const SimpleCursor& cursor) const;
 
   ///Transforms the given range in the current document revision to its according position
   ///in the parsed document containing this duchain object. The resulting cursor will be directly comparable to the non-translated
   ///range() members in the duchain, but only for one duchain locking cycle.
-  ///This must only be called from the foreground thread, or with the foreground lock acquired.
-  SimpleRange transformToLocalRevision(const SimpleRange& range) const;
+  ///@warning This must only be called from the foreground thread, or with the foreground lock acquired.
+  RangeInRevision transformToLocalRevision(const SimpleRange& range) const;
 
-  SimpleCursor transformFromLocalRevision(const SimpleCursor& cursor) const;
+  SimpleCursor transformFromLocalRevision(const CursorInRevision& cursor) const;
   
-  SimpleRange transformFromLocalRevision(const SimpleRange& range) const;
+  SimpleRange transformFromLocalRevision(const RangeInRevision& range) const;
 
 protected:
   /**
@@ -200,7 +201,7 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  DUChainBase( DUChainBaseData& dd, const SimpleRange& range );
+  DUChainBase( DUChainBaseData& dd, const RangeInRevision& range );
 
   ///Called after loading to rebuild the dynamic data. If this is a context, this should recursively work on all sub-contexts.
   virtual void rebuildDynamicData(DUContext* parent, uint ownIndex);

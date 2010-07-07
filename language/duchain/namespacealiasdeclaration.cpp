@@ -31,7 +31,7 @@ NamespaceAliasDeclaration::NamespaceAliasDeclaration(const NamespaceAliasDeclara
   : Declaration(*new NamespaceAliasDeclarationData(*rhs.d_func())) {
 }
 
-NamespaceAliasDeclaration::NamespaceAliasDeclaration(const SimpleRange& range, DUContext* context)
+NamespaceAliasDeclaration::NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context)
   : Declaration(*new NamespaceAliasDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);

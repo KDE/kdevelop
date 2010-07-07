@@ -218,7 +218,7 @@ void ClassBrowserPlugin::openDeclaration()
   if (bestDeclaration)
   {
     KUrl url(bestDeclaration->url().str());
-    KTextEditor::Range range = bestDeclaration->range().textRange();
+    KTextEditor::Range range = bestDeclaration->rangeInCurrentRevision().textRange();
 
     readLock.unlock();
 
@@ -265,7 +265,7 @@ void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
   if (bestDeclaration)
   {
     KUrl url(bestDeclaration->url().str());
-    KTextEditor::Range range = bestDeclaration->range().textRange();
+    KTextEditor::Range range = bestDeclaration->rangeInCurrentRevision().textRange();
 
     readLock.unlock();
 

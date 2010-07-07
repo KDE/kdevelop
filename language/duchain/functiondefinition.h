@@ -34,7 +34,7 @@ namespace KDevelop {
   ///It allows mapping from definition to declaration and from declaration to definition.
   class KDEVPLATFORMLANGUAGE_EXPORT FunctionDefinition : public FunctionDeclaration {
     public:
-    FunctionDefinition(const SimpleRange& range, DUContext* context);
+    FunctionDefinition(const RangeInRevision& range, DUContext* context);
     FunctionDefinition(FunctionDefinitionData& data);
     ~FunctionDefinition();
 

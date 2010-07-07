@@ -51,7 +51,7 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData&
 {
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUContext* context)
+ClassFunctionDeclaration::ClassFunctionDeclaration(const RangeInRevision& range, DUContext* context)
   : ClassFunctionDeclarationBase(*new ClassFunctionDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
@@ -59,7 +59,7 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const SimpleRange& range, DUC
     setContext( context );
 }
 
-ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const SimpleRange& range, DUContext* context)
+ClassFunctionDeclaration::ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const RangeInRevision& range, DUContext* context)
   : ClassFunctionDeclarationBase(data, range)
 {
   if( context )

@@ -183,7 +183,7 @@ NavigationContextPointer AbstractNavigationContext::execute(NavigationAction& ac
     /*          if(action.decl->internalContext())
                 cursor = action.decl->internalContext()->range().textRange().start() + KTextEditor::Cursor(0, 1);
               else*/
-                cursor = action.decl->range().textRange().start();
+                cursor = action.decl->rangeInCurrentRevision().start.textCursor();
             }
 
             action.decl->activateSpecialization();

@@ -81,7 +81,7 @@ QWidget* masterWidget(QWidget* w) {
 // Helper that determines the context to use for highlighting at a specific position
 DUContext* contextForHighlightingAt(const SimpleCursor& position, TopDUContext* topContext)
 {
-  DUContext* ctx = topContext->findContextAt(position);
+  DUContext* ctx = topContext->findContextAt(topContext->transformToLocalRevision(position));
   while(ctx && (ctx->type() == DUContext::Template || ctx->type() == DUContext::Helper || ctx->localScopeIdentifier().isEmpty()) && ctx->parentContext())
     ctx = ctx->parentContext();
   return ctx;
@@ -646,7 +646,6 @@ void ContextBrowserPlugin::switchUse(bool forward)
 {
   if(core()->documentController()->activeDocument() && core()->documentController()->activeDocument()->textDocument() && core()->documentController()->activeDocument()->textDocument()->activeView()) {
     KTextEditor::Document* doc = core()->documentController()->activeDocument()->textDocument();
-    KDevelop::SimpleCursor c(doc->activeView()->cursorPosition());
 
 
     KDevelop::DUChainReadLocker lock( DUChain::lock() );
@@ -654,6 +653,9 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
     if( chosen )
     {
+      SimpleCursor cCurrent(doc->activeView()->cursorPosition());
+      KDevelop::CursorInRevision c = chosen->transformToLocalRevision(cCurrent);
+      
       Declaration* decl = 0;
       //If we have a locked declaration, use that for jumping
       foreach(ContextBrowserView* view, m_views) {
@@ -663,7 +665,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
       }
       
       if(!decl) //Try finding a declaration under the cursor
-        decl = DUChainUtils::itemUnderCursor(doc->url(), c);
+        decl = DUChainUtils::itemUnderCursor(doc->url(), cCurrent);
       
       if(decl) {
         
@@ -676,7 +678,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
           target = FunctionDefinition::definition(decl);
         
           if(target && target != decl) {
-            SimpleCursor jumpTo = target->range().start;
+            SimpleCursor jumpTo = target->rangeInCurrentRevision().start;
             KUrl document = target->url().toUrl();
             lock.unlock();
             core()->documentController()->openDocument( document, cursorToRange(jumpTo)  );
@@ -703,11 +705,11 @@ void ContextBrowserPlugin::switchUse(bool forward)
             if(!usingFiles.isEmpty()) {
             TopDUContext* top = (forward ? usingFiles[0] : usingFiles.back()).data();
             if(top) {
-              QList<SimpleRange> useRanges = allUses(top, decl, true);
+              QList<RangeInRevision> useRanges = allUses(top, decl, true);
               qSort(useRanges);
               if(!useRanges.isEmpty()) {
                 KUrl url = top->url().toUrl();
-                SimpleRange selectUse = forward ? useRanges.first() : useRanges.back();
+                SimpleRange selectUse = chosen->transformFromLocalRevision(forward ? useRanges.first() : useRanges.back());
                 lock.unlock();
                 core()->documentController()->openDocument(url, cursorToRange(selectUse.start));
               }
@@ -716,7 +718,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
           return;
         }
         //Check whether we are within a use
-        QList<SimpleRange> localUses = allUses(chosen, decl, true);
+        QList<RangeInRevision> localUses = allUses(chosen, decl, true);
         qSort(localUses);
         for(int a = 0; a < localUses.size(); ++a) {
           int nextUse = (forward ? a+1 : a-1);
@@ -779,7 +781,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
                     decl = definition;
                 }
                 KUrl u(decl->url().str());
-                SimpleRange range = decl->range();
+                SimpleRange range = decl->rangeInCurrentRevision();
                 range.end = range.start;
                 lock.unlock();
                 core()->documentController()->openDocument(u, range.textRange());
@@ -789,11 +791,11 @@ void ContextBrowserPlugin::switchUse(bool forward)
                 
                 KUrl u(nextTop->url().str());
                 
-                QList<SimpleRange> nextTopUses = allUses(nextTop, decl, true);
+                QList<RangeInRevision> nextTopUses = allUses(nextTop, decl, true);
                 qSort(nextTopUses);
                 
                 if(!nextTopUses.isEmpty()) {
-                  SimpleRange range = forward ? nextTopUses.front() : nextTopUses.back();
+                  SimpleRange range =  chosen->transformFromLocalRevision(forward ? nextTopUses.front() : nextTopUses.back());
                   range.end = range.start;
                   lock.unlock();
                   core()->documentController()->openDocument(u, range.textRange());
@@ -805,7 +807,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
             }
           }else{
               KUrl url(chosen->url().str());
-              SimpleRange range = localUses[nextUse];
+              SimpleRange range = chosen->transformFromLocalRevision(localUses[nextUse]);
               range.end = range.start;
               lock.unlock();
               core()->documentController()->openDocument(url, range.textRange());

@@ -22,6 +22,7 @@
 #include "classmemberdeclaration.h"
 #include "classmemberdeclarationdata.h"
 #include "duchainregister.h"
+#include <editor/rangeinrevision.h>
 
 namespace KDevelop
 {
@@ -65,7 +66,7 @@ Declaration* ClassMemberDeclaration::clonePrivate() const {
   return new ClassMemberDeclaration(*this);
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(const SimpleRange& range, DUContext* context)
+ClassMemberDeclaration::ClassMemberDeclaration(const RangeInRevision& range, DUContext* context)
   : Declaration(*new ClassMemberDeclarationData, range )
 {
   d_func_dynamic()->setClassId(this);
@@ -73,7 +74,7 @@ ClassMemberDeclaration::ClassMemberDeclaration(const SimpleRange& range, DUConte
     setContext( context );
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd, const SimpleRange& range )
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd, const RangeInRevision& range )
   : Declaration(dd, range)
 {
 }

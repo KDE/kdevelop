@@ -239,7 +239,7 @@ void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* 
     m_revisionLocks.clear();
 }
 
-SimpleRange DocumentChangeTracker::transformBetweenRevisions(KDevelop::SimpleRange range, qint64 fromRevision, qint64 toRevision) const
+KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::RangeInRevision range, qint64 fromRevision, qint64 toRevision) const
 {
     VERIFY_FOREGROUND_LOCKED
     
@@ -252,7 +252,7 @@ SimpleRange DocumentChangeTracker::transformBetweenRevisions(KDevelop::SimpleRan
     return range;
 }
 
-SimpleCursor DocumentChangeTracker::transformBetweenRevisions(KDevelop::SimpleCursor cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior) const
+KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior) const
 {
     VERIFY_FOREGROUND_LOCKED
     
@@ -262,6 +262,26 @@ SimpleCursor DocumentChangeTracker::transformBetweenRevisions(KDevelop::SimpleCu
     }
     
     return cursor;
+}
+
+RangeInRevision DocumentChangeTracker::transformToRevision(SimpleRange range, qint64 toRevision) const
+{
+    return transformBetweenRevisions(RangeInRevision::castFromSimpleRange(range), -1, toRevision);
+}
+
+CursorInRevision DocumentChangeTracker::transformToRevision(SimpleCursor cursor, qint64 toRevision, MovingCursor::InsertBehavior behavior) const
+{
+    return transformBetweenRevisions(CursorInRevision::castFromSimpleCursor(cursor), -1, toRevision, behavior);
+}
+
+SimpleRange DocumentChangeTracker::transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const
+{
+    return transformBetweenRevisions(range, fromRevision, -1).castToSimpleRange();
+}
+
+SimpleCursor DocumentChangeTracker::transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, MovingCursor::InsertBehavior behavior) const
+{
+    return transformBetweenRevisions(cursor, fromRevision, -1, behavior).castToSimpleCursor();
 }
 
 RevisionLockerAndClearerPrivate::RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker, qint64 revision) : m_tracker(tracker), m_revision(revision)
@@ -334,8 +354,7 @@ void DocumentChangeTracker::unlockRevision(qint64 revision)
 qint64 RevisionLockerAndClearer::revision() const {
     return m_p->revision();
 }
-
-SimpleRange RevisionLockerAndClearer::transformToRevision(const KDevelop::SimpleRange& range, const KDevelop::RevisionLockerAndClearer::Ptr& to)
+RangeInRevision RevisionLockerAndClearer::transformToRevision(const KDevelop::RangeInRevision& range, const KDevelop::RevisionLockerAndClearer::Ptr& to)
 {
     VERIFY_FOREGROUND_LOCKED
     
@@ -351,7 +370,7 @@ SimpleRange RevisionLockerAndClearer::transformToRevision(const KDevelop::Simple
     return m_p->m_tracker->transformBetweenRevisions(range, fromRevision, toRevision);
 }
 
-SimpleCursor RevisionLockerAndClearer::transformToRevision(const KDevelop::SimpleCursor& cursor, const KDevelop::RevisionLockerAndClearer::Ptr& to, MovingCursor::InsertBehavior behavior)
+CursorInRevision RevisionLockerAndClearer::transformToRevision(const KDevelop::CursorInRevision& cursor, const KDevelop::RevisionLockerAndClearer::Ptr& to, MovingCursor::InsertBehavior behavior)
 {
     VERIFY_FOREGROUND_LOCKED
     
@@ -367,7 +386,7 @@ SimpleCursor RevisionLockerAndClearer::transformToRevision(const KDevelop::Simpl
     return m_p->m_tracker->transformBetweenRevisions(cursor, fromRevision, toRevision, behavior);
 }
 
-SimpleRange RevisionLockerAndClearer::transformFromRevision(const KDevelop::SimpleRange& range, const KDevelop::RevisionLockerAndClearer::Ptr& from)
+RangeInRevision RevisionLockerAndClearer::transformFromRevision(const KDevelop::RangeInRevision& range, const KDevelop::RevisionLockerAndClearer::Ptr& from)
 {
     VERIFY_FOREGROUND_LOCKED
     
@@ -383,7 +402,7 @@ SimpleRange RevisionLockerAndClearer::transformFromRevision(const KDevelop::Simp
     return m_p->m_tracker->transformBetweenRevisions(range, fromRevision, toRevision);
 }
 
-SimpleCursor RevisionLockerAndClearer::transformFromRevision(const KDevelop::SimpleCursor& cursor, const KDevelop::RevisionLockerAndClearer::Ptr& from, MovingCursor::InsertBehavior behavior)
+CursorInRevision RevisionLockerAndClearer::transformFromRevision(const KDevelop::CursorInRevision& cursor, const KDevelop::RevisionLockerAndClearer::Ptr& from, MovingCursor::InsertBehavior behavior)
 {
     VERIFY_FOREGROUND_LOCKED
     
@@ -397,6 +416,27 @@ SimpleCursor RevisionLockerAndClearer::transformFromRevision(const KDevelop::Sim
         fromRevision = from->revision();
     
     return m_p->m_tracker->transformBetweenRevisions(cursor, fromRevision, toRevision, behavior);
+}
+
+
+SimpleRange RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::RangeInRevision& range)
+{
+    return transformToRevision(range, KDevelop::RevisionLockerAndClearer::Ptr()).castToSimpleRange();
+}
+
+SimpleCursor RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::CursorInRevision& cursor, MovingCursor::InsertBehavior behavior)
+{
+    return transformToRevision(cursor, KDevelop::RevisionLockerAndClearer::Ptr(), behavior).castToSimpleCursor();
+}
+
+RangeInRevision RevisionLockerAndClearer::transformFromCurrentRevision(const KDevelop::SimpleRange& range)
+{
+    return transformFromRevision(RangeInRevision::castFromSimpleRange(range), RevisionReference());
+}
+
+CursorInRevision RevisionLockerAndClearer::transformFromCurrentRevision(const KDevelop::SimpleCursor& cursor, MovingCursor::InsertBehavior behavior)
+{
+    return transformFromRevision(CursorInRevision::castFromSimpleCursor(cursor), RevisionReference(), behavior);
 }
 
 bool RevisionLockerAndClearer::valid() const

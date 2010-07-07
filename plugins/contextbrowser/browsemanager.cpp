@@ -190,9 +190,6 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         
         KTextEditor::Cursor textCursor = iface->coordinatesToCursor(coordinatesInView);
         if(textCursor.isValid()) {
-            SmartInterface* iface = dynamic_cast<SmartInterface*>(view->document());
-            if (!iface) return false;
-            
             ///@todo find out why this is needed, fix the code in kate
             if(textCursor.column() > 0)
                 textCursor.setColumn(textCursor.column()-1);
@@ -215,7 +212,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 KDevelop::DUChainReadLocker lock( DUChain::lock() );
                 foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), SimpleCursor(textCursor)) );
                 
-                if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains(SimpleCursor(textCursor))) {
+                if(foundDeclaration && foundDeclaration->url().toUrl().equals(view->document()->url()) && foundDeclaration->range().contains( foundDeclaration->transformToLocalRevision(SimpleCursor(textCursor)))) {
                     ///A declaration was clicked directly. Jumping to it is useless, so jump to the definition or something useful
 
                     bool foundBetter = false;
@@ -248,7 +245,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
                 
                 if( foundDeclaration ) {
                     jumpTo.first = foundDeclaration->url().toUrl();
-                    jumpTo.second = foundDeclaration->range().start;
+                    jumpTo.second = foundDeclaration->rangeInCurrentRevision().start;
                 }
             }
             if(jumpTo.first.isValid() && jumpTo.second.isValid()) {

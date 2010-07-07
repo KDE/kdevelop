@@ -21,6 +21,7 @@
 #include "ducontext.h"
 #include "duchainregister.h"
 #include "types/delayedtype.h"
+#include <editor/rangeinrevision.h>
 
 namespace KDevelop
 {
@@ -31,7 +32,7 @@ AliasDeclaration::AliasDeclaration(const AliasDeclaration& rhs)
   : ClassMemberDeclaration(*new AliasDeclarationData(*rhs.d_func())) {
 }
 
-AliasDeclaration::AliasDeclaration(const SimpleRange& range, DUContext* context)
+AliasDeclaration::AliasDeclaration(const RangeInRevision& range, DUContext* context)
   : ClassMemberDeclaration(*new AliasDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);

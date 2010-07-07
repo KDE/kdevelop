@@ -71,7 +71,7 @@ protected:
   {
     DUChainWriteLocker lock(DUChain::lock());
 
-    SimpleRange newRange = editorFindRange(name ? name : range, name ? name : range);
+    RangeInRevision newRange = editorFindRange(name ? name : range, name ? name : range);
 
     QualifiedIdentifier id = identifierForNode(name);
 
@@ -88,7 +88,7 @@ protected:
    * \param isDefinition whether the new declaration is also a definition.
    */
   template<class DeclarationT>
-  DeclarationT* openDeclaration(const QualifiedIdentifier& id, const SimpleRange& newRange, DeclarationFlags flags = NoFlags)
+  DeclarationT* openDeclaration(const QualifiedIdentifier& id, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)
   {
     Identifier localId;
 
@@ -101,7 +101,7 @@ protected:
     if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
       // Seek a matching declaration
 
-      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, SimpleCursor::invalid(), this->topContext(), AbstractType::Ptr(), DUContext::NoFiltering);
+      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, CursorInRevision::invalid(), this->topContext(), AbstractType::Ptr(), DUContext::NoFiltering);
       foreach( Declaration* dec, declarations ) {
 
         if( LanguageSpecificDeclarationBuilderBase::wasEncountered(dec) )
@@ -147,7 +147,7 @@ protected:
 
   /// Convenience function. Same as openDeclaration(), but creates the declaration as a definition.
   template<class DeclarationT>
-  DeclarationT* openDefinition(const QualifiedIdentifier& id, const SimpleRange& newRange)
+  DeclarationT* openDefinition(const QualifiedIdentifier& id, const RangeInRevision& newRange)
   {
     return openDeclaration<DeclarationT>(id, newRange, DeclarationIsDefinition);
   }

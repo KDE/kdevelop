@@ -90,7 +90,7 @@ enum Contexts {
 
 struct HighlightedRange
 {
-  SimpleRange range;
+  RangeInRevision range;
   KTextEditor::Attribute::Ptr attribute;
   bool operator<(const HighlightedRange& rhs) const {
     return range.start < rhs.range.start;

@@ -31,7 +31,6 @@
 #include <interfaces/iplugin.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/editor/simplecursor.h>
-#include <language/editor/simplerange.h>
 #include <language/duchain/declaration.h>
 #include <KUrl>
 #include <language/editor/persistentmovingrange.h>

@@ -314,7 +314,7 @@ void DUContextDynamicData::addDeclaration( Declaration * newDeclaration )
     Q_ASSERT(newDeclaration->ownIndex() > (0xffffffff/2));
   }
 
-  SimpleCursor start = newDeclaration->range().start;
+  CursorInRevision start = newDeclaration->range().start;
 ///@todo Do binary search to find the position
   bool inserted = false;
   for (int i = m_context->d_func_dynamic()->m_localDeclarationsSize()-1; i >= 0; --i) {
@@ -464,7 +464,7 @@ DUContext::DUContext(DUContextData& data) : DUChainBase(data), m_dynamicData(new
 }
 
 
-DUContext::DUContext(const SimpleRange& range, DUContext* parent, bool anonymous)
+DUContext::DUContext(const RangeInRevision& range, DUContext* parent, bool anonymous)
   : DUChainBase(*new DUContextData(), range), m_dynamicData(new DUContextDynamicData(this))
 {
   d_func_dynamic()->setClassId(this);
@@ -499,7 +499,7 @@ bool DUContext::isAnonymous() const {
   return d_func()->m_anonymousInParent || (m_dynamicData->m_parentContext && m_dynamicData->m_parentContext->isAnonymous());
 }
 
-DUContext::DUContext( DUContextData& dd, const SimpleRange& range, DUContext * parent, bool anonymous )
+DUContext::DUContext( DUContextData& dd, const RangeInRevision& range, DUContext * parent, bool anonymous )
   : DUChainBase(dd, range), m_dynamicData(new DUContextDynamicData(this))
 {
   if(parent)
@@ -635,7 +635,7 @@ bool DUContext::isPropagateDeclarations() const
   return d_func()->m_propagateDeclarations;
 }
 
-QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier, const SimpleCursor & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
+QList<Declaration*> DUContext::findLocalDeclarations( const Identifier& identifier, const CursorInRevision & position, const TopDUContext* topContext, const AbstractType::Ptr& dataType, SearchFlags flags ) const
 {
   ENSURE_CAN_READ
 
@@ -654,13 +654,13 @@ bool contextIsChildOrEqual(const DUContext* childContext, const DUContext* conte
     return false;
 }
 
-void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
+void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, const CursorInRevision & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* /*source*/, SearchFlags flags ) const
 {
   {
      QMutexLocker lock(&DUContextDynamicData::m_localDeclarationsMutex);
 
      struct Checker {
-       Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const SimpleCursor & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
+       Checker(SearchFlags flags, const AbstractType::Ptr& dataType, const CursorInRevision & position, DUContext::ContextType ownType) : m_flags(flags), m_dataType(dataType), m_position(position), m_ownType(ownType) {
        }
 
        Declaration* check(Declaration* declaration) {
@@ -690,7 +690,7 @@ void DUContext::findLocalDeclarationsInternal( const Identifier& identifier, con
 
        SearchFlags m_flags;
        const AbstractType::Ptr& m_dataType;
-       const SimpleCursor& m_position;
+       const CursorInRevision& m_position;
        DUContext::ContextType m_ownType;
      };
 
@@ -758,7 +758,7 @@ bool DUContext::foundEnough( const DeclarationList& ret, SearchFlags flags ) con
     return false;
 }
 
-bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const
+bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdentifiers, const CursorInRevision & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const
 {
   if(depth > maxParentDepth) {
     kDebug() << "maximum depth reached in" << scopeIdentifier(true);
@@ -838,7 +838,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(KDevelop::QualifiedIde
   const DUContext* current = this;
   while(current) {
     SearchItem::PtrList aliasedIdentifiers;
-    current->applyAliases(identifiers, aliasedIdentifiers, SimpleCursor::invalid(), true, false);
+    current->applyAliases(identifiers, aliasedIdentifiers, CursorInRevision::invalid(), true, false);
     current->applyUpwardsAliases(identifiers, source);
     
     current = current->parentContext();
@@ -851,7 +851,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(KDevelop::QualifiedIde
   return ret;
 }
 
-QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, const TopDUContext* topContext, SearchFlags flags) const
+QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & identifier, const CursorInRevision & position, const AbstractType::Ptr& dataType, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -864,7 +864,7 @@ QList<Declaration*> DUContext::findDeclarations( const QualifiedIdentifier & ide
   return ret.toList();
 }
 
-bool DUContext::imports(const DUContext* origin, const SimpleCursor& /*position*/ ) const
+bool DUContext::imports(const DUContext* origin, const CursorInRevision& /*position*/ ) const
 {
   ENSURE_CAN_READ
 
@@ -889,7 +889,7 @@ bool DUContext::addIndirectImport(const DUContext::Import& import) {
   return false;
 }
 
-void DUContext::addImportedParentContext( DUContext * context, const SimpleCursor& position, bool anonymous, bool /*temporary*/ )
+void DUContext::addImportedParentContext( DUContext * context, const CursorInRevision& position, bool anonymous, bool /*temporary*/ )
 {
   ENSURE_CAN_WRITE
 
@@ -914,7 +914,7 @@ void DUContext::removeImportedParentContext( DUContext * context )
   ENSURE_CAN_WRITE
   DUCHAIN_D_DYNAMIC(DUContext);
 
-  Import import(context, this, SimpleCursor::invalid());
+  Import import(context, this, CursorInRevision::invalid());
 
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a) {
     if(d->m_importedContexts()[a] == import) {
@@ -962,7 +962,7 @@ QVector<DUContext*> DUContext::importers() const
   return ret;
 }
 
-DUContext * DUContext::findContext( const SimpleCursor& position, DUContext* parent) const
+DUContext * DUContext::findContext( const CursorInRevision& position, DUContext* parent) const
 {
   ENSURE_CAN_READ
 
@@ -994,7 +994,7 @@ bool DUContext::parentContextOf(DUContext* context) const
   return false;
 }
 
-QList< QPair<Declaration*, int> > DUContext::allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents) const
+QList< QPair<Declaration*, int> > DUContext::allDeclarations(const CursorInRevision& position, const TopDUContext* topContext, bool searchInParents) const
 {
   ENSURE_CAN_READ
 
@@ -1021,7 +1021,7 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
   return ret;
 }
 
-void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
+void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const CursorInRevision& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents, int currentDepth) const
 {
   if((currentDepth > 300 && currentDepth < 1000) || currentDepth > 1300) {
     kDebug() << "too much depth";
@@ -1070,7 +1070,7 @@ void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& def
         if( position.isValid() && import->position.isValid() && position < import->position )
           continue;
 
-        context->mergeDeclarationsInternal(definitions, SimpleCursor::invalid(), hadContexts, source, searchInParents && context->shouldSearchInParent(InImportedParentContext) &&  context->parentContext()->type() == DUContext::Helper, currentDepth+1);
+        context->mergeDeclarationsInternal(definitions, CursorInRevision::invalid(), hadContexts, source, searchInParents && context->shouldSearchInParent(InImportedParentContext) &&  context->parentContext()->type() == DUContext::Helper, currentDepth+1);
       }
     }
     
@@ -1191,7 +1191,7 @@ void DUContext::setType(ContextType type)
   //DUChain::contextChanged(this, DUChainObserver::Change, DUChainObserver::ContextType);
 }
 
-QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const SimpleCursor& position, const TopDUContext* topContext, SearchFlags flags) const
+QList<Declaration*> DUContext::findDeclarations(const Identifier& identifier, const CursorInRevision& position, const TopDUContext* topContext, SearchFlags flags) const
 {
   ENSURE_CAN_READ
 
@@ -1239,15 +1239,15 @@ DUContext* DUContext::specialize(IndexedInstantiationInformation /*specializatio
   return this;
 }
 
-SimpleCursor DUContext::importPosition(const DUContext* target) const
+CursorInRevision DUContext::importPosition(const DUContext* target) const
 {
   ENSURE_CAN_READ
   DUCHAIN_D(DUContext);
-  Import import(const_cast<DUContext*>(target), this, SimpleCursor::invalid());
+  Import import(const_cast<DUContext*>(target), this, CursorInRevision::invalid());
   for(unsigned int a = 0; a < d->m_importedContextsSize(); ++a)
     if(d->m_importedContexts()[a] == import)
       return d->m_importedContexts()[a].position;
-  return SimpleCursor::invalid();
+    return CursorInRevision::invalid();
 }
 
 QVector<DUContext::Import> DUContext::importedParentContexts() const
@@ -1259,7 +1259,7 @@ QVector<DUContext::Import> DUContext::importedParentContexts() const
   return ret;
 }
 
-void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports) const {
+void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchItem::PtrList& identifiers, const CursorInRevision& position, bool canBeNamespace, bool onlyImports) const {
 
   DeclarationList imports;
   findLocalDeclarationsInternal(globalImportIdentifier(), position, AbstractType::Ptr(), imports, topContext(), DUContext::NoFiltering);
@@ -1285,7 +1285,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
             NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
             identifiers.append( SearchItem::Ptr( new SearchItem( alias->importIdentifier(), identifier ) ) ) ;
           }else{
-            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().textRange();
+            kDebug() << "Declaration with namespace alias identifier has the wrong type" << importDecl->url().str() << importDecl->range().castToSimpleRange().textRange();
           }
         }
       }
@@ -1369,7 +1369,7 @@ bool usesRangeLessThan(const Use& left, const Use& right)
   return left.m_range.start < right.m_range.start;
 }
 
-int DUContext::createUse(int declarationIndex, const SimpleRange& range, int insertBefore)
+int DUContext::createUse(int declarationIndex, const RangeInRevision& range, int insertBefore)
 {
   DUCHAIN_D_DYNAMIC(DUContext);
   ENSURE_CAN_WRITE
@@ -1395,7 +1395,7 @@ int DUContext::createUse(int declarationIndex, const SimpleRange& range, int ins
   return insertBefore;
 }
 
-void DUContext::changeUseRange(int useIndex, const KDevelop::SimpleRange& range)
+void DUContext::changeUseRange(int useIndex, const KDevelop::RangeInRevision& range)
 {
   ENSURE_CAN_WRITE
   d_func_dynamic()->m_usesList()[useIndex].m_range = range;
@@ -1408,7 +1408,7 @@ void DUContext::setUseDeclaration(int useNumber, int declarationIndex)
 }
 
 
-DUContext * DUContext::findContextAt(const SimpleCursor & position, bool includeRightBorder) const
+DUContext * DUContext::findContextAt(const CursorInRevision & position, bool includeRightBorder) const
 {
   ENSURE_CAN_READ
   
@@ -1426,7 +1426,7 @@ DUContext * DUContext::findContextAt(const SimpleCursor & position, bool include
   return const_cast<DUContext*>(this);
 }
 
-Declaration * DUContext::findDeclarationAt(const SimpleCursor & position) const
+Declaration * DUContext::findDeclarationAt(const CursorInRevision & position) const
 {
   ENSURE_CAN_READ
 
@@ -1440,7 +1440,7 @@ Declaration * DUContext::findDeclarationAt(const SimpleCursor & position) const
   return 0;
 }
 
-DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
+DUContext* DUContext::findContextIncluding(const RangeInRevision& range) const
 {
   ENSURE_CAN_READ
 
@@ -1454,7 +1454,7 @@ DUContext* DUContext::findContextIncluding(const SimpleRange& range) const
   return const_cast<DUContext*>(this);
 }
 
-int DUContext::findUseAt(const SimpleCursor & position) const
+int DUContext::findUseAt(const CursorInRevision & position) const
 {
   ENSURE_CAN_READ
 
@@ -1526,9 +1526,9 @@ void DUContext::squeeze()
     child.data(topContext())->squeeze();
 }
 
-QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
+QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
 {
-  QList<SimpleRange> ret;
+  QList<RangeInRevision> ret;
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == declarationIndex)
       if(!noEmptyUses || !context->uses()[a].m_range.isEmpty())
@@ -1652,7 +1652,7 @@ void DUContext::SearchItem::addToEachNode(SearchItem::PtrList other) {
     next[a]->addToEachNode(other);
 }
 
-DUContext::Import::Import(DUContext* _context, const DUContext* importer, const SimpleCursor& _position) : position(_position) {
+DUContext::Import::Import(DUContext* _context, const DUContext* importer, const CursorInRevision& _position) : position(_position) {
   if(_context && _context->owner() && (_context->owner()->specialization().index() || (importer && importer->topContext() != _context->topContext()))) {
     m_declaration = _context->owner()->id();
   }else{
@@ -1660,7 +1660,7 @@ DUContext::Import::Import(DUContext* _context, const DUContext* importer, const 
   }
 }
 
-DUContext::Import::Import(const DeclarationId& id, const SimpleCursor& _position) : position(_position) {
+DUContext::Import::Import(const DeclarationId& id, const CursorInRevision& _position) : position(_position) {
   m_declaration = id;
 }
 

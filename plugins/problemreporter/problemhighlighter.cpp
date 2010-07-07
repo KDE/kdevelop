@@ -38,6 +38,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/icompletionsettings.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchainutils.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -114,7 +116,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
     
     KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(m_document.data());
     Q_ASSERT(iface);
-    QMutexLocker lock(iface->smartMutex());
+    QMutexLocker lockSmart(iface->smartMutex());
     
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
@@ -143,12 +145,20 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             }
         }
     }
+    
+    DUChainReadLocker lock;
+    
+    TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
 
     foreach (const KDevelop::ProblemPointer& problem, problems) {
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 
-        DocumentRange range = problem->finalLocation();
+        SimpleRange range;
+        if(top)
+            range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
+        else
+            range = problem->finalLocation();
         
         if(range.end.line >= m_document->lines())
             range.end = SimpleCursor(m_document->endOfLine(m_document->lines()-1));

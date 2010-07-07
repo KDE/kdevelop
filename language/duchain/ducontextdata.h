@@ -26,7 +26,7 @@
 #include <QtCore/QMultiHash>
 #include <QtCore/QMap>
 
-#include "../editor/simplecursor.h"
+#include "../editor/cursorinrevision.h"
 
 #include "duchainbase.h"
 #include "ducontext.h"

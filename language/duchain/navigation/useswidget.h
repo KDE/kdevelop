@@ -24,7 +24,7 @@
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>
-#include <language/editor/simplecursor.h>
+#include <language/editor/cursorinrevision.h>
 #include "../../languageexport.h"
 #include "usescollector.h"
 #include <language/editor/persistentmovingrange.h>

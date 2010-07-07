@@ -178,14 +178,14 @@ class ImportTraceItem
 {
 public:
 
-  ImportTraceItem(const DUContext* _ctx, SimpleCursor _pos = SimpleCursor::invalid()) : ctx(_ctx), position(_pos) {
+  ImportTraceItem(const DUContext* _ctx, CursorInRevision _pos = CursorInRevision::invalid()) : ctx(_ctx), position(_pos) {
   }
   ImportTraceItem() {
   }
 
   //The trace goes backwards. This means that for each imported context, it contains the context the new one is imported to, not the imported context.
   const DUContext* ctx;
-  SimpleCursor position;
+  CursorInRevision position;
 };
 
 class ImportTrace : public KDevVarLengthArray<ImportTraceItem, 40>
@@ -227,7 +227,7 @@ public:
    *
    * If the parent is in the symbol table and the context is not anonymous, it will also be added to the symbol table. You nead a write-lock to the DUChain then
    */
-  explicit DUContext(const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  explicit DUContext(const RangeInRevision& range, DUContext* parent = 0, bool anonymous = false);
   explicit DUContext(DUContextData&);
 
   /**
@@ -305,7 +305,7 @@ public:
    * @warning This uses the ranges in the local revision of the document (at last parsing time).
    *                  Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
    */
-  DUContext* findContextAt(const SimpleCursor& position, bool includeBorders = false) const;
+  DUContext* findContextAt(const CursorInRevision& position, bool includeBorders = false) const;
 
   /**
    * Find a child declaration that has a rang that covers the given position
@@ -314,7 +314,7 @@ public:
    * @warning This uses the ranges in the local revision of the document (at last parsing time).
    *                  Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
    */
-  Declaration* findDeclarationAt(const SimpleCursor& position) const;
+  Declaration* findDeclarationAt(const CursorInRevision& position) const;
 
   /**
    * Find the context which most specifically covers \a range.
@@ -322,7 +322,7 @@ public:
    * @warning This uses the ranges in the local revision of the document (at last parsing time).
    *                  Use DUChainBase::transformToLocalRevision to transform the cursor into that revision first.
    */
-  DUContext* findContextIncluding(const SimpleRange& range) const;
+  DUContext* findContextIncluding(const RangeInRevision& range) const;
 
   /**
    * Calculate the fully qualified scope identifier
@@ -369,10 +369,10 @@ public:
   /// Represents an imported parent context.
   struct KDEVPLATFORMLANGUAGE_EXPORT Import {
     ///DUChain must be read-locked when this is called
-    Import(DUContext* context, const DUContext* importer, const SimpleCursor& position = SimpleCursor::invalid());
-    Import() : position(SimpleCursor::invalid()) {
+    Import(DUContext* context, const DUContext* importer, const CursorInRevision& position = CursorInRevision::invalid());
+    Import() : position(CursorInRevision::invalid()) {
     }
-    Import(const DeclarationId& id, const SimpleCursor& position = SimpleCursor::invalid());
+    Import(const DeclarationId& id, const CursorInRevision& position = CursorInRevision::invalid());
     bool operator==(const Import& rhs) const {
       return m_context == rhs.m_context && m_declaration == rhs.m_declaration;
     }
@@ -398,7 +398,7 @@ public:
       return m_declaration;
     }
 
-    SimpleCursor position;
+CursorInRevision position;
     private:
       //Either we store m_declaration, or m_context. That way we can resolve specialized contexts.
       ///@todo Compress using union
@@ -419,12 +419,12 @@ public:
    * addImportedParentContext(..) was called with a valid cursor, this will return that position.
    * Else an invalid cursor is returned.
    * */
-  virtual SimpleCursor importPosition(const DUContext* target) const;
+  virtual CursorInRevision importPosition(const DUContext* target) const;
 
   /**
    * Returns true if this context imports @param origin at any depth, else false.
    * */
-  virtual bool imports(const DUContext* origin, const SimpleCursor& position = SimpleCursor::invalid()) const;
+  virtual bool imports(const DUContext* origin, const CursorInRevision& position = CursorInRevision::invalid()) const;
 
   /**
    * Adds an imported context.
@@ -437,7 +437,7 @@ public:
    * \note Be sure to have set the text location first, so that
    * the chain is sorted correctly.
    */
-  virtual void addImportedParentContext(DUContext* context, const SimpleCursor& position = SimpleCursor::invalid(), bool anonymous = false, bool temporary = false);
+  virtual void addImportedParentContext(DUContext* context, const CursorInRevision& position = CursorInRevision::invalid(), bool anonymous = false, bool temporary = false);
 
   /**
    * Adds an imported context, which may be indirect.
@@ -517,7 +517,7 @@ public:
    *
    * \warning this may return declarations which are not in this tree, you may need to lock them too...
    */
-  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findDeclarations(const QualifiedIdentifier& identifier, const CursorInRevision& position = CursorInRevision::invalid(), const AbstractType::Ptr& dataType = AbstractType::Ptr(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Searches for and returns a declaration with a given \a identifier in this context, which
@@ -533,7 +533,7 @@ public:
    *
    * \overload
    */
-  QList<Declaration*> findDeclarations(const Identifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findDeclarations(const Identifier& identifier, const CursorInRevision& position = CursorInRevision::invalid(), const TopDUContext* topContext = 0, SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Returns the type of any \a identifier defined in this context, or
@@ -541,7 +541,7 @@ public:
    *
    * Does not search imported parent-contexts(like base-classes).
    */
-  QList<Declaration*> findLocalDeclarations(const Identifier& identifier, const SimpleCursor& position = SimpleCursor::invalid(), const TopDUContext* topContext = 0, const AbstractType::Ptr& dataType = AbstractType::Ptr(), SearchFlags flags = NoSearchFlags) const;
+  QList<Declaration*> findLocalDeclarations(const Identifier& identifier, const CursorInRevision& position = CursorInRevision::invalid(), const TopDUContext* topContext = 0, const AbstractType::Ptr& dataType = AbstractType::Ptr(), SearchFlags flags = NoSearchFlags) const;
 
   /**
    * Clears all local declarations. Does not delete the declaration; the caller
@@ -571,7 +571,7 @@ public:
    *
    * \returns the requested context if one was found, otherwise null.
    */
-  DUContext* findContext(const SimpleCursor& position, DUContext* parent = 0) const;
+  DUContext* findContext(const CursorInRevision& position, DUContext* parent = 0) const;
 
   /**
    * Iterates the tree to see if the provided \a context is a subcontext of this context.
@@ -594,7 +594,7 @@ public:
    *
    * \returns the requested declarations, if any were active at that location. Declarations propagated into this context(@see setPropagateDeclarations) are included.
    */
-  QList< QPair<Declaration*, int> > allDeclarations(const SimpleCursor& position, const TopDUContext* topContext, bool searchInParents=true) const;
+  QList< QPair<Declaration*, int> > allDeclarations(const CursorInRevision& position, const TopDUContext* topContext, bool searchInParents=true) const;
 
   /**
    * Delete and remove all slaves(uses, declarations, definitions, contexts) that are not in the given set
@@ -631,13 +631,13 @@ public:
    * Find the use which encompasses \a position, if one exists.
    * @return The local index of the use, or -1
    */
-  int findUseAt(const SimpleCursor& position) const;
+  int findUseAt(const CursorInRevision& position) const;
 
   
   /**
    * The change must not break the ordering
    * */
-  void changeUseRange(int useIndex, const SimpleRange& range);
+  void changeUseRange(int useIndex, const RangeInRevision& range);
 
   /**
    * Assigns the declaration represented by @param declarationIndex to the use with index @param useIndex
@@ -654,7 +654,7 @@ public:
    *
    * @return Local index of the created use
    * */
-  int createUse(int declarationIndex, const SimpleRange& range, int insertBefore = -1);
+  int createUse(int declarationIndex, const RangeInRevision& range, int insertBefore = -1);
 
   /**
    * Deletes the use number @param index . index is the position in the vector of uses, not a used declaration index.
@@ -751,7 +751,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * */
   typedef KDevVarLengthArray<Declaration*, 40> DeclarationList;
 
-  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const;
+  virtual bool findDeclarationsInternal(const SearchItem::PtrList& identifiers, const CursorInRevision& position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags, uint depth ) const;
 
   ///Call this after parsing is finished. It will optimize the internal vectors to reduce memory-usage.
   void squeeze();
@@ -772,18 +772,18 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * This includes declarations propagated from sub-contexts.
    * @param hadUrls is used to count together all contexts that already were visited, so they are not visited again.
    */
-  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents = true, int currentDepth = 0) const;
+  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const CursorInRevision& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source, bool searchInParents = true, int currentDepth = 0) const;
 
   /// Logic for calculating the fully qualified scope name
   QualifiedIdentifier scopeIdentifierInternal(DUContext* context) const;
 
-  virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
+  virtual void findLocalDeclarationsInternal( const Identifier& identifier, const CursorInRevision & position, const AbstractType::Ptr& dataType, DeclarationList& ret, const TopDUContext* source, SearchFlags flags ) const;
 
   /**Applies namespace-imports and namespace-aliases and returns possible absolute identifiers that need to be searched.
    * @param targetIdentifiers will be filled with all identifiers that should be searched for, instead of identifier.
    * @param onlyImports if this is true, namespace-aliases will not be respected, but only imports. This is faster.
    * */
-  void applyAliases(const SearchItem::PtrList& identifiers, SearchItem::PtrList& targetIdentifiers, const SimpleCursor& position, bool canBeNamespace, bool onlyImports = false) const;
+  void applyAliases(const SearchItem::PtrList& identifiers, SearchItem::PtrList& targetIdentifiers, const CursorInRevision& position, bool canBeNamespace, bool onlyImports = false) const;
   /**
    * Applies the aliases that need to be applied when moving the search from this context up to the parent-context.
    * The default-implementation adds a set of identifiers with the own local identifier prefixed, if this is a namespace.
@@ -791,7 +791,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem : public KShared {
    * */
   virtual void applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopDUContext* source) const;
 
-  DUContext(DUContextData& dd, const SimpleRange& range, DUContext* parent = 0, bool anonymous = false);
+  DUContext(DUContextData& dd, const RangeInRevision& range, DUContext* parent = 0, bool anonymous = false);
 
   ///Just uses the data from the given context(doesn't copy or change anything, and the data will not be deleted on this contexts destruction)
   DUContext(DUContext& useDataFrom);
@@ -840,7 +840,7 @@ KDEVPLATFORMLANGUAGE_EXPORT Identifier& globalAliasIdentifier();
 /**
   * Collects all uses of the given @param declarationIndex
   * */
-KDEVPLATFORMLANGUAGE_EXPORT QList<SimpleRange> allUses(DUContext* context, int declarationIndex, bool noEmptyRanges = false);
+KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool noEmptyRanges = false);
 }
 
 #endif // DUCONTEXT_H

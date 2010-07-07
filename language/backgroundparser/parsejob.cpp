@@ -76,10 +76,10 @@ public:
           document( IndexedString(url.pathOrUrl()) )
         , backgroundParser( 0 )
         , abortMutex(new QMutex)
+        , hasReadContents( false )
         , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
-        , hasReadContents( false )
         , previousDocumentRevision( -1 )
     {
     }
@@ -355,7 +355,7 @@ struct MovingRangeTranslator : public DUChainVisitor
         uint usesCount = context->usesCount();
         for(uint u = 0; u < usesCount; ++u)
         {
-            SimpleRange r = context->uses()[u].m_range;
+            RangeInRevision r = context->uses()[u].m_range;
             translateRange(r);
             context->changeUseRange(u, r);
         }
@@ -367,12 +367,12 @@ struct MovingRangeTranslator : public DUChainVisitor
     
     void translateRange(DUChainBase* object)
     {
-        SimpleRange r = object->range();
+        RangeInRevision r = object->range();
         translateRange(r);
         object->setRange(r);
     }
 
-    void translateRange(SimpleRange& r)
+    void translateRange(RangeInRevision& r)
     {
         moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
         moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
@@ -437,7 +437,7 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
         QList< ProblemPointer > problems = context->problems();
         for(QList< ProblemPointer >::iterator problem = problems.begin(); problem != problems.end(); ++problem)
         {
-            SimpleRange r = (*problem)->range();
+            RangeInRevision r = (*problem)->range();
             translator.translateRange(r);
             (*problem)->setRange(r);
         }

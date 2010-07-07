@@ -83,7 +83,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param parentContext context in which this declaration occurred
    * */
-  Declaration(const SimpleRange& range, DUContext* parentContext);
+  Declaration(const RangeInRevision& range, DUContext* parentContext);
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   /// Destructor
@@ -339,7 +339,7 @@ public:
    * 
    * This is a non-trivial operation.
    * */
-  QMap<IndexedString, QList<SimpleRange> > uses() const;
+  QMap<IndexedString, QList<RangeInRevision> > uses() const;
 
   /**
    * Returns a list of pairs:
@@ -427,7 +427,7 @@ protected:
     * \param url document url in which this object is located.
     * \param range text range which this object covers.
     */
-  Declaration( DeclarationData & dd, const SimpleRange& range );
+  Declaration( DeclarationData & dd, const RangeInRevision& range );
 
   /**
    * Returns true if this declaration is being currently destroyed persistently,

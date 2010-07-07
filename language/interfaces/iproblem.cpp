@@ -47,12 +47,12 @@ KDevelop::IndexedString KDevelop::Problem::url() const
 
 DocumentRange Problem::finalLocation() const
 {
-    return DocumentRange(d_func()->url, range());
+    return DocumentRange(d_func()->url, rangeInCurrentRevision());
 }
 
 void Problem::setFinalLocation(const DocumentRange & location)
 {
-    setRange(location);
+    setRange(transformToLocalRevision(location));
     d_func_dynamic()->url = location.document;
 }
 

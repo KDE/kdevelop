@@ -19,7 +19,7 @@
 #include "declarationid.h"
 #include "ducontext.h"
 #include "topducontext.h"
-#include "../editor/simplecursor.h"
+#include "../editor/cursorinrevision.h"
 #include "duchain.h"
 #include "declaration.h"
 #include "persistentsymboltable.h"

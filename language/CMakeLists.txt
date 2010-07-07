@@ -170,6 +170,8 @@ install(FILES
     editor/documentcursor.h
     editor/simplecursor.h
     editor/simplerange.h
+    editor/cursorinrevision.h
+    editor/rangeinrevision.h
     editor/modificationrevision.h
     editor/modificationrevisionset.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/editor COMPONENT Devel

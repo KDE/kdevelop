@@ -87,7 +87,7 @@ protected:
   {
     QualifiedIdentifier id = identifierForNode(name);
 
-    SimpleRange newRange = editorFindRange(name, name);
+    RangeInRevision newRange = editorFindRange(name, name);
 
     DUChainWriteLocker lock(DUChain::lock()); ///@todo Don't call findDeclarations during write-lock, it can lead to UI lockups
     QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
@@ -122,7 +122,7 @@ protected:
    * \param newRange Text range which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, const SimpleRange& newRange, Declaration* declaration)
+  void newUse(T* node, const RangeInRevision& newRange, Declaration* declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
 
@@ -155,7 +155,7 @@ protected:
        
         if (LanguageSpecificUseBuilderBase::m_mapAst)
           LanguageSpecificUseBuilderBase::editor()->parseSession()->mapAstUse(
-            node, qMakePair<DUContextPointer, SimpleRange>(DUContextPointer(newContext), newRange));
+            node, qMakePair<DUContextPointer, RangeInRevision>(DUContextPointer(newContext), newRange));
 
         currentUseTracker().createUses << KDevelop::Use(newRange, declarationIndex);
       }

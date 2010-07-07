@@ -22,6 +22,14 @@
 #include "../languageexport.h"
 
 namespace KDevelop {
+
+/**
+ * Represents a cursor (line-number and column-number) within a text document. Generally this is
+ * a more efficient version of KTextEditor::Cursor.
+ * In KDevelop, this object is used when referencing the most current document revision
+ * (the document in its current version)
+ */
+
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleCursor {
 public:
 

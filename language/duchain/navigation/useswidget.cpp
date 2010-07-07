@@ -293,7 +293,7 @@ QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDe
   
   for(int useIndex = 0; useIndex < context->usesCount(); ++useIndex)
     if(context->uses()[useIndex].m_declarationIndex == usedDeclarationIndex)
-      ret << new OneUseWidget(decl, context->url(), context->uses()[useIndex].m_range, code);
+      ret << new OneUseWidget(decl, context->url(), context->transformFromLocalRevision(context->uses()[useIndex].m_range), code);
 
   foreach(DUContext* child, context->childContexts())
     if(!isNewGroup(context, child))
@@ -377,7 +377,7 @@ DeclarationsWidget::DeclarationsWidget(const CodeRepresentation& code, QList<Ind
 
     foreach(const IndexedDeclaration &decl, declarations)
       if(decl.data())
-        addItem(new OneUseWidget(decl, decl.data()->url(), decl.data()->range(), code));
+        addItem(new OneUseWidget(decl, decl.data()->url(), decl.data()->rangeInCurrentRevision(), code));
 
     setUpdatesEnabled(true);
 }

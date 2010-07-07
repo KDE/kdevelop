@@ -34,7 +34,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclaration : public Declaration
 {
 public:
   ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
-  ClassMemberDeclaration(const SimpleRange& range, DUContext* context);
+  ClassMemberDeclaration(const RangeInRevision& range, DUContext* context);
   ClassMemberDeclaration(ClassMemberDeclarationData& dd);
   ~ClassMemberDeclaration();
 
@@ -93,7 +93,7 @@ public:
   };
 
 protected:
-  ClassMemberDeclaration(ClassMemberDeclarationData& dd, const SimpleRange& range);
+  ClassMemberDeclaration(ClassMemberDeclarationData& dd, const RangeInRevision& range);
 
   DUCHAIN_DECLARE_DATA(ClassMemberDeclaration)
 private:

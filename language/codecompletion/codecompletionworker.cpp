@@ -36,6 +36,7 @@
 #include "codecompletionitem.h"
 #include "codecompletionmodel.h"
 #include "codecompletionitemgrouper.h"
+#include <interfaces/foregroundlock.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -92,12 +93,13 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   QString text;
   {
     {
+      ForegroundLock lockForeground;
       QMutexLocker lock(m_mutex);
       DUChainReadLocker lockDUChain;
       
       if(context) {
         kDebug() << context->localScopeIdentifier().toString();
-        range = KTextEditor::Range(context->range().start.textCursor(), position);
+        range = KTextEditor::Range(context->rangeInCurrentRevision().start.textCursor(), position);
       }
       else
         range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
@@ -126,7 +128,7 @@ void KDevelop::CodeCompletionWorker::doSpecialProcessing(uint) {
 
 }
 
-CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText, const KDevelop::SimpleCursor& position) const {
+CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText, const KDevelop::CursorInRevision& position) const {
   Q_UNUSED(context);
   Q_UNUSED(contextText);
   Q_UNUSED(followingText);
@@ -144,7 +146,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   
   kDebug() << "added text:" << followingText;
   
-  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, SimpleCursor(position) ) );
+  CodeCompletionContext::Ptr completionContext( createCompletionContext( context, contextText, followingText, CursorInRevision::castFromSimpleCursor(SimpleCursor(position)) ) );
   if (KDevelop::CodeCompletionModel* m = model())
     m->setCompletionContext(KDevelop::CodeCompletionContext::Ptr::staticCast(completionContext));
 

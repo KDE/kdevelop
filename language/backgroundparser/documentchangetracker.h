@@ -26,6 +26,7 @@
 #include <QPair>
 #include <language/editor/simplerange.h>
 #include <ktexteditor/movingrange.h>
+#include <language/editor/rangeinrevision.h>
 
 namespace KTextEditor
 {
@@ -64,28 +65,46 @@ public:
      * in which case the revision must not be used.
      * */
     bool valid() const;
-    
     /**
      * Transform a range from this document revision to the given @p to.
-     * If a zero target revision is given, the transformation is done to the current document revision.
      * */
-    SimpleRange transformToRevision(const SimpleRange& range, const Ptr& to = Ptr());
+    RangeInRevision transformToRevision(const RangeInRevision& range, const Ptr& to);
     /**
      * Transform a cursor from this document revision to the given @p to.
      * If a zero target revision is given, the transformation is done to the current document revision.
      * */
-    SimpleCursor transformToRevision(const SimpleCursor& cursor, const Ptr& to = Ptr(), KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert);
+    CursorInRevision transformToRevision(const CursorInRevision& cursor, const Ptr& to, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert);
+    
+    /**
+      * Transforms the given range from this revision into the current revision.
+      */
+    SimpleRange transformToCurrentRevision(const RangeInRevision& range);
+    
+    /**
+    * Transforms the given cursor from this revision into the current revision.
+    */
+    SimpleCursor transformToCurrentRevision(const CursorInRevision& cursor, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert);
     
     /**
      * Transform ranges from the given document revision @p from to the this one.
      * If a zero @p from revision is given, the transformation is done from the current document revision.
      * */
-    SimpleRange transformFromRevision(const SimpleRange& range, const Ptr& from = Ptr());
+    RangeInRevision transformFromRevision(const RangeInRevision& range, const Ptr& from = Ptr());
     /**
      * Transform ranges from the given document revision @p from to the this one.
      * If a zero @p from revision is given, the transformation is done from the current document revision.
      * */
-    SimpleCursor transformFromRevision(const SimpleCursor& cursor, const Ptr& from = Ptr(), KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert);
+    CursorInRevision transformFromRevision(const CursorInRevision& cursor, const Ptr& from = Ptr(), KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert);
+    
+    /**
+    * Transforms the given range from the current revision into this revision.
+    */
+    RangeInRevision transformFromCurrentRevision(const SimpleRange& range);
+    
+    /**
+    * Transforms the given cursor from the current revision into this revision.
+    */
+    CursorInRevision transformFromCurrentRevision(const SimpleCursor& cursor, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert);
     
 private:
     friend class DocumentChangeTracker;
@@ -193,11 +212,18 @@ public:
      * else the original range is returned.
      * 
      * @warning: Make sure that you actually hold the referenced revisions, else no transformation will be done.
-     * 
-     * @warning It is much less error-prone to use RevisionReference->transformToRevision() and RevisionReference->transformFromRevision() directly.
+     * @note It is much less error-prone to use RevisionReference->transformToRevision() and RevisionReference->transformFromRevision() directly.
      * */
-    SimpleRange transformBetweenRevisions(SimpleRange range, qint64 fromRevision, qint64 toRevision = -1) const;
-    SimpleCursor transformBetweenRevisions(SimpleCursor cursor, qint64 fromRevision, qint64 toRevision = -1, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    RangeInRevision transformBetweenRevisions(RangeInRevision range, qint64 fromRevision, qint64 toRevision) const;
+    CursorInRevision transformBetweenRevisions(CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+
+    SimpleRange transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const;
+    SimpleCursor transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+
+    /// Transform the range from the current revision into the given one
+    RangeInRevision transformToRevision(SimpleRange range, qint64 toRevision) const;
+    /// Transform the cursor from the current revision into the given one
+    CursorInRevision transformToRevision(SimpleCursor cursor, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
     
 protected:
     QString m_textAtLastReset;

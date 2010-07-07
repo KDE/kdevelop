@@ -24,6 +24,13 @@
 #include "../languageexport.h"
 #include "simplecursor.h"
 
+/**
+ * Represents a range (start- and end-cursor) within a text document. Generally this is
+ * a more efficient version of KTextEditor::Range.
+ * In KDevelop, this object is used when referencing the most current document revision
+ * (the document in its current version)
+ */
+
 namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleRange {
 public:

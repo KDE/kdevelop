@@ -104,6 +104,7 @@ public:
 
     /**
      * Location where this problem occurred
+     * @warning Must only be called from the foreground
      * */
     DocumentRange finalLocation() const;
     void setFinalLocation(const DocumentRange & location);

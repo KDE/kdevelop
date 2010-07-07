@@ -105,7 +105,7 @@ bool Declaration::inDUChain() const {
   return top && top->inDUChain();
 }
 
-Declaration::Declaration( const SimpleRange& range, DUContext* context )
+Declaration::Declaration( const RangeInRevision& range, DUContext* context )
   : DUChainBase(*new DeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);
@@ -137,7 +137,7 @@ Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
   m_indexInTopContext = 0;
 }
 
-Declaration::Declaration( DeclarationData & dd, const SimpleRange& range )
+Declaration::Declaration( DeclarationData & dd, const RangeInRevision& range )
   : DUChainBase(dd, range)
 {
   m_topContext = 0;
@@ -721,15 +721,15 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   return m_context->equalScopeIdentifier(m_context);
 }
 
-QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
+QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
 {
   ENSURE_CAN_READ
-  QMap<IndexedString, QMap<SimpleRange, bool> > tempUses;
+  QMap<IndexedString, QMap<RangeInRevision, bool> > tempUses;
 
   //First, search for uses within the own context
   {
-    QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
-    foreach(const SimpleRange& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    QMap<RangeInRevision, bool>& ranges(tempUses[topContext()->url()]);
+    foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
       ranges[range] = true;
   }
 
@@ -738,18 +738,18 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::uses() const
   FOREACH_ARRAY(const IndexedTopDUContext& indexedContext, useContexts) {
     TopDUContext* context = indexedContext.data();
     if(context) {
-      QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
-      foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
+      QMap<RangeInRevision, bool>& ranges(tempUses[context->url()]);
+      foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
         ranges[range] = true;
     }
   }
 
-  QMap<IndexedString, QList<SimpleRange> > ret;
+  QMap<IndexedString, QList<RangeInRevision> > ret;
 
-  for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
+  for(QMap<IndexedString, QMap<RangeInRevision, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
-      QList<SimpleRange>& list(ret[it.key()]);
-      for(QMap<SimpleRange, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
+      QList<RangeInRevision>& list(ret[it.key()]);
+      for(QMap<RangeInRevision, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }
   }
@@ -764,7 +764,7 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() cons
   //First, search for uses within the own context
   {
     QMap<SimpleRange, bool>& ranges(tempUses[topContext()->url()]);
-    foreach(const SimpleRange& range, allUses(topContext(), const_cast<Declaration*>(this)))
+    foreach(const RangeInRevision& range, allUses(topContext(), const_cast<Declaration*>(this)))
     {
       ranges[topContext()->transformFromLocalRevision(range)] = true;
     }
@@ -776,12 +776,12 @@ QMap<IndexedString, QList<SimpleRange> > Declaration::usesCurrentRevision() cons
     TopDUContext* context = indexedContext.data();
     if(context) {
       QMap<SimpleRange, bool>& ranges(tempUses[context->url()]);
-      foreach(const SimpleRange& range, allUses(context, const_cast<Declaration*>(this)))
+      foreach(const RangeInRevision& range, allUses(context, const_cast<Declaration*>(this)))
         ranges[context->transformFromLocalRevision(range)] = true;
     }
   }
 
-  QMap<IndexedString, QList<SimpleRange> > ret;
+QMap<IndexedString, QList<SimpleRange> > ret;
 
   for(QMap<IndexedString, QMap<SimpleRange, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {

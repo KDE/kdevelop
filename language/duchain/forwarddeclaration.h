@@ -50,7 +50,7 @@ public:
    * \param range range of the alias declaration's identifier
    * \param parentContext context in which this declaration occurred
    * */
-  ForwardDeclaration(const SimpleRange& range, DUContext* context);
+  ForwardDeclaration(const RangeInRevision& range, DUContext* context);
   ForwardDeclaration(ForwardDeclarationData& data);
 
   ///Copy-constructor for cloning

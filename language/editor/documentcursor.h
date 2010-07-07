@@ -22,11 +22,12 @@
 #include "../languageexport.h"
 #include "simplecursor.h"
 #include <language/duchain/indexedstring.h>
+#include "cursorinrevision.h"
 
 namespace KDevelop
 {
 /**
- * Lightweight object that extends KTextEditor::Range with information about the document URL to which the range
+ * Lightweight object that extends a cursor with information about the document URL to which the range
  * refers.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentCursor : public SimpleCursor

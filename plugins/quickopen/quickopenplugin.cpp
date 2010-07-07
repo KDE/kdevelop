@@ -205,7 +205,7 @@ Declaration* cursorContextDeclaration() {
 
   SimpleCursor cursor(view->cursorPosition());
 
-  DUContext* subCtx = ctx->findContext(cursor);
+  DUContext* subCtx = ctx->findContext(ctx->transformToLocalRevision(cursor));
 
   while(subCtx && !subCtx->owner())
     subCtx = subCtx->parentContext();
@@ -929,7 +929,7 @@ void QuickOpenPlugin::quickOpenDeclaration()
   decl->activateSpecialization();
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->range().start;
+  SimpleCursor c = decl->rangeInCurrentRevision().start;
 
   if(u.str().isEmpty()) {
     kDebug() << "Got empty url for declaration" << decl->toString();
@@ -1015,11 +1015,11 @@ void QuickOpenPlugin::quickOpenDefinition()
   }
 
   IndexedString u = decl->url();
-  SimpleCursor c = decl->range().start;
+  SimpleCursor c = decl->rangeInCurrentRevision().start;
   if(FunctionDefinition* def = FunctionDefinition::definition(decl)) {
     def->activateSpecialization();
     u = def->url();
-    c = def->range().start;
+    c = def->rangeInCurrentRevision().start;
   }else{
     kDebug() << "Found no definition for declaration";
     decl->activateSpecialization();
@@ -1128,7 +1128,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
   OutlineFilter filter(items, OutlineFilter::Functions);
   DUChainUtils::collectItems( context, filter );
 
-  SimpleCursor cursor = SimpleCursor(doc->cursorPosition());
+  CursorInRevision cursor = context->transformToLocalRevision(SimpleCursor(doc->cursorPosition()));
   if (!cursor.isValid())
     return;
 
@@ -1150,7 +1150,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     }
   }
 
-  SimpleCursor c = SimpleCursor::invalid();
+CursorInRevision c = CursorInRevision::invalid();
   if (direction == QuickOpenPlugin::NextFunction && nearestDeclAfter)
     c = nearestDeclAfter->range().start;
   else if (direction == QuickOpenPlugin::PreviousFunction && nearestDeclBefore)
@@ -1158,7 +1158,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
 
   lock.unlock();
   if (c.isValid())
-    core()->documentController()->openDocument(doc->url(), c.textCursor());
+    core()->documentController()->openDocument(doc->url(), context->transformFromLocalRevision(c).textCursor());
   else
     kDebug() << "No declaration to jump to";
 }

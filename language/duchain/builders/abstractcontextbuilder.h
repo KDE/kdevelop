@@ -97,7 +97,7 @@ public:
       {
         m_recompiling = true;
       }else
-      top = newTopContext( SimpleRange( SimpleCursor( 0, 0 ), SimpleCursor( INT_MAX, INT_MAX ) ) );
+        top = newTopContext( RangeInRevision( CursorInRevision( 0, 0 ), CursorInRevision( INT_MAX, INT_MAX ) ) );
       top->setType( DUContext::Global );
       DUChain::self()->addDocumentChain( top );
       setEncountered( top );
@@ -167,7 +167,7 @@ protected:
    *
    * \returns the text range encompassing the given AST node(s)
    */
-  virtual KTextEditor::Range editorFindRange( T* fromNode, T* toNode ) = 0;
+  virtual RangeInRevision editorFindRange( T* fromNode, T* toNode ) = 0;
 
   /**
    * Retrieve a text range for the given nodes.  This is a special function required
@@ -180,7 +180,7 @@ protected:
    *
    * \returns the text range encompassing the given AST node(s)
    */
-  virtual KTextEditor::Range editorFindRangeForContext( T* fromNode, T* toNode )
+  virtual RangeInRevision editorFindRangeForContext( T* fromNode, T* toNode )
   {
     return editorFindRange(fromNode, toNode);
   }
@@ -202,7 +202,7 @@ protected:
    * \param range range for the new context to encompass
    * \returns the newly created context
    */
-  virtual DUContext* newContext(const SimpleRange& range)
+  virtual DUContext* newContext(const RangeInRevision& range)
   {
     return new DUContext(range, currentContext());
   }
@@ -215,7 +215,7 @@ protected:
    *
    * \returns the newly created context
    */
-  virtual TopDUContext* newTopContext(const SimpleRange& range, ParsingEnvironmentFile* file = 0)
+  virtual TopDUContext* newTopContext(const RangeInRevision& range, ParsingEnvironmentFile* file = 0)
   {
     return new TopDUContext(m_url, range, file);
   }
@@ -346,7 +346,7 @@ protected:
    * \param identifier The range which encompasses the name of this context, if one exists.
    * \returns the opened context.
    */
-  DUContext* openContext(T* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, NameT* identifier = 0)
+  DUContext* openContext(T* node, const KDevelop::RangeInRevision& range, DUContext::ContextType type, NameT* identifier = 0)
   {
     if (m_compilingContexts) {
       DUContext* ret = openContextInternal(range, type, identifier ? identifierForNode(identifier) : QualifiedIdentifier());
@@ -368,7 +368,7 @@ protected:
    * \param identifier The identifier for this context
    * \returns the opened context.
    */
-  DUContext* openContext(T* node, const KDevelop::SimpleRange& range, DUContext::ContextType type, QualifiedIdentifier id)
+  DUContext* openContext(T* node, const KDevelop::RangeInRevision& range, DUContext::ContextType type, QualifiedIdentifier id)
   {
     if (m_compilingContexts) {
       DUContext* ret = openContextInternal(range, type, id);
@@ -563,7 +563,7 @@ protected:
    * \param identifier The identifier which corresponds to the context.
    * \returns the opened context.
    */
-  virtual DUContext* openContextInternal( const SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
+  virtual DUContext* openContextInternal( const RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     Q_ASSERT( m_compilingContexts );
     DUContext* ret = 0L;
@@ -605,7 +605,7 @@ protected:
       {
         DUChainWriteLocker writeLock( DUChain::lock() );
 
-        ret = newContext( SimpleRange( range ) );
+        ret = newContext( range );
         ret->setType( type );
 
         if (!identifier.isEmpty())

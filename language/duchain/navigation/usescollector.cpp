@@ -160,7 +160,7 @@ void UsesCollector::startCollecting() {
             allDeclarations.insert(d);
 
             if(m_collectConstructors && d.data() && d.data()->internalContext() && d.data()->internalContext()->type() == DUContext::Class) {
-              QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), CursorInRevision::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
               foreach(Declaration* constructor, constructors) {
                 ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(constructor);
                 if(classFun && classFun->isConstructor())
@@ -169,7 +169,7 @@ void UsesCollector::startCollecting() {
 
               Identifier destructorId = destructorForName(d.data()->identifier());
 
-              QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, CursorInRevision::invalid(), 0, AbstractType::Ptr(), DUContext::OnlyFunctions);
               foreach(Declaration* destructor, destructors) {
                 ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(destructor);
                 if(classFun && classFun->isDestructor())

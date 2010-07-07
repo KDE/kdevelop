@@ -69,8 +69,8 @@ typedef MergeAbstractFunctionDeclaration<ClassMemberDeclaration, ClassFunctionDe
 class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration : public ClassFunctionDeclarationBase
 {
 public:
-  ClassFunctionDeclaration(const SimpleRange& range, DUContext* context);
-  ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const SimpleRange& range, DUContext* context);
+  ClassFunctionDeclaration(const RangeInRevision& range, DUContext* context);
+  ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const RangeInRevision& range, DUContext* context);
   ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
   ~ClassFunctionDeclaration();
 

@@ -138,10 +138,10 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
     int currentDeclarationLine = -1;
     int currentContextLine = -1;
     if(declarationIterator != declarations.constEnd())
-      currentDeclarationLine = (*declarationIterator)->range().textRange().start().line();
+      currentDeclarationLine = (*declarationIterator)->rangeInCurrentRevision().textRange().start().line();
 
     if(childIterator != children.constEnd())
-      currentDeclarationLine = (*childIterator)->range().textRange().start().line();
+      currentDeclarationLine = (*childIterator)->rangeInCurrentRevision().textRange().start().line();
 
     if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.constEnd()) && declarationIterator != declarations.constEnd() )
     {

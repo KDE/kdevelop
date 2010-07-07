@@ -45,14 +45,14 @@ uint DUChainBaseData::classSize() const {
   return DUChainItemSystem::self().dataClassSize(*this);
 }
 
-DUChainBase::DUChainBase(const SimpleRange& range)
+DUChainBase::DUChainBase(const RangeInRevision& range)
   : d_ptr(new DUChainBaseData), m_ptr( 0L )
 {
   d_func_dynamic()->m_range = range;
   d_func_dynamic()->setClassId(this);
 }
 
-DUChainBase::DUChainBase( DUChainBaseData & dd, const SimpleRange& range )
+DUChainBase::DUChainBase( DUChainBaseData & dd, const RangeInRevision& range )
   : d_ptr( &dd ), m_ptr( 0 )
 {
   d_func_dynamic()->m_range = range;
@@ -149,7 +149,7 @@ void DUChainBase::makeDynamic() {
   }
 }
 
-SimpleRange DUChainBase::range() const
+RangeInRevision DUChainBase::range() const
 {
     return d_func()->m_range;
 }
@@ -161,11 +161,11 @@ SimpleRange DUChainBase::rangeInCurrentRevision() const
     if(tracker && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
-      
-      return tracker->transformBetweenRevisions(d_func()->m_range, revision);
+      return tracker->transformToCurrentRevision(d_func()->m_range, revision);
     }
     
-    return d_func()->m_range;
+    // If the document is not open, we can simply cast the range over, as no translation can be done
+    return d_func()->m_range.castToSimpleRange();
 }
 
 PersistentMovingRange::Ptr DUChainBase::createRangeMoving() const
@@ -174,63 +174,59 @@ PersistentMovingRange::Ptr DUChainBase::createRangeMoving() const
     return PersistentMovingRange::Ptr(new PersistentMovingRange(rangeInCurrentRevision(), url()));
 }
 
-SimpleCursor DUChainBase::transformToLocalRevision(const KDevelop::SimpleCursor& cursor) const
+CursorInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleCursor& cursor) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
     if(tracker && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
-      
-      return tracker->transformBetweenRevisions(cursor, -1, revision);
+      return tracker->transformToRevision(cursor, revision);
     }
     
-    return cursor;
+    return CursorInRevision::castFromSimpleCursor(cursor);
 }
 
-SimpleRange DUChainBase::transformToLocalRevision(const KDevelop::SimpleRange& range) const
+RangeInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleRange& range) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
     if(tracker && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
-      
-      return tracker->transformBetweenRevisions(range, -1, revision);
+      return tracker->transformToRevision(range, revision);
     }
     
-    return range;
+    return RangeInRevision::castFromSimpleRange(range);
 }
 
-SimpleRange DUChainBase::transformFromLocalRevision(const KDevelop::SimpleRange& range) const
+SimpleRange DUChainBase::transformFromLocalRevision(const KDevelop::RangeInRevision& range) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
     if(tracker && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
-      
-      return tracker->transformBetweenRevisions(range, revision, -1);
+      return tracker->transformToCurrentRevision(range, revision);
     }
     
-    return range;
+    return range.castToSimpleRange();
 }
 
-SimpleCursor DUChainBase::transformFromLocalRevision(const KDevelop::SimpleCursor& cursor) const
+SimpleCursor DUChainBase::transformFromLocalRevision(const KDevelop::CursorInRevision& cursor) const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
     if(tracker && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
-      
-      return tracker->transformBetweenRevisions(cursor, revision, -1);
+      return tracker->transformToCurrentRevision(cursor, revision);
     }
     
-    return cursor;
+    return cursor.castToSimpleCursor();
 }
 
-void DUChainBase::setRange(const SimpleRange& range)
+void DUChainBase::setRange(const RangeInRevision& range)
 {
     d_func_dynamic()->m_range = range;
 }

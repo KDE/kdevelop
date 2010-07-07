@@ -34,6 +34,7 @@
 #include "use.h"
 #include "indexedstring.h"
 #include "functiondefinition.h"
+#include <editor/rangeinrevision.h>
 
 using namespace KDevelop;
 
@@ -73,7 +74,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     case Helper: type = "Helper"; break;
     case Other: type = "Other"; break;
   }
-  kDebug() << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+  kDebug() << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().castToSimpleRange().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
 
       
   if( !context )
@@ -83,15 +84,15 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
       
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
-      kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().textRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
+      kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
       if (FunctionDefinition::definition(dec)) {
-        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().textRange();
+        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange().textRange();
       }
-      QMap<IndexedString, QList<SimpleRange> > uses = dec->uses();
-      for(QMap<IndexedString, QList<SimpleRange> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
+      QMap<IndexedString, QList<RangeInRevision> > uses = dec->uses();
+      for(QMap<IndexedString, QList<RangeInRevision> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
         kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
-        foreach (const SimpleRange& range, *it)
-          kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.textRange();
+        foreach (const RangeInRevision& range, *it)
+          kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.castToSimpleRange().textRange();
       }
     }
   } else {

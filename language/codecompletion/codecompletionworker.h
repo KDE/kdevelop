@@ -78,7 +78,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view, const KTextEditor::Range& contextRange, const QString& contextText);
     virtual QList<KSharedPtr<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, KSharedPtr<CodeCompletionContext> completionContext);
     ///If you don't need to reimplement computeCompletions, you can implement only this.
-    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const SimpleCursor &position) const;
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const CursorInRevision &position) const;
 
     ///Can be used to retrieve and set the aborting flag(Enabling it is equivalent to caling abortCompletion())
     ///Is always reset from within computeCompletions

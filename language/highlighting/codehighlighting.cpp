@@ -487,7 +487,7 @@ void CodeHighlighting::applyHighlighting(CodeHighlighting::DocumentHighlighting*
   while(rangeIt != highlighting->m_waiting.end())
   {
     // Translate the range into the current revision
-    SimpleRange transformedRange = tracker->transformBetweenRevisions(rangeIt->range, highlighting->m_waitingRevision);
+    SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
 
     while(movingIt != oldHighlightedRanges.end() &&
       (*movingIt)->start().line() < transformedRange.start.line ||
