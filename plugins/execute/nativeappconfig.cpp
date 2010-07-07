@@ -156,6 +156,7 @@ void NativeAppConfigPage::depEdited( const QString& str )
 
 void NativeAppConfigPage::activateDeps( int idx )
 {
+    browseProject->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
     dependencies->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
     targetDependency->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
 }
