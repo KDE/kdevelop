@@ -483,7 +483,7 @@ void RunController::slotDebug()
         d.exec();
     }
     
-    if(d->launchConfigurations.isEmpty())
+    if(!d->launchConfigurations.isEmpty())
         executeDefaultLaunch( "debug" );
 }
 
@@ -494,7 +494,7 @@ void RunController::slotProfile()
         d.exec();
     }
     
-    if(d->launchConfigurations.isEmpty())
+    if(!d->launchConfigurations.isEmpty())
         executeDefaultLaunch( "profile" );
 }
 
@@ -506,7 +506,7 @@ void RunController::slotExecute()
         d.exec();
     }
     
-    if(d->launchConfigurations.isEmpty())
+    if(!d->launchConfigurations.isEmpty())
         executeDefaultLaunch( "execute" );
 }
 
