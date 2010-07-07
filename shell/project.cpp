@@ -142,7 +142,6 @@ public:
     KUrl developerFileUrl;
     QString developerTempFile;
     QString projectTempFile;
-    KTemporaryFile* tmp;
     IPlugin* manager;
     IPlugin* vcsPlugin;
     ProjectFolderItem* topItem;
@@ -308,10 +307,9 @@ public:
         if( !statJob->exec() || !KIO::NetAccess::download( developerFileUrl, developerTempFile,
             Core::self()->uiController()->activeMainWindow() ) )
         {
-            tmp = new KTemporaryFile();
-            tmp->open();
-            developerTempFile = tmp->fileName();
-            tmp->close();
+            KTemporaryFile tmp;
+            tmp.open();
+            developerTempFile = tmp.fileName();
         }
         return true;
     }
@@ -434,7 +432,6 @@ Project::Project( QObject *parent )
     d->project = this;
     d->manager = 0;
     d->topItem = 0;
-    d->tmp = 0;
     d->vcsPlugin = 0;
     d->loading = false;
     d->scheduleReload = false;
@@ -535,11 +532,6 @@ void Project::close()
 {
     Core::self()->projectController()->projectModel()->removeRow( d->topItem->row() );
 
-    if( d->tmp )
-    {
-        d->tmp->close();
-    }
-
     if( !KIO::NetAccess::upload( d->developerTempFile, d->developerFileUrl,
                 Core::self()->uiController()->activeMainWindow() ) )
     {
@@ -548,7 +540,6 @@ void Project::close()
                          "Attention: The project settings you changed will be lost."
                     ) );
     }
-    delete d->tmp;
 }
 
 bool Project::inProject( const KUrl& url ) const
