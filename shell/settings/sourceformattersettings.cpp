@@ -362,10 +362,10 @@ void SourceFormatterSettings::newStyle()
     SourceFormatterStyle s( QString( "%1%2" ).arg( userStylePrefix ).arg( idx ) );
     if( item ) {
         SourceFormatterStyle existstyle = fmt.styles[ item->data( STYLE_ROLE ).toString() ];
-        s.setCaption( QString( "New %1" ).arg( existstyle.caption() ) );
+        s.setCaption( i18n( "New %1" ,existstyle.caption() ) );
         s.setContent( existstyle.content() );
     } else {
-        s.setCaption( QString( "New Style" ) );
+        s.setCaption( i18n( "New Style" ) );
     }
     fmt.styles[ s.name() ] = s;
     l.formatters[ l.selectedFmt ] = fmt;
