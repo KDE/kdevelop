@@ -82,7 +82,7 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
 
   QString lineText = view->document()->text(KTextEditor::Range(position.line(), 0, position.line(), position.column()));
   
-  if(lineText.startsWith("#") && lineText.contains("include") && inserted == "/")
+  if(lineText.startsWith("#") && lineText.contains("include") && inserted.endsWith("/"))
     return true; //Directory-content completion
   
   if(insertedTrimmed.endsWith('\"'))

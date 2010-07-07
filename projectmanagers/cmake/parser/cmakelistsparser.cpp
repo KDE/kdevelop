@@ -277,6 +277,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
         return CMakeFileContent();
     if ( !cmListFileLexer_SetFileName( lexer, qPrintable( fileName ) ) ) {
         kDebug(9042) << "cmake read error. could not read " << fileName;
+        cmListFileLexer_Delete(lexer);
         return CMakeFileContent();
     }
 
@@ -313,6 +314,7 @@ CMakeFileContent CMakeListsParser::readCMakeFile(const QString & fileName)
             }
         }
     }
+    cmListFileLexer_Delete(lexer);
 
     return ret;
 }
