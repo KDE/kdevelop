@@ -49,6 +49,12 @@ CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel
     SLOT(documentLoaded(KParts::Part*)));
   connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)) );
   aModel->setParent(this);
+
+  foreach( KDevelop::IDocument* doc, KDevelop::ICore::self()->documentController()->openDocuments() ) {
+    if (doc->textDocument()) {
+      checkDocument(doc->textDocument());
+    }
+  }
 }
 
 CodeCompletion::~CodeCompletion()
