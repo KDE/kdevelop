@@ -55,7 +55,7 @@ bool containsContext( const QList<LineContextPair>& lineContexts, TopDUContext* 
 
 bool importsContext( const QList<LineContextPair>& lineContexts, TopDUContext* context ) {
   foreach( const LineContextPair& ctx, lineContexts )
-    if( ctx.context && ctx.context->imports(context, KDevelop::SimpleCursor()) )
+    if( ctx.context && ctx.context->imports(context, KDevelop::CursorInRevision()) )
       return true;
   return false;
 }
@@ -128,7 +128,7 @@ void ContextBuilder::createUserProblem(AST* node, QString text) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
     problem->setDescription(text);
     problem->setSource(KDevelop::ProblemData::DUChainBuilder);
-    problem->setFinalLocation(DocumentRange(IndexedString(currentContext()->url().str()), editor()->findRange(node).textRange()));
+    problem->setFinalLocation(DocumentRange(IndexedString(currentContext()->url().str()), editor()->findRange(node).castToSimpleRange()));
     currentContext()->topContext()->addProblem(problem);
 }
 
@@ -197,21 +197,21 @@ DUContext* ContextBuilder::contextFromNode( AST* node )
   return node->ducontext;
 }
 
-KTextEditor::Range ContextBuilder::editorFindRange( AST* fromRange, AST* toRange )
+RangeInRevision ContextBuilder::editorFindRange( AST* fromRange, AST* toRange )
 {
-  return editor()->findRange(fromRange, toRange).textRange();
+  return editor()->findRange(fromRange, toRange);
 }
 
-KTextEditor::Range ContextBuilder::editorFindRangeForContext( AST* fromRange, AST* toRange )
+RangeInRevision ContextBuilder::editorFindRangeForContext( AST* fromRange, AST* toRange )
 {
-  return editor()->findRangeForContext(fromRange->start_token, toRange->end_token).textRange();
+  return editor()->findRangeForContext(fromRange->start_token, toRange->end_token);
 }
 
 ContextBuilder::~ContextBuilder ()
 {
 }
 
-QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const QualifiedIdentifier& id, KDevelop::SimpleCursor pos) {
+QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const QualifiedIdentifier& id, KDevelop::CursorInRevision pos) {
   if(id.count() < 2)
     return qMakePair((DUContext*)0, QualifiedIdentifier());
   
@@ -245,7 +245,7 @@ QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const Q
   return qMakePair(import, prefixId);
 }
 
-void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos) {
+void ContextBuilder::openPrefixContext(AST* ast, const QualifiedIdentifier& id, const CursorInRevision& pos) {
   if(id.count() < 2)
     return;
 
@@ -319,7 +319,7 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
     } else {
       kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: compiling";
 
-      topLevelContext = new CppDUContext<TopDUContext>(file->url(), SimpleRange(), filePtr);
+      topLevelContext = new CppDUContext<TopDUContext>(file->url(), RangeInRevision(), filePtr);
       topLevelContext->setType(DUContext::Global);
 
       Q_ASSERT(dynamic_cast<CppDUContext<TopDUContext>* >(topLevelContext));
@@ -373,7 +373,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
       Q_ASSERT(compilingContexts());
 
-      topLevelContext = new CppDUContext<TopDUContext>(file->url(), SimpleRange(SimpleCursor(0,0), SimpleCursor(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(file->url(), RangeInRevision(CursorInRevision(0,0), CursorInRevision(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
 
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
@@ -391,13 +391,13 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
             topLevelContext->removeImportedParentContext(parent.context(0));
       }
 
-      QList< QPair<TopDUContext*, SimpleCursor> > realIncluded;
-      QList< QPair<TopDUContext*, SimpleCursor> > realTemporaryIncluded;
+      QList< QPair<TopDUContext*, CursorInRevision> > realIncluded;
+      QList< QPair<TopDUContext*, CursorInRevision> > realTemporaryIncluded;
       foreach (const LineContextPair &included, *includes)
         if(!included.temporary)
-          realIncluded << qMakePair(included.context.data(), SimpleCursor(included.sourceLine, 0));
+          realIncluded << qMakePair(included.context.data(), CursorInRevision(included.sourceLine, 0));
         else
-          realTemporaryIncluded << qMakePair(included.context.data(), SimpleCursor(included.sourceLine, 0));
+          realTemporaryIncluded << qMakePair(included.context.data(), CursorInRevision(included.sourceLine, 0));
 
       topLevelContext->addImportedParentContexts(realIncluded);
       topLevelContext->addImportedParentContexts(realTemporaryIncluded, true);
@@ -614,7 +614,7 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
 #ifdef DEBUG_UPDATE_MATCHING
     kDebug() << "opening context with text" << editor()->tokensToStrings( rangeNode->start_token, rangeNode->end_token );
 #endif
-    KDevelop::SimpleRange range = editor()->findRangeForContext(rangeNode->start_token, rangeNode->end_token);
+    KDevelop::RangeInRevision range = editor()->findRangeForContext(rangeNode->start_token, rangeNode->end_token);
     range.end = range.start;
     DUContext* ret = openContextInternal(range, type, QualifiedIdentifier());
     rangeNode->ducontext = ret;
@@ -626,7 +626,7 @@ DUContext* ContextBuilder::openContextEmpty(AST* rangeNode, DUContext::ContextTy
   }
 }
 
-DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
+DUContext* ContextBuilder::openContextInternal(const KDevelop::RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& identifier)
 {
   DUContext* ret = ContextBuilderBase::openContextInternal(range, type, identifier);
 
@@ -645,7 +645,7 @@ DUContext* ContextBuilder::openContextInternal(const KDevelop::SimpleRange& rang
   return ret;
 }
 
-DUContext* ContextBuilder::newContext(const SimpleRange& range)
+DUContext* ContextBuilder::newContext(const RangeInRevision& range)
 {
   return new CppDUContext<DUContext>(range, currentContext());
 }
@@ -653,7 +653,7 @@ DUContext* ContextBuilder::newContext(const SimpleRange& range)
 #ifdef DEBUG_CONTEXT_RANGES
 void ContextBuilder::checkRanges()
 {
-  for(QHash<KDevelop::DUContext*, KDevelop::SimpleRange>::iterator it = m_contextRanges.begin(); it != m_contextRanges.end(); ) {
+  for(QHash<KDevelop::DUContext*, KDevelop::RangeInRevision>::iterator it = m_contextRanges.begin(); it != m_contextRanges.end(); ) {
     if(it.key()->range() != *it) {
       kDebug(9007) << "Range of" << it.key()->scopeIdentifier(true).toString() << "changed from" << (*it).textRange() << "to" << it.key()->range().textRange() << "at\n" << kBacktrace();
       it = m_contextRanges.erase(it); //Remove it so we see each change only once
@@ -727,7 +727,7 @@ class VerifyExpressionVisitor : public Cpp::ExpressionVisitor {
 class IdentifierVerifier : public DefaultVisitor
 {
 public:
-  IdentifierVerifier(ContextBuilder* _builder, const SimpleCursor& _cursor)
+  IdentifierVerifier(ContextBuilder* _builder, const CursorInRevision& _cursor)
     : builder(_builder)
     , result(true)
     , cursor(_cursor)
@@ -736,7 +736,7 @@ public:
 
   ContextBuilder* builder;
   bool result; //Will be true when this should be an expression, else false.
-  SimpleCursor cursor;
+  CursorInRevision cursor;
 
   void visitPostfixExpression(PostfixExpressionAST* node)
   {
@@ -800,7 +800,7 @@ void ContextBuilder::visitExpressionOrDeclarationStatement(ExpressionOrDeclarati
 
         node->expression->ducontext = currentContext();
         iv.parse(node->expression);*/
-        IdentifierVerifier iv(this, SimpleCursor(editor()->findPosition(node->start_token)));
+        IdentifierVerifier iv(this, CursorInRevision(editor()->findPosition(node->start_token)));
         iv.visit(node->expression);
         //kDebug(9007) << editor()->findPosition(node->start_token) << "IdentifierVerifier returned" << iv.result;
         node->expressionChosen = iv.result;
@@ -882,7 +882,7 @@ void ContextBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   QualifiedIdentifier id;
   if(node->declarator && node->declarator->id && node->declarator->id->qualified_names && (!node->declarator->parameter_declaration_clause || node->declarator->parameter_is_initializer)) {
     //Build a prefix-context for external variable-definitions
-    SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
+    CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     identifierForNode(node->declarator->id, id);
     
     openPrefixContext(node, id, pos);

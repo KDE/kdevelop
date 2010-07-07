@@ -49,12 +49,12 @@ Stream::Stream()
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
   , m_onwsString(true)
-  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
+  , m_macroExpansion(KDevelop::CursorInRevision::invalid())
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
   , m_locationTable(0L)
-  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
+  , m_originalInputPosition(KDevelop::CursorInRevision::invalid())
 {
   end = 0;
 }
@@ -65,12 +65,12 @@ Stream::Stream( PreprocessedContents * string, const Anchor& offset, LocationTab
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
   , m_onwsString(false)
-  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
+  , m_macroExpansion(KDevelop::CursorInRevision::invalid())
   , m_pos(0)
   , m_inputLine(offset.line)
   , m_inputLineStartedAt(-offset.column)
   , m_locationTable(table)
-  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
+  , m_originalInputPosition(KDevelop::CursorInRevision::invalid())
 {
   if(offset.collapsed)
     m_inputPositionLocked = true;
@@ -84,12 +84,12 @@ Stream::Stream( const uint * string, uint stringSize, const Anchor& offset, Loca
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
   , m_onwsString(true)
-  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
+  , m_macroExpansion(KDevelop::CursorInRevision::invalid())
   , m_pos(0)
   , m_inputLine(offset.line)
   , m_inputLineStartedAt(-offset.column)
   , m_locationTable(table)
-  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
+  , m_originalInputPosition(KDevelop::CursorInRevision::invalid())
 {
   memcpy(m_string->data(), string, stringSize * sizeof(uint));
   if(offset.collapsed)
@@ -104,12 +104,12 @@ Stream::Stream( PreprocessedContents * string, LocationTable* table )
   , m_skippedToEnd(false)
   , m_inputPositionLocked(false)
   , m_onwsString(false)
-  , m_macroExpansion(KDevelop::SimpleCursor::invalid())
+  , m_macroExpansion(KDevelop::CursorInRevision::invalid())
   , m_pos(0)
   , m_inputLine(0)
   , m_inputLineStartedAt(0)
   , m_locationTable(table)
-  , m_originalInputPosition(KDevelop::SimpleCursor::invalid())
+  , m_originalInputPosition(KDevelop::CursorInRevision::invalid())
 {
   c = m_string->constData();
   end = m_string->constData() + m_string->size();
@@ -367,12 +367,12 @@ void Stream::setInputPosition(const Anchor& position)
   m_inputPositionLocked = position.collapsed;
 }
 
-void Stream::setMacroExpansion(const KDevelop::SimpleCursor& expansion)
+void Stream::setMacroExpansion(const KDevelop::CursorInRevision& expansion)
 {
   m_macroExpansion = expansion;
 }
 
-KDevelop::SimpleCursor Stream::macroExpansion() const
+KDevelop::CursorInRevision Stream::macroExpansion() const
 {
   return m_macroExpansion;
 }
@@ -413,7 +413,7 @@ QByteArray rpp::Stream::stringFrom(int offset) const
   return ret;
 }
 
-KDevelop::SimpleCursor rpp::Stream::originalInputPosition() const
+KDevelop::CursorInRevision rpp::Stream::originalInputPosition() const
 {
   if (m_originalInputPosition.isValid())
     return m_originalInputPosition;
@@ -421,7 +421,7 @@ KDevelop::SimpleCursor rpp::Stream::originalInputPosition() const
   return inputPosition();
 }
 
-void rpp::Stream::setOriginalInputPosition(const KDevelop::SimpleCursor & position)
+void rpp::Stream::setOriginalInputPosition(const KDevelop::CursorInRevision & position)
 {
   m_originalInputPosition = position;
 }

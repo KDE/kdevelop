@@ -33,7 +33,7 @@ class KDEVCPPDUCHAIN_EXPORT QtFunctionDeclaration : public KDevelop::ClassFuncti
 public:
   QtFunctionDeclaration(const QtFunctionDeclaration& rhs);
   QtFunctionDeclaration(QtFunctionDeclarationData& data);
-  QtFunctionDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
+  QtFunctionDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
 
   KDevelop::IndexedString normalizedSignature() const;
   void setNormalizedSignature(KDevelop::IndexedString);

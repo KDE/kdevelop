@@ -19,7 +19,7 @@
 #ifndef CPPEDITORINTEGRATOR_H
 #define CPPEDITORINTEGRATOR_H
 
-#include <language/editor/simplerange.h>
+#include <language/editor/rangeinrevision.h>
 #include "cppduchainexport.h"
 #include "lexer.h"
 
@@ -59,7 +59,7 @@ public:
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KDevelop::SimpleCursor findPosition(const Token& token, Edge edge = BackEdge) const;
+  KDevelop::CursorInRevision findPosition(const Token& token, Edge edge = BackEdge) const;
 
   /**
    * Finds the location and \a file where the given \a token was parsed from.
@@ -70,7 +70,7 @@ public:
    *
    * \returns the requested cursor relating to the start or end of the given token.
    */
-  KDevelop::SimpleCursor findPosition(std::size_t token, Edge edge = BackEdge) const;
+  KDevelop::CursorInRevision findPosition(std::size_t token, Edge edge = BackEdge) const;
 
   /**
    * Create a range encompassing the given AST \a node.
@@ -78,7 +78,7 @@ public:
    *
    * \overload
    */
-  KDevelop::SimpleRange findRange(AST* node, RangeEdge = OuterEdge);
+  KDevelop::RangeInRevision findRange(AST* node, RangeEdge = OuterEdge);
 
   /**
    * Create a range encompassing the given AST \a nodes.
@@ -86,7 +86,7 @@ public:
    *
    * \overload
    */
-  KDevelop::SimpleRange findRange(AST* from, AST* to);
+  KDevelop::RangeInRevision findRange(AST* from, AST* to);
 
   /**
    * Create a range encompassing the given AST \a token.
@@ -94,7 +94,7 @@ public:
    *
    * \overload
    */
-  KDevelop::SimpleRange findRange(const Token& token);
+  KDevelop::RangeInRevision findRange(const Token& token);
 
   /**
    * Create a range encompassing the given AST \a token.
@@ -102,7 +102,7 @@ public:
    *
    * \overload
    */
-  KDevelop::SimpleRange findRange(std::size_t token);
+  KDevelop::RangeInRevision findRange(std::size_t token);
 
   /**
    * Create a range encompassing the given AST \a tokens.
@@ -110,7 +110,7 @@ public:
    *
    * \overload
    */
-  KDevelop::SimpleRange findRange(std::size_t start_token, std::size_t end_token);
+  KDevelop::RangeInRevision findRange(std::size_t start_token, std::size_t end_token);
 
   /**
    * Create a range encompassing the given range \a tokens.
@@ -119,7 +119,7 @@ public:
    * one macro-expansion, and if it has, returns a collapsed range at the position from where the expansion was started.
    * \overload
    */
-  KDevelop::SimpleRange findRangeForContext(std::size_t start_token, std::size_t end_token);
+  KDevelop::RangeInRevision findRangeForContext(std::size_t start_token, std::size_t end_token);
   
   /**
    * Retrieve the string represented by a token.

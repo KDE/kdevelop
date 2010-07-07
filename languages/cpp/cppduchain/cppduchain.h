@@ -42,7 +42,7 @@ namespace KDevelop {
   class TopDUContext;
   class Identifier;
   class QualifiedIdentifier;
-  class SimpleCursor;
+  class CursorInRevision;
   class IndexedString;
 }
 
@@ -64,7 +64,7 @@ KDEVCPPDUCHAIN_EXPORT QList<KDevelop::Declaration*> findLocalDeclarations( KDeve
  * Searches for declarations on the same level, either locally within the context, or namespace. \param identifier that will be declared in a given \param context
  * Tries to follow the C++ rules, that decide where a type may have been forward-declared.
  * */
-QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::SimpleCursor& position);
+QList<KDevelop::Declaration*> findDeclarationsSameLevel(KDevelop::DUContext* context, const KDevelop::Identifier& identifier, const KDevelop::CursorInRevision& position);
 
 /**
  * Takes and returns a list of declarations together with inheritance-depth.

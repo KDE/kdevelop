@@ -127,7 +127,7 @@ namespace QTest {
     return qstrdup(ba.data());
   }
   template<>
-  char *toString(const SimpleRange &range)
+  char *toString(const RangeInRevision &range)
   {
       QByteArray ba = "[ (";
       ba += QByteArray::number(range.start.line) + ", " + QByteArray::number(range.start.column);
@@ -216,7 +216,7 @@ void TestDUChain::initTestCase()
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";
 
-  topContext = new TopDUContext(IndexedString(file1.pathOrUrl()), SimpleRange(SimpleCursor(0,0),SimpleCursor(25,0)));
+  topContext = new TopDUContext(IndexedString(file1.pathOrUrl()), RangeInRevision(CursorInRevision(0,0),CursorInRevision(25,0)));
   DUChainWriteLocker lock(DUChain::lock());
 
   DUChain::self()->addDocumentChain(topContext);
@@ -252,7 +252,7 @@ void TestDUChain::cleanupTestCase()
   }
 }
 
-Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& id, const SimpleCursor& position)
+Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& id, const CursorInRevision& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -260,7 +260,7 @@ Declaration* TestDUChain::findDeclaration(DUContext* context, const Identifier& 
   return 0;
 }
 
-Declaration* TestDUChain::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const SimpleCursor& position)
+Declaration* TestDUChain::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const CursorInRevision& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -343,19 +343,19 @@ void TestDUChain::testContextRelationships()
 
   QCOMPARE(DUChain::self()->chainForDocument(file1), topContext);
 
-  DUContext* firstChild = new DUContext(SimpleRange(SimpleCursor(4,4), SimpleCursor(10,3)), topContext);
+  DUContext* firstChild = new DUContext(RangeInRevision(CursorInRevision(4,4), CursorInRevision(10,3)), topContext);
 
   QCOMPARE(firstChild->parentContext(), topContext);
   QCOMPARE(firstChild->childContexts().count(), 0);
   QCOMPARE(topContext->childContexts().count(), 1);
   QCOMPARE(topContext->childContexts().last(), firstChild);
 
-  DUContext* secondChild = new DUContext(SimpleRange(SimpleCursor(14,4), SimpleCursor(19,3)), topContext);
+  DUContext* secondChild = new DUContext(RangeInRevision(CursorInRevision(14,4), CursorInRevision(19,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 2);
   QCOMPARE(topContext->childContexts()[1], secondChild);
 
-  DUContext* thirdChild = new DUContext(SimpleRange(SimpleCursor(10,4), SimpleCursor(14,3)), topContext);
+  DUContext* thirdChild = new DUContext(RangeInRevision(CursorInRevision(10,4), CursorInRevision(14,3)), topContext);
 
   QCOMPARE(topContext->childContexts().count(), 3);
   QCOMPARE(topContext->childContexts()[1], thirdChild);
@@ -399,7 +399,7 @@ void TestDUChain::testMultiByteCStrings()
   QCOMPARE(cDec->uses().begin()->size(), 1);
   kDebug() << cDec->uses().begin()->first().textRange();
   
-//   QVERIFY(cDec->uses().begin()->first() == SimpleRange(0, 28, 0, 29));
+//   QVERIFY(cDec->uses().begin()->first() == RangeInRevision(0, 28, 0, 29));
   release(top);
 #endif
 }
@@ -688,7 +688,7 @@ void TestDUChain::testBaseUses()
     // the ctor usage
     QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
     QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().values().first().count(), 1);
-    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().values().first().first(), SimpleRange(0, 81, 0, 82));
+    QCOMPARE(top->childContexts()[0]->childContexts()[0]->localDeclarations()[0]->uses().values().first().first(), RangeInRevision(0, 81, 0, 82));
     release(top);
   }
 
@@ -706,8 +706,8 @@ void TestDUChain::testBaseUses()
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[1]->usesCount(), 2);
 
-    QCOMPARE(top->childContexts()[1]->uses()[0].m_range, SimpleRange(0, 41, 0, 42));
-    QCOMPARE(top->childContexts()[1]->uses()[1].m_range, SimpleRange(0, 44, 0, 45));
+    QCOMPARE(top->childContexts()[1]->uses()[0].m_range, RangeInRevision(0, 41, 0, 42));
+    QCOMPARE(top->childContexts()[1]->uses()[1].m_range, RangeInRevision(0, 44, 0, 45));
 
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
@@ -734,15 +734,15 @@ void TestDUChain::testBaseUses()
     QCOMPARE(top->localDeclarations().first()->uses().size(), 1);
     QCOMPARE(top->localDeclarations().first()->uses().begin()->size(), 2);
     // use in class B : public A<T>
-    QCOMPARE(top->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 38, 1, 39));
+    QCOMPARE(top->localDeclarations().first()->uses().begin()->at(0), RangeInRevision(1, 38, 1, 39));
     // use in B() : A<T>()
-    QCOMPARE(top->localDeclarations().first()->uses().begin()->at(1), SimpleRange(1, 51, 1, 52));
+    QCOMPARE(top->localDeclarations().first()->uses().begin()->at(1), RangeInRevision(1, 51, 1, 52));
 
     // use of A's ctor
     QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 1);
     QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().size(), 1);
     QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().begin()->size(), 1);
-    QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().begin()->first(), SimpleRange(1, 55, 1, 56));
+    QCOMPARE(top->childContexts()[1]->localDeclarations().first()->uses().begin()->first(), RangeInRevision(1, 55, 1, 56));
 
     release(top);
   }
@@ -813,20 +813,20 @@ void TestDUChain::testConstructorOperatorUses()
   
   QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
   QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 3);
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 55, 0, 56));
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(1), SimpleRange(0, 63, 0, 64));
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(2), SimpleRange(0, 69, 0, 70));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0), RangeInRevision(0, 55, 0, 56));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(1), RangeInRevision(0, 63, 0, 64));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(2), RangeInRevision(0, 69, 0, 70));
 
   QCOMPARE(top->childContexts()[0]->localDeclarations().count(), 2);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
   
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 2);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 58, 0, 59));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(1), SimpleRange(0, 70, 0, 71));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(0), RangeInRevision(0, 58, 0, 59));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(1), RangeInRevision(0, 70, 0, 71));
   
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().count(), 1);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0), SimpleRange(0, 76, 0, 77));
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0), RangeInRevision(0, 76, 0, 77));
   
   release(top);
 }
@@ -928,8 +928,8 @@ void TestDUChain::testEnum()
   QVERIFY(top->childContexts()[2]->inSymbolTable());
   
   ///@todo Test for the enum ranges and fix them, they overlap
-  kDebug() << top->childContexts()[0]->range().textRange();
-  kDebug() << top->localDeclarations()[0]->range().textRange();
+  kDebug() << top->childContexts()[0]->range().castToSimpleRange().textRange();
+  kDebug() << top->localDeclarations()[0]->range().castToSimpleRange().textRange();
 
   Declaration* decl = findDeclaration(top, Identifier("Enum"));
   Declaration* enumDecl = decl;
@@ -1827,7 +1827,7 @@ void TestDUChain::testDeclareNamespace()
   QCOMPARE(top->localDeclarations().count(), 3);
   QVERIFY(top->localScopeIdentifier().isEmpty());
   QCOMPARE(findDeclaration(top, Identifier("foo")), top->localDeclarations()[0]);
-  QCOMPARE(top->childContexts()[0]->range(), SimpleRange(0, 14, 0, 26));
+  QCOMPARE(top->childContexts()[0]->range(), RangeInRevision(0, 14, 0, 26));
   QVERIFY(top->localDeclarations()[0]->inSymbolTable());
 
   QVERIFY(top->localDeclarations()[0]->inSymbolTable());
@@ -2144,14 +2144,14 @@ void TestDUChain::testDeclareUsingNamespace()
   QVERIFY(findDeclaration(top, Identifier("foo")));
   QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
   QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 2);
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 65-22, 0, 68-22));
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(1), SimpleRange(0, 97-22, 0, 100-22));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0), RangeInRevision(0, 65-22, 0, 68-22));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(1), RangeInRevision(0, 97-22, 0, 100-22));
 
 
 //   QCOMPARE(top->localDeclarations()[0]->range()
-  QCOMPARE(top->localDeclarations()[1]->range(), SimpleRange(0, 33, 0, 42));
-  kDebug() << top->localDeclarations()[2]->range().textRange();
-  QCOMPARE(top->localDeclarations()[2]->range(), SimpleRange(0, 58, 0, 72));
+  QCOMPARE(top->localDeclarations()[1]->range(), RangeInRevision(0, 33, 0, 42));
+  kDebug() << top->localDeclarations()[2]->range().castToSimpleRange().textRange();
+  QCOMPARE(top->localDeclarations()[2]->range(), RangeInRevision(0, 58, 0, 72));
   
   
   DUContext* fooCtx = top->childContexts().first();
@@ -2268,13 +2268,13 @@ void TestDUChain::testSignalSlotUse() {
     //kDebug() << top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange();
     //kDebug() << top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first().textRange();
     //kDebug() << top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first().textRange();
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().textRange(), SimpleRange(3, 12, 3, 17).textRange());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[0]->uses().begin()->first().castToSimpleRange().textRange(), RangeInRevision(3, 12, 3, 17).castToSimpleRange().textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[1]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().textRange(), SimpleRange(1, 75, 1, 80).textRange());
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[1]->uses().begin()->first().castToSimpleRange().textRange(), RangeInRevision(1, 75, 1, 80).castToSimpleRange().textRange());
     QVERIFY(top->childContexts()[1]->localDeclarations()[2]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), SimpleRange(1, 29, 1, 36));
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[2]->uses().begin()->first(), RangeInRevision(1, 29, 1, 36));
     QVERIFY(top->childContexts()[1]->localDeclarations()[3]->uses().count());
-    QCOMPARE(top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first(), SimpleRange(2, 28, 2, 35));
+    QCOMPARE(top->childContexts()[1]->localDeclarations()[3]->uses().begin()->first(), RangeInRevision(2, 28, 2, 35));
 
     QCOMPARE(top->localDeclarations()[0]->uses().count(), 1);
     QCOMPARE(top->localDeclarations()[0]->uses().begin()->count(), 4);
@@ -2330,7 +2330,7 @@ void TestDUChain::testSignalSlotUse() {
     QVERIFY(sig->isSignal());
     QCOMPARE(sig->uses().size(), 1);
     QCOMPARE(sig->uses().begin()->count(), 1);
-    QCOMPARE(sig->uses().begin()->first(), SimpleRange(4, 52, 4, 59));
+    QCOMPARE(sig->uses().begin()->first(), RangeInRevision(4, 52, 4, 59));
   }
 }
 
@@ -2354,7 +2354,7 @@ void TestDUChain::testFunctionDefinition() {
   QVERIFY(dynamic_cast<AbstractFunctionDeclaration*>(atInA));
 
   QVERIFY(atInA->internalContext());
-  QCOMPARE(atInA->internalContext()->range(), SimpleRange(0, 29, 0, 33));
+  QCOMPARE(atInA->internalContext()->range(), RangeInRevision(0, 29, 0, 33));
   
   QCOMPARE(top->localDeclarations().count(), 5);
 
@@ -2436,8 +2436,8 @@ void TestDUChain::testFunctionDefinition2() {
     QCOMPARE(top->childContexts()[1]->range().start.column, 20);
     QCOMPARE(top->childContexts()[1]->range().end.column, 20);
     //Many parts of kdevelop assume that the compound parens are included in the range, so it has to stay like that
-    QCOMPARE(top->childContexts()[0]->range(), SimpleRange(1, 7, 1, 13));
-    QCOMPARE(top->childContexts()[2]->range(), SimpleRange(1, 22, 1, 24));
+    QCOMPARE(top->childContexts()[0]->range(), RangeInRevision(1, 7, 1, 13));
+    QCOMPARE(top->childContexts()[2]->range(), RangeInRevision(1, 22, 1, 24));
 
     QVERIFY(!top->childContexts()[2]->inSymbolTable());
 
@@ -2642,14 +2642,14 @@ void TestDUChain::testConstructorUses()
     // Q(int var)
     Declaration *ctorDecl = top->childContexts()[0]->localDeclarations()[0];
     QCOMPARE(ctorDecl->uses().size(), 1);
-    QList<SimpleRange> uses = ctorDecl->uses().values().first();
+    QList<RangeInRevision> uses = ctorDecl->uses().values().first();
 
     QCOMPARE(uses.size(), 5);
-    QCOMPARE(uses[0], SimpleRange(7, 16, 7, 17));
-    QCOMPARE(uses[1], SimpleRange(11, 7, 11, 8));
-    QCOMPARE(uses[2], SimpleRange(12, 11, 12, 12));
-    QCOMPARE(uses[3], SimpleRange(13, 15, 13, 16));
-    QCOMPARE(uses[4], SimpleRange(14, 7, 14, 8));
+    QCOMPARE(uses[0], RangeInRevision(7, 16, 7, 17));
+    QCOMPARE(uses[1], RangeInRevision(11, 7, 11, 8));
+    QCOMPARE(uses[2], RangeInRevision(12, 11, 12, 12));
+    QCOMPARE(uses[3], RangeInRevision(13, 15, 13, 16));
+    QCOMPARE(uses[4], RangeInRevision(14, 7, 14, 8));
 
     // Q()
     ctorDecl = top->childContexts()[0]->localDeclarations()[1];
@@ -2657,10 +2657,10 @@ void TestDUChain::testConstructorUses()
     uses = ctorDecl->uses().values().first();
 
     QCOMPARE(uses.size(), 4);
-    QCOMPARE(uses[0], SimpleRange(8, 9, 8, 10));
-    QCOMPARE(uses[1], SimpleRange(15, 8, 15, 9));
-    QCOMPARE(uses[2], SimpleRange(16, 12, 16, 13));
-    QCOMPARE(uses[3], SimpleRange(17, 16, 17, 17));
+    QCOMPARE(uses[0], RangeInRevision(8, 9, 8, 10));
+    QCOMPARE(uses[1], RangeInRevision(15, 8, 15, 9));
+    QCOMPARE(uses[2], RangeInRevision(16, 12, 16, 13));
+    QCOMPARE(uses[3], RangeInRevision(17, 16, 17, 17));
 
     release(top);
   }
@@ -2702,14 +2702,14 @@ void TestDUChain::testConstructorUses()
     QCOMPARE(ctorDecl->uses().size(), 1);
     ///TODO
     /*
-    QList<SimpleRange> uses = ctorDecl->uses().values().first();
+    QList<RangeInRevision> uses = ctorDecl->uses().values().first();
 
     QCOMPARE(uses.size(), 5);
-    QCOMPARE(uses[0], SimpleRange(7, 16, 7, 17));
-    QCOMPARE(uses[1], SimpleRange(11, 7, 11, 8));
-    QCOMPARE(uses[2], SimpleRange(12, 11, 12, 12));
-    QCOMPARE(uses[3], SimpleRange(13, 15, 13, 16));
-    QCOMPARE(uses[4], SimpleRange(14, 7, 14, 8));
+    QCOMPARE(uses[0], RangeInRevision(7, 16, 7, 17));
+    QCOMPARE(uses[1], RangeInRevision(11, 7, 11, 8));
+    QCOMPARE(uses[2], RangeInRevision(12, 11, 12, 12));
+    QCOMPARE(uses[3], RangeInRevision(13, 15, 13, 16));
+    QCOMPARE(uses[4], RangeInRevision(14, 7, 14, 8));
 
     // Q()
     ctorDecl = top->childContexts()[1]->localDeclarations()[1];
@@ -2717,10 +2717,10 @@ void TestDUChain::testConstructorUses()
     uses = ctorDecl->uses().values().first();
 
     QCOMPARE(uses.size(), 4);
-    QCOMPARE(uses[0], SimpleRange(8, 9, 8, 10));
-    QCOMPARE(uses[1], SimpleRange(15, 8, 15, 9));
-    QCOMPARE(uses[2], SimpleRange(16, 12, 16, 13));
-    QCOMPARE(uses[3], SimpleRange(17, 16, 17, 17));
+    QCOMPARE(uses[0], RangeInRevision(8, 9, 8, 10));
+    QCOMPARE(uses[1], RangeInRevision(15, 8, 15, 9));
+    QCOMPARE(uses[2], RangeInRevision(16, 12, 16, 13));
+    QCOMPARE(uses[3], RangeInRevision(17, 16, 17, 17));
     */
     release(top);
   }
@@ -3084,8 +3084,8 @@ void TestDUChain::testSpecializedTemplates() {
     QEXPECT_FAIL("", "The uses of T are not reported when we define the default implementation outside the class body", Abort);
     QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().size(), 1);
     QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->size(), 2);
-    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->at(0), SimpleRange(2, 22, 2, 23));
-    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 31, 2, 32));
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->at(0), RangeInRevision(2, 22, 2, 23));
+    QCOMPARE(top->childContexts().at(2)->localDeclarations().first()->uses().begin()->at(1), RangeInRevision(2, 31, 2, 32));
     release(top);
   }
 }
@@ -3615,7 +3615,7 @@ void TestDUChain::testSourceCodeInsertion()
 
     {
       Cpp::SourceCodeInsertion ins(top);
-      ins.setInsertBefore(top->localDeclarations()[1]->range().start);
+      ins.setInsertBefore(top->localDeclarations()[1]->range().start.castToSimpleCursor());
       ins.insertForwardDeclaration(top->localDeclarations()[1]);
       ins.changes().setReplacementPolicy(KDevelop::DocumentChangeSet::StopOnFailedChange);
       DocumentChangeSet::ChangeResult result = ins.changes().applyAllChanges();
@@ -3885,7 +3885,7 @@ void TestDUChain::testTemplates() {
     IdentifiedType* identifiedType = dynamic_cast<IdentifiedType*>(t.unsafeData());
     QVERIFY(identifiedType);
     QVERIFY(identifiedType->declaration(top));
-    kDebug() << identifiedType->declaration(top)->toString() << identifiedType->declaration(top)->range().textRange() << instanceDefClassA->toString() << instanceDefClassA->range().textRange();
+    kDebug() << identifiedType->declaration(top)->toString() << identifiedType->declaration(top)->range().castToSimpleRange().textRange() << instanceDefClassA->toString() << instanceDefClassA->range().castToSimpleRange().textRange();
     QCOMPARE(identifiedType->declaration(top), instanceDefClassA);
     QCOMPARE(identifiedType->qualifiedIdentifier().toString(), Identifier("A<B,C>").toString());
     QVERIFY(instanceDefClassA->internalContext());
@@ -4388,8 +4388,8 @@ void TestDUChain::testOperatorUses()
     QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 2);
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).textRange(), KTextEditor::Range(0, 68, 0, 69));
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(1).textRange(), KTextEditor::Range(0, 79, 0, 80));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0).castToSimpleRange().textRange(), KTextEditor::Range(0, 68, 0, 69));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(1).castToSimpleRange().textRange(), KTextEditor::Range(0, 79, 0, 80));
 
     release(top);
   }
@@ -4408,8 +4408,8 @@ void TestDUChain::testOperatorUses()
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->size(), 2);
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(2, 13, 2, 15));
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(3, 13, 3, 23));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), RangeInRevision(2, 13, 2, 15));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), RangeInRevision(3, 13, 3, 23));
 
     release(top);
   }
@@ -4427,8 +4427,8 @@ void TestDUChain::testOperatorUses()
     QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().count(), 1);
     QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->size(), 2);
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), SimpleRange(1, 28, 1, 29));
-    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), SimpleRange(2, 3, 2, 12));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(0), RangeInRevision(1, 28, 1, 29));
+    QCOMPARE(top->childContexts().first()->localDeclarations().first()->uses().begin()->at(1), RangeInRevision(2, 3, 2, 12));
 
     release(top);
   }
@@ -4439,8 +4439,8 @@ struct TestContext {
     static int number = 0;
     ++number;
     DUChainWriteLocker lock(DUChain::lock());
-    m_context = new TopDUContext(IndexedString(QString("/test1/%1").arg(number)), SimpleRange());
-    m_normalContext = new DUContext(SimpleRange(), m_context);
+    m_context = new TopDUContext(IndexedString(QString("/test1/%1").arg(number)), RangeInRevision());
+    m_normalContext = new DUContext(RangeInRevision(), m_context);
     DUChain::self()->addDocumentChain(m_context);
     Q_ASSERT(IndexedDUContext(m_context).context() == m_context);
   }
@@ -4466,7 +4466,7 @@ struct TestContext {
 
     DUChainReadLocker lock(DUChain::lock());
     foreach(TestContext* context, collected) {
-      QVERIFY(m_context->imports(context->m_context, SimpleCursor::invalid()));
+      QVERIFY(m_context->imports(context->m_context, CursorInRevision::invalid()));
 #ifdef TEST_NORMAL_IMPORTS
       QVERIFY(m_normalContext->imports(context->m_normalContext));
 #endif
@@ -4475,9 +4475,9 @@ struct TestContext {
 
     foreach(TestContext* context, allContexts)
       if(context != this) {
-        QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, SimpleCursor::invalid()));
+        QVERIFY(collected.contains(context) || !m_context->imports(context->m_context, CursorInRevision::invalid()));
 #ifdef TEST_NORMAL_IMPORTS
-        QVERIFY(collected.contains(context) || !m_normalContext->imports(context->m_normalContext, SimpleCursor::invalid()));
+        QVERIFY(collected.contains(context) || !m_normalContext->imports(context->m_normalContext, CursorInRevision::invalid()));
 #endif
       }
   }
@@ -4817,12 +4817,12 @@ void TestDUChain::testForwardDeclaration4()
 
   QCOMPARE(forwardDecl->uses().size(), 1);
   QCOMPARE(forwardDecl->uses().begin()->size(), 6);
-  QCOMPARE(forwardDecl->uses().begin()->at(0), SimpleRange(3, 19, 3, 26));
-  QCOMPARE(forwardDecl->uses().begin()->at(1), SimpleRange(4, 12, 4, 19));
-  QCOMPARE(forwardDecl->uses().begin()->at(2), SimpleRange(4, 22, 4, 29));
-  QCOMPARE(forwardDecl->uses().begin()->at(3), SimpleRange(5, 12, 5, 19));
-  QCOMPARE(forwardDecl->uses().begin()->at(4), SimpleRange(5, 22, 5, 29));
-  QCOMPARE(forwardDecl->uses().begin()->at(5), SimpleRange(6, 19, 6, 26));
+  QCOMPARE(forwardDecl->uses().begin()->at(0), RangeInRevision(3, 19, 3, 26));
+  QCOMPARE(forwardDecl->uses().begin()->at(1), RangeInRevision(4, 12, 4, 19));
+  QCOMPARE(forwardDecl->uses().begin()->at(2), RangeInRevision(4, 22, 4, 29));
+  QCOMPARE(forwardDecl->uses().begin()->at(3), RangeInRevision(5, 12, 5, 19));
+  QCOMPARE(forwardDecl->uses().begin()->at(4), RangeInRevision(5, 22, 5, 29));
+  QCOMPARE(forwardDecl->uses().begin()->at(5), RangeInRevision(6, 19, 6, 26));
 
   release(top);
 }

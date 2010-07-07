@@ -35,7 +35,7 @@ using namespace KDevelop;
 
 QTEST_MAIN( CMakeDUChainTest )
 
-Q_DECLARE_METATYPE(QList<SimpleRange>)
+Q_DECLARE_METATYPE(QList<RangeInRevision>)
 
 CMakeDUChainTest::CMakeDUChainTest() {
     AutoTestShell::init();
@@ -48,29 +48,29 @@ CMakeDUChainTest::~CMakeDUChainTest()
 void CMakeDUChainTest::testDUChainWalk_data()
 {
     QTest::addColumn<QString>("input");
-    QTest::addColumn<QList<SimpleRange> >("ranges");
+    QTest::addColumn<QList<RangeInRevision> >("ranges");
 
-    QTest::newRow("simple") << "project(simpletest)\n" << QList<SimpleRange>();
+    QTest::newRow("simple") << "project(simpletest)\n" << QList<RangeInRevision>();
 
-    QList<SimpleRange> sr;
-    sr.append(SimpleRange(1, 4, 1, 7));
+    QList<RangeInRevision> sr;
+    sr.append(RangeInRevision(1, 4, 1, 7));
     QTest::newRow("simple 2") <<
             "project(simpletest)\n"
             "set(var a b c)\n" << sr;
 
     QTest::newRow("simple 3") <<
             "project(simpletest)\n"
-            "find_package(KDE4)\n" << QList<SimpleRange>();
+            "find_package(KDE4)\n" << QList<RangeInRevision>();
 
 
-    sr.append(SimpleRange(2, 4, 2, 8));
+    sr.append(RangeInRevision(2, 4, 2, 8));
     QTest::newRow("simple 2 with use") <<
             "project(simpletest)\n"
             "set(var a b c)\n"
 	    "set(var2 ${var})\n"<< sr;
 
     sr.clear();
-    sr.append(SimpleRange(1, 15, 1, 18));
+    sr.append(RangeInRevision(1, 15, 1, 18));
     QTest::newRow("simple 2 with use") <<
             "project(simpletest)\n"
             "add_executable(var a b c)\n" << sr;
@@ -79,12 +79,12 @@ void CMakeDUChainTest::testDUChainWalk_data()
 void CMakeDUChainTest::testDUChainWalk()
 {
     QFETCH(QString, input);
-    QFETCH(QList<SimpleRange>, ranges);
+    QFETCH(QList<RangeInRevision>, ranges);
 
     KDevelop::ReferencedTopDUContext m_fakeContext;
     {
         DUChainWriteLocker lock(DUChain::lock());
-        m_fakeContext = new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+        m_fakeContext = new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
         DUChain::self()->addDocumentChain(m_fakeContext);
     }
     
@@ -124,7 +124,7 @@ void CMakeDUChainTest::testDUChainWalk()
         QVERIFY(ranges.contains(declarations[i]->range()));
     }*/
 
-    foreach(const SimpleRange& sr, ranges)
+    foreach(const RangeInRevision& sr, ranges)
     {
         bool found=false;
         for(int i=0; !found && i<declarations.count(); i++)
@@ -147,7 +147,7 @@ void CMakeDUChainTest::testUses_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QStringList>("decls");
-    QTest::addColumn<QList<SimpleRange> >("uses");
+    QTest::addColumn<QList<RangeInRevision> >("uses");
 
     QStringList input= QStringList() <<
             "project(simpletest)\n"
@@ -169,30 +169,30 @@ void CMakeDUChainTest::testUses_data()
             "endif(var)\n"
             "message(STATUS \"------- done\")\n";
             
-    QTest::newRow("empty") << "message(STATUS ueee)\n" << QStringList() << QList<SimpleRange>();
-    QTest::newRow("defanduse") << input[0] << (QStringList() << "var" << "var2") << (QList<SimpleRange>() << SimpleRange(2,11, 2,11+3) );
+    QTest::newRow("empty") << "message(STATUS ueee)\n" << QStringList() << QList<RangeInRevision>();
+    QTest::newRow("defanduse") << input[0] << (QStringList() << "var" << "var2") << (QList<RangeInRevision>() << RangeInRevision(2,11, 2,11+3) );
     QTest::newRow("include") << input[1] << (QStringList() << "CMAKE_MODULE_PATH" << "usinginc")
-        << (QList<SimpleRange>() << SimpleRange(2,17, 2,17+6));
+        << (QList<RangeInRevision>() << RangeInRevision(2,17, 2,17+6));
     
     QTest::newRow("macro") << input[2] << (QStringList() << "bla")
-        << (QList<SimpleRange>() << SimpleRange(2,9, 2,9+3) << SimpleRange(3,0,  3,3)/* << SimpleRange(10,3, 10,3+3)*/);
+        << (QList<RangeInRevision>() << RangeInRevision(2,9, 2,9+3) << RangeInRevision(3,0,  3,3)/* << RangeInRevision(10,3, 10,3+3)*/);
         
     QTest::newRow("conditional") << input[3] << QStringList("var")
-        << (QList<SimpleRange>() << SimpleRange(1,3, 1,3+3) << SimpleRange(3,6, 3,6+3));
+        << (QList<RangeInRevision>() << RangeInRevision(1,3, 1,3+3) << RangeInRevision(3,6, 3,6+3));
         
     QTest::newRow("included_macro") <<
         "set(CMAKE_MODULE_PATH .)\n"
         "include(included)\n"
         "mymacro(33)\nmessage(STATUS 33)\n"
         << QStringList("CMAKE_MODULE_PATH")
-        << (QList<SimpleRange>() << SimpleRange(2,0, 2,0+7));
+        << (QList<RangeInRevision>() << RangeInRevision(2,0, 2,0+7));
 }
 
 void CMakeDUChainTest::testUses()
 {
     QFETCH(QString, input);
     QFETCH(QStringList, decls);
-    QFETCH(QList<SimpleRange>, uses);
+    QFETCH(QList<RangeInRevision>, uses);
 
     QTemporaryFile filetemp("cmake_duchain_test");
     filetemp.open();
@@ -214,7 +214,7 @@ void CMakeDUChainTest::testUses()
             endc=0;
         }
     }
-    ReferencedTopDUContext m_fakeContext=new TopDUContext(IndexedString(file.fileName()), SimpleRange(0,0, endl, endc));
+    ReferencedTopDUContext m_fakeContext=new TopDUContext(IndexedString(file.fileName()), RangeInRevision(0,0, endl, endc));
     DUChain::self()->addDocumentChain(m_fakeContext);
     
     QString inputIncluded=
@@ -277,7 +277,7 @@ void CMakeDUChainTest::testUses()
     for(int i=0; i<ctx->usesCount(); i++)
     {
         Use u=ctx->uses()[i];
-        qDebug() << "use" << i << u.m_range.textRange() << uses[i].textRange()
+        qDebug() << "use" << i << u.m_range.castToSimpleRange().textRange() << uses[i].castToSimpleRange().textRange()
                  << u.usedDeclaration(ctx)->toString();
         QCOMPARE(uses[i], u.m_range);
     }

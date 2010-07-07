@@ -173,7 +173,7 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
   }else if(m_type == CreateDefinition) {
       TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
       if(topContext) {
-        duContext = topContext->findContextAt(position);
+        duContext = topContext->findContextAt(topContext->transformToLocalRevision(position));
       }
 
       QualifiedIdentifier scope = m_declaration->qualifiedIdentifier();

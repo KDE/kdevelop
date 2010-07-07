@@ -285,7 +285,7 @@ QList<KDevelop::CompletionTreeItemPointer> missingIncludeCompletionItems(QString
       }
       
       if(decl && !decl->isForwardDeclaration()) {
-        if(context->topContext()->imports(decl->topContext(), SimpleCursor::invalid()))
+        if(context->topContext()->imports(decl->topContext(), CursorInRevision::invalid()))
           continue;
         
         QString file(decl->url().toUrl().toLocalFile());

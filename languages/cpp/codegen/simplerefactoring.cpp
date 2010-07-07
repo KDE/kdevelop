@@ -243,7 +243,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
       
       KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(decl->url().toUrl());
       if(doc && doc->textDocument()) {
-        QString body = doc->textDocument()->text(decl->internalContext()->range().textRange());
+        QString body = doc->textDocument()->text(decl->internalContext()->rangeInCurrentRevision().textRange());
         SourceCodeInsertion ins(targetTopContext);
         QualifiedIdentifier namespaceIdentifier = decl->internalContext()->parentContext()->scopeIdentifier(false);
 
@@ -275,7 +275,7 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
           return;
         }
         
-        doc->textDocument()->replaceText(decl->internalContext()->range().textRange(), QString(";"));
+        doc->textDocument()->replaceText(decl->internalContext()->rangeInCurrentRevision().textRange(), QString(";"));
         ICore::self()->languageController()->backgroundParser()->addDocument(url.toUrl());
         ICore::self()->languageController()->backgroundParser()->addDocument(targetUrl);
         
@@ -337,7 +337,7 @@ DocumentChangeSet::ChangeResult applyChangesToDeclarations(QString oldName, QStr
 //         oldName = destructorForName(Identifier(oldName)).identifier().str();
       }
     }
-    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), decl.data()->range(), oldName, newName));
+    DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), decl.data()->rangeInCurrentRevision(), oldName, newName));
     if(!result)
       return result;
   }
@@ -356,7 +356,7 @@ DocumentChangeSet::ChangeResult applyChanges(QString oldName, QString newName, D
        kDebug() << "found empty use";
        continue;
      }
-     DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(context->url(), use.m_range, oldName, newName));
+     DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(context->url(), context->transformFromLocalRevision(use.m_range), oldName, newName));
      if(!result)
        return result;
    }

@@ -38,7 +38,7 @@ QPropertyDeclaration::QPropertyDeclaration(QPropertyDeclarationData& data)
 {
 }
 
-QPropertyDeclaration::QPropertyDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context)
+QPropertyDeclaration::QPropertyDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context)
   : KDevelop::ClassMemberDeclaration(*new QPropertyDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);

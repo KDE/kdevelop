@@ -487,7 +487,7 @@ void MakeImplementationPrivate::addDeclarationsToPrivate(CppNewClass & classGene
         AST * node = ast->astNodeFromDeclaration(decl);
         if(node)
         {
-            SimpleRange declarationRange = integrator.findRange(node);
+            SimpleRange declarationRange = integrator.findRange(node).castToSimpleRange();
             kDebug() << "Found AST node for declaration: " << decl->toString() << ". With range: " << declarationRange.textRange();
             
             DocumentChange removeDeclarations(decl->url(), declarationRange, decl->toString(), QString());

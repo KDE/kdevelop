@@ -26,9 +26,9 @@ void ChangeImplementor::replaceToken(std::size_t token, int newToken)
 {
   const Token& t = m_session->token_stream->token( token );
   rpp::Anchor a = m_session->positionAt( token );
-  KDevelop::SimpleRange tokenRange(a, t.size);
+  KDevelop::RangeInRevision tokenRange(a, t.size);
 
-  m_changes.addChange(KDevelop::DocumentChangePointer(new KDevelop::DocumentChange(m_url, tokenRange, t.symbolString(), token_text( newToken ))));
+  m_changes.addChange(KDevelop::DocumentChangePointer(new KDevelop::DocumentChange(m_url, tokenRange.castToSimpleRange(), t.symbolString(), token_text( newToken ))));
 }
 
 void ChangeImplementor::visitAccessSpecifier(AccessSpecifierChange* change, AccessSpecifierAST* node)

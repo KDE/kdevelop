@@ -43,7 +43,7 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
     QList<Declaration*> goodDeclarations;
     Identifier id = m_context->localScopeIdentifier().last();
     id.clearTemplateIdentifiers();
-    QList<Declaration*> declarations = m_context->findLocalDeclarations(id, KDevelop::SimpleCursor(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions);
+    QList<Declaration*> declarations = m_context->findLocalDeclarations(id, KDevelop::CursorInRevision(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions);
 
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       if( (*it)->indexedType() )
@@ -71,7 +71,7 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
   if( !m_context || !m_topContext )
     return 0;
 
-  QList<Declaration*> declarations = m_context->findDeclarations(functionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data());
+  QList<Declaration*> declarations = m_context->findDeclarations(functionName, KDevelop::CursorInRevision(), AbstractType::Ptr(), m_topContext.data());
 
   return resolveList(params, declarations, noUserDefinedConversion );
 }

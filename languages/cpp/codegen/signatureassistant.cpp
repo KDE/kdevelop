@@ -129,11 +129,12 @@ AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor
   
 }
 
-DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDevelop::SimpleRange range) const {
+DUContext* AdaptDefinitionSignatureAssistant::findFunctionContext(KUrl url, KDevelop::SimpleRange _range) const {
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   TopDUContext* top = DUChainUtils::standardContextForUrl(url);
 
   if(top) {
+    RangeInRevision range = top->transformToLocalRevision(_range);
     DUContext* context = top->findContextAt(range.start, true);
     if(context == top)
       context = top->findContextAt(range.end, true);
@@ -229,7 +230,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
       }
       
       DocumentChangeSet changes;
-      DocumentChange changeParameters(functionContext->url(), functionContext->range(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data()));
+      DocumentChange changeParameters(functionContext->url(), functionContext->rangeInCurrentRevision(), QString(), makeSignatureString(m_newSignature, m_otherSideContext.data()));
       changeParameters.m_ignoreOldText = true;
       changes.addChange( changeParameters );
       changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);

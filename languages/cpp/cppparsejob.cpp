@@ -776,7 +776,7 @@ void CPPInternalParseJob::run()
       ///Add all our imports to the re-used context, just to make sure they are there.
       foreach( const LineContextPair& import, importedContentChains )
           if(!import.temporary)
-            contentContext->addImportedParentContext(import.context, SimpleCursor(import.sourceLine, 0));
+            contentContext->addImportedParentContext(import.context, CursorInRevision(import.sourceLine, 0));
       contentContext->updateImportsCache();
     }
 
@@ -789,7 +789,7 @@ void CPPInternalParseJob::run()
         if(!context.context)
           continue;
         Q_ASSERT(context.context);
-        if(!contentContext->imports(context.context.data(), SimpleCursor::invalid())) {
+        if(!contentContext->imports(context.context.data(), CursorInRevision::invalid())) {
           kWarning() << "Context should be imported, but is not:" << contentContext->url().str() << " <- " << context.context->url().str();
         }
       }
@@ -819,7 +819,7 @@ void CPPInternalParseJob::run()
 
         //Make sure the imported contextsa re added
         foreach ( const LineContextPair &context, parentJob()->includedFiles() )
-          proxyContext->addImportedParentContext(context.context, SimpleCursor(context.sourceLine, 0));
+          proxyContext->addImportedParentContext(context.context, CursorInRevision(context.sourceLine, 0));
 
         proxyContext->updateImportsCache();
 
@@ -904,7 +904,7 @@ void CPPParseJob::processDelayedImports() {
       Q_ASSERT(context.context->parsingEnvironmentFile());
       if(context.context->parsingEnvironmentFile()->isProxyContext()) {
         Q_ASSERT(m_parseJob->proxyContext);
-        context.context->addImportedParentContext(m_parseJob->proxyContext.data(), SimpleCursor(context.sourceLine, 0));
+        context.context->addImportedParentContext(m_parseJob->proxyContext.data(), CursorInRevision(context.sourceLine, 0));
         Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(context.context->parsingEnvironmentFile().data());
         Q_ASSERT(cppEnvFile);
         cppEnvFile->merge(dynamic_cast<Cpp::EnvironmentFile&>(*m_parseJob->proxyContext->parsingEnvironmentFile().data()));
@@ -915,7 +915,7 @@ void CPPParseJob::processDelayedImports() {
       if(!content.context)
         continue;
       Q_ASSERT(content.context);
-      content.context->addImportedParentContext(m_parseJob->proxyContext.data(), SimpleCursor(content.sourceLine, 0));
+      content.context->addImportedParentContext(m_parseJob->proxyContext.data(), CursorInRevision(content.sourceLine, 0));
       content.context->updateImportsCache();
       Cpp::EnvironmentFile* cppEnvFile = dynamic_cast<Cpp::EnvironmentFile*>(content.context->parsingEnvironmentFile().data());
       Q_ASSERT(cppEnvFile);

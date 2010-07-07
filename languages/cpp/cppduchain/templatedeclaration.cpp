@@ -533,7 +533,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       if( import->type() == KDevelop::DUContext::Template || import->type() == KDevelop::DUContext::Function )
       {
         DUContext* ctx = import->instantiate(templateArguments, source);
-        contextCopy->addImportedParentContext( ctx, SimpleCursor(), true );
+        contextCopy->addImportedParentContext( ctx, CursorInRevision(), true );
 
         if( instantiatedDeclaration && import->type() == KDevelop::DUContext::Template ) {
           TemplateDeclaration* tempDecl = dynamic_cast<TemplateDeclaration*>(instantiatedDeclaration);
@@ -546,7 +546,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
       else
       {
         //Import all other imported contexts
-        contextCopy->addImportedParentContext( import, SimpleCursor::invalid(), true );
+        contextCopy->addImportedParentContext( import, CursorInRevision::invalid(), true );
       }
     }
 
@@ -567,7 +567,7 @@ CppDUContext<KDevelop::DUContext>* instantiateDeclarationAndContext( KDevelop::D
             {
               if( baseClass->declaration(source) && baseClass->declaration(source)->internalContext() )
               {
-                contextCopy->addImportedParentContext( baseClass->declaration(source)->internalContext(), SimpleCursor::invalid(), true );
+                contextCopy->addImportedParentContext( baseClass->declaration(source)->internalContext(), CursorInRevision::invalid(), true );
               }
               BaseClassInstance newInstance(base);
               newInstance.baseClass = newType->indexed();

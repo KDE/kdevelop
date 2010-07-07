@@ -142,7 +142,7 @@ void MissingIncludeCompletionModel::updateCompletionRange(KTextEditor::View* vie
       if(lock.locked()) {
         KDevelop::TopDUContext* top = KDevelop::DUChainUtils::standardContextForUrl(view->document()->url());
         if(top)
-          worker()->context = KDevelop::IndexedDUContext(top->findContextAt(KDevelop::SimpleCursor(range.end())));
+          worker()->context = KDevelop::IndexedDUContext(top->findContextAt(top->transformToLocalRevision(KDevelop::SimpleCursor(range.end()))));
       }
     }
     worker()->localExpression = range.text().join("\n");

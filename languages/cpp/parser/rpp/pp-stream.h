@@ -26,7 +26,7 @@
 
 #include <QtCore/QIODevice>
 
-#include <language/editor/simplecursor.h>
+#include <language/editor/cursorinrevision.h>
 #include <language/duchain/indexedstring.h>
 #include "anchor.h"
 #include "chartools.h"
@@ -95,8 +95,8 @@ class KDEVCPPRPP_EXPORT Stream
 
     /// If a macro-expansion is set, all anchors given to mark() will get that macro-expansion set.
     /// It marks the position from where the macro-expansion was started that leads to the current output @see rpp::Anchor
-    void setMacroExpansion(const KDevelop::SimpleCursor&);
-    KDevelop::SimpleCursor macroExpansion() const;
+    void setMacroExpansion(const KDevelop::CursorInRevision&);
+    KDevelop::CursorInRevision macroExpansion() const;
     
     //Checks whether the current index represents a character, and eventually compares it
     bool operator==(const char otherc) const {
@@ -146,8 +146,8 @@ class KDEVCPPRPP_EXPORT Stream
     void setInputPosition(const Anchor& position);
 
     ///Input-position that marks the start of the topmost currently expanding macro in the original document
-    KDevelop::SimpleCursor originalInputPosition() const;
-    void setOriginalInputPosition(const KDevelop::SimpleCursor& position);
+    KDevelop::CursorInRevision originalInputPosition() const;
+    void setOriginalInputPosition(const KDevelop::CursorInRevision& position);
 
     ///Used for output streams to mark stream positions with input position
     ///The macroExpansion member may have no effect if macroExpansion is set for this stream.
@@ -171,12 +171,12 @@ class KDEVCPPRPP_EXPORT Stream
     const unsigned int* c;
     const unsigned int* end;
     bool m_isNull, m_skippedToEnd, m_inputPositionLocked, m_onwsString;
-    KDevelop::SimpleCursor m_macroExpansion;
+    KDevelop::CursorInRevision m_macroExpansion;
     int m_pos;
     int m_inputLine;
     int m_inputLineStartedAt;
     LocationTable* m_locationTable;
-    KDevelop::SimpleCursor m_originalInputPosition;
+    KDevelop::CursorInRevision m_originalInputPosition;
 };
 
 }

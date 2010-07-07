@@ -25,7 +25,7 @@ using namespace KDevelop;
 
 REGISTER_DUCHAIN_ITEM(TemplateParameterDeclaration);
 
-TemplateParameterDeclaration::TemplateParameterDeclaration(const KDevelop::SimpleRange& range, DUContext* context)
+TemplateParameterDeclaration::TemplateParameterDeclaration(const KDevelop::RangeInRevision& range, DUContext* context)
   : Declaration(*new TemplateParameterDeclarationData, range)
 {
   d_func_dynamic()->setClassId(this);

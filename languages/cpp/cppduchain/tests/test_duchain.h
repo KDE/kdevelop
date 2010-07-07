@@ -34,13 +34,12 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/dumpchain.h>
 #include <language/duchain/types/indexedtype.h>
-#include <language/editor/simplecursor.h>
+#include <language/editor/cursorinrevision.h>
 
 namespace KDevelop
 {
 class Declaration;
 class TopDUContext;
-class SimpleCursor;
 class ClassFunctionDeclaration;
 }
 
@@ -51,8 +50,8 @@ class TestDUChain : public QObject
 public:
   TestDUChain();
 
-  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
-  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KDevelop::SimpleCursor& position = KDevelop::SimpleCursor::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::Identifier& id, const KDevelop::CursorInRevision& position = KDevelop::CursorInRevision::invalid());
+  KDevelop::Declaration* findDeclaration(KDevelop::DUContext* context, const KDevelop::QualifiedIdentifier& id, const KDevelop::CursorInRevision& position = KDevelop::CursorInRevision::invalid());
 
 
   //Move to slots again once it should be tested

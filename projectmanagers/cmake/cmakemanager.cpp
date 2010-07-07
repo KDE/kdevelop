@@ -225,7 +225,7 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
             buildstrapContext->deleteChildContextsRecursively();
         }else{
             IndexedString idxpath(buildStrapUrl);
-            buildstrapContext=new TopDUContext(idxpath, SimpleRange(0,0, 0,0),
+            buildstrapContext=new TopDUContext(idxpath, RangeInRevision(0,0, 0,0),
                                                new ParsingEnvironmentFile(idxpath));
             DUChain::self()->addDocumentChain(buildstrapContext);
         }
@@ -945,7 +945,7 @@ void CMakeManager::jumpToDeclaration()
             Declaration* decl = du->declaration().data();
             if(!decl)
                 return;
-            c = decl->range().start.textCursor();
+            c = decl->rangeInCurrentRevision().start.textCursor();
             url = decl->url().toUrl();
         }
 
@@ -1047,7 +1047,7 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
     e.addDocuments(IndexedString(lists));
     
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
-    KTextEditor::Range r=cmit->descriptor().range().textRange();
+    KTextEditor::Range r=cmit->descriptor().range().castToSimpleRange().textRange();
     kDebug(9042) << "For " << lists << " remove " << r;
     e.document()->removeText(r);
 
@@ -1061,14 +1061,14 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
     return 0;
 }
 
-bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, const KUrl& lists, bool add, const QString& replace)
+bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
 {
     bool ret=false;
-    QString txt=doc->text(r.textRange());
+    QString txt=doc->text(r.castToSimpleRange().textRange());
     if(!add && txt.contains(name))
     {
         txt.replace(name, replace);
-        doc->replaceText(r.textRange(), txt);
+        doc->replaceText(r.castToSimpleRange().textRange(), txt);
         ret=true;
     }
     else
@@ -1091,7 +1091,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
         if(add && decls.isEmpty())
         {
-            doc->insertText(r.textRange().start(), name);
+            doc->insertText(r.castToSimpleRange().textRange().start(), name);
             ret=true;
         }
         else foreach(Declaration* d, decls)
@@ -1102,7 +1102,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
             {
                 int endParenIndex = doc->line(lineNum).indexOf(')');
                 if(endParenIndex >= 0) {
-                    r.end = SimpleCursor(lineNum, endParenIndex);
+                    r.end = CursorInRevision(lineNum, endParenIndex);
                     break;
                 }
             }
@@ -1157,8 +1157,8 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
 
     DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-    SimpleRange r=desc->descriptor().range();
-    r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+    RangeInRevision r=desc->descriptor().range();
+    r.start=CursorInRevision(desc->descriptor().arguments.first().range().end);
 
     KUrl lists=folder->url();
     lists.addPath("CMakeLists.txt");
@@ -1207,8 +1207,8 @@ bool CMakeManager::addFileToTarget( KDevelop::ProjectFileItem* it, KDevelop::Pro
     CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
 
     DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-    SimpleRange r=desc->descriptor().range();
-    r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+    RangeInRevision r=desc->descriptor().range();
+    r.start=CursorInRevision(desc->descriptor().arguments.first().range().end);
 
     KUrl lists=folder->url();
     lists.addPath("CMakeLists.txt");
@@ -1238,7 +1238,7 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
     QString htmlDoc;
     if(top)
     {
-        int useAt=top->findUseAt(position);
+        int useAt=top->findUseAt(top->transformToLocalRevision(position));
         if(useAt>=0)
         {
             Use u=top->uses()[useAt];
@@ -1326,8 +1326,8 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
 
         DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-        SimpleRange r=desc->descriptor().range();
-        r.start=SimpleCursor(desc->descriptor().arguments.first().range().end);
+        RangeInRevision r=desc->descriptor().range();
+        r.start=CursorInRevision(desc->descriptor().arguments.first().range().end);
 
         KUrl lists=folder->url();
         lists.addPath("CMakeLists.txt");
@@ -1369,7 +1369,7 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     e.addDocuments(IndexedString(lists));
     
     CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
-    KTextEditor::Range r=cmit->descriptor().argRange().textRange();
+    KTextEditor::Range r=cmit->descriptor().argRange().castToSimpleRange().textRange();
     kDebug(9042) << "For " << lists << " rename " << r;
     
     e.document()->replaceText(r, newName);

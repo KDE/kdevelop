@@ -50,7 +50,7 @@ class KDEVCPPDUCHAIN_EXPORT TemplateParameterDeclaration : public KDevelop::Decl
 public:
   TemplateParameterDeclaration(TemplateParameterDeclarationData& data);
   TemplateParameterDeclaration(const TemplateParameterDeclaration& rhs);
-  TemplateParameterDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
+  TemplateParameterDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
   ~TemplateParameterDeclaration();
 
   /**

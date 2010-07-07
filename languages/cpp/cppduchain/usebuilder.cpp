@@ -129,7 +129,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
     virtual void usingDeclaration(AST* node,
                                   size_t start_token, size_t end_token,
                                   const KDevelop::DeclarationPointer& decl ) {
-      SimpleRange range = m_builder->editor()->findRange(start_token, end_token);
+      RangeInRevision range = m_builder->editor()->findRange(start_token, end_token);
       m_builder->newUse(node, range, decl.data());
     }
 

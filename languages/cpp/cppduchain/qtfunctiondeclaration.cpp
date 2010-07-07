@@ -30,7 +30,7 @@ QtFunctionDeclaration::QtFunctionDeclaration(const QtFunctionDeclaration& rhs) :
 QtFunctionDeclaration::QtFunctionDeclaration(QtFunctionDeclarationData& data) : KDevelop::ClassFunctionDeclaration(data) {
 }
 
-QtFunctionDeclaration::QtFunctionDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context) : KDevelop::ClassFunctionDeclaration(*new QtFunctionDeclarationData, range, context) {
+QtFunctionDeclaration::QtFunctionDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context) : KDevelop::ClassFunctionDeclaration(*new QtFunctionDeclarationData, range, context) {
   d_func_dynamic()->setClassId(this);
 }
 

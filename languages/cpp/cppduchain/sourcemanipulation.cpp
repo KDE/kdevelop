@@ -123,7 +123,7 @@ void KDevelop::SourceCodeInsertion::setSubScope(KDevelop::QualifiedIdentifier sc
       
       foreach(DUContext* child, context->childContexts()) {
         kDebug() << "checking child" << child->localScopeIdentifier().toString() << "against" << needNamespace.first();
-        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && (child->range().start < m_insertBefore || !m_insertBefore.isValid())) {
+        if(child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace && (child->rangeInCurrentRevision().start < m_insertBefore || !m_insertBefore.isValid())) {
           kDebug() << "taking";
           context = child;
           foundChild = true;
@@ -247,9 +247,9 @@ SimpleRange SourceCodeInsertion::insertionRange(int line)
   {
     SimpleRange range(line-1, m_codeRepresentation->line(line-1).size(), line-1, m_codeRepresentation->line(line-1).size());
     //If the context finishes on that line, then this will need adjusting
-    if(!m_context->range().textRange().contains(range.textRange()))
+    if(!m_context->rangeInCurrentRevision().textRange().contains(range.textRange()))
     {
-      range.start = m_context->range().end;
+      range.start = m_context->rangeInCurrentRevision().end;
       if(range.start.column > 0)
         range.start.column -= 1;
       range.end = range.start;
@@ -301,7 +301,7 @@ bool KDevelop::SourceCodeInsertion::insertVariableDeclaration(KDevelop::Identifi
 
 SimpleCursor SourceCodeInsertion::end() const
 {
-  SimpleCursor ret = m_context->range().end;
+  SimpleCursor ret = m_context->rangeInCurrentRevision().end;
   if(m_codeRepresentation && m_codeRepresentation->lines() && dynamic_cast<TopDUContext*>(m_context)) {
     ret.line = m_codeRepresentation->lines()-1;
     ret.column = m_codeRepresentation->line(ret.line).size();
@@ -338,7 +338,7 @@ SourceCodeInsertion::InsertionPoint SourceCodeInsertion::findInsertionPoint(KDev
         }
       }
     }
-    kDebug() << ret.line << m_context->scopeIdentifier(true) << m_context->range().textRange() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
+    kDebug() << ret.line << m_context->scopeIdentifier(true) << m_context->rangeInCurrentRevision().textRange() << behindExistingItem << m_context->url().toUrl() << m_context->parentContext();
     kDebug() << "is proxy:" << m_context->topContext()->parsingEnvironmentFile()->isProxyContext() << "count of declarations:" << m_context->topContext()->localDeclarations().size();
     
     if(!behindExistingItem) {
@@ -442,9 +442,9 @@ bool Cpp::SourceCodeInsertion::insertForwardDeclaration(KDevelop::Declaration* d
     
     bool needNewLine = true;
     
-    if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->range().end > m_insertBefore)) {
+    if(!m_scope.isEmpty() || (m_insertBefore.isValid() && m_context->rangeInCurrentRevision().end > m_insertBefore)) {
       //To the begin
-      position = m_context->range().start.textCursor();
+      position = m_context->rangeInCurrentRevision().start.textCursor();
       
       if(m_context->type() == DUContext::Namespace) {
           position += KTextEditor::Cursor(0, 1); //Skip over the opening '{' paren

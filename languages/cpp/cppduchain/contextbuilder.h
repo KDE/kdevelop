@@ -141,9 +141,9 @@ protected:
   virtual void startVisiting( AST* node );
   virtual void setContextOnNode( AST* node, DUContext* ctx );
   virtual DUContext* contextFromNode( AST* node );
-  virtual KTextEditor::Range editorFindRange( AST* fromRange, AST* toRange );
-  virtual KTextEditor::Range editorFindRangeForContext( AST* fromRange, AST* toRange );
-  virtual DUContext* newContext(const SimpleRange& range);
+  virtual RangeInRevision editorFindRange( AST* fromRange, AST* toRange );
+  virtual RangeInRevision editorFindRangeForContext( AST* fromRange, AST* toRange );
+  virtual DUContext* newContext(const RangeInRevision& range);
   
   /**
    * Compile an identifier for the specified NameAST \a id.
@@ -162,11 +162,11 @@ protected:
   ///The prefix-context will also import the context of the specific class-declaration, so the visibility matches.
   ///@param id should be the whole identifier. A prefix-context will only be created if it
   ///has more than 1 element.
-  void openPrefixContext(AST* ast, const QualifiedIdentifier& id, const SimpleCursor& pos);
+  void openPrefixContext(AST* ast, const QualifiedIdentifier& id, const CursorInRevision& pos);
   void closePrefixContext(const QualifiedIdentifier& id);
   
   //The returned context may be zero, while the identifier valid
-  QPair<DUContext*, QualifiedIdentifier> findPrefixContext(const QualifiedIdentifier& id, KDevelop::SimpleCursor pos);
+  QPair<DUContext*, QualifiedIdentifier> findPrefixContext(const QualifiedIdentifier& id, KDevelop::CursorInRevision pos);
   
   // Split up visitors created for subclasses to use
   /// Visits the type specifier and init declarator for a function.
@@ -216,7 +216,7 @@ protected:
   //Opens a context of size 0, starting at the given node
   KDevelop::DUContext* openContextEmpty(AST* range, KDevelop::DUContext::ContextType type);
 
-  KDevelop::DUContext* openContextInternal(const KDevelop::SimpleRange& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
+  KDevelop::DUContext* openContextInternal(const KDevelop::RangeInRevision& range, KDevelop::DUContext::ContextType type, const KDevelop::QualifiedIdentifier& identifier);
 
   bool createContextIfNeeded(AST* node, const QVector<KDevelop::DUContext::Import>& importedParentContexts);
   bool createContextIfNeeded(AST* node, KDevelop::DUContext* importedParentContext);
@@ -244,7 +244,7 @@ protected:
 
 #ifdef DEBUG_CONTEXT_RANGES
   void checkRanges();
-  QHash<KDevelop::DUContext*, KDevelop::SimpleRange> m_contextRanges;
+  QHash<KDevelop::DUContext*, KDevelop::RangeInRevision> m_contextRanges;
 #endif
 
   QVector<KDevelop::DUContext::Import> m_importedParentContexts;

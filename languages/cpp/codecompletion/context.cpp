@@ -159,7 +159,7 @@ bool removePrefixWord(QString& expression, QString word) {
   return false;
 }
 
-CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, const KDevelop::SimpleCursor& position, int depth, const QStringList& knownArgumentExpressions, int line )
+CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const QString& followingText, const KDevelop::CursorInRevision& position, int depth, const QStringList& knownArgumentExpressions, int line )
   : KDevelop::CodeCompletionContext(context, text, position, depth),
     m_memberAccessOperation(NoMemberAccess),
     m_knownArgumentExpressions(knownArgumentExpressions),
@@ -1127,7 +1127,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
         if(classFun->isDestructor())
           key.second = IndexedString("~" + key.second.str());
       }
-      if(!overridable.contains(key) && base->findLocalDeclarations(KDevelop::Identifier(key.second), SimpleCursor::invalid(), 0, key.first.abstractType(), KDevelop::DUContext::OnlyFunctions).isEmpty())
+      if(!overridable.contains(key) && base->findLocalDeclarations(KDevelop::Identifier(key.second), CursorInRevision::invalid(), 0, key.first.abstractType(), KDevelop::DUContext::OnlyFunctions).isEmpty())
         overridable.insert(key, KDevelop::CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::Override, DeclarationPointer(decl), completionContext, (classFun && classFun->isAbstract()) ? 1 : 2)));
     }
   }
@@ -1389,7 +1389,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                Declaration* signalContainer = signalContainerType->declaration(m_duContext->topContext());
               if(signalContainer && signalContainer->internalContext()) {
                 IndexedString signature(m_connectedSignalNormalizedSignature);
-                foreach(const DeclarationDepthPair &decl, signalContainer->internalContext()->allDeclarations( SimpleCursor::invalid(), m_duContext->topContext(), false )) {
+                foreach(const DeclarationDepthPair &decl, signalContainer->internalContext()->allDeclarations( CursorInRevision::invalid(), m_duContext->topContext(), false )) {
                   if(decl.first->identifier() == m_connectedSignalIdentifier) {
                     if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(decl.first)) {
                       if(classFun->isSignal() && classFun->normalizedSignature() == signature) {
@@ -1422,7 +1422,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
                 signalSlots << CompletionTreeItemPointer(new ImplementationHelperItem(ImplementationHelperItem::CreateSignalSlot, DeclarationPointer(connectedSignal.data()), CodeCompletionContext::Ptr(this)));
               }
               
-              foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(SimpleCursor::invalid(), m_duContext->topContext(), false) ) {
+              foreach(const DeclarationDepthPair &candidate, decl->internalContext()->allDeclarations(CursorInRevision::invalid(), m_duContext->topContext(), false) ) {
                 if(QtFunctionDeclaration* classFun = dynamic_cast<QtFunctionDeclaration*>(candidate.first)) {
                   if((classFun->isSignal() && m_onlyShow != ShowSlots) || (memberAccessOperation() == SlotAccess && classFun->isSlot() && filterDeclaration(classFun))) {
                     NormalDeclarationCompletionItem* item = new NormalDeclarationCompletionItem( DeclarationPointer(candidate.first), KDevelop::CodeCompletionContext::Ptr(this), candidate.second );

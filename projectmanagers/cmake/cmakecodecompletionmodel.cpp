@@ -115,7 +115,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     if(ctx)
     {
         typedef QPair<Declaration*, int> DeclPair;
-        QList<DeclPair> list=ctx->allDeclarations( SimpleCursor(range.start()), ctx );
+        QList<DeclPair> list=ctx->allDeclarations( ctx->transformToLocalRevision(SimpleCursor(range.start())), ctx );
         
         foreach(const DeclPair& pair, list)
         {

@@ -24,8 +24,6 @@
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
 
-#include <language/editor/simplecursor.h>
-
 #include <cppparserexport.h>
 #include <ksharedptr.h>
 #include <kurl.h>
@@ -34,7 +32,7 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/duchainpointer.h>
 #include <language/interfaces/iastcontainer.h>
-#include <language/editor/simplerange.h>
+#include <language/editor/rangeinrevision.h>
 
 namespace Cpp {
   class EnvironmentFile;
@@ -47,7 +45,7 @@ class TranslationUnitAST;
 class AST;
 
 typedef QVector<unsigned int> PreprocessedContents;
-typedef QPair<KDevelop::DUContextPointer, KDevelop::SimpleRange> SimpleUse;
+typedef QPair<KDevelop::DUContextPointer, KDevelop::RangeInRevision> SimpleUse;
 
 namespace rpp { class MacroBlock; class LocationTable; }
 

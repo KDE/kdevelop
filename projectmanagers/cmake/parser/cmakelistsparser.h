@@ -34,6 +34,7 @@
 // #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
 #include <cmakeexport.h>
+#include <language/editor/rangeinrevision.h>
 
 struct CMakeFunctionArgument
 {
@@ -60,8 +61,8 @@ struct CMakeFunctionArgument
 
     static QString unescapeValue(const QString& value);
     
-    KDevelop::SimpleRange range() const
-    { return KDevelop::SimpleRange(line-1, column-1, line-1, column+value.length()-1); }
+    KDevelop::RangeInRevision range() const
+    { return KDevelop::RangeInRevision(line-1, column-1, line-1, column+value.length()-1); }
 
     QString value;
     bool quoted;
@@ -87,21 +88,21 @@ public:
     int numSpacesAfterLeftParen;
     int numSpacesBeforeRightParen; */
 
-    KDevelop::SimpleRange nameRange() const
-    { return KDevelop::SimpleRange(line-1, column-1, line-1, column-1+name.length()); }
+    KDevelop::RangeInRevision nameRange() const
+    { return KDevelop::RangeInRevision(line-1, column-1, line-1, column-1+name.length()); }
 
-    KDevelop::SimpleRange range() const
-    { return KDevelop::SimpleRange(line-1, column-1, endLine-1, endColumn); }
+    KDevelop::RangeInRevision range() const
+    { return KDevelop::RangeInRevision(line-1, column-1, endLine-1, endColumn); }
     
-    KDevelop::SimpleRange argRange() const
+    KDevelop::RangeInRevision argRange() const
     { 
         if( !arguments.isEmpty() ) 
         { 
-            return KDevelop::SimpleRange(arguments.first().range().start,
+            return KDevelop::RangeInRevision(arguments.first().range().start,
                                    arguments.last().range().end); 
         } else 
         { 
-            return KDevelop::SimpleRange( line-1, column-1, endLine-1, endColumn); 
+            return KDevelop::RangeInRevision( line-1, column-1, endLine-1, endColumn); 
         }
     }
 

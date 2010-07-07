@@ -38,18 +38,18 @@ CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )
 {
 }
 
-SimpleCursor CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
+CursorInRevision CppEditorIntegrator::findPosition( std::size_t token, Edge edge ) const
 {
   if(token == 0) {
     kDebug() << "Searching position of invalid token";
-    return SimpleCursor();
+    return CursorInRevision();
     }
   
   const Token& t = m_session->token_stream->token(token);
   return findPosition(t, edge);
 }
 
-SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
+CursorInRevision CppEditorIntegrator::findPosition( const Token & token, Edge edge ) const
 {
   QPair<rpp::Anchor, uint> a = m_session->positionAndSpaceAt(token.position);
   rpp::Anchor position = a.first;
@@ -61,23 +61,23 @@ SimpleCursor CppEditorIntegrator::findPosition( const Token & token, Edge edge )
       if(a.second && length > a.second)
         length = a.second;
       //We have to check the following anchor in the location-table to make sure we don't make the range longer than possible
-      return position + SimpleCursor(0, length);
+      return position + CursorInRevision(0, length);
     }
   } else
     return position;
 }
 
-SimpleRange CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
+RangeInRevision CppEditorIntegrator::findRange( AST * node, RangeEdge edge )
 {
   Q_UNUSED(edge);
-  return SimpleRange(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge));
+  return RangeInRevision(findPosition(node->start_token, FrontEdge), findPosition(node->end_token - 1, BackEdge));
 }
 
-SimpleRange CppEditorIntegrator::findRangeForContext( size_t start_token, size_t end_token )
+RangeInRevision CppEditorIntegrator::findRangeForContext( size_t start_token, size_t end_token )
 {
   if(start_token == 0 || end_token == 0) {
     kDebug() << "Searching position of invalid token";
-    return SimpleRange();
+    return RangeInRevision();
   }
   const Token& tStart = m_session->token_stream->token(start_token);
   const Token& tEnd = m_session->token_stream->token(end_token-1);
@@ -88,29 +88,29 @@ SimpleRange CppEditorIntegrator::findRangeForContext( size_t start_token, size_t
     end.column += tEnd.symbolLength(); //We want the back edge
   
   if(start.macroExpansion.isValid() && start.macroExpansion == end.macroExpansion)
-    return SimpleRange(start.macroExpansion, start.macroExpansion);
+    return RangeInRevision(start.macroExpansion, start.macroExpansion);
   else
-    return SimpleRange(start, end);
+    return RangeInRevision(start, end);
 }
 
-SimpleRange CppEditorIntegrator::findRange( size_t start_token, size_t end_token )
+RangeInRevision CppEditorIntegrator::findRange( size_t start_token, size_t end_token )
 {
-  return SimpleRange(findPosition(start_token, FrontEdge), findPosition(end_token - 1, BackEdge));
+  return RangeInRevision(findPosition(start_token, FrontEdge), findPosition(end_token - 1, BackEdge));
 }
 
-SimpleRange CppEditorIntegrator::findRange( size_t token )
+RangeInRevision CppEditorIntegrator::findRange( size_t token )
 {
-  return SimpleRange(findPosition(token, FrontEdge), findPosition(token, BackEdge));
+  return RangeInRevision(findPosition(token, FrontEdge), findPosition(token, BackEdge));
 }
 
-SimpleRange CppEditorIntegrator::findRange(AST* from, AST* to)
+RangeInRevision CppEditorIntegrator::findRange(AST* from, AST* to)
 {
-  return SimpleRange(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));
+  return RangeInRevision(findPosition(from->start_token, FrontEdge), findPosition(to->end_token - 1, BackEdge));
 }
 
-SimpleRange CppEditorIntegrator::findRange( const Token & token )
+RangeInRevision CppEditorIntegrator::findRange( const Token & token )
 {
-  return SimpleRange(findPosition(token, FrontEdge), findPosition(token, BackEdge));
+  return RangeInRevision(findPosition(token, FrontEdge), findPosition(token, BackEdge));
 }
 
 QString CppEditorIntegrator::tokenToString(std::size_t token) const

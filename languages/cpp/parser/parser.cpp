@@ -123,7 +123,7 @@ Comment Parser::comment() {
 
 void Parser::preparseLineComments( int tokenNumber ) {
   const Token& token( (*session->token_stream)[tokenNumber] );
-  KDevelop::SimpleCursor tokenPosition = KDevelop::SimpleCursor::invalid();
+  KDevelop::CursorInRevision tokenPosition = KDevelop::CursorInRevision::invalid();
 
   for( int a = 0; a < 40; a++ ) {
       if( !session->token_stream->lookAhead(a) ) break;
@@ -134,7 +134,7 @@ void Parser::preparseLineComments( int tokenNumber ) {
         if( !tokenPosition.isValid() ) //Get the token line. Only on-demand, because it's not cheap.
           tokenPosition = session->positionAt(token.position);
 
-        KDevelop::SimpleCursor commentPosition = session->positionAt( commentToken.position );
+        KDevelop::CursorInRevision commentPosition = session->positionAt( commentToken.position );
 
         if( commentPosition.line < tokenPosition.line ) {
             continue;
@@ -165,7 +165,7 @@ void Parser::processComment( int offset, int line ) {
   const Token& commentToken( (*session->token_stream)[tokenNumber] );
   Q_ASSERT(commentToken.kind == Token_comment);
   if( line == -1 ) {
-    KDevelop::SimpleCursor position = session->positionAt( commentToken.position );
+    KDevelop::CursorInRevision position = session->positionAt( commentToken.position );
     line = position.line;
   }
 
@@ -366,10 +366,10 @@ void Parser::reportError(const QString& msg)
       QString fileName;
 
       uint tok = session->token_stream->cursor();
-      KDevelop::SimpleCursor position = session->positionAt(session->token_stream->position(tok));
+      KDevelop::CursorInRevision position = session->positionAt(session->token_stream->position(tok));
 
       KDevelop::ProblemPointer p(new KDevelop::Problem);
-      p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(position, 0)));
+      p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(position.castToSimpleCursor(), 0)));
       p->setDescription(msg);
       p->setSource(KDevelop::ProblemData::Parser);
 

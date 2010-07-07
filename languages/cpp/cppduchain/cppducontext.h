@@ -75,7 +75,7 @@ extern QMutex cppDuContextInstantiationsMutex;
     ///This class breaks up the logic of searching a declaration in C++, so QualifiedIdentifiers as well as AST-based lookup mechanisms can be used for searching
     class FindDeclaration {
       public:
-        FindDeclaration( const DUContext* ctx, const TopDUContext* source, DUContext::SearchFlags flags, const SimpleCursor& position, AbstractType::Ptr dataType = AbstractType::Ptr() ) : m_context(ctx), m_source(source), m_flags(flags), m_position(position), m_dataType(dataType) {
+        FindDeclaration( const DUContext* ctx, const TopDUContext* source, DUContext::SearchFlags flags, const CursorInRevision& position, AbstractType::Ptr dataType = AbstractType::Ptr() ) : m_context(ctx), m_source(source), m_flags(flags), m_position(position), m_dataType(dataType) {
           Q_ASSERT(m_source);
         }
         void openQualifiedIdentifier( bool isExplicitlyGlobal ) {
@@ -164,7 +164,7 @@ extern QMutex cppDuContextInstantiationsMutex;
         const TopDUContext* m_source;
         DUContext::SearchFlags m_flags;
         QList<DeclarationPointer> m_lastDeclarations;
-        SimpleCursor m_position;
+        CursorInRevision m_position;
         AbstractType::Ptr m_dataType;
 
         DUContextPointer m_lastScopeContext; //For debugging, last context in which we searched
@@ -241,7 +241,7 @@ class CppDUContext : public BaseContext {
     }
 
     ///Overridden to take care of templates and other c++ specific things
-    virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags, uint depth ) const
+    virtual bool findDeclarationsInternal(const DUContext::SearchItem::PtrList& identifiers, const CursorInRevision& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags, uint depth ) const
     {
       if(this->type() == DUContext::Class && identifiers.count() == 1 &&
         !(basicFlags & DUContext::NoSelfLookUp) && !(basicFlags & DUContext::OnlyFunctions) && this->localScopeIdentifier().count() &&
@@ -308,7 +308,7 @@ class CppDUContext : public BaseContext {
       return true;
     }
 
-    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const SimpleCursor& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags) const
+    bool findDeclarationsInternal(const QualifiedIdentifier& identifier, const CursorInRevision& position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags basicFlags) const
     {
       ifDebug( kDebug(9007) << "findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
 
@@ -370,7 +370,7 @@ class CppDUContext : public BaseContext {
       return true;
     }
 
-    virtual void findLocalDeclarationsInternal( const Identifier& identifier, const SimpleCursor & position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags flags ) const
+    virtual void findLocalDeclarationsInternal( const Identifier& identifier, const CursorInRevision & position, const AbstractType::Ptr& dataType, DUContext::DeclarationList& ret, const TopDUContext* source, typename BaseContext::SearchFlags flags ) const
     {
       ifDebug( kDebug(9007) << "findLocalDeclarationsInternal in " << this << "with parent" << this->parentContext() << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
       ifDebug( if( BaseContext::owner() && BaseContext::owner() ) kDebug(9007) << "in declaration: " << "(" << BaseContext::owner()->toString(); )
@@ -693,7 +693,7 @@ class CppDUContext : public BaseContext {
           }else{
             kDebug() << "Strange: non-template within template context";
             KDevVarLengthArray<Declaration*, 40> temp;
-            this->findLocalDeclarationsInternal( baseDecl->identifier(), SimpleCursor::invalid(), AbstractType::Ptr(), temp, source, DUContext::NoFiltering );
+            this->findLocalDeclarationsInternal( baseDecl->identifier(), CursorInRevision::invalid(), AbstractType::Ptr(), temp, source, DUContext::NoFiltering );
           }
         }
       }
@@ -710,7 +710,7 @@ class CppDUContext : public BaseContext {
       deleteAllInstantiations();
     }
 
-    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const SimpleCursor& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source,  bool searchInParents, int currentDepth) const
+    virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions, const CursorInRevision& position, QHash<const DUContext*, bool>& hadContexts, const TopDUContext* source,  bool searchInParents, int currentDepth) const
     {
       Q_ASSERT(source);
 //       kDebug() << "checking in" << this->scopeIdentifier(true).toString();

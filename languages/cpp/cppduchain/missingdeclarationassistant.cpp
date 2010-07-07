@@ -43,7 +43,7 @@ class CreateLocalDeclarationAction : public IAssistantAction {
           DUChainReadLocker lock(DUChain::lock());
           if(/*DUContext* searchFrom = */problem->type->searchStartContext.data()) {
             KDevelop::DocumentChangeSet changes;
-            changes.addChange(KDevelop::DocumentChange(problem->url(), SimpleRange(problem->range().start, problem->range().start), QString(),  typeString() + " "));
+            changes.addChange(KDevelop::DocumentChange(problem->url(), SimpleRange(problem->rangeInCurrentRevision().start, problem->rangeInCurrentRevision().start), QString(),  typeString() + " "));
             lock.unlock();
             
             changes.setReplacementPolicy(KDevelop::DocumentChangeSet::WarnOnFailedChange);

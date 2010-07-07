@@ -108,7 +108,7 @@ private:
   //Also collects the Qt function signature if required. In that case, true is always returned.
   bool checkParameterDeclarationClause(ParameterDeclarationClauseAST* clause);
   //Du-chain must be locked
-  QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::SimpleCursor& position);
+  QualifiedIdentifier resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const KDevelop::CursorInRevision& position);
 
   KDevelop::ForwardDeclaration* openForwardDeclaration(NameAST* name, AST* range);
   /**
@@ -121,7 +121,7 @@ private:
   template<class T>
   T* openDeclaration(NameAST* name, AST* range, const Identifier& customName = Identifier(), bool collapseRange = false, bool collapseRangeAtEnd = false);
   template<class T>
-  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd, const SimpleRange* customRange = 0);
+  T* openDeclarationReal(NameAST* name, AST* range, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd, const RangeInRevision* customRange = 0);
   /// Same as the above, but sets it as the definition too @param forceInstance when this is true, the declaration is forced to be an instance, not a type declaration,
   /// and its assigned identified type will not get the declaration assigned.
   virtual void closeDeclaration(bool forceInstance = false);

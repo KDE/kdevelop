@@ -153,7 +153,7 @@ void TestExpressionParser::cleanupTestCase()
 {
 }
 
-Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Identifier& id, const SimpleCursor& position)
+Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Identifier& id, const CursorInRevision& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())
@@ -161,7 +161,7 @@ Declaration* TestExpressionParser::findDeclaration(DUContext* context, const Ide
   return 0;
 }
 
-Declaration* TestExpressionParser::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const SimpleCursor& position)
+Declaration* TestExpressionParser::findDeclaration(DUContext* context, const QualifiedIdentifier& id, const CursorInRevision& position)
 {
   QList<Declaration*> ret = context->findDeclarations(id, position);
   if (ret.count())

@@ -37,8 +37,8 @@
 using namespace KDevelop;
 using namespace Cpp;
 
-NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, const SimpleCursor& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
-: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_localContext(localVisibilityContext), m_find(m_context, m_source, localSearchFlags, SimpleCursor(position) ), m_debug(debug), m_finalName(0)
+NameASTVisitor::NameASTVisitor(ParseSession* session, Cpp::ExpressionVisitor* visitor, const KDevelop::DUContext* context, const KDevelop::TopDUContext* source, const KDevelop::DUContext* localVisibilityContext, const CursorInRevision& position, KDevelop::DUContext::SearchFlags localSearchFlags, bool debug )
+: m_session(session), m_visitor(visitor), m_context(context), m_source(source), m_localContext(localVisibilityContext), m_find(m_context, m_source, localSearchFlags, CursorInRevision(position) ), m_debug(debug), m_finalName(0)
 {
   m_flags = localSearchFlags;
   m_stopSearch = false;

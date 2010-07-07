@@ -265,7 +265,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   if(standardCtx) {
     Declaration* definition = 0;
 
-    DUContext* ctx = standardCtx->findContext(cursor);
+    DUContext* ctx = standardCtx->findContext(standardCtx->transformToLocalRevision(cursor));
     if(!ctx)
       ctx = standardCtx;
 
@@ -293,7 +293,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(definition);
     if(def && def->declaration()) {
       Declaration* declaration = def->declaration();
-      KTextEditor::Range targetRange = declaration->range().textRange();
+      KTextEditor::Range targetRange = declaration->rangeInCurrentRevision().textRange();
       KUrl url(declaration->url().str());
       kDebug() << "found definition that has declaration: " << definition->toString() << "range" << targetRange << "url" << url;
       lock.unlock();
@@ -320,10 +320,10 @@ void CppLanguageSupport::switchDefinitionDeclaration()
 
   if(def) {
     KUrl url(def->url().str());
-    KTextEditor::Range targetRange = def->range().textRange();
+    KTextEditor::Range targetRange = def->rangeInCurrentRevision().textRange();
 
     if(def->internalContext()) {
-      targetRange.end() = def->internalContext()->range().end.textCursor();
+      targetRange.end() = def->internalContext()->rangeInCurrentRevision().end.textCursor();
     }else{
       kDebug(9007) << "Declaration does not have internal context";
     }
@@ -529,7 +529,7 @@ QPair<TopDUContextPointer, SimpleRange> CppLanguageSupport::importedContextForPo
     //It's an #include, find out which file was included at the given line
     foreach(const DUContext::Import &imported, ctx->importedParentContexts()) {
       if(imported.context(0)) {
-        if(ctx->importPosition(imported.context(0)).line == wordRange.start.line) {
+        if(ctx->transformFromLocalRevision(ctx->importPosition(imported.context(0))).line == wordRange.start.line) {
           if(TopDUContext* importedTop = dynamic_cast<TopDUContext*>(imported.context(0)))
             return qMakePair(TopDUContextPointer(importedTop), wordRange);
         }

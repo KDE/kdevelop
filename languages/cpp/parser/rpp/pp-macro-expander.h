@@ -31,7 +31,6 @@
 #include "pp-stream.h"
 #include "pp-scanner.h"
 #include "anchor.h"
-#include <language/editor/simplecursor.h>
 
 namespace KDevelop {
   class IndexedString;

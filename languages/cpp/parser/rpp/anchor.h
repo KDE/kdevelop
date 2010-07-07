@@ -21,29 +21,29 @@
 #ifndef ANCHOR_H
 #define ANCHOR_H
 
-#include <language/editor/simplecursor.h>
+#include <language/editor/cursorinrevision.h>
 
 #include <cppparserexport.h>
 
 namespace rpp {
 /**
- * A KDevelop::SimpleCursor with additional boolean value whether the range opened by this anchor is collapsed.
+ * A KDevelop::CursorInRevision with additional boolean value whether the range opened by this anchor is collapsed.
  * If that value is true, it means that Everything behind the anchor until the next one is collapsed to the exact position of this anchor.
  * */
-class KDEVCPPRPP_EXPORT Anchor : public KDevelop::SimpleCursor {
+class KDEVCPPRPP_EXPORT Anchor : public KDevelop::CursorInRevision {
 public:
   Anchor() : collapsed(false) {
   }
   
-  explicit Anchor(const SimpleCursor& cursor, bool _collapsed=false, KDevelop::SimpleCursor _macroExpansion=KDevelop::SimpleCursor::invalid()) : SimpleCursor(cursor), collapsed(_collapsed), macroExpansion(_macroExpansion) {
+  explicit Anchor(const CursorInRevision& cursor, bool _collapsed=false, KDevelop::CursorInRevision _macroExpansion=KDevelop::CursorInRevision::invalid()) : CursorInRevision(cursor), collapsed(_collapsed), macroExpansion(_macroExpansion) {
   }
-  explicit Anchor(int line, int column, bool _collapsed=false, KDevelop::SimpleCursor _macroExpansion=KDevelop::SimpleCursor::invalid()) : SimpleCursor(line, column), collapsed(_collapsed), macroExpansion(_macroExpansion) {
+  explicit Anchor(int line, int column, bool _collapsed=false, KDevelop::CursorInRevision _macroExpansion=KDevelop::CursorInRevision::invalid()) : CursorInRevision(line, column), collapsed(_collapsed), macroExpansion(_macroExpansion) {
   }
 
   bool collapsed;
   
   ///@todo create a sub-class that contains macroExpansion. It is only needed in the location-table and everything using not, not actually in the anchors.
-  KDevelop::SimpleCursor macroExpansion; //Zero if this position was not transformed through a macro-expansion, else a number that identifies the expansion
+  KDevelop::CursorInRevision macroExpansion; //Zero if this position was not transformed through a macro-expansion, else a number that identifies the expansion
 };
 }
 

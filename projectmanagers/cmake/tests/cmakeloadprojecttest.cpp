@@ -88,7 +88,7 @@ CMakeProjectVisitor CMakeLoadProjectTest::parseProject( const QString& sourcedir
     CacheValues cv;
     vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
     
-    KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), SimpleRange(0,0, 0,0));
+    KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
     DUChain::self()->addDocumentChain(buildstrapContext);
     ReferencedTopDUContext ref=buildstrapContext;
     QStringList modulesPath = vm["CMAKE_MODULE_PATH"];

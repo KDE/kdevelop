@@ -98,7 +98,7 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
 
   if(name.isEmpty()) {
     KDevelop::ProblemPointer problem(new KDevelop::Problem);
-    problem->setFinalLocation(KDevelop::DocumentRange(IndexedString(m_engine->currentFileNameString()), SimpleRange(input.originalInputPosition(), input.originalInputPosition())));
+    problem->setFinalLocation(KDevelop::DocumentRange(IndexedString(m_engine->currentFileNameString()), RangeInRevision(input.originalInputPosition(), 0).castToSimpleRange()));
     problem->setDescription(i18n("Macro error"));
     m_engine->problemEncountered(problem);
     return pp_actual();
@@ -111,7 +111,7 @@ pp_actual pp_macro_expander::resolve_formal(IndexedString name, Stream& input)
       }
       else {
         KDevelop::ProblemPointer problem(new KDevelop::Problem);
-        problem->setFinalLocation(KDevelop::DocumentRange(IndexedString(m_engine->currentFileNameString()), SimpleRange(input.originalInputPosition(), input.originalInputPosition())));
+        problem->setFinalLocation(KDevelop::DocumentRange(IndexedString(m_engine->currentFileNameString()), RangeInRevision(input.originalInputPosition(), 0).castToSimpleRange()));
         problem->setDescription(i18n("Call to macro %1 missing argument number %2", name.str(), index));
         problem->setExplanation(i18n("Formals: %1", joinIndexVector(formals, formalsSize, ", ")));
         m_engine->problemEncountered(problem);
@@ -152,14 +152,14 @@ pp_macro_expander::pp_macro_expander(pp* engine, pp_frame* frame, bool inHeaderS
   } \
 
 struct EnableMacroExpansion {
-  EnableMacroExpansion(Stream& _input, const KDevelop::SimpleCursor& expansionPosition) : input(_input), hadMacroExpansion(_input.macroExpansion().isValid()) {
+  EnableMacroExpansion(Stream& _input, const KDevelop::CursorInRevision& expansionPosition) : input(_input), hadMacroExpansion(_input.macroExpansion().isValid()) {
     
     if(!hadMacroExpansion)
       _input.setMacroExpansion(expansionPosition);
   }
   ~EnableMacroExpansion() {
     if(!hadMacroExpansion)
-      input.setMacroExpansion(KDevelop::SimpleCursor::invalid());
+      input.setMacroExpansion(KDevelop::CursorInRevision::invalid());
   }
   Stream& input;
   bool hadMacroExpansion;
@@ -263,7 +263,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         IndexedString identifier = IndexedString::fromIndex( skip_identifier(input) );
 
         Anchor inputPosition = input.inputPosition();
-        KDevelop::SimpleCursor originalInputPosition = input.originalInputPosition();
+        KDevelop::CursorInRevision originalInputPosition = input.originalInputPosition();
         PreprocessedContents formal = resolve_formal(identifier, input).mergeText();
         
         //Escape so we don't break on '"'

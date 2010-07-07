@@ -190,7 +190,7 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
   }else if(!m_inFunctionDefinition && node->declarator && node->declarator->parameter_declaration_clause && node->declarator->id) {
     //Decide whether the parameter-declaration clause is valid
     DUChainWriteLocker lock(DUChain::lock());
-    SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
+    CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     
     QualifiedIdentifier id;
     identifierForNode(node->declarator->id, id);    
@@ -218,7 +218,7 @@ void DeclarationBuilder::visitInitDeclarator(InitDeclaratorAST *node)
       ///@todo Solve the redundancy issue once and for all, properly, using a SimpleDeclarationOrFunctionDeclarationAST or similar.
       
       //Since we don't delete the temporary context, at least collapse its range.
-      tempContext->setRange(SimpleRange(tempContext->range().start, tempContext->range().end));
+      tempContext->setRange(RangeInRevision(tempContext->range().start, tempContext->range().end));
       
       setLastContext(previousLast);
       m_importedParentContexts = importedParentContexts;
@@ -257,7 +257,7 @@ KDevelop::IndexedDeclaration DeclarationBuilder::resolveMethodName(NameAST *node
 
   DUChainReadLocker lock(DUChain::lock());
   if(currentDeclaration() && currentDeclaration()->internalContext()) {
-    const QList<Declaration*> declarations = currentDeclaration()->internalContext()->findDeclarations(id, SimpleCursor::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
+    const QList<Declaration*> declarations = currentDeclaration()->internalContext()->findDeclarations(id, CursorInRevision::invalid(), AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
     if(!declarations.isEmpty())
       return KDevelop::IndexedDeclaration(declarations.first());
   }
@@ -376,7 +376,7 @@ void DeclarationBuilder::visitDeclarator (DeclaratorAST* node)
 
       if (id.count() > 1 ||
            (m_inFunctionDefinition && (currentContext()->type() == DUContext::Namespace || currentContext()->type() == DUContext::Global))) {
-        SimpleCursor pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), CppEditorIntegrator::FrontEdge);
+        CursorInRevision pos = currentDeclaration()->range().start;//editor()->findPosition(m_functionDefinedStack.top(), CppEditorIntegrator::FrontEdge);
         // TODO: potentially excessive locking
 
         QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos, AbstractType::Ptr(), 0, DUContext::OnlyFunctions);
@@ -481,9 +481,9 @@ T* DeclarationBuilder::openDeclaration(NameAST* name, AST* rangeNode, const Iden
 }
 
 template<class T>
-T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd, const SimpleRange* customRange)
+T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const Identifier& customName, bool collapseRangeAtStart, bool collapseRangeAtEnd, const RangeInRevision* customRange)
 {
-  SimpleRange newRange;
+  RangeInRevision newRange;
   if(name) {
     uint start = name->unqualified_name->start_token;
     uint end = name->unqualified_name->end_token;
@@ -524,7 +524,7 @@ T* DeclarationBuilder::openDeclarationReal(NameAST* name, AST* rangeNode, const 
     // Seek a matching declaration
 
     ///@todo maybe order the declarations within ducontext and change here back to walking the indices, because that's easier to debug and faster
-    QList<Declaration*> decls = currentContext()->findLocalDeclarations(localId, SimpleCursor::invalid(), 0, AbstractType::Ptr(), DUContext::NoFiltering);
+    QList<Declaration*> decls = currentContext()->findLocalDeclarations(localId, CursorInRevision::invalid(), 0, AbstractType::Ptr(), DUContext::NoFiltering);
     foreach( Declaration* dec, decls ) {
 
       if( wasEncountered(dec) )
@@ -949,7 +949,7 @@ void DeclarationBuilder::closeContext()
 void DeclarationBuilder::visitNamespace(NamespaceAST* ast) {
 
   {
-    SimpleRange range;
+    RangeInRevision range;
     Identifier id;
     
     if(ast->namespace_name)
@@ -991,7 +991,7 @@ void DeclarationBuilder::visitClassSpecifier(ClassSpecifierAST *node)
    * Will create one helper-context named "MyClass" around RealClass
    * */
 
-  SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
+  CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
 
   IndexedInstantiationInformation specializedWith;
   
@@ -1149,7 +1149,7 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
   addBaseType(instance, node);
 }
 
-QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)
+QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const CursorInRevision& position)
 {
   QList< Declaration* > decls = currentContext()->findDeclarations(identifier, position);
   
@@ -1188,7 +1188,7 @@ void DeclarationBuilder::visitUsing(UsingAST * node)
   {
     DUChainWriteLocker lock(DUChain::lock());
 
-    SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
+    CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
     QList<Declaration*> declarations = currentContext()->findDeclarations(id, pos);
     if(!declarations.isEmpty()) {
       decl->setAliasedDeclaration(declarations[0]);
@@ -1210,7 +1210,7 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
   DeclarationBuilderBase::visitUsingDirective(node);
 
   if( compilingContexts() ) {
-    SimpleRange range = editor()->findRange(node->start_token);
+    RangeInRevision range = editor()->findRange(node->start_token);
     DUChainWriteLocker lock(DUChain::lock());
     NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, globalImportIdentifier(), false, false, &range);
     {
@@ -1244,7 +1244,7 @@ void DeclarationBuilder::visitNamespaceAliasDefinition(NamespaceAliasDefinitionA
   }
 
   if( compilingContexts() ) {
-    SimpleRange range = editor()->findRange(node->namespace_name);
+    RangeInRevision range = editor()->findRange(node->namespace_name);
     DUChainWriteLocker lock(DUChain::lock());
     NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, Identifier(editor()->parseSession()->token_stream->token(node->namespace_name).symbol()), false, false, &range);
     {
@@ -1291,7 +1291,7 @@ void DeclarationBuilder::visitElaboratedTypeSpecifier(ElaboratedTypeSpecifierAST
 
       ///@todo think how this interacts with re-using duchains. In some cases a forward-declaration should still be created.
       QList<Declaration*> declarations;
-      SimpleCursor pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
+      CursorInRevision pos = editor()->findPosition(node->start_token, CppEditorIntegrator::FrontEdge);
 
       {
         DUChainReadLocker lock(DUChain::lock());
@@ -1549,7 +1549,7 @@ void DeclarationBuilder::applyFunctionSpecifiers()
       DUContext* iContext = import.context(topContext());
       if(iContext) {
         overridden += iContext->findDeclarations(QualifiedIdentifier(classFunDecl->identifier()),
-                                            SimpleCursor::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
+                                            CursorInRevision::invalid(), classFunDecl->abstractType(), classFunDecl->topContext(), DUContext::DontSearchInParent);
       }
     }
     if(!overridden.isEmpty()) {

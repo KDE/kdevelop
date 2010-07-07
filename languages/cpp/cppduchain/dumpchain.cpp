@@ -78,7 +78,7 @@ void DumpChain::visit(AST *node)
 
 
       kDebug(9007) << indentation <<  "\\" << names[node->kind]
-              << "[(" << node->start_token << ")" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge).textCursor() << /*", "
+              << "[(" << node->start_token << ")" << m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge).castToSimpleCursor().textCursor() << /*", "
               << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge) <<*/ "]" << nodeText << endl;
     } else
       kDebug(9007) << indentation << "\\" << names[node->kind]
@@ -95,7 +95,7 @@ void DumpChain::visit(AST *node)
     {
       kDebug(9007) << indentation << "/" << names[node->kind]
               << "[("  << node->end_token << ") "/*<< m_editor->findPosition(node->start_token, CppEditorIntegrator::FrontEdge) << ", "*/
-              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge).textCursor() << "]" << endl;
+              << m_editor->findPosition(node->end_token, CppEditorIntegrator::FrontEdge).castToSimpleCursor().textCursor() << "]" << endl;
     }
     else
     {

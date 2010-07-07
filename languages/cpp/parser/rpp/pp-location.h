@@ -24,8 +24,6 @@
 
 #include <QMap>
 
-#include <language/editor/simplecursor.h>
-
 #include <cppparserexport.h>
 #include "anchor.h"
 

@@ -71,7 +71,7 @@ class KDEVCPPDUCHAIN_EXPORT QPropertyDeclaration : public KDevelop::ClassMemberD
 public:
   QPropertyDeclaration(const QPropertyDeclaration& rhs);
   QPropertyDeclaration(QPropertyDeclarationData& data);
-  QPropertyDeclaration(const KDevelop::SimpleRange& range, KDevelop::DUContext* context);
+  QPropertyDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
 
   /**
    * Sets the @p declaration of the READ method of the property.

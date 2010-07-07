@@ -451,7 +451,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     
     DUContext* searchInContext = m_currentContext;
     
-    SimpleCursor position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
+    CursorInRevision position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
     if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
       position = position.invalid();
 
@@ -533,7 +533,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
           CppEditorIntegrator editor(session());
           
-          problem->setFinalLocation(DocumentRange(m_currentContext->url(), editor.findRange(node)));
+          problem->setFinalLocation(DocumentRange(m_currentContext->url(), editor.findRange(node).castToSimpleRange()));
           if(!problem->range().isEmpty() && !editor.findRangeForContext(node->start_token, node->end_token).isEmpty())
             m_problems << problem;
         }
@@ -1984,7 +1984,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
     
     {
-      SimpleCursor position = container->range().end;
+      CursorInRevision position = container->range().end;
       lock.unlock();
       //This builds the uses
       NameASTVisitor nameV( m_session, this, container, topContext(), m_currentContext, position );
@@ -2005,7 +2005,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     Identifier id(tokenFromIndex(node->name->id).symbol());
     
     if(!id.isEmpty()) {
-      foreach(Declaration* decl, container->findDeclarations(id, SimpleCursor::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
+      foreach(Declaration* decl, container->findDeclarations(id, CursorInRevision::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         QtFunctionDeclaration* qtFunction = dynamic_cast<QtFunctionDeclaration*>(decl);
         if(qtFunction) {
             ///Allow incomplete matching between the specified signature and the real signature, as Qt allows it.

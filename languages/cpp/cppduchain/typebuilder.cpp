@@ -411,7 +411,7 @@ bool TypeBuilder::openTypeFromName(NameAST* name, uint modifiers, bool needClass
   bool delay = false;
 
   if(!delay) {
-    SimpleCursor pos = editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge);
+    CursorInRevision pos = editor()->findPosition(name->start_token, CppEditorIntegrator::FrontEdge);
     DUChainReadLocker lock(DUChain::lock());
     ifDebug( kDebug() << "searching" << id.toString(); )
     ifDebugCurrentFile( kDebug() << "searching" << id.toString(); )
@@ -738,7 +738,7 @@ bool TypeBuilder::openTypeFromName(QualifiedIdentifier id, AST* typeNode, bool n
     bool delay = false;
 
     if (!delay) {
-        SimpleCursor pos(editorFindRange(typeNode, typeNode).start());
+        CursorInRevision pos(editorFindRange(typeNode, typeNode).start);
         DUChainReadLocker lock(DUChain::lock());
 
         QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);

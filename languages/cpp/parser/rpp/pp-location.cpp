@@ -180,7 +180,7 @@ void LocationTable::dump() const
   kDebug(9007) << "Location Table:";
   while (it.hasNext()) {
     it.next();
-    kDebug(9007) << it.key() << " => " << it.value().textCursor();
+    kDebug(9007) << it.key() << " => " << it.value().castToSimpleCursor().textCursor();
   }
 }
 
@@ -193,7 +193,7 @@ void LocationTable::splitByAnchors(const PreprocessedContents& text, const Ancho
 
   while (currentOffset < (size_t)text.size())
   {
-    Anchor nextAnchor(KDevelop::SimpleCursor::invalid());
+    Anchor nextAnchor(KDevelop::CursorInRevision::invalid());
     size_t nextOffset;
 
     if(it.hasNext()) {
@@ -202,7 +202,7 @@ void LocationTable::splitByAnchors(const PreprocessedContents& text, const Ancho
       nextAnchor = it.value();
     }else{
       nextOffset = text.size();
-      nextAnchor = Anchor(KDevelop::SimpleCursor::invalid());
+      nextAnchor = Anchor(KDevelop::CursorInRevision::invalid());
     }
 
     if( nextOffset-currentOffset > 0 ) {

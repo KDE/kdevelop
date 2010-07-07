@@ -82,7 +82,7 @@ private:
   Cpp::ExpressionVisitor* m_visitor;
   const KDevelop::DUContext* m_context;
   const KDevelop::DUContext* m_localContext;
-  KDevelop::SimpleCursor m_position;
+  KDevelop::CursorInRevision m_position;
   QList<KDevelop::DeclarationPointer> m_declarations;
   const KDevelop::TopDUContext* m_source;
   KDevelop::QualifiedIdentifier m_typeId;

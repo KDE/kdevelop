@@ -149,7 +149,7 @@ using namespace KDevelop;
     int functionCount = functions.size();
 
     if( context ) {
-      QList<Declaration*> declarations = context->findLocalDeclarations(Identifier(functionName), SimpleCursor::invalid(), topContext);
+      QList<Declaration*> declarations = context->findLocalDeclarations(Identifier(functionName), CursorInRevision::invalid(), topContext);
       for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
         KDevelop::FunctionType::Ptr function = (*it)->abstractType().cast<KDevelop::FunctionType>();
         ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
@@ -195,7 +195,7 @@ using namespace KDevelop;
     Identifier id(context->owner()->identifier());
     id.clearTemplateIdentifiers();
 
-    QList<Declaration*> declarations = context->findLocalDeclarations(id, SimpleCursor::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
+    QList<Declaration*> declarations = context->findLocalDeclarations(id, CursorInRevision::invalid(), topContext, AbstractType::Ptr(), DUContext::OnlyFunctions);
 
     for( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it ) {
       ClassFunctionDeclaration* functionDeclaration = dynamic_cast<ClassFunctionDeclaration*>( *it );
@@ -221,7 +221,7 @@ KDevelop::AbstractType::Ptr matchingClassPointer(const KDevelop::AbstractType::P
     DUContext* internal = actualStructure->internalContext(topContext);
     if(internal) {
       typedef QPair<Declaration*, int> DeclarationDepthPair;
-      foreach(Declaration* decl, internal->findDeclarations(Cpp::castIdentifier().identifier(), SimpleCursor::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
+      foreach(Declaration* decl, internal->findDeclarations(Cpp::castIdentifier().identifier(), CursorInRevision::invalid(), topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         FunctionType::Ptr funType = decl->type<FunctionType>();
         if(funType && funType->returnType()) {
           if(conversion.implicitConversion(funType->returnType()->indexed(), matchTo->indexed(), true)) {
@@ -259,7 +259,7 @@ AbstractType::Ptr decreasePointerDepth(AbstractType::Ptr type, TopDUContext* top
     if(useOperator) {
       Declaration* decl = getDeclaration(type, top);
       if(decl && decl->internalContext()) {
-        QList<Declaration*> decls = decl->internalContext()->findDeclarations(Identifier("operator*"), SimpleCursor::invalid(), top, DUContext::DontSearchInParent);
+        QList<Declaration*> decls = decl->internalContext()->findDeclarations(Identifier("operator*"), CursorInRevision::invalid(), top, DUContext::DontSearchInParent);
         if(!decls.isEmpty()) {
           FunctionType::Ptr fun = decls.first()->type<FunctionType>();
           if(fun)

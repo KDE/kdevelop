@@ -402,7 +402,7 @@ void CMakeProjectVisitorTest::testRun()
     QFETCH(QList<StringPair>, results);
     
     KDevelop::ReferencedTopDUContext fakeContext=
-                    new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+                    new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
     DUChain::self()->addDocumentChain(fakeContext);
     
     QFile file("cmake_visitor_test");
@@ -466,7 +466,7 @@ void CMakeProjectVisitorTest::testFinder()
     testFinder_init();
     
     KDevelop::ReferencedTopDUContext fakeContext=
-                    new TopDUContext(IndexedString("test"), SimpleRange(0,0,0,0));
+                    new TopDUContext(IndexedString("test"), RangeInRevision(0,0,0,0));
     DUChain::self()->addDocumentChain(fakeContext);
     
     QFile file("cmake_visitor_test");

@@ -212,7 +212,7 @@ namespace Cpp {
       static_cast<Data*>(data)->m_specializationsList().clear();
     }
     ///Arguments are passed to the base
-    SpecialTemplateDeclaration( const KDevelop::SimpleRange& range, KDevelop::DUContext* context ) : BaseDeclaration(*new SpecialTemplateDeclarationData<typename BaseDeclaration::Data>()) {
+    SpecialTemplateDeclaration( const KDevelop::RangeInRevision& range, KDevelop::DUContext* context ) : BaseDeclaration(*new SpecialTemplateDeclarationData<typename BaseDeclaration::Data>()) {
       static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
       
       this->setRange(range);

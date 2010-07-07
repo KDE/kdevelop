@@ -677,7 +677,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     else
     {
         IndexedString idxpath(path);
-        topctx=new TopDUContext(idxpath, SimpleRange(0,0, endl, endc),
+        topctx=new TopDUContext(idxpath, RangeInRevision(0,0, endl, endc),
                                 new ParsingEnvironmentFile(idxpath));
         DUChain::self()->addDocumentChain(topctx);
 
@@ -994,8 +994,8 @@ void CMakeProjectVisitor::macroDeclaration(const CMakeFunctionDesc& def, const C
     
     DUChainWriteLocker lock(DUChain::lock());
     QList<Declaration*> decls=m_topctx->findDeclarations(Identifier(id));
-    SimpleRange sr=def.arguments.first().range();
-    SimpleRange endsr=end.arguments.first().range();
+    RangeInRevision sr=def.arguments.first().range();
+    RangeInRevision endsr=end.arguments.first().range();
     int idx;
     
     if(!decls.isEmpty())
@@ -1165,7 +1165,7 @@ void usesForArguments(const QStringList& names, const QList<int>& args, const Re
         {
             CMakeFunctionArgument arg=func.arguments[use];
             int idx=topctx->indexForUsedDeclaration(decls.first());
-            topctx->createUse(idx, SimpleRange(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
+            topctx->createUse(idx, RangeInRevision(arg.line-1, arg.column-1, arg.line-1, arg.column-1+var.size()), 0);
         }
     }
 }
@@ -2108,7 +2108,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("%1 is a deprecated command and should not be used", func.name));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::SimpleRange(fc.first().range().start, fc.last().range().end)));
+            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
             m_topctx->addProblem(p);
         }
         element->setContent(fc, line);
@@ -2127,7 +2127,7 @@ int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClea
             KSharedPtr<Problem> p(new Problem);
             p->setDescription(i18n("Unfinished function. "));
             p->setRange(it->nameRange());
-            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::SimpleRange(fc.first().range().start, fc.last().range().end)));
+            p->setFinalLocation(DocumentRange(IndexedString(url), KDevelop::RangeInRevision(fc.first().range().start, fc.last().range().end).castToSimpleRange()));
             m_topctx->addProblem(p);
             
             break;
@@ -2184,7 +2184,7 @@ void CMakeProjectVisitor::createUses(const CMakeFunctionDesc& desc)
             if(!decls.isEmpty())
             {
                 int idx=m_topctx->indexForUsedDeclaration(decls.first());
-                m_topctx->createUse(idx, SimpleRange(arg.line-1, arg.column+it->first, arg.line-1, arg.column+it->second-1), 0);
+                m_topctx->createUse(idx, RangeInRevision(arg.line-1, arg.column+it->first, arg.line-1, arg.column+it->second-1), 0);
             }
         }
     }
