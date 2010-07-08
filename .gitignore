@@ -1,4 +1,13 @@
 apidocs
 .kdev4
+*~
+*.orig
+*.rej
 doxygen.log
+Doxyfile
+bla.diff
+*.kdevelop
+*.kdevelop.filelist
+*.kdevelop.pcs
+*.kdevses
 
