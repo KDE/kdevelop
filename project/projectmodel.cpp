@@ -166,7 +166,7 @@ void ProjectBaseItem::removeRow( int row )
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    for(; count>=0; count--)
+    for(; count>0; count--)
         removeRow(row);
 }
 
@@ -409,9 +409,7 @@ void ProjectModel::resetModel()
 
 void ProjectModel::clear()
 {
-    for( int i = 0; i < d->rootItem->rowCount(); i++ ) {
-        d->rootItem->removeRow( i );
-    }
+    d->rootItem->removeRows(0, d->rootItem->rowCount());
 }
 
 

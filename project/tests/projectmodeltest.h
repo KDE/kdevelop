@@ -34,6 +34,7 @@ Q_OBJECT
 private slots:
     void initTestCase();
     void init();
+    void cleanupTestCase();
     void testCreateFileSystemItems();
     void testCreateFileSystemItems_data();
     void testCreateTargetItems();

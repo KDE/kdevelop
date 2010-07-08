@@ -46,6 +46,11 @@ void ProjectModelTest::init()
     model->clear();
 }
 
+void ProjectModelTest::cleanupTestCase()
+{
+    delete model;
+}
+
 void ProjectModelTest::testCreateFileSystemItems()
 {
     QFETCH( int, itemType );
