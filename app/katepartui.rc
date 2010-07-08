@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KatePartView" version="55">
+<kpartgui name="KatePartView" version="56">
 <MenuBar>
   <Menu name="file" noMerge="1"><text>&amp;File</text>
     <Action name="file_save" group="save_merge" />
@@ -130,5 +130,11 @@
 <ToolBar name="mainToolBar" noMerge="1"><text>Main Toolbar</text>
   <Action name="file_save" group="file_operations" />
 </ToolBar>
+
+<ActionProperties scheme="Default">
+  <Action shortcut="" name="view_folding_markers"/>
+  <Action shortcut="" name="view_dynamic_word_wrap"/>
+  <Action shortcut="" name="view_line_numbers"/>
+</ActionProperties>
 
 </kpartgui>
