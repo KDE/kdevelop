@@ -443,6 +443,19 @@ private slots:
     QVERIFY(lastSession->token_stream->kind(asmDecl->cv->at(0)->element) == Token_volatile);
   }
 
+  void testIncrIdentifier()
+  {
+    //see bug https://bugs.kde.org/show_bug.cgi?id=238772
+    QByteArray code("void incr();");
+    pool memPool;
+    TranslationUnitAST* ast = parse(code, &memPool);
+    dumper.dump(ast, lastSession->token_stream);
+
+    QCOMPARE(ast->declarations->count(), 1);
+    FunctionDefinitionAST* funcDecl = reinterpret_cast<FunctionDefinitionAST*>(ast->declarations->at(0)->element);
+    QVERIFY(funcDecl);
+  }
+
   /*void testParseFile()
   {
      QFile file(TEST_FILE);
