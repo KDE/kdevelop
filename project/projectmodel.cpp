@@ -164,6 +164,12 @@ void ProjectBaseItem::removeRow( int row )
     delete takeRow(row);
 }
 
+void ProjectBaseItem::removeRows(int row, int count)
+{
+    for(; count>=0; count--)
+        removeRow(row);
+}
+
 QModelIndex ProjectBaseItem::index() const
 {
     if( model() ) {

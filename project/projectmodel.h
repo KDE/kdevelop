@@ -146,12 +146,17 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         void appendRow( ProjectBaseItem* item );
         
         /**
-         * Removes and deletes the item at the given row if there is one.
+         * Removes and deletes the item at the given @p row if there is one.
          */
         void removeRow( int row );
         
         /**
-         * Returns and removes the item at the given row if there is one.
+         * Removes and deletes the @p count items after the given @p row if there is one.
+         */
+        void removeRows( int row, int count );
+        
+        /**
+         * Returns and removes the item at the given @p row if there is one.
          */
         ProjectBaseItem* takeRow( int row );
 
