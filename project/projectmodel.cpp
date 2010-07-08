@@ -124,9 +124,9 @@ ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
     if( parent() ) {
-        parent()->removeRow( d->row );
+        parent()->takeRow( d->row );
     } else if( model() ) {
-        model()->removeRow( d->row );
+        model()->takeRow( d->row );
     }
     delete d;
 }
@@ -140,7 +140,7 @@ ProjectBaseItem* ProjectBaseItem::child( int row ) const
     return d->childs.at( row );
 }
 
-void ProjectBaseItem::removeRow( int row )
+ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 {
     Q_D(ProjectBaseItem);
     Q_ASSERT(row >= 0 && row < d->childs.size());
@@ -148,11 +148,20 @@ void ProjectBaseItem::removeRow( int row )
     if( model() ) {
         model()->beginRemoveRows( index(), row, row );
     }
-    d->childs.takeAt( row );
+    ProjectBaseItem* olditem = d->childs.takeAt( row );
+    olditem->d_func()->parent = 0;
+    olditem->d_func()->row = -1;
+    olditem->d_func()->model = 0;;
     
     if( model() ) {
         model()->endRemoveRows();
     }
+    return olditem;
+}
+
+void ProjectBaseItem::removeRow( int row )
+{
+    delete takeRow(row);
 }
 
 QModelIndex ProjectBaseItem::index() const
@@ -753,6 +762,11 @@ void ProjectModel::appendRow( ProjectBaseItem* item )
 void ProjectModel::removeRow( int row )
 {
     d->rootItem->removeRow( row );
+}
+
+ProjectBaseItem* ProjectModel::takeRow( int row )
+{
+    return d->rootItem->takeRow( row );
 }
 
 bool ProjectModel::hasChildren(const QModelIndex& parent) const
