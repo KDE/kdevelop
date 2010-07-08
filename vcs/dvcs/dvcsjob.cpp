@@ -237,7 +237,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         errorValue = "Timedout";
         break;
     case QProcess::WriteError:
-        errorValue = "WriteErro";
+        errorValue = "WriteError";
         break;
     case QProcess::ReadError:
         errorValue = "ReadError";
@@ -248,6 +248,8 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     }
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
+    
+    displayOutput(i18n("Command finnished with error %1.", errorValue));
     jobIsReady();
 }
 
@@ -258,7 +260,7 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     if (exitStatus != QProcess::NormalExit || exitCode != 0)
         slotProcessError(QProcess::UnknownError);
 
-    kDebug() << "process has finished with no errors";
+    displayOutput(i18n("Command exited with value %1.", exitCode));
     jobIsReady();
 }
 
