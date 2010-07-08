@@ -957,10 +957,7 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
 
     job->clear();
     job->setDirectory(workDir);
-    *job << "git";
-    *job << "rev-parse";
-    foreach(const QString &arg, args)
-        *job << arg;
+    *job << "git" << "rev-parse" << args;
 
     return job;
 }
@@ -969,10 +966,7 @@ DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &arg
 {
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, repository) ) {
-        *job << "git";
-        *job << "rev-list";
-        foreach(const QString &arg, args)
-            *job << arg;
+        *job << "git" << "rev-list" << args;
         return job;
     }
     
@@ -1025,9 +1019,10 @@ VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationD
 
 VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 {
-    DVcsJob* job = new DVcsJob(this);
+    DVcsJob* job = new DVcsJob(this, KDevelop::OutputJob::Verbose);
     if (prepareJob(job, source.toLocalFile())) {
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
+		qDebug() << "peeeeeeeeek" << job->dvcsCommand();
         return job;
     }
     

@@ -155,7 +155,7 @@ protected:
                         const QStringList &args);
     DVcsJob* gitRevParse(const QString &repository,
                          const QStringList &args,
-                         KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+                         KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Silent);
 
 protected slots:
     void parseGitBlameOutput(DVcsJob *job);
