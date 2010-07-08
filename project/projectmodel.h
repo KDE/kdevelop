@@ -144,11 +144,11 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * Adds a new child item to this item.
          */
         void appendRow( ProjectBaseItem* item );
+        
         /**
-         * Removes the item at the given row if there is one. The item is not being deleted.
-         * @returns the removed item or 0
+         * Removes and deletes the item at the given row if there is one.
          */
-        ProjectBaseItem* removeRow( int row );
+        void removeRow( int row );
 
         /** @returns RTTI info, allows to know the type of item */
         virtual int type() const;

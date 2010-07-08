@@ -277,13 +277,7 @@ void ProjectModelTest::testItemSanity()
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
 
-    ProjectBaseItem* removeditem = parent->removeRow( child->row() );
-    QCOMPARE( removeditem, child );
-    QCOMPARE( removeditem->row(), -1 );
-    QCOMPARE( removeditem->model(), (ProjectModel*)0 );
-    QCOMPARE( removeditem->parent(), (ProjectBaseItem*)0 );
-    QCOMPARE( removeditem->index(), QModelIndex() );
-    QCOMPARE( removeditem->rowCount(), 0 );
+    parent->removeRow( child->row() );
 }
 
 void ProjectModelTest::testRename()
