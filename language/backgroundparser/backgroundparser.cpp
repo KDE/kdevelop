@@ -183,6 +183,7 @@ public:
             job->setMinimumFeatures(features);
             job->setBackgroundParser(m_parser);
             job->setNotifyWhenReady(notifyWhenReady);
+            job->setTracker(m_parser->trackerForUrl(IndexedString(url)));
 
             QObject::connect(job, SIGNAL(done(ThreadWeaver::Job*)),
                                 m_parser, SLOT(parseComplete(ThreadWeaver::Job*)));
@@ -328,11 +329,11 @@ public:
     int m_neededPriority; //The minimum priority needed for processed jobs
 };
 
-
 BackgroundParser::BackgroundParser(ILanguageController *languageController)
     : QObject(languageController), d(new BackgroundParserPrivate(this, languageController))
 {
-    connect(ICore::self()->documentController(), SIGNAL(documentLoadedPrepare(KDevelop::IDocument*)), this, SLOT(documentLoadedPrepare(KDevelop::IDocument*)));
+    Q_ASSERT(ICore::self()->documentController());
+    connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 }
@@ -626,7 +627,7 @@ void BackgroundParser::documentClosed ( IDocument* document )
     if(document->textDocument())
     {
         IndexedString url(document->url());
-        kDebug() << "adding" << document->url() << "to background parser";
+        kDebug() << "removing" << document->url() << "from background parser";
         Q_ASSERT(d->m_managed.contains(url));
         
         delete d->m_managed[IndexedString(url)];
@@ -634,20 +635,23 @@ void BackgroundParser::documentClosed ( IDocument* document )
     }
 }
 
-void BackgroundParser::documentLoadedPrepare ( IDocument* document )
+
+void BackgroundParser::documentLoaded( IDocument* document )
 {
     QMutexLocker l(&d->m_mutex);
-    
     if(document->textDocument())
     {
+        kDebug() << "Creating change tracker for " << document->url();
         IndexedString url(document->url());
         // Some debugging because we had issues with this
         if(d->m_managed.contains(url))
             Q_ASSERT(d->m_managed[url]->document() == document->textDocument());
-            
+        
         Q_ASSERT(!d->m_managed.contains(url));
         
         d->m_managed.insert(url, new DocumentChangeTracker(document->textDocument()));
+    }else{
+        kDebug() << "NOT creating change tracker, because it is no text document: " << document->url();
     }
 }
 

@@ -32,8 +32,6 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 
-#include <language/backgroundparser/backgroundparser.h>
-
 #include "shellextension.h"
 
 #include "mainwindow.h"
@@ -54,6 +52,7 @@
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
 #include <KMessageBox>
+#include <language/duchain/repositories/itemrepository.h>
 
 namespace KDevelop {
 
@@ -119,14 +118,16 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         projectController = new ProjectController(m_core);
     }
 
-    if( !languageController )
-    {
-        languageController = new LanguageController(m_core);
-    }
-
     if( !documentController )
     {
         documentController = new DocumentController(m_core);
+    }
+
+    if( !languageController )
+    {
+        // Must be initialized after documentController, because the background parser depends
+        // on the document controller.
+        languageController = new LanguageController(m_core);
     }
 
     if( !runController )

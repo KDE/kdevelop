@@ -169,6 +169,7 @@ struct TextDocumentPrivate {
             return;
         // Tell the editor integrator first
         m_loaded = true;
+        m_textDocument->notifyLoaded();
     }
 
     void documentSaved(KTextEditor::Document* document, bool saveAs)

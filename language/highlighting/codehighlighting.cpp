@@ -44,6 +44,7 @@
 #include <duchain/parsingenvironment.h>
 #include <backgroundparser/backgroundparser.h>
 #include <ktexteditor/movinginterface.h>
+#include <duchain/dumpchain.h>
 
 using namespace KTextEditor;
 
@@ -166,7 +167,8 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context)
   highlighting->m_document = url;
   highlighting->m_waitingRevision = revision;
   highlighting->m_waiting = instance->m_highlight;
-  QMetaObject::invokeMethod(this, "applyHighlighting", Qt::QueuedConnection, Q_ARG(DocumentHighlighting*, highlighting));
+  kDebug() << "Highlighted ranges: " << highlighting->m_waiting.size();
+  QMetaObject::invokeMethod(this, "applyHighlighting", Qt::QueuedConnection, Q_ARG(void*, highlighting));
 
   delete instance;
 
@@ -451,8 +453,10 @@ void CodeHighlighting::clearHighlightingForDocument(IndexedString document)
   }
 }
 
-void CodeHighlighting::applyHighlighting(CodeHighlighting::DocumentHighlighting* highlighting)
+void CodeHighlighting::applyHighlighting(void* _highlighting)
 {
+  CodeHighlighting::DocumentHighlighting* highlighting = static_cast<CodeHighlighting::DocumentHighlighting*>(_highlighting);
+
   VERIFY_FOREGROUND_LOCKED
   QMutexLocker lock(&m_dataMutex);
   DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(highlighting->m_document);
@@ -489,6 +493,8 @@ void CodeHighlighting::applyHighlighting(CodeHighlighting::DocumentHighlighting*
     // Translate the range into the current revision
     SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
 
+    ///@todo Why doesn't this work?
+    #if 0
     while(movingIt != oldHighlightedRanges.end() &&
       (*movingIt)->start().line() < transformedRange.start.line ||
       ((*movingIt)->start().line() == transformedRange.start.line && (*movingIt)->start().column() < transformedRange.start.column))
@@ -496,6 +502,7 @@ void CodeHighlighting::applyHighlighting(CodeHighlighting::DocumentHighlighting*
       delete *movingIt; // Skip ranges that are in front of the current matched range
       ++movingIt;
     }
+    #endif
 
     tempRange.start().setPosition(transformedRange.start.line, transformedRange.start.column);
     tempRange.end().setPosition(transformedRange.end.line, transformedRange.end.column);
@@ -506,6 +513,7 @@ void CodeHighlighting::applyHighlighting(CodeHighlighting::DocumentHighlighting*
       transformedRange.end.line != (*movingIt)->end().line() ||
       transformedRange.end.column != (*movingIt)->end().column())
     {
+      Q_ASSERT(rangeIt->attribute);
       // The moving range is behind or unequal, create a new range
       highlighting->m_highlightedRanges.push_back(tracker->documentMovingInterface()->newMovingRange(tempRange));
       highlighting->m_highlightedRanges.back()->setAttribute(rangeIt->attribute);
@@ -517,6 +525,7 @@ void CodeHighlighting::applyHighlighting(CodeHighlighting::DocumentHighlighting*
       (*movingIt)->setRange(tempRange);
       ++movingIt;
     }
+    ++rangeIt;
   }
 
   for(; movingIt != oldHighlightedRanges.end(); ++movingIt)

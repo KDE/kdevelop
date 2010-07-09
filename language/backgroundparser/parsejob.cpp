@@ -333,6 +333,11 @@ KDevelop::ProblemPointer ParseJob::readContents()
         
         file.close();
     }
+
+    d->contents.contents.push_back((char)0);
+    d->contents.contents.push_back((char)0);
+    d->contents.contents.push_back((char)0);
+    d->contents.contents.push_back((char)0);
     
     return KDevelop::ProblemPointer();
 }

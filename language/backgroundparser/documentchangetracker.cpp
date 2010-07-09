@@ -64,8 +64,9 @@ namespace KDevelop
 {
 
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
-    : m_needUpdate(false), m_changedRange(0)
+    : m_needUpdate(false), m_changedRange(0), m_document(document), m_moving(0)
 {
+    Q_ASSERT(document);
     connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
     connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
     connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)));
@@ -120,7 +121,7 @@ qint64 DocumentChangeTracker::revisionAtLastReset() const
 {
     VERIFY_FOREGROUND_LOCKED
     
-    return m_revisionAtLastReset;
+    return m_revisionAtLastReset->revision();
 }
 
 QString DocumentChangeTracker::textAtLastReset() const
@@ -164,7 +165,7 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
     else
         m_changedRange->setRange(changed.encompass(m_changedRange->toRange()));
     
-    Q_ASSERT(m_moving->revision() != m_revisionAtLastReset);
+    Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision());
 
     ModificationRevision::setEditorRevisionForFile(KDevelop::IndexedString(m_document->url()), m_moving->revision());
     
@@ -328,9 +329,10 @@ void DocumentChangeTracker::lockRevision(qint64 revision)
     if(it != m_revisionLocks.end())
         ++(*it);
     else
+    {
         m_revisionLocks.insert(revision, 1);
-    
-    m_moving->lockRevision(revision);
+        m_moving->lockRevision(revision);
+    }
 }
 
 void DocumentChangeTracker::unlockRevision(qint64 revision)
@@ -346,9 +348,10 @@ void DocumentChangeTracker::unlockRevision(qint64 revision)
     --(*it);
     
     if(*it == 0)
+    {
+        m_moving->unlockRevision(revision);        
         m_revisionLocks.erase(it);
-    
-    m_moving->unlockRevision(revision);
+    }
 }
 
 qint64 RevisionLockerAndClearer::revision() const {

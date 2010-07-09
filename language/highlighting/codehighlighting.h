@@ -194,7 +194,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     mutable QMutex m_dataMutex;
 
   private Q_SLOTS:
-    void applyHighlighting(DocumentHighlighting* highlighting);
+    void applyHighlighting(void* highlighting);
 
     void trackerDestroyed(QObject* object);
 

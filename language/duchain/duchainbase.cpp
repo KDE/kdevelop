@@ -158,7 +158,7 @@ SimpleRange DUChainBase::rangeInCurrentRevision() const
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
-    if(tracker && topContext()->parsingEnvironmentFile())
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
       return tracker->transformToCurrentRevision(d_func()->m_range, revision);
@@ -178,7 +178,7 @@ CursorInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleCur
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
-    if(tracker && topContext()->parsingEnvironmentFile())
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
       return tracker->transformToRevision(cursor, revision);
@@ -191,7 +191,7 @@ RangeInRevision DUChainBase::transformToLocalRevision(const KDevelop::SimpleRang
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
-    if(tracker && topContext()->parsingEnvironmentFile())
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
       return tracker->transformToRevision(range, revision);
@@ -204,7 +204,7 @@ SimpleRange DUChainBase::transformFromLocalRevision(const KDevelop::RangeInRevis
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
-    if(tracker && topContext()->parsingEnvironmentFile())
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
       return tracker->transformToCurrentRevision(range, revision);
@@ -217,7 +217,7 @@ SimpleCursor DUChainBase::transformFromLocalRevision(const KDevelop::CursorInRev
 {
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url());
     
-    if(tracker && topContext()->parsingEnvironmentFile())
+    if(tracker && topContext() && topContext()->parsingEnvironmentFile())
     {
       qint64 revision = topContext()->parsingEnvironmentFile()->modificationRevision().revision;
       return tracker->transformToCurrentRevision(cursor, revision);
