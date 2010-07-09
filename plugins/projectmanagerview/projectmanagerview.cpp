@@ -67,9 +67,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 {
     m_ui->setupUi( this );
 
-    setWindowTitle(i18n("Projects"));
     setWindowIcon( SmallIcon( "project-development" ) );
-    setWhatsThis( i18n( "Project Manager" ) );
 
     m_syncAction = plugin->actionCollection()->action("locate_document");
     Q_ASSERT(m_syncAction);
