@@ -161,7 +161,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 
 void ProjectBaseItem::removeRow( int row )
 {
-    delete takeRow(row);
+    delete child(row);
 }
 
 void ProjectBaseItem::removeRows(int row, int count)
