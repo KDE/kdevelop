@@ -711,9 +711,17 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     if (!item || item == item->project()->projectItem()) {
         folder->project()->reloadModel();
     } else {
-        item->clear();
+        CMakeFolderItem* former=item->formerParent();
+        QString buildDir=item->buildDir();
+        ProjectFolderItem* parent=static_cast<ProjectFolderItem*>(item->parent());
+        KUrl url=item->url();
+        IProject* project=item->project();
 
-        reimport(item, item->parent()->url());
+        parent->removeRow(item->row());
+        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), buildDir, 0);
+
+        fi->setFormerParent(former);
+        reimport(fi, parent->url());
     }
     return true;
 }
