@@ -189,7 +189,7 @@ int main( int argc, char *argv[] )
 
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    KApplication app;
+    KDevelopApplication app;
 
     if(args->isSet("sessions"))
     {
