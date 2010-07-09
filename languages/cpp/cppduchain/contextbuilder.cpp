@@ -357,6 +357,8 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
       updateContext->parsingEnvironmentFile()->setIsProxyContext(false);
     }
   }
+  
+  Q_ASSERT(node);
 
   ReferencedTopDUContext topLevelContext;
   {

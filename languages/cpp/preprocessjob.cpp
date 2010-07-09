@@ -664,7 +664,8 @@ bool PreprocessJob::readContents()
   }
   
   m_firstEnvironmentFile->setModificationRevision( parentJob()->contents().modification );
-  
+
+  m_contents = parentJob()->contents().contents;
     
     ifDebug( kDebug( 9007 ) << "===-- PREPROCESSING --===> "
     << parentJob()->document().str()

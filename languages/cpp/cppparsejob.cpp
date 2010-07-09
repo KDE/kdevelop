@@ -725,16 +725,16 @@ void CPPInternalParseJob::run()
               DUChainWriteLocker lock( DUChain::lock() );
               contentContext->deleteUsesRecursively();
           }
-          
-          if (!parentJob()->abortRequested() && isOpenInEditor) {
-
-            if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
-            {
-                parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
-            }
-          }
         }
       }
+      
+      if (!parentJob()->abortRequested() && isOpenInEditor) {
+        if ( parentJob()->cpp() && parentJob()->cpp()->codeHighlighting() )
+        {
+          parentJob()->cpp()->codeHighlighting()->highlightDUChain( contentContext );
+        }
+      }
+      
 
       ///Now mark the context as not being updated. This MUST be done or we will be waiting forever in a loop
       {
