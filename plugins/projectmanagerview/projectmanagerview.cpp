@@ -85,10 +85,6 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
     addAction(plugin->actionCollection()->action("project_install"));
     addAction(plugin->actionCollection()->action("project_clean"));
 
-    m_ui->projectTreeView->setWhatsThis( i18n( "Project Overview" ) );
-    QSizePolicy pol( QSizePolicy::Expanding, QSizePolicy::Expanding );
-    pol.setVerticalStretch( 6 );
-    m_ui->projectTreeView->setSizePolicy( pol );
     connect(m_ui->projectTreeView, SIGNAL(activateUrl(const KUrl&)), this, SLOT(openUrl(const KUrl&)));
 
 //     m_filters = new KLineEdit(this);
@@ -96,11 +92,7 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 //     connect(d->m_filters, SIGNAL(returnPressed()), this, SLOT(filtersChanged()));
 //     vbox->addWidget( m_filters );
 
-    pol = QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
-    pol.setVerticalStretch( 2 );
     m_ui->buildSetView->setProjectView( this );
-    m_ui->buildSetView->setSizePolicy( pol );
-    m_ui->buildSetView->setWhatsThis( i18n( "Build Items:" ) );
 
     m_modelFilter = new ProjectProxyModel( this );
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
@@ -178,9 +170,9 @@ void ProjectManagerView::locateCurrentDocument()
             if (index.isValid()) {
                 if (!bestMatch.isValid()) {
                     bestMatch = index;
-                } else if (KDevelop::ProjectFolderItem* folder = dynamic_cast<KDevelop::ProjectFolderItem*>(item->parent())) {
+                } else if (KDevelop::ProjectBaseItem* parent = item->parent()) {
                     // prefer files in their real folders over the 'copies' in the target folders
-                    if (!folder->target()) {
+                    if (!parent->target()) {
                         bestMatch = index;
                         break;
                     }
