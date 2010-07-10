@@ -31,8 +31,10 @@
 
 namespace KDevelop {
 
-struct PersistentMovingRangePrivate : public QObject
+class PersistentMovingRangePrivate : public QObject
 {
+  Q_OBJECT
+  public:
   PersistentMovingRangePrivate() : m_valid(false), m_movingRange(0), m_tracker(0), m_zDepth(0) {
     moveToThread(QApplication::instance()->thread());
   }

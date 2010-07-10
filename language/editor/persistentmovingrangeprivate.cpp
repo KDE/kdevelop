@@ -34,20 +34,21 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
   {
     // Create a moving range
     m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range.textRange());
-    connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
-    connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+    connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
+    connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document* document)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
     m_movingRange->setAttribute(m_attribte);
     
     m_movingRange->setZDepth(m_zDepth);
   }
 }
 
+
 void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
 {
   Q_ASSERT(m_tracker);
   Q_ASSERT(m_movingRange);
-  disconnect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
-  disconnect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+  disconnect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
+  disconnect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
   
   delete m_movingRange;
   m_tracker = 0;
@@ -79,5 +80,8 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
     m_range = SimpleRange::invalid();
   }
   
-  disconnectTracker();
+  // No need to disconnect, as the document is being deleted. Simply set the referenes to zero.
+  delete m_movingRange;
+  m_movingRange = 0;
+  m_tracker = 0;
 }
