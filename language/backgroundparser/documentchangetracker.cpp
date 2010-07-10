@@ -37,6 +37,11 @@
 #include "backgroundparser.h"
 #include <QApplication>
 
+// Backward transformation currently doesn't work due to kate
+#define NO_BACKWARD_TRANSFORMATION
+// Only needed as long as the backward transformation doesn't work
+#define ALWAYS_UPDATE
+
 using namespace KTextEditor;
 
 /**
@@ -152,6 +157,10 @@ void DocumentChangeTracker::textChanged( Document* document, Range oldRange, Ran
         m_needUpdate = true;
     }
     
+    #ifdef ALWAYS_UPDATE
+    m_needUpdate = true;
+    #endif
+    
     m_currentCleanedInsertion.clear();
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
     
@@ -184,6 +193,10 @@ void DocumentChangeTracker::textInserted( Document* document, Range range )
         m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
     }
     
+    #ifdef ALWAYS_UPDATE
+    m_needUpdate = true;
+    #endif
+    
     if(m_lastInsertionPosition == KTextEditor::Cursor::invalid() || m_lastInsertionPosition == range.start())
     {
         m_currentCleanedInsertion.append(text);
@@ -203,6 +216,10 @@ void DocumentChangeTracker::textRemoved( Document* document, Range range )
     }else{
         m_needUpdate = true; // If we've inserted something else than whitespace, an update is required
     }
+    
+    #ifdef ALWAYS_UPDATE
+    m_needUpdate = true;
+    #endif
     
     m_currentCleanedInsertion.clear();
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
@@ -244,6 +261,14 @@ KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDeve
 {
     VERIFY_FOREGROUND_LOCKED
     
+    #ifdef NO_BACKWARD_TRANSFORMATION
+    if(fromRevision == -1)
+    {
+        kWarning() << "NOT mapping revision backwards from" << range.castToSimpleRange().textRange();
+        return range;
+    }
+    #endif
+    
     if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
     {
         m_moving->transformCursor(range.start.line, range.start.column, KTextEditor::MovingCursor::MoveOnInsert, fromRevision, toRevision);
@@ -256,6 +281,14 @@ KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDeve
 KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior) const
 {
     VERIFY_FOREGROUND_LOCKED
+    
+    #ifdef NO_BACKWARD_TRANSFORMATION
+    if(fromRevision == -1)
+    {
+        kWarning() << "NOT mapping revision backwards from" << cursor.castToSimpleCursor().textCursor();
+        return cursor;
+    }
+    #endif
     
     if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
     {
