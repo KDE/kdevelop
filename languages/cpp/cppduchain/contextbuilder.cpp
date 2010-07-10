@@ -358,8 +358,6 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     }
   }
   
-  Q_ASSERT(node);
-
   ReferencedTopDUContext topLevelContext;
   {
     DUChainWriteLocker lock(DUChain::lock());
@@ -420,6 +418,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext->cleanIfNotEncountered(QSet<DUChainBase*>());
   }else{
+    Q_ASSERT(node);
     node->ducontext = topLevelContext;
     supportBuild(node);
   }
