@@ -123,6 +123,8 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
 ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
+    removeRows(0, d->childs.size());
+    
     if( parent() ) {
         parent()->takeRow( d->row );
     } else if( model() ) {
@@ -151,7 +153,11 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     ProjectBaseItem* olditem = d->childs.takeAt( row );
     olditem->d_func()->parent = 0;
     olditem->d_func()->row = -1;
-    olditem->d_func()->model = 0;;
+    olditem->d_func()->model = 0;
+    for(int i=row; i<rowCount(); i++) {
+        child(i)->d_func()->row--;
+        Q_ASSERT(child(i)->d_func()->row==i);
+    }
     
     if( model() ) {
         model()->endRemoveRows();
@@ -161,13 +167,16 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 
 void ProjectBaseItem::removeRow( int row )
 {
-    delete child(row);
+    Q_D(ProjectBaseItem);
+    delete d->childs[row];
 }
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    for(; count>0; count--)
-        removeRow(row);
+    Q_D(ProjectBaseItem);
+    for(; count>0; count--) {
+        delete d->childs[row];
+    }
 }
 
 QModelIndex ProjectBaseItem::index() const
@@ -213,6 +222,7 @@ int ProjectBaseItem::row() const
 QString ProjectBaseItem::text() const
 {
     Q_D(const ProjectBaseItem);
+    Q_ASSERT(!d->text.isEmpty());
     return d->text;
 }
 
@@ -721,6 +731,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
     if( ( role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::DecorationRole ) && index.isValid() ) {
         ProjectBaseItem* item = itemFromIndex( index );
+        
         if( item ) {
             if( role == Qt::DecorationRole ) {
                 return item->iconName();
