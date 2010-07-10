@@ -45,6 +45,7 @@
 #include <backgroundparser/backgroundparser.h>
 #include <ktexteditor/movinginterface.h>
 #include <duchain/dumpchain.h>
+#include <backgroundparser/urlparselock.h>
 
 using namespace KTextEditor;
 
@@ -85,7 +86,6 @@ void CodeHighlighting::adaptToColorChanges()
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForType( Types type, Contexts context, const QColor &color ) const
 {
   QMutexLocker lock(&m_dataMutex);
-  ///@todo Clear cache when the highlighting has changed
   KTextEditor::Attribute::Ptr a;
   switch (context) {
     case DefinitionContext:
@@ -140,12 +140,19 @@ CodeHighlightingInstance* CodeHighlighting::createInstance() const
   return new CodeHighlightingInstance(this);
 }
 
-void CodeHighlighting::highlightDUChain(TopDUContext* context)
+void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 {
-  DUChainReadLocker lock;
-  ///@todo Find ways to not hold a read-lock over the whole time of the highlighting, this may make the UI laggy
+  IndexedString url;
 
-  IndexedString url = context->url();
+  {
+    DUChainReadLocker lock;
+    url = context->url();
+  }
+
+  // This prevents the background-parser from updating the top-context while we're working with it
+  UrlParseLock urlLock(context->url());
+
+  DUChainReadLocker lock;
 
   qint64 revision = context->parsingEnvironmentFile()->modificationRevision().revision;
 
@@ -159,15 +166,15 @@ void CodeHighlighting::highlightDUChain(TopDUContext* context)
 
   CodeHighlightingInstance* instance = createInstance();
 
-  instance->highlightDUChain(context);
-
   lock.unlock();
+
+  instance->highlightDUChain(context.data());
 
   DocumentHighlighting* highlighting = new DocumentHighlighting;
   highlighting->m_document = url;
   highlighting->m_waitingRevision = revision;
   highlighting->m_waiting = instance->m_highlight;
-  kDebug() << "Highlighted ranges: " << highlighting->m_waiting.size();
+
   QMetaObject::invokeMethod(this, "applyHighlighting", Qt::QueuedConnection, Q_ARG(void*, highlighting));
 
   delete instance;
@@ -192,28 +199,33 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context)
 
 void CodeHighlightingInstance::highlightDUChainSimple(DUContext* context)
 {
+  DUChainReadLocker lock;
+
   ///TODO: 4.1 make this overloadable, e.g. in PHP we also want local colorization in global context
   bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
 
   if( isInFunction && m_highlighting->m_localColorization ) {
+    lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
     highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
-    return;
-  }
+  }else{
+    foreach (Declaration* dec, context->localDeclarations())
+      highlightDeclaration(dec, QColor(QColor::Invalid));
 
+    highlightUses(context);
 
-  foreach (Declaration* dec, context->localDeclarations()) {
-    highlightDeclaration(dec, QColor(QColor::Invalid));
-  }
+    QVector< DUContext* > children = context->childContexts();
 
-  highlightUses(context);
+    lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
 
-  foreach (DUContext* child, context->childContexts()) {
-    highlightDUChainSimple(child);
+    foreach (DUContext* child, children)
+      highlightDUChainSimple(child);
   }
 }
 
 void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors)
 {
+  DUChainReadLocker lock;
+
   TopDUContext* top = context->topContext();
 
   //Merge the colors from the function arguments
@@ -272,13 +284,17 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     highlightUse(context, a, color);
   }
 
-  foreach (DUContext* child, context->childContexts()) {
-    highlightDUChain(child,  colorsForDeclarations, declarationsForColors );
-  }
   if(context->type() == DUContext::Other || context->type() == DUContext::Function) {
     m_functionColorsForDeclarations[IndexedDUContext(context)] = colorsForDeclarations;
     m_functionDeclarationsForColors[IndexedDUContext(context)] = declarationsForColors;
   }
+
+  QVector< DUContext* > children = context->childContexts();
+
+  lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
+
+  foreach (DUContext* child, children)
+    highlightDUChain(child,  colorsForDeclarations, declarationsForColors );
 }
 
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForDepth(int depth) const

@@ -149,7 +149,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     virtual ~CodeHighlighting();
 
     /// This function is thread-safe
-    void highlightDUChain(KDevelop::TopDUContext* context);
+    void highlightDUChain(ReferencedTopDUContext context);
 
     //color should be zero when undecided
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
