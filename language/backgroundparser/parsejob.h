@@ -41,6 +41,8 @@ class ReferencedTopDUContext;
 
 /**
  * The base class for background parser jobs.
+ *
+ * In your language plugin, don't forget to use acquire an UrlParseLock before starting to the actual parsing.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public ThreadWeaver::JobSequence
 {
