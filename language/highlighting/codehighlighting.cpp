@@ -49,6 +49,8 @@
 
 using namespace KTextEditor;
 
+static const float highlightingZDepth = -500;
+
 namespace KDevelop {
 
 ///@todo Don't highlighting everything, only what is visible on-demand
@@ -509,7 +511,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
     // Translate the range into the current revision
     SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
 
-    ///@todo Why doesn't this work?
+    ///@todo Make thiswork
     #if 0
     while(movingIt != oldHighlightedRanges.end() &&
       (*movingIt)->start().line() < transformedRange.start.line ||
@@ -533,6 +535,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
       // The moving range is behind or unequal, create a new range
       highlighting->m_highlightedRanges.push_back(tracker->documentMovingInterface()->newMovingRange(tempRange));
       highlighting->m_highlightedRanges.back()->setAttribute(rangeIt->attribute);
+      highlighting->m_highlightedRanges.back()->setZDepth(highlightingZDepth);
     }
     else
     {

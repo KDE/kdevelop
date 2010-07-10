@@ -63,7 +63,8 @@
 #include <sublime/mainwindow.h>
 #include <auto_ptr.h>
 
-const unsigned int highlightingTimeout = 150;
+static const unsigned int highlightingTimeout = 150;
+static const float highlightingZDepth = -5000;
 
 using KDevelop::ILanguage;
 using KTextEditor::Attribute;
@@ -391,6 +392,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
   // Highlight the declaration
   highlights.highlights << decl->createRangeMoving();
   highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+  highlights.highlights.back()->setZDepth(highlightingZDepth);
   
   // Highlight uses
   {
@@ -401,6 +403,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
       {
         highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(*useIt, fileIt.key()));
         highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+        highlights.highlights.back()->setZDepth(highlightingZDepth);
       }
     }
   }
@@ -409,6 +412,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
   {
     highlights.highlights << def->createRangeMoving();
     highlights.highlights.back()->setAttribute(highlightedUseAttribute());
+    highlights.highlights.back()->setZDepth(highlightingZDepth);
   }
 }
 
