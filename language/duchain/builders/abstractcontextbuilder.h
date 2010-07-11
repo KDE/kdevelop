@@ -608,10 +608,12 @@ protected:
         ret = newContext( range );
         ret->setType( type );
 
-        if (!identifier.isEmpty())
-          ret->setLocalScopeIdentifier(identifier);
+        if ( !identifier.isEmpty() )
+          ret->setLocalScopeIdentifier( identifier );
 
-        setInSymbolTable(ret);
+        setInSymbolTable( ret );
+      }else{
+        ret->setRange( range );
       }
     }
 
