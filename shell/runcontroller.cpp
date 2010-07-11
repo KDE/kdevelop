@@ -136,12 +136,7 @@ public:
             grp.sync();
         }
     }
-    void enableLaunchActions()
-    {
-        runAction->setEnabled( !launchConfigurations.isEmpty() );
-        profileAction->setEnabled( !launchConfigurations.isEmpty() );
-        dbgAction->setEnabled( !launchConfigurations.isEmpty() );
-    }
+    
     void configureLaunches()
     {
         LaunchConfigurationDialog dlg;
@@ -355,7 +350,6 @@ void RunController::initialize()
     {
         // Only do this in GUI mode
         d->updateCurrentLaunchAction();
-        d->enableLaunchActions();
     }
 }
 
@@ -431,7 +425,7 @@ void RunController::setupActions()
     ac->addAction("run_profile", d->profileAction);
     connect(d->profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
-    action = d->stopAction = new KActionMenu( KIcon("dialog-close"), i18n("Stop Jobs"), this);
+    action = d->stopAction = new KActionMenu( KIcon("process-stop"), i18n("Stop Jobs"), this);
     action->setIconText(i18nc("Short text for 'Stop Jobs' used in the toolbar", "Stop"));
     action->setShortcut(Qt::Key_Escape);
     action->setToolTip(i18n("Stop all currently running jobs"));
@@ -474,7 +468,6 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
                 d->currentTargetAction->actions().first()->setChecked(true);
         }
     }
-    d->enableLaunchActions();
 }
 
 void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
@@ -485,17 +478,36 @@ void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
 
 void RunController::slotDebug()
 {
-    executeDefaultLaunch( "debug" );
+    if(d->launchConfigurations.isEmpty()) {
+        LaunchConfigurationDialog d;
+        d.exec();
+    }
+    
+    if(!d->launchConfigurations.isEmpty())
+        executeDefaultLaunch( "debug" );
 }
 
 void RunController::slotProfile()
 {
-    executeDefaultLaunch( "profile" );
+    if(d->launchConfigurations.isEmpty()) {
+        LaunchConfigurationDialog d;
+        d.exec();
+    }
+    
+    if(!d->launchConfigurations.isEmpty())
+        executeDefaultLaunch( "profile" );
 }
 
 void RunController::slotExecute()
 {
-    executeDefaultLaunch( "execute" );
+    
+    if(d->launchConfigurations.isEmpty()) {
+        LaunchConfigurationDialog d;
+        d.exec();
+    }
+    
+    if(!d->launchConfigurations.isEmpty())
+        executeDefaultLaunch( "execute" );
 }
 
 LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
@@ -697,7 +709,6 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
     {
         d->addLaunchAction( l );
         d->launchConfigurations << l;
-        d->enableLaunchActions();
         if( !d->currentTargetAction->currentAction() )
         {
             if( !d->currentTargetAction->actions().isEmpty() )
@@ -738,8 +749,6 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
     }
 
     d->launchConfigurations.removeAll( l );
-
-    d->enableLaunchActions();
 
     delete l;
 }

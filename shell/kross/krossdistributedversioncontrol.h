@@ -79,6 +79,7 @@ public:
     KDevelop::VcsJob* reset(const KUrl &repository, const QStringList &args, const KUrl::List &files);
 
     void setActionDistributed(Kross::Action* anAction);
+    virtual KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const;
 private:
     Kross::Action *action;
     KDevelop::IPlugin* m_plugin;

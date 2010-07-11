@@ -1,5 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2009 Andreas Pakulat <apaku@gmx.de>
+    Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -43,10 +44,16 @@
 #include <util/kdevstringhandler.h>
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
+#include "projecttargetscombobox.h"
 
 KIcon NativeAppConfigPage::icon() const
 {
     return KIcon("system-run");
+}
+
+static KDevelop::ProjectBaseItem* itemForPath(const QStringList& path, KDevelop::ProjectModel* model)
+{
+    return model->itemFromIndex(model->pathToIndex(path));
 }
 
 //TODO: Make sure to auto-add the executable target to the dependencies when its used.
@@ -60,14 +67,9 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
     } else 
     {
-        if( project )
-        {
-            projectTarget->setBaseItem( project->projectItem() );
-        } else {
-            projectTarget->setBaseItem( 0 );
-        }
+        projectTarget->setBaseItem( project->projectItem() );
+        projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
         projectTargetRadio->setChecked( true );
-        projectTarget->setItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
     }
     arguments->setText( cfg.readEntry( ExecutePlugin::argumentsEntry, "" ) );
     workingDirectory->setUrl( cfg.readEntry( ExecutePlugin::workingDirEntry, KUrl() ) );
@@ -77,7 +79,14 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     QVariantList deps = KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList();
     QStringList strDeps;
     foreach( const QVariant& dep, deps ) {
-        QListWidgetItem* item = new QListWidgetItem( KDevelop::joinWithEscaping( dep.toStringList(), '/', '\\' ), dependencies );
+        QStringList deplist = dep.toStringList();
+        KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+        KDevelop::ProjectBaseItem* pitem=itemForPath(deplist, model);
+        KIcon icon;
+        if(pitem)
+            icon=KIcon(pitem->iconName());
+        
+        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), dependencies );
         item->setData( Qt::UserRole, dep );
     }
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
@@ -104,6 +113,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
 
     KDevelop::EnvironmentGroupList env( KGlobal::config() );
     environment->addItems( env.groups() );
+    browseProject->setIcon(KIcon("folder-document"));
 
 
     //connect signals to changed signal
@@ -130,6 +140,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     //connect( runInTerminal, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( dependencyAction, SIGNAL(currentIndexChanged(int)), SLOT(activateDeps(int)) );
     connect( targetDependency, SIGNAL(textChanged(QString)), SLOT(depEdited(QString)));
+    connect( browseProject, SIGNAL(clicked(bool)), targetDependency, SLOT(selectItemDialog()));
 }
 
 
@@ -145,6 +156,7 @@ void NativeAppConfigPage::depEdited( const QString& str )
 
 void NativeAppConfigPage::activateDeps( int idx )
 {
+    browseProject->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
     dependencies->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
     targetDependency->setEnabled( dependencyAction->itemData( idx ).toString() != "Nothing" );
 }
@@ -201,11 +213,19 @@ void NativeAppConfigPage::moveDependencyUp()
 
 void NativeAppConfigPage::addDep()
 {
-    QListWidgetItem* item = new QListWidgetItem( targetDependency->text(), dependencies );
+    KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
+    KIcon icon;
+    KDevelop::ProjectBaseItem* pitem = itemForPath(KDevelop::splitWithEscaping(targetDependency->text(),'/', '\\'), model);
+    if(pitem)
+        icon= KIcon(pitem->iconName());
+
+    QListWidgetItem* item = new QListWidgetItem(icon, targetDependency->text(), dependencies);
     item->setData( Qt::UserRole, targetDependency->itemPath() );
     targetDependency->setText("");
     addDependency->setEnabled( false );
-    dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
+    dependencies->selectionModel()->clearSelection();
+    item->setSelected(true);
+//     dependencies->selectionModel()->select( dependencies->model()->index( dependencies->model()->rowCount() - 1, 0, QModelIndex() ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::SelectCurrent );
 }
 
 void NativeAppConfigPage::removeDep()
@@ -231,7 +251,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
         cfg.deleteEntry( ExecutePlugin::projectTargetEntry );
     } else
     {
-        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->itemPath() );
+        cfg.writeEntry( ExecutePlugin::projectTargetEntry, projectTarget->currentItemPath() );
         cfg.deleteEntry( ExecutePlugin::executableEntry );
     }
     cfg.writeEntry( ExecutePlugin::argumentsEntry, arguments->text() );

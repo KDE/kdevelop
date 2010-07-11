@@ -22,8 +22,7 @@
 #ifndef KDEVPROJECTMODEL_H
 #define KDEVPROJECTMODEL_H
 
-#include <QtGui/QStandardItem>
-#include <QtGui/QStandardItemModel>
+#include <QtCore/QAbstractItemModel>
 #include "projectexport.h"
 #include <KDE/KUrl>
 #include <KDE/KSharedConfig>
@@ -41,6 +40,7 @@ class ProjectFileItem;
 class ProjectTargetItem;
 class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
+class ProjectModel;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectVisitor
 {
@@ -65,30 +65,33 @@ public:
  * \li Executable Target
  * \li File
  */
-class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
+class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 {
     public:
-        ProjectBaseItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        ProjectBaseItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
         virtual ~ProjectBaseItem();
 
-        /**
-         * add the item @p item to the list of children for this item
-         * do not use this function if you gave the item a parent when you
-         * created it
-         */
-        void add( ProjectBaseItem* item );
 
         enum ProjectItemType
         {
-            BuildFolder = QStandardItem::UserType         /** item is a buildable folder */,
-            Folder = QStandardItem::UserType+1            /** item is a folder */,
-            ExecutableTarget = QStandardItem::UserType+2  /** item is an executable target */,
-            LibraryTarget = QStandardItem::UserType+3     /** item is a library target */,
-            Target = QStandardItem::UserType+5            /** item is a target */,
-            File = QStandardItem::UserType+6              /** item is a file */,
-            CustomProjectItemType = QStandardItem::UserType+100 /** type which should be used as base for custom types */
+            BaseItem = 0          /** item is a base item */,
+            BuildFolder = 1       /** item is a buildable folder */,
+            Folder = 2            /** item is a folder */,
+            ExecutableTarget = 3  /** item is an executable target */,
+            LibraryTarget = 4     /** item is a library target */,
+            Target = 5            /** item is a target */,
+            File = 6              /** item is a file */,
+            CustomProjectItemType = 100 /** type which should be used as base for custom types */
         };
-        
+
+        enum RenameStatus
+        {
+            RenameOk = 0,
+            ExistingItemSameName = 1,
+            ProjectManagerRenameFailed = 2,
+            InvalidNewName = 3
+        };
+
         /** @returns Returns the project that the item belongs to.  */
         IProject* project() const;
 
@@ -100,12 +103,9 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
 
         /** @returns If this item is a file, it returns a pointer to the file, otherwise returns a 0 pointer. */
         virtual ProjectFileItem *file() const;
-        
+
         /** @returns If this item is a file, it returns a pointer to the file, otherwise returns a 0 pointer. */
         virtual ProjectExecutableTargetItem *executable() const;
-
-        /**  @param parent sets the item parent to @p parent */
-        void setParent( QStandardItem* parent);
 
         /** @returns Returns a list of the folders that have this object as the parent. */
         QList<ProjectFolderItem*> folderList() const;
@@ -116,27 +116,90 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem: public QStandardItem
         /** @returns Returns a list of the files that have this object as the parent. */
         QList<ProjectFileItem*> fileList() const;
 
-        /** @returns the url of this item if its a file or folder related object */
-        virtual KUrl url() const;
-
         virtual bool lessThan( const KDevelop::ProjectBaseItem* ) const;
+
+        /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
+        ProjectBaseItem* child( int row ) const;
+        /** @returns a valid QModelIndex for usage with the model API for this item. */
+        QModelIndex index() const;
+        /** @returns The parent item if this item has one, else it return 0. */
+        virtual ProjectBaseItem* parent() const;
+        /** @returns the displayed text of this item. */
+        QString text() const;
+        /** @returns the row in the list of children of this items parent, or -1. */
+        int row() const;
+        /**
+         * Allows to change the displayed text of this item.
+         * @param text the new text
+         */
+        void setText( const QString& text );
+
+        /** @returns the number of children of this item, or 0 if there are none. */
+        int rowCount() const;
+
+        /** @returns the model to which this item belongs, or 0 if its not associated to a model. */
+        ProjectModel* model() const;
+
+        /**
+         * Adds a new child item to this item.
+         */
+        void appendRow( ProjectBaseItem* item );
+        
+        /**
+         * Removes and deletes the item at the given @p row if there is one.
+         */
+        void removeRow( int row );
+        
+        /**
+         * Removes and deletes the @p count items after the given @p row if there is one.
+         */
+        void removeRows( int row, int count );
+        
+        /**
+         * Returns and removes the item at the given @p row if there is one.
+         */
+        ProjectBaseItem* takeRow( int row );
+
+        /** @returns RTTI info, allows to know the type of item */
+        virtual int type() const;
+
+        /** @returns a string to pass to KIcon as icon-name suitable to represent this item. */
+        virtual QString iconName() const;
+
+        /**
+         * Set the url of this item.
+         * Note this function never renames the item in the project manager or on the filesystem,
+         * it only changes the url and possibly the text nothing else.
+         */
+        virtual void setUrl( const KUrl& );
+
+        /** Get the url of this item (if any) */
+        KUrl url() const;
+
+        /**
+         * Renames the item to the new name.
+         * @returns status information wether the renaming succeeded.
+         */
+        virtual RenameStatus rename( const QString& newname );
 
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
         ProjectBaseItem( ProjectBaseItemPrivate& dd );
+        void setRow( int row );
+        void setModel( ProjectModel* model );
     private:
         Q_DECLARE_PRIVATE(ProjectBaseItem)
+        friend class ProjectModel;
 };
 
 /**
  * Implementation of the ProjectBaseItem interface that is specific to a
  * folder
  */
-class ProjectFolderItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectFolderItem: public ProjectBaseItem
 {
 public:
-    ProjectFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
+    ProjectFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
 
     virtual ~ProjectFolderItem();
 
@@ -145,50 +208,28 @@ public:
     ///Reimplemented from QStandardItem
     virtual int type() const;
 
-    /** Get the url of this folder */
-    KUrl url() const;
-
     /** Get the folder name, equal to url().fileName() but faster (precomputed) */
-    const QString& folderName() const;
-
-    /** Set the url of this folder */
-    void setUrl( const KUrl& );
-
-    /** Returns whether it is the project root folder */
-    bool isProjectRoot() const;
-
-    /** Sets whether it is the project root folder and sets the project name to the item */
-    void setProjectRoot(bool isRoot);
+    QString folderName() const;
 
     /** @returns Returns whether this folder directly contains the specified file or folder. */
     bool hasFileOrFolder(const QString& name) const;
-
-    /** If @p role is Qt::EditRole, it tells the projectcontroller that the folder name is changing to value.
-        Otherwise works like QStandardItem::setData */
-    void setData(const QVariant& value, int role = Qt::UserRole + 1);
-protected:
-    ProjectFolderItem( ProjectFolderItemPrivate& );
-private:
-    Q_DECLARE_PRIVATE(ProjectFolderItem)
+    
+    virtual QString iconName() const;
+    virtual RenameStatus rename(const QString& newname);
 };
 
 
 /**
  * Folder which contains buildable targets as part of a buildable project
  */
-class ProjectBuildFolderItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectBuildFolderItem: public ProjectFolderItem
 {
 public:
-    ProjectBuildFolderItem( IProject*, const KUrl &dir, QStandardItem *parent = 0 );
+    ProjectBuildFolderItem( IProject*, const KUrl &dir, ProjectBaseItem *parent = 0 );
 
     ///Reimplemented from QStandardItem
     virtual int type() const;
-
-protected:
-    ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& );
-private:
-    Q_DECLARE_PRIVATE(ProjectBuildFolderItem)
+    virtual QString iconName() const;
 };
 
 /**
@@ -196,20 +237,16 @@ private:
  *
  * This object contains all properties specific to a target.
  */
-class ProjectTargetItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectTargetItem: public ProjectBaseItem
 {
 public:
-    ProjectTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+    ProjectTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
 
     ///Reimplemented from QStandardItem
     virtual int type() const;
 
     virtual ProjectTargetItem *target() const;
-protected:
-    ProjectTargetItem( ProjectTargetItemPrivate& );
-private:
-    Q_DECLARE_PRIVATE(ProjectTargetItem)
+    virtual QString iconName() const;
 };
 
 /**
@@ -220,7 +257,7 @@ private:
 class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTargetItem
 {
     public:
-        ProjectExecutableTargetItem( IProject*, const QString &name, QStandardItem *parent = 0 );
+        ProjectExecutableTargetItem( IProject*, const QString &name, ProjectBaseItem *parent = 0 );
 
         virtual ProjectExecutableTargetItem *executable() const;
         virtual int type() const;
@@ -237,7 +274,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectExecutableTargetItem: public ProjectTarg
 class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetItem
 {
     public:
-        ProjectLibraryTargetItem(IProject* project, const QString &name, QStandardItem *parent = 0 );
+        ProjectLibraryTargetItem(IProject* project, const QString &name, ProjectBaseItem *parent = 0 );
 
         virtual int type() const;
 };
@@ -245,11 +282,10 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectLibraryTargetItem: public ProjectTargetI
 /**
  * Object which represents a file.
  */
-class ProjectFileItemPrivate;
 class KDEVPLATFORMPROJECT_EXPORT ProjectFileItem: public ProjectBaseItem
 {
 public:
-    ProjectFileItem( IProject*, const KUrl& file, QStandardItem *parent = 0 );
+    ProjectFileItem( IProject*, const KUrl& file, ProjectBaseItem *parent = 0 );
     ~ProjectFileItem();
 
     ///Reimplemented from QStandardItem
@@ -257,23 +293,12 @@ public:
 
     virtual ProjectFileItem *file() const;
 
-    /** Get the url of this file. */
-    KUrl url() const;
-
     /** Get the file name, equal to url().fileName() but faster (precomputed) */
-    const QString& fileName() const;
+    QString fileName() const;
 
-    /** Set the url of this file. */
-    void setUrl( const KUrl& );
-    
-    /** If @p role is Qt::EditRole, it tells the projectcontroller that the folder name is changing to value.
-        Otherwise works like QStandardItem::setData */
-    virtual void setData(const QVariant& value, int role = Qt::UserRole + 1);
-
-protected:
-    ProjectFileItem( ProjectFileItemPrivate& );
-private:
-    Q_DECLARE_PRIVATE(ProjectFileItem)
+    virtual void setUrl( const KUrl& );
+    virtual QString iconName() const;
+    virtual RenameStatus rename(const QString& newname);
 };
 
 /**
@@ -281,22 +306,41 @@ private:
  * @todo: maybe switch to QAbstractItemModel, would make the implementation
  *        for at least the checkbox-behaviour easier
  */
-class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QStandardItemModel
+class KDEVPLATFORMPROJECT_EXPORT ProjectModel: public QAbstractItemModel
 {
     Q_OBJECT
 public:
     ProjectModel( QObject *parent = 0 );
     virtual ~ProjectModel();
 
-    using QStandardItemModel::item;
-    ProjectBaseItem *item( const QModelIndex &index ) const;
-
     void resetModel();
+
+    void clear();
+
+    void appendRow( ProjectBaseItem* item );
+    void removeRow( int row );
+    ProjectBaseItem* takeRow( int row );
 
     QModelIndex pathToIndex(const QStringList& tofetch) const;
     QStringList pathFromIndex(const QModelIndex& index) const;
+
+    QModelIndex indexFromItem( const ProjectBaseItem* item ) const;
+    ProjectBaseItem* itemFromIndex( const QModelIndex& ) const;
+
+    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    virtual QModelIndex parent( const QModelIndex& child ) const;
+    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
+    virtual bool hasChildren(const QModelIndex& parent = QModelIndex()) const;
+
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
+    virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+
 private:
     class ProjectModelPrivate* const d;
+    friend class ProjectBaseItem;
 };
 
 KDEVPLATFORMPROJECT_EXPORT QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::ProjectBaseItem* item );

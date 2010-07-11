@@ -15,13 +15,12 @@
 #include <QStandardItemModel>
 #include <KConfigGroup>
 
-#include "snippetfeatures.h"
-
 class SnippetRepository;
 class SnippetPlugin;
 
 namespace KTextEditor {
 class TemplateScriptRegistrar;
+class TemplateScript;
 }
 
 /**
@@ -59,14 +58,14 @@ public:
      * 
      * @since KDE 4.5
      */
-    QString registerScript(const QString& script);
+    KTextEditor::TemplateScript* registerScript(const QString& script);
 
     /**
      * Unregister script identified by @p token.
      *
      * @since KDE 4.5
      */
-    void unregisterScript(const QString& token);
+    void unregisterScript(KTextEditor::TemplateScript* token);
 
 private:
     SnippetStore(SnippetPlugin* plugin);
@@ -75,9 +74,7 @@ private:
 
     static SnippetStore* m_self;
     SnippetPlugin* m_plugin;
-#ifdef SNIPPETS_HAVE_TPLIFACE2
     KTextEditor::TemplateScriptRegistrar* m_scriptregistrar;
-#endif
 };
 
 #endif

@@ -290,6 +290,11 @@ QString clearComments( QString str, QChar replacement ) {
       lastPos = i+2;
       if( lastPos == len ) break;
     } else {
+      if ( i == -1 ) {
+        // unterminated comment, might happen during code completion
+        // see also: https://bugs.kde.org/show_bug.cgi?id=231351
+        fillString( str, pos, len, replacement );
+      }
       break;
     }
   }
@@ -313,7 +318,26 @@ QString clearComments( QString str, QChar replacement ) {
 QString clearStrings( QString str, QChar replacement ) {
   bool inString = false;
   for(int pos = 0; pos < str.length(); ++pos) {
-    
+    //Skip cpp comments
+    if(!inString && pos + 1 < str.length() && str[pos] == '/' && str[pos+1] == '*')
+    {
+      pos += 2;
+      while(pos + 1 < str.length()) {
+        if (str[pos] == '*' && str[pos + 1] == '/') {
+          ++pos;
+          break;
+        }
+        ++pos;
+      }
+    }
+    //Skip cstyle comments
+    if(!inString && pos + 1 < str.length() && str[pos] == '/' && str[pos+1] == '/')
+    {
+      pos += 2;
+      while(pos < str.length() && str[pos] != '\n') {
+        ++pos;
+      }
+    }
     //Skip a character a la 'b'
     if(!inString && str[pos] == '\'' && pos + 3 <= str.length())
     {

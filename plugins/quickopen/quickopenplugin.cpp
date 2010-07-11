@@ -552,6 +552,22 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
     }
 
     switch( keyEvent->key() ) {
+      case Qt::Key_Tab:
+        if ( keyEvent->modifiers() == Qt::NoModifier ) {
+          // Tab should work just like Down
+          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
+          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Down, Qt::NoModifier));
+          return true;
+        }
+        break;
+      case Qt::Key_Backtab:
+         if ( keyEvent->modifiers() == Qt::ShiftModifier ) {
+          // Shift + Tab should work just like Up
+          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier));
+          QCoreApplication::sendEvent(o.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Up, Qt::NoModifier));
+          return true;
+        }
+        break;
       case Qt::Key_Down:
       case Qt::Key_Up:
       {

@@ -115,6 +115,7 @@ public:
 
     KDevelop::VcsJob* resolve(const KUrl::List& localLocations,
                               KDevelop::IBasicVersionControl::RecursionMode recursion);
+    KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const;
     // End:  KDevelop::IBasicVersionControl
 
     // Begin:  KDevelop::ICentralizedVersionControl

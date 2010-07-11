@@ -21,6 +21,7 @@
 
 #include <QtCore/QList>
 #include <QtGui/QInputDialog>
+#include <QtGui/QApplication>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -70,7 +71,7 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         {
             return "org.kdevelop.ProjectsView";
         }
-        
+
     private:
         ProjectManagerViewPlugin *mplugin;
 };
@@ -148,7 +149,7 @@ void ProjectManagerViewPlugin::updateFromBuildSetChange()
 void ProjectManagerViewPlugin::updateActionState( KDevelop::Context* ctx )
 {
     bool isEmpty = ICore::self()->projectController()->buildSetModel()->items().isEmpty();
-    if( isEmpty ) 
+    if( isEmpty )
     {
         isEmpty = !ctx || ctx->type() != Context::ProjectItemContext || dynamic_cast<ProjectItemContext*>( ctx )->items().isEmpty();
     }
@@ -230,7 +231,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         }
 
         KDevelop::ProjectFolderItem *prjitem = item->folder();
-        if ( !closeProjectsAdded && prjitem && prjitem->isProjectRoot() )
+        if ( !closeProjectsAdded && prjitem && !prjitem->parent() )
         {
             KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
             close->setIcon(KIcon("project-development-close"));
@@ -248,7 +249,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
+
         if ( !removeAdded && ((item->folder() && item->parent()) || item->file()) )
         {
             removeAdded = true;
@@ -257,7 +258,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(removeFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
+
         if( !renameAdded && (item->file() || item->folder()) && item->parent() )
         {
             renameAdded = true;
@@ -266,7 +267,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
             connect( action, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
             menuExt.addAction( ContextMenuExtension::FileGroup, action );
         }
-        
+
         //TODO: Port to launch framework
 //         if(!hasTargets && item->executable())
 //         {
@@ -277,7 +278,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
 //         }
 
     }
-    
+
     return menuExt;
 }
 
@@ -463,10 +464,18 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
     foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
     {
         if ( item->folder() || item->file() ) {
-            if ( item->folder() ) {
-                item->project()->projectFileManager()->removeFolder(item->folder());
-            } else {
-                item->project()->projectFileManager()->removeFile(item->file());
+
+            QWidget* window(QApplication::activeWindow());
+            int q=KMessageBox::questionYesNo(window,
+                item->folder() ? i18n("Do you really want to remove the directory <i>%1</i>?", item->folder()->url().pathOrUrl())
+                        : i18n("Do you really to remove the file <i>%1</i>?", item->file()->url().pathOrUrl()));
+            if(q==KMessageBox::Yes)
+            {
+                if ( item->folder() ) {
+                    item->project()->projectFileManager()->removeFolder(item->folder());
+                } else {
+                    item->project()->projectFileManager()->removeFile(item->file());
+                }
             }
         }
     }
@@ -485,7 +494,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
             continue;
         }
 
-        const QString src = item->data(Qt::EditRole).toString();
+        const QString src = item->text();
 
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
@@ -495,7 +504,22 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         );
 
         if (!name.isEmpty() && name != src) {
-            item->setData(name, Qt::EditRole);
+            ProjectBaseItem::RenameStatus status = item->rename( name );
+            
+            QWidget* window(QApplication::activeWindow());
+            switch(status) {
+                case ProjectBaseItem::RenameOk:
+                    break;
+                case ProjectBaseItem::ExistingItemSameName:
+                    KMessageBox::error(window, i18n("There already is a file called like '%1'", name));
+                    break;
+                case ProjectBaseItem::ProjectManagerRenameFailed:
+                    KMessageBox::error(window, i18n("Could not rename '%1'", name));
+                    break;
+                case ProjectBaseItem::InvalidNewName:
+                    KMessageBox::error(window, i18n("'%1' is not a valid file name", name));
+                    break;
+            }
         }
     }
 }
@@ -504,10 +528,10 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
     QString name = QInputDialog::getText(window, i18n("Create File in %1", item->url().prettyUrl()), i18n("File Name"));
-    
+
     if(name.isEmpty())
         return 0;
-    
+
     KUrl url=item->url();
     url.addPath( name );
 

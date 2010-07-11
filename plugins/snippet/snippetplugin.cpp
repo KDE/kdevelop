@@ -22,9 +22,9 @@
 #include <KActionCollection>
 #include <KAction>
 
-#include <kdeversion.h>
-#if KDE_VERSION >= KDE_MAKE_VERSION(4, 4, 0)
-    #define HAVE_HIGHLIGHT_IFACE
+#include "snippetfeatures.h"
+
+#ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
     #include <KTextEditor/HighlightInterface>
 #endif
 
@@ -46,6 +46,8 @@
 
 K_PLUGIN_FACTORY(SnippetFactory, registerPlugin<SnippetPlugin>(); )
 K_EXPORT_PLUGIN(SnippetFactory(KAboutData("kdevsnippet","kdevsnippet", ki18n("Snippets"), "0.1", ki18n("Support for managing and using code snippets"), KAboutData::License_GPL)))
+
+SnippetPlugin* SnippetPlugin::m_self = 0;
 
 class SnippetViewFactory: public KDevelop::IToolViewFactory{
 public:
@@ -75,6 +77,9 @@ private:
 SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
   : KDevelop::IPlugin(SnippetFactory::componentData(), parent)
 {
+    Q_ASSERT(!m_self);
+    m_self = this;
+
     SnippetStore::init(this);
 
     m_model = new SnippetCompletionModel;
@@ -89,6 +94,12 @@ SnippetPlugin::SnippetPlugin(QObject *parent, const QVariantList &)
 
 SnippetPlugin::~SnippetPlugin()
 {
+    m_self = 0;
+}
+
+SnippetPlugin* SnippetPlugin::self()
+{
+    return m_self;
 }
 
 void SnippetPlugin::unload()
@@ -112,6 +123,15 @@ void SnippetPlugin::insertSnippet(Snippet* snippet)
             doc->textDocument()->activeView()->setFocus();
         }
     }
+}
+
+void SnippetPlugin::insertSnippetFromActionData()
+{
+    KAction* action = dynamic_cast<KAction*>(sender());
+    Q_ASSERT(action);
+    Snippet* snippet = action->data().value<Snippet*>();
+    Q_ASSERT(snippet);
+    insertSnippet(snippet);
 }
 
 void SnippetPlugin::viewCreated( KTextEditor::Document*, KTextEditor::View* view )
@@ -157,7 +177,7 @@ void SnippetPlugin::createSnippetFromSelection()
     Q_ASSERT(view);
 
     QString mode;
-    #ifdef HAVE_HIGHLIGHT_IFACE
+    #ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
         if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
             mode = iface->highlightingModeAt(view->selectionRange().start());
         }

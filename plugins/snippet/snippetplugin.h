@@ -55,15 +55,19 @@ public:
     // KDevelop::IPlugin methods
     virtual void unload();
 
+    static SnippetPlugin* self();;
+
 private slots:
     void viewCreated( KTextEditor::Document*, KTextEditor::View* view );
     void documentLoaded(KParts::Part*);
 public slots:
     void createSnippetFromSelection();
+    void insertSnippetFromActionData();
 
 private:
     class SnippetViewFactory *m_factory;
     class SnippetCompletionModel* m_model;
+    static SnippetPlugin* m_self;
 };
 
 #endif

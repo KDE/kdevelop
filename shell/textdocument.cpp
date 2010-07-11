@@ -296,7 +296,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         #if KDE_VERSION >= KDE_MAKE_VERSION(4, 4, 0)
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with out own restructured UI configuration
-        const QString katePartUI = KStandardDirs::locate("data", "kdevelop/katepartui.rc");
+        QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", "kdevelop/katepartui.rc");
+        const QString katePartUI = katePartUIs.last();
         const QString katePartLocalUI = KStandardDirs::locateLocal("data", "kdevelop/katepartui.rc");
         view->replaceXMLFile(katePartUI, katePartLocalUI);
         #endif

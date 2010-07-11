@@ -30,6 +30,8 @@
 #include "uicontroller.h"
 #include "mainwindow.h"
 #include "shellextension.h"
+#include "projectsourcepage.h"
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -39,17 +41,31 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
 {
     resize(QSize(700, 500));
     
-    QWidget* page = new OpenProjectPage( startUrl, this );
-    connect( page, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
-    openPage = addPage( page, "Select Directory/Project File" );
-    page = new ProjectInfoPage( this );
+    KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    sourcePageWidget = new ProjectSourcePage( start, this );
+    connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
+    sourcePage = addPage( sourcePageWidget, "Select the source" );
+    
+    openPageWidget = new OpenProjectPage( start, this );
+    connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
+    openPage = addPage( openPageWidget, "Select the project" );
+    
+    QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
-    projectInfoPage = addPage( page, "Project Information" );
+    projectInfoPage = addPage( page, "Project information" );
+    
+    setValid( sourcePage, true );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
     showButton( KDialog::Help, false );
+}
+
+void OpenProjectDialog::validateSourcePage(bool valid)
+{
+    setValid(sourcePage, valid);
+    openPageWidget->setUrl(sourcePageWidget->workingDir());
 }
 
 void OpenProjectDialog::validateOpenUrl( const KUrl& url )
@@ -63,8 +79,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         QFileInfo info( url.toLocalFile() );
         isValid = info.exists();
         if ( isValid ) {
-            isDir = QFileInfo( url.toLocalFile() ).isDir();
-            extension = QFileInfo( url.toLocalFile() ).suffix();
+            isDir = info.isDir();
+            extension = info.suffix();
         }
     } else 
     {
@@ -76,38 +92,46 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         }
     }
 
+    QString msgTemplate;
+    if ( layoutDirection() == Qt::LeftToRight ) {
+        msgTemplate = QString(
+            "<table width='100%' cellpadding='0' cellspacing='0'>"
+                "<tr>"
+                    "<td align='left'>%1</td>"
+                    "<td align='right'>%2</td>"
+                "</tr>"
+            "</table>"
+        );
+    } else {
+        msgTemplate = QString(
+            "<table width='100%' cellpadding='0' cellspacing='0'>"
+                "<tr>"
+                    "<td align='left'>%2</td>"
+                    "<td align='right'>%1</td>"
+                "</tr>"
+            "</table>"
+        );
+    }
     if ( isValid ) {
         // reset header
-        openPage->setHeader(QString());
+        openPage->setHeader(
+            msgTemplate
+                .arg(openPage->name())
+                .arg("<span style='font-weight:normal'>"
+                        + i18n("open %1 as project", url.fileName())
+                     + "</span>")
+        );
     } else {
         // report error
         KColorScheme scheme(palette().currentColorGroup());
         const QString errorMsg = i18n("Selected URL is invalid.");
-        QString msgTemplate;
-        if ( layoutDirection() == Qt::LeftToRight ) {
-            msgTemplate = QString(
-                "<table width='100%' cellpadding='0' cellspacing='0'>"
-                    "<tr>"
-                        "<td align='left'>%1</td>"
-                        "<td align='right'><font color='%3'>%2</font></td>"
-                    "</tr>"
-                "</table>"
-            );
-        } else {
-            msgTemplate = QString(
-                "<table width='100%' cellpadding='0' cellspacing='0'>"
-                    "<tr>"
-                        "<td align='left'><font color='%3'>%2</font></td>"
-                        "<td align='right'>%1</td>"
-                    "</tr>"
-                "</table>"
-            );
-        }
         openPage->setHeader(
             msgTemplate
                 .arg(openPage->name())
-                .arg(errorMsg)
-                .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
+                .arg(QString("<font color='%1'>%2</font>")
+                    .arg(scheme.foreground(KColorScheme::NegativeText).color().name())
+                    .arg(errorMsg)
+                 )
         );
         setAppropriate( projectInfoPage, false );
         setAppropriate( openPage, true );

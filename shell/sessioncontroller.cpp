@@ -559,7 +559,7 @@ void SessionController::initialize( const QString& session )
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
-            && ses->id().toString() != session && ses->name() != session )
+            && (session.isEmpty() || (ses->id().toString() != session && ses->name() != session)) )
         {
             ///@todo Think about when we can do this. Another instance might still be using this session.
 //             session->deleteFromDisk();

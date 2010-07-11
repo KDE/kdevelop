@@ -90,8 +90,7 @@ void CreateClassWizard::accept()
     QWizard::accept();
     
     //Transmit all the final information to the generator
-    d->generator->license(field("license").toString());
-    d->generator->setAddCommentCharToLicense(field("addComment").toBool());
+    d->generator->setLicense(field("license").toString());
     kDebug() << "Header Url: " << field("headerUrl").toString();
     /*
     d->generator->setHeaderUrl(field("headerUrl").toString());
@@ -106,7 +105,7 @@ void CreateClassWizard::accept()
     changes.applyAllChanges();
 }
 
-ClassGenerator * CreateClassWizard::generator(void)
+ClassGenerator * CreateClassWizard::generator()
 {
     return d->generator;
 }
@@ -125,7 +124,6 @@ struct ClassGeneratorPrivate
 {
     QString name; ///< The name for the class to be generated (does not include namespace if relevant)
     QString license;
-    bool addCommentChar;
     QList<DeclarationPointer> inheritedClasses;   ///< Represent *ALL* of the inherited classes
     SimpleCursor headerPosition;
     SimpleCursor implementationPosition;
@@ -134,34 +132,34 @@ struct ClassGeneratorPrivate
     KUrl implementationUrl;
 };
 
-ClassGenerator::ClassGenerator(void) :
+ClassGenerator::ClassGenerator() :
                              d(new ClassGeneratorPrivate)
 {
 }
 
-ClassGenerator::~ClassGenerator(void)
+ClassGenerator::~ClassGenerator()
 {
     delete d;
 }
 
-const QString & ClassGenerator::name(void) const
+const QString & ClassGenerator::name() const
 {
     return d->name;
 }
 
-void ClassGenerator::identifier(const QString & identifier)
+void ClassGenerator::setName(const QString & newName)
 {
-    name(identifier);
+    d->name = newName;
 }
 
-QString ClassGenerator::identifier(void) const
+QString ClassGenerator::identifier() const
 {
     return name();
 }
 
-void ClassGenerator::name(const QString & newName)
+void ClassGenerator::setIdentifier(const QString & identifier)
 {
-    d->name = newName;
+    setName(identifier);
 }
 
 void ClassGenerator::addDeclaration(DeclarationPointer newDeclaration)
@@ -204,18 +202,18 @@ const QList<DeclarationPointer> & ClassGenerator::addBaseClass(const QString &  
     return m_baseClasses;
 }
 
-const QList<DeclarationPointer> & ClassGenerator::inheritanceList(void) const
+const QList<DeclarationPointer> & ClassGenerator::inheritanceList() const
 {
     return d->inheritedClasses;
 }
 
-void ClassGenerator::clearInheritance(void)
+void ClassGenerator::clearInheritance()
 {
     m_baseClasses.clear();
     d->inheritedClasses.clear();
 }
 
-void ClassGenerator::clearDeclarations(void)
+void ClassGenerator::clearDeclarations()
 {
     m_declarations.clear();
 }
@@ -279,28 +277,17 @@ KUrl & ClassGenerator::implementationUrl()
 }
 
 /// Specify license for this class
-void ClassGenerator::license(const QString & license)
+void ClassGenerator::setLicense(const QString & license)
 {
     kDebug() << "New Class: " << d->name << "Set license: " << d->license;
     d->license = license;
 }
 
 /// Get the license specified for this classes
-const QString & ClassGenerator::license(void) const
+const QString & ClassGenerator::license() const
 {
     return d->license;
 }
-
-bool ClassGenerator::addCommentCharToLicense() const
-{
-    return d->addCommentChar;
-}
-
-void ClassGenerator::setAddCommentCharToLicense(bool addcomment)
-{
-    d->addCommentChar = addcomment;
-}
-
 
 void ClassGenerator::fetchSuperClasses(DeclarationPointer derivedClass)
 {
@@ -344,6 +331,7 @@ ClassIdentifierPage::ClassIdentifierPage(QWizard* parent)
     connect(d->classid->removeInheritancePushButton, SIGNAL(pressed()), this, SLOT(removeInheritance()));
     connect(d->classid->moveUpPushButton, SIGNAL(pressed()), this, SLOT(moveUpInheritance()));
     connect(d->classid->moveDownPushButton, SIGNAL(pressed()), this, SLOT(moveDownInheritance()));
+    connect(d->classid->inheritanceList, SIGNAL(currentRowChanged(int)), this, SLOT(checkMoveButtonState()));
 
     registerField("classIdentifier*", d->classid->identifierLineEdit);
     registerField("classInheritance", this, "inheritance", SIGNAL(inheritanceChanged()));
@@ -385,6 +373,8 @@ void ClassIdentifierPage::removeInheritance()
     if (d->classid->inheritanceList->count() == 0)
         d->classid->removeInheritancePushButton->setEnabled(false);
 
+    checkMoveButtonState();
+
     emit inheritanceChanged();
 }
 
@@ -398,6 +388,7 @@ void ClassIdentifierPage::moveUpInheritance()
 
     QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
     d->classid->inheritanceList->insertItem(currentRow - 1, item);
+    d->classid->inheritanceList->setCurrentItem(item);
 
     emit inheritanceChanged();
 }
@@ -412,6 +403,7 @@ void ClassIdentifierPage::moveDownInheritance()
 
     QListWidgetItem* item = d->classid->inheritanceList->takeItem(currentRow);
     d->classid->inheritanceList->insertItem(currentRow + 1, item);
+    d->classid->inheritanceList->setCurrentItem(item);
 
     emit inheritanceChanged();
 }
@@ -441,7 +433,7 @@ bool ClassIdentifierPage::validatePage ( void )
 {
     //save the information in the generator
     ClassGenerator * generator = dynamic_cast<CreateClassWizard *>(wizard())->generator();
-    generator->identifier(field("classIdentifier").toString());
+    generator->setIdentifier(field("classIdentifier").toString());
     
     //Remove old base classes, and add the new ones
     generator->clearInheritance();
@@ -492,21 +484,18 @@ LicensePage::LicensePage(QWizard* parent)
     
     //Set the license selection to the previous one
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
-    d->license->addComment->setChecked( config.readEntry( "AddCommentCharacter", true ) );
     d->license->licenseComboBox->setCurrentIndex(config.readEntry( "LastSelectedLicense", 0 ));
     //Needed to avoid a bug where licenseComboChanged doesn't get called by QComboBox if the past selection was 0
     licenseComboChanged(d->license->licenseComboBox->currentIndex());
 
     registerField("license", d->license->licenseTextEdit);
-    registerField("addComment", d->license->addComment);
 }
 
-LicensePage::~LicensePage(void)
+LicensePage::~LicensePage()
 {
     KConfigGroup config(KGlobal::config()->group("CodeGeneration"));
     //Do not save invalid license numbers'
     int index = d->license->licenseComboBox->currentIndex();
-    config.writeEntry("AddCommentCharacter", !d->license->addComment->isEnabled() || d->license->addComment->isChecked() );
     if( index >= 0 || index < d->availableLicenses.size() )
     {
         config.writeEntry("LastSelectedLicense", index);
@@ -519,7 +508,7 @@ LicensePage::~LicensePage(void)
 }
 
 // If the user entered a custom license that they want to save, save it
-bool LicensePage::validatePage(void)
+bool LicensePage::validatePage()
 {
     if(d->license->licenseComboBox->currentIndex() == (d->availableLicenses.size() - 1) && 
         d->license->saveLicense->isChecked())
@@ -529,7 +518,7 @@ bool LicensePage::validatePage(void)
 }
 
 //! Read all the license files in the global and local config dirs
-void LicensePage::initializeLicenses(void)
+void LicensePage::initializeLicenses()
 {
     kDebug() << "Searching for available licenses";
     KStandardDirs * dirs = KGlobal::dirs();
@@ -598,14 +587,11 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->licenseTextEdit->clear();
         d->license->licenseTextEdit->setReadOnly(false);
         d->license->saveLicense->setEnabled(true);
-        d->license->addComment->setEnabled(true);
     }
     else
     {
         d->license->saveLicense->setEnabled(false);
         d->license->licenseTextEdit->setReadOnly(true);
-        d->license->addComment->setEnabled(false);
-        d->license->addComment->setChecked(true);
     }
     
     if(selectedLicense < 0 || selectedLicense >= d->availableLicenses.size())
@@ -614,7 +600,7 @@ void LicensePage::licenseComboChanged(int selectedLicense)
         d->license->licenseTextEdit->setText(readLicense(selectedLicense));
 }
 
-bool LicensePage::saveLicense(void)
+bool LicensePage::saveLicense()
 {
     kDebug() << "Attempting to save custom license: " << d->license->licenseName->text();
     

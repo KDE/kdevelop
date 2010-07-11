@@ -22,9 +22,6 @@
 #include "projectmodel.h"
 
 #include <kmimetype.h>
-#include <kiconloader.h>
-#include <kicon.h>
-#include <kio/global.h>
 
 #include <QApplication>
 #include <QPalette>
@@ -37,10 +34,11 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
 #include "interfaces/iprojectfilemanager.h"
-#include <KIO/NetAccess>
 #include <language/duchain/indexedstring.h>
 #include <KLocalizedString>
 #include <KMessageBox>
+#include <kio/udsentry.h>
+#include <kio/netaccess.h>
 
 namespace KDevelop
 {
@@ -75,68 +73,187 @@ QStringList joinProjectBasePath( const QStringList& partialpath, KDevelop::Proje
     return basePath + partialpath;
 }
 
+class ProjectModelPrivate
+{
+public:
+    ProjectModelPrivate( ProjectModel* model ): model( model )
+    {
+    }
+    ProjectBaseItem* rootItem;
+    ProjectModel* model;
+    ProjectBaseItem* itemFromIndex( const QModelIndex& idx ) {
+        if( !idx.isValid() ) {
+            return rootItem;
+        }
+        if( idx.model() != model ) {
+            return 0;
+        }
+        return model->itemFromIndex( idx );
+    }
+
+};
 
 class ProjectBaseItemPrivate
 {
 public:
-    ProjectBaseItemPrivate() : project(0) {}
+    ProjectBaseItemPrivate() : project(0), parent(0), row(-1), model(0) {}
     IProject* project;
-};
-
-class ProjectFolderItemPrivate : public ProjectBaseItemPrivate
-{
-public:
-    ProjectFolderItemPrivate() : m_isProjectRoot(false) {
-    }
+    ProjectBaseItem* parent;
+    int row;
+    QList<ProjectBaseItem*> childs;
+    QString text;
+    ProjectBaseItem::ProjectItemType type;
+    Qt::ItemFlags flags;
+    ProjectModel* model;
     KUrl m_url;
-    QString m_folderName;
-    bool m_isProjectRoot; ///@todo Why is this needed at all? Shouldn't it equal "parent() == 0" ?
 };
 
-class ProjectBuildFolderItemPrivate : public ProjectFolderItemPrivate
-{
-public:
-};
 
-class ProjectFileItemPrivate : public ProjectBaseItemPrivate
-{
-public:
-    KUrl m_url;
-    QString m_fileName;
-};
-
-class ProjectTargetItemPrivate : public ProjectBaseItemPrivate
-{
-};
-
-class ProjectModelPrivate
-{
-};
-
-ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, QStandardItem *parent )
-        : QStandardItem( name ), d_ptr(new ProjectBaseItemPrivate)
+ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, ProjectBaseItem *parent )
+        : d_ptr(new ProjectBaseItemPrivate)
 {
     Q_D(ProjectBaseItem);
     d->project = project;
-    setParent( parent );
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
-}
-
-ProjectBaseItem::ProjectBaseItem( ProjectBaseItemPrivate& dd)
-    : d_ptr(&dd)
-{
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable );
+    d->text = name;
+    if( parent ) {
+        parent->appendRow( this );
+    }
 }
 
 ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
+    removeRows(0, d->childs.size());
+    
+    if( parent() ) {
+        parent()->takeRow( d->row );
+    } else if( model() ) {
+        model()->takeRow( d->row );
+    }
     delete d;
 }
 
-KUrl ProjectBaseItem::url() const
+ProjectBaseItem* ProjectBaseItem::child( int row ) const
 {
-    return KUrl();
+    Q_D(const ProjectBaseItem);
+    if( row < 0 || row >= d->childs.length() ) {
+        return 0;
+    }
+    return d->childs.at( row );
+}
+
+ProjectBaseItem* ProjectBaseItem::takeRow(int row)
+{
+    Q_D(ProjectBaseItem);
+    Q_ASSERT(row >= 0 && row < d->childs.size());
+    
+    if( model() ) {
+        model()->beginRemoveRows( index(), row, row );
+    }
+    ProjectBaseItem* olditem = d->childs.takeAt( row );
+    olditem->d_func()->parent = 0;
+    olditem->d_func()->row = -1;
+    olditem->d_func()->model = 0;
+    for(int i=row; i<rowCount(); i++) {
+        child(i)->d_func()->row--;
+        Q_ASSERT(child(i)->d_func()->row==i);
+    }
+    
+    if( model() ) {
+        model()->endRemoveRows();
+    }
+    return olditem;
+}
+
+void ProjectBaseItem::removeRow( int row )
+{
+    Q_D(ProjectBaseItem);
+    delete d->childs[row];
+}
+
+void ProjectBaseItem::removeRows(int row, int count)
+{
+    Q_D(ProjectBaseItem);
+    for(; count>0; count--) {
+        delete d->childs[row];
+    }
+}
+
+QModelIndex ProjectBaseItem::index() const
+{
+    if( model() ) {
+        return model()->indexFromItem( this );
+    }
+    return QModelIndex();
+}
+
+int ProjectBaseItem::rowCount() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->childs.count();
+}
+
+int ProjectBaseItem::type() const
+{
+    return ProjectBaseItem::BaseItem;
+}
+
+ProjectModel* ProjectBaseItem::model() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->model;
+}
+
+ProjectBaseItem* ProjectBaseItem::parent() const
+{
+    Q_D(const ProjectBaseItem);
+    if( model() && model()->d->rootItem == d->parent ) {
+        return 0;
+    }
+    return d->parent;
+}
+
+int ProjectBaseItem::row() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->row;
+}
+
+QString ProjectBaseItem::text() const
+{
+    Q_D(const ProjectBaseItem);
+    Q_ASSERT(!d->text.isEmpty());
+    return d->text;
+}
+
+void ProjectBaseItem::setModel( ProjectModel* model )
+{
+    Q_D(ProjectBaseItem);
+    d->model = model;
+    foreach( ProjectBaseItem* item, d->childs ) {
+        item->setModel( model );
+    }
+}
+
+void ProjectBaseItem::setRow( int row )
+{
+    Q_D(ProjectBaseItem);
+    d->row = row;
+}
+
+void ProjectBaseItem::setText( const QString& text )
+{
+    Q_D(ProjectBaseItem);
+    d->text = text;
+    if( model() ) {
+        model()->dataChanged( index(), index() );
+    }
+}
+
+ProjectBaseItem::RenameStatus ProjectBaseItem::rename(const QString& newname)
+{
+    setText( newname );
+    return RenameOk;
 }
 
 KDevelop::ProjectBaseItem::ProjectItemType baseType( int type )
@@ -164,7 +281,7 @@ bool ProjectBaseItem::lessThan( const KDevelop::ProjectBaseItem* item ) const
         {
             return file()->fileName().compare(item->file()->fileName(), Qt::CaseInsensitive) < 0;
         }
-        return *this<*item;
+        return this->text()<item->text();
     }
     else
     {
@@ -180,15 +297,45 @@ IProject* ProjectBaseItem::project() const
     return d->project;
 }
 
-void ProjectBaseItem::setParent( QStandardItem* newParent )
+void ProjectBaseItem::appendRow( ProjectBaseItem* item )
 {
-    if( newParent && parent() != newParent )
-        newParent->setChild( newParent->rowCount(), this );
+    Q_D(ProjectBaseItem);
+    if( !item ) {
+        return;
+    }
+    if( item->parent() ) {
+        // Proper way is to first removeRow() on the original parent, then appendRow on this one
+        kWarning() << "Ignoring double insertion of item" << item;
+        return;
+    }
+    if( model() ) {
+        model()->beginInsertRows( index(), d->childs.count(), d->childs.count() );
+    }
+    d->childs.append( item );
+    item->setRow( d->childs.count() - 1 );
+    item->d_func()->parent = this;
+    item->setModel( model() );
+    if( model() ) {
+        model()->endInsertRows();
+    }
 }
 
-void ProjectBaseItem::add( ProjectBaseItem* item )
+KUrl ProjectBaseItem::url( ) const
 {
-    appendRow( item );
+    Q_D(const ProjectBaseItem);
+    return d->m_url;
+}
+
+void ProjectBaseItem::setUrl( const KUrl& url )
+{
+    Q_D(ProjectBaseItem);
+    d->m_url = url;
+    setText( d->m_url.fileName() );
+}
+
+QString ProjectBaseItem::iconName() const
+{
+    return "";
 }
 
 ProjectFolderItem *ProjectBaseItem::folder() const
@@ -216,7 +363,7 @@ QList<ProjectFolderItem*> ProjectBaseItem::folderList() const
     QList<ProjectFolderItem*> lst;
     for ( int i = 0; i < rowCount(); ++i )
     {
-        QStandardItem* item = child( i );
+        ProjectBaseItem* item = child( i );
         if ( item->type() == Folder || item->type() == BuildFolder )
         {
             ProjectFolderItem *kdevitem = dynamic_cast<ProjectFolderItem*>( item );
@@ -233,7 +380,7 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     QList<ProjectTargetItem*> lst;
     for ( int i = 0; i < rowCount(); ++i )
     {
-        QStandardItem* item = child( i );
+        ProjectBaseItem* item = child( i );
         Q_ASSERT(item);
         if ( item && ( item->type() == Target || item->type() == LibraryTarget ||
              item->type() == ExecutableTarget ) )
@@ -252,7 +399,7 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     QList<ProjectFileItem*> lst;
     for ( int i = 0; i < rowCount(); ++i )
     {
-        QStandardItem* item = child( i );
+        ProjectBaseItem* item = child( i );
         Q_ASSERT(item);
         if ( item && item->type() == File )
         {
@@ -265,41 +412,21 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
     return lst;
 }
 
-ProjectModel::ProjectModel( QObject *parent )
-        : QStandardItemModel( parent ), d(0)
-{
-}
-
-ProjectModel::~ProjectModel()
-{}
-
-
-ProjectBaseItem *ProjectModel::item( const QModelIndex &index ) const
-{
-    return dynamic_cast<ProjectBaseItem*>( itemFromIndex( index ) );
-}
-
 void ProjectModel::resetModel()
 {
     reset();
 }
 
-ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, QStandardItem * parent )
-        : ProjectBaseItem( *new ProjectFolderItemPrivate )
+void ProjectModel::clear()
 {
-    Q_D(ProjectFolderItem);
-    d->project = project;
-    setUrl(dir);
-    setParent(parent);
-    setIcon(KIcon("folder"));
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
+    d->rootItem->removeRows(0, d->rootItem->rowCount());
 }
 
-ProjectFolderItem::ProjectFolderItem( ProjectFolderItemPrivate& dd)
-    : ProjectBaseItem( dd )
+
+ProjectFolderItem::ProjectFolderItem( IProject* project, const KUrl & dir, ProjectBaseItem * parent )
+        : ProjectBaseItem( project, dir.fileName(), parent )
 {
-    setIcon(KIcon("folder"));
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
+    setUrl( dir );
 }
 
 ProjectFolderItem::~ProjectFolderItem()
@@ -316,32 +443,46 @@ int ProjectFolderItem::type() const
     return ProjectBaseItem::Folder;
 }
 
-KUrl ProjectFolderItem::url( ) const
+QString ProjectFolderItem::folderName() const
 {
-    Q_D(const ProjectFolderItem);
-    return d->m_url;
+    return url().fileName();
 }
 
-const QString& ProjectFolderItem::folderName() const
-{
-    Q_D(const ProjectFolderItem);
-    return d->m_folderName;
-}
 
-void ProjectFolderItem::setUrl( const KUrl& url )
+ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 {
-    Q_D(ProjectFolderItem);
-    d->m_url = url;
-    d->m_folderName = d->m_url.fileName();
-    setText( d->m_folderName );
-    setToolTip( text() );
+    //TODO: Same as ProjectFileItem, so should be shared somehow
+    KUrl dest = url().upUrl();
+    dest.addPath(newname);
+    if( !newname.contains('/') )
+    {
+        KIO::UDSEntry entry;
+        //There exists a file with that name?
+        if( !KIO::NetAccess::stat(dest, entry, 0) )
+        {
+            if( !project() || project()->projectFileManager()->renameFolder(this, dest) )
+            {
+                setUrl( dest );
+                return ProjectBaseItem::RenameOk;
+            } else
+            {
+                return ProjectBaseItem::ProjectManagerRenameFailed;
+            }
+        } else
+        {
+            return ProjectBaseItem::ExistingItemSameName;
+        }
+    } else
+    {
+        return ProjectBaseItem::InvalidNewName;
+    }
 }
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
     for ( int i = 0; i < rowCount(); ++i )
     {
-        QStandardItem* item = child( i );
+        ProjectBaseItem* item = child( i );
         if ( ProjectFileItem* file = dynamic_cast<ProjectFileItem*>(item))
             if (file->fileName() == name)
                 return true;
@@ -353,20 +494,14 @@ bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
     return false;
 }
 
-ProjectBuildFolderItem::ProjectBuildFolderItem( ProjectBuildFolderItemPrivate& dd )
-    : ProjectFolderItem( dd )
+ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, ProjectBaseItem *parent)
+    : ProjectFolderItem( project, dir, parent )
 {
-    setIcon(KIcon("folder-development"));
 }
 
-ProjectBuildFolderItem::ProjectBuildFolderItem( IProject* project, const KUrl &dir, QStandardItem *parent)
-    : ProjectFolderItem( *new ProjectBuildFolderItemPrivate )
+QString ProjectFolderItem::iconName() const
 {
-    Q_D(ProjectBuildFolderItem);
-    d->project = project;
-    setUrl( dir );
-    setParent( parent );
-    setIcon(KIcon("folder-development"));
+    return "folder";
 }
 
 int ProjectBuildFolderItem::type() const
@@ -374,102 +509,76 @@ int ProjectBuildFolderItem::type() const
     return ProjectBaseItem::BuildFolder;
 }
 
-void ProjectFolderItem::setProjectRoot(bool isRoot)
+QString ProjectBuildFolderItem::iconName() const
 {
-	Q_D(ProjectFolderItem);
-	d->m_isProjectRoot=isRoot;
-	setText(project()->name());
-        setToolTip( text() );
+    return "folder-development";
 }
 
-bool ProjectFolderItem::isProjectRoot() const
+ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, ProjectBaseItem * parent )
+        : ProjectBaseItem( project, file.fileName(), parent )
 {
-	Q_D(const ProjectFolderItem);
-	return d->m_isProjectRoot;
-}
-
-void ProjectFolderItem::setData(const QVariant& value, int role)
-{
-    if(role==Qt::EditRole && value != data(role)) {
-        KUrl dest = url().upUrl();
-        dest.addPath(value.toString());
-        bool ret=!value.toString().contains('/');
-        
-        KIO::UDSEntry entry;
-        ret = ret && !KIO::NetAccess::stat(dest, entry, 0); //There exists a file with that name
-        ret = ret && project()->projectFileManager()->renameFolder(this, dest);
-        if(ret)
-            emitDataChanged();
-        else
-            KMessageBox::error(0, i18n("The name for '%1' could not be changed", url().prettyUrl()), i18n("Project Management"));
-    } else
-        ProjectBaseItem::setData(value, role);
-}
-
-ProjectFileItem::ProjectFileItem( ProjectFileItemPrivate& dd)
-    : ProjectBaseItem(dd)
-{
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
-}
-
-ProjectFileItem::ProjectFileItem( IProject* project, const KUrl & file, QStandardItem * parent )
-        : ProjectBaseItem( *new ProjectFileItemPrivate )
-{
-    Q_D(ProjectFileItem);
-    d->project = project;
     setUrl( file );
-    setParent( parent );
-    setFlags( Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable );
+    // Need to this manually here as setUrl() is virtual and hence the above
+    // only calls the version in ProjectBaseItem and not ours
+    if( project ) {
+        project->addToFileSet( KDevelop::IndexedString(file) );
+    }
 }
 
 ProjectFileItem::~ProjectFileItem()
 {
-    Q_D(ProjectFileItem);
-    project()->removeFromFileSet(KDevelop::IndexedString(d->m_url));
+    if( project() ) {
+        project()->removeFromFileSet(KDevelop::IndexedString(url()));
+    }
 }
 
-void ProjectFileItem::setData(const QVariant& value, int role)
+QString ProjectFileItem::iconName() const
 {
-    if(role==Qt::EditRole && value != data(role)) {
-        KUrl dest = url().upUrl();
-        dest.addPath(value.toString());
-        bool ret=!value.toString().contains('/');
-        
+    return KMimeType::findByUrl(url(), 0, false, true)->iconName(url());
+}
+
+ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
+{
+    KUrl dest = url().upUrl();
+    dest.addPath(newname);
+    if( !newname.contains('/') )
+    {
         KIO::UDSEntry entry;
-        ret = ret && !KIO::NetAccess::stat(dest, entry, 0); //There exists a file with that name
-        ret = ret && project()->projectFileManager()->renameFile(this, dest);
-        if(ret)
-            emitDataChanged();
-        else
-            KMessageBox::error(0, i18n("The name for '%1' could not be changed", url().prettyUrl()), i18n("Project Management"));
+        //There exists a file with that name?
+        if( !KIO::NetAccess::stat(dest, entry, 0) )
+        {
+            if( !project() || project()->projectFileManager()->renameFile(this, dest) )
+            {
+                setUrl( dest );
+                return ProjectBaseItem::RenameOk;
+            } else
+            {
+                return ProjectBaseItem::ProjectManagerRenameFailed;
+            }
+        } else
+        {
+            return ProjectBaseItem::ExistingItemSameName;
+        }
     } else
-        ProjectBaseItem::setData(value, role);
+    {
+        return ProjectBaseItem::InvalidNewName;
+    }
 }
 
-KUrl ProjectFileItem::url( ) const
+QString ProjectFileItem::fileName() const
 {
-    Q_D(const ProjectFileItem);
-    return d->m_url;
-}
-
-const QString& ProjectFileItem::fileName() const
-{
-    Q_D(const ProjectFileItem);
-    return d->m_fileName;
+    return url().fileName();
 }
 
 void ProjectFileItem::setUrl( const KUrl& url )
 {
-    Q_D(ProjectFileItem);
-    if(!d->m_url.isEmpty())
-        project()->removeFromFileSet( KDevelop::IndexedString(d->m_url) );
-    project()->addToFileSet( KDevelop::IndexedString(url) );
-    
-    d->m_url = url;
-    d->m_fileName = d->m_url.fileName();
-    setText( d->m_fileName );
-    setToolTip( text() );
-    setIcon(KIcon(KMimeType::findByUrl(url, 0, false, true)->iconName(url)));
+    if( project() ) {
+        if(!this->url().isEmpty())
+            project()->removeFromFileSet( KDevelop::IndexedString(this->url()) );
+        project()->addToFileSet( KDevelop::IndexedString(url) );
+    }
+
+    ProjectBaseItem::setUrl( url );
 }
 
 int ProjectFileItem::type() const
@@ -482,20 +591,14 @@ ProjectFileItem *ProjectFileItem::file() const
     return const_cast<ProjectFileItem*>( this );
 }
 
-ProjectTargetItem::ProjectTargetItem( ProjectTargetItemPrivate& dd)
-    : ProjectBaseItem( dd )
+ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, ProjectBaseItem *parent )
+    : ProjectBaseItem( project, name, parent )
 {
 }
 
-ProjectTargetItem::ProjectTargetItem( IProject* project, const QString &name, QStandardItem *parent )
-                : ProjectBaseItem( *new ProjectTargetItemPrivate )
+QString ProjectTargetItem::iconName() const
 {
-    Q_D(ProjectTargetItem);
-    d->project = project;
-    setText( name );
-    setToolTip( text() );
-    setParent( parent );
-    setIcon( KIcon("system-run") );
+    return "system-run";
 }
 
 int ProjectTargetItem::type() const
@@ -508,9 +611,10 @@ ProjectTargetItem *ProjectTargetItem::target() const
     return const_cast<ProjectTargetItem*>( this );
 }
 
-ProjectExecutableTargetItem::ProjectExecutableTargetItem( IProject* project, const QString &name, QStandardItem *parent )
+ProjectExecutableTargetItem::ProjectExecutableTargetItem( IProject* project, const QString &name, ProjectBaseItem *parent )
     : ProjectTargetItem(project, name, parent)
-{}
+{
+}
 
 ProjectExecutableTargetItem *ProjectExecutableTargetItem::executable() const
 {
@@ -522,7 +626,7 @@ int ProjectExecutableTargetItem::type() const
     return ProjectBaseItem::ExecutableTarget;
 }
 
-ProjectLibraryTargetItem::ProjectLibraryTargetItem( IProject* project, const QString &name, QStandardItem *parent )
+ProjectLibraryTargetItem::ProjectLibraryTargetItem( IProject* project, const QString &name, ProjectBaseItem *parent )
     : ProjectTargetItem(project, name, parent)
 {}
 
@@ -545,12 +649,12 @@ QModelIndex ProjectModel::pathToIndex(const QStringList& tofetch_) const
     for(int a = 0; a < tofetch.size(); ++a)
     {
         const QString& currentName = tofetch[a];
-        
+
         bool matched = false;
-        QModelIndexList l = match(current, Qt::EditRole, currentName, -1, Qt::MatchExactly);
+        QModelIndexList l = match(current, Qt::DisplayRole, currentName, -1, Qt::MatchExactly);
         foreach(const QModelIndex& idx, l) {
             //If this is not the last item, only match folders, as there may be targets and folders with the same name
-            if(a == tofetch.size()-1 || item(idx)->folder()) {
+            if(a == tofetch.size()-1 || itemFromIndex(idx)->folder()) {
                 ret = idx;
                 current = index(0,0, ret);
                 matched = true;
@@ -574,7 +678,7 @@ QStringList ProjectModel::pathFromIndex(const QModelIndex& index) const
     QModelIndex idx = index;
     QStringList list;
     do {
-        QString t = data(idx, Qt::EditRole).toString();
+        QString t = data(idx, Qt::DisplayRole).toString();
         list.prepend(t);
         QModelIndex parent = idx.parent();
         idx = parent.sibling(parent.row(), index.column());
@@ -583,11 +687,126 @@ QStringList ProjectModel::pathFromIndex(const QModelIndex& index) const
     return list;
 }
 
+int ProjectModel::columnCount( const QModelIndex& ) const
+{
+    return 1;
+}
 
-ProjectVisitor::ProjectVisitor() 
+int ProjectModel::rowCount( const QModelIndex& parent ) const
+{
+    ProjectBaseItem* item = d->itemFromIndex( parent );
+    return item ? item->rowCount() : 0;
+}
+
+QModelIndex ProjectModel::parent( const QModelIndex& child ) const
+{
+    if( child.isValid() ) {
+        ProjectBaseItem* item = static_cast<ProjectBaseItem*>( child.internalPointer() );
+        return indexFromItem( item );
+    }
+    return QModelIndex();
+}
+
+QModelIndex ProjectModel::indexFromItem( const ProjectBaseItem* item ) const
+{
+    if( item && item->d_func()->parent ) {
+        return createIndex( item->row(), 0, item->d_func()->parent );
+    }
+    return QModelIndex();
+}
+
+ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
+{
+    if( index.row() >= 0 && index.column() == 0  && index.model() == this ) {
+        ProjectBaseItem* parent = static_cast<ProjectBaseItem*>( index.internalPointer() );
+        if( parent ) {
+            return parent->child( index.row() );
+        }
+    }
+    return 0;
+}
+
+
+QVariant ProjectModel::data( const QModelIndex& index, int role ) const
+{
+    if( ( role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::DecorationRole ) && index.isValid() ) {
+        ProjectBaseItem* item = itemFromIndex( index );
+        
+        if( item ) {
+            if( role == Qt::DecorationRole ) {
+                return item->iconName();
+            }
+            return item->text();
+        }
+    }
+    return QVariant();
+}
+
+ProjectModel::ProjectModel( QObject *parent )
+        : QAbstractItemModel( parent ), d( new ProjectModelPrivate( this ) )
+{
+    d->rootItem = new ProjectBaseItem( 0, "", 0 );
+    d->rootItem->setModel( this );
+}
+
+ProjectModel::~ProjectModel()
 {
 }
 
+
+ProjectVisitor::ProjectVisitor()
+{
+}
+
+QModelIndex ProjectModel::index( int row, int column, const QModelIndex& parent ) const
+{
+    if( hasIndex( row, column, parent ) ) {
+        ProjectBaseItem* parentItem = d->itemFromIndex( parent );
+        if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
+            return createIndex( row, column, parentItem );
+        }
+    }
+    return QModelIndex();
+}
+
+void ProjectModel::appendRow( ProjectBaseItem* item )
+{
+    d->rootItem->appendRow( item );
+}
+
+void ProjectModel::removeRow( int row )
+{
+    d->rootItem->removeRow( row );
+}
+
+ProjectBaseItem* ProjectModel::takeRow( int row )
+{
+    return d->rootItem->takeRow( row );
+}
+
+bool ProjectModel::hasChildren(const QModelIndex& parent) const
+{
+    bool b = QAbstractItemModel::hasChildren(parent);
+    return b;
+}
+
+bool ProjectModel::insertColumns(int, int, const QModelIndex&)
+{
+    // Not supported
+    return false;
+}
+
+bool ProjectModel::insertRows(int, int, const QModelIndex&)
+{
+    // Not supported
+    return false;
+}
+
+bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
+{
+    // Not supported
+    return false;
+}
 
 void ProjectVisitor::visit ( IProject* prj )
 {

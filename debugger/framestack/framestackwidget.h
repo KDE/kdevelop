@@ -28,6 +28,7 @@
 
 #include "../debuggerexport.h"
 
+class QMenu;
 class QTreeView;
 class QModelIndex;
 class QListView;
@@ -55,12 +56,16 @@ class KDEVPLATFORMDEBUGGER_EXPORT FramestackWidget : public QSplitter
         void currentThreadChanged(int);
         void currentFrameChanged(int);
         void frameClicked(const QModelIndex& idx);
+        void frameContextMenuRequested(const QPoint &pos);
+        void copySelection();
+        void selectAll();
 
     private:
         IDebugSession *m_session;
         QListView *m_threads;
         QWidget *m_threadsWidget;
         QTreeView *m_frames;
+        QMenu *m_framesContextMenu;
 };
 
 }

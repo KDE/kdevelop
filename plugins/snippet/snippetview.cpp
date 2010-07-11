@@ -27,10 +27,9 @@
 
 #include <KGlobalSettings>
 
-#include <kdeversion.h>
+#include "snippetfeatures.h"
 
-#if KDE_IS_VERSION( 4, 4, 0 )
-    #define SNIPPETS_HAVE_GHNS
+#ifdef SNIPPETS_HAVE_GHNS
     #include <KNS3/DownloadDialog>
     #include <knewstuff3/uploaddialog.h>
 #endif
@@ -335,7 +334,7 @@ bool SnippetView::eventFilter(QObject* obj, QEvent* e)
             QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
             Q_ASSERT(mouseEvent);
             QModelIndex clickedIndex = snippetTree->indexAt(mouseEvent->pos());
-            if (clickedIndex.isValid()) {
+            if (clickedIndex.isValid() && clickedIndex.parent().isValid()) {
                 slotSnippetClicked(clickedIndex);
                 e->accept();
                 return true;

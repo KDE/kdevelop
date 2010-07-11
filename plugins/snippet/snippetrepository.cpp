@@ -31,6 +31,9 @@
 
 #include <KUser>
 
+#include <KAction>
+#include <KShortcut>
+
 #include "snippetstore.h"
 
 SnippetRepository::SnippetRepository(const QString& file)
@@ -123,15 +126,18 @@ QString SnippetRepository::script() const
     return m_script;
 }
 
-QString SnippetRepository::scriptToken() const
+KTextEditor::TemplateScript* SnippetRepository::registeredScript() const
 {
-    return m_scriptToken;
+    return m_registeredScript;
 }
 
 void SnippetRepository::setScript(const QString& script)
 {
     m_script = script;
-    m_scriptToken = SnippetStore::self()->registerScript(m_script);
+    if ( m_registeredScript ) {
+        SnippetStore::self()->unregisterScript(m_registeredScript);
+    }
+    m_registeredScript = SnippetStore::self()->registerScript(m_script);
 }
 
 void SnippetRepository::remove()
@@ -221,6 +227,19 @@ void SnippetRepository::save()
     outfile.write(doc.toByteArray());
     outfile.close();
     m_file = outname;
+
+    // save shortcuts
+    KConfigGroup config = SnippetStore::self()->getConfig().group("repository " + m_file);
+    for ( int i = 0; i < rowCount(); ++i ) {
+        Snippet* snippet = dynamic_cast<Snippet*>(child(i));
+        if ( !snippet ) {
+            continue;
+        }
+        config.writeEntry("shortcut " + snippet->text(),
+                          QStringList() << snippet->action()->shortcut().primary().toString()
+                                        << snippet->action()->shortcut().alternate().toString());
+    }
+    config.sync();
 }
 
 void SnippetRepository::slotParseFile()
@@ -259,6 +278,9 @@ void SnippetRepository::slotParseFile()
     setFileTypes(docElement.attribute("filetypes").split(';', QString::SkipEmptyParts));
     setText(docElement.attribute("name"));
     setCompletionNamespace(docElement.attribute("namespace"));
+
+    // load shortcuts
+    KConfigGroup config = SnippetStore::self()->getConfig().group("repository " + m_file);
 
     // parse children, i.e. <item>'s
     const QDomNodeList& nodes = docElement.childNodes();
@@ -299,6 +321,13 @@ void SnippetRepository::slotParseFile()
             delete snippet;
             continue;
         } else {
+            const QStringList shortcuts = config.readEntry("shortcut " + snippet->text(), QStringList());
+            if ( shortcuts.count() >= 2 ) {
+                KShortcut shortcut;
+                shortcut.setPrimary(shortcuts.value(0));
+                shortcut.setAlternate(shortcuts.value(1));
+                snippet->action()->setShortcut(shortcut);
+            }
             appendRow(snippet);
         }
     }

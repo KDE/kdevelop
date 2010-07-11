@@ -183,7 +183,6 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
   connect( core()->documentController(), SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), this, SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
-  connect( core()->documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
   connect( DUChain::self(), SIGNAL( declarationSelected(DeclarationPointer) ), this, SLOT( declarationSelectedInUI(DeclarationPointer) ) );
@@ -565,19 +564,18 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 {
   Q_ASSERT(document->textDocument());
 
-  connect( document->textDocument(), SIGNAL(destroyed( QObject* )), this, SLOT( documentDestroyed( QObject* ) ) );
   connect( document->textDocument(), SIGNAL( viewCreated( KTextEditor::Document* , KTextEditor::View* ) ), this, SLOT( viewCreated( KTextEditor::Document*, KTextEditor::View* ) ) );
 
   foreach( View* view, document->textDocument()->views() )
     viewCreated( document->textDocument(), view );
 }
 
-void ContextBrowserPlugin::documentClosed( KDevelop::IDocument* /*document*/ )
+void ContextBrowserPlugin::documentActivated( IDocument* doc )
 {
-}
-
-void ContextBrowserPlugin::documentDestroyed( QObject* /*obj*/ )
-{
+  if (doc->textDocument() && doc->textDocument()->activeView())
+  {
+    cursorPositionChanged(doc->textDocument()->activeView(), doc->textDocument()->activeView()->cursorPosition());
+  }
 }
 
 void ContextBrowserPlugin::viewDestroyed( QObject* obj )

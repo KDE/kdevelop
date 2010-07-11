@@ -20,6 +20,7 @@
 #include <KStandardDirs>
 #include <KDebug>
 
+#include "snippetfeatures.h"
 
 #ifdef SNIPPETS_HAVE_TPLIFACE2
     #include <ktexteditor/editor.h>
@@ -30,7 +31,7 @@
 SnippetStore* SnippetStore::m_self = 0;
 
 SnippetStore::SnippetStore(SnippetPlugin* plugin)
-    : m_plugin(plugin)
+    : m_plugin(plugin), m_scriptregistrar(0)
 {
     m_self = this;
 
@@ -119,18 +120,18 @@ SnippetRepository* SnippetStore::repositoryForFile(const QString& file)
     return 0;
 }
 
-void SnippetStore::unregisterScript(const QString& token)
+void SnippetStore::unregisterScript(KTextEditor::TemplateScript* script)
 {
 #ifdef SNIPPETS_HAVE_TPLIFACE2
     if ( m_scriptregistrar ) {
-        m_scriptregistrar->unregisterTemplateScript(token);
+        m_scriptregistrar->unregisterTemplateScript(script);
     }
 #else
-    Q_UNUSED(token);
+    Q_UNUSED(script);
 #endif
 }
 
-QString SnippetStore::registerScript(const QString& script)
+KTextEditor::TemplateScript* SnippetStore::registerScript(const QString& script)
 {
 #ifdef SNIPPETS_HAVE_TPLIFACE2
     if ( m_scriptregistrar ) {
@@ -139,7 +140,7 @@ QString SnippetStore::registerScript(const QString& script)
 #else
     Q_UNUSED(script);
 #endif
-    return QString();
+    return 0;
 }
 
 

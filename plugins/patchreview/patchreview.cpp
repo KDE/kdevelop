@@ -1125,9 +1125,9 @@ void PatchReviewPlugin::updateKompareModel() {
 
         return;
     } catch ( const QString & str ) {
-        KMessageBox::error(0, str, "Kompare Model Update");
+        KMessageBox::error(0, str, i18n("Kompare Model Update"));
     } catch ( const char * str ) {
-        KMessageBox::error(0, str, "Kompare Model Update");
+        KMessageBox::error(0, str, i18n("Kompare Model Update"));
     }
     m_modelList.reset( 0 );
     m_kompareInfo.reset( 0 );

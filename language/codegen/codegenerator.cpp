@@ -110,7 +110,7 @@ void CodeGeneratorBase::setErrorText(const QString & errorText)
     d->error = errorText;
 }
 
-void CodeGeneratorBase::clearChangeSets(void)
+void CodeGeneratorBase::clearChangeSets()
 {
     kDebug() << "Cleaning up all the changesets registered by the generator";
     foreach(DUChainChangeSet * changeSet, d->duchainChanges)

@@ -101,7 +101,7 @@ public:
     CvsProxy* proxy();
 
     const KUrl urlFocusedDocument() const;
-
+    virtual KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const;
 public slots:
     // slots for context menu
     void ctxEdit();

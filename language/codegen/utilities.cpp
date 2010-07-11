@@ -38,7 +38,7 @@ IdentifierValidator::IdentifierValidator( DUContext * context) : QValidator(0), 
 {
 }
 
-IdentifierValidator::~IdentifierValidator(void)
+IdentifierValidator::~IdentifierValidator()
 {
 }
 
