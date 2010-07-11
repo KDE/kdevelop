@@ -144,7 +144,9 @@ void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedStrin
   ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
   
   QMutexLocker lock(&fileModificationTimeCacheMutex);
+  openDocumentsRevisionMap().erase(url);
   openDocumentsRevisionMap().insert(std::make_pair(url, revision));
+  Q_ASSERT(revisionForFile(url).revision == revision);
 }
 
 ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ ) : modificationTime(modTime.toTime_t()), revision(revision_) {
