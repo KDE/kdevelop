@@ -1281,7 +1281,6 @@ void DeclarationBuilder::visitUsingDirective(UsingDirectiveAST * node)
     DUChainWriteLocker lock(DUChain::lock());
     NamespaceAliasDeclaration* decl = openDeclarationReal<NamespaceAliasDeclaration>(0, 0, globalImportIdentifier(), false, false, &range);
     {
-      DUChainWriteLocker lock(DUChain::lock());
       QualifiedIdentifier id;
       identifierForNode(node->name, id);
       decl->setImportIdentifier( resolveNamespaceIdentifier(id, currentDeclaration()->range().start) );
