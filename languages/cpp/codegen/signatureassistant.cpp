@@ -241,7 +241,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
       changes.addChange( changeParameters );
       if (m_oldSignature.isConst != m_newSignature.isConst) {
         ///TODO: also use code representation here
-        SimpleRange range = functionContext->range();
+        RangeInRevision range = functionContext->range();
         // go after closing paren
         range.end.column++;
         // start == end (default when not const before)
@@ -254,7 +254,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
         } else {
           newText = " const";
         }
-        DocumentChange changeConstness(functionContext->url(), range, oldText, newText);
+        DocumentChange changeConstness(functionContext->url(), range.castToSimpleRange(), oldText, newText);
         changes.addChange(changeConstness);
       }
       if (m_oldSignature.returnType != m_newSignature.returnType) {
