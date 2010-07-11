@@ -613,7 +613,8 @@ protected:
 
         setInSymbolTable( ret );
       }else{
-        ret->setRange( range );
+        if(ret->parentContext())
+          ret->setRange( range );
       }
     }
 
