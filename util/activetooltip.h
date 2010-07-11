@@ -46,7 +46,8 @@ class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {
 Q_OBJECT
 public:
-    /* position must be in global coordinates.  */
+    ///@param parent Parent widget. Must not be zero, else the widget won't be shown.
+    /// @param position Position where to show the tooltip, in global coordinates.
     ActiveToolTip(QWidget *parent, const QPoint& position);
     ~ActiveToolTip();
 
