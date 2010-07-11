@@ -113,7 +113,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
              
             KDevelop::ProjectBuildFolderItem *fldr = new KDevelop::ProjectBuildFolderItem(dom->project(), file->url().upUrl());
             KDevelop::ProjectTargetItem *it = new KDevelop::ProjectTargetItem(dom->project(), target);
-            fldr->add(it);
+            fldr->appendRow(it);
              
             builditem=it;
             m_deleteWhenDone << fldr << it;

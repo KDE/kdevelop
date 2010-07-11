@@ -118,7 +118,7 @@ void MakeJob::start()
     m_process->setEnvironment( environmentVars() );
     m_process->setWorkingDirectory( buildDir.toLocalFile() );
     m_process->setProgram( command, cmd );
-    kDebug(9037) << "Starting build:" << cmd << "Build directory" << buildDir;
+    kDebug(9037) << "Starting build:" << command << cmd << "Build directory" << buildDir;
     m_process->start();
 }
 
@@ -224,7 +224,19 @@ QStringList MakeJob::computeBuildCommand() const
     {
         int suCommand = builderGroup.readEntry("Su Command", 0);
         QStringList kdesuline;
-        kdesuline << ((suCommand == 0) ? "kdesu" : "kdesudo" ) << "-t" << "-c" << cmdline.join(" ");
+        QStringList arguments;
+        QString suCommandName;
+        if (suCommand == 1) {
+          suCommandName = "kdesudo";
+          arguments << "-t" << "-c" << cmdline;
+        } else if (suCommand == 2) {
+          suCommandName = "sudo";
+          arguments << cmdline;
+        } else { //default
+          suCommandName = "kdesu";   
+          arguments << "-t" << "-c" << cmdline;
+        }
+        kdesuline << suCommandName << arguments;
         cmdline = kdesuline;
     }
 

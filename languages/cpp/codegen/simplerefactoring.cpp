@@ -390,6 +390,13 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   if(FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(declaration))
     declaration = definition->declaration(declaration->topContext());
 
+  // if renaming a ctor, use the class instead which will trigger renaming of all ctors as well
+  if(ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(declaration)) {
+    if ((cFunc->isConstructor() || cFunc->isDestructor()) && cFunc->context() && cFunc->context()->type() == DUContext::Class && cFunc->context()->owner()) {
+      declaration = cFunc->context()->owner();
+    }
+  }
+
   if(!declaration)
     return;
 
@@ -399,13 +406,13 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   QString replacementName;
 
   //Since we don't yet know what the text should be replaced with, we just collect the top-contexts to process
-  SimpleRefactoringCollector* collector = new SimpleRefactoringCollector(decl);
+  SimpleRefactoringCollector* collector = new SimpleRefactoringCollector(declaration);
 
   QDialog dialog;
 
   QTabWidget tabWidget;
 
-  UsesWidget uses(decl, collector);
+  UsesWidget uses(declaration, collector);
 
   QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration);
   AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);

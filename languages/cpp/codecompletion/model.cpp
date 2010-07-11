@@ -73,15 +73,6 @@ CodeCompletionModel::CodeCompletionModel( QObject * parent )
   setForceWaitForModel(true);
 }
 
-KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& matched) {
-  KSharedPtr<CompletionTreeElement> element = itemForIndex(matched);
-  //Do not hide the completion-list if the matched item is an implementation-helper
-  if(dynamic_cast<ImplementationHelperItem*>(element.data()))
-    return KTextEditor::CodeCompletionModelControllerInterface2::None;
-  else
-    return CodeCompletionModelControllerInterface2::matchingItem(matched);
-}
-
 bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& inserted, bool userInsertion, const KTextEditor::Cursor& position) {
   kDebug() << inserted;
   QString insertedTrimmed = inserted.trimmed();
@@ -90,7 +81,7 @@ bool CodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, const Q
 
   QString lineText = view->document()->text(KTextEditor::Range(position.line(), 0, position.line(), position.column()));
   
-  if(lineText.startsWith("#") && lineText.contains("include") && inserted == "/")
+  if(lineText.startsWith("#") && lineText.contains("include") && inserted.endsWith("/"))
     return true; //Directory-content completion
   
   if(insertedTrimmed.endsWith('\"'))

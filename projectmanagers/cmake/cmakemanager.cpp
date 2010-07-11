@@ -85,6 +85,8 @@
 
 #include <language/highlighting/codehighlighting.h>
 #include <interfaces/iruncontroller.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/vcsjob.h>
 
 using namespace KDevelop;
 
@@ -164,7 +166,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     if(item) {
         bool isroot = false;
         if (ProjectFolderItem* projectFolderItem = dynamic_cast<ProjectFolderItem*>(item)) {
-            if(projectFolderItem->isProjectRoot()) {
+            if(!projectFolderItem->parent()) {
                 isroot = true;
             }
         }
@@ -296,7 +298,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         }
 
         m_rootItem = new CMakeFolderItem(project, folderUrl.url(), QString(), 0 );
-        m_rootItem->setProjectRoot(true);
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
@@ -608,35 +609,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     return folderList;
 }
 
-bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
-{
-    CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
-    if ( !item ) {
-        QStandardItem* it = folder;
-        while(!item && it->parent()) {
-            it = it->parent();
-            item = dynamic_cast<CMakeFolderItem*>(it);
-        }
-    }
-
-    if (!item || item == item->project()->projectItem()) {
-        folder->project()->reloadModel();
-    } else {
-        CMakeFolderItem* former=item->formerParent();
-        QString buildDir=item->buildDir();
-        ProjectFolderItem* parent=static_cast<ProjectFolderItem*>(item->parent());
-        KUrl url=item->url();
-        IProject* project=item->project();
-
-        parent->removeRow(item->row());
-        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), buildDir, 0);
-
-        fi->setFormerParent(former);
-        reimport(fi, parent->url());
-    }
-    return true;
-}
-
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 {
     QList<KDevelop::ProjectTargetItem*> ret;
@@ -721,6 +693,35 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
     vm->remove("CMAKE_CURRENT_SOURCE_DIR");
     vm->remove("CMAKE_CURRENT_BINARY_DIR");
 }*/
+
+bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
+{
+    CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
+    if ( !item ) {
+        ProjectBaseItem* it = folder;
+        while(!item && it->parent()) {
+            it = it->parent();
+            item = dynamic_cast<CMakeFolderItem*>(it);
+        }
+    }
+
+    if (!item || item == item->project()->projectItem()) {
+        folder->project()->reloadModel();
+    } else {
+        CMakeFolderItem* former=item->formerParent();
+        QString buildDir=item->buildDir();
+        ProjectFolderItem* parent=static_cast<ProjectFolderItem*>(item->parent());
+        KUrl url=item->url();
+        IProject* project=item->project();
+
+        parent->removeRow(item->row());
+        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), buildDir, 0);
+
+        fi->setFormerParent(former);
+        reimport(fi, parent->url());
+    }
+    return true;
+}
 
 void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent)
 {
@@ -855,7 +856,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
             //We look for removed elements
             for(int i=0; i<item->rowCount(); i++)
             {
-                QStandardItem* it=item->child(i, 0);
+                ProjectBaseItem* it=item->child(i);
                 if(it->type()==ProjectBaseItem::Target)
                     continue;
                 
@@ -1340,11 +1341,11 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         ret = ret || hasChanges;
     }
 
-    if(ret && e.exec())
+    ret &= e.exec()==KDialog::Accepted;
+    if(ret)
     {
         bool ret=e.applyAllChanges();
-        if(ret)
-            ret=KDevelop::renameUrl(it->project(), it->url(), newUrl);
+        ret = ret && KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
 
     return ret;
@@ -1356,6 +1357,7 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     {
         return KDevelop::renameUrl(_it->project(), _it->url(), newUrl);
     }
+    
     CMakeFolderItem* it=static_cast<CMakeFolderItem*>(_it);
     KUrl lists=it->formerParent()->url();
     lists.addPath("CMakeLists.txt");
@@ -1372,15 +1374,13 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     KTextEditor::Range r=cmit->descriptor().argRange().castToSimpleRange().textRange();
     kDebug(9042) << "For " << lists << " rename " << r;
     
-    e.document()->replaceText(r, newName);
+    bool ret = e.document()->replaceText(r, newName);
     
-
-    bool ret=e.exec();
+    ret= ret && e.exec() == QDialog::Accepted;
     if(ret)
     {
-        ret=e.applyAllChanges();
-        if(ret)
-            ret=KDevelop::renameUrl(it->project(), it->url(), newUrl);
+        ret = e.applyAllChanges();
+        ret = ret && KDevelop::renameUrl(it->project(), it->url(), newUrl);
     }
     return ret;
 }

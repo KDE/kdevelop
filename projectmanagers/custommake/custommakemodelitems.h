@@ -29,7 +29,7 @@ class CustomMakeManager;
 class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, QStandardItem *parent=NULL );
+    CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, ProjectBaseItem*parent=NULL );
 
     virtual KUrl::List includeDirectories() const;
     virtual QHash<QString, QString> environment() const;
@@ -47,7 +47,7 @@ private:
 class CustomMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
-    CustomMakeFolderItem( CustomMakeManager*, KDevelop::IProject* project, const KUrl& , QStandardItem *parent = 0 );
+    CustomMakeFolderItem( CustomMakeManager*, KDevelop::IProject* project, const KUrl& , ProjectBaseItem*parent = 0 );
     virtual ~CustomMakeFolderItem();
 
     // watcher is reentrant. Only project parsing thread can call the methods of Watcher.

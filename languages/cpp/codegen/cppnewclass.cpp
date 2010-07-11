@@ -183,9 +183,8 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
       p->buildSystemManager()->features() & KDevelop::IBuildSystemManager::Targets )
   {
     QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
-    for(QStandardItem* it=folder; it && t.isEmpty(); it=it->parent()) {
-      KDevelop::ProjectBaseItem* bit=static_cast<KDevelop::ProjectBaseItem*>(it);
-      t=bit->targetList();
+    for(ProjectBaseItem* it=folder; it && t.isEmpty(); it=it->parent()) {
+      t=it->targetList();
     }
     if(t.count()==1) //Just choose this one
       target=t.first();
@@ -257,10 +256,10 @@ void CppNewClass::clearInheritance()
     m_baseAccessSpecifiers.clear();
 }
 
-void CppNewClass::identifier(const QString & identifier)
+void CppNewClass::setIdentifier(const QString & identifier)
 {
   QStringList list = identifier.split("::");
-  name(list.last());
+  setName(list.last());
   m_objectType->setDeclarationId(DeclarationId(QualifiedIdentifier(name())));
   list.pop_back();
   m_namespaces = list;
@@ -277,7 +276,7 @@ void CppNewClass::setType(Type type)
 }
 
 
-QString CppNewClass::identifier(void) const
+QString CppNewClass::identifier() const
 {
   QString identifier = m_namespaces.join("::");
   
@@ -315,7 +314,7 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
   kDebug() << "base-classes:" << m_baseClasses.size();
   
   if(!license().isEmpty())
-    output << (addCommentCharToLicense() ? "/*\n" : "") << license() << (addCommentCharToLicense() ? "\n*/" : "") << "\n\n";
+    output << license() << "\n\n";
 
   Identifier classId = Identifier(name());
 
@@ -500,7 +499,7 @@ void CppNewClass::generateImplementation(KDevelop::DocumentChangeSet& changes)
   QTextStream output(&implementation, QIODevice::WriteOnly);
 
   if(!license().isEmpty())
-    output << (addCommentCharToLicense() ? "/*\n" : "") << license() << (addCommentCharToLicense() ? "\n*/" : "") << "\n\n";
+    output << license() << "\n\n";
 
   // #include our header
   QString path = KUrl::relativePath(implementationUrl().directory(), headerUrl().toLocalFile());

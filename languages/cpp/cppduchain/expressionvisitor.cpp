@@ -422,7 +422,13 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       return true;
     } else {
       LOCKDUCHAIN;
-      problem(node, QString("Cannot dereference base-type \"%1\"").arg(base->toString()) );
+      QString typeStr;
+      if (base) {
+        typeStr = base->toString();
+      } else {
+        typeStr = "<notype>";
+      }
+      problem(node, QString("Cannot dereference base-type \"%1\"").arg(typeStr) );
       return false;
     }
   }

@@ -67,7 +67,7 @@ class CppNewClass : public KDevelop::ClassGenerator
     CppNewClass(KDevelop::ProjectBaseItem* parentItem)
       : m_type(DefaultType), m_objectType(new CppClassType), m_parentItem(parentItem)
     {};
-    virtual ~CppNewClass(void) {};
+    virtual ~CppNewClass() {};
     
     virtual KDevelop::DocumentChangeSet generate();
     
@@ -77,7 +77,7 @@ class CppNewClass : public KDevelop::ClassGenerator
     virtual KUrl headerUrlFromBase(KUrl baseUrl, bool toLower=true);
     virtual KUrl implementationUrlFromBase(KUrl baseUrl, bool toLower=true);
     
-    virtual void identifier(const QString & identifier);
+    virtual void setIdentifier(const QString & identifier);
     virtual QString identifier() const;
     
     virtual KDevelop::StructureType::Ptr objectType() const;
