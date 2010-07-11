@@ -511,16 +511,13 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
     // Translate the range into the current revision
     SimpleRange transformedRange = tracker->transformToCurrentRevision(rangeIt->range, highlighting->m_waitingRevision);
 
-    ///@todo Make thiswork
-    #if 0
     while(movingIt != oldHighlightedRanges.end() &&
-      (*movingIt)->start().line() < transformedRange.start.line ||
-      ((*movingIt)->start().line() == transformedRange.start.line && (*movingIt)->start().column() < transformedRange.start.column))
+      ((*movingIt)->start().line() < transformedRange.start.line ||
+      ((*movingIt)->start().line() == transformedRange.start.line && (*movingIt)->start().column() < transformedRange.start.column)))
     {
       delete *movingIt; // Skip ranges that are in front of the current matched range
       ++movingIt;
     }
-    #endif
 
     tempRange.start().setPosition(transformedRange.start.line, transformedRange.start.column);
     tempRange.end().setPosition(transformedRange.end.line, transformedRange.end.column);
