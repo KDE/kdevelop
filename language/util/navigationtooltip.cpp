@@ -24,6 +24,7 @@
 namespace KDevelop {
 
 NavigationToolTip::NavigationToolTip(QWidget* parent, const QPoint& point, QWidget* navigationWidget) : ActiveToolTip(parent, point) {
+    Q_ASSERT(parent);
     setBackgroundRole(QPalette::Window);
     setNavigationWidget(navigationWidget);
     connect(navigationWidget, SIGNAL(sizeHintChanged()), this, SLOT(sizeHintChanged()));
