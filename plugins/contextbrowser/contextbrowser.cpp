@@ -175,6 +175,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
 
   connect( core()->documentController(), SIGNAL( textDocumentCreated( KDevelop::IDocument* ) ), this, SLOT( textDocumentCreated( KDevelop::IDocument* ) ) );
   connect( core()->documentController(), SIGNAL( documentClosed( KDevelop::IDocument* ) ), this, SLOT( documentClosed( KDevelop::IDocument* ) ) );
+  connect( core()->documentController(), SIGNAL( documentActivated( KDevelop::IDocument* ) ), this, SLOT( documentActivated( KDevelop::IDocument* ) ) );
   connect( core()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), this, SLOT(parseJobFinished(KDevelop::ParseJob*)));
 
   connect( DUChain::self(), SIGNAL( declarationSelected(DeclarationPointer) ), this, SLOT( declarationSelectedInUI(DeclarationPointer) ) );
@@ -815,6 +816,14 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
 
 void ContextBrowserPlugin::documentClosed( KDevelop::IDocument* /*document*/ )
 {
+}
+
+void ContextBrowserPlugin::documentActivated( IDocument* doc )
+{
+  if (doc->textDocument() && doc->textDocument()->activeView())
+  {
+    cursorPositionChanged(doc->textDocument()->activeView(), doc->textDocument()->activeView()->cursorPosition());
+  }
 }
 
 void ContextBrowserPlugin::documentDestroyed( QObject* /*obj*/ )

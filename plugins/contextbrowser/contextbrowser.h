@@ -86,6 +86,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KTextEditor::Smart
     void parseJobFinished(KDevelop::ParseJob* job);
     void textDocumentCreated( KDevelop::IDocument* document );
     void documentClosed( KDevelop::IDocument* document );
+    void documentActivated( KDevelop::IDocument* );
     void documentDestroyed( QObject* obj );
     void viewDestroyed( QObject* obj );
     void cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition );
