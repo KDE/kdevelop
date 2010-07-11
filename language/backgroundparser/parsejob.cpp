@@ -394,7 +394,10 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
     qint64 targetRevision = d->contents.modification.revision;
     
     if(targetRevision == -1)
+    {
+        kDebug() << "invalid target revision" << targetRevision;
         return;
+    }
     
     qint64 sourceRevision;
 
@@ -407,7 +410,10 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
         sourceRevision = context->parsingEnvironmentFile()->modificationRevision().revision;
         
         if(sourceRevision == -1)
+        {
+            kDebug() << "invalid source revision" << sourceRevision;
             return;
+        }
     }
     
     if(sourceRevision > targetRevision)
