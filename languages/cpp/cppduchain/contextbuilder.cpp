@@ -363,17 +363,20 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
     DUChainWriteLocker lock(DUChain::lock());
     topLevelContext = updateContext;
 
+    RangeInRevision topRange = RangeInRevision(CursorInRevision(0,0), CursorInRevision(INT_MAX, INT_MAX));
+    
     if (topLevelContext) {
       kDebug(9007) << "ContextBuilder::buildContexts: recompiling";
       setRecompiling(true);
       DUChain::self()->updateContextEnvironment( topLevelContext, const_cast<Cpp::EnvironmentFile*>(file.data() ) );
+      topLevelContext->setRange(topRange);
     } else {
       kDebug(9007) << "ContextBuilder::buildContexts: compiling";
       setRecompiling(false);
 
       Q_ASSERT(compilingContexts());
 
-      topLevelContext = new CppDUContext<TopDUContext>(file->url(), RangeInRevision(CursorInRevision(0,0), CursorInRevision(INT_MAX, INT_MAX)), const_cast<Cpp::EnvironmentFile*>(file.data()));
+      topLevelContext = new CppDUContext<TopDUContext>(file->url(), topRange, const_cast<Cpp::EnvironmentFile*>(file.data()));
 
       topLevelContext->setType(DUContext::Global);
       topLevelContext->setFlags((TopDUContext::Flags)(TopDUContext::UpdatingContext | topLevelContext->flags()));
