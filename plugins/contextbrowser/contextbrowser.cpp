@@ -811,6 +811,14 @@ void ContextBrowserPlugin::textDocumentCreated( KDevelop::IDocument* document )
     registerAsRangeWatcher( chain );
 }
 
+void ContextBrowserPlugin::documentActivated( IDocument* doc )
+{
+  if (doc->textDocument() && doc->textDocument()->activeView())
+  {
+    cursorPositionChanged(doc->textDocument()->activeView(), doc->textDocument()->activeView()->cursorPosition());
+  }
+}
+
 void ContextBrowserPlugin::viewDestroyed( QObject* obj )
 {
   m_highlightedDeclarations.remove(static_cast<KTextEditor::View*>(obj));
