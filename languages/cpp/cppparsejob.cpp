@@ -430,6 +430,8 @@ void CPPInternalParseJob::run()
     QReadLocker lock(parentJob()->parentPreprocessor() ? 0 : parentJob()->cpp()->language()->parseLock());
     if(!ICore::self()->languageController()->language("C++")->languageSupport() || !parentJob()->cpp())
       return;
+    
+    initialize();
 
     if(updatingContentContext)
       parentJob()->translateDUChainToRevision(updatingContentContext.data());
@@ -458,8 +460,6 @@ void CPPInternalParseJob::run()
         return /*parentJob()->abortJob()*/;
 
     parentJob()->setLocalProgress(0, i18n("Parsing actual file"));
-
-    initialize();
 
     Cpp::EnvironmentFilePointer proxyEnvironmentFile(parentJob()->proxyEnvironmentFile());
     Cpp::EnvironmentFilePointer contentEnvironmentFile(parentJob()->contentEnvironmentFile());
