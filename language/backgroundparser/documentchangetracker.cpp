@@ -174,7 +174,7 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
     else
         m_changedRange->setRange(changed.encompass(m_changedRange->toRange()));
     
-    Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision());
+//     Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision()); // May happen after reload
 
     ModificationRevision::setEditorRevisionForFile(KDevelop::IndexedString(m_document->url()), m_moving->revision());
     
