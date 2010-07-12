@@ -46,6 +46,7 @@ public:
 ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     : QWidget(parent, Qt::ToolTip), d(new ActiveToolTipPrivate)
 {
+    Q_ASSERT(parent);
     d->mouseOut_ = 0;
     d->previousDistance_ = std::numeric_limits<uint>::max();
     setMouseTracking(true);

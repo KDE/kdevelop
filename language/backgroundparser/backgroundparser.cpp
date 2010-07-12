@@ -209,7 +209,7 @@ public:
         typedef QPointer<QObject> Notify;
         foreach(const Notify& n, notifyWhenReady)
             if(n)
-                QMetaObject::invokeMethod(n, "updateReady", Qt::DirectConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
+                QMetaObject::invokeMethod(n, "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, IndexedString(url)), Q_ARG(KDevelop::ReferencedTopDUContext, ReferencedTopDUContext()));
 
         return 0;
     }

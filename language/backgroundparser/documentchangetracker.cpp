@@ -71,6 +71,8 @@ namespace KDevelop
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     : m_needUpdate(false), m_changedRange(0), m_document(document), m_moving(0)
 {
+    m_url = IndexedString(document->url());
+    Q_ASSERT(document->url().isValid());
     Q_ASSERT(document);
     connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
     connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
@@ -174,12 +176,14 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
     else
         m_changedRange->setRange(changed.encompass(m_changedRange->toRange()));
     
-    Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision());
+//     Q_ASSERT(m_moving->revision() != m_revisionAtLastReset->revision()); // May happen after reload
 
-    ModificationRevision::setEditorRevisionForFile(KDevelop::IndexedString(m_document->url()), m_moving->revision());
+    // When reloading, textRemoved is called with an invalid m_document->url(). For that reason, we use m_url instead.
+        
+    ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
     
     if(needUpdate())
-        ICore::self()->languageController()->backgroundParser()->addDocument(m_document->url(), TopDUContext::AllDeclarationsContextsAndUses);
+        ICore::self()->languageController()->backgroundParser()->addDocument(m_url.toUrl(), TopDUContext::AllDeclarationsContextsAndUses);
 }
 
 void DocumentChangeTracker::textInserted( Document* document, Range range )

@@ -27,6 +27,7 @@
 #include <language/editor/simplerange.h>
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
+#include <duchain/indexedstring.h>
 
 namespace KTextEditor
 {
@@ -235,6 +236,7 @@ protected:
     
     KTextEditor::Document* m_document;
     KTextEditor::MovingInterface* m_moving;
+    KDevelop::IndexedString m_url;
     
     void updateChangedRange(KTextEditor::Range changed);
 public slots:
