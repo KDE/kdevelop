@@ -88,8 +88,12 @@ void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTex
         KTextEditor::TemplateInterface* templateIface
             = qobject_cast<KTextEditor::TemplateInterface*>(document->activeView());
         if ( templateIface ) {
+            QMap< QString, QString > values = QMap<QString, QString>();
+            if ( document->activeView()->selection() ) {
+                values["selection"] = document->text(document->activeView()->selectionRange());
+            }
             document->removeText(word);
-            templateIface->insertTemplateText(word.start(), m_snippet, QMap<QString, QString>());
+            templateIface->insertTemplateText(word.start(), m_snippet, values);
             return;
         }
     }
