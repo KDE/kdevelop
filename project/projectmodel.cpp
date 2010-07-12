@@ -123,13 +123,13 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
 ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
-    removeRows(0, d->childs.size());
     
     if( parent() ) {
         parent()->takeRow( d->row );
     } else if( model() ) {
         model()->takeRow( d->row );
     }
+    removeRows(0, d->childs.size());
     delete d;
 }
 
