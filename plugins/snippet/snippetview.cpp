@@ -334,7 +334,7 @@ bool SnippetView::eventFilter(QObject* obj, QEvent* e)
             QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
             Q_ASSERT(mouseEvent);
             QModelIndex clickedIndex = snippetTree->indexAt(mouseEvent->pos());
-            if (clickedIndex.isValid()) {
+            if (clickedIndex.isValid() && clickedIndex.parent().isValid()) {
                 slotSnippetClicked(clickedIndex);
                 e->accept();
                 return true;
