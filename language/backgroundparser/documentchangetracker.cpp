@@ -75,8 +75,8 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     Q_ASSERT(document->url().isValid());
     Q_ASSERT(document);
     connect(document, SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-    connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
-    connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,KTextEditor::Range)));
+    connect(document, SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range, QString)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range, QString)));
+    connect(document, SIGNAL(textChanged(KTextEditor::Document*,KTextEditor::Range,QString, KTextEditor::Range)), SLOT(textChanged(KTextEditor::Document*,KTextEditor::Range,QString, KTextEditor::Range)));
     connect(document, SIGNAL(destroyed(QObject*)), SLOT(documentDestroyed(QObject*)));
     
     m_moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
@@ -145,11 +145,10 @@ bool DocumentChangeTracker::needUpdate() const
     return m_needUpdate;
 }
 
-void DocumentChangeTracker::textChanged( Document* document, Range oldRange, Range newRange )
+void DocumentChangeTracker::textChanged( Document* document, Range /*oldRange*/, QString oldText, Range newRange )
 {
     m_currentCleanedInsertion.clear();
 
-    QString oldText = document->text(oldRange);
     QString newText = document->text(newRange);
     
     if(oldText.remove(whiteSpaceRegExp).isEmpty() && newText.remove(whiteSpaceRegExp).isEmpty())
@@ -210,9 +209,9 @@ void DocumentChangeTracker::textInserted( Document* document, Range range )
     updateChangedRange(range);
 }
 
-void DocumentChangeTracker::textRemoved( Document* document, Range range )
+void DocumentChangeTracker::textRemoved( Document* document, Range oldRange, QString oldText )
 {
-    QString text = document->text(range);
+    QString text = oldText;
     
     if(text.remove(whiteSpaceRegExp).isEmpty())
     {
@@ -228,7 +227,7 @@ void DocumentChangeTracker::textRemoved( Document* document, Range range )
     m_currentCleanedInsertion.clear();
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
     
-    updateChangedRange(range);
+    updateChangedRange(oldRange);
 }
 
 void DocumentChangeTracker::documentDestroyed( QObject* )
