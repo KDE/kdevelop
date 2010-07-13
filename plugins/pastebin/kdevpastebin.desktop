@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Service
+Icon=pastebin
+Exec=blubb
+Comment=This plugin will 
+Name=Pastebin
+GenericName=Pastebin
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevpastebin
+X-KDevelop-Version=10
+X-KDevelop-Category=Global
+X-KDE-PluginInfo-Name=kdevpastebin
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Mode=GUI
+X-KDevelop-Interfaces=org.kdevelop.IPatchExporter
