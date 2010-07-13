@@ -71,6 +71,7 @@ std::string*/
 #include <interfaces/iprojectcontroller.h>
 #include "diffsettings.h"
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/ipatchexporter.h>
 
 using namespace KDevelop;
 
@@ -213,11 +214,13 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.finishReview->setIcon(KIcon("dialog-ok"));
     
     QMenu* exportMenu = new QMenu(m_editPatch.exportReview);
+    connect(exportMenu, SIGNAL(triggered(QAction*)), SIGNAL(exporterSelected(QAction*)));
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
     {
         KPluginInfo info=pluginManager->pluginInfo(p);
-        exportMenu->addAction(KIcon(info.icon()), info.name());
+        QAction* action=exportMenu->addAction(KIcon(info.icon()), info.name());
+        action->setData(qVariantFromValue<QObject*>(p));
     }
     
     m_editPatch.exportReview->setMenu(exportMenu);
@@ -1396,6 +1399,13 @@ QWidget* PatchReviewPlugin::createToolView(QWidget* parent)
 {
     return new PatchReviewToolView(parent, this);
 }
+
+void PatchReviewPlugin::exporterSelected(QAction* action)
+{
+    IPatchExporter* exporter = qobject_cast<KDevelop::IPatchExporter*>(action->data().value<QObject*>());
+    exporter->exportPatch(patch());
+}
+
 
 #if 0
 void PatchReviewPlugin::determineState() {

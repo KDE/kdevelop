@@ -21,18 +21,18 @@
 #ifndef IPATCHEXPORTER_H
 #define IPATCHEXPORTER_H
 #include "interfacesexport.h"
+#include "ipatchsource.h"
 
 class QWidget;
 namespace KDevelop
 {
-class IPatchSource;
 
 class KDEVPLATFORMINTERFACES_EXPORT IPatchExporter
 {
     public:
         virtual ~IPatchExporter() {}
         
-        virtual void exportPatch(IPatchSource* source) = 0;
+        virtual void exportPatch(IPatchSource::Ptr source) = 0;
 };
 
 }
