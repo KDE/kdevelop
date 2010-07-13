@@ -104,6 +104,9 @@ void Parser::rewind(uint position) {
 
 void Parser::advance( bool skipComment ) {
   uint t = session->token_stream->lookAhead();
+  if( session->token_stream->cursor() > 0 && t == Token_EOF ) {
+    return;
+  }
   if(  t != Token_comment )
     _M_last_valid_token = session->token_stream->cursor();
 

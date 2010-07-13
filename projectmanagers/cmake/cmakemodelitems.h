@@ -82,6 +82,8 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         void setFormerParent(CMakeFolderItem* parent) { m_formerParent=parent; }
         
         QString buildDir() const { return m_buildDir; }
+        
+        void clear();
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;

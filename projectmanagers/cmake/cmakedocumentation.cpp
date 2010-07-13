@@ -21,7 +21,6 @@
 #include "cmakedocumentation.h"
 #include "cmakeutils.h"
 #include <KDebug>
-#include <QTimer>
 #include <QString>
 #include <QTextDocument>
 #include <language/duchain/declaration.h>
@@ -37,6 +36,7 @@
 #include <KIcon>
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
+#include <QTimer>
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
 K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmakedocumentation", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
@@ -53,8 +53,7 @@ CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     mCMakeCmd=KStandardDirs::findExe("cmake");
     CMakeDoc::s_provider=this;
     m_index= new QStringListModel(this);
-    
-    QTimer::singleShot(0, this, SLOT(delayedInitialization()));
+    initializeModel();
 }
 
 static const char* args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", 0, 0 };
@@ -97,6 +96,7 @@ QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) 
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::description(const QString& identifier, const KUrl& file) const
 {
+    initializeModel(); //make it not queued
     if(!KMimeType::findByUrl(file)->is("text/x-cmake"))
         return KSharedPtr<KDevelop::IDocumentation>();
     
@@ -143,6 +143,7 @@ KSharedPtr<KDevelop::IDocumentation > CMakeDocumentation::documentationForIndex(
 
 QAbstractListModel* CMakeDocumentation::indexModel() const
 {
+    initializeModel();
     return m_index;
 }
 
@@ -158,5 +159,18 @@ QString CMakeDocumentation::name() const
 
 KSharedPtr<KDevelop::IDocumentation> CMakeDocumentation::homePage() const
 {
+    if(!m_typeForName.isEmpty())
+        const_cast<CMakeDocumentation*>(this)->delayedInitialization();
+//     initializeModel();
     return KSharedPtr<KDevelop::IDocumentation>(new CMakeHomeDocumentation);
+}
+
+void CMakeDocumentation::initializeModel() const
+{
+    if(!m_typeForName.isEmpty())
+        return;
+    
+    QMetaObject::invokeMethod(const_cast<CMakeDocumentation*>(this), SLOT(delayedInitialization()), Qt::DirectConnection);
+//     QTimer::singleShot(0, const_cast<CMakeDocumentation*>(this), SLOT(delayedInitialization()));
+//     delayedInitialization();
 }

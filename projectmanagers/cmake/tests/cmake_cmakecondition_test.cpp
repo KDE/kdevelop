@@ -137,6 +137,8 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "true constant 6" ) << QStringList("tRUe") << true;
     QTest::newRow( "true constant 7" ) << QStringList("Y") << true;
     QTest::newRow( "true constant 8" ) << QStringList("-2") << true;
+    
+    QTest::newRow( "OR NOT ${undefinedvar}" ) << QString("OR NOT ${undefinedvar}").split(" ") << true;
 }
 
 void CMakeConditionTest::testBadParse()

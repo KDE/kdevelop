@@ -164,8 +164,7 @@ private slots:
   void testMemberFunctionModifiers();
 
   void testContextSearch();
-  
-  void testFinalCleanup();
+
   void testEllipsis();
 
   void testMultiByteCStrings();

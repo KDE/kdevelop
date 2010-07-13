@@ -56,3 +56,11 @@ KUrl CMakeExecutableTargetItem::builtUrl() const
     ret.addPath(outputName);
     return ret;
 }
+
+void CMakeFolderItem::clear()
+{
+    m_includeList.clear();
+    m_defines.clear();
+    m_topcontext=0;
+    removeRows(0, rowCount());
+}

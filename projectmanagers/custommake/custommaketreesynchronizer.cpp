@@ -157,7 +157,7 @@ void CustomMakeTreeSynchronizer::fileChanged( const QString& file, KDevelop::Pro
     Q_ASSERT(makefileItem);
 
     // find parent folder item
-    QStandardItem *stditem = makefileItem->parent();
+    KDevelop::ProjectBaseItem *stditem = makefileItem->parent();
     KDevelop::ProjectBuildFolderItem *parentFolder =
             dynamic_cast<KDevelop::ProjectBuildFolderItem*>( stditem );
     if( !parentFolder )

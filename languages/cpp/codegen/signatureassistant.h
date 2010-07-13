@@ -36,6 +36,7 @@ struct Signature
   QList<ParameterItem> parameters;
   QList<QString> defaultParams;
   KDevelop::IndexedType returnType;
+  bool isConst;
 };
 
 class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
