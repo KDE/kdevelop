@@ -73,6 +73,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QToolButton" name="exportReview">
+       <property name="text">
+        <string>Export Review</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="cancelReview">
        <property name="text">
         <string>Cancel Review</string>

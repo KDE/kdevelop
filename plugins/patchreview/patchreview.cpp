@@ -70,6 +70,8 @@ std::string*/
 #include <sublime/area.h>
 #include <interfaces/iprojectcontroller.h>
 #include "diffsettings.h"
+#include <bits/mathcalls.h>
+#include <kdevplatform/interfaces/iplugincontroller.h>
 
 using namespace KDevelop;
 
@@ -210,6 +212,16 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.nextHunk->setIcon(KIcon("arrow-down"));
     m_editPatch.cancelReview->setIcon(KIcon("dialog-cancel"));
     m_editPatch.finishReview->setIcon(KIcon("dialog-ok"));
+    
+    QMenu* exportMenu = new QMenu(m_editPatch.exportReview);
+    IPluginController* pluginManager = ICore::self()->pluginController();
+    foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
+    {
+        KPluginInfo info=pluginManager->pluginInfo(p);
+        exportMenu->addAction(KIcon(info.icon()), info.name());
+    }
+    
+    m_editPatch.exportReview->setMenu(exportMenu);
     
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
