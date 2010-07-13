@@ -38,9 +38,9 @@
 #include <QApplication>
 
 // Backward transformation currently doesn't work due to kate
-#define NO_BACKWARD_TRANSFORMATION
+// #define NO_BACKWARD_TRANSFORMATION
 // Only needed as long as the backward transformation doesn't work
-#define ALWAYS_UPDATE
+// #define ALWAYS_UPDATE
 
 using namespace KTextEditor;
 
