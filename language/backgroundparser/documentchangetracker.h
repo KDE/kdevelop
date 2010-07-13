@@ -27,7 +27,7 @@
 #include <language/editor/simplerange.h>
 #include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
-#include <duchain/indexedstring.h>
+#include <language/duchain/indexedstring.h>
 
 namespace KTextEditor
 {
