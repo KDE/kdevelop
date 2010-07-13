@@ -70,8 +70,7 @@ std::string*/
 #include <sublime/area.h>
 #include <interfaces/iprojectcontroller.h>
 #include "diffsettings.h"
-#include <bits/mathcalls.h>
-#include <kdevplatform/interfaces/iplugincontroller.h>
+#include <interfaces/iplugincontroller.h>
 
 using namespace KDevelop;
 
