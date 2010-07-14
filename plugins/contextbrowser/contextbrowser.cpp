@@ -61,7 +61,7 @@
 #include <language/interfaces/iquickopen.h>
 #include <interfaces/iplugincontroller.h>
 #include <sublime/mainwindow.h>
-#include <auto_ptr.h>
+#include <memory>
 
 static const unsigned int highlightingTimeout = 150;
 static const float highlightingZDepth = -5000;
