@@ -89,26 +89,40 @@ static bool removeDirectory(const QDir &aDir)
   return !has_err;
 }
 
+namespace {
+    int argc = 0;
+    char** argv = 0; 
+};
+
+void SessionController::setArguments(int _argc, char** _argv)
+{
+    argc = _argc;
+    argv = _argv;
+}
+
 static QStringList standardArguments()
 {
     QStringList ret;
-    for(int a = 0; a < QApplication::argc(); ++a)
+    for(int a = 0; a < argc; ++a)
     {
-        QString arg = QString::fromLocal8Bit(QApplication::argv()[a]);
-        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
+        QString arg = QString::fromLocal8Bit(argv[a]);
+        kWarning() << "ARG:" << "" + arg + "";
+/*        if(arg.startsWith("--graphicssystem=") || arg.startsWith("--style="))
         {
             ret << arg;
-        }else if(arg.startsWith("--graphicssystem") || arg.startsWith("--style"))
+        }else */
+        if(arg.startsWith("-graphicssystem") || arg.startsWith("-style"))
         {
-            ret << arg;
-            if(a+1 < QApplication::argc())
-                ret << QString::fromLocal8Bit(QApplication::argv()[a+1]);
+            ret << "-" + arg;
+            if(a+1 < argc)
+                ret << QString::fromLocal8Bit(argv[a+1]);
         }
     }
+    
+    kWarning() << "ARGUMENTS: " << ret << "from" << argc;
+    
     return ret;
 }
-
-///@todo The whole recovery stuff is only safe if we allow only one process per session
 
 class SessionControllerPrivate : public QObject
 {

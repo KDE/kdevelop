@@ -60,6 +60,11 @@ public:
     /// Returns whether the given session can be locked
     static bool tryLockSession(QString id);
     
+    /// The application should call this on startup to tell the
+    /// session-controller about the received arguments.
+    /// Some of them may need to be passed to newly opened sessions.
+    static void setArguments(int argc, char** argv);
+    
     bool lockSession();
 
     ///Finds a session by its name or by its UUID
