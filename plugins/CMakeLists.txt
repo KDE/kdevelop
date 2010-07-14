@@ -18,6 +18,7 @@ add_subdirectory(patchreview)
 add_subdirectory(openwith)
 add_subdirectory(grepview)
 add_subdirectory(pastebin)
+add_subdirectory(reviewboard)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 macro_optional_find_package( Boost 1.35.0 )
