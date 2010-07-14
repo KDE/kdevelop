@@ -50,7 +50,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
     
     QString newValue;
     int last=0;
-    for(int i=firstScape; i<value.size() && i>=0; i=value.indexOf(scapingChar, i+2))
+    for(int i=firstScape; i<value.size()-1 && i>=0; i=value.indexOf(scapingChar, i+2))
     {
         newValue+=value.mid(last, i-last);
         QChar current=value[i+1];
