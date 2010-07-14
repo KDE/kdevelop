@@ -191,6 +191,9 @@ int main( int argc, char *argv[] )
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     KDevelopApplication app;
 
+    // The session-controller needs to arguments to eventually pass them to newly opened sessions
+    KDevelop::SessionController::setArguments(argc, argv);
+    
     if(args->isSet("sessions"))
     {
         QTextStream qout(stdout);
