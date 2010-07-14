@@ -214,7 +214,7 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.finishReview->setIcon(KIcon("dialog-ok"));
     
     QMenu* exportMenu = new QMenu(m_editPatch.exportReview);
-    connect(exportMenu, SIGNAL(triggered(QAction*)), SIGNAL(exporterSelected(QAction*)));
+    connect(exportMenu, SIGNAL(triggered(QAction*)), m_plugin, SLOT(exporterSelected(QAction*)));
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
     {
@@ -1402,8 +1402,10 @@ QWidget* PatchReviewPlugin::createToolView(QWidget* parent)
 
 void PatchReviewPlugin::exporterSelected(QAction* action)
 {
-    IPatchExporter* exporter = qobject_cast<KDevelop::IPatchExporter*>(action->data().value<QObject*>());
-    exporter->exportPatch(patch());
+    IPlugin* exporter = qobject_cast<IPlugin*>(action->data().value<QObject*>());
+    
+    qDebug() << "exporting patch" << exporter << action->text();
+    exporter->extension<IPatchExporter>()->exportPatch(patch());
 }
 
 
