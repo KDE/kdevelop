@@ -22,6 +22,8 @@
 #include <KFileDialog>
 #include <KIO/CopyJob>
 #include <KLocalizedString>
+#include <KProcess>
+#include <KMessageBox>
 #include <interfaces/icore.h>
 #include <interfaces/ipatchexporter.h>
 #include <interfaces/iruncontroller.h>
@@ -39,10 +41,21 @@ class KIOExport : public KDevelop::IPatchExporter {
     }
 };
 
+class EMailExport : public KDevelop::IPatchExporter {
+    virtual void exportPatch(KDevelop::IPatchSource::Ptr source)
+    {
+        int pid = KProcess::startDetached("ksendemail", QStringList() << "--attach" << source->file().toLocalFile());
+
+        if(pid==0)
+            KMessageBox::error(0, i18n("Could not execute the e-mail client to send the patch.\n"));
+    }
+};
+
 StandardPatchExport::StandardPatchExport(PatchReviewPlugin* plugin, QObject* parent)
     : QObject(parent), m_plugin(plugin)
 {
     m_exporters.append(new KIOExport);
+    m_exporters.append(new EMailExport);
 }
 
 StandardPatchExport::~StandardPatchExport()
@@ -53,9 +66,15 @@ StandardPatchExport::~StandardPatchExport()
 void StandardPatchExport::addActions(QMenu* m)
 {
     m->addAction(KIcon("document-save"), i18n("Save As..."), this, SLOT(runKIOExport()));
+    m->addAction(KIcon("internet-mail"), i18n("Send..."), this, SLOT(runEMailExport()));
 }
 
 void StandardPatchExport::runKIOExport()
 {
     m_exporters[0]->exportPatch(m_plugin->patch());
+}
+
+void StandardPatchExport::runEMailExport()
+{
+    m_exporters[1]->exportPatch(m_plugin->patch());
 }

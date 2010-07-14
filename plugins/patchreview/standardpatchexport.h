@@ -47,6 +47,7 @@ class StandardPatchExport : public QObject
         
     public slots:
         void runKIOExport();
+        void runEMailExport();
         
     private:
         PatchReviewPlugin* m_plugin;
