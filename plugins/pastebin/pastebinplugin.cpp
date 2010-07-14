@@ -28,7 +28,10 @@
 #include <interfaces/ipatchsource.h>
 #include <KIO/Job>
 #include <KMessageBox>
+#include <KDebug>
 #include <QFile>
+#include <interfaces/icore.h>
+#include <interfaces/iruncontroller.h>
 
 using namespace KDevelop;
 
@@ -56,22 +59,27 @@ QByteArray urlToData(const KUrl& url)
         ret = f.readAll();
         
     } else {
-#warning TODO: add downloading the patches from away
+#warning TODO: add downloading the data
     }
     return ret;
 }
 
-void PastebinPlugin::exportPatch(IPatchSource* source)
+void PastebinPlugin::exportPatch(IPatchSource::Ptr source)
 {
+    kDebug() << "exporting patch to pastebin" << source->file();
+    
     QByteArray bytearray = "paste_code="+QUrl::toPercentEncoding(urlToData(source->file()), "/");
     bytearray += "&paste_format=dff&paste_expiry_date=1D&paste_email=";
 
     KUrl url("http://pastebin.com/api_public.php");
 
-    KIO::TransferJob *tf = KIO::http_post(url, bytearray, KIO::HideProgressInfo);
+    KIO::TransferJob *tf = KIO::http_post(url, bytearray);
 
     tf->addMetaData("content-type","Content-Type: application/x-www-form-urlencoded");
     connect(tf, SIGNAL(data(KIO::Job *, const QByteArray &)), this, SLOT(data(KIO::Job*, const QByteArray&)));
+    
+    m_result.insert(tf, QByteArray());
+    ICore::self()->runController()->registerJob(tf);
 }
 
 void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
@@ -84,8 +92,10 @@ void PastebinPlugin::data(KIO::Job* job, const QByteArray &data)
         } else if (it->isEmpty() || it->startsWith("ERROR")) {
             KMessageBox::error(0, *it);
         } else {
-            KMessageBox::information(0, *it);
+            QString htmlLink=QString("<a href='%1'>%1</a>").arg(*it);
+            KMessageBox::information(0, i18nc("The parameter is the link where the patch is stored", "<qt>You can find your patch at:<br/>%1</qt>", htmlLink));
         }
+        m_result.erase(it);
     } else {
         *it += data;
     }

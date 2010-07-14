@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Icon=pastebin
+Icon=edit-paste
 Exec=blubb
 Comment=This plugin will 
 Name=Pastebin
