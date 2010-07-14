@@ -72,6 +72,7 @@ std::string*/
 #include "diffsettings.h"
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ipatchexporter.h>
+#include "standardpatchexport.h"
 
 using namespace KDevelop;
 
@@ -214,7 +215,10 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.finishReview->setIcon(KIcon("dialog-ok"));
     
     QMenu* exportMenu = new QMenu(m_editPatch.exportReview);
+    StandardPatchExport* stdactions = new StandardPatchExport(m_plugin, this);
+    stdactions->addActions(exportMenu);
     connect(exportMenu, SIGNAL(triggered(QAction*)), m_plugin, SLOT(exporterSelected(QAction*)));
+    
     IPluginController* pluginManager = ICore::self()->pluginController();
     foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
     {
@@ -1404,8 +1408,10 @@ void PatchReviewPlugin::exporterSelected(QAction* action)
 {
     IPlugin* exporter = qobject_cast<IPlugin*>(action->data().value<QObject*>());
     
-    qDebug() << "exporting patch" << exporter << action->text();
-    exporter->extension<IPatchExporter>()->exportPatch(patch());
+    if(exporter) {
+        qDebug() << "exporting patch" << exporter << action->text();
+        exporter->extension<IPatchExporter>()->exportPatch(patch());
+    }
 }
 
 

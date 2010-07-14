@@ -75,7 +75,7 @@
      <item>
       <widget class="QToolButton" name="exportReview">
        <property name="text">
-        <string>Export Review</string>
+        <string>Export Diff...</string>
        </property>
        <property name="popupMode">
         <enum>QToolButton::InstantPopup</enum>

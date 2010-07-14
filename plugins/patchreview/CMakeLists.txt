@@ -5,9 +5,10 @@
 add_definitions( ${KDE4_ENABLE_EXCEPTIONS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/settings)
 
-set(patchreview_PART_SRCS      
+set(patchreview_PART_SRCS
     patchreview.cpp
     localpatchsource.cpp
+    standardpatchexport.cpp
     settings/diffsettings.cpp
     settings/settingsbase.cpp 
 
