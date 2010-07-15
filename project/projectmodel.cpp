@@ -168,14 +168,13 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 void ProjectBaseItem::removeRow( int row )
 {
     Q_D(ProjectBaseItem);
-    delete d->childs[row];
+    delete takeRow( row );
 }
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    Q_D(ProjectBaseItem);
-    for(; count>0; count--) {
-        delete d->childs[row];
+    for( ; count--; count > 0 ) {
+        removeRow( row );
     }
 }
 
