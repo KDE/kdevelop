@@ -24,6 +24,7 @@
 
 #include <projectmodel.h>
 #include <tests/modeltest.h>
+#include "dummyproject.h"
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
@@ -373,6 +374,18 @@ void ProjectModelTest::testRename_data()
     << false
     << QString::fromLatin1("mynew")
     << (int)ProjectBaseItem::InvalidNewName;
+}
+
+void ProjectModelTest::testWithProject()
+{
+    DummyProject* proj = new DummyProject( "DummyProject", 0 );
+    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
+    proj->setProjectItem( rootItem );
+    model->appendRow( rootItem );
+    ProjectBaseItem* item = model->itemFromIndex( model->index( 0, 0 ) );
+    QCOMPARE( item, rootItem );
+    QCOMPARE( item->text(), proj->name() );
+    QCOMPARE( item->url(), proj->folder() );
 }
 
 QTEST_KDEMAIN( ProjectModelTest, GUI)
