@@ -20,7 +20,6 @@
 
 #include "reviewpatchdialog.h"
 #include "ui_reviewpatch.h"
-#include <KIO/Job>
 
 ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     : KDialog(parent)
@@ -51,20 +50,3 @@ void ReviewPatchDialog::setPatch(const KUrl& file)
     m_patch = file;
 }
 
-struct Service
-{
-    Service(const QString& username, const QString& password, const KUrl& server)
-        : username(username), password(password), server(server)
-    {}
-    
-    QString username;
-    QString password;
-    KUrl server;
-};
-
-void postReview(const Service& s, const QString& repository_path, const KUrl& patch)
-{
-    KUrl url=s.server;
-    url.addPath("api/json/reviewrequests/new/");
-    KJob* job = KIO::http_post(url, "repository_path="+repository_path.toLatin1()+"&submit_as="+s.username.toLatin1());
-}
