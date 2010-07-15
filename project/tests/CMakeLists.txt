@@ -11,7 +11,7 @@ include_directories(
 
 set( projectmodeltest_SRCS projectmodeltest.cpp dummyproject.cpp ${CMAKE_SOURCE_DIR}/tests/modeltest.cpp )
 kde4_add_unit_test(projectmodeltest ${projectmodeltest_SRCS})
-target_link_libraries(projectmodeltest ${QT_QTTEST_LIBRARY} kdevplatforminterfaces kdevplatformproject )
+target_link_libraries(projectmodeltest ${QT_QTTEST_LIBRARY} kdevplatforminterfaces kdevplatformproject kdevplatformlanguage)
 
 set( projectmodelperformancetest_SRCS projectmodelperformancetest.cpp )
 kde4_add_executable(projectmodelperformancetest ${projectmodelperformancetest_SRCS})
