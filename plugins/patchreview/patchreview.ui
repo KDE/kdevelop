@@ -147,9 +147,6 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-          </item>
           <item row="2" column="0" colspan="2">
            <widget class="QTabWidget" name="tabWidget">
             <property name="currentIndex">
@@ -218,7 +215,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>88</width>
-           <height>18</height>
+           <height>37</height>
           </size>
          </property>
         </spacer>
@@ -239,6 +236,11 @@
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
+          <column>
+           <property name="text">
+            <string notr="true">1</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>

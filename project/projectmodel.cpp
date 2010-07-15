@@ -123,13 +123,13 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
 ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
-    removeRows(0, d->childs.size());
     
     if( parent() ) {
         parent()->takeRow( d->row );
     } else if( model() ) {
         model()->takeRow( d->row );
     }
+    removeRows(0, d->childs.size());
     delete d;
 }
 
@@ -168,14 +168,13 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 void ProjectBaseItem::removeRow( int row )
 {
     Q_D(ProjectBaseItem);
-    delete d->childs[row];
+    delete takeRow( row );
 }
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    Q_D(ProjectBaseItem);
-    for(; count>0; count--) {
-        delete d->childs[row];
+    for( ; count > 0; count-- ) {
+        removeRow( row );
     }
 }
 
@@ -222,8 +221,12 @@ int ProjectBaseItem::row() const
 QString ProjectBaseItem::text() const
 {
     Q_D(const ProjectBaseItem);
-    Q_ASSERT(!d->text.isEmpty());
-    return d->text;
+    if( project() && !parent() ) {
+        return project()->name();
+    } else {
+        Q_ASSERT(!d->text.isEmpty());
+        return d->text;
+    }
 }
 
 void ProjectBaseItem::setModel( ProjectModel* model )
