@@ -173,7 +173,7 @@ void ProjectBaseItem::removeRow( int row )
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    for( ; count--; count > 0 ) {
+    for( ; count > 0; count-- ) {
         removeRow( row );
     }
 }
