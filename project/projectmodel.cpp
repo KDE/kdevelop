@@ -222,8 +222,12 @@ int ProjectBaseItem::row() const
 QString ProjectBaseItem::text() const
 {
     Q_D(const ProjectBaseItem);
-    Q_ASSERT(!d->text.isEmpty());
-    return d->text;
+    if( project() && !parent() ) {
+        return project()->name();
+    } else {
+        Q_ASSERT(!d->text.isEmpty());
+        return d->text;
+    }
 }
 
 void ProjectBaseItem::setModel( ProjectModel* model )
