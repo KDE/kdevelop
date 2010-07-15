@@ -1,6 +1,5 @@
 #include "dashboard.h"
 #include <plasma/corona.h>
-#include <QTimer>
 #include "dashboardcorona.h"
 #include "appletselector.h"
 #include <interfaces/idashboardfactory.h>
@@ -15,7 +14,7 @@ dashboard::dashboard(KDevelop::IProject* project, DashboardCorona* corona, QWidg
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     
-    QTimer::singleShot(0, this, SLOT(init()));
+    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
 }
 
 dashboard::~dashboard()
@@ -46,7 +45,7 @@ void dashboard::updateView()
 //             c->resize(size());
             
             c->resize(size());
-            fitInView(c);
+            ensureVisible(c);
         }
     }
 }
