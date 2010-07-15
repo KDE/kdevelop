@@ -176,12 +176,11 @@ void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
   highlighting->m_document = url;
   highlighting->m_waitingRevision = revision;
   highlighting->m_waiting = instance->m_highlight;
+  qSort(highlighting->m_waiting.begin(), highlighting->m_waiting.end());
 
   QMetaObject::invokeMethod(this, "applyHighlighting", Qt::QueuedConnection, Q_ARG(void*, highlighting));
 
   delete instance;
-
-  qSort(highlighting->m_waiting.begin(), highlighting->m_waiting.end());
 }
 
 void CodeHighlightingInstance::highlightDUChain(DUContext* context)
