@@ -46,7 +46,7 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     repoFileTypesList->sortItems();
     repoFileTypesList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     connect(repoFileTypesList->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(updateFileTypesEdit()));
+            this, SLOT(updateFileTypes()));
 
     delete document;
 
@@ -91,7 +91,7 @@ EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     }
 
     validate();
-    updateFileTypesEdit();
+    updateFileTypes();
     repoNameEdit->setFocus();
 }
 
@@ -119,19 +119,27 @@ void EditRepository::save()
     m_repo->setCompletionNamespace(repoNamespaceEdit->text());
     m_repo->setScript(repoScriptEdit->toPlainText());
 
-    m_repo->setFileTypes(repoFileTypesEdit->text().split(";", QString::SkipEmptyParts));
+    QStringList types;
+    foreach( QListWidgetItem* item, repoFileTypesList->selectedItems() ) {
+        types << item->text();
+    }
+    m_repo->setFileTypes(types);
     m_repo->save();
 
     setWindowTitle(i18n("Edit Snippet Repository %1", m_repo->text()));
 }
 
-void EditRepository::updateFileTypesEdit()
+void EditRepository::updateFileTypes()
 {
     QStringList types;
     foreach( QListWidgetItem* item, repoFileTypesList->selectedItems() ) {
         types << item->text();
     }
-    repoFileTypesEdit->setText(types.join(";"));
+    if ( types.isEmpty() ) {
+        repoFileTypesListLabel->setText(i18n("<i>leave empty for general purpose snippets</i>"));
+    } else {
+        repoFileTypesListLabel->setText(types.join(", "));
+    }
 }
 
 #include "editrepository.moc"

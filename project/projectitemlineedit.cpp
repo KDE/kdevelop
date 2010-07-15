@@ -30,6 +30,14 @@
 #include <interfaces/iproject.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <QMenu>
+#include <KDialog>
+#include <QTreeView>
+#include "projectproxymodel.h"
+#include <QBoxLayout>
+#include <QLayout>
+#include <QLabel>
+#include <QHeaderView>
 
 static const QChar sep = '/';
 static const QChar escape = '\\';
@@ -143,10 +151,51 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
 {
     setCompleter( m_completer );
     setValidator( m_validator );
-    setClearButtonShown( true );
     setClickMessage( i18n("Enter the path to an item from the projects tree" ) );
+    
+    KAction* selectItemAction = new KAction(KIcon("folder-document"), i18n("Select..."), this);
+    connect(selectItemAction, SIGNAL(triggered()), SLOT(selectItemDialog()));
+    addAction(selectItemAction);
+    
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(showCtxMenu(QPoint)));
 }
 
+void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
+{
+    QScopedPointer<QMenu> menu(createStandardContextMenu());
+    menu->addActions(actions());
+    menu->exec(mapToGlobal(p));
+}
+
+void ProjectItemLineEdit::selectItemDialog()
+{
+    KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
+    
+    QWidget* w=new QWidget;
+    w->setLayout(new QVBoxLayout(w));
+    QTreeView* view = new QTreeView(w);
+    ProjectProxyModel* proxymodel = new ProjectProxyModel(view);
+    proxymodel->setSourceModel(model);
+    view->header()->hide();
+    view->setModel(proxymodel);
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    w->layout()->addWidget(new QLabel(i18n("Select the item you want to get the path from.")));
+    w->layout()->addWidget(view);
+    
+    QScopedPointer<KDialog> dialog(new KDialog);
+    dialog->setButtons(KDialog::Ok | KDialog::Cancel);
+    dialog->setCaption(i18n("Select an item..."));
+    dialog->setMainWidget(w);
+    int res = dialog->exec();
+    
+    if(res==KDialog::Accepted && view->selectionModel()->hasSelection()) {
+        QModelIndex idx=proxymodel->mapToSource(view->selectionModel()->selectedIndexes().first());
+        
+        setText(KDevelop::joinWithEscaping(model->pathFromIndex(idx), sep, escape));
+        selectAll();
+    }
+}
 
 void ProjectItemLineEdit::setItemPath(const QStringList& list)
 {

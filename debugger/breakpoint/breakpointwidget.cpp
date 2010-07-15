@@ -39,11 +39,14 @@
 #include "../../shell/debugcontroller.h"
 
 #define IF_DEBUG(x)
+#include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 
 using namespace KDevelop;
 
 BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
-: QWidget(parent), firstShow_(true), m_debugController(controller)
+: QWidget(parent), firstShow_(true), m_debugController(controller),
+  breakpointDisableAll_(0), breakpointEnableAll_(0), breakpointRemoveAll_(0)
 {
     setWindowTitle(i18n("Debugger Breakpoints"));
     setWhatsThis(i18n("<b>Breakpoint list</b><p>"
@@ -72,6 +75,7 @@ BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
 
     table_->setModel(m_debugController->breakpointModel());
 
+    connect(table_, SIGNAL(clicked(QModelIndex)), this, SLOT(slotRowClicked(QModelIndex)));
     connect(table_->selectionModel(), SIGNAL(selectionChanged(QItemSelection, QItemSelection)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
     connect(m_debugController->breakpointModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), SLOT(slotUpdateBreakpointDetail()));
@@ -94,10 +98,10 @@ void BreakpointWidget::setupPopupMenu()
 {
     popup_ = new QMenu(this);
 
-    QMenu* newBreakpoint = popup_->addMenu( i18nc("New breakpoint", "New") );
+    QMenu* newBreakpoint = popup_->addMenu( i18nc("New breakpoint", "&New") );
 
     QAction* action = newBreakpoint->addAction(
-        i18nc("Code breakpoint", "Code"),
+        i18nc("Code breakpoint", "&Code"),
         this,
         SLOT(slotAddBlankBreakpoint()) );
     // Use this action also to provide a local shortcut
@@ -106,13 +110,13 @@ void BreakpointWidget::setupPopupMenu()
     addAction(action);
 
     newBreakpoint->addAction(
-        i18nc("Data breakpoint", "Data write"),
+        i18nc("Data breakpoint", "Data &write"),
         this, SLOT(slotAddBlankWatchpoint()));
     newBreakpoint->addAction(
-        i18nc("Data read breakpoint", "Data read"),
+        i18nc("Data read breakpoint", "Data &read"),
         this, SLOT(slotAddBlankReadWatchpoint()));
     newBreakpoint->addAction(
-        i18nc("Data access breakpoint", "Data access"),
+        i18nc("Data access breakpoint", "Data &access"),
         this, SLOT(slotAddBlankAccessWatchpoint()));
 
     #if 0
@@ -127,20 +131,20 @@ void BreakpointWidget::setupPopupMenu()
 
     QAction* breakpointDelete = popup_->addAction(
         KIcon("breakpoint_delete"),
-        i18n( "Delete" ),
+        i18n( "&Delete" ),
         this,
         SLOT(slotRemoveBreakpoint()));
     breakpointDelete->setShortcut(Qt::Key_Delete);
     breakpointDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(breakpointDelete);
 
-    #if 0
-    m_ctxMenu->addSeparator();
 
-    m_breakpointDisableAll = m_ctxMenu->addAction( i18n( "Disable all") );
-    m_breakpointEnableAll = m_ctxMenu->addAction( i18n( "Enable all") );
-    m_breakpointDeleteAll = m_ctxMenu->addAction( i18n( "Delete all"), this, SLOT(slotRemoveAllBreakpoints()));
-    #endif
+    popup_->addSeparator();
+    breakpointDisableAll_ = popup_->addAction(i18n("Disable &all"), this, SLOT(slotDisableAllBreakpoints()));
+    breakpointEnableAll_ = popup_->addAction(i18n("&Enable all"), this, SLOT(slotEnableAllBreakpoints()));
+    breakpointRemoveAll_ = popup_->addAction(i18n("&Remove all"), this, SLOT(slotRemoveAllBreakpoints()));
+
+    connect(popup_,SIGNAL(aboutToShow()), this, SLOT(slotPopupMenuAboutToShow()));
 
 #if 0
     connect( m_ctxMenu,     SIGNAL(triggered(QAction*)),
@@ -191,6 +195,30 @@ void BreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
 #endif
     popup_->popup(event->globalPos());
 }
+
+void BreakpointWidget::slotPopupMenuAboutToShow()
+{
+    if (m_debugController->breakpointModel()->rowCount() < 2) {
+        breakpointDisableAll_->setDisabled(true);
+        breakpointEnableAll_->setDisabled(true);
+        breakpointRemoveAll_->setDisabled(true);
+    } else {
+        breakpointRemoveAll_->setEnabled(true);
+        bool allDisabled = true;
+        bool allEnabled = true;
+        for (int i = 0; i < m_debugController->breakpointModel()->rowCount() - 1 ; i++) {
+            Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(i);
+            if (bp->enabled())
+                allDisabled = false;
+            else
+                allEnabled = false;
+        }
+        breakpointDisableAll_->setDisabled(allDisabled);
+        breakpointEnableAll_->setDisabled(allEnabled);
+    }
+       
+}
+
 
 #if 0
 void slotContextMenuSelect( QAction* action )
@@ -286,6 +314,12 @@ void BreakpointWidget::slotRemoveBreakpoint()
     }
 }
 
+void BreakpointWidget::slotRemoveAllBreakpoints()
+{
+    m_debugController->breakpointModel()->removeRows(0, m_debugController->breakpointModel()->rowCount());
+}
+
+
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
     QModelIndexList selected = table_->selectionModel()->selectedIndexes();
@@ -328,5 +362,33 @@ void BreakpointWidget::breakpointError(KDevelop::Breakpoint* b, const QString& m
     pop->setTimeout(-1);
     pop->show(p);
 }
+
+void BreakpointWidget::slotRowClicked(const QModelIndex& index)
+{
+    if (index.column() != Breakpoint::LocationColumn)
+        return;
+    Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(index.row());
+    if (!bp)
+        return;
+   ICore::self()->documentController()->openDocument(bp->url().pathOrUrl(KUrl::RemoveTrailingSlash), KTextEditor::Cursor(bp->line(), 0));
+   
+}
+
+void BreakpointWidget::slotDisableAllBreakpoints()
+{
+    for (int i = 0; i < m_debugController->breakpointModel()->rowCount() - 1 ; i++) {
+        Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(i);
+        bp->setData(Breakpoint::EnableColumn, Qt::Unchecked);
+    }
+}
+
+void BreakpointWidget::slotEnableAllBreakpoints()
+{
+    for (int i = 0; i < m_debugController->breakpointModel()->rowCount() - 1 ; i++) {
+        Breakpoint *bp = m_debugController->breakpointModel()->breakpoint(i);
+        bp->setData(Breakpoint::EnableColumn, Qt::Checked);
+    }
+}
+
 
 #include "breakpointwidget.moc"

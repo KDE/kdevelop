@@ -144,11 +144,21 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          * Adds a new child item to this item.
          */
         void appendRow( ProjectBaseItem* item );
+        
         /**
-         * Removes the item at the given row if there is one. The item is not being deleted.
-         * @returns the removed item or 0
+         * Removes and deletes the item at the given @p row if there is one.
          */
-        ProjectBaseItem* removeRow( int row );
+        void removeRow( int row );
+        
+        /**
+         * Removes and deletes the @p count items after the given @p row if there is one.
+         */
+        void removeRows( int row, int count );
+        
+        /**
+         * Returns and removes the item at the given @p row if there is one.
+         */
+        ProjectBaseItem* takeRow( int row );
 
         /** @returns RTTI info, allows to know the type of item */
         virtual int type() const;
@@ -311,6 +321,7 @@ public:
 
     void appendRow( ProjectBaseItem* item );
     void removeRow( int row );
+    ProjectBaseItem* takeRow( int row );
 
     QModelIndex pathToIndex(const QStringList& tofetch) const;
     QStringList pathFromIndex(const QModelIndex& index) const;

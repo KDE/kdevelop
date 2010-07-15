@@ -37,7 +37,9 @@ Boston, MA 02110-1301, USA.
 #include <ktemporaryfile.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
+#include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
+#include <kshortcutsdialog.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
 
@@ -219,7 +221,21 @@ void MainWindow::configureShortcuts()
 {
     ///Workaround for a problem with the actions: Always start the shortcut-configuration in the first mainwindow, then propagate the updated
     ///settings into the other windows
-    Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->configureShortcuts();
+
+
+// We need to bring up the shortcut dialog ourself instead of 
+//      Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->configureShortcuts();
+// so we can connect to the saved() signal to propagate changes in the editor shortcuts
+
+   KShortcutsDialog dlg(KShortcutsEditor::AllActions, KShortcutsEditor::LetterShortcutsAllowed, this);
+    foreach (KXMLGUIClient *client, Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients())
+    {
+        if(client && !client->xmlFile().isEmpty())
+            dlg.addCollection( client->actionCollection() );
+    }
+    
+    connect(&dlg, SIGNAL(saved()), SLOT(shortcutsChanged()));
+    dlg.configure(true);
 
     QMap<QString, QKeySequence> shortcuts;
     foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients()) {
@@ -240,7 +256,28 @@ void MainWindow::configureShortcuts()
             }
         }
     }
+    
 }
+
+void MainWindow::shortcutsChanged()
+{
+    //propagate shortcut changes to all the opened text documents by reloading the UI XML file
+    KTextEditor::Document *activeDocument = Core::self()->documentController()->activeDocument()->textDocument();
+    if (activeDocument) {
+
+        KTextEditor::View *activeClient = activeDocument->activeView();
+        
+        foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
+            KTextEditor::Document *textDocument = doc->textDocument();
+            foreach(KTextEditor::View *client, textDocument->views()) {
+                 if (client != activeClient) {
+                    client->reloadXML();
+                }
+            }
+        }
+    }
+}
+
 
 void MainWindow::initialize()
 {

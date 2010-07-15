@@ -30,6 +30,8 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QStackedWidget>
+#include <QtGui/QApplication>
+#include <QtGui/QClipboard>
 #include <kmenu.h>
 #include <kaction.h>
 #include <kdebug.h>
@@ -37,6 +39,7 @@
 #include <klocale.h>
 #include <kicon.h>
 #include <ktabwidget.h>
+#include <kstandardaction.h>
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
@@ -81,6 +84,20 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
     addAction(focusOnSelect);
     focusOnSelect->setChecked( false );
 
+    QAction *separator = new QAction(this);
+    separator->setSeparator(true);
+    addAction(separator);
+    
+    KAction *selectAllAction = KStandardAction::selectAll(this);
+    selectAllAction->setShortcut(KShortcut()); //FIXME: why does CTRL-A conflict with Katepart (while CTRL-Cbelow doesn't) ?
+    selectAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(selectAllAction, SIGNAL(triggered()), SLOT(selectAll()));
+    addAction(selectAllAction);
+
+    KAction *copyAction = KStandardAction::copy(this);
+    copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    connect(copyAction, SIGNAL(triggered()), SLOT(copySelection()));
+    addAction(copyAction);
 
     connect( data, SIGNAL( outputAdded( int ) ),
              this, SLOT( addOutput( int ) ) );
@@ -102,6 +119,7 @@ OutputWidget::OutputWidget(QWidget* parent, ToolViewData* tvdata)
 void OutputWidget::addOutput( int id )
 {
     QTreeView* listview = createListView(id);
+    listview->setSelectionMode(QAbstractItemView::ContiguousSelection);
     setCurrentWidget( listview );
     connect( data->outputdata.value(id), SIGNAL(modelChanged(int)), this, SLOT(changeModel(int)));
     connect( data->outputdata.value(id), SIGNAL(delegateChanged(int)), this, SLOT(changeDelegate(int)));
@@ -431,5 +449,37 @@ void OutputWidget::scrollToIndex( const QModelIndex& idx )
     QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(w);
     view->scrollTo( idx );
 }
+
+void OutputWidget::copySelection()
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    QClipboard *cb = QApplication::clipboard();
+    QModelIndexList indexes = view->selectionModel()->selectedRows();
+    QString content;
+    Q_FOREACH( QModelIndex index, indexes) {
+      content += view->model()->data(index).toString() + "\n";
+    }
+    cb->setText(content);
+}
+
+void OutputWidget::selectAll()
+{
+    QWidget* widget = currentWidget();
+    if( !widget )
+        return;
+    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    if( !view )
+        return;
+
+    view->selectAll();
+}
+
+
 
 #include "outputwidget.moc"

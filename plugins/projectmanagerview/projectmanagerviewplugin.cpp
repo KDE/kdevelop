@@ -521,7 +521,22 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
         );
 
         if (!name.isEmpty() && name != src) {
-            item->rename( name );
+            ProjectBaseItem::RenameStatus status = item->rename( name );
+            
+            QWidget* window(QApplication::activeWindow());
+            switch(status) {
+                case ProjectBaseItem::RenameOk:
+                    break;
+                case ProjectBaseItem::ExistingItemSameName:
+                    KMessageBox::error(window, i18n("There already is a file called like '%1'", name));
+                    break;
+                case ProjectBaseItem::ProjectManagerRenameFailed:
+                    KMessageBox::error(window, i18n("Could not rename '%1'", name));
+                    break;
+                case ProjectBaseItem::InvalidNewName:
+                    KMessageBox::error(window, i18n("'%1' is not a valid file name", name));
+                    break;
+            }
         }
     }
 }

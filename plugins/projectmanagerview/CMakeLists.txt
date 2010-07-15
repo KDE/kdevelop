@@ -8,7 +8,6 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     projectmanagerview.cpp
     projecttreeview.cpp
     projectbuildsetwidget.cpp
-    projectproxymodel.cpp
     builditembuilderjob.cpp
     projectdashboardwidget.cpp
 )

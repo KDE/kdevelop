@@ -94,18 +94,24 @@ QVariant SnippetCompletionItem::data( const QModelIndex& index, int role, const 
 void SnippetCompletionItem::execute( KTextEditor::Document* document, const KTextEditor::Range& word )
 {
     if ( document->activeView() ) {
+        QMap< QString, QString > values = QMap<QString, QString>();
+        if ( document->activeView()->selection() ) {
+            values["selection"] = document->text(document->activeView()->selectionRange());
+        }
+        document->removeText(word);
         #ifdef SNIPPETS_HAVE_TPLIFACE2
             if ( KTextEditor::TemplateInterface2* templateIface2 = qobject_cast<KTextEditor::TemplateInterface2*>(document->activeView()) ) {
-                document->removeText(word);
-                templateIface2->insertTemplateText(word.start(), m_snippet, QMap<QString, QString>(), m_repo->registeredScript());
+                if ( word != document->activeView()->selectionRange() ) {
+                    document->removeText(word);
+                }
+                templateIface2->insertTemplateText(word.start(), m_snippet, values, m_repo->registeredScript());
                 return;
             }
         #endif
         KTextEditor::TemplateInterface* templateIface
             = qobject_cast<KTextEditor::TemplateInterface*>(document->activeView());
         if ( templateIface ) {
-            document->removeText(word);
-            templateIface->insertTemplateText(word.start(), m_snippet, QMap<QString, QString>());
+            templateIface->insertTemplateText(word.start(), m_snippet, values);
             return;
         }
     }

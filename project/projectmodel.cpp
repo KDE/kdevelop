@@ -123,11 +123,13 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
 ProjectBaseItem::~ProjectBaseItem()
 {
     Q_D(ProjectBaseItem);
+    
     if( parent() ) {
-        parent()->removeRow( d->row );
+        parent()->takeRow( d->row );
     } else if( model() ) {
-        model()->removeRow( d->row );
+        model()->takeRow( d->row );
     }
+    removeRows(0, d->childs.size());
     delete d;
 }
 
@@ -140,24 +142,41 @@ ProjectBaseItem* ProjectBaseItem::child( int row ) const
     return d->childs.at( row );
 }
 
-ProjectBaseItem* ProjectBaseItem::removeRow( int row )
+ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 {
     Q_D(ProjectBaseItem);
-    ProjectBaseItem* olditem = 0;
-    if( row >= 0 && row < d->childs.size() ) {
-        if( model() ) {
-            model()->beginRemoveRows( index(), row, row );
-        }
-        olditem = d->childs.at( row );
-        olditem->d_func()->parent = 0;
-        olditem->d_func()->row = -1;
-        olditem->d_func()->model = 0;
-        d->childs.removeAt( row );
-        if( model() ) {
-            model()->endRemoveRows();
-        }
+    Q_ASSERT(row >= 0 && row < d->childs.size());
+    
+    if( model() ) {
+        model()->beginRemoveRows( index(), row, row );
+    }
+    ProjectBaseItem* olditem = d->childs.takeAt( row );
+    olditem->d_func()->parent = 0;
+    olditem->d_func()->row = -1;
+    olditem->d_func()->model = 0;
+    for(int i=row; i<rowCount(); i++) {
+        child(i)->d_func()->row--;
+        Q_ASSERT(child(i)->d_func()->row==i);
+    }
+    
+    if( model() ) {
+        model()->endRemoveRows();
     }
     return olditem;
+}
+
+void ProjectBaseItem::removeRow( int row )
+{
+    Q_D(ProjectBaseItem);
+    delete d->childs[row];
+}
+
+void ProjectBaseItem::removeRows(int row, int count)
+{
+    Q_D(ProjectBaseItem);
+    for(; count>0; count--) {
+        delete d->childs[row];
+    }
 }
 
 QModelIndex ProjectBaseItem::index() const
@@ -203,6 +222,7 @@ int ProjectBaseItem::row() const
 QString ProjectBaseItem::text() const
 {
     Q_D(const ProjectBaseItem);
+    Q_ASSERT(!d->text.isEmpty());
     return d->text;
 }
 
@@ -399,9 +419,7 @@ void ProjectModel::resetModel()
 
 void ProjectModel::clear()
 {
-    for( int i = 0; i < d->rootItem->rowCount(); i++ ) {
-        d->rootItem->removeRow( i );
-    }
+    d->rootItem->removeRows(0, d->rootItem->rowCount());
 }
 
 
@@ -718,6 +736,7 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 {
     if( ( role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::DecorationRole ) && index.isValid() ) {
         ProjectBaseItem* item = itemFromIndex( index );
+        
         if( item ) {
             if( role == Qt::DecorationRole ) {
                 return item->iconName();
@@ -763,6 +782,11 @@ void ProjectModel::appendRow( ProjectBaseItem* item )
 void ProjectModel::removeRow( int row )
 {
     d->rootItem->removeRow( row );
+}
+
+ProjectBaseItem* ProjectModel::takeRow( int row )
+{
+    return d->rootItem->takeRow( row );
 }
 
 bool ProjectModel::hasChildren(const QModelIndex& parent) const

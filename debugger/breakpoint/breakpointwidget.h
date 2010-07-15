@@ -60,15 +60,23 @@ private Q_SLOTS:
     void slotAddBlankAccessWatchpoint();
     void slotRemoveBreakpoint();
     void slotUpdateBreakpointDetail();
+    void slotRowClicked(const QModelIndex& index);
     void breakpointError(KDevelop::Breakpoint *b, const QString& msg, int column);
     void breakpointHit(KDevelop::Breakpoint *b);
-
+    void slotDisableAllBreakpoints();
+    void slotEnableAllBreakpoints();
+    void slotRemoveAllBreakpoints();
+    void slotPopupMenuAboutToShow();
+    
 private:
     QTableView* table_;
     BreakpointDetails* details_;
     QMenu* popup_;
     bool firstShow_;
     DebugController *m_debugController;
+    QAction* breakpointDisableAll_;
+    QAction* breakpointEnableAll_;
+    QAction* breakpointRemoveAll_;
 };
 
 }

@@ -9,6 +9,7 @@ set(kdevplatformproject_LIB_SRCS
     projectbuildsetmodel.cpp
     projectitemlineedit.cpp
     helper.cpp
+    projectproxymodel.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp

@@ -60,6 +60,8 @@ private slots:
     void nextOutput();
     void previousOutput();
     void rowsInserted(const QModelIndex&, int, int);
+    void copySelection();
+    void selectAll();
 
 private:
     QTreeView* createListView(int id);

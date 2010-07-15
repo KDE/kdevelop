@@ -21,13 +21,14 @@
 #define PROJECTPROXYMODEL_H
 
 #include <QtGui/QSortFilterProxyModel>
+#include "projectexport.h"
 
 namespace KDevelop {
 class ProjectModel;
 class ProjectBaseItem;
 }
 
-class ProjectProxyModel : public QSortFilterProxyModel
+class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyModel
 {
     public:
         ProjectProxyModel(QObject *parent);
