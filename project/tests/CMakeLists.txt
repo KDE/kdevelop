@@ -9,7 +9,7 @@ include_directories(
     ${KDevPlatform_SOURCE_DIR}/project
     )
 
-set( projectmodeltest_SRCS projectmodeltest.cpp ${CMAKE_SOURCE_DIR}/tests/modeltest.cpp )
+set( projectmodeltest_SRCS projectmodeltest.cpp dummyproject.cpp ${CMAKE_SOURCE_DIR}/tests/modeltest.cpp )
 kde4_add_unit_test(projectmodeltest ${projectmodeltest_SRCS})
 target_link_libraries(projectmodeltest ${QT_QTTEST_LIBRARY} kdevplatforminterfaces kdevplatformproject )
 
