@@ -18,25 +18,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef REVIEWBOARDPLUGIN_H
-#define REVIEWBOARDPLUGIN_H
+#ifndef REVIEWPATCHDIALOG_H
+#define REVIEWPATCHDIALOG_H
+#include <KDialog>
 
-#include <interfaces/iplugin.h>
-#include <interfaces/ipatchexporter.h>
-
-namespace KIO {
-class Job;
+namespace Ui {
+    class ReviewPatch;
 }
 
-class ReviewBoardPlugin : public KDevelop::IPlugin, KDevelop::IPatchExporter
+class ReviewPatchDialog : public KDialog
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IPatchExporter )
     public:
-        ReviewBoardPlugin ( QObject* parent, const QList<QVariant>& args  );
-        virtual ~ReviewBoardPlugin();
+        ReviewPatchDialog(QWidget* parent = 0);
         
-        virtual void exportPatch(KDevelop::IPatchSource::Ptr source);
+        void setRepository(const QString& repo);
+        void setServer(const KUrl& server);
+        void setUsername(const QString& user);
+        void setPatch(const KUrl& file);
+        
+    private:    
+        Ui::ReviewPatch* m_ui;
+        KUrl m_patch;
 };
 
 #endif

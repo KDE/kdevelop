@@ -21,17 +21,23 @@
 #include "reviewboardplugin.h"
 #include <QVariantList>
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kaboutdata.h>
-#include <klocale.h>
-#include <interfaces/ipatchsource.h>
-#include <KIO/Job>
+#include <KPluginFactory>
+#include <KPluginLoader>
+#include <KAboutData>
+#include <KLocale>
+#include <KDialog>
 #include <KMessageBox>
 #include <KDebug>
+#include <KIO/Job>
 #include <QFile>
 #include <interfaces/icore.h>
+#include <interfaces/ipatchsource.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/vcsjob.h>
+#include "reviewpatchdialog.h"
 
 using namespace KDevelop;
 
@@ -66,4 +72,30 @@ QByteArray urlToData(const KUrl& url)
 
 void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
 {
+    IProject* p = ICore::self()->projectController()->findProjectForUrl(source->baseDir());
+    KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
+    
+    ReviewPatchDialog d;
+    QString repo;
+    if(versionedConfig.hasKey("repository"))
+        repo = versionedConfig.readEntry("repository", QString());
+    else if(p->versionControlPlugin()) {
+        IBasicVersionControl* vcs = p->versionControlPlugin()->extension<IBasicVersionControl>();
+        VcsJob* job=vcs->repositoryLocation(p->folder());
+        bool ret = job->exec();
+        
+        if(ret)
+            repo = job->fetchResults().toString();
+        delete job;
+    }
+    
+    d.setRepository(repo);
+    d.setServer(versionedConfig.readEntry("server", KUrl("http://reviewboard.kde.org")));
+    d.setUsername(versionedConfig.readEntry("username", QString()));
+    d.setPatch(source->file());
+    
+    int ret = d.exec();
+    if(ret==KDialog::Accepted) {
+//         postReview(Service(ui.server->text(), ui.username->text(), ui.password->text()), source->file());
+    }
 }
