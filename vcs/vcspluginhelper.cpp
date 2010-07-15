@@ -168,7 +168,8 @@ void VcsPluginHelper::setupFromContext(Context* context)
 
         if (prjctx) {
             foreach(KDevelop::ProjectBaseItem* item, prjctx->items()) {
-                d->ctxUrls.append(item->url());
+                if(!item->target())
+                    d->ctxUrls.append(item->url());
             }
         }
     }
