@@ -52,6 +52,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
     void viewCreated(KTextEditor::Document *document, KTextEditor::View *view);
     void documentSaved(KDevelop::IDocument*);
 
+  private Q_SLOTS:
+    /**
+     * check already opened documents,
+     * needs to be done via delayed call to prevent infinite loop in
+     * checkDocument() -> load lang plugin -> register CodeCompletion -> checkDocument() -> ...
+     */
+    void checkDocuments();
+
   private:
     
     void unregisterDocument(KTextEditor::Document*);
