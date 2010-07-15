@@ -404,14 +404,12 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
             stopWatcher(parent);
             KIO::CopyJob* job = KIO::move(source, destination);
             bool success = KIO::NetAccess::synchronousRun( job, KDevelop::ICore::self()->uiController()->activeMainWindow() );
-            continueWatcher(parent);
             if ( success ) {
-                item->parent()->removeRow( item->row() );
+                item->parent()->takeRow( item->row() );
                 parent->appendRow( item );
-                return true;
-            } else {
-                return false;
             }
+            continueWatcher(parent);
+            return success;
         }
     }
     return false;
