@@ -383,10 +383,13 @@ struct DocumentControllerPrivate {
 
         if(doc) {
             KTextEditor::Cursor activePosition;
-            if(doc->textDocument() && doc->textDocument()->activeView())
+            if(range.isValid())
+                activePosition = range.start();
+            else if(doc->textDocument() && doc->textDocument()->activeView())
                 activePosition = doc->textDocument()->activeView()->cursorPosition();
-            
-            emit controller->documentJumpPerformed(doc, range.isValid() ? range.start() : activePosition, previousActiveDocument, previousActivePosition);
+
+            if (doc != previousActiveDocument || activePosition != previousActivePosition)
+                emit controller->documentJumpPerformed(doc, activePosition, previousActiveDocument, previousActivePosition);
         }
         
         return true;
