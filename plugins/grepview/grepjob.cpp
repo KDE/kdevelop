@@ -86,6 +86,7 @@ void GrepJob::start()
             }
             if (!projectFiles.isEmpty())
             {
+                qSort(projectFiles);
                 QList<QRegExp> regExpList;
 
                 if (!filelist.isEmpty())
