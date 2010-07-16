@@ -47,6 +47,8 @@ PastebinPlugin::PastebinPlugin ( QObject* parent, const QVariantList& )
 PastebinPlugin::~PastebinPlugin()
 {}
 
+namespace
+{
 QByteArray urlToData(const KUrl& url)
 {
     QByteArray ret;
@@ -62,6 +64,7 @@ QByteArray urlToData(const KUrl& url)
 #warning TODO: add downloading the data
     }
     return ret;
+}
 }
 
 void PastebinPlugin::exportPatch(IPatchSource::Ptr source)

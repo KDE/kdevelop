@@ -61,18 +61,24 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            NewRequest(const KUrl& server, QObject* parent = 0);
+            NewRequest(const KUrl& server, const KUrl& patch, const QString& basedir, QObject* parent = 0);
             
             virtual void start();
             
         private slots:
-            void second();
-            void third();
+            void createRequest();
+            void submitPatch();
+            void done();
             
         private:
             KUrl m_server;
             HttpPostCall* m_repositories;
             HttpPostCall* m_newreq;
+            
+            KUrl m_patch;
+            QString m_basedir;
+            QString m_id;
+            HttpPostCall* m_uploadpatch;
     };
 }
 
