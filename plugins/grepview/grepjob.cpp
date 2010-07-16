@@ -31,6 +31,8 @@
 #include <project/projectmodel.h>
 #include <util/processlinemaker.h>
 
+#include <language/duchain/indexedstring.h>
+
 #include "grepoutputdelegate.h"
 
 
@@ -75,11 +77,12 @@ void GrepJob::start()
             //finished running, see the end of this function
             tempFile->setAutoRemove( false );
 
-            QList<ProjectFileItem*> fileItems = project->files();
             KUrl::List projectFiles;
-            foreach( ProjectFileItem *_item, fileItems )
+            
+            QSet<IndexedString> fileItems = project->fileSet();
+            foreach( const IndexedString &_item, fileItems )
             {
-                projectFiles << _item->url();
+                projectFiles << _item.toUrl();
             }
             if (!projectFiles.isEmpty())
             {
