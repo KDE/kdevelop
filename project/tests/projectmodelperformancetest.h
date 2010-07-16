@@ -40,6 +40,7 @@ private slots:
     void addBigTree();
     void addBigTreeDelayed();
     void addItemDelayed();
+    void changeItemText();
 private:
     QStack<KDevelop::ProjectBaseItem*> currentParent;
     int originalWidth;
