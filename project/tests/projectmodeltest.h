@@ -51,6 +51,6 @@ private:
     KDevelop::ProjectModel* model;
 };
 
-Q_DECLARE_METATYPE( QModelIndex );
+Q_DECLARE_METATYPE( QModelIndex )
 
 #endif

@@ -87,7 +87,7 @@ void ProjectModelTest::initTestCase()
 {
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
-    ModelTest* mt = new ModelTest( model, this );
+    new ModelTest( model, this );
 }
 
 void ProjectModelTest::init()
