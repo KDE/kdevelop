@@ -61,20 +61,29 @@ void HttpPostCall::processData(KJob* )
 {
     QJson::Parser parser;
 
+//     qDebug() << "parsing..." << receivedData << requestJob->url();
     bool ok;
     m_result = parser.parse(receivedData, &ok);
     if(!ok) {
         setError(1);
         setErrorText(i18n("JSON error: %1: %2", parser.errorLine(), parser.errorString()));
-    } else
-        emitResult();
+    }
+    
+    if(m_result.toMap().value("stat").toString()!="ok") {
+        setError(2);
+        setErrorText(i18n("Request Error: %1", m_result.toMap().value("err").toMap().value("msg").toString()));
+    }
+    
+    emitResult();
 }
 
 NewRequest::NewRequest(const KUrl& server, const KUrl& patch, const QString& basedir, QObject* parent)
     : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir)
 {
+    qDebug() << "XEEEEEE" << server << server.password() << server.userName();
+    
     m_repositories = new HttpPostCall(server, "/api/json/repositories/", "", this);
-    connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
+    connect(m_repositories, SIGNAL(finished(KJob*)), SLOT(createRequest()));
 }
 
 void NewRequest::start()
@@ -91,7 +100,8 @@ void NewRequest::createRequest()
         emitResult();
         return;
     }
-    QString repo = m_repositories->result().toMap()["repositories"].toList().first().toMap()["path"].toString();
+    QVariant res = m_repositories->result();
+    QString repo = res.toMap()["repositories"].toList().first().toMap()["path"].toString();
     
     m_newreq = new HttpPostCall(m_server, "/api/json/reviewrequests/new/", "submit_as="+m_server.userName().toLatin1()+"&repository_path="+repo.toLatin1(), this);
     connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
@@ -169,11 +179,14 @@ void NewRequest::submitPatch()
     if(m_newreq->error()) {
         qDebug() << "Could not create the new request" << m_newreq->errorString();
         setError(2);
-        setErrorText(i18n("Could not create the new request")); 
+        setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString())); 
         emitResult();
         return;
     }
-    m_id = m_newreq->result().toMap()["id"].toString();
+    QVariant res = m_newreq->result();
+   
+    m_id = res.toMap()["id"].toString();
+    Q_ASSERT(!m_id.isEmpty());
     
     QList<QPair<QString, QVariant> > vals;
     vals += QPair<QString, QVariant>("basedir", m_basedir);
@@ -184,13 +197,18 @@ void NewRequest::submitPatch()
     m_uploadpatch->start();
 }
 
-void ReviewBoard::NewRequest::done()
+QString NewRequest::requestId() const
 {
-    if(m_newreq->error()) {
-        qDebug() << "Could not upload the patch" << m_newreq->errorString();
+    return m_id;
+}
+
+void NewRequest::done()
+{
+    if(m_uploadpatch->error()) {
+        qDebug() << "Could not upload the patch" << m_uploadpatch->errorString();
         setError(3);
         setErrorText(i18n("Could not upload the patch")); 
-        emitResult();
-        return;
     }
+    
+    emitResult();
 }

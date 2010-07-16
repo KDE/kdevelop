@@ -32,14 +32,14 @@ class ReviewPatchDialog : public KDialog
     public:
         ReviewPatchDialog(QWidget* parent = 0);
         
-        void setRepository(const QString& repo);
+        void setBaseDir(const QString& dir);
         void setServer(const KUrl& server);
         void setUsername(const QString& user);
-        void setPatch(const KUrl& file);
         
+        /** @returns the server url with the username and password */
+        KUrl server() const;
     private:    
         Ui::ReviewPatch* m_ui;
-        KUrl m_patch;
 };
 
 #endif

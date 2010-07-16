@@ -64,6 +64,7 @@ namespace ReviewBoard
             NewRequest(const KUrl& server, const KUrl& patch, const QString& basedir, QObject* parent = 0);
             
             virtual void start();
+            QString requestId() const;
             
         private slots:
             void createRequest();

@@ -19,6 +19,7 @@
  */
 
 #include "reviewpatchdialog.h"
+#include <QDebug>
 #include "ui_reviewpatch.h"
 
 ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
@@ -30,9 +31,9 @@ ReviewPatchDialog::ReviewPatchDialog(QWidget* parent)
     setMainWidget(w);
 }
 
-void ReviewPatchDialog::setRepository(const QString& repo)
+void ReviewPatchDialog::setBaseDir(const QString& repo)
 {
-    m_ui->repository->setText(repo);
+    m_ui->basedir->setText(repo);
 }
 
 void ReviewPatchDialog::setServer(const KUrl& server)
@@ -45,8 +46,10 @@ void ReviewPatchDialog::setUsername(const QString& user)
     m_ui->username->setText(user);
 }
 
-void ReviewPatchDialog::setPatch(const KUrl& file)
+KUrl ReviewPatchDialog::server() const
 {
-    m_patch = file;
+    KUrl server=m_ui->server->url();
+    server.setUser(m_ui->username->text());
+    server.setPassword(m_ui->password->text());
+    return server;
 }
-

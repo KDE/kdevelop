@@ -76,23 +76,23 @@ void ReviewBoardPlugin::exportPatch(IPatchSource::Ptr source)
     KConfigGroup versionedConfig = p->projectConfiguration()->group("ReviewBoard");
     
     ReviewPatchDialog d;
-    QString repo;
-    if(versionedConfig.hasKey("repository"))
-        repo = versionedConfig.readEntry("repository", QString());
-    else if(p->versionControlPlugin()) {
-        IBasicVersionControl* vcs = p->versionControlPlugin()->extension<IBasicVersionControl>();
-        VcsJob* job=vcs->repositoryLocation(p->folder());
-        bool ret = job->exec();
-        
-        if(ret)
-            repo = job->fetchResults().toString();
-        delete job;
-    }
-    
-    d.setRepository(repo);
+//     QString repo;
+//     if(versionedConfig.hasKey("repository"))
+//         repo = versionedConfig.readEntry("repository", QString());
+//     else if(p->versionControlPlugin()) {
+//         IBasicVersionControl* vcs = p->versionControlPlugin()->extension<IBasicVersionControl>();
+//         VcsJob* job=vcs->repositoryLocation(p->folder());
+//         bool ret = job->exec();
+//         
+//         if(ret)
+//             repo = job->fetchResults().toString();
+//         delete job;
+//     }
+//     
+//     d.setRepository(repo);
     d.setServer(versionedConfig.readEntry("server", KUrl("http://reviewboard.kde.org")));
     d.setUsername(versionedConfig.readEntry("username", QString()));
-    d.setPatch(source->file());
+//     d.setPatch(source->file());
     
     int ret = d.exec();
     if(ret==KDialog::Accepted) {

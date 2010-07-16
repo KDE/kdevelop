@@ -19,7 +19,10 @@
 #include <KApplication>
 #include <KAboutData>
 #include <KCmdLineArgs>
-#include "../reviewpatchdialog.h"
+#include <KMessageBox>
+#include <QDebug>
+#include "reviewpatchdialog.h"
+#include "reviewboardjobs.h"
 
 int main(int argc, char *argv[])
 {
@@ -30,6 +33,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::init( argc, argv, &about );
     KCmdLineOptions options;
     options.add("+patch", ki18n( "Patch" ));
+    options.add("basedir <dir>", ki18n( "Base Directory" ));
     KCmdLineArgs::addCmdLineOptions( options );
     KApplication app;
     
@@ -37,11 +41,25 @@ int main(int argc, char *argv[])
     
     ReviewPatchDialog d;
     
-    d.setPatch(KUrl(args->arg(0)));
+    KUrl patch(args->arg(0));
+    QString basedir=args->getOption("basedir");
+    
+    qDebug() << "patch:" << patch << ", basedir:" << basedir;
     d.setServer(KUrl("http://reviewboard.kde.org"));
+    d.setBaseDir(basedir);
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
-        
+        KUrl url=d.server();
+        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), patch, QString());
+        bool corr = job->exec();
+        if(corr) {
+            url.setUserInfo(QString());
+            QString requrl = QString("%1/r/%2/").arg(url.prettyUrl()).arg(job->requestId());
+            
+            KMessageBox::information(0, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", requrl));
+        } else {
+            KMessageBox::error(0, job->errorText());
+        }
     }
     
     return ret!=QDialog::Accepted;

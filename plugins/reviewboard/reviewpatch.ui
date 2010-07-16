@@ -30,12 +30,12 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Repository</string>
+         <string>Base Dir:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KLineEdit" name="repository">
+       <widget class="KLineEdit" name="basedir">
         <property name="clickMessage">
          <string>Where this project was checked out from</string>
         </property>
@@ -58,7 +58,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KLineEdit" name="username"/>
+       <widget class="KLineEdit" name="username">
+        <property name="clickMessage">
+         <string>User name in the specified service</string>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
