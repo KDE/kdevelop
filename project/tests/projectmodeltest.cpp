@@ -20,11 +20,13 @@
 #include "projectmodeltest.h"
 #include <QtTest/QTest>
 #include <QtGui/QSortFilterProxyModel>
+#include <QtCore/QThread>
 #include <qtest_kde.h>
 
 #include <projectmodel.h>
 #include <tests/modeltest.h>
 #include "dummyproject.h"
+#include <tests/kdevsignalspy.h>
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
@@ -34,6 +36,52 @@ using KDevelop::ProjectExecutableTargetItem;
 using KDevelop::ProjectLibraryTargetItem;
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectBuildFolderItem;
+
+class AddItemThread : public QThread
+{
+Q_OBJECT
+public:
+    AddItemThread( ProjectBaseItem* _parentItem, QObject* parent = 0 )
+        : QThread( parent ), parentItem( _parentItem )
+    {
+    }
+    virtual void run()
+    {
+        this->sleep( 1 );
+        KUrl url = parentItem->url();
+        url.addPath("folder1");
+        ProjectFolderItem* folder = new ProjectFolderItem( 0, url, parentItem );
+        url.addPath( "file1" );
+        new ProjectFileItem( 0, url, folder );
+        emit addedItems();
+    }
+signals:
+    void addedItems();
+private:
+    ProjectBaseItem* parentItem;
+};
+
+class SignalReceiver : public QObject
+{
+Q_OBJECT
+public:
+    SignalReceiver(ProjectModel* _model, QObject* parent = 0)
+        : QObject(parent), model( _model )
+    {
+    }
+    QThread* threadOfSignalEmission() const
+    {
+        return threadOfReceivedSignal;
+    }
+private slots:
+    void rowsInserted( const QModelIndex&, int, int )
+    {
+        threadOfReceivedSignal = QThread::currentThread();
+    }
+private:
+    QThread* threadOfReceivedSignal;
+    ProjectModel* model;
+};
 
 void ProjectModelTest::initTestCase()
 {
@@ -406,5 +454,19 @@ void ProjectModelTest::testWithProject()
     QCOMPARE( item->url(), proj->folder() );
 }
 
+void ProjectModelTest::testAddItemInThread()
+{
+    ProjectFolderItem* root = new ProjectFolderItem( 0, KUrl("file:///f1"), 0 );
+    model->appendRow( root );
+    AddItemThread t( root );
+    SignalReceiver check( model );
+    connect( model, SIGNAL(rowsInserted( const QModelIndex&, int, int )), &check, SLOT(rowsInserted(const QModelIndex&, int, int)), Qt::DirectConnection );
+    KDevelop::KDevSignalSpy spy( &t, SIGNAL( addedItems() ), Qt::QueuedConnection );
+    t.start();
+    QVERIFY(spy.wait( 10000 ));
+    QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );
+}
+
 QTEST_KDEMAIN( ProjectModelTest, GUI)
 #include "projectmodeltest.moc"
+#include "moc_projectmodeltest.cpp"

@@ -46,6 +46,7 @@ private slots:
     void testChangeWithProxyModel();
     void testWithProject();
     void testTakeRow();
+    void testAddItemInThread();
 private:
     KDevelop::ProjectModel* model;
 };
