@@ -26,7 +26,6 @@ class dashboard : public Plasma::View
         virtual void resizeEvent(QResizeEvent* event);
         
     private slots:
-        void init();
         void updateView();
         void showAppletsSwitcher();
         void addApplet(const QString& name);
