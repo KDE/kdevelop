@@ -149,7 +149,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     Q_ASSERT(row >= 0 && row < d->childs.size());
     
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::BlockingQueuedConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::AutoConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
     ProjectBaseItem* olditem = d->childs.takeAt( row );
     olditem->d_func()->parent = 0;
@@ -162,7 +162,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     }
     
     if( model() ) {
-        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::BlockingQueuedConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
+        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::AutoConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
     return olditem;
 }
