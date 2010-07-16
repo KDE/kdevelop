@@ -39,6 +39,7 @@
 #include <KMessageBox>
 #include <kio/udsentry.h>
 #include <kio/netaccess.h>
+#include <QMetaClassInfo>
 
 namespace KDevelop
 {
@@ -148,7 +149,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     Q_ASSERT(row >= 0 && row < d->childs.size());
     
     if( model() ) {
-        model()->beginRemoveRows( index(), row, row );
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeRemoved", Qt::BlockingQueuedConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
     ProjectBaseItem* olditem = d->childs.takeAt( row );
     olditem->d_func()->parent = 0;
@@ -161,7 +162,7 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     }
     
     if( model() ) {
-        model()->endRemoveRows();
+        QMetaObject::invokeMethod( model(), "rowsRemoved", Qt::BlockingQueuedConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, row), Q_ARG(int, row) );
     }
     return olditem;
 }
@@ -250,7 +251,7 @@ void ProjectBaseItem::setText( const QString& text )
     Q_D(ProjectBaseItem);
     d->text = text;
     if( model() ) {
-        model()->dataChanged( index(), index() );
+        QMetaObject::invokeMethod( model(), "dataChanged", Qt::AutoConnection, Q_ARG(QModelIndex, index()), Q_ARG(QModelIndex, index()) );
     }
 }
 
@@ -312,15 +313,17 @@ void ProjectBaseItem::appendRow( ProjectBaseItem* item )
         kWarning() << "Ignoring double insertion of item" << item;
         return;
     }
+    int startrow,endrow;
     if( model() ) {
-        model()->beginInsertRows( index(), d->childs.count(), d->childs.count() );
+        startrow = endrow = d->childs.count();
+        QMetaObject::invokeMethod( model(), "rowsAboutToBeInserted", Qt::AutoConnection, Q_ARG(QModelIndex, index()), Q_ARG(int, startrow), Q_ARG(int, endrow) );
     }
     d->childs.append( item );
     item->setRow( d->childs.count() - 1 );
     item->d_func()->parent = this;
     item->setModel( model() );
     if( model() ) {
-        model()->endInsertRows();
+        QMetaObject::invokeMethod( model(), "rowsInserted", Qt::AutoConnection, Q_ARG( QModelIndex, index() ), Q_ARG( int, startrow ), Q_ARG( int, endrow ) );
     }
 }
 
