@@ -286,6 +286,24 @@ void ProjectModelTest::testItemSanity()
     parent->removeRow( child->row() );
 }
 
+void ProjectModelTest::testTakeRow()
+{
+    ProjectBaseItem* parent = new ProjectBaseItem( 0, "test" );
+    ProjectBaseItem* child = new ProjectBaseItem( 0, "test", parent );
+    ProjectBaseItem* subchild = new ProjectBaseItem( 0, "subtest", child );
+
+    model->appendRow( parent );
+
+    QCOMPARE( parent->model(), model );
+    QCOMPARE( child->model(), model );
+    QCOMPARE( subchild->model(), model );
+
+    parent->takeRow( child->row() );
+
+    QCOMPARE( child->model(), static_cast<ProjectModel*>(0) );
+    QCOMPARE( subchild->model(), static_cast<ProjectModel*>(0) );
+}
+
 void ProjectModelTest::testRename()
 {
     QFETCH( int, itemType );

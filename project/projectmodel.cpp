@@ -153,7 +153,8 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
     ProjectBaseItem* olditem = d->childs.takeAt( row );
     olditem->d_func()->parent = 0;
     olditem->d_func()->row = -1;
-    olditem->d_func()->model = 0;
+    olditem->setModel( 0 );
+
     for(int i=row; i<rowCount(); i++) {
         child(i)->d_func()->row--;
         Q_ASSERT(child(i)->d_func()->row==i);
