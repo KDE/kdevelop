@@ -9,44 +9,37 @@
 using namespace Plasma;
 
 dashboard::dashboard(KDevelop::IProject* project, DashboardCorona* corona, QWidget* parent)
-    : View(0, parent), corona(corona), m_selector(0), m_project(project)
+    : View(corona->containments().first(), parent), corona(corona), m_selector(0), m_project(project)
 {
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setFocusPolicy(Qt::NoFocus);
     
-    QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
+    connect(containment(), SIGNAL(showAddWidgetsInterface(QPointF)), this, SLOT(showAppletsSwitcher()));
+    connect(this, SIGNAL(sceneRectAboutToChange()), this, SLOT(updateView()));
+    connect(corona, SIGNAL(containmentAdded(Plasma::Containment*)), SLOT(setContainment(Plasma::Containment*)));
+    
+    setScene(corona);
+
+    setScreen(0);
+    QMetaObject::invokeMethod(this, "updateView", Qt::QueuedConnection);
 }
 
 dashboard::~dashboard()
 {
+    m_selector->hide();
     corona->saveLayout(QString());
-}
-
-void dashboard::init()
-{
-    updateView();
-    connect(this, SIGNAL(sceneRectAboutToChange()), this, SLOT(updateView()));
-    
-    Containment* c=corona->containments().first();
-    setContainment(c);
-    connect(containment(), SIGNAL(showAddWidgetsInterface(QPointF)), this, SLOT(showAppletsSwitcher()));
-    
-    setScene(corona);
 }
 
 void dashboard::updateView()
 {
-    if(!corona->containments().isEmpty()) {
-        Containment* c=corona->containments().first();
+    Containment* c=containment();
+    
+    qDebug() << "pepepepepe" << c << c->size() << size();
+    if (c/* && c->size().toSize() != size()*/) {
+//         c->setMaximumSize(size());
+//         c->setMinimumSize(size());
+        c->resize(size());
         
-        if (c->size().toSize() != size()) {
-//             c->setMaximumSize(size());
-//             c->setMinimumSize(size());
-//             c->resize(size());
-            
-            c->resize(size());
-            ensureVisible(c);
-        }
+        ensureVisible(c);
     }
 }
 

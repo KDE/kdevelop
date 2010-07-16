@@ -25,17 +25,18 @@ DashboardCorona::DashboardCorona(QObject* parent)
 
 void DashboardCorona::loadDefaultLayout()
 {
-    Plasma::Containment* c=addContainmentDelayed("newspaper");
+    Plasma::Containment* c=addContainment("newspaper");
     
     c->init();
     
     c->setWallpaper("color");
-    c->setFormFactor(Plasma::Planar);
     c->updateConstraints(Plasma::StartupCompletedConstraint);
     c->flushPendingConstraintsEvents();
     
+    emit containmentAdded(c);
+    
     QVariantList args;
-    for(int i=0; i<5; ++i) {
+    for(int i=0; i<2; ++i) {
         Plasma::Applet* applet = Plasma::Applet::load("clock", 0, args);
         
         c->addApplet(applet);
