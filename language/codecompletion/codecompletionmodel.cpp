@@ -64,16 +64,15 @@ class CompletionWorkerThread : public QThread
 {
 public:
 
-   CompletionWorkerThread(CodeCompletionModel* model) : QThread(model), m_model(model), m_worker(0) {
+   CompletionWorkerThread(CodeCompletionModel* model)
+     : QThread(model), m_model(model), m_worker(m_model->createCompletionWorker())
+   {
    }
    ~CompletionWorkerThread() {
      delete m_worker;
    }
    
    virtual void run () {
-     if(!m_worker)
-      m_worker = m_model->createCompletionWorker();
-     
      //We connect directly, so we can do the pre-grouping within the background thread
      connect(m_worker, SIGNAL(foundDeclarationsReal(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), m_model, SLOT(foundDeclarations(QList<KSharedPtr<CompletionTreeElement> >, KSharedPtr<CodeCompletionContext>)), Qt::QueuedConnection);
 
