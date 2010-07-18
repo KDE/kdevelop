@@ -87,6 +87,14 @@ public:
     KTextEditor::Range textRange() const {
         return KTextEditor::Range( KTextEditor::Cursor(start.line, start.column), KTextEditor::Cursor(end.line, end.column) );
     }
+
+    /**
+     * kDebug() stream operator.  Writes this range to the debug output in a nicely formatted way.
+     */
+    inline friend QDebug operator<< (QDebug s, const SimpleRange& range) {
+      s.nospace() << '[' << range.start << ", " << range.end << ']';
+      return s.space();
+    }
 };
 }
 

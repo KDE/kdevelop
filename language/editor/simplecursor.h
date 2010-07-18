@@ -83,6 +83,14 @@ public:
  SimpleCursor operator +(const SimpleCursor& rhs) const {
      return SimpleCursor(line + rhs.line, column + rhs.column);
  }
+
+ /**
+  * kDebug() stream operator.  Writes this cursor to the debug output in a nicely formatted way.
+  */
+ inline friend QDebug operator<< (QDebug s, const SimpleCursor& cursor) {
+     s.nospace() << "(" << cursor.line << ", " << cursor.column << ")";
+     return s.space();
+ }
 };
 }
 
