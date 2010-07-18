@@ -48,7 +48,7 @@ macro(kdevplatform_add_app_templates _templateNames)
         if(WIN32)
             add_custom_command(OUTPUT ${_template}
                 COMMAND zip ARGS -r
-                    ${_template} .
+                    ${_template} ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                     -x .svn _svn .kdev_ignore
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                 DEPENDS ${_deps}
@@ -71,7 +71,7 @@ macro(kdevplatform_add_app_templates _templateNames)
         macro_additional_clean_files(${_template})
 
     endforeach(_templateName)
-endmacro(kdevplatform_add_app_templates)
+endmacro(kdevplatform_add_app_templates _templateNames)
 
 # This needs to be reworked once we really support kross plugins
 #macro(kdevplatform_install_kross_plugin desktopfile subdir)

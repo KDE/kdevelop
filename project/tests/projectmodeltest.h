@@ -45,10 +45,12 @@ private slots:
     void testRename_data();
     void testChangeWithProxyModel();
     void testWithProject();
+    void testTakeRow();
+    void testAddItemInThread();
 private:
     KDevelop::ProjectModel* model;
 };
 
-Q_DECLARE_METATYPE( QModelIndex );
+Q_DECLARE_METATYPE( QModelIndex )
 
 #endif
