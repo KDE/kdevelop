@@ -220,7 +220,7 @@ void ColorCache::updateColorsFromSettings()
   }
 }
 
-void ColorCache::update(bool /*now*/)
+void ColorCache::update()
 {
   QMetaObject::invokeMethod(this, "updateInternal", Qt::QueuedConnection);
 }
