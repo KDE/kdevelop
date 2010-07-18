@@ -570,6 +570,9 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     QList<IPlugin*> plugins;
     foreach (const KPluginInfo &info, infos)
     {
+        if( !isEnabled(info) )
+            continue;
+
         IPlugin* plugin;
         if( d->loadedPlugins.contains( info ) )
             plugin = d->loadedPlugins[ info ];
