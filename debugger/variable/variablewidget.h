@@ -17,6 +17,7 @@
 #define KDEV_VARIABLEWIDGET_H
 
 #include <QTreeView>
+#include <QAction>
 
 #include <KComboBox>
 
@@ -79,9 +80,6 @@ private:
     void setupActions();
     virtual void contextMenuEvent(QContextMenuEvent* event);
 
-private slots:
-    void deleteWatch();
-
 #if 0
 Q_SIGNALS:
     void toggleWatchpoint(const QString &varName);
@@ -102,6 +100,8 @@ private: // helper functions
     QAction* toggleWatch_;
 #endif
 private:
+    QAction *m_contextMenuTitle;
+    QMenu *m_formatMenu;
     QAction *m_watchDelete;
 };
 

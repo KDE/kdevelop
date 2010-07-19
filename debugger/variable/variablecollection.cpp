@@ -30,6 +30,9 @@
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>
 #include <KParts/PartManager>
+#include <QClipboard>
+#include <QApplication>
+#include <QMessageBox>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idocumentcontroller.h"
@@ -64,7 +67,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
   : TreeItem(model, parent),
-    inScope_(true), topLevel_(true)
+    inScope_(true), topLevel_(true), m_format(Natural)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -115,6 +118,45 @@ void Variable::die()
 {
     removeSelf();
     deleteLater();
+}
+
+
+Variable::format_t Variable::str2format(const QString& str)
+{
+    if(str=="Binary" || str=="binary")          return Binary;
+    if(str=="Octal" || str=="octal")            return Octal;
+    if(str=="Decimal" || str=="decimal")        return Decimal;
+    if(str=="Hexadecimal" || str=="hexadecimal")return Hexadecimal;
+
+    return Natural; // maybe most reasonable default
+}
+
+QString Variable::format2str(format_t format)
+{
+    switch(format) {
+        case Natural:       return "natural";
+        case Binary:        return "binary";
+        case Octal:         return "octal";
+        case Decimal:       return "decimal";
+        case Hexadecimal:   return "hexadecimal";
+        default:            return "";
+    }
+}
+
+void Variable::slotSetFormat()
+{
+    QObject *obj=sender();
+    if(!obj) return;
+
+    setFormat(str2format(obj->objectName())); // use sender action name to know the format
+}
+
+
+void Variable::slotCopyValueToClipboard()
+{
+    QClipboard *pCb=QApplication::clipboard();
+    QString text=itemData[1].toString();
+    pCb->setText(text);
 }
 
 QVariant Variable::data(int column, int role) const
