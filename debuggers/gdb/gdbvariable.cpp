@@ -323,3 +323,47 @@ QString GdbVariable::enquotedExpression() const
     expr = expr.prepend('"').append('"');
     return expr;
 }
+
+
+class SetFormatHandler : public GDBCommandHandler
+{
+public:
+    SetFormatHandler(GdbVariable *var)
+        : m_variable(var)
+    {}
+
+    virtual void handle(const GDBMI::ResultRecord &r)
+    {
+        if(r.hasField("value"))
+            m_variable->setValue(r["value"].literal());
+    }
+private:
+    QPointer<GdbVariable> m_variable;
+};
+
+void GdbVariable::setFormat(format_t format)
+{
+    if(m_format==format)
+        return;
+    
+    if(childCount())
+    {
+        foreach(TreeItem* item, childItems)
+            if( GdbVariable* var=dynamic_cast<GdbVariable*>(item))
+                var->setFormat(format);
+    }
+    else
+    {
+        // FIXME: Eventually, should be a property of variable.
+        IDebugSession* is = ICore::self()->debugController()->currentSession();
+        DebugSession* s = static_cast<DebugSession*>(is);
+        s->addCommand(
+            new GDBCommand(GDBMI::VarSetFormat,
+                           QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format)),
+                           new SetFormatHandler(this)
+                           )
+                     );
+    }
+    
+    m_format=format;
+}

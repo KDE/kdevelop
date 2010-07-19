@@ -57,6 +57,7 @@ namespace KDevelop
     private: // Variable overrides
         void attachMaybe(QObject *callback, const char *callbackMethod);
         void fetchMoreChildren();
+        void setFormat(format_t format);
 
     private: // Internal
         friend class ::CreateVarobjHandler;
