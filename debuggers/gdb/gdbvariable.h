@@ -53,6 +53,8 @@ namespace KDevelop
         /* Called when GDB dies.  Clears the association between varobj names
            and Variable instances.  */
         static void markAllDead();
+        
+        virtual bool canSetFormat() const { return true; }
 
     private: // Variable overrides
         void attachMaybe(QObject *callback, const char *callbackMethod);
