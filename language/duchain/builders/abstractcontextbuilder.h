@@ -96,10 +96,16 @@ public:
       if( top )
       {
         m_recompiling = true;
-      }else
+        Q_ASSERT(top->type() == DUContext::Global);
+        Q_ASSERT(DUChain::self()->chainForIndex(top->ownIndex()) == top);
+      }
+      else
+      {
         top = newTopContext( RangeInRevision( CursorInRevision( 0, 0 ), CursorInRevision( INT_MAX, INT_MAX ) ) );
-      top->setType( DUContext::Global );
-      DUChain::self()->addDocumentChain( top );
+        DUChain::self()->addDocumentChain( top );
+        top->setType( DUContext::Global );
+      }
+
       setEncountered( top );
       setContextOnNode( node, top );
     }
