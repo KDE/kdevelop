@@ -85,14 +85,15 @@ public:
        The slot should be taking 'bool ok' parameter.  */
     virtual void attachMaybe(QObject *callback = 0, const char *callbackMethod = 0) = 0;
 
-    format_t getFormat() const { return m_format; }
-    virtual void setFormat(format_t format) =0;
-    
-    void die();
+    virtual bool canSetFormat() const { return false; }
 
+    virtual void setFormat(format_t format) =0;
+    format_t getFormat() const { return m_format; }
+    
 public slots:
-    void slotSetFormat();
+    void slotSetFormat(int f) { setFormat((format_t)f); }
     void slotCopyValueToClipboard();
+    void die();
     
 protected:
     bool topLevel() const { return topLevel_; }

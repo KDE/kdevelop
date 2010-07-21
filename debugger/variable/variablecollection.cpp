@@ -32,7 +32,6 @@
 #include <KParts/PartManager>
 #include <QClipboard>
 #include <QApplication>
-#include <QMessageBox>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idocumentcontroller.h"
@@ -142,15 +141,6 @@ QString Variable::format2str(format_t format)
         default:            return "";
     }
 }
-
-void Variable::slotSetFormat()
-{
-    QObject *obj=sender();
-    if(!obj) return;
-
-    setFormat(str2format(obj->objectName())); // use sender action name to know the format
-}
-
 
 void Variable::slotCopyValueToClipboard()
 {
