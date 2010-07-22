@@ -85,7 +85,7 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     
     connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent (KTextEditor::Document*)));
     
-    ModificationRevision::setEditorRevisionForFile(IndexedString(document->url()), m_moving->revision());
+    ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
     
     reset();
 }
