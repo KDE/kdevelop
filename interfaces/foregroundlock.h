@@ -83,6 +83,20 @@ class KDEVPLATFORMINTERFACES_EXPORT ForegroundLock
         bool m_locked;
 };
 
+/**
+ * Use this object if you want to temporarily release the foreground lock,
+ * for example when entering a local event-loop from within the foreground thread.
+ */
+class KDEVPLATFORMINTERFACES_EXPORT TemporarilyReleaseForegroundLock {
+public:
+    TemporarilyReleaseForegroundLock();
+    ~TemporarilyReleaseForegroundLock();
+private:
+    TemporarilyReleaseForegroundLock(const TemporarilyReleaseForegroundLock&);
+    TemporarilyReleaseForegroundLock& operator=(const TemporarilyReleaseForegroundLock& rhs);
+    int m_recursion;
+};
+
 #define VERIFY_FOREGROUND_LOCKED Q_ASSERT(KDevelop::ForegroundLock::isLockedForThread());
 
 class KDEVPLATFORMINTERFACES_EXPORT DoInForeground : public QObject

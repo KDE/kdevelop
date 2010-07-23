@@ -27,6 +27,7 @@ using namespace KDevelop;
 namespace {
 QMutex mutex(QMutex::Recursive);
 Qt::HANDLE holderThread = 0;
+int recursion = 0;
 }
 
 ForegroundLock::ForegroundLock(bool lock) : m_locked(false)
@@ -41,6 +42,7 @@ void KDevelop::ForegroundLock::relock()
     mutex.lock();
     m_locked = true;
     holderThread = QThread::currentThreadId();
+    ++recursion;
 }
 
 bool KDevelop::ForegroundLock::isLockedForThread()
@@ -52,6 +54,7 @@ bool KDevelop::ForegroundLock::tryLock()
 {
     if(mutex.tryLock())
     {
+        ++recursion;
         m_locked = true;
         holderThread = QThread::currentThreadId();
         return true;
@@ -62,10 +65,32 @@ bool KDevelop::ForegroundLock::tryLock()
 void KDevelop::ForegroundLock::unlock()
 {
     Q_ASSERT(holderThread == QThread::currentThreadId());
+    --recursion;
+    if(recursion == 0)
+        holderThread = 0;
     mutex.unlock();
     m_locked = false;
 }
 
+TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
+{
+    Q_ASSERT(holderThread == QThread::currentThreadId());
+    m_recursion = recursion;
+    
+    // Release all recursive locks
+    recursion = 0;
+    holderThread = 0;
+    for(int a = 0; a < m_recursion; ++a)
+        mutex.unlock();
+}
+
+TemporarilyReleaseForegroundLock::~TemporarilyReleaseForegroundLock()
+{
+    for(int a = 0; a < m_recursion; ++a)
+        mutex.unlock();
+    recursion = m_recursion;
+    holderThread = QThread::currentThreadId();
+}
 
 KDevelop::ForegroundLock::~ForegroundLock()
 {

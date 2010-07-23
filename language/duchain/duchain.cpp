@@ -62,6 +62,7 @@
 #include <unistd.h>
 #include "waitforupdate.h"
 #include "referencecounting.h"
+#include <interfaces/foregroundlock.h>
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
@@ -1635,6 +1636,7 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
 //   waiter.m_waitMutex.lock();
 //   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
+    TemporarilyReleaseForegroundLock release;
     ///@todo When we don't do this, the backgroundparser doesn't process anything.
     ///      The background-parser should be moved into an own thread, so we wouldn't need to do this.
     QApplication::processEvents();
