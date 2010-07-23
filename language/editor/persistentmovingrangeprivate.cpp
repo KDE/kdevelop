@@ -57,14 +57,17 @@ void KDevelop::PersistentMovingRangePrivate::disconnectTracker()
 
 void KDevelop::PersistentMovingRangePrivate::aboutToInvalidateMovingInterfaceContent()
 {
-  Q_ASSERT(m_tracker);
-  Q_ASSERT(m_movingRange);
-  
-  m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
-                           ///            keeping the range alive. DocumentChangeTracker to the rescue.
-  delete m_movingRange;
-  m_movingRange = 0;
-  m_range = SimpleRange::invalid();
+  if(m_movingRange)
+  {
+    Q_ASSERT(m_tracker);
+    Q_ASSERT(m_movingRange);
+    
+    m_valid = false; /// @todo More precise tracking: Why is the document being invalidated? Try
+                            ///            keeping the range alive. DocumentChangeTracker to the rescue.
+    delete m_movingRange;
+    m_movingRange = 0;
+    m_range = SimpleRange::invalid();
+  }
 }
 
 void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent()
