@@ -207,6 +207,8 @@ void PatchReviewToolView::showEditDialog() {
     
     m_editPatch.previousHunk->setIcon(KIcon("arrow-up"));
     m_editPatch.nextHunk->setIcon(KIcon("arrow-down"));
+    m_editPatch.cancelReview->setIcon(KIcon("dialog-cancel"));
+    m_editPatch.finishReview->setIcon(KIcon("dialog-ok"));
     
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );

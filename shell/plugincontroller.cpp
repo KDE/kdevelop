@@ -214,7 +214,7 @@ bool PluginController::isEnabled( const KPluginInfo& info )
     KConfigGroup grp = Core::self()->activeSession()->config()->group( pluginControllerGrp );
     bool isEnabled = grp.readEntry( info.pluginName()+"Enabled", ShellExtension::getInstance()->defaultPlugins().isEmpty() || ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() ) );
     //kDebug() << "read config:" << isEnabled << "is global plugin:" << isGlobalPlugin( info ) << "default:" << ShellExtension::getInstance()->defaultPlugins().isEmpty()  << ShellExtension::getInstance()->defaultPlugins().contains( info.pluginName() );
-    return !isGlobalPlugin( info ) || isUserSelectable( info ) || isEnabled;
+    return !isGlobalPlugin( info ) || !isUserSelectable( info ) || isEnabled;
 }
 
 void PluginController::initialize()
@@ -570,6 +570,9 @@ QList<IPlugin*> PluginController::allPluginsForExtension(const QString &extensio
     QList<IPlugin*> plugins;
     foreach (const KPluginInfo &info, infos)
     {
+        if( !isEnabled(info) )
+            continue;
+
         IPlugin* plugin;
         if( d->loadedPlugins.contains( info ) )
             plugin = d->loadedPlugins[ info ];

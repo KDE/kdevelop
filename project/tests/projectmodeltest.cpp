@@ -20,10 +20,13 @@
 #include "projectmodeltest.h"
 #include <QtTest/QTest>
 #include <QtGui/QSortFilterProxyModel>
+#include <QtCore/QThread>
 #include <qtest_kde.h>
 
 #include <projectmodel.h>
 #include <tests/modeltest.h>
+#include "dummyproject.h"
+#include <tests/kdevsignalspy.h>
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
@@ -34,11 +37,57 @@ using KDevelop::ProjectLibraryTargetItem;
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectBuildFolderItem;
 
+class AddItemThread : public QThread
+{
+Q_OBJECT
+public:
+    AddItemThread( ProjectBaseItem* _parentItem, QObject* parent = 0 )
+        : QThread( parent ), parentItem( _parentItem )
+    {
+    }
+    virtual void run()
+    {
+        this->sleep( 1 );
+        KUrl url = parentItem->url();
+        url.addPath("folder1");
+        ProjectFolderItem* folder = new ProjectFolderItem( 0, url, parentItem );
+        url.addPath( "file1" );
+        new ProjectFileItem( 0, url, folder );
+        emit addedItems();
+    }
+signals:
+    void addedItems();
+private:
+    ProjectBaseItem* parentItem;
+};
+
+class SignalReceiver : public QObject
+{
+Q_OBJECT
+public:
+    SignalReceiver(ProjectModel* _model, QObject* parent = 0)
+        : QObject(parent), model( _model )
+    {
+    }
+    QThread* threadOfSignalEmission() const
+    {
+        return threadOfReceivedSignal;
+    }
+private slots:
+    void rowsInserted( const QModelIndex&, int, int )
+    {
+        threadOfReceivedSignal = QThread::currentThread();
+    }
+private:
+    QThread* threadOfReceivedSignal;
+    ProjectModel* model;
+};
+
 void ProjectModelTest::initTestCase()
 {
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
-    ModelTest* mt = new ModelTest( model, this );
+    new ModelTest( model, this );
 }
 
 void ProjectModelTest::init()
@@ -285,6 +334,24 @@ void ProjectModelTest::testItemSanity()
     parent->removeRow( child->row() );
 }
 
+void ProjectModelTest::testTakeRow()
+{
+    ProjectBaseItem* parent = new ProjectBaseItem( 0, "test" );
+    ProjectBaseItem* child = new ProjectBaseItem( 0, "test", parent );
+    ProjectBaseItem* subchild = new ProjectBaseItem( 0, "subtest", child );
+
+    model->appendRow( parent );
+
+    QCOMPARE( parent->model(), model );
+    QCOMPARE( child->model(), model );
+    QCOMPARE( subchild->model(), model );
+
+    parent->takeRow( child->row() );
+
+    QCOMPARE( child->model(), static_cast<ProjectModel*>(0) );
+    QCOMPARE( subchild->model(), static_cast<ProjectModel*>(0) );
+}
+
 void ProjectModelTest::testRename()
 {
     QFETCH( int, itemType );
@@ -375,5 +442,31 @@ void ProjectModelTest::testRename_data()
     << (int)ProjectBaseItem::InvalidNewName;
 }
 
+void ProjectModelTest::testWithProject()
+{
+    DummyProject* proj = new DummyProject( "DummyProject", 0 );
+    ProjectFolderItem* rootItem = new ProjectFolderItem( proj, KUrl("file:///dummyprojectfolder"), 0);
+    proj->setProjectItem( rootItem );
+    model->appendRow( rootItem );
+    ProjectBaseItem* item = model->itemFromIndex( model->index( 0, 0 ) );
+    QCOMPARE( item, rootItem );
+    QCOMPARE( item->text(), proj->name() );
+    QCOMPARE( item->url(), proj->folder() );
+}
+
+void ProjectModelTest::testAddItemInThread()
+{
+    ProjectFolderItem* root = new ProjectFolderItem( 0, KUrl("file:///f1"), 0 );
+    model->appendRow( root );
+    AddItemThread t( root );
+    SignalReceiver check( model );
+    connect( model, SIGNAL(rowsInserted( const QModelIndex&, int, int )), &check, SLOT(rowsInserted(const QModelIndex&, int, int)), Qt::DirectConnection );
+    KDevelop::KDevSignalSpy spy( &t, SIGNAL( addedItems() ), Qt::QueuedConnection );
+    t.start();
+    QVERIFY(spy.wait( 10000 ));
+    QCOMPARE( qApp->thread(), check.threadOfSignalEmission() );
+}
+
 QTEST_KDEMAIN( ProjectModelTest, GUI)
 #include "projectmodeltest.moc"
+#include "moc_projectmodeltest.cpp"

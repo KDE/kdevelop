@@ -17,40 +17,35 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef KDEVELOP_PROJECT_PROJECTMODELTEST_INCLUDED
-#define KDEVELOP_PROJECT_PROJECTMODELTEST_INCLUDED
+#ifndef KDEVELOP_PROJECT_PROJECTMODELPERFORMANCETEST_INCLUDED
+#define KDEVELOP_PROJECT_PROJECTMODELPERFORMANCETEST_INCLUDED
 
-#include <QtCore/QObject>
-#include <QtCore/QModelIndex>
+#include <QtGui/QWidget>
+#include <QtCore/QStack>
 
 namespace KDevelop
 {
 class ProjectModel;
+class ProjectBaseItem;
 }
+class QTreeView;
 
-class ProjectModelTest : public QObject
+class ProjectModelPerformanceTest : public QWidget
 {
 Q_OBJECT
+public:
+    ProjectModelPerformanceTest(QWidget* parent = 0);
 private slots:
-    void initTestCase();
-    void init();
-    void cleanupTestCase();
-    void testCreateFileSystemItems();
-    void testCreateFileSystemItems_data();
-    void testCreateTargetItems();
-    void testCreateTargetItems_data();
-    void testCreateSimpleHierarchy();
-    void testItemSanity();
-    void testRename();
-    void testRename_data();
-    void testChangeWithProxyModel();
-    void testWithProject();
-    void testTakeRow();
-    void testAddItemInThread();
+    void addSmallTree();
+    void addBigTree();
+    void addBigTreeDelayed();
+    void addItemDelayed();
+    void changeItemText();
 private:
+    QStack<KDevelop::ProjectBaseItem*> currentParent;
+    int originalWidth;
     KDevelop::ProjectModel* model;
+    QTreeView* view;
 };
-
-Q_DECLARE_METATYPE( QModelIndex )
 
 #endif
