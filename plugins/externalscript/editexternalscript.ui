@@ -136,6 +136,11 @@
        <string>replace contents of current file</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>create new file</string>
+      </property>
+     </item>
     </widget>
    </item>
    <item row="5" column="0">

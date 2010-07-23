@@ -66,7 +66,9 @@ public:
     /// If no selection exists, the whole document gets replaced.
     ReplaceSelection,
     /// The whole contents of the active document gets replaced.
-    ReplaceDocument
+    ReplaceDocument,
+    /// Create a new file
+    CreateNewFile
   };
   /**
    * @return @c ReplaceMode that decides what parts of the active document should be replaced by the

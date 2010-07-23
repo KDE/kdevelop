@@ -195,16 +195,20 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
     if ( m_replaceMode != ExternalScriptItem::ReplaceNone ) {
       QStringList output;
       ///TODO: filter stderr?
-      //note: start at 1 since we add one line ourselves
 
+      //note: start at 1 since we add one line ourselves
       for ( int i = 1, c = model()->rowCount(); i < c; ++i ) {
         output << model()->data( model()->index( i, 0 ) ).toString();
       }
 
-      if ( m_selectionRange.isValid() ) {
-        m_document->replaceText( m_selectionRange, output.join( "\n" ) );
+      if ( m_replaceMode == ExternalScriptItem::CreateNewFile ) {
+        KDevelop::ICore::self()->documentController()->openDocumentFromText( output.join( "\n" ) );
       } else {
-        m_document->setText( output.join( "\n" ) );
+        if ( m_selectionRange.isValid() ) {
+          m_document->replaceText( m_selectionRange, output.join( "\n" ) );
+        } else {
+          m_document->setText( output.join( "\n" ) );
+        }
       }
     }
 
