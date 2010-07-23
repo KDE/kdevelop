@@ -80,7 +80,7 @@
       <string/>
      </property>
      <property name="text">
-      <string>STD&amp;IN:</string>
+      <string>&amp;Input:</string>
      </property>
      <property name="buddy">
       <cstring>stdinCombo</cstring>
@@ -112,7 +112,7 @@
       <string/>
      </property>
      <property name="text">
-      <string>STD&amp;OUT:</string>
+      <string>&amp;Output:</string>
      </property>
      <property name="buddy">
       <cstring>stdoutCombo</cstring>
