@@ -182,10 +182,14 @@ protected:
     /** Add files as args to the job. It changes absolute pathes to relatives */
     static bool addFileList(DVcsJob* job, const KUrl::List& urls);
 
-    /** Always returns directory path.
+    /** Returns the directory associated to the given path.
+     *  
+     *  If the path points to a directory, returns exactly that directory.
+     *  If the path points to a file, returns the parent directory.
+     * 
+     *  The returned directory always ends with a "/". 
+     * 
      * @param path a path of a file or a directory.
-     * @return if path argument if file then returns parent directory, otherwise path arg is returned.
-     * @todo it will be nice to change prepareJob() so it can change its repository argument.
      */
     static QString stripPathToDir(const QString &path);
 
