@@ -87,7 +87,7 @@ TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
 TemporarilyReleaseForegroundLock::~TemporarilyReleaseForegroundLock()
 {
     for(int a = 0; a < m_recursion; ++a)
-        mutex.unlock();
+        mutex.lock();
     recursion = m_recursion;
     holderThread = QThread::currentThreadId();
 }
