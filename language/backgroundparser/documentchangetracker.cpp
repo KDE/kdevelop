@@ -117,18 +117,18 @@ void DocumentChangeTracker::reset()
     m_textAtLastReset = m_document->text();
 }
 
-qint64 DocumentChangeTracker::currentRevision() const
+RevisionReference DocumentChangeTracker::currentRevision()
 {
     VERIFY_FOREGROUND_LOCKED
     
-    return m_moving->revision();
+    return acquireRevision(m_moving->revision());
 }
 
-qint64 DocumentChangeTracker::revisionAtLastReset() const
+RevisionReference DocumentChangeTracker::revisionAtLastReset() const
 {
     VERIFY_FOREGROUND_LOCKED
     
-    return m_revisionAtLastReset->revision();
+    return m_revisionAtLastReset;
 }
 
 QString DocumentChangeTracker::textAtLastReset() const
@@ -258,6 +258,7 @@ void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* 
     // Release all revisions! They must not be used any more.
     kDebug() << "clearing all revisions";
     m_revisionLocks.clear();
+    m_revisionAtLastReset = RevisionReference();
 }
 
 KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::RangeInRevision range, qint64 fromRevision, qint64 toRevision) const
@@ -344,6 +345,9 @@ RevisionLockerAndClearer::~RevisionLockerAndClearer()
 RevisionReference DocumentChangeTracker::acquireRevision(qint64 revision)
 {
     VERIFY_FOREGROUND_LOCKED
+    
+    if(!holdingRevision(revision))
+        return RevisionReference();
     
     RevisionReference ret(new RevisionLockerAndClearer);
     ret->m_p = new RevisionLockerAndClearerPrivate(this, revision);

@@ -157,9 +157,9 @@ public:
      * it will be unlocked as soon as reset() is called, so if you want to use
      * the revision afterwards, you have to lock it before calling reset.
      * 
-     * -1 is returned if the revisions were invalidated after the last call.
+     * zero is returned if the revisions were invalidated after the last call.
      * */
-    qint64 revisionAtLastReset() const;
+    RevisionReference revisionAtLastReset() const;
 
     /**
      * Returns the document text at the last reset
@@ -169,7 +169,7 @@ public:
     /**
      * Returns the current revision (which is not locked by the tracker)
      * */
-    qint64 currentRevision() const;
+    RevisionReference currentRevision();
     
     /**
      * Returns the range that was changed since the last reset
@@ -203,7 +203,9 @@ public:
     /**
      * Use this fuction to acquire a revision. As long as the returned object is stored somewhere,
      * the revision can be used for transformations in MovingInterface, and especially for 
-     * DocumentChangeTracker::transformBetweenRevisions
+     * DocumentChangeTracker::transformBetweenRevisions.
+     * 
+     * Returns a zero revision object if the revision could not be acquired (it wasn't held).
      * */
     RevisionReference acquireRevision(qint64 revision);
     

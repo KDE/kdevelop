@@ -80,7 +80,6 @@ public:
         , abortRequested( false )
         , aborted( false )
         , features( TopDUContext::VisibleDeclarationsAndContexts )
-        , previousDocumentRevision( -1 )
     {
     }
 
@@ -107,9 +106,6 @@ public:
     QPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
-    
-    // Document revision at the previous parse run, as retrieved from the tracker.
-    qint64 previousDocumentRevision;
 };
 
 ParseJob::ParseJob( const KUrl &url )
@@ -285,11 +281,8 @@ KDevelop::ProblemPointer ParseJob::readContents()
     if(d->tracker)
     {
         // The file is open in an editor
-        d->previousDocumentRevision = d->tracker->revisionAtLastReset();
+        d->previousRevision = d->tracker->revisionAtLastReset();
 
-        if(d->previousDocumentRevision != -1)
-            d->previousRevision = d->tracker->acquireRevision(d->previousDocumentRevision);
-        
         d->tracker->reset(); // Reset the tracker to the current revision
         
         d->contents.contents = tracker()->textAtLastReset().toUtf8();
@@ -425,7 +418,13 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
     ForegroundLock lock;
     if(d->tracker)
     {
-        if(sourceRevision != d->previousDocumentRevision)
+        if(!d->previousRevision)
+        {
+            kDebug() << "not translating because there is no valid predecessor-revision";
+            return;
+        }
+
+        if(sourceRevision != d->previousRevision->revision() || !d->previousRevision->valid())
         {
             kDebug() << "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
             return;
