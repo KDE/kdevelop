@@ -85,6 +85,7 @@
 #include "cppduchain/cppduchain.h"
 #include "codegen/codeassistant.h"
 #include "codegen/cppnewclass.h"
+#include <interfaces/foregroundlock.h>
 //#include "codegen/makeimplementationprivate.h"
 
 #include "includepathresolver.h"
@@ -358,6 +359,7 @@ CppLanguageSupport::~CppLanguageSupport()
 {
     ILanguage* lang = language();
     if (lang) {
+        TemporarilyReleaseForegroundLock release;
         lang->parseLock()->lockForWrite();
         m_self = 0; //By locking the parse-mutexes, we make sure that parse- and preprocess-jobs get a chance to finish in a good state
         lang->parseLock()->unlock();
