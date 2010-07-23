@@ -135,8 +135,8 @@ void ModificationRevision::clearEditorRevisionForFile(const KDevelop::IndexedStr
   ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
   
   QMutexLocker lock(&fileModificationTimeCacheMutex);
-  Q_ASSERT(openDocumentsRevisionMap().find(url) != openDocumentsRevisionMap().end());
-  openDocumentsRevisionMap().erase(url);
+  if(openDocumentsRevisionMap().find(url) != openDocumentsRevisionMap().end())
+    openDocumentsRevisionMap().erase(url);
 }
 
 void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedString& url, int revision)
