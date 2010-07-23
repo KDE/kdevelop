@@ -174,6 +174,7 @@ private:
     static KDevelop::VcsStatusInfo::State charToState(char ch);
 
     QList<QStringList> branchesShas;
+    // Set when isValidDirectory is called.
     KUrl m_lastRepoRoot;
 };
 

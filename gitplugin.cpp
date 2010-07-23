@@ -200,14 +200,58 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     Q_UNUSED(recursion)
     //it's a hack!!! See VcsCommitDialog::setCommitCandidates and the usage of DVcsJob/IDVCSexecutor
     //We need results just in status, so we set them here before execution in VcsCommitDialog::setCommitCandidates
-    QString repo = localLocations[0].toLocalFile();
-    QList<QVariant> statuses;
+    
+    isValidDirectory(localLocations[0].toLocalFile());
+    
+    if(!m_lastRepoRoot.isValid())
+      return errorsFound(i18n("Not in a git repository"), OutputJob::Verbose);
+    
+    QSet<QString> fileFilters;
+    QList<QString> dirFilters;
+    
+    foreach(KUrl url, localLocations)
+    {
+      if(QFileInfo(url.path()).isFile())
+        fileFilters.insert(url.path());
+      else
+        dirFilters << stripPathToDir(url.path());
+    }
+    
+    // Do the stat on the root directory (the other code expects that)
+    QString repo = m_lastRepoRoot.path();
+    QList<QVariant> unfilteredStates;
     qDebug("GitPlugin::status");
-    statuses << getCachedFiles(repo, KDevelop::OutputJob::Silent)
+    unfilteredStates << getCachedFiles(repo, KDevelop::OutputJob::Silent)
              << getModifiedFiles(repo, KDevelop::OutputJob::Silent)
              << getOtherFiles(repo, KDevelop::OutputJob::Silent);
     DVcsJob * noOp = empty_cmd(KDevelop::OutputJob::Silent);
-    noOp->setResults(QVariant(statuses));
+    
+    // Now filter the states regarding the selection
+    
+    QList<QVariant> filteredStates;
+    
+    foreach(QVariant statusVariant, unfilteredStates)
+    {
+      VcsStatusInfo info(statusVariant.value<VcsStatusInfo>());
+      
+      QString path = info.url().path();
+      
+      bool match = fileFilters.contains(path);
+      
+      foreach(QString dir, dirFilters)
+      {
+        if(match)
+          break;
+        match = path.startsWith(dir);
+      }
+      
+      if(match)
+      {
+        filteredStates << statusVariant;
+      }
+    }
+    
+    noOp->setResults(QVariant(filteredStates));
     return noOp;
 }
 
