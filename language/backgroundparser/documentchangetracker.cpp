@@ -37,9 +37,7 @@
 #include "backgroundparser.h"
 #include <QApplication>
 
-// Backward transformation currently doesn't work due to kate
-// #define NO_BACKWARD_TRANSFORMATION
-// Only needed as long as the backward transformation doesn't work
+// Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.
 // #define ALWAYS_UPDATE
 
 using namespace KTextEditor;
@@ -259,19 +257,12 @@ void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* 
     kDebug() << "clearing all revisions";
     m_revisionLocks.clear();
     m_revisionAtLastReset = RevisionReference();
+    ModificationRevision::setEditorRevisionForFile(m_url, 0);
 }
 
 KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::RangeInRevision range, qint64 fromRevision, qint64 toRevision) const
 {
     VERIFY_FOREGROUND_LOCKED
-    
-    #ifdef NO_BACKWARD_TRANSFORMATION
-    if(fromRevision == -1)
-    {
-        kWarning() << "NOT mapping revision backwards from" << range.castToSimpleRange().textRange();
-        return range;
-    }
-    #endif
     
     if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
     {
@@ -285,14 +276,6 @@ KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDeve
 KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior) const
 {
     VERIFY_FOREGROUND_LOCKED
-    
-    #ifdef NO_BACKWARD_TRANSFORMATION
-    if(fromRevision == -1)
-    {
-        kWarning() << "NOT mapping revision backwards from" << cursor.castToSimpleCursor().textCursor();
-        return cursor;
-    }
-    #endif
     
     if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
     {
