@@ -317,6 +317,8 @@ public:
     QHash<KUrl, ParseJob*> m_parseJobs;
     // A change tracker for each managed document
     QHash<IndexedString, DocumentChangeTracker*> m_managed;
+    // The url for each managed document. Those may temporarily differ from the real url.
+    QHash<KTextEditor::Document*, IndexedString> m_managedTextDocumentUrls;
 
     ThreadWeaver::Weaver m_weaver;
     ParserDependencyPolicy m_dependencyPolicy;
@@ -334,6 +336,7 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
 {
     Q_ASSERT(ICore::self()->documentController());
     connect(ICore::self()->documentController(), SIGNAL(documentLoaded(KDevelop::IDocument*)), this, SLOT(documentLoaded(KDevelop::IDocument*)));
+    connect(ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)), this, SLOT(documentUrlChanged(KDevelop::IDocument*)));
     connect(ICore::self()->documentController(), SIGNAL(documentClosed(KDevelop::IDocument*)), this, SLOT(documentClosed(KDevelop::IDocument*)));
     connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(aboutToQuit()));
 }
@@ -626,33 +629,53 @@ void BackgroundParser::documentClosed ( IDocument* document )
     
     if(document->textDocument())
     {
-        IndexedString url(document->url());
-        kDebug() << "removing" << document->url() << "from background parser";
+        KTextEditor::Document* textDocument = document->textDocument();
+        
+        if(!d->m_managedTextDocumentUrls.contains(textDocument))
+            return; // Probably the document had an invalid url, and thus it wasn't added to the background parser
+        
+        Q_ASSERT(d->m_managedTextDocumentUrls.contains(textDocument));
+        
+        IndexedString url(d->m_managedTextDocumentUrls[textDocument]);
         Q_ASSERT(d->m_managed.contains(url));
         
-        delete d->m_managed[IndexedString(url)];
-        d->m_managed.remove(IndexedString(url));
+        kDebug() << "removing" << url.str() << "from background parser";
+        delete d->m_managed[url];
+        d->m_managedTextDocumentUrls.remove(textDocument);
+        d->m_managed.remove(url);
     }
 }
-
 
 void BackgroundParser::documentLoaded( IDocument* document )
 {
     QMutexLocker l(&d->m_mutex);
-    if(document->textDocument())
+    if(document->textDocument() && document->textDocument()->url().isValid())
     {
+        KTextEditor::Document* textDocument = document->textDocument();
+        
         kDebug() << "Creating change tracker for " << document->url();
         IndexedString url(document->url());
         // Some debugging because we had issues with this
         if(d->m_managed.contains(url))
-            Q_ASSERT(d->m_managed[url]->document() == document->textDocument());
+            Q_ASSERT(d->m_managed[url]->document() == textDocument);
         
         Q_ASSERT(!d->m_managed.contains(url));
+        Q_ASSERT(!d->m_managedTextDocumentUrls.contains(textDocument));
         
-        d->m_managed.insert(url, new DocumentChangeTracker(document->textDocument()));
+        d->m_managedTextDocumentUrls[textDocument] = url;
+        d->m_managed.insert(url, new DocumentChangeTracker(textDocument));
     }else{
-        kDebug() << "NOT creating change tracker, because it is no text document: " << document->url();
+        kDebug() << "NOT creating change tracker for" << document->url();
     }
+}
+
+void BackgroundParser::documentUrlChanged(IDocument* document)
+{
+    documentClosed(document);
+    
+    // Only call documentLoaded if the file wasn't renamed to a filename that is already tracked.
+    if(document->textDocument() && !d->m_managed.contains(IndexedString(document->textDocument()->url())))
+        documentLoaded(document);
 }
 
 void BackgroundParser::startTimer() {

@@ -196,8 +196,9 @@ public Q_SLOTS:
     ///Returns the number of currently active or queued jobs
     int queuedCount() const;
     
-    void documentClosed ( KDevelop::IDocument* );
+    void documentClosed(KDevelop::IDocument*);
     void documentLoaded(KDevelop::IDocument*);
+    void documentUrlChanged(KDevelop::IDocument*);
 
 protected:
     void loadSettings(bool projectIsLoaded);
