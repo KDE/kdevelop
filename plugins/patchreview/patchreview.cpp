@@ -1311,9 +1311,17 @@ void PatchReviewPlugin::updateReview()
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
     //Open all relates files
     for(int a = 0; a < m_modelList->modelCount(); ++a) {
+      
+      KUrl absoluteUrl = m_patch->baseDir();
       KUrl url(m_modelList->modelAt(a)->source());
-       ICore::self()->documentController()->openDocument(url);
-       seekHunk(true, url); //Jump to the first changed position
+      
+      if(url.isRelative())
+        absoluteUrl.addPath(url.path());
+      else
+        absoluteUrl = url;
+        
+      ICore::self()->documentController()->openDocument(absoluteUrl);
+      seekHunk(true, absoluteUrl); //Jump to the first changed position
     }
   }
   
