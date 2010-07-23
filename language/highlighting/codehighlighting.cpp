@@ -538,6 +538,7 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
       // Update the existing moving range
       (*movingIt)->setAttribute(rangeIt->attribute);
       (*movingIt)->setRange(tempRange);
+      highlighting->m_highlightedRanges.push_back(*movingIt);
       ++movingIt;
     }
     ++rangeIt;
