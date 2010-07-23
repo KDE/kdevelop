@@ -65,13 +65,13 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   commandLabel->setToolTip( tooltip );
 
   tooltip = i18n(
-    "<p>Defines whether the external script should get <code>STDIN</code> or not.</p>"
+    "<p>Defines what the external script should get as input (via <code>STDIN</code>).</p>"
   );
   stdinCombo->setToolTip( tooltip );
   stdinLabel->setToolTip( tooltip );
 
   tooltip = i18n(
-    "<p>Defines what should be done with the <code>STDOUT</code> of the script.</p>"
+    "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of the script.</p>"
   );
   stdoutCombo->setToolTip( tooltip );
   stdoutLabel->setToolTip( tooltip );
