@@ -26,6 +26,12 @@ using namespace KDevelop;
 
 namespace {
 QMutex mutex(QMutex::Recursive);
+
+QMutex tryLockMutex;
+QMutex waitMutex;
+QMutex finishMutex;
+QWaitCondition condition;
+
 Qt::HANDLE holderThread = 0;
 int recursion = 0;
 }
@@ -39,7 +45,52 @@ ForegroundLock::ForegroundLock(bool lock) : m_locked(false)
 void KDevelop::ForegroundLock::relock()
 {
     Q_ASSERT(!m_locked);
-    mutex.lock();
+    
+    if(!QApplication::instance() || QThread::currentThread() == QApplication::instance()->thread())
+    {
+        mutex.lock();
+    }else{
+        QMutexLocker lock(&tryLockMutex);
+        
+        while(!mutex.tryLock(10))
+        {
+            // In case an additional event-loop was started from within the foreground, we send
+            // events to the foreground to temporarily release the lock.
+            
+            class ForegroundReleaser : public DoInForeground {
+                public:
+                virtual void doInternal() {
+                    // By locking the mutex, we make sure that the requester is actually waiting for the condition
+                    waitMutex.lock();
+                    // Now we release the foreground lock
+                    TemporarilyReleaseForegroundLock release;
+                    // And signalize to the requester that we've released it
+                    condition.wakeAll();
+                    // Allow the requester to actually wake up, by unlocking m_waitMutex
+                    waitMutex.unlock();
+                    // Now wait until the requester is ready
+                    QMutexLocker lock(&finishMutex);
+                }
+            };
+            
+            static ForegroundReleaser releaser;
+            
+            QMutexLocker lockWait(&waitMutex);
+            QMutexLocker lockFinish(&finishMutex);
+            
+            QMetaObject::invokeMethod(&releaser, "doInternalSlot", Qt::QueuedConnection);
+            condition.wait(&waitMutex);
+            
+            if(mutex.tryLock())
+            {
+                //success
+                break;
+            }else{
+                //Probably a third thread has creeped in and
+                //got the foreground lock before us. Just try again.
+            }
+        }
+    }
     m_locked = true;
     holderThread = QThread::currentThreadId();
     ++recursion;
