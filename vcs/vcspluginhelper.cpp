@@ -343,9 +343,6 @@ void VcsPluginHelper::commit()
 {
     Q_ASSERT(!d->ctxUrls.isEmpty());
     KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog(d->plugin, d->plugin->core()->uiController()->activeMainWindow());
-//     KConfigGroup vcsGroup(KSharedConfig::openConfig(componentData()), "VcsCommon");
-//     dlg->setOldMessages(vcsGroup.readEntry("OldCommitMessages", QStringList()));
-//     dlg->setRecursive(true);
     connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
     connect(dlg, SIGNAL(cancelCommit(KDevelop::VcsCommitDialog*)), this, SLOT(cancelCommit(KDevelop::VcsCommitDialog*)));
     dlg->setCommitCandidatesAndShow(d->ctxUrls.first());
@@ -353,11 +350,6 @@ void VcsPluginHelper::commit()
 
 void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)
 {
-    KConfigGroup vcsGroup(KSharedConfig::openConfig(d->plugin->componentData()), "VcsCommon");
-    QStringList oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
-    oldMessages << dlg->message();
-    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
-
     KDevelop::IBasicVersionControl* iface = dlg->versionControlPlugin()->extension<KDevelop::IBasicVersionControl>();
     d->plugin->core()->runController()->registerJob(iface->commit(dlg->message(), dlg->determineUrlsForCheckin(),
             dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive));

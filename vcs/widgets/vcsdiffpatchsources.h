@@ -31,6 +31,7 @@
 #include <qtextedit.h>
 #include "interfaces/ibasicversioncontrol.h"
 
+class KComboBox;
 namespace KDevelop {
 class VcsCommitDialog;
 }
@@ -58,7 +59,7 @@ class VCSDiffPatchSource : public KDevelop::IPatchSource {
 class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     Q_OBJECT
     public:
-    VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap<KUrl, QString> selectable, KDevelop::IBasicVersionControl* vcs);
+    VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap<KUrl, QString> selectable, KDevelop::IBasicVersionControl* vcs, QStringList oldMessages);
     
     ~VCSCommitDiffPatchSource() ;
     
@@ -77,11 +78,15 @@ class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     virtual bool finishReview(QList< KUrl > selection) ;
 Q_SIGNALS:
     void reviewFinished(QString message, QList<KUrl> selection);
+    void reviewCancelled(QString message);
 public:
     QPointer<QWidget> m_commitMessageWidget;
     QPointer<QTextEdit> m_commitMessageEdit;
     QMap<KUrl, QString> m_selectable;
     KDevelop::IBasicVersionControl* m_vcs;
+    KComboBox* m_oldMessages;
+public slots:
+    void oldMessageChanged(QString);
 };
 
 ///Sends the diff to the patch-review plugin.

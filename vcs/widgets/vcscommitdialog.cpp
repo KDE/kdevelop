@@ -36,6 +36,11 @@
 
 #include "ui_vcscommitdialog.h"
 #include "vcsdiffpatchsources.h"
+#include <KComponentData>
+
+namespace {
+    int maxMessages = 10;
+}
 
 namespace KDevelop
 {
@@ -93,6 +98,7 @@ public:
     Ui::VcsCommitDialog ui;
     KDevelop::VcsDiff diff;
     QList< KUrl > m_selection;
+    QStringList m_oldMessages;
 };
 
 VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
@@ -100,6 +106,9 @@ VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
 {
     d->plugin = plugin;
 
+    KConfigGroup vcsGroup(KSharedConfig::openConfig(plugin->componentData()), "VcsCommon");
+    d->m_oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
+    
     d->ui.setupUi( mainWidget() );
     setButtons( KDialog::Ok | KDialog::Cancel );
     setWindowTitle( i18n("Commit Message") );
@@ -113,6 +122,23 @@ VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
 
 VcsCommitDialog::~VcsCommitDialog()
 {
+    // Don't do this during shutdown, as the plugin may already be destroyed
+    if(!ICore::self()->shuttingDown())
+    {
+        QString text = d->ui.message->toPlainText();
+        if(!text.isEmpty())
+        {
+            if(d->m_oldMessages.contains(text))
+                d->m_oldMessages.removeAll(text);
+            
+            d->m_oldMessages.push_front(text);
+            while(d->m_oldMessages.size() > maxMessages)
+                d->m_oldMessages.pop_back();
+            
+            KConfigGroup vcsGroup(KSharedConfig::openConfig(d->plugin->componentData()), "VcsCommon");
+            vcsGroup.writeEntry("OldCommitMessages", d->m_oldMessages);
+        }
+    }
     delete d;
 }
 
@@ -222,16 +248,22 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl &url )
     job->exec();
     }
     
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(d->diff, d->urls, vcsiface);
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(d->diff, d->urls, vcsiface, d->m_oldMessages);
     
     if(showVcsDiff(patchSource))
     {
         connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(reviewFinished(QString,QList<KUrl>)));
+        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(reviewCancalled(QString)));
         connect(patchSource, SIGNAL(destroyed(QObject*)), SLOT(deleteLater()));
     }else{
         delete patchSource;
         show();
     }
+}
+
+void VcsCommitDialog::reviewCancalled(QString message)
+{
+    d->ui.message->setPlainText(message);
 }
 
 void VcsCommitDialog::reviewFinished(QString message, QList< KUrl > selection)
