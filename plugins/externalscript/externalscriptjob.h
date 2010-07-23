@@ -60,11 +60,12 @@ private:
   void appendLine( const QString &l );
   KProcess* m_proc;
   KDevelop::ProcessLineMaker* m_lineMaker;
-  ExternalScriptItem::ReplaceMode m_replaceMode;
+  ExternalScriptItem::OutputMode m_outputMode;
   ExternalScriptItem::InputMode m_inputMode;
   KTextEditor::Document* m_document;
   /// invalid when whole doc should be replaced
   KTextEditor::Range m_selectionRange;
+  KTextEditor::Cursor m_cursorPosition;
   bool m_showOutput;
 };
 

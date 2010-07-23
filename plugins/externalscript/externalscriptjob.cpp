@@ -47,7 +47,7 @@
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
     : KDevelop::OutputJob( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
-    m_replaceMode( item->replaceMode() ), m_inputMode( item->inputMode() ),
+    m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
     m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
@@ -60,10 +60,10 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
 
   KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
 
-  if ( m_replaceMode != ExternalScriptItem::ReplaceNone || m_inputMode != ExternalScriptItem::InputNone ) {
-    if ( !active || !active->isTextDocument() ) {
+  if ( m_outputMode != ExternalScriptItem::OutputNone || m_inputMode != ExternalScriptItem::InputNone ) {
+    if ( !active || !active->isTextDocument() || !active->textDocument()->activeView() ) {
       KMessageBox::error( QApplication::activeWindow(),
-                          i18n( "Cannot run script '%1' since it tries to replace "
+                          i18n( "Cannot run script '%1' since it tries to access "
                                 "the editor contents but no document is open.", item->text() ),
                           i18n( "No Document Open" )
                         );
@@ -75,11 +75,8 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     connect( m_document, SIGNAL( aboutToClose( KTextEditor::Document* ) ),
              this, SLOT( kill() ) );
 
-    if ( item->replaceMode() == ExternalScriptItem::ReplaceSelection ) {
-      if ( m_document->activeView() && m_document->activeView()->selection() ) {
-        m_selectionRange = m_document->activeView()->selectionRange();
-      }
-    }
+    m_selectionRange = m_document->activeView()->selectionRange();
+    m_cursorPosition = m_document->activeView()->cursorPosition();
   }
 
   if ( item->saveMode() == ExternalScriptItem::SaveCurrentDocument && active ) {
@@ -158,10 +155,25 @@ void ExternalScriptJob::start()
     if ( m_inputMode != ExternalScriptItem::InputNone ) {
       QString inputText;
 
-      if ( m_selectionRange.isValid() ) {
-        inputText = m_document->text( m_selectionRange );
-      } else {
-        inputText = m_document->text();
+      switch ( m_inputMode ) {
+        case ExternalScriptItem::InputNone:
+          // do nothing;
+          break;
+        case ExternalScriptItem::InputSelectionOrNone:
+          if ( m_selectionRange.isValid() ) {
+            inputText = m_document->text(m_selectionRange);
+          } // else nothing
+          break;
+        case ExternalScriptItem::InputSelectionOrDocument:
+          if ( m_selectionRange.isValid() ) {
+            inputText = m_document->text(m_selectionRange);
+          } else {
+            inputText = m_document->text();
+          }
+          break;
+        case ExternalScriptItem::InputDocument:
+          inputText = m_document->text();
+          break;
       }
 
       ///TODO: what to do with the encoding here?
@@ -192,23 +204,45 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
   m_lineMaker->flushBuffers();
 
   if ( exitCode == 0 && status == QProcess::NormalExit ) {
-    if ( m_replaceMode != ExternalScriptItem::ReplaceNone ) {
-      QStringList output;
+    if ( m_outputMode != ExternalScriptItem::OutputNone ) {
+      QString output;
       ///TODO: filter stderr?
 
       //note: start at 1 since we add one line ourselves
       for ( int i = 1, c = model()->rowCount(); i < c; ++i ) {
-        output << model()->data( model()->index( i, 0 ) ).toString();
+        if ( i > 1 ) {
+          output.append('\n');
+        }
+        output.append( model()->data( model()->index( i, 0 ) ).toString() );
       }
 
-      if ( m_replaceMode == ExternalScriptItem::CreateNewFile ) {
-        KDevelop::ICore::self()->documentController()->openDocumentFromText( output.join( "\n" ) );
-      } else {
-        if ( m_selectionRange.isValid() ) {
-          m_document->replaceText( m_selectionRange, output.join( "\n" ) );
-        } else {
-          m_document->setText( output.join( "\n" ) );
-        }
+      switch ( m_outputMode ) {
+        case ExternalScriptItem::OutputNone:
+          // do nothing;
+          break;
+        case ExternalScriptItem::OutputCreateNewFile:
+          KDevelop::ICore::self()->documentController()->openDocumentFromText( output );
+          break;
+        case ExternalScriptItem::OutputInsertAtCursor:
+          m_document->insertText( m_cursorPosition, output );
+          break;
+        case ExternalScriptItem::OutputReplaceSelectionOrInsertAtCursor:
+          if ( m_selectionRange.isValid() ) {
+            m_document->replaceText( m_selectionRange, output );
+          } else {
+            m_document->insertText( m_cursorPosition, output );
+          }
+          break;
+        case ExternalScriptItem::OutputReplaceSelectionOrDocument:
+          if ( m_selectionRange.isValid() ) {
+            m_document->replaceText( m_selectionRange, output );
+          } else {
+            m_document->setText( output );
+          }
+          break;
+        case ExternalScriptItem::OutputReplaceDocument:
+          m_document->setText( output );
+          break;
       }
     }
 

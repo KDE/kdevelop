@@ -96,7 +96,12 @@
      </item>
      <item>
       <property name="text">
-       <string>selection in current file</string>
+       <string>selection in current file or nothing</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>selection in current file or whole file</string>
       </property>
      </item>
      <item>
@@ -128,7 +133,17 @@
      </item>
      <item>
       <property name="text">
-       <string>replace selection in current file</string>
+       <string>insert at cursor position of current file</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace selection of current file or insert at cursor position</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace selection of current file or whole file</string>
       </property>
      </item>
      <item>

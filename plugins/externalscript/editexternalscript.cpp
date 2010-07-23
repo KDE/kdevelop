@@ -109,7 +109,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   nameEdit->setText( item->text() );
   commandEdit->setText( item->command() );
   stdinCombo->setCurrentIndex( item->inputMode() );
-  stdoutCombo->setCurrentIndex( item->replaceMode() );
+  stdoutCombo->setCurrentIndex( item->outputMode() );
   saveCombo->setCurrentIndex( item->saveMode() );
   shortcutWidget->setShortcut( item->action()->shortcut() );
   showOutputBox->setChecked( item->showOutput() );
@@ -141,10 +141,10 @@ void EditExternalScript::save()
   );
   m_item->setInputMode( inputMode );
 
-  ExternalScriptItem::ReplaceMode replaceMode = static_cast<ExternalScriptItem::ReplaceMode>(
+  ExternalScriptItem::OutputMode replaceMode = static_cast<ExternalScriptItem::OutputMode>(
       stdoutCombo->currentIndex()
   );
-  m_item->setReplaceMode( replaceMode );
+  m_item->setOutputMode( replaceMode );
 
   ExternalScriptItem::SaveMode saveMode = static_cast<ExternalScriptItem::SaveMode>(
       saveCombo->currentIndex()

@@ -85,7 +85,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setText( script.readEntry( "name" ) );
       item->setCommand( script.readEntry( "command" ));
       item->setInputMode( static_cast<ExternalScriptItem::InputMode>( script.readEntry( "inputMode", 0u ) ) );
-      item->setReplaceMode( static_cast<ExternalScriptItem::ReplaceMode>( script.readEntry( "replaceMode", 0u ) ) );
+      item->setOutputMode( static_cast<ExternalScriptItem::OutputMode>( script.readEntry( "outputMode", 0u ) ) );
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
       item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
       m_model->appendRow( item );
@@ -111,13 +111,15 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
     item = new ExternalScriptItem;
     item->setText( i18n("google selection") );
     item->setCommand( "xdg-open \"http://www.google.de/search?q=%s\"" );
+    item->setShowOutput( false );
     m_model->appendRow( item );
 
     item = new ExternalScriptItem;
     item->setText( i18n("sort selection") );
     item->setCommand( "sort" );
-    item->setInputMode( ExternalScriptItem::InputSelection );
-    item->setReplaceMode( ExternalScriptItem::ReplaceSelection );
+    item->setInputMode( ExternalScriptItem::InputSelectionOrDocument );
+    item->setOutputMode( ExternalScriptItem::OutputReplaceSelectionOrDocument );
+    item->setShowOutput( false );
     m_model->appendRow( item );
 
     config.writeEntry( "firstUse", false );
@@ -207,7 +209,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   config.writeEntry( "name", item->text() );
   config.writeEntry( "command", item->command() );
   config.writeEntry( "inputMode", (uint) item->inputMode() );
-  config.writeEntry( "replaceMode", (uint) item->replaceMode() );
+  config.writeEntry( "replaceMode", (uint) item->outputMode() );
   config.writeEntry( "saveMode", (uint) item->saveMode() );
   config.writeEntry( "shortcuts", item->action()->shortcut().toString() );
   config.sync();
