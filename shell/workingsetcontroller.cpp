@@ -185,6 +185,11 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("iconName", m_iconName);
     deleteGroupRecursive(group);
+    if (area->activeView()) {
+        group.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
+    } else {
+        group.writeEntry("Active View", QString());
+    }
     saveFromArea(area, areaIndex, group);
 
     if(isEmpty())
@@ -340,12 +345,23 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 
     loadToArea(area, areaIndex, group);
 
-    //activate first view in the working set
+    //activate view in the working set
     if (!area->views().isEmpty()) {
         foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
             if(window->area() == area) {
                 window->setArea(area);
-                window->activateView(area->views().first());
+                QString activeView = group.readEntry("Active View", QString());
+                kDebug() << activeView;
+                bool found = false;
+                foreach (Sublime::View *v, area->views()) {
+                    if (v->document()->documentSpecifier() == activeView) {
+                        window->activateView(v);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) window->activateView(area->views().first()); //fallback
+                break;
             }
         }
     }
