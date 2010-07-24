@@ -197,8 +197,6 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
 {
-    //Q_ASSERT(0);
-    kDebug() << "*********************************************************************************";
     if (area->isSplitted()) {
         group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
 
@@ -355,7 +353,6 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
 {
-    kDebug() << "***************************************************************************";
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
 

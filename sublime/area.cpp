@@ -404,9 +404,6 @@ void Area::positionChanged(View *view, int newPos)
     kDebug() << view << newPos;
     AreaIndex *index = indexOf(view);
     index->views().move(index->views().indexOf(view), newPos);
-    foreach (View *v, index->views()) {
-        kDebug() << v->document()->title();
-    }
 }
 
 
