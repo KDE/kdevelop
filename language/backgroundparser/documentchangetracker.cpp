@@ -112,6 +112,7 @@ void DocumentChangeTracker::reset()
     m_changedRange->setRange(KTextEditor::Range::invalid());
     
     m_revisionAtLastReset = acquireRevision(m_moving->revision());
+    Q_ASSERT(m_revisionAtLastReset);
     m_textAtLastReset = m_document->text();
 }
 
@@ -329,7 +330,7 @@ RevisionReference DocumentChangeTracker::acquireRevision(qint64 revision)
 {
     VERIFY_FOREGROUND_LOCKED
     
-    if(!holdingRevision(revision))
+    if(!holdingRevision(revision) && revision != m_moving->revision())
         return RevisionReference();
     
     RevisionReference ret(new RevisionLockerAndClearer);
