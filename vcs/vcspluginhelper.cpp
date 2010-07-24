@@ -160,25 +160,6 @@ VcsPluginHelper::VcsPluginHelper(KDevelop::IPlugin* parent, KDevelop::IBasicVers
 VcsPluginHelper::~VcsPluginHelper()
 {}
 
-KUrl VcsPluginHelper::urlForItem(KDevelop::ProjectBaseItem* item) const
-{
-    if (item->file()) {
-        return item->file()->url();
-    }
-
-    if (item->folder()) {
-        return item->folder()->url();
-    }
-
-    KDevelop::ProjectBaseItem* parentitem = dynamic_cast<KDevelop::ProjectBaseItem*>(item->parent());
-
-    if (parentitem) {
-        return parentitem->folder()->url();
-    }
-
-    return KUrl();
-}
-
 void VcsPluginHelper::setupFromContext(Context* context)
 {
     d->ctxUrls.clear();
@@ -187,7 +168,8 @@ void VcsPluginHelper::setupFromContext(Context* context)
 
         if (prjctx) {
             foreach(KDevelop::ProjectBaseItem* item, prjctx->items()) {
-                d->ctxUrls.append(urlForItem(item));
+                if(!item->target())
+                    d->ctxUrls.append(item->url());
             }
         }
     }

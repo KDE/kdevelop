@@ -73,6 +73,8 @@
 #include "svnimportmetadatawidget.h"
 #include "svncheckoutmetadatawidget.h"
 #include <vcs/vcspluginhelper.h>
+#include <vcs/widgets/standardvcslocationwidget.h>
+#include "svnlocationwidget.h"
 
 K_PLUGIN_FACTORY(KDevSvnFactory, registerPlugin<KDevSvnPlugin>();)
 K_EXPORT_PLUGIN(KDevSvnFactory(KAboutData("kdevsubversion", "kdevsubversion", ki18n("Subversion"), "0.1", ki18n("Support for Subversion version control systems"), KAboutData::License_GPL)))
@@ -505,6 +507,11 @@ void KDevSvnPlugin::ctxCheckout()
     if (dlg.exec() == QDialog::Accepted) {
         KDevelop::ICore::self()->runController()->registerJob(createWorkingCopy(widget->source(), widget->destination(), widget->recursionMode()));
     }
+}
+
+KDevelop::VcsLocationWidget* KDevSvnPlugin::vcsLocation(QWidget* parent) const
+{
+    return new SvnLocationWidget(parent);
 }
 
 #include "kdevsvnplugin.moc"

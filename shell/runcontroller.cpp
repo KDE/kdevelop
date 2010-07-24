@@ -136,12 +136,7 @@ public:
             grp.sync();
         }
     }
-    void enableLaunchActions()
-    {
-        runAction->setEnabled( !launchConfigurations.isEmpty() );
-        profileAction->setEnabled( !launchConfigurations.isEmpty() );
-        dbgAction->setEnabled( !launchConfigurations.isEmpty() );
-    }
+    
     void configureLaunches()
     {
         LaunchConfigurationDialog dlg;
@@ -355,7 +350,6 @@ void RunController::initialize()
     {
         // Only do this in GUI mode
         d->updateCurrentLaunchAction();
-        d->enableLaunchActions();
     }
 }
 
@@ -474,7 +468,6 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
                 d->currentTargetAction->actions().first()->setChecked(true);
         }
     }
-    d->enableLaunchActions();
 }
 
 void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
@@ -485,17 +478,36 @@ void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
 
 void RunController::slotDebug()
 {
-    executeDefaultLaunch( "debug" );
+    if(d->launchConfigurations.isEmpty()) {
+        LaunchConfigurationDialog d;
+        d.exec();
+    }
+    
+    if(!d->launchConfigurations.isEmpty())
+        executeDefaultLaunch( "debug" );
 }
 
 void RunController::slotProfile()
 {
-    executeDefaultLaunch( "profile" );
+    if(d->launchConfigurations.isEmpty()) {
+        LaunchConfigurationDialog d;
+        d.exec();
+    }
+    
+    if(!d->launchConfigurations.isEmpty())
+        executeDefaultLaunch( "profile" );
 }
 
 void RunController::slotExecute()
 {
-    executeDefaultLaunch( "execute" );
+    
+    if(d->launchConfigurations.isEmpty()) {
+        LaunchConfigurationDialog d;
+        d.exec();
+    }
+    
+    if(!d->launchConfigurations.isEmpty())
+        executeDefaultLaunch( "execute" );
 }
 
 LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
@@ -697,7 +709,6 @@ void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfigurati
     {
         d->addLaunchAction( l );
         d->launchConfigurations << l;
-        d->enableLaunchActions();
         if( !d->currentTargetAction->currentAction() )
         {
             if( !d->currentTargetAction->actions().isEmpty() )
@@ -738,8 +749,6 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
     }
 
     d->launchConfigurations.removeAll( l );
-
-    d->enableLaunchActions();
 
     delete l;
 }

@@ -48,6 +48,7 @@
 #include "importmetadatawidget.h"
 #include <language/interfaces/editorcontext.h>
 #include <vcs/vcspluginhelper.h>
+#include <vcs/widgets/standardvcslocationwidget.h>
 
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
 K_EXPORT_PLUGIN(KDevCvsFactory("kdevcvs"))
@@ -483,14 +484,19 @@ KDevelop::VcsJob * CvsPlugin::createWorkingCopy(const KDevelop::VcsLocation & so
     return job;
 }
 
-
 QString CvsPlugin::name() const
 {
     return i18n("CVS");
 }
+
 KDevelop::VcsImportMetadataWidget* CvsPlugin::createImportMetadataWidget(QWidget* parent)
 {
     return new ImportMetadataWidget(parent);
+}
+
+KDevelop::VcsLocationWidget* CvsPlugin::vcsLocation(QWidget* parent) const
+{
+    return new KDevelop::StandardVcsLocationWidget(parent);
 }
 
 // End:  KDevelop::IBasicVersionControl

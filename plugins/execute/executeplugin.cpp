@@ -122,29 +122,22 @@ KJob* ExecutePlugin::dependecyJob( KDevelop::ILaunchConfiguration* cfg ) const
         QList<KDevelop::ProjectBaseItem*> items;
         foreach( const QVariant& dep, deps )
         {
-            KDevelop::ProjectBaseItem* item = model->item( model->pathToIndex( dep.toStringList() ) );
+            KDevelop::ProjectBaseItem* item = model->itemFromIndex( model->pathToIndex( dep.toStringList() ) );
             if( item )
             {
                 items << item;
             }
         }
-        if( depAction == "SudoInstall" )
+        KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
+        if( depAction == "Build" )
         {
-            KMessageBox::information( KDevelop::ICore::self()->uiController()->activeMainWindow(), 
-                                    i18n("Installing via sudo is not yet implemented"), 
-                                        i18n("Not implemented") );
-        } else 
+            job->addItems( KDevelop::BuilderJob::Build, items );
+        } else if( depAction == "Install" )
         {
-            KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
-            if( depAction == "Build" )
-            {
-                job->addItems( KDevelop::BuilderJob::Build, items );
-            } else if( depAction == "Install" )
-            {
-                job->addItems( KDevelop::BuilderJob::Install, items );
-            }
-            return job;
+            job->addItems( KDevelop::BuilderJob::Build, items );
+            job->addItems( KDevelop::BuilderJob::Install, items );
         }
+        return job;
     }
     return 0;
 }

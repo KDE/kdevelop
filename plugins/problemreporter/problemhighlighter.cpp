@@ -100,6 +100,17 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
     }
 }
 
+void removeWatcher(const QList<SmartRange*> ranges, SmartRangeWatcher* watcher)
+{
+    foreach(SmartRange* range, ranges) {
+        Q_ASSERT(!range->watchers().contains(watcher));
+        foreach(SmartRange* child, range->childRanges()) {
+            Q_ASSERT(child->watchers().contains(watcher));
+            child->removeWatcher(watcher);
+        }
+    }
+}
+
 ProblemHighlighter::~ProblemHighlighter()
 {
     if(m_topHLRanges.isEmpty() || !m_document)
@@ -109,8 +120,10 @@ ProblemHighlighter::~ProblemHighlighter()
     editor.setCurrentUrl(IndexedString(m_document->url()), true);
 
     LockedSmartInterface iface = editor.smart();
-    if (iface)
+    if (iface) {
+        removeWatcher(m_topHLRanges, this);
         qDeleteAll(m_topHLRanges);
+    }
 }
 
 void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& problems)
@@ -129,6 +142,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 
+    removeWatcher(m_topHLRanges, this);
     qDeleteAll(m_topHLRanges);
     m_topHLRanges.clear();
     m_problemsForRanges.clear();

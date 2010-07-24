@@ -36,7 +36,6 @@ Boston, MA 02110-1301, USA.
 #include <kstandardaction.h>
 #include <kmessagebox.h>
 #include <kxmlguiwindow.h>
-#include <kfiledialog.h>
 #include <kactioncollection.h>
 #include <ktemporaryfile.h>
 #include <kservicetypetrader.h>

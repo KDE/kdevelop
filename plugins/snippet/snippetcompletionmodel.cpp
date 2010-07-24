@@ -23,10 +23,9 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
-#include <kdeversion.h>
+#include "snippetfeatures.h"
 
-#if KDE_VERSION >= KDE_MAKE_VERSION(4, 4, 0)
-    #define HAVE_HIGHLIGHT_IFACE
+#ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
     #include <KTextEditor/HighlightInterface>
 #endif
 
@@ -52,15 +51,15 @@ SnippetCompletionModel::~SnippetCompletionModel()
 QVariant SnippetCompletionModel::data( const QModelIndex& idx, int role ) const
 {
     // grouping of snippets
-    if (role == KTextEditor::CodeCompletionModel::InheritanceDepth) {
-        return 1;
-    }
     if (!idx.parent().isValid()) {
         if (role == Qt::DisplayRole) {
             return i18n("Snippets");
         }
         if (role == KTextEditor::CodeCompletionModel::GroupRole) {
             return Qt::DisplayRole;
+        }
+        if (role == KTextEditor::CodeCompletionModel::InheritanceDepth) {
+            return 800;
         }
         return QVariant();
     }
@@ -90,11 +89,11 @@ void SnippetCompletionModel::completionInvoked(KTextEditor::View *view, const KT
 void SnippetCompletionModel::initData(KTextEditor::View* view)
 {
     QString mode;
-    #ifdef HAVE_HIGHLIGHT_IFACE
+    #ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
         if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
             mode = iface->highlightingModeAt(view->cursorPosition());
         }
-    #endif // HAVE_HIGHLIGHT_IFACE
+    #endif // SNIPPETS_HAVE_HIGHLIGHTIFACE
 
     if ( mode.isEmpty() ) {
         mode = view->document()->highlightingMode();

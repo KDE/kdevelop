@@ -30,6 +30,8 @@
 #include "uicontroller.h"
 #include "mainwindow.h"
 #include "shellextension.h"
+#include "projectsourcepage.h"
+#include <interfaces/iprojectcontroller.h>
 
 namespace KDevelop
 {
@@ -39,17 +41,31 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
 {
     resize(QSize(700, 500));
     
-    QWidget* page = new OpenProjectPage( startUrl, this );
-    connect( page, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
-    openPage = addPage( page, "Select Directory/Project File" );
-    page = new ProjectInfoPage( this );
+    KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    sourcePageWidget = new ProjectSourcePage( start, this );
+    connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
+    sourcePage = addPage( sourcePageWidget, "Select the source" );
+    
+    openPageWidget = new OpenProjectPage( start, this );
+    connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
+    openPage = addPage( openPageWidget, "Select the project" );
+    
+    QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
-    projectInfoPage = addPage( page, "Project Information" );
+    projectInfoPage = addPage( page, "Project information" );
+    
+    setValid( sourcePage, true );
     setValid( openPage, false );
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
     showButton( KDialog::Help, false );
+}
+
+void OpenProjectDialog::validateSourcePage(bool valid)
+{
+    setValid(sourcePage, valid);
+    openPageWidget->setUrl(sourcePageWidget->workingDir());
 }
 
 void OpenProjectDialog::validateOpenUrl( const KUrl& url )
@@ -63,8 +79,8 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
         QFileInfo info( url.toLocalFile() );
         isValid = info.exists();
         if ( isValid ) {
-            isDir = QFileInfo( url.toLocalFile() ).isDir();
-            extension = QFileInfo( url.toLocalFile() ).suffix();
+            isDir = info.isDir();
+            extension = info.suffix();
         }
     } else 
     {

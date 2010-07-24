@@ -97,6 +97,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void updateCaption();
+    void shortcutsChanged();
 
 private:
     class MainWindowPrivate *d;

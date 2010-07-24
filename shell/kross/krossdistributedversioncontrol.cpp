@@ -250,3 +250,7 @@ VcsJob* KrossDistributedVersionControl::reset(const KUrl &repository, const QStr
     return new KrossVcsJob("reset", QVariantList() << repository << args << files, action, m_plugin, action);
 }
 
+KDevelop::VcsLocationWidget* KrossDistributedVersionControl::vcsLocation(QWidget* parent) const
+{
+    return 0;
+}

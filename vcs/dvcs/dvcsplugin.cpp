@@ -274,23 +274,18 @@ KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
 
 bool DistributedVersionControlPlugin::prepareJob(DVcsJob* job, const QString& repository, RequestedOperation op)
 {
-    if (!job) {
-        return false;
-    }
+    Q_ASSERT(job);
+    
     // Only do this check if it's a normal operation like diff, log ...
     // For other operations like "git clone" isValidDirectory() would fail as the
     // directory is not yet under git control
-    if (op == NormalOperation &&
-            !isValidDirectory(repository)) {
+    if (op == NormalOperation && !isValidDirectory(repository)) {
         kDebug() << repository << " is not a valid repository";
         return false;
     }
 
     QFileInfo repoInfo(repository);
-    if (!repoInfo.isAbsolute()) {
-        //We don't want to have empty or non-absolute pathes for working dir
-        return false;
-    }
+    Q_ASSERT(repoInfo.isAbsolute());
 
     // clear commands and args from a possible previous run
     job->clear();

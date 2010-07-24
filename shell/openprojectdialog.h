@@ -22,6 +22,8 @@ class Job;
 
 namespace KDevelop
 {
+class ProjectSourcePage;
+class OpenProjectPage;
 
 class OpenProjectDialog : public KAssistantDialog
 {
@@ -32,6 +34,7 @@ public:
     QString projectName();
     QString projectManager();
 private slots:
+    void validateSourcePage( bool );
     void validateOpenUrl( const KUrl& );
     void validateProjectName( const QString& );
     void validateProjectManager( const QString& );
@@ -41,9 +44,13 @@ private:
     KUrl m_url;
     QString m_projectName;
     QString m_projectManager;
+    KPageWidgetItem* sourcePage;
     KPageWidgetItem* openPage;
     KPageWidgetItem* projectInfoPage;
     QStringList m_fileList;
+
+    KDevelop::OpenProjectPage* openPageWidget;
+    KDevelop::ProjectSourcePage* sourcePageWidget;
 };
 
 }

@@ -8,6 +8,8 @@ set(kdevexecute_PART_UIS
 )
 
 set(kdevexecute_PART_SRCS
+
+    projecttargetscombobox.cpp
     executeplugin.cpp
     nativeappconfig.cpp
     nativeappjob.cpp

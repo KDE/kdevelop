@@ -33,6 +33,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 	ilauncher.cpp
 	ilaunchconfiguration.cpp
 	ilaunchmode.cpp
+	iprojectprovider.cpp
 )
 
 
@@ -85,6 +86,7 @@ install(FILES
     idebugcontroller.h
     ipartcontroller.h
     ilaunchmode.h
+    iprojectprovider.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/interfaces COMPONENT Devel
 )
 

@@ -29,6 +29,8 @@ set(kdevplatformvcs_LIB_SRCS
     widgets/vcsdiffwidget.cpp
     widgets/vcscommitdialog.cpp
     widgets/vcsdiffpatchsources.cpp
+    widgets/vcslocationwidget.cpp
+    widgets/standardvcslocationwidget.cpp
     models/vcsannotationmodel.cpp
     models/vcseventmodel.cpp
     models/vcsitemeventmodel.cpp
@@ -81,6 +83,8 @@ install(FILES
     widgets/vcseventwidget.h
     widgets/vcsdiffwidget.h
     widgets/vcscommitdialog.h
+    widgets/vcslocationwidget.h
+    widgets/standardvcslocationwidget.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/vcs/widgets COMPONENT Devel
 )
 

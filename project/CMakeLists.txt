@@ -9,6 +9,7 @@ set(kdevplatformproject_LIB_SRCS
     projectbuildsetmodel.cpp
     projectitemlineedit.cpp
     helper.cpp
+    projectproxymodel.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
@@ -16,18 +17,20 @@ set(kdevplatformproject_LIB_SRCS
 
 
 kde4_add_library(kdevplatformproject SHARED ${kdevplatformproject_LIB_SRCS})
-target_link_libraries(kdevplatformproject 
-        ${QT_QTDESIGNER_LIBRARY} 
+target_link_libraries(kdevplatformproject
+        ${QT_QTDESIGNER_LIBRARY}
         kdevplatforminterfaces
         kdevplatformutil
 	kdevplatformlanguage
         ${KDE4_KIO_LIBS})
-target_link_libraries(kdevplatformproject LINK_INTERFACE_LIBRARIES 
-        ${QT_QTGUI_LIBRARY} 
-        ${KDE4_KDECORE_LIBS} 
+target_link_libraries(kdevplatformproject LINK_INTERFACE_LIBRARIES
+        ${QT_QTGUI_LIBRARY}
+        ${KDE4_KDECORE_LIBS}
         ${KDE4_KUTIL_LIBRARY})
 set_target_properties(kdevplatformproject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformproject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+add_subdirectory(tests)
 
 ########### install files ###############
 

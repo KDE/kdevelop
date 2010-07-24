@@ -35,6 +35,8 @@
 
 #include "projectmodel.h"
 #include <util/kdevstringhandler.h>
+#include <kicon.h>
+#include <kmimetype.h>
 
 namespace KDevelop
 {
@@ -124,7 +126,7 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
     } else if(role == Qt::DecorationRole && idx.column()==0) {
         KDevelop::ProjectBaseItem* item = m_items.at( idx.row() ).findItem();
         if( item ) {
-            return item->icon();
+            return KIcon( item->iconName() );
         }
     }
     return QVariant();

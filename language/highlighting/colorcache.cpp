@@ -108,7 +108,7 @@ ColorCache::ColorCache(QObject* parent)
 
   m_self = this;
 
-  update(true);
+  update();
 }
 
 ColorCache::~ColorCache()
@@ -220,12 +220,9 @@ void ColorCache::updateColorsFromSettings()
   }
 }
 
-void ColorCache::update(bool now)
+void ColorCache::update()
 {
-  if(now)
-    updateInternal();
-  else
-    QMetaObject::invokeMethod(this, "updateInternal", Qt::QueuedConnection);
+  QMetaObject::invokeMethod(this, "updateInternal", Qt::QueuedConnection);
 }
 
 void ColorCache::updateInternal()

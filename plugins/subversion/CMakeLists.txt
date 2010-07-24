@@ -70,6 +70,7 @@ set(kdevsubversion_PART_SRCS
     svnimportmetadatawidget.cpp
     svncheckoutmetadatawidget.cpp
     svnclient.cpp
+    svnlocationwidget.cpp
 )
 
 set(kdevsubversion_PART_UI

@@ -256,7 +256,6 @@ KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *
 {
     KDevelop::ProjectFolderItem *projectRoot = new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
     kDebug() << "imported new project" << project->name() << "at" << projectRoot->url();
-    projectRoot->setProjectRoot(true);
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
     if ( project->folder().isLocalFile() ) {
@@ -405,13 +404,12 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
             stopWatcher(parent);
             KIO::CopyJob* job = KIO::move(source, destination);
             bool success = KIO::NetAccess::synchronousRun( job, KDevelop::ICore::self()->uiController()->activeMainWindow() );
-            continueWatcher(parent);
             if ( success ) {
-                item->setParent(parent);
-                return true;
-            } else {
-                return false;
+                item->parent()->takeRow( item->row() );
+                parent->appendRow( item );
             }
+            continueWatcher(parent);
+            return success;
         }
     }
     return false;

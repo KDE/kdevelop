@@ -29,12 +29,13 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
+#include <QtCore/QDir>
+#include <QtGui/QStandardItemModel>
 
 #include <KDE/KDebug>
 #include <KDE/KLocale>
 
 #include <interfaces/iplugin.h>
-#include <QDir>
 
 struct DVcsJobPrivate
 {
@@ -50,7 +51,6 @@ struct DVcsJobPrivate
     KProcess*   childproc;
     QStringList command;
     QString     server;
-    QDir        directory;
     bool        isRunning;
     bool        wasStarted;
     bool        failed;
@@ -63,6 +63,14 @@ DVcsJob::DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbos
     : VcsJob(parent, verbosity), d(new DVcsJobPrivate)
 {
     d->vcsplugin = parent;
+
+    connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
+            SLOT(slotProcessExited(int, QProcess::ExitStatus)));
+    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
+            SLOT(slotProcessError(QProcess::ProcessError)));
+
+    connect(d->childproc, SIGNAL(readyReadStandardOutput()),
+                SLOT(slotReceivedStdout()));
 }
 
 DVcsJob::~DVcsJob()
@@ -77,7 +85,7 @@ void DVcsJob::clear()
     d->command.clear();
     d->output.clear();
     d->server.clear();
-    d->directory = QDir::temp();
+    d->childproc->setWorkingDirectory(QDir::temp().absolutePath());
     d->isRunning = d->failed = d->wasStarted = false;
 }
 
@@ -88,7 +96,9 @@ void DVcsJob::setServer(const QString& server)
 
 void DVcsJob::setDirectory(const QDir& directory)
 {
-    d->directory = directory;
+    const QString workingDirectory = directory.absolutePath();
+    kDebug() << "Working directory:" << workingDirectory;
+    d->childproc->setWorkingDirectory(workingDirectory);
 }
 
 void DVcsJob::setStandardInputFile(const QString &fileName)
@@ -96,9 +106,9 @@ void DVcsJob::setStandardInputFile(const QString &fileName)
     d->childproc->setStandardInputFile(fileName);
 }
 
-const QDir & DVcsJob::getDirectory() const
+QDir DVcsJob::getDirectory() const
 {
-    return d->directory;
+    return QDir(d->childproc->workingDirectory());
 }
 
 bool DVcsJob::isRunning() const
@@ -175,20 +185,6 @@ void DVcsJob::start()
         return;
     }
 #endif
-    const QString workingDirectory = d->directory.absolutePath();
-    kDebug() << "Working directory:" << workingDirectory;
-    d->childproc->setWorkingDirectory(workingDirectory);
-
-
-    connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
-            SLOT(slotProcessExited(int, QProcess::ExitStatus)));
-    connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
-            SLOT(slotProcessError(QProcess::ProcessError)));
-
-    connect(d->childproc, SIGNAL(readyReadStandardError()),
-                SLOT(slotReceivedStderr()));
-    connect(d->childproc, SIGNAL(readyReadStandardOutput()),
-                SLOT(slotReceivedStdout()));
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
 
@@ -198,8 +194,10 @@ void DVcsJob::start()
     d->childproc->setProgram( d->command );
     d->childproc->setEnvironment(QProcess::systemEnvironment());
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
-    d->childproc->waitForStarted();
     d->childproc->start();
+    d->childproc->waitForStarted();
+    
+    displayOutput(d->command.join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -214,9 +212,6 @@ void DVcsJob::cancel()
 
 void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
-    // disconnect all connections to childproc's signals; they are no longer needed
-    d->childproc->disconnect();
-
     d->isRunning = false;
 
     //NOTE: some DVCS commands can use stderr...
@@ -242,7 +237,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
         errorValue = "Timedout";
         break;
     case QProcess::WriteError:
-        errorValue = "WriteErro";
+        errorValue = "WriteError";
         break;
     case QProcess::ReadError:
         errorValue = "ReadError";
@@ -253,33 +248,35 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     }
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
+    
+    displayOutput(i18n("Command finnished with error %1.", errorValue));
     jobIsReady();
 }
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    // disconnect all connections to childproc's signals; they are no longer needed
-    d->childproc->disconnect();
-
     d->isRunning = false;
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0)
         slotProcessError(QProcess::UnknownError);
 
-    kDebug() << "process has finished with no errors";
+    displayOutput(i18n("Command exited with value %1.", exitCode));
     jobIsReady();
+}
+
+void DVcsJob::displayOutput(const QString& data)
+{
+    static_cast<QStandardItemModel*>(model())->appendRow(new QStandardItem(data));
 }
 
 void DVcsJob::slotReceivedStdout()
 {
+    QByteArray output = d->childproc->readAllStandardOutput();
+    
     // accumulate output
-    d->output.append(d->childproc->readAllStandardOutput());
-}
-
-void DVcsJob::slotReceivedStderr()
-{
-    // accumulate output
-    d->output.append(d->childproc->readAllStandardError());
+    d->output.append(output);
+    
+    displayOutput(output);
 }
 
 KDevelop::VcsJob::JobStatus DVcsJob::status() const

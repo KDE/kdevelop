@@ -28,10 +28,10 @@
 
 #include "shellextension.h"
 #include "core.h"
-#include "projectcontroller.h"
 #include "plugincontroller.h"
 #include <kdiroperator.h>
 #include <kactioncollection.h>
+#include <KIO/NetAccess>
 
 namespace KDevelop
 {
@@ -41,11 +41,7 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
 
-    KUrl start = Core::self()->projectController()->projectsBaseDirectory();
-    if(startUrl.isValid())
-        start = startUrl;
-    
-    fileWidget = new KFileWidget( start, this);
+    fileWidget = new KFileWidget( startUrl, this);
 
     QStringList filters;
     QStringList allEntry;
@@ -94,6 +90,8 @@ OpenProjectPage::OpenProjectPage( const KUrl& startUrl, QWidget* parent )
 
     // Emitted when clicking on a file in the fileview area
     connect( fileWidget, SIGNAL(fileHighlighted(const QString&)), SLOT(highlightFile(const QString&)) );
+    
+    connect( fileWidget->dirOperator()->dirLister(), SIGNAL(completed(KUrl)), SLOT(dirChanged(KUrl)));
 }
 
 KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
@@ -105,6 +103,22 @@ KUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
         u.addPath( file );
     }
     return u;
+}
+
+void OpenProjectPage::setUrl(const KUrl& url)
+{
+    fileWidget->setUrl(url, false);
+}
+
+void OpenProjectPage::dirChanged(const KUrl& url)
+{
+    if(fileWidget->selectedFiles().isEmpty()) {
+        KFileItemList items=fileWidget->dirOperator()->dirLister()->items();
+        foreach(const KFileItem& item, items) {
+            if(item.url().path().endsWith(ShellExtension::getInstance()->projectFileExtension()) && item.isFile())
+                fileWidget->setSelection(item.url().url());
+        }
+    }
 }
 
 void OpenProjectPage::highlightFile( const QString& file )

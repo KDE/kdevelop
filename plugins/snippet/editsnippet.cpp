@@ -30,6 +30,8 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
 
     setButtons(/*Reset | */Apply | Cancel | Ok);
     setupUi(mainWidget());
+    mainWidget()->layout()->setMargin(0);
+    snippetShortcutWidget->layout()->setMargin(0);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
