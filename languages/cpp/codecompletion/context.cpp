@@ -1746,7 +1746,15 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     if(str.length() > 2 && cstr[0] == '_' && (cstr[1] == '_' || QChar(cstr[1]).isUpper()) && decl->url() != m_duContext->url())
       return false;
   }
-  
+
+  if(ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(decl)) {
+    ///TODO: indexedIdentifier().isEmpty() should be fixed for this case...
+    if (cDecl->classType() == ClassDeclarationData::Struct && cDecl->identifier().toString().isEmpty()) {
+      // filter anonymous structs
+      return false;
+    }
+  }
+
   if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
     return false;
   

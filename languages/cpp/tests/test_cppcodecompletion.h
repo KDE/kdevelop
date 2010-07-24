@@ -118,6 +118,7 @@ private slots:
   void testStringInComment_data();
   void testStringInComment();
   void testProperties();
+  void testAnonStruct();
 
 public:
   enum DumpArea {

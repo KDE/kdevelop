@@ -2162,6 +2162,21 @@ void TestCppCodeCompletion::testProperties()
   QCOMPARE(complCtx.completionContext->memberAccessOperation(), Cpp::CodeCompletionContext::NoMemberAccess);
   QVERIFY(!complCtx.names.contains(QString("myProp")));
   }
+
+  release(top);
+}
+
+void TestCppCodeCompletion::testAnonStruct()
+{
+  QByteArray code("void foo() { struct { int a; } myStruct; }");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  CompletionItemTester complCtx(top->childContexts().last(), "");
+  QVERIFY(!complCtx.names.contains("<unknown>"));
+
+  release(top);
 }
 
 class TestPreprocessor : public rpp::Preprocessor
