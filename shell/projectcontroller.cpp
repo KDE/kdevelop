@@ -803,6 +803,20 @@ KUrl ProjectController::projectsBaseDirectory() const
 QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
+    
+    if(!project)
+    {
+        // Find a project with the correct base directory at least
+        foreach(IProject* candidateProject, Core::self()->projectController()->projects())
+        {
+            if(candidateProject->folder().isParentOf(url))
+            {
+                project = candidateProject;
+                break;
+            }
+        }
+    }
+    
     QString prefixText = url.upUrl().pathOrUrl(KUrl::AddTrailingSlash);
     if (project) {
         if (format == FormatHtml) {
