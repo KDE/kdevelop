@@ -62,6 +62,7 @@ private:
   KDevelop::ProcessLineMaker* m_lineMaker;
   ExternalScriptItem::OutputMode m_outputMode;
   ExternalScriptItem::InputMode m_inputMode;
+  ExternalScriptItem::ErrorMode m_errorMode;
   KTextEditor::Document* m_document;
   /// invalid when whole doc should be replaced
   KTextEditor::Range m_selectionRange;

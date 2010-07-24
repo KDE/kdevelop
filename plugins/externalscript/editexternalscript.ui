@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>235</height>
+    <height>262</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -41,7 +41,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="shortcutLabel">
      <property name="toolTip">
       <string>&lt;p&gt;Defines shortcuts you can use to execute this script.&lt;/p&gt;</string>
@@ -51,7 +51,7 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <widget class="KShortcutWidget" name="shortcutWidget"/>
    </item>
    <item row="1" column="0">
@@ -158,7 +158,7 @@
      </item>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="saveLabel">
      <property name="text">
       <string>Save &amp;Mode:</string>
@@ -168,7 +168,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <widget class="QComboBox" name="saveCombo">
      <item>
       <property name="text">
@@ -187,7 +187,7 @@
      </item>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="7" column="0" colspan="2">
     <widget class="QCheckBox" name="showOutputBox">
      <property name="text">
       <string>Show Out&amp;put</string>
@@ -195,6 +195,55 @@
      <property name="checked">
       <bool>true</bool>
      </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="stderrLabel">
+     <property name="text">
+      <string>Errors:</string>
+     </property>
+     <property name="buddy">
+      <cstring>stderrCombo</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QComboBox" name="stderrCombo">
+     <item>
+      <property name="text">
+       <string>ignore</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>merge with normal output</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>insert at cursor position of current file</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace selection of current file or insert at cursor position</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace selection of current file or whole file</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>replace contents of current file</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>create new file</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

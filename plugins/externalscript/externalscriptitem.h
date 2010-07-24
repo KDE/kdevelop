@@ -88,6 +88,38 @@ public:
    */
   void setOutputMode( OutputMode mode );
 
+  /// Defines what should be done with the @c STDERR of a script run.
+  enum ErrorMode {
+    /// Ignore errors and do nothing.
+    ErrorNone,
+    /// Merge with @c STDOUT and use @c OutputMode.
+    ErrorMergeOutput,
+    /// Errors get inserted at the cursor position of the current document.
+    ErrorInsertAtCursor,
+    /// Current selection gets replaced in the active document.
+    /// If no selection exists, the output will get inserted at the
+    /// current cursor position in the active document view.
+    ErrorReplaceSelectionOrInsertAtCursor,
+    /// Current selection gets replaced in the active document.
+    /// If no selection exists, the whole document gets replaced.
+    ErrorReplaceSelectionOrDocument,
+    /// The whole contents of the active document gets replaced.
+    ErrorReplaceDocument,
+    /// Create a new file from the errors.
+    ErrorCreateNewFile
+  };
+
+  /**
+   * @return @c ErrorMode that decides what parts of the active document should be replaced by the
+   *         @c STDERR of the @c command() execution.
+   */
+  ErrorMode errorMode() const;
+  /**
+   * Sets the @c ErrorMode that decides what parts of the active document should be replaced by the
+   * @c STDERR of the @c command() execution.
+   */
+  void setErrorMode( ErrorMode mode );
+
   enum InputMode {
     /// Nothing gets streamed to the @c STDIN of the external script.
     InputNone,
@@ -138,6 +170,7 @@ private:
   QString m_command;
   SaveMode m_saveMode;
   OutputMode m_outputMode;
+  ErrorMode m_errorMode;
   InputMode m_inputMode;
   KAction* m_action;
   bool m_showOutput;

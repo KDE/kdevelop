@@ -86,6 +86,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
       item->setCommand( script.readEntry( "command" ));
       item->setInputMode( static_cast<ExternalScriptItem::InputMode>( script.readEntry( "inputMode", 0u ) ) );
       item->setOutputMode( static_cast<ExternalScriptItem::OutputMode>( script.readEntry( "outputMode", 0u ) ) );
+      item->setErrorMode( static_cast<ExternalScriptItem::ErrorMode>( script.readEntry( "errorMode", 0u ) ) );
       item->setSaveMode( static_cast<ExternalScriptItem::SaveMode>( script.readEntry( "saveMode", 0u ) ) );
       item->action()->setShortcut( KShortcut( script.readEntry( "shortcuts" ) ) );
       m_model->appendRow( item );
@@ -209,7 +210,8 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   config.writeEntry( "name", item->text() );
   config.writeEntry( "command", item->command() );
   config.writeEntry( "inputMode", (uint) item->inputMode() );
-  config.writeEntry( "replaceMode", (uint) item->outputMode() );
+  config.writeEntry( "outputMode", (uint) item->outputMode() );
+  config.writeEntry( "errorMode", (uint) item->errorMode() );
   config.writeEntry( "saveMode", (uint) item->saveMode() );
   config.writeEntry( "shortcuts", item->action()->shortcut().toString() );
   config.sync();
