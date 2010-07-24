@@ -256,7 +256,6 @@ void Container::addWidget(View *view, int position)
     if (position != -1)
     {
         idx = d->stack->insertWidget(position, w);
-        view->notifyPositionChanged(idx);
     }
     else
         idx = d->stack->addWidget(w);
