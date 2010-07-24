@@ -276,8 +276,8 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
 
             KUrl file = m_patch->baseDir();
             
-            file.addPath( model->sourcePath() );
-            file.addPath( model->sourceFile() );
+            file.addPath( model->destinationPath() );
+            file.addPath( model->destinationFile() );
             
             if ( !fileName.isEmpty() && fileName != file )
                 continue;
@@ -345,8 +345,8 @@ void PatchReviewPlugin::addHighlighting(const KUrl& highlightFile, IDocument* do
 
             KUrl file = m_patch->baseDir();
             
-            file.addPath( model->sourcePath() );
-            file.addPath( model->sourceFile() );
+            file.addPath( model->destinationPath() );
+            file.addPath( model->destinationFile() );
 
             if (file != highlightFile)
                 continue;
@@ -386,8 +386,8 @@ void PatchReviewPlugin::highlightPatch() {
 
             KUrl file = m_patch->baseDir();
             
-            file.addPath( model->sourcePath() );
-            file.addPath( model->sourceFile() );
+            file.addPath( model->destinationPath() );
+            file.addPath( model->destinationFile() );
 
             addHighlighting(file);
         }
@@ -415,8 +415,8 @@ void PatchReviewToolView::finishReview()
 
           KUrl file = m_plugin->patch()->baseDir();
           
-          file.addPath( model->sourcePath() );
-          file.addPath( model->sourceFile() );
+          file.addPath( model->destinationPath() );
+          file.addPath( model->destinationFile() );
           
           selectedUrls << file;
         }
@@ -447,8 +447,8 @@ void PatchReviewToolView::fileDoubleClicked( const QModelIndex& i ) {
 
         KUrl file = m_plugin->patch()->baseDir();
         
-        file.addPath( model->sourcePath() );
-        file.addPath( model->sourceFile() );
+        file.addPath( model->destinationPath() );
+        file.addPath( model->destinationFile() );
 
         kDebug() << "opening" << file.toLocalFile();
 
@@ -466,8 +466,8 @@ KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
 {
   KUrl file = m_plugin->patch()->baseDir();
   
-  file.addPath( model->sourcePath() );
-  file.addPath( model->sourceFile() );
+  file.addPath( model->destinationPath() );
+  file.addPath( model->destinationFile() );
   
   return file;
 }
@@ -481,70 +481,96 @@ void PatchReviewToolView::kompareModelChanged()
         return;
 
     QMap<KUrl, QString> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+
+    QSet<KUrl> haveUrls;
     
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
-    if ( !models )
-        return;
-    Diff2::DiffModelList::const_iterator it = models->constBegin();
-    QSet<KUrl> haveUrls;
-    for(; it != models->constEnd(); ++it) {
-        Diff2::DifferenceList * diffs = ( *it ) ->differences();
-        int cnt = 0;
-        if ( diffs )
-            cnt = diffs->count();
-
-        KUrl file = urlForFileModel(*it);
-        haveUrls.insert(file);
-
-        if(!QFileInfo(file.toLocalFile()).isReadable())
-          continue;
-          
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
-        
-        m_editPatch.filesList->insertTopLevelItem(0, item);
-
-        const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
-
-        QString text;
-        if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty()) {
-            text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, additionalUrls[file]);
-        } else {
-            text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
-        }
-
-        item->setData( 0, Qt::DisplayRole, text );
-        item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
-        item->setCheckState( 0, Qt::Checked );
-    }
-    
-    ///First add files that a project was found for, then the other ones
-    ///findProject() excludes some useless files like backups, so we can use that to sort those files to the back
-    for(int withProject = 1; withProject >= 0; --withProject)
+    if( models )
     {
-      for(QMap<KUrl, QString>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
-      {
-        KUrl url = it.key();
-        
-          if(((bool)ICore::self()->projectController()->findProjectForUrl(url)) != (bool)withProject)
+      Diff2::DiffModelList::const_iterator it = models->constBegin();
+      for(; it != models->constEnd(); ++it) {
+          Diff2::DifferenceList * diffs = ( *it ) ->differences();
+          int cnt = 0;
+          if ( diffs )
+              cnt = diffs->count();
+
+          KUrl file = urlForFileModel(*it);
+          haveUrls.insert(file);
+
+          if(!QFileInfo(file.toLocalFile()).isReadable())
             continue;
-        
-        if(!haveUrls.contains(url))
-        {
-          haveUrls.insert(url);
-          
+            
           QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
           
           m_editPatch.filesList->insertTopLevelItem(0, item);
-          QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-          if(!(*it).isEmpty())
-            text += " (" + (*it) + ")";
-          
+
+          const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
+
+          QString text;
+          if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty()) {
+              text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, additionalUrls[file]);
+          } else {
+              text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
+          }
+
           item->setData( 0, Qt::DisplayRole, text );
-          QVariant v;
-          v.setValue<KUrl>( url );
-          item->setData( 0, Qt::UserRole, v );
-          item->setCheckState( 0, Qt::Unchecked );
+          item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
+          item->setCheckState( 0, Qt::Checked );
+      }
+    }
+    
+    // Maps the _really_ useful items (with VCS state) to index 0,
+    // the items that have at least a project found to 1,
+    // and the probably really useless items without project found to 2.
+    // The project-manager filters useless stuff like backups out so they get index 2.
+    QMap<int, QList< QPair<KUrl, QString> > > newItems;
+    
+    for(QMap<KUrl, QString>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
+    {
+      KUrl url = it.key();
+      
+      if(!haveUrls.contains(url))
+      {
+        haveUrls.insert(url);
+        
+        ///@todo Better filtering without i18n
+        if(!(*it).isEmpty() && !(*it).contains(i18n("Unknown"), Qt::CaseInsensitive))
+        {
+          newItems[0] << qMakePair<KUrl, QString>(url, *it);
+        }else{
+          if(((bool)ICore::self()->projectController()->findProjectForUrl(url)))
+          {
+            newItems[1] << qMakePair<KUrl, QString>(url, *it);
+          }else{
+            newItems[2] << qMakePair<KUrl, QString>(url, *it);
+          }
         }
+      }
+    }
+    
+    for(int a = 0; a < 3; ++a)
+    {
+      for(QList< QPair< KUrl, QString > >::iterator itemIt = newItems[a].begin(); itemIt != newItems[a].end(); ++itemIt)
+      {
+        KUrl url = itemIt->first;
+        QString state = itemIt->second;
+        
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
+        
+        QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
+        if(!state.isEmpty())
+          text += " (" + state + ")";
+        
+        item->setData( 0, Qt::DisplayRole, text );
+        QVariant v;
+        v.setValue<KUrl>( url );
+        item->setData( 0, Qt::UserRole, v );
+        item->setCheckState( 0, Qt::Unchecked );
+
+        if(a == 0)
+          item->setCheckState( 0, Qt::Checked );
+        
+        m_editPatch.filesList->addTopLevelItem(item);
       }
     }
 }
@@ -1107,7 +1133,13 @@ void PatchReviewPlugin::updateKompareModel() {
         
         try {
             if ( !m_modelList->openDirAndDiff() )
-                throw "could not open diff " + m_patch->file().prettyUrl() + " on " + m_patch->baseDir().prettyUrl();
+            {
+#if 0
+                // Don't error out on empty files, as those are valid diffs too
+                if(QFileInfo(m_patch->file().toLocalFile()).size() != 0)
+                    throw "could not open diff " + m_patch->file().prettyUrl() + " on " + m_patch->baseDir().prettyUrl();
+#endif
+            }
          } catch ( const QString & str ) {
             throw;
         } catch ( ... ) {
@@ -1313,15 +1345,21 @@ void PatchReviewPlugin::updateReview()
     for(int a = 0; a < m_modelList->modelCount(); ++a) {
       
       KUrl absoluteUrl = m_patch->baseDir();
-      KUrl url(m_modelList->modelAt(a)->source());
+      KUrl url(m_modelList->modelAt(a)->destination());
       
       if(url.isRelative())
         absoluteUrl.addPath(url.path());
       else
         absoluteUrl = url;
-        
-      ICore::self()->documentController()->openDocument(absoluteUrl);
-      seekHunk(true, absoluteUrl); //Jump to the first changed position
+      
+      if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
+      {
+        ICore::self()->documentController()->openDocument(absoluteUrl);
+        seekHunk(true, absoluteUrl); //Jump to the first changed position
+      }else{
+        // Maybe the file was deleted
+        kDebug() << "could not open" << absoluteUrl << "because it doesn't exist";
+      }
     }
   }
   
