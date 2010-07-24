@@ -146,6 +146,9 @@ public:
                         QList<DVcsEvent>& commits) const;
 
 protected:
+  
+    KUrl repositoryRoot(const KUrl& path);
+  
     bool isValidDirectory(const KUrl &dirPath);
 
     DVcsJob* lsFiles(const QString &repository,

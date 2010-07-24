@@ -99,6 +99,13 @@ QString GitPlugin::name() const
     return QLatin1String("Git");
 }
 
+KUrl GitPlugin::repositoryRoot(const KUrl& path)
+{
+    // Ugly but true: This is how it works.
+    isValidDirectory(path);
+    return m_lastRepoRoot;
+}
+
 bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 {
     KUrl possibleRepoRoot = m_lastRepoRoot;
@@ -341,7 +348,8 @@ VcsJob* GitPlugin::commit(const QString& message,
         return 0;
 
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocations.front().toLocalFile()) ) {
+    
+    if (prepareJob(job, repositoryRoot(localLocations.front()).path()) ) {
         *job << "git";
         *job << "commit";
         *job << "-m";
@@ -655,8 +663,7 @@ QList<QVariant> GitPlugin::getCachedFiles(const QString &directory, KDevelop::Ou
         VcsStatusInfo status;
         status.setUrl(file);
         
-        status.setState(VcsStatusInfo::State(charToState(line.section(' ', 4, 4)[0].toAscii() ) +
-                                             VcsStatusInfo::ItemAdded) );
+        status.setState(VcsStatusInfo::State(charToState(line.section(' ', 4, 4)[0].toAscii() ) ));
 
         kDebug() << line[97] << " " << file.toLocalFile();
 
