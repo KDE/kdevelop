@@ -47,7 +47,7 @@ public:
     ~Container();
 
     /**Adds the widget for given @p view to the container.*/
-    void addWidget(View *view);
+    void addWidget(Sublime::View* view, int position = -1);
     /**Removes the widget from the container.*/
     void removeWidget(QWidget *w);
     /** @return true if widget is placed inside this container.*/
@@ -62,7 +62,6 @@ public:
     View *viewForWidget(QWidget *w) const;
 
     void setTabBarHidden(bool hide);
-    void setOpenAfterCurrent(bool after);
 
     /** Adds a corner widget to the left of this containers tab-bar. To remove it again, just delete it.
       * The ownership otherwise goes to the container. */

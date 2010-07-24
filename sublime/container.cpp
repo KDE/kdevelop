@@ -82,8 +82,6 @@ struct ContainerPrivate {
     QLabel *fileStatus;
     QLabel *statusCorner;
     QPointer<QWidget> leftCornerWidget;
-
-    bool openAfterCurrent;
 };
 
 class UnderlinedLabel: public QLabel {
@@ -188,8 +186,6 @@ Container::Container(QWidget *parent)
     d->tabBar->setTabsClosable(true);
     d->tabBar->setMovable(true);
     d->tabBar->setExpanding(false);
-
-    setOpenAfterCurrent(group.readEntry("TabBarOpenAfterCurrent", 1) == 1);
 }
 
 void Container::setLeftCornerWidget(QWidget* widget)
@@ -253,13 +249,13 @@ void Container::widgetActivated(int idx)
     }
 }
 
-void Container::addWidget(View *view)
+void Container::addWidget(View *view, int position)
 {
     QWidget *w = view->widget(this);
     int idx = 0;
-    if (d->openAfterCurrent)
+    if (position != -1)
     {
-        idx = d->stack->insertWidget(d->stack->currentIndex()+1, w);
+        idx = d->stack->insertWidget(position, w);
         view->notifyPositionChanged(idx);
     }
     else
@@ -392,11 +388,6 @@ void Container::setTabBarHidden(bool hide)
         d->fileStatus->hide();
         d->tabBar->show();
     }
-}
-
-void Container::setOpenAfterCurrent(bool after)
-{
-    d->openAfterCurrent = after;
 }
 
 void Container::tabMoved(int from, int to)

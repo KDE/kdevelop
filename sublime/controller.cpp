@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include <kdebug.h>
+#include <KSharedConfig>
 
 #include "area.h"
 #include "view.h"
@@ -94,6 +95,7 @@ struct ControllerPrivate {
     QMap<Area*, MainWindow*> shownAreas;
     QList<MainWindow*> controlledWindows;
     QVector< QList<Area*> > mainWindowAreas;
+    bool openAfterCurrent;
 };
 
 
@@ -108,7 +110,7 @@ Controller::Controller(QObject *parent)
 
 void Controller::init()
 {
-
+    loadSettings();
     qApp->installEventFilter(this);
 }
 
@@ -381,6 +383,17 @@ void Controller::notifyViewAdded(Sublime::AreaIndex*, Sublime::View *view)
 void Controller::setStatusIcon(Document * document, const QIcon & icon)
 {
     document->setStatusIcon(icon);
+}
+
+void Controller::loadSettings()
+{
+    KConfigGroup uiGroup = KGlobal::config()->group("UiSettings");
+    d->openAfterCurrent = (uiGroup.readEntry("TabBarOpenAfterCurrent", 1) == 1);
+}
+
+bool Controller::openAfterCurrent() const
+{
+    return d->openAfterCurrent;
 }
 
 }

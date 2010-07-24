@@ -143,6 +143,9 @@ public:
 
     void setStatusIcon(Document* document, const QIcon& icon);
 
+    bool openAfterCurrent() const;
+
+    void loadSettings();
 public Q_SLOTS:
     //@todo adymo: this should not be a part of public API
     /**Area can connect to this slot to release itself from its mainwindow.*/
