@@ -96,6 +96,15 @@ void WorkingSetController::initialize()
 
 void WorkingSetController::cleanup()
 {
+    foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+        foreach (Sublime::Area *area, window->areas()) {
+            if (!area->workingSet().isEmpty()) {
+                Q_ASSERT(m_workingSets.contains(area->workingSet()));
+                m_workingSets[area->workingSet()]->saveFromArea(area, area->rootIndex());
+            }
+        }
+    }
+
     foreach(WorkingSet* set, m_workingSets) {
         kDebug() << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
         if(!set->isPersistent() && !set->hasConnectedAreas()) {
