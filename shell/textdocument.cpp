@@ -533,8 +533,10 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     if(d->initialRange.isValid()) {
         if(d->initialRange.isEmpty())
             view->setCursorPosition(d->initialRange.start());
-        else
+        else {
+            view->setCursorPosition(d->initialRange.end());
             view->setSelection(d->initialRange);
+        }
     }
     TextEditorWidget* teWidget = new TextEditorWidget(parent);
     teWidget->setEditorView(view);
@@ -556,9 +558,16 @@ QString KDevelop::TextView::viewState() const
 {
     if( d->editor && d->editor->editorView() )
     {
-        KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
-        return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
-    }else
+        if (d->editor->editorView()->selection()) {
+            KTextEditor::Range selection = d->editor->editorView()->selectionRange();
+            return QString("Selection=%1,%2,%3,%4").arg(selection.start().line())
+                                                   .arg(selection.start().column())
+                                                   .arg(selection.end().line())
+                                                   .arg(selection.end().column());
+        } else {
+            KTextEditor::Cursor cursor = d->editor->editorView()->cursorPosition();
+            return QString("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
+        }    }else
     {
         kDebug() << "TextView's internal KTE view disappeared!";
         return QString();
@@ -571,12 +580,20 @@ void KDevelop::TextView::setInitialRange(KTextEditor::Range range) {
 
 void KDevelop::TextView::setState(const QString & state)
 {
-    static QRegExp re("Cursor=([\\d]+),([\\d]+)");
-    if (re.exactMatch(state)) {
-        if (d->editor && d->editor->editorView() && re.exactMatch(state))
-            d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()));
+    static QRegExp reCursor("Cursor=([\\d]+),([\\d]+)");
+    static QRegExp reSelection("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)");
+    if (reCursor.exactMatch(state)) {
+        if (d->editor && d->editor->editorView())
+            d->editor->editorView()->setCursorPosition(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()));
         else
-            setInitialRange(KTextEditor::Range(KTextEditor::Cursor(re.cap(1).toInt(), re.cap(2).toInt()), 0));
+            setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
+    } else if (reSelection.exactMatch(state)) {
+        KTextEditor::Range range(reSelection.cap(1).toInt(), reSelection.cap(2).toInt(), reSelection.cap(3).toInt(), reSelection.cap(4).toInt());
+        if (d->editor && d->editor->editorView()) {
+            d->editor->editorView()->setCursorPosition(range.end());
+            d->editor->editorView()->setSelection(range);
+        } else
+            setInitialRange(range);
     }
 }
 

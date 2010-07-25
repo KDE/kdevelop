@@ -161,18 +161,19 @@ void Area::setActiveView(View* view)
     d->activeView = view;
 }
 
-void Sublime::Area::addView(View *view, AreaIndex *index)
+void Area::addView(View *view, AreaIndex *index)
 {
-    index->add(view);
-    connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
-    kDebug() << "view added in" << this;
+    addViewSilently(view, index);
     emit viewAdded(index, view);
-    connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
 }
 
-void Sublime::Area::addViewSilently(View *view, AreaIndex *index)
+void Area::addViewSilently(View *view, AreaIndex *index)
 {
-    index->add(view);
+    View *after = 0;
+    if (controller()->openAfterCurrent()) {
+        after = activeView();
+    }
+    index->add(view, after);
     connect(view, SIGNAL(positionChanged(Sublime::View*, int)), this, SLOT(positionChanged(Sublime::View*, int)));
     kDebug() << "view added in" << this;
     connect(this, SIGNAL(destroyed()), view, SLOT(deleteLater()));
@@ -400,6 +401,7 @@ void Area::setIconName(const QString& iconName)
 
 void Area::positionChanged(View *view, int newPos)
 {
+    kDebug() << view << newPos;
     AreaIndex *index = indexOf(view);
     index->views().move(index->views().indexOf(view), newPos);
 }

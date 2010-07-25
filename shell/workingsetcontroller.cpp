@@ -96,6 +96,15 @@ void WorkingSetController::initialize()
 
 void WorkingSetController::cleanup()
 {
+    foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+        foreach (Sublime::Area *area, window->areas()) {
+            if (!area->workingSet().isEmpty()) {
+                Q_ASSERT(m_workingSets.contains(area->workingSet()));
+                m_workingSets[area->workingSet()]->saveFromArea(area, area->rootIndex());
+            }
+        }
+    }
+
     foreach(WorkingSet* set, m_workingSets) {
         kDebug() << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
         if(!set->isPersistent() && !set->hasConnectedAreas()) {
@@ -185,6 +194,11 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("iconName", m_iconName);
     deleteGroupRecursive(group);
+    if (area->activeView()) {
+        group.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
+    } else {
+        group.writeEntry("Active View", QString());
+    }
     saveFromArea(area, areaIndex, group);
 
     if(isEmpty())
@@ -216,6 +230,7 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
 
         int index = 0;
         foreach (Sublime::View* view, area->views()) {
+            kDebug() << view->document()->title();
             group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
             group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
 
@@ -339,12 +354,23 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 
     loadToArea(area, areaIndex, group);
 
-    //activate first view in the working set
+    //activate view in the working set
     if (!area->views().isEmpty()) {
         foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
             if(window->area() == area) {
                 window->setArea(area);
-                window->activateView(area->views().first());
+                QString activeView = group.readEntry("Active View", QString());
+                kDebug() << activeView;
+                bool found = false;
+                foreach (Sublime::View *v, area->views()) {
+                    if (v->document()->documentSpecifier() == activeView) {
+                        window->activateView(v);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) window->activateView(area->views().first()); //fallback
+                break;
             }
         }
     }
@@ -398,6 +424,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
             Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
+                kDebug() << document->title();
                 Sublime::View* view = document->createView();
 
                 QString state = group.readEntry(QString("View %1 State").arg(i), "");
@@ -548,6 +575,7 @@ void WorkingSetToolButton::loadSet()
 void WorkingSetToolButton::closeSet()
 {
     m_set->setPersistent(true);
+    m_set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
 
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
@@ -636,6 +664,7 @@ void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString t
     if (from == to)
         return;
     Q_ASSERT(m_areas.contains(area));
+    saveFromArea(area, area->rootIndex());
     disconnectArea(area);
     WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
     newSet->connectArea(area);
