@@ -575,6 +575,7 @@ void WorkingSetToolButton::loadSet()
 void WorkingSetToolButton::closeSet()
 {
     m_set->setPersistent(true);
+    m_set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
 
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
@@ -663,6 +664,7 @@ void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString t
     if (from == to)
         return;
     Q_ASSERT(m_areas.contains(area));
+    saveFromArea(area, area->rootIndex());
     disconnectArea(area);
     WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
     newSet->connectArea(area);
