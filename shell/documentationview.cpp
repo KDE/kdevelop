@@ -180,6 +180,15 @@ void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
 {
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);
+
+    // clear all history following the current item, unless we're already
+    // at the end (otherwise this code crashes when history is empty, which
+    // happens when addHistory is first called on startup to add the
+    // homepage)
+    if (mCurrent+1 < mHistory.end()) {
+        mHistory.erase(mCurrent+1, mHistory.end());
+    }
+
     mHistory.append(doc);
     mCurrent=mHistory.end()-1;
 }
