@@ -50,6 +50,7 @@ GenericName[sv]=Projekthantering
 GenericName[tr]=Proje Yönetici
 GenericName[uk]=Керування проектами
 GenericName[x-test]=xxProject Managerxx
+GenericName[zh_CN]=工程管理器
 GenericName[zh_TW]=專案管理員
 Comment=Allow KDevelop to manage generic projects
 Comment[bg]=Рарешаване на KDevelop обобщено манипулиране на проекти
