@@ -67,7 +67,7 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
         executablePath->setUrl( cfg.readEntry( ExecutePlugin::executableEntry, KUrl() ) );
     } else 
     {
-        projectTarget->setBaseItem( project->projectItem() );
+        projectTarget->setBaseItem( project ? project->projectItem() : 0);
         projectTarget->setCurrentItemPath( cfg.readEntry( ExecutePlugin::projectTargetEntry, QStringList() ) );
         projectTargetRadio->setChecked( true );
     }

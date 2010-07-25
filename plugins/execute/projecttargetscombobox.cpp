@@ -22,6 +22,8 @@
 #include <interfaces/iproject.h>
 #include <util/kdevstringhandler.h>
 #include <KIcon>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 using namespace KDevelop;
 
@@ -54,12 +56,24 @@ class ExecutablePathsVisitor
 void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item)
 {
     clear();
+
+    QList<ProjectFolderItem*> items;
+    if(item) {
+        items += item;
+    } else {
+        foreach(IProject* p, ICore::self()->projectController()->projects()) {
+            items += p->projectItem();
+        }
+    }
     
     ExecutablePathsVisitor walker;
-    walker.visit(item);
+    foreach(ProjectFolderItem* item, items) {
+        walker.visit(item);
+    }
     
     foreach(const QString& item, walker.paths())
         addItem(KIcon("system-run"), item);
+    
 }
 
 QStringList ProjectTargetsComboBox::currentItemPath() const
