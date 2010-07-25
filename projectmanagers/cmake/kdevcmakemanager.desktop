@@ -42,6 +42,7 @@ GenericName[pt_BR]=Gerenciador de Projetos
 GenericName[sv]=Projekthantering
 GenericName[uk]=Керування проектами
 GenericName[x-test]=xxProject Managerxx
+GenericName[zh_CN]=工程管理器
 Comment=Allows KDevelop to manager CMake based projects
 Comment[ca]=Permet a KDevelop gestionar projectes basats en CMake
 Comment[ca@valencia]=Permet a KDevelop gestionar projectes basats en CMake
