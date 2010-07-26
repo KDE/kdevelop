@@ -38,8 +38,6 @@ class AppletSelector : public KDialog
         
     signals:
         void addApplet(const QString& name);
-        void addApplet(IDashboardPlasmoidFactory* w);
-        void addApplet(IDashboardWidgetFactory* w);
         
     private:
         Ui::AppletSelector* m_ui;

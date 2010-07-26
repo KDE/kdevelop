@@ -14,6 +14,7 @@ namespace KDevelop {
 }
 namespace Plasma {
 	class Corona;
+    class Applet;
 }
 
 class dashboard : public Plasma::View
@@ -24,13 +25,13 @@ class dashboard : public Plasma::View
         virtual ~dashboard();
         
         virtual void resizeEvent(QResizeEvent* event);
+        Plasma::Applet* createApplet(IDashboardPlasmoidFactory* w);
+        Plasma::Applet* createApplet(IDashboardWidgetFactory* w);
         
     private slots:
         void updateView();
         void showAppletsSwitcher();
         void addApplet(const QString& name);
-        void addApplet(IDashboardPlasmoidFactory* w);
-        void addApplet(IDashboardWidgetFactory* w);
         
     private:
         DashboardCorona* corona;

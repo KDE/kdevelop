@@ -7,6 +7,7 @@ set(kdevprojectdasboard_SRCS
     
     dashboardview.cpp
     dashboarddocument.cpp
+    dashboardpluginloader.cpp
     kdevprojectdashboard.cpp)
 
 kde4_add_ui_files(kdevprojectdasboard_SRCS appletselector.ui)

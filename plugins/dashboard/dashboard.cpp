@@ -5,12 +5,15 @@
 #include <interfaces/idashboardfactory.h>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsProxyWidget>
+#include "dashboardpluginloader.h"
 
 using namespace Plasma;
 
 dashboard::dashboard(KDevelop::IProject* project, DashboardCorona* corona, QWidget* parent)
     : View(corona->containments().first(), parent), corona(corona), m_selector(0), m_project(project)
 {
+    new DashboardPluginLoader(this);
+    
     setFocusPolicy(Qt::NoFocus);
     
     connect(containment(), SIGNAL(showAddWidgetsInterface(QPointF)), this, SLOT(showAppletsSwitcher()));
@@ -25,7 +28,8 @@ dashboard::dashboard(KDevelop::IProject* project, DashboardCorona* corona, QWidg
 
 dashboard::~dashboard()
 {
-    m_selector->hide();
+    if(m_selector)
+        m_selector->hide();
     corona->saveLayout(QString());
 }
 
@@ -54,8 +58,6 @@ void dashboard::showAppletsSwitcher()
     if(!m_selector) {
         m_selector=new AppletSelector(this);
         connect(m_selector, SIGNAL(addApplet(QString)), SLOT(addApplet(QString)));
-        connect(m_selector, SIGNAL(addApplet(IDashboardPlasmoidFactory*)), SLOT(addApplet(IDashboardPlasmoidFactory*)));
-        connect(m_selector, SIGNAL(addApplet(IDashboardWidgetFactory*)), SLOT(addApplet(IDashboardWidgetFactory*)));
     }
     
     m_selector->show();
@@ -67,14 +69,14 @@ void dashboard::addApplet(const QString& name)
     Q_ASSERT(app);
 }
 
-void dashboard::addApplet(IDashboardPlasmoidFactory* fact)
+Plasma::Applet* dashboard::createApplet(IDashboardPlasmoidFactory* fact)
 {
     fact->setProject(m_project);
     Applet* applet=fact->plasmaApplet(QString());
-    containment()->addApplet(applet);
+    return applet;
 }
 
-void dashboard::addApplet(IDashboardWidgetFactory* fact)
+Plasma::Applet* dashboard::createApplet(IDashboardWidgetFactory* fact)
 {
     fact->setProject(m_project);
     QWidget* w=fact->widget();
@@ -87,7 +89,8 @@ void dashboard::addApplet(IDashboardWidgetFactory* fact)
     proxy->setWidget(w);
     l->addItem(proxy);
     a->setLayout(l);
-    containment()->addApplet(a);
+    
+    return a;
 }
 
 #include "dashboard.moc"

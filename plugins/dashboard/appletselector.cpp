@@ -27,7 +27,14 @@
 
 using namespace KDevelop;
 
-enum Source { PlasmaPlugin, PlasmoidFactory, WidgetFactory };
+QStandardItem* factoryItem(IDashboardFactory* fact)
+{
+    QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
+    item->setEditable(false);
+    item->setToolTip(fact->comment());
+    item->setData(fact->id(), Qt::UserRole+1);
+    return item;
+}
 
 AppletSelector::AppletSelector(QWidget* parent)
     : KDialog(parent)
@@ -48,33 +55,16 @@ AppletSelector::AppletSelector(QWidget* parent)
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
         item->setEditable(false);
         item->setToolTip(info.comment());
-        item->setData(qVariantFromValue<uint>(PlasmaPlugin));
-        item->setData(info.pluginName(), Qt::UserRole+2);
+        item->setData(info.pluginName(), Qt::UserRole+1);
         
         model->appendRow(item);
     }
     
-    QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
-    foreach(IDashboardPlasmoidFactory* fact, facts) {
-        QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
-        item->setEditable(false);
-        item->setToolTip(fact->comment());
-        item->setData(qVariantFromValue<uint>(PlasmoidFactory));
-        item->setData(qVariantFromValue<void*>(fact), Qt::UserRole+2);
-        
-        model->appendRow(item);
-    }
+    foreach(IDashboardFactory* fact, ICore::self()->dashboardController()->projectPlasmoidDashboardFactories())
+        model->appendRow(factoryItem(fact));
     
-    QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
-    foreach(IDashboardWidgetFactory* fact, factsW) {
-        QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
-        item->setToolTip(fact->comment());
-        item->setEditable(false);
-        item->setData(qVariantFromValue<uint>(WidgetFactory));
-        item->setData(qVariantFromValue<void*>(fact), Qt::UserRole+2);
-        
-        model->appendRow(item);
-    }
+    foreach(IDashboardFactory* fact, ICore::self()->dashboardController()->projectWidgetDashboardFactories())
+        model->appendRow(factoryItem(fact));
     
     m_ui->plugins->setModel(model);
     
@@ -83,16 +73,5 @@ AppletSelector::AppletSelector(QWidget* parent)
 
 void AppletSelector::selected(const QModelIndex& idx)
 {
-    Source s = (Source) idx.data(Qt::UserRole+1).value<uint>();
-    switch(s) {
-        case PlasmaPlugin:
-            emit addApplet(idx.data(Qt::UserRole+2).toString());
-            break;
-        case PlasmoidFactory:
-            emit addApplet((IDashboardPlasmoidFactory*) idx.data(Qt::UserRole+2).value<void*>());
-            break;
-        case WidgetFactory:
-            emit addApplet((IDashboardWidgetFactory*) idx.data(Qt::UserRole+2).value<void*>());
-            break;
-    }
+    emit addApplet(idx.data(Qt::UserRole+1).toString());
 }
