@@ -70,7 +70,6 @@ Plasma::Applet* DashboardPluginLoader::internalLoadApplet(const QString& name, u
         QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
         
         IProject* project = ICore::self()->projectController()->findProjectForUrl(args.first().toUrl());
-        qDebug() << "TUUUUC" << args.first().toUrl();
         Q_ASSERT(project);
         foreach(IDashboardPlasmoidFactory* fact, facts) {
             if(fact->id()==name)
