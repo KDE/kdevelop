@@ -26,7 +26,9 @@ class QWidget;
 class QGraphicsItem;
 class QString;
 namespace Plasma { class Applet; }
-namespace KDevelop { class IProject; }
+
+namespace KDevelop {
+class IProject;
 
 class IDashboardFactory
 {
@@ -83,5 +85,7 @@ class IDashboardPlasmoidFactory : public IDashboardFactory
         /** @returns the plasmoid that is going to be added when the user selects it for the Dashboard */
         virtual Plasma::Applet* plasmaApplet(const QString& serviceId) = 0;
 };
+
+}
 
 #endif // IDASHBOARDFACTORY_H

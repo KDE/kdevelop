@@ -21,10 +21,10 @@
 
 #include <QList>
 
-class IDashboardWidgetFactory;
-class IDashboardPlasmoidFactory;
 namespace KDevelop
 {
+class IDashboardWidgetFactory;
+class IDashboardPlasmoidFactory;
 
 class IDashboardController
 {

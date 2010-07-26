@@ -37,12 +37,12 @@ void KDevelop::DashboardController::addProjectDashboardItemFactory(IDashboardWid
     m_projectWidgetFactories.append(factory);
 }
 
-QList< IDashboardPlasmoidFactory* > KDevelop::DashboardController::projectPlasmoidDashboardFactories() const
+QList<KDevelop::IDashboardPlasmoidFactory*> KDevelop::DashboardController::projectPlasmoidDashboardFactories() const
 {
     return m_projectPlasmoidFactories;
 }
 
-QList<IDashboardWidgetFactory*> KDevelop::DashboardController::projectWidgetDashboardFactories() const
+QList<KDevelop::IDashboardWidgetFactory*> KDevelop::DashboardController::projectWidgetDashboardFactories() const
 {
     return m_projectWidgetFactories;
 }
