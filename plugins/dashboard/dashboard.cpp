@@ -3,17 +3,13 @@
 #include "dashboardcorona.h"
 #include "appletselector.h"
 #include <interfaces/idashboardfactory.h>
-#include <QGraphicsLinearLayout>
-#include <QGraphicsProxyWidget>
-#include "dashboardpluginloader.h"
+#include <interfaces/iproject.h>
 
 using namespace Plasma;
 
 dashboard::dashboard(KDevelop::IProject* project, DashboardCorona* corona, QWidget* parent)
     : View(corona->containments().first(), parent), corona(corona), m_selector(0), m_project(project)
 {
-    new DashboardPluginLoader(this);
-    
     setFocusPolicy(Qt::NoFocus);
     
     connect(containment(), SIGNAL(showAddWidgetsInterface(QPointF)), this, SLOT(showAppletsSwitcher()));
@@ -65,32 +61,8 @@ void dashboard::showAppletsSwitcher()
 
 void dashboard::addApplet(const QString& name)
 {
-    Applet* app=containment()->addApplet(name);
+    Applet* app=containment()->addApplet(name, QVariantList() << qVariantFromValue<QUrl>(m_project->projectFileUrl()));
     Q_ASSERT(app);
-}
-
-Plasma::Applet* dashboard::createApplet(IDashboardPlasmoidFactory* fact)
-{
-    fact->setProject(m_project);
-    Applet* applet=fact->plasmaApplet(QString());
-    return applet;
-}
-
-Plasma::Applet* dashboard::createApplet(IDashboardWidgetFactory* fact)
-{
-    fact->setProject(m_project);
-    QWidget* w=fact->widget();
-    w->setAttribute(Qt::WA_NoSystemBackground);
-    
-    Applet* a = new Applet(0, "clock");
-    a->setBackgroundHints(Plasma::Applet::StandardBackground);
-    QGraphicsLinearLayout* l=new QGraphicsLinearLayout(Qt::Horizontal);
-    QGraphicsProxyWidget* proxy=new QGraphicsProxyWidget(a);
-    proxy->setWidget(w);
-    l->addItem(proxy);
-    a->setLayout(l);
-    
-    return a;
 }
 
 #include "dashboard.moc"

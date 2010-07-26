@@ -65,18 +65,23 @@ Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardWidgetFactory* fac
 
 Plasma::Applet* DashboardPluginLoader::internalLoadApplet(const QString& name, uint appletId, const QVariantList& args)
 {
-    QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
-    
-    IProject* project = ICore::self()->projectController()->findProjectForUrl(args.first().toUrl());
-    foreach(IDashboardPlasmoidFactory* fact, facts) {
-        if(fact->id()==name)
-            return createApplet(fact, project);
-    }
-    
-    QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
-    foreach(IDashboardWidgetFactory* fact, factsW) {
-        if(fact->id()==name)
-            return createApplet(fact, project);
+    if(!args.isEmpty())
+    {
+        QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
+        
+        IProject* project = ICore::self()->projectController()->findProjectForUrl(args.first().toUrl());
+        qDebug() << "TUUUUC" << args.first().toUrl();
+        Q_ASSERT(project);
+        foreach(IDashboardPlasmoidFactory* fact, facts) {
+            if(fact->id()==name)
+                return createApplet(fact, project);
+        }
+        
+        QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
+        foreach(IDashboardWidgetFactory* fact, factsW) {
+            if(fact->id()==name)
+                return createApplet(fact, project);
+        }
     }
     
     return 0;

@@ -22,8 +22,6 @@
 
 #include <KDE/KDialog>
 
-class IDashboardPlasmoidFactory;
-class IDashboardWidgetFactory;
 class QModelIndex;
 namespace Ui { class AppletSelector; }
 
