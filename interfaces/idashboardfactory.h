@@ -20,6 +20,7 @@
 #ifndef IDASHBOARDFACTORY_H
 #define IDASHBOARDFACTORY_H
 
+class QByteArray;
 class KIcon;
 class QWidget;
 class QGraphicsItem;
@@ -31,6 +32,9 @@ class IDashboardFactory
 {
     public:
         virtual ~IDashboardFactory() {}
+        
+        /** @returns an untranslatable name for the dashboard item */
+        virtual QString id() const = 0;
         
         /** @returns a name to identifies the produced dashboard items */
         virtual QString name() const = 0;
