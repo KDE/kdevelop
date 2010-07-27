@@ -27,8 +27,7 @@ namespace KDevelop { class IProject; }
 class DashboardView : public Sublime::View
 {
     public:
-        DashboardView(KDevelop::IProject* project, Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip)
-            : View(doc, ws), m_project(project) {}
+        DashboardView(KDevelop::IProject* project, Sublime::Document* doc, WidgetOwnership ws = DoNotTakeOwnerShip);
             
         virtual QWidget* createWidget(QWidget* parent);
         

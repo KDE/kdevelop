@@ -26,9 +26,13 @@
 
 using namespace Plasma;
 
+DashboardView::DashboardView(KDevelop::IProject* project, Sublime::Document* doc, Sublime::View::WidgetOwnership ws)
+    : View(doc, ws), m_project(project)
+{}
+
 QWidget* DashboardView::createWidget(QWidget* parent)
 {
-    DashboardCorona* corona=new DashboardCorona(this);
+    DashboardCorona* corona=new DashboardCorona(m_project, this);
     corona->initializeLayout(m_project->projectFileUrl().toLocalFile()); //TODO: decide what to do with remote files
-    return new dashboard(m_project, corona);
+    return new Dashboard(corona);
 }

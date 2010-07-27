@@ -22,12 +22,17 @@
 
 #include <plasma/corona.h>
 
+namespace KDevelop { class IProject; }
+
 class DashboardCorona : public Plasma::Corona
 {
 	public:
-		DashboardCorona(QObject* parent = 0);
+		DashboardCorona(KDevelop::IProject* project, QObject* parent = 0);
 		
         virtual void loadDefaultLayout();
+        KDevelop::IProject* project() const;
+    private:
+        KDevelop::IProject* m_project;
 };
 
 #endif // DASHBOARDCORONA_H

@@ -30,7 +30,6 @@ namespace KDevelop
     class IDashboardWidgetFactory;
     class IDashboardPlasmoidFactory;
 }
-class dashboard;
 
 class DashboardPluginLoader : public Plasma::PluginLoader
 {

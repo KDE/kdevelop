@@ -18,20 +18,30 @@
 */
 
 #include "dashboardcorona.h"
+#include <interfaces/iproject.h>
 
-DashboardCorona::DashboardCorona(QObject* parent)
-	: Plasma::Corona(parent)
+DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
+	: Plasma::Corona(parent), m_project(project)
 {}
+
+KDevelop::IProject* DashboardCorona::project() const
+{
+    return m_project;
+}
 
 void DashboardCorona::loadDefaultLayout()
 {
-    Plasma::Containment* c=addContainment("newspaper");
+    loadLayout(m_project->projectFileUrl().toLocalFile());
+    
+    Plasma::Containment* c=addContainment("desktop");
     
     c->init();
     
-    c->setWallpaper("color");
+    KConfigGroup invalidConfig;
+    c->setWallpaper("image", "SingleImage");
     c->updateConstraints(Plasma::StartupCompletedConstraint);
     c->flushPendingConstraintsEvents();
+    c->save(invalidConfig);
     
     emit containmentAdded(c);
     
