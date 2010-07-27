@@ -42,7 +42,7 @@ class ProjectDashboardFactory : public KDevelop::IDocumentFactory
         virtual IDocument* create(const KUrl& url, ICore*)
         {
             IProject* proj = ICore::self()->projectController()->findProjectForUrl(url);
-            return new DashboardDocument(proj);
+            return proj ? new DashboardDocument(proj) : 0;
         }
 };
 
