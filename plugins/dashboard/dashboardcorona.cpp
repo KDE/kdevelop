@@ -46,11 +46,7 @@ void DashboardCorona::loadDefaultLayout()
     emit containmentAdded(c);
     
     QVariantList args;
-    for(int i=0; i<2; ++i) {
-        Plasma::Applet* applet = Plasma::Applet::load("clock", 0, args);
-        
-        c->addApplet(applet);
-    }
+    c->addApplet("project", QVariantList() << qVariantFromValue<QUrl>(m_project->projectFileUrl()));
 }
 
 
