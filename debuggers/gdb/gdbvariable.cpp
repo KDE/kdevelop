@@ -48,6 +48,7 @@ GdbVariable::GdbVariable(TreeModel* model, TreeItem* parent,
             const QString& expression, const QString& display)
 : Variable(model, parent, expression, display)
 {
+    setChanged(false);
 }
 
 GdbVariable::~GdbVariable()
@@ -256,6 +257,7 @@ void GdbVariable::fetchMoreChildren()
 
 void GdbVariable::handleUpdate(const GDBMI::Value& var)
 {
+    setChanged(true);
     if (var.hasField("type_changed")
         && var["type_changed"].literal() == "true")
     {
