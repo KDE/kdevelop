@@ -22,7 +22,9 @@
 
 #include <QtCore/QObject>
 #include <plasma/view.h>
+#include <QPointer>
 
+class KConfigDialog;
 class IDashboardPlasmoidFactory;
 class IDashboardWidgetFactory;
 class AppletSelector;
@@ -49,8 +51,10 @@ class Dashboard : public Plasma::View
         void updateView();
         void showAppletsSwitcher();
         void addApplet(const QString& name);
+        void showConfigure();
         
     private:
+        QPointer<KConfigDialog> m_configDialog;
         DashboardCorona* corona;
         AppletSelector* m_selector;
 };
