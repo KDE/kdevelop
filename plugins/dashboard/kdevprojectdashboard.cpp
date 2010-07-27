@@ -18,14 +18,15 @@
 */
 
 #include "kdevprojectdashboard.h"
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+#include <KPluginFactory>
+#include <KPluginLoader>
 #include <KAboutData>
 #include <KAction>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include "dashboarddocument.h"
 
@@ -35,9 +36,21 @@ K_EXPORT_PLUGIN(KDevProjectDashboardFactory(KAboutData("kdevprojectdashboard","p
 
 using namespace KDevelop;
 
+class ProjectDashboardFactory : public KDevelop::IDocumentFactory
+{
+    public:
+        virtual IDocument* create(const KUrl& url, ICore*)
+        {
+            IProject* proj = ICore::self()->projectController()->findProjectForUrl(url);
+            return new DashboardDocument(proj);
+        }
+};
+
 KDevProjectDashboard::KDevProjectDashboard( QObject* parent, const QVariantList& )
     : IPlugin(KDevProjectDashboardFactory::componentData(), parent )
-{}
+{
+    ICore::self()->documentController()->registerDocumentForMimetype("text/x-kdevelop", new ProjectDashboardFactory);
+}
 
 KDevelop::ContextMenuExtension KDevProjectDashboard::contextMenuExtension(Context* context)
 {
