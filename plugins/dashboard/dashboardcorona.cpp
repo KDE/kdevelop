@@ -38,7 +38,7 @@ void DashboardCorona::loadDefaultLayout()
     c->init();
     
     KConfigGroup invalidConfig;
-    c->setWallpaper("image", "SingleImage");
+    c->setWallpaper("color");
     c->updateConstraints(Plasma::StartupCompletedConstraint);
     c->flushPendingConstraintsEvents();
     c->save(invalidConfig);
