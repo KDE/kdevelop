@@ -1,6 +1,7 @@
 project(kdev-project-dashboard)
 
 set(kdevprojectdasboard_SRCS
+    widgetplasmoid.cpp
     appletselector.cpp
     dashboard.cpp
     dashboardcorona.cpp
