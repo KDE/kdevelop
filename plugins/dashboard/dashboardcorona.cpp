@@ -36,7 +36,7 @@ KDevelop::IProject* DashboardCorona::project() const
 
 void DashboardCorona::loadDefaultLayout()
 {
-    Plasma::Containment* c=addContainment("desktop");
+    Plasma::Containment* c=addContainment("newspaper");
     
     c->init();
     
