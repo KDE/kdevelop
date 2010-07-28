@@ -45,15 +45,6 @@ class IDashboardFactory
         
         /** @returns an icon that defines the produced dashboard items */
         virtual KIcon icon() const = 0;
-        
-        /** @param project is the project to be used by this factory. */
-        void setProject(KDevelop::IProject* project) { m_project=project; }
-        
-        /** @returns the project to which this factory is going to be dedicated. */
-        KDevelop::IProject* project() const { return m_project; }
-        
-    private:
-        KDevelop::IProject* m_project;
 };
 
 /**
@@ -69,7 +60,7 @@ class IDashboardWidgetFactory : public IDashboardFactory
          * @returns the widget we want to add to the Dashboard.
          * It will be internally transformed to be adapted to the Dashboard implementation
          */
-        virtual QWidget* widget() = 0;
+        virtual QWidget* widget(IProject* project) = 0;
 };
 
 /**

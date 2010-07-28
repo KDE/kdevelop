@@ -101,9 +101,9 @@ class ProjectDashboardItem : public IDashboardWidgetFactory
         virtual QString comment() const { return i18n("Shows information related to the project"); }
         virtual KIcon icon() const { return KIcon("project"); }
         virtual QString name() const { return i18n("Project"); }
-        virtual QWidget* widget()
+        virtual QWidget* widget(IProject* project)
         {
-            return new ProjectDashboardWidget(project());
+            return new ProjectDashboardWidget(project);
         }
 };
 
