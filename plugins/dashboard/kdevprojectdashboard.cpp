@@ -69,7 +69,7 @@ KDevelop::ContextMenuExtension KDevProjectDashboard::contextMenuExtension(Contex
 
     ContextMenuExtension menuExt;
     if(!m_selectedProjects.isEmpty()) {
-        KAction* action = new KAction(KIcon("project"), i18n("Show Dashboard"), this);
+        KAction* action = new KAction(KIcon("dashboard-show"), i18n("Show Dashboard"), this);
         connect(action, SIGNAL(triggered()), SLOT(showDashboard()));
         menuExt.addAction(ContextMenuExtension::ProjectGroup, action);
     }
