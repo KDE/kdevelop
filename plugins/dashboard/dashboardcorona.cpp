@@ -28,8 +28,6 @@ DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
     setObjectName(project->name());
     
     DashboardPluginLoader::self()->engine().data()->addConnection(objectName(), m_project->projectFileUrl());
-    
-    connect(this, SIGNAL(containmentAdded(Plasma::Containment*)), SLOT(newContainment(Plasma::Containment*)));
 }
 
 KDevelop::IProject* DashboardCorona::project() const
@@ -53,9 +51,4 @@ void DashboardCorona::loadDefaultLayout()
     
     QVariantList args;
     c->addApplet("project", QVariantList() << qVariantFromValue<QUrl>(m_project->projectFileUrl()));
-}
-
-void DashboardCorona::newContainment(Plasma::Containment* c)
-{
-    c->action("add page")->setVisible(false);
 }
