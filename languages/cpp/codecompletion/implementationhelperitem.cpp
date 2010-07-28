@@ -154,6 +154,9 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
 
       if(!classFunction || !classFunction->isConstructor())
         newText = "virtual ";
+      else if(classFunction && classFunction->isConstructor() && classFunction->isExplicit())
+        newText = "explicit ";
+
       if(m_declaration) {
         FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
         if(asFunction && asFunction->returnType())
