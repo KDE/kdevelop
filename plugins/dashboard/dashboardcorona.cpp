@@ -19,10 +19,15 @@
 
 #include "dashboardcorona.h"
 #include <interfaces/iproject.h>
+#include "dashboardpluginloader.h"
 
 DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
 	: Plasma::Corona(parent), m_project(project)
-{}
+{
+    setObjectName(project->name());
+    
+    DashboardPluginLoader::self()->engine().data()->addConnection(objectName(), m_project->projectFileUrl());
+}
 
 KDevelop::IProject* DashboardCorona::project() const
 {
@@ -31,8 +36,6 @@ KDevelop::IProject* DashboardCorona::project() const
 
 void DashboardCorona::loadDefaultLayout()
 {
-    loadLayout(m_project->projectFileUrl().toLocalFile());
-    
     Plasma::Containment* c=addContainment("desktop");
     
     c->init();
@@ -48,5 +51,3 @@ void DashboardCorona::loadDefaultLayout()
     QVariantList args;
     c->addApplet("project", QVariantList() << qVariantFromValue<QUrl>(m_project->projectFileUrl()));
 }
-
-

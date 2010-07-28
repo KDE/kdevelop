@@ -22,8 +22,6 @@
 #include <plasma/wallpaper.h>
 #include "dashboardcorona.h"
 #include "appletselector.h"
-#include <interfaces/idashboardfactory.h>
-#include <interfaces/iproject.h>
 #include <KConfigDialog>
 #include <QVBoxLayout>
 
@@ -81,7 +79,7 @@ void Dashboard::showAppletsSwitcher()
 
 void Dashboard::addApplet(const QString& name)
 {
-    Applet* app=containment()->addApplet(name, QVariantList() << qVariantFromValue<QUrl>(corona->project()->projectFileUrl()));
+    Applet* app=containment()->addApplet(name);
     Q_ASSERT(app);
 }
 

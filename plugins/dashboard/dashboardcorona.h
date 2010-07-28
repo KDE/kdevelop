@@ -26,13 +26,15 @@ namespace KDevelop { class IProject; }
 
 class DashboardCorona : public Plasma::Corona
 {
-	public:
-		DashboardCorona(KDevelop::IProject* project, QObject* parent = 0);
-		
+    Q_OBJECT
+    public:
+        DashboardCorona(KDevelop::IProject* project, QObject* parent = 0);
+        
         virtual void loadDefaultLayout();
         KDevelop::IProject* project() const;
     private:
         KDevelop::IProject* m_project;
+        
 };
 
 #endif // DASHBOARDCORONA_H

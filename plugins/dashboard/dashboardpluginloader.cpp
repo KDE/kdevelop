@@ -22,12 +22,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/idashboardcontroller.h>
 #include <interfaces/idashboardfactory.h>
-#include <QDebug>
-#include <QGraphicsLinearLayout>
-#include <QGraphicsProxyWidget>
-#include <plasma/applet.h>
-#include <QWidget>
-#include <kdevplatform/interfaces/iprojectcontroller.h>
+#include "widgetplasmoid.h"
+#include <plasma/dataengine.h>
 
 using namespace KDevelop;
 using namespace Plasma;
@@ -39,49 +35,62 @@ DashboardPluginLoader::DashboardPluginLoader()
     PluginLoader::setPluginLoader(this);
 }
 
-Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardPlasmoidFactory* fact, IProject* project)
+Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardPlasmoidFactory* fact)
 {
-    fact->setProject(project);
-    Applet* applet=fact->plasmaApplet(QString());
-    return applet;
+    return fact->plasmaApplet(QString());
 }
 
-Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardWidgetFactory* fact, IProject* project)
+Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardWidgetFactory* fact)
 {
-    fact->setProject(project);
-    QWidget* w=fact->widget();
-    w->setAttribute(Qt::WA_NoSystemBackground);
-    
-    Applet* a = new Applet(0, "clock");
-    a->setBackgroundHints(Plasma::Applet::StandardBackground);
-    QGraphicsLinearLayout* l=new QGraphicsLinearLayout(Qt::Horizontal);
-    QGraphicsProxyWidget* proxy=new QGraphicsProxyWidget(a);
-    proxy->setWidget(w);
-    l->addItem(proxy);
-    a->setLayout(l);
-    
-    return a;
+    return new WidgetPlasmoid(fact, 0, "clock");
 }
 
 Plasma::Applet* DashboardPluginLoader::internalLoadApplet(const QString& name, uint appletId, const QVariantList& args)
 {
-    if(!args.isEmpty())
-    {
-        QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
-        
-        IProject* project = ICore::self()->projectController()->findProjectForUrl(args.first().toUrl());
-        Q_ASSERT(project);
-        foreach(IDashboardPlasmoidFactory* fact, facts) {
-            if(fact->id()==name)
-                return createApplet(fact, project);
-        }
-        
-        QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
-        foreach(IDashboardWidgetFactory* fact, factsW) {
-            if(fact->id()==name)
-                return createApplet(fact, project);
-        }
+    QList<IDashboardPlasmoidFactory*> facts=ICore::self()->dashboardController()->projectPlasmoidDashboardFactories();
+
+    foreach(IDashboardPlasmoidFactory* fact, facts) {
+        if(fact->id()==name)
+            return createApplet(fact);
+    }
+    
+    QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
+    foreach(IDashboardWidgetFactory* fact, factsW) {
+        if(fact->id()==name)
+            return createApplet(fact);
     }
     
     return 0;
+}
+
+Plasma::DataEngine* DashboardPluginLoader::internalLoadDataEngine(const QString& name)
+{
+    if (name == "org.kdevelop.projects")
+        return engine().data();
+
+    return 0;
+}
+
+QWeakPointer<DashboardDataEngine> DashboardPluginLoader::engine()
+{
+    if(!m_engine)
+        m_engine = new DashboardDataEngine;
+    return m_engine;
+}
+
+DashboardPluginLoader* DashboardPluginLoader::self() { return s_loader; }
+
+
+
+////////////////
+DashboardDataEngine::DashboardDataEngine(QObject* parent, KService::Ptr service)
+    : DataEngine(parent, service)
+{}
+
+void DashboardDataEngine::addConnection(const QString& containmentId, const KUrl& projectFilePath)
+{
+    qDebug() << "addiiiiiiing" << containmentId << projectFilePath;
+    setData(containmentId, "projectFileUrl", QUrl(projectFilePath));
+    
+    qDebug() << "dataaaaaah" << query(containmentId);
 }
