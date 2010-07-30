@@ -1136,12 +1136,24 @@ void DeclarationBuilder::visitBaseSpecifier(BaseSpecifierAST *node) {
 QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const QualifiedIdentifier& identifier, const SimpleCursor& position)
 {
   QList< Declaration* > decls = currentContext()->findDeclarations(identifier, position);
-  
+
   QList<DUContext*> contexts;
-  
-  foreach(Declaration* decl, decls)
-    if(decl->kind() == Declaration::Namespace && decl->internalContext())
+
+  // qlist does not provide convenient stable iterators
+  std::list<Declaration*> worklist(decls.begin(), decls.end());
+  for (std::list<Declaration*>::iterator it = worklist.begin(); it != worklist.end(); ++it) {
+    Declaration * decl = *it;
+    if(decl->kind() == Declaration::Namespace && decl->internalContext()) {
       contexts << decl->internalContext();
+    } else if (decl->kind() == Declaration::NamespaceAlias) {
+      NamespaceAliasDeclaration *aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(decl);
+      if (aliasDecl != NULL) {
+        QList<Declaration*> importedDecls = currentContext()->findDeclarations(aliasDecl->importIdentifier(), position);
+        std::copy(importedDecls.begin(), importedDecls.end(),
+                  std::back_inserter(worklist));
+      }
+    }
+  }
   
   if( contexts.isEmpty() ) {
     //Failed to resolve namespace
