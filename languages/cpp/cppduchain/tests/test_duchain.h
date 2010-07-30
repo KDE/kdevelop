@@ -76,11 +76,13 @@ private slots:
   void testDeclareFriend();
   void testDeclareNamespace();
   void testDeclareNamespace2();
+  void testGlobalNamespaceAlias();
   void testLocalNamespaceAlias();
   void testDeclareUsingNamespace();
   void testUsingDeclaration();
   void testUsingDeclarationInTemplate();
   void testDeclareUsingNamespace2();
+  void testUsingGlobalNamespaceAlias();
   void testSearchAcrossNamespace();
   void testSearchAcrossNamespace2();
   void testSearchAcrossNamespace3();

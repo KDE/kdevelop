@@ -2098,7 +2098,45 @@ void TestDUChain::testDeclareUsingNamespace2()
   release(top);
 }
 
-void TestDUChain::testLocalNamespaceAlias()                                                                                                                                
+void TestDUChain::testGlobalNamespaceAlias()
+{
+  QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { afoo::bar(); }");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->localDeclarations().size(), 3);
+  NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl);
+  QCOMPARE(aliasDecl->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
+}
+
+void TestDUChain::testUsingGlobalNamespaceAlias()
+{
+  QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { using namespace afoo; bar(); }");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->localDeclarations().size(), 3);
+  NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl);
+  QCOMPARE(aliasDecl->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
+}
+
+void TestDUChain::testLocalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } int test() { namespace afoo = foo; afoo::bar(); }");
 
@@ -2112,7 +2150,7 @@ void TestDUChain::testLocalNamespaceAlias()
   QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));
   QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
   
-  QEXPECT_FAIL("", "Local namespace aliases currently don't work, bug 207548", Abort);
+  //QEXPECT_FAIL("", "Local namespace aliases currently don't work, bug 207548", Abort);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
 }
