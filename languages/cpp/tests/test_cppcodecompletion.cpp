@@ -855,6 +855,39 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
   release(top);
 }
 
+void TestCppCodeCompletion::testNamespaceAliasCompletion() {
+  
+  QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
+                    "namespace B = A; " // direct import of a namespace
+                    "namespace C = B; " // indirect import through another alias
+                    );
+
+  TopDUContext* top = parse(method, DumpNone);
+  
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A"));
+  QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("B"));
+  QCOMPARE(top->localDeclarations()[2]->identifier(), Identifier("C"));
+  QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Namespace);
+  QCOMPARE(top->localDeclarations()[1]->kind(), Declaration::NamespaceAlias);
+  QCOMPARE(top->localDeclarations()[2]->kind(), Declaration::NamespaceAlias);
+  QVERIFY(!top->localDeclarations()[0]->abstractType());
+  QVERIFY(!top->localDeclarations()[1]->abstractType());
+  QVERIFY(!top->localDeclarations()[2]->abstractType());
+  QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
+  
+  QCOMPARE(CompletionItemTester(top).names.toSet(), QSet<QString>() << "A" << "B" << "C");
+  
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "A::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "B::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "C::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top).itemData("A", KTextEditor::CodeCompletionModel::Prefix).toString(), QString("namespace"));
+  release(top);
+}
+
 
 void TestCppCodeCompletion::testIndirectImports()
 {
