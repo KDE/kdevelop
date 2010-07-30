@@ -2136,6 +2136,63 @@ void TestDUChain::testUsingGlobalNamespaceAlias()
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
 }
 
+void TestDUChain::testGlobalNamespaceAliasCycle()
+{
+  QByteArray method("namespace foo { int bar(); } namespace A = foo; namespace B = A; namespace A = B; "
+                    "int test() { foo::bar(); A::bar(); B::bar(); } ");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->localDeclarations().size(), 5); // foo, A, B, A, test
+  NamespaceAliasDeclaration* aliasDecl1 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl1);
+  QCOMPARE(aliasDecl1->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl1->identifier(), Identifier("A"));
+  NamespaceAliasDeclaration* aliasDecl2 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[2]);
+  QVERIFY(aliasDecl2);
+  QCOMPARE(aliasDecl2->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl2->identifier(), Identifier("B"));
+  NamespaceAliasDeclaration* aliasDecl3 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[3]);
+  QVERIFY(aliasDecl3);
+  QCOMPARE(aliasDecl3->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl3->identifier(), Identifier("A"));
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
+}
+
+void TestDUChain::testUsingGlobalNamespaceAliasCycle()
+{
+  QByteArray method("namespace foo { int bar(); } namespace A = foo; namespace B = A; namespace A = B; "
+                    "int testA() { using namespace A; bar(); } "
+                    "int testB() { using namespace B; bar(); }");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 5);
+  
+  QCOMPARE(top->localDeclarations().size(), 6); // foo, A, B, A, testA, testB
+  NamespaceAliasDeclaration* aliasDecl1 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl1);
+  QCOMPARE(aliasDecl1->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl1->identifier(), Identifier("A"));
+  NamespaceAliasDeclaration* aliasDecl2 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[2]);
+  QVERIFY(aliasDecl2);
+  QCOMPARE(aliasDecl2->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl2->identifier(), Identifier("B"));
+  NamespaceAliasDeclaration* aliasDecl3 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[3]);
+  QVERIFY(aliasDecl3);
+  QCOMPARE(aliasDecl3->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl3->identifier(), Identifier("A"));
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 2);
+}
+
 void TestDUChain::testLocalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } int test() { namespace afoo = foo; afoo::bar(); }");

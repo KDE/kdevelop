@@ -103,6 +103,7 @@ private slots:
   void testConstVisibility();
   void testNamespaceCompletion();
   void testNamespaceAliasCompletion();
+  void testNamespaceAliasCycleCompletion();
   void testTemplateMemberAccess();
   void testTemplateArguments();
   void testTemplateFunction();
