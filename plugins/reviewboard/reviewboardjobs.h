@@ -23,11 +23,9 @@
 
 #include <KJob>
 #include <KUrl>
+#include <QNetworkAccessManager>
 
-namespace KIO {
-    class TransferJob;
-    class Job;
-}
+class QNetworkReply;
 
 namespace ReviewBoard
 {
@@ -41,20 +39,23 @@ namespace ReviewBoard
     {
         Q_OBJECT
         public:
-            HttpPostCall(const KUrl& server, const QString& apiPath, const QByteArray& post, QObject* parent = 0);
+            HttpPostCall(const KUrl& s, const QString& apiPath, const QByteArray& post, bool multipart, QObject* parent);
             
             virtual void start();
             
             QVariant result() const;
             
         private slots:
-            void data(KIO::Job*, const QByteArray& data);
-            void processData(KJob* );
+            void finished();
             
         private:
-            KIO::TransferJob* requestJob;
-            QByteArray receivedData;
             QVariant m_result;
+            QNetworkReply* m_reply;
+            KUrl m_requrl;
+            QByteArray m_post;
+            
+            QNetworkAccessManager m_manager;
+            bool m_multipart;
     };
     
     class NewRequest : public KJob

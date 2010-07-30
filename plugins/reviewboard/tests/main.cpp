@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     int ret=d.exec();
     if(ret==QDialog::Accepted) {
         KUrl url=d.server();
-        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), patch, QString());
+        ReviewBoard::NewRequest* job=new ReviewBoard::NewRequest(d.server(), patch, d.baseDir());
         bool corr = job->exec();
         if(corr) {
             url.setUserInfo(QString());

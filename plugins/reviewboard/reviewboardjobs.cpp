@@ -26,63 +26,66 @@
 #include <KMimeType>
 #include <QFile>
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 using namespace ReviewBoard;
 
-HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QByteArray& post, QObject* parent)
-    : KJob(parent)
+HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QByteArray& post, bool multipart, QObject* parent)
+        : KJob(parent), m_post(post), m_multipart(multipart)
 {
-    KUrl url=s;
-    url.addPath(apiPath);
-    requestJob = KIO::http_post(url, post);
-
-    connect(requestJob, SIGNAL(data(KIO::Job *, const QByteArray &)), this, SLOT(data(KIO::Job*, const QByteArray&)));
-    connect(requestJob, SIGNAL(suspended(KJob*)), SIGNAL(suspended(KJob*)));
-    connect(requestJob, SIGNAL(resumed(KJob*)), SIGNAL(resumed(KJob*)));
-    connect(requestJob, SIGNAL(finished(KJob*)), SLOT(processData(KJob*)));
-}
-
-void HttpPostCall::data(KIO::Job*, const QByteArray& data)
-{
-    receivedData+=data;
+    m_requrl=s;
+    m_requrl.addPath(apiPath);
 }
 
 void HttpPostCall::start()
 {
-    requestJob->start();
+    QNetworkRequest r(m_requrl);
+
+    QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
+    r.setRawHeader("Authorization", head);
+    if(m_multipart)
+        r.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+
+    m_reply=m_manager.post(r, m_post);
+
+    connect(m_reply, SIGNAL(finished()), SLOT(finished()));
+
+    qDebug() << "starting..." << m_requrl << m_post;
 }
 
 QVariant HttpPostCall::result() const
 {
+    Q_ASSERT(m_reply->isFinished());
     return m_result;
 }
 
-void HttpPostCall::processData(KJob* )
+void HttpPostCall::finished()
 {
     QJson::Parser parser;
+    QByteArray receivedData = m_reply->readAll();
 
-//     qDebug() << "parsing..." << receivedData << requestJob->url();
+    qDebug() << "parsing..." << receivedData;
     bool ok;
     m_result = parser.parse(receivedData, &ok);
-    if(!ok) {
+    if (!ok) {
         setError(1);
         setErrorText(i18n("JSON error: %1: %2", parser.errorLine(), parser.errorString()));
     }
-    
-    if(m_result.toMap().value("stat").toString()!="ok") {
+
+    if (m_result.toMap().value("stat").toString()!="ok") {
         setError(2);
         setErrorText(i18n("Request Error: %1", m_result.toMap().value("err").toMap().value("msg").toString()));
     }
-    
+
     emitResult();
 }
 
 NewRequest::NewRequest(const KUrl& server, const KUrl& patch, const QString& basedir, QObject* parent)
-    : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir)
+        : KJob(parent), m_server(server), m_patch(patch), m_basedir(basedir)
 {
-    qDebug() << "XEEEEEE" << server << server.password() << server.userName();
-    
-    m_repositories = new HttpPostCall(server, "/api/json/repositories/", "", this);
+    m_repositories = new HttpPostCall(server, "/api/json/repositories/", "", false, this);
     connect(m_repositories, SIGNAL(finished(KJob*)), SLOT(createRequest()));
 }
 
@@ -93,7 +96,7 @@ void NewRequest::start()
 
 void NewRequest::createRequest()
 {
-    if(m_repositories->error()) {
+    if (m_repositories->error()) {
         qDebug() << "Could not check the repository" << m_repositories->errorString();
         setError(1);
         setErrorText(i18n("Could not find the repositories"));
@@ -102,10 +105,10 @@ void NewRequest::createRequest()
     }
     QVariant res = m_repositories->result();
     QString repo = res.toMap()["repositories"].toList().first().toMap()["path"].toString();
-    
-    m_newreq = new HttpPostCall(m_server, "/api/json/reviewrequests/new/", "submit_as="+m_server.userName().toLatin1()+"&repository_path="+repo.toLatin1(), this);
+
+    m_newreq = new HttpPostCall(m_server, "/api/json/reviewrequests/new/", "submit_as="+m_server.userName().toLatin1()+"&repository_path="+repo.toLatin1(), false, this);
     connect(m_newreq, SIGNAL(finished(KJob*)), SLOT(submitPatch()));
-    
+
     m_newreq->start();
 }
 
@@ -114,26 +117,24 @@ namespace
 QByteArray urlToData(const KUrl& url)
 {
     QByteArray ret;
-    if(url.isLocalFile()) {
+    if (url.isLocalFile()) {
         QFile f(url.toLocalFile());
         Q_ASSERT(f.exists());
         bool corr=f.open(QFile::ReadOnly | QFile::Text);
         Q_ASSERT(corr);
-        
+
         ret = f.readAll();
-        
+
     } else {
 #warning TODO: add downloading the data
     }
     return ret;
 }
 
-}
-
 QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 {
     static const QByteArray m_boundary = "----------" + KRandom::randomString( 42 + 13 ).toLatin1();
-    
+
     typedef QPair<QString, QVariant> StrVar;
     QByteArray form_data;
     foreach(const StrVar& val, values)
@@ -146,7 +147,7 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
         hstr += "\"";
 
         //File
-        if(val.second.canConvert(QVariant::Url)) {
+        if (val.second.type()==QVariant::Url) {
             KUrl path=val.second.toUrl();
             hstr += "; filename=\"" + path.fileName().toLatin1() + "\"";
             const KMimeType::Ptr ptr = KMimeType::findByUrl(path);
@@ -161,38 +162,39 @@ QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
 
         // append body
         form_data.append(hstr);
-        if(val.second.canConvert(QVariant::Url))
-            form_data=urlToData(val.second.toUrl());
+        if (val.second.type()==QVariant::Url)
+            form_data += urlToData(val.second.toUrl());
         else
             form_data += val.second.toByteArray();
         form_data.append("\r\n");
         //EOFILE
     }
-    
+
     form_data += QByteArray("--" + m_boundary + "--\r\n");
-    
+
     return form_data;
 }
 
+}
 void NewRequest::submitPatch()
 {
-    if(m_newreq->error()) {
+    if (m_newreq->error()) {
         qDebug() << "Could not create the new request" << m_newreq->errorString();
         setError(2);
-        setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString())); 
+        setErrorText(i18n("Could not create the new request:\n%1", m_newreq->errorString()));
         emitResult();
         return;
     }
     QVariant res = m_newreq->result();
-   
-    m_id = res.toMap()["id"].toString();
+
+    m_id = res.toMap()["review_request"].toMap()["id"].toString();
     Q_ASSERT(!m_id.isEmpty());
-    
+
     QList<QPair<QString, QVariant> > vals;
     vals += QPair<QString, QVariant>("basedir", m_basedir);
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
-    
-    m_uploadpatch = new HttpPostCall(m_server, "/api/json/reviewrequests/"+m_id+"/diff/new", multipartFormData(vals), this);
+
+    m_uploadpatch = new HttpPostCall(m_server, "/api/json/reviewrequests/"+m_id+"/diff/new", multipartFormData(vals), true, this);
     connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
     m_uploadpatch->start();
 }
@@ -204,11 +206,11 @@ QString NewRequest::requestId() const
 
 void NewRequest::done()
 {
-    if(m_uploadpatch->error()) {
+    if (m_uploadpatch->error()) {
         qDebug() << "Could not upload the patch" << m_uploadpatch->errorString();
         setError(3);
-        setErrorText(i18n("Could not upload the patch")); 
+        setErrorText(i18n("Could not upload the patch"));
     }
-    
+
     emitResult();
 }

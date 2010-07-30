@@ -38,7 +38,10 @@ class ReviewPatchDialog : public KDialog
         
         /** @returns the server url with the username and password */
         KUrl server() const;
-    private:    
+        
+        /** @returns the selected base directory for the patch */
+        QString baseDir() const;
+    private:
         Ui::ReviewPatch* m_ui;
 };
 

@@ -46,6 +46,11 @@ void ReviewPatchDialog::setUsername(const QString& user)
     m_ui->username->setText(user);
 }
 
+QString ReviewPatchDialog::baseDir() const
+{
+    return m_ui->basedir->text();
+}
+
 KUrl ReviewPatchDialog::server() const
 {
     KUrl server=m_ui->server->url();
