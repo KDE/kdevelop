@@ -32,6 +32,72 @@
 
 using namespace ReviewBoard;
 
+
+
+namespace
+{
+QByteArray urlToData(const KUrl& url)
+{
+    QByteArray ret;
+    if (url.isLocalFile()) {
+        QFile f(url.toLocalFile());
+        Q_ASSERT(f.exists());
+        bool corr=f.open(QFile::ReadOnly | QFile::Text);
+        Q_ASSERT(corr);
+
+        ret = f.readAll();
+
+    } else {
+#warning TODO: add downloading the data
+    }
+    return ret;
+}
+static const QByteArray m_boundary = "----------" + KRandom::randomString( 42 + 13 ).toLatin1();
+
+QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
+{
+    typedef QPair<QString, QVariant> StrVar;
+    QByteArray form_data;
+    foreach(const StrVar& val, values)
+    {
+        QByteArray hstr("--");
+        hstr += m_boundary;
+        hstr += "\r\n";
+        hstr += "Content-Disposition: form-data; name=\"";
+        hstr += val.first.toLatin1();
+        hstr += "\"";
+
+        //File
+        if (val.second.type()==QVariant::Url) {
+            KUrl path=val.second.toUrl();
+            hstr += "; filename=\"" + path.fileName().toLatin1() + "\"";
+            const KMimeType::Ptr ptr = KMimeType::findByUrl(path);
+            if (!ptr->name().isEmpty()) {
+                hstr += "\r\nContent-Type: ";
+                hstr += ptr->name().toAscii().constData();
+            }
+        }
+        //
+
+        hstr += "\r\n\r\n";
+
+        // append body
+        form_data.append(hstr);
+        if (val.second.type()==QVariant::Url)
+            form_data += urlToData(val.second.toUrl());
+        else
+            form_data += val.second.toByteArray();
+        form_data.append("\r\n");
+        //EOFILE
+    }
+
+    form_data += QByteArray("--" + m_boundary + "--\r\n");
+
+    return form_data;
+}
+
+}
+
 HttpPostCall::HttpPostCall(const KUrl& s, const QString& apiPath, const QByteArray& post, bool multipart, QObject* parent)
         : KJob(parent), m_post(post), m_multipart(multipart)
 {
@@ -45,8 +111,11 @@ void HttpPostCall::start()
 
     QByteArray head = "Basic " + m_requrl.userInfo().toAscii().toBase64();
     r.setRawHeader("Authorization", head);
-    if(m_multipart)
+    if(m_multipart) {
         r.setHeader(QNetworkRequest::ContentTypeHeader, "multipart/form-data");
+        r.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(m_post.size()));
+        r.setRawHeader( "Content-Type", "multipart/form-data; boundary=" + m_boundary );
+    }
 
     m_reply=m_manager.post(r, m_post);
 
@@ -112,70 +181,6 @@ void NewRequest::createRequest()
     m_newreq->start();
 }
 
-namespace
-{
-QByteArray urlToData(const KUrl& url)
-{
-    QByteArray ret;
-    if (url.isLocalFile()) {
-        QFile f(url.toLocalFile());
-        Q_ASSERT(f.exists());
-        bool corr=f.open(QFile::ReadOnly | QFile::Text);
-        Q_ASSERT(corr);
-
-        ret = f.readAll();
-
-    } else {
-#warning TODO: add downloading the data
-    }
-    return ret;
-}
-
-QByteArray multipartFormData(const QList<QPair<QString, QVariant> >& values)
-{
-    static const QByteArray m_boundary = "----------" + KRandom::randomString( 42 + 13 ).toLatin1();
-
-    typedef QPair<QString, QVariant> StrVar;
-    QByteArray form_data;
-    foreach(const StrVar& val, values)
-    {
-        QByteArray hstr("--");
-        hstr += m_boundary;
-        hstr += "\r\n";
-        hstr += "Content-Disposition: form-data; name=\"";
-        hstr += val.first.toLatin1();
-        hstr += "\"";
-
-        //File
-        if (val.second.type()==QVariant::Url) {
-            KUrl path=val.second.toUrl();
-            hstr += "; filename=\"" + path.fileName().toLatin1() + "\"";
-            const KMimeType::Ptr ptr = KMimeType::findByUrl(path);
-            if (!ptr->name().isEmpty()) {
-                hstr += "\r\nContent-Type: ";
-                hstr += ptr->name().toAscii().constData();
-            }
-        }
-        //
-
-        hstr += "\r\n\r\n";
-
-        // append body
-        form_data.append(hstr);
-        if (val.second.type()==QVariant::Url)
-            form_data += urlToData(val.second.toUrl());
-        else
-            form_data += val.second.toByteArray();
-        form_data.append("\r\n");
-        //EOFILE
-    }
-
-    form_data += QByteArray("--" + m_boundary + "--\r\n");
-
-    return form_data;
-}
-
-}
 void NewRequest::submitPatch()
 {
     if (m_newreq->error()) {
@@ -194,7 +199,7 @@ void NewRequest::submitPatch()
     vals += QPair<QString, QVariant>("basedir", m_basedir);
     vals += QPair<QString, QVariant>("path", qVariantFromValue<QUrl>(m_patch));
 
-    m_uploadpatch = new HttpPostCall(m_server, "/api/json/reviewrequests/"+m_id+"/diff/new", multipartFormData(vals), true, this);
+    m_uploadpatch = new HttpPostCall(m_server, "/api/json/reviewrequests/"+m_id+"/diff/new/", multipartFormData(vals), true, this);
     connect(m_uploadpatch, SIGNAL(finished(KJob*)), SLOT(done()));
     m_uploadpatch->start();
 }
