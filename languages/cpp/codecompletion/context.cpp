@@ -1762,7 +1762,8 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     }
   }
 
-  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
+  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace
+     && decl->kind() != Declaration::NamespaceAlias )
     return false;
   
   if(m_onlyShow == ShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))
