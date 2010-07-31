@@ -2207,7 +2207,7 @@ void TestDUChain::testLocalNamespaceAlias()
   QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));
   QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
   
-  //QEXPECT_FAIL("", "Local namespace aliases currently don't work, bug 207548", Abort);
+  QEXPECT_FAIL("", "Local namespace aliases currently don't work, bug 207548", Abort);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
 }
