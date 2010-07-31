@@ -939,11 +939,23 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 
   if( memberAccessOperation() == StaticMemberChoose && m_duContext ) {
     //Locate all namespace-instances we will be completing from
-  QList< Declaration* > decls = m_duContext->findDeclarations(QualifiedIdentifier(m_expression)); ///@todo respect position
-  
-  foreach(Declaration* decl, decls)
-    if((decl->kind() == Declaration::Namespace || dynamic_cast<ClassDeclaration*>(decl))  && decl->internalContext())
-      ret << decl->internalContext();
+    QList< Declaration* > decls = m_duContext->findDeclarations(QualifiedIdentifier(m_expression)); ///@todo respect position
+
+    // qlist does not provide convenient stable iterators
+    std::list<Declaration*> worklist(decls.begin(), decls.end());
+    for (std::list<Declaration*>::iterator it = worklist.begin(); it != worklist.end(); ++it) {
+      Declaration * decl = *it;
+      if((decl->kind() == Declaration::Namespace || dynamic_cast<ClassDeclaration*>(decl))  && decl->internalContext())
+        ret << decl->internalContext();
+      else if (decl->kind() == Declaration::NamespaceAlias) {
+        NamespaceAliasDeclaration * aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(decl);
+        if (aliasDecl) {
+          QList<Declaration*> importedDecls = m_duContext->findDeclarations(aliasDecl->importIdentifier()); ///@todo respect position
+          std::copy(importedDecls.begin(), importedDecls.end(),
+                    std::back_inserter(worklist));
+        }
+      }
+    }
   }
 
   if(m_expressionResult.isValid() ) {
@@ -1755,7 +1767,8 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     }
   }
 
-  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
+  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace
+     && decl->kind() != Declaration::NamespaceAlias )
     return false;
   
   if(m_onlyShow == ShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))
