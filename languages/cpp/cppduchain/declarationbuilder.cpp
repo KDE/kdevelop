@@ -1147,7 +1147,7 @@ QualifiedIdentifier DeclarationBuilder::resolveNamespaceIdentifier(const Qualifi
       contexts << decl->internalContext();
     } else if (decl->kind() == Declaration::NamespaceAlias) {
       NamespaceAliasDeclaration *aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(decl);
-      if (aliasDecl != NULL) {
+      if (aliasDecl) {
         QList<Declaration*> importedDecls = currentContext()->findDeclarations(aliasDecl->importIdentifier(), position);
         std::copy(importedDecls.begin(), importedDecls.end(),
                   std::back_inserter(worklist));

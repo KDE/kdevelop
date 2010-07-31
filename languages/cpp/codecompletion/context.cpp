@@ -955,7 +955,7 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
         ret << decl->internalContext();
       else if (decl->kind() == Declaration::NamespaceAlias) {
         NamespaceAliasDeclaration * aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(decl);
-        if (aliasDecl != NULL) {
+        if (aliasDecl) {
           QList<Declaration*> importedDecls = m_duContext->findDeclarations(aliasDecl->importIdentifier()); ///@todo respect position
           std::copy(importedDecls.begin(), importedDecls.end(),
                     std::back_inserter(worklist));
