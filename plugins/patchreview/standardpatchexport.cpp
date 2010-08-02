@@ -22,7 +22,7 @@
 #include <KFileDialog>
 #include <KIO/CopyJob>
 #include <KLocalizedString>
-#include <KProcess>
+#include <KToolInvocation>
 #include <KMessageBox>
 #include <interfaces/icore.h>
 #include <interfaces/ipatchexporter.h>
@@ -44,10 +44,7 @@ class KIOExport : public KDevelop::IPatchExporter {
 class EMailExport : public KDevelop::IPatchExporter {
     virtual void exportPatch(KDevelop::IPatchSource::Ptr source)
     {
-        int pid = KProcess::startDetached("ksendemail", QStringList() << "--attach" << source->file().toLocalFile());
-
-        if(pid==0)
-            KMessageBox::error(0, i18n("Could not execute the e-mail client to send the patch.\n"));
+        KToolInvocation::invokeMailer(QString(), QString(), QString(), QString(), QString(), QString(), QStringList() << source->file().toLocalFile());
     }
 };
 
