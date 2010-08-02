@@ -388,7 +388,13 @@ void SimpleRefactoring::startInteractiveRename(KDevelop::IndexedDeclaration decl
   }
 
   if(FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(declaration))
-    declaration = definition->declaration(declaration->topContext());
+  {
+    // If this is a function-definition, and there is a separate declaration
+    // available, rename that declaration instead
+    Declaration* realDeclaration = definition->declaration(declaration->topContext());
+    if(realDeclaration)
+      declaration = realDeclaration;
+  }
 
   // if renaming a ctor, use the class instead which will trigger renaming of all ctors as well
   if(ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(declaration)) {
