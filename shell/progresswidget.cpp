@@ -199,7 +199,6 @@ void StatusbarProgressWidget::slotBusyIndicator()
 void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsigned int value )
 {
   Q_ASSERT( item == mCurrentItem ); // the only one we should be connected to
-  show();
   if( item->busy() ) {
     m_pProgressBar->setMaximum( 0 );
   } else {
