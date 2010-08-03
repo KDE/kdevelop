@@ -47,7 +47,8 @@ CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel
     kdevModel->initialize();
   connect (KDevelop::ICore::self()->partController(), SIGNAL(partAdded(KParts::Part*)),
     SLOT(documentLoaded(KParts::Part*)));
-  connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)) );
+  connect( ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)),
+           SLOT(documentUrlChanged(KDevelop::IDocument*)) );
   aModel->setParent(this);
 
   // prevent deadlock
@@ -77,9 +78,9 @@ void CodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::
   }
 }
 
-void CodeCompletion::documentSaved(KDevelop::IDocument* document)
+void CodeCompletion::documentUrlChanged(KDevelop::IDocument* document)
 {
-  // The URL may have changed, so we re-register the document
+  // The URL has changed (might have a different language now), so we re-register the document
   Document* textDocument = document->textDocument();
   
   if(textDocument)
