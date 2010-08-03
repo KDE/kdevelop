@@ -116,7 +116,7 @@ void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
     delete mBusyTimer;
     mBusyTimer = 0;
     mDelayTimer->setSingleShot( true );
-    mDelayTimer->start( 1000 );
+    mDelayTimer->start( 500 );
   }
   else { // N items
     if ( !mBusyTimer ) {
@@ -124,7 +124,7 @@ void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
       connect( mBusyTimer, SIGNAL( timeout() ),
                this, SLOT( slotBusyIndicator() ) );
       mDelayTimer->setSingleShot( true );
-      mDelayTimer->start( 1000 );
+      mDelayTimer->start( 500 );
     }
   }
 }
