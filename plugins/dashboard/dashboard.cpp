@@ -21,6 +21,7 @@
 #include <plasma/corona.h>
 #include <plasma/wallpaper.h>
 #include "dashboardcorona.h"
+#include "dashboardpluginloader.h"
 #include "appletselector.h"
 #include <KConfigDialog>
 #include <QVBoxLayout>
@@ -30,7 +31,7 @@ using namespace Plasma;
 Dashboard::Dashboard(DashboardCorona* corona, QWidget* parent)
     : View(corona->containments().first(), parent), corona(corona), m_selector(0)
 {
-    m_selector=new AppletSelector(this);
+    m_selector=new AppletSelector(DashboardPluginLoader::self()->dashboardElements(), this);
     connect(m_selector, SIGNAL(addApplet(QString)), SLOT(addApplet(QString)));
     
     setFocusPolicy(Qt::NoFocus);
@@ -135,5 +136,11 @@ void Dashboard::showConfigure()
     
     m_configDialog->show();
 }
+
+void Dashboard::mouseDoubleClickEvent(QMouseEvent* event)
+{
+    m_selector->show();
+}
+
 
 #include "dashboard.moc"

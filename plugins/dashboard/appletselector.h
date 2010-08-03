@@ -21,6 +21,7 @@
 #define APPLETSELECTOR_H
 
 #include <KDE/KDialog>
+#include <KPluginInfo>
 
 class QModelIndex;
 namespace Ui { class AppletSelector; }
@@ -29,7 +30,7 @@ class AppletSelector : public KDialog
 {
     Q_OBJECT
     public:
-        AppletSelector(QWidget* parent = 0);
+        AppletSelector(const KPluginInfo::List& plugins, QWidget* parent = 0);
         
     public slots:
         void selected(const QModelIndex& idx);

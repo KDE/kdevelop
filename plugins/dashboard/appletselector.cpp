@@ -27,7 +27,7 @@
 
 using namespace KDevelop;
 
-AppletSelector::AppletSelector(QWidget* parent)
+AppletSelector::AppletSelector(const KPluginInfo::List& plugins, QWidget* parent)
     : KDialog(parent)
 {
     setButtons(Close);
@@ -42,7 +42,8 @@ AppletSelector::AppletSelector(QWidget* parent)
     
     QStandardItemModel* model = new QStandardItemModel(this);
     KPluginInfo::List list=Plasma::Applet::listAppletInfo();
-#warning add our plugins
+    list.append(plugins);
+    
     foreach(const KPluginInfo& info, list) {
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
         item->setEditable(false);

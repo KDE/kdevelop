@@ -54,6 +54,8 @@ class DashboardPluginLoader : public Plasma::PluginLoader
         
         QWeakPointer<DashboardDataEngine> engine();
         
+        KPluginInfo::List dashboardElements() const;
+        
         static DashboardPluginLoader* self();
     private:
         static DashboardPluginLoader* s_loader;
