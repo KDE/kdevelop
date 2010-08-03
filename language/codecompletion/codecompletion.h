@@ -48,7 +48,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
     virtual ~CodeCompletion();
 
   private Q_SLOTS:
-    void documentLoaded(KParts::Part* document);
+    void textDocumentCreated(KDevelop::IDocument*);
     void viewCreated(KTextEditor::Document *document, KTextEditor::View *view);
     void documentUrlChanged(KDevelop::IDocument*);
 
