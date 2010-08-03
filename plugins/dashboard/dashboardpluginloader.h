@@ -47,7 +47,7 @@ class DashboardPluginLoader : public Plasma::PluginLoader
         DashboardPluginLoader();
 
         Plasma::Applet* createApplet(KDevelop::IDashboardPlasmoidFactory* fact);
-        Plasma::Applet* createApplet(KDevelop::IDashboardWidgetFactory* fact);       
+        Plasma::Applet* createApplet(KDevelop::IDashboardWidgetFactory* fact, uint appletId);       
         virtual Plasma::Applet* internalLoadApplet(const QString& name, uint appletId = 0, const QVariantList& args = QVariantList());
         
         virtual Plasma::DataEngine* internalLoadDataEngine(const QString& name);

@@ -49,6 +49,5 @@ void DashboardCorona::loadDefaultLayout()
     
     emit containmentAdded(c);
     
-    QVariantList args;
-    c->addApplet("project", QVariantList() << qVariantFromValue<QUrl>(m_project->projectFileUrl()));
+    c->addApplet("org.kdevelop.project");
 }

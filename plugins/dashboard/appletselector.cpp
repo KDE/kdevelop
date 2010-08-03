@@ -27,15 +27,6 @@
 
 using namespace KDevelop;
 
-QStandardItem* factoryItem(IDashboardFactory* fact)
-{
-    QStandardItem* item = new QStandardItem(KIcon(fact->icon()), fact->name());
-    item->setEditable(false);
-    item->setToolTip(fact->comment());
-    item->setData(fact->id(), Qt::UserRole+1);
-    return item;
-}
-
 AppletSelector::AppletSelector(QWidget* parent)
     : KDialog(parent)
 {
@@ -51,6 +42,7 @@ AppletSelector::AppletSelector(QWidget* parent)
     
     QStandardItemModel* model = new QStandardItemModel(this);
     KPluginInfo::List list=Plasma::Applet::listAppletInfo();
+#warning add our plugins
     foreach(const KPluginInfo& info, list) {
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
         item->setEditable(false);
@@ -59,12 +51,6 @@ AppletSelector::AppletSelector(QWidget* parent)
         
         model->appendRow(item);
     }
-    
-    foreach(IDashboardFactory* fact, ICore::self()->dashboardController()->projectPlasmoidDashboardFactories())
-        model->appendRow(factoryItem(fact));
-    
-    foreach(IDashboardFactory* fact, ICore::self()->dashboardController()->projectWidgetDashboardFactories())
-        model->appendRow(factoryItem(fact));
     
     m_ui->plugins->setModel(model);
     

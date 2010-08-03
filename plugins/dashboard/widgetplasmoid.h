@@ -31,7 +31,7 @@ namespace KDevelop {
 class WidgetPlasmoid : public Plasma::Applet
 {
     public:
-        WidgetPlasmoid(KDevelop::IDashboardWidgetFactory* fact, QGraphicsItem* parent = 0, const QString& serviceId = QString(), uint appletId = 0);
+        WidgetPlasmoid(const KPluginInfo& info, KDevelop::IDashboardWidgetFactory* fact, QGraphicsItem* parent = 0, uint appletId = 0);
         
         virtual void init();
         KDevelop::IProject* project() const;

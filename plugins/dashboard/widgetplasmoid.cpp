@@ -33,8 +33,8 @@
 using namespace KDevelop;
 using namespace Plasma;
 
-WidgetPlasmoid::WidgetPlasmoid(KDevelop::IDashboardWidgetFactory* fact, QGraphicsItem* parent, const QString& serviceId, uint appletId)
-    : Plasma::Applet(parent, serviceId, appletId), m_fact(fact)
+WidgetPlasmoid::WidgetPlasmoid(const KPluginInfo& info, KDevelop::IDashboardWidgetFactory* fact, QGraphicsItem* parent, uint appletId)
+    : Plasma::Applet(info, parent, appletId), m_fact(fact)
 {
     setBackgroundHints(Plasma::Applet::StandardBackground);
 }

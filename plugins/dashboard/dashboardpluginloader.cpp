@@ -24,6 +24,7 @@
 #include <interfaces/idashboardfactory.h>
 #include "widgetplasmoid.h"
 #include <plasma/dataengine.h>
+#include <KServiceTypeTrader>
 
 using namespace KDevelop;
 using namespace Plasma;
@@ -35,14 +36,26 @@ DashboardPluginLoader::DashboardPluginLoader()
     PluginLoader::setPluginLoader(this);
 }
 
-Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardPlasmoidFactory* fact)
+namespace
 {
-    return fact->plasmaApplet(QString());
+    
+KPluginInfo queryPlugin(const QString &id )
+{
+    KService::List serviceList = KServiceTypeTrader::self()->query( "KDevelop/Dashboard", QString("[X-KDE-PluginInfo-Name]=='%1'").arg(id) );
+
+    return KPluginInfo( serviceList.first() );
 }
 
-Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardWidgetFactory* fact)
+}
+
+Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardPlasmoidFactory* fact)
 {
-    return new WidgetPlasmoid(fact, 0, "clock");
+    return fact->plasmaApplet();
+}
+
+Plasma::Applet* DashboardPluginLoader::createApplet(IDashboardWidgetFactory* fact, uint appletId)
+{
+    return new WidgetPlasmoid(queryPlugin(fact->id()), fact, 0, appletId);
 }
 
 Plasma::Applet* DashboardPluginLoader::internalLoadApplet(const QString& name, uint appletId, const QVariantList& args)
@@ -57,7 +70,7 @@ Plasma::Applet* DashboardPluginLoader::internalLoadApplet(const QString& name, u
     QList<IDashboardWidgetFactory*> factsW=ICore::self()->dashboardController()->projectWidgetDashboardFactories();
     foreach(IDashboardWidgetFactory* fact, factsW) {
         if(fact->id()==name)
-            return createApplet(fact);
+            return createApplet(fact, appletId);
     }
     
     return 0;
@@ -89,8 +102,5 @@ DashboardDataEngine::DashboardDataEngine(QObject* parent, KService::Ptr service)
 
 void DashboardDataEngine::addConnection(const QString& containmentId, const KUrl& projectFilePath)
 {
-    qDebug() << "addiiiiiiing" << containmentId << projectFilePath;
     setData(containmentId, "projectFileUrl", QUrl(projectFilePath));
-    
-    qDebug() << "dataaaaaah" << query(containmentId);
 }
