@@ -6,6 +6,103 @@
 
 QTEST_MAIN( CMakeAstTest )
 
+void CMakeAstTest::testAddDefinitionsGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_definitions");
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testAddDefinitionsGoodParse_data()
+{
+    CMakeFunctionDesc func;
+    func.name = "add_definitions";
+    QStringList argList;
+    argList << "-DFOOBAR" << "-DQT_NO_STL";
+    func.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "simple" ) << func;
+}
+
+void CMakeAstTest::testAddDefinitionsBadParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_definitions");
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
+}
+
+void CMakeAstTest::testAddDefinitionsBadParse_data()
+{
+    CMakeFunctionDesc func;
+    func.name = "add_definition";
+    QStringList argList;
+    argList << "-DFOOBAR" << "-DQT_NO_STL";
+    func.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "simple - bad" ) << func;
+
+}
+
+
+
+void CMakeAstTest::testAddDependenciesGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_dependencies");
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+
+}
+
+void CMakeAstTest::testAddDependenciesGoodParse_data()
+{
+    CMakeFunctionDesc func;
+    func.name = "add_dependencies";
+    QStringList argList;
+    argList << "target-name" << "dep1" << "dep2";
+    func.addArguments( argList );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "simple" ) << func;
+}
+
+void CMakeAstTest::testAddDependenciesBadParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_dependencies");
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
+}
+
+void CMakeAstTest::testAddDependenciesBadParse_data()
+{
+    CMakeFunctionDesc func;
+    func.name = "add_dependencies";
+    QStringList argList;
+
+    CMakeFunctionDesc func2;
+    func2.name = "add_dependencies";
+    QStringList argList2;
+    argList2 << "target";
+    func2.addArguments( argList2 );
+
+    CMakeFunctionDesc func3;
+    func3.name = "foobar";
+    QStringList argList3;
+    argList3 << "target" << "dep1" << "dep2";
+    func3.addArguments( argList3 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "no args" ) << func;
+    QTest::newRow( "one arg" ) << func2;
+    QTest::newRow( "two args. wrong name" ) << func3;
+}
+
+
 void CMakeAstTest::testAddExecutableGoodParse()
 {
     QFETCH( CMakeFunctionDesc, function );
@@ -704,6 +801,183 @@ void CMakeAstTest::testConfigureFileBadParse_data()
     QTest::newRow( "bad wrong name" ) << func1;
     QTest::newRow( "bad only one arg" ) << func2;
     QTest::newRow( "bad no args" ) << func3;
+}
+
+
+void CMakeAstTest::testCustomCommandGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_custom_command");
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testCustomCommandGoodParse_data()
+{
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    CMakeFunctionDesc func;
+    func.name = "add_custom_command";
+    QStringList argList;
+    argList << "OUTPUT" << "foo" << "COMMAND" << "bar";
+    func.addArguments( argList );
+    func.filePath = QString();
+    func.line = 0;
+
+    CMakeFunctionDesc func1;
+    func1.name = "add_custom_command";
+    QStringList argList1;
+    argList1 << "OUTPUT" << "foo" << "COMMAND" << "bar";
+    argList1 << "MAIN_DEPENDENCY" << "dep1" << "DEPENDS" << "dep1" << "dep2";
+    argList1 << "WORKING_DIRECTORY" << "dir1" << "COMMENT" << "some comment";
+    argList1 << "VERBATIM" << "APPEND";
+    func1.addArguments( argList1 );
+
+    CMakeFunctionDesc func2;
+    func2.name = "ADD_CUSTOM_COMMAND";
+    QStringList argList2;
+    argList2 << "OUTPUT" << "foo" << "COMMAND" << "bar" << "ARGS" << "baz";
+    argList2 << "MAIN_DEPENDENCY" << "dep1" << "DEPENDS" << "dep1" << "dep2";
+    argList2 << "WORKING_DIRECTORY" << "dir1" << "COMMENT" << "some comment";
+    argList2 << "VERBATIM" << "APPEND";
+    func2.addArguments( argList2 );
+
+    CMakeFunctionDesc func3;
+    func3.name = "ADD_CUSTOM_COMMAND";
+    QStringList argList3;
+    argList3 << "TARGET" << "foo" << "PRE_BUILD" << "COMMAND" << "bar";
+    argList3 << "MAIN_DEPENDENCY" << "dep1" << "DEPENDS" << "dep1" << "dep2";
+    argList3 << "WORKING_DIRECTORY" << "dir1" << "COMMENT" << "some comment";
+    func3.addArguments( argList3 );
+
+    QTest::newRow( "no optional" ) << func;
+    QTest::newRow( "all optional" ) << func1;
+    QTest::newRow( "optional with arg" ) << func2;
+    QTest::newRow( "second form all optional uppercase" ) << func3;
+
+}
+
+void CMakeAstTest::testCustomCommandBadParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_custom_command");
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
+}
+
+void CMakeAstTest::testCustomCommandBadParse_data()
+{
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    CMakeFunctionDesc func;
+    func.name = "foo";
+    func.filePath = QString();
+    func.line = 0;
+
+    CMakeFunctionDesc func_noargs;
+    func_noargs.name = "add_custom_command";
+
+    CMakeFunctionDesc func2;
+    func2.name = "add_custom_command";
+    QStringList argList2;
+    argList2 << "nottarget" << "foo" << "notcommand" << "foo1";
+    func2.addArguments( argList2 );
+    func2.filePath = QString();
+    func2.line = 0;
+
+    CMakeFunctionDesc func3;
+    func3.name = "add_custom_command";
+    QStringList argList3;
+    argList3 << "target" << "foo" << "no_pre_build" << "foo1";
+    func3.addArguments( argList3 );
+    func3.filePath = QString();
+    func3.line = 0;
+
+    CMakeFunctionDesc func4;
+    func4.name = "add_custom_command";
+    QStringList argList4;
+    argList4 << "output" << "foo1" << "no_command" << "foo2";
+    func4.addArguments( argList4 );
+    func4.filePath = QString();
+    func4.line = 0;
+
+    CMakeFunctionDesc func5;
+    func3.name = "add_custom_command";
+    QStringList argList5;
+    argList5 << "target" << "foo" << "PRE_BUILD" << "no_command";
+    func5.addArguments( argList5 );
+    func5.filePath = QString();
+    func5.line = 0;
+
+    QTest::newRow( "wrong function" ) << func;
+    QTest::newRow( "right function. no args" ) << func_noargs;
+    QTest::newRow( "wrong params 1" ) << func2;
+    QTest::newRow( "wrong params 2" ) << func3;
+    QTest::newRow( "wrong params 3" ) << func4;
+    QTest::newRow( "wrong params 4" ) << func5;
+
+}
+
+void CMakeAstTest::testCustomTargetGoodParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_custom_target");
+    QVERIFY( ast->parseFunctionInfo( function ) == true );
+    delete ast;
+}
+
+void CMakeAstTest::testCustomTargetGoodParse_data()
+{
+    CMakeFunctionDesc func1;
+    func1.name = "add_custom_target";
+    QStringList argList1;
+    argList1 << "MyName" << "ALL" << "foobar --test" << "COMMAND"
+             << "barbaz --foo" << "DEPENDS" << "dep1" << "dep2" << "dep3"
+             << "WORKING_DIRECTORY" << "/path/to/my/dir" << "COMMENT"
+             << "this is my comment" << "VERBATIM";
+    func1.addArguments( argList1 );
+
+    CMakeFunctionDesc func2;
+    func2.name = "ADD_CUSTOM_TARGET";
+    QStringList argList2;
+    argList2 << "MyName" << "my_command --test-param 1";
+    func2.addArguments( argList2 );
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "all optional" ) << func1;
+    QTest::newRow( "no optional" ) << func2;
+}
+
+void CMakeAstTest::testCustomTargetBadParse()
+{
+    QFETCH( CMakeFunctionDesc, function );
+    CMakeAst* ast = AstFactory::self()->createAst("add_custom_target");
+    QVERIFY( ast->parseFunctionInfo( function ) == false );
+    delete ast;
+}
+
+void CMakeAstTest::testCustomTargetBadParse_data()
+{
+    CMakeFunctionDesc func1;
+    func1.name = "add_custom_target";
+    QStringList argList1;
+    argList1 << "IAm#1" << "ALL" << "foobar --test" << "COMMAND"
+             << "barbaz --foo" << "DEPENDS" << "dep1" << "dep2" << "dep3"
+             << "WORKING_DIRECTORY" << "/path/to/my/dir" << "COMMENT"
+             << "this is my comment" << "VERBATIM";
+    func1.addArguments( argList1 );
+
+    CMakeFunctionDesc func2;
+    func2.name = "ADD_CUSTOM_TARGET";
+    QStringList argList2;
+    argList2 << "ALL" << "my_command --test-param 1";
+    func2.addArguments( argList2 );
+
+    CMakeFunctionDesc func3;
+    func3.name = "add_custom_target";
+
+    QTest::addColumn<CMakeFunctionDesc>( "function" );
+    QTest::newRow( "bad 1" ) << func1;
+    QTest::newRow( "bad 2" ) << func2;
+    QTest::newRow( "bad 3" ) << func3;
 }
 
 void CMakeAstTest::testCreateTestSourcelistGoodParse()
