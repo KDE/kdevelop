@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+Exec=blubb
+Name=Project Information
+GenericName=Project Information
+Comment=Shows information related to the project
+Icon=project-new
+ServiceTypes=KDevelop/Dashboard
+X-KDE-PluginInfo-Name=org.kdevelop.project
+X-KDE-PluginInfo-Author=Aleix Pol
+X-KDE-PluginInfo-License=LGPL

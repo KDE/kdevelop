@@ -97,10 +97,7 @@ public:
 class ProjectDashboardItem : public IDashboardWidgetFactory
 {
     public:
-        virtual QString id() const { return "project";}
-        virtual QString comment() const { return i18n("Shows information related to the project"); }
-        virtual KIcon icon() const { return KIcon("project"); }
-        virtual QString name() const { return i18n("Project"); }
+        virtual QString id() const { return "org.kdevelop.project"; }
         virtual QWidget* widget(IProject* project)
         {
             return new ProjectDashboardWidget(project);

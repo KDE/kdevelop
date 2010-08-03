@@ -36,15 +36,6 @@ class IDashboardFactory
         
         /** @returns an untranslatable name for the dashboard item */
         virtual QString id() const = 0;
-        
-        /** @returns a name to identifies the produced dashboard items */
-        virtual QString name() const = 0;
-        
-        /** @returns a comment to explain the user what the items will offer */
-        virtual QString comment() const = 0;
-        
-        /** @returns an icon that defines the produced dashboard items */
-        virtual KIcon icon() const = 0;
 };
 
 /**
@@ -73,7 +64,7 @@ class IDashboardPlasmoidFactory : public IDashboardFactory
 {
     public:
         /** @returns the plasmoid that is going to be added when the user selects it for the Dashboard */
-        virtual Plasma::Applet* plasmaApplet(const QString& serviceId) = 0;
+        virtual Plasma::Applet* plasmaApplet() = 0;
 };
 
 }
