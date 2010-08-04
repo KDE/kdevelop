@@ -42,7 +42,7 @@ set(kdevplatforminterfaces_LIB_SRCS
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces 
         ${KDE4_KIO_LIBS} 
-        ${KDE4_KUTILS_LIBS} 
+        ${KDE4_KCMUTILS_LIBS} 
         ${KDE4_KPARTS_LIBS} 
         ${KDE4_KNOTIFYCONFIG_LIBS} 
         ${KDE4_KTEXTEDITOR_LIBS} 
