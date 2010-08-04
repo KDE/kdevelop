@@ -222,7 +222,50 @@ public:
         }
     
     }
+    
+    void importProject(const KUrl& url)
+    {
+        if ( !url.isValid() )
+        {
+            KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
+                            i18n("Invalid Location: %1", url.prettyUrl()));
+            return;
+        }
+        if ( m_currentlyOpening.contains(url))
+        {
+            kDebug() << "Already opening " << url << ". Aborting.";
+            KPassivePopup::message( i18n( "Project already being opened"), 
+                                    i18n( "Already opening %1, not opening again", 
+                                        url.prettyUrl() ), 
+                                    m_core->uiController()->activeMainWindow() );
+            return;
+        }
 
+        foreach( IProject* project, m_projects )
+        {
+            if ( url == project->projectFileUrl() )
+            {
+                if ( dialog->userWantsReopen() )
+                { // close first, then open again by falling through
+                    q->closeProject(project);
+                } else { // abort
+                    return;
+                }
+            }
+        }
+
+        m_core->pluginControllerInternal()->loadProjectPlugins();
+
+        Project* project = new Project();
+        emit q->projectAboutToBeOpened( project );
+        if ( !project->open( url ) )
+        {
+            delete project;
+            return;
+        }
+
+        m_currentlyOpening << url;
+    }
 
 };
 
@@ -262,10 +305,10 @@ bool projectFileExists( const KUrl& u )
     }
 }
 
-KUrl ProjectDialogProvider::askProjectConfigLocation(const KUrl& startUrl)
+KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& startUrl)
 {
     Q_ASSERT(d);
-    OpenProjectDialog dlg( startUrl, Core::self()->uiController()->activeMainWindow() );
+    OpenProjectDialog dlg( fetch, startUrl, Core::self()->uiController()->activeMainWindow() );
     if(dlg.exec() == QDialog::Rejected)
         return KUrl();
     
@@ -351,10 +394,17 @@ void ProjectController::setupActions()
 
     d->m_openProject = action = ac->addAction( "project_open" );
     action->setText(i18n( "Open / Import Project..." ) );
-    connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     action->setToolTip( i18n( "Open / Import Project" ) );
     action->setWhatsThis( i18n( "<b>Open / Import project</b><p>Open an existing KDevelop 4 project or import an existing Project into KDevelop 4. This entry allows to select a KDevelop4 project file or an existing directory to open it in KDevelop. When opening an existing directory that does not yet have a KDevelop4 project file, the file will be created.</p>" ) );
     action->setIcon(KIcon("project-open"));
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
+    
+    d->m_openProject = action = ac->addAction( "project_fetch" );
+    action->setText(i18n( "Fetch Project..." ) );
+    action->setToolTip( i18n( "Fetch Project" ) );
+    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Fetches a project from either a Version Control System or somewhere else and puts into the disk and lets </p>" ) );
+//     action->setIcon(KIcon("project-open"));
+    connect( action, SIGNAL( triggered( bool ) ), SLOT( fetchProject() ) );
 
 //    action = ac->addAction( "project_close" );
 //    action->setText( i18n( "C&lose Project" ) );
@@ -514,7 +564,7 @@ void ProjectController::openProjectForUrl(const KUrl& sourceUrl) {
             break;
     }
     
-    KUrl askForOpen = d->dialog->askProjectConfigLocation(dirUrl);
+    KUrl askForOpen = d->dialog->askProjectConfigLocation(false, dirUrl);
     
     if(askForOpen.isValid())
         openProject(askForOpen);
@@ -555,52 +605,23 @@ void ProjectController::openProject( const KUrl &projectFile )
     
     if ( url.isEmpty() )
     {
-        url = d->dialog->askProjectConfigLocation();
-        if ( url.isEmpty() )
-            return;
+        url = d->dialog->askProjectConfigLocation(false);
     }
 
-    if ( !url.isValid() )
+    if ( !url.isEmpty() )    
     {
-        KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
-                           i18n("Invalid Location: %1", url.prettyUrl()));
-        return;
+        d->importProject(url);
     }
-    if ( d->m_currentlyOpening.contains(url))
+}
+
+void ProjectController::fetchProject()
+{
+    KUrl url = d->dialog->askProjectConfigLocation(true);
+
+    if ( !url.isEmpty() )    
     {
-        kDebug() << "Already opening " << url << ". Aborting.";
-        KPassivePopup::message( i18n( "Project already being opened"), 
-                                i18n( "Already opening %1, not opening again", 
-                                      url.prettyUrl() ), 
-                                Core::self()->uiController()->activeMainWindow() );
-        return;
+        d->importProject(url);
     }
-
-    foreach( IProject* project, d->m_projects )
-    {
-        if ( url == project->projectFileUrl() )
-        {
-            if ( d->dialog->userWantsReopen() )
-            { // close first, then open again by falling through
-                closeProject(project);
-            } else { // abort
-                return;
-            }
-        }
-    }
-
-    d->m_core->pluginControllerInternal()->loadProjectPlugins();
-
-    Project* project = new Project();
-    emit projectAboutToBeOpened( project );
-    if ( !project->open( url ) )
-    {
-        delete project;
-        return;
-    }
-
-    d->m_currentlyOpening << url;
-    return;
 }
 
 void ProjectController::projectImportingFinished( IProject* project )
