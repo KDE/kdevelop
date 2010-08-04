@@ -489,11 +489,8 @@ DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch,
 
 VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const KUrl::List& files)
 {
-    if (files.empty())
-        return 0;
-
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, repository.toLocalFile()) ) {
+    if (!files.isEmpty() && prepareJob(job, repository.toLocalFile()) ) {
         *job << "git";
         *job << "reset";
         //Empty branch has 'something' so it breaks the command
