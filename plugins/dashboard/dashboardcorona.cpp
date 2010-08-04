@@ -28,6 +28,9 @@ DashboardCorona::DashboardCorona(KDevelop::IProject *project, QObject* parent)
     setObjectName(project->name());
     
     DashboardPluginLoader::self()->engine().data()->addConnection(objectName(), m_project->projectFileUrl());
+    
+    setPreferredToolBoxPlugin(Plasma::Containment::CustomContainment, "org.kde.nettoolbox");
+    
 }
 
 KDevelop::IProject* DashboardCorona::project() const
