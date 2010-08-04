@@ -137,10 +137,4 @@ void Dashboard::showConfigure()
     m_configDialog->show();
 }
 
-void Dashboard::mouseDoubleClickEvent(QMouseEvent* event)
-{
-    m_selector->show();
-}
-
-
 #include "dashboard.moc"

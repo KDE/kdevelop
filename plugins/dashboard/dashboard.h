@@ -46,8 +46,6 @@ class Dashboard : public Plasma::View
         virtual ~Dashboard();
         
         virtual void resizeEvent(QResizeEvent* event);
-        
-        virtual void mouseDoubleClickEvent(QMouseEvent* event);
     private slots:
         void updateView();
         void showAppletsSwitcher();
