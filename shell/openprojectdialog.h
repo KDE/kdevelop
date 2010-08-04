@@ -29,7 +29,7 @@ class OpenProjectDialog : public KAssistantDialog
 {
 Q_OBJECT
 public:
-    OpenProjectDialog( const KUrl& startUrl, QWidget* parent = 0 );
+    OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget* parent = 0 );
     KUrl projectFileUrl();
     QString projectName();
     QString projectManager();

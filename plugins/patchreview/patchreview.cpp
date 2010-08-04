@@ -70,6 +70,9 @@ std::string*/
 #include <sublime/area.h>
 #include <interfaces/iprojectcontroller.h>
 #include "diffsettings.h"
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/ipatchexporter.h>
+#include "standardpatchexport.h"
 
 using namespace KDevelop;
 
@@ -210,6 +213,21 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.nextHunk->setIcon(KIcon("arrow-down"));
     m_editPatch.cancelReview->setIcon(KIcon("dialog-cancel"));
     m_editPatch.finishReview->setIcon(KIcon("dialog-ok"));
+    
+    QMenu* exportMenu = new QMenu(m_editPatch.exportReview);
+    StandardPatchExport* stdactions = new StandardPatchExport(m_plugin, this);
+    stdactions->addActions(exportMenu);
+    connect(exportMenu, SIGNAL(triggered(QAction*)), m_plugin, SLOT(exporterSelected(QAction*)));
+    
+    IPluginController* pluginManager = ICore::self()->pluginController();
+    foreach( IPlugin* p, pluginManager->allPluginsForExtension( "org.kdevelop.IPatchExporter" ) )
+    {
+        KPluginInfo info=pluginManager->pluginInfo(p);
+        QAction* action=exportMenu->addAction(KIcon(info.icon()), info.name());
+        action->setData(qVariantFromValue<QObject*>(p));
+    }
+    
+    m_editPatch.exportReview->setMenu(exportMenu);
     
     connect( m_editPatch.previousHunk, SIGNAL( clicked( bool ) ), this, SLOT( prevHunk() ) );
     connect( m_editPatch.nextHunk, SIGNAL( clicked( bool ) ), this, SLOT( nextHunk() ) );
@@ -1385,6 +1403,17 @@ QWidget* PatchReviewPlugin::createToolView(QWidget* parent)
 {
     return new PatchReviewToolView(parent, this);
 }
+
+void PatchReviewPlugin::exporterSelected(QAction* action)
+{
+    IPlugin* exporter = qobject_cast<IPlugin*>(action->data().value<QObject*>());
+    
+    if(exporter) {
+        qDebug() << "exporting patch" << exporter << action->text();
+        exporter->extension<IPatchExporter>()->exportPatch(patch());
+    }
+}
+
 
 #if 0
 void PatchReviewPlugin::determineState() {

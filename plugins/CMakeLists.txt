@@ -17,6 +17,7 @@ add_subdirectory(documentswitcher)
 add_subdirectory(patchreview)
 add_subdirectory(openwith)
 add_subdirectory(grepview)
+add_subdirectory(pastebin)
 add_subdirectory(dashboard)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
@@ -32,5 +33,10 @@ macro_log_feature( SUBVERSION_FOUND "Subversion" "Support for Subversion integra
 if(SUBVERSION_FOUND)
     macro_optional_add_subdirectory(subversion)
 endif(SUBVERSION_FOUND)
+
+macro_optional_find_package(QJSON)
+if(QJSON_FOUND)
+    macro_optional_add_subdirectory(reviewboard)
+endif(QJSON_FOUND)
 
 macro_display_feature_log()

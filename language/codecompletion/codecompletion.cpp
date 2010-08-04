@@ -27,7 +27,6 @@
 #include <ktexteditor/codecompletioninterface.h>
 
 #include <interfaces/icore.h>
-#include <interfaces/ipartcontroller.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 
@@ -45,9 +44,10 @@ CodeCompletion::CodeCompletion(QObject *parent, KTextEditor::CodeCompletionModel
   KDevelop::CodeCompletionModel* kdevModel = dynamic_cast<KDevelop::CodeCompletionModel*>(aModel);
   if(kdevModel)
     kdevModel->initialize();
-  connect (KDevelop::ICore::self()->partController(), SIGNAL(partAdded(KParts::Part*)),
-    SLOT(documentLoaded(KParts::Part*)));
-  connect( KDevelop::ICore::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)) );
+  connect(KDevelop::ICore::self()->documentController(), SIGNAL(textDocumentCreated(KDevelop::IDocument*)),
+          SLOT(textDocumentCreated(KDevelop::IDocument*)));
+  connect( ICore::self()->documentController(), SIGNAL(documentUrlChanged(KDevelop::IDocument*)),
+           SLOT(documentUrlChanged(KDevelop::IDocument*)) );
   aModel->setParent(this);
 
   // prevent deadlock
@@ -77,9 +77,9 @@ void CodeCompletion::viewCreated(KTextEditor::Document * document, KTextEditor::
   }
 }
 
-void CodeCompletion::documentSaved(KDevelop::IDocument* document)
+void CodeCompletion::documentUrlChanged(KDevelop::IDocument* document)
 {
-  // The URL may have changed, so we re-register the document
+  // The URL has changed (might have a different language now), so we re-register the document
   Document* textDocument = document->textDocument();
   
   if(textDocument)
@@ -89,14 +89,10 @@ void CodeCompletion::documentSaved(KDevelop::IDocument* document)
   }
 }
 
-void CodeCompletion::documentLoaded(KParts::Part* document)
+void CodeCompletion::textDocumentCreated(KDevelop::IDocument* document)
 {
-  KTextEditor::Document *textDocument = dynamic_cast<KTextEditor::Document*>(document);
-  if (textDocument) {
-    checkDocument(textDocument);
-  } else {
-    kDebug() << "Non-text editor document added";
-  }
+  Q_ASSERT(document->textDocument());
+  checkDocument(document->textDocument());
 }
 
 void CodeCompletion::unregisterDocument(Document* textDocument)

@@ -48,7 +48,13 @@ public:
     virtual ~IProjectDialogProvider();
 
 public Q_SLOTS:
-    virtual KUrl askProjectConfigLocation(const KUrl& startUrl = KUrl()) = 0;
+    /**
+     * Displays some UI to ask the user for the project location.
+     * 
+     * @param fetch will tell the UI that the user might want to fetch the project first
+     * @param startUrl tells where to look first
+     */
+    virtual KUrl askProjectConfigLocation(bool fetch, const KUrl& startUrl = KUrl()) = 0;
     virtual bool userWantsReopen() = 0;
 };
 
@@ -85,6 +91,7 @@ public:
 
 public Q_SLOTS:
     virtual void openProjectForUrl( const KUrl &sourceUrl );
+    virtual void fetchProject();
     virtual void openProject( const KUrl &KDev4ProjectFile = KUrl() );
     void projectImportingFinished( IProject* );
     virtual void closeProject( IProject* );
@@ -131,7 +138,7 @@ public:
     ProjectControllerPrivate* const d;
 
 public Q_SLOTS:
-    virtual KUrl askProjectConfigLocation(const KUrl& sta);
+    virtual KUrl askProjectConfigLocation(bool fetch, const KUrl& sta);
     virtual bool userWantsReopen();
 };
 

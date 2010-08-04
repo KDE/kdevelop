@@ -326,7 +326,11 @@ ClassIdentifierPage::ClassIdentifierPage(QWizard* parent)
 
     d->classid = new Ui::NewClassDialog;
     d->classid->setupUi(this);
-
+    d->classid->addInheritancePushButton->setIcon(KIcon("list-add"));
+    d->classid->removeInheritancePushButton->setIcon(KIcon("list-remove"));
+    d->classid->moveDownPushButton->setIcon(KIcon("go-down"));
+    d->classid->moveUpPushButton->setIcon(KIcon("go-up"));
+    
     connect(d->classid->addInheritancePushButton, SIGNAL(pressed()), this, SLOT(addInheritance()));
     connect(d->classid->removeInheritancePushButton, SIGNAL(pressed()), this, SLOT(removeInheritance()));
     connect(d->classid->moveUpPushButton, SIGNAL(pressed()), this, SLOT(moveUpInheritance()));
