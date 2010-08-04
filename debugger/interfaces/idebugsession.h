@@ -140,8 +140,17 @@ Q_SIGNALS:
 
 public:
     using QObject::event; // prevent hiding of base method.
-       
+
+    const QString& currentFile() const { return file_; }
+    int currentLine() const { return line_; }
+    const QString& currentAddr() const { return addr_; }
+    void clearCurrentPosition() { file_=""; line_=-1; }
+    
 protected:
+    // Current position in debugged program, gets set when the state changes
+    QString file_;
+    int line_;
+    QString addr_;
 
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
