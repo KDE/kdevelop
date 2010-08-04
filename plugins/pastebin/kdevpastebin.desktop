@@ -2,9 +2,12 @@
 Type=Service
 Icon=edit-paste
 Exec=blubb
-Comment=This plugin will 
+Comment=This plugin will
+Comment[x-test]=xxThis plugin willxx
 Name=Pastebin
+Name[x-test]=xxPastebinxx
 GenericName=Pastebin
+GenericName[x-test]=xxPastebinxx
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevpastebin
 X-KDevelop-Version=10
