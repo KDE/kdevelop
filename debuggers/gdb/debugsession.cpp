@@ -112,8 +112,7 @@ void DebugSession::emitShowStepInSource(const QString& file, int line, const QSt
     kDebug() << file << line << address;
     emit gdbShowStepInSource(file, line, address);
     if (!file.isEmpty()) {
-        // Debugger counts lines from 1
-        emit showStepInSource(KUrl::fromPath(file), line-1);
+        emit showStepInSource(KUrl::fromPath(file), line);
     } else {
         emit clearExecutionPoint();
     }
@@ -296,6 +295,7 @@ void DebugSession::run()
     if (stateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecContinue));
 }
 
@@ -304,6 +304,7 @@ void DebugSession::stepOut()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecFinish));
 }
 
@@ -395,6 +396,7 @@ void DebugSession::stepOver()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecNext));
 }
 
@@ -403,6 +405,7 @@ void DebugSession::stepOverInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecNextInstruction));
 }
 
@@ -411,6 +414,7 @@ void DebugSession::stepInto()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecStep));
 }
 
@@ -419,6 +423,7 @@ void DebugSession::stepIntoInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecStepInstruction));
 }
 
@@ -753,9 +758,11 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             if (frame.hasField("fullname")
                 && frame.hasField("line")
                 && frame.hasField("addr")) {
-                emitShowStepInSource(frame["fullname"].literal(),
-                     frame["line"].literal().toInt(),
-                     frame["addr"].literal());
+                
+                file_=frame["fullname"].literal();
+                line_=frame["line"].literal().toInt()-1; // Debugger counts lines from 1
+                addr_=frame["addr"].literal();
+                emitShowStepInSource(file_, line_, addr_);
 
                 raiseEvent(program_state_changed);
                 state_reload_needed = false;
@@ -1142,6 +1149,7 @@ void DebugSession::runUntil(const KUrl& url, int line)
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     if (!url.isValid())
         queueCmd(new GDBCommand(GDBMI::ExecUntil, line));
     else
@@ -1156,6 +1164,7 @@ void DebugSession::jumpTo(const KUrl& url, int line)
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
+    clearCurrentPosition();
     if (url.isValid()) {
         queueCmd(new GDBCommand(GDBMI::NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line)));
         queueCmd(new GDBCommand(GDBMI::NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line)));
