@@ -34,6 +34,7 @@ if(SUBVERSION_FOUND)
 endif(SUBVERSION_FOUND)
 
 macro_optional_find_package(QJSON)
+macro_log_feature( QJSON_FOUND "QJson" "QJson support for Uploading Patches to reviewboard" "http://qjson.sourceforge.net/" FALSE "0.7.0" "The qjson library is needed to enable uploading patches to reviewboard" )
 if(QJSON_FOUND)
     macro_optional_add_subdirectory(reviewboard)
 endif(QJSON_FOUND)
