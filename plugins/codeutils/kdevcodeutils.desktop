@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+Comment=Collection of various utilities that increase productivity while programming.
+Comment[x-test]=xxCollection of various utilities that increase productivity while programming.xx
+Name=Code Utilities
+Name[x-test]=xxCode Utilitiesxx
+GenericName=Code Utilities
+GenericName[x-test]=xxCode Utilitiesxx
+Icon=help-hint
+ServiceTypes=KDevelop/Plugin
+X-KDE-Library=kdevcodeutils
+X-KDE-PluginInfo-Name=kdevcodeutils
+X-KDevelop-Version=10
+X-KDevelop-Category=Global
+X-KDevelop-Mode=GUI
