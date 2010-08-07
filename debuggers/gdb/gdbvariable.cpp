@@ -348,21 +348,25 @@ void GdbVariable::setFormat(format_t format)
     
     if(childCount())
     {
-        foreach(TreeItem* item, childItems)
+        foreach(TreeItem* item, childItems) {
+            Q_ASSERT(dynamic_cast<GdbVariable*>);
             if( GdbVariable* var=dynamic_cast<GdbVariable*>(item))
                 var->setFormat(format);
+        }
     }
     else
     {
-        // FIXME: Eventually, should be a property of variable.
-        IDebugSession* is = ICore::self()->debugController()->currentSession();
-        DebugSession* s = static_cast<DebugSession*>(is);
-        s->addCommand(
-            new GDBCommand(GDBMI::VarSetFormat,
-                           QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format)),
-                           new SetFormatHandler(this)
-                           )
-                     );
+        if (hasStartedSession()) {
+            // FIXME: Eventually, should be a property of variable.
+            IDebugSession* is = ICore::self()->debugController()->currentSession();
+            DebugSession* s = static_cast<DebugSession*>(is);
+            s->addCommand(
+                new GDBCommand(GDBMI::VarSetFormat,
+                            QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format)),
+                            new SetFormatHandler(this)
+                            )
+                        );
+        }
     }
     
     m_format=format;
