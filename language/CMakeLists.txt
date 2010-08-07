@@ -198,6 +198,7 @@ install(FILES
     util/setrepository.h
     util/basicsetrepository.h
     util/includeitem.h
+    util/debuglanguageparserhelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util COMPONENT Devel
 )
 
