@@ -190,10 +190,6 @@ VariableCollection* VariableTree::collection() const
 
 VariableTree::~VariableTree()
 {
-    delete m_watchDelete;
-    delete m_contextMenuTitle;
-    delete m_formatMenu;
-    delete m_signalMapper;
 }
 
 void VariableTree::setupActions()
