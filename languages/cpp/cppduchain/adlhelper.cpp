@@ -23,76 +23,138 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-ADLHelper::ADLHelper( DUContextPointer context, TopDUContextPointer topContext )
-    : m_context( context ), m_topContext( topContext )
+ADLTypeVisitor::ADLTypeVisitor(ADLHelper & helper) : m_helper(helper)
 {
 }
 
-void ADLHelper::addArgument( const OverloadResolver::Parameter & argument )
+bool ADLTypeVisitor::preVisit(const AbstractType * type)
 {
-  addArgumentType( argument.type );
-}
-
-void ADLHelper::addArgumentType( const AbstractType::Ptr type )
-{
-  // TODO: refactor into a visitor
-  if ( type )
+  // the following types are of no interest to ADL
+  switch (type->whichType())
   {
-    switch ( type->whichType() )
-    {
-    case AbstractType::TypePointer:
-    {
-      PointerType::Ptr specificType = type.cast<PointerType>();
-      addArgumentType( specificType->baseType() );
-      break;
-    }
-    case AbstractType::TypeReference:
-    {
-      ReferenceType::Ptr specificType = type.cast<ReferenceType>();
-      addArgumentType( specificType->baseType() );
-      break;
-    }
-    case AbstractType::TypeArray:
-    {
-      ArrayType::Ptr specificType = type.cast<ArrayType>();
-      addArgumentType( specificType->elementType() );
-      break;
-    }
-
-    case AbstractType::TypeFunction:
-    {
-      //         FunctionType::Ptr specificType = type.cast<FunctionType>();
-      //         addAssociatedFunction(specificType->declaration());
-      //         break;
-    }
-    case AbstractType::TypeStructure:
-    {
-      StructureType::Ptr specificType = type.cast<StructureType>();
-      addAssociatedClass( specificType->declaration( m_topContext.data() ) );
-      break;
-    }
-    case AbstractType::TypeEnumeration:
-    {
-      EnumerationType::Ptr specificType = type.cast<EnumerationType>();
-      addAssociatedNamespace( specificType->declaration( m_topContext.data() ) );
-      break;
-    }
-    case AbstractType::TypeEnumerator:
-    {
-      EnumeratorType::Ptr specificType = type.cast<EnumeratorType>();
-      addAssociatedNamespace( specificType->declaration( m_topContext.data() ) );
-      break;
-    }
-    default:
-      // the following types have empty associated namespaces lists
-      /*      case AbstractType::TypeAbstract:
-      case AbstractType::TypeAlias:
-      case AbstractType::TypeIntegral:
-      case AbstractType::TypeDelayed:
-      case AbstractType::TypeUnsure:*/
-      ;
-    };
+  case AbstractType::TypeAbstract:
+  case AbstractType::TypeAlias:
+  case AbstractType::TypeIntegral:
+  case AbstractType::TypeDelayed:
+  case AbstractType::TypeUnsure:
+    return false;
+  default:
+    return true;
   };
+}
+
+void ADLTypeVisitor::postVisit(const AbstractType *)
+{
+}
+
+bool ADLTypeVisitor::visit(const AbstractType* type)
+{
+  return !seen(type);
+}
+
+void ADLTypeVisitor::visit(const IntegralType *)
+{
+}
+
+bool ADLTypeVisitor::visit(const PointerType * type)
+{
+  return !seen(type);
+}
+
+void ADLTypeVisitor::endVisit(const PointerType *)
+{
+  // traversed by PointerType::accept0
+}
+
+bool ADLTypeVisitor::visit(const ReferenceType * type)
+{
+  return !seen(type);
+}
+
+void ADLTypeVisitor::endVisit(const ReferenceType *)
+{
+  // traversed by ReferenceType::accept0
+}
+
+bool ADLTypeVisitor::visit(const FunctionType * type)
+{
+  return !seen(type);
+}
+
+void ADLTypeVisitor::endVisit(const FunctionType *)
+{
+  // return type and argument types are handled by FunctionType::accept0
+  // no need to access the
+}
+
+bool ADLTypeVisitor::visit(const StructureType * type)
+{
+  return !seen(type);
+}
+
+void ADLTypeVisitor::endVisit(const StructureType * type)
+{
+  // unfortunately StructureType won't access its base classes
+  // TODO: add ADL policies on class type traversal
+  // TODO: templates?
+  m_helper.addAssociatedClass(type->declaration(m_helper.m_topContext.data()));
+}
+
+bool ADLTypeVisitor::visit(const ArrayType * type)
+{
+  return !seen(type);
+}
+
+void ADLTypeVisitor::endVisit(const ArrayType *)
+{
+  // traversed by ArrayType::accept0
+}
+
+bool ADLTypeVisitor::seen(const KDevelop::AbstractType* type)
+{
+  if (m_seen.contains(type))
+    return true;
+
+  m_seen.insert(type);
+  return false;
+}
+
+
+ADLHelper::ADLHelper(DUContextPointer context, TopDUContextPointer topContext)
+    : m_context(context), m_topContext(topContext), m_typeVisitor(*this)
+{
+}
+
+void ADLHelper::addArgument(const OverloadResolver::Parameter & argument)
+{
+  addArgumentType(argument.type);
+}
+
+void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
+{
+  if (typePtr)
+  {
+    // the enumeration and enumerator types are not part of the TypeVisitor interface
+    switch (typePtr->whichType())
+    {
+    case AbstractType::TypeEnumeration:
+      {
+        EnumerationType::Ptr specificType = typePtr.cast<EnumerationType>();
+        if (specificType)
+          addAssociatedNamespace(specificType->declaration(m_topContext.data()));
+        break;
+      }
+    case AbstractType::TypeEnumerator:
+      {
+        EnumeratorType::Ptr specificType = typePtr.cast<EnumeratorType>();
+        if (specificType)
+          addAssociatedNamespace(specificType->declaration(m_topContext.data()));
+        break;
+      }
+    default:
+      typePtr->accept(&m_typeVisitor);
+    }
+  }
 }
 
 QSet< Declaration* > ADLHelper::associatedNamespaces() const
@@ -100,9 +162,9 @@ QSet< Declaration* > ADLHelper::associatedNamespaces() const
   return m_associatedNamespaces;
 }
 
-void ADLHelper::addAssociatedClass( Declaration * declaration )
+void ADLHelper::addAssociatedClass(Declaration * declaration)
 {
-  if ( !declaration || !m_context || !m_topContext )
+  if (!declaration || !m_context || !m_topContext)
     return;
 
   /*
@@ -115,44 +177,45 @@ void ADLHelper::addAssociatedClass( Declaration * declaration )
 
   // from the standard:
   // Typedef names and using-declarations used to specify the types do not contribute to this set.
-  if ( declaration->isTypeAlias() || declaration->isAnonymous() )
+  if (declaration->isTypeAlias() || declaration->isAnonymous())
     return;
-  
+
   // for now just add the class namespace
   // TODO: implement the above policy
   DUContext* declContext = declaration->logicalInternalContext(m_topContext.data());
-  if ( !declContext )
+  if (!declContext)
   {
     kDebug() << "declaration " << declaration->toString() << " has no logical internal context; skipping";
     return;
   }
 
-  addAssociatedNamespace( declContext->scopeIdentifier() );
+  addAssociatedNamespace(declContext->scopeIdentifier());
 }
 
-void ADLHelper::addAssociatedFunction( Declaration * declaration )
+void ADLHelper::addAssociatedFunction(Declaration * declaration)
 {
-  if ( !declaration || ! m_context || ! m_topContext )
+  if (!declaration || ! m_context || ! m_topContext)
     return;
 
   // TODO: implement
 }
 
-void ADLHelper::addAssociatedNamespace( const QualifiedIdentifier & identifier )
+void ADLHelper::addAssociatedNamespace(const QualifiedIdentifier & identifier)
 {
-  QList<Declaration*> decls = m_context->findDeclarations( identifier , KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
-  foreach( Declaration * decl, decls )
+  QList<Declaration*> decls = m_context->findDeclarations(identifier , KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data());
+  foreach(Declaration * decl, decls)
   {
-    addAssociatedNamespace( decl );
+    addAssociatedNamespace(decl);
   }
 }
 
-void ADLHelper::addAssociatedNamespace( Declaration * declaration )
+void ADLHelper::addAssociatedNamespace(Declaration * declaration)
 {
-  if ( !declaration )
+  if (!declaration)
     return;
 
-  if ( declaration->kind() == Declaration::Namespace ) {
+  if (declaration->kind() == Declaration::Namespace)
+  {
     kDebug() << "adding namespace " << declaration->toString();
     m_associatedNamespaces += declaration;
   }
@@ -161,5 +224,3 @@ void ADLHelper::addAssociatedNamespace( Declaration * declaration )
   addAssociatedNamespace(nsDecl);
   }*/
 }
-
-

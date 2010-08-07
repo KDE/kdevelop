@@ -1835,7 +1835,7 @@ void TestDUChain::testADLLookup()
 
   {
     QByteArray nonAdlCall("namespace foo { struct A {}; int bar(A& a) {} }"
-                          "int bar(foo::A& a) {}"
+                          "int bar(foo::A& a) {}" // found on normal lookup, hiding foo::bar
                           "int test() { A a; bar(a); }"); // calls ::bar
 
     LockedTopDUContext top( parse(nonAdlCall, DumpAll) );

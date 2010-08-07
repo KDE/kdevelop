@@ -22,9 +22,49 @@
 
 #include <QSet>
 #include "overloadresolution.h"
+#include <language/duchain/types/typesystem.h>
 
 namespace Cpp
 {
+
+  using namespace KDevelop;
+
+/**
+ * @brief Performs type traversal by ADLHelper in type traversal.
+ */
+class ADLTypeVisitor : public KDevelop::TypeVisitor
+{
+  public:
+    explicit ADLTypeVisitor(ADLHelper & helper);
+
+    virtual bool preVisit(const AbstractType * type);
+    virtual void postVisit(const AbstractType *);
+
+    virtual bool visit(const AbstractType* type);
+    virtual void visit(const KDevelop::IntegralType * type);
+
+    virtual bool visit(const KDevelop::PointerType * type);
+    virtual void endVisit(const KDevelop::PointerType *);
+
+    virtual bool visit(const KDevelop::ReferenceType * type);
+    virtual void endVisit(const KDevelop::ReferenceType *);
+
+    virtual bool visit(const KDevelop::FunctionType * type);
+    virtual void endVisit(const KDevelop::FunctionType *);
+
+    virtual bool visit(const KDevelop::StructureType * type);
+    virtual void endVisit(const KDevelop::StructureType *);
+
+    virtual bool visit(const KDevelop::ArrayType * type);
+    virtual void endVisit(const KDevelop::ArrayType *);
+
+  private:
+    ADLHelper & m_helper;
+
+    bool seen(const KDevelop::AbstractType* type);
+    QSet<const KDevelop::AbstractType*> m_seen;
+};
+
 
 /**
  * @brief Used for implementing ADL lookup.
@@ -34,45 +74,47 @@ namespace Cpp
  * Uninteresting arguments and types are skipped by the helper.
  * If an argument is found to match conditions for ADL it is added to the associated namespace list.
  *
- * @todo Optimize. Seen types/classes/function declarations (which involve more searches)
- * can be stored somewhere and their associated namespace list reused.
+ * Already seen types/classes/function declarations are skipped by the ADLTypeVisitor object.
  */
 class ADLHelper
 {
-public:
-  /**
-   * @copydoc Cpp::OverloadResolver::OverloadResolver()
-   */
-  ADLHelper( DUContextPointer context, TopDUContextPointer topContext );
+  public:
+    /**
+     * @copydoc Cpp::OverloadResolver::OverloadResolver()
+     */
+    ADLHelper(DUContextPointer context, TopDUContextPointer topContext);
 
-  /** @brief Adds an function argument for lookup. */
-  void addArgument( const OverloadResolver::Parameter & argument );
+    /** @brief Adds an function argument for lookup. */
+    void addArgument(const OverloadResolver::Parameter & argument);
 
-  /** @brief Adds an function argument type for lookup. */
-  void addArgumentType( const AbstractType::Ptr type );
+    /** @brief Adds an function argument type for lookup. */
+    void addArgumentType(const AbstractType::Ptr type);
 
-  /** @brief Retrieves the list of associated namespaces . */
-  QSet<Declaration*> associatedNamespaces() const;
+    /** @brief Retrieves the list of associated namespaces . */
+    QSet<Declaration*> associatedNamespaces() const;
 
-private:
+  private:
 
-  void addAssociatedClass( Declaration * declaration );
-  void addAssociatedFunction( Declaration * declaration );
+    void addAssociatedClass(Declaration * declaration);
+    void addAssociatedFunction(Declaration * declaration);
 
-  /**
-   * @brief Adds an associated namespace by identifier.
-   * All namespace declarations matching the given identifier are added.
-   */
-  void addAssociatedNamespace( const QualifiedIdentifier & identifier );
+    /**
+     * @brief Adds an associated namespace by identifier.
+     * All namespace declarations matching the given identifier are added.
+     */
+    void addAssociatedNamespace(const KDevelop::QualifiedIdentifier & identifier);
 
-  /** @brief Adds an associated namespace declaration. */
-  void addAssociatedNamespace( Declaration * declaration );
+    /** @brief Adds an associated namespace declaration. */
+    void addAssociatedNamespace(Declaration * declaration);
 
-  /** @brief Namespaces associated with the name lookup. */
-  QSet<Declaration*> m_associatedNamespaces;
+    /** @brief Namespaces associated with the name lookup. */
+    QSet<Declaration*> m_associatedNamespaces;
 
-  DUContextPointer m_context;
-  TopDUContextPointer m_topContext;
+    KDevelop::DUContextPointer m_context;
+    KDevelop::TopDUContextPointer m_topContext;
+
+    friend class ADLTypeVisitor;
+    ADLTypeVisitor m_typeVisitor;
 };
 
 }
