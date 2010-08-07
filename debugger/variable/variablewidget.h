@@ -80,6 +80,7 @@ public:
 private:
     void setupActions();
     virtual void contextMenuEvent(QContextMenuEvent* event);
+    Variable *selectedVariable() const;
 
 private slots:
     void changeVariableFormat(int);
@@ -111,8 +112,6 @@ private:
     QAction *m_watchDelete;
     QAction *m_copyVariableValue;
     QSignalMapper *m_signalMapper;
-
-    Variable *m_selectedVariable;
 };
 
 }

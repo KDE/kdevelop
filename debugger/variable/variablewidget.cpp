@@ -162,7 +162,7 @@ void VariableWidget::showEvent(QShowEvent* e)
 
 VariableTree::VariableTree(DebugController *controller,
                            VariableWidget *parent)
-: AsyncTreeView(controller->variableCollection(), parent), m_selectedVariable(0)
+: AsyncTreeView(controller->variableCollection(), parent)
 #if 0
 ,
       activePopup_(0),
@@ -241,11 +241,11 @@ void VariableTree::setupActions()
     
     m_watchDelete = new QAction(
         KIcon("edit-delete"), i18n( "Remove Watch Variable" ), this);
-        
+
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(m_watchDelete);
-    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(watchDelete(bool)));
+    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(watchDelete()));
 
     m_copyVariableValue = new QAction(i18n("&Copy Value"), this);
     m_copyVariableValue->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -253,32 +253,31 @@ void VariableTree::setupActions()
     connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
 }
 
+Variable* VariableTree::selectedVariable() const
+{
+    TreeItem* item = collection()->itemForIndex(selectionModel()->selectedRows().first());
+    if (!item) return 0;
+    return dynamic_cast<Variable*>(item);
+}
+
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 {
-    QModelIndex index = indexAt(event->pos());
-    if (!index.isValid())
-        return;
-    TreeItem* item = collection()->itemForIndex(index);
-    Variable* var = dynamic_cast<Variable*>(item);
-    if (!var) return;
-    m_selectedVariable = var;
+    if (!selectedVariable()) return;
 
     // set up menu
     QMenu contextMenu(this->parentWidget());
-    m_contextMenuTitle->setText(var->expression());
+    m_contextMenuTitle->setText(selectedVariable()->expression());
     contextMenu.addAction(m_contextMenuTitle);
     
-    if(var->canSetFormat())
+    if(selectedVariable()->canSetFormat())
         contextMenu.addMenu(m_formatMenu);
 
-    // connect all format change actions to currently selected variable
-    // the slotSetFormat slot will know the action by the action object name
     foreach(QAction* act, m_formatMenu->actions()) {
-        if(act->data().toInt()==var->format())
+        if(act->data().toInt()==selectedVariable()->format())
             act->setChecked(true);
     }
 
-    if (dynamic_cast<Watches*>(var->parent())) {
+    if (dynamic_cast<Watches*>(selectedVariable()->parent())) {
         contextMenu.addAction(m_watchDelete);
     }
 
@@ -290,21 +289,21 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
 void VariableTree::changeVariableFormat(int format)
 {
-    if (!m_selectedVariable) return;
-    m_selectedVariable->setFormat(static_cast<Variable::format_t>(format));
+    if (!selectedVariable()) return;
+    selectedVariable()->setFormat(static_cast<Variable::format_t>(format));
 }
 
 void VariableTree::watchDelete()
 {
-    if (!m_selectedVariable) return;
-    Q_ASSERT(dynamic_cast<Watches*>(m_selectedVariable->parent()));
-    m_selectedVariable->die();
+    if (!selectedVariable()) return;
+    Q_ASSERT(dynamic_cast<Watches*>(selectedVariable()->parent()));
+    selectedVariable()->die();
 }
 
 void VariableTree::copyVariableValue()
 {
-    if (!m_selectedVariable) return;
-    QApplication::clipboard()->setText(m_selectedVariable->value());
+    if (!selectedVariable()) return;
+    QApplication::clipboard()->setText(selectedVariable()->value());
 }
 
 #if 0
