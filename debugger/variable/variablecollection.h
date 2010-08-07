@@ -87,8 +87,9 @@ public:
 
     virtual bool canSetFormat() const { return false; }
 
-    virtual void setFormat(format_t format) =0;
-    format_t getFormat() const { return m_format; }
+    void setFormat(format_t format);
+    format_t format() const { return m_format; }
+    virtual void formatChanged();
     
 public slots:
     void slotSetFormat(int f) { setFormat((format_t)f); }
@@ -107,8 +108,6 @@ private:
     QString expression_;
     bool inScope_;
     bool topLevel_;
-    
-protected:
     format_t m_format;
 };
 

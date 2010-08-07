@@ -142,6 +142,19 @@ QString Variable::format2str(format_t format)
     }
 }
 
+
+void Variable::setFormat(Variable::format_t format)
+{
+    if (m_format != format) {
+        m_format = format;
+        formatChanged();
+    }
+}
+
+void Variable::formatChanged()
+{
+}
+
 void Variable::slotCopyValueToClipboard()
 {
     QClipboard *pCb=QApplication::clipboard();

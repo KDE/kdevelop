@@ -271,7 +271,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     foreach(QAction* act, m_formatMenu->actions())
     {
         act->setCheckable(true);
-        if(act->data().toInt()==var->getFormat())
+        if(act->data().toInt()==var->format())
             act->setChecked(true);
     }
         
