@@ -341,17 +341,14 @@ private:
     QPointer<GdbVariable> m_variable;
 };
 
-void GdbVariable::setFormat(format_t format)
+void GdbVariable::formatChanged()
 {
-    if(m_format==format)
-        return;
-    
     if(childCount())
     {
         foreach(TreeItem* item, childItems) {
-            Q_ASSERT(dynamic_cast<GdbVariable*>);
+            Q_ASSERT(dynamic_cast<GdbVariable*>(item));
             if( GdbVariable* var=dynamic_cast<GdbVariable*>(item))
-                var->setFormat(format);
+                var->setFormat(format());
         }
     }
     else
@@ -362,12 +359,10 @@ void GdbVariable::setFormat(format_t format)
             DebugSession* s = static_cast<DebugSession*>(is);
             s->addCommand(
                 new GDBCommand(GDBMI::VarSetFormat,
-                            QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format)),
+                            QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format())),
                             new SetFormatHandler(this)
                             )
                         );
         }
     }
-    
-    m_format=format;
 }
