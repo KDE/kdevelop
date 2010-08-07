@@ -162,7 +162,7 @@ void VariableWidget::showEvent(QShowEvent* e)
 
 VariableTree::VariableTree(DebugController *controller,
                            VariableWidget *parent)
-: AsyncTreeView(controller->variableCollection(), parent)
+: AsyncTreeView(controller->variableCollection(), parent), m_selectedVariable(0)
 #if 0
 ,
       activePopup_(0),
@@ -235,11 +235,13 @@ void VariableTree::setupActions()
     
     foreach(QAction* act, m_formatMenu->actions())
     {
+        act->setCheckable(true);
         act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         m_signalMapper->setMapping(act, act->data().toInt());
         connect(act, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
         addAction(act);
     }
+    connect(m_signalMapper, SIGNAL(mapped(int)), SLOT(changeVariableFormat(int)));
     
     m_watchDelete = new QAction(
         KIcon("edit-delete"), i18n( "Remove Watch Variable" ), this);
@@ -247,6 +249,12 @@ void VariableTree::setupActions()
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(m_watchDelete);
+    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(watchDelete(bool)));
+
+    m_copyVariableValue = new QAction(i18n("&Copy Value"), this);
+    m_copyVariableValue->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    m_copyVariableValue->setShortcut(QKeySequence::Copy);
+    connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
 }
 
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
@@ -257,6 +265,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     TreeItem* item = collection()->itemForIndex(index);
     Variable* var = dynamic_cast<Variable*>(item);
     if (!var) return;
+    m_selectedVariable = var;
 
     // set up menu
     QMenu contextMenu(this->parentWidget());
@@ -268,67 +277,39 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 
     // connect all format change actions to currently selected variable
     // the slotSetFormat slot will know the action by the action object name
-    foreach(QAction* act, m_formatMenu->actions())
-    {
-        act->setCheckable(true);
+    foreach(QAction* act, m_formatMenu->actions()) {
         if(act->data().toInt()==var->format())
             act->setChecked(true);
     }
-  
-    if (dynamic_cast<Watches*>(var->parent()))
-    {
+
+    if (dynamic_cast<Watches*>(var->parent())) {
         contextMenu.addAction(m_watchDelete);
     }
-    
+
     contextMenu.addSeparator();
-    QAction* act=contextMenu.addAction(i18n("&Copy Value"), var, SLOT(slotCopyValueToClipboard()));
-    act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    act->setShortcut(QKeySequence::Copy);
-        
+    contextMenu.addAction(m_copyVariableValue);
+
     contextMenu.exec(event->globalPos());
 }
 
-void VariableTree::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+void VariableTree::changeVariableFormat(int format)
 {
-    Variable *var=NULL;
-
-    if(selected.count()==1)
-    {
-        QModelIndex index = selected.indexes().first();
-        if (index.isValid())
-        {
-            TreeItem* item = collection()->itemForIndex(index);
-            var = dynamic_cast<Variable*>(item);
-            if(var) // we have new variable selected
-            {
-                connect(m_signalMapper, SIGNAL(mapped(int)), var, SLOT(slotSetFormat(int)));
-                if (dynamic_cast<Watches*>(var->parent()))
-                    connect(m_watchDelete, SIGNAL(triggered()), var, SLOT(die()));
-            }
-        }
-    }
-    
-    if(deselected.count()==1)
-    {
-        QModelIndex index = deselected.indexes().first();
-        if (index.isValid())
-        {
-            TreeItem* item = collection()->itemForIndex(index);
-            var = dynamic_cast<Variable*>(item);
-            if(var) // old selection deselected
-            {
-                disconnect(m_signalMapper, 0, var, 0);
-                if (dynamic_cast<Watches*>(var->parent()))
-                    disconnect(m_watchDelete, 0, var, 0);
-            }
-        }
-    }
-    
-    // var_old is deselected element (if any), var_new is selected element
-    
-    QTreeView::selectionChanged(selected, deselected);
+    if (!m_selectedVariable) return;
+    m_selectedVariable->setFormat(static_cast<Variable::format_t>(format));
 }
 
+void VariableTree::watchDelete()
+{
+    if (!m_selectedVariable) return;
+    Q_ASSERT(dynamic_cast<Watches*>(m_selectedVariable->parent()));
+    m_selectedVariable->die();
+}
+
+void VariableTree::copyVariableValue()
+{
+    if (!m_selectedVariable) return;
+    QApplication::clipboard()->setText(m_selectedVariable->value());
+}
 
 #if 0
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)

@@ -65,6 +65,7 @@ public:
     bool inScope() const;
     void setInScope(bool v);
     void setValue(const QString &v);
+    QString value() const;
     void setTopLevel(bool v);
     
     using TreeItem::setHasMore;
@@ -90,12 +91,10 @@ public:
     void setFormat(format_t format);
     format_t format() const { return m_format; }
     virtual void formatChanged();
-    
+
 public slots:
-    void slotSetFormat(int f) { setFormat((format_t)f); }
-    void slotCopyValueToClipboard();
     void die();
-    
+
 protected:
     bool topLevel() const { return topLevel_; }
 

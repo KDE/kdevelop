@@ -30,8 +30,6 @@
 #include <KTextEditor/TextHintInterface>
 #include <KTextEditor/Document>
 #include <KParts/PartManager>
-#include <QClipboard>
-#include <QApplication>
 
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idocumentcontroller.h"
@@ -91,6 +89,11 @@ void Variable::setValue(const QString& v)
 {
     itemData[1] = v;
     reportChange();
+}
+
+QString Variable::value() const
+{
+    return itemData[1].toString();
 }
 
 void Variable::setTopLevel(bool v)
@@ -153,13 +156,6 @@ void Variable::setFormat(Variable::format_t format)
 
 void Variable::formatChanged()
 {
-}
-
-void Variable::slotCopyValueToClipboard()
-{
-    QClipboard *pCb=QApplication::clipboard();
-    QString text=itemData[1].toString();
-    pCb->setText(text);
 }
 
 QVariant Variable::data(int column, int role) const
