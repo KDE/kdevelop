@@ -137,7 +137,8 @@ public:
                                               << proj->developerTempFile()
                                               << proj->projectTempFile()
                                               << proj->projectFileUrl().url()
-                                              << proj->developerFileUrl().url() );
+                                              << proj->developerFileUrl().url()
+                                              << proj->name() );
         }
         m_configuringProject = proj;
         m_cfgDlgs[proj]->setWindowTitle( i18n("Configure Project %1", proj->name()) );
