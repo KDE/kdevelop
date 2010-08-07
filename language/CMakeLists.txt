@@ -187,6 +187,7 @@ install(FILES
 install(FILES
     backgroundparser/backgroundparser.h
     backgroundparser/parsejob.h
+    backgroundparser/parseprojectjob.h
     backgroundparser/urlparselock.h
     backgroundparser/documentchangetracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser COMPONENT Devel
