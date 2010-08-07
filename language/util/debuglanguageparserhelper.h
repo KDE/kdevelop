@@ -165,7 +165,7 @@ int initAndRunParser(const KAboutData& aboutData, int argc, char* argv[])
     KCmdLineOptions options;
     options.add("a").add("print-ast", ki18n("print generated AST tree"));
     options.add("t").add("print-tokens", ki18n("print generated token stream"));
-    options.add("c").add("code <code>", ki18n("PHP code to parse"));
+    options.add("c").add("code <code>", ki18n("code to parse"));
     options.add("+files", ki18n("files or - to read from STDIN, the latter is the default if nothing is provided"));
     KCmdLineArgs::addCmdLineOptions( options );
 
