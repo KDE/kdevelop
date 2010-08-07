@@ -57,7 +57,6 @@ GdbVariable::~GdbVariable()
         // Delete only top-level variable objects.
         if (topLevel()) {
             if (hasStartedSession()) {
-                // FIXME: Eventually, should be a property of variable.
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
                 DebugSession* s = static_cast<DebugSession*>(is);
                 s->addCommand(new GDBCommand(GDBMI::VarDelete, 
@@ -147,7 +146,6 @@ void GdbVariable::attachMaybe(QObject *callback, const char *callbackMethod)
         return;
 
     if (hasStartedSession()) {
-        // FIXME: Eventually, should be a property of variable.
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
@@ -241,7 +239,6 @@ void GdbVariable::fetchMoreChildren()
     // FIXME: should not even try this if app is not started.
     // Probably need to disable open, or something
     if (hasStartedSession()) {
-        // FIXME: Eventually, should be a property of variable.
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
@@ -354,7 +351,6 @@ void GdbVariable::formatChanged()
     else
     {
         if (hasStartedSession()) {
-            // FIXME: Eventually, should be a property of variable.
             IDebugSession* is = ICore::self()->debugController()->currentSession();
             DebugSession* s = static_cast<DebugSession*>(is);
             s->addCommand(
