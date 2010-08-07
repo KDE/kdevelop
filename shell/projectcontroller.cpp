@@ -78,12 +78,6 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-bool parseAllProjectSources()
-{
-    KConfigGroup group = Core::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Parse All Project Sources", true );
-}
-
 class ProjectControllerPrivate
 {
 public:
