@@ -42,6 +42,7 @@ VariableController::VariableController(DebugSession* parent)
 {
     Q_ASSERT(parent);
     connect(parent, SIGNAL(programStopped(GDBMI::ResultRecord)), SLOT(programStopped(GDBMI::ResultRecord)));
+    connect(parent, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(stateChanged(KDevelop::IDebugSession::DebuggerState)));
 }
 
 DebugSession *VariableController::debugSession() const
@@ -240,9 +241,15 @@ createVariable(TreeModel* model, TreeItem* parent,
 void VariableController::handleEvent(IDebugSession::event_t event)
 {
     IVariableController::handleEvent(event);
-    if (event == IDebugSession::debugger_exited)
-        GdbVariable::markAllDead();
 }
+
+void VariableController::stateChanged(IDebugSession::DebuggerState state)
+{
+    if (state == IDebugSession::EndedState) {
+        GdbVariable::markAllDead();
+    }
+}
+
 
 
 #include "variablecontroller.moc"
