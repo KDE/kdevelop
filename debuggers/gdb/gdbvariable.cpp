@@ -126,6 +126,11 @@ public:
             if (m_variable->isExpanded() && r["numchild"].toInt()) {
                 m_variable->fetchMoreChildren();
             }
+
+            if (m_variable->format() != KDevelop::Variable::Natural) {
+                //TODO doesn't work for children as they are not yet loaded
+                m_variable->formatChanged();
+            }
         }
 
         if (m_callback && m_callbackMethod) {
