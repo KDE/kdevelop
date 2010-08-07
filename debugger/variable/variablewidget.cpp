@@ -274,14 +274,10 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         if(act->data().toInt()==var->format())
             act->setChecked(true);
     }
-        
-    // connect is done when selecting the variable
-    //connect(m_signalMapper, SIGNAL(mapped(int)), var, SLOT(slotSetFormat(int)));
   
     if (dynamic_cast<Watches*>(var->parent()))
     {
         contextMenu.addAction(m_watchDelete);
-        //connect(m_watchDelete, SIGNAL(triggered()), var, SLOT(die()));
     }
     
     contextMenu.addSeparator();
@@ -290,11 +286,6 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     act->setShortcut(QKeySequence::Copy);
         
     contextMenu.exec(event->globalPos());
-    
-    // remove signal connections since the action is reused for all variables
-    // done when item gets deselected
-    //disconnect(m_signalMapper, 0, var, 0);
-    //disconnect(m_watchDelete, 0, var, 0);
 }
 
 void VariableTree::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
