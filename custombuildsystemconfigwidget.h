@@ -22,9 +22,15 @@
 
 #include <QWidget>
 #include "custombuildsystemconfig.h"
+#include "custombuildjob.h"
 
 class KConfig;
 class KConfigGroup;
+
+namespace KDevelop
+{
+class IProject;
+}
 
 namespace Ui
 {
@@ -37,7 +43,7 @@ Q_OBJECT
 public:
     CustomBuildSystemConfigWidget( QWidget* parent = 0 );
     void loadFrom( KConfig* );
-    void saveTo( KConfig* );
+    void saveTo( KConfig*, KDevelop::IProject* project );
     void loadDefaults();
 signals:
     void changed();

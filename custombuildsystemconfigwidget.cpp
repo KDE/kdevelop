@@ -23,6 +23,10 @@
 
 #include "ui_custombuildsystemconfigwidget.h"
 #include "configconstants.h"
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
+#include <language/backgroundparser/parseprojectjob.h>
 
 CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     : QWidget( parent ), ui( new Ui::CustomBuildSystemConfigWidget )
@@ -169,7 +173,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSy
     }
 }
 
-void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg )
+void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg, KDevelop::IProject* project )
 {
     KConfigGroup subgrp = cfg->group( ConfigConstants::customBuildSystemGroup );
     for( int i = 0; i < ui->currentConfig->count(); i++ ) {
@@ -181,6 +185,11 @@ void CustomBuildSystemConfigWidget::saveTo( KConfig* cfg )
     }
     subgrp.writeEntry( ConfigConstants::currentConfigKey, ui->currentConfig->itemData( ui->currentConfig->currentIndex() ) );
     cfg->sync();
+
+    if ( KDevelop::IProjectController::parseAllProjectSources()) {
+        KJob* parseProjectJob = new KDevelop::ParseProjectJob(project);
+        KDevelop::ICore::self()->runController()->registerJob(parseProjectJob);
+    }
 }
 
 void CustomBuildSystemConfigWidget::configChanged()

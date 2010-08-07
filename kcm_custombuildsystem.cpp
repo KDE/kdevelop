@@ -58,7 +58,7 @@ void CustomBuildSystemKCModule::load()
 void CustomBuildSystemKCModule::save()
 {
     KCModule::save();
-    configWidget->saveTo( CustomBuildSystemSettings::self()->config() );
+    configWidget->saveTo( CustomBuildSystemSettings::self()->config(), project() );
 }
 
 void CustomBuildSystemKCModule::defaults()
