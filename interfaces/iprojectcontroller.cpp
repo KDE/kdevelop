@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "iprojectcontroller.h"
 #include <kconfiggroup.h>
 #include "icore.h"
+#include "isession.h"
 
 namespace KDevelop
 {
