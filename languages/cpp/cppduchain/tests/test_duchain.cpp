@@ -1809,6 +1809,216 @@ void TestDUChain::testSearchAcrossNamespace3()
   QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType()->toString(), QString("A::C"));
 }
 
+void TestDUChain::testADLLookup()
+{
+  {
+    QByteArray nonAdlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+                          "struct A {};"
+                          "int bar(int& a) {}"
+                          "int test() { A a; bar(a); }"); // calls ::bar
+
+    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    
+    QCOMPARE(top->childContexts().count(), 6);
+
+    // foo::bar is never used
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 0);
+
+    // ::bar has 1 use
+    QCOMPARE(top->localDeclarations().size(), 4);
+    QCOMPARE(top->localDeclarations()[2]->qualifiedIdentifier().toString(), QString("bar"));
+    QCOMPARE(top->localDeclarations()[2]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[2]->uses().begin()->size(), 1);
+  }
+
+  {
+    QByteArray nonAdlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+                          "int bar(foo::A& a) {}"
+                          "int test() { A a; bar(a); }"); // calls ::bar
+
+    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 5);
+
+    // foo::bar is hidden by successful normal name lookup
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 0);
+
+    // ::bar has 1 use
+    QCOMPARE(top->localDeclarations().size(), 3);
+    QCOMPARE(top->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("bar"));
+    QCOMPARE(top->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+  
+  {
+    QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+                       "struct A {};"
+                       "int bar(int& a) {}"
+                       "int test() { foo::A a; bar(a); }"); // calls foo::bar
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 6);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+    
+    // ::bar is never used
+    QCOMPARE(top->localDeclarations().size(), 4);
+    QCOMPARE(top->localDeclarations()[2]->qualifiedIdentifier().toString(), QString("bar"));
+    QCOMPARE(top->localDeclarations()[2]->uses().size(), 0);
+  }
+}
+
+void TestDUChain::testADLClassTypeLookup()
+{
+  {
+    // test lookup to base class namespace
+    QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+                       "namespace boo { struct B : public A {}; }"
+                       "struct A {};"
+                       "int bar(int& a) {}"
+                       "int test() { boo::B b; bar(b); }"); // calls foo::bar
+                        
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    QCOMPARE(top->childContexts().count(), 7);
+    
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+    
+    // ::bar is never used
+    QCOMPARE(top->localDeclarations().size(), 5);
+    QCOMPARE(top->localDeclarations()[3]->qualifiedIdentifier().toString(), QString("bar"));
+    QCOMPARE(top->localDeclarations()[3]->uses().size(), 0);
+  }
+
+  {
+    // test lookup to indirect base class namespace
+    QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+                       "namespace boo { struct B : public A {}; }"
+                       "namespace zoo { struct C : public B {}; }"
+                       "struct A {};"
+                       "int bar(int& a) {}"
+                       "int test() { zoo::C c; bar(c); }"); // calls foo::bar
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 10);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+
+    // ::bar is never used
+    QCOMPARE(top->localDeclarations().size(), 6);
+    QCOMPARE(top->localDeclarations()[5]->qualifiedIdentifier().toString(), QString("bar"));
+    QCOMPARE(top->localDeclarations()[5]->uses().size(), 0);
+  }
+
+  {
+    // test lookup for inner classes
+    QByteArray adlCall("namespace foo { struct A { struct B {}; }; int bar(A::B& b) {} }"
+                       "struct A {};"
+                       "int bar(int& a) {}"
+                       "int test() { foo::A::B b; bar(b); }"); // calls foo::bar
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 7);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+
+    // ::bar is never used
+    QCOMPARE(top->localDeclarations().size(), 4);
+    QCOMPARE(top->localDeclarations()[2]->qualifiedIdentifier().toString(), QString("bar"));
+    QCOMPARE(top->localDeclarations()[2]->uses().size(), 0);
+  }
+}
+
+void TestDUChain::testADLFunctionTypeLookup()
+{
+  {
+    QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} }"
+                       "int test() { A (*p)(); bar(p); }"); // calls foo::bar through p's return type
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    QCOMPARE(top->childContexts().count(), 3);
+    
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
+    QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} }"
+                       "int test() { void (*p)(A*); bar(p); }"); // calls foo::bar through p's argument type
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 3);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+}
+
+void TestDUChain::testADLEnumerationTypeLookup()
+{
+  {
+    QByteArray adlCall("namespace foo { enum A { enValue }; int bar(A a) {} }"
+                       "int test() { foo::A a; bar(a); }"); // calls foo::bar 
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    QCOMPARE(top->childContexts().count(), 3);
+    
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
+    QByteArray adlCall("namespace foo { enum A { enValue }; int bar(A a) {} }"
+                       "int test() { bar(foo::enValue); }"); // calls foo::bar
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 3);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+}
+
+
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 

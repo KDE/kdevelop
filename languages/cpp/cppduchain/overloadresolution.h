@@ -36,6 +36,7 @@ namespace KDevelop {
 namespace Cpp {
 using namespace KDevelop;
   class ViableFunction;
+  class ADLHelper;
 /**
  * Models overloaded function resolution
  * The du-chain must be locked for the whole lifetime of this object.
@@ -126,11 +127,12 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      *
      * @warning du-chain must be locked
 
-    * @param params parameters to match
+     * @param params parameters to match
      * @param declarations list of declarations
      * @param noUserDefinedConversion should be true if user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
+     * @param doADL should be true if one needs to try the ADL lookup as well
      * */
-    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
+    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false, bool doADL = true);
 
     /**
      * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
