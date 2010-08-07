@@ -17,6 +17,8 @@
 #define KDEV_VARIABLEWIDGET_H
 
 #include <QTreeView>
+#include <QAction>
+#include <QSignalMapper>
 
 #include <KComboBox>
 
@@ -78,9 +80,12 @@ public:
 private:
     void setupActions();
     virtual void contextMenuEvent(QContextMenuEvent* event);
+    Variable *selectedVariable() const;
 
 private slots:
-    void deleteWatch();
+    void changeVariableFormat(int);
+    void watchDelete();
+    void copyVariableValue();
 
 #if 0
 Q_SIGNALS:
@@ -102,7 +107,11 @@ private: // helper functions
     QAction* toggleWatch_;
 #endif
 private:
+    QAction *m_contextMenuTitle;
+    QMenu *m_formatMenu;
     QAction *m_watchDelete;
+    QAction *m_copyVariableValue;
+    QSignalMapper *m_signalMapper;
 };
 
 }

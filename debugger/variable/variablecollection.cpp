@@ -64,7 +64,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
   : TreeItem(model, parent),
-    inScope_(true), topLevel_(true)
+    inScope_(true), topLevel_(true), m_format(Natural)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -91,6 +91,11 @@ void Variable::setValue(const QString& v)
     reportChange();
 }
 
+QString Variable::value() const
+{
+    return itemData[1].toString();
+}
+
 void Variable::setTopLevel(bool v)
 {
     topLevel_ = v;
@@ -115,6 +120,42 @@ void Variable::die()
 {
     removeSelf();
     deleteLater();
+}
+
+
+Variable::format_t Variable::str2format(const QString& str)
+{
+    if(str=="Binary" || str=="binary")          return Binary;
+    if(str=="Octal" || str=="octal")            return Octal;
+    if(str=="Decimal" || str=="decimal")        return Decimal;
+    if(str=="Hexadecimal" || str=="hexadecimal")return Hexadecimal;
+
+    return Natural; // maybe most reasonable default
+}
+
+QString Variable::format2str(format_t format)
+{
+    switch(format) {
+        case Natural:       return "natural";
+        case Binary:        return "binary";
+        case Octal:         return "octal";
+        case Decimal:       return "decimal";
+        case Hexadecimal:   return "hexadecimal";
+        default:            return "";
+    }
+}
+
+
+void Variable::setFormat(Variable::format_t format)
+{
+    if (m_format != format) {
+        m_format = format;
+        formatChanged();
+    }
+}
+
+void Variable::formatChanged()
+{
 }
 
 QVariant Variable::data(int column, int role) const
