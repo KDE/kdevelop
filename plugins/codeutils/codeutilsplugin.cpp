@@ -106,17 +106,26 @@ void CodeUtilsPlugin::documentDeclaration()
     QString comment;
     QTextStream stream( &comment );
 
+    QString indentation = textDoc->line( insertPos.line() );
+    if (!indentation.isEmpty()) {
+        int lastSpace = 0;
+        while (indentation.at(lastSpace).isSpace()) {
+            ++lastSpace;
+        }
+        indentation.truncate(lastSpace);
+    }
+
     ///TODO: handle existing comments
-    stream << "/**\n";
-    stream << " * ${" << i18n( "..." ) << "}\n";
+    stream << indentation << "/**\n";
+    stream << indentation << " * ${" << i18n( "..." ) << "}\n";
 
     if (dec->isFunctionDeclaration()) {
         AbstractFunctionDeclaration* funDec = dynamic_cast<AbstractFunctionDeclaration*>(dec);
-        stream << " *\n";
+        stream << indentation << " *\n";
         if ( funDec && funDec->internalFunctionContext() ) {
             int i = 0;
             foreach(Declaration* param, funDec->internalFunctionContext()->localDeclarations()) {
-                stream << " * @param " << param->identifier().toString() << " ${p" << i << ":...}";
+                stream << indentation << " * @param " << param->identifier().toString() << " ${p" << i << ":...}";
                 IndexedString defaultValue = funDec->defaultParameterForArgument(i);
                 if (!defaultValue.isEmpty()) {
                     stream << " " << i18n("Defaults to %1.", defaultValue.str());
@@ -127,12 +136,12 @@ void CodeUtilsPlugin::documentDeclaration()
         }
         if ( FunctionType::Ptr funType = dec->type<FunctionType>() ) {
             if ( funType->returnType() ) {
-                stream << " * @return ${" << funType->returnType()->toString() << "}\n";
+                stream << indentation << " * @return ${" << funType->returnType()->toString() << "}\n";
             }
         }
     }
 
-    stream << " **/\n" << flush;
+    stream << indentation << " **/\n" << flush;
 
     lock.unlock();
     tplIface->insertTemplateText(insertPos, comment, QMap<QString, QString>());
