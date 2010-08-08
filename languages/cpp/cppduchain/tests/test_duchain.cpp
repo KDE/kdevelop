@@ -2008,7 +2008,7 @@ void TestDUChain::testADLFunctionTypeLookup()
 
     LockedTopDUContext top( parse(adlCall, DumpAll) );
 
-    QCOMPARE(top->childContexts().count(), 6);
+    QCOMPARE(top->childContexts().count(), 5);
 
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
@@ -2024,13 +2024,28 @@ void TestDUChain::testADLFunctionTypeLookup()
 
     LockedTopDUContext top( parse(adlCall, DumpAll) );
 
-    QCOMPARE(top->childContexts().count(), 3);
+    QCOMPARE(top->childContexts().count(), 5);
 
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
+    // not an ADL call - only return type and argument types of f matter
+    QByteArray nonAdlCall("namespace foo { struct A {}; int bar(void *a) {} void f(int a) {}}"
+                          "int test() { bar(&foo::f); }"); 
+
+    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 3);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 3);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 0);
   }
 }
 

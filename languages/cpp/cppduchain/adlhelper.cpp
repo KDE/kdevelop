@@ -166,14 +166,6 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
   if (!declaration || !m_context || !m_topContext)
     return;
 
-  /*
-  From the standard:
-
-  If T is a class type (including unions), its associated classes are: the class itself; the class of which it is a
-  member, if any; and its direct and indirect base classes. Its associated namespaces are the namespaces
-  in which its associated classes are defined.
-  */
-
   // from the standard:
   // Typedef names and using-declarations used to specify the types do not contribute to this set.
   if (declaration->isTypeAlias() || declaration->isAnonymous())
@@ -193,14 +185,6 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
     if (declContext)
       addAssociatedNamespace(declContext->scopeIdentifier());
   }
-}
-
-void ADLHelper::addAssociatedFunction(Declaration * declaration)
-{
-  if (!declaration || ! m_context || ! m_topContext)
-    return;
-
-  // TODO: implement
 }
 
 void ADLHelper::addAssociatedNamespace(const QualifiedIdentifier & identifier)

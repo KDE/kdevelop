@@ -95,8 +95,14 @@ class ADLHelper
 
   private:
 
+    /**
+     * @brief Adds an associated class type and its associated classes.
+     *
+     * If T is a class type (including unions), its associated classes are: the class itself; the class of which it is a
+     * member, if any; and its direct and indirect base classes. Its associated namespaces are the namespaces
+     * in which its associated classes are defined.
+     */
     void addAssociatedClass(Declaration * declaration);
-    void addAssociatedFunction(Declaration * declaration);
 
     /**
      * @brief Adds an associated namespace by identifier.
