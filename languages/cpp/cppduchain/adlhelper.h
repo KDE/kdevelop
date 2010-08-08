@@ -116,7 +116,11 @@ class ADLHelper
     /** @brief Computes all direct and indirect base classes of a class. */
     QList<Declaration *> computeAllBaseClasses(Declaration* decl);
 
-    /** @brief Namespaces associated with the name lookup. */
+    /** @brief Finds and adds the namespace of a declaration. */
+    void addDeclarationScopeIdentifier(Declaration * decl);
+
+  private:
+    /** @brief List of namespaces found by the ADL. */
     QSet<Declaration*> m_associatedNamespaces;
 
     KDevelop::DUContextPointer m_context;

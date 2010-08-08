@@ -140,14 +140,22 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
       {
         EnumerationType::Ptr specificType = typePtr.cast<EnumerationType>();
         if (specificType)
-          addAssociatedNamespace(specificType->declaration(m_topContext.data()));
+        {
+          Declaration * enumDecl = specificType->declaration(m_topContext.data());
+          addDeclarationScopeIdentifier(enumDecl);
+        }
         break;
       }
     case AbstractType::TypeEnumerator:
       {
         EnumeratorType::Ptr specificType = typePtr.cast<EnumeratorType>();
         if (specificType)
-          addAssociatedNamespace(specificType->declaration(m_topContext.data()));
+        {
+          // use the enumeration context for the enumerator value declaration to find out the namespace
+          Declaration * enumeratorDecl = specificType->declaration(m_topContext.data());
+          DUContext * enumContext = enumeratorDecl->context();
+          addAssociatedNamespace(enumContext->scopeIdentifier(false));
+        }
         break;
       }
     default:
@@ -173,17 +181,25 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
 
   QList<Declaration*> associatedClasses;
   associatedClasses << declaration;
-  
+
   QList<Declaration*> baseClasses = computeAllBaseClasses(declaration);
   associatedClasses << baseClasses;
 
   // no need to search for parent class, since scopeIdentifier() below skips them anyway
-  
+
   foreach(Declaration * decl, associatedClasses)
+  {
+    addDeclarationScopeIdentifier(decl);
+  }
+}
+
+void ADLHelper::addDeclarationScopeIdentifier(Declaration * decl)
+{
+  if (decl)
   {
     DUContext* declContext = decl->logicalInternalContext(m_topContext.data());
     if (declContext)
-      addAssociatedNamespace(declContext->scopeIdentifier());
+      addAssociatedNamespace(declContext->scopeIdentifier(false));
   }
 }
 
@@ -206,27 +222,26 @@ void ADLHelper::addAssociatedNamespace(Declaration * declaration)
     //kDebug() << "adding namespace " << declaration->toString();
     m_associatedNamespaces += declaration;
   }
-  // TODO: check if namespace aliases need to be resolved as well
-  /*  else if (nsDeclaration.kind() == Declaration::NamespaceAlias) {
-  addAssociatedNamespace(nsDecl);
-  }*/
 }
 
 QList<Declaration *> ADLHelper::computeAllBaseClasses(Declaration* declaration)
 {
   QList<Declaration *> baseClasses;
 
-  if (declaration) {
+  if (declaration)
+  {
     baseClasses << declaration;
-    
+
     ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration*>(declaration);
-    if (classDecl) {
+    if (classDecl)
+    {
       int nBaseClassesCount = classDecl->baseClassesSize();
       for (int i = 0; i < nBaseClassesCount; ++i)
       {
         const BaseClassInstance baseClass = classDecl->baseClasses()[i];
         AbstractType::Ptr type = baseClass.baseClass.abstractType();
-        if (type) {
+        if (type)
+        {
           StructureType::Ptr structType = type.cast<StructureType>();
           if (structType)
           {
@@ -237,6 +252,6 @@ QList<Declaration *> ADLHelper::computeAllBaseClasses(Declaration* declaration)
       }
     }
   }
-  
+
   return baseClasses;
 }
