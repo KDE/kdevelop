@@ -40,6 +40,9 @@
 // Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.
 // #define ALWAYS_UPDATE
 
+///@todo It isn't enough whether only-whitespace was removed/inserted. There is places where it may
+///      have an effect anyway, for example when splitting/joining two identifiers.
+
 using namespace KTextEditor;
 
 /**
@@ -149,8 +152,14 @@ void DocumentChangeTracker::textChanged( Document* document, Range /*oldRange*/,
     m_currentCleanedInsertion.clear();
 
     QString newText = document->text(newRange);
+
+    QString oldTextWithoutWhitespace = oldText;
+    oldTextWithoutWhitespace.remove(whiteSpaceRegExp);
     
-    if(oldText.remove(whiteSpaceRegExp).isEmpty() && newText.remove(whiteSpaceRegExp).isEmpty())
+    QString newTextWithoutWhitespace = newText;
+    newTextWithoutWhitespace.remove(whiteSpaceRegExp);
+    
+    if(oldTextWithoutWhitespace.isEmpty() && newTextWithoutWhitespace.isEmpty())
     {
         // Only whitespace was changed, no update is required
     }else{
@@ -187,8 +196,10 @@ void DocumentChangeTracker::updateChangedRange( Range changed )
 void DocumentChangeTracker::textInserted( Document* document, Range range )
 {
     QString text = document->text(range);
+    QString textWithoutWhitespace = text;
+    textWithoutWhitespace.remove(whiteSpaceRegExp);
     
-    if(text.remove(whiteSpaceRegExp).isEmpty())
+    if(textWithoutWhitespace.isEmpty())
     {
         // Only whitespace was changed, no update is required
     }else{
@@ -212,7 +223,10 @@ void DocumentChangeTracker::textRemoved( Document* document, Range oldRange, QSt
 {
     QString text = oldText;
     
-    if(text.remove(whiteSpaceRegExp).isEmpty())
+    QString textWithoutWhitespace = text;
+    textWithoutWhitespace.remove(whiteSpaceRegExp);
+    
+    if(textWithoutWhitespace.isEmpty())
     {
         // Only whitespace was changed, no update is required
     }else{
