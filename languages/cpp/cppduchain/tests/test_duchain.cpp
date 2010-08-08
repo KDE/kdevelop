@@ -1950,73 +1950,52 @@ void TestDUChain::testADLClassTypeLookup()
   {
     // test lookup to base class namespace
     QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
-                       "namespace boo { struct B : public A {}; }"
-                       "struct A {};"
-                       "int bar(int& a) {}"
+                       "namespace boo { struct B : public foo::A {}; }"
                        "int test() { boo::B b; bar(b); }"); // calls foo::bar
 
     LockedTopDUContext top( parse(adlCall, DumpAll) );
 
-    QCOMPARE(top->childContexts().count(), 7);
+    QCOMPARE(top->childContexts().count(), 4);
 
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
-
-    // ::bar is never used
-    QCOMPARE(top->localDeclarations().size(), 5);
-    QCOMPARE(top->localDeclarations()[3]->qualifiedIdentifier().toString(), QString("bar"));
-    QCOMPARE(top->localDeclarations()[3]->uses().size(), 0);
   }
 
   {
     // test lookup to indirect base class namespace
     QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
-                       "namespace boo { struct B : public A {}; }"
-                       "namespace zoo { struct C : public B {}; }"
-                       "struct A {};"
-                       "int bar(int& a) {}"
+                       "namespace boo { struct B : public foo::A {}; }"
+                       "namespace zoo { struct C : public boo::B {}; }"
                        "int test() { zoo::C c; bar(c); }"); // calls foo::bar
 
     LockedTopDUContext top( parse(adlCall, DumpAll) );
 
-    QCOMPARE(top->childContexts().count(), 10);
+    QCOMPARE(top->childContexts().count(), 5);
 
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
-
-    // ::bar is never used
-    QCOMPARE(top->localDeclarations().size(), 6);
-    QCOMPARE(top->localDeclarations()[5]->qualifiedIdentifier().toString(), QString("bar"));
-    QCOMPARE(top->localDeclarations()[5]->uses().size(), 0);
   }
 
   {
     // test lookup for inner classes
-    QByteArray adlCall("namespace foo { struct A { struct B {}; }; int bar(A::B& b) {} }"
-                       "struct A {};"
-                       "int bar(int& a) {}"
+    QByteArray adlCall("namespace foo { struct A { struct B {}; }; int bar(A::B&) {} }"
                        "int test() { foo::A::B b; bar(b); }"); // calls foo::bar
 
     LockedTopDUContext top( parse(adlCall, DumpAll) );
 
-    QCOMPARE(top->childContexts().count(), 7);
+    QCOMPARE(top->childContexts().count(), 3);
 
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
-
-    // ::bar is never used
-    QCOMPARE(top->localDeclarations().size(), 4);
-    QCOMPARE(top->localDeclarations()[2]->qualifiedIdentifier().toString(), QString("bar"));
-    QCOMPARE(top->localDeclarations()[2]->uses().size(), 0);
   }
 }
 
@@ -2025,7 +2004,6 @@ void TestDUChain::testADLFunctionTypeLookup()
   {
     QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} }"
                        "foo::A f() {}"
-                       "void bar() {}"
                        "int test() { bar(&f); }"); // calls foo::bar through f's return type
 
     LockedTopDUContext top( parse(adlCall, DumpAll) );
