@@ -146,6 +146,9 @@ void VcsEventWidgetPrivate::diffToPrevious()
             VcsDiffWidget* widget = new VcsDiffWidget( job );
             widget->setRevisions( prev, ev.revision() );
             KDialog* dlg = new KDialog( q );
+            
+            widget->connect(widget, SIGNAL(destroyed(QObject*)), dlg, SLOT(deleteLater()));
+            
             dlg->setCaption( i18n("Difference To Previous") );
             dlg->setButtons( KDialog::Ok );
             dlg->setMainWidget( widget );
@@ -220,6 +223,7 @@ VcsEventWidget::VcsEventWidget( const KUrl& url, KDevelop::VcsJob *job, QWidget 
              this, SLOT( jobReceivedResults( KDevelop::VcsJob* ) ) );
     ICore::self()->runController()->registerJob( d->m_job );
 }
+
 VcsEventWidget::~VcsEventWidget()
 {
     delete d->m_logModel;
