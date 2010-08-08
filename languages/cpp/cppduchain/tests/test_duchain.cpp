@@ -1861,7 +1861,7 @@ void TestDUChain::testSearchAcrossNamespace3()
   QCOMPARE(top->childContexts()[2]->localDeclarations()[0]->abstractType()->toString(), QString("A::C"));
 }
 
-void TestDUChain::testADLLookup()
+void TestDUChain::testADL()
 {
   {
     QByteArray nonAdlCall("namespace foo { struct A {}; int bar(A& a) {} }"
@@ -1945,7 +1945,7 @@ void TestDUChain::testADLLookup()
   }
 }
 
-void TestDUChain::testADLClassTypeLookup()
+void TestDUChain::testADLClassType()
 {
   {
     // test lookup to base class namespace
@@ -1999,7 +1999,7 @@ void TestDUChain::testADLClassTypeLookup()
   }
 }
 
-void TestDUChain::testADLFunctionTypeLookup()
+void TestDUChain::testADLFunctionType()
 {
   {
     QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} }"
@@ -2049,7 +2049,7 @@ void TestDUChain::testADLFunctionTypeLookup()
   }
 }
 
-void TestDUChain::testADLEnumerationTypeLookup()
+void TestDUChain::testADLEnumerationType()
 {
   {
     QByteArray adlCall("namespace foo { enum A { enValue }; int bar(A a) {} }"
