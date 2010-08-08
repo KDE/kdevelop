@@ -92,7 +92,7 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
     {
       QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
       adlFunctionName += functionName.last();
-      kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
+      //kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
       adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
     }
     resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false );
@@ -221,7 +221,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
       foreach( Declaration * funDecl, declarations) {
         QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
         adlFunctionName += funDecl->identifier();
-        kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
+        //kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
         adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
       }
     }

@@ -107,6 +107,9 @@ class ADLHelper
     /** @brief Adds an associated namespace declaration. */
     void addAssociatedNamespace(Declaration * declaration);
 
+    /** @brief Computes all direct and indirect base classes of a class. */
+    QList<Declaration *> computeAllBaseClasses(Declaration* decl);
+
     /** @brief Namespaces associated with the name lookup. */
     QSet<Declaration*> m_associatedNamespaces;
 

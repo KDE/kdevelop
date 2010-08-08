@@ -19,6 +19,7 @@
 
 #include "adlhelper.h"
 #include <language/duchain/types/alltypes.h>
+#include <language/duchain/classdeclaration.h>
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -84,7 +85,6 @@ bool ADLTypeVisitor::visit(const FunctionType * type)
 void ADLTypeVisitor::endVisit(const FunctionType *)
 {
   // return type and argument types are handled by FunctionType::accept0
-  // no need to access the
 }
 
 bool ADLTypeVisitor::visit(const StructureType * type)
@@ -94,9 +94,8 @@ bool ADLTypeVisitor::visit(const StructureType * type)
 
 void ADLTypeVisitor::endVisit(const StructureType * type)
 {
-  // unfortunately StructureType won't access its base classes
-  // TODO: add ADL policies on class type traversal
-  // TODO: templates?
+  // StructureType does not visit base classes etc
+  // so the processing is don by ADLHelper
   m_helper.addAssociatedClass(type->declaration(m_helper.m_topContext.data()));
 }
 
@@ -180,16 +179,20 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
   if (declaration->isTypeAlias() || declaration->isAnonymous())
     return;
 
-  // for now just add the class namespace
-  // TODO: implement the above policy
-  DUContext* declContext = declaration->logicalInternalContext(m_topContext.data());
-  if (!declContext)
-  {
-    kDebug() << "declaration " << declaration->toString() << " has no logical internal context; skipping";
-    return;
-  }
+  QList<Declaration*> associatedClasses;
+  associatedClasses << declaration;
+  
+  QList<Declaration*> baseClasses = computeAllBaseClasses(declaration);
+  associatedClasses << baseClasses;
 
-  addAssociatedNamespace(declContext->scopeIdentifier());
+  // no need to search for parent class, since scopeIdentifier() below skips them anyway
+  
+  foreach(Declaration * decl, associatedClasses)
+  {
+    DUContext* declContext = decl->logicalInternalContext(m_topContext.data());
+    if (declContext)
+      addAssociatedNamespace(declContext->scopeIdentifier());
+  }
 }
 
 void ADLHelper::addAssociatedFunction(Declaration * declaration)
@@ -216,11 +219,40 @@ void ADLHelper::addAssociatedNamespace(Declaration * declaration)
 
   if (declaration->kind() == Declaration::Namespace)
   {
-    kDebug() << "adding namespace " << declaration->toString();
+    //kDebug() << "adding namespace " << declaration->toString();
     m_associatedNamespaces += declaration;
   }
   // TODO: check if namespace aliases need to be resolved as well
   /*  else if (nsDeclaration.kind() == Declaration::NamespaceAlias) {
   addAssociatedNamespace(nsDecl);
   }*/
+}
+
+QList<Declaration *> ADLHelper::computeAllBaseClasses(Declaration* declaration)
+{
+  QList<Declaration *> baseClasses;
+
+  if (declaration) {
+    baseClasses << declaration;
+    
+    ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration*>(declaration);
+    if (classDecl) {
+      int nBaseClassesCount = classDecl->baseClassesSize();
+      for (int i = 0; i < nBaseClassesCount; ++i)
+      {
+        const BaseClassInstance baseClass = classDecl->baseClasses()[i];
+        AbstractType::Ptr type = baseClass.baseClass.abstractType();
+        if (type) {
+          StructureType::Ptr structType = type.cast<StructureType>();
+          if (structType)
+          {
+            Declaration * decl = structType->declaration(m_topContext.data());
+            baseClasses << computeAllBaseClasses(decl);
+          }
+        }
+      }
+    }
+  }
+  
+  return baseClasses;
 }
