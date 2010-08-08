@@ -169,9 +169,11 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     connect(action, SIGNAL(triggered()), this, SLOT(ctxBranchManager()));
     menu->addAction(action);
 
+#if 0
     action = new KAction(i18n("Revision History"), this);
     connect(action, SIGNAL(triggered()), this, SLOT(ctxRevHistory()));
     menu->addAction(action);
+#endif
 
     ContextMenuExtension menuExt;
     menuExt.addAction(ContextMenuExtension::VcsGroup, menu->menuAction());
@@ -228,6 +230,8 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     branchManager->show();
 }
 
+// This is redundant with the normal VCS "history" action
+#if 0
 void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
@@ -239,6 +243,7 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 
     emit addNewTabToMainView(revTree, i18n("Revision History"));
 }
+#endif
 
 void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
 {
