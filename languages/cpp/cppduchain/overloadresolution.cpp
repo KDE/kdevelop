@@ -77,7 +77,27 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
 
   QList<Declaration*> declarations = m_context->findDeclarations( functionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
 
-  return resolveList( params, declarations, noUserDefinedConversion );
+  Declaration * resolvedDecl = resolveList( params, declarations, noUserDefinedConversion );
+
+  if (!resolvedDecl) {
+    // start ADL lookup
+    ADLHelper adlHelper( m_context, m_topContext );
+    foreach( const Parameter & param, params.parameters )
+    {
+      adlHelper.addArgument( param );
+    }
+    QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
+    QList<Declaration*> adlDecls;
+    foreach( Declaration * nsDecl, adlNamespaces )
+    {
+      QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
+      adlFunctionName += functionName.last();
+      kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
+      adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
+    }
+    resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false );
+  }
+  return resolvedDecl;
 }
 
 uint OverloadResolver::worstConversionRank()
@@ -198,20 +218,17 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     QList<Declaration*> adlDecls;
     foreach( Declaration * nsDecl, adlNamespaces )
     {
-      if( nsDecl->kind() != Declaration::Namespace )
-        continue;
-
       foreach( Declaration * funDecl, declarations) {
         QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
         adlFunctionName += funDecl->identifier();
-        kDebug() << "ADL lookup in " << nsDecl->qualifiedIdentifier().toString() << "; qualified function name: " << adlFunctionName.toString();
+        kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
         adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
       }
     }
     return resolveList( params, adlDecls, noUserDefinedConversion, false);
   } else {
     return 0;
-  }  
+  }
 }
 
 QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial )
