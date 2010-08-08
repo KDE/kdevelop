@@ -47,6 +47,8 @@ using namespace KTextEditor;
 
 #define LOCK_SMART(range) KTextEditor::SmartInterface* iface = dynamic_cast<KTextEditor::SmartInterface*>(range->document()); QMutexLocker lock(iface ? iface->smartMutex() : 0);
 
+#define ifDebug(x)
+
 namespace KDevelop {
 
 
@@ -138,7 +140,7 @@ bool CodeHighlighting::isCodeHighlight(Attribute::Ptr attr) const
 
 void CodeHighlightingInstance::outputRange( KTextEditor::SmartRange * range ) const
 {
-  kDebug() << range << QString(range->depth(), ' ') << *range << "attr" << range->attribute();
+  ifDebug(kDebug() << range << QString(range->depth(), ' ') << *range << "attr" << range->attribute();)
   Q_ASSERT(range->start() <= range->end());
   foreach (SmartRange* child, range->childRanges())
     outputRange(child);

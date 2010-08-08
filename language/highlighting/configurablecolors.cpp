@@ -23,6 +23,8 @@
 
 #include "configurablecolors.h"
 
+#define ifDebug(x)
+
 namespace KDevelop
 {
 
@@ -52,100 +54,32 @@ ConfigurableHighlightingColors::ConfigurableHighlightingColors(QString highlight
   setDefaultAttribute(a);
 }
 
+#define ADD_COLOR(type, color) \
+  { \
+    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute); \
+    a->setForeground(QColor(cache->blendGlobalColor(color)));  \
+    addAttribute(CodeHighlighting::type, a);  \
+    ifDebug(kDebug() << #type << "color: " << (void*) color << "->" << (void*) a->foreground().color().rgb();) \
+  }
+
 CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : ConfigurableHighlightingColors("KDev Semantic Highlighting")
 {
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x005912))); //Dark green
-    addAttribute(CodeHighlighting::ClassType, a);
-    kDebug() << "Class color: " << (void*) 0x005912 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x35938d)));
-    addAttribute(CodeHighlighting::TypeAliasType, a);
-    kDebug() << "TypeAlias color: " << (void*) 0x35938d << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x6c101e))); //Dark red
-    addAttribute(CodeHighlighting::EnumType, a);
-    kDebug() << "Enum color: " << (void*) 0x6c101e << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x862a38))); //Greyish red
-    addAttribute(CodeHighlighting::EnumeratorType, a);
-    kDebug() << "Enumerator color: " << (void*) 0x862a38 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x21005A))); // Navy blue
-    addAttribute(CodeHighlighting::FunctionType, a);
-    kDebug() << "Function color: " << (void*) 0x21005A << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x443069)));// Dark Burple (blue / purple)
-    addAttribute(CodeHighlighting::MemberVariableType, a);
-    kDebug() << "MemberVariable color: " << (void*) 0x443069 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0xae7d00))); //Light orange
-    addAttribute(CodeHighlighting::LocalClassMemberType, a);
-    kDebug() << "LocalClassMember color: " << (void*) 0xae7d00 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x705000))); //Dark orange
-    addAttribute(CodeHighlighting::InheritedClassMemberType, a);
-    kDebug() << "InheritedClassMember color: " << (void*) 0x705000 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x0C4D3C)));
-    addAttribute(CodeHighlighting::LocalVariableType, a);
-    kDebug() << "LocalVariable color: " << (void*) 0x0C4D3C << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x300085))); // Less dark navy blue
-    addAttribute(CodeHighlighting::FunctionVariableType, a);
-    kDebug() << "FunctionVariable color: " << (void*) 0x300085 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x9F3C5F))); // Rose
-    addAttribute(CodeHighlighting::NamespaceVariableType, a);
-    kDebug() << "NamespaceVariable color: " << (void*) 0x9F3C5F << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x12762B))); // Grass green
-    addAttribute(CodeHighlighting::GlobalVariableType, a);
-    kDebug() << "GlobalVariable color: " << (void*) 0x12762B << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x6B2840))); // Dark rose
-    addAttribute(CodeHighlighting::NamespaceType, a);
-    kDebug() << "Namespace color: " << (void*) 0x6B2840 << "->" << (void*) a->foreground().color().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute(*defaultAttribute()));
-//     a->setForeground(QColor(0x8b0019)); // Pure red
-    a->setUnderlineColor(QColor(cache->blendGlobalColor(0x8b0019))); // Pure red
-    a->setUnderlineStyle(QTextCharFormat::WaveUnderline);
-    addAttribute(CodeHighlighting::ErrorVariableType, a);
-    kDebug() << "ErrorVariable underline color: " << (void*) 0x8b0019 << "->" << (void*) a->underlineColor().rgb();
-  }
-  {
-    KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute);
-    a->setForeground(QColor(cache->blendGlobalColor(0x5C5C5C))); // Gray
-    addAttribute(CodeHighlighting::ForwardDeclarationType, a);
-    kDebug() << "ForwardDeclaration color: " << (void*) 0x5C5C5C << "->" << (void*) a->foreground().color().rgb();
-  }
+  ADD_COLOR(ClassType, 0x005912) //Dark green
+  ADD_COLOR(TypeAliasType, 0x35938d)
+  ADD_COLOR(EnumType, 0x6c101e) //Dark red
+  ADD_COLOR(EnumeratorType, 0x862a38) //Greyish red
+  ADD_COLOR(FunctionType, 0x21005A) //Navy blue
+  ADD_COLOR(MemberVariableType, 0x443069) //Dark Burple (blue/purple)
+  ADD_COLOR(LocalClassMemberType, 0xae7d00) //Light orange
+  ADD_COLOR(InheritedClassMemberType, 0x705000) //Dark orange
+  ADD_COLOR(LocalVariableType, 0x0C4D3C)
+  ADD_COLOR(FunctionVariableType, 0x300085) //Less dark navy blue
+  ADD_COLOR(NamespaceVariableType, 0x9F3C5F) //Rose
+  ADD_COLOR(GlobalVariableType, 0x12762B) //Grass green
+  ADD_COLOR(NamespaceType, 0x6B2840) //Dark rose
+  ADD_COLOR(ErrorVariableType, 0x8b0019) //Pure red
+  ADD_COLOR(ForwardDeclarationType, 0x5C5C5C) //Gray
+
 /*      case ScopeType:
     case TemplateType:
     case TemplateParameterType:

@@ -43,6 +43,8 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 
+#define ifDebug(x)
+
 // ######### start interpolation
 
 uint totalColorInterpolationStepCount = 6;
@@ -136,10 +138,10 @@ void ColorCache::generateColors()
   m_colors.clear();
   uint step = totalColorInterpolationSteps() / totalGeneratedColors;
   uint currentPos = m_colorOffset;
-  kDebug() << "text color:" << m_foregroundColor;
+  ifDebug(kDebug() << "text color:" << m_foregroundColor;)
   for(uint a = 0; a < totalGeneratedColors; ++a) {
     m_colors.append( blendLocalColor( interpolate( currentPos ) ) );
-    kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();
+    ifDebug(kDebug() << "color" << a << "interpolated from" << currentPos << " < " << totalColorInterpolationSteps() << ":" << (void*) m_colors.last().rgb();)
     currentPos += step;
   }
   m_validColorCount = m_colors.count();
