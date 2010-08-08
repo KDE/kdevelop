@@ -1,10 +1,22 @@
 [Desktop Entry]
 Type=Service
 Comment=Collection of various utilities that increase productivity while programming.
+Comment[pt]=Uma colecção de vários utilitários que aumentam a produtividade enquanto programa.
+Comment[pt_BR]=Uma coleção de vários utilitários que aumentam a produtividade durante a programação.
+Comment[sv]=Samling av diverse verktyg för att öka produktiviteten vid programmering.
+Comment[uk]=Збірка різноманітних допоміжних програм, яка підвищує продуктивність програмування.
 Comment[x-test]=xxCollection of various utilities that increase productivity while programming.xx
 Name=Code Utilities
+Name[pt]=Utilitários de Código
+Name[pt_BR]=Utilitários de Código
+Name[sv]=Kodverktyg
+Name[uk]=Допоміжні засоби
 Name[x-test]=xxCode Utilitiesxx
 GenericName=Code Utilities
+GenericName[pt]=Utilitários de Código
+GenericName[pt_BR]=Utilitários de Código
+GenericName[sv]=Kodverktyg
+GenericName[uk]=Допоміжні засоби
 GenericName[x-test]=xxCode Utilitiesxx
 Icon=help-hint
 ServiceTypes=KDevelop/Plugin
