@@ -2,6 +2,7 @@
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
     ipatchsource.cpp
+    ipatchexporter.cpp
     iassistant.cpp
     context.cpp
 	ipatchdocument.cpp
@@ -61,6 +62,9 @@ install(FILES
     iplugin.h
     icore.h
     iuicontroller.h
+    ipatchdocument.h
+    ipatchexporter.h
+    ipatchsource.h
     iplugincontroller.h
     iprojectcontroller.h
     iproject.h
