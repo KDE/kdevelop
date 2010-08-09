@@ -222,7 +222,7 @@ void GrepJob::start()
                 else if(pattern[i] == 's')
                     modified += subst;
                 else
-                    modified += '%' + pattern[i];
+                    modified += QChar('%') + pattern[i];
                 continue;
             }
             if(pattern[i] == '%')
