@@ -118,6 +118,7 @@ private slots:
   void testArgumentList();
   void testStaticMethods();
   void testAnonStruct();
+  void testOverrideCtor();
 
 public:
   enum DumpArea {
