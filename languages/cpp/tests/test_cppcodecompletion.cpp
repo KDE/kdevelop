@@ -78,16 +78,6 @@ QString testFile4 = "void test1() {}; class TestClass() { TestClass() {} };";
 
 typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTester;
 
-bool containsDeclaration(const CompletionItemTester& ctx, Declaration* dec)
-{
-  foreach(CompletionItemTester::Item item, ctx.items) {
-    if (item->declaration().data() == dec) {
-      return true;
-    }
-  }
-  return false;
-}
-
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestCppCodeCompletion::TestCppCodeCompletion()
 {
@@ -2263,14 +2253,14 @@ void TestCppCodeCompletion::testOverrideCtor()
   {
     // in B we should see A's ctor
     CompletionItemTester complCtx(top->childContexts().at(1), "");
-    QVERIFY(containsDeclaration(complCtx, aCtor));
-    QVERIFY(!containsDeclaration(complCtx, bCtor));
+    QVERIFY(complCtx.containsDeclaration(aCtor));
+    QVERIFY(!complCtx.containsDeclaration(bCtor));
   }
   {
     // in C we should _only_ see B's ctor. Since it's already overridden, nothing should be shown.
     CompletionItemTester complCtx(top->childContexts().at(2), "");
-    QVERIFY(!containsDeclaration(complCtx, aCtor));
-    QVERIFY(!containsDeclaration(complCtx, bCtor));
+    QVERIFY(!complCtx.containsDeclaration(aCtor));
+    QVERIFY(!complCtx.containsDeclaration(bCtor));
   }
 
   release(top);
