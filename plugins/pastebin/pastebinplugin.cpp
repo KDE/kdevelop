@@ -61,7 +61,9 @@ QByteArray urlToData(const KUrl& url)
         ret = f.readAll();
         
     } else {
+#if defined(__GNUC__)
 #warning TODO: add downloading the data
+#endif
     }
     return ret;
 }
