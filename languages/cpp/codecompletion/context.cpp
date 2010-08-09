@@ -1126,13 +1126,14 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
   return static_cast<CodeCompletionContext*>(KDevelop::CodeCompletionContext::parentContext());
 }
 
-void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext) {
+void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext, int depth = 0) {
   if(!current)
     return;
   
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
-    if(classFun && (classFun->isVirtual() || classFun->isConstructor())) {
+    // one can only override the direct parent's ctor
+    if(classFun && (classFun->isVirtual() || (depth == 0 && classFun->isConstructor()))) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
       if(base->owner()) {
         if(classFun->isConstructor() || classFun->isDestructor())
@@ -1146,7 +1147,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
   }
 
   foreach(const DUContext::Import &import, current->importedParentContexts())
-    getOverridable(base, import.context(base->topContext()), overridable, completionContext);
+    getOverridable(base, import.context(base->topContext()), overridable, completionContext, depth + 1);
 }
 
 // #ifndef TEST_COMPLETION
