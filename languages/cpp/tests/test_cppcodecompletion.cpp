@@ -2269,8 +2269,8 @@ void TestCppCodeCompletion::testOverrideCtor()
   {
     // in C we should _only_ see B's ctor. Since it's already overridden, nothing should be shown.
     CompletionItemTester complCtx(top->childContexts().at(2), "");
-    QVERIFY(!complCtx.containsDeclaration(complCtx, aCtor));
-    QVERIFY(!complCtx.containsDeclaration(complCtx, bCtor));
+    QVERIFY(!containsDeclaration(complCtx, aCtor));
+    QVERIFY(!containsDeclaration(complCtx, bCtor));
   }
 
   release(top);
