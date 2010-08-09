@@ -207,6 +207,11 @@ const QList<DeclarationPointer> & ClassGenerator::inheritanceList() const
     return d->inheritedClasses;
 }
 
+const QList< DeclarationPointer >& ClassGenerator::directInheritanceList() const
+{
+    return m_baseClasses;
+}
+
 void ClassGenerator::clearInheritance()
 {
     m_baseClasses.clear();

@@ -173,6 +173,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassGenerator
     /// \return The list of all of the inherited classes
     const QList<DeclarationPointer> & inheritanceList() const;
 
+    /// \return The list of directly inherited classes
+    const QList<DeclarationPointer> & directInheritanceList() const;
+
     /**
      *Should return the suggested url of the header file for the given class-name
      */
