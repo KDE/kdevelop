@@ -4,6 +4,7 @@ Icon=edit-paste
 Exec=blubb
 Comment=This plugin will
 Comment[en_GB]=This plugin will
+Comment[es]=Este complemento
 Comment[fr]=Ce module externe utilisera
 Comment[pt]=Este 'plugin' irá
 Comment[pt_BR]=Este plugin irá
