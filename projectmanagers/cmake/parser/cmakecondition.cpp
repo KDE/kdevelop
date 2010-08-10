@@ -155,12 +155,11 @@ QStringList::const_iterator CMakeCondition::prevOperator(QStringList::const_iter
     return it;
 }
 
-#define CHECK_PREV(it) if(it==this->conditionBegin) return false
-#define CHECK_NEXT(it) if(it+1!=itEnd) return false
+#define CHECK_PREV(it) if((it)==this->conditionBegin) return false
+#define CHECK_NEXT(it) if((it+1)!=itEnd) return false
 
 bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStringList::const_iterator itEnd)
 {
-//     qDebug() << "xxxx" << *itBegin << *itEnd;
     if(itBegin==itEnd)
     {
         return isTrue(itBegin);
@@ -219,9 +218,11 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 itEnd=it2;
                 break;
             case AND:
+                CHECK_PREV(it2);
 //                 qDebug() << "AND" << last;
                 return evaluateCondition(itBegin, it2-1) && last;
             case OR:
+                CHECK_PREV(it2);
 //                 qDebug() << "OR" << last;
                 return evaluateCondition(itBegin, it2-1) || last;
             case MATCHES: {

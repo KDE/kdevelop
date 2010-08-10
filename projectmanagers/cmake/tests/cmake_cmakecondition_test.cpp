@@ -138,7 +138,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "true constant 7" ) << QStringList("Y") << true;
     QTest::newRow( "true constant 8" ) << QStringList("-2") << true;
     
-    QTest::newRow( "OR NOT ${undefinedvar}" ) << QString("OR NOT ${undefinedvar}").split(" ") << true;
+    QTest::newRow( "<empty> OR NOT <empty>" ) << QString(" OR NOT ").split(" ") << true;
 }
 
 void CMakeConditionTest::testBadParse()
@@ -157,6 +157,7 @@ void CMakeConditionTest::testBadParse_data()
 {
     QTest::addColumn<QStringList>( "expression" );
     QTest::newRow( "missing operator" ) << QString("MATCHES STUFF").split(" ");
+    QTest::newRow( "OR NOT" ) << QString("OR NOT").split(" ");
 }
 
 #include "cmake_cmakecondition_test.moc"
