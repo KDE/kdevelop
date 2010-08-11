@@ -36,7 +36,7 @@
 #include "breakpointdetails.h"
 #include "../breakpoint/breakpoint.h"
 #include "../breakpoint/breakpointmodel.h"
-#include "../../shell/debugcontroller.h"
+#include <interfaces/idebugcontroller.h>
 
 #define IF_DEBUG(x)
 #include <interfaces/icore.h>
@@ -44,7 +44,7 @@
 
 using namespace KDevelop;
 
-BreakpointWidget::BreakpointWidget(DebugController *controller, QWidget *parent)
+BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
 : QWidget(parent), firstShow_(true), m_debugController(controller),
   breakpointDisableAll_(0), breakpointEnableAll_(0), breakpointRemoveAll_(0)
 {
