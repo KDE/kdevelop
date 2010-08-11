@@ -31,6 +31,7 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folde
                                   CMakeFolderItem* item)
     : KDevelop::ProjectBuildFolderItem( project, folder, item ), m_formerParent(item), m_buildDir(build)
 {
+    setEnabled(QDir(url().toLocalFile()).exists());
 }
 
 QStringList CMakeFolderItem::includeDirectories() const
@@ -46,6 +47,25 @@ QStringList CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
+void CMakeFolderItem::clear()
+{
+    m_includeList.clear();
+    m_defines.clear();
+    m_topcontext=0;
+    removeRows(0, rowCount());
+}
+
+void CMakeFolderItem::setEnabled(bool enabled)
+{
+    if(enabled != (flags() & Qt::ItemIsEnabled)) {
+        if(enabled)
+            setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+        else
+            setFlags(Qt::ItemIsSelectable);
+        
+    }
+}
+
 KUrl CMakeExecutableTargetItem::builtUrl() const
 {
     KUrl ret;
@@ -56,12 +76,4 @@ KUrl CMakeExecutableTargetItem::builtUrl() const
     
     ret.addPath(outputName);
     return ret;
-}
-
-void CMakeFolderItem::clear()
-{
-    m_includeList.clear();
-    m_defines.clear();
-    m_topcontext=0;
-    removeRows(0, rowCount());
 }

@@ -84,7 +84,8 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         QString buildDir() const { return m_buildDir; }
         
         void clear();
-    void setEnabled();
+        
+        void setEnabled(bool);
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;
