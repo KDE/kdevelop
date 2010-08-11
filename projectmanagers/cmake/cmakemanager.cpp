@@ -300,7 +300,7 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             }
         }
 
-        m_rootItem = new CMakeFolderItem(project, folderUrl.url(), QString(), 0 );
+        m_rootItem = new CMakeFolderItem(project, folderUrl, QString(), 0 );
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
@@ -463,7 +463,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     if(path.upUrl()!=folder->url())
                         parent=0;
 
-                    CMakeFolderItem* a = new CMakeFolderItem( folder->project(), subf.name, subf.build_dir, parent );
+                    KUrl url = parent->url();
+                    url.addPath(subf.name);
+                    CMakeFolderItem* a = new CMakeFolderItem( folder->project(), url, subf.build_dir, parent );
                     kDebug() << "folder: " << a << a->index();
                     a->setUrl(path);
                     a->setDefinitions(data.definitions);
@@ -718,7 +720,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         IProject* project=item->project();
 
         parent->removeRow(item->row());
-        CMakeFolderItem* fi=new CMakeFolderItem(project, url.toLocalFile(), buildDir, 0);
+        CMakeFolderItem* fi=new CMakeFolderItem(project, url, buildDir, 0);
 
         fi->setFormerParent(former);
         reimport(fi, parent->url());
