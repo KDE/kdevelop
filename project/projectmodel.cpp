@@ -131,6 +131,7 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
     Q_D(ProjectBaseItem);
     d->project = project;
     d->text = name;
+    d->flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     if( parent ) {
         parent->appendRow( this );
     }
@@ -184,7 +185,6 @@ ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 
 void ProjectBaseItem::removeRow( int row )
 {
-    Q_D(ProjectBaseItem);
     delete takeRow( row );
 }
 
@@ -353,6 +353,20 @@ void ProjectBaseItem::setUrl( const KUrl& url )
     Q_D(ProjectBaseItem);
     d->m_url = url;
     setText( d->m_url.fileName() );
+}
+
+Qt::ItemFlags ProjectBaseItem::flags()
+{
+    Q_D(ProjectBaseItem);
+    return d->flags;
+}
+
+void ProjectBaseItem::setFlags(Qt::ItemFlags flags)
+{
+    Q_D(ProjectBaseItem);
+    d->flags = flags;
+    if(d->model)
+        d->model->dataChanged(index(), index());
 }
 
 QString ProjectBaseItem::iconName() const
@@ -810,6 +824,15 @@ bool ProjectModel::hasChildren(const QModelIndex& parent) const
 {
     bool b = QAbstractItemModel::hasChildren(parent);
     return b;
+}
+
+Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
+{
+    ProjectBaseItem* item = itemFromIndex( index );
+    if(item)
+        return item->flags();
+    else
+        return 0;
 }
 
 bool ProjectModel::insertColumns(int, int, const QModelIndex&)
