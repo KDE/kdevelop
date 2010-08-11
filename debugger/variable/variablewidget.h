@@ -31,7 +31,7 @@ class KHistoryComboBox;
 namespace KDevelop
 {
 
-class DebugController;
+class IDebugController;
 
 class VariableTree;
 class AbstractVariableItem;
@@ -41,7 +41,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableWidget : public QWidget
     Q_OBJECT
 
 public:
-    VariableWidget( DebugController *controller, QWidget *parent=0 );
+    VariableWidget( IDebugController *controller, QWidget *parent=0 );
 
 Q_SIGNALS:
     void requestRaise();
@@ -70,7 +70,7 @@ class VariableTree : public KDevelop::AsyncTreeView
 {
     Q_OBJECT
 public:
-    VariableTree(DebugController *controller, VariableWidget *parent);
+    VariableTree(IDebugController *controller, VariableWidget *parent);
     virtual ~VariableTree();
 
     VariableCollection* collection() const;
