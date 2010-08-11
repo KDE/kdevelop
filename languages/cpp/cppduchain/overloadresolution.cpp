@@ -77,10 +77,12 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
 
   QList<Declaration*> declarations = m_context->findDeclarations( functionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
 
-  Declaration * resolvedDecl = resolveList( params, declarations, noUserDefinedConversion );
+  // without ADL findDeclarations may fail so skip ADL there and do it here
+  Declaration * resolvedDecl = resolveList( params, declarations, noUserDefinedConversion, false );
 
   if (!resolvedDecl) {
     // start ADL lookup
+//     kDebug() << "ADL starting for function " << functionName.toString();
     ADLHelper adlHelper( m_context, m_topContext );
     foreach( const Parameter & param, params.parameters )
     {
@@ -92,10 +94,14 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
     {
       QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
       adlFunctionName += functionName.last();
-      //kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
+//       kDebug() << "ADL candidate: " << adlFunctionName.toString();
       adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
     }
     resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false );
+/*    if (resolvedDecl)
+      kDebug() << "ADL found " << resolvedDecl->toString();
+    else
+      kDebug() << "ADL failed";*/
   }
   return resolvedDecl;
 }
@@ -209,6 +215,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     return bestViableFunction.declaration().data();
   else if (doADL) {
     // if no name is found during normal lookup start ADL lookup
+//     kDebug() << "ADL starting for function(s): ";
     ADLHelper adlHelper( m_context, m_topContext );
     foreach( const Parameter & param, params.parameters )
     {
@@ -216,16 +223,23 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     }
     QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
     QList<Declaration*> adlDecls;
-    foreach( Declaration * nsDecl, adlNamespaces )
-    {
-      foreach( Declaration * funDecl, declarations) {
+    foreach( Declaration * funDecl, declarations) {
+//       kDebug() << "  ADL unqualified id: " << funDecl->identifier().toString();
+      foreach( Declaration * nsDecl, adlNamespaces )
+      {
         QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
         adlFunctionName += funDecl->identifier();
-        //kDebug() << "added ADL lookup for function " << adlFunctionName.toString();
+//         kDebug() << "    ADL candidate: " << adlFunctionName;
         adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
       }
     }
-    return resolveList( params, adlDecls, noUserDefinedConversion, false);
+    Declaration * resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false);
+//     if (resolvedDecl)
+//       kDebug() << "ADL found " << resolvedDecl->toString();
+//     else
+//       kDebug() << "ADL failed";
+
+    return resolvedDecl;
   } else {
     return 0;
   }

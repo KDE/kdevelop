@@ -34,7 +34,6 @@ bool ADLTypeVisitor::preVisit(const AbstractType * type)
   switch (type->whichType())
   {
   case AbstractType::TypeAbstract:
-  case AbstractType::TypeAlias:
   case AbstractType::TypeIntegral:
   case AbstractType::TypeDelayed:
   case AbstractType::TypeUnsure:
@@ -95,7 +94,7 @@ bool ADLTypeVisitor::visit(const StructureType * type)
 void ADLTypeVisitor::endVisit(const StructureType * type)
 {
   // StructureType does not visit base classes etc
-  // so the processing is don by ADLHelper
+  // so the processing is done by ADLHelper
   m_helper.addAssociatedClass(type->declaration(m_helper.m_topContext.data()));
 }
 
@@ -138,7 +137,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
     {
     case AbstractType::TypeEnumeration:
       {
-        EnumerationType::Ptr specificType = typePtr.cast<EnumerationType>();
+        EnumerationType* specificType = fastCast<EnumerationType*>(typePtr.unsafeData());
         if (specificType)
         {
           Declaration * enumDecl = specificType->declaration(m_topContext.data());
@@ -148,7 +147,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
       }
     case AbstractType::TypeEnumerator:
       {
-        EnumeratorType::Ptr specificType = typePtr.cast<EnumeratorType>();
+        EnumeratorType* specificType = fastCast<EnumeratorType*>(typePtr.unsafeData());
         if (specificType)
         {
           // use the enumeration context for the enumerator value declaration to find out the namespace
@@ -176,7 +175,7 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
 
   // from the standard:
   // Typedef names and using-declarations used to specify the types do not contribute to this set.
-  if (declaration->isTypeAlias() || declaration->isAnonymous())
+  if (declaration->isTypeAlias())
     return;
 
   QList<Declaration*> associatedClasses;
