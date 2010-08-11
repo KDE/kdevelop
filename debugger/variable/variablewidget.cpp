@@ -39,7 +39,7 @@
 #include <klocale.h>
 
 #include "../../interfaces/icore.h"
-#include "../../shell/debugcontroller.h"
+#include <interfaces/idebugcontroller.h>
 #include "../interfaces/ivariablecontroller.h"
 #include "variablecollection.h"
 
@@ -79,7 +79,7 @@ VariableCollection *variableCollection()
 }
 
 
-VariableWidget::VariableWidget(DebugController* controller, QWidget *parent)
+VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), variablesRoot_(controller->variableCollection()->root())
 {
   //setWindowIcon(KIcon("math_brace"));
@@ -160,7 +160,7 @@ void VariableWidget::showEvent(QShowEvent* e)
 // **************************************************************************
 // **************************************************************************
 
-VariableTree::VariableTree(DebugController *controller,
+VariableTree::VariableTree(IDebugController *controller,
                            VariableWidget *parent)
 : AsyncTreeView(controller->variableCollection(), parent)
 #if 0
