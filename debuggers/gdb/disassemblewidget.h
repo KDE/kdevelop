@@ -26,6 +26,11 @@
 #include "mi/gdbmi.h"
 
 #include <QTreeWidget>
+#include <KIcon>
+#include <KDialog>
+
+#include "ui_selectaddress.h"
+
 
 /***************************************************************************/
 /***************************************************************************/
@@ -38,9 +43,32 @@ namespace KDevelop {
 namespace GDBDebugger
 {
 
+class SelectAddrDialog: public KDialog
+{
+    Q_OBJECT
+    
+public:
+    SelectAddrDialog(QWidget *parent = 0);
+    
+    QString getAddr() const
+    { return hasValidAddress() ? m_ui.comboBox->currentText() : QString(); }
+    
+    bool hasValidAddress() const;
+    void updateOkState();
+     
+private Q_SLOTS:
+    void validateInput();
+    void itemSelected();
+    
+private:
+    Ui::SelectAddress m_ui;
+};
+
+
 class Breakpoint;
 class DebugSession;
 class CppDebuggerPlugin;
+
 
 class DisassembleWidget : public QTreeWidget
 {
@@ -48,6 +76,7 @@ class DisassembleWidget : public QTreeWidget
 
 public:
     enum Columns {
+        Icon,
         Address,
         Function,
         Offset,
@@ -64,6 +93,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
+    void slotChangeAddress();
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
 
 private Q_SLOTS:
@@ -72,10 +102,11 @@ private Q_SLOTS:
 protected:
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
+    virtual void contextMenuEvent(QContextMenuEvent*);
 
 private:
     bool displayCurrent();
-    void getNextDisplay();
+    void getAsmToDisplay(const QString& addr=QString());
 
     /// callback for GDBCommand
     void memoryRead(const GDBMI::ResultRecord& r);
@@ -85,6 +116,10 @@ private:
     unsigned long    upper_;
     unsigned long    address_;
     QString currentAddress_;
+    
+    QAction* selectAddrAction_;
+    static const KIcon icon_;
+    SelectAddrDialog* dlg;
 };
 
 }

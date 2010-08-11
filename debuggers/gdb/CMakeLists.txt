@@ -47,6 +47,7 @@ set(kdevgdb_PART_UI
     debuggertracingdialog.ui
     debuggerconfigwidget.ui
     selectcore.ui
+    selectaddress.ui
 )
 
 kde4_add_ui_files(kdevgdb_PART_SRCS ${kdevgdb_PART_UI})
