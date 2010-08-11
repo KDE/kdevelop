@@ -144,7 +144,7 @@ public:
     const QString& currentFile() const { return file_; }
     int currentLine() const { return line_; }
     const QString& currentAddr() const { return addr_; }
-    void clearCurrentPosition() { file_=""; line_=-1; }
+    void clearCurrentPosition() { file_=addr_=""; line_=-1; }
     
 protected:
     // Current position in debugged program, gets set when the state changes
