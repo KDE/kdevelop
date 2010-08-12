@@ -463,7 +463,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                     if(path.upUrl()!=folder->url())
                         parent=0;
 
-                    KUrl url = parent->url();
+                    KUrl url = item->url();
                     url.addPath(subf.name);
                     CMakeFolderItem* a = new CMakeFolderItem( folder->project(), url, subf.build_dir, parent );
                     kDebug() << "folder: " << a << a->index();
