@@ -18,24 +18,11 @@
  * 02110-1301, USA.
  */
 
-#ifndef IPATCHEXPORTER_H
-#define IPATCHEXPORTER_H
-#include "interfacesexport.h"
-#include "ipatchsource.h"
+#include "ipatchexporter.h"
 
-class QWidget;
-namespace KDevelop
-{
+using namespace KDevelop;
 
-class KDEVPLATFORMINTERFACES_EXPORT IPatchExporter
+IPatchExporter::~IPatchExporter()
 {
-    public:
-        virtual ~IPatchExporter();
-        
-        virtual void exportPatch(IPatchSource::Ptr source) = 0;
-};
 
 }
-Q_DECLARE_INTERFACE( KDevelop::IPatchExporter, "org.kdevelop.IPatchExporter" )
-
-#endif

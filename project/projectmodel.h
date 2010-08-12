@@ -183,6 +183,18 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         virtual RenameStatus rename( const QString& newname );
         
         bool isProjectRoot() const;
+        
+         /**
+         * Default flags: Qt::ItemIsEnabled | Qt::ItemIsSelectable
+         * 
+         * @returns the flags supported by the item
+         */
+        virtual Qt::ItemFlags flags();
+        
+        /**
+         * Sets what flags should be returned by ::flags() method.
+         */
+        void setFlags(Qt::ItemFlags flags);
 
     protected:
         class ProjectBaseItemPrivate* const d_ptr;
@@ -339,6 +351,8 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
     virtual bool insertColumns(int column, int count, const QModelIndex& parent = QModelIndex());
     virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
+    
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
 private:
     class ProjectModelPrivate* const d;

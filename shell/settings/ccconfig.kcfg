@@ -27,10 +27,10 @@
     <default>false</default>
     </entry>
     <entry name="localColorization" key="localColorization" type="Int">
-    <default>120</default>
+    <default>170</default>
     </entry>
     <entry name="globalColorization" key="globalColorization" type="Int">
-    <default>120</default>
+    <default>255</default>
     </entry>
     <entry name="minFilesForSimplifiedParsing" key="minFilesForSimplifiedParsing" type="Int">
     <default>100000</default>

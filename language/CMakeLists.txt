@@ -187,6 +187,7 @@ install(FILES
 install(FILES
     backgroundparser/backgroundparser.h
     backgroundparser/parsejob.h
+    backgroundparser/parseprojectjob.h
     backgroundparser/urlparselock.h
     backgroundparser/documentchangetracker.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/backgroundparser COMPONENT Devel
@@ -197,6 +198,7 @@ install(FILES
     util/setrepository.h
     util/basicsetrepository.h
     util/includeitem.h
+    util/debuglanguageparserhelper.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/language/util COMPONENT Devel
 )
 

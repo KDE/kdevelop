@@ -1,0 +1,10 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="kdevcodeutils" version="6">
+<MenuBar>
+  <Menu name="code">
+    <Text context="@title:menu">Code</Text>
+    <Action name="document_declaration" />
+  </Menu>
+</MenuBar>
+</kpartgui>
+

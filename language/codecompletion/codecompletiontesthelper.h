@@ -144,6 +144,15 @@ struct CodeCompletionItemTester {
         addElements(node->children);
     }
   }
+
+  bool containsDeclaration(Declaration* dec) const {
+    foreach(Item item, items) {
+        if (item->declaration().data() == dec) {
+            return true;
+        }
+    }
+    return false;
+  }
   
   QStringList names; //Names of all completion-items, not sorted
   typedef KSharedPtr <KDevelop::CompletionTreeItem > Item;

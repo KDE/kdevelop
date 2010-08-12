@@ -94,6 +94,11 @@ public:
      * @param format formatting used for the string
      */
     Q_SCRIPTABLE virtual QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const = 0;
+
+    /**
+     * @returns wether project files should be parsed or not
+     */
+    static bool parseAllProjectSources();
     
 public Q_SLOTS:
     /**

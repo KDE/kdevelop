@@ -23,6 +23,8 @@
 
 #include <kcmodule.h>
 #include <QtCore/QVariant>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 class KComponentData;
 class QWidget;
@@ -40,8 +42,14 @@ template <typename T> class ProjectKCModule : public KCModule
             T::self()->setProjectTempFile( args.at(1).toString() );
             T::self()->setProjectFileUrl( args.at(2).toString() );
             T::self()->setDeveloperFileUrl( args.at(3).toString() );
+            projectName = args.at(4).toString();
         }
         virtual ~ProjectKCModule() {}
+        KDevelop::IProject* project() const {
+            return KDevelop::ICore::self()->projectController()->findProjectByName( projectName );
+        }
+private:
+    QString projectName;
 };
 
 #endif
