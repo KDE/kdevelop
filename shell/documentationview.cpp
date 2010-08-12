@@ -24,6 +24,7 @@
 #include <QTextEdit>
 #include <QCompleter>
 #include <QLayout>
+#include <QTextBrowser>
 #include <KLineEdit>
 #include <KDebug>
 #include <KIcon>
@@ -31,53 +32,9 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationcontroller.h>
-#include <QTextBrowser>
+#include <interfaces/iplugincontroller.h>
 
-class ProvidersModel : public QAbstractListModel
-{
-    public:
-        
-        ProvidersModel(QObject* parent = 0)
-            : QAbstractListModel(parent)
-            , mProviders(KDevelop::ICore::self()->documentationController()->documentationProviders())
-        {}
-        
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
-        {
-            QVariant ret;
-            switch(role)
-            {
-                case Qt::DisplayRole:
-                    ret=provider(index.row())->name();
-                    break;
-                case Qt::DecorationRole:
-                    ret=provider(index.row())->icon();
-                    break;
-            }
-            return ret;
-        }
-        
-        virtual int rowCount(const QModelIndex&) const
-        {
-            return mProviders.count();
-        }
-        
-        QList<KDevelop::IDocumentationProvider*> providers() {
-            return mProviders;
-        }
-        
-        KDevelop::IDocumentationProvider* provider(int pos) const
-        {
-            return mProviders[pos];
-        }
-        
-        int rowForProvider(KDevelop::IDocumentationProvider* provider)
-        {
-            return mProviders.indexOf(provider);
-        }
-    private:
-        QList<KDevelop::IDocumentationProvider*> mProviders;
-};
+using namespace KDevelop;
 
 DocumentationView::DocumentationView(QWidget* parent)
     : QWidget(parent)
@@ -217,3 +174,62 @@ void DocumentationView::changedProvider(int row)
     
     showHome();
 }
+
+////////////// ProvidersModel //////////////////
+
+ProvidersModel::ProvidersModel(QObject* parent)
+    : QAbstractListModel(parent)
+    , mProviders(ICore::self()->documentationController()->documentationProviders())
+{
+    connect(ICore::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)), SLOT(unloaded(KDevelop::IPlugin*)));
+    connect(ICore::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(loaded(KDevelop::IPlugin*)));
+}
+
+QVariant ProvidersModel::data(const QModelIndex& index, int role) const
+{
+    qDebug() << "peppepepepe" << index;
+    QVariant ret;
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        ret=provider(index.row())->name();
+        break;
+    case Qt::DecorationRole:
+        ret=provider(index.row())->icon();
+        break;
+    }
+    return ret;
+}
+
+void ProvidersModel::unloaded(KDevelop::IPlugin* p)
+{
+    IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
+    int idx=-1;
+    if (prov)
+        idx = mProviders.indexOf(prov);
+
+    qDebug() << "---------unloaded" << ICore::self()->pluginController()->pluginInfo(p).name() << idx << prov << p->extensions();
+    if (idx>=0) {
+        beginRemoveRows(QModelIndex(), idx, idx);
+        mProviders.removeAt(idx);
+        endRemoveRows();
+    }
+}
+
+void ProvidersModel::loaded(IPlugin* p)
+{
+    IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
+
+    qDebug() << "++++++++++loaded" << ICore::self()->pluginController()->pluginInfo(p).name() << prov;
+    if (prov && !mProviders.contains(prov)) {
+        beginInsertRows(QModelIndex(), 0, 0);
+        mProviders.append(prov);
+        endInsertRows();
+    }
+}
+
+int ProvidersModel::rowForProvider(IDocumentationProvider* provider) { return mProviders.indexOf(provider); }
+IDocumentationProvider* ProvidersModel::provider(int pos) const { return mProviders[pos]; }
+QList< IDocumentationProvider* > ProvidersModel::providers() { return mProviders; }
+int ProvidersModel::rowCount(const QModelIndex&) const { return mProviders.count(); }
+
