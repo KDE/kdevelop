@@ -127,7 +127,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     
     foreach(IPlugin* p, plugins)
     {
-        IDocumentationProvider *doc=dynamic_cast<IDocumentationProvider*>(p);
+        IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
         Q_ASSERT(doc);
         ret.append(doc);
     }
