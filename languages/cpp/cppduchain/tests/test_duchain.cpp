@@ -4764,6 +4764,44 @@ void TestDUChain::testUses()
 
 }
 
+void TestDUChain::testCtorTypes()
+{
+  QByteArray method(
+    "class A\n"
+    "{\n"
+    "  public:\n"
+    "    A() {}\n"
+    "    A( int ) {}\n"
+    "    A( int* ) {}\n"
+    "    A( int, int ) {}\n"
+    "};\n"
+  );
+  LockedTopDUContext top = parse(method, DumpAll);
+
+  QVector< Declaration* > ctors = top->childContexts().first()->localDeclarations();
+
+  QList< QPair<IndexedType, IndexedString> > encountered;
+  QMap< QPair<IndexedType, IndexedString>, int > encountered2;
+
+  for ( int i = 0; i < ctors.size(); ++i ) {
+    for ( int j = i + 1; j < ctors.size(); ++j ) {
+      kDebug() << "comparing type of " << ctors[i]->toString() << "with" << ctors[j]->toString();
+      QVERIFY(ctors[i]->indexedType() != ctors[j]->indexedType());
+    }
+    QList< Declaration* > decs = top->childContexts().first()->findLocalDeclarations(
+        ctors[i]->identifier(), SimpleCursor::invalid(), 0, ctors[i]->abstractType(), DUContext::OnlyFunctions);
+    QCOMPARE(decs.count(), 1);
+
+    QPair<IndexedType, IndexedString> key = qMakePair(ctors[i]->indexedType(), ctors[i]->identifier().identifier());
+    QVERIFY(!encountered.contains(key));
+    encountered << key;
+
+    // everything works, but this fails:
+    QVERIFY(!encountered2.contains(key));
+    encountered2.insert(key, 0);
+  }
+}
+
 void TestDUChain::testConst()
 {
   {
