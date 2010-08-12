@@ -2034,18 +2034,18 @@ void TestDUChain::testADLFunctionType()
   }
 
   {
-    // not an ADL call - only return type and argument types of f matter
-    QByteArray nonAdlCall("namespace foo { struct A {}; int bar(void *a) {} void f(int a) {}}"
-                          "int test() { bar(&foo::f); }"); 
+    QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} void f(int a) {}}"
+                       "int test() { bar(&foo::f); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 3);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 0);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
   }
 }
 
@@ -2162,6 +2162,107 @@ void TestDUChain::testADLNameAlias()
   }
 }
 
+void TestDUChain::testADLTemplates()
+{
+  {
+    QByteArray adlCall("struct A { };"
+                       "namespace foo { template<class T> struct B { }; template<class T> void bar(T &) {} }"
+                       "int test() { foo::B<A> a; bar(a); }"); // calls foo::bar
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<foo::B<A> >"));
+    QVERIFY(d);    
+    QCOMPARE(d->uses().size(), 1);
+    QCOMPARE(d->uses().begin()->size(), 1);
+  }
+  {
+    QByteArray adlCall("template<class T> struct B { };"
+                       "namespace foo { struct A { }; template<class T> void bar(T &) {} }"
+                       "int test() { B<foo::A> a; bar(a); }"); // calls foo::bar
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::A> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 1);
+    QCOMPARE(d->uses().begin()->size(), 1);
+  }
+  {
+    QByteArray adlCall("template<class T> struct B { };"
+                       "namespace foo { struct A { }; template<class T> void bar(T &) {} }"
+                       "int test() { B<foo::A> a; bar(a); }"); // calls foo::bar
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::A> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 1);
+    QCOMPARE(d->uses().begin()->size(), 1);
+  }
+  {
+    QByteArray adlCall("namespace foo { enum E { value }; template<class T> void bar(T &) {} }"
+                       "template<class T> struct B { };"
+                       "int test() { B<foo::E> a; bar(a); }");
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::E> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 1);
+    QCOMPARE(d->uses().begin()->size(), 1);
+  }
+  {
+    QByteArray nonAdlCall("namespace foo { enum E { value }; template<class T> void bar(T &) {} }"
+                          "template<int I> struct B { };"
+                          "int test() { B<foo::value> a; bar(a); }");
+
+    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::value> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 0);
+  }
+  {
+    QByteArray nonAdlCall("namespace foo { struct A {}; void f(A& a) {} template<class T> void bar(T &) {} }"
+                          "template<void (*I)(foo::A&)> struct B { };"
+                          "int test() { B<&foo::f> a; bar(a); }");
+
+    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<&foo::f> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 0);
+  }
+}
+
+void TestDUChain::testADLTemplateTemplateParameters() {
+  {
+    QByteArray adlCall("namespace foo { struct A {}; template<class T> void bar(T &) {} }"
+                       "struct C : public foo::A { };" // foo::A is associated class of C
+                       "template<class T> struct B { };"
+                       "int test() { B<C> a; bar(a); }"); // in this ADL call
+                        
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<C> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 1);
+    QCOMPARE(d->uses().begin()->size(), 1);
+  }
+  {
+    QByteArray nonAdlCall("namespace foo { struct A {}; template<class T> void bar(T &) {} }"
+                          "template<class T> struct C : public foo::A { };" // foo::A is not an associated class of C ...
+                          "template<template<class U> class T> struct B { };"
+                          "int test() { B<C> a; bar(a); }"); // in this ADL call
+    
+    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<C> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 0);
+  }
+}
 #define V_CHILD_COUNT(context, cnt) QCOMPARE(context->childContexts().count(), cnt)
 #define V_DECLARATION_COUNT(context, cnt) QCOMPARE(context->localDeclarations().count(), cnt)
 

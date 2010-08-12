@@ -88,6 +88,8 @@ private slots:
   void testADLEnumerationType();
   void testADLClassMembers();
   void testADLNameAlias();
+  void testADLTemplates();
+  void testADLTemplateTemplateParameters();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();
