@@ -2,8 +2,8 @@ project( okteta )
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${okteta_SOURCE_DIR}/cmake/modules )
 
-find_package(KDE4 4.3.0 REQUIRED)
-find_package(KDevPlatform 0.9.98 REQUIRED)
+find_package(KDE4 4.5.0 REQUIRED)
+find_package(KDevPlatform 1.0.0 REQUIRED)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR} )
 include_directories( ${okteta_SOURCE_DIR} ${okteta_BINARY_DIR} )
