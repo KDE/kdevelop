@@ -20,6 +20,7 @@
 #include "adlhelper.h"
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/classdeclaration.h>
+#include "templatedeclaration.h"
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -78,12 +79,16 @@ void ADLTypeVisitor::endVisit(const ReferenceType *)
 
 bool ADLTypeVisitor::visit(const FunctionType * type)
 {
+  if (m_helper.m_bTemplateArgs)
+    return false;
+
   return !seen(type);
 }
 
 void ADLTypeVisitor::endVisit(const FunctionType *)
 {
   // return type and argument types are handled by FunctionType::accept0
+  // TODO: process the namespace of the function itself here
 }
 
 bool ADLTypeVisitor::visit(const StructureType * type)
@@ -119,7 +124,7 @@ bool ADLTypeVisitor::seen(const KDevelop::AbstractType* type)
 
 
 ADLHelper::ADLHelper(DUContextPointer context, TopDUContextPointer topContext)
-    : m_context(context), m_topContext(topContext), m_typeVisitor(*this)
+    : m_context(context), m_topContext(topContext), m_typeVisitor(*this), m_bTemplateArgs(false)
 {
 }
 
@@ -147,13 +152,16 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
       }
     case AbstractType::TypeEnumerator:
       {
-        EnumeratorType* specificType = fastCast<EnumeratorType*>(typePtr.unsafeData());
-        if (specificType)
+        if (!m_bTemplateArgs)
         {
-          // use the enumeration context for the enumerator value declaration to find out the namespace
-          Declaration * enumeratorDecl = specificType->declaration(m_topContext.data());
-          DUContext * enumContext = enumeratorDecl->context();
-          addAssociatedNamespace(enumContext->scopeIdentifier(false));
+          EnumeratorType* specificType = fastCast<EnumeratorType*>(typePtr.unsafeData());
+          if (specificType)
+          {
+            // use the enumeration context for the enumerator value declaration to find out the namespace
+            Declaration * enumeratorDecl = specificType->declaration(m_topContext.data());
+            DUContext * enumContext = enumeratorDecl->context();
+            addAssociatedNamespace(enumContext->scopeIdentifier(false));
+          }
         }
         break;
       }
@@ -181,10 +189,50 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
   QList<Declaration*> associatedClasses;
   associatedClasses << declaration;
 
-  QList<Declaration*> baseClasses = computeAllBaseClasses(declaration);
-  associatedClasses << baseClasses;
 
-  // no need to search for parent class, since scopeIdentifier() below skips them anyway
+  /*
+  Here comes the standard, along with my interpretation:
+
+  This works just like for classes or class members:
+    If T is a template-id, its associated namespaces and classes are the namespace in which the template is
+    defined; for member templates, the member template's class;
+
+  This means that if the template's argument T is a type, treat it just like any other function argument
+    the namespaces and classes associated
+    with the types of the template arguments provided for template type parameters (excluding template
+    template parameters);
+
+  If the template's argument T is a template, take just its namespace, and not associated classes or
+  the namespaces associated with its own arguments.
+    the namespaces in which any template template arguments are defined; and the
+    classes in which any member templates used as template template arguments are defined.
+
+  This means we need to skip enumeration values (not type!), function types, integral types etc
+  when we are processing template arguments
+    [Note: non-
+    type template arguments do not contribute to the set of associated namespaces. ]
+  */
+
+  TemplateDeclaration * templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
+  if (!m_bTemplateArgs || (m_bTemplateArgs && !templateDecl))
+  {
+    QList<Declaration*> baseClasses = computeAllBaseClasses(declaration);
+    associatedClasses << baseClasses;
+  }
+
+  if (!m_bTemplateArgs && templateDecl)
+  {
+    m_bTemplateArgs = true;
+    const InstantiationInformation& instantiationInfo = templateDecl->instantiatedWith().information();
+    for (unsigned int i = 0, n = instantiationInfo.templateParametersSize(); i < n; ++i)
+    {
+      const IndexedType & rType = instantiationInfo.templateParameters()[i];
+      addArgumentType(rType.abstractType());
+    }
+    m_bTemplateArgs = false;
+  }
+
+  // no need to search for container classes, since scopeIdentifier() below skips them anyway
 
   foreach(Declaration * decl, associatedClasses)
   {

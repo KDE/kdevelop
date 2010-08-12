@@ -128,6 +128,9 @@ class ADLHelper
 
     friend class ADLTypeVisitor;
     ADLTypeVisitor m_typeVisitor;
+
+    /** @brief Flags processing of the arguments of a template type. */
+    bool m_bTemplateArgs;
 };
 
 }
