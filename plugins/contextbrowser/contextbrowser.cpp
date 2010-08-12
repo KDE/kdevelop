@@ -57,6 +57,7 @@
 #include "contextbrowserview.h"
 #include <language/duchain/uses.h>
 #include <language/duchain/specializationstore.h>
+#include <language/duchain/aliasdeclaration.h>
 #include <language/util/navigationtooltip.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/interfaces/iquickopen.h>
@@ -343,7 +344,12 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     
     if(!navigationWidget) {
       Declaration* decl = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(viewUrl, SimpleCursor(position)) );
-      
+      if (decl && decl->kind() == Declaration::Alias) {
+        AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
+        Q_ASSERT(alias);
+        DUChainReadLocker lock;
+        decl = alias->aliasedDeclaration().declaration();
+      }
       if(decl) {
         if(m_currentToolTipDeclaration == IndexedDeclaration(decl) && m_currentToolTip)
           return;
@@ -555,6 +561,12 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const SimpleCurso
       }else{
         //If we haven't found a special language object, search for a use/declaration and eventually highlight it
         foundDeclaration = DUChainUtils::declarationForDefinition( DUChainUtils::itemUnderCursor(view->document()->url(), position) );
+        if (foundDeclaration && foundDeclaration->kind() == Declaration::Alias) {
+          AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(foundDeclaration);
+          Q_ASSERT(alias);
+          DUChainReadLocker lock;
+          foundDeclaration = alias->aliasedDeclaration().declaration();
+        }
       }
       return foundDeclaration;
 }
@@ -913,12 +925,19 @@ void ContextBrowserPlugin::switchUse(bool forward)
         if(decl)
           break;
       }
-      
+
       if(!decl) //Try finding a declaration under the cursor
         decl = DUChainUtils::itemUnderCursor(doc->url(), c);
-      
+
+      if (decl && decl->kind() == Declaration::Alias) {
+        AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
+        Q_ASSERT(alias);
+        DUChainReadLocker lock;
+        decl = alias->aliasedDeclaration().declaration();
+      }
+
       if(decl) {
-        
+
         Declaration* target = 0;
         if(forward)
           //Try jumping from definition to declaration
