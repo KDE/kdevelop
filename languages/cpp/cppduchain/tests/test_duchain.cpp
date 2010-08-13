@@ -2085,7 +2085,7 @@ void TestDUChain::testADLEnumerationType()
 void TestDUChain::testADLClassMembers()
 {
   {
-    QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void *) {} }"
+    QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void (A::*p)()) {} }"
                        "int test() { bar(&foo::A::mem_fun); }"); // calls foo::bar
     
     LockedTopDUContext top( parse(adlCall, DumpAll) );
@@ -2098,9 +2098,8 @@ void TestDUChain::testADLClassMembers()
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
   }
-    
   {
-    QByteArray adlCall("namespace foo { struct A { int member; }; void bar(void *) {} }"
+    QByteArray adlCall("namespace foo { struct A { int member; }; void bar(int A::*p) {} }"
                        "int test() { bar(&foo::A::member); }"); // calls foo::bar
     
     LockedTopDUContext top( parse(adlCall, DumpAll) );
@@ -2162,7 +2161,7 @@ void TestDUChain::testADLNameAlias()
   }
 }
 
-void TestDUChain::testADLTemplates()
+void TestDUChain::testADLTemplateArguments()
 {
   {
     QByteArray adlCall("struct A { };"
@@ -2184,6 +2183,18 @@ void TestDUChain::testADLTemplates()
     LockedTopDUContext top( parse(adlCall, DumpAll) );
 
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::A> >"));
+    QVERIFY(d);
+    QCOMPARE(d->uses().size(), 1);
+    QCOMPARE(d->uses().begin()->size(), 1);
+  }
+  {
+    QByteArray adlCall("template<class T> struct B { };"
+                       "namespace foo { struct A { }; template<class T> void bar(T &) {} }"
+                       "int test() { B<B<foo::A> > a; bar(a); }"); // calls foo::bar
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<B<foo::A> > >"));
     QVERIFY(d);
     QCOMPARE(d->uses().size(), 1);
     QCOMPARE(d->uses().begin()->size(), 1);
@@ -2236,7 +2247,7 @@ void TestDUChain::testADLTemplates()
   }
 }
 
-void TestDUChain::testADLTemplateTemplateParameters() {
+void TestDUChain::testADLTemplateTemplateArguments() {
   {
     QByteArray adlCall("namespace foo { struct A {}; template<class T> void bar(T &) {} }"
                        "struct C : public foo::A { };" // foo::A is associated class of C
