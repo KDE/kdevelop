@@ -46,8 +46,8 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     
     m_ui = new Ui::BranchDialogBase;
     QWidget* w = new QWidget(this);
-    setMainWidget(w);
     m_ui->setupUi(w);
+    setMainWidget(w);
 
     m_model = new BranchesListModel(d, repo, this);
     m_ui->branchView->setModel(m_model);
@@ -138,7 +138,7 @@ class BranchItem : public QStandardItem
         
         void setData(const QVariant& value, int role = Qt::UserRole + 1)
         {
-            if(role==Qt::EditRole) {
+            if(role==Qt::EditRole && value.toString()!=text()) {
                 QString newBranch = value.toString();
                 
                 BranchesListModel* bmodel = qobject_cast<BranchesListModel*>(model());
@@ -154,9 +154,12 @@ class BranchItem : public QStandardItem
                 if (ret == KMessageBox::Yes ) {
                     KDevelop::VcsJob *branchJob = bmodel->dvcsPlugin()->branch(bmodel->repository(), newBranch, text(), QStringList("-m"));
 
-                    kDebug() << "Renaming " << text() << " to " << newBranch;
-                    if(branchJob->exec())
+                    bool ret = branchJob->exec();
+                    kDebug() << "Renaming " << text() << " to " << newBranch << ':' << ret;
+                    if(ret) {
                         setText(newBranch);
+                        QStandardItem::setData(value, Qt::DisplayRole);
+                    }
                 }
             }
         }
