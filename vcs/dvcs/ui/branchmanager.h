@@ -69,6 +69,10 @@ class BranchesListModel : public QStandardItemModel
         
         KDevelop::DistributedVersionControlPlugin* dvcsPlugin() const { return dvcsplugin; }
         QString repository() const { return repo; }
+        
+    public slots:
+        void resetCurrent();
+        
     private:
         KDevelop::DistributedVersionControlPlugin* dvcsplugin;
         QString repo;

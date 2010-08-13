@@ -224,8 +224,9 @@ void DistributedVersionControlPlugin::ctxBranchManager()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
-    BranchManager * branchManager = new BranchManager(ctxUrlList.front().toLocalFile(), this, core()->uiController()->activeMainWindow());
-    branchManager->show();
+    
+    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
+    branchManager.exec();
 }
 
 void DistributedVersionControlPlugin::ctxRevHistory()
