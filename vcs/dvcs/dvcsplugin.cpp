@@ -232,12 +232,16 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());
+    
+    KDialog d;
 
     CommitLogModel* model = new CommitLogModel(getAllCommits(ctxUrlList.front().toLocalFile()));
-    CommitView *revTree = new CommitView;
+    CommitView *revTree = new CommitView(&d);
     revTree->setModel(model);
 
-    emit addNewTabToMainView(revTree, i18n("Revision History"));
+    d.setButtons(KDialog::Close);
+    d.setMainWidget(revTree);
+    d.exec();
 }
 
 void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
