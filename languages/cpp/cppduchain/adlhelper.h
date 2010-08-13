@@ -129,8 +129,14 @@ class ADLHelper
     friend class ADLTypeVisitor;
     ADLTypeVisitor m_typeVisitor;
 
-    /** @brief Flags processing of the arguments of a template type. */
-    bool m_bTemplateArgs;
+    /**
+     * @brief Flags processing of the arguments of a template type.
+     *
+     * If equal to 0, we are processing the function call arguments.
+     * If greater than 0, we are processing template arguments of one of the function call arguments.
+     * The value itself represents the instantiation depth of template arguments.
+     */
+    int m_templateArgsDepth;
 };
 
 }

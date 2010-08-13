@@ -16,7 +16,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "adlhelper.h"
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/classdeclaration.h>
@@ -31,6 +30,8 @@ ADLTypeVisitor::ADLTypeVisitor(ADLHelper & helper) : m_helper(helper)
 
 bool ADLTypeVisitor::preVisit(const AbstractType * type)
 {
+//  kDebug() << "ADL type: " << type->toString();
+
   // the following types are of no interest to ADL
   switch (type->whichType())
   {
@@ -79,7 +80,7 @@ void ADLTypeVisitor::endVisit(const ReferenceType *)
 
 bool ADLTypeVisitor::visit(const FunctionType * type)
 {
-  if (m_helper.m_bTemplateArgs)
+  if (m_helper.m_templateArgsDepth > 0)
     return false;
 
   return !seen(type);
@@ -124,7 +125,7 @@ bool ADLTypeVisitor::seen(const KDevelop::AbstractType* type)
 
 
 ADLHelper::ADLHelper(DUContextPointer context, TopDUContextPointer topContext)
-    : m_context(context), m_topContext(topContext), m_typeVisitor(*this), m_bTemplateArgs(false)
+    : m_context(context), m_topContext(topContext), m_typeVisitor(*this), m_templateArgsDepth(0)
 {
 }
 
@@ -152,7 +153,7 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
       }
     case AbstractType::TypeEnumerator:
       {
-        if (!m_bTemplateArgs)
+        if (m_templateArgsDepth == 0)
         {
           EnumeratorType* specificType = fastCast<EnumeratorType*>(typePtr.unsafeData());
           if (specificType)
@@ -182,7 +183,7 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
     return;
 
   // from the standard:
-  // Typedef names and using-declarations used to specify the types do not contribute to this set.
+  // Typedef names and using-declarations used to specify types do not contribute to this set.
   if (declaration->isTypeAlias())
     return;
 
@@ -191,13 +192,15 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
 
 
   /*
-  Here comes the standard, along with my interpretation:
+  Here comes the standard on template ADL, along with my interpretation:
 
   This works just like for classes or class members:
     If T is a template-id, its associated namespaces and classes are the namespace in which the template is
     defined; for member templates, the member template's class;
 
-  This means that if the template's argument T is a type, treat it just like any other function argument
+  This means that if the template's argument T is a type, treat it just like any other function argument.
+  GCC seems to include fully instantiated templates (which are a type indeed) here, so I followed the same
+  interpretation.
     the namespaces and classes associated
     with the types of the template arguments provided for template type parameters (excluding template
     template parameters);
@@ -207,29 +210,32 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
     the namespaces in which any template template arguments are defined; and the
     classes in which any member templates used as template template arguments are defined.
 
-  This means we need to skip enumeration values (not type!), function types, integral types etc
-  when we are processing template arguments
+  This means when we are processing template arguments we need to skip numeric template arguments,
+  i.e. enumeration values (not types!), function pointers, integral values etc
     [Note: non-
     type template arguments do not contribute to the set of associated namespaces. ]
   */
 
   TemplateDeclaration * templateDecl = dynamic_cast<TemplateDeclaration*>(declaration);
-  if (!m_bTemplateArgs || (m_bTemplateArgs && !templateDecl))
+  bool isFunctionArg = (m_templateArgsDepth == 0);
+  bool isTemplateClassArg = (m_templateArgsDepth > 0 && !templateDecl);
+  bool isTemplateTemplateArg = (templateDecl ? (templateDecl->instantiatedFrom() == NULL) : false);
+  if (isFunctionArg || (isTemplateClassArg && !isTemplateTemplateArg))
   {
     QList<Declaration*> baseClasses = computeAllBaseClasses(declaration);
     associatedClasses << baseClasses;
   }
 
-  if (!m_bTemplateArgs && templateDecl)
+  if (templateDecl && !isTemplateTemplateArg)
   {
-    m_bTemplateArgs = true;
+    m_templateArgsDepth++;
     const InstantiationInformation& instantiationInfo = templateDecl->instantiatedWith().information();
     for (unsigned int i = 0, n = instantiationInfo.templateParametersSize(); i < n; ++i)
     {
       const IndexedType & rType = instantiationInfo.templateParameters()[i];
       addArgumentType(rType.abstractType());
     }
-    m_bTemplateArgs = false;
+    m_templateArgsDepth--;
   }
 
   // no need to search for container classes, since scopeIdentifier() below skips them anyway
