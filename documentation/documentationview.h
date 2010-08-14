@@ -25,7 +25,10 @@
 #include <interfaces/idocumentation.h>
 #include "documentationexport.h"
 
-namespace KDevelop { class IPlugin; }
+namespace KDevelop {
+    class IPlugin;
+    class DocumentationFindWidget;
+}
 
 class QModelIndex;
 class KLineEdit;
@@ -56,11 +59,13 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
         KToolBar* mActions;
         QAction* mForward;
         QAction* mBack;
+        QAction* mFind;
         KLineEdit* mIdentifiers;
         QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
         QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
         QComboBox* mProviders;
         ProvidersModel* mProvidersModel;
+        KDevelop::DocumentationFindWidget* mFindDoc;
 };
 
 class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListModel
@@ -71,7 +76,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListMode
         ProvidersModel(QObject* parent = 0);
         
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-        virtual int rowCount(const QModelIndex&) const;
+        virtual int rowCount(const QModelIndex& idx = QModelIndex()) const;
         QList<KDevelop::IDocumentationProvider*> providers();
         KDevelop::IDocumentationProvider* provider(int pos) const;
         int rowForProvider(KDevelop::IDocumentationProvider* provider);

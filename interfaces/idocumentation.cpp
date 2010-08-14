@@ -26,7 +26,7 @@ namespace KDevelop
 IDocumentation::~IDocumentation()
 {}
 
-QWidget* IDocumentation::documentationWidget(QWidget* parent)
+QWidget* IDocumentation::documentationWidget(DocumentationFindWidget* findWidget, QWidget* parent)
 {
     QTextBrowser* widget=new QTextBrowser(parent);
     widget->setReadOnly(true);

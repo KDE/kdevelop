@@ -33,6 +33,7 @@
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include "documentationfindwidget.h"
 
 using namespace KDevelop;
 
@@ -43,11 +44,16 @@ DocumentationView::DocumentationView(QWidget* parent)
     setLayout(new QVBoxLayout(this));
     layout()->setMargin(0);
     layout()->setSpacing(0);
+    
     mActions=new KToolBar(this);
     mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    layout()->addWidget(mActions);
+    
+    mFindDoc = new DocumentationFindWidget;
+    mFindDoc->hide();
+    
     mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
+    mFind=mActions->addAction(KIcon("edit-find"), i18n("Find"), mFindDoc, SLOT(show()));
     mActions->addSeparator();
     mActions->addAction(KIcon("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);
@@ -80,7 +86,11 @@ DocumentationView::DocumentationView(QWidget* parent)
     connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
     mCurrent=mHistory.end();
     
-    if(mProvidersModel->rowCount(QModelIndex())>0)
+    layout()->addWidget(mActions);
+    layout()->addWidget(new QWidget(this));
+    layout()->addWidget(mFindDoc);
+    
+    if(mProvidersModel->rowCount()>0)
         changedProvider(0);
 }
 
@@ -157,15 +167,22 @@ void DocumentationView::updateView()
     mIdentifiers->setText((*mCurrent)->name());
     
     QLayoutItem* lastview=layout()->takeAt(1);
-    if(lastview && lastview->widget()->parent()==this)
+    Q_ASSERT(lastview);
+    
+    if(lastview->widget()->parent()==this)
         lastview->widget()->deleteLater();
     
     delete lastview;
     
-    QWidget* w=(*mCurrent)->documentationWidget(this);
+    mFindDoc->setEnabled(false);
+    QWidget* w=(*mCurrent)->documentationWidget(mFindDoc, this);
     Q_ASSERT(w);
     
+    mFind->setEnabled(mFindDoc->isEnabled());
+    
+    QLayoutItem* findW=layout()->takeAt(1);
     layout()->addWidget(w);
+    layout()->addItem(findW);
 }
 
 void DocumentationView::changedProvider(int row)
@@ -188,7 +205,6 @@ ProvidersModel::ProvidersModel(QObject* parent)
 
 QVariant ProvidersModel::data(const QModelIndex& index, int role) const
 {
-    qDebug() << "peppepepepe" << index;
     QVariant ret;
     switch (role)
     {
