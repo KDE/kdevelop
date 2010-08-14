@@ -68,6 +68,7 @@ set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
 set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
 set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
 set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
+set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES kdevplatformdocumentation)
 
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
