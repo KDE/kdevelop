@@ -83,7 +83,8 @@ kde4_add_plugin( kdevcmakedocumentation ${cmakedoc_SRCS} )
 target_link_libraries( kdevcmakedocumentation
                         ${KDEVPLATFORM_INTERFACES_LIBRARIES} kdev4cmakecommon
                         ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
-                        ${KDE4_KTEXTEDITOR_LIBS})
+                        ${KDEVPLATFORM_DOCUMENTATION_LIBRARIES}
+                        ${KDE4_KTEXTEDITOR_LIBS} ${QT_QTWEBKIT_LIBRARY})
 
 kde4_add_kcfg_files( cmakesettings_SRCS cmakeconfig.kcfgc )
 kde4_add_ui_files( cmakesettings_SRCS ${cmakesettings_UI} )

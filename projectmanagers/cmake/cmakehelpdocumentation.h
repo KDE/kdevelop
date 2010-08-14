@@ -46,8 +46,8 @@ class CMakeHomeDocumentation : public KDevelop::IDocumentation
         virtual KDevelop::IDocumentationProvider* provider() const;
         virtual QString name() const;
         virtual QString description() const { return name(); }
-        
-        virtual QWidget* documentationWidget(QWidget* parent = 0);
+
+        virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
 };
 
 #endif

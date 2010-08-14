@@ -31,8 +31,9 @@ class CMakeDoc : public KDevelop::IDocumentation
         
         virtual QString description() const { return mDesc; }
         virtual QString name() const { return mName; }
-        virtual bool providesWidget() const { return false; }
         virtual KDevelop::IDocumentationProvider* provider() const;
+        
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
         
         static CMakeDocumentation* s_provider;
         

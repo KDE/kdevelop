@@ -47,7 +47,7 @@ KDevelop::IDocumentationProvider* CMakeHomeDocumentation::provider() const
     return CMakeDoc::s_provider;
 }
 
-QWidget* CMakeHomeDocumentation::documentationWidget(QWidget* parent)
+QWidget* CMakeHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget*, QWidget* parent)
 {
     QTreeView* contents=new QTreeView(parent);
     contents->header()->setVisible(false);

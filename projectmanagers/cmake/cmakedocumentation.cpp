@@ -23,20 +23,21 @@
 #include <KDebug>
 #include <QString>
 #include <QTextDocument>
-#include <language/duchain/declaration.h>
-#include <interfaces/iplugincontroller.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/icore.h>
-#include <kmimetype.h>
-#include "cmakemanager.h"
-#include <cmakeparserutils.h>
 #include <QStringListModel>
 #include <interfaces/iproject.h>
 #include <KStandardDirs>
 #include <KIcon>
+#include <KGlobalSettings>
+#include <KMimeType>
+#include <documentation/standarddocumentationview.h>
+#include <language/duchain/declaration.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/icore.h>
+#include "cmakemanager.h"
+#include "cmakeparserutils.h"
 #include "cmakehelpdocumentation.h"
 #include "cmakedoc.h"
-#include <QTimer>
 
 K_PLUGIN_FACTORY(CMakeSupportDocFactory, registerPlugin<CMakeDocumentation>(); )
 K_EXPORT_PLUGIN(CMakeSupportDocFactory(KAboutData("kdevcmakedocumentation","kdevcmakedocumentation", ki18n("CMake Documentation"), "1.0", ki18n("Support for CMake documentation"), KAboutData::License_GPL)))
@@ -170,7 +171,15 @@ void CMakeDocumentation::initializeModel() const
     if(!m_typeForName.isEmpty())
         return;
     
-    QMetaObject::invokeMethod(const_cast<CMakeDocumentation*>(this), SLOT(delayedInitialization()), Qt::DirectConnection);
-//     QTimer::singleShot(0, const_cast<CMakeDocumentation*>(this), SLOT(delayedInitialization()));
-//     delayedInitialization();
+    QMetaObject::invokeMethod(const_cast<CMakeDocumentation*>(this), "delayedInitialization", Qt::QueuedConnection);
+}
+
+//////////CMakeDoc
+
+QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
+{
+    KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
+    view->setFont(KGlobalSettings::fixedFont());
+    view->setHtml("<html><body><code>"+description()+"</code></body></html>");
+    return view;
 }
