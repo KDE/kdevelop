@@ -34,7 +34,6 @@ set(kdevplatformshell_LIB_SRCS
     projectinfopage.cpp
     selectioncontroller.cpp
     documentationcontroller.cpp
-    documentationview.cpp
     debugcontroller.cpp
     launchconfiguration.cpp
     launchconfigurationdialog.cpp
@@ -103,7 +102,8 @@ target_link_libraries(kdevplatformshell
         sublime
         kdevplatformutil
         kdevplatformoutputview
-        kdevplatformdebugger)
+        kdevplatformdebugger
+        kdevplatformdocumentation)
 # need to add kdevplatform* once those are exported targets
 target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES
         ${KDE4_KDEUI_LIBS}

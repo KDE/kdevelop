@@ -164,6 +164,7 @@ void DocumentationView::updateView()
     
     QWidget* w=(*mCurrent)->documentationWidget(this);
     Q_ASSERT(w);
+    
     layout()->addWidget(w);
 }
 

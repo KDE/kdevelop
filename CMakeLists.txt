@@ -80,6 +80,7 @@ add_subdirectory(vcs)
 add_subdirectory(pics)
 #macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
+add_subdirectory(documentation)
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

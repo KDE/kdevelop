@@ -28,11 +28,11 @@
 #include <KDebug>
 #include <QAction>
 
-#include "documentationview.h"
-#include <language/interfaces/codecontext.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/interfaces/codecontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <documentation/documentationview.h>
 
 using namespace KDevelop;
 

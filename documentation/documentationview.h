@@ -23,6 +23,7 @@
 #include <QAbstractListModel>
 #include <KToolBar>
 #include <interfaces/idocumentation.h>
+#include "documentationexport.h"
 
 namespace KDevelop { class IPlugin; }
 
@@ -31,7 +32,7 @@ class KLineEdit;
 class ProvidersModel;
 class QComboBox;
 
-class DocumentationView : public QWidget
+class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 {
     Q_OBJECT
     public:
@@ -62,7 +63,7 @@ class DocumentationView : public QWidget
         ProvidersModel* mProvidersModel;
 };
 
-class ProvidersModel : public QAbstractListModel
+class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListModel
 {
     Q_OBJECT
     public:
