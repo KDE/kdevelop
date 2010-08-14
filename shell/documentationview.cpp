@@ -208,7 +208,6 @@ void ProvidersModel::unloaded(KDevelop::IPlugin* p)
     if (prov)
         idx = mProviders.indexOf(prov);
 
-    qDebug() << "---------unloaded" << ICore::self()->pluginController()->pluginInfo(p).name() << idx << prov << p->extensions();
     if (idx>=0) {
         beginRemoveRows(QModelIndex(), idx, idx);
         mProviders.removeAt(idx);
@@ -220,7 +219,6 @@ void ProvidersModel::loaded(IPlugin* p)
 {
     IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
 
-    qDebug() << "++++++++++loaded" << ICore::self()->pluginController()->pluginInfo(p).name() << prov;
     if (prov && !mProviders.contains(prov)) {
         beginInsertRows(QModelIndex(), 0, 0);
         mProviders.append(prov);
