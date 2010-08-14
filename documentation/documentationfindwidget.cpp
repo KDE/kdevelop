@@ -20,6 +20,7 @@
 
 #include "documentationfindwidget.h"
 #include "ui_documentationfindwidget.h"
+#include <QDebug>
 
 using namespace KDevelop;
 
@@ -30,11 +31,39 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
     m_ui->setupUi(this);
     
     m_ui->hideButton->setIcon(KIcon("dialog-close"));
-    m_ui->nextButton->setIcon(KIcon("go-next"));
-    m_ui->previousButton->setIcon(KIcon("go-previous"));
+    m_ui->nextButton->setIcon(KIcon("go-down-search"));
+    m_ui->previousButton->setIcon(KIcon("go-up-search"));
+    
+    connect(m_ui->findText, SIGNAL(returnPressed(QString)), SLOT(searchNext()));
+    connect(m_ui->nextButton, SIGNAL(clicked(bool)), SLOT(searchNext()));
+    connect(m_ui->previousButton, SIGNAL(clicked(bool)), SLOT(searchPrevious()));
 }
 
 DocumentationFindWidget::~DocumentationFindWidget()
 {
     delete m_ui;
+}
+
+void KDevelop::DocumentationFindWidget::searchNext()
+{
+    FindOptions opts=Next;
+    if(m_ui->matchCase->checkState()==Qt::Checked)
+        opts |= MatchCase;
+    
+    emit newSearch(m_ui->findText->text(), opts);
+}
+
+void KDevelop::DocumentationFindWidget::searchPrevious()
+{
+    FindOptions opts=Previous;
+    if(m_ui->matchCase->checkState()==Qt::Checked)
+        opts |= MatchCase;
+    
+    emit newSearch(m_ui->findText->text(), opts);
+}
+
+void KDevelop::DocumentationFindWidget::showEvent(QShowEvent* e)
+{
+    m_ui->findText->setFocus();
+    QWidget::showEvent(e);
 }

@@ -18,43 +18,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef DOCUMENTATIONFINDWIDGET_H
-#define DOCUMENTATIONFINDWIDGET_H
+#ifndef STANDARDDOCUMENTATIONVIEW_H
+#define STANDARDDOCUMENTATIONVIEW_H
 
-#include <QWidget>
+#include <QWebView>
 #include "documentationexport.h"
+#include "documentationfindwidget.h"
 
-namespace Ui { class FindWidget; }
 namespace KDevelop
 {
-    
-class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
+
+class KDEVPLATFORMDOCUMENTATION_EXPORT StandardDocumentationView : public QWebView
 {
     Q_OBJECT
     public:
-        enum FindOption {
-            Next = 1,
-            Previous = 2,
-            MatchCase = 4
-        };
-        Q_DECLARE_FLAGS(FindOptions, FindOption);
-        
-        explicit DocumentationFindWidget(QWidget* parent = 0);
-        virtual ~DocumentationFindWidget();
-        
-        virtual void showEvent ( QShowEvent* );
-        
-    private Q_SLOTS:
-        void searchNext();
-        void searchPrevious();
-        
-    Q_SIGNALS:
-        void newSearch(const QString& text, KDevelop::DocumentationFindWidget::FindOptions);
+        explicit StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent = 0 );
 
-    private:
-        Ui::FindWidget* m_ui;
+    public slots:
+        void search(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
 };
 
 }
-
-#endif // DOCUMENTATIONFINDWIDGET_H
+#endif // STANDARDDOCUMENTATIONVIEW_H

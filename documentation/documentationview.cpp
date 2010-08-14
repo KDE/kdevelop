@@ -179,6 +179,8 @@ void DocumentationView::updateView()
     Q_ASSERT(w);
     
     mFind->setEnabled(mFindDoc->isEnabled());
+    if(!mFindDoc->isEnabled())
+        mFindDoc->hide();
     
     QLayoutItem* findW=layout()->takeAt(1);
     layout()->addWidget(w);
