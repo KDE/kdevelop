@@ -41,8 +41,8 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         virtual QString name() const { return m_name; }
         
         virtual QString description() const;
-        
-        virtual QWidget* documentationWidget(QWidget* parent);
+
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent);
         
         virtual KDevelop::IDocumentationProvider* provider() const;
         QMap<QString, QUrl> info() const { return m_info; }
@@ -62,7 +62,7 @@ class HomeDocumentation : public QObject, public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        virtual QWidget* documentationWidget(QWidget* parent = 0);
+        virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
         virtual QString description() const { return QString(); }
         virtual QString name() const;
         virtual KDevelop::IDocumentationProvider* provider() const;
