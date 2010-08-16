@@ -130,6 +130,15 @@ QSet<IndexedString> openFiles()
 }
 }
 
+bool sortProjectFiles(const ProjectFile& left, const ProjectFile& right)
+{
+    // arbitrarily sort projects (fast)
+    if ( left.m_project != right.m_project ) {
+        return left.m_project < right.m_project;
+    }
+    return left.m_url.byteArray() < right.m_url.byteArray();
+}
+
 void ProjectFileDataProvider::reset() {
   Base::clearFilter();
   QList<ProjectFile> projectFiles;
@@ -148,6 +157,8 @@ void ProjectFileDataProvider::reset() {
       projectFiles << f;
     }
   }
+
+  qSort(projectFiles.begin(), projectFiles.end(), sortProjectFiles);
 
   setItems(projectFiles);
 }
@@ -204,6 +215,8 @@ void OpenFilesDataProvider::reset()
     }
     currentFiles << f;
   }
+
+  qSort(currentFiles.begin(), currentFiles.end(), sortProjectFiles);
 
   setItems(currentFiles);
 }

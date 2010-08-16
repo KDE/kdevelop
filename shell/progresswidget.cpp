@@ -116,7 +116,7 @@ void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
     delete mBusyTimer;
     mBusyTimer = 0;
     mDelayTimer->setSingleShot( true );
-    mDelayTimer->start( 1000 );
+    mDelayTimer->start( 500 );
   }
   else { // N items
     if ( !mBusyTimer ) {
@@ -124,7 +124,7 @@ void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
       connect( mBusyTimer, SIGNAL( timeout() ),
                this, SLOT( slotBusyIndicator() ) );
       mDelayTimer->setSingleShot( true );
-      mDelayTimer->start( 1000 );
+      mDelayTimer->start( 500 );
     }
   }
 }
@@ -199,7 +199,6 @@ void StatusbarProgressWidget::slotBusyIndicator()
 void StatusbarProgressWidget::slotProgressItemProgress( ProgressItem *item, unsigned int value )
 {
   Q_ASSERT( item == mCurrentItem ); // the only one we should be connected to
-  show();
   if( item->busy() ) {
     m_pProgressBar->setMaximum( 0 );
   } else {

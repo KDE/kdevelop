@@ -51,6 +51,8 @@ using namespace KTextEditor;
 
 static const float highlightingZDepth = -500;
 
+#define ifDebug(x)
+
 namespace KDevelop {
 
 ///@todo Don't highlighting everything, only what is visible on-demand

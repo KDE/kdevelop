@@ -73,6 +73,16 @@
       </spacer>
      </item>
      <item>
+      <widget class="QToolButton" name="exportReview">
+       <property name="text">
+        <string>Export Diff...</string>
+       </property>
+       <property name="popupMode">
+        <enum>QToolButton::InstantPopup</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="cancelReview">
        <property name="text">
         <string>Cancel Review</string>

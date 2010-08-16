@@ -17,6 +17,8 @@
 #define KDEV_VARIABLEWIDGET_H
 
 #include <QTreeView>
+#include <QAction>
+#include <QSignalMapper>
 
 #include <KComboBox>
 
@@ -31,7 +33,7 @@ class KHistoryComboBox;
 namespace KDevelop
 {
 
-class DebugController;
+class IDebugController;
 
 class VariableTree;
 class AbstractVariableItem;
@@ -41,7 +43,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT VariableWidget : public QWidget
     Q_OBJECT
 
 public:
-    VariableWidget( DebugController *controller, QWidget *parent=0 );
+    VariableWidget( IDebugController *controller, QWidget *parent=0 );
 
 Q_SIGNALS:
     void requestRaise();
@@ -70,7 +72,7 @@ class VariableTree : public KDevelop::AsyncTreeView
 {
     Q_OBJECT
 public:
-    VariableTree(DebugController *controller, VariableWidget *parent);
+    VariableTree(IDebugController *controller, VariableWidget *parent);
     virtual ~VariableTree();
 
     VariableCollection* collection() const;
@@ -78,9 +80,12 @@ public:
 private:
     void setupActions();
     virtual void contextMenuEvent(QContextMenuEvent* event);
+    Variable *selectedVariable() const;
 
 private slots:
-    void deleteWatch();
+    void changeVariableFormat(int);
+    void watchDelete();
+    void copyVariableValue();
 
 #if 0
 Q_SIGNALS:
@@ -102,7 +107,11 @@ private: // helper functions
     QAction* toggleWatch_;
 #endif
 private:
+    QAction *m_contextMenuTitle;
+    QMenu *m_formatMenu;
     QAction *m_watchDelete;
+    QAction *m_copyVariableValue;
+    QSignalMapper *m_signalMapper;
 };
 
 }

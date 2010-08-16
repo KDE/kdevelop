@@ -20,15 +20,22 @@
 #define DOCUMENTATIONVIEW_H
 
 #include <QWidget>
+#include <QAbstractListModel>
 #include <KToolBar>
 #include <interfaces/idocumentation.h>
+#include "documentationexport.h"
+
+namespace KDevelop {
+    class IPlugin;
+    class DocumentationFindWidget;
+}
 
 class QModelIndex;
 class KLineEdit;
 class ProvidersModel;
 class QComboBox;
 
-class DocumentationView : public QWidget
+class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 {
     Q_OBJECT
     public:
@@ -52,11 +59,34 @@ class DocumentationView : public QWidget
         KToolBar* mActions;
         QAction* mForward;
         QAction* mBack;
+        QAction* mFind;
         KLineEdit* mIdentifiers;
         QList< KSharedPtr< KDevelop::IDocumentation > > mHistory;
         QList< KSharedPtr< KDevelop::IDocumentation > >::iterator mCurrent;
         QComboBox* mProviders;
         ProvidersModel* mProvidersModel;
+        KDevelop::DocumentationFindWidget* mFindDoc;
+};
+
+class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListModel
+{
+    Q_OBJECT
+    public:
+        
+        ProvidersModel(QObject* parent = 0);
+        
+        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+        virtual int rowCount(const QModelIndex& idx = QModelIndex()) const;
+        QList<KDevelop::IDocumentationProvider*> providers();
+        KDevelop::IDocumentationProvider* provider(int pos) const;
+        int rowForProvider(KDevelop::IDocumentationProvider* provider);
+        
+    public slots:
+        void unloaded(KDevelop::IPlugin* p);
+        void loaded(KDevelop::IPlugin* p);
+        
+    private:
+        QList<KDevelop::IDocumentationProvider*> mProviders;
 };
 
 #endif // DOCUMENTATIONVIEW_H

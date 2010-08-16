@@ -31,7 +31,7 @@ class QTableView;
 class QMenu;
 
 namespace KDevelop {
-class DebugController;
+class IDebugController;
 class Breakpoint;
 class BreakpointDetails;
 
@@ -39,7 +39,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointWidget : public QWidget
 {
     Q_OBJECT
 public:
-    BreakpointWidget(DebugController *controller, QWidget *parent);
+    BreakpointWidget(IDebugController *controller, QWidget *parent);
  
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
@@ -73,7 +73,7 @@ private:
     BreakpointDetails* details_;
     QMenu* popup_;
     bool firstShow_;
-    DebugController *m_debugController;
+    IDebugController *m_debugController;
     QAction* breakpointDisableAll_;
     QAction* breakpointEnableAll_;
     QAction* breakpointRemoveAll_;

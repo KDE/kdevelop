@@ -226,8 +226,9 @@ void DistributedVersionControlPlugin::ctxBranchManager()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
-    BranchManager * branchManager = new BranchManager(ctxUrlList.front().toLocalFile(), this, core()->uiController()->activeMainWindow());
-    branchManager->show();
+    
+    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
+    branchManager.exec();
 }
 
 // This is redundant with the normal VCS "history" action
@@ -236,12 +237,16 @@ void DistributedVersionControlPlugin::ctxRevHistory()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());
+    
+    KDialog d;
 
     CommitLogModel* model = new CommitLogModel(getAllCommits(ctxUrlList.front().toLocalFile()));
-    CommitView *revTree = new CommitView;
+    CommitView *revTree = new CommitView(&d);
     revTree->setModel(model);
 
-    emit addNewTabToMainView(revTree, i18n("Revision History"));
+    d.setButtons(KDialog::Close);
+    d.setMainWidget(revTree);
+    d.exec();
 }
 #endif
 

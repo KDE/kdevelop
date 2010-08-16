@@ -28,11 +28,11 @@
 #include <KDebug>
 #include <QAction>
 
-#include "documentationview.h"
-#include <language/interfaces/codecontext.h>
 #include <interfaces/contextmenuextension.h>
+#include <language/interfaces/codecontext.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
+#include <documentation/documentationview.h>
 
 using namespace KDevelop;
 
@@ -127,7 +127,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     
     foreach(IPlugin* p, plugins)
     {
-        IDocumentationProvider *doc=dynamic_cast<IDocumentationProvider*>(p);
+        IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
         Q_ASSERT(doc);
         ret.append(doc);
     }

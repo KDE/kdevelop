@@ -59,33 +59,78 @@ public:
    */
   void setSaveMode( SaveMode mode );
 
-  enum ReplaceMode {
-    /// Nothing gets replaced in the active document.
-    ReplaceNone,
+  /// Defines what should be done with the @c STDOUT of a script run.
+  enum OutputMode {
+    /// Ignore output and do nothing.
+    OutputNone,
+    /// Output gets inserted at the cursor position of the current document.
+    OutputInsertAtCursor,
+    /// Current selection gets replaced in the active document.
+    /// If no selection exists, the output will get inserted at the
+    /// current cursor position in the active document view.
+    OutputReplaceSelectionOrInsertAtCursor,
     /// Current selection gets replaced in the active document.
     /// If no selection exists, the whole document gets replaced.
-    ReplaceSelection,
+    OutputReplaceSelectionOrDocument,
     /// The whole contents of the active document gets replaced.
-    ReplaceDocument
+    OutputReplaceDocument,
+    /// Create a new file from the output.
+    OutputCreateNewFile
   };
   /**
-   * @return @c ReplaceMode that decides what parts of the active document should be replaced by the
+   * @return @c OutputMode that decides what parts of the active document should be replaced by the
    *         @c STDOUT of the @c command() execution.
    */
-  ReplaceMode replaceMode() const;
+  OutputMode outputMode() const;
   /**
-   * Sets the @c ReplaceMode that decides what parts of the active document should be replaced by the
+   * Sets the @c OutputMode that decides what parts of the active document should be replaced by the
    * @c STDOUT of the @c command() execution.
    */
-  void setReplaceMode( ReplaceMode mode );
+  void setOutputMode( OutputMode mode );
+
+  /// Defines what should be done with the @c STDERR of a script run.
+  enum ErrorMode {
+    /// Ignore errors and do nothing.
+    ErrorNone,
+    /// Merge with @c STDOUT and use @c OutputMode.
+    ErrorMergeOutput,
+    /// Errors get inserted at the cursor position of the current document.
+    ErrorInsertAtCursor,
+    /// Current selection gets replaced in the active document.
+    /// If no selection exists, the output will get inserted at the
+    /// current cursor position in the active document view.
+    ErrorReplaceSelectionOrInsertAtCursor,
+    /// Current selection gets replaced in the active document.
+    /// If no selection exists, the whole document gets replaced.
+    ErrorReplaceSelectionOrDocument,
+    /// The whole contents of the active document gets replaced.
+    ErrorReplaceDocument,
+    /// Create a new file from the errors.
+    ErrorCreateNewFile
+  };
+
+  /**
+   * @return @c ErrorMode that decides what parts of the active document should be replaced by the
+   *         @c STDERR of the @c command() execution.
+   */
+  ErrorMode errorMode() const;
+  /**
+   * Sets the @c ErrorMode that decides what parts of the active document should be replaced by the
+   * @c STDERR of the @c command() execution.
+   */
+  void setErrorMode( ErrorMode mode );
 
   enum InputMode {
     /// Nothing gets streamed to the @c STDIN of the external script.
     InputNone,
     /// Current selection gets streamed into the @c STDIN of the external script.
-    InputSelection,
+    /// If no selection exists, nothing gets streamed.
+    InputSelectionOrNone,
+    /// Current selection gets streamed into the @c STDIN of the external script.
+    /// If no selection exists, the whole document gets streamed.
+    InputSelectionOrDocument,
     /// The whole contents of the active document get streamed into the @c STDIN of the external script.
-    InputDocument
+    InputDocument,
   };
   /**
    * @return @c InputMode that decides what parts of the active document should be streamded into
@@ -124,7 +169,8 @@ public:
 private:
   QString m_command;
   SaveMode m_saveMode;
-  ReplaceMode m_replaceMode;
+  OutputMode m_outputMode;
+  ErrorMode m_errorMode;
   InputMode m_inputMode;
   KAction* m_action;
   bool m_showOutput;

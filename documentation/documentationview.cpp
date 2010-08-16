@@ -24,6 +24,7 @@
 #include <QTextEdit>
 #include <QCompleter>
 #include <QLayout>
+#include <QTextBrowser>
 #include <KLineEdit>
 #include <KDebug>
 #include <KIcon>
@@ -31,53 +32,10 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationprovider.h>
 #include <interfaces/idocumentationcontroller.h>
-#include <QTextBrowser>
+#include <interfaces/iplugincontroller.h>
+#include "documentationfindwidget.h"
 
-class ProvidersModel : public QAbstractListModel
-{
-    public:
-        
-        ProvidersModel(QObject* parent = 0)
-            : QAbstractListModel(parent)
-            , mProviders(KDevelop::ICore::self()->documentationController()->documentationProviders())
-        {}
-        
-        virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const
-        {
-            QVariant ret;
-            switch(role)
-            {
-                case Qt::DisplayRole:
-                    ret=provider(index.row())->name();
-                    break;
-                case Qt::DecorationRole:
-                    ret=provider(index.row())->icon();
-                    break;
-            }
-            return ret;
-        }
-        
-        virtual int rowCount(const QModelIndex&) const
-        {
-            return mProviders.count();
-        }
-        
-        QList<KDevelop::IDocumentationProvider*> providers() {
-            return mProviders;
-        }
-        
-        KDevelop::IDocumentationProvider* provider(int pos) const
-        {
-            return mProviders[pos];
-        }
-        
-        int rowForProvider(KDevelop::IDocumentationProvider* provider)
-        {
-            return mProviders.indexOf(provider);
-        }
-    private:
-        QList<KDevelop::IDocumentationProvider*> mProviders;
-};
+using namespace KDevelop;
 
 DocumentationView::DocumentationView(QWidget* parent)
     : QWidget(parent)
@@ -86,11 +44,16 @@ DocumentationView::DocumentationView(QWidget* parent)
     setLayout(new QVBoxLayout(this));
     layout()->setMargin(0);
     layout()->setSpacing(0);
+    
     mActions=new KToolBar(this);
     mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    layout()->addWidget(mActions);
+    
+    mFindDoc = new DocumentationFindWidget;
+    mFindDoc->hide();
+    
     mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
+    mFind=mActions->addAction(KIcon("edit-find"), i18n("Find"), mFindDoc, SLOT(show()));
     mActions->addSeparator();
     mActions->addAction(KIcon("go-home"), i18n("Home"), this, SLOT(showHome()));
     mProviders=new QComboBox(mActions);
@@ -123,7 +86,11 @@ DocumentationView::DocumentationView(QWidget* parent)
     connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
     mCurrent=mHistory.end();
     
-    if(mProvidersModel->rowCount(QModelIndex())>0)
+    layout()->addWidget(mActions);
+    layout()->addWidget(new QWidget(this));
+    layout()->addWidget(mFindDoc);
+    
+    if(mProvidersModel->rowCount()>0)
         changedProvider(0);
 }
 
@@ -180,6 +147,15 @@ void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
 {
     mBack->setEnabled( !mHistory.isEmpty() );
     mForward->setEnabled(false);
+
+    // clear all history following the current item, unless we're already
+    // at the end (otherwise this code crashes when history is empty, which
+    // happens when addHistory is first called on startup to add the
+    // homepage)
+    if (mCurrent+1 < mHistory.end()) {
+        mHistory.erase(mCurrent+1, mHistory.end());
+    }
+
     mHistory.append(doc);
     mCurrent=mHistory.end()-1;
 }
@@ -191,14 +167,24 @@ void DocumentationView::updateView()
     mIdentifiers->setText((*mCurrent)->name());
     
     QLayoutItem* lastview=layout()->takeAt(1);
-    if(lastview && lastview->widget()->parent()==this)
+    Q_ASSERT(lastview);
+    
+    if(lastview->widget()->parent()==this)
         lastview->widget()->deleteLater();
     
     delete lastview;
     
-    QWidget* w=(*mCurrent)->documentationWidget(this);
+    mFindDoc->setEnabled(false);
+    QWidget* w=(*mCurrent)->documentationWidget(mFindDoc, this);
     Q_ASSERT(w);
+    
+    mFind->setEnabled(mFindDoc->isEnabled());
+    if(!mFindDoc->isEnabled())
+        mFindDoc->hide();
+    
+    QLayoutItem* findW=layout()->takeAt(1);
     layout()->addWidget(w);
+    layout()->addItem(findW);
 }
 
 void DocumentationView::changedProvider(int row)
@@ -208,3 +194,59 @@ void DocumentationView::changedProvider(int row)
     
     showHome();
 }
+
+////////////// ProvidersModel //////////////////
+
+ProvidersModel::ProvidersModel(QObject* parent)
+    : QAbstractListModel(parent)
+    , mProviders(ICore::self()->documentationController()->documentationProviders())
+{
+    connect(ICore::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)), SLOT(unloaded(KDevelop::IPlugin*)));
+    connect(ICore::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(loaded(KDevelop::IPlugin*)));
+}
+
+QVariant ProvidersModel::data(const QModelIndex& index, int role) const
+{
+    QVariant ret;
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        ret=provider(index.row())->name();
+        break;
+    case Qt::DecorationRole:
+        ret=provider(index.row())->icon();
+        break;
+    }
+    return ret;
+}
+
+void ProvidersModel::unloaded(KDevelop::IPlugin* p)
+{
+    IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
+    int idx=-1;
+    if (prov)
+        idx = mProviders.indexOf(prov);
+
+    if (idx>=0) {
+        beginRemoveRows(QModelIndex(), idx, idx);
+        mProviders.removeAt(idx);
+        endRemoveRows();
+    }
+}
+
+void ProvidersModel::loaded(IPlugin* p)
+{
+    IDocumentationProvider* prov=p->extension<IDocumentationProvider>();
+
+    if (prov && !mProviders.contains(prov)) {
+        beginInsertRows(QModelIndex(), 0, 0);
+        mProviders.append(prov);
+        endInsertRows();
+    }
+}
+
+int ProvidersModel::rowForProvider(IDocumentationProvider* provider) { return mProviders.indexOf(provider); }
+IDocumentationProvider* ProvidersModel::provider(int pos) const { return mProviders[pos]; }
+QList< IDocumentationProvider* > ProvidersModel::providers() { return mProviders; }
+int ProvidersModel::rowCount(const QModelIndex&) const { return mProviders.count(); }
+

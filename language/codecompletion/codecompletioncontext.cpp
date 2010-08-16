@@ -43,13 +43,13 @@ CodeCompletionContext::CodeCompletionContext(DUContextPointer context, const QSt
   IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
 
   if( depth > 10 ) {
-    log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
+    kDebug() << "too much recursion";
     m_valid = false;
     return;
   }
-  
+
   if( completionRecursionDepth > 10 ) {
-    log( "CodeCompletionContext::CodeCompletionContext: too much recursion" );
+    kDebug() << "too much recursion";
     m_valid = false;
     return;
   }
@@ -64,10 +64,6 @@ int CodeCompletionContext::depth() const {
 
 bool CodeCompletionContext::isValid() const {
   return m_valid;
-}
-
-void CodeCompletionContext::log( const QString& str ) const {
-  kDebug() << "CodeCompletionContext:" << str;
 }
 
 void KDevelop::CodeCompletionContext::setParentContext(KSharedPtr< KDevelop::CodeCompletionContext > newParent) {

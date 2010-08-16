@@ -37,7 +37,7 @@
 #include "snippetstore.h"
 
 SnippetRepository::SnippetRepository(const QString& file)
- : QStandardItem(i18n("<empty repository>")), m_file(file)
+ : QStandardItem(i18n("<empty repository>")), m_file(file), m_registeredScript(0)
 {
     setIcon( KIcon("folder") );
     bool activated = SnippetStore::self()->getConfig().readEntry<QStringList>("enabledRepositories", QStringList()).contains(file);
