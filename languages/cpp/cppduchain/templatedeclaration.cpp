@@ -326,8 +326,8 @@ void TemplateDeclaration::setSpecializedFrom(TemplateDeclaration* other) {
   IndexedDeclaration indexedOther(dynamic_cast<Declaration*>(other));
   Q_ASSERT(indexedSelf.data());
   
-  if( specializedFrom().data() )
-    dynamic_cast<TemplateDeclaration*>(specializedFrom().data())->removeSpecializationInternal(indexedSelf);
+  if( TemplateDeclaration* tplDec = dynamic_cast<TemplateDeclaration*>(specializedFrom().data()) )
+    tplDec->removeSpecializationInternal(indexedSelf);
 
   setSpecializedFromInternal(indexedOther);
 

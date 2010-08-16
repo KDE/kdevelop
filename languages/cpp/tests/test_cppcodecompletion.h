@@ -102,6 +102,8 @@ private slots:
   void testInheritanceVisibility();
   void testConstVisibility();
   void testNamespaceCompletion();
+  void testNamespaceAliasCompletion();
+  void testNamespaceAliasCycleCompletion();
   void testTemplateMemberAccess();
   void testTemplateArguments();
   void testTemplateFunction();
@@ -116,6 +118,7 @@ private slots:
   void testArgumentList();
   void testStaticMethods();
   void testAnonStruct();
+  void testOverrideCtor();
 
 public:
   enum DumpArea {

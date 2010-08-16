@@ -77,6 +77,15 @@ QString testFile4 = "void test1() {}; class TestClass() { TestClass() {} };";
 
 typedef CodeCompletionItemTester<Cpp::CodeCompletionContext> CompletionItemTester;
 
+bool containsDeclaration(const CompletionItemTester& ctx, Declaration* dec)
+{
+  foreach(CompletionItemTester::Item item, ctx.items) {
+    if (item->declaration().data() == dec) {
+      return true;
+    }
+  }
+  return false;
+}
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestCppCodeCompletion::TestCppCodeCompletion()
@@ -855,6 +864,68 @@ void TestCppCodeCompletion::testNamespaceCompletion() {
   release(top);
 }
 
+void TestCppCodeCompletion::testNamespaceAliasCompletion() {
+  
+  QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
+                    "namespace B = A; " // direct import of a namespace
+                    "namespace C = B; " // indirect import through another alias
+                    );
+
+  TopDUContext* top = parse(method, DumpNone);
+  
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A"));
+  QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("B"));
+  QCOMPARE(top->localDeclarations()[2]->identifier(), Identifier("C"));
+  QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Namespace);
+  QCOMPARE(top->localDeclarations()[1]->kind(), Declaration::NamespaceAlias);
+  QCOMPARE(top->localDeclarations()[2]->kind(), Declaration::NamespaceAlias);
+  QVERIFY(!top->localDeclarations()[0]->abstractType());
+  QVERIFY(!top->localDeclarations()[1]->abstractType());
+  QVERIFY(!top->localDeclarations()[2]->abstractType());
+  QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
+  
+  QCOMPARE(CompletionItemTester(top).names.toSet(), QSet<QString>() << "A" << "B" << "C");
+  
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "A::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "B::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "C::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top).itemData("A", KTextEditor::CodeCompletionModel::Prefix).toString(), QString("namespace"));
+  release(top);
+}
+
+void TestCppCodeCompletion::testNamespaceAliasCycleCompletion() {
+  
+  QByteArray method("namespace A { class C_A1; class C_A2; namespace Q { class C_Q1; class C_Q2; }; }; "
+                    "namespace B = A; namespace A = B; ");
+  
+  TopDUContext* top = parse(method, DumpNone);
+  
+  DUChainWriteLocker lock(DUChain::lock());
+  
+  QCOMPARE(top->localDeclarations().count(), 3);
+  QCOMPARE(top->childContexts().count(), 1);
+  QCOMPARE(top->localDeclarations()[0]->identifier(), Identifier("A"));
+  QCOMPARE(top->localDeclarations()[1]->identifier(), Identifier("B"));
+  QCOMPARE(top->localDeclarations()[2]->identifier(), Identifier("A"));
+  QCOMPARE(top->localDeclarations()[0]->kind(), Declaration::Namespace);
+  QCOMPARE(top->localDeclarations()[1]->kind(), Declaration::NamespaceAlias);
+  QCOMPARE(top->localDeclarations()[2]->kind(), Declaration::NamespaceAlias);
+  QVERIFY(!top->localDeclarations()[0]->abstractType());
+  QVERIFY(!top->localDeclarations()[1]->abstractType());
+  QVERIFY(!top->localDeclarations()[2]->abstractType());
+  QCOMPARE(top->localDeclarations()[0]->internalContext(), top->childContexts()[0]);
+  
+  QCOMPARE(CompletionItemTester(top).names.toSet(), QSet<QString>() << "A" << "B");
+  
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "A::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top->childContexts()[0], "B::").names.toSet(), QSet<QString>() << "C_A1" << "C_A2" << "Q");
+  QCOMPARE(CompletionItemTester(top).itemData("A", KTextEditor::CodeCompletionModel::Prefix).toString(), QString("namespace"));
+  release(top);
+}
 
 void TestCppCodeCompletion::testIndirectImports()
 {
@@ -2111,6 +2182,34 @@ void TestCppCodeCompletion::testAnonStruct()
 
   release(top);
 }
+
+void TestCppCodeCompletion::testOverrideCtor()
+{
+  QByteArray code("class A { A(int) {} }; class B : public A { B(float) {} }; class C : public B { C(float) {} };");
+  TopDUContext* top = parse(code, DumpNone);
+  DUChainWriteLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  Declaration* aCtor = top->childContexts().at(0)->localDeclarations().first();
+  Declaration* bCtor = top->childContexts().at(1)->localDeclarations().first();
+
+  {
+    // in B we should see A's ctor
+    CompletionItemTester complCtx(top->childContexts().at(1), "");
+    QVERIFY(containsDeclaration(complCtx, aCtor));
+    QVERIFY(!containsDeclaration(complCtx, bCtor));
+  }
+  {
+    // in C we should _only_ see B's ctor. Since it's already overridden, nothing should be shown.
+    CompletionItemTester complCtx(top->childContexts().at(2), "");
+    QVERIFY(!containsDeclaration(complCtx, aCtor));
+    QVERIFY(!containsDeclaration(complCtx, bCtor));
+  }
+
+  release(top);
+}
+
+//BEGIN: Helper
 
 class TestPreprocessor : public rpp::Preprocessor
 {
