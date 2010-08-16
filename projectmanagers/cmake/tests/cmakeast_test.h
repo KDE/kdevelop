@@ -32,6 +32,14 @@ public:
     virtual ~CMakeAstTest() {}
 
 private slots:
+    void testAddDefinitionsGoodParse();
+    void testAddDefinitionsGoodParse_data();
+    void testAddDefinitionsBadParse();
+    void testAddDefinitionsBadParse_data();
+    void testAddDependenciesGoodParse();
+    void testAddDependenciesGoodParse_data();
+    void testAddDependenciesBadParse();
+    void testAddDependenciesBadParse_data();
     void testAddExecutableGoodParse();
     void testAddExecutableGoodParse_data();
     void testAddExecutableBadParse();
@@ -76,6 +84,14 @@ private slots:
     void testConfigureFileGoodParse_data();
     void testConfigureFileBadParse();
     void testConfigureFileBadParse_data();
+    void testCustomCommandGoodParse();
+    void testCustomCommandGoodParse_data();
+    void testCustomCommandBadParse();
+    void testCustomCommandBadParse_data();
+    void testCustomTargetGoodParse();
+    void testCustomTargetGoodParse_data();
+    void testCustomTargetBadParse();
+    void testCustomTargetBadParse_data();
     void testCreateTestSourcelistGoodParse();
     void testCreateTestSourcelistGoodParse_data();
     void testCreateTestSourcelistBadParse();

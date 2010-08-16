@@ -75,11 +75,15 @@ private slots:
   void testDeclareFriend();
   void testDeclareNamespace();
   void testDeclareNamespace2();
+  void testGlobalNamespaceAlias();
+  void testGlobalNamespaceAliasCycle();
   void testLocalNamespaceAlias();
   void testDeclareUsingNamespace();
   void testUsingDeclaration();
   void testUsingDeclarationInTemplate();
   void testDeclareUsingNamespace2();
+  void testUsingGlobalNamespaceAlias();
+  void testUsingGlobalNamespaceAliasCycle();
   void testSearchAcrossNamespace();
   void testSearchAcrossNamespace2();
   void testSearchAcrossNamespace3();
@@ -170,6 +174,7 @@ private slots:
   void testMultiByteCStrings();
 
   void testUses();
+  void testCtorTypes();
 
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);

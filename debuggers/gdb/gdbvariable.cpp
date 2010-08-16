@@ -57,7 +57,6 @@ GdbVariable::~GdbVariable()
         // Delete only top-level variable objects.
         if (topLevel()) {
             if (hasStartedSession()) {
-                // FIXME: Eventually, should be a property of variable.
                 IDebugSession* is = ICore::self()->debugController()->currentSession();
                 DebugSession* s = static_cast<DebugSession*>(is);
                 s->addCommand(new GDBCommand(GDBMI::VarDelete, 
@@ -127,6 +126,11 @@ public:
             if (m_variable->isExpanded() && r["numchild"].toInt()) {
                 m_variable->fetchMoreChildren();
             }
+
+            if (m_variable->format() != KDevelop::Variable::Natural) {
+                //TODO doesn't work for children as they are not yet loaded
+                m_variable->formatChanged();
+            }
         }
 
         if (m_callback && m_callbackMethod) {
@@ -147,7 +151,6 @@ void GdbVariable::attachMaybe(QObject *callback, const char *callbackMethod)
         return;
 
     if (hasStartedSession()) {
-        // FIXME: Eventually, should be a property of variable.
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
@@ -241,7 +244,6 @@ void GdbVariable::fetchMoreChildren()
     // FIXME: should not even try this if app is not started.
     // Probably need to disable open, or something
     if (hasStartedSession()) {
-        // FIXME: Eventually, should be a property of variable.
         IDebugSession* is = ICore::self()->debugController()->currentSession();
         DebugSession* s = static_cast<DebugSession*>(is);
         s->addCommand(
@@ -322,4 +324,46 @@ QString GdbVariable::enquotedExpression() const
     expr.replace('"', "\\\"");
     expr = expr.prepend('"').append('"');
     return expr;
+}
+
+
+class SetFormatHandler : public GDBCommandHandler
+{
+public:
+    SetFormatHandler(GdbVariable *var)
+        : m_variable(var)
+    {}
+
+    virtual void handle(const GDBMI::ResultRecord &r)
+    {
+        if(r.hasField("value"))
+            m_variable->setValue(r["value"].literal());
+    }
+private:
+    QPointer<GdbVariable> m_variable;
+};
+
+void GdbVariable::formatChanged()
+{
+    if(childCount())
+    {
+        foreach(TreeItem* item, childItems) {
+            Q_ASSERT(dynamic_cast<GdbVariable*>(item));
+            if( GdbVariable* var=dynamic_cast<GdbVariable*>(item))
+                var->setFormat(format());
+        }
+    }
+    else
+    {
+        if (hasStartedSession()) {
+            IDebugSession* is = ICore::self()->debugController()->currentSession();
+            DebugSession* s = static_cast<DebugSession*>(is);
+            s->addCommand(
+                new GDBCommand(GDBMI::VarSetFormat,
+                            QString(" \"%1\" %2 ").arg(varobj_).arg(format2str(format())),
+                            new SetFormatHandler(this)
+                            )
+                        );
+        }
+    }
 }

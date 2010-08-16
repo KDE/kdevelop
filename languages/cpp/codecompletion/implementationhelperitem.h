@@ -23,6 +23,14 @@ using namespace KDevelop;
 
 namespace Cpp {
 
+/**
+ * TODO: refactor the mess that is introduced by reusing this class without a CodeCompletionContext in the CppNewClass wizard
+ * 
+ * Especially the handling of the forcedParentIdentifier should be reworked, I don't like the implementation I hacked in
+ * to support overriding of ctors there.
+ * 
+ * ~ Milian
+ */
 class ImplementationHelperItem : public NormalDeclarationCompletionItem
 {
 public:
@@ -46,7 +54,7 @@ public:
 
   private:
   ///DUChain must be read-locked
-  QString getOverrideName() const;
+  QString getOverrideName(const QualifiedIdentifier& forcedParentIdentifier = QualifiedIdentifier()) const;
 };
 
 }

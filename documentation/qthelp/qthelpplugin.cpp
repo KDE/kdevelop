@@ -66,6 +66,8 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
 	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
 	, m_engine(KStandardDirs::locateLocal("appdata", QString( "qthelpcollection.qhc" ), true, QtHelpFactory::componentData()))
 {
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
+    
     if( !m_engine.setupData() ) {
         kWarning() << "Couldn't setup QtHelp Collection file, searching in Qt docs will fail";
     }

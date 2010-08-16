@@ -415,7 +415,7 @@ void CppNewClass::generateHeader(KDevelop::DocumentChangeSet& changes)
     if(override->type<FunctionType>())
     {
       Cpp::ImplementationHelperItem item(Cpp::ImplementationHelperItem::Override, override);
-      output << item.insertionText() << "\n";
+      output << item.insertionText(KUrl(), SimpleCursor(), QualifiedIdentifier(classId)) << "\n";
     }
     else
       output << override->toString() << ";\n";

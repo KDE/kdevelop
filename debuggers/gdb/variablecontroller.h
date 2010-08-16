@@ -57,6 +57,7 @@ public:
 
 private slots:
     void programStopped(const GDBMI::ResultRecord &r);
+    void stateChanged(KDevelop::IDebugSession::DebuggerState);
 
 private:
     DebugSession* debugSession() const;

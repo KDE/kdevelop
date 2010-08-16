@@ -19,16 +19,16 @@
 */
 
 #include "qthelpdocumentation.h"
-#include <QWebView>
 #include <QLabel>
 #include <KLocale>
-#include <interfaces/icore.h>
-#include <interfaces/idocumentationcontroller.h>
-#include "qthelpnetwork.h"
-#include "qthelpplugin.h"
-#include <QtGui/QTreeView>
+#include <QTreeView>
 #include <QHelpContentModel>
 #include <QHeaderView>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
+#include <documentation/standarddocumentationview.h>
+#include "qthelpnetwork.h"
+#include "qthelpplugin.h"
 
 QtHelpPlugin* QtHelpDocumentation::s_provider=0;
 
@@ -163,13 +163,13 @@ QString QtHelpDocumentation::description() const
     return QStringList(m_info.keys()).join(", ");
 }
 
-QWidget* QtHelpDocumentation::documentationWidget(QWidget* parent)
+QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
     QWidget* ret;
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
         ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
-        QWebView* view=new QWebView(parent);
+        KDevelop::StandardDocumentationView* view=new KDevelop::StandardDocumentationView(findWidget, parent);
         view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(s_provider->engine(), 0));
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
         view->setContextMenuPolicy(Qt::ActionsContextMenu);
@@ -214,7 +214,7 @@ void QtHelpAlternativeLink::showUrl()
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
-QWidget* HomeDocumentation::documentationWidget(QWidget* parent)
+QWidget* HomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget*, QWidget* parent)
 {
     QTreeView* w=new QTreeView(parent);
     w->header()->setVisible(false);

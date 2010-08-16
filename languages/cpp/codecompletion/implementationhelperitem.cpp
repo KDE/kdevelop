@@ -37,15 +37,20 @@ ImplementationHelperItem::ImplementationHelperItem(HelperType type, KDevelop::De
 
 #define RETURN_CACHED_ICON(name) {static QIcon icon(KIcon(name).pixmap(QSize(16, 16))); return icon;}
 
-QString ImplementationHelperItem::getOverrideName() const {
+QString ImplementationHelperItem::getOverrideName(const KDevelop::QualifiedIdentifier& forcedParentIdentifier) const {
   QString ret;
   if(m_declaration) {
     ret = m_declaration->identifier().toString();
 
     KDevelop::ClassFunctionDeclaration* classDecl = dynamic_cast<KDevelop::ClassFunctionDeclaration*>(declaration().data());
-    if(classDecl && completionContext() && completionContext()->duContext()) {
-      if(classDecl->isConstructor() || classDecl->isDestructor())
-        ret = completionContext()->duContext()->localScopeIdentifier().toString();
+    if(classDecl) {
+      if(classDecl->isConstructor() || classDecl->isDestructor()) {
+        if (forcedParentIdentifier.isEmpty() && completionContext() && completionContext()->duContext()) {
+          ret = completionContext()->duContext()->localScopeIdentifier().toString();
+        } else {
+          ret = forcedParentIdentifier.last().toString();
+        }
+      }
       if(classDecl->isDestructor())
         ret = "~" + ret;
     }
@@ -154,12 +159,15 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
 
       if(!classFunction || !classFunction->isConstructor())
         newText = "virtual ";
+      else if(classFunction && classFunction->isConstructor() && classFunction->isExplicit())
+        newText = "explicit ";
+
       if(m_declaration) {
         FunctionType::Ptr asFunction = m_declaration->type<FunctionType>();
         if(asFunction && asFunction->returnType())
             newText += Cpp::simplifiedTypeString(asFunction->returnType(), duContext) + " ";
 
-        newText += getOverrideName();
+        newText += getOverrideName(forceParentScope);
 
         newText += signaturePart(true);
         newText += ";";
@@ -179,8 +187,15 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
       QualifiedIdentifier scope = m_declaration->qualifiedIdentifier();
 
       if(!forceParentScope.isEmpty() && !scope.isEmpty()) {
-        scope = forceParentScope;
-        scope.push(m_declaration->identifier());
+        if (classFunction && classFunction->isConstructor()) {
+          // HACK: for the new class dialog use the parentscope's identifier for the ctor
+          //       see also hack further below
+          scope = forceParentScope;
+          scope.push(forceParentScope.last());
+        } else {
+          scope = forceParentScope;
+          scope.push(m_declaration->identifier());
+        }
       }else{
         //Shorten the scope considering the context
         scope = Cpp::stripPrefixes(duContext, scope);
@@ -214,8 +229,14 @@ QString ImplementationHelperItem::insertionText(KUrl url, KDevelop::SimpleCursor
               else
                 newText += ", ";
               started = true;
-
-              newText += parentClassDecl->identifier().toString() + "(";
+              if (!forceParentScope.isEmpty()) {
+                //HACK: for the new class dialog use the direct declaration's identifier for the ctor call,
+                //      as otherwise we'd try to call a indirect parent's ctor
+                newText += m_declaration->identifier().toString();
+              } else {
+                newText += parentClassDecl->identifier().toString();
+              }
+              newText += '(';
               int take = funCtx->localDeclarations().size()-argsGiven; ///@todo Allow distributing the arguments among multiple parents in multipe-inheritance case
               for(int a = 0; a < take; ++a) {
                 if(a)

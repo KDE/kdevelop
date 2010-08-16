@@ -211,22 +211,22 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
   m_valid = isValidPosition();
   if( !m_valid ) {
-    log( "position not valid for code-completion" );
+    kDebug() << "position not valid for code-completion";
     return;
   }
 
-  ifDebug( log( "non-processed text: " + m_text ); )
+  ifDebug( kDebug() << "non-processed text: " + m_text; )
   if(depth == 0) {
     preprocessText( line );
     m_text = clearComments( m_text );
   }
     
-  ifDebug( log( "preprocessed text: " + m_text ); )
+  ifDebug( kDebug() << "preprocessed text: " + m_text; )
 
    m_text = stripFinalWhitespace( m_text );
    m_text = lastLines(m_text);
 
-  ifDebug( log( QString("depth %1").arg(depth) + " end of processed text: " + m_text ); )
+  ifDebug( kDebug() << QString("depth %1").arg(depth) + " end of processed text: " + m_text; )
 
   if(doConstructorCompletion())
     return;
@@ -337,7 +337,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   int start_expr = Utils::expressionAt( m_text, m_text.length() );
 
   m_expression = m_text.mid(start_expr).trimmed();
-  ifDebug( log( "expression: " + m_expression ); )
+  ifDebug( kDebug() << "expression: " + m_expression; )
 
   if(m_expression == "else")
     m_expression = QString();
@@ -362,7 +362,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
 
   QString expressionPrefix = stripFinalWhitespace( m_text.left(start_expr) );
 
-  ifDebug( log( "expressionPrefix: " + expressionPrefix ); )
+  ifDebug( kDebug() << "expressionPrefix: " + expressionPrefix; )
 
   ///Handle constructions like "ClassType instance("
   if(!expressionPrefix.isEmpty() && (expressionPrefix.endsWith('>') || expressionPrefix[expressionPrefix.length()-1].isLetterOrNumber() || expressionPrefix[expressionPrefix.length()-1] == '_')) {
@@ -397,8 +397,8 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     //Prevent useless endless recursion
     if(depth == 0 || parentContextText != m_text)
     {
-      log( QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix) );
-      log( QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText) );
+      kDebug() << QString("Recursive function-call: Searching parent-context in \"%1\"").arg(expressionPrefix);
+      kDebug() << QString("This argument-number: %1 Building parent-context from \"%2\"").arg(otherArguments.size()).arg(parentContextText);
       m_parentContext = new CodeCompletionContext( m_duContext, parentContextText, QString(), m_position, depth+1, otherArguments );
     }else{
       ifDebug( kDebug() << "not following at depth" << depth << " because:" << parentContextText << "==" << m_text; )
@@ -478,7 +478,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
   ///Handle overridden binary operator-functions
   if( endsWithOperator(expressionPrefix) || expressionPrefix.endsWith("return") ) {
     if(depth == 0 || m_text != expressionPrefix) {
-      log( QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix) );
+      kDebug() << QString( "Recursive operator: creating parent-context with \"%1\"" ).arg(expressionPrefix);
       m_parentContext = new CodeCompletionContext( m_duContext, expressionPrefix, QString(), m_position, depth+1 );
     }else{
       ifDebug( kDebug() << "not following operator at depth" << depth << " because:" << expressionPrefix  << "==" << m_text; )
@@ -548,7 +548,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     ifDebug( kDebug(9007) << "expression result: " << m_expressionResult.toString(); )
     if( !m_expressionResult.isValid() ) {
       if( m_memberAccessOperation != StaticMemberChoose ) {
-        log( QString("expression \"%1\" could not be evaluated").arg(expr) );
+        kDebug() << QString("expression \"%1\" could not be evaluated").arg(expr);
         if(m_memberAccessOperation == FunctionCallAccess || m_memberAccessOperation == TemplateAccess)
           m_functionName = m_expression; //Keep the context valid, so missing-include completion can happen
         else
@@ -621,18 +621,18 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
                 m_expressionResult.type = function->returnType()->indexed();
                 m_expressionResult.isInstance = true;
               } else {
-                  log( QString("arrow-operator of class is not a function, or is non-const where the object being accessed is const: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+                  kDebug() << QString("arrow-operator of class is not a function, or is non-const where the object being accessed is const: %1").arg(containerType ? containerType->toString() : QString("null") );
               }
             } else {
-              log( QString("arrow-operator on type without operator-> member: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+              kDebug() << QString("arrow-operator on type without operator-> member: %1").arg(containerType ? containerType->toString() : QString("null") );
               if(idDecl->internalContext()->type() == DUContext::Class)
                 replaceCurrentAccess("->", ".");
             }
           } else {
-            log( QString("arrow-operator on type without declaration and context: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+            kDebug() << QString("arrow-operator on type without declaration and context: %1").arg(containerType ? containerType->toString() : QString("null") );
           }
         } else {
-          log( QString("arrow-operator on invalid type: %1").arg(containerType ? containerType->toString() : QString("null") ) );
+          kDebug() << QString("arrow-operator on invalid type: %1").arg(containerType ? containerType->toString() : QString("null") );
           m_expressionResult = ExpressionEvaluationResult();
         }
       }
@@ -648,7 +648,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
     case MemberAccess:
     {
       if( expr.trimmed().isEmpty() ) {
-        log( "Expression was empty, cannot complete" );
+        kDebug() << "Expression was empty, cannot complete";
         m_valid = false;
       }
 
@@ -670,7 +670,7 @@ CodeCompletionContext::CodeCompletionContext(KDevelop::DUContextPointer context,
         if(type.cast<PointerType>())
           replaceCurrentAccess(".", "->");
       }else{
-        log( "No type for expression" );
+        kDebug() << "No type for expression";
       }
     }
     break;
@@ -823,7 +823,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   if( m_contextType == BinaryOperatorFunctionCall ) {
 
     if( !m_expressionResult.isInstance ) {
-      log( "tried to apply an operator to a non-instance: " + m_expressionResult.toString() );
+      kDebug() << "tried to apply an operator to a non-instance: " + m_expressionResult.toString();
       m_valid = false;
       return;
     }
@@ -864,7 +864,7 @@ void CodeCompletionContext::processFunctionCallAccess() {
   }
   
 //   if( declarations.isEmpty() ) {
-//     log( QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression) );
+//     kDebug() << QString("no list of function-declarations was computed for expression \"%1\"").arg(m_expression);
 //     return;
 //   }
 }
@@ -939,11 +939,23 @@ QList<DUContext*> CodeCompletionContext::memberAccessContainers() const {
 
   if( memberAccessOperation() == StaticMemberChoose && m_duContext ) {
     //Locate all namespace-instances we will be completing from
-  QList< Declaration* > decls = m_duContext->findDeclarations(QualifiedIdentifier(m_expression)); ///@todo respect position
-  
-  foreach(Declaration* decl, decls)
-    if((decl->kind() == Declaration::Namespace || dynamic_cast<ClassDeclaration*>(decl))  && decl->internalContext())
-      ret << decl->internalContext();
+    QList< Declaration* > decls = m_duContext->findDeclarations(QualifiedIdentifier(m_expression)); ///@todo respect position
+
+    // qlist does not provide convenient stable iterators
+    std::list<Declaration*> worklist(decls.begin(), decls.end());
+    for (std::list<Declaration*>::iterator it = worklist.begin(); it != worklist.end(); ++it) {
+      Declaration * decl = *it;
+      if((decl->kind() == Declaration::Namespace || dynamic_cast<ClassDeclaration*>(decl))  && decl->internalContext())
+        ret << decl->internalContext();
+      else if (decl->kind() == Declaration::NamespaceAlias) {
+        NamespaceAliasDeclaration * aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(decl);
+        if (aliasDecl) {
+          QList<Declaration*> importedDecls = m_duContext->findDeclarations(aliasDecl->importIdentifier()); ///@todo respect position
+          std::copy(importedDecls.begin(), importedDecls.end(),
+                    std::back_inserter(worklist));
+        }
+      }
+    }
   }
 
   if(m_expressionResult.isValid() ) {
@@ -1114,13 +1126,14 @@ CodeCompletionContext* CodeCompletionContext::parentContext() {
   return static_cast<CodeCompletionContext*>(KDevelop::CodeCompletionContext::parentContext());
 }
 
-void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext) {
+void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType, IndexedString>, KDevelop::CompletionTreeItemPointer >& overridable, CodeCompletionContext::Ptr completionContext, int depth = 0) {
   if(!current)
     return;
   
   foreach(Declaration* decl, current->localDeclarations()) {
     ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl);
-    if(classFun && (classFun->isVirtual() || classFun->isConstructor())) {
+    // one can only override the direct parent's ctor
+    if(classFun && (classFun->isVirtual() || (depth == 0 && classFun->isConstructor()))) {
       QPair<IndexedType, IndexedString> key = qMakePair(classFun->indexedType(), classFun->identifier().identifier());
       if(base->owner()) {
         if(classFun->isConstructor() || classFun->isDestructor())
@@ -1134,7 +1147,7 @@ void getOverridable(DUContext* base, DUContext* current, QMap< QPair<IndexedType
   }
 
   foreach(const DUContext::Import &import, current->importedParentContexts())
-    getOverridable(base, import.context(base->topContext()), overridable, completionContext);
+    getOverridable(base, import.context(base->topContext()), overridable, completionContext, depth + 1);
 }
 
 // #ifndef TEST_COMPLETION
@@ -1746,8 +1759,17 @@ bool  CodeCompletionContext::filterDeclaration(Declaration* decl, DUContext* dec
     if(str.length() > 2 && cstr[0] == '_' && (cstr[1] == '_' || QChar(cstr[1]).isUpper()) && decl->url() != m_duContext->url())
       return false;
   }
-  
-  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace)
+
+  if(ClassDeclaration* cDecl = dynamic_cast<ClassDeclaration*>(decl)) {
+    ///TODO: indexedIdentifier().isEmpty() should be fixed for this case...
+    if (cDecl->classType() == ClassDeclarationData::Struct && cDecl->identifier().toString().isEmpty()) {
+      // filter anonymous structs
+      return false;
+    }
+  }
+
+  if(m_onlyShow == ShowTypes && decl->kind() != Declaration::Type && decl->kind() != Declaration::Namespace
+     && decl->kind() != Declaration::NamespaceAlias )
     return false;
   
   if(m_onlyShow == ShowVariables && (decl->kind() != Declaration::Instance || decl->isFunctionDeclaration()))

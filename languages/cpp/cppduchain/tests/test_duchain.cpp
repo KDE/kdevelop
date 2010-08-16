@@ -1971,7 +1971,102 @@ void TestDUChain::testDeclareUsingNamespace2()
 
 }
 
-void TestDUChain::testLocalNamespaceAlias()                                                                                                                                
+void TestDUChain::testGlobalNamespaceAlias()
+{
+  QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { afoo::bar(); }");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->localDeclarations().size(), 3);
+  NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl);
+  QCOMPARE(aliasDecl->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
+}
+
+void TestDUChain::testUsingGlobalNamespaceAlias()
+{
+  QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { using namespace afoo; bar(); }");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->localDeclarations().size(), 3);
+  NamespaceAliasDeclaration* aliasDecl = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl);
+  QCOMPARE(aliasDecl->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl->identifier(), Identifier("afoo"));
+
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
+}
+
+void TestDUChain::testGlobalNamespaceAliasCycle()
+{
+  QByteArray method("namespace foo { int bar(); } namespace A = foo; namespace B = A; namespace A = B; "
+                    "int test() { foo::bar(); A::bar(); B::bar(); } ");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 3);
+  
+  QCOMPARE(top->localDeclarations().size(), 5); // foo, A, B, A, test
+  NamespaceAliasDeclaration* aliasDecl1 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl1);
+  QCOMPARE(aliasDecl1->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl1->identifier(), Identifier("A"));
+  NamespaceAliasDeclaration* aliasDecl2 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[2]);
+  QVERIFY(aliasDecl2);
+  QCOMPARE(aliasDecl2->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl2->identifier(), Identifier("B"));
+  NamespaceAliasDeclaration* aliasDecl3 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[3]);
+  QVERIFY(aliasDecl3);
+  QCOMPARE(aliasDecl3->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl3->identifier(), Identifier("A"));
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 3);
+}
+
+void TestDUChain::testUsingGlobalNamespaceAliasCycle()
+{
+  QByteArray method("namespace foo { int bar(); } namespace A = foo; namespace B = A; namespace A = B; "
+                    "int testA() { using namespace A; bar(); } "
+                    "int testB() { using namespace B; bar(); }");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  QCOMPARE(top->childContexts().count(), 5);
+  
+  QCOMPARE(top->localDeclarations().size(), 6); // foo, A, B, A, testA, testB
+  NamespaceAliasDeclaration* aliasDecl1 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[1]);
+  QVERIFY(aliasDecl1);
+  QCOMPARE(aliasDecl1->importIdentifier(), QualifiedIdentifier("foo"));
+  QCOMPARE(aliasDecl1->identifier(), Identifier("A"));
+  NamespaceAliasDeclaration* aliasDecl2 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[2]);
+  QVERIFY(aliasDecl2);
+  QCOMPARE(aliasDecl2->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl2->identifier(), Identifier("B"));
+  NamespaceAliasDeclaration* aliasDecl3 = dynamic_cast<NamespaceAliasDeclaration*>(top->localDeclarations()[3]);
+  QVERIFY(aliasDecl3);
+  QCOMPARE(aliasDecl3->importIdentifier(), QualifiedIdentifier("foo")); // already resolved
+  QCOMPARE(aliasDecl3->identifier(), Identifier("A"));
+  
+  QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().size(), 1);
+  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 2);
+}
+
+void TestDUChain::testLocalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } int test() { namespace afoo = foo; afoo::bar(); }");
 
@@ -4667,6 +4762,44 @@ void TestDUChain::testUses()
   QCOMPARE(decls.at( 0 )->uses().count(), 0);
   QCOMPARE(decls.at( 1 )->uses().count(), 1);
 
+}
+
+void TestDUChain::testCtorTypes()
+{
+  QByteArray method(
+    "class A\n"
+    "{\n"
+    "  public:\n"
+    "    A() {}\n"
+    "    A( int ) {}\n"
+    "    A( int* ) {}\n"
+    "    A( int, int ) {}\n"
+    "};\n"
+  );
+  LockedTopDUContext top = parse(method, DumpAll);
+
+  QVector< Declaration* > ctors = top->childContexts().first()->localDeclarations();
+
+  QList< QPair<IndexedType, IndexedString> > encountered;
+  QMap< QPair<IndexedType, IndexedString>, int > encountered2;
+
+  for ( int i = 0; i < ctors.size(); ++i ) {
+    for ( int j = i + 1; j < ctors.size(); ++j ) {
+      kDebug() << "comparing type of " << ctors[i]->toString() << "with" << ctors[j]->toString();
+      QVERIFY(ctors[i]->indexedType() != ctors[j]->indexedType());
+    }
+    QList< Declaration* > decs = top->childContexts().first()->findLocalDeclarations(
+        ctors[i]->identifier(), SimpleCursor::invalid(), 0, ctors[i]->abstractType(), DUContext::OnlyFunctions);
+    QCOMPARE(decs.count(), 1);
+
+    QPair<IndexedType, IndexedString> key = qMakePair(ctors[i]->indexedType(), ctors[i]->identifier().identifier());
+    QVERIFY(!encountered.contains(key));
+    encountered << key;
+
+    // everything works, but this fails:
+    QVERIFY(!encountered2.contains(key));
+    encountered2.insert(key, 0);
+  }
 }
 
 void TestDUChain::testConst()
