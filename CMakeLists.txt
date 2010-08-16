@@ -10,12 +10,8 @@ set(KDEVPLATFORM_VERSION_MAJOR 1)
 set(KDEVPLATFORM_VERSION_MINOR 0)
 set(KDEVPLATFORM_VERSION_PATCH 60)
 
-set(KDE_MIN_VERSION "4.4.0")
-find_package(KDE4 4.4.0 REQUIRED)
-
-if( ${KDE_VERSION} VERSION_GREATER 4.4.63 )
-    message(FATAL "KDevPlatform doesn't work (yet) with kdelibs 4.4.64 or later, please use the movingranges branch")
-endif(${KDE_VERSION} VERSION_GREATER 4.4.63)
+set(KDE_MIN_VERSION "4.5.0")
+find_package(KDE4 4.5.0 REQUIRED)
 
 find_package(ZLIB REQUIRED)
 
