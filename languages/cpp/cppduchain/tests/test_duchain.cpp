@@ -4789,7 +4789,7 @@ void TestDUChain::testCtorTypes()
       QVERIFY(ctors[i]->indexedType() != ctors[j]->indexedType());
     }
     QList< Declaration* > decs = top->childContexts().first()->findLocalDeclarations(
-        ctors[i]->identifier(), SimpleCursor::invalid(), 0, ctors[i]->abstractType(), DUContext::OnlyFunctions);
+        ctors[i]->identifier(), CursorInRevision::invalid(), 0, ctors[i]->abstractType(), DUContext::OnlyFunctions);
     QCOMPARE(decs.count(), 1);
 
     QPair<IndexedType, IndexedString> key = qMakePair(ctors[i]->indexedType(), ctors[i]->identifier().identifier());
