@@ -234,7 +234,6 @@ private Q_SLOTS:
 private:
     void jobIsReady();
     DVcsJobPrivate* const d;
-    QVariant results;
 };
 
 #endif

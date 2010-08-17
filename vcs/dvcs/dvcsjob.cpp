@@ -57,6 +57,8 @@ struct DVcsJobPrivate
     QByteArray  output;
     KProcess::OutputChannelMode commMode;
     KDevelop::IPlugin* vcsplugin;
+    
+    QVariant results;
 };
 
 DVcsJob::DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
@@ -157,12 +159,12 @@ QByteArray DVcsJob::rawOutput() const
 
 void DVcsJob::setResults(const QVariant &res)
 {
-    results = res;
+    d->results = res;
 }
 
 QVariant DVcsJob::fetchResults()
 {
-    return results;
+    return d->results;
 }
 
 void DVcsJob::setExitStatus(const bool exitStatus)
