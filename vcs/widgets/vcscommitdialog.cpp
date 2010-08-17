@@ -86,7 +86,7 @@ public:
         return ret;
     }
 
-    QMap<KUrl, QString> urls;
+    QMap<KUrl, VcsStatusInfo::State> urls;
     IPlugin *plugin;
     VcsCommitDialog* dlg;
     QHash<KUrl, KDevelop::VcsStatusInfo> statusInfos;
@@ -204,7 +204,7 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl &url )
             if(!state.isEmpty())
             {
                 d->insertRow(state, info.url(), brush, checked);
-                d->urls[info.url()] = state;
+                d->urls[info.url()] = info.state();
             }
         }
     }

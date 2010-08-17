@@ -30,7 +30,7 @@
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, QString > selectable, IBasicVersionControl* vcs)
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, KDevelop::VcsStatusInfo::State> selectable, IBasicVersionControl* vcs)
     : VCSDiffPatchSource(vcsdiff), m_selectable(selectable), m_vcs(vcs)
 {
     
@@ -87,7 +87,7 @@ bool VCSCommitDiffPatchSource::canSelectFiles() const {
     return true;
 }
 
-QMap< KUrl, QString > VCSCommitDiffPatchSource::additionalSelectableFiles() const {
+QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSCommitDiffPatchSource::additionalSelectableFiles() const {
     return m_selectable;
 }
 

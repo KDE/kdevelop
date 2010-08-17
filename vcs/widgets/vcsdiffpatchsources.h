@@ -25,11 +25,12 @@
 
 #include <ktemporaryfile.h>
 #include <qtextstream.h>
-#include <interfaces/ipatchsource.h>
-#include "vcsdiff.h"
-#include <kdebug.h>
 #include <qtextedit.h>
-#include "interfaces/ibasicversioncontrol.h"
+#include <kdebug.h>
+#include <interfaces/ibasicversioncontrol.h>
+#include <interfaces/ipatchsource.h>
+#include "vcs/vcsstatusinfo.h"
+#include "vcsdiff.h"
 
 namespace KDevelop {
 class VcsCommitDialog;
@@ -58,13 +59,13 @@ class VCSDiffPatchSource : public KDevelop::IPatchSource {
 class VCSCommitDiffPatchSource : public VCSDiffPatchSource {
     Q_OBJECT
     public:
-    VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap<KUrl, QString> selectable, KDevelop::IBasicVersionControl* vcs);
+    VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap<KUrl, KDevelop::VcsStatusInfo::State> selectable, KDevelop::IBasicVersionControl* vcs);
     
     ~VCSCommitDiffPatchSource() ;
     
     virtual bool canSelectFiles() const ;
     
-    QMap<KUrl, QString> additionalSelectableFiles() const ;
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalSelectableFiles() const ;
     
     virtual QWidget* customWidget() const ;
     
@@ -80,7 +81,7 @@ Q_SIGNALS:
 public:
     QPointer<QWidget> m_commitMessageWidget;
     QPointer<QTextEdit> m_commitMessageEdit;
-    QMap<KUrl, QString> m_selectable;
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     KDevelop::IBasicVersionControl* m_vcs;
 };
 

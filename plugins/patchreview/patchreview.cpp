@@ -491,6 +491,48 @@ KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
   return file;
 }
 
+static QString stateToString(KDevelop::VcsStatusInfo::State state)
+{
+    switch(state)
+    {
+      case KDevelop::VcsStatusInfo::ItemAdded:
+          return i18n("Added");
+      case KDevelop::VcsStatusInfo::ItemDeleted:
+          return i18n("Deleted");
+      case KDevelop::VcsStatusInfo::ItemHasConflicts:
+          return i18n("Has Conflicts");
+      case KDevelop::VcsStatusInfo::ItemModified:
+          return i18n("Modified");
+      case KDevelop::VcsStatusInfo::ItemUpToDate:
+          return i18n("Up To Date");
+      case KDevelop::VcsStatusInfo::ItemUnknown:
+      case KDevelop::VcsStatusInfo::ItemUserState:
+          return i18n("Unknown");
+    }
+    return i18nc("Unknown VCS file status, probably a backend error", "?");
+}
+
+static KIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
+{
+    switch(state)
+    {
+      case KDevelop::VcsStatusInfo::ItemAdded:
+          return KIcon("vcs-added");
+      case KDevelop::VcsStatusInfo::ItemDeleted:
+          return KIcon("vcs-removed");
+      case KDevelop::VcsStatusInfo::ItemHasConflicts:
+          return KIcon("vcs-conflicting");
+      case KDevelop::VcsStatusInfo::ItemModified:
+          return KIcon("vcs-locally-modified");
+      case KDevelop::VcsStatusInfo::ItemUpToDate:
+          return KIcon("vcs-normal");
+      case KDevelop::VcsStatusInfo::ItemUnknown:
+      case KDevelop::VcsStatusInfo::ItemUserState:
+          return KIcon("unknown");
+    }
+    return KIcon("dialog-error");
+}
+
 void PatchReviewToolView::kompareModelChanged()
 {
     m_editPatch.filesList->clear();
@@ -499,7 +541,7 @@ void PatchReviewToolView::kompareModelChanged()
     if (!m_plugin->modelList())
         return;
 
-    QMap<KUrl, QString> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
     
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if ( !models )
@@ -525,8 +567,10 @@ void PatchReviewToolView::kompareModelChanged()
         const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
 
         QString text;
-        if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty()) {
-            text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, additionalUrls[file]);
+        if(additionalUrls.contains(file)) {
+            VcsStatusInfo::State state = additionalUrls[file];
+            text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(state));
+            item->setIcon(0, stateToIcon(state));
         } else {
             text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
         }
@@ -540,7 +584,7 @@ void PatchReviewToolView::kompareModelChanged()
     ///findProject() excludes some useless files like backups, so we can use that to sort those files to the back
     for(int withProject = 1; withProject >= 0; --withProject)
     {
-      for(QMap<KUrl, QString>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
+      for(QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
       {
         KUrl url = it.key();
         
@@ -554,14 +598,10 @@ void PatchReviewToolView::kompareModelChanged()
           QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
           
           m_editPatch.filesList->insertTopLevelItem(0, item);
-          QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-          if(!(*it).isEmpty())
-            text += " (" + (*it) + ")";
           
-          item->setData( 0, Qt::DisplayRole, text );
-          QVariant v;
-          v.setValue<KUrl>( url );
-          item->setData( 0, Qt::UserRole, v );
+          item->setText(0, i18n("%1 (%2)", ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain), stateToString(it.value())));
+          item->setIcon(0, stateToIcon(it.value()));
+          item->setData( 0, Qt::UserRole, qVariantFromValue<KUrl>(url));
           item->setCheckState( 0, Qt::Unchecked );
         }
       }
