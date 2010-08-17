@@ -22,13 +22,11 @@
 
 #include <QtGui/QItemSelectionModel>
 
-class KDevDocumentModel;
-
 class KDevDocumentSelection: public QItemSelectionModel
 {
     Q_OBJECT
 public:
-    KDevDocumentSelection( KDevDocumentModel * model );
+    KDevDocumentSelection( QAbstractItemModel* model );
     virtual ~KDevDocumentSelection();
 
 public slots:
