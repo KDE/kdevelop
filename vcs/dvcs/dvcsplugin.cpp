@@ -319,7 +319,6 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
 {
     QStringList args;
     const QDir & dir = job->getDirectory();
-    const QString workingDir = dir.absolutePath();
 
     foreach(const KUrl &url, urls) {
         ///@todo this is ok for now, but what if some of the urls are not
@@ -336,7 +335,7 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
             file = url.toLocalFile();
 
         args << file;
-        kDebug() << "url is: " << url << "job->getDirectory(): " << workingDir << " file is: " << file;
+        kDebug() << "url is: " << url << "job->getDirectory(): " << dir.path() << " file is: " << file;
     }
 
     *job << args;
