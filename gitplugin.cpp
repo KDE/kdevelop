@@ -230,7 +230,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocations.front().toLocalFile()) ) {
         *job << "git" << "status" << "--porcelain" << "--";
-        addFileList(job, localLocations);
+        addFileList(job, recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitStatusOutput(DVcsJob*)));
         return job;
@@ -980,6 +980,21 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
     job->setResults(qVariantFromValue(diff));
 }
 
+// static VcsStatusInfo::State lsfilesToState(char id)
+// {
+//     switch(id) {
+//         case 'H': return VcsStatusInfo::ItemUpToDate; //Cached
+//         case 'S': return VcsStatusInfo::ItemUpToDate; //Skip work tree
+//         case 'M': return VcsStatusInfo::ItemHasConflicts; //unmerged
+//         case 'R': return VcsStatusInfo::ItemDeleted; //removed/deleted
+//         case 'C': return VcsStatusInfo::ItemModified; //modified/changed
+//         case 'K': return VcsStatusInfo::ItemDeleted; //to be killed
+//         case '?': return VcsStatusInfo::ItemUnknown; //other
+//     }
+//     Q_ASSERT(false);
+//     return VcsStatusInfo::ItemUnknown;
+// }
+
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QRegExp lineRx(" ?([A-Z?]+) (.+)");
@@ -987,16 +1002,18 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     const KUrl workingDir = job->getDirectory().absolutePath();
     
     QVariantList statuses;
-    foreach(const QString& line, outputLines)
-    {
+    QList<KUrl> processedFiles;
+    foreach(const QString& line, outputLines) {
         if(lineRx.indexIn(line)<0) {
             kDebug() << "Couldn't parse git status's output: " << line;
             continue;
         }
         qDebug() << "Checking git status for " << line << lineRx.capturedTexts();
         
+        QString curr=lineRx.capturedTexts()[2];
         KUrl fileUrl = workingDir;
-        fileUrl.addPath(lineRx.capturedTexts()[2]);
+        fileUrl.addPath(curr);
+        processedFiles.append(fileUrl);
         
         VcsStatusInfo status;
         status.setUrl(fileUrl);
@@ -1004,7 +1021,26 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         
         statuses.append(qVariantFromValue<VcsStatusInfo>(status));
     }
+    QStringList paths;
+    QStringList oldcmd=job->dvcsCommand();
+    QStringList::const_iterator it=oldcmd.constBegin()+oldcmd.indexOf("--")+1, itEnd=oldcmd.constEnd();
+    for(; it!=itEnd; ++it)
+        paths += *it;
     
+    //here we add the already up to date files
+    QStringList files = getLsFiles(job->getDirectory().path(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
+    foreach(const QString& file, files) {
+        KUrl fileUrl = workingDir;
+        fileUrl.addPath(file);
+        
+        if(!processedFiles.contains(fileUrl)) {
+            VcsStatusInfo status;
+            status.setUrl(fileUrl);
+            status.setState(VcsStatusInfo::ItemUpToDate);
+            
+            statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+        }
+    }
     job->setResults(statuses);
 }
 
