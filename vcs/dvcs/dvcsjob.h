@@ -188,15 +188,6 @@ public:
     virtual QVariant fetchResults();
 
     /**
-     * Sets exit status (d->failed variable).
-     * Since only executors can parse the job to set result, they can connect parsers to readyForParsing(DVCSjob) using
-     * Qt::DirectConnection to set the result. For example git-status can return exit status 1.
-     * If you don't set exit status in your parser then you will have JobFailed in status() result.
-     * @note First result is set in slotProcessExited() or slotProcessError().
-     */
-    virtual void setExitStatus(const bool exitStatus);
-
-    /**
      * Returns JobStatus
      * @see KDevelop::VcsJob::JobStatus
      */

@@ -41,7 +41,7 @@ struct DVcsJobPrivate
 {
     DVcsJobPrivate() : childproc(new KProcess), commMode(KProcess::SeparateChannels), vcsplugin(0)
     {
-        isRunning = failed = wasStarted = false;
+        isRunning = wasStarted = false;
     }
 
     ~DVcsJobPrivate() {
@@ -53,7 +53,6 @@ struct DVcsJobPrivate
     QString     server;
     bool        isRunning;
     bool        wasStarted;
-    bool        failed;
     QByteArray  output;
     KProcess::OutputChannelMode commMode;
     KDevelop::IPlugin* vcsplugin;
@@ -88,7 +87,7 @@ void DVcsJob::clear()
     d->output.clear();
     d->server.clear();
     d->childproc->setWorkingDirectory(QDir::temp().absolutePath());
-    d->isRunning = d->failed = d->wasStarted = false;
+    d->isRunning = d->wasStarted = false;
 }
 
 void DVcsJob::setServer(const QString& server)
@@ -167,11 +166,6 @@ QVariant DVcsJob::fetchResults()
     return d->results;
 }
 
-void DVcsJob::setExitStatus(const bool exitStatus)
-{
-    d->failed = exitStatus;
-}
-
 void DVcsJob::start()
 {
     Q_ASSERT_X(!d->isRunning, "DVCSjob::start", "Another proccess was started using this job class");
@@ -197,7 +191,6 @@ void DVcsJob::start()
     d->childproc->setEnvironment(QProcess::systemEnvironment());
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
-    d->childproc->waitForStarted();
     
     displayOutput(d->command.join(" "));
 }
@@ -215,9 +208,6 @@ void DVcsJob::cancel()
 void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
     d->isRunning = false;
-
-    //NOTE: some DVCS commands can use stderr...
-    d->failed = true;
 
     //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
     //and if exec is used, exec will return true and that is wrong!
@@ -285,10 +275,11 @@ KDevelop::VcsJob::JobStatus DVcsJob::status() const
 {
     if (!d->wasStarted)
         return KDevelop::VcsJob::JobNotStarted;
-    if (d->failed)
-        return KDevelop::VcsJob::JobFailed;
     if (d->isRunning)
         return KDevelop::VcsJob::JobRunning;
+    if(error()!=0)
+        return KDevelop::VcsJob::JobFailed;
+    
     return KDevelop::VcsJob::JobSucceeded;
 }
 
