@@ -123,11 +123,6 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
     // We might have found a valid repository, call git to verify it
     KDevelop::VcsJob* job = gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")), KDevelop::OutputJob::Silent);
 
-    if (!job) {
-        kDebug() << "Failed creating job";
-        return false;
-    }
-
     job->exec();
     if (job->status() == KDevelop::VcsJob::JobSucceeded) {
         kDebug() << "Dir:" << dirPath << " is inside work tree of git (" << possibleRepoRoot << ')';
@@ -208,7 +203,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     //it's a hack!!! See VcsCommitDialog::setCommitCandidates and the usage of DVcsJob/IDVCSexecutor
     //We need results just in status, so we set them here before execution in VcsCommitDialog::setCommitCandidates
     
-    isValidDirectory(localLocations[0].toLocalFile());
+    isValidDirectory(localLocations.first());
     
     if(!m_lastRepoRoot.isValid())
       return errorsFound(i18n("Not in a git repository"), OutputJob::Verbose);
@@ -216,7 +211,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     QSet<QString> fileFilters;
     QList<QString> dirFilters;
     
-    foreach(KUrl url, localLocations)
+    foreach(const KUrl& url, localLocations)
     {
       if(QFileInfo(url.path()).isFile())
         fileFilters.insert(url.path());
@@ -237,7 +232,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
     
     QList<QVariant> filteredStates;
     
-    foreach(QVariant statusVariant, unfilteredStates)
+    foreach(const QVariant& statusVariant, unfilteredStates)
     {
       VcsStatusInfo info(statusVariant.value<VcsStatusInfo>());
       
@@ -1117,7 +1112,15 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     return empty_cmd();
 }
 
+class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
+{
+    public:
+        GitVcsLocationWidget(QWidget* parent = 0, Qt::WindowFlags f = 0)
+            : StandardVcsLocationWidget(parent, f) {}
+        virtual bool isCorrect() const { return true; }
+};
+
 KDevelop::VcsLocationWidget* GitPlugin::vcsLocation(QWidget* parent) const
 {
-    return new KDevelop::StandardVcsLocationWidget(parent);
+    return new GitVcsLocationWidget(parent);
 }
