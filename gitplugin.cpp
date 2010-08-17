@@ -248,15 +248,6 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, fileOrDirectory.toLocalFile()) ) {
-        KUrl::List files;
-        if(QFileInfo(fileOrDirectory.toLocalFile()).isDir() && recursion==IBasicVersionControl::NonRecursive)
-            files = getLsFiles(fileOrDirectory.toLocalFile(), QStringList(), KDevelop::OutputJob::Silent);
-        else
-            files = fileOrDirectory;
-        QDir dotgit=dotGitDirectory(fileOrDirectory);
-        if(dotgit.cdUp())
-            job->setDirectory(dotgit);
-        
         QString dstRevisionName = toRevisionName(dstRevision);
         
         *job << "git" << "diff" << "--no-prefix";
@@ -265,7 +256,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
         else
             *job << toRevisionName(srcRevision, dstRevisionName)+".." + dstRevisionName;
         *job << "--";
-        addFileList(job, files);
+        addFileList(job, fileOrDirectory);
         
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
         return job;
