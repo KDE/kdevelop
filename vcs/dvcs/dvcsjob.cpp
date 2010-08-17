@@ -49,7 +49,6 @@ struct DVcsJobPrivate
     }
 
     KProcess*   childproc;
-    QStringList command;
     QString     server;
     bool        isRunning;
     bool        wasStarted;
@@ -83,7 +82,6 @@ void DVcsJob::clear()
 {
     //Do not use KProcess::clearEnvironment() (it sets the environment to kde_dummy).
     //Also DVCSjob can't set it, so it's ok.
-    d->command.clear();
     d->output.clear();
     d->server.clear();
     d->childproc->setWorkingDirectory(QDir::temp().absolutePath());
@@ -119,25 +117,25 @@ bool DVcsJob::isRunning() const
 
 DVcsJob& DVcsJob::operator<<(const QString& arg)
 {
-    d->command.append( arg );
+    *d->childproc << arg;
     return *this;
 }
 
 DVcsJob& DVcsJob::operator<<(const char* arg)
 {
-    d->command.append( arg );
+    *d->childproc << arg;
     return *this;
 }
 
 DVcsJob& DVcsJob::operator<<(const QStringList& args)
 {
-    d->command << args;
+    *d->childproc << args;
     return *this;
 }
 
-QString DVcsJob::dvcsCommand() const
+QStringList DVcsJob::dvcsCommand() const
 {
-    return d->command.join(" ");
+    return d->childproc->program();
 }
 
 QString DVcsJob::output() const
@@ -187,12 +185,11 @@ void DVcsJob::start()
     d->output.clear();
     d->isRunning = true;
     d->childproc->setOutputChannelMode( d->commMode );
-    d->childproc->setProgram( d->command );
     d->childproc->setEnvironment(QProcess::systemEnvironment());
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     
-    displayOutput(d->command.join(" "));
+    displayOutput(dvcsCommand().join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)

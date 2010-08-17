@@ -45,7 +45,7 @@ void DVcsJobTest::testJob()
     job->setDirectory(QDir::temp()); //working directory ("") is deprecated by DVCSjob
     QVERIFY(!job->exec());
     QVERIFY(job->status() == DVcsJob::JobFailed);
-    QCOMPARE(job->dvcsCommand(), echoCommand);
+    QCOMPARE(job->dvcsCommand().join(";;"), echoCommand);
 
     //check our clear() method. It's simple, but having bugs here is dangerous
     job->clear();
@@ -54,7 +54,7 @@ void DVcsJobTest::testJob()
     QVERIFY(job->status() == DVcsJob::JobNotStarted);
     QVERIFY(job->fetchResults().isNull());
     QVERIFY(job->getChildproc());
-    QCOMPARE(job->dvcsCommand(), QString());
+    QCOMPARE(job->dvcsCommand(), QStringList());
     QCOMPARE(job->getDirectory(), QDir::temp());
     QCOMPARE(job->output(), QString());
 

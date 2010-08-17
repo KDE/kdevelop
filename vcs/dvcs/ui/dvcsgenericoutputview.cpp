@@ -50,7 +50,7 @@ void DVCSgenericOutputView::slotJobFinished(KJob * job)
 {
     DVcsJob * gitjob = dynamic_cast<DVcsJob*>(job);
     if (gitjob) {
-        appendText( gitjob->dvcsCommand() );
+        appendText( gitjob->dvcsCommand().join(" ") );
         appendText( gitjob->output() );
         if (job->error() == 0) {
             appendText( i18n("Job exited normally") );

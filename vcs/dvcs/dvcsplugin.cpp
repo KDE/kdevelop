@@ -335,8 +335,8 @@ bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List
             file = url.toLocalFile();
 
         args << file;
-        kDebug() << "url is: " << url << "job->getDirectory(): " << dir.path() << " file is: " << file;
     }
+    kDebug() << "url is: " << urls << "job->getDirectory(): " << dir.path() << " files are: " << args;
 
     *job << args;
     return true;

@@ -159,7 +159,7 @@ public:
     /**
      * @return The command that is executed when calling start().
      */
-    QString dvcsCommand() const;
+    QStringList dvcsCommand() const;
 
     /**
      * @return The whole output of the job as a string. (Might fail on binary data)
