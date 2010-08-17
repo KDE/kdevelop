@@ -213,7 +213,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     return errorsFound(i18n("Could not get the status"), OutputJob::Verbose);
 }
 
-QString toRevisionName(const KDevelop::VcsRevision& rev)
+QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision="")
 {
     switch(rev.revisionType()) {
         case VcsRevision::Special:
@@ -225,6 +225,8 @@ QString toRevisionName(const KDevelop::VcsRevision& rev)
                 case VcsRevision::Working:
                     return "";
                 case VcsRevision::Previous:
+                    Q_ASSERT(!currentRevision.isEmpty());
+                    return currentRevision + "^1";
                 case VcsRevision::Start:
                     Q_ASSERT(false && "i don't know how to do that");
             }
@@ -255,11 +257,13 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
         if(dotgit.cdUp())
             job->setDirectory(dotgit);
         
+        QString dstRevisionName = toRevisionName(dstRevision);
+        
         *job << "git" << "diff" << "--no-prefix";
         if(dstRevision.revisionType()==VcsRevision::Special)
-            *job << toRevisionName(srcRevision);
+            *job << toRevisionName(srcRevision, dstRevisionName);
         else
-            *job << toRevisionName(srcRevision)+".."+toRevisionName(dstRevision);
+            *job << toRevisionName(srcRevision, dstRevisionName)+".." + dstRevisionName;
         *job << "--";
         addFileList(job, files);
         
