@@ -48,6 +48,9 @@ K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1"
 
 using namespace KDevelop;
 
+namespace
+{
+    
 QDir dotGitDirectory(const KUrl& dirPath)
 {
     const QString initialPath(dirPath.toLocalFile(KUrl::RemoveTrailingSlash));
@@ -63,6 +66,29 @@ QDir dotGitDirectory(const KUrl& dirPath)
     static const QString gitDir(".git");
     while (!dir.cd(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
     return dir;
+}
+
+/**
+ * Whenever a directory is provided, change it for all the files in it but not inner directories,
+ * that way we make sure we won't get into recursion,
+ */
+static KUrl::List preventRecursion(const KUrl::List& urls)
+{
+    KUrl::List ret;
+    foreach(const KUrl& url, urls) {
+        QDir d(url.toLocalFile());
+        if(d.exists()) {
+            QStringList entries = d.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            foreach(const QString& entry, entries) {
+                KUrl entryUrl = d.absoluteFilePath(entry);
+                ret += entryUrl;
+            }
+        } else
+            ret += url;
+    }
+    return ret;
+}
+
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
@@ -236,6 +262,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
         case VcsRevision::Date:
         case VcsRevision::FileNumber:
         case VcsRevision::Invalid:
+        case VcsRevision::UserSpecialType:
             Q_ASSERT(false);
     }
     return QString();
@@ -256,7 +283,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
         else
             *job << toRevisionName(srcRevision, dstRevisionName)+".." + dstRevisionName;
         *job << "--";
-        addFileList(job, fileOrDirectory);
+        addFileList(job, recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
         
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
         return job;
@@ -272,7 +299,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
     if (!localLocations.isEmpty() && prepareJob(job, localLocations.first().toLocalFile()) ) {
         *job << "git" << "checkout";
         *job << "--";
-        addFileList(job, localLocations);
+        addFileList(job, recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
         
         return job;
     }
@@ -1143,7 +1170,7 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
         if (prepareJob(job, localLocations.first().toLocalFile())) {
             //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
             *job << "git" << "checkout" << rev.revisionValue().toString() << "--";
-            addFileList(job, localLocations);
+            addFileList(job, recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
             return job;
         }
         
