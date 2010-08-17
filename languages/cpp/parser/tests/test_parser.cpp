@@ -372,6 +372,8 @@ private slots:
     //QCOMPARE(preprocess("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
     QCOMPARE(preprocess("#define TEST //Comment\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
     QCOMPARE(preprocess("#define TEST /*Comment\n*/\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
+    QCOMPARE(preprocess("#define TEST_URL \"http://foobar.com\"\nTEST_URL").trimmed(), QString("\"http://foobar.com\""));
+    QCOMPARE(preprocess("#define TEST_STR \"//\\\"//\"\nTEST_STR").trimmed(), QString("\"//\\\"//\""));
 
   }
 

@@ -361,6 +361,18 @@ void pp::handle_define (Stream& input)
         input.seek(pos);
       }
     }
+    if (input == '"')
+    {
+      do {
+        if (input == '\\' && input.peekNextCharacter() == '"') {
+          // skip escaped close quote
+          macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+          ++input;
+        }
+        macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+        ++input;
+      } while (!input.atEnd() && input != '"' && input != '\n');
+    }
 
     macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
     ++input;
