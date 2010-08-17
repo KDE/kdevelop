@@ -108,6 +108,16 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
     }
     
+    bool allLocalFiles(const KUrl::List& urls)
+    {
+        bool ret=true;
+        foreach(const KUrl& url, urls) {
+            QFileInfo info(url.toLocalFile());
+            ret &= info.isFile();
+        }
+        return ret;
+    }
+    
     QMenu* createMenu()
     {
         bool allVersioned=true;
@@ -136,7 +146,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
-        annotationAction->setEnabled(singleVersionedFile);
+        annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
         diffToHeadAction->setEnabled(singleVersionedFile);
         diffToBaseAction->setEnabled(singleVersionedFile);
         commitAction->setEnabled(singleVersionedFile);
