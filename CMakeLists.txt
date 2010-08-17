@@ -12,7 +12,7 @@ set(KDE_MIN_VERSION "4.3.0")
 find_package(KDE4 4.3.0 REQUIRED)
 
 if( ${KDE_VERSION} VERSION_GREATER 4.5.63 )
-    message(FATAL "KDevPlatform doesn't work (yet) with kdelibs 4.5.64 or later, please use the movingranges branch")
+    message(FATAL_ERROR "KDevPlatform doesn't work (yet) with kdelibs 4.5.64 or later, please use the movingranges branch")
 endif(${KDE_VERSION} VERSION_GREATER 4.5.63)
 
 include (KDE4Defaults)
