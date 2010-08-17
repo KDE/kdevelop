@@ -245,25 +245,21 @@ QStringList locationListToString(const QList<VcsLocation>& locations)
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
-    KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
+    KDevelop::VcsJob* vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
     Q_ASSERT(vcsjob);
 
-    if (vcsjob) {
-        if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
-            KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            if(d.isEmpty())
-                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                                   i18n("Cannot show the differences because there were none."),
-                                   i18n("VCS support"));
-            else {
-                VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
-                showVcsDiff(patch);
-            }
-        } else {
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
+    if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
+        KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
+        if(d.isEmpty())
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                i18n("Cannot show the differences because there were none."),
+                                i18n("VCS support"));
+        else {
+            VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
+            showVcsDiff(patch);
         }
-
-        vcsjob->disconnect(this);
+    } else {
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
     }
 }
 
