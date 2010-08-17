@@ -213,7 +213,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     return errorsFound(i18n("Could not get the status"), OutputJob::Verbose);
 }
 
-QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision="")
+QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision=QString())
 {
     switch(rev.revisionType()) {
         case VcsRevision::Special:
@@ -304,7 +304,7 @@ VcsJob* GitPlugin::commit(const QString& message,
 
     DVcsJob* job = new DVcsJob(this);
     
-    if (prepareJob(job, repositoryRoot(localLocations.front()).path()) ) {
+    if (prepareJob(job, repositoryRoot(localLocations.front()).toLocalFile()) ) {
         *job << "git";
         *job << "commit";
         *job << "-m";
@@ -1088,7 +1088,6 @@ VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
     DVcsJob* job = new DVcsJob(this, KDevelop::OutputJob::Verbose);
     if (prepareJob(job, source.toLocalFile())) {
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
-		qDebug() << "peeeeeeeeek" << job->dvcsCommand();
         return job;
     }
     
@@ -1117,22 +1116,49 @@ VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
 
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
-    return empty_cmd();
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, localRepositoryLocation.toLocalFile())) {
+        *job << "git" << "pull" << localOrRepoLocationSrc.localUrl().url();
+        return job;
+    }
+    
+    delete job;
+    return errorsFound(i18n("Could not get the repository updates"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
-    return empty_cmd();
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, localRepositoryLocation.toLocalFile())) {
+        *job << "git" << "push" << localOrRepoLocationDst.localUrl().url();
+        return job;
+    }
+    
+    delete job;
+    return errorsFound(i18n("Could not send the local changes"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::resolve(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
-    return empty_cmd();
+    return add(localLocations, recursion);
 }
 
 VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsRevision& rev, IBasicVersionControl::RecursionMode recursion)
 {
-    return empty_cmd();
+    if(rev.revisionType()==VcsRevision::Special && rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Head) {
+        return pull(VcsLocation(), localLocations.first());
+    } else {
+        DVcsJob* job = new DVcsJob(this);
+        if (prepareJob(job, localLocations.first().toLocalFile())) {
+            //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
+            *job << "git" << "checkout" << rev.revisionValue().toString() << "--";
+            addFileList(job, localLocations);
+            return job;
+        }
+        
+        delete job;
+        return errorsFound(i18n("Could update to the specified revision"), OutputJob::Verbose);
+    }
 }
 
 class GitVcsLocationWidget : public KDevelop::StandardVcsLocationWidget
