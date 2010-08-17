@@ -181,7 +181,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
 {
     Q_UNUSED(recursion)
     if (localLocations.empty())
-        return 0;
+        return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocations.front().toLocalFile()) ) {
@@ -196,65 +196,21 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
     return errorsFound(i18n("Could not add the files"), OutputJob::Verbose);
 }
 
-KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations,
-                            KDevelop::IBasicVersionControl::RecursionMode recursion)
+KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    Q_UNUSED(recursion)
-    //it's a hack!!! See VcsCommitDialog::setCommitCandidates and the usage of DVcsJob/IDVCSexecutor
-    //We need results just in status, so we set them here before execution in VcsCommitDialog::setCommitCandidates
-    
-    isValidDirectory(localLocations.first());
-    
-    if(!m_lastRepoRoot.isValid())
-      return errorsFound(i18n("Not in a git repository"), OutputJob::Verbose);
-    
-    QSet<QString> fileFilters;
-    QList<QString> dirFilters;
-    
-    foreach(const KUrl& url, localLocations)
-    {
-      if(QFileInfo(url.path()).isFile())
-        fileFilters.insert(url.path());
-      else
-        dirFilters << stripPathToDir(url.path());
+    if (localLocations.empty())
+        return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
+
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, localLocations.front().toLocalFile()) ) {
+        *job << "git" << "status" << "--short" << "--";
+        addFileList(job, localLocations);
+
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitStatusOutput(DVcsJob*)));
+        return job;
     }
-    
-    // Do the stat on the root directory (the other code expects that)
-    QString repo = m_lastRepoRoot.path();
-    QList<QVariant> unfilteredStates;
-    qDebug("GitPlugin::status");
-    unfilteredStates << getCachedFiles(repo, KDevelop::OutputJob::Silent)
-             << getModifiedFiles(repo, KDevelop::OutputJob::Silent)
-             << getOtherFiles(repo, KDevelop::OutputJob::Silent);
-    DVcsJob * noOp = empty_cmd(KDevelop::OutputJob::Silent);
-    
-    // Now filter the states regarding the selection
-    
-    QList<QVariant> filteredStates;
-    
-    foreach(const QVariant& statusVariant, unfilteredStates)
-    {
-      VcsStatusInfo info(statusVariant.value<VcsStatusInfo>());
-      
-      QString path = info.url().path();
-      
-      bool match = fileFilters.contains(path);
-      
-      foreach(QString dir, dirFilters)
-      {
-        if(match)
-          break;
-        match = path.startsWith(dir);
-      }
-      
-      if(match)
-      {
-        filteredStates << statusVariant;
-      }
-    }
-    
-    noOp->setResults(QVariant(filteredStates));
-    return noOp;
+    delete job;
+    return errorsFound(i18n("Could not get the status"), OutputJob::Verbose);
 }
 
 QString toRevisionName(const KDevelop::VcsRevision& rev)
@@ -584,29 +540,28 @@ QList<QVariant> GitPlugin::getOtherFiles(const QString& directory, OutputJob::Ou
 
 QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(this, verbosity);
-    if (prepareJob(job, directory) )
-        *job << "git";
-        *job << "diff-files";
-    if (job)
-        job->exec();
-    QStringList output;
-    if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        output = job->output().split('\n', QString::SkipEmptyParts);
-    else
-        return QList<QVariant>();
-
     QList<QVariant> modifiedFiles;
-    foreach(const QString &line, output)
-    {
-        KUrl file(stripPathToDir(directory) + line.section('\t', 1).trimmed());
+    DVcsJob* job = new DVcsJob(this, verbosity);
+    if (prepareJob(job, directory) ) {
+        *job << "git" << "diff-files";
 
-        VcsStatusInfo status;
-        status.setUrl(file);
-        status.setState(charToState(line.section(' ', 4, 4)[0].toAscii()) );
-        kDebug() << line[97] << " " << file.toLocalFile();
+        QStringList output;
+        if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+            output = job->output().split('\n', QString::SkipEmptyParts);
+        else
+            return QList<QVariant>();
 
-        modifiedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
+        foreach(const QString &line, output)
+        {
+            KUrl file(stripPathToDir(directory) + line.section('\t', 1).trimmed());
+
+            VcsStatusInfo status;
+            status.setUrl(file);
+            status.setState(messageToState(line.section(' ', 4, 4)));
+            kDebug() << line[97] << " " << file.toLocalFile();
+
+            modifiedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
+        }
     }
 
     return modifiedFiles;
@@ -654,8 +609,7 @@ QList<QVariant> GitPlugin::getCachedFiles(const QString &directory, KDevelop::Ou
 
         VcsStatusInfo status;
         status.setUrl(file);
-        
-        status.setState(VcsStatusInfo::State(charToState(line.section(' ', 4, 4)[0].toAscii() ) ));
+        status.setState(messageToState(line.section(' ', 4, 4)));
 
         kDebug() << line[97] << " " << file.toLocalFile();
 
@@ -973,18 +927,41 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
     job->setResults(qVariantFromValue(diff));
 }
 
+void GitPlugin::parseGitStatusOutput(DVcsJob* job)
+{
+    QRegExp lineRx(" ?([A-Z?]+) (.+)");
+    QStringList outputLines = job->output().split('\n');
+    const KUrl workingDir = job->getDirectory().absolutePath();
+    
+    QVariantList statuses;
+    foreach(const QString& line, outputLines)
+    {
+        if(lineRx.indexIn(line)<0) {
+            kDebug() << "Couldn't parse git status's output: " << line;
+            continue;
+        }
+        qDebug() << "Checking git status for " << line << lineRx.capturedTexts();
+        
+        KUrl fileUrl = workingDir;
+        fileUrl.addPath(lineRx.capturedTexts()[2]);
+        
+        VcsStatusInfo status;
+        status.setUrl(fileUrl);
+        status.setState(messageToState(lineRx.capturedTexts()[1]));
+        
+        statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+    }
+    
+    job->setResults(statuses);
+}
+
 QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args,
     KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
     DVcsJob* job = lsFiles(directory, args, verbosity);
-    if (job)
-    {
-        job->exec();
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-            return job->output().split('\n', QString::SkipEmptyParts);
-        else
-            return QStringList();
-    }
+    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+        return job->output().split('\n', QString::SkipEmptyParts);
+    
     return QStringList();
 }
 
@@ -1017,20 +994,31 @@ DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &arg
     return errorsFound(i18n("Could not get the rev list"), OutputJob::Verbose);
 }
 
-KDevelop::VcsStatusInfo::State GitPlugin::charToState(char ch)
+VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
 {
-    switch (ch)
+    Q_ASSERT(msg.size()==1 || msg.size()==2);
+    VcsStatusInfo::State ret = VcsStatusInfo::ItemUnknown;
+    
+    if(msg.contains('U') || msg == "AA" || msg == "DD")
+        ret = VcsStatusInfo::ItemHasConflicts;
+    else switch(msg[0].toAscii())
     {
         case 'M':
-            return VcsStatusInfo::ItemModified;
+            ret = VcsStatusInfo::ItemModified;
+            break;
         case 'A':
-            return VcsStatusInfo::ItemAdded;
+            ret = VcsStatusInfo::ItemAdded;
+            break;
         case 'D':
-            return VcsStatusInfo::ItemDeleted;
-        default://TODO: hasConflicts
-            return VcsStatusInfo::ItemUnknown;
+            ret = VcsStatusInfo::ItemDeleted;
+            break;
+        case '?':
+            ret = VcsStatusInfo::ItemUnknown;
+            break;
+            
     }
-    return VcsStatusInfo::ItemUnknown;
+    
+    return ret;
 }
 
 StandardCopyJob::StandardCopyJob(IPlugin* parent, const KUrl& source, const KUrl& dest,

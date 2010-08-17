@@ -160,11 +160,12 @@ protected:
                          const QStringList &args,
                          KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Silent);
 
-protected slots:
+private slots:
     void parseGitBlameOutput(DVcsJob *job);
     void parseGitLogOutput(DVcsJob *job);
     void parseGitDiffOutput(DVcsJob* job);
     void parseGitRepoLocationOutput(DVcsJob* job);
+    void parseGitStatusOutput(DVcsJob* job);
 
 private:
     //commit dialog "main" helper
@@ -174,7 +175,7 @@ private:
 
     void initBranchHash(const QString &repo);
 
-    static KDevelop::VcsStatusInfo::State charToState(char ch);
+    static KDevelop::VcsStatusInfo::State messageToState(const QString& ch);
 
     QList<QStringList> branchesShas;
     // Set when isValidDirectory is called.
