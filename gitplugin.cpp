@@ -203,7 +203,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
 
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocations.front().toLocalFile()) ) {
-        *job << "git" << "status" << "--short" << "--";
+        *job << "git" << "status" << "--porcelain" << "--";
         addFileList(job, localLocations);
 
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitStatusOutput(DVcsJob*)));
@@ -359,14 +359,11 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
 {
     DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocation.toLocalFile()) ) {
-        *job << "git";
-        *job << "blame";
-        *job << "--root";
-        *job << "-t";
-        *job << "--";
+    if (prepareJob(job, localLocation.toLocalFile())) {
+        *job << "git" << "blame" << "--porcelain" << "--";
         addFileList(job, localLocation);
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
+        return job;
     }
     delete job;
     return errorsFound(i18n("Could not read the annotations"), OutputJob::Verbose);
@@ -374,21 +371,59 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
 
 void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 {
-    QList<QVariant> results;
-    int lineNumber = 0;
-    /*static? */QRegExp regex("(\\w{8}) .* ?\\((.*) (\\d+) [-+]\\d+\\s+\\d+\\)");
-    foreach(const QString& line, job->output().split('\n')) {
-        if (regex.indexIn(line) == 0) {
-            VcsAnnotationLine annotation;
-            annotation.setAuthor(regex.cap(2));
-            annotation.setDate(QDateTime::fromTime_t(regex.cap(3).toUInt()));
-            annotation.setLineNumber(lineNumber);
-            VcsRevision rev;
-            rev.setRevisionValue(regex.cap(1), KDevelop::VcsRevision::GlobalNumber);
-            annotation.setRevision(rev);
-            results << QVariant::fromValue(annotation);
+    QVariantList results;
+    VcsAnnotationLine* annotation;
+    QStringList lines = job->output().split('\n');
+    
+    bool skipNext=false;
+    QMap<QString, VcsAnnotationLine> definedRevisions;
+    for(QStringList::const_iterator it=lines.constBegin(), itEnd=lines.constEnd();
+        it!=itEnd; ++it)
+    {
+        if(skipNext) {
+            skipNext=false;
+            results += qVariantFromValue(*annotation);
+            
+            continue;
         }
-        lineNumber++;
+        
+        if(it->isEmpty())
+            continue;
+        
+        QString name = it->left(it->indexOf(' '));
+        QString value = it->right(it->size()-name.size()-1);
+        
+        qDebug() << "last line" << *it;
+        if(name=="author")
+            annotation->setAuthor(value);
+        else if(name=="author-mail") {} //TODO: do smth with the e-mail?
+        else if(name=="author-tz") {} //TODO: does it really matter?
+        else if(name=="author-time")
+            annotation->setDate(QDateTime::fromTime_t(value.toUInt()));
+        else if(name=="summary")
+            annotation->setCommitMessage(value);
+        else if(name.startsWith("committer")) {} //We will just store the authors
+        else if(name=="previous") {} //We don't need that either
+        else if(name=="filename") { skipNext=true; }
+        else if(name=="boundary") {
+            definedRevisions.insert("boundary", VcsAnnotationLine());
+        }
+        else
+        {
+            QStringList values = value.split(' ');
+            
+            VcsRevision rev;
+            rev.setRevisionValue(name, KDevelop::VcsRevision::GlobalNumber);
+            
+            skipNext = definedRevisions.contains(name);
+            
+            if(!skipNext)
+                definedRevisions.insert(name, VcsAnnotationLine());
+            
+            annotation = &definedRevisions[name];
+            annotation->setLineNumber(values[1].toInt());
+            annotation->setRevision(rev);
+        }
     }
     job->setResults(results);
 }
@@ -439,7 +474,7 @@ DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch,
         return job;
     }
     delete job;
-    return errorsFound(i18n("Could not create the new branch"), OutputJob::Verbose);
+    return errorsFound(i18n("Could not list or operate with branches"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const KUrl::List& files)
@@ -477,21 +512,17 @@ DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
 
 QString GitPlugin::curBranch(const QString &repository)
 {
-    QString branchName;
-    DVcsJob* job = branch(repository);
-    if (job)
-    {
-        kDebug() << "Getting branch list";
-        job->exec();
-        
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-            branchName = job->output();
+    kDebug() << "Getting branch list";
+    
+    DVcsJob* job = new DVcsJob(this, OutputJob::Silent);
+    if (prepareJob(job, repository) ) {
+        *job << "git" << "status" << "-b" << "--porcelain";
+        if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
+            QString out = job->output();
+            return out.mid(3, out.indexOf('\n')-3);
+        }
     }
-
-    branchName = branchName.prepend('\n').section("\n*", 1);
-    branchName = branchName.section('\n', 0, 0).trimmed();
-    kDebug() << "Current branch is: " << branchName;
-    return branchName;
+    return QString();
 }
 
 QStringList GitPlugin::branches(const QString &repository)
