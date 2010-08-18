@@ -104,11 +104,9 @@ public:
 
     virtual KDevelop::VcsJob* diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                                    KDevelop::VcsDiff::Type, RecursionMode recursion);
-    using KDevelop::DistributedVersionControlPlugin::log;
 
-    KDevelop::VcsJob* log(const KUrl& localLocation,
-                          const KDevelop::VcsRevision& rev,
-                          unsigned long limit);
+    virtual KDevelop::VcsJob* log( const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long limit);
+    virtual KDevelop::VcsJob* log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit);
     KDevelop::VcsJob* annotate(const KUrl &localLocation, const KDevelop::VcsRevision &rev);
     KDevelop::VcsJob* revert(const KUrl::List& localLocations, RecursionMode recursion);
 

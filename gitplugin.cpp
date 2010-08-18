@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *   Copyright 2009 Hugo Parente Lima <hugo.pl@gmail.com>                  *
+ *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -353,10 +354,8 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     return errorsFound(i18n("Could not remove the files"), OutputJob::Verbose);
 }
 
-
 VcsJob* GitPlugin::log(const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev,
-                unsigned long limit)
+                const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit)
 {
     Q_UNUSED(rev)
     Q_UNUSED(limit)
@@ -372,6 +371,13 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     }
     delete job;
     return errorsFound(i18n("Could not generate the log"), OutputJob::Verbose);
+}
+
+
+VcsJob* GitPlugin::log(const KUrl& localLocation,
+                const KDevelop::VcsRevision& rev, unsigned long int limit)
+{
+    return log(localLocation, rev, rev);
 }
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
