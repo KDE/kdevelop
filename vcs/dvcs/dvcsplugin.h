@@ -64,13 +64,6 @@ public:
 
     // Begin: KDevelop::IBasicVersionControl
 
-    virtual VcsJob* log(const KUrl& localLocation,
-                        const VcsRevision& rev,
-                        unsigned long limit) = 0;
-    virtual VcsJob* log(const KUrl& localLocation,
-                        const VcsRevision& rev,
-                        const VcsRevision& limit);
-
     /** Used in KDevelop's appwizardplugin (creates import widget) */
     virtual VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent);
 
@@ -105,6 +98,11 @@ public:
     /** Returns the list of branches. */
     virtual QStringList branches(const QString &repository) = 0;
     // End: In tree branch-management
+    
+    /** Returns the list of all commits (in all branches).
+     * @see CommitView and CommitViewDelegate to see how this list is used.
+     */
+    virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
 
 public Q_SLOTS:
     //slots for context menu
@@ -133,7 +131,7 @@ Q_SIGNALS:
      * soon as it has finished.
      */
     void addNewTabToMainView(QWidget* tab, QString label);
-
+    
 protected:
     ///////////////////
     /** Checks if dirPath is located in DVCS repository */
@@ -141,11 +139,6 @@ protected:
 
     /** empty_cmd is used when something is not implemented, but has to return any job */
     virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-
-    /** Returns the list of all commits (in all branches).
-     * @see CommitView and CommitViewDelegate to see how this list is used.
-     */
-    virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
 
     KDevDVCSViewFactory * dvcsViewFactory() const;
 

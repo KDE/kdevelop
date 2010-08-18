@@ -90,15 +90,6 @@ DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
     delete d;
 }
 
-KDevelop::VcsJob*
-DistributedVersionControlPlugin::log(const KUrl& url,
-                                     const VcsRevision& from,
-                                     const VcsRevision& to)
-{
-    Q_UNUSED(to)
-    return log(url, from, 0);
-}
-
 // End:  KDevelop::IBasicVersionControl
 
 
@@ -195,7 +186,7 @@ void DistributedVersionControlPlugin::ctxRevHistory()
     
     KDialog d;
 
-    CommitLogModel* model = new CommitLogModel(getAllCommits(ctxUrlList.front().toLocalFile()));
+    CommitLogModel* model = new CommitLogModel(this, ctxUrlList.first().toLocalFile(), &d);
     CommitView *revTree = new CommitView(&d);
     revTree->setModel(model);
 
