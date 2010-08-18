@@ -90,25 +90,6 @@ DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
     delete d;
 }
 
-// Begin:  KDevelop::IBasicVersionControl
-QList<QVariant> DistributedVersionControlPlugin::getModifiedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
-{
-    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
-    return QList<QVariant>();
-}
-
-QList<QVariant> DistributedVersionControlPlugin::getCachedFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
-{
-    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
-    return QList<QVariant>();
-}
-
-QList<QVariant> DistributedVersionControlPlugin::getOtherFiles(const QString &, KDevelop::OutputJob::OutputJobVerbosity)
-{
-    Q_ASSERT(!"Either implement DistributedVersionControlPlugin::status() or this function");
-    return QList<QVariant>();
-}
-
 KDevelop::VcsJob*
 DistributedVersionControlPlugin::log(const KUrl& url,
                                      const VcsRevision& from,
