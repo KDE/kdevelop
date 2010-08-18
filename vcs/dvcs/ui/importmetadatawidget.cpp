@@ -28,6 +28,7 @@
 #include <KDebug>
 
 #include <vcslocation.h>
+#include "ui_importmetadatawidget.h"
 
 ImportMetadataWidget::ImportMetadataWidget(QWidget *parent)
     : KDevelop::VcsImportMetadataWidget(parent), m_ui( new Ui::ImportMetadataWidget )
@@ -60,7 +61,7 @@ KDevelop::VcsLocation ImportMetadataWidget::destination() const
 
 QString ImportMetadataWidget::message( ) const
 {
-    return QString("");
+    return QString();
 }
 
 void ImportMetadataWidget::setSourceLocation( const KDevelop::VcsLocation& url )
