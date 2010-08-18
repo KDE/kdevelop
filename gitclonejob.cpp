@@ -25,11 +25,11 @@ GitCloneJob::GitCloneJob(KDevelop::IPlugin* parent, OutputJobVerbosity verbosity
     : DVcsJob(parent, verbosity)
     , m_steps(0)
 {
-    connect(getChildproc(), SIGNAL(readyReadStandardError()), SLOT(receivedStderr()));
+    connect(process(), SIGNAL(readyReadStandardError()), SLOT(receivedStderr()));
 }
 void GitCloneJob::receivedStderr()
 {
-    QByteArray out=getChildproc()->readAllStandardError();
+    QByteArray out=process()->readAllStandardError();
     if (out.contains('\n')) {
         m_steps+=out.count('\n');
         emitPercent(m_steps, 6); //I'm counting 6 lines so it's a way to provide some progress, probably not the best

@@ -187,10 +187,9 @@ bool GitPlugin::isValidDirectory(const KUrl & dirPath)
     }
 
     // We might have found a valid repository, call git to verify it
-    KDevelop::VcsJob* job = gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")), KDevelop::OutputJob::Silent);
+    QScopedPointer<KDevelop::VcsJob> job(gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")), KDevelop::OutputJob::Silent));
 
-    job->exec();
-    if (job->status() == KDevelop::VcsJob::JobSucceeded) {
+    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
         kDebug() << "Dir:" << dirPath << " is inside work tree of git (" << possibleRepoRoot << ')';
         m_lastRepoRoot = possibleRepoRoot;
         return true;
@@ -541,8 +540,8 @@ QString GitPlugin::curBranch(const QString &repository)
 {
     kDebug() << "Getting branch list";
     
-    DVcsJob* job = new DVcsJob(this, OutputJob::Silent);
-    if (prepareJob(job, repository) ) {
+    QScopedPointer<DVcsJob> job(new DVcsJob(this, OutputJob::Silent));
+    if (prepareJob(job.data(), repository) ) {
         *job << "git" << "status" << "-b" << "--porcelain";
         if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
             QString out = job->output();
@@ -555,17 +554,13 @@ QString GitPlugin::curBranch(const QString &repository)
 QStringList GitPlugin::branches(const QString &repository)
 {
     QStringList branchListDirty;
-    DVcsJob* job = branch(repository);
-    if (job)
-    {
-        kDebug() << "Getting branch list";
-        job->exec();
-        
-        if (job->status() == KDevelop::VcsJob::JobSucceeded)
-            branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
-        else
-            return QStringList();
-    }
+    QScopedPointer<DVcsJob> job(branch(repository));
+    kDebug() << "Getting branch list";
+    
+    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+        branchListDirty = job->output().split('\n', QString::SkipEmptyParts);
+    else
+        return QStringList();
 
     QStringList branchList;
     foreach(QString branch, branchListDirty)
@@ -616,9 +611,9 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
     }
     QStringList args;
     args << "--all" << "--pretty" << "--parents";
-    DVcsJob* job = gitRevList(repo, args);
-    if (job)
-        job->exec();
+    QScopedPointer<DVcsJob> job(gitRevList(repo, args));
+    bool ret = job->exec();
+    Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
     QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 
     static QRegExp rx_com("commit \\w{40,40}");
@@ -781,9 +776,9 @@ void GitPlugin::initBranchHash(const QString &repo)
     //Now root branch is the current branch. In future it should be the longest branch
     //other commitLists are got with git-rev-lits branch ^br1 ^ br2
     QString root = GitPlugin::curBranch(repo);
-    DVcsJob* job = gitRevList(repo, QStringList(root));
-    if (job)
-        job->exec();
+    QScopedPointer<DVcsJob> job(gitRevList(repo, QStringList(root)));
+    bool ret = job->exec();
+    Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
     QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //     kDebug() << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);
@@ -798,9 +793,9 @@ void GitPlugin::initBranchHash(const QString &repo)
                 //man gitRevList for '^'
                 args<<'^' + branch_arg;
         }
-        DVcsJob* job = gitRevList(repo, args);
-        if (job)
-            job->exec();
+        QScopedPointer<DVcsJob> job(gitRevList(repo, args));
+        bool ret = job->exec();
+        Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
         QStringList commits = job->output().split('\n', QString::SkipEmptyParts);
 //         kDebug() << "\n\n\n commits" << commits << "\n\n\n";
         branchesShas.append(commits);
@@ -960,7 +955,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args,
     KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = lsFiles(directory, args, verbosity);
+    QScopedPointer<DVcsJob> job(lsFiles(directory, args, verbosity));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
         return job->output().split('\n', QString::SkipEmptyParts);
     
@@ -977,7 +972,6 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
     if (fsObject.isFile())
         workDir = fsObject.path();
 
-    job->clear();
     job->setDirectory(workDir);
     *job << "git" << "rev-parse" << args;
 
