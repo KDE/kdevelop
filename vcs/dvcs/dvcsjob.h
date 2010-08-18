@@ -5,6 +5,7 @@
  *                                                                         *
  *   Adapted for DVCS                                                      *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -51,37 +52,30 @@ class DVcsJobPrivate;
  *     job->setDirectory(workDir);
  *     *job << "git-rev-parse";
  *     foreach(const QString &arg, args) // *job << args can be used instead!
- *     *job << arg;
+ *         *job << arg;
  *     return job;
  * }
- * if (job) delete job;
- * return NULL;
+ * return error_cmd(i18n("could not create the job"));
  * @endcode
  * 
  * Usage example 1:
  * @code
  * VcsJob* j = add(DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
- * DVcsJob* job = dynamic_cast<DVCSjob*>(j);
- * if (job) {
- *     connect(job, SIGNAL(result(KJob*) ),
- *             this, SIGNAL(jobFinished(KJob*) ));
- *     job->start();
- * }
+ * DVcsJob* job = qobject_cast<DVCSjob*>(j);
+ * connect(job, SIGNAL(result(KJob*) ),
+ *         this, SIGNAL(jobFinished(KJob*) ));
+ * ICore::self()->runController()->registerJob(job);
  * @endcode
  * 
- * Usage example 2:
+ * Usage example 2, asyunchronous:
  * @code
  * DVcsJob* branchJob = d->branch(repo, baseBranch, newBranch);
- * DVcsJob* job = gitRevParse(dirPath.toLocalFile(), QStringList(QString("--is-inside-work-tree")));
- * if (job)
- * {
- *     job->exec();
- *     if (job->status() == KDevelop::VcsJob::JobSucceeded)
- *         return true;
- *     else
+ * 
+ * if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+ *     return true;
+ * else
  *     //something, maybe even just
- *         return false
- * }
+ *     return false
  * @endcode
  * 
  * @author Robert Gruber <rgruber@users.sourceforge.net>
