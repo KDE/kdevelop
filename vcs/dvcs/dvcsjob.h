@@ -47,20 +47,19 @@ class DVcsJobPrivate;
  * How to create DVcsJob:
  * @code
  * DVcsJob* job = new DVcsJob(vcsplugin);
- * if (job)
- * {
- *     job->setDirectory(workDir);
- *     *job << "git-rev-parse";
- *     foreach(const QString &arg, args) // *job << args can be used instead!
- *         *job << arg;
- *     return job;
- * }
+ * 
+ * job->setDirectory(workDir);
+ * *job << "git-rev-parse";
+ * foreach(const QString &arg, args) // *job << args can be used instead!
+ *     *job << arg;
+ * return job;
+ * 
  * return error_cmd(i18n("could not create the job"));
  * @endcode
  * 
  * Usage example 1:
  * @code
- * VcsJob* j = add(DistributedVersionControlPlugin::d->m_ctxUrlList, IBasicVersionControl::Recursive);
+ * VcsJob* j = add(KUrl::List() << a << b << c, IBasicVersionControl::Recursive);
  * DVcsJob* job = qobject_cast<DVCSjob*>(j);
  * connect(job, SIGNAL(result(KJob*) ),
  *         this, SIGNAL(jobFinished(KJob*) ));
@@ -89,21 +88,11 @@ public:
     virtual ~DVcsJob();
 
     /**
-     * Call this method to clear the job (for example, before setting another job).
-     */
-    void clear();
-
-    /**
      * Sets working directory.
      * @param directory Should contain only absolute path. Relative paths or "" (working dir) are deprecated and will make the job fail.
      * @note In DVCS plugins directory variable is used to get relative paths.
      */
     void setDirectory(const QDir & directory);
-
-    /**
-     * Sets standard input file.
-     */
-    void setStandardInputFile(const QString &fileName);
 
     /**
      * Returns current working directory.

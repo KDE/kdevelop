@@ -77,25 +77,11 @@ DVcsJob::~DVcsJob()
     delete d;
 }
 
-void DVcsJob::clear()
-{
-    //Do not use KProcess::clearEnvironment() (it sets the environment to kde_dummy).
-    //Also DVCSjob can't set it, so it's ok.
-    d->output.clear();
-    d->childproc->setWorkingDirectory(QDir::temp().absolutePath());
-    d->isRunning = d->wasStarted = false;
-}
-
 void DVcsJob::setDirectory(const QDir& directory)
 {
     const QString workingDirectory = directory.absolutePath();
     kDebug() << "Working directory:" << workingDirectory;
     d->childproc->setWorkingDirectory(workingDirectory);
-}
-
-void DVcsJob::setStandardInputFile(const QString &fileName)
-{
-    d->childproc->setStandardInputFile(fileName);
 }
 
 QDir DVcsJob::getDirectory() const
