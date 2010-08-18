@@ -181,11 +181,8 @@ void DistributedVersionControlPlugin::ctxPush()
     Q_ASSERT(!ctxUrlList.isEmpty());
 
     VcsJob* job = push(ctxUrlList.front().toLocalFile(), VcsLocation());
-    if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SIGNAL(jobFinished(KJob*)));
-        job->start();
-    }
+    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
+    ICore::self()->runController()->registerJob(job);
 }
 
 void DistributedVersionControlPlugin::ctxPull()
@@ -194,11 +191,8 @@ void DistributedVersionControlPlugin::ctxPull()
     Q_ASSERT(!ctxUrlList.isEmpty());
 
     VcsJob* job = pull(VcsLocation(), ctxUrlList.front().toLocalFile());
-    if (job) {
-        connect(job, SIGNAL(result(KJob*)),
-                this, SIGNAL(jobFinished(KJob*)));
-        job->start();
-    }
+    connect(job, SIGNAL(result(KJob*)), this, SIGNAL(jobFinished(KJob*)));
+    ICore::self()->runController()->registerJob(job);
 }
 
 void DistributedVersionControlPlugin::ctxBranchManager()
