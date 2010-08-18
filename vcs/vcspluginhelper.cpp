@@ -350,11 +350,9 @@ void VcsPluginHelper::commit()
     Q_ASSERT(!d->ctxUrls.isEmpty());
 
     KUrl url = d->ctxUrls.first();
-    VcsJob *statusJob = d->vcs->status( url );
+    QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
     QMap<KUrl, VcsStatusInfo::State> changes;
-    if( statusJob->exec() || statusJob->status() != VcsJob::JobSucceeded )
-        kDebug() << "Couldn't get status for urls: " << url;
-    else
+    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
     {
         QVariant varlist = statusJob->fetchResults();
 
@@ -366,10 +364,12 @@ void VcsPluginHelper::commit()
                 changes[info.url()] = info.state();
         }
     }
+    else
+        kDebug() << "Couldn't get status for urls: " << url;
     
-    VcsJob* diffJob = d->vcs->diff(url,
+    QScopedPointer<VcsJob> diffJob(d->vcs->diff(url,
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
-                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
 
     VcsDiff diff;
     bool correctDiff = diffJob->exec();
