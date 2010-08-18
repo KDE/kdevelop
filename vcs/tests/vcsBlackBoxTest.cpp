@@ -74,7 +74,7 @@ void validatingExecJob(int line, VcsJob* j, VcsJob::JobStatus status = VcsJob::J
     // Print the commmands in full, for easier bug location
 #if 0
     if (QLatin1String(j->metaObject()->className()) == "DVcsJob") {
-        kDebug() << "Command: \"" << ((DVcsJob*)j)->getChildproc()->program() << ((DVcsJob*)j)->getChildproc()->workingDirectory();
+        kDebug() << "Command: \"" << ((DVcsJob*)j)->process()->program() << ((DVcsJob*)j)->process()->workingDirectory();
         kDebug() << "Output: \"" << ((DVcsJob*)j)->output();
     }
 #endif

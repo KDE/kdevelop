@@ -52,7 +52,7 @@ private Q_SLOTS:
     void diffToHead();
     void diffToBase();
     void update();
-    void executeCommit(KDevelop::VcsCommitDialog* dlg);
+    void executeCommit(const QString& message, const KUrl::List& urls);
     void cancelCommit(KDevelop::VcsCommitDialog* dlg);
     void diffJobFinished(KJob* job);
 private:

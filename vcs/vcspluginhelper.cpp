@@ -348,27 +348,56 @@ void VcsPluginHelper::add()
 void VcsPluginHelper::commit()
 {
     Q_ASSERT(!d->ctxUrls.isEmpty());
-    KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog(d->plugin, d->plugin->core()->uiController()->activeMainWindow());
-//     KConfigGroup vcsGroup(KSharedConfig::openConfig(componentData()), "VcsCommon");
-//     dlg->setOldMessages(vcsGroup.readEntry("OldCommitMessages", QStringList()));
-//     dlg->setRecursive(true);
-    connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
-    connect(dlg, SIGNAL(cancelCommit(KDevelop::VcsCommitDialog*)), this, SLOT(cancelCommit(KDevelop::VcsCommitDialog*)));
-    dlg->setCommitCandidatesAndShow(d->ctxUrls.first());
+
+    KUrl url = d->ctxUrls.first();
+    VcsJob *statusJob = d->vcs->status( url );
+    QMap<KUrl, VcsStatusInfo::State> changes;
+    if( statusJob->exec() || statusJob->status() != VcsJob::JobSucceeded )
+        kDebug() << "Couldn't get status for urls: " << url;
+    else
+    {
+        QVariant varlist = statusJob->fetchResults();
+
+        foreach( const QVariant &var, varlist.toList() )
+        {
+            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
+            
+            if(info.state()!=VcsStatusInfo::ItemUpToDate)
+                changes[info.url()] = info.state();
+        }
+    }
+    
+    VcsJob* diffJob = d->vcs->diff(url,
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
+
+    VcsDiff diff;
+    bool correctDiff = diffJob->exec();
+    if(correctDiff)
+        diff = diffJob->fetchResults().value<VcsDiff>();
+    
+    if(!correctDiff) {
+        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
+    } else if(diff.isEmpty()) {
+        KMessageBox::information(0, i18n("Could not find any modifications to commit."));
+    } else {
+        VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs);
+        
+        bool ret = showVcsDiff(patchSource);
+        
+        Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
+        if(ret) {
+            connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,KUrl::List)));
+        } else {
+            delete patchSource;
+        }
+    }
 }
 
-void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)
+void VcsPluginHelper::executeCommit(const QString& message, const KUrl::List& urls)
 {
-    KConfigGroup vcsGroup(KSharedConfig::openConfig(d->plugin->componentData()), "VcsCommon");
-    QStringList oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
-    oldMessages << dlg->message();
-    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
-
-    KDevelop::IBasicVersionControl* iface = dlg->versionControlPlugin()->extension<KDevelop::IBasicVersionControl>();
-    d->plugin->core()->runController()->registerJob(iface->commit(dlg->message(), dlg->determineUrlsForCheckin(),
-            dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive));
-
-    dlg->deleteLater();
+    VcsJob* job=d->vcs->commit(message, urls, KDevelop::IBasicVersionControl::NonRecursive);
+    d->plugin->core()->runController()->registerJob(job);
 }
 
 void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
