@@ -526,15 +526,11 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
 }
 
 DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
-    KDevelop::OutputJob::OutputJobVerbosity verbosity)
+                            OutputJob::OutputJobVerbosity verbosity)
 {
     DVcsJob* job = new DVcsJob(this, verbosity);
     if (prepareJob(job, repository) ) {
-        *job << "git";
-        *job << "ls-files";
-        //Empty branch has 'something' so it breaks the command
-        if (!args.isEmpty())
-            *job << args;
+        *job << "git" << "ls-files";
         return job;
     }
     delete job;
@@ -587,102 +583,6 @@ QStringList GitPlugin::branches(const QString &repository)
         branchList<<branch;
     }
     return branchList;
-}
-
-QList<QVariant> GitPlugin::getOtherFiles(const QString& directory, OutputJob::OutputJobVerbosity verbosity)
-{
-    QStringList otherFiles = getLsFiles(directory, QStringList(QString("--others")), verbosity );
-
-    QList<QVariant> others;
-    foreach(const QString &file, otherFiles)
-    {
-        VcsStatusInfo status;
-        status.setUrl(stripPathToDir(directory) + file);
-        status.setState(VcsStatusInfo::ItemUnknown);
-        others.append(qVariantFromValue<VcsStatusInfo>(status));
-    }
-    return others;
-}
-
-QList<QVariant> GitPlugin::getModifiedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    QList<QVariant> modifiedFiles;
-    DVcsJob* job = new DVcsJob(this, verbosity);
-    if (prepareJob(job, directory) ) {
-        *job << "git" << "diff-files";
-
-        QStringList output;
-        if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
-            output = job->output().split('\n', QString::SkipEmptyParts);
-        else
-            return QList<QVariant>();
-
-        foreach(const QString &line, output)
-        {
-            KUrl file(stripPathToDir(directory) + line.section('\t', 1).trimmed());
-
-            VcsStatusInfo status;
-            status.setUrl(file);
-            status.setState(messageToState(line.section(' ', 4, 4)));
-            kDebug() << line[97] << " " << file.toLocalFile();
-
-            modifiedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
-        }
-    }
-
-    return modifiedFiles;
-}
-
-QList<QVariant> GitPlugin::getCachedFiles(const QString &directory, KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    DVcsJob* job = gitRevParse(directory, QStringList(QString("--branches")), verbosity);
-    job->exec();
-    QStringList shaArg;
-    if (job->output().isEmpty())
-    {
-        //there is no branches, which means there is no commit yet
-        //let's create an empty tree to use with git-diff-index
-        //TODO: in newer version of git (AFAIK 1.5.5) we can do:
-        //"git diff-index $(git rev-parse -q --verify HEAD  || echo 4b825dc642cb6eb9a060e54bf8d69288fbee4904)"
-        DVcsJob* job = new DVcsJob(this, verbosity);
-        if (prepareJob(job, directory) )
-        {
-            *job << "git";
-            *job << "mktree";
-            job->setStandardInputFile("/dev/null");
-        }
-        if (job && job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
-            shaArg<<job->output().split('\n', QString::SkipEmptyParts);
-    }
-    else
-        shaArg<<"HEAD";
-    job = new DVcsJob(this, verbosity);
-    if (prepareJob(job, directory) )
-        *job << "git" << "diff-index" << "--cached" << shaArg;
-    if (job)
-        job->exec();
-    QStringList output;
-    if (job->status() == KDevelop::VcsJob::JobSucceeded)
-        output = job->output().split('\n', QString::SkipEmptyParts);
-    else
-        return QList<QVariant>();
-
-    QList<QVariant> cachedFiles;
-
-    foreach(const QString &line, output)
-    {
-        KUrl file(stripPathToDir(directory) + line.section('\t', 1).trimmed());
-
-        VcsStatusInfo status;
-        status.setUrl(file);
-        status.setState(messageToState(line.section(' ', 4, 4)));
-
-        kDebug() << line[97] << " " << file.toLocalFile();
-
-        cachedFiles.append(qVariantFromValue<VcsStatusInfo>(status));
-    }
-
-    return cachedFiles;
 }
 
 /* Few words about how this hardcore works:
