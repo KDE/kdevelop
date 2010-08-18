@@ -119,9 +119,6 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     d->m_common->setupFromContext(context);
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
 
-    if (ctxUrlList.isEmpty())
-        return ContextMenuExtension();
-
     bool isWorkingDirectory = false;
     foreach(const KUrl &url, ctxUrlList) {
         if (isValidDirectory(url)) {
@@ -135,24 +132,11 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     }
 
     QMenu * menu = d->m_common->commonActions();
-    menu->addSeparator();
-    
-    KAction *action;
-    action = new KAction(KIcon("arrow-up-double"), i18n("Push..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxPush()));
-    menu->addAction(action);
-
-    action = new KAction(KIcon("arrow-down-double"), i18n("Pull..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxPull()));
-    menu->addAction(action);
-
-    action = new KAction(i18n("Branch Manager"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxBranchManager()));
-    menu->addAction(action);
-
-    action = new KAction(i18n("Revision History"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(ctxRevHistory()));
-    menu->addAction(action);
+    menu->addSeparator();    
+    menu->addAction(KIcon("arrow-up-double"), i18n("Push..."), this, SLOT(ctxPush()));
+    menu->addAction(KIcon("arrow-down-double"), i18n("Pull..."), this, SLOT(ctxPull()));
+    menu->addAction(i18n("Branch Manager"), this, SLOT(ctxBranchManager()));
+    menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()));
 
     ContextMenuExtension menuExt;
     menuExt.addAction(ContextMenuExtension::VcsGroup, menu->menuAction());
@@ -218,33 +202,6 @@ void DistributedVersionControlPlugin::ctxRevHistory()
     d.setButtons(KDialog::Close);
     d.setMainWidget(revTree);
     d.exec();
-}
-
-void DistributedVersionControlPlugin::checkoutFinished(KJob* _checkoutJob)
-{
-    DVcsJob* checkoutJob = dynamic_cast<DVcsJob*>(_checkoutJob);
-
-    QString workingDir = checkoutJob->getDirectory().absolutePath();
-    kDebug() << "checkout url is: " << workingDir;
-    KDevelop::IProject* curProject = core()->projectController()->findProjectForUrl(KUrl(workingDir));
-
-    if (!curProject) {
-        kDebug() << "couldn't find project for url:" << workingDir;
-        return;
-    }
-    KUrl projectFile = curProject->projectFileUrl();
-
-    core()->projectController()->closeProject(curProject); //let's ask to save all files!
-
-    if (!checkoutJob->exec()) {
-        kDebug() << "CHECKOUT PROBLEM!";
-    }
-
-    kDebug() << "projectFile is " << projectFile << " JobDir is " << workingDir;
-    kDebug() << "Project was closed, now it will be opened";
-    core()->projectController()->openProject(projectFile);
-//  maybe  IProject::reloadModel?
-//     emit jobFinished(_checkoutJob); //causes crash!
 }
 
 KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const

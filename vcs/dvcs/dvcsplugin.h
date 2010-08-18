@@ -116,11 +116,6 @@ public Q_SLOTS:
     // slots for menu
     void slotInit();
 
-    /**
-     * Updates project state after checkout (simply reloads it now)
-     */
-    void checkoutFinished(KJob*);
-
 Q_SIGNALS:
     /**
      * Some actions like commit, add, remove... will connect the job's
