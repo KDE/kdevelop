@@ -117,7 +117,7 @@ void CodeUtilsPlugin::documentDeclaration()
 
     ///TODO: handle existing comments
     stream << indentation << "/**\n";
-    stream << indentation << " * ${" << i18n( "..." ) << "}\n";
+    stream << indentation << " * @brief ${" << i18n( "..." ) << "}\n";
 
     if (dec->isFunctionDeclaration()) {
         AbstractFunctionDeclaration* funDec = dynamic_cast<AbstractFunctionDeclaration*>(dec);

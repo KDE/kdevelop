@@ -95,20 +95,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
 
     virtual void highlightDeclaration(KDevelop::Declaration* declaration, const QColor &color) const;
     virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor &color) const;
-    ///TODO: evaluate whether this should stay virtual for 4.1 and later
-    virtual void highlightUses(KDevelop::DUContext* context) const;
+    /**
+     * @param context Should be the context from where the declaration is used, if a use is highlighted.
+     * */
+    virtual Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const;
 
     void highlightDUChainSimple(KDevelop::DUContext* context) const;
     void highlightDUChain(KDevelop::DUContext* context) const;
     void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap) const;
+    void highlightUses(KDevelop::DUContext* context) const;
     void outputRange( KTextEditor::SmartRange * range ) const;
 
     KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
-    /**
-     * @param context Should be the context from where the declaration is used, if a use is highlighted.
-     * TODO: make this virtual for 4.1
-     * */
-    Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const;
 
     //A temporary hash for speedup
     mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
@@ -140,17 +138,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
-  private:
-    //Returns whether the given attribute was set by the code highlighting, and not by something else
-    //Always returns true when the attribute is zero
-    bool isCodeHighlight(KTextEditor::Attribute::Ptr attr) const;
-
-  ///TODO: 4.1 - reorder the functions to make more sense, cannot do now without changing ABI
   protected:
     //Can be overridden to create an own instance type
     virtual CodeHighlightingInstance* createInstance() const;
 
   private:
+    //Returns whether the given attribute was set by the code highlighting, and not by something else
+    //Always returns true when the attribute is zero
+    bool isCodeHighlight(KTextEditor::Attribute::Ptr attr) const;
+
     friend class CodeHighlightingInstance;
 
     mutable QHash<Types, KTextEditor::Attribute::Ptr> m_definitionAttributes;
