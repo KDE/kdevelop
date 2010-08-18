@@ -140,9 +140,6 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
 
-    QString EasterEgg = i18n("Thanks for the translation! Have a nice day, mr. translator!");
-    Q_UNUSED(EasterEgg)
-
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
     setXMLFile("kdevgit.rc");
 }
