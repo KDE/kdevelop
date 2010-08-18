@@ -189,7 +189,7 @@ void DVcsJob::start()
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     
-    displayOutput(dvcsCommand().join(" "));
+    displayOutput(getDirectory().path() + "> " + dvcsCommand().join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
