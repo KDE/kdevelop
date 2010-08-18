@@ -97,7 +97,7 @@ public:
     /**
      * Returns current working directory.
      */
-    QDir getDirectory() const;
+    QDir directory() const;
 
     /**
      * Call this method to set command to execute and its arguments.
@@ -177,7 +177,7 @@ public:
     virtual KDevelop::IPlugin* vcsPlugin() const;
     // End:  KDevelop::VcsJob
     
-    KProcess *getChildproc();
+    KProcess *process();
     
     void displayOutput(const QString& output);
 

@@ -212,9 +212,6 @@ bool DistributedVersionControlPlugin::prepareJob(DVcsJob* job, const QString& re
     QFileInfo repoInfo(repository);
     Q_ASSERT(repoInfo.isAbsolute());
 
-    // clear commands and args from a possible previous run
-    job->clear();
-
     //repository is sent by ContextMenu, so we check if it is a file and use it's path
     if (repoInfo.isFile())
         job->setDirectory(repoInfo.absoluteDir());
@@ -238,7 +235,7 @@ QString DistributedVersionControlPlugin::stripPathToDir(const QString &path)
 bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List& urls)
 {
     QStringList args;
-    const QDir & dir = job->getDirectory();
+    const QDir & dir = job->directory();
 
     foreach(const KUrl &url, urls) {
         ///@todo this is ok for now, but what if some of the urls are not

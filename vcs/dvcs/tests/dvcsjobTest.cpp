@@ -48,16 +48,14 @@ void DVcsJobTest::testJob()
     QCOMPARE(job->dvcsCommand().join(";;"), echoCommand);
 
     //check our clear() method. It's simple, but having bugs here is dangerous
-    job->clear();
     QVERIFY(job);
     QVERIFY(!job->isRunning());
     QVERIFY(job->status() == DVcsJob::JobNotStarted);
     QVERIFY(job->fetchResults().isNull());
-    QVERIFY(job->getChildproc());
+    QVERIFY(job->process());
     QCOMPARE(job->dvcsCommand(), QStringList());
-    QCOMPARE(job->getDirectory(), QDir::temp());
+    QCOMPARE(job->directory(), QDir::temp());
     QCOMPARE(job->output(), QString());
-
 }
 
 

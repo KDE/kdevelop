@@ -84,7 +84,7 @@ void DVcsJob::setDirectory(const QDir& directory)
     d->childproc->setWorkingDirectory(workingDirectory);
 }
 
-QDir DVcsJob::getDirectory() const
+QDir DVcsJob::directory() const
 {
     return QDir(d->childproc->workingDirectory());
 }
@@ -168,7 +168,7 @@ void DVcsJob::start()
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     
-    displayOutput(getDirectory().path() + "> " + dvcsCommand().join(" "));
+    displayOutput(directory().path() + "> " + dvcsCommand().join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -271,4 +271,4 @@ void DVcsJob::jobIsReady()
     emit resultsReady(this); //VcsJob
 }
 
-KProcess* DVcsJob::getChildproc() {return d->childproc;}
+KProcess* DVcsJob::process() {return d->childproc;}

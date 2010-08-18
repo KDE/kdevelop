@@ -32,7 +32,6 @@ void DVcsJobTest::checkDVCS()
 {
     qDebug() << "check!!!";
     DVcsJob* bzrJob = new DVcsJob(0);
-    bzrJob->clear();
     QVERIFY(bzrJob);
     QVERIFY(bzrJob->status() == DVcsJob::JobNotStarted);
 
@@ -46,10 +45,8 @@ void DVcsJobTest::checkDVCS()
     }
 
     DVcsJob* hgJob = new DVcsJob(0);
-    hgJob->clear();
     QVERIFY(hgJob);
     QVERIFY(hgJob->status() == DVcsJob::JobNotStarted);
-    hgJob->clear();
     hgJob->setDirectory(QDir::temp());
     *hgJob << "hg";
     *hgJob << "root";
@@ -60,10 +57,8 @@ void DVcsJobTest::checkDVCS()
     }
 
     DVcsJob* bzr2Job = new DVcsJob(0);
-    bzr2Job->clear();
     QVERIFY(bzr2Job);
     QVERIFY(bzr2Job->status() == DVcsJob::JobNotStarted);
-    bzr2Job->clear();
     bzr2Job->setDirectory(QDir::temp());
     *bzr2Job << "bzr";
     *bzr2Job << "root";
@@ -74,10 +69,8 @@ void DVcsJobTest::checkDVCS()
     }
 
     DVcsJob* hg2Job = new DVcsJob(0);
-    hg2Job->clear();
     QVERIFY(hg2Job);
     QVERIFY(hg2Job->status() == DVcsJob::JobNotStarted);
-    hg2Job->clear();
     hg2Job->setDirectory(QDir::temp());
     *hg2Job << "hg";
     *hg2Job << "root";
