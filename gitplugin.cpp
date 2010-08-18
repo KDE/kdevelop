@@ -104,6 +104,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
                 case VcsRevision::Previous:
                     Q_ASSERT(!currentRevision.isEmpty());
                     return currentRevision + "^1";
+                case VcsRevision::UserSpecialType: //Not used
                 case VcsRevision::Start:
                     Q_ASSERT(false && "i don't know how to do that");
             }
