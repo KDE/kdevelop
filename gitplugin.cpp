@@ -90,6 +90,47 @@ static KUrl::List preventRecursion(const KUrl::List& urls)
     return ret;
 }
 
+QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision=QString())
+{
+    switch(rev.revisionType()) {
+        case VcsRevision::Special:
+            switch(rev.revisionValue().value<VcsRevision::RevisionSpecialType>()) {
+                case VcsRevision::Head:
+                    return "^HEAD";
+                case VcsRevision::Base:
+                    return "HEAD";
+                case VcsRevision::Working:
+                    return "";
+                case VcsRevision::Previous:
+                    Q_ASSERT(!currentRevision.isEmpty());
+                    return currentRevision + "^1";
+                case VcsRevision::Start:
+                    Q_ASSERT(false && "i don't know how to do that");
+            }
+            break;
+        case VcsRevision::GlobalNumber:
+            return rev.revisionValue().toString();
+        case VcsRevision::Date:
+        case VcsRevision::FileNumber:
+        case VcsRevision::Invalid:
+        case VcsRevision::UserSpecialType:
+            Q_ASSERT(false);
+    }
+    return QString();
+}
+
+QString revisionInterval(const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision)
+{
+    QString ret;
+    QString dstRevisionName = toRevisionName(dstRevision);
+    if(dstRevision.revisionType()==VcsRevision::Special)
+        ret = toRevisionName(srcRevision, dstRevisionName);
+    else
+        ret = toRevisionName(srcRevision, dstRevisionName)+".." + dstRevisionName;
+    
+    return ret;
+}
+
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
@@ -240,35 +281,6 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     return errorsFound(i18n("Could not get the status"), OutputJob::Verbose);
 }
 
-QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision=QString())
-{
-    switch(rev.revisionType()) {
-        case VcsRevision::Special:
-            switch(rev.revisionValue().value<VcsRevision::RevisionSpecialType>()) {
-                case VcsRevision::Head:
-                    return "^HEAD";
-                case VcsRevision::Base:
-                    return "HEAD";
-                case VcsRevision::Working:
-                    return "";
-                case VcsRevision::Previous:
-                    Q_ASSERT(!currentRevision.isEmpty());
-                    return currentRevision + "^1";
-                case VcsRevision::Start:
-                    Q_ASSERT(false && "i don't know how to do that");
-            }
-            break;
-        case VcsRevision::GlobalNumber:
-            return rev.revisionValue().toString();
-        case VcsRevision::Date:
-        case VcsRevision::FileNumber:
-        case VcsRevision::Invalid:
-        case VcsRevision::UserSpecialType:
-            Q_ASSERT(false);
-    }
-    return QString();
-}
-
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
                         VcsDiff::Type type, IBasicVersionControl::RecursionMode recursion)
 {
@@ -276,14 +288,8 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, fileOrDirectory.toLocalFile()) ) {
-        QString dstRevisionName = toRevisionName(dstRevision);
         
-        *job << "git" << "diff" << "--no-prefix";
-        if(dstRevision.revisionType()==VcsRevision::Special)
-            *job << toRevisionName(srcRevision, dstRevisionName);
-        else
-            *job << toRevisionName(srcRevision, dstRevisionName)+".." + dstRevisionName;
-        *job << "--";
+        *job << "git" << "diff" << "--no-prefix" << revisionInterval(srcRevision, dstRevision) << "--";
         addFileList(job, recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
         
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
@@ -355,16 +361,11 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 }
 
 VcsJob* GitPlugin::log(const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit)
+                const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
-    Q_UNUSED(rev)
-    Q_UNUSED(limit)
     DVcsJob* job = new DVcsJob(this);
     if (prepareJob(job, localLocation.toLocalFile()) ) {
-        *job << "git";
-        *job << "log";
-        *job << "--date=raw";
-        *job << "--";
+        *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw" << "--";
         addFileList(job, localLocation);
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
         return job;
@@ -377,7 +378,15 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
-    return log(localLocation, rev, rev);
+    DVcsJob* job = new DVcsJob(this);
+    if (prepareJob(job, localLocation.toLocalFile()) ) {
+        *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString()) << QString("-%1").arg(limit) << "--";
+        addFileList(job, localLocation);
+        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
+        return job;
+    }
+    delete job;
+    return errorsFound(i18n("Could not generate the log"), OutputJob::Verbose);
 }
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
