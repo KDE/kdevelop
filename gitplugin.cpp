@@ -529,7 +529,7 @@ DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
 {
     DVcsJob* job = new DVcsJob(this, verbosity);
     if (prepareJob(job, repository) ) {
-        *job << "git" << "ls-files";
+        *job << "git" << "ls-files" << args;
         return job;
     }
     delete job;
