@@ -883,7 +883,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 {
     VcsDiff diff;
     diff.setDiff(job->output());
-    diff.setBaseDiff(KUrl(job->getDirectory().absolutePath()));
+    diff.setBaseDiff(KUrl(job->directory().absolutePath()));
     
     job->setResults(qVariantFromValue(diff));
 }
@@ -907,7 +907,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QRegExp lineRx(" ?([A-Z?]+) (.+)");
     QStringList outputLines = job->output().split('\n');
-    const KUrl workingDir = job->getDirectory().absolutePath();
+    const KUrl workingDir = job->directory().absolutePath();
     
     QVariantList statuses;
     QList<KUrl> processedFiles;
@@ -936,7 +936,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         paths += *it;
     
     //here we add the already up to date files
-    QStringList files = getLsFiles(job->getDirectory().path(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
+    QStringList files = getLsFiles(job->directory().path(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
     foreach(const QString& file, files) {
         KUrl fileUrl = workingDir;
         fileUrl.addPath(file);
