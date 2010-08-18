@@ -100,11 +100,6 @@ public:
     void clear();
 
     /**
-     * It's not used in any DVCS plugin.
-     */
-    void setServer(const QString& server);
-
-    /**
      * Sets working directory.
      * @param directory Should contain only absolute path. Relative paths or "" (working dir) are deprecated and will make the job fail.
      * @note In DVCS plugins directory variable is used to get relative paths.

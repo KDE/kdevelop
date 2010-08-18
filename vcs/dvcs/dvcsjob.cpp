@@ -49,7 +49,6 @@ struct DVcsJobPrivate
     }
 
     KProcess*   childproc;
-    QString     server;
     bool        isRunning;
     bool        wasStarted;
     QByteArray  output;
@@ -83,14 +82,8 @@ void DVcsJob::clear()
     //Do not use KProcess::clearEnvironment() (it sets the environment to kde_dummy).
     //Also DVCSjob can't set it, so it's ok.
     d->output.clear();
-    d->server.clear();
     d->childproc->setWorkingDirectory(QDir::temp().absolutePath());
     d->isRunning = d->wasStarted = false;
-}
-
-void DVcsJob::setServer(const QString& server)
-{
-    d->server = server;
 }
 
 void DVcsJob::setDirectory(const QDir& directory)
