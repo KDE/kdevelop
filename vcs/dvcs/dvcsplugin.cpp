@@ -79,10 +79,7 @@ struct DistributedVersionControlPluginPrivate {
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, KComponentData compData)
         : IPlugin(compData, parent)
         , d(new DistributedVersionControlPluginPrivate(this))
-{
-    QString EasterEgg = i18n("Horses are forbidden to eat fire hydrants in Marshalltown, Iowa.");
-    Q_UNUSED(EasterEgg)
-}
+{}
 
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 {
