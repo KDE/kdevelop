@@ -99,8 +99,9 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
                 case VcsRevision::Previous:
                     Q_ASSERT(!currentRevision.isEmpty());
                     return currentRevision + "^1";
-                case VcsRevision::UserSpecialType: //Not used
                 case VcsRevision::Start:
+                    return "";
+                case VcsRevision::UserSpecialType: //Not used
                     Q_ASSERT(false && "i don't know how to do that");
             }
             break;
@@ -115,14 +116,17 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
     return QString();
 }
 
-QString revisionInterval(const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision)
+QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit)
 {
     QString ret;
-    QString dstRevisionName = toRevisionName(dstRevision);
-    if(dstRevision.revisionType()==VcsRevision::Special)
-        ret = toRevisionName(srcRevision, dstRevisionName);
+    QString srcRevisionName = toRevisionName(rev);
+    if(limit.revisionType()==VcsRevision::Special &&
+                limit.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the begining just put the revisionInterval
+        return ret = srcRevisionName;
+    else if(rev.revisionType()==VcsRevision::Special)
+        ret = toRevisionName(limit, srcRevisionName);
     else
-        ret = toRevisionName(srcRevision, dstRevisionName)+".." + dstRevisionName;
+        ret = toRevisionName(limit, srcRevisionName)+".." +srcRevisionName;
     
     return ret;
 }
@@ -140,6 +144,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
     setXMLFile("kdevgit.rc");
+    setObjectName("Git");
 }
 
 GitPlugin::~GitPlugin()
@@ -222,7 +227,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     *job << "git" << "status" << "--porcelain" << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
-    connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitStatusOutput(DVcsJob*)));
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -235,7 +240,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     *job << "git" << "diff" << "--no-prefix" << revisionInterval(srcRevision, dstRevision) << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
     
-    connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitDiffOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -285,7 +290,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
     DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
     *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw";
     *job << "--" << localLocation;
-    connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -294,9 +299,12 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
     DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
-    *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString()) << QString("-%1").arg(limit) << "--";
-    *job << localLocation;
-    connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
+    *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString());
+    if(limit>0)
+        *job << QString("-%1").arg(limit);
+    
+    *job << "--" << localLocation;
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -305,7 +313,7 @@ KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop:
     DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
     *job << "git" << "blame" << "--porcelain";
     *job << "--" << localLocation;
-    connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -421,7 +429,7 @@ QString GitPlugin::curBranch(const QString &repository)
     kDebug() << "Getting branch list";
     
     QScopedPointer<DVcsJob> job(new DVcsJob(QDir(repository), this, OutputJob::Silent));
-    *job << "git" << "status" << "-b" << "--porcelain";
+    *job << "git" << "status" << "-b" << "--short";
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
         QString out = job->output();
         return out.mid(3, out.indexOf('\n')-3);
@@ -752,6 +760,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
             message += '\n';
         }
     }
+    
     item.setMessage(message.trimmed());
     commits.append(QVariant::fromValue(item));
     job->setResults(commits);
@@ -929,30 +938,24 @@ void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
 VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
 {
     DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
-    {
-        //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
-        *job << "git" << "config" << "remote.origin.url";
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitRepoLocationOutput(DVcsJob*)));
-        return job;
-    }
+    //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
+    *job << "git" << "config" << "remote.origin.url";
+    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitRepoLocationOutput(KDevelop::DVcsJob*)));
+    return job;
 }
 
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
-    {
-        *job << "git" << "pull" << localOrRepoLocationSrc.localUrl().url();
-        return job;
-    }
+    *job << "git" << "pull" << localOrRepoLocationSrc.localUrl().url();
+    return job;
 }
 
 VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
-    {
-        *job << "git" << "push" << localOrRepoLocationDst.localUrl().url();
-        return job;
-    }
+    *job << "git" << "push" << localOrRepoLocationDst.localUrl().url();
+    return job;
 }
 
 VcsJob* GitPlugin::resolve(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
