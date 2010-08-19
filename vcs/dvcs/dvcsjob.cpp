@@ -141,6 +141,8 @@ void DVcsJob::start()
     Q_ASSERT(QDir(d->childproc->workingDirectory()).isAbsolute());
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
+
+    setObjectName(d->vcsplugin->objectName()+": "+dvcsCommand().join(" "));
     
     d->status = JobRunning;
     d->childproc->setEnvironment(QProcess::systemEnvironment());
