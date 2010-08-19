@@ -144,7 +144,7 @@ public:
     KDevelop::DVcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
     
     bool hasStashes(const QDir& repository);
-    bool hasModifications(const KUrl& repository);
+    bool hasModifications(const QDir& repository);
 protected:
   
     KUrl repositoryRoot(const KUrl& path);

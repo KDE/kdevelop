@@ -47,6 +47,7 @@
 #include <QMenu>
 #include <interfaces/iruncontroller.h>
 #include "stashmanagerdialog.h"
+#include <KMessageBox>
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -168,9 +169,9 @@ bool GitPlugin::hasStashes(const QDir& repository)
     return !emptyOutput(gitStash(repository, QStringList("list"), KDevelop::OutputJob::Silent));
 }
 
-bool GitPlugin::hasModifications(const KUrl& file)
+bool GitPlugin::hasModifications(const QDir& d)
 {
-    return !emptyOutput(lsFiles(dotGitDirectory(file), QStringList("-m"), OutputJob::Silent));
+    return !emptyOutput(lsFiles(d, QStringList("-m"), OutputJob::Silent));
 }
 
 void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
@@ -178,7 +179,7 @@ void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
     m_urls = urls;
     
     QDir dir=urlDir(urls);
-    bool modif = hasModifications(urls.first());
+    bool modif = hasModifications(dotGitDirectory(urls.first()));
     bool canApply = !modif && hasStashes(dir);
     menu->addSeparator()->setText(i18n("Git Stashes"));
     menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(canApply);
@@ -226,7 +227,7 @@ QString GitPlugin::name() const
 
 KUrl GitPlugin::repositoryRoot(const KUrl& path)
 {
-    return KUrl(dotGitDirectory(path).path());
+    return KUrl(dotGitDirectory(path).absolutePath());
 }
 
 bool GitPlugin::isValidDirectory(const KUrl & dirPath)
@@ -444,8 +445,14 @@ DVcsJob* GitPlugin::var(const QString & repository)
 
 DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branch)
 {
-    ///TODO Check if the branch exists. or send only existed branch names here!
-    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    QDir d(repository);
+    
+    if(hasModifications(d) && KMessageBox::questionYesNo(0, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
+        QScopedPointer<DVcsJob> stash(gitStash(urlDir(m_urls), QStringList(), KDevelop::OutputJob::Verbose));
+        stash->exec();
+    }
+    
+    DVcsJob* job = new DVcsJob(d, this);
     *job << "git" << "checkout" << branch;
     return job;
 }
