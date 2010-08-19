@@ -21,13 +21,14 @@ add_subdirectory(tests)
 add_subdirectory(icons)
 
 set(kdevgit_PART_SRCS
-    gitclonejob.cpp
+    stashmanagerdialog.cpp
     
+    gitclonejob.cpp
     gitplugin.cpp
 )
 
+kde4_add_ui_files(kdevgit_PART_SRCS stashmanagerdialog.ui)
 kde4_add_plugin(kdevgit ${kdevgit_PART_SRCS})
-
 
 target_link_libraries(kdevgit
     ${KDE4_KDEUI_LIBS}

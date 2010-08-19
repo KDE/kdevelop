@@ -43,6 +43,10 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <KIO/CopyJob>
 #include "gitclonejob.h"
+#include <interfaces/contextmenuextension.h>
+#include <QMenu>
+#include <interfaces/iruncontroller.h>
+#include "stashmanagerdialog.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -150,6 +154,58 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 GitPlugin::~GitPlugin()
 {}
 
+bool emptyOutput(DVcsJob* job)
+{
+    QScopedPointer<DVcsJob> _job(job);
+    if(job->exec() && job->status()==VcsJob::JobSucceeded)
+        return job->rawOutput().trimmed().isEmpty();
+    
+    return false;
+}
+
+bool GitPlugin::hasStashes(const QDir& repository)
+{
+    return !emptyOutput(gitStash(repository, QStringList("list"), KDevelop::OutputJob::Silent));
+}
+
+bool GitPlugin::hasModifications(const KUrl& file)
+{
+    return !emptyOutput(lsFiles(dotGitDirectory(file), QStringList("-m"), OutputJob::Silent));
+}
+
+void GitPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
+{
+    m_urls = urls;
+    
+    QDir dir=urlDir(urls);
+    bool modif = hasModifications(urls.first());
+    bool canApply = !modif && hasStashes(dir);
+    menu->addSeparator()->setText(i18n("Git Stashes"));
+    menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(canApply);
+    menu->addAction(i18n("Push Stash"), this, SLOT(ctxPushStash()))->setEnabled(modif);
+    menu->addAction(i18n("Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(canApply);
+}
+
+void GitPlugin::ctxPushStash()
+{
+    VcsJob* job = gitStash(urlDir(m_urls), QStringList(), KDevelop::OutputJob::Verbose);
+    ICore::self()->runController()->registerJob(job);
+}
+
+void GitPlugin::ctxPopStash()
+{
+    VcsJob* job = gitStash(urlDir(m_urls), QStringList("pop"), KDevelop::OutputJob::Verbose);
+    ICore::self()->runController()->registerJob(job);
+}
+
+void GitPlugin::ctxStashManager()
+{
+    QPointer<StashManagerDialog> d = new StashManagerDialog(urlDir(m_urls), this, 0);
+    d->exec();
+    
+    delete d;
+}
+
 DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity=OutputJob::Verbose)
 {
     DVcsJob* j = new DVcsJob(QDir::temp(), this, verbosity);
@@ -187,10 +243,9 @@ bool GitPlugin::isVersionControlled(const KUrl &path)
         return isValidDirectory(path);
     }
 
-    QString workDir = fsObject.path();
     QString filename = fsObject.fileName();
 
-    QStringList otherFiles = getLsFiles(workDir, QStringList("--") << filename, KDevelop::OutputJob::Silent);
+    QStringList otherFiles = getLsFiles(fsObject.dir(), QStringList("--") << filename, KDevelop::OutputJob::Silent);
     return !otherFiles.empty();
 }
 
@@ -237,8 +292,12 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
     //TODO: control different types
     
     DVcsJob* job = new DVcsJob(urlDir(fileOrDirectory), this);
-    *job << "git" << "diff" << "--no-prefix" << revisionInterval(srcRevision, dstRevision) << "--";
-    *job << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
+    *job << "git" << "diff" << "--no-prefix";
+    QString revstr = revisionInterval(srcRevision, dstRevision);
+    if(!revstr.isEmpty())
+        *job << revstr;
+    
+    *job << "--" << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
     
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitDiffOutput(KDevelop::DVcsJob*)));
     return job;
@@ -416,11 +475,18 @@ VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const 
     return job;
 }
 
-DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
+DVcsJob* GitPlugin::lsFiles(const QDir &repository, const QStringList &args,
                             OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(QDir(repository), this, verbosity);
+    DVcsJob* job = new DVcsJob(repository, this, verbosity);
     *job << "git" << "ls-files" << args;
+    return job;
+}
+
+DVcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, OutputJob::OutputJobVerbosity verbosity)
+{
+    DVcsJob* job = new DVcsJob(repository, this, verbosity);
+    *job << "git" << "stash" << args;
     return job;
 }
 
@@ -429,10 +495,12 @@ QString GitPlugin::curBranch(const QString &repository)
     kDebug() << "Getting branch list";
     
     QScopedPointer<DVcsJob> job(new DVcsJob(QDir(repository), this, OutputJob::Silent));
-    *job << "git" << "status" << "-b" << "--short";
+    *job << "git" << "symbolic-ref" << "HEAD";
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
         QString out = job->output();
-        return out.mid(3, out.indexOf('\n')-3);
+        int slashPos = out.lastIndexOf('/')+1;
+        kDebug() << "Getting branch list" << out.mid(slashPos, out.size()-slashPos).trimmed();
+        return out.mid(slashPos, out.size()-slashPos).trimmed();
     }
     return QString();
 }
@@ -823,7 +891,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         paths += *it;
     
     //here we add the already up to date files
-    QStringList files = getLsFiles(job->directory().path(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
+    QStringList files = getLsFiles(job->directory(), QStringList() << "-c" << "--" << paths, OutputJob::Silent);
     foreach(const QString& file, files) {
         KUrl fileUrl = workingDir;
         fileUrl.addPath(file);
@@ -839,7 +907,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     job->setResults(statuses);
 }
 
-QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &args,
+QStringList GitPlugin::getLsFiles(const QDir &directory, const QStringList &args,
     KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
     QScopedPointer<DVcsJob> job(lsFiles(directory, args, verbosity));

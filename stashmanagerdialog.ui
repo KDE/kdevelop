@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StashManager</class>
+ <widget class="QWidget" name="StashManager">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" rowspan="5">
+    <widget class="QListView" name="stashView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="apply">
+     <property name="whatsThis">
+      <string>Applies stash's patch</string>
+     </property>
+     <property name="text">
+      <string>Apply</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="pop">
+     <property name="whatsThis">
+      <string>Applies stash's patch and drops the stash</string>
+     </property>
+     <property name="text">
+      <string>Pop</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="branch">
+     <property name="whatsThis">
+      <string>Creates a new branch and applies the stash there, then it drops the stash.</string>
+     </property>
+     <property name="text">
+      <string>Branch</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>77</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1">
+    <widget class="QPushButton" name="drop">
+     <property name="whatsThis">
+      <string>Removes the selected branch</string>
+     </property>
+     <property name="text">
+      <string>Drop</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

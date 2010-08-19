@@ -29,6 +29,7 @@
 #include <outputview/outputjob.h>
 #include <vcs/vcsjob.h>
 
+class QDir;
 
 namespace KDevelop
 {
@@ -138,13 +139,19 @@ public:
     void parseLogOutput(const KDevelop::DVcsJob * job,
                         QList<DVcsEvent>& commits) const;
 
+    virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
+    
+    KDevelop::DVcsJob* gitStash(const QDir& repository, const QStringList& args, KDevelop::OutputJob::OutputJobVerbosity verbosity);
+    
+    bool hasStashes(const QDir& repository);
+    bool hasModifications(const KUrl& repository);
 protected:
   
     KUrl repositoryRoot(const KUrl& path);
   
     bool isValidDirectory(const KUrl &dirPath);
 
-    KDevelop::DVcsJob* lsFiles(const QString &repository,
+    KDevelop::DVcsJob* lsFiles(const QDir &repository,
                      const QStringList &args,
                      KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     KDevelop::DVcsJob* gitRevList(const QString &repository,
@@ -159,10 +166,14 @@ private slots:
     void parseGitDiffOutput(KDevelop::DVcsJob* job);
     void parseGitRepoLocationOutput(KDevelop::DVcsJob* job);
     void parseGitStatusOutput(KDevelop::DVcsJob* job);
+    
+    void ctxPushStash();
+    void ctxPopStash();
+    void ctxStashManager();
 
 private:
     //commit dialog "main" helper
-    QStringList getLsFiles(const QString &directory, const QStringList &args,
+    QStringList getLsFiles(const QDir &directory, const QStringList &args,
         KDevelop::OutputJob::OutputJobVerbosity verbosity);
     KDevelop::DVcsJob* errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity);
 
@@ -171,6 +182,7 @@ private:
     static KDevelop::VcsStatusInfo::State messageToState(const QString& ch);
 
     QList<QStringList> branchesShas;
+    KUrl::List m_urls;
 };
 
 #endif
