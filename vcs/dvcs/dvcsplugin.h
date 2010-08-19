@@ -36,6 +36,7 @@
 #include <vcs/vcsstatusinfo.h>
 #include <outputview/outputjob.h>
 
+class QMenu;
 class QString;
 class KDevDVCSViewFactory;
 
@@ -104,6 +105,11 @@ public:
      */
     virtual QList<DVcsEvent> getAllCommits(const QString &repo) = 0;
 
+    /**
+     * When a plugin wants to add elements to the vcs menu, this method can be
+     * overriden.
+     */
+    virtual void additionalMenuEntries(QMenu* menu, const KUrl::List& urls);
 public Q_SLOTS:
     //slots for context menu
     void ctxPush();

@@ -125,6 +125,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     menu->addAction(KIcon("arrow-down-double"), i18n("Pull..."), this, SLOT(ctxPull()));
     menu->addAction(i18n("Branch Manager"), this, SLOT(ctxBranchManager()));
     menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()));
+    additionalMenuEntries(menu, ctxUrlList);
 
     ContextMenuExtension menuExt;
     menuExt.addAction(ContextMenuExtension::VcsGroup, menu->menuAction());
@@ -132,6 +133,9 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     return menuExt;
 
 }
+
+void DistributedVersionControlPlugin::additionalMenuEntries(QMenu* menu, const KUrl::List& urls)
+{}
 
 void DistributedVersionControlPlugin::slotInit()
 {
