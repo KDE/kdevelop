@@ -23,11 +23,11 @@
 
 #include <vcs/dvcs/dvcsjob.h>
 
-class GitCloneJob : public DVcsJob
+class GitCloneJob : public KDevelop::DVcsJob
 {
     Q_OBJECT
     public:
-        GitCloneJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+        GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
         
     public slots:
         void receivedStderr();

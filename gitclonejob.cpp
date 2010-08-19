@@ -21,8 +21,8 @@
 #include "gitclonejob.h"
 #include <QDebug>
 
-GitCloneJob::GitCloneJob(KDevelop::IPlugin* parent, OutputJobVerbosity verbosity)
-    : DVcsJob(parent, verbosity)
+GitCloneJob::GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, OutputJobVerbosity verbosity)
+    : DVcsJob(d, parent, verbosity)
     , m_steps(0)
 {
     connect(process(), SIGNAL(readyReadStandardError()), SLOT(receivedStderr()));

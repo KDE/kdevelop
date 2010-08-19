@@ -54,18 +54,13 @@ namespace
     
 QDir dotGitDirectory(const KUrl& dirPath)
 {
-    const QString initialPath(dirPath.toLocalFile(KUrl::RemoveTrailingSlash));
+    const QString initialPath(dirPath.toLocalFile());
     const QFileInfo finfo(initialPath);
-    QDir dir;
-    if (finfo.isFile()) {
-        dir = finfo.absoluteDir();
-    } else {
-        dir = QDir(initialPath);
-        dir.makeAbsolute();
-    }
+    QDir dir = finfo.absoluteDir();
     
     static const QString gitDir(".git");
-    while (!dir.cd(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
+    while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
+    
     return dir;
 }
 
@@ -132,6 +127,9 @@ QString revisionInterval(const KDevelop::VcsRevision& srcRevision, const KDevelo
     return ret;
 }
 
+QDir urlDir(const KUrl& url) { return QFileInfo(url.toLocalFile()).absoluteDir(); }
+QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: could be improved
+
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
@@ -147,9 +145,9 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 GitPlugin::~GitPlugin()
 {}
 
-DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity=OutputJob::Verbose)
 {
-    DVcsJob* j = new DVcsJob(this, verbosity);
+    DVcsJob* j = new DVcsJob(QDir::temp(), this, verbosity);
     *j << "echo" << i18n("error: %1", error) << "-n";
     return j;
 }
@@ -167,38 +165,14 @@ QString GitPlugin::name() const
 
 KUrl GitPlugin::repositoryRoot(const KUrl& path)
 {
-    // Ugly but true: This is how it works.
-    isValidDirectory(path);
-    return m_lastRepoRoot;
+    return KUrl(dotGitDirectory(path).path());
 }
 
 bool GitPlugin::isValidDirectory(const KUrl & dirPath)
 {
-    KUrl possibleRepoRoot = m_lastRepoRoot;
-    if (!m_lastRepoRoot.isValid() || !m_lastRepoRoot.isParentOf(dirPath)) {
-        QDir dir=dotGitDirectory(dirPath);
+    QDir dir=dotGitDirectory(dirPath);
 
-        if (".git" != dir.dirName()) {  // We didn't find .git, so no need to call git
-            kDebug() << "Dir:" << dirPath << " is not inside work tree of git \"" << dirPath << '"';
-            return false;
-        }
-        dir.cdUp();
-        possibleRepoRoot.setDirectory(dir.absolutePath());
-    }
-
-    // We might have found a valid repository, call git to verify it
-    QScopedPointer<KDevelop::VcsJob> job(gitRevParse(possibleRepoRoot.toLocalFile(), QStringList(QString("--is-inside-work-tree")), KDevelop::OutputJob::Silent));
-
-    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
-        kDebug() << "Dir:" << dirPath << " is inside work tree of git (" << possibleRepoRoot << ')';
-        m_lastRepoRoot = possibleRepoRoot;
-        return true;
-    } else if (m_lastRepoRoot == possibleRepoRoot) {   // Not a repository anymore
-        m_lastRepoRoot.clear(); // Restart from scratch
-        return isValidDirectory(dirPath);
-    }
-
-    return false;
+    return dir.exists(".git");
 }
 
 bool GitPlugin::isVersionControlled(const KUrl &path)
@@ -211,54 +185,32 @@ bool GitPlugin::isVersionControlled(const KUrl &path)
     QString workDir = fsObject.path();
     QString filename = fsObject.fileName();
 
-    QStringList listfiles("--");
-    listfiles.append(filename);
-    QStringList otherFiles = getLsFiles(workDir, listfiles, KDevelop::OutputJob::Silent);
+    QStringList otherFiles = getLsFiles(workDir, QStringList("--") << filename, KDevelop::OutputJob::Silent);
     return !otherFiles.empty();
 }
 
 VcsJob* GitPlugin::init(const KUrl &directory)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, directory.toLocalFile(), GitPlugin::Init) ) {
-        *job << "git";
-        *job << "init";
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not initialize the repository"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(directory), this);
+    *job << "git" << "init";
+    return job;
 }
 
 VcsJob* GitPlugin::createWorkingCopy(const KDevelop::VcsLocation & source, const KUrl& dest, KDevelop::IBasicVersionControl::RecursionMode)
 {
-    DVcsJob* job = new GitCloneJob(this);
-    if (prepareJob(job, dest.toLocalFile(), GitPlugin::Init) ) {
-        *job << "git" << "clone"
-             << "--progress"
-             << "--" << source.localUrl().prettyUrl() << dest.toLocalFile();
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not create the working copy"), OutputJob::Verbose);
+    DVcsJob* job = new GitCloneJob(urlDir(dest), this);
+    *job << "git" << "clone" << "--progress" << "--" << source.localUrl().url() << dest;
+    return job;
 }
 
 VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    Q_UNUSED(recursion)
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocations.front().toLocalFile()) ) {
-        *job << "git";
-        *job << "add";
-        *job << "--";
-        addFileList(job, localLocations);
-
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not add the files"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
+    *job << "git" << "add" << "--" << localLocations;
+    return job;
 }
 
 KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::IBasicVersionControl::RecursionMode recursion)
@@ -266,16 +218,12 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocations.front().toLocalFile()) ) {
-        *job << "git" << "status" << "--porcelain" << "--";
-        addFileList(job, recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
+    *job << "git" << "status" << "--porcelain" << "--";
+    *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitStatusOutput(DVcsJob*)));
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not get the status"), OutputJob::Verbose);
+    connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitStatusOutput(DVcsJob*)));
+    return job;
 }
 
 VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
@@ -283,33 +231,24 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
 {
     //TODO: control different types
     
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, fileOrDirectory.toLocalFile()) ) {
-        
-        *job << "git" << "diff" << "--no-prefix" << revisionInterval(srcRevision, dstRevision) << "--";
-        addFileList(job, recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
-        
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
-        return job;
-    }
+    DVcsJob* job = new DVcsJob(urlDir(fileOrDirectory), this);
+    *job << "git" << "diff" << "--no-prefix" << revisionInterval(srcRevision, dstRevision) << "--";
+    *job << (recursion == IBasicVersionControl::Recursive ? fileOrDirectory : preventRecursion(fileOrDirectory));
     
-    delete job;
-    return errorsFound(i18n("Could not create the patch"), OutputJob::Verbose);
+    connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitDiffOutput(DVcsJob*)));
+    return job;
 }
 
 VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (!localLocations.isEmpty() && prepareJob(job, localLocations.first().toLocalFile()) ) {
-        *job << "git" << "checkout";
-        *job << "--";
-        addFileList(job, recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
-        
-        return job;
-    }
+    if(localLocations.isEmpty() )
+        return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
     
-    delete job;
-    return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
+    *job << "git" << "checkout" << "--";
+    *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    
+    return job;
 }
 
 
@@ -319,84 +258,55 @@ VcsJob* GitPlugin::commit(const QString& message,
                              const KUrl::List& localLocations,
                              KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    Q_UNUSED(recursion)
-
     if (localLocations.empty() || message.isEmpty())
-        return 0;
+        return errorsFound(i18n("No files or message specified"));
 
-    DVcsJob* job = new DVcsJob(this);
+    DVcsJob* job = new DVcsJob(dotGitDirectory(localLocations.front()), this);
     
-    if (prepareJob(job, repositoryRoot(localLocations.front()).toLocalFile()) ) {
-        *job << "git";
-        *job << "commit";
-        *job << "-m";
-        //Note: the message is quoted somewhere else, so if we quote here then we have quotes in the commit log
-        *job << message;
-        *job << "--";
-        addFileList(job, localLocations);
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Committing failed"), OutputJob::Verbose);
+    *job << "git" << "commit" << "-m" << message;
+    *job << "--" << localLocations;
+    return job;
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
 {
-    if (files.empty())
-        return 0;
+    if (files.isEmpty())
+        return errorsFound(i18n("No files to remove"));
 
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, files.front().toLocalFile()) ) {
-        *job << "git";
-        *job << "rm";
-        *job << "--";
-        addFileList(job, files);
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not remove the files"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(files), this);
+    *job << "git" << "rm";
+    *job << "--" << files;
+    return job;
 }
 
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocation.toLocalFile()) ) {
-        *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw" << "--";
-        addFileList(job, localLocation);
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not generate the log"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw";
+    *job << "--" << localLocation;
+    connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
+    return job;
 }
 
 
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocation.toLocalFile()) ) {
-        *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString()) << QString("-%1").arg(limit) << "--";
-        addFileList(job, localLocation);
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not generate the log"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString()) << QString("-%1").arg(limit) << "--";
+    *job << localLocation;
+    connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitLogOutput(DVcsJob*)));
+    return job;
 }
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocation.toLocalFile())) {
-        *job << "git" << "blame" << "--porcelain" << "--";
-        addFileList(job, localLocation);
-        connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not read the annotations"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    *job << "git" << "blame" << "--porcelain";
+    *job << "--" << localLocation;
+    connect(job, SIGNAL(readyForParsing(DVcsJob*)), this, SLOT(parseGitBlameOutput(DVcsJob*)));
+    return job;
 }
 
 void GitPlugin::parseGitBlameOutput(DVcsJob *job)
@@ -460,93 +370,61 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 
 DVcsJob* GitPlugin::var(const QString & repository)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, repository) ) {
-        *job << "git";
-        *job << "var";
-        *job << "-l";
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not retrieve some repository variable"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    *job << "git" << "var" << "-l";
+    return job;
 }
 
 DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branch)
 {
     ///TODO Check if the branch exists. or send only existed branch names here!
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, repository) ) {
-        *job << "git";
-        *job << "checkout";
-        *job << branch;
-        return job;
-    }
-    
-    delete job;
-    return errorsFound(i18n("Could not switch the branch"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    *job << "git" << "checkout" << branch;
+    return job;
 }
 
 DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch, const QString &branch,
                              const QStringList &args)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, repository) ) {
-        *job << "git";
-        *job << "branch";
-        //Empty branch has 'something' so it breaks the command
-        if (!args.isEmpty())
-            *job << args;
-        *job << "--";
-        if (!branch.isEmpty())
-            *job << branch;
-        if (!basebranch.isEmpty())
-            *job << basebranch;
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not list or operate with branches"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    *job << "git" << "branch" << args;
+    
+    *job << "--";
+    if (!branch.isEmpty())
+        *job << branch;
+    if (!basebranch.isEmpty())
+        *job << basebranch;
+    return job;
 }
 
 VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const KUrl::List& files)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (!files.isEmpty() && prepareJob(job, repository.toLocalFile()) ) {
-        *job << "git";
-        *job << "reset";
-        //Empty branch has 'something' so it breaks the command
-        if (!args.isEmpty())
-            *job << args;
-        *job << "--";
-        addFileList(job, files);
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not reset"), OutputJob::Verbose);
+    if(files.isEmpty())
+        return errorsFound(i18n("Could not reset"), OutputJob::Verbose);
+    
+    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    *job << "git" << "reset" << args;
+    *job << "--" << files;
+    return job;
 }
 
 DVcsJob* GitPlugin::lsFiles(const QString &repository, const QStringList &args,
                             OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(this, verbosity);
-    if (prepareJob(job, repository) ) {
-        *job << "git" << "ls-files" << args;
-        return job;
-    }
-    delete job;
-    return errorsFound(i18n("Could not list files"), OutputJob::Verbose);
+    DVcsJob* job = new DVcsJob(QDir(repository), this, verbosity);
+    *job << "git" << "ls-files" << args;
+    return job;
 }
 
 QString GitPlugin::curBranch(const QString &repository)
 {
     kDebug() << "Getting branch list";
     
-    QScopedPointer<DVcsJob> job(new DVcsJob(this, OutputJob::Silent));
-    if (prepareJob(job.data(), repository) ) {
-        *job << "git" << "status" << "-b" << "--porcelain";
-        if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
-            QString out = job->output();
-            return out.mid(3, out.indexOf('\n')-3);
-        }
+    QScopedPointer<DVcsJob> job(new DVcsJob(QDir(repository), this, OutputJob::Silent));
+    *job << "git" << "status" << "-b" << "--porcelain";
+    if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
+        QString out = job->output();
+        return out.mid(3, out.indexOf('\n')-3);
     }
     return QString();
 }
@@ -965,14 +843,7 @@ QStringList GitPlugin::getLsFiles(const QString &directory, const QStringList &a
 DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &args,
     KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    //Use prepareJob() here only if you like "dead" recursion and KDevelop crashes
-    DVcsJob* job = new DVcsJob(this, verbosity);
-    QString workDir = repository;
-    QFileInfo fsObject(workDir);
-    if (fsObject.isFile())
-        workDir = fsObject.path();
-
-    job->setDirectory(workDir);
+    DVcsJob* job = new DVcsJob(QDir(repository), this, verbosity);
     *job << "git" << "rev-parse" << args;
 
     return job;
@@ -980,14 +851,11 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
 
 DVcsJob* GitPlugin::gitRevList(const QString &repository, const QStringList &args)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, repository) ) {
+    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    {
         *job << "git" << "rev-list" << args;
         return job;
     }
-    
-    delete job;
-    return errorsFound(i18n("Could not get the rev list"), OutputJob::Verbose);
 }
 
 VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
@@ -1046,14 +914,11 @@ VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationD
 
 VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 {
-    DVcsJob* job = new DVcsJob(this, KDevelop::OutputJob::Verbose);
-    if (prepareJob(job, source.toLocalFile())) {
+    DVcsJob* job = new DVcsJob(urlDir(source), this, KDevelop::OutputJob::Verbose);
+    {
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
         return job;
     }
-    
-    delete job;
-    return 0;
 }
 
 void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
@@ -1063,40 +928,31 @@ void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
 
 VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localLocation.toLocalFile())) {
+    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    {
         //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
         *job << "git" << "config" << "remote.origin.url";
         connect(job, SIGNAL(readyForParsing(DVcsJob*)), SLOT(parseGitRepoLocationOutput(DVcsJob*)));
         return job;
     }
-    
-    delete job;
-    return errorsFound(i18n("Could not get the repository location"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localRepositoryLocation.toLocalFile())) {
+    DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
+    {
         *job << "git" << "pull" << localOrRepoLocationSrc.localUrl().url();
         return job;
     }
-    
-    delete job;
-    return errorsFound(i18n("Could not get the repository updates"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
-    DVcsJob* job = new DVcsJob(this);
-    if (prepareJob(job, localRepositoryLocation.toLocalFile())) {
+    DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
+    {
         *job << "git" << "push" << localOrRepoLocationDst.localUrl().url();
         return job;
     }
-    
-    delete job;
-    return errorsFound(i18n("Could not send the local changes"), OutputJob::Verbose);
 }
 
 VcsJob* GitPlugin::resolve(const KUrl::List& localLocations, IBasicVersionControl::RecursionMode recursion)
@@ -1109,16 +965,13 @@ VcsJob* GitPlugin::update(const KUrl::List& localLocations, const KDevelop::VcsR
     if(rev.revisionType()==VcsRevision::Special && rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Head) {
         return pull(VcsLocation(), localLocations.first());
     } else {
-        DVcsJob* job = new DVcsJob(this);
-        if (prepareJob(job, localLocations.first().toLocalFile())) {
+        DVcsJob* job = new DVcsJob(urlDir(localLocations.first().toLocalFile()), this);
+        {
             //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
             *job << "git" << "checkout" << rev.revisionValue().toString() << "--";
-            addFileList(job, recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+            *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
             return job;
         }
-        
-        delete job;
-        return errorsFound(i18n("Could update to the specified revision"), OutputJob::Verbose);
     }
 }
 

@@ -117,13 +117,13 @@ public:
                             const KUrl::List& files);
     // End:  KDevelop::IDistributedVersionControl
 
-    DVcsJob* var(const QString &directory);
+    KDevelop::DVcsJob* var(const QString &directory);
 
     // Branch management
 
-    DVcsJob* switchBranch(const QString &repository,
+    KDevelop::DVcsJob* switchBranch(const QString &repository,
                           const QString &branch);
-    DVcsJob* branch(const QString &repository,
+    KDevelop::DVcsJob* branch(const QString &repository,
                     const QString &basebranch = QString(),
                     const QString &branch = QString(),
                     const QStringList &args = QStringList());
@@ -135,7 +135,7 @@ public:
     QList<DVcsEvent> getAllCommits(const QString &repo);
 
     //used in log
-    void parseLogOutput(const DVcsJob * job,
+    void parseLogOutput(const KDevelop::DVcsJob * job,
                         QList<DVcsEvent>& commits) const;
 
 protected:
@@ -144,35 +144,33 @@ protected:
   
     bool isValidDirectory(const KUrl &dirPath);
 
-    DVcsJob* lsFiles(const QString &repository,
+    KDevelop::DVcsJob* lsFiles(const QString &repository,
                      const QStringList &args,
                      KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
-    DVcsJob* gitRevList(const QString &repository,
+    KDevelop::DVcsJob* gitRevList(const QString &repository,
                         const QStringList &args);
-    DVcsJob* gitRevParse(const QString &repository,
+    KDevelop::DVcsJob* gitRevParse(const QString &repository,
                          const QStringList &args,
                          KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Silent);
 
 private slots:
-    void parseGitBlameOutput(DVcsJob *job);
-    void parseGitLogOutput(DVcsJob *job);
-    void parseGitDiffOutput(DVcsJob* job);
-    void parseGitRepoLocationOutput(DVcsJob* job);
-    void parseGitStatusOutput(DVcsJob* job);
+    void parseGitBlameOutput(KDevelop::DVcsJob *job);
+    void parseGitLogOutput(KDevelop::DVcsJob *job);
+    void parseGitDiffOutput(KDevelop::DVcsJob* job);
+    void parseGitRepoLocationOutput(KDevelop::DVcsJob* job);
+    void parseGitStatusOutput(KDevelop::DVcsJob* job);
 
 private:
     //commit dialog "main" helper
     QStringList getLsFiles(const QString &directory, const QStringList &args,
         KDevelop::OutputJob::OutputJobVerbosity verbosity);
-	DVcsJob* errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity);
+    KDevelop::DVcsJob* errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity);
 
     void initBranchHash(const QString &repo);
 
     static KDevelop::VcsStatusInfo::State messageToState(const QString& ch);
 
     QList<QStringList> branchesShas;
-    // Set when isValidDirectory is called.
-    KUrl m_lastRepoRoot;
 };
 
 #endif
