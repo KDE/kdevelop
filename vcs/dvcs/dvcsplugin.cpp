@@ -167,6 +167,11 @@ void DistributedVersionControlPlugin::ctxPull()
     ICore::self()->runController()->registerJob(job);
 }
 
+static QString stripPathToDir(const QString &path)
+{
+    return QFileInfo(path).absolutePath();
+}
+
 void DistributedVersionControlPlugin::ctxBranchManager()
 {
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
@@ -197,71 +202,9 @@ KDevDVCSViewFactory * DistributedVersionControlPlugin::dvcsViewFactory() const
     return d->m_factory;
 }
 
-bool DistributedVersionControlPlugin::prepareJob(DVcsJob* job, const QString& repository, RequestedOperation op)
+KDevelop::DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    Q_ASSERT(job);
-    
-    // Only do this check if it's a normal operation like diff, log ...
-    // For other operations like "git clone" isValidDirectory() would fail as the
-    // directory is not yet under git control
-    if (op == NormalOperation && !isValidDirectory(repository)) {
-        kDebug() << repository << " is not a valid repository";
-        return false;
-    }
-
-    QFileInfo repoInfo(repository);
-    Q_ASSERT(repoInfo.isAbsolute());
-
-    //repository is sent by ContextMenu, so we check if it is a file and use it's path
-    if (repoInfo.isFile())
-        job->setDirectory(repoInfo.absoluteDir());
-    else
-        job->setDirectory(QDir(repository));
-
-    return true;
-}
-
-QString DistributedVersionControlPlugin::stripPathToDir(const QString &path)
-{
-    QFileInfo repoInfo = QFileInfo(path);
-    if (repoInfo.isFile())
-        return repoInfo.path() + QDir::separator();
-    else if (path.endsWith(QDir::separator()))
-        return path;
-    else
-        return path + QDir::separator();
-}
-
-bool DistributedVersionControlPlugin::addFileList(DVcsJob* job, const KUrl::List& urls)
-{
-    QStringList args;
-    const QDir & dir = job->directory();
-
-    foreach(const KUrl &url, urls) {
-        ///@todo this is ok for now, but what if some of the urls are not
-        ///      to the given repository
-        //all urls should be relative to the working directory!
-        //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
-        QString file;
-        
-        if (url.isEmpty())
-            file = '.';
-        else if (!url.isRelative())
-            file = dir.relativeFilePath(url.toLocalFile());
-        else
-            file = url.toLocalFile();
-
-        args << file;
-    }
-    kDebug() << "url is: " << urls << "job->getDirectory(): " << dir.path() << " files are: " << args;
-
-    *job << args;
-    return true;
-}
-
-DVcsJob* DistributedVersionControlPlugin::empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity)
-{
-    DVcsJob* j = new DVcsJob(this, verbosity);
+    DVcsJob* j = new DVcsJob(QDir(), this, verbosity);
     *j << "echo" << "command not implemented" << "-n";
     return j;
 }

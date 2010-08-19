@@ -80,19 +80,16 @@ class DVcsJobPrivate;
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
+
+namespace KDevelop
+{
+
 class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
 public:
-    DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+    DVcsJob(const QDir& workingDir, KDevelop::IPlugin* parent=0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
     virtual ~DVcsJob();
-
-    /**
-     * Sets working directory.
-     * @param directory Should contain only absolute path. Relative paths or "" (working dir) are deprecated and will make the job fail.
-     * @note In DVCS plugins directory variable is used to get relative paths.
-     */
-    void setDirectory(const QDir & directory);
 
     /**
      * Returns current working directory.
@@ -116,6 +113,17 @@ public:
      * @see operator<<(const QString& arg).
      */
     DVcsJob& operator<<(const QStringList& args);
+    
+    /**
+     * Overloaded operator << for url's, can be used to pass files and
+     * makes arguments absolute to the process working directory
+     */
+    DVcsJob& operator<<(const KUrl& arg);
+    
+    /**
+     * @see operator<<(const KUrl& arg).
+     */
+    DVcsJob& operator<<(const QList<KUrl>& args);
 
     /**
      * Call this method to start this job.
@@ -187,11 +195,6 @@ public Q_SLOTS:
      */
     void cancel();
 
-    /**
-     * Returns if the job is running.
-     */
-    bool isRunning() const;
-
 Q_SIGNALS:
     void readyForParsing(DVcsJob *job);
 
@@ -201,8 +204,11 @@ private Q_SLOTS:
     void slotReceivedStdout();
 
 private:
+    
     void jobIsReady();
     DVcsJobPrivate* const d;
 };
+
+}
 
 #endif

@@ -5,6 +5,7 @@
  *                                                                         *
  *   Adapted for DVCS                                                      *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright Aleix Pol Gonzalez <aleixpol@kde.org>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -34,34 +35,35 @@
 
 #include <KDE/KDebug>
 #include <KDE/KLocale>
+#include <KDE/KUrl>
 
 #include <interfaces/iplugin.h>
 
+using namespace KDevelop;
+
 struct DVcsJobPrivate
 {
-    DVcsJobPrivate() : childproc(new KProcess), commMode(KProcess::SeparateChannels), vcsplugin(0)
-    {
-        isRunning = wasStarted = false;
-    }
+    DVcsJobPrivate() : childproc(new KProcess), vcsplugin(0)
+    {}
 
     ~DVcsJobPrivate() {
         delete childproc;
     }
 
     KProcess*   childproc;
-    bool        isRunning;
-    bool        wasStarted;
+    VcsJob::JobStatus status;
     QByteArray  output;
-    KProcess::OutputChannelMode commMode;
-    KDevelop::IPlugin* vcsplugin;
+    IPlugin* vcsplugin;
     
     QVariant results;
 };
 
-DVcsJob::DVcsJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
+DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity), d(new DVcsJobPrivate)
 {
+    d->status = JobNotStarted;
     d->vcsplugin = parent;
+    d->childproc->setWorkingDirectory(workingDir.absolutePath());
 
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
@@ -77,21 +79,9 @@ DVcsJob::~DVcsJob()
     delete d;
 }
 
-void DVcsJob::setDirectory(const QDir& directory)
-{
-    const QString workingDirectory = directory.absolutePath();
-    kDebug() << "Working directory:" << workingDirectory;
-    d->childproc->setWorkingDirectory(workingDirectory);
-}
-
 QDir DVcsJob::directory() const
 {
     return QDir(d->childproc->workingDirectory());
-}
-
-bool DVcsJob::isRunning() const
-{
-    return d->isRunning;
 }
 
 DVcsJob& DVcsJob::operator<<(const QString& arg)
@@ -121,7 +111,7 @@ QString DVcsJob::output() const
 {
     QByteArray stdoutbuf = rawOutput();
     int endpos = stdoutbuf.size();
-    if (isRunning()) {    // We may have received only part of a code-point
+    if (d->status==JobRunning) {    // We may have received only part of a code-point. apol: ASSERT?
         endpos = stdoutbuf.lastIndexOf('\n')+1; // Include the final newline or become 0, when there is no newline
     }
 
@@ -145,26 +135,16 @@ QVariant DVcsJob::fetchResults()
 
 void DVcsJob::start()
 {
-    Q_ASSERT_X(!d->isRunning, "DVCSjob::start", "Another proccess was started using this job class");
-    d->wasStarted = true;
+    Q_ASSERT_X(!d->status==JobRunning, "DVCSjob::start", "Another proccess was started using this job class");
 
-#if 0
-    //do not allow to run commands in the application's working dir
-    //TODO: change directory to KUrl, check if it's a relative path
-    if(d->directory.isEmpty() ) 
-    {
-        kDebug() << "No working directory specified for DVCS command";
-        slotProcessError(QProcess::UnknownError);
-        return;
-    }
-#endif
+    Q_ASSERT(QDir(d->childproc->workingDirectory()).exists());
+    Q_ASSERT(QDir(d->childproc->workingDirectory()).isAbsolute());
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
-
-    d->output.clear();
-    d->isRunning = true;
-    d->childproc->setOutputChannelMode( d->commMode );
+    
+    d->status = JobRunning;
     d->childproc->setEnvironment(QProcess::systemEnvironment());
+    d->childproc->setOutputChannelMode(KProcess::SeparateChannels);
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     
@@ -173,7 +153,7 @@ void DVcsJob::start()
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
 {
-    d->commMode = comm;
+    d->childproc->setOutputChannelMode(comm);
 }
 
 void DVcsJob::cancel()
@@ -183,7 +163,7 @@ void DVcsJob::cancel()
 
 void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
-    d->isRunning = false;
+    d->status = JobFailed;
 
     //Do not use d->childproc->exitCode() to set an error! If we have FailedToStart exitCode will return 0,
     //and if exec is used, exec will return true and that is wrong!
@@ -223,7 +203,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    d->isRunning = false;
+    d->status = JobSucceeded;
 
     if (exitStatus != QProcess::NormalExit || exitCode != 0)
         slotProcessError(QProcess::UnknownError);
@@ -247,21 +227,40 @@ void DVcsJob::slotReceivedStdout()
     displayOutput(output);
 }
 
-KDevelop::VcsJob::JobStatus DVcsJob::status() const
+VcsJob::JobStatus DVcsJob::status() const
 {
-    if (!d->wasStarted)
-        return KDevelop::VcsJob::JobNotStarted;
-    if (d->isRunning)
-        return KDevelop::VcsJob::JobRunning;
-    if(error()!=0)
-        return KDevelop::VcsJob::JobFailed;
-    
-    return KDevelop::VcsJob::JobSucceeded;
+    return d->status;
 }
 
-KDevelop::IPlugin* DVcsJob::vcsPlugin() const
+IPlugin* DVcsJob::vcsPlugin() const
 {
     return d->vcsplugin;
+}
+
+DVcsJob& DVcsJob::operator<<(const KUrl& url)
+{
+    ///@todo this is ok for now, but what if some of the urls are not
+    ///      to the given repository
+    //all urls should be relative to the working directory!
+    //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
+    QString file;
+    
+    if (url.isEmpty())
+        file = '.';
+    else if (!url.isRelative())
+        file = directory().relativeFilePath(url.toLocalFile());
+    else
+        file = url.toLocalFile();
+
+    *d->childproc << file;
+    return *this;
+}
+
+DVcsJob& DVcsJob::operator<<(const QList< KUrl >& urls)
+{
+    foreach(const KUrl &url, urls)
+        operator<<(url);
+    return *this;
 }
 
 void DVcsJob::jobIsReady()

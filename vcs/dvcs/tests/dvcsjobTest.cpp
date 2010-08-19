@@ -29,9 +29,9 @@
 void DVcsJobTest::testJob()
 {
 
-    DVcsJob* job = new DVcsJob(0);
+    KDevelop::DVcsJob* job = new KDevelop::DVcsJob(QDir::temp());
     QVERIFY(job);
-    QVERIFY(job->status() == DVcsJob::JobNotStarted);
+    QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
 
     //makes sence for bug 172309. With default (true) we have crash, with false — dead lock
     //should be removed after we fix the problem
@@ -42,15 +42,13 @@ void DVcsJobTest::testJob()
     //but it will be a wrong style to work with jobs.
     const QString echoCommand("echo -n test");
     *job << echoCommand;
-    job->setDirectory(QDir::temp()); //working directory ("") is deprecated by DVCSjob
     QVERIFY(!job->exec());
-    QVERIFY(job->status() == DVcsJob::JobFailed);
+    QVERIFY(job->status() == KDevelop::VcsJob::JobFailed);
     QCOMPARE(job->dvcsCommand().join(";;"), echoCommand);
 
     //check our clear() method. It's simple, but having bugs here is dangerous
     QVERIFY(job);
-    QVERIFY(!job->isRunning());
-    QVERIFY(job->status() == DVcsJob::JobNotStarted);
+    QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
     QVERIFY(job->fetchResults().isNull());
     QVERIFY(job->process());
     QCOMPARE(job->dvcsCommand(), QStringList());

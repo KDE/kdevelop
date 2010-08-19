@@ -38,10 +38,10 @@
 
 class QString;
 class KDevDVCSViewFactory;
-class DVcsJob;
 
 namespace KDevelop
 {
+class DVcsJob;
 class VcsJob;
 class ContextMenuExtension;
 struct DistributedVersionControlPluginPrivate;
@@ -141,32 +141,6 @@ protected:
     virtual DVcsJob* empty_cmd(KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
 
     KDevDVCSViewFactory * dvcsViewFactory() const;
-
-    /** RequestedOperation is used to know if we should check the repo with isValidDirectory
-     * or we want to create new repo (init/clone).
-     */
-    enum RequestedOperation {
-        NormalOperation, /**< add/commit/etc, check if we are in the repo */
-        Init             /**< we need init/clone, so don't call isValidDirectory, we're not in the repo, but yet ;) */
-    };
-
-    /** This method checks RequestedOperation, clears the job and sets working directory.
-     * Returns false only if op == NormalOperation and we are not in the repository.
-     * @param job the DVCSjob to be prepared
-     * @param repository working directiry
-     * @param op shows if the method should run isValidDirectory
-     */
-    virtual bool prepareJob(DVcsJob* job, const QString& repository,
-                            enum RequestedOperation op = NormalOperation);
-    /** Add files as args to the job. It changes absolute pathes to relatives */
-    static bool addFileList(DVcsJob* job, const KUrl::List& urls);
-
-    /** Always returns directory path.
-     * @param path a path of a file or a directory.
-     * @return if path argument if file then returns parent directory, otherwise path arg is returned.
-     * @todo it will be nice to change prepareJob() so it can change its repository argument.
-     */
-    static QString stripPathToDir(const QString &path);
 
 private:
     DistributedVersionControlPluginPrivate * const d;
