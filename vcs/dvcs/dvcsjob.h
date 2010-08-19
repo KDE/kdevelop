@@ -196,7 +196,7 @@ public Q_SLOTS:
     void cancel();
 
 Q_SIGNALS:
-    void readyForParsing(DVcsJob *job);
+    void readyForParsing(KDevelop::DVcsJob *job);
 
 private Q_SLOTS:
     void slotProcessError( QProcess::ProcessError );

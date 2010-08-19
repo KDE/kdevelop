@@ -199,6 +199,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     kDebug() << "oops, found an error while running" << dvcsCommand() << ":" << errorValue 
                                                      << "Exit code is:" << d->childproc->exitCode();
     
+    displayOutput(d->childproc->readAllStandardError());
     displayOutput(i18n("Command finnished with error %1.", errorValue));
     jobIsReady();
 }
