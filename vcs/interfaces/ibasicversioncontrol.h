@@ -189,12 +189,12 @@ public:
      * log events are available. The fetchResults method will return a QList<QVariant>
      * where the QVariant is a KDevelop::VcsEvent.
      *
-     * @param rev List @p rev and earlier. The default is HEAD.
+     * @param rev List @p rev and earlier.
      * @param limit Restrict to the most recent @p limit entries. Note that the
      * limit is @e advisory and may be ignored.
      */
     virtual VcsJob* log( const KUrl& localLocation,
-                         const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Head ),
+                         const VcsRevision& rev,
                          unsigned long limit = 0 ) = 0;
 
     /**
@@ -204,13 +204,13 @@ public:
      * log events are available. The fetchResults method will return a QList<QVariant>
      * where the QVariant is a KDevelop::VcsEvent.
      *
-     * @param rev List @p rev and earlier. The default is HEAD.
+     * @param rev List @p rev and earlier. The default is BASE.
      * @param limit Do not show entries earlier than @p limit. Note that the
-     * limit is @e advisory and may be ignored.
+     * limit is @e advisory and may be ignored. The default is the first revision.
      */
     virtual VcsJob* log( const KUrl& localLocation,
-                         const VcsRevision& rev,
-                         const VcsRevision& limit ) = 0;
+                         const VcsRevision& rev = VcsRevision::createSpecialRevision( VcsRevision::Base ),
+                         const VcsRevision& limit= VcsRevision::createSpecialRevision( VcsRevision::Start ) ) = 0;
 
     /**
      * Annotate each line of the given local url at the given revision
