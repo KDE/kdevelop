@@ -387,14 +387,14 @@ void VcsPluginHelper::commit()
         
         Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
         if(ret) {
-            connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,KUrl::List)));
+            connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
         } else {
             delete patchSource;
         }
     }
 }
 
-void VcsPluginHelper::executeCommit(const QString& message, const KUrl::List& urls)
+void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)
 {
     VcsJob* job=d->vcs->commit(message, urls, KDevelop::IBasicVersionControl::NonRecursive);
     d->plugin->core()->runController()->registerJob(job);
