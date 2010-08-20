@@ -1029,7 +1029,9 @@ VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, con
 VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
-    *job << "git" << "push" << localOrRepoLocationDst.localUrl().url();
+    *job << "git" << "push";
+    if(!localOrRepoLocationDst.localUrl().isEmpty())
+        *job << localOrRepoLocationDst.localUrl().url();
     return job;
 }
 
