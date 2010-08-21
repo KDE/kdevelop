@@ -1,5 +1,7 @@
 PROJECT(git)
 
+set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${git_SOURCE_DIR}/cmake)
 find_package(KDE4 REQUIRED)
 
