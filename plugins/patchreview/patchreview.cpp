@@ -50,6 +50,8 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <interfaces/iuicontroller.h>
 #include <kaboutdata.h>
 
+///@todo Get rid of SmartRanges here!
+
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
 
@@ -490,6 +492,48 @@ KUrl PatchReviewToolView::urlForFileModel(const Diff2::DiffModel* model)
   return file;
 }
 
+static QString stateToString(KDevelop::VcsStatusInfo::State state)
+{
+    switch(state)
+    {
+      case KDevelop::VcsStatusInfo::ItemAdded:
+          return i18n("Added");
+      case KDevelop::VcsStatusInfo::ItemDeleted:
+          return i18n("Deleted");
+      case KDevelop::VcsStatusInfo::ItemHasConflicts:
+          return i18n("Has Conflicts");
+      case KDevelop::VcsStatusInfo::ItemModified:
+          return i18n("Modified");
+      case KDevelop::VcsStatusInfo::ItemUpToDate:
+          return i18n("Up To Date");
+      case KDevelop::VcsStatusInfo::ItemUnknown:
+      case KDevelop::VcsStatusInfo::ItemUserState:
+          return i18n("Unknown");
+    }
+    return i18nc("Unknown VCS file status, probably a backend error", "?");
+}
+
+static KIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
+{
+    switch(state)
+    {
+      case KDevelop::VcsStatusInfo::ItemAdded:
+          return KIcon("vcs-added");
+      case KDevelop::VcsStatusInfo::ItemDeleted:
+          return KIcon("vcs-removed");
+      case KDevelop::VcsStatusInfo::ItemHasConflicts:
+          return KIcon("vcs-conflicting");
+      case KDevelop::VcsStatusInfo::ItemModified:
+          return KIcon("vcs-locally-modified");
+      case KDevelop::VcsStatusInfo::ItemUpToDate:
+          return KIcon("vcs-normal");
+      case KDevelop::VcsStatusInfo::ItemUnknown:
+      case KDevelop::VcsStatusInfo::ItemUserState:
+          return KIcon("unknown");
+    }
+    return KIcon("dialog-error");
+}
+
 void PatchReviewToolView::kompareModelChanged()
 {
     m_editPatch.filesList->clear();
@@ -498,7 +542,7 @@ void PatchReviewToolView::kompareModelChanged()
     if (!m_plugin->modelList())
         return;
 
-    QMap<KUrl, QString> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
+    QMap<KUrl, KDevelop::VcsStatusInfo::State> additionalUrls = m_plugin->patch()->additionalSelectableFiles();
 
     QSet<KUrl> haveUrls;
     
@@ -525,13 +569,16 @@ void PatchReviewToolView::kompareModelChanged()
           const QString filenameArgument = ICore::self()->projectController()->prettyFileName(file, KDevelop::IProjectController::FormatPlain);
 
           QString text;
-          if(additionalUrls.contains(file) && !additionalUrls[file].isEmpty()) {
-              text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, additionalUrls[file]);
+          QIcon icon;
+          if(additionalUrls.contains(file)) {
+              text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(additionalUrls[file]));
+              icon = stateToIcon(additionalUrls[file]);
           } else {
               text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
           }
 
           item->setData( 0, Qt::DisplayRole, text );
+          item->setIcon( 0, icon );
           item->setData( 0, Qt::UserRole, qVariantFromValue<const Diff2::DiffModel*>(*it));
           item->setCheckState( 0, Qt::Checked );
       }
@@ -541,9 +588,9 @@ void PatchReviewToolView::kompareModelChanged()
     // the items that have at least a project found to 1,
     // and the probably really useless items without project found to 2.
     // The project-manager filters useless stuff like backups out so they get index 2.
-    QMap<int, QList< QPair<KUrl, QString> > > newItems;
+    QMap<int, QList< QPair<KUrl, KDevelop::VcsStatusInfo::State> > > newItems;
     
-    for(QMap<KUrl, QString>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
+    for(QMap<KUrl, KDevelop::VcsStatusInfo::State>::const_iterator it = additionalUrls.constBegin(); it != additionalUrls.constEnd(); ++it)
     {
       KUrl url = it.key();
       
@@ -551,16 +598,15 @@ void PatchReviewToolView::kompareModelChanged()
       {
         haveUrls.insert(url);
         
-        ///@todo Better filtering without i18n
-        if(!(*it).isEmpty() && !(*it).contains(i18n("Unknown"), Qt::CaseInsensitive))
+        if(*it != KDevelop::VcsStatusInfo::State::ItemUnknown)
         {
-          newItems[0] << qMakePair<KUrl, QString>(url, *it);
+          newItems[0] << qMakePair(url, *it);
         }else{
           if(((bool)ICore::self()->projectController()->findProjectForUrl(url)))
           {
-            newItems[1] << qMakePair<KUrl, QString>(url, *it);
+            newItems[1] << qMakePair(url, *it);
           }else{
-            newItems[2] << qMakePair<KUrl, QString>(url, *it);
+            newItems[2] << qMakePair(url, *it);
           }
         }
       }
@@ -568,21 +614,21 @@ void PatchReviewToolView::kompareModelChanged()
     
     for(int a = 0; a < 3; ++a)
     {
-      for(QList< QPair< KUrl, QString > >::iterator itemIt = newItems[a].begin(); itemIt != newItems[a].end(); ++itemIt)
+      for(QList< QPair< KUrl, KDevelop::VcsStatusInfo::State > >::iterator itemIt = newItems[a].begin(); itemIt != newItems[a].end(); ++itemIt)
       {
         KUrl url = itemIt->first;
-        QString state = itemIt->second;
+        KDevelop::VcsStatusInfo::State state = itemIt->second;
         
         QTreeWidgetItem* item = new QTreeWidgetItem(m_editPatch.filesList);
         
         QString text = ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain);
-        if(!state.isEmpty())
-          text += " (" + state + ")";
+        text += " (" + stateToString(state) + ")";
         
         item->setData( 0, Qt::DisplayRole, text );
         QVariant v;
         v.setValue<KUrl>( url );
         item->setData( 0, Qt::UserRole, v );
+        item->setIcon( 0, stateToIcon(state) );
         item->setCheckState( 0, Qt::Unchecked );
 
         if(a == 0)

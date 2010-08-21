@@ -27,16 +27,15 @@
 #include <KDE/KUrl>
 
 #include <vcs/dvcs/dvcsjob.h>
+QTEST_MAIN( DVcsJobTest )
 
 void DVcsJobTest::checkDVCS()
 {
     qDebug() << "check!!!";
-    DVcsJob* bzrJob = new DVcsJob(0);
-    bzrJob->clear();
+    KDevelop::DVcsJob* bzrJob = new KDevelop::DVcsJob(QDir::temp(), 0);
     QVERIFY(bzrJob);
-    QVERIFY(bzrJob->status() == DVcsJob::JobNotStarted);
+    QVERIFY(bzrJob->status() == KDevelop::DVcsJob::JobNotStarted);
 
-    bzrJob->setDirectory(QDir::temp());
     *bzrJob << "bzr";
     *bzrJob << "root";
     QVERIFY(!bzrJob->exec());
@@ -45,12 +44,9 @@ void DVcsJobTest::checkDVCS()
         qDebug() << "Dir: /tmp" << " is inside work tree of bzr" ;
     }
 
-    DVcsJob* hgJob = new DVcsJob(0);
-    hgJob->clear();
+    KDevelop::DVcsJob* hgJob = new KDevelop::DVcsJob(QDir::temp(), 0);
     QVERIFY(hgJob);
-    QVERIFY(hgJob->status() == DVcsJob::JobNotStarted);
-    hgJob->clear();
-    hgJob->setDirectory(QDir::temp());
+    QVERIFY(hgJob->status() == KDevelop::DVcsJob::JobNotStarted);
     *hgJob << "hg";
     *hgJob << "root";
     QVERIFY(!hgJob->exec());
@@ -59,12 +55,9 @@ void DVcsJobTest::checkDVCS()
         qDebug() << "Dir: /tmp" << " is inside work tree of hg" ;
     }
 
-    DVcsJob* bzr2Job = new DVcsJob(0);
-    bzr2Job->clear();
+    KDevelop::DVcsJob* bzr2Job = new KDevelop::DVcsJob(QDir::temp(), 0);
     QVERIFY(bzr2Job);
-    QVERIFY(bzr2Job->status() == DVcsJob::JobNotStarted);
-    bzr2Job->clear();
-    bzr2Job->setDirectory(QDir::temp());
+    QVERIFY(bzr2Job->status() == KDevelop::DVcsJob::JobNotStarted);
     *bzr2Job << "bzr";
     *bzr2Job << "root";
     QVERIFY(!bzr2Job->exec());
@@ -73,12 +66,9 @@ void DVcsJobTest::checkDVCS()
         qDebug() << "Dir: /tmp" << " is inside work tree of bzr2" ;
     }
 
-    DVcsJob* hg2Job = new DVcsJob(0);
-    hg2Job->clear();
+    KDevelop::DVcsJob* hg2Job = new KDevelop::DVcsJob(QDir::temp(), 0);
     QVERIFY(hg2Job);
-    QVERIFY(hg2Job->status() == DVcsJob::JobNotStarted);
-    hg2Job->clear();
-    hg2Job->setDirectory(QDir::temp());
+    QVERIFY(hg2Job->status() == KDevelop::DVcsJob::JobNotStarted);
     *hg2Job << "hg";
     *hg2Job << "root";
     QVERIFY(!hg2Job->exec());
@@ -86,21 +76,6 @@ void DVcsJobTest::checkDVCS()
     {
         qDebug() << "Dir: /tmp" << " is inside work tree of hg2" ;
     }
-}
-
-int main(int argc, char* argv[])
-{
-    QApplication app(argc, argv);
-    DVcsJobTest tester;
-    QTimer::singleShot(200, &tester, SLOT(checkDVCS()));
-    tester.checkDVCS();
-//    QTimer *timer = new QTimer;
-//    QObject::connect(timer, SIGNAL(timeout()), &tester, SLOT(checkDVCS()));
-//    timer->start(1000);
-//    QTimer *timer2 = new QTimer;
-//    QObject::connect(timer2, SIGNAL(timeout()), &tester, SLOT(checkDVCS()));
-//    timer2->start(2);
-    return app.exec();
 }
 
 #include "dvcsjobTest.moc"

@@ -206,10 +206,34 @@ void GrepJob::start()
     xargsCmd << "-e";
 
     QString pattern = templateString;
-    if (regexpFlag)
-        pattern.replace(QRegExp("%s"), patternString());
-    else
-        pattern.replace(QRegExp("%s"), escape( patternString() ) );
+    {
+        QString subst = patternString();
+        if(regexpFlag)
+            subst = escape(subst);
+        QString modified;
+        bool expectEscape = false;
+        for(int i=0; i<pattern.length(); i++)
+        {
+            if(expectEscape)
+            {
+                expectEscape = false;
+                if(pattern[i] == '%')
+                    modified += '%';
+                else if(pattern[i] == 's')
+                    modified += subst;
+                else
+                    modified += QChar('%') + pattern[i];
+                continue;
+            }
+            if(pattern[i] == '%')
+            {
+                expectEscape = true;
+                continue;
+            }
+            modified += pattern[i];
+        }
+        pattern = modified;
+    }
 //     command += KShellProcess::quote(pattern);
 //     xargsCmd += quote(pattern); // quote isn't needed now.
     xargsCmd << pattern;

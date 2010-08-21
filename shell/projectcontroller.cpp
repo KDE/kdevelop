@@ -90,6 +90,7 @@ public:
     QItemSelectionModel* selectionModel;
     QMap<IProject*, QPointer<KSettings::Dialog> > m_cfgDlgs;
     QPointer<KAction> m_openProject;
+    QPointer<KAction> m_fetchProject;
     QPointer<KAction> m_closeProject;
     QPointer<KAction> m_openConfig;
     IProjectDialogProvider* dialog;
@@ -394,7 +395,7 @@ void ProjectController::setupActions()
     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL( triggered( bool ) ), SLOT( openProject() ) );
     
-    d->m_openProject = action = ac->addAction( "project_fetch" );
+    d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18n( "Fetch Project..." ) );
     action->setToolTip( i18n( "Fetch Project" ) );
     action->setWhatsThis( i18n( "<b>Fetch project</b><p>Fetches a project from either a Version Control System or somewhere else and puts into the disk and lets </p>" ) );
@@ -858,8 +859,8 @@ ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
     if ( ctx->type() != Context::ProjectItemContext || !static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
         return ext;
     }
-    
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_openProject);
+    ext.addAction(ContextMenuExtension::ProjectGroup, d->m_fetchProject);
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentAction);
     return ext;
 }

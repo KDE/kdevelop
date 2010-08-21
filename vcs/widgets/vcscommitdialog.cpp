@@ -37,10 +37,7 @@
 #include "ui_vcscommitdialog.h"
 #include "vcsdiffpatchsources.h"
 #include <KComponentData>
-
-namespace {
-    int maxMessages = 10;
-}
+#include <vcspluginhelper.h>
 
 namespace KDevelop
 {
@@ -91,7 +88,7 @@ public:
         return ret;
     }
 
-    QMap<KUrl, QString> urls;
+    QMap<KUrl, VcsStatusInfo::State> urls;
     IPlugin *plugin;
     VcsCommitDialog* dlg;
     QHash<KUrl, KDevelop::VcsStatusInfo> statusInfos;
@@ -106,8 +103,7 @@ VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
 {
     d->plugin = plugin;
 
-    KConfigGroup vcsGroup(KSharedConfig::openConfig(plugin->componentData()), "VcsCommon");
-    d->m_oldMessages = vcsGroup.readEntry("OldCommitMessages", QStringList());
+    d->m_oldMessages = retrieveOldCommitMessages();
     
     d->ui.setupUi( mainWidget() );
     setButtons( KDialog::Ok | KDialog::Cancel );
@@ -122,23 +118,7 @@ VcsCommitDialog::VcsCommitDialog( KDevelop::IPlugin *plugin, QWidget *parent )
 
 VcsCommitDialog::~VcsCommitDialog()
 {
-    // Don't do this during shutdown, as the plugin may already be destroyed
-    if(!ICore::self()->shuttingDown())
-    {
-        QString text = d->ui.message->toPlainText();
-        if(!text.isEmpty())
-        {
-            if(d->m_oldMessages.contains(text))
-                d->m_oldMessages.removeAll(text);
-            
-            d->m_oldMessages.push_front(text);
-            while(d->m_oldMessages.size() > maxMessages)
-                d->m_oldMessages.pop_back();
-            
-            KConfigGroup vcsGroup(KSharedConfig::openConfig(d->plugin->componentData()), "VcsCommon");
-            vcsGroup.writeEntry("OldCommitMessages", d->m_oldMessages);
-        }
-    }
+    addOldCommitMessage(d->ui.message->toPlainText());
     delete d;
 }
 
@@ -230,7 +210,7 @@ void VcsCommitDialog::setCommitCandidatesAndShow( const KUrl &url )
             if(!state.isEmpty())
             {
                 d->insertRow(state, info.url(), brush, checked);
-                d->urls[info.url()] = state;
+                d->urls[info.url()] = info.state();
             }
         }
     }
