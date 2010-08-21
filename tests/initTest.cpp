@@ -228,9 +228,7 @@ void GitInitTest::commitFiles()
     QVERIFY(QFileInfo(headRefName).exists());
 
     //Test the results of the "git add"
-    DVcsJob* jobLs = new DVcsJob(0);
-    jobLs->clear();
-    jobLs->setDirectory(gitTest_BaseDir);
+    DVcsJob* jobLs = new DVcsJob(gitTest_BaseDir);
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD";
 
     if (jobLs) {

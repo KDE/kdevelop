@@ -18,16 +18,14 @@ FIND_PROGRAM(GIT NAMES git
 if (GIT)
 
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-	set(gitInitTest_SRCS initTest.cpp ../gitplugin.cpp ../gitclonejob.cpp)
+    set(gitInitTest_SRCS initTest.cpp ../gitplugin.cpp ../gitclonejob.cpp ../stashmanagerdialog.cpp)
     kde4_add_unit_test(kdevgit-test ${gitInitTest_SRCS})
     target_link_libraries(kdevgit-test
         ${QT_QTTEST_LIBRARY}
         ${KDE4_KDECORE_LIBS}
-        kdevplatformshell
-        kdevplatforminterfaces
-        kdevplatformutil
-        kdevplatformvcs
-        kdevplatformtests
+        ${KDEVPLATFORM_VCS_LIBRARIES}
+        ${KDEVPLATFORM_UTIL_LIBRARIES}
+        ${KDEVPLATFORM_TESTS_LIBRARIES}
     )
 endif (GIT)
 
