@@ -137,8 +137,20 @@ void DVcsJob::start()
 {
     Q_ASSERT_X(!d->status==JobRunning, "DVCSjob::start", "Another proccess was started using this job class");
 
-    Q_ASSERT(QDir(d->childproc->workingDirectory()).exists());
-    Q_ASSERT(QDir(d->childproc->workingDirectory()).isAbsolute());
+    if( !d->childproc->workingDirectory().exists() ) {
+        QString error = i18n( "Working Directory doesn't exist: %1", d->childproc->workingDirectory() );
+        displayOutput(error);
+        setError( 255 );
+        setErrorMessage(error);
+        return;
+    }
+    if( !d->childproc->workingDirectory().isAbsolute() ) {
+        QString error = i18n( "Working Directory is not absolute: %1", d->childproc->workingDirectory() );
+        displayOutput(error);
+        setError( 255 );
+        setErrorMessage(error);
+        return;
+    }
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
 
