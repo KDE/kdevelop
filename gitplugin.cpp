@@ -148,7 +148,6 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
 
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
-    setXMLFile("kdevgit.rc");
     setObjectName("Git");
 }
 
