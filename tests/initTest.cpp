@@ -81,12 +81,7 @@ void GitInitTest::repoInit()
     kDebug() << "Trying to init repo";
     // make job that creates the local repository
     VcsJob* j = m_plugin->init(KUrl(gitTest_BaseDir));
-    QVERIFY(j);
-
-
-    // try to start the job
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     //check if the CVSROOT directory in the new local repository exists now
     QVERIFY(QFileInfo(gitRepo).exists());
@@ -116,8 +111,6 @@ void GitInitTest::addFiles()
         input << "HELLO WORLD";
     }
 
-    f.flush();
-
     f.close();
     f.setFileName(gitTest_BaseDir + gitTest_FileName2);
 
@@ -126,21 +119,15 @@ void GitInitTest::addFiles()
         input << "No, bar()!";
     }
 
-    f.flush();
-
     f.close();
 
     //test git-status exitCode (see DVcsJob::setExitCode).
     VcsJob* j = m_plugin->status(KUrl::List(gitTest_BaseDir));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     // /tmp/kdevGit_testdir/ and testfile
     j = m_plugin->add(KUrl::List(gitTest_BaseDir + gitTest_FileName));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     f.setFileName(gitSrcDir + gitTest_FileName3);
 
@@ -149,28 +136,20 @@ void GitInitTest::addFiles()
         input << "No, foo()! It's bar()!";
     }
 
-    f.flush();
-
     f.close();
 
     //test git-status exitCode again
     j = m_plugin->status(KUrl::List(gitTest_BaseDir));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     //repository path without trailing slash and a file in a parent directory
     // /tmp/repo  and /tmp/repo/src/bar
     j = m_plugin->add(KUrl::List(QStringList(gitSrcDir + gitTest_FileName3)));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     //let's use absolute path, because it's used in ContextMenus
     j = m_plugin->add(KUrl::List(QStringList(gitTest_BaseDir + gitTest_FileName2)));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     //Now let's create several files and try "git add file1 file2 file3"
     f.setFileName(gitTest_BaseDir + "file1");
@@ -180,8 +159,6 @@ void GitInitTest::addFiles()
         input << "file1";
     }
 
-    f.flush();
-
     f.close();
     f.setFileName(gitTest_BaseDir + "file2");
 
@@ -189,26 +166,23 @@ void GitInitTest::addFiles()
         QTextStream input(&f);
         input << "file2";
     }
-
-    f.flush();
-
     f.close();
-    QStringList multipleFiles;
+    
+    KUrl::List multipleFiles;
     multipleFiles << (gitTest_BaseDir + "file1");
     multipleFiles << (gitTest_BaseDir + "file2");
-    j = m_plugin->add(KUrl::List(multipleFiles));
+    j = m_plugin->add(multipleFiles);
     VERIFYJOB(j);
 }
 
 void GitInitTest::commitFiles()
 {
-    kDebug() << "\nListing variables with KProcess\n";
+    kDebug() << "Listing variables with KProcess\n";
     DVcsJob* j_var = m_plugin->var(gitTest_BaseDir);
     VERIFYJOB(j_var);
 
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
-    ///TODO: if "" is ok?
     VcsJob* j = m_plugin->commit(QString("Test commit"), KUrl::List(gitTest_BaseDir));
     VERIFYJOB(j);
 
@@ -222,7 +196,7 @@ void GitInitTest::commitFiles()
     QVERIFY(QFileInfo(headRefName).exists());
 
     //Test the results of the "git add"
-    DVcsJob* jobLs = new DVcsJob(gitTest_BaseDir);
+    DVcsJob* jobLs = new DVcsJob(gitTest_BaseDir, m_plugin);
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD";
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
@@ -240,9 +214,6 @@ void GitInitTest::commitFiles()
         QTextStream output(&headRef);
         output >> firstCommit;
     }
-
-    headRef.flush();
-
     headRef.close();
 
     QVERIFY(!firstCommit.isEmpty());
@@ -256,7 +227,7 @@ void GitInitTest::commitFiles()
         input << "Just another HELLO WORLD";
     }
 
-    f.flush();
+    f.close();
 
     //add changes
     j = m_plugin->add(KUrl::List(QStringList(gitTest_BaseDir + gitTest_FileName)));
@@ -271,9 +242,6 @@ void GitInitTest::commitFiles()
         QTextStream output(&headRef);
         output >> secondCommit;
     }
-
-    headRef.flush();
-
     headRef.close();
 
     QVERIFY(!secondCommit.isEmpty());
