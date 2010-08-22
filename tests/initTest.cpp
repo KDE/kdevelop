@@ -35,6 +35,9 @@
 #include <vcs/dvcs/dvcsjob.h>
 #include "../gitplugin.h"
 
+#define VERIFYJOB(j) \
+QVERIFY(j); QVERIFY(j->exec()); QVERIFY((j)->status() == KDevelop::VcsJob::JobSucceeded)
+
 const QString tempDir = QDir::tempPath();
 const QString gitTest_BaseDir(tempDir + "/kdevGit_testdir/");
 const QString gitTest_BaseDir2(tempDir + "/kdevGit_testdir2/");
@@ -194,33 +197,24 @@ void GitInitTest::addFiles()
     multipleFiles << (gitTest_BaseDir + "file1");
     multipleFiles << (gitTest_BaseDir + "file2");
     j = m_plugin->add(KUrl::List(multipleFiles));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 }
 
 void GitInitTest::commitFiles()
 {
     kDebug() << "\nListing variables with KProcess\n";
     DVcsJob* j_var = m_plugin->var(gitTest_BaseDir);
-    QVERIFY(j_var->exec());
-    QVERIFY(j_var->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j_var);
 
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
     ///TODO: if "" is ok?
     VcsJob* j = m_plugin->commit(QString("Test commit"), KUrl::List(gitTest_BaseDir));
-    QVERIFY(j);
-
-    // try to start the job
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     //test git-status exitCode one more time.
     j = m_plugin->status(KUrl::List(gitTest_BaseDir));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     //since we commited the file to the "pure" repository, .git/refs/heads/master should exist
     //TODO: maybe other method should be used
@@ -231,10 +225,7 @@ void GitInitTest::commitFiles()
     DVcsJob* jobLs = new DVcsJob(gitTest_BaseDir);
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD";
 
-    if (jobLs) {
-        QVERIFY(jobLs->exec());
-        QVERIFY(jobLs->status() == KDevelop::VcsJob::JobSucceeded);
-
+    if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {
         QStringList files = jobLs->output().split("\n");
         QVERIFY(files.contains(gitTest_FileName));
         QVERIFY(files.contains(gitTest_FileName2));
@@ -254,7 +245,7 @@ void GitInitTest::commitFiles()
 
     headRef.close();
 
-    QVERIFY(firstCommit != "");
+    QVERIFY(!firstCommit.isEmpty());
 
     kDebug() << "Committing one more time";
     //let's try to change the file and test "git commit -a"
@@ -269,18 +260,10 @@ void GitInitTest::commitFiles()
 
     //add changes
     j = m_plugin->add(KUrl::List(QStringList(gitTest_BaseDir + gitTest_FileName)));
-    QVERIFY(j);
-
-    // try to start the job
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     j = m_plugin->commit(QString("KDevelop's Test commit2"), KUrl::List(gitTest_BaseDir));
-    QVERIFY(j);
-
-    // try to start the job
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     QString secondCommit;
 
@@ -293,7 +276,7 @@ void GitInitTest::commitFiles()
 
     headRef.close();
 
-    QVERIFY(secondCommit != "");
+    QVERIFY(!secondCommit.isEmpty());
     QVERIFY(firstCommit != secondCommit);
 
 }
@@ -330,30 +313,22 @@ void GitInitTest::testCommit()
 void GitInitTest::testBranching()
 {
     DVcsJob* j = m_plugin->branch(gitTest_BaseDir);
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
 
     QString curBranch = m_plugin->curBranch(gitTest_BaseDir);
     QCOMPARE(curBranch, QString("master"));
 
     QString newBranch("new");
     j = m_plugin->branch(gitTest_BaseDir, QString("master"), newBranch);
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
     QVERIFY(m_plugin->branches(gitTest_BaseDir).contains(newBranch));
 
     j = m_plugin->switchBranch(gitTest_BaseDir, newBranch);
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
     QCOMPARE(m_plugin->curBranch(gitTest_BaseDir), newBranch);
 
     j = m_plugin->branch(gitTest_BaseDir, QString("master"), QString(), QStringList("-D"));
-    QVERIFY(j);
-    QVERIFY(j->exec());
-    QVERIFY(j->status() == KDevelop::VcsJob::JobSucceeded);
+    VERIFYJOB(j);
     QVERIFY(!m_plugin->branches(gitTest_BaseDir).contains(QString("master")));
 }
 
