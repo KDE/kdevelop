@@ -230,7 +230,8 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
 void DVcsJob::displayOutput(const QString& data)
 {
-    static_cast<QStandardItemModel*>(model())->appendRow(new QStandardItem(data));
+    if(model())
+        static_cast<QStandardItemModel*>(model())->appendRow(new QStandardItem(data));
 }
 
 void DVcsJob::slotReceivedStdout()
