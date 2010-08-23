@@ -869,6 +869,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     QRegExp lineRx(" ?([A-Z?]+) (.+)");
     QStringList outputLines = job->output().split('\n');
     const KUrl workingDir = job->directory().absolutePath();
+    const KUrl dotGit = dotGitDirectory(workingDir).absolutePath();
     
     QVariantList statuses;
     QList<KUrl> processedFiles;
@@ -880,7 +881,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         qDebug() << "Checking git status for " << line << lineRx.capturedTexts();
         
         QString curr=lineRx.capturedTexts()[2];
-        KUrl fileUrl = workingDir;
+        KUrl fileUrl = dotGit;
         fileUrl.addPath(curr);
         processedFiles.append(fileUrl);
         
