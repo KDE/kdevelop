@@ -64,16 +64,6 @@ public:
      */
     virtual VcsJob* pull(const VcsLocation& localOrRepoLocationSrc,
                          const KUrl& localRepositoryLocation) = 0;
-
-    /**
-     * Reset current HEAD to the specified state.
-     * 
-     * @param repository local repository.
-     * @param args dvcs-reset arguments.
-     * @param files filelist for resetting.
-     */
-    virtual VcsJob* reset(const KUrl& repository, 
-                          const QStringList &args, const KUrl::List& files) = 0;
 };
 
 }
