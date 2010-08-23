@@ -54,7 +54,6 @@
 // KDevelop
 #include <sublime/view.h>
 // KDE
-#include <KLocale>
 #include <KAction>
 #include <KStandardAction>
 #include <KActionCollection>
