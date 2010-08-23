@@ -38,6 +38,7 @@
 #include <KDE/KUrl>
 
 #include <interfaces/iplugin.h>
+#include <outputview/outputmodel.h>
 
 using namespace KDevelop;
 
@@ -56,6 +57,7 @@ struct DVcsJobPrivate
     IPlugin* vcsplugin;
     
     QVariant results;
+    OutputModel* model;
 };
 
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
@@ -64,7 +66,9 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->status = JobNotStarted;
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
-
+    d->model = new OutputModel;
+    setModel(d->model, IOutputView::TakeOwnership);
+    
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
     connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
@@ -72,6 +76,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
 
     connect(d->childproc, SIGNAL(readyReadStandardOutput()),
                 SLOT(slotReceivedStdout()));
+    
 }
 
 DVcsJob::~DVcsJob()
@@ -140,14 +145,14 @@ void DVcsJob::start()
     const QDir& workingdir = directory();
     if( !workingdir.exists() ) {
         QString error = i18n( "Working Directory doesn't exist: %1", d->childproc->workingDirectory() );
-        displayOutput(error);
+        d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
         return;
     }
     if( !workingdir.isAbsolute() ) {
         QString error = i18n( "Working Directory is not absolute: %1", d->childproc->workingDirectory() );
-        displayOutput(error);
+        d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
         return;
@@ -163,7 +168,7 @@ void DVcsJob::start()
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     
-    displayOutput(directory().path() + "> " + dvcsCommand().join(" "));
+    d->model->appendLine(directory().path() + "> " + dvcsCommand().join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -213,7 +218,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
                                                      << "Exit code is:" << d->childproc->exitCode();
     
     displayOutput(d->childproc->readAllStandardError());
-    displayOutput(i18n("Command finnished with error %1.", errorValue));
+    d->model->appendLine(i18n("Command finnished with error %1.", errorValue));
     jobIsReady();
 }
 
@@ -224,14 +229,13 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     if (exitStatus != QProcess::NormalExit || exitCode != 0)
         slotProcessError(QProcess::UnknownError);
 
-    displayOutput(i18n("Command exited with value %1.", exitCode));
+    d->model->appendLine(i18n("Command exited with value %1.", exitCode));
     jobIsReady();
 }
 
 void DVcsJob::displayOutput(const QString& data)
 {
-    if(model())
-        static_cast<QStandardItemModel*>(model())->appendRow(new QStandardItem(data));
+    d->model->appendLines(data.split('\n'));
 }
 
 void DVcsJob::slotReceivedStdout()

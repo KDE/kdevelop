@@ -35,7 +35,7 @@ namespace KDevelop
         setStandardToolView(IOutputView::VcsView);
         
         if(verbosity==Verbose)
-            QMetaObject::invokeMethod(this, "delayedModelInitialize");
+            QMetaObject::invokeMethod(this, "delayedModelInitialize", Qt::QueuedConnection);
     }
     
     void VcsJob::delayedModelInitialize()
