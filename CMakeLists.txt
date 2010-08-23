@@ -11,11 +11,6 @@ set( KDEVELOP_VERSION_PATCH 60 )
 set(KDE_MIN_VERSION "4.5.0")
 find_package(KDE4 4.5.0 REQUIRED)
 
-if( ${KDE_VERSION} VERSION_GREATER 4.5.63 )
-    message(FATAL_ERROR "KDevelop doesn't work (yet) with kdelibs 4.5.64 or later, please use the movingranges branch (http://gitorious.org/+kdevelop-developers/kdevelop/devel-kdevelop)")
-endif(${KDE_VERSION} VERSION_GREATER 4.5.63)
->>>>>>> 0b9add424b7b798fbce1e801bc868013ddad75c4
-
 include (KDE4Defaults)
 include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
