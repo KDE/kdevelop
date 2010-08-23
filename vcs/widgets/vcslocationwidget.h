@@ -38,7 +38,7 @@ class KDEVPLATFORMVCS_EXPORT VcsLocationWidget : public QWidget
         virtual bool isCorrect() const=0;
         
     signals:
-        virtual void changed()=0;
+        virtual void changed();
 };
 
 }
