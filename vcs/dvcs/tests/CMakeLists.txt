@@ -5,6 +5,7 @@ target_link_libraries(dvcsTest
 		              ${QT_QTTEST_LIBRARY}
 					  ${QT_QTGUI_LIBRARY}
 		              ${KDE4_KDECORE_LIBS}
+                      ${KDEVPLATFORM_TESTS_LIBRARIES}
                       kdevplatformutil
                       kdevplatformvcs
 	                  )

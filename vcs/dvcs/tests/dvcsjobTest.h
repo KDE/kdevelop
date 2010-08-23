@@ -27,8 +27,9 @@ class DVcsJobTest: public QObject
 {
     Q_OBJECT
 
-private slots:
-    void testJob();
+    private slots:
+        void initTestCase();
+        void testJob();
 };
 
 #endif

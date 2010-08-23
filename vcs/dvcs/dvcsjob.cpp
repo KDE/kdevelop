@@ -160,7 +160,10 @@ void DVcsJob::start()
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
 
-    setObjectName(d->vcsplugin->objectName()+": "+dvcsCommand().join(" "));
+    QString service;
+    if(d->vcsplugin)
+        service = d->vcsplugin->objectName();
+    setObjectName(service+": "+dvcsCommand().join(" "));
     
     d->status = JobRunning;
     d->childproc->setEnvironment(QProcess::systemEnvironment());

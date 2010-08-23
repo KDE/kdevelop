@@ -25,17 +25,23 @@
 #include <KDE/KUrl>
 
 #include <vcs/dvcs/dvcsjob.h>
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
+using namespace KDevelop;
+
+void DVcsJobTest::initTestCase()
+{
+    AutoTestShell::init();
+    TestCore* testCore = new KDevelop::TestCore();
+    testCore->initialize(KDevelop::Core::NoUi);
+}
 
 void DVcsJobTest::testJob()
 {
-
     KDevelop::DVcsJob* job = new KDevelop::DVcsJob(QDir::temp());
     QVERIFY(job);
     QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
-
-    //makes sence for bug 172309. With default (true) we have crash, with false — dead lock
-    //should be removed after we fix the problem
-    job->setAutoDelete(false);
 
     //try the command like "echo -n test"
     //should fail, because command and arg are in one string. We can change opearator<<(QString) to split,
@@ -45,15 +51,6 @@ void DVcsJobTest::testJob()
     QVERIFY(!job->exec());
     QVERIFY(job->status() == KDevelop::VcsJob::JobFailed);
     QCOMPARE(job->dvcsCommand().join(";;"), echoCommand);
-
-    //check our clear() method. It's simple, but having bugs here is dangerous
-    QVERIFY(job);
-    QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
-    QVERIFY(job->fetchResults().isNull());
-    QVERIFY(job->process());
-    QCOMPARE(job->dvcsCommand(), QStringList());
-    QCOMPARE(job->directory(), QDir::temp());
-    QCOMPARE(job->output(), QString());
 }
 
 
