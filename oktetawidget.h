@@ -36,7 +36,6 @@ class AbstractXmlGuiController;
 
 namespace KDevelop
 {
-class OktetaDocument;
 class OktetaPlugin;
 
 class OktetaWidget : public QWidget, public KXMLGUIClient
