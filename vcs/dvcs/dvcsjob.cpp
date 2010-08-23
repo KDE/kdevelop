@@ -256,20 +256,7 @@ IPlugin* DVcsJob::vcsPlugin() const
 
 DVcsJob& DVcsJob::operator<<(const KUrl& url)
 {
-    ///@todo this is ok for now, but what if some of the urls are not
-    ///      to the given repository
-    //all urls should be relative to the working directory!
-    //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
-    QString file;
-    
-    if (url.isEmpty())
-        file = '.';
-    else if (!url.isRelative())
-        file = directory().relativeFilePath(url.toLocalFile());
-    else
-        file = url.toLocalFile();
-
-    *d->childproc << file;
+    *d->childproc << url.toLocalFile();
     return *this;
 }
 
