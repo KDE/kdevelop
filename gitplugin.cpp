@@ -278,7 +278,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
-    DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
+    DVcsJob* job = new DVcsJob(urlDir(localLocations), this, OutputJob::Silent);
     *job << "git" << "status" << "--porcelain" << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
