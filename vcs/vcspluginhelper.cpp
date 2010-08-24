@@ -244,15 +244,6 @@ void VcsPluginHelper::diffToHead()
     d->plugin->core()->runController()->registerJob(job);
 }
 
-QStringList locationListToString(const QList<VcsLocation>& locations)
-{
-    QStringList ret;
-    foreach(const VcsLocation& loc, locations) {
-        ret.append(loc.localUrl().prettyUrl());
-    }
-    return ret;
-}
-
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
     KDevelop::VcsJob* vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
