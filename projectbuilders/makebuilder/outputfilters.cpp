@@ -16,7 +16,7 @@
 // @todo could get these from emacs compile.el
 QList<ErrorFormat> ErrorFormat::errorFormats = QList<ErrorFormat>()
     // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-    << ErrorFormat( "([^: \t]+):([0-9]+):(?:[0-9]+):([^0-9]+)", 1, 2, 3 )
+    << ErrorFormat( "([^: \t]+):([0-9]+):(?:[0-9]+):([^0-9]+)", 1, 2, 4 )
     // GCC
     << ErrorFormat( "([^: \t]+):([0-9]+):([^0-9]+)", 1, 2, 3 )
     // ICC
