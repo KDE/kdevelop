@@ -92,6 +92,10 @@ public:
     format_t format() const { return m_format; }
     virtual void formatChanged();
 
+    // get/set 'changed' state, if the variable changed it will be highlighted
+    bool isChanged() const { return changed_; }
+    void setChanged(bool c);
+    
 public slots:
     void die();
 
@@ -107,6 +111,8 @@ private:
     QString expression_;
     bool inScope_;
     bool topLevel_;
+    bool changed_;
+
     format_t m_format;
 };
 
@@ -160,7 +166,7 @@ public:
 
     friend class VariableCollection;
     friend class IVariableController;
-
+    
 private:
     void fetchMoreChildren() {}
 };

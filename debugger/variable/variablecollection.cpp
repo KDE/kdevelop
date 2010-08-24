@@ -123,6 +123,16 @@ void Variable::die()
 }
 
 
+void Variable::setChanged(bool c)
+{
+    changed_=c;
+    foreach(TreeItem* item, childItems)
+    {
+        Variable* var=dynamic_cast<Variable*>(item);
+        if(var) var->setChanged(c);
+    }
+}
+
 Variable::format_t Variable::str2format(const QString& str)
 {
     if(str=="Binary" || str=="binary")          return Binary;
@@ -160,14 +170,15 @@ void Variable::formatChanged()
 
 QVariant Variable::data(int column, int role) const
 {
-    if (column == 1 && role == Qt::ForegroundRole
-        && !inScope_)
+    if (column == 1 && role == Qt::ForegroundRole)
     {
         // FIXME: returning hardcoded gray is bad,
         // but we don't have access to any widget, or pallette
         // thereof, at this point.
-        return QColor(128, 128, 128);
+        if(!inScope_) return QColor(128, 128, 128);
+        if(changed_) return QColor(255, 0, 0);
     }
+   
     return TreeItem::data(column, role);
 }
 
@@ -229,6 +240,7 @@ void Watches::reinstall()
     for (int i = 0; i < childItems.size(); ++i)
     {
         Variable* v = static_cast<Variable*>(child(i));
+        v->setChanged(false);
         v->attachMaybe();
     }
 }
@@ -245,7 +257,9 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     for (int i = 0; i < childItems.size(); i++)
     {
         Q_ASSERT(dynamic_cast<KDevelop::Variable*>(child(i)));
-        existing << static_cast<KDevelop::Variable*>(child(i))->expression();
+        Variable* var= static_cast<KDevelop::Variable*>(child(i));
+        var->setChanged(false);
+        existing << var->expression();
     }
 
     foreach (const QString& var, locals) {
