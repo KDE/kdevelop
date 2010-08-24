@@ -30,6 +30,7 @@
 StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent)
     : KDialog(parent), m_plugin(plugin), m_dir(stashed)
 {
+    setWindowTitle(KDialog::makeStandardCaption(i18n("Stash Manager")));
     setButtons(KDialog::Close);
     
     QWidget* w = new QWidget(this);

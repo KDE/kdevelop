@@ -113,12 +113,6 @@ public:
 
     // Begin:  KDevelop::IDistributedVersionControl
     KDevelop::VcsJob* init(const KUrl & directory);
-    KDevelop::VcsJob* reset(const KUrl& repository,
-                            const QStringList &args,
-                            const KUrl::List& files);
-    // End:  KDevelop::IDistributedVersionControl
-
-    KDevelop::DVcsJob* var(const QString &directory);
 
     // Branch management
 

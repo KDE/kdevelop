@@ -354,10 +354,9 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 }
 
 
-VcsJob* GitPlugin::log(const KUrl& localLocation,
-                const KDevelop::VcsRevision& rev, unsigned long int limit)
+VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    DVcsJob* job = new DVcsJob(urlDir(localLocation), this, KDevelop::OutputJob::Silent);
     *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
@@ -369,7 +368,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    DVcsJob* job = new DVcsJob(urlDir(localLocation), this, KDevelop::OutputJob::Silent);
     *job << "git" << "blame" << "--porcelain";
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
@@ -435,13 +434,6 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
     job->setResults(results);
 }
 
-DVcsJob* GitPlugin::var(const QString & repository)
-{
-    DVcsJob* job = new DVcsJob(QDir(repository), this);
-    *job << "git" << "var" << "-l";
-    return job;
-}
-
 DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branch)
 {
     QDir d(repository);
@@ -459,7 +451,7 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
 DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch, const QString &branch,
                              const QStringList &args)
 {
-    DVcsJob* job = new DVcsJob(QDir(repository), this);
+    DVcsJob* job = new DVcsJob(QDir(repository), this, KDevelop::OutputJob::Silent);
     *job << "git" << "branch" << args;
     
     *job << "--";
@@ -467,17 +459,6 @@ DVcsJob* GitPlugin::branch(const QString &repository, const QString &basebranch,
         *job << branch;
     if (!basebranch.isEmpty())
         *job << basebranch;
-    return job;
-}
-
-VcsJob* GitPlugin::reset(const KUrl& repository, const QStringList &args, const KUrl::List& files)
-{
-    if(files.isEmpty())
-        return errorsFound(i18n("Could not reset"), OutputJob::Verbose);
-    
-    DVcsJob* job = new DVcsJob(urlDir(repository), this);
-    *job << "git" << "reset" << args;
-    *job << "--" << files;
     return job;
 }
 

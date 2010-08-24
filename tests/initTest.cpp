@@ -177,10 +177,6 @@ void GitInitTest::addFiles()
 
 void GitInitTest::commitFiles()
 {
-    kDebug() << "Listing variables with KProcess\n";
-    DVcsJob* j_var = m_plugin->var(gitTest_BaseDir);
-    VERIFYJOB(j_var);
-
     kDebug() << "Committing...";
     //we start it after addFiles, so we just have to commit
     VcsJob* j = m_plugin->commit(QString("Test commit"), KUrl::List(gitTest_BaseDir));
