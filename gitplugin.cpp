@@ -1003,13 +1003,17 @@ VcsJob* GitPlugin::repositoryLocation(const KUrl& localLocation)
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const KUrl& localRepositoryLocation)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
-    *job << "git" << "pull" << localOrRepoLocationSrc.localUrl().url();
+    job->setCommunicationMode(KProcess::MergedChannels);
+    *job << "git" << "pull";
+    if(!localOrRepoLocationSrc.localUrl().isEmpty())
+        *job << localOrRepoLocationSrc.localUrl().url();
     return job;
 }
 
 VcsJob* GitPlugin::push(const KUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
     DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
+    job->setCommunicationMode(KProcess::MergedChannels);
     *job << "git" << "push";
     if(!localOrRepoLocationDst.localUrl().isEmpty())
         *job << localOrRepoLocationDst.localUrl().url();
