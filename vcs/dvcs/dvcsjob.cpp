@@ -222,6 +222,11 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     
     displayOutput(d->childproc->readAllStandardError());
     d->model->appendLine(i18n("Command finnished with error %1.", errorValue));
+    
+    //Even if it was a silent process we want to provide some feedback to the user about what went wrong
+    //so we show the output then.
+    if(verbosity()==Silent)
+        startOutput();
     jobIsReady();
 }
 
