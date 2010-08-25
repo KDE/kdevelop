@@ -133,6 +133,8 @@ private:
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
                                                     KDevelop::ReferencedTopDUContext parent);
+    
+    static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
 
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
