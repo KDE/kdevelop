@@ -417,9 +417,8 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
     for ( int i = 0; i < rowCount(); ++i )
     {
         ProjectBaseItem* item = child( i );
-        Q_ASSERT(item);
-        if ( item && ( item->type() == Target || item->type() == LibraryTarget ||
-             item->type() == ExecutableTarget ) )
+        
+        if ( item->type() == Target || item->type() == LibraryTarget || item->type() == ExecutableTarget )
         {
             ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
             if ( kdevitem )
