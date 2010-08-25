@@ -123,7 +123,7 @@ private slots:
     void reimportDone(KJob* job);
 
 private:
-    void reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent);
+    void reimport(KDevelop::ProjectFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
     

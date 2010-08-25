@@ -442,7 +442,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             folder->cleanupBuildFolders(data.subdirectories);
             foreach (const Subdirectory& subf, data.subdirectories)
             {
-                if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't parse the wrong lines
+                if(subf.name.isEmpty() || alreadyAdded.contains(subf.name)) //empty case would not be necessary if we didn't process the wrong lines
                     continue;
                 
                 KUrl path(subf.name);
@@ -471,9 +471,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                         
                     }
                     if(!a) {
-                        KUrl url = item->url();
-                        url.addPath(subf.name);
-                        a = new CMakeFolderItem( folder->project(), url, subf.build_dir, parent );
+                        a = new CMakeFolderItem( folder->project(), path, subf.build_dir, parent );
                     }
                     
                     kDebug() << "folder: " << a << a->index();
@@ -646,6 +644,7 @@ void CMakeManager::setTargetFiles(ProjectTargetItem* target, const KUrl::List& f
             target->removeRow(file->row());
     }
     
+    tfiles = target->fileList(); //We need to recreate the list without the removed items
     foreach(const KUrl& file, files) {
         if(!containsFile(file, tfiles))
             new KDevelop::ProjectFileItem( target->project(), file, target );   
@@ -748,15 +747,11 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         }
     }
 
-    if (!item || item == item->project()->projectItem()) {
-        folder->project()->reloadModel();
-    } else {
-        reimport(item, item->parent()->url());
-    }
+    reimport(item);
     return true;
 }
 
-void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent)
+void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 {
     Q_ASSERT(!isReloading(fi->project()));
     
@@ -807,8 +802,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
 
         Q_ASSERT(files.count()==1);
         CMakeFolderItem *folderItem=static_cast<CMakeFolderItem*>(files.first()->parent());
-        if(folderItem!=p->projectItem())
-        {
+        
 #if 0
             KUrl relative=KUrl::relativeUrl(projectBaseUrl, dir);
             initializeProject(proj, dir);
@@ -820,12 +814,9 @@ void CMakeManager::dirtyFile(const QString & dirty)
                 parseOnly(proj, current);
             }
 #endif
-            reload(folderItem);
-        }
-        else
-        {
-            reload(p->projectItem());
-        }
+
+        
+        reload(folderItem);
     }
     else if(dirty.endsWith(".cmake"))
     {
@@ -1055,13 +1046,14 @@ bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
     if ( !KDevelop::removeUrl(it->project(), it->url(), true) ) {
         return false;
     }
-    KUrl lists=it->url().upUrl();
-    lists.addPath("CMakeLists.txt");
-    if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder)
-    {
+    
+    if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder) {
         it->parent()->removeRow(it->row());
         return true;
     }
+    
+    KUrl lists=it->url().upUrl();
+    lists.addPath("CMakeLists.txt");
 
     ApplyChangesWidget e;
     e.setCaption(it->text());

@@ -106,7 +106,7 @@ void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
         bool found=false;
         foreach(const Subdirectory& s, subs) {
-            found |= folder->text()==s.name && folder->type()!=ProjectBaseItem::BuildFolder;
+            found |= folder->text()==s.name && folder->type()==ProjectBaseItem::BuildFolder;
             if(found)
                 break;
         }
