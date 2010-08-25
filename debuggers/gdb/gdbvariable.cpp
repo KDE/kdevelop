@@ -47,9 +47,7 @@ static bool hasStartedSession()
 GdbVariable::GdbVariable(TreeModel* model, TreeItem* parent,
             const QString& expression, const QString& display)
 : Variable(model, parent, expression, display)
-{
-    setChanged(false);
-}
+{}
 
 GdbVariable::~GdbVariable()
 {
@@ -257,7 +255,6 @@ void GdbVariable::fetchMoreChildren()
 
 void GdbVariable::handleUpdate(const GDBMI::Value& var)
 {
-    setChanged(true);
     if (var.hasField("type_changed")
         && var["type_changed"].literal() == "true")
     {
@@ -307,10 +304,12 @@ void GdbVariable::handleUpdate(const GDBMI::Value& var)
                 var->setHasMoreInitial(child["numchild"].toInt() != 0);
                 appendChild(var);
                 var->setValue(child["value"].literal());
+                var->setChanged(true);
             }
         }
 
         setValue(var["value"].literal());
+        setChanged(true);
         setHasMore(var.hasField("has_more") && var["has_more"].toInt());
     }
 }

@@ -388,6 +388,9 @@ QString GDBCommand::gdbCommand() const
         case StackListLocals:
             command = "stack-list-locals";
             break;
+        case StackListVariables:
+            command = "stack-list-variables";
+            break;
         case StackSelectFrame:
             command = "stack-select-frame";
             break;

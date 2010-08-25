@@ -122,6 +122,7 @@ namespace GDBMI
         StackListExceptionHandlers,
         StackListFrames,
         StackListLocals,
+        StackListVariables,
         StackSelectFrame,
 
         SymbolInfoAddress,
