@@ -589,40 +589,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         }
     }
 
-    QStringList entriesL = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
-    QSet<QString> entries = filterFiles(entriesL);
-    foreach( const QString& entry, entries )
-    {
-        if( item->hasFileOrFolder( entry ) )
-            continue;
-
-        KUrl fileurl = item->url();
-        fileurl.addPath( entry );
-
-        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
-        {
-            KUrl cache=fileurl;
-            cache.addPath("CMakeCache.txt");
-            fileurl.adjustPath(KUrl::AddTrailingSlash);
-            if(!QFile::exists(cache.toLocalFile())
-                && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
-            {
-                if(m_pending.contains(fileurl))
-                    item->appendRow(m_pending.take(fileurl));
-                else if(subroot.isParentOf(fileurl))
-                {
-                    //if it's not subparent, we don't add it at all
-                    ProjectFolderItem* fitem=new ProjectFolderItem( item->project(), fileurl, item );
-                    folderList.append(fitem);
-                }
-            }
-        }
-        else if ( subroot.isParentOf(fileurl) )
-        {
-            //if it's not subparent, we don't add it at all
-            new KDevelop::ProjectFileItem( item->project(), fileurl, item );
-        }
-    }
+    reloadFiles(item);
 
     return folderList;
 }
@@ -787,6 +754,7 @@ bool CMakeManager::isReloading(IProject* p)
 
 void CMakeManager::dirtyFile(const QString & dirty)
 {
+    kDebug() << "dirty FileSystem: " << dirty;
     const KUrl dirtyFile(dirty);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
 
@@ -832,68 +800,70 @@ void CMakeManager::dirtyFile(const QString & dirty)
         Q_ASSERT(folders.isEmpty() || folders.size()==1);
         
         if(!folders.isEmpty())
+            reloadFiles(folders.first());
+    }
+}
+
+void CMakeManager::reloadFiles(ProjectFolderItem* item)
+{
+    QStringList entriesL = QDir(item->url().toLocalFile()).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+    QSet<QString> entries = filterFiles(entriesL);
+    
+    KUrl folderurl = item->url();
+    
+    kDebug() << "Reloading Directory!" << folderurl;
+    
+    //We look for removed elements
+    for(int i=0; i<item->rowCount(); i++)
+    {
+        ProjectBaseItem* it=item->child(i);
+        if(it->type()==ProjectBaseItem::Target || it->type()==ProjectBaseItem::ExecutableTarget || it->type()==ProjectBaseItem::LibraryTarget)
+            continue;
+        
+        QString current=it->text();
+        if(!entries.contains(current))
         {
-            QStringList entriesL = QDir(dirty).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
-            QSet<QString> entries = filterFiles(entriesL);
-            
-            ProjectFolderItem* item=folders.first();
-            KUrl folderurl = item->url();
-            
-            //We look for new elements
-            foreach( const QString& entry, entries )
+            KUrl fileurl = folderurl;
+            fileurl.addPath(current);
+        
+            switch(it->type())
             {
-                if( item->hasFileOrFolder( entry ) )
-                    continue;
-
-                KUrl fileurl = folderurl;
-                fileurl.addPath( entry );
-
-                if( QFileInfo( fileurl.toLocalFile() ).isDir() )
-                {
-                    KUrl cache=fileurl;
-                    cache.addPath("CMakeCache.txt");
-                    fileurl.adjustPath(KUrl::AddTrailingSlash);
-                    if(!QFile::exists(cache.toLocalFile())
-                        && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
-                    {
-                        new ProjectFolderItem( item->project(), fileurl, item );    
-                    }
-                }
-                else
-                {
-                    new KDevelop::ProjectFileItem( item->project(), fileurl, item );
-                }
+                case ProjectBaseItem::File:
+                    qDeleteAll(item->project()->filesForUrl(fileurl));
+                    break;
+                case ProjectBaseItem::Folder:
+                case ProjectBaseItem::BuildFolder:
+                    qDeleteAll(item->project()->foldersForUrl(fileurl));
+                    break;
+                default:
+                    break;
             }
-            
-            //We look for removed elements
-            for(int i=0; i<item->rowCount(); i++)
+        }
+    }
+    
+    //We look for new elements
+    foreach( const QString& entry, entries )
+    {
+        if( item->hasFileOrFolder( entry ) )
+            continue;
+
+        KUrl fileurl = folderurl;
+        fileurl.addPath( entry );
+
+        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
+        {
+            KUrl cache=fileurl;
+            cache.addPath("CMakeCache.txt");
+            fileurl.adjustPath(KUrl::AddTrailingSlash);
+            if(!QFile::exists(cache.toLocalFile())
+                && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
             {
-                ProjectBaseItem* it=item->child(i);
-                if(it->type()==ProjectBaseItem::Target)
-                    continue;
-                
-                QString current=it->text();
-                if(!entries.contains(current))
-                {
-                    KUrl fileurl = folderurl;
-                    fileurl.addPath(current);
-                
-                    switch(it->type())
-                    {
-                        case ProjectBaseItem::File:
-                            foreach(const ProjectFileItem* removed, p->filesForUrl(fileurl))
-                                removed->parent()->removeRow(removed->row());
-                            break;
-                        case ProjectBaseItem::Folder:
-                        case ProjectBaseItem::BuildFolder:
-                            foreach(const ProjectFolderItem* removed, p->foldersForUrl(fileurl))
-                                removed->parent()->removeRow(removed->row());
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                new ProjectFolderItem( item->project(), fileurl, item );    
             }
+        }
+        else
+        {
+            new KDevelop::ProjectFileItem( item->project(), fileurl, item );
         }
     }
 }
@@ -1313,7 +1283,9 @@ QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, co
 
 bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
 {
-    QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
+    KUrl fileUrl = it->url();
+    IProject *project = it->project();
+    QList<ProjectFileItem*> files=it->project()->filesForUrl(fileUrl);
     
     QList<ProjectTargetItem*> targets;
     
@@ -1327,7 +1299,7 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         
     if(targets.isEmpty())
     {
-        return KDevelop::renameUrl(it->project(), it->url(), newUrl);
+        return KDevelop::renameUrl(project, fileUrl, newUrl);
     }
     
     ApplyChangesWidget e;
@@ -1347,7 +1319,7 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
         lists.addPath("CMakeLists.txt");
         e.addDocuments(IndexedString(lists));
         
-        QString newName=KUrl::relativePath(it->url().upUrl().path(), newUrl.path());
+        QString newName=KUrl::relativeUrl(fileUrl.upUrl(), newUrl);
         if(newName.startsWith("./"))
             newName.remove(0,2);
         bool hasChanges = followUses(e.document(), r, ' '+it->text(), lists, false, ' '+newName);
@@ -1357,8 +1329,8 @@ bool CMakeManager::renameFile(ProjectFileItem* it, const KUrl& newUrl)
     ret &= e.exec()==KDialog::Accepted;
     if(ret)
     {
-        bool ret=e.applyAllChanges();
-        ret = ret && KDevelop::renameUrl(it->project(), it->url(), newUrl);
+        ret=e.applyAllChanges();
+        ret = ret && KDevelop::renameUrl(project, fileUrl, newUrl);
     }
 
     return ret;

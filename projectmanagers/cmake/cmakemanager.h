@@ -135,6 +135,7 @@ private:
                                                     KDevelop::ReferencedTopDUContext parent);
     
     static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
+    static void reloadFiles(KDevelop::ProjectFolderItem* item);
 
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
