@@ -16,7 +16,7 @@
 // @todo could get these from emacs compile.el
 QList<ErrorFormat> ErrorFormat::errorFormats = QList<ErrorFormat>()
     // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-    << ErrorFormat( "([^: \t]+):([0-9]+):(?:[0-9]+):([^0-9]+)", 1, 2, 3 )
+    << ErrorFormat( "([^: \t]+):([0-9]+):([0-9]+):([^0-9]+)", 1, 2, 4, 3 )
     // GCC
     << ErrorFormat( "([^: \t]+):([0-9]+):([^0-9]+)", 1, 2, 3 )
     // ICC
@@ -79,17 +79,19 @@ QList<ActionFormat> ActionFormat::actionFormats = QList<ActionFormat>()
     // match against Entering directory to update current build dir
     << ActionFormat( "cd", "", "make[^:]*: Entering directory `([^']+)'", 1);
 
-ErrorFormat::ErrorFormat( const QString& regExp, int file, int line, int text )
+ErrorFormat::ErrorFormat( const QString& regExp, int file, int line, int text, int column )
     : expression( regExp )
     , fileGroup( file )
     , lineGroup( line )
+    , columnGroup( column )
     , textGroup( text )
 {}
 
-ErrorFormat::ErrorFormat( const QString& regExp, int file, int line, int text, const QString& comp )
+ErrorFormat::ErrorFormat( const QString& regExp, int file, int line, int text, const QString& comp, int column )
     : expression( regExp )
     , fileGroup( file )
     , lineGroup( line )
+    , columnGroup( column )
     , textGroup( text )
     , compiler( comp )
 {}
