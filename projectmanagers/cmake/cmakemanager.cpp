@@ -858,7 +858,8 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             if(!QFile::exists(cache.toLocalFile())
                 && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
             {
-                new ProjectFolderItem( item->project(), fileurl, item );    
+                ProjectFolderItem* folder = new ProjectFolderItem( item->project(), fileurl, item );
+                reloadFiles(folder);
             }
         }
         else
