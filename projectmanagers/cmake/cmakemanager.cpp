@@ -982,6 +982,10 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
     Q_ASSERT(QFile::exists(folder.toLocalFile()));
     KUrl lists=parent->url();
     lists.addPath("CMakeLists.txt");
+    
+    if(!QFile::exists(lists)) //Folder's been added not a build folder, so we're done
+        return 0;
+    
     QString relative=KUrl::relativeUrl(parent->url(), folder);
 
     kDebug() << "Adding folder " << parent->url() << " to " << folder << " as " << relative;
