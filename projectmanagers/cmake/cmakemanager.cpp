@@ -852,14 +852,21 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
 
         if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
-            KUrl cache=fileurl;
-            cache.addPath("CMakeCache.txt");
             fileurl.adjustPath(KUrl::AddTrailingSlash);
-            if(!QFile::exists(cache.toLocalFile())
-                && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
-            {
-                ProjectFolderItem* folder = new ProjectFolderItem( item->project(), fileurl, item );
-                reloadFiles(folder);
+            ProjectFolderItem* pendingfolder = m_pending.take(fileurl);
+            
+            if(pendingfolder) {
+                item->appendRow(pendingfolder);
+            } else {
+                KUrl cache=fileurl;
+                cache.addPath("CMakeCache.txt");
+                fileurl.adjustPath(KUrl::AddTrailingSlash);
+                if(!QFile::exists(cache.toLocalFile())
+                    && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
+                {
+                    ProjectFolderItem* folder = new ProjectFolderItem( item->project(), fileurl, item );
+                    reloadFiles(folder);
+                }
             }
         }
         else

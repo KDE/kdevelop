@@ -135,14 +135,14 @@ private:
                                                     KDevelop::ReferencedTopDUContext parent);
     
     static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
-    static void reloadFiles(KDevelop::ProjectFolderItem* item);
+    void reloadFiles(KDevelop::ProjectFolderItem* item);
 
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
-    QMap<KUrl, KDevelop::ProjectFolderItem*> m_pending;
+    QMap<KUrl, CMakeFolderItem*> m_pending;
     
     QMap<KJob*, KDevelop::ProjectFolderItem*> m_busyProjects;
     
