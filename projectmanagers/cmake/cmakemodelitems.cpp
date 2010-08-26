@@ -100,18 +100,21 @@ KDevelop::ProjectFolderItem* CMakeFolderItem::folderNamed(const QString& name) c
     return 0;
 }
 
+template <class T>
+bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
+{
+    foreach(const T& s, list) {
+        if(item->text()==s.name)
+            return true;
+    }
+    return false;
+}
+
 void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
 {
     QList<KDevelop::ProjectFolderItem*> folders = folderList();
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
-        bool found=false;
-        foreach(const Subdirectory& s, subs) {
-            found |= folder->text()==s.name && folder->type()==ProjectBaseItem::BuildFolder;
-            if(found)
-                break;
-        }
-        
-        if(!found)
+        if(folder->type()==ProjectBaseItem::BuildFolder && !textInList<Subdirectory>(subs, folder))
             delete folder;
     }
 }
@@ -120,14 +123,7 @@ void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
 {
     QList<KDevelop::ProjectTargetItem*> targetl = targetList();
     foreach(KDevelop::ProjectTargetItem* target, targetl) {
-        bool found=false;
-        foreach(const CMakeTarget& t, targets) {
-            found |= target->text()==t.name;
-            if(found)
-                break;
-        }
-        
-        if(!found)
+        if(!textInList<CMakeTarget>(targets, target))
             delete target;
     }
 }
