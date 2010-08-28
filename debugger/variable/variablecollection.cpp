@@ -64,7 +64,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
   : TreeItem(model, parent),
-    inScope_(true), topLevel_(true), m_format(Natural)
+    inScope_(true), topLevel_(true), changed_(false), m_format(Natural)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -131,6 +131,7 @@ void Variable::setChanged(bool c)
         Variable* var=dynamic_cast<Variable*>(item);
         if(var) var->setChanged(c);
     }
+    reportChange();
 }
 
 Variable::format_t Variable::str2format(const QString& str)
