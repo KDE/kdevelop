@@ -873,9 +873,9 @@ void GdbTest::testVariablesLocalsStruct()
 
     QModelIndex i = variableCollection()->index(1, 0);
     QCOMPARE(variableCollection()->rowCount(i), 4);
-    COMPARE_DATA(variableCollection()->index(1, 0, i), "ts");
-    COMPARE_DATA(variableCollection()->index(1, 1, i), "{...}");
-    QModelIndex ts = variableCollection()->index(1, 0, i);
+    COMPARE_DATA(variableCollection()->index(3, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(3, 1, i), "{...}");
+    QModelIndex ts = variableCollection()->index(3, 0, i);
     COMPARE_DATA(variableCollection()->index(0, 0, ts), "...");
     variableCollection()->expanded(ts);
     QTest::qWait(100);
@@ -889,8 +889,8 @@ void GdbTest::testVariablesLocalsStruct()
     session->stepInto();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
-    COMPARE_DATA(variableCollection()->index(1, 0, i), "ts");
-    COMPARE_DATA(variableCollection()->index(1, 1, i), "{...}");
+    COMPARE_DATA(variableCollection()->index(3, 0, i), "ts");
+    COMPARE_DATA(variableCollection()->index(3, 1, i), "{...}");
     COMPARE_DATA(variableCollection()->index(0, 1, ts), "1");
 
     session->run();
