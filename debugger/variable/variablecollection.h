@@ -92,6 +92,11 @@ public:
     format_t format() const { return m_format; }
     virtual void formatChanged();
 
+    // get/set 'changed' state, if the variable changed it will be highlighted
+    bool isChanged() const { return changed_; }
+    void setChanged(bool c);
+    void resetChanged();
+
 public slots:
     void die();
 
@@ -107,6 +112,8 @@ private:
     QString expression_;
     bool inScope_;
     bool topLevel_;
+    bool changed_;
+
     format_t m_format;
 };
 
@@ -136,6 +143,7 @@ public:
 
     Variable *addFinishResult(const QString& convenienceVarible);
     void removeFinishResult();
+    void resetChanged();
 
     using TreeItem::childCount;
     friend class VariableCollection;
@@ -154,13 +162,14 @@ class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
 public:
     Locals(TreeModel* model, TreeItem* parent, const QString &name);
     QList<Variable*> updateLocals(QStringList locals);
+    void resetChanged();
 
     using TreeItem::deleteChildren;
     using TreeItem::setHasMore;
 
     friend class VariableCollection;
     friend class IVariableController;
-
+    
 private:
     void fetchMoreChildren() {}
 };
@@ -175,6 +184,8 @@ public:
     QHash<QString, Locals*> allLocals() const;
 
     void fetchMoreChildren() {}
+
+    void resetChanged();
 
 private:
     Watches *watches_;

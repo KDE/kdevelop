@@ -64,7 +64,7 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
                    const QString& expression,
                    const QString& display)
   : TreeItem(model, parent),
-    inScope_(true), topLevel_(true), m_format(Natural)
+    inScope_(true), topLevel_(true), changed_(false), m_format(Natural)
 {
     expression_ = expression;
     // FIXME: should not duplicate the data, instead overload 'data'
@@ -123,6 +123,23 @@ void Variable::die()
 }
 
 
+void Variable::setChanged(bool c)
+{
+    changed_=c;
+    reportChange();
+}
+
+void Variable::resetChanged()
+{
+    setChanged(false);
+    for (int i=0; i<childCount(); ++i) {
+        TreeItem* childItem = child(i);
+        if (dynamic_cast<Variable*>(childItem)) {
+            static_cast<Variable*>(childItem)->resetChanged();
+        }
+    }
+}
+
 Variable::format_t Variable::str2format(const QString& str)
 {
     if(str=="Binary" || str=="binary")          return Binary;
@@ -160,14 +177,15 @@ void Variable::formatChanged()
 
 QVariant Variable::data(int column, int role) const
 {
-    if (column == 1 && role == Qt::ForegroundRole
-        && !inScope_)
+    if (column == 1 && role == Qt::ForegroundRole)
     {
         // FIXME: returning hardcoded gray is bad,
         // but we don't have access to any widget, or pallette
         // thereof, at this point.
-        return QColor(128, 128, 128);
+        if(!inScope_) return QColor(128, 128, 128);
+        if(changed_) return QColor(255, 0, 0);
     }
+   
     return TreeItem::data(column, role);
 }
 
@@ -210,6 +228,16 @@ void Watches::removeFinishResult()
     }
 }
 
+void Watches::resetChanged()
+{
+    for (int i=0; i<childCount(); ++i) {
+        TreeItem* childItem = child(i);
+        if (dynamic_cast<Variable*>(childItem)) {
+            static_cast<Variable*>(childItem)->resetChanged();
+        }
+    }
+}
+
 QVariant Watches::data(int column, int role) const
 {
 #if 0
@@ -245,7 +273,8 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     for (int i = 0; i < childItems.size(); i++)
     {
         Q_ASSERT(dynamic_cast<KDevelop::Variable*>(child(i)));
-        existing << static_cast<KDevelop::Variable*>(child(i))->expression();
+        Variable* var= static_cast<KDevelop::Variable*>(child(i));
+        existing << var->expression();
     }
 
     foreach (const QString& var, locals) {
@@ -289,6 +318,16 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     return ret;
 }
 
+void Locals::resetChanged()
+{
+    for (int i=0; i<childCount(); ++i) {
+        TreeItem* childItem = child(i);
+        if (dynamic_cast<Variable*>(childItem)) {
+            static_cast<Variable*>(childItem)->resetChanged();
+        }
+    }
+}
+
 VariablesRoot::VariablesRoot(TreeModel* model)
 : TreeItem(model)
 {
@@ -309,6 +348,14 @@ Locals* VariablesRoot::locals(const QString& name)
 QHash<QString, Locals*> VariablesRoot::allLocals() const
 {
     return locals_;
+}
+
+void VariablesRoot::resetChanged()
+{
+    watches_->resetChanged();
+    foreach (Locals *l, locals_) {
+        l->resetChanged();
+    }
 }
 
 VariableCollection::VariableCollection(IDebugController* controller)
