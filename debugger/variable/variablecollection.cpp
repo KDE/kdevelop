@@ -126,12 +126,18 @@ void Variable::die()
 void Variable::setChanged(bool c)
 {
     changed_=c;
-    foreach(TreeItem* item, childItems)
-    {
-        Variable* var=dynamic_cast<Variable*>(item);
-        if(var) var->setChanged(c);
-    }
     reportChange();
+}
+
+void Variable::resetChanged()
+{
+    setChanged(false);
+    for (int i=0; i<childCount(); ++i) {
+        TreeItem* childItem = child(i);
+        if (dynamic_cast<Variable*>(childItem)) {
+            static_cast<Variable*>(childItem)->resetChanged();
+        }
+    }
 }
 
 Variable::format_t Variable::str2format(const QString& str)
@@ -222,6 +228,16 @@ void Watches::removeFinishResult()
     }
 }
 
+void Watches::resetChanged()
+{
+    for (int i=0; i<childCount(); ++i) {
+        TreeItem* childItem = child(i);
+        if (dynamic_cast<Variable*>(childItem)) {
+            static_cast<Variable*>(childItem)->resetChanged();
+        }
+    }
+}
+
 QVariant Watches::data(int column, int role) const
 {
 #if 0
@@ -241,7 +257,6 @@ void Watches::reinstall()
     for (int i = 0; i < childItems.size(); ++i)
     {
         Variable* v = static_cast<Variable*>(child(i));
-        v->setChanged(false);
         v->attachMaybe();
     }
 }
@@ -259,7 +274,6 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     {
         Q_ASSERT(dynamic_cast<KDevelop::Variable*>(child(i)));
         Variable* var= static_cast<KDevelop::Variable*>(child(i));
-        var->setChanged(false);
         existing << var->expression();
     }
 
@@ -304,6 +318,16 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     return ret;
 }
 
+void Locals::resetChanged()
+{
+    for (int i=0; i<childCount(); ++i) {
+        TreeItem* childItem = child(i);
+        if (dynamic_cast<Variable*>(childItem)) {
+            static_cast<Variable*>(childItem)->resetChanged();
+        }
+    }
+}
+
 VariablesRoot::VariablesRoot(TreeModel* model)
 : TreeItem(model)
 {
@@ -324,6 +348,14 @@ Locals* VariablesRoot::locals(const QString& name)
 QHash<QString, Locals*> VariablesRoot::allLocals() const
 {
     return locals_;
+}
+
+void VariablesRoot::resetChanged()
+{
+    watches_->resetChanged();
+    foreach (Locals *l, locals_) {
+        l->resetChanged();
+    }
 }
 
 VariableCollection::VariableCollection(IDebugController* controller)
