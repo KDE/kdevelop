@@ -40,6 +40,7 @@
 #include <khistorycombobox.h>
 #include <KIcon>
 #include <QScrollBar>
+#include <QScopedPointer>
 
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
@@ -368,7 +369,7 @@ void GDBOutputWidget::restorePartialProjectSession()
 
 void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
 {
-    QMenu* popup = new QMenu(this);
+    QScopedPointer<QMenu> popup(new QMenu(this));
 
     QAction* action = popup->addAction(i18n("Show Internal Commands"),
                                this,
