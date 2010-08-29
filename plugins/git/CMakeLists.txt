@@ -1,21 +1,6 @@
 PROJECT(git)
 
-set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE)
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${git_SOURCE_DIR}/cmake)
-find_package(KDE4 REQUIRED)
-
-find_package(KDevPlatform REQUIRED)
-include_directories(
-    ${KDEVPLATFORM_INCLUDE_DIR}
-    ${KDE4_INCLUDES}
-    ${KDE4_INCLUDE_DIR}/threadweaver
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/duchain
-    ${CMAKE_CURRENT_SOURCE_DIR}/parser
-    ${CMAKE_CURRENT_BINARY_DIR}/parser
-)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=9525)
 
