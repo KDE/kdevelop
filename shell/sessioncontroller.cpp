@@ -628,8 +628,14 @@ QList< const KDevelop::Session* > SessionController::sessions() const
 
 Session* SessionController::createSession( const QString& name )
 {
-    Session* s = new Session( QUuid::createUuid() );
-    s->setName( name );
+    Session* s;
+    if(name.startsWith("{"))
+    {
+        s = new Session( QUuid(name) );
+    }else{
+        s = new Session( QUuid::createUuid() );
+        s->setName( name );
+    }
     d->addSession( s );
     return s;
 }
@@ -745,6 +751,13 @@ SessionController::LockSessionState SessionController::tryLockSession(QString id
     LockSessionState ret;
     
     QString lockPath = sessionDirectory() + "/" + id + "/lock";
+
+    if(!QFileInfo(lockPath).exists())
+    {
+        // Maybe the session doesn't exist yet
+        ret.success = true;
+        return ret;
+    }
     
     KLockFile::Ptr lock(new KLockFile(lockPath));
     ret.success = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
