@@ -39,7 +39,7 @@
 #include <klocale.h>
 
 #include "../../interfaces/icore.h"
-#include "../../shell/debugcontroller.h"
+#include <interfaces/idebugcontroller.h>
 #include "../interfaces/ivariablecontroller.h"
 #include "variablecollection.h"
 
@@ -79,7 +79,7 @@ VariableCollection *variableCollection()
 }
 
 
-VariableWidget::VariableWidget(DebugController* controller, QWidget *parent)
+VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 : QWidget(parent), variablesRoot_(controller->variableCollection()->root())
 {
   //setWindowIcon(KIcon("math_brace"));
@@ -160,7 +160,7 @@ void VariableWidget::showEvent(QShowEvent* e)
 // **************************************************************************
 // **************************************************************************
 
-VariableTree::VariableTree(DebugController *controller,
+VariableTree::VariableTree(IDebugController *controller,
                            VariableWidget *parent)
 : AsyncTreeView(controller->variableCollection(), parent)
 #if 0
@@ -175,7 +175,8 @@ VariableTree::VariableTree(DebugController *controller,
     QModelIndex index = controller->variableCollection()->indexForItem(
         controller->variableCollection()->watches(), 0);
     setExpanded(index, true);
-
+    
+    m_signalMapper = new QSignalMapper(this);
     setupActions();
 }
 
@@ -193,44 +194,117 @@ VariableTree::~VariableTree()
 
 void VariableTree::setupActions()
 {
+    // TODO decorate this properly to make nice menu title
+    m_contextMenuTitle = new QAction(this);
+    m_contextMenuTitle->setEnabled(false);
+    
+    // make Format menu action group
+    m_formatMenu = new QMenu(i18n("&Format"), this);
+    QActionGroup *ag= new QActionGroup(m_formatMenu);
+    
+    QAction* act;
+    
+    act = new QAction(i18n("&Natural"), ag);
+    act->setData(Variable::Natural);
+    act->setShortcut(Qt::Key_N);
+    m_formatMenu->addAction(act);
+
+    act = new QAction(i18n("&Binary"), ag);
+    act->setData(Variable::Binary);
+    act->setShortcut(Qt::Key_B);
+    m_formatMenu->addAction(act);
+       
+    act = new QAction(i18n("&Octal"), ag);
+    act->setData(Variable::Octal);
+    act->setShortcut(Qt::Key_O);
+    m_formatMenu->addAction(act);
+    
+    act = new QAction(i18n("&Decimal"), ag);
+    act->setData(Variable::Decimal);
+    act->setShortcut(Qt::Key_D);
+    m_formatMenu->addAction(act);
+    
+    act = new QAction(i18n("&Hexadecimal"), ag);
+    act->setData(Variable::Hexadecimal);
+    act->setShortcut(Qt::Key_H);
+    m_formatMenu->addAction(act);
+    
+    foreach(QAction* act, m_formatMenu->actions())
+    {
+        act->setCheckable(true);
+        act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        m_signalMapper->setMapping(act, act->data().toInt());
+        connect(act, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+        addAction(act);
+    }
+    connect(m_signalMapper, SIGNAL(mapped(int)), SLOT(changeVariableFormat(int)));
+    
     m_watchDelete = new QAction(
-        KIcon("edit-delete"),
-        i18n( "Remove Watch Variable" ),
-        this);
+        KIcon("edit-delete"), i18n( "Remove Watch Variable" ), this);
+
     m_watchDelete->setShortcut(Qt::Key_Delete);
     m_watchDelete->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(deleteWatch()));
     addAction(m_watchDelete);
+    connect(m_watchDelete, SIGNAL(triggered(bool)), SLOT(watchDelete()));
+
+    m_copyVariableValue = new QAction(i18n("&Copy Value"), this);
+    m_copyVariableValue->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    m_copyVariableValue->setShortcut(QKeySequence::Copy);
+    connect(m_copyVariableValue, SIGNAL(triggered(bool)), SLOT(copyVariableValue()));
 }
 
+Variable* VariableTree::selectedVariable() const
+{
+    TreeItem* item = collection()->itemForIndex(selectionModel()->selectedRows().first());
+    if (!item) return 0;
+    return dynamic_cast<Variable*>(item);
+}
 
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 {
-    QModelIndex index = indexAt(event->pos());
-    if (!index.isValid())
-        return;
-    TreeItem* item = collection()->itemForIndex(index);
-    if (!dynamic_cast<Variable*>(item)) return;
+    if (!selectedVariable()) return;
 
-    if (dynamic_cast<Watches*>(static_cast<Variable*>(item)->parent())) {
-        QMenu popup;
-        popup.addAction(m_watchDelete);
-        popup.exec(event->globalPos());
+    // set up menu
+    QMenu contextMenu(this->parentWidget());
+    m_contextMenuTitle->setText(selectedVariable()->expression());
+    contextMenu.addAction(m_contextMenuTitle);
+    
+    if(selectedVariable()->canSetFormat())
+        contextMenu.addMenu(m_formatMenu);
+
+    foreach(QAction* act, m_formatMenu->actions()) {
+        if(act->data().toInt()==selectedVariable()->format())
+            act->setChecked(true);
     }
+
+    if (dynamic_cast<Watches*>(selectedVariable()->parent())) {
+        contextMenu.addAction(m_watchDelete);
+    }
+
+    contextMenu.addSeparator();
+    contextMenu.addAction(m_copyVariableValue);
+
+    contextMenu.exec(event->globalPos());
 }
 
-
-void VariableTree::deleteWatch()
+void VariableTree::changeVariableFormat(int format)
 {
-    QModelIndexList selected = selectionModel()->selectedIndexes();
-    if (!selected.isEmpty()) {
-        TreeItem* item = collection()->itemForIndex(selected.first());
-        if (!dynamic_cast<Variable*>(item)) return;
-        if (!dynamic_cast<Watches*>(static_cast<Variable*>(item)->parent())) return;
-        static_cast<Variable*>(item)->die();
-    }
+    if (!selectedVariable()) return;
+    selectedVariable()->setFormat(static_cast<Variable::format_t>(format));
 }
 
+void VariableTree::watchDelete()
+{
+    if (!selectedVariable()) return;
+    Q_ASSERT(dynamic_cast<Watches*>(selectedVariable()->parent()));
+    selectedVariable()->die();
+}
+
+void VariableTree::copyVariableValue()
+{
+    if (!selectedVariable()) return;
+    QApplication::clipboard()->setText(selectedVariable()->value());
+}
 
 #if 0
 void VariableTree::contextMenuEvent(QContextMenuEvent* event)
@@ -285,43 +359,6 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
 #define MAYBE_DISABLE(action) if (!var->isAlive()) action->setEnabled(false)
 
         VariableItem* var = qobject_cast<VariableItem*>(item);
-        if (var) {
-            activePopup_->addTitle(var->gdbExpression());
-
-            format.setTitle(i18n("Format"));
-
-            QActionGroup* ag = new QActionGroup(&format);
-
-            natural = format.addAction(i18n("Natural"));
-            natural->setData(VariableItem::natural);
-            natural->setShortcut(Qt::Key_N);
-
-            hex = format.addAction(i18n("Hexadecimal"));
-            hex->setData(VariableItem::hexadecimal);
-            hex->setShortcut(Qt::Key_X);
-
-            decimal = format.addAction(i18n("Decimal"));
-            decimal->setData(VariableItem::decimal);
-            decimal->setShortcut(Qt::Key_D);
-
-            character = format.addAction(i18n("Character"));
-            character->setData(VariableItem::character);
-            character->setShortcut(Qt::Key_C);
-
-            binary = format.addAction(i18n("Binary"));
-            binary->setData(VariableItem::binary);
-            binary->setShortcut(Qt::Key_T);
-
-            foreach (QAction* action, ag->actions()) {
-              action->setCheckable(true);
-              if (action->data().toInt() == var->format())
-                action->setChecked(true);
-            }
-
-            QAction* formatActions = activePopup_->addMenu(&format);
-            MAYBE_DISABLE(formatActions);
-        }
-
 
         AbstractVariableItem* root = item->abstractRoot();
 
@@ -333,11 +370,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
             MAYBE_DISABLE(remember);
         }
 
-        if (qobject_cast<WatchItem*>(root)) {
-            remove = activePopup_->addAction(KIcon("editdelete"), i18n("Remove Watch Variable"));
-            remove->setShortcut(Qt::Key_Delete);
-
-        } else if (!recentRoot) {
+        if (!recentRoot) {
             watch = activePopup_->addAction(i18n("Watch Variable"));
             MAYBE_DISABLE(watch);
         }
@@ -355,10 +388,6 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
             toggleWatch_->setCheckable(true);
             toggleWatch_->setEnabled(false);
         }
-
-        QAction* copyToClipboard = activePopup_->addAction(
-            KIcon("editcopy"), i18n("Copy Value") );
-        copyToClipboard->setShortcut(Qt::CTRL + Qt::Key_C);
 
         /* This code can be executed when debugger is stopped,
            and we invoke popup menu on a var under "recent expressions"
@@ -378,14 +407,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         delete activePopup_;
         activePopup_ = 0;
 
-        if (res == natural || res == hex || res == decimal
-            || res == character || res == binary)
-        {
-            // Change format.
-            VariableItem* var_item = static_cast<VariableItem*>(item);
-            var_item->setFormat(static_cast<VariableItem::FormatTypes>(res->data().toInt()));
-        }
-        else if (res == remember)
+        if (res == remember)
         {
             if (var)
             {
@@ -404,10 +426,6 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         else if (res == remove)
         {
             delete item;
-        }
-        else if (res == copyToClipboard)
-        {
-            VariableTree::copyToClipboard(item);
         }
         else if (res == toggleWatch_)
         {
@@ -432,48 +450,6 @@ void VariableTree::updateCurrentFrame()
 }
 
 // **************************************************************************
-
-void VariableTree::keyPressEvent(QKeyEvent* e)
-{
-    if (VariableItem* item = qobject_cast<VariableItem*>(collection()->itemForIndex(currentIndex())))
-    {
-        QString text = e->text();
-
-        if (text == "n" || text == "x" || text == "d" || text == "c"
-            || text == "t")
-        {
-            item->setFormat(
-                item->formatFromGdbModifier(text[0].toLatin1()));
-        }
-
-        if (e->key() == Qt::Key_Delete)
-        {
-            AbstractVariableItem* root = item->abstractRoot();
-
-            if (qobject_cast<WatchItem*>(root) || qobject_cast<RecentItem*>(root))
-            {
-                AbstractVariableItem* parent = item->abstractParent();
-                Q_ASSERT(parent);
-                if (parent)
-                    parent->deleteChild(item);
-            }
-        }
-
-        if (e->key() == Qt::Key_C && e->modifiers() == Qt::ControlModifier)
-        {
-            copyToClipboard(item);
-        }
-    }
-}
-
-
-void VariableTree::copyToClipboard(AbstractVariableItem* item)
-{
-    QClipboard *qb = KApplication::clipboard();
-    QString text = item->data( 1, Qt::DisplayRole ).toString();
-
-    qb->setText( text, QClipboard::Clipboard );
-}
 
 void VariableTree::handleAddressComputed(const GDBMI::ResultRecord& r)
 {

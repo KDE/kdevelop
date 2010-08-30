@@ -70,6 +70,7 @@
 #include <qlabel.h>
 #include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
+#include <interfaces/isession.h>
 
 namespace KDevelop
 {
@@ -108,6 +109,16 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
     }
     
+    bool allLocalFiles(const KUrl::List& urls)
+    {
+        bool ret=true;
+        foreach(const KUrl& url, urls) {
+            QFileInfo info(url.toLocalFile());
+            ret &= info.isFile();
+        }
+        return ret;
+    }
+    
     QMenu* createMenu()
     {
         bool allVersioned=true;
@@ -136,7 +147,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         
         const bool singleVersionedFile = ctxUrls.count() == 1 && allVersioned;
         historyAction->setEnabled(singleVersionedFile);
-        annotationAction->setEnabled(singleVersionedFile);
+        annotationAction->setEnabled(singleVersionedFile && allLocalFiles(ctxUrls));
         diffToHeadAction->setEnabled(singleVersionedFile);
         diffToBaseAction->setEnabled(singleVersionedFile);
         commitAction->setEnabled(singleVersionedFile);
@@ -245,25 +256,21 @@ QStringList locationListToString(const QList<VcsLocation>& locations)
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
-    KDevelop::VcsJob* vcsjob = dynamic_cast<KDevelop::VcsJob*>(job);
+    KDevelop::VcsJob* vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
     Q_ASSERT(vcsjob);
 
-    if (vcsjob) {
-        if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
-            KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
-            if(d.isEmpty())
-                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                                   i18n("There are no differences."),
-                                   i18n("VCS support"));
-            else {
-                VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
-                showVcsDiff(patch);
-            }
-        } else {
-            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
+    if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
+        KDevelop::VcsDiff d = vcsjob->fetchResults().value<KDevelop::VcsDiff>();
+        if(d.isEmpty())
+            KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                i18n("There are no differences."),
+                                i18n("VCS support"));
+        else {
+            VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
+            showVcsDiff(patch);
         }
-
-        vcsjob->disconnect(this);
+    } else {
+        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(), i18n("Unable to get difference."));
     }
 }
 
@@ -342,19 +349,63 @@ void VcsPluginHelper::add()
 void VcsPluginHelper::commit()
 {
     Q_ASSERT(!d->ctxUrls.isEmpty());
-    KDevelop::VcsCommitDialog* dlg = new KDevelop::VcsCommitDialog(d->plugin, d->plugin->core()->uiController()->activeMainWindow());
-    connect(dlg, SIGNAL(doCommit(KDevelop::VcsCommitDialog*)), this, SLOT(executeCommit(KDevelop::VcsCommitDialog*)));
-    connect(dlg, SIGNAL(cancelCommit(KDevelop::VcsCommitDialog*)), this, SLOT(cancelCommit(KDevelop::VcsCommitDialog*)));
-    dlg->setCommitCandidatesAndShow(d->ctxUrls.first());
+
+    KUrl url = d->ctxUrls.first();
+    QScopedPointer<VcsJob> statusJob(d->vcs->status(url));
+    QMap<KUrl, VcsStatusInfo::State> changes;
+    if( statusJob->exec() && statusJob->status() == VcsJob::JobSucceeded )
+    {
+        QVariant varlist = statusJob->fetchResults();
+
+        foreach( const QVariant &var, varlist.toList() )
+        {
+            VcsStatusInfo info = qVariantValue<KDevelop::VcsStatusInfo>( var );
+            
+            if(info.state()!=VcsStatusInfo::ItemUpToDate)
+                changes[info.url()] = info.state();
+        }
+    }
+    else
+        kDebug() << "Couldn't get status for urls: " << url;
+    
+    QScopedPointer<VcsJob> diffJob(d->vcs->diff(url,
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
+                                        KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working)));
+
+    VcsDiff diff;
+    bool correctDiff = diffJob->exec();
+    if(correctDiff)
+        diff = diffJob->fetchResults().value<VcsDiff>();
+    
+    if(!correctDiff) {
+        KMessageBox::error(0, i18n("Could not create a patch for the current version."));
+    } else if(diff.isEmpty()) {
+        KMessageBox::information(0, i18n("Could not find any modifications to commit."));
+    } else {
+        VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs, retrieveOldCommitMessages());
+        
+        bool ret = showVcsDiff(patchSource);
+        
+        Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
+        if(ret) {
+            connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
+            connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
+        } else {
+            delete patchSource;
+        }
+    }
 }
 
-void VcsPluginHelper::executeCommit(KDevelop::VcsCommitDialog* dlg)
+void VcsPluginHelper::executeCommit(const QString& message, const QList<KUrl>& urls)
 {
-    KDevelop::IBasicVersionControl* iface = dlg->versionControlPlugin()->extension<KDevelop::IBasicVersionControl>();
-    d->plugin->core()->runController()->registerJob(iface->commit(dlg->message(), dlg->determineUrlsForCheckin(),
-            dlg->recursive() ?  KDevelop::IBasicVersionControl::Recursive : KDevelop::IBasicVersionControl::NonRecursive));
+    VcsJob* job=d->vcs->commit(message, urls, KDevelop::IBasicVersionControl::NonRecursive);
+    d->plugin->core()->runController()->registerJob(job);
+    addOldCommitMessage(message);
+}
 
-    dlg->deleteLater();
+void VcsPluginHelper::commitReviewCancelled(QString message)
+{
+    addOldCommitMessage(message);
 }
 
 void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
@@ -362,6 +413,35 @@ void VcsPluginHelper::cancelCommit(KDevelop::VcsCommitDialog* dlg)
     dlg->deleteLater();
 }
 
+QStringList retrieveOldCommitMessages()
+{
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    return vcsGroup.readEntry("OldCommitMessages", QStringList());
 }
+
+namespace {
+    int maxMessages = 10;
+}
+
+void addOldCommitMessage(QString message)
+{
+    if(ICore::self()->shuttingDown())
+        return;
+    
+    QStringList oldMessages = retrieveOldCommitMessages();
+    
+    if(oldMessages.contains(message))
+        oldMessages.removeAll(message);
+    
+    oldMessages.push_front(message);
+    while(oldMessages.size() > maxMessages)
+        oldMessages.pop_back();
+    
+    KConfigGroup vcsGroup(ICore::self()->activeSession()->config(), "VCS");
+    vcsGroup.writeEntry("OldCommitMessages", oldMessages);
+}
+
+}
+
 
 #include "vcspluginhelper.moc"

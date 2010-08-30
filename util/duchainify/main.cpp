@@ -137,6 +137,10 @@ void Manager::init()
 
     if ( m_total ) {
         std::cout << "Added " << m_total << " files to the background parser" << std::endl;
+        if (m_waiting.isEmpty()) {
+            std::cout << "ready" << std::endl;
+            QApplication::quit();
+        }
     } else {
         std::cout << "no files added to the background parser" << std::endl;
         QCoreApplication::exit(0);

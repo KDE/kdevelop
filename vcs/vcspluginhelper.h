@@ -52,15 +52,19 @@ private Q_SLOTS:
     void diffToHead();
     void diffToBase();
     void update();
-    void executeCommit(KDevelop::VcsCommitDialog* dlg);
+    void executeCommit(const QString& message, const QList<KUrl>& urls);
     void cancelCommit(KDevelop::VcsCommitDialog* dlg);
     void diffJobFinished(KJob* job);
+    void commitReviewCancelled(QString);
 private:
     KUrl urlForItem(KDevelop::ProjectBaseItem* item) const;
 
     struct VcsPluginHelperPrivate;
     std::auto_ptr<VcsPluginHelperPrivate> d;
 };
+
+QStringList retrieveOldCommitMessages();
+void addOldCommitMessage(QString);
 
 } // namespace KDevelop
 

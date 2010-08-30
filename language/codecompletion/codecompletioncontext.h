@@ -86,8 +86,6 @@ namespace KDevelop {
       DUContext* duContext() const;
       
     protected:
-      void log( const QString& str ) const;
-      
       static QString extractLastLine(const QString& str);
       
       QString m_text;

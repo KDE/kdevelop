@@ -132,13 +132,17 @@ void OverridesPage::populateOverrideTree(const QList<DeclarationPointer> & baseL
         //For this internal context get all the function declarations inside the class
         foreach (Declaration * childDeclaration, context->localDeclarations())
         {
-            AbstractFunctionDeclaration * func;
-            if (childDeclaration->type<FunctionType>() &&
-                (func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration)) &&
-                func->isVirtual())
-            {
-                // Its a virtual function, add it to the list
-                addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
+            if (AbstractFunctionDeclaration * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration)) {
+                if (func->isVirtual()) {
+                    // Its a virtual function, add it to the list
+                    addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
+                } else if (generator()->directInheritanceList().contains(baseClass)) {
+                    // add ctors of direct parents
+                    ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
+                    if (cFunc && cFunc->isConstructor()) {
+                        addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
+                    }
+                }
             }
         }
     }

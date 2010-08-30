@@ -30,8 +30,8 @@
 #include <interfaces/iuicontroller.h>
 
 ExternalScriptItem::ExternalScriptItem()
-  : m_saveMode(SaveNone), m_replaceMode(ReplaceNone), m_inputMode(InputNone), m_action( 0 ),
-    m_showOutput( true )
+  : m_saveMode(SaveNone), m_outputMode(OutputNone), m_errorMode(ErrorNone),
+    m_inputMode(InputNone), m_action( 0 ), m_showOutput( true )
 {
 
 }
@@ -56,14 +56,24 @@ void ExternalScriptItem::setSaveMode( ExternalScriptItem::SaveMode mode )
   m_saveMode = mode;
 }
 
-ExternalScriptItem::ReplaceMode ExternalScriptItem::replaceMode() const
+ExternalScriptItem::OutputMode ExternalScriptItem::outputMode() const
 {
-  return m_replaceMode;
+  return m_outputMode;
 }
 
-void ExternalScriptItem::setReplaceMode( ExternalScriptItem::ReplaceMode mode )
+void ExternalScriptItem::setOutputMode( ExternalScriptItem::OutputMode mode )
 {
-  m_replaceMode = mode;
+  m_outputMode = mode;
+}
+
+ExternalScriptItem::ErrorMode ExternalScriptItem::errorMode() const
+{
+  return m_errorMode;
+}
+
+void ExternalScriptItem::setErrorMode( ExternalScriptItem::ErrorMode mode )
+{
+  m_errorMode = mode;
 }
 
 ExternalScriptItem::InputMode ExternalScriptItem::inputMode() const

@@ -62,4 +62,5 @@ void UiPreferences::save()
     UiController *uiController = Core::self()->uiControllerInternal();
     foreach (Sublime::MainWindow *window, uiController->mainWindows())
         (static_cast<KDevelop::MainWindow*>(window))->loadSettings();
+    uiController->loadSettings();
 }

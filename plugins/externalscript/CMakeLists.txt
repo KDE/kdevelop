@@ -5,6 +5,7 @@ set(kdevexternalscript_PART_SRCS
     externalscriptview.cpp
     externalscriptitem.cpp
     externalscriptjob.cpp
+    externalscriptoutputmodel.cpp
     editexternalscript.cpp
 )
 

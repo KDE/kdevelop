@@ -31,10 +31,9 @@
 
 using namespace KDevelop;
 
-VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, QString > selectable, IBasicVersionControl* vcs, QStringList oldMessages)
+VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(const KDevelop::VcsDiff& vcsdiff, QMap< KUrl, KDevelop::VcsStatusInfo::State> selectable, IBasicVersionControl* vcs, QStringList oldMessages)
     : VCSDiffPatchSource(vcsdiff), m_selectable(selectable), m_vcs(vcs)
 {
-    
     Q_ASSERT(m_vcs);
 
     m_commitMessageWidget = new QWidget;
@@ -111,7 +110,7 @@ bool VCSCommitDiffPatchSource::canSelectFiles() const {
     return true;
 }
 
-QMap< KUrl, QString > VCSCommitDiffPatchSource::additionalSelectableFiles() const {
+QMap< KUrl, KDevelop::VcsStatusInfo::State> VCSCommitDiffPatchSource::additionalSelectableFiles() const {
     return m_selectable;
 }
 
@@ -147,11 +146,11 @@ bool VCSCommitDiffPatchSource::finishReview(QList< KUrl > selection) {
         message = m_commitMessageEdit->toPlainText();
 
     kDebug() << "Finishing with selection" << selection;
-    QString text = i18n("Files will be committed:") + "\n";
+    QString text = i18n("Files will be committed:\n");
     foreach(const KUrl& url, selection)
-        text += ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "\n";
+        text += ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + '\n';
 
-    text += "\n" + i18n("With message:") + "\n" + message;
+    text += i18n("\nWith message:\n %1", message);
 
     int res = KMessageBox::warningContinueCancel(0, text, i18n("About to commit to repository"));
     if (res != KMessageBox::Continue) {

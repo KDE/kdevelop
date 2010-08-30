@@ -21,6 +21,7 @@
 #include "externalscriptjob.h"
 
 #include "externalscriptitem.h"
+#include "externalscriptoutputmodel.h"
 
 #include <QFileInfo>
 #include <QApplication>
@@ -47,7 +48,8 @@
 ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent )
     : KDevelop::OutputJob( parent ),
     m_proc( 0 ), m_lineMaker( 0 ),
-    m_replaceMode( item->replaceMode() ), m_inputMode( item->inputMode() ),
+    m_outputMode( item->outputMode() ), m_inputMode( item->inputMode() ),
+    m_errorMode( item->errorMode() ),
     m_document( 0 ), m_selectionRange( KTextEditor::Range::invalid() ),
     m_showOutput( item->showOutput() )
 {
@@ -56,14 +58,37 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   setCapabilities( Killable );
   setStandardToolView( KDevelop::IOutputView::RunView );
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
-  setModel( new KDevelop::OutputModel(), KDevelop::IOutputView::TakeOwnership );
+  ExternalScriptOutputModel* model = new ExternalScriptOutputModel;
+  setModel( model, KDevelop::IOutputView::TakeOwnership );
+
+  // also merge when error mode "equals" output mode
+  if ( (m_outputMode == ExternalScriptItem::OutputInsertAtCursor
+          && m_errorMode == ExternalScriptItem::ErrorInsertAtCursor) ||
+       (m_outputMode == ExternalScriptItem::OutputReplaceDocument
+          && m_errorMode == ExternalScriptItem::ErrorReplaceDocument) ||
+       (m_outputMode == ExternalScriptItem::OutputReplaceSelectionOrDocument
+          && m_errorMode == ExternalScriptItem::ErrorReplaceSelectionOrDocument) ||
+       (m_outputMode == ExternalScriptItem::OutputReplaceSelectionOrInsertAtCursor
+          && m_errorMode == ExternalScriptItem::ErrorReplaceSelectionOrInsertAtCursor) ||
+       // also these two otherwise they clash...
+       (m_outputMode == ExternalScriptItem::OutputReplaceSelectionOrInsertAtCursor
+          && m_errorMode == ExternalScriptItem::ErrorReplaceSelectionOrDocument) ||
+       (m_outputMode == ExternalScriptItem::OutputReplaceSelectionOrDocument
+          && m_errorMode == ExternalScriptItem::ErrorReplaceSelectionOrInsertAtCursor) )
+  {
+    m_errorMode = ExternalScriptItem::ErrorMergeOutput;
+  }
+
+  qDebug() << m_errorMode << m_outputMode;
 
   KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
 
-  if ( m_replaceMode != ExternalScriptItem::ReplaceNone || m_inputMode != ExternalScriptItem::InputNone ) {
-    if ( !active || !active->isTextDocument() ) {
+  if ( m_outputMode != ExternalScriptItem::OutputNone || m_inputMode != ExternalScriptItem::InputNone
+       || m_errorMode != ExternalScriptItem::ErrorNone )
+  {
+    if ( !active || !active->isTextDocument() || !active->textDocument()->activeView() ) {
       KMessageBox::error( QApplication::activeWindow(),
-                          i18n( "Cannot run script '%1' since it tries to replace "
+                          i18n( "Cannot run script '%1' since it tries to access "
                                 "the editor contents but no document is open.", item->text() ),
                           i18n( "No Document Open" )
                         );
@@ -75,11 +100,8 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     connect( m_document, SIGNAL( aboutToClose( KTextEditor::Document* ) ),
              this, SLOT( kill() ) );
 
-    if ( item->replaceMode() == ExternalScriptItem::ReplaceSelection ) {
-      if ( m_document->activeView() && m_document->activeView()->selection() ) {
-        m_selectionRange = m_document->activeView()->selectionRange();
-      }
-    }
+    m_selectionRange = m_document->activeView()->selectionRange();
+    m_cursorPosition = m_document->activeView()->cursorPosition();
   }
 
   if ( item->saveMode() == ExternalScriptItem::SaveCurrentDocument && active ) {
@@ -129,7 +151,9 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   }
   m_lineMaker = new KDevelop::ProcessLineMaker( m_proc, this );
   connect( m_lineMaker, SIGNAL( receivedStdoutLines( QStringList ) ),
-           model(), SLOT( appendLines( QStringList ) ) );
+           model, SLOT( appendStdoutLines( QStringList ) ) );
+  connect( m_lineMaker, SIGNAL( receivedStderrLines( QStringList ) ),
+           model, SLOT( appendStderrLines( QStringList ) ) );
   connect( m_proc, SIGNAL( error( QProcess::ProcessError ) ),
            SLOT( processError( QProcess::ProcessError ) ) );
   connect( m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ),
@@ -138,7 +162,11 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
   // Now setup the process parameters
   kDebug() << "setting command:" << command;
 
-  m_proc->setOutputChannelMode( KProcess::MergedChannels );
+  if ( m_errorMode == ExternalScriptItem::ErrorMergeOutput ) {
+    m_proc->setOutputChannelMode( KProcess::MergedChannels );
+  } else {
+    m_proc->setOutputChannelMode( KProcess::SeparateChannels );
+  }
   m_proc->setShellCommand( command );
 
   setObjectName( command );
@@ -158,10 +186,25 @@ void ExternalScriptJob::start()
     if ( m_inputMode != ExternalScriptItem::InputNone ) {
       QString inputText;
 
-      if ( m_selectionRange.isValid() ) {
-        inputText = m_document->text( m_selectionRange );
-      } else {
-        inputText = m_document->text();
+      switch ( m_inputMode ) {
+        case ExternalScriptItem::InputNone:
+          // do nothing;
+          break;
+        case ExternalScriptItem::InputSelectionOrNone:
+          if ( m_selectionRange.isValid() ) {
+            inputText = m_document->text(m_selectionRange);
+          } // else nothing
+          break;
+        case ExternalScriptItem::InputSelectionOrDocument:
+          if ( m_selectionRange.isValid() ) {
+            inputText = m_document->text(m_selectionRange);
+          } else {
+            inputText = m_document->text();
+          }
+          break;
+        case ExternalScriptItem::InputDocument:
+          inputText = m_document->text();
+          break;
       }
 
       ///TODO: what to do with the encoding here?
@@ -192,19 +235,78 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
   m_lineMaker->flushBuffers();
 
   if ( exitCode == 0 && status == QProcess::NormalExit ) {
-    if ( m_replaceMode != ExternalScriptItem::ReplaceNone ) {
-      QStringList output;
-      ///TODO: filter stderr?
-      //note: start at 1 since we add one line ourselves
 
-      for ( int i = 1, c = model()->rowCount(); i < c; ++i ) {
-        output << model()->data( model()->index( i, 0 ) ).toString();
+    ExternalScriptOutputModel* model = dynamic_cast<ExternalScriptOutputModel*>(OutputJob::model());
+    Q_ASSERT(model);
+
+    if ( m_outputMode != ExternalScriptItem::OutputNone ) {
+      QStringList lines = model->stdOut();
+
+      if ( !lines.isEmpty() ) {
+        QString output = lines.join( "\n" );
+        switch ( m_outputMode ) {
+          case ExternalScriptItem::OutputNone:
+            // do nothing;
+            break;
+          case ExternalScriptItem::OutputCreateNewFile:
+            KDevelop::ICore::self()->documentController()->openDocumentFromText( output );
+            break;
+          case ExternalScriptItem::OutputInsertAtCursor:
+            m_document->insertText( m_cursorPosition, output );
+            break;
+          case ExternalScriptItem::OutputReplaceSelectionOrInsertAtCursor:
+            if ( m_selectionRange.isValid() ) {
+              m_document->replaceText( m_selectionRange, output );
+            } else {
+              m_document->insertText( m_cursorPosition, output );
+            }
+            break;
+          case ExternalScriptItem::OutputReplaceSelectionOrDocument:
+            if ( m_selectionRange.isValid() ) {
+              m_document->replaceText( m_selectionRange, output );
+            } else {
+              m_document->setText( output );
+            }
+            break;
+          case ExternalScriptItem::OutputReplaceDocument:
+            m_document->setText( output );
+            break;
+        }
       }
+    }
+    if ( m_errorMode != ExternalScriptItem::ErrorNone && m_errorMode != ExternalScriptItem::ErrorMergeOutput ) {
+      QString output = model->stdErr().join( "\n" );
 
-      if ( m_selectionRange.isValid() ) {
-        m_document->replaceText( m_selectionRange, output.join( "\n" ) );
-      } else {
-        m_document->setText( output.join( "\n" ) );
+      if ( !output.isEmpty() ) {
+        switch ( m_errorMode ) {
+          case ExternalScriptItem::ErrorNone:
+          case ExternalScriptItem::ErrorMergeOutput:
+            // do nothing;
+            break;
+          case ExternalScriptItem::ErrorCreateNewFile:
+            KDevelop::ICore::self()->documentController()->openDocumentFromText( output );
+            break;
+          case ExternalScriptItem::ErrorInsertAtCursor:
+            m_document->insertText( m_cursorPosition, output );
+            break;
+          case ExternalScriptItem::ErrorReplaceSelectionOrInsertAtCursor:
+            if ( m_selectionRange.isValid() ) {
+              m_document->replaceText( m_selectionRange, output );
+            } else {
+              m_document->insertText( m_cursorPosition, output );
+            }
+            break;
+          case ExternalScriptItem::ErrorReplaceSelectionOrDocument:
+            if ( m_selectionRange.isValid() ) {
+              m_document->replaceText( m_selectionRange, output );
+            } else {
+              m_document->setText( output );
+            }
+            break;
+          case ExternalScriptItem::ErrorReplaceDocument:
+            m_document->setText( output );
+            break;
+        }
       }
     }
 

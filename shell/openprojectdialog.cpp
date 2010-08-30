@@ -36,7 +36,7 @@
 namespace KDevelop
 {
 
-OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
+OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget* parent )
     : KAssistantDialog( parent )
 {
     resize(QSize(700, 500));
@@ -60,6 +60,8 @@ OpenProjectDialog::OpenProjectDialog( const KUrl& startUrl, QWidget* parent )
     setValid( projectInfoPage, false);
     setAppropriate( projectInfoPage, false );
     showButton( KDialog::Help, false );
+    
+    setCurrentPage( fetch ? sourcePage : openPage );
 }
 
 void OpenProjectDialog::validateSourcePage(bool valid)

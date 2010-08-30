@@ -29,7 +29,6 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../../interfaces/iprojectcontroller.h"
 #include "../interfaces/isession.h"
-#include "../../shell/debugcontroller.h"
 
 namespace KDevelop {
 

@@ -179,6 +179,7 @@ void ProjectManagerView::locateCurrentDocument()
         }
     }
     if (bestMatch.isValid()) {
+        m_ui->projectTreeView->clearSelection();
         m_ui->projectTreeView->setCurrentIndex(bestMatch);
         m_ui->projectTreeView->expand(bestMatch);
         m_ui->projectTreeView->scrollTo(bestMatch);

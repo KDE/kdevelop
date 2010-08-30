@@ -103,7 +103,7 @@ void AreaIndex::add(View *view, View *after)
         return;
 
     if (after)
-        d->views.insert(d->views.indexOf(after), view);
+        d->views.insert(d->views.indexOf(after)+1, view);
     else
         d->views.append(view);
 }

@@ -10,8 +10,9 @@ set(KDEVPLATFORM_VERSION_MAJOR 1)
 set(KDEVPLATFORM_VERSION_MINOR 0)
 set(KDEVPLATFORM_VERSION_PATCH 60)
 
-set(KDE_MIN_VERSION "4.4.0")
-find_package(KDE4 4.4.0 REQUIRED)
+set(KDE_MIN_VERSION "4.5.0")
+find_package(KDE4 4.5.0 REQUIRED)
+
 find_package(ZLIB REQUIRED)
 
 include (KDE4Defaults)
@@ -68,6 +69,7 @@ set(KDEVPLATFORM_VCS_LIBRARIES kdevplatformvcs)
 set(KDEVPLATFORM_SHELL_LIBRARIES kdevplatformshell)
 set(KDEVPLATFORM_TESTS_LIBRARIES kdevplatformtests)
 set(KDEVPLATFORM_DEBUGGER_LIBRARIES kdevplatformdebugger)
+set(KDEVPLATFORM_DOCUMENTATION_LIBRARIES kdevplatformdocumentation)
 
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
@@ -80,6 +82,7 @@ add_subdirectory(vcs)
 add_subdirectory(pics)
 #macro_optional_add_subdirectory(doc)
 add_subdirectory(debugger)
+add_subdirectory(documentation)
 add_subdirectory(tests)
 
 add_subdirectory(plugins)

@@ -65,16 +65,24 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   commandLabel->setToolTip( tooltip );
 
   tooltip = i18n(
-    "<p>Defines whether the external script should get <code>STDIN</code> or not.</p>"
+    "<p>Defines what the external script should get as input (via <code>STDIN</code>).</p>"
   );
   stdinCombo->setToolTip( tooltip );
   stdinLabel->setToolTip( tooltip );
 
   tooltip = i18n(
-    "<p>Defines what should be done with the <code>STDOUT</code> of the script.</p>"
+    "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of the script.</p>"
   );
   stdoutCombo->setToolTip( tooltip );
   stdoutLabel->setToolTip( tooltip );
+
+  tooltip = i18n(
+    "<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of the script.</p>"
+    "<p>Note: if the action is the same as the one action for the output, the channels will be merged"
+    "and handled together.</p>"
+  );
+  stderrCombo->setToolTip( tooltip );
+  stderrLabel->setToolTip( tooltip );
 
   tooltip = i18n(
     "<p>Defines the name of the script. Just for displaying purposes.</p>"
@@ -109,7 +117,8 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
   nameEdit->setText( item->text() );
   commandEdit->setText( item->command() );
   stdinCombo->setCurrentIndex( item->inputMode() );
-  stdoutCombo->setCurrentIndex( item->replaceMode() );
+  stdoutCombo->setCurrentIndex( item->outputMode() );
+  stderrCombo->setCurrentIndex( item->errorMode() );
   saveCombo->setCurrentIndex( item->saveMode() );
   shortcutWidget->setShortcut( item->action()->shortcut() );
   showOutputBox->setChecked( item->showOutput() );
@@ -141,10 +150,15 @@ void EditExternalScript::save()
   );
   m_item->setInputMode( inputMode );
 
-  ExternalScriptItem::ReplaceMode replaceMode = static_cast<ExternalScriptItem::ReplaceMode>(
+  ExternalScriptItem::OutputMode outputMode = static_cast<ExternalScriptItem::OutputMode>(
       stdoutCombo->currentIndex()
   );
-  m_item->setReplaceMode( replaceMode );
+  m_item->setOutputMode( outputMode );
+
+  ExternalScriptItem::ErrorMode errorMode = static_cast<ExternalScriptItem::ErrorMode>(
+      stderrCombo->currentIndex()
+  );
+  m_item->setErrorMode( errorMode );
 
   ExternalScriptItem::SaveMode saveMode = static_cast<ExternalScriptItem::SaveMode>(
       saveCombo->currentIndex()

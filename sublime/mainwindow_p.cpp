@@ -241,6 +241,8 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         else
             container = qobject_cast<Container*>(splitter->widget(0));
         container->show();
+
+        int position = 0;
         foreach (View *view, index->views())
         {
             QWidget *widget = view->widget(container);
@@ -249,10 +251,11 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                 widget->installEventFilter(d);
                 foreach (QWidget* w, widget->findChildren<QWidget*>())
                     w->installEventFilter(d);
-                container->addWidget(view);
+                container->addWidget(view, position);
                 d->viewContainers[view] = container;
                 d->widgetToView[widget] = view;
             }
+            position++;
         }
     }
     return Area::ContinueWalker;

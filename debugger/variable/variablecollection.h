@@ -48,6 +48,7 @@ class VariableToolTip;
 
 class KDEVPLATFORMDEBUGGER_EXPORT Variable : public TreeItem
 {
+    Q_OBJECT
     friend class GDBDebugger::GdbTest;
 public:
 protected:
@@ -56,12 +57,17 @@ protected:
              const QString& display = "");
 
 public:
+    enum format_t { Natural, Binary, Octal, Decimal, Hexadecimal };
+    static format_t str2format(const QString& str);
+    static QString format2str(format_t format);
 
     QString expression() const;
     bool inScope() const;
     void setInScope(bool v);
     void setValue(const QString &v);
+    QString value() const;
     void setTopLevel(bool v);
+    
     using TreeItem::setHasMore;
     using TreeItem::setHasMoreInitial;
     using TreeItem::appendChild;
@@ -80,10 +86,17 @@ public:
        The slot should be taking 'bool ok' parameter.  */
     virtual void attachMaybe(QObject *callback = 0, const char *callbackMethod = 0) = 0;
 
+    virtual bool canSetFormat() const { return false; }
+
+    void setFormat(format_t format);
+    format_t format() const { return m_format; }
+    virtual void formatChanged();
+
+public slots:
     void die();
 
 protected:
-    bool topLevel() { return topLevel_; }
+    bool topLevel() const { return topLevel_; }
 
 private: // TreeItem overrides
 
@@ -94,6 +107,7 @@ private:
     QString expression_;
     bool inScope_;
     bool topLevel_;
+    format_t m_format;
 };
 
 class KDEVPLATFORMDEBUGGER_EXPORT TooltipRoot : public TreeItem

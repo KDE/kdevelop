@@ -305,10 +305,13 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     modifyHtml() += errorHighlight("Invalid type<br />");
     return;
   }
-  if( !classFunDecl || !classFunDecl->isConstructor() || !classFunDecl->isDestructor() ) {
+
+  if( !classFunDecl || (!classFunDecl->isConstructor() && !classFunDecl->isDestructor()) ) {
+    // only print return type for global functions and non-ctor/dtor methods
     eventuallyMakeTypeLinks( type->returnType() );
-    modifyHtml() += ' ' + nameHighlight(Qt::escape(prettyIdentifier(m_declaration).toString()));
   }
+
+  modifyHtml() += ' ' + nameHighlight(Qt::escape(prettyIdentifier(m_declaration).toString()));
 
   if( type->arguments().count() == 0 )
   {
