@@ -49,6 +49,9 @@ Boston, MA 02110-1301, USA.
 #include <QGroupBox>
 #include <QBoxLayout>
 #include <QTimer>
+#include <QStandardItemModel>
+#include <QTreeView>
+#include <QHeaderView>
 #include <klockfile.h>
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
@@ -738,6 +741,93 @@ bool SessionController::tryLockSession(QString id)
 {
     KLockFile::Ptr lock(new KLockFile(sessionDirectory() + "/" + id + "/lock"));
     return lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
+}
+
+QString SessionController::showSessionChooserDialog()
+{
+    KDialog dialog;
+    
+    QTreeView view;
+    view.setRootIsDecorated(false);
+    view.setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    QHBoxLayout layout(dialog.mainWidget());
+    
+    QStandardItemModel model;
+    model.setColumnCount(3);
+    model.setHeaderData(0, Qt::Horizontal,i18n("Identity"));
+    model.setHeaderData(1, Qt::Horizontal, i18n("Contents"));
+    model.setHeaderData(2, Qt::Horizontal,i18n("State"));
+    view.setModel(&model);
+    layout.addWidget(&view);
+    connect(&view, SIGNAL(doubleClicked(QModelIndex)), &dialog, SLOT(accept()));
+    
+    int row = 0;
+    int defaultRow = 0;
+    
+    QString defaultSession = KGlobal::config()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
+    
+    
+    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
+    {
+        if ( si.name.isEmpty() && si.projects.isEmpty() ) {
+            continue;
+        }
+        
+        if(si.uuid.toString() == defaultSession)
+            defaultRow = row;
+        
+        model.setItem(row, 0, new QStandardItem(si.uuid.toString()));
+        model.setItem(row, 1, new QStandardItem(si.description));
+        
+        QString state;
+        bool running = false;
+        if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
+        {
+            state = i18n("[running]");
+            running = true;
+        }
+        
+        model.setItem(row, 2, new QStandardItem(state));
+        
+        if(running)
+        {
+            for(int col = 0; col < 3; ++col)
+                model.item(row, col)->setEnabled(false);
+        }
+        
+        if(defaultRow == row && running)
+            ++defaultRow;
+        
+        ++row;
+    }
+
+    model.setItem(row, 0, new QStandardItem(i18n("Create New Session")));
+
+    view.selectionModel()->setCurrentIndex(model.index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    
+    view.resizeColumnToContents(0);
+    view.resizeColumnToContents(1);
+    view.resizeColumnToContents(2);
+    view.setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
+    dialog.setInitialSize(QSize(800, 500));
+
+    if(dialog.exec() != QDialog::Accepted)
+    {
+        return QString();
+    }
+    
+    QModelIndexList selected = view.selectionModel()->selectedIndexes();
+    if(!selected.isEmpty())
+    {
+        QString ret = selected[0].data().toString();
+        if(ret == i18n("Create New Session"))
+            ret = QUuid::createUuid().toString();
+        return ret;
+    }
+    
+    return QString();
 }
 
 }

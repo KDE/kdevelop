@@ -88,6 +88,9 @@ public:
 
     static QList< SessionInfo > availableSessionInfo();
     
+    /// Shows a dialog where the user can choose the session
+    static QString showSessionChooserDialog();
+    
     void plugActions();
     
     void emitQuitSession()
