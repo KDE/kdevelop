@@ -363,6 +363,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         }
         else
         {
+            reloadFiles(folder);
             
             KDevelop::ReferencedTopDUContext curr;
             if(item==item->project()->projectItem())
@@ -585,11 +586,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 
                 setTargetFiles(targetItem, tfiles);
             }
-
         }
     }
-
-    reloadFiles(item);
 
     return folderList;
 }
@@ -809,14 +807,26 @@ void CMakeManager::dirtyFile(const QString & dirty)
         QList<ProjectFolderItem*> folders=p->foldersForUrl(dirty);
         Q_ASSERT(folders.isEmpty() || folders.size()==1);
         
-        if(!folders.isEmpty())
+        if(!folders.isEmpty()) {
+            QMutexLocker locker(&m_busyProjectsMutex);
+            m_busyProjects += folders.first();
+            locker.unlock();
+            
             reloadFiles(folders.first());
+            
+            locker.relock();
+            m_busyProjects.remove(folders.first());
+            locker.unlock();
+        }
     }
 }
 
 void CMakeManager::reloadFiles(ProjectFolderItem* item)
 {
-    QStringList entriesL = QDir(item->url().toLocalFile()).entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+    QDir d(item->url().toLocalFile());
+    Q_ASSERT(d.exists());
+    
+    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
     QSet<QString> entries = filterFiles(entriesL);
     
     KUrl folderurl = item->url();
@@ -1373,6 +1383,9 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     QString newName=KUrl::relativePath(lists.upUrl().path(), newUrl.path());
     if(newName.startsWith("./"))
         newName.remove(0,2);
+    
+    KUrl url = it->url();
+    IProject* project = it->project();
 
     ApplyChangesWidget e;
     e.setCaption(it->text());
@@ -1384,12 +1397,9 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
     
     bool ret = e.document()->replaceText(r, newName);
     
-    ret= ret && e.exec() == QDialog::Accepted;
-    if(ret)
-    {
-        ret = e.applyAllChanges();
-        ret = ret && KDevelop::renameUrl(it->project(), it->url(), newUrl);
-    }
+    ret &= e.exec() == QDialog::Accepted;
+    ret &= KDevelop::renameUrl(project, url, newUrl);
+    ret &= e.applyAllChanges();
     return ret;
 }
 
