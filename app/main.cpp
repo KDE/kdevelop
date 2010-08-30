@@ -186,6 +186,7 @@ int main( int argc, char *argv[] )
     options.add("cs <name>", ki18n("Create new session with given name."));
     options.add("s <session>", ki18n("Session to load. You can pass either hash or the name of the session." ));
     options.add("sessions", ki18n( "List available sessions and quit" ));
+    options.add("ps", ki18n("Allow picking the session from a list" ));
 
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -216,6 +217,13 @@ int main( int argc, char *argv[] )
 
     // if empty, restart kdevelop with last active session, see SessionController::defaultSessionId
     QString session;
+    
+    if(args->isSet("ps"))
+    {
+        session = KDevelop::SessionController::showSessionChooserDialog();
+        if(session.isEmpty())
+            return 1;
+    }
 
     if ( args->isSet("debug") ) {
         if ( debugArgs.isEmpty() ) {
