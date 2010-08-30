@@ -23,6 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QtCore/QDir>
 #include <QtCore/QSignalMapper>
 #include <QtCore/QStringList>
+#include <QtCore/QTimer>
 
 #include <kglobal.h>
 #include <kcmdlineargs.h>
@@ -56,6 +57,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
+#include <QLabel>
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -566,6 +568,7 @@ void SessionController::cleanup()
 void SessionController::initialize( const QString& session )
 {
     QDir sessiondir( SessionController::sessionDirectory() );
+    
     foreach( const QString& s, sessiondir.entryList( QDir::AllDirs ) )
     {
         QUuid id( s );
@@ -737,30 +740,103 @@ QString SessionController::sessionDirectory()
     return KGlobal::mainComponent().dirs()->saveLocation( "data", KGlobal::mainComponent().componentName()+"/sessions", true );
 }
 
-bool SessionController::tryLockSession(QString id)
+SessionController::LockSessionState SessionController::tryLockSession(QString id)
 {
-    KLockFile::Ptr lock(new KLockFile(sessionDirectory() + "/" + id + "/lock"));
-    return lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
+    LockSessionState ret;
+    
+    QString lockPath = sessionDirectory() + "/" + id + "/lock";
+    
+    KLockFile::Ptr lock(new KLockFile(lockPath));
+    ret.success = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
+    if(!ret.success)
+    {
+        QFile file(sessionDirectory() + "/" + id + "/lock");
+        if(file.open(QIODevice::ReadOnly)) {
+            QStringList lines = QString::fromLocal8Bit(file.readAll()).split("\n");
+            if(lines.size())
+                ret.holder = lines[0];
+        }
+    }
+    return ret;
 }
 
-QString SessionController::showSessionChooserDialog()
-{
-    KDialog dialog;
+// Internal helper class
+class SessionChooserDialog : public KDialog {
+    Q_OBJECT
+public:
+    SessionChooserDialog(QTreeView* view, QStandardItemModel* model);
     
-    QTreeView view;
-    view.setRootIsDecorated(false);
-    view.setEditTriggers(QAbstractItemView::NoEditTriggers);
+public Q_SLOTS:
+    void updateState();
+    void doubleClicked(QModelIndex);
+private:
+    QStandardItemModel* m_model;
+    QTimer m_updateStateTimer;
+};
 
-    QHBoxLayout layout(dialog.mainWidget());
+SessionChooserDialog::SessionChooserDialog(QTreeView* view, QStandardItemModel* model) : m_model(model) {
+    m_updateStateTimer.setInterval(5000);
+    m_updateStateTimer.setSingleShot(false);
+    m_updateStateTimer.start();
+    connect(&m_updateStateTimer, SIGNAL(timeout()), SLOT(updateState()));
+    connect(view, SIGNAL(doubleClicked(QModelIndex)), SLOT(doubleClicked(QModelIndex)));
+}
+
+void SessionChooserDialog::doubleClicked(QModelIndex index)
+{
+    QStandardItem* item = m_model->itemFromIndex(index);
+    if(item && item->isEnabled())
+        accept();
+}
+
+void SessionChooserDialog::updateState() {
+    // Sometimes locking may take some time, so we stop the timer, to prevent an 'avalanche' of events
+    m_updateStateTimer.stop();
+    for(int row = 0; row < m_model->rowCount(); ++row)
+    {
+        QString session = m_model->index(row, 0).data().toString();
+        
+        if(session == i18n("Create New Session"))
+            continue;
+        
+        bool running = false;
+        QString state;
+        SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
+        if(!lockState)
+        {
+            state = i18n("[running, process %1]", lockState.holder);
+            running = true;
+        }
+        
+        if(m_model->item(row, 2))
+            m_model->item(row, 2)->setText(state);
+        
+        for(int col = 0; col < 3; ++col)
+            if(m_model->item(row, col))
+                m_model->item(row, col)->setEnabled(!running);
+    }
     
-    QStandardItemModel model;
-    model.setColumnCount(3);
-    model.setHeaderData(0, Qt::Horizontal,i18n("Identity"));
-    model.setHeaderData(1, Qt::Horizontal, i18n("Contents"));
-    model.setHeaderData(2, Qt::Horizontal,i18n("State"));
-    view.setModel(&model);
-    layout.addWidget(&view);
-    connect(&view, SIGNAL(doubleClicked(QModelIndex)), &dialog, SLOT(accept()));
+    m_updateStateTimer.start();
+}
+
+QString SessionController::showSessionChooserDialog(QString headerText)
+{
+    QTreeView* view = new QTreeView;
+    QStandardItemModel* model = new QStandardItemModel(view);
+    SessionChooserDialog dialog(view, model);
+    view->setRootIsDecorated(false);
+    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    QVBoxLayout layout(dialog.mainWidget());
+    if(!headerText.isEmpty())
+        layout.addWidget(new QLabel(headerText));
+    
+    model->setColumnCount(3);
+    model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
+    model->setHeaderData(1, Qt::Horizontal, i18n("Contents"));
+    model->setHeaderData(2, Qt::Horizontal,i18n("State"));
+    view->setModel(model);
+    layout.addWidget(view);
     
     int row = 0;
     int defaultRow = 0;
@@ -777,48 +853,41 @@ QString SessionController::showSessionChooserDialog()
         if(si.uuid.toString() == defaultSession)
             defaultRow = row;
         
-        model.setItem(row, 0, new QStandardItem(si.uuid.toString()));
-        model.setItem(row, 1, new QStandardItem(si.description));
+        model->setItem(row, 0, new QStandardItem(si.uuid.toString()));
+        model->setItem(row, 1, new QStandardItem(si.description));
         
         QString state;
         bool running = false;
         if(!KDevelop::SessionController::tryLockSession(si.uuid.toString()))
-        {
-            state = i18n("[running]");
             running = true;
-        }
         
-        model.setItem(row, 2, new QStandardItem(state));
-        
-        if(running)
-        {
-            for(int col = 0; col < 3; ++col)
-                model.item(row, col)->setEnabled(false);
-        }
+        model->setItem(row, 2, new QStandardItem(""));
         
         if(defaultRow == row && running)
             ++defaultRow;
         
         ++row;
     }
-
-    model.setItem(row, 0, new QStandardItem(i18n("Create New Session")));
-
-    view.selectionModel()->setCurrentIndex(model.index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     
-    view.resizeColumnToContents(0);
-    view.resizeColumnToContents(1);
-    view.resizeColumnToContents(2);
-    view.setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    model->setItem(row, 0, new QStandardItem(i18n("Create New Session")));
+
+    dialog.updateState();
+    
+    view->selectionModel()->setCurrentIndex(model->index(defaultRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    
+    view->resizeColumnToContents(0);
+    view->resizeColumnToContents(1);
+    view->resizeColumnToContents(2);
+    view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
-    dialog.setInitialSize(QSize(800, 500));
+    dialog.setInitialSize(QSize(900, 600));
 
     if(dialog.exec() != QDialog::Accepted)
     {
         return QString();
     }
     
-    QModelIndexList selected = view.selectionModel()->selectedIndexes();
+    QModelIndexList selected = view->selectionModel()->selectedIndexes();
     if(!selected.isEmpty())
     {
         QString ret = selected[0].data().toString();

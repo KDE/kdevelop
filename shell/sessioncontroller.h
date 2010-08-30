@@ -56,9 +56,17 @@ public:
     virtual ~SessionController();
     void initialize( const QString& session );
     void cleanup();
+
+    struct LockSessionState {
+        operator bool() const {
+            return success;
+        }
+        bool success;
+        QString holder;
+    };
     
     /// Returns whether the given session can be locked
-    static bool tryLockSession(QString id);
+    static LockSessionState tryLockSession(QString id);
     
     /// The application should call this on startup to tell the
     /// session-controller about the received arguments.
@@ -89,7 +97,7 @@ public:
     static QList< SessionInfo > availableSessionInfo();
     
     /// Shows a dialog where the user can choose the session
-    static QString showSessionChooserDialog();
+    static QString showSessionChooserDialog(QString headerText = QString());
     
     void plugActions();
     
@@ -112,6 +120,7 @@ private:
     Q_PRIVATE_SLOT( d, void loadSessionFromAction( QAction* ) )
     class SessionControllerPrivate* const d;
 };
+
 
 }
 #endif
