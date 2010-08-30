@@ -1,5 +1,3 @@
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${okteta_SOURCE_DIR}/cmake/modules )
-
 macro_optional_find_package( LibOktetaKasten )
 macro_optional_find_package( LibOkteta )
 macro_optional_find_package( LibKasten )
