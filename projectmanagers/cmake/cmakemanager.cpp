@@ -311,8 +311,8 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         
         m_watchers[project] = new KDirWatch(project);
         m_watchers[project]->addDir(folderUrl.path());
-        m_watchers[project]->disconnect( SIGNAL(dirty(QString) ), this, SLOT(dirtyFile(QString)));
         connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
+        connect(m_watchers[project], SIGNAL(deleted(QString)), this, SLOT(deletedWatchedDirectory(QString)));
         Q_ASSERT(m_rootItem->rowCount()==0);
     }
     return m_rootItem;
@@ -750,6 +750,16 @@ bool CMakeManager::isReloading(IProject* p)
             return true;
     }
     return false;
+}
+
+void CMakeManager::deletedWatchedDirectory(const QString& directory)
+{
+    KUrl dirurl(directory);
+    dirurl.adjustPath(KUrl::AddTrailingSlash);
+    IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
+    
+    if(p && p->folder()==dirurl)
+        ICore::self()->projectController()->closeProject(p);
 }
 
 void CMakeManager::dirtyFile(const QString & dirty)
