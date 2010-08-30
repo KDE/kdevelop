@@ -47,6 +47,8 @@
 #include <interfaces/iproject.h>
 #include <interfaces/isession.h>
 
+#define SYNC_OFTEN
+
 using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
@@ -170,7 +172,10 @@ void deleteGroupRecursive(KConfigGroup group) {
     //Why doesn't this work?
 //     Q_ASSERT(group.groupList().isEmpty());
     group.deleteGroup();
+
+#ifdef SYNC_OFTEN
     group.sync();
+#endif
 }
 
 void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
@@ -190,8 +195,10 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     if(isEmpty())
         deleteGroupRecursive(group);
 
+#ifdef SYNC_OFTEN
     setConfig.sync();
-
+#endif
+    
     emit setChangedSignificantly();
 }
 
@@ -418,7 +425,9 @@ void WorkingSet::deleteSet(bool force, bool silent)
         KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
         KConfigGroup group = setConfig.group(m_id);
         deleteGroupRecursive(group);
+#ifdef SYNC_OFTEN
         setConfig.sync();
+#endif
 
         if(!silent)
             emit setChangedSignificantly();
@@ -920,7 +929,9 @@ void WorkingSet::setPersistent(bool persistent) {
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("persistent", persistent);
+#ifdef SYNC_OFTEN
     group.sync();
+#endif
     kDebug() << "setting" << m_id << "persistent:" << persistent;
 }
 
