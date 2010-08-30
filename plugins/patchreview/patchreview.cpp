@@ -598,7 +598,7 @@ void PatchReviewToolView::kompareModelChanged()
       {
         haveUrls.insert(url);
         
-        if(*it != KDevelop::VcsStatusInfo::State::ItemUnknown)
+        if(*it != KDevelop::VcsStatusInfo::ItemUnknown)
         {
           newItems[0] << qMakePair(url, *it);
         }else{
