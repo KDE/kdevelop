@@ -1093,7 +1093,7 @@ bool followUses(KTextEditor::Document* doc, SimpleRange r, const QString& name, 
 
             Declaration* d=u.usedDeclaration(topctx);
 
-            if(d->context()->topContext()->url().toUrl()==lists)
+            if(d && d->context()->topContext()->url().toUrl()==lists)
                 decls += d;
         }
 
