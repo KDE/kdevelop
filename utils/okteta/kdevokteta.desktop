@@ -1,0 +1,44 @@
+[Desktop Entry]
+Type=Service
+
+Name=Okteta Integration
+Name[cs]=Integrace Oktety
+Name[de]=Okteta-Integration
+Name[es]=Integración con Okteta
+Name[nl]=Okteta-integratie
+Name[pt]=Integração com o Okteta
+Name[pt_BR]=Integração com o Okteta
+Name[sv]=Integrering med Okteta
+Name[uk]=Інтеграція з Okteta
+Name[x-test]=xxOkteta Integrationxx
+GenericName=Hex Editor Integration
+GenericName[cs]=Integrace hexa editoru
+GenericName[de]=Hex-Editor-Integration
+GenericName[es]=Integración con Hex Editor
+GenericName[nl]=Hexbewerker-integratie
+GenericName[pt]=Integração com o Editor Hexadecimal
+GenericName[pt_BR]=Integração com o editor hexadecimal
+GenericName[sv]=Integrering med hexeditor
+GenericName[uk]=Інтеграція з шістнадцятковим редактором
+GenericName[x-test]=xxHex Editor Integrationxx
+Comment=KDevelop Hex Editor based on Okteta
+Comment[de]=Auf Okteta basierender Hex-Editor für KDevelop
+Comment[es]=Editor hexadecimal de KDevelop basado en Okteta
+Comment[nl]=KDevelop hex-bewerker gebaseerd op Okteta
+Comment[pt]=Editor hexadecimal do KDevelop, baseado no Okteta
+Comment[pt_BR]=Editor hexadecimal do KDevelop, baseado no Okteta
+Comment[sv]=Hexeditor i KDevelop baserad på Okteta
+Comment[uk]=Шістнадцятковий редактор KDevelop, заснований на Okteta
+Comment[x-test]=xxKDevelop Hex Editor based on Oktetaxx
+Icon=okteta
+ServiceTypes=KDevelop/Plugin
+
+X-KDE-Library=kdevokteta
+X-KDE-PluginInfo-Name=kdevokteta
+X-KDE-PluginInfo-Author=Friedrich W. H. Kossebau
+X-KDE-PluginInfo-Email=kossebau@kde.org
+X-KDE-PluginInfo-Version=0.1.0
+X-KDE-PluginInfo-License=GPL
+X-KDevelop-Version=9
+X-KDevelop-Category=Global
+X-KDevelop-Mode=GUI
