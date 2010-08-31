@@ -268,7 +268,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
     DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
-    *job << "git" << "add" << "--" << localLocations;
+    *job << "git" << "add" << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     return job;
 }
 
@@ -327,7 +327,7 @@ VcsJob* GitPlugin::commit(const QString& message,
     DVcsJob* job = new DVcsJob(dotGitDirectory(localLocations.front()), this);
     
     *job << "git" << "commit" << "-m" << message;
-    *job << "--" << localLocations;
+    *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     return job;
 }
 
