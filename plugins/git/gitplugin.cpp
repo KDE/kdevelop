@@ -59,9 +59,8 @@ namespace
     
 QDir dotGitDirectory(const KUrl& dirPath)
 {
-    const QString initialPath(dirPath.toLocalFile());
-    const QFileInfo finfo(initialPath);
-    QDir dir = finfo.absoluteDir();
+    const QFileInfo finfo(dirPath.toLocalFile());
+    QDir dir = finfo.isDir() ? QDir(dirPath.toLocalFile()) : finfo.absoluteDir();
     
     static const QString gitDir(".git");
     while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
@@ -847,28 +846,31 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
-    QRegExp lineRx(" ?([A-Z?]+) (.+)");
-    QStringList outputLines = job->output().split('\n');
+    QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
     const KUrl workingDir = job->directory().absolutePath();
     const KUrl dotGit = dotGitDirectory(workingDir).absolutePath();
     
     QVariantList statuses;
     QList<KUrl> processedFiles;
+    
     foreach(const QString& line, outputLines) {
-        if(lineRx.indexIn(line)<0) {
-            kDebug() << "Couldn't parse git status's output: " << line;
-            continue;
-        }
-        qDebug() << "Checking git status for " << line << lineRx.capturedTexts();
+        //every line is 2 chars for the status, 1 space then the file desc
+        QString curr=line.right(line.size()-3);
+        QString state = line.left(2);
         
-        QString curr=lineRx.capturedTexts()[2];
+        int arrow = curr.indexOf("-> ");
+        if(arrow>=0)
+            curr = curr.right(curr.size()-arrow-3);
+        
         KUrl fileUrl = dotGit;
         fileUrl.addPath(curr);
         processedFiles.append(fileUrl);
         
         VcsStatusInfo status;
         status.setUrl(fileUrl);
-        status.setState(messageToState(lineRx.capturedTexts()[1]));
+        status.setState(messageToState(state));
+        
+        kDebug() << "Checking git status for " << line << curr << messageToState(state);
         
         statuses.append(qVariantFromValue<VcsStatusInfo>(status));
     }
@@ -938,13 +940,22 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
         case 'A':
             ret = VcsStatusInfo::ItemAdded;
             break;
+        case 'R':
+        case 'C':
+            ret = VcsStatusInfo::ItemModified;
+            break;
+        case ' ':
+            ret = msg[1] == 'M' ? VcsStatusInfo::ItemModified : VcsStatusInfo::ItemDeleted;
+            break;
         case 'D':
             ret = VcsStatusInfo::ItemDeleted;
             break;
         case '?':
             ret = VcsStatusInfo::ItemUnknown;
             break;
-            
+        default:
+            kDebug() << "Git status not identified:" << msg;
+            break;
     }
     
     return ret;
