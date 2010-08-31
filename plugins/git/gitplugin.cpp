@@ -338,7 +338,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
         return errorsFound(i18n("No files to remove"));
 
     DVcsJob* job = new DVcsJob(urlDir(files), this);
-    *job << "git" << "rm";
+    *job << "git" << "rm" << "-r";
     *job << "--" << files;
     return job;
 }
