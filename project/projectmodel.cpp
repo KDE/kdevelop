@@ -496,7 +496,6 @@ void propagateRename( const KDevelop::ProjectFolderItem* item, const KUrl& newBa
     foreach( KDevelop::ProjectBaseItem* child, item->children() )
     {
         url.setFileName( child->text() );
-        kDebug() << child->url() << url;
         child->setUrl( url );
         if ( child->folder() ) {
             propagateRename( child->folder(), url );
