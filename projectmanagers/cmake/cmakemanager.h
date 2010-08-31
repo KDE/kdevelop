@@ -146,7 +146,7 @@ private:
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     
-    QMap<KJob*, KDevelop::ProjectFolderItem*> m_busyProjects;
+    QSet<KDevelop::ProjectFolderItem*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     

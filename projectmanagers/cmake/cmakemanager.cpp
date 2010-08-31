@@ -96,6 +96,8 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(CMakeSupportFactory, registerPlugin<CMakeManager>(); )
 K_EXPORT_PLUGIN(CMakeSupportFactory(KAboutData("kdevcmakemanager","kdevcmake", ki18n("CMake Manager"), "0.1", ki18n("Support for managing CMake projects"), KAboutData::License_GPL)))
 
+Q_DECLARE_METATYPE ( KDevelop::ProjectFolderItem* )
+
 namespace {
 
 QString fetchBuildDir(KDevelop::IProject* project)
@@ -721,9 +723,11 @@ void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
     Q_ASSERT(!isReloading(fi->project()));
     
     KJob *job=createImportJob(fi);
+    job->setProperty("projectitem", qVariantFromValue(fi));
     
     QMutexLocker locker(&m_busyProjectsMutex);
-    m_busyProjects[job]=fi;
+    m_busyProjects += fi;
+    locker.unlock();
     
     connect( job, SIGNAL( result( KJob* ) ), this, SLOT( reimportDone( KJob* ) ) );
     ICore::self()->runController()->registerJob( job );
@@ -732,17 +736,18 @@ void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 void CMakeManager::reimportDone(KJob* job)
 {
     QMutexLocker locker(&m_busyProjectsMutex);
-    Q_ASSERT(m_busyProjects.contains(job));
-
-    m_busyProjects.remove(job);
+    ProjectFolderItem* it = job->property("projectitem").value<KDevelop::ProjectFolderItem*>();
+    
+    Q_ASSERT(m_busyProjects.contains(it));
+    m_busyProjects.remove(it);
 }
 
 bool CMakeManager::isReloading(IProject* p)
 {
-    QMutexLocker locker(&m_busyProjectsMutex);
     if(!p->isReady())
         return true;
     
+    QMutexLocker locker(&m_busyProjectsMutex);
     foreach(KDevelop::ProjectFolderItem* it, m_busyProjects) {
         if(it->project()==p)
             return true;
@@ -762,10 +767,10 @@ void CMakeManager::deletedWatchedDirectory(const QString& directory)
 
 void CMakeManager::dirtyFile(const QString & dirty)
 {
-    kDebug() << "dirty FileSystem: " << dirty;
     const KUrl dirtyFile(dirty);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirtyFile);
 
+    kDebug() << "dirty FileSystem: " << dirty << (p ? isReloading(p) : 0);
     if(p && isReloading(p))
         return;
     
@@ -824,7 +829,10 @@ void CMakeManager::dirtyFile(const QString & dirty)
 void CMakeManager::reloadFiles(ProjectFolderItem* item)
 {
     QDir d(item->url().toLocalFile());
-    Q_ASSERT(d.exists());
+    if(!d.exists()) {
+        kDebug() << "Trying to return a directory that doesn't exist:" << item->url();
+        return;
+    }
     
     QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
     QSet<QString> entries = filterFiles(entriesL);
