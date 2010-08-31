@@ -824,7 +824,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 {
     VcsDiff diff;
     diff.setDiff(job->output());
-    diff.setBaseDiff(KUrl(job->directory().absolutePath()));
+    diff.setBaseDiff(repositoryRoot(KUrl(job->directory().absolutePath())));
     
     job->setResults(qVariantFromValue(diff));
 }
