@@ -91,6 +91,7 @@ protected:
   int m_currentEnumeratorValue;
 
   bool m_lastTypeWasInstance;
+  bool m_lastTypeWasAuto;
 };
 
 ///Helper-function that extracts the text from start_token until end_token
