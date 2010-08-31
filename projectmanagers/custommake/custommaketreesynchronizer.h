@@ -38,6 +38,8 @@ public:
     void removeDirectory( const QString & path, bool recurse );
     void removeFile( const QString & path );
 
+    void stopWatcher();
+    void continueWatcher();
 protected Q_SLOTS:
     void filesCreated( const KUrl::List &files, KDevelop::ProjectFolderItem *parentFolder );
     void filesDeleted( const QList<KDevelop::ProjectFileItem*> &files,
