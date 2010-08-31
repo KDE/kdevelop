@@ -269,9 +269,11 @@ void MainWindow::shortcutsChanged()
         
         foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
             KTextEditor::Document *textDocument = doc->textDocument();
-            foreach(KTextEditor::View *client, textDocument->views()) {
-                 if (client != activeClient) {
-                    client->reloadXML();
+            if (textDocument) {
+                foreach(KTextEditor::View *client, textDocument->views()) {
+                    if (client != activeClient) {
+                        client->reloadXML();
+                    }
                 }
             }
         }
