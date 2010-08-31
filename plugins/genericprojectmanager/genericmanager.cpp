@@ -387,6 +387,18 @@ bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const 
     }
 }
 
+void propagateRename( KDevelop::ProjectBaseItem* item, const KUrl& newBase)
+{
+    KUrl url = newBase;
+    url.addPath("dummy");
+    foreach( KDevelop::ProjectBaseItem* child, item->children() ) {
+        url.setFileName( child->text() );
+        kDebug() << child->url() << url;
+        child->setUrl( url );
+        propagateRename( child, url );
+    }
+}
+
 bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& source, const KUrl& destination)
 {
     if ( !isValid(destination, true, item->project(), getIncludeRules(item->project())) ) {
@@ -407,6 +419,8 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
             if ( success ) {
                 item->parent()->takeRow( item->row() );
                 parent->appendRow( item );
+                item->setUrl( destination );
+                propagateRename( item, destination );
             }
             continueWatcher(parent);
             return success;
