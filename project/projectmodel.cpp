@@ -489,6 +489,20 @@ QString ProjectFolderItem::folderName() const
     return url().fileName();
 }
 
+void propagateRename( const KDevelop::ProjectFolderItem* item, const KUrl& newBase)
+{
+    KUrl url = newBase;
+    url.addPath("dummy");
+    foreach( KDevelop::ProjectBaseItem* child, item->children() )
+    {
+        url.setFileName( child->text() );
+        kDebug() << child->url() << url;
+        child->setUrl( url );
+        if ( child->folder() ) {
+            propagateRename( child->folder(), url );
+        }
+    }
+}
 
 ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 {
@@ -504,6 +518,7 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
             if( !project() || project()->projectFileManager()->renameFolder(this, dest) )
             {
                 setUrl( dest );
+                propagateRename(this, dest);
                 return ProjectBaseItem::RenameOk;
             } else
             {
