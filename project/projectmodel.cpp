@@ -768,10 +768,14 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
         ProjectBaseItem* item = itemFromIndex( index );
         
         if( item ) {
-            if( role == Qt::DecorationRole ) {
-                return item->iconName();
+            switch(role) {
+                case Qt::DecorationRole:
+                    return item->iconName();
+                case Qt::ToolTipRole:
+                    return item->url().prettyUrl();
+                default:
+                    return item->text();
             }
-            return item->text();
         }
     }
     return QVariant();
