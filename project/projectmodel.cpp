@@ -159,6 +159,12 @@ ProjectBaseItem* ProjectBaseItem::child( int row ) const
     return d->childs.at( row );
 }
 
+QList< ProjectBaseItem* > ProjectBaseItem::children() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->childs;
+}
+
 ProjectBaseItem* ProjectBaseItem::takeRow(int row)
 {
     Q_D(ProjectBaseItem);
