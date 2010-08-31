@@ -1,0 +1,90 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<gui name="okteta" version="1">
+<MenuBar>
+  <Menu name="file">
+    <Action name="file_save" group="save_merge" /> <!-- TODO: why isn't this offered by the host? -->
+    <Action name="file_save_as" group="save_merge" />
+    <Action name="export" group="save_merge" />
+    <Action name="file_print" group="print_merge" />
+    <Menu name="permission" group="print_merge">
+      <text context="@title:menu">Permissions</text>
+      <Action name="isreadonly" />
+      <Action name="isoverwriteonly" />
+    </Menu>
+  </Menu>
+  <Menu name="edit">
+    <Action name="edit_undo" group="edit_undo_merge" />
+    <Action name="edit_redo" group="edit_undo_merge" />
+    <Separator group="edit_undo_merge" />
+    <Action name="edit_cut" group="edit_paste_merge" />
+    <Action name="edit_copy" group="edit_paste_merge" />
+    <Action name="edit_paste" group="edit_paste_merge" />
+    <Action name="copy_as" group="edit_paste_merge" />
+    <Action name="insert" group="edit_paste_merge" />
+    <Separator group="edit_paste_merge" />
+    <Action name="edit_select_all" group="edit_select_merge" />
+    <Action name="edit_deselect" group="edit_select_merge" />
+    <Action name="edit_select" group="edit_select_merge" />
+    <Separator group="edit_select_merge" />
+    <Action name="edit_find" group="edit_find_merge" />
+    <Action name="edit_find_next" group="edit_find_merge" />
+    <Action name="edit_find_prev" group="edit_find_merge" />
+    <Action name="edit_replace" group="edit_find_merge" />
+    <Separator group="edit_find_merge" />
+    <Action name="set_overwrite" group="edit_select_merge" />
+    <Separator group="edit_find_merge" />
+    <Action name="goto_offset" group="edit_find_merge" />
+  </Menu>
+  <Menu name="view"><text>View</text>
+    <Action name="view_zoom_in" group="view_operations" />
+    <Action name="view_zoom_out" group="view_operations" />
+    <Separator group="view_operations" />
+    <Action name="view_showsnonprinting" group="view_operations" />
+    <Action name="view_lineoffset" group="view_operations" />
+    <Action name="togglecolumns" group="view_operations" />
+    <Separator group="view_operations" />
+    <Action name="view_valuecoding" group="view_operations" />
+    <Action name="view_charencoding" group="view_operations" />
+    <Separator group="view_operations" />
+    <Action name="view_bytesperline" group="view_operations" />
+    <Action name="view_bytespergroup" group="view_operations" />
+    <Action name="resizestyle" group="view_operations" />
+    <Action name="viewmode" group="view_operations" />
+  </Menu>
+  <Menu name="bookmarks"><text>Bookmarks</text>
+    <Action name="bookmark_add" />
+    <Action name="bookmark_edit" />
+    <Separator/>
+    <Action name="bookmark_replace" />
+    <Action name="bookmark_remove" />
+    <Action name="bookmark_remove_all" />
+    <Separator/>
+    <Action name="bookmark_previous" />
+    <Action name="bookmark_next" />
+    <Separator/>
+    <ActionList name="bookmark_list" />
+  </Menu>
+</MenuBar>
+
+<ToolBar name="mainToolBar">
+  <Action name="file_save" group="file_operations"/>
+  <Action name="edit_undo" group="edit_operations" />
+  <Action name="edit_redo" group="edit_operations" />
+  <Separator/>
+  <Action name="edit_find" group="edit_operations" />
+  <Action name="edit_find_next" group="edit_operations" />
+  <Action name="edit_find_last" group="edit_operations" />
+</ToolBar>
+
+<!--<ToolBar name="designerToolbar" noMerge="1"><text>Designer Layout Toolbar</text>
+    <Action name="layout_horiz"/>
+    <Action name="layout_vertical"/>
+    <Action name="layout_split_horiz"/>
+    <Action name="layout_split_vert"/>
+    <Action name="layout_grid"/>
+    <Action name="break_layout"/>
+    <Separator/>
+    <Action name="adjust_size"/>
+</ToolBar>-->
+
+</gui>

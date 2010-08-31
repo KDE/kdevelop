@@ -47,7 +47,8 @@ static bool hasStartedSession()
 GdbVariable::GdbVariable(TreeModel* model, TreeItem* parent,
             const QString& expression, const QString& display)
 : Variable(model, parent, expression, display)
-{}
+{
+}
 
 GdbVariable::~GdbVariable()
 {
