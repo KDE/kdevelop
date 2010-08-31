@@ -351,6 +351,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     m_watchers[item->project()]->addDir(item->url().toLocalFile());
     if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
+        reloadFiles(folder);
+        
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
         cmakeListsPath.addPath("CMakeLists.txt");
@@ -363,8 +365,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         }
         else
         {
-            reloadFiles(folder);
-            
             KDevelop::ReferencedTopDUContext curr;
             if(item==item->project()->projectItem())
                 curr=initializeProject(item->project(), item->project()->projectItem()->url());
@@ -841,11 +841,11 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             continue;
         
         QString current=it->text();
+        KUrl fileurl = folderurl;
+        fileurl.addPath(current);
+        
         if(!entries.contains(current))
         {
-            KUrl fileurl = folderurl;
-            fileurl.addPath(current);
-        
             switch(it->type())
             {
                 case ProjectBaseItem::File:
@@ -859,18 +859,26 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
                     break;
             }
         }
+        else if(it->url()!=fileurl) {
+            it->setUrl(fileurl);
+            ProjectFolderItem* folder = it->folder();
+            
+            if(folder)
+                reloadFiles(folder);
+        }
     }
     
     //We look for new elements
     foreach( const QString& entry, entries )
     {
-        if( item->hasFileOrFolder( entry ) )
-            continue;
-
         KUrl fileurl = folderurl;
         fileurl.addPath( entry );
-
-        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
+        
+        if( item->hasFileOrFolder( entry ) )
+        {
+            continue;
+        }
+        else if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
             fileurl.adjustPath(KUrl::AddTrailingSlash);
             ProjectFolderItem* pendingfolder = m_pending.take(fileurl);
