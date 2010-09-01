@@ -33,6 +33,13 @@ namespace KDevelop
         : OutputJob(parent, verbosity), d(new VcsJobPrivate)
     {
         setStandardToolView(IOutputView::VcsView);
+        
+        if(verbosity==Verbose)
+            QMetaObject::invokeMethod(this, "delayedModelInitialize", Qt::QueuedConnection);
+    }
+    
+    void VcsJob::delayedModelInitialize()
+    {
         startOutput();
     }
 

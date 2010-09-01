@@ -402,8 +402,7 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
     foreach ( KDevelop::ProjectFolderItem* parent, item->project()->foldersForUrl(destination.upUrl()) ) {
         if ( parent->type() == KDevelop::ProjectBaseItem::Folder ) {
             stopWatcher(parent);
-            KIO::CopyJob* job = KIO::move(source, destination);
-            bool success = KIO::NetAccess::synchronousRun( job, KDevelop::ICore::self()->uiController()->activeMainWindow() );
+            bool success = KDevelop::renameUrl( item->project(), source, destination );
             if ( success ) {
                 item->parent()->takeRow( item->row() );
                 parent->appendRow( item );

@@ -38,6 +38,7 @@
 #include <KDE/KUrl>
 
 #include <interfaces/iplugin.h>
+#include <outputview/outputmodel.h>
 
 using namespace KDevelop;
 
@@ -56,6 +57,7 @@ struct DVcsJobPrivate
     IPlugin* vcsplugin;
     
     QVariant results;
+    OutputModel* model;
 };
 
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
@@ -64,7 +66,9 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     d->status = JobNotStarted;
     d->vcsplugin = parent;
     d->childproc->setWorkingDirectory(workingDir.absolutePath());
-
+    d->model = new OutputModel;
+    setModel(d->model, IOutputView::TakeOwnership);
+    
     connect(d->childproc, SIGNAL(finished(int, QProcess::ExitStatus)),
             SLOT(slotProcessExited(int, QProcess::ExitStatus)));
     connect(d->childproc, SIGNAL(error( QProcess::ProcessError )),
@@ -72,6 +76,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
 
     connect(d->childproc, SIGNAL(readyReadStandardOutput()),
                 SLOT(slotReceivedStdout()));
+    
 }
 
 DVcsJob::~DVcsJob()
@@ -137,12 +142,28 @@ void DVcsJob::start()
 {
     Q_ASSERT_X(!d->status==JobRunning, "DVCSjob::start", "Another proccess was started using this job class");
 
-    Q_ASSERT(QDir(d->childproc->workingDirectory()).exists());
-    Q_ASSERT(QDir(d->childproc->workingDirectory()).isAbsolute());
+    const QDir& workingdir = directory();
+    if( !workingdir.exists() ) {
+        QString error = i18n( "Working Directory doesn't exist: %1", d->childproc->workingDirectory() );
+        d->model->appendLine(error);
+        setError( 255 );
+        setErrorText(error);
+        return;
+    }
+    if( !workingdir.isAbsolute() ) {
+        QString error = i18n( "Working Directory is not absolute: %1", d->childproc->workingDirectory() );
+        d->model->appendLine(error);
+        setError( 255 );
+        setErrorText(error);
+        return;
+    }
 
     kDebug() << "Execute dvcs command:" << dvcsCommand();
 
-    setObjectName(d->vcsplugin->objectName()+": "+dvcsCommand().join(" "));
+    QString service;
+    if(d->vcsplugin)
+        service = d->vcsplugin->objectName();
+    setObjectName(service+": "+dvcsCommand().join(" "));
     
     d->status = JobRunning;
     d->childproc->setEnvironment(QProcess::systemEnvironment());
@@ -150,7 +171,7 @@ void DVcsJob::start()
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
     
-    displayOutput(directory().path() + "> " + dvcsCommand().join(" "));
+    d->model->appendLine(directory().path() + "> " + dvcsCommand().join(" "));
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -200,7 +221,12 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
                                                      << "Exit code is:" << d->childproc->exitCode();
     
     displayOutput(d->childproc->readAllStandardError());
-    displayOutput(i18n("Command finnished with error %1.", errorValue));
+    d->model->appendLine(i18n("Command finnished with error %1.", errorValue));
+    
+    //Even if it was a silent process we want to provide some feedback to the user about what went wrong
+    //so we show the output then.
+    if(verbosity()==Silent)
+        startOutput();
     jobIsReady();
 }
 
@@ -211,13 +237,13 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     if (exitStatus != QProcess::NormalExit || exitCode != 0)
         slotProcessError(QProcess::UnknownError);
 
-    displayOutput(i18n("Command exited with value %1.", exitCode));
+    d->model->appendLine(i18n("Command exited with value %1.", exitCode));
     jobIsReady();
 }
 
 void DVcsJob::displayOutput(const QString& data)
 {
-    static_cast<QStandardItemModel*>(model())->appendRow(new QStandardItem(data));
+    d->model->appendLines(data.split('\n'));
 }
 
 void DVcsJob::slotReceivedStdout()
@@ -242,20 +268,7 @@ IPlugin* DVcsJob::vcsPlugin() const
 
 DVcsJob& DVcsJob::operator<<(const KUrl& url)
 {
-    ///@todo this is ok for now, but what if some of the urls are not
-    ///      to the given repository
-    //all urls should be relative to the working directory!
-    //if url is relative we rely on it's relative to job->getDirectory(), so we check if it's exists
-    QString file;
-    
-    if (url.isEmpty())
-        file = '.';
-    else if (!url.isRelative())
-        file = directory().relativeFilePath(url.toLocalFile());
-    else
-        file = url.toLocalFile();
-
-    *d->childproc << file;
+    *d->childproc << url.toLocalFile();
     return *this;
 }
 

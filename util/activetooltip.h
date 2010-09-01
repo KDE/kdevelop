@@ -72,6 +72,8 @@ public:
     
     void moveEvent(QMoveEvent*);
 
+    void paintEvent(QPaintEvent*);
+
     void adjustRect();
     
     ///Clicks within the friend widget are allowed

@@ -63,6 +63,7 @@
 #include <vcs/vcspluginhelper.h>
 #include <KMenu>
 #include <kparts/mainwindow.h>
+#include <interfaces/idocumentcontroller.h>
 
 namespace KDevelop
 {
@@ -181,6 +182,7 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     KUrl::List const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
     
+    ICore::self()->documentController()->saveAllDocuments();
     BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
     branchManager.exec();
 }

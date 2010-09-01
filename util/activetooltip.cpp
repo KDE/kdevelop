@@ -29,6 +29,8 @@
 #include <QPointer>
 #include <qdesktopwidget.h>
 #include <qmenu.h>
+#include <qstylepainter.h>
+#include <qstyleoption.h>
 
 namespace KDevelop
 {
@@ -55,9 +57,21 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     move(position);
 
     QPalette p;
+    
+    // adjust background color to use tooltip colors
     p.setColor(backgroundRole(), p.color(QPalette::ToolTipBase));
     p.setColor(QPalette::Base, p.color(QPalette::ToolTipBase));
+
+    // adjust foreground color to use tooltip colors
+    p.setColor(foregroundRole(), p.color(QPalette::ToolTipText));
+    p.setColor(QPalette::Text, p.color(QPalette::ToolTipText));
     setPalette(p);
+
+    // set margins based on style specification
+    QStyleOptionFrame opt;
+    opt.init(this);
+    int margin( style()->pixelMetric( QStyle::PM_ToolTipLabelFrameWidth, &opt, this ) );
+    setContentsMargins( margin, margin, margin, margin );
 
     qApp->installEventFilter(this);
 }
@@ -175,9 +189,26 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
 {
     adjustRect();
     
+    // set mask from style
+    QStyleOptionFrame opt;
+    opt.init(this);
+
+    QStyleHintReturnMask mask;
+    if( style()->styleHint( QStyle::SH_ToolTip_Mask, &opt, this, &mask ) && !mask.region.isEmpty() )
+    { setMask( mask.region ); }
+
     emit resized();
 
     updateMouseDistance();
+}
+
+void ActiveToolTip::paintEvent(QPaintEvent* event)
+{
+    QStylePainter painter( this );
+    painter.setClipRegion( event->region() );
+    QStyleOptionFrame opt;
+    opt.init(this);
+    painter.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
 }
 
 void ActiveToolTip::addExtendRect(QRect rect)

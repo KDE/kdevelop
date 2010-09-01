@@ -237,21 +237,13 @@ void VcsPluginHelper::revert()
 void VcsPluginHelper::diffToHead()
 {
     SINGLEURL_SETUP_VARS
+    ICore::self()->documentController()->saveAllDocuments();
     KDevelop::VcsJob* job = iface->diff(url,
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Head),
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
 
     connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
     d->plugin->core()->runController()->registerJob(job);
-}
-
-QStringList locationListToString(const QList<VcsLocation>& locations)
-{
-    QStringList ret;
-    foreach(const VcsLocation& loc, locations) {
-        ret.append(loc.localUrl().prettyUrl());
-    }
-    return ret;
 }
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
@@ -277,6 +269,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
 void VcsPluginHelper::diffToBase()
 {
     SINGLEURL_SETUP_VARS
+    ICore::self()->documentController()->saveAllDocuments();
     KDevelop::VcsJob* job = iface->diff(url,
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Base),
                                         KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working));
@@ -349,6 +342,7 @@ void VcsPluginHelper::add()
 void VcsPluginHelper::commit()
 {
     Q_ASSERT(!d->ctxUrls.isEmpty());
+    ICore::self()->documentController()->saveAllDocuments();
 
     KUrl url = d->ctxUrls.first();
     QScopedPointer<VcsJob> statusJob(d->vcs->status(url));

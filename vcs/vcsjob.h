@@ -135,6 +135,9 @@ Q_SIGNALS:
      * results are ready, or several times.
      */
     void resultsReady( KDevelop::VcsJob* );
+    
+private Q_SLOTS:
+    void delayedModelInitialize();
 
 private:
     class VcsJobPrivate* const d;

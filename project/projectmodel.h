@@ -120,6 +120,8 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         /** @returns the @p row item in the list of children of this item or 0 if there is no such child. */
         ProjectBaseItem* child( int row ) const;
+        /** @returns the list of children of this item. */
+        QList<ProjectBaseItem*> children() const;
         /** @returns a valid QModelIndex for usage with the model API for this item. */
         QModelIndex index() const;
         /** @returns The parent item if this item has one, else it return 0. */

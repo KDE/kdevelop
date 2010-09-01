@@ -40,6 +40,7 @@ class ProjectSourcePage : public QWidget
         void reevaluateCorrection();
         void progressChanged(KJob*, unsigned long);
         void infoMessage(KJob*, const QString& text, const QString& rich);
+        void locationChanged();
         
     signals:
         void isCorrect(bool);

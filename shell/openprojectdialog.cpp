@@ -42,6 +42,7 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     resize(QSize(700, 500));
     
     KUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
+    start.adjustPath(KUrl::AddTrailingSlash);
     sourcePageWidget = new ProjectSourcePage( start, this );
     connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
     sourcePage = addPage( sourcePageWidget, "Select the source" );

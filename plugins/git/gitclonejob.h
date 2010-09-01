@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
+ *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
  *   modify it under the terms of the GNU General Public License as        *
@@ -18,18 +18,22 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef DVCS_JOB_TEST_H
-#define DVCS_JOB_TEST_H
+#ifndef GITCLONEJOB_H
+#define GITCLONEJOB_H
 
-#include <QtCore/QObject>
+#include <vcs/dvcs/dvcsjob.h>
 
-class DVcsJobTest: public QObject
+class GitCloneJob : public KDevelop::DVcsJob
 {
     Q_OBJECT
-
-    private slots:
-        void initTestCase();
-        void testJob();
+    public:
+        GitCloneJob(const QDir& d, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
+        
+    public slots:
+        void receivedStderr();
+        
+    private:
+        uint m_steps;
 };
 
-#endif
+#endif // GITCLONEJOB_H

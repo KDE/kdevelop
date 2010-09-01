@@ -204,8 +204,7 @@ public:
             ret << folder;
 
         for(int i=0; i<folder->rowCount(); i++) {
-            ProjectBaseItem* item=dynamic_cast<ProjectBaseItem*>(folder->child(i));
-            Q_ASSERT(item);
+            ProjectBaseItem* item=folder->child(i);
 
             if(item->type()!=ProjectBaseItem::File)
                 ret << itemsForUrlInternal(url, item);

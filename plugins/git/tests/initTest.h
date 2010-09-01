@@ -1,4 +1,8 @@
 /***************************************************************************
+ *   This file was partly taken from KDevelop's cvs plugin                 *
+ *   Copyright 2007 Robert Gruber <rgruber@users.sourceforge.net>          *
+ *                                                                         *
+ *   Adapted for Git                                                       *
  *   Copyright 2008 Evgeniy Ivanov <powerfox@kde.ru>                       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or         *
@@ -18,17 +22,43 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  ***************************************************************************/
 
-#ifndef DVCS_JOB_TEST_H
-#define DVCS_JOB_TEST_H
+#ifndef GIT_INIT_H
+#define GIT_INIT_H
 
 #include <QtCore/QObject>
 
-class DVcsJobTest: public QObject
+class GitPlugin;
+
+namespace KDevelop
+{
+    class TestCore;
+}
+
+class GitInitTest: public QObject
 {
     Q_OBJECT
 
-    private slots:
-        void checkDVCS();
+private:
+    void repoInit();
+    void addFiles();
+    void commitFiles();
+//     void cloneRepository();
+//     void importTestData();
+//     void checkoutTestData();
+
+private slots:
+    void initTestCase();
+    void testInit();
+    void testAdd();
+    void testCommit();
+    void testBranching();
+    void revHistory();
+    void cleanupTestCase();
+
+private:
+    KDevelop::TestCore* m_testCore;
+    GitPlugin* m_plugin;
+    void removeTempDirs();
 };
 
 #endif

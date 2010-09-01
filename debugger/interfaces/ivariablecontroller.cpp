@@ -75,6 +75,7 @@ void IVariableController::updateIfFrameOrThreadChanged()
     if (sm->currentThread() != m_activeThread || sm->currentFrame() != m_activeFrame) {
         m_activeThread = sm->currentThread();
         m_activeFrame = sm->currentFrame();
+        variableCollection()->root()->resetChanged();
         update();
     }
 }
