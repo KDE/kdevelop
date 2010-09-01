@@ -22,9 +22,6 @@
 
 #include <QtCore/QByteArray>
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/document.h>
-
 #include <limits>
 
 #include "topducontext.h"
@@ -48,8 +45,6 @@
 #include "types/typeutils.h"
 #include "types/typealiastype.h"
 #include "classdeclaration.h"
-
-using namespace KTextEditor;
 
 namespace KDevelop
 {
