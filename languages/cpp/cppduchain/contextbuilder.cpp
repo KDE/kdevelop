@@ -431,7 +431,7 @@ ReferencedTopDUContext ContextBuilder::buildContexts(Cpp::EnvironmentFilePointer
 
     kDebug(9007) << "built top-level context with" << topLevelContext->localDeclarations().size() << "declarations and" << topLevelContext->importedParentContexts().size() << "included files";
     //If we're debugging the current file, dump the du-chain and the smart ranges
-    ifDebugFile( IndexedString(file->identity().url().str()), { KDevelop::DumpChain dump; dump.dump(topLevelContext); if(topLevelContext->smartRange()) dump.dumpRanges(topLevelContext->smartRange()); } );
+    ifDebugFile( IndexedString(file->identity().url().str()), { KDevelop::DumpChain dump; dump.dump(topLevelContext); } );
 
 /*     if( m_recompiling ) {
       DumpChain dump;

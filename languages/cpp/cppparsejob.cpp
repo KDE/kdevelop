@@ -66,7 +66,6 @@
 #include <interfaces/iuicontroller.h>
 #include <cpppreprocessenvironment.h>
 
-//#define DUMP_SMART_RANGES
 //#define DUMP_AST
 //#define DUMP_DUCHAIN
 
@@ -873,14 +872,6 @@ void CPPInternalParseJob::run()
         kDebug( 9007 ) << "================== duchain ==================";
         KDevelop::DumpChain dump;
         dump.dump(contentContext);
-#endif
-#ifdef DUMP_SMART_RANGES
-        if(contentContext->smartRange()) {
-          kDebug() << "dumping smart range";
-          KDevelop::DumpChain dump;
-          kDebug() << dump.dumpRanges(contentContext->smartRange());
-        }
-
 #endif
 
         //KDevelop::DumpDotGraph dumpGraph;
