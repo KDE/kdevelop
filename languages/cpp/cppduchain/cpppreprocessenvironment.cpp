@@ -12,7 +12,6 @@
  ***************************************************************************/
 
 #include "cpppreprocessenvironment.h"
-#include <language/editor/hashedstring.h>
 #include <language/interfaces/iproblem.h>
 #include <parser/rpp/macrorepository.h>
 

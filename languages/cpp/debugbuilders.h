@@ -23,7 +23,6 @@
 //#define DEBUG_DECLARATION "KDevelop::DocumentRangeObject::range"
 
 #ifdef DEBUG_FILE
-#include <language/editor/hashedstring.h>
 static IndexedString globalDebuggedFileName(DEBUG_FILE);
 #define ifDebugCurrentFile(action) if(this->currentContext()->url() == globalDebuggedFileName) { action }
 #define ifDebugFile(fileName, action) if(fileName == globalDebuggedFileName) { action }

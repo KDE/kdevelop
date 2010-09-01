@@ -26,7 +26,6 @@
 #include "control.h"
 #include "parsesession.h"
 
-#include <language/editor/hashedstring.h>
 #include <cstdlib>
 #include <iostream>
 #include "rpp/chartools.h"

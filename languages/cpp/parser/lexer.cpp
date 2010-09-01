@@ -22,7 +22,6 @@
 #include "control.h"
 #include "parsesession.h"
 #include "rpp/pp-scanner.h"
-#include <language/editor/hashedstring.h>
 
 #include <cctype>
 #include <util/kdevvarlengtharray.h>
