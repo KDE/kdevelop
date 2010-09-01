@@ -37,7 +37,6 @@
 #include <language/interfaces/icodehighlighting.h>
 #include <language/backgroundparser/documentchangetracker.h>
 
-namespace KTextEditor { class SmartRange; }
 namespace KDevelop
 {
 class DUContext;

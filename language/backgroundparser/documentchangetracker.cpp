@@ -26,7 +26,6 @@
 
 #include <kdebug.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
 #include <ktexteditor/movinginterface.h>
 
 #include <interfaces/foregroundlock.h>
