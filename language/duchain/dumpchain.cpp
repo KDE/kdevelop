@@ -23,8 +23,6 @@
 #include <QTextStream>
 
 #include <kdebug.h>
-#include <ktexteditor/range.h>
-#include <ktexteditor/smartrange.h>
 
 #include "ducontext.h"
 #include "topducontext.h"
@@ -126,15 +124,4 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     top = 0;
     had.clear();
   }
-}
-
-QString DumpChain::dumpRanges(KTextEditor::SmartRange* range, QString indent)
-{
-  QString ret;
-  QTextStream stream(&ret);
-  stream << indent << range << "(" << range->start().line() << ", " <<  range->start().column() << ") -> (" << range->end().line() << ", " <<  range->end().column() << ')' << "\n";
-  foreach(KTextEditor::SmartRange* child, range->childRanges())
-    stream << dumpRanges(child, indent + ' ');
-  
-  return ret;
 }
