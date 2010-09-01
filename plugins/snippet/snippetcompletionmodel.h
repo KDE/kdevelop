@@ -32,11 +32,11 @@ class View;
 
 class SnippetCompletionItem;
 
-class SnippetCompletionModel : public KTextEditor::CodeCompletionModel2,  public KTextEditor::CodeCompletionModelControllerInterface2
+class SnippetCompletionModel : public KTextEditor::CodeCompletionModel2,
+                               public KTextEditor::CodeCompletionModelControllerInterface3
 {
     Q_OBJECT
-    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
-    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface2)
+    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface3)
 
 public:
     SnippetCompletionModel();
@@ -52,7 +52,7 @@ public:
     virtual QModelIndex parent(const QModelIndex& index) const;
 
     virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
-    virtual bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
+    virtual bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion);
 private:
     void initData(KTextEditor::View* view);
     QList<SnippetCompletionItem*> m_snippets;

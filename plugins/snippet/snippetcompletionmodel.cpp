@@ -178,7 +178,7 @@ KTextEditor::Range SnippetCompletionModel::completionRange(KTextEditor::View* vi
     return range;
 }
 
-bool SnippetCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion)
+bool SnippetCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion)
 {
     if(view->cursorPosition() < range.start() || view->cursorPosition() > range.end()) {
         return true; //Always abort when the completion-range has been left
