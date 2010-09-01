@@ -37,8 +37,6 @@
 #include <ksharedconfig.h>
 #include <klocale.h>
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
 #include <ktexteditor/document.h>
 
 #include <threadweaver/State.h>

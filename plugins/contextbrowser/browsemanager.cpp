@@ -28,7 +28,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
-#include <ktexteditor/smartinterface.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>

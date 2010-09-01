@@ -30,9 +30,6 @@
 
 #include <kglobal.h>
 
-#include <KDE/KTextEditor/Document>
-#include <KDE/KTextEditor/SmartInterface>
-
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguage.h>

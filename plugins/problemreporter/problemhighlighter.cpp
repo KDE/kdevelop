@@ -27,7 +27,6 @@
 
 #include <language/duchain/indexedstring.h>
 #include <ktexteditor/texthintinterface.h>
-#include <ktexteditor/smartinterface.h>
 #include <qwidget.h>
 #include <ktextbrowser.h>
 #include <qboxlayout.h>

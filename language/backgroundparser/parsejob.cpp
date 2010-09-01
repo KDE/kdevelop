@@ -31,12 +31,11 @@
 #include <QByteArray>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <klocale.h>
-
-#include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
+#include <ktexteditor/movinginterface.h>
 
 #include "backgroundparser.h"
 #include "parserdependencypolicy.h"
@@ -45,13 +44,11 @@
 #include "duchain/duchainlock.h"
 #include "duchain/duchain.h"
 #include "duchain/parsingenvironment.h"
+
 #include <interfaces/foregroundlock.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <codegen/coderepresentation.h>
-#include <ktexteditor/movinginterface.h>
-#include <ktexteditor/view.h>
-#include <QApplication>
 #include <duchain/declaration.h>
 #include <duchain/use.h>
 
