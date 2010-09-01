@@ -26,7 +26,6 @@
 
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
 #include <klocale.h>
 
 #include "../duchain/ducontext.h"
@@ -82,8 +81,7 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
 
   //Compute the text we should complete on
   KTextEditor::Document* doc = view->document();
-  KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>(doc);
-  if( !doc || !smart ) {
+  if( !doc ) {
     kDebug() << "No document for completion";
     failed();
     return;
@@ -103,10 +101,9 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
       }
       else
         range = KTextEditor::Range(KTextEditor::Cursor(position.line(), 0), position);
+
+      text = doc->text(range);
     }
-    //Lock the smart-mutex so we won't get multithreading crashes
-    QMutexLocker lock(smart->smartMutex());
-    text = doc->text(range);
   }
 
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
