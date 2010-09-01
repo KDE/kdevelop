@@ -70,8 +70,6 @@ public:
                               const QString &className,
                               const QString &preferredName = QString() );
 
-    virtual void removePart( KParts::Part *part);
-
     KParts::ReadOnlyPart* activeReadOnly() const;
     KParts::ReadWritePart* activeReadWrite() const;
     KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;

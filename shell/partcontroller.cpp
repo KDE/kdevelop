@@ -41,7 +41,6 @@
 #include <ktexteditor/editor.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/factory.h>
-#include <ktexteditor/smartinterface.h>
 
 #include "core.h"
 
@@ -133,26 +132,6 @@ KTextEditor::Document* PartController::createTextPart(const QString &encoding)
     }
 
     return doc;
-}
-
-void PartController::removePart( KParts::Part *part )
-{
-#if 0
-    if ( KTextEditor::Document * doc = qobject_cast<KTextEditor::Document *>( part ) )
-    {
-        if ( KTextEditor::SmartInterface * smart = dynamic_cast<KTextEditor::SmartInterface*>( doc ) )
-        {
-            // FIXME not supposed to delete locked mutexes...
-            QMutexLocker lock ( smart->smartMutex() );
-            KParts::PartManager::removePart( part );
-            return ;
-        }
-
-        kWarning() << "Deleting text editor" << doc << "which does not have a smart interface." ;
-    }
-#endif
-
-    KParts::PartManager::removePart( part );
 }
 
 KParts::Part* PartController::createPart( const QString & mimeType,
