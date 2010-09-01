@@ -39,7 +39,6 @@
 
 #include <kinputdialog.h>
 #include <kparts/mainwindow.h>
-#include <ktexteditor/smartrange.h>
 #include <KMessageBox>
 #include <ast.h>
 #include <astutilities.h>

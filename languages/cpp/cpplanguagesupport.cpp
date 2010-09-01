@@ -45,7 +45,6 @@
 #include <kio/netaccess.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-#include <ktexteditor/smartinterface.h>
 #include <language/codecompletion/codecompletion.h>
 
 #include <interfaces/icore.h>
@@ -66,7 +65,6 @@
 #include <language/duchain/stringhelpers.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/topducontext.h>
-#include <language/duchain/smartconverter.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/codegen/coderepresentation.h>
 #include <interfaces/contextmenuextension.h>

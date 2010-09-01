@@ -114,7 +114,7 @@ void MissingIncludeCompletionModel::completionInvokedInternal(KTextEditor::View*
   clear();
 }
 
-KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction MissingIncludeCompletionModel::matchingItem(const QModelIndex& matched) {
+KTextEditor::CodeCompletionModelControllerInterface3::MatchReaction MissingIncludeCompletionModel::matchingItem(const QModelIndex& matched) {
   Q_UNUSED(matched);
   //When something in this model matches, don't hide the completion-list
   kDebug() << "checking reaction";
@@ -134,7 +134,7 @@ void MissingIncludeCompletionWorker::abortCurrentCompletion() {
   CodeCompletionWorker::abortCurrentCompletion();
 }
 
-void MissingIncludeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range) {
+KTextEditor::Range MissingIncludeCompletionModel::updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range) {
   QMutexLocker lock(&worker()->mutex);
   if(worker()->context.topContextIndex()) {
     {
@@ -145,14 +145,16 @@ void MissingIncludeCompletionModel::updateCompletionRange(KTextEditor::View* vie
           worker()->context = KDevelop::IndexedDUContext(top->findContextAt(top->transformToLocalRevision(KDevelop::SimpleCursor(range.end()))));
       }
     }
-    worker()->localExpression = range.text().join("\n");
+    worker()->localExpression = view->document()->text(range);
     worker()->allowCompletion();
 
     emit doSpecialProcessingInBackground(0);
   }
+
+  return range;
 }
 
-QString MissingIncludeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position) {
+QString MissingIncludeCompletionModel::filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position) {
   Q_UNUSED(view);
   Q_UNUSED(range);
   Q_UNUSED(position);

@@ -18,8 +18,6 @@
 
 #include "typebuilder.h"
 
-#include <ktexteditor/smartrange.h>
-
 #include <language/duchain/identifier.h>
 #include <language/duchain/duchain.h>
 #include <language/duchain/forwarddeclaration.h>

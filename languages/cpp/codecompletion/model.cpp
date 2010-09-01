@@ -59,7 +59,6 @@
 #include <language/editor/modificationrevision.h>
 #include <language/duchain/specializationstore.h>
 #include "implementationhelperitem.h"
-#include <ktexteditor/smartinterface.h>
 
 using namespace KTextEditor;
 using namespace KDevelop;
@@ -104,14 +103,14 @@ void CodeCompletionModel::aborted(KTextEditor::View* view) {
     worker()->abortCurrentCompletion();
     TypeConversion::stopCache();
     
-    KTextEditor::CodeCompletionModelControllerInterface::aborted(view);
+    KDevelop::CodeCompletionModel::aborted(view);
 }
 
 bool isValidIncludeDirectiveCharacter(QChar character) {
   return character.isLetterOrNumber() || character == '_' || character == '-' || character == '.';
 }
 
-bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion)
+bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion)
 {
   if(view->cursorPosition() < range.start() || view->cursorPosition() > range.end())
     return true; //Always abort when the completion-range has been left
@@ -120,7 +119,7 @@ bool CodeCompletionModel::shouldAbortCompletion(KTextEditor::View* view, const K
   QString line = view->document()->line(range.start().line()).trimmed();
   if(line.startsWith("#include")) {
     //Do custom check for include directives, since we allow more character then during usual completion
-    QString text = range.text().join("\n");
+    QString text = view->document()->text(range);
     for(int a = 0; a < text.length(); ++a) {
       if(!isValidIncludeDirectiveCharacter(text[a]))
         return true;
@@ -140,11 +139,11 @@ CodeCompletionModel::~CodeCompletionModel()
 {
 }
 
-void CodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range) {
+Range CodeCompletionModel::updateCompletionRange(View* view, const KTextEditor::Range& range) {
   if(completionContext()) {
     Cpp::CodeCompletionContext* cppContext = dynamic_cast<Cpp::CodeCompletionContext*>(completionContext().data());
     Q_ASSERT(cppContext);
-    cppContext->setFollowingText(range.text().join("\n"));
+    cppContext->setFollowingText(view->document()->text(range));
     bool didReset = false;
     if(completionContext()->ungroupedElements().size()) {
       //Update the ungrouped elements, since they may have changed their text
@@ -186,26 +185,22 @@ void CodeCompletionModel::updateCompletionRange(KTextEditor::View* view, KTextEd
   QString line = view->document()->line(range.start().line()).trimmed();
   if(line.startsWith("#include")) {
     //Skip over all characters that are allowed in a filename but usually not in code-completion
-    QMutexLocker lock(dynamic_cast<KTextEditor::SmartInterface*>(range.document())->smartMutex());
-    while(range.start().column() > 0) {
-      KTextEditor::Cursor newStart = range.start();
+    KTextEditor::Range newRange = range;
+    while(newRange.start().column() > 0) {
+      KTextEditor::Cursor newStart = newRange.start();
       newStart.setColumn(newStart.column()-1);
-      QChar character = range.document()->character(newStart);
+      QChar character = view->document()->character(newStart);
       if(isValidIncludeDirectiveCharacter(character)) {
-        range.start() = newStart; //Skip
+        newRange.start() = newStart; //Skip
       }else{
         break;
       }
     }
-    kDebug() << "new range:" << range.text();
-    return;
+    kDebug() << "new range:" << newRange;
+    return newRange;
   }
-  
-  KDevelop::CodeCompletionModel::updateCompletionRange(view, range);
-}
 
-QString CodeCompletionModel::filterString (KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position) {
-  return KDevelop::CodeCompletionModel::filterString(view, range, position);
+  return KDevelop::CodeCompletionModel::updateCompletionRange(view, range);
 }
 
 Range CodeCompletionModel::completionRange(View* view, const KTextEditor::Cursor& position)

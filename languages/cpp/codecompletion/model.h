@@ -60,11 +60,10 @@ class CodeCompletionModel : public KDevelop::CodeCompletionModel
   protected:
     virtual void foundDeclarations(QList<KSharedPtr<KDevelop::CompletionTreeElement> > item, KSharedPtr<KDevelop::CodeCompletionContext> completionContext);
     
-    virtual QString filterString ( KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position );
     virtual KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor& position);
-    virtual void updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range);
+    virtual KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range);
     virtual void aborted(KTextEditor::View* view);
-    virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::SmartRange& range, const QString& currentCompletion);
+    virtual bool shouldAbortCompletion (KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion);
     virtual bool shouldStartCompletion (KTextEditor::View*, const QString&, bool userInsertion, const KTextEditor::Cursor&);
     virtual KDevelop::CodeCompletionWorker* createCompletionWorker();
 

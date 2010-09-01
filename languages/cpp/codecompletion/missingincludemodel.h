@@ -53,12 +53,12 @@ public:
   
 protected:
   
-  virtual QString filterString(KTextEditor::View* view, const KTextEditor::SmartRange& range, const KTextEditor::Cursor& position);
-  virtual void updateCompletionRange(KTextEditor::View* view, KTextEditor::SmartRange& range);
+  virtual QString filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position);
+  virtual KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range);
   MissingIncludeCompletionWorker* worker() const;
   virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const KUrl& url);
   virtual KDevelop::CodeCompletionWorker* createCompletionWorker ();
-  virtual KTextEditor::CodeCompletionModelControllerInterface2::MatchReaction matchingItem(const QModelIndex& matched);
+  virtual KTextEditor::CodeCompletionModelControllerInterface3::MatchReaction matchingItem(const QModelIndex& matched);
 };
 
 class MissingIncludeCompletionWorker : public KDevelop::CodeCompletionWorker {

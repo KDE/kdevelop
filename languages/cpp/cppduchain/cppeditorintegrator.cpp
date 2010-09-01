@@ -19,8 +19,6 @@
 #include "cppeditorintegrator.h"
 
 #include <ktexteditor/document.h>
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
 
 #include <language/editor/documentrange.h>
 #include <language/editor/documentrangeobject.h>
@@ -30,7 +28,6 @@
 #include "parsesession.h"
 #include <rpp/chartools.h>
 
-using namespace KTextEditor;
 using namespace KDevelop;
 
 CppEditorIntegrator::CppEditorIntegrator( ParseSession* session )

@@ -18,9 +18,6 @@
 
 #include "usebuilder.h"
 
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
-
 #include "cppeditorintegrator.h"
 #include "name_compiler.h"
 #include <language/duchain/declaration.h>
@@ -33,7 +30,6 @@
 #include "expressionvisitor.h"
 #include <parsesession.h>
 
-using namespace KTextEditor;
 using namespace KDevelop;
 
 UseBuilder::UseBuilder (ParseSession* session)

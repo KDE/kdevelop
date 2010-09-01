@@ -36,9 +36,6 @@
 #include <interfaces/ilanguage.h>
 #include <language/interfaces/iastcontainer.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/smartinterface.h>
-
 #include "cpplanguagesupport.h"
 #include "cpphighlighting.h"
 
