@@ -735,15 +735,9 @@ WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
 }
 
 WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow) : QWidget(parent), m_set(set) {
-    QFrame* frame = new QFrame(this);
-    frame->setFrameStyle(QFrame::Panel | QFrame::Plain);
-    frame->setLineWidth(1);
     QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setSpacing(0);
     layout->setMargin(0);
-    layout->addWidget(frame);
-    QVBoxLayout* layout2 = new QVBoxLayout(frame);
-    layout2->setSpacing(0);
-    layout2->setContentsMargins(0, 0, 0, 0);
 
     // title bar
     {
@@ -772,12 +766,12 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         connect(m_deleteButton, SIGNAL(clicked(bool)), m_set, SLOT(deleteSet()));
         connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
         topLayout->addWidget(m_deleteButton);
-        layout2->addLayout(topLayout);
+        layout->addLayout(topLayout);
         // horizontal line
         QFrame* line = new QFrame();
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Raised);
-        layout2->addWidget(line);
+        layout->addWidget(line);
     }
 
     // everything else is added to the following widget which just has a different background color
@@ -785,13 +779,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     {
         QWidget* body = new QWidget();
         body->setLayout(bodyLayout);
-        QPalette palette = body->palette();
-        QColor bgColor = palette.color(QPalette::Background);
-        bgColor.setAlpha(0.4*255);
-        palette.setColor(QPalette::Background, bgColor);
-        body->setPalette(palette);
-        body->setAutoFillBackground(true);
-        layout2->addWidget(body);
+        layout->addWidget(body);
     }
 
     // document list actions
@@ -819,11 +807,6 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
         actionsLayout->addWidget(m_subtractButton);
         bodyLayout->addLayout(actionsLayout);
-        // horizontal line
-        QFrame* line = new QFrame();
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Sunken);
-        bodyLayout->addWidget(line);
     }
 
     QStringList files = m_set->fileList();
