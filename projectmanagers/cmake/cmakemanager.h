@@ -121,9 +121,11 @@ private slots:
     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
     void reimportDone(KJob* job);
+    
+    void deletedWatchedDirectory(const QString& directory);
 
 private:
-    void reimport(KDevelop::ProjectFolderItem* fi, const KUrl& parent);
+    void reimport(KDevelop::ProjectFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
     
@@ -133,15 +135,18 @@ private:
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
                                                     KDevelop::ReferencedTopDUContext parent);
+    
+    static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
+    void reloadFiles(KDevelop::ProjectFolderItem* item);
 
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
     QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KDevelop::IProject*, CacheValues> m_projectCache;
-    QMap<KUrl, KDevelop::ProjectFolderItem*> m_pending;
+    QMap<KUrl, CMakeFolderItem*> m_pending;
     
-    QMap<KJob*, KDevelop::ProjectFolderItem*> m_busyProjects;
+    QSet<KDevelop::ProjectFolderItem*> m_busyProjects;
     
     KDevelop::ICodeHighlighting *m_highlight;
     

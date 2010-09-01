@@ -31,11 +31,11 @@ class ErrorFormat
 {
     public:
         static QList<ErrorFormat> errorFormats;
-        ErrorFormat( const QString&, int, int, int );
-        ErrorFormat( const QString&, int, int, int, const QString& );
+        ErrorFormat( const QString&, int, int, int, int column=-1 );
+        ErrorFormat( const QString&, int, int, int, const QString&, int column=-1 );
         QRegExp expression;
         int fileGroup;
-        int lineGroup;
+        int lineGroup, columnGroup;
         int textGroup;
         QString compiler;
 };

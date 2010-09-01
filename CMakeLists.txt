@@ -5,7 +5,7 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDEVELOP_VERSION_MAJOR 4 )
-set( KDEVELOP_VERSION_MINOR 0 )
+set( KDEVELOP_VERSION_MINOR 1 )
 set( KDEVELOP_VERSION_PATCH 60 )
 
 set(KDE_MIN_VERSION "4.5.0")
@@ -25,7 +25,7 @@ if("${_isSystemLibDir}" STREQUAL "-1")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-find_package(KDevPlatform 1.0.60 REQUIRED)
+find_package(KDevPlatform 1.1.60 REQUIRED)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})
 
@@ -48,6 +48,7 @@ add_subdirectory(debuggers)
 add_subdirectory(app_templates)
 add_subdirectory(documentation)
 add_subdirectory(providers)
+add_subdirectory(utils)
 #macro_optional_add_subdirectory(doc)
 
 macro_display_feature_log()

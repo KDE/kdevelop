@@ -5231,6 +5231,79 @@ void TestDUChain::testIndexedStrings() {
   kDebug() << a << "successful tests";
 }
 
+void TestDUChain::testAutoTypeIntegral_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<uint>("datatype");
+  QTest::addColumn<bool>("constness");
+
+  QTest::newRow("int") << "auto x = 1;" << (uint) IntegralType::TypeInt << false;
+  QTest::newRow("double") << "auto x = 1.0;" << (uint) IntegralType::TypeDouble << false;
+  QTest::newRow("bool") << "auto x = false;" << (uint) IntegralType::TypeBoolean << false;
+  QTest::newRow("const-int-var") << "int a = 1; const auto x = a;" << (uint) IntegralType::TypeInt << true;
+}
+
+void TestDUChain::testAutoTypeIntegral()
+{
+  QFETCH(QString, code);
+  QFETCH(uint, datatype);
+  QFETCH(bool, constness);
+
+  LockedTopDUContext top = parse(code.toLocal8Bit(), DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QVERIFY(top->localDeclarations().count() >= 1);
+  Declaration* dec = top->findLocalDeclarations(Identifier("x")).first();
+  QVERIFY(dec);
+  IntegralType::Ptr type = dec->abstractType().cast<IntegralType>();
+  QVERIFY(type);
+  QCOMPARE(type->dataType(), datatype);
+
+  QCOMPARE((bool) (type->modifiers() & AbstractType::ConstModifier), constness);
+}
+
+void TestDUChain::testAutoTypes()
+{
+  LockedTopDUContext top = parse("struct Foo{}; int main() {\n"
+                                 "  auto v1 = new Foo;"
+                                 "  auto v2 = Foo;"
+                                 "  int tmp1 = 0; auto v3 = &tmp1;"
+// TODO: support this, when including <initializer_list>
+//                                  "  auto v4 = {1,2};"
+//                                  "  auto v5 = {1.0,2.0};"
+                                 "}\n", DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  DUContext* ctx = top->childContexts().last();
+  {
+    Declaration* dec = ctx->findDeclarations(Identifier("v1")).first();
+    PointerType::Ptr type = dec->abstractType().cast<PointerType>();
+    QVERIFY(type);
+    StructureType::Ptr structType = type->baseType().cast<StructureType>();
+    QVERIFY(structType);
+    QCOMPARE(structType->qualifiedIdentifier().toString(), QString("Foo"));
+  }
+  {
+    Declaration* dec = ctx->findDeclarations(Identifier("v2")).first();
+    StructureType::Ptr type = dec->abstractType().cast<StructureType>();
+    QEXPECT_FAIL("", "It's a delayed type, not a structure type...", Continue);
+    QVERIFY(type);
+//TODO:     QCOMPARE(type->qualifiedIdentifier().toString(), QString("Foo"));
+  }
+  {
+    Declaration* dec = ctx->findDeclarations(Identifier("v3")).first();
+    PointerType::Ptr type = dec->abstractType().cast<PointerType>();
+    QVERIFY(type);
+    IntegralType::Ptr intType = type->baseType().cast<IntegralType>();
+    QVERIFY(intType);
+    QCOMPARE(intType->dataType(), (uint) IntegralType::TypeInt);
+  }
+}
+
 KDevelop::TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
   if (dump)

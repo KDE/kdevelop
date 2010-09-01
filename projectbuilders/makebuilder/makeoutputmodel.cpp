@@ -39,13 +39,13 @@ class FilteredItem
         FilteredItem( const QString& line )
             : originalLine( line ), 
               type( QVariant::fromValue( MakeOutputModel::StandardItem ) ),
-              shortenedText( line ), isActivatable(false), lineNo(-1) { kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>(); }
+              shortenedText( line ), isActivatable(false), lineNo(-1), columnNo(-1) { kDebug() << "created item with type:" << type << type.value<MakeOutputModel::OutputItemType>(); }
         QString originalLine;
         QVariant type;
         QString shortenedText;
         bool isActivatable;
         KUrl url;
-        int lineNo;
+        int lineNo, columnNo;
 };
 
 const int MakeOutputModel::MakeItemTypeRole = Qt::UserRole + 1;
@@ -108,7 +108,7 @@ void MakeOutputModel::activate( const QModelIndex& index )
     if( item.isActivatable )
     {
         kDebug() << "activating:" << item.lineNo << item.url;
-        KTextEditor::Cursor range( item.lineNo, 0);
+        KTextEditor::Cursor range( item.lineNo, item.columnNo );
         KDevelop::IDocumentController *docCtrl = KDevelop::ICore::self()->documentController();
         docCtrl->openDocument( item.url, range );
     } else 
@@ -187,8 +187,13 @@ void MakeOutputModel::addLines( const QStringList& lines )
                 kDebug() << "found an error:" << line;
                 item.url = urlForFile( regEx.cap( errFormat.fileGroup ) );
                 item.lineNo = regEx.cap( errFormat.lineGroup ).toInt() - 1;
+                if(errFormat.columnGroup>=0)
+                    item.columnNo = regEx.cap( errFormat.columnGroup ).toInt() - 1;
+                else
+                    item.columnNo = 0;
+                
                 //item.shortenedText = regEx.cap( errFormat.textGroup );
-                item.type = QVariant::fromValue( ( regEx.cap(3).contains("warning", Qt::CaseInsensitive) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
+                item.type = QVariant::fromValue( ( regEx.cap(errFormat.textGroup).contains("warning", Qt::CaseInsensitive) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
                 item.isActivatable = true;
                 matched = true;
                 break;

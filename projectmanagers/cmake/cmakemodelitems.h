@@ -84,8 +84,12 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         QString buildDir() const { return m_buildDir; }
         
         void clear();
-        
         void setEnabled(bool);
+
+        KDevelop::ProjectTargetItem* targetNamed(Target::Type type, const QString& targetName) const;
+        KDevelop::ProjectFolderItem* folderNamed(const QString& name) const;
+        void cleanupBuildFolders(const QList< Subdirectory >& subs);
+        void cleanupTargets(const QList<CMakeTarget>& targets);
     private:
         KDevelop::ReferencedTopDUContext m_topcontext;
         QStringList m_includeList;

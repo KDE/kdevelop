@@ -176,6 +176,10 @@ private slots:
   void testUses();
   void testCtorTypes();
 
+  void testAutoTypeIntegral_data();
+  void testAutoTypeIntegral();
+  void testAutoTypes();
+
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 

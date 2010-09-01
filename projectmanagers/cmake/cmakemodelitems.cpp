@@ -47,14 +47,6 @@ QStringList CMakeFolderItem::includeDirectories() const
     return urls;
 }
 
-void CMakeFolderItem::clear()
-{
-    m_includeList.clear();
-    m_defines.clear();
-    m_topcontext=0;
-    removeRows(0, rowCount());
-}
-
 void CMakeFolderItem::setEnabled(bool enabled)
 {
     if(enabled != (flags() & Qt::ItemIsEnabled)) {
@@ -76,4 +68,62 @@ KUrl CMakeExecutableTargetItem::builtUrl() const
     
     ret.addPath(outputName);
     return ret;
+}
+
+bool isTargetType(Target::Type type, KDevelop::ProjectTargetItem* t)
+{
+    return
+        (type == Target::Library && t->type()==KDevelop::ProjectBaseItem::LibraryTarget) ||
+        (type == Target::Executable && t->type()==KDevelop::ProjectBaseItem::ExecutableTarget) ||
+        (type == Target::Custom && t->type()==KDevelop::ProjectBaseItem::Target);
+}
+
+KDevelop::ProjectTargetItem* CMakeFolderItem::targetNamed(Target::Type type, const QString& targetName) const
+{
+    QList< KDevelop::ProjectTargetItem* > targets = targetList();
+    foreach(KDevelop::ProjectTargetItem* t, targets) {
+        if(isTargetType(type, t) && t->text()==targetName) {
+            Q_ASSERT(dynamic_cast<KDevelop::ProjectTargetItem*>(t));
+            return t;
+        }
+    }
+    return 0;
+}
+
+KDevelop::ProjectFolderItem* CMakeFolderItem::folderNamed(const QString& name) const
+{
+    QList<KDevelop::ProjectFolderItem*> folders = folderList();
+    foreach(KDevelop::ProjectFolderItem* folder, folders) {
+        if(folder->text()==name)
+            return folder;
+    }
+    return 0;
+}
+
+template <class T>
+bool textInList(const QList<T>& list, KDevelop::ProjectBaseItem* item)
+{
+    foreach(const T& s, list) {
+        if(item->text()==s.name)
+            return true;
+    }
+    return false;
+}
+
+void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
+{
+    QList<KDevelop::ProjectFolderItem*> folders = folderList();
+    foreach(KDevelop::ProjectFolderItem* folder, folders) {
+        if(folder->type()==ProjectBaseItem::BuildFolder && !textInList<Subdirectory>(subs, folder))
+            delete folder;
+    }
+}
+
+void CMakeFolderItem::cleanupTargets(const QList<CMakeTarget>& targets)
+{
+    QList<KDevelop::ProjectTargetItem*> targetl = targetList();
+    foreach(KDevelop::ProjectTargetItem* target, targetl) {
+        if(!textInList<CMakeTarget>(targets, target))
+            delete target;
+    }
 }

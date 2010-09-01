@@ -425,6 +425,7 @@ bool Parser::skipUntilDeclaration()
         case Token_float:
         case Token_double:
         case Token_void:
+        case Token_auto:
         case Token_extern:
         case Token_namespace:
         case Token_using:
@@ -490,6 +491,7 @@ bool Parser::skipUntilStatement()
         case Token_float:
         case Token_double:
         case Token_void:
+        case Token_auto:
         case Token_class:
         case Token_struct:
         case Token_union:
@@ -1220,6 +1222,7 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
         case Token_float:
         case Token_double:
         case Token_void:
+        case Token_auto:
           integrals = snoc(integrals, session->token_stream->cursor(), session->mempool);
           isIntegral = true;
           advance();
@@ -1231,7 +1234,6 @@ bool Parser::parseSimpleTypeSpecifier(TypeSpecifierAST *&node,
     }
 
   SimpleTypeSpecifierAST *ast = 0;
-
   if (isIntegral)
     {
       ast = CreateNode<SimpleTypeSpecifierAST>(session->mempool);
@@ -3315,6 +3317,10 @@ bool Parser::parseBlockDeclaration(DeclarationAST *&node)
   parseCvQualify(cv);
 
   TypeSpecifierAST *spec = 0;
+  // auto support: right now it is part of the storage spec, put it back
+  if (storageSpec && session->token_stream->kind(storageSpec->toBack()->element) == Token_auto) {
+    rewind(storageSpec->toBack()->element);
+  }
   if (!parseTypeSpecifierOrClassSpec(spec))
     { // replace with simpleTypeSpecifier?!?!
       rewind(start);
@@ -3535,6 +3541,10 @@ bool Parser::parseDeclarationInternal(DeclarationAST *&node)
     }
 
   TypeSpecifierAST *spec = 0;
+  // auto support: right now it is part of the storage spec, put it back
+  if (hasStorageSpec && session->token_stream->kind(storageSpec->toBack()->element) == Token_auto) {
+    rewind(storageSpec->toBack()->element);
+  }
   if (parseTypeSpecifier(spec))
     {
       Q_ASSERT(spec != 0);

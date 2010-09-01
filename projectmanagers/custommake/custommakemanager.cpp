@@ -235,7 +235,21 @@ bool CustomMakeManager::removeFile(KDevelop::ProjectFileItem *file)
 
 bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)
 {
-    return KDevelop::renameUrl( oldFile->project(), oldFile->url(), newFile );
+    CustomMakeFolderItem* p = dynamic_cast<CustomMakeFolderItem*>(oldFile->project()->projectItem());
+    Q_ASSERT(p);
+    p->fsWatcher()->stopWatcher();
+    bool success = KDevelop::renameUrl( oldFile->project(), oldFile->url(), newFile );
+    if (success) {
+        foreach(KDevelop::ProjectFolderItem* folder, oldFile->project()->foldersForUrl(newFile.upUrl())) {
+            if (folder != oldFile->parent()) {
+                oldFile->parent()->takeRow(oldFile->row());
+                folder->appendRow(oldFile);
+            }
+            break;
+        }
+    }
+    p->fsWatcher()->continueWatcher();
+    return success;
 }
 
 bool CustomMakeManager::renameFolder(KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder )

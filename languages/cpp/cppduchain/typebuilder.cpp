@@ -57,7 +57,7 @@ QString stringFromSessionTokens( ParseSession* session, int start_token, int end
 }
 
 TypeBuilder::TypeBuilder(ParseSession* session)
-  : ContextBuilder(session), m_inTypedef(false), m_lastTypeWasInstance(false)
+  : ContextBuilder(session), m_inTypedef(false), m_lastTypeWasInstance(false), m_lastTypeWasAuto(false)
 {
 }
 
@@ -273,6 +273,7 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
   
   bool openedType = false;
   m_lastTypeWasInstance = false;
+  m_lastTypeWasAuto = false;
 
   if (node->type_of && node->expression) {
     node->expression->ducontext = currentContext();
@@ -325,6 +326,9 @@ void TypeBuilder::visitSimpleTypeSpecifier(SimpleTypeSpecifierAST *node)
         case Token_void:
           type = IntegralType::TypeVoid;
           break;
+        case Token_auto:
+          m_lastTypeWasAuto = true;
+          break;
       }
 
       it = it->next;
@@ -356,7 +360,7 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
   }
   
   IntegralType::Ptr integral = lastType().cast<IntegralType>();
-  if(integral && (integral->modifiers() & AbstractType::ConstModifier) && node->initializer_clause && node->initializer_clause->expression) {
+  if(integral && ((integral->modifiers() & AbstractType::ConstModifier) || m_lastTypeWasAuto) && node->initializer_clause && node->initializer_clause->expression) {
     //Parse the expression, and create a CppConstantIntegralType, since we know the value
     Cpp::ExpressionParser parser;
 
@@ -380,6 +384,9 @@ void TypeBuilder::createTypeForInitializer(InitializerAST *node) {
 
       if ( !delay && res.isValid() && res.isInstance ) {
         openType( res.type.abstractType() );
+        if ( m_lastTypeWasAuto ) {
+          currentAbstractType()->setModifiers( integral->modifiers() );
+        }
         openedType = true;
       }
     }
@@ -542,7 +549,6 @@ void TypeBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
 
   if (node->init_declarators) {
     const ListNode<InitDeclaratorAST*> *it = node->init_declarators->toFront(), *end = it;
-
     do {
       visit(it->element);
       // Reset last type to be the base type

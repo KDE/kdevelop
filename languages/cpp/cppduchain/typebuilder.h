@@ -158,6 +158,7 @@ protected:
   bool m_lastTypeWasInstance;
   QStack<KDevelop::AbstractType::Ptr> m_typeStack;
   KDevelop::AbstractType::Ptr m_lastType;
+  bool m_lastTypeWasAuto;
 };
 
 ///Helper-function that extracts the text from start_token until end_token
