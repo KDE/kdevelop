@@ -44,7 +44,6 @@
 #include <QFileInfo>
 #include <QScriptEngine>
 #include <QScriptValue>
-#include <language/duchain/smartconverter.h>
 
 using namespace KDevelop;
 
