@@ -141,13 +141,18 @@ QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: cou
 }
 
 GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
-    : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData())
+    : DistributedVersionControlPlugin(parent, KDevGitFactory::componentData()), m_oldVersion(false)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBasicVersionControl )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDistributedVersionControl )
 
     core()->uiController()->addToolView(i18n("Git"), dvcsViewFactory());
     setObjectName("Git");
+    
+    DVcsJob* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);
+    *versionJob << "git" << "--version";
+    connect(versionJob, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitVersionOutput(KDevelop::DVcsJob*)));
+    ICore::self()->runController()->registerJob(versionJob);
 }
 
 GitPlugin::~GitPlugin()
@@ -895,6 +900,21 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         }
     }
     job->setResults(statuses);
+}
+
+void GitPlugin::parseGitVersionOutput(DVcsJob* job)
+{
+    QStringList versionString = job->output().trimmed().split(' ').last().split('.');
+    static QList<int> minimumVersion = QList<int>() << 1 << 7;
+    
+    kDebug() << "checking git version" << versionString << "against" << minimumVersion;
+    m_oldVersion = false;
+    foreach(int num, minimumVersion) {
+        QString curr = versionString.takeFirst();
+        int valcurr = curr.toInt();
+        m_oldVersion |= valcurr<num;
+    }
+    kDebug() << "the current git version is old: " << m_oldVersion;
 }
 
 QStringList GitPlugin::getLsFiles(const QDir &directory, const QStringList &args,
