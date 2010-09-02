@@ -283,7 +283,8 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
     DVcsJob* job = new DVcsJob(urlDir(localLocations), this, OutputJob::Silent);
-    *job << "git" << "status" << "--porcelain" << "--";
+    //gits older than 1.7 need --short because there --porcelain doesn't exist
+    *job << "git" << "status" << (m_oldVersion ? "--short" : "--porcelain") << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
@@ -848,7 +849,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
 //     Q_ASSERT(false);
 //     return VcsStatusInfo::ItemUnknown;
 // }
-
+  
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
@@ -867,7 +868,9 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         if(arrow>=0)
             curr = curr.right(curr.size()-arrow-3);
         
-        KUrl fileUrl = dotGit;
+        //If it's an old version we will be using --short instead of --porcelain
+        //so the only difference is that the dotGit repositroy is not the root but the workingDir
+        KUrl fileUrl = m_oldVersion ? workingDir : dotGit ;
         fileUrl.addPath(curr);
         processedFiles.append(fileUrl);
         
