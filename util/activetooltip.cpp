@@ -66,12 +66,6 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
     p.setColor(QPalette::Text, p.color(QPalette::ToolTipText));
     setPalette(p);
 
-    // set margins based on style specification
-    QStyleOptionFrame opt;
-    opt.init(this);
-    int margin( style()->pixelMetric( QStyle::PM_ToolTipLabelFrameWidth, &opt, this ) );
-    setContentsMargins( margin, margin, margin, margin );
-
     qApp->installEventFilter(this);
 }
 
