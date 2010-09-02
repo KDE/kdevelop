@@ -1990,6 +1990,22 @@ void TestDUChain::testGlobalNamespaceAlias()
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->size(), 1);
 }
 
+void TestDUChain::testExternalMemberDeclaration()
+{
+  QByteArray method("struct A { static int m; };\n"
+                                      "int A::m = 3;");
+  
+  LockedTopDUContext top( parse(method, DumpAll) );
+  
+  // The declaration of "A::m" is put into a helper-context that makes the scope "A::"
+  QCOMPARE(top->localDeclarations().size(), 1);
+  QCOMPARE(top->childContexts().size(), 2);
+  QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
+  // There must be a use for the "A" in "int A::m"
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 1);
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0).castToSimpleRange().textRange(), KTextEditor::Range(1, 4, 1, 5));
+}
+
 void TestDUChain::testUsingGlobalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { using namespace afoo; bar(); }");
@@ -2122,8 +2138,6 @@ void TestDUChain::testDeclareUsingNamespace()
   QVERIFY(!bar->isFunctionDeclaration());
   QCOMPARE(bar->identifier(), Identifier("bar"));
   QCOMPARE(bar->qualifiedIdentifier(), QualifiedIdentifier("foo::bar"));
-  QEXPECT_FAIL("", "usebuilder fails in cppducontext.cpp FindDeclaration::closeIdentifier to find the declaration of bar, hence no uses\n"
-                   "if this tests passes, you ran testLocalNamespaceAlias before, which apparently is not cleaned up properly...", Abort);
   QCOMPARE(bar->uses().count(), 1);
   QCOMPARE(bar->uses().begin()->count(), 1);
   //kDebug() << findDeclaration(top, bar->identifier(), top->range().start)->qualifiedIdentifier().toString();

@@ -270,7 +270,6 @@ QPair<DUContext*, QualifiedIdentifier> ContextBuilder::findPrefixContext(const Q
       if(classContext && classContext->type() == DUContext::Class) {
         import = classContext;
         //Change the prefix-id so it respects namespace-imports
-        
         prefixId = classContext->scopeIdentifier(true);
         if(prefixId.count() >= currentScopeId.count() && prefixId.left(currentScopeId.count()) == currentScopeId)
           prefixId = prefixId.mid(currentScopeId.count());
