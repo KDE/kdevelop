@@ -160,6 +160,7 @@ private slots:
     void parseGitDiffOutput(KDevelop::DVcsJob* job);
     void parseGitRepoLocationOutput(KDevelop::DVcsJob* job);
     void parseGitStatusOutput(KDevelop::DVcsJob* job);
+    void parseGitVersionOutput(KDevelop::DVcsJob* job);
     
     void ctxPushStash();
     void ctxPopStash();
@@ -177,6 +178,9 @@ private:
 
     QList<QStringList> branchesShas;
     KUrl::List m_urls;
+    
+    /** Tells if it's older than 1.7.0 or not */
+    bool m_oldVersion;
 };
 
 #endif
