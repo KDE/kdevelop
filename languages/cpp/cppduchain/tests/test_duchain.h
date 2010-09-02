@@ -150,6 +150,7 @@ private slots:
   void testCodeModel();
   void testLoopNamespaceImport();
   void testConstructorUses();
+  void testExternalMemberDeclaration();
 
   void testSymbolTableValid();
   
