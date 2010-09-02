@@ -341,6 +341,7 @@ IdealDockWidget::IdealDockWidget(IdealMainWidget *parent)
       m_maximized(false),
       m_mainWidget(parent)
 {
+    setAutoFillBackground(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(contextMenuRequested(QPoint)));
