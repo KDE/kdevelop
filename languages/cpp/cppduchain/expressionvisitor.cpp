@@ -235,9 +235,8 @@ void ExpressionVisitor::parse( AST* ast ) {
 }
 
 void ExpressionVisitor::parseNamePrefix( NameAST* ast ) {
-  m_skipLastNamePart = true;
+  PushValue<bool> p(m_skipLastNamePart, true);
   parse(ast);
-  m_skipLastNamePart = false;
 }
 
 void ExpressionVisitor::reportRealProblems(bool report) {
@@ -1132,7 +1131,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if(node->declarator)
     {
       CppClassType::Ptr constructedType = computeConstructedType();
-      
+
       //Build constructor uses (similar to visitFunctionCall)
       
       AbstractType::Ptr oldLastType = m_lastType;

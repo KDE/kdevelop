@@ -217,6 +217,22 @@ void UseBuilder::visitSimpleDeclaration(SimpleDeclarationAST* node)
     }
     
     visitor.parse( node );
+    
+    // Build uses for the name-prefixes of init declarators
+    const ListNode<InitDeclaratorAST*>
+      *it = node->init_declarators->toFront(),
+      *end = it;
+
+    do {
+      InitDeclaratorAST* initDecl = it->element;
+      if(initDecl->declarator && initDecl->declarator->id)
+      {
+        UseExpressionVisitor visitor( editor()->parseSession(), this );
+        initDecl->declarator->id->ducontext = currentContext();
+        visitor.parseNamePrefix(initDecl->declarator->id);
+      }
+      it = it->next;
+    } while (it != end);
   }else{
     DefaultVisitor::visitSimpleDeclaration(node);    
   }
@@ -243,7 +259,6 @@ void UseBuilder::visitDeclarator(DeclaratorAST* node)
     UseExpressionVisitor visitor( editor()->parseSession(), this );
     if( !node->id->ducontext )
       node->id->ducontext = currentContext();
-
     visitor.parseNamePrefix(node->id);
   }
 

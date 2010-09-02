@@ -115,5 +115,4 @@ class KDEVCPPDUCHAIN_EXPORT SourceCodeInsertion : public KDevelop::SourceCodeIns
 }
 
 
-#endif // CPP_SOURCEMANIPULATION_H
- 
+#endif // CPP_SOURCEMANIPULATION_H 
