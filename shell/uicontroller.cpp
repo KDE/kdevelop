@@ -56,7 +56,7 @@ namespace KDevelop {
 class UiControllerPrivate {
 public:
     UiControllerPrivate(UiController *controller)
-    : cfgDlg(0), areasRestored(false), m_controller(controller)
+    : areasRestored(false), m_controller(controller)
     {
         Core::self()->workingSetControllerInternal()->initializeController(m_controller);
 
@@ -125,8 +125,6 @@ public:
     MainWindow* defaultMainWindow;
 
     QMap<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
-
-    KSettings::Dialog* cfgDlg;
 
     Sublime::MainWindow* activeSublimeWindow;
     QList<Sublime::MainWindow*> sublimeWindows;
@@ -416,17 +414,10 @@ void UiController::showSettingsDialog()
 {
     QStringList blacklist = d->core->pluginControllerInternal()->projectPlugins();
     kDebug() << "blacklist" << blacklist;
-    if(!d->cfgDlg)
-    {
-        d->cfgDlg = new KSettings::Dialog( QStringList() << "kdevplatform",
-                                           activeMainWindow() );
-        d->cfgDlg->setComponentBlacklist( blacklist );
-    }
-// The following doesn't work for some reason if the parent != activeMainWin,
-// the show() call doesn't show the dialog
-//     if( d->cfgDlg->dialog()->parentWidget() != activeMainWindow() )
-//         d->cfgDlg->dialog()->setParent( activeMainWindow() );
-    d->cfgDlg->exec();
+    KSettings::Dialog cfgDlg( QStringList() << "kdevplatform",
+                                        activeMainWindow() );
+    cfgDlg.setComponentBlacklist( blacklist );
+    cfgDlg.exec();
 }
 
 Sublime::Controller* UiController::controller()
