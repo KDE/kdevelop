@@ -2003,7 +2003,7 @@ void TestDUChain::testExternalMemberDeclaration()
   QCOMPARE(top->localDeclarations()[0]->uses().size(), 1);
   // There must be a use for the "A" in "int A::m"
   QCOMPARE(top->localDeclarations()[0]->uses().begin()->size(), 1);
-  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0).castToSimpleRange().textRange(), KTextEditor::Range(1, 4, 1, 5));
+  QCOMPARE(top->localDeclarations()[0]->uses().begin()->at(0).textRange(), KTextEditor::Range(1, 4, 1, 5));
 }
 
 void TestDUChain::testUsingGlobalNamespaceAlias()
