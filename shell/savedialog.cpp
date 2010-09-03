@@ -73,7 +73,8 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
     setButtonGuiItem( Ok, KGuiItem(i18n("Save &Selected"), KIcon("document-save-all"), i18n("Saves all selected files")) );
     setButtonText( User1, i18n("Save &None") );
     setButtonToolTip( User1, i18n("Discard all modifications") );
-    setDefaultButton( Ok );
+    setDefaultButton( Cancel );
+    setButtonFocus( Cancel );
 
     foreach (IDocument* doc, files)
         new DocumentItem( doc, m_listWidget );
