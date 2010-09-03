@@ -12,6 +12,7 @@ set(kdevgit_PART_SRCS
     
     gitclonejob.cpp
     gitplugin.cpp
+    gitjob.cpp
 )
 
 kde4_add_ui_files(kdevgit_PART_SRCS stashmanagerdialog.ui)

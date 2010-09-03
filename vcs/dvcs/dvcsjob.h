@@ -117,8 +117,10 @@ public:
     /**
      * Overloaded operator << for url's, can be used to pass files and
      * makes arguments absolute to the process working directory
+     * 
+     * Override if you need to treat paths beffore adding them as parameters.
      */
-    DVcsJob& operator<<(const KUrl& arg);
+    virtual DVcsJob& operator<<(const KUrl& arg);
     
     /**
      * @see operator<<(const KUrl& arg).
