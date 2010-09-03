@@ -50,8 +50,6 @@ namespace Cpp {
 
 
 void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
-  //We have to use word directly, because it may be a smart-range that is updated during insertions and such
-
   if( completionContext() && completionContext()->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
 
@@ -122,6 +120,8 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
 
   document->replaceText(word, newText);
+  KTextEditor::Cursor end = word.start();
+  end.setColumn(end.column() + newText.length());
   
   bool jumpForbidden = false;
   
@@ -132,22 +132,24 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
       jumpForbidden = true;
       lock.unlock();
-      document->insertText( word.end(), "<>" );
-      document->activeView()->setCursorPosition( word.end() - KTextEditor::Cursor(0, 1) );
+      document->insertText( end, "<>" );
+      end.setColumn(end.column() + 2);
+      document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
       lock.lock();
     }
   }
   
   if(m_declaration.data()->kind() == Declaration::Namespace) {
     lock.unlock();
-    document->insertText(word.end(), "::");
+    document->insertText(end, "::");
+    end.setColumn(end.column() + 2);
     lock.lock();
   }
     
   if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
     //Do some intelligent stuff for functions with the parens:
     lock.unlock();
-    insertFunctionParenText(document, word, m_declaration, jumpForbidden);
+    insertFunctionParenText(document, end, m_declaration, jumpForbidden);
   }
 }
 
