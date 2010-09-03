@@ -48,6 +48,7 @@
 #include <interfaces/iruncontroller.h>
 #include "stashmanagerdialog.h"
 #include <KMessageBox>
+#include "gitjob.h"
 
 K_PLUGIN_FACTORY(KDevGitFactory, registerPlugin<GitPlugin>(); )
 K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1",ki18n("A plugin to support git version control systems"), KAboutData::License_GPL)))
@@ -64,7 +65,7 @@ QDir dotGitDirectory(const KUrl& dirPath)
     
     static const QString gitDir(".git");
     while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
-    
+
     return dir;
 }
 
@@ -272,7 +273,7 @@ VcsJob* GitPlugin::add(const KUrl::List& localLocations, KDevelop::IBasicVersion
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
-    DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
     *job << "git" << "add" << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     return job;
 }
@@ -282,7 +283,7 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
     if (localLocations.empty())
         return errorsFound(i18n("Did not specify the list of files"), OutputJob::Verbose);
 
-    DVcsJob* job = new DVcsJob(urlDir(localLocations), this, OutputJob::Silent);
+    DVcsJob* job = new GitJob(urlDir(localLocations), this, OutputJob::Silent);
     //gits older than 1.7 need --short because there --porcelain doesn't exist
     *job << "git" << "status" << (m_oldVersion ? "--short" : "--porcelain") << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
@@ -296,7 +297,7 @@ VcsJob* GitPlugin::diff(const KUrl& fileOrDirectory, const KDevelop::VcsRevision
 {
     //TODO: control different types
     
-    DVcsJob* job = new DVcsJob(urlDir(fileOrDirectory), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this);
     *job << "git" << "diff" << "--no-prefix";
     QString revstr = revisionInterval(srcRevision, dstRevision);
     if(!revstr.isEmpty())
@@ -313,7 +314,7 @@ VcsJob* GitPlugin::revert(const KUrl::List& localLocations, IBasicVersionControl
     if(localLocations.isEmpty() )
         return errorsFound(i18n("Could not revert changes"), OutputJob::Verbose);
     
-    DVcsJob* job = new DVcsJob(urlDir(localLocations), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
     *job << "git" << "checkout" << "--";
     *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     
@@ -330,7 +331,7 @@ VcsJob* GitPlugin::commit(const QString& message,
     if (localLocations.empty() || message.isEmpty())
         return errorsFound(i18n("No files or message specified"));
 
-    DVcsJob* job = new DVcsJob(dotGitDirectory(localLocations.front()), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
     
     *job << "git" << "commit" << "-m" << message;
     *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
@@ -342,7 +343,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
     if (files.isEmpty())
         return errorsFound(i18n("No files to remove"));
 
-    DVcsJob* job = new DVcsJob(urlDir(files), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(files.front()), this);
     *job << "git" << "rm" << "-r";
     *job << "--" << files;
     return job;
@@ -351,7 +352,7 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this);
     *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw";
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
@@ -361,7 +362,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
 
 VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& rev, unsigned long int limit)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this, KDevelop::OutputJob::Silent);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     *job << "git" << "log" << "--date=raw" << toRevisionName(rev, QString());
     if(limit>0)
         *job << QString("-%1").arg(limit);
@@ -373,7 +374,7 @@ VcsJob* GitPlugin::log(const KUrl& localLocation, const KDevelop::VcsRevision& r
 
 KDevelop::VcsJob* GitPlugin::annotate(const KUrl &localLocation, const KDevelop::VcsRevision&)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this, KDevelop::OutputJob::Silent);
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this, KDevelop::OutputJob::Silent);
     *job << "git" << "blame" << "--porcelain";
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitBlameOutput(KDevelop::DVcsJob*)));
@@ -444,7 +445,7 @@ DVcsJob* GitPlugin::switchBranch(const QString &repository, const QString &branc
     QDir d(repository);
     
     if(hasModifications(d) && KMessageBox::questionYesNo(0, i18n("There are pending changes, do you want to stash them first?"))==KMessageBox::Yes) {
-        QScopedPointer<DVcsJob> stash(gitStash(urlDir(m_urls), QStringList(), KDevelop::OutputJob::Verbose));
+        QScopedPointer<DVcsJob> stash(gitStash(d, QStringList(), KDevelop::OutputJob::Verbose));
         stash->exec();
     }
     
