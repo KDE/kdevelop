@@ -378,6 +378,10 @@ void SourceFormatterSettings::newStyle()
 
 void SourceFormatterSettings::styleNameChanged( QListWidgetItem* item )
 {
+    if ( !item->isSelected() ) {
+        return;
+    }
+
     SourceFormatterLanguage l = languages[ cbLanguages->currentText() ];
     SourceFormatter fmt = l.formatters[ l.selectedFmt ];
 
