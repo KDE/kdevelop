@@ -93,8 +93,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
 
   document->replaceText(word, newText);
+  KTextEditor::Range newRange = word;
+  newRange.end().setColumn(newRange.start().column() + newText.length());
   
-  executed(document, word);
+  executed(document, newRange);
 }
 
 QWidget* NormalDeclarationCompletionItem::createExpandingWidget(const KDevelop::CodeCompletionModel* model) const
