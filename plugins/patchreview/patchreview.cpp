@@ -22,7 +22,6 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <QMenu>
 #include <QFile>
 #include <QTimer>
-#include <QMutexLocker>
 #include <QPersistentModelIndex>
 #include <kfiledialog.h>
 #include <interfaces/idocument.h>
@@ -44,13 +43,13 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <ktexteditor/markinterface.h>
-#include <ktexteditor/smartinterface.h>
+#include <ktexteditor/movinginterface.h>
 #include <interfaces/idocumentcontroller.h>
 #include <kprocess.h>
 #include <interfaces/iuicontroller.h>
 #include <kaboutdata.h>
 
-///@todo Get rid of SmartRanges here!
+///@todo Get rid of MovingRanges here!
 
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
@@ -309,17 +308,15 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                 ICore::self()->documentController()->activateDocument( doc );
                 if ( doc->textDocument() ) {
                   
-                    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc->textDocument() );
-                    Q_ASSERT(smart);
-                    QMutexLocker lock(smart->smartMutex());
-
-                    const QList< KTextEditor::SmartRange* > ranges = m_highlighters[doc->url()]->ranges();
+                    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc->textDocument() );
+                    Q_ASSERT(moving);
+                    const QList< KTextEditor::MovingRange* > ranges = m_highlighters[doc->url()]->ranges();
                     
                     KTextEditor::View * v = doc->textDocument() ->activeView();
                     int bestLine = -1;
                     if ( v ) {
                         KTextEditor::Cursor c = v->cursorPosition();
-                        for ( QList< KTextEditor::SmartRange* >::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
+                        for ( QList< KTextEditor::MovingRange* >::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
                             int line;
                             
                             line = (*it)->start().line();
@@ -333,7 +330,6 @@ void PatchReviewPlugin::seekHunk( bool forwards, const KUrl& fileName ) {
                             }
                         }
                         if ( bestLine != -1 ) {
-                          lock.unlock();
                             v->setCursorPosition( KTextEditor::Cursor( bestLine, 0 ) );
                             return ;
                         }
@@ -664,8 +660,7 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
     m_editPatch.filesList->setCurrentIndex(QModelIndex());
 }
 
-
-void PatchHighlighter::rangeDeleted(KTextEditor::SmartRange* range)
+void PatchHighlighter::rangeInvalid(KTextEditor::MovingRange* range)
 {
     m_ranges.remove(range);
     m_differencesForRanges.remove(range);
@@ -688,10 +683,10 @@ QSize sizeHintForHtml(QString html, QSize maxSize) {
   return ret;
 }
 
-void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::SmartRange* markRange, QPair< int, int > highlightMark)
+void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::MovingRange* markRange, QPair< int, int > highlightMark)
 {
   static QPointer<QWidget> currentTooltip;
-  static KTextEditor::SmartRange* currentTooltipMark;
+  static KTextEditor::MovingRange* currentTooltipMark;
   if(currentTooltipMark == markRange && currentTooltip)
     return;
   delete currentTooltip;
@@ -797,14 +792,13 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
   if(doc->activeView()) ///This is a workaround, if the cursor is somewhere else, the editor will always jump there when a mark was clicked
     doc->activeView()->setCursorPosition(KTextEditor::Cursor(mark.line, 0));
 
-  KTextEditor::SmartRange* range = rangeForMark(mark);
+  KTextEditor::MovingRange* range = rangeForMark(mark);
   
   if(range) {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc );
-    Q_ASSERT(smart);
-    QMutexLocker lock(smart->smartMutex());
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+    Q_ASSERT(moving);
     
-    QStringList currentText = range->text();
+    QString currentText = doc->text(range->toRange());
     Diff2::Difference* diff = m_differencesForRanges[range];
     
     removeLineMarker(range, diff);
@@ -835,28 +829,28 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
       replaceWith = sourceText;
     }
     
-    if(currentText.join("\n").simplified() != replace.simplified()) {
-      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText.join("\n")));
+    if(currentText.simplified() != replace.simplified()) {
+      KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText));
       return;
     }
     
     diff->apply(!diff->applied());
     
-    KTextEditor::Cursor start = range->start();
-    range->document()->replaceText(*range, replaceWith);
-    range->start() = start;
-    range->end() = start;
+    KTextEditor::Cursor start = range->start().toCursor();
+    range->document()->replaceText(range->toRange(), replaceWith);
+    KTextEditor::Range newRange(start, start);
     
     uint replaceWithLines = replaceWith.count('\n');
-    range->end().setLine(range->end().line() +  replaceWithLines);
+    newRange.end().setLine(range->end().line() +  replaceWithLines);
+    range->setRange(newRange);
     
     addLineMarker(range, diff);
   }
 }
 
-KTextEditor::SmartRange* PatchHighlighter::rangeForMark(KTextEditor::Mark mark)
+KTextEditor::MovingRange* PatchHighlighter::rangeForMark(KTextEditor::Mark mark)
 {
-    for(QMap< KTextEditor::SmartRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it) {
+    for(QMap< KTextEditor::MovingRange*, Diff2::Difference* >::const_iterator it = m_differencesForRanges.constBegin(); it != m_differencesForRanges.constEnd(); ++it) {
       if(it.key()->start().line() == mark.line)
       {
         return it.key();
@@ -876,7 +870,7 @@ void PatchHighlighter::markToolTipRequested(KTextEditor::Document* , KTextEditor
   int myMarksPattern = KTextEditor::MarkInterface::markType22 | KTextEditor::MarkInterface::markType23 | KTextEditor::MarkInterface::markType24 | KTextEditor::MarkInterface::markType25 | KTextEditor::MarkInterface::markType26 | KTextEditor::MarkInterface::markType27;
   if(mark.type & myMarksPattern) {
     //There is a mark in this line. Show the old text.
-    KTextEditor::SmartRange* range = rangeForMark(mark);
+    KTextEditor::MovingRange* range = rangeForMark(mark);
     if(range)
         showToolTipForMark(pos, range);
   }
@@ -902,8 +896,8 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
       //The document was loaded / reloaded
     if ( !m_model->differences() )
         return ;
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( doc );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
@@ -938,12 +932,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
     markIface->setMarkDescription(KTextEditor::MarkInterface::markType27, i18n("Change"));
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, KIcon("text-field").pixmap(16, 16));
 
-    QMutexLocker lock(smart->smartMutex());
-
-    KTextEditor::SmartRange* topRange = smart->newSmartRange(doc->documentRange(), 0, KTextEditor::SmartRange::ExpandLeft | KTextEditor::SmartRange::ExpandRight);
-
-    topRange->addWatcher(this);
-    
     for ( Diff2::DifferenceList::const_iterator it = m_model->differences() ->constBegin(); it != m_model->differences() ->constEnd(); ++it ) {
         Diff2::Difference* diff = *it;
         int line, lineCount;
@@ -970,9 +958,9 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
             endC.setLine( doc->lines() );
 
         if ( endC.isValid() && c.isValid() ) {
-            KTextEditor::SmartRange * r = smart->newSmartRange( c, endC );
-            r->setParentRange(topRange);
-            r->addWatcher(this);
+            KTextEditor::MovingRange * r = moving->newMovingRange( KTextEditor::Range(c, endC) );
+            r->setFeedback(this);
+            m_ranges << r;
             
             m_differencesForRanges[r] = *it;
 
@@ -980,9 +968,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
         }
     }
 
-    m_ranges << topRange;
-
-    smart->addHighlightToDocument(topRange);
     }
 }
 
@@ -1004,10 +989,10 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
 
-void PatchHighlighter::removeLineMarker(KTextEditor::SmartRange* range, Diff2::Difference* difference)
+void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* difference)
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( range->document() );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
@@ -1022,18 +1007,16 @@ void PatchHighlighter::removeLineMarker(KTextEditor::SmartRange* range, Diff2::D
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType27);
 }
 
-void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Difference* diff)
+void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* diff)
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( range->document() );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
     if( !markIface )
       return;
     
-    QMutexLocker lock(smart->smartMutex());
-  
     KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
     
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
@@ -1045,7 +1028,8 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
     }
     range->setAttribute( t );
     
-    range->deleteChildRanges();
+    /// TODO: how should this be ported?
+    /// range->deleteChildRanges();
     
     KTextEditor::MarkInterface::MarkTypes mark;
     
@@ -1086,7 +1070,9 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
         {
           if(currentPos != 0 || markers[b]->offset() != string.size())
           {
-            KTextEditor::SmartRange * r2 = smart->newSmartRange( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()), range );
+            KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()) ) );
+            r2->setFeedback(this);
+            m_ranges << r2;
             
             KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
@@ -1101,8 +1087,8 @@ void PatchHighlighter::addLineMarker(KTextEditor::SmartRange* range, Diff2::Diff
 
 void PatchHighlighter::clear()
 {
-    KTextEditor::SmartInterface* smart = dynamic_cast<KTextEditor::SmartInterface*>( m_doc->textDocument() );
-    if ( !smart )
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( m_doc->textDocument() );
+    if ( !moving )
         return;
 
     KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>( m_doc->textDocument() );
@@ -1119,8 +1105,6 @@ void PatchHighlighter::clear()
       markIface->removeMark(line, KTextEditor::MarkInterface::markType27);
     }
     
-    QMutexLocker lock(smart->smartMutex());
-
     while(!m_ranges.isEmpty())
       delete *m_ranges.begin();
 
