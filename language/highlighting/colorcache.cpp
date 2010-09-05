@@ -211,9 +211,11 @@ void ColorCache::updateColorsFromScheme()
   KColorScheme scheme(QPalette::Normal, KColorScheme::View);
 
   QColor foreground = scheme.foreground(KColorScheme::NormalText).color();
+  QColor background = scheme.background(KColorScheme::NormalBackground).color();
 
-  if ( foreground != m_foregroundColor ) {
+  if ( foreground != m_foregroundColor || background != m_backgroundColor ) {
     m_foregroundColor = foreground;
+    m_backgroundColor = background;
     update();
   }
 }
