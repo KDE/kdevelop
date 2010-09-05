@@ -497,6 +497,7 @@ void ContextBrowserPlugin::updateForView(View* view)
       // Highlight a special language object
       highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(specialRange, IndexedString(url)));
       highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute());
+      highlights.highlights.back()->setZDepth(highlightingZDepth);
       if(updateBrowserView)
         updateBrowserView->setSpecialNavigationWidget(language->languageSupport()->specialLanguageObjectNavigationWidget(url, highlightPosition));
     }else{
