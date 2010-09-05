@@ -138,9 +138,7 @@ void VcsEventWidgetPrivate::diffToPrevious()
         if( iface )
         {
             KDevelop::VcsEvent ev = m_logModel->eventForIndex( m_contextIndex );
-            KDevelop::VcsRevision prev;
-            prev.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Previous ),
-                                   KDevelop::VcsRevision::Special );
+            KDevelop::VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
             KDevelop::VcsJob* job = iface->diff( m_url, prev, ev.revision() );
 
             VcsDiffWidget* widget = new VcsDiffWidget( job );
