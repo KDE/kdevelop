@@ -178,9 +178,11 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
 
   #ifdef HAVE_HIGHLIGHTIFACE
   if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
-    foreground = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal)->foreground().color();
-    ///@todo Unfortunately, this does not retrieve the correct background color.
-//      background = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal)->background().color();
+    KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
+    foreground = style->foreground().color();
+    if (style->hasProperty(QTextFormat::BackgroundBrush)) {
+      background = style->background().color();
+    }
 //     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
     //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
     if ( KTextEditor::View* view = m_view.data() ) {
@@ -190,8 +192,10 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
     connect(doc->activeView(), SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
     m_view = doc->activeView();
 
-    if(!background.isValid())
+    if(!background.isValid()) {
+      // fallback for Kate < 4.5.2 where the background was never set in styles returned by defaultStyle()
       background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
+    }
   }
   #endif
 
