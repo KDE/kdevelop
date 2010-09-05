@@ -53,7 +53,7 @@ class IDocument;
 }
 
 ///Delete itself when the document(or textDocument), or Diff-Model is deleted.
-class PatchHighlighter : public QObject, public KTextEditor::MovingRangeFeedback {
+class PatchHighlighter : public QObject {
     Q_OBJECT
 public:
     PatchHighlighter( const Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin ) throw( QString );
@@ -64,6 +64,7 @@ public:
     }
 private slots:
     void documentDestroyed();
+    void aboutToDeleteMovingInterfaceContent(KTextEditor::Document*);
 private:
 
     void addLineMarker(KTextEditor::MovingRange* arg1, Diff2::Difference* arg2);
@@ -71,7 +72,6 @@ private:
   
     KTextEditor::MovingRange* rangeForMark(KTextEditor::Mark mark);
 
-    virtual void rangeInvalid(KTextEditor::MovingRange* range);
     void clear();
     QSet<KTextEditor::MovingRange*> m_ranges;
     QMap<KTextEditor::MovingRange*, Diff2::Difference*> m_differencesForRanges;

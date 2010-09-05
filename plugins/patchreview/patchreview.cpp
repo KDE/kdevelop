@@ -49,8 +49,6 @@ Copyright 2006-2009 David Nolden <david.nolden.kdevelop@art-master.de>
 #include <interfaces/iuicontroller.h>
 #include <kaboutdata.h>
 
-///@todo Get rid of MovingRanges here!
-
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF
 
@@ -73,6 +71,7 @@ std::string*/
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/ipatchexporter.h>
 #include "standardpatchexport.h"
+#include <language/highlighting/colorcache.h>
 
 using namespace KDevelop;
 
@@ -570,7 +569,7 @@ void PatchReviewToolView::kompareModelChanged()
               text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(additionalUrls[file]));
               icon = stateToIcon(additionalUrls[file]);
           } else {
-              text = i18np("%2 (1 hunk)", "%2, (%1 hunks)", cnt, filenameArgument);
+              text = i18np("%2 (1 hunk)", "%2 (%1 hunks)", cnt, filenameArgument);
           }
 
           item->setData( 0, Qt::DisplayRole, text );
@@ -660,10 +659,10 @@ void PatchReviewToolView::documentActivated(IDocument* doc)
     m_editPatch.filesList->setCurrentIndex(QModelIndex());
 }
 
-void PatchHighlighter::rangeInvalid(KTextEditor::MovingRange* range)
+void PatchHighlighter::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* )
 {
-    m_ranges.remove(range);
-    m_differencesForRanges.remove(range);
+    kDebug() << "about to delete";
+    clear();
 }
 
 QSize sizeHintForHtml(QString html, QSize maxSize) {
@@ -683,10 +682,13 @@ QSize sizeHintForHtml(QString html, QSize maxSize) {
   return ret;
 }
 
+namespace {
+  QPointer<QWidget> currentTooltip;
+  KTextEditor::MovingRange* currentTooltipMark;
+}
+
 void PatchHighlighter::showToolTipForMark(QPoint pos, KTextEditor::MovingRange* markRange, QPair< int, int > highlightMark)
 {
-  static QPointer<QWidget> currentTooltip;
-  static KTextEditor::MovingRange* currentTooltipMark;
   if(currentTooltipMark == markRange && currentTooltip)
     return;
   delete currentTooltip;
@@ -841,10 +843,17 @@ void PatchHighlighter::markClicked(KTextEditor::Document* doc, KTextEditor::Mark
     KTextEditor::Range newRange(start, start);
     
     uint replaceWithLines = replaceWith.count('\n');
-    newRange.end().setLine(range->end().line() +  replaceWithLines);
+    newRange.end().setLine(newRange.end().line() +  replaceWithLines);
     range->setRange(newRange);
     
     addLineMarker(range, diff);
+  }
+  
+  {
+    // After applying the change, show the tooltip again, mainly to update an old tooltip
+    delete currentTooltip;
+    bool h = false;
+    markToolTipRequested(doc, mark, QCursor::pos(), h);
   }
 }
 
@@ -959,7 +968,6 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
 
         if ( endC.isValid() && c.isValid() ) {
             KTextEditor::MovingRange * r = moving->newMovingRange( KTextEditor::Range(c, endC) );
-            r->setFeedback(this);
             m_ranges << r;
             
             m_differencesForRanges[r] = *it;
@@ -982,9 +990,9 @@ PatchHighlighter::PatchHighlighter( const Diff2::DiffModel* model, IDocument* kd
     if ( doc->lines() == 0 )
         return ;
 
-    ///This requires the KDE 4.4 development branch from 12.8.2009
     connect(doc, SIGNAL(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)), this, SLOT(markToolTipRequested(KTextEditor::Document*,KTextEditor::Mark,QPoint,bool&)));
     connect(doc, SIGNAL(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)), this, SLOT(markClicked(KTextEditor::Document*,KTextEditor::Mark,bool&)));
+    connect(doc, SIGNAL(aboutToDeleteMovingInterfaceContent (KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)));
     
     textInserted(kdoc->textDocument(), kdoc->textDocument()->documentRange());
 }
@@ -1005,6 +1013,16 @@ void PatchHighlighter::removeLineMarker(KTextEditor::MovingRange* range, Diff2::
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType25);
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType26);
     markIface->removeMark(range->start().line(), KTextEditor::MarkInterface::markType27);
+    
+    // Remove all ranges that are in the same line (the line markers)
+    foreach(KTextEditor::MovingRange* r, m_ranges)
+    {
+      if(r != range && range->contains(r->toRange()))
+      {
+        delete r;
+        m_ranges.remove(r);
+      }
+    }
 }
 
 void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Difference* diff)
@@ -1022,14 +1040,13 @@ void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Dif
     bool isOriginalState = diff->applied() == m_plugin->patch()->isAlreadyApplied();
     
     if(isOriginalState) {
-      t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 0, 255, 255, 20 ) ) );
+      t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 0, 255, 255), 20 ) ) );
     }else{
-      t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 255, 20 ) ) );
+      t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 255), 20 ) ) );
     }
     range->setAttribute( t );
+    range->setZDepth( -500 );
     
-    /// TODO: how should this be ported?
-    /// range->deleteChildRanges();
     
     KTextEditor::MarkInterface::MarkTypes mark;
     
@@ -1071,13 +1088,13 @@ void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Dif
           if(currentPos != 0 || markers[b]->offset() != string.size())
           {
             KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor(a + range->start().line(), currentPos), KTextEditor::Cursor(a + range->start().line(), markers[b]->offset()) ) );
-            r2->setFeedback(this);
             m_ranges << r2;
             
             KSharedPtr<KTextEditor::Attribute> t( new KTextEditor::Attribute() );
 
-            t->setProperty( QTextFormat::BackgroundBrush, QBrush( QColor( 255, 0, 0, 70 ) ) );
+            t->setProperty( QTextFormat::BackgroundBrush, QBrush( ColorCache::self()->blendBackground( QColor( 255, 0, 0), 70 ) ) );
             r2->setAttribute( t );
+            r2->setZDepth( -600 );
           }
         }
         currentPos = markers[b]->offset();
@@ -1087,6 +1104,9 @@ void PatchHighlighter::addLineMarker(KTextEditor::MovingRange* range, Diff2::Dif
 
 void PatchHighlighter::clear()
 {
+    if(m_ranges.empty())
+      return;
+
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>( m_doc->textDocument() );
     if ( !moving )
         return;
@@ -1105,11 +1125,9 @@ void PatchHighlighter::clear()
       markIface->removeMark(line, KTextEditor::MarkInterface::markType27);
     }
     
-    while(!m_ranges.isEmpty())
-      delete *m_ranges.begin();
-
-    Q_ASSERT(m_ranges.isEmpty());
-    Q_ASSERT(m_differencesForRanges.isEmpty());
+    qDeleteAll(m_ranges);
+    m_ranges.clear();
+    m_differencesForRanges.clear();
 }
 
 PatchHighlighter::~PatchHighlighter()
@@ -1122,7 +1140,9 @@ IDocument* PatchHighlighter::doc() {
 }
 
 void PatchHighlighter::documentDestroyed() {
+    kDebug() << "document destroyed";
     m_ranges.clear();
+    m_differencesForRanges.clear();
 }
 
 void PatchReviewPlugin::removeHighlighting( const KUrl& file ) {
