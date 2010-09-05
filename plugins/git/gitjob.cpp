@@ -24,18 +24,5 @@
 #include <kdebug.h>
 
 GitJob::GitJob(const QDir& workingDir, KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
-    : DVcsJob(workingDir, parent, verbosity), m_baseDir(workingDir.absolutePath())
-{
-    m_baseDir.adjustPath(KUrl::AddTrailingSlash);
-}
-
-KDevelop::DVcsJob& GitJob::operator<<(const KUrl& url)
-{
-    QString res = KUrl::relativeUrl(m_baseDir, url);
-    if(res == "./")
-        res = '.';
-    kDebug() << "old url" << url << "relative:" << res << "base dir:" << m_baseDir;
-    
-    return DVcsJob::operator<<(res);
-}
-
+    : DVcsJob(workingDir, parent, verbosity)
+{}
