@@ -371,22 +371,20 @@ void VcsPluginHelper::commit()
     if(correctDiff)
         diff = diffJob->fetchResults().value<VcsDiff>();
     
-    if(!correctDiff) {
+    if(!correctDiff)
         KMessageBox::error(0, i18n("Could not create a patch for the current version."));
-    } else if(diff.isEmpty()) {
-        KMessageBox::information(0, i18n("Could not find any modifications to commit."));
+
+    // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
+    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs, retrieveOldCommitMessages());
+    
+    bool ret = showVcsDiff(patchSource);
+    
+    Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
+    if(ret) {
+        connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
+        connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
     } else {
-        VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(diff, changes, d->vcs, retrieveOldCommitMessages());
-        
-        bool ret = showVcsDiff(patchSource);
-        
-        Q_ASSERT(ret && "Make sure PatchReview plugin is installed correctly");
-        if(ret) {
-            connect(patchSource, SIGNAL(reviewFinished(QString,QList<KUrl>)), this, SLOT(executeCommit(QString,QList<KUrl>)));
-            connect(patchSource, SIGNAL(reviewCancelled(QString)), this, SLOT(commitReviewCancelled(QString)));
-        } else {
-            delete patchSource;
-        }
+        delete patchSource;
     }
 }
 
