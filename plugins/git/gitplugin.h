@@ -160,6 +160,7 @@ private slots:
     void parseGitDiffOutput(KDevelop::DVcsJob* job);
     void parseGitRepoLocationOutput(KDevelop::DVcsJob* job);
     void parseGitStatusOutput(KDevelop::DVcsJob* job);
+    void parseGitStatusOutput_old(KDevelop::DVcsJob* job);
     void parseGitVersionOutput(KDevelop::DVcsJob* job);
     
     void ctxPushStash();

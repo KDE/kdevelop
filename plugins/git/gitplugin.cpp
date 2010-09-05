@@ -285,10 +285,15 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
 
     DVcsJob* job = new GitJob(urlDir(localLocations), this, OutputJob::Silent);
     
-    *job << "git" << "status" << "--porcelain" << "--";
-    *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    if(m_oldVersion) {
+        *job << "git" << "ls-files" << "-t" << "-m" << "-c" << "-o" << "-d" << "-k" << "--directory";
+        connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput_old(KDevelop::DVcsJob*)));
+    } else {
+        *job << "git" << "status" << "--porcelain";
+        connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
+    }
+    *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -836,21 +841,50 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
     job->setResults(qVariantFromValue(diff));
 }
 
-// static VcsStatusInfo::State lsfilesToState(char id)
-// {
-//     switch(id) {
-//         case 'H': return VcsStatusInfo::ItemUpToDate; //Cached
-//         case 'S': return VcsStatusInfo::ItemUpToDate; //Skip work tree
-//         case 'M': return VcsStatusInfo::ItemHasConflicts; //unmerged
-//         case 'R': return VcsStatusInfo::ItemDeleted; //removed/deleted
-//         case 'C': return VcsStatusInfo::ItemModified; //modified/changed
-//         case 'K': return VcsStatusInfo::ItemDeleted; //to be killed
-//         case '?': return VcsStatusInfo::ItemUnknown; //other
-//     }
-//     Q_ASSERT(false);
-//     return VcsStatusInfo::ItemUnknown;
-// }
-  
+static VcsStatusInfo::State lsfilesToState(char id)
+{
+    switch(id) {
+        case 'H': return VcsStatusInfo::ItemUpToDate; //Cached
+        case 'S': return VcsStatusInfo::ItemUpToDate; //Skip work tree
+        case 'M': return VcsStatusInfo::ItemHasConflicts; //unmerged
+        case 'R': return VcsStatusInfo::ItemDeleted; //removed/deleted
+        case 'C': return VcsStatusInfo::ItemModified; //modified/changed
+        case 'K': return VcsStatusInfo::ItemDeleted; //to be killed
+        case '?': return VcsStatusInfo::ItemUnknown; //other
+    }
+    Q_ASSERT(false);
+    return VcsStatusInfo::ItemUnknown;
+}
+
+void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
+{
+    QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+    
+    KUrl d = job->directory().absolutePath();
+    QMap<KUrl, VcsStatusInfo::State> allStatus;
+    foreach(const QString& line, outputLines) {
+        VcsStatusInfo::State status = lsfilesToState(line[0].toAscii());
+        
+        KUrl url = d;
+        url.addPath(line.right(line.size()-2));
+        
+        allStatus[url] = status;
+    }
+    
+    QVariantList statuses;
+    QMap< KUrl, VcsStatusInfo::State >::const_iterator it = allStatus.constBegin(), itEnd=allStatus.constEnd();
+    for(; it!=itEnd; ++it) {
+        
+        VcsStatusInfo status;
+        status.setUrl(it.key());
+        status.setState(it.value());
+        
+        statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+    }
+    
+    job->setResults(statuses);
+}
+
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
