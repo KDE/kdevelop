@@ -94,6 +94,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     ///no expanding information, no type-information, etc.
     bool fullCompletion() const;
     
+    virtual MatchReaction matchingItem(const QModelIndex& matched);
+    
     virtual QString filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position);
     
     void clear();
