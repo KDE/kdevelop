@@ -27,7 +27,6 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/use.h>
-#include <language/duchain/smartconverter.h>
 #include <util/pushvalue.h>
 
 #include "parsesession.h"
