@@ -172,12 +172,15 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
   }
 
   QColor foreground(QColor::Invalid);
+  QColor background(QColor::Invalid);
 
   // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
 
   #ifdef HAVE_HIGHLIGHTIFACE
   if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
     foreground = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal)->foreground().color();
+    ///@todo Unfortunately, this does not retrieve the correct background color.
+//      background = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal)->background().color();
 //     kDebug() << "got foreground:" << foreground.name() << "old is:" << m_foregroundColor.name();
     //NOTE: this slot is defined in KatePart > 4.4, see ApiDocs of the ConfigInterface
     if ( KTextEditor::View* view = m_view.data() ) {
@@ -186,14 +189,19 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
     }
     connect(doc->activeView(), SIGNAL(configChanged()), this, SLOT(slotViewSettingsChanged()));
     m_view = doc->activeView();
+
+    if(!background.isValid())
+      background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
   }
   #endif
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant
     updateColorsFromScheme();
-  } else if ( m_foregroundColor != foreground ) {
+  } else if ( m_foregroundColor != foreground || m_backgroundColor != background ) {
     m_foregroundColor = foreground;
+    m_backgroundColor = background;
+
     update();
   }
 }
@@ -265,6 +273,16 @@ QColor ColorCache::blend(QColor color, uchar ratio) const
   }
   // adapt contrast
   return KColorUtils::mix( m_foregroundColor, color, float(ratio) / float(0xff) );
+}
+
+QColor ColorCache::blendBackground(QColor color, uchar ratio) const
+{
+/*  if ( KColorUtils::luma(m_backgroundColor) >= 0.5 ) {
+    // for dark color schemes, produce a fitting color first
+    color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
+  }*/
+  // adapt contrast
+  return KColorUtils::mix( m_backgroundColor, color, float(ratio) / float(0xff) );
 }
 
 QColor ColorCache::blendGlobalColor(QColor color) const
