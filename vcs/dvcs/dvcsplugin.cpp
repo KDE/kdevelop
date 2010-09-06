@@ -122,9 +122,9 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
 
     QMenu * menu = d->m_common->commonActions();
     menu->addSeparator();    
-    menu->addAction(KIcon("arrow-up-double"), i18n("Push..."), this, SLOT(ctxPush()));
-    menu->addAction(KIcon("arrow-down-double"), i18n("Pull..."), this, SLOT(ctxPull()));
-    menu->addAction(i18n("Branch Manager"), this, SLOT(ctxBranchManager()));
+    menu->addAction(KIcon("arrow-up-double"), i18n("Push"), this, SLOT(ctxPush()));
+    menu->addAction(KIcon("arrow-down-double"), i18n("Pull"), this, SLOT(ctxPull()));
+    menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()));
     menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()));
     additionalMenuEntries(menu, ctxUrlList);
 
