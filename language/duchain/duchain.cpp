@@ -276,11 +276,13 @@ class DUChainPrivate
     private:
       void run() {
         while(1) {
-          m_waitMutex.lock();
-          if(m_stopRunning)
-            break;
-          m_wait.wait(&m_waitMutex, 1000 * cleanupEverySeconds);
-          m_waitMutex.unlock();
+          for(uint s = 0; s < cleanupEverySeconds; ++s) {
+            if(m_stopRunning)
+              break;
+            m_waitMutex.lock();
+            m_wait.wait(&m_waitMutex, 1000);
+            m_waitMutex.unlock();
+          }
           if(m_stopRunning)
             break;
 

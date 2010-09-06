@@ -276,6 +276,11 @@ void CodeCompletionModel::foundDeclarations(QList<KSharedPtr<CompletionTreeEleme
   }*/
 }
 
+CodeCompletionModelControllerInterface3::MatchReaction CodeCompletionModel::matchingItem(const QModelIndex& matched)
+{
+    return None;
+}
+
 void CodeCompletionModel::setCompletionContext(KSharedPtr<CodeCompletionContext> completionContext)
 {
   QMutexLocker lock(m_mutex);

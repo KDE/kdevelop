@@ -79,7 +79,9 @@ void KDevelop::ForegroundLock::relock()
             QMutexLocker lockFinish(&finishMutex);
             
             QMetaObject::invokeMethod(&releaser, "doInternalSlot", Qt::QueuedConnection);
-            condition.wait(&waitMutex);
+            // We limit the waiting time here, because sometimes it may happen that the foreground-lock is released,
+            // and the foreground is waiting without an event-loop running. (For example through TemporarilyReleaseForegroundLock)
+            condition.wait(&waitMutex, 30);
             
             if(mutex.tryLock())
             {
