@@ -61,6 +61,7 @@
 
 // #define ifDebug(x) x
 #include "cpputils.h"
+#include <rpp/pp-location.h>
 
 const uint maxIncludeDepth = 50;
 
@@ -240,6 +241,9 @@ void PreprocessJob::run()
     if(Cpp::EnvironmentManager::self()->matchingLevel() <= Cpp::EnvironmentManager::Naive && !m_headerSectionEnded && !m_firstEnvironmentFile->headerGuard().isEmpty()) {
       if(macroNamesAtBeginning.contains(m_firstEnvironmentFile->headerGuard())) {
         //Remove the header-guard, and re-preprocess, since we don't do real environment-management(We don't allow empty versions)
+        // We also have to clear the location-table here, because it already contains 'wrong' contents from the previous preprocessing
+        kDebug() << "Re-processing header with the header-guard disabled";
+        delete m_currentEnvironment->takeLocationTable();
         m_currentEnvironment->removeMacro(m_firstEnvironmentFile->headerGuard());
         result = preprocessor.processFile(parentJob()->document().str(), m_contents);
       }
