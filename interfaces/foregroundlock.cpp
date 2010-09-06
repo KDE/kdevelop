@@ -141,6 +141,7 @@ TemporarilyReleaseForegroundLock::~TemporarilyReleaseForegroundLock()
 {
     for(int a = 0; a < m_recursion; ++a)
         mutex.lock();
+    Q_ASSERT(recursion == 0 && holderThread == 0);
     recursion = m_recursion;
     holderThread = QThread::currentThreadId();
 }
