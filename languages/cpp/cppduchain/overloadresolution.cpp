@@ -375,7 +375,7 @@ AbstractType::Ptr getContainerType(AbstractType::Ptr type, int depth, TopDUConte
       return AbstractType::Ptr();
 
     Declaration* decl = idType->declaration(topContext);
-    if(!decl)
+    if(!decl || !decl->context())
       return AbstractType::Ptr();
 
     Declaration* containerDecl = decl->context()->owner();
