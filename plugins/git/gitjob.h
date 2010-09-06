@@ -30,10 +30,6 @@ class GitJob : public KDevelop::DVcsJob
     public:
         GitJob(const QDir& workingDir, KDevelop::IPlugin* parent = 0, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose);
         
-        ///Make paths relative to the current directory
-        virtual KDevelop::DVcsJob& operator<<(const KUrl& arg);
-    private:
-        KUrl m_baseDir;
 };
 
 #endif // GITJOB_H

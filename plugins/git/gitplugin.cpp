@@ -98,7 +98,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
                 case VcsRevision::Head:
                     return "^HEAD";
                 case VcsRevision::Base:
-                    return "HEAD";
+                    return "";
                 case VcsRevision::Working:
                     return "";
                 case VcsRevision::Previous:
@@ -124,15 +124,25 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
 QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit)
 {
     QString ret;
-    QString srcRevisionName = toRevisionName(rev);
-    if(limit.revisionType()==VcsRevision::Special &&
-                limit.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the begining just put the revisionInterval
-        return ret = srcRevisionName;
-    else if(rev.revisionType()==VcsRevision::Special)
-        ret = toRevisionName(limit, srcRevisionName);
-    else
-        ret = toRevisionName(limit, srcRevisionName)+".." +srcRevisionName;
+//     qDebug() << "prrrrrrrrrr" << toRevisionName(rev, "xxx") << toRevisionName(limit, "yyy");
     
+    if(rev.revisionType()==VcsRevision::Special &&
+                rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the begining just put the revisionInterval
+        ret = toRevisionName(limit, QString());
+    else {
+        QString dst = toRevisionName(limit);
+        if(dst.isEmpty())
+            ret = dst;
+        else {
+            QString src = toRevisionName(rev, dst);
+            if(src.isEmpty())
+                ret = src;
+            else
+                ret = src+".."+dst;
+        }
+    }
+    
+//     qDebug() << "=======>" << ret;
     return ret;
 }
 
@@ -285,10 +295,15 @@ KDevelop::VcsJob* GitPlugin::status(const KUrl::List& localLocations, KDevelop::
 
     DVcsJob* job = new GitJob(urlDir(localLocations), this, OutputJob::Silent);
     
-    *job << "git" << "status" << "--porcelain" << "--";
-    *job << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    if(m_oldVersion) {
+        *job << "git" << "ls-files" << "-t" << "-m" << "-c" << "-o" << "-d" << "-k" << "--directory";
+        connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput_old(KDevelop::DVcsJob*)));
+    } else {
+        *job << "git" << "status" << "--porcelain";
+        connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
+    }
+    *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
 
-    connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), SLOT(parseGitStatusOutput(KDevelop::DVcsJob*)));
     return job;
 }
 
@@ -353,7 +368,10 @@ VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
     DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this);
-    *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw";
+    *job << "git" << "log" << "--date=raw";
+    QString rev = revisionInterval(dst, src);
+    if(!rev.isEmpty())
+        *job << rev;
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
     return job;
@@ -836,21 +854,50 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
     job->setResults(qVariantFromValue(diff));
 }
 
-// static VcsStatusInfo::State lsfilesToState(char id)
-// {
-//     switch(id) {
-//         case 'H': return VcsStatusInfo::ItemUpToDate; //Cached
-//         case 'S': return VcsStatusInfo::ItemUpToDate; //Skip work tree
-//         case 'M': return VcsStatusInfo::ItemHasConflicts; //unmerged
-//         case 'R': return VcsStatusInfo::ItemDeleted; //removed/deleted
-//         case 'C': return VcsStatusInfo::ItemModified; //modified/changed
-//         case 'K': return VcsStatusInfo::ItemDeleted; //to be killed
-//         case '?': return VcsStatusInfo::ItemUnknown; //other
-//     }
-//     Q_ASSERT(false);
-//     return VcsStatusInfo::ItemUnknown;
-// }
-  
+static VcsStatusInfo::State lsfilesToState(char id)
+{
+    switch(id) {
+        case 'H': return VcsStatusInfo::ItemUpToDate; //Cached
+        case 'S': return VcsStatusInfo::ItemUpToDate; //Skip work tree
+        case 'M': return VcsStatusInfo::ItemHasConflicts; //unmerged
+        case 'R': return VcsStatusInfo::ItemDeleted; //removed/deleted
+        case 'C': return VcsStatusInfo::ItemModified; //modified/changed
+        case 'K': return VcsStatusInfo::ItemDeleted; //to be killed
+        case '?': return VcsStatusInfo::ItemUnknown; //other
+    }
+    Q_ASSERT(false);
+    return VcsStatusInfo::ItemUnknown;
+}
+
+void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
+{
+    QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+    
+    KUrl d = job->directory().absolutePath();
+    QMap<KUrl, VcsStatusInfo::State> allStatus;
+    foreach(const QString& line, outputLines) {
+        VcsStatusInfo::State status = lsfilesToState(line[0].toAscii());
+        
+        KUrl url = d;
+        url.addPath(line.right(line.size()-2));
+        
+        allStatus[url] = status;
+    }
+    
+    QVariantList statuses;
+    QMap< KUrl, VcsStatusInfo::State >::const_iterator it = allStatus.constBegin(), itEnd=allStatus.constEnd();
+    for(; it!=itEnd; ++it) {
+        
+        VcsStatusInfo status;
+        status.setUrl(it.key());
+        status.setState(it.value());
+        
+        statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+    }
+    
+    job->setResults(statuses);
+}
+
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);

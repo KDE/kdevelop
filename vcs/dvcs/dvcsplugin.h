@@ -115,9 +115,7 @@ public Q_SLOTS:
     void ctxPush();
     void ctxPull();
     void ctxBranchManager();
-#if 0
     void ctxRevHistory();
-#endif
 
     // slots for menu
     void slotInit();
