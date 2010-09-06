@@ -15,7 +15,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
-#include "imakebuilder.h"
+#include <project/interfaces/iprojectbuilder.h>
 #include <kpluginfactory.h>
 #include <kaboutdata.h>
 #include <kpluginloader.h>
@@ -42,7 +42,7 @@ class CustomMakeManager::Private
 public:
     Private() : m_builder(0) {}
 
-    IMakeBuilder *m_builder;
+    KDevelop::IProjectBuilder *m_builder;
 
 //     QList< KDevelop::ProjectBaseItem* > m_testItems; // for debug
 };
@@ -60,7 +60,7 @@ CustomMakeManager::CustomMakeManager( QObject *parent, const QVariantList& args 
     // TODO use CustomMakeBuilder
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IMakeBuilder" );
     Q_ASSERT(i);
-    d->m_builder = i->extension<IMakeBuilder>();
+    d->m_builder = i->extension<IProjectBuilder>();
     Q_ASSERT(d->m_builder);
 }
 

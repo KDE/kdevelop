@@ -22,17 +22,16 @@
 #define CMAKEBUILDER_H
 
 #include <interfaces/iplugin.h>
-#include "icmakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QVariant>
 #include <QtCore/QPair>
 #include <QtCore/QSet>
 #include <KUrl>
+#include <project/interfaces/iprojectbuilder.h>
 
 class QStringList;
 class QSignalMapper;
 class KDialog;
-class IMakeBuilder;
 namespace KDevelop{
     class ProjectBaseItem;
     class CommandExecutor;
@@ -42,10 +41,9 @@ namespace KDevelop{
 /**
  * @author Aleix Pol
 */
-class CMakeBuilder : public KDevelop::IPlugin, public ICMakeBuilder
+class CMakeBuilder : public KDevelop::IPlugin, public KDevelop::IProjectBuilder
 {
     Q_OBJECT
-    Q_INTERFACES( ICMakeBuilder )
     Q_INTERFACES( KDevelop::IProjectBuilder )
 
 public:
@@ -71,7 +69,7 @@ Q_SIGNALS:
 
 private:
     bool m_dirty;
-    IMakeBuilder* m_builder;
+    KDevelop::IProjectBuilder* m_builder;
     QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
 };
 
