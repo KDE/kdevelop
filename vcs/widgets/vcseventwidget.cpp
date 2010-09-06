@@ -85,6 +85,7 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
 
     action = menu.addAction(i18n("Diff between revisions"));
     QObject::connect( action, SIGNAL(triggered(bool)), q, SLOT(diffRevisions()) );
+    action->setEnabled(m_ui->eventView->selectionModel()->selectedRows().size()>=2);
 
     menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
 }
