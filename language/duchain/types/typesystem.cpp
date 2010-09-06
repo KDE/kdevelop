@@ -133,6 +133,7 @@ ConstantIntegralTypeData::ConstantIntegralTypeData()
 }
 
 ArrayTypeData::ArrayTypeData()
+  : m_dimension(0)
 {
 }
 
