@@ -54,6 +54,8 @@ K_EXPORT_PLUGIN(KDevGitFactory(KAboutData("kdevgit","kdevgit",ki18n("Git"),"0.1"
 
 using namespace KDevelop;
 
+typedef DVcsJob GitJob;
+
 namespace
 {
     
