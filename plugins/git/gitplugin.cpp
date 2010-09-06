@@ -97,7 +97,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
                 case VcsRevision::Head:
                     return "^HEAD";
                 case VcsRevision::Base:
-                    return "HEAD";
+                    return "";
                 case VcsRevision::Working:
                     return "";
                 case VcsRevision::Previous:
@@ -123,15 +123,17 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision
 QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRevision& limit)
 {
     QString ret;
-    QString srcRevisionName = toRevisionName(rev);
-    if(limit.revisionType()==VcsRevision::Special &&
-                limit.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the begining just put the revisionInterval
-        return ret = srcRevisionName;
-    else if(rev.revisionType()==VcsRevision::Special)
-        ret = toRevisionName(limit, srcRevisionName);
-    else
-        ret = toRevisionName(limit, srcRevisionName)+".." +srcRevisionName;
+//     qDebug() << "prrrrrrrrrr" << toRevisionName(rev, "xxx") << toRevisionName(limit, "yyy");
     
+    if(rev.revisionType()==VcsRevision::Special &&
+                rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Start) //if we want it to the begining just put the revisionInterval
+        ret = toRevisionName(limit, QString());
+    else {
+        QString dstRevisionName = toRevisionName(limit);
+        ret = toRevisionName(rev, dstRevisionName)+".."+dstRevisionName;
+    }
+    
+//     qDebug() << "=======>" << ret;
     return ret;
 }
 
@@ -350,8 +352,11 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 VcsJob* GitPlugin::log(const KUrl& localLocation,
                 const KDevelop::VcsRevision& src, const KDevelop::VcsRevision& dst)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
-    *job << "git" << "log" << revisionInterval(src, dst) << "--date=raw";
+    DVcsJob* job = new GitJob(dotGitDirectory(localLocation), this);
+    *job << "git" << "log" << "--date=raw";
+    QString rev = revisionInterval(dst, src);
+    if(!rev.isEmpty())
+        *job << rev;
     *job << "--" << localLocation;
     connect(job, SIGNAL(readyForParsing(KDevelop::DVcsJob*)), this, SLOT(parseGitLogOutput(KDevelop::DVcsJob*)));
     return job;
