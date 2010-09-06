@@ -31,7 +31,6 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folde
                                   CMakeFolderItem* item)
     : KDevelop::ProjectBuildFolderItem( project, folder, item ), m_formerParent(item), m_buildDir(build)
 {
-    setEnabled(QDir(url().toLocalFile()).exists());
 }
 
 QStringList CMakeFolderItem::includeDirectories() const
@@ -45,17 +44,6 @@ QStringList CMakeFolderItem::includeDirectories() const
         folder = folder->formerParent();
     }
     return urls;
-}
-
-void CMakeFolderItem::setEnabled(bool enabled)
-{
-    if(enabled != (flags() & Qt::ItemIsEnabled)) {
-        if(enabled)
-            setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-        else
-            setFlags(Qt::ItemIsSelectable);
-        
-    }
 }
 
 KUrl CMakeExecutableTargetItem::builtUrl() const
@@ -114,7 +102,8 @@ void CMakeFolderItem::cleanupBuildFolders(const QList< Subdirectory >& subs)
 {
     QList<KDevelop::ProjectFolderItem*> folders = folderList();
     foreach(KDevelop::ProjectFolderItem* folder, folders) {
-        if(folder->type()==ProjectBaseItem::BuildFolder && !textInList<Subdirectory>(subs, folder))
+        CMakeFolderItem* cmfolder = dynamic_cast<CMakeFolderItem*>(folder);
+        if(cmfolder && cmfolder->formerParent()==this && !textInList<Subdirectory>(subs, folder))
             delete folder;
     }
 }

@@ -350,8 +350,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     m_watchers[item->project()]->addDir(item->url().toLocalFile());
     if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder)
     {
-        reloadFiles(folder);
-        
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
         cmakeListsPath.addPath("CMakeLists.txt");
@@ -454,7 +452,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 path.adjustPath(KUrl::AddTrailingSlash);
 
                 kDebug(9042) << "Found subdir " << path << "which should be into" << subroot;
-                if(subroot.isParentOf(path) || path.isParentOf(subroot))
+                if((subroot.isParentOf(path) || path.isParentOf(subroot)) && QFileInfo(path.toLocalFile()).isDir())
                 {
                     alreadyAdded.append(subf.name);
                     CMakeFolderItem* parent=folder;
@@ -585,6 +583,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 
                 setTargetFiles(targetItem, tfiles);
             }
+            reloadFiles(folder);
         }
     }
 
@@ -702,6 +701,9 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
+    if(isReloading(folder->project()))
+        return false;
+    
     CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
     if ( !item ) {
         ProjectBaseItem* it = folder;
@@ -717,8 +719,6 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 
 void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 {
-    Q_ASSERT(!isReloading(fi->project()));
-    
     KJob *job=createImportJob(fi);
     job->setProperty("projectitem", qVariantFromValue(fi));
     

@@ -2172,7 +2172,6 @@ bool ListAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         case RemoveItem: {
             if(func.arguments.count()<3)
                 return false;
-            int i=0;
             addOutputArgument(func.arguments[1]);
             
             QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+2, itEnd=func.arguments.constEnd();
