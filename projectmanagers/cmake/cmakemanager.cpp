@@ -705,6 +705,9 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
 
 bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 {
+    if(isReloading(folder->project()))
+        return false;
+    
     CMakeFolderItem* item=dynamic_cast<CMakeFolderItem*>(folder);
     if ( !item ) {
         ProjectBaseItem* it = folder;
@@ -720,8 +723,6 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 
 void CMakeManager::reimport(KDevelop::ProjectFolderItem* fi)
 {
-    Q_ASSERT(!isReloading(fi->project()));
-    
     KJob *job=createImportJob(fi);
     job->setProperty("projectitem", qVariantFromValue(fi));
     
