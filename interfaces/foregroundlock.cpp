@@ -26,14 +26,43 @@ using namespace KDevelop;
 
 namespace {
 QMutex mutex(QMutex::Recursive);
-
 QMutex tryLockMutex;
 QMutex waitMutex;
 QMutex finishMutex;
 QWaitCondition condition;
 
-Qt::HANDLE holderThread = 0;
-int recursion = 0;
+volatile Qt::HANDLE holderThread = 0;
+volatile int recursion = 0;
+
+void lockForegroundMutexInternal() {
+    mutex.lock();
+    if(recursion > 0)
+        Q_ASSERT(holderThread == QThread::currentThreadId());
+    else
+        Q_ASSERT(holderThread == 0);
+    holderThread = QThread::currentThreadId();
+    recursion += 1;
+}
+
+bool tryLockForegroundMutexInternal(int interval = 0) {
+    if(mutex.tryLock(interval))
+    {
+        lockForegroundMutexInternal();
+        mutex.unlock(); // We've acquired one lock more than required, so unlock again
+        return true;
+    }else{
+        return false;
+    }
+}
+
+void unlockForegroundMutexInternal() {
+    Q_ASSERT(holderThread == QThread::currentThreadId());
+    Q_ASSERT(recursion > 0);
+    recursion -= 1;
+    if(recursion == 0)
+        holderThread = 0;
+    mutex.unlock();
+}
 }
 
 ForegroundLock::ForegroundLock(bool lock) : m_locked(false)
@@ -48,11 +77,11 @@ void KDevelop::ForegroundLock::relock()
     
     if(!QApplication::instance() || QThread::currentThread() == QApplication::instance()->thread())
     {
-        mutex.lock();
+        lockForegroundMutexInternal();
     }else{
         QMutexLocker lock(&tryLockMutex);
         
-        while(!mutex.tryLock(10))
+        while(!tryLockForegroundMutexInternal(10))
         {
             // In case an additional event-loop was started from within the foreground, we send
             // events to the foreground to temporarily release the lock.
@@ -83,7 +112,7 @@ void KDevelop::ForegroundLock::relock()
             // and the foreground is waiting without an event-loop running. (For example through TemporarilyReleaseForegroundLock)
             condition.wait(&waitMutex, 30);
             
-            if(mutex.tryLock())
+            if(tryLockForegroundMutexInternal())
             {
                 //success
                 break;
@@ -94,8 +123,8 @@ void KDevelop::ForegroundLock::relock()
         }
     }
     m_locked = true;
-    holderThread = QThread::currentThreadId();
-    ++recursion;
+    Q_ASSERT(holderThread == QThread::currentThreadId());
+    Q_ASSERT(recursion > 0);
 }
 
 bool KDevelop::ForegroundLock::isLockedForThread()
@@ -105,11 +134,9 @@ bool KDevelop::ForegroundLock::isLockedForThread()
 
 bool KDevelop::ForegroundLock::tryLock()
 {
-    if(mutex.tryLock())
+    if(tryLockForegroundMutexInternal())
     {
-        ++recursion;
         m_locked = true;
-        holderThread = QThread::currentThreadId();
         return true;
     }
     return false;
@@ -117,33 +144,29 @@ bool KDevelop::ForegroundLock::tryLock()
 
 void KDevelop::ForegroundLock::unlock()
 {
-    Q_ASSERT(holderThread == QThread::currentThreadId());
-    --recursion;
-    if(recursion == 0)
-        holderThread = 0;
-    mutex.unlock();
+    Q_ASSERT(m_locked);
+    unlockForegroundMutexInternal();
     m_locked = false;
 }
 
 TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
 {
     Q_ASSERT(holderThread == QThread::currentThreadId());
-    m_recursion = recursion;
     
-    // Release all recursive locks
-    recursion = 0;
-    holderThread = 0;
-    for(int a = 0; a < m_recursion; ++a)
-        mutex.unlock();
+    m_recursion = 0;
+    
+    while(holderThread == QThread::currentThreadId())
+    {
+        unlockForegroundMutexInternal();
+        ++m_recursion;
+    }
 }
 
 TemporarilyReleaseForegroundLock::~TemporarilyReleaseForegroundLock()
 {
     for(int a = 0; a < m_recursion; ++a)
-        mutex.lock();
-    Q_ASSERT(recursion == 0 && holderThread == 0);
-    recursion = m_recursion;
-    holderThread = QThread::currentThreadId();
+        lockForegroundMutexInternal();
+    Q_ASSERT(recursion == m_recursion && holderThread == QThread::currentThreadId());
 }
 
 KDevelop::ForegroundLock::~ForegroundLock()
