@@ -83,6 +83,6 @@ X-KDE-Library=kdevmakebuilder
 X-KDE-PluginInfo-Name=KDevMakeBuilder
 X-KDevelop-Version=10
 X-KDevelop-Category=Project
-X-KDevelop-Interfaces=org.kdevelop.IMakeBuilder
+X-KDevelop-Interfaces=org.kdevelop.IProjectBuilder,org.kdevelop.IMakeBuilder
 X-KDevelop-IRequired=org.kdevelop.IOutputView
 X-KDevelop-Mode=NoGUI

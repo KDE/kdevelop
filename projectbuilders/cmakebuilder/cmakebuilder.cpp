@@ -19,7 +19,6 @@
  */
 
 #include "cmakebuilder.h"
-#include "imakebuilder.h"
 
 #include <config.h>
 
@@ -35,6 +34,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectbuilder.h>
 #include <outputview/ioutputview.h>
 #include <outputview/outputmodel.h>
 #include <util/commandexecutor.h>
@@ -74,7 +74,7 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )
     {
-        m_builder = i->extension<IMakeBuilder>();
+        m_builder = i->extension<KDevelop::IProjectBuilder>();
         if( m_builder )
         {
             connect(i, SIGNAL(built(KDevelop::ProjectBaseItem*)), this, SLOT(buildFinished(KDevelop::ProjectBaseItem*)));
