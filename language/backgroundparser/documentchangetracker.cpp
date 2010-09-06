@@ -280,11 +280,6 @@ KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDeve
     
     if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
     {
-        if(fromRevision == -1)
-          fromRevision = m_moving->revision();
-        if(toRevision == -1)
-          toRevision = m_moving->revision();
-
         m_moving->transformCursor(range.start.line, range.start.column, KTextEditor::MovingCursor::MoveOnInsert, fromRevision, toRevision);
         m_moving->transformCursor(range.end.line, range.end.column, KTextEditor::MovingCursor::StayOnInsert, fromRevision, toRevision);
     }
@@ -298,11 +293,6 @@ KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDev
     
     if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
     {
-        if(fromRevision == -1)
-          fromRevision = m_moving->revision();
-        if(toRevision == -1)
-          toRevision = m_moving->revision();
-
         m_moving->transformCursor(cursor.line, cursor.column, behavior, fromRevision, toRevision);
     }
     
