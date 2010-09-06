@@ -503,10 +503,10 @@ QString GitPlugin::curBranch(const QString &repository)
     QScopedPointer<DVcsJob> job(new DVcsJob(QDir(repository), this, OutputJob::Silent));
     *job << "git" << "symbolic-ref" << "HEAD";
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
-        QString out = job->output();
-        int slashPos = out.lastIndexOf('/')+1;
-        kDebug() << "Getting branch list" << out.mid(slashPos, out.size()-slashPos).trimmed();
-        return out.mid(slashPos, out.size()-slashPos).trimmed();
+        QString out = job->output().trimmed();
+        
+        kDebug() << "Getting branch list" << out.right(out.size()-11);
+        return out.right(out.size()-11);
     }
     return QString();
 }
