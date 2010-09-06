@@ -59,7 +59,6 @@ namespace KDevelop
 }
 
 class CMakeFolderItem;
-class ICMakeBuilder;
 
 class CMakeManager
     : public KDevelop::IPlugin

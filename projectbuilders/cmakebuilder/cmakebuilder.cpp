@@ -70,7 +70,6 @@ CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
       m_dirty(true), m_builder( 0 )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
-    KDEV_USE_EXTENSION_INTERFACE( ICMakeBuilder )
 
     IPlugin* i = core()->pluginController()->pluginForExtension("org.kdevelop.IMakeBuilder");
     if( i )

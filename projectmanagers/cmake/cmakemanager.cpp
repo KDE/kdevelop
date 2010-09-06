@@ -70,7 +70,6 @@
 #include "cmakeutils.h"
 #include "cmaketypes.h"
 #include "parser/cmakeparserutils.h"
-#include "icmakebuilder.h"
 #include "icmakedocumentation.h"
 
 #ifdef CMAKEDEBUGVISITOR
@@ -90,6 +89,7 @@
 #include <interfaces/iruncontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcsjob.h>
+#include <project/interfaces/iprojectbuilder.h>
 
 using namespace KDevelop;
 
@@ -663,9 +663,9 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
 
 KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *) const
 {
-    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.ICMakeBuilder" );
+    IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IProjectBuilder", "KDevCMakeBuilder");
     Q_ASSERT(i);
-    ICMakeBuilder* _builder = i->extension<ICMakeBuilder>();
+    KDevelop::IProjectBuilder* _builder = i->extension<KDevelop::IProjectBuilder>();
     Q_ASSERT(_builder );
     return _builder ;
 }
