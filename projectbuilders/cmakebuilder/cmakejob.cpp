@@ -22,6 +22,8 @@
 
 #include "cmakejob.h"
 
+#include "imakebuilder.h"
+
 #include <config.h>
 
 #include <QtCore/QStringList>

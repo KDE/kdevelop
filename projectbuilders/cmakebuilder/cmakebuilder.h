@@ -32,6 +32,7 @@
 class QStringList;
 class QSignalMapper;
 class KDialog;
+class IMakeBuilder;
 namespace KDevelop{
     class ProjectBaseItem;
     class CommandExecutor;
@@ -69,7 +70,7 @@ Q_SIGNALS:
 
 private:
     bool m_dirty;
-    KDevelop::IProjectBuilder* m_builder;
+    IMakeBuilder* m_builder;
     QSet<KDevelop::ProjectBaseItem*> m_deleteWhenDone;
 };
 

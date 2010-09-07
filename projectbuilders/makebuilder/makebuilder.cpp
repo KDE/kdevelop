@@ -62,6 +62,7 @@ MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
     , m_delegate(new MakeOutputDelegate(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
+    KDEV_USE_EXTENSION_INTERFACE( IMakeBuilder )
 }
 
 MakeBuilder::~MakeBuilder()
