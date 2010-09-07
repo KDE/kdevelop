@@ -970,7 +970,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
 
 
     // Configuration values
-    bool    config_breakOnLoadingLibrary_ = grp.readEntry( GDBDebugger::breakOnLibLoadEntry, false );
     bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );

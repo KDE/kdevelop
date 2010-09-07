@@ -119,22 +119,6 @@ However, non-mangled names are easier to read.</string>
           </property>
          </widget>
         </item>
-        <item>
-         <widget class="QCheckBox" name="kcfg_breakOnLoadingLibrary">
-          <property name="whatsThis">
-           <string>If GDB has not seen a library that will be loaded via
-&quot;dlopen&quot; then it will refuse to set a breakpoint in that code.
-With this option, GDB will stop on a library load and hence
-try to set the pending breakpoints. See the documentation
-for more details relating to this behavior.
-
-If you are not &quot;dlopen&quot;ing libs then leave this unchecked.</string>
-          </property>
-          <property name="text">
-           <string>Try setting &amp;breakpoints on library loading</string>
-          </property>
-         </widget>
-        </item>
         <!--
         <item>
          <widget class="QCheckBox" name="kcfg_dbgTerminal">
