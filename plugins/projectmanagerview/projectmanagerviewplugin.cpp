@@ -511,7 +511,7 @@ void ProjectManagerViewPlugin::renameItemFromContextMenu()
                 case ProjectBaseItem::RenameOk:
                     break;
                 case ProjectBaseItem::ExistingItemSameName:
-                    KMessageBox::error(window, i18n("There already is a file called like '%1'", name));
+                    KMessageBox::error(window, i18n("There is already a file named '%1'", name));
                     break;
                 case ProjectBaseItem::ProjectManagerRenameFailed:
                     KMessageBox::error(window, i18n("Could not rename '%1'", name));

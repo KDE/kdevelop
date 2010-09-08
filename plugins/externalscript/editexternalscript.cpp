@@ -78,7 +78,7 @@ EditExternalScript::EditExternalScript( ExternalScriptItem* item, QWidget* paren
 
   tooltip = i18n(
     "<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of the script.</p>"
-    "<p>Note: if the action is the same as the one action for the output, the channels will be merged"
+    "<p>Note: if the action is the same as that chosen for the output, the channels will be merged "
     "and handled together.</p>"
   );
   stderrCombo->setToolTip( tooltip );
