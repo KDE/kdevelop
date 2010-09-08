@@ -42,9 +42,10 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter *formatter, const KMimeType::P
 	setMainWidget(m_content);
 
 	m_settingsWidget = m_sourceFormatter->editStyleWidget(mime);
+	init();
+
 	if (m_settingsWidget)
 		m_settingsWidget->load(style);
-	init();
 }
 
 EditStyleDialog::~EditStyleDialog()
