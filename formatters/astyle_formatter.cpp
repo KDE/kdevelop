@@ -520,13 +520,13 @@ void AStyleFormatter::setParensUnPaddingMode(bool state)
 
 void AStyleFormatter::setBreakOneLineBlocksMode(bool state)
 {
-    m_options["KeepBlocks"] = state;
+    m_options["KeepBlocks"] = !state;
     ASFormatter::setBreakOneLineBlocksMode(state);
 }
 
 void AStyleFormatter::setSingleStatementsMode(bool state)
 {
-    m_options["KeepStatements"] = state;
+    m_options["KeepStatements"] = !state;
     ASFormatter::setSingleStatementsMode(state);
 }
 
