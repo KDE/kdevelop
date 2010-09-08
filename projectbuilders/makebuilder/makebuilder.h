@@ -22,7 +22,7 @@
 #define MAKEBUILDER_H
 
 #include <interfaces/iplugin.h>
-#include <project/interfaces/iprojectbuilder.h>
+#include "imakebuilder.h"
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QVariant>
@@ -44,9 +44,10 @@ class CommandExecutor;
 /**
 @author Roberto Raggi
 */
-class MakeBuilder: public KDevelop::IPlugin, public KDevelop::IProjectBuilder
+class MakeBuilder: public KDevelop::IPlugin, public IMakeBuilder
 {
     Q_OBJECT
+    Q_INTERFACES( IMakeBuilder )
     Q_INTERFACES( KDevelop::IProjectBuilder )
 public:
     explicit MakeBuilder(QObject *parent = 0, const QVariantList &args = QVariantList());
