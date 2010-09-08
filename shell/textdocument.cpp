@@ -38,6 +38,8 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/modificationinterface.h>
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/markinterface.h>
+#include <ktexteditor/configinterface.h>
 
 #include <sublime/area.h>
 #include <sublime/view.h>
@@ -305,6 +307,11 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
+    
+    if (KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
+        config->setConfigValue("allow-mark-menu", false);
+        config->setConfigValue("default-mark-type", KTextEditor::MarkInterface::BreakpointActive);
+    }
 
     return view;
 }
