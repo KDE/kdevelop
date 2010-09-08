@@ -198,6 +198,9 @@ KDevVarLengthArray<KDevVarLengthArray<QPair<uint, TOKEN_KIND>, 10 >, index_size 
   ADD_TOKEN(switch);
   ADD_TOKEN(template);
   ADD_TOKEN(this);
+  ADD_TOKEN(thread_local);
+  ADD_TOKEN2(__thread, thread_local);
+  ADD_TOKEN2(__thread__, thread_local);
   ADD_TOKEN(throw);
   ADD_TOKEN(true);
   ADD_TOKEN(try);

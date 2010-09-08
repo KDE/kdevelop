@@ -433,6 +433,7 @@ bool Parser::skipUntilDeclaration()
         case Token_asm:
         case Token_template:
         case Token_export:
+        case Token_thread_local:
 
         case Token_const:       // cv
         case Token_volatile:    // cv
@@ -1841,7 +1842,7 @@ bool Parser::parseStorageClassSpecifier(const ListNode<uint> *&node)
   while (0 != (tk = session->token_stream->lookAhead())
          && (tk == Token_friend || tk == Token_auto
              || tk == Token_register || tk == Token_static
-             || tk == Token_extern || tk == Token_mutable))
+             || tk == Token_extern || tk == Token_mutable || tk == Token_thread_local))
     {
       node = snoc(node, session->token_stream->cursor(), session->mempool);
       advance();
