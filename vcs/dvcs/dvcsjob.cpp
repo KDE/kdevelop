@@ -144,7 +144,7 @@ void DVcsJob::start()
 
     const QDir& workingdir = directory();
     if( !workingdir.exists() ) {
-        QString error = i18n( "Working Directory doesn't exist: %1", d->childproc->workingDirectory() );
+        QString error = i18n( "Working Directory does not exist: %1", d->childproc->workingDirectory() );
         d->model->appendLine(error);
         setError( 255 );
         setErrorText(error);
@@ -221,7 +221,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
                                                      << "Exit code is:" << d->childproc->exitCode();
     
     displayOutput(d->childproc->readAllStandardError());
-    d->model->appendLine(i18n("Command finnished with error %1.", errorValue));
+    d->model->appendLine(i18n("Command finished with error %1.", errorValue));
     
     //Even if it was a silent process we want to provide some feedback to the user about what went wrong
     //so we show the output then.

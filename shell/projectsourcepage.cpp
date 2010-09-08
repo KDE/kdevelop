@@ -184,7 +184,7 @@ void ProjectSourcePage::reevaluateCorrection()
     m_ui->creationProgress->setEnabled(validToCheckout);
     
     if(!correct)
-        setStatus(i18n("You need to specify a valid or unexistent directory to check out a project"));
+        setStatus(i18n("You need to specify a valid or nonexistent directory to check out a project"));
     else if(!m_ui->get->isEnabled())
         setStatus(i18n("You need to specify a valid location for the project"));
     else

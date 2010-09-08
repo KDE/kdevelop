@@ -96,7 +96,7 @@ void BranchManager::delBranch()
     }
 
     int ret = KMessageBox::messageBox(this, KMessageBox::WarningYesNo, 
-                                      i18n("Are you sure you want to irreversebly remove the branch '%1'?", baseBranch));
+                                      i18n("Are you sure you want to irreversibly remove the branch '%1'?", baseBranch));
     if (ret == KMessageBox::Yes)
         m_model->removeBranch(baseBranch);
 }
