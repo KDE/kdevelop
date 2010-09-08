@@ -107,6 +107,7 @@ static char const * const _S_token_names[] = {
   "switch",
   "template",
   "this",
+  "thread_local",
   "throw",
   "true",
   "try",

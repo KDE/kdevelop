@@ -113,6 +113,7 @@ enum TOKEN_KIND
     Token_switch,
     Token_template,
     Token_this,
+    Token_thread_local,
     Token_throw,
     Token_true,
     Token_try,
