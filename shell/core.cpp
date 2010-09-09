@@ -55,6 +55,8 @@
 #include "kdevplatformversion.h"
 #include "workingsetcontroller.h"
 #include <KMessageBox>
+#include <KTextEditor/Document>
+#include <KTextEditor/SmartInterface>
 
 namespace KDevelop {
 
@@ -116,6 +118,23 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     if( !partController && !(mode & Core::NoUi))
     {
         partController = new PartController(m_core, uiController->defaultMainWindow());
+
+        {
+            // check features of kate and report to user if it does not fit
+            KTextEditor::Document* doc = partController->createTextPart(QString());
+
+            if ( !qobject_cast< KTextEditor::SmartInterface* >(doc) ) {
+                KMessageBox::error(QApplication::activeWindow(),
+                                   i18n("The installed Kate version does not support the SmartInterface which is crucial for"
+                                        "KDevelop up to and including version 4.1.\n\n"
+                                        "To use KDevelop with KDE SC 4.6, where the SmartInterface is replaced by the MovingInterface, "
+                                        "you need KDevelop 4.2 or higher."));
+                delete doc;
+                return false;
+            }
+
+            delete doc;
+        }
     }
 
     if( !projectController )
