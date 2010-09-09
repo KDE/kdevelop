@@ -71,7 +71,7 @@ GenericName[zh_CN]=文档支持
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevqthelp
-X-KDevelop-Version=10
+X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=KDevQtHelp
 X-KDE-PluginInfo-Author=Aleix Pol
