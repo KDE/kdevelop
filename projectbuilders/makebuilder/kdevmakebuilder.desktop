@@ -42,6 +42,7 @@ GenericName[pt_BR]=Construtor de Projetos
 GenericName[sv]=Projektbyggverktyg
 GenericName[uk]=Збирання проектів
 GenericName[x-test]=xxProject Builderxx
+GenericName[zh_CN]=工程构建器
 Comment=KDevelop Make Builder
 Comment[ca]=Constructor KDevelop Make
 Comment[ca@valencia]=Constructor KDevelop Make
