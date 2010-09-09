@@ -2,10 +2,16 @@
 Type=Service
 
 Name=Okteta Integration
+Name[sv]=Integrering med Okteta
+Name[uk]=Інтеграція з Okteta
 Name[x-test]=xxOkteta Integrationxx
 GenericName=Hex Editor Integration
+GenericName[sv]=Integrering med hexeditor
+GenericName[uk]=Інтеграція з шістнадцятковим редактором
 GenericName[x-test]=xxHex Editor Integrationxx
 Comment=KDevelop Hex Editor based on Okteta
+Comment[sv]=Hexeditor i KDevelop baserad på Okteta
+Comment[uk]=Шістнадцятковий редактор KDevelop, заснований на Okteta
 Comment[x-test]=xxKDevelop Hex Editor based on Oktetaxx
 Icon=okteta
 ServiceTypes=KDevelop/Plugin
