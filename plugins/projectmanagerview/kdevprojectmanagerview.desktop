@@ -2,6 +2,8 @@
 Type=Service
 Exec=blubb
 Comment=Lets you manage the project contents.
+Comment[sv]=Låter dig hantera projektets innehåll.
+Comment[uk]=Надає вам змогу керувати вмістом проектів.
 Comment[x-test]=xxLets you manage the project contents.xx
 Name=Project Manager View
 Name[bg]=Преглед на редактора на проекти
