@@ -62,6 +62,6 @@ Icon=gear
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevstandardoutputview
 X-KDE-PluginInfo-Name=KDevStandardOutputView
-X-KDevelop-Version=10
+X-KDevelop-Version=11
 X-KDevelop-Interfaces=org.kdevelop.IOutputView
 X-KDevelop-Mode=GUI

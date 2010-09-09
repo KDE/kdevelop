@@ -34,6 +34,6 @@ Icon=help-hint
 ServiceTypes=KDevelop/Plugin
 X-KDE-Library=kdevcodeutils
 X-KDE-PluginInfo-Name=kdevcodeutils
-X-KDevelop-Version=10
+X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDevelop-Mode=GUI
