@@ -371,10 +371,11 @@ QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
   else if( decl->kind() == Declaration::Type ) {
     if( decl->type<StructureType>() )
       kind = i18n("Class");
-  }
-
-  if( decl->kind() == Declaration::Instance )
+  } else if( decl->kind() == Declaration::Instance ) {
     kind = i18n("Variable");
+  } else if ( decl->kind() == Declaration::Namespace ) {
+    kind = i18n("Namespace");
+  }
 
   if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data()) ) {
     if( alias->identifier().isEmpty() )
