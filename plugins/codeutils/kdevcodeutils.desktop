@@ -1,14 +1,22 @@
 [Desktop Entry]
 Type=Service
 Comment=Collection of various utilities that increase productivity while programming.
+Comment[es]=Colección de diversas utilidades que incrementan la productividad al programar.
+Comment[nl]=Verzameling van hulpprogramma's die de productiviteit vergroot bij het programmeren
 Comment[sv]=Samling av diverse verktyg för att öka produktiviteten vid programmering.
 Comment[uk]=Збірка різноманітних допоміжних програм, яка підвищує продуктивність програмування.
 Comment[x-test]=xxCollection of various utilities that increase productivity while programming.xx
 Name=Code Utilities
+Name[es]=Utilidades de código fuente
+Name[nds]=Kode-Warktüüch
+Name[nl]=Hulpmiddelen bij coderen
 Name[sv]=Kodverktyg
 Name[uk]=Допоміжні засоби
 Name[x-test]=xxCode Utilitiesxx
 GenericName=Code Utilities
+GenericName[es]=Utilidades de código fuente
+GenericName[nds]=Kode-Warktüüch
+GenericName[nl]=Hulpmiddelen bij coderen
 GenericName[sv]=Kodverktyg
 GenericName[uk]=Допоміжні засоби
 GenericName[x-test]=xxCode Utilitiesxx
