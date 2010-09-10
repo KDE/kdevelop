@@ -42,6 +42,7 @@
 #include "document.h"
 #include <qpointer.h>
 #include <QEvent>
+#include <QKeyEvent>
 
 namespace Sublime {
 
@@ -69,7 +70,13 @@ class ContainerTabBar : public KTabBar {
         
         return KTabBar::event(ev);
     }
-    
+    virtual void mousePressEvent(QMouseEvent* event) {
+        if (event->button() == Qt::MidButton) {
+            // just close on midbutton, drag can still be done with left mouse button
+            return;
+        }
+        KTabBar::mousePressEvent(event);
+    }
     Container* m_container;
 };
 
@@ -180,6 +187,7 @@ Container::Container(QWidget *parent)
     connect(d->tabBar, SIGNAL(tabMoved(int,int)), this, SLOT(tabMoved(int, int)));
     connect(d->tabBar, SIGNAL(wheelDelta(int)), this, SLOT(wheelScroll(int)));
     connect(d->tabBar, SIGNAL(contextMenu(int,QPoint)), this, SLOT(contextMenu(int,QPoint)));
+    connect(d->tabBar, SIGNAL(mouseMiddleClick(int)), this, SLOT(closeRequest(int)));
 
     KConfigGroup group = KGlobal::config()->group("UiSettings");
     setTabBarHidden(group.readEntry("TabBarVisibility", 1) == 0);

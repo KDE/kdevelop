@@ -367,19 +367,20 @@ void ContextUsesWidget::linkWasActivated(QString link) {
     emit navigateDeclaration(decl);
 }
 
-DeclarationsWidget::DeclarationsWidget(const CodeRepresentation& code, QList<IndexedDeclaration> declarations) : m_declarations(declarations) {
+DeclarationWidget::DeclarationWidget(const CodeRepresentation& code, const IndexedDeclaration& decl) {
 
   DUChainReadLocker lock(DUChain::lock());
-    setUpdatesEnabled(false);
 
-    QLabel* headerLabel = new QLabel(sizePrefix + "<b>" + i18n("Declaration") + "</b>" + sizeSuffix);
+  setUpdatesEnabled(false);
+  if (Declaration* dec = decl.data()) {
+    QLabel* headerLabel = new QLabel(sizePrefix + "<b>" +
+                                                  (dec->isDefinition() ? i18n("Definition") : i18n("Declaration"))
+                                                + "</b>" + sizeSuffix);
     addHeaderItem(headerLabel);
+    addItem(new OneUseWidget(decl, dec->url(), dec->rangeInCurrentRevision(), code));
+  }
 
-    foreach(const IndexedDeclaration &decl, declarations)
-      if(decl.data())
-        addItem(new OneUseWidget(decl, decl.data()->url(), decl.data()->rangeInCurrentRevision(), code));
-
-    setUpdatesEnabled(true);
+  setUpdatesEnabled(true);
 }
 
 TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> allDeclarations, IndexedTopDUContext topContext) :
@@ -458,13 +459,11 @@ void TopContextUsesWidget::setExpanded(bool expanded) {
       setUpdatesEnabled(false);
 
       IndexedTopDUContext localTopContext(topContext);
-      QList<IndexedDeclaration> localDeclarations;
-      foreach(const IndexedDeclaration &decl, m_allDeclarations)
-        if(decl.indexedTopContext() == localTopContext)
-          localDeclarations << decl;
-
-        if(!localDeclarations.isEmpty())
-          addItem(new DeclarationsWidget(*code, localDeclarations));
+      foreach(const IndexedDeclaration &decl, m_allDeclarations) {
+        if(decl.indexedTopContext() == localTopContext) {
+          addItem(new DeclarationWidget(*code, decl));
+        }
+      }
 
       foreach(ContextUsesWidget* usesWidget, buildContextUses(*code, m_allDeclarations, topContext)) {
         addItem(usesWidget);
