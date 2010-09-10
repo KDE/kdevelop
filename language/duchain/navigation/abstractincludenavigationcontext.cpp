@@ -95,7 +95,8 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
     if(!shorten) {
       modifyHtml() += labelHighlight(i18n("Declarations:")) + "<br />";
       bool first = true;
-      addDeclarationsFromContext(duchain, first);
+      QList<IdentifierPair> decs;
+      addDeclarationsFromContext(duchain, first, decs);
     }
   }else if(duchains.isEmpty()) {
     modifyHtml() += i18n("not parsed yet");
@@ -123,7 +124,9 @@ bool AbstractIncludeNavigationContext::filterDeclaration(Declaration* /*decl*/)
   return true;
 }
 
-void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first, QString indent)
+void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
+                                                                  QList< IdentifierPair > &addedDeclarations,
+                                                                  const QString& indent )
 {
   //modifyHtml() += indent + ctx->localScopeIdentifier().toString() + "{<br />";
   QVector<DUContext*> children = ctx->childContexts();
@@ -145,7 +148,9 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
 
     if((currentDeclarationLine <= currentContextLine || currentContextLine == -1 || childIterator == children.constEnd()) && declarationIterator != declarations.constEnd() )
     {
-      if(filterDeclaration(*declarationIterator) ) {
+      IdentifierPair id = qMakePair(static_cast<int>((*declarationIterator)->kind()),
+                                    (*declarationIterator)->qualifiedIdentifier().index());
+      if(!addedDeclarations.contains(id) && filterDeclaration(*declarationIterator) ) {
         //Show the declaration
         if(!first)
           modifyHtml() += Qt::escape(", ");
@@ -154,12 +159,14 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
 
         modifyHtml() += Qt::escape(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ");
         makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
+
+        addedDeclarations << id;
       }
       ++declarationIterator;
     } else {
       //Eventually Recurse into the context
       if((*childIterator)->type() == DUContext::Global || (*childIterator)->type() == DUContext::Namespace /*|| (*childIterator)->type() == DUContext::Class*/)
-        addDeclarationsFromContext(*childIterator, first, indent + ' ');
+        addDeclarationsFromContext(*childIterator, first, addedDeclarations, indent + ' ');
       ++childIterator;
     }
   }
