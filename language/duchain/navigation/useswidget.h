@@ -96,12 +96,10 @@ namespace KDevelop {
         IndexedDUContext m_context;
     };
 
-    class KDEVPLATFORMLANGUAGE_EXPORT DeclarationsWidget : public NavigatableWidgetList {
+    class KDEVPLATFORMLANGUAGE_EXPORT DeclarationWidget : public NavigatableWidgetList {
       Q_OBJECT
       public:
-        DeclarationsWidget(const CodeRepresentation& code, QList<IndexedDeclaration> declarations);
-      private:
-        QList<IndexedDeclaration> m_declarations;
+        DeclarationWidget(const KDevelop::CodeRepresentation& code, const KDevelop::IndexedDeclaration& declaration);
     };
     
     /**
