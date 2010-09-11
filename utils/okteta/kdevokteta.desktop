@@ -2,6 +2,7 @@
 Type=Service
 
 Name=Okteta Integration
+Name[ca]=Integració d'Okteta
 Name[en_GB]=Okteta Integration
 Name[es]=Integración de Okteta
 Name[et]=Okteta lõimimine
@@ -13,6 +14,7 @@ Name[sv]=Integrering med Okteta
 Name[uk]=Інтеграція з Okteta
 Name[x-test]=xxOkteta Integrationxx
 GenericName=Hex Editor Integration
+GenericName[ca]=Integració d'editor hexadecimal
 GenericName[en_GB]=Hex Editor Integration
 GenericName[es]=Integración del editor hexadecimal
 GenericName[et]=Binaarfailide redaktori lõimimine
@@ -24,6 +26,7 @@ GenericName[sv]=Integrering av hexadecimaleditor
 GenericName[uk]=Інтеграція з шістнадцятковим редактором
 GenericName[x-test]=xxHex Editor Integrationxx
 Comment=KDevelop Hex Editor based on Okteta
+Comment[ca]=Editor hexadecimal de KDevelop basat en Okteta
 Comment[en_GB]=KDevelop Hex Editor based on Okteta
 Comment[es]=Editor hexadecimal de KDevelop basado en Okteta
 Comment[et]=KDevelopi binaarfailide redaktor Okteta põhjal

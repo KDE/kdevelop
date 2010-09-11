@@ -55,6 +55,7 @@ Name[x-test]=xxQt Documentationxx
 Name[zh_CN]=Qt 文档
 Name[zh_TW]=Qt 文件
 GenericName=Documentation Support
+GenericName[ca]=Implementació de la documentació
 GenericName[en_GB]=Documentation Support
 GenericName[es]=Implementación de la documentación
 GenericName[et]=Dokumentatsiooni toetus
