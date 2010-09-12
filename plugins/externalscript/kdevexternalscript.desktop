@@ -5,6 +5,7 @@ Exec=
 Comment=Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.
 Comment[ca]=Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.
 Comment[es]=Ejecutar aplicaciones o scripts externos para manipular el contenido del editor o realizar otras acciones.
+Comment[nds]=Utföhren vun extern Skripten oder Programmen för't Ännern vun den Editor-Inholt oder anner Akschonen.
 Comment[nl]=Externe scripts of programma's uitvoeren om de inhoud van de bewerker te manipuleren of andere acties uit te voeren.
 Comment[pt]=Executa programas ou aplicações externas para manipular o conteúdo do editor ou para efectuar outras acções arbitrárias.
 Comment[sv]=Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.
