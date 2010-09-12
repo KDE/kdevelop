@@ -124,7 +124,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
 
             if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
                 KMessageBox::error(QApplication::activeWindow(),
-                                   i18n("The installed Kate version does not support the MovingInterface which is crucial for"
+                                   i18n("The installed Kate version does not support the MovingInterface which is crucial for "
                                         "KDevelop starting from version 4.2.\n\n"
                                         "To use KDevelop with KDE SC prior to 4.6, where the SmartInterface is used instead "
                                         "of the MovingInterface, you need KDevelop 4.1 or lower."));
