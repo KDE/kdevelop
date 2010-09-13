@@ -91,6 +91,7 @@ private slots:
   void testIntegralTemplates();
   void testTypedef();
   void testTypedefUnsignedInt();
+  void testTypedefFuncptr();
   void testTemplateDependentClass();
   void testTemplateFunctions();
   void testTypedefUses();
