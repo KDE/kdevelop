@@ -167,6 +167,8 @@ private slots:
     void ctxStashManager();
 
 private:
+    void addNotVersionedFiles(const QDir& dir, const KUrl::List& files);
+    
     //commit dialog "main" helper
     QStringList getLsFiles(const QDir &directory, const QStringList &args,
         KDevelop::OutputJob::OutputJobVerbosity verbosity);

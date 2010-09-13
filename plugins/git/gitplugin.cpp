@@ -341,11 +341,36 @@ VcsJob* GitPlugin::commit(const QString& message,
     if (localLocations.empty() || message.isEmpty())
         return errorsFound(i18n("No files or message specified"));
 
-    DVcsJob* job = new DVcsJob(dotGitDirectory(localLocations.front()), this);
+    QDir dir = dotGitDirectory(localLocations.front());
+    DVcsJob* job = new DVcsJob(dir, this);
+    KUrl::List files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    addNotVersionedFiles(dir, files);
     
     *job << "git" << "commit" << "-m" << message;
-    *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    *job << "--" << files;
     return job;
+}
+
+void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
+{
+    QStringList otherStr = getLsFiles(dir, QStringList() << "--others", KDevelop::OutputJob::Silent);
+    KUrl::List toadd, otherFiles;
+    
+    foreach(const QString& file, otherStr) {
+        KUrl v(dir.absolutePath());
+        v.addPath(file);
+        
+        otherFiles += v;
+    }
+    
+    //We add the files that are not versioned
+    foreach(const KUrl& file, files) {
+        if(otherFiles.contains(file) && QFileInfo(file.toLocalFile()).isFile())
+            toadd += file;
+    }
+    
+    VcsJob* job = add(toadd);
+    job->exec();
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
@@ -1026,10 +1051,8 @@ VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationD
 VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 {
     DVcsJob* job = new DVcsJob(urlDir(source), this, KDevelop::OutputJob::Verbose);
-    {
-        *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
-        return job;
-    }
+    *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
+    return job;
 }
 
 void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
