@@ -353,6 +353,7 @@ public:
     }
   }
   ~DUChainPrivate() {
+    kDebug() << "Destroying";
     DUChain::m_deleted = true;
     m_cleanup->stopThread();
     delete m_cleanup;
