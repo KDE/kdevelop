@@ -394,7 +394,7 @@ void ProjectController::setupActions()
     d->m_fetchProject = action = ac->addAction( "project_fetch" );
     action->setText(i18n( "Fetch Project..." ) );
     action->setToolTip( i18n( "Fetch Project" ) );
-    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Fetches a project from either a Version Control System or somewhere else and puts into the disk and lets </p>" ) );
+    action->setWhatsThis( i18n( "<b>Fetch project</b><p>Guides the user through the project fetch and then imports it into KDevelop 4.</p>" ) );
 //     action->setIcon(KIcon("project-open"));
     connect( action, SIGNAL( triggered( bool ) ), SLOT( fetchProject() ) );
 

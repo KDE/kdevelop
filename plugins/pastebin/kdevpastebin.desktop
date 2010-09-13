@@ -2,8 +2,7 @@
 Type=Service
 Icon=edit-paste
 Exec=blubb
-Comment=This plugin will
-Comment[ca]=Aquest connector
+Comment=This plugin helps you upload your patches to Pastebin service
 Comment[es]=Este complemento
 Comment[nds]=Dit Moduul warrt
 Comment[nl]=Deze plugin zal
