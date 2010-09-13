@@ -346,11 +346,40 @@ VcsJob* GitPlugin::commit(const QString& message,
     if (localLocations.empty() || message.isEmpty())
         return errorsFound(i18n("No files or message specified"));
 
+<<<<<<< HEAD
     DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
+=======
+    QDir dir = dotGitDirectory(localLocations.front());
+    DVcsJob* job = new DVcsJob(dir, this);
+    KUrl::List files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    addNotVersionedFiles(dir, files);
+>>>>>>> 1.1
     
     *job << "git" << "commit" << "-m" << message;
-    *job << "--" << (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
+    *job << "--" << files;
     return job;
+}
+
+void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
+{
+    QStringList otherStr = getLsFiles(dir, QStringList() << "--others", KDevelop::OutputJob::Silent);
+    KUrl::List toadd, otherFiles;
+    
+    foreach(const QString& file, otherStr) {
+        KUrl v(dir.absolutePath());
+        v.addPath(file);
+        
+        otherFiles += v;
+    }
+    
+    //We add the files that are not versioned
+    foreach(const KUrl& file, files) {
+        if(otherFiles.contains(file) && QFileInfo(file.toLocalFile()).isFile())
+            toadd += file;
+    }
+    
+    VcsJob* job = add(toadd);
+    job->exec();
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
@@ -1030,23 +1059,22 @@ VcsStatusInfo::State GitPlugin::messageToState(const QString& msg)
     return ret;
 }
 
-StandardCopyJob::StandardCopyJob(IPlugin* parent, const KUrl& source, const KUrl& dest,
+StandardJob::StandardJob(IPlugin* parent, KJob* job,
                                  OutputJob::OutputJobVerbosity verbosity)
     : VcsJob(parent, verbosity)
-    , m_source(source), m_dest(dest)
+    , m_job(job)
     , m_plugin(parent)
     , m_status(JobNotStarted)
 {}
 
-void StandardCopyJob::start()
+void StandardJob::start()
 {
-    KIO::CopyJob* job=KIO::copy(m_source, m_dest);
-    connect(job, SIGNAL(result(KJob*)), SLOT(result(KJob*)));
-    job->start();
+    connect(m_job, SIGNAL(result(KJob*)), SLOT(result(KJob*)));
+    m_job->start();
     m_status=JobRunning;
 }
 
-void StandardCopyJob::result(KJob* job)
+void StandardJob::result(KJob* job)
 {
     m_status=job->error() == 0? JobSucceeded : JobFailed; emitResult();
 }
@@ -1054,15 +1082,19 @@ void StandardCopyJob::result(KJob* job)
 VcsJob* GitPlugin::copy(const KUrl& localLocationSrc, const KUrl& localLocationDstn)
 {
     //TODO: Probably we should "git add" after
-    return new StandardCopyJob(this, localLocationSrc, localLocationDstn, KDevelop::OutputJob::Silent);
+    return new StandardJob(this, KIO::copy(localLocationSrc, localLocationDstn), KDevelop::OutputJob::Silent);
 }
 
 VcsJob* GitPlugin::move(const KUrl& source, const KUrl& destination)
 {
-    DVcsJob* job = new DVcsJob(urlDir(source), this, KDevelop::OutputJob::Verbose);
-    {
+    QDir dir = urlDir(source);
+    QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << source.toLocalFile(), KDevelop::OutputJob::Silent);
+    if(otherStr.isEmpty()) {
+        DVcsJob* job = new DVcsJob(dir, this, KDevelop::OutputJob::Verbose);
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
         return job;
+    } else {
+        return new StandardJob(this, KIO::move(source, destination), KDevelop::OutputJob::Silent);
     }
 }
 

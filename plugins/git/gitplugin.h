@@ -37,12 +37,11 @@ namespace KDevelop
     class VcsRevision;
 }
 
-class StandardCopyJob : public KDevelop::VcsJob
+class StandardJob : public KDevelop::VcsJob
 {
     Q_OBJECT
     public:
-        StandardCopyJob(KDevelop::IPlugin* parent, const KUrl& source,
-                        const KUrl& dest, OutputJobVerbosity verbosity);
+        StandardJob(KDevelop::IPlugin* parent, KJob* job, OutputJobVerbosity verbosity);
         
         virtual QVariant fetchResults() { return QVariant(); }
         virtual void start();
@@ -53,7 +52,7 @@ class StandardCopyJob : public KDevelop::VcsJob
         void result(KJob*);
     
     private:
-        const KUrl m_source, m_dest;
+        KJob* m_job;
         KDevelop::IPlugin* m_plugin;
         JobStatus m_status;
 };
@@ -168,6 +167,8 @@ private slots:
     void ctxStashManager();
 
 private:
+    void addNotVersionedFiles(const QDir& dir, const KUrl::List& files);
+    
     //commit dialog "main" helper
     QStringList getLsFiles(const QDir &directory, const QStringList &args,
         KDevelop::OutputJob::OutputJobVerbosity verbosity);
