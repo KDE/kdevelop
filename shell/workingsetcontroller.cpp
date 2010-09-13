@@ -89,7 +89,7 @@ void WorkingSetController::initialize()
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     foreach(const QString& set, setConfig.groupList())
     {
-        if(setConfig.hasKey("iconName"))
+        if(setConfig.group(set).hasKey("iconName"))
             getWorkingSet(set, setConfig.group(set).readEntry<QString>("iconName", QString()));
         else
             kDebug() << "have garbage working set with id " << set;
@@ -193,12 +193,15 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
         Q_ASSERT(areaIndex->viewCount() == 0 && !areaIndex->isSplitted());
         return;
     }
+    
     kDebug() << "saving" << m_id << "from area";
 
+    bool wasPersistent = isPersistent();
+    
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
-    group.writeEntry("iconName", m_iconName);
     deleteGroupRecursive(group);
+    group.writeEntry("iconName", m_iconName);
     if (area->activeView()) {
         group.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
     } else {
@@ -209,6 +212,8 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     if(isEmpty())
         deleteGroupRecursive(group);
 
+    setPersistent(wasPersistent);
+    
 #ifdef SYNC_OFTEN
     setConfig.sync();
 #endif
