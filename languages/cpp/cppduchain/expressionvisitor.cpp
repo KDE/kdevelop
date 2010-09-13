@@ -1857,7 +1857,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( declarations.isEmpty()) {
       if (!constructedType ) {
-        if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
+        if (MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
           // try an ADL lookup
           if (!fail) {
             QualifiedIdentifier identifier = missing->identifier().identifier().identifier();
@@ -1875,6 +1875,19 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         } else {
           // code below assumes !declarations.empty()
           declarations << chosenFunction;
+          // also, visitName was eager to add a MissingDeclaratonProblem; remove it
+          m_problems.removeLast();
+          // code below does not introduce a hidden dependency between visitName and visitFunctionCall
+          // but is slower, and I never tested if it actually works
+/*          foreach(KSharedPtr<KDevelop::Problem> prob, m_problems) {
+            MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
+            if (pMissing && pMissing->type) {
+              if (pMissing->type->identifier() == missing->identifier()) {
+                m_problems.removeOne(prob);
+                break;
+              }
+           }
+          }*/
         }
       } else {
         //Default-constructor is used
