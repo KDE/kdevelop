@@ -154,6 +154,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
+    /// This function is thread-safe
+    /// Returns whether a highlighting is already given for the given url
+    bool hasHighlighting(IndexedString url) const;
+
   private:
     //Returns whether the given attribute was set by the code highlighting, and not by something else
     //Always returns true when the attribute is zero

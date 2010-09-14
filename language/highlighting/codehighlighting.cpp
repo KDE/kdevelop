@@ -144,6 +144,17 @@ CodeHighlightingInstance* CodeHighlighting::createInstance() const
   return new CodeHighlightingInstance(this);
 }
 
+bool CodeHighlighting::hasHighlighting(IndexedString url) const
+{
+  DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
+  if(tracker)
+  {
+    QMutexLocker lock(&m_dataMutex);
+    return m_highlights.contains(tracker) && !m_highlights[tracker]->m_highlightedRanges.isEmpty();
+  }
+  return false;
+}
+
 void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 {
   IndexedString url;
