@@ -346,14 +346,10 @@ VcsJob* GitPlugin::commit(const QString& message,
     if (localLocations.empty() || message.isEmpty())
         return errorsFound(i18n("No files or message specified"));
 
-<<<<<<< HEAD
-    DVcsJob* job = new GitJob(dotGitDirectory(localLocations.front()), this);
-=======
     QDir dir = dotGitDirectory(localLocations.front());
     DVcsJob* job = new DVcsJob(dir, this);
     KUrl::List files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     addNotVersionedFiles(dir, files);
->>>>>>> 1.1
     
     *job << "git" << "commit" << "-m" << message;
     *job << "--" << files;
