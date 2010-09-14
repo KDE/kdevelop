@@ -596,11 +596,12 @@ void WorkingSetToolButton::closeSet()
     mainWindow()->area()->setWorkingSet(QString());
 }
 
+static QPointer<KDevelop::ActiveToolTip> tooltip;
+
 bool WorkingSetToolButton::event(QEvent* e)
 {
     if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
         e->accept();
-        static QPointer<KDevelop::ActiveToolTip> tooltip;
         static WorkingSetToolButton* oldTooltipButton;
         if(tooltip && oldTooltipButton == this)
             return true;
@@ -748,9 +749,38 @@ WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
     //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
 }
 
+void WorkingSetFileLabel::setIsActiveFile(bool active)
+{
+    if(active)
+    {
+        setAutoFillBackground(true);
+        setBackgroundRole(QPalette::Highlight);
+        setForegroundRole(QPalette::HighlightedText);
+    }else{
+        setAutoFillBackground(false);
+        setBackgroundRole(QPalette::Window);
+        setForegroundRole(QPalette::WindowText);
+    }
+}
+
+
+void WorkingSetFileLabel::mouseReleaseEvent(QMouseEvent* ev)
+{
+    if(ev->button() == Qt::LeftButton)
+    {
+        
+        ev->accept();
+        emit clicked();
+        return;
+    }
+    QLabel::mouseReleaseEvent(ev);
+}
+
+
 WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow) : QWidget(parent), m_set(set) {
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
+    
     layout->setMargin(0);
 
     // title bar
@@ -764,6 +794,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addWidget(m_setButton);
 
         QLabel* name = new QLabel(i18n("<b>Working Set</b>"));
+        name->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
         topLayout->addWidget(name);
 
         topLayout->addStretch();
@@ -794,6 +825,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         QWidget* body = new QWidget();
         body->setLayout(bodyLayout);
         layout->addWidget(body);
+        body->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     }
 
     // document list actions
@@ -801,6 +833,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         QHBoxLayout* actionsLayout = new QHBoxLayout;
 
         QLabel* label = new QLabel(i18n("Documents:"));
+        label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
         actionsLayout->addWidget(label);
 
         actionsLayout->addStretch();
@@ -823,28 +856,39 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         bodyLayout->addLayout(actionsLayout);
     }
 
-    QStringList files = m_set->fileList();
-    foreach(const QString& file, files) {
-        QHBoxLayout* fileLayout = new QHBoxLayout;
+    foreach(const QString& file, m_set->fileList().toSet()) {
+        
+        ///@todo Use a nicer-looking "blended" highlighting for the active item, like in the area-tabs
+        
+        FileWidget* widget = new FileWidget;
+        widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        
+        QHBoxLayout* fileLayout = new QHBoxLayout(widget);
 
         QToolButton* plusButton = new QToolButton;
         plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
         fileLayout->addWidget(plusButton);
 
-        QLabel* fileLabel = new QLabel;
+        WorkingSetFileLabel* fileLabel = new WorkingSetFileLabel;
         fileLabel->setTextFormat(Qt::RichText);
-        fileLabel->setText(Core::self()->projectController()->prettyFileName(KUrl(file)));
+        // We add spaces behind and after, to make it look nicer
+        fileLabel->setText("&nbsp;" + Core::self()->projectController()->prettyFileName(KUrl(file)) + "&nbsp;");
 //         fileLabel->setToolTip(KUrl(file).pathOrUrl());
         fileLayout->addWidget(fileLabel);
         fileLayout->setMargin(0);
-        bodyLayout->addLayout(fileLayout);
 
         plusButton->setObjectName(file);
         fileLabel->setObjectName(file);
+        fileLabel->setCursor(QCursor(Qt::PointingHandCursor));
 
-        m_fileButtons.insert(file, plusButton);
+        widget->m_button = plusButton;
+        widget->m_label = fileLabel;
+        
+        bodyLayout->addWidget(widget);
+        m_fileWidgets.insert(file, widget);
 
         connect(plusButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
+        connect(fileLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     }
 
     updateFileButtons();
@@ -860,6 +904,11 @@ void WorkingSetToolTipWidget::updateFileButtons()
 {
     MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
+    
+    QString activeFile;
+    
+    if(mainWindow->area()->activeView())
+        activeFile = mainWindow->area()->activeView()->document()->documentSpecifier();
 
     WorkingSet* currentWorkingSet = Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow->area()->workingSet());
     QSet<QString> openFiles = currentWorkingSet->fileList().toSet();
@@ -867,21 +916,23 @@ void WorkingSetToolTipWidget::updateFileButtons()
     bool allOpen = true;
     bool noneOpen = true;
 
-    for(QMap< QString, QToolButton* >::iterator it = m_fileButtons.begin(); it != m_fileButtons.end(); ++it) {
+    for(QMap< QString, FileWidget* >::iterator it = m_fileWidgets.begin(); it != m_fileWidgets.end(); ++it) {
         if(openFiles.contains(it.key())) {
             noneOpen = false;
-            (*it)->setToolTip(i18n("Remove this file from the current working set"));
-            (*it)->setIcon(KIcon("list-remove"));
+            (*it)->m_button->setToolTip(i18n("Remove this file from the current working set"));
+            (*it)->m_button->setIcon(KIcon("list-remove"));
         }else{
             allOpen = false;
-            (*it)->setToolTip(i18n("Add this file to the current working set"));
-            (*it)->setIcon(KIcon("list-add"));
+            (*it)->m_button->setToolTip(i18n("Add this file to the current working set"));
+            (*it)->m_button->setIcon(KIcon("list-add"));
         }
+        
+        (*it)->m_label->setIsActiveFile(it.key() == activeFile);
     }
 
     // NOTE: allways hide merge&subtract all on current working set
     // if we want to enable mergeButton, we have to fix it's behavior since it operates directly on the
-    // set contents and not on the m_fileButtons
+    // set contents and not on the m_fileWidgets
     m_mergeButton->setHidden(allOpen || currentWorkingSet->id() == m_set->id());
     m_subtractButton->setHidden(noneOpen || mainWindow->area()->workingSet() == m_set->id());
     m_deleteButton->setHidden(m_set->hasConnectedAreas());
@@ -915,8 +966,42 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
     }else{
         openFiles.remove(s->objectName());
         filterViews(openFiles);
+        if(mainWindow->area()->workingSet() == m_set->id() && m_fileWidgets.contains(s->objectName()))
+        {
+            m_fileWidgets[s->objectName()]->hide();
+            if(tooltip)
+                tooltip->resize(tooltip->sizeHint());
+        }
     }
 
+    if(stillExists)
+        updateFileButtons();
+}
+
+void WorkingSetToolTipWidget::labelClicked()
+{
+    QPointer<WorkingSetToolTipWidget> stillExists(this);
+
+    WorkingSetFileLabel* s = qobject_cast<WorkingSetFileLabel*>(sender());
+    Q_ASSERT(s);
+    
+    bool found = false;
+    
+    Sublime::MainWindow* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    
+    foreach(Sublime::View* view, window->area()->views())
+    {
+        if(view->document()->documentSpecifier() == s->objectName())
+        {
+            window->activateView(view);
+            found = true;
+            break;
+        }
+    }
+    
+    if(!found)
+        Core::self()->documentControllerInternal()->openDocument(s->objectName());
+    
     if(stillExists)
         updateFileButtons();
 }

@@ -235,9 +235,17 @@ Q_SIGNALS:
 public slots:
     void buttonClicked(bool);
     void updateFileButtons();
+    void labelClicked();
     
 private:
-    QMap<QString, QToolButton*> m_fileButtons;
+    
+    class FileWidget : public QWidget {
+        public:
+        QToolButton* m_button;
+        class WorkingSetFileLabel* m_label;
+    };
+    
+    QMap<QString, FileWidget*> m_fileWidgets;
     WorkingSet* m_set;
 
     QPushButton* m_mergeButton;
@@ -246,6 +254,17 @@ private:
     WorkingSetToolButton* m_setButton;
 
     QPushButton* m_deleteButton;
+};
+
+class WorkingSetFileLabel : public QLabel {
+Q_OBJECT
+
+public:
+    virtual void mouseReleaseEvent(QMouseEvent* ev);
+    void setIsActiveFile(bool active);
+
+Q_SIGNALS:
+    void clicked();
 };
 
 class WorkingSetController : public QObject
