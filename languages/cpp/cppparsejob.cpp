@@ -568,7 +568,7 @@ void CPPInternalParseJob::run()
 
           if((updatingContentContext->features() & parentJob()->minimumFeatures()) ==  parentJob()->minimumFeatures() &&
             isOpenInEditor &&
-              updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime) {
+              updatingContentContext->parsingEnvironmentFile()->modificationRevision().modificationTime == ModificationRevision::revisionForFile(updatingContentContext->url()).modificationTime && CppLanguageSupport::self()->codeHighlighting()->hasHighlighting(parentJob()->document())) {
             kDebug() << "not processing" << updatingContentContext->url().str() << "because of missing compound tokens";
             ICore::self()->uiController()->showErrorMessage(i18n("Not updating duchain for %1", parentJob()->document().toUrl().fileName()), 1);
             l.unlock();
