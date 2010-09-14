@@ -635,7 +635,7 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
     while(!folder && item)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
-        item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
+        item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << (folder ? folder->url() : KUrl()) << item;
     }
     Q_ASSERT(folder);
@@ -653,7 +653,7 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
     while(!folder)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
-        item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
+        item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << folder << item;
     }
     Q_ASSERT(folder);
