@@ -856,8 +856,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         bodyLayout->addLayout(actionsLayout);
     }
 
-    QStringList files = m_set->fileList();
-    foreach(const QString& file, files) {
+    foreach(const QString& file, m_set->fileList().toSet()) {
         
         ///@todo Use a nicer-looking "blended" highlighting for the active item, like in the area-tabs
         
@@ -985,8 +984,23 @@ void WorkingSetToolTipWidget::labelClicked()
 
     WorkingSetFileLabel* s = qobject_cast<WorkingSetFileLabel*>(sender());
     Q_ASSERT(s);
-
-    Core::self()->documentControllerInternal()->openDocument(s->objectName());
+    
+    bool found = false;
+    
+    Sublime::MainWindow* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    
+    foreach(Sublime::View* view, window->area()->views())
+    {
+        if(view->document()->documentSpecifier() == s->objectName())
+        {
+            window->activateView(view);
+            found = true;
+            break;
+        }
+    }
+    
+    if(!found)
+        Core::self()->documentControllerInternal()->openDocument(s->objectName());
     
     if(stillExists)
         updateFileButtons();
