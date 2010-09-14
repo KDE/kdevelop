@@ -198,8 +198,8 @@ class WorkingSetToolButton : public QToolButton {
     void subtractSet();
     void intersectSet();
     void buttonTriggered();
-    private:
     
+    private:
     virtual void contextMenuEvent(QContextMenuEvent* ev);
     virtual bool event(QEvent* e);
     WorkingSet* m_set;
@@ -292,9 +292,15 @@ public:
         connect(controller, SIGNAL(areaCreated(Sublime::Area*)), this, SLOT(areaCreated(Sublime::Area*)));
     }
     
+    void notifyWorkingSetSwitched() {
+        emit workingSetSwitched();
+    }
+    
 Q_SIGNALS:
     void workingSetAdded(QString id);
     void workingSetRemoved(QString id);
+    // Emitted after a working-set in a main-window was switched
+    void workingSetSwitched();
     
 private slots:
     void areaCreated(Sublime::Area* area) {

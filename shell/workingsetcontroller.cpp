@@ -686,11 +686,13 @@ void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString t
     kDebug() << "update ready";
 }
 
+///@todo Move this function into WorkingSetController
 void WorkingSet::changedWorkingSet(Sublime::Area* area, QString from, QString to) {
     kDebug() << "changed working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
     Q_ASSERT(to == m_id);
     loadToArea(area, area->rootIndex(), !from.isEmpty());
     kDebug() << "update ready";
+    Core::self()->workingSetControllerInternal()->notifyWorkingSetSwitched();
 }
 
 void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
@@ -783,6 +785,11 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     
     layout->setMargin(0);
 
+    connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(), SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), SLOT(updateFileButtons()), Qt::QueuedConnection);
+    connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(), SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), SLOT(updateFileButtons()), Qt::QueuedConnection);
+
+    connect(Core::self()->workingSetControllerInternal(), SIGNAL(workingSetSwitched()), SLOT(updateFileButtons()));
+    
     // title bar
     {
         QHBoxLayout* topLayout = new QHBoxLayout;
