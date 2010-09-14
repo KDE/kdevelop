@@ -149,7 +149,7 @@ QList<ProjectFolderItem*> CustomMakeManager::parse(KDevelop::ProjectFolderItem *
         if ( fileInfo.isDir() )
         {
             //TODO: make filtering generic
-            if ( fileName == ".svn" || fileName == "CVS" || fileName == ".git" )
+            if ( fileName == QLatin1String(".svn") || fileName == QLatin1String("CVS") || fileName == QLatin1String(".git") || fileName == QLatin1String(".bzr") || fileName == QLatin1String(".hg") || fileName == QLatin1String("_darcs") )
             {
                 continue;
             }

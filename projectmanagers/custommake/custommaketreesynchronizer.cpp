@@ -90,7 +90,7 @@ void CustomMakeTreeSynchronizer::directoriesCreated( const KUrl::List &files,
 {
     Q_FOREACH( const KUrl& _file, files )
     {
-        if ( _file.fileName() == ".svn" || _file.fileName() == "CVS" || _file.fileName() == ".git" )
+        if ( _file.fileName() == QLatin1String(".svn") || _file.fileName() == QLatin1String("CVS") || _file.fileName() == QLatin1String(".git") || _file.fileName() == QLatin1String(".bzr") || _file.fileName() == QLatin1String(".hg") || _file.fileName() == QLatin1String("_darcs") )
         {
             continue;
         }
