@@ -372,7 +372,13 @@ void pp::handle_define (Stream& input)
         macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
         ++input;
       } while (!input.atEnd() && input != '"' && input != '\n');
-      continue;
+      
+      if(!input.atEnd())
+      {
+        macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+        ++input;
+        continue;
+      }
     }
 
     macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
