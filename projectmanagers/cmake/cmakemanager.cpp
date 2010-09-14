@@ -1149,10 +1149,6 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
 
 bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
 {
-    if ( !KDevelop::removeUrl(it->project(), it->url(), false) ) {
-        return false;
-    }
-
     bool ret=true;
     QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
     QMap<ProjectTargetItem*, ProjectFileItem*> targets;
@@ -1160,24 +1156,16 @@ bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
     //We loop through all the files with the same url
     foreach(ProjectFileItem* file, files)
     {
-        ProjectTargetItem* target=static_cast<ProjectBaseItem*>(file->parent())->target();
-        if(target) {
+        ProjectTargetItem* target=file->parent()->target();
+        if(target)
             targets.insert(target, file);
-        } else
-            file->parent()->removeRow(file->row());
     }
-
-    //only remove after we iterated over all files, otherwise the items
-    //might get deleted due to cmake files gettin reparsed
-    //TODO: this still leads to crashes if more than one item in a single target gets removed.
+    
     QMap< ProjectTargetItem*, ProjectFileItem* >::const_iterator it2 = targets.constBegin();
-    while (it2 != targets.constEnd()) {
-        bool res = removeFileFromTarget(it2.value(), it2.key());
-        ret = ret && res;
-        ++it2;
-    }
+    for(; it2!=targets.constEnd(); ++it2)
+        ret = ret && removeFileFromTarget(it2.value(), it2.key());
 
-    return ret;
+    return ret && KDevelop::removeUrl(it->project(), it->url(), false);
 }
 
 bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
@@ -1200,13 +1188,8 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     e.addDocuments(IndexedString(lists));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, QString());
-    if(ret)
-    {
-        if(e.exec())
-        {
-            e.applyAllChanges();
-        }
-    }
+    ret &= e.exec();
+    ret &= e.applyAllChanges();
     
     return ret;
 }

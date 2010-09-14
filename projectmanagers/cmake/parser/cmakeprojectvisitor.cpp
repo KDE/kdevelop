@@ -296,15 +296,20 @@ int CMakeProjectVisitor::visit( const SetDirectoryPropsAst * dirProps)
 int CMakeProjectVisitor::visit( const GetTargetPropAst * prop)
 {
     kDebug(9042) << "getting target " << prop->target() << " prop " << prop->property() << prop->variableName();
-    if(m_props[TargetProperty].contains(prop->target()) && !m_props[TargetProperty][prop->target()].contains(prop->property())) {
-        if(prop->property().startsWith("LOCATION_") && m_props[TargetProperty][prop->target()].contains("IMPORTED_"+prop->property()))
-            m_props[TargetProperty][prop->target()][prop->property()]=m_props[TargetProperty][prop->target()]["IMPORTED_"+prop->property()];
-            
-//         kDebug(9032) << "unexistent property" << prop->property() << "on" << prop->target();
-    }
-//     kDebug(9042) << "current properties" << m_props[TargetProperty][prop->target()].keys();
+    QStringList value;
     
-    m_vars->insert(prop->variableName(), m_props[TargetProperty][prop->target()][prop->property()]);
+    if(m_props[TargetProperty].contains(prop->target())) {
+        QMap<QString, QStringList>& targetProps = m_props[TargetProperty][prop->target()];
+        if(!targetProps.contains(prop->property())) {
+            if(prop->property().startsWith("LOCATION_") && targetProps.contains("IMPORTED_"+prop->property()))
+                targetProps[prop->property()]=targetProps["IMPORTED_"+prop->property()];
+        }
+        value = targetProps.value(prop->property());
+    }
+    if(value.isEmpty())
+        value += QString(prop->variableName()+"-NOTFOUND");
+    
+    m_vars->insert(prop->variableName(), value);
 //     kDebug(9042) << "goooooot" << m_vars->value(prop->variableName());
     return 1;
 }
@@ -387,7 +392,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     }
     
     Target target;
-    target.name=id;
+    target.name=id.isEmpty() ? "<wrong-target>" : id;
     target.declaration=d;
     target.files=sources;
     target.type=t;
