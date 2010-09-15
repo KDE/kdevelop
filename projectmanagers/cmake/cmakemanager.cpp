@@ -1191,13 +1191,8 @@ bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop
     e.addDocuments(IndexedString(lists));
 
     bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, QString());
-    if(ret)
-    {
-        if(e.exec())
-        {
-            e.applyAllChanges();
-        }
-    }
+    ret &= e.exec();
+    ret &= e.applyAllChanges();
     
     return ret;
 }

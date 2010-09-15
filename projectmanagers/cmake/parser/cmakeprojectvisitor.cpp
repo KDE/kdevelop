@@ -394,7 +394,7 @@ void CMakeProjectVisitor::defineTarget(const QString& id, const QStringList& sou
     }
     
     Target target;
-    target.name=id;
+    target.name=id.isEmpty() ? "<wrong-target>" : id;
     target.declaration=d;
     target.files=sources;
     target.type=t;
