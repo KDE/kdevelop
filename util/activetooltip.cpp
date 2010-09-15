@@ -281,13 +281,13 @@ void ActiveToolTipManager::doVisibility() {
         if(fullGeometry.bottom() > screenGeometry.bottom()) {
             //Move up, avoiding the mouse-cursor
             fullGeometry.moveBottom(fullGeometry.top()-10);
-            if(fullGeometry.bottom() > QCursor::pos().y() - 20 && fullGeometry.top() < QCursor::pos().y() + 20)
+            if(fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos()))
                 fullGeometry.moveBottom(QCursor::pos().y() - 20);
         }
         if(fullGeometry.right() > screenGeometry.right()) {
             //Move to left, avoiding the mouse-cursor
             fullGeometry.moveRight(fullGeometry.left()-10);
-            if(fullGeometry.right() > QCursor::pos().x() - 20 && fullGeometry.left() < QCursor::pos().x() + 20)
+            if(fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos()))
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
         }
         
