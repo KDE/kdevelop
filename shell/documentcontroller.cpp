@@ -231,7 +231,7 @@ struct DocumentControllerPrivate {
                 if(mimeType->is( "application/octet-stream" ))
                 {
                     // Try harder using KIO. This also allows looking at the content of remote files.
-                    KIO::MimetypeJob* job = KIO::mimetype(url);
+                    KIO::MimetypeJob* job = KIO::mimetype(url, KIO::HideProgressInfo);
                     if(job->exec())
                         mimeType =  KMimeType::mimeType(job->mimetype());
                     delete job;
