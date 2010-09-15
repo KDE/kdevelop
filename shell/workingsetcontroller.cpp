@@ -46,12 +46,15 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/isession.h>
+#include <kactioncollection.h>
+#include <qtimer.h>
 
 #define SYNC_OFTEN
 
 using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
+const int toolTipTimeout = 2000;
 
 static MainWindow* mainWindow() {
     MainWindow* ret = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
@@ -81,6 +84,9 @@ QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" <<
 
 WorkingSetController::WorkingSetController(Core* core) : m_core(core)
 {
+    m_hideToolTipTimer = new QTimer(this);
+    m_hideToolTipTimer->setInterval(toolTipTimeout);
+    m_hideToolTipTimer->setSingleShot(true);
 }
 
 void WorkingSetController::initialize()
@@ -94,6 +100,8 @@ void WorkingSetController::initialize()
         else
             kDebug() << "have garbage working set with id " << set;
     }
+    
+    if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
 void WorkingSetController::cleanup()
@@ -755,6 +763,7 @@ void WorkingSetFileLabel::setIsActiveFile(bool active)
 {
     if(active)
     {
+        ///@todo Use a nicer-looking "blended" highlighting for the active item, like in the area-tabs
         setAutoFillBackground(true);
         setBackgroundRole(QPalette::Highlight);
         setForegroundRole(QPalette::HighlightedText);
@@ -763,6 +772,7 @@ void WorkingSetFileLabel::setIsActiveFile(bool active)
         setBackgroundRole(QPalette::Window);
         setForegroundRole(QPalette::WindowText);
     }
+    m_isActive = active;
 }
 
 
@@ -863,9 +873,14 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         bodyLayout->addLayout(actionsLayout);
     }
 
-    foreach(const QString& file, m_set->fileList().toSet()) {
+    QSet<QString> hadFiles;
+
+    foreach(const QString& file, m_set->fileList()) {
         
-        ///@todo Use a nicer-looking "blended" highlighting for the active item, like in the area-tabs
+        if(hadFiles.contains(file))
+            continue;
+        
+        hadFiles.insert(file);
         
         FileWidget* widget = new FileWidget;
         widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -894,6 +909,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         
         bodyLayout->addWidget(widget);
         m_fileWidgets.insert(file, widget);
+        m_orderedFileWidgets.push_back(widget);
 
         connect(plusButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
         connect(fileLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
@@ -924,6 +940,8 @@ void WorkingSetToolTipWidget::updateFileButtons()
     bool allOpen = true;
     bool noneOpen = true;
 
+    bool needResize = false;
+    
     for(QMap< QString, FileWidget* >::iterator it = m_fileWidgets.begin(); it != m_fileWidgets.end(); ++it) {
         if(openFiles.contains(it.key())) {
             noneOpen = false;
@@ -933,6 +951,11 @@ void WorkingSetToolTipWidget::updateFileButtons()
             allOpen = false;
             (*it)->m_button->setToolTip(i18n("Add this file to the current working set"));
             (*it)->m_button->setIcon(KIcon("list-add"));
+            if(currentWorkingSet == m_set)
+            {
+                (*it)->hide();
+                needResize = true;
+            }
         }
         
         (*it)->m_label->setIsActiveFile(it.key() == activeFile);
@@ -956,6 +979,9 @@ void WorkingSetToolTipWidget::updateFileButtons()
         m_openButton->setIcon(KIcon("project-open"));
         m_openButton->setText(i18n("Load"));
     }
+    
+    if(needResize && tooltip)
+        tooltip->resize(tooltip->sizeHint());
 }
 
 void WorkingSetToolTipWidget::buttonClicked(bool)
@@ -974,12 +1000,6 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
     }else{
         openFiles.remove(s->objectName());
         filterViews(openFiles);
-        if(mainWindow->area()->workingSet() == m_set->id() && m_fileWidgets.contains(s->objectName()))
-        {
-            m_fileWidgets[s->objectName()]->hide();
-            if(tooltip)
-                tooltip->resize(tooltip->sizeHint());
-        }
     }
 
     if(stillExists)
@@ -1060,7 +1080,116 @@ QIcon WorkingSet::inactiveIcon() const {
         return m_inactiveNonPersistentIcon;
 }
 
+void WorkingSetController::setupActions()
+{
+    KActionCollection * ac =
+        Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
+    KAction *action;
+
+    action = ac->addAction ( "view_next_window" );
+    action->setText( i18n( "Next Document" ) );
+    action->setIcon( KIcon("go-next") );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
+    action->setWhatsThis( i18n( "Switch the focus to the next open document." ) );
+    action->setStatusTip( i18n( "Switch the focus to the next open document." ) );
+    connect( action, SIGNAL(triggered()), this, SLOT(nextDocument()) );
+
+    action = ac->addAction ( "view_previous_window" );
+    action->setText( i18n( "Previous Document" ) );
+    action->setIcon( KIcon("go-previous") );
+    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
+    action->setWhatsThis( i18n( "Switch the focus to the previous open document." ) );
+    action->setStatusTip( i18n( "Switch the focus to the previous open document." ) );
+    connect( action, SIGNAL(triggered()), this, SLOT(previousDocument()) );
+}
+
+void WorkingSetController::showGlobalToolTip()
+{
+    delete tooltip;
+    
+    KDevelop::MainWindow* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
+
+    tooltip = new KDevelop::ActiveToolTip(window, window->mapToGlobal(window->geometry().topRight()));
+    QVBoxLayout* layout = new QVBoxLayout(tooltip);
+    layout->setMargin(0);
+    WorkingSetToolTipWidget* widget = new WorkingSetToolTipWidget(tooltip, getWorkingSet(window->area()->workingSet()), window);
+    layout->addWidget(widget);
+    tooltip->resize( tooltip->sizeHint() );
+    ActiveToolTip::showToolTip(tooltip);
+    connect(m_hideToolTipTimer, SIGNAL(timeout()),  tooltip, SLOT(deleteLater()));
+    m_hideToolTipTimer->start();
+    connect(tooltip, SIGNAL(mouseIn()), m_hideToolTipTimer, SLOT(stop()));
+    connect(tooltip, SIGNAL(mouseOut()), m_hideToolTipTimer, SLOT(start()));
+}
+
+void WorkingSetController::nextDocument()
+{
+    if(!tooltip)
+        showGlobalToolTip();
+
+    m_hideToolTipTimer->stop();
+    m_hideToolTipTimer->start(toolTipTimeout);
+
+    if(tooltip)
+    {
+        WorkingSetToolTipWidget* widget = tooltip->findChild<WorkingSetToolTipWidget*>();
+        Q_ASSERT(widget);
+        widget->nextDocument();
+    }
+}
+
+void WorkingSetController::previousDocument()
+{
+    if(!tooltip)
+        showGlobalToolTip();
+
+    m_hideToolTipTimer->stop();
+    m_hideToolTipTimer->start(toolTipTimeout);
+    
+    if(tooltip)
+    {
+        WorkingSetToolTipWidget* widget = tooltip->findChild<WorkingSetToolTipWidget*>();
+        Q_ASSERT(widget);
+        widget->previousDocument();
+    }
+}
+
+void WorkingSetToolTipWidget::nextDocument()
+{
+    int active = -1;
+    for(int a = 0; a < m_orderedFileWidgets.size(); ++a)
+        if(m_orderedFileWidgets[a]->m_label->isActive())
+            active = a;
+    
+    if(active == -1)
+    {
+        kWarning() << "Found no active document";
+        return;
+    }
+    
+    int next = (active + 1) % m_orderedFileWidgets.size();
+    m_orderedFileWidgets[next]->m_label->emitClicked();
+}
+
+void WorkingSetToolTipWidget::previousDocument()
+{
+    int active = -1;
+    for(int a = 0; a < m_orderedFileWidgets.size(); ++a)
+        if(m_orderedFileWidgets[a]->m_label->isActive())
+            active = a;
+    
+    if(active == -1)
+    {
+        kWarning() << "Found no active document";
+        return;
+    }
+    
+    int next = active - 1;
+    if(next < 0)
+        next += m_orderedFileWidgets.size();
+    m_orderedFileWidgets[next]->m_label->emitClicked();
+}
 
 #include "workingsetcontroller.moc"
 

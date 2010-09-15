@@ -236,7 +236,8 @@ public slots:
     void buttonClicked(bool);
     void updateFileButtons();
     void labelClicked();
-    
+    void nextDocument();
+    void previousDocument();
 private:
     
     class FileWidget : public QWidget {
@@ -245,6 +246,7 @@ private:
         class WorkingSetFileLabel* m_label;
     };
     
+    QVector<FileWidget*> m_orderedFileWidgets;
     QMap<QString, FileWidget*> m_fileWidgets;
     WorkingSet* m_set;
 
@@ -260,11 +262,23 @@ class WorkingSetFileLabel : public QLabel {
 Q_OBJECT
 
 public:
+    WorkingSetFileLabel() : m_isActive(false) {
+    }
     virtual void mouseReleaseEvent(QMouseEvent* ev);
     void setIsActiveFile(bool active);
 
+    bool isActive() const {
+        return m_isActive;
+    }
+    
+    void emitClicked() {
+        emit clicked();
+    }
+    
 Q_SIGNALS:
     void clicked();
+private:
+    bool m_isActive;
 };
 
 class WorkingSetController : public QObject
@@ -311,10 +325,17 @@ private slots:
     bool usingIcon(QString icon);
 
     bool iconValid(QString icon);
+    
+    void nextDocument();
+    void previousDocument();
+    void showGlobalToolTip();
 private:
+    void setupActions();
+    
     QSet<QString> m_usedIcons;
     QMap<QString, WorkingSet*> m_workingSets;
     KDevelop::Core* m_core;
+    QTimer* m_hideToolTipTimer;
 };
 }
 
