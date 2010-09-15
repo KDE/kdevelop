@@ -875,6 +875,9 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     QSet<QString> hadFiles;
 
+    QVBoxLayout* filesLayout = new QVBoxLayout;
+    filesLayout->setMargin(0);
+    
     foreach(const QString& file, m_set->fileList()) {
         
         if(hadFiles.contains(file))
@@ -888,7 +891,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         QHBoxLayout* fileLayout = new QHBoxLayout(widget);
 
         QToolButton* plusButton = new QToolButton;
-        plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
         fileLayout->addWidget(plusButton);
 
         WorkingSetFileLabel* fileLabel = new WorkingSetFileLabel;
@@ -896,10 +899,13 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         // We add spaces behind and after, to make it look nicer
         fileLabel->setText("&nbsp;" + Core::self()->projectController()->prettyFileName(KUrl(file)) + "&nbsp;");
         fileLabel->setToolTip(i18n("Click to open and activate this document."));
-//         fileLabel->setToolTip(KUrl(file).pathOrUrl());
+        fileLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         fileLayout->addWidget(fileLabel);
         fileLayout->setMargin(0);
 
+        plusButton->setMaximumHeight(fileLabel->sizeHint().height() + 4);
+        plusButton->setMaximumWidth(plusButton->maximumHeight());
+        
         plusButton->setObjectName(file);
         fileLabel->setObjectName(file);
         fileLabel->setCursor(QCursor(Qt::PointingHandCursor));
@@ -907,13 +913,15 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         widget->m_button = plusButton;
         widget->m_label = fileLabel;
         
-        bodyLayout->addWidget(widget);
+        filesLayout->addWidget(widget);
         m_fileWidgets.insert(file, widget);
         m_orderedFileWidgets.push_back(widget);
 
         connect(plusButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
         connect(fileLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
     }
+    
+    bodyLayout->addLayout(filesLayout);
 
     updateFileButtons();
     connect(set, SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
@@ -947,6 +955,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
             noneOpen = false;
             (*it)->m_button->setToolTip(i18n("Remove this file from the current working set"));
             (*it)->m_button->setIcon(KIcon("list-remove"));
+            (*it)->show();
         }else{
             allOpen = false;
             (*it)->m_button->setToolTip(i18n("Add this file to the current working set"));
@@ -1169,6 +1178,9 @@ void WorkingSetToolTipWidget::nextDocument()
     }
     
     int next = (active + 1) % m_orderedFileWidgets.size();
+    while(m_orderedFileWidgets[next]->isHidden() && next != active)
+        next = (next + 1) % m_orderedFileWidgets.size();
+    
     m_orderedFileWidgets[next]->m_label->emitClicked();
 }
 
@@ -1188,6 +1200,14 @@ void WorkingSetToolTipWidget::previousDocument()
     int next = active - 1;
     if(next < 0)
         next += m_orderedFileWidgets.size();
+    
+    while(m_orderedFileWidgets[next]->isHidden() && next != active)
+    {
+        next -= 1;
+        if(next < 0)
+            next += m_orderedFileWidgets.size();
+    }
+    
     m_orderedFileWidgets[next]->m_label->emitClicked();
 }
 
