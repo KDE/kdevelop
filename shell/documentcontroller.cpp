@@ -52,6 +52,7 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "savedialog.h"
 #include <kmessagebox.h>
+#include <KIO/Job>
 
 #include <config-kdevplatform.h>
 #if HAVE_KOMPARE
@@ -226,6 +227,15 @@ struct DocumentControllerPrivate {
                 }
 
                 mimeType = KMimeType::findByUrl( url );
+                
+                if(mimeType->is( "application/octet-stream" ))
+                {
+                    // Try harder using KIO. This also allows looking at the content of remote files.
+                    KIO::MimetypeJob* job = KIO::mimetype(url);
+                    if(job->exec())
+                        mimeType =  KMimeType::mimeType(job->mimetype());
+                    delete job;
+                }
             }
 
             // is the URL pointing to a directory?
@@ -265,7 +275,7 @@ struct DocumentControllerPrivate {
                     doc = new PartDocument(url, Core::self());
                 } else
                 {
-                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1'.\nDo you want to open it as plain text?", url.fileName()), i18n("Could Not Find Editor"));
+                    int openAsText = KMessageBox::questionYesNo(0, i18n("KDevelop could not find the editor for file '%1' of type %2.\nDo you want to open it as plain text?", url.fileName(), mimeType->name()), i18n("Could Not Find Editor"));
                     if (openAsText == KMessageBox::Yes)
                         doc = new TextDocument(url, Core::self(), _encoding);
                     else
