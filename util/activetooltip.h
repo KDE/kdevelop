@@ -85,7 +85,11 @@ public:
     ///Set the area within which the mouse can be moved freely without hiding the tooltip
     void setBoundingGeometry(QRect geometry);
 Q_SIGNALS:
-    void resized();    
+    void resized();
+    // Emitted whenever mouse-activity is noticed within the tooltip area
+    void mouseIn();
+    // Emitted whenever mouse-activity is noticed outside of the tooltip area
+    void mouseOut();
 private:
     virtual void closeEvent(QCloseEvent* );
     void updateMouseDistance();

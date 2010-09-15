@@ -126,11 +126,15 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
                 
                 //Additional test: When the cursor has been moved towards the tooltip, don't close it.
                 if(distance > (int)d->previousDistance_)
+                {
                     ++d->mouseOut_;
-                else
+                    emit mouseOut();
+                }else
                     d->previousDistance_ = distance;
-            } else               
+            } else{
                 d->mouseOut_ = 0;
+                emit mouseIn();
+            }
             if (d->mouseOut_ == 2) {
                 kDebug() << "closing because of mouse move";
                 close();
@@ -277,13 +281,13 @@ void ActiveToolTipManager::doVisibility() {
         if(fullGeometry.bottom() > screenGeometry.bottom()) {
             //Move up, avoiding the mouse-cursor
             fullGeometry.moveBottom(fullGeometry.top()-10);
-            if(fullGeometry.bottom() > QCursor::pos().y() - 20)
+            if(fullGeometry.bottom() > QCursor::pos().y() - 20 && fullGeometry.top() < QCursor::pos().y() + 20)
                 fullGeometry.moveBottom(QCursor::pos().y() - 20);
         }
         if(fullGeometry.right() > screenGeometry.right()) {
             //Move to left, avoiding the mouse-cursor
             fullGeometry.moveRight(fullGeometry.left()-10);
-            if(fullGeometry.right() > QCursor::pos().x() - 20)
+            if(fullGeometry.right() > QCursor::pos().x() - 20 && fullGeometry.left() < QCursor::pos().x() + 20)
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
         }
         
