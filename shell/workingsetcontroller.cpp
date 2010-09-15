@@ -804,16 +804,20 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     {
         QHBoxLayout* topLayout = new QHBoxLayout;
         m_setButton = new WorkingSetToolButton(this, set, mainwindow);
-        // make read-only
-        m_setButton->disableTooltip();
-        m_setButton->setEnabled(false);
-    //     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        topLayout->addWidget(m_setButton);
+        m_setButton->hide();
+       
+        topLayout->addSpacing(5);
+        QLabel* icon = new QLabel;
+        topLayout->addWidget(icon);
+        topLayout->addSpacing(5);
 
         QLabel* name = new QLabel(i18n("<b>Working Set</b>"));
-        name->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        name->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         topLayout->addWidget(name);
+         topLayout->addSpacing(10);
 
+        icon->setPixmap(m_setButton->icon().pixmap(name->sizeHint().height()+8, name->sizeHint().height()+8));
+        
         topLayout->addStretch();
 
         m_openButton = new QPushButton;
