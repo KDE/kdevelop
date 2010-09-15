@@ -950,6 +950,8 @@ void WorkingSetToolTipWidget::updateFileButtons()
 
     bool needResize = false;
     
+    bool allHidden = true;
+    
     for(QMap< QString, FileWidget* >::iterator it = m_fileWidgets.begin(); it != m_fileWidgets.end(); ++it) {
         if(openFiles.contains(it.key())) {
             noneOpen = false;
@@ -966,6 +968,10 @@ void WorkingSetToolTipWidget::updateFileButtons()
                 needResize = true;
             }
         }
+        
+        
+        if(!(*it)->isHidden())
+            allHidden = false;
         
         (*it)->m_label->setIsActiveFile(it.key() == activeFile);
     }
@@ -988,6 +994,9 @@ void WorkingSetToolTipWidget::updateFileButtons()
         m_openButton->setIcon(KIcon("project-open"));
         m_openButton->setText(i18n("Load"));
     }
+    
+    if(allHidden && tooltip)
+        tooltip->hide();
     
     if(needResize && tooltip)
         tooltip->resize(tooltip->sizeHint());
