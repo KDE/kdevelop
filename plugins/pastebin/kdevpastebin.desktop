@@ -4,6 +4,7 @@ Icon=edit-paste
 Exec=blubb
 Comment=This plugin helps you upload your patches to Pastebin service
 Comment[en_GB]=This plugin helps you upload your patches to Pastebin service
+Comment[nl]=Deze plugin helpt u om uw patches naar de Pastebin-service te uploaden
 Comment[pt]=Este 'plugin' ajuda-o a enviar as suas modificações para o serviço Pastebin
 Comment[sv]=Insticksprogrammet hjälper dig att ladda upp programfixar till tjänsten Pastebin
 Comment[uk]=За допомогою цього додатка ви зможете вивантажувати ваші латки до служби Pastebin
