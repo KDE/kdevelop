@@ -167,16 +167,13 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     KUrl ret;
     if(item) {
         bool isroot = false;
-        if (ProjectFolderItem* projectFolderItem = dynamic_cast<ProjectFolderItem*>(item)) {
-            if(!projectFolderItem->parent()) {
-                isroot = true;
-            }
-        }
+        if (ProjectFolderItem* projectFolderItem = item->folder())
+            isroot = !projectFolderItem->parent();
+        
         if (isroot) {
             ret=CMake::currentBuildDir(item->project());
-        }
-        else {
-            ret=buildDirectory(dynamic_cast<CMakeFolderItem*>(item->parent()));
+        } else {
+            ret=buildDirectory(item->parent());
             CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
             if(fi)
                 ret.addPath(fi->buildDir());
