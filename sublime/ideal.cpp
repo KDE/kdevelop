@@ -134,7 +134,8 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
 
         // paint text and icon
         option.text = text();
-        QPixmap ic = icon().pixmap(option.iconSize, QIcon::Normal, QIcon::On);
+        QIcon::Mode iconMode = (option.state & QStyle::State_MouseOver) ? QIcon::Active : QIcon::Normal;
+        QPixmap ic = icon().pixmap(option.iconSize, iconMode, QIcon::On);
         QTransform tf;
         if(_area == Qt::LeftDockWidgetArea) {
             tf = tf.rotate(90);
