@@ -166,7 +166,7 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
 {
     KUrl ret;
     ProjectBaseItem* parent = item->parent();
-    if (parent) {
+    if (!parent) {
         ret=CMake::currentBuildDir(item->project());
     } else {
         ret=buildDirectory(parent);
