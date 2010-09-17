@@ -70,6 +70,7 @@ GenericName[pt_BR]=Suporte à documentação
 GenericName[sv]=Dokumentationsstöd
 GenericName[uk]=Підтримка роботи з документацією
 GenericName[x-test]=xxDocumentation Supportxx
+GenericName[zh_TW]=文件支援
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevqthelp

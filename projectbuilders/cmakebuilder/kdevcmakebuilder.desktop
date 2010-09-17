@@ -42,6 +42,7 @@ GenericName[pt_BR]=Construtor de projetos
 GenericName[sv]=Projektbyggverktyg
 GenericName[uk]=Збирання проектів
 GenericName[x-test]=xxProject Builderxx
+GenericName[zh_TW]=專案編譯器
 Comment=Builds CMake Projects
 Comment[ca]=Construeix projectes CMake
 Comment[ca@valencia]=Construeix projectes CMake
