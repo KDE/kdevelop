@@ -1536,6 +1536,47 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
   }
 }
 
+void TestCppCodeCompletion::testMacroIncludeDirectives()
+{
+  addInclude( "macroincludedirectivetest1.h", "class Test1{ };" );
+
+  {
+    QByteArray method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <macroincludedirectivetest1.h> \n #include TEST_HPP\n");
+
+    DUContext* top = parse(method, DumpAll);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 1);
+
+    release(top);
+  }
+  
+  {
+    QByteArray method("#define TEST \"macroincludedirectivetest1.h\" \n #include TEST\n");
+
+    DUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 1);
+
+    release(top);
+  }
+
+  {
+    QByteArray method("#define TEST <macroincludedirectivetest1.h> \n #include TEST\n");
+
+    DUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 1);
+
+    release(top);
+  }
+}
+
 void TestCppCodeCompletion::testAcrossHeaderReferences()
 {
   addInclude( "acrossheader1.h", "class Test{ };" );

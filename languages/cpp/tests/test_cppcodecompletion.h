@@ -84,6 +84,7 @@ private slots:
   void testForwardDeclaration();
   void testArgumentMatching();
   void testAcrossHeaderReferences();
+  void testMacroIncludeDirectives();
   void testAcrossHeaderTemplateReferences();
   void testAcrossHeaderTemplateResolution();
   void testHeaderGuards();
