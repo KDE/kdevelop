@@ -1541,9 +1541,9 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
   addInclude( "macroincludedirectivetest1.h", "class Test1{ };" );
 
   {
-    QByteArray method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <macroincludedirectivetest1.h> \n #include TEST_HPP\n");
+    QByteArray method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <TEST> \n #include TEST_HPP\n");
 
-    DUContext* top = parse(method, DumpAll);
+    DUContext* top = parse(method, DumpNone);
 
     DUChainWriteLocker lock(DUChain::lock());
 

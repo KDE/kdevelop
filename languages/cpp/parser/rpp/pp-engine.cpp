@@ -184,7 +184,8 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
   while (!input.atEnd() && input != quote) {
     RETURN_ON_FAIL(input != '\n');
 
-    includeNameB.append(input);
+    if(((uint)input) != indexFromCharacter(' '))
+      includeNameB.append(input);
     ++input;
   }
 
