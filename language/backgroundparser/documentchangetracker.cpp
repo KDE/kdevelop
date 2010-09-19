@@ -146,6 +146,20 @@ bool DocumentChangeTracker::needUpdate() const
     return m_needUpdate;
 }
 
+bool DocumentChangeTracker::checkMergeTokens(const KTextEditor::Range& range, QString oldText, QString newText)
+{
+    ///@todo Improve this so that it notices when we wrapped in/out of a line-comment
+    ///@todo Improve this so that it really checks whether some merge-able tokens have been moved together
+    if(m_document->documentRange().contains(range))
+    {
+        if(range.start().column() == 0 || m_document->text(KTextEditor::Range(range.start().line(), range.start().column()-1, range.start().line(), range.start().column()))[0].isSpace())
+            return true;
+        if(range.end().column() >= m_document->lineLength(range.end().line()) || m_document->text(KTextEditor::Range(range.end().line(), range.end().column(), range.end().line(), range.end().column()+1))[0].isSpace())
+            return true;
+    }
+    return false;
+}
+
 void DocumentChangeTracker::textChanged( Document* document, Range /*oldRange*/, QString oldText, Range newRange )
 {
     m_currentCleanedInsertion.clear();
@@ -158,7 +172,7 @@ void DocumentChangeTracker::textChanged( Document* document, Range /*oldRange*/,
     QString newTextWithoutWhitespace = newText;
     newTextWithoutWhitespace.remove(whiteSpaceRegExp);
     
-    if(oldTextWithoutWhitespace.isEmpty() && newTextWithoutWhitespace.isEmpty())
+    if(oldTextWithoutWhitespace.isEmpty() && newTextWithoutWhitespace.isEmpty() && checkMergeTokens(newRange, oldText, newText))
     {
         // Only whitespace was changed, no update is required
     }else{
@@ -198,7 +212,7 @@ void DocumentChangeTracker::textInserted( Document* document, Range range )
     QString textWithoutWhitespace = text;
     textWithoutWhitespace.remove(whiteSpaceRegExp);
     
-    if(textWithoutWhitespace.isEmpty())
+    if(textWithoutWhitespace.isEmpty() && checkMergeTokens(range, "", text))
     {
         // Only whitespace was changed, no update is required
     }else{
@@ -225,7 +239,7 @@ void DocumentChangeTracker::textRemoved( Document* document, Range oldRange, QSt
     QString textWithoutWhitespace = text;
     textWithoutWhitespace.remove(whiteSpaceRegExp);
     
-    if(textWithoutWhitespace.isEmpty())
+    if(textWithoutWhitespace.isEmpty() && checkMergeTokens(Range(oldRange.start(), oldRange.start()), oldText, ""))
     {
         // Only whitespace was changed, no update is required
     }else{

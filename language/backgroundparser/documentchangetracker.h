@@ -249,6 +249,8 @@ public slots:
     void aboutToInvalidateMovingInterfaceContent ( KTextEditor::Document* document );
 private:
     
+    virtual bool checkMergeTokens(const KTextEditor::Range& range, QString oldText, QString newText);
+    
     friend class RevisionLockerAndClearerPrivate;
     void lockRevision(qint64 revision);
     void unlockRevision(qint64 revision);
