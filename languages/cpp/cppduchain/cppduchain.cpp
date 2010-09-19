@@ -381,9 +381,6 @@ KDevelop::DUContext* logicalParentContext(KDevelop::DUContext* context, KDevelop
  * Preprocess the given string using the macros from given EnvironmentFile up to the given line
  * If line is -1, all macros are respected.
  * This is a quite slow operation, because thousands of macros need to be shuffled around.
- * 
- * @todo maybe implement a version of rpp::Environment that directly works on EnvironmentFile,
- * without needing to copy all macros.
  * */
 QString preprocess( const QString& text, Cpp::EnvironmentFile* file, int line, QSet<IndexedString> disableMacros ) {
 
