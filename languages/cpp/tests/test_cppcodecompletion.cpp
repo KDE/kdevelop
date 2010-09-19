@@ -1539,6 +1539,7 @@ void TestCppCodeCompletion::testUsesThroughMacros() {
 void TestCppCodeCompletion::testMacroIncludeDirectives()
 {
   addInclude( "macroincludedirectivetest1.h", "class Test1{ };" );
+  addInclude( "macro includedirectivetest2.h", "class Test1{ };" );
 
   {
     QByteArray method("#define TEST macroincludedirectivetest1.h \n #define TEST_HPP <macroincludedirectivetest1.h> \n #include TEST_HPP\n");
@@ -1566,6 +1567,30 @@ void TestCppCodeCompletion::testMacroIncludeDirectives()
 
   {
     QByteArray method("#define TEST <macroincludedirectivetest1.h> \n #include TEST\n");
+
+    DUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 1);
+
+    release(top);
+  }
+
+  {
+    QByteArray method("#include \"macro includedirectivetest2.h\"\n");
+
+    DUContext* top = parse(method, DumpNone);
+
+    DUChainWriteLocker lock(DUChain::lock());
+
+    QCOMPARE(top->importedParentContexts().size(), 1);
+
+    release(top);
+  }
+
+  {
+    QByteArray method("#define TEST \"macro includedirectivetest2.h\" \n #include TEST\n");
 
     DUContext* top = parse(method, DumpNone);
 

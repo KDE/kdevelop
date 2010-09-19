@@ -169,7 +169,22 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
     skip_blanks(input, devnull());
     RETURN_ON_FAIL(!includeString.isEmpty() && (includeString.first() == indexFromCharacter('<') || includeString.first() == indexFromCharacter('"')));
 
-    Stream newInput(&includeString, inputPosition);
+    // Filter out whitespaces
+    PreprocessedContents filteredIncludeString;
+    if(!includeString.empty() && includeString.front() == indexFromCharacter('"'))
+    {
+      // Don't filter if it is a string token
+      filteredIncludeString = includeString;
+    }
+    else
+    {
+      // Filter out whitespaces, as the preprocessor adds them in random places to prevent implicit token merging
+      foreach(uint index, includeString)
+          if(index != indexFromCharacter(' '))
+            filteredIncludeString.push_back(index);
+    }
+    
+    Stream newInput(&filteredIncludeString, inputPosition);
     newInput.setOriginalInputPosition(originalInputPosition);
     handle_include(skip_current_path, newInput, output);
     return;
