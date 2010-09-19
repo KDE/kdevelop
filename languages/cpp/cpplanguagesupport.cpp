@@ -656,7 +656,7 @@ QWidget* CppLanguageSupport::specialLanguageObjectNavigationWidget(const KUrl& u
         Cpp::EnvironmentFile* p(dynamic_cast<Cpp::EnvironmentFile*>(ctx->parsingEnvironmentFile().data()));
         if(p) {
           kDebug() << "preprocessing" << text;
-          preprocessedBody = Cpp::preprocess(text, p, position.line);
+          preprocessedBody = Cpp::preprocess(text, p, position.line+1);
         }
       }
     }
