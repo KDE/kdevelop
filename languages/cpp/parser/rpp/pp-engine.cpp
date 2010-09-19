@@ -368,10 +368,19 @@ void pp::handle_define (Stream& input)
           // skip escaped close quote
           macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
           ++input;
+          if(input.atEnd())
+            break;
         }
         macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
         ++input;
       } while (!input.atEnd() && input != '"' && input != '\n');
+
+      if(!input.atEnd())
+      {
+        macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
+        ++input;
+      }
+      continue;
     }
 
     macro->definitionList().append(KDevelop::IndexedString::fromIndex(input.current()));
