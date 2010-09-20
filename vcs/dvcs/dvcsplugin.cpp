@@ -124,8 +124,8 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
     menu->addSeparator();    
     menu->addAction(KIcon("arrow-up-double"), i18n("Push"), this, SLOT(ctxPush()));
     menu->addAction(KIcon("arrow-down-double"), i18n("Pull"), this, SLOT(ctxPull()));
-    menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()));
-    menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()));
+    menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
+    menu->addAction(i18n("Revision History"), this, SLOT(ctxRevHistory()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);
 
     ContextMenuExtension menuExt;
@@ -184,7 +184,10 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     
     ICore::self()->documentController()->saveAllDocuments();
     BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()), this, core()->uiController()->activeMainWindow());
-    branchManager.exec();
+    if(branchManager.isValid())
+        branchManager.exec();
+    else
+        KMessageBox::error(0, i18n("Could not show the Branch Manager, current branch is unavailable."));
 }
 
 // This is redundant with the normal VCS "history" action
