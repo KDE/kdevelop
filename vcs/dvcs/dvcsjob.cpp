@@ -227,7 +227,7 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
     //so we show the output then.
     if(verbosity()==Silent)
         startOutput();
-    jobIsReady();
+    emitResult();
 }
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
