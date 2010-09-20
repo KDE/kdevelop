@@ -52,9 +52,12 @@ BranchManager::BranchManager(const QString &repo, KDevelop::DistributedVersionCo
     m_model = new BranchesListModel(d, repo, this);
     m_ui->branchView->setModel(m_model);
     
-    QList< QStandardItem* > items = m_model->findItems(d->curBranch(repo));
-    Q_ASSERT(!items.isEmpty() && "the current branch should be among the branches");
-    m_ui->branchView->selectionModel()->select(items.first()->index(), QItemSelectionModel::ClearAndSelect);
+    QString branchname = d->curBranch(repo);
+    m_valid = !branchname.isEmpty();
+    if(m_valid) {
+        QList< QStandardItem* > items = m_model->findItems(branchname);
+        m_ui->branchView->selectionModel()->select(items.first()->index(), QItemSelectionModel::ClearAndSelect);
+    }
     
     connect(m_ui->newButton, SIGNAL(clicked()), this, SLOT(createBranch()));
     connect(m_ui->deleteButton, SIGNAL(clicked()), this, SLOT(delBranch()));

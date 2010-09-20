@@ -40,6 +40,8 @@ class BranchManager : public KDialog
 public:
     BranchManager(const QString &_repo, KDevelop::DistributedVersionControlPlugin* executor, QWidget *parent = 0);
     ~BranchManager();
+    
+    bool isValid() const { return m_valid; }
 
 signals:
     void checkedOut(KJob*);
@@ -55,6 +57,7 @@ private:
 
     Ui::BranchDialogBase* m_ui;
     BranchesListModel* m_model;
+    bool m_valid;
     
 };
 
