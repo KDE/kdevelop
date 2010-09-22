@@ -369,8 +369,10 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const KUrl::List& files)
             toadd += file;
     }
     
-    VcsJob* job = add(toadd);
-    job->exec();
+    if(!toadd.isEmpty()) {
+        VcsJob* job = add(toadd);
+        job->exec();
+    }
 }
 
 VcsJob* GitPlugin::remove(const KUrl::List& files)
