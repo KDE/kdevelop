@@ -404,7 +404,7 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
     QMap< IndexedString, QList< SimpleRange > > currentRevisionUses = decl->usesCurrentRevision();
     for(QMap< IndexedString, QList< SimpleRange > >::iterator fileIt = currentRevisionUses.begin(); fileIt != currentRevisionUses.end(); ++fileIt)
     {
-      for(QList< SimpleRange >::const_iterator useIt = (*fileIt).begin(); useIt != (*fileIt).end(); ++useIt)
+      for(QList< SimpleRange >::const_iterator useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt)
       {
         highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(*useIt, fileIt.key()));
         highlights.highlights.back()->setAttribute(highlightedUseAttribute());
