@@ -890,16 +890,9 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             
             if(pendingfolder) {
                 item->appendRow(pendingfolder);
-            } else {
-                KUrl cache=fileurl;
-                cache.addPath("CMakeCache.txt");
+            } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
-                if(!QFile::exists(cache.toLocalFile())
-                    && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
-                {
-                    ProjectFolderItem* folder = new ProjectFolderItem( item->project(), fileurl, item );
-                    reloadFiles(folder);
-                }
+                reloadFiles(new ProjectFolderItem( item->project(), fileurl, item ));
             }
         }
         else
@@ -907,6 +900,18 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             new KDevelop::ProjectFileItem( item->project(), fileurl, item );
         }
     }
+}
+
+bool CMakeManager::isCorrectFolder(const KUrl& url, IProject* p) const
+{
+    KUrl cache=url, missing=url;
+    cache.addPath("CMakeCache.txt");
+    missing.addPath(".kdev_ignore");
+    
+    bool ret = !QFile::exists(cache.toLocalFile()) && !QFile::exists(missing.toLocalFile());
+    ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
+    
+    return ret;
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const

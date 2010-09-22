@@ -127,6 +127,7 @@ private:
     void reimport(KDevelop::ProjectFolderItem* fi);
     CacheValues readCache(const KUrl &path) const;
     bool isReloading(KDevelop::IProject* p);
+    bool isCorrectFolder(const KUrl& url, KDevelop::IProject* p) const;
     
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
