@@ -1014,24 +1014,18 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
 
 KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
-    if ( !KDevelop::createFolder(folder) ) {
+    if(!dynamic_cast<CMakeFolderItem*>(parent)) {
+        KDevelop::createFolder(folder);
         return 0;
     }
     
     KUrl lists=parent->url();
     lists.addPath("CMakeLists.txt");
     
-    if(!QFile::exists(lists.toLocalFile())) //Folder's been added not a build folder, so we're done
-        return 0;
-    
-    Q_ASSERT(QFile::exists(folder.toLocalFile()));
-    
     QString relative=KUrl::relativeUrl(parent->url(), folder);
 
     kDebug() << "Adding folder " << parent->url() << " to " << folder << " as " << relative;
-
     Q_ASSERT(!relative.contains("/"));
-//     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
 
     ApplyChangesWidget e;
     e.setCaption(relative);
@@ -1042,21 +1036,16 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
 
     if(e.exec())
     {
-        KUrl newCMakeLists(folder);
-        newCMakeLists.addPath("CMakeLists.txt");
-
-        QFile f(newCMakeLists.toLocalFile());
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Could not create the directory's CMakeLists.txt file."));
-            return 0;
-        }
-        QTextStream out(&f);
-        out << "\n";
-
         bool saved=e.applyAllChanges();
-        if(!saved)
+        if(saved && KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
+            KUrl newCMakeLists(folder);
+            newCMakeLists.addPath("CMakeLists.txt");
+
+            QFile f(newCMakeLists.toLocalFile());
+            f.open(QIODevice::WriteOnly | QIODevice::Text);
+            QTextStream out(&f);
+            out << "\n";
+        } else
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                   i18n("Could not save the change."));
     }
