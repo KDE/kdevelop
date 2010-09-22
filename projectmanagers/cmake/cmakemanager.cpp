@@ -624,7 +624,7 @@ KUrl::List CMakeManager::includeDirectories(KDevelop::ProjectBaseItem *item) con
     while(!folder && item)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
-        item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
+        item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << (folder ? folder->url() : KUrl()) << item;
     }
     Q_ASSERT(folder);
@@ -642,7 +642,7 @@ QHash< QString, QString > CMakeManager::defines(KDevelop::ProjectBaseItem *item 
     while(!folder)
     {
         folder = dynamic_cast<CMakeFolderItem*>( item );
-        item = static_cast<KDevelop::ProjectBaseItem*>(item->parent());
+        item = item->parent();
 //         kDebug(9042) << "Looking for a folder: " << folder << item;
     }
     Q_ASSERT(folder);
@@ -882,16 +882,9 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             
             if(pendingfolder) {
                 item->appendRow(pendingfolder);
-            } else {
-                KUrl cache=fileurl;
-                cache.addPath("CMakeCache.txt");
+            } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
-                if(!QFile::exists(cache.toLocalFile())
-                    && !CMake::allBuildDirs(item->project()).contains(fileurl.toLocalFile(KUrl::RemoveTrailingSlash)))
-                {
-                    ProjectFolderItem* folder = new ProjectFolderItem( item->project(), fileurl, item );
-                    reloadFiles(folder);
-                }
+                reloadFiles(new ProjectFolderItem( item->project(), fileurl, item ));
             }
         }
         else
@@ -899,6 +892,18 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             new KDevelop::ProjectFileItem( item->project(), fileurl, item );
         }
     }
+}
+
+bool CMakeManager::isCorrectFolder(const KUrl& url, IProject* p) const
+{
+    KUrl cache=url, missing=url;
+    cache.addPath("CMakeCache.txt");
+    missing.addPath(".kdev_ignore");
+    
+    bool ret = !QFile::exists(cache.toLocalFile()) && !QFile::exists(missing.toLocalFile());
+    ret &= !CMake::allBuildDirs(p).contains(url.toLocalFile(KUrl::RemoveTrailingSlash));
+    
+    return ret;
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
@@ -1001,24 +1006,18 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
 
 KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
-    if ( !KDevelop::createFolder(folder) ) {
+    if(!dynamic_cast<CMakeFolderItem*>(parent)) {
+        KDevelop::createFolder(folder);
         return 0;
     }
     
     KUrl lists=parent->url();
     lists.addPath("CMakeLists.txt");
     
-    if(!QFile::exists(lists.toLocalFile())) //Folder's been added not a build folder, so we're done
-        return 0;
-    
-    Q_ASSERT(QFile::exists(folder.toLocalFile()));
-    
     QString relative=KUrl::relativeUrl(parent->url(), folder);
 
     kDebug() << "Adding folder " << parent->url() << " to " << folder << " as " << relative;
-
     Q_ASSERT(!relative.contains("/"));
-//     CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
 
     ApplyChangesWidget e;
     e.setCaption(relative);
@@ -1029,21 +1028,16 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
 
     if(e.exec())
     {
-        KUrl newCMakeLists(folder);
-        newCMakeLists.addPath("CMakeLists.txt");
-
-        QFile f(newCMakeLists.toLocalFile());
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Could not create the directory's CMakeLists.txt file."));
-            return 0;
-        }
-        QTextStream out(&f);
-        out << "\n";
-
         bool saved=e.applyAllChanges();
-        if(!saved)
+        if(saved && KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
+            KUrl newCMakeLists(folder);
+            newCMakeLists.addPath("CMakeLists.txt");
+
+            QFile f(newCMakeLists.toLocalFile());
+            f.open(QIODevice::WriteOnly | QIODevice::Text);
+            QTextStream out(&f);
+            out << "\n";
+        } else
             KMessageBox::error(0, i18n("KDevelop - CMake Support"),
                                   i18n("Could not save the change."));
     }

@@ -31,6 +31,7 @@ CMakeFolderItem::CMakeFolderItem( KDevelop::IProject *project, const KUrl &folde
                                   CMakeFolderItem* item)
     : KDevelop::ProjectBuildFolderItem( project, folder, item ), m_formerParent(item), m_buildDir(build)
 {
+    Q_ASSERT(folder.path().endsWith("/"));
 }
 
 QStringList CMakeFolderItem::includeDirectories() const

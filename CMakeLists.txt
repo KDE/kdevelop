@@ -5,8 +5,13 @@ set(KDE4_BUILD_TESTS "ON" CACHE "BOOL" "Enable building of tests" FORCE )
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
 
 set( KDEVELOP_VERSION_MAJOR 4 )
+<<<<<<< HEAD
 set( KDEVELOP_VERSION_MINOR 1 )
 set( KDEVELOP_VERSION_PATCH 60 )
+=======
+set( KDEVELOP_VERSION_MINOR 0 )
+set( KDEVELOP_VERSION_PATCH 82 )
+>>>>>>> 4.1
 
 set(KDE_MIN_VERSION "4.5.0")
 find_package(KDE4 4.5.0 REQUIRED)
