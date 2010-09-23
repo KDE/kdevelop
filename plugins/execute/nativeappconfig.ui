@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>512</width>
-    <height>515</height>
+    <width>511</width>
+    <height>699</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -17,16 +17,6 @@
       <string>Executable</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Project Target:</string>
-        </property>
-        <property name="buddy">
-         <cstring>projectTargetRadio</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QRadioButton" name="projectTargetRadio">
         <property name="sizePolicy">
@@ -53,16 +43,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Executable:</string>
-        </property>
-        <property name="buddy">
-         <cstring>executableRadio</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QRadioButton" name="executableRadio">
         <property name="enabled">
@@ -83,8 +63,31 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Executable:</string>
+        </property>
+        <property name="buddy">
+         <cstring>executableRadio</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Project Target:</string>
+        </property>
+        <property name="buddy">
+         <cstring>projectTargetRadio</cstring>
+        </property>
+       </widget>
+      </item>
      </layout>
-     <zorder></zorder>
+     <zorder>projectTargetRadio</zorder>
+     <zorder>projectTarget</zorder>
+     <zorder>executableRadio</zorder>
+     <zorder>executablePath</zorder>
      <zorder>label_2</zorder>
      <zorder>label</zorder>
     </widget>
@@ -105,7 +108,7 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
+      <item row="0" column="2">
        <widget class="KLineEdit" name="arguments">
         <property name="toolTip">
          <string>Enter arguments to give to the executable</string>
@@ -125,7 +128,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="1" column="2">
        <widget class="KUrlRequester" name="workingDirectory">
         <property name="toolTip">
          <string>Select a working directory for the executable</string>
@@ -145,10 +148,55 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="2" column="2">
        <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
         <property name="toolTip">
          <string>Select an environment to be used</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="KComboBox" name="terminal">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>&lt;p&gt;Defines the command to execute the external terminal emulator. Use the following placeholders:&lt;/p&gt;
+&lt;dl&gt;
+&lt;dt&gt;&lt;code&gt;%exe&lt;/code&gt;&lt;/dt&gt;
+&lt;dd&gt;The path to the executable selected above.&lt;/dd&gt;
+&lt;dt&gt;&lt;code&gt;%workdir&lt;/code&gt;&lt;/dt&gt;
+&lt;dd&gt;The path to the working directory selected above.&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;p&gt;The arguments defined above will get appended to this command.&lt;/p&gt;</string>
+        </property>
+        <property name="editable">
+         <bool>true</bool>
+        </property>
+        <item>
+         <property name="text">
+          <string notr="true">konsole --noclose --workdir %workdir -e %exe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">xterm -hold -e %exe</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string notr="true">gnome-terminal -e %exe</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="runInTerminal">
+        <property name="toolTip">
+         <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a toolview. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
+        </property>
+        <property name="text">
+         <string>Use External Terminal</string>
         </property>
        </widget>
       </item>
@@ -381,12 +429,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
+     <x>124</x>
      <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>384</x>
-     <y>92</y>
+     <x>497</x>
+     <y>85</y>
     </hint>
    </hints>
   </connection>
@@ -397,12 +445,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>87</y>
+     <x>124</x>
+     <y>83</y>
     </hint>
     <hint type="destinationlabel">
-     <x>473</x>
-     <y>92</y>
+     <x>497</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>runInTerminal</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>terminal</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>136</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>226</y>
     </hint>
    </hints>
   </connection>

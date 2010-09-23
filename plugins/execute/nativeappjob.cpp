@@ -111,7 +111,20 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     
     proc->setOutputChannelMode(KProcess::MergedChannels);
     
-    proc->setProgram( executable.toLocalFile(), arguments );
+    if (iface->useTerminal(cfg)) {
+        QStringList args = KShell::splitArgs(iface->terminal(cfg));
+        for (QStringList::iterator it = args.begin(); it != args.end(); ++it) {
+            if (*it == "%exe") {
+                *it = executable.toLocalFile();
+            } else if (*it == "%workdir") {
+                *it = wc.toLocalFile();
+            }
+        }
+        args.append( arguments );
+        proc->setProgram( args );
+    } else {
+        proc->setProgram( executable.toLocalFile(), arguments );
+    }
     
     setObjectName(cfg->name());
 }

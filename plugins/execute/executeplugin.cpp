@@ -53,6 +53,7 @@ QString ExecutePlugin::isExecutableEntry = "isExecutable";
 QString ExecutePlugin::dependencyEntry = "Dependencies";
 QString ExecutePlugin::environmentGroupEntry = "EnvironmentGroup";
 QString ExecutePlugin::useTerminalEntry = "Use External Terminal";
+QString ExecutePlugin::terminalEntry = "External Terminal";
 QString ExecutePlugin::userIdToRunEntry = "User Id to Run";
 QString ExecutePlugin::dependencyActionEntry = "Dependency Action";
 QString ExecutePlugin::projectTargetEntry = "Project Target";
@@ -213,6 +214,17 @@ bool ExecutePlugin::useTerminal( KDevelop::ILaunchConfiguration* cfg ) const
     }
     
     return cfg->config().readEntry( ExecutePlugin::useTerminalEntry, false );
+}
+
+
+QString ExecutePlugin::terminal( KDevelop::ILaunchConfiguration* cfg ) const
+{
+    if( !cfg )
+    {
+        return QString();
+    }
+    
+    return cfg->config().readEntry( ExecutePlugin::terminalEntry, QString() );
 }
 
 
