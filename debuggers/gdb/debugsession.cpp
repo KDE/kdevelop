@@ -968,25 +968,36 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         }
     }
 
+    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
+    Q_ASSERT(iface);
 
     // Configuration values
     bool    config_forceBPSet_ = grp.readEntry( GDBDebugger::allowForcedBPEntry, true );
     bool    config_displayStaticMembers_ = grp.readEntry( GDBDebugger::staticMembersEntry, false );
     bool    config_asmDemangle_ = grp.readEntry( GDBDebugger::demangleNamesEntry, true );
-    //bool    config_dbgTerminal_ = grp.readEntry( GDBDebugger::separateTerminalEntry, false );
-    bool    config_dbgTerminal_ = false;
     KUrl config_dbgShell_ = grp.readEntry( GDBDebugger::debuggerShellEntry, KUrl() );
     KUrl config_configGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbConfigEntry, KUrl() );
     KUrl config_runShellScript_ = grp.readEntry( GDBDebugger::remoteGdbShellEntry, KUrl() );
     KUrl config_runGdbScript_ = grp.readEntry( GDBDebugger::remoteGdbRunEntry, KUrl() );
     int config_outputRadix_ = 10;
+    
+    bool config_useExternalTerminal = iface->useTerminal( cfg );
+    QString config_externalTerminal = iface->terminal( cfg );
+    if (!config_externalTerminal.isEmpty()) {
+        // the external terminal cmd contains additional arguments, just get the terminal name
+        config_externalTerminal = KShell::splitArgs(config_externalTerminal).first();
+    }
+    ///FIXME: debugging in external terminal hangs for me in STTY::findExternalTTY in this line:
+    ///fifo_fd = ::open(fifo, O_RDONLY)
+    ///Hence disable this for now
+    config_useExternalTerminal = false;
 
     // Need to set up a new TTY for each run...
     if (tty_)
         delete tty_;
 
-    tty_ = new STTY(config_dbgTerminal_);//, Settings::terminalEmulatorName( *KGlobal::config() ));
-    if (!config_dbgTerminal_)
+    tty_ = new STTY(config_useExternalTerminal, config_externalTerminal);
+    if (!config_useExternalTerminal)
     {
         connect( tty_, SIGNAL(OutOutput(const QByteArray&)), SIGNAL(ttyStdout(const QByteArray&)) );
         connect( tty_, SIGNAL(ErrOutput(const QByteArray&)), SIGNAL(ttyStderr(const QByteArray&)) );
@@ -1007,10 +1018,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
     }
 
     queueCmd(new GDBCommand(GDBMI::InferiorTtySet, tty));
-
-
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension("org.kdevelop.IExecutePlugin")->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
 
     // Only dummy err here, actual erros have been checked already in the job and we don't get here if there were any
     QString err;
