@@ -93,6 +93,15 @@ GenericProjectManager::GenericProjectManager( QObject *parent, const QVariantLis
 
 void GenericProjectManager::projectClosing(KDevelop::IProject* project)
 {
+    if ( m_projectJobs.contains(project) ) {
+        // make sure the import job does not live longer than the project
+        // see also addLotsOfFiles test
+        foreach( KJob* job, m_projectJobs[project] ) {
+            kDebug() << "killing project job:" << job;
+            job->kill();
+        }
+        m_projectJobs.remove(project);
+    }
     delete m_watchers.take(project);
 }
 
@@ -152,9 +161,13 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
 KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceResursion )
 {
     GenericManagerListJob* listJob = new GenericManagerListJob( item, forceResursion );
+    m_projectJobs[ item->project() ] << listJob;
     kDebug() << "adding job" << listJob << item->url() << "for project" << item->project();
 
     KDevelop::ICore::self()->runController()->registerJob( listJob );
+
+    connect( listJob, SIGNAL(result(KJob*)),
+             this, SLOT(jobFinished(KJob*)) );
 
     connect( listJob, SIGNAL(entries(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)),
              this, SLOT(addJobItems(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)) );
@@ -163,6 +176,14 @@ KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* 
              listJob, SLOT(addSubDir(KDevelop::ProjectFolderItem*)));
 
     return listJob;
+}
+
+void GenericProjectManager::jobFinished(KJob* job)
+{
+    GenericManagerListJob* gmlJob = qobject_cast<GenericManagerListJob*>(job);
+    Q_ASSERT(gmlJob);
+    kDebug() << gmlJob;
+    m_projectJobs[ gmlJob->item()->project() ].removeOne( job );
 }
 
 void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries,
