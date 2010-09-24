@@ -34,6 +34,7 @@ class GenericManagerListJob : public KIO::Job
 
 public:
     GenericManagerListJob(KDevelop::ProjectFolderItem* item, const bool forceRecursion);
+    KDevelop::ProjectFolderItem* item() const;
 
 signals:
     void entries(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);

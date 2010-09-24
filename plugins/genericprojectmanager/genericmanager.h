@@ -93,6 +93,7 @@ private Q_SLOTS:
     void created(const QString &path);
 
     void projectClosing(KDevelop::IProject* project);
+    void jobFinished(KJob* job);
 
 private:
     /// Stops watching the given folder for changes, only useful for local files.
@@ -106,6 +107,7 @@ private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
                   const IncludeRules& rules ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
+    QMap<KDevelop::IProject*, QList<KJob*> > m_projectJobs;
 };
 
 #endif // KDEVGENERICIMPORTER_H
