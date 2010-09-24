@@ -92,9 +92,9 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
   connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
   m_openDec = new QAction(i18n("Show &Declaration"), this);
-  connect(m_openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()));
+  connect(m_openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()), Qt::QueuedConnection);
   m_openDef = new QAction(i18n("Show De&finition"), this);
-  connect(m_openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()));
+  connect(m_openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()), Qt::QueuedConnection);
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
