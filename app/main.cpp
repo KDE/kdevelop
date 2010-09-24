@@ -180,13 +180,27 @@ int main( int argc, char *argv[] )
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
-    options.add("project <project>", ki18n( "Url to project to load" ));
+    options.add("n")
+           .add("new-session <name>", ki18n("Open KDevelop with a new session using the given name."));
+    options.add("s")
+           .add("session <session>", ki18n("Open KDevelop with the given session.\n"
+                                           "You can pass either hash or the name of the session." ));
+    options.add("ps").add("pick-session", ki18n("Shows all available sessions and lets you select one to open." ));
+    options.add("l")
+           .add("list-sessions", ki18n( "List available sessions and quit." ));
+    options.add("p")
+           .add("project <project>", ki18n( "Open KDevelop and load the given project." ));
+    options.add("d")
+           .add("debug <debugger>",
+                ki18n( "Start debugging an application in KDevelop with the given debugger.\n"
+                       "The binary that should be debugged must follow - including arguments.\n"
+                       "Example: kdevelop --debug gdb myapp --foo bar"));
+
     options.add("+files", ki18n( "Files to load" ));
-    options.add("debug <debugger>", ki18n( "Start debugger, for example gdb. The binary that should be debugged must follow - including arguments." ));
-    options.add("cs <name>", ki18n("Create new session with given name."));
-    options.add("s <session>", ki18n("Session to load. You can pass either hash or the name of the session." ));
-    options.add("sessions", ki18n( "List available sessions and quit" ));
-    options.add("ps", ki18n("Allow picking the session from a list" ));
+
+    options.add(":", ki18n("Deprecated options:"));
+    options.add("sessions", ki18n( "Same as -l / --list-sessions" ));
+    options.add("cs <name>", ki18n( "Same as -n / --new-session" ));
 
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -194,8 +208,8 @@ int main( int argc, char *argv[] )
 
     // The session-controller needs to arguments to eventually pass them to newly opened sessions
     KDevelop::SessionController::setArguments(argc, argv);
-    
-    if(args->isSet("sessions"))
+
+    if(args->isSet("sessions") || args->isSet("list-sessions"))
     {
         QTextStream qout(stdout);
         qout << endl << ki18n("Available sessions (use '-s HASH' or '-s NAME' to open a specific one):").toString() << endl << endl;
@@ -236,9 +250,9 @@ int main( int argc, char *argv[] )
             binary = binary.right(binary.lastIndexOf('/'));
         }
         session = i18n("Debug")+" "+binary;
-    } else if ( args->isSet("cs") )
+    } else if ( args->isSet("cs") || args->isSet("new-session") )
     {
-        session = args->getOption("cs");
+        session = args->isSet("cs") ? args->getOption("cs") : args->getOption("new-session");
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
             if ( session == si.name ) {
@@ -248,8 +262,8 @@ int main( int argc, char *argv[] )
             }
         }
         // session doesn't exist, we can create it
-    } else if ( args->isSet("s") ) {
-        session = args->getOption("s");
+    } else if ( args->isSet("session") ) {
+        session = args->getOption("session");
         bool found = false;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
