@@ -228,7 +228,8 @@ struct DocumentControllerPrivate {
 
                 mimeType = KMimeType::findByUrl( url );
                 
-                if(mimeType->is( "application/octet-stream" ))
+                //NOTE: don't use mimeType->is() as that honors mimetype inheritance
+                if(mimeType->name() == "application/octet-stream")
                 {
                     // Try harder using KIO. This also allows looking at the content of remote files.
                     KIO::MimetypeJob* job = KIO::mimetype(url, KIO::HideProgressInfo);
