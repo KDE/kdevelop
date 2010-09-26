@@ -163,7 +163,7 @@ int main( int argc, char *argv[] )
         for (int i=0; i < c; ++i) {
             if (debugFound) {
                 debugArgs << argv[i];
-            } else if (QString(argv[i]) == "--debug") {
+            } else if (qstrcmp(argv[i], "--debug") == 0 || qstrcmp(argv[i], "-d") == 0) {
                 if (argc <= i+1) {
                     argc = i + 1;
                 } else {
