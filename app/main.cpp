@@ -183,7 +183,7 @@ int main( int argc, char *argv[] )
     options.add("n")
            .add("new-session <name>", ki18n("Open KDevelop with a new session using the given name."));
     options.add("s")
-           .add("session <session>", ki18n("Open KDevelop with the given session.\n"
+           .add("open-session <session>", ki18n("Open KDevelop with the given session.\n"
                                            "You can pass either hash or the name of the session." ));
     options.add("ps").add("pick-session", ki18n("Shows all available sessions and lets you select one to open." ));
     options.add("l")
