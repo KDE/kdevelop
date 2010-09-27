@@ -262,8 +262,8 @@ int main( int argc, char *argv[] )
             }
         }
         // session doesn't exist, we can create it
-    } else if ( args->isSet("session") ) {
-        session = args->getOption("session");
+    } else if ( args->isSet("open-session") ) {
+        session = args->getOption("open-session");
         bool found = false;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
