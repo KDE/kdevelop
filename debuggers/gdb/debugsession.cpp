@@ -858,7 +858,7 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
         m_gdb = 0;
     }
 
-    m_gdb = new GDB;
+    m_gdb = new GDB(this);
 
     // FIXME: here, we should wait until GDB is up and waiting for input.
     // Then, clear s_dbgNotStarted

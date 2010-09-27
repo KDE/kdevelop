@@ -40,7 +40,7 @@ class GDB : public QObject
 {
     Q_OBJECT
 public:
-    GDB();
+    explicit GDB(QObject* parent = 0);
 
     /** Starts GDB.  This should be done after connecting to all
         signals the client is interested in.  */

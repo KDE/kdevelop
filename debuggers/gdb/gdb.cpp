@@ -43,8 +43,8 @@
 
 using namespace GDBDebugger;
 
-GDB::GDB()
-: process_(0), sawPrompt_(false), currentCmd_(0)
+GDB::GDB(QObject* parent)
+: process_(0), sawPrompt_(false), currentCmd_(0), QObject(parent)
 {
 }
 
