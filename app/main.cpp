@@ -152,7 +152,7 @@ int main( int argc, char *argv[] )
         for (int i=0; i < c; ++i) {
             if (debugFound) {
                 debugArgs << argv[i];
-            } else if (QString(argv[i]) == "--debug") {
+            } else if (qstrcmp(argv[i], "--debug") == 0 || qstrcmp(argv[i], "-d") == 0) {
                 if (argc <= i+1) {
                     argc = i + 1;
                 } else {
@@ -169,12 +169,13 @@ int main( int argc, char *argv[] )
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineOptions options;
-    options.add("project <project>", ki18n( "Url to project to load" ));
+    options.add("n").add("cs <name>", ki18n("Create new session with given name."));
+    options.add("s").add("open-session <session>", ki18n("Session to load. You can pass either hash or the name of the session." ));
+    options.add("l").add("sessions", ki18n( "List available sessions and quit" ));
+    options.add("p").add("project <project>", ki18n( "Url to project to load" ));
+    options.add("d").add("debug <debugger>", ki18n( "Start debugger, for example gdb. The binary that should be debugged must follow - including arguments." ));
+
     options.add("+files", ki18n( "Files to load" ));
-    options.add("debug <debugger>", ki18n( "Start debugger, for example gdb. The binary that should be debugged must follow - including arguments." ));
-    options.add("cs <name>", ki18n("Create new session with given name."));
-    options.add("s <session>", ki18n("Session to load. You can pass either hash or the name of the session." ));
-    options.add("sessions", ki18n( "List available sessions and quit" ));
 
     KCmdLineArgs::addCmdLineOptions( options );
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
@@ -226,8 +227,8 @@ int main( int argc, char *argv[] )
             }
         }
         // session doesn't exist, we can create it
-    } else if ( args->isSet("s") ) {
-        session = args->getOption("s");
+    } else if ( args->isSet("open-session") ) {
+        session = args->getOption("open-session");
         bool found = false;
         foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo())
         {
