@@ -1327,6 +1327,11 @@ int CMakeProjectVisitor::visit(const ExecuteProcessAst *exec)
     QList<KProcess*> procs;
     foreach(const QStringList& _args, exec->commands())
     {
+        if (_args.isEmpty())
+        {
+            kDebug(9032) << "Error: trying to execute empty command";
+            break;
+        }
         QStringList args(_args);
         KProcess *p=new KProcess(), *prev=0;
         if(!procs.isEmpty())
