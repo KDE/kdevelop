@@ -71,19 +71,20 @@ KParts::Factory* IPartController::findPartFactory ( const QString& mimetype, con
 
 KParts::Part* IPartController::createPart ( const QString& mimetype, const QString& prefName )
 {
-    static const char* const services[] =
+    const uint length = 1;
+    static const char* const services[length] =
     {
         // Disable read/write parts until we can support them
         /*"KParts/ReadWritePart",*/ "KParts/ReadOnlyPart"
     };
 
-    static const char* const classNames[] =
+    static const char* const classNames[length] =
     {
         /*"KParts::ReadWritePart",*/ "KParts::ReadOnlyPart"
     };
 
     KParts::Part* part = 0;
-    for ( uint i = 0; i < 2; ++i )
+    for ( uint i = 0; i < length; ++i )
     {
         KParts::Factory* editorFactory = findPartFactory( mimetype, QString::fromLatin1(services[ i ]), prefName );
         if ( editorFactory )
