@@ -44,6 +44,10 @@ public:
       return document == rhs.document && SimpleRange::operator==(rhs);
     }
 
+    static DocumentRange invalid() {
+      return DocumentRange(IndexedString::IndexedString(), SimpleRange::invalid());
+    }
+
     IndexedString document;
 };
 

@@ -88,7 +88,7 @@ DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, c
 DeclarationContext::DeclarationContext(KTextEditor::View* view, KTextEditor::Cursor position) : DUContextContext(IndexedDUContext())
 {
     DUChainReadLocker lock(DUChain::lock());
-    DocumentRange useRange;
+    DocumentRange useRange = DocumentRange::invalid();
     IndexedDeclaration declaration;
     IndexedDUContext context;
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
