@@ -45,7 +45,7 @@ public:
     }
 
     static DocumentRange invalid() {
-      return DocumentRange(IndexedString::IndexedString(), SimpleRange::invalid());
+      return DocumentRange(IndexedString(), SimpleRange::invalid());
     }
 
     IndexedString document;
