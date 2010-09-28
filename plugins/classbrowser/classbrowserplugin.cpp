@@ -154,32 +154,6 @@ void ClassBrowserPlugin::findInClassBrowser()
     m_activeClassTree->highlightIdentifier(decl->qualifiedIdentifier());
 }
 
-template<class DestClass>
-static DestClass* getBestDeclaration(Declaration* a_decl)
-{
-  if ( a_decl == 0 )
-    return 0;
-
-  uint declarationCount = 0;
-  const IndexedDeclaration* declarations = 0;
-  PersistentSymbolTable::self().declarations(
-    a_decl->qualifiedIdentifier(),
-    declarationCount,
-    declarations );
-
-  for ( uint i = 0; i < declarationCount; ++i )
-  {
-    // See if this declaration matches and return it.
-    DestClass* decl = dynamic_cast<DestClass*>(declarations[i].declaration());
-    if ( decl && !decl->isForwardDeclaration() )
-    {
-      return decl;
-    }
-  }
-
-  return 0;
-}
-
 void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
 {
   DUChainReadLocker readLock(DUChain::lock());
@@ -187,22 +161,21 @@ void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
   if ( !declaration )
     return;
 
-  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declaration.data());
-
+  Declaration* decl = declaration.data();
   // If it's a function, find the function definition to go to the actual declaration.
-  if ( bestDeclaration && bestDeclaration->isFunctionDeclaration() )
+  if ( decl && decl->isFunctionDeclaration() )
   {
-    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(bestDeclaration);
+    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
     if ( funcDefinition == 0 )
-      funcDefinition = FunctionDefinition::definition(bestDeclaration);
+      funcDefinition = FunctionDefinition::definition(decl);
     if ( funcDefinition )
-      bestDeclaration = funcDefinition;
+      decl = funcDefinition;
   }
 
-  if (bestDeclaration)
+  if (decl)
   {
-    KUrl url(bestDeclaration->url().str());
-    KTextEditor::Range range = bestDeclaration->rangeInCurrentRevision().textRange();
+    KUrl url(decl->url().str());
+    KTextEditor::Range range = decl->rangeInCurrentRevision().textRange();
 
     readLock.unlock();
 
