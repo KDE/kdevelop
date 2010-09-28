@@ -269,22 +269,21 @@ void MainWindowPrivate::setupActions()
 //     connect( popupAction->menu(), SIGNAL( triggered( Action* ) ),
 //              this, SLOT( stopPopupActivated( QAction* ) ) );
 
-// These actions were moved into the working-set controller, so it can show a tooltip
-//     action = actionCollection()->addAction( "view_next_window" );
-//     action->setText( i18n( "&Next Window" ) );
-//     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
-//     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
-//     action->setToolTip( i18n( "Next window" ) );
-//     action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
-//     action->setIcon(KIcon("go-next"));
+     action = actionCollection()->addAction( "view_next_window" );
+     action->setText( i18n( "&Next Window" ) );
+     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoNextWindow() ) );
+     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
+     action->setToolTip( i18n( "Next window" ) );
+     action->setWhatsThis( i18n( "<b>Next window</b><p>Switches to the next window.</p>" ) );
+     action->setIcon(KIcon("go-next"));
 
-//     action = actionCollection()->addAction( "view_previous_window" );
-//     action->setText( i18n( "&Previous Window" ) );
-//     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
-//     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
-//     action->setToolTip( i18n( "Previous window" ) );
-//     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
-//     action->setIcon(KIcon("go-previous"));
+     action = actionCollection()->addAction( "view_previous_window" );
+     action->setText( i18n( "&Previous Window" ) );
+     connect( action, SIGNAL( triggered( bool ) ), SLOT( gotoPreviousWindow() ) );
+     action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
+     action->setToolTip( i18n( "Previous window" ) );
+     action->setWhatsThis( i18n( "<b>Previous window</b><p>Switches to the previous window.</p>" ) );
+     action->setIcon(KIcon("go-previous"));
 
     /*action = actionCollection()->addAction( "new_window" );
     action->setIcon(KIcon( "window-new" ));

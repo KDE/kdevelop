@@ -1104,6 +1104,7 @@ QIcon WorkingSet::inactiveIcon() const {
 
 void WorkingSetController::setupActions()
 {
+/*
     KActionCollection * ac =
         Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
@@ -1124,6 +1125,7 @@ void WorkingSetController::setupActions()
     action->setWhatsThis( i18n( "Switch the focus to the previous open document." ) );
     action->setStatusTip( i18n( "Switch the focus to the previous open document." ) );
     connect( action, SIGNAL(triggered()), this, SLOT(previousDocument()) );
+*/
 }
 
 void WorkingSetController::showGlobalToolTip()
