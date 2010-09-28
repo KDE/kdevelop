@@ -29,6 +29,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
+#include <kicon.h>
 
 #include "interfaces/icore.h"
 #include "interfaces/iuicontroller.h"
@@ -92,8 +93,10 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
   connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
   m_openDec = new QAction(i18n("Show &Declaration"), this);
+  m_openDec->setIcon( KIcon("go-jump-declaration" ) );
   connect(m_openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()), Qt::QueuedConnection);
   m_openDef = new QAction(i18n("Show De&finition"), this);
+  m_openDef->setIcon( KIcon("go-jump-definition" ) );
   connect(m_openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()), Qt::QueuedConnection);
 }
 
