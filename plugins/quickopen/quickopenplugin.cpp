@@ -72,6 +72,8 @@
 #include <util/activetooltip.h>
 #include <qboxlayout.h>
 #include <language/util/navigationtooltip.h>
+#include <interfaces/contextmenuextension.h>
+#include <language/interfaces/codecontext.h>
 
 using namespace KDevelop;
 
@@ -725,17 +727,17 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     quickOpenFunction->setShortcut( Qt::CTRL | Qt::ALT | Qt::Key_M );
     connect(quickOpenFunction, SIGNAL(triggered(bool)), this, SLOT(quickOpenFunction()));
 
-    KAction* quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
-    quickOpenDeclaration->setText( i18n("Jump to Declaration") );
-    quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
-    quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
-    connect(quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()));
+    m_quickOpenDeclaration = actions.addAction("quick_open_jump_declaration");
+    m_quickOpenDeclaration->setText( i18n("Jump to Declaration") );
+    m_quickOpenDeclaration->setIcon( KIcon("go-jump-declaration" ) );
+    m_quickOpenDeclaration->setShortcut( Qt::CTRL | Qt::Key_Period );
+    connect(m_quickOpenDeclaration, SIGNAL(triggered(bool)), this, SLOT(quickOpenDeclaration()), Qt::QueuedConnection);
 
-    KAction* quickOpenDefinition = actions.addAction("quick_open_jump_definition");
-    quickOpenDefinition->setText( i18n("Jump to Definition") );
-    quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
-    quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
-    connect(quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()));
+    m_quickOpenDefinition = actions.addAction("quick_open_jump_definition");
+    m_quickOpenDefinition->setText( i18n("Jump to Definition") );
+    m_quickOpenDefinition->setIcon( KIcon("go-jump-definition" ) );
+    m_quickOpenDefinition->setShortcut( Qt::CTRL | Qt::Key_Comma );
+    connect(m_quickOpenDefinition, SIGNAL(triggered(bool)), this, SLOT(quickOpenDefinition()), Qt::QueuedConnection);
 
     KAction* quickOpenLine = actions.addAction("quick_open_line");
     quickOpenLine->setText( i18n("Embedded Quick Open") );
@@ -810,6 +812,29 @@ QuickOpenPlugin::~QuickOpenPlugin()
 
 void QuickOpenPlugin::unload()
 {
+}
+
+ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context)
+{
+  KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
+
+  KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+
+  if (!codeContext)
+      return menuExt;
+
+  DUChainReadLocker readLock;
+  Declaration* decl(codeContext->declaration().data());
+
+  if (decl) {
+    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDeclaration);
+
+    if(FunctionDefinition::definition(decl)) {
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDefinition);
+    }
+  }
+
+  return menuExt;
 }
 
 void QuickOpenPlugin::showQuickOpen(const QStringList& items)

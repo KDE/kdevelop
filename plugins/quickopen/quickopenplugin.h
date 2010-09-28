@@ -29,6 +29,8 @@
 #include <language/interfaces/quickopendataprovider.h>
 #include "ui_quickopen.h"
 
+class KAction;
+
 namespace KDevelop {
   class SimpleCursor;
 }
@@ -50,7 +52,9 @@ public:
     
     // KDevelop::Plugin methods
     virtual void unload();
-    
+
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+
     enum ModelTypes {
       Files = 1,
       Functions = 2,
@@ -80,7 +84,6 @@ public:
     QuickOpenLineEdit* createQuickOpenLineWidget();
     
     virtual KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind);
-    
 public slots:
     void quickOpen();
     void quickOpenFile();
@@ -120,6 +123,8 @@ private:
   
     //We can only have one widget at a time, because we manipulate the model.
     QPointer<QObject> m_currentWidgetHandler;
+    KAction* m_quickOpenDeclaration;
+    KAction* m_quickOpenDefinition;
 };
 
 ///Will delete itself once the dialog is closed, so use QPointer when referencing it permanently

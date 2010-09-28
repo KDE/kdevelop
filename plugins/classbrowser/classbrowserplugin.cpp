@@ -29,7 +29,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
-#include <kicon.h>
 
 #include "interfaces/icore.h"
 #include "interfaces/iuicontroller.h"
@@ -92,12 +91,6 @@ ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
   
   m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
   connect(m_findInBrowser, SIGNAL(triggered(bool)), this, SLOT(findInClassBrowser()));
-  m_openDec = new QAction(i18n("Show &Declaration"), this);
-  m_openDec->setIcon( KIcon("go-jump-declaration" ) );
-  connect(m_openDec, SIGNAL(triggered(bool)), this, SLOT(openDeclaration()), Qt::QueuedConnection);
-  m_openDef = new QAction(i18n("Show De&finition"), this);
-  m_openDef->setIcon( KIcon("go-jump-definition" ) );
-  connect(m_openDef, SIGNAL(triggered(bool)), this, SLOT(openDefinition()), Qt::QueuedConnection);
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
@@ -134,14 +127,6 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelo
         
         m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
         menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_findInBrowser);
-      }
-  
-      m_openDec->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_openDec);
-
-      if(FunctionDefinition::definition(decl)) {
-        m_openDef->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-        menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_openDef);
       }
     }
   }
@@ -193,57 +178,6 @@ static DestClass* getBestDeclaration(Declaration* a_decl)
   }
 
   return 0;
-}
-
-void ClassBrowserPlugin::openDeclaration()
-{
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  QAction* a = static_cast<QAction*>(sender());
-
-  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
-
-  DeclarationPointer declPtr = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
-  Declaration* bestDeclaration = getBestDeclaration<Declaration>(declPtr.data());
-
-  // If it's a function, find the function definition to go to the actual declaration.
-  if ( bestDeclaration && bestDeclaration->isFunctionDeclaration() )
-  {
-    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(bestDeclaration);
-    if ( funcDefinition == 0 )
-      funcDefinition = FunctionDefinition::definition(bestDeclaration);
-    if ( funcDefinition && funcDefinition->declaration() )
-      bestDeclaration = funcDefinition->declaration();
-  }
-
-  if (bestDeclaration)
-  {
-    KUrl url(bestDeclaration->url().str());
-    KTextEditor::Range range = bestDeclaration->rangeInCurrentRevision().textRange();
-
-    readLock.unlock();
-
-    ICore::self()->documentController()->openDocument(url, range.start());
-  }
-}
-
-void ClassBrowserPlugin::openDefinition()
-{
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
-
-  DUChainReadLocker readLock(DUChain::lock());
-
-  QAction* a = static_cast<QAction*>(sender());
-
-  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
-
-  DeclarationPointer declPtr = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
-  readLock.unlock();
-
-  // Delegate to real function
-  showDefinition(declPtr);
 }
 
 void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
