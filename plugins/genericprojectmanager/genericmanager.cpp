@@ -166,7 +166,7 @@ KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* 
 
     KDevelop::ICore::self()->runController()->registerJob( listJob );
 
-    connect( listJob, SIGNAL(result(KJob*)),
+    connect( listJob, SIGNAL(finished(KJob*)),
              this, SLOT(jobFinished(KJob*)) );
 
     connect( listJob, SIGNAL(entries(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)),
