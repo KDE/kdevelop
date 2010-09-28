@@ -827,9 +827,12 @@ ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context)
   Declaration* decl(codeContext->declaration().data());
 
   if (decl) {
-    menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDeclaration);
+    const bool isDef = FunctionDefinition::definition(decl);
+    if (codeContext->use().isValid() || !isDef) {
+      menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDeclaration);
+    }
 
-    if(FunctionDefinition::definition(decl)) {
+    if(isDef) {
       menuExt.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, m_quickOpenDefinition);
     }
   }
