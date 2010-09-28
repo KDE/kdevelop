@@ -130,7 +130,7 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
         m_varUses.append(it);
         const QStringList valu=m_vars->value(varName);
         val = valu.join(";").toUpper();
-        ret=!s_falseDefinitions.contains(val) && !val.endsWith("_NOTFOUND");
+        ret=!s_falseDefinitions.contains(val) && !val.endsWith("-NOTFOUND");
 //         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
     } else {
         // Treat as variable, and expand it to "", which evaluates to false.

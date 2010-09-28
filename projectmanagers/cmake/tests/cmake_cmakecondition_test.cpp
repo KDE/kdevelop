@@ -39,6 +39,8 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
     m_vars->insert("MYTRUE", QStringList("NOT FALSE"));
     
+    m_vars->insert("UNFOUNDVAR", QStringList("UNFOUNDVAR-NOTFOUND"));
+    
     m_macros=new MacroMap();
     Macro m;
     m.name = "testmacro";
@@ -137,6 +139,8 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "true constant 6" ) << QStringList("tRUe") << true;
     QTest::newRow( "true constant 7" ) << QStringList("Y") << true;
     QTest::newRow( "true constant 8" ) << QStringList("-2") << true;
+    
+    QTest::newRow( "notfound variable" ) << QStringList("UNFOUNDVAR") << false;
     
     QTest::newRow( "<empty> OR NOT <empty>" ) << QString(" OR NOT ").split(" ") << true;
 }
