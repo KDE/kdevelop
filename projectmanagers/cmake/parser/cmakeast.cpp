@@ -3524,10 +3524,7 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
     {
         bool ok = false;
         m_version = CMakeParserUtils::parseVersion(func.arguments[1].value, &ok);
-        if (!ok)
-            return false;
-	else
-            return true;
+        return ok;
     }
     else if(first=="SET" && func.arguments.count()==3)
     {
@@ -3542,6 +3539,7 @@ bool CMakePolicyAst::parseFunctionInfo( const CMakeFunctionDesc& func )
         }
         else
             return false;
+        
         if(func.arguments[2].value=="OLD")
             m_isNew=false;
         else if(func.arguments[2].value=="NEW")
