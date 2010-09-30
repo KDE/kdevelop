@@ -692,7 +692,7 @@ KDevelop::ReferencedTopDUContext CMakeProjectVisitor::createContext(const KUrl& 
     ///@todo This is problematic when the same file is used from within multiple CMakeLists.txts,
     ///      for example a standard import like FindKDE4.cmake, because it creates a cross-dependency
     ///      between the topducontext's of independent projects, like for example kdebase and kdevplatform
-    ///@todo Solve that by creating unique versions of all used top-context on a per-project basis using ParsignEnvironmentFile for disambiguation.
+    ///@todo Solve that by creating unique versions of all used top-context on a per-project basis using ParsingEnvironmentFile for disambiguation.
     
     foreach(DUContext* importer, topctx->importers())
         importer->removeImportedParentContext(topctx);
