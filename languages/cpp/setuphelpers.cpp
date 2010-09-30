@@ -174,6 +174,8 @@ Cpp::ReferenceCountedMacroSet setupStandardMacros()
       rpp::pp_macro m("__null");
       m.setDefinitionText( "0" );
       insertMacro( macros, m );
+      m.name = IndexedString("NULL");
+      insertMacro( macros, m );
     }
 
     {
