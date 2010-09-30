@@ -309,7 +309,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         m_projectCache[project]=readCache(cachefile);
         
         m_watchers[project] = new KDirWatch(project);
-        m_watchers[project]->addDir(folderUrl.path());
         connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
         connect(m_watchers[project], SIGNAL(deleted(QString)), this, SLOT(deletedWatchedDirectory(QString)));
         Q_ASSERT(m_rootItem->rowCount()==0);
@@ -353,10 +352,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
         cmakeListsPath.addPath("CMakeLists.txt");
-
-        CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
         
-        if(f.isEmpty())
+        if(!QFile::exists(cmakeListsPath.toLocalFile()))
         {
             kDebug() << "There is no" << cmakeListsPath;
         }
@@ -401,7 +398,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 v.setMacroMap(&data.mm);
                 v.setModulePath(m_modulePathPerProject[item->project()]);
                 v.setDefinitions(folder->definitions());
-                v.walk(f, 0);
+                
+                CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
+                if(!f.isEmpty())
+                    v.walk(f, 0);
                 
                 folder->setTopDUContext(v.context());
                 data.projectName=v.projectName();
