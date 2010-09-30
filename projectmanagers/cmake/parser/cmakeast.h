@@ -31,7 +31,7 @@
 #include "cmakeastvisitor.h"
 #include "cmaketypes.h"
 
-class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should considerate making it abstract. */
+class KDEVCMAKECOMMON_EXPORT CMakeAst /*Should consider making it abstract. */
 {
     public:
         CMakeAst() : m_line(-1) { }
