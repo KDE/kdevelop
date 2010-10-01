@@ -228,19 +228,14 @@ struct DocumentControllerPrivate {
 
                 mimeType = KMimeType::findByUrl( url );
                 
-                //NOTE: don't use mimeType->is() as that honors mimetype inheritance
-                if(mimeType->name() == "application/octet-stream")
+                if( !url.isLocalFile() && mimeType->isDefault() )
                 {
-                    // Try harder using KIO. This also allows looking at the content of remote files.
-                    KIO::MimetypeJob* job = KIO::mimetype(url, KIO::HideProgressInfo);
-                    ///FIXME this is hazardous and may lead to repeated calls to
-                    ///      this function without it having returned in the first place
-                    ///      and this function is *not* reentrant, see assert below:
-                    ///      Q_ASSERT(!documents.contains(url) || documents[url]==doc);
-                    ///      if you get this, here is the reason
-                    if(job->exec())
-                        mimeType =  KMimeType::mimeType(job->mimetype());
-                    delete job;
+                    // fall back to text/plain, for remote files without extension, i.e. COPYING, LICENSE, ...
+                    // using a syncronous KIO::MimetypeJob is hazardous and may lead to repeated calls to
+                    // this function without it having returned in the first place
+                    // and this function is *not* reentrant, see assert below:
+                    // Q_ASSERT(!documents.contains(url) || documents[url]==doc);
+                    mimeType = KMimeType::mimeType("text/plain");
                 }
             }
 
@@ -316,7 +311,6 @@ struct DocumentControllerPrivate {
         //We can't have the same url in many documents
         //so we check it's already the same if it exists
         //contains=>it's the same
-        ///NOTE: if you get this and wonder why, see the FIXME note above
         Q_ASSERT(!documents.contains(url) || documents[url]==doc);
 
         Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
