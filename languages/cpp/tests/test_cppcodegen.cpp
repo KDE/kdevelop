@@ -85,8 +85,7 @@ void dumpDUChain(InsertIntoDUChain& code)
 {
     DUChainReadLocker lock;
     
-    KDevelop::DumpChain dump;
-    dump.dump(code.topContext());
+    KDevelop::dumpDUContext(code.topContext());
 }
 
 

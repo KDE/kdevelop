@@ -32,7 +32,6 @@
 #include "dumpchain.h"
 
 #include <language/duchain/identifier.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/editor/cursorinrevision.h>
 
@@ -182,6 +181,8 @@ private slots:
   void testAutoTypeIntegral();
   void testAutoTypes();
 
+  void testCommentAfterFunctionCall();
+
 private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 
@@ -202,7 +203,6 @@ private:
   // Parser
   Control control;
   Cpp::DumpChain cppDumper;
-  KDevelop::DumpChain dumper;
 
   // Declaration - use chain
   KDevelop::Declaration* noDef;

@@ -28,6 +28,7 @@
 #include "usebuilder.h"
 #include <language/duchain/declaration.h>
 #include <language/editor/documentrange.h>
+#include <language/duchain/dumpchain.h>
 #include "cppeditorintegrator.h"
 #include "dumptypes.h"
 #include "environmentmanager.h"
@@ -1149,7 +1150,7 @@ DUContext* TestExpressionParser::parse(const QByteArray& unit, DumpAreas dump)
     kDebug(9007) << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
-    dumper.dump(top);
+    dumpDUContext(top);
   }
 
   if (dump)

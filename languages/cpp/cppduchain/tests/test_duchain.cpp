@@ -31,6 +31,7 @@
 #include <language/duchain/declarationid.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/dumpdotgraph.h>
+#include <language/duchain/dumpchain.h>
 #include <typeinfo>
 #include <time.h>
 #include <set>
@@ -5380,7 +5381,7 @@ KDevelop::TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dum
     kDebug(9007) << "===== DUChain:";
 
     DUChainWriteLocker lock(DUChain::lock());
-    dumper.dump(top);
+    dumpDUContext(top);
   }
 
   if (dump)

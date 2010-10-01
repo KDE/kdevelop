@@ -28,7 +28,6 @@
 
 #include <language/editor/cursorinrevision.h>
 #include <language/duchain/identifier.h>
-#include <language/duchain/dumpchain.h>
 
 #include "contextbuilder.h"
 #include "parser.h"
@@ -150,7 +149,6 @@ private:
   // Parser
   Control control;
   Cpp::DumpChain cppDumper;
-  KDevelop::DumpChain dumper;
 
   KDevelop::AbstractType::Ptr typeVoid;
   KDevelop::AbstractType::Ptr typeInt;

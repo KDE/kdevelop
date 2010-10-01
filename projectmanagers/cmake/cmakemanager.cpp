@@ -419,8 +419,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             /*{
             kDebug() << "dumpiiiiiing" << folder->url();
             KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-            KDevelop::DumpChain dump;
-            dump.dump( v.context(), false);
+            KDevelop::dumpDUContext(v.context(), false);
             }*/
 
             if(folder->text()=="/" && !data.projectName.isEmpty())

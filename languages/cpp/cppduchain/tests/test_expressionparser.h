@@ -31,7 +31,6 @@
 #include "dumpchain.h"
 
 #include <language/duchain/identifier.h>
-#include <language/duchain/dumpchain.h>
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/indexedtype.h>
 
@@ -89,7 +88,6 @@ private:
 
   // Parser
   Control control;
-  KDevelop::DumpChain dumper;
   Cpp::DumpChain cppDumper;
 
   KDevelop::AbstractType::Ptr typeVoid;

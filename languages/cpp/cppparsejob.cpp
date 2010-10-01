@@ -867,8 +867,7 @@ void CPPInternalParseJob::run()
             DUChainReadLocker lock(DUChain::lock());
 #ifdef DUMP_DUCHAIN
         kDebug( 9007 ) << "================== duchain ==================";
-        KDevelop::DumpChain dump;
-        dump.dump(contentContext);
+        KDevelop::dumpDUContext(contentContext);
 #endif
 
         //KDevelop::DumpDotGraph dumpGraph;

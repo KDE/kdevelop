@@ -246,8 +246,7 @@ void CMakeDUChainTest::testUses()
     TopDUContext* ctx=v.context();
     QVERIFY(ctx);
     QVERIFY(ctx->indexed().data());
-//     KDevelop::DumpChain dump;
-//     dump.dump(ctx);
+//     KDevelop::dumpDUContext(ctx);
     QCOMPARE(ctx->range().start.line, 0);
     QVector<Declaration*> declarations=ctx->localDeclarations();
    
