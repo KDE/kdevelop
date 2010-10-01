@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
     Copyright 2002-2005 Roberto Raggi <roberto@kdevelop.org>
     Copyright 2006 Hamish Rodda <rodda@kde.org>
+    Copyright 2010 Milian Wolff <mail@milianw.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,7 +23,7 @@
 #include <QtCore/QString>
 #include <QTextStream>
 
-#include <kdebug.h>
+#include <KDebug>
 
 #include "ducontext.h"
 #include "topducontext.h"
@@ -32,26 +33,48 @@
 #include "use.h"
 #include "indexedstring.h"
 #include "functiondefinition.h"
+
 #include <editor/rangeinrevision.h>
 
 using namespace KDevelop;
 
+//BEGIN: private
+
+QTextStream globalOut(stdout);
+// use a QDebug to utilize operator<<() overloads
+// but don't use kDebug() to make sure we always print it, no matter what
+// is set in kdebugdialog
+QDebug qout(globalOut.device());
+
+class DumpChain
+{
+public:
+  DumpChain();
+  ~DumpChain();
+
+  void dump( DUContext * context, int allowedDepth );
+
+private:
+  int indent;
+  TopDUContext* top;
+  QSet<DUContext*> had;
+};
 
 DumpChain::DumpChain()
   : indent(0), top(0)
 {
 }
 
-DumpChain::~ DumpChain( )
+DumpChain::~DumpChain( )
 {
 }
 
 void DumpChain::dump( DUContext * context, int allowedDepth )
 {
-    if(!top)
-      top = context->topContext();
-    
-          enum ContextType {
+  if(!top)
+    top = context->topContext();
+
+  enum ContextType {
     Global    /**< A context that declares functions, namespaces or classes */,
     Namespace /**< A context that declares namespace members */,
     Class     /**< A context that declares class members */,
@@ -72,7 +95,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     case Helper: type = "Helper"; break;
     case Other: type = "Other"; break;
   }
-  kDebug() << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().castToSimpleRange().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "");
+  qout << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().castToSimpleRange().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "") << endl;
 
       
   if( !context )
@@ -82,19 +105,19 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
       
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
-      kDebug() << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s).";
+      qout << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s)." << endl;
       if (FunctionDefinition::definition(dec)) {
-        kDebug() << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange().textRange();
+        qout << QString((indent+1) * 2 + 1, ' ') << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange().textRange() << endl;
       }
       QMap<IndexedString, QList<RangeInRevision> > uses = dec->uses();
       for(QMap<IndexedString, QList<RangeInRevision> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
-        kDebug() << QString((indent+2) * 2, ' ') << "File:" << it.key().str();
+        qout << QString((indent+2) * 2, ' ') << "File:" << it.key().str() << endl;
         foreach (const RangeInRevision& range, *it)
-          kDebug() << QString((indent+2) * 2+1, ' ') << "Use:" << range.castToSimpleRange().textRange();
+          qout << QString((indent+2) * 2+1, ' ') << "Use:" << range.castToSimpleRange().textRange() << endl;
       }
     }
   } else {
-    kDebug() << QString((indent+1) * 2, ' ') << context->localDeclarations(top).count() << "Declarations, " << context->childContexts().size() << "child-contexts";
+    qout << QString((indent+1) * 2, ' ') << context->localDeclarations(top).count() << "Declarations, " << context->childContexts().size() << "child-contexts" << endl;
   }
 
   ++indent;
@@ -102,12 +125,12 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     foreach (const DUContext::Import &parent, context->importedParentContexts()) {
       DUContext* import = parent.context(top);
       if(!import) {
-          kDebug() << QString((indent+2) * 2+1, ' ') << "Could not get parent, is it registered in the DUChain?";
+          qout << QString((indent+2) * 2+1, ' ') << "Could not get parent, is it registered in the DUChain?" << endl;
           continue;
       }
       
       if(had.contains(import)) {
-        kDebug() << QString((indent+2) * 2+1, ' ') << "skipping" << import->scopeIdentifier(true) << "because it was already printed";
+        qout << QString((indent+2) * 2+1, ' ') << "skipping" << import->scopeIdentifier(true) << "because it was already printed" << endl;
         continue;
       }
       had.insert(import);
@@ -116,7 +139,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     }
 
     foreach (DUContext* child, context->childContexts())
-      dump(child);
+      dump(child, allowedDepth-1);
   }
   --indent;
   
@@ -124,4 +147,14 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     top = 0;
     had.clear();
   }
+}
+
+//END: private
+
+//BEGIN: public
+
+void KDevelop::dumpDUContext(DUContext* context, int allowedDepth)
+{
+  DumpChain dumper;
+  dumper.dump(context, allowedDepth);
 }

@@ -189,11 +189,7 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
         thisContext = top;
 
        kDebug() << "context is set to" << thisContext.data();
-        if( thisContext ) {
-/*          kDebug() << "================== duchain for the context =======================";
-          DumpChain dump;
-          dump.dump(thisContext.data());*/
-        } else {
+        if( !thisContext ) {
           kDebug() << "================== NO CONTEXT FOUND =======================";
           m_completionItems.clear();
           m_navigationWidgets.clear();
