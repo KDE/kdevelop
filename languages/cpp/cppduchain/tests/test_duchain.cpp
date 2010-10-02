@@ -5334,6 +5334,29 @@ void TestDUChain::testAutoTypes()
   }
 }
 
+void TestDUChain::testCommentAfterFunctionCall()
+{
+  // testcase for bug https://bugs.kde.org/show_bug.cgi?id=241793
+  
+  LockedTopDUContext top = parse("class View;\n"
+                                 "void setView(View* m_view) {\n"
+                                 "  setView(0);\n"
+                                 "  setView(m_view); //\n"
+                                 "}\n", DumpAll);
+  QVERIFY(top);
+  DUChainReadLocker lock;
+  QVERIFY(top->problems().isEmpty());
+
+  QCOMPARE(top->localDeclarations().size(), 2);
+  QCOMPARE(top->childContexts().size(), 2);
+
+  QCOMPARE(top->childContexts().first()->localDeclarations().size(), 1);
+  Declaration* m_view = top->childContexts().first()->localDeclarations().first();
+
+  QVERIFY(top->childContexts().last()->localDeclarations().isEmpty());
+  QCOMPARE(m_view->uses().size(), 1);
+}
+
 KDevelop::TopDUContext* TestDUChain::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
   if (dump)

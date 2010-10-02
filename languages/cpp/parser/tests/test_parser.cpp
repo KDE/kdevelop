@@ -571,6 +571,27 @@ private slots:
     QCOMPARE(propAst->final, isFinal);
   }
 
+  void testCommentAfterFunctionCall() {
+    //this is ambigous
+    pool memPool;
+    TranslationUnitAST* ast = parse("void setView() {\n"
+                                    "  setView(m_view); //\n"
+                                    "}\n", &memPool);
+
+    QVERIFY(ast != 0);
+
+    DumpTree dumper;
+    dumper.dump(ast, lastSession->token_stream);
+
+    QCOMPARE(ast->declarations->count(), 1);
+    QVERIFY(hasKind(ast, AST::Kind_FunctionDefinition));
+    FunctionDefinitionAST* funcAst = static_cast<FunctionDefinitionAST*>(getAST(ast, AST::Kind_FunctionDefinition));
+    QVERIFY(hasKind(funcAst, AST::Kind_ExpressionOrDeclarationStatement));
+    ExpressionOrDeclarationStatementAST* ambAst = static_cast<ExpressionOrDeclarationStatementAST*>(getAST(funcAst, AST::Kind_ExpressionOrDeclarationStatement));
+    QVERIFY(hasKind(funcAst, AST::Kind_FunctionCall));
+    QVERIFY(hasKind(funcAst, AST::Kind_InitDeclarator));
+  }
+
 private:
   ParseSession* lastSession;
 
