@@ -107,7 +107,14 @@ public:
      * open documents.
      */
     Q_SCRIPTABLE QList<IndexedString> managedDocuments();
-    
+
+    /**
+     * Returns the tracker for the given url if the document is being tracked, else returns zero.
+     * This function is thread-safe, but the returned object also isn't, so you must not use it
+     * when you're in a background thread without the foreground lock acquired.
+     * */
+    DocumentChangeTracker* trackerForUrl(const IndexedString& url) const;
+
 Q_SIGNALS:
     /** 
 	 * Emitted whenever a document parse-job has finished. 
@@ -131,13 +138,6 @@ public Q_SLOTS:
      * Suspends execution of the background parser
      */
     void suspend();
-
-    /**
-     * Returns the tracker for the given url if the document is being tracked, else returns zero.
-     * This function is thread-safe, but the returned object also isn't, so you must not use it
-     * when you're in a background thread without the foreground lock acquired.
-     * */
-    DocumentChangeTracker* trackerForUrl(const IndexedString& url) const;
     
     /**
      * Resumes execution of the background parser
