@@ -1196,7 +1196,7 @@ void DUChain::addDocumentChain( TopDUContext * chain )
 
   //contextChanged(0L, DUChainObserver::Addition, DUChainObserver::ChildContexts, chain);
 
-  if(ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
+  if(ICore::self() && ICore::self()->languageController()->backgroundParser()->trackerForUrl(chain->url()))
   {
     //Make sure the context stays alive at least as long as the context is open
     ReferencedTopDUContext ctx(chain);
