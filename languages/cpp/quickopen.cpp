@@ -331,12 +331,15 @@ void IncludeFileDataProvider::setFilterText( const QString& _text )
       explicitPath = true;
     }
     
-    KUrl u( text );
+    QString prefixPath;
+    if (!explicitPath || !text.isEmpty()) {
+      KUrl u( text );
 
-    u.setFileName( QString() );
-    QString prefixPath = u.toLocalFile();
+      u.setFileName( QString() );
+      prefixPath = u.toLocalFile();
+    }
 
-    if( prefixPath != m_lastSearchedPrefix && !prefixPath.isEmpty() )
+    if( explicitPath || (prefixPath != m_lastSearchedPrefix && !prefixPath.isEmpty()) )
     {
       kDebug(9007) << "extracted prefix " << prefixPath;
 
