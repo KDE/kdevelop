@@ -1869,7 +1869,7 @@ void TestDUChain::testADL()
                           "int bar(int& a) {}"
                           "int test() { A a; bar(a); }"); // calls ::bar
 
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(nonAdlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 6);
 
@@ -1889,7 +1889,7 @@ void TestDUChain::testADL()
                           "int bar(foo::A& a) {}" // found on normal lookup, hiding foo::bar
                           "int test() { A a; bar(a); }"); // calls ::bar
 
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(nonAdlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 5);
 
@@ -1911,7 +1911,7 @@ void TestDUChain::testADL()
                        "int bar(int& a) {}"
                        "int test() { foo::A a; bar(a); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 6);
 
@@ -1933,7 +1933,7 @@ void TestDUChain::testADL()
     QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
                        "int test() { foo::A a; bar(a); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -1953,7 +1953,7 @@ void TestDUChain::testADLClassType()
                        "namespace boo { struct B : public foo::A {}; }"
                        "int test() { boo::B b; bar(b); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 4);
 
@@ -1971,7 +1971,7 @@ void TestDUChain::testADLClassType()
                        "namespace zoo { struct C : public boo::B {}; }"
                        "int test() { zoo::C c; bar(c); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 5);
 
@@ -1987,7 +1987,7 @@ void TestDUChain::testADLClassType()
     QByteArray adlCall("namespace foo { struct A { struct B {}; }; int bar(A::B&) {} }"
                        "int test() { foo::A::B b; bar(b); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2006,7 +2006,7 @@ void TestDUChain::testADLFunctionType()
                        "foo::A f() {}"
                        "int test() { bar(&f); }"); // calls foo::bar through f's return type
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 5);
 
@@ -2022,7 +2022,7 @@ void TestDUChain::testADLFunctionType()
                        "void f(foo::A) {}"
                        "int test() { bar(f); }"); // calls foo::bar through f's argument type
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 5);
 
@@ -2058,7 +2058,7 @@ void TestDUChain::testADLEnumerationType()
     QByteArray adlCall("namespace foo { enum A { enValue }; int bar(A a) {} }"
                        "int test() { foo::A a; bar(a); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2073,7 +2073,7 @@ void TestDUChain::testADLEnumerationType()
     QByteArray adlCall("namespace foo { enum A { enValue }; int bar(A a) {} }"
                        "int test() { bar(foo::enValue); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     QCOMPARE(top->childContexts().count(), 3);
 
@@ -2125,7 +2125,7 @@ void TestDUChain::testADLNameAlias()
                        "typedef foo::A B;"
                        "int test() { B a; bar(a); }"); // calls foo::bar
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     QCOMPARE(top->childContexts().count(), 3);
     
@@ -2139,7 +2139,7 @@ void TestDUChain::testADLNameAlias()
     QByteArray adlCall("namespace foo { struct A { }; typedef A B; void bar(A &) {}  }"
                        "int test() { foo::B a; bar(a); }"); // calls foo::bar
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     QCOMPARE(top->childContexts().count(), 3);
     
@@ -2154,7 +2154,7 @@ void TestDUChain::testADLNameAlias()
     QByteArray nonAdlCall("struct A { }; namespace foo { typedef A B; void bar(A &) {}  }"
                           "int test() { foo::B a; bar(a); }"); // fails
     
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(nonAdlCall, DumpNone) );
     
     QCOMPARE(top->childContexts().count(), 4);
     
@@ -2172,7 +2172,7 @@ void TestDUChain::testADLTemplateArguments()
                        "namespace foo { template<class T> struct B { }; template<class T> void bar(T &) {} }"
                        "int test() { foo::B<A> a; bar(a); }"); // calls foo::bar
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<foo::B<A> >"));
     QVERIFY(d);    
@@ -2184,7 +2184,7 @@ void TestDUChain::testADLTemplateArguments()
                        "namespace foo { struct A { }; template<class T> void bar(T &) {} }"
                        "int test() { B<foo::A> a; bar(a); }"); // calls foo::bar
 
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
 
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::A> >"));
     QVERIFY(d);
@@ -2196,7 +2196,7 @@ void TestDUChain::testADLTemplateArguments()
                        "namespace foo { struct A { }; template<class T> void bar(T &) {} }"
                        "int test() { B<B<foo::A> > a; bar(a); }"); // calls foo::bar
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<B<foo::A> > >"));
     QVERIFY(d);
@@ -2208,7 +2208,7 @@ void TestDUChain::testADLTemplateArguments()
                        "namespace foo { struct A { }; template<class T> void bar(T &) {} }"
                        "int test() { B<foo::A> a; bar(a); }"); // calls foo::bar
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::A> >"));
     QVERIFY(d);
@@ -2220,7 +2220,7 @@ void TestDUChain::testADLTemplateArguments()
                        "template<class T> struct B { };"
                        "int test() { B<foo::E> a; bar(a); }");
     
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::E> >"));
     QVERIFY(d);
@@ -2232,7 +2232,7 @@ void TestDUChain::testADLTemplateArguments()
                           "template<int I> struct B { };"
                           "int test() { B<foo::value> a; bar(a); }");
 
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(nonAdlCall, DumpNone) );
 
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<foo::value> >"));
     QVERIFY(d);
@@ -2243,7 +2243,7 @@ void TestDUChain::testADLTemplateArguments()
                           "template<void (*I)(foo::A&)> struct B { };"
                           "int test() { B<&foo::f> a; bar(a); }");
 
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(nonAdlCall, DumpNone) );
 
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<&foo::f> >"));
     QVERIFY(d);
@@ -2258,7 +2258,7 @@ void TestDUChain::testADLTemplateTemplateArguments() {
                        "template<class T> struct B { };"
                        "int test() { B<C> a; bar(a); }"); // in this ADL call
                         
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
     
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<C> >"));
     QVERIFY(d);
@@ -2271,7 +2271,7 @@ void TestDUChain::testADLTemplateTemplateArguments() {
                           "template<template<class U> class T> struct B { };"
                           "int test() { B<C> a; bar(a); }"); // in this ADL call
     
-    LockedTopDUContext top( parse(nonAdlCall, DumpAll) );
+    LockedTopDUContext top( parse(nonAdlCall, DumpNone) );
     
     Declaration* d = findDeclaration(top, QualifiedIdentifier("foo::bar<B<C> >"));
     QVERIFY(d);
@@ -2398,7 +2398,7 @@ void TestDUChain::testGlobalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { afoo::bar(); }");
 
-  LockedTopDUContext top( parse(method, DumpAll) );
+  LockedTopDUContext top( parse(method, DumpNone) );
 
   QCOMPARE(top->childContexts().count(), 3);
 
@@ -2433,7 +2433,7 @@ void TestDUChain::testUsingGlobalNamespaceAlias()
 {
   QByteArray method("namespace foo { int bar(); } namespace afoo = foo; int test() { using namespace afoo; bar(); }");
 
-  LockedTopDUContext top( parse(method, DumpAll) );
+  LockedTopDUContext top( parse(method, DumpNone) );
 
   QCOMPARE(top->childContexts().count(), 3);
 
@@ -2453,7 +2453,7 @@ void TestDUChain::testGlobalNamespaceAliasCycle()
   QByteArray method("namespace foo { int bar(); } namespace A = foo; namespace B = A; namespace A = B; "
                     "int test() { foo::bar(); A::bar(); B::bar(); } ");
 
-  LockedTopDUContext top( parse(method, DumpAll) );
+  LockedTopDUContext top( parse(method, DumpNone) );
 
   QCOMPARE(top->childContexts().count(), 3);
 
@@ -2482,7 +2482,7 @@ void TestDUChain::testUsingGlobalNamespaceAliasCycle()
                     "int testA() { using namespace A; bar(); } "
                     "int testB() { using namespace B; bar(); }");
 
-  LockedTopDUContext top( parse(method, DumpAll) );
+  LockedTopDUContext top( parse(method, DumpNone) );
 
   QCOMPARE(top->childContexts().count(), 5);
 
