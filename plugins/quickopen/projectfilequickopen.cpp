@@ -115,7 +115,19 @@ ProjectFileDataProvider::ProjectFileDataProvider() {
 }
 
 void ProjectFileDataProvider::setFilterText( const QString& text ) {
-  Base::setFilter( text.split('/'), QChar('/') );
+  QString filterText = text;
+  if (filterText.startsWith(QLatin1String("./")) || filterText.startsWith(QLatin1String("../")) ) {
+    // assume we want to filter relative to active document's url
+    IDocument* doc = ICore::self()->documentController()->activeDocument();
+    if (doc) {
+      KUrl url = doc->url().upUrl();
+      url.addPath(text);
+      url.cleanPath();
+      url.adjustPath(KUrl::RemoveTrailingSlash);
+      filterText = url.pathOrUrl();
+    }
+  }
+  Base::setFilter( filterText.split('/', QString::SkipEmptyParts), QChar('/') );
 }
 
 namespace

@@ -158,7 +158,7 @@ class FilterWithSeparator {
       m_filtered.clear();
 
       QString exactNeedle;
-      if (!text.isEmpty() && !(text.size() == 1 && text.first().isEmpty())) {
+      if (!text.isEmpty()) {
           exactNeedle = separator + text.join(separator);
       }
 
