@@ -1194,15 +1194,19 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     }
   }
 
-CursorInRevision c = CursorInRevision::invalid();
+  CursorInRevision c = CursorInRevision::invalid();
   if (direction == QuickOpenPlugin::NextFunction && nearestDeclAfter)
     c = nearestDeclAfter->range().start;
   else if (direction == QuickOpenPlugin::PreviousFunction && nearestDeclBefore)
     c = nearestDeclBefore->range().start;
 
-  lock.unlock();
+  KTextEditor::Cursor textCursor = KTextEditor::Cursor::invalid();
   if (c.isValid())
-    core()->documentController()->openDocument(doc->url(), context->transformFromLocalRevision(c).textCursor());
+    textCursor = context->transformFromLocalRevision(c).textCursor();
+
+  lock.unlock();
+  if (textCursor.isValid())
+    core()->documentController()->openDocument(doc->url(), textCursor);
   else
     kDebug() << "No declaration to jump to";
 }
