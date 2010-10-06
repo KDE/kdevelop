@@ -75,7 +75,7 @@ KAboutData aboutData()
     aboutData.addAuthor( ki18n("Hamish Rodda"), ki18n( "Text editor integration, definition-use chain" ), "rodda@kde.org" );
     
     aboutData.addCredit( ki18n("Matt Rogers"), KLocalizedString(), "mattr@kde.org");
-    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and ident support"), "cedric.pasteur@free.fr" );
+    aboutData.addCredit( ki18n("Cédric Pasteur"), ki18n("astyle and indent support"), "cedric.pasteur@free.fr" );
     aboutData.addCredit( ki18n("Evgeniy Ivanov"), ki18n("Distributed VCS, Git, Mercurial"), "powerfox@kde.ru" );
     //Veritas is outside in playground currently.
     //aboutData.addCredit( ki18n("Manuel Breugelmanns"), ki18n( "Veritas, QTest integraton"), "mbr.nxi@gmail.com" );
