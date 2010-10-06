@@ -85,6 +85,7 @@ private slots:
   void testADL();
   void testADLClassType();
   void testADLFunctionType();
+  void testADLFunctionByName();
   void testADLEnumerationType();
   void testADLClassMembers();
   void testADLNameAlias();

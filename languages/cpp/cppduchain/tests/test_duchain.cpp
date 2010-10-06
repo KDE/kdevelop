@@ -2032,7 +2032,10 @@ void TestDUChain::testADLFunctionType()
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
   }
+}
 
+void TestDUChain::testADLFunctionByName()
+{
   {
     QByteArray adlCall("namespace foo { struct A {}; int bar(void *a) {} void f(int a) {}}"
                        "int test() { bar(&foo::f); }"); // calls foo::bar
@@ -2086,7 +2089,7 @@ void TestDUChain::testADLClassMembers()
 {
   {
     QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void (A::*p)()) {} }"
-                       "int test() { bar(&foo::A::mem_fun); }"); // calls foo::bar
+                       "int test() { void (A::*p)() = &foo::A::mem_fun; bar(p); }"); // calls foo::bar (avoid testADLFunctionByName)
     
     LockedTopDUContext top( parse(adlCall, DumpAll) );
     
@@ -2098,6 +2101,7 @@ void TestDUChain::testADLClassMembers()
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
   }
+
   {
     QByteArray adlCall("namespace foo { struct A { int member; }; void bar(int A::*p) {} }"
                        "int test() { bar(&foo::A::member); }"); // calls foo::bar
