@@ -10,6 +10,7 @@ set(kdevgrepview_PART_SRCS
     grepoutputmodel.cpp
     grepoutputdelegate.cpp
     grepjob.cpp
+    grepfindthread.cpp
 )
 
 set(kdevgrepview_PART_UI
