@@ -26,14 +26,32 @@ class GrepOutputItem : public QStandardItem
 {
 public:
     typedef QList<GrepOutputItem> List;
-    GrepOutputItem(const QString &fileName, const QString &lineNumber,
-                   const QString &text, bool showFilename);
+
+    enum ItemType
+    {
+        Text,
+        FileCollapsed,
+        FileExpanded
+    };
+
     GrepOutputItem(const QString &fileName, int lineNumber,
                    const QString &text);
     ~GrepOutputItem();
 
-    QString m_fileName, m_lineNumber, m_text;
-    bool m_showFilename;
+    QString filename() const ;
+    int lineNumber() const ;
+    bool collapsed() const ;
+    bool expanded() const ;
+    bool isText() const { return data()==Text; }
+    bool collapse();
+    bool expand();
+    bool toggleView();
+
+private:
+    QString m_fileName, m_text;
+    int m_lineNumber;
+    void showCollapsed();
+    void showExpanded();
 };
 
 class GrepOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel

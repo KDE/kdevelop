@@ -46,13 +46,78 @@ GrepOutputItem::GrepOutputItem(const QString &fileName,
     {
         QString formattedTxt = QString("  %1: %2").arg(lineNumber).arg(text);
         setText( formattedTxt );
-        //setData( Text );
+        setData( Text );
     }
     else
     {
         setText(text);
-        //showCollapsed();
+        showCollapsed();
     }
+}
+
+bool GrepOutputItem::collapse()
+{
+    if(isText())
+        return false;
+    if(collapsed())
+        return true;
+    QStandardItemModel *model = this->model();
+    if(!model)
+        return false;
+    int takeIdx = this->index().row()+1;
+    QList< QList<QStandardItem*> > rows;
+    forever
+    {
+        GrepOutputItem *textitem = dynamic_cast<GrepOutputItem*>(model->item(takeIdx));
+        if( !textitem )
+            break;
+        if(!textitem->isText())
+            break;
+        rows << model->takeRow(takeIdx);
+    }
+    foreach(const QList<QStandardItem*> &row, rows)
+        this->appendRow(row);
+    this->showCollapsed();
+    return true;
+}
+
+bool GrepOutputItem::expand()
+{
+    if(isText())
+        return false;
+    if(expanded())
+        return true;
+    int curRow = this->index().row()+1;
+    while(this->rowCount()!=0)
+    {
+        QList<QStandardItem*> row = this->takeRow(0);
+        this->model()->insertRow(curRow++, row);
+    }
+    showExpanded();
+    return true;
+}
+
+void GrepOutputItem::showCollapsed()
+{
+    setData( FileCollapsed );
+    setIcon( KIcon("arrow-right") );
+}
+
+void GrepOutputItem::showExpanded()
+{
+    setData( FileExpanded );
+    setIcon( KIcon("arrow-down") );
+}
+
+bool GrepOutputItem::toggleView()
+{
+    if(collapsed())
+        expand();
+    else if(expanded())
+        collapse();
+    else
+        return false;
+    return true;
 }
 
 GrepOutputItem::~GrepOutputItem()
