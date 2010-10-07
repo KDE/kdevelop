@@ -59,23 +59,17 @@ class GrepOutputModel : public QStandardItemModel, public KDevelop::IOutputViewM
     Q_OBJECT
 
 public:
-    enum ItemType
-    {
-        Text,
-        File
-    };
     explicit GrepOutputModel( QObject *parent = 0 );
     ~GrepOutputModel();
 
-    void setRegExp(const QString& regExp);
+    void setRegExp(const QRegExp& re);
 
     void activate( const QModelIndex &idx );
     QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
     QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
 
 public Q_SLOTS:
-    void appendOutputs( const QStringList &lines );
-    void appendErrors( const QStringList &lines );
+    void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void slotCompleted();
     void slotFailed();
 
@@ -83,11 +77,8 @@ private:
     
     /** Check whether idx points to a row in the current model. */
     bool isValidIndex( const QModelIndex& idx ) const;
-    
-//     int m_matchCount;
-    QString _lastfilename;
+
     QRegExp m_regExp;
-    QString m_pattern;
 };
 
 #endif

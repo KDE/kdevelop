@@ -18,24 +18,8 @@
 #include <ktexteditor/document.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-
-GrepOutputItem::GrepOutputItem(const QString &fileName, const QString &lineNumber,
-                   const QString &text, bool showFilename)
-    : QStandardItem(), m_fileName(fileName), m_lineNumber(lineNumber)
-    , m_text(text), m_showFilename( showFilename )
-{
-    if( !showFilename )
-    {
-        QString formattedTxt = lineNumber + ": " + text;
-        setText( formattedTxt );
-        setData( GrepOutputModel::Text );
-    }
-    else
-    {
-        setText( fileName );
-        setData( GrepOutputModel::File );
-    }
-}
+#include <kicon.h>
+#include <klocale.h>
 
 GrepOutputItem::GrepOutputItem(const QString &fileName,
                    int lineNumber,
@@ -120,17 +104,38 @@ bool GrepOutputItem::toggleView()
     return true;
 }
 
+bool GrepOutputItem::collapsed() const {
+    return data()==FileCollapsed;
+}
+
+int GrepOutputItem::lineNumber() const {
+    return m_lineNumber;
+}
+
+QString GrepOutputItem::filename() const {
+    return m_fileName;
+}
+
+bool GrepOutputItem::expanded() const {
+    return data()==FileExpanded;
+}
+
 GrepOutputItem::~GrepOutputItem()
 {}
 
 ///////////////////////////////////////////////////////////////
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
-    : QStandardItemModel( parent )
-    , _lastfilename(QString())
+    : QStandardItemModel( parent ), m_regExp("")
 {}
+
 GrepOutputModel::~GrepOutputModel()
 {}
+
+void GrepOutputModel::setRegExp(const QRegExp& re)
+{
+    m_regExp = re;
+}
 
 void GrepOutputModel::activate( const QModelIndex &idx )
 {
@@ -138,43 +143,33 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     GrepOutputItem *grepitem = dynamic_cast<GrepOutputItem*>(stditem);
     if( !grepitem )
         return;
+    
+    if(grepitem->toggleView())
+        return;
 
-    KUrl url(grepitem->m_fileName);
+    KUrl url(grepitem->filename());
 
-    int line = grepitem->m_lineNumber.toInt() - 1;
+    int line = grepitem->lineNumber() - 1;
     KTextEditor::Range range( line, 0, line+1, 0);
 
-    // Translate if the file has changed since grepping
-    KTextEditor::Range range2 = range;
-//     range = m_tracker.translateRange( url, range );
-
-    kDebug() << "range" << range2 << "translated to " << range;
-
     // Try to find the actual text range we found during the grep
-    if (IDocument* doc = ICore::self()->documentController()->documentForUrl( url )) {
-        KTextEditor::Range currentSelection = doc->textSelection();
-        if (KTextEditor::Document* tdoc = doc->textDocument()) {
-            QString text = tdoc->text( range );
-            if (m_regExp.isEmpty())
-                m_regExp.setPattern(m_pattern);
-            int index = m_regExp.indexIn(text);
-            if (index != -1) {
-                int addedLines = 0;
-                int addedCols = text.lastIndexOf('\n', index);
-                if (addedCols == -1)
-                    addedCols = index;
-                else
-                    addedLines = text.left(index).count('\n');
-
-                range = KTextEditor::Range(range.start() + KTextEditor::Cursor(addedLines, addedCols), m_regExp.matchedLength());
-            }
+    IDocument* doc = ICore::self()->documentController()->documentForUrl( url );
+    if(!doc)
+        doc = ICore::self()->documentController()->openDocument( url, range );
+    if(!doc)
+        return;
+    if (KTextEditor::Document* tdoc = doc->textDocument()) {
+        QString text = tdoc->line(line);
+        int index = m_regExp.indexIn(text);
+        if (index!=-1) {
+            range.setBothLines(line);
+            range.start().setColumn(index);
+            range.end().setColumn(index+m_regExp.matchedLength());
+            doc->setTextSelection( range );
         }
-
-        ICore::self()->documentController()->activateDocument( doc, range );
-
-    } else {
-        ICore::self()->documentController()->openDocument( url, range );
     }
+
+    ICore::self()->documentController()->activateDocument( doc, range );
 }
 
 bool GrepOutputModel::isValidIndex( const QModelIndex& idx ) const
@@ -189,7 +184,7 @@ QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
     for (int row = 0; row < rowCount(); ++row) {
         int currow = (startrow + row) % rowCount();
         if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->data() == Text)
+            if (grep_item->data() == GrepOutputItem::Text)
                 return index(currow, 0);
     }
     return QModelIndex();
@@ -204,70 +199,26 @@ QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentI
     {
         int currow = (startrow - row) % rowCount();
         if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->data() == Text)
+            if (grep_item->data() == GrepOutputItem::Text)
                 return index(currow, 0);
     }
     return QModelIndex();
 }
 
-void GrepOutputModel::appendOutputs( const QStringList &lines )
+void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
-    foreach( const QString& line, lines )
+    QString fnString;
+    if(items.length()>1)
+        fnString = QString(i18n("%1 (%2 matches)")).arg(filename).arg(items.length());
+    else
+        fnString = QString(i18n("%1 (1 match)")).arg(filename);
+    GrepOutputItem *fileItem = new GrepOutputItem(filename, -1, fnString);
+    appendRow(fileItem);
+    //m_tracker.addUrl(KUrl(filename));
+    foreach( const GrepOutputItem& item, items )
     {
-        int pos;
-        QString filename, linenumber, rest;
-
-        QString str = line;
-        if ( (pos = str.indexOf(':')) != -1)
-        {
-            filename = str.left(pos);
-            str.remove( 0, pos+1 );
-            if ( ( pos = str.indexOf(':') ) != -1)
-            {
-                linenumber = str.left(pos);
-                str.remove( 0, pos+1 );
-                // filename will be displayed only once
-                // selecting filename will display line 1 of file,
-                // otherwise, line of requested search
-                if ( _lastfilename != filename )
-                {
-                    _lastfilename = filename;
-                    appendRow(new GrepOutputItem(filename, "0", filename, true));
-                    appendRow(new GrepOutputItem(filename, linenumber, str, false));
-                }
-                else
-                {
-                    appendRow(new GrepOutputItem(filename, linenumber, str, false));
-                }
-//                 maybeScrollToBottom();
-            }
-            else
-            {
-                appendRow( new QStandardItem(line) );
-            }
-//             m_matchCount++;
-        }
+        fileItem->appendRow(new GrepOutputItem(item));
     }
-}
-
-void GrepOutputModel::appendErrors( const QStringList &lines )
-{
-    foreach( const QString& line, lines )
-        appendRow( new QStandardItem(line) );
-}
-
-void GrepOutputModel::slotCompleted()
-{
-    appendRow( new QStandardItem( "Completed" ) );
-}
-void GrepOutputModel::slotFailed()
-{
-    appendRow( new QStandardItem( "Failed" ) );
-}
-
-void GrepOutputModel::setRegExp(const QString& regExp)
-{
-    m_pattern = regExp;
 }
 
 #include "grepoutputmodel.moc"
