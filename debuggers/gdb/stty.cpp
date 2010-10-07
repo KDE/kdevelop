@@ -66,6 +66,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
+#include <kdebug.h>
 
 #include "stty.h"
 
@@ -317,8 +318,6 @@ bool STTY::findExternalTTY(const QString &termApp)
          * Spawn a console that in turn runs a shell script that passes us
          * back the terminal name and then only sits and waits.
          */
-
-        const char* prog      = appName.toLatin1();
         QString script = QString("tty>") + QString(fifo) +
             QString(";"                  // fifo name
                     "trap \"\" INT QUIT TSTP;"	  // ignore various signals
@@ -327,17 +326,18 @@ bool STTY::findExternalTTY(const QString &termApp)
         const char* scriptStr = script.toLatin1();
         const char* end       = 0;
 
+        QByteArray rawAppName = appName.toLocal8Bit();
         if ( termApp == "konsole" )
         {
-            ::execlp( prog,       prog,
+            ::execlp( rawAppName, rawAppName,
                   "-caption", i18n("kdevelop: Debug application console").toLocal8Bit().data(),
                   "-e",       "sh",
                   "-c",       scriptStr,
-                  end);
+                      end);
         }
         else
         {        
-            ::execlp( prog,       prog,
+            ::execlp( rawAppName, rawAppName,
                   "-e",       "sh",
                   "-c",       scriptStr,
                   end);
@@ -353,6 +353,8 @@ bool STTY::findExternalTTY(const QString &termApp)
 
     // Open the communication between us (the parent) and the
     // child (the process running on a tty console)
+    // FIXME: if child fails for any reason, this will block.
+    // should make the child report error via pipe
     fifo_fd = ::open(fifo, O_RDONLY);
     if (fifo_fd < 0)
         return false;

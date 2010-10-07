@@ -987,10 +987,6 @@ bool DebugSession::startProgram(KDevelop::ILaunchConfiguration* cfg)
         // the external terminal cmd contains additional arguments, just get the terminal name
         config_externalTerminal = KShell::splitArgs(config_externalTerminal).first();
     }
-    ///FIXME: debugging in external terminal hangs for me in STTY::findExternalTTY in this line:
-    ///fifo_fd = ::open(fifo, O_RDONLY)
-    ///Hence disable this for now
-    config_useExternalTerminal = false;
 
     // Need to set up a new TTY for each run...
     if (tty_)
