@@ -136,20 +136,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
             this, SLOT(patternComboEditTextChanged( const QString& )));
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
-    
-    const QStringList tools = QStringList() << "grep" << "egrep" << "sed" << "cat" << "xargs";
-    QStringList missing;
-    foreach(const QString &tool, tools)
-    {
-        if(KStandardDirs::findExe(tool).isEmpty())
-            missing << tool;
-    }
-    if(!missing.isEmpty())
-    {
-        QString list = "<li>" + missing.join("</li><li>") + "</li>";
-        QMessageBox::critical(this, i18n("Missing tools"), i18n("The following needed tools are missing on your system:")+list);
-        close();
-    }
 }
 
 // Returns the contents of a QComboBox as a QStringList
