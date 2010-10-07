@@ -470,7 +470,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
             QStringList values = value.split(' ');
             
             VcsRevision rev;
-            rev.setRevisionValue(name.truncate(8), KDevelop::VcsRevision::GlobalNumber);
+            rev.setRevisionValue(name.left(8), KDevelop::VcsRevision::GlobalNumber);
             
             skipNext = definedRevisions.contains(name);
             
