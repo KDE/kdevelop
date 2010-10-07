@@ -32,6 +32,7 @@
 #include <util/processlinemaker.h>
 
 #include <language/duchain/indexedstring.h>
+#include <interfaces/iuicontroller.h>
 
 #include "grepoutputdelegate.h"
 
@@ -75,319 +76,153 @@ static GrepOutputItem::List grepFileSimple(const QString &filename, const QStrin
 }
 
 GrepJob::GrepJob( QObject* parent )
-    : KDevelop::OutputJob( parent ), project(0), m_lineMaker(0)
+    : KDevelop::OutputJob( parent ), m_workState(WorkIdle)
 {
     setCapabilities(Killable);
+    KDevelop::ICore::self()->uiController()->registerStatus(this);
 }
 
-QString GrepJob::patternString() const
+QString GrepJob::statusName() const
 {
-    return m_patternString;
+    return i18n("Find in Files");
 }
 
-void GrepJob::setPatternString(const QString& patternString)
+void GrepJob::slotFindFinished()
 {
-    m_patternString = patternString;
+    if(m_findThread && !m_findThread->triesToAbort())
+    {
+        m_fileList = m_findThread->files();
+        delete m_findThread;
+    }
+    else
+    {
+        m_fileList.clear();
+        emit hideProgress(this);
+        emit clearMessage(this);
+        emit showErrorMessage(i18n("Find in Files aborted"), 5000);
+        emitResult();
+        return;
+    }
+    if(m_fileList.isEmpty())
+    {
+        m_workState = WorkIdle;
+        emit hideProgress(this);
+        emit clearMessage(this);
+        emit showErrorMessage(i18n("No files found matching the wildcard patterns"), 5000);
+        //model()->slotFailed();
+        emitResult();
+        return;
+    }
+    QString pattern = substitudePattern(m_templateString, m_patternString, m_regexpFlag);
+    m_regExp.setPattern(pattern);
+    m_regExp.setCaseSensitivity( m_caseSensitiveFlag ? Qt::CaseSensitive : Qt::CaseInsensitive );
+    if(m_regExp.pattern() == QRegExp::escape(m_regExp.pattern())) {
+        // this is obviously not a regexp, so do a regular search
+        m_regExpSimple = m_regExp.pattern();
+        m_regexpFlag = false;
+    }
+    GrepOutputModel *model = new GrepOutputModel();
+    model->setRegExp(m_regExp);
+    setModel(model, KDevelop::IOutputView::TakeOwnership);
+    setDelegate(GrepOutputDelegate::self());
+    startOutput();
+    if(m_fileList.length()<100)
+        emit showMessage(this, i18n("Searching for \"%1\"", m_regExp.pattern()));
+    else
+        emit showMessage(this, i18n("Searching for \"%1\" in %2 files", m_regExp.pattern(), m_fileList.length()));
+    m_workState = WorkGrep;
+    QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);
+}
 
-    setObjectName(i18n("Grep: %1", m_patternString));
+void GrepJob::slotWork()
+{
+    switch(m_workState)
+    {
+        case WorkIdle:
+            m_workState = WorkCollectFiles;
+            m_fileIndex = 0;
+            emit showProgress(this, 0,0,0);
+            QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
+            break;
+        case WorkCollectFiles:
+            m_findThread = new GrepFindFilesThread(this, m_directory, m_recursiveFlag, m_filesString, m_excludeString, m_useProjectFilesFlag);
+            emit showMessage(this, i18n("Collecting files..."));
+            connect(m_findThread, SIGNAL(finished()), this, SLOT(slotFindFinished()));
+            m_findThread->start();
+            break;
+        case WorkGrep:
+            if(m_fileIndex < m_fileList.length())
+            {
+                emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
+                // this increases the speed
+                for(int i=0; i<10; i++)
+                {
+                    if(m_fileIndex >= m_fileList.length())
+                        break;
+                    GrepOutputItem::List items;
+                    if(m_regexpFlag)
+                        items = grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
+                    else
+                        items = grepFileSimple(m_fileList[m_fileIndex].toLocalFile(), m_regExpSimple, m_caseSensitiveFlag);
+                    if(!items.isEmpty())
+                        model()->appendOutputs(m_fileList[m_fileIndex].toLocalFile(), items);
+                    m_fileIndex++;
+                }
+                QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
+            }
+            else
+            {
+                emit hideProgress(this);
+                emit clearMessage(this);
+                m_workState = WorkIdle;
+                //model()->slotCompleted();
+                emitResult();
+            }
+            break;
+    }
 }
 
 void GrepJob::start()
 {
-    KProcess *catProc=0, *findProc=0, *grepProc=0, *sedProc=0, *xargsProc=0;
-    QList<KProcess*> validProcs;
-
-    // waba: code below breaks on filenames containing a ',' !!!
-//     QStringList filelist = QString::split(",", filesString);
-    QStringList filelist = filesString.split(',');
-    KTemporaryFile* tempFile = 0;
-    if (useProjectFilesFlag)
-    {
-        if( !project )
-        {
-            project = KDevelop::ICore::self()->projectController()->findProjectForUrl( directory );
-        }
-        if (project)
-        {
-            tempFile = new KTemporaryFile();
-            tempFile->setSuffix(".grep.tmp");
-            //This is ok, the tempfile is deleted when the last process
-            //finished running, see the end of this function
-            tempFile->setAutoRemove( false );
-
-            KUrl::List projectFiles;
-            
-            QSet<IndexedString> fileItems = project->fileSet();
-            foreach( const IndexedString &_item, fileItems )
-            {
-                projectFiles << _item.toUrl();
-            }
-            if (!projectFiles.isEmpty())
-            {
-                qSort(projectFiles);
-                QList<QRegExp> regExpList;
-
-                if (!filelist.isEmpty())
-                {
-                    for (QStringList::Iterator it = filelist.begin(); it != filelist.end(); ++it)
-                        regExpList.append(QRegExp(*it, Qt::CaseSensitive, QRegExp::Wildcard));
-                }
-
-
-                if (tempFile->open())
-                {
-                    QTextStream out(tempFile);
-                    for (QList<KUrl>::Iterator it = projectFiles.begin(); it != projectFiles.end(); ++it)
-                    {
-                        // parent directory check.
-                        if( recursiveFlag && ! directory.isParentOf( *it ) ) continue;
-                        if( !recursiveFlag &&
-                            (*it).upUrl().equals(directory, KUrl::CompareWithoutTrailingSlash))
-                            continue;
-
-                        // filelist check
-                        bool matchOne = regExpList.count() == 0;
-                        for (QList<QRegExp>::Iterator it2 = regExpList.begin(); it2 != regExpList.end() && !matchOne; ++it2)
-                            matchOne = (*it2).exactMatch( (*it).toLocalFile() );
-
-                        // in case of files containing space, convert to \ so that
-                        // xargs can correctly treat that.
-                        if (matchOne)
-                            out << (*it).toLocalFile().replace(' ', "\\ ") << endl;
-                    }
-
-//                     tempFile.close();
-                }
-                else
-                {
-                    setError(TemporaryFileError);
-                    setErrorText(i18n("Unable to create a temporary file for search."));
-                    delete tempFile;
-                    return emitResult();
-                }
-            }
-
-            QStringList catCmd;
-            catCmd << tempFile->fileName().replace(' ', "\\ ");
-            catProc = new KProcess(this);
-            catProc->setProgram( "cat", catCmd );
-            catProc->setOutputChannelMode( KProcess::SeparateChannels );
-            validProcs << catProc;
-        }
-    }
-    else
-    {
-        QStringList files;
-        if (!filelist.isEmpty())
-        {
-            QStringList::Iterator it(filelist.begin());
-            files << *it;
-            ++it;
-            for(; it!=filelist.end(); ++it )
-                files << "-o" << "-name" << *it;
-        }
-        QStringList findCmd;
-        findCmd << directory.toLocalFile();
-        if (!recursiveFlag)
-            findCmd << "-maxdepth" << "1";
-
-        findCmd << "-name" << files;
-        findCmd << "-follow";
-
-        kDebug(9001) << "findCmd :" << findCmd;
-        findProc = new KProcess(this);
-        findProc->setProgram( "find", findCmd );
-        findProc->setOutputChannelMode( KProcess::SeparateChannels );
-        validProcs << findProc;
-    }
-
-    QStringList grepCmd;
-    QString excludestring = excludeString;
-    QStringList excludelist = excludestring.split(',', QString::SkipEmptyParts);
-    if (!excludelist.isEmpty())
-    {
-        QStringList::Iterator it(excludelist.begin());
-        grepCmd << "-v";
-        for (; it != excludelist.end(); ++it)
-            grepCmd << "-e" << *it;
-
-        grepProc = new KProcess(this);
-        grepProc->setProgram( "grep", grepCmd );
-        grepProc->setOutputChannelMode( KProcess::SeparateChannels );
-        validProcs << grepProc;
-    }
-
-    QStringList sedCmd;
-    if (!useProjectFilesFlag)
-    {
-        // quote spaces in filenames going to xargs
-        sedCmd << "s/ /\\\\\\ /g";
-        sedProc = new KProcess(this);
-        sedProc->setProgram( "sed", sedCmd );
-        sedProc->setOutputChannelMode( KProcess::SeparateChannels );
-        validProcs << sedProc;
-    }
-
-    QStringList xargsCmd;
-#ifndef USE_SOLARIS
-    xargsCmd << "egrep" << "-H" << "-n" << "-s";
-#else
-    // -H reported as not being available on Solaris,
-    // but we're buggy without it on Linux.
-    xargsCmd << "egrep" << "-n";
-#endif
-
-    if (!caseSensitiveFlag)
-    {
-        xargsCmd << "-i";
-    }
-    xargsCmd << "-e";
-
-    QString pattern = templateString;
-    {
-        QString subst = patternString();
-        if(regexpFlag)
-            subst = escape(subst);
-        QString modified;
-        bool expectEscape = false;
-        for(int i=0; i<pattern.length(); i++)
-        {
-            if(expectEscape)
-            {
-                expectEscape = false;
-                if(pattern[i] == '%')
-                    modified += '%';
-                else if(pattern[i] == 's')
-                    modified += subst;
-                else
-                    modified += QChar('%') + pattern[i];
-                continue;
-            }
-            if(pattern[i] == '%')
-            {
-                expectEscape = true;
-                continue;
-            }
-            modified += pattern[i];
-        }
-        pattern = modified;
-    }
-//     command += KShellProcess::quote(pattern);
-//     xargsCmd += quote(pattern); // quote isn't needed now.
-    xargsCmd << pattern;
-
-    xargsProc = new KProcess(this);
-    xargsProc->setProgram( "xargs", xargsCmd );
-    xargsProc->setOutputChannelMode( KProcess::SeparateChannels );
-    validProcs << xargsProc;
-
-    if( validProcs.count() > 1 )
-        validProcs[0]->setStandardOutputProcess( validProcs[1] );
-    if( validProcs.count() > 2 )
-        validProcs[1]->setStandardOutputProcess( validProcs[2] );
-    if( validProcs.count() > 3 )
-        validProcs[2]->setStandardOutputProcess( validProcs[3] );
-
+    if(m_workState!=WorkIdle)
+        return;
     setToolTitle(i18n("Find in Files"));
     setToolIcon(KIcon("edit-find"));
     setViewType(KDevelop::IOutputView::HistoryView);
-    setTitle(patternString());
+    setTitle(m_patternString);
     setBehaviours( KDevelop::IOutputView::AllowUserClose );
-
-    GrepOutputModel* grepModel = new GrepOutputModel();
-    grepModel->setRegExp(pattern);
-
-    setModel(grepModel, KDevelop::IOutputView::TakeOwnership);
-    setDelegate(GrepOutputDelegate::self());
-    startOutput();
-
-    m_lineMaker = new KDevelop::ProcessLineMaker( xargsProc );
-
-    // Delete the tempfile when xargs process is destroyed
-    if( tempFile )
-        connect( xargsProc, SIGNAL(destroyed(QObject*)), tempFile, SLOT(deleteLater()) );
-
-    connect( m_lineMaker, SIGNAL(receivedStdoutLines( const QStringList& ) ),
-             grepModel, SLOT(appendOutputs(const QStringList&)) );
-    connect( m_lineMaker, SIGNAL(receivedStderrLines( const QStringList& )),
-             grepModel, SLOT(appendErrors(const QStringList&)) );
-    connect( xargsProc, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotFinished()) );
-    connect( xargsProc, SIGNAL(error( QProcess::ProcessError )),
-             this, SLOT(slotError(QProcess::ProcessError)) );
-
-    // At first line, print out actual command invocation as if it was run via shell.
-    QString printCmd;
-    foreach( KProcess *_proc, validProcs )
-    {
-        printCmd += _proc->program().join(" ") + " | ";
-    }
-    printCmd.chop(3); // chop last '|'
-    grepModel->appendRow( new QStandardItem(printCmd) );
-
-    // start processes
-    foreach( KProcess *_proc, validProcs )
-    {
-        _proc->start();
-    }
+    m_fileList.clear();
+    m_workState = WorkIdle;
+    m_fileIndex = 0;
+    QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
 
-QString GrepJob::escape(const QString &str)
+QString GrepJob::substitudePattern(const QString& pattern, const QString& searchString, bool isRegexp)
 {
-    QString escaped("[]{}()\\^$?.+-*|");
-    QString res;
-
-    for (int i=0; i < str.length(); ++i)
+    QString subst = searchString;
+    if(!isRegexp)
+        subst = QRegExp::escape(subst);
+    QString result;
+    bool expectEscape = false;
+    foreach(const QChar &ch, pattern)
     {
-        if (escaped.indexOf(str[i]) != -1)
-            res += "\\";
-        res += str[i];
+        if(expectEscape)
+        {
+            expectEscape = false;
+            if(ch == '%')
+                result.append('%');
+            else if(ch == 's')
+                result.append(subst);
+            else
+                result.append('%').append(ch);
+        }
+        else if(ch == '%')
+            expectEscape = true;
+        else
+            result.append(ch);
     }
-
-    return res;
-}
-
-
-void GrepJob::slotFinished()
-{
-    m_lineMaker->flushBuffers();
-
-    emitResult();
-}
-
-void GrepJob::slotError(QProcess::ProcessError error)
-{
-    m_lineMaker->flushBuffers();
-
-    foreach(KProcess* proc, m_processes)
-    {
-        proc->kill();
-    }
-
-    setError(UserDefinedError);
-    // TODO more informative error codes
-    switch (error) {
-        case QProcess::FailedToStart:
-            setErrorText(i18n("Process failed to start."));
-            break;
-        case QProcess::Crashed:
-            setErrorText(i18n("Process crashed."));
-            break;
-        case QProcess::Timedout:
-            setErrorText(i18n("Process timed out."));
-            break;
-        case QProcess::WriteError:
-            setErrorText(i18n("Error while writing to process."));
-            break;
-        case QProcess::ReadError:
-            setErrorText(i18n("Error while reading from process."));
-            break;
-        case QProcess::UnknownError:
-            setErrorText(i18n("Unknown process error."));
-            break;
-    }
-
-    emitResult();
+    // kDebug() << "Pattern substituded:" << pattern << "+" << searchString << "=" << result;
+    return result;
 }
 
 GrepOutputModel* GrepJob::model() const
@@ -397,15 +232,13 @@ GrepOutputModel* GrepJob::model() const
 
 bool GrepJob::doKill()
 {
-    foreach (KProcess* p, m_processes)
-        p->close();
-
+    if(m_workState!=WorkIdle)
+    {
+        m_workState = WorkIdle;
+        m_findThread->tryAbort();
+        return m_findThread->isFinished();
+    }
     return true;
-}
-
-void GrepJob::setPatternString(const QString& patternString)
-{
-    m_patternString = patternString;
 }
 
 void GrepJob::setTemplateString(const QString& templateString)
@@ -448,5 +281,11 @@ void GrepJob::setProjectFilesFlag(bool projectFilesFlag)
     m_useProjectFilesFlag = projectFilesFlag;
 }
 
+void GrepJob::setPatternString(const QString& patternString)
+{
+    m_patternString = patternString;
+
+    setObjectName(i18n("Grep: %1", m_patternString));
+}
 
 #include "grepjob.moc"

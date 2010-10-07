@@ -14,11 +14,16 @@
 #ifndef GREPJOB_H
 #define GREPJOB_H
 
-#include <QProcess>
+#include <QRegExp>
+#include <QDir>
+#include <QPointer>
 
 #include <kurl.h>
 
 #include <outputview/outputjob.h>
+#include <interfaces/istatus.h>
+
+#include "grepfindthread.h"
 
 namespace KDevelop
 {
@@ -29,20 +34,14 @@ namespace KDevelop
 
 class GrepOutputModel;
 class GrepOutputDelegate;
-class KProcess;
 
-class GrepJob : public KDevelop::OutputJob
+class GrepJob : public KDevelop::OutputJob, public KDevelop::IStatus
 {
     Q_OBJECT
+    Q_INTERFACES( KDevelop::IStatus )
 
 public:
-    enum ErrorTypes {
-        TemporaryFileError = UserDefinedError
-    };
-
     GrepJob( QObject *parent = 0 );
-
-    QString patternString() const;
 
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
@@ -56,22 +55,39 @@ public:
 
     virtual void start();
 
+    virtual QString statusName() const;
 protected:
     virtual bool doKill();
 
     GrepOutputModel* model() const;
 
 private Q_SLOTS:
-    void slotFinished();
-    void slotError(QProcess::ProcessError error);
+    void slotFindFinished();
 
+Q_SIGNALS:
+    void clearMessage( KDevelop::IStatus* );
+    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0);
+    void showErrorMessage(const QString & message, int timeout = 0);
+    void hideProgress( KDevelop::IStatus* );
+    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
+    
 private:
-    static QString escape(const QString &str);
-
-    KDevelop::ProcessLineMaker* m_lineMaker;
-    QList<KProcess*> m_processes;
+    Q_INVOKABLE void slotWork();
+    static QString substitudePattern(const QString &pattern, const QString &searchString, bool isRegexp);
 
     QString m_patternString;
+    QRegExp m_regExp;
+    QString m_regExpSimple;
+    
+    enum {
+        WorkCollectFiles,
+        WorkGrep,
+        WorkIdle
+    } m_workState;
+    
+    KUrl::List m_fileList;
+    int m_fileIndex;
+    QPointer<GrepFindFilesThread> m_findThread;
 
     QString m_templateString;
     QString m_filesString;
