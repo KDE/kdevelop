@@ -35,6 +35,44 @@
 
 #include "grepoutputdelegate.h"
 
+static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
+{
+    GrepOutputItem::List res;
+    QFile file(filename);
+    if(!file.open(QIODevice::ReadOnly))
+        return res;
+    int lineno = 1;
+    QByteArray data = file.readLine();
+    while( !data.isNull() && file.error()==QFile::NoError )
+    {
+        if( re.indexIn(data)!=-1 )
+            res << GrepOutputItem(filename, lineno, QString(data).trimmed());
+        lineno++;
+        data = file.readLine();
+    }
+    file.close();
+    return res;
+}
+
+static GrepOutputItem::List grepFileSimple(const QString &filename, const QString &pattern, bool caseSense)
+{
+    GrepOutputItem::List res;
+    QFile file(filename);
+    if(!file.open(QIODevice::ReadOnly))
+        return res;
+    int lineno = 1;
+    QByteArray data = file.readLine();
+    while( !data.isNull() && file.error()==QFile::NoError )
+    {
+        QString dataStr = data;
+        if( dataStr.contains(pattern, caseSense ? Qt::CaseSensitive : Qt::CaseInsensitive) )
+            res << GrepOutputItem(filename, lineno, dataStr.trimmed());
+        lineno++;
+        data = file.readLine();
+    }
+    file.close();
+    return res;
+}
 
 GrepJob::GrepJob( QObject* parent )
     : KDevelop::OutputJob( parent ), project(0), m_lineMaker(0)

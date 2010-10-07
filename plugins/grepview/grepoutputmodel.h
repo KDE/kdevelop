@@ -15,6 +15,7 @@
 
 #include <QStandardItemModel>
 #include <QRegExp>
+#include <QList>
 #include <outputview/ioutputviewmodel.h>
 
 class QModelIndex;
@@ -24,8 +25,11 @@ using namespace KDevelop;
 class GrepOutputItem : public QStandardItem
 {
 public:
+    typedef QList<GrepOutputItem> List;
     GrepOutputItem(const QString &fileName, const QString &lineNumber,
                    const QString &text, bool showFilename);
+    GrepOutputItem(const QString &fileName, int lineNumber,
+                   const QString &text);
     ~GrepOutputItem();
 
     QString m_fileName, m_lineNumber, m_text;

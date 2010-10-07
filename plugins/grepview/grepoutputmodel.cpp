@@ -37,6 +37,24 @@ GrepOutputItem::GrepOutputItem(const QString &fileName, const QString &lineNumbe
     }
 }
 
+GrepOutputItem::GrepOutputItem(const QString &fileName,
+                   int lineNumber,
+                   const QString &text)
+    : QStandardItem(), m_fileName(fileName), m_text(text), m_lineNumber(lineNumber)
+{
+    if( lineNumber!=-1 )
+    {
+        QString formattedTxt = QString("  %1: %2").arg(lineNumber).arg(text);
+        setText( formattedTxt );
+        //setData( Text );
+    }
+    else
+    {
+        setText(text);
+        //showCollapsed();
+    }
+}
+
 GrepOutputItem::~GrepOutputItem()
 {}
 
