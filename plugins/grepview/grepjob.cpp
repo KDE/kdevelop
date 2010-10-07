@@ -116,9 +116,9 @@ void GrepJob::slotFindFinished()
     QString pattern = substitudePattern(m_templateString, m_patternString, m_regexpFlag);
     m_regExp.setPattern(pattern);
     m_regExp.setCaseSensitivity( m_caseSensitiveFlag ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    if(m_regExp.pattern() == QRegExp::escape(m_regExp.pattern())) {
+    m_regExpSimple = m_regExp.pattern();
+    if(m_regExpSimple == QRegExp::escape(m_regExpSimple)) {
         // this is obviously not a regexp, so do a regular search
-        m_regExpSimple = m_regExp.pattern();
         m_regexpFlag = false;
     }
     GrepOutputModel *model = new GrepOutputModel();
@@ -154,11 +154,7 @@ void GrepJob::slotWork()
             if(m_fileIndex < m_fileList.length())
             {
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
-                // this increases the speed
-                for(int i=0; i<10; i++)
-                {
-                    if(m_fileIndex >= m_fileList.length())
-                        break;
+                if(m_fileIndex < m_fileList.length()) {
                     GrepOutputItem::List items;
                     if(m_regexpFlag)
                         items = grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
@@ -232,11 +228,11 @@ GrepOutputModel* GrepJob::model() const
 
 bool GrepJob::doKill()
 {
-    if(m_workState!=WorkIdle)
+    if(m_workState!=WorkIdle && !m_findThread.isNull())
     {
         m_workState = WorkIdle;
         m_findThread->tryAbort();
-        return m_findThread->isFinished();
+        return false;
     }
     return true;
 }
