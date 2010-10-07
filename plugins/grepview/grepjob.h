@@ -43,20 +43,16 @@ public:
     GrepJob( QObject *parent = 0 );
 
     QString patternString() const;
+
     void setPatternString(const QString& patternString);
-
-    QString templateString;
-    QString filesString;
-    QString excludeString;
-    KUrl directory;
-
-    bool useProjectFilesFlag;
-    bool regexpFlag;
-    bool recursiveFlag;
-    bool noFindErrorsFlag;
-    bool caseSensitiveFlag;
-
-    KDevelop::IProject *project;
+    void setTemplateString(const QString &templateString);
+    void setFilesString(const QString &filesString);
+    void setExcludeString(const QString &excludeString);
+    void setDirectory(const KUrl &directory);
+    void setRecursive(bool recursive);
+    void setRegexpFlag(bool regexpFlag);
+    void setCaseSensitive(bool caseSensitive);
+    void setProjectFilesFlag(bool projectFilesFlag);
 
     virtual void start();
 
@@ -76,6 +72,16 @@ private:
     QList<KProcess*> m_processes;
 
     QString m_patternString;
+
+    QString m_templateString;
+    QString m_filesString;
+    QString m_excludeString;
+    KUrl m_directory;
+
+    bool m_useProjectFilesFlag;
+    bool m_regexpFlag;
+    bool m_recursiveFlag;
+    bool m_caseSensitiveFlag;
 };
 
 #endif

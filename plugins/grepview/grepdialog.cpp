@@ -268,15 +268,15 @@ void GrepDialog::search()
     GrepJob* job = new GrepJob();
 
     job->setPatternString(patternString());
-    job->templateString = templateString();
-    job->filesString = filesString();
-    job->excludeString = excludeString();
-    job->directory = directory();
+    job->setTemplateString(templateString());
+    job->setFilesString(filesString());
+    job->setExcludeString(excludeString());
+    job->setDirectory(directory());
 
-    job->useProjectFilesFlag = useProjectFilesFlag();
-    job->regexpFlag = regexpFlag();
-    job->recursiveFlag = recursiveFlag();
-    job->caseSensitiveFlag = caseSensitiveFlag();
+    job->setProjectFilesFlag( useProjectFilesFlag() );
+    job->setRegexpFlag( regexpFlag() );
+    job->setRecursive( recursiveFlag() );
+    job->setCaseSensitive( caseSensitiveFlag() );
 
     kDebug() << "registering job";
     KDevelop::ICore::self()->runController()->registerJob(job);

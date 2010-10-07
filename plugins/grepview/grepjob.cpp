@@ -403,4 +403,50 @@ bool GrepJob::doKill()
     return true;
 }
 
+void GrepJob::setPatternString(const QString& patternString)
+{
+    m_patternString = patternString;
+}
+
+void GrepJob::setTemplateString(const QString& templateString)
+{
+    m_templateString = templateString;
+}
+
+void GrepJob::setFilesString(const QString& filesString)
+{
+    m_filesString = filesString;
+}
+
+void GrepJob::setExcludeString(const QString& excludeString)
+{
+    m_excludeString = excludeString;
+}
+
+void GrepJob::setDirectory(const KUrl& directory)
+{
+    m_directory = directory;
+}
+
+void GrepJob::setCaseSensitive(bool caseSensitive)
+{
+    m_caseSensitiveFlag = caseSensitive;
+}
+
+void GrepJob::setRecursive(bool recursive)
+{
+    m_recursiveFlag = recursive;
+}
+
+void GrepJob::setRegexpFlag(bool regexpFlag)
+{
+    m_regexpFlag = regexpFlag;
+}
+
+void GrepJob::setProjectFilesFlag(bool projectFilesFlag)
+{
+    m_useProjectFilesFlag = projectFilesFlag;
+}
+
+
 #include "grepjob.moc"
