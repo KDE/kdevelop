@@ -107,6 +107,8 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     templateEdit->setText(template_str[0]);
 
     templateTypeCombo->addItems(template_desc);
+    templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
+    templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
 
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
@@ -184,6 +186,8 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("no_find_errs", suppressErrorsCheck->isChecked());
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
     cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
+    cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
+    cg.writeEntry("LastUsedTemplateString", templateEdit->text());
     cg.sync();
 }
 
