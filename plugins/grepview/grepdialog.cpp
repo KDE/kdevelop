@@ -126,8 +126,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
-    suppressErrorsCheck->setChecked(cg.readEntry("no_find_errs", true));
-
     connect(this, SIGNAL(okClicked()), this, SLOT(search()));
     connect(syncButton, SIGNAL(clicked()), this, SLOT(syncButtonClicked()));
     connect(templateTypeCombo, SIGNAL(activated(int)),
@@ -169,7 +167,6 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("recursive", recursiveCheck->isChecked());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
     cg.writeEntry("case_sens", caseSensitiveCheck->isChecked());
-    cg.writeEntry("no_find_errs", suppressErrorsCheck->isChecked());
     cg.writeEntry("exclude_patterns", qCombo2StringList(excludeCombo));
     cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
