@@ -264,11 +264,6 @@ bool GrepDialog::recursiveFlag() const
     return recursiveCheck->isChecked();
 }
 
-bool GrepDialog::noFindErrorsFlag() const
-{
-    return suppressErrorsCheck->isChecked();
-}
-
 bool GrepDialog::caseSensitiveFlag() const
 {
     return caseSensitiveCheck->isChecked();
@@ -292,7 +287,6 @@ void GrepDialog::search()
     job->useProjectFilesFlag = useProjectFilesFlag();
     job->regexpFlag = regexpFlag();
     job->recursiveFlag = recursiveFlag();
-    job->noFindErrorsFlag = noFindErrorsFlag();
     job->caseSensitiveFlag = caseSensitiveFlag();
 
     kDebug() << "registering job";

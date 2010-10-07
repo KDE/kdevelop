@@ -43,7 +43,6 @@ public:
     bool useProjectFilesFlag() const;
     bool regexpFlag() const;
     bool recursiveFlag() const;
-    bool noFindErrorsFlag() const;
     bool caseSensitiveFlag() const;
 
 private Q_SLOTS:
