@@ -351,7 +351,6 @@ QString GrepJob::escape(const QString &str)
 void GrepJob::slotFinished()
 {
     m_lineMaker->flushBuffers();
-    model()->slotCompleted();
 
     emitResult();
 }
@@ -359,7 +358,6 @@ void GrepJob::slotFinished()
 void GrepJob::slotError(QProcess::ProcessError error)
 {
     m_lineMaker->flushBuffers();
-    model()->slotCompleted();
 
     foreach(KProcess* proc, m_processes)
     {

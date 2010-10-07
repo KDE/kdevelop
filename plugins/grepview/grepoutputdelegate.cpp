@@ -40,10 +40,15 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
 {
     QStyleOptionViewItem opt = option;
     QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.toInt() == GrepOutputModel::Text )
+    if( status.isValid() && status.toInt() == GrepOutputItem::Text )
     {
         opt.palette.setBrush( QPalette::Text, textBrush.brush( option.palette ) );
-    }else if( status.isValid() && status.toInt() == GrepOutputModel::File )
+    }
+    else if( status.isValid() && status.toInt() == GrepOutputItem::FileCollapsed )
+    {
+        opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
+    }
+    else if( status.isValid() && status.toInt() == GrepOutputItem::FileExpanded )
     {
         opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
     }

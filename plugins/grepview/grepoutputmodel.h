@@ -70,8 +70,6 @@ public:
 
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
-    void slotCompleted();
-    void slotFailed();
 
 private:
     
