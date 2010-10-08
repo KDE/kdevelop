@@ -1663,11 +1663,37 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     int end = 1;
     if(fea->range())
     {
-        for( int i = fea->ranges().start; i < fea->ranges().stop; i += fea->ranges().step )
+        if (fea->ranges().start < fea->ranges().stop)
         {
-            m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
-            end=walk(fea->content(), fea->line()+1);
-            m_vars->take(fea->loopVar());
+            for( int i = fea->ranges().start; i < fea->ranges().stop; i += fea->ranges().step )
+            {
+                m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
+                end=walk(fea->content(), fea->line()+1);
+                m_vars->take(fea->loopVar());
+            }
+        }
+        else
+        {
+            // loop never runs, skip over to matching endforeach
+
+            // FIXME this code is duplicated from the non-range case.
+            // It should be probably factored into a separate helper function.
+
+            int lines=fea->line()+1, depth=1;
+            CMakeFileContent::const_iterator it=fea->content().constBegin()+lines;
+            CMakeFileContent::const_iterator itEnd=fea->content().constEnd();
+            for(; depth>0 && it!=itEnd; ++it, lines++)
+            {
+                if(it->name.toLower()=="foreach")
+                {
+                    depth++;
+                }
+                else if(it->name.toLower()=="endforeach")
+                {
+                    depth--;
+                }
+            }
+            end=lines-1;
         }
     }
     else
