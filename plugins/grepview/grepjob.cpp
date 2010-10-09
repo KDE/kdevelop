@@ -121,11 +121,7 @@ void GrepJob::slotFindFinished()
         // this is obviously not a regexp, so do a regular search
         m_regexpFlag = false;
     }
-    GrepOutputModel *model = new GrepOutputModel();
-    model->setRegExp(m_regExp);
-    setModel(model, KDevelop::IOutputView::TakeOwnership);
-    setDelegate(GrepOutputDelegate::self());
-    startOutput();
+    static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
     if(m_fileList.length()<100)
         emit showMessage(this, i18n("Searching for \"%1\"", m_regExp.pattern()));
     else
@@ -190,6 +186,12 @@ void GrepJob::start()
     m_fileList.clear();
     m_workState = WorkIdle;
     m_fileIndex = 0;
+
+    GrepOutputModel *model = new GrepOutputModel(this);
+    setModel(model, KDevelop::IOutputView::TakeOwnership);
+    setDelegate(GrepOutputDelegate::self());
+    startOutput();
+
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
 
