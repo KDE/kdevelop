@@ -117,7 +117,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
 
 
     //connect signals to changed signal
-    connect( projectTarget, SIGNAL(textChanged(const QString&)), SIGNAL(changed()) );
+    connect( projectTarget, SIGNAL(currentIndexChanged(const QString&)), SIGNAL(changed()) );
     connect( projectTargetRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executableRadio, SIGNAL(toggled(bool)), SIGNAL(changed()) );
     connect( executablePath->lineEdit(), SIGNAL(textEdited(const QString&)), SIGNAL(changed()) );
