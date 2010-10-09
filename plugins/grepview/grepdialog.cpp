@@ -64,26 +64,26 @@ const QStringList template_str = QStringList()
     << "\\b%s\\b\\s*\\->\\s*[a-z0-9_$]+\\s*\\(";
 
 const QStringList filepatterns = QStringList()
-    << "*.h *.hxx *.hpp *.hh *.h++ *.H *.tlh *.cpp *.cc *.C *.c++ *.cxx *.ocl *.inl *.idl *.c *.m *.mm *.M"
-    << "*.cpp *.cc *.C *.c++ *.cxx *.ocl *.inl *.c *.m *.mm *.M"
-    << "*.h *.hxx *.hpp *.hh *.h++ *.H *.tlh *.idl"
+    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
+    << "*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"
+    << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"
     << "*.adb"
     << "*.cs"
     << "*.f"
-    << "*.html *.htm"
+    << "*.html,*.htm"
     << "*.hs"
     << "*.java"
     << "*.js"
-    << "*.php *.php3 *.php4"
+    << "*.php,*.php3,*.php4"
     << "*.pl"
-    << "*.pp *.pas"
+    << "*.pp,*.pas"
     << "*.py"
-    << "*.js *.css *.yml *.rb *.rhtml *.html.erb *.rjs *.js.rjs *.rxml *.xml.builder"
-    << "CMakeLists.txt *.cmake"
+    << "*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder"
+    << "CMakeLists.txt,*.cmake"
     << "*";
 
 const QStringList excludepatterns = QStringList()
-    << "/CVS/ /SCCS/ /.svn/ /_darcs/ /build/ /.git/"
+    << "/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/"
     << "";
 
 }

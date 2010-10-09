@@ -23,7 +23,7 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const Q
     if(!project)
         return res;
     QStringList exclList;
-    foreach(const QString &sub, exclString.split(' ', QString::SkipEmptyParts))
+    foreach(const QString &sub, exclString.split(',', QString::SkipEmptyParts))
         exclList << QString("*%1*").arg(sub);
     QSet<IndexedString> fileSet = project->fileSet();
     foreach( const IndexedString &item, fileSet )
@@ -71,11 +71,11 @@ static KUrl::List thread_findFilesInternal(const QDir& dir, bool recursive, cons
 static KUrl::List thread_findFiles(const QDir dir, bool recursive, const QString inclString, const QString exclString, volatile bool &abort)
 {
     QStringList exclList;
-    foreach(const QString &sub, exclString.split(' ', QString::SkipEmptyParts))
+    foreach(const QString &sub, exclString.split(',', QString::SkipEmptyParts))
         exclList << QString("*%1*").arg(sub);
     KUrl::List list = thread_findFilesInternal(
         dir, recursive,
-        inclString.split(' ', QString::SkipEmptyParts),
+        inclString.split(',', QString::SkipEmptyParts),
         exclList,
         abort);
     qSort(list);
