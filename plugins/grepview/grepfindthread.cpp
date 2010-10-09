@@ -26,6 +26,7 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const Q
     foreach(const QString &sub, exclString.split(',', QString::SkipEmptyParts))
         exclList << QString("*%1*").arg(sub);
     QSet<IndexedString> fileSet = project->fileSet();
+    QStringList inclList = inclString.split(',');
     foreach( const IndexedString &item, fileSet )
     {
         if(abort)
@@ -35,7 +36,7 @@ static KUrl::List thread_getProjectFiles(const KUrl dir, bool recursive, const Q
             continue;
         if( !recursive && !url.upUrl().equals(dir, KUrl::CompareWithoutTrailingSlash))
             continue;
-        if( QDir::match(inclString, url.fileName()) && !QDir::match(exclList, url.toLocalFile()) )
+        if( QDir::match(inclList, url.fileName()) && !QDir::match(exclList, url.toLocalFile()) )
             res << url;
     }
     qSort(res);
