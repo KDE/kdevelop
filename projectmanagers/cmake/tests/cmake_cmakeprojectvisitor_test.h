@@ -45,6 +45,8 @@ private slots:
     void testFinder_init();
     void testFinder();
     void testFinder_data();
+
+    void testForeachLines();
 private:
     QStringList modulePath;    
     QStringList buildstrap;

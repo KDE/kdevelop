@@ -30,6 +30,7 @@
 #include <cmakecondition.h>
 #include <cmakeparserutils.h>
 #include <tests/autotestshell.h>
+#include <astfactory.h>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
@@ -521,5 +522,30 @@ void CMakeProjectVisitorTest::testFinder()
         DUChain::self()->removeDocumentChain(fakeContext);
     }
 }
+
+void CMakeProjectVisitorTest::testForeachLines()
+{
+    CMakeFunctionDesc foreachDesc, messageDesc, endForeachDesc;
+    foreachDesc.name = "foreach";
+    foreachDesc.addArguments(QStringList() << "i" << "RANGE" << "10" << "1");
+    messageDesc.name = "message"; // or anything
+    messageDesc.addArguments(QStringList() << "STATUS" << "pyon");
+    endForeachDesc.name = "endforeach";
+
+    CMakeFileContent content;
+    content << messageDesc << foreachDesc << messageDesc << endForeachDesc << messageDesc;
+
+    ForeachAst* ast = static_cast<ForeachAst*>(AstFactory::self()->createAst("foreach"));
+    ast->setContent(content, 1);
+    ast->parseFunctionInfo(foreachDesc);
+
+    VariableMap vm;
+    CMakeProjectVisitor v("somefile", ReferencedTopDUContext());
+    v.setVariableMap(&vm);
+
+    QCOMPARE(v.visit(ast), 3);
+    delete ast;
+}
+
 
 #include "cmake_cmakeprojectvisitor_test.moc"
