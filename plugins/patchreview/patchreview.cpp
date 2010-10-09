@@ -1384,8 +1384,11 @@ void PatchReviewPlugin::updateReview()
   
   m_updateKompareTimer->stop();
   updateKompareModel();
-  ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
   Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  if (w->area()->objectName() != "review")
+    ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
   if(!w->area()->workingSet().startsWith("review"))
     w->area()->setWorkingSet("review");
   
