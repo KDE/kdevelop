@@ -1392,11 +1392,16 @@ void PatchReviewPlugin::updateReview()
   if(!w->area()->workingSet().startsWith("review"))
     w->area()->setWorkingSet("review");
   
-  w->area()->clearViews();
-  
   if(!m_modelList.get())
     return;
+
+  // list of opened documents to prevent flicker
+  QMap<KUrl, IDocument*> documents;
+  foreach(IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    documents[doc->url()] = doc;
+  }
   
+  IDocument* futureActiveDoc = 0;
   //Open the diff itself
 #ifdef HAVE_KOMPARE
   KUrl fakeUrl(m_patch->file());
@@ -1406,9 +1411,14 @@ void PatchReviewPlugin::updateReview()
   IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
   
   Q_ASSERT(pdoc);
-  ICore::self()->documentController()->openDocument(doc);
+  futureActiveDoc = ICore::self()->documentController()->openDocument(doc);
+  //TODO: close kompare doc if available
 #else
-  ICore::self()->documentController()->openDocument(m_patch->file());
+  if (!documents.contains(m_patch->file())) {
+    futureActiveDoc = ICore::self()->documentController()->openDocument(m_patch->file());
+  } else {
+    documents.remove(m_patch->file());
+  }
 #endif
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
@@ -1425,7 +1435,11 @@ void PatchReviewPlugin::updateReview()
       
       if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
       {
-        ICore::self()->documentController()->openDocument(absoluteUrl);
+        if (!documents.contains(absoluteUrl)) {
+          ICore::self()->documentController()->openDocument(absoluteUrl);
+        } else {
+          documents.remove(absoluteUrl);
+        }
         seekHunk(true, absoluteUrl); //Jump to the first changed position
       }else{
         // Maybe the file was deleted
@@ -1433,7 +1447,15 @@ void PatchReviewPlugin::updateReview()
       }
     }
   }
-  
+
+  // close documents we didn't open again
+  foreach(IDocument* doc, documents.values()) {
+    doc->close();
+  }
+
+  Q_ASSERT(futureActiveDoc);
+  ICore::self()->documentController()->activateDocument(futureActiveDoc);
+
   bool b = ICore::self()->uiController()->findToolView(i18n("Patch Review"), m_factory);
   Q_ASSERT(b);
 }
