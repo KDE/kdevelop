@@ -56,6 +56,8 @@ private:
     void showExpanded();
 };
 
+Q_DECLARE_METATYPE(GrepOutputItem::List);
+
 class GrepOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT

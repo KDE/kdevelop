@@ -157,11 +157,12 @@ void GrepJob::slotWork()
             {
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
-                    GrepOutputItem::List items;
-                    items = grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
+                    QString file = m_fileList[m_fileIndex].toLocalFile();
+                    GrepOutputItem::List items = grepFile(file, m_regExp);
 
                     if(!items.isEmpty())
-                        model()->appendOutputs(m_fileList[m_fileIndex].toLocalFile(), items);
+                        emit foundMatches(file, items);
+
                     m_fileIndex++;
                 }
                 QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
@@ -200,6 +201,10 @@ void GrepJob::start()
             model, SLOT(showErrorMessage(QString)));
     connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
             model, SLOT(showMessage(KDevelop::IStatus*, QString)));
+
+    qRegisterMetaType<GrepOutputItem::List>();
+    connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),
+            model, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }

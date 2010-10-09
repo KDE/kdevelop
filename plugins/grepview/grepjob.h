@@ -24,6 +24,7 @@
 #include <interfaces/istatus.h>
 
 #include "grepfindthread.h"
+#include "grepoutputmodel.h"
 
 namespace KDevelop
 {
@@ -31,9 +32,6 @@ namespace KDevelop
     class IProject;
     class ProcessLineMaker;
 }
-
-class GrepOutputModel;
-class GrepOutputDelegate;
 
 class GrepJob : public KDevelop::OutputJob, public KDevelop::IStatus
 {
@@ -70,7 +68,9 @@ Q_SIGNALS:
     void showErrorMessage(const QString & message, int timeout = 0);
     void hideProgress( KDevelop::IStatus* );
     void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
-    
+
+    void foundMatches( const QString& filename, const GrepOutputItem::List& matches);
+
 private:
     Q_INVOKABLE void slotWork();
 
