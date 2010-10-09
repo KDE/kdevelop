@@ -925,6 +925,9 @@ bool DebugSession::startDebugger(KDevelop::ILaunchConfiguration* cfg)
     
     queueCmd(new GDBCommand(GDBMI::EnablePrettyPrinting));
 
+    queueCmd(new GDBCommand(GDBMI::GdbSet, "charset UTF-8"));
+    queueCmd(new GDBCommand(GDBMI::GdbSet, "print sevenbit-strings off"));
+
     QString fileName = KStandardDirs::locate("data", "kdevgdb/printers/gdbinit");
     if (!fileName.isEmpty()) {
         queueCmd(new GDBCommand(GDBMI::NonMI, "source " + fileName));

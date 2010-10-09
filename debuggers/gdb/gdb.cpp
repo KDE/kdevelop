@@ -179,8 +179,7 @@ void GDB::readyReadStandardOutput()
 void GDB::readyReadStandardError()
 {
     process_->setReadChannel(QProcess::StandardOutput);
-    emit internalCommandOutput(QString::fromLocal8Bit(
-                                   process_->readAll()));
+    emit internalCommandOutput(QString::fromUtf8(process_->readAll()));
 }
 
 void GDB::processLine(const QByteArray& line)
@@ -237,7 +236,7 @@ void GDB::processLine(const QByteArray& line)
 
                GDBMI::ResultRecord& result = static_cast<GDBMI::ResultRecord&>(*r);
 
-               emit internalCommandOutput(QString::fromLocal8Bit(line) + '\n');
+               emit internalCommandOutput(QString::fromUtf8(line) + '\n');
                
                // FIXME: the code below should be reviewed to consider result record
                // subtype when doing all decisions.

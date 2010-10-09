@@ -305,7 +305,8 @@ bool MIParser::parseCSV(GDBMI::TupleValue& value,
                         
 QString MIParser::parseStringLiteral()
 {
-    QByteArray message = lex->currentTokenText();
+    QByteArray messageByteArray = lex->currentTokenText();
+    QString message = QString::fromUtf8(messageByteArray.constData());
 
     int length = message.length();
     QString message2;
@@ -343,7 +344,7 @@ QString MIParser::parseStringLiteral()
 
         if (translated != -1)
         {
-            message2[target_index++] = (char)translated;
+            message2[target_index++] = translated;
             ++i;
         }
         else
