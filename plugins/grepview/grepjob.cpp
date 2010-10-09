@@ -43,13 +43,12 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     if(!file.open(QIODevice::ReadOnly))
         return res;
     int lineno = 1;
-    QByteArray data = file.readLine();
-    while( !data.isNull() && file.error()==QFile::NoError )
+    while( !file.atEnd() )
     {
+        QByteArray data = file.readLine();
         if( re.indexIn(data)!=-1 )
             res << GrepOutputItem(filename, lineno, QString(data).trimmed());
         lineno++;
-        data = file.readLine();
     }
     file.close();
     return res;
