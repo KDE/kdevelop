@@ -21,6 +21,11 @@ class QAction;
 class QActionGroup;
 class QMenu;
 
+namespace KTextEditor
+{
+class View;
+}
+
 namespace KDevelop
 {
 class VcsDiff;
@@ -49,8 +54,10 @@ private Q_SLOTS:
     void revert();
     void history();
     void annotation();
+    void annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line);
     void diffToHead();
     void diffToBase();
+    void diffForRev();
     void update();
     void executeCommit(const QString& message, const QList<KUrl>& urls);
     void cancelCommit(KDevelop::VcsCommitDialog* dlg);

@@ -107,6 +107,12 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
     return QVariant();
 }
 
+VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
+{
+    Q_ASSERT(line > 0 && d->m_annotation.containsLine( line ));
+    return d->m_annotation.line( line ).revision();
+}
+
 }
 
 #include "vcsannotationmodel.moc"
