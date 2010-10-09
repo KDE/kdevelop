@@ -20,6 +20,9 @@
 
 class QModelIndex;
 
+namespace KDevelop {
+    class IStatus;
+}
 
 class GrepOutputItem : public QStandardItem
 {
@@ -69,6 +72,9 @@ public:
 
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
+
+    void showErrorMessage( const QString& errorMessage );
+    void showMessage( KDevelop::IStatus*, const QString& message );
 
 private:
     

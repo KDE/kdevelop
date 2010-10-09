@@ -223,5 +223,16 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     }
 }
 
+void GrepOutputModel::showErrorMessage( const QString& errorMessage )
+{
+    appendRow(new QStandardItem(errorMessage));
+}
+
+void GrepOutputModel::showMessage( KDevelop::IStatus* , const QString& message )
+{
+    appendRow(new QStandardItem(message));
+}
+
+
 #include "grepoutputmodel.moc"
 

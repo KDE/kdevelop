@@ -192,6 +192,11 @@ void GrepJob::start()
     setDelegate(GrepOutputDelegate::self());
     startOutput();
 
+    connect(this, SIGNAL(showErrorMessage(QString, int)),
+            model, SLOT(showErrorMessage(QString)));
+    connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
+            model, SLOT(showMessage(KDevelop::IStatus*, QString)));
+
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
 
