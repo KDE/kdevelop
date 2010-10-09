@@ -55,26 +55,6 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     return res;
 }
 
-static GrepOutputItem::List grepFileSimple(const QString &filename, const QString &pattern, bool caseSense)
-{
-    GrepOutputItem::List res;
-    QFile file(filename);
-    if(!file.open(QIODevice::ReadOnly))
-        return res;
-    int lineno = 1;
-    QByteArray data = file.readLine();
-    while( !data.isNull() && file.error()==QFile::NoError )
-    {
-        QString dataStr = data;
-        if( dataStr.contains(pattern, caseSense ? Qt::CaseSensitive : Qt::CaseInsensitive) )
-            res << GrepOutputItem(filename, lineno, dataStr.trimmed());
-        lineno++;
-        data = file.readLine();
-    }
-    file.close();
-    return res;
-}
-
 GrepJob::GrepJob( QObject* parent )
     : KDevelop::OutputJob( parent ), m_workState(WorkIdle)
 {
@@ -85,6 +65,32 @@ GrepJob::GrepJob( QObject* parent )
 QString GrepJob::statusName() const
 {
     return i18n("Find in Files");
+}
+
+QString substitudePattern(const QString& pattern, const QString& searchString)
+{
+    QString subst = searchString;
+    QString result;
+    bool expectEscape = false;
+    foreach(const QChar &ch, pattern)
+    {
+        if(expectEscape)
+        {
+            expectEscape = false;
+            if(ch == '%')
+                result.append('%');
+            else if(ch == 's')
+                result.append(subst);
+            else
+                result.append('%').append(ch);
+        }
+        else if(ch == '%')
+            expectEscape = true;
+        else
+            result.append(ch);
+    }
+    // kDebug() << "Pattern substituded:" << pattern << "+" << searchString << "=" << result;
+    return result;
 }
 
 void GrepJob::slotFindFinished()
@@ -113,13 +119,13 @@ void GrepJob::slotFindFinished()
         emitResult();
         return;
     }
-    QString pattern = substitudePattern(m_templateString, m_patternString, m_regexpFlag);
+    QString pattern = substitudePattern(m_templateString, m_patternString);
     m_regExp.setPattern(pattern);
+    m_regExp.setPatternSyntax(QRegExp::RegExp2);
     m_regExp.setCaseSensitivity( m_caseSensitiveFlag ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    m_regExpSimple = m_regExp.pattern();
-    if(m_regExpSimple == QRegExp::escape(m_regExpSimple)) {
+    if(!m_regexpFlag || pattern == QRegExp::escape(pattern)) {
         // this is obviously not a regexp, so do a regular search
-        m_regexpFlag = false;
+        m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
     static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
     if(m_fileList.length()<100)
@@ -152,10 +158,8 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     GrepOutputItem::List items;
-                    if(m_regexpFlag)
-                        items = grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
-                    else
-                        items = grepFileSimple(m_fileList[m_fileIndex].toLocalFile(), m_regExpSimple, m_caseSensitiveFlag);
+                    items = grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
+
                     if(!items.isEmpty())
                         model()->appendOutputs(m_fileList[m_fileIndex].toLocalFile(), items);
                     m_fileIndex++;
@@ -198,34 +202,6 @@ void GrepJob::start()
             model, SLOT(showMessage(KDevelop::IStatus*, QString)));
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
-}
-
-QString GrepJob::substitudePattern(const QString& pattern, const QString& searchString, bool isRegexp)
-{
-    QString subst = searchString;
-    if(!isRegexp)
-        subst = QRegExp::escape(subst);
-    QString result;
-    bool expectEscape = false;
-    foreach(const QChar &ch, pattern)
-    {
-        if(expectEscape)
-        {
-            expectEscape = false;
-            if(ch == '%')
-                result.append('%');
-            else if(ch == 's')
-                result.append(subst);
-            else
-                result.append('%').append(ch);
-        }
-        else if(ch == '%')
-            expectEscape = true;
-        else
-            result.append(ch);
-    }
-    // kDebug() << "Pattern substituded:" << pattern << "+" << searchString << "=" << result;
-    return result;
 }
 
 GrepOutputModel* GrepJob::model() const

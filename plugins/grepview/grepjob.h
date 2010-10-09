@@ -73,7 +73,6 @@ Q_SIGNALS:
     
 private:
     Q_INVOKABLE void slotWork();
-    static QString substitudePattern(const QString &pattern, const QString &searchString, bool isRegexp);
 
     QString m_patternString;
     QRegExp m_regExp;
