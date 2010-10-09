@@ -1343,7 +1343,7 @@ void PatchReviewPlugin::cancelReview()
     delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    if(w->area()->workingSet().startsWith("review")) {
+    if(w->area()->objectName() == "review") {
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
@@ -1363,7 +1363,7 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
       delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    if(w->area()->workingSet().startsWith("review")) {
+    if(w->area()->objectName() == "review") {
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
