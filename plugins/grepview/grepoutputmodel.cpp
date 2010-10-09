@@ -21,6 +21,8 @@
 #include <kicon.h>
 #include <klocale.h>
 
+using namespace KDevelop;
+
 GrepOutputItem::GrepOutputItem(const QString &fileName,
                    int lineNumber,
                    const QString &text)

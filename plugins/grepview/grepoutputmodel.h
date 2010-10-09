@@ -20,7 +20,6 @@
 
 class QModelIndex;
 
-using namespace KDevelop;
 
 class GrepOutputItem : public QStandardItem
 {
