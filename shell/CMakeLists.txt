@@ -89,7 +89,7 @@ kde4_add_library(kdevplatformshell SHARED ${kdevplatformshell_LIB_SRCS})
 target_link_libraries(kdevplatformshell
         ${KDE4_KIO_LIBS}
         ${KDE4_KFILE_LIBS}
-        ${KDE4_KUTILS_LIBS}
+        ${KDE4_KCMUTILS_LIBS}
         ${KDE4_KPARTS_LIBS}
         ${KDE4_KNOTIFYCONFIG_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
