@@ -117,8 +117,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    directoryRequester->setUrl( KUrl( QDir::homePath() ) );
-    directoryRequester->fileDialog()->setUrl( KUrl( QDir::homePath() ) );
+    setDirectory( QDir::homePath() );
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
@@ -207,7 +206,7 @@ void GrepDialog::syncButtonClicked( )
         KUrl url = doc->url();
         if ( url.isLocalFile() )
         {
-            directoryRequester->lineEdit()->setText( url.upUrl().toLocalFile( KUrl::LeaveTrailingSlash ) );
+            setDirectory( url.upUrl().toLocalFile() );
         }
     }
 }
