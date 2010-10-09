@@ -50,6 +50,7 @@ private Q_SLOTS:
     void templateTypeComboActivated(int);
     void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );
+    void directoryChanged(const QString &dir);
 
 private:
     GrepViewPlugin * m_plugin;
