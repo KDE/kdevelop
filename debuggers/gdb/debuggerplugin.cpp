@@ -426,8 +426,10 @@ QString CppDebuggerPlugin::statusName() const
 
 void CppDebuggerPlugin::slotFinished()
 {
+    /* TODO: is this required?
     Q_ASSERT(dynamic_cast<DebugSession*>(sender()));
     DebugSession* session = static_cast<DebugSession*>(sender());
+    */
 }
 
 void CppDebuggerPlugin::controllerMessage( const QString& msg, int timeout )
