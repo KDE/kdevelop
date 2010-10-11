@@ -2878,6 +2878,15 @@ bool Parser::parseStatement(StatementAST *&node)
   return parseExpressionOrDeclarationStatement(node);
 }
 
+//since advance includes comments, this checks for both, ; or ; //
+bool isValidExprOrDeclEnd(ParseSession* session) {
+  int prev = session->token_stream->kind(session->token_stream->cursor() - 1);
+  if (prev == Token_comment) {
+    prev = session->token_stream->kind(session->token_stream->cursor() - 2);
+  }
+  return prev == ';';
+}
+
 bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
 {
   // hold any errors while the expression/declaration ambiguity is resolved
@@ -2889,7 +2898,8 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
   ///@todo solve -1 thing
   StatementAST *decl_ast = 0;
   bool maybe_amb = parseDeclarationStatement(decl_ast);
-  maybe_amb &= session->token_stream->kind(session->token_stream->cursor() - 1) == ';';
+  maybe_amb &= isValidExprOrDeclEnd(session);
+  maybe_amb &= isValidExprOrDeclEnd(session);
 
   // if parsing as a declaration succeeded, then any pending errors are genuine.
   // Otherwise this is not a declaration so ignore the errors.
@@ -2903,7 +2913,7 @@ bool Parser::parseExpressionOrDeclarationStatement(StatementAST *&node)
   rewind(start);
   StatementAST *expr_ast = 0;
   maybe_amb &= parseExpressionStatement(expr_ast);
-  maybe_amb &= session->token_stream->kind(session->token_stream->cursor() - 1) == ';';
+  maybe_amb &= isValidExprOrDeclEnd(session);
 
   // if parsing as an expression succeeded, then any pending errors are genuine.
   // Otherwise this is not an expression so ignore the errors.

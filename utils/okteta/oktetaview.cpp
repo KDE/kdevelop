@@ -34,7 +34,7 @@ namespace KDevelop
 {
 
 OktetaView::OktetaView( OktetaDocument* document )
-  : Sublime::View( document ),
+  : Sublime::View( document, View::TakeOwnership ),
     mByteArrayView( new Kasten::ByteArrayView( document->byteArrayDocument() ) )
 {
 }
