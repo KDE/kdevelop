@@ -1,0 +1,6 @@
+File=qchsettings.kcfg
+ClassName=QchSettings
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true
