@@ -32,6 +32,7 @@
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QSignalMapper>
+#include <QDBusServiceWatcher>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -231,30 +232,35 @@ void CppDebuggerPlugin::setupDBus()
 
     QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
     foreach (const QString& service, dbusInterface->registeredServiceNames().value())
-        slotDBusServiceOwnerChanged(service, QString(), service);
+        slotDBusServiceRegistered(service);
 
-    connect(dbusInterface, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(slotDBusServiceOwnerChanged(QString,QString,QString)));
+    QDBusServiceWatcher* watcher = new QDBusServiceWatcher(this);
+    connect(watcher, SIGNAL(serviceRegistered(QString)),
+            this, SLOT(slotDBusServiceRegistered(QString)));
+    connect(watcher, SIGNAL(serviceUnregistered(QString)),
+            this, SLOT(slotDBusServiceUnregistered(QString)));
 }
 
-void CppDebuggerPlugin::slotDBusServiceOwnerChanged(const QString & name, const QString & oldOwner, const QString & newOwner)
+void CppDebuggerPlugin::slotDBusServiceRegistered( const QString& service )
 {
-    if (name.startsWith("org.kde.drkonqi")) {
-        if (!oldOwner.isEmpty()) {
-            // Deregistration
-            if (m_drkonqis.contains(name))
-                delete m_drkonqis.take(name);
-        }
+    if (service.startsWith("org.kde.drkonqi")) {
+        // New registration
+        QDBusInterface* drkonqiInterface = new QDBusInterface(service, "/krashinfo", QString(), QDBusConnection::sessionBus(), this);
+        m_drkonqis.insert(service, drkonqiInterface);
 
-        if (!newOwner.isEmpty()) {
-            // New registration
-            QDBusInterface* drkonqiInterface = new QDBusInterface(name, "/krashinfo", QString(), QDBusConnection::sessionBus(), this);
-            m_drkonqis.insert(name, drkonqiInterface);
+        connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), m_drkonqiMap, SLOT(map()));
+        m_drkonqiMap->setMapping(drkonqiInterface, drkonqiInterface);
 
-            connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), m_drkonqiMap, SLOT(map()));
-            m_drkonqiMap->setMapping(drkonqiInterface, drkonqiInterface);
+        drkonqiInterface->call("registerDebuggingApplication", i18n("KDevelop"));
+    }
+}
 
-            drkonqiInterface->call("registerDebuggingApplication", i18n("KDevelop"));
-        }
+void CppDebuggerPlugin::slotDBusServiceUnregistered( const QString& service )
+{
+    if (service.startsWith("org.kde.drkonqi")) {
+        // Deregistration
+        if (m_drkonqis.contains(service))
+            delete m_drkonqis.take(service);
     }
 }
 

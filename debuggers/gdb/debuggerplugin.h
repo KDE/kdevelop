@@ -109,7 +109,9 @@ private Q_SLOTS:
     void slotExamineCore();
     void slotAttachProcess();
 
-    void slotDBusServiceOwnerChanged(const QString & name, const QString & oldOwner, const QString & newOwner);
+    void slotDBusServiceRegistered(const QString& service);
+    void slotDBusServiceUnregistered(const QString& service);
+
     void slotCloseDrKonqi();
 
     void slotFinished();
