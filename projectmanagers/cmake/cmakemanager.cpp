@@ -300,10 +300,12 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         cachefile.addPath("CMakeCache.txt");
         m_projectCache[project]=readCache(cachefile);
         
-        m_watchers[project] = new KDirWatch(project);
-        m_watchers[project]->addDir(folderUrl.path());
-        connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
-        connect(m_watchers[project], SIGNAL(deleted(QString)), this, SLOT(deletedWatchedDirectory(QString)));
+        KDirWatch* w = new KDirWatch(project);
+        w->setObjectName(project->name()+"_ProjectWatcher");
+        w->addFile(cachefile.toLocalFile());
+        connect(w, SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
+        connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
+        m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
     }
     return m_rootItem;
@@ -345,10 +347,8 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         kDebug(9042) << "parse:" << folder->url();
         KUrl cmakeListsPath(folder->url());
         cmakeListsPath.addPath("CMakeLists.txt");
-
-        CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
         
-        if(f.isEmpty())
+        if(!QFile::exists(cmakeListsPath.toLocalFile()))
         {
             kDebug() << "There is no" << cmakeListsPath;
         }
@@ -393,7 +393,10 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 v.setMacroMap(&data.mm);
                 v.setModulePath(m_modulePathPerProject[item->project()]);
                 v.setDefinitions(folder->definitions());
-                v.walk(f, 0);
+                
+                CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
+                if(!f.isEmpty())
+                    v.walk(f, 0);
                 
                 folder->setTopDUContext(v.context());
                 data.projectName=v.projectName();
@@ -787,7 +790,13 @@ void CMakeManager::dirtyFile(const QString & dirty)
         
         reload(folderItem);
     }
-    else if(dirty.endsWith(".cmake"))
+    else if(p && dirtyFile.fileName() == "CMakeCache.txt") {
+        KUrl builddirUrl = p->buildSystemManager()->buildDirectory(p->projectItem());
+        if(builddirUrl.isParentOf(dirtyFile)) {
+            m_projectCache[p]=readCache(dirtyFile);
+            p->reloadModel();
+        }
+    } else if(dirty.endsWith(".cmake"))
     {
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
