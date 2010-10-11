@@ -458,8 +458,23 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     KMenu menu;
     menu.addTitle(windowIcon(), windowTitle());
 
+    if ( QMainWindow* toolView = qobject_cast<QMainWindow*>(widget()) ) {
+        QToolBar* bar = 0;
+        foreach( QObject* child, toolView->children() ) {
+            if ( (bar = qobject_cast<QToolBar*>(child)) ) {
+                break;
+            }
+        }
+        Q_ASSERT(bar);
+        menu.addActions(bar->actions());
+        menu.addSeparator();
+        menu.addAction(bar->toggleViewAction());
+    }
+
+    menu.addSeparator();
+
     /// start position menu
-    QMenu* positionMenu = menu.addMenu(i18n("Position"));
+    QMenu* positionMenu = menu.addMenu(i18n("Toolview Position"));
 
     QActionGroup *g = new QActionGroup(this);
 
@@ -486,28 +501,15 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
     QAction *setShortcut = menu.addAction(KIcon("configure-shortcuts"), i18n("Assign Shortcut..."));
+    setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the toolview."));
 
     menu.addSeparator();
-    QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove"));
+    QAction* remove = menu.addAction(KIcon("dialog-close"), i18n("Remove Toolview"));
     QAction* toggleAnchored;
     if ( isAnchored() ) {
-        toggleAnchored = menu.addAction(KIcon("document-decrypt"), i18n("Unlock"));
+        toggleAnchored = menu.addAction(KIcon("document-decrypt"), i18n("Unlock Toolview"));
     } else {
-        toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock"));
-    }
-
-    if ( QMainWindow* toolView = qobject_cast<QMainWindow*>(widget()) ) {
-        menu.addSeparator();
-        QToolBar* bar = 0;
-        foreach( QObject* child, toolView->children() ) {
-            if ( (bar = qobject_cast<QToolBar*>(child)) ) {
-                break;
-            }
-        }
-        Q_ASSERT(bar);
-        menu.addActions(bar->actions());
-        menu.addSeparator();
-        menu.addAction(bar->toggleViewAction());
+        toggleAnchored = menu.addAction(KIcon("document-encrypt"), i18n("Lock Toolview"));
     }
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
