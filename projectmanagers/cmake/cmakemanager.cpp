@@ -308,9 +308,12 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
         cachefile.addPath("CMakeCache.txt");
         m_projectCache[project]=readCache(cachefile);
         
-        m_watchers[project] = new KDirWatch(project);
-        connect(m_watchers[project], SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
-        connect(m_watchers[project], SIGNAL(deleted(QString)), this, SLOT(deletedWatchedDirectory(QString)));
+        KDirWatch* w = new KDirWatch(project);
+        w->setObjectName(project->name()+"_ProjectWatcher");
+        w->addFile(cachefile.toLocalFile());
+        connect(w, SIGNAL(dirty(QString)), this, SLOT(dirtyFile(QString)));
+        connect(w, SIGNAL(deleted(QString)), this, SLOT(deletedWatched(QString)));
+        m_watchers[project] = w;
         Q_ASSERT(m_rootItem->rowCount()==0);
     }
     return m_rootItem;
@@ -796,7 +799,13 @@ void CMakeManager::dirtyFile(const QString & dirty)
         
         reload(folderItem);
     }
-    else if(dirty.endsWith(".cmake"))
+    else if(p && dirtyFile.fileName() == "CMakeCache.txt") {
+        KUrl builddirUrl = p->buildSystemManager()->buildDirectory(p->projectItem());
+        if(builddirUrl.isParentOf(dirtyFile)) {
+            m_projectCache[p]=readCache(dirtyFile);
+            p->reloadModel();
+        }
+    } else if(dirty.endsWith(".cmake"))
     {
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
