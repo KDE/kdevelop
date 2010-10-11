@@ -120,7 +120,7 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
 
         {
             // check features of kate and report to user if it does not fit
-            KTextEditor::Document* doc = partController->createTextPart(QString());
+            KTextEditor::Document* doc = partController->createTextPart();
 
             if ( !qobject_cast< KTextEditor::MovingInterface* >(doc) ) {
                 KMessageBox::error(QApplication::activeWindow(),

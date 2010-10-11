@@ -850,7 +850,7 @@ IDocumentFactory* DocumentController::factory(const QString& mime) const
 KTextEditor::Document* DocumentController::globalTextEditorInstance()
 {
     if(!d->globalTextEditorInstance)
-        d->globalTextEditorInstance = Core::self()->partControllerInternal()->createTextPart(QString());
+        d->globalTextEditorInstance = Core::self()->partControllerInternal()->createTextPart();
     return d->globalTextEditorInstance;
 }
 
