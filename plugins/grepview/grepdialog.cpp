@@ -56,12 +56,12 @@ const QStringList template_desc = QStringList()
     << "OBJECT->member(";
 
 const QStringList template_str = QStringList()
-    << "%s"
-    << "\\b%s\\b"
-    << "\\b%s\\b\\s*=[^=]"
-    << "\\->\\s*\\b%s\\b\\s*\\("
-    << "[a-z0-9_$]+\\s*::\\s*\\b%s\\b\\s*\\("
-    << "\\b%s\\b\\s*\\->\\s*[a-z0-9_$]+\\s*\\(";
+    << "(%s)"
+    << "\\b(%s)\\b"
+    << "\\b(%s)\\b\\s*=[^=]"
+    << "\\->\\s*\\b(%s)\\b\\s*\\("
+    << "[a-z0-9_$]+\\s*::\\s*\\b(%s)\\b\\s*\\("
+    << "\\b(%s)\\b\\s*\\->\\s*[a-z0-9_$]+\\s*\\(";
 
 const QStringList filepatterns = QStringList()
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
@@ -93,10 +93,11 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    setButtons( KDialog::Ok | KDialog::Cancel );
-    setButtonText( KDialog::Ok, i18n("Search") );
+    setButtons( KDialog::User1 | KDialog::User2 | KDialog::Cancel );
+    setButtonText( KDialog::User1, i18n("Search") );
+    setButtonText( KDialog::User2, i18n("Replace") );
     setCaption( i18n("Find In Files") );
-    setDefaultButton( KDialog::Ok );
+    setDefaultButton( KDialog::User1 );
 
     setupUi(mainWidget());
 
@@ -111,6 +112,10 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     templateTypeCombo->addItems(template_desc);
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
     templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
+    
+    replacementCombo->addItem( "" );
+    replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
+    replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
 
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
@@ -128,12 +133,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(search()));
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(search()));
     connect(syncButton, SIGNAL(clicked()), this, SLOT(syncButtonClicked()));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
     connect(patternCombo, SIGNAL(editTextChanged(const QString&)),
             this, SLOT(patternComboEditTextChanged( const QString& )));
+    connect(replacementCombo, SLOT(editTextChanged(const QString& )),
+            this, SLOT(replacementComboEditTextChanged( const QString& )));
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
 }
@@ -165,6 +172,7 @@ GrepDialog::~GrepDialog()
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
+    cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo));
     cg.writeEntry("regexp", regexCheck->isChecked());
     cg.writeEntry("recursive", recursiveCheck->isChecked());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
@@ -223,6 +231,11 @@ QString GrepDialog::templateString() const
     return templateEdit->text();
 }
 
+QString GrepDialog::replacementString() const
+{
+    return replacementCombo->currentText();
+}
+
 QString GrepDialog::filesString() const
 {
     return filesCombo->currentText();
@@ -260,7 +273,12 @@ bool GrepDialog::caseSensitiveFlag() const
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
-    enableButtonOk( !text.isEmpty() );
+    enableButton( KDialog::User1, !text.isEmpty() );
+}
+
+void GrepDialog::replacementComboEditTextChanged( const QString& text )
+{
+    enableButton( KDialog::User2, !text.isEmpty() );
 }
 
 void GrepDialog::search()
@@ -284,6 +302,11 @@ void GrepDialog::search()
     m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
     
     close();
+}
+
+void GrepDialog::replace()
+{
+    // TODO
 }
 
 #include "grepdialog.moc"

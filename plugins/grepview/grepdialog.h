@@ -36,6 +36,7 @@ public:
 
     QString patternString() const;
     QString templateString() const;
+    QString replacementString() const;
     QString filesString() const;
     QString excludeString() const;
     KUrl directory() const;
@@ -47,9 +48,11 @@ public:
 
 private Q_SLOTS:
     void search();
+    void replace();
     void templateTypeComboActivated(int);
     void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );
+    void replacementComboEditTextChanged( const QString& );
 
 private:
     GrepViewPlugin * m_plugin;
