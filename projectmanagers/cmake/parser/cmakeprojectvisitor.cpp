@@ -1549,7 +1549,7 @@ int CMakeProjectVisitor::visit(const GetSourceFilePropAst* prop)
 int CMakeProjectVisitor::visit(const OptionAst *opt)
 {
     kDebug(9042) << "option" << opt->variableName() << "-" << opt->description();
-    if(!m_vars->contains(opt->variableName()))
+    if(!m_vars->contains(opt->variableName()) && !m_cache->contains(opt->variableName()))
     {
         m_vars->insert(opt->variableName(), QStringList(opt->defaultValue()));
     }
