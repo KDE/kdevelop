@@ -141,16 +141,20 @@ Q_SIGNALS:
 public:
     using QObject::event; // prevent hiding of base method.
 
-    const QString& currentFile() const { return file_; }
-    int currentLine() const { return line_; }
-    const QString& currentAddr() const { return addr_; }
-    void clearCurrentPosition() { file_=addr_=""; line_=-1; }
+    const QString& currentFile() const { return m_file; }
+    int currentLine() const { return m_line; }
+    const QString& currentAddr() const { return m_addr; }
     
 protected:
     // Current position in debugged program, gets set when the state changes
-    QString file_;
-    int line_;
-    QString addr_;
+    QString m_file;
+    int m_line;
+    QString m_addr;
+
+    // Clear the position before running code
+    void clearCurrentPosition();
+    // Set new position and emit showStepInSource signal
+    void setCurrentPosition(const QString& file, int line, const QString& addr);
 
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
