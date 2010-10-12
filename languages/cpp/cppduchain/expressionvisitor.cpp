@@ -53,6 +53,9 @@
 //because the problem report contains a lot of information, and the problem currently appears very often.
 //#define DEBUG_FUNCTION_CALLS
 
+// uncomment to get debugging info on ADL - very expensive on parsing
+//#define DEBUG_ADL
+
 const uint maxExpressionVisitorProblems = 400;
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
@@ -1184,7 +1187,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
         if( !fail )
-          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations), false, false); // no ADL for class constructors
         else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
@@ -1418,7 +1421,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
         if( !fail )
-          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations), false, false); // no ADL for class constructors
         else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
@@ -1857,10 +1860,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     if( declarations.isEmpty()) {
       if (!constructedType ) {
-        if (MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
+        MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>();
+        if (missing) {
           // try an ADL lookup
           if (!fail) {
-            QualifiedIdentifier identifier = missing->identifier().identifier().identifier();
+            QualifiedIdentifier identifier = missing->identifier().identifier().identifier(); // wheee :)
+#ifdef DEBUG_ADL
+            kDebug() << "running ADL-enabled overload resolution";
+#endif // DEBUG_ADL
             chosenFunction = resolver.resolve(m_parameters, identifier);
           }
           missing->arguments = m_parameters;
@@ -1875,19 +1882,19 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         } else {
           // code below assumes !declarations.empty()
           declarations << chosenFunction;
-          // also, visitName was eager to add a MissingDeclaratonProblem; remove it
-          m_problems.removeLast();
-          // code below does not introduce a hidden dependency between visitName and visitFunctionCall
-          // but is slower, and I never tested if it actually works
-/*          foreach(KSharedPtr<KDevelop::Problem> prob, m_problems) {
-            MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
-            if (pMissing && pMissing->type) {
-              if (pMissing->type->identifier() == missing->identifier()) {
+
+          // if visitName was eager to add a MissingDeclaratonProblem; remove it
+          if (missing) {
+//            m_problems.removeLast();
+            foreach(KSharedPtr<KDevelop::Problem> prob, m_problems) {
+              MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
+              if (pMissing && pMissing->type &&
+                pMissing->type->identifier() == missing->identifier()) {
                 m_problems.removeOne(prob);
                 break;
               }
-           }
-          }*/
+            }
+          }
         }
       } else {
         //Default-constructor is used
@@ -1908,8 +1915,12 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     //Resolve functions normally
-    if( !fail && !chosenFunction )
+    if( !fail && !chosenFunction ) {
+#ifdef DEBUG_ADL
+      kDebug() << "running ADL-enabled overload resolution";
+#endif // DEBUG_ADL
       chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+    }
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
@@ -2314,6 +2325,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldLastInstance );
 
+#ifdef DEBUG_ADL
+        kDebug() << "running ADL-enabled overload resolution";
+#endif // DEBUG_ADL
         chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
       }
 

@@ -20,6 +20,10 @@
 #include <language/duchain/types/alltypes.h>
 #include <language/duchain/classdeclaration.h>
 #include "templatedeclaration.h"
+#include "typeutils.h"
+
+// uncomment to get debugging info on ADL - very expensive on parsing
+//#define DEBUG_ADL
 
 using namespace Cpp;
 using namespace KDevelop;
@@ -86,10 +90,20 @@ bool ADLTypeVisitor::visit(const FunctionType * type)
   return !seen(type);
 }
 
-void ADLTypeVisitor::endVisit(const FunctionType *)
+void ADLTypeVisitor::endVisit(const FunctionType * type)
 {
   // return type and argument types are handled by FunctionType::accept0
-  // TODO: process the namespace of the function itself here
+
+  // here we process the namespace of the function name (or containing class), if any
+  AbstractType::Ptr ptrType(const_cast<FunctionType*>(type)); // no ConstPtr so...
+  Declaration* decl = TypeUtils::getDeclaration(ptrType, m_helper.m_topContext.data());
+#ifdef DEBUG_ADL
+  if (decl) {
+    kDebug() << "    function type = " << type->toString() << ", declaration = " << decl->identifier().toString();
+  } else {
+    kDebug() << "    function type = " << type->toString() << ", declaration = NULL" ;
+  }
+#endif
 }
 
 bool ADLTypeVisitor::visit(const StructureType * type)
@@ -138,6 +152,9 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
 {
   if (typePtr)
   {
+#ifdef DEBUG_ADL
+    kDebug() << "    added argument type " << typePtr->toString() << " to ADL lookup";
+#endif 
     // the enumeration and enumerator types are not part of the TypeVisitor interface
     switch (typePtr->whichType())
     {
