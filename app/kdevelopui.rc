@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="130" name="kdevelop" >
+<kpartgui version="131" name="kdevelop" >
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -143,7 +143,7 @@
     <text context="@title:menu">Settings</text>
     <DefineGroup append="show_toolbar_merge" name="show_toolbar_merge"/>
     <DefineGroup append="show_merge" name="show_merge" />
-    <Action name="options_configure_editors" append="configure_merge" />
+    <Action name="show_editorconfig" append="configure_merge" />
     <DefineGroup append="configure_merge" name="configure_merge" />
   </Menu>
 
