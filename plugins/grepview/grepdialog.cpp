@@ -56,12 +56,12 @@ const QStringList template_desc = QStringList()
     << "OBJECT->member(";
 
 const QStringList template_str = QStringList()
-    << "(%s)"
-    << "\\b(%s)\\b"
-    << "\\b(%s)\\b\\s*=[^=]"
-    << "\\->\\s*\\b(%s)\\b\\s*\\("
-    << "[a-z0-9_$]+\\s*::\\s*\\b(%s)\\b\\s*\\("
-    << "\\b(%s)\\b\\s*\\->\\s*[a-z0-9_$]+\\s*\\(";
+    << "%s"
+    << "\\b%s\\b"
+    << "\\b%s\\b\\s*=[^=]"
+    << "\\->\\s*\\b%s\\b\\s*\\("
+    << "[a-z0-9_$]+\\s*::\\s*\\b%s\\b\\s*\\("
+    << "\\b%s\\b\\s*\\->\\s*[a-z0-9_$]+\\s*\\(";
 
 const QStringList filepatterns = QStringList()
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
