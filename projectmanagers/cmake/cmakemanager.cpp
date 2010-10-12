@@ -790,9 +790,19 @@ void CMakeManager::dirtyFile(const QString & dirty)
         
         reload(folderItem);
     }
-    else if(p && dirtyFile.fileName() == "CMakeCache.txt") {
-        KUrl builddirUrl = p->buildSystemManager()->buildDirectory(p->projectItem());
-        if(builddirUrl.isParentOf(dirtyFile)) {
+    else if(dirtyFile.fileName() == "CMakeCache.txt") {
+        KUrl builddirUrl;
+        IProject* p=0;
+        //we first have to check from which project is this builddir
+        foreach(KDevelop::IProject* pp, m_watchers.uniqueKeys()) {
+            KUrl url = pp->buildSystemManager()->buildDirectory(pp->projectItem());
+            if(dirtyFile.upUrl().equals(url, KUrl::CompareWithoutTrailingSlash)) {
+                builddirUrl=url;
+                p=pp;
+            }
+        }
+        
+        if(p) {
             m_projectCache[p]=readCache(dirtyFile);
             p->reloadModel();
         }
@@ -801,7 +811,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
             if(m_watchers[project]->contains(dirty))
-                reload(project->projectItem());
+                project->reloadModel();
         }
     }
     else if(p && QFileInfo(dirty).isDir())
