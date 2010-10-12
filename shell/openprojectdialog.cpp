@@ -23,6 +23,7 @@
 #include <kio/netaccess.h>
 #include <kio/udsentry.h>
 #include <kio/job.h>
+#include <kio/jobuidelegate.h>
 
 #include <kdebug.h>
 
@@ -85,11 +86,13 @@ void OpenProjectDialog::validateOpenUrl( const KUrl& url )
             isDir = info.isDir();
             extension = info.suffix();
         }
-    } else 
+    } else
     {
-        KIO::UDSEntry entry;
-        isValid = KIO::NetAccess::stat( url, entry, Core::self()->uiControllerInternal()->defaultMainWindow() );
+        KIO::StatJob* statJob = KIO::stat( url, KIO::HideProgressInfo );
+        statJob->ui()->setWindow( Core::self()->uiControllerInternal()->defaultMainWindow() );
+        isValid = statJob->exec(); // TODO: do this asynchronously so that the user isn't blocked while typing every letter of the hostname in sftp://hostname
         if ( isValid ) {
+            KIO::UDSEntry entry = statJob->statResult();
             isDir = entry.isDir();
             extension = QFileInfo( entry.stringValue( KIO::UDSEntry::UDS_NAME ) ).suffix();
         }
