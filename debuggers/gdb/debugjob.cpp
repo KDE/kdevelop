@@ -128,7 +128,7 @@ void DebugJob::done()
 }
 
 
-KillSessionJob::KillSessionJob(DebugSession *session, QObject* parent): m_session(session), KJob(parent)
+KillSessionJob::KillSessionJob(DebugSession *session, QObject* parent): KJob(parent), m_session(session)
 {
     connect(m_session, SIGNAL(finished()), SLOT(sessionFinished()));
     setCapabilities(Killable);
