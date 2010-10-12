@@ -820,7 +820,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         foreach(KDevelop::IProject* project, m_watchers.uniqueKeys())
         {
             if(m_watchers[project]->contains(dirty))
-                reload(project->projectItem());
+                project->reloadModel();
         }
     }
     else if(p && QFileInfo(dirty).isDir())
