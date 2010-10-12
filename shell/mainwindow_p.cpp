@@ -236,6 +236,11 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
+    action = actionCollection()->addAction( "show_editorconfig", this, SLOT( showEditorConfig() ) );
+    action->setIcon( KIcon("preferences-other") );
+    action->setText( i18n("Configure Editor..."));
+    action->setWhatsThis( i18n("Configure various aspects of this editor.") );
+
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
     action->setText( i18n("Configure Notifications...") );
     action->setToolTip( i18n("Configure Notifications") );

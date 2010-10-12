@@ -33,6 +33,7 @@ Boston, MA 02110-1301, USA.
 
 #include "mainwindow.h"
 #include "loadedpluginsdialog.h"
+#include <interfaces/ipartcontroller.h>
 
 namespace KDevelop {
 
@@ -171,6 +172,15 @@ void MainWindowPrivate::showLoadedPlugins()
 {
     LoadedPluginsDialog dlg(m_mainWindow);
     dlg.exec();
+}
+
+void MainWindowPrivate::showEditorConfig()
+{
+    KTextEditor::Editor* editor = Core::self()->partController()->editorPart();
+    if (editor->configDialogSupported()) {
+        editor->configDialog(m_mainWindow);
+        editor->writeConfig();
+    }
 }
 
 void MainWindowPrivate::contextMenuFileNew()
