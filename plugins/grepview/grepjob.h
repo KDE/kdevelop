@@ -45,6 +45,7 @@ public:
 
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
+    void setReplaceString(const QString &replaceString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
     void setDirectory(const KUrl &directory);
@@ -52,6 +53,7 @@ public:
     void setRegexpFlag(bool regexpFlag);
     void setCaseSensitive(bool caseSensitive);
     void setProjectFilesFlag(bool projectFilesFlag);
+    void setReplaceFlag(bool replaceFlag);
 
     virtual void start();
 
@@ -89,6 +91,7 @@ private:
     QPointer<GrepFindFilesThread> m_findThread;
 
     QString m_templateString;
+    QString m_replaceString;
     QString m_filesString;
     QString m_excludeString;
     KUrl m_directory;
@@ -97,6 +100,7 @@ private:
     bool m_regexpFlag;
     bool m_recursiveFlag;
     bool m_caseSensitiveFlag;
+    bool m_replaceFlag;
 };
 
 #endif

@@ -93,11 +93,11 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    setButtons( KDialog::User1 | KDialog::User2 | KDialog::Cancel );
-    setButtonText( KDialog::User1, i18n("Search") );
-    setButtonText( KDialog::User2, i18n("Replace") );
+    setButtons( SEARCH_BUTTON | REPLACE_BUTTON | KDialog::Cancel );
+    setButtonText( SEARCH_BUTTON, i18n("Search") );
+    setButtonText( REPLACE_BUTTON, i18n("Replace") );
     setCaption( i18n("Find In Files") );
-    setDefaultButton( KDialog::User1 );
+    setDefaultButton( SEARCH_BUTTON );
 
     setupUi(mainWidget());
 
@@ -133,7 +133,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns) );
 
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(search()));
+    connect(this, SIGNAL(buttonClicked(KDialog::ButtonCode)), this, SLOT(performAction(KDialog::ButtonCode)));
     connect(syncButton, SIGNAL(clicked()), this, SLOT(syncButtonClicked()));
     connect(templateTypeCombo, SIGNAL(activated(int)),
             this, SLOT(templateTypeComboActivated(int)));
@@ -273,16 +273,19 @@ bool GrepDialog::caseSensitiveFlag() const
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
-    enableButton( KDialog::User1, !text.isEmpty() );
+    enableButton( SEARCH_BUTTON, !text.isEmpty() );
 }
 
 void GrepDialog::replacementComboEditTextChanged( const QString& text )
 {
-    enableButton( KDialog::User2, !text.isEmpty() );
+    enableButton( REPLACE_BUTTON, !text.isEmpty() );
 }
 
-void GrepDialog::search()
+void GrepDialog::performAction(KDialog::ButtonCode button)
 {
+    // a click on cancel trigger this signal too
+    if( button != SEARCH_BUTTON && button != REPLACE_BUTTON ) return;
+    
     GrepJob* job = new GrepJob();
 
     job->setPatternString(patternString());
@@ -295,6 +298,7 @@ void GrepDialog::search()
     job->setRegexpFlag( regexpFlag() );
     job->setRecursive( recursiveFlag() );
     job->setCaseSensitive( caseSensitiveFlag() );
+    job->setReplaceFlag( button == REPLACE_BUTTON );
 
     kDebug() << "registering job";
     KDevelop::ICore::self()->runController()->registerJob(job);
@@ -302,11 +306,6 @@ void GrepDialog::search()
     m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
     
     close();
-}
-
-void GrepDialog::replace()
-{
-    // TODO
 }
 
 #include "grepdialog.moc"

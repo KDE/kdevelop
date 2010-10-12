@@ -260,6 +260,16 @@ void GrepJob::setProjectFilesFlag(bool projectFilesFlag)
     m_useProjectFilesFlag = projectFilesFlag;
 }
 
+void GrepJob::setReplaceFlag(bool replaceFlag)
+{
+    m_replaceFlag = replaceFlag;
+}
+
+void GrepJob::setReplaceString(const QString& replaceString)
+{
+    m_replaceString = replaceString;
+}
+
 void GrepJob::setPatternString(const QString& patternString)
 {
     m_patternString = patternString;
