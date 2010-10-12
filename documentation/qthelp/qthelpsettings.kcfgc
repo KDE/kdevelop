@@ -1,5 +1,5 @@
-File=qchsettings.kcfg
-ClassName=QchSettings
+File=qthelpsettings.kcfg
+ClassName=QtHelpSettings
 Singleton=true
 UseEnumTypes=true
 SetUserTexts=true

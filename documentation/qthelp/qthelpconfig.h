@@ -18,31 +18,31 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef QCHCONFIG_H
-#define QCHCONFIG_H
+#ifndef QTHELPCONFIG_H
+#define QTHELPCONFIG_H
 
 #include <KCModule>
 
-#include "ui_qchconfig.h"
+#include "ui_qthelpconfig.h"
 
 namespace Ui
 {
-    class QchConfigUI;
+    class QtHelpConfigUI;
 }
 
-class QchConfig : public KCModule
+class QtHelpConfig : public KCModule
 {
 public:
     Q_OBJECT
 
     public:
-      explicit QchConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
-      virtual ~QchConfig();
+      explicit QtHelpConfig(QWidget *parent = 0, const QVariantList &args = QVariantList());
+      virtual ~QtHelpConfig();
 
       virtual void save();
 
     private:
-      Ui::QchConfigUI* m_configWidget;
+      Ui::QtHelpConfigUI* m_configWidget;
 };
 
-#endif // QCHCONFIG_H
+#endif // QTHELPCONFIG_H

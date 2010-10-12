@@ -18,7 +18,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "qchconfig.h"
+#include "qthelpconfig.h"
 
 #include <KLocalizedString>
 #include <KPluginFactory>
@@ -38,20 +38,20 @@
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 
-#include "qchsettings.h"
-#include "ui_qchconfig.h"
+#include "qthelpsettings.h"
+#include "ui_qthelpconfig.h"
 
-K_PLUGIN_FACTORY(QchConfigFactory, registerPlugin<QchConfig>();)
-K_EXPORT_PLUGIN(QchConfigFactory("kdevqch_config"))
+K_PLUGIN_FACTORY(QtHelpConfigFactory, registerPlugin<QtHelpConfig>();)
+K_EXPORT_PLUGIN(QtHelpConfigFactory("kdevqthelp_config"))
 
 
-QchConfig::QchConfig(QWidget *parent, const QVariantList &args)
-    : KCModule(QchConfigFactory::componentData(), parent, args)
+QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
+    : KCModule(QtHelpConfigFactory::componentData(), parent, args)
 {
     QVBoxLayout * l = new QVBoxLayout( this );
 
     QWidget* w = new QWidget;
-    m_configWidget = new Ui::QchConfigUI;
+    m_configWidget = new Ui::QtHelpConfigUI;
     m_configWidget->setupUi( w );
 
     KUrlRequester *k= new KUrlRequester();
@@ -60,24 +60,24 @@ QchConfig::QchConfig(QWidget *parent, const QVariantList &args)
     m_configWidget->kcfg_qchList->setCustomEditor(k->customEditor());
     l->addWidget( w );
 
-    addConfig( QchSettings::self(), w );
+    addConfig( QtHelpSettings::self(), w );
 
     load();
 }
 
-QchConfig::~QchConfig()
+QtHelpConfig::~QtHelpConfig()
 {
     delete m_configWidget;
 }
 
-void QchConfig::save()
+void QtHelpConfig::save()
 {
     KCModule::save();
 
     // looks like we have to force a write so readConfig() can get the new values
-    QchSettings::self()->writeConfig();
+    QtHelpSettings::self()->writeConfig();
 
     KSettings::Dispatcher::reparseConfiguration( componentData().componentName() );
 }
 
-#include "qchconfig.moc"
+#include "qthelpconfig.moc"
