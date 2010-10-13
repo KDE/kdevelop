@@ -190,6 +190,7 @@ public:
     void addCommandBeforeRun(GDBCommand* cmd);
 
     bool stateIsOn(DBGStateFlags state) const;
+    DBGStateFlags debuggerState() const;
 
     using QObject::event;
 

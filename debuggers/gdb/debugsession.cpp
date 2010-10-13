@@ -1305,6 +1305,11 @@ bool DebugSession::stateIsOn(DBGStateFlags state) const
     return state_ & state;
 }
 
+DBGStateFlags DebugSession::debuggerState() const
+{
+    return state_;
+}
+
 void DebugSession::setStateOn(DBGStateFlags stateOn)
 {
     DBGStateFlags oldState = state_;
