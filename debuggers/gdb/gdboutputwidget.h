@@ -75,6 +75,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession *session);
+    void updateColors();
 
 protected:
     virtual void focusInEvent(QFocusEvent *e);
@@ -135,6 +136,9 @@ private:
     bool showInternalCommands_;
 
     int maxLines_;
+
+    QColor gdbColor_;
+    QColor errorColor_;
 };
 
 class OutputTextEdit : public QTextEdit

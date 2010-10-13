@@ -28,6 +28,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kmenu.h>
+#include <kcolorscheme.h>
 
 #include <QLabel>
 #include <QLayout>
@@ -111,6 +112,17 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
 
     currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
+
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
+            this, SLOT(updateColors()));
+    updateColors();
+}
+
+void GDBOutputWidget::updateColors()
+{
+    KColorScheme scheme(QPalette::Active);
+    gdbColor_ = scheme.foreground(KColorScheme::LinkText).color();
+    errorColor_ = scheme.foreground(KColorScheme::NegativeText).color();
 }
 
 void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
@@ -167,7 +179,7 @@ void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 }
 
 namespace {
-    QString colorify(QString text, const QString& color)
+    QString colorify(QString text, const QColor& color)
     {
         // Make sure the newline is at the end of the newly-added
         // string. This is so that we can always correctly remove
@@ -179,7 +191,7 @@ namespace {
         {
             text.remove(text.length()-1, 1);
         }
-        text = "<font color=\"" + color +  "\">" + text + "</font><br>";
+        text = "<font color=\"" + color.name() +  "\">" + text + "</font><br>";
         return text;
     }
 }
@@ -191,7 +203,7 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     QString s = html_escape(line);
     if (s.startsWith("(gdb)"))
     {
-        s = colorify(s, "blue");
+        s = colorify(s, gdbColor_);
     }
     else
         s.replace('\n', "<br>");
@@ -262,7 +274,7 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
-    QString colored = colorify(html_escape(line), "red");
+    QString colored = colorify(html_escape(line), errorColor_);
     // Errors are shown inside user commands too.
     allCommands_.append(colored);
     trimList(allCommands_, maxLines_);
