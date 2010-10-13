@@ -27,6 +27,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QTreeView>
+#include <QLineEdit>
 
 namespace GDBDebugger
 {
@@ -41,6 +42,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     m_processList->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     m_processList->setState(ProcessFilter::UserProcesses);
     m_processList->setKillButtonVisible(false);
+    m_processList->filterLineEdit()->setFocus();
     //m_processList->setPidFilter(qApp->pid());
     button(Ok)->setEnabled(false);
 }
