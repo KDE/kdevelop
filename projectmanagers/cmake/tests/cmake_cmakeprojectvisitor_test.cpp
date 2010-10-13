@@ -403,6 +403,16 @@ void CMakeProjectVisitorTest::testRun_data()
                             "endif(TRUE)\n"
                             "endwhile(1)\n"
                             << cacheValues << results;
+    
+    cacheValues << StringPair("VAR", "OFF");
+    results.clear();
+    results << StringPair("val", "TRUE");
+    QTest::newRow("break1") <<
+                            "option(VAR \"something\" ON)\n"
+                            "if(NOT VAR)\n"
+                                "set(val TRUE)\n"
+                            "endif(NOT VAR)\n"
+                            << cacheValues << results;
 }
 
 void CMakeProjectVisitorTest::testRun()
