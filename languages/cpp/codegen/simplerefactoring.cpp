@@ -268,14 +268,14 @@ void SimpleRefactoring::executeMoveIntoSourceAction() {
           KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Insertion failed"));
           return;
         }
-        
+        KTextEditor::Range range = decl->internalContext()->rangeInCurrentRevision().textRange();
         lock.unlock();
         if(!ins.changes().applyAllChanges()) {
           KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Applying changes failed"));
           return;
         }
         
-        doc->textDocument()->replaceText(decl->internalContext()->rangeInCurrentRevision().textRange(), QString(";"));
+        doc->textDocument()->replaceText(range, QString(";"));
         ICore::self()->languageController()->backgroundParser()->addDocument(url.toUrl());
         ICore::self()->languageController()->backgroundParser()->addDocument(targetUrl);
         
