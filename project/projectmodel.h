@@ -217,6 +217,8 @@ public:
 
     virtual ~ProjectFolderItem();
 
+    virtual void setUrl(const KUrl& );
+
     virtual ProjectFolderItem *folder() const;
 
     ///Reimplemented from QStandardItem

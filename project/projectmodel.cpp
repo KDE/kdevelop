@@ -474,6 +474,13 @@ ProjectFolderItem::~ProjectFolderItem()
 {
 }
 
+void ProjectFolderItem::setUrl( const KUrl& url )
+{
+    KUrl copy(url);
+    copy.adjustPath(KUrl::AddTrailingSlash);
+    ProjectBaseItem::setUrl(copy);
+}
+
 ProjectFolderItem *ProjectFolderItem::folder() const
 {
     return const_cast<ProjectFolderItem*>(this);
