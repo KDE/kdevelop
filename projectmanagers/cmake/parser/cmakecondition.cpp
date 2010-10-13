@@ -78,7 +78,8 @@ QMap<QString, CMakeCondition::conditionToken> CMakeCondition::nameToToken=initNa
 QSet<QString> CMakeCondition::s_falseDefinitions=QSet<QString>() << "" << "0" << "N" << "NO" << "OFF" << "FALSE" << "NOTFOUND" ;
 QSet<QString> CMakeCondition::s_trueDefinitions=QSet<QString>() << "1" << "ON" << "YES" << "TRUE" << "Y";
 
-CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v) : m_vars(v->variables()), m_visitor(v)
+CMakeCondition::CMakeCondition(const CMakeProjectVisitor* v)
+    : m_vars(v->variables()), m_cache(v->cache()), m_visitor(v)
 {
 }
 
@@ -122,19 +123,26 @@ bool CMakeCondition::isTrue(const QStringList::const_iterator& it)
         // TODO Don't go here if CMP0012 is OLD
         ret = false;
     }
-    else if(m_vars->contains(val))
+    else
     {
-        //         A variable is expanded (dereferenced) and then checked if it equals one of the above
-        //         FALSE constants.
-        QString varName=*it;
-        m_varUses.append(it);
-        const QStringList valu=m_vars->value(varName);
-        val = valu.join(";").toUpper();
-        ret=!s_falseDefinitions.contains(val) && !val.endsWith("-NOTFOUND");
-//         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
-    } else {
-        // Treat as variable, and expand it to "", which evaluates to false.
-        ret = false;
+        QString value;
+        if(m_vars->contains(val))
+        {
+            //         A variable is expanded (dereferenced) and then checked if it equals one of the above
+            //         FALSE constants.
+            value = m_vars->value(*it).join(";").toUpper();
+    //         kDebug(9042) << "Checking" << varName << "is true ? >>>" << m_vars->value(varName) << "<<<";
+        }
+        else if(m_cache->contains(val))
+        {
+            value = m_cache->value(*it).value.toUpper();
+        }
+        
+        if(!value.isEmpty()) {
+            m_varUses.append(it);
+            ret = !s_falseDefinitions.contains(value) && !value.endsWith("-NOTFOUND");
+        } else
+            ret = false;
     }
 
     return ret;

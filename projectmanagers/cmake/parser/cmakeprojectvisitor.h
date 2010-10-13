@@ -102,6 +102,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeProjectVisitor : CMakeAstVisitor
         void setDefinitions(const CMakeDefinitions& defs) { m_defs=defs; }
 
         const VariableMap* variables() const { return m_vars; }
+        const CacheValues* cache() const { return m_cache; }
         const CMakeDefinitions& definitions() const { return m_defs; }
         
         QString projectName() const { return m_projectName; }
