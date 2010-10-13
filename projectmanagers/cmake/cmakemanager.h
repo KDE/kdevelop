@@ -121,7 +121,7 @@ private slots:
     void projectClosing(KDevelop::IProject*);
     void reimportDone(KJob* job);
     
-    void deletedWatchedDirectory(const QString& directory);
+    void deletedWatched(const QString& directory);
 
 private:
     void reimport(KDevelop::ProjectFolderItem* fi);
