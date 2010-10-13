@@ -45,7 +45,8 @@ public:
         Lexer          /**< problem while lexing the file */,
         Parser         /**< problem while parsing the file */,
         DUChainBuilder /**< problem while building the duchain */,
-        SemanticAnalysis /**< problem during semantic analysis */
+        SemanticAnalysis /**< problem during semantic analysis */,
+        ToDo           /**< TODO item in a comment */
     };
 
     enum Severity {
