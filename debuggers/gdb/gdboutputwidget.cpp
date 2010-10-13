@@ -109,6 +109,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
             SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
     connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
+
+    currentSessionChanged(KDevelop::ICore::self()->debugController()->currentSession());
 }
 
 void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
@@ -127,6 +129,8 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 
      connect( session, SIGNAL(gdbStateChanged(DBGStateFlags, DBGStateFlags)),
              this,       SLOT(slotStateChanged(DBGStateFlags, DBGStateFlags)));
+
+     slotStateChanged(s_none, session->debuggerState());
 }
 
 
