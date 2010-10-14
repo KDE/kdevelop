@@ -69,11 +69,11 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
     }
 
   if(chosen == -1 && lastDefine != -1) {
-    chosen = lastDefine;
+    chosen = lastDefine + 1;
   }
 
   if (chosen == -1 && lastComment != -1) {
-    chosen = lastComment;
+    chosen = lastComment + 1;
   }
 
   if(chosen != -1) {
