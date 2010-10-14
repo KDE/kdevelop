@@ -26,12 +26,17 @@
 #include "partdocument.h"
 #include "mainwindow.h"
 
-using namespace KDevelop;
+namespace KDevelop {
+
+MainWindow* mainWindow() {
+    MainWindow* window = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    Q_ASSERT(window);
+    return window;
+}
 
 void filterViews(QSet< QString > keepFiles)
 {
-    MainWindow* window = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(window);
+    MainWindow* window = mainWindow();
 
     foreach(Sublime::View* view, window->area()->views()) {
 
@@ -45,4 +50,6 @@ void filterViews(QSet< QString > keepFiles)
             window->area()->closeView(view);
         }
     }
+}
+
 }

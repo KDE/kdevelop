@@ -23,6 +23,11 @@
 
 namespace KDevelop {
 
+class MainWindow;
+
+//returns the active MainWindow
+MainWindow* mainWindow();
+
 //Filters the views in the main-window so they only contain the given files to keep
 void filterViews(QSet< QString > keepFiles);
 
