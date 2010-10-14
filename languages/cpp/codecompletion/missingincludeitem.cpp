@@ -404,7 +404,7 @@ QString MissingIncludeCompletionItem::lineToInsert() const {
 void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
 
   QString insertLine = lineToInsert();
-  int lastLineWithInclude = 0;
+  int lastLineWithInclude = -1;
   int checkLines = word.start().line() -1;
   for(int a = 0; a < checkLines; ++a) {
     QString lineText = document->line(a);
@@ -418,7 +418,7 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
     }
   }
 
-  document->insertLine(moveBehindComment(document, lastLineWithInclude+1, word.start().line()), insertLine);
+  document->insertLine(moveBehindComment(document, lastLineWithInclude, word.start().line()), insertLine);
   MissingIncludeCompletionModel::startCompletionAfterParsing(IndexedString(document->url()));
 }
 
