@@ -57,16 +57,10 @@ void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /
 {
     kDebug() << "re-creating widget" << m_area;
 
-    if (workingSet()->isEmpty()) {
-        hide();
-    }
-
     Q_ASSERT(area == m_area);
 
     setWorkingSet(getSet(newSet));
-    if (workingSet()->isEmpty()) {
-        hide();
-    }
+    setVisible(!workingSet()->isEmpty());
 }
 
 #include "workingsetwidget.moc"
