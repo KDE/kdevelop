@@ -50,12 +50,12 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
     int lastComment = -1;
 
     for(int a = 0; a < checkLines; ++a) {
-      if(lines[a].startsWith('$')) {
+      if(lines.at(a).startsWith('$')) {
         chosen = -1;
         lastComment = a;
         continue;
       }
-      QString trimmedLine = lines[a].trimmed();
+      QString trimmedLine = lines.at(a).trimmed();
       if(trimmedLine.startsWith('#')) {
         lastDefine = a;
         chosen = -1;
@@ -217,7 +217,7 @@ QString KDevelop::SourceCodeInsertion::indentation() const {
     QString textLine = m_codeRepresentation->line(decl->range().start.line);
     
     for(int a = 0; a < textLine.size(); ++a) {
-      if(textLine[a].isSpace())
+      if(textLine.at(a).isSpace())
         ++spaces;
       else
         break;
