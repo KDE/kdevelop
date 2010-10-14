@@ -290,6 +290,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
 
     job->setPatternString(patternString());
     job->setTemplateString(templateString());
+    job->setReplaceString(replacementString());
     job->setFilesString(filesString());
     job->setExcludeString(excludeString());
     job->setDirectory(directory());

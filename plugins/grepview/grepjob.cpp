@@ -28,13 +28,18 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/idocument.h>
 #include <project/projectmodel.h>
 #include <util/processlinemaker.h>
+#include <ktexteditor/document.h>
 
 #include <language/duchain/indexedstring.h>
 #include <interfaces/iuicontroller.h>
 
 #include "grepoutputdelegate.h"
+
+using namespace KDevelop;
 
 static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 {
@@ -52,6 +57,36 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
         data = file.readLine();
     }
     file.close();
+    return res;
+}
+
+static GrepOutputItem::List replaceFile(const QString &filename, const QRegExp &re, const QString &repl)
+{
+    GrepOutputItem::List res;
+    KUrl url(filename);
+    
+    IDocument* doc = ICore::self()->documentController()->documentForUrl( url );
+    if(!doc)
+        doc = ICore::self()->documentController()->openDocument( url );
+    if(!doc)
+        return res;
+    
+    KTextEditor::Document* textDoc = doc->textDocument();
+    if(!textDoc)
+        return res;
+    
+    textDoc->startEditing();
+    for(int lineno = 0; lineno < textDoc->lines(); lineno++)
+    {
+        QString line = textDoc->line(lineno);
+        if( re.indexIn(line)!=-1 )
+        {
+            textDoc->removeLine(lineno);
+            textDoc->insertLine(lineno, line.replace(re, repl));
+            res << GrepOutputItem(filename, lineno+1, line.trimmed());
+        }
+    }
+    textDoc->endEditing();
     return res;
 }
 
@@ -158,7 +193,8 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     GrepOutputItem::List items;
-                    items = grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
+                    items = m_replaceFlag ? replaceFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp, m_replaceString)
+                                          : grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
 
                     if(!items.isEmpty())
                         model()->appendOutputs(m_fileList[m_fileIndex].toLocalFile(), items);
