@@ -60,6 +60,8 @@ public:
   };
   Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
+  void initShell();
+
   KDevelop::TopDUContext* parse(const QByteArray& unit,
                                 DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType),
                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);

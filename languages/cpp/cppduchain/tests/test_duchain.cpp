@@ -60,9 +60,6 @@
 #include <language/duchain/codemodel.h>
 #include <language/codegen/coderepresentation.h>
 
-#include <tests/testcore.h>
-#include <tests/autotestshell.h>
-
 #include "tokens.h"
 
 //Extremely slow
@@ -173,13 +170,7 @@ void TestDUChain::initTestCase()
 {
   noDef = 0;
 
-  AutoTestShell::init();
-  TestCore* core = new TestCore();
-  core->initialize(KDevelop::Core::NoUi);
-  EnvironmentManager::init();
-
-  DUChain::self()->disablePersistentStorage();
-  KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
+  initShell();
 
   file1 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/duchain.cpp";
   file2 = "file:///media/data/kdedev/4.0/kdevelop/languages/cpp/parser/dubuilder.cpp";

@@ -28,6 +28,9 @@
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/dumpchain.h>
+#include <language/codegen/coderepresentation.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 using namespace KDevelop;
 
@@ -72,6 +75,17 @@ LockedTopDUContext::~LockedTopDUContext()
 }
 
 //BEGIN TestHelper
+
+void TestHelper::initShell()
+{
+  AutoTestShell::init();
+  TestCore* core = new TestCore();
+  core->initialize(KDevelop::Core::NoUi);
+  EnvironmentManager::init();
+
+  DUChain::self()->disablePersistentStorage();
+  KDevelop::CodeRepresentation::setDiskChangesForbidden(true);
+}
 
 TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
