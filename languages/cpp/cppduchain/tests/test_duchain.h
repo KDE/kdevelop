@@ -25,15 +25,11 @@
 
 #include <kurl.h>
 
-#include <ktexteditor/cursor.h>
-
-#include "parser.h"
-#include "control.h"
-#include "dumpchain.h"
-
 #include <language/duchain/identifier.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/editor/cursorinrevision.h>
+
+#include "testhelper.h"
 
 namespace KDevelop
 {
@@ -42,7 +38,7 @@ class TopDUContext;
 class ClassFunctionDeclaration;
 }
 
-class TestDUChain : public QObject
+class TestDUChain : public QObject, public Cpp::TestHelper
 {
   Q_OBJECT
 
@@ -186,23 +182,8 @@ private:
   void assertNoMemberFunctionModifiers(KDevelop::ClassFunctionDeclaration* memberFun);
 
 public:
-  enum DumpArea {
-    DumpNone = 0,
-    DumpAST = 1,
-    DumpDUChain = 2,
-    DumpType = 4,
-    DumpAll = 7
-  };
-  Q_DECLARE_FLAGS(DumpAreas, DumpArea)
 
 private:
-  KDevelop::TopDUContext* parse(const QByteArray& unit, DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType),
-                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);
-
-  // Parser
-  Control control;
-  Cpp::DumpChain cppDumper;
-
   // Declaration - use chain
   KDevelop::Declaration* noDef;
   KUrl file1, file2;
