@@ -299,11 +299,13 @@ void WorkingSetToolTipWidget::updateFileButtons()
     if(m_set->id() == mainWindow->area()->workingSet()) {
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
+        connect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
         m_openButton->setIcon(KIcon("project-development-close"));
         m_openButton->setText(i18n("Close"));
     }else{
         disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
         connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
+        disconnect(m_openButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
         m_openButton->setIcon(KIcon("project-open"));
         m_openButton->setText(i18n("Load"));
     }
