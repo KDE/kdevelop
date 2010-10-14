@@ -31,6 +31,15 @@ target_link_libraries(duchaintest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRAR
 
 ########### next target ###############
 
+set(sourcemanipulationtest_SRCS test_sourcemanipulation.cpp testhelper.cpp)
+
+
+kde4_add_unit_test(sourcemanipulationtest ${sourcemanipulationtest_SRCS})
+target_link_libraries(sourcemanipulationtest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
+    kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})
+
+########### next target ###############
+
 set(itemrepositorytest_SRCS test_itemrepository.cpp)
 
 
