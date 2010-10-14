@@ -72,7 +72,6 @@ Q_SIGNALS:
 protected:
     //FIXME DOCUMENT!!!  queryClose() must call all of the Core cleanup() methods!
     virtual bool queryClose();
-    virtual void setupAreaSelector();
     //reimplemented from KXMLGUIBuilder to support visible menubar separators
     QAction *createCustomElement(QWidget *parent, int index, const QDomElement &element);
     QWidget *createContainer(QWidget *parent, int index,

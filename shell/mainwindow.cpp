@@ -373,14 +373,6 @@ void MainWindow::initializeStatusBar()
     d->setupStatusBar();
 }
 
-
-void MainWindow::setupAreaSelector()
-{
-    Sublime::MainWindow::setupAreaSelector();
-    d->setupAreaSelector();
-}
-
-
 void MainWindow::showErrorMessage(const QString& message, int timeout)
 {
     d->showErrorMessage(message, timeout);

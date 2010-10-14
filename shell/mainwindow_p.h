@@ -61,8 +61,6 @@ public:
     void setupStatusBar();
     void registerStatus(QObject*);
 
-    void setupAreaSelector();
-    
     void tabContextMenuRequested(Sublime::View *view, KMenu* menu);
     void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
 

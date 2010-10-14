@@ -337,16 +337,6 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>" ) );
 }
 
-void MainWindowPrivate::setupAreaSelector()
-{
-#if 0
-    if(!m_workingSetCornerWidget) {
-        m_workingSetCornerWidget = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, true);
-        m_mainWindow->setTabBarLeftCornerWidget(m_workingSetCornerWidget);
-    }
-#endif
-}
-
 void MainWindowPrivate::toggleArea(bool b)
 {
     if (!b) return;
