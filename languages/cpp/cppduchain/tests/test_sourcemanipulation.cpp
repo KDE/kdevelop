@@ -56,11 +56,11 @@ void TestSourceManipulation::testFirstValidCodeLineBefore_data()
 
   QTest::newRow("afterComment2") << "/**\n"
                                    " *\n"
-                                   " **/\n" // we want this line
-                                   "void foo() {\n"
+                                   " **/\n"
+                                   "void foo() {\n" // we want this line
                                    "  MissingInclude;\n"
                                    "}\n"
-                                << 4 << 2;
+                                << 4 << 3;
 
   QTest::newRow("afterInclude") << "#include <cstddef>\n"
                                    "\n" // we want this line
@@ -79,11 +79,11 @@ void TestSourceManipulation::testFirstValidCodeLineBefore_data()
                                    "}\n"
                                 << 6 << 4;
 
-  QTest::newRow("afterInclude3") << "#include <cstddef>\n" // we want this line
-                                   "void foo() {\n"
+  QTest::newRow("afterInclude3") << "#include <cstddef>\n"
+                                   "void foo() {\n" // we want this line
                                    "  MissingInclude;\n"
                                    "}\n"
-                                << 2 << 0;
+                                << 2 << 1;
 }
 
 void TestSourceManipulation::testFirstValidCodeLineBefore()
