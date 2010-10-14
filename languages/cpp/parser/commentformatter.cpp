@@ -23,7 +23,47 @@
 #include "lexer.h"
 #include "rpp/chartools.h"
 #include <language/duchain/stringhelpers.h>
+#include <language/editor/simplerange.h>
 
+QList<KDevelop::ProblemPointer> CommentFormatter::extractToDos( uint token, const ParseSession* session ) {
+  QList<KDevelop::ProblemPointer> result;
+  if( !token )
+    return QList<KDevelop::ProblemPointer>();
+  const Token& commentToken( (*session->token_stream)[token] );
+  QByteArray comment = stringFromContents(session->contentsVector(), commentToken.position, commentToken.size);
+  QList<QByteArray> lines = comment.split( '\n' );
+  if ( !lines.isEmpty() ) {
+    QList<QByteArray>::iterator bit = lines.begin();
+    QList<QByteArray>::iterator it = bit;
+    QList<QByteArray>::iterator eit = lines.end();
+
+    KDevelop::IndexedString document = session->url();
+    KDevelop::SimpleCursor comment_start = session->positionAt(commentToken.position).castToSimpleCursor();
+
+    for( ; it != eit; ++it ) {
+      // remove common leading chars from the beginning of line
+      int stripped_left = 0;
+      int stripped_right = 0;
+      stripped_left += KDevelop::strip( "///", *it );
+      stripped_left += KDevelop::strip( "//", *it );
+      stripped_left += KDevelop::strip( "**", *it );
+      stripped_right += KDevelop::rStrip( "/**", *it );
+
+      if( KDevelop::containsToDos(*it) ) {
+        KDevelop::ProblemPointer p(new KDevelop::Problem());
+        p->setSource(KDevelop::ProblemData::ToDo);
+        p->setDescription(*it);
+        p->setSeverity(KDevelop::ProblemData::Hint);
+        int start_line = comment_start.line + (it - bit);
+        int start_column = (it == bit) ? comment_start.column + stripped_left : stripped_left;
+        p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(start_line, start_column, start_line, it->size() + start_column)));
+        result.append(p);
+      }
+    }
+  }
+
+  return result;
+}
 
 QByteArray CommentFormatter::formatComment( uint token, const ParseSession* session ) {
   if( !token )

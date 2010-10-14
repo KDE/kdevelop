@@ -25,6 +25,7 @@
 #include "lexer.h"
 #include "control.h"
 #include "parsesession.h"
+#include "commentformatter.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -172,6 +173,10 @@ void Parser::processComment( int offset, int line ) {
   }
 
 /*  kDebug() << "noticing comment" << commentToken.symbol();*/
+  QList<KDevelop::ProblemPointer> problems = CommentFormatter::extractToDos(tokenNumber, session);
+  foreach(KDevelop::ProblemPointer problem, problems) {
+    control->reportProblem(problem);
+  }
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
 
 }

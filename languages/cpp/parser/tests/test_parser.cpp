@@ -365,6 +365,55 @@ private slots:
 
     //QCOMPARE(CommentFormatter::formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
   }
+  
+  void testComments5()
+  {
+    QByteArray method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n");
+    pool mem_pool;
+    int initial_size = control.problems().size();  // Remember existing number of problems
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("FIXME comment\nthis is TODO\nTODO: comment\n(another TODO)"));
+    it = it->next;
+    QVERIFY(it);
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
+
+    QList<KDevelop::ProblemPointer> problem_list = control.problems();
+    QCOMPARE(problem_list.size(), initial_size + 6); // 5 to-dos + additional 'Unexpected end of file' problem
+    KDevelop::ProblemPointer problem = problem_list[initial_size];
+    QCOMPARE(problem->description(), QString("FIXME comment"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(1, 4));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(1, 17));
+
+    problem = problem_list[initial_size + 1];
+    QCOMPARE(problem->description(), QString("this is TODO"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(2, 3));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(2, 15));
+
+    problem = problem_list[initial_size + 2];
+    QCOMPARE(problem->description(), QString("TODO: comment"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(3, 4));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(3, 17));
+
+    problem = problem_list[initial_size + 3];
+    QCOMPARE(problem->description(), QString("another TODO"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(4, 13));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(4, 25));
+
+    problem = problem_list[initial_size + 4];
+    QCOMPARE(problem->description(), QString("TODO COMMENT"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(8, 4));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(8, 16));
+  }
 
   QString preprocess(const QString& contents) {
     rpp::Preprocessor preprocessor;
