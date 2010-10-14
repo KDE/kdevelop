@@ -86,40 +86,6 @@ using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
 
-void release(TopDUContext* top)
-{
-  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
-
-  TopDUContextPointer tp(top);
-  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
-  Q_ASSERT(!tp);
-}
-
-/// Object that locks the duchain for writing and destroys its TopDUContext on destruction
-struct LockedTopDUContext
-{
-  LockedTopDUContext(TopDUContext* top) : m_top(top)
-  {
-  }
-  
-  ~LockedTopDUContext() {
-    DUChainWriteLocker lock(DUChain::lock());
-    release(m_top);
-  }
-  LockedTopDUContext& operator=(TopDUContext* ctx) {
-    m_top = ctx;
-    return *this;
-  }
-  TopDUContext* operator->() {
-    return m_top;
-  }
-  operator TopDUContext*() {
-    return m_top;
-  }
-  TopDUContext* m_top;
-  DUChainWriteLocker m_writeLock;
-};
-
 namespace QTest {
   template<>
   char* toString(const Cursor& cursor)
@@ -196,7 +162,6 @@ Declaration* getDeclaration( AbstractType::Ptr base, TopDUContext* top ) {
     return 0;
   }
 }
-
 
 #define TEST_FILE_PARSE_ONLY if (testFileParseOnly) QSKIP("Skip", SkipSingle);
 TestDUChain::TestDUChain()

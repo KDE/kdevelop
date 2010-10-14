@@ -33,6 +33,46 @@ using namespace KDevelop;
 
 using namespace Cpp;
 
+void Cpp::release( TopDUContext* top )
+{
+  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
+
+  TopDUContextPointer tp(top);
+  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
+  Q_ASSERT(!tp);
+}
+
+//BEGIN LockedTopDUContext
+
+LockedTopDUContext::LockedTopDUContext( TopDUContext* top )
+  : m_top( top )
+{
+}
+
+LockedTopDUContext::operator KDevelop::TopDUContext*() const
+{
+  return m_top;
+}
+
+TopDUContext* LockedTopDUContext::operator->() const
+{
+  return m_top;
+}
+
+LockedTopDUContext& LockedTopDUContext::operator=( TopDUContext * ctx )
+{
+  m_top = ctx;
+  return *this;
+}
+
+LockedTopDUContext::~LockedTopDUContext()
+{
+  DUChainWriteLocker lock;
+  release( m_top );
+}
+
+//BEGIN TestHelper
+
 TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
   if (dump)

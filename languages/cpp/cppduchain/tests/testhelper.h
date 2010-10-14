@@ -24,12 +24,29 @@
 
 #include "dumpchain.h"
 #include "control.h"
+#include <language/duchain/duchainlock.h>
 
 namespace KDevelop {
 class TopDUContext;
 }
 
 namespace Cpp {
+
+void release(KDevelop::TopDUContext* top);
+
+/// Object that locks the duchain for writing and destroys its TopDUContext on destruction
+struct LockedTopDUContext
+{
+  LockedTopDUContext(KDevelop::TopDUContext* top) ;
+
+  ~LockedTopDUContext() ;
+  LockedTopDUContext& operator=(KDevelop::TopDUContext* ctx);
+  KDevelop::TopDUContext* operator->() const;
+  operator KDevelop::TopDUContext*() const;
+
+  KDevelop::TopDUContext* m_top;
+  KDevelop::DUChainWriteLocker m_writeLock;
+};
 
 class TestHelper {
 public:
