@@ -46,13 +46,18 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
     if(lines.count() < checkLines)
       checkLines = lines.count();
 
+    int lastDefine = -1;
+    int lastComment = -1;
+
     for(int a = 0; a < checkLines; ++a) {
       if(lines[a].startsWith('$')) {
         chosen = -1;
+        lastComment = a;
         continue;
       }
       QString trimmedLine = lines[a].trimmed();
       if(trimmedLine.startsWith('#')) {
+        lastDefine = a;
         chosen = -1;
         continue;
       }
@@ -62,6 +67,14 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
       if(!trimmedLine.isEmpty())
         break;
     }
+
+  if(chosen == -1 && lastDefine != -1) {
+    chosen = lastDefine;
+  }
+
+  if (chosen == -1 && lastComment != -1) {
+    chosen = lastComment;
+  }
 
   if(chosen != -1) {
     // if chosen == 0 we can only add at the start of the document
