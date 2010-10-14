@@ -77,7 +77,7 @@
 
 using namespace KDevelop;
 
-const uint rowCountForDisablingScrollBar = 5000;
+const int rowCountForDisablingScrollBar = 5000;
 
 const bool noHtmlDestriptionInOutline = true;
 
