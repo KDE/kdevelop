@@ -36,9 +36,10 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
   
     int chosen = -1;
   
-    QString allText;
+    //Add some whitespace so we always have some comment clearing done, in every line
+    QString allText = "         \n";
     for(int a = 0; a < checkLines; ++a)
-      allText += m_codeRepresentation->line(a) + "         \n"; //Add some whitespace so we always have some comment clearing done, in every line
+      allText += m_codeRepresentation->line(a) + "         \n";
     allText = KDevelop::clearComments(allText, '$');
     
     QStringList lines = allText.split('\n');
@@ -62,9 +63,10 @@ int KDevelop::SourceCodeInsertion::firstValidCodeLineBefore(int lineNumber) cons
         break;
     }
 
-  if(chosen != -1)
-    return chosen;
-  else
+  if(chosen != -1) {
+    // if chosen == 0 we can only add at the start of the document
+    return qMax(0, chosen - 1);
+  } else
     return lineNumber;
 }
 
