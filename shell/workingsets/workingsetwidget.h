@@ -37,6 +37,13 @@ class MainWindow;
 class WorkingSetController;
 class WorkingSet;
 
+/**
+ * One instance of this widget is put next to the area switchers to show
+ * buttons for all available (not opened) working sets. This one has no fixed area.
+ *
+ * Then there is one instance of this widget per area switcher tab, showing
+ * the currently opened working set for this area.
+ */
 class WorkingSetWidget : public QWidget {
     Q_OBJECT
 

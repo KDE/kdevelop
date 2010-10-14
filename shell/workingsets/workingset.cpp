@@ -520,9 +520,12 @@ void WorkingSet::deleteSet()
 
 void WorkingSet::changed( Sublime::Area* area )
 {
-  if ( m_loading )
-    return; { //Do not capture changes done while loading
+  if ( m_loading ) {
+    return;
+  }
 
+  {
+    //Do not capture changes done while loading
     PushValue<bool> enableLoading( m_loading, true );
 
     kDebug() << "recording change done to" << m_id;
