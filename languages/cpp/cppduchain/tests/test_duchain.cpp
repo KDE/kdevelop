@@ -64,8 +64,6 @@
 #include <tests/autotestshell.h>
 
 #include "tokens.h"
-#include "parsesession.h"
-#include "astutilities.h"
 
 //Extremely slow
 // #define TEST_NORMAL_IMPORTS
