@@ -50,6 +50,7 @@
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
+#include "workingsets/workingset.h"
 
 namespace KDevelop {
 

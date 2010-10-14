@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QLabel>
 
+#include <KMenuBar>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,6 +51,8 @@ Boston, MA 02110-1301, USA.
 #include <sublime/document.h>
 #include <sublime/tooldocument.h>
 
+#include <util/pushvalue.h>
+
 #include <interfaces/iplugin.h>
 
 #include "core.h"
@@ -57,12 +60,9 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "uicontroller.h"
 #include "statusbar.h"
-
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
-
 #include "textdocument.h"
-#include <KMenuBar>
 #include "sessioncontroller.h"
 
 namespace KDevelop {
