@@ -418,7 +418,14 @@ void MissingIncludeCompletionItem::execute(KTextEditor::Document* document, cons
     }
   }
 
-  document->insertLine(moveBehindComment(document, lastLineWithInclude, word.start().line()), insertLine);
+  int line;
+  if (lastLineWithInclude != -1) {
+    line = lastLineWithInclude + 1;
+  } else {
+    line = moveBehindComment(document, 0, word.start().line());
+  }
+
+  document->insertLine(line, insertLine);
   MissingIncludeCompletionModel::startCompletionAfterParsing(IndexedString(document->url()));
 }
 
