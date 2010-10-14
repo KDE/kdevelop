@@ -66,8 +66,12 @@ static GrepOutputItem::List replaceFile(const QString &filename, const QRegExp &
     KUrl url(filename);
     
     IDocument* doc = ICore::self()->documentController()->documentForUrl( url );
+    bool alreadyOpened = true;
     if(!doc)
+    {
         doc = ICore::self()->documentController()->openDocument( url );
+        alreadyOpened = false;
+    }
     if(!doc)
         return res;
     
@@ -87,6 +91,10 @@ static GrepOutputItem::List replaceFile(const QString &filename, const QRegExp &
         }
     }
     textDoc->endEditing();
+    
+    if(!alreadyOpened && res.isEmpty())
+        doc->close();
+    
     return res;
 }
 
