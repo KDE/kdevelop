@@ -62,7 +62,7 @@ public:
     QList<WorkingSet*> allWorkingSets() const;
 
     //The returned widget is owned by the caller
-    QWidget* createSetManagerWidget(MainWindow* parent, bool local = false, Sublime::Area* fixedArea = 0);
+    QWidget* createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea = 0);
 
     void initializeController(UiController* controller);
 
@@ -72,8 +72,8 @@ public:
     void showToolTip( KDevelop::WorkingSet* set, const QPoint& pos);
 
 Q_SIGNALS:
-    void workingSetAdded(const QString& id);
-    void workingSetRemoved(const QString& id);
+    void workingSetAdded(WorkingSet* set);
+    void aboutToRemoveWorkingSet(WorkingSet* set);
     // Emitted after a working-set in a main-window was switched
     void workingSetSwitched();
 

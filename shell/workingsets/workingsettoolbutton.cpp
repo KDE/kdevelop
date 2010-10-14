@@ -50,12 +50,29 @@ QString htmlColor(QColor color) {
     return "#" + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
 }
 
-WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow) : QToolButton(parent), m_set(set), m_toolTipEnabled(true) {
+WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow)
+    : QToolButton(parent), m_set(set), m_mainWindow(mainWindow), m_toolTipEnabled(true)
+{
     setFocusPolicy(Qt::NoFocus);
+    setWorkingSet(set);
+
+    connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
+}
+
+WorkingSet* WorkingSetToolButton::workingSet() const
+{
+    return m_set;
+}
+
+void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
+{
+    Q_ASSERT(set);
+
+    m_set = set;
     QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
     QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
     QColor useColor;
-    if(mainWindow && mainWindow->area() && mainWindow->area()->workingSet() == set->id()) {
+    if(m_mainWindow && m_mainWindow->area() && m_mainWindow->area()->workingSet() == set->id()) {
         useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
         setIcon(set->activeIcon());
     }else{
@@ -65,8 +82,6 @@ WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, Mai
 
     QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
     setStyleSheet(sheet);
-
-    connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
 }
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)

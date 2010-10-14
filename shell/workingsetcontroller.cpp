@@ -36,6 +36,7 @@
 #include "workingsets/workingset.h"
 #include "workingsets/workingsettooltipwidget.h"
 #include "workingsets/workingsetwidget.h"
+#include "workingsets/closedworkingsetswidget.h"
 
 using namespace KDevelop;
 
@@ -129,15 +130,22 @@ WorkingSet* WorkingSetController::getWorkingSet(const QString& id, const QString
             kDebug() << "found no icon for working-set" << id;
             icon = "invalid";
         }
-        m_workingSets[id] = new WorkingSet(id, icon);
-        emit workingSetAdded(id);
+        WorkingSet* set = new WorkingSet(id, icon);
+        connect(set, SIGNAL(aboutToRemove(WorkingSet*)),
+                this, SIGNAL(aboutToRemoveWorkingSet(WorkingSet*)));
+        m_workingSets[id] = set;
+        emit workingSetAdded(set);
     }
 
     return m_workingSets[id];
 }
 
-QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local, Sublime::Area* fixedArea) {
-    return new WorkingSetWidget(parent, this, local, fixedArea);
+QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea) {
+    if (fixedArea) {
+        return new WorkingSetWidget(parent, fixedArea);
+    } else {
+        return new ClosedWorkingSetsWidget(parent);
+    }
 }
 
 void WorkingSetController::setupActions()

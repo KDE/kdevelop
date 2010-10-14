@@ -1,5 +1,6 @@
 /*
     Copyright David Nolden  <david.nolden.kdevelop@art-master.de>
+    Copyright 2010 Milian Wolff <mail@milianw.de>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,9 +19,6 @@
 
 #include "workingsetwidget.h"
 
-#include <QHBoxLayout>
-#include <QToolButton>
-
 #include <KDebug>
 
 #include <sublime/area.h>
@@ -33,82 +31,42 @@
 
 using namespace KDevelop;
 
-WorkingSetWidget::WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini,
-                                   Sublime::Area* fixedArea)
-    : QWidget(0), m_fixedArea(fixedArea), m_mini(mini), m_mainWindow(parent)
+WorkingSet* getSet(const QString& id)
 {
-    m_layout = new QHBoxLayout(this);
-    m_layout->setMargin(0);
-    if(!m_fixedArea)
-        connect(parent, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
-
-    connect(controller, SIGNAL(workingSetAdded(QString)), this, SLOT(workingSetsChanged()));
-    connect(controller, SIGNAL(workingSetRemoved(QString)), this, SLOT(workingSetsChanged()));
-
-    Sublime::Area* area = parent->area();
-    if(m_fixedArea)
-        area = m_fixedArea;
-    if(area)
-        areaChanged(area);
-
-    workingSetsChanged();
+    return Core::self()->workingSetControllerInternal()->getWorkingSet(id);
 }
 
-void WorkingSetWidget::areaChanged(Sublime::Area* area)
+WorkingSetWidget::WorkingSetWidget(MainWindow* parent, Sublime::Area* area)
+    : WorkingSetToolButton(0, getSet(area->workingSet()), parent), m_area(area)
 {
-    if(m_connectedArea) {
-        disconnect(m_connectedArea, SIGNAL(changingWorkingSet(Sublime::Area*, QString, QString)),
-                   this, SLOT(changingWorkingSet(Sublime::Area*, QString, QString)));
-    }
-
     //Queued connect so the change is already applied to the area when we start processing
-    connect(area, SIGNAL(changingWorkingSet(Sublime::Area*, QString, QString)), this,
+    connect(m_area, SIGNAL(changingWorkingSet(Sublime::Area*, QString, QString)), this,
             SLOT(changingWorkingSet(Sublime::Area*, QString, QString)), Qt::QueuedConnection);
 
-    m_connectedArea = area;
-
-    changingWorkingSet(area, QString(), area->workingSet());
+    setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
 }
 
-void WorkingSetWidget::changingWorkingSet( Sublime::Area* /*area*/, const QString& /*from*/, const QString& /*to*/)
+void WorkingSetWidget::setVisible( bool visible )
 {
-    workingSetsChanged();
+    // never show empty working sets
+    // TODO: I overloaded this only because hide() in the ctor does not work, other ideas?
+    QWidget::setVisible( !visible || !workingSet()->isEmpty() );
 }
 
-void WorkingSetWidget::workingSetsChanged()
+void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /*from*/, const QString& newSet)
 {
-    kDebug() << "re-creating widget" << m_connectedArea << m_fixedArea << m_mini;
-    foreach(QToolButton* button, m_buttons.keys())
-        delete button;
-    m_buttons.clear();
+    kDebug() << "re-creating widget" << m_area;
 
-    foreach(WorkingSet* set, Core::self()->workingSetControllerInternal()->allWorkingSets()) {
-
-        disconnect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
-        connect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
-
-        if(m_mini && set->id() != m_connectedArea->workingSet()) {
-//             kDebug() << "skipping" << set->id() << ", searching" << m_connectedArea->workingSet();
-            continue; //In "mini" mode, show only the current working set
-        }
-        if(set->isEmpty()) {
-//             kDebug() << "skipping" << set->id() << "because empty";
-            continue;
-        }
-
-        // Don't show working-sets that are active in an area belong to this main-window, as those
-        // can be activated directly through the icons in the tabs
-        if(!m_mini && set->hasConnectedAreas(m_mainWindow->areas()))
-             continue;
-        
-//         kDebug() << "adding button for" << set->id();
-        QToolButton* butt = new WorkingSetToolButton(this, set, m_mainWindow);
-        butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
-
-        m_layout->addWidget(butt);
-        m_buttons[butt] = set;
+    if (workingSet()->isEmpty()) {
+        hide();
     }
-    update();
+
+    Q_ASSERT(area == m_area);
+
+    setWorkingSet(getSet(newSet));
+    if (workingSet()->isEmpty()) {
+        hide();
+    }
 }
 
 #include "workingsetwidget.moc"

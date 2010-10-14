@@ -10,6 +10,7 @@ set(kdevplatformshell_LIB_SRCS
     workingsets/workingsettoolbutton.cpp
     workingsets/workingsettooltipwidget.cpp
     workingsets/workingsetwidget.cpp
+    workingsets/closedworkingsetswidget.cpp
     workingsets/workingsethelpers.cpp
     assistantpopup.cpp
     mainwindow.cpp

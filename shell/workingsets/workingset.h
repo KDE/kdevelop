@@ -87,6 +87,7 @@ private slots:
 
 signals:
     void setChangedSignificantly();
+    void aboutToRemove(WorkingSet*);
 
 private:
     void changed(Sublime::Area* area);

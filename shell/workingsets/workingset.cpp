@@ -294,6 +294,8 @@ void deleteGroupRecursive(KConfigGroup group) {
 void WorkingSet::deleteSet(bool force, bool silent)
 {
     if((m_areas.isEmpty() || force) && !m_id.isEmpty()) {
+        emit aboutToRemove(this);
+
         KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
         KConfigGroup group = setConfig.group(m_id);
         deleteGroupRecursive(group);

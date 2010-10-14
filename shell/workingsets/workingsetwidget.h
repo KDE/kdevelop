@@ -1,5 +1,6 @@
 /*
     Copyright David Nolden  <david.nolden.kdevelop@art-master.de>
+    Copyright 2010 Milian Wolff <mail@milianw.de>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,12 +20,9 @@
 #ifndef WORKINGSETWIDGET_H
 #define WORKINGSETWIDGET_H
 
-#include <QWidget>
 #include <QPointer>
-#include <QMap>
 
-class QToolButton;
-class QHBoxLayout;
+#include "workingsettoolbutton.h"
 
 namespace Sublime {
 class Area;
@@ -38,30 +36,21 @@ class WorkingSetController;
 class WorkingSet;
 
 /**
- * One instance of this widget is put next to the area switchers to show
- * buttons for all available (not opened) working sets. This one has no fixed area.
- *
- * Then there is one instance of this widget per area switcher tab, showing
+ * One instance of this widget is created per area switcher tab, showing
  * the currently opened working set for this area.
  */
-class WorkingSetWidget : public QWidget {
+class WorkingSetWidget : public WorkingSetToolButton {
     Q_OBJECT
 
 public:
-    WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini, Sublime::Area* fixedArea) ;
+    WorkingSetWidget(MainWindow* parent, Sublime::Area* area);
+    virtual void setVisible( bool visible );
+
+private slots:
+    void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
 
 private:
-    QHBoxLayout* m_layout;
-    QPointer<Sublime::Area> m_connectedArea;
-    QPointer<Sublime::Area> m_fixedArea;
-    bool m_mini;
-    QMap<QToolButton*, WorkingSet*> m_buttons;
-    MainWindow* m_mainWindow;
-
-public slots:
-    void areaChanged(Sublime::Area*);
-    void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
-    void workingSetsChanged();
+    QPointer<Sublime::Area> m_area;
 };
 
 }
