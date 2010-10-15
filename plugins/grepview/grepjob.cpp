@@ -48,13 +48,12 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     if(!file.open(QIODevice::ReadOnly))
         return res;
     int lineno = 1;
-    QByteArray data = file.readLine();
-    while( !data.isNull() && file.error()==QFile::NoError )
+    while( !file.atEnd() )
     {
+        QByteArray data = file.readLine();
         if( re.indexIn(data)!=-1 )
             res << GrepOutputItem(filename, lineno, QString(data).trimmed());
         lineno++;
-        data = file.readLine();
     }
     file.close();
     return res;
@@ -200,12 +199,12 @@ void GrepJob::slotWork()
             {
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
-                    GrepOutputItem::List items;
-                    items = m_replaceFlag ? replaceFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp, m_replaceString)
-                                          : grepFile(m_fileList[m_fileIndex].toLocalFile(), m_regExp);
+                    QString file = m_fileList[m_fileIndex].toLocalFile();
+                    GrepOutputItem::List items = m_replaceFlag ? replaceFile(file, m_regExp, m_replaceString) : grepFile(file, m_regExp);
 
                     if(!items.isEmpty())
-                        model()->appendOutputs(m_fileList[m_fileIndex].toLocalFile(), items);
+                        emit foundMatches(file, items);
+
                     m_fileIndex++;
                 }
                 QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
@@ -244,6 +243,10 @@ void GrepJob::start()
             model, SLOT(showErrorMessage(QString)));
     connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
             model, SLOT(showMessage(KDevelop::IStatus*, QString)));
+
+    qRegisterMetaType<GrepOutputItem::List>();
+    connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),
+            model, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }

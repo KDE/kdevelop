@@ -55,6 +55,7 @@ private Q_SLOTS:
     void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );
     void replacementComboEditTextChanged( const QString& );
+    void directoryChanged(const QString &dir);
 
 private:
     GrepViewPlugin * m_plugin;

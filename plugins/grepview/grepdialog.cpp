@@ -36,7 +36,8 @@
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iruncontroller.h>
-#include <interfaces/icore.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include <kstandarddirs.h>
 
@@ -121,8 +122,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
 
-    directoryRequester->setUrl( KUrl( QDir::homePath() ) );
-    directoryRequester->fileDialog()->setUrl( KUrl( QDir::homePath() ) );
+    setDirectory( QDir::homePath() );
     directoryRequester->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
 
     syncButton->setIcon(KIcon("dirsync"));
@@ -143,7 +143,23 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
             this, SLOT(replacementComboEditTextChanged( const QString& )));
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
+    
+    connect(directoryRequester, SIGNAL(textChanged(const QString&)), this, SLOT(directoryChanged(const QString&)));
 }
+
+void GrepDialog::directoryChanged(const QString& dir)
+{
+    setEnableProjectBox(false);
+    KUrl currentUrl = dir;
+    if( !currentUrl.isValid() )
+        return;
+    KDevelop::IProject *proj = KDevelop::ICore::self()->projectController()->findProjectForUrl( currentUrl );
+    if( proj && proj->folder().isLocalFile() )
+    {
+        setEnableProjectBox(! proj->files().isEmpty() );
+    }
+}
+
 
 // Returns the contents of a QComboBox as a QStringList
 static QStringList qCombo2StringList( QComboBox* combo )
@@ -198,7 +214,7 @@ void GrepDialog::syncButtonClicked( )
         KUrl url = doc->url();
         if ( url.isLocalFile() )
         {
-            directoryRequester->lineEdit()->setText( url.upUrl().toLocalFile( KUrl::LeaveTrailingSlash ) );
+            setDirectory( url.upUrl().toLocalFile() );
         }
     }
 }

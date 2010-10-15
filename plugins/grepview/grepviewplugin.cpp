@@ -123,27 +123,31 @@ void GrepViewPlugin::showDialog()
     }
 
     dlg->enableButtonOk( !pattern.isEmpty() );
-    
-    if (m_directory.isEmpty() || !QFileInfo(m_directory).isDir()) {
-        KUrl currentUrl;
-        KDevelop::IDocument *document = core()->documentController()->activeDocument();
-        dlg->setEnableProjectBox(false);
-        if( document )
+
+    if (!m_directory.isEmpty() && QFileInfo(m_directory).isDir()) {
+        dlg->setDirectory(m_directory);
+    }
+
+    KUrl currentUrl;
+    KDevelop::IDocument *document = core()->documentController()->activeDocument();
+    dlg->setEnableProjectBox(false);
+    if( document )
+    {
+        currentUrl = document->url();
+    }
+    if( currentUrl.isValid() )
+    {
+        KDevelop::IProject *proj =
+                core()->projectController()->findProjectForUrl( currentUrl );
+        if( proj && proj->folder().isLocalFile() )
         {
-            currentUrl = document->url();
-        }
-        if( currentUrl.isValid() )
-        {
-            KDevelop::IProject *proj =
-                    core()->projectController()->findProjectForUrl( currentUrl );
-            if( proj && proj->folder().isLocalFile() )
+            dlg->setEnableProjectBox(! proj->files().isEmpty() );
+
+            if (!m_directory.startsWith(proj->folder().toLocalFile()))
             {
-                dlg->setEnableProjectBox(! proj->files().isEmpty() );
                 dlg->setDirectory( proj->folder().toLocalFile() );
             }
         }
-    } else {
-        dlg->setDirectory(m_directory);
     }
 
     dlg->show();
