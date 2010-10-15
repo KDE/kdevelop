@@ -112,7 +112,7 @@ void ProjectLoadTest::addRemoveFiles()
 
     QCOMPARE(project->filesForUrl(path+"/blub"+QString::number(50)).count(), 1);
     KDevelop::ProjectFileItem* file = project->filesForUrl(path+"/blub"+QString::number(50)).first();
-    project->projectFileManager()->removeFile(file); //message box has to be accepted manually :(
+    project->projectFileManager()->removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
     for (int i=51; i<100; ++i) {
         QFile f2(path+"/blub"+QString::number(i));
         f2.remove();

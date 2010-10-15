@@ -41,6 +41,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         
         void setInformation(const QString& info);
 
+        bool hasDocuments() const;
+
         KTextEditor::Document* document() const;
         
         ///@param modified may be an artifial code representation (@ref KDevelop::InsertArtificialCodeRepresentation)

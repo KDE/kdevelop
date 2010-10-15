@@ -459,25 +459,62 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
     }
 }
 
+bool projectItemUrlLessThan(KDevelop::ProjectBaseItem* item1, KDevelop::ProjectBaseItem* item2)
+{
+    return item1->url().path() < item2->url().path();
+}
 void ProjectManagerViewPlugin::removeFromContextMenu()
 {
-    foreach( KDevelop::ProjectBaseItem* item, d->ctxProjectItemList )
-    {
-        if ( item->folder() || item->file() ) {
+    //copy the list of selected items and sort it to guarantee parents will come before children
+    QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
+    filteredItems[0] += d->ctxProjectItemList;
+    qSort(filteredItems[0].begin(), filteredItems[0].end(), projectItemUrlLessThan);
 
-            QWidget* window(QApplication::activeWindow());
-            int q=KMessageBox::questionYesNo(window,
-                item->folder() ? i18n("Do you really want to remove the directory <i>%1</i>?", item->folder()->url().pathOrUrl())
-                        : i18n("Do you really to remove the file <i>%1</i>?", item->file()->url().pathOrUrl()));
-            if(q==KMessageBox::Yes)
-            {
-                if ( item->folder() ) {
-                    item->project()->projectFileManager()->removeFolder(item->folder());
-                } else {
-                    item->project()->projectFileManager()->removeFile(item->file());
-                }
+    KUrl lastFolder;
+    QStringList itemPaths;
+    //Clean up the list, organize by manager
+    /*FIXME: No targets, no target subfiles, and no project folders should ever get here
+     * fix the contextmenu to make sure of it
+     * this should just make sure no children of folders that will be deleted are listed
+     */
+    foreach( KDevelop::ProjectBaseItem* item, filteredItems[0] )
+    {
+        if (item->url() == item->project()->folder())
+            continue;
+
+        if (item->folder() || item->file())
+        {
+            if (lastFolder.isParentOf(item->url())) {
+                continue;
+            } else if (item->folder()) {
+                lastFolder = item->url();
+            } else if (item->file()) {
+                if (item->parent()->target())
+                    continue;
             }
+
+            filteredItems[item->project()->projectFileManager()] << item;
+            itemPaths << item->url().path();
         }
+    }
+
+    if (!itemPaths.size())
+        return;
+
+    if (KMessageBox::questionYesNoList(
+            QApplication::activeWindow(),
+            i18n("Do you really want to delete these items?"),
+            itemPaths, i18n("Delete Files"), KStandardGuiItem::del()
+        ) == KMessageBox::No) {
+        return;
+    }
+
+    //Go though projectmanagers, have them remove the files and folders that they own
+    QMap< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> >::iterator it;
+    for (it = filteredItems.begin(); it != filteredItems.end(); ++it)
+    {
+        if (it.key())
+            it.key()->removeFilesAndFolders(it.value());
     }
 }
 

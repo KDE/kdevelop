@@ -68,8 +68,7 @@ public:
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem *parent );
     virtual KDevelop::ProjectFileItem* addFile( const KUrl& file, KDevelop::ProjectFolderItem *parent );
-    virtual bool removeFolder( KDevelop::ProjectFolderItem *folder );
-    virtual bool removeFile( KDevelop::ProjectFileItem *file );
+    virtual bool removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items);
     virtual bool renameFolder( KDevelop::ProjectFolderItem *folder, const KUrl& url );
     virtual bool renameFile( KDevelop::ProjectFileItem *file, const KUrl& url );
 

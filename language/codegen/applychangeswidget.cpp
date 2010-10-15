@@ -105,6 +105,11 @@ ApplyChangesWidget::~ApplyChangesWidget()
     delete d;
 }
 
+bool ApplyChangesWidget::hasDocuments() const
+{
+    return d->m_editParts.size() > 0;
+}
+
 KTextEditor::Document* ApplyChangesWidget::document() const
 {
     return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
@@ -159,7 +164,7 @@ void ApplyChangesWidgetPrivate::addItem(QStandardItemModel* mit, KTextEditor::Do
         edition.takeFirst();
     QStandardItem* it= new QStandardItem(edition.join("\n"));
     QStandardItem* action= new QStandardItem(type);
-    
+
     it->setData(qVariantFromValue(range));
     it->setEditable(false);
     action->setEditable(false);

@@ -48,10 +48,9 @@ class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
         KDevelop::ProjectFileItem* addFile( const KUrl&, KDevelop::ProjectFolderItem* ) { return 0; }
 
         bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* ) { return false; }
-        bool removeFolder( KDevelop::ProjectFolderItem* ) { return false; }
         bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-        bool removeFile( KDevelop::ProjectFileItem* ) { return false; }
-        bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* ) { return false; }
+        bool removeFilesAndFolders(QList< KDevelop::ProjectBaseItem* > ) { return false; }
+        bool removeFilesFromTargets( QList<KDevelop::TargetFilePair> ) { return false; }
         bool renameFile(KDevelop::ProjectFileItem*, const KUrl&) { return false; }
         bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&) { return false; }
         QHash<QString,QString> environment(KDevelop::ProjectBaseItem *) const { return QHash<QString, QString>(); }

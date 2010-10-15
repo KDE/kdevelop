@@ -435,29 +435,24 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
     return false;
 }
 
-bool GenericProjectManager::removeFolder( KDevelop::ProjectFolderItem * folder )
+bool GenericProjectManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> items)
 {
-    kDebug() << "removing folder" << folder->url();
-    KDevelop::ProjectFolderItem* parent = getParentFolder(folder);
-    stopWatcher(parent);
-    const bool success = KDevelop::removeUrl(parent->project(), folder->url(), true);
-    if ( success ) {
-        folder->parent()->removeRow( folder->row() );
-    }
-    continueWatcher(parent);
-    return success;
-}
+    bool success = true;
+    foreach(KDevelop::ProjectBaseItem* item, items)
+    {
+        Q_ASSERT(item->folder() || item->file());
 
-bool GenericProjectManager::removeFile( KDevelop::ProjectFileItem * file )
-{
-    kDebug() << "removing file" << file->url();
-    KDevelop::ProjectFolderItem* parent = getParentFolder(file);
-    stopWatcher(parent);
-    const bool success = KDevelop::removeUrl(file->project(), file->url(), false);
-    if ( success ) {
-        file->parent()->removeRow( file->row() );
+        KDevelop::ProjectFolderItem* parent = getParentFolder(item);
+        stopWatcher(parent);
+
+        success &= KDevelop::removeUrl(parent->project(), item->url(), true);
+        if ( success )
+            item->parent()->removeRow( item->row() );
+
+        continueWatcher(parent);
+        if ( !success )
+            break;
     }
-    continueWatcher(parent);
     return success;
 }
 
