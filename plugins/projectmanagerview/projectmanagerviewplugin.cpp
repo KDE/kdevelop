@@ -476,10 +476,13 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
         }
     }
 
-    if (KMessageBox::questionYesNoList(
+    if (KMessageBox::warningYesNoList(
             QApplication::activeWindow(),
-            i18n("Do you really want to delete these items?"),
-            itemPaths, i18n("Delete Files"), KStandardGuiItem::del()
+            i18np("Do you really want to delete this item?",
+                  "Do you really want to delete these %1 items?",
+                  itemPaths.size()),
+            itemPaths, i18n("Delete Files"),
+            KStandardGuiItem::del(), KStandardGuiItem::cancel()
         ) == KMessageBox::No) {
         return;
     }
