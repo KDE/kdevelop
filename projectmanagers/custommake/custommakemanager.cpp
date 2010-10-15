@@ -105,10 +105,9 @@ bool CustomMakeManager::removeTarget(KDevelop::ProjectTargetItem *target)
     return false;
 }
 
-bool CustomMakeManager::removeFileFromTarget(KDevelop::ProjectFileItem *file, KDevelop::ProjectTargetItem *parent)
+bool CustomMakeManager::removeFilesFromTargets(QList< TargetFilePair > targetFiles)
 {
-    Q_UNUSED( file )
-    Q_UNUSED( parent )
+    Q_UNUSED( targetFiles )
     return false;
 }
 
@@ -223,14 +222,17 @@ ProjectFileItem* CustomMakeManager::addFile(const KUrl& file, KDevelop::ProjectF
     return 0;
 }
 
-bool CustomMakeManager::removeFolder(KDevelop::ProjectFolderItem *folder)
+bool CustomMakeManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> items)
 {
-    return KDevelop::removeUrl(folder->project(), folder->url(), true);
-}
+    foreach(KDevelop::ProjectBaseItem* item, items)
+    {
+        Q_ASSERT(item->folder() || item->file());
+        Q_ASSERT(!item->file() || !item->file()->parent()->target());
 
-bool CustomMakeManager::removeFile(KDevelop::ProjectFileItem *file)
-{
-    return KDevelop::removeUrl(file->project(), file->url(), false);
+        if (!KDevelop::removeUrl(item->project(), item->url(), false))
+            return false;
+    }
+    return true;
 }
 
 bool CustomMakeManager::renameFile(KDevelop::ProjectFileItem* oldFile, const KUrl& newFile)
