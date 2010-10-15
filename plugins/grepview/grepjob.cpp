@@ -68,7 +68,9 @@ static GrepOutputItem::List replaceFile(const QString &filename, const QRegExp &
     bool alreadyOpened = true;
     if(!doc)
     {
-        doc = ICore::self()->documentController()->openDocument( url );
+        doc = ICore::self()->documentController()->openDocument( url, 
+                                                                 KTextEditor::Range::invalid(), 
+                                                                 IDocumentController::DoNotActivate);
         alreadyOpened = false;
     }
     if(!doc)

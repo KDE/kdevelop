@@ -403,6 +403,7 @@ p, li { white-space: pre-wrap; }
   <tabstop>patternCombo</tabstop>
   <tabstop>templateEdit</tabstop>
   <tabstop>templateTypeCombo</tabstop>
+  <tabstop>replacementCombo</tabstop>
   <tabstop>regexCheck</tabstop>
   <tabstop>caseSensitiveCheck</tabstop>
   <tabstop>directoryRequester</tabstop>
