@@ -65,7 +65,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public KDialog
         void change (KTextEditor::Document *document, const KTextEditor::Range &oldRange,
                 const KTextEditor::Range &newRange);
         void insertion (KTextEditor::Document *document, const KTextEditor::Range &range);
-        void removal (KTextEditor::Document *document, const KTextEditor::Range &range);
+        void removal (KTextEditor::Document *document, const KTextEditor::Range &range, const QString &oldText);
         void jump( const QModelIndex &);
         
     private:
