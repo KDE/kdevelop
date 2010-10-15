@@ -70,7 +70,7 @@ class DebugSession;
 class CppDebuggerPlugin;
 
 
-class DisassembleWidget : public QTreeWidget
+class DisassembleWidget : public QWidget
 {
     Q_OBJECT
 
@@ -93,8 +93,10 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
+    void slotValidateEdits();
     void slotChangeAddress();
     void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
+    void slotShowAddrRange();
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
@@ -103,10 +105,17 @@ protected:
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
     virtual void contextMenuEvent(QContextMenuEvent*);
+    bool hasValidAddrRange();
+    void enableControls(bool enabled);
 
 private:
     bool displayCurrent();
-    void getAsmToDisplay(const QString& addr=QString());
+    
+    // Disassemble memory region addr1..addr2
+    // if addr2 is empty, 128 bytes range taken
+    // if addr1 is empty, $pc is used
+    void getAsmToDisplay(const QString& addr1=QString(),
+        const QString& addr2=QString() );
 
     /// callback for GDBCommand
     void memoryRead(const GDBMI::ResultRecord& r);
@@ -115,11 +124,16 @@ private:
     unsigned long    lower_;
     unsigned long    upper_;
     unsigned long    address_;
-    QString currentAddress_;
+    QString m_currentAddress;
     
-    QAction* selectAddrAction_;
+    QTreeWidget* m_treeWidget;
+    QAction* m_selectAddrAction;
+    QComboBox* m_startAddress;
+    QComboBox* m_endAddress;
+    QPushButton* m_evalButton;
+    
     static const KIcon icon_;
-    SelectAddrDialog* dlg;
+    SelectAddrDialog* m_dlg;
 };
 
 }
