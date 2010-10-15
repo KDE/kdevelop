@@ -183,102 +183,86 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     if( items.isEmpty() )
         return IPlugin::contextMenuExtension( context );
 
+    //TODO: also needs: removeTarget, removeFileFromTarget, runTargetsFromContextMenu
     ContextMenuExtension menuExt;
-    bool closeProjectsAdded = false;
-    bool buildItemsAdded = false;
-    //bool hasTargets = false;
-    bool folderItemsAdded = false;
-    bool removeAdded = false;
-    bool renameAdded = false;
+    bool needsCreateFile = true;
+    bool needsCreateFolder = true;
+    bool needsCloseProjects = true;
+    bool needsBuildItems = true;
+    bool needsFolderItems = true;
+    bool needsRemoveAndRename = true;
 
-    if ( items.count() == 1 ) {
-        // it only makes sense to create new stuff when a single folder/target was selected
-        if ( items.first()->folder() || items.first()->target() ) {
-            KAction* action = new KAction( i18n( "Create File" ), this );
-            action->setIcon(KIcon("document-new"));
-            connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-        if ( items.first()->folder() ) {
-            KAction* action = new KAction( i18n( "Create Folder" ), this );
-            action->setIcon(KIcon("folder-new"));
-            connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-    }
-
-    foreach( ProjectBaseItem* item, items )
-    {
+    //needsCreateFile if there is one item and it's a folder or target
+    needsCreateFile &= (items.count() == 1) && (items.first()->folder() || items.first()->target());
+    //needsCreateFolder if there is one item and it's a folder
+    needsCreateFolder &= (items.count() == 1) && (items.first()->folder());
+    
+    foreach( ProjectBaseItem* item, items ) {
         d->ctxProjectItemList << item;
-        if ( !buildItemsAdded && ( item->target() || item->type() == ProjectBaseItem::BuildFolder ) )
-        {
-            KAction* action = new KAction( i18n( "Build" ), this );
-            action->setIcon(KIcon("run-build"));
-            connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-            action = new KAction( i18n( "Install" ), this );
-            action->setIcon(KIcon("run-install"));
-            connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-            action = new KAction( i18n( "Clean" ), this );
-            action->setIcon(KIcon("run-clean"));
-            connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-            action = new KAction( i18n( "Add to Buildset" ), this );
-            connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
-            menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-            buildItemsAdded = true;
-        }
+        //needsBuildItems if items are limited to targets and buildfolders
+        needsBuildItems &= item->target() || item->type() == ProjectBaseItem::BuildFolder;
 
-        KDevelop::ProjectFolderItem *prjitem = item->folder();
-        if ( !closeProjectsAdded && prjitem && !prjitem->parent() )
-        {
-            KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
-            close->setIcon(KIcon("project-development-close"));
-            connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
-            menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
-            closeProjectsAdded = true;
-        }
+        //needsCloseProjects if items are limited to top level folders (Project Folders)
+        needsCloseProjects &= item->folder() && !item->folder()->parent();
 
-        if ( !folderItemsAdded && prjitem )
-        {
-            folderItemsAdded = true;
+        //needsFolderItems if items are limited to folders
+        needsFolderItems &= (bool)item->folder();
 
-            KAction* action = new KAction( i18n( "Reload" ), this );
-            action->setIcon(KIcon("view-refresh"));
-            connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-
-        if ( !removeAdded && ((item->folder() && item->parent()) || item->file()) )
-        {
-            removeAdded = true;
-            KAction* action = new KAction( i18n( "Remove" ), this );
-            action->setIcon(KIcon("user-trash"));
-            connect( action, SIGNAL(triggered()), this, SLOT(removeFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-
-        if( !renameAdded && (item->file() || item->folder()) && item->parent() )
-        {
-            renameAdded = true;
-            KAction* action = new KAction( i18n( "Rename" ), this );
-            action->setIcon(KIcon("edit-rename"));
-            connect( action, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
-            menuExt.addAction( ContextMenuExtension::FileGroup, action );
-        }
-
-        //TODO: Port to launch framework
-//         if(!hasTargets && item->executable())
-//         {
-//             KAction* action = new KAction( i18n("Run"), this );
-//             action->setIcon(KIcon("system-run"));
-//             connect( action, SIGNAL( triggered() ), this, SLOT( runTargetsFromContextMenu() ) );
-//             menuExt.addAction( ContextMenuExtension::ProjectGroup, action );
-//         }
-
+        //needsRemove if items are limited to non-top-level folders or files that don't belong to targets
+        needsRemoveAndRename &= (item->folder() && item->parent()) || (item->file() && !item->parent()->target());
     }
 
+    if ( needsCreateFile ) {
+        KAction* action = new KAction( i18n( "Create File" ), this );
+        action->setIcon(KIcon("document-new"));
+        connect( action, SIGNAL(triggered()), this, SLOT(createFileFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, action );
+    }
+    if ( needsCreateFolder ) {
+        KAction* action = new KAction( i18n( "Create Folder" ), this );
+        action->setIcon(KIcon("folder-new"));
+        connect( action, SIGNAL(triggered()), this, SLOT(createFolderFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, action );
+    }
+    if ( needsBuildItems ) {
+        KAction* action = new KAction( i18n( "Build" ), this );
+        action->setIcon(KIcon("run-build"));
+        connect( action, SIGNAL( triggered() ), this, SLOT(buildItemsFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::BuildGroup, action );
+        action = new KAction( i18n( "Install" ), this );
+        action->setIcon(KIcon("run-install"));
+        connect( action, SIGNAL( triggered() ), this, SLOT(installItemsFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::BuildGroup, action );
+        action = new KAction( i18n( "Clean" ), this );
+        action->setIcon(KIcon("run-clean"));
+        connect( action, SIGNAL( triggered() ), this, SLOT(cleanItemsFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::BuildGroup, action );
+        action = new KAction( i18n( "Add to Buildset" ), this );
+        connect( action, SIGNAL(triggered() ), this, SLOT(addItemsFromContextMenuToBuildset() ) );
+        menuExt.addAction( ContextMenuExtension::BuildGroup, action );
+    }
+    if ( needsCloseProjects ) {
+        KAction* close = new KAction( i18np( "Close Project", "Close Projects", items.count() ), this );
+        close->setIcon(KIcon("project-development-close"));
+        connect( close, SIGNAL(triggered()), this, SLOT(closeProjects()) );
+        menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
+    }
+    if ( needsFolderItems ) {
+        KAction* action = new KAction( i18n( "Reload" ), this );
+        action->setIcon(KIcon("view-refresh"));
+        connect( action, SIGNAL(triggered()), this, SLOT(reloadFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, action );
+    }
+    if ( needsRemoveAndRename ) {
+        KAction* remove = new KAction( i18n( "Remove" ), this );
+        remove->setIcon(KIcon("user-trash"));
+        connect( remove, SIGNAL(triggered()), this, SLOT(removeFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, remove );
+        KAction* rename = new KAction( i18n( "Rename" ), this );
+        rename->setIcon(KIcon("edit-rename"));
+        connect( rename, SIGNAL(triggered()), this, SLOT(renameItemFromContextMenu()) );
+        menuExt.addAction( ContextMenuExtension::FileGroup, rename );
+    }
     return menuExt;
 }
 
@@ -472,34 +456,25 @@ void ProjectManagerViewPlugin::removeFromContextMenu()
 
     KUrl lastFolder;
     QStringList itemPaths;
-    //Clean up the list, organize by manager
-    /*FIXME: No targets, no target subfiles, and no project folders should ever get here
-     * fix the contextmenu to make sure of it
-     * this should just make sure no children of folders that will be deleted are listed
-     */
+
     foreach( KDevelop::ProjectBaseItem* item, filteredItems[0] )
     {
-        if (item->url() == item->project()->folder())
-            continue;
+        Q_ASSERT(item->folder() || item->file());
+        Q_ASSERT(!item->file() || !item->file()->parent()->target());
 
         if (item->folder() || item->file())
         {
+            //make sure no children of folders that will be deleted are listed
             if (lastFolder.isParentOf(item->url())) {
                 continue;
             } else if (item->folder()) {
                 lastFolder = item->url();
-            } else if (item->file()) {
-                if (item->parent()->target())
-                    continue;
             }
 
             filteredItems[item->project()->projectFileManager()] << item;
             itemPaths << item->url().path();
         }
     }
-
-    if (!itemPaths.size())
-        return;
 
     if (KMessageBox::questionYesNoList(
             QApplication::activeWindow(),
