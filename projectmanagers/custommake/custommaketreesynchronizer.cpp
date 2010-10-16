@@ -25,7 +25,20 @@ CustomMakeTreeSynchronizer::CustomMakeTreeSynchronizer(CustomMakeManager* manage
     m_customMan = manager;
     m_watch = new ProjectFileSystemWatcher( this );
 
-    continueWatcher();
+    connect( m_watch, SIGNAL(fileChanged(const QString&, KDevelop::ProjectFileItem*)),
+             this, SLOT(fileChanged(const QString&, KDevelop::ProjectFileItem*)) );
+
+    connect( m_watch, SIGNAL(directoriesCreated( const KUrl::List&, KDevelop::ProjectFolderItem* )),
+             this, SLOT(directoriesCreated(const KUrl::List&, KDevelop::ProjectFolderItem*)) );
+    connect( m_watch, SIGNAL(directoriesDeleted( const QList<KDevelop::ProjectFolderItem*> &,
+                          KDevelop::ProjectFolderItem *)),
+             this,    SLOT(directoriesDeleted(const QList< KDevelop :: ProjectFolderItem * >&,
+                          KDevelop::ProjectFolderItem*)) );
+
+    connect( m_watch, SIGNAL(filesCreated( const KUrl::List&, KDevelop::ProjectFolderItem* )),
+             this, SLOT(filesCreated(const KUrl::List&, KDevelop::ProjectFolderItem*)) );
+    connect( m_watch, SIGNAL(filesDeleted( const QList<KDevelop::ProjectFileItem*>&, KDevelop::ProjectFolderItem* ) ),
+             this, SLOT(filesDeleted(const QList< KDevelop :: ProjectFileItem * >&, KDevelop::ProjectFolderItem*)) );
 }
 CustomMakeTreeSynchronizer::~CustomMakeTreeSynchronizer()
 {}
@@ -202,38 +215,12 @@ void CustomMakeTreeSynchronizer::parseDirectoryRecursively( KDevelop::ProjectFol
 
 void CustomMakeTreeSynchronizer::stopWatcher()
 {
-    disconnect( m_watch, SIGNAL(fileChanged(const QString&, KDevelop::ProjectFileItem*)),
-             this, SLOT(fileChanged(const QString&, KDevelop::ProjectFileItem*)) );
-
-    disconnect( m_watch, SIGNAL(directoriesCreated( const KUrl::List&, KDevelop::ProjectFolderItem* )),
-             this, SLOT(directoriesCreated(const KUrl::List&, KDevelop::ProjectFolderItem*)) );
-    disconnect( m_watch, SIGNAL(directoriesDeleted( const QList<KDevelop::ProjectFolderItem*> &,
-                          KDevelop::ProjectFolderItem *)),
-             this,    SLOT(directoriesDeleted(const QList< KDevelop :: ProjectFolderItem * >&,
-                          KDevelop::ProjectFolderItem*)) );
-
-    disconnect( m_watch, SIGNAL(filesCreated( const KUrl::List&, KDevelop::ProjectFolderItem* )),
-             this, SLOT(filesCreated(const KUrl::List&, KDevelop::ProjectFolderItem*)) );
-    disconnect( m_watch, SIGNAL(filesDeleted( const QList<KDevelop::ProjectFileItem*>&, KDevelop::ProjectFolderItem* ) ),
-             this, SLOT(filesDeleted(const QList< KDevelop :: ProjectFileItem * >&, KDevelop::ProjectFolderItem*)) );
+    m_watch->stopWatcher();
 }
 
 void CustomMakeTreeSynchronizer::continueWatcher()
 {
-    connect( m_watch, SIGNAL(fileChanged(const QString&, KDevelop::ProjectFileItem*)),
-             this, SLOT(fileChanged(const QString&, KDevelop::ProjectFileItem*)) );
-
-    connect( m_watch, SIGNAL(directoriesCreated( const KUrl::List&, KDevelop::ProjectFolderItem* )),
-             this, SLOT(directoriesCreated(const KUrl::List&, KDevelop::ProjectFolderItem*)) );
-    connect( m_watch, SIGNAL(directoriesDeleted( const QList<KDevelop::ProjectFolderItem*> &,
-                          KDevelop::ProjectFolderItem *)),
-             this,    SLOT(directoriesDeleted(const QList< KDevelop :: ProjectFolderItem * >&,
-                          KDevelop::ProjectFolderItem*)) );
-
-    connect( m_watch, SIGNAL(filesCreated( const KUrl::List&, KDevelop::ProjectFolderItem* )),
-             this, SLOT(filesCreated(const KUrl::List&, KDevelop::ProjectFolderItem*)) );
-    connect( m_watch, SIGNAL(filesDeleted( const QList<KDevelop::ProjectFileItem*>&, KDevelop::ProjectFolderItem* ) ),
-             this, SLOT(filesDeleted(const QList< KDevelop :: ProjectFileItem * >&, KDevelop::ProjectFolderItem*)) );
+    m_watch->continueWatcher();
 }
 
 

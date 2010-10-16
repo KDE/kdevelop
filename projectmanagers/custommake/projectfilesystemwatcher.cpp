@@ -45,6 +45,16 @@ ProjectFileSystemWatcher::~ProjectFileSystemWatcher()
     delete d;
 }
 
+void ProjectFileSystemWatcher::continueWatcher()
+{
+    d->m_watch->blockSignals(false);
+}
+
+void ProjectFileSystemWatcher::stopWatcher()
+{
+    d->m_watch->blockSignals(true);
+}
+
 void ProjectFileSystemWatcher::addDirectory( KDevelop::ProjectFolderItem *folderItem )
 {
     const QString path = folderItem->url().toLocalFile(KUrl::AddTrailingSlash);

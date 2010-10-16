@@ -35,6 +35,9 @@ public:
     ProjectFileSystemWatcher( /*KDevelop::IProjectFileManager* manager, */QObject* parent = 0 );
     virtual ~ProjectFileSystemWatcher();
 
+    void stopWatcher();
+    void continueWatcher();
+
     void addDirectory( KDevelop::ProjectFolderItem* folderItem );
     void addFile( KDevelop::ProjectFileItem* fileItem );
 
