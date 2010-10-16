@@ -229,17 +229,8 @@ bool CustomMakeManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseItem*> 
         Q_ASSERT(item->folder() || item->file());
         Q_ASSERT(!item->file() || !item->file()->parent()->target());
 
-        CustomMakeFolderItem* p = dynamic_cast<CustomMakeFolderItem*>(item->project()->projectItem());
-        Q_ASSERT(p);
-        p->fsWatcher()->stopWatcher();
-        bool success = KDevelop::removeUrl(item->project(), item->url(), item->folder());
-        if (success) {
-            item->parent()->removeRow(item->row());
-        }
-        p->fsWatcher()->continueWatcher();
-        if (!success) {
+        if (!KDevelop::removeUrl(item->project(), item->url(), false))
             return false;
-        }
     }
     return true;
 }
