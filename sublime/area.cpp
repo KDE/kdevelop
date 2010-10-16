@@ -427,21 +427,22 @@ void Area::setWorkingSet(QString name)
 bool Area::closeView(View* view)
 {
     QPointer<Document> doc = view->document();
-                
-    //if(doc && doc->views().count() == 1) {    
-    if (doc && doc->uniqueView(this, view)) {
-        if(!doc->closeDocument())
-            return false;
-        else
-            return true;
-    }
-    
-    //close only one active view
-    removeView(view);
-    delete view;
 
-    if(doc && doc->views().count() == 0)
-        doc->closeDocument(); //close the document instead
+    if (doc && doc->views().count() == 1) {
+        // only one view remaining
+        // let the user decide whether he wants to close the document or not
+        Q_ASSERT(doc->views().first() == view);
+        return doc->closeDocument();
+     }
+    // otherwise we can silently close the view,
+    // the document will still have an opened view somewhere
+    AreaIndex *index = indexOf(view);
+    Q_ASSERT(index);
+
+    emit aboutToRemoveView(index, view);
+    index->remove(view);
+    delete view;
+    emit viewRemoved(index, view);
 
     return true;
 }
