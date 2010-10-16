@@ -247,11 +247,6 @@ void WorkingSetController::initializeController( UiController* controller )
   connect( controller, SIGNAL( areaCreated( Sublime::Area* ) ), this, SLOT( areaCreated( Sublime::Area* ) ) );
 }
 
-void WorkingSetController::notifyWorkingSetSwitched()
-{
-  emit workingSetSwitched();
-}
-
 QList< WorkingSet* > WorkingSetController::allWorkingSets() const
 {
   return m_workingSets.values();
@@ -261,6 +256,42 @@ void WorkingSetController::areaCreated( Sublime::Area* area )
 {
   WorkingSet* set = getWorkingSet( area->workingSet() );
   set->connectArea( area );
+
+  connect(area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)),
+          this, SLOT(changingWorkingSet(Sublime::Area*,QString,QString)));
+  connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
+          this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)));
 }
+
+void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
+{
+    kDebug() << "changing working-set from" << from << "to" << to << "area" << area;
+    if (from == to)
+        return;
+
+    WorkingSet* oldSet = getWorkingSet(from);
+    oldSet->disconnectArea(area);
+    if (!oldSet->id().isEmpty()) {
+        oldSet->saveFromArea(area, area->rootIndex());
+    }
+
+    WorkingSet* newSet = getWorkingSet(to);
+    newSet->connectArea(area);
+    kDebug() << "update ready";
+}
+
+void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
+{
+    kDebug() << "changed working-set from" << from << "to" << to << "area" << area;
+    if (from == to)
+        return;
+
+    WorkingSet* newSet = getWorkingSet(to);
+    newSet->loadToArea(area, area->rootIndex(), !from.isEmpty());
+
+    emit workingSetSwitched();
+    kDebug() << "update ready";
+}
+
 
 #include "workingsetcontroller.moc"

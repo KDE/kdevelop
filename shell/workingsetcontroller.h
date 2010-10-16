@@ -66,8 +66,6 @@ public:
 
     void initializeController(UiController* controller);
 
-    void notifyWorkingSetSwitched();
-
     KDevelop::ActiveToolTip* tooltip() const;
     void showToolTip( KDevelop::WorkingSet* set, const QPoint& pos);
 
@@ -88,6 +86,8 @@ private slots:
     void previousDocument();
     void showGlobalToolTip();
 
+    void changingWorkingSet( Sublime::Area*, const QString&, const QString& );
+    void changedWorkingSet( Sublime::Area*, const QString&, const QString& );
 private:
     void setupActions();
 

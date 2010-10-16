@@ -82,8 +82,6 @@ private slots:
     void deleteSet();
     void areaViewAdded(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/);
     void areaViewRemoved(Sublime::AreaIndex* /*index*/, Sublime::View* /*view*/);
-    void changingWorkingSet(Sublime::Area* area, QString from, QString to);
-    void changedWorkingSet(Sublime::Area*, QString, QString);
 
 signals:
     void setChangedSignificantly();

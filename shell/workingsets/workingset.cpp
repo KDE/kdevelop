@@ -369,28 +369,6 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     emit setChangedSignificantly();
 }
 
-void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString to) {
-    kDebug() << "changing working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
-    Q_ASSERT(from == m_id);
-    if (from == to)
-        return;
-    Q_ASSERT(m_areas.contains(area));
-    if (!m_id.isEmpty()) saveFromArea(area, area->rootIndex());
-    disconnectArea(area);
-    WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
-    newSet->connectArea(area);
-    kDebug() << "update ready";
-}
-
-///@todo Move this function into WorkingSetController
-void WorkingSet::changedWorkingSet(Sublime::Area* area, QString from, QString to) {
-    kDebug() << "changed working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
-    Q_ASSERT(to == m_id);
-    loadToArea(area, area->rootIndex(), !from.isEmpty());
-    kDebug() << "update ready";
-    Core::self()->workingSetControllerInternal()->notifyWorkingSetSwitched();
-}
-
 void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
     Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
     Q_ASSERT(area);
@@ -497,9 +475,6 @@ void WorkingSet::connectArea( Sublime::Area* area )
   m_areas.push_back( area );
   connect( area, SIGNAL( viewAdded( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewAdded( Sublime::AreaIndex*, Sublime::View* ) ) );
   connect( area, SIGNAL( viewRemoved( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewRemoved( Sublime::AreaIndex*, Sublime::View* ) ) );
-  connect( area, SIGNAL( changingWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changingWorkingSet( Sublime::Area*, QString, QString ) ) );
-  //The connection is queued, because the signal may be triggered from within an object that may be deleted during the performed actions
-  connect( area, SIGNAL( changedWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changedWorkingSet( Sublime::Area*, QString, QString ) ), Qt::QueuedConnection );
 }
 
 void WorkingSet::disconnectArea( Sublime::Area* area )
@@ -515,8 +490,6 @@ void WorkingSet::disconnectArea( Sublime::Area* area )
 
   disconnect( area, SIGNAL( viewAdded( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewAdded( Sublime::AreaIndex*, Sublime::View* ) ) );
   disconnect( area, SIGNAL( viewRemoved( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewRemoved( Sublime::AreaIndex*, Sublime::View* ) ) );
-  disconnect( area, SIGNAL( changingWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changingWorkingSet( Sublime::Area*, QString, QString ) ) );
-  disconnect( area, SIGNAL( changedWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changedWorkingSet( Sublime::Area*, QString, QString ) ) );
   m_areas.removeAll( area );
 }
 
