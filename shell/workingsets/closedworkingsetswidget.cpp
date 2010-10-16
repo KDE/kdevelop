@@ -81,12 +81,16 @@ void ClosedWorkingSetsWidget::changedWorkingSet( Sublime::Area* area, const QStr
 {
     Q_ASSERT(area == m_connectedArea);
 
-    WorkingSet* oldSet = getWorkingSet(from);
-    addWorkingSet(oldSet);
+    if (!from.isEmpty()) {
+        WorkingSet* oldSet = getWorkingSet(from);
+        addWorkingSet(oldSet);
+    }
 
-    WorkingSet* newSet = getWorkingSet(to);
-    if (m_buttons.contains(newSet)) {
-        delete m_buttons.take(newSet);
+    if (!to.isEmpty()) {
+        WorkingSet* newSet = getWorkingSet(to);
+        if (m_buttons.contains(newSet)) {
+            delete m_buttons.take(newSet);
+        }
     }
 }
 

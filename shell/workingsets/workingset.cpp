@@ -41,7 +41,11 @@ using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
 
-WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
+WorkingSet::WorkingSet(QString id, QString icon)
+    : m_id(id), m_iconName(icon)
+{
+    Q_ASSERT(!m_id.isEmpty());
+
     //Give the working-set icons one color, so they are less disruptive
     QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
     QImage imgInactive = imgActive;
@@ -65,7 +69,7 @@ WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
 
 WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
 {
-  m_id =  rhs.m_id + "_copy_";
+    m_id =  rhs.m_id + "_copy_";
 }
 
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
@@ -110,9 +114,6 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
 
 bool WorkingSet::isEmpty() const
 {
-    if(m_id.isEmpty())
-        return true;
-
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
@@ -177,9 +178,6 @@ void loadFileList(QStringList& ret, KConfigGroup group)
 
 QStringList WorkingSet::fileList() const
 {
-    if(m_id.isEmpty())
-        return QStringList();
-
     QStringList ret;
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
@@ -204,9 +202,6 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 area->closeView(view);
         }
     }
-
-    if(m_id.isEmpty())
-        return;
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
@@ -320,7 +315,7 @@ void deleteGroupRecursive(KConfigGroup group) {
 
 void WorkingSet::deleteSet(bool force, bool silent)
 {
-    if((m_areas.isEmpty() || force) && !m_id.isEmpty()) {
+    if(m_areas.isEmpty() || force) {
         emit aboutToRemove(this);
 
         KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
@@ -337,11 +332,6 @@ void WorkingSet::deleteSet(bool force, bool silent)
 
 void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
 {
-    if(m_id.isEmpty()) {
-        Q_ASSERT(areaIndex->viewCount() == 0 && !areaIndex->isSplitted());
-        return;
-    }
-
     kDebug() << "saving" << m_id << "from area";
 
     bool wasPersistent = isPersistent();
@@ -379,14 +369,7 @@ void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
         kDebug() << "doing nothing because loading";
         return;
     }
-    if (m_id.isEmpty()) {
-        //Spawn a new working-set
 
-        WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
-        set->saveFromArea(area, area->rootIndex());
-        area->setWorkingSet(set->id());
-        return;
-    }
     changed(area);
 }
 
@@ -404,8 +387,6 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
 }
 
 void WorkingSet::setPersistent(bool persistent) {
-    if(m_id.isEmpty())
-        return;
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("persistent", persistent);
@@ -416,8 +397,6 @@ void WorkingSet::setPersistent(bool persistent) {
 }
 
 bool WorkingSet::isPersistent() const {
-    if(m_id.isEmpty())
-        return false;
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return group.readEntry("persistent", false);

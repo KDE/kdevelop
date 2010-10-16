@@ -66,9 +66,13 @@ WorkingSet* WorkingSetToolButton::workingSet() const
 
 void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
 {
-    Q_ASSERT(set);
-
     m_set = set;
+
+    if (!set) {
+        setIcon(QIcon());
+        return;
+    }
+
     QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
     QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
     QColor useColor;
@@ -86,6 +90,8 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 {
+    Q_ASSERT(m_set);
+
     QToolButton::contextMenuEvent(ev);
 
     QMenu menu;
@@ -114,6 +120,8 @@ void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 
 void WorkingSetToolButton::intersectSet()
 {
+    Q_ASSERT(m_set);
+
     m_set->setPersistent(true);
 
     filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
@@ -121,6 +129,8 @@ void WorkingSetToolButton::intersectSet()
 
 void WorkingSetToolButton::subtractSet()
 {
+    Q_ASSERT(m_set);
+
     m_set->setPersistent(true);
 
     filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
@@ -128,6 +138,8 @@ void WorkingSetToolButton::subtractSet()
 
 void WorkingSetToolButton::mergeSet()
 {
+    Q_ASSERT(m_set);
+
     QSet< QString > loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
     foreach(const QString& file, loadFiles)
         Core::self()->documentController()->openDocument(file);
@@ -135,6 +147,8 @@ void WorkingSetToolButton::mergeSet()
 
 void WorkingSetToolButton::duplicateSet()
 {
+    Q_ASSERT(m_set);
+
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;
     WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
@@ -145,6 +159,8 @@ void WorkingSetToolButton::duplicateSet()
 
 void WorkingSetToolButton::loadSet()
 {
+    Q_ASSERT(m_set);
+
     m_set->setPersistent(true);
 
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
@@ -154,6 +170,8 @@ void WorkingSetToolButton::loadSet()
 
 void WorkingSetToolButton::closeSet()
 {
+    Q_ASSERT(m_set);
+
     m_set->setPersistent(true);
     m_set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
 
@@ -165,6 +183,8 @@ void WorkingSetToolButton::closeSet()
 bool WorkingSetToolButton::event(QEvent* e)
 {
     if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
+        Q_ASSERT(m_set);
+
         e->accept();
         static WorkingSetToolButton* oldTooltipButton;
 
@@ -188,6 +208,8 @@ bool WorkingSetToolButton::event(QEvent* e)
 
 void WorkingSetToolButton::buttonTriggered()
 {
+    Q_ASSERT(m_set);
+
     //Only close the working-set if the file was saved before
     if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
         return;

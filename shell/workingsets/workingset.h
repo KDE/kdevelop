@@ -50,8 +50,6 @@ public:
 
     void setPersistent(bool persistent);
 
-    /// empty id means this set is just there to create new "real" sets...
-    /// TODO: cleanup
     QString id() const;
 
     ///Creates a copy of this working-set with a new identity

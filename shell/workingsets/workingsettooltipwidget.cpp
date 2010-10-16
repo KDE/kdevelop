@@ -189,7 +189,6 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     updateFileButtons();
     connect(set, SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
-    connect(Core::self()->workingSetControllerInternal()->getWorkingSet(mainwindow->area()->workingSet()), SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
     connect(mainwindow->area(), SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), SLOT(updateFileButtons()), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "updateFileButtons");
@@ -248,12 +247,21 @@ void WorkingSetToolTipWidget::updateFileButtons()
     MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
 
-    QString activeFile;
+    WorkingSetController* controller = Core::self()->workingSetControllerInternal();
+    ActiveToolTip* tooltip = controller->tooltip();
 
+    if (mainWindow->area()->workingSet().isEmpty()) {
+        if (tooltip) {
+            tooltip->hide();
+        }
+
+        return;
+    }
+
+    QString activeFile;
     if(mainWindow->area()->activeView())
         activeFile = mainWindow->area()->activeView()->document()->documentSpecifier();
 
-    WorkingSetController* controller = Core::self()->workingSetControllerInternal();
     WorkingSet* currentWorkingSet = controller->getWorkingSet(mainWindow->area()->workingSet());
     QSet<QString> openFiles = currentWorkingSet->fileList().toSet();
 
@@ -308,8 +316,6 @@ void WorkingSetToolTipWidget::updateFileButtons()
         m_openButton->setIcon(KIcon("project-open"));
         m_openButton->setText(i18n("Load"));
     }
-
-    ActiveToolTip* tooltip = controller->tooltip();
 
     if(allHidden && tooltip)
         tooltip->hide();

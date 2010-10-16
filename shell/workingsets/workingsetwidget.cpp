@@ -33,6 +33,10 @@ using namespace KDevelop;
 
 WorkingSet* getSet(const QString& id)
 {
+    if (id.isEmpty()) {
+        return 0;
+    }
+
     return Core::self()->workingSetControllerInternal()->getWorkingSet(id);
 }
 
@@ -50,7 +54,7 @@ void WorkingSetWidget::setVisible( bool visible )
 {
     // never show empty working sets
     // TODO: I overloaded this only because hide() in the ctor does not work, other ideas?
-    QWidget::setVisible( !visible || !workingSet()->isEmpty() );
+    QWidget::setVisible( !visible || (workingSet() && !workingSet()->isEmpty()) );
 }
 
 void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /*from*/, const QString& newSet)
@@ -59,8 +63,13 @@ void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /
 
     Q_ASSERT(area == m_area);
 
-    setWorkingSet(getSet(newSet));
-    setVisible(!workingSet()->isEmpty());
+    if (newSet.isEmpty()) {
+        setWorkingSet(0);
+        setVisible(false);
+    } else {
+        setWorkingSet(getSet(newSet));
+        setVisible(!workingSet()->isEmpty());
+    }
 }
 
 #include "workingsetwidget.moc"

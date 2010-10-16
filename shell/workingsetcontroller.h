@@ -30,13 +30,13 @@ class QTimer;
 
 namespace Sublime {
 class Area;
+class AreaIndex;
+class View;
 }
 
 namespace KDevelop {
 
 class ActiveToolTip;
-
-
 class UiController;
 class MainWindow;
 class Core;
@@ -57,6 +57,12 @@ public:
 
     WorkingSet* newWorkingSet(const QString& prefix);
 
+    /**
+     * Get WorkingSet for given @p id.
+     *
+     * NOTE: Never pass an empty @p id, this means there is no working set
+     *       for the given area you got that @p id from.
+     */
     WorkingSet* getWorkingSet(const QString& id, const QString& icon = QString());
 
     QList<WorkingSet*> allWorkingSets() const;
@@ -86,8 +92,19 @@ private slots:
     void previousDocument();
     void showGlobalToolTip();
 
-    void changingWorkingSet( Sublime::Area*, const QString&, const QString& );
-    void changedWorkingSet( Sublime::Area*, const QString&, const QString& );
+    /**
+     * Disconnect @p oldSet from @p area and save it. Connect @p newSet with @p area.
+     */
+    void changingWorkingSet( Sublime::Area* area, const QString& oldSet, const QString& newSet);
+    /**
+     * Notify about working set change and setup @p area with contents of @p newSet.
+     */
+    void changedWorkingSet( Sublime::Area* area, const QString& oldSet, const QString& newSet );
+    /**
+     * Spawn new WorkingSet when we don't have one already for the view.
+     */
+    void viewAdded( Sublime::AreaIndex*, Sublime::View* );
+
 private:
     void setupActions();
 
