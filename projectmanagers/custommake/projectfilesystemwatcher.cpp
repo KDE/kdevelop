@@ -45,20 +45,24 @@ ProjectFileSystemWatcher::~ProjectFileSystemWatcher()
     delete d;
 }
 
-void ProjectFileSystemWatcher::addDirectory( const QString &path, KDevelop::ProjectFolderItem *folderItem )
+void ProjectFileSystemWatcher::addDirectory( KDevelop::ProjectFolderItem *folderItem )
 {
+    const QString path = folderItem->url().toLocalFile(KUrl::AddTrailingSlash);
     d->m_watch->addPath( path );
     d->m_folderHash.insert( path, folderItem );
 }
 
-void ProjectFileSystemWatcher::addFile( const QString &path, KDevelop::ProjectFileItem *fileItem )
+void ProjectFileSystemWatcher::addFile( KDevelop::ProjectFileItem *fileItem )
 {
+    const QString path = fileItem->url().toLocalFile(KUrl::RemoveTrailingSlash);
     d->m_watch->addPath( path );
     d->m_fileHash.insert( path, fileItem );
 }
 
 void ProjectFileSystemWatcher::removeDirectory( const QString & path, bool recurse )
 {
+    Q_ASSERT(path.endsWith('/'));
+
     kDebug(9025) << "Removing Directory from Watcher" << path;
     QStringList tobeRemovedPaths;
     tobeRemovedPaths.append( path );
@@ -111,6 +115,7 @@ void ProjectFileSystemWatcher::removeFile( const QString & path )
 void ProjectFileSystemWatcher::slotDirChanged( const QString& path )
 {
 //     Q_ASSERT( d->m_folderHash.contains(path) );
+    Q_ASSERT(path.endsWith('/'));
     if( d->m_folderHash.contains(path) )
     {
         KDevelop::ProjectFolderItem *folder = d->m_folderHash.value( path );

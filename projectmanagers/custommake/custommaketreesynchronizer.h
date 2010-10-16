@@ -32,8 +32,8 @@ public:
     explicit CustomMakeTreeSynchronizer( CustomMakeManager* manager, QObject* parent = 0 );
     virtual ~CustomMakeTreeSynchronizer();
 
-    void addDirectory( const QString &path, KDevelop::ProjectFolderItem *folderItem );
-    void addFile( const QString &path, KDevelop::ProjectFileItem *fileItem = 0 );
+    void addDirectory( KDevelop::ProjectFolderItem *folderItem );
+    void addFile( KDevelop::ProjectFileItem *fileItem );
 
     void removeDirectory( const QString & path, bool recurse );
     void removeFile( const QString & path );

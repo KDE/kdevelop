@@ -30,14 +30,14 @@ CustomMakeTreeSynchronizer::CustomMakeTreeSynchronizer(CustomMakeManager* manage
 CustomMakeTreeSynchronizer::~CustomMakeTreeSynchronizer()
 {}
 
-void CustomMakeTreeSynchronizer::addDirectory( const QString &path, KDevelop::ProjectFolderItem *folderItem )
+void CustomMakeTreeSynchronizer::addDirectory( KDevelop::ProjectFolderItem* folderItem )
 {
-    m_watch->addDirectory( path, folderItem );
+    m_watch->addDirectory( folderItem );
 }
 
-void CustomMakeTreeSynchronizer::addFile( const QString &path, KDevelop::ProjectFileItem *fileItem )
+void CustomMakeTreeSynchronizer::addFile( KDevelop::ProjectFileItem* fileItem )
 {
-    m_watch->addFile( path, fileItem );
+    m_watch->addFile( fileItem );
 }
 
 void CustomMakeTreeSynchronizer::removeDirectory( const QString & path, bool recurse )
@@ -70,7 +70,7 @@ void CustomMakeTreeSynchronizer::filesCreated( const KUrl::List &files,
             {
                 new CustomMakeTargetItem( parentFolder->project(), newTarget, parentFolder );
             }
-            addFile( _file.toLocalFile(), newitem );
+            addFile( newitem );
         }
     }
 }
@@ -97,7 +97,7 @@ void CustomMakeTreeSynchronizer::directoriesCreated( const KUrl::List &files,
         KDevelop::ProjectBuildFolderItem *newitem = new KDevelop::ProjectBuildFolderItem(
                 parentFolder->project(), _file, parentFolder );
 
-        addDirectory( _file.toLocalFile(), newitem );
+        addDirectory( newitem );
         this->parseDirectoryRecursively( newitem, m_customMan );
     }
 }
@@ -108,7 +108,7 @@ void CustomMakeTreeSynchronizer::directoriesDeleted( const QList<KDevelop::Proje
     Q_FOREACH( KDevelop::ProjectFolderItem *_item, dirs )
     {
         int row = _item->row();
-        QString tobeRemovedDir = _item->url().toLocalFile();
+        QString tobeRemovedDir = _item->url().toLocalFile(KUrl::AddTrailingSlash);
         parentFolder->removeRow( row );
 
         removeDirectory( tobeRemovedDir, true );
