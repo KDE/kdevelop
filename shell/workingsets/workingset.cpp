@@ -41,6 +41,33 @@ using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
 
+WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
+    //Give the working-set icons one color, so they are less disruptive
+    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
+    QImage imgInactive = imgActive;
+
+    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
+    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
+
+    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
+    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
+
+    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
+    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
+
+    QImage imgNonPersistent = imgInactive;
+
+    KIconEffect::deSaturate(imgNonPersistent, 1.0);
+
+    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
+    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
+}
+
+WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
+{
+  m_id =  rhs.m_id + "_copy_";
+}
+
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
 {
     if (area->isSplitted()) {
@@ -398,28 +425,6 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
     changed(area);
 }
 
-WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
-    //Give the working-set icons one color, so they are less disruptive
-    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
-    QImage imgInactive = imgActive;
-
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
-
-    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
-    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
-
-    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
-    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
-
-    QImage imgNonPersistent = imgInactive;
-
-    KIconEffect::deSaturate(imgNonPersistent, 1.0);
-
-    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
-    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
-}
-
 void WorkingSet::setPersistent(bool persistent) {
     if(m_id.isEmpty())
         return;
@@ -541,11 +546,6 @@ void WorkingSet::changed( Sublime::Area* area )
   }
 
   emit setChangedSignificantly();
-}
-
-WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
-{
-  m_id =  rhs.m_id + "_copy_";
 }
 
 QIcon WorkingSet::activeIcon() const
