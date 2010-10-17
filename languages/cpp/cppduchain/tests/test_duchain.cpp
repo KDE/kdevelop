@@ -2123,11 +2123,11 @@ void TestDUChain::testADLMemberFunctionByName()
   {
     QByteArray adlCall("namespace foo { struct A { void f(int a) {} }; int bar(void *a) {} }"
                        "int test() { bar(&foo::A::f); }"); // calls foo::bar
-    
+
     LockedTopDUContext top( parse(adlCall, DumpAll) );
-    
+
     QCOMPARE(top->childContexts().count(), 3);
-    
+
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
@@ -2136,9 +2136,18 @@ void TestDUChain::testADLMemberFunctionByName()
   }
 
   {
-    // test lookup to base class namespace (test if we
-    // (rest of tests are same as in testClassType)
-    QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+    // test lookup to base class namespace (rest of tests for associated classes are same as in testClassType)
+    // Note: when using int bar(void *) or int bar(void (A::*p)(int)) the overload resolver
+    // won't be able to do the conversion from void (boo::B::*)(int), so we use a template (just like in the real)
+    // This setup also tests if the OverloadResolver can instantiate templates for pointers to member functions
+    // At the current stage, the resolver fails for this.
+    // Note 2: it seems also the syntax "void (T::*p)(int)" is not properly parsed at this time, so making this
+    // work on this higher level is a dead end for now. For the template declaration below, the function declaration
+    // is parsed as "int bar( function void (int) , void p )"
+
+    // reported as bug 
+
+    QByteArray adlCall("namespace foo { struct A {}; template<class T> int bar(void (T::*p)(int)) {} }"
                        "namespace boo { struct B : public foo::A { void f(int a) {} }; }"
                        "int test() { bar(&boo::B::f); }"); // calls foo::bar
     
