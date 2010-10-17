@@ -46,12 +46,13 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
   public:
 
     struct Parameter {
-      Parameter() : type(0), lValue(false) {
+      Parameter() : type(0), lValue(false), declaration(NULL) {
       }
-      Parameter( AbstractType::Ptr t, bool isLValue ) : type(t), lValue( isLValue ) {
+      Parameter( AbstractType::Ptr t, bool isLValue, Declaration * decl = NULL) : type(t), lValue( isLValue ), declaration(decl) {
       }
       AbstractType::Ptr type;
       bool lValue;
+      Declaration * declaration; // if the parameter value is a function name, ADL needs to know it
 
       ///duchain must be locked
       QString toString() const {
@@ -62,6 +63,11 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
           ret += type->toString();
         else
           ret += "<notype>";
+        if (declaration) {
+          ret += " (refs declaration ";
+          ret += declaration->toString();
+          ret += ")";
+        }
         return ret;
       }
     };

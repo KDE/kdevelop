@@ -137,6 +137,13 @@ class ADLHelper
      * The value itself represents the instantiation depth of template arguments.
      */
     int m_templateArgsDepth;
+
+    /**
+     * @brief Possibly the function named used as argument by the caller.
+     * May be @c NULL .
+     * See the comments inside @code ADLTypeVisitor::endVisit(const FunctionType *) @endcode for details.
+     */
+    Declaration* m_possibleFunctionName;
 };
 
 }

@@ -920,7 +920,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
        * so we can add the type to the parameter-list.
        * */
       if( leftType && leftInstance) {
-        m_parameters << OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ) );
+        m_parameters << OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() );
         m_parameterNodes.append(node->left_expression);
 
         //LOCKDUCHAIN;
@@ -951,7 +951,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( tokenFromIndex(node->op).kind == ',' ) {
 
       if( rightType && rightInstance) {
-        m_parameters << OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) );
+        m_parameters << OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() );
         m_parameterNodes.append(node->right_expression);
         //LOCKDUCHAIN;
         //kDebug(9007) << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
@@ -1031,8 +1031,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolutionHelper helper(ptr, TopDUContextPointer(topContext()) );
-        helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ) ), op );
-        helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) ) );
+        helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() ), op );
+        helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) ) );
         QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
         if( !functions.isEmpty() )
@@ -1628,9 +1628,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           LOCKDUCHAIN;
           KDevelop::DUContextPointer ptr(m_currentContext);
           OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-          helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ) ), op );
+          helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ), op );
 
-          //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) );
+          //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) );
           QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
           if( !functions.isEmpty() )
@@ -1751,7 +1751,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           }
           visit(it->element->expression);
           if(store) {
-            m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
+            m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
             m_parameterNodes.append(it->element);
           }
           it = it->next;
@@ -1791,9 +1791,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     visit(expression);
 
-    //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
+    //binary expressions don't yield m_lastType, so when m_lastType is set we probably only have one single parameter
     if( m_lastType ) {
-      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) );
+      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() );
       m_parameterNodes.append(expression);
     }
 
@@ -2109,9 +2109,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     KDevelop::DUContextPointer ptr(m_currentContext);
     OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-    helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ) ), "[]" );
+    helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ), "[]" );
 
-    helper.setKnownParameters( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
+    helper.setKnownParameters( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
     QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
     if( !functions.isEmpty() )
@@ -2204,7 +2204,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-        helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ) ), op );
+        helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ), op );
 
         //Overloaded postfix operators have one additional int parameter
         static AbstractType::Ptr integer = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
