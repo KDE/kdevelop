@@ -2089,7 +2089,7 @@ void TestDUChain::testADLClassMembers()
 {
   {
     QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void (A::*p)()) {} }"
-                       "int test() { void (A::*p)() = &foo::A::mem_fun; bar(p); }"); // calls foo::bar (avoid testADLFunctionByName)
+                       "int test() { void (A::*p)() = &foo::A::mem_fun; bar(p); }"); // calls foo::bar (avoid testADLMemberFunctionByName)
     
     LockedTopDUContext top( parse(adlCall, DumpAll) );
     
@@ -2113,6 +2113,79 @@ void TestDUChain::testADLClassMembers()
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+}
+
+void TestDUChain::testADLMemberFunctionByName() 
+{
+  {
+    QByteArray adlCall("namespace foo { struct A { void f(int a) {} }; int bar(void *a) {} }"
+                       "int test() { bar(&foo::A::f); }"); // calls foo::bar
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    QCOMPARE(top->childContexts().count(), 3);
+    
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
+    // test lookup to base class namespace (test if we
+    // (rest of tests are same as in testClassType)
+    QByteArray adlCall("namespace foo { struct A {}; int bar(A& a) {} }"
+                       "namespace boo { struct B : public foo::A { void f(int a) {} }; }"
+                       "int test() { bar(&boo::B::f); }"); // calls foo::bar
+    
+    LockedTopDUContext top( parse(adlCall, DumpNone) );
+    
+    QCOMPARE(top->childContexts().count(), 4);
+    
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+}
+
+void TestDUChain::testADLOperators()
+{
+  {
+    QByteArray adlCall("namespace foo { struct A { }; A& operator+(const A&, int) {} }"
+                       "int test() { foo::A a, b;  b = a + 1; }"); // calls foo::operator+
+    
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+    
+    QCOMPARE(top->childContexts().count(), 3);
+    
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::operator+"));
+
+    // binary operator +
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
+  }
+
+  {
+    QByteArray adlCall("namespace foo { struct A { }; A& operator-(const A&) {} }"
+                       "int test() { foo::A a, b;  b = -a; }"); // calls foo::operator-
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 3);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::operator-"));
+
+    // unary operator -
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
   }
