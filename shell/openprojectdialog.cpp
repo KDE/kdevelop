@@ -46,16 +46,16 @@ OpenProjectDialog::OpenProjectDialog( bool fetch, const KUrl& startUrl, QWidget*
     start.adjustPath(KUrl::AddTrailingSlash);
     sourcePageWidget = new ProjectSourcePage( start, this );
     connect( sourcePageWidget, SIGNAL( isCorrect(bool) ), this, SLOT( validateSourcePage(bool) ) );
-    sourcePage = addPage( sourcePageWidget, "Select the source" );
+    sourcePage = addPage( sourcePageWidget, i18n("Select the source") );
     
     openPageWidget = new OpenProjectPage( start, this );
     connect( openPageWidget, SIGNAL( urlSelected( const KUrl& ) ), this, SLOT( validateOpenUrl( const KUrl& ) ) );
-    openPage = addPage( openPageWidget, "Select the project" );
+    openPage = addPage( openPageWidget, i18n("Select the project") );
     
     QWidget* page = new ProjectInfoPage( this );
     connect( page, SIGNAL( projectNameChanged( const QString& ) ), this, SLOT( validateProjectName( const QString& ) ) );
     connect( page, SIGNAL( projectManagerChanged( const QString& ) ), this, SLOT( validateProjectManager( const QString& ) ) );
-    projectInfoPage = addPage( page, "Project information" );
+    projectInfoPage = addPage( page, i18n("Project information") );
     
     setValid( sourcePage, true );
     setValid( openPage, false );
