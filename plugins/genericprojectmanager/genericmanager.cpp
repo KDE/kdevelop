@@ -366,6 +366,7 @@ KDevelop::ProjectFolderItem* GenericProjectManager::addFolder( const KUrl& url,
     stopWatcher(parent);
     if ( KDevelop::createFolder(url) ) {
         created = new KDevelop::ProjectFolderItem( parent->project(), url, parent );
+        emit folderAdded(created);
     }
     continueWatcher(parent);
     return created;
@@ -380,6 +381,7 @@ KDevelop::ProjectFileItem* GenericProjectManager::addFile( const KUrl& url,
     stopWatcher(parent);
     if ( KDevelop::createFile(url) ) {
         created = new KDevelop::ProjectFileItem( parent->project(), url, parent );
+        emit fileAdded(created);
     }
     continueWatcher(parent);
     return created;
@@ -418,6 +420,12 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
                 item->setUrl( destination );
                 item->parent()->takeRow( item->row() );
                 parent->appendRow( item );
+                if (item->file()) {
+                    emit fileRenamed(source, item->file());
+                } else {
+                    Q_ASSERT(item->folder());
+                    emit folderRenamed(source, item->folder());
+                }
             }
             continueWatcher(parent);
             return success;
@@ -437,8 +445,15 @@ bool GenericProjectManager::removeFilesAndFolders(QList<KDevelop::ProjectBaseIte
         stopWatcher(parent);
 
         success &= KDevelop::removeUrl(parent->project(), item->url(), true);
-        if ( success )
+        if ( success ) {
+            if (item->file()) {
+                emit fileRemoved(item->file());
+            } else {
+                Q_ASSERT(item->folder());
+                emit folderRemoved(item->folder());
+            }
             item->parent()->removeRow( item->row() );
+        }
 
         continueWatcher(parent);
         if ( !success )

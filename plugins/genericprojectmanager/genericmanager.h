@@ -83,6 +83,14 @@ public:
 Q_SIGNALS:
     void appendSubDir( KDevelop::ProjectFolderItem* item );
 
+    void folderAdded( KDevelop::ProjectFolderItem* folder );
+    void folderRemoved( KDevelop::ProjectFolderItem* folder );
+    void folderRenamed( const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder );
+
+    void fileAdded(KDevelop::ProjectFileItem* file);
+    void fileRemoved(KDevelop::ProjectFileItem* file);
+    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
+
 private Q_SLOTS:
     /// @p forceRecursion if true, existing folders will be re-read no matter what
     KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceRecursion = false );
