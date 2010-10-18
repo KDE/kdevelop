@@ -388,27 +388,16 @@ KDevelop::ProjectFileItem* GenericProjectManager::addFile( const KUrl& url,
 bool GenericProjectManager::renameFolder( KDevelop::ProjectFolderItem * folder, const KUrl& url )
 {
     kDebug() << "trying to rename a folder:" << folder->url() << url;
-    if ( rename(folder, folder->url(), url) ) {
-        folder->setUrl(url);
-        return true;
-    } else {
-        return false;
-    }
+    return rename(folder, url);
 }
 
 bool GenericProjectManager::renameFile( KDevelop::ProjectFileItem * file, const KUrl& url )
 {
     kDebug() << "trying to rename a file:" << file->url() << url;
-
-    if ( rename(file, file->url(), url) ) {
-        file->setUrl(url);
-        return true;
-    } else {
-        return false;
-    }
+    return rename(file, url);
 }
 
-bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& source, const KUrl& destination)
+bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& destination)
 {
     if ( !isValid(destination, true, item->project(), getIncludeRules(item->project())) ) {
         int cancel = KMessageBox::warningContinueCancel( KDevelop::ICore::self()->uiController()->activeMainWindow(),
@@ -423,8 +412,10 @@ bool GenericProjectManager::rename(KDevelop::ProjectBaseItem* item, const KUrl& 
     foreach ( KDevelop::ProjectFolderItem* parent, item->project()->foldersForUrl(destination.upUrl()) ) {
         if ( parent->type() == KDevelop::ProjectBaseItem::Folder ) {
             stopWatcher(parent);
+            const KUrl source = item->url();
             bool success = KDevelop::renameUrl( item->project(), source, destination );
             if ( success ) {
+                item->setUrl( destination );
                 item->parent()->takeRow( item->row() );
                 parent->appendRow( item );
             }
