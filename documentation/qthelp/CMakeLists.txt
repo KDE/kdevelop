@@ -10,6 +10,7 @@ install(FILES qthelpsettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
+    qthelpprovider.cpp
     qthelpdocumentation.cpp
     ${kdevqthelp_settings_SRCS}
 
@@ -44,6 +45,7 @@ install( FILES kdevqthelp_config.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
+    qthelpprovider.cpp
     qthelpdocumentation.cpp
 )
 

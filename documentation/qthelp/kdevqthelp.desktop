@@ -82,4 +82,4 @@ X-KDE-PluginInfo-Name=KDevQtHelp
 X-KDE-PluginInfo-Author=Aleix Pol
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Mode=GUI
-X-KDevelop-Interfaces=org.kdevelop.IDocumentationProvider
+X-KDevelop-Interfaces=org.kdevelop.IDocumentationProviderProvider

@@ -1,6 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2009 Aleix Pol <aleixpol@kde.org>
-    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,61 +19,25 @@
 */
 
 #include "qthelpplugin.h"
-#include <QDebug>
-#include <QHelpIndexModel>
-#include <QTemporaryFile>
-#include <QHelpContentModel>
 
-#include <KProcess>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KAboutData>
-#include <KStandardDirs>
 
-#include <language/duchain/duchain.h>
-#include <language/duchain/declaration.h>
-#include <language/duchain/duchainlock.h>
-
-#include <KIcon>
-#include "qthelpdocumentation.h"
+#include "qthelpsettings.h"
+#include "qthelpprovider.h"
 
 K_PLUGIN_FACTORY(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
 
-QString qtDocsLocation(const QString& qmake)
-{
-	QString ret;
-	
-	KProcess p;
-	p.setOutputChannelMode(KProcess::MergedChannels);
-	p.setProgram(qmake, QStringList("-query") << "QT_INSTALL_DOCS");
-	p.start();
-	
-	if(p.waitForFinished(5000))
-	{
-		QByteArray b = p.readAllStandardOutput();
-		ret.prepend(b.trimmed());
-	}
-	else
-		kDebug() << "failed to execute qmake to retrieve the docs";
-	
-	kDebug() << "qtdoc=" << ret;
-	Q_ASSERT(qmake.isEmpty() || !ret.isEmpty());
-	return QDir::fromNativeSeparators(ret);
-}
-
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
-	: KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
-	, m_engine(KStandardDirs::locateLocal("appdata", QString( "qthelpcollection.qhc" ), true, QtHelpFactory::componentData()))
+    : KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
+    , documentationProviders()
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
-    
-    if( !m_engine.setupData() ) {
-        kWarning() << "Couldn't setup QtHelp Collection file, searching in Qt docs will fail";
-    }
-    QtHelpDocumentation::s_provider=this;
-    
+    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProviderProvider )
+    readConfig();
     Q_UNUSED(args);
+<<<<<<< HEAD
     QStringList qmakes;
     QStringList tmp;
     KStandardDirs::findAllExe(tmp, "qmake");
@@ -144,38 +108,22 @@ KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration
 	
 	return KSharedPtr<KDevelop::IDocumentation>();
 }
+=======
+>>>>>>> Adapt QtHelpPlugin to IDocumentProviderProvider
 
-QAbstractListModel* QtHelpPlugin::indexModel() const
-{
-    return m_engine.indexModel();
 }
 
-KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForIndex(const QModelIndex& idx) const
+void QtHelpPlugin::readConfig()
 {
-    QString name=idx.data(Qt::DisplayRole).toString();
-    return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
+    QtHelpSettings::self()->readConfig();
+    QStringList qtHelpPathList = QtHelpSettings::qchList();
+    foreach(QString fileName,qtHelpPathList){
+        QVariantList a;
+        documentationProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, a));
+    }
 }
 
-QIcon QtHelpPlugin::icon() const
+QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
-    return KIcon("qtlogo");
-}
-
-QString QtHelpPlugin::name() const
-{
-    return i18n("QtHelp");
-}
-
-void QtHelpPlugin::jumpedTo(const QUrl& newUrl) const
-{
-    QMap<QString, QUrl> info;
-    info.insert(newUrl.toString(), newUrl);
-    
-    KSharedPtr<KDevelop::IDocumentation> doc(new QtHelpDocumentation(newUrl.toString(), info));
-    emit addHistory(doc);
-}
-
-KSharedPtr<KDevelop::IDocumentation> QtHelpPlugin::homePage() const
-{
-    return KSharedPtr<KDevelop::IDocumentation>(new HomeDocumentation);
+    return documentationProviders;
 }
