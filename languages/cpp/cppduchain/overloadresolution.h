@@ -163,6 +163,17 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @return false if the matching failed
      * */
     uint matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue = false) const;
+
+    /**
+     * Computes the declarations of functions that could be an Argument-Dependent Lookup match for the given declarations and parameters.
+     * The returned declarations might not exist. The function computes all names that would need to be checked based on the
+     * parameters' namespaces and types.
+     * @param params Current list of parameters
+     * @param declarations List of function call declarations
+     * @return List of function declarations available for overload resolution with ADL
+     */
+    QList<Declaration *> computeADLCandidates( const ParameterList& params, const QList<Declaration*>& declarations );
+    
   private:
     ///Replace class-instances with operator() functions, and pure classes with their constructors
     void expandDeclarations( const QList<Declaration*>& from, QSet<Declaration*>& to );

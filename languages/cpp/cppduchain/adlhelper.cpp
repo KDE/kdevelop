@@ -34,8 +34,6 @@ ADLTypeVisitor::ADLTypeVisitor(ADLHelper & helper) : m_helper(helper)
 
 bool ADLTypeVisitor::preVisit(const AbstractType * type)
 {
-//  kDebug() << "ADL type: " << type->toString();
-
     // the following types are of no interest to ADL
     switch (type->whichType())
     {
@@ -330,7 +328,9 @@ void ADLHelper::addAssociatedNamespace(Declaration * declaration)
 
     if (declaration->kind() == Declaration::Namespace)
     {
-        //kDebug() << "adding namespace " << declaration->toString();
+#ifdef DEBUG_ADL
+        kDebug() << "    adding namespace " << declaration->toString();
+#endif
         m_associatedNamespaces += declaration;
     }
 }

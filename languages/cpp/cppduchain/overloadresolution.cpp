@@ -34,7 +34,7 @@ using namespace Cpp;
 using namespace KDevelop;
 
 // uncomment to get debugging info on ADL - very expensive on parsing
-//#define DEBUG_ADL
+#define DEBUG_ADL
 
 OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance ) : m_context( context ), m_topContext( topContext ), m_worstConversionRank( NoMatch ), m_forceIsInstance( forceIsInstance )
 {
@@ -230,42 +230,12 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
     return bestViableFunction.declaration().data();
   else if (doADL) {
     // if no name is found during normal lookup start ADL lookup
-#ifdef DEBUG_ADL
-    kDebug() << "ADL starting for function(s): ";
-#endif
-    ADLHelper adlHelper( m_context, m_topContext );
-    foreach( const Parameter & param, params.parameters )
-    {
-      adlHelper.addArgument( param );
-    }
-    QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
-#ifdef DEBUG_ADL
-    foreach( Declaration * nsDecl, adlNamespaces )
-    {
-      kDebug() << "  ADL found namespace: " << nsDecl->qualifiedIdentifier().toString();
-    }
-#endif
-    QList<Declaration*> adlDecls;
-    foreach( Declaration * funDecl, declarations) {
-#ifdef DEBUG_ADL
-      kDebug() << "  ADL candidates for: " << funDecl->identifier().toString();
-#endif
-      foreach( Declaration * nsDecl, adlNamespaces )
-      {
-        QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
-        adlFunctionName += funDecl->identifier();
-#ifdef DEBUG_ADL
-        kDebug() << "    ADL candidate: " << adlFunctionName;
-#endif
-        adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
-      }
-    }
+    QList<Declaration*> adlDecls = computeADLCandidates(params, declarations);
     Declaration * resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false);
+
 #ifdef DEBUG_ADL
     if (resolvedDecl)
-      kDebug() << "ADL found " << resolvedDecl->toString();
-    else
-      kDebug() << "ADL failed";
+      kDebug() << "resolved through ADL: " << resolvedDecl->toString();
 #endif
     
     return resolvedDecl;
@@ -484,6 +454,44 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
   }
 
   return 1;
+}
+
+QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList& params, const QList<Declaration*>& declarations )
+{
+  ADLHelper adlHelper( m_context, m_topContext );
+  foreach( const Parameter & param, params.parameters )
+  {
+    adlHelper.addArgument( param );
+  }
+  QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
+
+#ifdef DEBUG_ADL
+  foreach( Declaration * nsDecl, adlNamespaces )
+  {
+    kDebug() << "  ADL found namespace: " << nsDecl->qualifiedIdentifier().toString();
+  }
+#endif
+
+  QList<Declaration*> adlDecls;
+  foreach( Declaration * funDecl, declarations) {
+
+#ifdef DEBUG_ADL
+    kDebug() << "  ADL candidates for: " << funDecl->identifier().toString();
+#endif
+
+    foreach( Declaration * nsDecl, adlNamespaces )
+    {
+      QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
+      adlFunctionName += funDecl->identifier();
+      adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
+
+#ifdef DEBUG_ADL
+      kDebug() << "    ADL candidate: " << adlFunctionName;
+#endif      
+    }
+  }
+
+  return adlDecls;
 }
 
 AbstractType::Ptr getContainerType( AbstractType::Ptr type, int depth, TopDUContext* topContext )
