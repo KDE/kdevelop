@@ -266,16 +266,22 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
 
     // add new rows
     foreach ( const KUrl& url, files ) {
-        new KDevelop::ProjectFileItem( baseItem->project(), url, baseItem );
+        KDevelop::ProjectFileItem* file = new KDevelop::ProjectFileItem( baseItem->project(),
+                                                                         url, baseItem );
+        emit fileAdded( file );
     }
     foreach ( const KUrl& url, folders ) {
-        emit appendSubDir( new KDevelop::ProjectFolderItem( baseItem->project(), url, baseItem ) );
+        KDevelop::ProjectFolderItem* folder = new KDevelop::ProjectFolderItem( baseItem->project(),
+                                                                               url, baseItem );
+        emit folderAdded( folder );
+        emit appendSubDir( folder );
     }
 }
 
 KDevelop::ProjectFolderItem *GenericProjectManager::import( KDevelop::IProject *project )
 {
     KDevelop::ProjectFolderItem *projectRoot = new KDevelop::ProjectFolderItem( project, project->folder(), 0 );
+    emit folderAdded( projectRoot );
     kDebug() << "imported new project" << project->name() << "at" << projectRoot->url();
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
@@ -324,9 +330,12 @@ void GenericProjectManager::created(const QString &path)
         }
         foreach ( KDevelop::ProjectFolderItem* parentItem, p->foldersForUrl(parent) ) {
             if ( info.isDir() ) {
-                eventuallyReadFolder(new KDevelop::ProjectFolderItem( p, url, parentItem ));
+                KDevelop::ProjectFolderItem* folder = new KDevelop::ProjectFolderItem( p, url, parentItem );
+                emit folderAdded( folder );
+                eventuallyReadFolder( folder );
             } else {
-                new KDevelop::ProjectFileItem( p, url, parentItem );
+                KDevelop::ProjectFileItem* file = new KDevelop::ProjectFileItem( p, url, parentItem );
+                emit fileAdded( file );
             }
         }
     }
