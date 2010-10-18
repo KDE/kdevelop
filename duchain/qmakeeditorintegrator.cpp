@@ -1,5 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2007 Piyush verma <piyush.verma@gmail.com>                  *
+ * Copyright (c) 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                           *
  * Permission is hereby granted, free of charge, to any person obtaining     *
  * a copy of this software and associated documentation files (the           *
@@ -21,44 +22,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.           *
  *****************************************************************************/
 #include "qmakeeditorintegrator.h"
-#include <ktexteditor/document.h>
-#include <ktexteditor/smartrange.h>
-#include <ktexteditor/smartinterface.h>
-
-#include <language/editor/documentrange.h>
-#include <language/editor/documentrangeobject.h>
 
 #include "parser/ast.h"
 
-using namespace KTextEditor;
+using namespace KDevelop;
 
 QMakeEditorIntegrator::QMakeEditorIntegrator()
 {
 }
 
-Cursor QMakeEditorIntegrator::findPosition( QMake::AST* node , Edge edge ) const
+CursorInRevision QMakeEditorIntegrator::findPosition( QMake::AST* node , Edge edge ) const
 {
     if ( edge == BackEdge )
     {
         // Apparently KTE expects a range to go until _after_ the last character that should be included
         // however the parser calculates endCol as the index _before_ the last included character, so adjust here
         // Maybe this should be solved differently, ask David how C++ support does it or look it up
-        return Cursor( node->endLine, node->endColumn+1 );
+        return CursorInRevision( node->endLine, node->endColumn+1 );
     }else
     {
-        return Cursor( node->startLine, node->startColumn );
+        return CursorInRevision( node->startLine, node->startColumn );
     }
 }
 
-Range QMakeEditorIntegrator::findRange( QMake::AST * node, RangeEdge edge )
+RangeInRevision QMakeEditorIntegrator::findRange( QMake::AST * node )
 {
-    Q_UNUSED( edge );
-    kDebug() << "Finding Range ==================";
-    return Range( findPosition( node, FrontEdge ), findPosition( node, BackEdge ) );
+    return RangeInRevision( findPosition( node, FrontEdge ), findPosition( node, BackEdge ) );
 }
 
-Range QMakeEditorIntegrator::findRange( QMake::AST* from, QMake::AST* to )
+RangeInRevision QMakeEditorIntegrator::findRange( QMake::AST* from, QMake::AST* to )
 {
-    return Range( findPosition( from, FrontEdge ), findPosition( to, BackEdge ) );
+    return RangeInRevision( findPosition( from, FrontEdge ), findPosition( to, BackEdge ) );
 }
 

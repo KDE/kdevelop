@@ -71,16 +71,14 @@ public:
                                   KDevelop::ProjectTargetItem* ) { return false; }
 
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-
-    virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*,
-                                       KDevelop::ProjectTargetItem* ) { return false; }
+    virtual bool removeFilesFromTargets(QList< KDevelop::TargetFilePair > /*targetFiles*/) { return false; }
 
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
 
     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* );
 
-    virtual bool reload(KDevelop::ProjectBaseItem*) { return false; }
+    virtual bool reload(KDevelop::ProjectFolderItem*) { return false; }
 
     virtual KDevelop::ProjectFolderItem* addFolder( const KUrl&,
             KDevelop::ProjectFolderItem* ) { return 0; }
@@ -88,8 +86,8 @@ public:
     virtual KDevelop::ProjectFileItem* addFile( const KUrl&,
             KDevelop::ProjectFolderItem* ) { return 0; }
 
-    virtual bool removeFile( KDevelop::ProjectFileItem* ) { return false; }
-    virtual bool removeFolder( KDevelop::ProjectFolderItem* ) { return false; }
+    /* FIXME */
+    virtual bool removeFilesAndFolders(QList< KDevelop::ProjectBaseItem* > items) { return false; }
     virtual bool renameFile( KDevelop::ProjectFileItem*, const KUrl& ) { return false; }
     virtual bool renameFolder( KDevelop::ProjectFolderItem*, const KUrl&  ) { return false; }
 

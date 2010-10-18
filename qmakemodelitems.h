@@ -25,11 +25,10 @@
 
 class QMakeProjectFile;
 
-
 class QMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
-    QMakeFolderItem( KDevelop::IProject*, QMakeProjectFile*, const KUrl&, QStandardItem* parent = 0 );
+    QMakeFolderItem( KDevelop::IProject*, QMakeProjectFile*, const KUrl&, KDevelop::ProjectBaseItem* parent = 0 );
     virtual ~QMakeFolderItem();
     QMakeProjectFile* projectFile() const;
 
@@ -40,7 +39,7 @@ private:
 class QMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    QMakeTargetItem( KDevelop::IProject*, const QString& s, QStandardItem* parent );
+    QMakeTargetItem( KDevelop::IProject*, const QString& s, KDevelop::ProjectBaseItem* parent );
     ~QMakeTargetItem();
     KUrl::List includeDirectories() const;
     QHash<QString, QString> environment() const;

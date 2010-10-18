@@ -1,5 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2008 Andreas Pakulat <apaku@gmx.de>                         *
+ * Copyright (c) 2010 Milian Wolff <mail@milianw.de>                         *
  *                                                                           *
  * Permission is hereby granted, free of charge, to any person obtaining     *
  * a copy of this software and associated documentation files (the           *
@@ -23,8 +24,8 @@
 #ifndef QMAKEEDITORINTEGRATOR_H
 #define QMAKEEDITORINTEGRATOR_H
 
-#include <language/editor/editorintegrator.h>
 #include "qmakeduchainexport.h"
+#include <language/editor/rangeinrevision.h>
 
 namespace QMake
 {
@@ -32,17 +33,21 @@ namespace QMake
 class AST;
 }
 
-class KDEVQMAKEDUCHAIN_EXPORT QMakeEditorIntegrator : public KDevelop::EditorIntegrator
+class KDEVQMAKEDUCHAIN_EXPORT QMakeEditorIntegrator
 {
 
 public:
     QMakeEditorIntegrator();
 
-    KTextEditor::Cursor findPosition( QMake::AST* node, Edge edge = BackEdge ) const;
+    enum Edge {
+        FrontEdge,
+        BackEdge
+    };
 
-    using KDevelop::EditorIntegrator::createRange;
-    KTextEditor::Range findRange( QMake::AST* node, RangeEdge = OuterEdge );
-    KTextEditor::Range findRange( QMake::AST* from, QMake::AST* to );
+    KDevelop::CursorInRevision findPosition( QMake::AST* node, Edge edge = BackEdge ) const;
+
+    KDevelop::RangeInRevision findRange( QMake::AST* node );
+    KDevelop::RangeInRevision findRange( QMake::AST* from, QMake::AST* to );
 
 private:
 };

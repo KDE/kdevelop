@@ -43,13 +43,17 @@ class KDEVQMAKEDUCHAIN_EXPORT ContextBuilder : public QMake::ASTVisitor, public 
 public:
     ContextBuilder();
     ~ContextBuilder();
+
 protected:
     QMakeEditorIntegrator* editor() const;
     virtual void startVisiting( QMake::AST* node );
     virtual void setContextOnNode( QMake::AST* node, KDevelop::DUContext* ctx );
     virtual KDevelop::DUContext* contextFromNode( QMake::AST* node );
-    virtual KTextEditor::Range editorFindRange( QMake::AST* fromRange, QMake::AST* toRange );
+    virtual KDevelop::RangeInRevision editorFindRange( QMake::AST* fromRange, QMake::AST* toRange );
     virtual KDevelop::QualifiedIdentifier identifierForNode( QMake::AST* );
+
+private:
+    QMakeEditorIntegrator* m_editor;
 };
 
 #endif

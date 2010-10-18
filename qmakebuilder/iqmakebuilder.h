@@ -20,7 +20,6 @@
 #define IQMAKEBUILDER_H
 
 #include <project/interfaces/iprojectbuilder.h>
-#include <interfaces/iextension.h>
 
 class IProject;
 class ProjectItem;
@@ -37,7 +36,6 @@ public:
 
 };
 
-KDEV_DECLARE_EXTENSION_INTERFACE( IQMakeBuilder, "org.kdevelop.IQMakeBuilder" )
 Q_DECLARE_INTERFACE( IQMakeBuilder, "org.kdevelop.IQMakeBuilder" )
 
 #endif

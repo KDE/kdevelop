@@ -23,12 +23,13 @@
 #include <QtCore/QHash>
 #include <QtCore/QPair>
 #include <QtCore/QList>
+#include <QtGui/QStandardItem>
 
 #include "qmakeprojectfile.h"
 
 
 QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectFile* scope,
-                                const KUrl& url, QStandardItem* parent )
+                                const KUrl& url, KDevelop::ProjectBaseItem* parent )
 : KDevelop::ProjectBuildFolderItem( project, url, parent ), m_projectFile( scope )
 {
 }
@@ -50,7 +51,7 @@ struct QMakeTargetItemPrivate
 };
 
 QMakeTargetItem::QMakeTargetItem( KDevelop::IProject* project, const QString& s,
-                                QStandardItem* parent )
+                                  KDevelop::ProjectBaseItem* parent )
     : KDevelop::ProjectTargetItem( project, s, parent ), d(new QMakeTargetItemPrivate)
 {
 }

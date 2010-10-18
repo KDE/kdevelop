@@ -22,13 +22,14 @@
 #include "qmakeeditorintegrator.h"
 
 ContextBuilder::ContextBuilder()
-    : QMake::ASTVisitor(), ContextBuilderBase()
+    : QMake::ASTVisitor(), ContextBuilderBase(),
+      m_editor(new QMakeEditorIntegrator())
 {
-    setEditor(new QMakeEditorIntegrator(), true);
 }
 
 ContextBuilder::~ContextBuilder()
 {
+    delete m_editor;
 }
 
 void ContextBuilder::startVisiting( QMake::AST* node )
@@ -48,13 +49,12 @@ KDevelop::DUContext* ContextBuilder::contextFromNode( QMake::AST* node )
 
 QMakeEditorIntegrator* ContextBuilder::editor() const
 {
-    return static_cast<QMakeEditorIntegrator*>(ContextBuilderBase::editor());
+    return m_editor;
 }
 
-KTextEditor::Range ContextBuilder::editorFindRange( QMake::AST* fromRange, QMake::AST* toRange )
+KDevelop::RangeInRevision ContextBuilder::editorFindRange( QMake::AST* fromRange, QMake::AST* toRange )
 {
-    QMakeEditorIntegrator* ed = editor();
-    return ed->findRange(fromRange, toRange);
+    return m_editor->findRange(fromRange, toRange);
 }
 
 KDevelop::QualifiedIdentifier ContextBuilder::identifierForNode( QMake::AST* node )
