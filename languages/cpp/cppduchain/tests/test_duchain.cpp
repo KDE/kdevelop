@@ -2087,22 +2087,6 @@ void TestDUChain::testADLEnumerationType()
 
 void TestDUChain::testADLClassMembers()
 {
-  {
-    QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void (A::*p)()) {} }"
-                       "int test() { void (A::*p)() = &foo::A::mem_fun; bar(p); }"); // calls foo::bar (avoid testADLMemberFunctionByName)
-    
-    LockedTopDUContext top( parse(adlCall, DumpAll) );
-    
-    QCOMPARE(top->childContexts().count(), 3);
-    
-    // foo::bar has 1 use
-    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
-    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
-  }
-
-  {
     QByteArray adlCall("namespace foo { struct A { int member; }; void bar(int A::*p) {} }"
                        "int test() { bar(&foo::A::member); }"); // calls foo::bar
     
@@ -2115,7 +2099,22 @@ void TestDUChain::testADLClassMembers()
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
-  }
+}
+
+void TestDUChain::testADLMemberFunction()
+{
+    QByteArray adlCall("namespace foo { struct A { void mem_fun() {} }; void bar(void (A::*p)()) {} }"
+    "int test() { void (foo::A::*p)() = &foo::A::mem_fun; bar(p); }"); // calls foo::bar (avoid testADLMemberFunctionByName)
+
+    LockedTopDUContext top( parse(adlCall, DumpAll) );
+
+    QCOMPARE(top->childContexts().count(), 3);
+
+    // foo::bar has 1 use
+    QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
+    QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
 }
 
 void TestDUChain::testADLMemberFunctionByName() 
