@@ -108,7 +108,20 @@ void IDebugSession::setCurrentPosition(const QString& file, int line, const QStr
     }
 }
 
+const QString& IDebugSession::currentFile() const
+{
+    return m_file;
+}
 
+int IDebugSession::currentLine() const
+{
+    return m_line;
+}
+
+const QString& IDebugSession::currentAddr() const
+{
+    return m_addr;
+}
 
 }
 
