@@ -163,12 +163,20 @@ void GrepJob::slotFindFinished()
         emitResult();
         return;
     }
+    
+    if(!m_regexpFlag) 
+    {
+        m_patternString = QRegExp::escape(m_patternString);
+    }
+    
     QString pattern = substitudePattern(m_templateString, m_patternString);
     m_regExp.setPattern(pattern);
     m_regExp.setPatternSyntax(QRegExp::RegExp2);
     m_regExp.setCaseSensitivity( m_caseSensitiveFlag ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    if(!m_regexpFlag || pattern == QRegExp::escape(pattern)) {
-        // this is obviously not a regexp, so do a regular search
+    if(pattern == QRegExp::escape(pattern))
+    {
+        // enable wildcard mode when possible
+        // if pattern has already been escaped (raw text serch) a second escape will result in a different string anyway
         m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
     static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
