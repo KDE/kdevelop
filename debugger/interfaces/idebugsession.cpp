@@ -87,8 +87,41 @@ QPair<KUrl, int> IDebugSession::convertToRemoteUrl(const QPair<KUrl, int>& local
     return localUrl;
 }
 
+void IDebugSession::clearCurrentPosition()
+{ 
+    m_file="";
+    m_addr="";
+    m_line=-1;
+    emit clearExecutionPoint();
+}
 
+void IDebugSession::setCurrentPosition(const QString& file, int line, const QString& addr)
+{
+    if (file.isEmpty()) // if source file is unknown there's not much we can do in debugger
+        clearCurrentPosition();
+    else 
+    {
+        m_file=file;
+        m_line=line;
+        m_addr=addr;
+        emit showStepInSource(KUrl::fromPath(file), line);
+    }
+}
 
+const QString& IDebugSession::currentFile() const
+{
+    return m_file;
+}
+
+int IDebugSession::currentLine() const
+{
+    return m_line;
+}
+
+const QString& IDebugSession::currentAddr() const
+{
+    return m_addr;
+}
 
 }
 
