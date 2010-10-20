@@ -1,6 +1,7 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
-   
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -84,6 +85,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListMode
     public slots:
         void unloaded(KDevelop::IPlugin* p);
         void loaded(KDevelop::IPlugin* p);
+        void reloadProviders();
         
     private:
         QList<KDevelop::IDocumentationProvider*> mProviders;

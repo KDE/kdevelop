@@ -1,6 +1,7 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
-   
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -203,6 +204,14 @@ ProvidersModel::ProvidersModel(QObject* parent)
 {
     connect(ICore::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)), SLOT(unloaded(KDevelop::IPlugin*)));
     connect(ICore::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(loaded(KDevelop::IPlugin*)));
+    connect(ICore::self()->documentationController(), SIGNAL(providersChanged()), SLOT(reloadProviders()));
+}
+
+void ProvidersModel::reloadProviders()
+{
+    beginResetModel();
+    mProviders = ICore::self()->documentationController()->documentationProviders();
+    endResetModel();
 }
 
 QVariant ProvidersModel::data(const QModelIndex& index, int role) const

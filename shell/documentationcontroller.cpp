@@ -127,7 +127,6 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProviderProvider");
 
     QList<IDocumentationProvider*> ret;
-
     foreach(IPlugin* p, pluginsProvider)
     {
         IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
@@ -141,6 +140,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
         Q_ASSERT(doc);
         ret.append(doc);
     }
+
     return ret;
 }
 
@@ -158,6 +158,11 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
         return;
     }
     view->showDocumentation(doc);
+}
+
+void DocumentationController::changedDoucmentationProviders()
+{
+    emit providersChanged();
 }
 
 #include "documentationcontroller.moc"

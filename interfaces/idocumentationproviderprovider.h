@@ -24,12 +24,8 @@
 #include <QtCore/QObject>
 #include "interfacesexport.h"
 
-class QIcon;
-class QModelIndex;
-class QAbstractListModel;
 namespace KDevelop
 {
-class Declaration;
 class IDocumentationProvider;
 
 class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProviderProvider
@@ -39,6 +35,9 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProviderProvider
 
         /** @returns a list of providers provided by this class. */
         virtual QList<IDocumentationProvider*> providers() = 0;
+
+Q_SIGNALS:
+    virtual void changedProvidersList() const=0;
 };
 
 }
