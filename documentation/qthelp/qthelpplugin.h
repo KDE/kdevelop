@@ -33,10 +33,13 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     Q_INTERFACES( KDevelop::IDocumentationProviderProvider )
     public:
         QtHelpPlugin(QObject *parent, const QVariantList & args);
-        void readConfig();
         virtual QList<KDevelop::IDocumentationProvider*> providers();
+    signals:
+        void changedProvidersList() const;
     private:
         QList<KDevelop::IDocumentationProvider*> documentationProviders;
+    private slots:
+        void readConfig();
 };
 
 #endif // QTHELPPLUGIN_H

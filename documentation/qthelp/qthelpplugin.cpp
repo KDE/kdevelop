@@ -23,6 +23,10 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <KAboutData>
+#include <KSettings/Dispatcher>
+#include <KComponentData>
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
 
 #include "qthelpsettings.h"
 #include "qthelpprovider.h"
@@ -35,92 +39,27 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     , documentationProviders()
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProviderProvider )
-    readConfig();
     Q_UNUSED(args);
-<<<<<<< HEAD
-    QStringList qmakes;
-    QStringList tmp;
-    KStandardDirs::findAllExe(tmp, "qmake");
-    qmakes += tmp;
-    KStandardDirs::findAllExe(tmp, "qmake-qt4");
-    qmakes += tmp;
-    QString dirName;
-    foreach(const QString& qmake, qmakes) {
-        /// check both in doc/ and doc/qch/
-        dirName=qtDocsLocation(qmake)+"/qch/";
-        QString fileName=dirName+"qt.qch";
-        if(QFile::exists(fileName)) {
-            kDebug() << "checking doc: " << fileName;
-            break;
-        } else
-            dirName.clear();
-            
-        dirName=qtDocsLocation(qmake);
-        fileName=dirName+"/qt.qch";
-        if(QFile::exists(fileName)) {
-            kDebug() << "checking doc: " << fileName;
-            break;
-        } else
-            dirName.clear();
-    }
-    
-    if(!dirName.isEmpty()) {
-        QDir d(dirName);
-        foreach(const QString& file, d.entryList(QDir::NoDotAndDotDot)) {
-            QString fileName=dirName+'/'+file;
-            QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
-            
-            if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
-                kDebug() << "loading doc" << fileName << fileNamespace;
-                if(m_engine.registerDocumentation(fileName))
-                    kDebug() << "documentation added successfully" << fileName;
-                else
-                    kDebug() << "error >> " << fileName << m_engine.error();
-            }
-        }
-        kDebug() << "registered" << m_engine.error() << m_engine.registeredDocumentations();
-    }
-    else
-        kDebug() << "no QtHelp found at all";
-}
 
-KSharedPtr< KDevelop::IDocumentation > QtHelpPlugin::documentationForDeclaration(KDevelop::Declaration* dec) const
-{
-	
-	if(dec) {
-        QStringList idList;
-        {
-        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
-        for(int a = 0; a < qid.count(); ++a)
-            idList << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
-        }
-        
-		QString id = idList.join("::");
-		if(!id.isEmpty()) {
-			QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
-            
-            kDebug() << "doc_found" << id << links;
-			if(!links.isEmpty())
-				return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, m_engine.linksForIdentifier(id)));
-		}
-	}
-	
-	return KSharedPtr<KDevelop::IDocumentation>();
-}
-=======
->>>>>>> Adapt QtHelpPlugin to IDocumentProviderProvider
-
+    readConfig();
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevqthelp_config"),
+                                                this, "readConfig" );
+    connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDoucmentationProviders()));
 }
 
 void QtHelpPlugin::readConfig()
 {
     QtHelpSettings::self()->readConfig();
     QStringList qtHelpPathList = QtHelpSettings::qchList();
-    foreach(QString fileName,qtHelpPathList){
-        QVariantList a;
-        documentationProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, a));
+    foreach(KDevelop::IDocumentationProvider* provider, documentationProviders) {
+        documentationProviders.removeAll(provider);
+        delete provider;
     }
+
+    foreach(QString fileName,qtHelpPathList){
+        documentationProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, QVariantList()));
+    }
+    emit changedProvidersList();
 }
 
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
