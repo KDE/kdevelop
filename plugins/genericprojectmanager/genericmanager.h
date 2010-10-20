@@ -1,4 +1,5 @@
 /* This file is part of KDevelop
+    CopyRight 2010 Milian Wolff <mail@milianw.de>
     Copyright 2004,2005 Roberto Raggi <roberto@kdevelop.org>
 
     This library is free software; you can redistribute it and/or
@@ -29,7 +30,6 @@ class KUrl;
 class KDirWatch;
 template <typename T> class QList;
 
-///FIXME: remove once the hack is gone
 class KJob;
 
 namespace KIO
