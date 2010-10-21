@@ -38,7 +38,6 @@ class IProject;
 class ProjectBaseItem;
 class ProjectFolderItem;
 class ProjectFileItem;
-class KDialogBase;
 
 /**
  * @short An interface to project file management
