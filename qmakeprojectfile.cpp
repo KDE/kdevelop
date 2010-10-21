@@ -83,10 +83,10 @@ bool QMakeProjectFile::read()
     return QMakeFile::read();
 }
 
-QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
+QStringList QMakeProjectFile::subProjects() const
 {
     kDebug(9024) << "Fetching subprojects";
-    QList<QMakeProjectFile*> list;
+    QStringList list;
     foreach(  QString subdir, variableValues( "SUBDIRS" ) )
     {
         QString fileOrPath;
@@ -106,30 +106,7 @@ QList<QMakeProjectFile*> QMakeProjectFile::subProjects() const
             fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }
         Q_ASSERT( !fileOrPath.isEmpty() );
-        QMakeProjectFile* qmscope = new QMakeProjectFile( fileOrPath );
-        QDir d;
-        if( QFileInfo( fileOrPath ).isDir() )
-        {
-            d = QDir( fileOrPath );
-        }else
-        {
-            d = QFileInfo( fileOrPath ).dir();
-        }
-        if( d.exists(".qmake.cache") )
-        {
-            QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
-            cache->setMkSpecs( m_mkspecs );
-            cache->read();
-            qmscope->setQMakeCache( cache );
-        }else
-        {
-            qmscope->setQMakeCache( m_cache );
-        }
-        qmscope->setMkSpecs( m_mkspecs );
-        if( qmscope->read() )
-        {
-            list.append( qmscope );
-        }
+        list << fileOrPath;
     }
 
     kDebug(9024) << "found" << list.size() << "subprojects";
@@ -327,6 +304,7 @@ QStringList QMakeProjectFile::targets() const
 
 QMakeProjectFile::~QMakeProjectFile()
 {
+    //TODO: delete cache, specs, ...?
 }
 
 QStringList QMakeProjectFile::resolveVariables( const QString& value ) const

@@ -41,7 +41,7 @@ public:
 
     bool read();
 
-    QList<QMakeProjectFile*> subProjects() const;
+    QStringList subProjects() const;
 
     KUrl::List files() const;
     KUrl::List filesForTarget( const QString& ) const;

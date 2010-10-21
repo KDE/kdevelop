@@ -22,41 +22,31 @@
 #define QMAKEMANAGER_H
 
 #include <project/interfaces/ibuildsystemmanager.h>
-#include <interfaces/iplugin.h>
-#include <QtCore/QVariant>
+#include <project/abstractfilemanagerplugin.h>
 
-template <typename T> class QList;
-class QString;
-
-//#include "domutil.h"
-//#include <project/projectmodel.h>
-
-class QDir;
-class QObject;
 class IQMakeBuilder;
 class QMakeCache;
-class QMakeMkSpecs;
-namespace KDevelop
-{
-class IProject;
-class ProjectFolderItem;
-class ProjectBaseItem;
-class ProjectFileItem;
-class ProjectTargetItem;
-class IProjectBuilder;
-}
 
-class QMakeProjectManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
+class QMakeProjectManager : public KDevelop::AbstractFileManagerPlugin, public KDevelop::IBuildSystemManager
 {
-Q_OBJECT
-Q_INTERFACES( KDevelop::IProjectFileManager )
-Q_INTERFACES( KDevelop::IBuildSystemManager )
+    Q_OBJECT
+    Q_INTERFACES( KDevelop::IBuildSystemManager )
+
 public:
     explicit QMakeProjectManager( QObject* parent = 0, const QVariantList& args = QVariantList() );
 
     virtual ~QMakeProjectManager();
 
+    //BEGIN AbstractFileManager
+    virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
+    virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project,
+                                                           const KUrl& url,
+                                                           KDevelop::ProjectBaseItem* parent = 0 );
     virtual Features features() const { return Features(Folders | Targets | Files); }
+    //END AbstractFileManager
+
+    //BEGIN IBuildSystemManager
+    //TODO
     virtual KDevelop::IProjectBuilder*  builder(KDevelop::ProjectFolderItem*) const;
     virtual KUrl buildDirectory(KDevelop::ProjectBaseItem*) const;
     virtual KUrl::List includeDirectories(KDevelop::ProjectBaseItem*) const;
@@ -73,35 +63,15 @@ public:
     virtual bool removeFilesFromTargets(QList< KDevelop::TargetFilePair > /*targetFiles*/) { return false; }
 
     virtual QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const;
+    //END IBuildSystemManager
 
-    virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* );
+private slots:
+  void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
 
-    virtual bool reload(KDevelop::ProjectFolderItem*) { return false; }
-
-    virtual KDevelop::ProjectFolderItem* addFolder( const KUrl&,
-            KDevelop::ProjectFolderItem* ) { return 0; }
-
-    virtual KDevelop::ProjectFileItem* addFile( const KUrl&,
-            KDevelop::ProjectFolderItem* ) { return 0; }
-
-    /* FIXME */
-    virtual bool removeFilesAndFolders(QList< KDevelop::ProjectBaseItem* > items) { return false; }
-    virtual bool renameFile( KDevelop::ProjectFileItem*, const KUrl& ) { return false; }
-    virtual bool renameFolder( KDevelop::ProjectFolderItem*, const KUrl&  ) { return false; }
-
-Q_SIGNALS:
-
-    void folderAdded( KDevelop::ProjectFolderItem* folder );
-    void folderRemoved( KDevelop::ProjectFolderItem* folder );
-    void folderRenamed( const KUrl& oldFolder,
-                        KDevelop::ProjectFolderItem* newFolder );
-
-    void fileAdded(KDevelop::ProjectFileItem* file);
-    void fileRemoved(KDevelop::ProjectFileItem* file);
-    void fileRenamed(const KUrl& oldFile,
-                     KDevelop::ProjectFileItem* newFile);
 private:
+    KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KUrl& url );
+    KDevelop::ProjectFolderItem* buildFolderItem( KDevelop::IProject* project, const KUrl& url,
+                                                  KDevelop::ProjectBaseItem* parent );
     QHash<QString,QString> queryQMake( KDevelop::IProject* ) const;
     QString findBasicMkSpec( const QString& mkspecdir ) const;
     QMakeCache* findQMakeCache( const QString& projectfile ) const;

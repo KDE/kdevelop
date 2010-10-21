@@ -32,6 +32,7 @@
 #include <kdebug.h>
 
 #include <interfaces/icore.h>
+#include <interfaces/iproject.h>
 #include <language/duchain/indexedstring.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
@@ -52,16 +53,19 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData("kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1", ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
-QMakeProjectManager::QMakeProjectManager( QObject* parent,
-                              const QVariantList& )
-        : IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
+QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
+        : AbstractFileManagerPlugin( QMakeSupportFactory::componentData(), parent ),
+          IBuildSystemManager(),
+          m_builder(0)
 {
-    KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
     KDEV_USE_EXTENSION_INTERFACE( IBuildSystemManager )
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IQMakeBuilder" );
     Q_ASSERT(i);
     m_builder = i->extension<IQMakeBuilder>();
     Q_ASSERT(m_builder);
+
+    connect(this, SIGNAL(folderAdded(KDevelop::ProjectFolderItem*)),
+            this, SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
 }
 
 QMakeProjectManager::~QMakeProjectManager()
@@ -87,90 +91,23 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* project) const
     return KUrl();
 }
 
-QList<ProjectFolderItem*> QMakeProjectManager::parse( ProjectFolderItem* item )
+ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,
+                                                          ProjectBaseItem* parent )
 {
-    QList<ProjectFolderItem*> folderList;
-
-    kDebug(9024) << "Parsing item:";
-
-    QMakeFolderItem* folderitem = dynamic_cast<QMakeFolderItem*>( item );
-    QStringList entries = QDir( item->url().toLocalFile() ).entryList( QDir::AllEntries | QDir::Hidden | QDir::System );
-
-    entries.removeAll(".");
-    entries.removeAll("..");
-
-    if( folderitem )
-    {
-        kDebug(9024) << "Item is a qmakefolder:";
-
-        foreach( QMakeProjectFile* subproject, folderitem->projectFile()->subProjects() )
-        {
-            kDebug(9024) << "adding subproject:" << subproject->absoluteDir();
-            if( entries.contains( KUrl(subproject->absoluteFile()).fileName() ) )
-            {
-                entries.removeAll( KUrl(subproject->absoluteFile()).fileName() );
-            }
-            folderList.append( new QMakeFolderItem( item->project(),
-                               subproject,
-                               KUrl( subproject->absoluteDir() ),
-                               item ) );
-        }
-        foreach( const QString& s, folderitem->projectFile()->targets() )
-        {
-            kDebug(9024) << "adding target:" << s;
-            QMakeTargetItem* target = new QMakeTargetItem( item->project(), s,  item );
-            foreach( const KUrl& u, folderitem->projectFile()->filesForTarget(s) )
-            {
-                if( entries.contains( u.fileName() ) )
-                {
-                    entries.removeAll( u.fileName() );
-                }
-                kDebug(9024) << "adding file:" << u;
-                new ProjectFileItem( item->project(), u, target );
-                new ProjectFileItem( item->project(), u, folderitem );
-                item->project()->addToFileSet( IndexedString( u ) );
-            }
-        }
+    if ( !parent ) {
+        return projectRootItem( project, url );
+    } else if (ProjectFolderItem* buildFolder = buildFolderItem( project, url, parent )) {
+        // child folder in a qmake folder
+        return buildFolder;
+    } else {
+        return AbstractFileManagerPlugin::createFolderItem( project, url, parent );
     }
-
-    foreach( const QString& entry, entries )
-    {
-        if( item->hasFileOrFolder( entry ) )
-            continue;
-
-        KUrl folderurl = item->url();
-        folderurl.addPath( entry );
-        if( QFileInfo( folderurl.toLocalFile() ).isDir() )
-        {
-            new ProjectFolderItem( item->project(), folderurl, item );
-        }else
-        {
-            new ProjectFileItem( item->project(), folderurl, item );
-        }
-    }
-
-//     kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
-//     new ProjectFileItem( item->project(),
-//                                    KUrl( folderitem->projectFile()->absoluteFile() ),
-//                                    item );
-    kDebug(9024) << "Added" << folderList.count() << "Elements";
-
-
-    return folderList;
 }
 
-ProjectFolderItem* QMakeProjectManager::import( IProject* project )
+ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, const KUrl& url )
 {
-    KUrl dirName = project->folder();
-    if( !dirName.isLocalFile() )
-    {
-        //FIXME turn this into a real warning
-        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
-        return 0;
-    }
-
-    QFileInfo fi( dirName.toLocalFile() );
-    QDir dir( dirName.toLocalFile() );
+    QFileInfo fi( url.toLocalFile() );
+    QDir dir( url.toLocalFile() );
     QStringList l = dir.entryList( QStringList() << "*.pro" );
 
     QString projectfile;
@@ -185,7 +122,7 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
         projectfile = l.first();
     }
 
-    KUrl projecturl = dirName;
+    KUrl projecturl = url;
     projecturl.adjustPath( KUrl::AddTrailingSlash );
     projecturl.setFileName( projectfile );
     QHash<QString,QString> qmvars = queryQMake( project );
@@ -205,6 +142,74 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
     kDebug(9024) << "top-level scope with variables:" << scope->variables();
     QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );
     return item;
+}
+
+ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, const KUrl& url,
+                                                         ProjectBaseItem* parent )
+{
+    QMakeFolderItem* qmakeParent = dynamic_cast<QMakeFolderItem*>( parent );
+    if ( !qmakeParent ) {
+        return 0;
+    }
+    QString path = url.toLocalFile( KUrl::RemoveTrailingSlash );
+    if ( !qmakeParent->projectFile()->subProjects().contains( path ) ) {
+        return 0;
+    }
+    QMakeProjectFile* qmscope = new QMakeProjectFile( path );
+
+    const QFileInfo info( path );
+    const QDir d = info.dir();
+    if( d.exists(".qmake.cache") ) {
+        QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
+        cache->setMkSpecs( qmakeParent->projectFile()->mkSpecs() );
+        cache->read();
+        qmscope->setQMakeCache( cache );
+    } else {
+        qmscope->setQMakeCache( qmakeParent->projectFile()->qmakeCache() );
+    }
+
+    qmscope->setMkSpecs( qmakeParent->projectFile()->mkSpecs() );
+    if( qmscope->read() ) {
+        //TODO: only on read?
+        return new QMakeFolderItem( project, qmscope, url, parent );
+    } else {
+        delete qmscope;
+        return 0;
+    }
+}
+
+void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
+{
+    QMakeFolderItem* qmakeParent = dynamic_cast<QMakeFolderItem*>( folder );
+    if ( !qmakeParent ) {
+        return;
+    }
+
+    kDebug(9024) << "adding targets for" << folder->url();
+    foreach( const QString& s, qmakeParent->projectFile()->targets() )
+    {
+        kDebug(9024) << "adding target:" << s;
+        QMakeTargetItem* target = new QMakeTargetItem( folder->project(), s, folder );
+        foreach( const KUrl& u, qmakeParent->projectFile()->filesForTarget(s) )
+        {
+            kDebug(9024) << "adding file:" << u;
+            new ProjectFileItem( folder->project(), u, target );
+            ///TODO: signal?
+        }
+    }
+}
+
+ProjectFolderItem* QMakeProjectManager::import( IProject* project )
+{
+    KUrl dirName = project->folder();
+    if( !dirName.isLocalFile() )
+    {
+        //FIXME turn this into a real warning
+        kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
+        return 0;
+    }
+
+    return AbstractFileManagerPlugin::import( project );
 }
 
 QList<ProjectTargetItem*> QMakeProjectManager::targets(ProjectFolderItem* item) const
