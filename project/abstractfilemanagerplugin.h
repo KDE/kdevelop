@@ -87,7 +87,7 @@ protected:
      * The default implementation will return a simple @c ProjectFileItem
      */
     virtual ProjectFileItem* createFileItem( KDevelop::IProject* project, const KUrl& url,
-                                             KDevelop::ProjectBaseItem* parent = 0);
+                                             KDevelop::ProjectBaseItem* parent);
 
 Q_SIGNALS:
     ///TODO: mark private
