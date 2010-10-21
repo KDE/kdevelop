@@ -166,50 +166,45 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
     {
         //FIXME turn this into a real warning
         kWarning(9025) << "not a local file. QMake support doesn't handle remote projects";
+        return 0;
+    }
+
+    QFileInfo fi( dirName.toLocalFile() );
+    QDir dir( dirName.toLocalFile() );
+    QStringList l = dir.entryList( QStringList() << "*.pro" );
+
+    QString projectfile;
+
+    if( l.count() && l.indexOf( project->name() + ".pro") != -1 )
+        projectfile = project->name() + ".pro";
+    if( l.isEmpty() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
+    {
+        projectfile = fi.baseName() + ".pro";
     }else
     {
-        QFileInfo fi( dirName.toLocalFile() );
-        QDir dir( dirName.toLocalFile() );
-        QStringList l = dir.entryList( QStringList() << "*.pro" );
-
-        QString projectfile;
-
-        if( l.count() && l.indexOf( project->name() + ".pro") != -1 )
-            projectfile = project->name() + ".pro";
-        if( l.isEmpty() || ( l.count() && l.indexOf( fi.baseName() + ".pro" ) != -1 ) )
-        {
-            projectfile = fi.baseName() + ".pro";
-        }else
-        {
-            projectfile = l.first();
-        }
-
-        KUrl projecturl = dirName;
-        projecturl.adjustPath( KUrl::AddTrailingSlash );
-        projecturl.setFileName( projectfile );
-        QHash<QString,QString> qmvars = queryQMake( project );
-        QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
-        mkspecs->read();
-        QMakeCache* cache = findQMakeCache( projecturl.toLocalFile() );
-        if( cache )
-        {
-            cache->setMkSpecs( mkspecs );
-            cache->read();
-        }
-        QMakeProjectFile* scope = new QMakeProjectFile( projecturl.toLocalFile() );
-        scope->setMkSpecs( mkspecs );
-	if( cache )
-	{
-            cache->setMkSpecs( mkspecs );
-            cache->read();
-            scope->setQMakeCache( cache );
-	}
-        scope->read();
-        kDebug(9024) << "top-level scope with variables:" << scope->variables();
-        QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );
-	return item;
+        projectfile = l.first();
     }
-    return 0;
+
+    KUrl projecturl = dirName;
+    projecturl.adjustPath( KUrl::AddTrailingSlash );
+    projecturl.setFileName( projectfile );
+    QHash<QString,QString> qmvars = queryQMake( project );
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( findBasicMkSpec( qmvars["QMAKE_MKSPECS"] ), qmvars );
+    mkspecs->read();
+    QMakeCache* cache = findQMakeCache( projecturl.toLocalFile() );
+    if( cache ) {
+        cache->setMkSpecs( mkspecs );
+        cache->read();
+    }
+    QMakeProjectFile* scope = new QMakeProjectFile( projecturl.toLocalFile() );
+    scope->setMkSpecs( mkspecs );
+    if( cache ) {
+        scope->setQMakeCache( cache );
+    }
+    scope->read();
+    kDebug(9024) << "top-level scope with variables:" << scope->variables();
+    QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );
+    return item;
 }
 
 QList<ProjectTargetItem*> QMakeProjectManager::targets(ProjectFolderItem* item) const
