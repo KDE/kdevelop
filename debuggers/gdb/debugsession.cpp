@@ -110,8 +110,7 @@ DebugSession::~DebugSession()
 void DebugSession::updateCurrentPosition(const QString& file, int line, const QString& address)
 {
     kDebug() << file << line << address;
-    emit gdbShowStepInSource(file, line, address);
-    setCurrentPosition(file, line, address);
+    setCurrentPosition(KUrl::fromLocalFile(file), line, address);
 }
 
 KDevelop::IDebugSession::DebuggerState DebugSession::state() const {

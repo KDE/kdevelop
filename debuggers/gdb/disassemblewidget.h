@@ -26,6 +26,7 @@
 #include "mi/gdbmi.h"
 
 #include <QTreeWidget>
+#include <KUrl>
 
 /***************************************************************************/
 /***************************************************************************/
@@ -64,7 +65,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
-    void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
+    void slotShowStepInSource(const KUrl &fileName, int lineNum, const QString &address);
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);

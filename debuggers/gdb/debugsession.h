@@ -287,7 +287,6 @@ Q_SIGNALS:
     void gdbInternalCommandStdout (const QString& output);
     void gdbUserCommandStdout (const QString& output);
     void gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
-    void gdbShowStepInSource(const QString &fileName, int line, const QString &address);
 
     void debuggerAbnormalExit();
 
