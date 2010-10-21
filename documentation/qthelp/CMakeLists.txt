@@ -13,6 +13,7 @@ set(kdevqthelp_SRCS
     qthelpproviderabstract.cpp
     qthelpprovider.cpp
     qthelpdocumentation.cpp
+    qthelpqtdoc.cpp
     ${kdevqthelp_settings_SRCS}
 )
 
@@ -48,6 +49,7 @@ set(kdevqthelp_SRCS
     qthelpproviderabstract.cpp
     qthelpprovider.cpp
     qthelpdocumentation.cpp
+    qthelpqtdoc.cpp
 )
 
 kde4_add_plugin(kdevqthelp ${kdevqthelp_SRCS})

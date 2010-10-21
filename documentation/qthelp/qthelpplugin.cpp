@@ -30,6 +30,7 @@
 
 #include "qthelpsettings.h"
 #include "qthelpprovider.h"
+#include "qthelpqtdoc.h"
 
 K_PLUGIN_FACTORY(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
@@ -59,6 +60,7 @@ void QtHelpPlugin::readConfig()
     foreach(QString fileName,qtHelpPathList){
         documentationProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, QVariantList()));
     }
+    documentationProviders.append(new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList()));
     emit changedProvidersList();
 }
 
