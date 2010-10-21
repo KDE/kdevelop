@@ -153,8 +153,13 @@ void AbstractFileManagerPlugin::Private::addJobItems(ProjectFolderItem* baseItem
     KUrl::List files;
     KUrl::List folders;
     foreach ( const KIO::UDSEntry& entry, entries ) {
+        QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
+        if (name == "." || name == "..") {
+            continue;
+        }
+
         KUrl url = baseItem->url();
-        url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
+        url.addPath( name );
 
         if ( !q->isValid( url, entry.isDir(), baseItem->project() ) ) {
             continue;
