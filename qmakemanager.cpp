@@ -47,15 +47,17 @@
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 
+using namespace KDevelop;
+
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData("kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1", ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
 QMakeProjectManager::QMakeProjectManager( QObject* parent,
                               const QVariantList& )
-        : KDevelop::IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
+        : IPlugin( QMakeSupportFactory::componentData(), parent ), m_builder(0)
 {
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
-    KDEV_USE_EXTENSION_INTERFACE( KDevelop::IBuildSystemManager )
+    KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
+    KDEV_USE_EXTENSION_INTERFACE( IBuildSystemManager )
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IQMakeBuilder" );
     Q_ASSERT(i);
     m_builder = i->extension<IQMakeBuilder>();
@@ -67,27 +69,27 @@ QMakeProjectManager::~QMakeProjectManager()
 
 }
 
-KUrl QMakeProjectManager::buildDirectory(KDevelop::ProjectBaseItem* project) const
+KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* project) const
 {
     if( project->folder() )
         return project->folder()->url();
     else if( project->parent() )
     {
-        KDevelop::ProjectBaseItem* base = static_cast<KDevelop::ProjectBaseItem*>(project->parent());
-        if( base->type() == KDevelop::ProjectBaseItem::Target )
+        ProjectBaseItem* base = static_cast<ProjectBaseItem*>(project->parent());
+        if( base->type() == ProjectBaseItem::Target )
         {
-            return static_cast<KDevelop::ProjectFolderItem*>(base->parent())->url();
+            return static_cast<ProjectFolderItem*>(base->parent())->url();
         }else
         {
-            return static_cast<KDevelop::ProjectFolderItem*>(base)->url();
+            return static_cast<ProjectFolderItem*>(base)->url();
         }
     }
     return KUrl();
 }
 
-QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::ProjectFolderItem* item )
+QList<ProjectFolderItem*> QMakeProjectManager::parse( ProjectFolderItem* item )
 {
-    QList<KDevelop::ProjectFolderItem*> folderList;
+    QList<ProjectFolderItem*> folderList;
 
     kDebug(9024) << "Parsing item:";
 
@@ -124,9 +126,9 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
                     entries.removeAll( u.fileName() );
                 }
                 kDebug(9024) << "adding file:" << u;
-                new KDevelop::ProjectFileItem( item->project(), u, target );
-                new KDevelop::ProjectFileItem( item->project(), u, folderitem );
-                item->project()->addToFileSet( KDevelop::IndexedString( u ) );
+                new ProjectFileItem( item->project(), u, target );
+                new ProjectFileItem( item->project(), u, folderitem );
+                item->project()->addToFileSet( IndexedString( u ) );
             }
         }
     }
@@ -140,15 +142,15 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
         folderurl.addPath( entry );
         if( QFileInfo( folderurl.toLocalFile() ).isDir() )
         {
-            new KDevelop::ProjectFolderItem( item->project(), folderurl, item );
+            new ProjectFolderItem( item->project(), folderurl, item );
         }else
         {
-            new KDevelop::ProjectFileItem( item->project(), folderurl, item );
+            new ProjectFileItem( item->project(), folderurl, item );
         }
     }
 
 //     kDebug(9024) << "adding project file:" << folderitem->projectFile()->absoluteFile();
-//     new KDevelop::ProjectFileItem( item->project(),
+//     new ProjectFileItem( item->project(),
 //                                    KUrl( folderitem->projectFile()->absoluteFile() ),
 //                                    item );
     kDebug(9024) << "Added" << folderList.count() << "Elements";
@@ -157,7 +159,7 @@ QList<KDevelop::ProjectFolderItem*> QMakeProjectManager::parse( KDevelop::Projec
     return folderList;
 }
 
-KDevelop::ProjectFolderItem* QMakeProjectManager::import( KDevelop::IProject* project )
+ProjectFolderItem* QMakeProjectManager::import( IProject* project )
 {
     KUrl dirName = project->folder();
     if( !dirName.isLocalFile() )
@@ -210,24 +212,24 @@ KDevelop::ProjectFolderItem* QMakeProjectManager::import( KDevelop::IProject* pr
     return 0;
 }
 
-QList<KDevelop::ProjectTargetItem*> QMakeProjectManager::targets(KDevelop::ProjectFolderItem* item) const
+QList<ProjectTargetItem*> QMakeProjectManager::targets(ProjectFolderItem* item) const
 {
     Q_UNUSED(item)
-    return QList<KDevelop::ProjectTargetItem*>();
+    return QList<ProjectTargetItem*>();
 }
 
-KDevelop::IProjectBuilder* QMakeProjectManager::builder(KDevelop::ProjectFolderItem*) const
+IProjectBuilder* QMakeProjectManager::builder(ProjectFolderItem*) const
 {
     Q_ASSERT(m_builder);
     return m_builder;
 }
 
-KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* item) const
+KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
 {
     KUrl::List list;
     QMakeFolderItem* folder = 0;
 
-    if( item->type() == KDevelop::ProjectBaseItem::File )
+    if( item->type() == ProjectBaseItem::File )
     {
         folder =
                 dynamic_cast<QMakeFolderItem*>( item->parent() );
@@ -236,7 +238,7 @@ KUrl::List QMakeProjectManager::includeDirectories(KDevelop::ProjectBaseItem* it
             folder =
                 dynamic_cast<QMakeFolderItem*>( item->parent()->parent() );
         }
-    }else if( item->type() == KDevelop::ProjectBaseItem::Target )
+    }else if( item->type() == ProjectBaseItem::Target )
     {
         folder =
                 dynamic_cast<QMakeFolderItem*>( item->parent() );
@@ -261,7 +263,7 @@ QString QMakeProjectManager::findBasicMkSpec( const QString& mkspecdir ) const
     return fi.absoluteFilePath();
 }
 
-QHash<QString,QString> QMakeProjectManager::queryQMake( KDevelop::IProject* project ) const
+QHash<QString,QString> QMakeProjectManager::queryQMake( IProject* project ) const
 {
     if( !project->folder().isLocalFile() || !m_builder )
         return QHash<QString,QString>();
