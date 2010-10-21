@@ -125,7 +125,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
-    void showStepInSource(const KUrl& file, int line);
+    void showStepInSource(const KUrl& file, int line, const QString &addr);
     void clearExecutionPoint();
     void finished();
 

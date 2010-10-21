@@ -103,7 +103,7 @@ void IDebugSession::setCurrentPosition(const KUrl& url, int line, const QString&
         m_url = url;
         m_line = line;
         m_addr = addr;
-        emit showStepInSource(url, line);
+        emit showStepInSource(url, line, addr);
     }
 }
 
