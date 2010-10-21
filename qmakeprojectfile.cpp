@@ -77,7 +77,7 @@ bool QMakeProjectFile::read()
     } else
     {
         QByteArray result = qtInc.readAll();
-        m_qtIncludeDir = QString::fromLocal8Bit( result );
+        m_qtIncludeDir = QString::fromLocal8Bit( result ).trimmed();
     }
 
     return QMakeFile::read();
@@ -115,24 +115,25 @@ QStringList QMakeProjectFile::subProjects() const
 
 KUrl::List QMakeProjectFile::includeDirectories() const
 {
-    kDebug(9024) << "Fetching include dirs";
+    kDebug(9024) << "Fetching include dirs" << m_qtIncludeDir;
+    kDebug(9024) << "CONFIG" << variableValues("CONFIG");
 
     KUrl::List list;
-    kDebug(9024) << variableValues("INCLUDEPATH");
+    kDebug(9024) << "INCLUDEPATH" << variableValues("INCLUDEPATH");
     foreach( const QString& val, variableValues("INCLUDEPATH") )
     {
         KUrl url(val);
         if( !list.contains( url ) )
             list << url;
     }
-    kDebug(9024) << variableValues("QMAKE_INCDIR");
+    kDebug(9024) << "QMAKE_INCDIR" << variableValues("QMAKE_INCDIR");
     foreach( const QString& val, variableValues("QMAKE_INCDIR") )
     {
         KUrl url(val);
         if( !list.contains( url ) )
             list << url;
     }
-    kDebug(9024) << variableValues("QMAKE_INCDIR_OPENGL");
+    kDebug(9024) << "QMAKE_INCDIR_OPENGL" << variableValues("QMAKE_INCDIR_OPENGL");
     if( variableValues("CONFIG").contains("opengl") )
     {
         foreach( const QString& val, variableValues("QMAKE_INCDIR_OPENGL") )
@@ -142,7 +143,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 list << url;
         }
     }
-    kDebug(9024) << variableValues("QMAKE_INCDIR_QT");
+    kDebug(9024) << "QT" << variableValues("QT");
     if( variableValues("CONFIG").contains("qt") )
     {
         KUrl url(m_qtIncludeDir);
@@ -195,11 +196,13 @@ KUrl::List QMakeProjectFile::includeDirectories() const
             else if ( module == "dbus" )
                 url.setUrl(m_qtIncludeDir + "/QtDBus");
 
+            kDebug() << url;
             if( !list.contains( url ) )
                 list << url;
         }
     }
-    kDebug(9024) << variableValues("QMAKE_INCDIR_THREAD");
+
+    kDebug(9024) << "QMAKE_INCDIR_THREAD" << variableValues("QMAKE_INCDIR_THREAD");
     if( variableValues("CONFIG").contains("thread") )
     {
         foreach( const QString& val, variableValues("QMAKE_INCDIR_THREAD") )
@@ -209,7 +212,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 list << url;
         }
     }
-    kDebug(9024) << variableValues("QMAKE_INCDIR_X11");
+    kDebug(9024) << "QMAKE_INCDIR_X11" << variableValues("QMAKE_INCDIR_X11");
     if( variableValues("CONFIG").contains("x11") )
     {
         foreach( const QString& val, variableValues("QMAKE_INCDIR_X11") )
@@ -219,6 +222,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 list << url;
         }
     }
+    kDebug(9024) << "final list:" << list;
     return list;
 }
 
