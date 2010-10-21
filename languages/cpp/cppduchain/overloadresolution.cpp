@@ -34,7 +34,7 @@ using namespace Cpp;
 using namespace KDevelop;
 
 // uncomment to get debugging info on ADL - very expensive on parsing
-#define DEBUG_ADL
+//#define DEBUG_ADL
 
 OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance ) : m_context( context ), m_topContext( topContext ), m_worstConversionRank( NoMatch ), m_forceIsInstance( forceIsInstance )
 {

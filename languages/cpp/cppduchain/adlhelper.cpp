@@ -23,7 +23,7 @@
 #include "typeutils.h"
 
 // uncomment to get debugging info on ADL - very expensive on parsing
-#define DEBUG_ADL
+//#define DEBUG_ADL
 
 using namespace Cpp;
 using namespace KDevelop;
