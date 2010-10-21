@@ -146,10 +146,6 @@ public:
     QString currentAddr() const;
     
 protected:
-    // Current position in debugged program, gets set when the state changes
-    QString m_file;
-    int m_line;
-    QString m_addr;
 
     // Clear the position before running code
     void clearCurrentPosition();
@@ -171,6 +167,13 @@ protected:
     IBreakpointController *m_breakpointController;
     IVariableController *m_variableController;    
     mutable IFrameStackModel *m_frameStackModel;
+
+private: //TODO use d-pointer
+    // Current position in debugged program, gets set when the state changes
+    QString m_file;
+    int m_line;
+    QString m_addr;
+
 };
 
 }
