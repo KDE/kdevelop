@@ -11,6 +11,7 @@
 #ifndef CUSTOMMAKEMANAGER_H
 #define CUSTOMMAKEMANAGER_H
 
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
@@ -29,7 +30,9 @@ namespace KDevelop
     class IProjectBuilder;
 }
 
-class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
+class CustomMakeManager : public KDevelop::IPlugin,
+                          public KDevelop::IProjectFileManager,
+                          public KDevelop::IBuildSystemManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IBuildSystemManager )

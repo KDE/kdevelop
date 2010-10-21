@@ -28,6 +28,7 @@
 
 #include <KDirWatch>
 
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/codegen/applychangeswidget.h>
@@ -63,6 +64,7 @@ class CMakeFolderItem;
 
 class CMakeManager
     : public KDevelop::IPlugin
+    , public KDevelop::IProjectFileManager
     , public KDevelop::IBuildSystemManager
     , public KDevelop::ILanguageSupport
     , public ICMakeManager

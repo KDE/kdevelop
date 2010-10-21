@@ -179,8 +179,7 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
   }
 
   // find target to add created class to
-  if(!target && folder && p->buildSystemManager() &&
-      p->buildSystemManager()->features() & KDevelop::IBuildSystemManager::Targets )
+  if(!target && folder && p->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets )
   {
     QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
     for(ProjectBaseItem* it=folder; it && t.isEmpty(); it=it->parent()) {
