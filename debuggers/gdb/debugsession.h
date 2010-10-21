@@ -115,7 +115,6 @@ private Q_SLOTS:
     void slotDebuggerAbnormalExit();
 
 private:
-    void updateCurrentPosition(const QString& file, int line, const QString& address);
     void _gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
    
     KDevelop::IFrameStackModel* createFrameStackModel();

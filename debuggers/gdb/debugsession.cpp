@@ -107,12 +107,6 @@ DebugSession::~DebugSession()
     delete commandQueue_;
 }
 
-void DebugSession::updateCurrentPosition(const QString& file, int line, const QString& address)
-{
-    kDebug() << file << line << address;
-    setCurrentPosition(KUrl::fromLocalFile(file), line, address);
-}
-
 KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
     return m_sessionState;
 }
@@ -290,7 +284,6 @@ void DebugSession::run()
     if (stateIsOn(s_appNotStarted|s_dbgNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecContinue));
 }
 
@@ -299,7 +292,6 @@ void DebugSession::stepOut()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecFinish));
 }
 
@@ -391,7 +383,6 @@ void DebugSession::stepOver()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecNext));
 }
 
@@ -400,7 +391,6 @@ void DebugSession::stepOverInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecNextInstruction));
 }
 
@@ -409,7 +399,6 @@ void DebugSession::stepInto()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecStep));
 }
 
@@ -418,7 +407,6 @@ void DebugSession::stepIntoInstruction()
     if (stateIsOn(s_appNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     queueCmd(new GDBCommand(GDBMI::ExecStepInstruction));
 }
 
@@ -758,7 +746,7 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
             
             if (!file.isEmpty()) {
                 // gdb counts lines from 1 and we don't
-                updateCurrentPosition(file, line.toInt()-1, addr);
+                setCurrentPosition(KUrl::fromLocalFile(file), line.toInt()-1, addr);
 
                 raiseEvent(program_state_changed);
                 state_reload_needed = false;
@@ -1150,7 +1138,6 @@ void DebugSession::runUntil(const KUrl& url, int line)
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     if (!url.isValid())
         queueCmd(new GDBCommand(GDBMI::ExecUntil, line));
     else
@@ -1165,7 +1152,6 @@ void DebugSession::jumpTo(const KUrl& url, int line)
     if (stateIsOn(s_dbgNotStarted|s_shuttingDown))
         return;
 
-    clearCurrentPosition();
     if (url.isValid()) {
         queueCmd(new GDBCommand(GDBMI::NonMI, QString("tbreak %1:%2").arg(url.toLocalFile()).arg(line)));
         queueCmd(new GDBCommand(GDBMI::NonMI, QString("jump %1:%2").arg(url.toLocalFile()).arg(line)));
