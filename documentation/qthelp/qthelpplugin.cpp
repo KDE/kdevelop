@@ -60,7 +60,9 @@ void QtHelpPlugin::readConfig()
     foreach(QString fileName,qtHelpPathList){
         documentationProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, QVariantList()));
     }
-    documentationProviders.append(new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList()));
+    if(QtHelpSettings::loadQtDocs()){
+        documentationProviders.append(new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList()));
+    }
     emit changedProvidersList();
 }
 

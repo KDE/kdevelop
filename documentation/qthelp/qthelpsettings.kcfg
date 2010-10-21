@@ -5,8 +5,11 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile name="kdeveloprc"/>
   <group name="Qch Documentation">
-    <entry name="qchList" key="QchUrlList" type="StringList">
-        <default></default>
-    </entry>
+  <entry name="qchList" key="QchUrlList" type="StringList">
+      <default></default>
+  </entry>
+  <entry name="loadQtDocs" key="LoadQtDocs" type="Int">
+      <default>1</default>
+  </entry>
   </group>
 </kcfg>
