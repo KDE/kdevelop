@@ -24,6 +24,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>
 #include "../debuggerexport.h"
+#include <KUrl>
 
 class KUrl;
 
@@ -141,7 +142,7 @@ Q_SIGNALS:
 public:
     using QObject::event; // prevent hiding of base method.
 
-    QString currentFile() const;
+    KUrl currentUrl() const;
     int currentLine() const;
     QString currentAddr() const;
     
@@ -150,7 +151,7 @@ protected:
     // Clear the position before running code
     void clearCurrentPosition();
     // Set new position and emit showStepInSource signal
-    void setCurrentPosition(const QString& file, int line, const QString& addr);
+    void setCurrentPosition(const KUrl& url, int line, const QString& addr);
 
     /** Raises the specified event. Should be used instead of
         emitting 'event' directly, since this method can perform
@@ -170,7 +171,7 @@ protected:
 
 private: //TODO use d-pointer
     // Current position in debugged program, gets set when the state changes
-    QString m_file;
+    KUrl m_url;
     int m_line;
     QString m_addr;
 
