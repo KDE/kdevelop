@@ -33,7 +33,6 @@ class QString;
 
 class QDir;
 class QObject;
-class KDialogBase;
 class IQMakeBuilder;
 class QMakeCache;
 class QMakeMkSpecs;
@@ -92,7 +91,6 @@ public:
     virtual bool renameFolder( KDevelop::ProjectFolderItem*, const KUrl&  ) { return false; }
 
 Q_SIGNALS:
-    void projectItemConfigWidget(const QList<KDevelop::ProjectBaseItem*> &dom, KDialogBase *dialog);
 
     void folderAdded( KDevelop::ProjectFolderItem* folder );
     void folderRemoved( KDevelop::ProjectFolderItem* folder );
