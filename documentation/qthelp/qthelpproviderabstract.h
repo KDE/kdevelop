@@ -19,26 +19,36 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef QTHELPPROVIDER_H
-#define QTHELPPROVIDER_H
+#ifndef QTHELPPROVIDERABSTRACT_H
+#define QTHELPPROVIDERABSTRACT_H
 
 #include <interfaces/idocumentationprovider.h>
 #include <QHelpEngine>
 #include <KComponentData>
-#include "qthelpproviderabstract.h"
 
-class QtHelpProvider : public QtHelpProviderAbstract
+class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QVariantList & args);
+    QtHelpProviderAbstract(QObject *parent, const KComponentData &componentData, const QString &collectionFileName, const QVariantList & args);
+    virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*) const;
 
-    virtual QIcon icon() const;
-    virtual QString name() const;
+    virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx) const;
+    virtual QAbstractListModel* indexModel() const;
 
-private:
-    QString m_fileName;
+    virtual QIcon icon() const = 0;
+    virtual QString name() const = 0;
+
+    virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
+
+    QHelpEngine* engine() { return &m_engine; }
+public slots:
+    void jumpedTo(const QUrl& newUrl) const;
+signals:
+    void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
+protected:
+    QHelpEngine m_engine;
 };
 
-#endif // QTHELPPROVIDER_H
+#endif // QTHELPPROVIDERABSTRACT_H

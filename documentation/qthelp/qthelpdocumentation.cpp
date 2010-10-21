@@ -29,9 +29,9 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
 #include "qthelpnetwork.h"
-#include "qthelpprovider.h"
+#include "qthelpproviderabstract.h"
 #include "kdebug.h"
-QtHelpProvider* QtHelpDocumentation::s_provider=0;
+QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
     : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0)

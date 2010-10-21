@@ -41,52 +41,10 @@
 #include "qthelpdocumentation.h"
 
 QtHelpProvider::QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QVariantList &args)
-    : m_engine(KStandardDirs::locateLocal("appdata", QString( QHelpEngineCore::namespaceName(fileName) + ".qhc" ), true, componentData))
+    : QtHelpProviderAbstract(parent, componentData, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
     , m_fileName(fileName)
 {
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProvider*>(this);
-    if( !m_engine.setupData() ) {
-        kWarning() << "Couldn't setup QtHelp Collection file, searching in Qt docs will fail";
-    }
-    m_engine.registerDocumentation(fileName);
-}
-
-KSharedPtr< KDevelop::IDocumentation > QtHelpProvider::documentationForDeclaration(KDevelop::Declaration* dec) const
-{
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProvider*>(this);
-    if(dec) {
-        QStringList idList;
-        {
-        KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
-        for(int a = 0; a < qid.count(); ++a)
-            idList << qid.at(a).identifier().str(); //Copy over the identifier components, without the template-parameters
-        }
-
-        QString id = idList.join("::");
-        if(!id.isEmpty()) {
-            QMap<QString, QUrl> links=m_engine.linksForIdentifier(id);
-
-            kDebug() << "doc_found" << id << links;
-            if(!links.isEmpty())
-                return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(id, m_engine.linksForIdentifier(id)));
-        }
-    }
-
-    return KSharedPtr<KDevelop::IDocumentation>();
-}
-
-QAbstractListModel* QtHelpProvider::indexModel() const
-{
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProvider*>(this);
-    return m_engine.indexModel();
-}
-
-KSharedPtr< KDevelop::IDocumentation > QtHelpProvider::documentationForIndex(const QModelIndex& idx) const
-{
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProvider*>(this);
-    QString name=idx.data(Qt::DisplayRole).toString();
-    return KSharedPtr<KDevelop::IDocumentation>(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
+    m_engine.registerDocumentation(m_fileName);
 }
 
 QIcon QtHelpProvider::icon() const
@@ -100,19 +58,4 @@ QString QtHelpProvider::name() const
         return QHelpEngineCore::namespaceName(m_fileName);
     }
    return m_engine.customFilters().at(0);
-}
-
-void QtHelpProvider::jumpedTo(const QUrl& newUrl) const
-{
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProvider*>(this);
-    QMap<QString, QUrl> info;
-    info.insert(newUrl.toString(), newUrl);
-    KSharedPtr<KDevelop::IDocumentation> doc(new QtHelpDocumentation(newUrl.toString(), info));
-    emit addHistory(doc);
-}
-
-KSharedPtr<KDevelop::IDocumentation> QtHelpProvider::homePage() const
-{
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProvider*>(this);
-    return KSharedPtr<KDevelop::IDocumentation>(new HomeDocumentation);
 }

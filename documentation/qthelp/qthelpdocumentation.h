@@ -29,7 +29,7 @@
 
 class QModelIndex;
 class QWebView;
-class QtHelpProvider;
+class QtHelpProviderAbstract;
 
 class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
 {
@@ -48,12 +48,12 @@ class QtHelpDocumentation : public QObject, public KDevelop::IDocumentation
         virtual KDevelop::IDocumentationProvider* provider() const;
         QMap<QString, QUrl> info() const { return m_info; }
 
-        static QtHelpProvider* s_provider;
+        static QtHelpProviderAbstract* s_provider;
     private slots:
         void jumpedTo(const QUrl& newUrl);
 
     private:
-        QtHelpProvider *m_provider;
+        QtHelpProviderAbstract *m_provider;
         const QString m_name;
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
@@ -73,7 +73,7 @@ class HomeDocumentation : public QObject, public KDevelop::IDocumentation
     public slots:
         void clicked(const QModelIndex& idx);
     private:
-        QtHelpProvider *m_provider;
+        QtHelpProviderAbstract *m_provider;
 };
 
 class QtHelpAlternativeLink : public QAction
