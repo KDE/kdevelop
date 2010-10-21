@@ -141,9 +141,9 @@ Q_SIGNALS:
 public:
     using QObject::event; // prevent hiding of base method.
 
-    const QString& currentFile() const;
+    QString currentFile() const;
     int currentLine() const;
-    const QString& currentAddr() const;
+    QString currentAddr() const;
     
 protected:
     // Current position in debugged program, gets set when the state changes
