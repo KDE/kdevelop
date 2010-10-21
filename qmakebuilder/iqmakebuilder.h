@@ -21,8 +21,9 @@
 
 #include <project/interfaces/iprojectbuilder.h>
 
+namespace KDevelop {
 class IProject;
-class ProjectItem;
+}
 
 /**
 @author Andreas Pakulat
