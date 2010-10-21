@@ -169,6 +169,9 @@ protected:
     IVariableController *m_variableController;    
     mutable IFrameStackModel *m_frameStackModel;
 
+private Q_SLOTS:
+    void slotStateChanged(KDevelop::IDebugSession::DebuggerState state);
+
 private: //TODO use d-pointer
     // Current position in debugged program, gets set when the state changes
     KUrl m_url;

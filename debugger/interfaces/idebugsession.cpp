@@ -122,6 +122,14 @@ QString IDebugSession::currentAddr() const
     return m_addr;
 }
 
+void IDebugSession::slotStateChanged(IDebugSession::DebuggerState state)
+{
+    if (state != PausedState) {
+        clearCurrentPosition();
+    }
+}
+
+
 }
 
 #include "idebugsession.moc"
