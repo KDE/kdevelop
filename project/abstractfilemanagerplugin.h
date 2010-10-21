@@ -91,15 +91,15 @@ protected:
 
 Q_SIGNALS:
     ///TODO: mark private
-    void appendSubDir( ProjectFolderItem* item );
+    void appendSubDir(ProjectFolderItem* item );
 
-    void folderAdded( ProjectFolderItem* folder );
-    void folderRemoved( ProjectFolderItem* folder );
-    void folderRenamed( const KUrl& oldFolder, ProjectFolderItem* newFolder );
+    void folderAdded(KDevelop::ProjectFolderItem* folder);
+    void folderRemoved(KDevelop::ProjectFolderItem* folder);
+    void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
 
-    void fileAdded(ProjectFileItem* file);
-    void fileRemoved(ProjectFileItem* file);
-    void fileRenamed(const KUrl& oldFile, ProjectFileItem* newFile);
+    void fileAdded(KDevelop::ProjectFileItem* file);
+    void fileRemoved(KDevelop::ProjectFileItem* file);
+    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private:
     struct Private;
