@@ -318,8 +318,6 @@ KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& sta
         } else
         {
             KTemporaryFile tmp;
-            ///TODO: do we really want to set setAutoRemove to false??
-            tmp.setAutoRemove( false );
             tmp.open();
             bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
                             dlg.projectName(),
