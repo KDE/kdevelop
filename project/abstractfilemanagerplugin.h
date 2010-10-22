@@ -36,7 +36,7 @@ class FileManagerListJob;
  *
  * It supports remote files using KIO and uses KDirWatch to synchronize with on-disk changes.
  */
-class KDEVPLATFORMPROJECT_EXPORT AbstractFileManagerPlugin : public IPlugin, public IProjectFileManager
+class KDEVPLATFORMPROJECT_EXPORT AbstractFileManagerPlugin : public IPlugin, public virtual IProjectFileManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectFileManager )

@@ -25,7 +25,7 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 
-class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager, public KDevelop::IProjectFileManager
+class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IBuildSystemManager )

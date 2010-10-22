@@ -352,8 +352,8 @@ void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* fold
 AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& instance,
                                                       QObject *parent,
                                                       const QVariantList & /*args*/ )
-    : IPlugin( instance, parent ),
-      IProjectFileManager(),
+    : IProjectFileManager(),
+      IPlugin( instance, parent ),
       d(new Private(this))
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
