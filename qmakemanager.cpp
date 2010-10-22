@@ -78,9 +78,9 @@ IProjectFileManager::Features QMakeProjectManager::features() const
     return Features(Folders | Targets | Files);
 }
 
-bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* project ) const
+bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* /*project*/ ) const
 {
-    if (url.fileName() == ".kdev4" ) {
+    if (isFolder && url.fileName() == ".kdev4" ) {
         return false;
     } else {
         // TODO: filter setup
@@ -94,7 +94,7 @@ KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* project) const
         return project->folder()->url();
     else if( project->parent() )
     {
-        ProjectBaseItem* base = static_cast<ProjectBaseItem*>(project->parent());
+        ProjectBaseItem* base = project->parent();
         if( base->type() == ProjectBaseItem::Target )
         {
             return static_cast<ProjectFolderItem*>(base->parent())->url();
