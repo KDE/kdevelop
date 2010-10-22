@@ -64,7 +64,6 @@ class CMakeFolderItem;
 
 class CMakeManager
     : public KDevelop::IPlugin
-    , public KDevelop::IProjectFileManager
     , public KDevelop::IBuildSystemManager
     , public KDevelop::ILanguageSupport
     , public ICMakeManager

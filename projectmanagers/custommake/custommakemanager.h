@@ -31,7 +31,6 @@ namespace KDevelop
 }
 
 class CustomMakeManager : public KDevelop::IPlugin,
-                          public KDevelop::IProjectFileManager,
                           public KDevelop::IBuildSystemManager
 {
     Q_OBJECT
