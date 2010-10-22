@@ -65,7 +65,7 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( documentDeclaration() ) );
     action->setToolTip( i18n( "Add Doxygen skeleton for declaration under cursor." ) );
     action->setWhatsThis( i18n( "<b>Document Declaration</b><p>"
-                                "Adds a basic Doxygen comment sekeleton in front of "
+                                "Adds a basic Doxygen comment skeleton in front of "
                                 "the declaration under the cursor, e.g. with all the "
                                 "parameter of a function."
                                 "</p>" ) );
