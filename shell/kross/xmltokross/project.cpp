@@ -248,7 +248,7 @@ IPlugin* DumbProject::managerPlugin() const
 void DumbProject::setManagerPlugin( IPlugin* manager )
 {
     d->manager = manager;
-    d->topItem = dynamic_cast<IBuildSystemManager*>(manager)->import( this );
+    d->topItem = dynamic_cast<IProjectFileManager*>(manager)->import( this );
 }
 
 // PersistentHash * DumbProject::persistentHash() const

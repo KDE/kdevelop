@@ -62,8 +62,7 @@ bool GenericProjectManager::reload( ProjectFolderItem* item )
 
 bool GenericProjectManager::isValid( const KUrl &url, const bool isFolder, IProject* project ) const
 {
-    if ( isFolder && ( url.fileName() == "." || url.fileName() == ".."
-            || ( url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) ) ) {
+    if ( isFolder && url.fileName() == ".kdev4" && url.upUrl() == project->folder() ) {
         return false;
     } else if ( url == project->projectFileUrl() ) {
         return false;

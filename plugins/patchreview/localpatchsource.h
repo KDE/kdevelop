@@ -46,6 +46,7 @@ public:
 
     LocalPatchSource()  : m_depth(0) {
     }
+    virtual ~LocalPatchSource();
 };
 
 #endif // LOCALPATCHSOURCE_H

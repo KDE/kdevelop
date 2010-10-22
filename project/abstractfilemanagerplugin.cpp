@@ -153,8 +153,13 @@ void AbstractFileManagerPlugin::Private::addJobItems(ProjectFolderItem* baseItem
     KUrl::List files;
     KUrl::List folders;
     foreach ( const KIO::UDSEntry& entry, entries ) {
+        QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
+        if (name == "." || name == "..") {
+            continue;
+        }
+
         KUrl url = baseItem->url();
-        url.addPath( entry.stringValue( KIO::UDSEntry::UDS_NAME ) );
+        url.addPath( name );
 
         if ( !q->isValid( url, entry.isDir(), baseItem->project() ) ) {
             continue;
@@ -354,8 +359,8 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& inst
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
 
-    connect(core()->projectController(), SIGNAL(projectClosing(IProject*)),
-            this, SLOT(projectClosing(IProject*)));
+    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+            this, SLOT(projectClosing(KDevelop::IProject*)));
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
