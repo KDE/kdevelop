@@ -37,6 +37,10 @@ public:
 
     virtual ~QMakeProjectManager();
 
+    static QMakeProjectManager* self();
+
+    QString qtIncludeDir() const;
+
     //BEGIN AbstractFileManager
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
     virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project,
@@ -77,6 +81,9 @@ private:
     QString findBasicMkSpec( const QString& mkspecdir ) const;
     QMakeCache* findQMakeCache( const QString& projectfile ) const;
     IQMakeBuilder* m_builder;
+    mutable QString m_qtIncludeDir;
+
+    static QMakeProjectManager* m_self;
 };
 
 #endif

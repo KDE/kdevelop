@@ -53,11 +53,21 @@ using namespace KDevelop;
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData("kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1", ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
+QMakeProjectManager* QMakeProjectManager::m_self = 0;
+
+QMakeProjectManager* QMakeProjectManager::self()
+{
+    return m_self;
+}
+
 QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
         : AbstractFileManagerPlugin( QMakeSupportFactory::componentData(), parent ),
           IBuildSystemManager(),
           m_builder(0)
 {
+    Q_ASSERT(!m_self);
+    m_self = this;
+
     KDEV_USE_EXTENSION_INTERFACE( IBuildSystemManager )
     IPlugin* i = core()->pluginController()->pluginForExtension( "org.kdevelop.IQMakeBuilder" );
     Q_ASSERT(i);
@@ -70,7 +80,7 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
 
 QMakeProjectManager::~QMakeProjectManager()
 {
-
+    m_self = 0;
 }
 
 IProjectFileManager::Features QMakeProjectManager::features() const
@@ -318,6 +328,29 @@ QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) co
         return new QMakeCache( curdir.canonicalPath()+"/.qmake.cache" );
     }
     return 0;
+}
+
+QString QMakeProjectManager::qtIncludeDir() const
+{
+    if ( !m_qtIncludeDir.isEmpty() ) {
+        return m_qtIncludeDir;
+    }
+
+    // Let's cache the Qt include dir
+    KProcess qtInc;
+    qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
+    qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+    qtInc.start();
+    if ( !qtInc.waitForFinished() )
+    {
+        kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
+    } else
+    {
+        QByteArray result = qtInc.readAll();
+        m_qtIncludeDir = QString::fromLocal8Bit( result ).trimmed();
+    }
+
+    return m_qtIncludeDir;
 }
 
 #include "qmakemanager.moc"

@@ -20,6 +20,8 @@
 
 #include "qmakeprojectfile.h"
 
+#include "qmakemanager.h"
+
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
@@ -68,19 +70,7 @@ bool QMakeProjectFile::read()
         }
     }
 
-    // Let's cache the Qt include dir
-    KProcess qtInc;
-    qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
-    qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
-    qtInc.start();
-    if ( !qtInc.waitForFinished() )
-    {
-        kDebug(9024) << "Failed to query Qt header path using qmake";
-    } else
-    {
-        QByteArray result = qtInc.readAll();
-        m_qtIncludeDir = QString::fromLocal8Bit( result ).trimmed();
-    }
+    m_qtIncludeDir = QMakeProjectManager::self()->qtIncludeDir();
 
     return QMakeFile::read();
 }
