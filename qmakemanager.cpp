@@ -88,22 +88,14 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
     }
 }
 
-KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* project) const
+KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
 {
-    if( project->folder() )
-        return project->folder()->url();
-    else if( project->parent() )
-    {
-        ProjectBaseItem* base = project->parent();
-        if( base->type() == ProjectBaseItem::Target )
-        {
-            return static_cast<ProjectFolderItem*>(base->parent())->url();
-        }else
-        {
-            return static_cast<ProjectFolderItem*>(base)->url();
-        }
+    while (!item->folder()) {
+        item = item->parent();
+        Q_ASSERT(item);
     }
-    return KUrl();
+    Q_ASSERT(item && item->folder());
+    return item->url();
 }
 
 ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,
