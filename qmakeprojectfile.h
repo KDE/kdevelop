@@ -58,6 +58,8 @@ public:
     QMakeCache* qmakeCache() const;
     QStringList resolveVariables( const QString& variable ) const;
 private:
+    void addUrlsForVariable(const QString& variable, KUrl::List* list) const;
+
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
     QString m_qtIncludeDir;

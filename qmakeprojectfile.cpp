@@ -113,37 +113,30 @@ QStringList QMakeProjectFile::subProjects() const
     return list;
 }
 
+void QMakeProjectFile::addUrlsForVariable(const QString& variable, KUrl::List* list) const
+{
+    const QStringList values = variableValues(variable);
+    kDebug(9024) << variable << values;
+    foreach( const QString& val, values ) {
+        KUrl url( resolveToSingleFileName(val) );
+        if( !list->contains(val) ) {
+            list->append(url);
+        }
+    }
+}
+
 KUrl::List QMakeProjectFile::includeDirectories() const
 {
     kDebug(9024) << "Fetching include dirs" << m_qtIncludeDir;
     kDebug(9024) << "CONFIG" << variableValues("CONFIG");
 
     KUrl::List list;
-    kDebug(9024) << "INCLUDEPATH" << variableValues("INCLUDEPATH");
-    foreach( const QString& val, variableValues("INCLUDEPATH") )
-    {
-        KUrl url(val);
-        if( !list.contains( url ) )
-            list << url;
-    }
-    kDebug(9024) << "QMAKE_INCDIR" << variableValues("QMAKE_INCDIR");
-    foreach( const QString& val, variableValues("QMAKE_INCDIR") )
-    {
-        KUrl url(val);
-        if( !list.contains( url ) )
-            list << url;
-    }
-    kDebug(9024) << "QMAKE_INCDIR_OPENGL" << variableValues("QMAKE_INCDIR_OPENGL");
+    addUrlsForVariable("INCLUDEPATH", &list);
+    addUrlsForVariable("QMAKE_INCDIR", &list);
     if( variableValues("CONFIG").contains("opengl") )
     {
-        foreach( const QString& val, variableValues("QMAKE_INCDIR_OPENGL") )
-        {
-            KUrl url(val);
-            if( !list.contains( url ) )
-                list << url;
-        }
+        addUrlsForVariable("QMAKE_INCDIR_OPENGL", &list);
     }
-    kDebug(9024) << "QT" << variableValues("QT");
     if( variableValues("CONFIG").contains("qt") )
     {
         KUrl url(m_qtIncludeDir);
@@ -154,74 +147,66 @@ KUrl::List QMakeProjectFile::includeDirectories() const
         {
             KUrl url;
             if ( module == "core" )
-                url.setUrl(m_qtIncludeDir + "/QtCore");
+                url.setPath(m_qtIncludeDir + "/QtCore");
             else if ( module == "gui" )
-                url.setUrl(m_qtIncludeDir + "/QtGui");
+                url.setPath(m_qtIncludeDir + "/QtGui");
             else if ( module == "network" )
-                url.setUrl(m_qtIncludeDir + "/QtNetwork");
+                url.setPath(m_qtIncludeDir + "/QtNetwork");
             else if ( module == "opengl" )
-                url.setUrl(m_qtIncludeDir + "/QtOpenGL");
+                url.setPath(m_qtIncludeDir + "/QtOpenGL");
             else if ( module == "phonon" )
-                url.setUrl(m_qtIncludeDir + "/Phonon");
+                url.setPath(m_qtIncludeDir + "/Phonon");
             else if ( module == "script" )
-                url.setUrl(m_qtIncludeDir + "/QtScript");
+                url.setPath(m_qtIncludeDir + "/QtScript");
             else if ( module == "scripttools" )
-                url.setUrl(m_qtIncludeDir + "/QtScriptTools");
+                url.setPath(m_qtIncludeDir + "/QtScriptTools");
             else if ( module == "sql" )
-                url.setUrl(m_qtIncludeDir + "/QtSql");
+                url.setPath(m_qtIncludeDir + "/QtSql");
             else if ( module == "svg" )
-                url.setUrl(m_qtIncludeDir + "/QtSvg");
+                url.setPath(m_qtIncludeDir + "/QtSvg");
             else if ( module == "webkit" )
-                url.setUrl(m_qtIncludeDir + "/QtWebKit");
+                url.setPath(m_qtIncludeDir + "/QtWebKit");
             else if ( module == "xml" )
-                url.setUrl(m_qtIncludeDir + "/QtXml");
+                url.setPath(m_qtIncludeDir + "/QtXml");
             else if ( module == "xmlpatterns" )
-                url.setUrl(m_qtIncludeDir + "/QtXmlPatterns");
+                url.setPath(m_qtIncludeDir + "/QtXmlPatterns");
             else if ( module == "qt3support" )
-                url.setUrl(m_qtIncludeDir + "/Qt3Support");
+                url.setPath(m_qtIncludeDir + "/Qt3Support");
             else if ( module == "designer" )
-                url.setUrl(m_qtIncludeDir + "/QtDesigner");
+                url.setPath(m_qtIncludeDir + "/QtDesigner");
             else if ( module == "uitools" )
-                url.setUrl(m_qtIncludeDir + "/QtUiTools");
+                url.setPath(m_qtIncludeDir + "/QtUiTools");
             else if ( module == "help" )
-                url.setUrl(m_qtIncludeDir + "/QtHelp");
+                url.setPath(m_qtIncludeDir + "/QtHelp");
             else if ( module == "assistant" )
-                url.setUrl(m_qtIncludeDir + "/QtAssistant");
+                url.setPath(m_qtIncludeDir + "/QtAssistant");
             else if ( module == "qtestlib" )
-                url.setUrl(m_qtIncludeDir + "/QtTest");
+                url.setPath(m_qtIncludeDir + "/QtTest");
             else if ( module == "qaxcontainer" )
-                url.setUrl(m_qtIncludeDir + "/ActiveQt");
+                url.setPath(m_qtIncludeDir + "/ActiveQt");
             else if ( module == "qaxserver" )
-                url.setUrl(m_qtIncludeDir + "/ActiveQt");
+                url.setPath(m_qtIncludeDir + "/ActiveQt");
             else if ( module == "dbus" )
-                url.setUrl(m_qtIncludeDir + "/QtDBus");
+                url.setPath(m_qtIncludeDir + "/QtDBus");
 
-            kDebug() << url;
             if( !list.contains( url ) )
                 list << url;
         }
     }
 
-    kDebug(9024) << "QMAKE_INCDIR_THREAD" << variableValues("QMAKE_INCDIR_THREAD");
     if( variableValues("CONFIG").contains("thread") )
     {
-        foreach( const QString& val, variableValues("QMAKE_INCDIR_THREAD") )
-        {
-            KUrl url(val);
-            if( !list.contains( url ) )
-                list << url;
-        }
+        addUrlsForVariable("QMAKE_INCDIR_THREAD", &list);
     }
-    kDebug(9024) << "QMAKE_INCDIR_X11" << variableValues("QMAKE_INCDIR_X11");
     if( variableValues("CONFIG").contains("x11") )
     {
-        foreach( const QString& val, variableValues("QMAKE_INCDIR_X11") )
-        {
-            KUrl url(val);
-            if( !list.contains( url ) )
-                list << url;
-        }
+        addUrlsForVariable("QMAKE_INCDIR_X11", &list);
     }
+
+    addUrlsForVariable("MOC_DIR", &list);
+    addUrlsForVariable("OBJECTS_DIR", &list);
+    addUrlsForVariable("UI_DIR", &list);
+
     kDebug(9024) << "final list:" << list;
     return list;
 }
