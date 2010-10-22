@@ -359,8 +359,8 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const KComponentData& inst
 {
     KDEV_USE_EXTENSION_INTERFACE( IProjectFileManager )
 
-    connect(core()->projectController(), SIGNAL(projectClosing(IProject*)),
-            this, SLOT(projectClosing(IProject*)));
+    connect(core()->projectController(), SIGNAL(projectClosing(KDevelop::IProject*)),
+            this, SLOT(projectClosing(KDevelop::IProject*)));
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin()

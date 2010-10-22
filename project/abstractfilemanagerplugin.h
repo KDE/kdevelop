@@ -115,7 +115,7 @@ private:
     Q_PRIVATE_SLOT(d, void deleted(const QString &path))
     Q_PRIVATE_SLOT(d, void created(const QString &path))
 
-    Q_PRIVATE_SLOT(d, void projectClosing(IProject* project))
+    Q_PRIVATE_SLOT(d, void projectClosing(KDevelop::IProject* project))
     Q_PRIVATE_SLOT(d, void jobFinished(KJob* job))
 };
 
