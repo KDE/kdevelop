@@ -42,7 +42,8 @@ public:
     virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project,
                                                            const KUrl& url,
                                                            KDevelop::ProjectBaseItem* parent = 0 );
-    virtual Features features() const { return Features(Folders | Targets | Files); }
+    virtual Features features() const;
+    virtual bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project ) const;
     //END AbstractFileManager
 
     //BEGIN IBuildSystemManager

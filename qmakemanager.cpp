@@ -73,6 +73,21 @@ QMakeProjectManager::~QMakeProjectManager()
 
 }
 
+IProjectFileManager::Features QMakeProjectManager::features() const
+{
+    return Features(Folders | Targets | Files);
+}
+
+bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* project ) const
+{
+    if (url.fileName() == ".kdev4" ) {
+        return false;
+    } else {
+        // TODO: filter setup
+        return true;
+    }
+}
+
 KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* project) const
 {
     if( project->folder() )
