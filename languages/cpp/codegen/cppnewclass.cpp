@@ -113,6 +113,7 @@ void CppOverridesPage::populateOverrideTree(const QList< DeclarationPointer >& b
 
   if (!context || !context->childContexts().size() == 1) {
     kWarning() << "invalid context for generated cpp file with default methods" << file.fileName();
+    file.remove();
     return;
   }
 
