@@ -159,13 +159,13 @@ void QMakeBuilder::distcleanCompleted( KDevelop::ProjectBaseItem* item, const QS
 void QMakeBuilder::qmakeCompleted(int id)
 {
     if( m_items.contains( id ) )
-        emit configured( m_items[id] );
+        emit configured( m_items.value(id) );
 }
 
 void QMakeBuilder::errored(int id)
 {
     if( m_items.contains(id))
-        emit failed(m_items[id]);
+        emit failed(m_items.value(id));
 }
 
 QString QMakeBuilder::qmakeBinary( KDevelop::IProject* project )

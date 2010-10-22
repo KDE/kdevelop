@@ -177,7 +177,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         {
             foreach( const QString& var, includefile.variables() )
             {
-                if( m_variableValues[ var ] != includefile.variableValues( var ) )
+                if( m_variableValues.value( var ) != includefile.variableValues( var ) )
                 {
                     m_variableValues[ var ] = includefile.variableValues( var );
                 }
@@ -216,7 +216,7 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
     {
         foreach( const QString& value, values )
         {
-            if( !m_variableValues[node->identifier->value].contains(value) )
+            if( !m_variableValues.value(node->identifier->value).contains(value) )
             {
                 m_variableValues[node->identifier->value].append(value);
             }
@@ -228,19 +228,13 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
         QString value = values.first().trimmed();
         QString regex = value.mid(2,value.indexOf("/", 2));
         QString replacement = value.mid(value.indexOf("/", 2)+1,value.lastIndexOf("/"));
-        QStringList list = m_variableValues[node->identifier->value];
-        list.replaceInStrings( QRegExp(regex), replacement );
-        m_variableValues[node->identifier->value] = list;
+        m_variableValues[node->identifier->value].replaceInStrings( QRegExp(regex), replacement );
     }
 }
 
 QStringList QMakeFile::variableValues( const QString& variable ) const
 {
-    if( m_variableValues.contains( variable ) )
-    {
-        return m_variableValues[ variable ];
-    }
-    return QStringList();
+    return m_variableValues.value( variable, QStringList() );
 }
 
 bool QMakeFile::containsVariable( const QString& variable ) const

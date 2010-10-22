@@ -149,9 +149,7 @@ QStringList VariableReferenceParser::variableReferences() const
 
 VariableInfo VariableReferenceParser::variableInfo( const QString& var ) const
 {
-    if( m_variables.contains( var ) )
-        return m_variables[var];
-    return VariableInfo();
+    return m_variables.value( var, VariableInfo());
 }
 
 void VariableReferenceParser::appendPosition( const QString& var, int start, int end,

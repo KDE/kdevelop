@@ -28,9 +28,7 @@ QMakeMkSpecs::QMakeMkSpecs( const QString& basicmkspecs, const QHash<QString,QSt
 
 QString QMakeMkSpecs::qmakeInternalVariable( const QString& var ) const
 {
-    if( m_qmakeInternalVariables.contains( var ) )
-        return m_qmakeInternalVariables[var];
-    return QString();
+    return m_qmakeInternalVariables.value(var, QString());
 }
 
 QString QMakeMkSpecs::resolveInternalQMakeVariables( const QString& value ) const
