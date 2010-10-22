@@ -44,6 +44,7 @@
 #include <interfaces/ilauncher.h>
 #include <interfaces/ilaunchmode.h>
 #include <QLayout>
+#include <QMenu>
 
 namespace KDevelop
 {
@@ -120,6 +121,14 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     }
     int width = qMax( tree->columnWidth( 0 ), level*tree->indentation() + tree->indentation() + tree->sizeHintForIndex( widthidx ).width() );
     tree->setColumnWidth( 0, width );
+    
+    QMenu* m = new QMenu(this);
+    foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes())
+    {
+        m->addActions(type->launcherSuggestions());
+        connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+    }
+    addConfig->setMenu(m);
     
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
@@ -294,6 +303,23 @@ void LaunchConfigurationDialog::createConfiguration()
         tree->edit( newindex );
         tree->resizeColumnToContents( 0 );
     }
+}
+
+void LaunchConfigurationDialog::addConfiguration(ILaunchConfiguration* _launch)
+{
+    LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>(_launch);
+    Q_ASSERT(launch);
+    int row = model->findItemForProject(launch->project())->row;
+    QModelIndex idx  = model->index(row, 0);
+    
+    qDebug() << "pepepe" << idx.isValid() << launch->project()->name();
+    model->addConfiguration(launch, idx);
+    
+    QModelIndex newindex = model->index( model->rowCount( idx ) - 1, 0, idx );
+    tree->selectionModel()->select( newindex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
+    tree->selectionModel()->setCurrentIndex( newindex, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
+    tree->edit( newindex );
+    tree->resizeColumnToContents( 0 );
 }
 
 LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstractItemModel(parent)
@@ -665,23 +691,34 @@ void LaunchConfigurationsModel::deleteConfiguration( const QModelIndex& index )
 
 void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
 {
-    TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
-    ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
-    if( parent.isValid() && t && !Core::self()->runController()->launchConfigurationTypes().isEmpty() )
+    if(!Core::self()->runController()->launchConfigurationTypes().isEmpty())
     {
-        if( !ti && t->parent )
-        {
-            kWarning() << "Expected project or global item, but didn't find either";
-            return;
-        }
-        beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
+        TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
+        ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
         
         LaunchConfigurationType* type = Core::self()->runController()->launchConfigurationTypes().at(0);
         QPair<QString,QString> launcher = qMakePair( type->launchers().at( 0 )->supportedModes().at(0), type->launchers().at( 0 )->id() );
         IProject* p = ( ti ? ti->project : 0 );
         ILaunchConfiguration* l = Core::self()->runController()->createLaunchConfiguration( type, launcher, p );
+        
+        addConfiguration(l, parent);
+    }
+}
+
+void LaunchConfigurationsModel::addConfiguration(ILaunchConfiguration* l, const QModelIndex& parent)
+{
+    TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
+    ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
+    if( parent.isValid() )
+    {
+        beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );
         addItemForLaunchConfig( dynamic_cast<LaunchConfiguration*>( l ) );
         endInsertRows();
+    }
+    else
+    {
+        delete l;
+        Q_ASSERT(false && "could not add the configuration");
     }
 }
 
