@@ -125,7 +125,12 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     QMenu* m = new QMenu(this);
     foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes())
     {
-        m->addActions(type->launcherSuggestions());
+        QList<QAction*> actions = type->launcherSuggestions();
+        foreach(QAction* action, actions) {
+            action->setParent(this);
+        }
+        
+        m->addActions(actions);
         connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
     }
     addConfig->setMenu(m);

@@ -408,9 +408,7 @@ QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem*
 
 QList<QAction*> NativeAppConfigType::launcherSuggestions()
 {
-    static QList<QAction*> ret;
-    if(!ret.isEmpty())
-        return ret;
+    QList<QAction*> ret;
     
     QList<KDevelop::ProjectTargetItem*> targets;
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
