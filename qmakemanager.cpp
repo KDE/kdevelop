@@ -90,12 +90,16 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
 
 KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
 {
-    while (!item->folder()) {
+    while ( !item->folder() ) {
         item = item->parent();
         Q_ASSERT(item);
     }
-    Q_ASSERT(item && item->folder());
-    return item->url();
+    Q_ASSERT( item && item->folder() );
+    if ( QMakeFolderItem* qmakeItem = dynamic_cast<QMakeFolderItem*>( item ) ) {
+        return qmakeItem->projectFile()->buildDirectory();
+    } else {
+        return KUrl();
+    }
 }
 
 ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,

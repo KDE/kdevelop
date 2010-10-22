@@ -42,6 +42,7 @@ public:
     bool read();
 
     QStringList subProjects() const;
+    QString buildDirectory() const;
 
     KUrl::List files() const;
     KUrl::List filesForTarget( const QString& ) const;

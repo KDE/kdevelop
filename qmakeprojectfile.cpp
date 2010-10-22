@@ -306,6 +306,17 @@ QStringList QMakeProjectFile::targets() const
     return list;
 }
 
+QString QMakeProjectFile::buildDirectory() const
+{
+    QStringList dir = variableValues("DESTDIR");
+    if (!dir.isEmpty()) {
+        kDebug(9024) << "found DESTDIR:" << dir;
+        return resolveToSingleFileName(dir.first());
+    } else {
+        return absoluteDir();
+    }
+}
+
 QMakeProjectFile::~QMakeProjectFile()
 {
     //TODO: delete cache, specs, ...?
