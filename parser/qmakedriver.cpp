@@ -32,6 +32,8 @@
 
 #include "ast.h"
 
+#define ifDebug(x)
+
 namespace QMake
 {
 
@@ -45,7 +47,7 @@ bool Driver::readFile( const QString& filename, const char* codec )
     QFile f(filename);
     if( !f.open(QIODevice::ReadOnly) )
     {
-        kDebug(9024) << "Couldn't open project file:" << filename;
+        kWarning(9024) << "Couldn't open project file:" << filename;
         return false;
     }
     QTextStream s(&f);
@@ -77,7 +79,7 @@ bool Driver::parse( ProjectAST** qmast )
     bool matched = qmakeparser.parseProject(&ast);
     if( matched )
     {
-        kDebug(9024) << "Successfully parsed";
+        ifDebug(kDebug(9024) << "Successfully parsed";)
         if( m_debug )
         {
             DebugVisitor d(&qmakeparser);
@@ -86,7 +88,7 @@ bool Driver::parse( ProjectAST** qmast )
         *qmast = new ProjectAST();
         BuildASTVisitor d( &qmakeparser, *qmast );
         d.visitProject(ast);
-        kDebug(9024) << "Found" << (*qmast)->statements.count() << "Statements";
+        ifDebug(kDebug(9024) << "Found" << (*qmast)->statements.count() << "Statements";)
     }else
     {
         ast = 0;

@@ -30,6 +30,8 @@
 #include "qmakeincludefile.h"
 #include "variablereferenceparser.h"
 
+#define ifDebug(x)
+
 //@TODO: Make the globbing stuff work with drives on win32
 
 QStringList resolveShellGlobbingInternal( const QString& relativefile,
@@ -97,7 +99,7 @@ QMakeFile::QMakeFile( const QString& file )
 bool QMakeFile::read()
 {
     QFileInfo fi( m_projectFile );
-    kDebug(9024) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;
+    ifDebug(kDebug(9024) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;)
     if( fi.isDir() )
     {
         QDir dir( m_projectFile );
@@ -119,16 +121,16 @@ bool QMakeFile::read()
 
     if( !d.parse( &m_ast ) )
     {
-        kDebug( 9024 ) << "Couldn't parse project:" << m_projectFile;
+        ifDebug(kDebug( 9024 ) << "Couldn't parse project:" << m_projectFile;)
         delete m_ast;
         m_ast = 0;
         m_projectFile = QString();
         return false;
     }else
     {
-        kDebug(9024) << "found ast:" << m_ast->statements.count() ;
+        ifDebug(kDebug(9024) << "found ast:" << m_ast->statements.count() ;)
         visitNode(m_ast);
-        kDebug(9024) << "Variables found:" << m_variableValues ;
+        ifDebug(kDebug(9024) << "Variables found:" << m_variableValues ;)
     }
     return true;
 }
@@ -161,13 +163,13 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         if( node->args.isEmpty() )
             return;
         QStringList arguments = getValueList( node->args );
-        kDebug(9024) << "found include" << node->identifier->value << arguments;
+        ifDebug(kDebug(9024) << "found include" << node->identifier->value << arguments;)
         QString argument = arguments.join("").trimmed();
         if( QFileInfo( argument ).isRelative() )
         {
             argument = QFileInfo( absoluteDir() + '/' + argument ).canonicalFilePath();
         }
-        kDebug(9024) << "Reading Include file:" << argument;
+        ifDebug(kDebug(9024) << "Reading Include file:" << argument;)
         QMakeIncludeFile includefile( argument, m_variableValues );
         includefile.setParent( this );
         bool read = includefile.read();
@@ -299,7 +301,7 @@ QStringList QMakeFile::resolveVariables( const QString& value ) const
     foreach( const QString& variable, parser.variableReferences() )
     {
         VariableInfo vi = parser.variableInfo( variable );
-        kDebug(9024) << "Found variable reference:" << variable << vi.positions << vi.type;
+        ifDebug(kDebug(9024) << "Found variable reference:" << variable << vi.positions << vi.type;)
     }
     return ret;
 }

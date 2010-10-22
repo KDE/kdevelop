@@ -32,6 +32,8 @@
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
 
+#define ifDebug(x)
+
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
         << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
@@ -85,12 +87,12 @@ bool QMakeProjectFile::read()
 
 QStringList QMakeProjectFile::subProjects() const
 {
-    kDebug(9024) << "Fetching subprojects";
+    ifDebug(kDebug(9024) << "Fetching subprojects";)
     QStringList list;
     foreach(  QString subdir, variableValues( "SUBDIRS" ) )
     {
         QString fileOrPath;
-        kDebug(9024) << "Found value:" << subdir;
+        ifDebug(kDebug(9024) << "Found value:" << subdir;)
         if ( containsVariable( subdir+".file" ) && !variableValues( subdir+".file" ).isEmpty() )
         {
             subdir = variableValues( subdir+".file" ).first();
@@ -109,14 +111,14 @@ QStringList QMakeProjectFile::subProjects() const
         list << fileOrPath;
     }
 
-    kDebug(9024) << "found" << list.size() << "subprojects";
+    ifDebug(kDebug(9024) << "found" << list.size() << "subprojects";)
     return list;
 }
 
 void QMakeProjectFile::addUrlsForVariable(const QString& variable, KUrl::List* list) const
 {
     const QStringList values = variableValues(variable);
-    kDebug(9024) << variable << values;
+    ifDebug(kDebug(9024) << variable << values;)
     foreach( const QString& val, values ) {
         KUrl url( resolveToSingleFileName(val) );
         if( !list->contains(val) ) {
@@ -127,8 +129,8 @@ void QMakeProjectFile::addUrlsForVariable(const QString& variable, KUrl::List* l
 
 KUrl::List QMakeProjectFile::includeDirectories() const
 {
-    kDebug(9024) << "Fetching include dirs" << m_qtIncludeDir;
-    kDebug(9024) << "CONFIG" << variableValues("CONFIG");
+    ifDebug(kDebug(9024) << "Fetching include dirs" << m_qtIncludeDir;)
+    ifDebug(kDebug(9024) << "CONFIG" << variableValues("CONFIG");)
 
     KUrl::List list;
     addUrlsForVariable("INCLUDEPATH", &list);
@@ -207,14 +209,13 @@ KUrl::List QMakeProjectFile::includeDirectories() const
     addUrlsForVariable("OBJECTS_DIR", &list);
     addUrlsForVariable("UI_DIR", &list);
 
-    kDebug(9024) << "final list:" << list;
+    ifDebug(kDebug(9024) << "final list:" << list;)
     return list;
 }
 
 KUrl::List QMakeProjectFile::files() const
 {
-    kDebug(9024) << "Fetching files";
-
+    ifDebug(kDebug(9024) << "Fetching files";)
 
     KUrl::List list;
     foreach( const QString& variable, QMakeProjectFile::FileVariables )
@@ -224,14 +225,13 @@ KUrl::List QMakeProjectFile::files() const
             list += KUrl::List( resolveFileName( value ) );
         }
     }
-    kDebug(9024) << "found" << list.size() << "files";
+    ifDebug(kDebug(9024) << "found" << list.size() << "files";)
     return list;
 }
 
 KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
 {
-    kDebug(9024) << "Fetching files";
-
+    ifDebug(kDebug(9024) << "Fetching files";)
 
     KUrl::List list;
     if( variableValues("INSTALLS").contains(s) )
@@ -255,7 +255,7 @@ KUrl::List QMakeProjectFile::filesForTarget( const QString& s ) const
             }
         }
     }
-    kDebug(9024) << "found" << list.size() << "files";
+    ifDebug(kDebug(9024) << "found" << list.size() << "files";)
     return list;
 }
 
@@ -271,7 +271,7 @@ QString QMakeProjectFile::getTemplate() const
 
 QStringList QMakeProjectFile::targets() const
 {
-    kDebug(9024) << "Fetching targets";
+    ifDebug(kDebug(9024) << "Fetching targets";)
 
     QStringList list;
 
@@ -287,7 +287,7 @@ QStringList QMakeProjectFile::targets() const
             list << target;
     }
 
-    kDebug(9024) << "found" << list.size() << "targets";
+    ifDebug(kDebug(9024) << "found" << list.size() << "targets";)
     return list;
 }
 
@@ -295,7 +295,7 @@ QString QMakeProjectFile::buildDirectory() const
 {
     QStringList dir = variableValues("DESTDIR");
     if (!dir.isEmpty()) {
-        kDebug(9024) << "found DESTDIR:" << dir;
+        ifDebug(kDebug(9024) << "found DESTDIR:" << dir;)
         return resolveToSingleFileName(dir.first());
     } else {
         return absoluteDir();
