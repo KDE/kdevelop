@@ -35,14 +35,16 @@ public:
     FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion);
     ProjectFolderItem* item() const;
 
+    void addSubDir(ProjectFolderItem* item);
+
 signals:
-    void entries(ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
+    void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,
+                 const KIO::UDSEntryList& entries, const bool forceRecursion);
     void nextJob();
 
 private slots:
     void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
     void slotResult(KJob* job);
-    void addSubDir(ProjectFolderItem* item);
     void startNextJob();
 
 private:

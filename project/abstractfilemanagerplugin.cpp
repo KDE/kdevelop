@@ -75,7 +75,8 @@ struct AbstractFileManagerPlugin::Private {
     /// @p forceRecursion if true, existing folders will be re-read no matter what
     KJob* eventuallyReadFolder( ProjectFolderItem* item,
                                 const bool forceRecursion = false );
-    void addJobItems(ProjectFolderItem* baseItem,
+    void addJobItems(FileManagerListJob* job,
+                     ProjectFolderItem* baseItem,
                      const KIO::UDSEntryList& entries,
                      const bool forceRecursion);
 
@@ -111,9 +112,9 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
 }
 
 KJob* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item,
-                                                                const bool forceResursion )
+                                                                const bool forceRecursion )
 {
-    FileManagerListJob* listJob = new FileManagerListJob( item, forceResursion );
+    FileManagerListJob* listJob = new FileManagerListJob( item, forceRecursion );
     m_projectJobs[ item->project() ] << listJob;
     kDebug() << "adding job" << listJob << item->url() << "for project" << item->project();
 
@@ -122,11 +123,8 @@ KJob* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderIte
     q->connect( listJob, SIGNAL(finished(KJob*)),
                 q, SLOT(jobFinished(KJob*)) );
 
-    q->connect( listJob, SIGNAL(entries(ProjectFolderItem*, KIO::UDSEntryList, bool)),
-                q, SLOT(addJobItems(ProjectFolderItem*, KIO::UDSEntryList, bool)) );
-
-    q->connect( q, SIGNAL(appendSubDir(ProjectFolderItem*)),
-                listJob, SLOT(addSubDir(ProjectFolderItem*)));
+    q->connect( listJob, SIGNAL(entries(FileManagerListJob*, ProjectFolderItem*, KIO::UDSEntryList, bool)),
+                q, SLOT(addJobItems(FileManagerListJob*, ProjectFolderItem*, KIO::UDSEntryList, bool)) );
 
     return listJob;
 }
@@ -139,7 +137,8 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
     m_projectJobs[ gmlJob->item()->project() ].removeOne( job );
 }
 
-void AbstractFileManagerPlugin::Private::addJobItems(ProjectFolderItem* baseItem,
+void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
+                                                     ProjectFolderItem* baseItem,
                                                      const KIO::UDSEntryList& entries,
                                                      const bool forceRecursion)
 {
@@ -202,7 +201,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(ProjectFolderItem* baseItem
                 folders.removeAt( index );
                 if ( forceRecursion ) {
                     //no need to add this item, but we still want to recurse into it
-                    emit q->appendSubDir( f );
+                    job->addSubDir( f );
                 }
             }
         } else if ( baseItem->child(j)->type() == ProjectBaseItem::File ) {
@@ -229,7 +228,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(ProjectFolderItem* baseItem
     foreach ( const KUrl& url, folders ) {
         ProjectFolderItem* folder = q->createFolderItem( baseItem->project(), url, baseItem );
         emit q->folderAdded( folder );
-        emit q->appendSubDir( folder );
+        job->addSubDir( folder );
     }
 }
 

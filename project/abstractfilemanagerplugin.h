@@ -29,6 +29,8 @@
 
 namespace KDevelop {
 
+class FileManagerListJob;
+
 /**
  * This class can be used as a common base for file managers.
  *
@@ -90,9 +92,6 @@ protected:
                                              KDevelop::ProjectBaseItem* parent);
 
 Q_SIGNALS:
-    ///TODO: mark private
-    void appendSubDir(ProjectFolderItem* item );
-
     void folderAdded(KDevelop::ProjectFolderItem* folder);
     void folderRemoved(KDevelop::ProjectFolderItem* folder);
     void folderRenamed(const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder);
@@ -108,7 +107,8 @@ private:
 
     Q_PRIVATE_SLOT(d, KJob* eventuallyReadFolder( ProjectFolderItem* item,
                                                   const bool forceRecursion = false ))
-    Q_PRIVATE_SLOT(d, void addJobItems(ProjectFolderItem* baseItem,
+    Q_PRIVATE_SLOT(d, void addJobItems(FileManagerListJob* job,
+                                       ProjectFolderItem* baseItem,
                                        const KIO::UDSEntryList& entries,
                                        const bool forceRecursion))
 
