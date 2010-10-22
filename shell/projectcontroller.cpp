@@ -74,6 +74,7 @@ Boston, MA 02110-1301, USA.
 #include <kio/job.h>
 #include "sessioncontroller.h"
 #include "session.h"
+#include <QApplication>
 
 namespace KDevelop
 {
@@ -306,42 +307,93 @@ bool projectFileExists( const KUrl& u )
     }
 }
 
+bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
+{
+    KSharedConfig::Ptr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
+    KConfigGroup grp = cfg->group( "Project" );
+    QString defaultName = dlg->projectFileUrl().upUrl().fileName();
+    return (grp.readEntry( "Name", QString() ) == dlg->projectName() || dlg->projectName() == defaultName) &&
+           grp.readEntry( "Manager", QString() ) == dlg->projectManager();
+}
+
 KUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const KUrl& startUrl)
 {
     Q_ASSERT(d);
     OpenProjectDialog dlg( fetch, startUrl, Core::self()->uiController()->activeMainWindow() );
     if(dlg.exec() == QDialog::Rejected)
         return KUrl();
-    
+
     KUrl projectFileUrl = dlg.projectFileUrl();
     kDebug() << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
-    if( !projectFileExists( projectFileUrl ) )
+    if( projectFileExists( projectFileUrl ) )
     {
+        // check whether config is equal
+        bool shouldAsk = true;
         if( projectFileUrl.isLocalFile() )
         {
-            bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
-                            dlg.projectName(),
-                            dlg.projectManager() );
-            if (!ok)
-                return KUrl();
-        } else
-        {
-            KTemporaryFile tmp;
-            tmp.open();
-            bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
-                            dlg.projectName(),
-                            dlg.projectManager() );
-            if (!ok)
-                return KUrl();
-
-            ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
-            if (!ok) {
-                KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
-                    i18n("Unable to create configuration file %1", projectFileUrl.url()));
-                return KUrl();
+            shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), &dlg );
+        } else {
+            QString tmpFile;
+            if ( KIO::NetAccess::download( projectFileUrl, tmpFile, qApp->activeWindow() ) ) {
+                shouldAsk = !equalProjectFile( tmpFile, &dlg );
+                QFile::remove(tmpFile);
+            } else {
+                shouldAsk = false;
             }
         }
+
+        if ( shouldAsk )
+        {
+            KGuiItem yes = KStandardGuiItem::yes();
+            yes.setText(i18n("Override"));
+            yes.setToolTip(i18n("Continue to open the project and use the just provided project configuration."));
+            yes.setIcon(KIcon());
+            KGuiItem no = KStandardGuiItem::no();
+            no.setText(i18n("Open Existing File"));
+            no.setToolTip(i18n("Continue to open the project but use the existing project configuration."));
+            no.setIcon(KIcon());
+            KGuiItem cancel = KStandardGuiItem::cancel();
+            cancel.setToolTip(i18n("Cancel and don't open the project."));
+            int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
+                i18n("There already exists a project configuration file at %1.\n"
+                     "Do you want to override it or open the existing file?", projectFileUrl.pathOrUrl()),
+                i18n("Override existing project configuration"), yes, no, cancel );
+            if ( ret == KMessageBox::No )
+            {
+                // no: reuse existing project file
+                return projectFileUrl;
+            } else if ( ret == KMessageBox::Cancel )
+            {
+                return KUrl();
+            } // else fall through and write new file
+        }
     }
+
+    if( projectFileUrl.isLocalFile() )
+    {
+        bool ok = writeNewProjectFile( KSharedConfig::openConfig( projectFileUrl.toLocalFile(), KConfig::SimpleConfig ),
+                        dlg.projectName(),
+                        dlg.projectManager() );
+        if (!ok)
+            return KUrl();
+    } else
+    {
+        KTemporaryFile tmp;
+        tmp.open();
+        bool ok = writeNewProjectFile( KSharedConfig::openConfig( tmp.fileName(), KConfig::SimpleConfig ),
+                        dlg.projectName(),
+                        dlg.projectManager() );
+        if (!ok)
+            return KUrl();
+
+        ok = KIO::NetAccess::upload( tmp.fileName(), projectFileUrl, Core::self()->uiControllerInternal()->defaultMainWindow() );
+        if (!ok) {
+            KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
+                i18n("Unable to create configuration file %1", projectFileUrl.url()));
+            return KUrl();
+        }
+    }
+
     return projectFileUrl;
 }
 
@@ -737,7 +789,6 @@ void ProjectController::closeProject(IProject* proj_)
         kWarning() << "Unknown Project subclass found!";
         return;
     }
-    
     d->m_projects.removeAll(proj);
     emit projectClosing(proj);
     //Core::self()->saveSettings();     // The project file is being closed.
