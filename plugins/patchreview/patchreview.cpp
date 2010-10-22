@@ -1266,6 +1266,7 @@ void showDiff(const KDevelop::VcsDiff& d)
         {
             KTemporaryFile temp2;
             temp2.setSuffix("2.patch");
+            //FIXME: don't leak
             temp2.setAutoRemove(false);
             temp2.open();
             QTextStream t2(&temp2);

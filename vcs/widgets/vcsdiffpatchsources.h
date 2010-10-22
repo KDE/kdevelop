@@ -41,6 +41,7 @@ class QWidget;
 class VCSDiffPatchSource : public KDevelop::IPatchSource {
     public:
     VCSDiffPatchSource(const KDevelop::VcsDiff& diff) ;
+    virtual ~VCSDiffPatchSource();
         
     virtual KUrl baseDir() const ;
     
