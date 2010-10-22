@@ -215,14 +215,23 @@ public:
     
     }
     
-    void importProject(const KUrl& url)
+    void importProject(const KUrl& url_)
     {
+        KUrl url(url_);
+        if ( url.isLocalFile() )
+        {
+            QString path = QFileInfo( url.toLocalFile() ).canonicalFilePath();
+            if ( !path.isEmpty() )
+                url.setPath( path );
+        }
+
         if ( !url.isValid() )
         {
             KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
                             i18n("Invalid Location: %1", url.prettyUrl()));
             return;
         }
+
         if ( m_currentlyOpening.contains(url))
         {
             kDebug() << "Already opening " << url << ". Aborting.";
@@ -646,6 +655,7 @@ void ProjectController::projectImportingFinished( IProject* project )
         config->sync();
     }
 
+    Q_ASSERT(d->m_currentlyOpening.contains(project->projectFileUrl()));
     d->m_currentlyOpening.removeAll(project->projectFileUrl());
     emit projectOpened( project );
 

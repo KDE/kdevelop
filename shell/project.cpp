@@ -248,12 +248,6 @@ public:
     {
         // helper method for open()
         projectFileUrl = projectFileUrl_;
-        if ( projectFileUrl.isLocalFile() )
-        {
-            QString path = QFileInfo( projectFileUrl.toLocalFile() ).canonicalFilePath();
-            if ( !path.isEmpty() )
-                projectFileUrl.setPath( path );
-        }
     }
 
     bool initProjectFiles()
