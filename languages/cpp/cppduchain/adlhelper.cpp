@@ -117,7 +117,7 @@ void ADLTypeVisitor::endVisit(const FunctionType * type)
         QualifiedIdentifier identifier = declaration->qualifiedIdentifier();
         while (identifier.count() > 1) {
             identifier.pop(); // last identifier would never be a namespace in correct code
-            QList<Declaration*> decls = m_helper.m_context->findDeclarations(identifier , KDevelop::SimpleCursor(), AbstractType::Ptr(), m_helper.m_topContext.data());
+            QList<Declaration*> decls = m_helper.m_context->findDeclarations(identifier , CursorInRevision::invalid(), AbstractType::Ptr(), m_helper.m_topContext.data());
             foreach(Declaration * decl, decls)
             {
                 if (decl->kind() == Declaration::Namespace)
@@ -314,7 +314,7 @@ void ADLHelper::addDeclarationScopeIdentifier(Declaration * decl)
 
 void ADLHelper::addAssociatedNamespace(const QualifiedIdentifier & identifier)
 {
-    QList<Declaration*> decls = m_context->findDeclarations(identifier , KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data());
+    QList<Declaration*> decls = m_context->findDeclarations(identifier , CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data());
     foreach(Declaration * decl, decls)
     {
         addAssociatedNamespace(decl);

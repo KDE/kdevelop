@@ -49,7 +49,7 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
   QList<Declaration*> goodDeclarations;
   Identifier id = m_context->localScopeIdentifier().last();
   id.clearTemplateIdentifiers();
-  QList<Declaration*> declarations = m_context->findLocalDeclarations( id, KDevelop::SimpleCursor(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions );
+  QList<Declaration*> declarations = m_context->findLocalDeclarations( id, CursorInRevision::invalid(), m_topContext.data(), AbstractType::Ptr(), DUContext::OnlyFunctions );
 
   for ( QList<Declaration*>::iterator it = declarations.begin(); it != declarations.end(); ++it )
   {
@@ -78,7 +78,7 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
   if ( !m_context || !m_topContext )
     return 0;
 
-  QList<Declaration*> declarations = m_context->findDeclarations( functionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
+  QList<Declaration*> declarations = m_context->findDeclarations( functionName, CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data() );
 
   // without ADL findDeclarations may fail so skip ADL there and do it here
   Declaration * resolvedDecl = resolveList( params, declarations, noUserDefinedConversion, false );
@@ -108,7 +108,7 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
 #ifdef DEBUG_ADL
       kDebug() << "  ADL candidate: " << adlFunctionName.toString();
 #endif
-      adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
+      adlDecls << m_context->findDeclarations( adlFunctionName, CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data() );
     }
     resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false );
 #ifdef DEBUG_ADL
@@ -483,7 +483,7 @@ QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList
     {
       QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
       adlFunctionName += funDecl->identifier();
-      adlDecls << m_context->findDeclarations( adlFunctionName, KDevelop::SimpleCursor(), AbstractType::Ptr(), m_topContext.data() );
+      adlDecls << m_context->findDeclarations( adlFunctionName, CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data() );
 
 #ifdef DEBUG_ADL
       kDebug() << "    ADL candidate: " << adlFunctionName;

@@ -83,43 +83,6 @@ using namespace Utils;
 
 QTEST_MAIN(TestDUChain)
 
-<<<<<<< HEAD
-=======
-void release(TopDUContext* top)
-{
-  //KDevelop::EditorIntegrator::releaseTopRange(top->textRangePtr());
-
-  TopDUContextPointer tp(top);
-  DUChain::self()->removeDocumentChain(static_cast<TopDUContext*>(top));
-  Q_ASSERT(!tp);
-}
-
-/// Object that locks the duchain for writing and destroys its TopDUContext on destruction
-struct LockedTopDUContext
-{
-  LockedTopDUContext(TopDUContext* top) : m_top(top)
-  {
-  }
-
-  ~LockedTopDUContext() {
-    DUChainWriteLocker lock(DUChain::lock());
-    release(m_top);
-  }
-  LockedTopDUContext& operator=(TopDUContext* ctx) {
-    m_top = ctx;
-    return *this;
-  }
-  TopDUContext* operator->() {
-    return m_top;
-  }
-  operator TopDUContext*() {
-    return m_top;
-  }
-  TopDUContext* m_top;
-  DUChainWriteLocker m_writeLock;
-};
-
->>>>>>> Added ADL while building uses for function calls
 namespace QTest {
   template<>
   char* toString(const Cursor& cursor)
@@ -387,13 +350,8 @@ void TestDUChain::testMultiByteCStrings()
   QCOMPARE(cDec->uses().size(), 1);
   QCOMPARE(cDec->uses().begin()->size(), 1);
   kDebug() << cDec->uses().begin()->first().textRange();
-<<<<<<< HEAD
   
 //   QVERIFY(cDec->uses().begin()->first() == RangeInRevision(0, 28, 0, 29));
-=======
-
-//   QVERIFY(cDec->uses().begin()->first() == SimpleRange(0, 28, 0, 29));
->>>>>>> Added ADL while building uses for function calls
 #endif
 }
 
@@ -772,7 +730,6 @@ void TestDUChain::testConstructorOperatorUses()
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().count(), 1);
 
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->count(), 2);
-<<<<<<< HEAD
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(0), RangeInRevision(0, 58, 0, 59));
   QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(1), RangeInRevision(0, 70, 0, 71));
   
@@ -780,15 +737,6 @@ void TestDUChain::testConstructorOperatorUses()
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->count(), 1);
   QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0), RangeInRevision(0, 76, 0, 77));
   
-=======
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(0), SimpleRange(0, 58, 0, 59));
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[0]->uses().begin()->at(1), SimpleRange(0, 70, 0, 71));
-
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->count(), 1);
-  QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->at(0), SimpleRange(0, 76, 0, 77));
-
->>>>>>> Added ADL while building uses for function calls
 }
 void TestDUChain::testDeclareFor()
 {
