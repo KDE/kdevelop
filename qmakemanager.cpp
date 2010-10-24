@@ -168,7 +168,12 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
 ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, const KUrl& url,
                                                          ProjectBaseItem* parent )
 {
-    QMakeFolderItem* qmakeParent = dynamic_cast<QMakeFolderItem*>( parent );
+    QMakeFolderItem* qmakeParent = 0;
+    ProjectBaseItem* p = parent;
+    while (!qmakeParent && p) {
+        qmakeParent = dynamic_cast<QMakeFolderItem*>( p );
+        p = p->parent();
+    }
     if ( !qmakeParent ) {
         return 0;
     }
