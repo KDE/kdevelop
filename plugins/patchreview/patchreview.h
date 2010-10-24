@@ -204,7 +204,7 @@ private:
     void addHighlighting( const KUrl& file, KDevelop::IDocument* document = 0 );
     void removeHighlighting( const KUrl& file = KUrl() );
 
-    KDevelop::IPatchSource* m_patch;
+    KDevelop::IPatchSource::Ptr m_patch;
 
     QTimer* m_updateKompareTimer;
 
