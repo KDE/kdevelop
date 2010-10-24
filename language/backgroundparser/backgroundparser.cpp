@@ -156,7 +156,7 @@ public:
         m_parser->updateProgressBar();
 
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
-        if(m_doneParseJobs == m_maxParseJobs)
+        if(m_doneParseJobs == m_maxParseJobs || m_weaver.queueLength() == 0)
             emit m_parser->hideProgress(m_parser);
     }
 
@@ -228,10 +228,12 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         m_threads = 0;
         m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", 1));
 
+        resume();
+
         if (BACKWARDS_COMPATIBLE_ENTRY("Enabled", true)) {
-            resume();
+            m_parser->enableProcessing();
         } else {
-            suspend();
+            m_parser->disableProcessing();
         }
     }
 

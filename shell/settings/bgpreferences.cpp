@@ -85,9 +85,9 @@ void BGPreferences::save()
     KCModule::save();
 
     if ( preferencesDialog->kcfg_enable->isChecked() )
-        Core::self()->languageController()->backgroundParser()->resume();
+        Core::self()->languageController()->backgroundParser()->enableProcessing();
     else
-        Core::self()->languageController()->backgroundParser()->suspend();
+        Core::self()->languageController()->backgroundParser()->disableProcessing();
 
     Core::self()->languageController()->backgroundParser()->setDelay( preferencesDialog->kcfg_delay->value() );
     Core::self()->languageController()->backgroundParser()->setThreadCount( preferencesDialog->kcfg_threads->value() );
