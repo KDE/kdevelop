@@ -180,6 +180,9 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 url.setPath(m_qtIncludeDir + "/ActiveQt");
             else if ( module == "dbus" )
                 url.setPath(m_qtIncludeDir + "/QtDBus");
+            else {
+                kWarning() << "unhandled QT module:" << module;
+            }
 
             if( !list.contains( url ) )
                 list << url;
