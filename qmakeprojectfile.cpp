@@ -172,7 +172,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 url.setPath(m_qtIncludeDir + "/QtHelp");
             else if ( module == "assistant" )
                 url.setPath(m_qtIncludeDir + "/QtAssistant");
-            else if ( module == "qtestlib" )
+            else if ( module == "qtestlib" || module == "testlib" )
                 url.setPath(m_qtIncludeDir + "/QtTest");
             else if ( module == "qaxcontainer" )
                 url.setPath(m_qtIncludeDir + "/ActiveQt");
