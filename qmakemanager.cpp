@@ -103,11 +103,18 @@ IProjectFileManager::Features QMakeProjectManager::features() const
 
 bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProject* /*project*/ ) const
 {
+    // TODO: filter setup
+
+    QString name = url.fileName();
     const QStringList invalidFolders = QStringList() << ".kdev4" << ".svn" << ".git" << "CVS";
-    if (isFolder && invalidFolders.contains( url.fileName() )) {
+    if (isFolder && invalidFolders.contains( name )) {
+        return false;
+    } else if (!isFolder && (name.startsWith("Makefile") || name.endsWith(".o")
+                          || name.startsWith("moc_") || name.endsWith(".moc")
+                          || name.endsWith(".so") || name.contains(".so.")))
+    {
         return false;
     } else {
-        // TODO: filter setup
         return true;
     }
 }
