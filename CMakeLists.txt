@@ -37,11 +37,19 @@ set(kdevqmakemanager_PART_SRCS
     qmakefile.cpp
     qmakecache.cpp
     variablereferenceparser.cpp
+    qmakejob.cpp
 )
 
 
 kde4_add_plugin(kdevqmakemanager ${kdevqmakemanager_PART_SRCS})
-target_link_libraries( kdevqmakemanager ${KDE4_KDEUI_LIBS} ${KDEVPLATFORM_INTERFACES_LIBRARIES} ${KDEVPLATFORM_PROJECT_LIBRARIES} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} kdev4qmakeparser )
+target_link_libraries( kdevqmakemanager
+    ${KDE4_KDEUI_LIBS}
+    ${KDEVPLATFORM_INTERFACES_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_UTIL_LIBRARIES}
+    ${KDEVPLATFORM_OUTPUTVIEW_LIBRARIES}
+    kdev4qmakeparser )
 
 ########### install files ###############
 

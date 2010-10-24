@@ -33,6 +33,9 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
+#include <interfaces/contextmenuextension.h>
+#include <interfaces/context.h>
+#include <interfaces/iruncontroller.h>
 #include <language/duchain/indexedstring.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
@@ -47,11 +50,16 @@
 #include "qmakeprojectfile.h"
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
+#include <QAction>
+#include <KIcon>
+#include "qmakejob.h"
 
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
-K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData("kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1", ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
+K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData(
+    "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1",
+    ki18n("Support for managing QMake projects"), KAboutData::License_GPL)))
 
 QMakeProjectManager* QMakeProjectManager::m_self = 0;
 
@@ -63,7 +71,8 @@ QMakeProjectManager* QMakeProjectManager::self()
 QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
         : AbstractFileManagerPlugin( QMakeSupportFactory::componentData(), parent ),
           IBuildSystemManager(),
-          m_builder(0)
+          m_builder(0),
+          m_runQmake(0)
 {
     Q_ASSERT(!m_self);
     m_self = this;
@@ -76,6 +85,10 @@ QMakeProjectManager::QMakeProjectManager( QObject* parent, const QVariantList& )
 
     connect(this, SIGNAL(folderAdded(KDevelop::ProjectFolderItem*)),
             this, SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
+
+    m_runQmake = new QAction(KIcon("qtlogo"), i18n("Run QMake"), this);
+    connect(m_runQmake, SIGNAL(triggered(bool)),
+            this, SLOT(slotRunQMake()));
 }
 
 QMakeProjectManager::~QMakeProjectManager()
@@ -356,6 +369,36 @@ QString QMakeProjectManager::qtIncludeDir() const
     }
 
     return m_qtIncludeDir;
+}
+
+ContextMenuExtension QMakeProjectManager::contextMenuExtension( Context* context )
+{
+    ContextMenuExtension ext;
+
+    if ( context->hasType( Context::ProjectItemContext ) ) {
+        ProjectItemContext* pic = dynamic_cast<ProjectItemContext*>( context );
+        Q_ASSERT(pic);
+        if ( pic->items().isEmpty() ) {
+            return ext;
+        }
+
+        m_actionItem = dynamic_cast<QMakeFolderItem*>( pic->items().first() );
+        if ( m_actionItem ) {
+            ext.addAction( ContextMenuExtension::ProjectGroup, m_runQmake );
+        }
+    }
+
+    return ext;
+}
+
+void QMakeProjectManager::slotRunQMake()
+{
+    Q_ASSERT(m_actionItem);
+
+    ///TODO: support shadow builds
+    QMakeJob* job = new QMakeJob( m_actionItem->url().toLocalFile(), this );
+
+    KDevelop::ICore::self()->runController()->registerJob( job );
 }
 
 #include "qmakemanager.moc"

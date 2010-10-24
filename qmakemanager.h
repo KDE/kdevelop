@@ -24,6 +24,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/abstractfilemanagerplugin.h>
 
+class QMakeFolderItem;
 class IQMakeBuilder;
 class QMakeCache;
 
@@ -40,6 +41,8 @@ public:
     static QMakeProjectManager* self();
 
     QString qtIncludeDir() const;
+
+    virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 
     //BEGIN AbstractFileManager
     virtual KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
@@ -72,6 +75,7 @@ public:
 
 private slots:
   void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
+  void slotRunQMake();
 
 private:
     KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KUrl& url );
@@ -82,6 +86,8 @@ private:
     QMakeCache* findQMakeCache( const QString& projectfile ) const;
     IQMakeBuilder* m_builder;
     mutable QString m_qtIncludeDir;
+    QAction* m_runQmake;
+    QMakeFolderItem* m_actionItem;
 
     static QMakeProjectManager* m_self;
 };
