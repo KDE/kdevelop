@@ -200,9 +200,7 @@ public Q_SLOTS:
     void documentLoaded(KDevelop::IDocument*);
     void documentUrlChanged(KDevelop::IDocument*);
 
-protected:
-    void loadSettings(bool projectIsLoaded);
-    void saveSettings(bool projectIsLoaded);
+    void loadSettings();
 
 protected Q_SLOTS:
     void parseComplete(ThreadWeaver::Job *job);

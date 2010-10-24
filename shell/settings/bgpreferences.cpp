@@ -59,6 +59,22 @@ BGPreferences::BGPreferences( QWidget *parent, const QVariantList &args )
     load();
 }
 
+void BGPreferences::load()
+{
+    KCModule::load();
+
+    // stay backwards compatible
+    Q_ASSERT(ICore::self()->activeSession());
+    KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
+    KConfigGroup oldConfig(KGlobal::config(), "Background Parser");
+#define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
+config.readEntry(entry, oldConfig.readEntry(entry, default))
+
+    preferencesDialog->kcfg_delay->setValue( BACKWARDS_COMPATIBLE_ENTRY("Delay", 500) );
+    preferencesDialog->kcfg_threads->setValue( BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", 2) );
+    preferencesDialog->kcfg_enable->setChecked( BACKWARDS_COMPATIBLE_ENTRY("Enabled", true) );
+}
+
 BGPreferences::~BGPreferences( )
 {
     delete preferencesDialog;
