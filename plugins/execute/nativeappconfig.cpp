@@ -46,6 +46,7 @@
 #include <util/environmentgrouplist.h>
 #include <project/projectitemlineedit.h>
 #include "projecttargetscombobox.h"
+#include <QMenu>
 
 KIcon NativeAppConfigPage::icon() const
 {
@@ -406,25 +407,28 @@ QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem*
     return ret;
 }
 
-QList<QAction*> NativeAppConfigType::launcherSuggestions()
+QMenu* NativeAppConfigType::launcherSuggestions()
 {
-    QList<QAction*> ret;
+    QMenu* ret = new QMenu;
+    ret->setTitle(tr("Project Executables"));
     
-    QList<KDevelop::ProjectTargetItem*> targets;
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
-    foreach(KDevelop::IProject* project, projects) {
-        if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets)
-            targets += targetsInFolder(project->projectItem());
-    }
     
-    foreach(KDevelop::ProjectTargetItem* target, targets) {
-        if(target->executable()) {
-            QString path = KDevelop::joinWithEscaping(model->pathFromIndex(target->index()),'/','\\');
-            QAction* act = new QAction(path, this);
-            act->setData(path);
-            connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
-            ret += act;
+    foreach(KDevelop::IProject* project, projects) {
+        if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
+            QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
+            
+            QMenu* projectMenu = ret->addMenu(project->name());
+            foreach(KDevelop::ProjectTargetItem* target, targets) {
+                if(target->executable()) {
+                    QString path = KDevelop::joinWithEscaping(model->pathFromIndex(target->index()),'/','\\');
+                    QAction* act = projectMenu->addAction(path);
+                    act->setData(path);
+                    connect(act, SIGNAL(triggered(bool)), SLOT(suggestionTriggered()));
+                }
+            }
+            projectMenu->setEnabled(!projectMenu->isEmpty());
         }
     }
     

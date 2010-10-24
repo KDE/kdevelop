@@ -125,13 +125,12 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     QMenu* m = new QMenu(this);
     foreach(LaunchConfigurationType* type, Core::self()->runController()->launchConfigurationTypes())
     {
-        QList<QAction*> actions = type->launcherSuggestions();
-        foreach(QAction* action, actions) {
-            action->setParent(this);
-        }
+        QMenu* suggestionsMenu = type->launcherSuggestions();
         
-        m->addActions(actions);
-        connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+        if(suggestionsMenu) {
+            m->addMenu(suggestionsMenu);
+            connect(type, SIGNAL(signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration*)), SLOT(addConfiguration(KDevelop::ILaunchConfiguration*)));
+        }
     }
     addConfig->setMenu(m);
     
@@ -712,8 +711,6 @@ void LaunchConfigurationsModel::createConfiguration(const QModelIndex& parent )
 
 void LaunchConfigurationsModel::addConfiguration(ILaunchConfiguration* l, const QModelIndex& parent)
 {
-    TreeItem* t = static_cast<TreeItem*>( parent.internalPointer() );
-    ProjectItem* ti = dynamic_cast<ProjectItem*>( t );
     if( parent.isValid() )
     {
         beginInsertRows( parent, rowCount( parent ), rowCount( parent ) );

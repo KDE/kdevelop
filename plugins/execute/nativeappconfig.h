@@ -88,7 +88,7 @@ public:
                                    KDevelop::ProjectBaseItem* item ) const;
     void configureLaunchFromCmdLineArguments ( KConfigGroup cfg,
                                                const QStringList& args ) const;
-    QList<QAction*> launcherSuggestions();
+    QMenu* launcherSuggestions();
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 public slots:

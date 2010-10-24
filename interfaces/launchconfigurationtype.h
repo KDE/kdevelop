@@ -25,7 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 
-class QAction;
+class QMenu;
 class KIcon;
 class KUrl;
 class KConfigGroup;
@@ -132,7 +132,11 @@ public:
     */
     virtual bool canLaunch( const KUrl& file ) const = 0;
     
-    virtual QList<QAction*> launcherSuggestions() = 0;
+    /**
+     * Returns a menu that will be added to the UI where the interface will be
+     * able to add any suggestion it needs, like default targets.
+     */
+    virtual QMenu* launcherSuggestions() { return 0; }
     
 signals:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
