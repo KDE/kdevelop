@@ -89,16 +89,19 @@ const QStringList excludepatterns = QStringList()
 
 }
 
+const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
+const KDialog::ButtonCode GrepDialog::ReplaceButton = KDialog::User2;
+
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    setButtons( SEARCH_BUTTON | REPLACE_BUTTON | KDialog::Cancel );
-    setButtonText( SEARCH_BUTTON, i18n("Search") );
-    setButtonText( REPLACE_BUTTON, i18n("Replace") );
+    setButtons( SearchButton | ReplaceButton | KDialog::Cancel );
+    setButtonText( SearchButton, i18n("Search") );
+    setButtonText( ReplaceButton, i18n("Replace") );
     setCaption( i18n("Find In Files") );
-    setDefaultButton( SEARCH_BUTTON );
+    setDefaultButton( SearchButton );
 
     setupUi(mainWidget());
 
@@ -289,18 +292,18 @@ bool GrepDialog::caseSensitiveFlag() const
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
-    enableButton( SEARCH_BUTTON, !text.isEmpty() );
+    enableButton( SearchButton, !text.isEmpty() );
 }
 
 void GrepDialog::replacementComboEditTextChanged( const QString& text )
 {
-    enableButton( REPLACE_BUTTON, !text.isEmpty() );
+    enableButton( ReplaceButton, !text.isEmpty() );
 }
 
 void GrepDialog::performAction(KDialog::ButtonCode button)
 {
     // a click on cancel trigger this signal too
-    if( button != SEARCH_BUTTON && button != REPLACE_BUTTON ) return;
+    if( button != SearchButton && button != ReplaceButton ) return;
     
     GrepJob* job = new GrepJob();
 
@@ -315,7 +318,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     job->setRegexpFlag( regexpFlag() );
     job->setRecursive( recursiveFlag() );
     job->setCaseSensitive( caseSensitiveFlag() );
-    job->setReplaceFlag( button == REPLACE_BUTTON );
+    job->setReplaceFlag( button == ReplaceButton );
 
     kDebug() << "registering job";
     KDevelop::ICore::self()->runController()->registerJob(job);

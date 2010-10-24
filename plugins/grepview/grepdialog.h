@@ -27,8 +27,8 @@ class GrepDialog : public KDialog, private Ui::GrepWidget
     Q_OBJECT
 
 public:
-    static const KDialog::ButtonCode SEARCH_BUTTON  = KDialog::User1;
-    static const KDialog::ButtonCode REPLACE_BUTTON = KDialog::User2;
+    static const KDialog::ButtonCode SearchButton;
+    static const KDialog::ButtonCode ReplaceButton;
     
     explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0 );
     ~GrepDialog();
