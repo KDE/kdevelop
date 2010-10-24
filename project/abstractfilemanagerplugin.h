@@ -27,6 +27,8 @@
 
 #include <interfaces/iplugin.h>
 
+class KDirWatch;
+
 namespace KDevelop {
 
 class FileManagerListJob;
@@ -90,6 +92,11 @@ protected:
      */
     virtual ProjectFileItem* createFileItem( KDevelop::IProject* project, const KUrl& url,
                                              KDevelop::ProjectBaseItem* parent);
+
+    /**
+     * @return the @c KDirWatch for the given @p project.
+     */
+    KDirWatch* projectWatcher( KDevelop::IProject* project ) const;
 
 Q_SIGNALS:
     void folderAdded(KDevelop::ProjectFolderItem* folder);

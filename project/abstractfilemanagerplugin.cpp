@@ -499,6 +499,11 @@ ProjectFolderItem* AbstractFileManagerPlugin::createFolderItem( IProject* projec
     return new ProjectFolderItem( project, url, parent );
 }
 
+KDirWatch* AbstractFileManagerPlugin::projectWatcher( IProject* project ) const
+{
+    return d->m_watchers.value( project, 0 );
+}
+
 //END Plugin
 
 #include "abstractfilemanagerplugin.moc"
