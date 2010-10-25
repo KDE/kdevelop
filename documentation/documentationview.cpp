@@ -68,6 +68,7 @@ DocumentationView::DocumentationView(QWidget* parent)
     }
 
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
+    connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     mIdentifiers=new KLineEdit(mActions);
     mIdentifiers->setClearButtonShown(true);
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
@@ -161,6 +162,14 @@ void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
     mCurrent=mHistory.end()-1;
 }
 
+void DocumentationView::emptyHistory()
+{
+    mHistory.clear();
+    mCurrent=mHistory.end();
+    mBack->setEnabled(false);
+    mForward->setEnabled(false);
+}
+
 void DocumentationView::updateView()
 {
     mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
@@ -212,6 +221,7 @@ void ProvidersModel::reloadProviders()
     beginResetModel();
     mProviders = ICore::self()->documentationController()->documentationProviders();
     endResetModel();
+    emit providersChanged();
 }
 
 QVariant ProvidersModel::data(const QModelIndex& index, int role) const
@@ -240,6 +250,7 @@ void ProvidersModel::unloaded(KDevelop::IPlugin* p)
         beginRemoveRows(QModelIndex(), idx, idx);
         mProviders.removeAt(idx);
         endRemoveRows();
+        emit providersChanged();
     }
 
     IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
@@ -252,6 +263,7 @@ void ProvidersModel::unloaded(KDevelop::IPlugin* p)
                 endRemoveRows();
             }
         }
+        emit providersChanged();
     }
 }
 
@@ -263,6 +275,7 @@ void ProvidersModel::loaded(IPlugin* p)
         beginInsertRows(QModelIndex(), 0, 0);
         mProviders.append(prov);
         endInsertRows();
+        emit providersChanged();
     }
 
     IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
@@ -270,6 +283,7 @@ void ProvidersModel::loaded(IPlugin* p)
         beginInsertRows(QModelIndex(), 0, 0);
         mProviders.append(provProv->providers());
         endInsertRows();
+        emit providersChanged();
     }
 }
 

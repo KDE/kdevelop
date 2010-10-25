@@ -46,6 +46,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 
     public slots:
         void addHistory(KSharedPtr< KDevelop::IDocumentation > doc);
+        void emptyHistory();
         void browseForward();
         void browseBack();
         void changedSelection();
@@ -88,6 +89,8 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListMode
 
     private:
         QList<KDevelop::IDocumentationProvider*> mProviders;
+signals:
+        void providersChanged();
 };
 
 #endif // DOCUMENTATIONVIEW_H
