@@ -43,6 +43,7 @@ public:
 
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
+    void serReplacementTemplateString(const QString &replTmplString);
     void setReplaceString(const QString &replaceString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
@@ -91,7 +92,9 @@ private:
     QPointer<GrepFindFilesThread> m_findThread;
 
     QString m_templateString;
+    QString m_replacementTemplateString;
     QString m_replaceString;
+    QString m_finalReplacement;   // computed with m_replaceString and m_replacementTemplateString
     QString m_filesString;
     QString m_excludeString;
     KUrl m_directory;

@@ -61,8 +61,16 @@ const QStringList template_str = QStringList()
     << "\\b%s\\b"
     << "\\b%s\\b\\s*=[^=]"
     << "\\->\\s*\\b%s\\b\\s*\\("
-    << "[a-z0-9_$]+\\s*::\\s*\\b%s\\b\\s*\\("
-    << "\\b%s\\b\\s*\\->\\s*[a-z0-9_$]+\\s*\\(";
+    << "([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\("
+    << "\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\(";
+
+const QStringList repl_template = QStringList()
+    << "%s"
+    << "%s"
+    << "%s = "
+    << "->%s("
+    << "\\1::%s("
+    << "%s->\\1(";
 
 const QStringList filepatterns = QStringList()
     << "*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M"
@@ -111,16 +119,15 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
     
-    templateEdit->setText(template_str[0]);
-
     templateTypeCombo->addItems(template_desc);
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
     templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
+    replacementTemplateEdit->setText( cg.readEntry("LastUsedReplacementTemplateString", repl_template[0]) );
     
     replacementCombo->addItem( "" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
-
+    
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
     caseSensitiveCheck->setChecked(cg.readEntry("case_sens", true));
@@ -142,8 +149,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
             this, SLOT(templateTypeComboActivated(int)));
     connect(patternCombo, SIGNAL(editTextChanged(const QString&)),
             this, SLOT(patternComboEditTextChanged( const QString& )));
-    connect(replacementCombo, SLOT(editTextChanged(const QString& )),
-            this, SLOT(replacementComboEditTextChanged( const QString& )));
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
     
@@ -200,12 +205,14 @@ GrepDialog::~GrepDialog()
     cg.writeEntry("file_patterns", qCombo2StringList(filesCombo));
     cg.writeEntry("LastUsedTemplateIndex", templateTypeCombo->currentIndex());
     cg.writeEntry("LastUsedTemplateString", templateEdit->text());
+    cg.writeEntry("LastUsedReplacementTemplateString", replacementTemplateEdit->text());
     cg.sync();
 }
 
 void GrepDialog::templateTypeComboActivated(int index)
 {
     templateEdit->setText(template_str[index]);
+    replacementTemplateEdit->setText(repl_template[index]);
 }
 
 void GrepDialog::syncButtonClicked( )
@@ -250,6 +257,11 @@ QString GrepDialog::templateString() const
     return templateEdit->text();
 }
 
+QString GrepDialog::replacementTemplateString() const
+{
+    return replacementTemplateEdit->text();
+}
+
 QString GrepDialog::replacementString() const
 {
     return replacementCombo->currentText();
@@ -292,11 +304,7 @@ bool GrepDialog::caseSensitiveFlag() const
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
-    enableButton( SearchButton, !text.isEmpty() );
-}
-
-void GrepDialog::replacementComboEditTextChanged( const QString& text )
-{
+    enableButton( SearchButton,  !text.isEmpty() );
     enableButton( ReplaceButton, !text.isEmpty() );
 }
 
@@ -308,6 +316,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepJob* job = new GrepJob();
 
     job->setPatternString(patternString());
+    job->serReplacementTemplateString(replacementTemplateString());
     job->setTemplateString(templateString());
     job->setReplaceString(replacementString());
     job->setFilesString(filesString());

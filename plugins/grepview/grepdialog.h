@@ -40,6 +40,7 @@ public:
     QString patternString() const;
     QString templateString() const;
     QString replacementString() const;
+    QString replacementTemplateString() const;
     QString filesString() const;
     QString excludeString() const;
     KUrl directory() const;
@@ -54,7 +55,6 @@ private Q_SLOTS:
     void templateTypeComboActivated(int);
     void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );
-    void replacementComboEditTextChanged( const QString& );
     void directoryChanged(const QString &dir);
 
 private:

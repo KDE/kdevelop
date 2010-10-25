@@ -169,6 +169,12 @@ void GrepJob::slotFindFinished()
         m_patternString = QRegExp::escape(m_patternString);
     }
     
+    if(m_replaceFlag && m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
+    {
+        emit showErrorMessage(i18n("Captures are not allowed in pattern string"), 5000);
+        return;
+    }
+    
     QString pattern = substitudePattern(m_templateString, m_patternString);
     m_regExp.setPattern(pattern);
     m_regExp.setPatternSyntax(QRegExp::RegExp2);
@@ -179,6 +185,11 @@ void GrepJob::slotFindFinished()
         // if pattern has already been escaped (raw text serch) a second escape will result in a different string anyway
         m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
+    
+    // backslashes can be sprecial chars
+    QString replacement = (m_regExp.patternSyntax() == QRegExp::Wildcard) ? m_replaceString : m_replaceString.replace("\\", "\\\\");
+    m_finalReplacement = substitudePattern(m_replacementTemplateString, replacement);
+    
     static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
     if(m_fileList.length()<100)
         emit showMessage(this, i18n("Searching for \"%1\"", m_regExp.pattern()));
@@ -210,7 +221,7 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     QString file = m_fileList[m_fileIndex].toLocalFile();
-                    GrepOutputItem::List items = m_replaceFlag ? replaceFile(file, m_regExp, m_replaceString) : grepFile(file, m_regExp);
+                    GrepOutputItem::List items = m_replaceFlag ? replaceFile(file, m_regExp, m_finalReplacement) : grepFile(file, m_regExp);
 
                     if(!items.isEmpty())
                         emit foundMatches(file, items);
@@ -280,6 +291,11 @@ bool GrepJob::doKill()
 void GrepJob::setTemplateString(const QString& templateString)
 {
     m_templateString = templateString;
+}
+
+void GrepJob::serReplacementTemplateString(const QString &replTmplString)
+{
+    m_replacementTemplateString = replTmplString;
 }
 
 void GrepJob::setFilesString(const QString& filesString)
