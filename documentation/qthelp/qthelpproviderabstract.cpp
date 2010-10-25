@@ -41,7 +41,8 @@
 #include "qthelpdocumentation.h"
 
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const KComponentData &componentData, const QString &collectionFileName, const QVariantList &args)
-    : m_engine(KStandardDirs::locateLocal("appdata", collectionFileName, true, componentData))
+    : QObject(parent)
+    , m_engine(KStandardDirs::locateLocal("appdata", collectionFileName, true, componentData))
 {
     Q_UNUSED(args);
     if( !m_engine.setupData() ) {

@@ -48,6 +48,11 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDoucmentationProviders()));
 }
 
+QtHelpPlugin::~QtHelpPlugin()
+{
+}
+
+
 void QtHelpPlugin::readConfig()
 {
     QtHelpSettings::self()->readConfig();
