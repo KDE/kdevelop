@@ -28,12 +28,14 @@ class QMakeProjectFile;
 class QMakeFolderItem : public KDevelop::ProjectBuildFolderItem
 {
 public:
-    QMakeFolderItem( KDevelop::IProject*, QMakeProjectFile*, const KUrl&, KDevelop::ProjectBaseItem* parent = 0 );
+    QMakeFolderItem( KDevelop::IProject*,const KUrl&, KDevelop::ProjectBaseItem* parent = 0 );
     virtual ~QMakeFolderItem();
-    QMakeProjectFile* projectFile() const;
+
+    void addProjectFile(QMakeProjectFile* file);
+    QList<QMakeProjectFile*> projectFiles() const;
 
 private:
-    QMakeProjectFile* m_projectFile;
+    QList<QMakeProjectFile*> m_projectFiles;
 };
 
 class QMakeTargetItem : public KDevelop::ProjectTargetItem

@@ -58,6 +58,7 @@ void QMakeProjectFile::setMkSpecs( QMakeMkSpecs* mkspecs )
 
 bool QMakeProjectFile::read()
 {
+    Q_ASSERT(m_mkspecs);
     foreach( const QString& var, m_mkspecs->variables() )
     {
         m_variableValues[var] = m_mkspecs->variableValues( var );
@@ -103,6 +104,17 @@ QStringList QMakeProjectFile::subProjects() const
 
     ifDebug(kDebug(9024) << "found" << list.size() << "subprojects";)
     return list;
+}
+
+bool QMakeProjectFile::hasSubProject(const QString& file) const
+{
+    foreach( const QString& sub, subProjects() ) {
+        if (sub == file) {
+            return true;
+        } else if ( QFileInfo(file).absoluteDir() == sub ) {
+            return true;
+        }
+    }
 }
 
 void QMakeProjectFile::addUrlsForVariable(const QString& variable, KUrl::List* list) const

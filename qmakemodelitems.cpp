@@ -28,19 +28,25 @@
 #include "qmakeprojectfile.h"
 
 
-QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, QMakeProjectFile* scope,
-                                const KUrl& url, KDevelop::ProjectBaseItem* parent )
-: KDevelop::ProjectBuildFolderItem( project, url, parent ), m_projectFile( scope )
+QMakeFolderItem::QMakeFolderItem( KDevelop::IProject* project, const KUrl& url,
+                                  KDevelop::ProjectBaseItem* parent )
+    : KDevelop::ProjectBuildFolderItem( project, url, parent )
 {
 }
 
-QMakeProjectFile* QMakeFolderItem::projectFile() const
+QList<QMakeProjectFile*> QMakeFolderItem::projectFiles() const
 {
-    return m_projectFile;
+    return m_projectFiles;
+}
+
+void QMakeFolderItem::addProjectFile(QMakeProjectFile* file)
+{
+    m_projectFiles << file;
 }
 
 QMakeFolderItem::~QMakeFolderItem()
 {
+    qDeleteAll(m_projectFiles);
 }
 
 struct QMakeTargetItemPrivate

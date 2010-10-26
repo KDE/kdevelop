@@ -56,6 +56,19 @@
 
 using namespace KDevelop;
 
+//BEGIN Helpers
+
+QMakeFolderItem* findQMakeFolderParent(ProjectBaseItem* item) {
+    QMakeFolderItem* p = 0;
+    while (!p && item) {
+        p = dynamic_cast<QMakeFolderItem*>( item );
+        item = item->parent();
+    }
+    return p;
+}
+
+//END Helpers
+
 K_PLUGIN_FACTORY(QMakeSupportFactory, registerPlugin<QMakeProjectManager>(); )
 K_EXPORT_PLUGIN(QMakeSupportFactory(KAboutData(
     "kdevqmakemanager","kdevqmake", ki18n("QMake Manager"), "0.1",
@@ -121,16 +134,20 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
 
 KUrl QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
 {
-    while ( !item->folder() ) {
-        item = item->parent();
-        Q_ASSERT(item);
+    ///TODO: support includes by some other parent or sibling in a different file-tree-branch
+    QMakeFolderItem* qmakeItem = findQMakeFolderParent(item);
+    if ( qmakeItem ) {
+        if (!item->parent()) {
+            return qmakeItem->projectFiles().first()->buildDirectory();
+        }
+        foreach ( QMakeProjectFile* pro, qmakeItem->projectFiles() ) {
+            if ( pro->hasSubProject( item->url().toLocalFile() ) ) {
+                return pro->buildDirectory();
+            }
+        }
     }
-    Q_ASSERT( item && item->folder() );
-    if ( QMakeFolderItem* qmakeItem = dynamic_cast<QMakeFolderItem*>( item ) ) {
-        return qmakeItem->projectFile()->buildDirectory();
-    } else {
-        return KUrl();
-    }
+
+    return KUrl();
 }
 
 ProjectFolderItem* QMakeProjectManager::createFolderItem( IProject* project, const KUrl& url,
@@ -182,47 +199,70 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem( IProject* project, cons
     }
     scope->read();
     kDebug(9024) << "top-level scope with variables:" << scope->variables();
-    QMakeFolderItem* item = new QMakeFolderItem( project, scope, project->folder() );
+    QMakeFolderItem* item = new QMakeFolderItem( project, project->folder() );
+    item->addProjectFile(scope);
     return item;
 }
 
 ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, const KUrl& url,
                                                          ProjectBaseItem* parent )
 {
-    QMakeFolderItem* qmakeParent = 0;
-    ProjectBaseItem* p = parent;
-    while (!qmakeParent && p) {
-        qmakeParent = dynamic_cast<QMakeFolderItem*>( p );
-        p = p->parent();
-    }
-    if ( !qmakeParent ) {
+    // find .pro or .pri files in dir
+    QDir dir(url.toLocalFile());
+    QStringList projectFiles = dir.entryList(QStringList() << "*.pro" << "*.pri", QDir::Files);
+    if ( projectFiles.isEmpty() ) {
         return 0;
-    }
-    QString path = url.toLocalFile( KUrl::RemoveTrailingSlash );
-    if ( !qmakeParent->projectFile()->subProjects().contains( path ) ) {
-        return 0;
-    }
-    QMakeProjectFile* qmscope = new QMakeProjectFile( path );
-
-    const QFileInfo info( path );
-    const QDir d = info.dir();
-    if( d.exists(".qmake.cache") ) {
-        QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
-        cache->setMkSpecs( qmakeParent->projectFile()->mkSpecs() );
-        cache->read();
-        qmscope->setQMakeCache( cache );
-    } else {
-        qmscope->setQMakeCache( qmakeParent->projectFile()->qmakeCache() );
     }
 
-    qmscope->setMkSpecs( qmakeParent->projectFile()->mkSpecs() );
-    if( qmscope->read() ) {
-        //TODO: only on read?
-        return new QMakeFolderItem( project, qmscope, url, parent );
-    } else {
-        delete qmscope;
-        return 0;
+    QMakeFolderItem* folderItem = new QMakeFolderItem(project, url, parent);
+
+    //TODO: included by not-parent file (in a nother file-tree-branch).
+    QMakeFolderItem* qmakeParent = findQMakeFolderParent(parent);
+    Q_ASSERT(qmakeParent);
+
+    foreach( const QString& file, projectFiles ) {
+        const QString absFile = dir.absoluteFilePath(file);
+
+        //TODO: multiple includes by different .pro's
+        QMakeProjectFile* parentPro = 0;
+        foreach( QMakeProjectFile* p, qmakeParent->projectFiles() ) {
+            if (p->hasSubProject(absFile)) {
+                parentPro = p;
+                break;
+            }
+        }
+        if (!parentPro) {
+            kWarning() << "skipping:" << file << "because I could not find a parent pro";
+            continue;
+        }
+        kDebug(9024) << "add project file:" << absFile << "parent:" << parentPro->absoluteFile();
+
+        QMakeProjectFile* qmscope = new QMakeProjectFile( absFile );
+
+        const QFileInfo info( absFile );
+        const QDir d = info.dir();
+        ///TODO: cleanup
+        if( d.exists(".qmake.cache") ) {
+            QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
+            cache->setMkSpecs( parentPro->mkSpecs() );
+            cache->read();
+            qmscope->setQMakeCache( cache );
+        } else {
+            qmscope->setQMakeCache( parentPro->qmakeCache() );
+        }
+
+        qmscope->setMkSpecs( parentPro->mkSpecs() );
+
+        if( qmscope->read() ) {
+            //TODO: only on read?
+            folderItem->addProjectFile( qmscope );
+        } else {
+            delete qmscope;
+            return 0;
+        }
     }
+
+    return folderItem;
 }
 
 void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
@@ -233,15 +273,15 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
     }
 
     kDebug(9024) << "adding targets for" << folder->url();
-    foreach( const QString& s, qmakeParent->projectFile()->targets() )
-    {
-        kDebug(9024) << "adding target:" << s;
-        QMakeTargetItem* target = new QMakeTargetItem( folder->project(), s, folder );
-        foreach( const KUrl& u, qmakeParent->projectFile()->filesForTarget(s) )
-        {
-            kDebug(9024) << "adding file:" << u;
-            new ProjectFileItem( folder->project(), u, target );
-            ///TODO: signal?
+    foreach( QMakeProjectFile* pro, qmakeParent->projectFiles() ) {
+        foreach( const QString& s, pro->targets() ) {
+            kDebug(9024) << "adding target:" << s;
+            QMakeTargetItem* target = new QMakeTargetItem( folder->project(), s, folder );
+            foreach( const KUrl& u, pro->filesForTarget(s) ) {
+                kDebug(9024) << "adding file:" << u;
+                new ProjectFileItem( folder->project(), u, target );
+                ///TODO: signal?
+            }
         }
     }
 }
@@ -274,29 +314,17 @@ IProjectBuilder* QMakeProjectManager::builder(ProjectFolderItem*) const
 KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
 {
     KUrl::List list;
-    QMakeFolderItem* folder = 0;
+    QMakeFolderItem* folder = findQMakeFolderParent(item);
 
-    if( item->type() == ProjectBaseItem::File )
-    {
-        folder =
-                dynamic_cast<QMakeFolderItem*>( item->parent() );
-        if( !folder )
-        {
-            folder =
-                dynamic_cast<QMakeFolderItem*>( item->parent()->parent() );
+    if ( folder ) {
+//         qDebug() << "include dirs:" << folder << folder->url();
+        //TODO: maybe filter duplicates
+        foreach( QMakeProjectFile* pro, folder->projectFiles() ) {
+            if (pro->files().contains(item->url())) {
+                list += pro->includeDirectories();
+            }
         }
-    }else if( item->type() == ProjectBaseItem::Target )
-    {
-        folder =
-                dynamic_cast<QMakeFolderItem*>( item->parent() );
-    }else
-    {
-        folder =
-                dynamic_cast<QMakeFolderItem*>( item );
-    }
-    if( folder )
-    {
-        list += folder->projectFile()->includeDirectories();
+//         qDebug() << list;
     }
     return list;
 }
