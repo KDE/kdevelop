@@ -115,6 +115,7 @@ bool QMakeProjectFile::hasSubProject(const QString& file) const
             return true;
         }
     }
+    return false;
 }
 
 void QMakeProjectFile::addUrlsForVariable(const QString& variable, KUrl::List* list) const
