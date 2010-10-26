@@ -306,7 +306,9 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
             value.replace(pos.start, pos.end - pos.start + 1, varValue);
         }
     }
-    return value.split(" ", QString::SkipEmptyParts);
+    QStringList ret = value.split(" ", QString::SkipEmptyParts);
+    ifDebug(kDebug(9024) << "resolved variable" << var << "to" << ret;)
+    return ret;
 }
 
 //kate: hl c++;
