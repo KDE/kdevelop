@@ -162,10 +162,10 @@ public:
     }
   }
 
-  mutable QHash<Qt::HANDLE,TopDUContext::CacheData*> m_threadCaches;
+  mutable QHash<QThread*, TopDUContext::CacheData*> m_threadCaches;
 
   TopDUContext::CacheData* currentCache() const {
-    QHash<Qt::HANDLE,TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThreadId());
+    QHash<QThread*, TopDUContext::CacheData*>::iterator it = m_threadCaches.find(QThread::currentThread());
     if(it != m_threadCaches.end())
       return *it;
     else
@@ -1385,13 +1385,13 @@ QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, 
 TopDUContext::Cache::Cache(TopDUContextPointer context) : d(new CacheData(context)) {
   DUChainWriteLocker lock(DUChain::lock());
   if(d->context)
-    d->context->m_local->m_threadCaches.insert(QThread::currentThreadId(), d);
+    d->context->m_local->m_threadCaches.insert(QThread::currentThread(), d);
 }
 
 TopDUContext::Cache::~Cache() {
   DUChainWriteLocker lock(DUChain::lock());
-  if(d->context && d->context->m_local->m_threadCaches[QThread::currentThreadId()] == d)
-    d->context->m_local->m_threadCaches.remove(QThread::currentThreadId());
+  if(d->context && d->context->m_local->m_threadCaches[QThread::currentThread()] == d)
+    d->context->m_local->m_threadCaches.remove(QThread::currentThread());
 
   delete d;
 }
