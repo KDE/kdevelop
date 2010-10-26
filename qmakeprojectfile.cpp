@@ -71,6 +71,11 @@ bool QMakeProjectFile::read()
         }
     }
 
+    ///TODO: more special variables
+    m_variableValues["PWD"] = QStringList() << absoluteDir();
+    ///TODO: this is supposed to be the build dir!
+    m_variableValues["OUT_PWD"] = QStringList() << absoluteDir();
+
     if (m_qtIncludeDir.isEmpty()) {
         // Let's cache the Qt include dir
         KProcess qtInc;
