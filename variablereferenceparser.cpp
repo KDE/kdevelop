@@ -73,7 +73,8 @@ bool VariableReferenceParser::parse()
                         curpos++;
                     }while( curpos < size && it->unicode() != ')' );
                     type = VariableInfo::ShellVariableResolveQMake;
-                    variable = m_content.mid( begin + 3, curpos - begin - 1 );
+                    variable = m_content.mid( begin + 3, curpos - begin - 3 );
+                    ++curpos;
                 }else if( it->unicode() == '{' )
                 {
                     do
@@ -85,7 +86,8 @@ bool VariableReferenceParser::parse()
                             type = VariableInfo::FunctionCall;
                         }
                     }while( curpos < size && it->unicode() != '}' );
-                    variable = m_content.mid( begin + 3, curpos - begin - 1 );
+                    variable = m_content.mid( begin + 3, curpos - begin - 3 );
+                    ++curpos;
                 }else
                 {
                     do

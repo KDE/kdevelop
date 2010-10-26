@@ -22,6 +22,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <QtCore/QProcessEnvironment>
 
 #include <kdebug.h>
 
@@ -163,6 +164,8 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         if( node->args.isEmpty() )
             return;
         QStringList arguments = getValueList( node->args );
+        Q_ASSERT(!arguments.isEmpty());
+
         ifDebug(kDebug(9024) << "found include" << node->identifier->value << arguments;)
         QString argument = arguments.join("").trimmed();
         if( QFileInfo( argument ).isRelative() )
@@ -173,6 +176,7 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         QMakeIncludeFile includefile( argument, m_variableValues );
         includefile.setParent( this );
         bool read = includefile.read();
+        ifDebug(kDebug(9024) << "successfully read:" << read;)
         if( read )
         {
             foreach( const QString& var, includefile.variables() )
@@ -301,12 +305,36 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
     QString value = var;
     foreach( const QString& variable, parser.variableReferences() ) {
         VariableInfo vi = parser.variableInfo( variable );
-        QString varValue = m_variableValues[ variable ].join(" ");
+        QString varValue;
+
+        switch (vi.type) {
+            case VariableInfo::QMakeVariable:
+                if (!m_variableValues.contains(variable)) {
+                    kWarning(9024) << "unknown variable:" << variable << "skipping";
+                    continue;
+                }
+                varValue = m_variableValues.value( variable, QStringList() ).join(" ");
+                break;
+            case VariableInfo::ShellVariableResolveQMake:
+            case VariableInfo::ShellVariableResolveMake:
+                ///TODO: make vs qmake time
+                varValue = QProcessEnvironment::systemEnvironment().value(variable);
+                break;
+            case VariableInfo::FunctionCall:
+                ///TODO:
+                kWarning(9024) << "unimplemented function call in variable:" << variable;
+                continue;
+            case VariableInfo::Invalid:
+                kWarning(9024) << "invalid qmake variable:" << variable;
+                continue;
+        }
+        
         foreach(const VariableInfo::Position& pos, vi.positions ) {
             value.replace(pos.start, pos.end - pos.start + 1, varValue);
         }
     }
     QStringList ret = value.split(" ", QString::SkipEmptyParts);
+    Q_ASSERT(!ret.isEmpty());
     ifDebug(kDebug(9024) << "resolved variable" << var << "to" << ret;)
     return ret;
 }

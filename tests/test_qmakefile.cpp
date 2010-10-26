@@ -25,6 +25,8 @@
 #include <QTest>
 
 #include <QTextStream>
+#include <QProcessEnvironment>
+#include <QDebug>
 #include <KTemporaryFile>
 
 QTEST_MAIN(TestQMakeFile);
@@ -40,7 +42,7 @@ char *toString(const QStringList &list)
     if (list.isEmpty()) {
         ba = "()";
     } else {
-        ba = "([" + list.join("], [").toLocal8Bit() + "])";
+        ba = "(\"" + list.join("\", \"").toLocal8Bit() + "\")";
     }
     return qstrdup(ba.data());
 }
@@ -97,6 +99,21 @@ void TestQMakeFile::varResolution_data()
     variables["VAR1"] = QStringList() << "1";
     variables["VAR2"] = QStringList() << "1";
     QTest::newRow("var-in-var") << "VAR1 = 1\nVAR2 = $$VAR1\n"
+                            << variables;
+    }
+    {
+    QMakeFile::VariableMap variables;
+    
+    variables["VAR1"] = QStringList() << "foo";
+    variables["VAR2"] = QStringList() << "foo";
+    QTest::newRow("curlyvar") << "VAR1 = foo\nVAR2 = $${VAR1}\n"
+                            << variables;
+    }
+    {
+    QMakeFile::VariableMap variables;
+    
+    variables["VAR1"] = QStringList() << QProcessEnvironment::systemEnvironment().value("USER");
+    QTest::newRow("qmakeshell") << "VAR1 = $$(USER)\n"
                             << variables;
     }
 }
