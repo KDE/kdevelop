@@ -320,6 +320,10 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
                 ///TODO: make vs qmake time
                 varValue = QProcessEnvironment::systemEnvironment().value(variable);
                 break;
+            case VariableInfo::QtConfigVariable:
+                //should be handled in QMakeProjectfile
+                kWarning(9024) << "QtConfigVariable slipped through:" << variable;
+                continue;
             case VariableInfo::FunctionCall:
                 ///TODO:
                 kWarning(9024) << "unimplemented function call in variable:" << variable;

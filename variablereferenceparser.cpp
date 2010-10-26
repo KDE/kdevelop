@@ -86,6 +86,16 @@ bool VariableReferenceParser::parse()
                     }while( curpos < size && it->unicode() != '}' );
                     variable = m_content.mid( begin + 3, curpos - begin - 3 );
                     ++curpos;
+                }else if( it->unicode() == '[' )
+                {
+                    do
+                    {
+                        it++;
+                        curpos++;
+                    }while( curpos < size && it->unicode() != ']' );
+                    type = VariableInfo::QtConfigVariable;
+                    variable = m_content.mid( begin + 3, curpos - begin - 3 );
+                    ++curpos;
                 }else
                 {
                     do

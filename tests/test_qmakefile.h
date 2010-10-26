@@ -32,6 +32,8 @@ private slots:
 
     void referenceParser_data();
     void referenceParser();
+
+    void libTarget();
 };
 
 #endif // TEST_QMAKEFILE_H

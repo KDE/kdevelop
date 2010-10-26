@@ -19,7 +19,9 @@
  ***************************************************************************/
 
 #include "qmakemkspecs.h"
+
 #include <QStringList>
+#include <QDebug>
 
 QMakeMkSpecs::QMakeMkSpecs( const QString& basicmkspecs, const QHash<QString,QString>& variables )
     : QMakeFile( basicmkspecs ), m_qmakeInternalVariables( variables )
@@ -33,13 +35,13 @@ QString QMakeMkSpecs::qmakeInternalVariable( const QString& var ) const
 
 QString QMakeMkSpecs::resolveInternalQMakeVariables( const QString& value ) const
 {
-    QRegExp mkspecsvar("$$\\[([^\\]])\\]");
+    QRegExp mkspecsvar("\\$\\$\\[([^\\]]+)\\]", Qt::CaseSensitive, QRegExp::RegExp2);
     int pos = 0;
     QString ret = value;
-    while( pos != -1 )
+    while( -1 != (pos = mkspecsvar.indexIn( value, pos )) )
     {
-        pos = mkspecsvar.indexIn( value, pos );
         ret.replace( pos, mkspecsvar.matchedLength(), qmakeInternalVariable( mkspecsvar.cap(1) ) );
+        pos += mkspecsvar.matchedLength();
     }
     return ret;
 }

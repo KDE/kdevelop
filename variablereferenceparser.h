@@ -33,6 +33,7 @@ public:
     enum VariableType
     {
         QMakeVariable,
+        QtConfigVariable,
         ShellVariableResolveQMake,
         ShellVariableResolveMake,
         FunctionCall,

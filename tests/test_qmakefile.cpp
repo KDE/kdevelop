@@ -21,6 +21,8 @@
 #include "test_qmakefile.h"
 #include "qmakefile.h"
 #include "variablereferenceparser.h"
+#include "qmakeprojectfile.h"
+#include "qmakemkspecs.h"
 
 #include <QTest>
 
@@ -28,6 +30,8 @@
 #include <QProcessEnvironment>
 #include <QDebug>
 #include <KTemporaryFile>
+#include <KProcess>
+#include <QFileInfo>
 
 QTEST_MAIN(TestQMakeFile);
 
@@ -63,6 +67,37 @@ char *toString(const QMakeFile::VariableMap &variables)
     return qstrdup(ba.data());
 }
 
+}
+
+QHash<QString,QString> queryQMake( const QString& path )
+{
+    QHash<QString,QString> hash;
+    KProcess p;
+    QStringList queryVariables;
+    queryVariables << "QMAKE_MKSPECS" << "QMAKE_VERSION" <<
+            "QT_INSTALL_BINS" << "QT_INSTALL_CONFIGURATION" <<
+            "QT_INSTALL_DATA" << "QT_INSTALL_DEMOS" << "QT_INSTALL_DOCS" <<
+            "QT_INSTALL_EXAMPLES" << "QT_INSTALL_HEADERS" <<
+            "QT_INSTALL_LIBS" << "QT_INSTALL_PLUGINS" << "QT_INSTALL_PREFIX" <<
+            "QT_INSTALL_TRANSLATIONS" << "QT_VERSION";
+
+    QFileInfo info(path);
+    Q_ASSERT(info.exists());
+    foreach( const QString& var, queryVariables)
+    {
+        p.clearProgram();
+        p.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+        p.setWorkingDirectory( info.absolutePath() );
+        //To be implemented when there's an API to fetch Env from Project
+        //p.setEnv();
+        p << "qmake-qt4" << "-query" << var;
+        p.execute();
+        QString result = QString::fromLocal8Bit( p.readAllStandardOutput() ).trimmed();
+        if( result != "**Unknown**")
+            hash[var] = result;
+    }
+    qDebug() << "Ran qmake-qt4, found:" << hash;
+    return hash;
 }
 
 void TestQMakeFile::varResolution()
@@ -151,5 +186,28 @@ void TestQMakeFile::referenceParser_data()
     QTest::newRow("dot") << ".";
     QTest::newRow("dotdot") << "..";
 }
+
+void TestQMakeFile::libTarget()
+{
+    KTemporaryFile tmpfile;
+    tmpfile.open();
+    QTextStream stream(&tmpfile);
+    stream << "TARGET = MyLib\nTEMPLATE = lib\n";
+    stream << flush;
+    tmpfile.close();
+
+    QMakeProjectFile file(tmpfile.fileName());
+
+    QHash<QString,QString> qmvars = queryQMake( tmpfile.fileName() );
+    QString specFile = qmvars["QMAKE_MKSPECS"] + "/default/qmake.conf";
+    QVERIFY(QFile::exists(specFile));
+    QMakeMkSpecs* mkspecs = new QMakeMkSpecs( specFile, qmvars );
+    mkspecs->read();
+    file.setMkSpecs(mkspecs);
+    QVERIFY(file.read());
+
+    QCOMPARE(file.targets(), QStringList() << "MyLib");
+}
+
 
 #include "test_qmakefile.moc"
