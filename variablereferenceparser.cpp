@@ -107,6 +107,7 @@ bool VariableReferenceParser::parse()
 
                     if( it->unicode() == '(' )
                     {
+                        type = VariableInfo::FunctionCall;
                         int braceCount = 0;
                         do
                         {

@@ -302,6 +302,8 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
         return QStringList() << var;
     }
 
+    ///TODO: multiple vars in one place will make the offsets go bonkers
+
     QString value = var;
     foreach( const QString& variable, parser.variableReferences() ) {
         VariableInfo vi = parser.variableInfo( variable );
@@ -325,8 +327,17 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
                 kWarning(9024) << "QtConfigVariable slipped through:" << variable;
                 continue;
             case VariableInfo::FunctionCall:
-                ///TODO:
-                kWarning(9024) << "unimplemented function call in variable:" << variable;
+                if (variable == "qtLibraryTarget") {
+                    foreach(const VariableInfo::Position& pos, vi.positions ) {
+                        int start = pos.start + 3 + variable.length();
+                        QString args = value.mid(start , pos.end - start);
+                        varValue = resolveVariables( args ).join(" ");
+                        value.replace(pos.start, pos.end - pos.start + 1, varValue);
+                    }
+                } else {
+                    ///TODO:
+                    kWarning(9024) << "unimplemented function call in variable:" << variable;
+                }
                 continue;
             case VariableInfo::Invalid:
                 kWarning(9024) << "invalid qmake variable:" << variable;

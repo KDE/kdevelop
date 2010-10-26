@@ -189,10 +189,13 @@ void TestQMakeFile::referenceParser_data()
 
 void TestQMakeFile::libTarget()
 {
+    QFETCH(QString, target);
+    QFETCH(QString, resolved);
+
     KTemporaryFile tmpfile;
     tmpfile.open();
     QTextStream stream(&tmpfile);
-    stream << "TARGET = MyLib\nTEMPLATE = lib\n";
+    stream << "TARGET = " << target << "\nTEMPLATE = lib\n";
     stream << flush;
     tmpfile.close();
 
@@ -206,7 +209,17 @@ void TestQMakeFile::libTarget()
     file.setMkSpecs(mkspecs);
     QVERIFY(file.read());
 
-    QCOMPARE(file.targets(), QStringList() << "MyLib");
+    QCOMPARE(file.targets(), QStringList() << resolved);
+}
+
+void TestQMakeFile::libTarget_data()
+{
+    QTest::addColumn<QString>("target");
+    QTest::addColumn<QString>("resolved");
+
+    QTest::newRow("simple") << "MyLib" << "MyLib";
+    QTest::newRow("qtLibraryTarget") << "$$qtLibraryTarget(MyLib)" << "MyLib";
+    QTest::newRow("qtLibraryTarget-Var") << "MyLib\nTARGET = $$qtLibraryTarget($$TARGET)" << "MyLib";
 }
 
 

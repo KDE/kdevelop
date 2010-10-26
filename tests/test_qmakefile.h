@@ -33,6 +33,7 @@ private slots:
     void referenceParser_data();
     void referenceParser();
 
+    void libTarget_data();
     void libTarget();
 };
 
