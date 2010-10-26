@@ -49,7 +49,7 @@ bool VariableReferenceParser::parse()
     int curpos = 0;
     if( size == 0 || size < 3 )
     {
-        return false;
+        return true;
     }
     QChar* it = m_content.data();
     do

@@ -20,6 +20,7 @@
 
 #include "test_qmakefile.h"
 #include "qmakefile.h"
+#include "variablereferenceparser.h"
 
 #include <QTest>
 
@@ -98,6 +99,24 @@ void TestQMakeFile::varResolution_data()
     QTest::newRow("var-in-var") << "VAR1 = 1\nVAR2 = $$VAR1\n"
                             << variables;
     }
+}
+
+void TestQMakeFile::referenceParser()
+{
+    QFETCH(QString, var);
+
+    VariableReferenceParser parser;
+    parser.setContent(var);
+    QVERIFY(parser.parse());
+}
+
+
+void TestQMakeFile::referenceParser_data()
+{
+    QTest::addColumn<QString>("var");
+
+    QTest::newRow("dot") << ".";
+    QTest::newRow("dotdot") << "..";
 }
 
 #include "test_qmakefile.moc"

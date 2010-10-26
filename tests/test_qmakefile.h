@@ -29,6 +29,9 @@ class TestQMakeFile : public QObject {
 private slots:
     void varResolution_data();
     void varResolution();
+
+    void referenceParser_data();
+    void referenceParser();
 };
 
 #endif // TEST_QMAKEFILE_H
