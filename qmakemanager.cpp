@@ -232,7 +232,10 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
             }
         }
         if (!parentPro) {
-            kWarning() << "skipping:" << file << "because I could not find a parent pro";
+            if (!file.endsWith(".pri")) {
+                // only display this warning for .pro files
+                kWarning() << "skipping:" << file << "because I could not find a parent pro";
+            }
             continue;
         }
         kDebug(9024) << "add project file:" << absFile << "parent:" << parentPro->absoluteFile();
@@ -278,7 +281,6 @@ void QMakeProjectManager::slotFolderAdded( ProjectFolderItem* folder )
             kDebug(9024) << "adding target:" << s;
             QMakeTargetItem* target = new QMakeTargetItem( folder->project(), s, folder );
             foreach( const KUrl& u, pro->filesForTarget(s) ) {
-                kDebug(9024) << "adding file:" << u;
                 new ProjectFileItem( folder->project(), u, target );
                 ///TODO: signal?
             }
