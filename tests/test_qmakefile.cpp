@@ -87,8 +87,15 @@ void TestQMakeFile::varResolution_data()
     {
     QMakeFile::VariableMap variables;
     variables["VAR1"] = QStringList() << "1";
+    QTest::newRow("simple") << "VAR1 = 1\n"
+                            << variables;
+    }
+
+    {
+    QMakeFile::VariableMap variables;
+    variables["VAR1"] = QStringList() << "1";
     variables["VAR2"] = QStringList() << "1";
-    QTest::newRow("simple") << "VAR1 = 1\nVAR2 = $$VAR1\n"
+    QTest::newRow("var-in-var") << "VAR1 = 1\nVAR2 = $$VAR1\n"
                             << variables;
     }
 }

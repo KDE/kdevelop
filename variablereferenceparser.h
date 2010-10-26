@@ -29,7 +29,7 @@
 
 class VariableInfo
 {
-    public:
+public:
     enum VariableType
     {
         QMakeVariable,
@@ -39,9 +39,18 @@ class VariableInfo
         Invalid
     };
 
-        VariableInfo();
-        QList<QPair<int,int> > positions;
-        VariableType type;
+    struct Position {
+        Position(int start_, int end_)
+            : start(start_), end(end_)
+        {
+        }
+        int start;
+        int end;
+    };
+
+    VariableInfo();
+    QList< Position > positions;
+    VariableType type;
 };
 
 class VariableReferenceParser

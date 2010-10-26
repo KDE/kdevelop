@@ -286,23 +286,27 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
     return result;
 }
 
-QStringList QMakeFile::resolveVariables( const QString& value ) const
+QStringList QMakeFile::resolveVariables( const QString& var ) const
 {
     VariableReferenceParser parser;
-    parser.setContent( value );
-    if( !parser.parse() )
-    {
-        kWarning(9024) << "Couldn't parse" << value << "to replace variables in it";
-        return QStringList() << value;
+    parser.setContent( var );
+    if( !parser.parse() ) {
+        kWarning(9024) << "Couldn't parse" << var << "to replace variables in it";
+        return QStringList() << var;
     }
-    QStringList ret;
-    ret << value;
-    foreach( const QString& variable, parser.variableReferences() )
-    {
+    if (parser.variableReferences().isEmpty()) {
+        return QStringList() << var;
+    }
+
+    QString value = var;
+    foreach( const QString& variable, parser.variableReferences() ) {
         VariableInfo vi = parser.variableInfo( variable );
-        ifDebug(kDebug(9024) << "Found variable reference:" << variable << vi.positions << vi.type;)
+        QString varValue = m_variableValues[ variable ].join(" ");
+        foreach(const VariableInfo::Position& pos, vi.positions ) {
+            value.replace(pos.start, pos.end - pos.start + 1, varValue);
+        }
     }
-    return ret;
+    return value.split(" ", QString::SkipEmptyParts);
 }
 
 //kate: hl c++;

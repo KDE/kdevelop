@@ -161,6 +161,6 @@ void VariableReferenceParser::appendPosition( const QString& var, int start, int
         vi.type = type;
         m_variables[var] = vi;
     }
-    m_variables[var].positions << QPair<int,int>( start, end );
+    m_variables[var].positions << VariableInfo::Position( start, end );
 }
 
