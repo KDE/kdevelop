@@ -32,7 +32,7 @@
 namespace QMake
 {
 
-bool isIdentifierCharacter( QChar* c )
+bool isIdentifierCharacter( QChar* c, bool canLookAhead )
 {
     return ( c->isLetter()
              || c->isDigit()
@@ -41,6 +41,8 @@ bool isIdentifierCharacter( QChar* c )
              || c->unicode() == '-'
              || c->unicode() == '$'
              || c->unicode() == '*'
+             || (canLookAhead && (c+1)->unicode() != '='
+                 && (c->unicode() == '+'))
            );
 }
 
@@ -275,7 +277,7 @@ int Lexer::nextTokenKind()
                 if ( isBeginIdentifierCharacter( it ) )
                 {
                     token = Parser::Token_IDENTIFIER;
-                    while ( !it->isSpace() && isIdentifierCharacter( it )  && m_curpos < m_contentSize )
+                    while ( !it->isSpace() && isIdentifierCharacter( it, m_curpos + 1 < m_contentSize )  && m_curpos < m_contentSize )
                     {
                         it++;
                         m_curpos++;

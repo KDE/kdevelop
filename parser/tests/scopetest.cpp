@@ -130,5 +130,13 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL( ScopeTest, missingColon,
               "eval \n" )
 
+void ScopeTest::strangeScopeNames()
+{
+    QMake::Driver d;
+    d.setContent( "linux-gcc++-* {\n  VARIABLE = FOO\n}\n" );
+    bool ret = d.parse( &ast );
+    QVERIFY( ret );
+}
+
 #include "scopetest.moc"
 

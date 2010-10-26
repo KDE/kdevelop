@@ -52,6 +52,7 @@ class ScopeTest : public QObject
         void missingStatement_data();
         void missingColon();
         void missingColon_data();
+        void strangeScopeNames();
     private:
         QMake::ProjectAST* ast;
 
