@@ -303,7 +303,8 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
     }
 
     ///TODO: multiple vars in one place will make the offsets go bonkers
-
+    ///TODO: function arguments
+    ///TODO: $$1...
     QString value = var;
     foreach( const QString& variable, parser.variableReferences() ) {
         VariableInfo vi = parser.variableInfo( variable );
@@ -343,13 +344,13 @@ QStringList QMakeFile::resolveVariables( const QString& var ) const
                 kWarning(9024) << "invalid qmake variable:" << variable;
                 continue;
         }
-        
+
         foreach(const VariableInfo::Position& pos, vi.positions ) {
             value.replace(pos.start, pos.end - pos.start + 1, varValue);
         }
     }
+
     QStringList ret = value.split(" ", QString::SkipEmptyParts);
-    Q_ASSERT(!ret.isEmpty());
     ifDebug(kDebug(9024) << "resolved variable" << var << "to" << ret;)
     return ret;
 }
