@@ -1,6 +1,7 @@
 /* KDevelop QMake Support
  *
  * Copyright 2006 Andreas Pakulat <apaku@gmx.de>
+ * Copyright 2010 Milian Wolff <mail@milianw.de>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +40,6 @@ public:
     virtual ~QMakeProjectManager();
 
     static QMakeProjectManager* self();
-
-    QString qtIncludeDir() const;
 
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
 

@@ -50,6 +50,9 @@ public:
 
     QStringList variableValues(const QString&) const;
     QStringList variables() const;
+    typedef QMap< QString, QStringList > VariableMap;
+    VariableMap variableMap() const;
+
     bool containsVariable( const QString& ) const;
 
     static QStringList resolveShellGlobbing( const QString& absolutefile );

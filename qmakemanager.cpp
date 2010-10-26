@@ -384,29 +384,6 @@ QMakeCache* QMakeProjectManager::findQMakeCache( const QString& projectfile ) co
     return 0;
 }
 
-QString QMakeProjectManager::qtIncludeDir() const
-{
-    if ( !m_qtIncludeDir.isEmpty() ) {
-        return m_qtIncludeDir;
-    }
-
-    // Let's cache the Qt include dir
-    KProcess qtInc;
-    qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
-    qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
-    qtInc.start();
-    if ( !qtInc.waitForFinished() )
-    {
-        kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
-    } else
-    {
-        QByteArray result = qtInc.readAll();
-        m_qtIncludeDir = QString::fromLocal8Bit( result ).trimmed();
-    }
-
-    return m_qtIncludeDir;
-}
-
 ContextMenuExtension QMakeProjectManager::contextMenuExtension( Context* context )
 {
     ContextMenuExtension ext;

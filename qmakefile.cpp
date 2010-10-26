@@ -121,7 +121,7 @@ bool QMakeFile::read()
 
     if( !d.parse( &m_ast ) )
     {
-        ifDebug(kDebug( 9024 ) << "Couldn't parse project:" << m_projectFile;)
+        kWarning( 9024 ) << "Couldn't parse project:" << m_projectFile;
         delete m_ast;
         m_ast = 0;
         m_projectFile = QString();
@@ -232,6 +232,11 @@ void QMakeFile::visitAssignment( QMake::AssignmentAST* node )
     }
 }
 
+QStringList QMakeFile::variables() const
+{
+    return m_variableValues.keys();
+}
+
 QStringList QMakeFile::variableValues( const QString& variable ) const
 {
     return m_variableValues.value( variable, QStringList() );
@@ -240,6 +245,11 @@ QStringList QMakeFile::variableValues( const QString& variable ) const
 bool QMakeFile::containsVariable( const QString& variable ) const
 {
     return m_variableValues.contains( variable );
+}
+
+QMakeFile::VariableMap QMakeFile::variableMap() const
+{
+    return m_variableValues;
 }
 
 QStringList QMakeFile::resolveShellGlobbing( const QString& absolutefile )
@@ -274,11 +284,6 @@ QStringList QMakeFile::resolveFileName( const QString& file ) const
         result << QFileInfo( s ).canonicalFilePath();
     }
     return result;
-}
-
-QStringList QMakeFile::variables() const
-{
-    return m_variableValues.keys();
 }
 
 QStringList QMakeFile::resolveVariables( const QString& value ) const

@@ -20,8 +20,6 @@
 
 #include "qmakeprojectfile.h"
 
-#include "qmakemanager.h"
-
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 #include <QtCore/QDir>
@@ -36,13 +34,15 @@
 
 #define ifDebug(x)
 
+QString QMakeProjectFile::m_qtIncludeDir = QString();
+
 const QStringList QMakeProjectFile::FileVariables = QStringList() << "IDLS"
         << "RESOURCES" << "IMAGES" << "LEXSOURCES" << "DISTFILES"
         << "YACCSOURCES" << "TRANSLATIONS" << "HEADERS" << "SOURCES"
         << "INTERFACES" << "FORMS" ;
 
 QMakeProjectFile::QMakeProjectFile( const QString& projectfile )
-    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0), m_qtIncludeDir()
+    : QMakeFile( projectfile ), m_mkspecs(0), m_cache(0)
 {
 }
 
@@ -71,7 +71,19 @@ bool QMakeProjectFile::read()
         }
     }
 
-    m_qtIncludeDir = QMakeProjectManager::self()->qtIncludeDir();
+    if (m_qtIncludeDir.isEmpty()) {
+        // Let's cache the Qt include dir
+        KProcess qtInc;
+        qtInc << "qmake" << "-query" << "QT_INSTALL_HEADERS";
+        qtInc.setOutputChannelMode( KProcess::OnlyStdoutChannel );
+        qtInc.start();
+        if ( !qtInc.waitForFinished() ) {
+            kWarning() << "Failed to query Qt header path using qmake, is qmake installed?";
+        } else {
+            QByteArray result = qtInc.readAll();
+            m_qtIncludeDir = QString::fromLocal8Bit( result ).trimmed();
+        }
+    }
 
     return QMakeFile::read();
 }

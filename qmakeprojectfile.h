@@ -64,7 +64,7 @@ private:
 
     QMakeMkSpecs* m_mkspecs;
     QMakeCache* m_cache;
-    QString m_qtIncludeDir;
+    static QString m_qtIncludeDir;
 };
 
 #endif
