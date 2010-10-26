@@ -116,6 +116,14 @@ void TestQMakeFile::varResolution_data()
     QTest::newRow("qmakeshell") << "VAR1 = $$(USER)\n"
                             << variables;
     }
+    {
+    QMakeFile::VariableMap variables;
+    
+    variables["VAR1"] = QStringList() << "foo";
+    variables["VAR2"] = QStringList() << "foo/bar";
+    QTest::newRow("path") << "VAR1 = foo\nVAR2 = $$VAR1/bar\n"
+                            << variables;
+    }
 }
 
 void TestQMakeFile::referenceParser()

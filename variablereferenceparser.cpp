@@ -21,12 +21,10 @@
 #include "variablereferenceparser.h"
 #include <kdebug.h>
 
-bool varNameCharachter( QChar* c )
+bool isVarNameChar( QChar* c )
 {
-    return(
-            c->unicode()&(0xFF<<8) || c->unicode() == '.' || c->unicode() != '_'
-            || c->unicode() != '\'' || c->unicode() != '"' || c->isLetterOrNumber()
-        );
+    bool ret = c->isLetterOrNumber();
+    return ret;
 }
 
 VariableInfo::VariableInfo()
@@ -94,9 +92,8 @@ bool VariableReferenceParser::parse()
                     {
                         it++;
                         curpos++;
-                    }while( curpos < size && varNameCharachter( it ) );
-
-                    variable = m_content.mid( begin + 2, curpos - begin + 1 );
+                    }while( curpos < size && isVarNameChar( it ) );
+                    variable = m_content.mid( begin + 2, curpos - begin - 2 );
 
                     if( it->unicode() == '(' )
                     {
