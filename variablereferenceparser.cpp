@@ -23,7 +23,7 @@
 
 bool isVarNameChar( QChar* c )
 {
-    bool ret = c->isLetterOrNumber();
+    bool ret = c->isLetterOrNumber() || c->unicode() == '_';
     return ret;
 }
 

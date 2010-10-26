@@ -124,6 +124,14 @@ void TestQMakeFile::varResolution_data()
     QTest::newRow("path") << "VAR1 = foo\nVAR2 = $$VAR1/bar\n"
                             << variables;
     }
+    {
+    QMakeFile::VariableMap variables;
+    
+    variables["VAR_1"] = QStringList() << "foo";
+    variables["VAR_2"] = QStringList() << "foo/bar";
+    QTest::newRow("var-underscore") << "VAR_1 = foo\nVAR_2 = $$VAR_1/bar"
+                            << variables;
+    }
 }
 
 void TestQMakeFile::referenceParser()
