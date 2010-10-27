@@ -36,14 +36,16 @@ public:
     GenericManagerListJob(KDevelop::ProjectFolderItem* item, const bool forceRecursion);
     KDevelop::ProjectFolderItem* item() const;
 
+    void addSubDir(KDevelop::ProjectFolderItem* item);
+
 signals:
-    void entries(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
+    void entries(GenericManagerListJob*, KDevelop::ProjectFolderItem* baseItem,
+                 const KIO::UDSEntryList& entries, const bool forceRecursion);
     void nextJob();
 
 private slots:
     void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
     void slotResult(KJob* job);
-    void addSubDir(KDevelop::ProjectFolderItem* item);
     void startNextJob();
 
 private:

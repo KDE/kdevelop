@@ -43,6 +43,8 @@ KDevelop::ProjectFolderItem* GenericManagerListJob::item() const
 
 void GenericManagerListJob::addSubDir( KDevelop::ProjectFolderItem* item )
 {
+    Q_ASSERT(!m_item || item->url().upUrl() == m_item->url());
+
     m_listQueue.enqueue(item);
 }
 
@@ -57,6 +59,7 @@ void GenericManagerListJob::startNextJob()
     if ( m_listQueue.isEmpty() ) {
         return;
     }
+
     m_item = m_listQueue.dequeue();
     KIO::ListJob* job = KIO::listDir( m_item->url(), KIO::HideProgressInfo );
     job->setParentJob( this );
@@ -67,7 +70,7 @@ void GenericManagerListJob::startNextJob()
 
 void GenericManagerListJob::slotResult(KJob* job)
 {
-    emit entries(m_item, entryList, m_forceRecursion);
+    emit entries(this, m_item, entryList, m_forceRecursion);
     entryList.clear();
 
     if( job->error() ) {

@@ -158,9 +158,9 @@ QList<KDevelop::ProjectFolderItem*> GenericProjectManager::parse( KDevelop::Proj
     return QList<KDevelop::ProjectFolderItem*>();
 }
 
-KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceResursion )
+GenericManagerListJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceRecursion )
 {
-    GenericManagerListJob* listJob = new GenericManagerListJob( item, forceResursion );
+    GenericManagerListJob* listJob = new GenericManagerListJob( item, forceRecursion );
     m_projectJobs[ item->project() ] << listJob;
     kDebug() << "adding job" << listJob << item->url() << "for project" << item->project();
 
@@ -169,11 +169,9 @@ KJob* GenericProjectManager::eventuallyReadFolder( KDevelop::ProjectFolderItem* 
     connect( listJob, SIGNAL(finished(KJob*)),
              this, SLOT(jobFinished(KJob*)) );
 
-    connect( listJob, SIGNAL(entries(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)),
-             this, SLOT(addJobItems(KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)) );
-
-    connect( this, SIGNAL(appendSubDir(KDevelop::ProjectFolderItem*)),
-             listJob, SLOT(addSubDir(KDevelop::ProjectFolderItem*)));
+    connect( listJob,
+             SIGNAL(entries(GenericManagerListJob*, KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)),
+             SLOT(addJobItems(GenericManagerListJob*, KDevelop::ProjectFolderItem*, KIO::UDSEntryList, bool)) );
 
     return listJob;
 }
@@ -183,11 +181,11 @@ void GenericProjectManager::jobFinished(KJob* job)
     GenericManagerListJob* gmlJob = qobject_cast<GenericManagerListJob*>(job);
     Q_ASSERT(gmlJob);
     kDebug() << gmlJob;
-    m_projectJobs[ gmlJob->item()->project() ].removeOne( job );
+    m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
 }
 
-void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries,
-                                        const bool forceRecursion)
+void GenericProjectManager::addJobItems(GenericManagerListJob* job, KDevelop::ProjectFolderItem* baseItem,
+                                        const KIO::UDSEntryList& entries, const bool forceRecursion)
 {
     if ( entries.empty() ) {
         return;
@@ -245,7 +243,7 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
                 folders.removeAt( index );
                 if ( forceRecursion ) {
                     //no need to add this item, but we still want to recurse into it
-                    emit appendSubDir( f );
+                    job->addSubDir( f );
                 }
             }
         } else if ( baseItem->child(j)->type() == KDevelop::ProjectBaseItem::File ) {
@@ -269,7 +267,7 @@ void GenericProjectManager::addJobItems(KDevelop::ProjectFolderItem* baseItem, c
         new KDevelop::ProjectFileItem( baseItem->project(), url, baseItem );
     }
     foreach ( const KUrl& url, folders ) {
-        emit appendSubDir( new KDevelop::ProjectFolderItem( baseItem->project(), url, baseItem ) );
+        job->addSubDir( new KDevelop::ProjectFolderItem( baseItem->project(), url, baseItem ) );
     }
 }
 

@@ -29,7 +29,6 @@ class KUrl;
 class KDirWatch;
 template <typename T> class QList;
 
-///FIXME: remove once the hack is gone
 class KJob;
 
 namespace KIO
@@ -46,7 +45,7 @@ class ProjectFolderItem;
 class ProjectFileItem;
 }
 
-class KDialogBase;
+class GenericManagerListJob;
 
 class GenericProjectManager: public KDevelop::IPlugin, public KDevelop::IGenericProjectManager
 {
@@ -81,13 +80,13 @@ public:
     /// first item is includes, second excludes
     typedef QPair<QStringList, QStringList> IncludeRules;
 
-Q_SIGNALS:
-    void appendSubDir( KDevelop::ProjectFolderItem* item );
-
 private Q_SLOTS:
     /// @p forceRecursion if true, existing folders will be re-read no matter what
-    KJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceRecursion = false );
-    void addJobItems(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
+    GenericManagerListJob* eventuallyReadFolder( KDevelop::ProjectFolderItem* item, const bool forceRecursion = false );
+    void addJobItems(GenericManagerListJob* job,
+                     KDevelop::ProjectFolderItem* baseItem,
+                     const KIO::UDSEntryList& entries,
+                     const bool forceRecursion);
 
     void deleted(const QString &path);
     void created(const QString &path);
@@ -107,7 +106,7 @@ private:
     bool isValid( const KUrl& url, const bool isFolder, KDevelop::IProject* project,
                   const IncludeRules& rules ) const;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
-    QMap<KDevelop::IProject*, QList<KJob*> > m_projectJobs;
+    QMap<KDevelop::IProject*, QList<GenericManagerListJob*> > m_projectJobs;
 };
 
 #endif // KDEVGENERICIMPORTER_H
