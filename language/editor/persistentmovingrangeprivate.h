@@ -35,7 +35,7 @@ class PersistentMovingRangePrivate : public QObject
 {
   Q_OBJECT
   public:
-  PersistentMovingRangePrivate() : m_valid(false), m_movingRange(0), m_tracker(0), m_zDepth(0) {
+  PersistentMovingRangePrivate() : m_valid(false), m_shouldExpand(false), m_movingRange(0), m_tracker(0), m_zDepth(0) {
     moveToThread(QApplication::instance()->thread());
   }
   
@@ -44,6 +44,7 @@ class PersistentMovingRangePrivate : public QObject
   void disconnectTracker();
   
   bool m_valid;
+  bool m_shouldExpand;
   SimpleRange m_range;
   IndexedString m_document;
   KTextEditor::Attribute::Ptr m_attribte;

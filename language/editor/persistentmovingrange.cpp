@@ -26,12 +26,14 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>
 
-KDevelop::PersistentMovingRange::PersistentMovingRange(const SimpleRange& range, const IndexedString& document): m_p(new PersistentMovingRangePrivate)
+KDevelop::PersistentMovingRange::PersistentMovingRange(const SimpleRange& range, const IndexedString& document, bool shouldExpand)
+: m_p(new PersistentMovingRangePrivate)
 {
   VERIFY_FOREGROUND_LOCKED;
   m_p->m_range = range;
   m_p->m_document = document;
-  
+  m_p->m_shouldExpand = shouldExpand;
+
   m_p->connectTracker();
 }
 
