@@ -63,11 +63,13 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
             "you specify. Matches will be displayed, you "
             "can switch to a match directly.</p>") );
     action->setIcon(KIcon("edit-find"));
+
+    // instantiate delegate, it's supposed to be deleted via QObject inheritance
+    new GrepOutputDelegate(this);
 }
 
 GrepViewPlugin::~GrepViewPlugin()
 {
-    GrepOutputDelegate::self()->deleteLater();
 }
 
 KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
