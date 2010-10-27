@@ -99,7 +99,9 @@
 
 // #define CALLGRIND_TRACE_UI_LOCKUP
 
-#define DEBUG_UI_LOCKUP
+// defined through cmake
+// #define DEBUG_UI_LOCKUP
+
 #define LOCKUP_INTERVAL 300
 
 #ifdef CALLGRIND_TRACE_UI_LOCKUP
