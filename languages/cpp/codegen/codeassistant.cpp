@@ -61,7 +61,7 @@ void StaticCodeAssistant::documentLoaded(KDevelop::IDocument* document) {
   {
     ///@todo Make these connections non-queued, and then reach forward using a QPointer, since else a crash may happen when the document is destroyed before the message is processed
     connect(document->textDocument(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range)));
+    connect(document->textDocument(), SIGNAL(textRemoved(KTextEditor::Document*,KTextEditor::Range, const QString&)), SLOT(textRemoved(KTextEditor::Document*,KTextEditor::Range, const QString&)));
   }
 }
 
@@ -75,32 +75,45 @@ void StaticCodeAssistant::textInserted(KTextEditor::Document* document, KTextEdi
   QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range));
 }
 
-void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range) {
-  range = KTextEditor::Range(range.start(), range.start());
-  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range));
+void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range, const QString &removedText) {
+  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range), Q_ARG(const QString&, removedText));
 }
 
-void StaticCodeAssistant::eventuallyStartAssistant(SafeDocumentPointer document, KTextEditor::Range range) {
+void StaticCodeAssistant::eventuallyStartAssistant(SafeDocumentPointer document, KTextEditor::Range range, const QString& removedText) {
 
   if(!document)
     return;
   
-  if(m_activeAssistant) {
-//     kDebug() << "there still is an active assistant";
-//     if(abs(m_activeAssistant->invocationCursor().line() < range.start().line()) >= 1) {
-//       kDebug() << "assistant was not deleted in time";
-//     }else{
-//       return;
-//     }
-  }
   //Eventually pop up an assistant
   if(!document->activeView())
     return;
-  
-  KSharedPtr<AdaptDefinitionSignatureAssistant> signatureAssistant(new AdaptDefinitionSignatureAssistant(document->activeView(), range));
+
+  //FIXME: update signature assistant to play well with the rename assistant
+  KTextEditor::Range sigAssistRange = removedText.isEmpty() ? range : KTextEditor::Range(range.start(), range.start());
+  KSharedPtr<AdaptDefinitionSignatureAssistant> signatureAssistant(new AdaptDefinitionSignatureAssistant(document->activeView(), sigAssistRange));
   
   if(signatureAssistant->isUseful()) {
     startAssistant(KSharedPtr<IAssistant>(signatureAssistant.data()));
+  }
+
+  if (!m_renameAssistants.contains(document->activeView())) {
+    m_renameAssistants[document->activeView()].attach(new RenameAssistant(document->activeView()));
+    connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)),
+            SLOT(deleteRenameAssistantsForDocument(KTextEditor::Document*)));
+  }
+
+  m_renameAssistants[document->activeView()]->textChanged(range, removedText);
+
+  if(m_renameAssistants[document->activeView()]->isUseful()) {
+    startAssistant(KSharedPtr<IAssistant>(m_renameAssistants[document->activeView()].data()));
+  }
+}
+
+void StaticCodeAssistant::deleteRenameAssistantsForDocument(KTextEditor::Document* document)
+{
+  foreach(KTextEditor::View *view, document->views()) {
+    if (m_renameAssistants.contains(view))
+      m_renameAssistants.remove(view);
   }
 }
 
@@ -163,10 +176,7 @@ void StaticCodeAssistant::documentActivated(KDevelop::IDocument* doc) {
 }
 
 void StaticCodeAssistant::checkAssistantForProblems(KDevelop::TopDUContext* top) {
-    //Check whether one of the problems is in the current line, and if yes, show its assistant
-//     kDebug() << "checking, problem-count:" << top->problems().size();
     foreach(KDevelop::ProblemPointer problem, top->problems()) {
-//       kDebug() << "range of problem:" << problem->range().textRange() << "matching to" << m_currentView->cursorPosition().line();
       if(m_currentView && m_currentView->cursorPosition().line() == problem->range().start.line) {
         IAssistant::Ptr solution = problem->solutionAssistant();
         if(solution) {

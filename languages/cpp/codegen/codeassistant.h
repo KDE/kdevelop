@@ -27,6 +27,7 @@
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/types/indexedtype.h>
 #include <QTimer>
+#include "renameassistant.h"
 
 typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 
@@ -51,12 +52,13 @@ class StaticCodeAssistant : public QObject {
     void assistantHide();
     void documentLoaded(KDevelop::IDocument*);
     void textInserted(KTextEditor::Document*,KTextEditor::Range);
-    void textRemoved(KTextEditor::Document*,KTextEditor::Range);
+    void textRemoved(KTextEditor::Document*,KTextEditor::Range,const QString& removedText);
     void parseJobFinished(KDevelop::ParseJob*);
     void documentActivated(KDevelop::IDocument*);
     void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
     void timeout();
-    void eventuallyStartAssistant(SafeDocumentPointer, KTextEditor::Range range);
+    void eventuallyStartAssistant(SafeDocumentPointer document, KTextEditor::Range range, const QString& removedText = QString());
+    void deleteRenameAssistantsForDocument(KTextEditor::Document*);
   private:
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
     ///@param manage If this is true, the static code-assistant manages the hiding of the assistant
@@ -66,6 +68,7 @@ class StaticCodeAssistant : public QObject {
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;
     KSharedPtr<KDevelop::IAssistant> m_activeAssistant;
+    QHash< KTextEditor::View*, KSharedPtr<RenameAssistant> > m_renameAssistants;
     bool m_activeProblemAssistant;
     QTimer* m_timer;
     
