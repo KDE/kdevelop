@@ -1,7 +1,7 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
-
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -46,13 +46,13 @@ DocumentationView::DocumentationView(QWidget* parent)
     setLayout(new QVBoxLayout(this));
     layout()->setMargin(0);
     layout()->setSpacing(0);
-
+    
     mActions=new KToolBar(this);
     mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
-
+    
     mFindDoc = new DocumentationFindWidget;
     mFindDoc->hide();
-
+    
     mBack=mActions->addAction(KIcon("go-previous"), i18n("Back"));
     mForward=mActions->addAction(KIcon("go-next"), i18n("Forward"));
     mFind=mActions->addAction(KIcon("edit-find"), i18n("Find"), mFindDoc, SLOT(show()));
@@ -66,7 +66,7 @@ DocumentationView::DocumentationView(QWidget* parent)
         connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KSharedPtr<KDevelop::IDocumentation>)),
                 SLOT(addHistory(KSharedPtr<KDevelop::IDocumentation>)));
     }
-
+    
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
     connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     mIdentifiers=new KLineEdit(mActions);
@@ -79,20 +79,20 @@ DocumentationView::DocumentationView(QWidget* parent)
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
     connect(mIdentifiers, SIGNAL(returnPressed()), SLOT(changedSelection()));
     connect(mIdentifiers->completer(), SIGNAL(activated(QModelIndex)), SLOT(changeProvider(QModelIndex)));
-
+    
     mActions->addWidget(mProviders);
     mActions->addWidget(mIdentifiers);
-
+    
     mBack->setEnabled(false);
     mForward->setEnabled(false);
     connect(mBack, SIGNAL(triggered()), this, SLOT(browseBack()));
     connect(mForward, SIGNAL(triggered()), this, SLOT(browseForward()));
     mCurrent=mHistory.end();
-
+    
     layout()->addWidget(mActions);
     layout()->addWidget(new QWidget(this));
     layout()->addWidget(mFindDoc);
-
+    
     if(mProvidersModel->rowCount()>0)
         changedProvider(0);
 }
@@ -102,6 +102,7 @@ void DocumentationView::browseBack()
     mCurrent--;
     mBack->setEnabled(mCurrent!=mHistory.begin());
     mForward->setEnabled(true);
+    
     updateView();
 }
 
@@ -110,14 +111,14 @@ void DocumentationView::browseForward()
     mCurrent++;
     mForward->setEnabled(mCurrent+1!=mHistory.end());
     mBack->setEnabled(true);
-
+    
     updateView();
 }
 
 void DocumentationView::showHome()
 {
     KDevelop::IDocumentationProvider* prov=mProvidersModel->provider(mProviders->currentIndex());
-
+    
     showDocumentation(prov->homePage());
 }
 
@@ -140,7 +141,7 @@ void DocumentationView::changeProvider(const QModelIndex& idx)
 void DocumentationView::showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)
 {
     kDebug(9529) << "showing" << doc->name();
-
+    
     addHistory(doc);
     updateView();
 }
@@ -175,23 +176,23 @@ void DocumentationView::updateView()
     mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
     mIdentifiers->completer()->setModel((*mCurrent)->provider()->indexModel());
     mIdentifiers->setText((*mCurrent)->name());
-
+    
     QLayoutItem* lastview=layout()->takeAt(1);
     Q_ASSERT(lastview);
-
+    
     if(lastview->widget()->parent()==this)
         lastview->widget()->deleteLater();
-
+    
     delete lastview;
-
+    
     mFindDoc->setEnabled(false);
     QWidget* w=(*mCurrent)->documentationWidget(mFindDoc, this);
     Q_ASSERT(w);
-
+    
     mFind->setEnabled(mFindDoc->isEnabled());
     if(!mFindDoc->isEnabled())
         mFindDoc->hide();
-
+    
     QLayoutItem* findW=layout()->takeAt(1);
     layout()->addWidget(w);
     layout()->addItem(findW);
@@ -201,7 +202,7 @@ void DocumentationView::changedProvider(int row)
 {
     mIdentifiers->completer()->setModel(mProvidersModel->provider(row)->indexModel());
     mIdentifiers->clear();
-
+    
     showHome();
 }
 
@@ -277,7 +278,6 @@ void ProvidersModel::loaded(IPlugin* p)
         endInsertRows();
         emit providersChanged();
     }
-
     IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
     if (provProv) {
         beginInsertRows(QModelIndex(), 0, 0);

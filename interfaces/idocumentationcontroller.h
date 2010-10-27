@@ -1,7 +1,7 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
-
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -41,10 +41,10 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController: public QObject
 
         /** Return the documentation provider plugin instances. */
         virtual QList<IDocumentationProvider*> documentationProviders() const=0;
-
+        
         /** Return the corresponding documentation instance for a determinate declaration. */
         virtual KSharedPtr<IDocumentation> documentationForDeclaration(Declaration* declaration)=0;
-
+        
         /** Show the documentation specified by @p doc. */
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)=0;
 
