@@ -61,8 +61,10 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     
     addConfig->setIcon( KIcon("list-add") );
     addConfig->setEnabled( false );
+    addConfig->setToolTip(i18n("Add a new launch configuration."));
     deleteConfig->setIcon( KIcon("list-remove") );
     deleteConfig->setEnabled( false );
+    deleteConfig->setToolTip(i18n("Delete selected launch configuration."));
     
     model = new LaunchConfigurationsModel( tree );
     tree->setModel( model );
