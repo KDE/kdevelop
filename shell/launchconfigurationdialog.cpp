@@ -473,6 +473,15 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                 {
                     return lmi->mode->icon();
                 }
+                if ( index.column() == 0 && !index.parent().isValid() ) {
+                    if (index.row() == 0) {
+                        // global item
+                        return KIcon("folder");
+                    } else {
+                        // project item
+                        return KIcon("folder-development");
+                    }
+                }
             }
             case Qt::EditRole:
             {
