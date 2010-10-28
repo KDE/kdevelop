@@ -264,6 +264,8 @@ void CppLanguageSupport::switchDefinitionDeclaration()
   DUChainReadLocker lock(DUChain::lock());
 
   TopDUContext* standardCtx = standardContext(docUrl);
+
+  bool wasSignal = false;
   if(standardCtx) {
     Declaration* definition = 0;
 
@@ -292,6 +294,14 @@ void CppLanguageSupport::switchDefinitionDeclaration()
         kDebug() << "not found definition using declarationInLine";
     }
 
+    if(ClassFunctionDeclaration* cDef = dynamic_cast<ClassFunctionDeclaration*>(definition)) {
+      if (cDef->isSignal()) {
+        kDebug() << "found definition is a signal, not switching to .moc implementation";
+        definition = 0;
+        wasSignal = true;
+      }
+    }
+
     FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(definition);
     if(def && def->declaration()) {
       Declaration* declaration = def->declaration();
@@ -318,7 +328,10 @@ void CppLanguageSupport::switchDefinitionDeclaration()
     kDebug(9007) << "Got no context for the current document";
   }
 
-  Declaration* def = definitionForCursorDeclaration(cursor, docUrl);
+  Declaration* def = 0;
+  if (!wasSignal) {
+     def = definitionForCursorDeclaration(cursor, docUrl);
+  }
 
   if(def) {
     KUrl url(def->url().str());
@@ -342,7 +355,7 @@ void CppLanguageSupport::switchDefinitionDeclaration()
       core()->documentController()->openDocument(url);
     }
     return;
-  }else{
+  }else if (!wasSignal) {
     kWarning(9007) << "Found no definition assigned to cursor position";
   }
 
