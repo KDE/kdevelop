@@ -37,7 +37,7 @@ struct CustomBuildSystemTool
     ActionType type;
 };
 
-Q_DECLARE_METATYPE( CustomBuildSystemTool );
+Q_DECLARE_METATYPE( CustomBuildSystemTool )
 
 struct CustomBuildSystemProjectPathConfig
 {

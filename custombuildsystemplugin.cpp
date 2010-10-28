@@ -32,11 +32,11 @@
 #include <interfaces/iplugincontroller.h>
 #include "configconstants.h"
 
-#include <genericprojectmanager/igenericprojectmanager.h>
 #include "custombuildjob.h"
 
 using KDevelop::ProjectTargetItem;
 using KDevelop::ProjectFolderItem;
+using KDevelop::ProjectBuildFolderItem;
 using KDevelop::ProjectBaseItem;
 using KDevelop::ProjectFileItem;
 using KDevelop::IPlugin;
@@ -53,7 +53,7 @@ K_EXPORT_PLUGIN(CustomBuildSystemFactory(KAboutData("kdevcustombuildsystem","kde
 
 
 CustomBuildSystem::CustomBuildSystem( QObject *parent, const QVariantList & )
-    : IPlugin( CustomBuildSystemFactory::componentData(), parent )
+    : AbstractFileManagerPlugin( CustomBuildSystemFactory::componentData(), parent )
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectBuilder )
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IProjectFileManager )
@@ -65,19 +65,9 @@ CustomBuildSystem::~CustomBuildSystem()
 {
 }
 
-ProjectFileItem* CustomBuildSystem::addFile( const KUrl& folder, ProjectFolderItem* parent )
-{
-    return genericManager()->addFile( folder, parent );
-}
-
-bool CustomBuildSystem::addFileToTarget( ProjectFileItem* file, ProjectTargetItem* parent )
+bool CustomBuildSystem::addFileToTarget( ProjectFileItem*, ProjectTargetItem* )
 {
     return 0;
-}
-
-ProjectFolderItem* CustomBuildSystem::addFolder( const KUrl& folder, ProjectFolderItem* parent )
-{
-    return genericManager()->addFolder( folder, parent );
 }
 
 KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
@@ -87,7 +77,6 @@ KJob* CustomBuildSystem::build( ProjectBaseItem* dom )
 
 KUrl CustomBuildSystem::buildDirectory( ProjectBaseItem*  item ) const
 {
-    
     KUrl u;
     if( item->folder() ) {
         u = item->url();
@@ -121,7 +110,7 @@ KJob* CustomBuildSystem::configure( IProject* project )
     return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Configure );
 }
 
-ProjectTargetItem* CustomBuildSystem::createTarget( const QString& target, ProjectFolderItem* parent )
+ProjectTargetItem* CustomBuildSystem::createTarget( const QString&, ProjectFolderItem* )
 {
     return 0;
 }
@@ -150,9 +139,10 @@ IProjectFileManager::Features CustomBuildSystem::features() const
     return IProjectFileManager::Files | IProjectFileManager::Folders;
 }
 
-ProjectFolderItem* CustomBuildSystem::import( IProject* project )
+ProjectFolderItem* CustomBuildSystem::createFolderItem( KDevelop::IProject* project, 
+                    const KUrl& url, KDevelop::ProjectBaseItem* parent )
 {
-    return genericManager()->import( project );
+    return new ProjectBuildFolderItem( project, url, parent );
 }
 
 KUrl::List CustomBuildSystem::includeDirectories( ProjectBaseItem* item ) const
@@ -174,66 +164,24 @@ KJob* CustomBuildSystem::install( ProjectBaseItem* item )
     return new CustomBuildJob( this, item, CustomBuildSystemTool::Install );
 }
 
-QList< ProjectFolderItem* > CustomBuildSystem::parse( ProjectFolderItem* dom )
-{
-    return genericManager()->parse( dom );
-}
-
 KJob* CustomBuildSystem::prune( IProject* project )
 {
     return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Prune );
 }
 
-bool CustomBuildSystem::reload( ProjectFolderItem* item )
-{
-    return genericManager()->reload( item );
-}
-
-bool CustomBuildSystem::removeFile( ProjectFileItem* file )
-{
-    return genericManager()->removeFile( file );
-}
-
-bool CustomBuildSystem::removeFileFromTarget( ProjectFileItem* file, ProjectTargetItem* parent )
+bool CustomBuildSystem::removeFilesFromTargets( QList<QPair<ProjectTargetItem*,ProjectFileItem*> > )
 {
     return false;
 }
 
-bool CustomBuildSystem::removeFolder( ProjectFolderItem* folder )
-{
-    return genericManager()->removeFolder( folder );
-}
-
-bool CustomBuildSystem::removeTarget( ProjectTargetItem* target )
+bool CustomBuildSystem::removeTarget( ProjectTargetItem* )
 {
     return false;
-}
-
-bool CustomBuildSystem::renameFile( ProjectFileItem* oldFile, const KUrl& newFile )
-{
-    return genericManager()->renameFile( oldFile, newFile );
-}
-
-bool CustomBuildSystem::renameFolder( ProjectFolderItem* oldFolder, const KUrl& newFolder )
-{
-    return genericManager()->renameFolder( oldFolder, newFolder );
 }
 
 QList<ProjectTargetItem*> CustomBuildSystem::targets( ProjectFolderItem* ) const
 {
     return QList<ProjectTargetItem*>();
-}
-
-IGenericProjectManager* CustomBuildSystem::genericManager() const
-{
-    IGenericProjectManager* manager = ICore::self()->pluginController()->extensionForPlugin<KDevelop::IGenericProjectManager>( "org.kdevelop.IGenericProjectManager" );
-    Q_ASSERT(manager);
-    return manager;
-}
-
-KJob* CustomBuildSystem::createImportJob( ProjectFolderItem* item )
-{
-    return genericManager()->createImportJob(item);
 }
 
 KConfigGroup CustomBuildSystem::configuration( IProject* project ) const

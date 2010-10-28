@@ -23,6 +23,7 @@
 #include <interfaces/iplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/interfaces/iprojectbuilder.h>
+#include <project/abstractfilemanagerplugin.h>
 
 class KConfigGroup;
 class KDialogBase;
@@ -35,7 +36,7 @@ class IOutputView;
 class IProject;
 }
 
-class CustomBuildSystem : public KDevelop::IPlugin, public KDevelop::IProjectBuilder, public KDevelop::IBuildSystemManager
+class CustomBuildSystem : public KDevelop::AbstractFileManagerPlugin, public KDevelop::IProjectBuilder, public KDevelop::IBuildSystemManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IProjectBuilder )
@@ -59,26 +60,11 @@ signals:
     void configured( KDevelop::IProject* );
     void pruned( KDevelop::IProject* );
 
-// ProjectFileManager API
+// AbstractFileManagerPlugin API
 public:
-    KDevelop::ProjectFileItem* addFile( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
-    KDevelop::ProjectFolderItem* addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent );
     Features features() const;
-    KDevelop::ProjectFolderItem* import( KDevelop::IProject* project );
-    QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    bool reload( KDevelop::ProjectFolderItem* item );
-    bool removeFile( KDevelop::ProjectFileItem* file );
-    bool removeFolder( KDevelop::ProjectFolderItem* folder );
-    bool renameFile( KDevelop::ProjectFileItem* oldFile, const KUrl& newFile );
-    bool renameFolder( KDevelop::ProjectFolderItem* oldFolder, const KUrl& newFolder );
-    KJob* createImportJob( KDevelop::ProjectFolderItem* item );
-signals:
-    void folderAdded( KDevelop::ProjectFolderItem* folder );
-    void folderRemoved( KDevelop::ProjectFolderItem* folder );
-    void folderRenamed( const KUrl& oldFolder, KDevelop::ProjectFolderItem* newFolder );
-    void fileAdded(KDevelop::ProjectFileItem* file );
-    void fileRemoved(KDevelop::ProjectFileItem* file );
-    void fileRenamed(const KUrl& oldFile, KDevelop::ProjectFileItem* newFile );
+    virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project, 
+                    const KUrl& url, KDevelop::ProjectBaseItem* parent = 0 );
 
 // BuildSystemManager API
 public:
@@ -88,13 +74,11 @@ public:
     KDevelop::ProjectTargetItem* createTarget( const QString& target, KDevelop::ProjectFolderItem* parent );
     QHash<QString, QString> defines( KDevelop::ProjectBaseItem* ) const;
     KUrl::List includeDirectories( KDevelop::ProjectBaseItem* ) const;
-    bool removeFileFromTarget( KDevelop::ProjectFileItem* file, KDevelop::ProjectTargetItem* parent );
+    bool removeFilesFromTargets( QList<QPair<KDevelop::ProjectTargetItem*,KDevelop::ProjectFileItem*> > );
     bool removeTarget( KDevelop::ProjectTargetItem* target );
     QList<KDevelop::ProjectTargetItem*> targets( KDevelop::ProjectFolderItem* ) const;
     KConfigGroup configuration( KDevelop::IProject* ) const;
     QString findMatchingPathGroup( const KConfigGroup& cfg, KDevelop::ProjectBaseItem* ) const;
-private:
-    KDevelop::IGenericProjectManager* genericManager() const;
 };
 
 #endif

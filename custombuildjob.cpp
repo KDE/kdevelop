@@ -61,6 +61,8 @@ CustomBuildJob::CustomBuildJob( CustomBuildSystem* plugin, KDevelop::ProjectBase
             title = i18n( "Pruning:" );
             subgrpname = QString( "%1Prune" ).arg( ConfigConstants::toolGroupPrefix );
             break;
+        case CustomBuildSystemTool::Undefined:
+            return;
     }
     setTitle( QString("%1 %2").arg( cmd ).arg( item->text() ) );
     setObjectName( QString("%1 %2").arg( cmd ).arg( item->text() ) );
