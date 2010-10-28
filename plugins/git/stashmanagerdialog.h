@@ -23,11 +23,11 @@
 
 #include <KDialog>
 #include <QStandardItemModel>
+#include <QDir>
 
 class KJob;
 namespace Ui { class StashManager; }
 
-class QDir;
 class GitPlugin;
 
 class StashManagerDialog : public KDialog
@@ -50,7 +50,7 @@ class StashManagerDialog : public KDialog
         
         Ui::StashManager* m_ui;
         GitPlugin* m_plugin;
-        const QDir& m_dir;
+        QDir m_dir;
 };
 
 class StashModel : public QStandardItemModel

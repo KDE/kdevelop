@@ -58,7 +58,7 @@ StashManagerDialog::~StashManagerDialog()
 void StashManagerDialog::stashesFound()
 {
     QModelIndex firstIdx=m_ui->stashView->model()->index(0, 0);
-    m_ui->stashView->selectionModel()->select(firstIdx, QItemSelectionModel::ClearAndSelect);
+    m_ui->stashView->setCurrentIndex(firstIdx);
     mainWidget()->setEnabled(true);
 }
 
@@ -72,7 +72,7 @@ QString StashManagerDialog::selection() const
 void StashManagerDialog::runStash(const QStringList& arguments)
 {
     KDevelop::VcsJob* job = m_plugin->gitStash(m_dir, arguments, KDevelop::OutputJob::Verbose);
-    connect(job, SIGNAL(finished()), SLOT(accept()));
+    connect(job, SIGNAL(result(KJob*)), SLOT(accept()));
     
     mainWidget()->setEnabled(false);
     
