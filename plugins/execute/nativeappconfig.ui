@@ -17,16 +17,6 @@
       <string>Executable</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Project Target:</string>
-        </property>
-        <property name="buddy">
-         <cstring>projectTargetRadio</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QRadioButton" name="projectTargetRadio">
         <property name="sizePolicy">
@@ -53,16 +43,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Executable:</string>
-        </property>
-        <property name="buddy">
-         <cstring>executableRadio</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1">
        <widget class="QRadioButton" name="executableRadio">
         <property name="enabled">
@@ -83,8 +63,31 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Executable:</string>
+        </property>
+        <property name="buddy">
+         <cstring>executableRadio</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Project Target:</string>
+        </property>
+        <property name="buddy">
+         <cstring>projectTargetRadio</cstring>
+        </property>
+       </widget>
+      </item>
      </layout>
-     <zorder></zorder>
+     <zorder>projectTargetRadio</zorder>
+     <zorder>projectTarget</zorder>
+     <zorder>executableRadio</zorder>
+     <zorder>executablePath</zorder>
      <zorder>label_2</zorder>
      <zorder>label</zorder>
     </widget>
@@ -381,12 +384,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>55</y>
+     <x>117</x>
+     <y>46</y>
     </hint>
     <hint type="destinationlabel">
-     <x>384</x>
-     <y>92</y>
+     <x>497</x>
+     <y>77</y>
     </hint>
    </hints>
   </connection>
@@ -397,12 +400,28 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>142</x>
-     <y>87</y>
+     <x>117</x>
+     <y>75</y>
     </hint>
     <hint type="destinationlabel">
-     <x>473</x>
-     <y>92</y>
+     <x>497</x>
+     <y>77</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>projectTargetRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>projectTarget</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>152</x>
+     <y>38</y>
     </hint>
    </hints>
   </connection>
