@@ -94,7 +94,6 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     }
     tree->selectionModel()->select( QItemSelection( idx, idx ), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     tree->selectionModel()->setCurrentIndex( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
-    setInitialSize( QSize( 700, 500 ) );
     
     // Unfortunately tree->resizeColumnToContents() only looks at the top-level 
     // items, instead of all open ones. Hence we're calculating it ourselves like
@@ -118,11 +117,18 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         level++;
         parentidx = parentidx.parent();
     }
-    int width = qMax( tree->columnWidth( 0 ), level*tree->indentation() + tree->indentation() + tree->sizeHintForIndex( widthidx ).width() );
+    int width = tree->columnWidth( 0 );
+    while ( widthidx.isValid() )
+    {
+        width = qMax( width, level*tree->indentation() + tree->indentation() + tree->sizeHintForIndex( widthidx ).width() );
+        widthidx = widthidx.parent();
+    }
     tree->setColumnWidth( 0, width );
-    
+
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
+
+    setInitialSize( sizeHint() );
 }
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
