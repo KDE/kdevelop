@@ -40,22 +40,31 @@
 #include <KIcon>
 #include "qthelpdocumentation.h"
 
-QtHelpProvider::QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QVariantList &args)
+QtHelpProvider::QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
     : QtHelpProviderAbstract(parent, componentData, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
     , m_fileName(fileName)
+    , m_name(name)
+    , m_icon(iconName)
 {
     m_engine.registerDocumentation(m_fileName);
 }
 
 QIcon QtHelpProvider::icon() const
 {
-    return KIcon("qtlogo");
+    return KIcon(m_icon);
 }
 
 QString QtHelpProvider::name() const
 {
-    if(m_engine.customFilters().isEmpty()) {
-        return QHelpEngineCore::namespaceName(m_fileName);
-    }
-   return m_engine.customFilters().at(0);
+    return m_name;
+}
+
+QString QtHelpProvider::fileName() const
+{
+    return m_fileName;
+}
+
+QString QtHelpProvider::iconName() const
+{
+    return m_icon;
 }

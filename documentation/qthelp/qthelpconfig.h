@@ -40,7 +40,16 @@ public:
       virtual ~QtHelpConfig();
 
       virtual void save();
+      virtual void load();
+      virtual void defaults();
 
+    private slots:
+      void add();
+      void remove();
+      void up();
+      void down();
+      void modify();
+      void selectionChanged();
     private:
       Ui::QtHelpConfigUI* m_configWidget;
 };

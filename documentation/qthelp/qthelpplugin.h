@@ -24,7 +24,9 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationproviderprovider.h>
 #include <QHelpEngine>
-
+#include <kpluginfactory.h>
+#include "qthelpprovider.h"
+#include "qthelpqtdoc.h"
 class QtHelpDocumentation;
 
 class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProviderProvider
@@ -34,13 +36,24 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     public:
         QtHelpPlugin(QObject *parent, const QVariantList & args);
         ~QtHelpPlugin();
+
+        static QtHelpPlugin *self() { return s_plugin; }
+
         virtual QList<KDevelop::IDocumentationProvider*> providers();
+        QList<QtHelpProvider*> qtHelpProviderLoaded();
+        bool qtHelpQtDocLoaded();
+        void setQtDoc(QtHelpQtDoc* qtDoc);
+        void writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc);
+    public slots:
+        void readConfig();
     signals:
         void changedProvidersList() const;
     private:
-        QList<KDevelop::IDocumentationProvider*> documentationProviders;
-    private slots:
-        void readConfig();
+        static QtHelpPlugin *s_plugin;
+        QList<QtHelpProvider*> m_qtHelpProviders;
+        QtHelpQtDoc* m_qtDoc;
 };
+
+K_PLUGIN_FACTORY_DECLARATION(QtHelpFactory)
 
 #endif // QTHELPPLUGIN_H

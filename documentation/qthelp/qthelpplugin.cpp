@@ -27,24 +27,32 @@
 #include <KComponentData>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
-
-#include "qthelpsettings.h"
+#include <kconfiggroup.h>
+#include "kdebug.h"
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
+#include "qthelpconfig.h"
 
-K_PLUGIN_FACTORY(QtHelpFactory, registerPlugin<QtHelpPlugin>(); )
+QtHelpPlugin *QtHelpPlugin::s_plugin = 0;
+
+K_PLUGIN_FACTORY_DEFINITION(QtHelpFactory,
+                 registerPlugin<QtHelpPlugin>();
+registerPlugin<QtHelpConfig>();
+)
 K_EXPORT_PLUGIN(QtHelpFactory(KAboutData("kdevqthelp","kdevqthelp", ki18n("QtHelp"), "0.1", ki18n("Check Qt Help documentation"), KAboutData::License_GPL)))
 
 QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QtHelpFactory::componentData(), parent)
-    , documentationProviders()
+    , m_qtHelpProviders()
+    , m_qtDoc(0)
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProviderProvider )
-    Q_UNUSED(args);
 
+    Q_UNUSED(args);
+    s_plugin = this;
     readConfig();
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevqthelp_config"),
-                                                this, "readConfig" );
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevqthelp"),
+                                                    this, "readConfig" );
     connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDoucmentationProviders()));
 }
 
@@ -55,23 +63,59 @@ QtHelpPlugin::~QtHelpPlugin()
 
 void QtHelpPlugin::readConfig()
 {
-    QtHelpSettings::self()->readConfig();
-    QStringList qtHelpPathList = QtHelpSettings::qchList();
-    foreach(KDevelop::IDocumentationProvider* provider, documentationProviders) {
-        documentationProviders.removeAll(provider);
+    KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
+    QStringList iconList = cg.readEntry("iconList", QStringList());
+    QStringList nameList = cg.readEntry("nameList", QStringList());
+    QStringList pathList = cg.readEntry("pathList", QStringList());
+    bool loadQtDoc = cg.readEntry("loadQtDocs", true);
+    foreach(QtHelpProvider* provider, m_qtHelpProviders) {
+        m_qtHelpProviders.removeAll(provider);
         delete provider;
     }
-
-    foreach(QString fileName,qtHelpPathList){
-        documentationProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, QVariantList()));
+    for(int i=0; i < pathList.length(); i++) {
+        m_qtHelpProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), pathList.at(i), nameList.at(i), iconList.at(i),QVariantList()));
     }
-    if(QtHelpSettings::loadQtDocs()){
-        documentationProviders.append(new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList()));
+
+    if(m_qtDoc&&!loadQtDoc){
+        delete m_qtDoc;
+        m_qtDoc = 0;
+    } else if(!m_qtDoc&&loadQtDoc) {
+        m_qtDoc = new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList());
     }
     emit changedProvidersList();
 }
 
+void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc)
+{
+    KConfigGroup cg(KGlobal::config(), "QtHelp Documentation");
+    cg.writeEntry("iconList", iconList);
+    cg.writeEntry("nameList", nameList);
+    cg.writeEntry("pathList", pathList);
+    cg.writeEntry("loadQtDocs", loadQtDoc);
+}
+
+void QtHelpPlugin::setQtDoc(QtHelpQtDoc* qtDoc)
+{
+    m_qtDoc = qtDoc;
+}
+
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
-    return documentationProviders;
+    QList<KDevelop::IDocumentationProvider*> list;
+    foreach(QtHelpProvider* provider, m_qtHelpProviders) {
+        list.append(provider);
+    }
+    if(m_qtDoc){
+        list.append(m_qtDoc);
+    }
+    return list;
+}
+
+QList<QtHelpProvider*> QtHelpPlugin::qtHelpProviderLoaded()
+{
+    return m_qtHelpProviders;
+}
+
+bool QtHelpPlugin::qtHelpQtDocLoaded(){
+    return m_qtDoc;
 }

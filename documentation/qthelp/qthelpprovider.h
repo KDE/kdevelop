@@ -32,13 +32,16 @@ class QtHelpProvider : public QtHelpProviderAbstract
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QVariantList & args);
+    QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QString &name, const QString &iconName, const QVariantList & args);
 
     virtual QIcon icon() const;
     virtual QString name() const;
-
+    QString fileName() const;
+    QString iconName() const;
 private:
     QString m_fileName;
+    QString m_name;
+    QString m_icon;
 };
 
 #endif // QTHELPPROVIDER_H

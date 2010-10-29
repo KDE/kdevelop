@@ -1,13 +1,11 @@
 [Desktop Entry]
 Icon=kdevelop
 Type=Service
-ServiceTypes=KCModule
-
-X-KDE-ModuleType=Library
-X-KDE-Library=kdevqthelp_config
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kdevqthelp
 X-KDE-FactoryName=kdevqthelp_config
-X-KDE-ParentApp=kdevplatform
-X-KDE-ParentComponents=kdevplatform
+X-KDE-ParentApp=kdevelop
+X-KDE-ParentComponents=kdevqthelp
 X-KDE-CfgDlgHierarchy=DOCUMENTATION
 Name=QtHelp Documentation
 Name[x-test]=xxQtHelp Documentationxx
