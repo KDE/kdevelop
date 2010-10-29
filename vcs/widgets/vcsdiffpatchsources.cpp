@@ -87,6 +87,11 @@ VCSDiffPatchSource::VCSDiffPatchSource(const KDevelop::VcsDiff& vcsdiff)
     m_base = vcsdiff.baseDiff();
 }
 
+VCSDiffPatchSource::~VCSDiffPatchSource()
+{
+    QFile::remove(m_file.toLocalFile());
+}
+
 KUrl VCSDiffPatchSource::baseDir() const {
     return m_base;
 }

@@ -41,6 +41,37 @@ using namespace KDevelop;
 
 bool WorkingSet::m_loading = false;
 
+WorkingSet::WorkingSet(QString id, QString icon)
+    : m_id(id), m_iconName(icon)
+{
+    Q_ASSERT(!m_id.isEmpty());
+
+    //Give the working-set icons one color, so they are less disruptive
+    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
+    QImage imgInactive = imgActive;
+
+    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
+    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
+
+    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
+    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
+
+    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
+    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
+
+    QImage imgNonPersistent = imgInactive;
+
+    KIconEffect::deSaturate(imgNonPersistent, 1.0);
+
+    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
+    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
+}
+
+WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
+{
+    m_id =  rhs.m_id + "_copy_";
+}
+
 void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
 {
     if (area->isSplitted()) {
@@ -83,9 +114,6 @@ void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConf
 
 bool WorkingSet::isEmpty() const
 {
-    if(m_id.isEmpty())
-        return true;
-
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
@@ -150,9 +178,6 @@ void loadFileList(QStringList& ret, KConfigGroup group)
 
 QStringList WorkingSet::fileList() const
 {
-    if(m_id.isEmpty())
-        return QStringList();
-
     QStringList ret;
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
@@ -177,9 +202,6 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
                 area->closeView(view);
         }
     }
-
-    if(m_id.isEmpty())
-        return;
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
@@ -293,7 +315,7 @@ void deleteGroupRecursive(KConfigGroup group) {
 
 void WorkingSet::deleteSet(bool force, bool silent)
 {
-    if((m_areas.isEmpty() || force) && !m_id.isEmpty()) {
+    if(m_areas.isEmpty() || force) {
         emit aboutToRemove(this);
 
         KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
@@ -310,11 +332,6 @@ void WorkingSet::deleteSet(bool force, bool silent)
 
 void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
 {
-    if(m_id.isEmpty()) {
-        Q_ASSERT(areaIndex->viewCount() == 0 && !areaIndex->isSplitted());
-        return;
-    }
-
     kDebug() << "saving" << m_id << "from area";
 
     bool wasPersistent = isPersistent();
@@ -342,28 +359,6 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     emit setChangedSignificantly();
 }
 
-void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString to) {
-    kDebug() << "changing working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
-    Q_ASSERT(from == m_id);
-    if (from == to)
-        return;
-    Q_ASSERT(m_areas.contains(area));
-    if (!m_id.isEmpty()) saveFromArea(area, area->rootIndex());
-    disconnectArea(area);
-    WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
-    newSet->connectArea(area);
-    kDebug() << "update ready";
-}
-
-///@todo Move this function into WorkingSetController
-void WorkingSet::changedWorkingSet(Sublime::Area* area, QString from, QString to) {
-    kDebug() << "changed working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
-    Q_ASSERT(to == m_id);
-    loadToArea(area, area->rootIndex(), !from.isEmpty());
-    kDebug() << "update ready";
-    Core::self()->workingSetControllerInternal()->notifyWorkingSetSwitched();
-}
-
 void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
     Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
     Q_ASSERT(area);
@@ -374,14 +369,7 @@ void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
         kDebug() << "doing nothing because loading";
         return;
     }
-    if (m_id.isEmpty()) {
-        //Spawn a new working-set
 
-        WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
-        set->saveFromArea(area, area->rootIndex());
-        area->setWorkingSet(set->id());
-        return;
-    }
     changed(area);
 }
 
@@ -398,31 +386,7 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
     changed(area);
 }
 
-WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
-    //Give the working-set icons one color, so they are less disruptive
-    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
-    QImage imgInactive = imgActive;
-
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
-
-    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
-    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
-
-    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
-    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
-
-    QImage imgNonPersistent = imgInactive;
-
-    KIconEffect::deSaturate(imgNonPersistent, 1.0);
-
-    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
-    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
-}
-
 void WorkingSet::setPersistent(bool persistent) {
-    if(m_id.isEmpty())
-        return;
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     group.writeEntry("persistent", persistent);
@@ -433,8 +397,6 @@ void WorkingSet::setPersistent(bool persistent) {
 }
 
 bool WorkingSet::isPersistent() const {
-    if(m_id.isEmpty())
-        return false;
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup group = setConfig.group(m_id);
     return group.readEntry("persistent", false);
@@ -492,9 +454,6 @@ void WorkingSet::connectArea( Sublime::Area* area )
   m_areas.push_back( area );
   connect( area, SIGNAL( viewAdded( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewAdded( Sublime::AreaIndex*, Sublime::View* ) ) );
   connect( area, SIGNAL( viewRemoved( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewRemoved( Sublime::AreaIndex*, Sublime::View* ) ) );
-  connect( area, SIGNAL( changingWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changingWorkingSet( Sublime::Area*, QString, QString ) ) );
-  //The connection is queued, because the signal may be triggered from within an object that may be deleted during the performed actions
-  connect( area, SIGNAL( changedWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changedWorkingSet( Sublime::Area*, QString, QString ) ), Qt::QueuedConnection );
 }
 
 void WorkingSet::disconnectArea( Sublime::Area* area )
@@ -510,8 +469,6 @@ void WorkingSet::disconnectArea( Sublime::Area* area )
 
   disconnect( area, SIGNAL( viewAdded( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewAdded( Sublime::AreaIndex*, Sublime::View* ) ) );
   disconnect( area, SIGNAL( viewRemoved( Sublime::AreaIndex*, Sublime::View* ) ), this, SLOT( areaViewRemoved( Sublime::AreaIndex*, Sublime::View* ) ) );
-  disconnect( area, SIGNAL( changingWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changingWorkingSet( Sublime::Area*, QString, QString ) ) );
-  disconnect( area, SIGNAL( changedWorkingSet( Sublime::Area*, QString, QString ) ), this, SLOT( changedWorkingSet( Sublime::Area*, QString, QString ) ) );
   m_areas.removeAll( area );
 }
 
@@ -541,11 +498,6 @@ void WorkingSet::changed( Sublime::Area* area )
   }
 
   emit setChangedSignificantly();
-}
-
-WorkingSet::WorkingSet( const KDevelop::WorkingSet& rhs ) : QObject()
-{
-  m_id =  rhs.m_id + "_copy_";
 }
 
 QIcon WorkingSet::activeIcon() const

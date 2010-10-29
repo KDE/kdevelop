@@ -55,6 +55,7 @@
 #include <interfaces/icore.h>
 #include <qcoreapplication.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/isession.h>
 
 const bool separateThreadForHighPriority = true;
 
@@ -79,8 +80,6 @@ public:
         ThreadWeaver::setDebugLevel(true, 1);
 
         QObject::connect(&m_timer, SIGNAL(timeout()), m_parser, SLOT(parseDocuments()));
-
-        loadSettings(); // Start the weaver
     }
 
     void startTimerThreadSafe() {
@@ -157,7 +156,7 @@ public:
         m_parser->updateProgressBar();
 
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
-        if(m_doneParseJobs == m_maxParseJobs)
+        if(m_doneParseJobs == m_maxParseJobs || m_weaver.queueLength() == 0)
             emit m_parser->hideProgress(m_parser);
     }
 
@@ -216,17 +215,25 @@ public:
     void loadSettings()
     {
         ///@todo re-load settings when they have been changed!
-        KConfigGroup config(KGlobal::config(), "Background Parser");
+        Q_ASSERT(ICore::self()->activeSession());
+        KConfigGroup config(ICore::self()->activeSession()->config(), "Background Parser");
 
-        m_delay = config.readEntry("Delay", 500);
+        // stay backwards compatible
+        KConfigGroup oldConfig(KGlobal::config(), "Background Parser");
+#define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
+config.readEntry(entry, oldConfig.readEntry(entry, default))
+
+        m_delay = BACKWARDS_COMPATIBLE_ENTRY("Delay", 500);
         m_timer.setInterval(m_delay);
         m_threads = 0;
-        m_parser->setThreadCount(config.readEntry("Number of Threads", 1));
+        m_parser->setThreadCount(BACKWARDS_COMPATIBLE_ENTRY("Number of Threads", 1));
 
-        if (config.readEntry("Enabled", true)) {
-            resume();
+        resume();
+
+        if (BACKWARDS_COMPATIBLE_ENTRY("Enabled", true)) {
+            m_parser->enableProcessing();
         } else {
-            suspend();
+            m_parser->disableProcessing();
         }
     }
 
@@ -367,17 +374,9 @@ void BackgroundParser::clear(QObject* parent)
     }
 }
 
-void BackgroundParser::loadSettings(bool projectIsLoaded)
+void BackgroundParser::loadSettings()
 {
-    Q_UNUSED(projectIsLoaded)
-
-
     d->loadSettings();
-}
-
-void BackgroundParser::saveSettings(bool projectIsLoaded)
-{
-    Q_UNUSED(projectIsLoaded)
 }
 
 void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QString text)

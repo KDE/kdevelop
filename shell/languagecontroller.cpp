@@ -126,6 +126,8 @@ LanguageController::~LanguageController()
 
 void LanguageController::initialize()
 {
+    d->backgroundParser->loadSettings();
+
     // make sure the DUChain is setup before we try to access it from different threads at the same time
     DUChain::self();
 

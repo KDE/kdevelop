@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef GENERICMANAGERLISTJOB_H
-#define GENERICMANAGERLISTJOB_H
+#ifndef FILEMANAGERLISTJOB_H
+#define FILEMANAGERLISTJOB_H
 
 #include <KIO/Job>
 #include <QtCore/QQueue>
@@ -26,32 +26,35 @@
 namespace KDevelop
 {
     class ProjectFolderItem;
-}
 
-class GenericManagerListJob : public KIO::Job
+class FileManagerListJob : public KIO::Job
 {
     Q_OBJECT
 
 public:
-    GenericManagerListJob(KDevelop::ProjectFolderItem* item, const bool forceRecursion);
-    KDevelop::ProjectFolderItem* item() const;
+    FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion);
+    ProjectFolderItem* item() const;
+
+    void addSubDir(ProjectFolderItem* item);
 
 signals:
-    void entries(KDevelop::ProjectFolderItem* baseItem, const KIO::UDSEntryList& entries, const bool forceRecursion);
+    void entries(FileManagerListJob* job, ProjectFolderItem* baseItem,
+                 const KIO::UDSEntryList& entries, const bool forceRecursion);
     void nextJob();
 
 private slots:
     void slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn );
     void slotResult(KJob* job);
-    void addSubDir(KDevelop::ProjectFolderItem* item);
     void startNextJob();
 
 private:
-    QQueue<KDevelop::ProjectFolderItem*> m_listQueue;
+    QQueue<ProjectFolderItem*> m_listQueue;
     /// current base dir
-    KDevelop::ProjectFolderItem* m_item;
+    ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
     const bool m_forceRecursion;
 };
 
-#endif // GENERICMANAGERLISTJOB_H
+}
+
+#endif // FILEMANAGERLISTJOB_H

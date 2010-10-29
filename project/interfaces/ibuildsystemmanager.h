@@ -22,7 +22,10 @@
 #ifndef IBUILDSYSTEMMANAGER_H
 #define IBUILDSYSTEMMANAGER_H
 
+#include <KUrl>
+
 #include "iprojectfilemanager.h"
+
 #include "../projectexport.h"
 
 namespace KDevelop
@@ -33,10 +36,13 @@ class ProjectTargetItem;
 typedef QList<ProjectFileItem*> FileItemList;
 typedef QPair<ProjectTargetItem*, ProjectFileItem*> TargetFilePair;
 /**
- * Manage the file and build system of the project.
+ * Manages the build system of the project.
+ *
+ * Use/Implement the IProjectFileManager interface to manage files.
+ *
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public IProjectFileManager
+class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public virtual IProjectFileManager
 {
 public:
 

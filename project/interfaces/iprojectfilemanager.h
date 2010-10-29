@@ -38,7 +38,6 @@ class IProject;
 class ProjectBaseItem;
 class ProjectFolderItem;
 class ProjectFileItem;
-class KDialogBase;
 
 /**
  * @short An interface to project file management
@@ -110,7 +109,7 @@ public:
      * Adds the file specified by @p file to the folder @p parent and modifies
      * the underlying build system if needed. The file is not added to a target
      */
-    virtual ProjectFileItem* addFile(const KUrl& folder, ProjectFolderItem *parent) = 0;
+    virtual ProjectFileItem* addFile(const KUrl& file, ProjectFolderItem *parent) = 0;
 
     /**
      * Remove files or folders from the project and delete them from disk

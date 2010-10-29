@@ -120,6 +120,7 @@ void MainWindow::setArea(Area *area)
     if (d->area)
         disconnect(d->area, 0, this, 0);
     
+    bool wasEnabled = updatesEnabled();
     setUpdatesEnabled(false);
 
     bool differentArea = (area != d->area);
@@ -148,7 +149,7 @@ void MainWindow::setArea(Area *area)
     
     loadSettings();
 
-    setUpdatesEnabled(true);
+    setUpdatesEnabled(wasEnabled);
 
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));

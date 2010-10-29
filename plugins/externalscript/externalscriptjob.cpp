@@ -79,8 +79,6 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, QObject* parent 
     m_errorMode = ExternalScriptItem::ErrorMergeOutput;
   }
 
-  qDebug() << m_errorMode << m_outputMode;
-
   KDevelop::IDocument* active = KDevelop::ICore::self()->documentController()->activeDocument();
 
   if ( m_outputMode != ExternalScriptItem::OutputNone || m_inputMode != ExternalScriptItem::InputNone

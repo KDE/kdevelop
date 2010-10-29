@@ -117,7 +117,6 @@ void SvnImport::testBasic()
 void SvnImport::testImportWithMissingDirs()
 {
     KTempDir reposDir;
-    reposDir.setAutoRemove( false );
     VcsLocation reposLoc;
     setupLocalRepository( reposDir.name(), reposLoc );
 

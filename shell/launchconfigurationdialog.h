@@ -83,6 +83,8 @@ public:
     LaunchConfiguration* configForIndex( const QModelIndex& ) const;
     ILaunchMode* modeForIndex( const QModelIndex& idx ) const;
     QModelIndex indexForConfig( LaunchConfiguration* ) const;
+    void addConfiguration(KDevelop::ILaunchConfiguration* launch, const QModelIndex& idx);
+    
 private:
     class TreeItem
     {
@@ -113,10 +115,12 @@ private:
     public:
         QString text;
     };
-    ProjectItem* findItemForProject( IProject* );
     void addItemForLaunchConfig( LaunchConfiguration* l );
     void addLaunchModeItemsForLaunchConfig ( KDevelop::LaunchConfigurationsModel::LaunchItem* l );
     QList<TreeItem*> topItems;
+    
+public:
+    ProjectItem* findItemForProject( IProject* );
 };
 
 class LaunchConfigPagesContainer : public QWidget
@@ -142,6 +146,7 @@ public:
 private slots:
     void deleteConfiguration();
     void createConfiguration();
+    void addConfiguration(KDevelop::ILaunchConfiguration*);
     void selectionChanged(QItemSelection,QItemSelection);
     void pageChanged();
     void saveConfig();

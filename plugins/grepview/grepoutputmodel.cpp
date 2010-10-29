@@ -209,11 +209,8 @@ QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentI
 
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
-    QString fnString;
-    if(items.length()>1)
-        fnString = QString(i18n("%1 (%2 matches)")).arg(filename).arg(items.length());
-    else
-        fnString = QString(i18n("%1 (1 match)")).arg(filename);
+    QString fnString = i18np("%2 (one match)", "%2 (%1 matches)", items.length(), filename);
+
     GrepOutputItem *fileItem = new GrepOutputItem(filename, -1, fnString);
     appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));

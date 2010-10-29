@@ -1307,6 +1307,7 @@ void showDiff(const KDevelop::VcsDiff& d)
         {
             KTemporaryFile temp2;
             temp2.setSuffix("2.patch");
+            //FIXME: don't leak
             temp2.setAutoRemove(false);
             temp2.open();
             QTextStream t2(&temp2);
@@ -1359,7 +1360,7 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     
     emit patchChanged();
     
-    if(!dynamic_cast<LocalPatchSource*>(m_patch))
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data()))
       delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
@@ -1463,21 +1464,15 @@ void PatchReviewPlugin::updateReview()
 void PatchReviewPlugin::setPatch(IPatchSource* patch)
 {
   if(m_patch) {
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
-    if(objPatch) {
-      disconnect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
-    }
+    disconnect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
   }
   m_patch = patch;
 
   if(m_patch) {
     kDebug() << "setting new patch" << patch->name() << "with file" << patch->file();
     registerPatch(patch);
-    
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
-    if(objPatch) {
-      connect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
-    }
+
+    connect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
   }
   
   notifyPatchChanged();

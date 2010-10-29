@@ -22,6 +22,7 @@
 
 #include <interfaces/iplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/projectmodel.h>
 
 class DummyBSM : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
