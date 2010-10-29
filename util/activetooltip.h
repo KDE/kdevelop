@@ -81,10 +81,10 @@ public:
     void addFriendWidget(QWidget* widget);
     
     ///Add a rectangle to the area in which the mouse can be moved freely without hiding the tooltip
-    void addExtendRect(QRect rect);
+    void addExtendRect(const QRect& rect);
     
     ///Set the area within which the mouse can be moved freely without hiding the tooltip
-    void setBoundingGeometry(QRect geometry);
+    void setBoundingGeometry(const QRect& geometry);
 Q_SIGNALS:
     void resized();
     // Emitted whenever mouse-activity is noticed within the tooltip area

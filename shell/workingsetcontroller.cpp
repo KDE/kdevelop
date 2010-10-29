@@ -16,73 +16,37 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <KDE/KTextEditor/Document>
 #include "workingsetcontroller.h"
-#include <kconfiggroup.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <ksharedconfig.h>
-#include <kcolorutils.h>
-#include <sublime/view.h>
-#include <sublime/areaindex.h>
-#include <sublime/document.h>
-#include <interfaces/idocument.h>
-#include "core.h"
-#include "documentcontroller.h"
-#include <sublime/area.h>
-#include "mainwindow.h"
-#include <qboxlayout.h>
-#include <klocalizedstring.h>
-#include <util/pushvalue.h>
-#include <kiconeffect.h>
-#include <qapplication.h>
-#include <util/activetooltip.h>
-#include <qevent.h>
-#include <qmenu.h>
-#include <sublime/urldocument.h>
-#include "partdocument.h"
-#include "textdocument.h"
-#include <qpushbutton.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/iproject.h>
-#include <interfaces/isession.h>
-#include <kactioncollection.h>
-#include <qtimer.h>
 
-#define SYNC_OFTEN
+#include <QTimer>
+#include <QVBoxLayout>
+
+#include "mainwindow.h"
+#include "partdocument.h"
+#include "uicontroller.h"
+
+#include <interfaces/iuicontroller.h>
+#include <interfaces/isession.h>
+
+#include <sublime/view.h>
+#include <sublime/area.h>
+
+#include <util/activetooltip.h>
+
+#include "workingsets/workingset.h"
+#include "workingsets/workingsettooltipwidget.h"
+#include "workingsets/workingsetwidget.h"
+#include "workingsets/closedworkingsetswidget.h"
 
 using namespace KDevelop;
 
-bool WorkingSet::m_loading = false;
 const int toolTipTimeout = 2000;
-
-static MainWindow* mainWindow() {
-    MainWindow* ret = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(ret);
-    return ret;
-}
-
-//Filters the views in the main-window so they only contain the given files to keep
-void filterViews(QSet< QString > keepFiles)
-{
-    foreach(Sublime::View* view, mainWindow()->area()->views()) {
-
-        PartDocument* partDoc = dynamic_cast<PartDocument*>(view->document());
-        if(partDoc && !keepFiles.contains(partDoc->documentSpecifier())) {
-            if(view->document()->views().count() == 1) {
-                partDoc->close();
-                continue;
-            }
-
-            mainWindow()->area()->closeView(view);
-        }
-    }
-}
 
 //Random set of icons that are well distinguishable from each other. If the user doesn't have them, they won't be used.
 QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
 
-WorkingSetController::WorkingSetController(Core* core) : m_core(core)
+WorkingSetController::WorkingSetController(Core* core)
+    : m_core(core)
 {
     m_hideToolTipTimer = new QTimer(this);
     m_hideToolTipTimer->setInterval(toolTipTimeout);
@@ -100,7 +64,7 @@ void WorkingSetController::initialize()
         else
             kDebug() << "have garbage working set with id " << set;
     }
-    
+
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
@@ -127,8 +91,7 @@ void WorkingSetController::cleanup()
     m_workingSets.clear();
 }
 
-
-bool WorkingSetController::usingIcon(QString icon)
+bool WorkingSetController::usingIcon(const QString& icon)
 {
     foreach(WorkingSet* set, m_workingSets)
         if(set->iconName() == icon)
@@ -136,22 +99,23 @@ bool WorkingSetController::usingIcon(QString icon)
     return false;
 }
 
-bool WorkingSetController::iconValid(QString icon)
+bool WorkingSetController::iconValid(const QString& icon)
 {
     return !KIconLoader::global()->iconPath(icon, KIconLoader::Small, true).isNull();
 }
 
-
-WorkingSet* WorkingSetController::newWorkingSet(QString prefix)
+WorkingSet* WorkingSetController::newWorkingSet(const QString& prefix)
 {
     QString newId = QString("%1_%2").arg(prefix).arg(qrand() % 10000000);
     return getWorkingSet(newId);
 }
 
-WorkingSet* WorkingSetController::getWorkingSet(QString id, QString icon)
+WorkingSet* WorkingSetController::getWorkingSet(const QString& id, const QString& _icon)
 {
-    if(!m_workingSets.contains(id)) {
+    Q_ASSERT(!id.isEmpty());
 
+    if(!m_workingSets.contains(id)) {
+        QString icon = _icon;
         if(icon.isEmpty())
         {
             for(int a = 0; a < 100; ++a) {
@@ -168,938 +132,22 @@ WorkingSet* WorkingSetController::getWorkingSet(QString id, QString icon)
             kDebug() << "found no icon for working-set" << id;
             icon = "invalid";
         }
-        m_workingSets[id] = new WorkingSet(id, icon);
-        emit workingSetAdded(id);
+        WorkingSet* set = new WorkingSet(id, icon);
+        connect(set, SIGNAL(aboutToRemove(WorkingSet*)),
+                this, SIGNAL(aboutToRemoveWorkingSet(WorkingSet*)));
+        m_workingSets[id] = set;
+        emit workingSetAdded(set);
     }
 
     return m_workingSets[id];
 }
 
-void deleteGroupRecursive(KConfigGroup group) {
-//     kDebug() << "deleting" << group.name();
-    foreach(const QString& entry, group.entryMap().keys()) {
-        group.deleteEntry(entry);
-    }
-    Q_ASSERT(group.entryMap().isEmpty());
-
-    foreach(const QString& subGroup, group.groupList()) {
-        deleteGroupRecursive(group.group(subGroup));
-        group.deleteGroup(subGroup);
-    }
-    //Why doesn't this work?
-//     Q_ASSERT(group.groupList().isEmpty());
-    group.deleteGroup();
-
-#ifdef SYNC_OFTEN
-    group.sync();
-#endif
-}
-
-void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex)
-{
-    if(m_id.isEmpty()) {
-        Q_ASSERT(areaIndex->viewCount() == 0 && !areaIndex->isSplitted());
-        return;
-    }
-    
-    kDebug() << "saving" << m_id << "from area";
-
-    bool wasPersistent = isPersistent();
-    
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-    deleteGroupRecursive(group);
-    group.writeEntry("iconName", m_iconName);
-    if (area->activeView()) {
-        group.writeEntry("Active View", area->activeView()->document()->documentSpecifier());
+QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea) {
+    if (fixedArea) {
+        return new WorkingSetWidget(parent, fixedArea);
     } else {
-        group.writeEntry("Active View", QString());
+        return new ClosedWorkingSetsWidget(parent);
     }
-    saveFromArea(area, areaIndex, group);
-
-    if(isEmpty())
-        deleteGroupRecursive(group);
-
-    setPersistent(wasPersistent);
-    
-#ifdef SYNC_OFTEN
-    setConfig.sync();
-#endif
-    
-    emit setChangedSignificantly();
-}
-
-void WorkingSet::saveFromArea(Sublime::Area* a, Sublime::AreaIndex * area, KConfigGroup & group)
-{
-    if (area->isSplitted()) {
-        group.writeEntry("Orientation", area->orientation() == Qt::Horizontal ? "Horizontal" : "Vertical");
-
-        if (area->first()) {
-            KConfigGroup subgroup(&group, "0");
-            subgroup.deleteGroup();
-            saveFromArea(a, area->first(), subgroup);
-        }
-
-        if (area->second()) {
-            KConfigGroup subgroup(&group, "1");
-            subgroup.deleteGroup();
-            saveFromArea(a, area->second(), subgroup);
-        }
-    } else {
-        group.writeEntry("View Count", area->viewCount());
-
-        int index = 0;
-        foreach (Sublime::View* view, area->views()) {
-            kDebug() << view->document()->title();
-            group.writeEntry(QString("View %1 Type").arg(index), view->document()->documentType());
-            group.writeEntry(QString("View %1").arg(index), view->document()->documentSpecifier());
-
-            TextDocument *textDoc = qobject_cast<KDevelop::TextDocument*>(view->document());
-            if (textDoc && textDoc->textDocument()) {
-                QString encoding = textDoc->textDocument()->encoding();
-                if (!encoding.isEmpty())
-                    group.writeEntry(QString("View %1 Encoding").arg(index), encoding);
-            }
-            QString state = view->viewState();
-            if (!state.isEmpty())
-                group.writeEntry(QString("View %1 State").arg(index), state);
-
-            ++index;
-        }
-    }
-}
-
-
-bool WorkingSet::isEmpty() const
-{
-    if(m_id.isEmpty())
-        return true;
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-    return !group.hasKey("Orientation") && group.readEntry("View Count", 0) == 0;
-}
-
-struct DisableMainWindowUpdatesFromArea
-{
-    DisableMainWindowUpdatesFromArea(Sublime::Area* area) : m_area(area) {
-        if(area) {
-
-            foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
-                if(window->area() == area) {
-                    if(window->updatesEnabled()) {
-                        wasUpdatesEnabled.insert(window);
-                        window->setUpdatesEnabled(false);
-                    }
-                }
-            }
-        }
-    }
-
-    ~DisableMainWindowUpdatesFromArea() {
-        if(m_area) {
-            foreach(Sublime::MainWindow* window, wasUpdatesEnabled) {
-                window->setUpdatesEnabled(true);
-            }
-        }
-    }
-
-    Sublime::Area* m_area;
-    QSet<Sublime::MainWindow*> wasUpdatesEnabled;
-};
-
-void loadFileList(QStringList& ret, KConfigGroup group)
-{
-    if (group.hasKey("Orientation")) {
-        QStringList subgroups = group.groupList();
-
-        if (subgroups.contains("0")) {
-
-            {
-                KConfigGroup subgroup(&group, "0");
-                loadFileList(ret, subgroup);
-            }
-
-            if (subgroups.contains("1")) {
-                KConfigGroup subgroup(&group, "1");
-                loadFileList(ret, subgroup);
-            }
-        }
-
-    } else {
-
-        int viewCount = group.readEntry("View Count", 0);
-        for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QString("View %1").arg(i), "");
-
-            ret << specifier;
-        }
-    }
-}
-QStringList WorkingSet::fileList() const
-{
-    if(m_id.isEmpty())
-        return QStringList();
-
-    QStringList ret;
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-
-    loadFileList(ret, group);
-    return ret;
-}
-
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, bool clear) {
-    PushValue<bool> enableLoading(m_loading, true);
-
-    DisableMainWindowUpdatesFromArea updatesDisabler(area);
-
-    kDebug() << "loading working-set" << m_id << "into area" << area;
-
-    if(clear) {
-        kDebug() << "clearing area with working-set" << area->workingSet();
-        QSet< QString > files = fileList().toSet();
-        foreach(Sublime::View* view, area->views()) {
-            Sublime::UrlDocument* doc = dynamic_cast<Sublime::UrlDocument*>(view->document());
-            if(!doc || !files.contains(doc->documentSpecifier()))
-                area->closeView(view);
-        }
-    }
-
-    if(m_id.isEmpty())
-        return;
-
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-
-    loadToArea(area, areaIndex, group);
-
-    //activate view in the working set
-    if (!area->views().isEmpty()) {
-        foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
-            if(window->area() == area) {
-                window->setArea(area);
-                QString activeView = group.readEntry("Active View", QString());
-                kDebug() << activeView;
-                bool found = false;
-                foreach (Sublime::View *v, area->views()) {
-                    if (v->document()->documentSpecifier() == activeView) {
-                        window->activateView(v);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) window->activateView(area->views().first()); //fallback
-                break;
-            }
-        }
-    }
-}
-
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup group)
-{
-    if (group.hasKey("Orientation")) {
-        QStringList subgroups = group.groupList();
-
-        if (subgroups.contains("0") && subgroups.contains("1")) {
-//             kDebug() << "has zero, split:" << split;
-
-            Qt::Orientation orientation = group.readEntry("Orientation", "Horizontal") == "Vertical" ? Qt::Vertical : Qt::Horizontal;
-            if(!areaIndex->isSplitted()){
-                areaIndex->split(orientation);
-            }else{
-                areaIndex->setOrientation(orientation);
-            }
-
-            loadToArea(area, areaIndex->first(), KConfigGroup(&group, "0"));
-
-            loadToArea(area, areaIndex->second(), KConfigGroup(&group, "1"));
-        }
-    } else {
-        while (areaIndex->isSplitted()) {
-            areaIndex = areaIndex->first();
-            Q_ASSERT(areaIndex);// Split area index did not contain a first child area index if this fails
-            kDebug() << "is already splitted, using first index" << areaIndex;
-        }
-
-        int viewCount = group.readEntry("View Count", 0);
-        for (int i = 0; i < viewCount; ++i) {
-            QString type = group.readEntry(QString("View %1 Type").arg(i), "");
-            QString specifier = group.readEntry(QString("View %1").arg(i), "");
-
-            bool viewExists = false;
-            foreach (Sublime::View* view, areaIndex->views()) {
-                if (view->document()->documentSpecifier() == specifier) {
-                    viewExists = true;
-                    break;
-                }
-            }
-
-            if (viewExists) {
-                kDebug() << "View already exists!";
-                continue;
-            }
-
-            IDocument* doc = Core::self()->documentControllerInternal()->openDocument(specifier,
-                             KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
-            Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
-            if (document) {
-                kDebug() << document->title();
-                Sublime::View* view = document->createView();
-
-                QString state = group.readEntry(QString("View %1 State").arg(i), "");
-                if (!state.isEmpty())
-                    view->setState(state);
-
-                area->addViewSilently(view, areaIndex);
-            } else {
-                kWarning() << "Unable to create view of type " << type;
-            }
-        }
-    }
-}
-
-void WorkingSet::deleteSet(bool force, bool silent)
-{
-    if((m_areas.isEmpty() || force) && !m_id.isEmpty()) {
-        KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-        KConfigGroup group = setConfig.group(m_id);
-        deleteGroupRecursive(group);
-#ifdef SYNC_OFTEN
-        setConfig.sync();
-#endif
-
-        if(!silent)
-            emit setChangedSignificantly();
-    }
-}
-
-QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, bool local, Sublime::Area* fixedArea) {
-    return new WorkingSetWidget(parent, this, local, fixedArea);
-}
-
-WorkingSetWidget::WorkingSetWidget(MainWindow* parent, WorkingSetController* controller, bool mini, Sublime::Area* fixedArea)
-	: QWidget(0), m_fixedArea(fixedArea), m_mini(mini), m_mainWindow(parent)
-{
-    m_layout = new QHBoxLayout(this);
-    m_layout->setMargin(0);
-    if(!m_fixedArea)
-        connect(parent, SIGNAL(areaChanged(Sublime::Area*)), this, SLOT(areaChanged(Sublime::Area*)));
-
-    connect(controller, SIGNAL(workingSetAdded(QString)), this, SLOT(workingSetsChanged()));
-    connect(controller, SIGNAL(workingSetRemoved(QString)), this, SLOT(workingSetsChanged()));
-
-    Sublime::Area* area = parent->area();
-    if(m_fixedArea)
-        area = m_fixedArea;
-    if(area)
-        areaChanged(area);
-
-    workingSetsChanged();
-}
-
-void WorkingSetWidget::areaChanged(Sublime::Area* area)
-{
-    if(m_connectedArea) {
-        disconnect(m_connectedArea, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)), this, SLOT(changingWorkingSet(Sublime::Area*,QString,QString)));
-    }
-
-    //Queued connect so the change is already applied to the area when we start processing
-    connect(area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)), this, SLOT(changingWorkingSet(Sublime::Area*,QString,QString)), Qt::QueuedConnection);
-
-    m_connectedArea = area;
-
-    changingWorkingSet(area, QString(), area->workingSet());
-}
-
-void WorkingSetWidget::changingWorkingSet(Sublime::Area*, QString, QString)
-{
-    workingSetsChanged();
-}
-
-QString htmlColorElement(int element) {
-    QString ret = QString("%1").arg(element, 2, 16, QChar('0'));
-    return ret;
-}
-
-QString htmlColor(QColor color) {
-    return "#" + htmlColorElement(color.red()) + htmlColorElement(color.green()) + htmlColorElement(color.blue());
-}
-
-void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
-{
-    QToolButton::contextMenuEvent(ev);
-
-    QMenu menu;
-    Sublime::MainWindow* mainWindow = dynamic_cast<Sublime::MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(mainWindow);
-    if(m_set->id() == mainWindow->area()->workingSet()) {
-        menu.addAction(i18n("Close Working Set (Left Click)"), this, SLOT(closeSet()));
-        menu.addAction(i18n("Duplicate Working Set"), this, SLOT(duplicateSet()));
-    }else{
-        menu.addAction(i18n("Load Working Set (Left Click)"), this, SLOT(loadSet()));
-//         menu.addAction(i18n("Merge Working Set"), this, SLOT(mergeSet()));
-//         menu.addSeparator();
-//         menu.addAction(i18n("Intersect Working Set"), this, SLOT(intersectSet()));
-//         menu.addAction(i18n("Subtract Working Set"), this, SLOT(subtractSet()));
-    }
-    menu.actions()[0]->setIcon(KIcon(m_set->iconName()));
-
-    if(!m_set->hasConnectedAreas()) {
-        menu.addSeparator();
-        menu.addAction(i18n("Delete Working Set"), m_set, SLOT(deleteSet()));
-    }
-    menu.exec(ev->globalPos());
-
-    ev->accept();
-}
-
-void WorkingSetToolButton::intersectSet()
-{
-    m_set->setPersistent(true);
-
-    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
-}
-
-void WorkingSetToolButton::subtractSet()
-{
-    m_set->setPersistent(true);
-
-    filterViews(Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
-}
-
-void WorkingSetToolButton::mergeSet()
-{
-    QSet< QString > loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
-    foreach(const QString& file, loadFiles)
-        Core::self()->documentController()->openDocument(file);
-}
-
-void WorkingSetToolButton::duplicateSet()
-{
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
-        return;
-    WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
-    set->setPersistent(true);
-    set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
-    mainWindow()->area()->setWorkingSet(set->id());
-}
-
-void WorkingSetToolButton::loadSet()
-{
-    m_set->setPersistent(true);
-
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
-        return;
-    mainWindow()->area()->setWorkingSet(QString(m_set->id()));
-}
-
-void WorkingSetToolButton::closeSet()
-{
-    m_set->setPersistent(true);
-    m_set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
-
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
-        return;
-    mainWindow()->area()->setWorkingSet(QString());
-}
-
-static QPointer<KDevelop::ActiveToolTip> tooltip;
-
-bool WorkingSetToolButton::event(QEvent* e)
-{
-    if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
-        e->accept();
-        static WorkingSetToolButton* oldTooltipButton;
-        if(tooltip && oldTooltipButton == this)
-            return true;
-
-        delete tooltip;
-        oldTooltipButton = this;
-
-        tooltip = new KDevelop::ActiveToolTip(Core::self()->uiControllerInternal()->activeMainWindow(), QCursor::pos() + QPoint(10, 20));
-        tooltip->addExtendRect(QRect(parentWidget()->mapToGlobal(geometry().topLeft()), parentWidget()->mapToGlobal(geometry().bottomRight())));
-        QVBoxLayout* layout = new QVBoxLayout(tooltip);
-        layout->setMargin(0);
-        WorkingSetToolTipWidget* widget = new WorkingSetToolTipWidget(tooltip, m_set, mainWindow());
-        layout->addWidget(widget);
-        tooltip->resize( tooltip->sizeHint() );
-        connect(widget, SIGNAL(shouldClose()), tooltip, SLOT(close()));
-        ActiveToolTip::showToolTip(tooltip);
-        return true;
-    }
-    return QToolButton::event(e);
-}
-
-void WorkingSetWidget::workingSetsChanged()
-{
-    kDebug() << "re-creating widget" << m_connectedArea << m_fixedArea << m_mini;
-    foreach(QToolButton* button, m_buttons.keys())
-        delete button;
-    m_buttons.clear();
-
-    foreach(WorkingSet* set, Core::self()->workingSetControllerInternal()->allWorkingSets()) {
-
-        disconnect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
-        connect(set, SIGNAL(setChangedSignificantly()), this, SLOT(workingSetsChanged()));
-
-        if(m_mini && set->id() != m_connectedArea->workingSet()) {
-//             kDebug() << "skipping" << set->id() << ", searching" << m_connectedArea->workingSet();
-            continue; //In "mini" mode, show only the current working set
-        }
-        if(set->isEmpty()) {
-//             kDebug() << "skipping" << set->id() << "because empty";
-            continue;
-        }
-
-        // Don't show working-sets that are active in an area belong to this main-window, as those
-        // can be activated directly through the icons in the tabs
-        if(!m_mini && set->hasConnectedAreas(m_mainWindow->areas()))
-             continue;
-        
-//         kDebug() << "adding button for" << set->id();
-        QToolButton* butt = new WorkingSetToolButton(this, set, m_mainWindow);
-        butt->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
-
-        m_layout->addWidget(butt);
-        m_buttons[butt] = set;
-    }
-    update();
-}
-
-void WorkingSetToolButton::buttonTriggered()
-{
-    //Only close the working-set if the file was saved before
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
-        return;
-
-    if(mainWindow()->area()->workingSet() == m_set->id()) {
-        closeSet();
-    }else{
-        m_set->setPersistent(true);
-        mainWindow()->area()->setWorkingSet(m_set->id());
-    }
-}
-
-void WorkingSet::changingWorkingSet(Sublime::Area* area, QString from, QString to) {
-    kDebug() << "changing working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
-    Q_ASSERT(from == m_id);
-    if (from == to)
-        return;
-    Q_ASSERT(m_areas.contains(area));
-    if (!m_id.isEmpty()) saveFromArea(area, area->rootIndex());
-    disconnectArea(area);
-    WorkingSet* newSet = Core::self()->workingSetControllerInternal()->getWorkingSet(to);
-    newSet->connectArea(area);
-    kDebug() << "update ready";
-}
-
-///@todo Move this function into WorkingSetController
-void WorkingSet::changedWorkingSet(Sublime::Area* area, QString from, QString to) {
-    kDebug() << "changed working-set from" << from << "to" << to << ", local: " << m_id << "area" << area;
-    Q_ASSERT(to == m_id);
-    loadToArea(area, area->rootIndex(), !from.isEmpty());
-    kDebug() << "update ready";
-    Core::self()->workingSetControllerInternal()->notifyWorkingSetSwitched();
-}
-
-void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
-    Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
-    Q_ASSERT(area);
-    Q_ASSERT(area->workingSet() == m_id);
-
-    kDebug() << "added view in" << area << ", id" << m_id;
-    if (m_loading) {
-        kDebug() << "doing nothing because loading";
-        return;
-    }
-    if (m_id.isEmpty()) {
-        //Spawn a new working-set
-
-        WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
-        set->saveFromArea(area, area->rootIndex());
-        area->setWorkingSet(set->id());
-        return;
-    }
-    changed(area);
-}
-
-void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
-    Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
-    Q_ASSERT(area);
-    Q_ASSERT(area->workingSet() == m_id);
-
-    kDebug() << "removed view in" << area << ", id" << m_id;
-    if (m_loading) {
-        kDebug() << "doing nothing because loading";
-        return;
-    }
-    changed(area);
-}
-
-WorkingSet::WorkingSet(QString id, QString icon) : m_id(id), m_iconName(icon) {
-    //Give the working-set icons one color, so they are less disruptive
-    QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
-    QImage imgInactive = imgActive;
-
-    QColor activeIconColor = QApplication::palette().color(QPalette::Active, QPalette::Highlight);
-    QColor inActiveIconColor = QApplication::palette().color(QPalette::Active, QPalette::Base);
-
-    KIconEffect::colorize(imgActive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.7), 0.5);
-    KIconEffect::colorize(imgInactive, KColorUtils::mix(inActiveIconColor, activeIconColor, 0.3), 0.5);
-
-    m_activeIcon = QIcon(QPixmap::fromImage(imgActive));
-    m_inactiveIcon = QIcon(QPixmap::fromImage(imgActive));
-
-    QImage imgNonPersistent = imgInactive;
-
-    KIconEffect::deSaturate(imgNonPersistent, 1.0);
-
-    m_inactiveNonPersistentIcon = QIcon(QPixmap::fromImage(imgNonPersistent));
-    //effect.apply(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16), KIconLoader::NoGroup, );
-}
-
-void WorkingSetFileLabel::setIsActiveFile(bool active)
-{
-    if(active)
-    {
-        ///@todo Use a nicer-looking "blended" highlighting for the active item, like in the area-tabs
-        setAutoFillBackground(true);
-        setBackgroundRole(QPalette::Highlight);
-        setForegroundRole(QPalette::HighlightedText);
-    }else{
-        setAutoFillBackground(false);
-        setBackgroundRole(QPalette::Window);
-        setForegroundRole(QPalette::WindowText);
-    }
-    m_isActive = active;
-}
-
-
-void WorkingSetFileLabel::mouseReleaseEvent(QMouseEvent* ev)
-{
-    if(ev->button() == Qt::LeftButton)
-    {
-        
-        ev->accept();
-        emit clicked();
-        return;
-    }
-    QLabel::mouseReleaseEvent(ev);
-}
-
-
-WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow) : QWidget(parent), m_set(set) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setSpacing(0);
-    
-    layout->setMargin(0);
-
-    connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(), SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)), SLOT(updateFileButtons()), Qt::QueuedConnection);
-    connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(), SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)), SLOT(updateFileButtons()), Qt::QueuedConnection);
-
-    connect(Core::self()->workingSetControllerInternal(), SIGNAL(workingSetSwitched()), SLOT(updateFileButtons()));
-    
-    // title bar
-    {
-        QHBoxLayout* topLayout = new QHBoxLayout;
-        m_setButton = new WorkingSetToolButton(this, set, mainwindow);
-        m_setButton->hide();
-       
-        topLayout->addSpacing(5);
-        QLabel* icon = new QLabel;
-        topLayout->addWidget(icon);
-        topLayout->addSpacing(5);
-
-        QLabel* name = new QLabel(i18n("<b>Working Set</b>"));
-        name->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
-        topLayout->addWidget(name);
-         topLayout->addSpacing(10);
-
-        icon->setPixmap(m_setButton->icon().pixmap(name->sizeHint().height()+8, name->sizeHint().height()+8));
-        
-        topLayout->addStretch();
-
-        m_openButton = new QPushButton;
-        m_openButton->setFlat(true);
-        topLayout->addWidget(m_openButton);
-
-        m_deleteButton = new QPushButton;
-        m_deleteButton->setIcon(KIcon("edit-delete"));
-        m_deleteButton->setText(i18n("Delete"));
-        m_deleteButton->setToolTip(i18n("Remove this working set. The contained documents are not affected."));
-        m_deleteButton->setFlat(true);
-        connect(m_deleteButton, SIGNAL(clicked(bool)), m_set, SLOT(deleteSet()));
-        connect(m_deleteButton, SIGNAL(clicked(bool)), this, SIGNAL(shouldClose()));
-        topLayout->addWidget(m_deleteButton);
-        layout->addLayout(topLayout);
-        // horizontal line
-        QFrame* line = new QFrame();
-        line->setFrameShape(QFrame::HLine);
-        line->setFrameShadow(QFrame::Raised);
-        layout->addWidget(line);
-    }
-
-    // everything else is added to the following widget which just has a different background color
-    QVBoxLayout* bodyLayout = new QVBoxLayout;
-    {
-        QWidget* body = new QWidget();
-        body->setLayout(bodyLayout);
-        layout->addWidget(body);
-        body->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    }
-
-    // document list actions
-    {
-        QHBoxLayout* actionsLayout = new QHBoxLayout;
-
-        QLabel* label = new QLabel(i18n("Documents:"));
-        label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        actionsLayout->addWidget(label);
-
-        actionsLayout->addStretch();
-
-        m_mergeButton = new QPushButton;
-        m_mergeButton->setIcon(KIcon("list-add"));
-        m_mergeButton->setText(i18n("Add All"));
-        m_mergeButton->setToolTip(i18n("Add all documents that are part of this working set to the currently active working set."));
-        m_mergeButton->setFlat(true);
-        connect(m_mergeButton, SIGNAL(clicked(bool)), m_setButton, SLOT(mergeSet()));
-        actionsLayout->addWidget(m_mergeButton);
-
-        m_subtractButton = new QPushButton;
-        m_subtractButton->setIcon(KIcon("list-remove"));
-        m_subtractButton->setText(i18n("Subtract All"));
-        m_subtractButton->setToolTip(i18n("Remove all documents that are part of this working set from the currently active working set."));
-        m_subtractButton->setFlat(true);
-        connect(m_subtractButton, SIGNAL(clicked(bool)), m_setButton, SLOT(subtractSet()));
-        actionsLayout->addWidget(m_subtractButton);
-        bodyLayout->addLayout(actionsLayout);
-    }
-
-    QSet<QString> hadFiles;
-
-    QVBoxLayout* filesLayout = new QVBoxLayout;
-    filesLayout->setMargin(0);
-    
-    foreach(const QString& file, m_set->fileList()) {
-        
-        if(hadFiles.contains(file))
-            continue;
-        
-        hadFiles.insert(file);
-        
-        FileWidget* widget = new FileWidget;
-        widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        
-        QHBoxLayout* fileLayout = new QHBoxLayout(widget);
-
-        QToolButton* plusButton = new QToolButton;
-        plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
-        fileLayout->addWidget(plusButton);
-
-        WorkingSetFileLabel* fileLabel = new WorkingSetFileLabel;
-        fileLabel->setTextFormat(Qt::RichText);
-        // We add spaces behind and after, to make it look nicer
-        fileLabel->setText("&nbsp;" + Core::self()->projectController()->prettyFileName(KUrl(file)) + "&nbsp;");
-        fileLabel->setToolTip(i18n("Click to open and activate this document."));
-        fileLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        fileLayout->addWidget(fileLabel);
-        fileLayout->setMargin(0);
-
-        plusButton->setMaximumHeight(fileLabel->sizeHint().height() + 4);
-        plusButton->setMaximumWidth(plusButton->maximumHeight());
-        
-        plusButton->setObjectName(file);
-        fileLabel->setObjectName(file);
-        fileLabel->setCursor(QCursor(Qt::PointingHandCursor));
-
-        widget->m_button = plusButton;
-        widget->m_label = fileLabel;
-        
-        filesLayout->addWidget(widget);
-        m_fileWidgets.insert(file, widget);
-        m_orderedFileWidgets.push_back(widget);
-
-        connect(plusButton, SIGNAL(clicked(bool)), this, SLOT(buttonClicked(bool)));
-        connect(fileLabel, SIGNAL(clicked()), this, SLOT(labelClicked()));
-    }
-    
-    bodyLayout->addLayout(filesLayout);
-
-    updateFileButtons();
-    connect(set, SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
-    connect(Core::self()->workingSetControllerInternal()->getWorkingSet(mainwindow->area()->workingSet()), SIGNAL(setChangedSignificantly()), SLOT(updateFileButtons()));
-    connect(mainwindow->area(), SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)), SLOT(updateFileButtons()), Qt::QueuedConnection);
-
-    QMetaObject::invokeMethod(this, "updateFileButtons");
-}
-
-
-void WorkingSetToolTipWidget::updateFileButtons()
-{
-    MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(mainWindow);
-    
-    QString activeFile;
-    
-    if(mainWindow->area()->activeView())
-        activeFile = mainWindow->area()->activeView()->document()->documentSpecifier();
-
-    WorkingSet* currentWorkingSet = Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow->area()->workingSet());
-    QSet<QString> openFiles = currentWorkingSet->fileList().toSet();
-
-    bool allOpen = true;
-    bool noneOpen = true;
-
-    bool needResize = false;
-    
-    bool allHidden = true;
-    
-    for(QMap< QString, FileWidget* >::iterator it = m_fileWidgets.begin(); it != m_fileWidgets.end(); ++it) {
-        if(openFiles.contains(it.key())) {
-            noneOpen = false;
-            (*it)->m_button->setToolTip(i18n("Remove this file from the current working set"));
-            (*it)->m_button->setIcon(KIcon("list-remove"));
-            (*it)->show();
-        }else{
-            allOpen = false;
-            (*it)->m_button->setToolTip(i18n("Add this file to the current working set"));
-            (*it)->m_button->setIcon(KIcon("list-add"));
-            if(currentWorkingSet == m_set)
-            {
-                (*it)->hide();
-                needResize = true;
-            }
-        }
-        
-        
-        if(!(*it)->isHidden())
-            allHidden = false;
-        
-        (*it)->m_label->setIsActiveFile(it.key() == activeFile);
-    }
-
-    // NOTE: allways hide merge&subtract all on current working set
-    // if we want to enable mergeButton, we have to fix it's behavior since it operates directly on the
-    // set contents and not on the m_fileWidgets
-    m_mergeButton->setHidden(allOpen || currentWorkingSet->id() == m_set->id());
-    m_subtractButton->setHidden(noneOpen || mainWindow->area()->workingSet() == m_set->id());
-    m_deleteButton->setHidden(m_set->hasConnectedAreas());
-
-    if(m_set->id() == mainWindow->area()->workingSet()) {
-        disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
-        connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
-        m_openButton->setIcon(KIcon("project-development-close"));
-        m_openButton->setText(i18n("Close"));
-    }else{
-        disconnect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(closeSet()));
-        connect(m_openButton, SIGNAL(clicked(bool)), m_setButton, SLOT(loadSet()));
-        m_openButton->setIcon(KIcon("project-open"));
-        m_openButton->setText(i18n("Load"));
-    }
-    
-    if(allHidden && tooltip)
-        tooltip->hide();
-    
-    if(needResize && tooltip)
-        tooltip->resize(tooltip->sizeHint());
-}
-
-void WorkingSetToolTipWidget::buttonClicked(bool)
-{
-    QPointer<WorkingSetToolTipWidget> stillExists(this);
-
-    QToolButton* s = qobject_cast<QToolButton*>(sender());
-    Q_ASSERT(s);
-
-    MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
-    Q_ASSERT(mainWindow);
-    QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow->area()->workingSet())->fileList().toSet();
-
-    if(!openFiles.contains(s->objectName())) {
-        Core::self()->documentControllerInternal()->openDocument(s->objectName());
-    }else{
-        openFiles.remove(s->objectName());
-        filterViews(openFiles);
-    }
-
-    if(stillExists)
-        updateFileButtons();
-}
-
-void WorkingSetToolTipWidget::labelClicked()
-{
-    QPointer<WorkingSetToolTipWidget> stillExists(this);
-
-    WorkingSetFileLabel* s = qobject_cast<WorkingSetFileLabel*>(sender());
-    Q_ASSERT(s);
-    
-    bool found = false;
-    
-    Sublime::MainWindow* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    
-    foreach(Sublime::View* view, window->area()->views())
-    {
-        if(view->document()->documentSpecifier() == s->objectName())
-        {
-            window->activateView(view);
-            found = true;
-            break;
-        }
-    }
-    
-    if(!found)
-        Core::self()->documentControllerInternal()->openDocument(s->objectName());
-    
-    if(stillExists)
-        updateFileButtons();
-}
-
-WorkingSetToolButton::WorkingSetToolButton(QWidget* parent, WorkingSet* set, MainWindow* mainWindow) : QToolButton(parent), m_set(set), m_toolTipEnabled(true) {
-    setFocusPolicy(Qt::NoFocus);
-    QColor activeBgColor = palette().color(QPalette::Active, QPalette::Highlight);
-    QColor normalBgColor = palette().color(QPalette::Active, QPalette::Base);
-    QColor useColor;
-    if(mainWindow && mainWindow->area() && mainWindow->area()->workingSet() == set->id()) {
-        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.6);
-        setIcon(set->activeIcon());
-    }else{
-        useColor = KColorUtils::mix(normalBgColor, activeBgColor, 0.2);
-        setIcon(set->inactiveIcon());
-    }
-
-    QString sheet = QString("QToolButton { background : %1}").arg(htmlColor(useColor));
-    setStyleSheet(sheet);
-
-    connect(this, SIGNAL(clicked(bool)), SLOT(buttonTriggered()));
-}
-
-void WorkingSet::setPersistent(bool persistent) {
-    if(m_id.isEmpty())
-        return;
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-    group.writeEntry("persistent", persistent);
-#ifdef SYNC_OFTEN
-    group.sync();
-#endif
-    kDebug() << "setting" << m_id << "persistent:" << persistent;
-}
-
-bool WorkingSet::isPersistent() const {
-    if(m_id.isEmpty())
-        return false;
-    KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    KConfigGroup group = setConfig.group(m_id);
-    return group.readEntry("persistent", false);
-}
-
-QIcon WorkingSet::inactiveIcon() const {
-    if(isPersistent())
-        return m_inactiveIcon;
-    else
-        return m_inactiveNonPersistentIcon;
 }
 
 void WorkingSetController::setupActions()
@@ -1128,36 +176,53 @@ void WorkingSetController::setupActions()
 */
 }
 
-void WorkingSetController::showGlobalToolTip()
+ActiveToolTip* WorkingSetController::tooltip() const
 {
-    delete tooltip;
-    
+    return m_tooltip;
+}
+
+void WorkingSetController::showToolTip(WorkingSet* set, const QPoint& pos)
+{
+    delete m_tooltip;
+
     KDevelop::MainWindow* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
 
-    tooltip = new KDevelop::ActiveToolTip(window, window->mapToGlobal(window->geometry().topRight()));
-    QVBoxLayout* layout = new QVBoxLayout(tooltip);
+    m_tooltip = new KDevelop::ActiveToolTip(window, pos);
+    QVBoxLayout* layout = new QVBoxLayout(m_tooltip);
     layout->setMargin(0);
-    WorkingSetToolTipWidget* widget = new WorkingSetToolTipWidget(tooltip, getWorkingSet(window->area()->workingSet()), window);
+    WorkingSetToolTipWidget* widget = new WorkingSetToolTipWidget(m_tooltip, set, window);
     layout->addWidget(widget);
-    tooltip->resize( tooltip->sizeHint() );
-    ActiveToolTip::showToolTip(tooltip);
-    connect(m_hideToolTipTimer, SIGNAL(timeout()),  tooltip, SLOT(deleteLater()));
+    m_tooltip->resize( m_tooltip->sizeHint() );
+
+    connect(widget, SIGNAL(shouldClose()), m_tooltip, SLOT(close()));
+
+    ActiveToolTip::showToolTip(m_tooltip);
+}
+
+void WorkingSetController::showGlobalToolTip()
+{
+    KDevelop::MainWindow* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
+
+    showToolTip(getWorkingSet(window->area()->workingSet()),
+                              window->mapToGlobal(window->geometry().topRight()));
+
+    connect(m_hideToolTipTimer, SIGNAL(timeout()),  m_tooltip, SLOT(deleteLater()));
     m_hideToolTipTimer->start();
-    connect(tooltip, SIGNAL(mouseIn()), m_hideToolTipTimer, SLOT(stop()));
-    connect(tooltip, SIGNAL(mouseOut()), m_hideToolTipTimer, SLOT(start()));
+    connect(m_tooltip, SIGNAL(mouseIn()), m_hideToolTipTimer, SLOT(stop()));
+    connect(m_tooltip, SIGNAL(mouseOut()), m_hideToolTipTimer, SLOT(start()));
 }
 
 void WorkingSetController::nextDocument()
 {
-    if(!tooltip)
+    if(!m_tooltip)
         showGlobalToolTip();
 
     m_hideToolTipTimer->stop();
     m_hideToolTipTimer->start(toolTipTimeout);
 
-    if(tooltip)
+    if(m_tooltip)
     {
-        WorkingSetToolTipWidget* widget = tooltip->findChild<WorkingSetToolTipWidget*>();
+        WorkingSetToolTipWidget* widget = m_tooltip->findChild<WorkingSetToolTipWidget*>();
         Q_ASSERT(widget);
         widget->nextDocument();
     }
@@ -1165,76 +230,97 @@ void WorkingSetController::nextDocument()
 
 void WorkingSetController::previousDocument()
 {
-    if(!tooltip)
+    if(!m_tooltip)
         showGlobalToolTip();
 
     m_hideToolTipTimer->stop();
     m_hideToolTipTimer->start(toolTipTimeout);
-    
-    if(tooltip)
+
+    if(m_tooltip)
     {
-        WorkingSetToolTipWidget* widget = tooltip->findChild<WorkingSetToolTipWidget*>();
+        WorkingSetToolTipWidget* widget = m_tooltip->findChild<WorkingSetToolTipWidget*>();
         Q_ASSERT(widget);
         widget->previousDocument();
     }
 }
 
-void WorkingSetToolTipWidget::nextDocument()
+void WorkingSetController::initializeController( UiController* controller )
 {
-    int active = -1;
-    for(int a = 0; a < m_orderedFileWidgets.size(); ++a)
-        if(m_orderedFileWidgets[a]->m_label->isActive())
-            active = a;
-    
-    if(active == -1)
-    {
-        kWarning() << "Found no active document";
-        return;
-    }
-    
-    int next = (active + 1) % m_orderedFileWidgets.size();
-    while(m_orderedFileWidgets[next]->isHidden() && next != active)
-        next = (next + 1) % m_orderedFileWidgets.size();
-    
-    m_orderedFileWidgets[next]->m_label->emitClicked();
+  connect( controller, SIGNAL( areaCreated( Sublime::Area* ) ), this, SLOT( areaCreated( Sublime::Area* ) ) );
 }
 
-void WorkingSetToolTipWidget::previousDocument()
+QList< WorkingSet* > WorkingSetController::allWorkingSets() const
 {
-    int active = -1;
-    for(int a = 0; a < m_orderedFileWidgets.size(); ++a)
-        if(m_orderedFileWidgets[a]->m_label->isActive())
-            active = a;
-    
-    if(active == -1)
-    {
-        kWarning() << "Found no active document";
-        return;
-    }
-    
-    int next = active - 1;
-    if(next < 0)
-        next += m_orderedFileWidgets.size();
-    
-    while(m_orderedFileWidgets[next]->isHidden() && next != active)
-    {
-        next -= 1;
-        if(next < 0)
-            next += m_orderedFileWidgets.size();
-    }
-    
-    m_orderedFileWidgets[next]->m_label->emitClicked();
+  return m_workingSets.values();
 }
+
+void WorkingSetController::areaCreated( Sublime::Area* area )
+{
+    if (!area->workingSet().isEmpty()) {
+        WorkingSet* set = getWorkingSet( area->workingSet() );
+        set->connectArea( area );
+    }
+
+    connect(area, SIGNAL(changingWorkingSet(Sublime::Area*,QString,QString)),
+            this, SLOT(changingWorkingSet(Sublime::Area*,QString,QString)));
+    connect(area, SIGNAL(changedWorkingSet(Sublime::Area*,QString,QString)),
+            this, SLOT(changedWorkingSet(Sublime::Area*,QString,QString)));
+    connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*,Sublime::View*)),
+            this, SLOT(viewAdded(Sublime::AreaIndex*,Sublime::View*)));
+}
+
+void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
+{
+    kDebug() << "changing working-set from" << from << "to" << to << "area" << area;
+    if (from == to)
+        return;
+
+    if (!from.isEmpty()) {
+        WorkingSet* oldSet = getWorkingSet(from);
+        oldSet->disconnectArea(area);
+        if (!oldSet->id().isEmpty()) {
+            oldSet->saveFromArea(area, area->rootIndex());
+        }
+    }
+
+    if (!to.isEmpty()) {
+        WorkingSet* newSet = getWorkingSet(to);
+        newSet->connectArea(area);
+    }
+
+    kDebug() << "update ready";
+}
+
+void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to)
+{
+    kDebug() << "changed working-set from" << from << "to" << to << "area" << area;
+    if (from == to)
+        return;
+
+    if (!to.isEmpty()) {
+        WorkingSet* newSet = getWorkingSet(to);
+        newSet->loadToArea(area, area->rootIndex(), !from.isEmpty());
+    } else {
+        area->clearViews();
+    }
+
+    emit workingSetSwitched();
+    kDebug() << "update ready";
+}
+
+void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
+{
+    Sublime::Area* area = qobject_cast< Sublime::Area* >(sender());
+    Q_ASSERT(area);
+
+    if (area->workingSet().isEmpty()) {
+        //Spawn a new working-set
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet(area->objectName());
+        set->connectArea(area);
+        set->saveFromArea(area, area->rootIndex());
+        area->setWorkingSet(set->id());
+    }
+}
+
 
 #include "workingsetcontroller.moc"
-
-
-
-
-
-
-
-
-
-
-

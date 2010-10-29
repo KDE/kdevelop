@@ -191,10 +191,11 @@ void GrepJob::slotFindFinished()
     m_finalReplacement = substitudePattern(m_replacementTemplateString, replacement);
     
     static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
-    if(m_fileList.length()<100)
-        emit showMessage(this, i18n("Searching for \"%1\"", m_regExp.pattern()));
-    else
-        emit showMessage(this, i18n("Searching for \"%1\" in %2 files", m_regExp.pattern(), m_fileList.length()));
+
+    emit showMessage(this, i18np("Searching for \"%2\" in one file",
+                                 "Searching for \"%2\" in %1 files",
+                                 m_fileList.length(), m_regExp.pattern()));
+
     m_workState = WorkGrep;
     QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);
 }

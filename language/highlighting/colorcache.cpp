@@ -83,7 +83,7 @@ namespace KDevelop {
 ColorCache* ColorCache::m_self = 0;
 
 ColorCache::ColorCache(QObject* parent)
-  : QObject(parent), m_defaultColors(0), m_validColorCount(0), m_colorOffset(0),
+  : QObject(parent), m_defaultColors(new CodeHighlightingColors(this)), m_validColorCount(0), m_colorOffset(0),
     m_localColorRatio(0), m_globalColorRatio(0)
 {
   Q_ASSERT(m_self == 0);
@@ -117,6 +117,7 @@ ColorCache::~ColorCache()
 {
   m_self = 0;
   delete m_defaultColors;
+  m_defaultColors = 0;
 }
 
 ColorCache* ColorCache::self()
@@ -303,6 +304,7 @@ QColor ColorCache::blendLocalColor(QColor color) const
 
 CodeHighlightingColors* ColorCache::defaultColors() const
 {
+  Q_ASSERT(m_defaultColors);
   return m_defaultColors;
 }
 

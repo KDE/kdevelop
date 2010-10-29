@@ -22,20 +22,27 @@
 #ifndef IBUILDSYSTEMMANAGER_H
 #define IBUILDSYSTEMMANAGER_H
 
+#include <KUrl>
+
 #include "iprojectfilemanager.h"
+
 #include "../projectexport.h"
 
 namespace KDevelop
 {
 
 class IProjectBuilder;
-typedef QList<ProjectFileItem*> FileItemList;
 class ProjectTargetItem;
+typedef QList<ProjectFileItem*> FileItemList;
+typedef QPair<ProjectTargetItem*, ProjectFileItem*> TargetFilePair;
 /**
- * Manage the file and build system of the project.
+ * Manages the build system of the project.
+ *
+ * Use/Implement the IProjectFileManager interface to manage files.
+ *
  * @author Matt Rogers <mattr@kde.org>, Hamish Rodda <rodda@kde.org>
  */
-class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public IProjectFileManager
+class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public virtual IProjectFileManager
 {
 public:
 
@@ -101,13 +108,12 @@ public:
     virtual bool addFileToTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
 
     /**
-     * Remove a file from a target
+     * Remove files from targets
      *
-     * Removes the file specified by @p file from the folder @p parent and
-     * modifies the underlying build system if needed. The file is not removed
-     * from the folder it is in
+     * Removes the files from the targets they are paired with (@p targetFiles)
+     * Files are not removed from the folders or the filesystem.
      */
-    virtual bool removeFileFromTarget(ProjectFileItem *file, ProjectTargetItem *parent) = 0;
+    virtual bool removeFilesFromTargets(QList<TargetFilePair> targetFiles) = 0;
 
     /**
      * Get the toplevel build directory for the project

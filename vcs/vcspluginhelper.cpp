@@ -71,6 +71,8 @@
 #include <QMenu>
 #include "widgets/vcsdiffpatchsources.h"
 #include <interfaces/isession.h>
+#include "vcsevent.h"
+#include <KCompositeJob>
 
 namespace KDevelop
 {
@@ -88,6 +90,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
     KAction * diffToHeadAction;
     KAction * diffToBaseAction;
     KAction * revertAction;
+    KAction * diffForRevAction;
     
     void createActions(QObject * parent) {
         commitAction = new KAction(KIcon("svn-commit"), i18n("Commit..."), parent);
@@ -98,6 +101,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         revertAction = new KAction(KIcon("archive-remove"), i18n("Revert"), parent);
         historyAction = new KAction(KIcon("view-history"), i18n("History..."), parent);
         annotationAction = new KAction(KIcon("user-properties"), i18n("Annotation..."), parent);
+        diffForRevAction = new KAction(KIcon("vcs_diff"), i18n("Show Diff..."), parent);
         
         connect(commitAction, SIGNAL(triggered()), parent, SLOT(commit()));
         connect(addAction, SIGNAL(triggered()), parent, SLOT(add()));
@@ -107,6 +111,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         connect(revertAction, SIGNAL(triggered()), parent, SLOT(revert()));
         connect(historyAction, SIGNAL(triggered()), parent, SLOT(history()));
         connect(annotationAction, SIGNAL(triggered()), parent, SLOT(annotation()));
+        connect(diffForRevAction, SIGNAL(triggered()), parent, SLOT(diffForRev()));
     }
     
     bool allLocalFiles(const KUrl::List& urls)
@@ -278,6 +283,22 @@ void VcsPluginHelper::diffToBase()
     ICore::self()->runController()->registerJob(job);
 }
 
+void VcsPluginHelper::diffForRev()
+{
+    QAction* action = qobject_cast<QAction*>( sender() );
+    Q_ASSERT(action);
+    Q_ASSERT(action->data().canConvert<VcsRevision>());
+    VcsRevision rev = action->data().value<VcsRevision>();
+
+    SINGLEURL_SETUP_VARS
+    ICore::self()->documentController()->saveAllDocuments();
+    VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
+    KDevelop::VcsJob* job = iface->diff(url, prev, rev );
+
+    connect(job, SIGNAL(finished(KJob*)), this, SLOT(diffJobFinished(KJob*)));
+    d->plugin->core()->runController()->registerJob(job);
+}
+
 void VcsPluginHelper::history()
 {
     SINGLEURL_SETUP_VARS
@@ -319,6 +340,9 @@ void VcsPluginHelper::annotation()
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument());
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
+            connect(doc->textDocument()->activeView(),
+                    SIGNAL(annotationContextMenuAboutToShow( KTextEditor::View*, QMenu*, int )),
+                    this, SLOT(annotationContextMenuAboutToShow( KTextEditor::View*, QMenu*, int )));
         } else {
             KMessageBox::error(0, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -327,6 +351,19 @@ void VcsPluginHelper::annotation()
         KMessageBox::error(0, i18n("Cannot execute annotate action because the "
                                    "document was not found, or was not a text document:\n%1", url.pathOrUrl()));
     }
+}
+
+void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
+{
+    KTextEditor::AnnotationInterface* annotateiface =
+        qobject_cast<KTextEditor::AnnotationInterface*>(view->document());
+
+    VcsAnnotationModel* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
+    Q_ASSERT(model);
+
+    VcsRevision rev = model->revisionForLine(line);
+    d->diffForRevAction->setData(QVariant::fromValue(rev));
+    menu->addAction(d->diffForRevAction);
 }
 
 void VcsPluginHelper::update()

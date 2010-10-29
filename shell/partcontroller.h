@@ -57,7 +57,7 @@ public:
     PartController(Core *core, QWidget *toplevel);
     virtual ~PartController();
 
-    KTextEditor::Document* createTextPart( const QString &encoding );
+    KTextEditor::Document* createTextPart( const QString &encoding = QString() );
     virtual KTextEditor::Editor* editorPart() const;
 
     bool canCreatePart( const KUrl &url );

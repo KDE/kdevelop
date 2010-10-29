@@ -50,6 +50,7 @@
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
 #include "workingsetcontroller.h"
+#include "workingsets/workingset.h"
 
 namespace KDevelop {
 
@@ -433,14 +434,19 @@ KParts::MainWindow *UiController::activeMainWindow()
 void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
     area->save(group);
-    Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet())->saveFromArea(area, area->rootIndex());
+    if (!area->workingSet().isEmpty()) {
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
+        set->saveFromArea(area, area->rootIndex());
+    }
 }
 
 void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
     area->load(group);
-    WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
-    Q_ASSERT(set->isConnected(area));
+    if (!area->workingSet().isEmpty()) {
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
+        Q_ASSERT(set->isConnected(area));
+    }
 }
 
 void UiController::saveAllAreas(KSharedConfig::Ptr config)

@@ -61,8 +61,6 @@ public:
     void setupStatusBar();
     void registerStatus(QObject*);
 
-    void setupAreaSelector();
-    
     void tabContextMenuRequested(Sublime::View *view, KMenu* menu);
     void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
 
@@ -109,6 +107,7 @@ public Q_SLOTS:
     void configureNotifications();
     void showAboutPlatform();
     void showLoadedPlugins();
+    void showEditorConfig();
 
     void toggleArea(bool b);
     void showErrorMessage(QString message, int timeout);

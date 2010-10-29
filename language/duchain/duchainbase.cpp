@@ -232,11 +232,11 @@ void DUChainBase::setRange(const RangeInRevision& range)
 }
 
 QMutex shouldCreateConstantDataStorageMutex;
-QSet<Qt::HANDLE> shouldCreateConstantDataStorage;
+QSet<QThread*> shouldCreateConstantDataStorage;
 
 bool DUChainBaseData::shouldCreateConstantData() {
   shouldCreateConstantDataStorageMutex.lock();
-  bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThreadId() );
+  bool ret = shouldCreateConstantDataStorage.contains( QThread::currentThread() );
   shouldCreateConstantDataStorageMutex.unlock();
   return ret;
 }
@@ -245,9 +245,9 @@ void DUChainBaseData::setShouldCreateConstantData(bool should) {
   shouldCreateConstantDataStorageMutex.lock();
   
   if(should)
-    shouldCreateConstantDataStorage.insert(QThread::currentThreadId());
+    shouldCreateConstantDataStorage.insert(QThread::currentThread());
   else
-    shouldCreateConstantDataStorage.remove(QThread::currentThreadId());
+    shouldCreateConstantDataStorage.remove(QThread::currentThread());
   
   shouldCreateConstantDataStorageMutex.unlock();
 }

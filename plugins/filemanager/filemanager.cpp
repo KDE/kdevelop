@@ -104,7 +104,7 @@ void FileManager::gotoUrl( const KUrl& url )
 
 void FileManager::updateNav( const KUrl& url )
 {
-    urlnav->setUrl( url );
+    urlnav->setLocationUrl( url );
 }
 
 void FileManager::setupActions()

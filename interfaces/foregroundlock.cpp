@@ -31,16 +31,16 @@ QMutex waitMutex;
 QMutex finishMutex;
 QWaitCondition condition;
 
-volatile Qt::HANDLE holderThread = 0;
+volatile QThread* holderThread = 0;
 volatile int recursion = 0;
 
 void lockForegroundMutexInternal() {
     mutex.lock();
     if(recursion > 0)
-        Q_ASSERT(holderThread == QThread::currentThreadId());
+        Q_ASSERT(holderThread == QThread::currentThread());
     else
         Q_ASSERT(holderThread == 0);
-    holderThread = QThread::currentThreadId();
+    holderThread = QThread::currentThread();
     recursion += 1;
 }
 
@@ -56,7 +56,7 @@ bool tryLockForegroundMutexInternal(int interval = 0) {
 }
 
 void unlockForegroundMutexInternal() {
-    Q_ASSERT(holderThread == QThread::currentThreadId());
+    Q_ASSERT(holderThread == QThread::currentThread());
     Q_ASSERT(recursion > 0);
     recursion -= 1;
     if(recursion == 0)
@@ -123,13 +123,13 @@ void KDevelop::ForegroundLock::relock()
         }
     }
     m_locked = true;
-    Q_ASSERT(holderThread == QThread::currentThreadId());
+    Q_ASSERT(holderThread == QThread::currentThread());
     Q_ASSERT(recursion > 0);
 }
 
 bool KDevelop::ForegroundLock::isLockedForThread()
 {
-    return QThread::currentThreadId() == holderThread;
+    return QThread::currentThread() == holderThread;
 }
 
 bool KDevelop::ForegroundLock::tryLock()
@@ -151,11 +151,11 @@ void KDevelop::ForegroundLock::unlock()
 
 TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
 {
-    Q_ASSERT(holderThread == QThread::currentThreadId());
+    Q_ASSERT(holderThread == QThread::currentThread());
     
     m_recursion = 0;
     
-    while(holderThread == QThread::currentThreadId())
+    while(holderThread == QThread::currentThread())
     {
         unlockForegroundMutexInternal();
         ++m_recursion;
@@ -166,7 +166,7 @@ TemporarilyReleaseForegroundLock::~TemporarilyReleaseForegroundLock()
 {
     for(int a = 0; a < m_recursion; ++a)
         lockForegroundMutexInternal();
-    Q_ASSERT(recursion == m_recursion && holderThread == QThread::currentThreadId());
+    Q_ASSERT(recursion == m_recursion && holderThread == QThread::currentThread());
 }
 
 KDevelop::ForegroundLock::~ForegroundLock()

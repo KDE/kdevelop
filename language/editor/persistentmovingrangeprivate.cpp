@@ -34,10 +34,11 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
   {
     // Create a moving range
     m_movingRange = m_tracker->documentMovingInterface()->newMovingRange(m_range.textRange());
+    if (m_shouldExpand)
+      m_movingRange->setInsertBehaviors(KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
     connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToDeleteMovingInterfaceContent()));
     connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent()));
     m_movingRange->setAttribute(m_attribte);
-    
     m_movingRange->setZDepth(m_zDepth);
   }
 }

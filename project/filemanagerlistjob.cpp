@@ -17,14 +17,16 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "genericmanagerlistjob.h"
+#include "filemanagerlistjob.h"
 
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 
 #include <KDebug>
 
-GenericManagerListJob::GenericManagerListJob(KDevelop::ProjectFolderItem* item, const bool forceRecursion)
+using namespace KDevelop;
+
+FileManagerListJob::FileManagerListJob(ProjectFolderItem* item, const bool forceRecursion)
     : KIO::Job(), m_item(0), m_forceRecursion(forceRecursion)
 {
     /* the following line is not an error in judgement, apparently starting a
@@ -36,27 +38,30 @@ GenericManagerListJob::GenericManagerListJob(KDevelop::ProjectFolderItem* item, 
     startNextJob();
 }
 
-KDevelop::ProjectFolderItem* GenericManagerListJob::item() const
+ProjectFolderItem* FileManagerListJob::item() const
 {
     return m_item;
 }
 
-void GenericManagerListJob::addSubDir( KDevelop::ProjectFolderItem* item )
+void FileManagerListJob::addSubDir( ProjectFolderItem* item )
 {
+    Q_ASSERT(!m_item || item->url().upUrl() == m_item->url());
+
     m_listQueue.enqueue(item);
 }
 
-void GenericManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
+void FileManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
 {
     Q_UNUSED(job);
     entryList.append(entriesIn);
 }
 
-void GenericManagerListJob::startNextJob()
+void FileManagerListJob::startNextJob()
 {
     if ( m_listQueue.isEmpty() ) {
         return;
     }
+
     m_item = m_listQueue.dequeue();
     KIO::ListJob* job = KIO::listDir( m_item->url(), KIO::HideProgressInfo );
     job->setParentJob( this );
@@ -65,9 +70,9 @@ void GenericManagerListJob::startNextJob()
     connect( job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)) );
 }
 
-void GenericManagerListJob::slotResult(KJob* job)
+void FileManagerListJob::slotResult(KJob* job)
 {
-    emit entries(m_item, entryList, m_forceRecursion);
+    emit entries(this, m_item, entryList, m_forceRecursion);
     entryList.clear();
 
     if( job->error() ) {
@@ -81,4 +86,4 @@ void GenericManagerListJob::slotResult(KJob* job)
     }
 }
 
-#include "genericmanagerlistjob.moc"
+#include "filemanagerlistjob.moc"

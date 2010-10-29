@@ -290,7 +290,7 @@ void DebugController::addSession(IDebugSession* session)
     m_currentSession = session;
         
     connect(session, SIGNAL(stateChanged(KDevelop::IDebugSession::DebuggerState)), SLOT(debuggerStateChanged(KDevelop::IDebugSession::DebuggerState)));
-    connect(session, SIGNAL(showStepInSource(KUrl,int)), SLOT(showStepInSource(KUrl,int)));
+    connect(session, SIGNAL(showStepInSource(KUrl,int,QString)), SLOT(showStepInSource(KUrl,int)));
     connect(session, SIGNAL(clearExecutionPoint()), SLOT(clearExecutionPoint()));
     connect(session, SIGNAL(raiseFramestackViews()), SIGNAL(raiseFramestackViews()));
     

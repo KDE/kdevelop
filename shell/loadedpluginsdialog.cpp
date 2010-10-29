@@ -243,6 +243,15 @@ public:
         setVerticalScrollMode(QListView::ScrollPerPixel);
     }
 
+    virtual ~PluginsView()
+    {
+        // explicitly delete the delegate here since otherwise
+        // we get spammed by warnings that the KPushButton we return
+        // in createItemWidgets is deleted before the delegate
+        // *sigh* - even dfaure says KWidgetItemDelegate is a crude hack
+        delete itemDelegate();
+    }
+
     virtual QSize sizeHint() const
     {
         QSize ret = QListView::sizeHint();

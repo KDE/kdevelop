@@ -74,7 +74,7 @@ class DebugMode : public ILaunchMode
 {
 public:
     DebugMode() {}
-    virtual KIcon icon() const { return KIcon(); }
+    virtual KIcon icon() const { return KIcon("tools-report-bug"); }
     virtual QString id() const { return "debug"; }
     virtual QString name() const { return i18n("Debug"); }
 };
@@ -83,7 +83,7 @@ class ProfileMode : public ILaunchMode
 {
 public:
     ProfileMode() {}
-    virtual KIcon icon() const { return KIcon(); }
+    virtual KIcon icon() const { return KIcon("office-chart-area"); }
     virtual QString id() const { return "profile"; }
     virtual QString name() const { return i18n("Profile"); }
 };
@@ -409,7 +409,7 @@ void RunController::setupActions()
     ac->addAction("run_execute", d->runAction);
     connect(d->runAction, SIGNAL(triggered(bool)), this, SLOT(slotExecute()));
 
-    d->dbgAction = new KAction( KIcon("dbgrun"), i18n("Debug Launch"), this);
+    d->dbgAction = new KAction( KIcon("debug-run"), i18n("Debug Launch"), this);
     d->dbgAction->setShortcut(Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug Launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18n("Debug current Launch"));

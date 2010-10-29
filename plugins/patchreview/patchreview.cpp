@@ -1307,6 +1307,7 @@ void showDiff(const KDevelop::VcsDiff& d)
         {
             KTemporaryFile temp2;
             temp2.setSuffix("2.patch");
+            //FIXME: don't leak
             temp2.setAutoRemove(false);
             temp2.open();
             QTextStream t2(&temp2);
@@ -1343,7 +1344,7 @@ void PatchReviewPlugin::cancelReview()
     delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    if(w->area()->workingSet().startsWith("review")) {
+    if(w->area()->objectName() == "review") {
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
@@ -1359,11 +1360,11 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
     
     emit patchChanged();
     
-    if(!dynamic_cast<LocalPatchSource*>(m_patch))
+    if(!dynamic_cast<LocalPatchSource*>(m_patch.data()))
       delete m_patch;
     
     Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    if(w->area()->workingSet().startsWith("review")) {
+    if(w->area()->objectName() == "review") {
       w->area()->clearViews();
       ICore::self()->uiController()->switchToArea("code", KDevelop::IUiController::ThisWindow);
     }
@@ -1384,16 +1385,24 @@ void PatchReviewPlugin::updateReview()
   
   m_updateKompareTimer->stop();
   updateKompareModel();
-  ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
   Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+  if (w->area()->objectName() != "review")
+    ICore::self()->uiController()->switchToArea("review", KDevelop::IUiController::ThisWindow);
+
   if(!w->area()->workingSet().startsWith("review"))
     w->area()->setWorkingSet("review");
   
-  w->area()->clearViews();
-  
   if(!m_modelList.get())
     return;
+
+  // list of opened documents to prevent flicker
+  QMap<KUrl, IDocument*> documents;
+  foreach(IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    documents[doc->url()] = doc;
+  }
   
+  IDocument* futureActiveDoc = 0;
   //Open the diff itself
 #ifdef HAVE_KOMPARE
   KUrl fakeUrl(m_patch->file());
@@ -1403,9 +1412,14 @@ void PatchReviewPlugin::updateReview()
   IPatchDocument* pdoc=dynamic_cast<IPatchDocument*>(doc);
   
   Q_ASSERT(pdoc);
-  ICore::self()->documentController()->openDocument(doc);
+  futureActiveDoc = ICore::self()->documentController()->openDocument(doc);
+  //TODO: close kompare doc if available
 #else
-  ICore::self()->documentController()->openDocument(m_patch->file());
+  if (!documents.contains(m_patch->file())) {
+    futureActiveDoc = ICore::self()->documentController()->openDocument(m_patch->file());
+  } else {
+    documents.remove(m_patch->file());
+  }
 #endif
 
   if(m_modelList->modelCount() < maximumFilesToOpenDirectly) {
@@ -1422,7 +1436,11 @@ void PatchReviewPlugin::updateReview()
       
       if(QFileInfo(absoluteUrl.path()).exists() && absoluteUrl.path() != "/dev/null")
       {
-        ICore::self()->documentController()->openDocument(absoluteUrl);
+        if (!documents.contains(absoluteUrl)) {
+          ICore::self()->documentController()->openDocument(absoluteUrl);
+        } else {
+          documents.remove(absoluteUrl);
+        }
         seekHunk(true, absoluteUrl); //Jump to the first changed position
       }else{
         // Maybe the file was deleted
@@ -1430,7 +1448,15 @@ void PatchReviewPlugin::updateReview()
       }
     }
   }
-  
+
+  // close documents we didn't open again
+  foreach(IDocument* doc, documents.values()) {
+    doc->close();
+  }
+
+  Q_ASSERT(futureActiveDoc);
+  ICore::self()->documentController()->activateDocument(futureActiveDoc);
+
   bool b = ICore::self()->uiController()->findToolView(i18n("Patch Review"), m_factory);
   Q_ASSERT(b);
 }
@@ -1438,21 +1464,15 @@ void PatchReviewPlugin::updateReview()
 void PatchReviewPlugin::setPatch(IPatchSource* patch)
 {
   if(m_patch) {
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
-    if(objPatch) {
-      disconnect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
-    }
+    disconnect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
   }
   m_patch = patch;
 
   if(m_patch) {
     kDebug() << "setting new patch" << patch->name() << "with file" << patch->file();
     registerPatch(patch);
-    
-    QObject* objPatch = dynamic_cast<QObject*>(m_patch);
-    if(objPatch) {
-      connect(objPatch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
-    }
+
+    connect(m_patch, SIGNAL(patchChanged()), this, SLOT(notifyPatchChanged()));
   }
   
   notifyPatchChanged();

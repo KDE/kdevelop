@@ -75,7 +75,7 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config, bool force)
 
 QWidget* MainWindow::customButtonForAreaSwitcher ( Sublime::Area* area )
 {
-    return Core::self()->workingSetControllerInternal()->createSetManagerWidget(this, true, area);
+    return Core::self()->workingSetControllerInternal()->createSetManagerWidget(this, area);
 }
 
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
@@ -372,14 +372,6 @@ void MainWindow::initializeStatusBar()
 {
     d->setupStatusBar();
 }
-
-
-void MainWindow::setupAreaSelector()
-{
-    Sublime::MainWindow::setupAreaSelector();
-    d->setupAreaSelector();
-}
-
 
 void MainWindow::showErrorMessage(const QString& message, int timeout)
 {

@@ -210,7 +210,7 @@ void ActiveToolTip::paintEvent(QPaintEvent* event)
     painter.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
 }
 
-void ActiveToolTip::addExtendRect(QRect rect)
+void ActiveToolTip::addExtendRect(const QRect& rect)
 {
     d->rectExtensions_ += rect;
 }
@@ -224,9 +224,9 @@ void ActiveToolTip::adjustRect()
     updateMouseDistance();
 }
 
-void ActiveToolTip::setBoundingGeometry(QRect r) {
-    r.adjust(-10, -10, 10, 10);
-    d->rect_ = r;
+void ActiveToolTip::setBoundingGeometry(const QRect& geometry) {
+    d->rect_ = geometry;
+    d->rect_.adjust(-10, -10, 10, 10);
 }
 
 namespace {

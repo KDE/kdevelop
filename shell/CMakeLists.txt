@@ -5,6 +5,13 @@ add_subdirectory(tests)
 
 set(kdevplatformshell_LIB_SRCS
     workingsetcontroller.cpp
+    workingsets/workingset.cpp
+    workingsets/workingsetfilelabel.cpp
+    workingsets/workingsettoolbutton.cpp
+    workingsets/workingsettooltipwidget.cpp
+    workingsets/workingsetwidget.cpp
+    workingsets/closedworkingsetswidget.cpp
+    workingsets/workingsethelpers.cpp
     assistantpopup.cpp
     mainwindow.cpp
     mainwindow_p.cpp

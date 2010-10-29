@@ -52,11 +52,11 @@ namespace KDevelop {
  * you have to redefine the QCoreApplication::notify(..) function so that it locks the foreground mutex:
  *
  * <example>
- * static Qt::HANDLE mainThread = QThread::currentThreadId();
+ * static QThread* mainThread = QThread::currentThread();
  *
  * bool KDevelopApplication::notify(QObject* receiver, QEvent* event)
  * {
- *    KDevelop::ForegroundLock lock(QThread::currentThreadId() == mainThread);
+ *    KDevelop::ForegroundLock lock(QThread::currentThread() == mainThread);
  *    return KApplication::notify(receiver, event);
  * }
  * </example>

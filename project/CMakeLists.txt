@@ -10,6 +10,8 @@ set(kdevplatformproject_LIB_SRCS
     projectitemlineedit.cpp
     helper.cpp
     projectproxymodel.cpp
+    abstractfilemanagerplugin.cpp
+    filemanagerlistjob.cpp
     interfaces/iprojectbuilder.cpp
     interfaces/iprojectfilemanager.cpp
     interfaces/ibuildsystemmanager.cpp
@@ -51,5 +53,6 @@ install(FILES
     projectbuildsetmodel.h
     builderjob.h
     helper.h
+    abstractfilemanagerplugin.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/project COMPONENT Devel
  )

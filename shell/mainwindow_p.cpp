@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QBoxLayout>
 #include <QLabel>
 
+#include <KMenuBar>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
@@ -50,6 +51,8 @@ Boston, MA 02110-1301, USA.
 #include <sublime/document.h>
 #include <sublime/tooldocument.h>
 
+#include <util/pushvalue.h>
+
 #include <interfaces/iplugin.h>
 
 #include "core.h"
@@ -57,12 +60,9 @@ Boston, MA 02110-1301, USA.
 #include "partcontroller.h"
 #include "uicontroller.h"
 #include "statusbar.h"
-
 #include "mainwindow.h"
 #include "workingsetcontroller.h"
-
 #include "textdocument.h"
-#include <KMenuBar>
 #include "sessioncontroller.h"
 
 namespace KDevelop {
@@ -236,6 +236,11 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( QString( "<b>%1</b><p>%2</p>" ).arg( text ).arg(
                               i18n( "Lets you customize %1.", app ) ) );
 
+    action = actionCollection()->addAction( "show_editorconfig", this, SLOT( showEditorConfig() ) );
+    action->setIcon( KIcon("preferences-other") );
+    action->setText( i18n("Configure Editor..."));
+    action->setWhatsThis( i18n("Configure various aspects of this editor.") );
+
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
     action->setText( i18n("Configure Notifications...") );
     action->setToolTip( i18n("Configure Notifications") );
@@ -330,16 +335,6 @@ void MainWindowPrivate::setupActions()
     connect( action, SIGNAL( triggered( bool ) ),  SLOT( viewAddNewToolView() ) );
     action->setToolTip( i18n( "Add Tool View" ) );
     action->setWhatsThis( i18n( "<b>Add Tool View</b><p>Adds a new tool view to this window.</p>" ) );
-}
-
-void MainWindowPrivate::setupAreaSelector()
-{
-#if 0
-    if(!m_workingSetCornerWidget) {
-        m_workingSetCornerWidget = Core::self()->workingSetControllerInternal()->createSetManagerWidget(m_mainWindow, true);
-        m_mainWindow->setTabBarLeftCornerWidget(m_workingSetCornerWidget);
-    }
-#endif
 }
 
 void MainWindowPrivate::toggleArea(bool b)

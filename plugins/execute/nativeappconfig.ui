@@ -470,5 +470,21 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>projectTargetRadio</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>projectTarget</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>34</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>152</x>
+     <y>38</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
 </ui>

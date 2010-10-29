@@ -49,7 +49,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public KShared
     /**
      * Creates a new persistent moving range based on the current revision of the given document
      * */
-    PersistentMovingRange(const SimpleRange& range, const IndexedString& document);
+    PersistentMovingRange(const SimpleRange& range, const IndexedString& document, bool shouldExpand = false);
     ~PersistentMovingRange();
     
     IndexedString document() const;

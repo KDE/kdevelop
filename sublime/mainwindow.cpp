@@ -120,6 +120,9 @@ void MainWindow::setArea(Area *area)
     if (d->area)
         disconnect(d->area, 0, this, 0);
     
+    bool wasEnabled = updatesEnabled();
+    setUpdatesEnabled(false);
+
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
        not mean those are removed from area, so prevent slotDockShown
@@ -145,7 +148,9 @@ void MainWindow::setArea(Area *area)
     d->ignoreDockShown = false;
     
     loadSettings();
-        
+
+    setUpdatesEnabled(wasEnabled);
+
     connect(area, SIGNAL(viewAdded(Sublime::AreaIndex*, Sublime::View*)),
         this, SLOT(viewAdded(Sublime::AreaIndex*, Sublime::View*)));
     connect(area, SIGNAL(viewRemoved(Sublime::AreaIndex*,Sublime::View*)),

@@ -27,12 +27,15 @@
 class GrepOutputDelegate : public QItemDelegate
 {
 public:
+    explicit GrepOutputDelegate(QObject* parent);
+    virtual ~GrepOutputDelegate();
+
     static GrepOutputDelegate* self();
-    GrepOutputDelegate(QObject* = 0);
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 private:
     KStatefulBrush textBrush;
     KStatefulBrush fileBrush;
+    static GrepOutputDelegate* m_self;
 };
 
 #endif
