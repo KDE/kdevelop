@@ -38,7 +38,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 
-//#include "qthelpsettings.h"
 #include "ui_qthelpconfig.h"
 #include "KIconButton"
 #include "qthelpplugin.h"
@@ -152,7 +151,7 @@ void QtHelpConfig::selectionChanged()
         int row = m_configWidget->qchTable->selectedItems().at(0)->row();
         int nbRow = m_configWidget->qchTable->rowCount();
         m_configWidget->removeButton->setEnabled(true);
-        m_configWidget->editButton->setEnabled(true);        
+        m_configWidget->editButton->setEnabled(true);
         m_configWidget->qchName->setText(m_configWidget->qchTable->item(row, 0)->text());
         m_configWidget->qchRequester->setText(m_configWidget->qchTable->item(row, 1)->text());
         m_configWidget->qchIcon->setIcon(m_configWidget->qchTable->item(row, 2)->text());

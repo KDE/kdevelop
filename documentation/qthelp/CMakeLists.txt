@@ -13,7 +13,7 @@ set(kdevqthelp_config_UI
     qthelpconfig.ui
 )
 
-kde4_add_ui_files(kdevqthelp_config_SRCS ${kdevqthelp_config_UI})
+kde4_add_ui_files(kdevqthelp_SRCS ${kdevqthelp_config_UI})
 
 kde4_add_plugin(kdevqthelp ${kdevqthelp_SRCS})
 target_link_libraries(kdevqthelp
