@@ -18,23 +18,18 @@
 
 #include "renameassistant.h"
 #include <language/duchain/duchainutils.h>
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
-#include <interfaces/ilanguagecontroller.h>
 #include <language/duchain/declaration.h>
-#include <klocalizedstring.h>
 #include <language/codegen/documentchangeset.h>
-#include <kmessagebox.h>
-#include <language/backgroundparser/parsejob.h>
-#include <language/backgroundparser/backgroundparser.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/classfunctiondeclaration.h>
+#include <klocalizedstring.h>
+#include <kmessagebox.h>
 
-using namespace  KDevelop;
+using namespace KDevelop;
 using namespace Cpp;
 
 typedef QMap<IndexedString, QList <RangeInRevision> > UsesList;
@@ -54,14 +49,24 @@ public:
   virtual void execute() {
     UsesList::iterator it;
     DocumentChangeSet changes;
+
+    KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     for (it = m_oldDeclarationUses.begin(); it != m_oldDeclarationUses.end(); ++it) {
+      TopDUContext* topContext = DUChainUtils::standardContextForUrl(it.key().toUrl());
+      if (!topContext) {
+        //This would be abnormal
+        kDebug() << "while renaming" << it.key().str() << "didn't produce a context";
+        continue;
+      }
+
       foreach (RangeInRevision range, it.value()) {
         DocumentChange useRename
-            (it.key(), range.castToSimpleRange(), m_oldDeclarationName.toString(), m_newDeclarationName);
+            (it.key(), topContext->transformFromLocalRevision(range), m_oldDeclarationName.toString(), m_newDeclarationName);
         changes.addChange( useRename );
         changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
       }
     }
+    lock.unlock();
 
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
     if(!result)
@@ -110,8 +115,7 @@ Declaration* RenameAssistant::getValidDeclarationForChangedRange(KTextEditor::Ra
     return 0;
 
   //Now we know we're editing a declaration, but some declarations we don't offer a rename for
-  //basically that's any declaration that wouldn't be fully renamed just by renaming its uses.
-  //FIXME: the following may not be exactly the desired filter
+  //basically that's any declaration that wouldn't be fully renamed just by renaming its uses().
   if (declaration->internalContext() || declaration->isForwardDeclaration()) {
     //make an exception for non-class functions
     if(!declaration->isFunctionDeclaration() || dynamic_cast<ClassFunctionDeclaration*>(declaration))
@@ -147,19 +151,17 @@ void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString re
         if (removedText.isEmpty() && newRange.intersect(invocationRange).isEmpty())
           newRange = newRange.encompass(invocationRange); //if text was added to the ends, encompass it
 
-        /* FIXME: if you make a selection that includes one (and only one) of the ends of a declaration
-         * and then replace it with some new text, the new text will not be registered.
-         * Since removed text is already registered by the decl range (and I can't get the previous range,
-         * this is impossible to distinguish from certain other cases where a rename should not be offered.
-         * Is it possible to make declaration ranges grow (like a MovingRange) by default?
-         */
-
         m_newDeclarationRange.attach(new PersistentMovingRange(newRange, m_documentUrl, true));
       }
       else  return; //new declaration is use-less
     }
     else return; //not editing a declaration
   }
+
+  //Unfortunately this happens when you make a selection including one end of the decl's range and replace it
+  if (removedText.isEmpty() && m_newDeclarationRange->range().textRange().intersect(invocationRange).isEmpty())
+    m_newDeclarationRange.attach( new PersistentMovingRange(
+        m_newDeclarationRange->range().textRange().encompass(invocationRange), m_documentUrl, true) );
 
   m_newDeclarationName = view()->document()->text(m_newDeclarationRange->range().textRange());
 
