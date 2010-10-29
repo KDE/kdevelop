@@ -23,6 +23,6 @@ install(TARGETS kde4app ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
-install( FILES kde4app.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( PROGRAMS kde4app.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES kde4app.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
 install( FILES kde4appui.rc  DESTINATION  ${DATA_INSTALL_DIR}/kde4app )

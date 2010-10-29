@@ -35,8 +35,11 @@ public:
     ProjectFileSystemWatcher( /*KDevelop::IProjectFileManager* manager, */QObject* parent = 0 );
     virtual ~ProjectFileSystemWatcher();
 
-    void addDirectory( const QString &path, KDevelop::ProjectFolderItem *folderItem );
-    void addFile( const QString &path, KDevelop::ProjectFileItem *fileItem );
+    void stopWatcher();
+    void continueWatcher();
+
+    void addDirectory( KDevelop::ProjectFolderItem* folderItem );
+    void addFile( KDevelop::ProjectFileItem* fileItem );
 
     /** Note: Sometimes, when directory trees are being deleted, directoriesDeleted() signal for
      * parent directory is emitted first, and signal for child directories are emitted next.

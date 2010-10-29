@@ -113,7 +113,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotDebuggerAbnormalExit();
-    void emitShowStepInSource(const QString& file, int line, const QString& address);
 
 private:
     void _gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
@@ -287,7 +286,6 @@ Q_SIGNALS:
     void gdbInternalCommandStdout (const QString& output);
     void gdbUserCommandStdout (const QString& output);
     void gdbStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
-    void gdbShowStepInSource(const QString &fileName, int line, const QString &address);
 
     void debuggerAbnormalExit();
 

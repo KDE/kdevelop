@@ -28,6 +28,7 @@
 
 #include <KDirWatch>
 
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/codegen/applychangeswidget.h>

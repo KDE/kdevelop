@@ -113,6 +113,7 @@ void CppOverridesPage::populateOverrideTree(const QList< DeclarationPointer >& b
 
   if (!context || !context->childContexts().size() == 1) {
     kWarning() << "invalid context for generated cpp file with default methods" << file.fileName();
+    file.remove();
     return;
   }
 
@@ -179,8 +180,7 @@ KDevelop::DocumentChangeSet CppNewClass::generate()
   }
 
   // find target to add created class to
-  if(!target && folder && p->buildSystemManager() &&
-      p->buildSystemManager()->features() & KDevelop::IBuildSystemManager::Targets )
+  if(!target && folder && p->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets )
   {
     QList<KDevelop::ProjectTargetItem*> t=folder->targetList();
     for(ProjectBaseItem* it=folder; it && t.isEmpty(); it=it->parent()) {

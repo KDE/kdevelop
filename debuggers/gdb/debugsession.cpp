@@ -107,18 +107,6 @@ DebugSession::~DebugSession()
     delete commandQueue_;
 }
 
-void DebugSession::emitShowStepInSource(const QString& file, int line, const QString& address)
-{
-    kDebug() << file << line << address;
-    emit gdbShowStepInSource(file, line, address);
-    if (!file.isEmpty()) {
-        // Debugger counts lines from 1
-        emit showStepInSource(KUrl::fromPath(file), line-1);
-    } else {
-        emit clearExecutionPoint();
-    }
-}
-
 KDevelop::IDebugSession::DebuggerState DebugSession::state() const {
     return m_sessionState;
 }
@@ -750,12 +738,15 @@ void DebugSession::slotProgramStopped(const GDBMI::ResultRecord& r)
         
         if (r.hasField("frame")) {
             const GDBMI::Value& frame = r["frame"];
-            if (frame.hasField("fullname")
-                && frame.hasField("line")
-                && frame.hasField("addr")) {
-                emitShowStepInSource(frame["fullname"].literal(),
-                     frame["line"].literal().toInt(),
-                     frame["addr"].literal());
+            QString file, line, addr;
+            
+            if (frame.hasField("fullname")) file = frame["fullname"].literal();;
+            if (frame.hasField("line"))     line = frame["line"].literal();
+            if (frame.hasField("addr"))     addr = frame["addr"].literal();
+            
+            if (!file.isEmpty()) {
+                // gdb counts lines from 1 and we don't
+                setCurrentPosition(KUrl::fromLocalFile(file), line.toInt()-1, addr);
 
                 raiseEvent(program_state_changed);
                 state_reload_needed = false;

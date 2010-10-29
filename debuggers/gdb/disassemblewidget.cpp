@@ -85,8 +85,8 @@ void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
     DebugSession *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
-    connect(session, SIGNAL(gdbShowStepInSource(QString,int,QString)),
-                SLOT(slotShowStepInSource(QString,int,QString)));
+    connect(session, SIGNAL(showStepInSource(KUrl,int,QString)),
+                SLOT(slotShowStepInSource(KUrl,int,QString)));
 }
 
 
@@ -137,7 +137,7 @@ void DisassembleWidget::slotActivate(bool activate)
 
 /***************************************************************************/
 
-void DisassembleWidget::slotShowStepInSource(   const QString &, int,
+void DisassembleWidget::slotShowStepInSource(   const KUrl &, int,
                                                 const QString &currentAddress)
 {
     kDebug();
