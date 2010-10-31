@@ -43,15 +43,21 @@ public:
   class ProblemModel* model() const;
 
   virtual void contextMenuEvent(QContextMenuEvent* );
+  virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+  virtual void reset();
   
 protected:
   virtual void showEvent(QShowEvent* event);
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
+  void setAutoResize(bool autoresize);
   
 private:
+  void resizeColumns();
   ProblemReporterPlugin* m_plugin;
+  bool m_autoResize
+;
 };
 
 #endif

@@ -47,7 +47,7 @@ using namespace KDevelop;
 
 ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     : QTreeView(parent)
-    , m_plugin(plugin)
+    , m_plugin(plugin), m_autoResize(true)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
@@ -117,6 +117,14 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(allProjectAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
     connect(scopeMapper, SIGNAL(mapped(int)), model(), SLOT(setScope(int)));
 
+    KAction* autoResizeAction = new KAction(this);
+    autoResizeAction->setText(i18n("Auto Resize Columns"));
+    autoResizeAction->setToolTip(i18n("Automatically resize columns to their data size"));
+    autoResizeAction->setCheckable(true);
+    autoResizeAction->setChecked(m_autoResize);
+    connect(autoResizeAction, SIGNAL(triggered(bool)), this, SLOT(setAutoResize(bool)));
+    addAction(autoResizeAction);
+
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
 }
 
@@ -146,6 +154,42 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     }
 
     m_plugin->core()->documentController()->openDocument(url, start);
+}
+
+void ProblemWidget::resizeColumns()
+{
+    if (isVisible()) {
+        for (int i = 0; i < model()->columnCount(); ++i) {
+            resizeColumnToContents(i);
+        }
+    }
+}
+
+void ProblemWidget::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    QTreeView::dataChanged(topLeft, bottomRight);
+    if (m_autoResize) {
+        resizeColumns();
+    }
+}
+
+void ProblemWidget::reset()
+{
+    QTreeView::reset();
+    if (m_autoResize) {
+        resizeColumns();
+    }
+}
+
+void ProblemWidget::setAutoResize(bool autoResize)
+{
+    if (!m_autoResize && autoResize) {
+        m_autoResize = autoResize;
+        resizeColumns();
+    } else {
+        m_autoResize = autoResize;
+    }
+    kDebug() << m_autoResize;
 }
 
 ProblemModel * ProblemWidget::model() const
