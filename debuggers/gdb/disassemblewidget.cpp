@@ -195,7 +195,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
     currentSessionChanged(pS);
     
     if(pS && !pS->currentAddr().isEmpty())
-        slotShowStepInSource(pS->currentFile(), pS->currentLine(), pS->currentAddr());
+        slotShowStepInSource(pS->currentUrl(), pS->currentLine(), pS->currentAddr());
 }
 
 
