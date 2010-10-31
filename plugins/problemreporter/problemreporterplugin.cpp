@@ -45,6 +45,7 @@
 
 #include "problemhighlighter.h"
 #include "problemwidget.h"
+#include "problemmodel.h"
 #include <interfaces/context.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainutils.h>
@@ -64,7 +65,10 @@ public:
 
   virtual QWidget* create(QWidget *parent = 0)
   {
-    return new ProblemWidget(parent, m_plugin);
+    ProblemWidget* widget = new ProblemWidget(parent, m_plugin);
+    ProblemModel* model = m_plugin->getModel();
+    widget->setModel(model);
+    return widget;
   }
 
   virtual Qt::DockWidgetArea defaultPosition()
@@ -83,7 +87,7 @@ private:
 
 ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList&)
     : KDevelop::IPlugin(KDevProblemReporterFactory::componentData(), parent)
-    , m_factory(new ProblemReporterFactory(this))
+    , m_factory(new ProblemReporterFactory(this)), m_model(new ProblemModel(this))
 {
   core()->uiController()->addToolView(i18n("Problems"), m_factory);
   setXMLFile( "kdevproblemreporter.rc" );
@@ -96,6 +100,11 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject *parent, const QVariantList
 ProblemReporterPlugin::~ProblemReporterPlugin()
 {
   qDeleteAll(m_highlighters);
+}
+
+ProblemModel* ProblemReporterPlugin::getModel() const
+{
+  return m_model;
 }
 
 void ProblemReporterPlugin::unload()
@@ -130,15 +139,8 @@ void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::R
     if (!ph)
       return;
 
-    QList<ProblemPointer> allProblems;
-    QSet<TopDUContext*> hadContexts;
-
-    {
-      DUChainReadLocker lock(DUChain::lock());
-
-      ProblemWidget::collectProblems(allProblems, topContext.data(), hadContexts);
-    }
-
+    m_model->updateProblems(url, topContext);
+    QList<ProblemPointer> allProblems = m_model->getProblems(url, false);
     ph->setProblems(allProblems);
   }
 }

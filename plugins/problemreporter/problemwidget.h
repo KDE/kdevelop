@@ -24,11 +24,6 @@
 
 #include <QtGui/QTreeView>
 
-#include <KUrl>
-#include <KTextEditor/Range>
-
-#include <language/interfaces/iproblem.h>
-
 namespace KDevelop {
   class ParseJob;
   class TopDUContext;
@@ -47,8 +42,6 @@ public:
 
   class ProblemModel* model() const;
 
-  static void collectProblems(QList<KDevelop::ProblemPointer>& allProblems, KDevelop::TopDUContext* context, QSet<KDevelop::TopDUContext*>& hadContexts);
-
   virtual void contextMenuEvent(QContextMenuEvent* );
   
 protected:
@@ -56,19 +49,9 @@ protected:
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
-
-  void parseJobFinished(KDevelop::ParseJob* job);
-
-  void documentActivated(KDevelop::IDocument*);
-  
-  void forceFullUpdate();
   
 private:
-  void showProblems(KDevelop::TopDUContext* ctx, KDevelop::IDocument* doc);
   ProblemReporterPlugin* m_plugin;
-  KUrl m_activeDirectory;
-  KUrl m_activeUrl;
-  KAction* m_fullUpdateAction;
 };
 
 #endif
