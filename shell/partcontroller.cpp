@@ -26,11 +26,13 @@
 #include <QFile>
 #include <QTimer>
 #include <QMutexLocker>
+#include <QApplication>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmimetype.h>
 #include <kmimetypetrader.h>
+#include <KMessageBox>
 
 #include <kparts/part.h>
 #include <kparts/factory.h>
@@ -112,8 +114,13 @@ KTextEditor::Editor* PartController::editorPart() const
             "KTextEditor/Document",
             "KTextEditor::Editor" ));
 
-        //TODO: turn into KMessageBox with translatable error message
-        Q_ASSERT_X(editorFactory, "PartController::createTextPart", "could not find KTextEditor::Factory, check your installation");
+        if (!editorFactory) {
+            KMessageBox::error(qApp->activeWindow(), i18n("System Configuration Error"),
+                               i18n("Could not find KTextEditor::Factory, check your installation.\n"
+                                    "Make sure that KDEDIRS is set properly and that you ran kbuildsycoca4." ));
+            qApp->quit();
+            return 0;
+        }
 
         d->m_textEditor = editorFactory->editor();
     }
