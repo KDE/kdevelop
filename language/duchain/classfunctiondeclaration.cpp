@@ -39,9 +39,14 @@ ClassFunctionDeclaration::ClassFunctionDeclaration(const ClassFunctionDeclaratio
 }
 
 void ClassFunctionDeclaration::setAbstractType(AbstractType::Ptr type) {
-  if(type && !dynamic_cast<FunctionType*>(type.unsafeData())) {
-    kWarning(9505) << "WARNING: Non-function type assigned to function declaration."
-                      "Type is: " << type->toString() << "whichType:" << type->whichType();
+  ///TODO: write testcase for typealias case which used to trigger this warning:
+  ///      typedef bool (*EventFilter)(void *message, long *result);
+  ///      in e.g. qcoreapplication.h:172
+  if(type && !dynamic_cast<FunctionType*>(type.unsafeData()) && type->whichType() != AbstractType::TypeAlias) {
+    kWarning(9505) << "WARNING: Non-function type assigned to function declaration. Type is: "
+                      << type->toString() << "whichType:" << type->whichType()
+                      << "Declaration is:" << toString()
+                      << topContext()->url().str() << range().castToSimpleRange();
   }
   ClassMemberDeclaration::setAbstractType(type);
 }
