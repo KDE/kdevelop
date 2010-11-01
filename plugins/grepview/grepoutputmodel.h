@@ -17,6 +17,8 @@
 #include <QRegExp>
 #include <QList>
 #include <outputview/ioutputviewmodel.h>
+#include <language/codegen/documentchangeset.h>
+#include <kde_file.h>
 
 class QModelIndex;
 
@@ -36,12 +38,13 @@ public:
         FileExpanded
     };
 
-    GrepOutputItem(const QString &fileName, int lineNumber,
-                   const QString &text);
+    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text);
+    GrepOutputItem(const QString &filename, const QString &text);
     ~GrepOutputItem();
 
     QString filename() const ;
     int lineNumber() const ;
+    KDevelop::DocumentChangePointer change() const ;
     bool collapsed() const ;
     bool expanded() const ;
     bool isText() const { return data()==Text; }
@@ -50,8 +53,8 @@ public:
     bool toggleView();
 
 private:
-    QString m_fileName, m_text;
-    int m_lineNumber;
+    KDevelop::DocumentChangePointer m_change;
+   
     void showCollapsed();
     void showExpanded();
 };

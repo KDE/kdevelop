@@ -23,23 +23,22 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(const QString &fileName,
-                   int lineNumber,
-                   const QString &text)
-    : QStandardItem(), m_fileName(fileName), m_text(text), m_lineNumber(lineNumber)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text)
+    : QStandardItem(), m_change(change)
 {
-    if( lineNumber!=-1 )
-    {
-        QString formattedTxt = QString("  %1: %2").arg(lineNumber).arg(text);
-        setText( formattedTxt );
-        setData( Text );
-    }
-    else
-    {
-        setText(text);
-        showCollapsed();
-    }
+    int line = lineNumber();
+    QString formattedTxt = QString("  %1: %2").arg(line).arg(text);
+    setText( formattedTxt );
+    setData( Text );
 }
+
+GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
+    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
+{
+    setText(text);
+    showCollapsed();
+}
+
 
 bool GrepOutputItem::collapse()
 {
@@ -111,11 +110,17 @@ bool GrepOutputItem::collapsed() const {
 }
 
 int GrepOutputItem::lineNumber() const {
-    return m_lineNumber;
+    // line starts at 0 for cursor but we want to start at 1
+    return m_change->m_range.start.line + 1;
 }
 
 QString GrepOutputItem::filename() const {
-    return m_fileName;
+    return m_change->m_document.str();
+}
+
+DocumentChangePointer GrepOutputItem::change() const
+{
+    return m_change;
 }
 
 bool GrepOutputItem::expanded() const {
@@ -211,7 +216,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 {
     QString fnString = i18np("%2 (one match)", "%2 (%1 matches)", items.length(), filename);
 
-    GrepOutputItem *fileItem = new GrepOutputItem(filename, -1, fnString);
+    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString);
     appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )

@@ -36,66 +36,39 @@
 
 #include <language/duchain/indexedstring.h>
 #include <interfaces/iuicontroller.h>
+#include <language/codegen/documentchangeset.h>
 
 #include "grepoutputdelegate.h"
 
 using namespace KDevelop;
 
-static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
+static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
 {
     GrepOutputItem::List res;
     QFile file(filename);
     if(!file.open(QIODevice::ReadOnly))
         return res;
-    int lineno = 1;
+    int lineno = 0;
     while( !file.atEnd() )
     {
         QByteArray data = file.readLine();
-        if( re.indexIn(data)!=-1 )
-            res << GrepOutputItem(filename, lineno, QString(data).trimmed());
+        int offset = 0;
+        while( re.indexIn(data, offset)!=-1 )
+        {
+            int start = re.pos(0);
+            int end = start + re.cap(0).length();
+            
+            DocumentChangePointer change = DocumentChangePointer(new DocumentChange(
+                IndexedString(filename), 
+                SimpleRange(lineno, start, lineno, end),
+                re.cap(0), re.cap(0).replace(re, repl)));
+            
+            res << GrepOutputItem(change, QString(data).trimmed());
+            offset = end + 1;
+        }
         lineno++;
     }
     file.close();
-    return res;
-}
-
-static GrepOutputItem::List replaceFile(const QString &filename, const QRegExp &re, const QString &repl)
-{
-    GrepOutputItem::List res;
-    KUrl url(filename);
-    
-    IDocument* doc = ICore::self()->documentController()->documentForUrl( url );
-    bool alreadyOpened = true;
-    if(!doc)
-    {
-        doc = ICore::self()->documentController()->openDocument( url, 
-                                                                 KTextEditor::Range::invalid(), 
-                                                                 IDocumentController::DoNotActivate);
-        alreadyOpened = false;
-    }
-    if(!doc)
-        return res;
-    
-    KTextEditor::Document* textDoc = doc->textDocument();
-    if(!textDoc)
-        return res;
-    
-    textDoc->startEditing();
-    for(int lineno = 0; lineno < textDoc->lines(); lineno++)
-    {
-        QString line = textDoc->line(lineno);
-        if( re.indexIn(line)!=-1 )
-        {
-            textDoc->removeLine(lineno);
-            textDoc->insertLine(lineno, line.replace(re, repl));
-            res << GrepOutputItem(filename, lineno+1, line.trimmed());
-        }
-    }
-    textDoc->endEditing();
-    
-    if(!alreadyOpened && res.isEmpty())
-        doc->close();
-    
     return res;
 }
 
@@ -104,6 +77,9 @@ GrepJob::GrepJob( QObject* parent )
 {
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
+    
+    //FIXME only for benchmarks
+    connect(this, SIGNAL(finished(KJob *)), this, SLOT(doBench()));
 }
 
 QString GrepJob::statusName() const
@@ -222,13 +198,27 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     QString file = m_fileList[m_fileIndex].toLocalFile();
-                    GrepOutputItem::List items = m_replaceFlag ? replaceFile(file, m_regExp, m_finalReplacement) : grepFile(file, m_regExp);
+                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement);
 
                     if(!items.isEmpty())
+                    {
+                        if(m_replaceFlag) 
+                        {
+                            foreach(const GrepOutputItem &i, items)
+                            {
+                                m_changeSet.addChange(i.change());
+                            }
+                        }
                         emit foundMatches(file, items);
+                    }
 
                     m_fileIndex++;
                 }
+                QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
+            }
+            else if(m_replaceFlag)
+            {
+                m_workState = WorkReplace;
                 QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             }
             else
@@ -240,6 +230,17 @@ void GrepJob::slotWork()
                 emitResult();
             }
             break;
+        case WorkReplace:
+            DocumentChangeSet::ChangeResult result = m_changeSet.applyAllChanges();
+            if(!result)
+            {
+                emit showErrorMessage(i18n("Replacement failed: ") + result.m_failureReason);
+            }
+            emit hideProgress(this);
+            emit clearMessage(this);
+            m_workState = WorkIdle;
+            emitResult();
+            break;
     }
 }
 
@@ -247,6 +248,10 @@ void GrepJob::start()
 {
     if(m_workState!=WorkIdle)
         return;
+    
+    //FIXME: only for benchmarks
+    m_timer.start();
+    
     setToolTitle(i18n("Find in Files"));
     setToolIcon(KIcon("edit-find"));
     setViewType(KDevelop::IOutputView::HistoryView);
@@ -271,6 +276,12 @@ void GrepJob::start()
             model, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
+}
+
+//FIXME: only for benchmarks
+void GrepJob::doBench()
+{
+    qDebug() << "Grep done in " << m_timer.elapsed() << " ms";
 }
 
 GrepOutputModel* GrepJob::model() const

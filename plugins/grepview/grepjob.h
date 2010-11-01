@@ -26,6 +26,9 @@
 #include "grepfindthread.h"
 #include "grepoutputmodel.h"
 
+//FIXME: only for benchmarks
+#include <QElapsedTimer>
+
 namespace KDevelop
 {
     class IOutputView;
@@ -74,6 +77,12 @@ Q_SIGNALS:
 
     void foundMatches( const QString& filename, const GrepOutputItem::List& matches);
 
+//FIXME: only for benchmarks, to be deleted
+private slots:
+    void doBench();
+private:
+    QElapsedTimer m_timer;
+
 private:
     Q_INVOKABLE void slotWork();
 
@@ -84,12 +93,15 @@ private:
     enum {
         WorkCollectFiles,
         WorkGrep,
+        WorkReplace,
         WorkIdle
     } m_workState;
     
     KUrl::List m_fileList;
     int m_fileIndex;
     QPointer<GrepFindFilesThread> m_findThread;
+    
+    KDevelop::DocumentChangeSet m_changeSet;
 
     QString m_templateString;
     QString m_replacementTemplateString;
