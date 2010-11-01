@@ -16,7 +16,6 @@
 #include <QStandardItemModel>
 #include <QRegExp>
 #include <QList>
-#include <outputview/ioutputviewmodel.h>
 #include <language/codegen/documentchangeset.h>
 #include <kde_file.h>
 
@@ -61,7 +60,7 @@ private:
 
 Q_DECLARE_METATYPE(GrepOutputItem::List);
 
-class GrepOutputModel : public QStandardItemModel, public KDevelop::IOutputViewModel
+class GrepOutputModel : public QStandardItemModel
 {
     Q_OBJECT
 
@@ -70,7 +69,8 @@ public:
     ~GrepOutputModel();
 
     void setRegExp(const QRegExp& re);
-
+  
+	// the next three methods are currently not used, I need to investigate to know if we still need them
     void activate( const QModelIndex &idx );
     QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
     QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );

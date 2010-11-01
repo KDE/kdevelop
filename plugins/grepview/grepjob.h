@@ -19,8 +19,8 @@
 #include <QPointer>
 
 #include <kurl.h>
+#include <kjob.h>
 
-#include <outputview/outputjob.h>
 #include <interfaces/istatus.h>
 
 #include "grepfindthread.h"
@@ -31,12 +31,11 @@
 
 namespace KDevelop
 {
-    class IOutputView;
     class IProject;
     class ProcessLineMaker;
 }
 
-class GrepJob : public KDevelop::OutputJob, public KDevelop::IStatus
+class GrepJob : public KJob, public KDevelop::IStatus
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
@@ -89,6 +88,7 @@ private:
     QString m_patternString;
     QRegExp m_regExp;
     QString m_regExpSimple;
+	GrepOutputModel *m_outputModel;
     
     enum {
         WorkCollectFiles,

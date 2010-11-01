@@ -14,6 +14,7 @@
 
 #include "grepjob.h"
 #include "grepoutputmodel.h"
+#include "grepoutputview.h"
 
 #include <QWhatsThis>
 #include <QList>
@@ -41,6 +42,30 @@
 #include "grepoutputdelegate.h"
 
 using namespace KDevelop;
+
+class GrepOutputViewFactory: public KDevelop::IToolViewFactory
+{
+public:
+  GrepOutputViewFactory(GrepJob *job): m_job(job) {}
+
+  virtual QWidget* create(QWidget *parent = 0)
+  {
+    return new GrepOutputView(parent, m_job);
+  }
+
+  virtual Qt::DockWidgetArea defaultPosition()
+  {
+    return Qt::BottomDockWidgetArea;
+  }
+
+  virtual QString id() const
+  {
+    return "org.kdevelop.GrepOutputView";
+  }
+
+private:
+  GrepJob *m_job;
+};
 
 static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
 {
@@ -73,7 +98,7 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re,
 }
 
 GrepJob::GrepJob( QObject* parent )
-    : KDevelop::OutputJob( parent ), m_workState(WorkIdle)
+    : KJob( parent ), m_workState(WorkIdle)
 {
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
@@ -166,7 +191,7 @@ void GrepJob::slotFindFinished()
     QString replacement = (m_regExp.patternSyntax() == QRegExp::Wildcard) ? m_replaceString : m_replaceString.replace("\\", "\\\\");
     m_finalReplacement = substitudePattern(m_replacementTemplateString, replacement);
     
-    static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
+    m_outputModel->setRegExp(m_regExp);
 
     emit showMessage(this, i18np("Searching for \"%2\" in one file",
                                  "Searching for \"%2\" in %1 files",
@@ -252,29 +277,30 @@ void GrepJob::start()
     //FIXME: only for benchmarks
     m_timer.start();
     
-    setToolTitle(i18n("Find in Files"));
-    setToolIcon(KIcon("edit-find"));
-    setViewType(KDevelop::IOutputView::HistoryView);
-    setTitle(m_patternString);
-    setBehaviours( KDevelop::IOutputView::AllowUserClose );
     m_fileList.clear();
     m_workState = WorkIdle;
     m_fileIndex = 0;
 
-    GrepOutputModel *model = new GrepOutputModel(this);
-    setModel(model, KDevelop::IOutputView::TakeOwnership);
-    setDelegate(GrepOutputDelegate::self());
-    startOutput();
+    GrepOutputViewFactory *m_factory = new GrepOutputViewFactory(this);
+    GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
+							   findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
+
+    m_outputModel = new GrepOutputModel(this);
+    toolView->setModel(m_outputModel);
+    toolView->setDelegate(GrepOutputDelegate::self());
+
+	m_outputModel->appendRow(new GrepOutputItem("filename", "text"));
+    kDebug() << "appenRow";
 
     connect(this, SIGNAL(showErrorMessage(QString, int)),
-            model, SLOT(showErrorMessage(QString)));
+            m_outputModel, SLOT(showErrorMessage(QString)));
     connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            model, SLOT(showMessage(KDevelop::IStatus*, QString)));
+            m_outputModel, SLOT(showMessage(KDevelop::IStatus*, QString)));
 
     qRegisterMetaType<GrepOutputItem::List>();
     connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),
-            model, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
-
+            m_outputModel, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
+	
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
 
@@ -282,11 +308,6 @@ void GrepJob::start()
 void GrepJob::doBench()
 {
     qDebug() << "Grep done in " << m_timer.elapsed() << " ms";
-}
-
-GrepOutputModel* GrepJob::model() const
-{
-    return static_cast<GrepOutputModel*>(OutputJob::model());
 }
 
 bool GrepJob::doKill()
