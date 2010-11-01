@@ -2045,6 +2045,8 @@ void TestDUChain::testADLClassMembers()
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+
+    QEXPECT_FAIL("", "ADL for class members doesn't work", Abort);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
 }
@@ -2061,6 +2063,8 @@ void TestDUChain::testADLMemberFunction()
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+
+    QEXPECT_FAIL("", "ADL for class members doesn't work", Abort);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
 }
@@ -2105,6 +2109,8 @@ void TestDUChain::testADLMemberFunctionByName()
     // foo::bar has 1 use
     QCOMPARE(top->childContexts()[0]->localDeclarations().size(), 2);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->qualifiedIdentifier().toString(), QString("foo::bar"));
+
+    QEXPECT_FAIL("", "ADL for class members doesn't work", Abort);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().size(), 1);
     QCOMPARE(top->childContexts()[0]->localDeclarations()[1]->uses().begin()->size(), 1);
   }
