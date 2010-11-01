@@ -53,6 +53,8 @@
 #include <QAction>
 #include <KIcon>
 #include "qmakejob.h"
+#include <KDirWatch>
+#include <interfaces/iprojectcontroller.h>
 
 using namespace KDevelop;
 
@@ -298,7 +300,42 @@ ProjectFolderItem* QMakeProjectManager::import( IProject* project )
         return 0;
     }
 
-    return AbstractFileManagerPlugin::import( project );
+    ProjectFolderItem* ret = AbstractFileManagerPlugin::import( project );
+
+    connect(projectWatcher(project), SIGNAL(dirty(QString)),
+            this, SLOT(slotDirty(QString)));
+
+    return ret;
+}
+
+void QMakeProjectManager::slotDirty(const QString& path)
+{
+    if (!path.endsWith(".pro") && !path.endsWith(".pri")) {
+        return;
+    }
+
+    QFileInfo info(path);
+    if (!info.isFile()) {
+        return;
+    }
+
+    const KUrl url(path);
+    IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
+    Q_ASSERT(project);
+
+    foreach(ProjectFolderItem* folder, project->foldersForUrl(url.upUrl())) {
+        if (QMakeFolderItem* qmakeFolder = dynamic_cast<QMakeFolderItem*>( folder )) {
+            foreach(QMakeProjectFile* pro, qmakeFolder->projectFiles()) {
+                if (pro->absoluteFile() == path) {
+                    //TODO: children
+                    //TODO: cache added
+                    kDebug() << "reloading" << pro << path;
+                    pro->read();
+                }
+            }
+            return;
+        }
+    }
 }
 
 QList<ProjectTargetItem*> QMakeProjectManager::targets(ProjectFolderItem* item) const

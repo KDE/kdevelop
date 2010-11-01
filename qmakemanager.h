@@ -73,8 +73,9 @@ public:
     //END IBuildSystemManager
 
 private slots:
-  void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
-  void slotRunQMake();
+    void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
+    void slotRunQMake();
+    void slotDirty(const QString& path);
 
 private:
     KDevelop::ProjectFolderItem* projectRootItem( KDevelop::IProject* project, const KUrl& url );
