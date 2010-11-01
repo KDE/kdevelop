@@ -128,6 +128,9 @@ Declaration* RenameAssistant::getValidDeclarationForChangedRange(KTextEditor::Ra
 void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString removedText) {
   clearActions();
 
+  if (!view())
+    return;
+
   //If the inserted text isn't valid for a variable name, consider the editing ended
   QRegExp validDeclName("^[0-9a-zA-Z_]*$");
   if (removedText.isEmpty() && !validDeclName.exactMatch(view()->document()->text(invocationRange))) {
