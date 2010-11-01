@@ -54,7 +54,7 @@ void QMakeJob::start()
     startOutput();
 
     QStringList args;
-    args << "qmake" << "CONFIG+=debug";
+    args << "qmake" << "CONFIG+=debug" << "-r";
 
     m_model->appendLine(m_wd + ": " + args.join(" "));
 
