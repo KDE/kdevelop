@@ -94,6 +94,7 @@ set(gdbtest_PART_SRCS
 
 kde4_add_ui_files(gdbtest_PART_SRCS
     debuggertracingdialog.ui
+    selectaddress.ui
 )
 kde4_add_unit_test(gdbtest ${gdbtest_PART_SRCS})
 target_link_libraries(gdbtest
