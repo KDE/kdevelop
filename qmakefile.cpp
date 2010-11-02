@@ -99,6 +99,7 @@ QMakeFile::QMakeFile( const QString& file )
 
 bool QMakeFile::read()
 {
+    Q_ASSERT(!m_projectFile.isEmpty());
     QFileInfo fi( m_projectFile );
     ifDebug(kDebug(9024) << "Is" << m_projectFile << "a dir?" << fi.isDir() ;)
     if( fi.isDir() )
@@ -171,6 +172,13 @@ void QMakeFile::visitFunctionCall( QMake::FunctionCallAST* node )
         if( QFileInfo( argument ).isRelative() )
         {
             argument = QFileInfo( absoluteDir() + '/' + argument ).canonicalFilePath();
+        }
+        if (argument.isEmpty()) {
+            kWarning() << "empty include file detected" << absoluteFile() << "line" << node->startLine;
+            if( node->identifier->value.startsWith('!') ) {
+                visitNode( node->body );
+            }
+            return;
         }
         ifDebug(kDebug(9024) << "Reading Include file:" << argument;)
         QMakeIncludeFile includefile( argument, m_variableValues );
