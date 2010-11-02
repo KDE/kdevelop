@@ -117,6 +117,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         level++;
         parentidx = parentidx.parent();
     }
+    // make sure the base column width is honored, e.g. when no launch configs exist
+    tree->resizeColumnToContents(0);
     int width = tree->columnWidth( 0 );
     while ( widthidx.isValid() )
     {
