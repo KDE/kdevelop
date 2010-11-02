@@ -45,7 +45,7 @@ public:
 
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
-    void serReplacementTemplateString(const QString &replTmplString);
+    void setReplacementTemplateString(const QString &replTmplString);
     void setReplaceString(const QString &replaceString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);

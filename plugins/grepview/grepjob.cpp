@@ -326,7 +326,7 @@ void GrepJob::setTemplateString(const QString& templateString)
     m_templateString = templateString;
 }
 
-void GrepJob::serReplacementTemplateString(const QString &replTmplString)
+void GrepJob::setReplacementTemplateString(const QString &replTmplString)
 {
     m_replacementTemplateString = replTmplString;
 }

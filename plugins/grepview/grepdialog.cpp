@@ -316,7 +316,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepJob* job = new GrepJob();
 
     job->setPatternString(patternString());
-    job->serReplacementTemplateString(replacementTemplateString());
+    job->setReplacementTemplateString(replacementTemplateString());
     job->setTemplateString(templateString());
     job->setReplaceString(replacementString());
     job->setFilesString(filesString());
