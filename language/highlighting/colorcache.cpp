@@ -277,7 +277,6 @@ void ColorCache::updateInternal()
 QColor ColorCache::blend(QColor color, uchar ratio) const
 {
   Q_ASSERT(m_foregroundColor.isValid());
-  qDebug() << m_foregroundColor.name() << ratio;
   if ( KColorUtils::luma(m_foregroundColor) >= 0.5 ) {
     // for dark color schemes, produce a fitting color first
     color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();
