@@ -356,14 +356,17 @@ KUrl::List QMakeProjectManager::includeDirectories(ProjectBaseItem* item) const
     QMakeFolderItem* folder = findQMakeFolderParent(item);
 
     if ( folder ) {
-//         qDebug() << "include dirs:" << folder << folder->url();
-        //TODO: maybe filter duplicates
         foreach( QMakeProjectFile* pro, folder->projectFiles() ) {
             if (pro->files().contains(item->url())) {
-                list += pro->includeDirectories();
+                foreach(const KUrl& url, pro->includeDirectories()) {
+                    Q_ASSERT(url.isValid());
+                    if (!list.contains(url)) {
+                        list << url;
+                    }
+                }
             }
         }
-//         qDebug() << list;
+//         kDebug(9024) << "include dirs for" << item->url() << ":" << list;
     }
     return list;
 }

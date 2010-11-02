@@ -141,7 +141,7 @@ void QMakeProjectFile::addUrlsForVariable(const QString& variable, KUrl::List* l
     ifDebug(kDebug(9024) << variable << values;)
     foreach( const QString& val, values ) {
         KUrl url( resolveToSingleFileName(val) );
-        if( !list->contains(val) ) {
+        if( url.isValid() && !list->contains(val) ) {
             list->append(url);
         }
     }
