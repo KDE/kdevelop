@@ -130,7 +130,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
 
-    setInitialSize( sizeHint() );
+    setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )
