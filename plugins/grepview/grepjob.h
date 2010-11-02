@@ -118,4 +118,8 @@ private:
     bool m_replaceFlag;
 };
 
+//FIXME: this function is used externally only for tests, find a way to keep it 
+//       static for a regular compilation
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl);
+
 #endif

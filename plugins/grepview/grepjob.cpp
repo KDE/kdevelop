@@ -67,7 +67,7 @@ private:
   GrepJob *m_job;
 };
 
-static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
 {
     GrepOutputItem::List res;
     QFile file(filename);
@@ -89,7 +89,7 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re,
                 re.cap(0), re.cap(0).replace(re, repl)));
             
             res << GrepOutputItem(change, QString(data).trimmed());
-            offset = end + 1;
+            offset = end;
         }
         lineno++;
     }
