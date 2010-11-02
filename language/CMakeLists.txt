@@ -111,7 +111,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/utilities.cpp
 
     util/setrepository.cpp
-	util/includeitem.cpp
+    util/includeitem.cpp
     util/navigationtooltip.cpp
 
     highlighting/colorcache.cpp
