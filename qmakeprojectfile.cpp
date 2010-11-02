@@ -214,6 +214,7 @@ KUrl::List QMakeProjectFile::includeDirectories() const
                 url.setPath(m_qtIncludeDir + "/QtDeclarative");
             else {
                 kWarning() << "unhandled QT module:" << module;
+                continue;
             }
 
             if( !list.contains( url ) )
