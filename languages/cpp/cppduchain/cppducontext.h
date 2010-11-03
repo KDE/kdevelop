@@ -346,7 +346,8 @@ class CppDUContext : public BaseContext {
               
               if( basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) {
                 AbstractType::Ptr targetTypePtr = TypeUtils::unAliasedType(TypeUtils::targetType(res.type.abstractType(), 0));
-                if (targetTypePtr.cast<CppTemplateParameterType>() || targetTypePtr.cast<DelayedType>()) {
+                if (targetTypePtr.cast<CppTemplateParameterType>() || (targetTypePtr.cast<DelayedType>() && targetTypePtr.cast<DelayedType>()->kind() == DelayedType::Delayed)) {
+                  ifDebug( kDebug() << "stopping because the type" << targetTypePtr->toString() << "of" << i.toString() << "is bad"; )
                   return false;
                 }
               }
@@ -388,7 +389,7 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, ret, source, flags );
 
-        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.textCursor(); )
+        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor().textCursor(); )
 
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params
