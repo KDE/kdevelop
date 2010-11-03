@@ -442,17 +442,10 @@ TopDUContext* CppLanguageSupport::standardContext(const KUrl& url, bool proxyCon
 
   if(top && (top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) && !proxyContext)
   {
-    if(!top->importedParentContexts().isEmpty())
+    top = contentContextFromProxyContext(top);
+    if(!top)
     {
-      top = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().context(0));
-
-      if(!top)
-      {
-        kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
-      }
-
-    } else {
-      kDebug(9007) << "ERROR: Proxy-context has no content-context";
+      kDebug(9007) << "WARNING: Proxy-context had invalid content-context";
     }
   }
 

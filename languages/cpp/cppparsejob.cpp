@@ -811,7 +811,7 @@ void CPPInternalParseJob::run()
           Q_ASSERT(0); //Failure
         }
 
-        Q_ASSERT(proxyContext->importedParentContexts()[0].context(0) == contentContext);
+        Q_ASSERT(contentContextFromProxyContext(proxyContext) == contentContext.data());
 
         //Make sure the imported contextsa re added
         foreach ( const LineContextPair &context, parentJob()->includedFiles() )

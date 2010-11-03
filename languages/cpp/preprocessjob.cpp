@@ -72,6 +72,27 @@ QString urlsToString(const QList<KUrl>& urlList) {
   return paths;
 }
 
+TopDUContext* contentContextFromProxyContext(TopDUContext* top)
+{
+  if(!top)
+    return 0;
+  if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
+    if(!top->importedParentContexts().isEmpty())
+    {
+      TopDUContext* ret = top->importedParentContexts()[0].context(0)->topContext();
+      if(ret->url() != top->url())
+        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
+      if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
+        return ret;
+    }
+    else {
+      kDebug() << "Proxy-context imports no content-context";
+    }
+  } else
+    return top;
+  return 0;
+}
+
 PreprocessJob::PreprocessJob(CPPParseJob * parent)
     : ThreadWeaver::Job(parent)
     , m_currentEnvironment(0)
@@ -309,23 +330,6 @@ void PreprocessJob::headerSectionEnded(rpp::Stream& stream)
   headerSectionEndedInternal(&stream);
 }
 
-TopDUContext* contentFromProxy(TopDUContext* ctx) {
-    if( ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext() ) {
-        {
-          ReferencedTopDUContext ref(ctx);
-        }
-        if(ctx->importedParentContexts().isEmpty()) {
-          kDebug() << "proxy-context for" << ctx->url().str() << "has no imports!" << ctx->ownIndex();
-          return 0;
-        }
-        Q_ASSERT(!ctx->importedParentContexts().isEmpty());
-        return dynamic_cast<TopDUContext*>(ctx->importedParentContexts().first().context(0));
-    }else{
-        return ctx;
-    }
-}
-
-
 void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
 {
     bool closeStream = false;
@@ -355,7 +359,7 @@ void PreprocessJob::headerSectionEndedInternal(rpp::Stream* stream)
         KDevelop::ReferencedTopDUContext content;
 
         if(m_updatingEnvironmentFile)
-          content = KDevelop::ReferencedTopDUContext(contentFromProxy(m_updatingEnvironmentFile->topContext()));
+          content = KDevelop::ReferencedTopDUContext(contentContextFromProxyContext(m_updatingEnvironmentFile->topContext()));
         else
           content = KDevelop::DUChain::self()->chainForDocument(u, m_currentEnvironment, false);
 
