@@ -51,7 +51,7 @@ QtHelpPlugin::QtHelpPlugin(QObject* parent, const QVariantList& args)
     Q_UNUSED(args);
     s_plugin = this;
     readConfig();
-    KSettings::Dispatcher::registerComponent( KComponentData("kdevqthelp"),
+    KSettings::Dispatcher::registerComponent( KComponentData("kdevplatform"),
                                                     this, "readConfig" );
     connect(this, SIGNAL(changedProvidersList()), KDevelop::ICore::self()->documentationController(), SLOT(changedDoucmentationProviders()));
 }
