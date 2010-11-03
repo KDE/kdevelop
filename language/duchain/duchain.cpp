@@ -1469,6 +1469,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
+    Q_ASSERT((standardContext->url().toUrl() == doc->url()));
 
     sdDUChainPrivate->m_openDocumentContexts.insert(standardContext);
 
@@ -1611,15 +1612,20 @@ TopDUContext* contentContextFromProxyContext(TopDUContext* top)
     return 0;
   if(top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->isProxyContext()) {
     if(!top->importedParentContexts().isEmpty())
-      return top->importedParentContexts()[0].context(0)->topContext();
+    {
+      TopDUContext* ret = top->importedParentContexts()[0].context(0)->topContext();
+      if(ret->url() != top->url())
+        kDebug() << "url-mismatch between content and proxy:" << top->url().toUrl() << ret->url().toUrl();
+      if(ret->url() == top->url() && !ret->parsingEnvironmentFile()->isProxyContext())
+        return ret;
+    }
     else {
       kDebug() << "Proxy-context imports no content-context";
-      return 0;
     }
   } else
     return top;
+  return 0;
 }
-
 KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedString& document, KDevelop::TopDUContext::Features minFeatures, bool proxyContext) {
   Q_ASSERT(!lock()->currentThreadHasReadLock() && !lock()->currentThreadHasWriteLock());
 
