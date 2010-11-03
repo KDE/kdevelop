@@ -90,19 +90,39 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="KPushButton" name="addButton"/>
+           <widget class="KPushButton" name="addButton">
+            <property name="text">
+             <string>Add</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="editButton"/>
+           <widget class="KPushButton" name="editButton">
+            <property name="text">
+             <string>Modify</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="removeButton"/>
+           <widget class="KPushButton" name="removeButton">
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="upButton"/>
+           <widget class="KPushButton" name="upButton">
+            <property name="text">
+             <string>Move Up</string>
+            </property>
+           </widget>
           </item>
           <item>
-           <widget class="KPushButton" name="downButton"/>
+           <widget class="KPushButton" name="downButton">
+            <property name="text">
+             <string>Move Down</string>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="verticalSpacer_2">
