@@ -44,6 +44,9 @@
 #include <QDir>
 #include <QSessionManager>
 #include <QThread>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
 
 #include <shell/core.h>
 #include <shell/mainwindow.h>
@@ -276,6 +279,55 @@ int main( int argc, char *argv[] )
             QTextStream qerr(stderr);
             qerr << endl << i18n("Cannot open unknown session %1. See --sessions switch for available sessions or use -cs to create a new one.", session) << endl;
             return 1;
+        }
+    }
+
+    QString sessionId = session;
+    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfo()) {
+        if ( si.name == session ) {
+            sessionId = si.uuid.toString();
+            break;
+        }
+    }
+
+    forever {
+        KDevelop::SessionController::LockSessionState state = KDevelop::SessionController::tryLockSession(sessionId);
+        if(!state) {
+            QDBusInterface interface(QString("org.kdevelop.kdevelop-%1").arg(state.holderPid),
+                                     "/kdevelop/MainWindow", "org.kdevelop.MainWindow",
+                                     QDBusConnection::sessionBus());
+            if (interface.isValid()) {
+                QDBusReply<void> reply = interface.call("ensureVisible");
+                if (reply.isValid()) {
+                    qDebug() << i18n("made running kdevelop instance (PID: %1) visible", state.holderPid);
+                    return 0;
+                }
+            }
+
+            QString errmsg = i18n("<p>Failed to lock the session <em>%1</em>, "
+                                  "already locked by %2 (PID %4) on %3.<br>"
+                                  "The given application did not respond to a DBUS call, "
+                                  "it may have crashed or is hanging.</p>"
+                                  "<p>Do you want to remove the lock file and force a new KDevelop instance?<br/>"
+                                  "<strong>Beware:</strong> Only do this if you are sure there is no running"
+                                  " KDevelop process using this session.</p>",
+                                  session, state.holderApp, state.holderHostname, state.holderPid );
+
+            KGuiItem overwrite = KStandardGuiItem::cont();
+            overwrite.setText(i18n("remove lock file"));
+            KGuiItem cancel = KStandardGuiItem::quit();
+            int ret = KMessageBox::warningYesNo(0, errmsg, i18n("Failed to Lock Session %1", session),
+                                                overwrite, cancel, QString() );
+            if (ret == KMessageBox::Yes) {
+                if (!QFile::remove(state.lockFile)) {
+                    KMessageBox::error(0, i18n("Failed to remove lock file %1.", state.lockFile));
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        } else {
+            break;
         }
     }
 
