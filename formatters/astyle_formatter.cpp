@@ -174,15 +174,19 @@ void AStyleFormatter::updateFormatter()
     // fill
     int wsCount = m_options["FillCount"].toInt();
     if(m_options["Fill"].toString() == "Tabs") {
-        AStyleFormatter::setTabIndentation(wsCount, m_options["FillForce"].toBool() );
+        ///TODO: rename FillForce somehow...
+        bool force = m_options["FillForce"].toBool();
+        AStyleFormatter::setTabSpaceConversionMode(false);
+        AStyleFormatter::setTabIndentation(wsCount, force );
         m_indentString = "\t";
     } else {
         AStyleFormatter::setSpaceIndentation(wsCount);
         m_indentString = "";
         m_indentString.fill(' ', wsCount);
+
+        AStyleFormatter::setTabSpaceConversionMode(m_options["FillForce"].toBool());
     }
 
-    AStyleFormatter::setTabSpaceConversionMode(m_options["FillForce"].toBool());
     AStyleFormatter::setEmptyLineFill(m_options["Fill_EmptyLines"].toBool());
 
     // indent
