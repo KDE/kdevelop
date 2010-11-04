@@ -750,25 +750,19 @@ SessionController::LockSessionState SessionController::tryLockSession(QString id
 {
     LockSessionState ret;
     
-    QString lockPath = sessionDirectory() + "/" + id + "/lock";
+    ret.lockFile = sessionDirectory() + "/" + id + "/lock";
 
-    if(!QFileInfo(lockPath).exists())
+    if(!QFileInfo(ret.lockFile).exists())
     {
         // Maybe the session doesn't exist yet
         ret.success = true;
         return ret;
     }
     
-    KLockFile::Ptr lock(new KLockFile(lockPath));
+    KLockFile::Ptr lock(new KLockFile(ret.lockFile));
     ret.success = lock->lock(KLockFile::NoBlockFlag | KLockFile::ForceFlag) == KLockFile::LockOK;
-    if(!ret.success)
-    {
-        QFile file(sessionDirectory() + "/" + id + "/lock");
-        if(file.open(QIODevice::ReadOnly)) {
-            QStringList lines = QString::fromLocal8Bit(file.readAll()).split("\n");
-            if(lines.size())
-                ret.holder = lines[0];
-        }
+    if(!ret.success) {
+        lock->getLockInfo(ret.holderPid, ret.holderHostname, ret.holderApp);
     }
     return ret;
 }
@@ -817,7 +811,8 @@ void SessionChooserDialog::updateState() {
         SessionController::LockSessionState lockState = KDevelop::SessionController::tryLockSession(session);
         if(!lockState)
         {
-            state = i18n("[running, process %1]", lockState.holder);
+            state = i18n("[running, pid %1, app %2, host %3]", lockState.holderPid,
+                         lockState.holderApp, lockState.holderHostname);
             running = true;
         }
         
