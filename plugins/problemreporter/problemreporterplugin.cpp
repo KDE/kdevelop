@@ -134,12 +134,12 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 }
 
 void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext) {
+  m_model->problemsUpdated(url);
   if (m_highlighters.contains(url)) {
     ProblemHighlighter* ph = m_highlighters[url];
     if (!ph)
       return;
 
-    m_model->problemsUpdated(url);
     QList<ProblemPointer> allProblems = m_model->getProblems(url, false);
     ph->setProblems(allProblems);
   }
