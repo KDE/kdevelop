@@ -40,7 +40,7 @@
 using namespace KDevelop;
 
 ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
-  : QAbstractItemModel(parent), m_plugin(parent), m_showImports(false), m_documentSet(0)
+  : QAbstractItemModel(parent), m_plugin(parent), m_lock(QReadWriteLock::Recursive), m_showImports(false), m_documentSet(0)
 {
     setScope(CurrentDocument);
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
@@ -226,92 +226,67 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-void ProblemModel::updateProblems(const KDevelop::IndexedString& url, TopDUContext* context)
+void ProblemModel::problemsUpdated(const KDevelop::IndexedString& url)
 {
-    if (!context) {
-        return;
-    }
-    DUChainReadLocker chainLock;
-    m_lock.lockForWrite();
-    m_topProblems.remove(url);
-    updateProblemsInternal(context, url);
-    m_lock.unlock();
-    chainLock.unlock();
+    QReadLocker locker(&m_lock);
     if (m_documentSet->get().contains(url)) {
         rebuildProblemList();
-    }
-}
-
-void ProblemModel::updateProblemsInternal(KDevelop::TopDUContext* context, const KDevelop::IndexedString& parentUrl)
-{
-    KDevelop::IndexedString currentUrl = context->url();
-    if (parentUrl == currentUrl) {
-        m_topProblems[currentUrl].append(context->problems());
-    } else {
-        m_imports[parentUrl].insert(currentUrl);
-        if (m_topProblems.contains(currentUrl)) {
-            return;
-        }
-        m_topProblems[currentUrl] = context->problems();
-    }
-    bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
-    foreach(const DUContext::Import &ctx, context->importedParentContexts()) {
-        if(!ctx.indexedContext().indexedTopContext().isLoaded())
-            continue;
-        TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(0));
-        if(topCtx) {
-            //If we are starting at a proxy-context, only recurse into other proxy-contexts,
-            //because those contain the problems.
-            if(!isProxy || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
-                updateProblemsInternal(topCtx, currentUrl);
-        }
     }
 }
 
 QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImports)
 {
     QList<ProblemPointer> result;
-    QSet<IndexedString> visitedUrls;
-    m_lock.lockForRead();
-    getProblemsInternal(url, showImports, visitedUrls, result);
-    m_lock.unlock();
+    QSet<TopDUContext*> visitedContexts;
+    DUChainReadLocker lock;
+    getProblemsInternal(DUChain::self()->chainForDocument(url), showImports, visitedContexts, result);
     return result;
 }
 
 QList< ProblemPointer > ProblemModel::getProblems(QSet< IndexedString > urls, bool showImports)
 {
     QList<ProblemPointer> result;
-    QSet<IndexedString> visitedUrls;
-    m_lock.lockForRead();
+    QSet<TopDUContext*> visitedContexts;
+    DUChainReadLocker lock;
     foreach(const IndexedString& url, urls) {
-        getProblemsInternal(url, showImports, visitedUrls, result);
+        getProblemsInternal(DUChain::self()->chainForDocument(url), showImports, visitedContexts, result);
     }
-    m_lock.unlock();
     return result;
 }
 
-void ProblemModel::getProblemsInternal(IndexedString url, bool showImports, QSet< IndexedString >& visitedUrls, QList< ProblemPointer >& result)
+void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, QSet<TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result)
 {
-    if (visitedUrls.contains(url)) {
+    if (!context || visitedContexts.contains(context)) {
         return;
     }
-    result.append(m_topProblems[url]);
-    visitedUrls.insert(url);
+    result.append(context->problems());
+    visitedContexts.insert(context);
     if (showImports) {
-        foreach(const IndexedString& importUrl, m_imports[url]) {
-            getProblemsInternal(importUrl, showImports, visitedUrls, result);
+        bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
+        foreach(const DUContext::Import &ctx, context->importedParentContexts()) {
+            if(!ctx.indexedContext().indexedTopContext().isLoaded())
+                continue;
+            TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(0));
+            if(topCtx) {
+                //If we are starting at a proxy-context, only recurse into other proxy-contexts,
+                //because those contain the problems.
+                if(!isProxy || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
+                    getProblemsInternal(topCtx, showImports, visitedContexts, result);
+            }
         }
     }
 }
 
 void ProblemModel::rebuildProblemList()
 {
+    // No locking here, because it may be called from an already locked context
     m_problems = getProblems(m_documentSet->get(), m_showImports);
     reset();
 }
 
 void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
 {
+    QWriteLocker locker(&m_lock);
     m_currentDocument = document->url();
     m_documentSet->setCurrentDocument(IndexedString(m_currentDocument));
     reset();
@@ -320,6 +295,7 @@ void ProblemModel::setCurrentDocument(KDevelop::IDocument* document)
 void ProblemModel::setShowImports(bool showImports)
 {
     if (m_showImports != showImports) {
+        QWriteLocker locker(&m_lock);
         m_showImports = showImports;
         rebuildProblemList();
     }
@@ -328,6 +304,7 @@ void ProblemModel::setShowImports(bool showImports)
 void ProblemModel::setScope(int scope)
 {
     Scope cast_scope = static_cast<Scope>(scope);
+    QWriteLocker locker(&m_lock);
     if (!m_documentSet || m_documentSet->getScope() != cast_scope) {
         if (m_documentSet) {
             delete m_documentSet;

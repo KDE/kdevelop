@@ -80,17 +80,15 @@ public:
      * Get merged list of problems for all @ref urls.
      */
     QList<KDevelop::ProblemPointer> getProblems(QSet<KDevelop::IndexedString> urls, bool showImports);
-    /**
-     * Update list of problems for file @ref url for @ref context.
-     * Old problems for @ref url are thrown away.
-     * Problems for imports are taken for context only if they are not already present.
-     */
-    void updateProblems(const KDevelop::IndexedString& url, KDevelop::TopDUContext * context);
     ProblemReporterPlugin* plugin();
 
 public slots:
     void setShowImports(bool showImports);
     void setScope(int scope);   // Use int to be able to use QSignalMapper
+    /**
+     * List of problems for @ref url has been updated
+     */
+    void problemsUpdated(const KDevelop::IndexedString& url);
     void forceFullUpdate();
 
 private slots:
@@ -98,21 +96,14 @@ private slots:
     void setCurrentDocument(KDevelop::IDocument* doc);
 
 private:
-    void updateProblemsInternal(KDevelop::TopDUContext * context, const KDevelop::IndexedString& parentUrl);
-    void getProblemsInternal(KDevelop::IndexedString url, bool showImports, QSet<KDevelop::IndexedString>& visitedUrls, QList<KDevelop::ProblemPointer>& result);
+    void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result);
     void rebuildProblemList();
 
     ProblemReporterPlugin* m_plugin;
 
     QList<KDevelop::ProblemPointer> m_problems;
 
-    // document -> list of problems
-    typedef QHash<KDevelop::IndexedString, QList<KDevelop::ProblemPointer> > ProblemHash;
-    ProblemHash m_topProblems;
-    typedef QHash<KDevelop::IndexedString, QSet<KDevelop::IndexedString> > ImportHash;
-    ImportHash m_imports;
-    QReadWriteLock m_lock;
-
+    QReadWriteLock m_lock;  // guards access to m_documentSet
     KUrl m_currentDocument;  // current document
     bool m_showImports; // include problems from imported documents
     WatchedDocumentSet* m_documentSet;

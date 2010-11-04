@@ -133,13 +133,13 @@ void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
   DUChain::self()->updateContextForUrl(IndexedString(document->url()), KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
-void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+void ProblemReporterPlugin::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext) {
   if (m_highlighters.contains(url)) {
     ProblemHighlighter* ph = m_highlighters[url];
     if (!ph)
       return;
 
-    m_model->updateProblems(url, topContext);
+    m_model->problemsUpdated(url);
     QList<ProblemPointer> allProblems = m_model->getProblems(url, false);
     ph->setProblems(allProblems);
   }
