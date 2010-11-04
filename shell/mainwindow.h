@@ -45,6 +45,7 @@ Provides methods to control the main window of an application.
 class KDEVPLATFORMSHELL_EXPORT MainWindow: public Sublime::MainWindow {
     friend class UiController;
     Q_OBJECT
+    Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.MainWindow" )
 public:
     explicit MainWindow( Sublime::Controller *parent = 0, Qt::WFlags flags = KDE_DEFAULT_WINDOWFLAGS );
     virtual ~MainWindow();
@@ -59,8 +60,9 @@ public Q_SLOTS:
         @p message The message
         @p timeout The timeout in milliseconds how long to show the message */
     void showErrorMessage(const QString& message, int timeout);
-        
-    
+
+    virtual Q_SCRIPTABLE void ensureVisible();
+
 public Q_SLOTS:
     virtual void setVisible( bool visible );
     void configureShortcuts();

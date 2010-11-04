@@ -28,6 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QtGui/QDropEvent>
 #include <QtGui/QMenuBar>
 #include <QtCore/QMimeData>
+#include <QtDBus/QDBusConnection>
 
 #include <KDE/KApplication>
 #include <KDE/KActionCollection>
@@ -42,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <kshortcutsdialog.h>
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
+#include <KWindowSystem>
 
 #include <sublime/area.h>
 #include "shellextension.h"
@@ -81,6 +83,9 @@ QWidget* MainWindow::customButtonForAreaSwitcher ( Sublime::Area* area )
 MainWindow::MainWindow( Sublime::Controller *parent, Qt::WFlags flags )
         : Sublime::MainWindow( parent, flags )
 {
+    QDBusConnection::sessionBus().registerObject( "/kdevelop/MainWindow",
+        this, QDBusConnection::ExportScriptableSlots );
+
     setAreaSwitcherCornerWidget(Core::self()->workingSetControllerInternal()->createSetManagerWidget(this));
     setAcceptDrops( true );
     KConfigGroup cg = KGlobal::config()->group( "UiSettings" );
@@ -125,6 +130,18 @@ MainWindow::~ MainWindow()
 
     delete d;
     Core::self()->uiControllerInternal()->mainWindowDeleted(this);
+}
+
+void MainWindow::ensureVisible()
+{
+    if (isMinimized()) {
+        if (isMaximized()) {
+            showMaximized();
+        } else {
+            showNormal();
+        }
+    }
+    KWindowSystem::forceActiveWindow(winId());
 }
 
 QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomElement& element)
