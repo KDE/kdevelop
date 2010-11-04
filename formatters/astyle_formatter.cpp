@@ -214,10 +214,7 @@ void AStyleFormatter::updateFormatter()
     AStyleFormatter::setBreakClosingHeaderBracketsMode(m_options["BracketsCloseHeaders"].toBool());
     // blocks
     AStyleFormatter::setBreakBlocksMode(m_options["BlockBreak"].toBool());
-    if(m_options["BlockBreakAll"].toBool()){
-        AStyleFormatter::setBreakBlocksMode(true);
-        AStyleFormatter::setBreakClosingHeaderBlocksMode(true);
-    }
+    AStyleFormatter::setBreakClosingHeaderBlocksMode(m_options["BlockBreakAll"].toBool());
     AStyleFormatter::setBreakElseIfsMode(m_options["BlockIfElse"].toBool());
 
     // padding
