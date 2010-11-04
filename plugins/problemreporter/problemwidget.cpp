@@ -117,6 +117,38 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(allProjectAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
     connect(scopeMapper, SIGNAL(mapped(int)), model(), SLOT(setScope(int)));
 
+    KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
+    severityMenu->setToolTip(i18n("Select the lowest level of problem severity to be displayed"));
+    QActionGroup* severityActions = new QActionGroup(this);
+
+    KAction* errorSeverityAction = new KAction(i18n("Error"), this);
+    errorSeverityAction->setToolTip(i18n("Display only errors"));
+
+    KAction* warningSeverityAction = new KAction(i18n("Warning"), this);
+    warningSeverityAction->setToolTip(i18n("Display errors and warnings"));
+
+    KAction* hintSeverityAction = new KAction(i18n("Hint"), this);
+    hintSeverityAction->setToolTip(i18n("Display errors, warnings and hints"));
+
+    KAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
+    for (int i = 0; i < 3; ++i) {
+        severityActionArray[i]->setCheckable(true);
+        severityActions->addAction(severityActionArray[i]);
+        severityMenu->addAction(severityActionArray[i]);
+    }
+    addAction(severityMenu);
+
+    hintSeverityAction->setChecked(true);
+    model()->setSeverity(ProblemData::Hint);
+    QSignalMapper * severityMapper = new QSignalMapper(this);
+    severityMapper->setMapping(errorSeverityAction, ProblemData::Error);
+    severityMapper->setMapping(warningSeverityAction, ProblemData::Warning);
+    severityMapper->setMapping(hintSeverityAction, ProblemData::Hint);
+    connect(errorSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
+    connect(warningSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
+    connect(hintSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
+    connect(severityMapper, SIGNAL(mapped(int)), model(), SLOT(setSeverity(int)));
+
     KAction* autoResizeAction = new KAction(this);
     autoResizeAction->setText(i18n("Auto Resize Columns"));
     autoResizeAction->setToolTip(i18n("Automatically resize columns to their data size"));

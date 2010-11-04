@@ -85,6 +85,7 @@ public:
 public slots:
     void setShowImports(bool showImports);
     void setScope(int scope);   // Use int to be able to use QSignalMapper
+    void setSeverity(int severity); // Use int to be able to use QSignalMapper
     /**
      * List of problems for @ref url has been updated
      */
@@ -106,6 +107,7 @@ private:
     QReadWriteLock m_lock;  // guards access to m_documentSet
     KUrl m_currentDocument;  // current document
     bool m_showImports; // include problems from imported documents
+    KDevelop::ProblemData::Severity m_severity;
     WatchedDocumentSet* m_documentSet;
 };
 

@@ -40,7 +40,7 @@
 using namespace KDevelop;
 
 ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
-  : QAbstractItemModel(parent), m_plugin(parent), m_lock(QReadWriteLock::Recursive), m_showImports(false), m_documentSet(0)
+  : QAbstractItemModel(parent), m_plugin(parent), m_lock(QReadWriteLock::Recursive), m_showImports(false), m_severity(ProblemData::Hint), m_documentSet(0)
 {
     setScope(CurrentDocument);
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
@@ -259,7 +259,11 @@ void ProblemModel::getProblemsInternal(TopDUContext* context, bool showImports, 
     if (!context || visitedContexts.contains(context)) {
         return;
     }
-    result.append(context->problems());
+    foreach(ProblemPointer p, context->problems()) {
+        if (p->severity() <= m_severity) {
+            result.append(p);
+        }
+    }
     visitedContexts.insert(context);
     if (showImports) {
         bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
@@ -324,6 +328,16 @@ void ProblemModel::setScope(int scope)
             break;
         }
         connect(m_documentSet, SIGNAL(changed()), this, SLOT(documentSetChanged()));
+        rebuildProblemList();
+    }
+}
+
+void ProblemModel::setSeverity(int severity)
+{
+    ProblemData::Severity cast_severity = static_cast<ProblemData::Severity>(severity);
+    if (m_severity != cast_severity) {
+        QWriteLocker locker(&m_lock);
+        m_severity = cast_severity;
         rebuildProblemList();
     }
 }
