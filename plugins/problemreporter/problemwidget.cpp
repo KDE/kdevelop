@@ -62,7 +62,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     fullUpdateAction->setText(i18n("Force Full Update"));
     fullUpdateAction->setToolTip(i18n("Re-parse the current file and all its imports."));
     fullUpdateAction->setIcon(KIcon("view-refresh"));
-    //connect(m_fullUpdateAction, SIGNAL(triggered(bool)), this, SLOT(forceFullUpdate()));
+    connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
     addAction(fullUpdateAction);
 
     KAction* showImportsAction = new KAction(this);

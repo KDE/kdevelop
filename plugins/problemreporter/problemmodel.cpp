@@ -335,5 +335,12 @@ void ProblemModel::documentSetChanged()
 
 void ProblemModel::forceFullUpdate()
 {
-    // TODO: implement
+    m_lock.lockForRead();
+    QSet<IndexedString> documents = m_documentSet->get();
+    m_lock.unlock();
+    DUChainReadLocker lock(DUChain::lock());
+    foreach(const IndexedString& document, documents) {
+        TopDUContext::Features updateType = m_showImports ? TopDUContext::ForceUpdateRecursive : TopDUContext::ForceUpdate;
+        DUChain::self()->updateContextForUrl(document, (TopDUContext::Features)(updateType | TopDUContext::AST | TopDUContext::VisibleDeclarationsAndContexts));
+    }
 }
