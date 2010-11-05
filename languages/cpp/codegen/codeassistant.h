@@ -57,7 +57,7 @@ class StaticCodeAssistant : public QObject {
     void documentActivated(KDevelop::IDocument*);
     void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
     void timeout();
-    void eventuallyStartAssistant(SafeDocumentPointer document, KTextEditor::Range range, const QString& removedText = QString());
+    void eventuallyStartAssistant();
     void deleteRenameAssistantsForDocument(KTextEditor::Document*);
   private:
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
@@ -71,7 +71,10 @@ class StaticCodeAssistant : public QObject {
     QHash< KTextEditor::View*, KSharedPtr<RenameAssistant> > m_renameAssistants;
     bool m_activeProblemAssistant;
     QTimer* m_timer;
-    
+
+    SafeDocumentPointer m_eventualDocument;
+    KTextEditor::Range m_eventualRange;
+    QString m_eventualRemovedText;
     //Singleton pointer
     static StaticCodeAssistant * instance;
 };

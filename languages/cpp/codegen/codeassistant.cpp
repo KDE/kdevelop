@@ -34,16 +34,9 @@
 
 using namespace KDevelop;
 
-Q_DECLARE_METATYPE(SafeDocumentPointer)
-Q_DECLARE_METATYPE(KTextEditor::Range)
-
 namespace Cpp {
 
 StaticCodeAssistant::StaticCodeAssistant() : m_activeProblemAssistant(false) {
-  
-  qRegisterMetaType<KTextEditor::Range>("KTextEditor::Range");
-  qRegisterMetaType<SafeDocumentPointer>("SafeDocumentPointer");  
-  
   m_timer = new QTimer(this);
   m_timer->setSingleShot(true),
   m_timer->setInterval(400);
@@ -71,42 +64,61 @@ void StaticCodeAssistant::assistantHide() {
 }
 
 void StaticCodeAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {
-  
-  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range));
+  m_eventualDocument = document;
+  m_eventualRange = range;
+  m_eventualRemovedText.clear();
+  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection);
 }
 
 void StaticCodeAssistant::textRemoved(KTextEditor::Document* document, KTextEditor::Range range, const QString &removedText) {
-  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection, Q_ARG(SafeDocumentPointer, document), Q_ARG(KTextEditor::Range, range), Q_ARG(const QString&, removedText));
+  m_eventualDocument = document;
+  m_eventualRange = range;
+  m_eventualRemovedText = removedText;
+  QMetaObject::invokeMethod(this, "eventuallyStartAssistant", Qt::QueuedConnection);
 }
 
-void StaticCodeAssistant::eventuallyStartAssistant(SafeDocumentPointer document, KTextEditor::Range range, const QString& removedText) {
-
-  if(!document)
+void StaticCodeAssistant::eventuallyStartAssistant() {
+  if(!m_eventualDocument)
     return;
-  
+
+  KTextEditor::View* view = m_eventualDocument->activeView();
   //Eventually pop up an assistant
-  if(!document->activeView())
+  if(!view)
     return;
 
   //FIXME: update signature assistant to play well with the rename assistant
-  KTextEditor::Range sigAssistRange = removedText.isEmpty() ? range : KTextEditor::Range(range.start(), range.start());
-  KSharedPtr<AdaptDefinitionSignatureAssistant> signatureAssistant(new AdaptDefinitionSignatureAssistant(document->activeView(), sigAssistRange));
-  
+  KTextEditor::Range sigAssistRange = m_eventualRange;
+  if (!m_eventualRemovedText.isEmpty()) {
+    sigAssistRange.setRange(sigAssistRange.start(), sigAssistRange.start());
+  }
+
+  KSharedPtr<AdaptDefinitionSignatureAssistant> signatureAssistant(
+    new AdaptDefinitionSignatureAssistant(view, sigAssistRange)
+  );
+
   if(signatureAssistant->isUseful()) {
     startAssistant(KSharedPtr<IAssistant>(signatureAssistant.data()));
   }
 
-  if (!m_renameAssistants.contains(document->activeView())) {
-    m_renameAssistants[document->activeView()].attach(new RenameAssistant(document->activeView()));
-    connect(document, SIGNAL(aboutToClose(KTextEditor::Document*)),
+  RenameAssistant* renameAssistant = m_renameAssistants[view].data();
+  if (!renameAssistant) {
+    renameAssistant =  new RenameAssistant(view);
+    m_renameAssistants[view].attach(renameAssistant);
+    connect(m_eventualDocument, SIGNAL(aboutToClose(KTextEditor::Document*)),
             SLOT(deleteRenameAssistantsForDocument(KTextEditor::Document*)));
   }
 
-  m_renameAssistants[document->activeView()]->textChanged(range, removedText);
+  renameAssistant->textChanged(m_eventualRange, m_eventualRemovedText);
 
-  if(m_renameAssistants[document->activeView()]->isUseful()) {
-    startAssistant(KSharedPtr<IAssistant>(m_renameAssistants[document->activeView()].data()));
+  if(renameAssistant->isUseful()) {
+    startAssistant(KSharedPtr<IAssistant>(renameAssistant));
   }
+
+  // optimize, esp. for setText() calls as done in e.g. reformat source
+  // only start the assitant once for multiple textRemoved/textInserted signals
+  m_eventualDocument = 0;
+  m_eventualRange = KTextEditor::Range::invalid();
+  m_eventualRemovedText.clear();
 }
 
 void StaticCodeAssistant::deleteRenameAssistantsForDocument(KTextEditor::Document* document)
