@@ -24,17 +24,17 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepJob* job)
 {
   Ui::GrepOutputView::setupUi(this);
 
-  setObjectName("Replace in files Tree");
-  setWindowTitle(i18n("Replace in files"));
-  setWindowIcon(SmallIcon("code-class"));
+//  setObjectName("Replace in files Tree");
+//  setWindowTitle(i18n("Replace in files"));
+  setWindowIcon(SmallIcon("cmake"));
+  
+  m_model = new GrepOutputModel(this);
+  resultsTreeView->setModel(m_model);
+  resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
 }
 
-void GrepOutputView::setModel(GrepOutputModel *model)
+GrepOutputModel* GrepOutputView::model()
 {
-  resultsTreeView->setModel(model);
+  return m_model;
 }
 
-void GrepOutputView::setDelegate(GrepOutputDelegate *delegate)
-{
-  resultsTreeView->setItemDelegate(delegate);
-}

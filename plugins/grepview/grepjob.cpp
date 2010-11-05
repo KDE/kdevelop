@@ -285,9 +285,7 @@ void GrepJob::start()
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
 							   findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
 
-    m_outputModel = new GrepOutputModel(this);
-    toolView->setModel(m_outputModel);
-    toolView->setDelegate(GrepOutputDelegate::self());
+	m_outputModel = toolView->model();
 
 	m_outputModel->appendRow(new GrepOutputItem("filename", "text"));
     kDebug() << "appenRow";

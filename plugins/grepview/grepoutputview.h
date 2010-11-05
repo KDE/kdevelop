@@ -17,13 +17,12 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView
 
 public:
     GrepOutputView(QWidget* parent, GrepJob* job);
-	
-    void setModel(GrepOutputModel*);
-    void setDelegate(GrepOutputDelegate*);
+
+	GrepOutputModel* model();
 
 private:
     GrepJob* m_job;
-
+	GrepOutputModel* m_model;
 };
 
 #endif // GREPOUTPUTVIEW_H

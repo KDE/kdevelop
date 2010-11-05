@@ -62,7 +62,7 @@ public:
 protected:
     virtual bool doKill();
 
-    GrepOutputModel* model() const;
+//    GrepOutputModel* model() const;
 
 private Q_SLOTS:
     void slotFindFinished();

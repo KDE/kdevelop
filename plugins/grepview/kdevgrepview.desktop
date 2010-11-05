@@ -86,5 +86,5 @@ X-KDE-Library=kdevgrepview
 X-KDE-PluginInfo-Name=kdevgrepview
 X-KDevelop-Version=11
 X-KDevelop-Category=Global
-X-KDevelop-IRequired=org.kdevelop.IOutputView,org.kdevelop.IStatus
+X-KDevelop-IRequired=org.kdevelop.IStatus
 X-KDevelop-Mode=GUI
