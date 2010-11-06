@@ -10,6 +10,7 @@ GenericName[fr]=Prise en charge de la documentation
 ServiceTypes=KDevelop/Plugin
 
 X-KDE-Library=kdevmanpage
+X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=KDevManPage
 X-KDE-PluginInfo-License=GPL
