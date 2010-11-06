@@ -87,6 +87,9 @@ private:
     bool isValidIndex( const QModelIndex& idx ) const;
 
     QRegExp m_regExp;
+
+private slots:
+    void updateCheckState(QStandardItem*);
 };
 
 #endif

@@ -28,8 +28,10 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
 {
     int line = lineNumber();
     QString formattedTxt = QString("  %1: %2").arg(line).arg(text);
-    setText( formattedTxt );
-    setData( Text );
+    setText(formattedTxt);
+    setData(Text, Qt::CheckStateRole);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
+    setCheckState(Qt::Checked);
 }
 
 GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
@@ -37,6 +39,8 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
 {
     setText(text);
     showCollapsed();
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setCheckState(Qt::Checked);
 }
 
 
@@ -85,13 +89,11 @@ bool GrepOutputItem::expand()
 void GrepOutputItem::showCollapsed()
 {
     setData( FileCollapsed );
-    setIcon( KIcon("arrow-right") );
 }
 
 void GrepOutputItem::showExpanded()
 {
     setData( FileExpanded );
-    setIcon( KIcon("arrow-down") );
 }
 
 bool GrepOutputItem::toggleView()
@@ -134,7 +136,10 @@ GrepOutputItem::~GrepOutputItem()
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
     : QStandardItemModel( parent ), m_regExp("")
-{}
+{
+    connect(this, SIGNAL(itemChanged(QStandardItem*)),
+              this, SLOT(updateCheckState(QStandardItem*)));
+}
 
 GrepOutputModel::~GrepOutputModel()
 {}
@@ -235,6 +240,62 @@ void GrepOutputModel::showMessage( KDevelop::IStatus* , const QString& message )
     appendRow(new QStandardItem(message));
 }
 
+void GrepOutputModel::updateCheckState(QStandardItem* item)
+{
+    // if we don't disconnect the SIGNAL, the setCheckState will call it in loop
+    disconnect(SIGNAL(itemChanged(QStandardItem*)));
+
+    if(item->parent() == 0)
+    {
+        int idx = item->rowCount() - 1;
+        
+        if(item->checkState() == Qt::Unchecked)
+        {
+            item->setCheckState (Qt::Checked);
+            while(idx >= 0)
+            {
+                item->child(idx)->setCheckState(Qt::Checked);
+                idx--;
+            }
+        } else if(item->checkState() == Qt::PartiallyChecked)
+        {
+            item->setCheckState(Qt::Checked);
+            while(idx >= 0)
+            {
+                item->child(idx)->setCheckState(Qt::Checked);
+                idx--;
+            }
+        } else if(item->checkState() == Qt::Checked)
+        {
+            item->setCheckState(Qt::Unchecked);
+            while(idx >= 0)
+            {
+                item->child(idx)->setCheckState(Qt::Unchecked);
+                idx--;
+            }
+        }
+    }
+    else
+    {
+        QStandardItem *parent = item->parent();
+        bool checked = false;
+        bool unchecked = false;
+        int idx = parent->rowCount() - 1;
+        while(idx >= 0)
+        {
+            if(parent->child(idx)->checkState() == Qt::Checked) checked = true;
+            else unchecked = true;
+
+            idx--;
+        }
+
+        if(checked) unchecked ? parent->setCheckState(Qt::PartiallyChecked) : parent->setCheckState(Qt::Checked);
+        else parent->setCheckState(Qt::Unchecked);
+    }
+
+    connect(this, SIGNAL(itemChanged(QStandardItem*)),
+              this, SLOT(updateCheckState(QStandardItem*)));
+}
 
 #include "grepoutputmodel.moc"
 
