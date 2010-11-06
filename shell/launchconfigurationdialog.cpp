@@ -120,6 +120,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
         level++;
         parentidx = parentidx.parent();
     }
+    // make sure the base column width is honored, e.g. when no launch configs exist
+    tree->resizeColumnToContents(0);
     int width = tree->columnWidth( 0 );
     while ( widthidx.isValid() )
     {
@@ -143,7 +145,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent): KDialog(p
     connect( this, SIGNAL(okClicked()), SLOT(saveConfig()) );
     connect( this, SIGNAL(applyClicked()), SLOT(saveConfig()) );
 
-    setInitialSize( sizeHint() );
+    setInitialSize( QSize(qMax(700, sizeHint().width()), qMax(500, sizeHint().height())) );
 }
 
 void LaunchConfigurationDialog::selectionChanged(QItemSelection selected, QItemSelection deselected )

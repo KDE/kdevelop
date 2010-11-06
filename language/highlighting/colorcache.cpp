@@ -83,13 +83,15 @@ namespace KDevelop {
 ColorCache* ColorCache::m_self = 0;
 
 ColorCache::ColorCache(QObject* parent)
-  : QObject(parent), m_defaultColors(new CodeHighlightingColors(this)), m_validColorCount(0), m_colorOffset(0),
+  : QObject(parent), m_defaultColors(0), m_validColorCount(0), m_colorOffset(0),
     m_localColorRatio(0), m_globalColorRatio(0)
 {
   Q_ASSERT(m_self == 0);
 
   updateColorsFromScheme(); // default / fallback
   updateColorsFromSettings();
+
+  m_defaultColors = new CodeHighlightingColors(this);
 
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
            this, SLOT(updateColorsFromSettings()), Qt::QueuedConnection);
@@ -274,6 +276,7 @@ void ColorCache::updateInternal()
 
 QColor ColorCache::blend(QColor color, uchar ratio) const
 {
+  Q_ASSERT(m_foregroundColor.isValid());
   if ( KColorUtils::luma(m_foregroundColor) >= 0.5 ) {
     // for dark color schemes, produce a fitting color first
     color = KColorUtils::tint(m_foregroundColor, color, 0.5).rgb();

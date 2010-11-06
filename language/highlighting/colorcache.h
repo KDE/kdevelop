@@ -57,9 +57,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// access the global color cache
     static ColorCache* self();
 
-    /// setup the color cache, this needs to be called before self() is accessed
-    static void initialize();
-
     /// adapt a given foreground color to the current color scheme
     /// @p ratio between 0 and 255 where 0 gives @see m_foregroundColor
     /// and 255 gives @p color

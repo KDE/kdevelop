@@ -58,11 +58,19 @@ public:
     void cleanup();
 
     struct LockSessionState {
+        LockSessionState()
+         : success(true),
+           holderPid(-1)
+        {
+        }
         operator bool() const {
             return success;
         }
         bool success;
-        QString holder;
+        QString holderApp;
+        QString holderHostname;
+        int holderPid;
+        QString lockFile;
     };
     
     /// Returns whether the given session can be locked

@@ -1,5 +1,6 @@
-
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9505 )
+
+add_subdirectory(highlighting/tests)
 
 set(kdevplatformlanguage_LIB_SRCS
     editor/persistentmovingrangeprivate.cpp
@@ -111,7 +112,7 @@ set(kdevplatformlanguage_LIB_SRCS
     codegen/utilities.cpp
 
     util/setrepository.cpp
-	util/includeitem.cpp
+    util/includeitem.cpp
     util/navigationtooltip.cpp
 
     highlighting/colorcache.cpp
