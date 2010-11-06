@@ -11,6 +11,7 @@
 #ifndef CUSTOMMAKEMANAGER_H
 #define CUSTOMMAKEMANAGER_H
 
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <interfaces/iplugin.h>
 #include <QtCore/QVariant>
@@ -29,7 +30,8 @@ namespace KDevelop
     class IProjectBuilder;
 }
 
-class CustomMakeManager : public KDevelop::IPlugin, public KDevelop::IBuildSystemManager
+class CustomMakeManager : public KDevelop::IPlugin,
+                          public KDevelop::IBuildSystemManager
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IBuildSystemManager )
@@ -89,8 +91,7 @@ public:
      * modifies the underlying build system if needed. The file is not removed
      * from the folder it is in
      */
-    virtual bool removeFileFromTarget(KDevelop::ProjectFileItem *file,
-                                      KDevelop::ProjectTargetItem *parent);
+    virtual bool removeFilesFromTargets(QList<KDevelop::TargetFilePair>);
 
     /**
      * Get the toplevel build directory for the project
@@ -142,21 +143,12 @@ public:
     virtual KDevelop::ProjectFileItem* addFile(const KUrl& file, KDevelop::ProjectFolderItem *parent);
 
     /**
-     * Remove a folder from the project
+     * Remove items from the project and delete them from disk
      *
-     * Removes the folder specified by @p folder from folder @p parent and
+     * Removes the items specified by @p items and
      * modifies the underlying build system if needed.
      */
-    virtual bool removeFolder(KDevelop::ProjectFolderItem *folder);
-
-    /**
-     * Remove a file from the project
-     *
-     * Removes the file specified by @p file and
-     * modifies the underlying build system if needed. If the file being
-     * removed is also part of a target, it should be removed from the target as well
-     */
-    virtual bool removeFile(KDevelop::ProjectFileItem *file);
+    virtual bool removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items);
 
     /**
      * Rename a file in the project
@@ -181,6 +173,7 @@ public:
     QStringList parseCustomMakeFile( const KUrl &makefile );
 
 private:
+
     class Private;
     Private *d;
 };

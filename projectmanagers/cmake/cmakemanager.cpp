@@ -58,7 +58,6 @@
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchainutils.h>
 #include <language/codecompletion/codecompletion.h>
-#include <language/codegen/applychangeswidget.h>
 
 #include "cmakemodelitems.h"
 #include "cmakenavigationwidget.h"
@@ -1066,40 +1065,6 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
     return 0;
 }
 
-bool CMakeManager::removeFolder( KDevelop::ProjectFolderItem* it)
-{
-    if ( !KDevelop::removeUrl(it->project(), it->url(), true) ) {
-        return false;
-    }
-    
-    if(it->type()!=KDevelop::ProjectBaseItem::BuildFolder) {
-        it->parent()->removeRow(it->row());
-        return true;
-    }
-    
-    KUrl lists=it->url().upUrl();
-    lists.addPath("CMakeLists.txt");
-
-    ApplyChangesWidget e;
-    e.setCaption(it->text());
-    e.setInformation(i18n("Remove a folder called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists));
-    
-    CMakeFolderItem* cmit=static_cast<CMakeFolderItem*>(it);
-    KTextEditor::Range r=cmit->descriptor().range().castToSimpleRange().textRange();
-    kDebug(9042) << "For " << lists << " remove " << r;
-    e.document()->removeText(r);
-
-    if(e.exec())
-    {
-        bool saved=e.applyAllChanges();
-        if(!saved)
-            KMessageBox::error(0, i18n("KDevelop - CMake Support"),
-                                  i18n("Could not save the change."));
-    }
-    return 0;
-}
-
 bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& name, const KUrl& lists, bool add, const QString& replace)
 {
     bool ret=false;
@@ -1155,51 +1120,137 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
     return ret;
 }
 
-bool CMakeManager::removeFile( KDevelop::ProjectFileItem* it)
+QList<TargetFilePair> CMakeManager::getTargetFilesWithin(const QList<KDevelop::ProjectBaseItem*> &items) const
 {
-    bool ret=true;
-    QList<ProjectFileItem*> files=it->project()->filesForUrl(it->url());
-    QMap<ProjectTargetItem*, ProjectFileItem*> targets;
-
-    //We loop through all the files with the same url
-    foreach(ProjectFileItem* file, files)
+    QList<TargetFilePair> targetFiles;
+    foreach (ProjectBaseItem* item, items)
     {
-        ProjectTargetItem* target=file->parent()->target();
-        if(target)
-            targets.insert(target, file);
+        if (ProjectFileItem* file = item->file())
+        {
+            //FIXME: ProjectFileItems should have a list of the targets they belong to
+            QList<ProjectFileItem*> allItemsForUrl = file->project()->filesForUrl(file->url());
+            foreach(ProjectFileItem* item, allItemsForUrl)
+            {
+                if (ProjectTargetItem* target = item->parent()->target())
+                    targetFiles << TargetFilePair(target, item);
+            }
+        }
+        else if (ProjectFolderItem* folder = item->folder())
+            targetFiles += getTargetFilesWithin(folder->children());
     }
-    
-    QMap< ProjectTargetItem*, ProjectFileItem* >::const_iterator it2 = targets.constBegin();
-    for(; it2!=targets.constEnd(); ++it2)
-        ret = ret && removeFileFromTarget(it2.value(), it2.key());
-
-    return ret && KDevelop::removeUrl(it->project(), it->url(), false);
+    return targetFiles;
 }
 
-bool CMakeManager::removeFileFromTarget( KDevelop::ProjectFileItem* it, KDevelop::ProjectTargetItem* target)
+QList<CMakeFolderItem*> CMakeManager::getCMakeFoldersWithin(const QList<KDevelop::ProjectBaseItem*> &items) const
 {
-    if(it->parent()!=target)
-        return false; //It is not a cmake-managed file
+    QList<CMakeFolderItem*> cmakeFolders;
+    foreach (ProjectBaseItem* item, items)
+    {
+        switch (item->type())
+        {
+        case KDevelop::ProjectBaseItem::BuildFolder:
+            cmakeFolders << static_cast<CMakeFolderItem*>(item);
+            //let it drop
+        case KDevelop::ProjectBaseItem::Folder:
+            getCMakeFoldersWithin(item->children());
+            break;
+        }
+    }
+    return cmakeFolders;
+}
 
-    CMakeFolderItem* folder=static_cast<CMakeFolderItem*>(target->parent());
+bool CMakeManager::changesWidgetAddCMakeFolderRemovals(const QList<CMakeFolderItem*> &folders, ApplyChangesWidget* changesWidget)
+{
+    foreach(CMakeFolderItem* folder, folders)
+    {
+        KUrl lists = folder->url().upUrl();
+        lists.addPath("CMakeLists.txt");
 
-    DescriptorAttatched* desc=dynamic_cast<DescriptorAttatched*>(target);
-    RangeInRevision r=desc->descriptor().range();
-    r.start=CursorInRevision(desc->descriptor().arguments.first().range().end);
+        changesWidget->addDocuments(IndexedString(lists));
+        KTextEditor::Range range = folder->descriptor().range().castToSimpleRange().textRange();
+        if (!changesWidget->document()->removeText(range))
+            return false;
+    }
+    return true;
+}
 
-    KUrl lists=folder->url();
-    lists.addPath("CMakeLists.txt");
+bool CMakeManager::changesWidgetAddTargetFileRemovals(const QList<TargetFilePair> &targetFiles, ApplyChangesWidget* changesWidget)
+{
+    foreach (TargetFilePair targetFile, targetFiles)
+    {
+        Q_ASSERT(targetFile.second->parent() == targetFile.first);
 
-    ApplyChangesWidget e;
-    e.setCaption(it->text());
-    e.setInformation(i18n("Remove a file called '%1'.", it->text()));
-    e.addDocuments(IndexedString(lists));
+        CMakeFolderItem* folder = static_cast<CMakeFolderItem*>(targetFile.first->parent());
 
-    bool ret=followUses(e.document(), r, ' '+it->text(), lists, false, QString());
-    ret &= e.exec();
-    ret &= e.applyAllChanges();
-    
-    return ret;
+        DescriptorAttatched* desc = dynamic_cast<DescriptorAttatched*>(targetFile.first);
+        RangeInRevision range = desc->descriptor().range();
+        range.start = CursorInRevision(desc->descriptor().arguments.first().range().end);
+
+        KUrl lists = folder->url();
+        lists.addPath("CMakeLists.txt");
+
+        changesWidget->addDocuments(IndexedString(lists));
+
+        //FIXME: Not sure if this "find" extraction will cover all use cases
+        QString find = KUrl::relativeUrl(folder->url(), targetFile.second->url());
+        if (!followUses(changesWidget->document(), range, ' '+find, lists, false, QString()))
+            return false;
+    }
+    return true;
+}
+
+bool CMakeManager::removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items)
+{
+    //First do CMakeLists changes
+    ApplyChangesWidget changesWidget;
+    changesWidget.setCaption(i18n("CMakeLists Changes"));
+    changesWidget.setInformation(i18n("Remove files and folders from CMakeLists as follows:"));
+
+    bool cmakeSuccessful = true;
+    cmakeSuccessful &= changesWidgetAddTargetFileRemovals(getTargetFilesWithin(items), &changesWidget);
+    cmakeSuccessful &= changesWidgetAddCMakeFolderRemovals(getCMakeFoldersWithin(items), &changesWidget);
+
+    if (changesWidget.hasDocuments())
+        cmakeSuccessful &= changesWidget.exec() && changesWidget.applyAllChanges();
+
+    if (!cmakeSuccessful)
+    {
+        if (KMessageBox::questionYesNo( QApplication::activeWindow(),
+                                        i18n("Changes to CMakeLists failed, abort file deletion?"),
+                                        i18n("Error"))
+            == KMessageBox::Yes)
+        {
+            return false;
+        }
+    }
+
+    //Then delete the files/folders
+    foreach(ProjectBaseItem* item, items)
+    {
+        Q_ASSERT(item->folder() || item->file());
+        Q_ASSERT(!item->file() || !item->file()->parent()->target());
+
+        if (!KDevelop::removeUrl(item->project(), item->url(), false))
+            return false;
+    }
+
+    return true;
+}
+
+bool CMakeManager::removeFilesFromTargets( QList<TargetFilePair> targetFiles)
+{
+    ApplyChangesWidget changesWidget;
+    changesWidget.setCaption(i18n("CMakeLists Changes"));
+    changesWidget.setInformation(i18n("Modify project targets as follows:"));
+
+    if (targetFiles.size() &&
+        changesWidgetAddTargetFileRemovals(targetFiles, &changesWidget) &&
+        changesWidget.exec() &&
+        changesWidget.applyAllChanges()) {
+        return true;
+    }
+
+    return false;
 }
 
 //This is being called from ::parse() so we shouldn't make it block the ui

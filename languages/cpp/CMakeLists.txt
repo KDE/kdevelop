@@ -52,6 +52,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
     codegen/signatureassistant.cpp
+    codegen/renameassistant.cpp
     codegen/unresolvedincludeassistant.cpp
 #     codegen/makeimplementationprivate.cpp
 )
@@ -72,6 +73,11 @@ if(BUILD_kdev_includepathresolver)
   ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDECORE_LIBS} ${KDEVPLATFORM_LANGUAGE_LIBRARIES} )
   install(TARGETS kdev_includepathresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif(BUILD_kdev_includepathresolver)
+
+option(BUILD_uiblocktester "Build a debug thread into the plugin that checks for UI-thread lockups" OFF)
+if(BUILD_uiblocktester)
+  add_definitions(-DDEBUG_UI_LOCKUP)
+endif(BUILD_uiblocktester)
 
 kde4_add_plugin(kdevcpplanguagesupport ${kdevcpplanguagesupport_PART_SRCS})
 target_link_libraries(kdevcpplanguagesupport

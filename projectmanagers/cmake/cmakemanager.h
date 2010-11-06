@@ -28,8 +28,10 @@
 
 #include <KDirWatch>
 
+#include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <language/interfaces/ilanguagesupport.h>
+#include <language/codegen/applychangeswidget.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
 
@@ -87,10 +89,9 @@ public:
     virtual KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) { return 0; }
     virtual bool addFileToTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
 
-    virtual bool removeFolder( KDevelop::ProjectFolderItem* );
     virtual bool removeTarget( KDevelop::ProjectTargetItem* ) { return false; }
-    virtual bool removeFile( KDevelop::ProjectFileItem* );
-    virtual bool removeFileFromTarget( KDevelop::ProjectFileItem*, KDevelop::ProjectTargetItem* );
+    virtual bool removeFilesFromTargets( QList<KDevelop::TargetFilePair> );
+    virtual bool removeFilesAndFolders( QList<KDevelop::ProjectBaseItem*> items);
 
     virtual bool renameFile(KDevelop::ProjectFileItem*, const KUrl&);
     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KUrl&);
@@ -138,6 +139,11 @@ private:
     
     static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
     void reloadFiles(KDevelop::ProjectFolderItem* item);
+
+    bool changesWidgetAddTargetFileRemovals(const QList<KDevelop::TargetFilePair> &targetFiles, KDevelop::ApplyChangesWidget* changesWidget);
+    bool changesWidgetAddCMakeFolderRemovals(const QList<CMakeFolderItem*> &folders, KDevelop::ApplyChangesWidget* changesWidget);
+    QList<CMakeFolderItem*> getCMakeFoldersWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
+    QList<KDevelop::TargetFilePair> getTargetFilesWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
 
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;

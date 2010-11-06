@@ -27,6 +27,12 @@
 
 #include <QTreeWidget>
 
+#include <KUrl>
+#include <KIcon>
+#include <KDialog>
+
+#include "ui_selectaddress.h"
+
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
@@ -38,16 +44,40 @@ namespace KDevelop {
 namespace GDBDebugger
 {
 
+class SelectAddrDialog: public KDialog
+{
+    Q_OBJECT
+    
+public:
+    SelectAddrDialog(QWidget *parent = 0);
+    
+    QString getAddr() const
+    { return hasValidAddress() ? m_ui.comboBox->currentText() : QString(); }
+    
+    bool hasValidAddress() const;
+    void updateOkState();
+     
+private Q_SLOTS:
+    void validateInput();
+    void itemSelected();
+    
+private:
+    Ui::SelectAddress m_ui;
+};
+
+
 class Breakpoint;
 class DebugSession;
 class CppDebuggerPlugin;
 
-class DisassembleWidget : public QTreeWidget
+
+class DisassembleWidget : public QWidget
 {
     Q_OBJECT
 
 public:
     enum Columns {
+        Icon,
         Address,
         Function,
         Offset,
@@ -64,7 +94,10 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotActivate(bool activate);
     void slotDeactivate();
-    void slotShowStepInSource(const QString &fileName, int lineNum, const QString &address);
+    void slotShowStepInSource(const KUrl &fileName, int lineNum, const QString &address);
+    void slotValidateEdits();
+    void slotChangeAddress();
+    void slotShowAddrRange();
 
 private Q_SLOTS:
     void currentSessionChanged(KDevelop::IDebugSession* session);
@@ -72,10 +105,18 @@ private Q_SLOTS:
 protected:
     virtual void showEvent(QShowEvent*);
     virtual void hideEvent(QHideEvent*);
+    virtual void contextMenuEvent(QContextMenuEvent*);
+    bool hasValidAddrRange();
+    void enableControls(bool enabled);
 
 private:
     bool displayCurrent();
-    void getNextDisplay();
+    
+    // Disassemble memory region addr1..addr2
+    // if addr2 is empty, 128 bytes range taken
+    // if addr1 is empty, $pc is used
+    void getAsmToDisplay(const QString& addr1=QString(),
+        const QString& addr2=QString() );
 
     /// callback for GDBCommand
     void memoryRead(const GDBMI::ResultRecord& r);
@@ -84,7 +125,16 @@ private:
     unsigned long    lower_;
     unsigned long    upper_;
     unsigned long    address_;
-    QString currentAddress_;
+    QString m_currentAddress;
+    
+    QTreeWidget* m_treeWidget;
+    QAction* m_selectAddrAction;
+    QComboBox* m_startAddress;
+    QComboBox* m_endAddress;
+    QPushButton* m_evalButton;
+    
+    static const KIcon icon_;
+    SelectAddrDialog* m_dlg;
 };
 
 }

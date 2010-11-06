@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SelectAddress</class>
+ <widget class="QWidget" name="SelectAddress">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>50</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>250</width>
+    <height>50</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Address selector</string>
+  </property>
+  <property name="toolTip">
+   <string>Select the address to disassemble around</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Select address to disassemble around</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KHistoryComboBox" name="comboBox">
+     <property name="insertPolicy">
+      <enum>QComboBox::InsertAtTop</enum>
+     </property>
+     <property name="urlDropsEnabled">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KHistoryComboBox</class>
+   <extends>KComboBox</extends>
+   <header>khistorycombobox.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
