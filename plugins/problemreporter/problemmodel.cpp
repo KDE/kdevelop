@@ -359,6 +359,6 @@ void ProblemModel::forceFullUpdate()
     DUChainReadLocker lock(DUChain::lock());
     foreach(const IndexedString& document, documents) {
         TopDUContext::Features updateType = m_showImports ? TopDUContext::ForceUpdateRecursive : TopDUContext::ForceUpdate;
-        DUChain::self()->updateContextForUrl(document, (TopDUContext::Features)(updateType | TopDUContext::AST | TopDUContext::VisibleDeclarationsAndContexts));
+        DUChain::self()->updateContextForUrl(document, (TopDUContext::Features)(updateType | TopDUContext::SimplifiedVisibleDeclarationsAndContexts));
     }
 }

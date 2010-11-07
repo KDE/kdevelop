@@ -60,7 +60,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     KAction* fullUpdateAction = new KAction(this);
     fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     fullUpdateAction->setText(i18n("Force Full Update"));
-    fullUpdateAction->setToolTip(i18n("Re-parse the current file and all its imports."));
+    fullUpdateAction->setToolTip(i18n("Re-parse all watched documents"));
     fullUpdateAction->setIcon(KIcon("view-refresh"));
     connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
     addAction(fullUpdateAction);
