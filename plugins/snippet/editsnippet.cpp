@@ -14,11 +14,11 @@
 #include "snippetrepository.h"
 
 #include <KLocalizedString>
-
-#include <KTextEditor/EditorChooser>
 #include <KPushButton>
-
 #include <KAction>
+#include <KMimeTypeTrader>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include "snippetstore.h"
 #include "snippet.h"
@@ -30,14 +30,31 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
 
     setButtons(/*Reset | */Apply | Cancel | Ok);
     setupUi(mainWidget());
-    mainWidget()->layout()->setMargin(0);
+
+    KParts::ReadWritePart* part= KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(
+                                        "text/plain", mainWidget(), mainWidget());
+    m_document = qobject_cast<KTextEditor::Document*>(part);
+    Q_ASSERT(m_document);
+    Q_ASSERT(m_document->action("file_save"));
+    m_document->action("file_save")->setEnabled(false);
+    if (!m_repo->fileTypes().isEmpty()) {
+        m_document->setMode(m_repo->fileTypes().first());
+    }
+
+    m_view = qobject_cast< KTextEditor::View* >( m_document->widget() );
+    verticalLayout->addWidget(m_view, 5);
+    snippetContentsLabel->setBuddy(m_view);
+
+    verticalLayout->setMargin(0);
+    formLayout->setMargin(0);
+
     snippetShortcutWidget->layout()->setMargin(0);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(save()));
     connect(this, SIGNAL(applyClicked()), this, SLOT(save()));
 
     connect(snippetNameEdit, SIGNAL(textEdited(QString)), this, SLOT(validate()));
-    connect(snippetContentsEdit, SIGNAL(textChanged()), this, SLOT(validate()));
+    connect(m_document, SIGNAL(textChanged(KTextEditor::Document*)), this, SLOT(validate()));
 
     // if we edit a snippet, add all existing data
     if ( m_snippet ) {
@@ -46,7 +63,7 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
         setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
 
         snippetArgumentsEdit->setText(m_snippet->arguments());
-        snippetContentsEdit->setPlainText(m_snippet->snippet());
+        m_document->setText(m_snippet->snippet());
         snippetNameEdit->setText(m_snippet->text());
         snippetPostfixEdit->setText(m_snippet->postfix());
         snippetPrefixEdit->setText(m_snippet->prefix());
@@ -58,16 +75,26 @@ EditSnippet::EditSnippet(SnippetRepository* repository, Snippet* snippet, QWidge
     validate();
 
     snippetNameEdit->setFocus();
+
+    QSize initSize = sizeHint();
+    initSize.setHeight( initSize.height() + 200 );
+    setInitialSize(initSize);
 }
 
 EditSnippet::~EditSnippet()
 {
 }
 
+void EditSnippet::setSnippetText( const QString& text )
+{
+    m_document->setText(text);
+    validate();
+}
+
 void EditSnippet::validate()
 {
     const QString& name = snippetNameEdit->text();
-    bool valid = !name.isEmpty() && !snippetContentsEdit->document()->isEmpty();
+    bool valid = !name.isEmpty() && !m_document->isEmpty();
     if (valid) {
         // make sure the snippetname includes no spaces
         for ( int i = 0; i < name.length(); ++i ) {
@@ -91,7 +118,7 @@ void EditSnippet::save()
         m_repo->appendRow(m_snippet);
     }
     m_snippet->setArguments(snippetArgumentsEdit->text());
-    m_snippet->setSnippet(snippetContentsEdit->document()->toPlainText());
+    m_snippet->setSnippet(m_document->text());
     m_snippet->setText(snippetNameEdit->text());
     m_snippet->setPostfix(snippetPostfixEdit->text());
     m_snippet->setPrefix(snippetPrefixEdit->text());

@@ -15,6 +15,12 @@
 
 #include <KDialog>
 
+namespace KTextEditor
+{
+class Document;
+class View;
+}
+
 class SnippetRepository;
 class Snippet;
 
@@ -25,7 +31,7 @@ class QStandardItemModel;
  *
  * @author Milian Wolff <mail@milianw.de>
  */
-class EditSnippet : public KDialog, public Ui::EditSnippetBase
+class EditSnippet : public KDialog, protected Ui::EditSnippetBase
 {
     Q_OBJECT
 
@@ -34,9 +40,13 @@ public:
     explicit EditSnippet(SnippetRepository* repo, Snippet* snippet, QWidget* parent = 0);
     virtual ~EditSnippet();
 
+    void setSnippetText(const QString& text);
+
 private:
     SnippetRepository* m_repo;
     Snippet* m_snippet;
+    KTextEditor::Document* m_document;
+    KTextEditor::View* m_view;
 
 private slots:
     void save();
