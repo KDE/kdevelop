@@ -40,6 +40,8 @@ public:
 private slots:
     void viewCreated(KTextEditor::Document*,KTextEditor::View*);
     void textHintRequested(const KTextEditor::Cursor&, QString&);
+    void aboutToInvalidateMovingInterfaceContent();
+    void aboutToRemoveText(const KTextEditor::Range& range);
 private:
 
     void clearHighlights();

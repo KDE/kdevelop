@@ -54,6 +54,10 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     
     connect(m_document, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
     connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), this, SLOT(settingsChanged()));
+    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+            this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+    connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)),
+            this, SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
 
 void ProblemHighlighter::settingsChanged()
@@ -199,6 +203,31 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
                 continue;
             }
             markIface->addMark(problem->finalLocation().start.line, mark);
+        }
+    }
+}
+
+void ProblemHighlighter::aboutToInvalidateMovingInterfaceContent()
+{
+    qDeleteAll(m_topHLRanges);
+    m_topHLRanges.clear();
+    m_problemsForRanges.clear();
+}
+
+void ProblemHighlighter::aboutToRemoveText( const KTextEditor::Range& range )
+{
+    if (range.onSingleLine()) { // no need to optimize this
+        return;
+    }
+
+    QList< MovingRange* >::iterator it = m_topHLRanges.begin();
+    while(it != m_topHLRanges.end()) {
+        if (range.contains((*it)->toRange())) {
+            m_problemsForRanges.remove(*it);
+            delete (*it);
+            it = m_topHLRanges.erase(it);
+        } else {
+            ++it;
         }
     }
 }

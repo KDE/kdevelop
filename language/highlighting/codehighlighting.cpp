@@ -509,6 +509,8 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
     connect(tracker, SIGNAL(destroyed(QObject*)), SLOT(trackerDestroyed(QObject*)));
     connect(tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
             this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    connect(tracker->document(), SIGNAL(aboutToRemoveText(KTextEditor::Range)),
+            this, SLOT(aboutToRemoveText(KTextEditor::Range)));
   }
 
   m_highlights[tracker] = highlighting;
@@ -579,6 +581,32 @@ void CodeHighlighting::aboutToInvalidateMovingInterfaceContent(Document* doc)
   clearHighlightingForDocument(IndexedString(doc->url()));
 }
 
+void CodeHighlighting::aboutToRemoveText( const KTextEditor::Range& range )
+{
+  if (range.onSingleLine()) // don't try to optimize this
+    return;
+
+  VERIFY_FOREGROUND_LOCKED
+  QMutexLocker lock(&m_dataMutex);
+  Q_ASSERT(dynamic_cast<KTextEditor::Document*>(sender()));
+  KTextEditor::Document* doc = static_cast<KTextEditor::Document*>(sender());
+
+  DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()
+                                      ->trackerForUrl(IndexedString(doc->url()));
+  if(m_highlights.contains(tracker))
+  {
+    QVector<MovingRange*>& ranges = m_highlights.value(tracker)->m_highlightedRanges;
+    QVector<MovingRange*>::iterator it = ranges.begin();
+    while(it != ranges.end()) {
+      if (range.contains((*it)->toRange())) {
+        delete (*it);
+        it = ranges.erase(it);
+      } else {
+        ++it;
+      }
+    }
+  }
+}
 
 }
 
