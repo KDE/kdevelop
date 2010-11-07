@@ -21,6 +21,9 @@
 
 #include <QString>
 #include <QStringList>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 namespace KDevelop
 {
@@ -553,8 +556,13 @@ QByteArray formatComment( const QByteArray& comment ) {
   return ret.trimmed();
 }
 
-bool containsToDos( const QByteArray& comment_line ) {
-  return comment_line.contains("TODO") || comment_line.contains("FIXME");
+bool containsToDos( const QString& comment_line ) {
+  foreach(const QString& todoMarker, ICore::self()->languageController()->completionSettings()->todoMarkerWords()) {
+    if (comment_line.contains(todoMarker)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 ParamIterator::~ParamIterator()

@@ -94,7 +94,7 @@ int KDEVPLATFORMLANGUAGE_EXPORT strip( const QByteArray& str, QByteArray& from )
 /**
  * Check whether the comment string contains words marking it as a to-do.
  * */
-bool KDEVPLATFORMLANGUAGE_EXPORT containsToDos( const QByteArray& comment_line );
+bool KDEVPLATFORMLANGUAGE_EXPORT containsToDos( const QString& comment_line );
 
 /**
  * Can be used to iterate through different kinds of parameters, for example template-parameters(By giving it "<>:")

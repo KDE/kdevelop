@@ -33,6 +33,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 #include "problemreporterplugin.h"
 #include "watcheddocumentset.h"
@@ -44,6 +46,8 @@ ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
 {
     setScope(CurrentDocument);
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
+    // CompletionSettings include a list of todo markers we care for, so need to update
+    connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), SLOT(forceFullUpdate()));
 }
 
 ProblemModel::~ ProblemModel()
