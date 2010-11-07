@@ -507,6 +507,8 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
   }else{
     // we newly add this tracker, so add the connection
     connect(tracker, SIGNAL(destroyed(QObject*)), SLOT(trackerDestroyed(QObject*)));
+    connect(tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+            this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
   }
 
   m_highlights[tracker] = highlighting;
@@ -572,6 +574,10 @@ void CodeHighlighting::trackerDestroyed(QObject* object)
   m_highlights.remove(tracker);
 }
 
+void CodeHighlighting::aboutToInvalidateMovingInterfaceContent(Document* doc)
+{
+  clearHighlightingForDocument(IndexedString(doc->url()));
+}
 
 
 }
