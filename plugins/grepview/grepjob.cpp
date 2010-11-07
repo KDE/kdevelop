@@ -16,26 +16,15 @@
 #include "grepoutputmodel.h"
 #include "grepoutputview.h"
 
-#include <QWhatsThis>
 #include <QList>
 #include <QRegExp>
 #include <QKeySequence>
 
-#include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktemporaryfile.h>
-
-#include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/icore.h>
-#include <interfaces/idocumentcontroller.h>
-#include <interfaces/idocument.h>
-#include <project/projectmodel.h>
-#include <util/processlinemaker.h>
-#include <ktexteditor/document.h>
 
 #include <language/duchain/indexedstring.h>
+#include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <language/codegen/documentchangeset.h>
 
@@ -43,29 +32,6 @@
 
 using namespace KDevelop;
 
-class GrepOutputViewFactory: public KDevelop::IToolViewFactory
-{
-public:
-  GrepOutputViewFactory(GrepJob *job): m_job(job) {}
-
-  virtual QWidget* create(QWidget *parent = 0)
-  {
-    return new GrepOutputView(parent, m_job);
-  }
-
-  virtual Qt::DockWidgetArea defaultPosition()
-  {
-    return Qt::BottomDockWidgetArea;
-  }
-
-  virtual QString id() const
-  {
-    return "org.kdevelop.GrepOutputView";
-  }
-
-private:
-  GrepJob *m_job;
-};
 
 GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
 {
@@ -77,8 +43,15 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
     while( !file.atEnd() )
     {
         QByteArray data = file.readLine();
+        
+        // remove line terminators (in order to not match them)
+        for(int pos = data.length()-1; pos >= 0 && (data[pos] == '\r' || data[pos] == '\n'); pos--)
+        {
+            data.chop(1);
+        }
+        
         int offset = 0;
-        while( re.indexIn(data, offset)!=-1 )
+        while( re.indexIn(data, offset)!=-1 && offset < data.length() )
         {
             int start = re.pos(0);
             int end = start + re.cap(0).length();
@@ -281,13 +254,7 @@ void GrepJob::start()
     m_workState = WorkIdle;
     m_fileIndex = 0;
 
-    GrepOutputViewFactory *m_factory = new GrepOutputViewFactory(this);
-    GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
-							   findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
-
-	m_outputModel = toolView->model();
-
-	m_outputModel->appendRow(new GrepOutputItem("filename", "text"));
+    m_outputModel->appendRow(new GrepOutputItem("filename", "text"));
     kDebug() << "appenRow";
 
     connect(this, SIGNAL(showErrorMessage(QString, int)),
@@ -317,6 +284,11 @@ bool GrepJob::doKill()
         return false;
     }
     return true;
+}
+
+void GrepJob::setOutputModel(GrepOutputModel* model)
+{
+    m_outputModel = model;
 }
 
 void GrepJob::setTemplateString(const QString& templateString)

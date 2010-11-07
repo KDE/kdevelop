@@ -43,6 +43,9 @@
 
 #include "grepviewplugin.h"
 #include "grepjob.h"
+#include "grepoutputview.h"
+
+using namespace KDevelop;
 
 namespace {
 
@@ -161,7 +164,7 @@ void GrepDialog::directoryChanged(const QString& dir)
     KUrl currentUrl = dir;
     if( !currentUrl.isValid() )
         return;
-    KDevelop::IProject *proj = KDevelop::ICore::self()->projectController()->findProjectForUrl( currentUrl );
+    IProject *proj = ICore::self()->projectController()->findProjectForUrl( currentUrl );
     if( proj && proj->folder().isLocalFile() )
     {
         setEnableProjectBox(! proj->files().isEmpty() );
@@ -217,7 +220,7 @@ void GrepDialog::templateTypeComboActivated(int index)
 
 void GrepDialog::syncButtonClicked( )
 {
-    KDevelop::IDocument *doc = m_plugin->core()->documentController()->activeDocument();
+    IDocument *doc = m_plugin->core()->documentController()->activeDocument();
     kDebug(9001) << doc;
     if ( doc )
     {
@@ -314,7 +317,12 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     if( button != SearchButton && button != ReplaceButton ) return;
     
     GrepJob* job = new GrepJob();
+    
+    GrepOutputViewFactory *m_factory = new GrepOutputViewFactory(job);
+    GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
+                               findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
 
+    job->setOutputModel(toolView->model());
     job->setPatternString(patternString());
     job->setReplacementTemplateString(replacementTemplateString());
     job->setTemplateString(templateString());
@@ -330,7 +338,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     job->setReplaceFlag( button == ReplaceButton );
 
     kDebug() << "registering job";
-    KDevelop::ICore::self()->runController()->registerJob(job);
+    ICore::self()->runController()->registerJob(job);
     
     m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
     

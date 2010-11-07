@@ -17,6 +17,7 @@
 #include <QtCore/QObject>
 #include <QList>
 #include <QMetaType>
+#include <QPair>
 
 namespace KDevelop
 {
@@ -37,17 +38,26 @@ public:
     };
     typedef QList<Match> MatchList;
     
+    typedef QPair<QString, QString> File;  /// Represent a file with name => content
+    typedef QList<File> FileList;
+    
 private:
     KDevelop::TestCore* m_testCore;
     GrepViewPlugin* m_plugin;
     
 private slots:
     void initTestCase();
+    
     void testFind();
     void testFind_data();
+    
+    void testReplace();
+    void testReplace_data();
+    
     void cleanupTestCase();
 };
 
 Q_DECLARE_METATYPE(FindReplaceTest::MatchList)
+Q_DECLARE_METATYPE(FindReplaceTest::FileList);
 
 #endif // REPLACETEST_H

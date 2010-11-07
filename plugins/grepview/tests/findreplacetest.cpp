@@ -14,20 +14,22 @@
 #include <QRegExp>
 
 #include <ktemporaryfile.h>
+#include <ktempdir.h>
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
 #include "findreplacetest.h"
 #include "../grepjob.h"
-//#include "../grepviewplugin.h"
+#include "../grepviewplugin.h"
+#include "../grepoutputmodel.h"
 
 void FindReplaceTest::initTestCase()
 {
     KDevelop::AutoTestShell::init();
     m_testCore = new KDevelop::TestCore();
     m_testCore->initialize(KDevelop::Core::NoUi);
-    //m_plugin = new GitPlugin(m_testCore);
+    //m_plugin = new GrepViewPlugin(m_testCore);
 }
 
 void FindReplaceTest::cleanupTestCase()
@@ -56,6 +58,14 @@ void FindReplaceTest::testFind_data()
     // the matching must be sertarted after the last previous match
     QTest::newRow("RegExp (greedy match)") << "foofooo" << QRegExp("[o]+")
                            << (MatchList() << Match(0, 1, 3) << Match(0, 4, 7));
+    QTest::newRow("Matching EOL") << "foobar\nfoobar" << QRegExp("foo.*")
+                           << (MatchList() << Match(0, 0, 6) << Match(1, 0, 6));
+    QTest::newRow("Matching EOL (Windows style)") << "foobar\r\nfoobar" << QRegExp("foo.*")
+                           << (MatchList() << Match(0, 0, 6) << Match(1, 0, 6));
+    QTest::newRow("Empty lines handling") << "foo\n\n\n" << QRegExp("bar")
+                           << (MatchList());
+    QTest::newRow("Matching empty string") << "foobar\n" << QRegExp(".*") 
+                           << (MatchList() << Match(0, 0, 6));
 }
 
 void FindReplaceTest::testFind()
@@ -84,5 +94,96 @@ void FindReplaceTest::testFind()
     QVERIFY(file.open());
     QCOMPARE(QString(file.readAll()), subject);
 }
+
+
+void FindReplaceTest::testReplace_data()
+{
+    QTest::addColumn<FileList>("subject");
+    QTest::addColumn<QString>("searchPattern");
+    QTest::addColumn<QString>("searchTemplate");
+    QTest::addColumn<QString>("replace");
+    QTest::addColumn<QString>("replaceTemplate");
+    QTest::addColumn<FileList>("result");
+    
+    QTest::newRow("Raw replace") 
+        << (FileList() << File("myfile.txt", "some text\nreplacement\nsome other test\n")
+                       << File("otherfile.txt", "some replacement text\n\n"))
+        << "replacement" << "%s"
+        << "dummy"       << "%s"
+        << (FileList() << File("myfile.txt", "some text\ndummy\nsome other test\n")
+                       << File("otherfile.txt", "some dummy text\n\n"));
+
+    QTest::newRow("Template replace")
+        << (FileList() << File("somefile.h",   "struct Foo {\n  void setFoo(int foo);\n};")
+                       << File("somefile.cpp", "instance->setFoo(0);\n setFoo(0); /*not replaced*/"))
+        << "setFoo" << "\\->\\s*\\b%s\\b\\s*\\("
+        << "setBar" << "->%s("
+        << (FileList() << File("somefile.h",   "struct Foo {\n  void setFoo(int foo);\n};")
+                       << File("somefile.cpp", "instance->setBar(0);\n setFoo(0); /*not replaced*/"));
+
+    QTest::newRow("Template with captures")
+        << (FileList() << File("somefile.cpp", "inst::func(1, 2)\n otherInst :: func (\"foo\")\n func()"))
+        << "func" << "([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\("
+        << "REPL" << "\\1::%s("
+        << (FileList() << File("somefile.cpp", "inst::REPL(1, 2)\n otherInst::REPL(\"foo\")\n func()"));
+
+    QTest::newRow("Regexp pattern")
+        << (FileList() << File("somefile.txt", "foobar\n foooobar\n fake"))
+        << "f\\w*o" << "%s"
+        << "FOO" << "%s"
+        << (FileList() << File("somefile.txt", "FOObar\n FOObar\n fake"));
+}
+
+
+void FindReplaceTest::testReplace()
+{
+    QFETCH(FileList, subject);
+    QFETCH(QString,  searchPattern);
+    QFETCH(QString,  searchTemplate);
+    QFETCH(QString,  replace);
+    QFETCH(QString,  replaceTemplate);
+    QFETCH(FileList, result);
+    
+    KTempDir tempDir;
+    QDir     dir(tempDir.name());  // we need some convenience functions that are not in KTempDir
+    
+    foreach(File fileData, subject) 
+    {
+        QFile file(dir.filePath(fileData.first));
+        QVERIFY(file.open(QIODevice::WriteOnly));
+        QVERIFY(file.write(fileData.second.toUtf8()) != -1);
+        file.close();
+    }
+    
+    GrepJob *job = new GrepJob(this);
+    
+    job->setOutputModel(new GrepOutputModel(job));
+    job->setPatternString(searchPattern);
+    job->setTemplateString(searchTemplate);
+    job->setReplaceString(replace);
+    job->setReplacementTemplateString(replaceTemplate);
+    job->setFilesString("*");
+    job->setExcludeString("");
+    job->setDirectory(dir.path());
+    job->setRecursive(true);
+    job->setRegexpFlag(true);
+    job->setCaseSensitive(true);
+    job->setProjectFilesFlag(false);
+    job->setReplaceFlag(true);
+    
+    kDebug() << "Job started";
+    QVERIFY(job->exec());
+    kDebug() << "Job passed";
+    
+    foreach(File fileData, result) 
+    {
+        QFile file(dir.filePath(fileData.first));
+        QVERIFY(file.open(QIODevice::ReadOnly));
+        QCOMPARE(QString(file.readAll()), fileData.second);
+        file.close();
+    }
+    tempDir.unlink();
+}
+
 
 QTEST_MAIN(FindReplaceTest);

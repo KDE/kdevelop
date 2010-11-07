@@ -43,6 +43,7 @@ class GrepJob : public KJob, public KDevelop::IStatus
 public:
     GrepJob( QObject *parent = 0 );
 
+    void setOutputModel(GrepOutputModel * model);
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
     void setReplacementTemplateString(const QString &replTmplString);
@@ -88,7 +89,7 @@ private:
     QString m_patternString;
     QRegExp m_regExp;
     QString m_regExpSimple;
-	GrepOutputModel *m_outputModel;
+    GrepOutputModel *m_outputModel;
     
     enum {
         WorkCollectFiles,

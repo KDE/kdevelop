@@ -19,6 +19,25 @@
 
 using namespace KDevelop;
 
+GrepOutputViewFactory::GrepOutputViewFactory(GrepJob* job): m_job(job)
+{}
+
+QWidget* GrepOutputViewFactory::create(QWidget* parent)
+{
+    return new GrepOutputView(parent, m_job);
+}
+
+Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition()
+{
+    return Qt::BottomDockWidgetArea;
+}
+
+QString GrepOutputViewFactory::id() const
+{
+    return "org.kdevelop.GrepOutputView";
+}
+
+
 GrepOutputView::GrepOutputView(QWidget* parent, GrepJob* job)
   : QWidget(parent), m_job(job)
 {
