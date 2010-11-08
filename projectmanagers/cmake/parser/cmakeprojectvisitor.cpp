@@ -442,7 +442,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         values = m_cache->value(set->variableName()).value.split(';');
     else
         values = set->values();
-    kDebug(9042) << "setting variable:" << set->variableName() << "to" << values;
+    kDebug(9042) << "setting variable:" << set->variableName() /*<< "to" << values*/;
     m_vars->insert(set->variableName(), values);
     return 1;
 }
@@ -1663,7 +1663,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     {
         if (fea->ranges().start < fea->ranges().stop)
         {
-            for( int i = fea->ranges().start; i < fea->ranges().stop; i += fea->ranges().step )
+            for( int i = fea->ranges().start; i < fea->ranges().stop && !m_hitBreak; i += fea->ranges().step )
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
@@ -1722,9 +1722,12 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
                 m_vars->insert(fea->loopVar(), QStringList(s));
                 kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
                 end=walk(fea->content(), fea->line()+1);
+                if(m_hitBreak)
+                    break;
             }
         }
     }
+    m_hitBreak=false;
     kDebug(9042) << "EndForeach" << fea->loopVar();
     return end-fea->line()+1;
 }
