@@ -51,8 +51,6 @@ QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     QWidget* w = new QWidget;
     m_configWidget = new Ui::QtHelpConfigUI;
     m_configWidget->setupUi( w );
-    m_configWidget->qchRequester->setMode( KFile::File | KFile::ExistingOnly );
-    m_configWidget->qchRequester->setFilter("*.qch|Qt Compressed Help (.qch)");
     m_configWidget->qchIcon->setIcon("qtlogo");
     m_configWidget->addButton->setIcon(KIcon("list-add"));
     connect(m_configWidget->addButton, SIGNAL(clicked(bool)), this, SLOT(add()));

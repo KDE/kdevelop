@@ -17,13 +17,16 @@
    <item>
     <widget class="QGroupBox" name="qchManage">
      <property name="title">
-      <string>Manage qch documentation</string>
+      <string>Manage QtHelp Documentation</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="KIconButton" name="qchIcon">
+          <property name="toolTip">
+           <string>Select an icon</string>
+          </property>
           <property name="iconSize">
            <number>16</number>
           </property>
@@ -40,6 +43,12 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip">
+           <string>Select a name</string>
+          </property>
+          <property name="clickMessage">
+           <string>Select a name</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -49,6 +58,15 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Select a QtHelp file...</string>
+          </property>
+          <property name="filter">
+           <string notr="true">*.qch|Qt Compressed Help (.qch)</string>
+          </property>
+          <property name="clickMessage">
+           <string>Select a QtHelp file...</string>
           </property>
          </widget>
         </item>
@@ -65,7 +83,7 @@
            <bool>false</bool>
           </property>
           <attribute name="horizontalHeaderVisible">
-           <bool>true</bool>
+           <bool>false</bool>
           </attribute>
           <attribute name="verticalHeaderVisible">
            <bool>false</bool>
@@ -141,14 +159,14 @@
         </item>
        </layout>
       </item>
+      <item>
+       <widget class="QCheckBox" name="loadQtDocsCheckBox">
+        <property name="text">
+         <string>Load automatically Qt documentations</string>
+        </property>
+       </widget>
+      </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="loadQtDocsCheckBox">
-     <property name="text">
-      <string>Load automatically Qt documentations</string>
-     </property>
     </widget>
    </item>
    <item>
