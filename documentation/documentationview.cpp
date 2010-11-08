@@ -169,6 +169,9 @@ void DocumentationView::emptyHistory()
     mCurrent=mHistory.end();
     mBack->setEnabled(false);
     mForward->setEnabled(false);
+    if(mProviders->count() > 0) {
+        mProviders->setCurrentIndex(0);
+    }
 }
 
 void DocumentationView::updateView()
