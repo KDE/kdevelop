@@ -444,7 +444,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         values = m_cache->value(set->variableName()).value.split(';');
     else
         values = set->values();
-    kDebug(9042) << "setting variable:" << set->variableName() << "to" << values;
+    kDebug(9042) << "setting variable:" << set->variableName() /*<< "to" << values*/;
     m_vars->insert(set->variableName(), values);
     return 1;
 }
