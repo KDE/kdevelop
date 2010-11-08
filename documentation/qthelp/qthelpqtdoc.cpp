@@ -94,7 +94,7 @@ void QtHelpQtDoc::registerDocumentations()
     
     if(!dirName.isEmpty()) {
         QDir d(dirName);
-        foreach(const QString& file, d.entryList()) {
+        foreach(const QString& file, d.entryList(QDir::NoDotAndDotDot)) {
             QString fileName=dirName+'/'+file;
             QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
             
