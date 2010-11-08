@@ -444,7 +444,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         values = m_cache->value(set->variableName()).value.split(';');
     else
         values = set->values();
-    kDebug(9042) << "setting variable:" << set->variableName()/* << "to" << values*/;
+    kDebug(9042) << "setting variable:" << set->variableName() << "to" << values;
     m_vars->insert(set->variableName(), values);
     return 1;
 }
@@ -530,6 +530,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(KUrl(path).directory()));
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
@@ -541,7 +542,8 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             //FIXME: Put here the error.
             kDebug(9042) << "Include. Parsing error.";
         }
-        m_vars->take("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {
@@ -633,6 +635,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(KUrl(path).directory()));
         if(pack->isRequired())
             m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
         if(pack->isQuiet())
@@ -653,7 +656,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             m_vars->insert(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
-        m_vars->take("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {

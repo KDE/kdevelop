@@ -381,6 +381,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
         data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(currentBinDir));
         data.vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
+        data.vm.insert("CMAKE_CURRENT_LIST_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
         data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
 
         kDebug(9042) << "currentBinDir" << KUrl(data.vm.value("CMAKE_BINARY_DIR")[0]) << data.vm.value("CMAKE_CURRENT_BINARY_DIR");
@@ -417,6 +418,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             }
         }
         data.vm.remove("CMAKE_CURRENT_LIST_FILE");
+        data.vm.remove("CMAKE_CURRENT_LIST_DIR");
         data.vm.remove("CMAKE_CURRENT_SOURCE_DIR");
         data.vm.remove("CMAKE_CURRENT_BINARY_DIR");
         
@@ -679,6 +681,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
     QString currentBinDir=KUrl::relativeUrl(project->projectItem()->url(), url);
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
+    vm->insert("CMAKE_CURRENT_LIST_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
     vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
     CMakeProjectVisitor v(url.toLocalFile(), missingtopcontext);
     v.setCacheValues(m_projectCache[project]);
@@ -687,6 +690,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
     v.setModulePath(m_modulePathPerProject[project]);
     v.walk(f, 0);
     vm->remove("CMAKE_CURRENT_LIST_FILE");
+    vm->remove("CMAKE_CURRENT_LIST_DIR");
     vm->remove("CMAKE_CURRENT_SOURCE_DIR");
     vm->remove("CMAKE_CURRENT_BINARY_DIR");
 }*/
