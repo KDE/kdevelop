@@ -166,7 +166,6 @@ QString QtHelpDocumentation::description() const
 
 QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
-        kDebug() << "clicked";
     QWidget* ret;
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
         ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
@@ -194,7 +193,6 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
 
 void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {
-        kDebug() << "clicked";
     Q_ASSERT(lastView);
     m_provider->jumpedTo(newUrl);
     lastView->load(newUrl);
@@ -202,20 +200,17 @@ void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 
 KDevelop::IDocumentationProvider* QtHelpDocumentation::provider() const
 {
-        kDebug() << "clicked";
     return m_provider;
 }
 
 QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent)
     : QAction(name, parent), mDoc(doc), mName(name)
 {
-        kDebug() << "clicked";
     connect(this, SIGNAL(triggered()), SLOT(showUrl()));
 }
 
 void QtHelpAlternativeLink::showUrl()
 {
-        kDebug() << "clicked";
     KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(mName, mDoc->info(), mName));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
@@ -226,7 +221,6 @@ HomeDocumentation::HomeDocumentation() : m_provider(QtHelpDocumentation::s_provi
 
 QWidget* HomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget*, QWidget* parent)
 {
-        kDebug() << "clicked";
     QTreeView* w=new QTreeView(parent);
     w->header()->setVisible(false);
     w->setModel(m_provider->engine()->contentModel());
@@ -237,7 +231,6 @@ QWidget* HomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidge
 
 void HomeDocumentation::clicked(const QModelIndex& idx)
 {
-    kDebug() << "clicked";
     QHelpContentModel* model = m_provider->engine()->contentModel();
     QHelpContentItem* it=model->contentItemAt(idx);
     QMap<QString, QUrl> info;
@@ -249,12 +242,10 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
 
 QString HomeDocumentation::name() const
 {
-        kDebug() << "clicked";
     return i18n("QtHelp Home Page");
 }
 
 KDevelop::IDocumentationProvider* HomeDocumentation::provider() const
 {
-        kDebug() << "clicked";
     return m_provider;
 }
