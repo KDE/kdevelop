@@ -468,6 +468,7 @@ void CMakeProjectVisitorTest::testFinder_data()
     
     QTest::newRow("Qt4") << "Qt4";
     QTest::newRow("KDE4") << "KDE4";
+//     QTest::newRow("QtGstreamer") << "QtGstreamer"; //commented because it might not be installed, but works
 }
 
 void CMakeProjectVisitorTest::testFinder_init()

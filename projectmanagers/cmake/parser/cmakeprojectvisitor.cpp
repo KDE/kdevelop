@@ -600,6 +600,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     {
         configPath.prepend(instPath+"/share/"+name.toLower()+post);
         configPath.prepend(instPath+"/lib/"+name.toLower()+post);
+        configPath.prepend(instPath+"/share/"+name+post);
+        configPath.prepend(instPath+"/lib/"+name+post);
     }
 
     QString varName=pack->name()+"_DIR";
