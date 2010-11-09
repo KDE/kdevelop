@@ -68,21 +68,55 @@ void QtHelpPlugin::readConfig()
     QStringList nameList = cg.readEntry("nameList", QStringList());
     QStringList pathList = cg.readEntry("pathList", QStringList());
     bool loadQtDoc = cg.readEntry("loadQtDocs", true);
-    foreach(QtHelpProvider* provider, m_qtHelpProviders) {
-        m_qtHelpProviders.removeAll(provider);
-        delete provider;
-    }
-    for(int i=0; i < pathList.length(); i++) {
-        m_qtHelpProviders.append(new QtHelpProvider(this, QtHelpFactory::componentData(), pathList.at(i), nameList.at(i), iconList.at(i),QVariantList()));
-    }
 
+    loadQtHelpProvider(pathList, nameList, iconList);
+    loadQtDocumentation(loadQtDoc);
+
+    emit changedProvidersList();
+}
+
+void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
+{
     if(m_qtDoc&&!loadQtDoc){
         delete m_qtDoc;
         m_qtDoc = 0;
     } else if(!m_qtDoc&&loadQtDoc) {
         m_qtDoc = new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList());
     }
-    emit changedProvidersList();
+}
+
+void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList, QStringList iconList)
+{
+    QList<QtHelpProvider*> oldList(m_qtHelpProviders);
+    m_qtHelpProviders.clear();
+    for(int i=0; i < pathList.length(); i++) {
+        // check if provider already exist
+        QString fileName = pathList.at(i);
+        QString name = nameList.at(i);
+        QString iconName = iconList.at(i);
+        QString nameSpace = QHelpEngineCore::namespaceName(fileName);
+        QtHelpProvider *provider = 0;
+        foreach(QtHelpProvider* oldProvider, oldList){
+            if(QHelpEngineCore::namespaceName(oldProvider->name()) == nameSpace){
+                provider = oldProvider;
+                oldList.removeAll(provider);
+                break;
+            }
+        }
+        if(!provider){
+            provider = new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, name, iconName, QVariantList());
+        }else{
+            provider->setName(name);
+            provider->setIconName(iconName);
+        }
+        m_qtHelpProviders.append(provider);
+    }
+
+    // delete unused providers
+    foreach(QtHelpProvider* provider, oldList) {
+        oldList.removeAll(provider);
+        delete provider;
+    }
 }
 
 void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc)

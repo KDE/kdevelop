@@ -44,14 +44,14 @@ QtHelpProvider::QtHelpProvider(QObject *parent, const KComponentData &componentD
     : QtHelpProviderAbstract(parent, componentData, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
     , m_fileName(fileName)
     , m_name(name)
-    , m_icon(iconName)
+    , m_iconName(iconName)
 {
     m_engine.registerDocumentation(m_fileName);
 }
 
 QIcon QtHelpProvider::icon() const
 {
-    return KIcon(m_icon);
+    return KIcon(m_iconName);
 }
 
 QString QtHelpProvider::name() const
@@ -66,5 +66,15 @@ QString QtHelpProvider::fileName() const
 
 QString QtHelpProvider::iconName() const
 {
-    return m_icon;
+    return m_iconName;
+}
+
+void QtHelpProvider::setName(QString name)
+{
+    m_name = name;
+}
+
+void QtHelpProvider::setIconName(QString iconName)
+{
+    m_iconName = iconName;
 }

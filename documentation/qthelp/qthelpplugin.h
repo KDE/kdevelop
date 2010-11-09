@@ -44,6 +44,10 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         bool qtHelpQtDocLoaded();
         void setQtDoc(QtHelpQtDoc* qtDoc);
         void writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc);
+
+        void loadQtDocumentation(bool loadQtDoc);
+        void loadQtHelpProvider(QStringList pathList, QStringList nameList, QStringList iconList);
+
     public slots:
         void readConfig();
     signals:

@@ -38,10 +38,12 @@ public:
     virtual QString name() const;
     QString fileName() const;
     QString iconName() const;
+    void setName(QString name);
+    void setIconName(QString iconName);
 private:
     QString m_fileName;
     QString m_name;
-    QString m_icon;
+    QString m_iconName;
 };
 
 #endif // QTHELPPROVIDER_H
