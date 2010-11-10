@@ -64,8 +64,10 @@ void FindReplaceTest::testFind_data()
                            << (MatchList() << Match(0, 0, 6) << Match(1, 0, 6));
     QTest::newRow("Empty lines handling") << "foo\n\n\n" << QRegExp("bar")
                            << (MatchList());
-    QTest::newRow("Matching empty string") << "foobar\n" << QRegExp(".*") 
+    QTest::newRow("Can match empty string (at EOL)") << "foobar\n" << QRegExp(".*") 
                            << (MatchList() << Match(0, 0, 6));
+    QTest::newRow("Matching empty string anywhere") << "foobar\n" << QRegExp("") 
+                           << (MatchList());
 }
 
 void FindReplaceTest::testFind()
