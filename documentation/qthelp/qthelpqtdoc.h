@@ -21,11 +21,7 @@
 #ifndef QTHELPQTDOC_H
 #define QTHELPQTDOC_H
 
-#include <interfaces/idocumentationprovider.h>
-#include <QHelpEngine>
 #include "qthelpproviderabstract.h"
-
-class QtHelpDocumentation;
 
 class QtHelpQtDoc : public QtHelpProviderAbstract
 {

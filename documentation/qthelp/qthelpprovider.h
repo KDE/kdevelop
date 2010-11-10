@@ -22,9 +22,6 @@
 #ifndef QTHELPPROVIDER_H
 #define QTHELPPROVIDER_H
 
-#include <interfaces/idocumentationprovider.h>
-#include <QHelpEngine>
-#include <KComponentData>
 #include "qthelpproviderabstract.h"
 
 class QtHelpProvider : public QtHelpProviderAbstract

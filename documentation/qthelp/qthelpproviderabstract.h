@@ -23,8 +23,12 @@
 #define QTHELPPROVIDERABSTRACT_H
 
 #include <interfaces/idocumentationprovider.h>
+#include <QObject>
+#include <QString>
+#include <QUrl>
+#include <QVariantList>
 #include <QHelpEngine>
-#include <KComponentData>
+
 
 class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {

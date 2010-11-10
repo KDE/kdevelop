@@ -23,10 +23,10 @@
 
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationproviderprovider.h>
-#include <QHelpEngine>
 #include <kpluginfactory.h>
-#include "qthelpprovider.h"
-#include "qthelpqtdoc.h"
+
+class QtHelpProvider;
+class QtHelpQtDoc;
 class QtHelpDocumentation;
 
 class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProviderProvider
@@ -42,7 +42,6 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         virtual QList<KDevelop::IDocumentationProvider*> providers();
         QList<QtHelpProvider*> qtHelpProviderLoaded();
         bool qtHelpQtDocLoaded();
-        void setQtDoc(QtHelpQtDoc* qtDoc);
         void writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc);
 
 

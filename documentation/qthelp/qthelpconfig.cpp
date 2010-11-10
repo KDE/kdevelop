@@ -20,29 +20,12 @@
 
 #include "qthelpconfig.h"
 
-#include <KLocalizedString>
-#include <KPluginFactory>
-#include <KPluginLoader>
-#include <KConfigGroup>
-#include <KUrlRequester>
-#include <KUrl>
-#include <KAboutData>
-#include <KPushButton>
-#include <KIconLoader>
-#include <KDebug>
-#include <KFile>
-#include <KSettings/Dispatcher>
-
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
+#include <KMessageBox>
 
 #include "ui_qthelpconfig.h"
-#include "KIconButton"
 #include "qthelpplugin.h"
-#include <QHelpEngineCore>
 #include "qthelpprovider.h"
+
 QtHelpConfig::QtHelpConfig(QWidget *parent, const QVariantList &args)
     : KCModule(QtHelpFactory::componentData(), parent, args)
 {
@@ -204,12 +187,14 @@ bool QtHelpConfig::checkQtHelpFile()
     //verify if the file is valid and if there is a name
     if (qtHelpNamespace.isEmpty() || m_configWidget->qchName->text().isEmpty()) {
         // Open error message (not valid Qt Compressed Help file)
+        KMessageBox::error(this, i18n("Qt Compressed Help file is not valid. Or name is empty."));
         return false;
     }
     // verify if it's the namespace it's not already in the list
     for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
         if(qtHelpNamespace == QHelpEngineCore::namespaceName(m_configWidget->qchTable->item(i,1)->text())){
             // Open error message, documentation already imported
+            KMessageBox::error(this, i18n("Documentation already imported"));
             return false;
         }
     }

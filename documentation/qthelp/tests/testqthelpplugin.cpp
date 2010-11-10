@@ -20,7 +20,7 @@
 #include "testqthelpplugin.h"
 #include "../qthelpplugin.h"
 #include <tests/autotestshell.h>
-
+#include "../qthelpprovider.h"
 #include <kdebug.h>
 QTEST_KDEMAIN_CORE(TestQtHelpPlugin)
 

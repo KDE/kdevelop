@@ -20,18 +20,14 @@
 */
 
 #include "qthelpqtdoc.h"
-#include <QTemporaryFile>
 
-#include <KProcess>
-#include <KAboutData>
+#include <QDir>
+
+#include <KLocale>
 #include <KStandardDirs>
-
-#include <language/duchain/duchain.h>
-#include <language/duchain/declaration.h>
-#include <language/duchain/duchainlock.h>
-
+#include <KProcess>
 #include <KIcon>
-#include "qthelpdocumentation.h"
+#include <KDebug>
 
 QString qtDocsLocation(const QString& qmake)
 {

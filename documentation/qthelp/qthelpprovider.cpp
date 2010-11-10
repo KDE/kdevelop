@@ -20,25 +20,7 @@
 */
 
 #include "qthelpprovider.h"
-#include <QtCore/QObject>
-
-#include <KDebug>
-#include <QHelpIndexModel>
-#include <QTemporaryFile>
-#include <QHelpContentModel>
-
-#include <KProcess>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <KAboutData>
-#include <KStandardDirs>
-
-#include <language/duchain/duchain.h>
-#include <language/duchain/declaration.h>
-#include <language/duchain/duchainlock.h>
-
 #include <KIcon>
-#include "qthelpdocumentation.h"
 
 QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
     : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)

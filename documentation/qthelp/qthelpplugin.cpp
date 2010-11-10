@@ -24,11 +24,9 @@
 #include <kpluginloader.h>
 #include <KAboutData>
 #include <KSettings/Dispatcher>
-#include <KComponentData>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <kconfiggroup.h>
-#include "kdebug.h"
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
 #include "qthelpconfig.h"
@@ -139,11 +137,6 @@ void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStri
     cg.writeEntry("nameList", nameList);
     cg.writeEntry("pathList", pathList);
     cg.writeEntry("loadQtDocs", loadQtDoc);
-}
-
-void QtHelpPlugin::setQtDoc(QtHelpQtDoc* qtDoc)
-{
-    m_qtDoc = qtDoc;
 }
 
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
