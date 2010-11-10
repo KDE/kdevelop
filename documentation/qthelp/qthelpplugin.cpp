@@ -98,7 +98,7 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
         if(!nameSpace.isEmpty()){
             QtHelpProvider *provider = 0;
             foreach(QtHelpProvider* oldProvider, oldList){
-                if(QHelpEngineCore::namespaceName(oldProvider->name()) == nameSpace){
+                if(QHelpEngineCore::namespaceName(oldProvider->fileName()) == nameSpace){
                     provider = oldProvider;
                     oldList.removeAll(provider);
                     break;
