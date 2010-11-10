@@ -51,7 +51,8 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
         }
         
         int offset = 0;
-        while( re.indexIn(data, offset)!=-1 && offset < data.length() )
+        // allow empty string matching result in an infinite loop !
+        while( re.indexIn(data, offset)!=-1 && re.cap(0).length() > 0 )
         {
             int start = re.pos(0);
             int end = start + re.cap(0).length();
