@@ -95,21 +95,23 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
         QString name = nameList.at(i);
         QString iconName = iconList.at(i);
         QString nameSpace = QHelpEngineCore::namespaceName(fileName);
-        QtHelpProvider *provider = 0;
-        foreach(QtHelpProvider* oldProvider, oldList){
-            if(QHelpEngineCore::namespaceName(oldProvider->name()) == nameSpace){
-                provider = oldProvider;
-                oldList.removeAll(provider);
-                break;
+        if(!nameSpace.isEmpty()){
+            QtHelpProvider *provider = 0;
+            foreach(QtHelpProvider* oldProvider, oldList){
+                if(QHelpEngineCore::namespaceName(oldProvider->name()) == nameSpace){
+                    provider = oldProvider;
+                    oldList.removeAll(provider);
+                    break;
+                }
             }
+            if(!provider){
+                provider = new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, name, iconName, QVariantList());
+            }else{
+                provider->setName(name);
+                provider->setIconName(iconName);
+            }
+            m_qtHelpProviders.append(provider);
         }
-        if(!provider){
-            provider = new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, name, iconName, QVariantList());
-        }else{
-            provider->setName(name);
-            provider->setIconName(iconName);
-        }
-        m_qtHelpProviders.append(provider);
     }
 
     // delete unused providers
