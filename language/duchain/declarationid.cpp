@@ -105,7 +105,9 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       }
     }
   }else{
-    ret.append(direct.declaration());
+    Declaration* decl = direct.declaration();
+    if(decl)
+      ret.append(decl);
   }
   
   if(!ret.isEmpty() && m_specialization.index()) {
