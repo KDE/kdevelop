@@ -32,11 +32,12 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView
 public:
     GrepOutputView(QWidget* parent, GrepJob* job);
 
-	GrepOutputModel* model();
+    GrepOutputModel* model();
+    void setMessage(const QString& msg);
 
 private:
     GrepJob* m_job;
-	GrepOutputModel* m_model;
+    GrepOutputModel* m_model;
 };
 
 #endif // GREPOUTPUTVIEW_H

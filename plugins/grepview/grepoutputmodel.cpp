@@ -20,6 +20,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <kicon.h>
 #include <klocale.h>
+#include "grepoutputview.h"
 
 using namespace KDevelop;
 
@@ -232,12 +233,14 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 
 void GrepOutputModel::showErrorMessage( const QString& errorMessage )
 {
-    appendRow(new QStandardItem(errorMessage));
+    ((GrepOutputView*)parent())->setStyleSheet("QLabel { color : red; }");
+    ((GrepOutputView*)parent())->setMessage(errorMessage);
 }
 
 void GrepOutputModel::showMessage( KDevelop::IStatus* , const QString& message )
 {
-    appendRow(new QStandardItem(message));
+    ((GrepOutputView*)parent())->setStyleSheet("");
+    ((GrepOutputView*)parent())->setMessage(message);
 }
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)

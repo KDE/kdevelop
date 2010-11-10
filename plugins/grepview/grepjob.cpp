@@ -168,8 +168,8 @@ void GrepJob::slotFindFinished()
     
     m_outputModel->setRegExp(m_regExp);
 
-    emit showMessage(this, i18np("Searching for \"%2\" in one file",
-                                 "Searching for \"%2\" in %1 files",
+    emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
+                                 "Searching for <b>%2</b> in %1 files",
                                  m_fileList.length(), m_regExp.pattern()));
 
     m_workState = WorkGrep;

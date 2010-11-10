@@ -50,10 +50,15 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepJob* job)
   m_model = new GrepOutputModel(this);
   resultsTreeView->setModel(m_model);
   resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
+  resultsTreeView->setHeaderHidden(true);
 }
 
 GrepOutputModel* GrepOutputView::model()
 {
-  return m_model;
+    return m_model;
 }
 
+void GrepOutputView::setMessage(const QString& msg)
+{
+    messageLabel->setText(msg);
+}
