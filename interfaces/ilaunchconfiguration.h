@@ -48,6 +48,12 @@ public:
     virtual const KConfigGroup config() const = 0;
     
     /**
+     * Access to the configuration group for this launch configuration.
+     * @returns the config to write to
+     */
+    virtual KConfigGroup config() = 0;
+    
+    /**
      * Each launch configuration has a type, which identifies which launcher and launch modes
      * are supported.
      * @returns the configuration type

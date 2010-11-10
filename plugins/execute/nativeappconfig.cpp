@@ -437,7 +437,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
 
 void NativeAppConfigType::suggestionTriggered()
 {
-    QAction* action = (QAction*) sender();
+    QAction* action = qobject_cast<QAction*>(sender());
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     KDevelop::ProjectTargetItem* pitem = dynamic_cast<KDevelop::ProjectTargetItem*>(itemForPath(KDevelop::splitWithEscaping(action->data().toString(),'/', '\\'), model));
     if(pitem) {
