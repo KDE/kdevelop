@@ -259,6 +259,8 @@ void GrepJob::start()
 
     m_findSomething = false;
 
+    m_outputModel->clear();
+    
     connect(this, SIGNAL(showErrorMessage(QString, int)),
             m_outputModel, SLOT(showErrorMessage(QString)));
     connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
