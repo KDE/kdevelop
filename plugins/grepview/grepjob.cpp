@@ -76,6 +76,8 @@ GrepJob::GrepJob( QObject* parent )
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
     
+    connect(this, SIGNAL(result(KJob *)), this, SLOT(testFinishState(KJob *)));
+
     //FIXME only for benchmarks
     connect(this, SIGNAL(finished(KJob *)), this, SLOT(doBench()));
 }
@@ -200,6 +202,7 @@ void GrepJob::slotWork()
 
                     if(!items.isEmpty())
                     {
+                        m_findSomething = true;
                         if(m_replaceFlag) 
                         {
                             foreach(const GrepOutputItem &i, items)
@@ -254,8 +257,7 @@ void GrepJob::start()
     m_workState = WorkIdle;
     m_fileIndex = 0;
 
-    m_outputModel->appendRow(new GrepOutputItem("filename", "text"));
-    kDebug() << "appenRow";
+    m_findSomething = false;
 
     connect(this, SIGNAL(showErrorMessage(QString, int)),
             m_outputModel, SLOT(showErrorMessage(QString)));
@@ -265,7 +267,7 @@ void GrepJob::start()
     qRegisterMetaType<GrepOutputItem::List>();
     connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),
             m_outputModel, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
-	
+
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
 }
 
@@ -284,6 +286,14 @@ bool GrepJob::doKill()
         return false;
     }
     return true;
+}
+
+void GrepJob::testFinishState(KJob *job)
+{
+    if(!job->error())
+    {
+        if(!m_findSomething) emit showMessage(this, i18n("No results found"));
+    }
 }
 
 void GrepJob::setOutputModel(GrepOutputModel* model)

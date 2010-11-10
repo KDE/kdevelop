@@ -67,6 +67,7 @@ protected:
 
 private Q_SLOTS:
     void slotFindFinished();
+    void testFinishState(KJob *job);
 
 Q_SIGNALS:
     void clearMessage( KDevelop::IStatus* );
@@ -117,6 +118,8 @@ private:
     bool m_recursiveFlag;
     bool m_caseSensitiveFlag;
     bool m_replaceFlag;
+    
+    bool m_findSomething;
 };
 
 //FIXME: this function is used externally only for tests, find a way to keep it 
