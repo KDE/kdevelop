@@ -51,6 +51,7 @@ public:
       void modify();
       void selectionChanged();
     private:
+      bool checkQtHelpFile();
       Ui::QtHelpConfigUI* m_configWidget;
 };
 

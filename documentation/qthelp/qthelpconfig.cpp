@@ -168,8 +168,7 @@ void QtHelpConfig::selectionChanged()
 
 void QtHelpConfig::add()
 {
-    if (QHelpEngineCore::namespaceName(m_configWidget->qchRequester->text()).isEmpty() || m_configWidget->qchName->text().isEmpty()) {
-        // Open error message (not valid Qt Compressed Help file)
+    if(!checkQtHelpFile()){
         return;
     }
     int row = m_configWidget->qchTable->rowCount();
@@ -186,8 +185,7 @@ void QtHelpConfig::add()
 
 void QtHelpConfig::modify()
 {
-    if (QHelpEngineCore::namespaceName(m_configWidget->qchRequester->text()).isEmpty() || m_configWidget->qchName->text().isEmpty()) {
-        // Open error message (not valid Qt Compressed Help file)
+    if(!checkQtHelpFile()){
         return;
     }
     if (!m_configWidget->qchTable->selectedItems().isEmpty()) {
@@ -198,6 +196,24 @@ void QtHelpConfig::modify()
         m_configWidget->qchTable->item(row, 2)->setText(m_configWidget->qchIcon->icon());
         emit changed(true);
     }
+}
+
+bool QtHelpConfig::checkQtHelpFile()
+{
+    QString qtHelpNamespace = QHelpEngineCore::namespaceName(m_configWidget->qchRequester->text());
+    //verify if the file is valid and if there is a name
+    if (qtHelpNamespace.isEmpty() || m_configWidget->qchName->text().isEmpty()) {
+        // Open error message (not valid Qt Compressed Help file)
+        return false;
+    }
+    // verify if it's the namespace it's not already in the list
+    for(int i=0; i < m_configWidget->qchTable->rowCount(); i++) {
+        if(qtHelpNamespace == QHelpEngineCore::namespaceName(m_configWidget->qchTable->item(i,1)->text())){
+            // Open error message, documentation already imported
+            return false;
+        }
+    }
+    return true;
 }
 
 void QtHelpConfig::remove()
