@@ -40,8 +40,8 @@
 #include <KIcon>
 #include "qthelpdocumentation.h"
 
-QtHelpProvider::QtHelpProvider(QObject *parent, const KComponentData &componentData, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
-    : QtHelpProviderAbstract(parent, componentData, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
+QtHelpProvider::QtHelpProvider(QObject *parent, const QString &fileName, const QString &name, const QString &iconName, const QVariantList &args)
+    : QtHelpProviderAbstract(parent, QHelpEngineCore::namespaceName(fileName) + ".qhc", args)
     , m_fileName(fileName)
     , m_name(name)
     , m_iconName(iconName)

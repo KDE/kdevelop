@@ -81,7 +81,7 @@ void QtHelpPlugin::loadQtDocumentation(bool loadQtDoc)
         delete m_qtDoc;
         m_qtDoc = 0;
     } else if(!m_qtDoc&&loadQtDoc) {
-        m_qtDoc = new QtHelpQtDoc(this, QtHelpFactory::componentData(), QVariantList());
+        m_qtDoc = new QtHelpQtDoc(this, QVariantList());
     }
 }
 
@@ -105,7 +105,7 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
                 }
             }
             if(!provider){
-                provider = new QtHelpProvider(this, QtHelpFactory::componentData(), fileName, name, iconName, QVariantList());
+                provider = new QtHelpProvider(this, fileName, name, iconName, QVariantList());
             }else{
                 provider->setName(name);
                 provider->setIconName(iconName);

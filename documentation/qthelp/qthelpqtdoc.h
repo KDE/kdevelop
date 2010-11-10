@@ -31,7 +31,7 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
 {
     Q_OBJECT
 	public:
-        QtHelpQtDoc(QObject *parent, const KComponentData &componentData, const QVariantList &args);
+        QtHelpQtDoc(QObject *parent, const QVariantList &args);
         virtual QIcon icon() const;
         virtual QString name() const;
         void registerDocumentations();

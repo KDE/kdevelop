@@ -40,9 +40,9 @@
 #include <KIcon>
 #include "qthelpdocumentation.h"
 
-QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const KComponentData &componentData, const QString &collectionFileName, const QVariantList &args)
+QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList &args)
     : QObject(parent)
-    , m_engine(KStandardDirs::locateLocal("appdata", collectionFileName, true, componentData))
+    , m_engine(KStandardDirs::locateLocal("appdata", collectionFileName, true))
 {
     Q_UNUSED(args);
     if( !m_engine.setupData() ) {

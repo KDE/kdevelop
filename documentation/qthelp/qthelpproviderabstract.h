@@ -31,7 +31,7 @@ class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationPr
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
 public:
-    QtHelpProviderAbstract(QObject *parent, const KComponentData &componentData, const QString &collectionFileName, const QVariantList & args);
+    QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList & args);
     virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*) const;
 
     virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx) const;

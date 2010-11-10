@@ -57,8 +57,8 @@ QString qtDocsLocation(const QString& qmake)
 
 
 
-QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const KComponentData &componentData, const QVariantList &args)
-    : QtHelpProviderAbstract(parent, componentData, "qthelpcollection.qhc", args)
+QtHelpQtDoc::QtHelpQtDoc(QObject *parent, const QVariantList &args)
+    : QtHelpProviderAbstract(parent, "qthelpcollection.qhc", args)
 {
     Q_UNUSED(args);
     registerDocumentations();
