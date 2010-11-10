@@ -110,7 +110,18 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
                 provider->setName(name);
                 provider->setIconName(iconName);
             }
-            m_qtHelpProviders.append(provider);
+
+            bool exist = false;
+            foreach(QtHelpProvider* existingProvider, m_qtHelpProviders){
+                if(QHelpEngineCore::namespaceName(existingProvider->fileName()) ==  nameSpace){
+                    exist = true;
+                    break;
+                }
+            }
+
+            if(!exist){
+                m_qtHelpProviders.append(provider);
+            }
         }
     }
 
