@@ -13,6 +13,7 @@
 #include "grepoutputmodel.h"
 #include "grepviewplugin.h"
 #include <QModelIndex>
+#include <QTextDocument>
 #include <kcolorscheme.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
@@ -234,13 +235,13 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 void GrepOutputModel::showErrorMessage( const QString& errorMessage )
 {
     ((GrepOutputView*)parent())->setStyleSheet("QLabel { color : red; }");
-    ((GrepOutputView*)parent())->setMessage(errorMessage);
+    ((GrepOutputView*)parent())->setMessage(Qt::escape(errorMessage));
 }
 
 void GrepOutputModel::showMessage( KDevelop::IStatus* , const QString& message )
 {
     ((GrepOutputView*)parent())->setStyleSheet("");
-    ((GrepOutputView*)parent())->setMessage(message);
+    ((GrepOutputView*)parent())->setMessage(Qt::escape(message));
 }
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
