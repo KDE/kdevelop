@@ -20,8 +20,14 @@
 
 #include "grepoutputdelegate.h"
 #include "grepoutputmodel.h"
+
 #include <QtGui/QPainter>
 #include <QtCore/QModelIndex>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextCursor>
+#include <QtGui/QAbstractTextDocumentLayout>
+#include <QtGui/QTextCharFormat>
+
 #include <kdebug.h>
 
 GrepOutputDelegate* GrepOutputDelegate::m_self = 0;
@@ -33,7 +39,7 @@ GrepOutputDelegate* GrepOutputDelegate::self()
 }
 
 GrepOutputDelegate::GrepOutputDelegate( QObject* parent )
-    : QItemDelegate(parent), textBrush( KColorScheme::View, KColorScheme::LinkText ),
+    : QStyledItemDelegate(parent), textBrush( KColorScheme::View, KColorScheme::LinkText ),
       fileBrush( KColorScheme::View, KColorScheme::InactiveText )
 {
     Q_ASSERT(!m_self);
@@ -61,6 +67,44 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     {
         opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
     }
-    QItemDelegate::paint(painter, opt, index);
+    
+    // rich text component
+    const GrepOutputItem *item = dynamic_cast<const GrepOutputItem *>((dynamic_cast<const GrepOutputModel *>(index.model()))->itemFromIndex(index));
+    if(item && item->change()->m_range.isValid())
+    {
+        QStyleOptionViewItemV4 options = option;
+        initStyleOption(&options, index);
+
+        // building item representation
+        const KDevelop::SimpleRange rng = item->change()->m_range;
+        QTextDocument doc;
+        QTextCursor cur(&doc);
+        QTextCharFormat normal = cur.charFormat(), bold = cur.charFormat();
+        bold.setFontWeight(QFont::Bold);
+        cur.insertText(QString("%1: ").arg(item->lineNumber()));
+        cur.insertText(item->text().left(rng.start.column));
+        cur.insertText(item->text().mid(rng.start.column, rng.end.column - rng.start.column), bold);
+        cur.insertText(item->text().right(item->text().length() - rng.end.column), normal);
+        
+        painter->save();
+        options.text = "";
+        options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter);
+
+        // shift text right to make icon visible
+        QSize iconSize = options.decorationSize;
+        painter->translate(options.rect.left()+iconSize.width(), options.rect.top());
+        QRect clip(0, 0, options.rect.width()+iconSize.width(), options.rect.height());
+
+        painter->setClipRect(clip);
+        QAbstractTextDocumentLayout::PaintContext ctx;
+        ctx.clip = clip;
+        doc.documentLayout()->draw(painter, ctx);
+
+        painter->restore();
+    }
+    else
+    {
+        QStyledItemDelegate::paint(painter, opt, index);
+    }
 }
 

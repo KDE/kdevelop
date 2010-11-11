@@ -28,8 +28,6 @@
 #include <interfaces/iuicontroller.h>
 #include <language/codegen/documentchangeset.h>
 
-#include "grepoutputdelegate.h"
-
 using namespace KDevelop;
 
 
@@ -62,7 +60,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
                 SimpleRange(lineno, start, lineno, end),
                 re.cap(0), re.cap(0).replace(re, repl)));
             
-            res << GrepOutputItem(change, QString(data).trimmed());
+            res << GrepOutputItem(change, QString(data));
             offset = end;
         }
         lineno++;

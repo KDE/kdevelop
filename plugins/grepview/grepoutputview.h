@@ -16,13 +16,10 @@ class GrepOutputDelegate;
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-  GrepOutputViewFactory(GrepJob *job);
+  GrepOutputViewFactory();
   virtual QWidget* create(QWidget *parent = 0);
   virtual Qt::DockWidgetArea defaultPosition();
   virtual QString id() const;
-
-private:
-  GrepJob *m_job;
 };
 
 class GrepOutputView : public QWidget, Ui::GrepOutputView
@@ -30,7 +27,7 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView
   Q_OBJECT
 
 public:
-    GrepOutputView(QWidget* parent, GrepJob* job);
+    GrepOutputView(QWidget* parent);
 
     GrepOutputModel* model();
     void setMessage(const QString& msg);
