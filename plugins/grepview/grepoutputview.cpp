@@ -19,12 +19,12 @@
 
 using namespace KDevelop;
 
-GrepOutputViewFactory::GrepOutputViewFactory(GrepJob* job): m_job(job)
+GrepOutputViewFactory::GrepOutputViewFactory()
 {}
 
 QWidget* GrepOutputViewFactory::create(QWidget* parent)
 {
-    return new GrepOutputView(parent, m_job);
+    return new GrepOutputView(parent);
 }
 
 Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition()
@@ -38,8 +38,8 @@ QString GrepOutputViewFactory::id() const
 }
 
 
-GrepOutputView::GrepOutputView(QWidget* parent, GrepJob* job)
-  : QWidget(parent), m_job(job)
+GrepOutputView::GrepOutputView(QWidget* parent)
+  : QWidget(parent)
 {
   Ui::GrepOutputView::setupUi(this);
 
@@ -51,6 +51,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepJob* job)
   resultsTreeView->setModel(m_model);
   resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
   resultsTreeView->setHeaderHidden(true);
+  connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
 }
 
 GrepOutputModel* GrepOutputView::model()

@@ -318,7 +318,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     
     GrepJob* job = new GrepJob();
     
-    GrepOutputViewFactory *m_factory = new GrepOutputViewFactory(job);
+    GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
 

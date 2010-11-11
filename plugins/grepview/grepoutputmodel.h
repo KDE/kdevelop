@@ -71,13 +71,12 @@ public:
     void setRegExp(const QRegExp& re);
   
 	// the next three methods are currently not used, I need to investigate to know if we still need them
-    void activate( const QModelIndex &idx );
     QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
     QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
 
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
-
+    void activate( const QModelIndex &idx );
     void showErrorMessage( const QString& errorMessage );
     void showMessage( KDevelop::IStatus*, const QString& message );
 

@@ -27,9 +27,9 @@ using namespace KDevelop;
 GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text)
     : QStandardItem(), m_change(change)
 {
-    int line = lineNumber();
-    QString formattedTxt = QString("  %1: %2").arg(line).arg(text);
-    setText(formattedTxt);
+    QString replacement = text.left(change->m_range.start.column) + change->m_newText + text.right(text.length() - change->m_range.end.column);
+    setText(text);
+    setToolTip(replacement);
     setData(Text, Qt::CheckStateRole);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     setCheckState(Qt::Checked);

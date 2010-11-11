@@ -21,10 +21,10 @@
 #ifndef GREPOUTPUTDELEGATE_H
 #define GREPOUTPUTDELEGATE_H
 
-#include <QtGui/QItemDelegate>
+#include <QtGui/QStyledItemDelegate>
 #include <kcolorscheme.h>
 
-class GrepOutputDelegate : public QItemDelegate
+class GrepOutputDelegate : public QStyledItemDelegate
 {
 public:
     explicit GrepOutputDelegate(QObject* parent);
