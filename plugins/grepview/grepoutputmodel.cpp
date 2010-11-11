@@ -31,7 +31,7 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
     QString formattedTxt = QString("  %1: %2").arg(line).arg(text);
     setText(formattedTxt);
     setData(Text, Qt::CheckStateRole);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     setCheckState(Qt::Checked);
 }
 
@@ -40,7 +40,7 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
 {
     setText(text);
     showCollapsed();
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
     setCheckState(Qt::Checked);
 }
 
@@ -251,29 +251,19 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
     if(item->parent() == 0)
     {
         int idx = item->rowCount() - 1;
-        
+
         if(item->checkState() == Qt::Unchecked)
         {
-            item->setCheckState (Qt::Checked);
             while(idx >= 0)
             {
-                item->child(idx)->setCheckState(Qt::Checked);
-                idx--;
-            }
-        } else if(item->checkState() == Qt::PartiallyChecked)
-        {
-            item->setCheckState(Qt::Checked);
-            while(idx >= 0)
-            {
-                item->child(idx)->setCheckState(Qt::Checked);
+                item->child(idx)->setCheckState(Qt::Unchecked);
                 idx--;
             }
         } else if(item->checkState() == Qt::Checked)
         {
-            item->setCheckState(Qt::Unchecked);
             while(idx >= 0)
             {
-                item->child(idx)->setCheckState(Qt::Unchecked);
+                item->child(idx)->setCheckState(Qt::Checked);
                 idx--;
             }
         }
