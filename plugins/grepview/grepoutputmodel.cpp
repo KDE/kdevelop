@@ -241,18 +241,6 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     }
 }
 
-void GrepOutputModel::showErrorMessage( const QString& errorMessage )
-{
-    ((GrepOutputView*)parent())->setStyleSheet("QLabel { color : red; }");
-    ((GrepOutputView*)parent())->setMessage(errorMessage);
-}
-
-void GrepOutputModel::showMessage( KDevelop::IStatus* , const QString& message )
-{
-    ((GrepOutputView*)parent())->setStyleSheet("");
-    ((GrepOutputView*)parent())->setMessage(message);
-}
-
 void GrepOutputModel::updateCheckState(QStandardItem* item)
 {
     // if we don't disconnect the SIGNAL, the setCheckState will call it in loop

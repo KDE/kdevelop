@@ -63,3 +63,15 @@ void GrepOutputView::setMessage(const QString& msg)
 {
     messageLabel->setText(msg);
 }
+
+void GrepOutputView::showErrorMessage( const QString& errorMessage )
+{
+    setStyleSheet("QLabel { color : red; }");
+    setMessage(errorMessage);
+}
+
+void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
+{
+    setStyleSheet("");
+    setMessage(message);
+}

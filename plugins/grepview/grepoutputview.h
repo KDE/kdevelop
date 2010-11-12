@@ -8,6 +8,11 @@
 
 #include "ui_grepoutputview.h"
 
+namespace KDevelop
+{
+    class IStatus;
+}
+
 class GrepViewPlugin;
 class GrepJob;
 class GrepOutputModel;
@@ -31,6 +36,11 @@ public:
 
     GrepOutputModel* model();
     void setMessage(const QString& msg);
+
+public Q_SLOTS:
+    void showErrorMessage( const QString& errorMessage );
+    void showMessage( KDevelop::IStatus*, const QString& message );
+
 
 private:
     GrepJob* m_job;

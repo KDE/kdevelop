@@ -257,13 +257,7 @@ void GrepJob::start()
     m_fileIndex = 0;
 
     m_findSomething = false;
-
     m_outputModel->clear();
-    
-    connect(this, SIGNAL(showErrorMessage(QString, int)),
-            m_outputModel, SLOT(showErrorMessage(QString)));
-    connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            m_outputModel, SLOT(showMessage(KDevelop::IStatus*, QString)));
 
     qRegisterMetaType<GrepOutputItem::List>();
     connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),

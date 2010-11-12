@@ -78,8 +78,6 @@ public:
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void activate( const QModelIndex &idx );
-    void showErrorMessage( const QString& errorMessage );
-    void showMessage( KDevelop::IStatus*, const QString& message );
 
 private:
     
