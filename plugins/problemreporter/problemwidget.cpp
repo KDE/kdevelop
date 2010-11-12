@@ -75,6 +75,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(showImportsAction, SIGNAL(triggered(bool)), this->model(), SLOT(setShowImports(bool)));
 
     KActionMenu* scopeMenu = new KActionMenu(this);
+    scopeMenu->setDelayed(false);
     scopeMenu->setText(i18n("Scope"));
     scopeMenu->setToolTip(i18n("Which files to display the problems for"));
 
@@ -118,6 +119,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(scopeMapper, SIGNAL(mapped(int)), model(), SLOT(setScope(int)));
 
     KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
+    severityMenu->setDelayed(false);
     severityMenu->setToolTip(i18n("Select the lowest level of problem severity to be displayed"));
     QActionGroup* severityActions = new QActionGroup(this);
 
