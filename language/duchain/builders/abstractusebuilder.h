@@ -119,7 +119,7 @@ protected:
   /**
    * Register a new use for a \a declaration with a \a node.
    *
-   * NOTE: This function requires the DUChain to be write locked.
+   * NOTE: This function requires the DUChain to be read or write locked.
    *       Use the DeclarationPointer versions otherwise.
    *
    * \param node Node which encompasses the use.
@@ -127,6 +127,8 @@ protected:
    */
   void newUse(T* node, Declaration* declaration)
   {
+    ENSURE_CHAIN_READ_LOCKED
+    DUChainWriteLocker lock;
     newUse(node, editorFindRange(node, node), declaration);
   }
 
