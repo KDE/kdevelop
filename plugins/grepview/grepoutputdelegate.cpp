@@ -69,8 +69,9 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     }
     
     // rich text component
-    const GrepOutputItem *item = dynamic_cast<const GrepOutputItem *>((dynamic_cast<const GrepOutputModel *>(index.model()))->itemFromIndex(index));
-    if(item && item->change()->m_range.isValid())
+    const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
+    const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
+    if(item && item->isMatch())
     {
         QStyleOptionViewItemV4 options = option;
         initStyleOption(&options, index);
@@ -87,14 +88,14 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         cur.insertText(item->text().right(item->text().length() - rng.end.column), normal);
         
         painter->save();
-        options.text = "";
+        options.text = "";  // text will be drawn separately
         options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter);
 
-        // shift text right to make icon visible
-        QSize iconSize = options.decorationSize;
-        painter->translate(options.rect.left()+iconSize.width(), options.rect.top());
-        QRect clip(0, 0, options.rect.width()+iconSize.width(), options.rect.height());
-
+        // set correct draw area
+        QRect clip = options.widget->style()->subElementRect(QStyle::SE_ItemViewItemText, &options);
+        painter->translate(clip.topLeft());
+        clip.setTopLeft(QPoint(0,0));
+        
         painter->setClipRect(clip);
         QAbstractTextDocumentLayout::PaintContext ctx;
         ctx.clip = clip;
@@ -104,7 +105,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     }
     else
     {
-        QStyledItemDelegate::paint(painter, opt, index);
+        QStyledItemDelegate::paint(painter, option, index);
     }
 }
 
