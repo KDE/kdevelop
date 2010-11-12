@@ -30,9 +30,11 @@ public:
     
 private Q_SLOTS:
     void showDialog();
+    void showDialogFromProject();
 
 private:
     QString m_directory;
+    QString m_contextMenuDirectory;
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include "grepoutputmodel.h"
 #include "grepviewplugin.h"
 #include <QModelIndex>
+#include <QTextDocument>
 #include <kcolorscheme.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
@@ -29,7 +30,7 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
 {
     setText(text);
     setData(Text, Qt::CheckStateRole);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     setCheckState(Qt::Checked);
     if(replace)
     {
@@ -45,7 +46,7 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
 {
     setText(text);
     showCollapsed();
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
     setCheckState(Qt::Checked);
 }
 
@@ -249,29 +250,19 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
     if(item->parent() == 0)
     {
         int idx = item->rowCount() - 1;
-        
+
         if(item->checkState() == Qt::Unchecked)
         {
-            item->setCheckState (Qt::Checked);
             while(idx >= 0)
             {
-                item->child(idx)->setCheckState(Qt::Checked);
-                idx--;
-            }
-        } else if(item->checkState() == Qt::PartiallyChecked)
-        {
-            item->setCheckState(Qt::Checked);
-            while(idx >= 0)
-            {
-                item->child(idx)->setCheckState(Qt::Checked);
+                item->child(idx)->setCheckState(Qt::Unchecked);
                 idx--;
             }
         } else if(item->checkState() == Qt::Checked)
         {
-            item->setCheckState(Qt::Unchecked);
             while(idx >= 0)
             {
-                item->child(idx)->setCheckState(Qt::Unchecked);
+                item->child(idx)->setCheckState(Qt::Checked);
                 idx--;
             }
         }

@@ -2,7 +2,7 @@
 *   Copyright 1999-2001 by Bernd Gehrmann                                 *
 *   bernd@kdevelop.org                                                    *
 *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
-*                                                                         *
+*   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>                *                                                                      *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
 *   the Free Software Foundation; either version 2 of the License, or     *
@@ -75,6 +75,18 @@ GrepViewPlugin::~GrepViewPlugin()
 KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+    if( context->type() == KDevelop::Context::ProjectItemContext ) {
+        KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+        QList<KDevelop::ProjectBaseItem*> items = ctx->items();
+        // verify if there is only one folder selected
+        if ((items.count() == 1) && (items.first()->folder())) {
+            KAction* action = new KAction( i18n( "Find and replace in this folder" ), this );
+            action->setIcon(KIcon("edit-find"));
+            m_contextMenuDirectory = items.at(0)->folder()->url().toLocalFile();
+            connect( action, SIGNAL(triggered()), this, SLOT(showDialogFromProject()));
+            extension.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, action );
+        }
+    }
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
@@ -153,6 +165,12 @@ void GrepViewPlugin::showDialog()
     }
 
     dlg->show();
+}
+
+void GrepViewPlugin::showDialogFromProject()
+{
+    rememberSearchDirectory(m_contextMenuDirectory);
+    showDialog();
 }
 
 void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
