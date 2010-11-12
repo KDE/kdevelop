@@ -21,7 +21,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <kicon.h>
 #include <klocale.h>
-#include "grepoutputview.h"
 
 using namespace KDevelop;
 
@@ -34,10 +33,10 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
     setCheckState(Qt::Checked);
     if(replace)
     {
-        QString replacement = text.left(change->m_range.start.column) +             // start of line
-                            change->m_newText +                                     // replaced part
-                            text.right(text.length() - change->m_range.end.column); // rest of line
-        setToolTip(replacement);
+        QString replacement = Qt::escape(text.left(change->m_range.start.column)) + // start of line
+                            "<b>" + Qt::escape(change->m_newText) + "</b>" +        // replaced part
+                            Qt::escape(text.right(text.length() - change->m_range.end.column)); // rest of line
+        setToolTip(replacement.trimmed());
     }
 }
 
