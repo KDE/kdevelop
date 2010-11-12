@@ -111,7 +111,21 @@ protected:
    * \param node Node which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
+  void newUse(T* node, const DeclarationPointer& declaration)
+  {
+    newUse(node, editorFindRange(node, node), declaration);
+  }
+
+  /**
+   * Register a new use for a \a declaration with a \a node.
+   *
+   * NOTE: This function requires the DUChain to be write locked.
+   *       Use the DeclarationPointer versions otherwise.
+   *
+   * \param node Node which encompasses the use.
+   * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
+   */
+  void newUse(T* node, Declaration* declaration)
   {
     newUse(node, editorFindRange(node, node), declaration);
   }
@@ -126,10 +140,25 @@ protected:
   {
     DUChainWriteLocker lock(DUChain::lock());
     Declaration* declaration = _declaration.data();
-    
+
     if(!declaration)
       return; // The declaration was deleted in the meantime
 
+    newUse(node, newRange, declaration);
+  }
+
+  /**
+   * Register a new use.
+   *
+   * NOTE: This function requires the DUChain to be write locked.
+   *       Use the DeclarationPointer versions otherwise.
+   *
+   * \param newRange Text range which encompasses the use.
+   * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
+   */
+  void newUse(T* node, const RangeInRevision& newRange, Declaration* declaration)
+  {
+    ENSURE_CHAIN_WRITE_LOCKED
     bool encountered = false;
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
     int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
