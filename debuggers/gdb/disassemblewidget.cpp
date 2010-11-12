@@ -107,7 +107,7 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     
     {   // initialize controls
-        QHBoxLayout* controlsLayout = new QHBoxLayout(this);
+        QHBoxLayout* controlsLayout = new QHBoxLayout;
         QLabel* startAddr = new QLabel(i18n("Start address:"), this);
         QLabel* endAddr   = new QLabel(i18n("End Address:"), this);
         
@@ -179,7 +179,6 @@ DisassembleWidget::DisassembleWidget(CppDebuggerPlugin* plugin, QWidget *parent)
             SIGNAL(currentSessionChanged(KDevelop::IDebugSession*)),
             SLOT(currentSessionChanged(KDevelop::IDebugSession*)));
 
-    connect(plugin, SIGNAL(reset()), this, SLOT(clear()));
     connect(plugin, SIGNAL(reset()), this, SLOT(slotDeactivate()));
     
     // context menu command

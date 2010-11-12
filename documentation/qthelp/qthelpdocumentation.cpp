@@ -1,6 +1,7 @@
 /*  This file is part of KDevelop
     Copyright 2009 Aleix Pol <aleixpol@kde.org>
     Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -28,27 +29,27 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <documentation/standarddocumentationview.h>
 #include "qthelpnetwork.h"
-#include "qthelpplugin.h"
-
-QtHelpPlugin* QtHelpDocumentation::s_provider=0;
+#include "qthelpproviderabstract.h"
+#include "kdebug.h"
+QtHelpProviderAbstract* QtHelpDocumentation::s_provider=0;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
-    : m_name(name), m_info(info), m_current(info.constBegin()), lastView(0)
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(0)
 {}
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
-    : m_name(name), m_info(info), m_current(m_info.find(key))
+    : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key))
 { Q_ASSERT(m_current!=m_info.constEnd()); }
 
 QString QtHelpDocumentation::description() const
 {
     QUrl url(m_current.value());
-    QByteArray data = s_provider->engine()->fileData(url);
+    QByteArray data = m_provider->engine()->fileData(url);
 
     //Extract a short description from the html data
     QString dataString = QString::fromLatin1(data); ///@todo encoding
     QString fragment = url.fragment();
-    
+
     QString p = "((\\\")|(\\\'))";
     QString exp = "< a name = " + p + fragment + p + " > < / a >";
     QString optionalSpace = "( )*";
@@ -70,9 +71,9 @@ QString QtHelpDocumentation::description() const
                 pos = titleStart;
         }
     }
-    
+
     if(pos != -1) {
-        
+
         QString exp = "< a name = " + p + "((\\S)*)" + p + " > < / a >";
         exp.replace(" ", optionalSpace);
         QRegExp nextFragmentExpression(exp);
@@ -89,7 +90,7 @@ QString QtHelpDocumentation::description() const
             if(newEnd != -1 && newEnd > pos)
                 endPos = newEnd + lastNewLine.matchedLength();
         }
-        
+
         {
             //Find the title, and start from there
             QString titleRegExp("< h\\d class = \"title\" >");
@@ -99,10 +100,10 @@ QString QtHelpDocumentation::description() const
             if(idx > pos && idx < endPos)
                 pos = idx;
         }
-        
-        
+
+
         QString thisFragment = dataString.mid(pos, endPos - pos);
-        
+
         {
             //Completely remove the first large header found, since we don't need a header
             QString headerRegExp("< h\\d.*>.*< / h\\d >");
@@ -114,7 +115,7 @@ QString QtHelpDocumentation::description() const
                 thisFragment.remove(idx, findHeader.matchedLength());
             }
         }
-        
+
         {
             //Replace all gigantic header-font sizes with <big>
 
@@ -131,23 +132,23 @@ QString QtHelpDocumentation::description() const
                 thisFragment.replace(closeSize, "</big><br />");
             }
         }
-        
+
         {
             //Replace paragraphs by newlines
-            
+
             QString begin("< p >");
             begin.replace(" ", optionalSpace);
-            
+
             QRegExp findBegin(begin);
             thisFragment.replace(findBegin, "");
 
             QString end("< /p >");
             end.replace(" ", optionalSpace);
-            
+
             QRegExp findEnd(end);
             thisFragment.replace(findEnd, "<br />");
         }
-        
+
         {
             //Remove links, because they won't work
             QString link("< a href = " + p + ".*" + p);
@@ -156,10 +157,10 @@ QString QtHelpDocumentation::description() const
             exp.setMinimal(true);
             thisFragment.replace(exp, "<a ");
         }
-        
+
         return thisFragment;
     }
-    
+
     return QStringList(m_info.keys()).join(", ");
 }
 
@@ -170,19 +171,19 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
         ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
         KDevelop::StandardDocumentationView* view=new KDevelop::StandardDocumentationView(findWidget, parent);
-        view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(s_provider->engine(), 0));
+        view->page()->setNetworkAccessManager(new HelpNetworkAccessManager(m_provider->engine(), 0));
         view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
         view->setContextMenuPolicy(Qt::ActionsContextMenu);
-        
+
         foreach(const QString& name, m_info.keys()) {
             QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, view);
-            
+
             act->setCheckable(true);
             act->setChecked(name==m_current.key());
             view->addAction(act);
         }
         QObject::connect(view, SIGNAL(linkClicked(QUrl)), SLOT(jumpedTo(QUrl)));
-        
+
         view->load(m_current.value());
         ret=view;
         lastView=view;
@@ -193,13 +194,13 @@ QWidget* QtHelpDocumentation::documentationWidget(KDevelop::DocumentationFindWid
 void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {
     Q_ASSERT(lastView);
-    s_provider->jumpedTo(newUrl);
+    m_provider->jumpedTo(newUrl);
     lastView->load(newUrl);
 }
 
 KDevelop::IDocumentationProvider* QtHelpDocumentation::provider() const
 {
-    return s_provider;
+    return m_provider;
 }
 
 QtHelpAlternativeLink::QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent)
@@ -214,23 +215,27 @@ void QtHelpAlternativeLink::showUrl()
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
 
+HomeDocumentation::HomeDocumentation() : m_provider(QtHelpDocumentation::s_provider)
+{
+}
+
 QWidget* HomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget*, QWidget* parent)
 {
     QTreeView* w=new QTreeView(parent);
     w->header()->setVisible(false);
-    w->setModel(QtHelpDocumentation::s_provider->engine()->contentModel());
-    
+    w->setModel(m_provider->engine()->contentModel());
+
     connect(w, SIGNAL(clicked(QModelIndex)), SLOT(clicked(QModelIndex)));
     return w;
 }
 
 void HomeDocumentation::clicked(const QModelIndex& idx)
 {
-    QHelpContentModel* model=QtHelpDocumentation::s_provider->engine()->contentModel();
+    QHelpContentModel* model = m_provider->engine()->contentModel();
     QHelpContentItem* it=model->contentItemAt(idx);
     QMap<QString, QUrl> info;
     info.insert(it->title(), it->url());
-    
+
     KSharedPtr<KDevelop::IDocumentation> newDoc(new QtHelpDocumentation(it->title(), info));
     KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
 }
@@ -242,5 +247,5 @@ QString HomeDocumentation::name() const
 
 KDevelop::IDocumentationProvider* HomeDocumentation::provider() const
 {
-    return QtHelpDocumentation::s_provider;
+    return m_provider;
 }
