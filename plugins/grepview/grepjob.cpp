@@ -31,7 +31,7 @@
 using namespace KDevelop;
 
 
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace)
 {
     GrepOutputItem::List res;
     QFile file(filename);
@@ -60,7 +60,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
                 SimpleRange(lineno, start, lineno, end),
                 re.cap(0), re.cap(0).replace(re, repl)));
             
-            res << GrepOutputItem(change, QString(data));
+            res << GrepOutputItem(change, QString(data), replace);
             offset = end;
         }
         lineno++;
@@ -197,7 +197,7 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     QString file = m_fileList[m_fileIndex].toLocalFile();
-                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement);
+                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement, m_replaceFlag);
 
                     if(!items.isEmpty())
                     {

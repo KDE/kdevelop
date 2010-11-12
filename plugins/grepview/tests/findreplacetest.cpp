@@ -81,7 +81,7 @@ void FindReplaceTest::testFind()
     file.write(subject.toUtf8());
     file.close();
     
-    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search, "");
+    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search, "", false);
     
     QCOMPARE(actualMatches.length(), matches.length());
     

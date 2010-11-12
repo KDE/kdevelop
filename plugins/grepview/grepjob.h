@@ -124,6 +124,6 @@ private:
 
 //FIXME: this function is used externally only for tests, find a way to keep it 
 //       static for a regular compilation
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl);
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace);
 
 #endif

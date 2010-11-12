@@ -37,7 +37,7 @@ public:
         FileExpanded
     };
 
-    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text);
+    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text, bool replace);
     GrepOutputItem(const QString &filename, const QString &text);
     ~GrepOutputItem();
 
@@ -47,6 +47,7 @@ public:
     bool collapsed() const ;
     bool expanded() const ;
     bool isText() const { return data()==Text; }
+    bool isMatch() const;
     bool collapse();
     bool expand();
     bool toggleView();

@@ -24,15 +24,20 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text, bool replace)
     : QStandardItem(), m_change(change)
 {
-    QString replacement = text.left(change->m_range.start.column) + change->m_newText + text.right(text.length() - change->m_range.end.column);
     setText(text);
-    setToolTip(replacement);
     setData(Text, Qt::CheckStateRole);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
     setCheckState(Qt::Checked);
+    if(replace)
+    {
+        QString replacement = text.left(change->m_range.start.column) +             // start of line
+                            change->m_newText +                                     // replaced part
+                            text.right(text.length() - change->m_range.end.column); // rest of line
+        setToolTip(replacement);
+    }
 }
 
 GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
@@ -128,6 +133,11 @@ DocumentChangePointer GrepOutputItem::change() const
 
 bool GrepOutputItem::expanded() const {
     return data()==FileExpanded;
+}
+
+bool GrepOutputItem::isMatch() const
+{
+    return m_change->m_range.isValid();
 }
 
 GrepOutputItem::~GrepOutputItem()
