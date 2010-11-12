@@ -14,12 +14,10 @@
 #include "grepviewplugin.h"
 #include <QModelIndex>
 #include <QTextDocument>
-#include <kcolorscheme.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <kicon.h>
 #include <klocale.h>
 
 using namespace KDevelop;
@@ -28,7 +26,6 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
     : QStandardItem(), m_change(change)
 {
     setText(text);
-    setData(Text, Qt::CheckStateRole);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     setCheckState(Qt::Checked);
     if(replace)
@@ -44,85 +41,18 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
     : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
 {
     setText(text);
-    showCollapsed();
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
     setCheckState(Qt::Checked);
 }
 
-
-bool GrepOutputItem::collapse()
+int GrepOutputItem::lineNumber() const 
 {
-    if(isText())
-        return false;
-    if(collapsed())
-        return true;
-    QStandardItemModel *model = this->model();
-    if(!model)
-        return false;
-    int takeIdx = this->index().row()+1;
-    QList< QList<QStandardItem*> > rows;
-    forever
-    {
-        GrepOutputItem *textitem = dynamic_cast<GrepOutputItem*>(model->item(takeIdx));
-        if( !textitem )
-            break;
-        if(!textitem->isText())
-            break;
-        rows << model->takeRow(takeIdx);
-    }
-    foreach(const QList<QStandardItem*> &row, rows)
-        this->appendRow(row);
-    this->showCollapsed();
-    return true;
-}
-
-bool GrepOutputItem::expand()
-{
-    if(isText())
-        return false;
-    if(expanded())
-        return true;
-    int curRow = this->index().row()+1;
-    while(this->rowCount()!=0)
-    {
-        QList<QStandardItem*> row = this->takeRow(0);
-        this->model()->insertRow(curRow++, row);
-    }
-    showExpanded();
-    return true;
-}
-
-void GrepOutputItem::showCollapsed()
-{
-    setData( FileCollapsed );
-}
-
-void GrepOutputItem::showExpanded()
-{
-    setData( FileExpanded );
-}
-
-bool GrepOutputItem::toggleView()
-{
-    if(collapsed())
-        expand();
-    else if(expanded())
-        collapse();
-    else
-        return false;
-    return true;
-}
-
-bool GrepOutputItem::collapsed() const {
-    return data()==FileCollapsed;
-}
-
-int GrepOutputItem::lineNumber() const {
     // line starts at 0 for cursor but we want to start at 1
     return m_change->m_range.start.line + 1;
 }
 
-QString GrepOutputItem::filename() const {
+QString GrepOutputItem::filename() const 
+{
     return m_change->m_document.str();
 }
 
@@ -131,11 +61,7 @@ DocumentChangePointer GrepOutputItem::change() const
     return m_change;
 }
 
-bool GrepOutputItem::expanded() const {
-    return data()==FileExpanded;
-}
-
-bool GrepOutputItem::isMatch() const
+bool GrepOutputItem::isText() const
 {
     return m_change->m_range.isValid();
 }
@@ -164,10 +90,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
 {
     QStandardItem *stditem = itemFromIndex(idx);
     GrepOutputItem *grepitem = dynamic_cast<GrepOutputItem*>(stditem);
-    if( !grepitem )
-        return;
-    
-    if(grepitem->toggleView())
+    if( !grepitem || !grepitem->isText() )
         return;
 
     KUrl url(grepitem->filename());
@@ -207,7 +130,7 @@ QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
     for (int row = 0; row < rowCount(); ++row) {
         int currow = (startrow + row) % rowCount();
         if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->data() == GrepOutputItem::Text)
+            if (grep_item->isText())
                 return index(currow, 0);
     }
     return QModelIndex();
@@ -222,7 +145,7 @@ QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentI
     {
         int currow = (startrow - row) % rowCount();
         if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->data() == GrepOutputItem::Text)
+            if (grep_item->isText())
                 return index(currow, 0);
     }
     return QModelIndex();

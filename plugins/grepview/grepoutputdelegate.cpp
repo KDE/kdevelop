@@ -39,8 +39,7 @@ GrepOutputDelegate* GrepOutputDelegate::self()
 }
 
 GrepOutputDelegate::GrepOutputDelegate( QObject* parent )
-    : QStyledItemDelegate(parent), textBrush( KColorScheme::View, KColorScheme::LinkText ),
-      fileBrush( KColorScheme::View, KColorScheme::InactiveText )
+    : QStyledItemDelegate(parent)
 {
     Q_ASSERT(!m_self);
     m_self = this;
@@ -52,26 +51,11 @@ GrepOutputDelegate::~GrepOutputDelegate()
 }
 
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    QStyleOptionViewItem opt = option;
-    QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.toInt() == GrepOutputItem::Text )
-    {
-        opt.palette.setBrush( QPalette::Text, textBrush.brush( option.palette ) );
-    }
-    else if( status.isValid() && status.toInt() == GrepOutputItem::FileCollapsed )
-    {
-        opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
-    }
-    else if( status.isValid() && status.toInt() == GrepOutputItem::FileExpanded )
-    {
-        opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
-    }
-    
+{ 
     // rich text component
     const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
     const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
-    if(item && item->isMatch())
+    if(item && item->isText())
     {
         QStyleOptionViewItemV4 options = option;
         initStyleOption(&options, index);
