@@ -257,7 +257,7 @@ QString GrepDialog::patternString() const
 
 QString GrepDialog::templateString() const
 {
-    return templateEdit->text();
+    return templateEdit->text().isEmpty() ? "%s" : templateEdit->text();
 }
 
 QString GrepDialog::replacementTemplateString() const
