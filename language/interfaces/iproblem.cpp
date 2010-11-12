@@ -140,6 +140,8 @@ QString Problem::sourceString() const
             return i18n("Definition-Use Chain");
         case ProblemData::SemanticAnalysis:
             return i18n("Semantic Analysis");
+        case ProblemData::ToDo:
+            return i18n("TODO");
         case ProblemData::Unknown:
         default:
             return i18n("Unknown");

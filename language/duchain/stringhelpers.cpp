@@ -21,6 +21,9 @@
 
 #include <QString>
 #include <QStringList>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
 
 namespace KDevelop
 {
@@ -449,53 +452,58 @@ void strip( const QString& str, QString& from ) {
   if( ip ) from = from.mid( ip );
 }
 
-void rStrip( const QByteArray& str, QByteArray& from ) {
-  if( str.isEmpty() ) return;
+int rStrip( const QByteArray& str, QByteArray& from ) {
+  if( str.isEmpty() ) return 0;
 
   int i = 0;
   int ip = from.length();
   int s = from.length();
 
+  bool exhausted = false;
   for( int a = s-1; a >= 0; a-- ) {
-      if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
-          continue;
+    if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
+      continue;
+    } else {
+      if( exhausted || from[a] != str[i] ) {
+        ip = a + 1;
+        break;
       } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
+        i++;
+        if( i == (int)str.length() ) exhausted = true;
       }
+    }
   }
 
   if( ip != (int)from.length() ) from = from.left( ip );
+  return s - ip;
 }
 
-void strip( const QByteArray& str, QByteArray& from ) {
-  if( str.isEmpty() ) return;
+int strip( const QByteArray& str, QByteArray& from ) {
+  if( str.isEmpty() ) return 0;
 
   int i = 0;
   int ip = 0;
   int s = from.length();
 
+  bool exhausted = false;
   for( int a = 0; a < s; a++ ) {
-      if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
-          continue;
+    if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
+      continue;
+    } else {
+      if( exhausted || from[a] != str[i] ) {
+        ip=a;
+        break;
       } else {
-          if( from[a] == str[i] ) {
-              i++;
-              ip = a+1;
-              if( i == (int)str.length() ) break;
-          } else {
-              break;
-          }
+        i++;
+        if( i == (int)str.length() ) exhausted = true;
       }
+    }
   }
 
   if( ip ) from = from.mid( ip );
+  return ip;
 }
+
 QString formatComment( const QString& comment ) {
   QString ret;
 
@@ -547,6 +555,16 @@ QByteArray formatComment( const QByteArray& comment ) {
 
   return ret.trimmed();
 }
+
+bool containsToDos( const QString& comment_line ) {
+  foreach(const QString& todoMarker, ICore::self()->languageController()->completionSettings()->todoMarkerWords()) {
+    if (comment_line.contains(todoMarker)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 ParamIterator::~ParamIterator()
 {
   delete d;
