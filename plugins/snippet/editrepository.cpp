@@ -25,8 +25,6 @@
 
 #include "snippetstore.h"
 
-#include "snippetfeatures.h"
-
 EditRepository::EditRepository(SnippetRepository* repository, QWidget* parent)
     : KDialog(parent), Ui::EditRepositoryBase(), m_repo(repository)
 {
