@@ -60,22 +60,17 @@ public:
     ~GrepOutputModel();
 
     void setRegExp(const QRegExp& re);
-  
-	// the next three methods are currently not used, I need to investigate to know if we still need them
-    QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
-    QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
     void clear();  // resets file & match counts
-
+ 
+    QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
+    QModelIndex nextItemIndex(const QModelIndex &currentIdx) const;
+    
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void activate( const QModelIndex &idx );
     void doReplacements();
 
-private:
-    
-    /** Check whether idx points to a row in the current model. */
-    bool isValidIndex( const QModelIndex& idx ) const;
-
+private:    
     QRegExp m_regExp;
     GrepOutputItem *rootItem;
     int fileCount;

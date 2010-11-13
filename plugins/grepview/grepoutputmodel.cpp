@@ -16,9 +16,10 @@
 #include <QTextDocument>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
+#include <klocale.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <klocale.h>
+
 
 using namespace KDevelop;
 
@@ -197,37 +198,28 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     ICore::self()->documentController()->activateDocument( doc, range );
 }
 
-bool GrepOutputModel::isValidIndex( const QModelIndex& idx ) const
+QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) const
 {
-    return ( idx.isValid() && idx.row() >= 0 && idx.row() < rowCount() && idx.column() == 0 );
-}
-
-QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
-{
-    int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
-    
-    for (int row = 0; row < rowCount(); ++row) {
-        int currow = (startrow + row) % rowCount();
-        if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->isText())
-                return index(currow, 0);
-    }
-    return QModelIndex();
-}
-
-QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
-{
-    //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
-    int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
-    
-    for (int row = 0; row < rowCount(); ++row)
+    int row = currentIdx.row();
+    GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+    if(current_item->parent() != 0) //we do nothing if it's the root item
     {
-        int currow = (startrow - row) % rowCount();
-        if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->isText())
-                return index(currow, 0);
+        if(row > 0)
+            return current_item->parent()->child(row - 1)->index();
     }
-    return QModelIndex();
+    return currentIdx;
+}
+
+QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
+{
+    int row = currentIdx.row();
+    GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+    if(current_item->parent() != 0) //we do nothing if it's the root item
+    {
+        if(row < current_item->parent()->rowCount() - 1)
+            return current_item->parent()->child(row + 1)->index();
+    }
+    return currentIdx;
 }
 
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )

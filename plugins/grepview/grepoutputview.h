@@ -49,6 +49,10 @@ public Q_SLOTS:
 private:
     GrepOutputModel* m_model;
     QAction* m_apply;
+    
+private slots:
+    void selectPreviousItem();
+    void selectNextItem();
 };
 
 #endif // GREPOUTPUTVIEW_H

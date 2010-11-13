@@ -9,7 +9,6 @@
 
 #include <kpushbutton.h>
 #include <klocale.h>
-#include <kdebug.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kxmlguiclient.h>
@@ -66,6 +65,8 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
     connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(m_apply, SIGNAL(triggered(bool)), this, SLOT(onApply()));
+    connect(previous, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
+    connect(next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
 }
 
 GrepOutputModel* GrepOutputView::model()
@@ -110,3 +111,16 @@ void GrepOutputView::expandRootElement(const QModelIndex& parent)
     }
 }
 
+void GrepOutputView::selectPreviousItem()
+{
+    QModelIndex idx = resultsTreeView->currentIndex();
+    if(idx.isValid())
+        resultsTreeView->setCurrentIndex(m_model->previousItemIndex(idx));
+}
+
+void GrepOutputView::selectNextItem()
+{
+    QModelIndex idx = resultsTreeView->currentIndex();
+    if(idx.isValid())
+        resultsTreeView->setCurrentIndex(m_model->nextItemIndex(idx));
+}
