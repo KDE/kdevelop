@@ -198,7 +198,7 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
         QStringList itemFolderListString;
         Q_FOREACH( KDevelop::ProjectFolderItem *_item, itemFolderList )
         {
-            itemFolderListString << _item->url().toLocalFile();
+            itemFolderListString << _item->url().toLocalFile(KUrl::RemoveTrailingSlash);
         }
 
         // Compare the difference between disk file and model items
@@ -252,7 +252,7 @@ void ProjectFileSystemWatcher::slotDirChangedInternal( const QString &dir, KDeve
         QList< KDevelop::ProjectFolderItem* > deletedDirs;
         Q_FOREACH( KDevelop::ProjectFolderItem* _folderItem, itemFolderList )
         {
-            if( dirList.contains( _folderItem->url().toLocalFile() ) == false)
+            if( dirList.contains( _folderItem->url().toLocalFile(KUrl::RemoveTrailingSlash) ) == false)
             {
 //                 int row = _folderItem->row();
 //                 QString tobeRemovedDir = _folderItem->url().toLocalFile();
