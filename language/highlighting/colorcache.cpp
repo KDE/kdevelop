@@ -36,9 +36,7 @@
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
 
-#ifdef HAVE_HIGHLIGHTIFACE
-  #include <KTextEditor/HighlightInterface>
-#endif
+#include <KTextEditor/HighlightInterface>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -96,19 +94,14 @@ ColorCache::ColorCache(QObject* parent)
   connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)),
            this, SLOT(updateColorsFromSettings()), Qt::QueuedConnection);
 
-  #ifdef HAVE_HIGHLIGHTIFACE
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
-            this, SLOT(slotDocumentActivated(KDevelop::IDocument*)));
+  connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)),
+          this, SLOT(slotDocumentActivated(KDevelop::IDocument*)));
 
-    if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
-      if ( doc->textDocument() ) {
-        updateColorsFromDocument(doc->textDocument());
-      }
+  if ( IDocument* doc = ICore::self()->documentController()->activeDocument() ) {
+    if ( doc->textDocument() ) {
+      updateColorsFromDocument(doc->textDocument());
     }
-  #else
-    connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()),
-            this, SLOT(updateColorsFromScheme()), Qt::QueuedConnection);
-  #endif
+  }
 
   m_self = this;
 
@@ -179,7 +172,6 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
 
   // either the KDE 4.4 way with the HighlightInterface or fallback to the old way via global KDE color scheme
 
-  #ifdef HAVE_HIGHLIGHTIFACE
   if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(doc) ) {
     KTextEditor::Attribute::Ptr style = iface->defaultStyle(KTextEditor::HighlightInterface::dsNormal);
     foreground = style->foreground().color();
@@ -200,7 +192,6 @@ void ColorCache::updateColorsFromDocument(KTextEditor::Document* doc)
       background = KColorScheme(QPalette::Normal, KColorScheme::View).background(KColorScheme::NormalBackground).color();
     }
   }
-  #endif
 
   if ( !foreground.isValid() ) {
     // fallback to colorscheme variant

@@ -22,11 +22,7 @@
 #include <KActionCollection>
 #include <KAction>
 
-#include "snippetfeatures.h"
-
-#ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
-    #include <KTextEditor/HighlightInterface>
-#endif
+#include <KTextEditor/HighlightInterface>
 
 #include <interfaces/ipartcontroller.h>
 #include <interfaces/icore.h>
@@ -177,11 +173,9 @@ void SnippetPlugin::createSnippetFromSelection()
     Q_ASSERT(view);
 
     QString mode;
-    #ifdef SNIPPETS_HAVE_HIGHLIGHTIFACE
-        if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
+    if ( KTextEditor::HighlightInterface* iface = qobject_cast<KTextEditor::HighlightInterface*>(view->document()) ) {
             mode = iface->highlightingModeAt(view->selectionRange().start());
-        }
-    #endif
+    }
     if ( mode.isEmpty() ) {
         mode = view->document()->mode();
     }

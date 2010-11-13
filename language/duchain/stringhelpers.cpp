@@ -459,23 +459,22 @@ int rStrip( const QByteArray& str, QByteArray& from ) {
   int ip = from.length();
   int s = from.length();
 
-  bool exhausted = false;
   for( int a = s-1; a >= 0; a-- ) {
-    if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
-      continue;
-    } else {
-      if( exhausted || from[a] != str[i] ) {
-        ip = a + 1;
-        break;
+      if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
+          continue;
       } else {
-        i++;
-        if( i == (int)str.length() ) exhausted = true;
+          if( from[a] == str[i] ) {
+              i++;
+              ip = a;
+              if( i == (int)str.length() ) break;
+          } else {
+              break;
+          }
       }
-    }
   }
 
   if( ip != (int)from.length() ) from = from.left( ip );
-  return s - ip;
+  return s - from.length();
 }
 
 int strip( const QByteArray& str, QByteArray& from ) {
@@ -485,25 +484,23 @@ int strip( const QByteArray& str, QByteArray& from ) {
   int ip = 0;
   int s = from.length();
 
-  bool exhausted = false;
   for( int a = 0; a < s; a++ ) {
-    if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
-      continue;
-    } else {
-      if( exhausted || from[a] != str[i] ) {
-        ip=a;
-        break;
+      if( isWhite( from[a] ) ) { ///@todo Check whether this can cause problems in utf-8, as only one real character is treated!
+          continue;
       } else {
-        i++;
-        if( i == (int)str.length() ) exhausted = true;
+          if( from[a] == str[i] ) {
+              i++;
+              ip = a+1;
+              if( i == (int)str.length() ) break;
+          } else {
+              break;
+          }
       }
-    }
   }
 
   if( ip ) from = from.mid( ip );
-  return ip;
+  return s - from.length();
 }
-
 QString formatComment( const QString& comment ) {
   QString ret;
 
