@@ -52,6 +52,8 @@ GrepOutputView::GrepOutputView(QWidget* parent)
   resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
   resultsTreeView->setHeaderHidden(true);
   connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
+  connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
+  connect(applyButton, SIGNAL(clicked(bool)), this, SLOT(onApply()));
 }
 
 GrepOutputModel* GrepOutputView::model()
@@ -62,6 +64,11 @@ GrepOutputModel* GrepOutputView::model()
 void GrepOutputView::setMessage(const QString& msg)
 {
     messageLabel->setText(msg);
+}
+
+void GrepOutputView::enableReplace(bool enable)
+{
+    applyButton->setEnabled(enable);
 }
 
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
@@ -75,3 +82,19 @@ void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
     setStyleSheet("");
     setMessage(message);
 }
+
+void GrepOutputView::onApply()
+{
+    setEnabled(false);
+    m_model->doReplacements();
+    setEnabled(true);
+}
+
+void GrepOutputView::expandRootElement(const QModelIndex& parent)
+{
+    if(!parent.isValid())
+    {
+        resultsTreeView->setExpanded(m_model->index(0,0), true);
+    }
+}
+

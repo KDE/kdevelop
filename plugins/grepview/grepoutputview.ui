@@ -19,9 +19,9 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPushButton" name="replaceButton">
+        <widget class="QPushButton" name="applyButton">
          <property name="text">
-          <string>Replace</string>
+          <string>Apply</string>
          </property>
         </widget>
        </item>
@@ -67,7 +67,7 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>replaceButton</tabstop>
+  <tabstop>applyButton</tabstop>
   <tabstop>previousButton</tabstop>
   <tabstop>nextButton</tabstop>
   <tabstop>changeButton</tabstop>

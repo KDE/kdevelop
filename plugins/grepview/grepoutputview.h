@@ -36,14 +36,16 @@ public:
 
     GrepOutputModel* model();
     void setMessage(const QString& msg);
+    void enableReplace(bool enable);
 
 public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
     void showMessage( KDevelop::IStatus*, const QString& message );
+    void onApply();
+    void expandRootElement( const QModelIndex & parent );
 
 
 private:
-    GrepJob* m_job;
     GrepOutputModel* m_model;
 };
 

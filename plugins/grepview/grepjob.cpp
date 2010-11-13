@@ -202,23 +202,11 @@ void GrepJob::slotWork()
                     if(!items.isEmpty())
                     {
                         m_findSomething = true;
-                        if(m_replaceFlag) 
-                        {
-                            foreach(const GrepOutputItem &i, items)
-                            {
-                                m_changeSet.addChange(i.change());
-                            }
-                        }
                         emit foundMatches(file, items);
                     }
 
                     m_fileIndex++;
                 }
-                QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
-            }
-            else if(m_replaceFlag)
-            {
-                m_workState = WorkReplace;
                 QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             }
             else
@@ -229,17 +217,6 @@ void GrepJob::slotWork()
                 //model()->slotCompleted();
                 emitResult();
             }
-            break;
-        case WorkReplace:
-            DocumentChangeSet::ChangeResult result = m_changeSet.applyAllChanges();
-            if(!result)
-            {
-                emit showErrorMessage(i18n("Replacement failed: ") + result.m_failureReason);
-            }
-            emit hideProgress(this);
-            emit clearMessage(this);
-            m_workState = WorkIdle;
-            emitResult();
             break;
     }
 }

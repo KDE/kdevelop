@@ -95,15 +95,12 @@ private:
     enum {
         WorkCollectFiles,
         WorkGrep,
-        WorkReplace,
         WorkIdle
     } m_workState;
     
     KUrl::List m_fileList;
     int m_fileIndex;
     QPointer<GrepFindFilesThread> m_findThread;
-    
-    KDevelop::DocumentChangeSet m_changeSet;
 
     QString m_templateString;
     QString m_replacementTemplateString;

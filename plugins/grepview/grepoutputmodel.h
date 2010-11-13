@@ -30,13 +30,17 @@ public:
     typedef QList<GrepOutputItem> List;
 
     GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text, bool replace);
-    GrepOutputItem(const QString &filename, const QString &text);
+    GrepOutputItem(const QString &filename, const QString &text, bool replace);
     ~GrepOutputItem();
 
     QString filename() const ;
     int lineNumber() const ;
     KDevelop::DocumentChangePointer change() const ;
     bool isText() const ;
+    /// Recursively apply check state to children
+    void propagateState() ;
+    /// Check children to determine current state
+    void refreshState() ;
 
 private:
     KDevelop::DocumentChangePointer m_change;
@@ -60,10 +64,12 @@ public:
 	// the next three methods are currently not used, I need to investigate to know if we still need them
     QModelIndex nextHighlightIndex( const QModelIndex& currentIndex );
     QModelIndex previousHighlightIndex( const QModelIndex& currentIndex );
+    void clear();  // resets file & match counts
 
 public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void activate( const QModelIndex &idx );
+    void doReplacements();
 
 private:
     
@@ -71,6 +77,9 @@ private:
     bool isValidIndex( const QModelIndex& idx ) const;
 
     QRegExp m_regExp;
+    GrepOutputItem *rootItem;
+    int fileCount;
+    int matchCount;
 
 private slots:
     void updateCheckState(QStandardItem*);

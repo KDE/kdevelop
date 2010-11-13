@@ -26,10 +26,12 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
     : QStandardItem(), m_change(change)
 {
     setText(text);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-    setCheckState(Qt::Checked);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    
     if(replace)
     {
+        setCheckable(true);
+        setCheckState(Qt::Checked);
         QString replacement = Qt::escape(text.left(change->m_range.start.column)) + // start of line
                             "<b>" + Qt::escape(change->m_newText) + "</b>" +        // replaced part
                             Qt::escape(text.right(text.length() - change->m_range.end.column)); // rest of line
@@ -37,12 +39,17 @@ GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text
     }
 }
 
-GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text)
+GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool replace)
     : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
 {
     setText(text);
-    setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsTristate);
-    setCheckState(Qt::Checked);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    if(replace)
+    {
+        setCheckable(true);
+        setTristate(true);
+        setCheckState(Qt::Checked);
+    }
 }
 
 int GrepOutputItem::lineNumber() const 
@@ -66,13 +73,78 @@ bool GrepOutputItem::isText() const
     return m_change->m_range.isValid();
 }
 
+void GrepOutputItem::propagateState()
+{
+    for(int i = 0; i < rowCount(); i++)
+    {
+        GrepOutputItem *item = static_cast<GrepOutputItem *>(child(i));
+        if(item->isEnabled())
+        {
+            item->setCheckState(checkState());
+            item->propagateState();
+        }
+    }
+}
+
+void GrepOutputItem::refreshState()
+{
+    if(rowCount() > 0)
+    {
+        int checked   = 0;
+        int unchecked = 0;
+        int enabled   = 0; //only enabled items are relevants
+        
+        for(int i = 0; i < rowCount(); i++)
+        {
+            QStandardItem *item = child(i);
+            if(item->isEnabled())
+            {
+                enabled += 1;
+                switch(child(i)->checkState())
+                {
+                    case Qt::Checked:
+                        checked += 1;
+                        break;
+                    case Qt::Unchecked:
+                        unchecked += 1;
+                        break;
+                    default: break;
+                }
+            }
+        }
+        
+        if(enabled == 0)
+        {
+            setCheckState(Qt::Unchecked);
+            setEnabled(false);
+        }
+        else if(checked == enabled)
+        {
+            setCheckState(Qt::Checked);
+        } 
+        else if (unchecked == enabled)
+        {
+            setCheckState(Qt::Unchecked);
+        }
+        else
+        {
+            setCheckState(Qt::PartiallyChecked);
+        }
+    }
+    
+    if(GrepOutputItem *p = static_cast<GrepOutputItem *>(parent()))
+    {
+        p->refreshState();
+    }
+}
+
 GrepOutputItem::~GrepOutputItem()
 {}
 
 ///////////////////////////////////////////////////////////////
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
-    : QStandardItemModel( parent ), m_regExp("")
+    : QStandardItemModel( parent ), m_regExp(""), rootItem(0), fileCount(0), matchCount(0)
 {
     connect(this, SIGNAL(itemChanged(QStandardItem*)),
               this, SLOT(updateCheckState(QStandardItem*)));
@@ -80,6 +152,13 @@ GrepOutputModel::GrepOutputModel( QObject *parent )
 
 GrepOutputModel::~GrepOutputModel()
 {}
+
+void GrepOutputModel::clear()
+{
+    QStandardItemModel::clear();
+    fileCount = 0;
+    matchCount = 0;
+}
 
 void GrepOutputModel::setRegExp(const QRegExp& re)
 {
@@ -153,10 +232,24 @@ QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentI
 
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
+    if(items.isEmpty())
+        return;
+    
+    bool replace = items[0].isCheckable();  //FIXME : find a cleaner way to get this !
+    if(rowCount() == 0)
+    {
+        rootItem = new GrepOutputItem("", "", replace);
+        appendRow(rootItem);
+    }
+    
+    fileCount  += 1;
+    matchCount += items.length();
+    rootItem->setText(i18n("%1 matches in %2 files", matchCount, fileCount));
+    
     QString fnString = i18np("%2 (one match)", "%2 (%1 matches)", items.length(), filename);
 
-    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString);
-    appendRow(fileItem);
+    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, replace);
+    rootItem->appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
@@ -168,48 +261,49 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
 {
     // if we don't disconnect the SIGNAL, the setCheckState will call it in loop
     disconnect(SIGNAL(itemChanged(QStandardItem*)));
-
-    if(item->parent() == 0)
+    
+    // try to update checkstate on non checkable items would make a checkbox appear
+    if(item->isCheckable())
     {
-        int idx = item->rowCount() - 1;
-
-        if(item->checkState() == Qt::Unchecked)
-        {
-            while(idx >= 0)
-            {
-                item->child(idx)->setCheckState(Qt::Unchecked);
-                idx--;
-            }
-        } else if(item->checkState() == Qt::Checked)
-        {
-            while(idx >= 0)
-            {
-                item->child(idx)->setCheckState(Qt::Checked);
-                idx--;
-            }
-        }
-    }
-    else
-    {
-        QStandardItem *parent = item->parent();
-        bool checked = false;
-        bool unchecked = false;
-        int idx = parent->rowCount() - 1;
-        while(idx >= 0)
-        {
-            if(parent->child(idx)->checkState() == Qt::Checked) checked = true;
-            else unchecked = true;
-
-            idx--;
-        }
-
-        if(checked) unchecked ? parent->setCheckState(Qt::PartiallyChecked) : parent->setCheckState(Qt::Checked);
-        else parent->setCheckState(Qt::Unchecked);
+        GrepOutputItem *it = static_cast<GrepOutputItem *>(item);
+        it->propagateState();
+        it->refreshState();
     }
 
     connect(this, SIGNAL(itemChanged(QStandardItem*)),
               this, SLOT(updateCheckState(QStandardItem*)));
 }
+
+void GrepOutputModel::doReplacements()
+{
+    
+    DocumentChangeSet changeSet;
+    changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
+    for(int fileRow = 0; fileRow < rootItem->rowCount(); fileRow++)
+    {
+        GrepOutputItem *file = static_cast<GrepOutputItem *>(rootItem->child(fileRow));
+        
+        for(int matchRow = 0; matchRow < file->rowCount(); matchRow++)
+        {
+            GrepOutputItem *match = static_cast<GrepOutputItem *>(file->child(matchRow));
+            if(match->checkState() == Qt::Checked) 
+            {
+                changeSet.addChange(match->change());
+                // this item cannot be checked anymore
+                match->setCheckState(Qt::Unchecked);
+                match->setEnabled(false);
+            }
+        }
+    }
+    
+    DocumentChangeSet::ChangeResult result = changeSet.applyAllChanges();
+    //TODO : really display this
+    if(!result.m_success)
+    {
+        kDebug() << result.m_failureReason;
+    }
+}
+
 
 #include "grepoutputmodel.moc"
 
