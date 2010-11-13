@@ -156,8 +156,11 @@ public:
         m_parser->updateProgressBar();
 
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
-        if(m_doneParseJobs == m_maxParseJobs || m_weaver.queueLength() == 0)
+        if(m_doneParseJobs == m_maxParseJobs
+            || (m_neededPriority == BackgroundParser::BestPriority && m_weaver.queueLength() == 0))
+        {
             emit m_parser->hideProgress(m_parser);
+        }
     }
 
     ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QPointer<QObject> > notifyWhenReady)
