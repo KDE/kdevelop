@@ -185,9 +185,13 @@ bool QtHelpConfig::checkQtHelpFile(bool modify)
 {
     QString qtHelpNamespace = QHelpEngineCore::namespaceName(m_configWidget->qchRequester->text());
     //verify if the file is valid and if there is a name
-    if (qtHelpNamespace.isEmpty() || m_configWidget->qchName->text().isEmpty()) {
+    if(m_configWidget->qchName->text().isEmpty()){
+        KMessageBox::error(this, i18n("Name can't be empty."));
+        return false;
+    }
+    if (qtHelpNamespace.isEmpty()) {
         // Open error message (not valid Qt Compressed Help file)
-        KMessageBox::error(this, i18n("Qt Compressed Help file is not valid. Or name is empty."));
+        KMessageBox::error(this, i18n("Qt Compressed Help file is not valid."));
         return false;
     }
     int modifyIndex = -1;

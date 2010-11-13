@@ -162,7 +162,7 @@
       <item>
        <widget class="QCheckBox" name="loadQtDocsCheckBox">
         <property name="text">
-         <string>Load automatically Qt documentations</string>
+         <string>Load Qt documentations</string>
         </property>
        </widget>
       </item>
