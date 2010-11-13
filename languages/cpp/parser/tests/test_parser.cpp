@@ -377,7 +377,7 @@ private slots:
     QVERIFY(it);
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("FIXME comment\nthis is TODO\nTODO: comment\n(another TODO)"));
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("FIXME comment\nthis is TODO\n TODO: comment\n(another TODO)"));
     it = it->next;
     QVERIFY(it);
     QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
@@ -413,6 +413,17 @@ private slots:
     QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
     QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(8, 4));
     QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(8, 16));
+  }
+
+  void testComments6() {
+    QByteArray module("//TranslationUnitComment\n/**\n * foo\n **/\nint i;\n");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(module, &mem_pool);
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("foo"));
   }
 
   QString preprocess(const QString& contents) {
