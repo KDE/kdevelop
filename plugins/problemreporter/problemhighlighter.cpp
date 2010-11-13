@@ -88,6 +88,9 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
             {
                 //There is a problem which's range contains the cursor
                 ProblemPointer problem = m_problemsForRanges[range];
+                if (problem->source() == ProblemData::ToDo) {
+                    continue;
+                }
                 
                 KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
                 widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
@@ -166,9 +169,11 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
         KTextEditor::MovingRange* problemRange = iface->newMovingRange(range.textRange());
         
         m_problemsForRanges.insert(problemRange, problem);
+        m_topHLRanges.append(problemRange);
         
-        if(problem->severity() != ProblemData::Hint || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
-        
+        if(problem->source() != ProblemData::ToDo && (problem->severity() != ProblemData::Hint
+            || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()))
+        {
             KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
             if(problem->severity() == ProblemData::Error)
                 error->setUnderlineColor(Qt::red);
@@ -176,7 +181,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
                 error->setUnderlineColor(Qt::magenta);
             else if(problem->severity() == ProblemData::Hint)
                 error->setUnderlineColor(Qt::yellow);
-                
+
             error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
 #if 0
@@ -189,8 +194,6 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 #endif
 
             problemRange->setAttribute(error);
-            
-            m_topHLRanges.append(problemRange);
         }
         
         if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
