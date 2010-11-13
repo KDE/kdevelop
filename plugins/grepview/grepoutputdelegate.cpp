@@ -27,6 +27,7 @@
 #include <QtGui/QTextCursor>
 #include <QtGui/QAbstractTextDocumentLayout>
 #include <QtGui/QTextCharFormat>
+#include <QtCore/QRegExp>
 
 #include <kdebug.h>
 
@@ -52,6 +53,9 @@ GrepOutputDelegate::~GrepOutputDelegate()
 
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 { 
+    // there is no function in QString to left-trim. A call to remove this this regexp does the job
+    static const QRegExp leftspaces("^\\s*", Qt::CaseSensitive, QRegExp::RegExp);
+    
     // rich text component
     const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
     const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
@@ -64,12 +68,27 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         const KDevelop::SimpleRange rng = item->change()->m_range;
         QTextDocument doc;
         QTextCursor cur(&doc);
-        QTextCharFormat normal = cur.charFormat(), bold = cur.charFormat();
-        bold.setFontWeight(QFont::Bold);
-        cur.insertText(QString("%1: ").arg(item->lineNumber()));
-        cur.insertText(item->text().left(rng.start.column));
-        cur.insertText(item->text().mid(rng.start.column, rng.end.column - rng.start.column), bold);
-        cur.insertText(item->text().right(item->text().length() - rng.end.column), normal);
+        
+        QPalette::ColorGroup cg = options.state & QStyle::State_Enabled
+                                  ? QPalette::Normal : QPalette::Disabled;
+        QPalette::ColorRole cr  = options.state & QStyle::State_Selected
+                                  ? QPalette::HighlightedText : QPalette::Text;
+        QTextCharFormat fmt = cur.charFormat();
+        fmt.setFont(options.font);
+        
+        // the line number appears grayed
+        fmt.setForeground(options.palette.brush(QPalette::Disabled, cr));
+        cur.insertText(QString("%1: ").arg(item->lineNumber()), fmt);
+        
+        // switch to normal color
+        fmt.setForeground(options.palette.brush(cg, cr));
+        cur.insertText(item->text().left(rng.start.column).remove(leftspaces), fmt);
+        
+        fmt.setFontWeight(QFont::Bold);
+        cur.insertText(item->text().mid(rng.start.column, rng.end.column - rng.start.column), fmt);
+        
+        fmt.setFontWeight(QFont::Normal);
+        cur.insertText(item->text().right(item->text().length() - rng.end.column), fmt);
         
         painter->save();
         options.text = "";  // text will be drawn separately
@@ -77,7 +96,8 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
 
         // set correct draw area
         QRect clip = options.widget->style()->subElementRect(QStyle::SE_ItemViewItemText, &options);
-        painter->translate(clip.topLeft());
+        QFontMetrics metrics(options.font);
+        painter->translate(clip.topLeft() - QPoint(0, metrics.descent()));
         clip.setTopLeft(QPoint(0,0));
         
         painter->setClipRect(clip);
