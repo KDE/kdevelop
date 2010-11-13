@@ -91,6 +91,25 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
       stripped_left += KDevelop::strip( "**", *it );
       stripped_right += KDevelop::rStrip( "/**", *it );
 
+      int left_spaces;
+      for (left_spaces = 0; left_spaces < it->size(); ++left_spaces) {
+        if (!isSpace(it->at(left_spaces))) {
+          break;
+        }
+      }
+
+      int right_spaces;
+      for (right_spaces = it->size() - 1; right_spaces >= 0; --right_spaces) {
+        if (!isSpace(it->at(right_spaces))) {
+          break;
+        }
+      }
+      right_spaces = it->size() - 1 - right_spaces;
+
+      stripped_left += left_spaces;
+      stripped_right += right_spaces;
+      *it = it->mid(left_spaces, it->size() - left_spaces - right_spaces);
+
       if( containsToDo(*it) ) {
         KDevelop::ProblemPointer p(new KDevelop::Problem());
         p->setSource(KDevelop::ProblemData::ToDo);
