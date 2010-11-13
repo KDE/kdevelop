@@ -55,6 +55,7 @@ Boston, MA 02110-1301, USA.
 #include <QHeaderView>
 #include <klockfile.h>
 #include <interfaces/idocumentcontroller.h>
+#include <ktexteditor/recoveryinterface.h>
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
 #include <QLabel>
@@ -401,7 +402,15 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                doc->textDocument()->setText(text);
+                                
+                                KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
+                                
+                                if(recovery && recovery->haveRecovery())
+                                    // Use the recovery from the kate swap-file if possible
+                                    recovery->doRecovery();
+                                else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
                             }
                         }
                     }
