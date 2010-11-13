@@ -32,7 +32,7 @@
 CommentFormatter::CommentFormatter()
 {
   if(!KDevelop::ICore::self())
-    return; // May happen in tests
+    return; // May happen in tests i guess
   
   foreach(QString marker, KDevelop::ICore::self()->languageController()->completionSettings()->todoMarkerWords())
   {
