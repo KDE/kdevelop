@@ -172,11 +172,7 @@ void Parser::processComment( int offset, int line ) {
     line = position.line;
   }
 
-/*  kDebug() << "noticing comment" << commentToken.symbol();*/
-  QList<KDevelop::ProblemPointer> problems = CommentFormatter::extractToDos(tokenNumber, session);
-  foreach(KDevelop::ProblemPointer problem, problems) {
-    control->reportProblem(problem);
-  }
+  session->m_commentFormatter.extractToDos( tokenNumber, session, control );
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
 
 }

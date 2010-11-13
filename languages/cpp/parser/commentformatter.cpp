@@ -24,12 +24,54 @@
 #include "rpp/chartools.h"
 #include <language/duchain/stringhelpers.h>
 #include <language/editor/simplerange.h>
+#include <interfaces/icore.h>
+#include <interfaces/ilanguagecontroller.h>
+#include <interfaces/icompletionsettings.h>
+#include "control.h"
 
-QList<KDevelop::ProblemPointer> CommentFormatter::extractToDos( uint token, const ParseSession* session ) {
-  QList<KDevelop::ProblemPointer> result;
+CommentFormatter::CommentFormatter()
+{
+  if(!KDevelop::ICore::self())
+    return; // May happen in tests
+  
+  foreach(QString marker, KDevelop::ICore::self()->languageController()->completionSettings()->todoMarkerWords())
+  {
+    m_commentMarkers << marker.toUtf8();
+    m_commentMarkerIndices << KDevelop::IndexedString(marker).index();
+  }
+}
+
+bool CommentFormatter::containsToDo(const uint* start, const uint* end) const
+{
+  const uint* markersStart = m_commentMarkerIndices.data();
+  const uint* markersEnd = m_commentMarkerIndices.data() + m_commentMarkerIndices.size();
+  
+  for(const uint* cursor = start; cursor < end; ++cursor)
+    for(const uint* marker = markersStart; marker < markersEnd; ++marker)
+      if(*cursor == *marker)
+        return true;
+  
+  return false;
+}
+
+bool CommentFormatter::containsToDo(const QByteArray& text) const
+{
+  foreach(const QByteArray& marker, m_commentMarkers)
+    if(text.contains(marker))
+      return true;
+  return false;
+}
+
+void CommentFormatter::extractToDos( uint token, const ParseSession* session, Control* control ) {
+
   if( !token )
-    return QList<KDevelop::ProblemPointer>();
+    return;
+  
   const Token& commentToken( (*session->token_stream)[token] );
+  
+  if( !containsToDo(session->contents() + commentToken.position, session->contents() + commentToken.position + commentToken.size) )
+    return; // Most common code path: No todos
+  
   QByteArray comment = stringFromContents(session->contentsVector(), commentToken.position, commentToken.size);
   QList<QByteArray> lines = comment.split( '\n' );
   if ( !lines.isEmpty() ) {
@@ -49,7 +91,7 @@ QList<KDevelop::ProblemPointer> CommentFormatter::extractToDos( uint token, cons
       stripped_left += KDevelop::strip( "**", *it );
       stripped_right += KDevelop::rStrip( "/**", *it );
 
-      if( KDevelop::containsToDos(*it) ) {
+      if( containsToDo(*it) ) {
         KDevelop::ProblemPointer p(new KDevelop::Problem());
         p->setSource(KDevelop::ProblemData::ToDo);
         p->setDescription(*it);
@@ -57,12 +99,10 @@ QList<KDevelop::ProblemPointer> CommentFormatter::extractToDos( uint token, cons
         int start_line = comment_start.line + (it - bit);
         int start_column = (it == bit) ? comment_start.column + stripped_left : stripped_left;
         p->setFinalLocation(KDevelop::DocumentRange(session->url(), KDevelop::SimpleRange(start_line, start_column, start_line, it->size() + start_column)));
-        result.append(p);
+        control->reportProblem(p);
       }
     }
   }
-
-  return result;
 }
 
 QByteArray CommentFormatter::formatComment( uint token, const ParseSession* session ) {

@@ -144,7 +144,7 @@ void DeclarationBuilder::visitTemplateParameter(TemplateParameterAST * ast) {
 
 void DeclarationBuilder::parseComments(const ListNode<uint> *comments)
 {
-  setComment(CommentFormatter::formatComment(comments, editor()->parseSession()));
+  setComment(editor()->parseSession()->m_commentFormatter.formatComment(comments, editor()->parseSession()));
 }
 
 void DeclarationBuilder::visitFunctionDeclaration(FunctionDefinitionAST* node)

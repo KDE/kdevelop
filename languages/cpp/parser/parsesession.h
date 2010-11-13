@@ -33,6 +33,7 @@
 #include <language/duchain/duchainpointer.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/editor/rangeinrevision.h>
+#include "commentformatter.h"
 
 namespace Cpp {
   class EnvironmentFile;
@@ -124,6 +125,8 @@ public:
   TokenStream* token_stream;
 
   KDevelop::IndexedString m_url; //Should contain the url from which the content was extracted, can also be empty.
+
+  CommentFormatter m_commentFormatter;
 
 private:
   PreprocessedContents m_contents;

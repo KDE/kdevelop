@@ -24,6 +24,7 @@
 #include <cppparserexport.h>
 #include <language/interfaces/iproblem.h>
 
+class Control;
 template<class Tp>
 class ListNode;
 
@@ -35,14 +36,20 @@ class ParseSession;
  * */
 class KDEVCPPPARSER_EXPORT CommentFormatter {
   public:
+    CommentFormatter();
+    
     ///Processes the comment represented by the given token-number within the parse-session's token-stream
-    static QByteArray formatComment( uint token, const ParseSession* session );
+    QByteArray formatComment( uint token, const ParseSession* session );
 
-    static QList<KDevelop::ProblemPointer> extractToDos( uint token, const ParseSession* session );
+    void extractToDos( uint token, const ParseSession* session, Control* control );
 
     ///Processes the list of comments represented by the given token-number within the parse-session's token-stream
-    static QByteArray formatComment( const ListNode<uint>* node, const ParseSession* session );
+    QByteArray formatComment( const ListNode<uint>* node, const ParseSession* session );
   private:
+    bool containsToDo(const uint* start, const uint* end) const;
+    bool containsToDo(const QByteArray& text) const;
+    QVector<uint> m_commentMarkerIndices; // IndexedString indices
+    QVector<QByteArray> m_commentMarkers;
 };
 
 #endif
