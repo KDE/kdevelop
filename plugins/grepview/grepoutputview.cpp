@@ -65,7 +65,7 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
     connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
-    connect(m_apply, SIGNAL(trigerred(bool)), this, SLOT(onApply()));
+    connect(m_apply, SIGNAL(triggered(bool)), this, SLOT(onApply()));
 }
 
 GrepOutputModel* GrepOutputView::model()

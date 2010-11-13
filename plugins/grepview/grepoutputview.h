@@ -22,10 +22,10 @@ class GrepOutputDelegate;
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
 public:
-  GrepOutputViewFactory();
-  virtual QWidget* create(QWidget *parent = 0);
-  virtual Qt::DockWidgetArea defaultPosition();
-  virtual QString id() const;
+    GrepOutputViewFactory();
+    virtual QWidget* create(QWidget *parent = 0);
+    virtual Qt::DockWidgetArea defaultPosition();
+    virtual QString id() const;
 };
 
 class GrepOutputView : public QWidget, Ui::GrepOutputView
