@@ -358,7 +358,9 @@ void ProblemModel::forceFullUpdate()
     m_lock.unlock();
     DUChainReadLocker lock(DUChain::lock());
     foreach(const IndexedString& document, documents) {
-        TopDUContext::Features updateType = m_showImports ? TopDUContext::ForceUpdateRecursive : TopDUContext::ForceUpdate;
-        DUChain::self()->updateContextForUrl(document, (TopDUContext::Features)(updateType | TopDUContext::SimplifiedVisibleDeclarationsAndContexts));
+        TopDUContext::Features updateType = TopDUContext::ForceUpdate;
+        if(documents.size() == 1)
+            updateType = TopDUContext::ForceUpdateRecursive;
+        DUChain::self()->updateContextForUrl(document, (TopDUContext::Features)(updateType | TopDUContext::VisibleDeclarationsAndContexts));
     }
 }
