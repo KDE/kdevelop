@@ -556,15 +556,6 @@ QByteArray formatComment( const QByteArray& comment ) {
   return ret.trimmed();
 }
 
-bool containsToDos( const QString& comment_line ) {
-  foreach(const QString& todoMarker, ICore::self()->languageController()->completionSettings()->todoMarkerWords()) {
-    if (comment_line.contains(todoMarker)) {
-      return true;
-    }
-  }
-  return false;
-}
-
 ParamIterator::~ParamIterator()
 {
   delete d;
