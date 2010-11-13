@@ -37,21 +37,33 @@ QString GrepOutputViewFactory::id() const
     return "org.kdevelop.GrepOutputView";
 }
 
-
 GrepOutputView::GrepOutputView(QWidget* parent)
   : QWidget(parent)
 {
-  Ui::GrepOutputView::setupUi(this);
+    Ui::GrepOutputView::setupUi(this);
 
-//  setObjectName("Replace in files Tree");
-//  setWindowTitle(i18n("Replace in files"));
-  setWindowIcon(SmallIcon("cmake"));
-  
-  m_model = new GrepOutputModel(this);
-  resultsTreeView->setModel(m_model);
-  resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
-  resultsTreeView->setHeaderHidden(true);
-  connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
+    setWindowTitle(i18n("Replace output view"));
+    setWindowIcon(SmallIcon("edit-find"));
+    
+    QAction *apply = new QAction(KIcon("dialog-ok-apply"), i18n("&Replace"), this);
+    QAction *previous = new QAction(KIcon("go-previous"), i18n("&Previous"), this);
+    QAction *next = new QAction(KIcon("go-next"), i18n("&Next"), this);
+    QAction *separator = new QAction(this);
+    separator->setSeparator(true);
+    QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
+    
+    addAction(apply);
+    addAction(previous);
+    addAction(next);
+    addAction(separator);
+    addAction(change_criteria);
+    
+
+    m_model = new GrepOutputModel(this);
+    resultsTreeView->setModel(m_model);
+    resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
+    resultsTreeView->setHeaderHidden(true);
+    connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
 }
 
 GrepOutputModel* GrepOutputView::model()
