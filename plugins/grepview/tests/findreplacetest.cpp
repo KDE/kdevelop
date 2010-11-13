@@ -55,7 +55,7 @@ void FindReplaceTest::testFind_data()
                            << (MatchList() << Match(0, 0, 3) << Match(0, 3, 6));
     QTest::newRow("RegExp (member call)") << "foo->bar ();\nbar();" << QRegExp("\\->\\s*\\b(bar)\\b\\s*\\(")
                            << (MatchList() << Match(0, 3, 10));
-    // the matching must be sertarted after the last previous match
+    // the matching must be started after the last previous match
     QTest::newRow("RegExp (greedy match)") << "foofooo" << QRegExp("[o]+")
                            << (MatchList() << Match(0, 1, 3) << Match(0, 4, 7));
     QTest::newRow("Matching EOL") << "foobar\nfoobar" << QRegExp("foo.*")
@@ -81,7 +81,7 @@ void FindReplaceTest::testFind()
     file.write(subject.toUtf8());
     file.close();
     
-    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search, "");
+    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search, "", false);
     
     QCOMPARE(actualMatches.length(), matches.length());
     
@@ -158,8 +158,9 @@ void FindReplaceTest::testReplace()
     }
     
     GrepJob *job = new GrepJob(this);
+    GrepOutputModel *model = new GrepOutputModel(job);
     
-    job->setOutputModel(new GrepOutputModel(job));
+    job->setOutputModel(model);
     job->setPatternString(searchPattern);
     job->setTemplateString(searchTemplate);
     job->setReplaceString(replace);
@@ -173,9 +174,8 @@ void FindReplaceTest::testReplace()
     job->setProjectFilesFlag(false);
     job->setReplaceFlag(true);
     
-    kDebug() << "Job started";
     QVERIFY(job->exec());
-    kDebug() << "Job passed";
+    model->doReplacements();
     
     foreach(File fileData, result) 
     {

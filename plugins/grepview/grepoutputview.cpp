@@ -45,25 +45,27 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     setWindowTitle(i18n("Replace output view"));
     setWindowIcon(SmallIcon("edit-find"));
     
-    QAction *apply = new QAction(KIcon("dialog-ok-apply"), i18n("&Replace"), this);
+    m_apply = new QAction(KIcon("dialog-ok-apply"), i18n("&Replace"), this);
     QAction *previous = new QAction(KIcon("go-previous"), i18n("&Previous"), this);
     QAction *next = new QAction(KIcon("go-next"), i18n("&Next"), this);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
     
-    addAction(apply);
+    addAction(m_apply);
     addAction(previous);
     addAction(next);
     addAction(separator);
     addAction(change_criteria);
     
-
     m_model = new GrepOutputModel(this);
     resultsTreeView->setModel(m_model);
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
+    
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
+    connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
+    connect(m_apply, SIGNAL(trigerred(bool)), this, SLOT(onApply()));
 }
 
 GrepOutputModel* GrepOutputView::model()
@@ -75,3 +77,36 @@ void GrepOutputView::setMessage(const QString& msg)
 {
     messageLabel->setText(msg);
 }
+
+void GrepOutputView::enableReplace(bool enable)
+{
+    m_apply->setEnabled(enable);
+}
+
+void GrepOutputView::showErrorMessage( const QString& errorMessage )
+{
+    setStyleSheet("QLabel { color : red; }");
+    setMessage(errorMessage);
+}
+
+void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
+{
+    setStyleSheet("");
+    setMessage(message);
+}
+
+void GrepOutputView::onApply()
+{
+    setEnabled(false);
+    m_model->doReplacements();
+    setEnabled(true);
+}
+
+void GrepOutputView::expandRootElement(const QModelIndex& parent)
+{
+    if(!parent.isValid())
+    {
+        resultsTreeView->setExpanded(m_model->index(0,0), true);
+    }
+}
+

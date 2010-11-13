@@ -3,10 +3,16 @@
 
 #include <qwidget.h>
 #include <qtreeview.h>
+#include <qaction.h>
 
 #include <interfaces/iuicontroller.h>
 
 #include "ui_grepoutputview.h"
+
+namespace KDevelop
+{
+    class IStatus;
+}
 
 class GrepViewPlugin;
 class GrepJob;
@@ -31,10 +37,18 @@ public:
 
     GrepOutputModel* model();
     void setMessage(const QString& msg);
+    void enableReplace(bool enable);
+
+public Q_SLOTS:
+    void showErrorMessage( const QString& errorMessage );
+    void showMessage( KDevelop::IStatus*, const QString& message );
+    void onApply();
+    void expandRootElement( const QModelIndex & parent );
+
 
 private:
-    GrepJob* m_job;
     GrepOutputModel* m_model;
+    QAction* m_apply;
 };
 
 #endif // GREPOUTPUTVIEW_H

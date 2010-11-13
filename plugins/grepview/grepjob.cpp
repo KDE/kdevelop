@@ -31,7 +31,7 @@
 using namespace KDevelop;
 
 
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl)
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace)
 {
     GrepOutputItem::List res;
     QFile file(filename);
@@ -60,7 +60,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
                 SimpleRange(lineno, start, lineno, end),
                 re.cap(0), re.cap(0).replace(re, repl)));
             
-            res << GrepOutputItem(change, QString(data));
+            res << GrepOutputItem(change, QString(data), replace);
             offset = end;
         }
         lineno++;
@@ -197,28 +197,16 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     QString file = m_fileList[m_fileIndex].toLocalFile();
-                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement);
+                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement, m_replaceFlag);
 
                     if(!items.isEmpty())
                     {
                         m_findSomething = true;
-                        if(m_replaceFlag) 
-                        {
-                            foreach(const GrepOutputItem &i, items)
-                            {
-                                m_changeSet.addChange(i.change());
-                            }
-                        }
                         emit foundMatches(file, items);
                     }
 
                     m_fileIndex++;
                 }
-                QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
-            }
-            else if(m_replaceFlag)
-            {
-                m_workState = WorkReplace;
                 QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
             }
             else
@@ -229,17 +217,6 @@ void GrepJob::slotWork()
                 //model()->slotCompleted();
                 emitResult();
             }
-            break;
-        case WorkReplace:
-            DocumentChangeSet::ChangeResult result = m_changeSet.applyAllChanges();
-            if(!result)
-            {
-                emit showErrorMessage(i18n("Replacement failed: ") + result.m_failureReason);
-            }
-            emit hideProgress(this);
-            emit clearMessage(this);
-            m_workState = WorkIdle;
-            emitResult();
             break;
     }
 }
@@ -257,13 +234,7 @@ void GrepJob::start()
     m_fileIndex = 0;
 
     m_findSomething = false;
-
     m_outputModel->clear();
-    
-    connect(this, SIGNAL(showErrorMessage(QString, int)),
-            m_outputModel, SLOT(showErrorMessage(QString)));
-    connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            m_outputModel, SLOT(showMessage(KDevelop::IStatus*, QString)));
 
     qRegisterMetaType<GrepOutputItem::List>();
     connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),

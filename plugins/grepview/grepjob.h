@@ -95,15 +95,12 @@ private:
     enum {
         WorkCollectFiles,
         WorkGrep,
-        WorkReplace,
         WorkIdle
     } m_workState;
     
     KUrl::List m_fileList;
     int m_fileIndex;
     QPointer<GrepFindFilesThread> m_findThread;
-    
-    KDevelop::DocumentChangeSet m_changeSet;
 
     QString m_templateString;
     QString m_replacementTemplateString;
@@ -124,6 +121,6 @@ private:
 
 //FIXME: this function is used externally only for tests, find a way to keep it 
 //       static for a regular compilation
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl);
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace);
 
 #endif

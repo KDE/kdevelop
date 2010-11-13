@@ -257,7 +257,7 @@ QString GrepDialog::patternString() const
 
 QString GrepDialog::templateString() const
 {
-    return templateEdit->text();
+    return templateEdit->text().isEmpty() ? "%s" : templateEdit->text();
 }
 
 QString GrepDialog::replacementTemplateString() const
@@ -321,7 +321,13 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
-
+    toolView->enableReplace(button == ReplaceButton);
+    
+    connect(job, SIGNAL(showErrorMessage(QString, int)),
+            toolView, SLOT(showErrorMessage(QString)));
+    connect(job, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
+            toolView, SLOT(showMessage(KDevelop::IStatus*, QString)));
+    
     job->setOutputModel(toolView->model());
     job->setPatternString(patternString());
     job->setReplacementTemplateString(replacementTemplateString());

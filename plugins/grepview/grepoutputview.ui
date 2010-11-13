@@ -30,6 +30,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>applyButton</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>nextButton</tabstop>
+  <tabstop>changeButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
