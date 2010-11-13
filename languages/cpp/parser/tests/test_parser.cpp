@@ -429,7 +429,7 @@ private slots:
     QVERIFY(it);
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("foo"));
+    QCOMPARE(CommentFormatter().formatComment(it->element->comments, lastSession), QByteArray("foo"));
   }
 
   QString preprocess(const QString& contents) {
