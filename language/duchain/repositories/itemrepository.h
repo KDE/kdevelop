@@ -2367,18 +2367,20 @@ class ItemRepository : public AbstractItemRepository {
       m_dynamicFile->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
     }
 
-#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
-    m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
-    Q_ASSERT(m_file->isOpen());
-    Q_ASSERT(m_file->size() >= BucketStartOffset);
-    if(m_fileMap) {
-      m_fileMapSize = m_file->size() - BucketStartOffset;
-    }else{
-      kWarning() << "mapping" << m_file->fileName() << "FAILED!";
-    }
-#else
-    m_fileMap = 0;
     m_fileMapSize = 0;
+    m_fileMap = 0;
+
+#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
+    if(m_file->size() > BucketStartOffset){
+      m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
+      Q_ASSERT(m_file->isOpen());
+      Q_ASSERT(m_file->size() >= BucketStartOffset);
+      if(m_fileMap){
+        m_fileMapSize = m_file->size() - BucketStartOffset;
+      }else{
+        kWarning() << "mapping" << m_file->fileName() << "FAILED!";
+      }
+    }
 #endif
     //To protect us from inconsistency due to crashes. flush() is not enough.
     m_file->close();

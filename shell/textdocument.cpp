@@ -290,19 +290,19 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     view = d->document->createView(parent);
 
     if (view) {
-        #if KDE_VERSION < KDE_MAKE_VERSION(4, 4, 60)
-        view->setContextMenu( view->defaultContextMenu() );
-        #endif
         connect(view, SIGNAL(contextMenuAboutToShow(KTextEditor::View*,QMenu*)), this, SLOT(populateContextMenu(KTextEditor::View*,QMenu*)));
 
-        #if KDE_VERSION >= KDE_MAKE_VERSION(4, 4, 0)
         //in KDE >= 4.4 we can use KXMLGuiClient::replaceXMLFile to provide
         //katepart with out own restructured UI configuration
         QStringList katePartUIs = KGlobal::mainComponent().dirs()->findAllResources("data", "kdevelop/katepartui.rc");
         const QString katePartUI = katePartUIs.last();
         const QString katePartLocalUI = KStandardDirs::locateLocal("data", "kdevelop/katepartui.rc");
+        if (!QFile::exists(katePartLocalUI)) {
+            // prevent warning:
+            // kdevelop/kdeui (kdelibs): No such XML file ".../.kde/share/apps/kdevelop/katepartui.rc"
+            QFile::copy(katePartUI, katePartLocalUI);
+        }
         view->replaceXMLFile(katePartUI, katePartLocalUI);
-        #endif
     }
 
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))

@@ -44,8 +44,6 @@ bool WorkingSet::m_loading = false;
 WorkingSet::WorkingSet(QString id, QString icon)
     : m_id(id), m_iconName(icon)
 {
-    Q_ASSERT(!m_id.isEmpty());
-
     //Give the working-set icons one color, so they are less disruptive
     QImage imgActive(KIconLoader::global()->loadIcon(icon, KIconLoader::NoGroup, 16).toImage());
     QImage imgInactive = imgActive;
@@ -355,7 +353,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 #ifdef SYNC_OFTEN
     setConfig.sync();
 #endif
-
+    
     emit setChangedSignificantly();
 }
 

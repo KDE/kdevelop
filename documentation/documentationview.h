@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -45,6 +46,7 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
         
     public slots:
         void addHistory(KSharedPtr< KDevelop::IDocumentation > doc);
+        void emptyHistory();
         
         void browseForward();
         void browseBack();
@@ -84,9 +86,12 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT ProvidersModel : public QAbstractListMode
     public slots:
         void unloaded(KDevelop::IPlugin* p);
         void loaded(KDevelop::IPlugin* p);
+        void reloadProviders();
         
     private:
         QList<KDevelop::IDocumentationProvider*> mProviders;
+signals:
+        void providersChanged();
 };
 
 #endif // DOCUMENTATIONVIEW_H

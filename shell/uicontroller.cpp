@@ -59,7 +59,8 @@ public:
     UiControllerPrivate(UiController *controller)
     : areasRestored(false), m_controller(controller)
     {
-        Core::self()->workingSetControllerInternal()->initializeController(m_controller);
+        if (Core::self()->workingSetControllerInternal())
+            Core::self()->workingSetControllerInternal()->initializeController(m_controller);
 
         QMap<QString, Sublime::Position> desired;
 

@@ -30,9 +30,6 @@
 #include "../languageexport.h"
 
 #include <kdeversion.h>
-#if KDE_VERSION > KDE_MAKE_VERSION(4, 3, 80)
-  #define HAVE_HIGHLIGHTIFACE
-#endif
 
 namespace KTextEditor {
 class Document;

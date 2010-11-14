@@ -59,6 +59,14 @@ Boston, MA 02110-1301, USA.
 #include <sublime/area.h>
 #include <QLabel>
 
+
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(4,5,60)
+    #define HAVE_RECOVERY_INTERFACE
+    #include <ktexteditor/recoveryinterface.h>
+#endif
+
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
 namespace KDevelop
@@ -401,7 +409,19 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                doc->textDocument()->setText(text);
+                                #ifdef HAVE_RECOVERY_INTERFACE
+                                KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
+                                
+                                if(recovery && recovery->haveRecovery())
+                                    // Use the recovery from the kate swap-file if possible
+                                    recovery->doRecovery();
+                                else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
+                                #else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
+                                #endif
                             }
                         }
                     }

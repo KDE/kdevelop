@@ -645,6 +645,7 @@ QList<IDocument*> DocumentController::openDocuments() const
 void DocumentController::activateDocument( IDocument * document, const KTextEditor::Range& range )
 {
     // TODO avoid some code in openDocument?
+    Q_ASSERT(document);
     openDocument(document->url(), range);
 }
 
