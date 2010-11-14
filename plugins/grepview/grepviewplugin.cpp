@@ -142,28 +142,6 @@ void GrepViewPlugin::showDialog()
         dlg->setDirectory(m_directory);
     }
 
-    KUrl currentUrl;
-    KDevelop::IDocument *document = core()->documentController()->activeDocument();
-    dlg->setEnableProjectBox(false);
-    if( document )
-    {
-        currentUrl = document->url();
-    }
-    if( currentUrl.isValid() )
-    {
-        KDevelop::IProject *proj =
-                core()->projectController()->findProjectForUrl( currentUrl );
-        if( proj && proj->folder().isLocalFile() )
-        {
-            dlg->setEnableProjectBox(! proj->files().isEmpty() );
-
-            if (!m_directory.startsWith(proj->folder().toLocalFile()))
-            {
-                dlg->setDirectory( proj->folder().toLocalFile() );
-            }
-        }
-    }
-
     dlg->show();
 }
 
