@@ -54,7 +54,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     KAction *action = actionCollection()->addAction("edit_grep");
     action->setText(i18n("Find in Fi&les..."));
     action->setShortcut( i18n("Ctrl+Alt+f") );
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
     action->setToolTip( i18n("Search for expressions over several files") );
     action->setWhatsThis( i18n("<b>Find in files</b><p>"
             "Opens the 'Find in files' dialog. There you "
@@ -92,7 +92,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
             QAction* action = new QAction(KIcon("edit-find"), i18n("&Find in Files"), this);
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(showDialogFromMenu()));
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
     }
@@ -100,49 +100,58 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     return extension;
 }
 
-void GrepViewPlugin::showDialog()
+void GrepViewPlugin::showDialog(bool setLastUsed)
 {
+    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), setLastUsed );
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
-    QString pattern;
-    if( doc )
+    
+    if(!setLastUsed)
     {
-        KTextEditor::Range range = doc->textSelection();
-        if( range.isValid() )
+        QString pattern;
+        if( doc )
         {
-            kDebug() << "got valid range:" << range;
-            pattern = doc->textDocument()->text( range );
-            kDebug() << "context now:" << pattern;
+            KTextEditor::Range range = doc->textSelection();
+            if( range.isValid() )
+            {
+                kDebug() << "got valid range:" << range;
+                pattern = doc->textDocument()->text( range );
+                kDebug() << "context now:" << pattern;
+            }
+            if( pattern.isEmpty() )
+            {
+                kDebug() << "fetching current word";
+                pattern = doc->textWord();
+                kDebug() << "word is:" << pattern;
+            }
         }
-        if( pattern.isEmpty() )
+
+        // Before anything, this removes line feeds from the
+        // beginning and the end.
+        int len = pattern.length();
+        if (len > 0 && pattern[0] == '\n')
         {
-            kDebug() << "fetching current word";
-            pattern = doc->textWord();
-            kDebug() << "word is:" << pattern;
+            pattern.remove(0, 1);
+            len--;
         }
-    }
+        if (len > 0 && pattern[len-1] == '\n')
+            pattern.truncate(len-1);
+        if (!pattern.isEmpty()) {
+            dlg->setPattern( pattern );
+        }
 
-    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
-    // Before anything, this removes line feeds from the
-    // beginning and the end.
-    int len = pattern.length();
-    if (len > 0 && pattern[0] == '\n')
-    {
-        pattern.remove(0, 1);
-        len--;
+        dlg->enableButtonOk( !pattern.isEmpty() );
     }
-    if (len > 0 && pattern[len-1] == '\n')
-        pattern.truncate(len-1);
-    if (!pattern.isEmpty()) {
-        dlg->setPattern( pattern );
-    }
-
-    dlg->enableButtonOk( !pattern.isEmpty() );
 
     if (!m_directory.isEmpty() && QFileInfo(m_directory).isDir()) {
         dlg->setDirectory(m_directory);
     }
 
     dlg->show();
+}
+
+void GrepViewPlugin::showDialogFromMenu()
+{
+    showDialog();
 }
 
 void GrepViewPlugin::showDialogFromProject()

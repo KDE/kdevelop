@@ -27,9 +27,10 @@ public:
 
     void rememberSearchDirectory(QString const & directory);
     virtual KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
-    
+    void showDialog(bool setLastUsed = false);
+
 private Q_SLOTS:
-    void showDialog();
+    void showDialogFromMenu();
     void showDialogFromProject();
 
 private:

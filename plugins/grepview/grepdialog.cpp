@@ -103,7 +103,7 @@ const QStringList excludepatterns = QStringList()
 const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
 const KDialog::ButtonCode GrepDialog::ReplaceButton = KDialog::User2;
 
-GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
+GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUsed )
     : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -117,8 +117,14 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     setupUi(mainWidget());
 
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
+    
+    // add default values when the most recent ones should not be set
+    if(!setLastUsed)
+    {
+        patternCombo->addItem( "" );
+        replacementCombo->addItem( "" );
+    }
 
-    patternCombo->addItem( "" );
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
     
@@ -127,7 +133,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
     templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
     replacementTemplateEdit->setText( cg.readEntry("LastUsedReplacementTemplateString", repl_template[0]) );
     
-    replacementCombo->addItem( "" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     
@@ -173,14 +178,14 @@ void GrepDialog::directoryChanged(const QString& dir)
 
 
 // Returns the contents of a QComboBox as a QStringList
-static QStringList qCombo2StringList( QComboBox* combo )
+static QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty = false )
 {
     QStringList list;
     if (!combo) {
         return list;
     }
     int skippedItem = -1;
-    if (!combo->currentText().isEmpty()) {
+    if (!combo->currentText().isEmpty() || allowEmpty) {
         list << combo->currentText();
     }
     if (combo->currentIndex() != -1 && !combo->itemText(combo->currentIndex()).isEmpty()) {
@@ -199,7 +204,7 @@ GrepDialog::~GrepDialog()
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
-    cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo));
+    cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     cg.writeEntry("regexp", regexCheck->isChecked());
     cg.writeEntry("recursive", recursiveCheck->isChecked());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
@@ -322,6 +327,7 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
     toolView->enableReplace(button == ReplaceButton);
+    toolView->setPlugin(m_plugin);
     
     connect(job, SIGNAL(showErrorMessage(QString, int)),
             toolView, SLOT(showErrorMessage(QString)));

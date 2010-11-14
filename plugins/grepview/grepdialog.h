@@ -30,7 +30,7 @@ public:
     static const KDialog::ButtonCode SearchButton;
     static const KDialog::ButtonCode ReplaceButton;
     
-    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0 );
+    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0, bool setLastUsed=false );
     ~GrepDialog();
 
     void setPattern(const QString &pattern);
