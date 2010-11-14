@@ -51,6 +51,9 @@ class CreateLocalDeclarationAction : public IAssistantAction {
           }
         }
         virtual QString description() const {
+          return i18n("local %1", typeString(20));
+        }
+        virtual QString toolTip() const {
           return i18n("Create local declaration %1 %2", typeString(20), problem->type->identifier().toString());
         }
     private:
@@ -115,6 +118,9 @@ class CreateMemberDeclarationAction : public IAssistantAction {
           }
         }
         virtual QString description() const {
+          return accessString() + " " + returnString();
+        }
+        virtual QString toolTip() const {
           DUChainReadLocker lock(DUChain::lock());
           DUContext* container = useContainer();
           if(container)
@@ -129,6 +135,8 @@ class CreateMemberDeclarationAction : public IAssistantAction {
               return "protected";
             case Declaration::Private:
               return "private";
+            case Declaration::Public:
+              return "public";
             default:
               return QString();
           }      
@@ -239,4 +247,9 @@ MissingDeclarationAssistant::MissingDeclarationAssistant(KSharedPtr< Cpp::Missin
         addAction(KDevelop::IAssistantAction::Ptr(new CreateMemberDeclarationAction(problem)));
     }
   }
+
+  if (p->type->isFunction)
+    m_title = i18n("Declare function \"%1\" as", type->identifier().toString());
+  else
+    m_title = i18n("Declare \"%1\" as", type->identifier().toString());
 }

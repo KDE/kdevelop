@@ -129,8 +129,7 @@ void StaticCodeAssistant::deleteRenameAssistantsForDocument(KTextEditor::Documen
   }
 }
 
-void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assistant, bool manage) {
-  Q_UNUSED(manage);
+void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assistant) {
   if(m_activeAssistant)
     m_activeAssistant->doHide();
   
@@ -139,7 +138,7 @@ void StaticCodeAssistant::startAssistant(KSharedPtr< KDevelop::IAssistant > assi
   
   m_activeAssistant = assistant;
   if(m_activeAssistant) {
-    connect(m_activeAssistant.data(), SIGNAL(hide()), SLOT(assistantHide()));
+    connect(m_activeAssistant.data(), SIGNAL(hide()), SLOT(assistantHide()), Qt::DirectConnection);
     ICore::self()->uiController()->popUpAssistant(IAssistant::Ptr(m_activeAssistant.data()));
     
     m_assistantStartedAt =  m_currentView->cursorPosition();

@@ -61,9 +61,7 @@ class StaticCodeAssistant : public QObject {
     void deleteRenameAssistantsForDocument(KTextEditor::Document*);
   private:
     void checkAssistantForProblems(KDevelop::TopDUContext* top);
-    ///@param manage If this is true, the static code-assistant manages the hiding of the assistant
-    ///                           (It is hidden as soon as the line is left)
-    void startAssistant(KSharedPtr< KDevelop::IAssistant > assistant, bool manage = true);
+    void startAssistant(KSharedPtr< KDevelop::IAssistant > assistant);
     QPointer<KTextEditor::View> m_currentView;
     KTextEditor::Cursor m_assistantStartedAt;
     KDevelop::IndexedString m_currentDocument;

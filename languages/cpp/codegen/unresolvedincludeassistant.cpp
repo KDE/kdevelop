@@ -123,7 +123,7 @@ QString Cpp::OpenProjectForFileAssistant::description() const {
 }
 
 QString MissingIncludePathAssistant::title() const {
-  return i18n("Not Found: %1", m_directive);
+  return i18n("Include file \"%1\" not found", m_directive);
 }
 
 Cpp::MissingIncludePathAssistant::MissingIncludePathAssistant(KDevelop::IndexedString url, QString directive) {

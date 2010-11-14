@@ -23,6 +23,7 @@
 #include <language/duchain/identifier.h>
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>
+#include <ktexteditor/view.h>
 
 
 namespace KDevelop {
@@ -30,7 +31,7 @@ class ParseJob;
 }
 namespace Cpp {
 
-class RenameAssistant : public KDevelop::ITextAssistant {
+class RenameAssistant : public KDevelop::IAssistant {
 Q_OBJECT
 public:
   RenameAssistant(KTextEditor::View *view);
@@ -47,6 +48,7 @@ private:
   QMap <KDevelop::IndexedString, QList <KDevelop::RangeInRevision > > m_oldDeclarationUses;
   KDevelop::IndexedString m_documentUrl;
   bool m_isUseful;
+  KTextEditor::View *m_view;
 };
 
 }

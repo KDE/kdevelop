@@ -24,6 +24,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/types/indexedtype.h>
 #include <language/duchain/indexedstring.h>
+#include <ktexteditor/view.h>
 
 
 namespace KDevelop {
@@ -39,7 +40,7 @@ struct Signature
   bool isConst;
 };
 
-class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
+class AdaptDefinitionSignatureAssistant : public KDevelop::IAssistant {
   Q_OBJECT
   public:
     AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted);
@@ -57,6 +58,7 @@ class AdaptDefinitionSignatureAssistant : public KDevelop::ITextAssistant {
     KDevelop::SimpleRange m_invocationRange;
     
     KDevelop::DUContext* findFunctionContext(KUrl url, KDevelop::SimpleRange position) const;
+    KTextEditor::View *m_view;
   private slots:
     void parseJobFinished(KDevelop::ParseJob*);
 };

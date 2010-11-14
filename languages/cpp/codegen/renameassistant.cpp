@@ -79,9 +79,9 @@ private:
 };
 
 RenameAssistant::RenameAssistant(KTextEditor::View *view) :
-ITextAssistant(view),
 m_documentUrl(IndexedString(view->document()->url())),
-m_isUseful(false)
+m_isUseful(false),
+m_view(view)
 {}
 
 void RenameAssistant::reset() {
@@ -128,12 +128,12 @@ Declaration* RenameAssistant::getValidDeclarationForChangedRange(KTextEditor::Ra
 void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString removedText) {
   clearActions();
 
-  if (!view())
+  if (!m_view)
     return;
 
   //If the inserted text isn't valid for a variable name, consider the editing ended
   QRegExp validDeclName("^[0-9a-zA-Z_]*$");
-  if (removedText.isEmpty() && !validDeclName.exactMatch(view()->document()->text(invocationRange))) {
+  if (removedText.isEmpty() && !validDeclName.exactMatch(m_view->document()->text(invocationRange))) {
     reset();
     return;
   }
@@ -166,7 +166,7 @@ void RenameAssistant::textChanged(KTextEditor::Range invocationRange, QString re
     m_newDeclarationRange.attach( new PersistentMovingRange(
         m_newDeclarationRange->range().textRange().encompass(invocationRange), m_documentUrl, true) );
 
-  m_newDeclarationName = view()->document()->text(m_newDeclarationRange->range().textRange());
+  m_newDeclarationName = m_view->document()->text(m_newDeclarationRange->range().textRange());
 
   if (m_newDeclarationName == m_oldDeclarationName.toString())
     return;
