@@ -28,6 +28,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include <cppparserexport.h>
+#include "commentformatter.h"
 
 #ifdef Q_CC_MSVC
 #include <hash_map>

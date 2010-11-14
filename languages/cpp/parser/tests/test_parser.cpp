@@ -279,25 +279,28 @@ private slots:
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
 
-    QCOMPARE(CommentFormatter::formatComment(ast->comments, lastSession), QByteArray("TranslationUnitComment")); //The comments were merged
+    CommentFormatter formatter;
+    
+    QCOMPARE(formatter.formatComment(ast->comments, lastSession), QByteArray("TranslationUnitComment")); //The comments were merged
 
     const ListNode<DeclarationAST*>* it = ast->declarations;
     QVERIFY(it);
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("Hello\n(behind)"));
+    QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Hello\n(behind)"));
 
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("between\nHello2\n(behind)"));
+    QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("between\nHello2\n(behind)"));
 
     it = it->next;
     QVERIFY(it);
-    QCOMPARE(CommentFormatter::formatComment(it->element->comments, lastSession), QByteArray("Hello3\nbeforeTest\n(testBehind)"));
+    QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Hello3\nbeforeTest\n(testBehind)"));
   }
 
   void testComments2()
   {
+    CommentFormatter formatter;
     QByteArray method("enum Enum\n {//enumerator1Comment\nenumerator1, //enumerator1BehindComment\n /*enumerator2Comment*/ enumerator2 /*enumerator2BehindComment*/};");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
@@ -317,16 +320,17 @@ private slots:
     enumerator = enumerator->next;
     QVERIFY(enumerator);
 
-    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator1Comment\n(enumerator1BehindComment)"));
+    QCOMPARE(formatter.formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator1Comment\n(enumerator1BehindComment)"));
 
     enumerator = enumerator->next;
     QVERIFY(enumerator);
 
-    QCOMPARE(CommentFormatter::formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator2Comment\n(enumerator2BehindComment)"));
+    QCOMPARE(formatter.formatComment(enumerator->element->comments, lastSession), QByteArray("enumerator2Comment\n(enumerator2BehindComment)"));
   }
 
   void testComments3()
   {
+    CommentFormatter formatter;
     QByteArray method("class Class{\n//Comment\n int val;};");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
@@ -346,11 +350,12 @@ private slots:
     members = members->next;
     QVERIFY(members);
 
-    QCOMPARE(CommentFormatter::formatComment(members->element->comments, lastSession), QByteArray("Comment"));
+    QCOMPARE(formatter.formatComment(members->element->comments, lastSession), QByteArray("Comment"));
   }
 
   void testComments4()
   {
+    CommentFormatter formatter;
     QByteArray method("//TranslationUnitComment\n//Comment\ntemplate<class C> class Class{};");
     pool mem_pool;
     TranslationUnitAST* ast = parse(method, &mem_pool);
@@ -363,7 +368,68 @@ private slots:
     QVERIFY(templDecl);
     QVERIFY(templDecl->declaration);
 
-    //QCOMPARE(CommentFormatter::formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
+    //QCOMPARE(formatter.formatComment(templDecl->declaration->comments, lastSession), QString("Comment"));
+  }
+  
+  void testComments5()
+  {
+    CommentFormatter formatter;
+    QByteArray method("//TranslationUnitComment\n  //FIXME comment\n //this is TODO\n /* TODO: comment */\n  int i;  // another TODO \n // Just a simple comment\nint j;\n int main(void) {\n // TODO COMMENT\n}\n");
+    pool mem_pool;
+    int initial_size = control.problems().size();  // Remember existing number of problems
+    TranslationUnitAST* ast = parse(method, &mem_pool);
+
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("FIXME comment\nthis is TODO\n TODO: comment\n(another TODO)"));
+    it = it->next;
+    QVERIFY(it);
+    QCOMPARE(formatter.formatComment(it->element->comments, lastSession), QByteArray("Just a simple comment"));
+
+    QList<KDevelop::ProblemPointer> problem_list = control.problems();
+    QCOMPARE(problem_list.size(), initial_size + 6); // 5 to-dos + additional 'Unexpected end of file' problem
+    KDevelop::ProblemPointer problem = problem_list[initial_size];
+    QCOMPARE(problem->description(), QString("FIXME comment"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(1, 4));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(1, 17));
+
+    problem = problem_list[initial_size + 1];
+    QCOMPARE(problem->description(), QString("this is TODO"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(2, 3));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(2, 15));
+
+    problem = problem_list[initial_size + 2];
+    QCOMPARE(problem->description(), QString("TODO: comment"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(3, 4));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(3, 17));
+
+    problem = problem_list[initial_size + 3];
+    QCOMPARE(problem->description(), QString("another TODO"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(4, 13));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(4, 25));
+
+    problem = problem_list[initial_size + 4];
+    QCOMPARE(problem->description(), QString("TODO COMMENT"));
+    QCOMPARE(problem->source(), KDevelop::ProblemData::ToDo);
+    QCOMPARE(problem->finalLocation().start, KDevelop::SimpleCursor(8, 4));
+    QCOMPARE(problem->finalLocation().end, KDevelop::SimpleCursor(8, 16));
+  }
+
+  void testComments6() {
+    QByteArray module("//TranslationUnitComment\n/**\n * foo\n **/\nint i;\n");
+    pool mem_pool;
+    TranslationUnitAST* ast = parse(module, &mem_pool);
+    const ListNode<DeclarationAST*>* it = ast->declarations;
+    QVERIFY(it);
+    it = it->next;
+    QVERIFY(it);
+    QCOMPARE(CommentFormatter().formatComment(it->element->comments, lastSession), QByteArray("foo"));
   }
 
   QString preprocess(const QString& contents) {

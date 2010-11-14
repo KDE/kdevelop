@@ -1,0 +1,4 @@
+In order to generate .qch file, you need to run the following command
+qhelpgenerator input.qhp -o output.qch
+for each qhp file.
+

@@ -25,6 +25,7 @@
 #include "lexer.h"
 #include "control.h"
 #include "parsesession.h"
+#include "commentformatter.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -171,7 +172,7 @@ void Parser::processComment( int offset, int line ) {
     line = position.line;
   }
 
-/*  kDebug() << "noticing comment" << commentToken.symbol();*/
+  session->m_commentFormatter.extractToDos( tokenNumber, session, control );
   m_commentStore.addComment( Comment( session->token_stream->cursor() + offset, line ) );
 
 }

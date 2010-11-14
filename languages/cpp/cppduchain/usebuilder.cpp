@@ -126,7 +126,7 @@ class UseExpressionVisitor : public Cpp::ExpressionVisitor {
                                   size_t start_token, size_t end_token,
                                   const KDevelop::DeclarationPointer& decl ) {
       RangeInRevision range = m_builder->editor()->findRange(start_token, end_token);
-      m_builder->newUse(node, range, decl.data());
+      m_builder->newUse(node, range, decl);
     }
 
     virtual void problem(AST* node, const QString& str) {

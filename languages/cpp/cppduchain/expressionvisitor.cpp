@@ -1921,14 +1921,16 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       //Constructor was called
       m_lastType = AbstractType::Ptr(constructedType.unsafeData());
       m_lastInstance = Instance(constructedType->declaration(topContext()));
-    } else {
+    } else if (chosenFunction) {
       KDevelop::FunctionType::Ptr functionType = chosenFunction->abstractType().cast<KDevelop::FunctionType>();
-      if( !chosenFunction || !functionType ) {
+      if( !functionType ) {
         problem( node, QString( "could not find a matching function for function-call" ) );
       } else {
         m_lastType = functionType->returnType();
         m_lastInstance = Instance(chosenFunction);
       }
+    } else {
+      problem( node, QString( "could not find a matching function for function-call" ) );
     }
 
     static IndexedString functionCallOperatorIdentifier("operator()");
