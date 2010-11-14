@@ -17,8 +17,6 @@
 */
 
 #include "iassistant.h"
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
 #include <kaction.h>
 #include <QMetaType>
 
@@ -28,6 +26,7 @@ Q_DECLARE_METATYPE(KSharedPtr<IAssistantAction>)
 
 KAction* KDevelop::IAssistantAction::toKAction() const {
     KAction* ret = new KAction(KIcon(icon()), description(), 0);
+    ret->setToolTip(toolTip());
     qRegisterMetaType<KSharedPtr<IAssistantAction> >("KSharedPtr<IAssistantAction>()");
     
     //Add the data as a KSharedPtr to the action, so this assistant stays alive at least as long as the KAction
@@ -54,10 +53,6 @@ QString KDevelop::IAssistantAction::toolTip() const {
     return QString();
 }
 
-unsigned int KDevelop::IAssistantAction::flags() const {
-    return NoFlag;
-}
-
 KDevelop::IAssistant::IAssistant() : KSharedObject(*(QObject*)this) {
 }
 
@@ -71,7 +66,6 @@ QString KDevelop::IAssistant::title() const {
 }
 
 void KDevelop::IAssistant::doHide() {
-    kDebug() << "hiding";
     emit hide();
 }
 
@@ -85,36 +79,6 @@ void KDevelop::IAssistant::addAction(KDevelop::IAssistantAction::Ptr action) {
 
 void KDevelop::IAssistant::clearActions() {
     m_actions.clear();
-}
-
-KTextEditor::View* KDevelop::ITextAssistant::view() const {
-  return m_view;
-}
-
-KTextEditor::Cursor KDevelop::ITextAssistant::invocationCursor() const {
-  return m_invocationCursor;
-}
-
-KDevelop::ITextAssistant::ITextAssistant(KTextEditor::View* view) {
-  m_view = view;
-  connect(view, SIGNAL(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)), SLOT(cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor)));
-  connect(view->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
-  m_invocationCursor = view->cursorPosition();
-}
-
-ITextAssistant::~ITextAssistant()
-{
-
-}
-
-void KDevelop::ITextAssistant::textInserted(KTextEditor::Document* document, KTextEditor::Range range) {
-    if(document->text(range).contains("\n"))
-        emit hide();
-}
-
-void KDevelop::ITextAssistant::cursorPositionChanged(KTextEditor::View* /*view*/, KTextEditor::Cursor cursor) {
-  if(abs((m_invocationCursor - cursor).line()) > 2)
-    emit hide();
 }
 
 QString KDevelop::DummyAssistantAction::description() const {
