@@ -120,6 +120,17 @@ void MakeOutputModel::activate( const QModelIndex& index )
 QModelIndex MakeOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
     int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
+
+    if( !errorItems.empty() )
+    {
+        kDebug() << "searching next error";
+        // Jump to the next error item
+        std::set< int >::const_iterator next = errorItems.lower_bound( startrow );
+        if( next == errorItems.end() )
+            next = errorItems.begin();
+        
+        return index( *next, 0, QModelIndex() );
+    }
     
     for( int row = 0; row < rowCount(); ++row ) 
     {
@@ -136,6 +147,21 @@ QModelIndex MakeOutputModel::previousHighlightIndex( const QModelIndex &currentI
 {
     //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
     int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
+    
+    if(!errorItems.empty())
+    {
+        kDebug() << "searching previous error";
+        
+        // Jump to the previous error item
+        std::set< int >::const_iterator previous = errorItems.lower_bound( currentIdx.row() );
+        
+        if( previous == errorItems.begin() )
+            previous = errorItems.end();
+        
+        --previous;
+        
+        return index( *previous, 0, QModelIndex() );
+    }
     
     for ( int row = 0; row < rowCount(); ++row )
     {
@@ -179,6 +205,9 @@ void MakeOutputModel::addLines( const QStringList& lines )
 
         FilteredItem item( line );
         bool matched = false;
+        
+        OutputItemType itemType = StandardItem;
+        
         foreach( const ErrorFormat& errFormat, ErrorFormat::errorFormats )
         {
             QRegExp regEx = errFormat.expression;
@@ -193,8 +222,16 @@ void MakeOutputModel::addLines( const QStringList& lines )
                     item.columnNo = 0;
                 
                 //item.shortenedText = regEx.cap( errFormat.textGroup );
-                item.type = QVariant::fromValue( ( regEx.cap(errFormat.textGroup).contains("warning", Qt::CaseInsensitive) ? MakeOutputModel::WarningItem : MakeOutputModel::ErrorItem ) );
-                item.isActivatable = true;
+                QString txt = regEx.cap(errFormat.textGroup);
+                
+                if(txt.contains("error", Qt::CaseInsensitive))
+                    itemType = ErrorItem;
+                
+                if(txt.contains("warning", Qt::CaseInsensitive))
+                    itemType = WarningItem;
+
+                if(!txt.contains("note"))
+                    item.isActivatable = true;
                 matched = true;
                 break;
             }
@@ -207,7 +244,7 @@ void MakeOutputModel::addLines( const QStringList& lines )
                 if( regEx.indexIn( line ) != -1 )
                 {
                     kDebug() << "found an action" << line << actFormat.tool << actFormat.toolGroup << actFormat.fileGroup;
-                    item.type = QVariant::fromValue( MakeOutputModel::ActionItem );
+                    itemType = MakeOutputModel::ActionItem;
                     if( actFormat.fileGroup != -1 && actFormat.toolGroup != -1 )
                     {
                         item.shortenedText = QString( "%1 %2 (%3)").arg( actFormat.action ).arg( regEx.cap( actFormat.fileGroup ) ).arg( regEx.cap( actFormat.toolGroup ) );
@@ -221,7 +258,14 @@ void MakeOutputModel::addLines( const QStringList& lines )
                 }
             }
         }
-        kDebug() << "adding item:" << item.shortenedText << item.type;
+        
+        item.type = QVariant::fromValue( itemType );
+        
+        kDebug() << "adding item:" << item.shortenedText << itemType;
+        
+        if( itemType == ErrorItem )
+            errorItems.insert(items.size());
+        
         items << item;
     }
     endInsertRows();

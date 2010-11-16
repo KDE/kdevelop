@@ -25,6 +25,7 @@
 #include <QString>
 #include <kurl.h>
 #include <outputview/ioutputviewmodel.h>
+#include <set>
 
 class FilteredItem;
 
@@ -33,11 +34,11 @@ class MakeOutputModel : public QAbstractListModel, public KDevelop::IOutputViewM
     Q_OBJECT
 public:
     enum OutputItemType{
-        ErrorItem = 0,
-        WarningItem = 1,
-        ActionItem = 2,
-        CustomItem = 3,
-        StandardItem = 4
+        ErrorItem = 1,
+        WarningItem = 2,
+        ActionItem = 3,
+        CustomItem = 4,
+        StandardItem = 5
     };
 
     static const int MakeItemTypeRole;
@@ -60,6 +61,8 @@ private:
     KUrl urlForFile( const QString& ) const;
     bool isValidIndex( const QModelIndex& ) const;
     QList<FilteredItem> items;
+    // We use std::set because that is ordered
+    std::set<int> errorItems; // Indices of all items that are errors
     QString currentDir;
     KUrl buildDir;
 };
