@@ -26,6 +26,8 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QIODevice>
+
 
 class QWidget;
 class QStackedWidget;

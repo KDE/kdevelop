@@ -25,6 +25,8 @@
 
 #include <language/duchain/indexedstring.h>
 #include <language/duchain/declaration.h>
+#include <KIO/FileJob>
+#include <QMap>
 
 namespace KDevelop
 {
@@ -61,6 +63,12 @@ public:
     /// @see PhpLanguageSupport
     const KDevelop::IndexedString& internalFunctionFile() const;
 
+    void getManPage(const KUrl& page);
+    void getManMainIndex();
+    void getManSectionIndex(const QString section);
+
+
+
 private:
     /// fills model with all declarations from the internal PHP functions file
     void fillModel();
@@ -71,8 +79,21 @@ private:
     /// internal function file
     const KDevelop::IndexedString m_internalFunctionsFile;
 
+    /// Parser result
+    //QList <QMap <QString, QString> > m_manMainIndex;
+    //QList <QMap <QString, QString> > m_manSectionIndex;
+
+    /// Slave buffer
+    QString m_manPageBuffer;
+    QString m_manMainIndexBuffer;
+    QString m_manSectionIndexBuffer;
+
 public slots:
     void slotParseJobFinished( KDevelop::ParseJob* job );
+    void readDataFromManPage(KIO::Job * job, const QByteArray &data);
+    void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
+    void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
+    void jobDone(KIO::Job * job);
 };
 
 Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )

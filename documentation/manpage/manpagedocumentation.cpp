@@ -19,9 +19,13 @@
 
 #include <QLabel>
 #include <KLocale>
+#include <QTreeView>
 
 #include "manpagedocumentation.h"
 #include "manpageplugin.h"
+
+#include <QtDebug>
+
 
 
 ManPageDocumentation::ManPageDocumentation(const KUrl& url, const QString& name, const QByteArray& description, ManPagePlugin* parent)
@@ -40,10 +44,17 @@ QString ManPageDocumentation::description() const
 }
 
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
-{
-    QWidget* ret;
-    ret=new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
-    return ret;
+{  
+
+    QTreeView* contents=new QTreeView(parent);
+
+    ManPageModel* model=new ManPageModel(contents);
+
+    model->getManPage(KUrl(""));
+    contents->setModel(model);
+
+    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
+    return contents;
 }
 
 

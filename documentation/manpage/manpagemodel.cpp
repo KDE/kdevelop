@@ -35,6 +35,12 @@
 #include <KStandardDirs>
 #include <KLocalizedString>
 
+#include <KIO/TransferJob>
+#include <KIO/Job>
+#include <kio/jobclasses.h>
+
+#include <QtDebug>
+
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -115,6 +121,63 @@ DeclarationPointer ManPageModel::declarationForIndex(const QModelIndex& index) c
     Q_ASSERT(m_declarations.size() > index.row());
 
     return m_declarations[index.row()];
+}
+
+void ManPageModel::getManPage(const KUrl& page){
+    KIO::TransferJob  * transferJob = NULL;
+    //page = KUrl("man:/usr/share/man/man3/a64l.3.gz");
+
+    transferJob = KIO::get(KUrl("man:/usr/share/man/man3/a64l.3.gz"), KIO::NoReload, KIO::HideProgressInfo);
+    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
+             this, SLOT( readDataFromManPage( KIO::Job *, const QByteArray & ) ) );
+    connect( transferJob, SIGNAL( result  (  KIO::Job *)),
+             this, SLOT( jobDone( KIO::Job *) ) );
+
+    transferJob->start();
+}
+
+void ManPageModel::getManMainIndex(){
+    KIO::TransferJob  * transferJob = NULL;
+
+    transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
+    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
+             this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
+    connect( transferJob, SIGNAL( result  (  KIO::Job *)),
+             this, SLOT( jobDone( KIO::Job *) ) );
+
+    transferJob->start();
+}
+
+void ManPageModel::getManSectionIndex(const QString section){
+    KIO::TransferJob  * transferJob = NULL;
+
+    transferJob = KIO::get(KUrl("man:(" + section + ")"), KIO::NoReload, KIO::HideProgressInfo);
+    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
+             this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
+    connect( transferJob, SIGNAL( result  (  KIO::Job *)),
+             this, SLOT( jobDone( KIO::Job *) ) );
+
+    transferJob->start();
+}
+
+void ManPageModel::readDataFromManPage(KIO::Job * job, const QByteArray &data){
+     qDebug() << "readDataFromManPage";
+     m_manPageBuffer.append(data);
+      qDebug() << data;
+}
+
+void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){
+     qDebug() << "readDataFromMainIndex";
+     m_manMainIndexBuffer.append(data);
+}
+
+void ManPageModel::readDataFromSectionIndex(KIO::Job * job, const QByteArray &data){
+     qDebug() << "readDataFromSectionIndex";
+     m_manSectionIndexBuffer.append(data);
+}
+
+void ManPageModel::jobDone(KIO::Job *){
+     qDebug() << "jobDone";
 }
 
 #include "manpagemodel.moc"

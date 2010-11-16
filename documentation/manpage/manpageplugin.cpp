@@ -109,7 +109,7 @@ QString ManPagePlugin::getDocumentationFilename( KDevelop::Declaration* dec, con
         fname = fname.toLower();
     }
 
-    return fname;
+    return "man:"+fname;
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
@@ -172,4 +172,6 @@ KSharedPtr< IDocumentation > ManPagePlugin::homePage() const
     KUrl url = KUrl("");
     return documentationForUrl(url, i18n("Man Documentation"));
 }
+
+
 
