@@ -36,6 +36,17 @@ public:
      * @return Whether the thread is going to abort its work.
      */
     bool triesToAbort() const;
+    
+    /**
+     * @brief Parses include string to a list suitable for QDir::match
+     */
+    static QStringList parseInclude(QString inc);
+    
+    /**
+     * @brief Parses exclude string to a list suitable for QDir::match
+     */
+    static QStringList parseExclude(QString excl);
+    
 protected:
     void run();
 private:

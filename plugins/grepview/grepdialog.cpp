@@ -38,12 +38,14 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
+#include <shell/savedialog.h>
 
 #include <kstandarddirs.h>
 
 #include "grepviewplugin.h"
 #include "grepjob.h"
 #include "grepoutputview.h"
+#include "grepfindthread.h"
 
 using namespace KDevelop;
 
@@ -320,6 +322,32 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
 {
     // a click on cancel trigger this signal too
     if( button != SearchButton && button != ReplaceButton ) return;
+    
+    // search for unsaved documents
+    QList<IDocument*> unsavedFiles;
+    QStringList include = GrepFindFilesThread::parseInclude(filesString());
+    QStringList exclude = GrepFindFilesThread::parseExclude(excludeString());
+    foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
+    {
+        KUrl docUrl = doc->url();
+        if(doc->state() != IDocument::Clean && directory().isParentOf(docUrl) && 
+           QDir::match(include, docUrl.fileName()) && !QDir::match(exclude, docUrl.toLocalFile()))
+        {
+            unsavedFiles << doc;
+        }
+    }
+    
+    if(!unsavedFiles.empty())
+    {
+        // show dialog
+        KSaveSelectDialog dlg(unsavedFiles, this);
+        if(dlg.exec() == QDialog::Rejected)
+        {
+            close();
+            return;
+        }
+    }
+    
     
     GrepJob* job = new GrepJob();
     
