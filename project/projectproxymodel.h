@@ -23,6 +23,10 @@
 #include <QtGui/QSortFilterProxyModel>
 #include "projectexport.h"
 
+#include <QList>
+#include <QSharedPointer>
+#include <QRegExp>
+
 namespace KDevelop {
 class ProjectModel;
 class ProjectBaseItem;
@@ -36,11 +40,15 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectProxyModel : public QSortFilterProxyMode
 
         QModelIndex proxyIndexFromItem(KDevelop::ProjectBaseItem* item) const;
         KDevelop::ProjectBaseItem* itemFromProxyIndex( const QModelIndex& ) const;
+        
+        void setFilterString(const QString &filters);
 
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 
     private:
         KDevelop::ProjectModel* projectModel() const;
+        bool filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const;
+        QList<QSharedPointer<QRegExp> > mFilenameFilters; 
 };
 
 #endif
