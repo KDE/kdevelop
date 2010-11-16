@@ -233,30 +233,42 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem( IProject* project, cons
                 break;
             }
         }
-        if (!parentPro) {
-            if (!file.endsWith(".pri")) {
-                // only display this warning for .pro files
-                kWarning() << "skipping:" << file << "because I could not find a parent pro";
-            }
+        if (!parentPro && file.endsWith(".pri")) {
             continue;
         }
-        kDebug(9024) << "add project file:" << absFile << "parent:" << parentPro->absoluteFile();
+        kDebug(9024) << "add project file:" << absFile;
+        if (parentPro) {
+            kDebug(9024) << "parent:" << parentPro->absoluteFile();
+        } else {
+            kDebug(9024) << "no parent, assume project root";
+        }
 
         QMakeProjectFile* qmscope = new QMakeProjectFile( absFile );
 
         const QFileInfo info( absFile );
         const QDir d = info.dir();
         ///TODO: cleanup
-        if( d.exists(".qmake.cache") ) {
-            QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
-            cache->setMkSpecs( parentPro->mkSpecs() );
-            cache->read();
-            qmscope->setQMakeCache( cache );
-        } else {
-            qmscope->setQMakeCache( parentPro->qmakeCache() );
-        }
+        if ( parentPro) {
+            // subdir
+            if( d.exists(".qmake.cache") ) {
+                QMakeCache* cache = new QMakeCache( d.canonicalPath()+"/.qmake.cache" );
+                cache->setMkSpecs( parentPro->mkSpecs() );
+                cache->read();
+                qmscope->setQMakeCache( cache );
+            } else {
+                qmscope->setQMakeCache( parentPro->qmakeCache() );
+            }
 
-        qmscope->setMkSpecs( parentPro->mkSpecs() );
+            qmscope->setMkSpecs( parentPro->mkSpecs() );
+        } else {
+            // new project
+            QMakeFolderItem* root = dynamic_cast<QMakeFolderItem*>( project->projectItem() );
+            Q_ASSERT(root);
+            qmscope->setMkSpecs( root->projectFiles().first()->mkSpecs() );
+            if( root->projectFiles().first()->qmakeCache() ) {
+                qmscope->setQMakeCache( root->projectFiles().first()->qmakeCache() );
+            }
+        }
 
         if( qmscope->read() ) {
             //TODO: only on read?

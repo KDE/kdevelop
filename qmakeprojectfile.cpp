@@ -115,7 +115,10 @@ QStringList QMakeProjectFile::subProjects() const
         {
             fileOrPath = resolveToSingleFileName( subdir.trimmed() );
         }
-        Q_ASSERT( !fileOrPath.isEmpty() );
+        if (fileOrPath.isEmpty()) {
+            kWarning() << "could not resolve subdir" << subdir << "to file or path, skipping";
+            continue;
+        }
         list << fileOrPath;
     }
 
