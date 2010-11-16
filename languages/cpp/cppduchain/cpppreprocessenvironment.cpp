@@ -83,9 +83,7 @@ void CppPreprocessEnvironment::swapMacros( rpp::Environment* parentEnvironment )
     CppPreprocessEnvironment* env = dynamic_cast<CppPreprocessEnvironment*>(parentEnvironment);
     Q_ASSERT(env);
 
-    Cpp::ReferenceCountedStringSet old = m_macroNameSet;
-    m_macroNameSet = env->m_macroNameSet;
-    env->m_macroNameSet = old;
+    qSwap(m_macroNameSet, env->m_macroNameSet);
 
     rpp::Environment::swapMacros(parentEnvironment);
 }
