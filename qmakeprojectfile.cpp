@@ -73,6 +73,8 @@ bool QMakeProjectFile::read()
 
     ///TODO: more special variables
     m_variableValues["PWD"] = QStringList() << absoluteDir();
+    m_variableValues["_PRO_FILE_"] = QStringList() << absoluteFile();
+    m_variableValues["_PRO_FILE_PWD_"] = m_variableValues["PWD"];
     ///TODO: this is supposed to be the build dir!
     m_variableValues["OUT_PWD"] = QStringList() << absoluteDir();
 
