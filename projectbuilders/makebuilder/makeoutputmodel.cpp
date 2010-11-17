@@ -180,14 +180,21 @@ KUrl MakeOutputModel::urlForFile( const QString& filename ) const
     KUrl u;
     if( fi.isRelative() )
     {
-        if( currentDir.isEmpty() ) 
+        if( currentDirs.isEmpty() ) 
         {
             u = buildDir;
-        } else
-        {
-            u = KUrl( currentDir );
+            u.addPath( filename );
+            return u;
         }
-        u.addPath( filename );
+        
+        int pos = currentDirs.size()-1;
+        do {
+            u = KUrl( currentDirs[ pos ] );
+            u.addPath( filename );
+            --pos;
+        }while( pos >= 0 && !QFileInfo(u.toLocalFile()).exists() );
+        
+        return u;
     } else 
     {
         u = KUrl( filename );
@@ -251,7 +258,7 @@ void MakeOutputModel::addLines( const QStringList& lines )
                     }
                     if( actFormat.action == "cd" )
                     {
-                        currentDir = regEx.cap( actFormat.fileGroup );
+                        currentDirs << regEx.cap( actFormat.fileGroup );
                     }
                     matched = true;
                     break;
