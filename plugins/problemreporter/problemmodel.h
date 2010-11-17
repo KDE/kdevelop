@@ -34,6 +34,7 @@ namespace KDevelop {
     class TopDUContext;
 }
 
+class QTimer;
 class ProblemReporterPlugin;
 class WatchedDocumentSet;
 
@@ -95,6 +96,7 @@ public slots:
 private slots:
     void documentSetChanged();
     void setCurrentDocument(KDevelop::IDocument* doc);
+    void timerExpired();
 
 private:
     void getProblemsInternal(KDevelop::TopDUContext* context, bool showImports, QSet<KDevelop::TopDUContext*>& visitedContexts, QList<KDevelop::ProblemPointer>& result);
@@ -109,6 +111,11 @@ private:
     bool m_showImports; // include problems from imported documents
     KDevelop::ProblemData::Severity m_severity;
     WatchedDocumentSet* m_documentSet;
+
+    QTimer* m_minTimer;
+    QTimer* m_maxTimer;
+    const static int MinTimeout;
+    const static int MaxTimeout;
 };
 
 #endif // PROBLEMMODEL_H

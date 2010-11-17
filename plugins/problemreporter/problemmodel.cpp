@@ -21,6 +21,7 @@
 
 #include "problemmodel.h"
 
+#include <QTimer>
 #include <klocale.h>
 
 #include <language/backgroundparser/backgroundparser.h>
@@ -44,6 +45,14 @@ using namespace KDevelop;
 ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
   : QAbstractItemModel(parent), m_plugin(parent), m_lock(QReadWriteLock::Recursive), m_showImports(false), m_severity(ProblemData::Hint), m_documentSet(0)
 {
+    m_minTimer = new QTimer(this);
+    m_minTimer->setInterval(MinTimeout);
+    m_minTimer->setSingleShot(true);
+    connect(m_minTimer, SIGNAL(timeout()), SLOT(timerExpired()));
+    m_maxTimer = new QTimer(this);
+    m_maxTimer->setInterval(MaxTimeout);
+    m_maxTimer->setSingleShot(true);
+    connect(m_maxTimer, SIGNAL(timeout()), SLOT(timerExpired()));
     setScope(CurrentDocument);
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
     // CompletionSettings include a list of todo markers we care for, so need to update
@@ -53,6 +62,9 @@ ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
         setCurrentDocument(ICore::self()->documentController()->activeDocument());
     }
 }
+
+const int ProblemModel::MinTimeout = 1000;
+const int ProblemModel::MaxTimeout = 5000;
 
 ProblemModel::~ ProblemModel()
 {
@@ -238,8 +250,20 @@ void ProblemModel::problemsUpdated(const KDevelop::IndexedString& url)
 {
     QReadLocker locker(&m_lock);
     if (m_documentSet->get().contains(url)) {
-        rebuildProblemList();
+        // m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
+        m_minTimer->start();
+        // m_maxTimer will expire unconditionally in MaxTimeout
+        if (!m_maxTimer->isActive()) {
+            m_maxTimer->start();
+        }
     }
+}
+
+void ProblemModel::timerExpired()
+{
+    m_minTimer->stop();
+    m_maxTimer->stop();
+    rebuildProblemList();
 }
 
 QList<ProblemPointer> ProblemModel::getProblems(IndexedString url, bool showImports)
