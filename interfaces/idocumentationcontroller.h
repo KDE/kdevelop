@@ -50,7 +50,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController: public QObject
 
     public Q_SLOTS:
         /** Emit signal when the documentation providers list changed. */
-        virtual void changedDoucmentationProviders() = 0;
+        virtual void changedDocumentationProviders() = 0;
 
     Q_SIGNALS:
         /** Emitted when providers list changed */

@@ -48,7 +48,7 @@ class DocumentationController : public KDevelop::IDocumentationController
         ContextMenuExtension contextMenuExtension( Context* context );
         
     public slots:
-        virtual void changedDoucmentationProviders();
+        virtual void changedDocumentationProviders();
     private slots:
         void doShowDocumentation();
     private:
