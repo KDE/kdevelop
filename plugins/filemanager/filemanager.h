@@ -47,7 +47,7 @@ private:
     void setupActions();
     QList<QAction*> tbActions;
     KAction *newFileAction;
-
+    QList<QAction*> contextActions;
     KDirOperator* dirop;
     KUrlNavigator* urlnav;
 };
