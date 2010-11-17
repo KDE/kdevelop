@@ -160,7 +160,7 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
     view->showDocumentation(doc);
 }
 
-void DocumentationController::changedDoucmentationProviders()
+void DocumentationController::changedDocumentationProviders()
 {
     emit providersChanged();
 }
