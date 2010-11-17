@@ -91,8 +91,8 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         cur.insertText(item->text().right(item->text().length() - rng.end.column), fmt);
         
         painter->save();
-        options.text = "";  // text will be drawn separately
-        options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter);
+        options.text = QString();  // text will be drawn separately
+        options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter, options.widget);
 
         // set correct draw area
         QRect clip = options.widget->style()->subElementRect(QStyle::SE_ItemViewItemText, &options);

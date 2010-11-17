@@ -38,21 +38,24 @@ public:
     GrepOutputModel* model();
     void setMessage(const QString& msg);
     void enableReplace(bool enable);
+    void setPlugin(GrepViewPlugin *plugin);
 
 public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
     void showMessage( KDevelop::IStatus*, const QString& message );
-    void onApply();
-    void expandRootElement( const QModelIndex & parent );
 
 
 private:
     GrepOutputModel* m_model;
     QAction* m_apply;
+    GrepViewPlugin *m_plugin;
     
 private slots:
     void selectPreviousItem();
     void selectNextItem();
+    void onApply();
+    void showDialog();
+    void expandRootElement( const QModelIndex & parent );
 };
 
 #endif // GREPOUTPUTVIEW_H

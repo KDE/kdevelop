@@ -19,6 +19,7 @@
 #include <QList>
 #include <QRegExp>
 #include <QKeySequence>
+#include <QTextDocument>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -167,9 +168,21 @@ void GrepJob::slotFindFinished()
     
     m_outputModel->setRegExp(m_regExp);
 
-    emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
-                                 "Searching for <b>%2</b> in %1 files",
-                                 m_fileList.length(), m_regExp.pattern()));
+    if(m_replaceFlag)
+    {
+        emit showMessage(this, i18np("Replace <b>%2</b> by <b>%3</b> in one file",
+                                     "Replace <b>%2</b> by <b>%3</b> in %1 files",
+                                     m_fileList.length(), 
+                                     Qt::escape(m_regExp.pattern()), 
+                                     Qt::escape(m_finalReplacement)));
+    }
+    else
+    {
+        emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
+                                     "Searching for <b>%2</b> in %1 files",
+                                     m_fileList.length(), 
+                                     Qt::escape(m_regExp.pattern())));
+    }
 
     m_workState = WorkGrep;
     QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);

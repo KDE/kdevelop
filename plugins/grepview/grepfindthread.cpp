@@ -86,10 +86,8 @@ bool GrepFindFilesThread::triesToAbort() const
 
 void GrepFindFilesThread::run()
 {
-    QStringList include = m_patString.split(',', QString::SkipEmptyParts);
-    QStringList exclude;
-    foreach(const QString &sub, m_exclString.split(',', QString::SkipEmptyParts))
-        exclude << QString("*%1*").arg(sub);
+    QStringList include = GrepFindFilesThread::parseInclude(m_patString);
+    QStringList exclude = GrepFindFilesThread::parseExclude(m_exclString);
 
     if(m_project)
         m_files = thread_getProjectFiles(m_directory, m_recursive, include, exclude, m_tryAbort);
@@ -101,4 +99,17 @@ void GrepFindFilesThread::run()
 
 KUrl::List GrepFindFilesThread::files() const {
     return m_files;
+}
+
+QStringList GrepFindFilesThread::parseExclude(QString excl)
+{
+    QStringList exclude;
+    foreach(const QString &sub, excl.split(',', QString::SkipEmptyParts))
+        exclude << QString("*%1*").arg(sub);
+    return exclude;
+}
+
+QStringList GrepFindFilesThread::parseInclude(QString inc)
+{
+    return inc.split(',', QString::SkipEmptyParts);
 }

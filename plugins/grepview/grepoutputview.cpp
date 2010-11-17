@@ -3,6 +3,8 @@
 #include "grepoutputmodel.h"
 #include "grepoutputdelegate.h"
 #include "ui_grepoutputview.h"
+#include "grepdialog.h"
+#include "grepviewplugin.h"
 
 #include <QtGui/QAction>
 #include <QtGui/QTreeView>
@@ -67,11 +69,17 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     connect(m_apply, SIGNAL(triggered(bool)), this, SLOT(onApply()));
     connect(previous, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
+    connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
 
 GrepOutputModel* GrepOutputView::model()
 {
     return m_model;
+}
+
+void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
+{
+    m_plugin = plugin;
 }
 
 void GrepOutputView::setMessage(const QString& msg)
@@ -101,6 +109,11 @@ void GrepOutputView::onApply()
     setEnabled(false);
     m_model->doReplacements();
     setEnabled(true);
+}
+
+void GrepOutputView::showDialog()
+{
+    m_plugin->showDialog(true);
 }
 
 void GrepOutputView::expandRootElement(const QModelIndex& parent)
