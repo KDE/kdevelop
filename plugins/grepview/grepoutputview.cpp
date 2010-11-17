@@ -1,3 +1,13 @@
+/**************************************************************************
+*   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+***************************************************************************/
+
 #include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepoutputmodel.h"
@@ -8,13 +18,6 @@
 
 #include <QtGui/QAction>
 #include <QtGui/QTreeView>
-
-#include <kpushbutton.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kactioncollection.h>
-#include <kxmlguiclient.h>
-#include <ktoolbar.h>
 
 #include <interfaces/icore.h>
 
@@ -110,15 +113,6 @@ void GrepOutputView::onApply()
     m_model->doReplacements();
     setEnabled(true);
 }
-/**************************************************************************
-*   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
-*                                                                         *
-*   This program is free software; you can redistribute it and/or modify  *
-*   it under the terms of the GNU General Public License as published by  *
-*   the Free Software Foundation; either version 2 of the License, or     *
-*   (at your option) any later version.                                   *
-*                                                                         *
-***************************************************************************/
 
 void GrepOutputView::showDialog()
 {
