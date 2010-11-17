@@ -197,7 +197,7 @@ class CppDUContext : public BaseContext {
       static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
     
-    ///Matches the qualified identifier represented by the search item to the tail of the contexts scope identfier
+    ///Matches the qualified identifier represented by the search item to the tail of the context's scope identfier
     ///Also matches searches without template-parameters to fully instantiated contexts
     ///Returns true if they match
     inline bool matchSearchItem(DUContext::SearchItem::Ptr item, const DUContext* ctx) const {
@@ -277,7 +277,7 @@ class CppDUContext : public BaseContext {
       
       if( basicFlags & BaseContext::DirectQualifiedLookup ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
-        //We use DirectQualifiedLookup to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
+        //We use DirectQualifiedLookup to signal that we don't need to do the whole scope-search, template-resolution etc. logic.
         return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, source, basicFlags, depth );
       }
       

@@ -88,15 +88,15 @@ namespace Cpp {
        * */
       KDevelop::Declaration* instantiate( const InstantiationInformation& templateArguments, const KDevelop::TopDUContext* source, bool forceLocal = false );
 
-      ///Returns true if this class is either is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
+      ///Returns true if this class is a direct instantiation of the given class. Not if it is an instantiation of a specialization of the given class.
       bool isInstantiatedFrom(const TemplateDeclaration* other) const;
 
       void setSpecializedFrom(TemplateDeclaration* other);
 
       IndexedInstantiationInformation instantiatedWith() const;
       
-      ///Marks that currently a declaration is instantiated with the given instantiation-information. A zero instantiation is inserted into
-      ///the cache to make sure that we don't instantiate the same declaration again in the meantime.
+      ///Marks that a declaration is currently instantiated with the given instantiation-information.
+      ///A zero instantiation is inserted into the cache to make sure that we don't instantiate the same declaration again in the meantime.
       void reserveInstantiation(const IndexedInstantiationInformation& info);
 
       ///An instantiation is an additional temporary version of this declaration that was created given some template-parameters.
@@ -118,7 +118,7 @@ namespace Cpp {
       DUContext* templateContext(const TopDUContext* source) const;
       
       ///@return The declaration this one was explicitly specialized from.
-      ///Zero, or a non-specialized(thus also non-instantiated) template-class, which this was explicitly specialized from.
+      ///Zero, or a non-specialized (thus also non-instantiated) template-class, which this was explicitly specialized from.
       virtual IndexedDeclaration specializedFrom() = 0;
       virtual const IndexedDeclaration* specializations() const = 0;
       virtual uint specializationsSize() const = 0;
@@ -191,9 +191,9 @@ namespace Cpp {
   /**
    * Use this to merge any type of declaration with a TemplateDeclaration.
    * This allows wrapping template-declaration's over any kind of declaration, without changing the basic structure of types.
-   * Necessary because we have at least 3 differnt declaration-classes that are not derived from each other, and that can
-   * be a TemplateDeclaration.
-   * */
+   * Necessary because we have at least 3 different declaration-classes that are not derived from each other, and that can
+   * be TemplateDeclarations.
+   */
   template<class BaseDeclaration>
   class KDEVCPPDUCHAIN_EXPORT SpecialTemplateDeclaration : public BaseDeclaration, public TemplateDeclaration {
     public:
