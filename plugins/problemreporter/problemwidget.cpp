@@ -26,6 +26,7 @@
 #include <QCursor>
 #include <QContextMenuEvent>
 #include <QSignalMapper>
+#include <QHeaderView>
 
 #include <kaction.h>
 #include <kactionmenu.h>
@@ -47,7 +48,7 @@ using namespace KDevelop;
 
 ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     : QTreeView(parent)
-    , m_plugin(plugin), m_autoResize(true)
+    , m_plugin(plugin)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
@@ -56,6 +57,7 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     setWhatsThis( i18n( "Problems" ) );
 
     setModel(m_plugin->getModel());
+    header()->setStretchLastSection(false);
 
     KAction* fullUpdateAction = new KAction(this);
     fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -151,14 +153,6 @@ ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     connect(hintSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
     connect(severityMapper, SIGNAL(mapped(int)), model(), SLOT(setSeverity(int)));
 
-    KAction* autoResizeAction = new KAction(this);
-    autoResizeAction->setText(i18n("Auto Resize Columns"));
-    autoResizeAction->setToolTip(i18n("Automatically resize columns to their data size"));
-    autoResizeAction->setCheckable(true);
-    autoResizeAction->setChecked(m_autoResize);
-    connect(autoResizeAction, SIGNAL(triggered(bool)), this, SLOT(setAutoResize(bool)));
-    addAction(autoResizeAction);
-
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
 }
 
@@ -192,9 +186,27 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
 
 void ProblemWidget::resizeColumns()
 {
-    if (isVisible()) {
-        for (int i = 0; i < model()->columnCount(); ++i) {
-            resizeColumnToContents(i);
+    // Do actual resizing only if the widget is visible and there are not too many items
+    const int ResizeRowLimit = 15;
+    if (isVisible() && model()->rowCount() > 0 && model()->rowCount() < ResizeRowLimit) {
+        const int columnCount = model()->columnCount();
+        QVector<int> widthArray(columnCount);
+        int totalWidth = 0;
+        for (int i = 0; i < columnCount; ++i) {
+            widthArray[i] = columnWidth(i);
+            totalWidth += widthArray[i];
+        }
+        for (int i = 0; i < columnCount; ++i) {
+            int columnWidthHint = qMax(sizeHintForColumn(i), header()->sectionSizeHint(i));
+            if (columnWidthHint - widthArray[i] > 0) {
+                if (columnWidthHint - widthArray[i] < width() - totalWidth) { // enough space to resize
+                    setColumnWidth(i, columnWidthHint);
+                    totalWidth += (columnWidthHint - widthArray[i]);
+                } else {
+                    setColumnWidth(i, widthArray[i] + width() - totalWidth);
+                    break;
+                }
+            }
         }
     }
 }
@@ -202,28 +214,13 @@ void ProblemWidget::resizeColumns()
 void ProblemWidget::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     QTreeView::dataChanged(topLeft, bottomRight);
-    if (m_autoResize) {
-        resizeColumns();
-    }
+    resizeColumns();
 }
 
 void ProblemWidget::reset()
 {
     QTreeView::reset();
-    if (m_autoResize) {
-        resizeColumns();
-    }
-}
-
-void ProblemWidget::setAutoResize(bool autoResize)
-{
-    if (!m_autoResize && autoResize) {
-        m_autoResize = autoResize;
-        resizeColumns();
-    } else {
-        m_autoResize = autoResize;
-    }
-    kDebug() << m_autoResize;
+    resizeColumns();
 }
 
 ProblemModel * ProblemWidget::model() const

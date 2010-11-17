@@ -51,12 +51,10 @@ protected:
 
 private Q_SLOTS:
   void itemActivated(const QModelIndex& index);
-  void setAutoResize(bool autoresize);
   
 private:
   void resizeColumns();
   ProblemReporterPlugin* m_plugin;
-  bool m_autoResize
 ;
 };
 
