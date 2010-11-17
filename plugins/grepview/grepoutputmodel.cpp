@@ -204,8 +204,29 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
     GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
     if(current_item->parent() != 0) //we do nothing if it's the root item
     {
-        if(row > 0)
-            return current_item->parent()->child(row - 1)->index();
+        if(current_item->parent()->parent() == 0) // the item is a file
+        {
+            int item_row = current_item->row();
+            if(item_row > 0)
+            {
+                int idx_last_item = current_item->parent()->child(item_row - 1)->rowCount() - 1;
+                return current_item->parent()->child(item_row - 1)->child(idx_last_item)->index();
+            }
+        }
+        else // the item is a match
+        {
+            if(row > 0)
+                return current_item->parent()->child(row - 1)->index();
+            else // we return the index of the last item of the previous file
+            {
+                int parrent_row = current_item->parent()->row();
+                if(parrent_row > 0)
+                {
+                    int idx_last_item = current_item->parent()->parent()->child(parrent_row - 1)->rowCount() - 1;
+                    return current_item->parent()->parent()->child(parrent_row - 1)->child(idx_last_item)->index();
+                }
+            }
+        }
     }
     return currentIdx;
 }
@@ -216,8 +237,27 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
     if(current_item->parent() != 0) //we do nothing if it's the root item
     {
-        if(row < current_item->parent()->rowCount() - 1)
-            return current_item->parent()->child(row + 1)->index();
+        if(current_item->parent()->parent() == 0) // the item is a file
+        {
+            int item_row = current_item->row();
+            if(item_row < current_item->parent()->rowCount())
+            {
+                return current_item->parent()->child(item_row)->child(0)->index();
+            }
+        }
+        else // the item is a match
+        {
+            if(row < current_item->parent()->rowCount() - 1)
+                return current_item->parent()->child(row + 1)->index();
+            else // we return the index of the first item of the next file
+            {
+                int parrent_row = current_item->parent()->row();
+                if(parrent_row < current_item->parent()->parent()->rowCount() - 1)
+                {
+                    return current_item->parent()->parent()->child(parrent_row + 1)->child(0)->index();
+                }
+            }
+        }
     }
     return currentIdx;
 }

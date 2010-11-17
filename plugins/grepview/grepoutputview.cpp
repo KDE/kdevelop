@@ -115,12 +115,20 @@ void GrepOutputView::selectPreviousItem()
 {
     QModelIndex idx = resultsTreeView->currentIndex();
     if(idx.isValid())
-        resultsTreeView->setCurrentIndex(m_model->previousItemIndex(idx));
+    {
+        QModelIndex prev_idx = m_model->previousItemIndex(idx);
+        resultsTreeView->setCurrentIndex(prev_idx);
+        m_model->activate(prev_idx);
+    }
 }
 
 void GrepOutputView::selectNextItem()
 {
     QModelIndex idx = resultsTreeView->currentIndex();
     if(idx.isValid())
-        resultsTreeView->setCurrentIndex(m_model->nextItemIndex(idx));
+    {
+        QModelIndex next_idx = m_model->nextItemIndex(idx);
+        resultsTreeView->setCurrentIndex(next_idx);
+        m_model->activate(next_idx);
+    }
 }
