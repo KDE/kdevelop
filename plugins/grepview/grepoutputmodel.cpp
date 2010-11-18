@@ -146,7 +146,7 @@ GrepOutputItem::~GrepOutputItem()
 ///////////////////////////////////////////////////////////////
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
-    : QStandardItemModel( parent ), m_regExp(""), rootItem(0), fileCount(0), matchCount(0)
+    : QStandardItemModel( parent ), m_regExp(""), m_rootItem(0), m_fileCount(0), m_matchCount(0)
 {
     connect(this, SIGNAL(itemChanged(QStandardItem*)),
               this, SLOT(updateCheckState(QStandardItem*)));
@@ -158,8 +158,8 @@ GrepOutputModel::~GrepOutputModel()
 void GrepOutputModel::clear()
 {
     QStandardItemModel::clear();
-    fileCount = 0;
-    matchCount = 0;
+    m_fileCount = 0;
+    m_matchCount = 0;
 }
 
 void GrepOutputModel::setRegExp(const QRegExp& re)
@@ -271,18 +271,18 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     bool replace = items[0].isCheckable();  //FIXME : find a cleaner way to get this !
     if(rowCount() == 0)
     {
-        rootItem = new GrepOutputItem("", "", replace);
-        appendRow(rootItem);
+        m_rootItem = new GrepOutputItem("", "", replace);
+        appendRow(m_rootItem);
     }
     
-    fileCount  += 1;
-    matchCount += items.length();
-    rootItem->setText(i18n("%1 matches in %2 files", matchCount, fileCount));
+    m_fileCount  += 1;
+    m_matchCount += items.length();
+    m_rootItem->setText(i18n("%1 matches in %2 files", m_matchCount, m_fileCount));
     
     QString fnString = i18np("%2 (one match)", "%2 (%1 matches)", items.length(), filename);
 
     GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, replace);
-    rootItem->appendRow(fileItem);
+    m_rootItem->appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
@@ -312,9 +312,9 @@ void GrepOutputModel::doReplacements()
     
     DocumentChangeSet changeSet;
     changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
-    for(int fileRow = 0; fileRow < rootItem->rowCount(); fileRow++)
+    for(int fileRow = 0; fileRow < m_rootItem->rowCount(); fileRow++)
     {
-        GrepOutputItem *file = static_cast<GrepOutputItem *>(rootItem->child(fileRow));
+        GrepOutputItem *file = static_cast<GrepOutputItem *>(m_rootItem->child(fileRow));
         
         for(int matchRow = 0; matchRow < file->rowCount(); matchRow++)
         {

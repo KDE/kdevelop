@@ -25,7 +25,6 @@ namespace KDevelop
 }
 
 class GrepViewPlugin;
-class GrepJob;
 class GrepOutputModel;
 class GrepOutputDelegate;
 
@@ -46,6 +45,15 @@ public:
     GrepOutputView(QWidget* parent);
 
     GrepOutputModel* model();
+    
+    /**
+     * This causes the creation of a new model, the old one is deleted.
+     * This is necessary because the previous job, if any, is not killed instantly and
+     * sometimes continues to feed the model.
+     * @return pointer to the new model
+     */
+    GrepOutputModel* renewModel();
+    
     void setMessage(const QString& msg);
     void enableReplace(bool enable);
     void setPlugin(GrepViewPlugin *plugin);
@@ -56,7 +64,6 @@ public Q_SLOTS:
 
 
 private:
-    GrepOutputModel* m_model;
     QAction* m_apply;
     GrepViewPlugin *m_plugin;
     

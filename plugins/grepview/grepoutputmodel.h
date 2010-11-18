@@ -73,9 +73,9 @@ public Q_SLOTS:
 
 private:    
     QRegExp m_regExp;
-    GrepOutputItem *rootItem;
-    int fileCount;
-    int matchCount;
+    GrepOutputItem *m_rootItem;
+    int m_fileCount;
+    int m_matchCount;
 
 private slots:
     void updateCheckState(QStandardItem*);

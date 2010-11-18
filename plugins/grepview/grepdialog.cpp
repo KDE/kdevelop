@@ -349,11 +349,12 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     }
     
     
-    GrepJob* job = new GrepJob();
+    GrepJob* job = m_plugin->grepJob();
     
     GrepOutputViewFactory *m_factory = new GrepOutputViewFactory();
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
+    toolView->renewModel();
     toolView->enableReplace(button == ReplaceButton);
     toolView->setPlugin(m_plugin);
     

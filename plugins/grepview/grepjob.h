@@ -36,13 +36,22 @@ namespace KDevelop
     class ProcessLineMaker;
 }
 
+class GrepViewPlugin;
+class FindReplaceTest; //FIXME: this is useful only for tests
+
 class GrepJob : public KJob, public KDevelop::IStatus
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
+    
+    friend class GrepViewPlugin;
+    friend class FindReplaceTest;
 
-public:
+private:
+    ///Job can only be instanciated by plugin
     GrepJob( QObject *parent = 0 );
+    
+public:
 
     void setOutputModel(GrepOutputModel * model);
     void setPatternString(const QString& patternString);

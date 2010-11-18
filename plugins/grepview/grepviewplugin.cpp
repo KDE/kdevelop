@@ -14,6 +14,7 @@
 #include "grepdialog.h"
 #include "grepoutputmodel.h"
 #include "grepoutputdelegate.h"
+#include "grepjob.h"
 
 #include <QWhatsThis>
 #include <QKeySequence>
@@ -46,7 +47,7 @@ K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
 
 GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
-    : KDevelop::IPlugin( GrepViewFactory::componentData(), parent )
+    : KDevelop::IPlugin( GrepViewFactory::componentData(), parent ), m_currentJob(0)
 {
     setXMLFile("kdevgrepview.rc");
 
@@ -183,6 +184,25 @@ void GrepViewPlugin::showDialogFromProject()
 void GrepViewPlugin::rememberSearchDirectory(QString const & directory)
 {
     m_directory = directory;
+}
+
+GrepJob* GrepViewPlugin::grepJob()
+{
+    if(m_currentJob != 0)
+    {
+        m_currentJob->kill();
+    }
+    m_currentJob = new GrepJob();
+    connect(m_currentJob, SIGNAL(finished(KJob*)), this, SLOT(jobFinished(KJob*)));
+    return m_currentJob;
+}
+
+void GrepViewPlugin::jobFinished(KJob* job)
+{
+    if(job == m_currentJob)
+    {
+        m_currentJob = 0;
+    }
 }
 
 #include "grepviewplugin.moc"

@@ -62,22 +62,31 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     addAction(separator);
     addAction(change_criteria);
     
-    m_model = new GrepOutputModel(this);
-    resultsTreeView->setModel(m_model);
+    resultsTreeView->setModel(new GrepOutputModel);
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
     
-    connect(resultsTreeView, SIGNAL(activated(QModelIndex)), m_model, SLOT(activate(QModelIndex)));
-    connect(m_model, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(m_apply, SIGNAL(triggered(bool)), this, SLOT(onApply()));
     connect(previous, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
     connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
 
+GrepOutputModel* GrepOutputView::renewModel()
+{
+    GrepOutputModel* oldModel = model();
+    GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
+    resultsTreeView->setModel(newModel);
+    connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
+    connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
+    oldModel->deleteLater();
+    return newModel;
+}
+
+
 GrepOutputModel* GrepOutputView::model()
 {
-    return m_model;
+    return static_cast<GrepOutputModel*>(resultsTreeView->model());
 }
 
 void GrepOutputView::setPlugin(GrepViewPlugin* plugin)
@@ -110,7 +119,7 @@ void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
 void GrepOutputView::onApply()
 {
     setEnabled(false);
-    m_model->doReplacements();
+    model()->doReplacements();
     setEnabled(true);
 }
 
@@ -123,7 +132,7 @@ void GrepOutputView::expandRootElement(const QModelIndex& parent)
 {
     if(!parent.isValid())
     {
-        resultsTreeView->setExpanded(m_model->index(0,0), true);
+        resultsTreeView->setExpanded(model()->index(0,0), true);
     }
 }
 
@@ -132,9 +141,9 @@ void GrepOutputView::selectPreviousItem()
     QModelIndex idx = resultsTreeView->currentIndex();
     if(idx.isValid())
     {
-        QModelIndex prev_idx = m_model->previousItemIndex(idx);
+        QModelIndex prev_idx = model()->previousItemIndex(idx);
         resultsTreeView->setCurrentIndex(prev_idx);
-        m_model->activate(prev_idx);
+        model()->activate(prev_idx);
     }
 }
 
@@ -143,8 +152,8 @@ void GrepOutputView::selectNextItem()
     QModelIndex idx = resultsTreeView->currentIndex();
     if(idx.isValid())
     {
-        QModelIndex next_idx = m_model->nextItemIndex(idx);
+        QModelIndex next_idx = model()->nextItemIndex(idx);
         resultsTreeView->setCurrentIndex(next_idx);
-        m_model->activate(next_idx);
+        model()->activate(next_idx);
     }
 }
