@@ -48,9 +48,8 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
 
     QTreeView* contents=new QTreeView(parent);
 
-    ManPageModel* model=new ManPageModel(contents);
+    ManPageModel* model = new ManPageModel(contents);
 
-    model->getManPage(KUrl(""));
     contents->setModel(model);
 
     QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));

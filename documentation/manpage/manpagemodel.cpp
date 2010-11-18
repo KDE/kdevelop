@@ -39,6 +39,11 @@
 #include <KIO/Job>
 #include <kio/jobclasses.h>
 
+#include <QWebPage>
+#include <QWebFrame>
+#include <QWebElement>
+#include <QWebElementCollection>
+
 #include <QtDebug>
 
 using namespace KDevelop;
@@ -47,6 +52,7 @@ ManPageModel::ManPageModel(QObject* parent)
     : QAbstractListModel(parent), m_internalFunctionsFile("")
 {
     fillModel();
+    getManMainIndex();
 }
 
 const KDevelop::IndexedString& ManPageModel::internalFunctionFile() const
@@ -127,13 +133,10 @@ void ManPageModel::getManPage(const KUrl& page){
     KIO::TransferJob  * transferJob = NULL;
     //page = KUrl("man:/usr/share/man/man3/a64l.3.gz");
 
-    transferJob = KIO::get(KUrl("man:/usr/share/man/man3/a64l.3.gz"), KIO::NoReload, KIO::HideProgressInfo);
+    transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
              this, SLOT( readDataFromManPage( KIO::Job *, const QByteArray & ) ) );
-    connect( transferJob, SIGNAL( result  (  KIO::Job *)),
-             this, SLOT( jobDone( KIO::Job *) ) );
 
-    transferJob->start();
 }
 
 void ManPageModel::getManMainIndex(){
@@ -142,10 +145,12 @@ void ManPageModel::getManMainIndex(){
     transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
              this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
-    connect( transferJob, SIGNAL( result  (  KIO::Job *)),
-             this, SLOT( jobDone( KIO::Job *) ) );
 
-    transferJob->start();
+    if (transferJob->exec()){
+        this->indexParser();
+    } else {
+        qDebug() << "ManPageModel transferJob error";
+    }
 }
 
 void ManPageModel::getManSectionIndex(const QString section){
@@ -153,31 +158,57 @@ void ManPageModel::getManSectionIndex(const QString section){
 
     transferJob = KIO::get(KUrl("man:(" + section + ")"), KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
-             this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
-    connect( transferJob, SIGNAL( result  (  KIO::Job *)),
-             this, SLOT( jobDone( KIO::Job *) ) );
+             this, SLOT( readDataFromSectionIndex( KIO::Job *, const QByteArray & ) ) );
 
-    transferJob->start();
+    if (transferJob->exec()){
+        this->sectionParser();
+    } else {
+        qDebug() << "ManPageModel transferJob error";
+    }
 }
 
 void ManPageModel::readDataFromManPage(KIO::Job * job, const QByteArray &data){
-     qDebug() << "readDataFromManPage";
      m_manPageBuffer.append(data);
-      qDebug() << data;
 }
 
 void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){
-     qDebug() << "readDataFromMainIndex";
      m_manMainIndexBuffer.append(data);
 }
 
 void ManPageModel::readDataFromSectionIndex(KIO::Job * job, const QByteArray &data){
-     qDebug() << "readDataFromSectionIndex";
      m_manSectionIndexBuffer.append(data);
 }
 
-void ManPageModel::jobDone(KIO::Job *){
-     qDebug() << "jobDone";
+void ManPageModel::indexParser(){
+     QWebPage * page = new QWebPage();
+     QWebFrame * frame = page->mainFrame();
+     frame->setHtml(m_manMainIndexBuffer);
+     QWebElement document = frame->documentElement();
+     QWebElementCollection links = document.findAll("a");
+     foreach(QWebElement e, links){
+        qDebug() << "element";
+        qDebug() << e.attribute("href");
+        qDebug() << e.toPlainText();
+     }
+
+
+}
+
+void ManPageModel::sectionParser(){
+     QWebPage * page = new QWebPage();
+     QWebFrame * frame = page->mainFrame();
+     frame->setHtml(m_manSectionIndexBuffer);
+     QWebElement document = frame->documentElement();
+     QWebElementCollection links = document.findAll("a");
+     foreach(QWebElement e, links){
+         if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
+             qDebug() << "function";
+             qDebug() << e.attribute("href");
+             qDebug() << e.toPlainText();
+         }
+     }
+
+
 }
 
 #include "manpagemodel.moc"

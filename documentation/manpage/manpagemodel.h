@@ -79,9 +79,8 @@ private:
     /// internal function file
     const KDevelop::IndexedString m_internalFunctionsFile;
 
-    /// Parser result
-    //QList <QMap <QString, QString> > m_manMainIndex;
-    //QList <QMap <QString, QString> > m_manSectionIndex;
+    void sectionParser();
+    void indexParser();
 
     /// Slave buffer
     QString m_manPageBuffer;
@@ -93,7 +92,8 @@ public slots:
     void readDataFromManPage(KIO::Job * job, const QByteArray &data);
     void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
     void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
-    void jobDone(KIO::Job * job);
+
+
 };
 
 Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )
