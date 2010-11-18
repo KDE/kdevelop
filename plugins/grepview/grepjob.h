@@ -96,7 +96,8 @@ private:
     enum {
         WorkCollectFiles,
         WorkGrep,
-        WorkIdle
+        WorkIdle,
+        WorkCancelled
     } m_workState;
     
     KUrl::List m_fileList;

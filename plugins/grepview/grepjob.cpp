@@ -126,7 +126,7 @@ void GrepJob::slotFindFinished()
         m_fileList.clear();
         emit hideProgress(this);
         emit clearMessage(this);
-        emit showErrorMessage(i18n("Find in Files aborted"), 5000);
+        emit showErrorMessage(i18n("Search aborted"), 5000);
         emitResult();
         return;
     }
@@ -232,6 +232,12 @@ void GrepJob::slotWork()
                 emitResult();
             }
             break;
+        case WorkCancelled:            
+            emit hideProgress(this);
+            emit clearMessage(this);
+            emit showErrorMessage(i18n("Search aborted"), 5000);
+            emitResult();
+            break;
     }
 }
 
@@ -270,6 +276,10 @@ bool GrepJob::doKill()
         m_workState = WorkIdle;
         m_findThread->tryAbort();
         return false;
+    }
+    else
+    {
+        m_workState = WorkCancelled;
     }
     return true;
 }
