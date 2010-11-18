@@ -127,12 +127,14 @@ void CommentFormatter::extractToDos( uint token, const ParseSession* session, Co
 QByteArray CommentFormatter::formatComment( uint token, const ParseSession* session ) {
   if( !token )
     return QByteArray();
+  ///@todo Work directly on lists of IndexedString tokens, rather than QBytearray (faster), and only convert to QByteArray in the end.
   const Token& commentToken( (*session->token_stream)[token] );
   return KDevelop::formatComment( stringFromContents(session->contentsVector(), commentToken.position, commentToken.size ) );
 }
 
 QByteArray CommentFormatter::formatComment( const ListNode<uint>* comments, const ParseSession* session ) {
   QByteArray ret;
+  ///@todo Work directly on lists of IndexedString tokens, rather than QBytearray (faster), and only convert to QByteArray in the end.
   if( comments )
   {
     const ListNode<uint> *it = comments->toFront(), *end = it;
