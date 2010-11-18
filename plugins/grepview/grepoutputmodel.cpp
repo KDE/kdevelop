@@ -205,7 +205,7 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
     GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
     if(current_item->parent() != 0) //we do nothing if it's the root item
     {
-        if(current_item->parent()->parent() == 0) // the item is a file
+        if(!current_item->isText()) // the item is a file
         {
             int item_row = current_item->row();
             if(item_row > 0)
@@ -238,7 +238,7 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
     if(current_item->parent() != 0) //we do nothing if it's the root item
     {
-        if(current_item->parent()->parent() == 0) // the item is a file
+        if(!current_item->isText()) // the item is a file
         {
             int item_row = current_item->row();
             if(item_row < current_item->parent()->rowCount())
