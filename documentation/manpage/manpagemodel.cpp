@@ -48,7 +48,8 @@
 #include <QtDebug>
 #include <QTreeView>
 #include <QHeaderView>
-
+#include "manpagedocumentation.h"
+#include <interfaces/idocumentationcontroller.h>
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -103,17 +104,6 @@ QList<ManPage> ManPageModel::manPageList(const QString &sectionId) const{
     return m_manMap.keys(sectionId);
 }
 
-
-void ManPageModel::getManPage(const KUrl& page){
-    KIO::TransferJob  * transferJob = NULL;
-    //page = KUrl("man:/usr/share/man/man3/a64l.3.gz");
-
-    transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
-             this, SLOT( readDataFromManPage( KIO::Job *, const QByteArray & ) ) );
-
-}
-
 void ManPageModel::initModel(){
     m_manMainIndexBuffer.clear();
     KIO::TransferJob  * transferJob = 0;
@@ -145,10 +135,6 @@ void ManPageModel::initSection(const QString sectionId){
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
-}
-
-void ManPageModel::readDataFromManPage(KIO::Job * job, const QByteArray &data){
-     m_manPageBuffer.append(data);
 }
 
 void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){
@@ -185,6 +171,19 @@ void ManPageModel::sectionParser(const QString &sectionId){
              m_manMap.insert(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))), sectionId);
          }
      }
+}
+
+void ManPageModel::showItem(const QModelIndex& idx){
+    if(idx.isValid() && int(idx.internalId())>=0) {
+        /*QString desc=ManPageDocumentation::s_provider->descriptionForIdentifier(idx.data().toString(),
+                                                                    (ICMakeDocumentation::Type) idx.parent().row());
+        CMakeDoc::Ptr doc(new CMakeDoc(idx.data().toString(), desc));
+*/
+        QString sectionId = m_sectionList.at(idx.internalId()).first;
+        ManPage page = manPageList(sectionId).at(idx.row());
+        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page));
+        KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+    }
 }
 
 #include "manpagemodel.moc"

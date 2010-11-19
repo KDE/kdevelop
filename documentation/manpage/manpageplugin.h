@@ -47,14 +47,7 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
       signals:
         void addHistory( const KSharedPtr< KDevelop::IDocumentation >& doc ) const;
 
-      public slots:
-        void loadUrl(const QUrl &url) const;
-
       private:
-        KSharedPtr< KDevelop::IDocumentation > documentationForUrl(
-            const KUrl& url, const QString& name, const QByteArray& description = QByteArray()
-        ) const;
-
         QString getDocumentationFilename(KDevelop::Declaration* dec, const bool& isLocal) const;
         QStringListModel* m_index;
 

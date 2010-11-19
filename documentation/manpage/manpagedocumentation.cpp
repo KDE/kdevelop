@@ -26,13 +26,36 @@
 #include "manpageplugin.h"
 
 #include <QtDebug>
+#include <KIO/TransferJob>
+#include <KIO/Job>
+#include <kio/jobclasses.h>
+#include <documentation/standarddocumentationview.h>
 
 ManPagePlugin* ManPageDocumentation::s_provider=0;
 
 
-ManPageDocumentation::ManPageDocumentation(const KUrl& url, const QString& name, const QByteArray& description)
-    : m_url(url), m_name(name), m_description(description)
+ManPageDocumentation::ManPageDocumentation(ManPage page)
+    : m_url(page.second), m_name(page.first)
+//    , m_description()
 {
+    m_description = getManPageContent();
+}
+
+void ManPageDocumentation::readDataFromManPage(KIO::Job * job, const QByteArray &data){
+     m_manPageBuffer.append(data);
+}
+
+const QString ManPageDocumentation::getManPageContent()
+{
+    KIO::TransferJob  * transferJob = KIO::get(m_url, KIO::NoReload, KIO::HideProgressInfo);
+    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
+             this, SLOT( readDataFromManPage( KIO::Job *, const QByteArray & ) ) );
+    if (transferJob->exec()){
+        return m_manPageBuffer;
+    } else {
+        return i18n("Could not find any documentation for '%1'", m_name);
+        qDebug() << "Get man page transferJob error";
+    }
 }
 
 KDevelop::IDocumentationProvider* ManPageDocumentation::provider() const
@@ -42,20 +65,14 @@ KDevelop::IDocumentationProvider* ManPageDocumentation::provider() const
 
 QString ManPageDocumentation::description() const
 {
-    return QString::fromUtf8( m_description );
+    return m_description;
 }
 
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
 {  
-
-    QTreeView* contents=new QTreeView(parent);
-
-    ManPageModel* model = new ManPageModel(contents);
-
-    contents->setModel(model);
-
-    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
-    return contents;
+    KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
+    view->setHtml(description());
+    return view;
 }
 
 
@@ -69,9 +86,9 @@ QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFi
     QTreeView* contents=new QTreeView(parent);
     contents->header()->setVisible(false);
 
-    ManPageModel* model = new ManPageModel(contents);
-    contents->setModel(model);
-    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
+    m_model = new ManPageModel(contents);
+    contents->setModel(m_model);
+    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), m_model, SLOT(showItem(QModelIndex)));
     return contents;
 }
 

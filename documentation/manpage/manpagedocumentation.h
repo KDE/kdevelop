@@ -28,7 +28,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QIODevice>
-
+#include <manpagemodel.h>
 
 class QWidget;
 class QStackedWidget;
@@ -40,7 +40,7 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        ManPageDocumentation(const KUrl& url, const QString& name, const QByteArray& description);
+        ManPageDocumentation(ManPage page);
 
         virtual QString name() const { return m_name; }
         virtual QString description() const;
@@ -48,11 +48,16 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
         virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
         virtual KDevelop::IDocumentationProvider* provider() const;
         static ManPagePlugin* s_provider;
+        const QString getManPageContent();
+    private slots:
+        void readDataFromManPage(KIO::Job * job, const QByteArray &data);
+
     private:
         const KUrl m_url;
         const QString m_name;
-        const QByteArray m_description;
-        
+        QString m_description;
+        QString m_manPageBuffer;
+
 };
 
 class ManPageHomeDocumentation : public KDevelop::IDocumentation
@@ -63,6 +68,8 @@ class ManPageHomeDocumentation : public KDevelop::IDocumentation
         virtual QString description() const { return name(); }
 
         virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
+private:
+        ManPageModel *m_model;
 };
 
 

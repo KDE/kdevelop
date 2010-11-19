@@ -62,20 +62,20 @@ public:
 
 
 public slots:
-    void readDataFromManPage(KIO::Job * job, const QByteArray &data);
+    void showItem(const QModelIndex& idx);
+
+private slots:
     void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
     void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
 
 private:
     QList<ManPage> manPageList(const QString &sectionId) const;
-    void getManPage(const KUrl& page);
     void initModel();
     void initSection(const QString section);
     void sectionParser(const QString &sectionId);
     QList<ManSection> indexParser();
 
     /// Slave buffers
-    QString m_manPageBuffer;
     QString m_manMainIndexBuffer;
     QString m_manSectionIndexBuffer;
 

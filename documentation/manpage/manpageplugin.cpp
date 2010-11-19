@@ -100,18 +100,6 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIn
     return KSharedPtr<IDocumentation>();
 }
 
-void ManPagePlugin::loadUrl(const QUrl& url) const
-{
-    kDebug() << "loading URL" << url;
-    KSharedPtr<IDocumentation> doc = documentationForUrl(url, QString());
-    ICore::self()->documentationController()->showDocumentation(doc);
-}
-
-KSharedPtr< IDocumentation > ManPagePlugin::documentationForUrl(const KUrl& url, const QString& name, const QByteArray& description) const
-{
-    return KSharedPtr<IDocumentation>(new ManPageDocumentation( url, name, description));
-}
-
 KSharedPtr< IDocumentation > ManPagePlugin::homePage() const
 {
     return KSharedPtr<KDevelop::IDocumentation>(new ManPageHomeDocumentation);
