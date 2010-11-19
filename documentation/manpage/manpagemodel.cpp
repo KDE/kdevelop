@@ -51,6 +51,8 @@
 #include <QHeaderView>
 #include "manpagedocumentation.h"
 #include <interfaces/idocumentationcontroller.h>
+
+#include "manpageplugin.h"
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -142,7 +144,7 @@ void ManPageModel::sectionDataReceived(KJob *job){
         qDebug() << "ManPageModel transferJob error";
     }
     iterator->next();
-    reset();
+    KDevelop::ICore::self()->documentationController()->showDocumentation(ManPageDocumentation::s_provider->homePage());
     if(iterator->hasNext()){
         initSection();
     } else {
@@ -182,21 +184,23 @@ void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
          ManPage page;
          if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
              m_manMap.insert(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))), sectionId);
+             m_index.append(e.toPlainText());
          }
      }
 }
 
 void ManPageModel::showItem(const QModelIndex& idx){
     if(idx.isValid() && int(idx.internalId())>=0) {
-        /*QString desc=ManPageDocumentation::s_provider->descriptionForIdentifier(idx.data().toString(),
-                                                                    (ICMakeDocumentation::Type) idx.parent().row());
-        CMakeDoc::Ptr doc(new CMakeDoc(idx.data().toString(), desc));
-*/
         QString sectionId = m_sectionList.at(idx.internalId()).first;
         ManPage page = manPageList(sectionId).at(idx.row());
         KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }
+
+QStringListModel* ManPageModel::indexList(){
+    return new QStringListModel(m_index, this);
+}
+
 
 #include "manpagemodel.moc"

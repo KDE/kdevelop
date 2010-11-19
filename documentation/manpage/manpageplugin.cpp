@@ -55,7 +55,6 @@ K_EXPORT_PLUGIN(ManPageFactory(KAboutData("kdevmanpage","kdevmanpage", ki18n("Ma
 
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     : IPlugin(ManPageFactory::componentData(), parent)
-    , m_index(new QStringListModel())
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     Q_UNUSED(args);
@@ -94,7 +93,7 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
 
 QAbstractListModel* ManPagePlugin::indexModel() const
 {
-    return m_index;
+    return m_model->indexList();
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIndex& index) const

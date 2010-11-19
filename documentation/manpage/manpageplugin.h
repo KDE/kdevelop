@@ -50,7 +50,6 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
 
       private:
         QString getDocumentationFilename(KDevelop::Declaration* dec, const bool& isLocal) const;
-        QStringListModel* m_index;
         ManPageModel *m_model;
 
 };

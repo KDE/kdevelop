@@ -60,7 +60,7 @@ public:
     virtual int columnCount(const QModelIndex&) const { return 1; }
     virtual QModelIndex parent(const QModelIndex& child) const;
     QModelIndex index(int row, int column, const QModelIndex& parent) const;
-
+    QStringListModel* indexList();
 
 public slots:
     void showItem(const QModelIndex& idx);
@@ -84,7 +84,7 @@ private:
     QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;
     QMap<ManPage, QString> m_manMap;
-
+    QStringList m_index;
 
 };
 
