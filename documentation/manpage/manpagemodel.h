@@ -29,6 +29,7 @@
 #include <KIO/FileJob>
 #include <QMap>
 #include <KUrl>
+#include <QListIterator>
 
 namespace KDevelop
 {
@@ -63,22 +64,24 @@ public:
 
 public slots:
     void showItem(const QModelIndex& idx);
-
 private slots:
+    void indexDataReceived(KJob *job);
+    void sectionDataReceived(KJob *job);
+    void initModel();
     void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
     void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
 
 private:
     QList<ManPage> manPageList(const QString &sectionId) const;
-    void initModel();
-    void initSection(const QString section);
-    void sectionParser(const QString &sectionId);
+    void initSection();
+    void sectionParser(const QString &sectionId, const QString &data);
     QList<ManSection> indexParser();
 
     /// Slave buffers
     QString m_manMainIndexBuffer;
     QString m_manSectionIndexBuffer;
 
+    QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;
     QMap<ManPage, QString> m_manMap;
 

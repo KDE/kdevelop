@@ -37,6 +37,7 @@
 #include <KLocalizedString>
 
 #include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 #include <KIO/Job>
 #include <kio/jobclasses.h>
 
@@ -55,7 +56,7 @@ using namespace KDevelop;
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
-    initModel();
+    QMetaObject::invokeMethod(const_cast<ManPageModel*>(this), "initModel", Qt::QueuedConnection);
 }
 
 
@@ -111,29 +112,41 @@ void ManPageModel::initModel(){
     transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
              this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
+    connect(transferJob, SIGNAL(result(KJob *)), this, SLOT(indexDataReceived(KJob *)));
+}
 
-    if (transferJob->exec()){
+void ManPageModel::indexDataReceived(KJob *job){
+    if (!job->error()){
         m_sectionList = this->indexParser();
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
-    foreach(ManSection section, m_sectionList){
-        initSection(section.first);
+    iterator = new QListIterator<ManSection>(m_sectionList);
+    if(iterator->hasNext()){
+        initSection();
     }
+
 }
 
-void ManPageModel::initSection(const QString sectionId){
-    m_manSectionIndexBuffer.clear();
-    KIO::TransferJob  * transferJob = 0;
+void ManPageModel::initSection(){
+    KIO::StoredTransferJob  * transferJob = transferJob = KIO::storedGet(KUrl("man:(" + iterator->peekNext().first + ")"), KIO::NoReload, KIO::HideProgressInfo);
+    connect(transferJob, SIGNAL(result(KJob *)), this, SLOT(sectionDataReceived(KJob *)));
+}
 
-    transferJob = KIO::get(KUrl("man:(" + sectionId + ")"), KIO::NoReload, KIO::HideProgressInfo);
-    connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
-             this, SLOT( readDataFromSectionIndex( KIO::Job *, const QByteArray & ) ) );
-
-    if (transferJob->exec()){
-        this->sectionParser(sectionId);
+void ManPageModel::sectionDataReceived(KJob *job){
+    if (!job->error()){
+        KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
+        this->sectionParser(iterator->peekNext().first, QString(stjob->data()));
+        m_sectionList = this->indexParser();
     } else {
         qDebug() << "ManPageModel transferJob error";
+    }
+    iterator->next();
+    reset();
+    if(iterator->hasNext()){
+        initSection();
+    } else {
+        delete iterator;
     }
 }
 
@@ -159,10 +172,10 @@ QList<ManSection> ManPageModel::indexParser(){
      return list;
 }
 
-void ManPageModel::sectionParser(const QString &sectionId){
+void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
      QWebPage * page = new QWebPage();
      QWebFrame * frame = page->mainFrame();
-     frame->setHtml(m_manSectionIndexBuffer);
+     frame->setHtml(data);
      QWebElement document = frame->documentElement();
      QWebElementCollection links = document.findAll("a");
      foreach(QWebElement e, links){
