@@ -79,6 +79,7 @@ GrepOutputModel* GrepOutputView::renewModel()
     resultsTreeView->setModel(newModel);
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
+    connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
     oldModel->deleteLater();
     return newModel;
 }

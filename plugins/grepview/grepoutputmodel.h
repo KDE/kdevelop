@@ -71,6 +71,9 @@ public Q_SLOTS:
     void activate( const QModelIndex &idx );
     void doReplacements();
 
+Q_SIGNALS:
+    void showErrorMessage(const QString & message, int timeout = 0);
+    
 private:    
     QRegExp m_regExp;
     GrepOutputItem *m_rootItem;
