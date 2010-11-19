@@ -27,9 +27,6 @@
 #include "grepfindthread.h"
 #include "grepoutputmodel.h"
 
-//FIXME: only for benchmarks
-#include <QElapsedTimer>
-
 namespace KDevelop
 {
     class IProject;
@@ -85,14 +82,7 @@ Q_SIGNALS:
     void showErrorMessage(const QString & message, int timeout = 0);
     void hideProgress( KDevelop::IStatus* );
     void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
-
     void foundMatches( const QString& filename, const GrepOutputItem::List& matches);
-
-//FIXME: only for benchmarks, to be deleted
-private slots:
-    void doBench();
-private:
-    QElapsedTimer m_timer;
 
 private:
     Q_INVOKABLE void slotWork();

@@ -78,9 +78,6 @@ GrepJob::GrepJob( QObject* parent )
     KDevelop::ICore::self()->uiController()->registerStatus(this);
     
     connect(this, SIGNAL(result(KJob *)), this, SLOT(testFinishState(KJob *)));
-
-    //FIXME only for benchmarks
-    connect(this, SIGNAL(finished(KJob *)), this, SLOT(doBench()));
 }
 
 QString GrepJob::statusName() const
@@ -246,9 +243,6 @@ void GrepJob::start()
     if(m_workState!=WorkIdle)
         return;
     
-    //FIXME: only for benchmarks
-    m_timer.start();
-    
     m_fileList.clear();
     m_workState = WorkIdle;
     m_fileIndex = 0;
@@ -261,12 +255,6 @@ void GrepJob::start()
             m_outputModel, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
-}
-
-//FIXME: only for benchmarks
-void GrepJob::doBench()
-{
-    qDebug() << "Grep done in " << m_timer.elapsed() << " ms";
 }
 
 bool GrepJob::doKill()
