@@ -61,17 +61,17 @@ public:
     QModelIndex index(int row, int column, const QModelIndex& parent) const;
 
 
-    void getManPage(const KUrl& page);
-    void initModel();
-    void initSection(const QString section);
-
 public slots:
     void readDataFromManPage(KIO::Job * job, const QByteArray &data);
     void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
     void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
 
 private:
-    QMap<ManPage, QString> sectionParser(const QString &sectionId);
+    QList<ManPage> manPageList(const QString &sectionId) const;
+    void getManPage(const KUrl& page);
+    void initModel();
+    void initSection(const QString section);
+    void sectionParser(const QString &sectionId);
     QList<ManSection> indexParser();
 
     /// Slave buffers

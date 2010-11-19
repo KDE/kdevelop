@@ -81,7 +81,7 @@ QVariant ManPageModel::data(const QModelIndex& index, int role) const
         if(role==Qt::DisplayRole) {
             int internal(index.internalId());
             if(internal>=0)
-                return QVariant();
+                return manPageList(m_sectionList.at(index.internalId()).first).at(index.row()).first;
             else
                 return m_sectionList.at(index.row()).second;
         }
@@ -94,10 +94,15 @@ int ManPageModel::rowCount(const QModelIndex& parent) const
     if(!parent.isValid()){
         return m_sectionList.count();
     }else if(int(parent.internalId())<0) {
-        return 0;
+        return manPageList(m_sectionList.at(parent.row()).first).count();
     }
     return 0;
 }
+
+QList<ManPage> ManPageModel::manPageList(const QString &sectionId) const{
+    return m_manMap.keys(sectionId);
+}
+
 
 void ManPageModel::getManPage(const KUrl& page){
     KIO::TransferJob  * transferJob = NULL;
@@ -136,7 +141,7 @@ void ManPageModel::initSection(const QString sectionId){
              this, SLOT( readDataFromSectionIndex( KIO::Job *, const QByteArray & ) ) );
 
     if (transferJob->exec()){
-        m_manMap = this->sectionParser(sectionId);
+        this->sectionParser(sectionId);
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
@@ -168,20 +173,18 @@ QList<ManSection> ManPageModel::indexParser(){
      return list;
 }
 
-QMap<ManPage, QString> ManPageModel::sectionParser(const QString &sectionId){
+void ManPageModel::sectionParser(const QString &sectionId){
      QWebPage * page = new QWebPage();
      QWebFrame * frame = page->mainFrame();
      frame->setHtml(m_manSectionIndexBuffer);
      QWebElement document = frame->documentElement();
      QWebElementCollection links = document.findAll("a");
-     QMap<ManPage, QString> manMap;
      foreach(QWebElement e, links){
          ManPage page;
          if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
-             manMap.insert(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))), sectionId);
+             m_manMap.insert(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))), sectionId);
          }
      }
-     return m_manMap;
 }
 
 #include "manpagemodel.moc"
