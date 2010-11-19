@@ -44,12 +44,14 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
         virtual QString name() const;
         virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
 
+        ManPageModel* model() const;
       signals:
         void addHistory( const KSharedPtr< KDevelop::IDocumentation >& doc ) const;
 
       private:
         QString getDocumentationFilename(KDevelop::Declaration* dec, const bool& isLocal) const;
         QStringListModel* m_index;
+        ManPageModel *m_model;
 
 };
 

@@ -48,7 +48,7 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
         virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
         virtual KDevelop::IDocumentationProvider* provider() const;
         static ManPagePlugin* s_provider;
-        const QString getManPageContent();
+        QString getManPageContent();
     private slots:
         void readDataFromManPage(KIO::Job * job, const QByteArray &data);
 
@@ -68,8 +68,6 @@ class ManPageHomeDocumentation : public KDevelop::IDocumentation
         virtual QString description() const { return name(); }
 
         virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
-private:
-        ManPageModel *m_model;
 };
 
 

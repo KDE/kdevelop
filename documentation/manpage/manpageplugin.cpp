@@ -60,7 +60,7 @@ ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;
-
+    m_model = new ManPageModel(this);
     kDebug() << "ManPagePlugin constructor";
 
 }
@@ -77,7 +77,9 @@ QIcon ManPagePlugin::icon() const
     return icon;
 }
 
-
+ManPageModel* ManPagePlugin::model() const{
+    return m_model;
+}
 
 
 QString ManPagePlugin::getDocumentationFilename( KDevelop::Declaration* dec, const bool& isLocal ) const

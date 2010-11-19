@@ -36,7 +36,6 @@ ManPagePlugin* ManPageDocumentation::s_provider=0;
 
 ManPageDocumentation::ManPageDocumentation(ManPage page)
     : m_url(page.second), m_name(page.first)
-//    , m_description()
 {
     m_description = getManPageContent();
 }
@@ -45,7 +44,7 @@ void ManPageDocumentation::readDataFromManPage(KIO::Job * job, const QByteArray 
      m_manPageBuffer.append(data);
 }
 
-const QString ManPageDocumentation::getManPageContent()
+QString ManPageDocumentation::getManPageContent()
 {
     KIO::TransferJob  * transferJob = KIO::get(m_url, KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
@@ -75,20 +74,16 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
     return view;
 }
 
-
 bool ManPageDocumentation::providesWidget() const
 {
     return false;
 }
 
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
-
     QTreeView* contents=new QTreeView(parent);
     contents->header()->setVisible(false);
-
-    m_model = new ManPageModel(contents);
-    contents->setModel(m_model);
-    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), m_model, SLOT(showItem(QModelIndex)));
+    contents->setModel(ManPageDocumentation::s_provider->model());
+    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), ManPageDocumentation::s_provider->model(), SLOT(showItem(QModelIndex)));
     return contents;
 }
 
