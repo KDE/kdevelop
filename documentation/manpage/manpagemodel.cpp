@@ -1,6 +1,7 @@
 /*  This file is part of KDevelop
 
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -45,88 +46,57 @@
 #include <QWebElementCollection>
 
 #include <QtDebug>
+#include <QTreeView>
+#include <QHeaderView>
 
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
-    : QAbstractListModel(parent), m_internalFunctionsFile("")
+    : QAbstractItemModel(parent)
 {
-    fillModel();
-    getManMainIndex();
+    initModel();
 }
 
-const KDevelop::IndexedString& ManPageModel::internalFunctionFile() const
+
+QModelIndex ManPageModel::parent(const QModelIndex& child) const
 {
-    return m_internalFunctionsFile;
+    if(child.isValid() && child.column()==0 && int(child.internalId())>=0)
+        return createIndex(child.internalId(),0, -1);
+    return QModelIndex();
 }
 
-void ManPageModel::slotParseJobFinished( ParseJob* job )
+QModelIndex ManPageModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if ( job->document() == m_internalFunctionsFile ) {
-        disconnect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
-                   this, SLOT(slotParseJobFinished(KDevelop::ParseJob*)));
-        fillModel();
-    }
-}
+    if(row<0 || column!=0)
+        return QModelIndex();
+    if(!parent.isValid() && row==m_sectionList.count())
+        return QModelIndex();
 
-void ManPageModel::fillModel()
-{
-    DUChainReadLocker lock(DUChain::self()->lock());
-
-    TopDUContext* top = DUChain::self()->chainForDocument(m_internalFunctionsFile);
-    if ( !top ) {
-        qWarning() << "could not find DUChain for internal function file, connecting to background parser";
-        connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)),
-                this, SLOT(slotParseJobFinished(KDevelop::ParseJob*)));
-        return;
-    }
-
-    kDebug() << "filling model";
-    typedef QPair<Declaration*, int> DeclDepthPair;
-    foreach ( const DeclDepthPair& declpair, top->allDeclarations(top->range().end, top) ) {
-        if ( declpair.first->abstractType() && declpair.first->abstractType()->modifiers() & AbstractType::ConstModifier ) {
-            // filter global constants, since they are hard to find in the documentation
-            continue;
-        }
-        m_declarations << DeclarationPointer(declpair.first);
-
-        if ( StructureType::Ptr type = declpair.first->type<StructureType>() ) {
-            foreach ( Declaration* dec, type->internalContext(top)->localDeclarations() ) {
-                m_declarations << DeclarationPointer(dec);
-            }
-        }
-    }
-}
-
-bool ManPageModel::hasChildren(const QModelIndex& parent) const
-{
-    return parent == QModelIndex();
+    return createIndex(row,column, int(parent.isValid() ? parent.row() : -1));
 }
 
 QVariant ManPageModel::data(const QModelIndex& index, int role) const
 {
+    if(index.isValid()){
+        if(role==Qt::DisplayRole) {
+            int internal(index.internalId());
+            if(internal>=0)
+                return QVariant();
+            else
+                return m_sectionList.at(index.row()).second;
+        }
+    }
     return QVariant();
 }
 
 int ManPageModel::rowCount(const QModelIndex& parent) const
 {
-    Q_UNUSED(parent);
-
-    return m_declarations.count();
-}
-
-bool ManPageModel::canFetchMore(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-
-    return false;
-}
-
-DeclarationPointer ManPageModel::declarationForIndex(const QModelIndex& index) const
-{
-    Q_ASSERT(m_declarations.size() > index.row());
-
-    return m_declarations[index.row()];
+    if(!parent.isValid()){
+        return m_sectionList.count();
+    }else if(int(parent.internalId())<0) {
+        return 0;
+    }
+    return 0;
 }
 
 void ManPageModel::getManPage(const KUrl& page){
@@ -139,29 +109,34 @@ void ManPageModel::getManPage(const KUrl& page){
 
 }
 
-void ManPageModel::getManMainIndex(){
-    KIO::TransferJob  * transferJob = NULL;
+void ManPageModel::initModel(){
+    m_manMainIndexBuffer.clear();
+    KIO::TransferJob  * transferJob = 0;
 
     transferJob = KIO::get(KUrl("man://"), KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
              this, SLOT( readDataFromMainIndex( KIO::Job *, const QByteArray & ) ) );
 
     if (transferJob->exec()){
-        this->indexParser();
+        m_sectionList = this->indexParser();
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
+    foreach(ManSection section, m_sectionList){
+        initSection(section.first);
+    }
 }
 
-void ManPageModel::getManSectionIndex(const QString section){
-    KIO::TransferJob  * transferJob = NULL;
+void ManPageModel::initSection(const QString sectionId){
+    m_manSectionIndexBuffer.clear();
+    KIO::TransferJob  * transferJob = 0;
 
-    transferJob = KIO::get(KUrl("man:(" + section + ")"), KIO::NoReload, KIO::HideProgressInfo);
+    transferJob = KIO::get(KUrl("man:(" + sectionId + ")"), KIO::NoReload, KIO::HideProgressInfo);
     connect( transferJob, SIGNAL( data  (  KIO::Job *, const QByteArray &)),
              this, SLOT( readDataFromSectionIndex( KIO::Job *, const QByteArray & ) ) );
 
     if (transferJob->exec()){
-        this->sectionParser();
+        m_manMap = this->sectionParser(sectionId);
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
@@ -179,36 +154,34 @@ void ManPageModel::readDataFromSectionIndex(KIO::Job * job, const QByteArray &da
      m_manSectionIndexBuffer.append(data);
 }
 
-void ManPageModel::indexParser(){
+QList<ManSection> ManPageModel::indexParser(){
+
      QWebPage * page = new QWebPage();
      QWebFrame * frame = page->mainFrame();
      frame->setHtml(m_manMainIndexBuffer);
      QWebElement document = frame->documentElement();
      QWebElementCollection links = document.findAll("a");
+     QList<ManSection> list;
      foreach(QWebElement e, links){
-        qDebug() << "element";
-        qDebug() << e.attribute("href");
-        qDebug() << e.toPlainText();
+        list.append(qMakePair(e.attribute("accesskey"), e.toPlainText()));
      }
-
-
+     return list;
 }
 
-void ManPageModel::sectionParser(){
+QMap<ManPage, QString> ManPageModel::sectionParser(const QString &sectionId){
      QWebPage * page = new QWebPage();
      QWebFrame * frame = page->mainFrame();
      frame->setHtml(m_manSectionIndexBuffer);
      QWebElement document = frame->documentElement();
      QWebElementCollection links = document.findAll("a");
+     QMap<ManPage, QString> manMap;
      foreach(QWebElement e, links){
+         ManPage page;
          if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
-             qDebug() << "function";
-             qDebug() << e.attribute("href");
-             qDebug() << e.toPlainText();
+             manMap.insert(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))), sectionId);
          }
      }
-
-
+     return m_manMap;
 }
 
 #include "manpagemodel.moc"

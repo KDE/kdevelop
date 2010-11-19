@@ -1,6 +1,7 @@
 /*  This file is part of KDevelop
 
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <language/duchain/declaration.h>
 #include <KIO/FileJob>
 #include <QMap>
+#include <KUrl>
 
 namespace KDevelop
 {
@@ -34,17 +36,19 @@ namespace KDevelop
     class ParseJob;
 }
 
-class ManPageModel : public QAbstractListModel
+// id and name for man section
+typedef QPair<QString, QString> ManSection ;
+
+// name and url for man page
+typedef QPair<QString, KUrl> ManPage;
+
+
+class ManPageModel : public QAbstractItemModel
 {
     Q_OBJECT
 
 public:
     ManPageModel(QObject* parent = 0);
-
-    enum CustomDataRoles {
-        /// returns the Declaration that a given index in the model represents
-        DeclarationRole = Qt::UserRole
-    };
 
     /**
      * You can use @p DeclarationRole to get the Declaration for a given index.
@@ -52,46 +56,31 @@ public:
      */
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual bool hasChildren(const QModelIndex& parent) const;
-    virtual bool canFetchMore(const QModelIndex& parent) const;
+    virtual int columnCount(const QModelIndex&) const { return 1; }
+    virtual QModelIndex parent(const QModelIndex& child) const;
+    QModelIndex index(int row, int column, const QModelIndex& parent) const;
 
-    /// Returns the Declaration for a given index
-    /// NOTE: Don't forget to lock the DUChain if you access the declaration!
-    KDevelop::DeclarationPointer declarationForIndex(const QModelIndex& index) const;
-
-    /// Returns the destination of the internal PHP function file
-    /// @see PhpLanguageSupport
-    const KDevelop::IndexedString& internalFunctionFile() const;
 
     void getManPage(const KUrl& page);
-    void getManMainIndex();
-    void getManSectionIndex(const QString section);
+    void initModel();
+    void initSection(const QString section);
 
-
+public slots:
+    void readDataFromManPage(KIO::Job * job, const QByteArray &data);
+    void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
+    void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
 
 private:
-    /// fills model with all declarations from the internal PHP functions file
-    void fillModel();
+    QMap<ManPage, QString> sectionParser(const QString &sectionId);
+    QList<ManSection> indexParser();
 
-    /// List of pointers to _all_ PHP internal declarations
-    QList<KDevelop::DeclarationPointer> m_declarations;
-
-    /// internal function file
-    const KDevelop::IndexedString m_internalFunctionsFile;
-
-    void sectionParser();
-    void indexParser();
-
-    /// Slave buffer
+    /// Slave buffers
     QString m_manPageBuffer;
     QString m_manMainIndexBuffer;
     QString m_manSectionIndexBuffer;
 
-public slots:
-    void slotParseJobFinished( KDevelop::ParseJob* job );
-    void readDataFromManPage(KIO::Job * job, const QByteArray &data);
-    void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
-    void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
+    QList<ManSection> m_sectionList;
+    QMap<ManPage, QString> m_manMap;
 
 
 };

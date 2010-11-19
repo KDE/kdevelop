@@ -1,5 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -39,20 +40,29 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        ManPageDocumentation(const KUrl& url, const QString& name, const QByteArray& description, ManPagePlugin* parent);
+        ManPageDocumentation(const KUrl& url, const QString& name, const QByteArray& description);
 
         virtual QString name() const { return m_name; }
         virtual QString description() const;
         virtual bool providesWidget() const;
         virtual QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0);
         virtual KDevelop::IDocumentationProvider* provider() const;
-
-      private:
+        static ManPagePlugin* s_provider;
+    private:
         const KUrl m_url;
         const QString m_name;
         const QByteArray m_description;
-        ManPagePlugin* m_parent;
         
+};
+
+class ManPageHomeDocumentation : public KDevelop::IDocumentation
+{
+    public:
+        virtual KDevelop::IDocumentationProvider* provider() const;
+        virtual QString name() const;
+        virtual QString description() const { return name(); }
+
+        virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
 };
 
 

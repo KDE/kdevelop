@@ -54,10 +54,13 @@ K_EXPORT_PLUGIN(ManPageFactory(KAboutData("kdevmanpage","kdevmanpage", ki18n("Ma
                                KAboutData::License_GPL)))
 
 ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
-    : IPlugin(ManPageFactory::componentData(), parent), m_model(new ManPageModel(this))
+    : IPlugin(ManPageFactory::componentData(), parent)
+    , m_index(new QStringListModel())
 {
     KDEV_USE_EXTENSION_INTERFACE( KDevelop::IDocumentationProvider )
     Q_UNUSED(args);
+    ManPageDocumentation::s_provider = this;
+
     kDebug() << "ManPagePlugin constructor";
 
 }
@@ -79,80 +82,22 @@ QIcon ManPagePlugin::icon() const
 
 QString ManPagePlugin::getDocumentationFilename( KDevelop::Declaration* dec, const bool& isLocal ) const
 {
-    QString fname;
-
-    if ( ClassFunctionDeclaration* fdec = dynamic_cast<ClassFunctionDeclaration*>( dec ) ) {
-
-        if ( dec->context() && dec->context()->type() == DUContext::Class && dec->context()->owner() ) {
-            QString className = dec->context()->owner()->identifier().toString();
-
-            if ( !isLocal ) {
-                fname = className + '->' + fdec->identifier().toString();
-            } else {
-                if ( fdec->isConstructor() ) {
-                    fname = className;
-                } else if ( fdec->isDestructor() ) {
-                    fname = "~" + className;
-                } else {
-                    fname = fdec->identifier().toString();
-                }
-            }
-        }
-    } else if ( dynamic_cast<ClassDeclaration*>(dec) ) {
-        fname = "class." + dec->identifier().toString();
-    } else if ( dynamic_cast<FunctionDeclaration*>(dec) ) {
-        fname = "function." + dec->identifier().toString();
-    }
-
-
-    if ( !fname.isEmpty() && isLocal ) {
-        fname = fname.toLower();
-    }
-
-    return "man:"+fname;
+    return QString();
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
 {
-    if ( dec ) {
-        DUChainReadLocker lock( DUChain::lock() );
-
-        // filter non global or non-php declarations
-        if ( dec->topContext()->url() != m_model->internalFunctionFile() ) {
-            return KSharedPtr<IDocumentation>();
-        }
-
-        KUrl url = KUrl("man:(3)");
-
-        QString file = getDocumentationFilename( dec, url.isLocalFile() );
-        if ( file.isEmpty() ) {
-            kDebug() << "no documentation pattern found for" << dec->toString();
-            return KSharedPtr<IDocumentation>();
-        }
-
-        url.addPath( file );
-        if ( url.isLocalFile() && !QFile::exists( url.toLocalFile() ) ) {
-            kDebug() << "bad path" << url << "for documentation of" << dec->toString() << " - aborting";
-            return KSharedPtr<IDocumentation>();
-        }
-
-        kDebug() << "man page documentation located at " << url << "for" << dec->toString();
-        return documentationForUrl(url, dec->qualifiedIdentifier().toString(), dec->comment());
-    }
-
     return KSharedPtr<IDocumentation>();
 }
 
 QAbstractListModel* ManPagePlugin::indexModel() const
 {
-    return m_model;
+    return m_index;
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIndex& index) const
 {
-    return documentationForDeclaration(static_cast<Declaration*>(
-        index.data(ManPageModel::DeclarationRole).value<DeclarationPointer>().data()
-    ));
+    return KSharedPtr<IDocumentation>();
 }
 
 void ManPagePlugin::loadUrl(const QUrl& url) const
@@ -164,14 +109,12 @@ void ManPagePlugin::loadUrl(const QUrl& url) const
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForUrl(const KUrl& url, const QString& name, const QByteArray& description) const
 {
-    return KSharedPtr<IDocumentation>(new ManPageDocumentation( url, name, description, const_cast<ManPagePlugin*>(this)));
+    return KSharedPtr<IDocumentation>(new ManPageDocumentation( url, name, description));
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::homePage() const
 {
-    KUrl url = KUrl("");
-    return documentationForUrl(url, i18n("Man Documentation"));
+    return KSharedPtr<KDevelop::IDocumentation>(new ManPageHomeDocumentation);
 }
 
-
-
+#include "manpageplugin.moc"
