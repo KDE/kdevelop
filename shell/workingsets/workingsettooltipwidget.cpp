@@ -250,21 +250,19 @@ void WorkingSetToolTipWidget::updateFileButtons()
     WorkingSetController* controller = Core::self()->workingSetControllerInternal();
     ActiveToolTip* tooltip = controller->tooltip();
 
-    if (mainWindow->area()->workingSet().isEmpty()) {
-        if (tooltip) {
-            tooltip->hide();
-        }
-
-        return;
-    }
-
     QString activeFile;
     if(mainWindow->area()->activeView())
         activeFile = mainWindow->area()->activeView()->document()->documentSpecifier();
 
-    WorkingSet* currentWorkingSet = controller->getWorkingSet(mainWindow->area()->workingSet());
-    QSet<QString> openFiles = currentWorkingSet->fileList().toSet();
+    WorkingSet* currentWorkingSet = 0;
+    QSet<QString> openFiles;
 
+    if(!mainWindow->area()->workingSet().isEmpty())
+    {
+        currentWorkingSet = controller->getWorkingSet(mainWindow->area()->workingSet());
+        openFiles = currentWorkingSet->fileList().toSet();
+    }
+    
     bool allOpen = true;
     bool noneOpen = true;
 
@@ -299,7 +297,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
     // NOTE: allways hide merge&subtract all on current working set
     // if we want to enable mergeButton, we have to fix it's behavior since it operates directly on the
     // set contents and not on the m_fileWidgets
-    m_mergeButton->setHidden(allOpen || currentWorkingSet->id() == m_set->id());
+    m_mergeButton->setHidden(allOpen || currentWorkingSet == m_set);
     m_subtractButton->setHidden(noneOpen || mainWindow->area()->workingSet() == m_set->id());
     m_deleteButton->setHidden(m_set->hasConnectedAreas());
 

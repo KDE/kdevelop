@@ -89,12 +89,12 @@ protected:
 
     RangeInRevision newRange = editorFindRange(name, name);
 
-    DUChainWriteLocker lock(DUChain::lock()); ///@todo Don't call findDeclarations during write-lock, it can lead to UI lockups
-    QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
+    DUChainReadLocker lock(DUChain::lock());
+    QList<DeclarationPointer> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id, newRange.start);
     foreach (Declaration* declaration, declarations)
       if (!declaration->isForwardDeclaration()) {
         declarations.clear();
-        declarations.append(declaration);
+        declarations.append(DeclarationPointer(declaration));
         break;
       }
     // If we don't break, there's no non-forward declaration
@@ -111,7 +111,7 @@ protected:
    * \param node Node which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, KDevelop::Declaration* declaration)
+  void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
   {
     newUse(node, editorFindRange(node, node), declaration);
   }
@@ -122,11 +122,15 @@ protected:
    * \param newRange Text range which encompasses the use.
    * \param decl Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, const RangeInRevision& newRange, Declaration* declaration)
+  void newUse(T* node, const RangeInRevision& newRange, const DeclarationPointer& _declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
+    Declaration* declaration = _declaration.data();
+    
+    if(!declaration)
+      return; // The declaration was deleted in the meantime
 
-    bool encountered = false; ///@todo This can cause I/O, so it would be better if it was possible with only a read-lock
+    bool encountered = false;
     int declarationIndex = LanguageSpecificUseBuilderBase::currentContext()->topContext()->indexForUsedDeclaration(declaration);
     int contextUpSteps = 0; //We've got to use the stack here, and not parentContext(), because the order may be different
 

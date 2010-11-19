@@ -19,32 +19,25 @@
 #ifndef ASSISTANTPOPUP_H
 #define ASSISTANTPOPUP_H
 
-#include <QFrame>
+#include <QToolBar>
 #include <interfaces/iassistant.h>
 #include <ksharedptr.h>
 
 
-class AssistantPopup : public QFrame
+class AssistantPopup : public QToolBar
 {
-    Q_OBJECT
+Q_OBJECT
 public:
     typedef KSharedPtr<AssistantPopup> Ptr;
     AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant);
     KDevelop::IAssistant::Ptr assistant() const;
-    public slots:
-    void executeAction1();
-    void executeAction2();
-    void executeAction3();
-    void executeAction4();
+public slots:
     void executeHideAction();
-    void assistantActionsChanged();
-    private:
-        void executeAction(int number);
-        void updateActions();
-        QWidget* widgetForAction(KDevelop::IAssistantAction::Ptr action);
-        KDevelop::IAssistant::Ptr m_assistant;
-        QList<KDevelop::IAssistantAction::Ptr> m_actions;
-        QPalette m_normalPalette;
+private:
+    void updateActions();
+    QWidget* widgetForAction(KDevelop::IAssistantAction::Ptr action);
+    KDevelop::IAssistant::Ptr m_assistant;
+    QList<KDevelop::IAssistantAction::Ptr> m_assistantActions;
 };
 
 #endif // ASSISTANTPOPUP_H

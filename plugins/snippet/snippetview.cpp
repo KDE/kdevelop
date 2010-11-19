@@ -27,12 +27,8 @@
 
 #include <KGlobalSettings>
 
-#include "snippetfeatures.h"
-
-#ifdef SNIPPETS_HAVE_GHNS
-    #include <KNS3/DownloadDialog>
-    #include <knewstuff3/uploaddialog.h>
-#endif
+#include <KNS3/DownloadDialog>
+#include <knewstuff3/uploaddialog.h>
 
 SnippetView::SnippetView(SnippetPlugin* plugin, QWidget* parent)
  : QWidget(parent), Ui::SnippetViewBase(), m_plugin(plugin)
@@ -283,7 +279,6 @@ void SnippetView::slotFilterChanged()
     m_proxy->changeFilter( filterText->text() );
 }
 
-#ifdef SNIPPETS_HAVE_GHNS
 void SnippetView::slotGHNS()
 {
     KNS3::DownloadDialog dialog("ktexteditor_codesnippets_core.knsrc", this);
@@ -319,10 +314,6 @@ void SnippetView::slotSnippetToGHNS()
     dialog.setUploadName(repo->text());
     dialog.exec();
 }
-#else
-void SnippetView::slotGHNS() {}
-void SnippetView::slotSnippetToGHNS() {}
-#endif
 
 bool SnippetView::eventFilter(QObject* obj, QEvent* e)
 {

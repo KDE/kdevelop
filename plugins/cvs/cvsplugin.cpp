@@ -41,7 +41,6 @@
 #include "cvsjob.h"
 #include "editorsview.h"
 #include "commitdialog.h"
-#include "updateoptionsdialog.h"
 #include "cvsgenericoutputview.h"
 #include "checkoutdialog.h"
 #include "importdialog.h"

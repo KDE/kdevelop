@@ -156,8 +156,11 @@ public:
         m_parser->updateProgressBar();
 
         //We don't hide the progress-bar in updateProgressBar, so it doesn't permanently flash when a document is reparsed again and again.
-        if(m_doneParseJobs == m_maxParseJobs || m_weaver.queueLength() == 0)
+        if(m_doneParseJobs == m_maxParseJobs
+            || (m_neededPriority == BackgroundParser::BestPriority && m_weaver.queueLength() == 0))
+        {
             emit m_parser->hideProgress(m_parser);
+        }
     }
 
     ParseJob* createParseJob(const KUrl& url, TopDUContext::Features features, QList<QPointer<QObject> > notifyWhenReady)
@@ -650,11 +653,17 @@ void BackgroundParser::documentLoaded( IDocument* document )
     {
         KTextEditor::Document* textDocument = document->textDocument();
         
-        kDebug() << "Creating change tracker for " << document->url();
         IndexedString url(document->url());
         // Some debugging because we had issues with this
-        if(d->m_managed.contains(url))
-            Q_ASSERT(d->m_managed[url]->document() == textDocument);
+        
+        if(d->m_managed.contains(url) && d->m_managed[url]->document() == textDocument)
+        {
+            kDebug() << "Got redundant documentLoaded from" << document->url() << textDocument;
+            return;
+        }
+        
+        kDebug() << "Creating change tracker for " << document->url();
+        
         
         Q_ASSERT(!d->m_managed.contains(url));
         Q_ASSERT(!d->m_managedTextDocumentUrls.contains(textDocument));

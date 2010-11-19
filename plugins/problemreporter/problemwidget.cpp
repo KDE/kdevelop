@@ -25,28 +25,21 @@
 #include <QMenu>
 #include <QCursor>
 #include <QContextMenuEvent>
+#include <QSignalMapper>
 
+#include <kaction.h>
+#include <kactionmenu.h>
 #include <klocale.h>
 #include <kicon.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <interfaces/ilanguagecontroller.h>
-#include <interfaces/ilanguage.h>
-#include <interfaces/idocument.h>
-#include <language/interfaces/ilanguagesupport.h>
-#include <language/backgroundparser/backgroundparser.h>
-#include <language/backgroundparser/parsejob.h>
-
+#include <interfaces/iassistant.h>
 #include <language/duchain/duchain.h>
-#include <language/duchain/duchainobserver.h>
 #include <language/duchain/duchainlock.h>
-#include <language/duchain/parsingenvironment.h>
 
 #include "problemreporterplugin.h"
 #include "problemmodel.h"
-#include <kaction.h>
-#include <interfaces/iassistant.h>
 
 //#include "modeltest.h"
 
@@ -54,123 +47,123 @@ using namespace KDevelop;
 
 ProblemWidget::ProblemWidget(QWidget* parent, ProblemReporterPlugin* plugin)
     : QTreeView(parent)
-    , m_plugin(plugin)
+    , m_plugin(plugin), m_autoResize(true)
 {
     setObjectName("Problem Reporter Tree");
     setWindowTitle(i18n("Problems"));
     setWindowIcon( KIcon("dialog-information") ); ///@todo Use a proper icon
     setRootIsDecorated(true);
     setWhatsThis( i18n( "Problems" ) );
-    setModel(new ProblemModel(m_plugin));
 
-//     setContextMenuPolicy(Qt::CustomContextMenu);
-    
-    m_fullUpdateAction = new KAction(this);
-    m_fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    m_fullUpdateAction->setText(i18n("Force Full Update"));
-    m_fullUpdateAction->setToolTip(i18n("Re-parse the current file and all its imports."));
-    m_fullUpdateAction->setIcon(KIcon("view-refresh"));
-    connect(m_fullUpdateAction, SIGNAL(triggered(bool)), this, SLOT(forceFullUpdate()));
-    addAction(m_fullUpdateAction);
-    //new ModelTest(model());
+    setModel(m_plugin->getModel());
 
-    bool success = connect(ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)), Qt::DirectConnection);
+    KAction* fullUpdateAction = new KAction(this);
+    fullUpdateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    fullUpdateAction->setText(i18n("Force Full Update"));
+    fullUpdateAction->setToolTip(i18n("Re-parse all watched documents"));
+    fullUpdateAction->setIcon(KIcon("view-refresh"));
+    connect(fullUpdateAction, SIGNAL(triggered(bool)), model(), SLOT(forceFullUpdate()));
+    addAction(fullUpdateAction);
+
+    KAction* showImportsAction = new KAction(this);
+    addAction(showImportsAction);
+    showImportsAction->setCheckable(true);
+    showImportsAction->setChecked(false);
+    showImportsAction->setText(i18n("Show Imports"));
+    showImportsAction->setToolTip(i18n("Display problems in imported files"));
+    this->model()->setShowImports(false);
+    connect(showImportsAction, SIGNAL(triggered(bool)), this->model(), SLOT(setShowImports(bool)));
+
+    KActionMenu* scopeMenu = new KActionMenu(this);
+    scopeMenu->setDelayed(false);
+    scopeMenu->setText(i18n("Scope"));
+    scopeMenu->setToolTip(i18n("Which files to display the problems for"));
+
+    QActionGroup* scopeActions = new QActionGroup(this);
+
+    KAction* currentDocumentAction = new KAction(this);
+    currentDocumentAction->setText(i18n("Current Document"));
+    currentDocumentAction->setToolTip(i18n("Display problems in current document"));
+
+    KAction* openDocumentsAction = new KAction(this);
+    openDocumentsAction->setText(i18n("Open documents"));
+    openDocumentsAction->setToolTip(i18n("Display problems in all open documents"));
+
+    KAction* currentProjectAction = new KAction(this);
+    currentProjectAction->setText(i18n("Current Project"));
+    currentProjectAction->setToolTip(i18n("Display problems in current project"));
+
+    KAction* allProjectAction = new KAction(this);
+    allProjectAction->setText(i18n("All Projects"));
+    allProjectAction->setToolTip(i18n("Display problems in all projects"));
+
+    KAction* scopeActionArray[] = {currentDocumentAction, openDocumentsAction, currentProjectAction, allProjectAction};
+    for (int i = 0; i < 4; ++i) {
+        scopeActionArray[i]->setCheckable(true);
+        scopeActions->addAction(scopeActionArray[i]);
+        scopeMenu->addAction(scopeActionArray[i]);
+    }
+    addAction(scopeMenu);
+
+    currentDocumentAction->setChecked(true);
+    model()->setScope(ProblemModel::CurrentDocument);
+    QSignalMapper * scopeMapper = new QSignalMapper(this);
+    scopeMapper->setMapping(currentDocumentAction, ProblemModel::CurrentDocument);
+    scopeMapper->setMapping(openDocumentsAction, ProblemModel::OpenDocuments);
+    scopeMapper->setMapping(currentProjectAction, ProblemModel::CurrentProject);
+    scopeMapper->setMapping(allProjectAction, ProblemModel::AllProjects);
+    connect(currentDocumentAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
+    connect(openDocumentsAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
+    connect(currentProjectAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
+    connect(allProjectAction, SIGNAL(triggered()), scopeMapper, SLOT(map()));
+    connect(scopeMapper, SIGNAL(mapped(int)), model(), SLOT(setScope(int)));
+
+    KActionMenu* severityMenu = new KActionMenu(i18n("Severity"), this);
+    severityMenu->setDelayed(false);
+    severityMenu->setToolTip(i18n("Select the lowest level of problem severity to be displayed"));
+    QActionGroup* severityActions = new QActionGroup(this);
+
+    KAction* errorSeverityAction = new KAction(i18n("Error"), this);
+    errorSeverityAction->setToolTip(i18n("Display only errors"));
+
+    KAction* warningSeverityAction = new KAction(i18n("Warning"), this);
+    warningSeverityAction->setToolTip(i18n("Display errors and warnings"));
+
+    KAction* hintSeverityAction = new KAction(i18n("Hint"), this);
+    hintSeverityAction->setToolTip(i18n("Display errors, warnings and hints"));
+
+    KAction* severityActionArray[] = {errorSeverityAction, warningSeverityAction, hintSeverityAction};
+    for (int i = 0; i < 3; ++i) {
+        severityActionArray[i]->setCheckable(true);
+        severityActions->addAction(severityActionArray[i]);
+        severityMenu->addAction(severityActionArray[i]);
+    }
+    addAction(severityMenu);
+
+    hintSeverityAction->setChecked(true);
+    model()->setSeverity(ProblemData::Hint);
+    QSignalMapper * severityMapper = new QSignalMapper(this);
+    severityMapper->setMapping(errorSeverityAction, ProblemData::Error);
+    severityMapper->setMapping(warningSeverityAction, ProblemData::Warning);
+    severityMapper->setMapping(hintSeverityAction, ProblemData::Hint);
+    connect(errorSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
+    connect(warningSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
+    connect(hintSeverityAction, SIGNAL(triggered()), severityMapper, SLOT(map()));
+    connect(severityMapper, SIGNAL(mapped(int)), model(), SLOT(setSeverity(int)));
+
+    KAction* autoResizeAction = new KAction(this);
+    autoResizeAction->setText(i18n("Auto Resize Columns"));
+    autoResizeAction->setToolTip(i18n("Automatically resize columns to their data size"));
+    autoResizeAction->setCheckable(true);
+    autoResizeAction->setChecked(m_autoResize);
+    connect(autoResizeAction, SIGNAL(triggered(bool)), this, SLOT(setAutoResize(bool)));
+    addAction(autoResizeAction);
+
     connect(this, SIGNAL(activated(const QModelIndex&)), SLOT(itemActivated(const QModelIndex&)));
-    connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(documentActivated(KDevelop::IDocument*)));
-    Q_ASSERT(success);
 }
 
 ProblemWidget::~ProblemWidget()
 {
-}
-
-void ProblemWidget::collectProblems(QList<ProblemPointer>& allProblems, TopDUContext* context, QSet<TopDUContext*>& hadContexts)
-{
-  if(!context) {
-      kDebug() << "collecting from bad context";
-      return;
-  }
-  if(hadContexts.contains(context))
-    return;
-
-  hadContexts.insert(context);
-
-  allProblems += context->problems();
-
-  bool isProxy = context->parsingEnvironmentFile() && context->parsingEnvironmentFile()->isProxyContext();
-  foreach(const DUContext::Import &ctx, context->importedParentContexts()) {
-      if(!ctx.indexedContext().indexedTopContext().isLoaded())
-          continue;
-    TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(0));
-    if(topCtx) {
-      //If we are starting at a proxy-context, only recurse into other proxy-contexts,
-      //because those contain the problems.
-      if(!isProxy || (topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext()))
-        collectProblems(allProblems, topCtx, hadContexts);
-    }
-  }
-}
-
-void ProblemWidget::forceFullUpdate() {
-    kDebug() << "forcing full update";
-    if(!m_activeUrl.isValid()) {
-        kWarning() << "no active url";
-        return;
-    }
-    DUChainReadLocker lock(DUChain::lock());
-    DUChain::self()->updateContextForUrl(IndexedString(m_activeUrl), (TopDUContext::Features)(KDevelop::TopDUContext::VisibleDeclarationsAndContexts | KDevelop::TopDUContext::ForceUpdateRecursive));
-}
-
-void ProblemWidget::showProblems(TopDUContext* ctx, KDevelop::IDocument* doc)
-{
-  if(ctx) {
-    QList<ProblemPointer> allProblems;
-    QSet<TopDUContext*> hadContexts;
-    DUChainReadLocker lock(DUChain::lock());
-    collectProblems(allProblems, ctx, hadContexts);
-    model()->setProblems(allProblems, m_activeDirectory);
-    if (isVisible()) {
-        // no need to resize columns if the toolview isn't visible
-        // we will resize them right after show anyway
-        for (int i = 0; i < model()->columnCount(); ++i)
-            resizeColumnToContents(i);
-    }
-  }else{
-    model()->clear();
-  }
-}
-
-void ProblemWidget::documentActivated(KDevelop::IDocument* doc)
-{
-  m_activeDirectory = doc->url().upUrl();
-  m_activeUrl = doc->url();
-
-  QList<KDevelop::ILanguage*> languages = ICore::self()->languageController()->languagesForUrl(doc->url());
-
-  KDevelop::TopDUContext* chosen = 0;
-
-  DUChainReadLocker lock;
-  
-  foreach( KDevelop::ILanguage* language, languages)
-    if(!chosen)
-      chosen = language->languageSupport()->standardContext(doc->url(), true);
-
-  showProblems(chosen, doc);
-}
-
-void ProblemWidget::parseJobFinished(KDevelop::ParseJob* job)
-{
-  KUrl url = job->document().toUrl();
-  IDocument* active = ICore::self()->documentController()->activeDocument();
-
-  DUChainReadLocker lock;
-  
-  if(active) {
-    //For now, only show problems from the current document
-    if(active->url() == url && job->duChain()) {
-      showProblems(job->duChain(), active);
-    }
-  }
 }
 
 void ProblemWidget::itemActivated(const QModelIndex& index)
@@ -182,6 +175,7 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     KUrl url;
 
     {
+      // TODO: is this really necessary?
       DUChainReadLocker lock(DUChain::lock());
       KDevelop::ProblemPointer problem = model()->problemForIndex(index);
       if (!index.internalPointer()) {
@@ -194,6 +188,42 @@ void ProblemWidget::itemActivated(const QModelIndex& index)
     }
 
     m_plugin->core()->documentController()->openDocument(url, start);
+}
+
+void ProblemWidget::resizeColumns()
+{
+    if (isVisible()) {
+        for (int i = 0; i < model()->columnCount(); ++i) {
+            resizeColumnToContents(i);
+        }
+    }
+}
+
+void ProblemWidget::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    QTreeView::dataChanged(topLeft, bottomRight);
+    if (m_autoResize) {
+        resizeColumns();
+    }
+}
+
+void ProblemWidget::reset()
+{
+    QTreeView::reset();
+    if (m_autoResize) {
+        resizeColumns();
+    }
+}
+
+void ProblemWidget::setAutoResize(bool autoResize)
+{
+    if (!m_autoResize && autoResize) {
+        m_autoResize = autoResize;
+        resizeColumns();
+    } else {
+        m_autoResize = autoResize;
+    }
+    kDebug() << m_autoResize;
 }
 
 ProblemModel * ProblemWidget::model() const

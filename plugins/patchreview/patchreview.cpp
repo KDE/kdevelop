@@ -901,7 +901,7 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, KTextEditor::Ran
 {
     if(range == doc->documentRange())
     {
-      kWarning() << "re-doing";
+      kDebug() << "re-doing";
       //The document was loaded / reloaded
     if ( !m_model->differences() )
         return ;
@@ -1181,9 +1181,9 @@ void PatchReviewPlugin::updateKompareModel() {
   
     kDebug() << "updating model";
     try {
+        removeHighlighting();
         m_modelList.reset( 0 );
         delete m_diffSettings;
-        removeHighlighting();
         
         emit patchChanged();
 
@@ -1231,6 +1231,7 @@ void PatchReviewPlugin::updateKompareModel() {
     } catch ( const char * str ) {
         KMessageBox::error(0, str, i18n("Kompare Model Update"));
     }
+    removeHighlighting();
     m_modelList.reset( 0 );
     m_kompareInfo.reset( 0 );
     delete m_diffSettings;
@@ -1336,6 +1337,7 @@ void showDiff(const KDevelop::VcsDiff& d)
 void PatchReviewPlugin::cancelReview()
 {
   if(m_patch) {
+    removeHighlighting();
     m_modelList.reset( 0 );
     m_patch->cancelReview();
 
@@ -1356,6 +1358,7 @@ void PatchReviewPlugin::finishReview(QList< KUrl > selection)
   if(m_patch) {
     if(!m_patch->finishReview(selection))
       return;
+    removeHighlighting();
     m_modelList.reset( 0 );
     
     emit patchChanged();
@@ -1418,7 +1421,7 @@ void PatchReviewPlugin::updateReview()
   if (!documents.contains(m_patch->file())) {
     futureActiveDoc = ICore::self()->documentController()->openDocument(m_patch->file());
   } else {
-    documents.remove(m_patch->file());
+    futureActiveDoc = documents.take(m_patch->file());
   }
 #endif
 

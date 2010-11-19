@@ -19,6 +19,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::ExpandingFieldsGrow</enum>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="snippetName">
        <property name="text">
@@ -98,14 +101,24 @@
      <item row="4" column="1">
       <widget class="KShortcutWidget" name="snippetShortcutWidget"/>
      </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="snippetContentsLabel">
-       <property name="text">
-        <string>Snippet:</string>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="KTabWidget" name="editorTabs">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="snippetTab">
+      <attribute name="title">
+       <string>&amp;Snippet</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="scriptTab">
+      <attribute name="title">
+       <string>S&amp;cripts</string>
+      </attribute>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>
@@ -119,6 +132,12 @@
    <class>KShortcutWidget</class>
    <extends>QWidget</extends>
    <header>kshortcutwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>ktabwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

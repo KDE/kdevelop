@@ -110,6 +110,7 @@ private:
 
     QSet<QString> m_usedIcons;
     QMap<QString, WorkingSet*> m_workingSets;
+    WorkingSet* m_emptyWorkingSet;
     KDevelop::Core* m_core;
     QTimer* m_hideToolTipTimer;
     QPointer<KDevelop::ActiveToolTip> m_tooltip;
