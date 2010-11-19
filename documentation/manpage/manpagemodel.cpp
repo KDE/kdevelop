@@ -139,7 +139,6 @@ void ManPageModel::sectionDataReceived(KJob *job){
     if (!job->error()){
         KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
         this->sectionParser(iterator->peekNext().first, QString(stjob->data()));
-        m_sectionList = this->indexParser();
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
