@@ -35,6 +35,9 @@
          <property name="text">
           <string notr="true"/>
          </property>
+         <property name="clickMessage">
+          <string>Filter...</string>
+         </property>
          <property name="showClearButton" stdset="0">
           <bool>true</bool>
          </property>
@@ -48,9 +51,9 @@
            <verstretch>6</verstretch>
           </sizepolicy>
          </property>
-      <property name="whatsThis">
-       <string>Project Overview</string>
-      </property>
+         <property name="whatsThis">
+          <string>Project Overview</string>
+         </property>
          <attribute name="headerStretchLastSection">
           <bool>false</bool>
          </attribute>
@@ -81,6 +84,11 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+  <customwidget>
    <class>ProjectBuildSetWidget</class>
    <extends>QWidget</extends>
    <header>projectbuildsetwidget.h</header>
@@ -90,11 +98,6 @@
    <class>ProjectTreeView</class>
    <extends>QTreeView</extends>
    <header>projecttreeview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>KLineEdit</header>
   </customwidget>
  </customwidgets>
  <resources/>
