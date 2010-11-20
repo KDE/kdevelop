@@ -36,6 +36,7 @@ namespace KDevelop {
 namespace Cpp {
 using namespace KDevelop;
   class ViableFunction;
+  class ADLHelper;
 /**
  * Models overloaded function resolution
  * The du-chain must be locked for the whole lifetime of this object.
@@ -45,12 +46,13 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
   public:
 
     struct Parameter {
-      Parameter() : type(0), lValue(false) {
+      Parameter() : type(0), lValue(false), declaration(NULL) {
       }
-      Parameter( AbstractType::Ptr t, bool isLValue ) : type(t), lValue( isLValue ) {
+      Parameter( AbstractType::Ptr t, bool isLValue, Declaration * decl = NULL) : type(t), lValue( isLValue ), declaration(decl) {
       }
       AbstractType::Ptr type;
       bool lValue;
+      Declaration * declaration; // if the parameter value is a function name, ADL needs to know it
 
       ///duchain must be locked
       QString toString() const {
@@ -61,6 +63,11 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
           ret += type->toString();
         else
           ret += "<notype>";
+        if (declaration) {
+          ret += " (refs declaration ";
+          ret += declaration->toString();
+          ret += ")";
+        }
         return ret;
       }
     };
@@ -126,11 +133,12 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      *
      * @warning du-chain must be locked
 
-    * @param params parameters to match
+     * @param params parameters to match
      * @param declarations list of declarations
      * @param noUserDefinedConversion should be true if user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
+     * @param doADL should be true if one needs to try the ADL lookup as well
      * */
-    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
+    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false, bool doADL = true);
 
     /**
      * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
@@ -155,6 +163,17 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @return false if the matching failed
      * */
     uint matchParameterTypes(const AbstractType::Ptr& argumentType, const AbstractType::Ptr& parameterType, QMap<IndexedString, AbstractType::Ptr>& instantiatedTypes, bool keepValue = false) const;
+
+    /**
+     * Computes the declarations of functions that could be an Argument-Dependent Lookup match for the given declarations and parameters.
+     * The returned declarations might not exist. The function computes all names that would need to be checked based on the
+     * parameters' namespaces and types.
+     * @param params Current list of parameters
+     * @param declarations List of function call declarations
+     * @return List of function declarations available for overload resolution with ADL
+     */
+    QList<Declaration *> computeADLCandidates( const ParameterList& params, const QList<Declaration*>& declarations );
+    
   private:
     ///Replace class-instances with operator() functions, and pure classes with their constructors
     void expandDeclarations( const QList<Declaration*>& from, QSet<Declaration*>& to );
