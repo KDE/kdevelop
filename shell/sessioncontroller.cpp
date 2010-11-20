@@ -412,9 +412,9 @@ private slots:
                                 #ifdef HAVE_RECOVERY_INTERFACE
                                 KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
                                 
-                                if(recovery && recovery->haveRecovery())
+                                if(recovery && recovery->isDataRecoveryAvailable())
                                     // Use the recovery from the kate swap-file if possible
-                                    recovery->doRecovery();
+                                    recovery->recoverData();
                                 else
                                     // Use a simple recovery through "replace text"
                                     doc->textDocument()->setText(text);
