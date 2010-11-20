@@ -333,10 +333,11 @@ void GrepOutputModel::doReplacements()
     //TODO : really display this
     if(!result.m_success)
     {
-        kDebug() << result.m_failureReason;
+        DocumentChangePointer ch = result.m_reasonChange;
+        emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5").arg(Qt::escape(ch->m_oldText)).arg(Qt::escape(ch->m_newText))
+                        .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
     }
 }
-
 
 #include "grepoutputmodel.moc"
 
