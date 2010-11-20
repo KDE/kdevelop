@@ -190,7 +190,7 @@ void ProjectManagerView::locateCurrentDocument()
 
 void ProjectManagerView::openUrl( const KUrl& url )
 {
-        ICore::self()->documentController()->openDocument( url );
+    ICore::self()->documentController()->openDocument( url );
 }
 
 void ProjectManagerView::filterChanged(const QString &text)

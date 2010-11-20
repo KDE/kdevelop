@@ -64,25 +64,26 @@ QVariant ProjectProxyModel::data(const QModelIndex& index, int role) const
 
 bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const
 {
-    bool retval = true; // Show all items by default
-    QModelIndex index0 = sourceModel()->index(source_row, 0, source_parent);
+    if (mFilenameFilters.isEmpty()) {
+        return true;
+    }
 
-    KDevelop::ProjectBaseItem *item(projectModel()->itemFromIndex(index0));
-    
-    if (item)
-    {
-        if (!mFilenameFilters.empty() &&
-            item->type() != KDevelop::ProjectBaseItem::Folder && 
+    bool retval = true; // Show all items by default
+    QModelIndex index = sourceModel()->index(source_row, 0, source_parent);
+
+    KDevelop::ProjectBaseItem *item = projectModel()->itemFromIndex(index);
+
+    if (item) {
+        if (item->type() != KDevelop::ProjectBaseItem::Folder &&
             item->type() != KDevelop::ProjectBaseItem::BuildFolder)
         {
             retval = false; // Do not show until it is matched to filter
-            
+
             QSharedPointer<QRegExp> filter;
-            
+
             foreach(filter, mFilenameFilters)
             {
-                if (filter->exactMatch(item->text()))
-                {
+                if (filter->exactMatch(item->text())) {
                     retval = true;
                     break;
                 }
@@ -95,12 +96,11 @@ bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & s
 void ProjectProxyModel::setFilterString(const QString &filters)
 {
     QStringList patterns(filters.split(QRegExp("[; ]"), QString::SkipEmptyParts));
-    
+
     // Check for special case: single pattern without special chars -> force prefixed search (qwerty ->qwerty*)
-    if (patterns.size() == 1)
-    {
+    if (patterns.size() == 1) {
         QString pattern(patterns.front());
-        
+
         if (!pattern.contains('*') &&
             !pattern.contains('?') &&
             !pattern.contains('[') &&
@@ -109,18 +109,18 @@ void ProjectProxyModel::setFilterString(const QString &filters)
             // Filter has no specia symbols (?, *) so adjust it for prefixed search
             pattern += '*';
         }
-        
+
         patterns.clear();
         patterns << pattern;
     }
-    
+
     QString pattern;
     mFilenameFilters.clear();
-  
+
     foreach(pattern, patterns)
     {
         mFilenameFilters.push_back(QSharedPointer<QRegExp>(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard)));
     }
-    
+
     invalidateFilter();
 };
