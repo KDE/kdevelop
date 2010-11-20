@@ -76,7 +76,7 @@ files for parsing:</string>
     <widget class="QLabel" name="label_4">
      <property name="text">
       <string>Save All Documents
-Before Building</string>
+Before Building:</string>
      </property>
     </widget>
    </item>
