@@ -37,7 +37,7 @@ GrepOutputItem::GrepOutputItem(const QString &fileName,
     else
     {
         setText(text);
-        showCollapsed();
+        showExpanded();
     }
 }
 
@@ -216,7 +216,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
-        fileItem->appendRow(new GrepOutputItem(item));
+        appendRow(new GrepOutputItem(item));
     }
 }
 

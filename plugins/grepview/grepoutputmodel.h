@@ -42,6 +42,7 @@ public:
 
     QString filename() const ;
     int lineNumber() const ;
+    ///TODO: remove this mess, reuse a proper hierarchic model/view instead of outputview
     bool collapsed() const ;
     bool expanded() const ;
     bool isText() const { return data()==Text; }
