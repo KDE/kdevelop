@@ -95,9 +95,12 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_modelFilter = new ProjectProxyModel( this );
     m_modelFilter->setSourceModel(ICore::self()->projectController()->projectModel());
+    connect(ICore::self()->projectController()->projectModel(), SIGNAL(rowsInserted(const QModelIndex &,int,int)),
+            this, SLOT(rowsInserted(const QModelIndex &,int,int)));
 
     m_ui->projectTreeView->setModel( m_modelFilter );
 
+    connect(m_ui->fileNameFilterEdit, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)));
 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
@@ -192,5 +195,14 @@ void ProjectManagerView::openUrl( const KUrl& url )
         ICore::self()->documentController()->openDocument( url );
 }
 
+void ProjectManagerView::filterChanged(const QString &text)
+{
+    m_modelFilter->setFilterString(text);
+}
+
+void ProjectManagerView::rowsInserted(const QModelIndex & parent, int start, int end )
+{
+    m_modelFilter->invalidate();
+};
 #include "projectmanagerview.moc"
 

@@ -23,6 +23,8 @@
 
 #include <QtGui/QWidget>
 
+class QModelIndex;
+
 class KAction;
 class KUrl;
 
@@ -54,6 +56,8 @@ private slots:
     void locateCurrentDocument();
     void updateSyncAction();
     void openUrl( const KUrl& );
+    void filterChanged(const QString&);
+    void rowsInserted(const QModelIndex & parent, int start, int end );
 
 private:
     QAction* m_syncAction;
