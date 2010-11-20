@@ -74,6 +74,11 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect( groupModel, SIGNAL( modelReset() ), SLOT( enableDeleteButton() ) );
 }
 
+void EnvironmentWidget::setActiveGroup( const QString& group )
+{
+    ui.activeCombo->setCurrentItem(group);
+}
+
 void EnvironmentWidget::enableDeleteButton()
 {
     ui.deleteButton->setEnabled( groupModel->rowCount( QModelIndex() ) > 0 );
