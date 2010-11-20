@@ -449,6 +449,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     connect(m_browseManager, SIGNAL(shiftKeyTriggered()), this, SLOT(switchFocusToContextBrowser()));
     
     m_previousButton = new QToolButton();
+    m_previousButton->setToolTip(i18n("Go back in context history"));
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_previousButton->setIcon(KIcon("go-previous"));
     m_previousButton->setEnabled(false);
@@ -459,6 +460,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     connect(m_previousMenu, SIGNAL(aboutToShow()), this, SLOT(previousMenuAboutToShow()));
 
     m_nextButton = new QToolButton();
+    m_nextButton->setToolTip(i18n("Go forward in context history"));
     m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_nextButton->setIcon(KIcon("go-next"));
     m_nextButton->setEnabled(false);
