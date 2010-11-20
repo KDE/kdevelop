@@ -484,6 +484,7 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     if(quickOpen) {
       m_outlineLine = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n("Outline"), IQuickOpen::Outline);
       m_outlineLine->setDefaultText(i18n("Outline..."));
+      m_outlineLine->setToolTip(i18n("Navigate outline of active document, click to browse."));
     }
     
     connect(m_browseManager, SIGNAL(startDelayedBrowsing(KTextEditor::View*)), this, SIGNAL(startDelayedBrowsing(KTextEditor::View*)));
