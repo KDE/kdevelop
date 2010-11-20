@@ -29,6 +29,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="KLineEdit" name="fileNameFilterEdit">
+         <property name="toolTip">
+          <string>Insert wildcard patterns to filter the project view for files and targets for matching items.</string>
+         </property>
          <property name="inputMask">
           <string notr="true"/>
          </property>

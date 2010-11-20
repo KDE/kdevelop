@@ -154,6 +154,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area, IdealMainWid
     , _corner(0)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setToolTip(i18n("Right click to add new tool views."));
 
     if (area == Qt::BottomDockWidgetArea)
     {
@@ -276,6 +277,7 @@ void IdealButtonBarWidget::actionEvent(QActionEvent *event)
             _buttons.insert(action, button);
 
             button->setText(action->text());
+            button->setToolTip(i18n("Toggle '%1' tool view.", action->text()));
             button->setIcon(action->icon());
             button->setShortcut(QKeySequence());
             button->setChecked(action->isChecked());
