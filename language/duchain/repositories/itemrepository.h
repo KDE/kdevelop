@@ -341,7 +341,7 @@ class Bucket {
         m_monsterBucketExtent = monsterBucketExtent;
         m_available = ItemRepositoryBucketSize;
         m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
-        memset(m_data, 0, ItemRepositoryBucketSize + monsterBucketExtent * DataSize * sizeof(char));
+        memset(m_data, 0, (ItemRepositoryBucketSize + monsterBucketExtent * DataSize) * sizeof(char));
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
         m_objectMapSize = ObjectMapSize;
         m_objectMap = new short unsigned int[m_objectMapSize];
