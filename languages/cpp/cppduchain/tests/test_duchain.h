@@ -82,6 +82,18 @@ private slots:
   void testSearchAcrossNamespace();
   void testSearchAcrossNamespace2();
   void testSearchAcrossNamespace3();
+  void testADL();
+  void testADLClassType();
+  void testADLFunctionType();
+  void testADLFunctionByName();
+  void testADLEnumerationType();
+  void testADLClassMembers();
+  void testADLMemberFunction();
+  void testADLMemberFunctionByName();
+  void testADLOperators();
+  void testADLNameAlias();
+  void testADLTemplateArguments();
+  void testADLTemplateTemplateArguments();
   void testTemplateEnums();
   void testIntegralTemplates();
   void testTypedef();

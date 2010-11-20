@@ -29,6 +29,7 @@
 #include "typeutils.h"
 #include "viablefunctions.h"
 #include "cppduchain.h"
+#include "adlhelper.h"
 
 using namespace KDevelop;
 using namespace Cpp;
@@ -88,8 +89,29 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
     QList<Declaration*> decls = m_context->findDeclarations(m_operatorIdentifier);
     foreach( Declaration* decl, decls ) {
       FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
-      if( fun && fun->arguments().size() == 2 )
+      if( fun && (fun->arguments().size() == 1 || fun->arguments().size() == 2) )
         m_declarations << DeclarationWithArgument( m_baseType, decl );
+    }
+    ///If no global or class member operators found try ADL for namespaced operators
+    if (m_declarations.empty()) {
+      ADLHelper adlHelper( m_context, m_topContext );
+      adlHelper.addArgument(m_baseType);
+      foreach( const OverloadResolver::Parameter & param, m_knownParameters.parameters ) {
+        adlHelper.addArgument( param );
+      }
+      QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
+      foreach( Declaration * adlNsDecl, adlNamespaces) {
+        // lookup each adlNsDecl::m_operationIdentifier
+        QualifiedIdentifier operatorIdentifier = adlNsDecl->qualifiedIdentifier();
+        operatorIdentifier.push(m_operatorIdentifier);
+        // same as above for the qualified identifier
+        QList<Declaration*> decls = m_context->findDeclarations(operatorIdentifier);
+        foreach( Declaration* decl, decls ) {
+          FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
+          if( fun && (fun->arguments().size() == 1 || fun->arguments().size() == 2) )
+            m_declarations << DeclarationWithArgument( m_baseType, decl );
+        }          
+      }
     }
   }else{
     //m_declarations should already be set by setFunctions(..)
@@ -116,6 +138,24 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
   QList< ViableFunction > viableFunctions;
 
   viableFunctions = resolv.resolveListOffsetted( m_knownParameters, m_declarations, partial );
+
+  // also retrieve names by ADL if partial argument list (only used by code completion)
+  // and even in strict mode if normal lookup failed
+  if (partial || viableFunctions.empty()) {
+    QList<Declaration*> declarations;
+    foreach(const DeclarationWithArgument & declWithArg, m_declarations) {
+      declarations << declWithArg.second;
+    }
+    
+    QList<Declaration*> adlDecls = resolv.computeADLCandidates(m_knownParameters, declarations);
+    if (!adlDecls.empty()) {
+      QList< DeclarationWithArgument > adlDeclsWithArguments;
+      foreach(Declaration * decl, adlDecls) {
+        adlDeclsWithArguments << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); // see setFunctions
+      }
+      viableFunctions += resolv.resolveListOffsetted( m_knownParameters, adlDeclsWithArguments, partial );
+    }
+  }
 
   foreach( const ViableFunction& function, viableFunctions ) {
     if( function.declaration() && function.declaration()->abstractType() ) {

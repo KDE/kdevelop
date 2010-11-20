@@ -53,6 +53,9 @@
 //because the problem report contains a lot of information, and the problem currently appears very often.
 //#define DEBUG_FUNCTION_CALLS
 
+// uncomment to get debugging info on ADL - very expensive on parsing
+//#define DEBUG_ADL
+
 const uint maxExpressionVisitorProblems = 400;
 
 ///Remember to always when visiting a node create a PushPositiveValue object for the context
@@ -253,7 +256,7 @@ void ExpressionVisitor::problem( AST* node, const QString& str ) {
 
   kDebug(9007) << "Cpp::ExpressionVisitor dumping the node that created the problem";
   Cpp::DumpChain d;
-  
+
   d.dump(node, m_session);
 #endif
 }
@@ -453,7 +456,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
   void ExpressionVisitor::visitName(NameAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    
+
     DUContext* searchInContext = m_currentContext;
     
     CursorInRevision position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
@@ -516,7 +519,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       m_lastDeclarations = nameV.declarations();
 
       if( m_lastDeclarations.isEmpty() || !m_lastDeclarations.first().data() ) {
-        
+
         if(Cpp::isTemplateDependent(m_currentContext) ) {
           if(m_memberAccess || (node->qualified_names && nameV.foundSomething() && Cpp::isTemplateDependent(nameV.foundSomething().data()))) {
           //Do nothing. Within a not instantiated template, we cannot be that sure
@@ -524,15 +527,15 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
           return;
           }
         }
-        
+
         MissingDeclarationType::Ptr missing(new MissingDeclarationType);
-        
+
         missing->setIdentifier(IndexedTypeIdentifier(nameV.identifier()));
         if(m_memberAccess)
           missing->containerContext = searchInContext;
-        
+
         missing->searchStartContext = m_currentContext;
-        
+
         if(m_reportRealProblems && m_problems.size() < maxExpressionVisitorProblems) {
           KSharedPtr<KDevelop::Problem> problem(new Cpp::MissingDeclarationProblem(missing));
           problem->setSource(KDevelop::ProblemData::SemanticAnalysis);
@@ -577,7 +580,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     clearLast();
-    
+
     if( node->literal ) {
       visit( node->literal );
       return; //We had a string-literal
@@ -642,7 +645,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     visit( node->name );
 
     const Token& token(tokenFromIndex(node->token));
-    
+
     static const IndexedString True("true");
     static const IndexedString False("false");
 
@@ -670,7 +673,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
       m_lastInstance = Instance( true );
       static_cast<ConstantIntegralType*>(m_lastType.unsafeData())->setValue<qint64>( token.symbol() == True );
     }
-    
+
     //Respect "this" token
     if( token.kind == Token_this ) {
       LOCKDUCHAIN;
@@ -883,10 +886,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   //We have  to prevent automatic parsing and splitting by QualifiedIdentifier and Identifier
   Identifier idd;
   idd.setIdentifier(id);
-  
+
   QualifiedIdentifier ident;
   ident.push(idd);
-  
+
   ident.setIsExpression( expression );
   type->setIdentifier( IndexedTypeIdentifier(ident) );
   m_lastType = type.cast<AbstractType>();
@@ -917,7 +920,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
        * so we can add the type to the parameter-list.
        * */
       if( leftType && leftInstance) {
-        m_parameters << OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ) );
+        m_parameters << OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() );
         m_parameterNodes.append(node->left_expression);
 
         //LOCKDUCHAIN;
@@ -938,7 +941,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         }
       }
     }
-    
+
     visit(node->right_expression);
 
     Instance rightInstance = m_lastInstance;
@@ -948,7 +951,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     if( tokenFromIndex(node->op).kind == ',' ) {
 
       if( rightType && rightInstance) {
-        m_parameters << OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) );
+        m_parameters << OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() );
         m_parameterNodes.append(node->right_expression);
         //LOCKDUCHAIN;
         //kDebug(9007) << "Adding parameter from right: " << (rightType.data() ? rightType->toString() : QString("<notype>"));
@@ -970,7 +973,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       clearLast();
       return;
     }
-    
+
     if(MissingDeclarationType::Ptr missing = leftType.cast<Cpp::MissingDeclarationType>()) {
       if(rightType) {
         Cpp::ExpressionEvaluationResult res;
@@ -1004,7 +1007,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       m_lastType = leftType;
       return;
     }
-    
+
     if( dynamic_cast<DelayedType*>(rightType.unsafeData()) || dynamic_cast<DelayedType*>(leftType.unsafeData()) ) {
       m_lastInstance = Instance(true);
       createDelayedType(node);
@@ -1012,7 +1015,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     int tokenKind = tokenFromIndex(node->op).kind;
-    
+
     if(rightType && leftType && rightInstance && leftInstance) {
       LOCKDUCHAIN;
       //Test if there is a builtin operator that can be used. If it is, this will also evaluate the values of constant expressions.
@@ -1028,8 +1031,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolutionHelper helper(ptr, TopDUContextPointer(topContext()) );
-        helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ) ), op );
-        helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) ) );
+        helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() ), op );
+        helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) ) );
         QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
         if( !functions.isEmpty() )
@@ -1085,7 +1088,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     QList<DeclarationPointer> decls = comp.declarations();
 
     m_lastType = comp.type();
-    
+
     if( !decls.isEmpty() )
     {
       m_lastDeclarations = decls;
@@ -1127,21 +1130,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::visitInitDeclarator(InitDeclaratorAST* node)
   {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
-    
+
     if(node->declarator)
     {
       CppClassType::Ptr constructedType = computeConstructedType();
 
       //Build constructor uses (similar to visitFunctionCall)
-      
+
       AbstractType::Ptr oldLastType = m_lastType;
       Instance oldInstance = m_lastInstance;
       QList< DeclarationPointer > declarations = m_lastDeclarations;
-      
+
       clearLast();
 
       bool fail = true;
-      
+
       size_t token = node->start_token;
       //NOTE: we might have an initializer in a class for pure virtual methods,
       //      but we just ignore that. See also TestDUChain::testForwardDeclaration4
@@ -1170,25 +1173,25 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         token = node->declarator->parameter_declaration_clause->start_token-1;
         fail = !buildParametersFromDeclaration(node->declarator->parameter_declaration_clause);
       }
-      
+
       if(fail || !constructedType) {
         DefaultVisitor::visitInitDeclarator(node);
         return;
       }
-      
+
       DeclarationPointer chosenFunction;
       {
         LOCKDUCHAIN;
-        
+
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
         if( !fail )
-          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations), false, false); // no ADL for class constructors
         else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
-      
+
       if(chosenFunction)
         newUse( node , token, token+1, chosenFunction );
     }else{
@@ -1221,7 +1224,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     visit(node->parameter_declaration_clause);
     visit(node->exception_spec);
-    
+
     LOCKDUCHAIN;
     if( node->array_dimensions && oldLastType ) {
       ArrayType::Ptr p( new ArrayType() );
@@ -1301,25 +1304,25 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     LOCKDUCHAIN;
-    
+
     static IndexedString ref("&");
     static IndexedString ptr("*");
-    
+
     IndexedString op = m_session->token_stream->token(node->op).symbol();
-    
-    
+
+
     if(op == ptr) {
-    
+
       PointerType::Ptr p( new PointerType() );
       p->setBaseType( m_lastType );
       p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
-  
+
       m_lastType = p.cast<AbstractType>();
     }else{
       ReferenceType::Ptr p( new ReferenceType() );
       p->setBaseType( m_lastType );
       p->setModifiers(TypeBuilder::parseConstVolatile(m_session, node->cv));
-  
+
       m_lastType = p.cast<AbstractType>();
     }
     m_lastInstance = Instance(false);
@@ -1360,9 +1363,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     clearLast();
     visit( node->expression );
     clearLast();
-    
+
     CppClassType::Ptr constructedType;
-    
+
 
     //Visit declarator and type-specifier, which should build the type
     if( node->type_id ) {
@@ -1374,7 +1377,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       constructedType = computeConstructedType();
       visit(node->new_type_id->new_declarator);
     }
-    
+
     if( m_lastType )
     {
       LOCKDUCHAIN;
@@ -1399,32 +1402,32 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
       //Build constructor uses (similar to visitFunctionCall)
       //Largely a copy of visitInitDeclarator()
-      
+
       AbstractType::Ptr oldLastType = m_lastType;
       Instance oldInstance = m_lastInstance;
       QList< DeclarationPointer > declarations = m_lastDeclarations;
-      
+
       clearLast();
 
       bool fail = !buildParametersFromExpression(node->new_initializer->expression);
-      
+
       size_t token = node->new_initializer->start_token;
 
       DeclarationPointer chosenFunction;
       {
         LOCKDUCHAIN;
-        
+
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
         if( !fail )
-          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations), false, false); // no ADL for class constructors
         else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
-      
+
       if(chosenFunction)
-        newUse( node , token, token+1, chosenFunction );    
+        newUse( node , token, token+1, chosenFunction );
     }
 
     m_lastType = lastType;
@@ -1440,10 +1443,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     //Also visit the not interesting parts, so they are evaluated
     clearLast();
-    
+
     visit(node->condition);
 
-    
+
     if( dynamic_cast<DelayedType*>(m_lastType.unsafeData()) ) {
       //Store the expression so it's evaluated later
       m_lastInstance = Instance(true);
@@ -1529,7 +1532,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return false;
     }
   }
-  
+
   /**
    * partially have test */
   void ExpressionVisitor::visitUnaryExpression(UnaryExpressionAST* node)
@@ -1625,9 +1628,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           LOCKDUCHAIN;
           KDevelop::DUContextPointer ptr(m_currentContext);
           OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-          helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ) ), op );
+          helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ), op );
 
-          //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ) ) );
+          //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) );
           QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
           if( !functions.isEmpty() )
@@ -1675,14 +1678,14 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_lastType = f->returnType();
     //Just keep the function instance, set in findMember(..)
   }
-  
+
 
   CppClassType::Ptr ExpressionVisitor::computeConstructedType()
   {
     CppClassType::Ptr constructedType;
 
     AbstractType::Ptr oldLastType = m_lastType;
-    
+
     if(!m_lastInstance) {
       LOCKDUCHAIN;
       if(m_lastDeclarations.isEmpty() && m_lastType && !m_lastInstance) {
@@ -1693,13 +1696,13 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             m_lastDeclarations << DeclarationPointer(decl);
         }
       }
-      
+
       if( !m_lastDeclarations.isEmpty() && m_lastDeclarations.first().data() && m_lastDeclarations.first()->kind() == Declaration::Type && (constructedType = unAliasedType(m_lastDeclarations.first()->logicalDeclaration(topContext())->abstractType()).cast<CppClassType>()) ) {
 
         if( constructedType && constructedType->declaration(topContext()) && constructedType->declaration(topContext())->internalContext() )
         {
           Declaration* constructedDecl = constructedType->declaration(topContext());
-          
+
           //Replace a type with its constructros if there is constructors available, so overload-resolution can happen
           m_lastDeclarations = convert(constructedDecl->internalContext()->findLocalDeclarations( constructedDecl->identifier(), constructedDecl->internalContext()->range().end, topContext(), AbstractType::Ptr(), DUContext::OnlyFunctions ));
         }
@@ -1732,9 +1735,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               visit(it->element->declarator->array_dimensions->element);
             }while(itt != end2);
           }
-          
+
           visit(it->element->type_specifier);
-          
+
           if(it->element->declarator) {
             ///@todo Eventually build constructor uses for mis-parsed sub-declarators or parameter-declaration-clauses
             if(it->element->declarator->sub_declarator && it->element->declarator->sub_declarator->id)
@@ -1748,16 +1751,16 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           }
           visit(it->element->expression);
           if(store) {
-            m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
+            m_parameters.append( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
             m_parameterNodes.append(it->element);
           }
           it = it->next;
         }
       while (it != end);
     }
-    
+
     bool fail = false;
-    
+
     if(store) {
       //Check if all parameters could be evaluated
       int paramNum = 1;
@@ -1769,7 +1772,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         }
       }
     }
-    
+
     return !fail;
   }
 
@@ -1779,21 +1782,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
      * Evaluate the function-argument types. Those are represented a little strangely:
      * expression contains them, using recursive binary expressions
      * */
-    
+
     m_parameters.clear();
     m_parameterNodes.clear();
-    
+
     if(!expression)
       return true;
-    
+
     visit(expression);
 
-    //binary expressions don't yield m_lastType, so when m_lastType is set wo probably only have one single parameter
+    //binary expressions don't yield m_lastType, so when m_lastType is set we probably only have one single parameter
     if( m_lastType ) {
-      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) );
+      m_parameters << OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() );
       m_parameterNodes.append(expression);
     }
-    
+
     //Check if all parameters could be evaluated
     int paramNum = 1;
     bool fail = false;
@@ -1804,7 +1807,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         paramNum++;
       }
     }
-    
+
     return !fail;
   }
 
@@ -1815,7 +1818,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
      * If a class name was found, get its constructors.
      * */
     AbstractType::Ptr oldLastType = m_lastType;
-    
+
     CppClassType::Ptr constructedType;
 
     if(!m_lastInstance) {
@@ -1846,46 +1849,78 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     m_currentUse.isValid = false;
 
     clearLast();
-    
-    bool fail = !buildParametersFromExpression(node->arguments);
-    
-    if( declarations.isEmpty() && !constructedType ) {
 
-      if(MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>()) {
-        missing->arguments = m_parameters;
-        missing->isFunction = true;
-      }
-      m_lastType = oldLastType;
-      problem( node, "function-call: no matching declarations found" );
-      return;
-    }
+    bool fail = !buildParametersFromExpression(node->arguments);
 
     LOCKDUCHAIN;
 
-    if(declarations.isEmpty() && constructedType) {
-      //Default-constructor is used
-      m_lastType = AbstractType::Ptr(constructedType.unsafeData());
-      DeclarationPointer decl(constructedType->declaration(topContext()));
-      m_lastInstance = Instance(decl.data());
-      m_lastDeclarations.clear();
-//       m_lastDeclarations << decl;
-      lock.unlock();
-      if(oldCurrentUse.isValid) {
-        newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
-      }
-      flushUse();
-      m_parameterNodes = oldParameterNodes;
-      m_parameters = oldParams;
-      return;
-    }
-
-    //Resolve functions
     DeclarationPointer chosenFunction;
     KDevelop::DUContextPointer ptr(m_currentContext);
     OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
-    if( !fail )
+    if( declarations.isEmpty()) {
+      if (!constructedType ) {
+        MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>();
+        if (missing) {
+          // try an ADL lookup
+          if (!fail) {
+            QualifiedIdentifier identifier = missing->identifier().identifier().identifier(); // wheee :)
+#ifdef DEBUG_ADL
+            kDebug() << "running ADL-enabled overload resolution";
+#endif // DEBUG_ADL
+            chosenFunction = resolver.resolve(m_parameters, identifier);
+          }
+          missing->arguments = m_parameters;
+          missing->isFunction = true;
+        }
+
+        if (!chosenFunction) {
+          // nothing found even through ADL
+          m_lastType = oldLastType;
+          problem( node, "function-call: no matching declarations found" );
+          return;
+        } else {
+          // code below assumes !declarations.empty()
+          declarations << chosenFunction;
+
+          // if visitName was eager to add a MissingDeclaratonProblem; remove it
+          if (missing) {
+//            m_problems.removeLast();
+            foreach(KSharedPtr<KDevelop::Problem> prob, m_problems) {
+              MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
+              if (pMissing && pMissing->type &&
+                pMissing->type->identifier() == missing->identifier()) {
+                m_problems.removeOne(prob);
+                break;
+              }
+            }
+          }
+        }
+      } else {
+        //Default-constructor is used
+        m_lastType = AbstractType::Ptr(constructedType.unsafeData());
+        DeclarationPointer decl(constructedType->declaration(topContext()));
+        m_lastInstance = Instance(decl.data());
+        m_lastDeclarations.clear();
+//         m_lastDeclarations << decl;
+        lock.unlock();
+        if(oldCurrentUse.isValid) {
+          newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
+        }
+        flushUse();
+        m_parameterNodes = oldParameterNodes;
+        m_parameters = oldParams;
+        return;
+      }
+    }
+
+    //Resolve functions normally
+    if( !fail && !chosenFunction ) {
+#ifdef DEBUG_ADL
+      kDebug() << "running ADL-enabled overload resolution";
+#endif // DEBUG_ADL
       chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+    }
 
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
@@ -1900,7 +1935,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           continue;
         int defaultParamCount = 0;
         if( AbstractFunctionDeclaration* aDec = dynamic_cast<AbstractFunctionDeclaration*>(decl.data()) )
-          defaultParamCount = aDec->defaultParameters().count();
+          defaultParamCount = aDec->defaultParametersSize();
 
         candidates += decl->toString() + QString(" default-params: %1").arg(defaultParamCount) + '\n';
       }
@@ -1934,15 +1969,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     static IndexedString functionCallOperatorIdentifier("operator()");
-    
+
     bool createUseOnParen = (bool)chosenFunction && (constructedType || chosenFunction->identifier().identifier() == functionCallOperatorIdentifier);
     //Re-create the use we have discarded earlier, this time with the correct overloaded function chosen.
     lock.unlock();
-    
+
     if(createUseOnParen) {
       if(oldCurrentUse.isValid)
         newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, oldCurrentUse.declaration );
-      
+
       newUse( node , node->start_token, node->start_token+1, chosenFunction );
     }else if(oldCurrentUse.isValid) {
       newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, chosenFunction );
@@ -1950,46 +1985,46 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     m_parameterNodes = oldParameterNodes;
     m_parameters = oldParams;
-    
+
     flushUse();
-    
+
     if( m_lastType )
       expressionType( node, m_lastType, m_lastInstance );
   }
-  
+
   void ExpressionVisitor::visitSignalSlotExpression(SignalSlotExpressionAST* node) {
-    
+
     //So uses for the argument-types are built
     LOCKDUCHAIN;
-    
+
     putStringType();
-    
+
     if(m_parameters.isEmpty())
       return;
-    
+
     DUContext* container = 0;///@todo check whether signal/slot match, warn if not.
-    
+
     StructureType::Ptr slotStructure = TypeUtils::targetType(TypeUtils::matchingClassPointer(qObjectPtrType(), TypeUtils::realType(m_parameters.back().type, m_topContext), m_topContext), m_topContext).cast<StructureType>();
     if(slotStructure)
-      container = slotStructure->internalContext(m_topContext);    
-    
+      container = slotStructure->internalContext(m_topContext);
+
     if(!container) {
       Declaration* klass = Cpp::localClassFromCodeContext(m_currentContext);
       if(klass)
         container = klass->internalContext();
     }
-    
+
     if(!container) {
       lock.unlock();
       problem(node, QString("No signal/slot container"));
       return;
     }
-    
+
     if(!node->name) {
       problem(node, QString("Bad signal/slot"));
       return;
     }
-    
+
     {
       CursorInRevision position = container->range().end;
       lock.unlock();
@@ -1998,11 +2033,11 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       nameV.run(node->name, true);
       lock.lock();
     }
-    
+
 
     CppEditorIntegrator editor(session());
     QByteArray tokenByteArray = editor.tokensToByteArray(node->name->id, node->name->end_token);
-    
+
     QByteArray sig;
     if(node->name->end_token-1 >= node->name->id+2) {
       sig = QMetaObject::normalizedSignature( editor.tokensToByteArray(node->name->id+1, node->name->end_token) );
@@ -2010,7 +2045,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     }
 
     Identifier id(tokenFromIndex(node->name->id).symbol());
-    
+
     if(!id.isEmpty()) {
       foreach(Declaration* decl, container->findDeclarations(id, CursorInRevision::invalid(), m_topContext, (DUContext::SearchFlags)(DUContext::DontSearchInParent | DUContext::NoFiltering))) {
         QtFunctionDeclaration* qtFunction = dynamic_cast<QtFunctionDeclaration*>(decl);
@@ -2020,7 +2055,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             ///@todo: For slots, we should only allow it if the parameter has a default argument.
             uint functionSigLength = qtFunction->normalizedSignature().length();
             const char* functionSig = qtFunction->normalizedSignature().c_str();
-            
+
             if(functionSigLength >= sig.length() &&
                strncmp(functionSig, sig.data(), sig.length()) == 0 &&
                (sig.isEmpty() || functionSigLength == sig.length() || functionSig[sig.length()] == ' ' || functionSig[sig.length()] == ','))
@@ -2076,9 +2111,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     KDevelop::DUContextPointer ptr(m_currentContext);
     OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-    helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ) ), "[]" );
+    helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ), "[]" );
 
-    helper.setKnownParameters( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ) ) );
+    helper.setKnownParameters( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
     QList<OverloadResolutionFunction> functions = helper.resolve(false);
 
     if( !functions.isEmpty() )
@@ -2103,7 +2138,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       //problem(node, "No fitting operator. found" );
     }
   }
-  
+
   void ExpressionVisitor::visitSizeofExpression(SizeofExpressionAST* node)  {
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
     visit(node->type_id);
@@ -2137,9 +2172,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
   void ExpressionVisitor::putStringType() {
     IntegralType::Ptr i(new KDevelop::IntegralType(IntegralType::TypeChar));
     i->setModifiers(AbstractType::ConstModifier);
-    
+
     PointerType::Ptr p( new PointerType() );
-    
+
     p->setBaseType( AbstractType::Ptr(i.unsafeData()) );
 
     m_lastType = p.cast<AbstractType>();
@@ -2171,7 +2206,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-        helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ) ), op );
+        helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ), op );
 
         //Overloaded postfix operators have one additional int parameter
         static AbstractType::Ptr integer = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
@@ -2230,13 +2265,13 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           m_lastDeclarations = oldLastDecls;
           m_lastType = oldLastType;
           m_lastInstance = oldLastInstance;
-          
+
           visit(it->element);
           it = it->next;
         }
       while (it != end);
     }
-    
+
     visit(node->win_decl_specifiers);
   }
 
@@ -2292,6 +2327,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldLastInstance );
 
+#ifdef DEBUG_ADL
+        kDebug() << "running ADL-enabled overload resolution";
+#endif // DEBUG_ADL
         chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
       }
 
