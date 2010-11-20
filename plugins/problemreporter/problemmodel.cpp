@@ -48,6 +48,10 @@ ProblemModel::ProblemModel(ProblemReporterPlugin * parent)
     connect(ICore::self()->documentController(), SIGNAL(documentActivated(KDevelop::IDocument*)), SLOT(setCurrentDocument(KDevelop::IDocument*)));
     // CompletionSettings include a list of todo markers we care for, so need to update
     connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), SLOT(forceFullUpdate()));
+
+    if (ICore::self()->documentController()->activeDocument()) {
+        setCurrentDocument(ICore::self()->documentController()->activeDocument());
+    }
 }
 
 ProblemModel::~ ProblemModel()
@@ -358,6 +362,9 @@ void ProblemModel::forceFullUpdate()
     m_lock.unlock();
     DUChainReadLocker lock(DUChain::lock());
     foreach(const IndexedString& document, documents) {
+        if (document.isEmpty())
+            continue;
+
         TopDUContext::Features updateType = TopDUContext::ForceUpdate;
         if(documents.size() == 1)
             updateType = TopDUContext::ForceUpdateRecursive;
