@@ -21,7 +21,6 @@
 
 #include "projectmanagerview.h"
 
-#include <QtCore/QDebug>
 #include <QtGui/QHeaderView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QHBoxLayout>

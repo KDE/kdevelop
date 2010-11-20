@@ -95,8 +95,6 @@ bool ProjectProxyModel::filterAcceptsRow ( int source_row, const QModelIndex & s
 void ProjectProxyModel::setFilterString(const QString &filters)
 {
     QStringList patterns(filters.split(QRegExp("[; ]"), QString::SkipEmptyParts));
-    qDebug() << "[PMV] set filter: " << patterns;
-        
     
     // Check for special case: single pattern without special chars -> force prefixed search (qwerty ->qwerty*)
     if (patterns.size() == 1)
@@ -121,11 +119,8 @@ void ProjectProxyModel::setFilterString(const QString &filters)
   
     foreach(pattern, patterns)
     {
-        qDebug() << "[PMV] Set pattern" << pattern;
         mFilenameFilters.push_back(QSharedPointer<QRegExp>(new QRegExp(pattern, Qt::CaseInsensitive, QRegExp::Wildcard)));
     }
-    
-    qDebug() << "[PMV] invalidate filter";
     
     invalidateFilter();
 };
