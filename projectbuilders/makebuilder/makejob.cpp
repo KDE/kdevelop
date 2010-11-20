@@ -228,7 +228,7 @@ QStringList MakeJob::computeBuildCommand() const
         QString suCommandName;
         if (suCommand == 1) {
           suCommandName = "kdesudo";
-          arguments << "-t" << "-c" << cmdline;
+          arguments << "-t" << "--" << cmdline;
         } else if (suCommand == 2) {
           suCommandName = "sudo";
           arguments << cmdline;
