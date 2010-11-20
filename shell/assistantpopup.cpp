@@ -22,8 +22,14 @@
 #include <QLabel>
 #include <klocalizedstring.h>
 #include <KAction>
+#include <QApplication>
+
+const int SPACING_FROM_PARENT_BOTTOM = 5;
 
 void AssistantPopup::updateActions() {
+    QPalette palette = QApplication::palette();
+    palette.setBrush(QPalette::Background, palette.toolTipBase());
+    setPalette(palette);
     m_assistantActions = m_assistant->actions();
     if (!m_assistant->title().isEmpty()) {
         QLabel* title = new QLabel("<b>" + m_assistant->title() + ":<b>");
@@ -35,7 +41,7 @@ void AssistantPopup::updateActions() {
     addSeparator();
     addWidget(widgetForAction(KDevelop::IAssistantAction::Ptr()));
     resize(sizeHint());
-    move((parentWidget()->width() - width())/2, parentWidget()->height() - height());
+    move((parentWidget()->width() - width())/2, parentWidget()->height() - height() - SPACING_FROM_PARENT_BOTTOM);
 }
 
 AssistantPopup::AssistantPopup(QWidget* parent, KDevelop::IAssistant::Ptr assistant) : QToolBar(parent), m_assistant(assistant) {
