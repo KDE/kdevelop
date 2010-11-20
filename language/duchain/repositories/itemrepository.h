@@ -305,6 +305,13 @@ class ExampleItemRequest {
   }
 };
 
+/**
+ * Buckets are the memory-units that are used to store the data in an ItemRepository.
+ *
+ * About monster buckets: Normally a bucket has a size of 64kb, but when an item is
+ * allocated that is larger than that, a "monster bucket" is allocated, which spans the
+ * space of multiple buckets.
+ */
 template<class Item, class ItemRequest, bool markForReferenceCounting, uint fixedItemSize>
 class Bucket {
   public:
