@@ -38,6 +38,7 @@
 #include <kfadewidgeteffect.h>
 #include <kcombobox.h>
 #include <kjob.h>
+#include <KLineEdit>
 
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
@@ -60,6 +61,39 @@
 #include "ui_projectmanagerview.h"
 
 using namespace KDevelop;
+
+//BEGIN ProjectManagerFilterAction
+class ProjectManagerFilterAction : public KAction {
+    Q_OBJECT
+
+public:
+    explicit ProjectManagerFilterAction( QObject* parent );
+
+signals:
+    void filterChanged(const QString& filter);
+
+protected:
+    virtual QWidget* createWidget( QWidget* parent );
+};
+
+ProjectManagerFilterAction::ProjectManagerFilterAction( QObject* parent )
+    : KAction( parent )
+{
+    setIcon(KIcon("view-filter"));
+    setText(i18n("Filter..."));
+    setToolTip(i18n("Insert wildcard patterns to filter the project view"
+                    " for files and targets for matching items."));
+}
+
+QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
+{
+    KLineEdit* edit = new KLineEdit(parent);
+    edit->setClickMessage(text());
+    connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
+    return edit;
+}
+
+//END ProjectManagerFilterAction
 
 ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidget *parent )
         : QWidget( parent ), m_ui(new Ui::ProjectManagerView), m_plugin(plugin)
@@ -98,7 +132,10 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
 
     m_ui->projectTreeView->setModel( m_modelFilter );
 
-    connect(m_ui->fileNameFilterEdit, SIGNAL(textChanged(QString)), this, SLOT(filterChanged(QString)));
+    ProjectManagerFilterAction* filterAction = new ProjectManagerFilterAction(this);
+    connect(filterAction, SIGNAL(filterChanged(QString)),
+            this, SLOT(filterChanged(QString)));
+    addAction(filterAction);
 
     connect( m_ui->projectTreeView->selectionModel(), SIGNAL(selectionChanged( const QItemSelection&, const QItemSelection&) ),
              this, SLOT(selectionChanged() ) );
@@ -199,4 +236,4 @@ void ProjectManagerView::filterChanged(const QString &text)
 }
 
 #include "projectmanagerview.moc"
-
+#include "moc_projectmanagerview.cpp"
