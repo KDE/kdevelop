@@ -84,10 +84,13 @@ QVariant ManPageModel::data(const QModelIndex& index, int role) const
     if(index.isValid()){
         if(role==Qt::DisplayRole) {
             int internal(index.internalId());
-            if(internal>=0)
-                return manPageList(m_sectionList.at(index.internalId()).first).at(index.row()).first;
-            else
+            if(internal>=0){
+                int position = index.row();
+                QString sectionId = m_sectionList.at(index.internalId()).first;
+                return manPage(sectionId, position).first;
+            } else {
                 return m_sectionList.at(index.row()).second;
+            }
         }
     }
     return QVariant();
@@ -98,13 +101,18 @@ int ManPageModel::rowCount(const QModelIndex& parent) const
     if(!parent.isValid()){
         return m_sectionList.count();
     }else if(int(parent.internalId())<0) {
-        return manPageList(m_sectionList.at(parent.row()).first).count();
+        QString sectionId = m_sectionList.at(parent.row()).first;
+        return manPageList(sectionId).count();
     }
     return 0;
 }
 
 QList<ManPage> ManPageModel::manPageList(const QString &sectionId) const{
-    return m_manMap.keys(sectionId);
+    return m_manMap.value(sectionId);
+}
+
+ManPage ManPageModel::manPage(const QString &sectionId, int position) const{
+    return manPageList(sectionId).at(position);
 }
 
 void ManPageModel::initModel(){
@@ -179,19 +187,20 @@ void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
      frame->setHtml(data);
      QWebElement document = frame->documentElement();
      QWebElementCollection links = document.findAll("a");
+     QList<ManPage> pageList;
      foreach(QWebElement e, links){
-         ManPage page;
          if(e.hasAttribute("href") && !(e.attribute("href").contains(QRegExp( "#." )))){
-             m_manMap.insert(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))), sectionId);
+             pageList.append(qMakePair(e.toPlainText(), KUrl(e.attribute("href"))));
              m_index.append(e.toPlainText());
          }
      }
+     m_manMap.insert(sectionId, pageList);
 }
 
 void ManPageModel::showItem(const QModelIndex& idx){
     if(idx.isValid() && int(idx.internalId())>=0) {
         QString sectionId = m_sectionList.at(idx.internalId()).first;
-        ManPage page = manPageList(sectionId).at(idx.row());
+        ManPage page = manPage(sectionId, idx.row());
         KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(page));
         KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
     }

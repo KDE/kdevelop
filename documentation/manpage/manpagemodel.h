@@ -73,6 +73,7 @@ private slots:
 
 private:
     QList<ManPage> manPageList(const QString &sectionId) const;
+    ManPage manPage(const QString &sectionId, int position) const;
     void initSection();
     void sectionParser(const QString &sectionId, const QString &data);
     QList<ManSection> indexParser();
@@ -83,7 +84,7 @@ private:
 
     QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;
-    QMap<ManPage, QString> m_manMap;
+    QHash<QString, QList<ManPage> > m_manMap;
     QStringList m_index;
 
 };
