@@ -97,6 +97,11 @@ public:
     static RangeInRevision castFromSimpleRange(const SimpleRange& range) {
       return RangeInRevision(range.start.line, range.start.column, range.end.line, range.end.column);
     }
+    ///kDebug() stream operator.  Writes this range to the debug output in a nicely formatted way.
+    inline friend QDebug operator<< (QDebug s, const RangeInRevision& range) {
+      s.nospace() << '[' << range.start << ", " << range.end << ']';
+      return s.space();
+    }
 };
 }
 
