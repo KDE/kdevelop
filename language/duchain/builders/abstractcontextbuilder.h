@@ -639,6 +639,11 @@ protected:
     context->setInSymbolTable(type == DUContext::Class || type == DUContext::Namespace || type == DUContext::Global || type == DUContext::Helper || type == DUContext::Enum);
   }
 
+  /// @returns the current url/path ot the document we are parsing
+  IndexedString document() const {
+    return m_url;
+  }
+
 private:
 
   Identifier m_identifier;
