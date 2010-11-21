@@ -395,7 +395,6 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View* view) {
         {
             // We do this to prevent UI flicker. The view has already been removed from
             // one of the connected areas, so the working-set has already recorded the change.
-            kDebug() << "Not processing areaViewRemoved(), because the document is not in all areas";
             return;
         }
         
