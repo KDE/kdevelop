@@ -371,7 +371,7 @@ void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
     changed(area);
 }
 
-void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
+void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View* view) {
     Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
     Q_ASSERT(area);
     Q_ASSERT(area->workingSet() == m_id);
@@ -381,6 +381,26 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View*) {
         kDebug() << "doing nothing because loading";
         return;
     }
+    
+    foreach(Sublime::Area* otherArea, m_areas)
+    {
+        if(otherArea == area)
+            continue;
+        bool hadDocument = false;
+        foreach(Sublime::View* areaView, otherArea->views())
+            if(view->document() == areaView->document())
+                hadDocument = true;
+
+        if(!hadDocument)
+        {
+            // We do this to prevent UI flicker. The view has already been removed from
+            // one of the connected areas, so the working-set has already recorded the change.
+            kDebug() << "Not processing areaViewRemoved(), because the document is not in all areas";
+            return;
+        }
+        
+    }
+    
     changed(area);
 }
 
