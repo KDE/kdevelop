@@ -97,7 +97,7 @@ class ContextMenuExtension;
  * - <i>Comment</i> is a short description about the plugin (optional);
  * - <i>Icon</i> is a plugin icon (preferred);
  *   <i>X-KDE-library</i>this is the name of the .so file to load for this plugin (required);
- * - <i>X-KDE-PluginInfo-Name</i> is a non-translateable user-readable plugin
+ * - <i>X-KDE-PluginInfo-Name</i> is a non-translatable user-readable plugin
  *   identifier used in KTrader queries (required);
  * - <i>X-KDE-PluginInfo-Author</i> is a non-translateable name of the plugin
  *   author (optional);
@@ -117,7 +117,7 @@ class ContextMenuExtension;
  *   support for (optional);
  * - <i>X-KDevelop-SupportedMimeTypes</i> is a list of mimetypes that the 
  *   language-parser in this plugin supports (optional);
- * - <i>X-KDevelop-Mode</i> is either GUI or NoGUI to indicate wether a plugin can run
+ * - <i>X-KDevelop-Mode</i> is either GUI or NoGUI to indicate whether a plugin can run
  *   with the GUI components loaded or not (required);
  * - <i>X-KDevelop-Category</i> is a scope of a plugin (see below for
  * explanation) (required);
