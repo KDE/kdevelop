@@ -39,9 +39,6 @@
 // Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.
 // #define ALWAYS_UPDATE
 
-///@todo It isn't enough whether only-whitespace was removed/inserted. There is places where it may
-///      have an effect anyway, for example when splitting/joining two identifiers.
-
 using namespace KTextEditor;
 
 /**
