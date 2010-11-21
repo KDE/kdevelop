@@ -89,6 +89,7 @@ QWidget* ProjectManagerFilterAction::createWidget( QWidget* parent )
 {
     KLineEdit* edit = new KLineEdit(parent);
     edit->setClickMessage(text());
+    edit->setClearButtonShown(true);
     connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(filterChanged(QString)));
     return edit;
 }
