@@ -379,11 +379,17 @@ VcsJob* GitPlugin::remove(const KUrl::List& files)
 {
     if (files.isEmpty())
         return errorsFound(i18n("No files to remove"));
+    QDir dir = dotGitDirectory(files.front());
 
-    DVcsJob* job = new DVcsJob(urlDir(files), this);
-    *job << "git" << "rm" << "-r";
-    *job << "--" << files;
-    return job;
+    QStringList otherStr = getLsFiles(dir, QStringList() << "--others" << "--" << files.front().toLocalFile(), KDevelop::OutputJob::Silent);
+    if(otherStr.isEmpty()) {
+        DVcsJob* job = new GitJob(dir, this);
+        *job << "git" << "rm" << "-r";
+        *job << "--" << files;
+        return job;
+    } else {
+        return new StandardJob(this, KIO::trash(files), KDevelop::OutputJob::Silent);
+    }
 }
 
 VcsJob* GitPlugin::log(const KUrl& localLocation,
