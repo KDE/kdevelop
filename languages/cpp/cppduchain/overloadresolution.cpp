@@ -70,7 +70,8 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
     }
   }
 
-  return resolveList( params, goodDeclarations, noUserDefinedConversion );
+  // no ADL possible when resolving constructors
+  return resolveList( params, goodDeclarations, noUserDefinedConversion, false );
 }
 
 Declaration* OverloadResolver::resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion )
