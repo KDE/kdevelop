@@ -1,5 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -60,8 +61,6 @@ ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;
     m_model = new ManPageModel(this);
-    kDebug() << "ManPagePlugin constructor";
-
 }
 
 
@@ -98,7 +97,8 @@ QAbstractListModel* ManPagePlugin::indexModel() const
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIndex& index) const
 {
-    return KSharedPtr<IDocumentation>();
+    QString name = index.data().toString();
+    return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(name, KUrl("man:"+name))));
 }
 
 KSharedPtr< IDocumentation > ManPagePlugin::homePage() const

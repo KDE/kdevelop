@@ -1,5 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2010 Yannick Motta <yannick.motta@gmail.com>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -34,7 +35,7 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
-	public:
+    public:
                 ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
 
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration* dec) const;
