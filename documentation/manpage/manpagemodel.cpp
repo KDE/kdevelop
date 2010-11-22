@@ -57,8 +57,14 @@ using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
+    , m_indexModel(new QStringListModel)
 {
     QMetaObject::invokeMethod(const_cast<ManPageModel*>(this), "initModel", Qt::QueuedConnection);
+}
+
+ManPageModel::~ManPageModel()
+{
+    delete m_indexModel;
 }
 
 
@@ -155,6 +161,8 @@ void ManPageModel::sectionDataReceived(KJob *job){
     if(iterator->hasNext()){
         initSection();
     } else {
+        // End of init
+        m_indexModel->setStringList(m_index);
         delete iterator;
     }
 }
@@ -207,7 +215,12 @@ void ManPageModel::showItem(const QModelIndex& idx){
 }
 
 QStringListModel* ManPageModel::indexList(){
-    return new QStringListModel(m_index, this);
+    return m_indexModel;
+}
+
+bool ManPageModel::containsIdentifier(QString identifier)
+{
+    return m_index.contains(identifier);
 }
 
 

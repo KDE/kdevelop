@@ -50,7 +50,7 @@ class ManPageModel : public QAbstractItemModel
 
 public:
     ManPageModel(QObject* parent = 0);
-
+    virtual ~ManPageModel();
     /**
      * You can use @p DeclarationRole to get the Declaration for a given index.
      * NOTE: If you use that, don't forget to lock the DUChain if you access the declaration!
@@ -61,6 +61,7 @@ public:
     virtual QModelIndex parent(const QModelIndex& child) const;
     QModelIndex index(int row, int column, const QModelIndex& parent) const;
     QStringListModel* indexList();
+    bool containsIdentifier(QString identifier);
 
 public slots:
     void showItem(const QModelIndex& idx);
@@ -86,7 +87,7 @@ private:
     QList<ManSection> m_sectionList;
     QHash<QString, QList<ManPage> > m_manMap;
     QStringList m_index;
-
+    QStringListModel* m_indexModel;
 };
 
 Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )

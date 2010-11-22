@@ -36,8 +36,8 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
     Q_OBJECT
     Q_INTERFACES( KDevelop::IDocumentationProvider )
     public:
-                ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
-
+        ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
+        virtual ~ManPagePlugin();
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration* dec) const;
         virtual QAbstractListModel* indexModel() const;
         virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& index) const;
@@ -46,10 +46,10 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
         virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
 
         ManPageModel* model() const;
-      signals:
+    signals:
         void addHistory( const KSharedPtr< KDevelop::IDocumentation >& doc ) const;
 
-      private:
+    private:
         QString getDocumentationFilename(KDevelop::Declaration* dec, const bool& isLocal) const;
         ManPageModel *m_model;
 

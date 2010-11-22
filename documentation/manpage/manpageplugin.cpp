@@ -63,6 +63,10 @@ ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     m_model = new ManPageModel(this);
 }
 
+ManPagePlugin::~ManPagePlugin()
+{
+    delete m_model;
+}
 
 QString ManPagePlugin::name() const
 {
@@ -87,7 +91,17 @@ QString ManPagePlugin::getDocumentationFilename( KDevelop::Declaration* dec, con
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
 {
-    return KSharedPtr<IDocumentation>();
+    QString identifier = dec->identifier().toString();
+    if(m_model->containsIdentifier(identifier)){
+        {
+            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+            KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
+            if(qid.count() == 1){
+                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier+"a", KUrl("man:"+identifier))));
+            }
+        }
+    }
+    return  KSharedPtr<IDocumentation>();
 }
 
 QAbstractListModel* ManPagePlugin::indexModel() const
