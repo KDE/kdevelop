@@ -150,9 +150,13 @@ void OutputWidget::changeModel( int id )
     {
         OutputData* od = data->outputdata.value(id);
         views.value( id )->setModel(od->model);
+
+        if (!od->model)
+            return;
+
         disconnect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)), this,
                     SLOT(rowsInserted(const QModelIndex&, int, int)) );
-        if( od->behaviour & KDevelop::IOutputView::AutoScroll && od->model )
+        if( od->behaviour & KDevelop::IOutputView::AutoScroll )
         {
             connect( od->model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
                      SLOT(rowsInserted(const QModelIndex&, int, int)) );
