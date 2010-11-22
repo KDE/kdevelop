@@ -444,7 +444,7 @@ bool Area::closeView(View* view)
             Area* area = controller()->areaForView(otherView);
             if(area == this && otherView != view)
                 otherViewsInCurrentWorkingSet += 1;
-            if(area != this && area->workingSet() != workingSet())
+            if(!area || (area != this && area->workingSet() != workingSet()))
                 viewsInOtherWorkingSet += 1;
         }
 
