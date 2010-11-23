@@ -69,6 +69,7 @@ signals:
 
 public slots:
     void showItem(const QModelIndex& idx);
+    void showItemFromUrl(const QUrl& url);
 private slots:
     void indexDataReceived(KJob *job);
     void sectionDataReceived(KJob *job);

@@ -74,6 +74,8 @@ QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWi
 {  
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
     view->setHtml(description());
+    view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    QObject::connect(view, SIGNAL(linkClicked(QUrl)), ManPageDocumentation::s_provider->model(), SLOT(showItemFromUrl(QUrl)));
     return view;
 }
 
