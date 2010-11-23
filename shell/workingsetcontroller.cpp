@@ -46,7 +46,7 @@ const int toolTipTimeout = 2000;
 QStringList setIcons = QStringList() << "chronometer" << "games-config-tiles" << "im-user" << "irc-voice" << "irc-operator" << "office-chart-pie" << "office-chart-ring" << "speaker" << "view-pim-notes" << "esd" << "akonadi" << "kleopatra" << "nepomuk" << "package_edutainment_art" << "package_games_amusement" << "package_games_sports" << "package_network" << "package_office_database" << "package_system_applet" << "package_system_emulator" << "preferences-desktop-notification-bell" << "wine" << "utilities-desktop-extra" << "step" << "preferences-web-browser-cookies" << "preferences-plugin" << "preferences-kcalc-constants" << "preferences-desktop-icons" << "tagua" << "inkscape" << "java" << "kblogger" << "preferences-desktop-personal" << "emblem-favorite" << "face-smile-big" << "face-embarrassed" << "user-identity" << "mail-tagged" << "media-playlist-suffle" << "weather-clouds";
 
 WorkingSetController::WorkingSetController(Core* core)
-    : m_core(core)
+    : m_emptyWorkingSet(0), m_core(core)
 {
     m_hideToolTipTimer = new QTimer(this);
     m_hideToolTipTimer->setInterval(toolTipTimeout);
@@ -64,7 +64,9 @@ void WorkingSetController::initialize()
         else
             kDebug() << "have garbage working set with id " << set;
     }
-
+    
+    m_emptyWorkingSet = new WorkingSet("empty", "invalid");
+    
     if(!(Core::self()->setupFlags() & Core::NoUi)) setupActions();
 }
 
@@ -89,6 +91,9 @@ void WorkingSetController::cleanup()
     }
 
     m_workingSets.clear();
+
+    delete m_emptyWorkingSet;
+    m_emptyWorkingSet = 0;
 }
 
 bool WorkingSetController::usingIcon(const QString& icon)
@@ -112,8 +117,9 @@ WorkingSet* WorkingSetController::newWorkingSet(const QString& prefix)
 
 WorkingSet* WorkingSetController::getWorkingSet(const QString& id, const QString& _icon)
 {
-    Q_ASSERT(!id.isEmpty());
-
+    if(id.isEmpty())
+        return m_emptyWorkingSet;
+    
     if(!m_workingSets.contains(id)) {
         QString icon = _icon;
         if(icon.isEmpty())

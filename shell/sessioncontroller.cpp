@@ -1,5 +1,6 @@
 /* This file is part of KDevelop
 Copyright 2008 Andreas Pakulat <apaku@gmx.de>
+Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -58,6 +59,14 @@ Boston, MA 02110-1301, USA.
 #include <ktexteditor/document.h>
 #include <sublime/area.h>
 #include <QLabel>
+
+
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(4,5,60)
+    #define HAVE_RECOVERY_INTERFACE
+    #include <ktexteditor/recoveryinterface.h>
+#endif
 
 const int recoveryStorageInterval = 10; ///@todo Make this configurable
 
@@ -138,7 +147,7 @@ public:
         connect(&recoveryTimer, SIGNAL(timeout()), SLOT(recoveryStorageTimeout()));
         
         // Try the recovery only after the initialization has finished
-        connect(ICore::self(), SIGNAL(initializationCompleted()), SLOT(performRecovery()), Qt::QueuedConnection);
+        connect(ICore::self(), SIGNAL(initializationCompleted()), SLOT(lateInitialization()), Qt::QueuedConnection);
         
         recoveryTimer.setSingleShot(false);
         recoveryTimer.start();
@@ -306,6 +315,7 @@ public:
     bool recoveryDirectoryIsOwn;
     
     QTimer recoveryTimer;
+    QMap<KUrl, QStringList > currentRecoveryFiles;
 
     
     QString ownSessionDirectory() const
@@ -322,8 +332,28 @@ public:
             removeDirectory(recoveryDir);
     }
     
-private slots:
+public slots:
+    void documentSaved( KDevelop::IDocument* document )
+    {
+        if(currentRecoveryFiles.contains(document->url()))
+        {
+            kDebug() << "deleting recovery-info for" << document->url();
+            foreach(const QString& recoveryFileName, currentRecoveryFiles[document->url()])
+            {
+                bool result = QFile::remove(recoveryFileName);
+                kDebug() << "deleted" << recoveryFileName << result;
+            }
+            currentRecoveryFiles.remove(document->url());
+        }
+    }
     
+private slots:
+    void lateInitialization()
+    {
+        performRecovery();
+        connect(Core::self()->documentController(), SIGNAL(documentSaved(KDevelop::IDocument*)), SLOT(documentSaved(KDevelop::IDocument*)));
+        
+    }
     void performRecovery()
     {
         kDebug() << "Checking recovery";
@@ -401,7 +431,19 @@ private slots:
                                 kWarning() << "The document " << originalFile.prettyUrl() << " could not be opened as a text-document, creating a new document with the recovered contents";
                                 doc = ICore::self()->documentController()->openDocumentFromText(text);
                             }else{
-                                doc->textDocument()->setText(text);
+                                #ifdef HAVE_RECOVERY_INTERFACE
+                                KTextEditor::RecoveryInterface* recovery = qobject_cast<KTextEditor::RecoveryInterface*>(doc->textDocument());
+                                
+                                if(recovery && recovery->isDataRecoveryAvailable())
+                                    // Use the recovery from the kate swap-file if possible
+                                    recovery->recoverData();
+                                else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
+                                #else
+                                    // Use a simple recovery through "replace text"
+                                    doc->textDocument()->setText(text);
+                                #endif
                             }
                         }
                     }
@@ -423,6 +465,8 @@ private slots:
     {
         if(!recoveryDirectoryIsOwn)
             return;
+        
+        currentRecoveryFiles.clear();
         
         QDir recoveryDir(ownSessionDirectory() + "/recovery");
         
@@ -469,13 +513,19 @@ private slots:
                         
                         if(!text.isEmpty())
                         {
-                            QFile urlFile(recoveryCurrentDir.path() + QString("/%1_url").arg(num));
+                            QString urlFilePath = recoveryCurrentDir.path() + QString("/%1_url").arg(num);
+                            QFile urlFile(urlFilePath);
                             urlFile.open(QIODevice::WriteOnly);
                             urlFile.write(document->url().pathOrUrl().toUtf8());
                             
-                            QFile f(recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num));
+                            QString textFilePath = recoveryCurrentDir.path() + "/" + QString("/%1_text").arg(num);
+                            QFile f(textFilePath);
                             f.open(QIODevice::WriteOnly);
                             f.write(text.toUtf8());
+                            
+                            currentRecoveryFiles[document->url()] =
+                                        QStringList() <<  (recoveryDir.path() + "/current" + QString("/%1_url").arg(num))
+                                                      << (recoveryDir.path() + "/current" + QString("/%1_text").arg(num));
                             
                             ++num;
                         }

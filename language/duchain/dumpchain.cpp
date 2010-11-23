@@ -84,25 +84,26 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
     Helper    /**< A helper context, used for language-specific tweaks */,
     Other     /**< Represents executable code, like for example within a compound-statement */
   };
+
   QString type;
   switch(context->type()) {
-    case Global: type = "Global"; break;
-    case Namespace: type = "Namespace"; break;
-    case Class: type = "Class"; break;
-    case Function: type = "Function"; break;
-    case Template: type = "Template"; break;
-    case Enum: type = "Enum"; break;
-    case Helper: type = "Helper"; break;
-    case Other: type = "Other"; break;
+    case DUContext::Global: type = "Global"; break;
+    case DUContext::Namespace: type = "Namespace"; break;
+    case DUContext::Class: type = "Class"; break;
+    case DUContext::Function: type = "Function"; break;
+    case DUContext::Template: type = "Template"; break;
+    case DUContext::Enum: type = "Enum"; break;
+    case DUContext::Helper: type = "Helper"; break;
+    case DUContext::Other: type = "Other"; break;
   }
   qout << QString(indent * 2, ' ') << (indent ? "==import==> Context " : "New Context ") << type << context << "\"" <<  context->localScopeIdentifier() << "\" [" << context->scopeIdentifier() << "]" << context->range().castToSimpleRange().textRange() << ' ' << (dynamic_cast<TopDUContext*>(context) ? "top-context" : "") << endl;
 
-      
+
   if( !context )
     return;
   if (allowedDepth >= 0) {
     foreach (Declaration* dec, context->localDeclarations(top)) {
-      
+
       //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
       
       qout << QString((indent+1) * 2, ' ') << "Declaration: " << dec->toString() << /*(idType ? (" (type-identity: " + idType->identifier().toString() + ")") : QString()) <<*/ " [" << dec->qualifiedIdentifier() << "]" << dec << "(internal ctx" << dec->internalContext() << ")" << dec->range().castToSimpleRange().textRange() << "," << (dec->isDefinition() ? "defined, " : (FunctionDefinition::definition(dec) ? "" : "no definition, ")) << dec->uses().count() << "use(s)." << endl;
@@ -128,13 +129,13 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
           qout << QString((indent+2) * 2+1, ' ') << "Could not get parent, is it registered in the DUChain?" << endl;
           continue;
       }
-      
+
       if(had.contains(import)) {
         qout << QString((indent+2) * 2+1, ' ') << "skipping" << import->scopeIdentifier(true) << "because it was already printed" << endl;
         continue;
       }
       had.insert(import);
-      
+
       dump(import, allowedDepth-1);
     }
 
@@ -142,7 +143,7 @@ void DumpChain::dump( DUContext * context, int allowedDepth )
       dump(child, allowedDepth-1);
   }
   --indent;
-  
+
   if(indent == 0) {
     top = 0;
     had.clear();

@@ -203,6 +203,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
     /// when the colors change we must invalidate our local caches
     void adaptToColorChanges();
+
+    void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*);
+    void aboutToRemoveText(const KTextEditor::Range&);
 };
 
 }

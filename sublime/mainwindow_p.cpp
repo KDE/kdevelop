@@ -235,7 +235,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
             connect(container, SIGNAL(tabToolTipRequested(Sublime::View*,QPoint)),
                     d->m_mainWindow, SLOT(tabToolTipRequested(Sublime::View*,QPoint)));
             connect(container, SIGNAL(closeRequest(QWidget*)),
-                    d, SLOT(widgetCloseRequest(QWidget*)));
+                    d, SLOT(widgetCloseRequest(QWidget*)), Qt::QueuedConnection);
             splitter->addWidget(container);
         }
         else

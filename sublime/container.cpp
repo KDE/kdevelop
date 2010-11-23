@@ -439,8 +439,9 @@ void Container::contextMenu( int currentTab, QPoint pos )
             // activate last tab
             widgetActivated(count() - 1);
             // close all
-            while ( count() ) {
-                closeRequest(widget(0));
+            QList<QWidget*> tabs;
+            for ( int i = 0; i < count(); ++i ) {
+                closeRequest(widget(i));
             }
         } // else the action was handled by someone else
     }

@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +20,7 @@
 #include "documentationcontroller.h"
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
+#include <interfaces/idocumentationproviderprovider.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
@@ -122,8 +124,15 @@ KSharedPtr< KDevelop::IDocumentation > DocumentationController::documentationFor
 QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
 {
     QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProvider");
+    QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension("org.kdevelop.IDocumentationProviderProvider");
     
     QList<IDocumentationProvider*> ret;
+    foreach(IPlugin* p, pluginsProvider)
+    {
+        IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
+        Q_ASSERT(docProvider);
+        ret.append(docProvider->providers());
+    }
     
     foreach(IPlugin* p, plugins)
     {
@@ -131,6 +140,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
         Q_ASSERT(doc);
         ret.append(doc);
     }
+
     return ret;
 }
 
@@ -148,6 +158,11 @@ void KDevelop::DocumentationController::showDocumentation(KSharedPtr< KDevelop::
         return;
     }
     view->showDocumentation(doc);
+}
+
+void DocumentationController::changedDocumentationProviders()
+{
+    emit providersChanged();
 }
 
 #include "documentationcontroller.moc"

@@ -166,20 +166,6 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     return KXMLGUIBuilder::createCustomElement(parent, index, element);
 }
 
-QWidget* MainWindow::createContainer(QWidget* parent, int index,
-    const QDomElement& element, QAction*& containerAction)
-{
-#if KDE_VERSION < KDE_MAKE_VERSION(4, 4, 0)
-    //for KDE < 4.4 we need to remove "Editor" toplevel menu - it will
-    //always be empty because our custom katepartui.rc is not used
-    const QString tagName = element.tagName().toLower();
-    if (tagName == QLatin1String("menu") &&
-            element.attribute(QLatin1String("name")).toUtf8() == "editor")
-        return 0;
-#endif
-    return KXMLGUIBuilder::createContainer(parent, index, element, containerAction);
-}
-
 void MainWindow::dragEnterEvent( QDragEnterEvent* ev )
 {
     if( ev->mimeData()->hasFormat( "text/uri-list" ) && ev->mimeData()->hasUrls() )
@@ -279,18 +265,19 @@ void MainWindow::configureShortcuts()
 void MainWindow::shortcutsChanged()
 {
     //propagate shortcut changes to all the opened text documents by reloading the UI XML file
-    KTextEditor::Document *activeDocument = Core::self()->documentController()->activeDocument()->textDocument();
-    if (activeDocument) {
+    IDocument* activeDoc = Core::self()->documentController()->activeDocument();
+    if (!activeDoc || !activeDoc->textDocument()) {
+        return;
+    }
 
-        KTextEditor::View *activeClient = activeDocument->activeView();
-        
-        foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
-            KTextEditor::Document *textDocument = doc->textDocument();
-            if (textDocument) {
-                foreach(KTextEditor::View *client, textDocument->views()) {
-                    if (client != activeClient) {
-                        client->reloadXML();
-                    }
+    KTextEditor::View *activeClient = activeDoc->textDocument()->activeView();
+
+    foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
+        KTextEditor::Document *textDocument = doc->textDocument();
+        if (textDocument) {
+            foreach(KTextEditor::View *client, textDocument->views()) {
+                if (client != activeClient) {
+                    client->reloadXML();
                 }
             }
         }

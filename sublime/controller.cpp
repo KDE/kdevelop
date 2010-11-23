@@ -284,6 +284,15 @@ Area *Controller::area(int mainWindow, const QString& id)
     return 0;
 }
 
+Area* Controller::areaForView(View* view) const
+{
+    foreach (Area* area, allAreas())
+        if(area->views().contains(view))
+            return area;
+
+    return 0;
+}
+
 /*We need this to catch activation of views and toolviews
 so that we can always tell what view and toolview is active.
 "Active" doesn't mean focused. It means that it is focused now

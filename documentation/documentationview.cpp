@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,6 +32,7 @@
 #include <KLocale>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationprovider.h>
+#include <interfaces/idocumentationproviderprovider.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include "documentationfindwidget.h"
@@ -66,6 +68,7 @@ DocumentationView::DocumentationView(QWidget* parent)
     }
     
     connect(mProviders, SIGNAL(activated(int)), SLOT(changedProvider(int)));
+    connect(mProvidersModel, SIGNAL(providersChanged()), this, SLOT(emptyHistory()));
     mIdentifiers=new KLineEdit(mActions);
     mIdentifiers->setClearButtonShown(true);
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
@@ -160,6 +163,17 @@ void DocumentationView::addHistory(KSharedPtr< KDevelop::IDocumentation > doc)
     mCurrent=mHistory.end()-1;
 }
 
+void DocumentationView::emptyHistory()
+{
+    mHistory.clear();
+    mCurrent=mHistory.end();
+    mBack->setEnabled(false);
+    mForward->setEnabled(false);
+    if(mProviders->count() > 0) {
+        mProviders->setCurrentIndex(0);
+    }
+}
+
 void DocumentationView::updateView()
 {
     mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
@@ -203,6 +217,15 @@ ProvidersModel::ProvidersModel(QObject* parent)
 {
     connect(ICore::self()->pluginController(), SIGNAL(pluginUnloaded(KDevelop::IPlugin*)), SLOT(unloaded(KDevelop::IPlugin*)));
     connect(ICore::self()->pluginController(), SIGNAL(pluginLoaded(KDevelop::IPlugin*)), SLOT(loaded(KDevelop::IPlugin*)));
+    connect(ICore::self()->documentationController(), SIGNAL(providersChanged()), SLOT(reloadProviders()));
+}
+
+void ProvidersModel::reloadProviders()
+{
+    beginResetModel();
+    mProviders = ICore::self()->documentationController()->documentationProviders();
+    endResetModel();
+    emit providersChanged();
 }
 
 QVariant ProvidersModel::data(const QModelIndex& index, int role) const
@@ -231,6 +254,20 @@ void ProvidersModel::unloaded(KDevelop::IPlugin* p)
         beginRemoveRows(QModelIndex(), idx, idx);
         mProviders.removeAt(idx);
         endRemoveRows();
+        emit providersChanged();
+    }
+
+    IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
+    if (provProv) {
+        foreach (IDocumentationProvider* p, provProv->providers()) {
+            idx = mProviders.indexOf(p);
+            if (idx>=0) {
+                beginRemoveRows(QModelIndex(), idx, idx);
+                mProviders.removeAt(idx);
+                endRemoveRows();
+            }
+        }
+        emit providersChanged();
     }
 }
 
@@ -242,6 +279,14 @@ void ProvidersModel::loaded(IPlugin* p)
         beginInsertRows(QModelIndex(), 0, 0);
         mProviders.append(prov);
         endInsertRows();
+        emit providersChanged();
+    }
+    IDocumentationProviderProvider* provProv=p->extension<IDocumentationProviderProvider>();
+    if (provProv) {
+        beginInsertRows(QModelIndex(), 0, 0);
+        mProviders.append(provProv->providers());
+        endInsertRows();
+        emit providersChanged();
     }
 }
 

@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,7 +34,7 @@ class Core;
 class Context;
 class ContextMenuExtension;
 
-class DocumentationController : public QObject, public KDevelop::IDocumentationController
+class DocumentationController : public KDevelop::IDocumentationController
 {
         Q_OBJECT
     public:
@@ -46,6 +47,8 @@ class DocumentationController : public QObject, public KDevelop::IDocumentationC
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc);
         ContextMenuExtension contextMenuExtension( Context* context );
         
+    public slots:
+        virtual void changedDocumentationProviders();
     private slots:
         void doShowDocumentation();
     private:

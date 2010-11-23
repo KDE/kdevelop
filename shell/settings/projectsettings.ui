@@ -10,49 +10,49 @@
     <height>247</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Projects Base Directory:</string>
-     </property>
-     <property name="buddy">
-      <cstring>kcfg_projectsBaseDirectory</cstring>
-     </property>
-    </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Projects Base Directory:</string>
+       </property>
+       <property name="buddy">
+        <cstring>kcfg_projectsBaseDirectory</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KUrlRequester" name="kcfg_projectsBaseDirectory">
+       <property name="toolTip">
+        <string>Select the base directory where new projects are to be created.</string>
+       </property>
+       <property name="mode">
+        <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="KUrlRequester" name="kcfg_projectsBaseDirectory">
-     <property name="toolTip">
-      <string>Select the base directory where new projects are to be created.</string>
-     </property>
-     <property name="mode">
-      <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>Schedule all project
-files for parsing:</string>
-     </property>
-     <property name="buddy">
-      <cstring>kcfg_parseAllProjectSources</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+   <item>
     <widget class="QCheckBox" name="kcfg_parseAllProjectSources">
      <property name="toolTip">
       <string>Parse all files in a project after the project has been opened.</string>
      </property>
      <property name="text">
-      <string/>
+      <string>Schedule all project files for parsing</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item>
+    <widget class="QCheckBox" name="kcfg_saveDocuments">
+     <property name="text">
+      <string>Save all documents before building</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -64,21 +64,6 @@ files for parsing:</string>
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="2" column="1">
-    <widget class="QCheckBox" name="kcfg_saveDocuments">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Save All Documents
-Before Building</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

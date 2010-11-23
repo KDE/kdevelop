@@ -26,6 +26,7 @@ set(kdevplatforminterfaces_LIB_SRCS
     icompletionsettings.cpp
     iselectioncontroller.cpp
     idocumentationprovider.cpp
+    idocumentationproviderprovider.cpp
     idocumentation.cpp
     idocumentationcontroller.cpp
     idebugcontroller.cpp
@@ -88,6 +89,7 @@ install(FILES
     iselectioncontroller.h
     idocumentation.h
     idocumentationprovider.h
+    idocumentationproviderprovider.h
     idocumentationcontroller.h
     idebugcontroller.h
     ipartcontroller.h

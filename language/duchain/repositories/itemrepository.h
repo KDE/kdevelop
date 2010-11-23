@@ -305,6 +305,13 @@ class ExampleItemRequest {
   }
 };
 
+/**
+ * Buckets are the memory-units that are used to store the data in an ItemRepository.
+ *
+ * About monster buckets: Normally a bucket has a size of 64kb, but when an item is
+ * allocated that is larger than that, a "monster bucket" is allocated, which spans the
+ * space of multiple buckets.
+ */
 template<class Item, class ItemRequest, bool markForReferenceCounting, uint fixedItemSize>
 class Bucket {
   public:
@@ -341,6 +348,7 @@ class Bucket {
         m_monsterBucketExtent = monsterBucketExtent;
         m_available = ItemRepositoryBucketSize;
         m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
+        memset(m_data, 0, (ItemRepositoryBucketSize + monsterBucketExtent * DataSize) * sizeof(char));
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
         m_objectMapSize = ObjectMapSize;
         m_objectMap = new short unsigned int[m_objectMapSize];
@@ -2367,18 +2375,20 @@ class ItemRepository : public AbstractItemRepository {
       m_dynamicFile->read((char*)m_freeSpaceBuckets.data(), sizeof(uint) * m_freeSpaceBucketsSize);
     }
 
-#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
-    m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
-    Q_ASSERT(m_file->isOpen());
-    Q_ASSERT(m_file->size() >= BucketStartOffset);
-    if(m_fileMap) {
-      m_fileMapSize = m_file->size() - BucketStartOffset;
-    }else{
-      kWarning() << "mapping" << m_file->fileName() << "FAILED!";
-    }
-#else
-    m_fileMap = 0;
     m_fileMapSize = 0;
+    m_fileMap = 0;
+
+#ifdef ITEMREPOSITORY_USE_MMAP_LOADING
+    if(m_file->size() > BucketStartOffset){
+      m_fileMap = m_file->map(BucketStartOffset, m_file->size() - BucketStartOffset);
+      Q_ASSERT(m_file->isOpen());
+      Q_ASSERT(m_file->size() >= BucketStartOffset);
+      if(m_fileMap){
+        m_fileMapSize = m_file->size() - BucketStartOffset;
+      }else{
+        kWarning() << "mapping" << m_file->fileName() << "FAILED!";
+      }
+    }
 #endif
     //To protect us from inconsistency due to crashes. flush() is not enough.
     m_file->close();

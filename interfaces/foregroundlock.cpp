@@ -48,6 +48,7 @@ bool tryLockForegroundMutexInternal(int interval = 0) {
     if(mutex.tryLock(interval))
     {
         lockForegroundMutexInternal();
+        Q_ASSERT(holderThread == QThread::currentThread());
         mutex.unlock(); // We've acquired one lock more than required, so unlock again
         return true;
     }else{

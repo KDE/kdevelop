@@ -1,5 +1,6 @@
 /*
    Copyright 2009 Aleix Pol Gonzalez <aleixpol@kde.org>
+   Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
    
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #define IDOCUMENTATIONCONTROLLER_H
 
 #include <interfaces/idocumentation.h>
+#include <QtCore/QObject>
 
 namespace KDevelop {
 class IDocumentationProvider;
@@ -30,12 +32,13 @@ class Declaration;
  *
  * @author Aleix Pol <aleixpol@kde.org>
  */
-class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController
+class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController: public QObject
 {
+    Q_OBJECT
     public:
         IDocumentationController();
         virtual ~IDocumentationController();
-        
+
         /** Return the documentation provider plugin instances. */
         virtual QList<IDocumentationProvider*> documentationProviders() const=0;
         
@@ -44,6 +47,14 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationController
         
         /** Show the documentation specified by @p doc. */
         virtual void showDocumentation(KSharedPtr< KDevelop::IDocumentation > doc)=0;
+
+    public Q_SLOTS:
+        /** Emit signal when the documentation providers list changed. */
+        virtual void changedDocumentationProviders() = 0;
+
+    Q_SIGNALS:
+        /** Emitted when providers list changed */
+        void providersChanged();
 };
 
 }

@@ -39,6 +39,7 @@ class EnvironmentPreferencesPrivate
 public:
     EnvironmentWidget *preferencesDialog;
     KConfigSkeleton* skel;
+    QString activeGroup;
 };
 
 K_PLUGIN_FACTORY(PreferencesFactory, registerPlugin<EnvironmentPreferences>(); )
@@ -59,8 +60,9 @@ EnvironmentPreferences::EnvironmentPreferences( QWidget *parent, const QVariantL
     d->skel = new KConfigSkeleton(KGlobal::config());
     addConfig( d->skel, d->preferencesDialog );
 
-
-    load();
+    if (!args.isEmpty() && args.first().canConvert<QString>()) {
+        d->activeGroup = args.first().toString();
+    }
 }
 
 EnvironmentPreferences::~EnvironmentPreferences( )
@@ -77,6 +79,7 @@ void EnvironmentPreferences::save()
 void EnvironmentPreferences::load()
 {
     d->preferencesDialog->loadSettings( d->skel->config() );
+    d->preferencesDialog->setActiveGroup( d->activeGroup );
     KCModule::load();
 }
 

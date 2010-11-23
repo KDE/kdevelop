@@ -94,7 +94,12 @@ public:
  static CursorInRevision castFromSimpleCursor(const SimpleCursor& cursor) {
    return CursorInRevision(cursor.line, cursor.column);
  }
- 
+
+ /// kDebug() stream operator.  Writes this cursor to the debug output in a nicely formatted way.
+ inline friend QDebug operator<< (QDebug s, const CursorInRevision& cursor) {
+   s.nospace() << "(" << cursor.line << ", " << cursor.column << ")";
+   return s.space();
+ }
 };
 }
 

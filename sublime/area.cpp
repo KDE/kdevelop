@@ -426,14 +426,44 @@ void Area::setWorkingSet(QString name)
 
 bool Area::closeView(View* view)
 {
+    static QSet<View*> alreadyClosingViews;
+    
+    if(alreadyClosingViews.contains(view))
+        return false; // The view is already being closed, so ignore the closeView request
+
     QPointer<Document> doc = view->document();
 
-    if (doc && doc->views().count() == 1) {
-        // only one view remaining
-        // let the user decide whether he wants to close the document or not
-        Q_ASSERT(doc->views().first() == view);
-        return doc->closeDocument();
-     }
+    
+    if(doc)
+    {
+        int otherViewsInCurrentWorkingSet = 0;
+        int viewsInOtherWorkingSet = 0;
+
+        foreach(View* otherView, doc->views())
+        {
+            Area* area = controller()->areaForView(otherView);
+            if(area == this && otherView != view)
+                otherViewsInCurrentWorkingSet += 1;
+            if(!area || (area != this && area->workingSet() != workingSet()))
+                viewsInOtherWorkingSet += 1;
+        }
+
+        if(otherViewsInCurrentWorkingSet == 0 && viewsInOtherWorkingSet == 0)
+        {
+            // only one view in one working-set remaining
+            // let the user decide whether he wants to close the document or not
+            
+            // Eventually, the document will automatically delete all of its views.
+            // So, record the views, and make sure that the working-set controller
+            // doesn't try to delete the view twice while synchronizing the areas.
+            
+            alreadyClosingViews = doc->views().toSet();
+            bool ret = doc->closeDocument();
+            alreadyClosingViews.clear();
+            return ret;
+        }
+    }
+
     // otherwise we can silently close the view,
     // the document will still have an opened view somewhere
     AreaIndex *index = indexOf(view);

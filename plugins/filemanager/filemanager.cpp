@@ -82,12 +82,23 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
 void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
 {
-    menu->addSeparator();
+    foreach(QAction* a, contextActions){
+        if(menu->actions().contains(a)){
+            menu->removeAction(a);
+        }
+    }
+    contextActions.clear();
+    contextActions.append(menu->addSeparator());
     menu->addAction(newFileAction);
+    contextActions.append(newFileAction);
     if (item.isFile()) {
         KDevelop::FileContext context(item.url());
         QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
         KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
+        QMenu* tmpMenu = new QMenu();
+        KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);
+        contextActions.append(tmpMenu->actions());
+        delete tmpMenu;
     }
 }
 

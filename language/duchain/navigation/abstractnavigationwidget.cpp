@@ -173,8 +173,12 @@ void AbstractNavigationWidget::update() {
   m_browser->setMaximumHeight(10000);
   
   if(m_currentWidget) {
-    //This connection is a bit hacky..
-    connect(m_currentWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),  this, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
+    if (m_currentWidget->metaObject()
+          ->indexOfSignal(SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration))) != -1)
+    {
+      connect(m_currentWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),
+              this, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
+    }
     layout()->addWidget(m_currentWidget);
     if(m_context->isWidgetMaximized()) {
       //Leave unused room to the widget

@@ -89,6 +89,7 @@ void CCPreferences::writeToSettings()
     settings.m_highlightProblematicLines = preferencesDialog->kcfg_highlightProblematicLines->isChecked();
     settings.m_showMultiLineInformation = preferencesDialog->kcfg_showMultiLineSelectionInformation->isChecked();
     settings.m_minFilesForSimplifiedParsing = preferencesDialog->kcfg_minFilesForSimplifiedParsing->value();
+    settings.m_todoMarkerWords = preferencesDialog->kcfg_todoMarkerWords->items();
     
     emit settings.emitChanged();
 }

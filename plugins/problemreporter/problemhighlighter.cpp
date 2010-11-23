@@ -48,12 +48,16 @@ ProblemHighlighter::ProblemHighlighter(KTextEditor::Document* document)
     : m_document(document)
 {
     Q_ASSERT(m_document);
-    
+
     foreach(KTextEditor::View* view, m_document->views())
         viewCreated(document, view);
-    
+
     connect(m_document, SIGNAL(viewCreated(KTextEditor::Document*,KTextEditor::View*)), this, SLOT(viewCreated(KTextEditor::Document*,KTextEditor::View*)));
     connect(ICore::self()->languageController()->completionSettings(), SIGNAL(settingsChanged(ICompletionSettings*)), this, SLOT(settingsChanged()));
+    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)),
+            this, SLOT(aboutToInvalidateMovingInterfaceContent()));
+    connect(m_document, SIGNAL(aboutToRemoveText(KTextEditor::Range)),
+            this, SLOT(aboutToRemoveText(KTextEditor::Range)));
 }
 
 void ProblemHighlighter::settingsChanged()
@@ -75,7 +79,7 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
 {
     KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
     Q_ASSERT(view);
-    
+
     KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
     if(moving) {
         ///@todo Sort the ranges when writing them, and do binary search instead of linear
@@ -84,12 +88,15 @@ void ProblemHighlighter::textHintRequested(const KTextEditor::Cursor& pos, QStri
             {
                 //There is a problem which's range contains the cursor
                 ProblemPointer problem = m_problemsForRanges[range];
-                
+                if (problem->source() == ProblemData::ToDo) {
+                    continue;
+                }
+
                 KDevelop::AbstractNavigationWidget* widget = new KDevelop::AbstractNavigationWidget;
                 widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problem)));
-                
+
                 KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, QCursor::pos() + QPoint(20, 40), widget);
-                
+
                 tooltip->resize( widget->sizeHint() + QSize(10, 10) );
                 ActiveToolTip::showToolTip(tooltip, 99, "problem-tooltip");
                 return;
@@ -110,10 +117,10 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 {
     if(!m_document)
         return;
-    
+
     KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
     Q_ASSERT(iface);
-    
+
     const bool hadProblems = !m_problems.isEmpty();
     m_problems = problems;
 
@@ -122,7 +129,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
     m_problemsForRanges.clear();
 
     IndexedString url( m_document->url() );
-    
+
     ///TODO: create a better MarkInterface that makes it possible to add the marks to the scrollbar
     ///      but having no background.
     ///      also make it nicer together with other plugins, this would currently fail with
@@ -138,9 +145,9 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             }
         }
     }
-    
+
     DUChainReadLocker lock;
-    
+
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
 
     foreach (const KDevelop::ProblemPointer& problem, problems) {
@@ -152,19 +159,21 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
             range = top->transformFromLocalRevision(RangeInRevision::castFromSimpleRange(problem->finalLocation()));
         else
             range = problem->finalLocation();
-        
+
         if(range.end.line >= m_document->lines())
             range.end = SimpleCursor(m_document->endOfLine(m_document->lines()-1));
-        
+
         if(range.isEmpty())
             range.end.column += 1;
-        
+
         KTextEditor::MovingRange* problemRange = iface->newMovingRange(range.textRange());
-        
+
         m_problemsForRanges.insert(problemRange, problem);
-        
-        if(problem->severity() != ProblemData::Hint || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()) {
-        
+        m_topHLRanges.append(problemRange);
+
+        if(problem->source() != ProblemData::ToDo && (problem->severity() != ProblemData::Hint
+            || ICore::self()->languageController()->completionSettings()->highlightSemanticProblems()))
+        {
             KTextEditor::Attribute::Ptr error(new KTextEditor::Attribute());
             if(problem->severity() == ProblemData::Error)
                 error->setUnderlineColor(Qt::red);
@@ -172,7 +181,7 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
                 error->setUnderlineColor(Qt::magenta);
             else if(problem->severity() == ProblemData::Hint)
                 error->setUnderlineColor(Qt::yellow);
-                
+
             error->setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
 #if 0
@@ -185,10 +194,8 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
 #endif
 
             problemRange->setAttribute(error);
-            
-            m_topHLRanges.append(problemRange);
         }
-        
+
         if (markIface && ICore::self()->languageController()->completionSettings()->highlightProblematicLines()) {
             uint mark;
             if (problem->severity() == ProblemData::Error) {
@@ -199,6 +206,31 @@ void ProblemHighlighter::setProblems(const QList<KDevelop::ProblemPointer>& prob
                 continue;
             }
             markIface->addMark(problem->finalLocation().start.line, mark);
+        }
+    }
+}
+
+void ProblemHighlighter::aboutToInvalidateMovingInterfaceContent()
+{
+    qDeleteAll(m_topHLRanges);
+    m_topHLRanges.clear();
+    m_problemsForRanges.clear();
+}
+
+void ProblemHighlighter::aboutToRemoveText( const KTextEditor::Range& range )
+{
+    if (range.onSingleLine()) { // no need to optimize this
+        return;
+    }
+
+    QList< MovingRange* >::iterator it = m_topHLRanges.begin();
+    while(it != m_topHLRanges.end()) {
+        if (range.contains((*it)->toRange())) {
+            m_problemsForRanges.remove(*it);
+            delete (*it);
+            it = m_topHLRanges.erase(it);
+        } else {
+            ++it;
         }
     }
 }

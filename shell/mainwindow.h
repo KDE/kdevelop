@@ -76,8 +76,6 @@ protected:
     virtual bool queryClose();
     //reimplemented from KXMLGUIBuilder to support visible menubar separators
     QAction *createCustomElement(QWidget *parent, int index, const QDomElement &element);
-    QWidget *createContainer(QWidget *parent, int index,
-        const QDomElement &element, QAction*& containerAction);
 
 public Q_SLOTS:
     virtual void loadSettings();

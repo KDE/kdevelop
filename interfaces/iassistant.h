@@ -22,16 +22,11 @@
 #include <QtCore/QPointer>
 #include <QtGui/QIcon>
 #include <KDE/KSharedPtr>
-#include <ktexteditor/cursor.h>
 #include "interfacesexport.h"
 #include <util/ksharedobject.h>
 
 class KAction;
 
-namespace KTextEditor {
-class View;
-class Cursor;
-}
 namespace KDevelop {
 
 ///Represents a single assistant action.
@@ -59,16 +54,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KS
         ///May return an icon for this action
         ///The default implementation returns an invalid icon, which means that no icon is shown
         virtual QIcon icon() const;
-        
-        enum Flags {
-            NoFlag = 0,
-            OwnLineFlag //If this flag is given, the action is shown in an own line. This is useful when the description tends to be very long.
-        };
-        
-        ///May return any or'ed combination of Flags
-        ///The default-implementation returns NoFlag
-        virtual uint flags() const;
-        
+
     public Q_SLOTS:
         ///Execute this action
         virtual void execute() = 0;
@@ -120,32 +106,6 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistant : public QObject, public KSharedO
         void actionsChanged();
     private:
         QList<IAssistantAction::Ptr> m_actions;
-};
-
-///A helper assistant base class that binds itself to a view, and hides itself as soon as
-///the cursor was moved too far away from the invocation position, or a newline was inserted.
-class KDEVPLATFORMINTERFACES_EXPORT ITextAssistant : public IAssistant
-{
-  Q_OBJECT
-public:
-  ITextAssistant(KTextEditor::View* view);
-  ~ITextAssistant();
-  
-  ///@return The view this text-assistant was created with. May be zero if it was deleted already.
-  KTextEditor::View* view() const;
-  ///Position where the cursor was when this assistant was created
-  KTextEditor::Cursor invocationCursor() const;
-private Q_SLOTS:
-  //This function checks whether the cursor was moved away by more than 2 lines from the initial position, and hides the assistant if so.
-  //Override it to change this behavior.
-  virtual void cursorPositionChanged(KTextEditor::View*,KTextEditor::Cursor);
-  //This function checks whether a newline was inserted, and hides the assistant if so.
-  //Override it to change this behavior.
-  virtual void textInserted(KTextEditor::Document*,KTextEditor::Range);
-  
-private:
-  QPointer<KTextEditor::View> m_view;
-  KTextEditor::Cursor m_invocationCursor;
 };
 
 }
