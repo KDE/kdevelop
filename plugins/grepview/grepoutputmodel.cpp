@@ -286,7 +286,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
-        appendRow(new GrepOutputItem(item));
+        fileItem->appendRow(new GrepOutputItem(item));
     }
 }
 
@@ -330,6 +330,7 @@ void GrepOutputModel::doReplacements()
     }
     
     DocumentChangeSet::ChangeResult result = changeSet.applyAllChanges();
+    //TODO : really display this
     if(!result.m_success)
     {
         DocumentChangePointer ch = result.m_reasonChange;

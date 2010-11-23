@@ -362,6 +362,8 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
             toolView, SLOT(showErrorMessage(QString)));
     connect(job, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
             toolView, SLOT(showMessage(KDevelop::IStatus*, QString)));
+    connect(toolView, SIGNAL(outputViewIsClosed()),
+            job, SLOT(kill()));
     
     job->setOutputModel(toolView->model());
     job->setPatternString(patternString());

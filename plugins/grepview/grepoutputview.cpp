@@ -72,6 +72,11 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
 
+GrepOutputView::~GrepOutputView()
+{
+    emit outputViewIsClosed();
+}
+
 GrepOutputModel* GrepOutputView::renewModel()
 {
     GrepOutputModel* oldModel = model();

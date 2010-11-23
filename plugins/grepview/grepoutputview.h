@@ -43,7 +43,7 @@ class GrepOutputView : public QWidget, Ui::GrepOutputView
 
 public:
     GrepOutputView(QWidget* parent);
-
+    ~GrepOutputView();
     GrepOutputModel* model();
     
     /**
@@ -62,7 +62,9 @@ public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
     void showMessage( KDevelop::IStatus*, const QString& message );
 
-
+Q_SIGNALS:
+    void outputViewIsClosed();
+    
 private:
     QAction* m_apply;
     GrepViewPlugin *m_plugin;
