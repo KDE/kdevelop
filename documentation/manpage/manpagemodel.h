@@ -63,6 +63,10 @@ public:
     QStringListModel* indexList();
     bool containsIdentifier(QString identifier);
 
+signals:
+    void sectionParsed();
+    void sectionCount(int count);
+
 public slots:
     void showItem(const QModelIndex& idx);
 private slots:

@@ -82,8 +82,12 @@ bool ManPageDocumentation::providesWidget() const
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
     QTreeView* contents=new QTreeView(parent);
     contents->header()->setVisible(false);
-    contents->setModel(ManPageDocumentation::s_provider->model());
-    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), ManPageDocumentation::s_provider->model(), SLOT(showItem(QModelIndex)));
+    ManPageModel* model = ManPageDocumentation::s_provider->model();
+    contents->setModel(model);
+    qDebug() << "CONNECT";
+    QObject::connect(model, SIGNAL(sectionCount(int)), this, SLOT(sectionCount(int)) );
+    QObject::connect(model, SIGNAL(sectionParsed()), this, SLOT(sectionParsed()) );
+    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
     return contents;
 }
 
@@ -95,4 +99,14 @@ QString ManPageHomeDocumentation::name() const
 KDevelop::IDocumentationProvider* ManPageHomeDocumentation::provider() const
 {
     return ManPageDocumentation::s_provider;//CMakeDoc::s_provider;
+}
+
+void ManPageHomeDocumentation::sectionParsed()
+{
+   qDebug() << "SECTION PARSED";
+}
+
+void ManPageHomeDocumentation::sectionCount(int count)
+{
+   qDebug() << "SECTION COUNT " << count;
 }

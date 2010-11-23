@@ -137,6 +137,8 @@ void ManPageModel::indexDataReceived(KJob *job){
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
+    qDebug() << "indexDataReceived";
+    emit sectionCount(m_sectionList.count());
     iterator = new QListIterator<ManSection>(m_sectionList);
     if(iterator->hasNext()){
         initSection();
@@ -157,7 +159,8 @@ void ManPageModel::sectionDataReceived(KJob *job){
         qDebug() << "ManPageModel transferJob error";
     }
     iterator->next();
-    KDevelop::ICore::self()->documentationController()->showDocumentation(ManPageDocumentation::s_provider->homePage());
+    qDebug() << "sectionDataReceived";
+    emit sectionParsed();
     if(iterator->hasNext()){
         initSection();
     } else {
@@ -165,6 +168,7 @@ void ManPageModel::sectionDataReceived(KJob *job){
         m_indexModel->setStringList(m_index);
         delete iterator;
     }
+    KDevelop::ICore::self()->documentationController()->showDocumentation(ManPageDocumentation::s_provider->homePage());
 }
 
 void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){

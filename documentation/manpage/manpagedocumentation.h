@@ -60,14 +60,18 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
 
 };
 
-class ManPageHomeDocumentation : public KDevelop::IDocumentation
+class ManPageHomeDocumentation : public QObject, public KDevelop::IDocumentation
 {
+    Q_OBJECT
     public:
         virtual KDevelop::IDocumentationProvider* provider() const;
         virtual QString name() const;
         virtual QString description() const { return name(); }
-
         virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
+    public slots :
+        void sectionCount(int count);
+        void sectionParsed();
+
 };
 
 
