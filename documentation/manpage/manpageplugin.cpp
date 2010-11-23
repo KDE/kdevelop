@@ -43,6 +43,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
+#include <QProgressBar>
+
 #include "manpageplugin.h"
 #include "manpagedocumentation.h"
 #include "manpagemodel.h"
@@ -61,6 +63,9 @@ ManPagePlugin::ManPagePlugin(QObject* parent, const QVariantList& args)
     Q_UNUSED(args);
     ManPageDocumentation::s_provider = this;
     m_model = new ManPageModel(this);
+    QObject::connect(m_model, SIGNAL(sectionCount(int)), this, SLOT(sectionCount(int)) );
+    QObject::connect(m_model, SIGNAL(sectionParsed()), this, SLOT(sectionParsed()) );
+    m_progressBar = new QProgressBar();
 }
 
 ManPagePlugin::~ManPagePlugin()
@@ -81,6 +86,10 @@ QIcon ManPagePlugin::icon() const
 
 ManPageModel* ManPagePlugin::model() const{
     return m_model;
+}
+
+QProgressBar* ManPagePlugin::progressBar() const{
+    return m_progressBar;
 }
 
 
@@ -118,6 +127,18 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForIndex(const QModelIn
 KSharedPtr< IDocumentation > ManPagePlugin::homePage() const
 {
     return KSharedPtr<KDevelop::IDocumentation>(new ManPageHomeDocumentation);
+}
+
+void ManPagePlugin::sectionParsed()
+{
+   m_progressBar->setValue(m_progressBar->value() + 1);
+}
+
+void ManPagePlugin::sectionCount(int count)
+{
+   m_progressBar->setMinimum(0);
+   m_progressBar->setMaximum(count);
+   m_progressBar->setValue(0);
 }
 
 #include "manpageplugin.moc"

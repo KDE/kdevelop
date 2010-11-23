@@ -31,6 +31,8 @@ class ManPageDocumentation;
 
 class KUrl;
 
+class QProgressBar;
+
 class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
@@ -46,12 +48,19 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
         virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
 
         ManPageModel* model() const;
+        QProgressBar* progressBar() const;
+
     signals:
         void addHistory( const KSharedPtr< KDevelop::IDocumentation >& doc ) const;
+
+    public slots :
+        void sectionCount(int count);
+        void sectionParsed();
 
     private:
         QString getDocumentationFilename(KDevelop::Declaration* dec, const bool& isLocal) const;
         ManPageModel *m_model;
+        QProgressBar *m_progressBar;
 
 };
 

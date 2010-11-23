@@ -22,6 +22,9 @@
 #include <KLocale>
 #include <QTreeView>
 #include <QHeaderView>
+#include <QProgressBar>
+#include <QVBoxLayout>
+
 #include "manpagedocumentation.h"
 #include "manpageplugin.h"
 
@@ -80,15 +83,26 @@ bool ManPageDocumentation::providesWidget() const
 }
 
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
-    QTreeView* contents=new QTreeView(parent);
-    contents->header()->setVisible(false);
-    ManPageModel* model = ManPageDocumentation::s_provider->model();
-    contents->setModel(model);
-    qDebug() << "CONNECT";
-    QObject::connect(model, SIGNAL(sectionCount(int)), this, SLOT(sectionCount(int)) );
-    QObject::connect(model, SIGNAL(sectionParsed()), this, SLOT(sectionParsed()) );
-    QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
-    return contents;
+    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
+    if(progressBar->value() != progressBar->maximum()){
+        QWidget* widget = new QWidget(parent);
+        QLabel* label = new QLabel(i18n("Loading man pages ..."));
+        label->setAlignment(Qt::AlignHCenter);
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget(label);
+        layout->addWidget(progressBar);
+        layout->addStretch();
+        widget->setLayout(layout);
+        return widget;
+    }
+    else {
+        QTreeView* contents = new QTreeView(parent);
+        contents->header()->setVisible(false);
+        ManPageModel* model = ManPageDocumentation::s_provider->model();
+        contents->setModel(model);
+        QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
+        return contents;
+    }
 }
 
 QString ManPageHomeDocumentation::name() const
@@ -99,14 +113,4 @@ QString ManPageHomeDocumentation::name() const
 KDevelop::IDocumentationProvider* ManPageHomeDocumentation::provider() const
 {
     return ManPageDocumentation::s_provider;//CMakeDoc::s_provider;
-}
-
-void ManPageHomeDocumentation::sectionParsed()
-{
-   qDebug() << "SECTION PARSED";
-}
-
-void ManPageHomeDocumentation::sectionCount(int count)
-{
-   qDebug() << "SECTION COUNT " << count;
 }
