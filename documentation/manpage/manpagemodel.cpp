@@ -217,8 +217,10 @@ void ManPageModel::showItem(const QModelIndex& idx){
 }
 
 void ManPageModel::showItemFromUrl(const QUrl& url){
-    KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(qMakePair(url.path(), KUrl(url))));
-    KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+    if(url.toString().startsWith("man")){
+        KSharedPtr<KDevelop::IDocumentation> newDoc(new ManPageDocumentation(qMakePair(url.path(), KUrl(url))));
+        KDevelop::ICore::self()->documentationController()->showDocumentation(newDoc);
+    }
 }
 
 QStringListModel* ManPageModel::indexList(){
