@@ -139,13 +139,14 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
           createUse = !m_foundSomething || !Cpp::isTemplateDependent(m_foundSomething.data());
         }
         if(createUse)
-          m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer());
+          m_visitor->newUse(node, node->id, node->id+1, DeclarationPointer() );
       }
       
       if( m_debug )
         kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
     }
   }
+  qDebug() << "done with" << m_currentIdentifier.toString();
 
   _M_name.push(m_currentIdentifier);
   

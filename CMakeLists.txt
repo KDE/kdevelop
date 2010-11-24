@@ -25,6 +25,7 @@ if("${_isSystemLibDir}" STREQUAL "-1")
 endif("${_isSystemLibDir}" STREQUAL "-1")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
+message(STATUS "ssssssssssssssss ${KDEVPLATFORM_INCLUDE_DIR} ${CMAKE_MODULE_PATH}")
 find_package(KDevPlatform 1.1.60 REQUIRED)
 
 include_directories(${KDEVPLATFORM_INCLUDE_DIR})

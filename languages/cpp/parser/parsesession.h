@@ -33,6 +33,7 @@
 #include <language/duchain/duchainpointer.h>
 #include <language/interfaces/iastcontainer.h>
 #include <language/editor/rangeinrevision.h>
+#include <language/duchain/types/functiontype.h>
 #include "commentformatter.h"
 
 namespace Cpp {
@@ -72,6 +73,9 @@ public:
 
   ///Create a mapping between an AST node and its parent.
   void mapAstParent(AST *node, AST *parent);
+  
+  ///Create a mapping between an AST node and its parent.
+  void mapCallAstToType(AST *node, KDevelop::FunctionType::Ptr type);
 
   /// Visits the tree and sets the appropriate nodes as parent on each node of the tree.
   void setASTNodeParents();
@@ -85,6 +89,8 @@ public:
   AST * astNodeFromDeclaration(KDevelop::Declaration * declaration);
 
   AST * astNodeFromUse(const SimpleUse &use) const;
+  
+  KDevelop::FunctionType::Ptr typeFromCallAst(AST* ast);
 
   /**
    * \brief Access the parent node for a given AST.
@@ -141,6 +147,7 @@ private:
   QMap<SimpleUse, AST *> m_UseToAst;
 
   QMap<AST *, AST *> m_AstToParent;
+  QMap<AST*, KDevelop::FunctionType::Ptr> m_AstToType;
 };
 
 #endif

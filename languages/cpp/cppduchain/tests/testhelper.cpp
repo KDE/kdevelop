@@ -31,6 +31,7 @@
 #include <language/codegen/coderepresentation.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <usedecoratorvisitor.h>
 
 using namespace KDevelop;
 
@@ -129,6 +130,9 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
 
   UseBuilder useBuilder(session.data());
   useBuilder.buildUses(ast);
+  
+  UseDecoratorVisitor visit(session.data(), &m_modifications);
+  visit.run(ast);
 
   if (dump & DumpDUChain) {
     kDebug(9007) << "===== DUChain:";

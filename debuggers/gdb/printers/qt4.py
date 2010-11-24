@@ -496,6 +496,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QString$')] = lambda val: QStringPrinter(val)
     pretty_printers_dict[re.compile('^QByteArray$')] = lambda val: QByteArrayPrinter(val)
     pretty_printers_dict[re.compile('^QList<.*>$')] = lambda val: QListPrinter(val, None)
+    pretty_printers_dict[re.compile('^QStack<.*>$')] = lambda val: QListPrinter(val, None)
     pretty_printers_dict[re.compile('^QStringList$')] = lambda val: QListPrinter(val, 'QString')
     pretty_printers_dict[re.compile('^QMap<.*>$')] = lambda val: QMapPrinter(val)
     pretty_printers_dict[re.compile('^QHash<.*>$')] = lambda val: QHashPrinter(val)

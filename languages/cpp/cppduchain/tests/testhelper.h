@@ -25,6 +25,7 @@
 #include "dumpchain.h"
 #include "control.h"
 #include <language/duchain/duchainlock.h>
+#include "dataaccessrepository.h"
 
 namespace KDevelop {
 class TopDUContext;
@@ -65,12 +66,13 @@ public:
   KDevelop::TopDUContext* parse(const QByteArray& unit,
                                 DumpAreas dump = static_cast<DumpAreas>(DumpAST | DumpDUChain | DumpType),
                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);
-
+protected:
+  KDevelop::DataAccessRepository m_modifications;
+  
 private:
   // Parser
   Control control;
   DumpChain cppDumper;
-
 };
 
 }

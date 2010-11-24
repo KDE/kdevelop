@@ -5815,4 +5815,17 @@ void TestDUChain::testCommentAfterFunctionCall()
   QCOMPARE(m_view->uses().size(), 1);
 }
 
+QVector<const Use*> usesForContext(DUContext* c)
+{
+  QVector<const Use*> ret;
+  for(int i=0; i<c->usesCount(); i++) {
+    ret += &c->uses()[i];
+  }
+  
+  foreach(DUContext* cc, c->childContexts()) {
+    ret += usesForContext(cc);
+  }
+  return ret;
+}
+
 #include "test_duchain.moc"

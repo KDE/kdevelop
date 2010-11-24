@@ -104,6 +104,11 @@ AST * ParseSession::astNodeFromDeclaration(KDevelop::DeclarationPointer declarat
     return m_DuchainToAst[declaration];
 }
 
+void ParseSession::mapCallAstToType(AST* node, KDevelop::FunctionType::Ptr type)
+{
+  m_AstToType.insert(node, type);
+}
+
 AST * ParseSession::astNodeFromDeclaration(KDevelop::Declaration * declaration)
 {
   return astNodeFromDeclaration(KDevelop::DeclarationPointer(declaration));
@@ -117,6 +122,11 @@ AST * ParseSession::astNodeFromUse(const SimpleUse &use) const
 AST* ParseSession::parentAstNode(AST* node)
 {
   return m_AstToParent.value(node, 0);
+}
+
+KDevelop::FunctionType::Ptr ParseSession::typeFromCallAst(AST* ast)
+{
+  return m_AstToType.value(ast);
 }
 
 KDevelop::DeclarationPointer ParseSession::declarationFromAstNode(AST * node)

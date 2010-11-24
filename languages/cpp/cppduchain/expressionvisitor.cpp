@@ -380,6 +380,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
             clearLast();
             return;
           }
+          session()->mapCallAstToType(node, m_lastType.cast<FunctionType>());
 
           if( !m_lastDeclarations.isEmpty() ) {
             DeclarationPointer decl(m_lastDeclarations.first());
@@ -723,6 +724,7 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
 
         m_lastType = thisPointer.cast<AbstractType>();
         m_lastInstance = Instance(true);
+        session()->mapCallAstToType(node, cppFunction);
       }else{
         if( context->owner() && context->owner() && context->owner()->abstractType() )
           problem(node, QString("\"this\" used in non-function context of type %1(%2)").arg( "unknown" ) .arg(m_currentContext->owner()->abstractType()->toString()));
@@ -941,7 +943,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         }
       }
     }
-
     visit(node->right_expression);
 
     Instance rightInstance = m_lastInstance;
@@ -1044,7 +1045,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
             m_lastInstance = Instance(functions.first().function.declaration());
 
             lock.unlock();
-            newUse( node, node->op, node->op+1, functions.first().function.declaration() );
+            //apol: we should check the arguments here and in case there's some ref value mark it as write
+            newUse( node, node->op, node->op+1, functions.first().function.declaration() );  
+            
+            session()->mapCallAstToType(node, function);
           }else{
             //Do not complain here, because we do not check for builtin operators
             //problem(node, "No fitting operator. found" );
@@ -1641,7 +1645,9 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               m_lastInstance = Instance(true);
 
               lock.unlock();
+              //apol: should mark the used value as writed considering if the const-ness of the function and the argument passed
               newUse( node, node->op, node->op+1, functions.first().function.declaration() );
+              session()->mapCallAstToType(node, function);
             }else{
               problem(node, QString("Found no viable function"));
             }
@@ -1790,6 +1796,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       return true;
 
     visit(expression);
+    qDebug("b");
 
     //binary expressions don't yield m_lastType, so when m_lastType is set we probably only have one single parameter
     if( m_lastType ) {
@@ -1967,6 +1974,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
     } else {
       problem( node, QString( "could not find a matching function for function-call" ) );
     }
+    
+    session()->mapCallAstToType(node, chosenFunction->abstractType().cast<KDevelop::FunctionType>());
 
     static IndexedString functionCallOperatorIdentifier("operator()");
 
@@ -2123,6 +2132,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if( function ) {
         m_lastType = function->returnType();
         m_lastInstance = Instance(true);
+        session()->mapCallAstToType(node, function);
       }else{
         clearLast();
         problem(node, QString("Found no subscript-function"));
@@ -2220,6 +2230,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           if( functions.first().function.isViable() && function ) {
             m_lastType = function->returnType();
             m_lastInstance = Instance(true);
+            session()->mapCallAstToType(node, function);
           }else{
             problem(node, QString("Found no viable function"));
           }
@@ -2336,6 +2347,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       if (chosenFunction) {
         uint token = node->initializer_id->end_token;
         newUse( node , token, token+1, chosenFunction );
+        
+        session()->mapCallAstToType(node, chosenFunction->type<FunctionType>());
       }
     }
 
