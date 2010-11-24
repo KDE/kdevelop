@@ -16,31 +16,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CONTROLFLOWGRAPH_H
-#define CONTROLFLOWGRAPH_H
+#ifndef CONTROLFLOWGRAPHBUILDER_H
+#define CONTROLFLOWGRAPHBUILDER_H
 
-#include <QVector>
 #include <cppduchainexport.h>
+#include <parser/default_visitor.h>
 
-namespace KDevelop {
-
-class ControlFlowNode;
-
-class KDEVCPPDUCHAIN_EXPORT ControlFlowGraph
+namespace KDevelop
 {
-  public:
-    typedef QVector<ControlFlowNode*>::const_iterator const_iterator;
-    
-    void addEntry(ControlFlowNode* n);
-    void clear();
-    
-    const_iterator constBegin() const { return m_graphNodes.constBegin(); }
-    const_iterator constEnd() const { return m_graphNodes.constEnd(); }
-    
-  private:
-    QVector<ControlFlowNode*> m_graphNodes;
-};
-
+class ControlFlowGraph;
+class ControlFlowNode;
+class CursorInRevision;
 }
 
-#endif
+class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
+{
+  public:
+    ControlFlowGraphBuilder(ParseSession* session, KDevelop::ControlFlowGraph* graph);
+    
+    void run(AST* node);
+    
+  protected:
+    virtual void visitFunctionDefinition(FunctionDefinitionAST* node);
+    virtual void visitIfStatement(IfStatementAST* node);
+    
+  private:
+    KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);
+    KDevelop::CursorInRevision cursorForToken(uint token);
+    
+    ParseSession* m_session;
+    KDevelop::ControlFlowGraph* m_graph;
+    KDevelop::ControlFlowNode* m_currentNode;
+};
+
+#endif // CONTROLFLOWGRAPHBUILDER_H

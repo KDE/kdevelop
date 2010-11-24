@@ -17,4 +17,18 @@
 */
 
 #include "flowgraph.h"
+#include "flownode.h"
+
+void KDevelop::ControlFlowGraph::addEntry(KDevelop::ControlFlowNode* n)
+{
+  m_graphNodes += n;
+}
+
+void KDevelop::ControlFlowGraph::clear()
+{
+  //TODO: delete recursively!!
+  qDeleteAll(m_graphNodes);
+  
+  m_graphNodes.clear();
+}
 

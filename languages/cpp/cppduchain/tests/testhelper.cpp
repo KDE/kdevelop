@@ -32,6 +32,7 @@
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <usedecoratorvisitor.h>
+#include <controlflowgraphbuilder.h>
 
 using namespace KDevelop;
 
@@ -90,6 +91,9 @@ void TestHelper::initShell()
 
 TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUContext* update, bool keepAst)
 {
+  m_modifications.clear();
+  m_ctlflowGraph.clear();
+  
   if (dump)
     kDebug(9007) << "==== Beginning new test case...:" << endl << unit;
 
@@ -133,6 +137,9 @@ TopDUContext* TestHelper::parse(const QByteArray& unit, DumpAreas dump, TopDUCon
   
   UseDecoratorVisitor visit(session.data(), &m_modifications);
   visit.run(ast);
+  
+  ControlFlowGraphBuilder flowvisitor(session.data(), &m_ctlflowGraph);
+  flowvisitor.run(ast);
 
   if (dump & DumpDUChain) {
     kDebug(9007) << "===== DUChain:";

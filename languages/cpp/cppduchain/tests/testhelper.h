@@ -26,6 +26,7 @@
 #include "control.h"
 #include <language/duchain/duchainlock.h>
 #include "dataaccessrepository.h"
+#include <flowgraph.h>
 
 namespace KDevelop {
 class TopDUContext;
@@ -68,6 +69,7 @@ public:
                                 KDevelop::TopDUContext* update = 0, bool keepAst = false);
 protected:
   KDevelop::DataAccessRepository m_modifications;
+  KDevelop::ControlFlowGraph m_ctlflowGraph;
   
 private:
   // Parser

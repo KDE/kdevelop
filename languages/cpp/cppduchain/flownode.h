@@ -23,26 +23,22 @@
 namespace KDevelop
 {
 
-class FlowNode
+class ControlFlowNode
 {
   public:
     enum Type { Conditional, Sequential, Exit };
-    
-    static FlowNode createExit(const RangeInRevision& range);
-    static FlowNode createConditional(const RangeInRevision& range, FlowNode* next, FlowNode* alternative, const KDevelop::RangeInRevision& condition);
-    static FlowNode createSequential(const RangeInRevision& range, FlowNode* next);
+    ControlFlowNode();
     
     Type type() const;
     
-  private:
-    FlowNode() {}
-    FlowNode(const KDevelop::RangeInRevision& range, FlowNode* next=0, FlowNode* alternative=0, const KDevelop::RangeInRevision& condition=KDevelop::RangeInRevision());
+    void setStartCursor(const CursorInRevision& cursor) {m_nodeRange.start = cursor; }
+    void setEndCursor(const CursorInRevision& cursor) {m_nodeRange.end = cursor; }
     
     KDevelop::RangeInRevision m_nodeRange;
     KDevelop::RangeInRevision m_conditionRange;
     
-    FlowNode* m_next;
-    FlowNode* m_alternative;
+    ControlFlowNode* m_next;
+    ControlFlowNode* m_alternative;
 };
 
 }

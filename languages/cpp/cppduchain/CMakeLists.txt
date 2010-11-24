@@ -52,6 +52,7 @@ set(kdevcppduchain_LIB_SRCS
     navigation/includenavigationcontext.cpp
     navigation/macronavigationcontext.cpp
     
+    controlflowgraphbuilder.cpp
     dataaccessrepository.cpp
     flownode.cpp
     flowgraph.cpp

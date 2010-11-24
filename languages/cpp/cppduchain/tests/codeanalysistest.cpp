@@ -19,6 +19,8 @@
 #include "codeanalysistest.h"
 #include <QTest>
 #include <language/duchain/duchain.h>
+#include <flowgraph.h>
+#include <flownode.h>
 
 QTEST_MAIN(CodeAnalysisTest)
 
@@ -40,7 +42,6 @@ void CodeAnalysisTest::testUseReadWrite()
 {
   QFETCH(QString, code);
   QFETCH(QVariantList, modFlags);
-  m_modifications.clear();
   
   LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
   
@@ -92,4 +93,52 @@ void CodeAnalysisTest::testUseReadWrite_data()
                                   << (QVariantList() << uint(DataAccess::Read));
   QTest::newRow("init") << "int f() { int a=3; }"
                                   << (QVariantList() << uint(DataAccess::Write));
+  QTest::newRow("switch") << "int f(int a) { switch(a) { case 3: break;} }"
+                                  << (QVariantList() << uint(DataAccess::Read));
+}
+
+static uint countNodesRecursively(ControlFlowNode* node, QSet<ControlFlowNode*> visited=QSet<ControlFlowNode*>())
+{
+  uint ret = 1;
+  visited.insert(node);
+  
+  if(node->m_next) ret += countNodesRecursively(node->m_next, visited);
+  if(node->m_alternative) ret += countNodesRecursively(node->m_alternative, visited);
+  
+  return ret;
+}
+
+void CodeAnalysisTest::testControlFlowCreation()
+{
+  QFETCH(QString, code);
+  QFETCH(int, nodeCount);
+  
+  LockedTopDUContext top = parse(code.toUtf8(), DumpAST);
+  
+  ControlFlowGraph* graph = &m_ctlflowGraph;
+  uint countedNodes = 0;
+  
+  KDevelop::ControlFlowGraph::const_iterator it=graph->constBegin(), itEnd=graph->constEnd();
+  int entries = 0;
+  for(; it!=itEnd; ++it) {
+    countedNodes += countNodesRecursively(*it);
+    entries++;
+  }
+  
+  QCOMPARE(entries, 1);
+  QCOMPARE(countedNodes, uint(nodeCount));
+}
+void CodeAnalysisTest::testControlFlowCreation_data()
+{
+  QTest::addColumn<QString>("code");
+  QTest::addColumn<int>("nodeCount");
+  
+  QTest::newRow("empty") << "void f() {}" << 1;
+  QTest::newRow("sequence") << "int f() { int a=3; return a+1; }" << 1;
+  QTest::newRow("conditional") << "int f() { int a=3; if(a) a+=1; else a-=1; return a+3; }" << 4;
+  QTest::newRow("conditional_inlined") << "int f() { int a=3; a=a?a+1 : a-1; return a+3; }" << 4;
+  QTest::newRow("while") << "int f(int q) { while(q) {q--} return q; }" << 4;
+  QTest::newRow("for") << "int f() { for(int i=0; i<3; i++) {i+=54;} return 0; }" << 5;
+  QTest::newRow("different exits") << "int f(int a) { if(a) return a; return b; }" << 5;
+  QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: case 2: break; case 3; break;} }" << 4;
 }

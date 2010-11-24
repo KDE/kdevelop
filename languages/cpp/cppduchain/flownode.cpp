@@ -20,18 +20,14 @@
 
 using namespace KDevelop;
 
-FlowNode::FlowNode(const KDevelop::RangeInRevision& range, FlowNode* next, FlowNode* alternative, const KDevelop::RangeInRevision& condition)
-  : m_nodeRange(range), m_conditionRange(condition), m_next(next), m_alternative(alternative)
+ControlFlowNode::ControlFlowNode()
+  : m_next(0), m_alternative(0)
+{}
+
+ControlFlowNode::Type ControlFlowNode::type() const
 {
   Q_ASSERT(!m_alternative || m_next); //If we have alternative, we have next.
-}
-
-FlowNode FlowNode::createConditional(const RangeInRevision& r, FlowNode* n, FlowNode* a, const RangeInRevision& c) { return FlowNode(r, n, a, c); }
-FlowNode FlowNode::createExit(const RangeInRevision& r) { return FlowNode(r); }
-FlowNode FlowNode::createSequential(const RangeInRevision& r, FlowNode* next) { return FlowNode(r, next); }
-
-FlowNode::Type FlowNode::type() const
-{
+  
   if(m_next && m_alternative) return Conditional;
   else if(m_next) return Sequential;
   else return Exit;

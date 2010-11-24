@@ -34,6 +34,9 @@ class CodeAnalysisTest : public QObject, public Cpp::TestHelper
     
     void testUseReadWrite();
     void testUseReadWrite_data();
+    
+    void testControlFlowCreation();
+    void testControlFlowCreation_data();
 };
 
 #endif // DATAACCESSTEST_H
