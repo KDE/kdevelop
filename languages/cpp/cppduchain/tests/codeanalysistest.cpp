@@ -16,27 +16,27 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "dataaccesstest.h"
+#include "codeanalysistest.h"
 #include <QTest>
 #include <language/duchain/duchain.h>
 
-QTEST_MAIN(DataAccessRepositoryTest)
+QTEST_MAIN(CodeAnalysisTest)
 
 using namespace KDevelop;
 using namespace Cpp;
 
-DataAccessRepositoryTest::DataAccessRepositoryTest(QObject* parent): QObject(parent)
+CodeAnalysisTest::CodeAnalysisTest(QObject* parent): QObject(parent)
 {
   initShell();
 }
 
-void DataAccessRepositoryTest::initTestCase()
+void CodeAnalysisTest::initTestCase()
 {}
 
-void DataAccessRepositoryTest::cleanupTestCase()
+void CodeAnalysisTest::cleanupTestCase()
 {}
 
-void DataAccessRepositoryTest::testUseReadWrite()
+void CodeAnalysisTest::testUseReadWrite()
 {
   QFETCH(QString, code);
   QFETCH(QVariantList, modFlags);
@@ -56,7 +56,7 @@ void DataAccessRepositoryTest::testUseReadWrite()
     i++;
   }
 }
-void DataAccessRepositoryTest::testUseReadWrite_data()
+void CodeAnalysisTest::testUseReadWrite_data()
 {
   QTest::addColumn<QString>("code");
   QTest::addColumn<QVariantList>("modFlags");

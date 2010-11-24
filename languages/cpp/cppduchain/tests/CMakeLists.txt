@@ -48,6 +48,6 @@ target_link_libraries(itemrepositorytest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR
 
 ########## next target ################
 
-kde4_add_unit_test(dataaccesstest dataaccesstest.cpp testhelper.cpp)
+kde4_add_unit_test(dataaccesstest codeanalysistest.cpp testhelper.cpp)
 target_link_libraries(dataaccesstest ${KDE4_KDECORE_LIBS} ${KDE4_KTEXTEDITOR_LIBRARY} ${QT_QTTEST_LIBRARY}
     kdev4cppparser kdev4cpprpp kdev4cppduchain ${KDEVPLATFORM_LANGUAGE_LIBRARIES} ${KDEVPLATFORM_TESTS_LIBRARIES})

@@ -22,11 +22,11 @@
 #include <QObject>
 #include "testhelper.h"
 
-class DataAccessRepositoryTest : public QObject, public Cpp::TestHelper
+class CodeAnalysisTest : public QObject, public Cpp::TestHelper
 {
   Q_OBJECT
   public:
-    explicit DataAccessRepositoryTest(QObject* parent = 0);
+    explicit CodeAnalysisTest(QObject* parent = 0);
     
   private slots:
     void initTestCase();
