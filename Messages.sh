@@ -12,5 +12,5 @@ fi
 if [[ "$kcfgfiles" != "" ]] ; then
     $EXTRACTRC $kcfgfiles >> rc.cpp || exit 13
 fi
-$XGETTEXT -kaliasLocal `find $subdirs -name \*.cc -o -name \*.cpp -o -name \*.h` rc.cpp -o $podir/kdevplatform.pot
+$XGETTEXT -kaliasLocal `find $subdirs -name \*.cc -o -name \*.cpp -o -name \*.h | grep -v '/tests/'` rc.cpp -o $podir/kdevplatform.pot
 rm -f rc.cpp
