@@ -58,13 +58,9 @@ LocationTable* Environment::takeLocationTable()
 }
 
 void Environment::swapMacros( Environment* parentEnvironment ) {
-  EnvironmentMap oldEnvironment = m_environment;
-  m_environment = parentEnvironment->m_environment;
-  parentEnvironment->m_environment = oldEnvironment;
-  
-  QVector< pp_macro* > oldOwnedMacros = m_ownedMacros;
-  m_ownedMacros = parentEnvironment->m_ownedMacros;
-  parentEnvironment->m_ownedMacros = oldOwnedMacros;
+  qSwap(m_environment, parentEnvironment->m_environment);
+
+  qSwap(m_ownedMacros, parentEnvironment->m_ownedMacros);
 }
 
 void Environment::clearMacro(const KDevelop::IndexedString& name)
