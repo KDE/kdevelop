@@ -46,6 +46,7 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
         virtual QIcon icon() const;
         virtual QString name() const;
         virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
+        void deleteProgressBar();
 
         ManPageModel* model() const;
         QProgressBar* progressBar() const;

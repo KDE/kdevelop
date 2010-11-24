@@ -165,6 +165,7 @@ void ManPageModel::sectionDataReceived(KJob *job){
         // End of init
         m_indexModel->setStringList(m_index);
         delete iterator;
+        ManPageDocumentation::s_provider->deleteProgressBar();
         KDevelop::ICore::self()->documentationController()->showDocumentation(ManPageDocumentation::s_provider->homePage());
     }
 }
@@ -188,6 +189,7 @@ QList<ManSection> ManPageModel::indexParser(){
      foreach(QWebElement e, links){
         list.append(qMakePair(e.attribute("accesskey"), e.parent().parent().findAll("td").at(2).toPlainText()));
      }
+     delete page;
      return list;
 }
 
@@ -205,6 +207,7 @@ void ManPageModel::sectionParser(const QString &sectionId, const QString &data){
          }
      }
      m_manMap.insert(sectionId, pageList);
+     delete page;
 }
 
 void ManPageModel::showItem(const QModelIndex& idx){

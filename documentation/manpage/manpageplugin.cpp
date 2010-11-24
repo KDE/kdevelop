@@ -92,6 +92,11 @@ QProgressBar* ManPagePlugin::progressBar() const{
     return m_progressBar;
 }
 
+void ManPagePlugin::deleteProgressBar() {
+    delete m_progressBar;
+    m_progressBar = 0;
+}
+
 
 QString ManPagePlugin::getDocumentationFilename( KDevelop::Declaration* dec, const bool& isLocal ) const
 {

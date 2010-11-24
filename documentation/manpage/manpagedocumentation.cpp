@@ -86,7 +86,7 @@ bool ManPageDocumentation::providesWidget() const
 
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
     QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
-    if(progressBar->value() != progressBar->maximum()){
+    if(progressBar != 0){
         QWidget* widget = new QWidget(parent);
         QLabel* label = new QLabel(i18n("Loading man pages ..."));
         label->setAlignment(Qt::AlignHCenter);
@@ -114,5 +114,5 @@ QString ManPageHomeDocumentation::name() const
 
 KDevelop::IDocumentationProvider* ManPageHomeDocumentation::provider() const
 {
-    return ManPageDocumentation::s_provider;//CMakeDoc::s_provider;
+    return ManPageDocumentation::s_provider;
 }
