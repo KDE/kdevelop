@@ -53,6 +53,7 @@ private slots:
     void testCommit();
     void testBranching();
     void revHistory();
+    void testAnnotation();
     void cleanupTestCase();
 
 private:
