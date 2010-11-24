@@ -78,4 +78,24 @@ void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
     previous->m_alternative = nextNode;
   
   nextNode->setStartCursor(cursorForToken(node->end_token));
+  m_currentNode = nextNode;
+}
+
+void ControlFlowGraphBuilder::visitWhileStatement(WhileStatementAST* node)
+{
+  //TODO:   m_currentNode->m_conditionRange = rangeBetween(node->condition->start_token, node->condition->end_token);
+  m_currentNode->setEndCursor(cursorForToken(node->start_token));
+  ControlFlowNode* previous = m_currentNode;
+  
+  ControlFlowNode* conditionNode = createCompoundStatement(node->condition, 0);
+  ControlFlowNode* bodyNode = createCompoundStatement(node->statement, 0);
+  ControlFlowNode* nextNode = new ControlFlowNode;
+  
+  previous->m_next = conditionNode;
+  bodyNode->m_next = conditionNode;
+  conditionNode->m_next =bodyNode;
+  conditionNode->m_alternative = nextNode;
+  
+  nextNode->setStartCursor(cursorForToken(node->end_token));
+  m_currentNode = nextNode;
 }
