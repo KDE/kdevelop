@@ -232,6 +232,8 @@ public:
     
     virtual QString iconName() const;
     virtual RenameStatus rename(const QString& newname);
+    
+    void propagateRename( const KUrl& newBase ) const;
 };
 
 
