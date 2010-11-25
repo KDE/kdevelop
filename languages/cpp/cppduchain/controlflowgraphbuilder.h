@@ -40,6 +40,8 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     virtual void visitFunctionDefinition(FunctionDefinitionAST* node);
     virtual void visitIfStatement(IfStatementAST* node);
     virtual void visitWhileStatement(WhileStatementAST* node);
+    virtual void visitForStatement(ForStatementAST* node);
+    virtual void visitConditionalExpression(ConditionalExpressionAST* node);
     
   private:
     KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);
