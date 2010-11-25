@@ -66,6 +66,7 @@ public:
 signals:
     void sectionParsed();
     void sectionCount(int count);
+    void manPagesLoaded();
 
 public slots:
     void showItem(const QModelIndex& idx);

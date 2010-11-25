@@ -24,6 +24,7 @@
 #include <QHeaderView>
 #include <QProgressBar>
 #include <QVBoxLayout>
+#include <QStackedWidget>
 
 #include "manpagedocumentation.h"
 #include "manpageplugin.h"
@@ -85,26 +86,49 @@ bool ManPageDocumentation::providesWidget() const
 }
 
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
+
     QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
+    ManPageModel* model = ManPageDocumentation::s_provider->model();
+
+    if(m_qswidget != 0){
+    m_qswidget = new QStackedWidget(parent);
+    QObject::connect(model, SIGNAL(manPagesLoaded()), this, SLOT(manPagesLoaded()));
+
+    m_loadingWidget = new QWidget(m_qswidget);
+    QLabel* label = new QLabel(i18n("Loading man pages ..."));
+    label->setAlignment(Qt::AlignHCenter);
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(label);
+    layout->addWidget(progressBar);
+    layout->addStretch();
+    m_loadingWidget->setLayout(layout);
+    m_qswidget->addWidget(m_loadingWidget);
+
+    m_contents = new QTreeView(parent);
+    m_contents->header()->setVisible(false);
+    m_contents->setModel(model);
+    QObject::connect(m_contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
+    m_qswidget->addWidget(m_contents);
+    }
+
     if(progressBar != 0){
-        QWidget* widget = new QWidget(parent);
-        QLabel* label = new QLabel(i18n("Loading man pages ..."));
-        label->setAlignment(Qt::AlignHCenter);
-        QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget(label);
-        layout->addWidget(progressBar);
-        layout->addStretch();
-        widget->setLayout(layout);
-        return widget;
+        m_qswidget->setCurrentWidget(m_loadingWidget);
     }
     else {
-        QTreeView* contents = new QTreeView(parent);
-        contents->header()->setVisible(false);
-        ManPageModel* model = ManPageDocumentation::s_provider->model();
-        contents->setModel(model);
-        QObject::connect(contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
-        return contents;
+        m_qswidget->setCurrentWidget(m_contents);
     }
+
+    return m_qswidget;
+}
+
+void ManPageHomeDocumentation::manPagesLoaded()
+{
+    m_qswidget->setCurrentWidget(m_contents);
+    m_contents->repaint();
+    m_qswidget->removeWidget(m_loadingWidget);
+    delete m_loadingWidget;
+    m_loadingWidget = 0;
+
 }
 
 QString ManPageHomeDocumentation::name() const
