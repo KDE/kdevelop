@@ -481,6 +481,8 @@ void ProjectFolderItem::setUrl( const KUrl& url )
     KUrl copy(url);
     copy.adjustPath(KUrl::AddTrailingSlash);
     ProjectBaseItem::setUrl(copy);
+    
+    propagateRename(url);
 }
 
 ProjectFolderItem *ProjectFolderItem::folder() const
@@ -498,16 +500,18 @@ QString ProjectFolderItem::folderName() const
     return url().fileName();
 }
 
-void propagateRename( const KDevelop::ProjectFolderItem* item, const KUrl& newBase)
+void ProjectFolderItem::propagateRename(const KUrl& newBase) const
 {
     KUrl url = newBase;
     url.addPath("dummy");
-    foreach( KDevelop::ProjectBaseItem* child, item->children() )
+    foreach( KDevelop::ProjectBaseItem* child, children() )
     {
         url.setFileName( child->text() );
         child->setUrl( url );
-        if ( child->folder() ) {
-            propagateRename( child->folder(), url );
+        
+        const ProjectFolderItem* folder = child->folder();
+        if ( folder ) {
+            folder->propagateRename( url );
         }
     }
 }
@@ -525,10 +529,9 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
         {
             if( !project() || project()->projectFileManager()->renameFolder(this, dest) )
             {
-                setUrl( dest );
-                propagateRename(this, dest);
                 return ProjectBaseItem::RenameOk;
-            } else
+            }
+            else
             {
                 return ProjectBaseItem::ProjectManagerRenameFailed;
             }
@@ -613,9 +616,9 @@ ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
         {
             if( !project() || project()->projectFileManager()->renameFile(this, dest) )
             {
-                setUrl( dest );
                 return ProjectBaseItem::RenameOk;
-            } else
+            }
+            else
             {
                 return ProjectBaseItem::ProjectManagerRenameFailed;
             }
