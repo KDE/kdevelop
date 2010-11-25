@@ -38,7 +38,6 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <shell/savedialog.h>
 
 #include <kstandarddirs.h>
 
@@ -337,15 +336,10 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
         }
     }
     
-    if(!unsavedFiles.empty())
+    if(!ICore::self()->documentController()->saveSomeDocuments(unsavedFiles))
     {
-        // show dialog
-        KSaveSelectDialog dlg(unsavedFiles, this);
-        if(dlg.exec() == QDialog::Rejected)
-        {
-            close();
-            return;
-        }
+        close();
+        return;
     }
     
     
