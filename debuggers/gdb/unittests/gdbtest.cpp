@@ -92,6 +92,7 @@ public:
         delete c;
     }
     virtual const KConfigGroup config() const { return cfg; }
+    virtual KConfigGroup config() { return cfg; };
     virtual QString name() const { return QString("Test-Launch"); }
     virtual KDevelop::IProject* project() const { return 0; }
     virtual KDevelop::LaunchConfigurationType* type() const { return 0; }

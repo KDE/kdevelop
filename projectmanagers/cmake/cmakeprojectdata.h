@@ -15,6 +15,10 @@ struct CMakeProjectData
     VariableMap vm;
     MacroMap mm;
     CMakeProperties properties;
+    CacheValues cache;
+    QStringList modulePath;
+    
+    void clear() { vm.clear(); mm.clear(); properties.clear();  cache.clear(); }
 };
 
 #endif

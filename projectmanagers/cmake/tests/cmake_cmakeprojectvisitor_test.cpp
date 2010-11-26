@@ -31,6 +31,7 @@
 #include <cmakeparserutils.h>
 #include <tests/autotestshell.h>
 #include <astfactory.h>
+#include <cmakeprojectdata.h>
 
 QTEST_KDEMAIN_CORE(CMakeProjectVisitorTest)
 
@@ -468,6 +469,7 @@ void CMakeProjectVisitorTest::testFinder_data()
     
     QTest::newRow("Qt4") << "Qt4";
     QTest::newRow("KDE4") << "KDE4";
+//     QTest::newRow("QtGstreamer") << "QtGstreamer"; //commented because it might not be installed, but works
 }
 
 void CMakeProjectVisitorTest::testFinder_init()
@@ -499,31 +501,28 @@ void CMakeProjectVisitorTest::testFinder()
     file.remove();
     QVERIFY(code.count() != 0);
     
-    MacroMap mm;
-    CacheValues val;
-    VariableMap vm;
-    vm=initialVariables;
-    vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
-    vm.insert("CMAKE_MODULE_PATH", modulePath);
+    CMakeProjectData data;
+    data.vm=initialVariables;
+    data.vm.insert("CMAKE_BINARY_DIR", QStringList("./"));
+    data.vm.insert("CMAKE_MODULE_PATH", modulePath);
     
     foreach(const QString& script, buildstrap)
     {
         QString scriptfile=CMakeProjectVisitor::findFile(script, modulePath, QStringList());
-        fakeContext=CMakeParserUtils::includeScript(scriptfile, fakeContext, &vm, &mm,
-                                                    "./", &val, modulePath);
+        fakeContext=CMakeParserUtils::includeScript(scriptfile, fakeContext, &data, "./");
     }
     
-    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
+    data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
     CMakeProjectVisitor v(file.fileName(), fakeContext);
-    v.setVariableMap(&vm);
-    v.setMacroMap(&mm);
-    v.setCacheValues( &val );
+    v.setVariableMap(&data.vm);
+    v.setMacroMap(&data.mm);
+    v.setCacheValues( &data.cache );
     v.walk(code, 0);
     
     QString foundvar=QString("%1_FOUND").arg(module.toUpper());
     bool found=CMakeCondition(&v).condition(QStringList(foundvar));
     if(!found)
-        qDebug() << "result: " << vm.value(foundvar);
+        qDebug() << "result: " << data.vm.value(foundvar);
     
     QVERIFY(found);
     

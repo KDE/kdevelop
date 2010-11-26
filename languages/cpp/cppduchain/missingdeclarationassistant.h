@@ -33,6 +33,9 @@ public:
   MissingDeclarationAssistant(KSharedPtr<MissingDeclarationProblem> p);
   KSharedPtr<MissingDeclarationProblem> problem;
   MissingDeclarationType::Ptr type;
+  QString title() const { return m_title; }
+private:
+  QString m_title;
 };
 
 }

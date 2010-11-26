@@ -357,7 +357,7 @@ correctly.
 </string>
             </property>
             <property name="text">
-             <string extracomment="Means break unrelated blocks by a newline">&amp;Break blocks</string>
+             <string comment="Means break unrelated blocks by a newline">&amp;Break blocks</string>
             </property>
            </widget>
           </item>
@@ -378,7 +378,7 @@ correctly.
 </string>
             </property>
             <property name="text">
-             <string extracomment="Means break all blocks with a newline">Break all bl&amp;ocks</string>
+             <string comment="Means break all blocks with a newline">Break all bl&amp;ocks</string>
             </property>
            </widget>
           </item>
@@ -388,7 +388,7 @@ correctly.
              <string>Break 'else if()' statements into two different lines.</string>
             </property>
             <property name="text">
-             <string extracomment="Means break else if() into separate lines">Break i&amp;f-else</string>
+             <string comment="Means break else if() into separate lines">Break i&amp;f-else</string>
             </property>
            </widget>
           </item>

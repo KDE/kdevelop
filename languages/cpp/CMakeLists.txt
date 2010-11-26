@@ -52,6 +52,7 @@ set(kdevcpplanguagesupport_PART_SRCS
     codegen/progressdialogs.cpp
     codegen/codeassistant.cpp
     codegen/signatureassistant.cpp
+    codegen/renameassistant.cpp
     codegen/unresolvedincludeassistant.cpp
 #     codegen/makeimplementationprivate.cpp
 )

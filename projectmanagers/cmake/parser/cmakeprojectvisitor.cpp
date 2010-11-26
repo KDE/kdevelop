@@ -442,7 +442,7 @@ int CMakeProjectVisitor::visit(const SetAst *set)
         values = m_cache->value(set->variableName()).value.split(';');
     else
         values = set->values();
-    kDebug(9042) << "setting variable:" << set->variableName()/* << "to" << values*/;
+    kDebug(9042) << "setting variable:" << set->variableName() /*<< "to" << values*/;
     m_vars->insert(set->variableName(), values);
     return 1;
 }
@@ -528,6 +528,7 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(KUrl(path).directory()));
         CMakeFileContent include = CMakeListsParser::readCMakeFile(path);
         if ( !include.isEmpty() )
         {
@@ -539,7 +540,8 @@ int CMakeProjectVisitor::visit(const IncludeAst *inc)
             //FIXME: Put here the error.
             kDebug(9042) << "Include. Parsing error.";
         }
-        m_vars->take("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {
@@ -598,6 +600,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     {
         configPath.prepend(instPath+"/share/"+name.toLower()+post);
         configPath.prepend(instPath+"/lib/"+name.toLower()+post);
+        configPath.prepend(instPath+"/share/"+name+post);
+        configPath.prepend(instPath+"/lib/"+name+post);
     }
 
     QString varName=pack->name()+"_DIR";
@@ -629,6 +633,7 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
     if(!path.isEmpty())
     {
         m_vars->insertMulti("CMAKE_CURRENT_LIST_FILE", QStringList(path));
+        m_vars->insertMulti("CMAKE_CURRENT_LIST_DIR", QStringList(KUrl(path).directory()));
         if(pack->isRequired())
             m_vars->insert(pack->name()+"_FIND_REQUIRED", QStringList("TRUE"));
         if(pack->isQuiet())
@@ -649,7 +654,8 @@ int CMakeProjectVisitor::visit(const FindPackageAst *pack)
         {
             m_vars->insert(QString("%1_CONFIG").arg(pack->name()), QStringList(path));
         }
-        m_vars->take("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_FILE");
+        m_vars->remove("CMAKE_CURRENT_LIST_DIR");
     }
     else
     {
@@ -1657,7 +1663,7 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
     {
         if (fea->ranges().start < fea->ranges().stop)
         {
-            for( int i = fea->ranges().start; i < fea->ranges().stop; i += fea->ranges().step )
+            for( int i = fea->ranges().start; i < fea->ranges().stop && !m_hitBreak; i += fea->ranges().step )
             {
                 m_vars->insertMulti(fea->loopVar(), QStringList(QString::number(i)));
                 end=walk(fea->content(), fea->line()+1);
@@ -1716,9 +1722,12 @@ int CMakeProjectVisitor::visit(const ForeachAst *fea)
                 m_vars->insert(fea->loopVar(), QStringList(s));
                 kDebug(9042) << "looping" << fea->loopVar() << "=" << m_vars->value(fea->loopVar());
                 end=walk(fea->content(), fea->line()+1);
+                if(m_hitBreak)
+                    break;
             }
         }
     }
+    m_hitBreak=false;
     kDebug(9042) << "EndForeach" << fea->loopVar();
     return end-fea->line()+1;
 }
@@ -2085,6 +2094,9 @@ RecursivityType recursivity(const QString& functionName)
 
 int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClean)
 {
+    if(fc.isEmpty())
+        return 0;
+    
     ReferencedTopDUContext aux=m_topctx;
     KUrl url(fc[0].filePath);
     

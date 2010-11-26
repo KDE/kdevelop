@@ -91,7 +91,7 @@ void pp::processFileInternal(const QString& fileName, const QByteArray& fileCont
     m_files.push(KDevelop::IndexedString(fileName));
     // Guestimate as to how much expansion will occur
     result.reserve(int(fileContents.length() * 1.2));
-    PreprocessedContents contents = convertFromByteArray(fileContents);
+    PreprocessedContents contents = tokenizeFromByteArray(fileContents);
     {
       Stream is(&contents);
       Stream rs(&result, m_environment->locationTable());

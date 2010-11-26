@@ -140,6 +140,7 @@ class KDEVCPPDUCHAIN_EXPORT ExpressionVisitor : public DefaultVisitor {
 
     bool m_strict, m_memberAccess, m_skipLastNamePart;
     AbstractType::Ptr m_lastType;
+    bool m_hadMemberAccess; // Whether during last call to findName() a class-member was accessed
     Instance m_lastInstance; //Contains whether the last evaluation resulted in an instance, and maybe the instance-declaration
 
     const KDevelop::TopDUContext* m_source;

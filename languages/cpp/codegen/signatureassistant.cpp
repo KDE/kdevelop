@@ -47,7 +47,8 @@ bool AdaptDefinitionSignatureAssistant::isUseful() {
   return !m_declarationName.isEmpty() && m_definitionId.isValid();
 }
 
-AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted) : ITextAssistant(view) {
+AdaptDefinitionSignatureAssistant::AdaptDefinitionSignatureAssistant(KTextEditor::View* view, KTextEditor::Range inserted)
+:m_view(view) {
   connect(KDevelop::ICore::self()->languageController()->backgroundParser(), SIGNAL(parseJobFinished(KDevelop::ParseJob*)), SLOT(parseJobFinished(KDevelop::ParseJob*)));
   m_document = KDevelop::IndexedString(view->document()->url());
   
@@ -186,25 +187,30 @@ QString makeSignatureString(Signature signature, DUContext* visibilityFrom) {
 
 class AdaptSignatureAction : public KDevelop::IAssistantAction {
   public:
-    AdaptSignatureAction(KDevelop::DeclarationId definitionId, KDevelop::ReferencedTopDUContext definitionContext, Signature oldSignature, Signature newSignature) : 
+    AdaptSignatureAction(KDevelop::DeclarationId definitionId, KDevelop::ReferencedTopDUContext definitionContext, Signature oldSignature, Signature newSignature, bool editingDefinition) :
     m_otherSideId(definitionId), 
     m_otherSideContext(definitionContext), 
     m_oldSignature(oldSignature),
-    m_newSignature(newSignature) {
+    m_newSignature(newSignature),
+    m_editingDefinition(editingDefinition) {
     }
     
     virtual QString description() const {
+      return i18n("Update %1 signature", m_editingDefinition ? i18n("declaration") : i18n("definition"));
+    }
+
+    virtual QString toolTip() const {
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-      return i18n("Update Definition from %1(%2)%3 to (%4)%5",
+      return i18n("Update %1\nfrom: %2(%3)%4\nto: %2(%5)%6",
+                  m_editingDefinition ? i18n("declaration") : i18n("definition"),
                   m_otherSideId.qualifiedIdentifier().toString(),
                   makeSignatureString(m_oldSignature, m_otherSideContext.data()),
                   m_oldSignature.isConst ? " const" : "",
                   makeSignatureString(m_newSignature, m_otherSideContext.data()),
                   m_newSignature.isConst ? " const" : "");
     }
-    
+
     virtual void execute() {
-      
       KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
       IndexedString url = m_otherSideContext->url();
       lock.unlock();
@@ -282,6 +288,7 @@ class AdaptSignatureAction : public KDevelop::IAssistantAction {
     KDevelop::ReferencedTopDUContext m_otherSideContext;
     Signature m_oldSignature;
     Signature m_newSignature;
+    bool m_editingDefinition;
 };
 
 /* -- only needed for return type updating, which isn't supported yet
@@ -297,13 +304,11 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
   if(job->document() == m_document) {
     kDebug() << "parse job finshed for current document";
     clearActions();
-    KTextEditor::View* v = view();
-    if(!v) {
+    if(!m_view) {
       kDebug() << "breaking";
       return;
     }
-    
-    SimpleCursor currentPos(v->cursorPosition());
+    SimpleCursor currentPos(m_view->cursorPosition());
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     KDevelop::ReferencedTopDUContext top(DUChainUtils::standardContextForUrl(m_document.toUrl()));
     if(!top)
@@ -382,7 +387,7 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
 
         if(changed) {
           kDebug() << "signature changed";
-          addAction(IAssistantAction::Ptr(new AdaptSignatureAction(m_definitionId, m_definitionContext, m_oldSignature, newSignature)));
+          addAction(IAssistantAction::Ptr(new AdaptSignatureAction(m_definitionId, m_definitionContext, m_oldSignature, newSignature, m_editingDefinition)));
         }else{
           kDebug() << "signature stayed equal";
         }
@@ -390,7 +395,6 @@ void AdaptDefinitionSignatureAssistant::parseJobFinished(KDevelop::ParseJob* job
     }else{
       kDebug() << "found no declaration in line" << currentPos.textCursor() << "in document" << job->duChain();
     }
-    
     emit actionsChanged();
   }
 }

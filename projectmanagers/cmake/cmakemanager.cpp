@@ -167,6 +167,9 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     ProjectBaseItem* parent = item->parent();
     if (!parent) {
         ret=CMake::currentBuildDir(item->project());
+        
+        CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
+        ret.addPath(fi->buildDir());
     } else {
         ret=buildDirectory(parent);
         CMakeFolderItem *fi=dynamic_cast<CMakeFolderItem*>(item);
@@ -176,13 +179,18 @@ KUrl CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
     return ret;
 }
 
-KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project, const KUrl& baseUrl)
+KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProject* project)
 {
+    KUrl baseUrl=project->folder();
+    baseUrl.cd(CMake::projectRootRelative(project));
+    
     QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
-    m_modulePathPerProject[project]=initials.first["CMAKE_MODULE_PATH"];
-    m_macrosPerProject[project].clear();
-    m_varsPerProject[project]=initials.first;
-    m_varsPerProject[project].insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
+    CMakeProjectData* data = &m_projectsData[project];
+    
+    data->clear();
+    data->modulePath=initials.first["CMAKE_MODULE_PATH"];
+    data->vm=initials.first;
+    data->vm.insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
 
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -193,17 +201,17 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
         {
             if( QFileInfo(path).exists() )
             {
-                m_modulePathPerProject[project] << path;
+                data->modulePath << path;
                 l << path;
             }
         }
         if( !l.isEmpty() )
             group.writeEntry("CMakeDir", l);
         else
-            group.writeEntry("CMakeDir", m_modulePathPerProject[project]);
+            group.writeEntry("CMakeDir", data->modulePath);
     }
     else
-        group.writeEntry("CMakeDir", m_modulePathPerProject[project]);
+        group.writeEntry("CMakeDir", data->modulePath);
 
     
     KDevelop::ReferencedTopDUContext buildstrapContext;
@@ -230,10 +238,33 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     ReferencedTopDUContext ref=buildstrapContext;
     foreach(const QString& script, initials.second)
     {
-        ref = includeScript(CMakeProjectVisitor::findFile(script, m_modulePathPerProject[project], QStringList()),
-                              project, ref);
+        ref = includeScript(CMakeProjectVisitor::findFile(script, m_projectsData[project].modulePath, QStringList()), project, baseUrl.toLocalFile(), ref);
     }
     
+    //Initialize parent parts of the project that don't belong to the tree (because it's a partial import)
+    if(baseUrl.isParentOf(project->folder()) && baseUrl!=project->folder())
+    {
+        QList<KUrl> toimport;
+        toimport += baseUrl;
+        while(!toimport.isEmpty()) {
+            KUrl script = toimport.takeFirst(), currentDir=script;
+            script.addPath("CMakeLists.txt");
+            
+            ref = includeScript(script.toLocalFile(), project, currentDir.toLocalFile(), ref);
+            Q_ASSERT(ref);
+            
+            foreach(const Subdirectory& s, data->subdirectories) {
+                KUrl candidate = currentDir;
+                candidate.addPath(s.name);
+                
+                if(candidate.isParentOf(project->folder()))
+                    toimport += candidate;
+            }
+        }
+        
+        dynamic_cast<CMakeFolderItem*>(project->projectItem())->setBuildDir(KUrl::relativeUrl(baseUrl, project->folder()));
+        qDebug() << "aaaaaaaaaAAAAAAAAAaaaAAaaaAAa" << buildDirectory(project->projectItem());
+    }
     return ref;
 }
 
@@ -290,14 +321,14 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             }
         }
 
-        m_rootItem = new CMakeFolderItem(project, folderUrl, QString(), 0 );
+        m_rootItem = new CMakeFolderItem(project, project->folder(), QString(), 0 );
 
         KUrl cachefile=buildDirectory(m_rootItem);
         if( cachefile.isEmpty() ) {
             CMake::checkForNeedingConfigure(m_rootItem);
         }
         cachefile.addPath("CMakeCache.txt");
-        m_projectCache[project]=readCache(cachefile);
+        m_projectsData[project].cache=readCache(cachefile);
         
         KDirWatch* w = new KDirWatch(project);
         w->setObjectName(project->name()+"_ProjectWatcher");
@@ -312,10 +343,10 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
 
 
 KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file,
-                                                        KDevelop::IProject * project, ReferencedTopDUContext parent)
+                                                        KDevelop::IProject * project, const QString& dir, ReferencedTopDUContext parent)
 {
     m_watchers[project]->addFile(file);
-    return CMakeParserUtils::includeScript( file, parent, &m_varsPerProject[project], &m_macrosPerProject[project], project->folder().toLocalFile(KUrl::RemoveTrailingSlash), &m_projectCache[project], m_modulePathPerProject[project]);
+    return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir);
 }
 
 QMutex rxFileFilterMutex; //We have to use a mutex-lock to protect static regular ex
@@ -339,7 +370,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     QList<KDevelop::ProjectFolderItem*> folderList;
     CMakeFolderItem* folder = dynamic_cast<CMakeFolderItem*>( item );
 
-    KUrl subroot=item->project()->folder();
     m_watchers[item->project()]->addDir(item->url().toLocalFile(), KDirWatch::WatchFiles);
     
     KUrl cmakeListsPath(folder->url());
@@ -351,69 +381,27 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
         
         KDevelop::ReferencedTopDUContext curr;
         if(item==item->project()->projectItem())
-            curr=initializeProject(item->project(), item->project()->projectItem()->url());
+            curr=initializeProject(item->project());
         else
             curr=folder->formerParent()->topDUContext();
         
         kDebug(9042) << "Adding cmake: " << cmakeListsPath << " to the model";
 
-        m_watchers[item->project()]->addFile(cmakeListsPath.toLocalFile());
         QString binDir=KUrl::relativePath(folder->project()->projectItem()->url().toLocalFile(), folder->url().toLocalFile());
         if(binDir.startsWith("./"))
             binDir=binDir.remove(0, 2);
         
-        CMakeProjectData data;
-        
-        //Im not sure if we want to save taht, it might be a lot of data,
-        //but can be useful when regenerating.
-        data.vm=m_varsPerProject[item->project()];
-        data.mm=m_macrosPerProject[item->project()];
-        QString currentBinDir=data.vm.value("CMAKE_BINARY_DIR")[0]+binDir;
+        CMakeProjectData& data=m_projectsData[item->project()];
 
-        data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(currentBinDir));
-        data.vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
-        data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(folder->url().toLocalFile(KUrl::RemoveTrailingSlash)));
-
-        kDebug(9042) << "currentBinDir" << KUrl(data.vm.value("CMAKE_BINARY_DIR")[0]) << data.vm.value("CMAKE_CURRENT_BINARY_DIR");
+//         kDebug(9042) << "currentBinDir" << KUrl(data.vm.value("CMAKE_BINARY_DIR")[0]) << data.vm.value("CMAKE_CURRENT_BINARY_DIR");
 
     #ifdef CMAKEDEBUGVISITOR
         CMakeAstDebugVisitor dv;
         dv.walk(cmakeListsPath.toLocalFile(), f, 0);
     #endif
-        
-        {
-            CMakeProjectVisitor v(folder->url().toLocalFile(KUrl::RemoveTrailingSlash), curr);
-            v.setCacheValues(&m_projectCache[item->project()]);
-            v.setVariableMap(&data.vm);
-            v.setMacroMap(&data.mm);
-            v.setModulePath(m_modulePathPerProject[item->project()]);
-            v.setDefinitions(folder->definitions());
-            
-            CMakeFileContent f = CMakeListsParser::readCMakeFile(cmakeListsPath.toLocalFile());
-            if(!f.isEmpty())
-                v.walk(f, 0);
-            
-            folder->setTopDUContext(v.context());
-            data.projectName=v.projectName();
-            data.subdirectories=v.subdirectories();
-            data.definitions=v.definitions();
-            data.includeDirectories=v.includeDirectories();
-            data.targets=v.targets();
-            data.properties=v.properties();
-            
-            QList<Target>::iterator it=data.targets.begin(), itEnd=data.targets.end();
-            for(; it!=itEnd; ++it)
-            {
-                it->files=v.resolveDependencies(it->files);
-            }
-        }
-        data.vm.remove("CMAKE_CURRENT_LIST_FILE");
-        data.vm.remove("CMAKE_CURRENT_SOURCE_DIR");
-        data.vm.remove("CMAKE_CURRENT_BINARY_DIR");
-        
-        m_varsPerProject[item->project()]=data.vm;
-        m_macrosPerProject[item->project()]=data.mm;
 
+        ReferencedTopDUContext ctx = includeScript(cmakeListsPath.toLocalFile(), folder->project(), item->url().toLocalFile(), curr);
+        folder->setTopDUContext(ctx);
        /*{
         kDebug() << "dumpiiiiiing" << folder->url();
         KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
@@ -434,9 +422,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 path.addPath(subf.name);
             }
             path.adjustPath(KUrl::AddTrailingSlash);
-
-            kDebug(9042) << "Found subdir " << path << "which should be into" << subroot;
-            if((subroot.isParentOf(path) || path.isParentOf(subroot)) && QFileInfo(path.toLocalFile()).isDir())
+            
             {
                 alreadyAdded.append(subf.name);
                 CMakeFolderItem* parent=folder;
@@ -452,12 +438,12 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                         a = static_cast<CMakeFolderItem*>(ff);
                     
                 }
-                if(!a) {
+                if(!a)
                     a = new CMakeFolderItem( folder->project(), path, subf.build_dir, parent );
-                }
+                else
+                    a->setUrl(path);
                 
                 kDebug() << "folder: " << a << a->index();
-                a->setUrl(path);
                 a->setDefinitions(data.definitions);
                 folderList.append( a );
                 
@@ -476,7 +462,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
 
         QStringList directories;
         directories += folder->url().toLocalFile(KUrl::RemoveTrailingSlash);
-        directories += currentBinDir;
 
         foreach(const QString& s, data.includeDirectories)
         {
@@ -670,6 +655,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
     QString currentBinDir=KUrl::relativeUrl(project->projectItem()->url(), url);
     vm->insert("CMAKE_CURRENT_BINARY_DIR", QStringList(vm->value("CMAKE_BINARY_DIR")[0]+currentBinDir));
     vm->insert("CMAKE_CURRENT_LIST_FILE", QStringList(cmakeListsPath.toLocalFile(KUrl::RemoveTrailingSlash)));
+    vm->insert("CMAKE_CURRENT_LIST_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
     vm->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(url.toLocalFile(KUrl::RemoveTrailingSlash)));
     CMakeProjectVisitor v(url.toLocalFile(), missingtopcontext);
     v.setCacheValues(m_projectCache[project]);
@@ -678,6 +664,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder(KDevelop::ProjectFolderItem *)
     v.setModulePath(m_modulePathPerProject[project]);
     v.walk(f, 0);
     vm->remove("CMAKE_CURRENT_LIST_FILE");
+    vm->remove("CMAKE_CURRENT_LIST_DIR");
     vm->remove("CMAKE_CURRENT_SOURCE_DIR");
     vm->remove("CMAKE_CURRENT_BINARY_DIR");
 }*/
@@ -806,7 +793,7 @@ void CMakeManager::dirtyFile(const QString & dirty)
         }
         
         if(p) {
-            m_projectCache[p]=readCache(dirtyFile);
+            m_projectsData[p].cache=readCache(dirtyFile);
             p->reloadModel();
         }
     } else if(dirty.endsWith(".cmake"))
@@ -864,18 +851,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         
         if(!entries.contains(current))
         {
-            switch(it->type())
-            {
-                case ProjectBaseItem::File:
-                    qDeleteAll(item->project()->filesForUrl(fileurl));
-                    break;
-                case ProjectBaseItem::Folder:
-                case ProjectBaseItem::BuildFolder:
-                    qDeleteAll(item->project()->foldersForUrl(fileurl));
-                    break;
-                default:
-                    break;
-            }
+            qDeleteAll(item->project()->itemsForUrl(fileurl));
         }
         else if(it->url()!=fileurl) {
             it->setUrl(fileurl);
@@ -1354,15 +1330,15 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const KUrl& url, co
 QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* project, const QString& id) const
 {
     QPair<QString, QString> ret;
-    if(project==0 && !m_projectCache.keys().isEmpty())
+    if(project==0 && !m_projectsData.keys().isEmpty())
     {
-        project=m_projectCache.keys().first();
+        project=m_projectsData.keys().first();
     }
     
-    kDebug() << "cache value " << id << project << (m_projectCache.contains(project) && m_projectCache[project].contains(id));
-    if(m_projectCache.contains(project) && m_projectCache[project].contains(id))
+//     kDebug() << "cache value " << id << project << (m_projectsData.contains(project) && m_projectsData[project].cache.contains(id));
+    if(m_projectsData.contains(project) && m_projectsData[project].cache.contains(id))
     {
-        const CacheEntry& e=m_projectCache[project].value(id);
+        const CacheEntry& e=m_projectsData[project].cache.value(id);
         ret.first=e.value;
         ret.second=e.doc;
     }
@@ -1460,11 +1436,8 @@ bool CMakeManager::renameFolder(ProjectFolderItem* _it, const KUrl& newUrl)
 
 void CMakeManager::projectClosing(IProject* p)
 {
-    m_modulePathPerProject.remove(p);
-    m_varsPerProject.remove(p); 
-    m_macrosPerProject.remove(p);
+    m_projectsData.remove(p); 
     m_watchers.remove(p);
-    m_projectCache.remove(p);
 }
 
 #include "cmakemanager.moc"

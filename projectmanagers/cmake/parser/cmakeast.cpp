@@ -1477,7 +1477,7 @@ bool FindPathAst::parseFunctionInfo( const CMakeFunctionDesc& func )
 FindProgramAst::FindProgramAst()
 {
         m_noDefaultPath = m_noCmakeEnvironmentPath = m_noCmakePath =
-        m_noSystemEnvironmentPath = m_noSystemEnvironmentPath = false;
+        m_noSystemEnvironmentPath = false;
 }
 
 FindProgramAst::~FindProgramAst()

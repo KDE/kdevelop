@@ -59,8 +59,8 @@ void Cpp::AddCustomIncludePathAction::execute() {
   if(oldSettings.isValid()) {
     current = KUrl(oldSettings.storagePath);
     o.storageDirectory->setUrl(current);
-    o.sourceDirectory->setPath(oldSettings.sourceDir);
-    o.buildDirectory->setPath(oldSettings.buildDir);
+    o.sourceDirectory->setUrl(KUrl(oldSettings.sourceDir));
+    o.buildDirectory->setUrl(KUrl(oldSettings.buildDir));
     foreach(const QString& customPath, oldSettings.paths)
       if(!customPath.isEmpty())
         o.customIncludePaths->appendPlainText(customPath);
@@ -123,7 +123,7 @@ QString Cpp::OpenProjectForFileAssistant::description() const {
 }
 
 QString MissingIncludePathAssistant::title() const {
-  return i18n("Not Found: %1", m_directive);
+  return i18n("Include file \"%1\" not found", m_directive);
 }
 
 Cpp::MissingIncludePathAssistant::MissingIncludePathAssistant(KDevelop::IndexedString url, QString directive) {

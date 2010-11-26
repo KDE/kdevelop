@@ -1,5 +1,6 @@
 /*  This file is part of KDevelop
     Copyright 2009 Aleix Pol <aleixpol@kde.org>
+    Copyright 2010 Benjamin Port <port.benjamin@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,35 +22,42 @@
 #define QTHELPPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <interfaces/idocumentationprovider.h>
-#include <QHelpEngine>
+#include <interfaces/idocumentationproviderprovider.h>
+#include <kpluginfactory.h>
 
+class QtHelpProvider;
+class QtHelpQtDoc;
 class QtHelpDocumentation;
 
-class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
+class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProviderProvider
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IDocumentationProvider )
-	public:
-		QtHelpPlugin(QObject *parent, const QVariantList & args);
-		virtual KSharedPtr< KDevelop::IDocumentation > documentationForDeclaration (KDevelop::Declaration*) const;
-        
-        virtual KSharedPtr< KDevelop::IDocumentation > documentationForIndex(const QModelIndex& idx) const;
-        virtual QAbstractListModel* indexModel() const;
-        
-        virtual QIcon icon() const;
-        virtual QString name() const;
-        
-        virtual KSharedPtr< KDevelop::IDocumentation > homePage() const;
-        
-        QHelpEngine* engine() { return &m_engine; }
+    Q_INTERFACES( KDevelop::IDocumentationProviderProvider )
+    public:
+        QtHelpPlugin(QObject *parent, const QVariantList & args);
+        ~QtHelpPlugin();
+
+        static QtHelpPlugin *self() { return s_plugin; }
+
+        virtual QList<KDevelop::IDocumentationProvider*> providers();
+        QList<QtHelpProvider*> qtHelpProviderLoaded();
+        bool qtHelpQtDocLoaded();
+        void writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc);
+
+
     public slots:
-        void jumpedTo(const QUrl& newUrl) const;
-        
-    Q_SIGNALS:
-        void addHistory(const KSharedPtr< KDevelop::IDocumentation >& doc) const;
-	private:
-		QHelpEngine m_engine;
+        void readConfig();
+    signals:
+        void changedProvidersList() const;
+    private:
+        void loadQtDocumentation(bool loadQtDoc);
+        void loadQtHelpProvider(QStringList pathList, QStringList nameList, QStringList iconList);
+
+        static QtHelpPlugin *s_plugin;
+        QList<QtHelpProvider*> m_qtHelpProviders;
+        QtHelpQtDoc* m_qtDoc;
 };
+
+K_PLUGIN_FACTORY_DECLARATION(QtHelpFactory)
 
 #endif // QTHELPPLUGIN_H

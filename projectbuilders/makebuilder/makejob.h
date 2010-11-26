@@ -60,6 +60,7 @@ public:
     };
 
     MakeJob( MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandType command, const QString& overrideTarget = QString() );
+    virtual ~MakeJob();
 
     virtual void start();
 

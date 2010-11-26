@@ -197,7 +197,7 @@ class CppDUContext : public BaseContext {
       static_cast<DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
     
-    ///Matches the qualified identifier represented by the search item to the tail of the contexts scope identfier
+    ///Matches the qualified identifier represented by the search item to the tail of the context's scope identfier
     ///Also matches searches without template-parameters to fully instantiated contexts
     ///Returns true if they match
     inline bool matchSearchItem(DUContext::SearchItem::Ptr item, const DUContext* ctx) const {
@@ -277,7 +277,7 @@ class CppDUContext : public BaseContext {
       
       if( basicFlags & BaseContext::DirectQualifiedLookup ) {
         //ifDebug( kDebug(9007) << "redirecting findDeclarationsInternal in " << this << "(" << this->scopeIdentifier() <<") for \"" << identifier.toString() << "\""; )
-        //We use DirectQualifiedLookup to signalize that we don't need to do the whole scope-search, template-resolution etc. logic.
+        //We use DirectQualifiedLookup to signal that we don't need to do the whole scope-search, template-resolution etc. logic.
         return BaseContext::findDeclarationsInternal(identifiers, position, dataType, ret, source, basicFlags, depth );
       }
       
@@ -346,7 +346,8 @@ class CppDUContext : public BaseContext {
               
               if( basicFlags & KDevelop::DUContext::NoUndefinedTemplateParams) {
                 AbstractType::Ptr targetTypePtr = TypeUtils::unAliasedType(TypeUtils::targetType(res.type.abstractType(), 0));
-                if (targetTypePtr.cast<CppTemplateParameterType>() || targetTypePtr.cast<DelayedType>()) {
+                if (targetTypePtr.cast<CppTemplateParameterType>() || (targetTypePtr.cast<DelayedType>() && targetTypePtr.cast<DelayedType>()->kind() == DelayedType::Delayed)) {
+                  ifDebug( kDebug() << "stopping because the type" << targetTypePtr->toString() << "of" << i.toString() << "is bad"; )
                   return false;
                 }
               }
@@ -388,7 +389,7 @@ class CppDUContext : public BaseContext {
       
         BaseContext::findLocalDeclarationsInternal(identifier, position, dataType, ret, source, flags );
 
-        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.textCursor(); )
+        ifDebug( kDebug(9007) << "basically found:" << ret.count() - retCount << "containing" << BaseContext::localDeclarations().count() << "searching-position" << position.castToSimpleCursor().textCursor(); )
 
         if( !(flags & DUContext::NoFiltering) ) {
           //Filter out constructors and if needed unresolved template-params

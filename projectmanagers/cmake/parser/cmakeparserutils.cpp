@@ -29,6 +29,7 @@
 #include <kstandarddirs.h>
 #include "cmakeprojectvisitor.h"
 #include <ktempdir.h>
+#include <cmakeprojectdata.h>
 
 namespace CMakeParserUtils
 {
@@ -141,31 +142,43 @@ namespace CMakeParserUtils
         return t;
     }
 
+    void printSubdirectories(const QList<Subdirectory>& subs)
+    {
+        Q_FOREACH(const Subdirectory& s, subs) {
+            qDebug() << "lala " << s.name;
+        }
+    }
     
-    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent, VariableMap* variables, MacroMap* macros, const QString& sourcedir, CacheValues* cache, const QStringList& modulesDir )
+    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent, CMakeProjectData* data, const QString& sourcedir)
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-        if(f.isEmpty())
-        {
-            kDebug() << "There is no such file: " << file;
-            return 0;
-        }
         
-        variables->insert("CMAKE_CURRENT_BINARY_DIR", variables->value("CMAKE_BINARY_DIR"));
-        variables->insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
-        variables->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
+        data->vm.insert("CMAKE_CURRENT_BINARY_DIR", data->vm.value("CMAKE_BINARY_DIR"));
+        data->vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
+        data->vm.insert("CMAKE_CURRENT_LIST_DIR", QStringList(QFileInfo(file).dir().absolutePath()));
+        data->vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
         
         CMakeProjectVisitor v(file, parent);
-        v.setCacheValues( cache );
-        v.setVariableMap(variables);
-        v.setMacroMap(macros);
-        v.setModulePath(modulesDir);
+        v.setCacheValues(&data->cache);
+        v.setVariableMap(&data->vm);
+        v.setMacroMap(&data->mm);
+        v.setModulePath(data->modulePath);
         v.walk(f, 0, true);
         
-        variables->remove("CMAKE_CURRENT_LIST_FILE");
-        variables->remove("CMAKE_CURRENT_SOURCE_DIR");
-        variables->remove("CMAKE_CURRENT_BINARY_DIR");
+        data->projectName=v.projectName();
+        data->subdirectories=v.subdirectories();
+        data->definitions=v.definitions();
+        data->includeDirectories=v.includeDirectories();
+        data->targets=v.targets();
+        data->properties=v.properties();
+        
+        //printSubdirectories(data->subdirectories);
+        
+        data->vm.remove("CMAKE_CURRENT_LIST_FILE");
+        data->vm.remove("CMAKE_CURRENT_LIST_DIR");
+        data->vm.remove("CMAKE_CURRENT_SOURCE_DIR");
+        data->vm.remove("CMAKE_CURRENT_BINARY_DIR");
         
         return v.context();
     }

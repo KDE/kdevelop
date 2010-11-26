@@ -68,6 +68,11 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
     setObjectName(title);
 }
 
+MakeJob::~MakeJob()
+{
+    Q_ASSERT(!m_process || m_process->state() == KProcess::NotRunning);
+}
+
 void MakeJob::start()
 {
     kDebug(9037) << "Building with make" << m_command << m_overrideTarget;
@@ -228,7 +233,7 @@ QStringList MakeJob::computeBuildCommand() const
         QString suCommandName;
         if (suCommand == 1) {
           suCommandName = "kdesudo";
-          arguments << "-t" << "-c" << cmdline;
+          arguments << "-t" << "--" << cmdline;
         } else if (suCommand == 2) {
           suCommandName = "sudo";
           arguments << cmdline;
@@ -307,6 +312,7 @@ bool MakeJob::doKill()
     model()->addLine( i18n("*** Aborted ***") );
     m_killed = true;
     m_process->kill();
+    m_process->waitForFinished();
     return true;
 }
 

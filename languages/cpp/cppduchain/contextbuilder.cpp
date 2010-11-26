@@ -328,15 +328,12 @@ KDevelop::TopDUContext* ContextBuilder::buildProxyContextFromContent(Cpp::Enviro
       topLevelContext->updateImportsCache(); //Mark that we will use a cached import-structure
     }
 
-    if(content) {
-      cppContext->clearImportedParentContexts();
-      cppContext->addImportedParentContext(content.data());
-      cppContext->updateImportsCache(); //Mark that we will use a cached import-structure
-    } else {
-      ///This happens if a content-context is deleted from the du-chain during the time that the du-chain is not locked by this thread
-      kDebug(9007) << "ContextBuilder::buildProxyContextFromContent: Content-context lost for " << file->url().str();
-      Q_ASSERT(0);
-    }
+    Q_ASSERT(content);
+    
+    cppContext->clearImportedParentContexts();
+    cppContext->addImportedParentContext(content.data());
+    cppContext->updateImportsCache(); //Mark that we will use a cached import-structure
+
     Q_ASSERT(topLevelContext->importedParentContexts().count());
   }
 
