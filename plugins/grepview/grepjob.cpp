@@ -21,9 +21,11 @@
 #include <QRegExp>
 #include <QKeySequence>
 #include <QTextDocument>
+#include <QTextStream>
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kencodingprober.h>
 
 #include <language/duchain/indexedstring.h>
 #include <interfaces/icore.h>
@@ -37,12 +39,27 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
 {
     GrepOutputItem::List res;
     QFile file(filename);
+    
     if(!file.open(QIODevice::ReadOnly))
         return res;
     int lineno = 0;
-    while( !file.atEnd() )
+    
+    
+    // detect encoding (unicode files can be feed forever, stops when confidence reachs 99%
+    KEncodingProber prober;
+    while(!file.atEnd() && prober.state() == KEncodingProber::Probing && prober.confidence() < 0.99) {
+        prober.feed(file.read(0xFF));
+    }
+    
+    kDebug() << prober.encoding() << prober.confidence() << prober.state() << file.pos() << file.size();
+    
+    // reads file with detected encoding
+    file.seek(0);
+    QTextStream stream(&file);
+    stream.setCodec(prober.encodingName());
+    while( !stream.atEnd() )
     {
-        QByteArray data = file.readLine();
+        QString data = stream.readLine();
         
         // remove line terminators (in order to not match them)
         for(int pos = data.length()-1; pos >= 0 && (data[pos] == '\r' || data[pos] == '\n'); pos--)
@@ -62,7 +79,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
                 SimpleRange(lineno, start, lineno, end),
                 re.cap(0), re.cap(0).replace(re, repl)));
             
-            res << GrepOutputItem(change, QString(data), replace);
+            res << GrepOutputItem(change, data, replace);
             offset = end;
         }
         lineno++;
