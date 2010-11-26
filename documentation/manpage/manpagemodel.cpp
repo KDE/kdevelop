@@ -153,7 +153,7 @@ void ManPageModel::initSection(){
 void ManPageModel::sectionDataReceived(KJob *job){
     if (!job->error()){
         KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
-        this->sectionParser(iterator->peekNext().first, QString(stjob->data()));
+        this->sectionParser(iterator->peekNext().first, QString::fromUtf8(stjob->data()));
     } else {
         qDebug() << "ManPageModel transferJob error";
     }
@@ -173,11 +173,11 @@ void ManPageModel::sectionDataReceived(KJob *job){
 }
 
 void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){
-     m_manMainIndexBuffer.append(data);
+     m_manMainIndexBuffer.append(QString::fromUtf8(data));
 }
 
 void ManPageModel::readDataFromSectionIndex(KIO::Job * job, const QByteArray &data){
-     m_manSectionIndexBuffer.append(data);
+     m_manSectionIndexBuffer.append(QString::fromUtf8(data));
 }
 
 QList<ManSection> ManPageModel::indexParser(){

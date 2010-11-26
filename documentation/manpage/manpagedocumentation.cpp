@@ -45,7 +45,7 @@ ManPageDocumentation::ManPageDocumentation(ManPage page)
 }
 
 void ManPageDocumentation::readDataFromManPage(KIO::Job * job, const QByteArray &data){
-     m_manPageBuffer.append(data);
+    m_manPageBuffer.append(QString::fromUtf8(data));
 }
 
 QString ManPageDocumentation::getManPageContent()
