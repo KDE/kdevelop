@@ -187,8 +187,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
 
     // remove obsolete rows
     for ( int j = 0; j < baseItem->rowCount(); ++j ) {
-        if ( baseItem->child(j)->type() == ProjectBaseItem::Folder ) {
-            ProjectFolderItem* f = static_cast<ProjectFolderItem*>( baseItem->child(j) );
+        if ( ProjectFolderItem* f = baseItem->child(j)->folder() ) {
             // check if this is still a valid folder
             int index = folders.indexOf( f->url() );
             if ( index == -1 ) {
@@ -204,8 +203,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
                     job->addSubDir( f );
                 }
             }
-        } else if ( baseItem->child(j)->type() == ProjectBaseItem::File ) {
-            ProjectFileItem* f = static_cast<ProjectFileItem*>( baseItem->child(j) );
+        } else if ( ProjectFileItem* f =  baseItem->child(j)->file() ) {
             // check if this is still a valid file
             int index = files.indexOf( f->url() );
             if ( index == -1 ) {
