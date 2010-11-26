@@ -173,7 +173,6 @@ namespace CMakeParserUtils
         data->targets=v.targets();
         data->properties=v.properties();
         
-        qDebug() << "lelele" << file;
         printSubdirectories(data->subdirectories);
         
         data->vm.remove("CMAKE_CURRENT_LIST_FILE");
