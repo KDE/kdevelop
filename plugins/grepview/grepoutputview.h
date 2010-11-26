@@ -11,10 +11,6 @@
 #ifndef GREPOUTPUTVIEW_H
 #define GREPOUTPUTVIEW_H
 
-#include <qwidget.h>
-#include <qtreeview.h>
-#include <qaction.h>
-
 #include <interfaces/iuicontroller.h>
 
 #include "ui_grepoutputview.h"

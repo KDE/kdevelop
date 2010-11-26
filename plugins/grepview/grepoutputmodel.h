@@ -15,11 +15,12 @@
 #define GREPOUTPUTMODEL_H
 
 #include <QStandardItemModel>
-#include <QRegExp>
 #include <QList>
+
 #include <language/codegen/documentchangeset.h>
 
 class QModelIndex;
+class QRegExp;
 
 namespace KDevelop {
     class IStatus;

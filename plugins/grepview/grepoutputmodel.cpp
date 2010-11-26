@@ -13,11 +13,13 @@
 
 #include "grepoutputmodel.h"
 #include "grepviewplugin.h"
-#include <QModelIndex>
-#include <QTextDocument>
+
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
 #include <klocale.h>
+
+#include <QModelIndex>
+#include <QTextDocument>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 

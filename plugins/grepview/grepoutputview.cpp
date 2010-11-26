@@ -8,16 +8,13 @@
 *                                                                         *
 ***************************************************************************/
 
-#include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepoutputmodel.h"
 #include "grepoutputdelegate.h"
 #include "ui_grepoutputview.h"
-#include "grepdialog.h"
 #include "grepviewplugin.h"
 
 #include <QtGui/QAction>
-#include <QtGui/QTreeView>
 
 #include <interfaces/icore.h>
 

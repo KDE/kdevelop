@@ -29,8 +29,6 @@
 #include <QtGui/QTextCharFormat>
 #include <QtCore/QRegExp>
 
-#include <kdebug.h>
-
 GrepOutputDelegate* GrepOutputDelegate::m_self = 0;
 
 GrepOutputDelegate* GrepOutputDelegate::self()
