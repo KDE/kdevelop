@@ -126,7 +126,8 @@ bool QMakeProjectManager::isValid( const KUrl& url, const bool isFolder, IProjec
         return false;
     } else if (!isFolder && (name.startsWith("Makefile") || name.endsWith(".o")
                           || name.startsWith("moc_") || name.endsWith(".moc")
-                          || name.endsWith(".so") || name.contains(".so.")))
+                          || name.endsWith(".so") || name.contains(".so.")
+                          || name.startsWith(".swp.")))
     {
         return false;
     } else {
