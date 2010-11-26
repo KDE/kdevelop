@@ -114,7 +114,7 @@ void CodeAnalysisTest::testControlFlowCreation()
   QFETCH(QString, code);
   QFETCH(int, nodeCount);
   
-  LockedTopDUContext top = parse(code.toUtf8(), DumpAST);
+  LockedTopDUContext top = parse(code.toUtf8(), DumpNone);
   
   ControlFlowGraph* graph = &m_ctlflowGraph;
   
@@ -132,13 +132,17 @@ void CodeAnalysisTest::testControlFlowCreation_data()
   QTest::addColumn<QString>("code");
   QTest::addColumn<int>("nodeCount");
   
-  QTest::newRow("empty") << "void f() {}" << 1;
-  QTest::newRow("sequence") << "int f(int a) { return a+1; }" << 1;
-  QTest::newRow("conditional") << "int f(int a) { if(a) a+=1; return a+3; }" << 3;
-  QTest::newRow("conditional_else") << "int f(int a) { if(a) a+=1; else a-=1; return a+3; }" << 4;
-  QTest::newRow("different exits") << "int f(int a) { if(a) return a; else return b; }" << 3;
-  QTest::newRow("conditional_inlined") << "int f(int a) { a=a?a+1 : a-1; return a+3; }" << 4;
-  QTest::newRow("while") << "int f(int q) { while(q) {q--} return q; }" << 4;
-  QTest::newRow("for") << "int f(int a) { for(int i=0; i<a; i++) {i+=54;} return 0; }" << 5;
-  QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: case 2: break; case 3; break;} }" << 4;
+  QTest::newRow("empty") << "void f() {}" << 2;
+  QTest::newRow("sequence") << "int f(int a) { return a+1; }" << 2;
+  QTest::newRow("conditional") << "int f(int a) { if(a) a+=1; return a+3; }" << 4;
+  QTest::newRow("conditional_else") << "int f(int a) { if(a) a+=1; else a-=1; return a+3; }" << 5;
+  QTest::newRow("different exits") << "int f(int a) { if(a) return a; else return b; }" << 4;
+  QTest::newRow("conditional_inlined") << "int f(int a) { a=a?a+1 : a-1; return a+3; }" << 5;
+  QTest::newRow("while") << "int f(int q) { while(q) {q--} return q; }" << 5;
+  QTest::newRow("for") << "int f(int a) { for(int i=0; i<a; i++) {i+=54;} return 0; }" << 6;
+  QTest::newRow("switch") << "void f(int a) { switch(a) { case 1: case 2: break; case 3; break;} }" << 5;
+  QTest::newRow("do-while") << "void f(int a) { do {a--; } while(a); }" << 5;
+  
+  QTest::newRow("loopbreak") << "void f(int i) { while(i) { if(i>20) break; } i++; }" << 7;
+  QTest::newRow("loopconti") << "void f(int i) { while(i) { if(i>20) continue; } i++; }" << 7;
 }

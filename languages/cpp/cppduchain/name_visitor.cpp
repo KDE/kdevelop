@@ -146,7 +146,6 @@ void NameASTVisitor::visitUnqualifiedName(UnqualifiedNameAST *node)
         kDebug( 9007 ) << "failed to find " << m_currentIdentifier << " as part of " << decode( m_session, node ) << ", searched in " << m_find.describeLastContext();
     }
   }
-  qDebug() << "done with" << m_currentIdentifier.toString();
 
   _M_name.push(m_currentIdentifier);
   

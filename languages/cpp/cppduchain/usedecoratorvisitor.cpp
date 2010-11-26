@@ -65,7 +65,7 @@ void UseDecoratorVisitor::visitUnqualifiedName(UnqualifiedNameAST* node)
  
   DUContext* ctx = m_currentContext;
   IndexedString id = m_session->token_stream->token(node->id).symbol();
-  qDebug() << "found name" << id.str() << (type ? type->toString() : "no type") << ctx;
+//   qDebug() << "found name" << id.str() << (type ? type->toString() : "no type") << ctx;
   
   if(type && ctx) {
     LOCKDUCHAIN;
@@ -109,7 +109,7 @@ void UseDecoratorVisitor::visitBinaryExpression(BinaryExpressionAST* node)
   //we have two use cases here: the , parameter where we only want to advance in case we're in a function call argument list
   //or it's an operator expression and we want to visit the two sides of the expression.
   
-  qDebug() << "BinaryExpression" << m_session->token_stream->token(node->op).symbolString();
+//   qDebug() << "BinaryExpression" << m_session->token_stream->token(node->op).symbolString();
   
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
   FunctionType::Ptr optype = m_session->typeFromCallAst(node);
@@ -282,7 +282,7 @@ void visitNodesBackwards(Visitor *v, const ListNode<_Tp> *nodes)
 
 void UseDecoratorVisitor::visitPostfixExpression(PostfixExpressionAST* node)
 {
-  qDebug() << "visit: PostfixExpression" << nodeToString(m_session, node);
+//   qDebug() << "visit: PostfixExpression" << nodeToString(m_session, node);
   PushPositiveContext pushContext( m_currentContext, node->ducontext );
   PushValue<uint> v(m_defaultFlags, DataAccess::Read);
   
@@ -344,7 +344,7 @@ void UseDecoratorVisitor::visitInitDeclarator(InitDeclaratorAST* node)
 void UseDecoratorVisitor::visit##a(a##AST* node)\
 {\
     PushPositiveContext pushContext( m_currentContext, node->ducontext );\
-    qDebug() << "visit: " #a << nodeToString(m_session, node);\
+/*qDebug() << "visit: " #a << nodeToString(m_session, node);*/\
     DefaultVisitor::visit##a (node);\
 }
 
@@ -353,7 +353,7 @@ void UseDecoratorVisitor::visit##a(a##AST* node)\
 {\
   PushPositiveContext pushContext( m_currentContext, node->ducontext );\
   PushValue<uint> v(m_defaultFlags, b);\
-  qDebug() << "visit: " #a << nodeToString(m_session, node);\
+/*   qDebug() << "visit: " #a << nodeToString(m_session, node);*/\
   static AbstractType::Ptr ntype(new DelayedType);\
   \
   m_callStack.push(QList< AbstractType::Ptr >() << ntype);\

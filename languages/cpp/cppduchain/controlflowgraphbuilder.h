@@ -42,6 +42,10 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     virtual void visitWhileStatement(WhileStatementAST* node);
     virtual void visitForStatement(ForStatementAST* node);
     virtual void visitConditionalExpression(ConditionalExpressionAST* node);
+    virtual void visitDoStatement(DoStatementAST* node);
+    
+    virtual void visitReturnStatement(ReturnStatementAST* node);
+    virtual void visitJumpStatement(JumpStatementAST* node);
     
   private:
     KDevelop::ControlFlowNode* createCompoundStatement(AST* node, KDevelop::ControlFlowNode* next);
@@ -50,6 +54,10 @@ class KDEVCPPDUCHAIN_EXPORT ControlFlowGraphBuilder : public DefaultVisitor
     ParseSession* m_session;
     KDevelop::ControlFlowGraph* m_graph;
     KDevelop::ControlFlowNode* m_currentNode;
+    
+    KDevelop::ControlFlowNode* m_returnNode;
+    KDevelop::ControlFlowNode* m_breakNode;
+    KDevelop::ControlFlowNode* m_continueNode;
 };
 
 #endif // CONTROLFLOWGRAPHBUILDER_H

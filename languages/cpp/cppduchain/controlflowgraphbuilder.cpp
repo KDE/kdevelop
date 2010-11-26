@@ -21,6 +21,8 @@
 #include "flowgraph.h"
 #include <parsesession.h>
 #include <lexer.h>
+#include <tokens.h>
+#include <util/pushvalue.h>
 
 using namespace KDevelop;
 
@@ -28,6 +30,9 @@ ControlFlowGraphBuilder::ControlFlowGraphBuilder(ParseSession* session, ControlF
   : m_session(session)
   , m_graph(graph)
   , m_currentNode(0)
+  , m_returnNode(0)
+  , m_breakNode(0)
+  , m_continueNode(0)
 {}
 
 void ControlFlowGraphBuilder::run(AST* node)
@@ -50,15 +55,18 @@ ControlFlowNode* ControlFlowGraphBuilder::createCompoundStatement(AST* node, Con
   startNode->setStartCursor(startcursor);
   m_currentNode = startNode;
   visit(node);
-  CursorInRevision endcursor = cursorForToken(node->end_token);
-  m_currentNode->setEndCursor(endcursor);
-  m_currentNode->m_next = next;
+  
+  if(!m_currentNode->m_next) {
+    m_currentNode->m_next = next;
+    m_currentNode->setEndCursor(cursorForToken(node->end_token));
+  }
   return startNode;
 }
 
 void ControlFlowGraphBuilder::visitFunctionDefinition(FunctionDefinitionAST* node)
 {
-  m_graph->addEntry(createCompoundStatement(node->function_body, 0));
+  m_returnNode = new ControlFlowNode;
+  m_graph->addEntry(createCompoundStatement(node->function_body, m_returnNode));
   m_currentNode=0;
 }
 
@@ -72,10 +80,7 @@ void ControlFlowGraphBuilder::visitIfStatement(IfStatementAST* node)
   ControlFlowNode* nextNode = new ControlFlowNode;
   
   previous->m_next = createCompoundStatement(node->statement, nextNode);
-  if(node->else_statement)
-    previous->m_alternative = createCompoundStatement(node->else_statement, nextNode);
-  else
-    previous->m_alternative = nextNode;
+  previous->m_alternative = node->else_statement ? createCompoundStatement(node->else_statement, nextNode) : nextNode;
   
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
@@ -87,12 +92,14 @@ void ControlFlowGraphBuilder::visitWhileStatement(WhileStatementAST* node)
   m_currentNode->setEndCursor(cursorForToken(node->start_token));
   ControlFlowNode* previous = m_currentNode;
   
-  ControlFlowNode* conditionNode = createCompoundStatement(node->condition, 0);
-  ControlFlowNode* bodyNode = createCompoundStatement(node->statement, 0);
   ControlFlowNode* nextNode = new ControlFlowNode;
+  ControlFlowNode* conditionNode = createCompoundStatement(node->condition, 0);
+  
+  PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
+  PushValue<ControlFlowNode*> pushContinue(m_continueNode, conditionNode);
+  ControlFlowNode* bodyNode = createCompoundStatement(node->statement, conditionNode);
   
   previous->m_next = conditionNode;
-  bodyNode->m_next = conditionNode;
   conditionNode->m_next =bodyNode;
   conditionNode->m_alternative = nextNode;
   
@@ -109,6 +116,9 @@ void ControlFlowGraphBuilder::visitForStatement(ForStatementAST* node)
   ControlFlowNode* nextNode = new ControlFlowNode;
   ControlFlowNode* conditionNode = createCompoundStatement(node->condition, 0);
   ControlFlowNode* incNode = createCompoundStatement(node->expression, conditionNode);
+  
+  PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
+  PushValue<ControlFlowNode*> pushContinue(m_continueNode, incNode);
   ControlFlowNode* bodyNode = createCompoundStatement(node->statement, incNode);
   
   conditionNode->m_next = bodyNode;
@@ -134,5 +144,48 @@ void ControlFlowGraphBuilder::visitConditionalExpression(ConditionalExpressionAS
   
   nextNode->setStartCursor(cursorForToken(node->end_token));
   m_currentNode = nextNode;
+}
+
+void ControlFlowGraphBuilder::visitDoStatement(DoStatementAST* node)
+{
+  m_currentNode->setEndCursor(cursorForToken(node->end_token));
+  ControlFlowNode* previous = m_currentNode;
+  
+  ControlFlowNode* nextNode = new ControlFlowNode;
+  ControlFlowNode* condNode = createCompoundStatement(node->expression, nextNode);
+  
+  PushValue<ControlFlowNode*> pushBreak(m_breakNode, nextNode);
+  PushValue<ControlFlowNode*> pushContinue(m_continueNode, condNode);
+  ControlFlowNode* bodyNode = createCompoundStatement(node->statement, condNode);
+  
+  previous->m_next = bodyNode;
+  condNode->m_alternative = bodyNode;
+  
+  nextNode->setStartCursor(cursorForToken(node->end_token));
+  m_currentNode = nextNode;
+}
+
+void ControlFlowGraphBuilder::visitReturnStatement(ReturnStatementAST* node)
+{
+  DefaultVisitor::visitReturnStatement(node);
+  m_currentNode->setEndCursor(cursorForToken(node->end_token));
+  m_currentNode->m_next = m_returnNode;
+}
+
+void ControlFlowGraphBuilder::visitJumpStatement(JumpStatementAST* node)
+{
+  m_currentNode->setEndCursor(cursorForToken(node->end_token));
+  switch(node->op) {
+    case Token_continue:
+//       if(!m_continueNode) addproblem(!!!);
+      m_currentNode->m_next = m_continueNode;
+      break;
+    case Token_break:
+//       if(!m_breakNode) addproblem(!!!);
+      m_currentNode->m_next = m_breakNode;
+      break;
+    case Token_goto:
+      break;
+  }
 }
 
