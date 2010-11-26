@@ -39,6 +39,7 @@
 #include "icmakemanager.h"
 #include "cmakeprojectvisitor.h"
 
+struct CMakeProjectData;
 class QStandardItem;
 class QDir;
 class QObject;
@@ -134,7 +135,7 @@ private:
     QMutex m_busyProjectsMutex;
     KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
     
-    KDevelop::ReferencedTopDUContext includeScript(const QString& File, KDevelop::IProject * project,
+    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);
     
     static void setTargetFiles(KDevelop::ProjectTargetItem* target, const KUrl::List& files);
@@ -146,10 +147,8 @@ private:
     QList<KDevelop::TargetFilePair> getTargetFilesWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
 
     QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
-    QMap<KDevelop::IProject*, VariableMap> m_varsPerProject;
-    QMap<KDevelop::IProject*, MacroMap> m_macrosPerProject;
+    QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
-    QMap<KDevelop::IProject*, CacheValues> m_projectCache;
     QMap<KUrl, CMakeFolderItem*> m_pending;
     
     QSet<KDevelop::ProjectFolderItem*> m_busyProjects;

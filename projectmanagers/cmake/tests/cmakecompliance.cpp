@@ -30,6 +30,7 @@
 #include <cmakeparserutils.h>
 #include <language/duchain/duchain.h>
 #include <tests/autotestshell.h>
+#include <cmakeprojectdata.h>
 
 using namespace KDevelop;
 
@@ -95,29 +96,29 @@ CMakeProjectVisitor CMakeCompliance::parseFile( const QString& sourcefile )
     CMakeFileContent code=CMakeListsParser::readCMakeFile(projectfile);
 
     static QPair<VariableMap,QStringList> initials = CMakeParserUtils::initialVariables();
-    MacroMap mm;
-    VariableMap vm = initials.first;
-    CacheValues cv;
+    CMakeProjectData data;
+    data.vm = initials.first;
     QString sourcedir=sourcefile.left(sourcefile.lastIndexOf('/'));
-    vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
+    data.vm.insert("CMAKE_SOURCE_DIR", QStringList(sourcedir));
     
     KDevelop::ReferencedTopDUContext buildstrapContext=new TopDUContext(IndexedString("buildstrap"), RangeInRevision(0,0, 0,0));
     DUChain::self()->addDocumentChain(buildstrapContext);
     ReferencedTopDUContext ref=buildstrapContext;
-    QStringList modulesPath = vm["CMAKE_MODULE_PATH"];
+    QStringList modulesPath = data.vm["CMAKE_MODULE_PATH"];
+    
     foreach(const QString& script, initials.second)
     {
-        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &vm, &mm, sourcedir, &cv, modulesPath );
+        ref = CMakeParserUtils::includeScript(CMakeProjectVisitor::findFile(script, modulesPath, QStringList()), ref, &data, sourcedir, modulesPath );
     }
     
-    vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));
-    vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(projectfile));
-    vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
+    data.vm.insert("CMAKE_CURRENT_BINARY_DIR", QStringList(sourcedir));
+    data.vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(projectfile));
+    data.vm.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList(sourcedir));
 
     CMakeProjectVisitor v(projectfile, ref);
-    v.setVariableMap(&vm);
-    v.setMacroMap(&mm);
-    v.setCacheValues(&cv);
+    v.setVariableMap(&data.vm);
+    v.setMacroMap(&data.mm);
+    v.setCacheValues(&data.cache);
     v.setModulePath(modulesPath);
     output.clear();
     v.walk(code, 0);
