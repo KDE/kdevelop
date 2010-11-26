@@ -34,7 +34,7 @@
 using namespace Cpp;
 using namespace KDevelop;
 
-const bool allowADL = false;
+const bool allowADL = true;
 
 // uncomment to get debugging info on ADL - very expensive on parsing
 // #define DEBUG_ADL
