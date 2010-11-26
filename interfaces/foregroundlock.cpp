@@ -25,7 +25,7 @@
 using namespace KDevelop;
 
 namespace {
-QMutex mutex(QMutex::Recursive);
+QMutex internalMutex;
 QMutex tryLockMutex;
 QMutex waitMutex;
 QMutex finishMutex;
@@ -35,24 +35,34 @@ volatile QThread* holderThread = 0;
 volatile int recursion = 0;
 
 void lockForegroundMutexInternal() {
-    mutex.lock();
-    if(recursion > 0)
-        Q_ASSERT(holderThread == QThread::currentThread());
-    else
-        Q_ASSERT(holderThread == 0);
-    holderThread = QThread::currentThread();
-    recursion += 1;
+    if(holderThread == QThread::currentThread())
+    {
+        // We already have the mutex
+        ++recursion;
+    }else{
+        internalMutex.lock();
+        Q_ASSERT(recursion == 0 && holderThread == 0);
+        holderThread = QThread::currentThread();
+        recursion = 1;
+    }
 }
 
 bool tryLockForegroundMutexInternal(int interval = 0) {
-    if(mutex.tryLock(interval))
+    if(holderThread == QThread::currentThread())
     {
-        lockForegroundMutexInternal();
-        Q_ASSERT(holderThread == QThread::currentThread());
-        mutex.unlock(); // We've acquired one lock more than required, so unlock again
+        // We already have the mutex
+        ++recursion;
         return true;
     }else{
-        return false;
+        if(internalMutex.tryLock(interval))
+        {
+            Q_ASSERT(recursion == 0 && holderThread == 0);
+            holderThread = QThread::currentThread();
+            recursion = 1;
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 
@@ -61,8 +71,10 @@ void unlockForegroundMutexInternal() {
     Q_ASSERT(recursion > 0);
     recursion -= 1;
     if(recursion == 0)
+    {
         holderThread = 0;
-    mutex.unlock();
+        internalMutex.unlock();
+    }
 }
 }
 
