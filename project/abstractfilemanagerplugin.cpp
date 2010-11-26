@@ -303,7 +303,7 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const KUr
         }
     }
     foreach ( ProjectFolderItem* parent, item->project()->foldersForUrl(destination.upUrl()) ) {
-        if ( parent->type() == ProjectBaseItem::Folder ) {
+        if ( parent->folder() ) {
             stopWatcher(parent);
             const KUrl source = item->url();
             bool success = renameUrl( item->project(), source, destination );
