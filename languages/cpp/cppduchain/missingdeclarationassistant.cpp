@@ -210,6 +210,7 @@ class CreateMemberDeclarationAction : public IAssistantAction {
         }
         
         AbstractType::Ptr type(AbstractType::Ptr base) const {
+          DUChainReadLocker lock;
           AbstractType::Ptr ret = TypeUtils::realTypeKeepAliases(TypeUtils::removeConstants(base, problem->topContext()))->indexed().abstractType();
           if(ret)
             ret->setModifiers(ret->modifiers() & (~AbstractType::ConstModifier)); //Remove "const" modifier

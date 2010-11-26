@@ -279,7 +279,7 @@ AbstractType::Ptr increasePointerDepth(AbstractType::Ptr type) {
 }
 
 AbstractType::Ptr removeConstants(AbstractType::Ptr type, const TopDUContext* source) {
-  
+    ENSURE_CHAIN_READ_LOCKED
     if(TypePtr< EnumeratorType > enumerator = type.cast<EnumeratorType>())
     {
       Declaration* decl = enumerator->declaration(source);
