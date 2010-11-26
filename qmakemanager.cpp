@@ -346,6 +346,13 @@ void QMakeProjectManager::slotDirty(const QString& path)
                 }
             }
             return;
+        } else if (ProjectFolderItem* newFolder = buildFolderItem(project, folder->url(), folder->parent())) {
+            kDebug() << "changing from normal folder to qmake project folder:" << folder->url();
+            // .pro / .pri file did not exist before
+            while(folder->rowCount()) {
+                newFolder->appendRow(folder->takeRow(0));
+            }
+            folder->parent()->removeRow(folder->row());
         }
     }
 }
