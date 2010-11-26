@@ -88,7 +88,7 @@ bool ADLTypeVisitor::visit(const FunctionType * type)
     return !seen(type);
 }
 
-void ADLTypeVisitor::endVisit(const FunctionType * type)
+void ADLTypeVisitor::endVisit(const FunctionType * /*type*/)
 {
     // return type and argument types are handled by FunctionType::accept0
 
@@ -114,23 +114,19 @@ void ADLTypeVisitor::endVisit(const FunctionType * type)
         // note that calling addDeclarationScopeIdentifier does not work because for some reason
         // for function names DUContext::scopeIdentifier returns the function name instead of the
         // name of the function's scope
-        QualifiedIdentifier identifier = declaration->qualifiedIdentifier();
-        while (identifier.count() > 1) {
-            identifier.pop(); // last identifier would never be a namespace in correct code
-            QList<Declaration*> decls = m_helper.m_context->findDeclarations(identifier , CursorInRevision::invalid(), AbstractType::Ptr(), m_helper.m_topContext.data());
-            foreach(Declaration * decl, decls)
+        DUContext* context = declaration->context();
+        while (context) {
+            Declaration* decl = context->owner();
+            
+            if (context->type() == DUContext::Namespace)
             {
-                if (decl->kind() == Declaration::Namespace)
-                {
-                    m_helper.addAssociatedNamespace(decl);
-                    identifier = QualifiedIdentifier(); // also break from the while
-                    break;
-                } else if (dynamic_cast<ClassDeclaration*>(decl)) {
-                    m_helper.addAssociatedClass(decl);
-                    identifier = QualifiedIdentifier(); // also break from the while
-                    break;
-                }
+                m_helper.addAssociatedNamespace(decl->qualifiedIdentifier());
+                break;
+            } else if (context->type() == DUContext::Class) {
+                m_helper.addAssociatedClass(decl);
+                break;
             }
+            context = context->parentContext();
         }
     }
 }
@@ -159,15 +155,12 @@ void ADLTypeVisitor::endVisit(const ArrayType *)
 
 bool ADLTypeVisitor::seen(const KDevelop::AbstractType* type)
 {
-    if (m_seen.contains(type))
+    if (m_helper.m_alreadyProcessed.contains(type))
         return true;
 
-    m_seen.insert(type);
+    m_helper.m_alreadyProcessed.insert(type);
     return false;
 }
-
-
-
 
 ADLHelper::ADLHelper(DUContextPointer context, TopDUContextPointer topContext)
         : m_context(context), m_topContext(topContext),
@@ -185,6 +178,9 @@ void ADLHelper::addArgument(const OverloadResolver::Parameter & argument)
 
 void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
 {
+    if(m_alreadyProcessed.contains(typePtr.unsafeData()))
+      return;
+    
     if (typePtr)
     {
 #ifdef DEBUG_ADL
@@ -226,9 +222,11 @@ void ADLHelper::addArgumentType(const AbstractType::Ptr typePtr)
             typePtr->accept(&m_typeVisitor);
         }
     }
+    
+    m_alreadyProcessed.insert(typePtr.unsafeData());
 }
 
-QSet< Declaration* > ADLHelper::associatedNamespaces() const
+QSet< QualifiedIdentifier > ADLHelper::associatedNamespaces() const
 {
     return m_associatedNamespaces;
 }
@@ -243,9 +241,12 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
     if (declaration->isTypeAlias())
         return;
 
-    QList<Declaration*> associatedClasses;
-    associatedClasses << declaration;
-
+    if(m_alreadyProcessed.contains(declaration))
+      return;
+    
+    m_alreadyProcessed.insert(declaration);
+    
+    addDeclarationScopeIdentifier(declaration);
 
     /*
     Here comes the standard on template ADL, along with my interpretation:
@@ -277,13 +278,11 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
     bool isTemplateClassArg = (m_templateArgsDepth > 0 && !templateDecl);
     bool isTemplateTemplateArg = (templateDecl ? (templateDecl->instantiatedFrom() == NULL) : false);
     if (isFunctionArg || (isTemplateClassArg && !isTemplateTemplateArg))
-    {
-        QList<Declaration*> baseClasses = computeAllBaseClasses(declaration);
-        associatedClasses << baseClasses;
-    }
+        addBaseClasses(declaration);
 
     if (templateDecl && !isTemplateTemplateArg)
     {
+        ///@todo Probably the parent has to be considered too (see previousInstantiationInformation), ouch
         m_templateArgsDepth++;
         const InstantiationInformation& instantiationInfo = templateDecl->instantiatedWith().information();
         for (unsigned int i = 0, n = instantiationInfo.templateParametersSize(); i < n; ++i)
@@ -293,76 +292,35 @@ void ADLHelper::addAssociatedClass(Declaration * declaration)
         }
         m_templateArgsDepth--;
     }
-
-    // no need to search for container classes, since scopeIdentifier() below skips them anyway
-
-    foreach(Declaration * decl, associatedClasses)
-    {
-        addDeclarationScopeIdentifier(decl);
-    }
 }
 
 void ADLHelper::addDeclarationScopeIdentifier(Declaration * decl)
 {
-    if (decl)
-    {
-        DUContext* declContext = decl->logicalInternalContext(m_topContext.data());
-        if (declContext)
-            addAssociatedNamespace(declContext->scopeIdentifier(false));
-    }
+    if(decl)
+        addAssociatedNamespace(decl->context()->scopeIdentifier(false));
 }
 
-void ADLHelper::addAssociatedNamespace(const QualifiedIdentifier & identifier)
+void ADLHelper::addAssociatedNamespace(const KDevelop::QualifiedIdentifier& identifier)
 {
-    QList<Declaration*> decls = m_context->findDeclarations(identifier , CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data());
-    foreach(Declaration * decl, decls)
-    {
-        addAssociatedNamespace(decl);
-    }
-}
-
-void ADLHelper::addAssociatedNamespace(Declaration * declaration)
-{
-    if (!declaration)
-        return;
-
-    if (declaration->kind() == Declaration::Namespace)
-    {
 #ifdef DEBUG_ADL
-        kDebug() << "    adding namespace " << declaration->toString();
+        kDebug() << "    adding namespace " << identifier.identifier().toString();
 #endif
-        m_associatedNamespaces += declaration;
-    }
+    if(identifier.count())
+      m_associatedNamespaces.insert(identifier);
 }
 
-QList<Declaration *> ADLHelper::computeAllBaseClasses(Declaration* declaration)
+void ADLHelper::addBaseClasses(Declaration* declaration)
 {
-    QList<Declaration *> baseClasses;
-
-    if (declaration)
+    ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration*>(declaration);
+    if (classDecl)
     {
-        baseClasses << declaration;
-
-        ClassDeclaration * classDecl = dynamic_cast<ClassDeclaration*>(declaration);
-        if (classDecl)
+        int nBaseClassesCount = classDecl->baseClassesSize();
+        for (int i = 0; i < nBaseClassesCount; ++i)
         {
-            int nBaseClassesCount = classDecl->baseClassesSize();
-            for (int i = 0; i < nBaseClassesCount; ++i)
-            {
-                const BaseClassInstance baseClass = classDecl->baseClasses()[i];
-                AbstractType::Ptr type = baseClass.baseClass.abstractType();
-                if (type)
-                {
-                    StructureType::Ptr structType = type.cast<StructureType>();
-                    if (structType)
-                    {
-                        Declaration * decl = structType->declaration(m_topContext.data());
-                        baseClasses << computeAllBaseClasses(decl);
-                    }
-                }
-            }
+            const BaseClassInstance baseClass = classDecl->baseClasses()[i];
+            StructureType::Ptr type = baseClass.baseClass.type<StructureType>();
+            if (type)
+                addAssociatedClass(type->declaration(m_topContext.data()));
         }
     }
-
-    return baseClasses;
 }

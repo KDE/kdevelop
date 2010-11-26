@@ -138,7 +138,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @param noUserDefinedConversion should be true if user-defined conversions(conversion-operators and constructor-conversion) are not allowed when matching the parameters
      * @param doADL should be true if one needs to try the ADL lookup as well
      * */
-    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false, bool doADL = true);
+    Declaration* resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion = false );
 
     /**
      * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
@@ -154,6 +154,20 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * */
     QList< ViableFunction > resolveListOffsetted( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial );
 
+    /**
+     * Matches the given functions with the given parameters. Only does partial matching, by considering only those parameters that were
+     * actually given, if @param partial is given.
+     *
+     * The main difference of this call to resolveList(..) is that it for each given declaration, it allows a list of parameters that are prepended.
+     *
+     * (this is more efficient than resolveListOffsetted)
+     *
+     * @warning du-chain must be locked
+     *
+     * @return only the most viable function
+     * */
+    ViableFunction resolveListViable( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial = false );
+    
     /**
      * This extracts the template-parameters. It does not do any actual checking whether non-template types are equal or match each other.
      * @param argumentType The type actually given
@@ -172,7 +186,7 @@ class KDEVCPPDUCHAIN_EXPORT OverloadResolver {
      * @param declarations List of function call declarations
      * @return List of function declarations available for overload resolution with ADL
      */
-    QList<Declaration *> computeADLCandidates( const ParameterList& params, const QList<Declaration*>& declarations );
+    QList<Declaration *> computeADLCandidates( const ParameterList& params, const QualifiedIdentifier& identifier );
     
   private:
     ///Replace class-instances with operator() functions, and pure classes with their constructors

@@ -212,7 +212,7 @@ bool ExpressionVisitor::isLValue( const AbstractType::Ptr& type, const Instance&
   return instance && (instance.declaration || isReferenceType(type));
 }
 
-ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_source(source), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0), m_reportRealProblems(false) {
+ExpressionVisitor::ExpressionVisitor(ParseSession* session, const KDevelop::TopDUContext* source, bool strict) : m_strict(strict), m_memberAccess(false), m_skipLastNamePart(false), m_hadMemberAccess(false), m_source(source), m_ignore_uses(0), m_session(session), m_currentContext(0), m_topContext(0), m_reportRealProblems(false) {
 }
 
 ExpressionVisitor::~ExpressionVisitor() {
@@ -271,8 +271,6 @@ ExpressionVisitor::Instance ExpressionVisitor::lastInstance() {
 
 /** Find the member in the declaration's du-chain. **/
 void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Identifier& member, bool isConst, bool postProblem ) {
-
-    ///have test
 
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
@@ -458,6 +456,8 @@ void ExpressionVisitor::findMember( AST* node, AbstractType::Ptr base, const Ide
     PushPositiveContext pushContext( m_currentContext, node->ducontext );
 
     DUContext* searchInContext = m_currentContext;
+
+    m_hadMemberAccess = m_memberAccess;
     
     CursorInRevision position = m_session->positionAt( m_session->token_stream->position(node->start_token) );
     if( m_currentContext->url() != m_session->m_url ) //.equals( m_session->m_url, KUrl::CompareWithoutTrailingSlash ) )
@@ -1031,20 +1031,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolutionHelper helper(ptr, TopDUContextPointer(topContext()) );
-        helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() ), op );
+        helper.setFunctionNameForADL(QualifiedIdentifier("operator" + op));
+        helper.setOperator( OverloadResolver::Parameter(leftType, isLValue( leftType, leftInstance ), leftInstance.declaration.data() ) );
         helper.setKnownParameters( OverloadResolver::ParameterList( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) ) );
-        QList<OverloadResolutionFunction> functions = helper.resolve(false);
+        ViableFunction viable = helper.resolve();
 
-        if( !functions.isEmpty() )
+        if( viable.isValid() )
         {
-          KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
-          if( functions.first().function.isViable() && function ) {
+          KDevelop::FunctionType::Ptr function = viable.declaration()->type<KDevelop::FunctionType>();
+          if( viable.isViable() && function ) {
             success = true;
             m_lastType = function->returnType();
-            m_lastInstance = Instance(functions.first().function.declaration());
+            m_lastInstance = Instance(viable.declaration());
 
             lock.unlock();
-            newUse( node, node->op, node->op+1, functions.first().function.declaration() );
+            newUse( node, node->op, node->op+1, viable.declaration() );
           }else{
             //Do not complain here, because we do not check for builtin operators
             //problem(node, "No fitting operator. found" );
@@ -1187,7 +1188,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
         if( !fail )
-          chosenFunction = resolver.resolveList(m_parameters, convert(declarations), false, false); // no ADL for class constructors
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
         else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
@@ -1421,7 +1422,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
 
         if( !fail )
-          chosenFunction = resolver.resolveList(m_parameters, convert(declarations), false, false); // no ADL for class constructors
+          chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
         else if(!declarations.isEmpty() && !m_strict)
           chosenFunction = declarations.first();
       }
@@ -1628,20 +1629,21 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           LOCKDUCHAIN;
           KDevelop::DUContextPointer ptr(m_currentContext);
           OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-          helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ), op );
+          helper.setFunctionNameForADL( QualifiedIdentifier("operator" + op) );
+          helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
 
           //helper.setKnownParameters( OverloadResolver::Parameter(rightType, isLValue( rightType, rightInstance ), rightInstance.declaration.data() ) );
-          QList<OverloadResolutionFunction> functions = helper.resolve(false);
+          ViableFunction viable = helper.resolve();
 
-          if( !functions.isEmpty() )
+          if( viable.isValid() )
           {
-            KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
-            if( functions.first().function.isViable() && function ) {
+            KDevelop::FunctionType::Ptr function = viable.declaration()->type<KDevelop::FunctionType>();
+            if( viable.isViable() && function ) {
               m_lastType = function->returnType();
               m_lastInstance = Instance(true);
 
               lock.unlock();
-              newUse( node, node->op, node->op+1, functions.first().function.declaration() );
+              newUse( node, node->op, node->op+1, viable.declaration() );
             }else{
               problem(node, QString("Found no viable function"));
             }
@@ -1856,72 +1858,55 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     DeclarationPointer chosenFunction;
     KDevelop::DUContextPointer ptr(m_currentContext);
-    OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldInstance );
+    OverloadResolutionHelper helper( ptr, KDevelop::TopDUContextPointer(topContext()) );
 
+    MissingDeclarationType::Ptr missing;
+    
     if( declarations.isEmpty()) {
-      if (!constructedType ) {
-        MissingDeclarationType::Ptr missing = oldLastType.cast<Cpp::MissingDeclarationType>();
-        if (missing) {
-          // try an ADL lookup
-          if (!fail) {
-            QualifiedIdentifier identifier = missing->identifier().identifier().identifier(); // wheee :)
-#ifdef DEBUG_ADL
-            kDebug() << "running ADL-enabled overload resolution";
-#endif // DEBUG_ADL
-            chosenFunction = resolver.resolve(m_parameters, identifier);
-          }
-          missing->arguments = m_parameters;
-          missing->isFunction = true;
+      missing = oldLastType.cast<Cpp::MissingDeclarationType>();
+      if (missing) {
+        // Eventually use ADL lookup to find the missing declaration
+        if (!fail && !missing->containerContext.isValid()) {
+          helper.setFunctionNameForADL(missing->identifier().identifier().identifier());
         }
-
-        if (!chosenFunction) {
-          // nothing found even through ADL
-          m_lastType = oldLastType;
-          problem( node, "function-call: no matching declarations found" );
-          return;
-        } else {
-          // code below assumes !declarations.empty()
-          declarations << chosenFunction;
-
-          // if visitName was eager to add a MissingDeclaratonProblem; remove it
-          if (missing) {
-//            m_problems.removeLast();
-            foreach(KSharedPtr<KDevelop::Problem> prob, m_problems) {
-              MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
-              if (pMissing && pMissing->type &&
-                pMissing->type->identifier() == missing->identifier()) {
-                m_problems.removeOne(prob);
-                break;
-              }
-            }
-          }
-        }
-      } else {
-        //Default-constructor is used
-        m_lastType = AbstractType::Ptr(constructedType.unsafeData());
-        DeclarationPointer decl(constructedType->declaration(topContext()));
-        m_lastInstance = Instance(decl.data());
-        m_lastDeclarations.clear();
-//         m_lastDeclarations << decl;
-        lock.unlock();
-        if(oldCurrentUse.isValid) {
-          newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
-        }
-        flushUse();
-        m_parameterNodes = oldParameterNodes;
-        m_parameters = oldParams;
-        return;
+        missing->arguments = m_parameters;
+        missing->isFunction = true;
       }
+    }else{
+      // Eventually use ADL
+      if(!m_hadMemberAccess)
+        helper.setFunctionNameForADL(QualifiedIdentifier(declarations.first()->identifier()));
     }
+    
+    ViableFunction viable;
 
     //Resolve functions normally
-    if( !fail && !chosenFunction ) {
-#ifdef DEBUG_ADL
-      kDebug() << "running ADL-enabled overload resolution";
-#endif // DEBUG_ADL
-      chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
+    if( !fail && !chosenFunction )
+    {
+      helper.setFunctions(convert(declarations));
+      helper.setKnownParameters(m_parameters);
+      viable = helper.resolve( !(bool)constructedType );
+      if(viable.isValid())
+        chosenFunction = viable.declaration();
     }
-
+    
+    if( !chosenFunction && constructedType )
+    {
+      //Default-constructor is used
+      m_lastType = AbstractType::Ptr(constructedType.unsafeData());
+      DeclarationPointer decl(constructedType->declaration(topContext()));
+      m_lastInstance = Instance(decl.data());
+      m_lastDeclarations.clear();
+      lock.unlock();
+      if(oldCurrentUse.isValid) {
+        newUse( oldCurrentUse.node, oldCurrentUse.start_token, oldCurrentUse.end_token, decl );
+      }
+      flushUse();
+      m_parameterNodes = oldParameterNodes;
+      m_parameters = oldParams;
+      return;
+    }
+    
     if( !chosenFunction && !m_strict ) {
       //Because we do not want to rely too much on our understanding of the code, we take the first function instead of totally failing.
 #ifdef DEBUG_FUNCTION_CALLS
@@ -1945,11 +1930,26 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       fail = true;
     }
 
-    if( fail ) {
+    if( fail && !declarations.isEmpty() && !chosenFunction ) {
       //Since not all parameters could be evaluated, Choose the first function
       chosenFunction = declarations.front();
     }
-
+    
+    if(missing && viable.isValid())
+    {
+      // Remove the MissingDeclarationProblem which has been created alongside MissingDeclarationType
+      for(int idx = m_problems.size()-1; idx >= 0; --idx)
+      {
+        KSharedPtr<KDevelop::Problem>& prob(m_problems[idx]);
+        MissingDeclarationProblem * pMissing = dynamic_cast<MissingDeclarationProblem*>(prob.data());
+        if (pMissing && pMissing->type == missing )
+        {
+          m_problems.removeAt(idx);
+          break;
+        }
+      }
+    }
+    
     clearLast();
 
     if( constructedType ) {
@@ -1966,6 +1966,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
       }
     } else {
       problem( node, QString( "could not find a matching function for function-call" ) );
+      if(missing)
+        m_lastType = missing.cast<AbstractType>(); // Forward the MissingType, as it will be used for assistants.
     }
 
     static IndexedString functionCallOperatorIdentifier("operator()");
@@ -2111,14 +2113,15 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
     KDevelop::DUContextPointer ptr(m_currentContext);
     OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-    helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ), "[]" );
+    helper.setFunctionNameForADL( QualifiedIdentifier("operator[]") );
+    helper.setOperator( OverloadResolver::Parameter(masterType, isLValue( masterType, masterInstance ), masterInstance.declaration.data() ) );
 
     helper.setKnownParameters( OverloadResolver::Parameter( m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
-    QList<OverloadResolutionFunction> functions = helper.resolve(false);
+    ViableFunction viable = helper.resolve();
 
-    if( !functions.isEmpty() )
+    if( viable.isValid() )
     {
-      KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
+      KDevelop::FunctionType::Ptr function = viable.declaration()->type<KDevelop::FunctionType>();
 
       if( function ) {
         m_lastType = function->returnType();
@@ -2128,8 +2131,8 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         problem(node, QString("Found no subscript-function"));
       }
 
-      if( !functions.first().function.isViable() ) {
-        problem(node, QString("Found no viable subscript-function, chosen function: %1").arg(functions.first().function.declaration() ? functions.first().function.declaration()->toString() : QString()));
+      if( !viable.isViable() ) {
+        problem(node, QString("Found no viable subscript-function, chosen function: %1").arg(viable.declaration() ? viable.declaration()->toString() : QString()));
       }
 
     }else{
@@ -2206,18 +2209,19 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
         LOCKDUCHAIN;
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolutionHelper helper( ptr, TopDUContextPointer(topContext()) );
-        helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ), op );
+        helper.setFunctionNameForADL( QualifiedIdentifier("operator" + op) );
+        helper.setOperator( OverloadResolver::Parameter(m_lastType, isLValue( m_lastType, m_lastInstance ), m_lastInstance.declaration.data() ) );
 
         //Overloaded postfix operators have one additional int parameter
         static AbstractType::Ptr integer = AbstractType::Ptr(new ConstantIntegralType(IntegralType::TypeInt));
         helper.setKnownParameters( OverloadResolver::Parameter( integer, false ) );
 
-        QList<OverloadResolutionFunction> functions = helper.resolve(false);
+        ViableFunction viable = helper.resolve();
 
-        if( !functions.isEmpty() )
+        if( viable.isValid() )
         {
-          KDevelop::FunctionType::Ptr function = functions.first().function.declaration()->type<KDevelop::FunctionType>();
-          if( functions.first().function.isViable() && function ) {
+          KDevelop::FunctionType::Ptr function = viable.declaration()->type<KDevelop::FunctionType>();
+          if( viable.isViable() && function ) {
             m_lastType = function->returnType();
             m_lastInstance = Instance(true);
           }else{
@@ -2225,7 +2229,7 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
           }
 
           lock.unlock();
-          newUse( node, node->op, node->op+1, functions.first().function.declaration() );
+          newUse( node, node->op, node->op+1, viable.declaration() );
         }else{
           //Do not complain here, because we do not check for builtin operators
           //problem(node, "No fitting operator. found" );
@@ -2326,10 +2330,6 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
 
         KDevelop::DUContextPointer ptr(m_currentContext);
         OverloadResolver resolver( ptr, KDevelop::TopDUContextPointer(topContext()), oldLastInstance );
-
-#ifdef DEBUG_ADL
-        kDebug() << "running ADL-enabled overload resolution";
-#endif // DEBUG_ADL
         chosenFunction = resolver.resolveList(m_parameters, convert(declarations));
       }
 

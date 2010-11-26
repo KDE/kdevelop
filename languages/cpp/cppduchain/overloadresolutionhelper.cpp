@@ -34,21 +34,28 @@
 using namespace KDevelop;
 using namespace Cpp;
 
+///@todo Decide whether this should be enabled or disabled (by performance considerations)
+bool useADLForOperators = false;
+
 OverloadResolutionFunction::OverloadResolutionFunction() : matchedArguments(0) {
 }
 
 OverloadResolutionFunction::OverloadResolutionFunction( int _matchedArguments, const ViableFunction& _viable ) : matchedArguments(_matchedArguments), function(_viable) {
 }
 
-OverloadResolutionHelper::OverloadResolutionHelper(const DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext) : m_context(context), m_topContext(topContext), m_isOperator(false)
+OverloadResolutionHelper::OverloadResolutionHelper(const KDevelop::DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext) : m_context(context), m_topContext(topContext), m_isOperator(false)
 {
 }
 
-void OverloadResolutionHelper::setOperator( const OverloadResolver::Parameter& base, const QString& operatorName )
+void OverloadResolutionHelper::setFunctionNameForADL(const KDevelop::QualifiedIdentifier& identifierForADL)
+{
+  m_identifierForADL = identifierForADL;
+}
+
+void OverloadResolutionHelper::setOperator( const OverloadResolver::Parameter& base )
 {
   m_baseType = base;
   m_isOperator = true;
-  m_operatorIdentifier = Identifier("operator"+operatorName);
 }
 
 void OverloadResolutionHelper::setFunctions( const QList<Declaration*>& functions )
@@ -62,11 +69,10 @@ void OverloadResolutionHelper::setKnownParameters( const OverloadResolver::Param
   m_knownParameters = parameters;
 }
 
-QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial)
+void OverloadResolutionHelper::initializeResolver(OverloadResolver& resolv)
 {
-  QList<OverloadResolutionFunction> functions;
-
   if( m_isOperator ) {
+    Q_ASSERT(!m_identifierForADL.isEmpty());
     ///Search for member operators
     AbstractType::Ptr real( TypeUtils::realType(m_baseType.type, m_context->topContext()) );
     if( dynamic_cast<CppClassType*>( real.unsafeData() ) )
@@ -75,7 +81,7 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
       if( idType && idType->declaration(m_context->topContext()) ) {
         DUContext* ctx = idType->declaration(m_context->topContext())->logicalInternalContext(m_context->topContext());
         if( ctx ) {
-          QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, m_operatorIdentifier, m_context->topContext() );
+          QList<Declaration*> decls = Cpp::findLocalDeclarations( ctx, m_identifierForADL.first(), m_context->topContext() );
           foreach( Declaration* decl, decls )
             m_declarations << DeclarationWithArgument( OverloadResolver::ParameterList(), decl );
         } else {
@@ -86,42 +92,31 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
       }
     }
     ///Search for static global operators
-    QList<Declaration*> decls = m_context->findDeclarations(m_operatorIdentifier);
+    QList<Declaration*> decls = m_context->findDeclarations(m_identifierForADL);
     foreach( Declaration* decl, decls ) {
       FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
       if( fun && (fun->arguments().size() == 1 || fun->arguments().size() == 2) )
         m_declarations << DeclarationWithArgument( m_baseType, decl );
     }
     ///If no global or class member operators found try ADL for namespaced operators
-    if (m_declarations.empty()) {
-      ADLHelper adlHelper( m_context, m_topContext );
-      adlHelper.addArgument(m_baseType);
-      foreach( const OverloadResolver::Parameter & param, m_knownParameters.parameters ) {
-        adlHelper.addArgument( param );
-      }
-      QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
-      foreach( Declaration * adlNsDecl, adlNamespaces) {
-        // lookup each adlNsDecl::m_operationIdentifier
-        QualifiedIdentifier operatorIdentifier = adlNsDecl->qualifiedIdentifier();
-        operatorIdentifier.push(m_operatorIdentifier);
-        // same as above for the qualified identifier
-        QList<Declaration*> decls = m_context->findDeclarations(operatorIdentifier);
-        foreach( Declaration* decl, decls ) {
-          FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
-          if( fun && (fun->arguments().size() == 1 || fun->arguments().size() == 2) )
-            m_declarations << DeclarationWithArgument( m_baseType, decl );
-        }          
-      }
+    if (m_declarations.isEmpty() && useADLForOperators) {
+      
+      OverloadResolver::ParameterList params;
+      params.parameters << m_baseType;
+      params.parameters += m_knownParameters.parameters;
+      
+      foreach( Declaration* decl, resolv.computeADLCandidates( params, m_identifierForADL ) ) {
+        FunctionType::Ptr fun = decl->abstractType().cast<FunctionType>();
+        if( fun && (fun->arguments().size() == 1 || fun->arguments().size() == 2) )
+          m_declarations << DeclarationWithArgument( m_baseType, decl );
+      }          
     }
   }else{
     //m_declarations should already be set by setFunctions(..)
   }
 
-  QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
   foreach( const DeclarationWithArgument& decl, m_declarations )
     m_argumentCountMap[decl.second] = decl.first.parameters.size();
-
-  OverloadResolver resolv( m_context, m_topContext );
 
 //   log( "functions given to overload-resolution:" );
 //   foreach( const DeclarationWithArgument& declaration, m_declarations )
@@ -133,7 +128,11 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
 //     log( result.toString() );
 //   }
 //   lock.lock();
+}
 
+QList<OverloadResolutionFunction> OverloadResolutionHelper::resolveToList(bool partial)
+{
+  OverloadResolver resolv( m_context, m_topContext );
 
   QList< ViableFunction > viableFunctions;
 
@@ -141,13 +140,9 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
 
   // also retrieve names by ADL if partial argument list (only used by code completion)
   // and even in strict mode if normal lookup failed
-  if (partial || viableFunctions.empty()) {
-    QList<Declaration*> declarations;
-    foreach(const DeclarationWithArgument & declWithArg, m_declarations) {
-      declarations << declWithArg.second;
-    }
+  if (partial || viableFunctions.empty() || !viableFunctions[0].isViable()) {
     
-    QList<Declaration*> adlDecls = resolv.computeADLCandidates(m_knownParameters, declarations);
+    QList<Declaration*> adlDecls = resolv.computeADLCandidates( m_knownParameters, m_identifierForADL );
     if (!adlDecls.empty()) {
       QList< DeclarationWithArgument > adlDeclsWithArguments;
       foreach(Declaration * decl, adlDecls) {
@@ -157,13 +152,41 @@ QList<OverloadResolutionFunction> OverloadResolutionHelper::resolve(bool partial
     }
   }
 
-  foreach( const ViableFunction& function, viableFunctions ) {
-    if( function.declaration() && function.declaration()->abstractType() ) {
-      functions << OverloadResolutionFunction( m_argumentCountMap[function.declaration().data()] + m_knownParameters.parameters.size(), function );
+  qSort( viableFunctions );
+
+  QList<OverloadResolutionFunction> ret;
+  
+  foreach( const ViableFunction& function, viableFunctions )
+  {
+    if( function.declaration() && function.declaration()->abstractType() )
+      ret << OverloadResolutionFunction( m_argumentCountMap[function.declaration().data()] + m_knownParameters.parameters.size(), function );
+  }
+
+  return ret;
+}
+
+ViableFunction OverloadResolutionHelper::resolve(bool forceInstance)
+{
+  OverloadResolver resolv( m_context, m_topContext, forceInstance );
+
+  initializeResolver(resolv);
+  
+  ViableFunction ret = resolv.resolveListViable( m_knownParameters, m_declarations );
+
+  // also retrieve names by ADL if partial argument list (only used by code completion)
+  // and even in strict mode if normal lookup failed
+  if (!ret.isViable()) {
+    
+    QList<Declaration*> adlDecls = resolv.computeADLCandidates( m_knownParameters, m_identifierForADL );
+    if (!adlDecls.empty()) {
+      QList< DeclarationWithArgument > adlDeclsWithArguments;
+      foreach(Declaration * decl, adlDecls)
+        adlDeclsWithArguments << DeclarationWithArgument( OverloadResolver::ParameterList(), decl ); // see setFunctions
+      ret = resolv.resolveListViable( m_knownParameters, adlDeclsWithArguments );
     }
   }
 
-  return functions;
+  return ret;
 }
 
 void OverloadResolutionHelper::log(const QString& str) const

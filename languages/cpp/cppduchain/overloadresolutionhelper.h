@@ -63,16 +63,23 @@ namespace Cpp
     OverloadResolutionHelper(const KDevelop::DUContextPointer& context, const KDevelop::TopDUContextPointer& topContext);
 
     /**
+     * @param identifierForADL The identifier will be used for performing argument-dependent look-up.
+     *                         This should only be non-empty if the function is not being called as a member.
+     * */
+    void setFunctionNameForADL( const QualifiedIdentifier& identifierForADL );
+    
+    /**
      * @param base Sets the base-type, which is used while searching overloaded operators as:
      * Container-class of member operators, or first argument of global operators.
-     * @param operatorName is the string-name of the operator, without "operator". Example: ">" ">=", etc.
+     * @warning: If calling this, you _must_ also call setFunctionNameForADL with the full operator name,
+     *           like "operator=".
      * */
-    void setOperator( const OverloadResolver::Parameter& base, const QString& operatorName );
+    void setOperator( const OverloadResolver::Parameter& base );
 
     /**
      * Call this instead of setOperator to use the specified list of functions for overload-resolution
      * */
-    void setFunctions( const QList<Declaration*>& functions );
+    void setFunctions( const QList<KDevelop::Declaration*>& functions );
 
     /**
      * Call this to set the already known parameter-types for the function-call,
@@ -83,11 +90,24 @@ namespace Cpp
     /**
      * @param partial If partial is given, it is not required that all parameters of the functions have a value.
      *
+     * This is relatively slow, and returns a list of all considered functions, sorted by viability.
+     * 
      * The du-chain must be read-locked.
      * */
-    QList<OverloadResolutionFunction> resolve( bool partial );
+    QList<OverloadResolutionFunction> resolveToList( bool partial = false );
 
+    /**
+     * The du-chain must be read-locked.
+     * 
+     * Returns only the most viable matched function. If no function is viable, a nonviable
+     * function will be returned.
+     * @param forceIsInstance If this is true, all encountered class types will be considered _instances_
+     *                        of the class.
+     * */
+    ViableFunction resolve( bool forceIsInstance = false );
+    
     private:
+      void initializeResolver(OverloadResolver& resolver);
       void log(const QString& str) const;
       KDevelop::DUContextPointer m_context;
       KDevelop::TopDUContextPointer m_topContext;
@@ -95,7 +115,8 @@ namespace Cpp
       bool m_isOperator;
       QList< DeclarationWithArgument > m_declarations; //Declarations are paired with the optional first argument for the declared functions
       OverloadResolver::ParameterList m_knownParameters;
-      Identifier m_operatorIdentifier;
+      QMap<Declaration*, int> m_argumentCountMap; //Maps how many pre-defined arguments were given to which function
+      QualifiedIdentifier m_identifierForADL;
   };
 
 }
