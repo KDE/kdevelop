@@ -22,7 +22,6 @@
 #define SAVEDIALOG_H
 
 #include <KDialog>
-#include "shellexport.h"
 
 class QListWidget;
 
@@ -30,7 +29,7 @@ namespace KDevelop {
 
 class IDocument;
 
-class KDEVPLATFORMSHELL_EXPORT KSaveSelectDialog : public KDialog
+class KSaveSelectDialog : public KDialog
 {
     Q_OBJECT
 

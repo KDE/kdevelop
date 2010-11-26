@@ -15,11 +15,9 @@
 
 #include "grepjob.h"
 #include "grepoutputmodel.h"
-#include "grepoutputview.h"
 
 #include <QList>
 #include <QRegExp>
-#include <QKeySequence>
 #include <QTextDocument>
 #include <QTextStream>
 

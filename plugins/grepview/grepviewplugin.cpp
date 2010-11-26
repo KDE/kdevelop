@@ -17,31 +17,29 @@
 #include "grepjob.h"
 
 #include <QWhatsThis>
-#include <QKeySequence>
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
 #include <kactioncollection.h>
-#include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/view.h>
+#include <kparts/mainwindow.h>
 
 #include <interfaces/icore.h>
-#include <outputview/ioutputview.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <kparts/mainwindow.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <project/projectmodel.h>
 #include <language/interfaces/editorcontext.h>
+#include <outputview/ioutputview.h>
 
 K_PLUGIN_FACTORY(GrepViewFactory, registerPlugin<GrepViewPlugin>(); )
 K_EXPORT_PLUGIN(GrepViewFactory(KAboutData("kdevgrepview","kdevgrepview", ki18n("Find/Replace In Files"), "0.1", ki18n("Support for running grep over a list of files"), KAboutData::License_GPL)))
@@ -114,15 +112,11 @@ void GrepViewPlugin::showDialog(bool setLastUsed)
             KTextEditor::Range range = doc->textSelection();
             if( range.isValid() )
             {
-                kDebug() << "got valid range:" << range;
                 pattern = doc->textDocument()->text( range );
-                kDebug() << "context now:" << pattern;
             }
             if( pattern.isEmpty() )
             {
-                kDebug() << "fetching current word";
                 pattern = doc->textWord();
-                kDebug() << "word is:" << pattern;
             }
         }
 

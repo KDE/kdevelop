@@ -139,7 +139,6 @@ install(FILES
     selectioncontroller.h
     runcontroller.h
     launchconfiguration.h
-    savedialog.h
     DESTINATION ${INCLUDE_INSTALL_DIR}/kdevplatform/shell COMPONENT Devel
 )
 

@@ -15,7 +15,6 @@
 #ifndef GREPJOB_H
 #define GREPJOB_H
 
-#include <QRegExp>
 #include <QDir>
 #include <QPointer>
 
@@ -33,6 +32,7 @@ namespace KDevelop
     class ProcessLineMaker;
 }
 
+class QRegExp;
 class GrepViewPlugin;
 class FindReplaceTest; //FIXME: this is useful only for tests
 

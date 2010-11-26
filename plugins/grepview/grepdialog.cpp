@@ -31,6 +31,7 @@
 #include <kcombobox.h>
 #include <kurlcompletion.h>
 #include <kurlrequester.h>
+#include <kstandarddirs.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -38,9 +39,6 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <shell/savedialog.h>
-
-#include <kstandarddirs.h>
 
 #include "grepviewplugin.h"
 #include "grepjob.h"
@@ -228,7 +226,6 @@ void GrepDialog::templateTypeComboActivated(int index)
 void GrepDialog::syncButtonClicked( )
 {
     IDocument *doc = m_plugin->core()->documentController()->activeDocument();
-    kDebug(9001) << doc;
     if ( doc )
     {
         KUrl url = doc->url();
@@ -337,15 +334,10 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
         }
     }
     
-    if(!unsavedFiles.empty())
+    if(!ICore::self()->documentController()->saveSomeDocuments(unsavedFiles))
     {
-        // show dialog
-        KSaveSelectDialog dlg(unsavedFiles, this);
-        if(dlg.exec() == QDialog::Rejected)
-        {
-            close();
-            return;
-        }
+        close();
+        return;
     }
     
     
@@ -380,7 +372,6 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     job->setCaseSensitive( caseSensitiveFlag() );
     job->setReplaceFlag( button == ReplaceButton );
 
-    kDebug() << "registering job";
     ICore::self()->runController()->registerJob(job);
     
     m_plugin->rememberSearchDirectory(directory().toLocalFile(KUrl::AddTrailingSlash));
