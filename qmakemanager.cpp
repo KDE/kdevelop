@@ -333,9 +333,14 @@ void QMakeProjectManager::slotDirty(const QString& path)
     }
 
     const KUrl url(path);
+    if (!isValid(url, false, 0)) {
+        return;
+    }
+
     IProject* project = ICore::self()->projectController()->findProjectForUrl(url);
     Q_ASSERT(project);
 
+    bool finished = false;
     foreach(ProjectFolderItem* folder, project->foldersForUrl(url.upUrl())) {
         if (QMakeFolderItem* qmakeFolder = dynamic_cast<QMakeFolderItem*>( folder )) {
             foreach(QMakeProjectFile* pro, qmakeFolder->projectFiles()) {
@@ -346,7 +351,7 @@ void QMakeProjectManager::slotDirty(const QString& path)
                     pro->read();
                 }
             }
-            return;
+            finished = true;
         } else if (ProjectFolderItem* newFolder = buildFolderItem(project, folder->url(), folder->parent())) {
             kDebug() << "changing from normal folder to qmake project folder:" << folder->url();
             // .pro / .pri file did not exist before
@@ -354,6 +359,19 @@ void QMakeProjectManager::slotDirty(const QString& path)
                 newFolder->appendRow(folder->takeRow(0));
             }
             folder->parent()->removeRow(folder->row());
+            folder = newFolder;
+            finished = true;
+        }
+        if (finished) {
+            // remove existing targets and readd them
+            for(int i = 0; i < folder->rowCount(); ++i) {
+                if (folder->child(i)->target()) {
+                    folder->removeRow(i);
+                }
+            }
+            ///TODO: put into it's own function once we add more stuff to that slot
+            slotFolderAdded(folder);
+            break;
         }
     }
 }
