@@ -42,7 +42,6 @@ class ManPageDocumentation : public QObject, public KDevelop::IDocumentation
     Q_OBJECT
     public:
         ManPageDocumentation(ManPage page);
-
         virtual QString name() const { return m_name; }
         virtual QString description() const;
         virtual bool providesWidget() const;
@@ -65,6 +64,8 @@ class ManPageHomeDocumentation : public QObject, public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
+        ManPageHomeDocumentation();
+        virtual ~ManPageHomeDocumentation();
         virtual KDevelop::IDocumentationProvider* provider() const;
         virtual QString name() const;
         virtual QString description() const { return name(); }

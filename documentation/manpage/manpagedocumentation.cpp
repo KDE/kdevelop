@@ -72,7 +72,7 @@ QString ManPageDocumentation::description() const
 }
 
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
-{  
+{
     KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
     view->setHtml(description());
     view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
@@ -85,13 +85,12 @@ bool ManPageDocumentation::providesWidget() const
     return false;
 }
 
-QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
-
-    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
+ManPageHomeDocumentation::ManPageHomeDocumentation()
+{
     ManPageModel* model = ManPageDocumentation::s_provider->model();
+    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
 
-    if(m_qswidget != 0){
-    m_qswidget = new QStackedWidget(parent);
+    m_qswidget = new QStackedWidget();
     QObject::connect(model, SIGNAL(manPagesLoaded()), this, SLOT(manPagesLoaded()));
 
     m_loadingWidget = new QWidget(m_qswidget);
@@ -104,31 +103,46 @@ QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFi
     m_loadingWidget->setLayout(layout);
     m_qswidget->addWidget(m_loadingWidget);
 
-    m_contents = new QTreeView(parent);
+    m_contents = new QTreeView(0);
     m_contents->header()->setVisible(false);
-    m_contents->setModel(model);
     QObject::connect(m_contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
     m_qswidget->addWidget(m_contents);
+
+    m_qswidget->setCurrentWidget(m_loadingWidget);
+}
+
+ManPageHomeDocumentation::~ManPageHomeDocumentation()
+{
+    delete m_contents;
+    if(m_loadingWidget){
+        delete m_loadingWidget;
     }
+}
+
+
+QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
+
+    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
+    ManPageModel* model = ManPageDocumentation::s_provider->model();
 
     if(progressBar != 0){
         m_qswidget->setCurrentWidget(m_loadingWidget);
     }
     else {
+        m_contents->setModel(model);
         m_qswidget->setCurrentWidget(m_contents);
     }
-
     return m_qswidget;
 }
 
 void ManPageHomeDocumentation::manPagesLoaded()
 {
+    ManPageModel* model = ManPageDocumentation::s_provider->model();
+    m_contents->setModel(model);
     m_qswidget->setCurrentWidget(m_contents);
-    m_contents->repaint();
     m_qswidget->removeWidget(m_loadingWidget);
     delete m_loadingWidget;
     m_loadingWidget = 0;
-
 }
 
 QString ManPageHomeDocumentation::name() const

@@ -165,10 +165,8 @@ void ManPageModel::sectionDataReceived(KJob *job){
         // End of init
         m_indexModel->setStringList(m_index);
         delete iterator;
-        //emit manPagesLoaded();
         ManPageDocumentation::s_provider->deleteProgressBar();
-        KDevelop::ICore::self()->documentationController()->showDocumentation(ManPageDocumentation::s_provider->homePage());
-
+        emit manPagesLoaded();
     }
 }
 
