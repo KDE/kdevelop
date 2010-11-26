@@ -103,7 +103,7 @@ ManPageHomeDocumentation::ManPageHomeDocumentation()
     m_loadingWidget->setLayout(layout);
     m_qswidget->addWidget(m_loadingWidget);
 
-    m_contents = new QTreeView(0);
+    m_contents = new QTreeView(m_qswidget);
     m_contents->header()->setVisible(false);
     QObject::connect(m_contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
     m_qswidget->addWidget(m_contents);
@@ -111,20 +111,10 @@ ManPageHomeDocumentation::ManPageHomeDocumentation()
     m_qswidget->setCurrentWidget(m_loadingWidget);
 }
 
-ManPageHomeDocumentation::~ManPageHomeDocumentation()
-{
-    delete m_contents;
-    if(m_loadingWidget){
-        delete m_loadingWidget;
-    }
-}
-
-
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
-
     QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
     ManPageModel* model = ManPageDocumentation::s_provider->model();
-
+    m_qswidget->setParent(parent);
     if(progressBar != 0){
         m_qswidget->setCurrentWidget(m_loadingWidget);
     }

@@ -65,7 +65,6 @@ class ManPageHomeDocumentation : public QObject, public KDevelop::IDocumentation
     Q_OBJECT
     public:
         ManPageHomeDocumentation();
-        virtual ~ManPageHomeDocumentation();
         virtual KDevelop::IDocumentationProvider* provider() const;
         virtual QString name() const;
         virtual QString description() const { return name(); }
