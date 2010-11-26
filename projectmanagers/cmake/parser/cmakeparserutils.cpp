@@ -149,15 +149,10 @@ namespace CMakeParserUtils
         }
     }
     
-    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent, CMakeProjectData* data, const QString& sourcedir, const QStringList& modulesDir )
+    KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::ReferencedTopDUContext parent, CMakeProjectData* data, const QString& sourcedir)
     {
         kDebug(9042) << "Running cmake script: " << file;
         CMakeFileContent f = CMakeListsParser::readCMakeFile(file);
-        if(f.isEmpty())
-        {
-            kDebug() << "There is no such file: " << file;
-            return 0;
-        }
         
         data->vm.insert("CMAKE_CURRENT_BINARY_DIR", data->vm.value("CMAKE_BINARY_DIR"));
         data->vm.insert("CMAKE_CURRENT_LIST_FILE", QStringList(file));
@@ -168,7 +163,7 @@ namespace CMakeParserUtils
         v.setCacheValues(&data->cache);
         v.setVariableMap(&data->vm);
         v.setMacroMap(&data->mm);
-        v.setModulePath(modulesDir);
+        v.setModulePath(data->modulePath);
         v.walk(f, 0, true);
         
         data->projectName=v.projectName();

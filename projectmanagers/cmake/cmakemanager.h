@@ -133,7 +133,7 @@ private:
     
     QMutex m_reparsingMutex;
     QMutex m_busyProjectsMutex;
-    KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project, const KUrl& baseUrl);
+    KDevelop::ReferencedTopDUContext initializeProject(KDevelop::IProject* project);
     
     KDevelop::ReferencedTopDUContext includeScript(const QString& file, KDevelop::IProject * project, const QString& currentDir,
                                                     KDevelop::ReferencedTopDUContext parent);
@@ -146,7 +146,6 @@ private:
     QList<CMakeFolderItem*> getCMakeFoldersWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
     QList<KDevelop::TargetFilePair> getTargetFilesWithin(const QList<KDevelop::ProjectBaseItem*> &items) const;
 
-    QMap<KDevelop::IProject*, QStringList> m_modulePathPerProject;
     QMap<KDevelop::IProject*, CMakeProjectData> m_projectsData;
     QMap<KDevelop::IProject*, KDirWatch*> m_watchers;
     QMap<KUrl, CMakeFolderItem*> m_pending;

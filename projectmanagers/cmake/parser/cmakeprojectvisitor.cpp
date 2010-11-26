@@ -2094,6 +2094,9 @@ RecursivityType recursivity(const QString& functionName)
 
 int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClean)
 {
+    if(fc.isEmpty())
+        return 0;
+    
     ReferencedTopDUContext aux=m_topctx;
     KUrl url(fc[0].filePath);
     
