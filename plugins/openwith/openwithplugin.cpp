@@ -50,7 +50,7 @@ K_EXPORT_PLUGIN(KDevOpenWithFactory(KAboutData("kdevopenwith","kdevopenwith", ki
 
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& ) 
     : IPlugin ( KDevOpenWithFactory::componentData(), parent ),
-    actionMap( 0 )
+    m_actionMap( 0 )
 {
 //    setXMLFile( "kdevopenwithui.rc" );
 }
@@ -61,35 +61,35 @@ OpenWithPlugin::~OpenWithPlugin()
 
 KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::Context* context )
 {
-    if( actionMap )
+    if( m_actionMap )
     {
-        delete actionMap;
-        actionMap = 0;
+        delete m_actionMap;
+        m_actionMap = 0;
     }
-    urls = QList<KUrl>();
+    m_urls = QList<KUrl>();
     FileContext* filectx = dynamic_cast<FileContext*>( context );
     ProjectItemContext* projctx = dynamic_cast<ProjectItemContext*>( context );
     if( filectx && filectx->urls().count() > 0 )
     {
-        urls = filectx->urls();
+        m_urls = filectx->urls();
     } else if ( projctx && projctx->items().count() > 0 )
     {
         foreach( ProjectBaseItem* item, projctx->items() )
         {
             if( item->file() )
             {
-                urls << item->file()->url();
+                m_urls << item->file()->url();
             }
         }
     }
-    if( !urls.isEmpty() )
+    if( !m_urls.isEmpty() )
     {
-        actionMap = new QSignalMapper( this );
-        connect( actionMap, SIGNAL(mapped(const QString&)), SLOT(open(const QString&)) );
+        m_actionMap = new QSignalMapper( this );
+        connect( m_actionMap, SIGNAL(mapped(const QString&)), SLOT(open(const QString&)) );
         
         // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
         // TODO: Think about possible alternatives to using the mimetype of the first url.
-        KMimeType::Ptr mimetype = KMimeType::findByUrl( urls.first() );
+        KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
         KService::List apps = KMimeTypeTrader::self()->query( mimetype->name() );
         KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( mimetype->name() );
         KService::List parts = KMimeTypeTrader::self()->query( mimetype->name(), "KParts/ReadOnlyPart" );
@@ -122,8 +122,8 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
     {
         KAction* act = new KAction( svc->name(), this );
         act->setIcon( SmallIcon( svc->icon() ) );
-        connect(act, SIGNAL(triggered()), actionMap, SLOT(map()));
-        actionMap->setMapping( act, svc->storageId() );
+        connect(act, SIGNAL(triggered()), m_actionMap, SLOT(map()));
+        m_actionMap->setMapping( act, svc->storageId() );
         if( svc->storageId() == pref->storageId() )
         {
             openactions.prepend( act );
@@ -137,7 +137,7 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
 
 void OpenWithPlugin::openDefault()
 {
-    foreach( const KUrl& u, urls ) {
+    foreach( const KUrl& u, m_urls ) {
         ICore::self()->documentController()->openDocument( u );
     }
 }
@@ -147,7 +147,7 @@ void OpenWithPlugin::open ( const QString& storageid )
     KService::Ptr svc = KService::serviceByStorageId( storageid );
     if( svc->isApplication() )
     {
-        KRun::run( *svc, urls, ICore::self()->uiController()->activeMainWindow() );
+        KRun::run( *svc, m_urls, ICore::self()->uiController()->activeMainWindow() );
     } else 
     {
         QString prefName = svc->desktopEntryName();
@@ -158,7 +158,7 @@ void OpenWithPlugin::open ( const QString& storageid )
             // TODO: Solve this rather inside DocumentController
             prefName = "";
         }
-        foreach( const KUrl& u, urls )
+        foreach( const KUrl& u, m_urls )
         {
             ICore::self()->documentController()->openDocument( u, prefName );
         }
