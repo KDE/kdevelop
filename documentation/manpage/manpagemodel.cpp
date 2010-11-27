@@ -172,11 +172,6 @@ void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data)
     m_manMainIndexBuffer.append(QString::fromUtf8(data));
 }
 
-void ManPageModel::readDataFromSectionIndex(KIO::Job * job, const QByteArray &data){
-    Q_UNUSED(job);
-    m_manSectionIndexBuffer.append(QString::fromUtf8(data));
-}
-
 QList<ManSection> ManPageModel::indexParser(){
 
      QWebPage * page = new QWebPage();

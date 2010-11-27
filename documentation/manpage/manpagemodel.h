@@ -76,7 +76,6 @@ private slots:
     void sectionDataReceived(KJob *job);
     void initModel();
     void readDataFromMainIndex(KIO::Job * job, const QByteArray &data);
-    void readDataFromSectionIndex(KIO::Job * job, const QByteArray &data);
 
 private:
     QList<ManPage> manPageList(const QString &sectionId) const;
