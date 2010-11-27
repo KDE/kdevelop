@@ -492,18 +492,18 @@ static QString stateToString(KDevelop::VcsStatusInfo::State state)
     switch(state)
     {
       case KDevelop::VcsStatusInfo::ItemAdded:
-          return i18n("Added");
+          return i18nc("VCS file status", "Added");
       case KDevelop::VcsStatusInfo::ItemDeleted:
-          return i18n("Deleted");
+          return i18nc("VCS file status", "Deleted");
       case KDevelop::VcsStatusInfo::ItemHasConflicts:
-          return i18n("Has Conflicts");
+          return i18nc("VCS file status", "Has Conflicts");
       case KDevelop::VcsStatusInfo::ItemModified:
-          return i18n("Modified");
+          return i18nc("VCS file status", "Modified");
       case KDevelop::VcsStatusInfo::ItemUpToDate:
-          return i18n("Up To Date");
+          return i18nc("VCS file status", "Up To Date");
       case KDevelop::VcsStatusInfo::ItemUnknown:
       case KDevelop::VcsStatusInfo::ItemUserState:
-          return i18n("Unknown");
+          return i18nc("VCS file status", "Unknown");
     }
     return i18nc("Unknown VCS file status, probably a backend error", "?");
 }
@@ -566,10 +566,12 @@ void PatchReviewToolView::kompareModelChanged()
           QString text;
           QIcon icon;
           if(additionalUrls.contains(file)) {
-              text = i18np("%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(additionalUrls[file]));
+              text = i18ncp("%1: number of changed hunks, %2: file name, %3: vcs file state",
+                "%2 (1 hunk, %3)", "%2 (%1 hunks, %3)", cnt, filenameArgument, stateToString(additionalUrls[file]));
               icon = stateToIcon(additionalUrls[file]);
           } else {
-              text = i18np("%2 (1 hunk)", "%2 (%1 hunks)", cnt, filenameArgument);
+              text = i18ncp("%1: number of changed hunks, %2: file name",
+                "%2 (1 hunk)", "%2 (%1 hunks)", cnt, filenameArgument);
           }
 
           item->setData( 0, Qt::DisplayRole, text );
