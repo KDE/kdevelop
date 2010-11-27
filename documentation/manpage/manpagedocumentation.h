@@ -64,15 +64,11 @@ class ManPageHomeDocumentation : public QObject, public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
-        ManPageHomeDocumentation();
         virtual KDevelop::IDocumentationProvider* provider() const;
         virtual QString name() const;
         virtual QString description() const { return name(); }
         virtual QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = 0 );
-    public slots:
-        void manPagesLoaded();
     private:
-        QStackedWidget* m_qswidget;
         QWidget* m_loadingWidget;
         QTreeView* m_contents;
 

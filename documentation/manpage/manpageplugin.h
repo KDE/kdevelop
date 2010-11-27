@@ -59,7 +59,6 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
         void sectionParsed();
 
     private:
-        QString getDocumentationFilename(KDevelop::Declaration* dec, const bool& isLocal) const;
         ManPageModel *m_model;
         QProgressBar *m_progressBar;
 

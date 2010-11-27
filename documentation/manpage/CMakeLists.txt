@@ -3,6 +3,7 @@ set(kdevmanpage_SRCS
     manpagedocumentation.cpp
     manpageplugin.cpp
     manpagemodel.cpp
+    manpagedocumentationwidget.cpp
 )
 
 kde4_add_plugin(kdevmanpage ${kdevmanpage_SRCS})

@@ -20,6 +20,8 @@
 */
 
 #include "manpagemodel.h"
+#include "manpageplugin.h"
+#include "manpagedocumentation.h"
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -39,20 +41,16 @@
 #include <KIO/TransferJob>
 #include <KIO/StoredTransferJob>
 #include <KIO/Job>
-#include <kio/jobclasses.h>
 
 #include <QWebPage>
 #include <QWebFrame>
 #include <QWebElement>
 #include <QWebElementCollection>
 
-#include <QtDebug>
 #include <QTreeView>
 #include <QHeaderView>
-#include "manpagedocumentation.h"
 #include <interfaces/idocumentationcontroller.h>
 
-#include "manpageplugin.h"
 using namespace KDevelop;
 
 ManPageModel::ManPageModel(QObject* parent)
@@ -135,18 +133,17 @@ void ManPageModel::indexDataReceived(KJob *job){
     if (!job->error()){
         m_sectionList = this->indexParser();
     } else {
-        qDebug() << "ManPageModel transferJob error";
+        return;
     }
     emit sectionCount(m_sectionList.count());
     iterator = new QListIterator<ManSection>(m_sectionList);
     if(iterator->hasNext()){
         initSection();
     }
-
 }
 
 void ManPageModel::initSection(){
-    KIO::StoredTransferJob  * transferJob = transferJob = KIO::storedGet(KUrl("man:(" + iterator->peekNext().first + ")"), KIO::NoReload, KIO::HideProgressInfo);
+    KIO::StoredTransferJob  * transferJob = KIO::storedGet(KUrl("man:(" + iterator->peekNext().first + ")"), KIO::NoReload, KIO::HideProgressInfo);
     connect(transferJob, SIGNAL(result(KJob *)), this, SLOT(sectionDataReceived(KJob *)));
 }
 
@@ -155,7 +152,7 @@ void ManPageModel::sectionDataReceived(KJob *job){
         KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
         this->sectionParser(iterator->peekNext().first, QString::fromUtf8(stjob->data()));
     } else {
-        qDebug() << "ManPageModel transferJob error";
+        return;
     }
     iterator->next();
     emit sectionParsed();
@@ -171,11 +168,13 @@ void ManPageModel::sectionDataReceived(KJob *job){
 }
 
 void ManPageModel::readDataFromMainIndex(KIO::Job * job, const QByteArray &data){
-     m_manMainIndexBuffer.append(QString::fromUtf8(data));
+    Q_UNUSED(job);
+    m_manMainIndexBuffer.append(QString::fromUtf8(data));
 }
 
 void ManPageModel::readDataFromSectionIndex(KIO::Job * job, const QByteArray &data){
-     m_manSectionIndexBuffer.append(QString::fromUtf8(data));
+    Q_UNUSED(job);
+    m_manSectionIndexBuffer.append(QString::fromUtf8(data));
 }
 
 QList<ManSection> ManPageModel::indexParser(){

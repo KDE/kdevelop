@@ -28,8 +28,8 @@
 
 #include "manpagedocumentation.h"
 #include "manpageplugin.h"
+#include "manpagedocumentationwidget.h"
 
-#include <QtDebug>
 #include <KIO/TransferJob>
 #include <KIO/Job>
 #include <kio/jobclasses.h>
@@ -45,6 +45,7 @@ ManPageDocumentation::ManPageDocumentation(ManPage page)
 }
 
 void ManPageDocumentation::readDataFromManPage(KIO::Job * job, const QByteArray &data){
+    Q_UNUSED(job);
     m_manPageBuffer.append(QString::fromUtf8(data));
 }
 
@@ -57,7 +58,6 @@ QString ManPageDocumentation::getManPageContent()
         return m_manPageBuffer;
     } else {
         return i18n("Could not find any documentation for '%1'", m_name);
-        qDebug() << "Get man page transferJob error";
     }
 }
 
@@ -85,55 +85,11 @@ bool ManPageDocumentation::providesWidget() const
     return false;
 }
 
-ManPageHomeDocumentation::ManPageHomeDocumentation()
-{
-    ManPageModel* model = ManPageDocumentation::s_provider->model();
-    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
-
-    m_qswidget = new QStackedWidget();
-    QObject::connect(model, SIGNAL(manPagesLoaded()), this, SLOT(manPagesLoaded()));
-
-    m_loadingWidget = new QWidget(m_qswidget);
-    QLabel* label = new QLabel(i18n("Loading man pages ..."));
-    label->setAlignment(Qt::AlignHCenter);
-    QVBoxLayout* layout = new QVBoxLayout();
-    layout->addWidget(label);
-    layout->addWidget(progressBar);
-    layout->addStretch();
-    m_loadingWidget->setLayout(layout);
-    m_qswidget->addWidget(m_loadingWidget);
-
-    m_contents = new QTreeView(m_qswidget);
-    m_contents->header()->setVisible(false);
-    QObject::connect(m_contents, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
-    m_qswidget->addWidget(m_contents);
-
-    m_qswidget->setCurrentWidget(m_loadingWidget);
-}
-
 QWidget* ManPageHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget *findWidget, QWidget *parent){
-    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
-    ManPageModel* model = ManPageDocumentation::s_provider->model();
-    m_qswidget->setParent(parent);
-    if(progressBar != 0){
-        m_qswidget->setCurrentWidget(m_loadingWidget);
-    }
-    else {
-        m_contents->setModel(model);
-        m_qswidget->setCurrentWidget(m_contents);
-    }
-    return m_qswidget;
+    Q_UNUSED(findWidget);
+    return new ManPageDocumentationWidget(parent);
 }
 
-void ManPageHomeDocumentation::manPagesLoaded()
-{
-    ManPageModel* model = ManPageDocumentation::s_provider->model();
-    m_contents->setModel(model);
-    m_qswidget->setCurrentWidget(m_contents);
-    m_qswidget->removeWidget(m_loadingWidget);
-    delete m_loadingWidget;
-    m_loadingWidget = 0;
-}
 
 QString ManPageHomeDocumentation::name() const
 {
@@ -144,3 +100,5 @@ KDevelop::IDocumentationProvider* ManPageHomeDocumentation::provider() const
 {
     return ManPageDocumentation::s_provider;
 }
+
+#include "manpagedocumentation.moc"

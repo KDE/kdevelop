@@ -97,11 +97,6 @@ void ManPagePlugin::deleteProgressBar() {
     m_progressBar = 0;
 }
 
-QString ManPagePlugin::getDocumentationFilename( KDevelop::Declaration* dec, const bool& isLocal ) const
-{
-    return QString();
-}
-
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
 {
     QString identifier = dec->identifier().toString();
