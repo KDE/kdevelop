@@ -47,8 +47,12 @@ DocumentationView::DocumentationView(QWidget* parent)
     layout()->setMargin(0);
     layout()->setSpacing(0);
     
+    //TODO: clean this up, simply use addAction as that will create a toolbar automatically
+    //      use custom KAction's with createWidget for mProviders and mIdentifiers
     mActions=new KToolBar(this);
     mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    int iconSize=style()->pixelMetric(QStyle::PM_SmallIconSize);
+    mActions->setIconSize(QSize(iconSize, iconSize));
     
     mFindDoc = new DocumentationFindWidget;
     mFindDoc->hide();
