@@ -41,6 +41,9 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <kparts/mainwindow.h>
+#include <KMessageBox>
+#include <QApplication>
+#include <KConfigGroup>
 
 using namespace KDevelop;
 
@@ -53,6 +56,7 @@ OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
     m_actionMap( 0 )
 {
 //    setXMLFile( "kdevopenwithui.rc" );
+    KDEV_USE_EXTENSION_INTERFACE( IOpenWith )
 }
 
 OpenWithPlugin::~OpenWithPlugin()
@@ -90,10 +94,12 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension ( KDevelop::
         // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
         // TODO: Think about possible alternatives to using the mimetype of the first url.
         KMimeType::Ptr mimetype = KMimeType::findByUrl( m_urls.first() );
-        KService::List apps = KMimeTypeTrader::self()->query( mimetype->name() );
-        KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( mimetype->name() );
-        KService::List parts = KMimeTypeTrader::self()->query( mimetype->name(), "KParts/ReadOnlyPart" );
-        KService::Ptr preferredpart = KMimeTypeTrader::self()->preferredService( mimetype->name(), "KParts/ReadOnlyPart" );
+        m_mimeType = mimetype->name();
+        KService::List apps = KMimeTypeTrader::self()->query( m_mimeType );
+        KService::Ptr preferredapp = KMimeTypeTrader::self()->preferredService( m_mimeType );
+        KService::List parts = KMimeTypeTrader::self()->query( m_mimeType, "KParts/ReadOnlyPart" );
+        KService::Ptr preferredpart = KMimeTypeTrader::self()->preferredService( m_mimeType,
+                                                                                 "KParts/ReadOnlyPart" );
         
         // Now setup a menu with actions for each part and app
         KMenu* menu = new KMenu( i18n("Open With" ) );
@@ -137,6 +143,14 @@ QList< QAction* > OpenWithPlugin::actionsForServices ( const KService::List& lis
 
 void OpenWithPlugin::openDefault()
 {
+    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    if (config.hasKey(m_mimeType)) {
+        QString storageId = config.readEntry(m_mimeType, QString());
+        if (!storageId.isEmpty() && KService::serviceByStorageId(storageId)) {
+            open(storageId);
+            return;
+        }
+    }
     foreach( const KUrl& u, m_urls ) {
         ICore::self()->documentController()->openDocument( u );
     }
@@ -163,4 +177,30 @@ void OpenWithPlugin::open ( const QString& storageid )
             ICore::self()->documentController()->openDocument( u, prefName );
         }
     }
+
+    KConfigGroup config = KGlobal::config()->group("Open With Defaults");
+    if (storageid != config.readEntry(m_mimeType, QString())) {
+        int setDefault = KMessageBox::questionYesNo(
+            qApp->activeWindow(),
+            i18n("Do you want to open %1 files by default with %2?",
+                 m_mimeType, svc->name() ),
+            i18n("Set as default?"),
+            KStandardGuiItem::yes(), KStandardGuiItem::no(),
+            QString("OpenWith-%1").arg(m_mimeType)
+        );
+        if (setDefault == KMessageBox::Yes) {
+            config.writeEntry(m_mimeType, storageid);
+        }
+    }
+}
+
+void OpenWithPlugin::openFiles( const KUrl::List& files )
+{
+    if (files.isEmpty()) {
+        return;
+    }
+
+    m_urls = files;
+    m_mimeType = KMimeType::findByUrl( m_urls.first() )->name();
+    openDefault();
 }

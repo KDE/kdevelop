@@ -86,5 +86,6 @@ X-KDevelop-Version=11
 X-KDevelop-Category=Global
 X-KDE-PluginInfo-Name=kdevopenwith
 X-KDE-PluginInfo-Author=Andreas Pakulat
+X-KDevelop-Interfaces=org.kdevelop.IOpenWith
 X-KDE-PluginInfo-License=GPL
 X-KDevelop-Mode=GUI
