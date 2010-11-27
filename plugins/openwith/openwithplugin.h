@@ -42,7 +42,8 @@ public:
     OpenWithPlugin ( QObject* parent, const QVariantList& args  );
     virtual ~OpenWithPlugin();
     virtual KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context );
-    virtual void openFiles( const KUrl::List& files );
+protected:
+    virtual void openFilesInternal( const KUrl::List& files );
 private slots:
     void open( const QString& );
     void openDefault();

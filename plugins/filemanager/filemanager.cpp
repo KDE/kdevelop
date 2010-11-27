@@ -45,7 +45,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
-#include <interfaces/iplugincontroller.h>
 
 #include "../openwith/iopenwith.h"
 
@@ -107,16 +106,7 @@ void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
 
 void FileManager::openFile(const KFileItem& file)
 {
-    KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()
-                                ->pluginForExtension( "org.kdevelop.IOpenWith" );
-    if (i) {
-        KDevelop::IOpenWith* openWith = i->extension<KDevelop::IOpenWith>();
-        Q_ASSERT(openWith);
-        openWith->openFiles(KUrl::List() << file.url());
-        return;
-    }
-
-    KDevelop::ICore::self()->documentController()->openDocument( file.url() );
+    KDevelop::IOpenWith::openFiles(KUrl::List() << file.url());
 }
 
 

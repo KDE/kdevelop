@@ -43,7 +43,6 @@
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/iruncontroller.h>
@@ -231,15 +230,7 @@ void ProjectManagerView::locateCurrentDocument()
 
 void ProjectManagerView::openUrl( const KUrl& url )
 {
-    IPlugin* i = ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IOpenWith" );
-    if (i) {
-        KDevelop::IOpenWith* openWith = i->extension<KDevelop::IOpenWith>();
-        Q_ASSERT(openWith);
-        openWith->openFiles(KUrl::List() << url);
-        return;
-    }
-
-    ICore::self()->documentController()->openDocument( url );
+    IOpenWith::openFiles(KUrl::List() << url);
 }
 
 void ProjectManagerView::filterChanged(const QString &text)

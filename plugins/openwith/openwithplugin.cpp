@@ -194,7 +194,7 @@ void OpenWithPlugin::open ( const QString& storageid )
     }
 }
 
-void OpenWithPlugin::openFiles( const KUrl::List& files )
+void OpenWithPlugin::openFilesInternal( const KUrl::List& files )
 {
     if (files.isEmpty()) {
         return;

@@ -31,6 +31,8 @@
 #include <language/duchain/parsingenvironment.h>
 #include <project/projectmodel.h>
 
+#include "../openwith/iopenwith.h"
+
 using namespace KDevelop;
 
 ProjectFileData::ProjectFileData( const ProjectFile& file ) : m_file(file) {
@@ -51,7 +53,7 @@ QString ProjectFileData::htmlDescription() const {
 }
 
 bool ProjectFileData::execute( QString& /*filterText*/ ) {
-  ICore::self()->documentController()->openDocument( totalUrl() );
+  IOpenWith::openFiles(KUrl::List() << totalUrl());
   return true;
 }
 

@@ -20,7 +20,12 @@
 
 #ifndef IOPENWITH_H
 #define IOPENWITH_H
+
 #include <KUrl>
+
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+#include <interfaces/idocumentcontroller.h>
 
 namespace KDevelop {
 
@@ -32,8 +37,27 @@ public:
     virtual ~IOpenWith() {}
     /**
      * Open @p files with the preferred applications or parts as chosen by the user.
+     *
+     * If the open with plugin was disabled by the user, the files will be opened
+     * as text documents.
      */
-    virtual void openFiles(const KUrl::List &files) = 0;
+    static void openFiles(const KUrl::List &files)
+    {
+        IPlugin* i = ICore::self()->pluginController()->pluginForExtension( "org.kdevelop.IOpenWith" );
+        if (i) {
+            KDevelop::IOpenWith* openWith = i->extension<KDevelop::IOpenWith>();
+            Q_ASSERT(openWith);
+            openWith->openFilesInternal(files);
+            return;
+        }
+
+        foreach(const KUrl& url, files) {
+            ICore::self()->documentController()->openDocument( url );
+        }
+    }
+
+protected:
+    virtual void openFilesInternal(const KUrl::List &files) = 0;
 };
 
 }
