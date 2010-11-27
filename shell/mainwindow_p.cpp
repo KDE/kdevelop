@@ -420,13 +420,17 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         Core::self()->uiControllerInternal()->factoryDocuments();
     QMap<QAction*, IToolViewFactory*> actionToFactory;
     if ( !factories.isEmpty() ) {
+        // sorted actions
+        QMap<QString, QAction*> actionMap;
         for (QMap<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = factories.constBegin();
                 it != factories.constEnd(); ++it)
         {
-            QAction* action = menu.addAction(it.value()->statusIcon(), it.value()->title());
+            QAction* action = new QAction(it.value()->statusIcon(), it.value()->title(), &menu);
             action->setIcon(it.value()->statusIcon());
             actionToFactory.insert(action, it.key());
+            actionMap[action->text()] = action;
         }
+        menu.addActions(actionMap.values());
     }
 
     QAction* triggered = menu.exec(position);
