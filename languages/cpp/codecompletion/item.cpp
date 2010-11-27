@@ -113,7 +113,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
       newText = m_declaration->identifier().toString();
     } else {
       kDebug() << "Declaration disappeared";
-      return;
+      if(!alternativeText.isEmpty())
+        newText = alternativeText;
+      else
+        return;
     }
   }else{
     newText = alternativeText;
@@ -126,6 +129,10 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   bool jumpForbidden = false;
   
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+  
+  if(!m_declaration.data())
+    return;
+  
   Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
   if(templateDecl) {
     DUContext* context = templateDecl->templateContext(m_declaration->topContext());
@@ -421,8 +428,42 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
               }
             return QVariant();
           }
-          break;
+          if (m_declaration->abstractType()) {
+            if(EnumeratorType::Ptr enumerator = m_declaration->type<EnumeratorType>()) {
+              if(m_declaration->context()->owner() && m_declaration->context()->owner()->abstractType()) {
+                if(!m_declaration->context()->owner()->identifier().isEmpty())
+                  return shortenedTypeString(DeclarationPointer(m_declaration->context()->owner()), desiredTypeLength);
+                else
+                  return "enum";
+              }
+            }
+            if (FunctionType::Ptr functionType = m_declaration->type<FunctionType>()) {
+              ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+
+              if (functionType->returnType()) {
+                QString ret = shortenedTypeString(m_declaration, desiredTypeLength);
+                if(shortenArgumentHintReturnValues && argumentHintDepth() && ret.length() > maximumArgumentHintReturnValueLength)
+                  return QString("...");
+                else
+                  return ret;
+              }else if(argumentHintDepth()) {
+                return QString();//Don't show useless prefixes in the argument-hints
+              }else if(funDecl && funDecl->isConstructor() )
+                return "<constructor>";
+              else if(funDecl && funDecl->isDestructor() )
+                return "<destructor>";
+              else
+                return "<incomplete type>";
+
+            } else {
+              return shortenedTypeString(m_declaration, desiredTypeLength);
+            }
+          } else {
+            return "<incomplete type>";
+          }
+          return QVariant();
         }
+        break;
         case CodeCompletionModel::Scope: {
           //The scopes are not needed
           return QVariant();
@@ -451,6 +492,20 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
           return ret;
         }
         break;
+        case CodeCompletionModel::Name:
+        {
+          if(alternativeText.isEmpty())
+            alternativeText = declarationName();
+          return alternativeText;
+        }
+        case CodeCompletionModel::Postfix:
+        {
+            if (FunctionType::Ptr functionType = m_declaration->type<FunctionType>()) {
+              // Retrieve const/volatile string
+              return functionType->AbstractType::toString();
+            }
+            return QVariant();
+        }
       }
       break;
     case CodeCompletionModel::HighlightingMethod:
@@ -504,10 +559,27 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       }
       break;
     }
-  }
-  lock.unlock();
+    case CodeCompletionModel::BestMatchesCount:
+      return QVariant(normalBestMatchesCount);
+    break;
+    case CodeCompletionModel::IsExpandable:
+      return QVariant(createsExpandingWidget());
+    case CodeCompletionModel::ExpandingWidget: {
+      QWidget* nav = createExpandingWidget(model);
+      Q_ASSERT(nav);
+      model->addNavigationWidget(this, nav);
 
-  return KDevelop::NormalDeclarationCompletionItem::data(index, role, model);
+      QVariant v;
+      v.setValue<QWidget*>(nav);
+      return v;
+    }
+    case CodeCompletionModel::ScopeIndex:
+      return static_cast<int>(reinterpret_cast<long>(m_declaration->context()));
+
+    case CodeCompletionModel::CompletionRole:
+      return (int)completionProperties();
+  }
+  return QVariant();
 }
 
 void NormalDeclarationCompletionItem::needCachedArgumentList() const
