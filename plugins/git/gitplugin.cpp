@@ -484,7 +484,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
                 definedRevisions.insert(name, VcsAnnotationLine());
             
             annotation = &definedRevisions[name];
-            annotation->setLineNumber(values[1].toInt());
+            annotation->setLineNumber(values[1].toInt() - 1);
             annotation->setRevision(rev);
         }
     }

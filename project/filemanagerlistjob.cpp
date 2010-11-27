@@ -76,7 +76,7 @@ void FileManagerListJob::slotResult(KJob* job)
     entryList.clear();
 
     if( job->error() ) {
-        kDebug() << "error in list job:" << job->error() << job->errorString();
+        kDebug(9517) << "error in list job:" << job->error() << job->errorString();
     }
 
     if( m_listQueue.isEmpty() ) {

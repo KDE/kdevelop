@@ -233,7 +233,7 @@ QList<ILanguage*> LanguageController::languagesForUrl(const KUrl &url)
         return languages;
 
     ///Crashy and unsafe part: Load missing language-supports
-    KMimeType::Ptr mimeType = KMimeType::findByUrl(url);
+    KMimeType::Ptr mimeType = KMimeType::findByUrl(url, 0, false, true);
 
     LanguageCache::ConstIterator it = d->languageCache.constFind(mimeType->name());
     if (it != d->languageCache.constEnd()) {

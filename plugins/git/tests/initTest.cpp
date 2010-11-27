@@ -33,6 +33,7 @@
 #include <kio/netaccess.h>
 
 #include <vcs/dvcs/dvcsjob.h>
+#include <vcs/vcsannotation.h>
 #include "../gitplugin.h"
 
 #define VERIFYJOB(j) \
@@ -220,7 +221,7 @@ void GitInitTest::commitFiles()
 
     if (f.open(QIODevice::WriteOnly)) {
         QTextStream input(&f);
-        input << "Just another HELLO WORLD";
+        input << "Just another HELLO WORLD\n";
     }
 
     f.close();
@@ -320,6 +321,34 @@ void GitInitTest::revHistory()
     QVERIFY(commits[0].getCommit().contains(QRegExp("^\\w{,40}$")));
 
     QVERIFY(commits[0].getParents()[0].contains(QRegExp("^\\w{,40}$")));
+}
+
+void GitInitTest::testAnnotation()
+{
+    // called after commitFiles
+    QFile f(gitTest_BaseDir + gitTest_FileName);
+    QVERIFY(f.open(QIODevice::Append));
+    QTextStream input(&f);
+    input << "An appended line";
+    f.close();
+
+    VcsJob* j = m_plugin->commit(QString("KDevelop's Test commit3"), KUrl::List(gitTest_BaseDir));
+    VERIFYJOB(j);
+
+    j = m_plugin->annotate(KUrl(gitTest_BaseDir + gitTest_FileName), VcsRevision::createSpecialRevision(VcsRevision::Head));
+    VERIFYJOB(j);
+
+    QList<QVariant> results = j->fetchResults().toList();
+    QCOMPARE(results.size(), 2);
+    QVERIFY(results.at(0).canConvert<VcsAnnotationLine>());
+    VcsAnnotationLine annotation = results.at(0).value<VcsAnnotationLine>();
+    QCOMPARE(annotation.lineNumber(), 0);
+    QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit2"));
+
+    QVERIFY(results.at(1).canConvert<VcsAnnotationLine>());
+    annotation = results.at(1).value<VcsAnnotationLine>();
+    QCOMPARE(annotation.lineNumber(), 1);
+    QCOMPARE(annotation.commitMessage(), QString("KDevelop's Test commit3"));
 }
 
 void GitInitTest::removeTempDirs()
