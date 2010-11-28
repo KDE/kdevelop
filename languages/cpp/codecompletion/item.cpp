@@ -559,25 +559,8 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       }
       break;
     }
-    case CodeCompletionModel::BestMatchesCount:
-      return QVariant(normalBestMatchesCount);
-    break;
-    case CodeCompletionModel::IsExpandable:
-      return QVariant(createsExpandingWidget());
-    case CodeCompletionModel::ExpandingWidget: {
-      QWidget* nav = createExpandingWidget(model);
-      Q_ASSERT(nav);
-      model->addNavigationWidget(this, nav);
-
-      QVariant v;
-      v.setValue<QWidget*>(nav);
-      return v;
-    }
-    case CodeCompletionModel::ScopeIndex:
-      return static_cast<int>(reinterpret_cast<long>(m_declaration->context()));
-
-    case CodeCompletionModel::CompletionRole:
-      return (int)completionProperties();
+    default:
+      return KDevelop::NormalDeclarationCompletionItem::data(index, role, model);
   }
   return QVariant();
 }
