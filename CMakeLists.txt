@@ -7,6 +7,11 @@ include(KDE4Defaults)
 include(MacroLibrary)
 find_package(KDevPlatform 1.1.0 REQUIRED)
 
+if(KDevPlatform_VERSION VERSION_GREATER 1.1.50)
+    MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.2, version 1.1 is required")
+endif(KDevPlatform_VERSION VERSION_GREATER 1.1.50)
+
+
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
 add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
