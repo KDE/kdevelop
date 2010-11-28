@@ -213,7 +213,12 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
   //hide these buttons for now, they're senseless
 
   m_layout->addLayout(m_headerLayout);
-  m_layout->addLayout(m_itemLayout);
+  
+  QHBoxLayout* spaceLayout = new QHBoxLayout;
+  spaceLayout->addSpacing(10);
+  spaceLayout->addLayout(m_itemLayout);
+  
+  m_layout->addLayout(spaceLayout);
 
   if(maxHeight)
     setMaximumHeight(maxHeight);
@@ -399,25 +404,12 @@ m_allDeclarations(allDeclarations) {
     labelLayout->addWidget(m_button, Qt::AlignLeft | Qt::AlignVCenter);
     labelLayout->addWidget(label, Qt::AlignLeft | Qt::AlignVCenter);
 
-    QString projectName = i18n("No project");
-    QString fileName = topContext.url().str();
     int usesCount = 0;
-
-/*    usesCountLabel->setAlignment((Qt::Alignment)(Qt::AlignLeft | Qt::AlignVCenter));
-    projectLabel->setAlignment((Qt::Alignment)(Qt::AlignLeft | Qt::AlignVCenter));*/
-
-    if(topContext.data()) {
-      KDevelop::IProject* project = ICore::self()->projectController()->findProjectForUrl(topContext.data()->url().toUrl());
-      if(project) {
-        projectName = project->name();
-        fileName = project->relativeUrl(topContext.data()->url().toUrl()).toLocalFile();
-      }
-    }
 
     if(topContext.isLoaded())
       usesCount = DUChainUtils::contextCountUses(topContext.data(), declaration.data());
 
-    label->setText(i18np("<b>Project:</b> %2 &nbsp; <b>File:</b> %3 &nbsp; <i>(1 use)</i>", "<b>Project:</b> %2 &nbsp; <b>File:</b> %3 &nbsp; <i>(%1 uses)</i>", usesCount, projectName, fileName));
+    label->setText(i18np("<b>File:</b> %2 &nbsp; <i>(1 use)</i>", "<b>File:</b> %2 &nbsp; <i>(%1 uses)</i>", usesCount, ICore::self()->projectController()->prettyFileName(topContext.url().toUrl())));
 
     m_button->setIcon(KIcon("go-next"));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(labelClicked()));
