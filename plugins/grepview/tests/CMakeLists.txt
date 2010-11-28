@@ -21,6 +21,8 @@ kde4_add_unit_test(findreplace-test ${findReplaceTest_SRCS})
 target_link_libraries(findreplace-test
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
+    ${KDEVPLATFORM_LANGUAGE_LIBRARIES}
+    ${KDEVPLATFORM_PROJECT_LIBRARIES}
     ${KDEVPLATFORM_UTIL_LIBRARIES}
     ${KDEVPLATFORM_TESTS_LIBRARIES}
 )
