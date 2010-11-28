@@ -181,7 +181,9 @@ QList<ManSection> ManPageModel::indexParser(){
      QWebElementCollection links = document.findAll("a");
      QList<ManSection> list;
      foreach(QWebElement e, links){
-        list.append(qMakePair(e.attribute("accesskey"), e.parent().parent().findAll("td").at(2).toPlainText()));
+         QString sectionId = e.attribute("href");
+         sectionId = sectionId.mid(5,sectionId.size()-1);
+         list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
      }
      delete page;
      return list;
