@@ -5,6 +5,7 @@
 *   Copyright 2008 by Hamish Rodda                                        *
 *   rodda@kde.org                                                         *
 *   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
+*   Copyright 2010 Julien Desgats <julien.desgats@gmail.com>              *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +22,6 @@
 #include <QTextDocument>
 #include <QTextStream>
 
-#include <kdebug.h>
 #include <klocale.h>
 #include <kencodingprober.h>
 
@@ -48,9 +48,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
     while(!file.atEnd() && prober.state() == KEncodingProber::Probing && prober.confidence() < 0.99) {
         prober.feed(file.read(0xFF));
     }
-    
-    kDebug() << prober.encoding() << prober.confidence() << prober.state() << file.pos() << file.size();
-    
+        
     // reads file with detected encoding
     file.seek(0);
     QTextStream stream(&file);
@@ -122,7 +120,6 @@ QString substitudePattern(const QString& pattern, const QString& searchString)
         else
             result.append(ch);
     }
-    // kDebug() << "Pattern substituded:" << pattern << "+" << searchString << "=" << result;
     return result;
 }
 

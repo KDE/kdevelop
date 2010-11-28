@@ -4,6 +4,7 @@
  *   Copyright 2008 by Hamish Rodda                                        *
  *   rodda@kde.org                                                         *
  *   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
+ *   Copyright 2010 Julien Desgats <julien.desgats@gmail.com>              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
