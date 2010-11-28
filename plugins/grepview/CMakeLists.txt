@@ -11,10 +11,12 @@ set(kdevgrepview_PART_SRCS
     grepoutputdelegate.cpp
     grepjob.cpp
     grepfindthread.cpp
+    grepoutputview.cpp
 )
 
 set(kdevgrepview_PART_UI
     grepwidget.ui
+    grepoutputview.ui
 )
 
 kde4_add_ui_files(kdevgrepview_PART_SRCS ${kdevgrepview_PART_UI})
@@ -38,3 +40,5 @@ install(TARGETS kdevgrepview DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 install( FILES kdevgrepview.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install( FILES kdevgrepview.rc DESTINATION ${DATA_INSTALL_DIR}/kdevgrepview )
+
+add_subdirectory(tests)

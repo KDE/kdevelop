@@ -3,6 +3,7 @@
  *   bernd@kdevelop.org                                                    *
  *   Copyright 2008 by Hamish Rodda                                        *
  *   rodda@kde.org                                                         *
+ *   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -14,13 +15,12 @@
 #ifndef GREPJOB_H
 #define GREPJOB_H
 
-#include <QRegExp>
 #include <QDir>
 #include <QPointer>
 
 #include <kurl.h>
+#include <kjob.h>
 
-#include <outputview/outputjob.h>
 #include <interfaces/istatus.h>
 
 #include "grepfindthread.h"
@@ -28,21 +28,33 @@
 
 namespace KDevelop
 {
-    class IOutputView;
     class IProject;
     class ProcessLineMaker;
 }
 
-class GrepJob : public KDevelop::OutputJob, public KDevelop::IStatus
+class QRegExp;
+class GrepViewPlugin;
+class FindReplaceTest; //FIXME: this is useful only for tests
+
+class GrepJob : public KJob, public KDevelop::IStatus
 {
     Q_OBJECT
     Q_INTERFACES( KDevelop::IStatus )
+    
+    friend class GrepViewPlugin;
+    friend class FindReplaceTest;
 
-public:
+private:
+    ///Job can only be instanciated by plugin
     GrepJob( QObject *parent = 0 );
+    
+public:
 
+    void setOutputModel(GrepOutputModel * model);
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
+    void setReplacementTemplateString(const QString &replTmplString);
+    void setReplaceString(const QString &replaceString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
     void setDirectory(const KUrl &directory);
@@ -50,6 +62,7 @@ public:
     void setRegexpFlag(bool regexpFlag);
     void setCaseSensitive(bool caseSensitive);
     void setProjectFilesFlag(bool projectFilesFlag);
+    void setReplaceFlag(bool replaceFlag);
 
     virtual void start();
 
@@ -57,10 +70,11 @@ public:
 protected:
     virtual bool doKill();
 
-    GrepOutputModel* model() const;
+//    GrepOutputModel* model() const;
 
 private Q_SLOTS:
     void slotFindFinished();
+    void testFinishState(KJob *job);
 
 Q_SIGNALS:
     void clearMessage( KDevelop::IStatus* );
@@ -68,7 +82,6 @@ Q_SIGNALS:
     void showErrorMessage(const QString & message, int timeout = 0);
     void hideProgress( KDevelop::IStatus* );
     void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value);
-
     void foundMatches( const QString& filename, const GrepOutputItem::List& matches);
 
 private:
@@ -77,11 +90,13 @@ private:
     QString m_patternString;
     QRegExp m_regExp;
     QString m_regExpSimple;
+    GrepOutputModel *m_outputModel;
     
     enum {
         WorkCollectFiles,
         WorkGrep,
-        WorkIdle
+        WorkIdle,
+        WorkCancelled
     } m_workState;
     
     KUrl::List m_fileList;
@@ -89,6 +104,9 @@ private:
     QPointer<GrepFindFilesThread> m_findThread;
 
     QString m_templateString;
+    QString m_replacementTemplateString;
+    QString m_replaceString;
+    QString m_finalReplacement;   // computed with m_replaceString and m_replacementTemplateString
     QString m_filesString;
     QString m_excludeString;
     KUrl m_directory;
@@ -97,6 +115,13 @@ private:
     bool m_regexpFlag;
     bool m_recursiveFlag;
     bool m_caseSensitiveFlag;
+    bool m_replaceFlag;
+    
+    bool m_findSomething;
 };
+
+//FIXME: this function is used externally only for tests, find a way to keep it 
+//       static for a regular compilation
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace);
 
 #endif

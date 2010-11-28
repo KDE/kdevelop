@@ -27,7 +27,10 @@ class GrepDialog : public KDialog, private Ui::GrepWidget
     Q_OBJECT
 
 public:
-    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0 );
+    static const KDialog::ButtonCode SearchButton;
+    static const KDialog::ButtonCode ReplaceButton;
+    
+    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0, bool setLastUsed=false );
     ~GrepDialog();
 
     void setPattern(const QString &pattern);
@@ -36,6 +39,8 @@ public:
 
     QString patternString() const;
     QString templateString() const;
+    QString replacementString() const;
+    QString replacementTemplateString() const;
     QString filesString() const;
     QString excludeString() const;
     KUrl directory() const;
@@ -46,7 +51,7 @@ public:
     bool caseSensitiveFlag() const;
 
 private Q_SLOTS:
-    void search();
+    void performAction(KDialog::ButtonCode button);
     void templateTypeComboActivated(int);
     void syncButtonClicked();
     void patternComboEditTextChanged( const QString& );

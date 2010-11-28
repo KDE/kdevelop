@@ -21,10 +21,9 @@
 #ifndef GREPOUTPUTDELEGATE_H
 #define GREPOUTPUTDELEGATE_H
 
-#include <QtGui/QItemDelegate>
-#include <kcolorscheme.h>
+#include <QtGui/QStyledItemDelegate>
 
-class GrepOutputDelegate : public QItemDelegate
+class GrepOutputDelegate : public QStyledItemDelegate
 {
 public:
     explicit GrepOutputDelegate(QObject* parent);
@@ -33,8 +32,6 @@ public:
     static GrepOutputDelegate* self();
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 private:
-    KStatefulBrush textBrush;
-    KStatefulBrush fileBrush;
     static GrepOutputDelegate* m_self;
 };
 

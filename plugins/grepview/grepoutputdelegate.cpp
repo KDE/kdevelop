@@ -20,9 +20,14 @@
 
 #include "grepoutputdelegate.h"
 #include "grepoutputmodel.h"
+
 #include <QtGui/QPainter>
 #include <QtCore/QModelIndex>
-#include <kdebug.h>
+#include <QtGui/QTextDocument>
+#include <QtGui/QTextCursor>
+#include <QtGui/QAbstractTextDocumentLayout>
+#include <QtGui/QTextCharFormat>
+#include <QtCore/QRegExp>
 
 GrepOutputDelegate* GrepOutputDelegate::m_self = 0;
 
@@ -33,8 +38,7 @@ GrepOutputDelegate* GrepOutputDelegate::self()
 }
 
 GrepOutputDelegate::GrepOutputDelegate( QObject* parent )
-    : QItemDelegate(parent), textBrush( KColorScheme::View, KColorScheme::LinkText ),
-      fileBrush( KColorScheme::View, KColorScheme::InactiveText )
+    : QStyledItemDelegate(parent)
 {
     Q_ASSERT(!m_self);
     m_self = this;
@@ -46,21 +50,64 @@ GrepOutputDelegate::~GrepOutputDelegate()
 }
 
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    QStyleOptionViewItem opt = option;
-    QVariant status = index.data(Qt::UserRole+1);
-    if( status.isValid() && status.toInt() == GrepOutputItem::Text )
+{ 
+    // there is no function in QString to left-trim. A call to remove this this regexp does the job
+    static const QRegExp leftspaces("^\\s*", Qt::CaseSensitive, QRegExp::RegExp);
+    
+    // rich text component
+    const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());
+    const GrepOutputItem  *item  = dynamic_cast<const GrepOutputItem *>(model->itemFromIndex(index));
+    if(item && item->isText())
     {
-        opt.palette.setBrush( QPalette::Text, textBrush.brush( option.palette ) );
+        QStyleOptionViewItemV4 options = option;
+        initStyleOption(&options, index);
+
+        // building item representation
+        const KDevelop::SimpleRange rng = item->change()->m_range;
+        QTextDocument doc;
+        QTextCursor cur(&doc);
+        
+        QPalette::ColorGroup cg = options.state & QStyle::State_Enabled
+                                  ? QPalette::Normal : QPalette::Disabled;
+        QPalette::ColorRole cr  = options.state & QStyle::State_Selected
+                                  ? QPalette::HighlightedText : QPalette::Text;
+        QTextCharFormat fmt = cur.charFormat();
+        fmt.setFont(options.font);
+        
+        // the line number appears grayed
+        fmt.setForeground(options.palette.brush(QPalette::Disabled, cr));
+        cur.insertText(QString("%1: ").arg(item->lineNumber()), fmt);
+        
+        // switch to normal color
+        fmt.setForeground(options.palette.brush(cg, cr));
+        cur.insertText(item->text().left(rng.start.column).remove(leftspaces), fmt);
+        
+        fmt.setFontWeight(QFont::Bold);
+        cur.insertText(item->text().mid(rng.start.column, rng.end.column - rng.start.column), fmt);
+        
+        fmt.setFontWeight(QFont::Normal);
+        cur.insertText(item->text().right(item->text().length() - rng.end.column), fmt);
+        
+        painter->save();
+        options.text = QString();  // text will be drawn separately
+        options.widget->style()->drawControl(QStyle::CE_ItemViewItem, &options, painter, options.widget);
+
+        // set correct draw area
+        QRect clip = options.widget->style()->subElementRect(QStyle::SE_ItemViewItemText, &options);
+        QFontMetrics metrics(options.font);
+        painter->translate(clip.topLeft() - QPoint(0, metrics.descent()));
+        clip.setTopLeft(QPoint(0,0));
+        
+        painter->setClipRect(clip);
+        QAbstractTextDocumentLayout::PaintContext ctx;
+        ctx.clip = clip;
+        doc.documentLayout()->draw(painter, ctx);
+
+        painter->restore();
     }
-    else if( status.isValid() && status.toInt() == GrepOutputItem::FileCollapsed )
+    else
     {
-        opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
+        QStyledItemDelegate::paint(painter, option, index);
     }
-    else if( status.isValid() && status.toInt() == GrepOutputItem::FileExpanded )
-    {
-        opt.palette.setBrush( QPalette::Text, fileBrush.brush( option.palette ) );
-    }
-    QItemDelegate::paint(painter, opt, index);
 }
 

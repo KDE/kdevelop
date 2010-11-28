@@ -2,6 +2,7 @@
  *   Copyright 1999-2001 Bernd Gehrmann and the KDevelop Team              *
  *   bernd@kdevelop.org                                                    *
  *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
+ *   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -12,114 +13,133 @@
 
 #include "grepoutputmodel.h"
 #include "grepviewplugin.h"
-#include <QModelIndex>
-#include <kcolorscheme.h>
+
 #include <ktexteditor/cursor.h>
 #include <ktexteditor/document.h>
+#include <klocale.h>
+
+#include <QModelIndex>
+#include <QTextDocument>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
-#include <kicon.h>
-#include <klocale.h>
+
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(const QString &fileName,
-                   int lineNumber,
-                   const QString &text)
-    : QStandardItem(), m_fileName(fileName), m_text(text), m_lineNumber(lineNumber)
+GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text, bool replace)
+    : QStandardItem(), m_change(change)
 {
-    if( lineNumber!=-1 )
+    setText(text);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    
+    if(replace)
     {
-        QString formattedTxt = QString("  %1: %2").arg(lineNumber).arg(text);
-        setText( formattedTxt );
-        setData( Text );
+        setCheckable(true);
+        setCheckState(Qt::Checked);
+        QString replacement = Qt::escape(text.left(change->m_range.start.column)) + // start of line
+                            "<b>" + Qt::escape(change->m_newText) + "</b>" +        // replaced part
+                            Qt::escape(text.right(text.length() - change->m_range.end.column)); // rest of line
+        setToolTip(replacement.trimmed());
     }
-    else
+}
+
+GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool replace)
+    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), SimpleRange::invalid(), QString(), QString()))
+{
+    setText(text);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    if(replace)
     {
-        setText(text);
-        showExpanded();
+        setCheckable(true);
+        setTristate(true);
+        setCheckState(Qt::Checked);
     }
 }
 
-bool GrepOutputItem::collapse()
+int GrepOutputItem::lineNumber() const 
 {
-    if(isText())
-        return false;
-    if(collapsed())
-        return true;
-    QStandardItemModel *model = this->model();
-    if(!model)
-        return false;
-    int takeIdx = this->index().row()+1;
-    QList< QList<QStandardItem*> > rows;
-    forever
+    // line starts at 0 for cursor but we want to start at 1
+    return m_change->m_range.start.line + 1;
+}
+
+QString GrepOutputItem::filename() const 
+{
+    return m_change->m_document.str();
+}
+
+DocumentChangePointer GrepOutputItem::change() const
+{
+    return m_change;
+}
+
+bool GrepOutputItem::isText() const
+{
+    return m_change->m_range.isValid();
+}
+
+void GrepOutputItem::propagateState()
+{
+    for(int i = 0; i < rowCount(); i++)
     {
-        GrepOutputItem *textitem = dynamic_cast<GrepOutputItem*>(model->item(takeIdx));
-        if( !textitem )
-            break;
-        if(!textitem->isText())
-            break;
-        rows << model->takeRow(takeIdx);
+        GrepOutputItem *item = static_cast<GrepOutputItem *>(child(i));
+        if(item->isEnabled())
+        {
+            item->setCheckState(checkState());
+            item->propagateState();
+        }
     }
-    foreach(const QList<QStandardItem*> &row, rows)
-        this->appendRow(row);
-    this->showCollapsed();
-    return true;
 }
 
-bool GrepOutputItem::expand()
+void GrepOutputItem::refreshState()
 {
-    if(isText())
-        return false;
-    if(expanded())
-        return true;
-    int curRow = this->index().row()+1;
-    while(this->rowCount()!=0)
+    if(rowCount() > 0)
     {
-        QList<QStandardItem*> row = this->takeRow(0);
-        this->model()->insertRow(curRow++, row);
+        int checked   = 0;
+        int unchecked = 0;
+        int enabled   = 0; //only enabled items are relevants
+        
+        for(int i = 0; i < rowCount(); i++)
+        {
+            QStandardItem *item = child(i);
+            if(item->isEnabled())
+            {
+                enabled += 1;
+                switch(child(i)->checkState())
+                {
+                    case Qt::Checked:
+                        checked += 1;
+                        break;
+                    case Qt::Unchecked:
+                        unchecked += 1;
+                        break;
+                    default: break;
+                }
+            }
+        }
+        
+        if(enabled == 0)
+        {
+            setCheckState(Qt::Unchecked);
+            setEnabled(false);
+        }
+        else if(checked == enabled)
+        {
+            setCheckState(Qt::Checked);
+        } 
+        else if (unchecked == enabled)
+        {
+            setCheckState(Qt::Unchecked);
+        }
+        else
+        {
+            setCheckState(Qt::PartiallyChecked);
+        }
     }
-    showExpanded();
-    return true;
-}
-
-void GrepOutputItem::showCollapsed()
-{
-    setData( FileCollapsed );
-    setIcon( KIcon("arrow-right") );
-}
-
-void GrepOutputItem::showExpanded()
-{
-    setData( FileExpanded );
-    setIcon( KIcon("arrow-down") );
-}
-
-bool GrepOutputItem::toggleView()
-{
-    if(collapsed())
-        expand();
-    else if(expanded())
-        collapse();
-    else
-        return false;
-    return true;
-}
-
-bool GrepOutputItem::collapsed() const {
-    return data()==FileCollapsed;
-}
-
-int GrepOutputItem::lineNumber() const {
-    return m_lineNumber;
-}
-
-QString GrepOutputItem::filename() const {
-    return m_fileName;
-}
-
-bool GrepOutputItem::expanded() const {
-    return data()==FileExpanded;
+    
+    if(GrepOutputItem *p = static_cast<GrepOutputItem *>(parent()))
+    {
+        p->refreshState();
+    }
 }
 
 GrepOutputItem::~GrepOutputItem()
@@ -128,11 +148,21 @@ GrepOutputItem::~GrepOutputItem()
 ///////////////////////////////////////////////////////////////
 
 GrepOutputModel::GrepOutputModel( QObject *parent )
-    : QStandardItemModel( parent ), m_regExp("")
-{}
+    : QStandardItemModel( parent ), m_regExp(""), m_rootItem(0), m_fileCount(0), m_matchCount(0)
+{
+    connect(this, SIGNAL(itemChanged(QStandardItem*)),
+              this, SLOT(updateCheckState(QStandardItem*)));
+}
 
 GrepOutputModel::~GrepOutputModel()
 {}
+
+void GrepOutputModel::clear()
+{
+    QStandardItemModel::clear();
+    m_fileCount = 0;
+    m_matchCount = 0;
+}
 
 void GrepOutputModel::setRegExp(const QRegExp& re)
 {
@@ -143,10 +173,7 @@ void GrepOutputModel::activate( const QModelIndex &idx )
 {
     QStandardItem *stditem = itemFromIndex(idx);
     GrepOutputItem *grepitem = dynamic_cast<GrepOutputItem*>(stditem);
-    if( !grepitem )
-        return;
-    
-    if(grepitem->toggleView())
+    if( !grepitem || !grepitem->isText() )
         return;
 
     KUrl url(grepitem->filename());
@@ -174,62 +201,145 @@ void GrepOutputModel::activate( const QModelIndex &idx )
     ICore::self()->documentController()->activateDocument( doc, range );
 }
 
-bool GrepOutputModel::isValidIndex( const QModelIndex& idx ) const
+QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) const
 {
-    return ( idx.isValid() && idx.row() >= 0 && idx.row() < rowCount() && idx.column() == 0 );
-}
-
-QModelIndex GrepOutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
-{
-    int startrow = isValidIndex(currentIdx) ? currentIdx.row() + 1 : 0;
-    
-    for (int row = 0; row < rowCount(); ++row) {
-        int currow = (startrow + row) % rowCount();
-        if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->data() == GrepOutputItem::Text)
-                return index(currow, 0);
-    }
-    return QModelIndex();
-}
-
-QModelIndex GrepOutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
-{
-    //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
-    int startrow = rowCount() + (isValidIndex(currentIdx) ? currentIdx.row() : rowCount()) - 1;
-    
-    for (int row = 0; row < rowCount(); ++row)
+    int row = currentIdx.row();
+    GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+    if(current_item->parent() != 0) //we do nothing if it's the root item
     {
-        int currow = (startrow - row) % rowCount();
-        if (GrepOutputItem* grep_item = dynamic_cast<GrepOutputItem*>(item(currow)))
-            if (grep_item->data() == GrepOutputItem::Text)
-                return index(currow, 0);
+        if(!current_item->isText()) // the item is a file
+        {
+            int item_row = current_item->row();
+            if(item_row > 0)
+            {
+                int idx_last_item = current_item->parent()->child(item_row - 1)->rowCount() - 1;
+                return current_item->parent()->child(item_row - 1)->child(idx_last_item)->index();
+            }
+        }
+        else // the item is a match
+        {
+            if(row > 0)
+                return current_item->parent()->child(row - 1)->index();
+            else // we return the index of the last item of the previous file
+            {
+                int parrent_row = current_item->parent()->row();
+                if(parrent_row > 0)
+                {
+                    int idx_last_item = current_item->parent()->parent()->child(parrent_row - 1)->rowCount() - 1;
+                    return current_item->parent()->parent()->child(parrent_row - 1)->child(idx_last_item)->index();
+                }
+            }
+        }
     }
-    return QModelIndex();
+    return currentIdx;
+}
+
+QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
+{
+    int row = currentIdx.row();
+    GrepOutputItem* current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+    if(current_item->parent() != 0) //we do nothing if it's the root item
+    {
+        if(!current_item->isText()) // the item is a file
+        {
+            int item_row = current_item->row();
+            if(item_row < current_item->parent()->rowCount())
+            {
+                return current_item->parent()->child(item_row)->child(0)->index();
+            }
+        }
+        else // the item is a match
+        {
+            if(row < current_item->parent()->rowCount() - 1)
+                return current_item->parent()->child(row + 1)->index();
+            else // we return the index of the first item of the next file
+            {
+                int parrent_row = current_item->parent()->row();
+                if(parrent_row < current_item->parent()->parent()->rowCount() - 1)
+                {
+                    return current_item->parent()->parent()->child(parrent_row + 1)->child(0)->index();
+                }
+            }
+        }
+    }
+    return currentIdx;
 }
 
 void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputItem::List &items )
 {
+    if(items.isEmpty())
+        return;
+    
+    bool replace = items[0].isCheckable();  //FIXME : find a cleaner way to get this !
+    if(rowCount() == 0)
+    {
+        m_rootItem = new GrepOutputItem("", "", replace);
+        appendRow(m_rootItem);
+    }
+    
+    m_fileCount  += 1;
+    m_matchCount += items.length();
+    m_rootItem->setText(i18n("%1 matches in %2 files", m_matchCount, m_fileCount));
+    
     QString fnString = i18np("%2 (one match)", "%2 (%1 matches)", items.length(), filename);
 
-    GrepOutputItem *fileItem = new GrepOutputItem(filename, -1, fnString);
-    appendRow(fileItem);
+    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, replace);
+    m_rootItem->appendRow(fileItem);
     //m_tracker.addUrl(KUrl(filename));
     foreach( const GrepOutputItem& item, items )
     {
-        appendRow(new GrepOutputItem(item));
+        fileItem->appendRow(new GrepOutputItem(item));
     }
 }
 
-void GrepOutputModel::showErrorMessage( const QString& errorMessage )
+void GrepOutputModel::updateCheckState(QStandardItem* item)
 {
-    appendRow(new QStandardItem(errorMessage));
+    // if we don't disconnect the SIGNAL, the setCheckState will call it in loop
+    disconnect(SIGNAL(itemChanged(QStandardItem*)));
+    
+    // try to update checkstate on non checkable items would make a checkbox appear
+    if(item->isCheckable())
+    {
+        GrepOutputItem *it = static_cast<GrepOutputItem *>(item);
+        it->propagateState();
+        it->refreshState();
+    }
+
+    connect(this, SIGNAL(itemChanged(QStandardItem*)),
+              this, SLOT(updateCheckState(QStandardItem*)));
 }
 
-void GrepOutputModel::showMessage( KDevelop::IStatus* , const QString& message )
+void GrepOutputModel::doReplacements()
 {
-    appendRow(new QStandardItem(message));
+    
+    DocumentChangeSet changeSet;
+    changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
+    for(int fileRow = 0; fileRow < m_rootItem->rowCount(); fileRow++)
+    {
+        GrepOutputItem *file = static_cast<GrepOutputItem *>(m_rootItem->child(fileRow));
+        
+        for(int matchRow = 0; matchRow < file->rowCount(); matchRow++)
+        {
+            GrepOutputItem *match = static_cast<GrepOutputItem *>(file->child(matchRow));
+            if(match->checkState() == Qt::Checked) 
+            {
+                changeSet.addChange(match->change());
+                // this item cannot be checked anymore
+                match->setCheckState(Qt::Unchecked);
+                match->setEnabled(false);
+            }
+        }
+    }
+    
+    DocumentChangeSet::ChangeResult result = changeSet.applyAllChanges();
+    //TODO : really display this
+    if(!result.m_success)
+    {
+        DocumentChangePointer ch = result.m_reasonChange;
+        emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5").arg(Qt::escape(ch->m_oldText)).arg(Qt::escape(ch->m_newText))
+                        .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
+    }
 }
-
 
 #include "grepoutputmodel.moc"
 

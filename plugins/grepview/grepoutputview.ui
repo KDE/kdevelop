@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GrepOutputView</class>
+ <widget class="QWidget" name="GrepOutputView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>746</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="messageLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTreeView" name="resultsTreeView"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>applyButton</tabstop>
+  <tabstop>previousButton</tabstop>
+  <tabstop>nextButton</tabstop>
+  <tabstop>changeButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

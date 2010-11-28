@@ -4,6 +4,7 @@
 *   Copyright 2007 Dukju Ahn <dukjuahn@gmail.com>                         *
 *   Copyright 2008 by Hamish Rodda                                        *
 *   rodda@kde.org                                                         *
+*   Copyright 2010 Silvère Lestang <silvere.lestang@gmail.com>            *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -15,39 +16,70 @@
 #include "grepjob.h"
 #include "grepoutputmodel.h"
 
-#include <QWhatsThis>
 #include <QList>
 #include <QRegExp>
-#include <QKeySequence>
+#include <QTextDocument>
+#include <QTextStream>
 
-#include <kprocess.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <ktemporaryfile.h>
-
-#include <interfaces/iproject.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/icore.h>
-#include <project/projectmodel.h>
-#include <util/processlinemaker.h>
+#include <kencodingprober.h>
 
 #include <language/duchain/indexedstring.h>
+#include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
+#include <language/codegen/documentchangeset.h>
 
-#include "grepoutputdelegate.h"
+using namespace KDevelop;
 
-static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
+
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace)
 {
     GrepOutputItem::List res;
     QFile file(filename);
+    
     if(!file.open(QIODevice::ReadOnly))
         return res;
-    int lineno = 1;
-    while( !file.atEnd() )
+    int lineno = 0;
+    
+    
+    // detect encoding (unicode files can be feed forever, stops when confidence reachs 99%
+    KEncodingProber prober;
+    while(!file.atEnd() && prober.state() == KEncodingProber::Probing && prober.confidence() < 0.99) {
+        prober.feed(file.read(0xFF));
+    }
+    
+    kDebug() << prober.encoding() << prober.confidence() << prober.state() << file.pos() << file.size();
+    
+    // reads file with detected encoding
+    file.seek(0);
+    QTextStream stream(&file);
+    stream.setCodec(prober.encodingName());
+    while( !stream.atEnd() )
     {
-        QByteArray data = file.readLine();
-        if( re.indexIn(data)!=-1 )
-            res << GrepOutputItem(filename, lineno, QString(data).trimmed());
+        QString data = stream.readLine();
+        
+        // remove line terminators (in order to not match them)
+        for(int pos = data.length()-1; pos >= 0 && (data[pos] == '\r' || data[pos] == '\n'); pos--)
+        {
+            data.chop(1);
+        }
+        
+        int offset = 0;
+        // allow empty string matching result in an infinite loop !
+        while( re.indexIn(data, offset)!=-1 && re.cap(0).length() > 0 )
+        {
+            int start = re.pos(0);
+            int end = start + re.cap(0).length();
+            
+            DocumentChangePointer change = DocumentChangePointer(new DocumentChange(
+                IndexedString(filename), 
+                SimpleRange(lineno, start, lineno, end),
+                re.cap(0), re.cap(0).replace(re, repl)));
+            
+            res << GrepOutputItem(change, data, replace);
+            offset = end;
+        }
         lineno++;
     }
     file.close();
@@ -55,10 +87,12 @@ static GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 }
 
 GrepJob::GrepJob( QObject* parent )
-    : KDevelop::OutputJob( parent ), m_workState(WorkIdle)
+    : KJob( parent ), m_workState(WorkIdle)
 {
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
+    
+    connect(this, SIGNAL(result(KJob *)), this, SLOT(testFinishState(KJob *)));
 }
 
 QString GrepJob::statusName() const
@@ -104,7 +138,7 @@ void GrepJob::slotFindFinished()
         m_fileList.clear();
         emit hideProgress(this);
         emit clearMessage(this);
-        emit showErrorMessage(i18n("Find in Files aborted"), 5000);
+        emit showErrorMessage(i18n("Search aborted"), 5000);
         emitResult();
         return;
     }
@@ -118,19 +152,50 @@ void GrepJob::slotFindFinished()
         emitResult();
         return;
     }
+    
+    if(!m_regexpFlag) 
+    {
+        m_patternString = QRegExp::escape(m_patternString);
+    }
+    
+    if(m_replaceFlag && m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
+    {
+        emit showErrorMessage(i18n("Captures are not allowed in pattern string"), 5000);
+        return;
+    }
+    
     QString pattern = substitudePattern(m_templateString, m_patternString);
     m_regExp.setPattern(pattern);
     m_regExp.setPatternSyntax(QRegExp::RegExp2);
     m_regExp.setCaseSensitivity( m_caseSensitiveFlag ? Qt::CaseSensitive : Qt::CaseInsensitive );
-    if(!m_regexpFlag || pattern == QRegExp::escape(pattern)) {
-        // this is obviously not a regexp, so do a regular search
+    if(pattern == QRegExp::escape(pattern))
+    {
+        // enable wildcard mode when possible
+        // if pattern has already been escaped (raw text serch) a second escape will result in a different string anyway
         m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
-    static_cast<GrepOutputModel*>(model())->setRegExp(m_regExp);
+    
+    // backslashes can be sprecial chars
+    QString replacement = (m_regExp.patternSyntax() == QRegExp::Wildcard) ? m_replaceString : m_replaceString.replace("\\", "\\\\");
+    m_finalReplacement = substitudePattern(m_replacementTemplateString, replacement);
+    
+    m_outputModel->setRegExp(m_regExp);
 
-    emit showMessage(this, i18np("Searching for \"%2\" in one file",
-                                 "Searching for \"%2\" in %1 files",
-                                 m_fileList.length(), m_regExp.pattern()));
+    if(m_replaceFlag)
+    {
+        emit showMessage(this, i18np("Replace <b>%2</b> by <b>%3</b> in one file",
+                                     "Replace <b>%2</b> by <b>%3</b> in %1 files",
+                                     m_fileList.length(), 
+                                     Qt::escape(m_regExp.pattern()), 
+                                     Qt::escape(m_finalReplacement)));
+    }
+    else
+    {
+        emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
+                                     "Searching for <b>%2</b> in %1 files",
+                                     m_fileList.length(), 
+                                     Qt::escape(m_regExp.pattern())));
+    }
 
     m_workState = WorkGrep;
     QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);
@@ -158,10 +223,13 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     QString file = m_fileList[m_fileIndex].toLocalFile();
-                    GrepOutputItem::List items = grepFile(file, m_regExp);
+                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement, m_replaceFlag);
 
                     if(!items.isEmpty())
+                    {
+                        m_findSomething = true;
                         emit foundMatches(file, items);
+                    }
 
                     m_fileIndex++;
                 }
@@ -176,6 +244,12 @@ void GrepJob::slotWork()
                 emitResult();
             }
             break;
+        case WorkCancelled:            
+            emit hideProgress(this);
+            emit clearMessage(this);
+            emit showErrorMessage(i18n("Search aborted"), 5000);
+            emitResult();
+            break;
     }
 }
 
@@ -183,35 +257,19 @@ void GrepJob::start()
 {
     if(m_workState!=WorkIdle)
         return;
-    setToolTitle(i18n("Find in Files"));
-    setToolIcon(KIcon("edit-find"));
-    setViewType(KDevelop::IOutputView::HistoryView);
-    setTitle(m_patternString);
-    setBehaviours( KDevelop::IOutputView::AllowUserClose );
+    
     m_fileList.clear();
     m_workState = WorkIdle;
     m_fileIndex = 0;
 
-    GrepOutputModel *model = new GrepOutputModel(this);
-    setModel(model, KDevelop::IOutputView::TakeOwnership);
-    setDelegate(GrepOutputDelegate::self());
-    startOutput();
-
-    connect(this, SIGNAL(showErrorMessage(QString, int)),
-            model, SLOT(showErrorMessage(QString)));
-    connect(this, SIGNAL(showMessage(KDevelop::IStatus*, QString, int)),
-            model, SLOT(showMessage(KDevelop::IStatus*, QString)));
+    m_findSomething = false;
+    m_outputModel->clear();
 
     qRegisterMetaType<GrepOutputItem::List>();
     connect(this, SIGNAL(foundMatches(QString, GrepOutputItem::List)),
-            model, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
+            m_outputModel, SLOT(appendOutputs(QString, GrepOutputItem::List)), Qt::QueuedConnection);
 
     QMetaObject::invokeMethod(this, "slotWork", Qt::QueuedConnection);
-}
-
-GrepOutputModel* GrepJob::model() const
-{
-    return static_cast<GrepOutputModel*>(OutputJob::model());
 }
 
 bool GrepJob::doKill()
@@ -222,12 +280,34 @@ bool GrepJob::doKill()
         m_findThread->tryAbort();
         return false;
     }
+    else
+    {
+        m_workState = WorkCancelled;
+    }
     return true;
+}
+
+void GrepJob::testFinishState(KJob *job)
+{
+    if(!job->error())
+    {
+        if(!m_findSomething) emit showMessage(this, i18n("No results found"));
+    }
+}
+
+void GrepJob::setOutputModel(GrepOutputModel* model)
+{
+    m_outputModel = model;
 }
 
 void GrepJob::setTemplateString(const QString& templateString)
 {
     m_templateString = templateString;
+}
+
+void GrepJob::setReplacementTemplateString(const QString &replTmplString)
+{
+    m_replacementTemplateString = replTmplString;
 }
 
 void GrepJob::setFilesString(const QString& filesString)
@@ -263,6 +343,16 @@ void GrepJob::setRegexpFlag(bool regexpFlag)
 void GrepJob::setProjectFilesFlag(bool projectFilesFlag)
 {
     m_useProjectFilesFlag = projectFilesFlag;
+}
+
+void GrepJob::setReplaceFlag(bool replaceFlag)
+{
+    m_replaceFlag = replaceFlag;
+}
+
+void GrepJob::setReplaceString(const QString& replaceString)
+{
+    m_replaceString = replaceString;
 }
 
 void GrepJob::setPatternString(const QString& patternString)
