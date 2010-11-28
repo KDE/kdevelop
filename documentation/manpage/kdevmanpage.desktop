@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Service
 Icon=x-office-address-book
-Comment=This plugin provides Manuel Pages integration
+Comment=This plugin provides Manual Pages integration
 Name=Man Pages
 GenericName=Documentation Support
 ServiceTypes=KDevelop/Plugin
