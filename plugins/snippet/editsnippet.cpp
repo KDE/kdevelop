@@ -24,6 +24,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KToolInvocation>
+#include <KMessageBox>
 
 #include "snippetstore.h"
 #include "snippet.h"
@@ -153,11 +154,13 @@ void EditSnippet::save()
     }
     m_snippet->setArguments(m_ui->snippetArgumentsEdit->text());
     m_snippet->setSnippet(m_snippetView->document()->text());
+    m_snippetView->document()->setModified(false);
     m_snippet->setText(m_ui->snippetNameEdit->text());
     m_snippet->setPostfix(m_ui->snippetPostfixEdit->text());
     m_snippet->setPrefix(m_ui->snippetPrefixEdit->text());
     m_snippet->action()->setShortcut(m_ui->snippetShortcutWidget->shortcut());
     m_repo->setScript(m_scriptsView->document()->text());
+    m_scriptsView->document()->setModified(false);
     m_repo->save();
 
     setWindowTitle(i18n("Edit Snippet %1 in %2", m_snippet->text(), m_repo->text()));
@@ -173,5 +176,18 @@ void EditSnippet::slotScriptDocumentation()
     KToolInvocation::invokeHelp("advanced-editing-tools-scripting-api", "kate");
 }
 
+void EditSnippet::reject()
+{
+    if (m_snippetView->document()->isModified() || m_scriptsView->document()->isModified()) {
+        int ret = KMessageBox::warningContinueCancel(qApp->activeWindow(),
+            i18n("The snippet contains unsaved changes. Do you want to continue and lose all changes?"),
+            i18n("Warning - Unsaved Changes")
+        );
+        if (ret == KMessageBox::Cancel) {
+            return;
+        }
+    }
+    QDialog::reject();
+}
 
 #include "editsnippet.moc"

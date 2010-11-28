@@ -44,6 +44,8 @@ public:
 
     void setSnippetText(const QString& text);
 
+    virtual void reject();
+
 private:
     Ui::EditSnippetBase* m_ui;
     SnippetRepository* m_repo;
