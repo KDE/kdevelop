@@ -21,17 +21,17 @@
 #ifndef MANPAGEPLUGIN_H
 #define MANPAGEPLUGIN_H
 
+#include "manpagemodel.h"
+
 #include <interfaces/iplugin.h>
 #include <interfaces/idocumentationprovider.h>
-#include <QVariantList>
 
-#include "manpagemodel.h"
+#include <QVariantList>
+#include <QProgressBar>
 
 class ManPageDocumentation;
 
 class KUrl;
-
-class QProgressBar;
 
 class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationProvider
 {
@@ -54,14 +54,8 @@ class ManPagePlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationP
     signals:
         void addHistory( const KSharedPtr< KDevelop::IDocumentation >& doc ) const;
 
-    public slots :
-        void sectionCount(int count);
-        void sectionParsed();
-
     private:
         ManPageModel *m_model;
-        QProgressBar *m_progressBar;
-
 };
 
 #endif // MANPAGEPLUGIN_H

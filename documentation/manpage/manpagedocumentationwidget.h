@@ -24,6 +24,7 @@
 #include <QStackedWidget>
 
 class QTreeView;
+class QProgressBar;
 
 class ManPageDocumentationWidget : public QStackedWidget
 {
@@ -32,9 +33,12 @@ public:
     explicit ManPageDocumentationWidget(QWidget *parent = 0);
 public slots:
     void manIndexLoaded();
+    void sectionListUpdated();
+    void sectionParsed();
 private:
     QWidget* m_loadingWidget;
     QTreeView* m_treeView;
+    QProgressBar* m_progressBar;
 };
 
 #endif // MANPAGEDOCUMENTATIONWIDGET_H

@@ -56,6 +56,8 @@ using namespace KDevelop;
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
     , m_indexModel(new QStringListModel)
+    , m_loaded(false)
+    , m_nbSectionLoaded(0)
 {
     QMetaObject::invokeMethod(const_cast<ManPageModel*>(this), "initModel", Qt::QueuedConnection);
 }
@@ -135,7 +137,7 @@ void ManPageModel::indexDataReceived(KJob *job){
     } else {
         return;
     }
-    emit sectionCount(m_sectionList.count());
+    emit sectionListUpdated();
     iterator = new QListIterator<ManSection>(m_sectionList);
     if(iterator->hasNext()){
         initSection();
@@ -155,14 +157,15 @@ void ManPageModel::sectionDataReceived(KJob *job){
         return;
     }
     iterator->next();
+    m_nbSectionLoaded++;
     emit sectionParsed();
     if(iterator->hasNext()){
         initSection();
     } else {
         // End of init
+        m_loaded = true;
         m_indexModel->setStringList(m_index);
         delete iterator;
-        ManPageDocumentation::s_provider->deleteProgressBar();
         emit manPagesLoaded();
     }
 }
@@ -231,5 +234,19 @@ bool ManPageModel::containsIdentifier(QString identifier)
     return m_index.contains(identifier);
 }
 
+int ManPageModel::sectionCount() const
+{
+    return m_sectionList.count();
+}
+
+bool ManPageModel::isLoaded() const
+{
+    return m_loaded;
+}
+
+int ManPageModel::nbSectionLoaded() const
+{
+    return m_nbSectionLoaded;
+}
 
 #include "manpagemodel.moc"

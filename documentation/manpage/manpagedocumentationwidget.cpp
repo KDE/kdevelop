@@ -33,29 +33,33 @@ ManPageDocumentationWidget::ManPageDocumentationWidget(QWidget *parent)
     , m_loadingWidget(0)
 {
     ManPageModel* model = ManPageDocumentation::s_provider->model();
-    QProgressBar* progressBar = ManPageDocumentation::s_provider->progressBar();
-    if(progressBar){
-        connect(model, SIGNAL(manPagesLoaded()), this, SLOT(manIndexLoaded()));
-        m_loadingWidget = new QWidget(this);
-        QLabel* label = new QLabel(i18n("Loading man pages ..."));
-        label->setAlignment(Qt::AlignHCenter);
-        QVBoxLayout* layout = new QVBoxLayout();
-        layout->addWidget(label);
-        layout->addWidget(progressBar);
-        layout->addStretch();
-        m_loadingWidget->setLayout(layout);
-        addWidget(m_loadingWidget);
-    }
     m_treeView = new QTreeView(this);
     m_treeView->header()->setVisible(false);
     connect(m_treeView, SIGNAL(clicked(QModelIndex)), model, SLOT(showItem(QModelIndex)));
     addWidget(m_treeView);
-    if(progressBar){
+    if(!model->isLoaded()){
+        m_loadingWidget = new QWidget(this);
+        m_progressBar = new QProgressBar(m_loadingWidget);
+        QLabel* label = new QLabel(i18n("Loading man pages ..."));
+        if(model->sectionCount() == 0){
+            connect(model, SIGNAL(sectionListUpdated()), this, SLOT(sectionListUpdated()) );
+        } else {
+            sectionListUpdated();
+        }
+        connect(model, SIGNAL(sectionParsed()), this, SLOT(sectionParsed()) );
+        connect(model, SIGNAL(manPagesLoaded()), this, SLOT(manIndexLoaded()));
+        label->setAlignment(Qt::AlignHCenter);
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->addWidget(label);
+        layout->addWidget(m_progressBar);
+        layout->addStretch();
+        m_loadingWidget->setLayout(layout);
+        addWidget(m_loadingWidget);
         setCurrentWidget(m_loadingWidget);
-    }
-    else {
+    } else {
         manIndexLoaded();
     }
+
 }
 
 void ManPageDocumentationWidget::manIndexLoaded()
@@ -68,4 +72,16 @@ void ManPageDocumentationWidget::manIndexLoaded()
         delete m_loadingWidget;
         m_loadingWidget = 0;
     }
+}
+
+void ManPageDocumentationWidget::sectionListUpdated()
+{
+    ManPageModel* model = ManPageDocumentation::s_provider->model();
+    m_progressBar->setRange(0, model->sectionCount());
+}
+
+void ManPageDocumentationWidget::sectionParsed()
+{
+    ManPageModel* model = ManPageDocumentation::s_provider->model();
+    m_progressBar->setValue(model->nbSectionLoaded());
 }
