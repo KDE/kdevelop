@@ -121,7 +121,7 @@ p, li { white-space: pre-wrap; }
    <item row="4" column="1">
     <widget class="QCheckBox" name="regexCheck">
      <property name="toolTip">
-      <string>Enable or diable regular expression.</string>
+      <string>Enable or disable regular expression.</string>
      </property>
      <property name="text">
       <string/>
