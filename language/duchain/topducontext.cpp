@@ -786,7 +786,7 @@ TopDUContext::~TopDUContext( )
   }
   deleteChildContextsRecursively();
   deleteLocalDeclarations();
-  m_dynamicData->clearContextsAndDeclartions();
+  m_dynamicData->clearContextsAndDeclarations();
 }
 
 void TopDUContext::deleteSelf() {
