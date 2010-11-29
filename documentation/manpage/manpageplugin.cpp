@@ -32,6 +32,7 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/indexedstring.h>
+#include <language/duchain/parsingenvironment.h>
 
 #include <language/duchain/classdeclaration.h>
 #include <language/duchain/functiondeclaration.h>
@@ -99,6 +100,14 @@ void ManPagePlugin::deleteProgressBar() {
 
 KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declaration* dec ) const
 {
+    Q_ASSERT(dec);
+    Q_ASSERT(dec->topContext());
+    Q_ASSERT(dec->topContext()->parsingEnvironmentFile());
+    static const KDevelop::IndexedString cppLanguage("C++");
+    if (dec->topContext()->parsingEnvironmentFile()->language() != cppLanguage) {
+        return KSharedPtr<IDocumentation>();
+    }
+
     QString identifier = dec->identifier().toString();
     if(m_model->containsIdentifier(identifier)){
         {
