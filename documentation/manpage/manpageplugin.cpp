@@ -110,12 +110,10 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
 
     QString identifier = dec->identifier().toString();
     if(m_model->containsIdentifier(identifier)){
-        {
-            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-            KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
-            if(qid.count() == 1){
-                return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier+"a", KUrl("man:"+identifier))));
-            }
+        KDevelop::DUChainReadLocker lock;
+        KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
+        if(qid.count() == 1){
+            return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier+"a", KUrl("man:"+identifier))));
         }
     }
     return  KSharedPtr<IDocumentation>();
