@@ -38,8 +38,6 @@ namespace CMakeParserUtils
         QList<int> versionNumList;
         *ok = false;
         QStringList versionStringList = version.split('.', QString::SkipEmptyParts);
-        if (versionStringList.isEmpty())
-            return versionNumList;
 
         foreach(const QString& part, versionStringList)
         {
