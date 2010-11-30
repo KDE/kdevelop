@@ -134,8 +134,6 @@ void ManPageModel::initModel(){
 void ManPageModel::indexDataReceived(KJob *job){
     if (!job->error()){
         m_sectionList = indexParser();
-    } else {
-        return;
     }
     emit sectionListUpdated();
     iterator = new QListIterator<ManSection>(m_sectionList);
@@ -153,8 +151,6 @@ void ManPageModel::sectionDataReceived(KJob *job){
     if (!job->error()){
         KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
         sectionParser(iterator->peekNext().first, QString::fromUtf8(stjob->data()));
-    } else {
-        return;
     }
     iterator->next();
     m_nbSectionLoaded++;
