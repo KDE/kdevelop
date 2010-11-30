@@ -11,10 +11,11 @@ if(KDevPlatform_VERSION VERSION_GREATER 1.1.50)
     MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.2, version 1.1 is required")
 endif(KDevPlatform_VERSION VERSION_GREATER 1.1.50)
 
+set(CUSTOM_BUILDSYSTEM_VERSION 1.0.0)
 
 include_directories( ${KDE4_INCLUDES} ${KDEVPLATFORM_INCLUDE_DIR})
 
-add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} )
+add_definitions( ${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DCUSTOM_BUILDSYSTEM_VERSION=\\\"${CUSTOM_BUILDSYSTEM_VERSION}\\\" )
 
 ## Unittests
 add_subdirectory( tests )
