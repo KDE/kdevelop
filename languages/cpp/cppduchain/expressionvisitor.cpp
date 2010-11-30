@@ -1646,13 +1646,10 @@ void ExpressionVisitor::createDelayedType( AST* node , bool expression ) {
               m_lastInstance = Instance(true);
 
               lock.unlock();
-<<<<<<< HEAD
-              //apol: should mark the used value as writed considering if the const-ness of the function and the argument passed
-              newUse( node, node->op, node->op+1, functions.first().function.declaration() );
-              session()->mapCallAstToType(node, function);
-=======
+              
               newUse( node, node->op, node->op+1, viable.declaration() );
->>>>>>> 6a668c2bec55000e59ee68ad2c579555e640dc15
+              session()->mapCallAstToType(node, function);
+
             }else{
               problem(node, QString("Found no viable function"));
             }
