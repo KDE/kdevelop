@@ -260,7 +260,6 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
         }
         
         dynamic_cast<CMakeFolderItem*>(project->projectItem())->setBuildDir(KUrl::relativeUrl(baseUrl, project->folder()));
-        qDebug() << "aaaaaaaaaAAAAAAAAAaaaAAaaaAAa" << buildDirectory(project->projectItem());
     }
     return ref;
 }
@@ -440,7 +439,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 else
                     a->setUrl(path);
                 
-                kDebug() << "folder: " << a << a->index();
+//                 kDebug() << "folder: " << a << a->index();
                 a->setDefinitions(data.definitions);
                 folderList.append( a );
                 
@@ -477,7 +476,6 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
                 dir=simp.toLocalFile();
             }
 
-            kDebug() << "converting " << s << dir;
             if(!directories.contains(dir))
                 directories.append(dir);
         }
@@ -533,18 +531,17 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             KUrl::List tfiles;
             foreach( const QString & sFile, t.files)
             {
-                if(sFile.isEmpty())
+                if(sFile.startsWith("#[") || sFile.isEmpty())
                     continue;
 
                 KUrl sourceFile(sFile);
                 if(sourceFile.isRelative()) {
                     sourceFile = folder->url();
-                    sourceFile.adjustPath( KUrl::RemoveTrailingSlash );
                     sourceFile.addPath( sFile );
                 }
                 
                 tfiles += sourceFile;
-                kDebug(9042) << "..........Adding:" << sourceFile;
+                kDebug(9042) << "..........Adding:" << sourceFile << sFile << folder->url();
             }
             
             setTargetFiles(targetItem, tfiles);
