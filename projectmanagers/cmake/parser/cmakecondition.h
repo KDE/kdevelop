@@ -31,7 +31,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeCondition
         QList<int> variableArguments() const { return m_argUses; }
         
         enum conditionToken { None=0, variable, NOT, AND, OR, COMMAND, EXISTS, IS_NEWER_THAN, IS_DIRECTORY, IS_ABSOLUTE, MATCHES,
-            LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, LPR, RPR, Last };
+            LESS, GREATER, EQUAL, STRLESS, STRGREATER, STREQUAL, DEFINED, LPR, RPR, VERSION_LESS, VERSION_EQUAL, VERSION_GREATER, Last };
     private:
         static conditionToken typeName(const QString& name);
         QStringList::const_iterator prevOperator(QStringList::const_iterator it, QStringList::const_iterator itStop) const;

@@ -45,6 +45,8 @@ class pp_actual {
 public:
   pp_actual() : forceValid(false) {
   }
+  PreprocessedContents sourceText;
+  Anchor sourcePosition;
   QList<PreprocessedContents> text;
   QList<Anchor> inputPosition; //Each inputPosition marks the beginning of one item in the text list
   bool forceValid;
@@ -56,17 +58,6 @@ public:
     forceValid = false;
     text.clear();
     inputPosition.clear();
-  }
-
-  PreprocessedContents mergeText() const {
-    if(text.count() == 1)
-      return text.at(0);
-    
-    PreprocessedContents ret;
-    
-    foreach(const PreprocessedContents& t, text)
-      ret += t;
-    return ret;
   }
 };
 
@@ -89,7 +80,8 @@ public:
 
   /// Expands text with the known macros. Continues until it finds a new text line
   /// beginning with #, at which point control is returned.
-  void operator()(Stream& input, Stream& output);
+  /// If substitute == true, perform only macro parameter substitution and # token processing
+  void operator()(Stream& input, Stream& output, bool substitute = false, LocationTable* table = 0);
 
   void skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro,
                                 Stream& input, Stream& output);
@@ -107,6 +99,10 @@ public:
   }
   
 private:
+  /// Read actual parameter of @ref macro value from @ref input and append it to @ref actuals
+  /// @ref expander is a reusable macro expander
+  void skip_actual_parameter(rpp::Stream& input, rpp::pp_macro& macro, QList< rpp::pp_actual >& actuals, rpp::pp_macro_expander& expander);
+
   pp* m_engine;
   pp_frame* m_frame;
 

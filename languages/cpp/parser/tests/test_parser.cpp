@@ -440,19 +440,34 @@ private slots:
 
   void testPreprocessor() {
     rpp::Preprocessor preprocessor;
-    //QCOMPARE(preprocess("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
+    QCOMPARE(preprocess("#define TEST (1L<<10)\nTEST").trimmed(), QString("(1L<<10)"));
+    QCOMPARE(preprocess("#define SELF OTHER\n#define OTHER SELF\nSELF").trimmed(), QString("SELF"));
     QCOMPARE(preprocess("#define TEST //Comment\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
     QCOMPARE(preprocess("#define TEST /*Comment\n*/\nTEST 1").trimmed(), QString("1")); //Comments are not included in macros
     QCOMPARE(preprocess("#define TEST_URL \"http://foobar.com\"\nTEST_URL").trimmed(), QString("\"http://foobar.com\""));
     QCOMPARE(preprocess("#define TEST_STR \"//\\\"//\"\nTEST_STR").trimmed(), QString("\"//\\\"//\""));
+    QCOMPARE(preprocess("#if ~1\n#define NUMBER 10\n#else\n#define NUMBER 20\n#endif\nNUMBER").trimmed(), QString("10"));
+    QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO\n(aa, bb)").trimmed(), QString("ab"));
+    QCOMPARE(preprocess("#define MACRO(a, b) ab\nMACRO(aa,\n bb)").trimmed(), QString("ab"));
+  }
 
+  void testPreprocessorStringify() {
+    QCOMPARE(preprocess("#define STR(s) #s\n#define MACRO string\nSTR(MACRO)").trimmed(), QString("\"MACRO\""));
+    QCOMPARE(preprocess("#define STR(s) #s\n#define XSTR(s) STR(s)\n#define MACRO string\nXSTR(MACRO)").simplified(), QString("\"string\""));
   }
 
   void testStringConcatenation()
   {
     rpp::Preprocessor preprocessor;
     QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
+    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(var1, )").trimmed(), QString("var1"));
+    QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(, var2)").trimmed(), QString("var2"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2 Var2##Var1\nCONCAT(      Hello      ,      You     )").simplified(), QString("\nHelloYou YouHello").simplified());
+
+    QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
+    QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\n#define LOW LOW world\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
+    QCOMPARE(preprocess("#define GLUE(a, b) a ##b\n#define XGLUE(a, b) GLUE(a, b)\n#define HIGHLOW hello\n#define LOW LOW world\nXGLUE(HIGH, LOW)").simplified(), QString("hello world")); // TODO: simplified -> trimmed
+    QCOMPARE(preprocess("#define GLUE(a, b, c) k ## l ## m\nGLUE(a, b, c)").trimmed(), QString("klm"));
   }
 
   void testCondition()

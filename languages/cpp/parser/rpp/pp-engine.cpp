@@ -155,7 +155,8 @@ void pp::handle_directive(uint directive, Stream& input, Stream& output)
 
 void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
 {
-  if (isLetter(input.current()) || input == '_') {
+  QByteArray bytes = KDevelop::IndexedString::fromIndex(input.current()).byteArray();
+  if (bytes.size() > 0 && (isLetter(bytes.at(0)) || bytes.at(0) == '_')) {
     pp_macro_expander expand_include(this);
 
     Anchor inputPosition = input.inputPosition();
@@ -199,7 +200,6 @@ void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
   while (!input.atEnd() && input != quote) {
     RETURN_ON_FAIL(input != '\n');
 
-    if(((uint)input) != indexFromCharacter(' '))
       includeNameB.append(input);
     ++input;
   }
@@ -526,6 +526,10 @@ Value pp::eval_primary(Stream& input)
 
     case '!':
       result.set_long(eval_primary(input).is_zero());
+      break;
+
+    case '~':
+      result.set_long(~ eval_primary(input).l);
       break;
 
     case '(':

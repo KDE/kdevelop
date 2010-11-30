@@ -82,6 +82,7 @@ class CMakeFolderItem : public KDevelop::ProjectBuildFolderItem, public Descript
         void setFormerParent(CMakeFolderItem* parent) { m_formerParent=parent; }
         
         QString buildDir() const { return m_buildDir; }
+        void setBuildDir(const QString& bd) { m_buildDir = bd; }
         
         void clear();
 

@@ -38,7 +38,7 @@
 #include "preprocessor.h"
 #include "chartools.h"
 
-const int maxMacroExpansionDepth = 50;
+const int maxMacroExpansionDepth = 70;
 
 using namespace KDevelop;
 
@@ -183,7 +183,7 @@ class MacroHider {
     Environment* m_environment;
 };
 
-void pp_macro_expander::operator()(Stream& input, Stream& output)
+void pp_macro_expander::operator()(Stream& input, Stream& output, bool substitute, LocationTable* table)
 {
   skip_blanks(input, output);
 
@@ -214,47 +214,25 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           ++input;
           skip_blanks (input, devnull());
           
+          // Need to extract previous identifier in case there are spaces in front of current output position
+          // May happen if parameter to the left of ## was expanded to an empty string
           IndexedString previous;
           if (output.offset() > 0) {
             previous = IndexedString::fromIndex(output.popLastOutput()); //Previous already has been expanded
-            while(output.offset() > 0 && isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ')
+            while(output.offset() > 0 && isCharacter(previous.index()) && isSpace(characterFromIndex(previous.index())))
               previous = IndexedString::fromIndex(output.popLastOutput());   
           }
-          
-          IndexedString add = IndexedString::fromIndex(skip_identifier (input));
-          
-          PreprocessedContents newExpanded;
-          
-          {
-            //Expand "add", so it is eventually replaced by an actual
-            PreprocessedContents actualText;
-            actualText.append(add.index());
-
-            {
-              Stream as(&actualText);
-              pp_macro_expander expand_actual(m_engine, m_frame);
-              Stream nas(&newExpanded);
-              expand_actual(as, nas);
-            }
-          }
-          
-          if(!newExpanded.isEmpty()) {
-            IndexedString first = IndexedString::fromIndex(newExpanded.first());
-            if(!isCharacter(first.index()) || QChar(characterFromIndex(first.index())).isLetterOrNumber() || characterFromIndex(first.index()) == '_') {
-              //Merge the tokens
-              newExpanded.first() = IndexedString(previous.byteArray() + first.byteArray()).index();
-            }else{
-              //Cannot merge, prepend the previous text
-              newExpanded.prepend(previous.index());
-            }
+          output.appendString(output.currentOutputAnchor(), previous);
+          // OK to put the merged tokens into stream separately, because the stream in character-based
+          Anchor nextStart = input.inputPosition();
+          IndexedString next = IndexedString::fromIndex(skip_identifier (input));
+          pp_actual actualNext = resolve_formal(next, input);
+          if (!actualNext.isValid()) {
+            output.appendString(nextStart, next);
           }else{
-            newExpanded.append(previous.index());
+            output.appendString(actualNext.sourcePosition, actualNext.sourceText);
           }
-          
-          //Now expand the merged text completely into the output.
-          pp_macro_expander final_expansion(m_engine, m_frame);
-          Stream nas(&newExpanded, output.currentOutputAnchor());
-          final_expansion(nas, output);
+          output.mark(input.inputPosition());
           continue;
         }
         
@@ -264,7 +242,7 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
 
         Anchor inputPosition = input.inputPosition();
         KDevelop::CursorInRevision originalInputPosition = input.originalInputPosition();
-        PreprocessedContents formal = resolve_formal(identifier, input).mergeText();
+        PreprocessedContents formal = resolve_formal(identifier, input).sourceText;
         
         //Escape so we don't break on '"'
         for(int a = formal.count()-1; a >= 0; --a) {
@@ -277,7 +255,6 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             }
               
         }
-
         Stream is(&formal, inputPosition);
         is.setOriginalInputPosition(originalInputPosition);
         skip_whitespaces(is, devnull());
@@ -325,9 +302,34 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         check_header_section
         
         Anchor inputPosition = input.inputPosition();
+        int offset = input.offset();
         IndexedString name = IndexedString::fromIndex(skip_identifier (input));
         
-        Anchor inputPosition2 = input.inputPosition();
+        // peek forward to check for ##
+        int start = input.offset();
+        skip_blanks(input, devnull());
+        if (!input.atEnd()) {
+          if(input == '#' && (++input) == '#') {
+              ++input;
+              //We have skipped a paste token
+              skip_blanks(input, devnull());
+              pp_actual actualFirst = resolve_formal(name, input);
+
+              if (!actualFirst.isValid()) {
+                output.appendString(inputPosition, name);
+              } else {
+                output.appendString(actualFirst.sourcePosition, actualFirst.sourceText);
+              }
+
+              input.seek(start); // will need to process the second argument too
+              output.mark(input.inputPosition());
+              continue;
+          }else{
+            input.seek(start);
+          }
+        }
+
+        if (substitute) {
         pp_actual actual = resolve_formal(name, input);
         if (actual.isValid()) {
           Q_ASSERT(actual.text.size() == actual.inputPosition.size());
@@ -340,23 +342,9 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             output.appendString(*cursorIt, *textIt);
           }
           output << ' '; //Insert a whitespace to omit implicit token merging
-          output.mark(input.inputPosition());
-          
-          if(actual.text.isEmpty()) {
-            int start = input.offset();
             
-            skip_blanks(input, devnull());
-            if (input.atEnd()) {
-              // this might happen in e.g. /usr/include/bits/mathcalls.h
-              continue;
-            }
-            //Omit paste tokens behind empty used actuals, else we will merge with the previous text
-            if(input == '#' && (++input) == '#') {
-              ++input;
-              //We have skipped a paste token
             }else{
-              input.seek(start);
-            }
+            output.appendString(inputPosition, name);
           }
           
           continue;
@@ -384,15 +372,29 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
             output.appendString(inputPosition, convertFromByteArray(QDate::currentDate().toString("\"MMM dd yyyy\"").toUtf8()));
           else if (name == timeIndex)
             output.appendString(inputPosition, convertFromByteArray(QTime::currentTime().toString("\"hh:mm:ss\"").toUtf8()));
-          else
+          else {
+            if (table) {
+              // In case of a merged token, find some borders for it inside a macro invocation
+              Anchor leftmost = table->positionAt(offset, *input.source(), true).first;
+              Anchor rightmost = table->positionAt(input.offset(), *input.source(), true).first;
+              // The order of parameters inside macro body may be different from its declaration
+              if (rightmost < leftmost) {
+                qSwap(rightmost, leftmost);
+              }
+              output.appendString(leftmost, name);
+              if (rightmost != leftmost) {
+                output.mark(rightmost);
+              }
+            } else {
             output.appendString(inputPosition, name);
+            }
+          }
           continue;
         }
         
         EnableMacroExpansion enable(output, input.inputPosition()); //Configure the output-stream so it marks all stored input-positions as transformed through a macro
 
           if (macro->definitionSize()) {
-            
             //Hide the expanded macro to prevent endless expansion
             MacroHider hideMacro(macro, m_engine->environment());
             
@@ -417,19 +419,17 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
               output << ' '; //Prevent implicit token merging
             }
           }
-        }else if(input == '(') {
+        }else if(input == '(' && !substitute) {
 
         //Eventually execute a function-macro
           
         IndexedString previous = IndexedString::fromIndex(indexFromCharacter(' ')); //Previous already has been expanded
         uint stepsBack = 0;
-        while(isCharacter(previous.index()) && characterFromIndex(previous.index()) == ' ' && output.peekLastOutput(stepsBack)) {
+        while(isCharacter(previous.index()) && isSpace(characterFromIndex(previous.index())) && output.peekLastOutput(stepsBack)) {
           previous = IndexedString::fromIndex(output.peekLastOutput(stepsBack));
           ++stepsBack;
         }
-        
         pp_macro* macro = m_engine->environment()->retrieveMacro(previous, false);
-        
         if(!macro || !macro->function_like || !macro->defined || macro->hidden) {
           output << input;
           ++input;
@@ -446,69 +446,14 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
         RETURN_IF_INPUT_BROKEN
 
         pp_macro_expander expand_actual(m_engine, m_frame);
+        skip_actual_parameter(input, *macro, actuals, expand_actual);
 
-        {
-          PreprocessedContents actualText;
-          skip_whitespaces(input, devnull());
-          Anchor actualStart = input.inputPosition();
-          {
-            Stream as(&actualText);
-            skip_argument_variadics(actuals, macro, input, as);
-          }
-          trim(actualText);
-
-          pp_actual newActual;
-          {
-            PreprocessedContents newActualText;
-            Stream as(&actualText, actualStart);
-            as.setOriginalInputPosition(input.originalInputPosition());
-
-            rpp::LocationTable table;
-            table.anchor(0, actualStart, 0);
-            Stream nas(&newActualText, actualStart, &table);
-            expand_actual(as, nas);
-            
-            table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
-          }
-          newActual.forceValid = true;
-          
-          actuals.append(newActual);
-        }
-
-        // TODO: why separate from the above?
         while (!input.atEnd() && input == ',')
         {
           ++input; // skip ','
           
           RETURN_IF_INPUT_BROKEN
-
-          {
-            PreprocessedContents actualText;
-            skip_whitespaces(input, devnull());
-            Anchor actualStart = input.inputPosition();
-            {
-              Stream as(&actualText);
-              skip_argument_variadics(actuals, macro, input, as);
-            }
-            trim(actualText);
-
-            pp_actual newActual;
-            {
-              PreprocessedContents newActualText;
-              Stream as(&actualText, actualStart);
-              as.setOriginalInputPosition(input.originalInputPosition());
-
-              PreprocessedContents actualText;
-              rpp::LocationTable table;
-              table.anchor(0, actualStart, 0);
-              Stream nas(&newActualText, actualStart, &table);
-              expand_actual(as, nas);
-              
-              table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
-            }
-            newActual.forceValid = true;
-            actuals.append(newActual);
-          }
+          skip_actual_parameter(input, *macro, actuals, expand_actual);
         }
 
         if( input != ')' ) {
@@ -559,8 +504,15 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
           
           ///@todo UGLY conversion
           Stream ms((uint*)macro->definition(), macro->definitionSize(), Anchor(input.inputPosition(), true));
-          ms.setOriginalInputPosition(input.originalInputPosition());
-          expand_macro(ms, output);
+
+          PreprocessedContents expansion_text;
+          rpp::LocationTable table;
+          Stream expansion_stream(&expansion_text, Anchor(input.inputPosition(), true), &table);
+          expand_macro(ms, expansion_stream, true);
+
+          Stream ns(&expansion_text, Anchor(input.inputPosition(), true));
+          ns.setOriginalInputPosition(input.originalInputPosition());
+          expand_macro(ns, output, false, &table);
           output << ' '; //Prevent implicit token merging
         }
       } else {
@@ -570,6 +522,36 @@ void pp_macro_expander::operator()(Stream& input, Stream& output)
     }
 
   }
+}
+
+void pp_macro_expander::skip_actual_parameter(Stream& input, rpp::pp_macro& macro, QList< pp_actual >& actuals, pp_macro_expander& expander)
+{
+  PreprocessedContents actualText;
+  skip_whitespaces(input, devnull());
+  Anchor actualStart = input.inputPosition();
+  {
+    Stream as(&actualText);
+    skip_argument_variadics(actuals, &macro, input, as);
+  }
+  trim(actualText);
+
+  pp_actual newActual;
+  newActual.sourceText = actualText;
+  newActual.sourcePosition = actualStart;
+  {
+    PreprocessedContents newActualText;
+    Stream as(&actualText, actualStart);
+    as.setOriginalInputPosition(input.originalInputPosition());
+
+    rpp::LocationTable table;
+    table.anchor(0, actualStart, 0);
+    Stream nas(&newActualText, actualStart, &table);
+    expander(as, nas);
+    table.splitByAnchors(newActualText, actualStart, newActual.text, newActual.inputPosition);
+  }
+  newActual.forceValid = true;
+
+  actuals.append(newActual);
 }
 
 void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actuals, pp_macro *__macro, Stream& input, Stream& output)
@@ -586,4 +568,3 @@ void pp_macro_expander::skip_argument_variadics (const QList<pp_actual>& __actua
             && input == '.'
             && (__actuals.size() + 1) == (int)__macro->formalsSize());
 }
-

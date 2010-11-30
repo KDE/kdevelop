@@ -26,33 +26,28 @@ QTEST_MAIN( CMakeConditionTest )
 
 CMakeConditionTest::CMakeConditionTest()
 {
-    m_vars=new VariableMap();
-    m_vars->insert("TRUE", QStringList("TRUE"));
-    m_vars->insert("FALSE", QStringList("FALSE"));
+    m_vars.insert("TRUE", QStringList("TRUE"));
+    m_vars.insert("FALSE", QStringList("FALSE"));
     
-    m_vars->insert("EMPTY", QStringList());
-    m_vars->insert("ZERO", QStringList("0"));
-    m_vars->insert("ONE", QStringList("1"));
-    m_vars->insert("EXP", QStringList("-llala -lexpression"));
-    m_vars->insert("UNFORTUNATE-NOTFOUND", QStringList("TRUE"));
+    m_vars.insert("EMPTY", QStringList());
+    m_vars.insert("ZERO", QStringList("0"));
+    m_vars.insert("ONE", QStringList("1"));
+    m_vars.insert("EXP", QStringList("-llala -lexpression"));
+    m_vars.insert("UNFORTUNATE-NOTFOUND", QStringList("TRUE"));
     
-    m_vars->insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
-    m_vars->insert("MYTRUE", QStringList("NOT FALSE"));
+    m_vars.insert("CMAKE_CURRENT_SOURCE_DIR", QStringList("./"));
+    m_vars.insert("MYTRUE", QStringList("NOT FALSE"));
     
-    m_vars->insert("UNFOUNDVAR", QStringList("UNFOUNDVAR-NOTFOUND"));
+    m_vars.insert("UNFOUNDVAR", QStringList("UNFOUNDVAR-NOTFOUND"));
     
-    m_macros=new MacroMap();
     Macro m;
     m.name = "testmacro";
     m.isFunction=false;
-    m_macros->insert("testmacro", m);
+    m_macros.insert("testmacro", m);
 }
 
 CMakeConditionTest::~CMakeConditionTest()
-{
-    delete m_vars;
-    delete m_macros;
-}
+{}
 
 void CMakeConditionTest::testGoodParse()
 {
@@ -60,8 +55,9 @@ void CMakeConditionTest::testGoodParse()
     QFETCH( bool, result );
     
     CMakeProjectVisitor v(QString(), 0);
-    v.setVariableMap( m_vars );
-    v.setMacroMap( m_macros );
+    v.setVariableMap( &m_vars );
+    v.setMacroMap( &m_macros );
+    v.setCacheValues( &m_cache );
     
     CMakeCondition cond(&v);
     QCOMPARE( cond.condition(expression), result );
@@ -105,6 +101,9 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "weirdmatch" ) << QString("EXP MATCHES expression").split(" ") << true;
     QTest::newRow( "isabsolute+true" ) << QString("IS_ABSOLUTE /foo/bar").split(" ") << true;
     QTest::newRow( "isabsolute+false" ) << QString("IS_ABSOLUTE ../bar").split(" ") << false;
+    QTest::newRow( "version_less" ) << QString("1.1 VERSION_LESS 1.3.1").split(" ") << true;
+    QTest::newRow( "version_equal" ) << QString("1.3.1 VERSION_EQUAL 1.3.1").split(" ") << true;
+    QTest::newRow( "version_greater" ) << QString("1.4 VERSION_GREATER 1.3.1").split(" ") << true;
 
     //parentheses: 2.6.3
     QTest::newRow( "parenthese0" ) << QString("ONE AND ( NOT ZERO OR ZERO )").split(" ") << true;
@@ -150,8 +149,9 @@ void CMakeConditionTest::testBadParse()
     QFETCH( QStringList, expression );
     
     CMakeProjectVisitor v(QString(), 0);
-    v.setVariableMap( m_vars );
-    v.setMacroMap( m_macros );
+    v.setVariableMap( &m_vars );
+    v.setMacroMap( &m_macros );
+    v.setCacheValues( &m_cache );
     
     CMakeCondition cond(&v);
     QCOMPARE( cond.condition(expression), false );

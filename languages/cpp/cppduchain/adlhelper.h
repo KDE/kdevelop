@@ -62,7 +62,6 @@ class ADLTypeVisitor : public KDevelop::TypeVisitor
     ADLHelper & m_helper;
 
     bool seen(const KDevelop::AbstractType* type);
-    QSet<const KDevelop::AbstractType*> m_seen;
 };
 
 
@@ -91,7 +90,7 @@ class ADLHelper
     void addArgumentType(const AbstractType::Ptr type);
 
     /** @brief Retrieves the list of associated namespaces . */
-    QSet<Declaration*> associatedNamespaces() const;
+    QSet<QualifiedIdentifier> associatedNamespaces() const;
 
   private:
 
@@ -106,22 +105,20 @@ class ADLHelper
 
     /**
      * @brief Adds an associated namespace by identifier.
-     * All namespace declarations matching the given identifier are added.
      */
     void addAssociatedNamespace(const KDevelop::QualifiedIdentifier & identifier);
 
-    /** @brief Adds an associated namespace declaration. */
-    void addAssociatedNamespace(Declaration * declaration);
-
-    /** @brief Computes all direct and indirect base classes of a class. */
-    QList<Declaration *> computeAllBaseClasses(Declaration* decl);
+    void addBaseClasses(Declaration* decl);
 
     /** @brief Finds and adds the namespace of a declaration. */
     void addDeclarationScopeIdentifier(Declaration * decl);
 
   private:
     /** @brief List of namespaces found by the ADL. */
-    QSet<Declaration*> m_associatedNamespaces;
+    QSet<QualifiedIdentifier> m_associatedNamespaces;
+    
+    // AbstractType* or Declaration*
+    QSet<const void*> m_alreadyProcessed;
 
     KDevelop::DUContextPointer m_context;
     KDevelop::TopDUContextPointer m_topContext;

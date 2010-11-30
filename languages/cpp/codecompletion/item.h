@@ -70,7 +70,7 @@ public:
   
   bool completingTemplateParameters() const;
   
-  QString alternativeText; //Text shown when declaration is zero
+  mutable QString alternativeText; //Text shown when declaration is zero
   
   //If this is true, alternativeText will be shown in the list, and will be inserted on execution.
   //Also the scope will be set to LocalScope when this attribute is true.

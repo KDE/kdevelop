@@ -1777,6 +1777,9 @@ int CMakeProjectVisitor::visit(const StringAst *sast)
                     kDebug(9032) << "ERROR String: Not a regex. " << sast->cmdType();
                     break;
             }
+            for(int i=1; i<rx.captureCount()+1 && i<10; i++) {
+                m_vars->insert(QString("CMAKE_MATCH_%1").arg(i), QStringList(rx.cap(i)));
+            }
             kDebug() << "regex" << sast->outputVariable() << "=" << sast->regex() << res;
             m_vars->insert(sast->outputVariable(), res);
         }
@@ -2094,6 +2097,9 @@ RecursivityType recursivity(const QString& functionName)
 
 int CMakeProjectVisitor::walk(const CMakeFileContent & fc, int line, bool isClean)
 {
+    if(fc.isEmpty())
+        return 0;
+    
     ReferencedTopDUContext aux=m_topctx;
     KUrl url(fc[0].filePath);
     

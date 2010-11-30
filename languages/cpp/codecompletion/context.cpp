@@ -828,9 +828,10 @@ void CodeCompletionContext::processFunctionCallAccess() {
       return;
     }
 
-    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.abstractType(), m_expressionResult.isLValue()), m_operator);
+    helper.setOperator(OverloadResolver::Parameter(m_expressionResult.type.abstractType(), m_expressionResult.isLValue()));
 
     m_functionName = "operator"+m_operator;
+    
   } else {
     ///Simply take all the declarations that were found by the expression-parser
 
@@ -842,14 +843,17 @@ void CodeCompletionContext::processFunctionCallAccess() {
         m_functionName = decl->identifier().toString();
     }
   }
-
+  
+  if( m_contextType == BinaryOperatorFunctionCall || m_expression == m_functionName )
+    helper.setFunctionNameForADL( QualifiedIdentifier(m_functionName) );
+  
   OverloadResolver::ParameterList knownParameters;
   foreach( const ExpressionEvaluationResult &result, m_knownArgumentTypes )
     knownParameters.parameters << OverloadResolver::Parameter( result.type.abstractType(), result.isLValue() );
 
   helper.setKnownParameters(knownParameters);
 
-  m_functions = helper.resolve(true);
+  m_functions = helper.resolveToList(true);
 
   if(m_contextType == BinaryOperatorFunctionCall) {
     //Filter away all global binary operators that do not have the first argument matched

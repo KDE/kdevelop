@@ -29,12 +29,15 @@
 #include "typeutils.h"
 #include <QtAlgorithms>
 #include "adlhelper.h"
+#include <language/duchain/persistentsymboltable.h>
 
 using namespace Cpp;
 using namespace KDevelop;
 
+const bool allowADL = true;
+
 // uncomment to get debugging info on ADL - very expensive on parsing
-//#define DEBUG_ADL
+// #define DEBUG_ADL
 
 OverloadResolver::OverloadResolver( DUContextPointer context, TopDUContextPointer topContext, bool forceIsInstance ) : m_context( context ), m_topContext( topContext ), m_worstConversionRank( NoMatch ), m_forceIsInstance( forceIsInstance )
 {
@@ -71,7 +74,7 @@ Declaration* OverloadResolver::resolveConstructor( const ParameterList& params, 
   }
 
   // no ADL possible when resolving constructors
-  return resolveList( params, goodDeclarations, noUserDefinedConversion, false );
+  return resolveList( params, goodDeclarations, noUserDefinedConversion );
 }
 
 Declaration* OverloadResolver::resolve( const ParameterList& params, const QualifiedIdentifier& functionName, bool noUserDefinedConversion )
@@ -82,36 +85,14 @@ Declaration* OverloadResolver::resolve( const ParameterList& params, const Quali
   QList<Declaration*> declarations = m_context->findDeclarations( functionName, CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data() );
 
   // without ADL findDeclarations may fail so skip ADL there and do it here
-  Declaration * resolvedDecl = resolveList( params, declarations, noUserDefinedConversion, false );
+  Declaration * resolvedDecl = resolveList( params, declarations, noUserDefinedConversion );
 
-  if (!resolvedDecl) {
+  if (!resolvedDecl && functionName.count() == 1) {
     // start ADL lookup
-#ifdef DEBUG_ADL
-    kDebug() << "ADL starting for function " << functionName.toString();
-#endif
-    ADLHelper adlHelper( m_context, m_topContext );
-    foreach( const Parameter & param, params.parameters )
-    {
-      adlHelper.addArgument( param );
-    }
-    QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
-#ifdef DEBUG_ADL
-    foreach( Declaration * nsDecl, adlNamespaces )
-    {
-      kDebug() << "  ADL found namespace: " << nsDecl->qualifiedIdentifier().toString();
-    }
-#endif    
-    QList<Declaration*> adlDecls;
-    foreach( Declaration * nsDecl, adlNamespaces )
-    {
-      QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );      
-      adlFunctionName += functionName.last();
-#ifdef DEBUG_ADL
-      kDebug() << "  ADL candidate: " << adlFunctionName.toString();
-#endif
-      adlDecls << m_context->findDeclarations( adlFunctionName, CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data() );
-    }
-    resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false );
+    
+    QList<Declaration*> adlDecls = computeADLCandidates( params, functionName );
+    
+    resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion );
 #ifdef DEBUG_ADL
     if (resolvedDecl)
       kDebug() << "ADL found " << resolvedDecl->toString();
@@ -195,7 +176,7 @@ void OverloadResolver::expandDeclarations( const QList<QPair<OverloadResolver::P
   }
 }
 
-Declaration* OverloadResolver::resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion, bool doADL )
+Declaration* OverloadResolver::resolveList( const ParameterList& params, const QList<Declaration*>& declarations, bool noUserDefinedConversion )
 {
   if ( !m_context || !m_topContext )
     return 0;
@@ -229,18 +210,7 @@ Declaration* OverloadResolver::resolveList( const ParameterList& params, const Q
 
   if ( bestViableFunction.isViable() )
     return bestViableFunction.declaration().data();
-  else if (doADL) {
-    // if no name is found during normal lookup start ADL lookup
-    QList<Declaration*> adlDecls = computeADLCandidates(params, declarations);
-    Declaration * resolvedDecl = resolveList( params, adlDecls, noUserDefinedConversion, false);
-
-#ifdef DEBUG_ADL
-    if (resolvedDecl)
-      kDebug() << "resolved through ADL: " << resolvedDecl->toString();
-#endif
-    
-    return resolvedDecl;
-  } else {
+  else {
     return 0;
   }
 }
@@ -262,9 +232,14 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
 
   for ( QHash<Declaration*, OverloadResolver::ParameterList>::const_iterator it = newDeclarations.constBegin(); it != newDeclarations.constEnd(); ++it )
   {
-    ViableFunction viable( m_topContext.data(), it.key() );
     ParameterList mergedParams = it.value();
     mergedParams.parameters += params.parameters;
+    
+    Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
+    if ( !decl )
+      continue;
+    
+    ViableFunction viable( m_topContext.data(), decl );
     viable.matchParameters( mergedParams, partial );
 
     viableFunctions << viable;
@@ -273,6 +248,43 @@ QList< ViableFunction > OverloadResolver::resolveListOffsetted( const ParameterL
   qSort( viableFunctions );
 
   return viableFunctions;
+}
+
+ViableFunction OverloadResolver::resolveListViable( const ParameterList& params, const QList<QPair<OverloadResolver::ParameterList, Declaration*> >& declarations, bool partial )
+{
+  if ( !m_context || !m_topContext )
+    return ViableFunction();
+
+  ///Iso c++ draft 13.3.3
+  m_worstConversionRank = ExactMatch;
+
+  ///First step: Replace class-instances with operator() functions, and pure classes with their constructors
+  QHash<Declaration*, OverloadResolver::ParameterList> newDeclarations;
+  expandDeclarations( declarations, newDeclarations );
+
+  ///Second step: Find best viable function
+  ViableFunction bestViableFunction(m_topContext.data());
+
+  for ( QHash<Declaration*, OverloadResolver::ParameterList>::const_iterator it = newDeclarations.constBegin(); it != newDeclarations.constEnd(); ++it )
+  {
+    ParameterList mergedParams = it.value();
+    mergedParams.parameters += params.parameters;
+    
+    Declaration* decl = applyImplicitTemplateParameters( mergedParams, it.key() );
+    if ( !decl )
+      continue;
+    
+    ViableFunction viable( m_topContext.data(), decl );
+    viable.matchParameters( mergedParams, partial );
+
+    if ( viable.isBetter( bestViableFunction ) )
+    {
+      bestViableFunction = viable;
+      m_worstConversionRank = bestViableFunction.worstConversion();
+    }
+  }
+
+  return bestViableFunction;
 }
 
 Declaration* OverloadResolver::applyImplicitTemplateParameters( const ParameterList& params, Declaration* declaration ) const
@@ -457,38 +469,55 @@ uint OverloadResolver::matchParameterTypes( const AbstractType::Ptr& argumentTyp
   return 1;
 }
 
-QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList& params, const QList<Declaration*>& declarations )
+QList<Declaration *> OverloadResolver::computeADLCandidates( const ParameterList& params, const QualifiedIdentifier& identifier )
 {
-  ADLHelper adlHelper( m_context, m_topContext );
+  if(!allowADL || identifier.count() != 1 )
+    return QList<Declaration *>();
+
+  // Don't try to do ADL if there are delayed/unresolved types involved,
+  // because then we cannot get a proper match as to ViableFunction anyway
   foreach( const Parameter & param, params.parameters )
-  {
+      if( fastCast<DelayedType*>(param.type.unsafeData()) )
+          return QList<Declaration *>();
+  
+  ADLHelper adlHelper( m_context, m_topContext );
+  
+  foreach( const Parameter & param, params.parameters )
     adlHelper.addArgument( param );
-  }
-  QSet<Declaration*> adlNamespaces = adlHelper.associatedNamespaces();
+
+  QSet<QualifiedIdentifier> adlNamespaces = adlHelper.associatedNamespaces();
 
 #ifdef DEBUG_ADL
-  foreach( Declaration * nsDecl, adlNamespaces )
+  foreach( QualifiedIdentifier ns, adlNamespaces )
   {
-    kDebug() << "  ADL found namespace: " << nsDecl->qualifiedIdentifier().toString();
+    kDebug() << "  ADL found namespace: " << ns.toString();
   }
 #endif
 
   QList<Declaration*> adlDecls;
-  foreach( Declaration * funDecl, declarations) {
 
 #ifdef DEBUG_ADL
-    kDebug() << "  ADL candidates for: " << funDecl->identifier().toString();
+    kDebug() << "  ADL candidates for: " << identifier.toString();
 #endif
 
-    foreach( Declaration * nsDecl, adlNamespaces )
+  foreach( QualifiedIdentifier adlFunctionName, adlNamespaces )
+  {
+    adlFunctionName += identifier;
+    
+    // By using DeclarationId, we prevent a lot of complex logic which we don't require, as we
+    // already have the fully qualified scope.
+    PersistentSymbolTable::FilteredDeclarationIterator decls =
+        PersistentSymbolTable::self().getFilteredDeclarations(IndexedQualifiedIdentifier(adlFunctionName), m_topContext->recursiveImportIndices());
+    
+    for(; decls; ++decls)
     {
-      QualifiedIdentifier adlFunctionName( nsDecl->qualifiedIdentifier() );
-      adlFunctionName += funDecl->identifier();
-      adlDecls << m_context->findDeclarations( adlFunctionName, CursorInRevision::invalid(), AbstractType::Ptr(), m_topContext.data() );
-
+      Declaration* decl = decls->data();
+      if(decl && decl->isFunctionDeclaration()) {
+      adlDecls << decl;
 #ifdef DEBUG_ADL
-      kDebug() << "    ADL candidate: " << adlFunctionName;
+    kDebug() << "    ADL candidate: " << adlFunctionName << decl->toString();
 #endif      
+      }
     }
   }
 

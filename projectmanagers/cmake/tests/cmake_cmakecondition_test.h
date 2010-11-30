@@ -40,8 +40,9 @@ private slots:
     void testBadParse_data();
     
 private:
-    VariableMap* m_vars;
-    MacroMap* m_macros;
+    VariableMap m_vars;
+    MacroMap m_macros;
+    CacheValues m_cache;
 };
 
 #endif

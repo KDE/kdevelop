@@ -1785,8 +1785,23 @@ void TestCppCodeCompletion::testMacroExpansionRanges() {
   DUChainWriteLocker l(DUChain::lock());
   TopDUContext* ctx = parse(test.toUtf8());
   QCOMPARE(ctx->localDeclarations().count(), 1);
-  kDebug() << ctx->localDeclarations()[0]->range().castToSimpleRange().textRange();
   QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 5, 1, 11));
+}
+{
+  //The range of the merged declaration name should be within macro invocation even when the order of merging is different from the order of formal parameters
+  QString test("#define TEST(X, Y) class Y ## X {};\nTEST(Hello, World)\n");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 12, 1, 18));
+}
+{
+  //The range of the merged declaration name should be collapsed if it does not start with a macro parameter
+  QString test("#define TEST(X) class Hallo ## X {};\nTEST(Class)\n");
+  DUChainWriteLocker l(DUChain::lock());
+  TopDUContext* ctx = parse(test.toUtf8());
+  QCOMPARE(ctx->localDeclarations().count(), 1);
+  QCOMPARE(ctx->localDeclarations()[0]->range().castToSimpleRange().textRange(), KTextEditor::Range(1, 11, 1, 11));
 }
 }
 

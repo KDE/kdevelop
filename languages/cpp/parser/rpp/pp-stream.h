@@ -163,6 +163,9 @@ class KDEVCPPRPP_EXPORT Stream
     Stream & operator<< ( const Stream& input );
     Stream& appendString( const Anchor& inputPosition, const PreprocessedContents & string );
     Stream& appendString( const Anchor& inputPosition, KDevelop::IndexedString index );
+    const PreprocessedContents* source() const {
+      return m_string;
+    }
 
   private:
     Q_DISABLE_COPY(Stream)

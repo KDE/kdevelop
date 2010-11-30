@@ -82,11 +82,11 @@ QVariant ImplementationHelperItem::data(const QModelIndex& index, int role, cons
     if(index.column() == KTextEditor::CodeCompletionModel::Prefix) {
       QString prefix;
       if(m_type == Override)
-        prefix = i18n("Override");
+        prefix = i18nc("@action C++ code completion", "Override");
       if(m_type == CreateDefinition)
-        prefix = i18n("Implement");
+        prefix = i18nc("@action C++ code completion", "Implement");
       if(m_type == CreateSignalSlot)
-        return i18n("Create Slot");
+        return i18nc("@action C++ code completion", "Create Slot");
 
       ret = prefix + " " + ret.toString();
     }
