@@ -105,6 +105,9 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "weirdmatch" ) << QString("EXP MATCHES expression").split(" ") << true;
     QTest::newRow( "isabsolute+true" ) << QString("IS_ABSOLUTE /foo/bar").split(" ") << true;
     QTest::newRow( "isabsolute+false" ) << QString("IS_ABSOLUTE ../bar").split(" ") << false;
+    QTest::newRow( "version_less" ) << QString("1.1 VERSION_LESS 1.3.1").split(" ") << true;
+    QTest::newRow( "version_equal" ) << QString("1.3.1 VERSION_EQUAL 1.3.1").split(" ") << true;
+    QTest::newRow( "version_greater" ) << QString("1.4 VERSION_GREATER 1.3.1").split(" ") << true;
 
     //parentheses: 2.6.3
     QTest::newRow( "parenthese0" ) << QString("ONE AND ( NOT ZERO OR ZERO )").split(" ") << true;

@@ -21,33 +21,7 @@
 #include <QDateTime>
 
 #include "astfactory.h"
-
-QVector<int> initPriorities()
-{
-    QVector<int> ret(CMakeCondition::Last);
-    for(int i=CMakeCondition::None; i<CMakeCondition::Last; i++) {
-        ret[i]=-1;
-    }
-    ret[CMakeCondition::AND]=0;
-    ret[CMakeCondition::OR]=0;
-    ret[CMakeCondition::NOT]=1;
-    ret[CMakeCondition::IS_NEWER_THAN]=2;
-    ret[CMakeCondition::MATCHES]=2;
-    ret[CMakeCondition::LESS]=2;
-    ret[CMakeCondition::GREATER]=2;
-    ret[CMakeCondition::EQUAL]=2;
-    ret[CMakeCondition::STRLESS]=2;
-    ret[CMakeCondition::STRGREATER]=2;
-    ret[CMakeCondition::STREQUAL]=2;
-    ret[CMakeCondition::DEFINED]=3;
-    ret[CMakeCondition::COMMAND]=3;
-    ret[CMakeCondition::EXISTS]=3;
-    ret[CMakeCondition::IS_DIRECTORY]=3;
-    ret[CMakeCondition::IS_ABSOLUTE]=3;
-    ret[CMakeCondition::LPR]=-1;
-    ret[CMakeCondition::RPR]=-1;
-    return ret;
-}
+#include "cmakeparserutils.h"
 
 QMap<QString, CMakeCondition::conditionToken> initNameToToken()
 {
@@ -68,12 +42,25 @@ QMap<QString, CMakeCondition::conditionToken> initNameToToken()
     ret["STRGREATER"]=CMakeCondition::STRGREATER;
     ret["STREQUAL"]=CMakeCondition::STREQUAL;
     ret["DEFINED"]=CMakeCondition::DEFINED;
+    ret["VERSION_LESS"]=CMakeCondition::VERSION_LESS;
+    ret["VERSION_GREATER"]=CMakeCondition::VERSION_GREATER;
+    ret["VERSION_EQUAL"]=CMakeCondition::VERSION_EQUAL;
     ret["("]=CMakeCondition::LPR;
     ret[")"]=CMakeCondition::RPR;
     return ret;
 }
 
-QVector<int> CMakeCondition::m_priorities=initPriorities();
+static int compareVersions(const QList<int>& v1, const QList<int>& v2)
+{
+    QList<int>::const_iterator it1=v1.constBegin(), it2=v2.constBegin();
+    QList<int>::const_iterator itEnd1=v1.constEnd(), itEnd2=v2.constEnd();
+    
+    int dif=0;
+    for(; it1!=itEnd1 && it2!=itEnd2 && !dif; ++it1, ++it2) { dif=*it1-*it2; }
+    
+    return dif;
+}
+
 QMap<QString, CMakeCondition::conditionToken> CMakeCondition::nameToToken=initNameToToken();
 QSet<QString> CMakeCondition::s_falseDefinitions=QSet<QString>() << "" << "0" << "N" << "NO" << "OFF" << "FALSE" << "NOTFOUND" ;
 QSet<QString> CMakeCondition::s_trueDefinitions=QSet<QString>() << "1" << "ON" << "YES" << "TRUE" << "Y";
@@ -317,6 +304,36 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 QFileInfo pathB(*(it2+1));
 //                 kDebug(9042) << "newer" << strA << strB;
                 last= (pathA.lastModified()>pathB.lastModified());
+                itEnd=it2-1;
+            }   break;
+            case VERSION_EQUAL: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
+                bool ok;
+                QList<int> versionA(CMakeParserUtils::parseVersion(*(it2-1), &ok));
+                QList<int> versionB(CMakeParserUtils::parseVersion(*(it2+1), &ok));
+//                 kDebug(9042) << "newer" << strA << strB;
+                last= ok && compareVersions(versionA, versionB)==0;
+                itEnd=it2-1;
+            }   break;
+            case VERSION_LESS: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
+                bool ok;
+                QList<int> versionA(CMakeParserUtils::parseVersion(*(it2-1), &ok));
+                QList<int> versionB(CMakeParserUtils::parseVersion(*(it2+1), &ok));
+//                 kDebug(9042) << "newer" << strA << strB;
+                last= ok && compareVersions(versionA, versionB)<0;
+                itEnd=it2-1;
+            }   break;
+            case VERSION_GREATER: {
+                CHECK_PREV(it2);
+                CHECK_NEXT(it2);
+                bool ok;
+                QList<int> versionA(CMakeParserUtils::parseVersion(*(it2-1), &ok));
+                QList<int> versionB(CMakeParserUtils::parseVersion(*(it2+1), &ok));
+//                 kDebug(9042) << "newer" << strA << strB;
+                last= ok && compareVersions(versionA, versionB)>0;
                 itEnd=it2-1;
             }   break;
             case LPR: {
