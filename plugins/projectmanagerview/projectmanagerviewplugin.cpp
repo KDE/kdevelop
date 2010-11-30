@@ -71,7 +71,16 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         {
             return "org.kdevelop.ProjectsView";
         }
-
+        virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const
+        {
+            QList<QAction*> actions;
+            foreach(QAction* action, viewWidget->actions()) {
+                if (!qobject_cast<ProjectManagerFilterAction*>(action)) {
+                    actions << action;
+                }
+            }
+            return actions;
+        }
     private:
         ProjectManagerViewPlugin *mplugin;
 };

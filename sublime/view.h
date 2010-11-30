@@ -54,6 +54,9 @@ public:
     /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
     QList<QAction*> toolBarActions() const;
 
+    /**@return the toolbar actions for this view, this needs to be called _after_ the first call to widget() */
+    QList<QAction*> contextMenuActions() const;
+
     /**@return the document for this view.*/
     Document *document() const;
     /**@return widget for this view (creates it if it's not yet created).*/

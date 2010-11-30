@@ -68,7 +68,15 @@ public:
      * @returns a list of actions to be added to the toolbar
      */
     virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const { return viewWidget->actions(); }
-    
+    /**
+     * Fetch a list of actions to be shown in the context menu of the toolview @p view.
+     * The default implementation will return all actions of @p viewWidget.
+     *
+     * @param view the view for which the context menu should be shown
+     * @returns a list of actions to be shown in the context menu
+     */
+    virtual QList<QAction*> contextMenuActions( QWidget* viewWidget ) const { return viewWidget->actions(); }
+
     /**
      * called when a new view is created from this template
      * @param view the new sublime view that is being shown

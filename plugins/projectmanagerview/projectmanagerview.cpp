@@ -34,7 +34,6 @@
 #include <kurl.h>
 #include <klocale.h>
 #include <kactioncollection.h>
-#include <kaction.h>
 #include <kfadewidgeteffect.h>
 #include <kcombobox.h>
 #include <kjob.h>
@@ -65,18 +64,6 @@
 using namespace KDevelop;
 
 //BEGIN ProjectManagerFilterAction
-class ProjectManagerFilterAction : public KAction {
-    Q_OBJECT
-
-public:
-    explicit ProjectManagerFilterAction( QObject* parent );
-
-signals:
-    void filterChanged(const QString& filter);
-
-protected:
-    virtual QWidget* createWidget( QWidget* parent );
-};
 
 ProjectManagerFilterAction::ProjectManagerFilterAction( QObject* parent )
     : KAction( parent )
@@ -239,4 +226,3 @@ void ProjectManagerView::filterChanged(const QString &text)
 }
 
 #include "projectmanagerview.moc"
-#include "moc_projectmanagerview.cpp"

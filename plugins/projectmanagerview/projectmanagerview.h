@@ -22,10 +22,10 @@
 #define KDEVPROJECTMANAGERVIEW_H
 
 #include <QtGui/QWidget>
+#include <KAction>
 
 class QModelIndex;
 
-class KAction;
 class KUrl;
 
 namespace Ui
@@ -41,6 +41,19 @@ class ProjectBaseItem;
 }
 
 class ProjectManagerViewPlugin;
+
+class ProjectManagerFilterAction : public KAction {
+    Q_OBJECT
+
+public:
+    explicit ProjectManagerFilterAction( QObject* parent );
+
+signals:
+    void filterChanged(const QString& filter);
+
+protected:
+    virtual QWidget* createWidget( QWidget* parent );
+};
 
 class ProjectManagerView: public QWidget
 {

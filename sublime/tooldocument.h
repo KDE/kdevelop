@@ -39,6 +39,7 @@ public:
     virtual ~ToolFactory() {}
     virtual QWidget* create(ToolDocument *doc, QWidget *parent = 0) = 0;
     virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const = 0;
+    virtual QList<QAction*> contextMenuActions( QWidget* viewWidget ) const = 0;
     virtual QString id() const = 0;
 };
 
@@ -54,6 +55,7 @@ public:
         return new Widget(parent);
     }
     virtual QList<QAction*> toolBarActions( QWidget* ) const { return QList<QAction*>(); }
+    virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const { return QList<QAction*>(); }
     virtual QString id() const { return m_id; }
     virtual bool viewsWantProgressIndicator() const { return false; }
 private:

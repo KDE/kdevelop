@@ -460,20 +460,14 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     KMenu menu;
     menu.addTitle(windowIcon(), windowTitle());
 
-    if ( QMainWindow* toolView = qobject_cast<QMainWindow*>(widget()) ) {
-        QToolBar* bar = 0;
-        foreach( QObject* child, toolView->children() ) {
-            if ( (bar = qobject_cast<QToolBar*>(child)) ) {
-                break;
-            }
-        }
-        Q_ASSERT(bar);
-        menu.addActions(bar->actions());
-        menu.addSeparator();
-        menu.addAction(bar->toggleViewAction());
-    }
-
+    menu.addActions(m_view->contextMenuActions());
     menu.addSeparator();
+
+    ///TODO: can this be cleaned up?
+    if(QToolBar* toolBar = widget()->findChild<QToolBar*>()) {
+        menu.addAction(toolBar->toggleViewAction());
+        menu.addSeparator();
+    }
 
     /// start position menu
     QMenu* positionMenu = menu.addMenu(i18n("Toolview Position"));

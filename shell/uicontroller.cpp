@@ -150,6 +150,10 @@ public:
         return m_factory->create(parent);
     }
 
+    virtual QList< QAction* > contextMenuActions(QWidget* viewWidget) const
+    {
+        return m_factory->contextMenuActions( viewWidget );
+    }
 
     QList<QAction*> toolBarActions( QWidget* viewWidget ) const
     {
