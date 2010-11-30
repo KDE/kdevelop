@@ -1,0 +1,46 @@
+   KDevelop Custom Buildsystem Plugin
+
+Author:
+-------
+
+Andreas Pakulat <apaku@gmx.de>
+
+License:
+--------
+
+See the LICENSE file.
+
+Description:
+------------
+
+This plugin allows to handle arbitrary custom buildsystems with KDevelop.
+
+It supports setting up commands and arguments to build, configure, clean,
+'dist-clean' and install the project, so that KDevelop's actions work as
+expected.
+
+Additionally it allows to setup include directories (or import-directories) and
+defines for the project on a per-directory basis. This allows the C++ support
+and other language plugins to find file-references without manually adding them
+via the include-assistant.
+
+This should help all those that have a special build setup to still be able to
+embrace the features that KDevelop has to offer.
+
+Requirements:
+-------------
+
+The only requirement is KDevPlatform, version 1.1.0 (which in turn means that
+KDE Platform 4.4 or later needs to be installed too)
+
+Installation:
+-------------
+
+See the INSTALL file.
+
+Bugs:
+-----
+
+Please report bugs at bugs.kde.org under the KDevelop product for the 'custom
+buildsystem' component.
+
