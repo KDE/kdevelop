@@ -24,8 +24,65 @@
 
 using namespace KDevelop;
 
+#define USE_PTHREAD_MUTEX
+
+#ifdef USE_PTHREAD_MUTEX
+
+#include <pthread.h>
+#include <time.h>
+
+
+class SimplePThreadMutex {
+public:
+    SimplePThreadMutex() {
+        m_mutex = PTHREAD_MUTEX_INITIALIZER;
+        int result = pthread_mutex_init(&m_mutex, 0);
+        Q_ASSERT(result == 0);
+    }
+    ~SimplePThreadMutex() {
+        pthread_mutex_destroy(&m_mutex);
+    }
+    void lock() {
+        int result = pthread_mutex_lock(&m_mutex);
+        Q_ASSERT(result == 0);
+    }
+    void unlock() {
+        int result = pthread_mutex_unlock(&m_mutex);
+        Q_ASSERT(result == 0);
+    }
+    bool tryLock(int interval) {
+        if(interval == 0)
+        {
+            int result = pthread_mutex_trylock(&m_mutex);
+            return result == 0;
+        }else{
+            timespec abs_time;
+            clock_gettime(CLOCK_REALTIME, &abs_time);
+            abs_time.tv_nsec += interval * 1000000;
+            if(abs_time.tv_nsec >= 1000000000)
+            {
+                abs_time.tv_nsec -= 1000000000;
+                abs_time.tv_sec += 1;
+            }
+            
+            int result = pthread_mutex_timedlock(&m_mutex, &abs_time);
+            return result == 0;
+        }
+    }
+    
+private:
+    pthread_mutex_t m_mutex;
+};
+
 namespace {
+
+SimplePThreadMutex internalMutex;
+#else
+
+namespace {
+
 QMutex internalMutex;
+#endif
 QMutex tryLockMutex;
 QMutex waitMutex;
 QMutex finishMutex;
