@@ -101,7 +101,7 @@ KSharedPtr< IDocumentation > ManPagePlugin::documentationForDeclaration( Declara
         KDevelop::DUChainReadLocker lock;
         KDevelop::QualifiedIdentifier qid = dec->qualifiedIdentifier();
         if(qid.count() == 1){
-            return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier+"a", KUrl("man:"+identifier))));
+            return KSharedPtr<IDocumentation>(new ManPageDocumentation(qMakePair(identifier, KUrl("man:"+identifier))));
         }
     }
     return  KSharedPtr<IDocumentation>();
