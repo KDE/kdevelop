@@ -273,15 +273,6 @@ public:
         {
             if( s->id() == QUuid( a->data().toString() ) && s != activeSession ) {
                 bool loaded = loadSessionExternally( s );
-                
-#if 0
-                if(loaded)
-                {
-                    //Terminate this instance of kdevelop if the user agrees
-                    foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
-                        window->close();
-                }
-#endif
                 break;
             }
         }
