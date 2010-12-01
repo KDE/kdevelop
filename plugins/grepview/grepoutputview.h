@@ -64,6 +64,8 @@ Q_SIGNALS:
     
 private:
     QAction* m_apply;
+    QAction* m_next;
+    QAction* m_prev;
     GrepViewPlugin *m_plugin;
     
 private slots:
@@ -72,6 +74,7 @@ private slots:
     void onApply();
     void showDialog();
     void expandRootElement( const QModelIndex & parent );
+    void rowsRemoved();
 };
 
 #endif // GREPOUTPUTVIEW_H

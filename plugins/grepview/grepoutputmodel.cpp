@@ -312,7 +312,8 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
 
 void GrepOutputModel::doReplacements()
 {
-    
+    Q_ASSERT(m_rootItem);
+
     DocumentChangeSet changeSet;
     changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
     for(int fileRow = 0; fileRow < m_rootItem->rowCount(); fileRow++)

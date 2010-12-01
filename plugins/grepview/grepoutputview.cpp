@@ -48,25 +48,28 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     setWindowIcon(SmallIcon("edit-find"));
     
     m_apply = new QAction(KIcon("dialog-ok-apply"), i18n("&Replace"), this);
-    QAction *previous = new QAction(KIcon("go-previous"), i18n("&Previous"), this);
-    QAction *next = new QAction(KIcon("go-next"), i18n("&Next"), this);
+    m_apply->setEnabled(false);
+    m_prev = new QAction(KIcon("go-previous"), i18n("&Previous"), this);
+    m_prev->setEnabled(false);
+    m_next = new QAction(KIcon("go-next"), i18n("&Next"), this);
+    m_next->setEnabled(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
     
     addAction(m_apply);
-    addAction(previous);
-    addAction(next);
+    addAction(m_prev);
+    addAction(m_next);
     addAction(separator);
     addAction(change_criteria);
     
-    resultsTreeView->setModel(new GrepOutputModel);
+    renewModel();
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
-    
+
     connect(m_apply, SIGNAL(triggered(bool)), this, SLOT(onApply()));
-    connect(previous, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
-    connect(next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
+    connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
+    connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
     connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
 
@@ -77,13 +80,17 @@ GrepOutputView::~GrepOutputView()
 
 GrepOutputModel* GrepOutputView::renewModel()
 {
-    GrepOutputModel* oldModel = model();
+    if (model()) {
+        model()->deleteLater();
+    }
+
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
     resultsTreeView->setModel(newModel);
+    connect(newModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
+            this, SLOT(rowsRemoved()));
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
-    oldModel->deleteLater();
     return newModel;
 }
 
@@ -105,7 +112,7 @@ void GrepOutputView::setMessage(const QString& msg)
 
 void GrepOutputView::enableReplace(bool enable)
 {
-    m_apply->setEnabled(enable);
+    m_apply->setVisible(enable);
 }
 
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
@@ -122,6 +129,7 @@ void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
 
 void GrepOutputView::onApply()
 {
+    Q_ASSERT(model()->rowCount());
     setEnabled(false);
     model()->doReplacements();
     setEnabled(true);
@@ -138,6 +146,10 @@ void GrepOutputView::expandRootElement(const QModelIndex& parent)
     {
         resultsTreeView->setExpanded(model()->index(0,0), true);
     }
+
+    m_apply->setEnabled(true);
+    m_prev->setEnabled(true);
+    m_next->setEnabled(true);
 }
 
 void GrepOutputView::selectPreviousItem()
@@ -160,4 +172,11 @@ void GrepOutputView::selectNextItem()
         resultsTreeView->setCurrentIndex(next_idx);
         model()->activate(next_idx);
     }
+}
+
+void GrepOutputView::rowsRemoved()
+{
+    m_apply->setEnabled(model()->rowCount());
+    m_prev->setEnabled(model()->rowCount());
+    m_next->setEnabled(model()->rowCount());
 }
