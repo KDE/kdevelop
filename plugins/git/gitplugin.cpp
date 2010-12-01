@@ -147,7 +147,14 @@ QString revisionInterval(const KDevelop::VcsRevision& rev, const KDevelop::VcsRe
     return ret;
 }
 
-QDir urlDir(const KUrl& url) { return QFileInfo(url.toLocalFile()).absoluteDir(); }
+QDir urlDir(const KUrl& url)
+{
+    QFileInfo f(url.toLocalFile());
+    if(f.isDir())
+        return QDir(url.toLocalFile());
+    else
+        return f.absoluteDir();
+}
 QDir urlDir(const KUrl::List& urls) { return urlDir(urls.first()); } //TODO: could be improved
 
 }
