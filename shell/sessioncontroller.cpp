@@ -383,8 +383,18 @@ private slots:
                 if(!urlList.isEmpty())
                 {
                     //Either recover, or delete the recovery directory
-                    int choice = KMessageBox::warningContinueCancelList(ICore::self()->uiController()->activeMainWindow(), i18n("This session crashed at %1, but recovery copies of the following modified files are available.\n\nPush Continue to recover the modified files.\n\nPush Cancel to lose the modifications.", date), urlList, i18n("Recovery"));
-                    
+                    ///TODO: user proper runtime locale for date, it might be different
+                    ///      from what was used when the recovery file was saved
+                    KGuiItem recover = KStandardGuiItem::cont();
+                    recover.setIcon(KIcon("edit-redo"));
+                    recover.setText(i18n("Recover"));
+                    KGuiItem discard = KStandardGuiItem::discard();
+                    int choice = KMessageBox::warningContinueCancelList(qApp->activeWindow(),
+                        i18nc("%1: date of the last snapshot",
+                              "The session crashed the last time it was used. "
+                              "The following modified files can be recovered from a backup from %1.", date),
+                        urlList, i18n("Crash Recovery"), recover, discard );
+
                     if(choice == KMessageBox::Continue)
                     {
                         #if 0
