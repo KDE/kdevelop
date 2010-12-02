@@ -41,20 +41,22 @@ WorkingSet* getSet(const QString& id)
 }
 
 WorkingSetWidget::WorkingSetWidget(MainWindow* parent, Sublime::Area* area)
-    : WorkingSetToolButton(0, getSet(area->workingSet()), parent), m_area(area)
+    : WorkingSetToolButton(0, 0, parent), m_area(area)
 {
     //Queued connect so the change is already applied to the area when we start processing
     connect(m_area, SIGNAL(changingWorkingSet(Sublime::Area*, QString, QString)), this,
             SLOT(changingWorkingSet(Sublime::Area*, QString, QString)), Qt::QueuedConnection);
 
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Ignored));
+
+    changingWorkingSet(m_area, QString(), area->workingSet());
 }
 
 void WorkingSetWidget::setVisible( bool visible )
 {
     // never show empty working sets
     // TODO: I overloaded this only because hide() in the ctor does not work, other ideas?
-    QWidget::setVisible( !visible || (workingSet() && !workingSet()->isEmpty()) );
+    QWidget::setVisible( visible && (workingSet() && !workingSet()->isEmpty()) );
 }
 
 void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /*from*/, const QString& newSet)
@@ -63,12 +65,26 @@ void WorkingSetWidget::changingWorkingSet( Sublime::Area* area, const QString& /
 
     Q_ASSERT(area == m_area);
 
+    if (workingSet()) {
+        disconnect(workingSet(), SIGNAL(setChangedSignificantly()),
+                   this, SLOT(setChangedSignificantly()));
+    }
+
     if (newSet.isEmpty()) {
         setWorkingSet(0);
         setVisible(false);
     } else {
         setWorkingSet(getSet(newSet));
+        connect(workingSet(), SIGNAL(setChangedSignificantly()),
+                   this, SLOT(setChangedSignificantly()));
         setVisible(!workingSet()->isEmpty());
+    }
+}
+
+void WorkingSetWidget::setChangedSignificantly()
+{
+    if (workingSet()->isEmpty()) {
+        setVisible(false);
     }
 }
 
