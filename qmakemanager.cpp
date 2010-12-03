@@ -19,39 +19,40 @@
  */
 
 #include "qmakemanager.h"
-#include <QList>
-#include <QVector>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #include <QtCore/QHash>
+#include <QtCore/QList>
 
-#include <kurl.h>
-#include <kio/job.h>
-#include <kprocess.h>
-#include <kdebug.h>
+#include <QtGui/QAction>
+
+#include <KUrl>
+#include <KIO//Job>
+#include <KProcess>
+#include <KDebug>
+#include <KDirWatch>
+#include <KIcon>
+#include <KPluginFactory>
+#include <KAboutData>
+#include <KPluginLoader>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/iruncontroller.h>
-#include <language/duchain/indexedstring.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
-#include "iqmakebuilder.h"
-#include <kpluginfactory.h>
-#include <kaboutdata.h>
-#include <kpluginloader.h>
-#include <kdebug.h>
+#include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
+#include <language/duchain/indexedstring.h>
+
+#include "iqmakebuilder.h"
 
 #include "qmakemodelitems.h"
 #include "qmakeprojectfile.h"
 #include "qmakecache.h"
 #include "qmakemkspecs.h"
-#include <QAction>
-#include <KIcon>
 #include "qmakejob.h"
 #include <KDirWatch>
 #include <interfaces/iprojectcontroller.h>
