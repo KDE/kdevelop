@@ -1,5 +1,5 @@
 #!/bin/sh
-files=`find . -name \*.rc -o -name \*.ui | grep -v '/qmakebuilder/' | grep -v '/tests/'`
+files=`find . -name \*.rc -o -name \*.ui | grep -v '/qmakebuilder/' | grep -v '/app_templates/' | grep -v '/tests/'`
 if [ "x$files" != "x" ]; then
        $EXTRACTRC $files >> rc.cpp
 fi
