@@ -32,8 +32,8 @@ class GrepOutputItem : public QStandardItem
 public:
     typedef QList<GrepOutputItem> List;
 
-    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text, bool replace);
-    GrepOutputItem(const QString &filename, const QString &text, bool replace);
+    GrepOutputItem(KDevelop::DocumentChangePointer change, const QString &text);
+    GrepOutputItem(const QString &filename, const QString &text);
     ~GrepOutputItem();
 
     QString filename() const ;
@@ -44,6 +44,8 @@ public:
     void propagateState() ;
     /// Check children to determine current state
     void refreshState() ;
+
+    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
 
 private:
     KDevelop::DocumentChangePointer m_change;
@@ -63,6 +65,9 @@ public:
     ~GrepOutputModel();
 
     void setRegExp(const QRegExp& re);
+    void setReplacementTemplate(const QString &tmpl);
+    /// applies replacement on given text
+    QString replacementFor(const QString &text);
     void clear();  // resets file & match counts
  
     QModelIndex previousItemIndex(const QModelIndex &currentIdx) const;
@@ -72,12 +77,17 @@ public Q_SLOTS:
     void appendOutputs( const QString &filename, const GrepOutputItem::List &lines );
     void activate( const QModelIndex &idx );
     void doReplacements();
+    void setReplacement(const QString &repl);
 
 Q_SIGNALS:
     void showErrorMessage(const QString & message, int timeout = 0);
     
 private:    
     QRegExp m_regExp;
+    QString m_replacement;
+    QString m_replacementTemplate;
+    QString m_finalReplacement;
+    bool m_finalUpToDate;  /// says if m_finalReplacement is up to date or must be regenerated
     GrepOutputItem *m_rootItem;
     int m_fileCount;
     int m_matchCount;

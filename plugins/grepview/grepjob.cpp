@@ -16,6 +16,7 @@
 
 #include "grepjob.h"
 #include "grepoutputmodel.h"
+#include "greputil.h"
 
 #include <QList>
 #include <QRegExp>
@@ -33,7 +34,7 @@
 using namespace KDevelop;
 
 
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace)
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
 {
     GrepOutputItem::List res;
     QFile file(filename);
@@ -73,9 +74,9 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const 
             DocumentChangePointer change = DocumentChangePointer(new DocumentChange(
                 IndexedString(filename), 
                 SimpleRange(lineno, start, lineno, end),
-                re.cap(0), re.cap(0).replace(re, repl)));
+                re.cap(0), QString()));
             
-            res << GrepOutputItem(change, data, replace);
+            res << GrepOutputItem(change, data);
             offset = end;
         }
         lineno++;
@@ -96,31 +97,6 @@ GrepJob::GrepJob( QObject* parent )
 QString GrepJob::statusName() const
 {
     return i18n("Find in Files");
-}
-
-QString substitudePattern(const QString& pattern, const QString& searchString)
-{
-    QString subst = searchString;
-    QString result;
-    bool expectEscape = false;
-    foreach(const QChar &ch, pattern)
-    {
-        if(expectEscape)
-        {
-            expectEscape = false;
-            if(ch == '%')
-                result.append('%');
-            else if(ch == 's')
-                result.append(subst);
-            else
-                result.append('%').append(ch);
-        }
-        else if(ch == '%')
-            expectEscape = true;
-        else
-            result.append(ch);
-    }
-    return result;
 }
 
 void GrepJob::slotFindFinished()
@@ -155,7 +131,7 @@ void GrepJob::slotFindFinished()
         m_patternString = QRegExp::escape(m_patternString);
     }
     
-    if(m_replaceFlag && m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
+    if(m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
     {
         emit showErrorMessage(i18n("Captures are not allowed in pattern string"), 5000);
         return;
@@ -172,27 +148,14 @@ void GrepJob::slotFindFinished()
         m_regExp.setPatternSyntax(QRegExp::Wildcard);
     }
     
-    // backslashes can be sprecial chars
-    QString replacement = (m_regExp.patternSyntax() == QRegExp::Wildcard) ? m_replaceString : m_replaceString.replace("\\", "\\\\");
-    m_finalReplacement = substitudePattern(m_replacementTemplateString, replacement);
-    
     m_outputModel->setRegExp(m_regExp);
+    m_outputModel->setReplacementTemplate(m_replacementTemplateString);
 
-    if(m_replaceFlag)
-    {
-        emit showMessage(this, i18np("Replace <b>%2</b> by <b>%3</b> in one file",
-                                     "Replace <b>%2</b> by <b>%3</b> in %1 files",
-                                     m_fileList.length(), 
-                                     Qt::escape(m_regExp.pattern()), 
-                                     Qt::escape(m_finalReplacement)));
-    }
-    else
-    {
-        emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
-                                     "Searching for <b>%2</b> in %1 files",
-                                     m_fileList.length(), 
-                                     Qt::escape(m_regExp.pattern())));
-    }
+
+    emit showMessage(this, i18np("Searching for <b>%2</b> in one file",
+                                 "Searching for <b>%2</b> in %1 files",
+                                 m_fileList.length(),
+                                 Qt::escape(m_regExp.pattern())));
 
     m_workState = WorkGrep;
     QMetaObject::invokeMethod( this, "slotWork", Qt::QueuedConnection);
@@ -220,7 +183,7 @@ void GrepJob::slotWork()
                 emit showProgress(this, 0, m_fileList.length(), m_fileIndex);
                 if(m_fileIndex < m_fileList.length()) {
                     QString file = m_fileList[m_fileIndex].toLocalFile();
-                    GrepOutputItem::List items = grepFile(file, m_regExp, m_finalReplacement, m_replaceFlag);
+                    GrepOutputItem::List items = grepFile(file, m_regExp);
 
                     if(!items.isEmpty())
                     {
@@ -340,16 +303,6 @@ void GrepJob::setRegexpFlag(bool regexpFlag)
 void GrepJob::setProjectFilesFlag(bool projectFilesFlag)
 {
     m_useProjectFilesFlag = projectFilesFlag;
-}
-
-void GrepJob::setReplaceFlag(bool replaceFlag)
-{
-    m_replaceFlag = replaceFlag;
-}
-
-void GrepJob::setReplaceString(const QString& replaceString)
-{
-    m_replaceString = replaceString;
 }
 
 void GrepJob::setPatternString(const QString& patternString)

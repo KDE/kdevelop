@@ -10,6 +10,7 @@ set(findReplaceTest_SRCS
     ../grepjob.cpp
     ../grepfindthread.cpp
     ../grepoutputview.cpp
+    ../greputil.cpp
 )
 set(kdevgrepview_PART_UI
     ../grepwidget.ui

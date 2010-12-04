@@ -81,7 +81,7 @@ void FindReplaceTest::testFind()
     file.write(subject.toUtf8());
     file.close();
     
-    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search, "", false);
+    GrepOutputItem::List actualMatches = grepFile(file.fileName(), search);
     
     QCOMPARE(actualMatches.length(), matches.length());
     
@@ -163,7 +163,6 @@ void FindReplaceTest::testReplace()
     job->setOutputModel(model);
     job->setPatternString(searchPattern);
     job->setTemplateString(searchTemplate);
-    job->setReplaceString(replace);
     job->setReplacementTemplateString(replaceTemplate);
     job->setFilesString("*");
     job->setExcludeString("");
@@ -172,9 +171,9 @@ void FindReplaceTest::testReplace()
     job->setRegexpFlag(true);
     job->setCaseSensitive(true);
     job->setProjectFilesFlag(false);
-    job->setReplaceFlag(true);
     
     QVERIFY(job->exec());
+    model->setReplacement(replace);
     model->doReplacements();
     
     foreach(File fileData, result) 

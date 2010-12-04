@@ -13,8 +13,6 @@
 
 #include "grepdialog.h"
 
-#include <algorithm>
-
 #include <QDir>
 #include <QLabel>
 #include <QRegExp>
@@ -45,12 +43,11 @@
 #include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepfindthread.h"
+#include "greputil.h"
 
 using namespace KDevelop;
 
 namespace {
-
-static int const MAX_LAST_SEARCH_ITEMS_COUNT = 15;
 
 const QStringList template_desc = QStringList()
     << "verbatim"
@@ -102,16 +99,14 @@ const QStringList excludepatterns = QStringList()
 }
 
 const KDialog::ButtonCode GrepDialog::SearchButton  = KDialog::User1;
-const KDialog::ButtonCode GrepDialog::ReplaceButton = KDialog::User2;
 
 GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUsed )
     : KDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
 {
     setAttribute(Qt::WA_DeleteOnClose);
 
-    setButtons( SearchButton | ReplaceButton | KDialog::Cancel );
-    setButtonText( SearchButton, i18n("Search") );
-    setButtonText( ReplaceButton, i18n("Replace") );
+    setButtons( SearchButton | KDialog::Cancel );
+    setButtonText( SearchButton, i18n("Search...") );
     setCaption( i18n("Find/Replace In Files") );
     setDefaultButton( SearchButton );
 
@@ -123,7 +118,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     if(!setLastUsed)
     {
         patternCombo->addItem( "" );
-        replacementCombo->addItem( "" );
     }
 
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
@@ -133,9 +127,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
     templateEdit->setText( cg.readEntry("LastUsedTemplateString", template_str[0]) );
     replacementTemplateEdit->setText( cg.readEntry("LastUsedReplacementTemplateString", repl_template[0]) );
-    
-    replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
-    replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     
     regexCheck->setChecked(cg.readEntry("regexp", false ));
 
@@ -177,35 +168,11 @@ void GrepDialog::directoryChanged(const QString& dir)
     }
 }
 
-
-// Returns the contents of a QComboBox as a QStringList
-static QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty = false )
-{
-    QStringList list;
-    if (!combo) {
-        return list;
-    }
-    int skippedItem = -1;
-    if (!combo->currentText().isEmpty() || allowEmpty) {
-        list << combo->currentText();
-    }
-    if (combo->currentIndex() != -1 && !combo->itemText(combo->currentIndex()).isEmpty()) {
-        skippedItem = combo->currentIndex();
-    }
-    for (int i = 0; i < std::min(MAX_LAST_SEARCH_ITEMS_COUNT, combo->count()); ++i) {
-        if (i != skippedItem && !combo->itemText(i).isEmpty()) {
-            list << combo->itemText(i);
-        }
-    }
-    return list;
-}
-
 GrepDialog::~GrepDialog()
 {
     KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
-    cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     cg.writeEntry("regexp", regexCheck->isChecked());
     cg.writeEntry("recursive", recursiveCheck->isChecked());
     cg.writeEntry("search_project_files", limitToProjectCheck->isChecked());
@@ -270,11 +237,6 @@ QString GrepDialog::replacementTemplateString() const
     return replacementTemplateEdit->text();
 }
 
-QString GrepDialog::replacementString() const
-{
-    return replacementCombo->currentText();
-}
-
 QString GrepDialog::filesString() const
 {
     return filesCombo->currentText();
@@ -313,13 +275,12 @@ bool GrepDialog::caseSensitiveFlag() const
 void GrepDialog::patternComboEditTextChanged( const QString& text)
 {
     enableButton( SearchButton,  !text.isEmpty() );
-    enableButton( ReplaceButton, !text.isEmpty() );
 }
 
 void GrepDialog::performAction(KDialog::ButtonCode button)
 {
     // a click on cancel trigger this signal too
-    if( button != SearchButton && button != ReplaceButton ) return;
+    if( button != SearchButton ) return;
     
     // search for unsaved documents
     QList<IDocument*> unsavedFiles;
@@ -348,7 +309,6 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Replace in files"), m_factory, IUiController::CreateAndRaise);
     toolView->renewModel();
-    toolView->enableReplace(button == ReplaceButton);
     toolView->setPlugin(m_plugin);
     
     connect(job, SIGNAL(showErrorMessage(QString, int)),
@@ -362,7 +322,6 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     job->setPatternString(patternString());
     job->setReplacementTemplateString(replacementTemplateString());
     job->setTemplateString(templateString());
-    job->setReplaceString(replacementString());
     job->setFilesString(filesString());
     job->setExcludeString(excludeString());
     job->setDirectory(directory());
@@ -371,7 +330,6 @@ void GrepDialog::performAction(KDialog::ButtonCode button)
     job->setRegexpFlag( regexpFlag() );
     job->setRecursive( recursiveFlag() );
     job->setCaseSensitive( caseSensitiveFlag() );
-    job->setReplaceFlag( button == ReplaceButton );
 
     ICore::self()->runController()->registerJob(job);
     

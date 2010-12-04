@@ -52,7 +52,6 @@ public:
     GrepOutputModel* renewModel();
     
     void setMessage(const QString& msg);
-    void enableReplace(bool enable);
     void setPlugin(GrepViewPlugin *plugin);
 
 public Q_SLOTS:
@@ -63,7 +62,6 @@ Q_SIGNALS:
     void outputViewIsClosed();
     
 private:
-    QAction* m_apply;
     QAction* m_next;
     QAction* m_prev;
     GrepViewPlugin *m_plugin;

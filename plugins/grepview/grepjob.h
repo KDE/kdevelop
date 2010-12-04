@@ -55,7 +55,6 @@ public:
     void setPatternString(const QString& patternString);
     void setTemplateString(const QString &templateString);
     void setReplacementTemplateString(const QString &replTmplString);
-    void setReplaceString(const QString &replaceString);
     void setFilesString(const QString &filesString);
     void setExcludeString(const QString &excludeString);
     void setDirectory(const KUrl &directory);
@@ -63,7 +62,6 @@ public:
     void setRegexpFlag(bool regexpFlag);
     void setCaseSensitive(bool caseSensitive);
     void setProjectFilesFlag(bool projectFilesFlag);
-    void setReplaceFlag(bool replaceFlag);
 
     virtual void start();
 
@@ -106,8 +104,6 @@ private:
 
     QString m_templateString;
     QString m_replacementTemplateString;
-    QString m_replaceString;
-    QString m_finalReplacement;   // computed with m_replaceString and m_replacementTemplateString
     QString m_filesString;
     QString m_excludeString;
     KUrl m_directory;
@@ -116,13 +112,12 @@ private:
     bool m_regexpFlag;
     bool m_recursiveFlag;
     bool m_caseSensitiveFlag;
-    bool m_replaceFlag;
     
     bool m_findSomething;
 };
 
 //FIXME: this function is used externally only for tests, find a way to keep it 
 //       static for a regular compilation
-GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re, const QString &repl, bool replace);
+GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re);
 
 #endif
