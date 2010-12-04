@@ -45,6 +45,7 @@
 #include "grepjob.h"
 #include "grepoutputview.h"
 #include "grepfindthread.h"
+#include <interfaces/isession.h>
 
 using namespace KDevelop;
 
@@ -117,7 +118,7 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent, bool setLastUs
 
     setupUi(mainWidget());
 
-    KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     
     // add default values when the most recent ones should not be set
     if(!setLastUsed)
@@ -202,7 +203,7 @@ static QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty = false 
 
 GrepDialog::~GrepDialog()
 {
-    KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     // memorize the last patterns and paths
     cg.writeEntry("LastSearchItems", qCombo2StringList(patternCombo));
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));

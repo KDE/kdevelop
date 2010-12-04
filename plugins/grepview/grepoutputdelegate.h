@@ -32,6 +32,7 @@ public:
 
     static GrepOutputDelegate* self();
     void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 private:
     static GrepOutputDelegate* m_self;
 };

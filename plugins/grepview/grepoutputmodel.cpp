@@ -23,6 +23,7 @@
 #include <QTextDocument>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
 
 
 using namespace KDevelop;
@@ -282,7 +283,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     m_matchCount += items.length();
     m_rootItem->setText(i18n("%1 matches in %2 files", m_matchCount, m_fileCount));
     
-    QString fnString = i18np("%2 (one match)", "%2 (%1 matches)", items.length(), filename);
+    QString fnString = i18np("%2 <i>(one match)</i>", "%2 <i>(%1 matches)</i>", items.length(), ICore::self()->projectController()->prettyFileName(filename));
 
     GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, replace);
     m_rootItem->appendRow(fileItem);
@@ -338,7 +339,8 @@ void GrepOutputModel::doReplacements()
     if(!result.m_success)
     {
         DocumentChangePointer ch = result.m_reasonChange;
-        emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5").arg(Qt::escape(ch->m_oldText)).arg(Qt::escape(ch->m_newText))
+        if(ch)
+            emit showErrorMessage(i18n("Failed to replace <b>%1</b> by <b>%2</b> in %3:%4:%5").arg(Qt::escape(ch->m_oldText)).arg(Qt::escape(ch->m_newText))
                         .arg(ch->m_document.toUrl().toLocalFile()).arg(ch->m_range.start.line + 1).arg(ch->m_range.start.column + 1));
     }
 }
