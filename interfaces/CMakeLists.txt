@@ -1,3 +1,4 @@
+find_package(Threads)
 
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
@@ -51,6 +52,11 @@ target_link_libraries(kdevplatforminterfaces
         ${QT_QTDESIGNER_LIBRARY} 
         ${KDE4_KROSSCORE_LIBS}
         rt)
+
+if(CMAKE_HAVE_THREADS_LIBRARY)
+    target_link_libraries(kdevplatforminterfaces ${CMAKE_THREAD_LIBS_INIT})
+endif(CMAKE_HAVE_THREADS_LIBRARY)
+
 target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES 
         ${KDE4_KPARTS_LIBS} 
         ${KDE4_KTEXTEDITOR_LIBS} 
