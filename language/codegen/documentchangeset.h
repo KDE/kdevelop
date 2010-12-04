@@ -72,7 +72,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeSet {
             return m_success;
         }
         
+        /// Reason why the change failed
         QString m_failureReason;
+        /// Specific change that caused the problem (might be 0)
         DocumentChangePointer m_reasonChange;
         
         bool m_success;
