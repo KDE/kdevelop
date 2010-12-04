@@ -379,7 +379,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     if( !launcher ) {
         KMessageBox::error(
             qApp->activeWindow(), 
-            "Current launch configuration does not support the '" + runMode + "' mode.",
+            i18n("The current launch configuration does not support the '%1' mode.", runMode),
             "");
         return 0;
     }
