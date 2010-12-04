@@ -948,12 +948,16 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         return QString();
     }
     
-    QModelIndexList selected = view->selectionModel()->selectedIndexes();
-    if(!selected.isEmpty())
+    QModelIndex selected = view->selectionModel()->currentIndex();
+    if(selected.isValid())
     {
-        QString ret = selected[0].data().toString();
+        selected = selected.sibling(selected.row(), 0);
+        QString ret = selected.data().toString();
         if(ret == i18n("Create New Session"))
+        {
+            qsrand(QDateTime::currentDateTime().toTime_t());
             ret = QUuid::createUuid().toString();
+        }
         return ret;
     }
     
