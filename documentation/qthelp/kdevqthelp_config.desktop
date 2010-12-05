@@ -9,6 +9,7 @@ X-KDE-ParentComponents=kdevplatform
 X-KDE-CfgDlgHierarchy=GENERAL
 Name=QtHelp Documentation
 Name[de]=Qt-Hilfe-Dokumentation
+Name[en_GB]=QtHelp Documentation
 Name[es]=Documentación de QtHelp
 Name[et]=QtHelpi dokumentatsioon
 Name[fr]=Documentation de QtHelp
