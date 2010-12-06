@@ -138,13 +138,13 @@ If this is the same as the source directory you can leave it empty.</string>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Includes/Imports and Defines for Project Items</string>
+      <string>Includes/Imports and Defines for Project Directories/Files</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Project Items:</string>
+         <string>Directories/Files:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -160,7 +160,13 @@ If this is the same as the source directory you can leave it empty.</string>
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>A list pf project items to setup include/import paths and defines for.</string>
+         <string>A list of paths specifying project directories or files, for which includes and
+defines should be set up. &quot;/&quot; denotes the top level project directory. If the
+path identifies a directory the includes/defines are active for that directory
+and all sub (and sub-sub)directories.</string>
+        </property>
+        <property name="whatsThis">
+         <string/>
         </property>
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectRows</enum>
@@ -217,6 +223,10 @@ If this is the same as the source directory you can leave it empty.</string>
               <verstretch>8</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string>A list of absolute include paths that the KDevelop parser should be using
+when parsing the project files in the given project path.</string>
+            </property>
             <property name="selectionBehavior">
              <enum>QAbstractItemView::SelectRows</enum>
             </property>
@@ -241,7 +251,7 @@ If this is the same as the source directory you can leave it empty.</string>
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>List of defines configured for the selected project item</string>
+             <string>Specify a list of pre-processor defines and their values that the KDevelop parser should use when parsing the files in the given project path.</string>
             </property>
             <property name="selectionBehavior">
              <enum>QAbstractItemView::SelectRows</enum>

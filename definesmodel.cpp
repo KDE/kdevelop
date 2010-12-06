@@ -39,7 +39,7 @@ QVariant DefinesModel::data( const QModelIndex& index, int role ) const
     }
 
     if( index.row() == m_defines.count() && index.column() == 0 ) {
-        return i18n( "Double Click here to insert a new include path" );
+        return i18n( "Double-Click here to insert a new define to be used for the path" );
     } else if( index.row() < m_defines.count() ) {
         if( index.column() == 0 ) {
             return m_defines.at( index.row() ).first;

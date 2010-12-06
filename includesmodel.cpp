@@ -39,7 +39,7 @@ QVariant IncludesModel::data( const QModelIndex& index, int role ) const
     }
 
     if( index.row() == m_includes.count() ) {
-        return i18n( "Double Click here to insert a new include path" );
+        return i18n( "Double-Click here to insert a new include path to be used for the path" );
     } else {
         return m_includes.at( index.row() );
     }

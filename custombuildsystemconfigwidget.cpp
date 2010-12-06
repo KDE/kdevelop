@@ -90,7 +90,9 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         configs << config;
         ui->currentConfig->addItem( config.title, config.grpName );
     }
-    changeCurrentConfig( ui->currentConfig->findData( grp.readEntry( ConfigConstants::currentConfigKey, "" ) ) );
+    int idx = ui->currentConfig->findData( grp.readEntry( ConfigConstants::currentConfigKey, "" ) );
+    ui->currentConfig->setCurrentIndex( idx );
+    changeCurrentConfig( idx );
 }
 
 void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& cfg, CustomBuildSystemConfig& c )
