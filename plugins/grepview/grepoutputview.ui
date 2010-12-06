@@ -53,6 +53,9 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="toolTip">
+           <string>Enter the replacement pattern.</string>
+          </property>
           <property name="editable">
            <bool>true</bool>
           </property>
@@ -65,6 +68,9 @@
             <horstretch>1</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Apply replacement on selectd items.</string>
           </property>
           <property name="text">
            <string>Apply</string>

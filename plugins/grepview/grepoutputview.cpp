@@ -21,6 +21,7 @@
 #include <KMessageBox>
 
 #include <interfaces/icore.h>
+#include <interfaces/isession.h>
 
 using namespace KDevelop;
 
@@ -71,7 +72,7 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
     connect(applyButton, SIGNAL(clicked()),  this, SLOT(onApply()));
     
-    KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
     replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
     applyButton->setIcon(KIcon("dialog-ok-apply"));
@@ -81,7 +82,7 @@ GrepOutputView::GrepOutputView(QWidget* parent)
 
 GrepOutputView::~GrepOutputView()
 {
-    KConfigGroup cg = KGlobal::config()->group( "GrepDialog" );
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     emit outputViewIsClosed();
 }
