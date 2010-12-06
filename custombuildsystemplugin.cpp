@@ -70,7 +70,7 @@ ProjectFileItem* CustomBuildSystem::addFile( const KUrl& folder, ProjectFolderIt
     return genericManager()->addFile( folder, parent );
 }
 
-bool CustomBuildSystem::addFileToTarget( ProjectFileItem* file, ProjectTargetItem* parent )
+bool CustomBuildSystem::addFileToTarget( ProjectFileItem*, ProjectTargetItem* )
 {
     return 0;
 }
@@ -121,7 +121,7 @@ KJob* CustomBuildSystem::configure( IProject* project )
     return new CustomBuildJob( this, project->projectItem(), CustomBuildSystemTool::Configure );
 }
 
-ProjectTargetItem* CustomBuildSystem::createTarget( const QString& target, ProjectFolderItem* parent )
+ProjectTargetItem* CustomBuildSystem::createTarget( const QString&, ProjectFolderItem* )
 {
     return 0;
 }
@@ -194,7 +194,7 @@ bool CustomBuildSystem::removeFile( ProjectFileItem* file )
     return genericManager()->removeFile( file );
 }
 
-bool CustomBuildSystem::removeFileFromTarget( ProjectFileItem* file, ProjectTargetItem* parent )
+bool CustomBuildSystem::removeFileFromTarget( ProjectFileItem*, ProjectTargetItem* )
 {
     return false;
 }
@@ -204,7 +204,7 @@ bool CustomBuildSystem::removeFolder( ProjectFolderItem* folder )
     return genericManager()->removeFolder( folder );
 }
 
-bool CustomBuildSystem::removeTarget( ProjectTargetItem* target )
+bool CustomBuildSystem::removeTarget( ProjectTargetItem* )
 {
     return false;
 }
