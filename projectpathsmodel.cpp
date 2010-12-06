@@ -39,7 +39,7 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
     }
 
     if( index.row() == projectPaths.count() ) {
-        return i18n( "Double Click here to insert a new path" );
+        return i18n( "Double-Click here to insert a new path to a directory or file." );
     } else {
         switch( role ) {
         case IncludesDataRole:
