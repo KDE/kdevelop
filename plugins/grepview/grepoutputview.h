@@ -21,6 +21,8 @@ namespace KDevelop
     class IStatus;
 }
 
+class QModelIndex;
+
 class GrepViewPlugin;
 class GrepOutputModel;
 class GrepOutputDelegate;
@@ -57,6 +59,7 @@ public:
 public Q_SLOTS:
     void showErrorMessage( const QString& errorMessage );
     void showMessage( KDevelop::IStatus*, const QString& message );
+    void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 
 Q_SIGNALS:
     void outputViewIsClosed();

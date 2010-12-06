@@ -95,6 +95,7 @@ GrepOutputModel* GrepOutputView::renewModel()
 
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
     resultsTreeView->setModel(newModel);
+    applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
     connect(newModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
@@ -103,6 +104,7 @@ GrepOutputModel* GrepOutputView::renewModel()
     connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
+    connect(newModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
     return newModel;
 }
 
@@ -193,4 +195,14 @@ void GrepOutputView::rowsRemoved()
 {
     m_prev->setEnabled(model()->rowCount());
     m_next->setEnabled(model()->rowCount());
+}
+
+void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    Q_UNUSED(bottomRight);
+    // we only care about root item
+    if(!topLeft.parent().isValid())
+    {
+        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked);
+    }
 }
