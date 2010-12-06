@@ -704,7 +704,7 @@ QList< IDocument * > KDevelop::DocumentController::documentsInWindow(MainWindow 
     return list;
 }
 
-QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(MainWindow * mw) const
+QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(MainWindow * mw, bool currentAreaOnly) const
 {
     // Gather a list of all documents which have views only in the given main window
     QList<IDocument*> checkSave;
@@ -715,7 +715,7 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
 
             foreach (Sublime::View* view, sdoc->views()) {
                 foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows())
-                    if(window != mw && window->containsView(view))
+                    if(window->containsView(view) && (window != mw || (currentAreaOnly && window == mw && !mw->area()->views().contains(view))))
                         inOtherWindow = true;
             }
 
@@ -735,9 +735,9 @@ QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList
     return ret;
 }
 
-bool DocumentController::saveAllDocumentsForWindow(MainWindow* mw, IDocument::DocumentSaveMode mode)
+bool DocumentController::saveAllDocumentsForWindow(KDevelop::MainWindow* mw, KDevelop::IDocument::DocumentSaveMode mode, bool currentAreaOnly)
 {
-    QList<IDocument*> checkSave = documentsExclusivelyInWindow(mw);
+    QList<IDocument*> checkSave = documentsExclusivelyInWindow(mw, currentAreaOnly);
 
     return saveSomeDocuments(checkSave, mode);
 }

@@ -149,7 +149,7 @@ void WorkingSetToolButton::duplicateSet()
 {
     Q_ASSERT(m_set);
 
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
         return;
     WorkingSet* set = Core::self()->workingSetControllerInternal()->newWorkingSet("clone");
     set->setPersistent(true);
@@ -163,7 +163,7 @@ void WorkingSetToolButton::loadSet()
 
     m_set->setPersistent(true);
 
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
         return;
     mainWindow()->area()->setWorkingSet(QString(m_set->id()));
 }
@@ -175,7 +175,7 @@ void WorkingSetToolButton::closeSet()
     m_set->setPersistent(true);
     m_set->saveFromArea(mainWindow()->area(), mainWindow()->area()->rootIndex());
 
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
         return;
     mainWindow()->area()->setWorkingSet(QString());
 }
@@ -211,7 +211,7 @@ void WorkingSetToolButton::buttonTriggered()
     Q_ASSERT(m_set);
 
     //Only close the working-set if the file was saved before
-    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default))
+    if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))
         return;
 
     if(mainWindow()->area()->workingSet() == m_set->id()) {
