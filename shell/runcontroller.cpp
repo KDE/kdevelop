@@ -377,7 +377,10 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     ILauncher* launcher = run->type()->launcherForId( launcherId );
 
     if( !launcher ) {
-        kWarning() << i18n("Launcher could not be found for the name '%1'. Check the launch configuration.", launcherId );
+        KMessageBox::error(
+            qApp->activeWindow(), 
+            i18n("The current launch configuration does not support the '%1' mode.", runMode),
+            "");
         return 0;
     }
 

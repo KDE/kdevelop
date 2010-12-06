@@ -181,6 +181,7 @@ public:
     
     void newSession()
     {
+        qsrand(QDateTime::currentDateTime().toTime_t());
         Session* session = new Session( QUuid::createUuid() );
         
         KProcess::startDetached(ShellExtension::getInstance()->binaryPath(), QStringList() << "-s" << session->id().toString() << standardArguments());
@@ -686,6 +687,7 @@ Session* SessionController::createSession( const QString& name )
     {
         s = new Session( QUuid(name) );
     }else{
+        qsrand(QDateTime::currentDateTime().toTime_t());
         s = new Session( QUuid::createUuid() );
         s->setName( name );
     }
@@ -740,6 +742,7 @@ Session* SessionController::session( const QString& nameOrId ) const
 QString SessionController::cloneSession( const QString& nameOrid )
 {
     Session* origSession = session( nameOrid );
+    qsrand(QDateTime::currentDateTime().toTime_t());
     QUuid id = QUuid::createUuid();
     KIO::NetAccess::dircopy( KUrl( sessionDirectory() + '/' + origSession->id().toString() ), 
                              KUrl( sessionDirectory() + '/' + id.toString() ), 
@@ -948,12 +951,16 @@ QString SessionController::showSessionChooserDialog(QString headerText)
         return QString();
     }
     
-    QModelIndexList selected = view->selectionModel()->selectedIndexes();
-    if(!selected.isEmpty())
+    QModelIndex selected = view->selectionModel()->currentIndex();
+    if(selected.isValid())
     {
-        QString ret = selected[0].data().toString();
+        selected = selected.sibling(selected.row(), 0);
+        QString ret = selected.data().toString();
         if(ret == i18n("Create New Session"))
+        {
+            qsrand(QDateTime::currentDateTime().toTime_t());
             ret = QUuid::createUuid().toString();
+        }
         return ret;
     }
     

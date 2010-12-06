@@ -26,7 +26,7 @@ using namespace KDevelop;
 
 #define USE_PTHREAD_MUTEX
 
-#ifdef USE_PTHREAD_MUTEX
+#if defined(USE_PTHREAD_MUTEX) && defined(Q_OS_LINUX)
 
 #include <pthread.h>
 #include <time.h>
