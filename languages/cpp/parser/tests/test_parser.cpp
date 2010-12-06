@@ -458,7 +458,6 @@ private slots:
 
   void testStringConcatenation()
   {
-    rpp::Preprocessor preprocessor;
     QCOMPARE(preprocess("Hello##You"), QString("HelloYou"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(var1, )").trimmed(), QString("var1"));
     QCOMPARE(preprocess("#define CONCAT(Var1, Var2) Var1##Var2\nCONCAT(, var2)").trimmed(), QString("var2"));
@@ -468,6 +467,18 @@ private slots:
     QCOMPARE(preprocess("#define GLUE(a, b) a ## b\n#define HIGHLOW hello\n#define LOW LOW world\nGLUE(HIGH, LOW)").trimmed(), QString("hello"));
     QCOMPARE(preprocess("#define GLUE(a, b) a ##b\n#define XGLUE(a, b) GLUE(a, b)\n#define HIGHLOW hello\n#define LOW LOW world\nXGLUE(HIGH, LOW)").simplified(), QString("hello world")); // TODO: simplified -> trimmed
     QCOMPARE(preprocess("#define GLUE(a, b, c) k ## l ## m\nGLUE(a, b, c)").trimmed(), QString("klm"));
+  }
+
+  void testEmptyInclude()
+  {
+    // testcase for https://bugs.kde.org/show_bug.cgi?id=258972
+    rpp::Preprocessor preprocessor;
+    rpp::pp pp(&preprocessor);
+    pp.processFile("anonymous", QByteArray("#include\n\nint main(){\n    ;\n}\n"));
+    QCOMPARE(pp.problems().count(), 1);
+    qDebug() << pp.problems().first()->description();
+    QCOMPARE(pp.problems().first()->finalLocation().start, KDevelop::SimpleCursor(0, 8));
+    QCOMPARE(pp.problems().first()->finalLocation().end, KDevelop::SimpleCursor(0, 8));
   }
 
   void testCondition()
