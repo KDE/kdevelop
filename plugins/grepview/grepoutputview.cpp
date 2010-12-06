@@ -14,10 +14,14 @@
 #include "grepoutputdelegate.h"
 #include "ui_grepoutputview.h"
 #include "grepviewplugin.h"
+#include "grepdialog.h"
+#include "greputil.h"
 
 #include <QtGui/QAction>
+#include <KMessageBox>
 
 #include <interfaces/icore.h>
+#include <interfaces/isession.h>
 
 using namespace KDevelop;
 
@@ -47,8 +51,6 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     setWindowTitle(i18n("Replace output view"));
     setWindowIcon(SmallIcon("edit-find"));
     
-    m_apply = new QAction(KIcon("dialog-ok-apply"), i18n("&Replace"), this);
-    m_apply->setEnabled(false);
     m_prev = new QAction(KIcon("go-previous"), i18n("&Previous"), this);
     m_prev->setEnabled(false);
     m_next = new QAction(KIcon("go-next"), i18n("&Next"), this);
@@ -57,7 +59,6 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     separator->setSeparator(true);
     QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
     
-    addAction(m_apply);
     addAction(m_prev);
     addAction(m_next);
     addAction(separator);
@@ -67,14 +68,22 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setHeaderHidden(true);
 
-    connect(m_apply, SIGNAL(triggered(bool)), this, SLOT(onApply()));
     connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
+    connect(applyButton, SIGNAL(clicked()),  this, SLOT(onApply()));
+    
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
+    replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
+    replacementCombo->setInsertPolicy(QComboBox::InsertAtTop);
+    applyButton->setIcon(KIcon("dialog-ok-apply"));
+    
     connect(change_criteria, SIGNAL(triggered(bool)), this, SLOT(showDialog()));
 }
 
 GrepOutputView::~GrepOutputView()
 {
+    KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
+    cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     emit outputViewIsClosed();
 }
 
@@ -86,11 +95,16 @@ GrepOutputModel* GrepOutputView::renewModel()
 
     GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
     resultsTreeView->setModel(newModel);
+    applyButton->setEnabled(false);
+    // text may be already present
+    newModel->setReplacement(replacementCombo->currentText());
     connect(newModel, SIGNAL(rowsRemoved(QModelIndex, int, int)),
             this, SLOT(rowsRemoved()));
     connect(resultsTreeView, SIGNAL(activated(QModelIndex)), newModel, SLOT(activate(QModelIndex)));
+    connect(replacementCombo, SIGNAL(editTextChanged(QString)), newModel, SLOT(setReplacement(QString)));
     connect(newModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(expandRootElement(QModelIndex)));
     connect(newModel, SIGNAL(showErrorMessage(QString,int)), this, SLOT(showErrorMessage(QString)));
+    connect(newModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateApplyState(QModelIndex,QModelIndex)));
     return newModel;
 }
 
@@ -110,11 +124,6 @@ void GrepOutputView::setMessage(const QString& msg)
     messageLabel->setText(msg);
 }
 
-void GrepOutputView::enableReplace(bool enable)
-{
-    m_apply->setVisible(enable);
-}
-
 void GrepOutputView::showErrorMessage( const QString& errorMessage )
 {
     setStyleSheet("QLabel { color : red; }");
@@ -130,6 +139,14 @@ void GrepOutputView::showMessage( KDevelop::IStatus* , const QString& message )
 void GrepOutputView::onApply()
 {
     Q_ASSERT(model()->rowCount());
+    // ask a confirmation before an empty string replacement
+    if(replacementCombo->currentText().length() == 0 &&
+       KMessageBox::questionYesNo(this, i18n("Start replacement"),
+                                  i18n("Would you want to replace by empty string ?")) == KMessageBox::ButtonCode::No)
+    {
+        return;
+    }
+
     setEnabled(false);
     model()->doReplacements();
     setEnabled(true);
@@ -147,9 +164,9 @@ void GrepOutputView::expandRootElement(const QModelIndex& parent)
         resultsTreeView->setExpanded(model()->index(0,0), true);
     }
 
-    m_apply->setEnabled(true);
     m_prev->setEnabled(true);
     m_next->setEnabled(true);
+    applyButton->setEnabled(true);
 }
 
 void GrepOutputView::selectPreviousItem()
@@ -176,7 +193,16 @@ void GrepOutputView::selectNextItem()
 
 void GrepOutputView::rowsRemoved()
 {
-    m_apply->setEnabled(model()->rowCount());
     m_prev->setEnabled(model()->rowCount());
     m_next->setEnabled(model()->rowCount());
+}
+
+void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+    Q_UNUSED(bottomRight);
+    // we only care about root item
+    if(!topLeft.parent().isValid())
+    {
+        applyButton->setEnabled(topLeft.data(Qt::CheckStateRole) != Qt::Unchecked);
+    }
 }

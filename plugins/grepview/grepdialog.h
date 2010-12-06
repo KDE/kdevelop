@@ -29,7 +29,6 @@ class GrepDialog : public KDialog, private Ui::GrepWidget
 
 public:
     static const KDialog::ButtonCode SearchButton;
-    static const KDialog::ButtonCode ReplaceButton;
     
     explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=0, bool setLastUsed=false );
     ~GrepDialog();
@@ -40,7 +39,6 @@ public:
 
     QString patternString() const;
     QString templateString() const;
-    QString replacementString() const;
     QString replacementTemplateString() const;
     QString filesString() const;
     QString excludeString() const;
