@@ -825,7 +825,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         return;
     }
     
-    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QSet<QString> entries = filterFiles(entriesL);
     
     KUrl folderurl = item->url();
