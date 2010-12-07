@@ -585,8 +585,18 @@ QString & LicensePage::readLicense(int licenseIndex)
         licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
         QString developer("%1 <%2>");
         KEMailSettings* emailSettings = new KEMailSettings();
-        developer = developer.arg(emailSettings->getSetting(KEMailSettings::RealName));
-        developer = developer.arg(emailSettings->getSetting(KEMailSettings::EmailAddress));
+        QString name = emailSettings->getSetting(KEMailSettings::RealName);
+        if (name.isEmpty())
+        {
+            name = "<copyright holder>";
+        }
+        developer = developer.arg(name);
+        QString email = emailSettings->getSetting(KEMailSettings::EmailAddress);
+        if (email.isEmpty())
+        {
+            email = "email"; //no < > as they are already through the email field
+        }
+        developer = developer.arg(email);
         licenseText.replace("<copyright holder>", developer);
 
         d->availableLicenses[licenseIndex].contents = licenseText;
