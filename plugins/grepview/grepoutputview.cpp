@@ -51,16 +51,22 @@ GrepOutputView::GrepOutputView(QWidget* parent)
     setWindowTitle(i18n("Replace output view"));
     setWindowIcon(SmallIcon("edit-find"));
     
-    m_prev = new QAction(KIcon("go-previous"), i18n("&Previous"), this);
+    m_prev = new QAction(KIcon("go-previous"), i18n("&Previous item"), this);
     m_prev->setEnabled(false);
-    m_next = new QAction(KIcon("go-next"), i18n("&Next"), this);
+    m_next = new QAction(KIcon("go-next"), i18n("&Next item"), this);
     m_next->setEnabled(false);
+    m_collapseAll = new QAction(KIcon("arrow-left-double"), i18n("C&ollapse all"), this); // TODO change icon
+    m_collapseAll->setEnabled(false);
+    m_expandAll = new QAction(KIcon("arrow-right-double"), i18n("&Expand all"), this); // TODO change icon
+    m_expandAll->setEnabled(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *change_criteria = new QAction(KIcon("configure"), i18n("&Change criteria"), this);
     
     addAction(m_prev);
     addAction(m_next);
+    addAction(m_collapseAll);
+    addAction(m_expandAll);
     addAction(separator);
     addAction(change_criteria);
     
@@ -70,6 +76,8 @@ GrepOutputView::GrepOutputView(QWidget* parent)
 
     connect(m_prev, SIGNAL(triggered(bool)), this, SLOT(selectPreviousItem()));
     connect(m_next, SIGNAL(triggered(bool)), this, SLOT(selectNextItem()));
+    connect(m_collapseAll, SIGNAL(triggered(bool)), this, SLOT(collapseAllItems()));
+    connect(m_expandAll, SIGNAL(triggered(bool)), this, SLOT(expandAllItems()));
     connect(applyButton, SIGNAL(clicked()),  this, SLOT(onApply()));
     
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
@@ -166,6 +174,8 @@ void GrepOutputView::expandRootElement(const QModelIndex& parent)
 
     m_prev->setEnabled(true);
     m_next->setEnabled(true);
+    m_collapseAll->setEnabled(true);
+    m_expandAll->setEnabled(true);
     applyButton->setEnabled(true);
 }
 
@@ -191,6 +201,17 @@ void GrepOutputView::selectNextItem()
     }
 }
 
+
+void GrepOutputView::collapseAllItems()
+{
+    resultsTreeView->collapseAll();
+}
+
+void GrepOutputView::expandAllItems()
+{
+    resultsTreeView->expandAll();
+}
+    
 void GrepOutputView::rowsRemoved()
 {
     m_prev->setEnabled(model()->rowCount());

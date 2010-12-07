@@ -67,11 +67,15 @@ Q_SIGNALS:
 private:
     QAction* m_next;
     QAction* m_prev;
+    QAction* m_collapseAll;
+    QAction* m_expandAll;
     GrepViewPlugin *m_plugin;
     
 private slots:
     void selectPreviousItem();
     void selectNextItem();
+    void collapseAllItems();
+    void expandAllItems();
     void onApply();
     void showDialog();
     void expandRootElement( const QModelIndex & parent );
