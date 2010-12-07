@@ -94,6 +94,18 @@ CorePrivate::CorePrivate(Core *core):
 {
 }
 
+void CorePrivate::initializeDUChainRepositories()
+{
+    // Initialize the global item repository as first thing after loading the session
+    globalItemRepositoryRegistry();
+    
+    // This needs to be initialized here too as the function is not threadsafe, but can
+    // sometimes be called from different threads. This results in the underlying QFile
+    // being 0 and hence crashes at some point later when accessing the contents via 
+    // read. See https://bugs.kde.org/show_bug.cgi?id=250779
+    RecursiveImportRepository::repository();
+}
+
 bool CorePrivate::initialize(Core::Setup mode, const QString& session )
 {
     m_mode=mode;
@@ -198,16 +210,10 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         }
         return false;
     }
-    // Initialize the item repository as first thing after loading the session,
+
     // TODO: Is this early enough, or should we put the loading of the session into
     // the controller construct
-    globalItemRepositoryRegistry();
-    
-    // This needs to be initialized here too as the function is not threadsafe, but can
-    // sometimes be called from different threads. This results in the underlying QFile
-    // being 0 and hence crashes at some point later when accessing the contents via 
-    // read. See https://bugs.kde.org/show_bug.cgi?id=250779
-    RecursiveImportRepository::repository();
+    initializeDUChainRepositories();
 
     if(!(mode & Core::NoUi)) uiController->initialize();
     languageController->initialize();
