@@ -152,7 +152,7 @@ class BranchItem : public QStandardItem
                 }
 
                 int ret = KMessageBox::messageBox(0, KMessageBox::WarningYesNo, 
-                                                i18n("Are you sure you want to rename %1 to %2 ?", text(), newBranch));
+                                                i18n("Are you sure you want to rename \"%1\" to \"%2\"?", text(), newBranch));
 
                 if (ret == KMessageBox::Yes ) {
                     KDevelop::VcsJob *branchJob = bmodel->dvcsPlugin()->branch(bmodel->repository(), newBranch, text(), QStringList("-m"));
