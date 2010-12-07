@@ -1418,26 +1418,38 @@ int CMakeProjectVisitor::visit(const FileAst *file)
             break;
         case FileAst::Glob: {
             QStringList matches;
-            QString relative=file->path();
+            QString currentPath=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+            QString relativeto=file->path();
+            if(!relativeto.isEmpty()) {
+                if(KUrl::isRelativeUrl(relativeto))
+                    currentPath += '/'+relativeto;
+                else
+                    currentPath = relativeto;
+            }
+            
             foreach(const QString& glob, file->globbingExpressions())
             {
                 QStringList globs;
-                QString current;
-                if(KUrl::isRelativeUrl(glob)) {
-                    KUrl urlGlob(glob);
-                    current=urlGlob.upUrl().path();
+                QString current(currentPath);
+                int lastSlash = glob.lastIndexOf('/');
+                
+                if(lastSlash>=0) {
+                    QString path = glob.left(lastSlash);
+                    if(KUrl::isRelativeUrl(glob))
+                        current+='/'+path;
+                    else
+                        current = path;
                     
-                    globs.append(urlGlob.fileName());
-                } else if(!relative.isEmpty()) {
-                    current=relative;
-                    globs.append(glob);
+                    globs.append(glob.right(glob.size()-lastSlash-1));
                 } else {
-                    current=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
                     globs.append(glob);
                 }
                 
                 QDir d(current);
-                matches+=d.entryList(globs, QDir::NoDotAndDotDot | QDir::AllEntries);
+                QStringList matching=d.entryList(globs, QDir::NoDotAndDotDot | QDir::AllEntries);
+                
+                foreach(const QString& match, matching)
+                    matches += d.absoluteFilePath(match);
             }
             m_vars->insert(file->variable(), matches);
             kDebug(9042) << "file glob" << file->path() << file->globbingExpressions() << matches;
