@@ -32,6 +32,7 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 
+#include <language/duchain/topducontext.h>
 #include <language/editor/editorintegrator.h>
 #include <language/backgroundparser/backgroundparser.h>
 
@@ -202,6 +203,12 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     // the controller construct
     globalItemRepositoryRegistry();
     
+    // This needs to be initialized here too as the function is not threadsafe, but can
+    // sometimes be called from different threads. This results in the underlying QFile
+    // being 0 and hence crashes at some point later when accessing the contents via 
+    // read. See https://bugs.kde.org/show_bug.cgi?id=250779
+    RecursiveImportRepository::repository();
+
     if(!(mode & Core::NoUi)) uiController->initialize();
     languageController->initialize();
     projectController->initialize();
