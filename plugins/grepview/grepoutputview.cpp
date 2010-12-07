@@ -149,8 +149,8 @@ void GrepOutputView::onApply()
     Q_ASSERT(model()->rowCount());
     // ask a confirmation before an empty string replacement
     if(replacementCombo->currentText().length() == 0 &&
-       KMessageBox::questionYesNo(this, i18n("Start replacement"),
-                                  i18n("Would you want to replace by empty string ?")) == KMessageBox::ButtonCode::No)
+       KMessageBox::questionYesNo(this, i18n("Would you want to replace by empty string ?"),
+                                        i18n("Start replacement")) == KMessageBox::ButtonCode::No)
     {
         return;
     }

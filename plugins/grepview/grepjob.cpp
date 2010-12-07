@@ -53,7 +53,7 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     // reads file with detected encoding
     file.seek(0);
     QTextStream stream(&file);
-    stream.setCodec(prober.encodingName());
+    stream.setCodec(prober.encoding());
     while( !stream.atEnd() )
     {
         QString data = stream.readLine();
@@ -133,7 +133,9 @@ void GrepJob::slotFindFinished()
     
     if(m_regexpFlag && QRegExp(m_patternString).captureCount() > 0)
     {
-        emit showErrorMessage(i18n("Captures are not allowed in pattern string"), 5000);
+        emit showErrorMessage(i18nc("Capture is the text which is \"captured\" with () in regular expressions "
+                                    "see http://doc.trolltech.com/qregexp.html#capturedTexts",
+                                    "Captures are not allowed in pattern string"), 5000);
         return;
     }
     
