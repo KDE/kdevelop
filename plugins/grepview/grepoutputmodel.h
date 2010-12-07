@@ -49,9 +49,6 @@ public:
 
 private:
     KDevelop::DocumentChangePointer m_change;
-   
-    void showCollapsed();
-    void showExpanded();
 };
 
 Q_DECLARE_METATYPE(GrepOutputItem::List);
