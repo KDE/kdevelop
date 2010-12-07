@@ -232,7 +232,6 @@ class QHashPrinter:
             #print "QHashData::firstNode() *bucket %s" % bucket
             n = self.d['numBuckets']
             #print "QHashData::firstNode() n %s" % n
-            n -= 1
             while n:
                 #print "QHashData::firstNode() in while, n %s" % n;
                 if bucket != e:
