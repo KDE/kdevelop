@@ -248,14 +248,13 @@ class QHashPrinter:
         def nextNode (self, node):
             "Get the nextNode after the current, see also QHashData::nextNode()."
             #print "******************************** nextNode"
-            e = self.d.cast(gdb.lookup_type('QHashData::Node').pointer())
-
             #print "nextNode: node %s" % node
+            next = node['next'].cast(gdb.lookup_type('QHashData::Node').pointer())
+            e = next
 
-            next = node['next']
             #print "nextNode: next %s" % next
             if next['next']:
-                #return "nextNode: return next"
+                #print "nextNode: return next"
                 return next
 
             #print "nextNode: node->h %s" % node['h']
