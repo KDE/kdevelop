@@ -23,6 +23,7 @@
 
 #include <KListWidget>
 #include <KLineEdit>
+#include <KEMailSettings>
 #include <kdebug.h>
 #include <kmessagebox.h>
 
@@ -579,10 +580,18 @@ QString & LicensePage::readLicense(int licenseIndex)
             else
                 licenseText = "Error, could not open license file.\n Was it deleted?";
         }
-        
+
+        /* Add date, name and email to license text */
+        licenseText.replace("<year>", QDate::currentDate().toString("yyyy"));
+        QString developer("%1 <%2>");
+        KEMailSettings* emailSettings = new KEMailSettings();
+        developer = developer.arg(emailSettings->getSetting(KEMailSettings::RealName));
+        developer = developer.arg(emailSettings->getSetting(KEMailSettings::EmailAddress));
+        licenseText.replace("<copyright holder>", developer);
+
         d->availableLicenses[licenseIndex].contents = licenseText;
     }
-    
+
     return d->availableLicenses[licenseIndex].contents;
 }
 
