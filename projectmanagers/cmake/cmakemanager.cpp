@@ -562,7 +562,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             KUrl::List tfiles;
             foreach( const QString & sFile, t.files)
             {
-                if(sFile.isEmpty())
+                if(sFile.startsWith("#[") || sFile.isEmpty())
                     continue;
 
                 KUrl sourceFile(sFile);
@@ -857,7 +857,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         return;
     }
     
-    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot );
+    QStringList entriesL = d.entryList( QDir::AllEntries | QDir::NoDotAndDotDot | QDir::NoSymLinks);
     QSet<QString> entries = filterFiles(entriesL);
     
     KUrl folderurl = item->url();
