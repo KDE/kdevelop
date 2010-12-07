@@ -69,7 +69,8 @@ class AbstractTypeDataRequest {
   }
   
   static bool persistent(const AbstractTypeData* item) {
-    return (bool)item->refCount;
+    // Don't try to delete release items for which the factory is not loaded, as that will lead to a crash/assertion later
+    return (bool)item->refCount || !TypeSystem::self().isFactoryLoaded(*item);
   }
 
   bool equals(const AbstractTypeData* item) const {

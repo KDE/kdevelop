@@ -43,6 +43,12 @@ uint TypeSystem::dataClassSize(const AbstractTypeData& data) const {
   return m_fastDataClassSizes[data.typeClassId];
 }
 
+bool TypeSystem::isFactoryLoaded(const AbstractTypeData& data) const {
+  if(uint(m_factories.size()) <= data.typeClassId || m_fastFactories[data.typeClassId] == 0)
+    return false;
+  else
+    return true;
+}
 
 void TypeSystem::copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const {
   if(uint(m_factories.size()) <= from.typeClassId || m_factories[from.typeClassId] == 0) {
