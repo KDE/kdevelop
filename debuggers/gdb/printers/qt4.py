@@ -309,7 +309,7 @@ class QHashPrinter:
         else:
             empty = ""
 
-        return "%sQMap<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%sQHash<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'
