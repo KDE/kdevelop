@@ -237,7 +237,11 @@ void ProblemWidget::contextMenuEvent(QContextMenuEvent* event) {
             QList<QAction*> actions;
             if(solution) {
                 foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
+                {
                     actions << action->toKAction();
+                    if(!solution->title().isEmpty())
+                        actions.back()->setText(solution->title() + " " + actions.back()->text());
+                }
             }
             if(!actions.isEmpty())
                 QMenu::exec(actions, event->globalPos());

@@ -162,6 +162,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         return extension;
       }
       
+    QString title;
     QList<QAction*> actions;
     
     TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
@@ -170,6 +171,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
         if(problem->range().contains(top->transformToLocalRevision(KDevelop::SimpleCursor(editorContext->position())))) {
           KDevelop::IAssistant::Ptr solution = problem ->solutionAssistant();
           if(solution) {
+            title = solution->title();
             foreach(KDevelop::IAssistantAction::Ptr action, solution->actions())
               actions << action->toKAction();
           }
@@ -178,8 +180,12 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
     }
     
     if(!actions.isEmpty()) {
-      QAction* menuAction = new QAction(i18n("Solve Problem"), 0);
-      QMenu* menu(new QMenu(i18n("Solve Problem"), 0));
+      QString text = i18n("Solve Problem");
+      if(!title.isEmpty())
+        text = i18n("Solve: %1", title);
+      
+      QAction* menuAction = new QAction(text, 0);
+      QMenu* menu(new QMenu(text, 0));
       menuAction->setMenu(menu);
       foreach(QAction* action, actions)
         menu->addAction(action);
