@@ -48,7 +48,6 @@ public:
     CorePrivate(Core *core);
     ~CorePrivate();
     bool initialize( Core::Setup mode, const QString& session );
-    void initializeDUChainRepositories();
     QPointer<PluginController> pluginController;
     QPointer<UiController> uiController;
     QPointer<ProjectController> projectController;
