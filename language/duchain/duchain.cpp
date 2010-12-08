@@ -1126,6 +1126,9 @@ DUChain* DUChain::self()
   return sdDUChainPrivate->instance;
 }
 
+extern void initModificationRevisionSetRepository();
+extern void initDeclarationRepositories();
+
 void DUChain::initialize()
 {
     // Initialize the global item repository as first thing after loading the session
@@ -1138,7 +1141,9 @@ void DUChain::initialize()
     RecursiveImportRepository::repository();
 
     // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
-    DeclarationData::commentRepository();
+    initDeclarationRepositories();
+    
+    initModificationRevisionSetRepository();
 }
 
 DUChainLock* DUChain::lock()

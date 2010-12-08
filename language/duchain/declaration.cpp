@@ -44,6 +44,7 @@
 #include "types/typeutils.h"
 #include "types/typealiastype.h"
 #include "classdeclaration.h"
+#include "repositories/stringrepository.h"
 
 namespace KDevelop
 {
@@ -73,9 +74,13 @@ m_isFinal(rhs.m_isFinal)
 }
 
 ///@todo Use reference counting
-Repositories::StringRepository& DeclarationData::commentRepository() {
+static Repositories::StringRepository& commentRepository() {
     static Repositories::StringRepository commentRepositoryObject("Comment Repository");
     return commentRepositoryObject;
+}
+
+void initDeclarationRepositories() {
+  commentRepository();
 }
 
 Declaration::Kind Declaration::kind() const {
@@ -190,7 +195,7 @@ QByteArray Declaration::comment() const {
   if(!d->m_comment)
     return 0;
   else
-    return Repositories::arrayFromItem(d->commentRepository().itemFromIndex(d->m_comment));
+    return Repositories::arrayFromItem(commentRepository().itemFromIndex(d->m_comment));
 }
 
 void Declaration::setComment(const QByteArray& str) {
@@ -198,7 +203,7 @@ void Declaration::setComment(const QByteArray& str) {
   if(str.isEmpty())
     d->m_comment = 0;
   else
-    d->m_comment = d->commentRepository().index(Repositories::StringRepositoryItemRequest(str, IndexedString::hashString(str, str.length()), str.length()));
+    d->m_comment = commentRepository().index(Repositories::StringRepositoryItemRequest(str, IndexedString::hashString(str, str.length()), str.length()));
 }
 
 void Declaration::setComment(const QString& str) {

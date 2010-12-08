@@ -30,7 +30,6 @@
 #include "duchain.h"
 #include "../languageexport.h"
 #include "types/indexedtype.h"
-#include "repositories/stringrepository.h"
 
 namespace KDevelop
 {
@@ -53,7 +52,6 @@ public:
   //Index in the comment repository
   uint m_comment;
 
-  /// @see commentRepository()
   Declaration::Kind m_kind;
 
   bool m_isDefinition  : 1;
@@ -61,11 +59,6 @@ public:
   bool m_isTypeAlias   : 1;
   bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
   bool m_isFinal       : 1;
-
-  /**
-  * Repository containing the comment string representations.
-  */
-  static Repositories::StringRepository& commentRepository();
 };
 }
 

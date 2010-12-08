@@ -95,6 +95,10 @@ static FileModificationPairRepository& fileModificationPairRepository() {
   return rep;
 }
 
+void initModificationRevisionSetRepository() {
+  fileModificationPairRepository();
+}
+
 QHash<uint, std::pair<timeval, bool> > needsUpdateCache;
 
 void ModificationRevisionSet::clearCache() {
@@ -104,7 +108,7 @@ void ModificationRevisionSet::clearCache() {
 }
 
 struct FileModificationSetRepository : public Utils::BasicSetRepository {
-  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", &KDevelop::globalItemRepositoryRegistry(), true) {
+  FileModificationSetRepository() : Utils::BasicSetRepository("file modification sets", &globalItemRepositoryRegistry(), true) {
   }
   virtual void itemRemovedFromSets(uint index);
 };
