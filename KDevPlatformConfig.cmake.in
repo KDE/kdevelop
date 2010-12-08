@@ -22,12 +22,6 @@
 
 get_filename_component(_KDEVPLATFORM_CURRENT_DIR  "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-if( "${KDevPlatform_VERSION}" VERSION_GREATER "${KDevPlatform_FIND_VERSION_MAJOR}.${KDevPlatform_FIND_VERSION_MINOR}.59" )
-    # Error out as we detected that an incompatible API version was requested (smaller minor version)
-    message(FATAL_ERROR "KDevPlatform ${KDevPlatform_VERSION} changed API and is not compatible to the requested version ${KDevPlatform_FIND_VERSION}")
-    set(KDevPlatform_FOUND FALSE)
-endif( "${KDevPlatform_VERSION}" VERSION_GREATER "${KDevPlatform_FIND_VERSION_MAJOR}.${KDevPlatform_FIND_VERSION_MINOR}.59" )
-
 if(NOT WIN32)
 # This is needed on non-win32 platforms, as lib-install-dir might be in a 
 # totally different prefix than include-install-dir. So instead hardcode the
@@ -75,4 +69,3 @@ mark_as_advanced(
     KDEVPLATFORM_DOCUMENTATION_LIBRARIES
     KDEVPLATFORM_TESTS_LIBRARIES
 )
-
