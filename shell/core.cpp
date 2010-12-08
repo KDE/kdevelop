@@ -32,6 +32,10 @@
 #include <sublime/area.h>
 #include <sublime/tooldocument.h>
 
+#include <language/duchain/topducontext.h>
+#include <language/duchain/repositories/itemrepository.h>
+#include <language/duchain/duchain.h>
+
 #include "shellextension.h"
 
 #include "mainwindow.h"
@@ -53,7 +57,6 @@
 #include "workingsetcontroller.h"
 #include <KMessageBox>
 
-#include <language/duchain/repositories/itemrepository.h>
 #include <KTextEditor/Document>
 #include <ktexteditor/movinginterface.h>
 
@@ -206,11 +209,11 @@ bool CorePrivate::initialize(Core::Setup mode, QString session )
         }
         return false;
     }
-    // Initialize the item repository as first thing after loading the session,
+
     // TODO: Is this early enough, or should we put the loading of the session into
     // the controller construct
-    globalItemRepositoryRegistry();
-    
+    DUChain::initialize();
+
     if(!(mode & Core::NoUi)) uiController->initialize();
     languageController->initialize();
     projectController->initialize();

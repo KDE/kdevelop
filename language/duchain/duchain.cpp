@@ -20,20 +20,28 @@
 #include "duchain.h"
 #include "duchainlock.h"
 
+#include <unistd.h>
+
 #include <QtCore/QCoreApplication>
 #include <QApplication>
 #include <QtCore/QHash>
 #include <QtCore/QMultiMap>
 #include <QtCore/QTimer>
 #include <QtCore/QReadWriteLock>
-#include <QtCore/qatomic.h>
+#include <QtCore/QAtomicInt>
+#include <QtCore/QThread>
+#include <QtCore/QWaitCondition>
+#include <QtCore/QMutex>
 
-#include <kglobal.h>
+#include <KGlobal>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguage.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/foregroundlock.h>
+
+#include <util/google/dense_hash_map>
 
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
@@ -52,14 +60,9 @@
 #include "duchainregister.h"
 #include "persistentsymboltable.h"
 #include "repositories/itemrepository.h"
-#include <util/google/dense_hash_map>
-#include <QtCore/qthread.h>
-#include <QtCore/qwaitcondition.h>
-#include <QtCore/qmutex.h>
-#include <unistd.h>
 #include "waitforupdate.h"
 #include "referencecounting.h"
-#include <interfaces/foregroundlock.h>
+#include "declarationdata.h"
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
@@ -1121,6 +1124,21 @@ DUChain::~DUChain()
 DUChain* DUChain::self()
 {
   return sdDUChainPrivate->instance;
+}
+
+void DUChain::initialize()
+{
+    // Initialize the global item repository as first thing after loading the session
+    globalItemRepositoryRegistry();
+
+    // This needs to be initialized here too as the function is not threadsafe, but can
+    // sometimes be called from different threads. This results in the underlying QFile
+    // being 0 and hence crashes at some point later when accessing the contents via 
+    // read. See https://bugs.kde.org/show_bug.cgi?id=250779
+    RecursiveImportRepository::repository();
+
+    // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
+    DeclarationData::commentRepository();
 }
 
 DUChainLock* DUChain::lock()
