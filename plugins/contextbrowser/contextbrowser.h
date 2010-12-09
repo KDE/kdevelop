@@ -109,6 +109,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin
     void findUses();
     
     void textInserted(KTextEditor::Document*, KTextEditor::Range);
+    void selectionChanged(KTextEditor::View*);
     
   private:
     

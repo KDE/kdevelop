@@ -453,6 +453,15 @@ ContextBrowserView* ContextBrowserPlugin::browserViewForTextView(View* view)
 
 void ContextBrowserPlugin::updateForView(View* view)
 {
+    bool allowHighlight = true;
+    if(view->selection())
+    {
+      // If something is selected, we unhighlight everything, so that we don't conflict with the
+      // kate plugin that highlights occurences of the selected string, and also to reduce the
+      // overall amount of concurrent highlighting.
+      allowHighlight = false;
+    }
+    
     if(m_highlightedRanges[view].keep)
     {
       m_highlightedRanges[view].keep = false;
@@ -495,9 +504,12 @@ void ContextBrowserPlugin::updateForView(View* view)
     if(specialRange.isValid())
     {
       // Highlight a special language object
-      highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(specialRange, IndexedString(url)));
-      highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute());
-      highlights.highlights.back()->setZDepth(highlightingZDepth);
+      if(allowHighlight)
+      {
+        highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(specialRange, IndexedString(url)));
+        highlights.highlights.back()->setAttribute(highlightedSpecialObjectAttribute());
+        highlights.highlights.back()->setZDepth(highlightingZDepth);
+      }
       if(updateBrowserView)
         updateBrowserView->setSpecialNavigationWidget(language->languageSupport()->specialLanguageObjectNavigationWidget(url, highlightPosition));
     }else{
@@ -526,7 +538,8 @@ void ContextBrowserPlugin::updateForView(View* view)
       
       if( foundDeclaration ) {
         m_lastHighlightedDeclaration = highlights.declaration = IndexedDeclaration(foundDeclaration);
-        addHighlight( view, foundDeclaration );
+        if(allowHighlight)
+          addHighlight( view, foundDeclaration );
         
         if(updateBrowserView)
           updateBrowserView->setDeclaration(foundDeclaration, topContext);
@@ -597,6 +610,13 @@ void ContextBrowserPlugin::viewDestroyed( QObject* obj )
   m_updateViews.remove(static_cast<View*>(obj));
 }
 
+void ContextBrowserPlugin::selectionChanged( View* view )
+{
+  clearMouseHover();
+  m_updateViews.insert(view);
+  m_updateTimer->start(highlightingTimeout/2); // triggers updateViews()
+}
+
 void ContextBrowserPlugin::cursorPositionChanged( View* view, const KTextEditor::Cursor& newPosition )
 {
   if(view->document() == m_lastInsertionDocument && newPosition == m_lastInsertionPos)
@@ -628,6 +648,7 @@ void ContextBrowserPlugin::viewCreated( KTextEditor::Document* , View* v )
   connect( v, SIGNAL(destroyed( QObject* )), this, SLOT( viewDestroyed( QObject* ) ) );
   disconnect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
   connect( v->document(), SIGNAL(textInserted(KTextEditor::Document*,KTextEditor::Range)), this, SLOT(textInserted(KTextEditor::Document*,KTextEditor::Range)));
+  disconnect( v, SIGNAL(selectionChanged(KTextEditor::View*)), this, SLOT(selectionChanged(KTextEditor::View*)));
 
   KTextEditor::TextHintInterface *iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
   if( !iface )
