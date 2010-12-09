@@ -88,6 +88,10 @@ static RepositoryManager< ItemRepository<AbstractTypeData, AbstractTypeDataReque
   return repository;
 }
 
+void initTypeRepository() {
+  typeRepository();
+}
+
 AbstractRepositoryManager* typeRepositoryManager() {
   return &typeRepository();
 }

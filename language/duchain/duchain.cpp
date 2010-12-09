@@ -64,7 +64,7 @@
 #include <unistd.h>
 #include "waitforupdate.h"
 #include "referencecounting.h"
-#include "declarationdata.h"
+#include "importers.h"
 
 Q_DECLARE_METATYPE(KDevelop::IndexedString)
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
@@ -1130,22 +1130,37 @@ DUChain* DUChain::self()
 
 extern void initModificationRevisionSetRepository();
 extern void initDeclarationRepositories();
+extern void initIdentifierRepository();
+extern void initTypeRepository();
+extern void initInstantiationInformationRepository();
+extern void initReferenceCounting();
 
 void DUChain::initialize()
 {
-    // Initialize the global item repository as first thing after loading the session
-    globalItemRepositoryRegistry();
+  // Initialize the global item repository as first thing after loading the session
+  globalItemRepositoryRegistry();
 
-    // This needs to be initialized here too as the function is not threadsafe, but can
-    // sometimes be called from different threads. This results in the underlying QFile
-    // being 0 and hence crashes at some point later when accessing the contents via 
-    // read. See https://bugs.kde.org/show_bug.cgi?id=250779
-    RecursiveImportRepository::repository();
+  initReferenceCounting();
 
-    // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
-    initDeclarationRepositories();
-    
-    initModificationRevisionSetRepository();
+  // This needs to be initialized here too as the function is not threadsafe, but can
+  // sometimes be called from different threads. This results in the underlying QFile
+  // being 0 and hence crashes at some point later when accessing the contents via 
+  // read. See https://bugs.kde.org/show_bug.cgi?id=250779
+  RecursiveImportRepository::repository();
+  RecursiveImportCacheRepository::repository();
+
+  // similar to above, see https://bugs.kde.org/show_bug.cgi?id=255323
+  initDeclarationRepositories();
+
+  initModificationRevisionSetRepository();
+  initIdentifierRepository();
+  initTypeRepository();
+  initInstantiationInformationRepository();
+
+  Importers::self();
+ 
+  globalImportIdentifier();
+  globalAliasIdentifier();
 }
 
 DUChainLock* DUChain::lock()
