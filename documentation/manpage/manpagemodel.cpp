@@ -247,4 +247,15 @@ int ManPageModel::nbSectionLoaded() const
     return m_nbSectionLoaded;
 }
 
+bool ManPageModel::identifierInSection(const QString &identifier, const QString& section) const
+{
+    QList<ManPage> list = m_manMap.value(section);
+    foreach(ManPage page, list){
+        if(page.first == identifier){
+            return true;
+        }
+    }
+    return false;
+}
+
 #include "manpagemodel.moc"
