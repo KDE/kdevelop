@@ -139,7 +139,9 @@ void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStri
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
     QList<KDevelop::IDocumentationProvider*> list;
-    list += m_qtHelpProviders;
+    foreach(QtHelpProvider* provider, m_qtHelpProviders) {
+        list.append(provider);
+    }
     if(m_qtDoc){
         list.append(m_qtDoc);
     }
