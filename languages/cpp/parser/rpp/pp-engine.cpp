@@ -155,6 +155,10 @@ void pp::handle_directive(uint directive, Stream& input, Stream& output)
 
 void pp::handle_include(bool skip_current_path, Stream& input, Stream& output)
 {
+  if (input.atEnd()) {
+    createProblem(input, i18n("invalid include directive"));
+    return;
+  }
   QByteArray bytes = KDevelop::IndexedString::fromIndex(input.current()).byteArray();
   if (bytes.size() > 0 && (isLetter(bytes.at(0)) || bytes.at(0) == '_')) {
     pp_macro_expander expand_include(this);
