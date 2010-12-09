@@ -49,9 +49,11 @@ namespace Cpp {
 
 
 
-void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& word) {
+void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, const KTextEditor::Range& _word) {
   if( completionContext() && completionContext()->depth() != 0 )
     return; //Do not replace any text when it is an argument-hint
+
+  KTextEditor::Range word(_word);
 
   if(m_isQtSignalSlotCompletion) {
     bool addSignalSlot = true;
@@ -121,8 +123,20 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }else{
     newText = alternativeText;
   }
-
+  
+  // Text that will be removed in a separate editing step (so the user can undo it)
+  KTextEditor::Range removeInSecondStep;
+  
+  KTextEditor::Cursor cursor = document->activeView()->cursorPosition();
+  if(cursor != word.end())
+  {
+    int removeUntilColumn = word.end().column() + word.start().column() + newText.length() - cursor.column();
+    word.end() = cursor;
+    removeInSecondStep = KTextEditor::Range(word.start().line(), word.start().column() + newText.length(), word.end().line(), removeUntilColumn);
+  }
+  
   document->replaceText(word, newText);
+  
   KTextEditor::Cursor end = word.start();
   end.setColumn(end.column() + newText.length());
   
@@ -130,33 +144,44 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   
   KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
   
-  if(!m_declaration.data())
-    return;
-  
-  Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
-  if(templateDecl) {
-    DUContext* context = templateDecl->templateContext(m_declaration->topContext());
-    if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
-      jumpForbidden = true;
+  if(m_declaration.data())
+  {
+    Cpp::TemplateDeclaration* templateDecl = dynamic_cast<Cpp::TemplateDeclaration*>(m_declaration.data());
+    if(templateDecl) {
+      DUContext* context = templateDecl->templateContext(m_declaration->topContext());
+      if(context && context->localDeclarations().count() && context->localDeclarations()[0]->type<CppTemplateParameterType>()) {
+        jumpForbidden = true;
+        lock.unlock();
+        document->insertText( end, "<>" );
+        end.setColumn(end.column() + 2);
+        document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
+        lock.lock();
+      }
+    }
+    
+    if(m_declaration.data()->kind() == Declaration::Namespace) {
       lock.unlock();
-      document->insertText( end, "<>" );
+      document->insertText(end, "::");
       end.setColumn(end.column() + 2);
-      document->activeView()->setCursorPosition( end - KTextEditor::Cursor(0, 1) );
       lock.lock();
+    }
+      
+    if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
+      //Do some intelligent stuff for functions with the parens:
+      lock.unlock();
+      insertFunctionParenText(document, end, m_declaration, jumpForbidden);
     }
   }
   
-  if(m_declaration.data()->kind() == Declaration::Namespace) {
-    lock.unlock();
-    document->insertText(end, "::");
-    end.setColumn(end.column() + 2);
-    lock.lock();
-  }
-    
-  if( !useAlternativeText && m_declaration && (dynamic_cast<AbstractFunctionDeclaration*>(m_declaration.data()) || completionContext()->isConstructorInitialization()) ) {
-    //Do some intelligent stuff for functions with the parens:
-    lock.unlock();
-    insertFunctionParenText(document, end, m_declaration, jumpForbidden);
+  if(!removeInSecondStep.isEmpty() && removeInSecondStep.end() > end && removeInSecondStep.end().line() == end.line() && removeInSecondStep.end().column() <= document->lineLength(removeInSecondStep.end().line()))
+  {
+    // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
+    bool wasEditing = document->endEditing();
+    if(wasEditing)
+      document->startEditing();
+    else
+      kWarning() << "Was not editing";
+    document->removeText(removeInSecondStep);
   }
 }
 
