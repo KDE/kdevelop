@@ -200,19 +200,12 @@ bool isHeader(const KUrl &url) {
 
 QStringList standardIncludePaths()
 {
-  static QMutex mutex;
-  QMutexLocker lock(&mutex); //Make sure we don't call computeGccStandardMacros() twice at the same time
-  
   static QStringList list = CppTools::setupStandardIncludePaths();
   return list;
 }
 
-
 const Cpp::ReferenceCountedMacroSet& standardMacros()
 {
-  static QMutex mutex;
-  QMutexLocker lock(&mutex); //Make sure we don't call computeGccStandardMacros() twice at the same time
-  
   static Cpp::ReferenceCountedMacroSet macros = CppTools::setupStandardMacros();
   return macros;
 }
