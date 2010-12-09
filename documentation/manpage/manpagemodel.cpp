@@ -56,6 +56,8 @@ using namespace KDevelop;
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
     , m_indexModel(new QStringListModel)
+    , m_loaded(false)
+    , m_nbSectionLoaded(0)
 {
     QMetaObject::invokeMethod(const_cast<ManPageModel*>(this), "initModel", Qt::QueuedConnection);
 }
@@ -132,10 +134,8 @@ void ManPageModel::initModel(){
 void ManPageModel::indexDataReceived(KJob *job){
     if (!job->error()){
         m_sectionList = indexParser();
-    } else {
-        return;
     }
-    emit sectionCount(m_sectionList.count());
+    emit sectionListUpdated();
     iterator = new QListIterator<ManSection>(m_sectionList);
     if(iterator->hasNext()){
         initSection();
@@ -151,18 +151,17 @@ void ManPageModel::sectionDataReceived(KJob *job){
     if (!job->error()){
         KIO::StoredTransferJob *stjob = dynamic_cast<KIO::StoredTransferJob*>(job);
         sectionParser(iterator->peekNext().first, QString::fromUtf8(stjob->data()));
-    } else {
-        return;
     }
     iterator->next();
+    m_nbSectionLoaded++;
     emit sectionParsed();
     if(iterator->hasNext()){
         initSection();
     } else {
         // End of init
+        m_loaded = true;
         m_indexModel->setStringList(m_index);
         delete iterator;
-        ManPageDocumentation::s_provider->deleteProgressBar();
         emit manPagesLoaded();
     }
 }
@@ -181,7 +180,9 @@ QList<ManSection> ManPageModel::indexParser(){
      QWebElementCollection links = document.findAll("a");
      QList<ManSection> list;
      foreach(QWebElement e, links){
-        list.append(qMakePair(e.attribute("accesskey"), e.parent().parent().findAll("td").at(2).toPlainText()));
+         QString sectionId = e.attribute("href");
+         sectionId = sectionId.mid(5,sectionId.size()-1);
+         list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
      }
      delete page;
      return list;
@@ -229,5 +230,19 @@ bool ManPageModel::containsIdentifier(QString identifier)
     return m_index.contains(identifier);
 }
 
+int ManPageModel::sectionCount() const
+{
+    return m_sectionList.count();
+}
+
+bool ManPageModel::isLoaded() const
+{
+    return m_loaded;
+}
+
+int ManPageModel::nbSectionLoaded() const
+{
+    return m_nbSectionLoaded;
+}
 
 #include "manpagemodel.moc"

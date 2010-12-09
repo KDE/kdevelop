@@ -232,7 +232,6 @@ class QHashPrinter:
             #print "QHashData::firstNode() *bucket %s" % bucket
             n = self.d['numBuckets']
             #print "QHashData::firstNode() n %s" % n
-            n -= 1
             while n:
                 #print "QHashData::firstNode() in while, n %s" % n;
                 if bucket != e:
@@ -249,14 +248,13 @@ class QHashPrinter:
         def nextNode (self, node):
             "Get the nextNode after the current, see also QHashData::nextNode()."
             #print "******************************** nextNode"
-            e = self.d.cast(gdb.lookup_type('QHashData::Node').pointer())
-
             #print "nextNode: node %s" % node
+            next = node['next'].cast(gdb.lookup_type('QHashData::Node').pointer())
+            e = next
 
-            next = node['next']
             #print "nextNode: next %s" % next
             if next['next']:
-                #return "nextNode: return next"
+                #print "nextNode: return next"
                 return next
 
             #print "nextNode: node->h %s" % node['h']
@@ -309,7 +307,7 @@ class QHashPrinter:
         else:
             empty = ""
 
-        return "%sQMap<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%sQHash<%s, %s>" % ( empty , self.val.type.template_argument(0), self.val.type.template_argument(1) )
 
     def display_hint (self):
         return 'map'

@@ -62,10 +62,12 @@ public:
     QModelIndex index(int row, int column, const QModelIndex& parent) const;
     QStringListModel* indexList();
     bool containsIdentifier(QString identifier);
-
+    int sectionCount() const;
+    bool isLoaded() const;
+    int nbSectionLoaded() const;
 signals:
     void sectionParsed();
-    void sectionCount(int count);
+    void sectionListUpdated();
     void manPagesLoaded();
 
 public slots:
@@ -86,13 +88,15 @@ private:
 
     /// Slave buffers
     QString m_manMainIndexBuffer;
-    QString m_manSectionIndexBuffer;
 
     QListIterator<ManSection> *iterator;
     QList<ManSection> m_sectionList;
     QHash<QString, QList<ManPage> > m_manMap;
     QStringList m_index;
     QStringListModel* m_indexModel;
+
+    bool m_loaded;
+    int m_nbSectionLoaded;
 };
 
 Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )

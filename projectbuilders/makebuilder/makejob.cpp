@@ -70,6 +70,11 @@ MakeJob::MakeJob(MakeBuilder* builder, KDevelop::ProjectBaseItem* item, CommandT
 
 MakeJob::~MakeJob()
 {
+    if(!m_killed && m_process && m_process->state() != KProcess::NotRunning)
+    {
+        m_process->kill();
+        m_process->waitForFinished();
+    }
     Q_ASSERT(!m_process || m_process->state() == KProcess::NotRunning);
 }
 
