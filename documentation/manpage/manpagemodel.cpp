@@ -160,6 +160,8 @@ void ManPageModel::sectionDataReceived(KJob *job){
     } else {
         // End of init
         m_loaded = true;
+        m_index.removeDuplicates();
+        m_index.sort();
         m_indexModel->setStringList(m_index);
         delete iterator;
         emit manPagesLoaded();
