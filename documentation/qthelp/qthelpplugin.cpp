@@ -124,10 +124,7 @@ void QtHelpPlugin::loadQtHelpProvider(QStringList pathList, QStringList nameList
     }
 
     // delete unused providers
-    foreach(QtHelpProvider* provider, oldList) {
-        oldList.removeAll(provider);
-        delete provider;
-    }
+    qDeleteAll(oldList);
 }
 
 void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStringList pathList, bool loadQtDoc)
@@ -142,9 +139,7 @@ void QtHelpPlugin::writeConfig(QStringList iconList, QStringList nameList, QStri
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
     QList<KDevelop::IDocumentationProvider*> list;
-    foreach(QtHelpProvider* provider, m_qtHelpProviders) {
-        list.append(provider);
-    }
+    list += m_qtHelpProviders;
     if(m_qtDoc){
         list.append(m_qtDoc);
     }
