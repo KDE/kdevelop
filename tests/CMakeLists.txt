@@ -8,4 +8,5 @@ kde4_add_unit_test( custombuildsystemplugintest ${custombuildsystemplugintest_SR
 target_link_libraries( custombuildsystemplugintest
         ${QT_QTTEST_LIBRARY}
         ${KDEVPLATFORM_TESTS_LIBRARIES}
+        ${KDEVPLATFORM_PROJECT_LIBRARIES}
     )
