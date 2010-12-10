@@ -737,10 +737,14 @@ namespace {
   uint currentMaxArgumentHints = defaultMaxArgumentHints;
 };
 
-uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints()
+uint MoreArgumentHintsCompletionItem::resetMaxArgumentHints(bool isAutomaticCompletion)
 {
   uint ret = currentMaxArgumentHints;
   currentMaxArgumentHints = defaultMaxArgumentHints;
+  
+  if(isAutomaticCompletion)
+    return 1;
+  
   return ret;
 }
 

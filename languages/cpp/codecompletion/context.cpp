@@ -57,6 +57,7 @@
 #include <templateparameterdeclaration.h>
 #include <language/duchain/classdeclaration.h>
 #include "qpropertydeclaration.h"
+#include "model.h"
 
 // #define ifDebug(x) x
 
@@ -1280,7 +1281,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
           {
             ifDebug( kDebug() << "functionCallAccess" << functions().count() << m_expression; )
             
-            uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints();
+            uint max = MoreArgumentHintsCompletionItem::resetMaxArgumentHints(!fullCompletion);
             
             //Don't show annoying empty argument-hints
 /*            if(parentContext->m_contextType != BinaryOperatorFunctionCall && parentContext->functions().size() == 0)
@@ -1291,9 +1292,19 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
               int num = 0;
               foreach( const Cpp::CodeCompletionContext::Function &function, functions() ) {
                 if (num == max) {
-                  //When there are too many overloaded functions, do not show them all if completion was invoked automatically
-                  CompletionTreeItemPointer item( new MoreArgumentHintsCompletionItem( KSharedPtr <KDevelop::CodeCompletionContext >(this), i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2 (show more)", "%1 more overloads of %2 (show more)", functions().count() - num, functionName()), num ) );
-                  items << item;
+                  if(fullCompletion)
+                  {
+                    //When there are too many overloaded functions, do not show them all
+                    CompletionTreeItemPointer item( new MoreArgumentHintsCompletionItem( KSharedPtr <KDevelop::CodeCompletionContext >(this), i18ncp("Here, overload is used as a programming term.  This string is used to display how many overloaded versions there are of the function whose name is the second argument.", "1 more overload of %2 (show more)", "%1 more overloads of %2 (show more)", functions().count() - num, functionName()), num ) );
+                    items.push_front(item);
+                  }else if(!items.isEmpty()) {
+                    NormalDeclarationCompletionItem* last = dynamic_cast<NormalDeclarationCompletionItem*>(items.back().data());
+                    if(last->declaration())
+                    {
+//                       last->alternativeText = i18n("(%1 more) ", functions().count() - num) + last->declaration()->identifier().toString();
+//                       last->useAlternativeText = true;
+                    }
+                  }
                   break;
                 }
 
@@ -1483,7 +1494,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionItems(bool& sh
       }
     }
 
-    if(!ignoreParentContext && fullCompletion && m_parentContext && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
+    if(!ignoreParentContext 
+      && (fullCompletion || (Cpp::useArgumentHintInAutomaticCompletion() && depth() == 0))
+      && m_parentContext
+      && (!noMultipleBinaryOperators || m_contextType != BinaryOperatorFunctionCall || parentContext()->m_contextType != BinaryOperatorFunctionCall))
       items = parentContext()->completionItems( shouldAbort, fullCompletion ) + items;
 
     if(depth() == 0) {

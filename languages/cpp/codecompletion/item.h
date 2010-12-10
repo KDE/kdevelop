@@ -115,7 +115,7 @@ public:
   // Maximum number of argument-hints that should be shown by code completion
   // Whenever this is called, the maximum number of arguments is reset afterwards,
   // so make sure you call it only once in the correct place.
-  static uint resetMaxArgumentHints();
+  static uint resetMaxArgumentHints(bool isAutomaticCompletion);
 private:
   uint m_oldNumber;
 };
