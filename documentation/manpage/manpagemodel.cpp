@@ -183,7 +183,7 @@ QList<ManSection> ManPageModel::indexParser(){
      QList<ManSection> list;
      foreach(QWebElement e, links){
          QString sectionId = e.attribute("href");
-         sectionId = sectionId.mid(5,sectionId.size()-1);
+         sectionId = sectionId.mid(5,sectionId.size()-6);
          list.append(qMakePair(sectionId, e.parent().parent().findAll("td").at(2).toPlainText()));
      }
      delete page;
