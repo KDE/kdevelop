@@ -42,6 +42,8 @@
 #include <language/codecompletion/codecompletionhelper.h>
 #include "context.h"
 #include <ktexteditor/codecompletioninterface.h>
+#include <ktexteditor/movingrange.h>
+#include <ktexteditor/movinginterface.h>
 
 using namespace KDevelop;
 
@@ -125,14 +127,16 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
   }
   
   // Text that will be removed in a separate editing step (so the user can undo it)
-  KTextEditor::Range removeInSecondStep;
+  std::auto_ptr<KTextEditor::MovingRange> removeInSecondStep;
   
   KTextEditor::Cursor cursor = document->activeView()->cursorPosition();
   if(cursor != word.end())
   {
-    int removeUntilColumn = word.end().column() + word.start().column() + newText.length() - cursor.column();
+    KTextEditor::MovingInterface* moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
+    Q_ASSERT(moving);
+    removeInSecondStep =  std::auto_ptr<KTextEditor::MovingRange>(
+      moving->newMovingRange(KTextEditor::Range(cursor, word.end()), KTextEditor::MovingRange::DoNotExpand));
     word.end() = cursor;
-    removeInSecondStep = KTextEditor::Range(word.start().line(), word.start().column() + newText.length(), word.end().line(), removeUntilColumn);
   }
   
   document->replaceText(word, newText);
@@ -173,15 +177,20 @@ void NormalDeclarationCompletionItem::execute(KTextEditor::Document* document, c
     }
   }
   
-  if(!removeInSecondStep.isEmpty() && removeInSecondStep.end() > end && removeInSecondStep.end().line() == end.line() && removeInSecondStep.end().column() <= document->lineLength(removeInSecondStep.end().line()))
+  
+  if(removeInSecondStep.get())
   {
-    // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
-    bool wasEditing = document->endEditing();
-    if(wasEditing)
-      document->startEditing();
-    else
-      kWarning() << "Was not editing";
-    document->removeText(removeInSecondStep);
+    KTextEditor::Range removeRange = removeInSecondStep->toRange();
+    if(!removeRange.isEmpty() && removeRange.end() > end && removeRange.end().line() == end.line() && removeRange.end().column() <= document->lineLength(removeRange.end().line()))
+    {
+      // We stop the editing sequence, which was initiated by kate, so the user can manually undo the removal
+      bool wasEditing = document->endEditing();
+      if(wasEditing)
+        document->startEditing();
+      else
+        kWarning() << "Was not editing";
+      document->removeText(removeRange);
+    }
   }
 }
 
