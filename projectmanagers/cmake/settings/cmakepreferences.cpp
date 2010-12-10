@@ -134,12 +134,16 @@ void CMakePreferences::save()
     KUrl installPrefix;
     QString buildType;
     
+    bool needReconfiguring = true;
     if(m_currentModel)
     {
         cmakeCmd=m_currentModel->value("CMAKE_COMMAND");
         installPrefix=m_currentModel->value("CMAKE_INSTALL_PREFIX");
         buildType=m_currentModel->value("CMAKE_BUILD_TYPE");
-        m_currentModel->writeDown();
+        if (!m_currentModel->writeDown()) {
+            KMessageBox::error(this, i18n("Could not write CMake settings to file '%1'.\nCheck that you have write access to it", m_currentModel->filePath().pathOrUrl()));
+            needReconfiguring = false;
+        }
     }
     
     item = CMakeSettings::self()->findItem("cmakeBin");
@@ -156,7 +160,9 @@ void CMakePreferences::save()
     CMakeSettings::self()->writeConfig();
     
     //We run cmake on the builddir to generate it 
-    configure();
+    if (needReconfiguring) {
+        configure();
+    }
 }
 
 void CMakePreferences::defaults()
