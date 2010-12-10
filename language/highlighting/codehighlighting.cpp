@@ -196,44 +196,19 @@ void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
   delete instance;
 }
 
-void CodeHighlightingInstance::highlightDUChain(DUContext* context)
+void CodeHighlightingInstance::highlightDUChain(TopDUContext* context)
 {
   m_contextClasses.clear();
   m_useClassCache = true;
 
   //Highlight
-  highlightDUChainSimple(static_cast<DUContext*>(context));
+  highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
 
   m_functionColorsForDeclarations.clear();
   m_functionDeclarationsForColors.clear();
 
   m_useClassCache = false;
   m_contextClasses.clear();
-}
-
-void CodeHighlightingInstance::highlightDUChainSimple(DUContext* context)
-{
-  DUChainReadLocker lock;
-
-  ///TODO: 4.1 make this overloadable, e.g. in PHP we also want local colorization in global context
-  bool isInFunction = context->type() == DUContext::Function || (context->type() == DUContext::Other && context->owner());
-
-  if( isInFunction && m_highlighting->m_localColorization ) {
-    lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
-    highlightDUChain(context, QHash<Declaration*, uint>(), emptyColorMap());
-  }else{
-    foreach (Declaration* dec, context->localDeclarations())
-      highlightDeclaration(dec, QColor(QColor::Invalid));
-
-    highlightUses(context);
-
-    QVector< DUContext* > children = context->childContexts();
-
-    lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
-
-    foreach (DUContext* child, children)
-      highlightDUChainSimple(child);
-  }
 }
 
 void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declaration*, uint> colorsForDeclarations, ColorMap declarationsForColors)
@@ -256,6 +231,10 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
   QList<Declaration*> takeFreeColors;
 
   foreach (Declaration* dec, context->localDeclarations()) {
+    if (!useRainbowColor(dec)) {
+      highlightDeclaration(dec, QColor(QColor::Invalid));
+      continue;
+    }
     //Initially pick a color using the hash, so the chances are good that the same identifier gets the same color always.
     uint colorNum = dec->identifier().hash() % ColorCache::self()->validColorCount();
 
@@ -436,6 +415,11 @@ CodeHighlightingInstance::Types CodeHighlightingInstance::typeForDeclaration(Dec
   }
 
   return type;
+}
+
+bool CodeHighlightingInstance::useRainbowColor(Declaration* dec) const
+{
+  return dec->context()->type() == DUContext::Function || (dec->context()->type() == DUContext::Other && dec->context()->owner());
 }
 
 void CodeHighlightingInstance::highlightDeclaration(Declaration * declaration, const QColor &color)

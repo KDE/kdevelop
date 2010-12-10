@@ -111,8 +111,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
     virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor &color);
     virtual void highlightUses(KDevelop::DUContext* context);
 
-    void highlightDUChainSimple(KDevelop::DUContext* context);
-    void highlightDUChain(KDevelop::DUContext* context);
+    void highlightDUChain(KDevelop::TopDUContext* context);
     void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap);
 
     KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
@@ -120,6 +119,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
      * @param context Should be the context from where the declaration is used, if a use is highlighted.
      * */
     virtual Types typeForDeclaration(KDevelop::Declaration* dec, KDevelop::DUContext* context) const;
+    /**
+     * Decides whether to apply auto-generated rainbow colors to @p dec.
+     * Default implementation only applies that to local variables in functions.
+     */
+    virtual bool useRainbowColor(KDevelop::Declaration* dec) const;
 
     //A temporary hash for speedup
     mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
