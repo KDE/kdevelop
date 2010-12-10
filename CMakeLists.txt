@@ -9,7 +9,7 @@ find_package(KDevPlatform 1.1.60 REQUIRED)
 
 if(KDevPlatform_VERSION VERSION_GREATER 1.2.59)
     MESSAGE(FATAL_ERROR "This version of the plugin doesn't work with KDevPlatform 1.3, version 1.2 is required")
-endif(KDevPlatform_VERSION VERSION_GREATER 1.1.50)
+endif()
 
 set(CUSTOM_BUILDSYSTEM_VERSION 1.0.60)
 
