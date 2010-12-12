@@ -1,4 +1,5 @@
 find_package(Threads)
+find_library(RT_LIBRARY rt)
 
 add_subdirectory(tests)
 
@@ -42,7 +43,6 @@ set(kdevplatforminterfaces_LIB_SRCS
 	iprojectprovider.cpp
 )
 
-
 kde4_add_library(kdevplatforminterfaces SHARED ${kdevplatforminterfaces_LIB_SRCS})
 target_link_libraries(kdevplatforminterfaces 
         ${KDE4_KIO_LIBS} 
@@ -52,15 +52,15 @@ target_link_libraries(kdevplatforminterfaces
         ${KDE4_KTEXTEDITOR_LIBS} 
         ${KDE4_THREADWEAVER_LIBRARIES} 
         ${QT_QTDESIGNER_LIBRARY} 
-        ${KDE4_KROSSCORE_LIBS}
-        )
-if (NOT APPLE)
-  target_link_libraries(kdevplatforminterfaces rt)
-endif (NOT APPLE)
+        ${KDE4_KROSSCORE_LIBS})
 
-if(CMAKE_HAVE_THREADS_LIBRARY)
-    target_link_libraries(kdevplatforminterfaces ${CMAKE_THREAD_LIBS_INIT})
-endif(CMAKE_HAVE_THREADS_LIBRARY)
+if( RT_LIBRARY )
+    target_link_libraries( kdevplatforminterfaces ${RT_LIBRARY} )
+endif( RT_LIBRARY )
+
+if( Threads_FOUND )
+    target_link_libraries( kdevplatforminterfaces ${CMAKE_THREAD_LIBS_INIT} )
+endif( Threads_FOUND )
 
 target_link_libraries(kdevplatforminterfaces LINK_INTERFACE_LIBRARIES 
         ${KDE4_KPARTS_LIBS} 
