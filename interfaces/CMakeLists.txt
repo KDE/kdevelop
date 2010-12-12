@@ -1,5 +1,7 @@
 find_package(Threads)
 
+add_subdirectory(tests)
+
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=9502 )
 set(kdevplatforminterfaces_LIB_SRCS
     foregroundlock.cpp
