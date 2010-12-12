@@ -26,6 +26,7 @@ class TestForegroundLock : public QObject {
     Q_OBJECT
 
 private slots:
+    void testTryLock_data();
     void testTryLock();
 };
 }

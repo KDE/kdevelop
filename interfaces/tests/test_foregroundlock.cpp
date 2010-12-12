@@ -47,21 +47,41 @@ public:
     }
 };
 
+void TestForegroundLock::testTryLock_data()
+{
+    QTest::addColumn<int>("numThreads");
+    for (int i = 1; i <= 10; ++i) {
+        QTest::newRow(qPrintable(QString::number(i))) << i;
+    }
+}
+
 void TestForegroundLock::testTryLock()
 {
-    TryLockThread t1;
-    TryLockThread t2;
-    TryLockThread t3;
+    QFETCH(int, numThreads);
+    QList<TryLockThread*> threads;
+    for (int i = 0; i < numThreads; ++i) {
+        threads << new TryLockThread;
+    }
 
     ForegroundLock lock(true);
 
-    t1.start();
-    t2.start();
-    t3.start();
+    foreach(TryLockThread* thread, threads) {
+        thread->start();
+    }
 
     lock.unlock();
 
-    while(t1.isRunning() || t2.isRunning() || t3.isRunning()) {
+    while(true) {
+        bool running = false;
+        foreach(TryLockThread* thread, threads) {
+            if (thread->isRunning()) {
+                running = true;
+                break;
+            }
+        }
+        if (!running) {
+            break;
+        }
         lock.relock();
         usleep(10);
         lock.unlock();
