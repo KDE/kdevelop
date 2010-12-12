@@ -53,7 +53,10 @@ target_link_libraries(kdevplatforminterfaces
         ${KDE4_THREADWEAVER_LIBRARIES} 
         ${QT_QTDESIGNER_LIBRARY} 
         ${KDE4_KROSSCORE_LIBS}
-        rt)
+        )
+if (NOT APPLE)
+  target_link_libraries(kdevplatforminterfaces rt)
+endif (NOT APPLE)
 
 if(CMAKE_HAVE_THREADS_LIBRARY)
     target_link_libraries(kdevplatforminterfaces ${CMAKE_THREAD_LIBS_INIT})
