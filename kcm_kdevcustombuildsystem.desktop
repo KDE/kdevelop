@@ -10,4 +10,14 @@ X-KDE-ParentComponents=KDevCustomBuildSystem,KDevGenericManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
+Name[pt]=Sistema de Compilação Personalizado
+Name[pt_BR]=Sistema de Compilação personalizado
+Name[sv]=Eget byggsystem
+Name[uk]=Нетипова система збирання
+Name[x-test]=xxCustom BuildSystemxx
 Comment=Configure Custom BuildSystem settings
+Comment[pt]=Configurar as opções do Sistema de Compilação Personalizado
+Comment[pt_BR]=Configura as opções do Sistema de Compilação personalizado
+Comment[sv]=Anpassa inställningar av eget byggsystem
+Comment[uk]=Зміна параметрів нетипової системи збирання
+Comment[x-test]=xxConfigure Custom BuildSystem settingsxx
