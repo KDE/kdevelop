@@ -360,7 +360,7 @@ QVariant CodeCompletionModel::data(const QModelIndex& index, int role) const
   }
   
   //In minimal completion mode, hide all columns except the "name" one
-  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name)
+  if(!m_fullCompletion && role == Qt::DisplayRole && index.column() != Name && (treeElement.asItem()->argumentHintDepth() == 0 || index.column() == Prefix))
     return QVariant();
   
   QVariant ret = treeElement.asItem()->data(index, role, this);
