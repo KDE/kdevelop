@@ -166,7 +166,6 @@ void DVcsJob::start()
     setObjectName(service+": "+dvcsCommand().join(" "));
     
     d->status = JobRunning;
-    d->childproc->setEnvironment(QProcess::systemEnvironment());
     d->childproc->setOutputChannelMode(KProcess::SeparateChannels);
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();

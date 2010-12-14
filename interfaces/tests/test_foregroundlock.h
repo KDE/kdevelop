@@ -1,5 +1,4 @@
 /*
-    Copyright David Nolden  <david.nolden.kdevelop@art-master.de>
     Copyright 2010 Milian Wolff <mail@milianw.de>
 
     This program is free software; you can redistribute it and/or modify
@@ -17,42 +16,20 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef WORKINGSETWIDGET_H
-#define WORKINGSETWIDGET_H
+#ifndef TEST_FOREGROUNDLOCK_H
+#define TEST_FOREGROUNDLOCK_H
 
-#include <QPointer>
-
-#include "workingsettoolbutton.h"
-
-namespace Sublime {
-class Area;
-}
+#include <QObject>
 
 namespace KDevelop {
-
-class MainWindow;
-
-class WorkingSetController;
-class WorkingSet;
-
-/**
- * One instance of this widget is created per area switcher tab, showing
- * the currently opened working set for this area.
- */
-class WorkingSetWidget : public WorkingSetToolButton {
+class TestForegroundLock : public QObject {
     Q_OBJECT
 
-public:
-    WorkingSetWidget(MainWindow* parent, Sublime::Area* area);
-    virtual void setVisible( bool visible );
-
 private slots:
-    void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
-
-private:
-    QPointer<Sublime::Area> m_area;
+    void testTryLock_data();
+    void testTryLock();
 };
-
 }
 
-#endif // WORKINGSETWIDGET_H
+
+#endif // TEST_FOREGROUNDLOCK_H
