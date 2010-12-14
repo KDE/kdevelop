@@ -136,7 +136,7 @@ void NativeAppJob::start()
     if( proc )
     {
         startOutput();
-        appendLine( i18n("Starting: %1", proc->property("executable").toString() ) );
+        appendLine( i18n("Starting: %1", proc->program().join(" ") ) );
         proc->start();
     } else
     {
