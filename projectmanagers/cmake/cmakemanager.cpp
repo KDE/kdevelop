@@ -847,12 +847,14 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         {
             qDeleteAll(item->project()->itemsForUrl(fileurl));
         }
-        else if(it->url()!=fileurl) {
-            it->setUrl(fileurl);
-            ProjectFolderItem* folder = it->folder();
-            
-            if(folder)
-                reloadFiles(folder);
+        else {
+            if(it->url()!=fileurl) {
+                it->setUrl(fileurl);
+                if(ProjectFolderItem* folder = it->folder())
+                    reloadFiles(folder);
+            }
+            // reduce amount of checks done when looking for new items
+            entries.remove(current);
         }
     }
     
@@ -861,12 +863,11 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
     {
         KUrl fileurl = folderurl;
         fileurl.addPath( entry );
-        
-        if( item->hasFileOrFolder( entry ) )
-        {
-            continue;
-        }
-        else if( QFileInfo( fileurl.toLocalFile() ).isDir() )
+
+        // existing entries should have been removed above already
+        Q_ASSERT( !item->hasFileOrFolder( entry ) );
+
+        if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
             fileurl.adjustPath(KUrl::AddTrailingSlash);
             ProjectFolderItem* pendingfolder = m_pending.take(fileurl);
