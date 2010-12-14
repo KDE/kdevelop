@@ -43,6 +43,7 @@
 #include <qpointer.h>
 #include <QEvent>
 #include <QKeyEvent>
+#include "urldocument.h"
 
 namespace Sublime {
 
@@ -307,7 +308,21 @@ void Container::documentTitleChanged(Sublime::Document* doc)
     QMapIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
-            d->fileNameCorner->setText( doc->title() );
+            QString txt = doc->title();
+            //TODO: Maybe add new virtual in Document to support supplying this
+            // extended information from subclasses like IDocument which can use
+            // the rest of the kdevplatform API
+            UrlDocument* udoc = dynamic_cast<UrlDocument*>( doc );
+            if( udoc ) {
+                QString pretty;
+                if( udoc->url().isLocalFile() ) {
+                    pretty = udoc->url().toLocalFile();
+                } else {
+                    pretty = udoc->url().prettyUrl();
+                }
+                txt = txt + " (" + pretty + ")";
+            }
+            d->fileNameCorner->setText( txt );
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
                 d->tabBar->setTabText(tabIndex, doc->title());
