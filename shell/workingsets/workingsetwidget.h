@@ -48,7 +48,6 @@ public:
 
 private slots:
     void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
-    void setChangedSignificantly();
 
 private:
     QPointer<Sublime::Area> m_area;
