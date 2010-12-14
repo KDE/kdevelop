@@ -27,12 +27,10 @@ target_link_libraries(kdevplatformutil
         ${KDE4_KDEUI_LIBS} 
         ${KDE4_KCMUTILS_LIBRARY} 
         kdevplatforminterfaces 
-        kdevplatformoutputview
     )
 # Might want to add kdevplatform* when they're exported targets
 target_link_libraries(kdevplatformutil LINK_INTERFACE_LIBRARIES 
-        ${KDE4_KDEUI_LIBS} 
-        ${KDE4_KCMUTILS_LIBRARY})
+        ${KDE4_KDEUI_LIBS})
 set_target_properties(kdevplatformutil PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformutil EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

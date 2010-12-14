@@ -15,8 +15,7 @@ target_link_libraries(kdevplatformdocumentation
         kdevplatforminterfaces)
 
 target_link_libraries(kdevplatformdocumentation LINK_INTERFACE_LIBRARIES
-        ${QT_QTGUI_LIBRARY}
-        ${KDE4_KDECORE_LIBS})
+        kdevplatforminterfaces)
 
 set_target_properties(kdevplatformdocumentation PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 

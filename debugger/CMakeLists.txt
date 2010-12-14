@@ -30,6 +30,9 @@ target_link_libraries(kdevplatformdebugger
         ${KDE4_KDEUI_LIBS}
         ${KDE4_KTEXTEDITOR_LIBS}
     )
+target_link_libraries(kdevplatformdebugger LINK_INTERFACE_LIBRARIES 
+        kdevplatforminterfaces
+        kdevplatformutil)
 set_target_properties(kdevplatformdebugger PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformdebugger EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

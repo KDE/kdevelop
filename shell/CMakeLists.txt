@@ -113,15 +113,9 @@ target_link_libraries(kdevplatformshell
         kdevplatformdocumentation)
 # need to add kdevplatform* once those are exported targets
 target_link_libraries(kdevplatformshell LINK_INTERFACE_LIBRARIES
-        ${KDE4_KDEUI_LIBS}
-        ${KDE4_KDECORE_LIBS}
-        kdevplatformproject
+        kdevplatformoutputview
         sublime
-        kdevplatformlanguage
-        kdevplatformvcs
-        kdevplatformdocumentation
-        kdevplatformdebugger
-	kdevplatforminterfaces)
+        kdevplatformdebugger)
 set_target_properties(kdevplatformshell PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 install(FILES

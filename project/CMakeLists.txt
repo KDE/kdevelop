@@ -26,9 +26,7 @@ target_link_libraries(kdevplatformproject
 	kdevplatformlanguage
         ${KDE4_KIO_LIBS})
 target_link_libraries(kdevplatformproject LINK_INTERFACE_LIBRARIES
-        ${QT_QTGUI_LIBRARY}
-        ${KDE4_KDECORE_LIBS}
-        ${KDE4_KUTIL_LIBRARY})
+        kdevplatforminterfaces)
 set_target_properties(kdevplatformproject PROPERTIES VERSION ${KDEVPLATFORM_LIB_VERSION} SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 install(TARGETS kdevplatformproject EXPORT KDevPlatformTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
