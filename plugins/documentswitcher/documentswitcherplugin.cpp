@@ -44,7 +44,6 @@ K_EXPORT_PLUGIN(DocumentSwitcherFactory(KAboutData("kdevdocumentswitcher","kdevd
 
 //TODO: Show frame around view's widget while walking through
 //TODO: Make the widget transparent
-//TODO: Better placement, at cursor position might not be ideal, maybe on the right side of the central widget
 
 DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantList &/*args*/)
     :KDevelop::IPlugin(DocumentSwitcherFactory::componentData(), parent), view(0)
