@@ -550,13 +550,13 @@ bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
     for ( int i = 0; i < rowCount(); ++i )
     {
         ProjectBaseItem* item = child( i );
-        if ( ProjectFileItem* file = dynamic_cast<ProjectFileItem*>(item))
-            if (file->fileName() == name)
+        if ( ProjectFileItem* f = item->file() ) {
+            if ( f->fileName() == name )
                 return true;
-
-        if ( ProjectFolderItem* folder = dynamic_cast<ProjectFolderItem*>(item))
-            if (folder->folderName() == name)
+        } else if ( ProjectFolderItem* f = item->folder() ) {
+            if ( f->folderName() == name )
                 return true;
+        }
     }
     return false;
 }
