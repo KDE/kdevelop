@@ -129,8 +129,6 @@ ProjectBaseItem::ProjectBaseItem( IProject* project, const QString &name, Projec
         : d_ptr(new ProjectBaseItemPrivate)
 {
     Q_D(ProjectBaseItem);
-    // only the root item has no project (and can be identified by having no name or parent)
-    Q_ASSERT(project || (name.isEmpty() && !parent));
     d->project = project;
     d->text = name;
     d->flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
