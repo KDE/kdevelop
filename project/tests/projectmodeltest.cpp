@@ -155,7 +155,7 @@ void ProjectModelTest::testCreateFileSystemItems_data()
     QTest::newRow("RootFolder")
         << (int)ProjectBaseItem::Folder
         << KUrl("file:///rootdir")
-        << KUrl("file:///rootdir")
+        << KUrl("file:///rootdir/")
         << QString::fromLatin1("rootdir")
         << ( QStringList() << "rootdir" )
         << 0;
@@ -163,7 +163,7 @@ void ProjectModelTest::testCreateFileSystemItems_data()
     QTest::newRow("RootBuildFolder")
         << (int)ProjectBaseItem::BuildFolder
         << KUrl("file:///rootdir")
-        << KUrl("file:///rootdir")
+        << KUrl("file:///rootdir/")
         << QString::fromLatin1("rootdir")
         << ( QStringList() << "rootdir" )
         << 0;
