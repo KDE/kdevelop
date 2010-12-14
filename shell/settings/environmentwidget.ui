@@ -1,112 +1,113 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>EnvironmentWidget</class>
- <widget class="QWidget" name="EnvironmentWidget" >
-  <property name="geometry" >
+ <widget class="QWidget" name="EnvironmentWidget">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>696</width>
+    <width>704</width>
     <height>480</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout" >
-   <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
       <string>Environment Group</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="KComboBox" name="activeCombo" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+   <item row="0" column="1">
+    <widget class="KComboBox" name="activeCombo">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>1</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="editable" >
+     <property name="editable">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="0" column="2" >
-    <widget class="QPushButton" name="addgrpBtn" >
-     <property name="text" >
+   <item row="0" column="2">
+    <widget class="QPushButton" name="addgrpBtn">
+     <property name="text">
       <string>Add group</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="3" >
-    <widget class="QPushButton" name="removegrpBtn" >
-     <property name="text" >
+   <item row="0" column="3">
+    <widget class="QPushButton" name="removegrpBtn">
+     <property name="text">
       <string>Remove group</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="4" >
-    <widget class="KPushButton" name="setAsDefaultBtn" >
-     <property name="text" >
+   <item row="0" column="4" colspan="2">
+    <widget class="KPushButton" name="setAsDefaultBtn">
+     <property name="text">
       <string>Set As Default Group</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="5" >
-    <widget class="QTableView" name="variableTable" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+   <item row="1" column="0" colspan="5">
+    <widget class="QTableView" name="variableTable">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>2</verstretch>
       </sizepolicy>
      </property>
-     <property name="selectionMode" >
+     <property name="selectionMode">
       <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
-     <property name="selectionBehavior" >
+     <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectRows</enum>
      </property>
-     <property name="sortingEnabled" >
+     <property name="sortingEnabled">
       <bool>true</bool>
      </property>
-     <property name="cornerButtonEnabled" >
+     <property name="cornerButtonEnabled">
       <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="5" >
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="margin" >
-      <number>0</number>
-     </property>
+   <item row="1" column="5">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="KPushButton" name="newButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="deleteButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
-         <height>20</height>
+         <width>20</width>
+         <height>40</height>
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="KPushButton" name="newButton" >
-       <property name="text" >
-        <string>New</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KPushButton" name="deleteButton" >
-       <property name="text" >
-        <string>Delete</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>
@@ -114,14 +115,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -51,6 +51,8 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     proxyModel->setSourceModel( groupModel );
     ui.variableTable->setModel( proxyModel );
     ui.variableTable->horizontalHeader()->setResizeMode( 1, QHeaderView::Stretch );
+    ui.newButton->setIcon(KIcon("list-add"));
+    ui.deleteButton->setIcon(KIcon("list-remove"));
 
     connect( ui.newButton, SIGNAL( clicked() ),
              SLOT( newButtonClicked() ) );
