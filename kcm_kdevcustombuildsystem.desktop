@@ -10,6 +10,7 @@ X-KDE-ParentComponents=KDevCustomBuildSystem,KDevGenericManager
 X-KDE-CfgDlgHierarchy=BUILDTOOL
 
 Name=Custom BuildSystem
+Name[nds]=Topasst Buusystem
 Name[pt]=Sistema de Compilação Personalizado
 Name[pt_BR]=Sistema de Compilação personalizado
 Name[sv]=Eget byggsystem
