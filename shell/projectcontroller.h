@@ -86,6 +86,7 @@ public:
 
     KUrl projectsBaseDirectory() const;
     QString prettyFileName(KUrl url, FormattingOptions format = FormatHtml) const;
+    QString prettyFilePath(KUrl url, FormattingOptions format = FormatHtml) const;
 
     ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
 

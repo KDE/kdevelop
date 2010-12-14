@@ -872,7 +872,7 @@ KUrl ProjectController::projectsBaseDirectory() const
                                      KUrl( QDir::homePath()+"/projects" ) );
 }
 
-QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
+QString ProjectController::prettyFilePath(KUrl url, FormattingOptions format) const
 {
     IProject* project = Core::self()->projectController()->findProjectForUrl(url);
     
@@ -901,6 +901,12 @@ QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) co
             relativePath = relativePath.mid(2);
         prefixText += relativePath;
     }
+    return prefixText;
+}
+
+QString ProjectController::prettyFileName(KUrl url, FormattingOptions format) const
+{
+    QString prefixText = prettyFilePath( url, format );
     if (format == FormatHtml) {
         return prefixText + "<b>" + url.fileName() + "</b>";
     } else {
