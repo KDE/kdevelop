@@ -339,7 +339,8 @@ void Container::setCurrentWidget(QWidget* w)
     if (View *view = d->viewForWidget[w])
     {
         statusChanged(view);
-        d->fileNameCorner->setText(view->document()->title());
+        statusIconChanged( view->document() );
+        documentTitleChanged( view->document() );
     }
 }
 
@@ -359,8 +360,13 @@ void Sublime::Container::removeWidget(QWidget *w)
         int widgetIdx = d->stack->indexOf(w);
         d->stack->removeWidget(w);
         d->tabBar->removeTab(widgetIdx);
-        if (d->tabBar->currentIndex() != -1)
-            d->fileNameCorner->setText(d->tabBar->tabText(d->tabBar->currentIndex()));
+        if (d->tabBar->currentIndex() != -1) {
+            QWidget* w = widget( d->tabBar->currentIndex() );
+            if( w ) {
+                statusIconChanged( d->viewForWidget[w]->document() );
+                documentTitleChanged( d->viewForWidget[w]->document() );
+            }
+        }
         View* view = d->viewForWidget.take(w);
         if (view)
         {
