@@ -41,6 +41,7 @@ class ProjectTargetItem;
 class ProjectExecutableTargetItem;
 class ProjectLibraryTargetItem;
 class ProjectModel;
+class IndexedString;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectVisitor
 {
@@ -177,6 +178,13 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
 
         /** Get the url of this item (if any) */
         KUrl url() const;
+
+        /** Gets the basename of this url (if any) */
+        QString baseName() const;
+
+        /** Gets the indexed version of the basename of this url (if any)
+            Use this for comparison as it is much faster */
+        IndexedString indexedBaseName() const;
 
         /**
          * Renames the item to the new name.

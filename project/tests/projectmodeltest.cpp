@@ -27,6 +27,8 @@
 #include <tests/modeltest.h>
 #include "dummyproject.h"
 #include <tests/kdevsignalspy.h>
+#include <tests/autotestshell.h>
+#include <tests/testcore.h>
 
 using KDevelop::ProjectModel;
 using KDevelop::ProjectBaseItem;
@@ -85,6 +87,10 @@ private:
 
 void ProjectModelTest::initTestCase()
 {
+    KDevelop::AutoTestShell::init();
+    KDevelop::TestCore* core = new KDevelop::TestCore();
+    core->initialize(KDevelop::Core::NoUi);
+
     qRegisterMetaType<QModelIndex>("QModelIndex");
     model = new ProjectModel( this );
     new ModelTest( model, this );
@@ -257,7 +263,9 @@ void ProjectModelTest::testCreateSimpleHierarchy()
     QString targetName = "testtarged";
     QString cppFileName = "file.cpp";
     ProjectFolderItem* rootFolder = new ProjectFolderItem( 0, KUrl("file:///"+folderName) );
+    QCOMPARE(rootFolder->baseName(), folderName);
     ProjectFileItem* file = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+fileName), rootFolder );
+    QCOMPARE(file->baseName(), fileName);
     ProjectTargetItem* target = new ProjectTargetItem( 0, targetName );
     rootFolder->appendRow( target );
     ProjectFileItem* targetfile = new ProjectFileItem( 0, KUrl("file:///"+folderName+"/"+cppFileName), target );

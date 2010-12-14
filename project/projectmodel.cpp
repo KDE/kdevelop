@@ -122,6 +122,7 @@ public:
     Qt::ItemFlags flags;
     ProjectModel* model;
     KUrl m_url;
+    IndexedString m_baseName;
 };
 
 
@@ -354,11 +355,25 @@ KUrl ProjectBaseItem::url( ) const
     return d->m_url;
 }
 
+QString ProjectBaseItem::baseName() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->m_baseName.str();
+}
+
+IndexedString ProjectBaseItem::indexedBaseName() const
+{
+    Q_D(const ProjectBaseItem);
+    return d->m_baseName;
+}
+
 void ProjectBaseItem::setUrl( const KUrl& url )
 {
     Q_D(ProjectBaseItem);
     d->m_url = url;
-    setText( d->m_url.fileName() );
+    const QString baseName = url.fileName();
+    d->m_baseName = IndexedString(baseName);
+    setText( baseName );
 }
 
 Qt::ItemFlags ProjectBaseItem::flags()
@@ -495,7 +510,7 @@ int ProjectFolderItem::type() const
 
 QString ProjectFolderItem::folderName() const
 {
-    return url().fileName();
+    return baseName();
 }
 
 void ProjectFolderItem::propagateRename(const KUrl& newBase) const
@@ -545,16 +560,13 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
+    const IndexedString indexedName(name);
     for ( int i = 0; i < rowCount(); ++i )
     {
         ProjectBaseItem* item = child( i );
-        if ( ProjectFileItem* f = item->file() ) {
-            if ( f->fileName() == name )
-                return true;
-        } else if ( ProjectFolderItem* f = item->folder() ) {
-            if ( f->folderName() == name )
-                return true;
-        }
+        const IndexedString& other = item->indexedBaseName();
+        if ( other == indexedName )
+            return true;
     }
     return false;
 }
@@ -632,7 +644,7 @@ ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newname)
 
 QString ProjectFileItem::fileName() const
 {
-    return url().fileName();
+    return baseName();
 }
 
 void ProjectFileItem::setUrl( const KUrl& url )
