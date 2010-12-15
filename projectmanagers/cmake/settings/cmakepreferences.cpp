@@ -64,6 +64,7 @@ CMakePreferences::CMakePreferences(QWidget* parent, const QVariantList& args)
     m_prefsUi->cacheList->setItemDelegate(new CMakeCacheDelegate(m_prefsUi->cacheList));
     m_prefsUi->cacheList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_prefsUi->cacheList->horizontalHeader()->setStretchLastSection(true);
+    m_prefsUi->cacheList->verticalHeader()->hide();
     addConfig( CMakeSettings::self(), w );
 
     connect(m_prefsUi->buildDirs, SIGNAL(currentIndexChanged(const QString& )),
