@@ -354,7 +354,7 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
     KUrl cmakeListsPath(folder->url());
     cmakeListsPath.addPath("CMakeLists.txt");
     
-    if(folder && folder->type()==KDevelop::ProjectBaseItem::BuildFolder && QFile::exists(cmakeListsPath.toLocalFile()))
+    if(folder && QFile::exists(cmakeListsPath.toLocalFile()))
     {
         kDebug(9042) << "parse:" << folder->url();
         
@@ -578,6 +578,9 @@ QList<KDevelop::ProjectFolderItem*> CMakeManager::parse( KDevelop::ProjectFolder
             
             setTargetFiles(targetItem, tfiles);
         }
+    } else {
+        folder->cleanupBuildFolders(QList<Subdirectory>());
+        folder->cleanupTargets(QList<CMakeTarget>());
     }
     reloadFiles(folder);
 
@@ -751,18 +754,18 @@ bool CMakeManager::isReloading(IProject* p)
 void CMakeManager::deletedWatched(const QString& path)
 {
     KUrl dirurl(path);
-    dirurl.adjustPath(KUrl::AddTrailingSlash);
     IProject* p=ICore::self()->projectController()->findProjectForUrl(dirurl);
     
     if(p) {
+        dirurl.adjustPath(KUrl::AddTrailingSlash);
         if(p->folder()==dirurl)
             ICore::self()->projectController()->closeProject(p);
         else if(!isReloading(p)) {
             KUrl url(path);
             
             if(path.endsWith("/CMakeLists.txt")) {
-                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl().upUrl());
-                foreach(ProjectFolderItem* folder, folders)
+                QList<ProjectFolderItem*> folders = p->foldersForUrl(url.upUrl());
+                foreach(ProjectFolderItem* folder, folders) 
                     reload(folder);
                 
             } else {
