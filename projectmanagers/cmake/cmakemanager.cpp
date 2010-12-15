@@ -790,7 +790,6 @@ void CMakeManager::dirtyFile(const QString & dirty)
         }
         
         if(p) {
-            m_projectsData[p].cache=readCache(dirtyFile);
             p->reloadModel();
         }
     } else if(dirty.endsWith(".cmake"))
