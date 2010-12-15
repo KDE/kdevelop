@@ -1531,10 +1531,9 @@ int CMakeProjectVisitor::visit(const MathAst *math)
 
 int CMakeProjectVisitor::visit(const GetFilenameComponentAst *filecomp)
 {
-    QString dir;
     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
 
-    dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
+    QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
     QFileInfo fi(dir, filecomp->fileName());
 
     QString val;
