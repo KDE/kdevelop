@@ -870,7 +870,8 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         fileurl.addPath( entry );
 
         // existing entries should have been removed above already
-        Q_ASSERT( !item->hasFileOrFolder( entry ) );
+        // disabled for performance reasons
+//         Q_ASSERT( !item->hasFileOrFolder( entry ) );
 
         if( QFileInfo( fileurl.toLocalFile() ).isDir() )
         {
