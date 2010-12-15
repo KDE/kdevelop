@@ -188,6 +188,10 @@ KDevelop::ReferencedTopDUContext CMakeManager::initializeProject(KDevelop::IProj
     data->modulePath=initials.first["CMAKE_MODULE_PATH"];
     data->vm=initials.first;
     data->vm.insert("CMAKE_SOURCE_DIR", QStringList(baseUrl.toLocalFile(KUrl::RemoveTrailingSlash)));
+    
+    KUrl cachefile=buildDirectory(project->projectItem());
+    cachefile.addPath("CMakeCache.txt");
+    data->cache=readCache(cachefile);
 
     KSharedConfig::Ptr cfg = project->projectConfiguration();
     KConfigGroup group(cfg.data(), "CMake");
@@ -324,7 +328,6 @@ KDevelop::ProjectFolderItem* CMakeManager::import( KDevelop::IProject *project )
             CMake::checkForNeedingConfigure(m_rootItem);
         }
         cachefile.addPath("CMakeCache.txt");
-        m_projectsData[project].cache=readCache(cachefile);
         
         KDirWatch* w = new KDirWatch(project);
         w->setObjectName(project->name()+"_ProjectWatcher");
