@@ -988,8 +988,10 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
         {
             CacheLine c;
             c.readLine(line);
-            if(c.flag().isEmpty())
+            if(c.flag().isEmpty()) {
                 ret[c.name()]=CacheEntry(c.value(), currentComment.join("\n"));
+                currentComment.clear();
+            }
 //             kDebug(9042) << "Cache line" << line << c.name();
         }
         else if(line.startsWith("//"))
