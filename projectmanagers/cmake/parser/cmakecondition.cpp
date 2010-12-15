@@ -181,13 +181,15 @@ bool CMakeCondition::evaluateCondition(QStringList::const_iterator itBegin, QStr
                 break;
             case EXISTS:
             {
+                last=false;
                 QString v=*(it2+1);
+                
                 if(v.isEmpty())
                     kDebug(9042) << "error: no parameter to exist";
+                else if(v.startsWith("/.."))
+                    last=false;
                 else
                 {
-                    last=false;
-                    
                     Q_ASSERT(m_vars->contains("CMAKE_CURRENT_SOURCE_DIR"));
                     QString dir=m_vars->value("CMAKE_CURRENT_SOURCE_DIR").first();
                     QFileInfo f(dir, v);
