@@ -1002,8 +1002,8 @@ CacheValues CMakeManager::readCache(const KUrl &path) const
 
 KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevelop::ProjectFolderItem* parent)
 {
-    if(!dynamic_cast<CMakeFolderItem*>(parent)) {
-        KDevelop::createFolder(folder);
+    bool created = KDevelop::createFolder(folder);
+    if(!created || !dynamic_cast<CMakeFolderItem*>(parent)) {
         return 0;
     }
     
@@ -1025,7 +1025,7 @@ KDevelop::ProjectFolderItem* CMakeManager::addFolder( const KUrl& folder, KDevel
     if(e.exec())
     {
         bool saved=e.applyAllChanges();
-        if(saved && KDevelop::createFolder(folder)) { //If saved we create the folder then the CMakeLists.txt file
+        if(saved) { //If saved we create the folder then the CMakeLists.txt file
             KUrl newCMakeLists(folder);
             newCMakeLists.addPath("CMakeLists.txt");
 
