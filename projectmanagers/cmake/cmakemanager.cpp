@@ -348,18 +348,18 @@ KDevelop::ReferencedTopDUContext CMakeManager::includeScript(const QString& file
     return CMakeParserUtils::includeScript( file, parent, &m_projectsData[project], dir);
 }
 
-QMutex rxFileFilterMutex; //We have to use a mutex-lock to protect static regular ex
-static QRegExp rxFileFilter("\\w*~$|\\w*\\.bak$"); ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
+
 
 QSet<QString> filterFiles(const QStringList& orig)
 {
-    QMutexLocker lock(&rxFileFilterMutex);
-    
     QSet<QString> ret;
     foreach(const QString& str, orig)
     {
-        if(rxFileFilter.indexIn(str)<0)
-            ret.insert(str);
+        ///@todo This filter should be configurable, and filtering should be done on a manager-independent level
+        if (str.endsWith(QLatin1Char('~')) || str.endsWith(QLatin1String(".bak")))
+            continue;
+
+        ret.insert(str);
     }
     return ret;
 }
