@@ -919,6 +919,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
                 item->appendRow(pendingfolder);
             } else if(isCorrectFolder(fileurl, item->project())) {
                 fileurl.adjustPath(KUrl::AddTrailingSlash);
+                m_watchers[item->project()]->addDir(fileurl.toLocalFile(), KDirWatch::WatchFiles);
                 reloadFiles(new ProjectFolderItem( item->project(), fileurl, item ));
             }
         }
