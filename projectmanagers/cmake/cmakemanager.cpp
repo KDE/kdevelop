@@ -855,8 +855,6 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
         else {
             if(it->url()!=fileurl) {
                 it->setUrl(fileurl);
-                if(ProjectFolderItem* folder = it->folder())
-                    reloadFiles(folder);
             }
             // reduce amount of checks done when looking for new items
             entries.remove(current);
