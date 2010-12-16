@@ -853,7 +853,7 @@ void CMakeManager::reloadFiles(ProjectFolderItem* item)
             qDeleteAll(item->project()->itemsForUrl(fileurl));
         }
         else {
-            if(it->url()!=fileurl) {
+            if(!it->url().equals(fileurl, KUrl::CompareWithoutTrailingSlash)) {
                 it->setUrl(fileurl);
             }
             // reduce amount of checks done when looking for new items
