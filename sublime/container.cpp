@@ -44,6 +44,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include "urldocument.h"
+#include <ksqueezedtextlabel.h>
 
 namespace Sublime {
 
@@ -86,16 +87,16 @@ struct ContainerPrivate {
 
     ContainerTabBar *tabBar;
     QStackedWidget *stack;
-    QLabel *fileNameCorner;
+    KSqueezedTextLabel *fileNameCorner;
     QLabel *fileStatus;
-    QLabel *statusCorner;
+    KSqueezedTextLabel *statusCorner;
     QPointer<QWidget> leftCornerWidget;
 };
 
-class UnderlinedLabel: public QLabel {
+class UnderlinedLabel: public KSqueezedTextLabel {
 public:
-    UnderlinedLabel(KTabBar *tabBar, QWidget* parent = 0, Qt::WindowFlags f = 0)
-        :QLabel(parent, f), m_tabBar(tabBar)
+    UnderlinedLabel(KTabBar *tabBar, QWidget* parent = 0)
+        :KSqueezedTextLabel(parent), m_tabBar(tabBar)
     {
     }
 
@@ -126,7 +127,7 @@ protected:
             }
         }
 
-        QLabel::paintEvent(ev);
+        KSqueezedTextLabel::paintEvent(ev);
     }
 
     KTabBar *m_tabBar;
@@ -135,8 +136,8 @@ protected:
 
 class StatusLabel: public UnderlinedLabel {
 public:
-    StatusLabel(KTabBar *tabBar, QWidget* parent = 0, Qt::WindowFlags f = 0):
-        UnderlinedLabel(tabBar, parent, f)
+    StatusLabel(KTabBar *tabBar, QWidget* parent = 0):
+        UnderlinedLabel(tabBar, parent)
     {
         setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         setSizePolicy(QSizePolicy::Maximum, sizePolicy().verticalPolicy());
