@@ -39,6 +39,7 @@ CMakeConditionTest::CMakeConditionTest()
     m_vars.insert("MYTRUE", QStringList("NOT FALSE"));
     
     m_vars.insert("UNFOUNDVAR", QStringList("UNFOUNDVAR-NOTFOUND"));
+    m_vars.insert("BLEP2", QStringList("TRUE"));
     
     Macro m;
     m.name = "testmacro";
@@ -104,6 +105,7 @@ void CMakeConditionTest::testGoodParse_data()
     QTest::newRow( "version_less" ) << QString("1.1 VERSION_LESS 1.3.1").split(" ") << true;
     QTest::newRow( "version_equal" ) << QString("1.3.1 VERSION_EQUAL 1.3.1").split(" ") << true;
     QTest::newRow( "version_greater" ) << QString("1.4 VERSION_GREATER 1.3.1").split(" ") << true;
+    QTest::newRow( "detect_number" ) << QString("BLEP2").split(" ") << true;
 
     //parentheses: 2.6.3
     QTest::newRow( "parenthese0" ) << QString("ONE AND ( NOT ZERO OR ZERO )").split(" ") << true;
