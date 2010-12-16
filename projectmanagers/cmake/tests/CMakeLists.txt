@@ -5,6 +5,7 @@ include_directories(
 )
 
 add_definitions( "-DCMAKE_TESTS_PROJECTS_DIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/manual\\\"" )
+add_definitions( "-DCMAKE_INSTALLED_MODULES=\\\"${DATA_INSTALL_DIR}/cmake/modules\\\"" )
 
 set(CMAKE_TEST_LIBRARIES 
     ${QT_QTTEST_LIBRARY}

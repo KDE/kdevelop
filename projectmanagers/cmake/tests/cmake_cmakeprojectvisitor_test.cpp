@@ -468,6 +468,8 @@ void CMakeProjectVisitorTest::testFinder_data()
     
     QTest::newRow("Qt4") << "Qt4";
     QTest::newRow("KDE4") << "KDE4";
+//     QTest::newRow("Eigen2") << "Eigen2";
+//     QTest::newRow("Exiv2") << "Exiv2";
 //     QTest::newRow("QtGstreamer") << "QtGstreamer"; //commented because it might not be installed, but works
 }
 
@@ -475,6 +477,7 @@ void CMakeProjectVisitorTest::testFinder_init()
 {
     QPair<VariableMap, QStringList> initials=CMakeParserUtils::initialVariables();
     modulePath += initials.first.value("CMAKE_MODULE_PATH");
+    modulePath += CMAKE_INSTALLED_MODULES;
 //     modulePath += QStringList(CMAKE_TESTS_PROJECTS_DIR "/modules"); //Not used yet
 
     initialVariables=initials.first;
