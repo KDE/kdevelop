@@ -335,7 +335,7 @@ void ProjectModelTest::testItemSanity()
     model->appendRow( parent );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     QSignalSpy s( model, SIGNAL(dataChanged( const QModelIndex&, const QModelIndex& )) );
-    parent->setText( "newtest" );
+    parent->setUrl( KUrl("file:///newtest") );
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QString("newtest") );
 

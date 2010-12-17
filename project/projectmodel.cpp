@@ -122,7 +122,6 @@ public:
     Qt::ItemFlags flags;
     ProjectModel* model;
     KUrl m_url;
-    IndexedString m_baseName;
 };
 
 
@@ -357,14 +356,7 @@ KUrl ProjectBaseItem::url( ) const
 
 QString ProjectBaseItem::baseName() const
 {
-    Q_D(const ProjectBaseItem);
-    return d->m_baseName.str();
-}
-
-IndexedString ProjectBaseItem::indexedBaseName() const
-{
-    Q_D(const ProjectBaseItem);
-    return d->m_baseName;
+    return text();
 }
 
 void ProjectBaseItem::setUrl( const KUrl& url )
@@ -372,7 +364,7 @@ void ProjectBaseItem::setUrl( const KUrl& url )
     Q_D(ProjectBaseItem);
     d->m_url = url;
     const QString baseName = url.fileName();
-    d->m_baseName = IndexedString(baseName);
+    qDebug() << baseName;
     setText( baseName );
 }
 
@@ -560,13 +552,13 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newname)
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
-    const IndexedString indexedName(name);
-    for ( int i = 0; i < rowCount(); ++i )
+    foreach ( ProjectBaseItem* item, children() )
     {
-        ProjectBaseItem* item = child( i );
-        const IndexedString& other = item->indexedBaseName();
-        if ( other == indexedName )
+        if ( (item->type() == Folder || item->type() == File || item->type() == BuildFolder)
+             && name == item->baseName() )
+        {
             return true;
+        }
     }
     return false;
 }

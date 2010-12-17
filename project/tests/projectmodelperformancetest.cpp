@@ -80,9 +80,6 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     b = new QPushButton( "Add Big Subtree in Chunks", this );
     connect( b, SIGNAL(clicked()), SLOT(addBigTreeDelayed()) );
     l->addWidget( b, 0, 4 );
-    b = new QPushButton( "Change Text", this );
-    connect( b, SIGNAL(clicked()), SLOT(changeItemText()) );
-    l->addWidget( b, 0, 5 );
     
     l->addWidget( view, 1, 0, 1, 6 );
     
@@ -157,18 +154,6 @@ void ProjectModelPerformanceTest::addSmallTree()
         ProjectFolderItem* item = new ProjectFolderItem( 0, KUrl( QString( "file:///f%1" ).arg( i ) ), 0 );
         generateChilds( item, SMALL_WIDTH, SMALL_DEPTH );
         model->appendRow( item );
-    }
-}
-
-void ProjectModelPerformanceTest::changeItemText()
-{
-    QItemSelectionModel* sel = view->selectionModel();
-    foreach( const QModelIndex& idx, sel->selectedRows() ) {
-        ProjectBaseItem* item = model->itemFromIndex( idx );
-        if( item ) {
-           QString txt = QInputDialog::getText( this, "New Text", "Provide new text", QLineEdit::Normal, item->text() );
-           item->setText( txt );
-        }
     }
 }
 
