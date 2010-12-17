@@ -213,6 +213,17 @@ public:
      * @param actions Add your actions here. A new set of actions has to be created for each mainwindow.
      */
     virtual void createActionsForMainWindow( Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions );
+
+    /**
+     * This function is necessary because there is no proper way to signal errors from plugin constructor.
+     * @returns True if the plugin has encountered an error, false otherwise.
+     */
+    virtual bool hasError() const;
+
+    /**
+     * Description of the last encountered error, of an empty string if none.
+     */
+    virtual QString errorDescription() const;
 public Q_SLOTS:
     /**
      * Re-initialize the global icon loader

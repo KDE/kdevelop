@@ -138,6 +138,9 @@ public:
     
     bool hasStashes(const QDir& repository);
     bool hasModifications(const QDir& repository);
+
+    virtual bool hasError() const;
+    virtual QString errorDescription() const;
 protected:
   
     KUrl repositoryRoot(const KUrl& path);
@@ -183,6 +186,9 @@ private:
     
     /** Tells if it's older than 1.7.0 or not */
     bool m_oldVersion;
+
+    bool m_hasError;
+    QString m_errorDescription;
 };
 
 #endif

@@ -79,6 +79,7 @@ void PluginPreferences::save()
     selector->save();
     KCModule::save();
     Core::self()->pluginControllerInternal()->updateLoadedPlugins();
+    selector->load();   // Some plugins may have failed to load, they must be unchecked.
 }
 
 void PluginPreferences::load()
