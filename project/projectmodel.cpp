@@ -364,7 +364,6 @@ void ProjectBaseItem::setUrl( const KUrl& url )
     Q_D(ProjectBaseItem);
     d->m_url = url;
     const QString baseName = url.fileName();
-    qDebug() << baseName;
     setText( baseName );
 }
 
