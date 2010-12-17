@@ -209,7 +209,6 @@ void Container::setLeftCornerWidget(QWidget* widget)
     d->leftCornerWidget = widget;
     if(!widget)
         return;
-    qDebug() << widget;
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     m_tabBarLayout->insertWidget(0, widget);
     widget->show();
@@ -418,7 +417,6 @@ void Container::setTabBarHidden(bool hide)
         d->fileStatus->hide();
         d->tabBar->show();
     }
-    qDebug() << Q_FUNC_INFO << this << hide << d->fileNameCorner->isVisible() << d->tabBar->isVisible();
 }
 
 void Container::tabMoved(int from, int to)
