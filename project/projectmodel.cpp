@@ -196,14 +196,6 @@ void ProjectBaseItem::removeRow( int row )
 
 void ProjectBaseItem::removeRows(int row, int count)
 {
-    // optimize shutdown, esp. for big projects
-    Q_D(ProjectBaseItem);
-    if (row == 0 && count == d->children.size()) {
-        qDeleteAll(d->children);
-        d->children.clear();
-        return;
-    }
-    // otherwise just remove the rows that where selected
     for( ; count > 0; count-- ) {
         removeRow( row );
     }
