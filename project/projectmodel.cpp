@@ -865,11 +865,9 @@ ProjectVisitor::ProjectVisitor()
 
 QModelIndex ProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
-    if( hasIndex( row, column, parent ) ) {
-        ProjectBaseItem* parentItem = d->itemFromIndex( parent );
-        if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
-            return createIndex( row, column, parentItem );
-        }
+    ProjectBaseItem* parentItem = d->itemFromIndex( parent );
+    if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
+        return createIndex( row, column, parentItem );
     }
     return QModelIndex();
 }

@@ -49,6 +49,8 @@ private slots:
     void testWithProject();
     void testTakeRow();
     void testAddItemInThread();
+
+    // benchmarking
     void testDeleteLots();
 private:
     KDevelop::ProjectModel* model;
